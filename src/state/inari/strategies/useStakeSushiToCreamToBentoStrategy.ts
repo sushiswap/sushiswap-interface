@@ -7,7 +7,7 @@ import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseInariStrategy from './useBaseInariStrategy'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
 import { BigNumber } from 'ethers'
 
@@ -16,7 +16,8 @@ export const general: StrategyGeneralInfo = {
   steps: ['SUSHI', 'crXSUSHI', 'BentoBox'],
   zapMethod: 'stakeSushiToCreamToBento',
   unzapMethod: 'unstakeSushiFromCreamFromBento',
-  description: t`TODO`,
+  description: t`Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically
+                invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi.`,
   inputSymbol: 'SUSHI',
   outputSymbol: 'crXSUSHI in BentoBox',
 }
@@ -79,24 +80,14 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
     [sushiPerXSushi, zenkoContract]
   )
 
-  // Run before executing transaction creation by transforming from xSUSHI value to crXSUSHI value
-  // As you will be spending crXSUSHI when unzapping from this strategy
-  // const preExecute = useCallback(
-  //   async (val: CurrencyAmount<Token>) => {
-  //     if (zapIn) return execute(val)
-  //
-  //     const bal = await zenkoContract.toCtoken(CRXSUSHI.address, val.toExact().toBigNumber(XSUSHI.decimals))
-  //     return execute(CurrencyAmount.fromRawAmount(CRXSUSHI, bal.toString()))
-  //   },
-  //   [execute, zapIn, zenkoContract]
-  // )
-
-  return {
-    ...baseStrategy,
-    setBalances,
-    calculateOutputFromInput,
-    // execute: preExecute,
-  }
+  return useMemo(
+    () => ({
+      ...baseStrategy,
+      setBalances,
+      calculateOutputFromInput,
+    }),
+    [baseStrategy, calculateOutputFromInput, setBalances]
+  )
 }
 
 export default useStakeSushiToCreamToBentoStrategy

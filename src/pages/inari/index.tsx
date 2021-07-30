@@ -16,6 +16,7 @@ import NetworkGuard from '../../guards/Network'
 import { ChainId } from '@sushiswap/sdk'
 import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
 import StrategySelector from '../../features/inari/StrategySelector'
+import { Field } from '../../state/inari/types'
 
 const Inari = () => {
   const { i18n } = useLingui()
@@ -29,7 +30,7 @@ const Inari = () => {
         <title>Inari | Sushi</title>
         <meta name="description" content="Inari..." />
       </Head>
-      <Container maxWidth="5xl" className="space-y-6">
+      <Container maxWidth="5xl" className="flex flex-col gap-8 py-8 px-4">
         <div className="flex gap-8 items-center">
           <div className="min-w-[140px] min-h-[105px]">
             <Image src="/inari-sign.png" alt="inari-sign" width={140} height={105} />
@@ -66,6 +67,7 @@ const Inari = () => {
                       token={tokens?.inputToken}
                       symbol={general?.inputSymbol}
                       balance={balances?.inputTokenBalance}
+                      field={Field.INPUT}
                     />
                   </div>
                   <div className="flex items-center w-[60px] z-1 relative ml-[-16px] mr-[-16px]">
@@ -80,6 +82,7 @@ const Inari = () => {
                       token={tokens?.outputToken}
                       symbol={general?.outputSymbol}
                       balance={balances?.outputTokenBalance}
+                      field={Field.OUTPUT}
                     />
                   </div>
                 </div>

@@ -7,7 +7,7 @@ import { useActiveWeb3React } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseInariStrategy from './useBaseInariStrategy'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export const general: StrategyGeneralInfo = {
   name: 'SUSHI → Bento',
@@ -55,10 +55,13 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
     })
   }, [balances, setBalances, xSushiBentoBalance?.value])
 
-  return {
-    setBalances,
-    ...baseStrategy,
-  }
+  return useMemo(
+    () => ({
+      setBalances,
+      ...baseStrategy,
+    }),
+    [baseStrategy, setBalances]
+  )
 }
 
 export default useStakeSushiToBentoStrategy

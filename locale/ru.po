@@ -86,6 +86,9 @@ msgstr "Аналитика"
 msgid "Approve"
 msgstr "Утвердить"
 
+msgid "Approve Inari Master Contract"
+msgstr ""
+
 msgid "Approve Inari to spend {0}"
 msgstr ""
 
@@ -103,6 +106,9 @@ msgstr "Утверждено"
 
 msgid "Approving"
 msgstr "Утверждение"
+
+msgid "Approving Inari Master Contract"
+msgstr ""
 
 msgid "Approving Inari to spend {0}"
 msgstr ""
@@ -492,6 +498,11 @@ msgstr "Недействительный получатель"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Изолированные рынки кредитования снижают ваши риски как кредитора активов. Точно знайте, какое обеспечение доступно вам в случае неплатежеспособности контрагента."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -670,6 +681,9 @@ msgstr "Неаппаратный кошелек"
 
 msgid "None"
 msgstr "Нет"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ИСПОЛЬЗУЙТЕ ЭТОТ РЕЖИМ ТОЛЬКО, ЕСЛИ ЗНАЕТЕ, ЧТО ВЫ ДЕЛАЕТЕ."
@@ -880,8 +894,19 @@ msgstr "Ставка SUSHI"
 msgid "Stake SUSHI for xSUSHI"
 msgstr "Ставка SUSHI на xSUSHI"
 
+msgid "Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
 msgid ""
 "Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid ""
+"Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically\n"
 "invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
 msgstr ""
 
@@ -921,9 +946,6 @@ msgstr "Обменять на (прибл.):"
 
 msgid "Swap To:"
 msgstr "Обменять на:"
-
-msgid "TODO"
-msgstr ""
 
 msgid "TVL"
 msgstr "TVL"

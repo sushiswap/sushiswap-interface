@@ -5,14 +5,14 @@ import { useActiveWeb3React } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseInariStrategy from './useBaseInariStrategy'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 
 export const general: StrategyGeneralInfo = {
   name: 'SUSHI → Aave',
   steps: ['SUSHI', 'xSUSHI', 'Aave'],
   zapMethod: 'stakeSushiToAave',
   unzapMethod: 'unstakeSushiFromAave',
-  description: t`TODO`,
+  description: t`Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing.`,
   inputSymbol: 'SUSHI',
   outputSymbol: 'xSUSHI in Aave',
 }
@@ -32,7 +32,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
   },
 }
 
-const useStakeSushiToBentoStrategy = (): StrategyHook => {
+const useStakeSushiToAaveStrategy = (): StrategyHook => {
   const { account } = useActiveWeb3React()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], AXSUSHI])
   const { setBalances, ...baseStrategy } = useBaseInariStrategy({
@@ -50,10 +50,13 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
     })
   }, [balances, setBalances])
 
-  return {
-    ...baseStrategy,
-    setBalances,
-  }
+  return useMemo(
+    () => ({
+      ...baseStrategy,
+      setBalances,
+    }),
+    [baseStrategy, setBalances]
+  )
 }
 
-export default useStakeSushiToBentoStrategy
+export default useStakeSushiToAaveStrategy

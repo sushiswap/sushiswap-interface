@@ -86,6 +86,9 @@ msgstr "애널리틱스"
 msgid "Approve"
 msgstr "승인"
 
+msgid "Approve Inari Master Contract"
+msgstr ""
+
 msgid "Approve Inari to spend {0}"
 msgstr ""
 
@@ -103,6 +106,9 @@ msgstr "승인됨"
 
 msgid "Approving"
 msgstr "승인"
+
+msgid "Approving Inari Master Contract"
+msgstr ""
 
 msgid "Approving Inari to spend {0}"
 msgstr ""
@@ -490,6 +496,11 @@ msgstr "잘못된 수신자"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "격리 대출 시장은 자산 대출자에 대한 위험을 완화합니다. 상대방 파산 시 어떤 담보를 사용할 수 있는지 정확히 알아보세요."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -668,6 +679,9 @@ msgstr "비-하드웨어 지갑"
 
 msgid "None"
 msgstr "없음"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
@@ -878,8 +892,19 @@ msgstr "SUSHI 스테이킹"
 msgid "Stake SUSHI for xSUSHI"
 msgstr "SUSHI를 스테이크하고 xSUSHI를 얻으세요"
 
+msgid "Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
 msgid ""
 "Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid ""
+"Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically\n"
 "invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
 msgstr ""
 
@@ -919,9 +944,6 @@ msgstr "다음으로 스왑(예상):"
 
 msgid "Swap To:"
 msgstr "다음으로 스왑:"
-
-msgid "TODO"
-msgstr ""
 
 msgid "TVL"
 msgstr "전체 동결 가치"

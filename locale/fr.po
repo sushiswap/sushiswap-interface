@@ -86,6 +86,9 @@ msgstr "Statistiques"
 msgid "Approve"
 msgstr "Approuver"
 
+msgid "Approve Inari Master Contract"
+msgstr ""
+
 msgid "Approve Inari to spend {0}"
 msgstr ""
 
@@ -103,6 +106,9 @@ msgstr "Approuvé"
 
 msgid "Approving"
 msgstr "Approbation en cours"
+
+msgid "Approving Inari Master Contract"
+msgstr ""
 
 msgid "Approving Inari to spend {0}"
 msgstr ""
@@ -492,6 +498,11 @@ msgstr "Destinataire non valide"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "Les marchés de prêts isolés atténuent vos risques en tant que prêteur d'actifs. Vous savez exactement quelles garanties sont à votre disposition en cas d'insolvabilité de la contrepartie."
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -670,6 +681,9 @@ msgstr "Portefeuille non-hardware"
 
 msgid "None"
 msgstr "Aucun"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "N'UTILISEZ CE MODE QUE SI VOUS SAVEZ CE QUE VOUS FAITES."
@@ -880,8 +894,19 @@ msgstr "Placer SUSHI"
 msgid "Stake SUSHI for xSUSHI"
 msgstr "Staker SUSHI pour xSUSHI"
 
+msgid "Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
 msgid ""
 "Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid ""
+"Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically\n"
 "invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
 msgstr ""
 
@@ -921,9 +946,6 @@ msgstr "Swap pour (estimé):"
 
 msgid "Swap To:"
 msgstr "Swapper pour:"
-
-msgid "TODO"
-msgstr ""
 
 msgid "TVL"
 msgstr "TVL"

@@ -2,13 +2,13 @@ import React, { FC } from 'react'
 import { classNames } from '../../functions'
 import { useAppDispatch } from '../../state/hooks'
 import { setStrategy } from '../../state/inari/actions'
-import { useInariState, useInariStrategies2 } from '../../state/inari/hooks'
+import { useInariState, useInariStrategies } from '../../state/inari/hooks'
 
 interface StrategySelectorProps {}
 
 const StrategySelector: FC<StrategySelectorProps> = () => {
   const { id } = useInariState()
-  const strategies = useInariStrategies2()
+  const strategies = useInariStrategies()
   const dispatch = useAppDispatch()
 
   return (

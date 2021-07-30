@@ -86,6 +86,9 @@ msgstr "分析"
 msgid "Approve"
 msgstr "承認"
 
+msgid "Approve Inari Master Contract"
+msgstr ""
+
 msgid "Approve Inari to spend {0}"
 msgstr ""
 
@@ -103,6 +106,9 @@ msgstr "承認済み"
 
 msgid "Approving"
 msgstr "承認しています"
+
+msgid "Approving Inari Master Contract"
+msgstr ""
 
 msgid "Approving Inari to spend {0}"
 msgstr ""
@@ -492,6 +498,11 @@ msgstr "受領者が無効です"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "孤立した貸出し市場では、資産の貸し手としてのリスクが軽減されます。相手が破産した場合に利用できる担保を正確に把握することができます。"
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -670,6 +681,9 @@ msgstr "非ハードウェアウォレット"
 
 msgid "None"
 msgstr "なし"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "このモードは、自分が行っている内容を分かっている場合のみ使用してください。"
@@ -880,8 +894,19 @@ msgstr "SUSHIに出資"
 msgid "Stake SUSHI for xSUSHI"
 msgstr "xSUSHIにSUSHIを出資"
 
+msgid "Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
 msgid ""
 "Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid ""
+"Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically\n"
 "invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
 msgstr ""
 
@@ -921,9 +946,6 @@ msgstr "スワップ先 (推定)："
 
 msgid "Swap To:"
 msgstr "スワップ先："
-
-msgid "TODO"
-msgstr ""
 
 msgid "TVL"
 msgstr "TVL"

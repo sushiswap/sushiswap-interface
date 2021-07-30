@@ -8,6 +8,7 @@ import { Input as NumericalInput } from '../../components/NumericalInput'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
+import { Field } from '../../state/inari/types'
 
 interface BalancePanelProps {
   label: string
@@ -15,37 +16,39 @@ interface BalancePanelProps {
   value: string
   symbol: string
   balance: CurrencyAmount<Token> | null
+  field: Field
   showMax?: boolean
 }
 
-const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = false, symbol, balance }) => {
+const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = false, symbol, balance, field }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const { zapIn } = useInariState()
   const { tokens } = useDerivedInariState()
   const { calculateOutputFromInput } = useSelectedInariStrategy()
 
-  const onMax = useCallback(async () => {
-    const val = balance ? balance?.toExact() : '0'
-    dispatch(
-      setValues({
-        inputValue: val,
-        outputValue: await calculateOutputFromInput(zapIn, val, tokens.inputToken, tokens.outputToken),
-      })
-    )
-  }, [balance, calculateOutputFromInput, dispatch, tokens.inputToken, tokens.outputToken, zapIn])
-
-  const handleInput = useCallback(
-    async (val) => {
+  const dispatchValue = useCallback(
+    async (val: string) => {
       dispatch(
         setValues({
-          inputValue: val,
-          outputValue: await calculateOutputFromInput(zapIn, val, tokens.inputToken, tokens.outputToken),
+          inputValue:
+            field === Field.INPUT
+              ? val
+              : await calculateOutputFromInput(!zapIn, val, tokens.outputToken, tokens.inputToken),
+          outputValue:
+            field === Field.INPUT
+              ? await calculateOutputFromInput(zapIn, val, tokens.inputToken, tokens.outputToken)
+              : val,
         })
       )
     },
-    [calculateOutputFromInput, dispatch, tokens.inputToken, tokens.outputToken, zapIn]
+    [calculateOutputFromInput, dispatch, field, tokens.inputToken, tokens.outputToken, zapIn]
   )
+
+  const onMax = useCallback(async () => {
+    const val = balance ? balance?.toExact() : '0'
+    await dispatchValue(val)
+  }, [balance, dispatchValue])
 
   return (
     <div className="flex flex-col gap-1 w-full">
@@ -59,7 +62,7 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = fa
         <div className="rounded-full">
           <CurrencyLogo currency={token} size={40} />
         </div>
-        <NumericalInput value={value} onUserInput={handleInput} />
+        <NumericalInput value={value} onUserInput={dispatchValue} />
         {showMax && (
           <span
             onClick={onMax}

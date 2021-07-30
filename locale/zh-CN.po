@@ -86,6 +86,9 @@ msgstr "分析界面"
 msgid "Approve"
 msgstr "批准"
 
+msgid "Approve Inari Master Contract"
+msgstr ""
+
 msgid "Approve Inari to spend {0}"
 msgstr ""
 
@@ -103,6 +106,9 @@ msgstr "已批准"
 
 msgid "Approving"
 msgstr "批准中"
+
+msgid "Approving Inari Master Contract"
+msgstr ""
 
 msgid "Approving Inari to spend {0}"
 msgstr ""
@@ -481,6 +487,11 @@ msgstr "无效接收人"
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
 msgstr "孤立借贷市场降低您作为资产提供人的风险。在对手方破产时确切知道对方的抵押品。"
 
+msgid ""
+"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
+"sure you have approved the limit order master contract or the order will not execute"
+msgstr ""
+
 msgid "Italian"
 msgstr ""
 
@@ -656,6 +667,9 @@ msgstr "非硬件钱包"
 
 msgid "None"
 msgstr "无"
+
+msgid "Not approved"
+msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "请了解您在做什么之后再选择该模式。"
@@ -866,8 +880,19 @@ msgstr "质押SUSHI"
 msgid "Stake SUSHI for xSUSHI"
 msgstr "将SUSHI质押成xSUSHI"
 
+msgid "Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
 msgid ""
 "Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid ""
+"Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically\n"
 "invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
 msgstr ""
 
@@ -907,9 +932,6 @@ msgstr "交换至（估算）："
 
 msgid "Swap To:"
 msgstr "交换至："
-
-msgid "TODO"
-msgstr ""
 
 msgid "TVL"
 msgstr "TVL"

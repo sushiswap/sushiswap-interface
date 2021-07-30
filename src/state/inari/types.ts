@@ -2,6 +2,11 @@ import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
 import { ApprovalState } from '../../hooks'
 import { BentoMasterApproveCallback, BentoPermit } from '../../hooks/useBentoMasterApproveCallback'
 
+export enum Field {
+  INPUT = 'INPUT',
+  OUTPUT = 'OUTPUT',
+}
+
 export interface Strategy {
   id: string
   general: StrategyGeneralInfo

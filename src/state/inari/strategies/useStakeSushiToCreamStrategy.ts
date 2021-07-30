@@ -6,7 +6,7 @@ import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseInariStrategy from './useBaseInariStrategy'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useDerivedInariState } from '../hooks'
 import { BentoPermit } from '../../../hooks/useBentoMasterApproveCallback'
 
@@ -15,7 +15,7 @@ export const general: StrategyGeneralInfo = {
   steps: ['SUSHI', 'xSUSHI', 'Cream'],
   zapMethod: 'stakeSushiToCream',
   unzapMethod: 'unstakeSushiFromCream',
-  description: t`TODO`,
+  description: t`Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing.`,
   inputSymbol: 'SUSHI',
   outputSymbol: 'xSUSHI in Cream',
 }
@@ -35,7 +35,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
   },
 }
 
-const useStakeSushiToBentoStrategy = (): StrategyHook => {
+const useStakeSushiToCreamStrategy = (): StrategyHook => {
   const { account } = useActiveWeb3React()
   const { zapIn } = useDerivedInariState()
   const zenkoContract = useZenkoContract()
@@ -76,11 +76,14 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
     [execute, zapIn, zenkoContract]
   )
 
-  return {
-    ...baseStrategy,
-    setBalances,
-    execute: preExecute,
-  }
+  return useMemo(
+    () => ({
+      ...baseStrategy,
+      setBalances,
+      execute: preExecute,
+    }),
+    [baseStrategy, preExecute, setBalances]
+  )
 }
 
-export default useStakeSushiToBentoStrategy
+export default useStakeSushiToCreamStrategy
