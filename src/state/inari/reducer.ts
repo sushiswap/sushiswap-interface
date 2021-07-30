@@ -10,6 +10,7 @@ const initialState: InariState = {
   outputValue: '',
   general,
   tokens: tokenDefinitions,
+  usesBentoBox: true,
 }
 
 export default createReducer<InariState>(initialState, (builder) =>

@@ -1,6 +1,6 @@
 import { useActiveWeb3React, useApproveCallback, useInariContract } from '../../../hooks'
 import { useTransactionAdder } from '../../transactions/hooks'
-import { BaseStrategyHook, StrategyBalances } from '../types'
+import { BaseStrategyHook, StrategyBalances, StrategyGeneralInfo, StrategyTokenDefinitions } from '../types'
 import { useDerivedInariState } from '../hooks'
 import { useCallback, useMemo, useState } from 'react'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
@@ -8,7 +8,19 @@ import { e10 } from '../../../functions'
 import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
 import useBentoMasterApproveCallback, { BentoPermit } from '../../../hooks/useBentoMasterApproveCallback'
 
-const useBaseInariStrategy = ({ id, general, tokenDefinitions, usesBentoBox = false }): BaseStrategyHook => {
+interface useBaseInariStrategyInterface {
+  id: string
+  general: StrategyGeneralInfo
+  tokenDefinitions: StrategyTokenDefinitions
+  usesBentoBox?: boolean
+}
+
+const useBaseInariStrategy = ({
+  id,
+  general,
+  tokenDefinitions,
+  usesBentoBox = false,
+}: useBaseInariStrategyInterface): BaseStrategyHook => {
   const { account } = useActiveWeb3React()
   const { inputValue, zapIn, tokens } = useDerivedInariState()
   const inariContract = useInariContract()
@@ -32,8 +44,9 @@ const useBaseInariStrategy = ({ id, general, tokenDefinitions, usesBentoBox = fa
       id,
       general,
       tokenDefinitions,
+      usesBentoBox,
     }
-  }, [general, id, tokenDefinitions])
+  }, [general, id, tokenDefinitions, usesBentoBox])
 
   // Default execution function, can be overridden in child strategies
   // If you override, it's best to do some formatting beforehand and then still call this function
@@ -56,17 +69,21 @@ const useBaseInariStrategy = ({ id, general, tokenDefinitions, usesBentoBox = fa
           ]
 
           const tx = await inariContract.batch(batch, true)
-          return addTransaction(tx, {
+          addTransaction(tx, {
             summary: `Approve Inari Master Contract and ${zapIn ? 'Deposit' : 'Withdraw'} ${general.outputSymbol}`,
           })
+
+          return tx
         }
 
         // Else proceed normally
         else {
           const tx = await inariContract[method](account, val.toExact().toBigNumber(val.currency.decimals))
-          return addTransaction(tx, {
+          addTransaction(tx, {
             summary: `${zapIn ? 'Deposit' : 'Withdraw'} ${general.outputSymbol}`,
           })
+
+          return tx
         }
       } catch (error) {
         console.error(error)

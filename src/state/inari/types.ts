@@ -26,8 +26,7 @@ export interface StrategyGeneralInfo {
 export interface StrategyTokenDefinitions {
   inputToken: StrategyToken
   outputToken: StrategyToken
-  badgeToken?: StrategyToken
-  allowanceToken?: StrategyToken
+  spendToken?: StrategyToken
 }
 
 export interface StrategyToken {
@@ -68,18 +67,16 @@ export interface StrategyHook extends BaseStrategyHook {}
 export interface InariState {
   id: string
   zapIn: boolean
+  usesBentoBox: boolean
   inputValue: string
   outputValue: string
   general: StrategyGeneralInfo
   tokens: StrategyTokenDefinitions
 }
 
-export interface DerivedInariState {
-  id: string
-  general: StrategyGeneralInfo
-  zapIn: boolean
-  outputValue: CurrencyAmount<Token>
+export interface DerivedInariState extends Omit<InariState, 'inputValue' | 'outputValue' | 'tokens'> {
   inputValue: CurrencyAmount<Token>
+  outputValue: CurrencyAmount<Token>
   tokens: {
     inputToken: Token
     outputToken: Token
