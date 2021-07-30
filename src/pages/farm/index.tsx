@@ -199,8 +199,8 @@ export default function Farm(): JSX.Element {
           {
             token: 'TRU',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/tru.jpg',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e8) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e8) * averageBlockTime * blocksPerDay,
             rewardPrice: truPrice,
           },
         ]
