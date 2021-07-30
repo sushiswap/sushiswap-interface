@@ -9,6 +9,7 @@ import { PortisConnector } from '@web3-react/portis-connector'
 import { TorusConnector } from '@web3-react/torus-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
+import { KeystoneConnetor } from '@keystonehq/keystone-connector'
 
 const RPC = {
   [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
@@ -106,6 +107,11 @@ export const walletlink = new WalletLinkConnector({
 // mainnet only
 export const torus = new TorusConnector({
   chainId: 1,
+})
+
+export const keystone = new KeystoneConnetor({
+  chainId: 1,
+  url: RPC[ChainId.MAINNET],
 })
 
 // binance only
