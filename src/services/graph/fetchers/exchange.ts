@@ -74,6 +74,24 @@ export const getEthPrice = async (chainId = ChainId.MAINNET, variables = undefin
   return data?.bundles?.[0]?.ethPrice
 }
 
+export const getYggPrice = async () => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x25f8087ead173b73d6e8b84329989a8eea16cf73',
+  })
+}
+
+export const getRulerPrice = async () => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x2aeccb42482cc64e087b6d2e5da39f5a7a7001f8',
+  })
+}
+
+export const getTruPrice = async () => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x4c19596f5aaff459fa38b0f7ed92f11ae6543784',
+  })
+}
+
 export const getCvxPrice = async () => {
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
     id: '0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b',

@@ -68,6 +68,28 @@ export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'yggPrice' : null, () => getYggPrice(), swrConfig)
+  return data
+}
+
+export function useRulerPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? 'rulerPrice' : null,
+    () => getRulerPrice(),
+    swrConfig
+  )
+  return data
+}
+
+export function useTruPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'truPrice' : null, () => getTruPrice(), swrConfig)
+  return data
+}
+
 export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'aclxPrice' : null, () => getAlcxPrice(), swrConfig)

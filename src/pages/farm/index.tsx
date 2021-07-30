@@ -15,6 +15,9 @@ import {
   useStakePrice,
   usePicklePrice,
   useMphPrice,
+  useYggPrice,
+  useRulerPrice,
+  useTruPrice,
   useSushiPairs,
   useSushiPrice,
 } from '../../services/graph'
@@ -64,7 +67,20 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [sushiPrice, ethPrice, maticPrice, alcxPrice, cvxPrice, stakePrice, onePrice, picklePrice, mphPrice] = [
+  const [
+    sushiPrice,
+    ethPrice,
+    maticPrice,
+    alcxPrice,
+    cvxPrice,
+    stakePrice,
+    onePrice,
+    picklePrice,
+    mphPrice,
+    yggPrice,
+    rulerPrice,
+    truPrice,
+  ] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -74,6 +90,9 @@ export default function Farm(): JSX.Element {
     useOnePrice(),
     usePicklePrice(),
     useMphPrice(),
+    useYggPrice(),
+    useRulerPrice(),
+    useTruPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -130,14 +149,14 @@ export default function Farm(): JSX.Element {
           },
           {
             token: 'CVX',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
+            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B/logo.png',
             rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
             rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
           },
           {
             token: 'CVX',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
+            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B/logo.png',
             rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
             rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: cvxPrice,
@@ -155,6 +174,34 @@ export default function Farm(): JSX.Element {
             rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
             rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
             rewardPrice: mphPrice,
+          },
+          {
+            token: 'DUMMY',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: mphPrice,
+          },
+          {
+            token: 'YGG',
+            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x25f8087EAD173b73D6e8B84329989A8eEA16CF73/logo.png',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: yggPrice,
+          },
+          {
+            token: 'RULER',
+            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x2aECCB42482cc64E087b6D2e5Da39f5A7A7001f8/logo.png',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: rulerPrice,
+          },
+          {
+            token: 'TRU',
+            icon: 'https://github.com/sushiswap/icons/blob/master/token/tru.jpg',
+            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
+            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
+            rewardPrice: truPrice,
           },
         ]
 
