@@ -15,7 +15,7 @@ import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExa
 import useENS from '../../hooks/useENS'
 import { t } from '@lingui/macro'
 import { i18n } from '@lingui/core'
-import { useUserSingleHopOnly } from '../user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from '../user/hooks'
 
 export function useLimitOrderActionHandlers(): {
   onCurrencySelection: (field: Field, currency: Currency) => void
@@ -278,6 +278,7 @@ export function useDefaultsFromURLSearch() {
   const { chainId } = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
   const parsedQs = useParsedQueryString()
+  const [expertMode] = useExpertModeManager()
   const [result, setResult] = useState<
     | {
         inputCurrencyId: string | undefined
@@ -293,6 +294,7 @@ export function useDefaultsFromURLSearch() {
     dispatch(
       replaceLimitOrderState({
         ...parsed,
+        recipient: expertMode ? parsed.recipient : null,
       })
     )
 
@@ -300,6 +302,8 @@ export function useDefaultsFromURLSearch() {
       inputCurrencyId: parsed.inputCurrencyId,
       outputCurrencyId: parsed.outputCurrencyId,
     })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, chainId, parsedQs])
 
   return result
