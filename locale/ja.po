@@ -715,6 +715,9 @@ msgstr ""
 msgid "Please enter an amount"
 msgstr ""
 
+msgid "Please note that the recipient address is different from the connected wallet address."
+msgstr ""
+
 msgid "Please refer to the"
 msgstr ""
 
@@ -1157,6 +1160,9 @@ msgid "minutes"
 msgstr "分"
 
 msgid "or the transaction will revert."
+msgstr ""
+
+msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

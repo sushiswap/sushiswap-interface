@@ -37,6 +37,7 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks'
 import { useExpertModeManager } from '../../../state/user/hooks'
 import { useLingui } from '@lingui/react'
+import Alert from '../../../components/Alert'
 
 const areEqual = (first, second) => {
   if (first.length !== second.length) {
@@ -52,7 +53,7 @@ const areEqual = (first, second) => {
 
 function LimitOrder() {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
 
   const loadedUrlParams = useDefaultsFromURLSearch()
   const [loadedInputCurrency, loadedOutputCurrency] = [
@@ -337,6 +338,16 @@ function LimitOrder() {
                     <ArrowDownIcon className="text-high-emphesis" strokeWidth={2} width={16} height={16} />
                   </div>
                   <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
+                  {recipient !== account && (
+                    <Alert
+                      type="warning"
+                      dismissable={false}
+                      showIcon
+                      message={i18n._(
+                        t`Please note that the recipient address is different from the connected wallet address.`
+                      )}
+                    />
+                  )}
                 </>
               ) : null}
             </div>
