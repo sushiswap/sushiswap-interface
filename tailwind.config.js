@@ -13,6 +13,9 @@ module.exports = {
   darkMode: false,
   theme: {
     extend: {
+      backgroundImage: (theme) => ({
+        'binary-pattern': "url('/binary-pattern.png')",
+      }),
       linearBorderGradients: {
         directions: {
           tr: 'to top right',
