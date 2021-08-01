@@ -175,8 +175,14 @@ export function useSushiPairs(
   return data
 }
 
-export function useTokens(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useTokens(
+  variables = undefined,
+  query = undefined,
+  chainId = undefined,
+  swrConfig: SWRConfiguration = undefined
+) {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
   const shouldFetch = chainId
   const { data } = useSWR(
     shouldFetch ? ['tokens', chainId, query, JSON.stringify(variables)] : null,

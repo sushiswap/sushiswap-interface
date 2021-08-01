@@ -1,5 +1,5 @@
 import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { useEthPrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
+import { useEthPrice, useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
@@ -8,16 +8,16 @@ export default function Tokens() {
   const block1d = useOneDayBlock()
   const block1w = useOneWeekBlock()
 
-  const ethPrice = useEthPrice()
-  const ethPrice1d = useEthPrice({ block: { number: Number(block1d) } })
-  const ethPrice1w = useEthPrice({ block: { number: Number(block1w) } })
+  const nativePrice = useNativePrice()
+  const nativePrice1d = useNativePrice({ block: { number: Number(block1d) } })
+  const nativePrice1w = useNativePrice({ block: { number: Number(block1w) } })
 
   const tokens = useTokens()
   const tokens1d = useTokens({ block: { number: Number(block1d) } })
   const tokens1w = useTokens({ block: { number: Number(block1w) } })
 
   const tokensFormatted =
-    tokens && tokens1d && tokens1w && ethPrice && ethPrice1d && ethPrice1w
+    tokens && tokens1d && tokens1w && nativePrice && nativePrice1d && nativePrice1w
       ? tokens.map((token) => {
           const token1d = tokens1d.find((p) => token.id === p.id) ?? token
           const token1w = tokens1w.find((p) => token.id === p.id) ?? token
@@ -28,11 +28,11 @@ export default function Tokens() {
               symbol: token.symbol,
               name: token.name,
             },
-            liquidity: token.liquidity * token.derivedETH * ethPrice,
+            liquidity: token.liquidity * token.derivedETH * nativePrice,
             volume24h: token.volumeUSD - token1d.volumeUSD,
-            price: token.derivedETH * ethPrice,
-            change1d: ((token.derivedETH * ethPrice) / (token1d.derivedETH * ethPrice1d)) * 100 - 100,
-            change1w: ((token.derivedETH * ethPrice) / (token1w.derivedETH * ethPrice1w)) * 100 - 100,
+            price: token.derivedETH * nativePrice,
+            change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
+            change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
           }
         })
       : []

@@ -1,4 +1,3 @@
-import { times } from 'lodash'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
@@ -16,6 +15,7 @@ import {
   useCustomDayBlock,
   useEthPrice,
   useFarms,
+  useNativePrice,
   useOneDayBlock,
   useSushiPairs,
   useToken,
@@ -23,7 +23,6 @@ import {
   useTokenPairs,
   useTransactions,
 } from '../../../services/graph'
-import { tokenDayDatasQuery } from '../../../services/graph/queries'
 
 const socialsPlaceholder = [
   {
@@ -81,8 +80,8 @@ export default function Token(): JSX.Element {
   const block2d = useCustomDayBlock(2)
 
   // General data (volume, liquidity)
-  const ethPrice = useEthPrice()
-  const ethPrice1d = useEthPrice({ block: { number: Number(block1d) } })
+  const nativePrice = useNativePrice()
+  const nativePrice1d = useNativePrice({ block: { number: Number(block1d) } })
 
   const token = useToken({ id: id })
   const token1d = useToken({ id: id, block: { number: Number(block1d) } })
@@ -181,18 +180,19 @@ export default function Token(): JSX.Element {
   // A bit messy, but allows for renders as info comes in
   const data = useMemo(() => {
     return {
-      price: token && ethPrice ? token.derivedETH * ethPrice : undefined,
+      price: token && nativePrice ? token.derivedETH * nativePrice : undefined,
       priceChange:
-        token && ethPrice && token1d && ethPrice1d
-          ? ((token.derivedETH * ethPrice) / (token1d.derivedETH * ethPrice1d)) * 100 - 100
+        token && nativePrice && token1d && nativePrice1d
+          ? ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100
           : undefined,
       chart: tokenDayData
         ? tokenDayData.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.priceUSD) }))
         : undefined,
-      liquidity: token && ethPrice ? token.liquidity * token.derivedETH * ethPrice : 0,
+      liquidity: token && nativePrice ? token.liquidity * token.derivedETH * nativePrice : 0,
       liquidityChange:
-        token && token1d && ethPrice && ethPrice1d
-          ? ((token.liquidity * token.derivedETH * ethPrice) / (token1d.liquidity * token1d.derivedETH * ethPrice1d)) *
+        token && token1d && nativePrice && nativePrice1d
+          ? ((token.liquidity * token.derivedETH * nativePrice) /
+              (token1d.liquidity * token1d.derivedETH * nativePrice1d)) *
               100 -
             100
           : 0,
@@ -202,7 +202,7 @@ export default function Token(): JSX.Element {
           ? ((token.volumeUSD - token1d.volumeUSD) / (token1d.volumeUSD - token2d.volumeUSD)) * 100 - 100
           : 0,
     }
-  }, [ethPrice, ethPrice1d, token, token1d, token2d, tokenDayData])
+  }, [nativePrice, nativePrice1d, token, token1d, token2d, tokenDayData])
 
   return (
     <>

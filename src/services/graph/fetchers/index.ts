@@ -1,6 +1,8 @@
 import { request } from 'graphql-request'
 
 export async function pager(endpoint, query, variables = undefined) {
+  if (endpoint.includes('undefined')) return {}
+
   let data: any = {}
   let skip = 0
   let flag = true
