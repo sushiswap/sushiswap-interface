@@ -18,7 +18,7 @@ msgid ""
 "(COMING SOON) Accrue automatic yield through flash loans and\n"
 "SUSHI strategies"
 msgstr ""
-"(A VENIR) Accroître le rendement automatique grâce aux flash loans et aux stratégies \n"
+"(A VENIR) Accroître le rendement automatique grâce aux stratégies et aux flash loans \n"
 ""
 
 #~ msgid "(COMING SOON) Accrue automatic yield through flash loans andSUSHI strategies"
@@ -86,12 +86,12 @@ msgstr "30 Jours"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:94
 msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
-msgstr "Une portion de chaque trade (0.05%) est reversée aux détenteurs de xSUSHI au titre d'incitation à participer au protocole."
+msgstr "Une portion de chaque trade (0.05%) est reversée aux détenteurs de xSUSHI."
 
 #: src/features/lending/TradeReview.tsx:72
 #: src/features/swap/AdvancedSwapDetails.tsx:80
 msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
-msgstr "Une portion de chaque trade (0,25%) est reversée aux fournisseurs de liquidité au titre d'incitation à participer au protocole."
+msgstr "Une portion de chaque trade (0,25%) est reversée aux fournisseurs de liquidité."
 
 #: src/features/farm/FarmList.tsx:43
 #: src/pages/kashi/borrow/[pair].tsx:124
@@ -284,11 +284,11 @@ msgstr "Applications BentoBox"
 
 #: src/pages/bentobox/index.tsx:50
 msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
-msgstr "BentoBox est une façon innovante d'utiliser les dapps en économisant du gaz et en maximisant les rendements."
+msgstr "BentoBox permet d'utiliser des dapps en économisant du gaz et en maximisant les rendements."
 
 #: src/pages/user/balances.tsx:89
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
-msgstr "BentoBox offre des rendements supplémentaires sur les dépôts avec des flash loans, des stratégies et des transferts à faible gaz entre les dapps intégrées, comme Kashi"
+msgstr "BentoBox offre des rendements supplémentaires sur les dépôts grâce aux stratégies et aux flash loans ainsi que des transferts à faible gaz entre les dapps intégrées, comme Kashi"
 
 #: src/pages/kashi/borrow/[pair].tsx:236
 msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
@@ -313,7 +313,7 @@ msgstr "Emprunter"
 
 #: src/pages/kashi/borrow/index.tsx:287
 msgid "Borrow assets and leverage up"
-msgstr "Emprunter des actifs et recourir à l'effet de levier"
+msgstr "Emprunter des actifs et utiliser un effet de levier"
 
 #: src/pages/kashi/borrow/[pair].tsx:91
 msgid "Borrow {0}"
@@ -444,7 +444,7 @@ msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
 "migrate"
 msgstr ""
-"Selectionnez un pool ci-dessous, saisissez le montant que vous souhaitez migrer ou choisissez max, puis cliquez sur \n"
+"Selectionnez une pool ci-dessous, saisissez le montant que vous souhaitez migrer ou choisissez max, puis cliquez sur \n"
 " migrer"
 
 #~ msgid "Click on a pool below, input the amount you wish to migrate or select max, and clickmigrate"
@@ -658,7 +658,7 @@ msgstr "Entrer"
 
 #: src/pages/bar/index.tsx:371
 msgid "Enter Amount"
-msgstr "Entrer le montant"
+msgstr "Entrez le montant"
 
 #: src/state/limit-order/hooks.ts:177
 #: src/state/swap/hooks.ts:192
@@ -862,7 +862,7 @@ msgstr "Facteur de risque"
 
 #: src/pages/vesting/index.tsx:163
 msgid "Historical Total Locked: Connect Wallet"
-msgstr "Total de SUSHI verrouillé: Connecter un portefeuille"
+msgstr "Total de SUSHI verrouillé: Connectez un portefeuille"
 
 #: src/pages/vesting/index.tsx:159
 msgid "Historical Total Locked: Fetching Total"
@@ -1013,7 +1013,7 @@ msgstr "Prêté"
 #: src/components/ExchangeHeader.tsx:60
 #: src/pages/kashi/borrow/index.tsx:81
 msgid "Limit"
-msgstr "Limite"
+msgstr "Limit"
 
 #: src/kashi/pages/Markets/Borrow.tsx:40
 #~ msgid "Limit <0>Used</0>"
@@ -1033,7 +1033,7 @@ msgstr "Liquidité"
 
 #: src/features/swap/AdvancedSwapDetails.tsx:78
 msgid "Liquidity Provider Fee"
-msgstr "Frais de fournisseur de liquidité"
+msgstr "Frais des fournisseurs de liquidité"
 
 #: src/pages/exchange/pool/index.tsx:110
 msgid "Liquidity Provider Rewards"
@@ -1102,7 +1102,7 @@ msgid ""
 "MEOW tokens wrap xSUSHI into BentoBox for double yields and can be\n"
 "used to vote in special MEOW governor contracts."
 msgstr ""
-"Le token MEOW représente des xSUSHI déposer dans la BentoBox engrangent un double rendement,\n"
+"Le token MEOW représente des xSUSHI déposés dans la BentoBox engrangent un double rendement,\n"
 "il peut aussi être utilisé pour voter et participer à la gouvernance\n"
 ""
 
@@ -1385,7 +1385,7 @@ msgstr "Merci d'entrer un montant"
 
 #: src/pages/vesting/index.tsx:129
 msgid "Please refer to the"
-msgstr "Merci de vous référez à"
+msgstr "Merci de vous référer à"
 
 #: src/components/Settings/index.tsx:144
 msgid "Please type the word \"confirm\" to enable expert mode."
@@ -1399,7 +1399,7 @@ msgstr "Pool"
 
 #: src/pages/exchange/find/index.tsx:140
 msgid "Pool Found!"
-msgstr "Pool identifié!"
+msgstr "Pool identifiée!"
 
 #: src/pages/Yield/minichefv2/index.tsx:82
 #~ msgid "Pool Rewards"
@@ -1617,7 +1617,7 @@ msgstr "Envoyer à:"
 
 #: src/components/Settings/index.tsx:115
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
-msgstr "Envoyer une transaction privée pour éviter le front-running et les attaques sandwich. Nécessite un pourboire pour le mineur"
+msgstr "Envoyez une transaction privée pour éviter le front-running et les attaques sandwich. Nécessite un pourboire pour le mineur"
 
 #: src/features/liquidity/LiquidityPrice.tsx:52
 msgid "Share of Pool"
@@ -1644,7 +1644,7 @@ msgstr "Tolérance au slippage..."
 #: src/features/lending/Button.tsx:28
 #: src/features/limit-order/LimitOrderButton.tsx:189
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
-msgstr "Une erreur s'est produite lors de la signature de l'approbation. Cela peut arriver lors de l'utilisation de portefeuilles \"hardware\", tels que Trezor et Ledger. Cliquez à nouveau et la méthode de récupération sera utilisée"
+msgstr "Une erreur s'est produite lors de la signature de l'approbation. Cela peut arriver lors de l'utilisation de portefeuilles \"hardware\", tels que Trezor et Ledger. Cliquez à nouveau et une autre méthode sera utilisée"
 
 #: src/components/LanguageSwitch/index.tsx:50
 #: src/components/LanguageSwitch/index.tsx:54
@@ -1841,7 +1841,7 @@ msgstr "Ajoutez un pourboire pour encourager les mineurs a sélectionner votre t
 #: src/pages/exchange/add/[[...tokens]].tsx:361
 #: src/pages/exchange/find/index.tsx:95
 msgid "Tip:"
-msgstr "Pourboire:"
+msgstr "Astuce:"
 
 #: src/pages/Swap/direct.tsx:268
 #~ msgid "To"
@@ -1944,7 +1944,7 @@ msgstr "Unstake"
 
 #: src/pages/bar/index.tsx:409
 msgid "Unstaked"
-msgstr "Unstaked"
+msgstr "Unstaké"
 
 #: src/pages/exchange/add/[[...tokens]].tsx:455
 #: src/pages/exchange/swap/[[...tokens]].tsx:574
@@ -2007,7 +2007,7 @@ msgstr "Vietnamien"
 #: src/pages/exchange/add/[[...tokens]].tsx:328
 #: src/pages/exchange/remove/[[...tokens]].tsx:722
 msgid "View Liquidity Positions"
-msgstr "Consulter les positions de liquidité"
+msgstr "Consulter mes positions de liquidité"
 
 #: src/pages/bar/index.tsx:242
 msgid "View Stats"
@@ -2028,7 +2028,7 @@ msgstr "Consulter les statistiques"
 #: src/components/AccountDetails/index.tsx:155
 #: src/pages/user/index.tsx:111
 msgid "View on explorer"
-msgstr "Consulter sur l'explorateur"
+msgstr "Consulter depuis l'explorateur"
 
 #: src/components/swap/AdvancedSwapDetails.tsx:82
 #~ msgid "View pair analytics"
@@ -2169,7 +2169,7 @@ msgstr "Votre liquidité"
 
 #: src/features/farm/FarmListItemDetails.tsx:139
 msgid "Your Staked"
-msgstr "Vos X staké"
+msgstr "Vos stakés"
 
 #: src/pages/bar/index.tsx:453
 msgid "Your SushiBar Stats"
@@ -2204,7 +2204,7 @@ msgstr "Votre total de tokens dans la pool"
 
 #: src/components/TransactionSettings/index.tsx:167
 msgid "Your transaction may be frontrun"
-msgstr "Votre transaction peut être en \"frontrun\""
+msgstr "Votre transaction peut être \"frontrun\""
 
 #: src/components/TransactionSettings/index.tsx:166
 msgid "Your transaction may fail"
@@ -2317,7 +2317,7 @@ msgstr ""
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:47
 #: src/features/liquidity/ConfirmAddModalBottom.tsx:54
 msgid "{0} Deposited"
-msgstr "{0} Déposé"
+msgstr "{0} Déposé(s)"
 
 #: src/pages/kashi/borrow/[pair].tsx:231
 #: src/pages/kashi/lend/[pair].tsx:202
@@ -2341,4 +2341,4 @@ msgstr "{0} {sign} taux du marché"
 
 #: src/pages/exchange/remove/[[...tokens]].tsx:638
 msgid "{0}/{1} Burned"
-msgstr "{0}/{1} Brulé"
+msgstr "{0}/{1} Brulé contre la liquidité sous-jacente"
