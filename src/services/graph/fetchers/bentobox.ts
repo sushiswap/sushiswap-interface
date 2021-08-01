@@ -3,9 +3,8 @@ import { getTokenSubset } from './exchange'
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
 import { bentoUserTokensQuery, kashiPairsQuery, kashiUserPairsQuery } from '../queries/bentobox'
-import { request } from 'graphql-request'
 import { getFraction, toAmount } from '../../../functions'
-import { BigNumber } from '@ethersproject/bignumber'
+import { pager } from '.'
 
 export const BENTOBOX = {
   [ChainId.MAINNET]: 'sushiswap/bentobox',
@@ -15,7 +14,7 @@ export const BENTOBOX = {
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
 }
 export const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) =>
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)
+  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)
 
 export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undefined) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)
