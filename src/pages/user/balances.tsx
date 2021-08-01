@@ -113,9 +113,9 @@ const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => 
             loader={cloudinaryLoader}
             height={56}
             width={56}
-            src={token.tokenInfo.logoURI}
+            src={token.tokenInfo?.logoURI}
             className="w-10 mr-4 rounded-lg sm:w-14"
-            alt={token.tokenInfo.symbol}
+            alt={token.tokenInfo?.symbol}
           />
           <div>{token && token.symbol}</div>
         </div>
