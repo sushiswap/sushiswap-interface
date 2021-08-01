@@ -8,8 +8,10 @@ import useMigrateState, { MigrateState } from '../../../hooks/useMigrateState'
 
 import { AddressZero } from '@ethersproject/constants'
 import Badge from '../../../components/Badge'
+import Container from '../../../components/Container'
 import Dots from '../../../components/Dots'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import Empty from '../../../components/Empty'
 import Head from 'next/head'
 import LPToken from '../../../types/LPToken'
@@ -21,7 +23,6 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { useSushiRollContract } from '../../../hooks/useContract'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -308,8 +309,9 @@ export default function Migrate() {
   } else if (chainId === ChainId.MATIC) {
     exchange = 'QuickSwap'
   }
+
   return (
-    <>
+    <Container id="migrate-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="lg">
       <Head>
         <title>Migrate | Sushi</title>
         <meta key="description" name="description" content="Migrate your liquidity to SushiSwap." />
@@ -318,7 +320,7 @@ export default function Migrate() {
       <div className="mb-8 text-2xl text-center">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
 
       <DoubleGlowShadow>
-        <div className="w-full max-w-lg p-4 space-y-4 rounded bg-dark-900">
+        <div className="p-4 space-y-4 rounded bg-dark-900">
           {!account ? (
             <Web3Connect color="blue" className="w-full" />
           ) : state.loading ? (
@@ -345,6 +347,6 @@ export default function Migrate() {
           )}
         </div>
       </DoubleGlowShadow>
-    </>
+    </Container>
   )
 }

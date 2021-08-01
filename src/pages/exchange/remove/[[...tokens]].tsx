@@ -19,6 +19,7 @@ import Container from '../../../components/Container'
 import { Contract } from '@ethersproject/contracts'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import Dots from '../../../components/Dots'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/burn/actions'
 import Head from 'next/head'
 import Header from '../../../components/ExchangeHeader'
@@ -47,7 +48,6 @@ import useTransactionDeadline from '../../../hooks/useTransactionDeadline'
 import { useUserSlippageToleranceWithDefault } from '../../../state/user/hooks'
 import { useV2LiquidityTokenPermit } from '../../../hooks/useERC20Permit'
 import { useWalletModalToggle } from '../../../state/application/hooks'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
@@ -709,164 +709,161 @@ export default function Remove() {
   )
 
   return (
-    <>
+    <Container id="remove-liquidity-page"  className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Remove Liquidity | Sushi</title>
         <meta key="description" name="description" content="Remove liquidity from the SushiSwap AMM" />
       </Head>
+      <div className="px-4 mb-5">
+        <NavLink href="/pool">
+          <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">
+            <span>{i18n._(t`View Liquidity Positions`)}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </NavLink>
+      </div>
 
-      <Container id="remove-liquidity-page" maxWidth="2xl" className="space-y-4">
-        <div className="px-4 mb-5">
-          <NavLink href="/pool">
-            <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">
-              <span>{i18n._(t`View Liquidity Positions`)}</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </NavLink>
-        </div>
+      <DoubleGlowShadow>
+        <div className="p-4 space-y-4 rounded bg-dark-900" style={{ zIndex: 1 }}>
+          {/* <AddRemoveTabs
+          creating={false}
+          adding={false}
+          defaultSlippage={DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE}
+        /> */}
+          <Header input={currencyA} output={currencyB} allowedSlippage={allowedSlippage} />
+          <div>
+            <TransactionConfirmationModal
+              isOpen={showConfirm}
+              onDismiss={handleDismissConfirmation}
+              attemptingTxn={attemptingTxn}
+              hash={txHash ? txHash : ''}
+              content={() => (
+                <ConfirmationModalContent
+                  title={i18n._(t`You will receive`)}
+                  onDismiss={handleDismissConfirmation}
+                  topContent={modalHeader}
+                  bottomContent={modalBottom}
+                />
+              )}
+              pendingText={pendingText}
+            />
+            <AutoColumn gap="md">
+              {/* <LiquidityHeader input={currencyA} output={currencyB} /> */}
 
-        <DoubleGlowShadow>
-          <div className="p-4 space-y-4 rounded bg-dark-900" style={{ zIndex: 1 }}>
-            {/* <AddRemoveTabs
-            creating={false}
-            adding={false}
-            defaultSlippage={DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE}
-          /> */}
-            <Header input={currencyA} output={currencyB} allowedSlippage={allowedSlippage} />
-            <div>
-              <TransactionConfirmationModal
-                isOpen={showConfirm}
-                onDismiss={handleDismissConfirmation}
-                attemptingTxn={attemptingTxn}
-                hash={txHash ? txHash : ''}
-                content={() => (
-                  <ConfirmationModalContent
-                    title={i18n._(t`You will receive`)}
-                    onDismiss={handleDismissConfirmation}
-                    topContent={modalHeader}
-                    bottomContent={modalBottom}
-                  />
-                )}
-                pendingText={pendingText}
-              />
-              <AutoColumn gap="md">
-                {/* <LiquidityHeader input={currencyA} output={currencyB} /> */}
+              <div>
+                <PercentInputPanel
+                  value={innerLiquidityPercentage}
+                  onUserInput={setInnerLiquidityPercentage}
+                  id="liquidity-percent"
+                />
 
-                <div>
-                  <PercentInputPanel
-                    value={innerLiquidityPercentage}
-                    onUserInput={setInnerLiquidityPercentage}
-                    id="liquidity-percent"
-                  />
+                <AutoColumn justify="space-between" className="py-2.5">
+                  <AutoRow justify={'flex-start'} style={{ padding: '0 1rem' }}>
+                    <button className="z-10 -mt-6 -mb-6 rounded-full cursor-default bg-dark-900 p-3px">
+                      <div className="p-3 rounded-full bg-dark-800">
+                        <ArrowDownIcon width="32px" height="32px" />
+                      </div>
+                    </button>
+                  </AutoRow>
+                </AutoColumn>
 
-                  <AutoColumn justify="space-between" className="py-2.5">
-                    <AutoRow justify={'flex-start'} style={{ padding: '0 1rem' }}>
-                      <button className="z-10 -mt-6 -mb-6 rounded-full cursor-default bg-dark-900 p-3px">
-                        <div className="p-3 rounded-full bg-dark-800">
-                          <ArrowDownIcon width="32px" height="32px" />
-                        </div>
-                      </button>
-                    </AutoRow>
-                  </AutoColumn>
+                <div id="remove-liquidity-output" className="p-5 rounded bg-dark-800">
+                  <div className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row">
+                    <div className="w-full text-white sm:w-2/5" style={{ margin: 'auto 0px' }}>
+                      <AutoColumn>
+                        <div>You Will Receive:</div>
+                        {chainId && (oneCurrencyIsWETH || oneCurrencyIsETH) ? (
+                          <RowBetween className="text-sm">
+                            {oneCurrencyIsETH ? (
+                              <Link
+                                href={`/remove/${currencyA?.isNative ? WNATIVE[chainId].address : currencyIdA}/${
+                                  currencyB?.isNative ? WNATIVE[chainId].address : currencyIdB
+                                }`}
+                              >
+                                <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">
+                                  Receive W{NATIVE[chainId].symbol}
+                                </a>
+                              </Link>
+                            ) : oneCurrencyIsWETH ? (
+                              <Link
+                                href={`/remove/${currencyA?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdA}/${
+                                  currencyB?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdB
+                                }`}
+                              >
+                                <a className="text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap">
+                                  Receive {NATIVE[chainId].symbol}
+                                </a>
+                              </Link>
+                            ) : null}
+                          </RowBetween>
+                        ) : null}
+                      </AutoColumn>
+                    </div>
 
-                  <div id="remove-liquidity-output" className="p-5 rounded bg-dark-800">
-                    <div className="flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row">
-                      <div className="w-full text-white sm:w-2/5" style={{ margin: 'auto 0px' }}>
+                    <div className="flex flex-col space-y-3 md:flex-row md:space-x-6 md:space-y-0">
+                      <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
+                        <CurrencyLogo currency={currencyA} size="46px" />
                         <AutoColumn>
-                          <div>You Will Receive:</div>
-                          {chainId && (oneCurrencyIsWETH || oneCurrencyIsETH) ? (
-                            <RowBetween className="text-sm">
-                              {oneCurrencyIsETH ? (
-                                <Link
-                                  href={`/remove/${currencyA?.isNative ? WNATIVE[chainId].address : currencyIdA}/${
-                                    currencyB?.isNative ? WNATIVE[chainId].address : currencyIdB
-                                  }`}
-                                >
-                                  <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">
-                                    Receive W{NATIVE[chainId].symbol}
-                                  </a>
-                                </Link>
-                              ) : oneCurrencyIsWETH ? (
-                                <Link
-                                  href={`/remove/${currencyA?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdA}/${
-                                    currencyB?.equals(WNATIVE[chainId]) ? 'ETH' : currencyIdB
-                                  }`}
-                                >
-                                  <a className="text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap">
-                                    Receive {NATIVE[chainId].symbol}
-                                  </a>
-                                </Link>
-                              ) : null}
-                            </RowBetween>
-                          ) : null}
+                          <div className="text-white">{formattedAmounts[Field.CURRENCY_A] || '-'}</div>
+                          <div className="text-sm">{currencyA?.symbol}</div>
                         </AutoColumn>
                       </div>
-
-                      <div className="flex flex-col space-y-3 md:flex-row md:space-x-6 md:space-y-0">
-                        <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
-                          <CurrencyLogo currency={currencyA} size="46px" />
-                          <AutoColumn>
-                            <div className="text-white">{formattedAmounts[Field.CURRENCY_A] || '-'}</div>
-                            <div className="text-sm">{currencyA?.symbol}</div>
-                          </AutoColumn>
-                        </div>
-                        <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
-                          <CurrencyLogo currency={currencyB} size="46px" />
-                          <AutoColumn>
-                            <div className="text-white">{formattedAmounts[Field.CURRENCY_B] || '-'}</div>
-                            <div className="text-sm">{currencyB?.symbol}</div>
-                          </AutoColumn>
-                        </div>
+                      <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
+                        <CurrencyLogo currency={currencyB} size="46px" />
+                        <AutoColumn>
+                          <div className="text-white">{formattedAmounts[Field.CURRENCY_B] || '-'}</div>
+                          <div className="text-sm">{currencyB?.symbol}</div>
+                        </AutoColumn>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <div style={{ position: 'relative' }}>
-                  {!account ? (
-                    <Web3Connect size="lg" color="blue" className="w-full" />
-                  ) : (
-                    <div className="grid grid-cols-2 gap-4">
-                      <ButtonConfirmed
-                        onClick={onAttemptToApprove}
-                        confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
-                        disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
-                      >
-                        {approval === ApprovalState.PENDING ? (
-                          <Dots>{i18n._(t`Approving`)}</Dots>
-                        ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
-                          i18n._(t`Approved`)
-                        ) : (
-                          i18n._(t`Approve`)
-                        )}
-                      </ButtonConfirmed>
-                      <ButtonError
-                        onClick={() => {
-                          setShowConfirm(true)
-                        }}
-                        disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
-                        error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
-                      >
-                        {error || i18n._(t`Confirm Withdrawal`)}
-                      </ButtonError>
-                    </div>
-                  )}
-                </div>
-              </AutoColumn>
-            </div>
-
-            {pair ? <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} /> : null}
+              <div style={{ position: 'relative' }}>
+                {!account ? (
+                  <Web3Connect size="lg" color="blue" className="w-full" />
+                ) : (
+                  <div className="grid grid-cols-2 gap-4">
+                    <ButtonConfirmed
+                      onClick={onAttemptToApprove}
+                      confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
+                      disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
+                    >
+                      {approval === ApprovalState.PENDING ? (
+                        <Dots>{i18n._(t`Approving`)}</Dots>
+                      ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
+                        i18n._(t`Approved`)
+                      ) : (
+                        i18n._(t`Approve`)
+                      )}
+                    </ButtonConfirmed>
+                    <ButtonError
+                      onClick={() => {
+                        setShowConfirm(true)
+                      }}
+                      disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
+                      error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
+                    >
+                      {error || i18n._(t`Confirm Withdrawal`)}
+                    </ButtonError>
+                  </div>
+                )}
+              </div>
+            </AutoColumn>
           </div>
-        </DoubleGlowShadow>
-      </Container>
-    </>
+
+          {pair ? <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} /> : null}
+        </div>
+      </DoubleGlowShadow>
+    </Container>
   )
 }

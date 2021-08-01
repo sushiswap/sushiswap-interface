@@ -1,40 +1,42 @@
-import Head from 'next/head'
-import { t } from '@lingui/macro'
-import TokenWarningModal from '../../../modals/TokenWarningModal'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useLingui } from '@lingui/react'
 import { ChainId, Token } from '@sushiswap/sdk'
-import { useAllTokens, useCurrency } from '../../../hooks/Tokens'
-import { Field } from '../../../state/swap/actions'
-import { useExpertModeManager } from '../../../state/user/hooks'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { formatPercent, maxAmountSpend, tryParseAmount } from '../../../functions'
-import Lottie from 'lottie-react'
-import swapArrowsAnimationData from '../../../animation/swap-arrows.json'
-import LimitPriceInputPanel from '../../../features/limit-order/LimitPriceInputPanel'
-import ExpertModePanel from '../../../components/ExpertModePanel'
-import PriceRatio from '../../../features/limit-order/PriceRatio'
-import OrderExpirationDropdown from '../../../features/limit-order/OrderExpirationDropdown'
-import AddressInputPanel from '../../../components/AddressInputPanel'
-import { ArrowDownIcon } from '@heroicons/react/outline'
+import { useAllTokens, useCurrency } from '../../../hooks/Tokens'
 import {
   useDefaultsFromURLSearch,
   useDerivedLimitOrderInfo,
   useLimitOrderActionHandlers,
   useLimitOrderState,
 } from '../../../state/limit-order/hooks'
-import LimitOrderButton from '../../../features/limit-order/LimitOrderButton'
+
+import AddressInputPanel from '../../../components/AddressInputPanel'
+import { ArrowDownIcon } from '@heroicons/react/outline'
 import BalancePanel from '../../../features/limit-order/BalancePanel'
-import ExchangeHeader from '../../../components/ExchangeHeader'
-import CurrencyInputPanel from '../../../features/limit-order/CurrencyInputPanel'
+import Container from '../../../components/Container'
 import CurrencyInput from '../../../features/limit-order/CurrencyInput'
+import CurrencyInputPanel from '../../../features/limit-order/CurrencyInputPanel'
 import CurrencySelect from '../../../features/limit-order/CurrencySelect'
-import Typography from '../../../components/Typography'
-import PayFromToggle from '../../../features/limit-order/PayFromToggle'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
+import ExchangeHeader from '../../../components/ExchangeHeader'
 import { ExclamationIcon } from '@heroicons/react/solid'
-import { useActiveWeb3React } from '../../../hooks'
-import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
+import ExpertModePanel from '../../../components/ExpertModePanel'
+import { Field } from '../../../state/swap/actions'
+import Head from 'next/head'
+import LimitOrderButton from '../../../features/limit-order/LimitOrderButton'
+import LimitPriceInputPanel from '../../../features/limit-order/LimitPriceInputPanel'
+import Lottie from 'lottie-react'
 import NetworkGuard from '../../../guards/Network'
+import OrderExpirationDropdown from '../../../features/limit-order/OrderExpirationDropdown'
+import PayFromToggle from '../../../features/limit-order/PayFromToggle'
+import PriceRatio from '../../../features/limit-order/PriceRatio'
+import TokenWarningModal from '../../../modals/TokenWarningModal'
+import Typography from '../../../components/Typography'
+import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
+import swapArrowsAnimationData from '../../../animation/swap-arrows.json'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../../hooks'
+import { useExpertModeManager } from '../../../state/user/hooks'
+import { useLingui } from '@lingui/react'
 
 const areEqual = (first, second) => {
   if (first.length !== second.length) {
@@ -208,7 +210,7 @@ function LimitOrder() {
   }, [currencies, pairs])
 
   return (
-    <>
+    <Container id="limit-order-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>{i18n._(t`Limit order`)} | Sushi</title>
         <meta
@@ -229,7 +231,7 @@ function LimitOrder() {
         }}
       >
         <DoubleGlowShadow>
-          <div id="limit-order-page" className="flex flex-col p-4 rounded bg-dark-900 gap-4">
+          <div id="limit-order-page" className="flex flex-col gap-4 p-4 rounded bg-dark-900">
             <ExchangeHeader input={currencies[Field.INPUT]} output={currencies[Field.OUTPUT]} />
             <div className="flex flex-col gap-4">
               <CurrencyInputPanel
@@ -259,10 +261,10 @@ function LimitOrder() {
               />
               <div className="flex flex-row gap-5">
                 <div />
-                <div className="flex items-center relative">
+                <div className="relative flex items-center">
                   <div className="z-0 absolute w-[2px] bg-dark-800 h-[calc(100%+32px)] top-[-16px] left-[calc(50%-1px)]" />
                   <button
-                    className="rounded-full bg-dark-900 p-3px z-10"
+                    className="z-10 rounded-full bg-dark-900 p-3px"
                     onClick={() => {
                       onSwitchTokens()
                     }}
@@ -284,7 +286,7 @@ function LimitOrder() {
                 <LimitPriceInputPanel onBlur={(val) => checkLimitPrice(val)} />
               </div>
               <CurrencyInputPanel
-                className="relative z-1 rounded"
+                className="relative rounded z-1"
                 id="swap-currency-input"
                 selectComponent={
                   <CurrencySelect
@@ -307,7 +309,7 @@ function LimitOrder() {
                     error={currencyInputPanelError}
                     endAdornment={
                       <div className="flex flex-col">
-                        <span className="text-xs font-bold text-high-emphesis text-right">
+                        <span className="text-xs font-bold text-right text-high-emphesis">
                           {currencyInputPanelHelperText}
                         </span>
                       </div>
@@ -316,8 +318,8 @@ function LimitOrder() {
                 }
                 bottomAdornment={
                   currencyInputPanelError ? (
-                    <div className="bg-red bg-opacity-20 rounded-b flex items-center py-2 justify-center z-0 -mt-2">
-                      <div className="pt-2 flex gap-2 items-center">
+                    <div className="z-0 flex items-center justify-center py-2 -mt-2 rounded-b bg-red bg-opacity-20">
+                      <div className="flex items-center gap-2 pt-2">
                         <ExclamationIcon className="text-red" width={24} height={24} />
                         <Typography variant="xs" weight={700}>
                           {currencyInputPanelError}
@@ -339,7 +341,7 @@ function LimitOrder() {
               ) : null}
             </div>
 
-            <div className="flex flex-col md:flex-row justify-between gap-4 items-end md:items-center w-full">
+            <div className="flex flex-col items-end justify-between w-full gap-4 md:flex-row md:items-center">
               {currencies[Field.INPUT] && currencies[Field.OUTPUT] && (
                 <div className="flex flex-1">
                   <PriceRatio />
@@ -352,7 +354,7 @@ function LimitOrder() {
                   }`}
                 >
                   <div
-                    className="flex text-blue underline cursor-pointer items-center text-sm"
+                    className="flex items-center text-sm underline cursor-pointer text-blue"
                     onClick={() => onChangeRecipient('')}
                   >
                     {i18n._(t`Change Recipient`)}
@@ -372,7 +374,7 @@ function LimitOrder() {
           </div>
         </DoubleGlowShadow>
       </ExpertModePanel>
-    </>
+    </Container>
   )
 }
 

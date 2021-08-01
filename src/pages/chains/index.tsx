@@ -1,3 +1,4 @@
+import Container from '../../components/Container'
 import Head from 'next/head'
 import Typography from '../../components/Typography'
 import useSWR from 'swr'
@@ -8,7 +9,7 @@ export default function Status({ initialData }) {
   const res = useSWR('https://chainid.network/chains.json', getChains, { initialData })
   const { data } = res
   return (
-    <>
+    <Container id="chains-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="6xl">
       <Head>
         <title>Chains | Sushi</title>
         <meta key="description" name="description" content="Chains..." />
@@ -29,7 +30,7 @@ export default function Status({ initialData }) {
           })}
         </div>
       </div>
-    </>
+    </Container>
   )
 }
 

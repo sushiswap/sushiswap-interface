@@ -87,7 +87,7 @@ export default function Pool() {
   // })
   const migrationSupported = chainId in MigrationSupported
   return (
-    <>
+    <Container id="pool-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Pool | Sushi</title>
         <meta
@@ -97,75 +97,73 @@ export default function Pool() {
         />
       </Head>
 
-      <Container maxWidth="2xl" className="space-y-6">
-        <div className="p-4 mb-3 space-y-3">
-          <Back />
+      <div className="p-4 mb-3 space-y-3">
+        <Back />
 
-          <Typography component="h1" variant="h2">
-            {i18n._(t`My Liquidity Positions`)}
-          </Typography>
-        </div>
+        <Typography component="h1" variant="h2">
+          {i18n._(t`My Liquidity Positions`)}
+        </Typography>
+      </div>
 
-        <Alert
-          title={i18n._(t`Liquidity Provider Rewards`)}
-          message={i18n._(t`Liquidity providers earn a 0.25% fee on all trades proportional to their share of
+      <Alert
+        title={i18n._(t`Liquidity Provider Rewards`)}
+        message={i18n._(t`Liquidity providers earn a 0.25% fee on all trades proportional to their share of
                         the pool. Fees are added to the pool, accrue in real time and can be claimed by
                         withdrawing your liquidity`)}
-          type="information"
-        />
+        type="information"
+      />
 
-        <div className="p-4 space-y-4 rounded bg-dark-900">
-          <div className="grid grid-flow-row gap-3">
-            {!account ? (
-              <Web3Connect size="lg" color="blue" className="w-full" />
-            ) : v2IsLoading ? (
-              <Empty>
-                <Dots>{i18n._(t`Loading`)}</Dots>
-              </Empty>
-            ) : allV2PairsWithLiquidity?.length > 0 ? (
-              <>
-                {/* <div className="flex items-center justify-center">
+      <div className="p-4 space-y-4 rounded bg-dark-900">
+        <div className="grid grid-flow-row gap-3">
+          {!account ? (
+            <Web3Connect size="lg" color="blue" className="w-full" />
+          ) : v2IsLoading ? (
+            <Empty>
+              <Dots>{i18n._(t`Loading`)}</Dots>
+            </Empty>
+          ) : allV2PairsWithLiquidity?.length > 0 ? (
+            <>
+              {/* <div className="flex items-center justify-center">
                   <ExternalLink
                     href={"https://analytics.sushi.com/user/" + account}
                   >
                     Account analytics and accrued fees <span> ↗</span>
                   </ExternalLink>
                 </div> */}
-                {allV2PairsWithLiquidity.map((v2Pair) => (
-                  <FullPositionCard
-                    key={v2Pair.liquidityToken.address}
-                    pair={v2Pair}
-                    stakedBalance={CurrencyAmount.fromRawAmount(v2Pair.liquidityToken, '0')}
-                  />
-                ))}
-              </>
-            ) : (
-              <Empty className="flex text-lg text-center text-low-emphesis">
-                <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
-              </Empty>
-            )}
-            <div className={classNames('grid gap-4', migrationSupported ? 'grid-cols-3' : 'grid-cols-2')}>
-              <Button
-                id="add-pool-button"
-                color="gradient"
-                className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
-                onClick={() => router.push(`/add/${currencyId(NATIVE[chainId])}`)}
-              >
-                {i18n._(t`Add`)}
-              </Button>
-              <Button id="add-pool-button" color="gray" onClick={() => router.push(`/find`)}>
-                {i18n._(t`Import`)}
-              </Button>
+              {allV2PairsWithLiquidity.map((v2Pair) => (
+                <FullPositionCard
+                  key={v2Pair.liquidityToken.address}
+                  pair={v2Pair}
+                  stakedBalance={CurrencyAmount.fromRawAmount(v2Pair.liquidityToken, '0')}
+                />
+              ))}
+            </>
+          ) : (
+            <Empty className="flex text-lg text-center text-low-emphesis">
+              <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
+            </Empty>
+          )}
+          <div className={classNames('grid gap-4', migrationSupported ? 'grid-cols-3' : 'grid-cols-2')}>
+            <Button
+              id="add-pool-button"
+              color="gradient"
+              className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
+              onClick={() => router.push(`/add/${currencyId(NATIVE[chainId])}`)}
+            >
+              {i18n._(t`Add`)}
+            </Button>
+            <Button id="add-pool-button" color="gray" onClick={() => router.push(`/find`)}>
+              {i18n._(t`Import`)}
+            </Button>
 
-              {migrationSupported && (
-                <Button id="create-pool-button" color="gray" onClick={() => router.push(`/migrate`)}>
-                  {i18n._(t`Migrate`)}
-                </Button>
-              )}
-            </div>
+            {migrationSupported && (
+              <Button id="create-pool-button" color="gray" onClick={() => router.push(`/migrate`)}>
+                {i18n._(t`Migrate`)}
+              </Button>
+            )}
           </div>
         </div>
-      </Container>
-    </>
+      </div>
+    </Container>
   )
 }
