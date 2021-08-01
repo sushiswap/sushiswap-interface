@@ -41,6 +41,9 @@ msgstr "各取引の一部 (0.25％) は、プロトコルのインセンティ�
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "承認"
 
@@ -273,6 +276,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "プールおよび供給を作成"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -323,6 +329,9 @@ msgstr "Sushiの開発者向けドキュメント。"
 
 msgid "Documentation for users of Sushi."
 msgstr "Sushiのユーザー向けドキュメント。"
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -431,6 +440,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "健全性"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "過去の合計ロック数：ウォレットを接続"
@@ -559,6 +571,9 @@ msgstr "{exchange}の流動性ポジションを読み込んでいます"
 
 msgid "Loading..."
 msgstr "読み込んでいます..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "最大"
@@ -735,6 +750,9 @@ msgstr "プールが見つかりました！"
 msgid "Pool Tokens"
 msgstr "トークンをプール"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "報酬プールのトークンをプール"
 
@@ -755,6 +773,9 @@ msgstr "価格への影響が高すぎる"
 
 msgid "Price Updated"
 msgstr "価格が更新されました"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -816,6 +837,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "名前を検索またはアドレスを貼り付ける"
 
@@ -857,6 +881,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "承認の署名中に問題が発生しました。これは、TrezorやLedgerなどのハードウェアウォレットに対して想定されています。もう一度クリックすると、フォールバックメソッドが使用されます"
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

@@ -41,6 +41,9 @@ msgstr "Ein Teil jedes Handels (0,25 %) geht als Protokollanreiz an Liquiditäts
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "Akzeptieren"
 
@@ -273,6 +276,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "Erstellen Sie Pool & Supply"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -323,6 +329,9 @@ msgstr "Dokumentation für Entwickler von Sushi."
 
 msgid "Documentation for users of Sushi."
 msgstr "Dokumentation für Benutzer von Sushi."
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -431,6 +440,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "Gesundheit"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Historische Gesamtsumme gesperrt: Wallet verbinden"
@@ -559,6 +571,9 @@ msgstr "Laden Ihrer {exchange} Liquiditätspositionen"
 
 msgid "Loading..."
 msgstr "Wird geladen ..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "MAX"
@@ -735,6 +750,9 @@ msgstr "Pool gefunden!"
 msgid "Pool Tokens"
 msgstr "Pool-Token"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "Pool-Token im Prämienpool"
 
@@ -755,6 +773,9 @@ msgstr "Preisauswirkung zu hoch"
 
 msgid "Price Updated"
 msgstr "Preis aktualisiert"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -816,6 +837,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "Suchen Sie den Namen oder fügen Sie die Adresse ein"
 
@@ -857,6 +881,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Bei der Unterzeichnung der Genehmigung ist ein Fehler aufgetreten. Dies geschieht häufig bei Hardware-Wallets wie z. B. Trezor und Ledger. Klicken Sie erneut und die Fallback-Methode wird verwendet."
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

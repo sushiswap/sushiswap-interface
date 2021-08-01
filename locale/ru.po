@@ -41,6 +41,9 @@ msgstr "Часть каждой сделки (0,25%) направляется п
 msgid "APR"
 msgstr "Годовая процентная ставка"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "Принять"
 
@@ -273,6 +276,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "Создать пул и поставку"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -323,6 +329,9 @@ msgstr "Документация для разработчиков Sushi."
 
 msgid "Documentation for users of Sushi."
 msgstr "Документация для пользователей Sushi."
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -431,6 +440,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "Здоровье"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Всего заблокировано исторически: подключение кошелька"
@@ -559,6 +571,9 @@ msgstr "Загрузка ваших позиций ликвидности {excha
 
 msgid "Loading..."
 msgstr "Загрузка..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "МАКСИМУМ"
@@ -735,6 +750,9 @@ msgstr "Пул найден!"
 msgid "Pool Tokens"
 msgstr "Токены пула"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "Токены пула в пуле вознаграждений"
 
@@ -755,6 +773,9 @@ msgstr "Слишком сильное влияние на цену"
 
 msgid "Price Updated"
 msgstr "Цена обновлена"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -816,6 +837,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "Найдите имя или вставьте адрес"
 
@@ -857,6 +881,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Что-то пошло не так при подписании разрешения. Это ожидается для аппаратных кошельков, таких как Trezor и Ledger. Щелкните еще раз, и будет использован резервный метод"
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

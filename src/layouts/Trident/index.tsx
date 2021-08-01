@@ -17,7 +17,7 @@ const Layout: FC<ComponentProps> = ({ children, breadcrumbs = [] }) => {
   )
 }
 
-const TridentLayout = (breadcrumbs: string[]) => {
+const TridentLayout = ({ breadcrumbs }: { breadcrumbs: string[] }) => {
   return ({ children }) => <Layout breadcrumbs={breadcrumbs}>{children}</Layout>
 }
 

@@ -41,6 +41,9 @@ msgstr "Una parte di ogni operazione (0,25%) va ai fornitori di liquidità come 
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "Accetta"
 
@@ -273,6 +276,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "Crea pool e fornitura"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -323,6 +329,9 @@ msgstr "Documentazione per gli sviluppatori di Sushi."
 
 msgid "Documentation for users of Sushi."
 msgstr "Documentazione per gli utenti di Sushi."
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -431,6 +440,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "Salute"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Totale storico bloccato: collega wallet"
@@ -556,6 +568,9 @@ msgstr "Caricamento delle tue posizioni di liquidità su {exchange}"
 
 msgid "Loading..."
 msgstr "Caricamento..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "MAX"
@@ -732,6 +747,9 @@ msgstr "Pool trovato!"
 msgid "Pool Tokens"
 msgstr "Pool token"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "Pool token in pool di ricompense"
 
@@ -752,6 +770,9 @@ msgstr "Impatto sul prezzo troppo elevato"
 
 msgid "Price Updated"
 msgstr "Prezzo aggiornato"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -813,6 +834,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "Cerca nome o incolla indirizzo"
 
@@ -854,6 +878,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Qualcosa è andato storto durante la firma dell'approvazione. Questo è previsto per gli hardware wallet, come Trezor e Ledger. Clicca di nuovo per usare il metodo alternativo"
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

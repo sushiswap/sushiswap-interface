@@ -41,6 +41,9 @@ msgstr "Une portion de chaque transaction (0,25%) est reversée aux fournisseurs
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "Accepter"
 
@@ -273,6 +276,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "Créer un pool et apporter de la liquidité"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -323,6 +329,9 @@ msgstr "Documentation pour les développeurs de Sushi."
 
 msgid "Documentation for users of Sushi."
 msgstr "Documentation pour les utilisateurs de Sushi."
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -431,6 +440,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "Facteur de risque"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Total SUSHI verrouillé: Connecter un portefeuille"
@@ -559,6 +571,9 @@ msgstr "Chargement de vos positions {exchange}"
 
 msgid "Loading..."
 msgstr "Chargement..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "MAX"
@@ -735,6 +750,9 @@ msgstr "Pool identifié"
 msgid "Pool Tokens"
 msgstr "Tokens du pool"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "Tokens disponibles dans le pool de récompenses"
 
@@ -755,6 +773,9 @@ msgstr "Impact prix trop important"
 
 msgid "Price Updated"
 msgstr "Prix actualisé"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -816,6 +837,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "Rechercher un nom ou coller une adresse"
 
@@ -857,6 +881,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Une erreur s'est produite lors de la signature de l'approbation. Cela peut arriver lors de l'utilisation de portefeuilles \"hardware\", tels que Trezor et Ledger. Cliquez à nouveau et la méthode de récupération sera utilisée"
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

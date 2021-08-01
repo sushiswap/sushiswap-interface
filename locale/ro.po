@@ -41,6 +41,9 @@ msgstr "O parte din fiecare tranzacție (0,25%) se îndreaptă către furnizorii
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "Acceptați"
 
@@ -273,6 +276,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "Creați fond comun și ofertă"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -323,6 +329,9 @@ msgstr "Documentație pentru dezvoltatorii de Sushi."
 
 msgid "Documentation for users of Sushi."
 msgstr "Documentație pentru utilizatorii de Sushi."
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -431,6 +440,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "Sănătate"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Valoare istorică totală blocată: Conectați portofelul"
@@ -559,6 +571,9 @@ msgstr "Se încarcă pozițiile lichidităților dvs. {exchange}"
 
 msgid "Loading..."
 msgstr "Se încarcă..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "MAX"
@@ -735,6 +750,9 @@ msgstr "Fond comun găsit!"
 msgid "Pool Tokens"
 msgstr "Token-uri pentru fondul comun"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "Token-uri aferente fondului comun în fondul pentru recompense"
 
@@ -755,6 +773,9 @@ msgstr "Impactul asupra prețului este prea mare"
 
 msgid "Price Updated"
 msgstr "Preț actualizat"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -816,6 +837,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "Căutați numele sau lipiți adresa"
 
@@ -857,6 +881,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Ceva nu a funcționat corect în timpul semnării aprobării. Acest lucru este de așteptat pentru portofelele hardware, cum ar fi Trezor și Ledger. Faceți clic din nou și va fi utilizată metoda de rezervă"
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

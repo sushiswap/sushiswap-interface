@@ -41,6 +41,9 @@ msgstr "A portion of each trade (0.25%) goes to liquidity providers as a protoco
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr "APY"
+
 msgid "Accept"
 msgstr "Accept"
 
@@ -276,6 +279,9 @@ msgstr "Copy Address"
 msgid "Create Pool & Supply"
 msgstr "Create Pool & Supply"
 
+msgid "Create a New Pool"
+msgstr "Create a New Pool"
+
 msgid "Create a new Kashi Market"
 msgstr "Create a new Kashi Market"
 
@@ -326,6 +332,9 @@ msgstr "Documentation for developers of Sushi."
 
 msgid "Documentation for users of Sushi."
 msgstr "Documentation for users of Sushi."
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr "Earn LP fees by depositing tokens to the platform."
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr "Either return to the {link}, or change to an available network."
@@ -434,6 +443,9 @@ msgstr "Have assets you want to earn additional interest on? Lend them in isolat
 
 msgid "Health"
 msgstr "Health"
+
+msgid "Highest to Lowest"
+msgstr "Highest to Lowest"
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Historical Total Locked: Connect Wallet"
@@ -564,6 +576,9 @@ msgstr "Loading your {exchange} liquidity positions"
 
 msgid "Loading..."
 msgstr "Loading..."
+
+msgid "Lowest to Highest"
+msgstr "Lowest to Highest"
 
 msgid "MAX"
 msgstr "MAX"
@@ -744,6 +759,9 @@ msgstr "Pool Found!"
 msgid "Pool Tokens"
 msgstr "Pool Tokens"
 
+msgid "Pool Type Info"
+msgstr "Pool Type Info"
+
 msgid "Pool tokens in rewards pool"
 msgstr "Pool tokens in rewards pool"
 
@@ -764,6 +782,9 @@ msgstr "Price Impact Too High"
 
 msgid "Price Updated"
 msgstr "Price Updated"
+
+msgid "Provide liquidity & earn."
+msgstr "Provide liquidity & earn."
 
 msgid "Rate"
 msgstr "Rate"
@@ -825,6 +846,9 @@ msgstr "Russian"
 msgid "SLP"
 msgstr "SLP"
 
+msgid "Search by token"
+msgstr "Search by token"
+
 msgid "Search name or paste address"
 msgstr "Search name or paste address"
 
@@ -866,6 +890,9 @@ msgstr "Slippage tolerance..."
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
+
+msgid "Sort:"
+msgstr "Sort:"
 
 msgid "Spanish"
 msgstr "Spanish"

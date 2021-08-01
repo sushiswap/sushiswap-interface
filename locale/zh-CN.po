@@ -41,6 +41,9 @@ msgstr "每笔交易的0.25%都会分给协议的流动性提供者。"
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "接受"
 
@@ -271,6 +274,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "创建池和供应"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -321,6 +327,9 @@ msgstr "Sushi开发文档。"
 
 msgid "Documentation for users of Sushi."
 msgstr "Sushi用户文档。"
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -420,6 +429,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "健康值"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "锁仓的总数：连接钱包"
@@ -545,6 +557,9 @@ msgstr "正在加载您的{exchange}您的流动性仓位"
 
 msgid "Loading..."
 msgstr "载入中..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "最大数量"
@@ -721,6 +736,9 @@ msgstr "找到池！"
 msgid "Pool Tokens"
 msgstr "流动性池中的总代币"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "奖励池中的代币"
 
@@ -741,6 +759,9 @@ msgstr "价格影响过高"
 
 msgid "Price Updated"
 msgstr "价格更新"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -802,6 +823,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "搜索名称或粘贴地址"
 
@@ -843,6 +867,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "在签署批准时出现错误。可能是硬件钱包例如Trezor和Ledger。再次点击，将使用倒退的办法。"
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

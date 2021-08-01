@@ -41,6 +41,9 @@ msgstr "Một phần của mỗi giao dịch (0,25%) được chuyển đến c�
 msgid "APR"
 msgstr "Lãi suất phần trăm hàng năm - APR"
 
+msgid "APY"
+msgstr ""
+
 msgid "Accept"
 msgstr "Chấp nhận"
 
@@ -271,6 +274,9 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "Tạo mạng lưới & tổng cung"
 
+msgid "Create a New Pool"
+msgstr ""
+
 msgid "Create a new Kashi Market"
 msgstr ""
 
@@ -321,6 +327,9 @@ msgstr "Tài liệu dành cho các nhà phát triển Sushi."
 
 msgid "Documentation for users of Sushi."
 msgstr "Tài liệu cho người dùng Sushi."
+
+msgid "Earn LP fees by depositing tokens to the platform."
+msgstr ""
 
 msgid "Either return to the {link}, or change to an available network."
 msgstr ""
@@ -429,6 +438,9 @@ msgstr ""
 
 msgid "Health"
 msgstr "Sức khỏe"
+
+msgid "Highest to Lowest"
+msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Tổng số lịch sử đã khóa: Kết nối ví"
@@ -557,6 +569,9 @@ msgstr "Đang tải trạng thái thanh khoản {exchange}"
 
 msgid "Loading..."
 msgstr "Đang tải..."
+
+msgid "Lowest to Highest"
+msgstr ""
 
 msgid "MAX"
 msgstr "TỐI ĐA"
@@ -733,6 +748,9 @@ msgstr "Đã tìm thấy mạng lưới!"
 msgid "Pool Tokens"
 msgstr "Token mạng lưới"
 
+msgid "Pool Type Info"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "Token mạng lưới trong mạng lưới phần thưởng"
 
@@ -753,6 +771,9 @@ msgstr "Tác động giá quá cao"
 
 msgid "Price Updated"
 msgstr "Đã cập nhật giá"
+
+msgid "Provide liquidity & earn."
+msgstr ""
 
 msgid "Rate"
 msgstr ""
@@ -814,6 +835,9 @@ msgstr ""
 msgid "SLP"
 msgstr ""
 
+msgid "Search by token"
+msgstr ""
+
 msgid "Search name or paste address"
 msgstr "Tìm kiếm tên hoặc dán địa chỉ"
 
@@ -855,6 +879,9 @@ msgstr ""
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Đã xảy ra sự cố khi ký phê duyệt. Điều này được mong đợi đối với các ví cứng, chẳng hạn như Trezor và Ledger. Nhấp lại và phương pháp dự phòng sẽ được sử dụng"
+
+msgid "Sort:"
+msgstr ""
 
 msgid "Spanish"
 msgstr ""

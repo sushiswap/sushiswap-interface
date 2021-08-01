@@ -86,6 +86,6 @@ const Pool = () => {
   )
 }
 
-Pool.Layout = TridentLayout(['Pools', 'Pool Types'])
+Pool.Layout = TridentLayout({ breadcrumbs: ['Pools', 'Pool Types'] })
 
 export default Pool
