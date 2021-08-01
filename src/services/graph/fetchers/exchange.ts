@@ -69,10 +69,10 @@ export const getTokenPrices = async (chainId = ChainId.MAINNET, variables) => {
 
 export const getTokenPrice = async (chainId = ChainId.MAINNET, query, variables) => {
   // console.log('getTokenPrice')
-  const ethPrice = await getEthPrice(chainId)
+  const nativePrice = await getNativePrice(chainId)
 
   const { token } = await exchange(chainId, query, variables)
-  return token[0]?.derivedETH * ethPrice
+  return token?.derivedETH * nativePrice
 }
 
 export const getNativePrice = async (chainId = ChainId.MAINNET, variables = undefined) => {
