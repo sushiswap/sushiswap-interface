@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react'
-import LineGraph from '../../../components/LineGraph'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import AllocationTable from '../../../features/analytics/Portfolio/AllocationTable'
-import { classNames, formatNumber, shortenAddress } from '../../../functions'
+import { formatNumber, shortenAddress } from '../../../functions'
 import { useActiveWeb3React } from '../../../hooks'
 import {
   useAllUserPairs,
@@ -33,8 +32,6 @@ export default function Portfolio() {
   // For BentoBox
   const userBentoTokens = useBentoUserTokens()
   const userKashiPairs = useAllUserKashiPairs()
-
-  console.log(userKashiPairs)
 
   const totalUsd = useMemo(() => {
     let total = 0
