@@ -30,7 +30,12 @@ export function useUserKashiPairs(variables = undefined, chainId = undefined, sw
 
   const shouldFetch = chainId && account
 
-  variables = Object.keys(variables ?? {}).includes('user') ? variables : { ...variables, user: account.toLowerCase() }
+  variables =
+    Object.keys(variables ?? {}).includes('user') && account
+      ? variables
+      : account
+      ? { ...variables, user: account.toLowerCase() }
+      : ''
 
   const { data } = useSWR(
     shouldFetch ? ['userKashiPairs', chainId, JSON.stringify(variables)] : null,
@@ -51,7 +56,11 @@ export function useBentoUserTokens(
 
   const shouldFetch = chainId && account
 
-  variables = Object.keys(variables ?? {}).includes('user') ? variables : { ...variables, user: account.toLowerCase() }
+  variables = Object.keys(variables ?? {}).includes('user')
+    ? variables
+    : account
+    ? { ...variables, user: account.toLowerCase() }
+    : ''
 
   const { data } = useSWR(
     shouldFetch ? ['bentoUserTokens', chainId, JSON.stringify(variables)] : null,

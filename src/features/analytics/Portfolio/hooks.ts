@@ -88,8 +88,8 @@ export function useUserFarms(chainId = undefined) {
             .map((position) => {
               const farm = farms.find((f) => f.chef === position.chef && f.id === position.id)
               if (!farm) return undefined
-              const sushiPair = sushiPairs.find((pair) => pair.id === farm.pair)
-              const kashiPair = kashiPairs.find((pair) => pair.id === farm.pair)
+              const sushiPair = sushiPairs?.find((pair) => pair.id === farm.pair)
+              const kashiPair = kashiPairs?.find((pair) => pair.id === farm.pair)
 
               if (!sushiPair && !kashiPair) return undefined
 
