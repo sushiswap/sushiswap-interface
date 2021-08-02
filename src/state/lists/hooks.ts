@@ -74,6 +74,8 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     66: { ...map1[66], ...map2[66] }, // okex
     65: { ...map1[65], ...map2[65] }, // okex testnet
     42220: { ...map1[42220], ...map2[42220] }, // celo
+    11297108109: { ...map1[11297108109], ...map2[11297108109] }, // palm
+    11297108099: { ...map1[11297108099], ...map2[11297108099] }, // palm testnet
   }
 }
 

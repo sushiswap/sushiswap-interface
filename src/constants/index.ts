@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
-import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink, keystone } from '../connectors'
+import { binance, fortmatic, injected, keystone, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
@@ -29,6 +29,7 @@ export const RPC = {
   [ChainId.OKEX]: 'https://exchainrpc.okex.org',
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+  [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
 }
 
 export const POOL_DENY = ['14', '29', '45', '30']

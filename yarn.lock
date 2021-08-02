@@ -2426,25 +2426,26 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-11.0.0.tgz#6579ae0fff48dad32c6df1f5762a3dcab83c4594"
-  integrity sha512-ST9XiW88pwCysKfKUw0ye2r+2WpL07H7z0fqx6CwufOavHAGZonGaCst+ZSc6zro96BLyUAacY9sONIcCGL63Q==
+"@sushiswap/default-token-list@11.4.0":
+  version "11.4.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-11.4.0.tgz#af6aeafad79b84f8d2f8008ae97c42ff33daa4ee"
+  integrity sha512-qsq+6sb3Bb0UjXZRYySU9rpqia+lNAnxApckib4DHqiYE+R4ccWlalRW/VWGqjdtrvWGBCZJNaXTLF2ruF7zyw==
 
 "@sushiswap/limit-order-pair-list@0.2.1":
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-pair-list/-/limit-order-pair-list-0.2.1.tgz#652999e7f5a11bf15e32e0384a7fe6c646fab2fd"
   integrity sha512-Lht7xL+kPEv4zGRZsolpi3lGRScI4a3gl5P7yqAp0lOetXPXlKhwGXX3wSEBjXtOls3H2vTvyKv8FZxr9Bk20Q==
 
-"@sushiswap/sdk@5.0.0-canary.24":
-  version "5.0.0-canary.24"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.24.tgz#cf49e506cc223003f0243a31852567f43ae09577"
-  integrity sha512-VP0mGKYe7hCTCCrKIhGlgiNEjMTv6+QqlRswDb0YGuu77woZCKVT5KkX1dfR1hCutZduujO+O/iyK4mWovczUA==
+"@sushiswap/sdk@5.0.0-canary.33":
+  version "5.0.0-canary.33"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.33.tgz#dcc3222070eacef26381775231359bf347a4e4c5"
+  integrity sha512-0pPjUUm5loSaTZCapFwzocUSpJ01WPjyKCb82S0Ay/K+ud4GuVVUKyC2qxiWBIhkmzNGOGXS1W2bL2gnap+xUg==
   dependencies:
     "@sushiswap/core" "^2.0.0-canary.0"
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
     jsbi "^3.1.1"
+    lowdash "^1.2.0"
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
@@ -9955,6 +9956,11 @@ lottie-web@^5.7.3:
   version "5.7.11"
   resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.7.11.tgz#4ba74e8a629f76d3c0a0062ddc37d2b96e13765c"
   integrity sha512-Jvz3PQqwrDj1rXGqfeQtipH/WNtM/Y4l8t8NIQXe1xUI0nVooH2bTYJGef0UkdBcWUx1s3miKsRhyP196g9tvQ==
+
+lowdash@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/lowdash/-/lowdash-1.2.0.tgz#d807b966da490ce449324a066b61dd2ff31089fa"
+  integrity sha512-oHdShh4q1SmsUkLBa9ITyi4x3ObxUxFeGNu7GCGta8b9jq0IAmZ/Zeapd/Ex7/OuA8tN96izhRdQlUcMe40Ing==
 
 lowercase-keys@^1.0.0, lowercase-keys@^1.0.1:
   version "1.0.1"

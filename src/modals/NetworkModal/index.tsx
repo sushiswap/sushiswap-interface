@@ -149,6 +149,17 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://forno.celo.org'],
     blockExplorerUrls: ['https://explorer.celo.org'],
   },
+  [ChainId.PALM]: {
+    chainId: '0x2A15C308D',
+    chainName: 'Palm',
+    nativeCurrency: {
+      name: 'Palm',
+      symbol: 'PALM',
+      decimals: 18,
+    },
+    rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
+    blockExplorerUrls: ['https://explorer.palm.io'],
+  },
 }
 
 export default function NetworkModal(): JSX.Element | null {
@@ -179,6 +190,7 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.HARMONY,
           ChainId.AVALANCHE,
           ChainId.CELO,
+          ChainId.PALM,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (
