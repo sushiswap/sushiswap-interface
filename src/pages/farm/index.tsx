@@ -127,7 +127,7 @@ export default function Farm(): JSX.Element {
               pool.rewarder.rewardToken
             )}/logo.png`
 
-        const decimals = BigNumber.from(10).pow(pool.rewardToken.decimals)
+        const decimals = 10 ** pool.rewardToken.decimals
 
         const rewardPerBlock =
           pool.rewardToken.symbol === 'ALCX'
