@@ -29,13 +29,13 @@ import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
-import CLONE_REWARDER_ABI from '../constants/abis/clone-rewarder.json'
 import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
 import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
 import CHAINLINK_ORACLE_ABI from '../constants/abis/chainlink-oracle.json'
+import CLONE_REWARDER_ABI from '../constants/abis/clone-rewarder.json'
 import COMPLEX_REWARDER_ABI from '../constants/abis/complex-rewarder.json'
 import { Contract } from '@ethersproject/contracts'
 import DASHBOARD2_ABI from '../constants/abis/dashboard2.json'
@@ -48,6 +48,8 @@ import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
 import FACTORY_ABI from '../constants/abis/factory.json'
 import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
+import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json'
+import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
 import MASTERCHEF_V2_ABI from '../constants/abis/masterchef-v2.json'
@@ -66,13 +68,10 @@ import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZAPPER_ABI from '../constants/abis/zapper.json'
-import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json'
-import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json'
 import { getContract } from '../functions/contract'
+import { getVerifyingContract } from 'limitorderv2-sdk'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
-
-import { getVerifyingContract } from 'limitorderv2-sdk'
 
 const UNI_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 
@@ -153,11 +152,6 @@ export function useBoringHelperContract(): Contract | null {
 
 export function usePendingContract(): Contract | null {
   return useContract('0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029', PENDING_ABI, false)
-}
-
-export function useMulticallContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
 }
 
 export function useMulticall2Contract() {
