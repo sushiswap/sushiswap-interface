@@ -9,6 +9,8 @@ import {
   poolsV2Query,
 } from '../queries'
 
+import { getTokenSubset, getEthPrice } from './exchange'
+
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
 import { request } from 'graphql-request'
@@ -62,7 +64,17 @@ export const getMasterChefV1PairAddreses = async () => {
 
 export const getMasterChefV2Farms = async () => {
   const { pools } = await masterChefV2(poolsV2Query)
-  return pools
+
+  const tokens = await getTokenSubset(ChainId.MAINNET, {
+    tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+  })
+
+  return pools.map((pool) => ({
+    ...pool,
+    rewardToken: {
+      ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+    },
+  }))
 }
 
 export const getMasterChefV2PairAddreses = async () => {
