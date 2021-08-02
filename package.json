@@ -89,7 +89,7 @@
     "fuse.js": "^6.4.6",
     "graphql-tag": "^2.12.5",
     "husky": "^7.0.0",
-    "limitorderv2-sdk": "^0.1.57",
+    "limitorderv2-sdk": "^0.1.62",
     "lint-staged": "^11.0.0",
     "lodash": "^4.17.21",
     "lottie-react": "^2.1.0",
