@@ -732,6 +732,9 @@ msgstr "Please connect to the appropriate Ethereum network."
 msgid "Please enter an amount"
 msgstr "Please enter an amount"
 
+msgid "Please note that the recipient address is different from the connected wallet address."
+msgstr "Please note that the recipient address is different from the connected wallet address."
+
 msgid "Please refer to the"
 msgstr "Please refer to the"
 

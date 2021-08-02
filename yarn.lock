@@ -2431,10 +2431,12 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-11.4.0.tgz#af6aeafad79b84f8d2f8008ae97c42ff33daa4ee"
   integrity sha512-qsq+6sb3Bb0UjXZRYySU9rpqia+lNAnxApckib4DHqiYE+R4ccWlalRW/VWGqjdtrvWGBCZJNaXTLF2ruF7zyw==
 
-"@sushiswap/limit-order-pair-list@0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-pair-list/-/limit-order-pair-list-0.2.1.tgz#652999e7f5a11bf15e32e0384a7fe6c646fab2fd"
-  integrity sha512-Lht7xL+kPEv4zGRZsolpi3lGRScI4a3gl5P7yqAp0lOetXPXlKhwGXX3wSEBjXtOls3H2vTvyKv8FZxr9Bk20Q==
+"@sushiswap/limit-order-pair-list@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-pair-list/-/limit-order-pair-list-0.2.2.tgz#49b6ec5008627e1fb2d7dc43e88b6249308383ab"
+  integrity sha512-5BdxmT8xjNT57IaWQswNZld6mALGNp4LoVaLA8SytVEl2XAqJlVr26S79X1Cf+ath1F5SJntcIyaCuQg6vGDtA==
+  dependencies:
+    "@sushiswap/default-token-list" "^11.3.0"
 
 "@sushiswap/sdk@5.0.0-canary.33":
   version "5.0.0-canary.33"

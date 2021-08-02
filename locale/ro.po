@@ -723,6 +723,9 @@ msgstr ""
 msgid "Please enter an amount"
 msgstr ""
 
+msgid "Please note that the recipient address is different from the connected wallet address."
+msgstr ""
+
 msgid "Please refer to the"
 msgstr ""
 

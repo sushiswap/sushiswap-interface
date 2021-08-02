@@ -13,6 +13,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
 import {
+  useExpertModeManager,
   useUserArcherETHTip,
   useUserArcherGasEstimate,
   useUserArcherGasPrice,
@@ -369,6 +370,7 @@ export function useDefaultsFromURLSearch():
   const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const parsedQs = useParsedQueryString()
+  const [expertMode] = useExpertModeManager()
   const [result, setResult] = useState<
     | {
         inputCurrencyId: string | undefined
@@ -387,7 +389,7 @@ export function useDefaultsFromURLSearch():
         field: parsed.independentField,
         inputCurrencyId: parsed[Field.INPUT].currencyId,
         outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-        recipient: parsed.recipient,
+        recipient: expertMode ? parsed.recipient : null,
       })
     )
 

@@ -10,6 +10,9 @@ import {
   getMphPrice,
   getStakePrice,
   getSushiPrice,
+  getYggPrice,
+  getRulerPrice,
+  getTruPrice,
   getTokens,
   getDayData,
   getFactory,
@@ -65,6 +68,28 @@ export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.HARMONY
   const { data } = useSWR(shouldFetch ? 'onePrice' : null, () => getOnePrice(), swrConfig)
+  return data
+}
+
+export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'yggPrice' : null, () => getYggPrice(), swrConfig)
+  return data
+}
+
+export function useRulerPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? 'rulerPrice' : null,
+    () => getRulerPrice(),
+    swrConfig
+  )
+  return data
+}
+
+export function useTruPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'truPrice' : null, () => getTruPrice(), swrConfig)
   return data
 }
 
