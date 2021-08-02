@@ -6,7 +6,7 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import Dots from '../../components/Dots'
 import { useDerivedInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
-import { BentoApprovalState, BentoPermit } from '../../hooks/useBentoMasterApproveCallback'
+import { BentoApprovalState } from '../../hooks/useBentoMasterApproveCallback'
 import ProgressSteps from '../../components/ProgressSteps'
 
 interface InariButtonProps extends ButtonProps {}
@@ -14,31 +14,27 @@ interface InariButtonProps extends ButtonProps {}
 const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const { inputValue, usesBentoBox } = useDerivedInariState()
+  const { inputValue } = useDerivedInariState()
   const { balances, execute, bentoApproveCallback, approveCallback } = useSelectedInariStrategy()
-  const [permit, setPermit] = useState<BentoPermit>(null)
   const [pending, setPending] = useState(false)
 
   const onExecute = useCallback(async () => {
-    const tx = await execute(inputValue, permit)
     setPending(true)
-    await tx?.wait()
+    const tx = await execute(inputValue)
     setPending(false)
-  }, [execute, inputValue, permit])
+    await tx?.wait()
+  }, [execute, inputValue])
 
   // Get permit to send with execute
   const handleGetPermit = useCallback(async () => {
-    const bentoPermit = await bentoApproveCallback.getPermit()
-    setPermit(bentoPermit)
+    await bentoApproveCallback.getPermit()
   }, [bentoApproveCallback])
 
-  // Approve flow
   // Add token approve to approve flow
-  const steps = [approveCallback[0] === ApprovalState.APPROVED]
-
-  // Only add bentoApprove flow if not yet approved to avoid a weird looking approveFlow
-  // when switching strategies after a bentoApproval
-  if (usesBentoBox && bentoApproveCallback.approvalState !== BentoApprovalState.APPROVED) steps.push(false)
+  // Note that this is not required when unstaking from BentoBox strategies, hence approveCallback can be null
+  const steps = []
+  if (approveCallback) steps.push(approveCallback[0] === ApprovalState.APPROVED)
+  if (bentoApproveCallback) steps.push(bentoApproveCallback.approvalState === BentoApprovalState.APPROVED)
 
   const approveFlow = (
     <div className="flex flex-col">
@@ -67,7 +63,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
       </Button>
     )
 
-  if (approveCallback[0] === ApprovalState.PENDING)
+  if (approveCallback && approveCallback[0] === ApprovalState.PENDING)
     return (
       <>
         <Button {...rest} disabled color="gray">
@@ -77,7 +73,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
       </>
     )
 
-  if (approveCallback[0] === ApprovalState.NOT_APPROVED)
+  if (approveCallback && approveCallback[0] === ApprovalState.NOT_APPROVED)
     return (
       <>
         <Button {...rest} color="pink" onClick={approveCallback[1]}>
@@ -109,7 +105,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
 
   return (
     <Button {...rest} disabled={pending} color={pending ? 'gray' : 'gradient'} onClick={onExecute}>
-      {pending ? <Dots>{i18n._(t`Pending transaction`)}</Dots> : children}
+      {children}
     </Button>
   )
 }

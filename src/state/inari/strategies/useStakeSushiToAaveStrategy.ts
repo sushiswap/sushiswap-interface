@@ -4,7 +4,7 @@ import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
 import { useActiveWeb3React } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import useBaseInariStrategy from './useBaseInariStrategy'
+import useBaseStrategy from './useBaseStrategy'
 import { useEffect, useMemo } from 'react'
 
 export const general: StrategyGeneralInfo = {
@@ -35,7 +35,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 const useStakeSushiToAaveStrategy = (): StrategyHook => {
   const { account } = useActiveWeb3React()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], AXSUSHI])
-  const { setBalances, ...baseStrategy } = useBaseInariStrategy({
+  const { setBalances, ...strategy } = useBaseStrategy({
     id: 'stakeSushiToAaveStrategy',
     general,
     tokenDefinitions,
@@ -52,10 +52,10 @@ const useStakeSushiToAaveStrategy = (): StrategyHook => {
 
   return useMemo(
     () => ({
-      ...baseStrategy,
+      ...strategy,
       setBalances,
     }),
-    [baseStrategy, setBalances]
+    [strategy, setBalances]
   )
 }
 

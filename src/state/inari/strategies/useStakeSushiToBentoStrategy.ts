@@ -6,8 +6,9 @@ import { useBentoBalance } from '../../bentobox/hooks'
 import { useActiveWeb3React } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import useBaseInariStrategy from './useBaseInariStrategy'
 import { useEffect, useMemo } from 'react'
+import useBaseStrategy from './useBaseStrategy'
+import useBentoBoxTrait from '../traits/useBentoBoxTrait'
 
 export const general: StrategyGeneralInfo = {
   name: 'SUSHI → Bento',
@@ -39,12 +40,16 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
   const { account } = useActiveWeb3React()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], XSUSHI])
   const xSushiBentoBalance = useBentoBalance(XSUSHI.address)
-  const { setBalances, ...baseStrategy } = useBaseInariStrategy({
+
+  // Strategy ends in BentoBox so use BaseBentoBox strategy
+  const baseStrategy = useBaseStrategy({
     id: 'stakeSushiToBentoStrategy',
     general,
     tokenDefinitions,
-    usesBentoBox: true,
   })
+
+  // Add in BentoBox trait as output is in BentoBox
+  const { setBalances, ...strategy } = useBentoBoxTrait(baseStrategy)
 
   useEffect(() => {
     if (!balances) return
@@ -58,9 +63,9 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
   return useMemo(
     () => ({
       setBalances,
-      ...baseStrategy,
+      ...strategy,
     }),
-    [baseStrategy, setBalances]
+    [strategy, setBalances]
   )
 }
 

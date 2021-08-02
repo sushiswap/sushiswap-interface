@@ -1,90 +1,79 @@
-import { useActiveWeb3React, useApproveCallback, useInariContract } from '../../../hooks'
+import { ApprovalState, useActiveWeb3React, useApproveCallback, useInariContract } from '../../../hooks'
 import { useTransactionAdder } from '../../transactions/hooks'
-import { BaseStrategyHook, StrategyBalances, StrategyGeneralInfo, StrategyTokenDefinitions } from '../types'
+import { Strategy, StrategyBalances, StrategyGeneralInfo, StrategyTokenDefinitions } from '../types'
 import { useDerivedInariState } from '../hooks'
 import { useCallback, useMemo, useState } from 'react'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import { e10 } from '../../../functions'
+import { e10, tryParseAmount } from '../../../functions'
 import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
-import useBentoMasterApproveCallback, { BentoPermit } from '../../../hooks/useBentoMasterApproveCallback'
+import { BentoPermit } from '../../../hooks/useBentoMasterApproveCallback'
 
-interface useBaseInariStrategyInterface {
+export interface useBaseStrategyInterface {
   id: string
   general: StrategyGeneralInfo
   tokenDefinitions: StrategyTokenDefinitions
-  usesBentoBox?: boolean
 }
 
-const useBaseInariStrategy = ({
-  id,
-  general,
-  tokenDefinitions,
-  usesBentoBox = false,
-}: useBaseInariStrategyInterface): BaseStrategyHook => {
+export interface BaseStrategyHook extends Strategy {
+  execute: (val: CurrencyAmount<Token>, permit?: BentoPermit) => Promise<any>
+  approveCallback: [ApprovalState, () => Promise<void>]
+  getStrategy: () => Strategy
+  calculateOutputFromInput: (
+    zapIn: boolean,
+    inputValue: string,
+    inputToken: Token,
+    outputToken: Token
+  ) => Promise<string> | string
+  balances: StrategyBalances
+  setBalances: ({
+    inputTokenBalance,
+    outputTokenBalance,
+  }: {
+    inputTokenBalance?: CurrencyAmount<Token>
+    outputTokenBalance?: CurrencyAmount<Token>
+  }) => void
+  bentoApproveCallback?: null
+}
+
+// Every strategy should use a BaseStrategy. Can also use useBaseBentoBoxStrategy or useBaseHasPermitTokenStrategy
+// which use BaseStrategy under the hood. Please look in both BaseStrategies to see what they offer and/or why you may need them
+const useBaseStrategy = ({ id, general, tokenDefinitions }: useBaseStrategyInterface): BaseStrategyHook => {
   const { account } = useActiveWeb3React()
   const { inputValue, zapIn, tokens } = useDerivedInariState()
   const inariContract = useInariContract()
   const addTransaction = useTransactionAdder()
   const approveCallback = useApproveCallback(inputValue, inariContract?.address)
   const sushiPerXSushi = useSushiPerXSushi(true)
-  const bentoApproveCallback = useBentoMasterApproveCallback(inariContract.address, {
-    otherBentoBoxContract: inariContract,
-    contractName: 'Inari',
-    functionFragment: 'setBentoApproval',
-  })
   const [balances, _setBalances] = useState<StrategyBalances>({
     inputTokenBalance: CurrencyAmount.fromRawAmount(tokens.inputToken, '0'),
     outputTokenBalance: CurrencyAmount.fromRawAmount(tokens.outputToken, '0'),
   })
 
-  // Get basic strategy information, DONT override this function unless you know what you're doing
-  // Responsible for switching strategies
+  // Get basic strategy information
   const getStrategy = useCallback(() => {
     return {
       id,
       general,
       tokenDefinitions,
-      usesBentoBox,
     }
-  }, [general, id, tokenDefinitions, usesBentoBox])
+  }, [general, id, tokenDefinitions])
 
   // Default execution function, can be overridden in child strategies
   // If you override, it's best to do some formatting beforehand and then still call this function
   // Look at useStakeSushiToCreamStrategy for an example
   const execute = useCallback(
-    async (val: CurrencyAmount<Token>, bentoPermit?: BentoPermit) => {
+    async (val: CurrencyAmount<Token>) => {
       if (!inariContract) return
 
       const method = zapIn ? general.zapMethod : general.unzapMethod
 
       try {
-        // If we have a permit, batch tx with permit
-        if (bentoPermit) {
-          const batch = [
-            bentoPermit.data,
-            inariContract?.interface?.encodeFunctionData(method, [
-              account,
-              val.toExact().toBigNumber(val.currency.decimals),
-            ]),
-          ]
+        const tx = await inariContract[method](account, val.quotient.toString())
+        addTransaction(tx, {
+          summary: `${zapIn ? 'Deposit' : 'Withdraw'} ${general.outputSymbol}`,
+        })
 
-          const tx = await inariContract.batch(batch, true)
-          addTransaction(tx, {
-            summary: `Approve Inari Master Contract and ${zapIn ? 'Deposit' : 'Withdraw'} ${general.outputSymbol}`,
-          })
-
-          return tx
-        }
-
-        // Else proceed normally
-        else {
-          const tx = await inariContract[method](account, val.toExact().toBigNumber(val.currency.decimals))
-          addTransaction(tx, {
-            summary: `${zapIn ? 'Deposit' : 'Withdraw'} ${general.outputSymbol}`,
-          })
-
-          return tx
-        }
+        return tx
       } catch (error) {
         console.error(error)
       }
@@ -141,13 +130,11 @@ const useBaseInariStrategy = ({
         outputTokenBalance: zapIn ? balances.outputTokenBalance : balances.inputTokenBalance,
       },
       setBalances,
-      ...(usesBentoBox && { bentoApproveCallback }),
     }),
     [
       approveCallback,
       balances.inputTokenBalance,
       balances.outputTokenBalance,
-      bentoApproveCallback,
       calculateOutputFromInput,
       execute,
       general,
@@ -155,10 +142,9 @@ const useBaseInariStrategy = ({
       id,
       setBalances,
       tokenDefinitions,
-      usesBentoBox,
       zapIn,
     ]
   )
 }
 
-export default useBaseInariStrategy
+export default useBaseStrategy

@@ -6,18 +6,18 @@ import { useBentoBalance } from '../../bentobox/hooks'
 import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import useBaseInariStrategy from './useBaseInariStrategy'
 import { useCallback, useEffect, useMemo } from 'react'
 import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
 import { BigNumber } from 'ethers'
+import useBaseStrategy from './useBaseStrategy'
+import useBentoBoxTrait from '../traits/useBentoBoxTrait'
 
 export const general: StrategyGeneralInfo = {
   name: 'Cream → Bento',
   steps: ['SUSHI', 'crXSUSHI', 'BentoBox'],
   zapMethod: 'stakeSushiToCreamToBento',
   unzapMethod: 'unstakeSushiFromCreamFromBento',
-  description: t`Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically
-                invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi.`,
+  description: t`Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click.`,
   inputSymbol: 'SUSHI',
   outputSymbol: 'crXSUSHI in BentoBox',
 }
@@ -43,16 +43,16 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET]])
   const sushiPerXSushi = useSushiPerXSushi(true)
   const crxSushiBentoBalance = useBentoBalance(CRXSUSHI.address)
-  const {
-    setBalances,
-    calculateOutputFromInput: _,
-    ...baseStrategy
-  } = useBaseInariStrategy({
+
+  // Strategy ends in BentoBox so use BaseBentoBox strategy
+  const baseStrategy = useBaseStrategy({
     id: 'stakeSushiToCreamToBentoStrategy',
     general,
     tokenDefinitions,
-    usesBentoBox: true,
   })
+
+  // Add in BentoBox trait as output is in BentoBox
+  const { setBalances, calculateOutputFromInput: _, ...strategy } = useBentoBoxTrait(baseStrategy)
 
   useEffect(() => {
     if (!balances) return
@@ -82,11 +82,11 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
 
   return useMemo(
     () => ({
-      ...baseStrategy,
+      ...strategy,
       setBalances,
       calculateOutputFromInput,
     }),
-    [baseStrategy, calculateOutputFromInput, setBalances]
+    [strategy, calculateOutputFromInput, setBalances]
   )
 }
 

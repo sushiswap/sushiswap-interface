@@ -41,23 +41,6 @@ export function useDerivedInariState(): DerivedInariState {
     [tokens.outputToken.address, tokens.outputToken.chainId, tokens.outputToken.decimals, tokens.outputToken.symbol]
   )
 
-  // For some strategies we display xSushi instead of the token we spend when withdrawing from a strategy
-  // If these two tokens have different symbols we have a problem with tryParseAmount.
-  // Take the useStakeSushiToCreamStrategy for example xSushi has 18 decimals whereas crXSUSHI has 8.
-  // You should be able to enter a value with 18 decimals (because we display in xSushi amount)
-  // tryParseAmount would return undefined because it is trying to parse the inputValue to a CurrencyAmount
-  // with crXSUSHI set as currency which has only 8 decimals.
-  // spendToken can be set to the token that will be spent when withdrawing from a strategy (crXSUSHi in this example)
-  const spendToken = useMemo(() => {
-    if (!tokens.spendToken) return null
-    new Token(
-      tokens.spendToken.chainId,
-      tokens.spendToken.address,
-      tokens.spendToken.decimals,
-      tokens.spendToken.symbol
-    )
-  }, [tokens.spendToken])
-
   return useMemo(
     () => ({
       ...rest,
@@ -67,10 +50,9 @@ export function useDerivedInariState(): DerivedInariState {
       tokens: {
         inputToken,
         outputToken,
-        spendToken,
       },
     }),
-    [general, inputToken, inputValue, outputToken, outputValue, rest, spendToken]
+    [general, inputToken, inputValue, outputToken, outputValue, rest]
   )
 }
 

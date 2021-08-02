@@ -1,6 +1,7 @@
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
-import { ApprovalState } from '../../hooks'
-import { BentoMasterApproveCallback, BentoPermit } from '../../hooks/useBentoMasterApproveCallback'
+import { BaseStrategyWithBentoBoxTraitHook } from './traits/useBentoBoxTrait'
+import { BaseStrategyWithHasPermitTokenHook } from './traits/useHasPermitTokenTrait'
+import { BaseStrategyHook } from './strategies/useBaseStrategy'
 
 export enum Field {
   INPUT = 'INPUT',
@@ -26,7 +27,6 @@ export interface StrategyGeneralInfo {
 export interface StrategyTokenDefinitions {
   inputToken: StrategyToken
   outputToken: StrategyToken
-  spendToken?: StrategyToken
 }
 
 export interface StrategyToken {
@@ -41,33 +41,14 @@ export interface StrategyBalances {
   outputTokenBalance: CurrencyAmount<Token>
 }
 
-export interface BaseStrategyHook extends Strategy {
-  execute: (val: CurrencyAmount<Token>, permit?: BentoPermit) => Promise<any>
-  approveCallback: [ApprovalState, () => Promise<void>]
-  getStrategy: () => Strategy
-  calculateOutputFromInput: (
-    zapIn: boolean,
-    inputValue: string,
-    inputToken: Token,
-    outputToken: Token
-  ) => Promise<string> | string
-  balances: StrategyBalances
-  setBalances: ({
-    inputTokenBalance,
-    outputTokenBalance,
-  }: {
-    inputTokenBalance?: CurrencyAmount<Token>
-    outputTokenBalance?: CurrencyAmount<Token>
-  }) => void
-  bentoApproveCallback?: BentoMasterApproveCallback
-}
+export type StrategyHook = BaseStrategyHook | BaseStrategyWithBentoBoxTraitHook | BaseStrategyWithHasPermitTokenHook
 
-export interface StrategyHook extends BaseStrategyHook {}
-
+// --------------------------------
+// STATE
+// --------------------------------
 export interface InariState {
   id: string
   zapIn: boolean
-  usesBentoBox: boolean
   inputValue: string
   outputValue: string
   general: StrategyGeneralInfo
@@ -80,7 +61,5 @@ export interface DerivedInariState extends Omit<InariState, 'inputValue' | 'outp
   tokens: {
     inputToken: Token
     outputToken: Token
-    badgeToken?: Token
-    allowanceToken?: Token
   }
 }

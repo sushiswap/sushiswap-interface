@@ -52,6 +52,7 @@ export interface BentoMasterApproveCallback {
   approvalState: BentoApprovalState
   approve: () => Promise<void>
   getPermit: () => Promise<BentoPermit>
+  permit: BentoPermit
 }
 
 export interface BentoMasterApproveCallbackOptions {
@@ -69,10 +70,10 @@ const useBentoMasterApproveCallback = (
   const addTransaction = useTransactionAdder()
   const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
   const pendingApproval = useBentoHasPendingApproval(masterContract, account, contractName)
-  const [hasPermit, setHasPermit] = useState(false)
+  const [permit, setPermit] = useState<BentoPermit>(null)
 
   const approvalState: BentoApprovalState = useMemo(() => {
-    if (hasPermit) return BentoApprovalState.APPROVED
+    if (permit) return BentoApprovalState.APPROVED
     if (pendingApproval) return BentoApprovalState.PENDING
 
     // We might not have enough data to know whether or not we need to approve
@@ -81,7 +82,7 @@ const useBentoMasterApproveCallback = (
     if (!currentAllowed) return BentoApprovalState.NOT_APPROVED
 
     return BentoApprovalState.APPROVED
-  }, [account, currentAllowed, hasPermit, masterContract, pendingApproval])
+  }, [account, currentAllowed, masterContract, pendingApproval, permit])
 
   const getPermit = useCallback(async () => {
     if (approvalState !== BentoApprovalState.NOT_APPROVED) {
@@ -110,9 +111,7 @@ const useBentoMasterApproveCallback = (
       )
 
       const { v, r, s } = ethers.utils.splitSignature(signature)
-      setHasPermit(true)
-
-      return {
+      const permit = {
         outcome: BentoApproveOutcome.SUCCESS,
         signature: { v, r, s },
         data: (otherBentoBoxContract || bentoBoxContract)?.interface?.encodeFunctionData(
@@ -120,6 +119,9 @@ const useBentoMasterApproveCallback = (
           [account, masterContract, true, v, r, s]
         ),
       }
+
+      setPermit(permit)
+      return permit
     } catch (e) {
       return {
         outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
@@ -157,6 +159,7 @@ const useBentoMasterApproveCallback = (
     approvalState,
     approve,
     getPermit,
+    permit,
   }
 }
 

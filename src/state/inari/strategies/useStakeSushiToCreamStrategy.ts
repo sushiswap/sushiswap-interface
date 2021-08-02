@@ -2,13 +2,12 @@ import { t } from '@lingui/macro'
 import { CRXSUSHI, SUSHI, XSUSHI } from '../../../constants'
 import { ChainId, CurrencyAmount, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
 import { tryParseAmount } from '../../../functions'
-import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
+import { useActiveWeb3React, useApproveCallback, useInariContract, useZenkoContract } from '../../../hooks'
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import useBaseInariStrategy from './useBaseInariStrategy'
-import { useCallback, useEffect, useMemo } from 'react'
+import useBaseStrategy from './useBaseStrategy'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDerivedInariState } from '../hooks'
-import { BentoPermit } from '../../../hooks/useBentoMasterApproveCallback'
 
 export const general: StrategyGeneralInfo = {
   name: 'SUSHI → Cream',
@@ -33,24 +32,52 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
     decimals: 18,
     symbol: 'XSUSHI',
   },
-  spendToken: {
-    chainId: ChainId.MAINNET,
-    address: '0x228619cca194fbe3ebeb2f835ec1ea5080dafbb2',
-    decimals: 8,
-    symbol: 'crXSUSHI',
-  },
 }
 
 const useStakeSushiToCreamStrategy = (): StrategyHook => {
   const { account } = useActiveWeb3React()
-  const { zapIn } = useDerivedInariState()
+  const { zapIn, inputValue } = useDerivedInariState()
   const zenkoContract = useZenkoContract()
+  const inariContract = useInariContract()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], CRXSUSHI])
-  const { execute, setBalances, ...baseStrategy } = useBaseInariStrategy({
+  const [cTokenAmount, setCTokenAmount] = useState<CurrencyAmount<Token>>(null)
+
+  // Override approveCallback for this strategy as we need to approve CRXSUSHI on zapOut
+  const approveCallback = useApproveCallback(zapIn ? inputValue : cTokenAmount, inariContract?.address)
+  const { execute, setBalances, ...baseStrategy } = useBaseStrategy({
     id: 'stakeSushiToCreamStrategy',
     general,
     tokenDefinitions,
   })
+
+  const toCTokenAmount = useCallback(
+    async (val: CurrencyAmount<Token>) => {
+      if (!zenkoContract || !val) return null
+
+      const bal = await zenkoContract.toCtoken(CRXSUSHI.address, val.quotient.toString())
+      return CurrencyAmount.fromRawAmount(CRXSUSHI, bal.toString())
+    },
+    [zenkoContract]
+  )
+
+  // Run before executing transaction creation by transforming from xSUSHI value to crXSUSHI value
+  // As you will be spending crXSUSHI when unzapping from this strategy
+  const preExecute = useCallback(
+    async (val: CurrencyAmount<Token>) => {
+      if (zapIn) return execute(val)
+      return execute(await toCTokenAmount(val))
+    },
+    [execute, toCTokenAmount, zapIn]
+  )
+
+  // TODO, FIX INFINITE LOOP
+  useEffect(() => {
+    toCTokenAmount(inputValue).then((val) =>
+      setCTokenAmount((prevState) => {
+        if (prevState?.toExact() !== val?.toExact()) return val
+      })
+    )
+  }, [inputValue, toCTokenAmount])
 
   useEffect(() => {
     if (!zenkoContract || !balances) return
@@ -70,25 +97,14 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
     main()
   }, [balances, setBalances, zenkoContract])
 
-  // Run before executing transaction creation by transforming from xSUSHI value to crXSUSHI value
-  // As you will be spending crXSUSHI when unzapping from this strategy
-  const preExecute = useCallback(
-    async (val: CurrencyAmount<Token>, bentoPermit?: BentoPermit) => {
-      if (zapIn) return execute(val)
-
-      const bal = await zenkoContract.toCtoken(CRXSUSHI.address, val.toExact().toBigNumber(XSUSHI.decimals))
-      return execute(CurrencyAmount.fromRawAmount(CRXSUSHI, bal.toString()), bentoPermit)
-    },
-    [execute, zapIn, zenkoContract]
-  )
-
   return useMemo(
     () => ({
       ...baseStrategy,
+      approveCallback,
       setBalances,
       execute: preExecute,
     }),
-    [baseStrategy, preExecute, setBalances]
+    [approveCallback, baseStrategy, preExecute, setBalances]
   )
 }
 
