@@ -23,6 +23,7 @@ const ROLL_LIST = 'https://app.tryroll.com/tokens.json'
 const SET_LIST = 'https://raw.githubusercontent.com/SetProtocol/uniswap-tokenlist/main/set.tokenlist.json'
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
 const WRAPPED_LIST = 'wrapped.tokensoft.eth'
+const DHEDGE_LIST = 'https://gateway.pinata.cloud/ipfs/QmRdKE7aiePYbhE7UtCWg9L9gsSw2Gx7pvTCSvkygrcg5U'
 
 // lower index == higher priority for token import
 export const DEFAULT_LIST_OF_LISTS: string[] = [
@@ -43,8 +44,9 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   NFTX_LIST_V2,
   OPTIMISM_LIST,
   GEMINI_LIST,
+  DHEDGE_LIST,
   ...UNSUPPORTED_LIST_URLS, // need to load unsupported tokens as well
 ]
 
 // default lists to be 'active' aka searched across
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = [YEARN_LIST, GEMINI_LIST ]
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [YEARN_LIST, GEMINI_LIST]
