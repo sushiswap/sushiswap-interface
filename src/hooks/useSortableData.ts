@@ -33,6 +33,10 @@ const useSortableData = (items: any, config: any = null) => {
             if (aValue.gt(bValue)) {
               return sortConfig.direction === 'ascending' ? 1 : -1
             }
+          } else if (aValue === Infinity) {
+            return sortConfig.direction === 'ascending' ? -1 : 1
+          } else if (bValue === Infinity) {
+            return sortConfig.direction === 'ascending' ? 1 : -1
           } else {
             if (aValue < bValue) {
               return sortConfig.direction === 'ascending' ? -1 : 1
