@@ -69,20 +69,13 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [
-    sushiPrice,
-    ethPrice,
-    maticPrice,
-    alcxPrice,
-    cvxPrice,
-    stakePrice,
-    onePrice,
-    picklePrice,
-    mphPrice,
-    yggPrice,
-    rulerPrice,
-    truPrice,
-  ] = [useSushiPrice(), useEthPrice(), useMaticPrice(), useStakePrice(), useOnePrice()]
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice] = [
+    useSushiPrice(),
+    useEthPrice(),
+    useMaticPrice(),
+    useStakePrice(),
+    useOnePrice(),
+  ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
 
