@@ -22,6 +22,8 @@ import {
   useSushiPrice,
 } from '../../services/graph'
 
+import { getAddress } from 'ethers/lib/utils'
+import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
 import FarmList from '../../features/farm/FarmList'
@@ -67,32 +69,12 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [
-    sushiPrice,
-    ethPrice,
-    maticPrice,
-    alcxPrice,
-    cvxPrice,
-    stakePrice,
-    onePrice,
-    picklePrice,
-    mphPrice,
-    yggPrice,
-    rulerPrice,
-    truPrice,
-  ] = [
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
-    useAlcxPrice(),
-    useCvxPrice(),
     useStakePrice(),
     useOnePrice(),
-    usePicklePrice(),
-    useMphPrice(),
-    useYggPrice(),
-    useRulerPrice(),
-    useTruPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -139,73 +121,33 @@ export default function Farm(): JSX.Element {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
-        const REWARDS = [
-          {
-            token: 'ALCX',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/alcx.jpg',
-            rewardPerBlock: pool.rewarder.rewardPerSecond / 1e18,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * blocksPerDay,
-            rewardPrice: alcxPrice,
-          },
-          {
-            token: 'CVX',
-            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B/logo.png',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
-            rewardPrice: cvxPrice,
-          },
-          {
-            token: 'CVX',
-            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x4e3FBD56CD56c3e72c1403e103b45Db9da5B9D2B/logo.png',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
-            rewardPrice: cvxPrice,
-          },
-          {
-            token: 'PICKLE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/pickle.jpg',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
-            rewardPrice: picklePrice,
-          },
-          {
-            token: 'MPH',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/88mph.jpg',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
-            rewardPrice: mphPrice,
-          },
-          {
-            token: 'DUMMY',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
-            rewardPrice: mphPrice,
-          },
-          {
-            token: 'YGG',
-            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x25f8087EAD173b73D6e8B84329989A8eEA16CF73/logo.png',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
-            rewardPrice: yggPrice,
-          },
-          {
-            token: 'RULER',
-            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x2aECCB42482cc64E087b6D2e5Da39f5A7A7001f8/logo.png',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e18) * averageBlockTime * blocksPerDay,
-            rewardPrice: rulerPrice,
-          },
-          {
-            token: 'TRU',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/tru.jpg',
-            rewardPerBlock: (pool.rewarder.rewardPerSecond / 1e8) * averageBlockTime,
-            rewardPerDay: (pool.rewarder.rewardPerSecond / 1e8) * averageBlockTime * blocksPerDay,
-            rewardPrice: truPrice,
-          },
-        ]
+        const icon = ['0', '3', '4', '8'].includes(pool.id)
+          ? `https://raw.githubusercontent.com/sushiswap/icons/master/token/${pool.rewardToken.symbol.toLowerCase()}.jpg`
+          : `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/${getAddress(
+              pool.rewarder.rewardToken
+            )}/logo.png`
 
-        return [...defaultRewards, REWARDS[pool.id]]
+        const decimals = 10 ** pool.rewardToken.decimals
+
+        const rewardPerBlock =
+          pool.rewardToken.symbol === 'ALCX'
+            ? pool.rewarder.rewardPerSecond / decimals
+            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
+
+        const rewardPerDay =
+          pool.rewardToken.symbol === 'ALCX'
+            ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
+            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
+
+        const reward = {
+          token: pool.rewardToken.symbol,
+          icon: icon,
+          rewardPerBlock: rewardPerBlock,
+          rewardPerDay: rewardPerDay,
+          rewardPrice: pool.rewardToken.derivedETH * ethPrice,
+        }
+
+        return [...defaultRewards, reward]
       } else if (pool.chef === Chef.MINICHEF) {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime

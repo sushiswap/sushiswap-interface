@@ -50,10 +50,13 @@ const usePending = (farm) => {
     async function fetchPendingReward() {
       try {
         const pending = await contract[chainId]?.pendingTokens(farm.id, account, '0')
-        // todo: do not assume [0] or that rewardToken has 18 decimals
-        const formatted = Fraction.from(BigNumber.from(pending?.rewardAmounts[0]), BigNumber.from(10).pow(18)).toString(
-          18
-        )
+        // todo: do not assume [0] or that rewardToken has 18 decimals (only works w/ mastechefv2 currently)
+        const formatted = farm.rewardToken
+          ? Fraction.from(
+              BigNumber.from(pending?.rewardAmounts[0]),
+              BigNumber.from(10).pow(farm.rewardToken.decimals)
+            ).toString(farm.rewardToken.decimals)
+          : Fraction.from(BigNumber.from(pending?.rewardAmounts[0]), BigNumber.from(10).pow(18)).toString(18)
         setBalance(formatted)
       } catch (error) {
         console.error(error)
