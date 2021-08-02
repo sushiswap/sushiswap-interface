@@ -9,7 +9,7 @@ import {
   poolsV2Query,
 } from '../queries'
 
-import { getTokenSubset, getEthPrice } from './exchange'
+import { getTokenSubset } from './exchange'
 
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
