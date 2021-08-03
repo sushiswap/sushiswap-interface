@@ -6,7 +6,7 @@ import { useActiveWeb3React, useApproveCallback, useInariContract, useZenkoContr
 import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseStrategy from './useBaseStrategy'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDerivedInariState } from '../hooks'
 
 export const general: StrategyGeneralInfo = {
@@ -40,10 +40,11 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
   const zenkoContract = useZenkoContract()
   const inariContract = useInariContract()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], CRXSUSHI])
-  const [cTokenAmount, setCTokenAmount] = useState<CurrencyAmount<Token>>(null)
+  const cTokenAmountRef = useRef<CurrencyAmount<Token>>(null)
+  const approveAmount = useMemo(() => (zapIn ? inputValue : cTokenAmountRef.current), [inputValue, zapIn])
 
   // Override approveCallback for this strategy as we need to approve CRXSUSHI on zapOut
-  const approveCallback = useApproveCallback(zapIn ? inputValue : cTokenAmount, inariContract?.address)
+  const approveCallback = useApproveCallback(approveAmount, inariContract?.address)
   const { execute, setBalances, ...baseStrategy } = useBaseStrategy({
     id: 'stakeSushiToCreamStrategy',
     general,
@@ -70,13 +71,8 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
     [execute, toCTokenAmount, zapIn]
   )
 
-  // TODO, FIX INFINITE LOOP
   useEffect(() => {
-    toCTokenAmount(inputValue).then((val) =>
-      setCTokenAmount((prevState) => {
-        if (prevState?.toExact() !== val?.toExact()) return val
-      })
-    )
+    toCTokenAmount(inputValue).then((val) => (cTokenAmountRef.current = val))
   }, [inputValue, toCTokenAmount])
 
   useEffect(() => {
@@ -100,11 +96,11 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
   return useMemo(
     () => ({
       ...baseStrategy,
-      approveCallback,
+      approveCallback: [...approveCallback, approveAmount],
       setBalances,
       execute: preExecute,
     }),
-    [approveCallback, baseStrategy, preExecute, setBalances]
+    [approveAmount, approveCallback, baseStrategy, preExecute, setBalances]
   )
 }
 

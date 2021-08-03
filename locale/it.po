@@ -735,9 +735,6 @@ msgstr "In attesa"
 msgid "Pending Treasury Transfer"
 msgstr "In attesa del trasferimento dalla tesoreria"
 
-msgid "Pending transaction"
-msgstr ""
-
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
@@ -905,9 +902,7 @@ msgstr ""
 msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
 msgstr ""
 
-msgid ""
-"Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click. crXSUSHI in BentoBox is automatically\n"
-"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgid "Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click."
 msgstr ""
 
 msgid ""

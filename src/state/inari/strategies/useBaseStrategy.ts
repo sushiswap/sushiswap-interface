@@ -16,7 +16,7 @@ export interface useBaseStrategyInterface {
 
 export interface BaseStrategyHook extends Strategy {
   execute: (val: CurrencyAmount<Token>, permit?: BentoPermit) => Promise<any>
-  approveCallback: [ApprovalState, () => Promise<void>]
+  approveCallback: [ApprovalState, () => Promise<void>, CurrencyAmount<Token>]
   getStrategy: () => Strategy
   calculateOutputFromInput: (
     zapIn: boolean,
@@ -122,7 +122,7 @@ const useBaseStrategy = ({ id, general, tokenDefinitions }: useBaseStrategyInter
       general,
       tokenDefinitions,
       execute,
-      approveCallback,
+      approveCallback: [...approveCallback, inputValue],
       getStrategy,
       calculateOutputFromInput,
       balances: {
@@ -140,6 +140,7 @@ const useBaseStrategy = ({ id, general, tokenDefinitions }: useBaseStrategyInter
       general,
       getStrategy,
       id,
+      inputValue,
       setBalances,
       tokenDefinitions,
       zapIn,

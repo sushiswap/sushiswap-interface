@@ -67,7 +67,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
     return (
       <>
         <Button {...rest} disabled color="gray">
-          <Dots>{i18n._(t`Approving Inari to spend ${inputValue.currency.symbol}`)}</Dots>
+          <Dots>{i18n._(t`Approving Inari to spend ${approveCallback[2].currency.symbol}`)}</Dots>
         </Button>
         {approveFlow}
       </>
@@ -77,7 +77,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
     return (
       <>
         <Button {...rest} color="pink" onClick={approveCallback[1]}>
-          {i18n._(t`Approve Inari to spend ${inputValue.currency.symbol}`)}
+          {i18n._(t`Approve Inari to spend ${approveCallback[2].currency.symbol}`)}
         </Button>
         {approveFlow}
       </>

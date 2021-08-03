@@ -86,7 +86,9 @@ const Inari = () => {
                     />
                   </div>
                 </div>
-                <InariButton color="gradient">Execute</InariButton>
+                <InariButton color="gradient" className="font-bold">
+                  Execute
+                </InariButton>
                 <div className="relative -m-5 p-7 mt-0 bg-dark-700 rounded-b">
                   <InariDescription />
                 </div>
