@@ -1,5 +1,6 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import { classNames } from '../../functions'
+import { XIcon } from '@heroicons/react/solid'
 
 const FILLED = {
   default: 'bg-gray-700',
@@ -21,18 +22,33 @@ interface ChipProps {
   color?: ChipColor
   variant?: ChipVariant
   className?: string
+  onDelete?: (e) => void
+  deleteIcon?: ReactNode
 }
 
-const Chip: FC<ChipProps> = ({ label, color = 'default', variant = 'filled', className = '' }) => {
+const Chip: FC<ChipProps> = ({
+  label,
+  color = 'default',
+  variant = 'filled',
+  className = '',
+  onDelete,
+  deleteIcon = <XIcon width={12} height={12} strokeWidth={5} />,
+}) => {
   return (
     <div
       className={classNames(
         VARIANT[variant][color],
-        'inline-flex h-[24px] rounded-[12px] py-0.5 px-3 text-high-emphesis font-medium text-xs leading-5',
+        onDelete ? 'pr-1' : 'pr-2',
+        'inline-flex h-[24px] rounded-[12px] py-0.5 pl-2 text-high-emphesis font-medium text-xs leading-5 gap-1 items-center',
         className
       )}
     >
       {label}
+      {onDelete && (
+        <div className="rounded bg-[rgba(255,255,255,0.12)] hover:bg-[rgba(255,255,255,0.24)] cursor-pointer p-0.5">
+          {deleteIcon}
+        </div>
+      )}
     </div>
   )
 }

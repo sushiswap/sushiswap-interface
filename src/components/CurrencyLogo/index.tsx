@@ -95,12 +95,11 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.CELO]: CeloLogo,
 }
 
-interface CurrencyLogoProps {
+export interface CurrencyLogoProps {
   currency?: Currency
   size?: string | number
   style?: React.CSSProperties
   className?: string
-  squared?: boolean
 }
 
 const unknown = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png'
@@ -138,3 +137,4 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
 }
 
 export default CurrencyLogo
+export { default as CurrencyLogoArray } from './CurrencyLogoArray'
