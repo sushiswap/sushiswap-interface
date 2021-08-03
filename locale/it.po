@@ -850,7 +850,7 @@ msgid "Share of Pool:"
 msgstr "Quota del pool:"
 
 msgid "Slippage tolerance"
-msgstr "Tolleranza slippage"
+msgstr "Toleranza slippage"
 
 msgid "Slippage tolerance..."
 msgstr ""
@@ -944,7 +944,7 @@ msgid "This transaction will not succeed due to price movement. Try increasing y
 msgstr ""
 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
-msgstr "Questa transazione non andrà a buon fine a causa del movimento del prezzo o della commissione sul trasferimento. Prova ad aumentare la tolleranza allo slippage."
+msgstr "Questa transazione non andrà a buon fine a causa del movimento del prezzo o della commissione sul trasferimento. Prova ad aumentare la toleranza allo slippage."
 
 msgid "Tip to encourage miners to select this transaction."
 msgstr ""

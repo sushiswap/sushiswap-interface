@@ -32,7 +32,7 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import useENS from '../../hooks/useENS'
 import { useLingui } from '@lingui/react'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
-import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
+import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTolerance'
 import {
   EstimatedSwapCall,
   SuccessfulCall,
