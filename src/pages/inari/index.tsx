@@ -45,21 +45,21 @@ const Inari = () => {
             </Typography>
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-10">
-          <div className="col-span-12 sm:col-span-3">
+        <div className="grid grid-cols-12 md:gap-10 space-y-10 md:space-y-0">
+          <div className="col-span-12 md:col-span-3">
             <div className="flex flex-col gap-5">
               <StrategySelector />
             </div>
           </div>
-          <div className="col-span-12 sm:col-span-9 grid gap-4">
+          <div className="col-span-12 md:col-span-9 grid gap-4">
             <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
               <StrategyStepDisplay />
               <SideSwitch />
             </div>
             <DoubleGlowShadow className="max-w-[100%]">
               <div className="bg-dark-900 border-dark-700 rounded border-2 p-5 grid gap-8">
-                <div className="flex flex-col sm:flex-row items-center">
-                  <div className="w-full sm:w-3/5 mr-2">
+                <div className="flex flex-col md:flex-row items-start">
+                  <div className="w-full md:w-3/5 mr-2">
                     <BalancePanel
                       label={i18n._(t`From`)}
                       showMax
@@ -70,12 +70,12 @@ const Inari = () => {
                       field={Field.INPUT}
                     />
                   </div>
-                  <div className="flex items-center w-[60px] z-1 relative ml-[-16px] mr-[-16px]">
-                    <div className="w-[60px] h-[60px] rounded-full sm:bg-dark-800 border-2 border-dark-900 p-2 flex items-center justify-center">
+                  <div className="flex items-center md:w-[60px] z-1 relative md:ml-[-16px] md:mr-[-16px] md:mt-[34px] justify-center w-full">
+                    <div className="w-[60px] h-[60px] rounded-full md:bg-dark-800 border-2 border-dark-900 p-2 flex items-center justify-center transform rotate-90 md:rotate-0">
                       <ArrowRightIcon width={24} height={24} className="text-high-emphesis" />
                     </div>
                   </div>
-                  <div className="w-full sm:w-2/5 ml-2">
+                  <div className="w-full md:w-2/5 md:ml-2">
                     <BalancePanel
                       label={i18n._(t`To`)}
                       value={outputValue}
