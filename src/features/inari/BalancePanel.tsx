@@ -59,7 +59,7 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = fa
         </Typography>
       </div>
       <div className="flex flex-row bg-dark-800 p-4 rounded gap-4 items-center">
-        <div className="rounded-full">
+        <div className="rounded-full overflow-hidden">
           <CurrencyLogo currency={token} size={40} />
         </div>
         <NumericalInput value={value} onUserInput={dispatchValue} />
