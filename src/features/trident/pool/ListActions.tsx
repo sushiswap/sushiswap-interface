@@ -7,10 +7,10 @@ import { useLingui } from '@lingui/react'
 import { useTridentPoolPageDispatch, useTridentPoolPageState } from './context'
 import { ActionType } from './context/types'
 import BottomSlideIn from '../../../components/Dialog/BottomSlideIn'
-import { XIcon } from '@heroicons/react/outline'
 import Checkbox from '../../../components/Checkbox'
 import Chip from '../../../components/Chip'
 import { FEE_TIERS, POOL_TYPES, SORT_OPTIONS } from './context/constants'
+import Divider from '../../../components/Divider'
 
 interface SortSelectorProps {}
 
@@ -62,7 +62,7 @@ const ListActions: FC<SortSelectorProps> = () => {
   )
 
   return (
-    <div className="flex flex-col gap-4 px-5">
+    <div className="flex flex-col gap-5 px-5">
       <div className="flex flex-row items-center gap-5">
         <div className="flex gap-2 items-center rounded border border-dark-800 bg-dark-900 bg-opacity-50 py-2 px-3 flex-grow">
           <SearchIcon strokeWidth={5} width={20} height={20} />
@@ -84,28 +84,31 @@ const ListActions: FC<SortSelectorProps> = () => {
         </div>
       </div>
       {filters.poolTypes.length + filters.feeTiers.length > 0 && (
-        <div className="flex justify-between items-start gap-3">
-          <Typography weight={400}>{i18n._(t`Filters:`)}</Typography>
-          <div className="flex gap-2 items-center flex-wrap">
-            {filters.poolTypes.map((type) => (
-              <Chip
-                label={type.label}
-                color={type.color}
-                key={type.label}
-                onDelete={() => handleAddOrDeletePoolTypeFilter(type, false)}
-              />
-            ))}
-            {filters.feeTiers.map((type) => (
-              <Chip
-                label={type.label}
-                color={type.color}
-                {...type}
-                key={type.label}
-                onDelete={() => handleAddOrDeleteFeeTierFilter(type, false)}
-              />
-            ))}
+        <>
+          <div className="flex justify-between items-start gap-3">
+            <Typography weight={400}>{i18n._(t`Filters:`)}</Typography>
+            <div className="flex gap-2 items-center flex-wrap">
+              {filters.poolTypes.map((type) => (
+                <Chip
+                  label={type.label}
+                  color={type.color}
+                  key={type.label}
+                  onDelete={() => handleAddOrDeletePoolTypeFilter(type, false)}
+                />
+              ))}
+              {filters.feeTiers.map((type) => (
+                <Chip
+                  label={type.label}
+                  color={type.color}
+                  {...type}
+                  key={type.label}
+                  onDelete={() => handleAddOrDeleteFeeTierFilter(type, false)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+          <Divider />
+        </>
       )}
       <div
         className="flex justify-between items-center cursor-pointer"
@@ -114,7 +117,7 @@ const ListActions: FC<SortSelectorProps> = () => {
         <Typography weight={400}>{i18n._(t`Sort:`)}</Typography>
         <div className="flex gap-1 items-center">
           <Typography weight={700} className="text-high-emphesis">
-            {i18n._(t`APY`)} {SORT_OPTIONS[sortType].title}
+            {SORT_OPTIONS[sortType].title}
           </Typography>
           <div className={`text-high-emphesis transform ${hideSortTypes ? '' : 'rotate-180'}`}>
             <ChevronDownIcon width={20} height={20} />
@@ -130,6 +133,7 @@ const ListActions: FC<SortSelectorProps> = () => {
           ))}
         </RadioGroup>
       )}
+      <Divider />
       <BottomSlideIn title={i18n._(t`Apply Pool Filters`)} open={open} onClose={() => setOpen(false)}>
         <div className="bg-dark-800 rounded-t">
           <div className="flex flex-col gap-5 p-5">
@@ -137,10 +141,6 @@ const ListActions: FC<SortSelectorProps> = () => {
               <Typography variant="lg" weight={700} className="text-high-emphesis">
                 By Pool Types:
               </Typography>
-              <button onClick={() => setOpen(false)}>
-                <span className="sr-only">Close panel</span>
-                <XIcon className="h-6 w-6 text-high-emphesis" aria-hidden="true" />
-              </button>
             </div>
             {POOL_TYPES.map((poolType) => {
               const checked = !!filters.poolTypes.find((el) => el.label === poolType.label)
@@ -162,10 +162,6 @@ const ListActions: FC<SortSelectorProps> = () => {
                 <Typography variant="lg" weight={700} className="text-high-emphesis">
                   By Fee Tier:
                 </Typography>
-                <button onClick={() => setOpen(false)}>
-                  <span className="sr-only">Close panel</span>
-                  <XIcon className="h-6 w-6 text-high-emphesis" aria-hidden="true" />
-                </button>
               </div>
               {FEE_TIERS.map((feeTier) => {
                 const checked = !!filters.feeTiers.find((el) => el.label === feeTier.label)
