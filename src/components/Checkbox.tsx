@@ -1,6 +1,5 @@
-import QuestionHelper from './QuestionHelper'
 import React from 'react'
-import Settings from './Settings'
+import { CheckIcon } from '@heroicons/react/solid'
 
 export type Color = 'pink' | 'blue'
 
@@ -18,15 +17,24 @@ function Checkbox({
   color,
   set,
   className = '',
+  checked,
   ...rest
 }: CheckboxProps & React.InputHTMLAttributes<HTMLInputElement>): JSX.Element {
   return (
-    <input
-      type="checkbox"
-      onChange={(event) => set(event.target.checked)}
-      className={`border border-dark-700 cursor-pointer appearance-none h-5 w-5 rounded-sm bg-dark-900 disabled:bg-dark-1000 disabled:border-dark-800 ${COLOR[color]} ${className}`}
-      {...rest}
-    />
+    <div className="flex relative items-center justify-center">
+      <input
+        type="checkbox"
+        onChange={(event) => set(event.target.checked)}
+        className={`border border-dark-700 checked:bg-gradient-to-r checked:from-blue checked:to-pink checked:border-white cursor-pointer appearance-none h-5 w-5 rounded-sm bg-dark-900 disabled:bg-dark-1000 disabled:border-dark-800 ${COLOR[color]} ${className}`}
+        checked={checked}
+        {...rest}
+      />
+      {checked && (
+        <div className="absolute pointer-events-none">
+          <CheckIcon width={20} height={20} className="text-white" />
+        </div>
+      )}
+    </div>
   )
 }
 
