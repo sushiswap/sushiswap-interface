@@ -11,18 +11,17 @@ import {
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
-  useOnePrice,
-  useStakePrice,
-  usePicklePrice,
   useMphPrice,
-  useYggPrice,
+  useOnePrice,
+  usePicklePrice,
   useRulerPrice,
-  useTruPrice,
+  useStakePrice,
   useSushiPairs,
   useSushiPrice,
+  useTruPrice,
+  useYggPrice,
 } from '../../services/graph'
 
-import { getAddress } from 'ethers/lib/utils'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
@@ -33,6 +32,7 @@ import React from 'react'
 import Search from '../../components/Search'
 import { classNames } from '../../functions'
 import dynamic from 'next/dynamic'
+import { getAddress } from 'ethers/lib/utils'
 import { usePositions } from '../../features/farm/hooks'
 import { useRouter } from 'next/router'
 
@@ -257,6 +257,8 @@ export default function Farm(): JSX.Element {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
     threshold: 0.4,
   }
+
+  // console.log({ data })
 
   const { result, term, search } = useFuse({
     data,
