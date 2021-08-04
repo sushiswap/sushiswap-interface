@@ -1,0 +1,1491 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: lokalise.com\n"
+"Project-Id-Version: SushiSwap Interface\n"
+"PO-Revision-Date: 2021-05-05 14:23\n"
+"Last-Translator: lokalise.com\n"
+"Language-Team: lokalise.com\n\n"
+"Language: zh_TW\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"Plural-Forms: \n"
+
+#, fuzzy
+msgid ""
+"(COMING SOON) Accrue automatic yield through flash loans and"
+"SUSHI strategies"
+msgstr "（即將推出）透過閃電貸款和 SUSHI 策略自動獲得收益"
+
+#, fuzzy
+msgid "{0, plural, one {Token} many {Tokens}}"
+msgstr ""
+
+#, fuzzy
+msgid "{0} {1} per {2}"
+msgstr "{0}{1} 每筆 {2}"
+
+#, fuzzy
+msgid "{0} {sign} market rate"
+msgstr "{0} {sign} 市場匯率"
+
+#, fuzzy
+msgid "{0} Deposited"
+msgstr "{0}存入的"
+
+#, fuzzy
+msgid "{0} Strategy"
+msgstr "{0}策略"
+
+#, fuzzy
+msgid "{0}/{1} Burned"
+msgstr "{0}／{1} 銷毀"
+
+#, fuzzy
+msgid "1 Hour"
+msgstr "1 小時"
+
+#, fuzzy
+msgid "1 Week"
+msgstr "1 週"
+
+#, fuzzy
+msgid "24 Hours"
+msgstr "24 小時"
+
+#, fuzzy
+msgid "30 Days"
+msgstr "30 日"
+
+#, fuzzy
+msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
+msgstr "每筆交易的一部分 (0.05%) 將作為協議獎勵分配給 xSUSHI 的持有者。"
+
+#, fuzzy
+msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
+msgstr "每筆交易的0.25%都會分給協議的流動性提供者。"
+
+#, fuzzy
+msgid "above"
+msgstr "以上"
+
+#, fuzzy
+msgid "Accept"
+msgstr "接受"
+
+#, fuzzy
+msgid "Add"
+msgstr "添加"
+
+#, fuzzy
+msgid "Add {0} {1} and {2} {3}"
+msgstr "增加{0} {1}和{2} {3}"
+
+#, fuzzy
+msgid "Add {0} to MetaMask"
+msgstr "新增 {0} 至 MetaMask"
+
+#, fuzzy
+msgid "Add collateral in order to borrow assets"
+msgstr "添加抵押品以借出資產"
+
+#, fuzzy
+msgid "Add Liquidity"
+msgstr "添加流動性"
+
+#, fuzzy
+msgid "Add liquidity"
+msgstr "添加流動性"
+
+#, fuzzy
+msgid "Add SUSHI to your MetaMask wallet"
+msgstr "新增 SUSHI 至您的 MetaMask 錢包"
+
+#, fuzzy
+msgid "Add xSUSHI to your MetaMask wallet"
+msgstr "新增 xSUSHI 至您的 MetaMask 錢包"
+
+#, fuzzy
+msgid "Added"
+msgstr "已新增"
+
+#, fuzzy
+msgid "Additional records and weekly merkle updates can be found on"
+msgstr "可以在以下網站找到其他記錄和每週 merkle 的更新"
+
+#, fuzzy
+msgid "Amount of Tokens"
+msgstr "代幣數量"
+
+#, fuzzy
+msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
+msgstr "嘗試進行此交易時發生錯誤。您可能需要增加您的滑動價差。如果仍無法進行，則可能是交易代幣的相容性問題。請注意轉帳手續費及 rebase 代幣與 Uniswap V3 不相容。"
+
+#, fuzzy
+msgid "Analytics"
+msgstr "分析界面"
+
+#, fuzzy
+msgid "Approve"
+msgstr "批准"
+
+#, fuzzy
+msgid "Approve {0}"
+msgstr "批准{0}"
+
+#, fuzzy
+msgid "Approve Kashi"
+msgstr "批準Kashi"
+
+#, fuzzy
+msgid "Approve Limit Order"
+msgstr "核准停損訂單"
+
+#, fuzzy
+msgid "Approved"
+msgstr "已批準"
+
+#, fuzzy
+msgid "Approving"
+msgstr "批準中"
+
+#, fuzzy
+msgid "Approving {0}"
+msgstr "批准{0}"
+
+#, fuzzy
+msgid "Approving Limit Order"
+msgstr "核准停損訂單中"
+
+#, fuzzy
+msgid "APR"
+msgstr "APR"
+
+#, fuzzy
+msgid "Are you sure?"
+msgstr "您確定嗎？"
+
+#, fuzzy
+msgid "Auto"
+msgstr "自動"
+
+#, fuzzy
+msgid "Available"
+msgstr "可用的"
+
+#, fuzzy
+msgid "Available Networks"
+msgstr "可用網路"
+
+#, fuzzy
+msgid "Back to Limit Orders"
+msgstr "返回至停損訂單"
+
+#, fuzzy
+msgid "Balance"
+msgstr "餘額"
+
+#, fuzzy
+msgid "Balance:"
+msgstr "餘額："
+
+#, fuzzy
+msgid "below"
+msgstr "以下"
+
+#, fuzzy
+msgid "Bento Balance: {0}"
+msgstr "Bento余额： {0}"
+
+#, fuzzy
+msgid "BentoBox"
+msgstr "BentoBox"
+
+#, fuzzy
+msgid "BentoBox Apps"
+msgstr "BentoBox應用"
+
+#, fuzzy
+msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
+msgstr "BentoBox可以實現用很低的gas費用體驗高收益的dapp。"
+
+#, fuzzy
+msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
+msgstr "BentoBox通過在集成的dapp中使用閃電貸、策略以及固定和低Gas的轉賬，來提供額外收益"
+
+#, fuzzy
+msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
+msgstr "BentoBox策略可以為您的抵押代幣創造收益。這個代幣暫時在BentoBox中沒有策略。"
+
+#, fuzzy
+msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
+msgstr "BentoBox策略可以在未借出資金時為您的流動資金創造收益。該代币在BentoBox中尚無策略。"
+
+#, fuzzy
+msgid "Borrow"
+msgstr "借"
+
+#, fuzzy
+msgid "Borrow {0}"
+msgstr "借用{0}"
+
+#, fuzzy
+msgid "Borrow {0}-{1}"
+msgstr "借用{0} - {1}"
+
+#, fuzzy
+msgid "Borrow assets and leverage up"
+msgstr "借入资产并提高杠杆率"
+
+#, fuzzy
+msgid "Borrowed"
+msgstr "已借入"
+
+#, fuzzy
+msgid "Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest."
+msgstr "借款讓您在不出售資產的情況下獲得流動性。您的借款上限取決於您抵押物的價值。您可以借出您抵押品價值的75%，隨時可以還款，並附上利息。"
+
+#, fuzzy
+msgid "Buy"
+msgstr "購買"
+
+#, fuzzy
+msgid ""
+"By adding liquidity you'll earn 0.25% of all trades on this pair"
+"proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be"
+"claimed by withdrawing your liquidity."
+msgstr ""
+
+#, fuzzy
+msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
+msgstr "跳過確認、接受交易高滑點。使用時風險自擔。"
+
+#, fuzzy
+msgid "Cancel"
+msgstr "取消"
+
+#, fuzzy
+msgid "Cancel Order"
+msgstr "取消訂單"
+
+#, fuzzy
+msgid "Cancelled"
+msgstr "已取消"
+
+#, fuzzy
+msgid "Change"
+msgstr "變更"
+
+#, fuzzy
+msgid "Change Recipient"
+msgstr "變更收款人"
+
+#, fuzzy
+msgid "Claim SUSHI"
+msgstr "獲取SUSHI"
+
+#, fuzzy
+msgid "Claimed"
+msgstr "已獲取"
+
+#, fuzzy
+msgid "Clear all"
+msgstr "清除全部"
+
+#, fuzzy
+msgid "Clear History"
+msgstr "清除歷史"
+
+#, fuzzy
+msgid ""
+"Click on a pool below, input the amount you wish to migrate or select max, and click"
+"migrate"
+msgstr "點擊下面的共有資金，輸入您要轉移的金額或選擇最大值，然後點擊轉移"
+
+#, fuzzy
+msgid "Collateral"
+msgstr "抵押品"
+
+#, fuzzy
+msgid "Community Approval"
+msgstr "社區批準"
+
+#, fuzzy
+msgid "Confirm"
+msgstr "確認"
+
+#, fuzzy
+msgid "Confirm Adding Liquidity"
+msgstr "確認添加流動性"
+
+#, fuzzy
+msgid "Confirm convert"
+msgstr "確認轉換"
+
+#, fuzzy
+msgid "Confirm Limit Order"
+msgstr "確認停損訂單"
+
+#, fuzzy
+msgid "Confirm Staking"
+msgstr "確認質押"
+
+#, fuzzy
+msgid "Confirm Supply"
+msgstr "確認供應"
+
+#, fuzzy
+msgid "Confirm Swap"
+msgstr "確認交換"
+
+#, fuzzy
+msgid "Confirm this transaction in your wallet"
+msgstr "在您的錢包中確認這筆交易"
+
+#, fuzzy
+msgid "Confirm Withdrawal"
+msgstr "確認提取"
+
+#, fuzzy
+msgid "Connect to a wallet"
+msgstr "連接錢包"
+
+#, fuzzy
+msgid "Connect to wallet"
+msgstr "連接至錢包"
+
+#, fuzzy
+msgid "Connect Wallet"
+msgstr "連接錢包"
+
+#, fuzzy
+msgid "Convert"
+msgstr "轉換"
+
+#, fuzzy
+msgid "Converting {0} {1} for {2} {3}"
+msgstr "將{0} {1}轉換為{2} {3}"
+
+#, fuzzy
+msgid "Copied"
+msgstr "已複製"
+
+#, fuzzy
+msgid "Copy Address"
+msgstr "複製地址"
+
+#, fuzzy
+msgid "Create a new Kashi Market"
+msgstr "建立新的 Kashi 市場"
+
+#, fuzzy
+msgid "Create a pair"
+msgstr "創建交易對"
+
+#, fuzzy
+msgid "Create pool"
+msgstr "創建池"
+
+#, fuzzy
+msgid "Create Pool & Supply"
+msgstr "創建池和供應"
+
+#, fuzzy
+msgid "Current"
+msgstr "目前的"
+
+#, fuzzy
+msgid "Deposit"
+msgstr "存款"
+
+#, fuzzy
+msgid "Deposit {0} into BentoBox"
+msgstr "將{0}存入 BentoBox"
+
+#, fuzzy
+msgid "Deposit SUSHI into BentoBox"
+msgstr "將SUSHI存入BentoBox"
+
+#, fuzzy
+msgid "Deposit tokens into BentoBox for all the yields"
+msgstr "將代幣存入BentoBox，以獲得所有收益。"
+
+#, fuzzy
+msgid "Depositing {0} into BentoBox"
+msgstr "將{0}存入 BentoBox"
+
+#, fuzzy
+msgid "Dev"
+msgstr "開發人員"
+
+#, fuzzy
+msgid "Disable Multihops"
+msgstr "禁用Multihops"
+
+#, fuzzy
+msgid "Disconnect"
+msgstr "斷線"
+
+#, fuzzy
+msgid "Discord"
+msgstr "Discord"
+
+#, fuzzy
+msgid "Dismiss"
+msgstr "解散"
+
+#, fuzzy
+msgid "Docs"
+msgstr "文档"
+
+#, fuzzy
+msgid "Documentation for developers of Sushi."
+msgstr "Sushi開發文檔。"
+
+#, fuzzy
+msgid "Documentation for users of Sushi."
+msgstr "Sushi用户文档。"
+
+#, fuzzy
+msgid "Either return to the {link}, or change to an available network."
+msgstr "返回到 {link} ，或者變更可用的網路。"
+
+#, fuzzy
+msgid "Enter"
+msgstr "進入"
+
+#, fuzzy
+msgid "Enter a recipient"
+msgstr "輸入收件人"
+
+#, fuzzy
+msgid "Enter a valid slippage percentage"
+msgstr "輸入有效的滑點百分比"
+
+#, fuzzy
+msgid "Enter Amount"
+msgstr "輸入金額"
+
+#, fuzzy
+msgid "Enter an amount"
+msgstr "輸入金額"
+
+#, fuzzy
+msgid "Error"
+msgstr "錯誤"
+
+#, fuzzy
+msgid "Error connecting"
+msgstr "連線錯誤"
+
+#, fuzzy
+msgid "Error connecting. Try refreshing the page."
+msgstr "連線錯誤。請重新整理頁面。"
+
+#, fuzzy
+msgid "Exchange Rate"
+msgstr "匯率"
+
+#, fuzzy
+msgid "Expanded results from inactive Token Lists"
+msgstr "不常用代幣清單的擴展結果"
+
+#, fuzzy
+msgid "Expert Mode"
+msgstr "專家模式"
+
+#, fuzzy
+msgid ""
+"Expert mode turns off the confirm transaction prompt and allows high slippage trades"
+"that often result in bad rates and lost funds."
+msgstr "專家模式會關閉確認交易彈出式視窗並允許經常導致不良利率和資金損失的高滑動價差交易。"
+
+#, fuzzy
+msgid "Expiration is the time at which the order will become invalid"
+msgstr "過期是指訂單失效的時間。"
+
+#, fuzzy
+msgid "Expired"
+msgstr "過期"
+
+#, fuzzy
+msgid "failed to load"
+msgstr "加載失敗"
+
+#, fuzzy
+msgid "Farm"
+msgstr "挖礦"
+
+#, fuzzy
+msgid "Filled"
+msgstr "填寫"
+
+#, fuzzy
+msgid "Find Pool"
+msgstr "查找池"
+
+#, fuzzy
+msgid "for deliberations on additional points."
+msgstr "對其他要點的討論。"
+
+#, fuzzy
+msgid ""
+"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI"
+"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve"
+"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols."
+"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited"
+"SUSHI and any additional from fees."
+msgstr "每條交易區塊鏈上每次交易的 0.05% 交易手續費將按 SUSHI 的股分比例分給 SushiBar。當您的 SUSHI 被質押到 SushiBar 時，您將收到 xSUSHI 作為投票權的回報和可以與其他協議交互的完全可組合的代幣。您的 xSUSHI 會持續產生複利，當取消抵押時將收到質押時的 SUSHI 以及產生的任何額外手續費。"
+
+#, fuzzy
+msgid "forum discussion"
+msgstr "論壇討論"
+
+#, fuzzy
+msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
+msgstr "在不減少資產的情況下獲得代幣的敞口。杠桿將使您能夠對資產做空，並從下跌趨勢中獲利。"
+
+#, fuzzy
+msgid ""
+"Gain governance rights with xSUSHI and earn 5% APR (0.05% of"
+"all swaps from all chains)"
+msgstr "透過 xSUSHI 獲得治理權並賺取 5% 的年利率（所有交易區塊鏈上每筆交易的 0.05%）"
+
+#, fuzzy
+msgid "Go Back"
+msgstr "返回"
+
+#, fuzzy
+msgid "Hardware Wallet"
+msgstr "硬件錢包"
+
+#, fuzzy
+msgid "Harmony Bridge"
+msgstr "Harmony 幣橋接"
+
+#, fuzzy
+msgid "Harvest {0} SUSHI {1}"
+msgstr "收穫 {0}SUSHI{1}"
+
+#, fuzzy
+msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
+msgstr "您有想要賺取額外利息的資產嗎？ 在獨立的市場放貸並從借款人賺取利息。"
+
+#, fuzzy
+msgid "Health"
+msgstr "健康值"
+
+#, fuzzy
+msgid "Historical Total Locked: {0} SUSHI"
+msgstr "锁仓的总数：{0}SUSHI"
+
+#, fuzzy
+msgid "Historical Total Locked: Connect Wallet"
+msgstr "鎖倉的總數：連接錢包"
+
+#, fuzzy
+msgid "Historical Total Locked: Fetching Total"
+msgstr "鎖倉的總數：獲取總數"
+
+#, fuzzy
+msgid "home page"
+msgstr "首頁"
+
+#, fuzzy
+msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
+msgstr "如果您想要對未在清單的市場供貨，可以使用這個工具來建立新的交易配對。"
+
+#, fuzzy
+msgid "Import"
+msgstr "匯入"
+
+#, fuzzy
+msgid "Import Pool"
+msgstr "導入流動性池"
+
+#, fuzzy
+msgid "In Bento:"
+msgstr "在 Bento："
+
+#, fuzzy
+msgid "In Wallet:"
+msgstr "在錢包中："
+
+#, fuzzy
+msgid "Input is estimated. You will sell at most"
+msgstr "轉入已審計。您最多將賣掉"
+
+#, fuzzy
+msgid "Insufficient {0} balance"
+msgstr "代幣{0}餘額不足"
+
+#, fuzzy
+msgid "Insufficient Balance"
+msgstr "余額不足"
+
+#, fuzzy
+msgid "Insufficient liquidity for this trade"
+msgstr "該交易的流動性不足"
+
+#, fuzzy
+msgid "Interface Settings"
+msgstr "交互設置"
+
+#, fuzzy
+msgid "Invalid pair"
+msgstr "無效的代幣對"
+
+#, fuzzy
+msgid "Invalid recipient"
+msgstr "无效收件人"
+
+#, fuzzy
+msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
+msgstr "孤立借貸市場降低您作為資產提供人的風險。在對手方破產時確切知道對方的抵押品。"
+
+#, fuzzy
+msgid "Join the community on Discord."
+msgstr "加入Discord社區。"
+
+#, fuzzy
+msgid "Learn more about wallets"
+msgstr "了解更多關於錢包的資訊"
+
+#, fuzzy
+msgid "Lend"
+msgstr "借貸"
+
+#, fuzzy
+msgid "Lend assets for interest from borrowers."
+msgstr "向借款人收取的利息"
+
+#, fuzzy
+msgid "Lend your assets, earn yield with no impermanent loss"
+msgstr "借出您的資產，賺取收益無無常損失"
+
+#, fuzzy
+msgid "Lending"
+msgstr "借貸"
+
+#, fuzzy
+msgid "Lent"
+msgstr "借出"
+
+#, fuzzy
+msgid "Limit"
+msgstr "停損點"
+
+#, fuzzy
+msgid "Limit order"
+msgstr "停損訂單"
+
+#, fuzzy
+msgid "Liquidity"
+msgstr "流動性"
+
+#, fuzzy
+msgid "Liquidity Provider Fee"
+msgstr "LP獎勵"
+
+#, fuzzy
+msgid "Liquidity Provider Rewards"
+msgstr "LP獎勵"
+
+#, fuzzy
+msgid ""
+"Liquidity providers earn a 0.25% fee on all trades proportional to their share of"
+"the pool. Fees are added to the pool, accrue in real time and can be claimed by"
+"withdrawing your liquidity"
+msgstr "流通量供應商會在所有交易中收取 0.25% 的費用，費用將與其共用資金中股份比例成正比。費用被實時累積增加到共用資金中，透過撤出流動性以收取。"
+
+#, fuzzy
+msgid "Lists"
+msgstr "清單"
+
+#, fuzzy
+msgid "Loading"
+msgstr "載入中"
+
+#, fuzzy
+msgid "Loading Balance"
+msgstr "載入餘額中"
+
+#, fuzzy
+msgid "Loading balance"
+msgstr "載入餘額中"
+
+#, fuzzy
+msgid "Loading your {exchange} liquidity positions"
+msgstr "正在加載您的{exchange}您的流動性倉位"
+
+#, fuzzy
+msgid "loading..."
+msgstr "載入中..."
+
+#, fuzzy
+msgid "Loading..."
+msgstr "載入中..."
+
+#, fuzzy
+msgid "LTV"
+msgstr "LTV"
+
+#, fuzzy
+msgid "Manage"
+msgstr "管理"
+
+#, fuzzy
+msgid "Manage this pool"
+msgstr "管理這個池子"
+
+#, fuzzy
+msgid "Manage Token Lists"
+msgstr "管理代幣列表"
+
+#, fuzzy
+msgid "Market"
+msgstr "市場"
+
+#, fuzzy
+msgid "Markets"
+msgstr "市場"
+
+#, fuzzy
+msgid "Matic Bridge"
+msgstr "Matic 幣橋接"
+
+#, fuzzy
+msgid "MAX"
+msgstr "最大數量"
+
+#, fuzzy
+msgid "Max"
+msgstr "最大數量"
+
+#, fuzzy
+msgid "Maximize yield by staking SUSHI for xSUSHI"
+msgstr "將SUSHI質押成xSUSHI最大化收益"
+
+#, fuzzy
+msgid "Maximum sent"
+msgstr "最大傳送"
+
+#, fuzzy
+msgid ""
+"MEOW tokens wrap xSUSHI into BentoBox for double yields and can be"
+"used to vote in special MEOW governor contracts."
+msgstr ""
+
+#, fuzzy
+msgid "MEV Shield by Archer DAO"
+msgstr "Archer DAO 的 MEV Shield"
+
+#, fuzzy
+msgid "Migrate"
+msgstr "遷移"
+
+#, fuzzy
+msgid "Migrate {exchange} Liquidity"
+msgstr "遷移{exchange}流動資金"
+
+#, fuzzy
+msgid "Migrating"
+msgstr "正在遷移"
+
+#, fuzzy
+msgid "Migration is done in one-click using your signature (permit)"
+msgstr "使用您的簽名（許可證），一鍵完成遷移"
+
+#, fuzzy
+msgid "Miner Tip"
+msgstr "礦工小費"
+
+#, fuzzy
+msgid "Minimum Received"
+msgstr "最少收到"
+
+#, fuzzy
+msgid "Minimum received"
+msgstr "最少可獲得的數量"
+
+#, fuzzy
+msgid "minutes"
+msgstr "分鐘"
+
+#, fuzzy
+msgid "My Liquidity Positions"
+msgstr "我的流動性頭寸"
+
+#, fuzzy
+msgid "My Orders"
+msgstr "我的訂單"
+
+#, fuzzy
+msgid "My SUSHI"
+msgstr "我的 SUSHI"
+
+#, fuzzy
+msgid "Network not supported yet"
+msgstr "尚未支援網路"
+
+#, fuzzy
+msgid "Never"
+msgstr "從未"
+
+#, fuzzy
+msgid "New to Ethereum?"
+msgstr "初次使用以太坊？"
+
+#, fuzzy
+msgid "No Liquidity found"
+msgstr "沒有發現流動性"
+
+#, fuzzy
+msgid "No liquidity found to do swap"
+msgstr "沒有發現流動性可以互換"
+
+#, fuzzy
+msgid "No liquidity was found."
+msgstr "未發現流動性。"
+
+#, fuzzy
+msgid "No order history"
+msgstr "沒有訂單記錄"
+
+#, fuzzy
+msgid "No pool found"
+msgstr "未找到池"
+
+#, fuzzy
+msgid "No results found"
+msgstr "未找到結果"
+
+#, fuzzy
+msgid "Non-hardware Wallet"
+msgstr "非硬件錢包"
+
+#, fuzzy
+msgid "None"
+msgstr "無"
+
+#, fuzzy
+msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
+msgstr "只有当您知道自己在做什么时，才会使用此模式。"
+
+#, fuzzy
+msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
+msgstr "糟糕！出現未知錯誤。請刷新頁面，或從其他瀏覽器或設備訪問"
+
+#, fuzzy
+msgid "Open main menu"
+msgstr "打開主菜單"
+
+#, fuzzy
+msgid "Open Orders"
+msgstr "公開訂單"
+
+#, fuzzy
+msgid "Open Source"
+msgstr "開源"
+
+#, fuzzy
+msgid "or the transaction will revert."
+msgstr "或交易將被恢復。"
+
+#, fuzzy
+msgid "Oracle"
+msgstr "預言機"
+
+#, fuzzy
+msgid "Order Expiration"
+msgstr "訂單到期"
+
+#, fuzzy
+msgid "Order History"
+msgstr "訂單記錄"
+
+#, fuzzy
+msgid ""
+"Output is estimated. If the price changes by more than {0}% your transaction"
+"will revert."
+msgstr ""
+
+#, fuzzy
+msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
+msgstr "估計輸出。如果價格變化超過{0} ％，您的交易將被退回。"
+
+#, fuzzy
+msgid "Output is estimated. You will receive at least"
+msgstr "轉出已審計。您將至少收到"
+
+#, fuzzy
+msgid "Output will be sent to"
+msgstr "轉出將傳送到"
+
+#, fuzzy
+msgid "Pay"
+msgstr "支付"
+
+#, fuzzy
+msgid "Pay from:"
+msgstr "付款方式："
+
+#, fuzzy
+msgid "Pending"
+msgstr "處理中"
+
+#, fuzzy
+msgid "Pending Treasury Transfer"
+msgstr "等待金庫轉賬"
+
+#, fuzzy
+msgid "Please connect to the appropriate Ethereum network."
+msgstr "請連接到對應的以太坊網路。"
+
+#, fuzzy
+msgid "Please enter an amount"
+msgstr "請輸入金額"
+
+#, fuzzy
+msgid "Please refer to the"
+msgstr "請參考"
+
+msgid "Please type the word \"confirm\" to enable expert mode."
+msgstr "請輸入單字「 confirm」以啟用專家模式。"
+
+#, fuzzy
+msgid "Pool"
+msgstr "資金池"
+
+#, fuzzy
+msgid "Pool Found!"
+msgstr "找到池！"
+
+#, fuzzy
+msgid "Pool Tokens"
+msgstr "流動性池中的總代幣"
+
+#, fuzzy
+msgid "Pool tokens in rewards pool"
+msgstr "獎勵池中的代幣"
+
+#, fuzzy
+msgid "Pooled {0}"
+msgstr "汇集{0}"
+
+#, fuzzy
+msgid "Positions"
+msgstr "倉位"
+
+#, fuzzy
+msgid "Price Impact"
+msgstr "價格影響"
+
+#, fuzzy
+msgid "Price Impact High"
+msgstr "價格影響高"
+
+#, fuzzy
+msgid "Price Impact Too High"
+msgstr "價格影響過高"
+
+#, fuzzy
+msgid "Price Updated"
+msgstr "價格更新"
+
+#, fuzzy
+msgid "Rate"
+msgstr "利率"
+
+#, fuzzy
+msgid "Rates"
+msgstr "費率"
+
+#, fuzzy
+msgid "Receive"
+msgstr "收到"
+
+#, fuzzy
+msgid "Recent Transactions"
+msgstr "最近交易"
+
+#, fuzzy
+msgid "Recipient"
+msgstr "收款人"
+
+#, fuzzy
+msgid "Remove"
+msgstr "删除"
+
+#, fuzzy
+msgid "Remove {0} {1} and {2} {3}"
+msgstr "移除{0}{1}和{2}{3}"
+
+#, fuzzy
+msgid "Remove Liquidity"
+msgstr "移除流動性"
+
+#, fuzzy
+msgid "Remove recipient"
+msgstr "移除收款人"
+
+#, fuzzy
+msgid "Removing {0} {1} and {2} {3}"
+msgstr "移除{0}{1}和{2}{3}"
+
+#, fuzzy
+msgid "Repay"
+msgstr "還款"
+
+#, fuzzy
+msgid "Restricts swaps to direct pairs only."
+msgstr "限制只交易直接交易對。"
+
+#, fuzzy
+msgid "Review Limit Order"
+msgstr "查看停損訂單"
+
+#, fuzzy
+msgid "Rewards"
+msgstr "獎勵"
+
+#, fuzzy
+msgid "Roll it back - this feature is not yet supported on {0}."
+msgstr "返回–{0}尚未支援此功能。"
+
+#, fuzzy
+msgid "Route"
+msgstr "路徑"
+
+#, fuzzy
+msgid "Routing through these tokens resulted in the best price for your trade."
+msgstr "路由經過這些代幣將給您的交易帶來最好的價格。"
+
+#, fuzzy
+msgid "Search name or paste address"
+msgstr "搜索名稱或粘貼地址"
+
+#, fuzzy
+msgid "Select a asset token"
+msgstr "選擇資產代幣"
+
+#, fuzzy
+msgid "Select a collateral token"
+msgstr "選擇質押代幣"
+
+#, fuzzy
+msgid "Select a rate"
+msgstr "選擇利率"
+
+#, fuzzy
+msgid "Select a token"
+msgstr "選擇代幣"
+
+#, fuzzy
+msgid "Select a token to find your liquidity"
+msgstr "选择代币以找到您的流动性"
+
+#, fuzzy
+msgid "Select an order expiration"
+msgstr "選擇訂單到期期限"
+
+#, fuzzy
+msgid "Send to:"
+msgstr "傳送至："
+
+#, fuzzy
+msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
+msgstr "私下進行交易傳送以避免搶先交易與三明治夾擊。需要給礦工小費以獎勵礦工"
+
+#, fuzzy
+msgid "Share of Pool"
+msgstr "池子裏的份額"
+
+#, fuzzy
+msgid "Share of Pool:"
+msgstr "池子裏的份額："
+
+#, fuzzy
+msgid "Slippage tolerance"
+msgstr "可容忍滑點"
+
+#, fuzzy
+msgid "Slippage tolerance..."
+msgstr "滑動差價..."
+
+#, fuzzy
+msgid "SLP"
+msgstr "SLP"
+
+#, fuzzy
+msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
+msgstr "在簽署批準時出現錯誤。可能是硬件錢包例如Trezor和Ledger。再次點擊，將使用倒退的辦法。"
+
+#, fuzzy
+msgid "Stack Yields with SAAVE"
+msgstr "使用SAAVE疊加收益"
+
+#, fuzzy
+msgid "Stake"
+msgstr "質押"
+
+#, fuzzy
+msgid ""
+"Stake into xSUSHI add collateral as axSUSHI on Aave all in"
+"one click"
+msgstr "一鍵即可質押 xSUSHI 新增質押品作為 Aave 上的 axSUSHI"
+
+#, fuzzy
+msgid "Stake SUSHI"
+msgstr "質押SUSHI"
+
+#, fuzzy
+msgid "Stake SUSHI for xSUSHI"
+msgstr "將SUSHI質押成xSUSHI"
+
+#, fuzzy
+msgid "Staking APR"
+msgstr "質押APR"
+
+#, fuzzy
+msgid "Supplying {0} {1} and {2} {3}"
+msgstr "提供{0} {1}和{2} {3}"
+
+#, fuzzy
+msgid "Sushi is a supporter of Open Source."
+msgstr "Sushi是開源協議的支持者。"
+
+#, fuzzy
+msgid "SushiSwap"
+msgstr "SushiSwap"
+
+#, fuzzy
+msgid "Swap"
+msgstr "代幣兌換"
+
+#, fuzzy
+msgid "Swap Anyway"
+msgstr "仍要交換"
+
+#, fuzzy
+msgid "Swap From (est.):"
+msgstr "交換自（估計）："
+
+#, fuzzy
+msgid "Swap From:"
+msgstr "交換自："
+
+#, fuzzy
+msgid "Swap To (est.):"
+msgstr "交換至（估算）："
+
+#, fuzzy
+msgid "Swap To:"
+msgstr "交換至："
+
+#, fuzzy
+msgid "The difference between the market price and estimated price due to trade size."
+msgstr "因為交易規模所導致的市場價格和您的價格之間的差距。"
+
+#, fuzzy
+msgid "The input token cannot be transferred. There may be an issue with the input token."
+msgstr "無法轉入代幣。轉入的代幣可能有問題。"
+
+#, fuzzy
+msgid "The onchain oracle that tracks the pricing for this pair"
+msgstr "鏈上預言機追蹤這個交易對的價格"
+
+#, fuzzy
+msgid "The output token cannot be transferred. There may be an issue with the output token."
+msgstr "無法轉出代幣。轉出的代幣可能有問題。"
+
+#, fuzzy
+msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
+msgstr "由於截止期限已過，交易無法傳送。請檢查您的交易截止期限。"
+
+#, fuzzy
+msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
+msgstr "交易不滿足 Uniswap 不變公式 x*y=k。這通常表示您要交易的代幣之一在轉帳時包含自定義行為。"
+
+#, fuzzy
+msgid "Things you can do with your SUSHI"
+msgstr "SUSHI可以做的事情"
+
+#, fuzzy
+msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
+msgstr "此代幣沒有出現在啟用的代幣列表中。請確認這是您要交易的代幣。"
+
+#, fuzzy
+msgid "This transaction is below market rate"
+msgstr "此交易低於市場利率"
+
+#, fuzzy
+msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
+msgstr "因價格變動導致交易失敗。請嘗試增加您的滑動差價。"
+
+#, fuzzy
+msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
+msgstr "交易未成功，可能因為價格變動，也可能轉賬中產生的費用。請提高您可接受的滑點。"
+
+#, fuzzy
+msgid "Tip to encourage miners to select this transaction."
+msgstr "給予小費鼓勵礦工選擇此交易。"
+
+#, fuzzy
+msgid "Tip:"
+msgstr "小費："
+
+#, fuzzy
+msgid "Toggle Expert Mode"
+msgstr "切換專家模式"
+
+#, fuzzy
+msgid "Token"
+msgstr "代幣"
+
+#, fuzzy
+msgid "Tokens"
+msgstr "代幣"
+
+#, fuzzy
+msgid ""
+"Tokens from inactive lists. Import specific tokens below or"
+"click Manage to activate more lists."
+msgstr ""
+
+#, fuzzy
+msgid "Tools"
+msgstr "工具"
+
+#, fuzzy
+msgid "Tools to optimize your workflow."
+msgstr "用於優化工作流程的工具。"
+
+#, fuzzy
+msgid "Total"
+msgstr "總數"
+
+#, fuzzy
+msgid "Transaction deadline"
+msgstr "交易期限"
+
+#, fuzzy
+msgid "Transaction History {0}"
+msgstr "交易記錄{0}"
+
+#, fuzzy
+msgid "Transaction Settings"
+msgstr "交易設置"
+
+#, fuzzy
+msgid "Transaction Submitted"
+msgstr "交易已提交"
+
+#, fuzzy
+msgid "Try enabling multi-hop trades"
+msgstr "嘗試啟用多跳交易"
+
+#, fuzzy
+msgid "Turn On Expert Mode"
+msgstr "開啟專家模式"
+
+#, fuzzy
+msgid "TVL"
+msgstr "TVL"
+
+#, fuzzy
+msgid "Unknown error{0}. Try increasing your slippage tolerance."
+msgstr "未知錯誤{0}。請試著增加滑動差價。"
+
+#, fuzzy
+msgid "Unstake"
+msgstr "解除抵押"
+
+#, fuzzy
+msgid "Unstaked"
+msgstr "解除質押"
+
+#, fuzzy
+msgid "Unsupported Asset"
+msgstr "不支持的資產"
+
+#, fuzzy
+msgid "Unwrap"
+msgstr "解開"
+
+#, fuzzy
+msgid "Use SUSHI"
+msgstr "使用 SUSHI"
+
+#, fuzzy
+msgid "Use this tool to find pairs that don't automatically appear in the interface"
+msgstr "使用此工具查找沒有自動顯示的交易配對"
+
+#, fuzzy
+msgid "Use xSUSHI"
+msgstr "使用 xSUSHI"
+
+#, fuzzy
+msgid "Used"
+msgstr "已使用"
+
+#, fuzzy
+msgid "Vesting"
+msgstr "鎖倉"
+
+#, fuzzy
+msgid "Vesting is executed within the guidelines selected by the community in"
+msgstr "授領權是社群根據選擇的指南執行"
+
+#, fuzzy
+msgid "View Liquidity Positions"
+msgstr "查看流動性頭寸"
+
+#, fuzzy
+msgid "View on explorer"
+msgstr "在瀏覽器查看"
+
+#, fuzzy
+msgid "View Stats"
+msgstr "查看數據"
+
+#, fuzzy
+msgid "Waiting for Confirmation"
+msgstr "等待確認中"
+
+#, fuzzy
+msgid "Wallet"
+msgstr "錢包"
+
+#, fuzzy
+msgid "Wallet Balance"
+msgstr "錢包余額"
+
+#, fuzzy
+msgid "Weekly unlocks from the vesting period."
+msgstr "從既得期間開始每週解鎖。"
+
+#, fuzzy
+msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
+msgstr "當創建一個交易對時，您是第一個流動性提供者。您添加的代幣比例將決定這個池子的價格。一旦您對該比率滿意，點擊供應進行查看"
+
+#, fuzzy
+msgid "Withdraw"
+msgstr "提取"
+
+#, fuzzy
+msgid "Wrap"
+msgstr "包裹"
+
+#, fuzzy
+msgid "Wrong Network"
+msgstr "錯誤的網絡"
+
+#, fuzzy
+msgid "xSUSHI Fee"
+msgstr "xSUSHI 手續費"
+
+#, fuzzy
+msgid "Yesterday's APR"
+msgstr "昨天的APR"
+
+#, fuzzy
+msgid "You are creating a pool"
+msgstr "您正在創建一個池"
+
+#, fuzzy
+msgid "You are on the wrong network"
+msgstr "您位在錯誤的網路"
+
+#, fuzzy
+msgid "You don’t have liquidity in this pool yet"
+msgstr "您的這個池中還沒有流動性"
+
+#, fuzzy
+msgid "You need to first approve LP tokens and then migrate it"
+msgstr "您需要首先批準LP代幣，然後遷移它"
+
+#, fuzzy
+msgid "You pay"
+msgstr "您支付"
+
+#, fuzzy
+msgid "You Pay:"
+msgstr "您支付："
+
+#, fuzzy
+msgid "You receive"
+msgstr "您收到"
+
+#, fuzzy
+msgid "You receive:"
+msgstr "您收到："
+
+#, fuzzy
+msgid "You will receive"
+msgstr "您將收到"
+
+#, fuzzy
+msgid "Your"
+msgstr "您的"
+
+#, fuzzy
+msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
+msgstr "您的{exchange} {0} / {1}流動性將變為SushiSwap {2} / {3}的流動性。"
+
+#, fuzzy
+msgid "Your Claimable SUSHI this Week"
+msgstr "本周您可領取的SUSHI"
+
+#, fuzzy
+msgid "Your Liquidity"
+msgstr "您的流動性"
+
+#, fuzzy
+msgid "Your pool share"
+msgstr "您在流動性池的佔比"
+
+#, fuzzy
+msgid "Your Staked"
+msgstr "您在流動性池的占比"
+
+#, fuzzy
+msgid "Your SushiBar Stats"
+msgstr "您的SushiBar統計信息"
+
+#, fuzzy
+msgid "Your total pool tokens"
+msgstr "流動性池中的總代幣"
+
+#, fuzzy
+msgid "Your transaction may be frontrun"
+msgstr "您的交易可能被搶跑。"
+
+#, fuzzy
+msgid "Your transaction may fail"
+msgstr "您的交易可能失敗。"
+
+#, fuzzy
+msgid "Your transaction will revert if it is pending for more than this long."
+msgstr "如果您的交易待處理的時間超過此時間，則它將還原。"
+
+msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
+msgstr "如果價格變化的不利程度超過此百分比，您的交易將被恢復 。"
+
+#, fuzzy
+msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
+msgstr "如果交易在確認之前出現大的不利價格變動，則交易將恢復。"
+
+#, fuzzy
+msgid "Your transactions will appear here..."
+msgstr "您的交易將顯示在此..."
+
+#, fuzzy
+msgid "Your Wallet"
+msgstr "您的钱包"
+
+#, fuzzy
+msgid "Zap"
+msgstr "Zap"

@@ -1,0 +1,1488 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: lokalise.com\n"
+"Project-Id-Version: SushiSwap Interface\n"
+"PO-Revision-Date: 2021-07-19 14:00\n"
+"Last-Translator: lokalise.com\n"
+"Language-Team: lokalise.com\n\n"
+"Language: fa\n"
+
+#, fuzzy
+msgid ""
+"(COMING SOON) Accrue automatic yield through flash loans and"
+"SUSHI strategies"
+msgstr "(به زودی) بازده خودکار را از طریق وام‌های سریع و استراتژی‌های سوشی کسب کنید"
+
+#, fuzzy
+msgid "{0, plural, one {Token} many {Tokens}}"
+msgstr ""
+
+#, fuzzy
+msgid "{0} {1} per {2}"
+msgstr "{0} {1} در هر {2}"
+
+#, fuzzy
+msgid "{0} {sign} market rate"
+msgstr "{0} {sign} نرخ بازار"
+
+#, fuzzy
+msgid "{0} Deposited"
+msgstr "{0} واریز شد"
+
+#, fuzzy
+msgid "{0} Strategy"
+msgstr "{0} استراتژی"
+
+#, fuzzy
+msgid "{0}/{1} Burned"
+msgstr "{0}/ {1} سوخته"
+
+#, fuzzy
+msgid "1 Hour"
+msgstr "1 ساعت"
+
+#, fuzzy
+msgid "1 Week"
+msgstr "1 هفته"
+
+#, fuzzy
+msgid "24 Hours"
+msgstr "24 ساعت"
+
+#, fuzzy
+msgid "30 Days"
+msgstr "30 روز"
+
+#, fuzzy
+msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
+msgstr "بخشی از هر معامله (0.05٪) به عنوان مشوق پروتكل به دارندگان xSUSHI تعلق می‌گیرد."
+
+#, fuzzy
+msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
+msgstr "بخشی از هر معامله (0.05٪) به عنوان مشوق پروتكل به دارندگان ایکس‌سوشی تعلق می‌گیرد."
+
+#, fuzzy
+msgid "above"
+msgstr "بالا"
+
+#, fuzzy
+msgid "Accept"
+msgstr "قبول کنید"
+
+#, fuzzy
+msgid "Add"
+msgstr "اضافه کنید"
+
+#, fuzzy
+msgid "Add {0} {1} and {2} {3}"
+msgstr "اضافه کردن {0} {1} و {2} {3}"
+
+#, fuzzy
+msgid "Add {0} to MetaMask"
+msgstr "{0} را به متاماسک اضافه کنید"
+
+#, fuzzy
+msgid "Add collateral in order to borrow assets"
+msgstr "برای قرض گرفتن دارایی، وثیقه اضافه کنید"
+
+#, fuzzy
+msgid "Add Liquidity"
+msgstr "لیکوییدیتی را افزایش دهید"
+
+#, fuzzy
+msgid "Add liquidity"
+msgstr "لیکوییدیتی را افزایش دهید"
+
+#, fuzzy
+msgid "Add SUSHI to your MetaMask wallet"
+msgstr "به کیف پول متاماسک خود، سوشی اضافه کنید"
+
+#, fuzzy
+msgid "Add xSUSHI to your MetaMask wallet"
+msgstr "به کیف پول متاماسک خود، ایکس‌سوشی اضافه کنید"
+
+#, fuzzy
+msgid "Added"
+msgstr "اضافه شده"
+
+#, fuzzy
+msgid "Additional records and weekly merkle updates can be found on"
+msgstr "سوابق اضافی و به روزرسانی‌های هفتگی مرکل را می‌توان در اینجا یافت"
+
+#, fuzzy
+msgid "Amount of Tokens"
+msgstr "مبلغ توکن ها"
+
+#, fuzzy
+msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
+msgstr "هنگام اجرای این جابه‌جایی، خطایی روی داد. شاید لازم باشد دامنه پذیرش افت خود را افزایش دهید. اگر این اقدام مؤثر واقع نشود، ممکن است به دلیل وجود نوعی ناسازگاری در توکنی باشد که مبادله می‌کنید. توجه داشته باشید هزینه توکن‌های انتقال و ریبس با Uniswap V3 سازگار نیست."
+
+#, fuzzy
+msgid "Analytics"
+msgstr "تجزیه و تحلیل"
+
+#, fuzzy
+msgid "Approve"
+msgstr "تایید کنید"
+
+#, fuzzy
+msgid "Approve {0}"
+msgstr "تایید کنید {0}"
+
+#, fuzzy
+msgid "Approve Kashi"
+msgstr "تایید کَشی"
+
+#, fuzzy
+msgid "Approve Limit Order"
+msgstr "محدود کردن سفارش را تأیید کنید"
+
+#, fuzzy
+msgid "Approved"
+msgstr "تایید شد"
+
+#, fuzzy
+msgid "Approving"
+msgstr "در حال تایید"
+
+#, fuzzy
+msgid "Approving {0}"
+msgstr "در حال تایید {0}"
+
+#, fuzzy
+msgid "Approving Limit Order"
+msgstr "تأیید محدود کردن سفارش"
+
+#, fuzzy
+msgid "APR"
+msgstr "APR"
+
+#, fuzzy
+msgid "Are you sure?"
+msgstr "آیا مطمئن هستید؟"
+
+#, fuzzy
+msgid "Auto"
+msgstr "خودکار"
+
+#, fuzzy
+msgid "Available"
+msgstr "در دسترس"
+
+#, fuzzy
+msgid "Available Networks"
+msgstr "شبکه‌های موجود"
+
+#, fuzzy
+msgid "Back to Limit Orders"
+msgstr "بازگشت به محدود کردن سفارش"
+
+#, fuzzy
+msgid "Balance"
+msgstr "مانده"
+
+#, fuzzy
+msgid "Balance:"
+msgstr "مانده:"
+
+#, fuzzy
+msgid "below"
+msgstr "زیر"
+
+#, fuzzy
+msgid "Bento Balance: {0}"
+msgstr "مانده بنتو {0}"
+
+#, fuzzy
+msgid "BentoBox"
+msgstr "بنتوباکس"
+
+#, fuzzy
+msgid "BentoBox Apps"
+msgstr "کاربردهای بنتوباکس"
+
+#, fuzzy
+msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
+msgstr "بنتوباکس شیوه ای مبتکرانه برای استفاده بهینه از گاز dapp ها و به دست آوردن بازده بیشتر است"
+
+#, fuzzy
+msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
+msgstr "بنتوباکس در سپرده هایی که وام سریع، استراتژی دارند بازده بیشتری فراهم می آورد و با گاز ثابت و کمتر در میان dapp های یکپارچه مانند بازارهای کشی منتقل می شود"
+
+#, fuzzy
+msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
+msgstr "استراتژی های بنتوباکس می توانند برای توکن های وثیقه شما بازده ایجاد کنند. این توکن هنوز هیچ استراتژی در بنتوباکس ندارد"
+
+#, fuzzy
+msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
+msgstr "استراتژی های بنتوباکس می توانند برای لیکوییدیتی شما بازده ایجاد کنند و در عین حال قرض داده نمی شود. این توکن هنوز هیچ استراتژی در بنتوباکس ندارد"
+
+#, fuzzy
+msgid "Borrow"
+msgstr "قرض گیری"
+
+#, fuzzy
+msgid "Borrow {0}"
+msgstr "قرض گیری {0}"
+
+#, fuzzy
+msgid "Borrow {0}-{1}"
+msgstr "قرض گیری {0}-{1}"
+
+#, fuzzy
+msgid "Borrow assets and leverage up"
+msgstr "قرض گیری دارایی ها و سرمایه گذاری با قرض"
+
+#, fuzzy
+msgid "Borrowed"
+msgstr "قرض گرفته شد"
+
+#, fuzzy
+msgid "Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest."
+msgstr "قرض گیری این امکان را برای شما فراهم می آورد تا بدون فروش لیکوییدیتی به دست آورید. حد قرض گیری شما به مبلغ وثیقه واریز شده بستگی دارد. می توانید تا 75% وثیقه خود را قرض بگیرید و در هر زمانی و بدون پرداخت بهره افزوده آن را پس دهید"
+
+#, fuzzy
+msgid "Buy"
+msgstr "خرید"
+
+#, fuzzy
+msgid ""
+"By adding liquidity you'll earn 0.25% of all trades on this pair"
+"proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be"
+"claimed by withdrawing your liquidity."
+msgstr ""
+
+#, fuzzy
+msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
+msgstr "راه های فرعی حالات را تایید می کنند و امکان معاملات با افت بالا را فراهم می آورند. با قبول ریسک، از آن استفاده کنید"
+
+#, fuzzy
+msgid "Cancel"
+msgstr "لغو"
+
+#, fuzzy
+msgid "Cancel Order"
+msgstr "لغو سفارش"
+
+#, fuzzy
+msgid "Cancelled"
+msgstr "لغو شد"
+
+#, fuzzy
+msgid "Change"
+msgstr "تغییر"
+
+#, fuzzy
+msgid "Change Recipient"
+msgstr "تغییر گیرنده"
+
+#, fuzzy
+msgid "Claim SUSHI"
+msgstr "سوشی را مطالبه کنید"
+
+#, fuzzy
+msgid "Claimed"
+msgstr "مطالبه شد"
+
+#, fuzzy
+msgid "Clear all"
+msgstr "پاک کردن همه"
+
+#, fuzzy
+msgid "Clear History"
+msgstr "پاک کردن تاریخچه (سوابق)"
+
+#, fuzzy
+msgid ""
+"Click on a pool below, input the amount you wish to migrate or select max, and click"
+"migrate"
+msgstr "روی مبلغ کل زیر کلیک کنید، مبلغی که مایل به جابه‌جایی آن هستید را وارد یا حداکثر را انتخاب کنید؛ سپس روی «جابه‌جا کردن» کلیک کنید"
+
+#, fuzzy
+msgid "Collateral"
+msgstr "وثیقه"
+
+#, fuzzy
+msgid "Community Approval"
+msgstr "تایید همانندی (گروه)"
+
+#, fuzzy
+msgid "Confirm"
+msgstr "تایید کنید"
+
+#, fuzzy
+msgid "Confirm Adding Liquidity"
+msgstr "افزایش لیکوییدیتی را تایید کنید"
+
+#, fuzzy
+msgid "Confirm convert"
+msgstr "تبدیل را تأیید کنید"
+
+#, fuzzy
+msgid "Confirm Limit Order"
+msgstr "سفارش محدود را تأیید کنید"
+
+#, fuzzy
+msgid "Confirm Staking"
+msgstr "تایید سهام گذاری"
+
+#, fuzzy
+msgid "Confirm Supply"
+msgstr "تامین را تایید کنید"
+
+#, fuzzy
+msgid "Confirm Swap"
+msgstr "تایید جابه جایی"
+
+#, fuzzy
+msgid "Confirm this transaction in your wallet"
+msgstr "این تراکنش را در کیف پول خود تأیید کنید"
+
+#, fuzzy
+msgid "Confirm Withdrawal"
+msgstr "برداشت را تایید کنید"
+
+#, fuzzy
+msgid "Connect to a wallet"
+msgstr "به کیف پول وصل شوید"
+
+#, fuzzy
+msgid "Connect to wallet"
+msgstr "به کیف پول وصل شوید"
+
+#, fuzzy
+msgid "Connect Wallet"
+msgstr "کیف پول را اتصال دهید"
+
+#, fuzzy
+msgid "Convert"
+msgstr "تبدیل"
+
+#, fuzzy
+msgid "Converting {0} {1} for {2} {3}"
+msgstr "تبدیل {0} {1} برای {2} {3}"
+
+#, fuzzy
+msgid "Copied"
+msgstr "کپی شد"
+
+#, fuzzy
+msgid "Copy Address"
+msgstr "آدرس را کپی کنید"
+
+#, fuzzy
+msgid "Create a new Kashi Market"
+msgstr "یک بازار کاشی جدید ایجاد کنید"
+
+#, fuzzy
+msgid "Create a pair"
+msgstr "یک جفت ایجاد کنید"
+
+#, fuzzy
+msgid "Create pool"
+msgstr "استخر ایجاد کنید"
+
+#, fuzzy
+msgid "Create Pool & Supply"
+msgstr "استخر و تامین ایجاد کنید"
+
+#, fuzzy
+msgid "Current"
+msgstr "جاری"
+
+#, fuzzy
+msgid "Deposit"
+msgstr "واریز کنید"
+
+#, fuzzy
+msgid "Deposit {0} into BentoBox"
+msgstr "واریز {0} به بنتوباکس"
+
+#, fuzzy
+msgid "Deposit SUSHI into BentoBox"
+msgstr "سوشی را به بنتوباکس واریز کنید"
+
+#, fuzzy
+msgid "Deposit tokens into BentoBox for all the yields"
+msgstr "برای تمامی بازده ها، توکن ها را به بنتوباکس واریز کنید"
+
+#, fuzzy
+msgid "Depositing {0} into BentoBox"
+msgstr "واریز {0} به بنتوباکس"
+
+#, fuzzy
+msgid "Dev"
+msgstr "Dev"
+
+#, fuzzy
+msgid "Disable Multihops"
+msgstr "غیرفعال سازی چندپرش ها"
+
+#, fuzzy
+msgid "Disconnect"
+msgstr "قطع"
+
+#, fuzzy
+msgid "Discord"
+msgstr "ناهماهنگی"
+
+#, fuzzy
+msgid "Dismiss"
+msgstr "لغو"
+
+#, fuzzy
+msgid "Docs"
+msgstr "اسناد"
+
+#, fuzzy
+msgid "Documentation for developers of Sushi."
+msgstr "مستندسازی (ارائه اسناد) برای توسعه دهندگان سوشی"
+
+#, fuzzy
+msgid "Documentation for users of Sushi."
+msgstr "مستندسازی برای کاربران سوشی"
+
+#, fuzzy
+msgid "Either return to the {link}, or change to an available network."
+msgstr "یا به {link} برگردید، یا به یک شبکه موجود تغییر دهید."
+
+#, fuzzy
+msgid "Enter"
+msgstr "ورود"
+
+#, fuzzy
+msgid "Enter a recipient"
+msgstr "گیرنده را وارد کنید"
+
+#, fuzzy
+msgid "Enter a valid slippage percentage"
+msgstr "درصد افت معتبر را وارد کنید"
+
+#, fuzzy
+msgid "Enter Amount"
+msgstr "مبلغ را وارد کنید"
+
+#, fuzzy
+msgid "Enter an amount"
+msgstr "مبلغ را وارد کنید"
+
+#, fuzzy
+msgid "Error"
+msgstr "خطا"
+
+#, fuzzy
+msgid "Error connecting"
+msgstr "خطا در اتصال"
+
+#, fuzzy
+msgid "Error connecting. Try refreshing the page."
+msgstr "خطا در اتصال. سعی کنید صفحه را تازه‌سازی کنید."
+
+#, fuzzy
+msgid "Exchange Rate"
+msgstr "نرخ ارز"
+
+#, fuzzy
+msgid "Expanded results from inactive Token Lists"
+msgstr "نتایج گسترش یافته از لیست‌های توکن غیرفعال"
+
+#, fuzzy
+msgid "Expert Mode"
+msgstr "حالت خبره"
+
+#, fuzzy
+msgid ""
+"Expert mode turns off the confirm transaction prompt and allows high slippage trades"
+"that often result in bad rates and lost funds."
+msgstr "حالت «خبره» پیام تأیید تراکنش را غیرفعال می‌کند و معاملات با افت بالا، که اغلب به نرخ‌های بد و از دست دادن وجه منجر می‌شود، را امکان‌پذیر می‌سازد."
+
+#, fuzzy
+msgid "Expiration is the time at which the order will become invalid"
+msgstr "انقضا به زمانی اطلاق می‌گردد که سفارش نامعتبر می‌شود"
+
+#, fuzzy
+msgid "Expired"
+msgstr "منقضی شده"
+
+#, fuzzy
+msgid "failed to load"
+msgstr "بارگیری ناموفق است"
+
+#, fuzzy
+msgid "Farm"
+msgstr "مزرعه"
+
+#, fuzzy
+msgid "Filled"
+msgstr "پر شده"
+
+#, fuzzy
+msgid "Find Pool"
+msgstr "استخر را پیدا کنید"
+
+#, fuzzy
+msgid "for deliberations on additional points."
+msgstr "برای مشورت درباره نکات اضافی."
+
+#, fuzzy
+msgid ""
+"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI"
+"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve"
+"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols."
+"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited"
+"SUSHI and any additional from fees."
+msgstr "برای هر جابه‌جایی در مبادله بر روی هر زنجیره، 0.05% هزینه جابه‌جایی به صورت سوشی/ به نسبت سهم شما در سوشی‌بار توزیع می‌شود. زمانی که سوشی شما در سوشی‌بار سهام‌گذاری شد، شما ایکس سوشی را در مقابل حق رأی خود دریافت خواهید کرد؛ همچنین، توکن کاملاً ترکیب‌پذیر را دریافت خواهید کرد که می‌تواند با پروتکل‌های دیگر همکنش داشته باشد. ایکس سوشی شما به طور پیوسته ترکیب می‌شوند؛ و زمانی که شما سهام‌گذاری را لغو می‌کنید، تمامی ان سوشی‌هایی که در ابتدا سهام‌گذاری شده‌اند و تمامی اضافات حاصله از هزینه‌ها را دریافت خواهید کرد."
+
+#, fuzzy
+msgid "forum discussion"
+msgstr "بحث انجمن"
+
+#, fuzzy
+msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
+msgstr "بدون کاهش دارایی خود، توکن بگیرید. سرمایه گذاری با قرض شما را قادر می سازد تا در مقابل دارایی ها جایگاه کوتاهی به دست آورید و از جابه جایی کاهش قیمت بازده دریافت کنید"
+
+#, fuzzy
+msgid ""
+"Gain governance rights with xSUSHI and earn 5% APR (0.05% of"
+"all swaps from all chains)"
+msgstr "با ایکس‌سوشی حق نظارت کسب کنید و 5% APR (0.05% از کل جابه‌جایی‌ها از تمامی زنجیره‌ها) را به دست آورید"
+
+#, fuzzy
+msgid "Go Back"
+msgstr "بازگشت"
+
+#, fuzzy
+msgid "Hardware Wallet"
+msgstr "کیف پول سخت افزاری"
+
+#, fuzzy
+msgid "Harmony Bridge"
+msgstr "پل هارمونی"
+
+#, fuzzy
+msgid "Harvest {0} SUSHI {1}"
+msgstr "برداشت {0} سوشی {1}"
+
+#, fuzzy
+msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
+msgstr "آیا دارایی‌هایی را در اختیار دارید که می‌خواهید از آنها بهره بیشتر دریافت کنید؟ آنها را در بازارهای جداگانه قرض دهید و از قرض‌گیرندگان بهره بگیرید."
+
+#, fuzzy
+msgid "Health"
+msgstr "صحت"
+
+#, fuzzy
+msgid "Historical Total Locked: {0} SUSHI"
+msgstr "مجموع تاریخی قفل شد: {0} سوشی"
+
+#, fuzzy
+msgid "Historical Total Locked: Connect Wallet"
+msgstr "مجموع تاریخی قفل شد: به کیف پول وصل شوید"
+
+#, fuzzy
+msgid "Historical Total Locked: Fetching Total"
+msgstr "مجموع تاریخی قفل شد: بازآوری مجموع"
+
+#, fuzzy
+msgid "home page"
+msgstr "صفحه اصلی"
+
+#, fuzzy
+msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
+msgstr "اگر می‌خواهید به بازاری عرضه کنید که هنوز لیست نشده، می‌توانید از این ابزار برای ایجاد یک جفت جدید استفاده کنید."
+
+#, fuzzy
+msgid "Import"
+msgstr "وارد كردن"
+
+#, fuzzy
+msgid "Import Pool"
+msgstr "استخر را وارد کنید"
+
+#, fuzzy
+msgid "In Bento:"
+msgstr "در بنتو:"
+
+#, fuzzy
+msgid "In Wallet:"
+msgstr "در کیف پول:"
+
+#, fuzzy
+msgid "Input is estimated. You will sell at most"
+msgstr "ورودی برآوردی است. حداکثر میرانی که خواهید فروخت"
+
+#, fuzzy
+msgid "Insufficient {0} balance"
+msgstr "مانده {0} ناکافی "
+
+#, fuzzy
+msgid "Insufficient Balance"
+msgstr "مانده کافی نیست"
+
+#, fuzzy
+msgid "Insufficient liquidity for this trade"
+msgstr "لیکوییدیتی ناکافی برای این معامله"
+
+#, fuzzy
+msgid "Interface Settings"
+msgstr "تنظیمات خط اتصال"
+
+#, fuzzy
+msgid "Invalid pair"
+msgstr "جفت نامعتبر"
+
+#, fuzzy
+msgid "Invalid recipient"
+msgstr "گیرنده نامعتبر"
+
+#, fuzzy
+msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
+msgstr "بازارهای قرضدهی تکی باعث می شوند که ریسک شما به عنوان قرض دهنده جابه جا شود. آیا می دانید که چه تضمینی در صورت روبه رو شدن با ورشکستگی طرف مقابل برای شما وجود دارد"
+
+#, fuzzy
+msgid "Join the community on Discord."
+msgstr "در دیسکورد، به گروه بپیوندید"
+
+#, fuzzy
+msgid "Learn more about wallets"
+msgstr "درباره کیف پول بیشتر بدانید"
+
+#, fuzzy
+msgid "Lend"
+msgstr "قرض دهید"
+
+#, fuzzy
+msgid "Lend assets for interest from borrowers."
+msgstr "برای دریافت بهره از قرض گیرندگان، دارایی ها را قرض دهید"
+
+#, fuzzy
+msgid "Lend your assets, earn yield with no impermanent loss"
+msgstr "دارایی های خود را قرض دهید، و بدون ضرر و زیان موقت بازده به دست آوردید"
+
+#, fuzzy
+msgid "Lending"
+msgstr "در حال قرض دادن"
+
+#, fuzzy
+msgid "Lent"
+msgstr "قرض داده شد"
+
+#, fuzzy
+msgid "Limit"
+msgstr "محدود کردن"
+
+#, fuzzy
+msgid "Limit order"
+msgstr "سفارش را محدود کنید"
+
+#, fuzzy
+msgid "Liquidity"
+msgstr "لیکوییدیتی"
+
+#, fuzzy
+msgid "Liquidity Provider Fee"
+msgstr "هزینه تامین کننده لیکوییدیتی"
+
+#, fuzzy
+msgid "Liquidity Provider Rewards"
+msgstr "جوایز تامین کننده لیکوییدیتی"
+
+#, fuzzy
+msgid ""
+"Liquidity providers earn a 0.25% fee on all trades proportional to their share of"
+"the pool. Fees are added to the pool, accrue in real time and can be claimed by"
+"withdrawing your liquidity"
+msgstr "تأمین‌کنندگان لیکوییدیتی به نسبت سهم خود از مبلغ کل، 0.25% حق‌الزحمه را برای کلیه مبادلات دریافت می‌کنند. حق‌الزحمه‌ها به مبلغ کل اضافه و در زمان واقعی انباشته می‌شوند؛ و با برداشت لیکوییدیتی خود، می‌توانید آنها را مطالبه کنید"
+
+#, fuzzy
+msgid "Lists"
+msgstr "فهرست ها"
+
+#, fuzzy
+msgid "Loading"
+msgstr "بارگیری"
+
+#, fuzzy
+msgid "Loading Balance"
+msgstr "مانده در حال بارگیری است"
+
+#, fuzzy
+msgid "Loading balance"
+msgstr "مانده در حال بارگیری است"
+
+#, fuzzy
+msgid "Loading your {exchange} liquidity positions"
+msgstr "بارگیری وضعیت لیکوییدیتی {exchange}"
+
+#, fuzzy
+msgid "loading..."
+msgstr "بارگیری"
+
+#, fuzzy
+msgid "Loading..."
+msgstr "بارگیری"
+
+#, fuzzy
+msgid "LTV"
+msgstr "ال‌تی‌وی"
+
+#, fuzzy
+msgid "Manage"
+msgstr "مدیریت کنید"
+
+#, fuzzy
+msgid "Manage this pool"
+msgstr "این استخر را مدیریت کنید"
+
+#, fuzzy
+msgid "Manage Token Lists"
+msgstr "مدیریت لیست‌های توکن"
+
+#, fuzzy
+msgid "Market"
+msgstr "بازار"
+
+#, fuzzy
+msgid "Markets"
+msgstr "بازارها"
+
+#, fuzzy
+msgid "Matic Bridge"
+msgstr "پل ماتیک"
+
+#, fuzzy
+msgid "MAX"
+msgstr "حداکثر"
+
+#, fuzzy
+msgid "Max"
+msgstr "حداکثر"
+
+#, fuzzy
+msgid "Maximize yield by staking SUSHI for xSUSHI"
+msgstr "با سهام گذاری سوشی برای ایکس سوشی خود بازده را به حداکثر برسانید"
+
+#, fuzzy
+msgid "Maximum sent"
+msgstr "حداکثر ارسال شده"
+
+#, fuzzy
+msgid ""
+"MEOW tokens wrap xSUSHI into BentoBox for double yields and can be"
+"used to vote in special MEOW governor contracts."
+msgstr ""
+
+#, fuzzy
+msgid "MEV Shield by Archer DAO"
+msgstr "سپر MEV توسط آرچر DAO"
+
+#, fuzzy
+msgid "Migrate"
+msgstr "جابه جایی"
+
+#, fuzzy
+msgid "Migrate {exchange} Liquidity"
+msgstr "لیکوییدیتی{exchange} را جابه جا کنید"
+
+#, fuzzy
+msgid "Migrating"
+msgstr "در حال جابه جایی"
+
+#, fuzzy
+msgid "Migration is done in one-click using your signature (permit)"
+msgstr "جابه جایی با یک بار کلیک کردن با استفاده از امضای (اجازه) شما انجام می شود"
+
+#, fuzzy
+msgid "Miner Tip"
+msgstr "نکته ویژه ماینر"
+
+#, fuzzy
+msgid "Minimum Received"
+msgstr "حداقل دریافتی"
+
+#, fuzzy
+msgid "Minimum received"
+msgstr "حداقل دریافتی"
+
+#, fuzzy
+msgid "minutes"
+msgstr "دقیقه ها"
+
+#, fuzzy
+msgid "My Liquidity Positions"
+msgstr "وضعیت‌های لیکوییدیتی من"
+
+#, fuzzy
+msgid "My Orders"
+msgstr "سفارش‌های من"
+
+#, fuzzy
+msgid "My SUSHI"
+msgstr "سوشی من"
+
+#, fuzzy
+msgid "Network not supported yet"
+msgstr "هنوز از شبکه پشتیبانی نمی‌شود"
+
+#, fuzzy
+msgid "Never"
+msgstr "هرگز"
+
+#, fuzzy
+msgid "New to Ethereum?"
+msgstr "اتریوم برای شما تازگی دارد؟"
+
+#, fuzzy
+msgid "No Liquidity found"
+msgstr "هیچ لیکوییدیتی یافت نشد"
+
+#, fuzzy
+msgid "No liquidity found to do swap"
+msgstr "هیچ لیکوییدیتی برای جابه جایی یافت نشد"
+
+#, fuzzy
+msgid "No liquidity was found."
+msgstr "هیچ لیکوییدیتی یافت نشد."
+
+#, fuzzy
+msgid "No order history"
+msgstr "بدون تاریخچه سفارش"
+
+#, fuzzy
+msgid "No pool found"
+msgstr "هیچ استخری یافت نشد"
+
+#, fuzzy
+msgid "No results found"
+msgstr "هیچ نتیجه ای یافت نشد"
+
+#, fuzzy
+msgid "Non-hardware Wallet"
+msgstr "عدم وجود کیف پول سخت افزاری"
+
+#, fuzzy
+msgid "None"
+msgstr "هیچ کدام"
+
+#, fuzzy
+msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
+msgstr "تنها در صورتی که می دانید که در حال انجام چه کاری هستید از این حالت استفاده کنید"
+
+#, fuzzy
+msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
+msgstr "اوه! خطای نامعلومی رخ داده است. لطفاً صفحه را رفرش (بازآوری) کنید یا از بروز (مرورگر) یا دستگاه دیگری برای مشاهده سایت استفاده کنید"
+
+#, fuzzy
+msgid "Open main menu"
+msgstr "منوی اصلی را باز کنید"
+
+#, fuzzy
+msgid "Open Orders"
+msgstr "سفارش‌های باز"
+
+#, fuzzy
+msgid "Open Source"
+msgstr "منبع باز"
+
+#, fuzzy
+msgid "or the transaction will revert."
+msgstr "یا تراکنش برگشت داده خواهد شد."
+
+#, fuzzy
+msgid "Oracle"
+msgstr "اوراکل"
+
+#, fuzzy
+msgid "Order Expiration"
+msgstr "انقضای سفارش"
+
+#, fuzzy
+msgid "Order History"
+msgstr "تاریخچه سفارش"
+
+#, fuzzy
+msgid ""
+"Output is estimated. If the price changes by more than {0}% your transaction"
+"will revert."
+msgstr ""
+
+#, fuzzy
+msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
+msgstr "نتیجه برآوردی است. در صورت تغییر قیمت تا بیش از {0}% تراکنش شما برگشت داده خواهد شد"
+
+#, fuzzy
+msgid "Output is estimated. You will receive at least"
+msgstr "خروجی برآوردی است. حداقل مبلغی که دریافت خواهید کرد"
+
+#, fuzzy
+msgid "Output will be sent to"
+msgstr "خروجی فرستاده خواهد شد به"
+
+#, fuzzy
+msgid "Pay"
+msgstr "پرداخت"
+
+#, fuzzy
+msgid "Pay from:"
+msgstr "پرداخت از:"
+
+#, fuzzy
+msgid "Pending"
+msgstr "در حال تعلیق"
+
+#, fuzzy
+msgid "Pending Treasury Transfer"
+msgstr "تعلیق انتقال صندوق"
+
+#, fuzzy
+msgid "Please connect to the appropriate Ethereum network."
+msgstr "لطفاً به شبکه اتریوم مناسب متصل شوید."
+
+#, fuzzy
+msgid "Please enter an amount"
+msgstr "لطفاً یک مبلغ را وارد کنید"
+
+#, fuzzy
+msgid "Please refer to the"
+msgstr "لطفا مراجعه کنید به"
+
+msgid "Please type the word \"confirm\" to enable expert mode."
+msgstr "لطفا کلمه «confirm» (تأیید) را تایپ کنید تا حالت خبره فعال شود."
+
+#, fuzzy
+msgid "Pool"
+msgstr "استخر"
+
+#, fuzzy
+msgid "Pool Found!"
+msgstr "استخر یافت شد"
+
+#, fuzzy
+msgid "Pool Tokens"
+msgstr "توکن های استخر"
+
+#, fuzzy
+msgid "Pool tokens in rewards pool"
+msgstr "توکن های استخر در استخر جوایز"
+
+#, fuzzy
+msgid "Pooled {0}"
+msgstr "{0} استخر شد"
+
+#, fuzzy
+msgid "Positions"
+msgstr "وضعیت ها"
+
+#, fuzzy
+msgid "Price Impact"
+msgstr "تاثیر قیمت"
+
+#, fuzzy
+msgid "Price Impact High"
+msgstr "تاثیر بالای قیمت"
+
+#, fuzzy
+msgid "Price Impact Too High"
+msgstr "تاثیر بسیار بالای قیمت"
+
+#, fuzzy
+msgid "Price Updated"
+msgstr "قیمت به روزرسانی شده"
+
+#, fuzzy
+msgid "Rate"
+msgstr "نرخ"
+
+#, fuzzy
+msgid "Rates"
+msgstr "نرخ ها"
+
+#, fuzzy
+msgid "Receive"
+msgstr "دریافت"
+
+#, fuzzy
+msgid "Recent Transactions"
+msgstr "تراکنش‌های اخیر"
+
+#, fuzzy
+msgid "Recipient"
+msgstr "گیرنده"
+
+#, fuzzy
+msgid "Remove"
+msgstr "حذف"
+
+#, fuzzy
+msgid "Remove {0} {1} and {2} {3}"
+msgstr "حذف {0} {1} و {2} {3}"
+
+#, fuzzy
+msgid "Remove Liquidity"
+msgstr "لیکوییدیتی را حذف کنید"
+
+#, fuzzy
+msgid "Remove recipient"
+msgstr "حذف گیرنده"
+
+#, fuzzy
+msgid "Removing {0} {1} and {2} {3}"
+msgstr "حذف {0} {1}  و {2} {3}"
+
+#, fuzzy
+msgid "Repay"
+msgstr "بازپرداخت"
+
+#, fuzzy
+msgid "Restricts swaps to direct pairs only."
+msgstr "جابه جایی های را تنها به جفت های مستقیم محدود می کند"
+
+#, fuzzy
+msgid "Review Limit Order"
+msgstr "مرور محدود کردن سفارش"
+
+#, fuzzy
+msgid "Rewards"
+msgstr "جوایز"
+
+#, fuzzy
+msgid "Roll it back - this feature is not yet supported on {0}."
+msgstr "آن را برگشت دهید - این ویژگی هنوز در {0} پشتیبانی نمی‌شود."
+
+#, fuzzy
+msgid "Route"
+msgstr "مسیریابی "
+
+#, fuzzy
+msgid "Routing through these tokens resulted in the best price for your trade."
+msgstr "مسیریابی از طریق این توکن ها به بهترین قیمت برای معامله شما منجر می شود"
+
+#, fuzzy
+msgid "Search name or paste address"
+msgstr "نام را جستجو کنید یا آدرس را پیست کنید"
+
+#, fuzzy
+msgid "Select a asset token"
+msgstr "یک توکن دارایی را انتخاب کنید"
+
+#, fuzzy
+msgid "Select a collateral token"
+msgstr "یک توکن وثیقه را انتخاب کنید"
+
+#, fuzzy
+msgid "Select a rate"
+msgstr "یک نرخ را انتخاب کنید"
+
+#, fuzzy
+msgid "Select a token"
+msgstr "یک توکن انتخاب کنید"
+
+#, fuzzy
+msgid "Select a token to find your liquidity"
+msgstr "برای پیدا کردن لیکوییدیتی خود، توکنی را انتخاب کنید"
+
+#, fuzzy
+msgid "Select an order expiration"
+msgstr "یک انقضای سفارش را انتخاب کنید"
+
+#, fuzzy
+msgid "Send to:"
+msgstr "فرستادن به:"
+
+#, fuzzy
+msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
+msgstr "برای پیشگیری از حملات متضمن پیش‌دستی و در تنگنا قرار دادن، تراکنش‌ها را به صورت خصوصی ارسال کنید. مستلزم یک انعام ویژه ماینر برای تشویق ماینرها است"
+
+#, fuzzy
+msgid "Share of Pool"
+msgstr "سهم استخر"
+
+#, fuzzy
+msgid "Share of Pool:"
+msgstr "سهم استخر"
+
+#, fuzzy
+msgid "Slippage tolerance"
+msgstr "دامنه پذیرش افت"
+
+#, fuzzy
+msgid "Slippage tolerance..."
+msgstr "دامنه پذیرش افت..."
+
+#, fuzzy
+msgid "SLP"
+msgstr "اس‌ال‌پی"
+
+#, fuzzy
+msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
+msgstr "در طول امضای تاییدیه اشتباهی رخ داده است. این امر برای کیف پول های سخت افزاری مانند Trezor و Ledger رخ می دهد. دوباره کلیک کنید و شیوه فال بک (جایگزین) استفاده خواهد شد"
+
+#, fuzzy
+msgid "Stack Yields with SAAVE"
+msgstr "استک بازده ها با SAAVE"
+
+#, fuzzy
+msgid "Stake"
+msgstr "سهام گذاری کنید"
+
+#, fuzzy
+msgid ""
+"Stake into xSUSHI add collateral as axSUSHI on Aave all in"
+"one click"
+msgstr "با فقط یک کلیک، سهام‌گذاری در ایکس سوشی باعث می‌شود که همگی به صورت ای‌ایکس‌سوشی بر روی Aave همسو شوند"
+
+#, fuzzy
+msgid "Stake SUSHI"
+msgstr "سوشی را سهام گذاری کنید"
+
+#, fuzzy
+msgid "Stake SUSHI for xSUSHI"
+msgstr "سهام گذاری سوشی برای ایکس سوشی"
+
+#, fuzzy
+msgid "Staking APR"
+msgstr "سهام گذاری APR"
+
+#, fuzzy
+msgid "Supplying {0} {1} and {2} {3}"
+msgstr "تامین {0} {1} و {2} {3}"
+
+#, fuzzy
+msgid "Sushi is a supporter of Open Source."
+msgstr "سوشی، پشتیان منبع باز است"
+
+#, fuzzy
+msgid "SushiSwap"
+msgstr "سوشی‌سواپ"
+
+#, fuzzy
+msgid "Swap"
+msgstr "جابه جا کنید"
+
+#, fuzzy
+msgid "Swap Anyway"
+msgstr "جابه جایی در هر صورت"
+
+#, fuzzy
+msgid "Swap From (est.):"
+msgstr "از (est.) جابه جا کنید"
+
+#, fuzzy
+msgid "Swap From:"
+msgstr "از .... جابه جا کنید"
+
+#, fuzzy
+msgid "Swap To (est.):"
+msgstr "جابه جایی به (est.)"
+
+#, fuzzy
+msgid "Swap To:"
+msgstr "جابه جایی به:"
+
+#, fuzzy
+msgid "The difference between the market price and estimated price due to trade size."
+msgstr "تفاوت میان قیمت بازار و قیمت برآوردی به علت اندازه معامله"
+
+#, fuzzy
+msgid "The input token cannot be transferred. There may be an issue with the input token."
+msgstr "توکن ورودی قابل انتقال نیست. ممکن است توکن ورودی مشکلی داشته باشد."
+
+#, fuzzy
+msgid "The onchain oracle that tracks the pricing for this pair"
+msgstr "اوراکل زنجیره ای که قیمت گذاری این جفت را پیگیری می کند"
+
+#, fuzzy
+msgid "The output token cannot be transferred. There may be an issue with the output token."
+msgstr "توکن خروجی قابل انتقال نیست. ممکن است توکن خروجی مشکلی داشته باشد."
+
+#, fuzzy
+msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
+msgstr "ارسال این تراکنش امکان‌پذیر نیست زیرا مهلت آن گذشته است. لطفاً بررسی کنید که مهلت تراکنش شما خیلی کم نباشد."
+
+#, fuzzy
+msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
+msgstr "x * y = k ثابت تک‌جابه‌جایی با جابه‌جایی حاصل نشد. این معمولاً به این معنی است که یکی از توکن‌هایی که در حال جابه‌جایی آن هستید متضمن رفتار سفارشی در انتقال است."
+
+#, fuzzy
+msgid "Things you can do with your SUSHI"
+msgstr "کارهایی که شما با سوشی خود می توانید انجام دهید"
+
+#, fuzzy
+msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
+msgstr "این توکن در لیست(های) توکن فعال نمایش داده نمی‌شود. اطمینان حاصل کنید که این همان نشانه‌ای است که می‌خواهید تبادل کنید."
+
+#, fuzzy
+msgid "This transaction is below market rate"
+msgstr "این تراکنش زیر نرخ بازار است"
+
+#, fuzzy
+msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
+msgstr "این تراکنش به علت جابه‌جایی قیمت موفقیت‌آمیز نخواهد بود. افزایش دامنه پذیرش افت را امتحان کنید."
+
+#, fuzzy
+msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
+msgstr "این تراکنش به علت جابه جایی قیمت یا هزینه انتقال، ناموفق خواهد بود. افزایش دامنه پذیرش افت را امتحان کنید"
+
+#, fuzzy
+msgid "Tip to encourage miners to select this transaction."
+msgstr "نکته‌ای برای تشویق ماینرها به انتخاب این تراکنش."
+
+#, fuzzy
+msgid "Tip:"
+msgstr "نکته:"
+
+#, fuzzy
+msgid "Toggle Expert Mode"
+msgstr "حالت خبره توگل"
+
+#, fuzzy
+msgid "Token"
+msgstr "توکن"
+
+#, fuzzy
+msgid "Tokens"
+msgstr "توکن ها"
+
+#, fuzzy
+msgid ""
+"Tokens from inactive lists. Import specific tokens below or"
+"click Manage to activate more lists."
+msgstr ""
+
+#, fuzzy
+msgid "Tools"
+msgstr "ابزارها"
+
+#, fuzzy
+msgid "Tools to optimize your workflow."
+msgstr "ابزارها برای بهینه سازی جریان کار شما"
+
+#, fuzzy
+msgid "Total"
+msgstr "مجموع"
+
+#, fuzzy
+msgid "Transaction deadline"
+msgstr "آخرین موعد تراکنش"
+
+#, fuzzy
+msgid "Transaction History {0}"
+msgstr "تاریخچه تراکنش {0}"
+
+#, fuzzy
+msgid "Transaction Settings"
+msgstr "تنظیمات تراکنش"
+
+#, fuzzy
+msgid "Transaction Submitted"
+msgstr "تراکنش ارسال شده"
+
+#, fuzzy
+msgid "Try enabling multi-hop trades"
+msgstr "فعال سازی مبادله های چندپرشی را امتحان کنید"
+
+#, fuzzy
+msgid "Turn On Expert Mode"
+msgstr "روشن کردن حالت خبره"
+
+#, fuzzy
+msgid "TVL"
+msgstr "کارهایی "
+
+#, fuzzy
+msgid "Unknown error{0}. Try increasing your slippage tolerance."
+msgstr "خطای ناشناخته{0}. افزایش دامنه پذیرش افت را امتحان کنید."
+
+#, fuzzy
+msgid "Unstake"
+msgstr "لغو سهام گذاری"
+
+#, fuzzy
+msgid "Unstaked"
+msgstr "لغو سهام گذاری"
+
+#, fuzzy
+msgid "Unsupported Asset"
+msgstr "دارایی بدون پشتیبانی"
+
+#, fuzzy
+msgid "Unwrap"
+msgstr "باز کردن"
+
+#, fuzzy
+msgid "Use SUSHI"
+msgstr "استفاده از سوشی"
+
+#, fuzzy
+msgid "Use this tool to find pairs that don't automatically appear in the interface"
+msgstr "از این ابزار برای یافتن جفت‌هایی استفاده کنید که به صورت خودکار در رابط کاربری نمایش داده نمی‌شوند"
+
+#, fuzzy
+msgid "Use xSUSHI"
+msgstr "استفاده از ایکس‌سوشی"
+
+#, fuzzy
+msgid "Used"
+msgstr "استفاده شده"
+
+#, fuzzy
+msgid "Vesting"
+msgstr "در حال واگذار کردن"
+
+#, fuzzy
+msgid "Vesting is executed within the guidelines selected by the community in"
+msgstr "واگذاری در چارچوب دستورالعمل‌های انتخاب شده توسط جامعه اجرا می‌شود"
+
+#, fuzzy
+msgid "View Liquidity Positions"
+msgstr "مشاهده وضعیت‌های لیکوییدیتی خود"
+
+#, fuzzy
+msgid "View on explorer"
+msgstr "مشاهده در جستجوگر (اکسپلورو)"
+
+#, fuzzy
+msgid "View Stats"
+msgstr "مشاهده آمار"
+
+#, fuzzy
+msgid "Waiting for Confirmation"
+msgstr "در انتظار تأیید"
+
+#, fuzzy
+msgid "Wallet"
+msgstr "کیف پول"
+
+#, fuzzy
+msgid "Wallet Balance"
+msgstr "مانده کیف پول"
+
+#, fuzzy
+msgid "Weekly unlocks from the vesting period."
+msgstr "گشایش‌های هفتگی از دوره واگذاری."
+
+#, fuzzy
+msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
+msgstr "هنگام ایجاد جفت، شما اولین تامین کننده لیکوییدیتی هستید. نسبت توکن هایی که اضافه می کنید، قیمت این استخر را مشخص خواهند کرد. اگر با نرخ موافق بودید، می توانید برای مشاهده بر روی تامین (supply) کلیک کنید"
+
+#, fuzzy
+msgid "Withdraw"
+msgstr "برداشت"
+
+#, fuzzy
+msgid "Wrap"
+msgstr "پوشاندن"
+
+#, fuzzy
+msgid "Wrong Network"
+msgstr "شبکه اشتباه"
+
+#, fuzzy
+msgid "xSUSHI Fee"
+msgstr "هزینه ایکس‌سوشی"
+
+#, fuzzy
+msgid "Yesterday's APR"
+msgstr "APR دیروز"
+
+#, fuzzy
+msgid "You are creating a pool"
+msgstr "شما در حال ایجاد استخر هستید"
+
+#, fuzzy
+msgid "You are on the wrong network"
+msgstr "شما در شبکه اشتباهی هستید"
+
+#, fuzzy
+msgid "You don’t have liquidity in this pool yet"
+msgstr "شما هنوز در این استخر لیکوییدیتی ندارید"
+
+#, fuzzy
+msgid "You need to first approve LP tokens and then migrate it"
+msgstr "لازم است اول توکن های LP را تایید کرده و سپس آن را جابه جا کنید"
+
+#, fuzzy
+msgid "You pay"
+msgstr "شما می‌پردازید"
+
+#, fuzzy
+msgid "You Pay:"
+msgstr "شما می‌پردازید:"
+
+#, fuzzy
+msgid "You receive"
+msgstr "شما دریافت می‌کنید"
+
+#, fuzzy
+msgid "You receive:"
+msgstr "شما دریافت می‌کنید:"
+
+#, fuzzy
+msgid "You will receive"
+msgstr "شما دریافت خواهید کرد"
+
+#, fuzzy
+msgid "Your"
+msgstr "شما"
+
+#, fuzzy
+msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
+msgstr "لیکوییدیتی {exchange} {0}/{1} شما به لیکوییدیتی  {2}/{3}سوشی سواپ (SushiSwap) تبدیل خواهد شد "
+
+#, fuzzy
+msgid "Your Claimable SUSHI this Week"
+msgstr "سوشی قابل مطالبه شما در این هفته"
+
+#, fuzzy
+msgid "Your Liquidity"
+msgstr "لیکوییدیتی شما"
+
+#, fuzzy
+msgid "Your pool share"
+msgstr "سهم استخر شما "
+
+#, fuzzy
+msgid "Your Staked"
+msgstr "سهام گذاری های شما"
+
+#, fuzzy
+msgid "Your SushiBar Stats"
+msgstr "آمار سوشی بار شما"
+
+#, fuzzy
+msgid "Your total pool tokens"
+msgstr "کل توکن های استخر شما"
+
+#, fuzzy
+msgid "Your transaction may be frontrun"
+msgstr "تراکنش شما می تواند موفق باشد"
+
+#, fuzzy
+msgid "Your transaction may fail"
+msgstr "ممکن است تراکش شما ناموفق باشد"
+
+#, fuzzy
+msgid "Your transaction will revert if it is pending for more than this long."
+msgstr "اگر تعلیق بیشتر از این زمان به طول بیانجامد، تراکنش شما برگشت داده خواهد شد"
+
+msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
+msgstr "اگر تغییرات قیمت نامطلوب بیشتر از این درصد باشد، تراکنش شما برگشت داده خواهد شد."
+
+#, fuzzy
+msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
+msgstr "در صورتی که جابه جایی نامطلوب و زیاد قیمت قبل از تایید وجود داشته باشد، تراکنش شما برگشت داده خواهد شد"
+
+#, fuzzy
+msgid "Your transactions will appear here..."
+msgstr "تراکنش‌های شما در اینجا نشان داده خواهد شد..."
+
+#, fuzzy
+msgid "Your Wallet"
+msgstr "کیف پول شما"
+
+#, fuzzy
+msgid "Zap"
+msgstr "زاپ"
