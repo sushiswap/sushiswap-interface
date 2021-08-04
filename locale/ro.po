@@ -86,6 +86,9 @@ msgstr ""
 msgid "Analytics"
 msgstr "Analize"
 
+msgid "Apply Pool Filters"
+msgstr ""
+
 msgid "Approve"
 msgstr "Aprobați"
 
@@ -129,6 +132,9 @@ msgid "Balance"
 msgstr "Sold"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Based on your Wallet and BentoBox balances"
 msgstr ""
 
 msgid "Bento Balance: {0}"
@@ -391,6 +397,9 @@ msgstr ""
 msgid "Filled"
 msgstr ""
 
+msgid "Filters:"
+msgstr ""
+
 msgid "Find Pool"
 msgstr "Găsiți fond comun"
 
@@ -440,9 +449,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "Sănătate"
-
-msgid "Highest to Lowest"
-msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Valoare istorică totală blocată: Conectați portofelul"
@@ -571,9 +577,6 @@ msgstr "Se încarcă pozițiile lichidităților dvs. {exchange}"
 
 msgid "Loading..."
 msgstr "Se încarcă..."
-
-msgid "Lowest to Highest"
-msgstr ""
 
 msgid "MAX"
 msgstr "MAX"
@@ -813,6 +816,12 @@ msgstr "Rambursare"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Restricționează swap-urile doar la perechile directe."
 
+msgid "Results"
+msgstr ""
+
+msgid "Results for '{searchQuery}'"
+msgstr ""
+
 msgid "Review Limit Order"
 msgstr ""
 
@@ -909,6 +918,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "Investire APR"
+
+msgid "Suggested Pools"
+msgstr ""
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Oferire {0} {1} și {2} {3}"

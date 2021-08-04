@@ -14,10 +14,10 @@ const VARIANT = {
   filled: FILLED,
 }
 
-export type ChipColor = 'purple' | 'yellow' | 'blue' | 'green'
+export type ChipColor = 'default' | 'purple' | 'yellow' | 'blue' | 'green'
 export type ChipVariant = 'filled'
 
-interface ChipProps {
+export interface ChipProps {
   label: string
   color?: ChipColor
   variant?: ChipVariant
@@ -25,6 +25,8 @@ interface ChipProps {
   onDelete?: (e) => void
   deleteIcon?: ReactNode
 }
+
+export type ChipStateProps = Pick<ChipProps, 'label' | 'color' | 'variant'>
 
 const Chip: FC<ChipProps> = ({
   label,
@@ -39,13 +41,16 @@ const Chip: FC<ChipProps> = ({
       className={classNames(
         VARIANT[variant][color],
         onDelete ? 'pr-1' : 'pr-2',
-        'inline-flex h-[24px] rounded-[12px] py-0.5 pl-2 text-high-emphesis font-medium text-xs leading-5 gap-1 items-center',
+        'whitespace-nowrap inline-flex h-[24px] rounded-[12px] py-0.5 pl-2 text-high-emphesis font-medium text-xs leading-5 gap-1 items-center',
         className
       )}
     >
       {label}
       {onDelete && (
-        <div className="rounded bg-[rgba(255,255,255,0.12)] hover:bg-[rgba(255,255,255,0.24)] cursor-pointer p-0.5">
+        <div
+          className="rounded bg-[rgba(255,255,255,0.12)] hover:bg-[rgba(255,255,255,0.24)] cursor-pointer p-0.5"
+          onClick={onDelete}
+        >
           {deleteIcon}
         </div>
       )}

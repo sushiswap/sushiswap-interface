@@ -86,6 +86,9 @@ msgstr ""
 msgid "Analytics"
 msgstr "Аналитика"
 
+msgid "Apply Pool Filters"
+msgstr ""
+
 msgid "Approve"
 msgstr "Утвердить"
 
@@ -129,6 +132,9 @@ msgid "Balance"
 msgstr "Баланс"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Based on your Wallet and BentoBox balances"
 msgstr ""
 
 msgid "Bento Balance: {0}"
@@ -391,6 +397,9 @@ msgstr ""
 msgid "Filled"
 msgstr ""
 
+msgid "Filters:"
+msgstr ""
+
 msgid "Find Pool"
 msgstr "Найти пул"
 
@@ -440,9 +449,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "Здоровье"
-
-msgid "Highest to Lowest"
-msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Всего заблокировано исторически: подключение кошелька"
@@ -571,9 +577,6 @@ msgstr "Загрузка ваших позиций ликвидности {excha
 
 msgid "Loading..."
 msgstr "Загрузка..."
-
-msgid "Lowest to Highest"
-msgstr ""
 
 msgid "MAX"
 msgstr "МАКСИМУМ"
@@ -813,6 +816,12 @@ msgstr "Погасить"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Ограничивает обмены только прямыми парами."
 
+msgid "Results"
+msgstr ""
+
+msgid "Results for '{searchQuery}'"
+msgstr ""
+
 msgid "Review Limit Order"
 msgstr ""
 
@@ -909,6 +918,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "Ставка годовых"
+
+msgid "Suggested Pools"
+msgstr ""
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Поставка {0} {1} и {2} {3}"

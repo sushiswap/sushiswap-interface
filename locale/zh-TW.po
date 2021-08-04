@@ -86,6 +86,9 @@ msgstr ""
 msgid "Analytics"
 msgstr "分析界面"
 
+msgid "Apply Pool Filters"
+msgstr ""
+
 msgid "Approve"
 msgstr "批准"
 
@@ -129,6 +132,9 @@ msgid "Balance"
 msgstr "餘額"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Based on your Wallet and BentoBox balances"
 msgstr ""
 
 msgid "Bento Balance: {0}"
@@ -387,6 +393,9 @@ msgstr ""
 msgid "Filled"
 msgstr ""
 
+msgid "Filters:"
+msgstr ""
+
 msgid "Find Pool"
 msgstr "查找池"
 
@@ -429,9 +438,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "健康值"
-
-msgid "Highest to Lowest"
-msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "鎖倉的總數：連接錢包"
@@ -557,9 +563,6 @@ msgstr "正在加載您的{exchange}您的流動性倉位"
 
 msgid "Loading..."
 msgstr "載入中..."
-
-msgid "Lowest to Highest"
-msgstr ""
 
 msgid "MAX"
 msgstr "最大數量"
@@ -799,6 +802,12 @@ msgstr "還款"
 msgid "Restricts swaps to direct pairs only."
 msgstr "限制只交易直接交易對。"
 
+msgid "Results"
+msgstr ""
+
+msgid "Results for '{searchQuery}'"
+msgstr ""
+
 msgid "Review Limit Order"
 msgstr ""
 
@@ -895,6 +904,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "質押APR"
+
+msgid "Suggested Pools"
+msgstr ""
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "提供{0} {1}和{2} {3}"

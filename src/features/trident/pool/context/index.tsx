@@ -5,6 +5,10 @@ import { Reducer, State } from './types'
 const initialState: State = {
   sortType: 0,
   searchQuery: null,
+  filters: {
+    poolTypes: [],
+    feeTiers: [],
+  },
 }
 
 export const TridentPoolPageContext = createContext<{ state: State; dispatch: Dispatch<any> }>({

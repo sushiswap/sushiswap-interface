@@ -86,6 +86,9 @@ msgstr ""
 msgid "Analytics"
 msgstr "Análisis"
 
+msgid "Apply Pool Filters"
+msgstr ""
+
 msgid "Approve"
 msgstr "Aprobar"
 
@@ -129,6 +132,9 @@ msgid "Balance"
 msgstr "Saldo"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Based on your Wallet and BentoBox balances"
 msgstr ""
 
 msgid "Bento Balance: {0}"
@@ -391,6 +397,9 @@ msgstr ""
 msgid "Filled"
 msgstr ""
 
+msgid "Filters:"
+msgstr ""
+
 msgid "Find Pool"
 msgstr "Buscar fondo"
 
@@ -440,9 +449,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "Salud"
-
-msgid "Highest to Lowest"
-msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Total histórico bloqueado: conectar cartera"
@@ -571,9 +577,6 @@ msgstr "Cargando sus posiciones de liquidez {exchange}"
 
 msgid "Loading..."
 msgstr "Cargando..."
-
-msgid "Lowest to Highest"
-msgstr ""
 
 msgid "MAX"
 msgstr "MAX"
@@ -813,6 +816,12 @@ msgstr "Pagar"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Restringe los intercambios a pares directos únicamente."
 
+msgid "Results"
+msgstr ""
+
+msgid "Results for '{searchQuery}'"
+msgstr ""
+
 msgid "Review Limit Order"
 msgstr ""
 
@@ -909,6 +918,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "Apuesta APR"
+
+msgid "Suggested Pools"
+msgstr ""
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Suministrando {0} {1} y {2} {3}"

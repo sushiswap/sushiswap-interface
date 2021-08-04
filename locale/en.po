@@ -86,6 +86,9 @@ msgstr "An error occurred when trying to execute this swap. You may need to incr
 msgid "Analytics"
 msgstr "Analytics"
 
+msgid "Apply Pool Filters"
+msgstr "Apply Pool Filters"
+
 msgid "Approve"
 msgstr "Approve"
 
@@ -130,6 +133,9 @@ msgstr "Balance"
 
 msgid "Balance:"
 msgstr "Balance:"
+
+msgid "Based on your Wallet and BentoBox balances"
+msgstr "Based on your Wallet and BentoBox balances"
 
 msgid "Bento Balance: {0}"
 msgstr "Bento Balance: {0}"
@@ -394,6 +400,9 @@ msgstr "Farm"
 msgid "Filled"
 msgstr "Filled"
 
+msgid "Filters:"
+msgstr "Filters:"
+
 msgid "Find Pool"
 msgstr "Find Pool"
 
@@ -443,9 +452,6 @@ msgstr "Have assets you want to earn additional interest on? Lend them in isolat
 
 msgid "Health"
 msgstr "Health"
-
-msgid "Highest to Lowest"
-msgstr "Highest to Lowest"
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Historical Total Locked: Connect Wallet"
@@ -576,9 +582,6 @@ msgstr "Loading your {exchange} liquidity positions"
 
 msgid "Loading..."
 msgstr "Loading..."
-
-msgid "Lowest to Highest"
-msgstr "Lowest to Highest"
 
 msgid "MAX"
 msgstr "MAX"
@@ -822,6 +825,12 @@ msgstr "Repay"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Restricts swaps to direct pairs only."
 
+msgid "Results"
+msgstr "Results"
+
+msgid "Results for '{searchQuery}'"
+msgstr "Results for '{searchQuery}'"
+
 msgid "Review Limit Order"
 msgstr "Review Limit Order"
 
@@ -918,6 +927,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "Staking APR"
+
+msgid "Suggested Pools"
+msgstr "Suggested Pools"
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Supplying {0} {1} and {2} {3}"

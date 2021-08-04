@@ -86,6 +86,9 @@ msgstr ""
 msgid "Analytics"
 msgstr "애널리틱스"
 
+msgid "Apply Pool Filters"
+msgstr ""
+
 msgid "Approve"
 msgstr "승인"
 
@@ -129,6 +132,9 @@ msgid "Balance"
 msgstr "잔액"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Based on your Wallet and BentoBox balances"
 msgstr ""
 
 msgid "Bento Balance: {0}"
@@ -391,6 +397,9 @@ msgstr ""
 msgid "Filled"
 msgstr ""
 
+msgid "Filters:"
+msgstr ""
+
 msgid "Find Pool"
 msgstr "풀 찾기"
 
@@ -438,9 +447,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "건전성"
-
-msgid "Highest to Lowest"
-msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "잠긴 기록 합계: 지갑 연결"
@@ -569,9 +575,6 @@ msgstr "{exchange} 유동성 포지션 로드 중"
 
 msgid "Loading..."
 msgstr "로드 중..."
-
-msgid "Lowest to Highest"
-msgstr ""
 
 msgid "MAX"
 msgstr "최대"
@@ -811,6 +814,12 @@ msgstr "상환"
 msgid "Restricts swaps to direct pairs only."
 msgstr "스왑을 직접적인 거래쌍으로만 제한합니다."
 
+msgid "Results"
+msgstr ""
+
+msgid "Results for '{searchQuery}'"
+msgstr ""
+
 msgid "Review Limit Order"
 msgstr ""
 
@@ -907,6 +916,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "APR 스테이킹"
+
+msgid "Suggested Pools"
+msgstr ""
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "{0} {1} 및 {2} {3} 공급 중"

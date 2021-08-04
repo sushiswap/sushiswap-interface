@@ -86,6 +86,9 @@ msgstr ""
 msgid "Analytics"
 msgstr "Phân tích"
 
+msgid "Apply Pool Filters"
+msgstr ""
+
 msgid "Approve"
 msgstr "Phê duyệt"
 
@@ -129,6 +132,9 @@ msgid "Balance"
 msgstr "Số dư"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Based on your Wallet and BentoBox balances"
 msgstr ""
 
 msgid "Bento Balance: {0}"
@@ -389,6 +395,9 @@ msgstr ""
 msgid "Filled"
 msgstr ""
 
+msgid "Filters:"
+msgstr ""
+
 msgid "Find Pool"
 msgstr "Tìm mạng lưới"
 
@@ -438,9 +447,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "Sức khỏe"
-
-msgid "Highest to Lowest"
-msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Tổng số lịch sử đã khóa: Kết nối ví"
@@ -569,9 +575,6 @@ msgstr "Đang tải trạng thái thanh khoản {exchange}"
 
 msgid "Loading..."
 msgstr "Đang tải..."
-
-msgid "Lowest to Highest"
-msgstr ""
 
 msgid "MAX"
 msgstr "TỐI ĐA"
@@ -811,6 +814,12 @@ msgstr "Hoàn trả"
 msgid "Restricts swaps to direct pairs only."
 msgstr "Chỉ hạn chế hoán đổi đối với các cặp trực tiếp."
 
+msgid "Results"
+msgstr ""
+
+msgid "Results for '{searchQuery}'"
+msgstr ""
+
 msgid "Review Limit Order"
 msgstr ""
 
@@ -907,6 +916,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "APR đặt cược"
+
+msgid "Suggested Pools"
+msgstr ""
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Tổng cung {0} {1} và {2} {3}"

@@ -36,9 +36,9 @@ const Pool = () => {
         </div>
       </div>
       <ListActions />
-      <div className={classNames('flex gap-6', !searchQuery ? 'flex-col-reverse' : 'flex-col')}>
-        <SearchResultPools />
+      <div className={classNames('flex gap-6', searchQuery ? 'flex-col-reverse' : 'flex-col')}>
         <SuggestedPools />
+        <SearchResultPools />
       </div>
     </div>
   )

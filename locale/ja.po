@@ -86,6 +86,9 @@ msgstr ""
 msgid "Analytics"
 msgstr "分析"
 
+msgid "Apply Pool Filters"
+msgstr ""
+
 msgid "Approve"
 msgstr "承認"
 
@@ -129,6 +132,9 @@ msgid "Balance"
 msgstr "残高"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Based on your Wallet and BentoBox balances"
 msgstr ""
 
 msgid "Bento Balance: {0}"
@@ -391,6 +397,9 @@ msgstr ""
 msgid "Filled"
 msgstr ""
 
+msgid "Filters:"
+msgstr ""
+
 msgid "Find Pool"
 msgstr "プールを検索"
 
@@ -440,9 +449,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "健全性"
-
-msgid "Highest to Lowest"
-msgstr ""
 
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "過去の合計ロック数：ウォレットを接続"
@@ -571,9 +577,6 @@ msgstr "{exchange}の流動性ポジションを読み込んでいます"
 
 msgid "Loading..."
 msgstr "読み込んでいます..."
-
-msgid "Lowest to Highest"
-msgstr ""
 
 msgid "MAX"
 msgstr "最大"
@@ -813,6 +816,12 @@ msgstr "払い戻す"
 msgid "Restricts swaps to direct pairs only."
 msgstr "スワップを直接ペアのみに制限します。"
 
+msgid "Results"
+msgstr ""
+
+msgid "Results for '{searchQuery}'"
+msgstr ""
+
 msgid "Review Limit Order"
 msgstr ""
 
@@ -909,6 +918,9 @@ msgstr ""
 
 msgid "Staking APR"
 msgstr "APRを出資しています"
+
+msgid "Suggested Pools"
+msgstr ""
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "{0}{1}および{2}{3}を供給しています"
