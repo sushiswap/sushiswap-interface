@@ -125,6 +125,9 @@ msgstr "Available"
 msgid "Available Networks"
 msgstr "Available Networks"
 
+msgid "Back"
+msgstr "Back"
+
 msgid "Back to Limit Orders"
 msgstr "Back to Limit Orders"
 
@@ -190,6 +193,9 @@ msgstr ""
 
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
+
+msgid "CURRENT POOL TYPES"
+msgstr "CURRENT POOL TYPES"
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -299,6 +305,9 @@ msgstr "Create pool"
 
 msgid "Current"
 msgstr "Current"
+
+msgid "Currently, there are four pool types on the platform.  However, our infrastructure has been built in a way to support more and more pool types as they emerge."
+msgstr "Currently, there are four pool types on the platform.  However, our infrastructure has been built in a way to support more and more pool types as they emerge."
 
 msgid "Deposit"
 msgstr "Deposit"
@@ -522,6 +531,9 @@ msgstr "Korean"
 
 msgid "LTV"
 msgstr "LTV"
+
+msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
+msgstr "Learn more about the power of Sushi's AMM and Tines routing engine."
 
 msgid "Learn more about wallets"
 msgstr "Learn more about wallets"
@@ -765,6 +777,9 @@ msgstr "Pool Tokens"
 msgid "Pool Type Info"
 msgstr "Pool Type Info"
 
+msgid "Pool Types"
+msgstr "Pool Types"
+
 msgid "Pool tokens in rewards pool"
 msgstr "Pool tokens in rewards pool"
 
@@ -961,6 +976,9 @@ msgstr "Swap To:"
 msgid "TVL"
 msgstr "TVL"
 
+msgid "Tap any to learn more"
+msgstr "Tap any to learn more"
+
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 
@@ -1102,6 +1120,9 @@ msgstr "Wallet Balance"
 
 msgid "Weekly unlocks from the vesting period."
 msgstr "Weekly unlocks from the vesting period."
+
+msgid "What kinds of liquidity pools are supported on Sushi?"
+msgstr "What kinds of liquidity pools are supported on Sushi?"
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"

@@ -125,6 +125,9 @@ msgstr "Disponible"
 msgid "Available Networks"
 msgstr ""
 
+msgid "Back"
+msgstr ""
+
 msgid "Back to Limit Orders"
 msgstr ""
 
@@ -187,6 +190,9 @@ msgstr ""
 
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
 msgstr "Omite los modales de confirmación y permite operaciones de alto deslizamiento. Úselo bajo su propio riesgo."
+
+msgid "CURRENT POOL TYPES"
+msgstr ""
 
 msgid "Cancel"
 msgstr ""
@@ -295,6 +301,9 @@ msgid "Create pool"
 msgstr "Crear grupo"
 
 msgid "Current"
+msgstr ""
+
+msgid "Currently, there are four pool types on the platform.  However, our infrastructure has been built in a way to support more and more pool types as they emerge."
 msgstr ""
 
 msgid "Deposit"
@@ -516,6 +525,9 @@ msgid "Korean"
 msgstr ""
 
 msgid "LTV"
+msgstr ""
+
+msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
 msgstr ""
 
 msgid "Learn more about wallets"
@@ -756,6 +768,9 @@ msgstr "Fichas de piscina"
 msgid "Pool Type Info"
 msgstr ""
 
+msgid "Pool Types"
+msgstr ""
+
 msgid "Pool tokens in rewards pool"
 msgstr "Pool tokens en el grupo de recompensas"
 
@@ -952,6 +967,9 @@ msgstr "Cambiar a:"
 msgid "TVL"
 msgstr "TVL"
 
+msgid "Tap any to learn more"
+msgstr ""
+
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
 
@@ -1090,6 +1108,9 @@ msgid "Wallet Balance"
 msgstr "Saldo de Wallet"
 
 msgid "Weekly unlocks from the vesting period."
+msgstr ""
+
+msgid "What kinds of liquidity pools are supported on Sushi?"
 msgstr ""
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
