@@ -62,16 +62,18 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
   return (
     <div className="flex justify-end">
       <table className="flex flex-col space-y-2 text-sm text-high-emphesis">
-        {rewards.map((reward, i) => (
-          <tr>
-            <td>
-              <CurrencyLogo currency={currencies[i]} size={size} />
-            </td>
-            <td>
-              <div className="ml-2 whitespace-nowrap">{`${reward.amount.toFixed(3)} ${reward.symbol} / day`}</div>
-            </td>
-          </tr>
-        ))}
+        <tbody>
+          {rewards.map((reward, i) => (
+            <tr>
+              <td>
+                <CurrencyLogo currency={currencies[i]} size={size} />
+              </td>
+              <td>
+                <div className="ml-2 whitespace-nowrap">{`${reward.amount.toFixed(3)} ${reward.symbol} / day`}</div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )
