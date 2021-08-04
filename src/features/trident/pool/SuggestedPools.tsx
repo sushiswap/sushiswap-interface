@@ -1,16 +1,18 @@
 import { FC, useState } from 'react'
 import ListCard from './ListCard'
 import Typography from '../../../components/Typography'
+import ViewMore from '../../../components/ViewMore'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import Switch from '../../../components/Switch'
+import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/solid'
 
 interface SuggestedPools {}
 
 const SuggestedPools: FC<SuggestedPools> = () => {
   const { i18n } = useLingui()
   const [hide, setHide] = useState(false)
-
+  const [viewMore, setViewMore] = useState(false)
   return (
     <div className="flex flex-col gap-2 px-5 mt-2">
       <div className="flex justify-between">
@@ -52,6 +54,19 @@ const SuggestedPools: FC<SuggestedPools> = () => {
         <>
           <ListCard />
           <ListCard />
+          {viewMore && (
+            <>
+              <ListCard />
+              <ListCard />
+              <ListCard />
+              <ListCard />
+            </>
+          )}
+          <ViewMore
+            text={viewMore ? 'View Less' : 'View More'}
+            onClick={() => setViewMore(!viewMore)}
+            icon={viewMore ? <MinusSmIcon /> : <PlusSmIcon />}
+          />
         </>
       )}
     </div>
