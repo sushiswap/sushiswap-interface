@@ -341,7 +341,7 @@
   "Your transaction may be frontrun": "Sua transação pode ser \"frontrun\"",
   "Your transaction may fail": "Sua transação pode falhar",
   "Your transaction will revert if it is pending for more than this long.": "Sua transação será revertida se ficar pendente por mais tempo.",
-  "Your transaction will revert if the price changes unfavorably by more than this percentage.": "Sua transação será revertida se o preço mudar desfavoravelmente em mais do que esta porcentagem.",
+  "Your transaction will revert if the price changes unfavorably by more than this percentage.": "Sua transação será estornada se o preço mudar em uma porcentagem maior que seja desfavorável a você.",
   "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.": "Sua transação será revertida se houver um movimento de preço grande e desfavorável antes de ser confirmada.",
   "Your transactions will appear here...": "Suas transações aparecerão aqui...",
   "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity.": "Sua liquidez {exchange} {0}/{1}  se tornará liquidez SushiSwap {2}/{3}.",
