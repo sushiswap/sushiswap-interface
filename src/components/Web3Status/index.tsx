@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { fortmatic, injected, portis, walletconnect, walletlink, keystone } from '../../connectors'
+import { fortmatic, injected, portis, walletconnect, walletlink } from '../../connectors'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -74,7 +74,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
       </IconWrapper>
     )
-  } else if (connector === keystone) {
+  } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
       <IconWrapper size={16}>
         <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />

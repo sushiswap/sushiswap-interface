@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
-import { binance, fortmatic, injected, keystone, portis, torus, walletconnect, walletlink } from '../connectors'
+import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
@@ -119,7 +119,13 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
   },
   KEYSTONE: {
-    connector: keystone,
+    connector: async () => {
+      const KeystoneConnector = (await import('@keystonehq/keystone-connector')).KeystoneConnector
+      return new KeystoneConnector({
+        chainId: 1,
+        url: RPC[ChainId.MAINNET],
+      })
+    },
     name: 'Keystone',
     iconName: 'keystone.png',
     description: 'Connect to Keystone hardware wallet.',

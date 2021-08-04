@@ -2,7 +2,6 @@ import { BscConnector } from '@binance-chain/bsc-connector'
 import { ChainId } from '@sushiswap/sdk'
 import { FortmaticConnector } from './Fortmatic'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { KeystoneConnetor } from '@keystonehq/keystone-connector'
 import { NetworkConnector } from './NetworkConnector'
 import { PortisConnector } from '@web3-react/portis-connector'
 import { TorusConnector } from '@web3-react/torus-connector'
@@ -108,11 +107,6 @@ export const walletlink = new WalletLinkConnector({
 // mainnet only
 export const torus = new TorusConnector({
   chainId: 1,
-})
-
-export const keystone = new KeystoneConnetor({
-  chainId: 1,
-  url: RPC[ChainId.MAINNET],
 })
 
 // binance only
