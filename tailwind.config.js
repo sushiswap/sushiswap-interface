@@ -14,7 +14,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: (theme) => ({
-        'binary-pattern': "url('/binary-pattern.png')",
+        'binary-pattern': "url('/images/trident/binary-pattern.png')",
+        'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
       }),
       linearBorderGradients: {
         directions: {
@@ -47,6 +48,8 @@ module.exports = {
         yellow: '#ffd166',
 
         'opaque-blue': '#0993ec80',
+        'transparent-blue': '#0993EC1A',
+        'transparent-pink': '#FE5A751A',
         'opaque-pink': '#f338c380',
         'pink-red': '#FE5A75',
         'light-brown': '#FEC464',

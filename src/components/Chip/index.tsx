@@ -26,8 +26,6 @@ export interface ChipProps {
   deleteIcon?: ReactNode
 }
 
-export type ChipStateProps = Pick<ChipProps, 'label' | 'color' | 'variant'>
-
 const Chip: FC<ChipProps> = ({
   label,
   color = 'default',

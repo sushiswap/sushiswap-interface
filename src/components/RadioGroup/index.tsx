@@ -19,13 +19,10 @@ RadioGroup.Option = ({
           <div className="flex items-center text-sm cursor-pointer gap-3.5">
             <span
               className={classNames(
-                checked ? '' : 'border border-dark-700 bg-dark-800',
+                checked ? 'bg-gradient-to-r from-blue to-pink' : 'border border-dark-700 bg-dark-800',
                 'h-6 w-6 rounded-full flex items-center justify-center'
               )}
               aria-hidden="true"
-              {...(checked && {
-                style: { background: 'linear-gradient(103.72deg, #0993EC -6.18%, #F338C3 100%)' },
-              })}
             >
               {checked && <span className="rounded-full bg-white w-2.5 h-2.5" />}
             </span>

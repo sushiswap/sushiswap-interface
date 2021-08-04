@@ -15,11 +15,11 @@ const VARIANTS = {
   hero: 'text-hero',
   h1: 'text-4xl',
   h2: 'text-3xl',
-  h3: 'text-2xl',
-  lg: 'text-lg',
-  base: 'text-base',
-  sm: 'text-sm',
-  xs: 'text-xs',
+  h3: 'text-2xl leading-7',
+  lg: 'text-lg leading-6',
+  base: 'text-base leading-5',
+  sm: 'text-sm leading-5',
+  xs: 'text-xs leading-4',
 }
 
 export interface TypographyProps {

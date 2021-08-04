@@ -9,7 +9,7 @@ import { TridentPoolPageContextProvider, useTridentPoolPageState } from '../../.
 import SuggestedPools from '../../../features/trident/pool/SuggestedPools'
 import { classNames } from '../../../functions'
 
-const PAGE_CONFIG = { breadcrumbs: ['Pools', 'Pool Types'] }
+const PAGE_CONFIG = { breadcrumbs: ['Pools'] }
 
 const Pool = () => {
   const { i18n } = useLingui()

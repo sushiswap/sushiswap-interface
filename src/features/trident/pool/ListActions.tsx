@@ -88,10 +88,21 @@ const ListActions: FC<SortSelectorProps> = () => {
           <Typography weight={400}>{i18n._(t`Filters:`)}</Typography>
           <div className="flex gap-2 items-center flex-wrap">
             {filters.poolTypes.map((type) => (
-              <Chip {...type} key={type.label} onDelete={() => handleAddOrDeletePoolTypeFilter(type, false)} />
+              <Chip
+                label={type.label}
+                color={type.color}
+                key={type.label}
+                onDelete={() => handleAddOrDeletePoolTypeFilter(type, false)}
+              />
             ))}
             {filters.feeTiers.map((type) => (
-              <Chip {...type} key={type.label} onDelete={() => handleAddOrDeleteFeeTierFilter(type, false)} />
+              <Chip
+                label={type.label}
+                color={type.color}
+                {...type}
+                key={type.label}
+                onDelete={() => handleAddOrDeleteFeeTierFilter(type, false)}
+              />
             ))}
           </div>
         </div>

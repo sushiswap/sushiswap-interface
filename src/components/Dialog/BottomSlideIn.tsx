@@ -37,10 +37,7 @@ const BottomSlideIn: FC<BottomSlideInProps> = ({ title, open, onClose, children 
               leaveTo="translate-y-full"
             >
               <div className="w-full max-h-[fit-content] absolute bottom-0 rounded-t overflow-hidden">
-                <div
-                  className="flex flex-col shadow-xl overflow-y-scroll h-full"
-                  style={{ background: 'linear-gradient(103.72deg, #0993EC -6.18%, #F338C3 100%)' }}
-                >
+                <div className="flex flex-col shadow-xl overflow-y-scroll h-full bg-gradient-to-r from-blue to-pink">
                   <div className="p-5">
                     <div className="flex items-center justify-between gap-3">
                       <Typography variant="lg" weight={700} className="text-high-emphesis">

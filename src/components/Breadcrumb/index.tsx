@@ -8,13 +8,7 @@ interface BreadcrumbProps {
 
 const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs = [] }) => {
   return (
-    <div
-      className="w-full border-b border-dark-900 px-5 py-2 flex flex-row items-center"
-      style={{
-        background:
-          'linear-gradient(90.12deg, rgba(9, 147, 236, 0.05) 12.77%, rgba(243, 56, 195, 0.05) 87.29%), #161522',
-      }}
-    >
+    <div className="w-full border-b border-dark-900 px-5 py-2 flex flex-row items-center bg-gradient-to-r from-transparent-blue to-transparent-pink">
       {breadcrumbs
         .map<ReactNode>((el, index) => (
           <Typography

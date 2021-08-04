@@ -1,4 +1,4 @@
-import { ChipStateProps } from '../../../../components/Chip'
+import { ChipColor } from '../../../../components/Chip'
 
 export enum ActionType {
   SEARCH = 'SEARCH',
@@ -18,7 +18,14 @@ export interface State {
   sortType: number
   searchQuery: string
   filters: {
-    poolTypes: ChipStateProps[]
-    feeTiers: ChipStateProps[]
+    poolTypes: {
+      label: string
+      color: ChipColor
+      description: string
+    }[]
+    feeTiers: {
+      label: string
+      color: ChipColor
+    }[]
   }
 }

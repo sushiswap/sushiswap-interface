@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { classNames } from '../../functions'
 
 const SIZE = {
@@ -55,6 +55,7 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  startIcon?: ReactNode
   color?: ButtonColor
   size?: ButtonSize
   variant?: ButtonVariant
@@ -67,6 +68,7 @@ function Button({
   color = 'default',
   size = 'default',
   variant = 'filled',
+  startIcon = undefined,
   ...rest
 }: ButtonProps): JSX.Element {
   return (
@@ -74,12 +76,13 @@ function Button({
       className={classNames(
         VARIANT[variant][color],
         variant !== 'empty' && SIZE[size],
-        'rounded disabled:cursor-not-allowed focus:outline-none',
+        'rounded disabled:cursor-not-allowed focus:outline-none flex items-center',
         // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
         className
       )}
       {...rest}
     >
+      {startIcon && startIcon}
       {children}
     </button>
   )
