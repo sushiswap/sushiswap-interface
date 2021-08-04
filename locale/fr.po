@@ -1071,6 +1071,9 @@ msgstr ""
 msgid "View Liquidity Positions"
 msgstr ""
 
+msgid "View More"
+msgstr ""
+
 msgid "View Stats"
 msgstr "Voir les statistiques"
 

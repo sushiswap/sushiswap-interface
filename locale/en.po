@@ -1082,6 +1082,9 @@ msgstr "Vietnamese"
 msgid "View Liquidity Positions"
 msgstr "View Liquidity Positions"
 
+msgid "View More"
+msgstr "View More"
+
 msgid "View Stats"
 msgstr "View Stats"
 

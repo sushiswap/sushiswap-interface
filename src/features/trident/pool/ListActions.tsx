@@ -96,13 +96,16 @@ const ListActions: FC<SortSelectorProps> = () => {
           </div>
         </div>
       )}
-      <div className="flex justify-between items-center">
+      <div
+        className="flex justify-between items-center cursor-pointer"
+        onClick={() => setHideSortTypes(!hideSortTypes)}
+      >
         <Typography weight={400}>{i18n._(t`Sort:`)}</Typography>
-        <div className="flex gap-1 items-center" onClick={() => handleSortType((sortType + 1) % SORT_OPTIONS.length)}>
+        <div className="flex gap-1 items-center">
           <Typography weight={700} className="text-high-emphesis">
             {i18n._(t`APY`)} {SORT_OPTIONS[sortType].title}
           </Typography>
-          <div className={`text-high-emphesis transform ${SORT_OPTIONS[sortType].desc ? '' : 'rotate-180'}`}>
+          <div className={`text-high-emphesis transform ${hideSortTypes ? '' : 'rotate-180'}`}>
             <ChevronDownIcon width={20} height={20} />
           </div>
         </div>
