@@ -86,6 +86,12 @@ msgstr "Dati analitici"
 msgid "Approve"
 msgstr "Approva"
 
+msgid "Approve Inari Master Contract"
+msgstr ""
+
+msgid "Approve Inari to spend {0}"
+msgstr ""
+
 msgid "Approve Kashi"
 msgstr "Approva Kashi"
 
@@ -100,6 +106,12 @@ msgstr "Approvato"
 
 msgid "Approving"
 msgstr "Approvazione"
+
+msgid "Approving Inari Master Contract"
+msgstr ""
+
+msgid "Approving Inari to spend {0}"
+msgstr ""
 
 msgid "Approving Limit Order"
 msgstr ""
@@ -345,6 +357,9 @@ msgstr "Inserisci una percentuale di slippage valida"
 msgid "Enter an amount"
 msgstr "Inserisci un importo"
 
+msgid "Enter an mount"
+msgstr ""
+
 msgid "Error"
 msgstr "Errore"
 
@@ -399,6 +414,9 @@ msgstr ""
 "SUSHI depositati in origine ed eventuali altri derivanti dalle commissioni."
 
 msgid "French"
+msgstr ""
+
+msgid "From"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -667,6 +685,9 @@ msgstr ""
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "USA QUESTA MODALITÀ SOLO SE SAI COSA STAI FACENDO."
 
+msgid "One-Click Strategies"
+msgstr ""
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Ops! Si è verificato un Errore imprevisto. Aggiorna la pagina o visita da un altro browser o dispositivo"
 
@@ -873,6 +894,20 @@ msgstr "Metti in staking SUSHI"
 msgid "Stake SUSHI for xSUSHI"
 msgstr "Metti in staking SUSHI per xSUSHI"
 
+msgid "Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid ""
+"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click."
+msgstr ""
+
 msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
@@ -913,6 +948,11 @@ msgstr "Scambia in:"
 msgid "TVL"
 msgstr "TVL"
 
+msgid ""
+"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
+"collateral on other platforms, and more!"
+msgstr ""
+
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
 
@@ -950,6 +990,9 @@ msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
 msgid "Tip:"
+msgstr ""
+
+msgid "To"
 msgstr ""
 
 msgid "Toggle Expert Mode"

@@ -10,19 +10,21 @@ import swap from './swap/reducer'
 import transactions from './transactions/reducer'
 import user from './user/reducer'
 import zap from './zap/reducer'
+import inari from './inari/reducer'
 
 const reducer = combineReducers({
-    application,
-    user,
-    transactions,
-    swap,
-    mint,
-    burn,
-    multicall,
-    lists,
-    zap,
-    limitOrder,
-    create,
+  application,
+  user,
+  transactions,
+  swap,
+  mint,
+  burn,
+  multicall,
+  lists,
+  zap,
+  limitOrder,
+  create,
+  inari,
 })
 
 export default reducer

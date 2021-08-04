@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from 'react'
 
-import { PopupContent } from "../../state/application/actions";
-import TransactionPopup from "./TransactionPopup";
-import { XIcon } from "@heroicons/react/outline";
-import { animated, useSpring } from "react-spring";
-import styled from "styled-components";
-import { useRemovePopup } from "../../state/application/hooks";
+import { PopupContent } from '../../state/application/actions'
+import TransactionPopup from './TransactionPopup'
+import { XIcon } from '@heroicons/react/outline'
+import { animated, useSpring } from 'react-spring'
+import styled from 'styled-components'
+import { useRemovePopup } from '../../state/application/hooks'
 
 export const Popup = styled.div`
   display: inline-block;
@@ -24,7 +24,7 @@ export const Popup = styled.div`
       margin-right: 20px;
     }
   `}
-`;
+`
 
 const AnimatedFader = animated(({ children, ...rest }) => (
   <div className="h-[3px] bg-dark-800 w-full">
@@ -32,49 +32,44 @@ const AnimatedFader = animated(({ children, ...rest }) => (
       {children}
     </div>
   </div>
-));
+))
 
 export default function PopupItem({
   removeAfterMs,
   content,
   popKey,
 }: {
-  removeAfterMs: number | null;
-  content: PopupContent;
-  popKey: string;
+  removeAfterMs: number | null
+  content: PopupContent
+  popKey: string
 }) {
-  const removePopup = useRemovePopup();
-  const removeThisPopup = useCallback(
-    () => removePopup(popKey),
-    [popKey, removePopup]
-  );
+  const removePopup = useRemovePopup()
+  const removeThisPopup = useCallback(() => removePopup(popKey), [popKey, removePopup])
   useEffect(() => {
-    if (removeAfterMs === null) return undefined;
+    if (removeAfterMs === null) return undefined
 
     const timeout = setTimeout(() => {
-      removeThisPopup();
-    }, removeAfterMs);
+      removeThisPopup()
+    }, removeAfterMs)
 
     return () => {
-      clearTimeout(timeout);
-    };
-  }, [removeAfterMs, removeThisPopup]);
+      clearTimeout(timeout)
+    }
+  }, [removeAfterMs, removeThisPopup])
 
-  let popupContent;
-  if ("txn" in content) {
+  let popupContent
+  if ('txn' in content) {
     const {
       txn: { hash, success, summary },
-    } = content;
-    popupContent = (
-      <TransactionPopup hash={hash} success={success} summary={summary} />
-    );
+    } = content
+    popupContent = <TransactionPopup hash={hash} success={success} summary={summary} />
   }
 
   const faderStyle = useSpring({
-    from: { width: "100%" },
-    to: { width: "0%" },
+    from: { width: '100%' },
+    to: { width: '0%' },
     config: { duration: removeAfterMs ?? undefined },
-  });
+  })
 
   return (
     <div className="mb-4">
@@ -88,5 +83,5 @@ export default function PopupItem({
         {removeAfterMs !== null ? <AnimatedFader style={faderStyle} /> : null}
       </div>
     </div>
-  );
+  )
 }

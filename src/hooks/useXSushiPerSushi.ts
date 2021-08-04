@@ -10,7 +10,7 @@ const QUERY = `{
 const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
 
 // Returns ratio of XSushi:Sushi
-export default function useSushiPerXSushi() {
+export default function useSushiPerXSushi(parse = true) {
   const { data } = useSWR(QUERY, fetcher)
-  return parseFloat(data?.bar?.ratio)
+  return parse ? parseFloat(data?.bar?.ratio) : data?.bar?.ratio
 }

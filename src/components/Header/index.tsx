@@ -76,26 +76,29 @@ function AppBar(): JSX.Element {
                           </a>
                         </NavLink>
                       )}
-                      {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI].includes(chainId) && (
-                        <>
-                          <NavLink href={'/lend'}>
-                            <a
-                              id={`lend-nav-link`}
-                              className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                            >
-                              {i18n._(t`Lend`)}
-                            </a>
-                          </NavLink>
-                          <NavLink href={'/borrow'}>
-                            <a
-                              id={`borrow-nav-link`}
-                              className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                            >
-                              {i18n._(t`Borrow`)}
-                            </a>
-                          </NavLink>
-                        </>
-                      )}
+                      {chainId &&
+                        [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI].includes(
+                          chainId
+                        ) && (
+                          <>
+                            <NavLink href={'/lend'}>
+                              <a
+                                id={`lend-nav-link`}
+                                className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                              >
+                                {i18n._(t`Lend`)}
+                              </a>
+                            </NavLink>
+                            <NavLink href={'/borrow'}>
+                              <a
+                                id={`borrow-nav-link`}
+                                className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                              >
+                                {i18n._(t`Borrow`)}
+                              </a>
+                            </NavLink>
+                          </>
+                        )}
                       {chainId === ChainId.MAINNET && (
                         <NavLink href={'/stake'}>
                           <a
@@ -355,7 +358,7 @@ function AppBar(): JSX.Element {
                       {i18n._(t`Analytics`)}
                     </ExternalLink>
                   )}
-                  
+
                 {chainId === ChainId.MAINNET && (
                   <Link href={'/miso'}>
                     <a

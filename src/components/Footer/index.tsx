@@ -59,7 +59,7 @@ const Footer = () => {
 
         {chainId && chainId === ChainId.PALM && (
           <ExternalLink id={`palm-bridge-link`} href=" https://app.palm.io/bridge" className="text-low-emphesis">
-            {i18n._(t`xDai Bridge`)}
+            {i18n._(t`Palm Bridge`)}
           </ExternalLink>
         )}
 

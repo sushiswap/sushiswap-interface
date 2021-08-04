@@ -86,6 +86,12 @@ msgstr "애널리틱스"
 msgid "Approve"
 msgstr "승인"
 
+msgid "Approve Inari Master Contract"
+msgstr ""
+
+msgid "Approve Inari to spend {0}"
+msgstr ""
+
 msgid "Approve Kashi"
 msgstr "카시 허용"
 
@@ -100,6 +106,12 @@ msgstr "승인됨"
 
 msgid "Approving"
 msgstr "승인"
+
+msgid "Approving Inari Master Contract"
+msgstr ""
+
+msgid "Approving Inari to spend {0}"
+msgstr ""
 
 msgid "Approving Limit Order"
 msgstr ""
@@ -345,6 +357,9 @@ msgstr "유효한 슬리피지 비율 입력"
 msgid "Enter an amount"
 msgstr "금액 입력"
 
+msgid "Enter an mount"
+msgstr ""
+
 msgid "Error"
 msgstr "오류"
 
@@ -397,6 +412,9 @@ msgstr ""
 "xSUSHI 이자는 누적되며 이후에 출금할 때는 처음 스테이킹한 SUSHI에 더해 추가 수수료를 돌려 받게 됩니다."
 
 msgid "French"
+msgstr ""
+
+msgid "From"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -668,6 +686,9 @@ msgstr ""
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
 
+msgid "One-Click Strategies"
+msgstr ""
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "이런! 알 수 없는 오류가 발생했습니다. 페이지를 새로 고침하거나 다른 브라우저 또는 기기에서 방문하세요."
 
@@ -874,6 +895,20 @@ msgstr "SUSHI 스테이킹"
 msgid "Stake SUSHI for xSUSHI"
 msgstr "SUSHI를 스테이크하고 xSUSHI를 얻으세요"
 
+msgid "Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid ""
+"Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically\n"
+"invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing."
+msgstr ""
+
+msgid "Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click."
+msgstr ""
+
 msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
@@ -914,6 +949,11 @@ msgstr "다음으로 스왑:"
 msgid "TVL"
 msgstr "전체 동결 가치"
 
+msgid ""
+"Take your SUSHI and invest in various strategies with one click! Earn extra yields with BentoBox, use as\n"
+"collateral on other platforms, and more!"
+msgstr ""
+
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
 
@@ -951,6 +991,9 @@ msgid "Tip to encourage miners to select this transaction."
 msgstr ""
 
 msgid "Tip:"
+msgstr ""
+
+msgid "To"
 msgstr ""
 
 msgid "Toggle Expert Mode"
