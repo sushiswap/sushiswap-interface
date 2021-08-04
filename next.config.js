@@ -47,6 +47,17 @@ module.exports = withBundleAnalyzer(
           destination: '/lend',
           permanent: true,
         },
+        // Analytics
+        {
+          source: '/analytics',
+          destination: '/analytics/dashboard',
+          permanent: true,
+        },
+        {
+          source: '/portfolio',
+          destination: '/analytics/portfolio',
+          permanent: true,
+        },
       ]
     },
     async rewrites() {
