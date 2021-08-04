@@ -444,6 +444,9 @@ msgstr ""
 msgid "Harvest {0} SUSHI {1}"
 msgstr ""
 
+msgid "Harvest {0}/{1}"
+msgstr ""
+
 msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
 msgstr ""
 
@@ -724,6 +727,9 @@ msgid "Output is estimated. You will receive at least"
 msgstr ""
 
 msgid "Output will be sent to"
+msgstr ""
+
+msgid "Palm Bridge"
 msgstr ""
 
 msgid "Pay"

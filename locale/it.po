@@ -17,23 +17,21 @@ msgid ""
 "(COMING SOON) Accrue automatic yield through flash loans and\n"
 "SUSHI strategies"
 msgstr ""
-"(IN ARRIVO) Genera rendimento automatico tramite flash loan e\n"
-"strategie SUSHI"
 
 msgid "1 Hour"
-msgstr ""
+msgstr "1 ora"
 
 msgid "1 Week"
-msgstr ""
+msgstr "1 settimana"
 
 msgid "24 Hours"
-msgstr ""
+msgstr "24 ore"
 
 msgid "30 Days"
-msgstr ""
+msgstr "30 giorni"
 
 msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
-msgstr ""
+msgstr "Una parte di ogni operazione (0,05%) va ai titolari xSUSHI come incentivo di protocollo."
 
 msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
 msgstr "Una parte di ogni operazione (0,25%) va ai fornitori di liquidità come incentivo di protocollo."
@@ -51,7 +49,7 @@ msgid "Add Liquidity"
 msgstr "Aggiungi liquidità"
 
 msgid "Add SUSHI to your MetaMask wallet"
-msgstr ""
+msgstr "Aggiungi SUSHI al tuo wallet Metamask"
 
 msgid "Add collateral in order to borrow assets"
 msgstr "Aggiungi collaterale per prendere in prestito asset"
@@ -60,25 +58,25 @@ msgid "Add liquidity"
 msgstr "Aggiungi liquidità"
 
 msgid "Add xSUSHI to your MetaMask wallet"
-msgstr ""
+msgstr "Aggiungi xSUSHI al tuo wallet MetaMask"
 
 msgid "Add {0} to MetaMask"
-msgstr ""
+msgstr "Aggiungi {0} a MetaMask"
 
 msgid "Add {0} {1} and {2} {3}"
-msgstr ""
+msgstr "Aggiungi {0} {1} e {2} {3}"
 
 msgid "Added"
-msgstr ""
+msgstr "Aggiunto"
 
 msgid "Additional records and weekly merkle updates can be found on"
-msgstr ""
+msgstr "Ulteriori record e aggiornamenti settimanali di Merkle sono disponibili su"
 
 msgid "Amount of Tokens"
 msgstr "Quantità di token"
 
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
-msgstr ""
+msgstr "Si è verificato un errore durante il tentativo di eseguire questo scambio. Potrebbe essere necessario aumentare la tolleranza allo slippage; se questo non basta, potrebbe esserci un'incompatibilità con il token che stai scambiando. Notare che la commissione sui token per il trasferimento e rebase non è compatibile con Uniswap V3."
 
 msgid "Analytics"
 msgstr "Dati analitici"
@@ -96,7 +94,7 @@ msgid "Approve Kashi"
 msgstr "Approva Kashi"
 
 msgid "Approve Limit Order"
-msgstr ""
+msgstr "Approva ordine limite"
 
 msgid "Approve {0}"
 msgstr "Approva {0}"
@@ -114,7 +112,7 @@ msgid "Approving Inari to spend {0}"
 msgstr ""
 
 msgid "Approving Limit Order"
-msgstr ""
+msgstr "Approvazione ordine limite"
 
 msgid "Approving {0}"
 msgstr "Approvazione {0}"
@@ -123,22 +121,22 @@ msgid "Are you sure?"
 msgstr "Sei sicuro?"
 
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 msgid "Available"
 msgstr "Disponibile"
 
 msgid "Available Networks"
-msgstr ""
+msgstr "Reti disponibili"
 
 msgid "Back to Limit Orders"
-msgstr ""
+msgstr "Torna agli ordini limite"
 
 msgid "Balance"
 msgstr "Saldo"
 
 msgid "Balance:"
-msgstr ""
+msgstr "Saldo:"
 
 msgid "Bento Balance: {0}"
 msgstr "Saldo Bento: {0}"
@@ -180,7 +178,7 @@ msgid "Borrowing allows you to obtain liquidity without selling. Your borrow lim
 msgstr "Assumere prestiti ti permette di ottenere liquidità senza vendere. Il tuo limite di prestito dipende dall'importo del collaterale depositato. Potrai prendere in prestito fino al 75% del tuo collaterale e rimborsare in qualsiasi momento con gli interessi maturati."
 
 msgid "Buy"
-msgstr ""
+msgstr "Acquista"
 
 msgid ""
 "By adding liquidity you'll earn 0.25% of all trades on this pair\n"
@@ -192,19 +190,19 @@ msgid "Bypasses confirmation modals and allows high slippage trades. Use at your
 msgstr "Bypassa i modali di conferma e consente operazioni con uno slippage elevato. Usare a proprio rischio."
 
 msgid "Cancel"
-msgstr ""
+msgstr "Elimina"
 
 msgid "Cancel Order"
-msgstr ""
+msgstr "Elimina ordine"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "Eliminato"
 
 msgid "Change"
-msgstr ""
+msgstr "Cambia"
 
 msgid "Change Recipient"
-msgstr ""
+msgstr "Cambia destinatario"
 
 msgid "Chinese"
 msgstr ""
@@ -219,14 +217,12 @@ msgid "Clear History"
 msgstr "Cancella cronologia"
 
 msgid "Clear all"
-msgstr ""
+msgstr "Cancella tutto"
 
 msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
 "migrate"
 msgstr ""
-"Clicca su un pool di seguito, inserisci l'importo che vuoi migrare o seleziona max, e clicca su\n"
-"migra"
 
 msgid "Collateral"
 msgstr "Collaterale"
@@ -241,7 +237,7 @@ msgid "Confirm Adding Liquidity"
 msgstr "Conferma aggiunta di liquidità"
 
 msgid "Confirm Limit Order"
-msgstr ""
+msgstr "Conferma ordine limite"
 
 msgid "Confirm Staking"
 msgstr "Conferma staking"
@@ -256,10 +252,10 @@ msgid "Confirm Withdrawal"
 msgstr "Conferma prelievo"
 
 msgid "Confirm convert"
-msgstr ""
+msgstr "Conferma conversione"
 
 msgid "Confirm this transaction in your wallet"
-msgstr ""
+msgstr "Conferma la transazione nel wallet"
 
 msgid "Connect Wallet"
 msgstr "Collega wallet"
@@ -268,25 +264,25 @@ msgid "Connect to a wallet"
 msgstr "Collega a un wallet"
 
 msgid "Connect to wallet"
-msgstr ""
+msgstr "Collega al wallet"
 
 msgid "Convert"
-msgstr ""
+msgstr "Converti"
 
 msgid "Converting {0} {1} for {2} {3}"
-msgstr ""
+msgstr "Conversione {0} {1} per {2} {3}"
 
 msgid "Copied"
-msgstr ""
+msgstr "Copiato"
 
 msgid "Copy Address"
-msgstr ""
+msgstr "Copia indirizzo"
 
 msgid "Create Pool & Supply"
 msgstr "Crea pool e fornitura"
 
 msgid "Create a new Kashi Market"
-msgstr ""
+msgstr "Crea un nuovo mercato Kashi"
 
 msgid "Create a pair"
 msgstr "Crea una coppia"
@@ -295,7 +291,7 @@ msgid "Create pool"
 msgstr "Crea pool"
 
 msgid "Current"
-msgstr ""
+msgstr "Attuale"
 
 msgid "Deposit"
 msgstr "Deposita"
@@ -307,10 +303,10 @@ msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Deposita token in BentoBox per tutti i rendimenti"
 
 msgid "Deposit {0} into BentoBox"
-msgstr ""
+msgstr "Deposita {0} su BentoBox"
 
 msgid "Depositing {0} into BentoBox"
-msgstr ""
+msgstr "Deposito {0} su BentoBox"
 
 msgid "Dev"
 msgstr "Dev"
@@ -319,7 +315,7 @@ msgid "Disable Multihops"
 msgstr "Disattiva multihop"
 
 msgid "Disconnect"
-msgstr ""
+msgstr "Disconnetti"
 
 msgid "Discord"
 msgstr "Discord"
@@ -337,7 +333,7 @@ msgid "Documentation for users of Sushi."
 msgstr "Documentazione per gli utenti di Sushi."
 
 msgid "Either return to the {link}, or change to an available network."
-msgstr ""
+msgstr "Ritorna su {link} o passa a una rete disponibile."
 
 msgid "English"
 msgstr ""
@@ -364,38 +360,36 @@ msgid "Error"
 msgstr "Errore"
 
 msgid "Error connecting"
-msgstr ""
+msgstr "Errore di connessione"
 
 msgid "Error connecting. Try refreshing the page."
-msgstr ""
+msgstr "Errore di connessione. Prova ad aggiornare la pagina."
 
 msgid "Exchange Rate"
-msgstr ""
+msgstr "Tasso di cambio"
 
 msgid "Expanded results from inactive Token Lists"
-msgstr ""
+msgstr "Risultati ampliati da elenchi token inattivi"
 
 msgid "Expert Mode"
-msgstr ""
+msgstr "Modalità esperto"
 
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
 "that often result in bad rates and lost funds."
 msgstr ""
-"La modalità esperto disattiva il messaggio di conferma della transazione e consente operazioni con uno slippage elevato;\n"
-"spesso questo risulta in tassi svantaggiosi e perdite di fondi."
 
 msgid "Expiration is the time at which the order will become invalid"
-msgstr ""
+msgstr "La scadenza corrisponde al momento in cui l'ordine non risulta più valido"
 
 msgid "Expired"
-msgstr ""
+msgstr "Scaduto"
 
 msgid "Farm"
-msgstr ""
+msgstr "Farm"
 
 msgid "Filled"
-msgstr ""
+msgstr "Inserito"
 
 msgid "Find Pool"
 msgstr "Trova pool"
@@ -407,11 +401,6 @@ msgid ""
 "Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
 "SUSHI and any additional from fees."
 msgstr ""
-"Per ogni scambio sull'exchange da qualsiasi blockchain, lo 0,05% delle commissioni viene distribuito come SUSHI\n"
-"in proporzione alla tua quota del SushiBar. Quando metti in staking i tuoi SUSHI nel SushiBar, ricevi in cambio\n"
-"xSUSHI, un token che conferisce diritti di voto completamente componibile in grado di interagire con altri protocolli.\n"
-"Il tuo xSUSHI è costantemente composto, quando interrompi lo staking ricevi tutti i\n"
-"SUSHI depositati in origine ed eventuali altri derivanti dalle commissioni."
 
 msgid "French"
 msgstr ""
@@ -426,26 +415,27 @@ msgid ""
 "Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
 "all swaps from all chains)"
 msgstr ""
-"Ottieni diritti di governance con xSUSHI e guadagna un APR del 5% (0,05% di\n"
-"tutti gli scambi da tutte le blockchain)"
 
 msgid "German"
 msgstr ""
 
 msgid "Go Back"
-msgstr ""
+msgstr "Torna indietro"
 
 msgid "Hardware Wallet"
 msgstr "Hardware Wallet"
 
 msgid "Harmony Bridge"
-msgstr ""
+msgstr "Harmony Bridge"
 
 msgid "Harvest {0} SUSHI {1}"
+msgstr "Raccogli {0} SUSHI {1}"
+
+msgid "Harvest {0}/{1}"
 msgstr ""
 
 msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
-msgstr ""
+msgstr "Hai degli asset su cui vuoi guadagnare interessi aggiuntivi? Prestali in mercati isolati e ricevi interessi dai debitori."
 
 msgid "Health"
 msgstr "Salute"
@@ -460,22 +450,22 @@ msgid "Historical Total Locked: {0} SUSHI"
 msgstr "Totale storico bloccato: {0} SUSHI"
 
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
-msgstr ""
+msgstr "Se vuoi scegliere un mercato che non è ancora elencato, puoi utilizzare questo strumento per creare una nuova coppia."
 
 msgid "Import"
-msgstr ""
+msgstr "Importa"
 
 msgid "Import Pool"
 msgstr "Importa pool"
 
 msgid "In Bento:"
-msgstr ""
+msgstr "Su Bento:"
 
 msgid "In Wallet:"
-msgstr ""
+msgstr "Nel wallet:"
 
 msgid "Input is estimated. You will sell at most"
-msgstr ""
+msgstr "L'input è stimato. Venderai al massimo"
 
 msgid "Insufficient Balance"
 msgstr "Saldo insufficiente"
@@ -516,10 +506,10 @@ msgid "Korean"
 msgstr ""
 
 msgid "LTV"
-msgstr ""
+msgstr "LTV"
 
 msgid "Learn more about wallets"
-msgstr ""
+msgstr "Scopri di più sui wallet"
 
 msgid "Lend"
 msgstr "Presta"
@@ -537,10 +527,10 @@ msgid "Lent"
 msgstr "Prestato"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limite"
 
 msgid "Limit order"
-msgstr ""
+msgstr "Ordine limite"
 
 msgid "Liquidity"
 msgstr "Liquidità"
@@ -555,7 +545,7 @@ msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
 "withdrawing your liquidity"
-msgstr "I fornitori di liquidità guadagnano una commissione dello 0,25% su tutte le operazioni in proporzione alla loro quota del pool. Le commissioni vengono aggiunte al pool, maturano in tempo reale e possono essere riscattate prelevando la tua liquidità."
+msgstr ""
 
 msgid "Lists"
 msgstr "Liste"
@@ -564,10 +554,10 @@ msgid "Loading"
 msgstr "Caricamento"
 
 msgid "Loading Balance"
-msgstr ""
+msgstr "Caricamento saldo"
 
 msgid "Loading balance"
-msgstr ""
+msgstr "Caricamento saldo"
 
 msgid "Loading your {exchange} liquidity positions"
 msgstr "Caricamento delle tue posizioni di liquidità su {exchange}"
@@ -584,25 +574,25 @@ msgid ""
 msgstr ""
 
 msgid "MEV Shield by Archer DAO"
-msgstr ""
+msgstr "MEV Shield da Archer DAO"
 
 msgid "Manage"
 msgstr "Gestisci"
 
 msgid "Manage Token Lists"
-msgstr ""
+msgstr "Gestisci elenchi token"
 
 msgid "Manage this pool"
 msgstr "Gestisci questo pool"
 
 msgid "Market"
-msgstr ""
+msgstr "Mercato"
 
 msgid "Markets"
 msgstr "Mercati"
 
 msgid "Matic Bridge"
-msgstr ""
+msgstr "Matic Bridge"
 
 msgid "Max"
 msgstr "Massimo"
@@ -611,7 +601,7 @@ msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Massimizza il rendimento facendo staking di SUSHI per xSUSHI"
 
 msgid "Maximum sent"
-msgstr ""
+msgstr "Massimo inviato"
 
 msgid "Migrate"
 msgstr "Migra"
@@ -626,10 +616,10 @@ msgid "Migration is done in one-click using your signature (permit)"
 msgstr "La migrazione viene eseguita in un click usando la tua firma (permesso)"
 
 msgid "Miner Tip"
-msgstr ""
+msgstr "Consiglio miner"
 
 msgid "Minimum Received"
-msgstr ""
+msgstr "Minimo ricevuto"
 
 msgid "Minimum received"
 msgstr "Minimo ricevuto"
@@ -638,22 +628,22 @@ msgid "Miso"
 msgstr ""
 
 msgid "My Liquidity Positions"
-msgstr ""
+msgstr "Le mie posizioni di liquidità"
 
 msgid "My Orders"
-msgstr ""
+msgstr "I miei ordini"
 
 msgid "My SUSHI"
-msgstr ""
+msgstr "Il mio SUSHI"
 
 msgid "Network not supported yet"
-msgstr ""
+msgstr "Rete non ancora supportata"
 
 msgid "Never"
-msgstr ""
+msgstr "Mai"
 
 msgid "New to Ethereum?"
-msgstr ""
+msgstr "Non conosci Ethereum?"
 
 msgid "No Liquidity found"
 msgstr "Nessuna liquidità trovata"
@@ -662,10 +652,10 @@ msgid "No liquidity found to do swap"
 msgstr "Nessuna liquidità trovata per scambiare"
 
 msgid "No liquidity was found."
-msgstr ""
+msgstr "Nessuna liquidità trovata."
 
 msgid "No order history"
-msgstr ""
+msgstr "Nessuna cronologia ordini"
 
 msgid "No pool found"
 msgstr "Nessun pool trovato"
@@ -692,7 +682,7 @@ msgid "Oops! An unknown error occurred. Please refresh the page, or visit from a
 msgstr "Ops! Si è verificato un Errore imprevisto. Aggiorna la pagina o visita da un altro browser o dispositivo"
 
 msgid "Open Orders"
-msgstr ""
+msgstr "Ordini aperti"
 
 msgid "Open Source"
 msgstr "Open Source"
@@ -704,10 +694,10 @@ msgid "Oracle"
 msgstr "Oracolo"
 
 msgid "Order Expiration"
-msgstr ""
+msgstr "Scadenza ordini"
 
 msgid "Order History"
-msgstr ""
+msgstr "Cronologia ordini"
 
 msgid ""
 "Output is estimated. If the price changes by more than {0}% your transaction\n"
@@ -718,16 +708,19 @@ msgid "Output is estimated. If the price changes by more than {0}% your transact
 msgstr "L'output è stimato. Se il prezzo cambia per più del {0}% la tua transazione verrà annullata."
 
 msgid "Output is estimated. You will receive at least"
-msgstr ""
+msgstr "L'output è stimato. Riceverai almeno"
 
 msgid "Output will be sent to"
+msgstr "L'output verrà inviato a"
+
+msgid "Palm Bridge"
 msgstr ""
 
 msgid "Pay"
-msgstr ""
+msgstr "Paga"
 
 msgid "Pay from:"
-msgstr ""
+msgstr "Paga da:"
 
 msgid "Pending"
 msgstr "In attesa"
@@ -736,16 +729,16 @@ msgid "Pending Treasury Transfer"
 msgstr "In attesa del trasferimento dalla tesoreria"
 
 msgid "Please connect to the appropriate Ethereum network."
-msgstr ""
+msgstr "Connetti alla rete Ethereum appropriata."
 
 msgid "Please enter an amount"
-msgstr ""
+msgstr "Inserisci un importo"
 
 msgid "Please note that the recipient address is different from the connected wallet address."
 msgstr ""
 
 msgid "Please refer to the"
-msgstr ""
+msgstr "Fai riferimento a"
 
 msgid "Pool"
 msgstr "Pool"
@@ -778,19 +771,19 @@ msgid "Price Updated"
 msgstr "Prezzo aggiornato"
 
 msgid "Rate"
-msgstr ""
+msgstr "Rate"
 
 msgid "Rates"
 msgstr "Tassi"
 
 msgid "Receive"
-msgstr ""
+msgstr "Ricevi"
 
 msgid "Recent Transactions"
-msgstr ""
+msgstr "Transazioni recenti"
 
 msgid "Recipient"
-msgstr ""
+msgstr "Destinatario"
 
 msgid "Remove"
 msgstr "Rimuovi"
@@ -799,10 +792,10 @@ msgid "Remove Liquidity"
 msgstr "Rimuovi liquidità"
 
 msgid "Remove recipient"
-msgstr ""
+msgstr "Rimuovi destinatario"
 
 msgid "Remove {0} {1} and {2} {3}"
-msgstr ""
+msgstr "Rimuovi {0} {1} e {2} {3}"
 
 msgid "Removing {0} {1} and {2} {3}"
 msgstr "Rimuovi {0} {1} e {2} {3}"
@@ -814,13 +807,13 @@ msgid "Restricts swaps to direct pairs only."
 msgstr "Limita gli scambi solo alle coppie dirette."
 
 msgid "Review Limit Order"
-msgstr ""
+msgstr "Riesamina ordine limite"
 
 msgid "Rewards"
-msgstr ""
+msgstr "Ricompense"
 
 msgid "Roll it back - this feature is not yet supported on {0}."
-msgstr ""
+msgstr "Rollback - questa funzione non è ancora supportata su {0}."
 
 msgid "Romanian"
 msgstr ""
@@ -835,19 +828,19 @@ msgid "Russian"
 msgstr ""
 
 msgid "SLP"
-msgstr ""
+msgstr "SLP"
 
 msgid "Search name or paste address"
 msgstr "Cerca nome o incolla indirizzo"
 
 msgid "Select a asset token"
-msgstr ""
+msgstr "Seleziona un asset token"
 
 msgid "Select a collateral token"
-msgstr ""
+msgstr "Seleziona un token collaterale"
 
 msgid "Select a rate"
-msgstr ""
+msgstr "Seleziona un valore"
 
 msgid "Select a token"
 msgstr "Seleziona un token"
@@ -856,13 +849,13 @@ msgid "Select a token to find your liquidity"
 msgstr "Seleziona un token per trovare la tua liquidità"
 
 msgid "Select an order expiration"
-msgstr ""
+msgstr "Seleziona una scadenza dell'ordine"
 
 msgid "Send to:"
-msgstr ""
+msgstr "Invia a:"
 
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
-msgstr ""
+msgstr "Invia la transazione in privato per evitare attacchi front-running e sandwich. Richiede un suggerimento per incentivare i miner"
 
 msgid "Share of Pool"
 msgstr "Quota del pool"
@@ -874,7 +867,7 @@ msgid "Slippage tolerance"
 msgstr "Tolleranza slippage"
 
 msgid "Slippage tolerance..."
-msgstr ""
+msgstr "Tolleranza slippage..."
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "Qualcosa è andato storto durante la firma dell'approvazione. Questo è previsto per gli hardware wallet, come Trezor e Ledger. Clicca di nuovo per usare il metodo alternativo"
@@ -912,8 +905,6 @@ msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
 msgstr ""
-"Fai staking in xSUSHI e aggiungi collaterale come axSUSHI su Aave tutto in\n"
-"un click."
 
 msgid "Staking APR"
 msgstr "APR di staking"
@@ -925,7 +916,7 @@ msgid "Sushi is a supporter of Open Source."
 msgstr "Sushi è un sostenitore dell'Open Source."
 
 msgid "SushiSwap"
-msgstr ""
+msgstr "SushiSwap"
 
 msgid "Swap"
 msgstr "Scambia"
@@ -954,43 +945,43 @@ msgid ""
 msgstr ""
 
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
-msgstr ""
+msgstr "L'invariante di Uniswap x*y=k non è stata soddisfatta dallo scambio. Questo di solito significa che uno dei token che stai scambiando incorpora un comportamento personalizzato durante il trasferimento."
 
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "La differenza tra il prezzo di mercato e il prezzo stimato a causa delle dimensioni dell'operazione."
 
 msgid "The input token cannot be transferred. There may be an issue with the input token."
-msgstr ""
+msgstr "Non è stato possibile trasferire il token di input; potrebbe esserci un problema con il token di input."
 
 msgid "The onchain oracle that tracks the pricing for this pair"
 msgstr "L'oracolo on-chain che traccia i prezzi per questa coppia"
 
 msgid "The output token cannot be transferred. There may be an issue with the output token."
-msgstr ""
+msgstr "Non è stato possibile trasferire il token di output; potrebbe esserci un problema con il token di output."
 
 msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
-msgstr ""
+msgstr "Non è stato possibile inviare la transazione perché il termine è scaduto. Verifica che il termine della transazione non sia troppo breve."
 
 msgid "Things you can do with your SUSHI"
 msgstr "Cose che puoi fare con i tuoi SUSHI"
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
-msgstr ""
+msgstr "Questo token non compare negli elenchi di token attivi. Assicurati che questo sia il token da usare nell'operazione."
 
 msgid "This transaction is below market rate"
-msgstr ""
+msgstr "Questa transazione è inferiore al valore di mercato"
 
 msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
-msgstr ""
+msgstr "Questa transazione non andrà a buon fine a causa del movimento del prezzo. Prova ad aumentare la tolleranza allo slippage."
 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "Questa transazione non andrà a buon fine a causa del movimento del prezzo o della commissione sul trasferimento. Prova ad aumentare la tolleranza allo slippage."
 
 msgid "Tip to encourage miners to select this transaction."
-msgstr ""
+msgstr "Consiglio per incoraggiare i miner a selezionare questa transazione."
 
 msgid "Tip:"
-msgstr ""
+msgstr "Consiglio:"
 
 msgid "To"
 msgstr ""
@@ -1019,13 +1010,13 @@ msgid "Total"
 msgstr "Totale"
 
 msgid "Transaction History {0}"
-msgstr ""
+msgstr "Storico delle transazioni {0}"
 
 msgid "Transaction Settings"
 msgstr "Impostazioni transazione"
 
 msgid "Transaction Submitted"
-msgstr ""
+msgstr "Transazione inviata"
 
 msgid "Transaction deadline"
 msgstr "Scadenza transazione"
@@ -1037,7 +1028,7 @@ msgid "Turn On Expert Mode"
 msgstr "Attiva modalità esperto"
 
 msgid "Unknown error{0}. Try increasing your slippage tolerance."
-msgstr ""
+msgstr "Errore sconosciuto{0}. Prova ad aumentare la tolleranza allo slippage."
 
 msgid "Unstake"
 msgstr "Togli dallo staking"
@@ -1052,28 +1043,28 @@ msgid "Unwrap"
 msgstr "Unwrap"
 
 msgid "Use SUSHI"
-msgstr ""
+msgstr "Usa SUSHI"
 
 msgid "Use this tool to find pairs that don't automatically appear in the interface"
-msgstr ""
+msgstr "Usa questo strumento per trovare coppie che non appaiono automaticamente nell’interfaccia"
 
 msgid "Use xSUSHI"
-msgstr ""
+msgstr "Usa xSUSHI"
 
 msgid "Used"
-msgstr ""
+msgstr "Utilizzato"
 
 msgid "Vesting"
 msgstr "Vesting"
 
 msgid "Vesting is executed within the guidelines selected by the community in"
-msgstr ""
+msgstr "Il vesting viene eseguito secondo le linee guida selezionate dalla community in"
 
 msgid "Vietnamese"
 msgstr ""
 
 msgid "View Liquidity Positions"
-msgstr ""
+msgstr "Mostra posizioni di liquidità"
 
 msgid "View Stats"
 msgstr "Visualizza statistiche"
@@ -1082,7 +1073,7 @@ msgid "View on explorer"
 msgstr "Visualizza sull'explorer"
 
 msgid "Waiting for Confirmation"
-msgstr ""
+msgstr "In attesa di conferma"
 
 msgid "Wallet"
 msgstr "Wallet"
@@ -1091,7 +1082,7 @@ msgid "Wallet Balance"
 msgstr "Saldo del wallet"
 
 msgid "Weekly unlocks from the vesting period."
-msgstr ""
+msgstr "Sblocchi settimanali dal periodo di vesting."
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "Quando crei una coppia sei il primo fornitore di liquidità. Il rapporto dei token che aggiungi determinerà il prezzo di questo pool. Quando sei soddisfatto con il prezzo clicca su fornisci per verificare"
@@ -1109,7 +1100,7 @@ msgid "Yesterday's APR"
 msgstr "APR di ieri"
 
 msgid "You Pay:"
-msgstr ""
+msgstr "Paghi:"
 
 msgid "You are creating a pool"
 msgstr "Stai creando un pool"
@@ -1124,19 +1115,19 @@ msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Devi prima approvare i token LP e poi migrarli"
 
 msgid "You pay"
-msgstr ""
+msgstr "Paghi"
 
 msgid "You receive"
-msgstr ""
+msgstr "Ricevi"
 
 msgid "You receive:"
-msgstr ""
+msgstr "Ricevi:"
 
 msgid "You will receive"
 msgstr "Riceverai"
 
 msgid "Your"
-msgstr ""
+msgstr "Il tuo/I tuoi"
 
 msgid "Your Claimable SUSHI this Week"
 msgstr "I tuoi SUSHI riscattabili questa settimana"
@@ -1175,31 +1166,31 @@ msgid "Your transaction will revert if there is a large, unfavorable price movem
 msgstr "La tua transazione verrà annullata in caso di un forte movimento del prezzo sfavorevole prima della conferma."
 
 msgid "Your transactions will appear here..."
-msgstr ""
+msgstr "Le tue transazioni appariranno qui..."
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "La tua liquidità in {0}/{1} su {exchange} diventerà liquidità in {2}/{3} su Sushiswap."
 
 msgid "Zap"
-msgstr ""
+msgstr "Zap"
 
 msgid "above"
-msgstr ""
+msgstr "superiore"
 
 msgid "below"
-msgstr ""
+msgstr "inferiore"
 
 msgid "failed to load"
 msgstr "impossibile caricare"
 
 msgid "for deliberations on additional points."
-msgstr ""
+msgstr "per discussione su ulteriori punti."
 
 msgid "forum discussion"
-msgstr ""
+msgstr "discussione sul forum"
 
 msgid "home page"
-msgstr ""
+msgstr "home page"
 
 msgid "loading..."
 msgstr "caricamento..."
@@ -1208,13 +1199,13 @@ msgid "minutes"
 msgstr "minuti"
 
 msgid "or the transaction will revert."
-msgstr ""
+msgstr "o la transazione verrà annullata."
 
 msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"
-msgstr ""
+msgstr "Commissione xSUSHI"
 
 #. js-lingui:icu=%7B0%2C+plural%2C+one+%7BToken%7D+many+%7BTokens%7D%7D&pluralize_on=0
 msgid "Token"
@@ -1229,10 +1220,10 @@ msgid "{0} Strategy"
 msgstr "Strategia {0}"
 
 msgid "{0} {1} per {2}"
-msgstr ""
+msgstr "{0} {1} per {2}"
 
 msgid "{0} {sign} market rate"
-msgstr ""
+msgstr "{0} {sign} valore di mercato"
 
 msgid "{0}/{1} Burned"
-msgstr ""
+msgstr "{0}/{1} distrutti"

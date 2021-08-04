@@ -17,23 +17,21 @@ msgid ""
 "(COMING SOON) Accrue automatic yield through flash loans and\n"
 "SUSHI strategies"
 msgstr ""
-"（即将推出）通过闪电贷和\n"
-"SUSHI策略累积自动获取收益"
 
 msgid "1 Hour"
-msgstr ""
+msgstr "1 小时"
 
 msgid "1 Week"
-msgstr ""
+msgstr "1 周"
 
 msgid "24 Hours"
-msgstr ""
+msgstr "24 小时"
 
 msgid "30 Days"
-msgstr ""
+msgstr "30 天"
 
 msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
-msgstr ""
+msgstr "每笔交易的一部分 (0.05%) 将作为协议奖励给 xSUSHI 持有人。"
 
 msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
 msgstr "每笔交易的0.25%都会分给协议的流动性提供者。"
@@ -51,7 +49,7 @@ msgid "Add Liquidity"
 msgstr "添加流动性"
 
 msgid "Add SUSHI to your MetaMask wallet"
-msgstr ""
+msgstr "将 SUSHI 添加到您的 MetaMask 钱包中"
 
 msgid "Add collateral in order to borrow assets"
 msgstr "添加抵押品以借出资产"
@@ -60,25 +58,25 @@ msgid "Add liquidity"
 msgstr "添加流动性"
 
 msgid "Add xSUSHI to your MetaMask wallet"
-msgstr ""
+msgstr "将 xSUSHI 添加到您的 MetaMask 钱包中"
 
 msgid "Add {0} to MetaMask"
-msgstr ""
+msgstr "将 {0} 添加到 MetaMask"
 
 msgid "Add {0} {1} and {2} {3}"
-msgstr ""
+msgstr "添加 {0} {1} 和 {2} {3}"
 
 msgid "Added"
-msgstr ""
+msgstr "已添加"
 
 msgid "Additional records and weekly merkle updates can be found on"
-msgstr ""
+msgstr "其他记录和每周 merkle 的更新可以在以下网站找到"
 
 msgid "Amount of Tokens"
 msgstr "代币数量"
 
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
-msgstr ""
+msgstr "在试图执行该兑换时发生了错误。您可能需要增加您的可容忍滑点。如果仍然无法操作，说明可能是您所交易的代币存在兼容性问题。注意：转账和 rebase 代币的费率与 Uniswap V3 不一样。"
 
 msgid "Analytics"
 msgstr "分析界面"
@@ -96,7 +94,7 @@ msgid "Approve Kashi"
 msgstr "批准Kashi"
 
 msgid "Approve Limit Order"
-msgstr ""
+msgstr "批准限价单"
 
 msgid "Approve {0}"
 msgstr "批准{0}"
@@ -114,7 +112,7 @@ msgid "Approving Inari to spend {0}"
 msgstr ""
 
 msgid "Approving Limit Order"
-msgstr ""
+msgstr "正在批准限价单"
 
 msgid "Approving {0}"
 msgstr "批准{0}"
@@ -123,22 +121,22 @@ msgid "Are you sure?"
 msgstr "您确定吗？"
 
 msgid "Auto"
-msgstr ""
+msgstr "自动"
 
 msgid "Available"
 msgstr "可用的"
 
 msgid "Available Networks"
-msgstr ""
+msgstr "可用网络"
 
 msgid "Back to Limit Orders"
-msgstr ""
+msgstr "返回到限价单"
 
 msgid "Balance"
 msgstr "余额"
 
 msgid "Balance:"
-msgstr ""
+msgstr "余额："
 
 msgid "Bento Balance: {0}"
 msgstr "Bento余额： {0}"
@@ -180,7 +178,7 @@ msgid "Borrowing allows you to obtain liquidity without selling. Your borrow lim
 msgstr "借款让您在不出售资产的情况下获得流动性。您的借款上限取决于您抵押物的价值。您可以借出您抵押品价值的75%，随时可以还款，并附上利息。"
 
 msgid "Buy"
-msgstr ""
+msgstr "购买"
 
 msgid ""
 "By adding liquidity you'll earn 0.25% of all trades on this pair\n"
@@ -192,19 +190,19 @@ msgid "Bypasses confirmation modals and allows high slippage trades. Use at your
 msgstr "跳过确认、接受交易高滑点。使用时风险自担。"
 
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 msgid "Cancel Order"
-msgstr ""
+msgstr "取消订单"
 
 msgid "Cancelled"
-msgstr ""
+msgstr "已取消"
 
 msgid "Change"
-msgstr ""
+msgstr "更改"
 
 msgid "Change Recipient"
-msgstr ""
+msgstr "更改收款人"
 
 msgid "Chinese"
 msgstr ""
@@ -219,12 +217,12 @@ msgid "Clear History"
 msgstr "清除历史"
 
 msgid "Clear all"
-msgstr ""
+msgstr "清除所有"
 
 msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click\n"
 "migrate"
-msgstr "点击下面的一个池子，输入您想迁移的数量或选择最大，然后点击/nmigrate"
+msgstr ""
 
 msgid "Collateral"
 msgstr "抵押品"
@@ -239,7 +237,7 @@ msgid "Confirm Adding Liquidity"
 msgstr "确认添加流动性"
 
 msgid "Confirm Limit Order"
-msgstr ""
+msgstr "确认限价单"
 
 msgid "Confirm Staking"
 msgstr "确认质押"
@@ -254,10 +252,10 @@ msgid "Confirm Withdrawal"
 msgstr "确认提取"
 
 msgid "Confirm convert"
-msgstr ""
+msgstr "确认转换"
 
 msgid "Confirm this transaction in your wallet"
-msgstr ""
+msgstr "在您的钱包中确认这笔交易"
 
 msgid "Connect Wallet"
 msgstr "连接钱包"
@@ -266,25 +264,25 @@ msgid "Connect to a wallet"
 msgstr "连接钱包"
 
 msgid "Connect to wallet"
-msgstr ""
+msgstr "连接到钱包"
 
 msgid "Convert"
-msgstr ""
+msgstr "转换"
 
 msgid "Converting {0} {1} for {2} {3}"
-msgstr ""
+msgstr "将 {0} {1} 转换为 {2} {3}"
 
 msgid "Copied"
-msgstr ""
+msgstr "已复制"
 
 msgid "Copy Address"
-msgstr ""
+msgstr "复制地址"
 
 msgid "Create Pool & Supply"
 msgstr "创建池和供应"
 
 msgid "Create a new Kashi Market"
-msgstr ""
+msgstr "创建一个新的 Kashi 市场"
 
 msgid "Create a pair"
 msgstr "创建交易对"
@@ -293,7 +291,7 @@ msgid "Create pool"
 msgstr "创建池"
 
 msgid "Current"
-msgstr ""
+msgstr "当前"
 
 msgid "Deposit"
 msgstr "存款"
@@ -305,10 +303,10 @@ msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "将代币存入BentoBox，以获得所有收益。"
 
 msgid "Deposit {0} into BentoBox"
-msgstr ""
+msgstr "存入 {0} BentoBox"
 
 msgid "Depositing {0} into BentoBox"
-msgstr ""
+msgstr "正在存入 {0} BentoBox"
 
 msgid "Dev"
 msgstr "开发人员"
@@ -317,7 +315,7 @@ msgid "Disable Multihops"
 msgstr "禁用Multihops"
 
 msgid "Disconnect"
-msgstr ""
+msgstr "断开连接"
 
 msgid "Discord"
 msgstr "Discord"
@@ -335,7 +333,7 @@ msgid "Documentation for users of Sushi."
 msgstr "Sushi用户文档。"
 
 msgid "Either return to the {link}, or change to an available network."
-msgstr ""
+msgstr "返回到 {link}，或更换到可用的网络。"
 
 msgid "English"
 msgstr ""
@@ -362,36 +360,36 @@ msgid "Error"
 msgstr "错误"
 
 msgid "Error connecting"
-msgstr ""
+msgstr "连接错误"
 
 msgid "Error connecting. Try refreshing the page."
-msgstr ""
+msgstr "连接错误。尝试刷新页面。"
 
 msgid "Exchange Rate"
-msgstr ""
+msgstr "汇率"
 
 msgid "Expanded results from inactive Token Lists"
-msgstr ""
+msgstr "非活跃代币列表的拓展结果"
 
 msgid "Expert Mode"
-msgstr ""
+msgstr "专家模式"
 
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades\n"
 "that often result in bad rates and lost funds."
-msgstr "专家模式关闭确认交易弹出、允许高交易滑点经常会导致不好的价格和资金的丢失。"
+msgstr ""
 
 msgid "Expiration is the time at which the order will become invalid"
-msgstr ""
+msgstr "过期是指订单失效的时间"
 
 msgid "Expired"
-msgstr ""
+msgstr "过期"
 
 msgid "Farm"
-msgstr ""
+msgstr "挖矿"
 
 msgid "Filled"
-msgstr ""
+msgstr "填入"
 
 msgid "Find Pool"
 msgstr "查找池"
@@ -402,7 +400,7 @@ msgid ""
 "xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
 "Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
 "SUSHI and any additional from fees."
-msgstr "每条链上每笔交易手续费的0.05%都分给SushiBar（以SUSHI的形式）。当您的SUSHI质押在SushiBar的时候，您将会收到xSUSHI，它有治理权及可以与其它协议交互。xSUSHI可持续复利，当您解除质押时，您将收到质押时的SUSHI及手续费。"
+msgstr ""
 
 msgid "French"
 msgstr ""
@@ -416,25 +414,28 @@ msgstr "在不减少资产的情况下获得代币的敞口。杠杆将使您能
 msgid ""
 "Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
 "all swaps from all chains)"
-msgstr "通过xSUSHI获得治理权，并获得5%的年利率（来自所有链上交易手续费的0.05%）"
+msgstr ""
 
 msgid "German"
 msgstr ""
 
 msgid "Go Back"
-msgstr ""
+msgstr "返回"
 
 msgid "Hardware Wallet"
 msgstr "硬件钱包"
 
 msgid "Harmony Bridge"
-msgstr ""
+msgstr "Harmony 桥"
 
 msgid "Harvest {0} SUSHI {1}"
+msgstr "收获 {0} SUSHI {1}"
+
+msgid "Harvest {0}/{1}"
 msgstr ""
 
 msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
-msgstr ""
+msgstr "手头持有资产并希望借此赚取额外利息？把它们借给孤立的市场，从借款人处赚取利息。"
 
 msgid "Health"
 msgstr "健康值"
@@ -449,22 +450,22 @@ msgid "Historical Total Locked: {0} SUSHI"
 msgstr "锁仓的总数：{0}SUSHI"
 
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
-msgstr ""
+msgstr "如果您想要向尚未上架的市场供应，您可以使用这个工具来创建一个新的交易对。"
 
 msgid "Import"
-msgstr ""
+msgstr "导入"
 
 msgid "Import Pool"
 msgstr "导入流动性池"
 
 msgid "In Bento:"
-msgstr ""
+msgstr "在 Bento："
 
 msgid "In Wallet:"
-msgstr ""
+msgstr "在钱包中："
 
 msgid "Input is estimated. You will sell at most"
-msgstr ""
+msgstr "输入是估计值。您最多可以卖出"
 
 msgid "Insufficient Balance"
 msgstr "余额不足"
@@ -505,10 +506,10 @@ msgid "Korean"
 msgstr ""
 
 msgid "LTV"
-msgstr ""
+msgstr "LTV（质押率）"
 
 msgid "Learn more about wallets"
-msgstr ""
+msgstr "了解更多关于钱包的信息"
 
 msgid "Lend"
 msgstr "借贷"
@@ -526,10 +527,10 @@ msgid "Lent"
 msgstr "借出"
 
 msgid "Limit"
-msgstr ""
+msgstr "限价"
 
 msgid "Limit order"
-msgstr ""
+msgstr "限价单"
 
 msgid "Liquidity"
 msgstr "流动性"
@@ -544,7 +545,7 @@ msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
 "withdrawing your liquidity"
-msgstr "流动性提供者(LP)可按比例收取流动性池中交易额的0.25%作为手续费收入。手续费收入将被直接实时添加至流动性池，在撤出流动性时可收取。"
+msgstr ""
 
 msgid "Lists"
 msgstr "清单"
@@ -553,10 +554,10 @@ msgid "Loading"
 msgstr "载入中"
 
 msgid "Loading Balance"
-msgstr ""
+msgstr "加载余额"
 
 msgid "Loading balance"
-msgstr ""
+msgstr "加载余额"
 
 msgid "Loading your {exchange} liquidity positions"
 msgstr "正在加载您的{exchange}您的流动性仓位"
@@ -573,25 +574,25 @@ msgid ""
 msgstr ""
 
 msgid "MEV Shield by Archer DAO"
-msgstr ""
+msgstr "Archer DAO 的 MEV Shield"
 
 msgid "Manage"
 msgstr "管理"
 
 msgid "Manage Token Lists"
-msgstr ""
+msgstr "管理代币列表"
 
 msgid "Manage this pool"
 msgstr "管理这个池子"
 
 msgid "Market"
-msgstr ""
+msgstr "市场"
 
 msgid "Markets"
 msgstr "市场"
 
 msgid "Matic Bridge"
-msgstr ""
+msgstr "Matic 桥"
 
 msgid "Max"
 msgstr "最大数量"
@@ -600,7 +601,7 @@ msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "将SUSHI质押成xSUSHI最大化收益"
 
 msgid "Maximum sent"
-msgstr ""
+msgstr "最大发送量"
 
 msgid "Migrate"
 msgstr "迁移"
@@ -615,10 +616,10 @@ msgid "Migration is done in one-click using your signature (permit)"
 msgstr "使用您的签名(许可证)，一键完成迁移"
 
 msgid "Miner Tip"
-msgstr ""
+msgstr "矿工小费"
 
 msgid "Minimum Received"
-msgstr ""
+msgstr "最少可获得的数量"
 
 msgid "Minimum received"
 msgstr "最少可获得的数量"
@@ -627,22 +628,22 @@ msgid "Miso"
 msgstr ""
 
 msgid "My Liquidity Positions"
-msgstr ""
+msgstr "我的 LP"
 
 msgid "My Orders"
-msgstr ""
+msgstr "我的订单"
 
 msgid "My SUSHI"
-msgstr ""
+msgstr "我的 SUSHI"
 
 msgid "Network not supported yet"
-msgstr ""
+msgstr "尚不支持的网络"
 
 msgid "Never"
-msgstr ""
+msgstr "从不"
 
 msgid "New to Ethereum?"
-msgstr ""
+msgstr "以太坊新手？"
 
 msgid "No Liquidity found"
 msgstr "没有发现流动性"
@@ -651,10 +652,10 @@ msgid "No liquidity found to do swap"
 msgstr "该交换没有流动性"
 
 msgid "No liquidity was found."
-msgstr ""
+msgstr "未发现流动性。"
 
 msgid "No order history"
-msgstr ""
+msgstr "没有订单记录"
 
 msgid "No pool found"
 msgstr "未找到池"
@@ -681,7 +682,7 @@ msgid "Oops! An unknown error occurred. Please refresh the page, or visit from a
 msgstr "糟糕！出现未知错误。请刷新页面，或从其他浏览器或设备访问"
 
 msgid "Open Orders"
-msgstr ""
+msgstr "开仓订单"
 
 msgid "Open Source"
 msgstr "开源"
@@ -693,10 +694,10 @@ msgid "Oracle"
 msgstr "预言机"
 
 msgid "Order Expiration"
-msgstr ""
+msgstr "订单到期"
 
 msgid "Order History"
-msgstr ""
+msgstr "订单历史"
 
 msgid ""
 "Output is estimated. If the price changes by more than {0}% your transaction\n"
@@ -707,16 +708,19 @@ msgid "Output is estimated. If the price changes by more than {0}% your transact
 msgstr "估计输出。如果价格变化超过{0} ％，您的交易将被退回。"
 
 msgid "Output is estimated. You will receive at least"
-msgstr ""
+msgstr "输出是估计值。您将至少收到"
 
 msgid "Output will be sent to"
+msgstr "输出将发送至"
+
+msgid "Palm Bridge"
 msgstr ""
 
 msgid "Pay"
-msgstr ""
+msgstr "支付"
 
 msgid "Pay from:"
-msgstr ""
+msgstr "付款方式："
 
 msgid "Pending"
 msgstr "处理中"
@@ -725,16 +729,16 @@ msgid "Pending Treasury Transfer"
 msgstr "等待金库转账"
 
 msgid "Please connect to the appropriate Ethereum network."
-msgstr ""
+msgstr "请连接到对应的以太坊网络。"
 
 msgid "Please enter an amount"
-msgstr ""
+msgstr "请输入金额"
 
 msgid "Please note that the recipient address is different from the connected wallet address."
 msgstr ""
 
 msgid "Please refer to the"
-msgstr ""
+msgstr "请参考"
 
 msgid "Pool"
 msgstr "资金池"
@@ -767,19 +771,19 @@ msgid "Price Updated"
 msgstr "价格更新"
 
 msgid "Rate"
-msgstr ""
+msgstr "费率"
 
 msgid "Rates"
 msgstr "费率"
 
 msgid "Receive"
-msgstr ""
+msgstr "收到"
 
 msgid "Recent Transactions"
-msgstr ""
+msgstr "最近交易"
 
 msgid "Recipient"
-msgstr ""
+msgstr "收款人"
 
 msgid "Remove"
 msgstr "去除"
@@ -788,10 +792,10 @@ msgid "Remove Liquidity"
 msgstr "删除流动金"
 
 msgid "Remove recipient"
-msgstr ""
+msgstr "删除收款人"
 
 msgid "Remove {0} {1} and {2} {3}"
-msgstr ""
+msgstr "移除 {0} {1} 和 {2} {3}"
 
 msgid "Removing {0} {1} and {2} {3}"
 msgstr "移除{0}{1}和{2}{3}"
@@ -803,13 +807,13 @@ msgid "Restricts swaps to direct pairs only."
 msgstr "限制只交易直接交易对。"
 
 msgid "Review Limit Order"
-msgstr ""
+msgstr "查看限价单"
 
 msgid "Rewards"
-msgstr ""
+msgstr "奖励"
 
 msgid "Roll it back - this feature is not yet supported on {0}."
-msgstr ""
+msgstr "回滚 - {0}尚不支持此功能。"
 
 msgid "Romanian"
 msgstr ""
@@ -824,19 +828,19 @@ msgid "Russian"
 msgstr ""
 
 msgid "SLP"
-msgstr ""
+msgstr "SLP"
 
 msgid "Search name or paste address"
 msgstr "搜索名称或粘贴地址"
 
 msgid "Select a asset token"
-msgstr ""
+msgstr "选择资产代币"
 
 msgid "Select a collateral token"
-msgstr ""
+msgstr "选择抵押代币"
 
 msgid "Select a rate"
-msgstr ""
+msgstr "选择费率"
 
 msgid "Select a token"
 msgstr "选择通证"
@@ -845,13 +849,13 @@ msgid "Select a token to find your liquidity"
 msgstr "选择代币以找到您的流动性"
 
 msgid "Select an order expiration"
-msgstr ""
+msgstr "选择订单到期时间"
 
 msgid "Send to:"
-msgstr ""
+msgstr "发送至："
 
 msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
-msgstr ""
+msgstr "私下发送交易，以避免抢跑和三明治夹击。需要小费从而激励矿工打包"
 
 msgid "Share of Pool"
 msgstr "池子里的份额"
@@ -863,7 +867,7 @@ msgid "Slippage tolerance"
 msgstr "可容忍滑点"
 
 msgid "Slippage tolerance..."
-msgstr ""
+msgstr "可容忍滑点..."
 
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
 msgstr "在签署批准时出现错误。可能是硬件钱包例如Trezor和Ledger。再次点击，将使用倒退的办法。"
@@ -901,8 +905,6 @@ msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
 "one click"
 msgstr ""
-"放入xSUSHI进行抵押，将抵押品作为axSUSHI添加到\n"
-"一键中"
 
 msgid "Staking APR"
 msgstr "质押APR"
@@ -914,7 +916,7 @@ msgid "Sushi is a supporter of Open Source."
 msgstr "Sushi是开源协议的支持者。"
 
 msgid "SushiSwap"
-msgstr ""
+msgstr "SushiSwap"
 
 msgid "Swap"
 msgstr "兑换"
@@ -943,43 +945,43 @@ msgid ""
 msgstr ""
 
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
-msgstr ""
+msgstr "该交易不满足 Uniswap 恒定乘积公式 x*y=k。这通常意味着您正在交换的其中一个代币在转账时包含了自定义行为。"
 
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "因为交易规模所导致的市场价格和预计价格之间的差距。"
 
 msgid "The input token cannot be transferred. There may be an issue with the input token."
-msgstr ""
+msgstr "输入的代币不能被转账。这可能和您输入的代币有关系。"
 
 msgid "The onchain oracle that tracks the pricing for this pair"
 msgstr "链上预言机追踪这个交易对的价格"
 
 msgid "The output token cannot be transferred. There may be an issue with the output token."
-msgstr ""
+msgstr "输出的代币不能被转账。这可能和您输出的代币有关系。"
 
 msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
-msgstr ""
+msgstr "由于截止时间已过，交易无法发送。请检查您的交易期限是否过低。"
 
 msgid "Things you can do with your SUSHI"
 msgstr "SUSHI可以做的事情"
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
-msgstr ""
+msgstr "该代币没有出现在活跃代币列表中。请确认这是您想要交易的代币。"
 
 msgid "This transaction is below market rate"
-msgstr ""
+msgstr "该交易低于市场价格"
 
 msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
-msgstr ""
+msgstr "由于价格变动，这笔交易将不会成功。尝试增加您的可容忍滑点。"
 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "交易未成功，可能因为价格变动，也可能转账中产生的费用。请提高您可接受的滑点。"
 
 msgid "Tip to encourage miners to select this transaction."
-msgstr ""
+msgstr "打赏小费以激励矿工选择此交易。"
 
 msgid "Tip:"
-msgstr ""
+msgstr "小费："
 
 msgid "To"
 msgstr ""
@@ -1008,13 +1010,13 @@ msgid "Total"
 msgstr "总数"
 
 msgid "Transaction History {0}"
-msgstr ""
+msgstr "交易记录 {0}"
 
 msgid "Transaction Settings"
 msgstr "交易设置"
 
 msgid "Transaction Submitted"
-msgstr ""
+msgstr "提交的交易"
 
 msgid "Transaction deadline"
 msgstr "交易期限"
@@ -1026,7 +1028,7 @@ msgid "Turn On Expert Mode"
 msgstr "开启专家模式"
 
 msgid "Unknown error{0}. Try increasing your slippage tolerance."
-msgstr ""
+msgstr "未知错误{0}。尝试增加您的可容忍滑点。"
 
 msgid "Unstake"
 msgstr "解除抵押"
@@ -1041,28 +1043,28 @@ msgid "Unwrap"
 msgstr "解开"
 
 msgid "Use SUSHI"
-msgstr ""
+msgstr "使用 SUSHI"
 
 msgid "Use this tool to find pairs that don't automatically appear in the interface"
-msgstr ""
+msgstr "如果交易对没有自动显示，请使用这个工具。"
 
 msgid "Use xSUSHI"
-msgstr ""
+msgstr "使用 xSUSHI"
 
 msgid "Used"
-msgstr ""
+msgstr "已使用"
 
 msgid "Vesting"
 msgstr "锁仓"
 
 msgid "Vesting is executed within the guidelines selected by the community in"
-msgstr ""
+msgstr "锁仓是在社区选择的指导方针内执行的"
 
 msgid "Vietnamese"
 msgstr ""
 
 msgid "View Liquidity Positions"
-msgstr ""
+msgstr "查看 LP"
 
 msgid "View Stats"
 msgstr "查看数据"
@@ -1071,7 +1073,7 @@ msgid "View on explorer"
 msgstr "在浏览器查看"
 
 msgid "Waiting for Confirmation"
-msgstr ""
+msgstr "等待确认中"
 
 msgid "Wallet"
 msgstr "钱包"
@@ -1080,7 +1082,7 @@ msgid "Wallet Balance"
 msgstr "钱包余额"
 
 msgid "Weekly unlocks from the vesting period."
-msgstr ""
+msgstr "从解锁期开始，每周解锁。"
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "当创建一个交易对时，您是第一个流动性提供者。您添加的代币比例将决定这个池子的价格。一旦您对该比率满意，点击供应进行查看"
@@ -1098,7 +1100,7 @@ msgid "Yesterday's APR"
 msgstr "昨天的APR"
 
 msgid "You Pay:"
-msgstr ""
+msgstr "您支付："
 
 msgid "You are creating a pool"
 msgstr "您正在创建一个池"
@@ -1113,19 +1115,19 @@ msgid "You need to first approve LP tokens and then migrate it"
 msgstr "您需要首先批准LP代币，然后迁移它"
 
 msgid "You pay"
-msgstr ""
+msgstr "您支付"
 
 msgid "You receive"
-msgstr ""
+msgstr "您将收到"
 
 msgid "You receive:"
-msgstr ""
+msgstr "您将收到："
 
 msgid "You will receive"
 msgstr "您将收到"
 
 msgid "Your"
-msgstr ""
+msgstr "您的"
 
 msgid "Your Claimable SUSHI this Week"
 msgstr "本周您可领取的SUSHI"
@@ -1164,31 +1166,31 @@ msgid "Your transaction will revert if there is a large, unfavorable price movem
 msgstr "如果交易在确认之前出现大的不利价格变动，则交易将恢复。"
 
 msgid "Your transactions will appear here..."
-msgstr ""
+msgstr "您的交易将出现在这里..."
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "您的{exchange} {0} / {1}流动性将变为SushiSwap {2} / {3}的流动性。"
 
 msgid "Zap"
-msgstr ""
+msgstr "Zap"
 
 msgid "above"
-msgstr ""
+msgstr "以上"
 
 msgid "below"
-msgstr ""
+msgstr "以下"
 
 msgid "failed to load"
 msgstr "加载失败"
 
 msgid "for deliberations on additional points."
-msgstr ""
+msgstr "对其他要点的讨论。"
 
 msgid "forum discussion"
-msgstr ""
+msgstr "论坛讨论"
 
 msgid "home page"
-msgstr ""
+msgstr "主页"
 
 msgid "loading..."
 msgstr "载入中..."
@@ -1197,13 +1199,13 @@ msgid "minutes"
 msgstr "分钟"
 
 msgid "or the transaction will revert."
-msgstr ""
+msgstr "否则交易将会退回。"
 
 msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"
-msgstr ""
+msgstr "xSUSHI 手续费"
 
 #. js-lingui:icu=%7B0%2C+plural%2C+one+%7BToken%7D+many+%7BTokens%7D%7D&pluralize_on=0
 msgid "Token"
@@ -1218,10 +1220,10 @@ msgid "{0} Strategy"
 msgstr "{0}策略"
 
 msgid "{0} {1} per {2}"
-msgstr ""
+msgstr "{0} {1} 每 {2}"
 
 msgid "{0} {sign} market rate"
-msgstr ""
+msgstr "{0}{sign} 市场利率"
 
 msgid "{0}/{1} Burned"
-msgstr ""
+msgstr "{0}/{1} 被销毁"
