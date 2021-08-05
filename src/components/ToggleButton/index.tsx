@@ -19,12 +19,12 @@ ToggleButtonGroup.Button = ({
   className = 'py-1',
 }: ComponentProps<typeof HeadlessRadioGroup.Option>) => {
   return (
-    <HeadlessRadioGroup.Option value={value}>
+    <HeadlessRadioGroup.Option value={value} className="outline-none">
       {({ checked }) => (
         <div
           className={classNames(
             className,
-            'rounded-lg border h-full flex items-center justify-center cursor-pointer',
+            'rounded-lg border h-full flex items-center justify-center cursor-pointer focus:none',
             checked ? 'border-transparent border-gradient-r-blue-pink-dark-900' : 'border-transparent'
           )}
         >

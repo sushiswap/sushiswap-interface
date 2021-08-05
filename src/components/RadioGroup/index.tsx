@@ -13,7 +13,7 @@ RadioGroup.Option = ({
   className = 'space-y-3.5',
 }: ComponentProps<typeof HeadlessRadioGroup.Option>) => {
   return (
-    <HeadlessRadioGroup.Option value={value} className={className}>
+    <HeadlessRadioGroup.Option value={value} className={classNames('outline-none', className)}>
       {({ checked }) => (
         <>
           <div className="flex items-center text-sm cursor-pointer gap-3.5">
