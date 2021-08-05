@@ -38,6 +38,21 @@ export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undef
       ...pair.collateral,
       ...tokens.find((token) => token.id === pair.collateral.id),
     },
+    assetAmount: Math.floor(pair.totalAssetBase / getFraction({ ...pair, token0: pair.asset })).toString(),
+    borrowedAmount: toAmount(
+      {
+        bentoAmount: pair.totalBorrowElastic.toBigNumber(0),
+        bentoShare: pair.totalBorrowBase.toBigNumber(0),
+      },
+      pair.totalBorrowElastic.toBigNumber(0)
+    ).toString(),
+    collateralAmount: toAmount(
+      {
+        bentoAmount: pair.collateral.totalSupplyElastic.toBigNumber(0),
+        bentoShare: pair.collateral.totalSupplyBase.toBigNumber(0),
+      },
+      pair.totalCollateralShare.toBigNumber(0)
+    ).toString(),
   }))
 }
 
@@ -49,7 +64,7 @@ export const getUserKashiPairs = async (chainId = ChainId.MAINNET, variables) =>
     assetAmount: Math.floor(
       userPair.assetFraction / getFraction({ ...userPair.pair, token0: userPair.pair.asset })
     ).toString(),
-    borrowAmount: toAmount(
+    borrowedAmount: toAmount(
       {
         bentoAmount: userPair.pair.totalBorrowElastic.toBigNumber(0),
         bentoShare: userPair.pair.totalBorrowBase.toBigNumber(0),

@@ -76,8 +76,10 @@ export function useUserFarms(chainId = undefined) {
   const userPositions = usePositions(chainId)
   const farms = useFarms(undefined, chainId)
 
-  const sushiPairs = useSushiPairs(undefined, undefined, chainId)
-  const kashiPairs = useKashiPairs(undefined, chainId)
+  const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
+
+  const sushiPairs = useSushiPairs({ where: { id_in: farmAddresses } }, undefined, chainId)
+  const kashiPairs = useKashiPairs({ where: { id_in: farmAddresses } }, chainId)
 
   const nativePrice = useNativePrice(undefined, chainId)
 
@@ -178,7 +180,7 @@ export function useUserKashiPairs(chainId = undefined) {
           const collateral = tokens.find((t) => t.id === userPair.pair.collateral.id)
 
           const assetValueUSD = (userPair.assetAmount / 10 ** asset.decimals) * asset.derivedETH * nativePrice
-          const borrowedValueUSD = (userPair.borrowAmount / 10 ** asset.decimals) * asset.derivedETH * nativePrice
+          const borrowedValueUSD = (userPair.borrowedAmount / 10 ** asset.decimals) * asset.derivedETH * nativePrice
           const collateralValueUSD =
             (userPair.collateralAmount / 10 ** collateral.decimals) * collateral.derivedETH * nativePrice
 

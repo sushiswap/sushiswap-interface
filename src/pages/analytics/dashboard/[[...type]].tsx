@@ -5,11 +5,11 @@ import Container from '../../../components/Container'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
-import Menu from '../../../features/analytics/AnalyticsMenu'
 import ChartCard from '../../../features/analytics/Dashboard/ChartCard'
 import {
   useEthPrice,
   useFarms,
+  useNativePrice,
   useOneDayBlock,
   useOneWeekBlock,
   useSushiPairs,
@@ -19,7 +19,7 @@ import { useRouter } from 'next/router'
 import PairList from '../../../features/analytics/Pairs/PairList'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import PoolList from '../../../features/analytics/Pools/PoolsList'
-import { useKashiPairs } from '../../../features/lending/context'
+import { useKashiPairs } from '../../../services/graph/index'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 
 // TODO: Top Pools: Rewards, APR
@@ -61,15 +61,20 @@ export default function Dashboard(): JSX.Element {
   // For Top Farms
   const farms = useFarms()
   const kashiPairs = useKashiPairs()
+  const nativePrice = useNativePrice()
   const farmsFormatted = useMemo(() => {
-    return farms && pairs && kashiPairs
+    return farms && (pairs || (kashiPairs && nativePrice))
       ? farms
           .map((farm) => {
-            const pair = pairs.find((pair) => pair.id === farm.pair) ?? kashiPairs.find((pair) => pair.id === farm.pair)
+            const pair =
+              pairs?.find((pair) => pair.id === farm.pair) ?? kashiPairs?.find((pair) => pair.id === farm.pair)
 
             if (!pair) return undefined
 
-            if (pair.asset) console.log(pair)
+            // It's a Kashi pair if pair.asset exists
+            const liquidity = pair.asset
+              ? (pair.assetAmount * pair.token0.derivedETH * nativePrice) / 10 ** pair.token0.decimals
+              : pair.reserveUSD
 
             return {
               pair: {
@@ -81,7 +86,7 @@ export default function Dashboard(): JSX.Element {
                 { address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2', symbol: 'SUSHI', amount: 10 },
                 { address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', symbol: 'WETH', amount: 1.01 },
               ],
-              liquidity: pair.reserveUSD ?? 1000000,
+              liquidity: liquidity,
               apr: 10,
             }
           })

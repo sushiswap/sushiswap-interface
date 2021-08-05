@@ -63,9 +63,10 @@ export default function Farm(): JSX.Element {
 
   // TODO: Obviously need to sort this out but this is fine for time being,
   // prices are only loaded when needed for a specific network
-  const [sushiPrice, nativePrice, alcxPrice, cvxPrice] = [
+  const [sushiPrice, nativePrice, maticPrice, alcxPrice, cvxPrice] = [
     useSushiPrice(),
     useNativePrice(),
+    useMaticPrice(),
     useAlcxPrice(),
     useCvxPrice(),
   ]
@@ -152,7 +153,7 @@ export default function Farm(): JSX.Element {
           [ChainId.MATIC]: {
             token: 'MATIC',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg',
-            rewardPrice: nativePrice,
+            rewardPrice: maticPrice, // ETH is the native on Polygon
           },
           [ChainId.XDAI]: {
             token: 'STAKE',
@@ -188,6 +189,8 @@ export default function Farm(): JSX.Element {
     const tvl = swapPair
       ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
       : balance * kashiPair.token0.derivedETH * nativePrice
+
+    console.log(rewards)
 
     const roiPerBlock =
       rewards.reduce((previousValue, currentValue) => {

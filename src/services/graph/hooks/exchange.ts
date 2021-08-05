@@ -106,13 +106,7 @@ export function useCvxPrice(variables = undefined, swrConfig: SWRConfiguration =
 }
 
 export function useMaticPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && chainId === ChainId.MATIC
-  const { data } = useSWR(
-    shouldFetch ? ['maticPrice', JSON.stringify(variables)] : null,
-    () => getMaticPrice(variables),
-    swrConfig
-  )
+  const { data } = useSWR(['maticPrice', JSON.stringify(variables)], () => getMaticPrice(variables), swrConfig)
   return data
 }
 
