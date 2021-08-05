@@ -41,9 +41,6 @@ msgstr "A portion of each trade (0.25%) goes to liquidity providers as a protoco
 msgid "APR"
 msgstr "APR"
 
-msgid "APY"
-msgstr "APY"
-
 msgid "Accept"
 msgstr "Accept"
 
@@ -115,6 +112,9 @@ msgstr "Approving {0}"
 
 msgid "Are you sure?"
 msgstr "Are you sure?"
+
+msgid "Assets"
+msgstr "Assets"
 
 msgid "Auto"
 msgstr "Auto"
@@ -315,6 +315,9 @@ msgstr "Deposit"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "Deposit SUSHI into BentoBox"
 
+msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgstr "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Deposit tokens into BentoBox for all the yields"
 
@@ -406,6 +409,9 @@ msgstr "Expired"
 msgid "Farm"
 msgstr "Farm"
 
+msgid "Fees (24H)"
+msgstr "Fees (24H)"
+
 msgid "Filled"
 msgstr "Filled"
 
@@ -486,6 +492,13 @@ msgstr "In Bento:"
 msgid "In Wallet:"
 msgstr "In Wallet:"
 
+msgid ""
+"In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
+"automatically."
+msgstr ""
+"In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
+"automatically."
+
 msgid "Input is estimated. You will sell at most"
 msgstr "Input is estimated. You will sell at most"
 
@@ -500,6 +513,9 @@ msgstr "Insufficient {0} balance"
 
 msgid "Interface Settings"
 msgstr "Interface Settings"
+
+msgid "Introduction"
+msgstr "Introduction"
 
 msgid "Invalid pair"
 msgstr "Invalid pair"
@@ -561,6 +577,9 @@ msgstr "Limit order"
 
 msgid "Liquidity"
 msgstr "Liquidity"
+
+msgid "Liquidity Distribution"
+msgstr "Liquidity Distribution"
 
 msgid "Liquidity Provider Fee"
 msgstr "Liquidity Provider Fee"
@@ -658,6 +677,9 @@ msgstr "Minimum received"
 
 msgid "Miso"
 msgstr "Miso"
+
+msgid "My Deposits"
+msgstr "My Deposits"
 
 msgid "My Liquidity Positions"
 msgstr "My Liquidity Positions"
@@ -785,6 +807,9 @@ msgstr "Pool tokens in rewards pool"
 
 msgid "Pooled {0}"
 msgstr "Pooled {0}"
+
+msgid "Pools"
+msgstr "Pools"
 
 msgid "Positions"
 msgstr "Positions"
@@ -943,6 +968,9 @@ msgstr ""
 msgid "Staking APR"
 msgstr "Staking APR"
 
+msgid "Standard Mode"
+msgstr "Standard Mode"
+
 msgid "Suggested Pools"
 msgstr "Suggested Pools"
 
@@ -1088,6 +1116,9 @@ msgstr "Use xSUSHI"
 msgid "Used"
 msgstr "Used"
 
+msgid "Utilization (24H)"
+msgstr "Utilization (24H)"
+
 msgid "Vesting"
 msgstr "Vesting"
 
@@ -1096,6 +1127,9 @@ msgstr "Vesting is executed within the guidelines selected by the community in"
 
 msgid "Vietnamese"
 msgstr "Vietnamese"
+
+msgid "View Analytics"
+msgstr "View Analytics"
 
 msgid "View Liquidity Positions"
 msgstr "View Liquidity Positions"
@@ -1108,6 +1142,12 @@ msgstr "View Stats"
 
 msgid "View on explorer"
 msgstr "View on explorer"
+
+msgid "Volume"
+msgstr "Volume"
+
+msgid "Volume (24H)"
+msgstr "Volume (24H)"
 
 msgid "Waiting for Confirmation"
 msgstr "Waiting for Confirmation"
@@ -1213,6 +1253,9 @@ msgstr "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidit
 
 msgid "Zap"
 msgstr "Zap"
+
+msgid "Zap Mode"
+msgstr "Zap Mode"
 
 msgid "above"
 msgstr "above"

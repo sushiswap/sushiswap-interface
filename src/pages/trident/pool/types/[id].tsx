@@ -34,7 +34,7 @@ const PoolType = ({ pool }) => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex flex-col w-full gap-9">
+    <div className="flex flex-col w-full gap-9 mt-px">
       <div className="flex flex-col bg-gradient-to-r from-transparent-blue to-opaque-blue">
         <div className="flex flex-col p-5 bg-dark-700 bg-opacity-80">
           <div className="flex flex-col items-start gap-5">

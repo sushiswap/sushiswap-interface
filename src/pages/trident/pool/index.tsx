@@ -20,7 +20,7 @@ const Pool = () => {
   const { searchQuery } = useTridentPoolPageState()
 
   return (
-    <div className="flex flex-col w-full gap-6">
+    <div className="flex flex-col w-full gap-6 mt-px">
       <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-90 gap-6">
         <div className="">
           <Typography variant="h3" className="text-high-emphesis" weight={400}>

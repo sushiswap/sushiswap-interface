@@ -22,7 +22,7 @@ const PoolTypes = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex flex-col w-full gap-9">
+    <div className="flex flex-col w-full gap-9 mt-px">
       <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-90">
         <div className="flex flex-row items-start gap-3">
           <Typography variant="h3" className="text-high-emphesis" weight={700}>

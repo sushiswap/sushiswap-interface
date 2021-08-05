@@ -15,6 +15,8 @@ module.exports = {
     extend: {
       backgroundImage: (theme) => ({
         'binary-pattern': "url('/images/trident/binary-pattern.png')",
+        'bubble-pattern': "url('/images/trident/bubble-pattern.png')",
+        'dots-pattern': "url('/images/trident/dots-pattern.png')",
         'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
       }),
       linearBorderGradients: {

@@ -9,17 +9,18 @@ const WEIGHTS = {
   700: 'font-bold',
 }
 
-export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 'sm' | 'xs'
+export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 'sm' | 'xs' | 'xxs'
 
 const VARIANTS = {
   hero: 'text-hero',
   h1: 'text-4xl',
-  h2: 'text-3xl',
+  h2: 'text-3xl tracking-[-0.02em]',
   h3: 'text-2xl leading-7',
   lg: 'text-lg leading-6',
   base: 'text-base leading-5',
   sm: 'text-sm leading-5',
   xs: 'text-xs leading-4',
+  xxs: 'text-[0.625rem] leading-3',
 }
 
 export interface TypographyProps {

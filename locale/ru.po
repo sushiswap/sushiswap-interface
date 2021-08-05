@@ -41,9 +41,6 @@ msgstr "Часть каждой сделки (0,25%) направляется п
 msgid "APR"
 msgstr "Годовая процентная ставка"
 
-msgid "APY"
-msgstr ""
-
 msgid "Accept"
 msgstr "Принять"
 
@@ -115,6 +112,9 @@ msgstr "Утверждение {0}"
 
 msgid "Are you sure?"
 msgstr "Вы уверены?"
+
+msgid "Assets"
+msgstr ""
 
 msgid "Auto"
 msgstr ""
@@ -312,6 +312,9 @@ msgstr "Депозит"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "Внесите SUSHI в BentoBox"
 
+msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgstr ""
+
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Внесите токены в BentoBox для всех доходов"
 
@@ -403,6 +406,9 @@ msgstr ""
 msgid "Farm"
 msgstr ""
 
+msgid "Fees (24H)"
+msgstr ""
+
 msgid "Filled"
 msgstr ""
 
@@ -483,6 +489,11 @@ msgstr ""
 msgid "In Wallet:"
 msgstr ""
 
+msgid ""
+"In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
+"automatically."
+msgstr ""
+
 msgid "Input is estimated. You will sell at most"
 msgstr ""
 
@@ -497,6 +508,9 @@ msgstr "Недостаточный остаток {0}"
 
 msgid "Interface Settings"
 msgstr "Настройки интерфейса"
+
+msgid "Introduction"
+msgstr ""
 
 msgid "Invalid pair"
 msgstr "Недействительная пара"
@@ -556,6 +570,9 @@ msgstr ""
 
 msgid "Liquidity"
 msgstr "Ликвидность"
+
+msgid "Liquidity Distribution"
+msgstr ""
 
 msgid "Liquidity Provider Fee"
 msgstr "Комиссия поставщика ликвидности"
@@ -650,6 +667,9 @@ msgid "Minimum received"
 msgstr "Полученный минимум"
 
 msgid "Miso"
+msgstr ""
+
+msgid "My Deposits"
 msgstr ""
 
 msgid "My Liquidity Positions"
@@ -776,6 +796,9 @@ msgstr "Токены пула в пуле вознаграждений"
 
 msgid "Pooled {0}"
 msgstr "Объединено {0}"
+
+msgid "Pools"
+msgstr ""
 
 msgid "Positions"
 msgstr "Позиции"
@@ -934,6 +957,9 @@ msgstr ""
 msgid "Staking APR"
 msgstr "Ставка годовых"
 
+msgid "Standard Mode"
+msgstr ""
+
 msgid "Suggested Pools"
 msgstr ""
 
@@ -1077,6 +1103,9 @@ msgstr ""
 msgid "Used"
 msgstr ""
 
+msgid "Utilization (24H)"
+msgstr ""
+
 msgid "Vesting"
 msgstr "Передача прав на ценные бумаги"
 
@@ -1084,6 +1113,9 @@ msgid "Vesting is executed within the guidelines selected by the community in"
 msgstr ""
 
 msgid "Vietnamese"
+msgstr ""
+
+msgid "View Analytics"
 msgstr ""
 
 msgid "View Liquidity Positions"
@@ -1097,6 +1129,12 @@ msgstr "Посмотреть статистику"
 
 msgid "View on explorer"
 msgstr "Посмотреть в проводнике"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Volume (24H)"
+msgstr ""
 
 msgid "Waiting for Confirmation"
 msgstr ""
@@ -1201,6 +1239,9 @@ msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity
 msgstr "Ваша ликвидность {exchange} {0}/{1} станет ликвидностью SushiSwap {2}/{3}."
 
 msgid "Zap"
+msgstr ""
+
+msgid "Zap Mode"
 msgstr ""
 
 msgid "above"

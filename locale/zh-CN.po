@@ -41,9 +41,6 @@ msgstr "每笔交易的0.25%都会分给协议的流动性提供者。"
 msgid "APR"
 msgstr "APR"
 
-msgid "APY"
-msgstr ""
-
 msgid "Accept"
 msgstr "接受"
 
@@ -115,6 +112,9 @@ msgstr "批准{0}"
 
 msgid "Are you sure?"
 msgstr "您确定吗？"
+
+msgid "Assets"
+msgstr ""
 
 msgid "Auto"
 msgstr ""
@@ -310,6 +310,9 @@ msgstr "存款"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "将SUSHI存入BentoBox"
 
+msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgstr ""
+
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "将代币存入BentoBox，以获得所有收益。"
 
@@ -399,6 +402,9 @@ msgstr ""
 msgid "Farm"
 msgstr ""
 
+msgid "Fees (24H)"
+msgstr ""
+
 msgid "Filled"
 msgstr ""
 
@@ -472,6 +478,11 @@ msgstr ""
 msgid "In Wallet:"
 msgstr ""
 
+msgid ""
+"In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
+"automatically."
+msgstr ""
+
 msgid "Input is estimated. You will sell at most"
 msgstr ""
 
@@ -486,6 +497,9 @@ msgstr "代币{0}余额不足"
 
 msgid "Interface Settings"
 msgstr "交互设置"
+
+msgid "Introduction"
+msgstr ""
 
 msgid "Invalid pair"
 msgstr "无效的代币对"
@@ -545,6 +559,9 @@ msgstr ""
 
 msgid "Liquidity"
 msgstr "流动性"
+
+msgid "Liquidity Distribution"
+msgstr ""
 
 msgid "Liquidity Provider Fee"
 msgstr "LP奖励"
@@ -636,6 +653,9 @@ msgid "Minimum received"
 msgstr "最少可获得的数量"
 
 msgid "Miso"
+msgstr ""
+
+msgid "My Deposits"
 msgstr ""
 
 msgid "My Liquidity Positions"
@@ -762,6 +782,9 @@ msgstr "奖励池中的代币"
 
 msgid "Pooled {0}"
 msgstr "汇集{0}"
+
+msgid "Pools"
+msgstr ""
 
 msgid "Positions"
 msgstr "仓位"
@@ -920,6 +943,9 @@ msgstr ""
 msgid "Staking APR"
 msgstr "质押APR"
 
+msgid "Standard Mode"
+msgstr ""
+
 msgid "Suggested Pools"
 msgstr ""
 
@@ -1063,6 +1089,9 @@ msgstr ""
 msgid "Used"
 msgstr ""
 
+msgid "Utilization (24H)"
+msgstr ""
+
 msgid "Vesting"
 msgstr "锁仓"
 
@@ -1070,6 +1099,9 @@ msgid "Vesting is executed within the guidelines selected by the community in"
 msgstr ""
 
 msgid "Vietnamese"
+msgstr ""
+
+msgid "View Analytics"
 msgstr ""
 
 msgid "View Liquidity Positions"
@@ -1083,6 +1115,12 @@ msgstr "查看数据"
 
 msgid "View on explorer"
 msgstr "在浏览器查看"
+
+msgid "Volume"
+msgstr ""
+
+msgid "Volume (24H)"
+msgstr ""
 
 msgid "Waiting for Confirmation"
 msgstr ""
@@ -1187,6 +1225,9 @@ msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity
 msgstr "您的{exchange} {0} / {1}流动性将变为SushiSwap {2} / {3}的流动性。"
 
 msgid "Zap"
+msgstr ""
+
+msgid "Zap Mode"
 msgstr ""
 
 msgid "above"

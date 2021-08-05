@@ -38,8 +38,8 @@ const Chip: FC<ChipProps> = ({
     <div
       className={classNames(
         VARIANT[variant][color],
-        onDelete ? 'pr-1' : 'pr-2',
-        'whitespace-nowrap inline-flex h-[24px] rounded-[12px] py-0.5 pl-2 text-high-emphesis font-medium text-xs leading-5 gap-1 items-center',
+        onDelete ? 'pr-1' : 'pr-3',
+        `whitespace-nowrap inline-flex h-[24px] rounded-[12px] py-0.5 pl-3 text-${color} font-bold text-xs leading-5 gap-2 items-center`,
         className
       )}
     >
