@@ -4,10 +4,10 @@ import Main from '../../components/Main'
 import Breadcrumb from '../../components/Breadcrumb'
 
 interface ComponentProps {
-  breadcrumbs: string[]
+  breadcrumbs: { label: string; slug: string }[]
 }
 
-const Layout: FC<ComponentProps> = ({ children, breadcrumbs = [] }) => {
+const TridentLayout: FC<ComponentProps> = ({ children, breadcrumbs = [] }) => {
   return (
     <div className="z-0 flex flex-col items-center w-full h-screen">
       <Breadcrumb breadcrumbs={breadcrumbs} />
@@ -15,10 +15,6 @@ const Layout: FC<ComponentProps> = ({ children, breadcrumbs = [] }) => {
       <Popups />
     </div>
   )
-}
-
-const TridentLayout = ({ breadcrumbs }: { breadcrumbs: string[] }) => {
-  return ({ children }) => <Layout breadcrumbs={breadcrumbs}>{children}</Layout>
 }
 
 export default TridentLayout

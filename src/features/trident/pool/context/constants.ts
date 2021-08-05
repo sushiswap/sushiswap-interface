@@ -6,17 +6,33 @@ export const SORT_OPTIONS = [
 ]
 
 export const POOL_TYPES = [
-  { label: 'Classic', color: 'default', description: 'Most common, traditional 50/50 value split between assets' },
+  {
+    label: 'Classic',
+    color: 'default',
+    description: 'Most common, traditional 50/50 value split between assets',
+    long_description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim bibendum in ut amet, sit fames. Iaculis ultrices sit fermentum commodo nisl eget etiam fusce ac. Risus enim sollicitudin phasellus nibh. Neque turpis amet at scelerisque vitae nibh magna. Aliquet ut natoque quisque eget pellentesque id. Convallis enim.',
+  },
   {
     label: 'Concentrated',
     color: 'purple',
     description: 'Same value makeup of a classic pool, but for a specific price range',
+    long_description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim bibendum in ut amet, sit fames. Iaculis ultrices sit fermentum commodo nisl eget etiam fusce ac. Risus enim sollicitudin phasellus nibh. Neque turpis amet at scelerisque vitae nibh magna. Aliquet ut natoque quisque eget pellentesque id. Convallis enim.',
   },
-  { label: 'Multi-Asset', color: 'blue', description: '3 to 32 assets, with tokens deposited in equal values' },
+  {
+    label: 'Multi-Asset',
+    color: 'blue',
+    description: '3 to 32 assets, with tokens deposited in equal values',
+    long_description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim bibendum in ut amet, sit fames. Iaculis ultrices sit fermentum commodo nisl eget etiam fusce ac. Risus enim sollicitudin phasellus nibh. Neque turpis amet at scelerisque vitae nibh magna. Aliquet ut natoque quisque eget pellentesque id. Convallis enim.',
+  },
   {
     label: 'Weighted',
     color: 'yellow',
     description: 'Two asset pools, with the value split skewed higher towards one.',
+    long_description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim bibendum in ut amet, sit fames. Iaculis ultrices sit fermentum commodo nisl eget etiam fusce ac. Risus enim sollicitudin phasellus nibh. Neque turpis amet at scelerisque vitae nibh magna. Aliquet ut natoque quisque eget pellentesque id. Convallis enim.',
   },
 ]
 

@@ -1,9 +1,10 @@
 import { FC, ReactNode } from 'react'
 import Typography from '../Typography'
 import { ChevronRight } from 'react-feather'
+import Link from 'next/link'
 
 interface BreadcrumbProps {
-  breadcrumbs: string[]
+  breadcrumbs: { label: string; slug: string }[]
 }
 
 const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs = [] }) => {
@@ -14,10 +15,10 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs = [] }) => {
           <Typography
             variant="xs"
             weight={400}
-            key={el}
+            key={el.label}
             className={index === breadcrumbs.length - 1 ? 'text-high-emphesis' : 'text-secondary'}
           >
-            {el}
+            <Link href={el.slug}>{el.label}</Link>
           </Typography>
         ))
         .reduce(

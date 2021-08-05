@@ -9,7 +9,11 @@ import { TridentPoolPageContextProvider, useTridentPoolPageState } from '../../.
 import SuggestedPools from '../../../features/trident/pool/SuggestedPools'
 import { classNames } from '../../../functions'
 
-const PAGE_CONFIG = { breadcrumbs: ['Pools'] }
+export async function getStaticProps() {
+  return {
+    props: { breadcrumbs: [{ label: 'Pools', slug: '/trident/pool' }] },
+  }
+}
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -45,6 +49,6 @@ const Pool = () => {
 }
 
 Pool.Provider = TridentPoolPageContextProvider
-Pool.Layout = TridentLayout(PAGE_CONFIG)
+Pool.Layout = TridentLayout
 
 export default Pool
