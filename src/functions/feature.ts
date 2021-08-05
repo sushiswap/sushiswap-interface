@@ -21,6 +21,7 @@ const features = {
     Feature.MIGRATE,
     Feature.ANALYTICS,
     Feature.STAKING,
+    Feature.MISO,
   ],
   [ChainId.ROPSTEN]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI],
   [ChainId.RINKEBY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI],

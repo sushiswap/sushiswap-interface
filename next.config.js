@@ -62,7 +62,6 @@ module.exports = withBundleAnalyzer(
     },
     async rewrites() {
       return [
-        // Bar
         {
           source: '/stake',
           destination: '/bar',
@@ -86,6 +85,18 @@ module.exports = withBundleAnalyzer(
         {
           source: '/swap/:token*',
           destination: '/exchange/swap/:token*',
+        },
+        {
+          source: '/limit-order',
+          destination: '/exchange/limit-order',
+        },
+        {
+          source: '/limit-order/:token*',
+          destination: '/exchange/limit-order/:token*',
+        },
+        {
+          source: '/open-order',
+          destination: '/exchange/open-order',
         },
         {
           source: '/migrate',

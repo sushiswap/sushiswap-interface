@@ -21,7 +21,7 @@ enum DeadlineError {
 }
 
 export interface TransactionSettingsProps {
-  placeholderSlippage: Percent // varies according to the context in which the settings dialog is placed
+  placeholderSlippage?: Percent // varies according to the context in which the settings dialog is placed
 }
 
 export default function TransactionSettings({ placeholderSlippage }: TransactionSettingsProps) {
@@ -114,7 +114,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
             )}
             tabIndex={-1}
           >
-            <div className="flex justify-between items-center gap-1">
+            <div className="flex items-center justify-between gap-1">
               {tooLow || tooHigh ? (
                 <span className="hidden sm:inline text-yellow" role="img" aria-label="warning">
                   ⚠️
@@ -122,7 +122,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
               ) : null}
               <input
                 className={classNames(slippageError ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis')}
-                placeholder={placeholderSlippage.toFixed(2)}
+                placeholder={placeholderSlippage?.toFixed(2)}
                 value={
                   slippageInput.length > 0
                     ? slippageInput

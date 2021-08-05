@@ -9,6 +9,8 @@ import {
   poolsV2Query,
 } from '../queries'
 
+import { getTokenSubset } from './exchange'
+
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
 import { request } from 'graphql-request'
@@ -23,7 +25,7 @@ export const miniChef = async (query, chainId = ChainId.MAINNET, variables = und
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query, variables)
 
 export const MASTERCHEF_V2 = {
-  [ChainId.MAINNET]: 'jiro-ono/sushitestsubgraph',
+  [ChainId.MAINNET]: 'sushiswap/master-chefv2',
 }
 
 export const masterChefV2 = async (query, chainId = ChainId.MAINNET, variables = undefined) =>
@@ -62,7 +64,17 @@ export const getMasterChefV1PairAddreses = async () => {
 
 export const getMasterChefV2Farms = async (variables = undefined) => {
   const { pools } = await masterChefV2(poolsV2Query, undefined, variables)
-  return pools
+
+  const tokens = await getTokenSubset(ChainId.MAINNET, {
+    tokenAddresses: Array.from(pools.map((pool) => pool.rewarder.rewardToken)),
+  })
+
+  return pools.map((pool) => ({
+    ...pool,
+    rewardToken: {
+      ...tokens.find((token) => token.id === pool.rewarder.rewardToken),
+    },
+  }))
 }
 
 export const getMasterChefV2PairAddreses = async () => {

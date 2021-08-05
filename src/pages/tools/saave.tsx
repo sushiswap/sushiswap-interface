@@ -4,7 +4,7 @@ import Typography from '../../components/Typography'
 
 export default function Saave() {
   return (
-    <>
+    <Container id="saave-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Saave | Sushi</title>
         <meta key="description" name="description" content="SushiSwap Saave..." />
@@ -19,6 +19,6 @@ export default function Saave() {
           aliquam, mi sed rhoncus cursus, turpis lectus vehicula enim, eu volutpat diam quam at felis.
         </Typography>
       </Container>
-    </>
+    </Container>
   )
 }

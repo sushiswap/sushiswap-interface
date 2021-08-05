@@ -5,6 +5,7 @@ import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
 import Card from '../../../components/Card'
+import Container from '../../../components/Container'
 import Head from 'next/head'
 import Image from '../../../components/Image'
 import Layout from '../../../layouts/Kashi'
@@ -19,14 +20,14 @@ export default function Pair() {
   const router = useRouter()
   const { i18n } = useLingui()
   const [tabIndex, setTabIndex] = useState(0)
-  const info = useKashiInfo()
 
   const pair = useKashiPair(router.query.pair as string)
+  const info = useKashiInfo()
 
   if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
 
   return (
-    <>
+    <div id={`lend-${router.query.pair}-page`}>
       <Head>
         <title>Lend {pair.asset.tokenInfo.symbol} | Sushi</title>
         <meta key="description" name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
@@ -116,7 +117,7 @@ export default function Pair() {
           </TabPanel>
         </Tabs>
       </Card>
-    </>
+    </div>
   )
 }
 

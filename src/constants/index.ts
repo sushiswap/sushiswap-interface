@@ -29,6 +29,7 @@ export const RPC = {
   [ChainId.OKEX]: 'https://exchainrpc.okex.org',
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+  [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
 }
 
 export const POOL_DENY = ['14', '29', '45', '30']
@@ -52,7 +53,10 @@ export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
 // TODO: update weekly with new constant
 export const MERKLE_ROOT =
   //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-13/merkle-10959148-11550728.json'
-  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-14/merkle-10959148-11596364.json'
+  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-14/merkle-10959148-11596364.json'
+  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-15/merkle-10959148-11641996.json'
+  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-16/merkle-10959148-11687577.json'
+  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-17/merkle-10959148-11733182.json'
 
 // /**
 //  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
@@ -110,6 +114,21 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     name: 'WalletConnect',
     iconName: 'wallet-connect.svg',
     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
+    href: null,
+    color: '#4196FC',
+    mobile: true,
+  },
+  KEYSTONE: {
+    connector: async () => {
+      const KeystoneConnector = (await import('@keystonehq/keystone-connector')).KeystoneConnector
+      return new KeystoneConnector({
+        chainId: 1,
+        url: RPC[ChainId.MAINNET],
+      })
+    },
+    name: 'Keystone',
+    iconName: 'keystone.png',
+    description: 'Connect to Keystone hardware wallet.',
     href: null,
     color: '#4196FC',
     mobile: true,

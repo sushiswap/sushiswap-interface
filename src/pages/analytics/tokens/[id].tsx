@@ -10,10 +10,8 @@ import InfoCard from '../../../features/analytics/Tokens/Token/InfoCard'
 import TopFarmsList from '../../../features/analytics/Tokens/Token/TopFarmsList'
 import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
 import { classNames, formatNumber } from '../../../functions'
-import { useCurrency } from '../../../hooks/Tokens'
 import {
   useCustomDayBlock,
-  useEthPrice,
   useFarms,
   useNativePrice,
   useOneDayBlock,
@@ -23,6 +21,7 @@ import {
   useTokenPairs,
   useTransactions,
 } from '../../../services/graph'
+import { useCurrency } from '../../../hooks/Tokens'
 
 const socialsPlaceholder = [
   {

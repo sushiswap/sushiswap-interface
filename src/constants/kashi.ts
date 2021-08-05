@@ -71,11 +71,11 @@ export const BENTOBOX_ADDRESS: {
   [ChainId.RINKEBY]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
   [ChainId.GÖRLI]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
   [ChainId.KOVAN]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
-  [ChainId.FANTOM]: '',
+  [ChainId.FANTOM]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.MATIC]: '0x0319000133d3AdA02600f0875d2cf03D442C3367',
   [ChainId.MATIC_TESTNET]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
-  [ChainId.XDAI]: '',
+  [ChainId.XDAI]: '0xE2d7F5dd869Fc7c126D21b13a9080e75a4bDb324',
   [ChainId.BSC]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
   [ChainId.BSC_TESTNET]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
   [ChainId.ARBITRUM]: '',
@@ -83,13 +83,15 @@ export const BENTOBOX_ADDRESS: {
   [ChainId.MOONBEAM_TESTNET]: '',
   [ChainId.AVALANCHE]: '',
   [ChainId.AVALANCHE_TESTNET]: '',
-  [ChainId.HECO]: '',
+  [ChainId.HECO]: '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966',
   [ChainId.HECO_TESTNET]: '',
   [ChainId.HARMONY]: '',
   [ChainId.HARMONY_TESTNET]: '',
   [ChainId.OKEX]: '',
   [ChainId.OKEX_TESTNET]: '',
   [ChainId.CELO]: '',
+  [ChainId.PALM]: '',
+  [ChainId.PALM_TESTNET]: '',
 }
 
 export const KASHI_ADDRESS: {
@@ -104,7 +106,7 @@ export const KASHI_ADDRESS: {
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.MATIC]: '0xB527C5295c4Bc348cBb3a2E96B2494fD292075a7',
   [ChainId.MATIC_TESTNET]: '',
-  [ChainId.XDAI]: '',
+  [ChainId.XDAI]: '0x7a6DA9903d0a481F40b8336c1463487BC8C0407e',
   [ChainId.BSC]: '0x2cBA6Ab6574646Badc84F0544d05059e57a5dc42',
   [ChainId.BSC_TESTNET]: '',
   [ChainId.ARBITRUM]: '',
@@ -112,13 +114,15 @@ export const KASHI_ADDRESS: {
   [ChainId.MOONBEAM_TESTNET]: '',
   [ChainId.AVALANCHE]: '',
   [ChainId.AVALANCHE_TESTNET]: '',
-  [ChainId.HECO]: '',
+  [ChainId.HECO]: '0x2cBA6Ab6574646Badc84F0544d05059e57a5dc42',
   [ChainId.HECO_TESTNET]: '',
   [ChainId.HARMONY]: '',
   [ChainId.HARMONY_TESTNET]: '',
   [ChainId.OKEX]: '',
   [ChainId.OKEX_TESTNET]: '',
   [ChainId.CELO]: '',
+  [ChainId.PALM]: '',
+  [ChainId.PALM_TESTNET]: '',
 }
 
 // export const KASHI_ADDRESS = '0x2cBA6Ab6574646Badc84F0544d05059e57a5dc42'
@@ -135,7 +139,7 @@ export const SUSHISWAP_SWAPPER_ADDRESS: {
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.MATIC]: '0xe9589382130Ded5DF2397E2fD7A3E9b41DD2701D',
   [ChainId.MATIC_TESTNET]: '',
-  [ChainId.XDAI]: '',
+  [ChainId.XDAI]: '0xE02BDb31C353CE95A1D74F81C93eEa70Bf7371B9',
   [ChainId.BSC]: '0x1766733112408b95239aD1951925567CB1203084',
   [ChainId.BSC_TESTNET]: '',
   [ChainId.ARBITRUM]: '',
@@ -143,13 +147,15 @@ export const SUSHISWAP_SWAPPER_ADDRESS: {
   [ChainId.MOONBEAM_TESTNET]: '',
   [ChainId.AVALANCHE]: '',
   [ChainId.AVALANCHE_TESTNET]: '',
-  [ChainId.HECO]: '',
+  [ChainId.HECO]: '0x1766733112408b95239aD1951925567CB1203084',
   [ChainId.HECO_TESTNET]: '',
   [ChainId.HARMONY]: '',
   [ChainId.HARMONY_TESTNET]: '',
   [ChainId.OKEX]: '',
   [ChainId.OKEX_TESTNET]: '',
   [ChainId.CELO]: '',
+  [ChainId.PALM]: '',
+  [ChainId.PALM_TESTNET]: '',
 }
 
 export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
@@ -164,7 +170,7 @@ export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.MATIC]: '0x73BE093B84c773fe8eE0f76DDc0829E45c215415',
   [ChainId.MATIC_TESTNET]: '',
-  [ChainId.XDAI]: '',
+  [ChainId.XDAI]: '0x735f0FbEb3b6389986BcaAf073Af07D2F8be2b93',
   [ChainId.BSC]: '0x86c655cAc122e9A2fd9Ae1f79Df27b30E357968c',
   [ChainId.BSC_TESTNET]: '',
   [ChainId.ARBITRUM]: '',
@@ -179,6 +185,8 @@ export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
   [ChainId.OKEX]: '',
   [ChainId.OKEX_TESTNET]: '',
   [ChainId.CELO]: '',
+  [ChainId.PALM]: '',
+  [ChainId.PALM_TESTNET]: '',
 }
 
 export const SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS = {
@@ -191,7 +199,7 @@ export const SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS = {
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.MATIC]: '0xDB6C4EDd9545d3b815dA85E6429B699c418886f9',
   [ChainId.MATIC_TESTNET]: '',
-  [ChainId.XDAI]: '',
+  [ChainId.XDAI]: '0x07b6e34EeCF38B02e83b6B4702699717e298967E',
   [ChainId.BSC]: '0x1B16149Edaf1EFa6ADE6aEEF33e63C6e08c9bB1B',
   [ChainId.BSC_TESTNET]: '',
   [ChainId.ARBITRUM]: '',
@@ -206,6 +214,8 @@ export const SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS = {
   [ChainId.OKEX]: '',
   [ChainId.OKEX_TESTNET]: '',
   [ChainId.CELO]: '',
+  [ChainId.PALM]: '',
+  [ChainId.PALM_TESTNET]: '',
 }
 
 export const PEGGED_ORACLE_ADDRESS = '0x6cbfbB38498Df0E1e7A4506593cDB02db9001564'
@@ -226,7 +236,7 @@ export const BORING_HELPER_ADDRESS = {
   [ChainId.FANTOM_TESTNET]: '',
   [ChainId.MATIC]: '0xA77a7fD5a16237B85E0FAd02C51f459D18AE93Cd',
   [ChainId.MATIC_TESTNET]: '',
-  [ChainId.XDAI]: '',
+  [ChainId.XDAI]: '0x97e4a0fb71243A83A6FbaEF7Cf73617594e4cF2F',
   [ChainId.BSC]: '0x11Ca5375AdAfd6205E41131A4409f182677996E6',
   [ChainId.BSC_TESTNET]: '',
   [ChainId.ARBITRUM]: '',
@@ -234,7 +244,7 @@ export const BORING_HELPER_ADDRESS = {
   [ChainId.MOONBEAM_TESTNET]: '',
   [ChainId.AVALANCHE]: '',
   [ChainId.AVALANCHE_TESTNET]: '',
-  [ChainId.HECO]: '',
+  [ChainId.HECO]: '0x11Ca5375AdAfd6205E41131A4409f182677996E6',
   [ChainId.HECO_TESTNET]: '',
   [ChainId.HARMONY]: '',
   [ChainId.HARMONY_TESTNET]: '',

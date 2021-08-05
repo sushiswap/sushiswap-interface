@@ -121,7 +121,7 @@ const FarmListItem = ({ farm }) => {
                     const tx = await deposit(farm.id, depositValue.toBigNumber(liquidityToken?.decimals))
 
                     addTransaction(tx, {
-                      summary: `Deposit ${farm.pair.name}`,
+                      summary: `Deposit ${farm.pair.token0.name}/${farm.pair.token1.name}`,
                     })
                   } catch (error) {
                     console.error(error)
@@ -173,7 +173,7 @@ const FarmListItem = ({ farm }) => {
                   // KMP decimals depend on asset, SLP is always 18
                   const tx = await withdraw(farm.id, withdrawValue.toBigNumber(liquidityToken?.decimals))
                   addTransaction(tx, {
-                    summary: `Withdraw ${farm.pair.name}`,
+                    summary: `Withdraw ${farm.pair.token0.name}/${farm.pair.token1.name}`,
                   })
                 } catch (error) {
                   console.error(error)
@@ -195,7 +195,7 @@ const FarmListItem = ({ farm }) => {
                 try {
                   const tx = await harvest(farm.id)
                   addTransaction(tx, {
-                    summary: `Harvest ${farm.pair.name}`,
+                    summary: i18n._(t`Harvest ${farm.pair.token0.name}/${farm.pair.token1.name}`),
                   })
                 } catch (error) {
                   console.error(error)

@@ -24,7 +24,7 @@ export const EXCHANGE = {
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
-  //[ChainId.OKEX]: 'sushiswap/okex-exchange',
+  [ChainId.OKEX]: 'sushiswap/okex-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
   [ChainId.CELO]: 'sushiswap/celo-exchange',
 }
@@ -85,6 +85,27 @@ export const getEthPrice = async (variables = undefined) => {
   return getNativePrice(ChainId.MAINNET, variables)
 }
 
+export const getYggPrice = async (variables = {}) => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x25f8087ead173b73d6e8b84329989a8eea16cf73',
+    ...variables,
+  })
+}
+
+export const getRulerPrice = async (variables = {}) => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x2aeccb42482cc64e087b6d2e5da39f5a7a7001f8',
+    ...variables,
+  })
+}
+
+export const getTruPrice = async (variables = {}) => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x4c19596f5aaff459fa38b0f7ed92f11ae6543784',
+    ...variables,
+  })
+}
+
 export const getCvxPrice = async (variables = {}) => {
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
     id: '0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b',
@@ -104,6 +125,20 @@ export const getAlcxPrice = async (variables = {}) => {
   // console.log('getAlcxPrice')
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
     id: '0xdbdb4d16eda451d0503b854cf79d55697f90c8df',
+    ...variables,
+  })
+}
+
+export const getPicklePrice = async (variables = {}) => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x429881672b9ae42b8eba0e26cd9c73711b891ca5',
+    ...variables,
+  })
+}
+
+export const getMphPrice = async (variables = {}) => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x8888801af4d980682e47f1a9036e589479e835c5',
     ...variables,
   })
 }

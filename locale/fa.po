@@ -3,479 +3,528 @@
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: lokalise.com\n"
 "Project-Id-Version: SushiSwap Interface\n"
-"PO-Revision-Date: 2021-07-06 08:18\n"
+"PO-Revision-Date: 2021-07-19 14:00\n"
 "Last-Translator: lokalise.com\n"
 "Language-Team: lokalise.com\n\n"
 "Language: fa\n"
 
-#: src/pages/Swap/direct.tsx:276
-msgid "- Remove send"
-msgstr ""
 
 msgid ""
 "(COMING SOON) Accrue automatic yield through flash loans and"
 "SUSHI strategies"
+msgstr "(به زودی) بازده خودکار را از طریق وام‌های سریع و استراتژی‌های سوشی کسب کنید"
+
+
+msgid "{0, plural, one {Token} many {Tokens}}"
 msgstr ""
 
-#: src/pages/Vesting/index.tsx:271
-msgid "(COMING SOON) Accrue automatic yield through flash loans and\nSUSHI strategies"
-msgstr ""
 
-#: src/pages/AddLiquidity/ConfirmAddModalBottom.tsx:15
-#: src/pages/AddLiquidity/ConfirmAddModalBottom.tsx:22
+msgid "{0} {1} per {2}"
+msgstr "{0} {1} در هر {2}"
+
+
+msgid "{0} {sign} market rate"
+msgstr "{0} {sign} نرخ بازار"
+
+
 msgid "{0} Deposited"
-msgstr ""
+msgstr "{0} واریز شد"
 
-#: src/pages/AddLiquidity/PoolPriceBar.tsx:20
-#: src/pages/AddLiquidity/PoolPriceBar.tsx:26
-msgid "{0} per {1}"
-msgstr ""
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:85
-#: src/kashi/pages/Pair/Lend/index.tsx:85
 msgid "{0} Strategy"
-msgstr ""
+msgstr "{0} استراتژی"
 
-#: src/pages/Swap/direct.tsx:249
-msgid "+ Add a send (optional)"
-msgstr ""
 
-#: src/kashi/pages/Markets/Lending.tsx:174
-msgid "+ Create a new market"
-msgstr ""
+msgid "{0}/{1} Burned"
+msgstr "{0}/ {1} سوخته"
 
-#: src/pages/Yield/minichefv2/InputGroup.tsx:69
-msgid "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive you rewards at any time."
-msgstr ""
 
-#, fuzzy
-msgid "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive your rewards at any time."
-msgstr "<0>Tip:</0> In order to start earning rewards, you will need to first acquire some SLP by adding liquidity to the specified pair or <1>migrating existing liquidity.</1> Once you have SLP you can stake it into this yield farm to start earning rewards. Unstake anytime and then you can convert your SLP back to base tokens by clicking Remove Liquidity. Click Harvest to receive you rewards at any time."
+msgid "1 Hour"
+msgstr "1 ساعت"
 
-#: src/pages/RemoveLiquidity/index.tsx:450
-msgid "<0>Tip:</0> Removing pool tokens converts your position back into underlying tokens at the current rate, proportional to your share of the pool. Accrued fees are included in the amounts you receive."
-msgstr ""
 
-#: src/pages/PoolFinder/index.tsx:74
-msgid "<0>Tip:</0> Use this tool to find pairs that don't automatically appear in the interface"
-msgstr ""
+msgid "1 Week"
+msgstr "1 هفته"
 
-#: src/pages/AddLiquidity/index.tsx:254
-msgid "<0>Tip:</0> When you add liquidity, you will receive pool tokens representing your position. These tokens automatically earn fees proportional to your share of the pool, and can be redeemed at any time."
-msgstr ""
 
-#: src/kashi/pages/Markets/Borrow.tsx:29
-#: src/kashi/pages/Markets/Lending.tsx:26
-msgid "<0>Your</0> Positions"
-msgstr ""
+msgid "24 Hours"
+msgstr "24 ساعت"
 
-msgid "300M+ TVL on Polygon! Optimized routing enabled"
-msgstr ""
 
-#: src/components/swap/AdvancedSwapDetails.tsx:48
-#: src/components/swap/SwapModalFooter.tsx:81
-#: src/kashi/components/TradeReview.tsx:39
+msgid "30 Days"
+msgstr "30 روز"
+
+
+msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
+msgstr "بخشی از هر معامله (0.05٪) به عنوان مشوق پروتكل به دارندگان xSUSHI تعلق می‌گیرد."
+
+
 msgid "A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive."
-msgstr ""
+msgstr "بخشی از هر معامله (0.05٪) به عنوان مشوق پروتكل به دارندگان ایکس‌سوشی تعلق می‌گیرد."
 
-#: src/components/swap/SwapModalHeader.tsx:73
+
+msgid "above"
+msgstr "بالا"
+
+
 msgid "Accept"
-msgstr ""
+msgstr "قبول کنید"
 
-#: src/components/Liquidity/LiquidityHeader.tsx:7
-#: src/components/PositionCard/index.tsx:204
+
 msgid "Add"
-msgstr ""
+msgstr "اضافه کنید"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:40
+
+msgid "Add {0} {1} and {2} {3}"
+msgstr "اضافه کردن {0} {1} و {2} {3}"
+
+
+msgid "Add {0} to MetaMask"
+msgstr "{0} را به متاماسک اضافه کنید"
+
+
 msgid "Add collateral in order to borrow assets"
-msgstr ""
+msgstr "برای قرض گرفتن دارایی، وثیقه اضافه کنید"
+
 
 msgid "Add Liquidity"
-msgstr ""
+msgstr "لیکوییدیتی را افزایش دهید"
 
-#: src/pages/PoolFinder/index.tsx:131
+
 msgid "Add liquidity"
-msgstr ""
+msgstr "لیکوییدیتی را افزایش دهید"
 
-#: src/components/AppBar.tsx:138
-msgid "Add Sushi to your Metamask wallet"
-msgstr ""
 
-#: src/components/AppBar.tsx:94
-msgid "Add xSushi to your Metamask wallet"
-msgstr ""
+msgid "Add SUSHI to your MetaMask wallet"
+msgstr "به کیف پول متاماسک خود، سوشی اضافه کنید"
 
-#: src/pages/Migrate/index.tsx:53
+
+msgid "Add xSUSHI to your MetaMask wallet"
+msgstr "به کیف پول متاماسک خود، ایکس‌سوشی اضافه کنید"
+
+
+msgid "Added"
+msgstr "اضافه شده"
+
+
+msgid "Additional records and weekly merkle updates can be found on"
+msgstr "سوابق اضافی و به روزرسانی‌های هفتگی مرکل را می‌توان در اینجا یافت"
+
+
 msgid "Amount of Tokens"
-msgstr ""
+msgstr "مبلغ توکن ها"
+
+
+msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
+msgstr "هنگام اجرای این جابه‌جایی، خطایی روی داد. شاید لازم باشد دامنه پذیرش افت خود را افزایش دهید. اگر این اقدام مؤثر واقع نشود، ممکن است به دلیل وجود نوعی ناسازگاری در توکنی باشد که مبادله می‌کنید. توجه داشته باشید هزینه توکن‌های انتقال و ریبس با Uniswap V3 سازگار نیست."
+
 
 msgid "Analytics"
-msgstr ""
+msgstr "تجزیه و تحلیل"
 
-msgid "annualized"
-msgstr ""
 
 msgid "Approve"
-msgstr ""
+msgstr "تایید کنید"
 
-#: src/pages/AddLiquidity/index.tsx:298
-#: src/pages/AddLiquidity/index.tsx:303
-#: src/pages/Swap/direct.tsx:299
-#: src/pages/Swap/index.tsx:338
+
 msgid "Approve {0}"
-msgstr ""
+msgstr "تایید کنید {0}"
 
-#: src/kashi/components/Button.tsx:21
+
 msgid "Approve Kashi"
-msgstr ""
+msgstr "تایید کَشی"
 
-#: src/pages/Migrate/index.tsx:146
-#: src/pages/RemoveLiquidity/index.tsx:474
-#: src/pages/Swap/direct.tsx:299
-#: src/pages/Swap/index.tsx:338
+
+msgid "Approve Limit Order"
+msgstr "محدود کردن سفارش را تأیید کنید"
+
+
 msgid "Approved"
-msgstr ""
+msgstr "تایید شد"
 
-#: src/pages/BentoBox/Balances/Deposit.tsx:48
-#: src/pages/Migrate/index.tsx:146
-#: src/pages/RemoveLiquidity/index.tsx:474
-#: src/pages/SushiBar/StakeCard.tsx:184
+
 msgid "Approving"
-msgstr ""
+msgstr "در حال تایید"
 
-#: src/pages/AddLiquidity/index.tsx:297
-#: src/pages/AddLiquidity/index.tsx:302
+
 msgid "Approving {0}"
-msgstr ""
+msgstr "در حال تایید {0}"
 
-#: src/pages/Yield/masterchefv1/index.tsx:85
-#: src/pages/Yield/minichefv2/index.tsx:99
+
+msgid "Approving Limit Order"
+msgstr "تأیید محدود کردن سفارش"
+
+
 msgid "APR"
-msgstr ""
+msgstr "APR"
 
-msgid "APR (incl. Fees)"
-msgstr ""
 
-msgid "APY (incl. Fees)"
-msgstr ""
-
-#: src/components/Settings/index.tsx:89
 msgid "Are you sure?"
-msgstr ""
+msgstr "آیا مطمئن هستید؟"
 
-#: src/kashi/pages/Markets/Borrow.tsx:114
-#: src/kashi/pages/Pair/Borrow/index.tsx:46
-#: src/kashi/pages/Pair/Lend/index.tsx:36
+
+msgid "Auto"
+msgstr "خودکار"
+
+
 msgid "Available"
-msgstr ""
+msgstr "در دسترس"
 
-#: src/pages/SushiBar/BalanceCard.tsx:12
+
+msgid "Available Networks"
+msgstr "شبکه‌های موجود"
+
+
+msgid "Back to Limit Orders"
+msgstr "بازگشت به محدود کردن سفارش"
+
+
 msgid "Balance"
-msgstr ""
+msgstr "مانده"
 
-#: src/pages/BentoBox/Balances/Withdraw.tsx:26
+
+msgid "Balance:"
+msgstr "مانده:"
+
+
+msgid "below"
+msgstr "زیر"
+
+
 msgid "Bento Balance: {0}"
-msgstr ""
+msgstr "مانده بنتو {0}"
+
 
 msgid "BentoBox"
-msgstr ""
+msgstr "بنتوباکس"
 
-#: src/pages/BentoBox/index.tsx:32
+
 msgid "BentoBox Apps"
-msgstr ""
+msgstr "کاربردهای بنتوباکس"
 
-#: src/pages/BentoBox/index.tsx:35
+
 msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
-msgstr ""
+msgstr "بنتوباکس شیوه ای مبتکرانه برای استفاده بهینه از گاز dapp ها و به دست آوردن بازده بیشتر است"
 
-#: src/pages/BentoBox/Balances/index.tsx:32
+
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
-msgstr ""
+msgstr "بنتوباکس در سپرده هایی که وام سریع، استراتژی دارند بازده بیشتری فراهم می آورد و با گاز ثابت و کمتر در میان dapp های یکپارچه مانند بازارهای کشی منتقل می شود"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:88
+
 msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
-msgstr ""
+msgstr "استراتژی های بنتوباکس می توانند برای توکن های وثیقه شما بازده ایجاد کنند. این توکن هنوز هیچ استراتژی در بنتوباکس ندارد"
 
-#: src/kashi/pages/Pair/Lend/index.tsx:88
+
 msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
-msgstr ""
+msgstr "استراتژی های بنتوباکس می توانند برای لیکوییدیتی شما بازده ایجاد کنند و در عین حال قرض داده نمی شود. این توکن هنوز هیچ استراتژی در بنتوباکس ندارد"
 
-#: src/kashi/pages/Markets/Borrow.tsx:22
-#: src/kashi/pages/Markets/Borrow.tsx:102
-#: src/kashi/pages/Pair/Borrow/index.tsx:148
+
 msgid "Borrow"
-msgstr ""
+msgstr "قرض گیری"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:105
+
 msgid "Borrow {0}"
-msgstr ""
+msgstr "قرض گیری {0}"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:94
+
 msgid "Borrow {0}-{1}"
-msgstr ""
+msgstr "قرض گیری {0}-{1}"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:70
-#: src/kashi/pages/Pair/Lend/index.tsx:58
-msgid "Borrow APR"
-msgstr ""
 
-#: src/kashi/pages/Markets/Borrow.tsx:20
 msgid "Borrow assets and leverage up"
-msgstr ""
+msgstr "قرض گیری دارایی ها و سرمایه گذاری با قرض"
 
-#: src/kashi/pages/Markets/Borrow.tsx:34
-#: src/kashi/pages/Markets/Borrow.tsx:111
-#: src/kashi/pages/Markets/Lending.tsx:43
-#: src/kashi/pages/Markets/Lending.tsx:118
-#: src/kashi/pages/Pair/Borrow/index.tsx:54
-#: src/kashi/pages/Pair/Borrow/index.tsx:127
-#: src/kashi/pages/Pair/Lend/index.tsx:42
+
 msgid "Borrowed"
-msgstr ""
+msgstr "قرض گرفته شد"
 
-#: src/kashi/pages/Markets/Borrow.tsx:20
+
 msgid "Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest."
-msgstr ""
+msgstr "قرض گیری این امکان را برای شما فراهم می آورد تا بدون فروش لیکوییدیتی به دست آورید. حد قرض گیری شما به مبلغ وثیقه واریز شده بستگی دارد. می توانید تا 75% وثیقه خود را قرض بگیرید و در هر زمانی و بدون پرداخت بهره افزوده آن را پس دهید"
 
-msgid "Bridge Assets"
-msgstr ""
+
+msgid "Buy"
+msgstr "خرید"
+
 
 msgid ""
-"By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share"
-"of the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing"
-"your liquidity."
+"By adding liquidity you'll earn 0.25% of all trades on this pair"
+"proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be"
+"claimed by withdrawing your liquidity."
 msgstr ""
 
-#: src/components/PositionCard/index.tsx:91
-msgid "By adding liquidity you'll earn 0.25% of all trades on this pair proportional to your share\nof the pool. Fees are added to the pool, accrue in real time and can be claimed by withdrawing\nyour liquidity."
-msgstr ""
 
-#: src/components/Settings/index.tsx:131
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
-msgstr ""
+msgstr "راه های فرعی حالات را تایید می کنند و امکان معاملات با افت بالا را فراهم می آورند. با قبول ریسک، از آن استفاده کنید"
 
-#: src/pages/Swap/index.tsx:399
-msgid "Check out Sushi on Polygon (Matic)"
-msgstr ""
 
-#: src/pages/Yield/masterchefv1/index.tsx:55
-#: src/pages/Yield/minichefv2/index.tsx:61
-msgid "Claim"
-msgstr ""
+msgid "Cancel"
+msgstr "لغو"
 
-#: src/pages/Vesting/index.tsx:211
+
+msgid "Cancel Order"
+msgstr "لغو سفارش"
+
+
+msgid "Cancelled"
+msgstr "لغو شد"
+
+
+msgid "Change"
+msgstr "تغییر"
+
+
+msgid "Change Recipient"
+msgstr "تغییر گیرنده"
+
+
 msgid "Claim SUSHI"
-msgstr ""
+msgstr "سوشی را مطالبه کنید"
 
-#: src/pages/Vesting/index.tsx:211
+
 msgid "Claimed"
-msgstr ""
+msgstr "مطالبه شد"
 
-#: src/pages/Transactions/TransactionHistory.tsx:14
+
+msgid "Clear all"
+msgstr "پاک کردن همه"
+
+
 msgid "Clear History"
-msgstr ""
+msgstr "پاک کردن تاریخچه (سوابق)"
 
-#: src/pages/Swap/index.tsx:401
-msgid "Click here to switch to Polygon using Metamask"
-msgstr ""
 
 msgid ""
 "Click on a pool below, input the amount you wish to migrate or select max, and click"
 "migrate"
-msgstr ""
+msgstr "روی مبلغ کل زیر کلیک کنید، مبلغی که مایل به جابه‌جایی آن هستید را وارد یا حداکثر را انتخاب کنید؛ سپس روی «جابه‌جا کردن» کلیک کنید"
 
-#: src/pages/Migrate/index.tsx:211
-msgid "Click on a pool below, input the amount you wish to migrate or select max, and click\nmigrate"
-msgstr ""
 
-#: src/kashi/pages/Markets/Borrow.tsx:37
-#: src/kashi/pages/Markets/Borrow.tsx:105
-#: src/kashi/pages/Markets/Lending.tsx:34
-#: src/kashi/pages/Markets/Lending.tsx:108
-#: src/kashi/pages/Pair/Borrow/index.tsx:107
-#: src/kashi/pages/Pair/Borrow/index.tsx:118
-#: src/kashi/pages/Pair/Lend/index.tsx:66
 msgid "Collateral"
-msgstr ""
+msgstr "وثیقه"
 
-#: src/pages/Vesting/index.tsx:157
+
 msgid "Community Approval"
-msgstr ""
+msgstr "تایید همانندی (گروه)"
 
-#: src/pages/RemoveLiquidity/index.tsx:392
+
 msgid "Confirm"
-msgstr ""
+msgstr "تایید کنید"
 
-#: src/pages/AddLiquidity/index.tsx:314
+
 msgid "Confirm Adding Liquidity"
-msgstr ""
+msgstr "افزایش لیکوییدیتی را تایید کنید"
 
-#: src/pages/SushiBar/StakeCard.tsx:199
+
+msgid "Confirm convert"
+msgstr "تبدیل را تأیید کنید"
+
+
+msgid "Confirm Limit Order"
+msgstr "سفارش محدود را تأیید کنید"
+
+
 msgid "Confirm Staking"
-msgstr ""
+msgstr "تایید سهام گذاری"
 
-#: src/pages/AddLiquidity/ConfirmAddModalBottom.tsx:45
+
 msgid "Confirm Supply"
-msgstr ""
+msgstr "تامین را تایید کنید"
 
-#: src/components/swap/ConfirmSwapModal.tsx:32
-#: src/components/swap/SwapModalFooter.tsx:94
+
 msgid "Confirm Swap"
-msgstr ""
+msgstr "تایید جابه جایی"
 
-#: src/pages/RemoveLiquidity/index.tsx:482
-#: src/pages/SushiBar/StakeCard.tsx:200
+
+msgid "Confirm this transaction in your wallet"
+msgstr "این تراکنش را در کیف پول خود تأیید کنید"
+
+
 msgid "Confirm Withdrawal"
-msgstr ""
+msgstr "برداشت را تایید کنید"
+
 
 msgid "Connect to a wallet"
-msgstr ""
+msgstr "به کیف پول وصل شوید"
 
-#: src/pages/PoolFinder/index.tsx:61
-msgid "Connect to a wallet to find pools"
-msgstr ""
 
-#: src/pages/Migrate/index.tsx:202
-#: src/pages/Pool/index.tsx:144
-#: src/pages/Positions/LiquidityPositions.tsx:50
-msgid "Connect to a wallet to view your liquidity"
-msgstr ""
+msgid "Connect to wallet"
+msgstr "به کیف پول وصل شوید"
 
-#: src/pages/AddLiquidity/index.tsx:289
-#: src/pages/RemoveLiquidity/index.tsx:472
-#: src/pages/SushiBar/StakeCard.tsx:193
-#: src/pages/Swap/index.tsx:324
+
 msgid "Connect Wallet"
-msgstr ""
+msgstr "کیف پول را اتصال دهید"
+
+
+msgid "Convert"
+msgstr "تبدیل"
+
+
+msgid "Converting {0} {1} for {2} {3}"
+msgstr "تبدیل {0} {1} برای {2} {3}"
+
+
+msgid "Copied"
+msgstr "کپی شد"
+
+
+msgid "Copy Address"
+msgstr "آدرس را کپی کنید"
+
+
+msgid "Create a new Kashi Market"
+msgstr "یک بازار کاشی جدید ایجاد کنید"
+
 
 msgid "Create a pair"
-msgstr ""
+msgstr "یک جفت ایجاد کنید"
 
-#: src/pages/Positions/LiquidityPositions.tsx:63
-msgid "Create a Pair"
-msgstr ""
 
-#: src/pages/PoolFinder/index.tsx:138
 msgid "Create pool"
-msgstr ""
+msgstr "استخر ایجاد کنید"
 
-#: src/pages/AddLiquidity/ConfirmAddModalBottom.tsx:45
+
 msgid "Create Pool & Supply"
-msgstr ""
+msgstr "استخر و تامین ایجاد کنید"
 
-#: src/pages/BentoBox/Balances/Deposit.tsx:55
-#: src/pages/Yield/masterchefv1/InputGroup.tsx:91
+
+msgid "Current"
+msgstr "جاری"
+
+
 msgid "Deposit"
-msgstr ""
+msgstr "واریز کنید"
 
-#: src/pages/Vesting/index.tsx:266
+
+msgid "Deposit {0} into BentoBox"
+msgstr "واریز {0} به بنتوباکس"
+
+
 msgid "Deposit SUSHI into BentoBox"
-msgstr ""
+msgstr "سوشی را به بنتوباکس واریز کنید"
 
-#: src/pages/BentoBox/Balances/index.tsx:32
+
 msgid "Deposit tokens into BentoBox for all the yields"
-msgstr ""
+msgstr "برای تمامی بازده ها، توکن ها را به بنتوباکس واریز کنید"
 
-#: src/pages/Yield/masterchefv1/index.tsx:52
-#: src/pages/Yield/minichefv2/index.tsx:58
-msgid "Deposited"
-msgstr ""
 
-#: src/components/Menu.tsx:15
+msgid "Depositing {0} into BentoBox"
+msgstr "واریز {0} به بنتوباکس"
+
+
 msgid "Dev"
-msgstr ""
+msgstr "Dev"
 
-#: src/components/Settings/index.tsx:146
+
 msgid "Disable Multihops"
-msgstr ""
+msgstr "غیرفعال سازی چندپرش ها"
 
-#: src/components/Menu.tsx:30
+
+msgid "Disconnect"
+msgstr "قطع"
+
+
 msgid "Discord"
-msgstr ""
+msgstr "ناهماهنگی"
 
-#: src/pages/SushiBar/TransactionFailedModal.tsx:21
+
 msgid "Dismiss"
-msgstr ""
+msgstr "لغو"
 
-#: src/components/Menu.tsx:10
+
 msgid "Docs"
-msgstr ""
+msgstr "اسناد"
 
-#: src/components/Menu.tsx:16
+
 msgid "Documentation for developers of Sushi."
-msgstr ""
+msgstr "مستندسازی (ارائه اسناد) برای توسعه دهندگان سوشی"
 
-#: src/components/Menu.tsx:11
+
 msgid "Documentation for users of Sushi."
-msgstr ""
+msgstr "مستندسازی برای کاربران سوشی"
 
-#: src/pages/Pool/index.tsx:133
-msgid "Don't see a pool you joined? <0>Import it.</0>"
-msgstr ""
 
-#: src/pages/Positions/LiquidityPositions.tsx:42
-msgid "Dont see a pool you joined?"
-msgstr ""
+msgid "Either return to the {link}, or change to an available network."
+msgstr "یا به {link} برگردید، یا به یک شبکه موجود تغییر دهید."
 
-msgid "Enjoy the lowest slippage on Polygon"
-msgstr ""
 
-#: src/pages/BentoBox/index.tsx:47
 msgid "Enter"
-msgstr ""
+msgstr "ورود"
 
-#: src/state/swap/hooks.ts:120
+
 msgid "Enter a recipient"
-msgstr ""
+msgstr "گیرنده را وارد کنید"
 
-#: src/components/TransactionSettings/index.tsx:176
+
 msgid "Enter a valid slippage percentage"
-msgstr ""
+msgstr "درصد افت معتبر را وارد کنید"
 
-#: src/pages/SushiBar/StakeCard.tsx:195
+
 msgid "Enter Amount"
-msgstr ""
+msgstr "مبلغ را وارد کنید"
 
-#: src/state/mint/hooks.ts:137
-#: src/state/stake/hooks.ts:158
-#: src/state/stake/hooks.ts:175
-#: src/state/swap/hooks.ts:113
+
 msgid "Enter an amount"
-msgstr ""
+msgstr "مبلغ را وارد کنید"
+
 
 msgid "Error"
-msgstr ""
+msgstr "خطا"
+
+
+msgid "Error connecting"
+msgstr "خطا در اتصال"
+
+
+msgid "Error connecting. Try refreshing the page."
+msgstr "خطا در اتصال. سعی کنید صفحه را تازه‌سازی کنید."
+
+
+msgid "Exchange Rate"
+msgstr "نرخ ارز"
+
+
+msgid "Expanded results from inactive Token Lists"
+msgstr "نتایج گسترش یافته از لیست‌های توکن غیرفعال"
+
+
+msgid "Expert Mode"
+msgstr "حالت خبره"
+
 
 msgid ""
 "Expert mode turns off the confirm transaction prompt and allows high slippage trades"
 "that often result in bad rates and lost funds."
-msgstr ""
+msgstr "حالت «خبره» پیام تأیید تراکنش را غیرفعال می‌کند و معاملات با افت بالا، که اغلب به نرخ‌های بد و از دست دادن وجه منجر می‌شود، را امکان‌پذیر می‌سازد."
 
-#: src/components/Settings/index.tsx:96
-msgid "Expert mode turns off the confirm transaction prompt and allows high slippage trades\nthat often result in bad rates and lost funds."
-msgstr ""
+
+msgid "Expiration is the time at which the order will become invalid"
+msgstr "انقضا به زمانی اطلاق می‌گردد که سفارش نامعتبر می‌شود"
+
+
+msgid "Expired"
+msgstr "منقضی شده"
+
 
 msgid "failed to load"
-msgstr ""
+msgstr "بارگیری ناموفق است"
 
-#: src/pages/Yield/masterchefv1/index.tsx:98
-#: src/pages/Yield/minichefv2/index.tsx:112
-msgid "Fetching Instruments"
-msgstr ""
 
-#: src/pages/PoolFinder/index.tsx:66
+msgid "Farm"
+msgstr "مزرعه"
+
+
+msgid "Filled"
+msgstr "پر شده"
+
+
 msgid "Find Pool"
-msgstr ""
+msgstr "استخر را پیدا کنید"
 
-#, fuzzy
-msgid ""
-"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI"
-"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive"
-"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols."
-"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited"
-"SUSHI and any additional from fees."
-msgstr "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\nproportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\nxSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\nYour xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\nSUSHI and any additional from fees."
+
+msgid "for deliberations on additional points."
+msgstr "برای مشورت درباره نکات اضافی."
+
 
 msgid ""
 "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI"
@@ -483,984 +532,955 @@ msgid ""
 "xSUSHI in return for voting rights and a fully composable token that can interact with other protocols."
 "Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited"
 "SUSHI and any additional from fees."
-msgstr ""
+msgstr "برای هر جابه‌جایی در مبادله بر روی هر زنجیره، 0.05% هزینه جابه‌جایی به صورت سوشی/ به نسبت سهم شما در سوشی‌بار توزیع می‌شود. زمانی که سوشی شما در سوشی‌بار سهام‌گذاری شد، شما ایکس سوشی را در مقابل حق رأی خود دریافت خواهید کرد؛ همچنین، توکن کاملاً ترکیب‌پذیر را دریافت خواهید کرد که می‌تواند با پروتکل‌های دیگر همکنش داشته باشد. ایکس سوشی شما به طور پیوسته ترکیب می‌شوند؛ و زمانی که شما سهام‌گذاری را لغو می‌کنید، تمامی ان سوشی‌هایی که در ابتدا سهام‌گذاری شده‌اند و تمامی اضافات حاصله از هزینه‌ها را دریافت خواهید کرد."
 
-#: src/pages/SushiBar/InfoCard.tsx:31
-msgid "For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\nproportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\nxSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\nYour xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\nSUSHI and any additional from fees."
-msgstr ""
 
-#: src/pages/Swap/direct.tsx:237
-msgid "From"
-msgstr ""
+msgid "forum discussion"
+msgstr "بحث انجمن"
 
-#: src/pages/Swap/direct.tsx:237
-msgid "From (estimated)"
-msgstr ""
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:40
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
-msgstr ""
+msgstr "بدون کاهش دارایی خود، توکن بگیرید. سرمایه گذاری با قرض شما را قادر می سازد تا در مقابل دارایی ها جایگاه کوتاهی به دست آورید و از جابه جایی کاهش قیمت بازده دریافت کنید"
+
 
 msgid ""
 "Gain governance rights with xSUSHI and earn 5% APR (0.05% of"
 "all swaps from all chains)"
-msgstr ""
+msgstr "با ایکس‌سوشی حق نظارت کسب کنید و 5% APR (0.05% از کل جابه‌جایی‌ها از تمامی زنجیره‌ها) را به دست آورید"
 
-#: src/pages/Vesting/index.tsx:233
-msgid "Gain governance rights with xSUSHI and earn 5% APR (0.05% of\nall swaps from all chains)"
-msgstr ""
 
-#: src/pages/Migrate/index.tsx:86
+msgid "Go Back"
+msgstr "بازگشت"
+
+
 msgid "Hardware Wallet"
-msgstr ""
+msgstr "کیف پول سخت افزاری"
 
-#: src/pages/Yield/masterchefv1/InputGroup.tsx:126
-msgid "Harvest {0} SUSHI"
-msgstr ""
 
-#, fuzzy
-msgid "Harvest {0} SUSHI & {1} ALCX"
-msgstr ""
+msgid "Harmony Bridge"
+msgstr "پل هارمونی"
 
-#: src/pages/Yield/minichefv2/InputGroup.tsx:59
-msgid "Harvest {0} SUSHI & {1} MATIC"
-msgstr ""
 
-#: src/kashi/pages/Pair/Lend/index.tsx:24
-msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers. It's as easy as deposit and withdraw whenever you want."
-msgstr ""
+msgid "Harvest {0} SUSHI {1}"
+msgstr "برداشت {0} سوشی {1}"
 
-#: src/pages/Pool/index.tsx:162
-msgid "Have Liquidity on {0}?"
-msgstr ""
 
-#: src/kashi/pages/Pair/Lend/index.tsx:74
+msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
+msgstr "آیا دارایی‌هایی را در اختیار دارید که می‌خواهید از آنها بهره بیشتر دریافت کنید؟ آنها را در بازارهای جداگانه قرض دهید و از قرض‌گیرندگان بهره بگیرید."
+
+
 msgid "Health"
-msgstr ""
+msgstr "صحت"
 
-#: src/pages/Tools/index.tsx:83
-msgid "Helpful Sushi Tools"
-msgstr ""
 
-#: src/pages/Vesting/index.tsx:200
 msgid "Historical Total Locked: {0} SUSHI"
-msgstr ""
+msgstr "مجموع تاریخی قفل شد: {0} سوشی"
 
-#: src/pages/Vesting/index.tsx:202
+
 msgid "Historical Total Locked: Connect Wallet"
-msgstr ""
+msgstr "مجموع تاریخی قفل شد: به کیف پول وصل شوید"
 
-#: src/pages/Vesting/index.tsx:200
+
 msgid "Historical Total Locked: Fetching Total"
-msgstr ""
+msgstr "مجموع تاریخی قفل شد: بازآوری مجموع"
 
-#: src/pages/Positions/LiquidityPositions.tsx:43
-msgid "import it"
-msgstr ""
 
-msgid "Import it"
-msgstr ""
+msgid "home page"
+msgstr "صفحه اصلی"
+
+
+msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
+msgstr "اگر می‌خواهید به بازاری عرضه کنید که هنوز لیست نشده، می‌توانید از این ابزار برای ایجاد یک جفت جدید استفاده کنید."
+
+
+msgid "Import"
+msgstr "وارد كردن"
+
 
 msgid "Import Pool"
-msgstr ""
+msgstr "استخر را وارد کنید"
 
-#: src/components/swap/SwapModalHeader.tsx:88
-msgid "Input is estimated. You will sell at most <0>{0} {1}</0> or the transaction will revert."
-msgstr ""
 
-#: src/pages/Yield/masterchefv1/index.tsx:68
-#: src/pages/Yield/minichefv2/index.tsx:74
-msgid "Instruments"
-msgstr ""
+msgid "In Bento:"
+msgstr "در بنتو:"
 
-#: src/hooks/useWrapCallback.ts:62
-#: src/state/mint/hooks.ts:141
-#: src/state/mint/hooks.ts:144
-#: src/state/swap/hooks.ts:144
+
+msgid "In Wallet:"
+msgstr "در کیف پول:"
+
+
+msgid "Input is estimated. You will sell at most"
+msgstr "ورودی برآوردی است. حداکثر میرانی که خواهید فروخت"
+
+
 msgid "Insufficient {0} balance"
-msgstr ""
+msgstr "مانده {0} ناکافی "
 
-#: src/pages/Migrate/index.tsx:136
-#: src/pages/SushiBar/StakeCard.tsx:197
+
 msgid "Insufficient Balance"
-msgstr ""
+msgstr "مانده کافی نیست"
 
-#: src/pages/Swap/direct.tsx:292
-#: src/pages/Swap/index.tsx:331
+
 msgid "Insufficient liquidity for this trade"
-msgstr ""
+msgstr "لیکوییدیتی ناکافی برای این معامله"
 
-#: src/hooks/useWrapCallback.ts:81
-msgid "Insufficient WETH balance"
-msgstr ""
 
-#: src/components/Settings/index.tsx:125
 msgid "Interface Settings"
-msgstr ""
+msgstr "تنظیمات خط اتصال"
 
-#: src/pages/PoolFinder/index.tsx:144
+
 msgid "Invalid pair"
-msgstr ""
+msgstr "جفت نامعتبر"
 
-#: src/state/swap/hooks.ts:126
+
 msgid "Invalid recipient"
-msgstr ""
+msgstr "گیرنده نامعتبر"
 
-#: src/kashi/pages/Markets/Lending.tsx:20
+
 msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
-msgstr ""
+msgstr "بازارهای قرضدهی تکی باعث می شوند که ریسک شما به عنوان قرض دهنده جابه جا شود. آیا می دانید که چه تضمینی در صورت روبه رو شدن با ورشکستگی طرف مقابل برای شما وجود دارد"
 
-#: src/components/Menu.tsx:31
+
 msgid "Join the community on Discord."
-msgstr ""
+msgstr "در دیسکورد، به گروه بپیوندید"
 
-msgid "Kashi Lending"
-msgstr ""
 
-#: src/pages/Saave/index.tsx:59
-msgid "Keys Burned: 2022.03.04 at 22:05"
-msgstr ""
+msgid "Learn more about wallets"
+msgstr "درباره کیف پول بیشتر بدانید"
+
 
 msgid "Lend"
-msgstr ""
+msgstr "قرض دهید"
 
-#: src/pages/Yield/masterchefv1/InputGroup.tsx:57
-msgid "Lend {assetSymbol}"
-msgstr ""
 
-#: src/kashi/pages/Pair/Lend/index.tsx:24
 msgid "Lend assets for interest from borrowers."
-msgstr ""
+msgstr "برای دریافت بهره از قرض گیرندگان، دارایی ها را قرض دهید"
 
-#: src/kashi/pages/Markets/Lending.tsx:20
+
 msgid "Lend your assets, earn yield with no impermanent loss"
-msgstr ""
+msgstr "دارایی های خود را قرض دهید، و بدون ضرر و زیان موقت بازده به دست آوردید"
 
-#: src/kashi/pages/Markets/Lending.tsx:31
-#: src/kashi/pages/Markets/Lending.tsx:105
+
 msgid "Lending"
-msgstr ""
+msgstr "در حال قرض دادن"
 
-#: src/kashi/pages/Markets/Lending.tsx:40
+
 msgid "Lent"
-msgstr ""
+msgstr "قرض داده شد"
 
-#: src/kashi/pages/Markets/Borrow.tsx:40
-msgid "Limit <0>Used</0>"
-msgstr ""
+
+msgid "Limit"
+msgstr "محدود کردن"
+
+
+msgid "Limit order"
+msgstr "سفارش را محدود کنید"
+
 
 msgid "Liquidity"
-msgstr ""
+msgstr "لیکوییدیتی"
 
-#: src/pages/Positions/index.tsx:70
-#: src/pages/Transactions/index.tsx:68
-msgid "Liquidity Positions"
-msgstr ""
 
-#: src/components/Liquidity/AdvancedLiquidityDetails.tsx:32
-#: src/components/swap/AdvancedSwapDetails.tsx:47
-#: src/components/swap/SwapModalFooter.tsx:79
 msgid "Liquidity Provider Fee"
-msgstr ""
+msgstr "هزینه تامین کننده لیکوییدیتی"
 
-#: src/pages/Pool/index.tsx:127
+
 msgid "Liquidity Provider Rewards"
-msgstr ""
+msgstr "جوایز تامین کننده لیکوییدیتی"
+
 
 msgid ""
 "Liquidity providers earn a 0.25% fee on all trades proportional to their share of"
 "the pool. Fees are added to the pool, accrue in real time and can be claimed by"
 "withdrawing your liquidity"
-msgstr ""
+msgstr "تأمین‌کنندگان لیکوییدیتی به نسبت سهم خود از مبلغ کل، 0.25% حق‌الزحمه را برای کلیه مبادلات دریافت می‌کنند. حق‌الزحمه‌ها به مبلغ کل اضافه و در زمان واقعی انباشته می‌شوند؛ و با برداشت لیکوییدیتی خود، می‌توانید آنها را مطالبه کنید"
 
-#: src/pages/Pool/index.tsx:127
-msgid "Liquidity providers earn a 0.25% fee on all trades proportional to their share of\nthe pool. Fees are added to the pool, accrue in real time and can be claimed by\nwithdrawing your liquidity"
-msgstr ""
 
-#: src/components/SearchModal/Manage.tsx:56
 msgid "Lists"
-msgstr ""
+msgstr "فهرست ها"
 
-#: src/pages/Migrate/index.tsx:136
-#: src/pages/Pool/index.tsx:148
-#: src/pages/PoolFinder/index.tsx:150
-#: src/pages/Positions/LiquidityPositions.tsx:52
-#: src/pages/Positions/index.tsx:46
-#: src/pages/Transactions/index.tsx:46
+
 msgid "Loading"
-msgstr ""
+msgstr "بارگیری"
 
-#: src/pages/Migrate/index.tsx:204
+
+msgid "Loading Balance"
+msgstr "مانده در حال بارگیری است"
+
+
+msgid "Loading balance"
+msgstr "مانده در حال بارگیری است"
+
+
 msgid "Loading your {exchange} liquidity positions"
-msgstr ""
+msgstr "بارگیری وضعیت لیکوییدیتی {exchange}"
 
-#: src/pages/SushiBar/APRCard.tsx:46
-msgid "Loading..."
-msgstr ""
 
 msgid "loading..."
-msgstr ""
+msgstr "بارگیری"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:78
-msgid "Loan to Value"
-msgstr ""
+
+msgid "Loading..."
+msgstr "بارگیری"
+
+
+msgid "LTV"
+msgstr "ال‌تی‌وی"
+
 
 msgid "Manage"
-msgstr ""
+msgstr "مدیریت کنید"
 
-#: src/components/PositionCard/index.tsx:211
-msgid "Manage Liquidity in Rewards Pool"
-msgstr ""
 
-#: src/pages/PoolFinder/index.tsx:123
 msgid "Manage this pool"
-msgstr ""
+msgstr "این استخر را مدیریت کنید"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:43
-#: src/kashi/pages/Pair/Lend/index.tsx:27
-msgid "Market Info"
-msgstr ""
 
-#: src/pages/Yield/minichefv2/index.tsx:171
-msgid "Market Staked"
-msgstr ""
+msgid "Manage Token Lists"
+msgstr "مدیریت لیست‌های توکن"
 
-#: src/kashi/pages/Markets/Borrow.tsx:99
-#: src/kashi/pages/Markets/Lending.tsx:102
+
+msgid "Market"
+msgstr "بازار"
+
+
 msgid "Markets"
-msgstr ""
+msgstr "بازارها"
+
+
+msgid "Matic Bridge"
+msgstr "پل ماتیک"
+
 
 msgid "MAX"
-msgstr ""
+msgstr "حداکثر"
+
 
 msgid "Max"
-msgstr ""
+msgstr "حداکثر"
 
-#: src/pages/SushiBar/InfoCard.tsx:26
+
 msgid "Maximize yield by staking SUSHI for xSUSHI"
+msgstr "با سهام گذاری سوشی برای ایکس سوشی خود بازده را به حداکثر برسانید"
+
+
+msgid "Maximum sent"
+msgstr "حداکثر ارسال شده"
+
+
+msgid ""
+"MEOW tokens wrap xSUSHI into BentoBox for double yields and can be"
+"used to vote in special MEOW governor contracts."
 msgstr ""
 
-#: src/components/swap/AdvancedSwapDetails.tsx:26
-#: src/components/swap/SwapModalFooter.tsx:51
-msgid "Maximum sold"
-msgstr ""
 
-#: src/pages/Migrate/index.tsx:149
+msgid "MEV Shield by Archer DAO"
+msgstr "سپر MEV توسط آرچر DAO"
+
+
 msgid "Migrate"
-msgstr ""
+msgstr "جابه جایی"
 
-#: src/pages/Migrate/index.tsx:197
+
 msgid "Migrate {exchange} Liquidity"
-msgstr ""
+msgstr "لیکوییدیتی{exchange} را جابه جا کنید"
 
-#: src/pages/Pool/index.tsx:164
-msgid "Migrate Now"
-msgstr ""
 
-#: src/pages/Migrate/index.tsx:149
 msgid "Migrating"
-msgstr ""
+msgstr "در حال جابه جایی"
 
-#: src/pages/Migrate/index.tsx:82
+
 msgid "Migration is done in one-click using your signature (permit)"
-msgstr ""
+msgstr "جابه جایی با یک بار کلیک کردن با استفاده از امضای (اجازه) شما انجام می شود"
 
-#: src/components/swap/AdvancedSwapDetails.tsx:26
-#: src/components/swap/SwapModalFooter.tsx:51
+
+msgid "Miner Tip"
+msgstr "نکته ویژه ماینر"
+
+
+msgid "Minimum Received"
+msgstr "حداقل دریافتی"
+
+
 msgid "Minimum received"
-msgstr ""
+msgstr "حداقل دریافتی"
 
-#: src/components/TransactionSettings/index.tsx:197
+
 msgid "minutes"
-msgstr ""
+msgstr "دقیقه ها"
 
-#, fuzzy
-msgid "Missed the Auction?"
-msgstr ""
 
-#: src/pages/Swap/index.tsx:257
-msgid "New network, new features"
-msgstr ""
+msgid "My Liquidity Positions"
+msgstr "وضعیت‌های لیکوییدیتی من"
 
-#: src/pages/Migrate/index.tsx:167
+
+msgid "My Orders"
+msgstr "سفارش‌های من"
+
+
+msgid "My SUSHI"
+msgstr "سوشی من"
+
+
+msgid "Network not supported yet"
+msgstr "هنوز از شبکه پشتیبانی نمی‌شود"
+
+
+msgid "Never"
+msgstr "هرگز"
+
+
+msgid "New to Ethereum?"
+msgstr "اتریوم برای شما تازگی دارد؟"
+
+
 msgid "No Liquidity found"
-msgstr ""
+msgstr "هیچ لیکوییدیتی یافت نشد"
 
-#: src/pages/Pool/index.tsx:157
-msgid "No liquidity found"
-msgstr ""
 
-#: src/kashi/components/TradeReview.tsx:56
 msgid "No liquidity found to do swap"
-msgstr ""
+msgstr "هیچ لیکوییدیتی برای جابه جایی یافت نشد"
 
-#: src/pages/Positions/LiquidityPositions.tsx:56
-msgid "No liquidity positions found"
-msgstr ""
 
-#: src/pages/PoolFinder/index.tsx:136
+msgid "No liquidity was found."
+msgstr "هیچ لیکوییدیتی یافت نشد."
+
+
+msgid "No order history"
+msgstr "بدون تاریخچه سفارش"
+
+
 msgid "No pool found"
-msgstr ""
+msgstr "هیچ استخری یافت نشد"
 
-#: src/pages/Yield/masterchefv1/index.tsx:97
-#: src/pages/Yield/minichefv2/index.tsx:111
-msgid "No Results"
-msgstr ""
 
 msgid "No results found"
-msgstr ""
+msgstr "هیچ نتیجه ای یافت نشد"
 
-#: src/pages/Migrate/index.tsx:81
+
 msgid "Non-hardware Wallet"
-msgstr ""
+msgstr "عدم وجود کیف پول سخت افزاری"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:87
-#: src/kashi/pages/Pair/Lend/index.tsx:87
+
 msgid "None"
-msgstr ""
+msgstr "هیچ کدام"
 
-#: src/pages/Tools/index.tsx:132
-msgid "One click SUSHI → xSUSHI → aXSUSHI"
-msgstr ""
 
-#: src/components/Settings/index.tsx:100
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
-msgstr ""
+msgstr "تنها در صورتی که می دانید که در حال انجام چه کاری هستید از این حالت استفاده کنید"
+
 
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
-msgstr ""
+msgstr "اوه! خطای نامعلومی رخ داده است. لطفاً صفحه را رفرش (بازآوری) کنید یا از بروز (مرورگر) یا دستگاه دیگری برای مشاهده سایت استفاده کنید"
+
 
 msgid "Open main menu"
-msgstr ""
+msgstr "منوی اصلی را باز کنید"
 
-#: src/components/Menu.tsx:20
+
+msgid "Open Orders"
+msgstr "سفارش‌های باز"
+
+
 msgid "Open Source"
-msgstr ""
+msgstr "منبع باز"
 
-#: src/kashi/pages/Markets/Borrow.tsx:108
-#: src/kashi/pages/Markets/Lending.tsx:37
-#: src/kashi/pages/Markets/Lending.tsx:111
-#: src/kashi/pages/Pair/Borrow/index.tsx:109
+
+msgid "or the transaction will revert."
+msgstr "یا تراکنش برگشت داده خواهد شد."
+
+
 msgid "Oracle"
+msgstr "اوراکل"
+
+
+msgid "Order Expiration"
+msgstr "انقضای سفارش"
+
+
+msgid "Order History"
+msgstr "تاریخچه سفارش"
+
+
+msgid ""
+"Output is estimated. If the price changes by more than {0}% your transaction"
+"will revert."
 msgstr ""
 
-#: src/pages/AddLiquidity/index.tsx:195
-#: src/pages/RemoveLiquidity/index.tsx:353
+
 msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
-msgstr ""
+msgstr "نتیجه برآوردی است. در صورت تغییر قیمت تا بیش از {0}% تراکنش شما برگشت داده خواهد شد"
 
-#: src/components/swap/SwapModalHeader.tsx:79
-msgid "Output is estimated. You will receive at least <0>{0} {1}</0> or the transaction will revert."
-msgstr ""
 
-#: src/components/swap/SwapModalHeader.tsx:100
-msgid "Output will be sent to <0>{0}</0>"
-msgstr ""
+msgid "Output is estimated. You will receive at least"
+msgstr "خروجی برآوردی است. حداقل مبلغی که دریافت خواهید کرد"
+
+
+msgid "Output will be sent to"
+msgstr "خروجی فرستاده خواهد شد به"
+
+
+msgid "Pay"
+msgstr "پرداخت"
+
+
+msgid "Pay from:"
+msgstr "پرداخت از:"
+
 
 msgid "Pending"
-msgstr ""
+msgstr "در حال تعلیق"
 
-#: src/pages/Vesting/index.tsx:211
+
 msgid "Pending Treasury Transfer"
-msgstr ""
+msgstr "تعلیق انتقال صندوق"
 
-#: src/pages/Yield/minichefv2/index.tsx:177
-msgid "per month"
-msgstr ""
 
-#: src/components/Settings/index.tsx:103
+msgid "Please connect to the appropriate Ethereum network."
+msgstr "لطفاً به شبکه اتریوم مناسب متصل شوید."
+
+
+msgid "Please enter an amount"
+msgstr "لطفاً یک مبلغ را وارد کنید"
+
+
+msgid "Please refer to the"
+msgstr "لطفا مراجعه کنید به"
+
 msgid "Please type the word \"confirm\" to enable expert mode."
-msgstr ""
+msgstr "لطفا کلمه «confirm» (تأیید) را تایپ کنید تا حالت خبره فعال شود."
+
 
 msgid "Pool"
-msgstr ""
+msgstr "استخر"
 
-#: src/pages/PoolFinder/index.tsx:120
+
 msgid "Pool Found!"
-msgstr ""
+msgstr "استخر یافت شد"
 
-#: src/pages/Yield/minichefv2/index.tsx:82
-msgid "Pool Rewards"
-msgstr ""
 
-#: src/pages/AddLiquidity/index.tsx:190
 msgid "Pool Tokens"
-msgstr ""
+msgstr "توکن های استخر"
 
-#: src/components/PositionCard/index.tsx:154
+
 msgid "Pool tokens in rewards pool"
-msgstr ""
+msgstr "توکن های استخر در استخر جوایز"
 
-#: src/components/PositionCard/index.tsx:69
-#: src/components/PositionCard/index.tsx:79
-#: src/components/PositionCard/index.tsx:159
-#: src/components/PositionCard/index.tsx:173
+
 msgid "Pooled {0}"
-msgstr ""
+msgstr "{0} استخر شد"
 
-#: src/pages/Positions/index.tsx:28
+
 msgid "Positions"
-msgstr ""
+msgstr "وضعیت ها"
 
-#, fuzzy
-msgid "Pour a hot bowl of MISO, the new <0>token launchpad</0> from SUSHI"
-msgstr ""
 
-#: src/pages/RemoveLiquidity/index.tsx:375
-#: src/pages/Swap/direct.tsx:360
-#: src/pages/Swap/index.tsx:306
-msgid "Price"
-msgstr ""
-
-#: src/components/swap/AdvancedSwapDetails.tsx:39
-#: src/components/swap/SwapModalFooter.tsx:70
 msgid "Price Impact"
-msgstr ""
+msgstr "تاثیر قیمت"
 
-#: src/pages/Swap/direct.tsx:319
-#: src/pages/Swap/index.tsx:358
+
 msgid "Price Impact High"
-msgstr ""
+msgstr "تاثیر بالای قیمت"
 
-#: src/pages/Swap/index.tsx:382
+
 msgid "Price Impact Too High"
-msgstr ""
+msgstr "تاثیر بسیار بالای قیمت"
 
-#: src/components/swap/SwapModalHeader.tsx:65
+
 msgid "Price Updated"
-msgstr ""
+msgstr "قیمت به روزرسانی شده"
 
-#: src/pages/AddLiquidity/ConfirmAddModalBottom.tsx:29
+
+msgid "Rate"
+msgstr "نرخ"
+
+
 msgid "Rates"
-msgstr ""
+msgstr "نرخ ها"
 
-#: src/pages/Saave/index.tsx:64
-msgid "Read the contract"
-msgstr ""
 
-#: src/pages/Swap/index.tsx:260
-msgid "Read Tutorial"
-msgstr ""
+msgid "Receive"
+msgstr "دریافت"
 
-#: src/components/Liquidity/LiquidityHeader.tsx:13
-#: src/components/PositionCard/V1.tsx:37
-#: src/components/PositionCard/index.tsx:207
+
+msgid "Recent Transactions"
+msgstr "تراکنش‌های اخیر"
+
+
+msgid "Recipient"
+msgstr "گیرنده"
+
+
 msgid "Remove"
-msgstr ""
+msgstr "حذف"
+
+
+msgid "Remove {0} {1} and {2} {3}"
+msgstr "حذف {0} {1} و {2} {3}"
+
 
 msgid "Remove Liquidity"
-msgstr ""
+msgstr "لیکوییدیتی را حذف کنید"
 
-#: src/pages/Swap/index.tsx:296
-msgid "Remove send"
-msgstr ""
 
-#: src/pages/RemoveLiquidity/index.tsx:397
+msgid "Remove recipient"
+msgstr "حذف گیرنده"
+
+
 msgid "Removing {0} {1} and {2} {3}"
-msgstr ""
+msgstr "حذف {0} {1}  و {2} {3}"
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:151
+
 msgid "Repay"
-msgstr ""
+msgstr "بازپرداخت"
 
-#: src/pages/Tools/index.tsx:106
-msgid "Request Tool"
-msgstr ""
 
-#: src/components/Settings/index.tsx:148
 msgid "Restricts swaps to direct pairs only."
-msgstr ""
+msgstr "جابه جایی های را تنها به جفت های مستقیم محدود می کند"
 
-#: src/components/swap/AdvancedSwapDetails.tsx:69
+
+msgid "Review Limit Order"
+msgstr "مرور محدود کردن سفارش"
+
+
+msgid "Rewards"
+msgstr "جوایز"
+
+
+msgid "Roll it back - this feature is not yet supported on {0}."
+msgstr "آن را برگشت دهید - این ویژگی هنوز در {0} پشتیبانی نمی‌شود."
+
+
 msgid "Route"
-msgstr ""
+msgstr "مسیریابی "
 
-#: src/components/swap/AdvancedSwapDetails.tsx:70
-#: src/kashi/components/TradeReview.tsx:50
+
 msgid "Routing through these tokens resulted in the best price for your trade."
-msgstr ""
+msgstr "مسیریابی از طریق این توکن ها به بهترین قیمت برای معامله شما منجر می شود"
 
-#: src/pages/Saave/index.tsx:49
-msgid "SAAVE: Stack your yields in one transaction"
-msgstr ""
-
-#: src/pages/Yield/components/Search.tsx:6
-msgid "Search by name, symbol, address"
-msgstr ""
 
 msgid "Search name or paste address"
-msgstr ""
+msgstr "نام را جستجو کنید یا آدرس را پیست کنید"
+
+
+msgid "Select a asset token"
+msgstr "یک توکن دارایی را انتخاب کنید"
+
+
+msgid "Select a collateral token"
+msgstr "یک توکن وثیقه را انتخاب کنید"
+
+
+msgid "Select a rate"
+msgstr "یک نرخ را انتخاب کنید"
+
 
 msgid "Select a token"
-msgstr ""
+msgstr "یک توکن انتخاب کنید"
 
-#: src/pages/PoolFinder/index.tsx:61
+
 msgid "Select a token to find your liquidity"
-msgstr ""
+msgstr "برای پیدا کردن لیکوییدیتی خود، توکنی را انتخاب کنید"
 
-#: src/pages/AddLiquidity/PoolPriceBar.tsx:37
+
+msgid "Select an order expiration"
+msgstr "یک انقضای سفارش را انتخاب کنید"
+
+
+msgid "Send to:"
+msgstr "فرستادن به:"
+
+
+msgid "Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners"
+msgstr "برای پیشگیری از حملات متضمن پیش‌دستی و در تنگنا قرار دادن، تراکنش‌ها را به صورت خصوصی ارسال کنید. مستلزم یک انعام ویژه ماینر برای تشویق ماینرها است"
+
+
 msgid "Share of Pool"
-msgstr ""
+msgstr "سهم استخر"
 
-#: src/pages/AddLiquidity/ConfirmAddModalBottom.tsx:40
+
 msgid "Share of Pool:"
-msgstr ""
+msgstr "سهم استخر"
 
-#: src/pages/Swap/direct.tsx:366
-#: src/pages/Swap/index.tsx:312
-msgid "Slippage Tolerance"
-msgstr ""
 
-#: src/components/TransactionSettings/index.tsx:131
 msgid "Slippage tolerance"
-msgstr ""
+msgstr "دامنه پذیرش افت"
 
-#: src/kashi/components/Button.tsx:18
+
+msgid "Slippage tolerance..."
+msgstr "دامنه پذیرش افت..."
+
+
+msgid "SLP"
+msgstr "اس‌ال‌پی"
+
+
 msgid "Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used"
-msgstr ""
+msgstr "در طول امضای تاییدیه اشتباهی رخ داده است. این امر برای کیف پول های سخت افزاری مانند Trezor و Ledger رخ می دهد. دوباره کلیک کنید و شیوه فال بک (جایگزین) استفاده خواهد شد"
 
-#: src/pages/Vesting/index.tsx:247
+
 msgid "Stack Yields with SAAVE"
-msgstr ""
+msgstr "استک بازده ها با SAAVE"
 
-#: src/pages/Yield/minichefv2/InputGroup.tsx:111
+
 msgid "Stake"
-msgstr ""
+msgstr "سهام گذاری کنید"
+
 
 msgid ""
 "Stake into xSUSHI add collateral as axSUSHI on Aave all in"
 "one click"
-msgstr ""
+msgstr "با فقط یک کلیک، سهام‌گذاری در ایکس سوشی باعث می‌شود که همگی به صورت ای‌ایکس‌سوشی بر روی Aave همسو شوند"
 
-#: src/pages/Vesting/index.tsx:251
-msgid "Stake into xSUSHI add collateral as axSUSHI on Aave all in\none click"
-msgstr ""
 
-#: src/pages/SushiBar/StakeCard.tsx:132
-#: src/pages/SushiBar/StakeCard.tsx:147
 msgid "Stake SUSHI"
-msgstr ""
+msgstr "سوشی را سهام گذاری کنید"
 
-#: src/pages/Vesting/index.tsx:229
+
 msgid "Stake SUSHI for xSUSHI"
-msgstr ""
+msgstr "سهام گذاری سوشی برای ایکس سوشی"
 
-#: src/pages/Saave/index.tsx:54
-msgid "Stake your SUSHI into xSUSHI for ~5% APY. Deposit your xSUSHI into Aave as aXSUSHI to earn collateral interest and borrowing power. All in one click."
-msgstr ""
 
-msgid ""
-"Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights."
-"Continuously compounding."
-msgstr ""
-
-#: src/pages/SushiBar/legacy/index.tsx:21
-msgid "Stake your SUSHI into xSUSHI for ~5% APY. No impermanent loss, no loss of governance rights.\nContinuously compounding."
-msgstr ""
-
-#: src/pages/SushiBar/APRCard.tsx:31
 msgid "Staking APR"
-msgstr ""
+msgstr "سهام گذاری APR"
 
-#: src/pages/Tools/index.tsx:112
-msgid "Submit Tool"
-msgstr ""
 
-#: src/kashi/pages/Pair/Borrow/index.tsx:62
-#: src/kashi/pages/Pair/Lend/index.tsx:50
-msgid "Supply APR"
-msgstr ""
-
-#: src/pages/AddLiquidity/index.tsx:203
 msgid "Supplying {0} {1} and {2} {3}"
-msgstr ""
+msgstr "تامین {0} {1} و {2} {3}"
 
-#: src/pages/RemoveLiquidity/index.tsx:363
-msgid "SUSHI {0}/{1} Burned"
-msgstr ""
 
-#: src/pages/Trade/index.tsx:9
-msgid "Sushi allows for swapping of ERC20 compatible tokens across multiple networks"
-msgstr ""
-
-msgid "SUSHI Balance"
-msgstr ""
-
-#: src/pages/Saave/SushiInputPanel.tsx:163
-msgid "SUSHI Balance: {sushiBalance}"
-msgstr ""
-
-#: src/components/Menu.tsx:21
 msgid "Sushi is a supporter of Open Source."
-msgstr ""
+msgstr "سوشی، پشتیان منبع باز است"
 
-msgid "SushiBar"
-msgstr ""
 
-#: src/pages/SushiBar/legacy/index.tsx:18
-msgid "SushiBar: Make SUSHI work for you"
-msgstr ""
+msgid "SushiSwap"
+msgstr "سوشی‌سواپ"
+
 
 msgid "Swap"
-msgstr ""
+msgstr "جابه جا کنید"
 
-#: src/pages/Swap/direct.tsx:321
-#: src/pages/Swap/direct.tsx:345
-#: src/pages/Swap/index.tsx:360
-#: src/pages/Swap/index.tsx:384
+
 msgid "Swap Anyway"
-msgstr ""
+msgstr "جابه جایی در هر صورت"
 
-#, fuzzy
-msgid "Swap for SAK3 token on SUSHI now. Click here to swap."
-msgstr ""
 
 msgid "Swap From (est.):"
-msgstr ""
+msgstr "از (est.) جابه جا کنید"
+
 
 msgid "Swap From:"
-msgstr ""
+msgstr "از .... جابه جا کنید"
 
-#: src/pages/Swap/index.tsx:287
+
 msgid "Swap To (est.):"
-msgstr ""
+msgstr "جابه جایی به (est.)"
 
-#: src/pages/Swap/index.tsx:288
+
 msgid "Swap To:"
-msgstr ""
+msgstr "جابه جایی به:"
 
-#: src/components/swap/AdvancedSwapDetails.tsx:40
-#: src/kashi/components/TradeReview.tsx:30
+
 msgid "The difference between the market price and estimated price due to trade size."
-msgstr ""
+msgstr "تفاوت میان قیمت بازار و قیمت برآوردی به علت اندازه معامله"
 
-#: src/components/swap/SwapModalFooter.tsx:72
-msgid "The difference between the market price and your price due to trade size."
-msgstr ""
 
-#: src/kashi/pages/Markets/Lending.tsx:112
+msgid "The input token cannot be transferred. There may be an issue with the input token."
+msgstr "توکن ورودی قابل انتقال نیست. ممکن است توکن ورودی مشکلی داشته باشد."
+
+
 msgid "The onchain oracle that tracks the pricing for this pair"
-msgstr ""
+msgstr "اوراکل زنجیره ای که قیمت گذاری این جفت را پیگیری می کند"
 
-#: src/hooks/useSwapCallback.ts:139
-#: src/hooks/useSwapCallback.ts:139
-msgid "The transaction cannot succeed due to error: {0}. This is probably an issue with one of the tokens you are swapping."
-msgstr ""
 
-#: src/pages/Vesting/index.tsx:221
+msgid "The output token cannot be transferred. There may be an issue with the output token."
+msgstr "توکن خروجی قابل انتقال نیست. ممکن است توکن خروجی مشکلی داشته باشد."
+
+
+msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
+msgstr "ارسال این تراکنش امکان‌پذیر نیست زیرا مهلت آن گذشته است. لطفاً بررسی کنید که مهلت تراکنش شما خیلی کم نباشد."
+
+
+msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
+msgstr "x * y = k ثابت تک‌جابه‌جایی با جابه‌جایی حاصل نشد. این معمولاً به این معنی است که یکی از توکن‌هایی که در حال جابه‌جایی آن هستید متضمن رفتار سفارشی در انتقال است."
+
+
 msgid "Things you can do with your SUSHI"
-msgstr ""
+msgstr "کارهایی که شما با سوشی خود می توانید انجام دهید"
 
-#: src/hooks/useSwapCallback.ts:136
-#: src/hooks/useSwapCallback.ts:136
+
+msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
+msgstr "این توکن در لیست(های) توکن فعال نمایش داده نمی‌شود. اطمینان حاصل کنید که این همان نشانه‌ای است که می‌خواهید تبادل کنید."
+
+
+msgid "This transaction is below market rate"
+msgstr "این تراکنش زیر نرخ بازار است"
+
+
+msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
+msgstr "این تراکنش به علت جابه‌جایی قیمت موفقیت‌آمیز نخواهد بود. افزایش دامنه پذیرش افت را امتحان کنید."
+
+
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
-msgstr ""
+msgstr "این تراکنش به علت جابه جایی قیمت یا هزینه انتقال، ناموفق خواهد بود. افزایش دامنه پذیرش افت را امتحان کنید"
 
-#: src/pages/Swap/direct.tsx:268
-msgid "To"
-msgstr ""
 
-#: src/pages/Swap/direct.tsx:268
-msgid "To (estimated)"
-msgstr ""
+msgid "Tip to encourage miners to select this transaction."
+msgstr "نکته‌ای برای تشویق ماینرها به انتخاب این تراکنش."
 
-#: src/pages/Saave/index.tsx:69
-msgid "To withdraw into SUSHI, go to Aave and remove axSUSHI as collateral and then to SushiBar to unstake. A full unwind will be avaialble soon."
-msgstr ""
 
-#: src/components/Settings/index.tsx:129
+msgid "Tip:"
+msgstr "نکته:"
+
+
 msgid "Toggle Expert Mode"
-msgstr ""
+msgstr "حالت خبره توگل"
 
-#: src/pages/BentoBox/Balances/index.tsx:50
+
 msgid "Token"
-msgstr ""
+msgstr "توکن"
 
-#: src/components/SearchModal/ImportToken.tsx:53
-#: src/components/SearchModal/Manage.tsx:59
-#: src/components/SearchModal/ManageTokens.tsx:90
+
 msgid "Tokens"
-msgstr ""
+msgstr "توکن ها"
 
-#: src/pages/Tools/index.tsx:74
-#: src/pages/Tools/index.tsx:100
-msgid "Tools"
-msgstr ""
-
-#: src/components/Menu.tsx:26
-msgid "Tools to optimize your workflow."
-msgstr ""
-
-#: src/kashi/pages/Markets/Lending.tsx:121
-#: src/kashi/pages/Pair/Lend/index.tsx:30
-msgid "Total"
-msgstr ""
-
-#: src/pages/Trade/index.tsx:8
-msgid "Trade"
-msgstr ""
-
-#: src/components/TransactionSettings/index.tsx:186
-msgid "Transaction deadline"
-msgstr ""
-
-#: src/pages/Positions/index.tsx:73
-#: src/pages/Transactions/index.tsx:71
-msgid "Transaction History"
-msgstr ""
-
-#: src/components/Settings/index.tsx:123
-msgid "Transaction Settings"
-msgstr ""
-
-#: src/pages/Transactions/index.tsx:28
-msgid "Transactions"
-msgstr ""
-
-#: src/pages/Swap/direct.tsx:293
-#: src/pages/Swap/index.tsx:332
-msgid "Try enabling multi-hop trades"
-msgstr ""
-
-#: src/components/Settings/index.tsx:110
-msgid "Turn On Expert Mode"
-msgstr ""
-
-#: src/pages/Yield/masterchefv1/index.tsx:76
-#: src/pages/Yield/minichefv2/index.tsx:90
-msgid "TVL"
-msgstr ""
-
-msgid "Unknown error"
-msgstr ""
-
-#: src/pages/Yield/minichefv2/InputGroup.tsx:136
-msgid "Unstake"
-msgstr ""
-
-#: src/pages/SushiBar/BalanceCard.tsx:26
-msgid "Unstaked"
-msgstr ""
-
-#: src/pages/AddLiquidity/index.tsx:288
-#: src/pages/Swap/index.tsx:323
-msgid "Unsupported Asset"
-msgstr ""
-
-#: src/pages/Swap/direct.tsx:289
-#: src/pages/Swap/index.tsx:328
-msgid "Unwrap"
-msgstr ""
-
-#: src/hooks/useWrapCallback.ts:73
-msgid "Unwrap {0} W{1} to {2}"
-msgstr ""
-
-#: src/pages/Tools/index.tsx:88
-msgid "Use any tool below to optimize your workflow. Please note, some tools are experimental so use with discretion. If theres a smart contract involved for the tool, read the code and confirm the keys have been burned."
-msgstr ""
-
-#: src/pages/Yield/minichefv2/index.tsx:44
-msgid "V2 Rewarder"
-msgstr ""
-
-msgid "Vesting"
-msgstr ""
-
-#: src/pages/Vesting/index.tsx:161
-msgid "Vesting is executed within the guidelines selected by the community in <0>SIMP3</0>.<1/><2/>Please refer to the <3>forum discussion</3> for deliberations on additional points.<4/><5/>Additional records and weekly merkle updates can be found on <6>Github</6>"
-msgstr ""
-
-#: src/pages/Positions/index.tsx:59
-#: src/pages/Transactions/index.tsx:58
-msgid "View on explorer"
-msgstr ""
-
-#: src/components/swap/AdvancedSwapDetails.tsx:82
-msgid "View pair analytics"
-msgstr ""
-
-#: src/pages/SushiBar/APRCard.tsx:40
-msgid "View Stats"
-msgstr ""
-
-#: src/pages/SushiBar/legacy/index.tsx:31
-msgid "View SushiBar Stats"
-msgstr ""
-
-#: src/pages/AddLiquidity/index.tsx:243
-msgid "View Your Liquidity Positions"
-msgstr ""
-
-#: src/pages/RemoveLiquidity/index.tsx:438
-msgid "View Your Liquidity Positions >"
-msgstr ""
-
-#: src/pages/SushiBar/legacy/index.tsx:34
-msgid "View your SushiBar Portfolio"
-msgstr ""
-
-#: src/pages/BentoBox/Balances/index.tsx:51
-msgid "Wallet"
-msgstr ""
-
-#: src/pages/BentoBox/Balances/Deposit.tsx:34
-#: src/pages/Yield/masterchefv1/InputGroup.tsx:69
-#: src/pages/Yield/minichefv2/InputGroup.tsx:88
-msgid "Wallet Balance"
-msgstr ""
-
-#: src/pages/Swap/index.tsx:256
-msgid "Welcome to Sushi on Polygon (Matic)"
-msgstr ""
-
-#: src/pages/AddLiquidity/index.tsx:253
-msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
-msgstr ""
-
-msgid "Withdraw"
-msgstr ""
-
-#: src/pages/Yield/masterchefv1/InputGroup.tsx:60
-msgid "Withdraw {assetSymbol}"
-msgstr ""
-
-#: src/pages/Swap/direct.tsx:287
-#: src/pages/Swap/index.tsx:326
-msgid "Wrap"
-msgstr ""
-
-msgid "Wrong Network"
-msgstr ""
 
 msgid ""
-"xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional"
-"to your share of the SushiBar."
+"Tokens from inactive lists. Import specific tokens below or"
+"click Manage to activate more lists."
 msgstr ""
 
-#: src/pages/SushiBar/legacy/index.tsx:25
-msgid "xSUSHI automatically earn fees (0.05% of all swaps, including multichain swaps) proportional\nto your share of the SushiBar."
-msgstr ""
 
-msgid "xSUSHI Balance"
-msgstr ""
+msgid "Tools"
+msgstr "ابزارها"
 
-#: src/pages/SushiBar/APRCard.tsx:48
+
+msgid "Tools to optimize your workflow."
+msgstr "ابزارها برای بهینه سازی جریان کار شما"
+
+
+msgid "Total"
+msgstr "مجموع"
+
+
+msgid "Transaction deadline"
+msgstr "آخرین موعد تراکنش"
+
+
+msgid "Transaction History {0}"
+msgstr "تاریخچه تراکنش {0}"
+
+
+msgid "Transaction Settings"
+msgstr "تنظیمات تراکنش"
+
+
+msgid "Transaction Submitted"
+msgstr "تراکنش ارسال شده"
+
+
+msgid "Try enabling multi-hop trades"
+msgstr "فعال سازی مبادله های چندپرشی را امتحان کنید"
+
+
+msgid "Turn On Expert Mode"
+msgstr "روشن کردن حالت خبره"
+
+
+msgid "TVL"
+msgstr "کارهایی "
+
+
+msgid "Unknown error{0}. Try increasing your slippage tolerance."
+msgstr "خطای ناشناخته{0}. افزایش دامنه پذیرش افت را امتحان کنید."
+
+
+msgid "Unstake"
+msgstr "لغو سهام گذاری"
+
+
+msgid "Unstaked"
+msgstr "لغو سهام گذاری"
+
+
+msgid "Unsupported Asset"
+msgstr "دارایی بدون پشتیبانی"
+
+
+msgid "Unwrap"
+msgstr "باز کردن"
+
+
+msgid "Use SUSHI"
+msgstr "استفاده از سوشی"
+
+
+msgid "Use this tool to find pairs that don't automatically appear in the interface"
+msgstr "از این ابزار برای یافتن جفت‌هایی استفاده کنید که به صورت خودکار در رابط کاربری نمایش داده نمی‌شوند"
+
+
+msgid "Use xSUSHI"
+msgstr "استفاده از ایکس‌سوشی"
+
+
+msgid "Used"
+msgstr "استفاده شده"
+
+
+msgid "Vesting"
+msgstr "در حال واگذار کردن"
+
+
+msgid "Vesting is executed within the guidelines selected by the community in"
+msgstr "واگذاری در چارچوب دستورالعمل‌های انتخاب شده توسط جامعه اجرا می‌شود"
+
+
+msgid "View Liquidity Positions"
+msgstr "مشاهده وضعیت‌های لیکوییدیتی خود"
+
+
+msgid "View on explorer"
+msgstr "مشاهده در جستجوگر (اکسپلورو)"
+
+
+msgid "View Stats"
+msgstr "مشاهده آمار"
+
+
+msgid "Waiting for Confirmation"
+msgstr "در انتظار تأیید"
+
+
+msgid "Wallet"
+msgstr "کیف پول"
+
+
+msgid "Wallet Balance"
+msgstr "مانده کیف پول"
+
+
+msgid "Weekly unlocks from the vesting period."
+msgstr "گشایش‌های هفتگی از دوره واگذاری."
+
+
+msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
+msgstr "هنگام ایجاد جفت، شما اولین تامین کننده لیکوییدیتی هستید. نسبت توکن هایی که اضافه می کنید، قیمت این استخر را مشخص خواهند کرد. اگر با نرخ موافق بودید، می توانید برای مشاهده بر روی تامین (supply) کلیک کنید"
+
+
+msgid "Withdraw"
+msgstr "برداشت"
+
+
+msgid "Wrap"
+msgstr "پوشاندن"
+
+
+msgid "Wrong Network"
+msgstr "شبکه اشتباه"
+
+
+msgid "xSUSHI Fee"
+msgstr "هزینه ایکس‌سوشی"
+
+
 msgid "Yesterday's APR"
-msgstr ""
+msgstr "APR دیروز"
 
-msgid "Yield"
-msgstr ""
 
-#, fuzzy
-msgid "Yield Debugger"
-msgstr ""
-
-#, fuzzy
-msgid "Yield Farms"
-msgstr ""
-
-#: src/pages/Yield/masterchefv1/index.tsx:39
-#: src/pages/Yield/minichefv2/index.tsx:43
-msgid "Yield Instruments"
-msgstr ""
-
-#: src/pages/AddLiquidity/index.tsx:250
 msgid "You are creating a pool"
-msgstr ""
+msgstr "شما در حال ایجاد استخر هستید"
+
 
 msgid "You are on the wrong network"
-msgstr ""
+msgstr "شما در شبکه اشتباهی هستید"
 
-#: src/pages/PoolFinder/index.tsx:129
+
 msgid "You don’t have liquidity in this pool yet"
-msgstr ""
+msgstr "شما هنوز در این استخر لیکوییدیتی ندارید"
 
-#: src/pages/Migrate/index.tsx:87
+
 msgid "You need to first approve LP tokens and then migrate it"
-msgstr ""
+msgstr "لازم است اول توکن های LP را تایید کرده و سپس آن را جابه جا کنید"
 
-#: src/pages/AddLiquidity/index.tsx:250
-#: src/pages/RemoveLiquidity/index.tsx:445
+
+msgid "You pay"
+msgstr "شما می‌پردازید"
+
+
+msgid "You Pay:"
+msgstr "شما می‌پردازید:"
+
+
+msgid "You receive"
+msgstr "شما دریافت می‌کنید"
+
+
+msgid "You receive:"
+msgstr "شما دریافت می‌کنید:"
+
+
 msgid "You will receive"
-msgstr ""
+msgstr "شما دریافت خواهید کرد"
 
-#: src/pages/Migrate/index.tsx:154
+
+msgid "Your"
+msgstr "شما"
+
+
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
-msgstr ""
+msgstr "لیکوییدیتی {exchange} {0}/{1} شما به لیکوییدیتی  {2}/{3}سوشی سواپ (SushiSwap) تبدیل خواهد شد "
 
-#: src/pages/Vesting/index.tsx:190
+
 msgid "Your Claimable SUSHI this Week"
-msgstr ""
+msgstr "سوشی قابل مطالبه شما در این هفته"
 
-#: src/pages/Migrate/index.tsx:209
+
 msgid "Your Liquidity"
-msgstr ""
+msgstr "لیکوییدیتی شما"
 
-#: src/pages/Positions/LiquidityPositions.tsx:40
-msgid "Your Liquidity Positions"
-msgstr ""
 
-#: src/components/Liquidity/AdvancedLiquidityDetails.tsx:21
-#: src/components/PositionCard/index.tsx:75
-msgid "Your Pool Share"
-msgstr ""
-
-#: src/components/PositionCard/index.tsx:190
 msgid "Your pool share"
-msgstr ""
+msgstr "سهم استخر شما "
 
-#: src/components/Liquidity/AdvancedLiquidityDetails.tsx:10
-#: src/components/PositionCard/index.tsx:63
-msgid "Your Pool Tokens"
-msgstr ""
 
-#: src/pages/Yield/minichefv2/InputGroup.tsx:117
 msgid "Your Staked"
-msgstr ""
+msgstr "سهام گذاری های شما"
 
-#: src/pages/SushiBar/BalanceCard.tsx:50
+
 msgid "Your SushiBar Stats"
-msgstr ""
+msgstr "آمار سوشی بار شما"
 
-#: src/components/PositionCard/index.tsx:146
+
 msgid "Your total pool tokens"
-msgstr ""
+msgstr "کل توکن های استخر شما"
 
-#: src/pages/Transactions/TransactionHistory.tsx:12
-msgid "Your Transaction History"
-msgstr ""
 
-msgid "Your Transaction History on {0}"
-msgstr ""
-
-#: src/components/TransactionSettings/index.tsx:179
 msgid "Your transaction may be frontrun"
-msgstr ""
+msgstr "تراکنش شما می تواند موفق باشد"
 
-#: src/components/TransactionSettings/index.tsx:178
+
 msgid "Your transaction may fail"
-msgstr ""
+msgstr "ممکن است تراکش شما ناموفق باشد"
 
-#: src/components/TransactionSettings/index.tsx:188
+
 msgid "Your transaction will revert if it is pending for more than this long."
-msgstr ""
+msgstr "اگر تعلیق بیشتر از این زمان به طول بیانجامد، تراکنش شما برگشت داده خواهد شد"
 
-#: src/components/TransactionSettings/index.tsx:133
 msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
-msgstr ""
+msgstr "اگر تغییرات قیمت نامطلوب بیشتر از این درصد باشد، تراکنش شما برگشت داده خواهد شد."
 
-#: src/components/swap/AdvancedSwapDetails.tsx:28
-#: src/components/swap/SwapModalFooter.tsx:53
-#: src/kashi/components/TradeReview.tsx:21
+
 msgid "Your transaction will revert if there is a large, unfavorable price movement before it is confirmed."
-msgstr ""
+msgstr "در صورتی که جابه جایی نامطلوب و زیاد قیمت قبل از تایید وجود داشته باشد، تراکنش شما برگشت داده خواهد شد"
 
-#: src/pages/Migrate/index.tsx:206
+
+msgid "Your transactions will appear here..."
+msgstr "تراکنش‌های شما در اینجا نشان داده خواهد شد..."
+
+
 msgid "Your Wallet"
-msgstr ""
+msgstr "کیف پول شما"
 
-#: src/pages/Yield/masterchefv1/index.tsx:49
-#: src/pages/Yield/minichefv2/index.tsx:55
-msgid "Your Yields"
-msgstr ""
+
+msgid "Zap"
+msgstr "زاپ"

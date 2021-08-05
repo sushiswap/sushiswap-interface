@@ -95,14 +95,6 @@ function AppBar(): JSX.Element {
                               {i18n._(t`Borrow`)}
                             </a>
                           </NavLink>
-                          {/* <Link href={'/bento'}>
-                                                            <a
-                                                                id={`bento-nav-link`}
-                                                                className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                                                            >
-                                                                {i18n._(t`BentoBox`)}
-                                                            </a>
-                                                        </Link> */}
                         </>
                       )}
                       {chainId && featureEnabled(Feature.STAKING, chainId) && (
@@ -114,6 +106,16 @@ function AppBar(): JSX.Element {
                             {i18n._(t`Stake`)}
                           </a>
                         </NavLink>
+                      )}
+                      {chainId === ChainId.MAINNET && (
+                        <Link href={'/miso'}>
+                          <a
+                            id={`miso-nav-link`}
+                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                          >
+                            {i18n._(t`Miso`)}
+                          </a>
+                        </Link>
                       )}
                     </div>
                   </div>
@@ -352,6 +354,17 @@ function AppBar(): JSX.Element {
                   >
                     {i18n._(t`Analytics`)}
                   </ExternalLink>
+                )}
+
+                {chainId && featureEnabled(Feature.MISO, chainId) && (
+                  <Link href={'/miso'}>
+                    <a
+                      id={`stake-nav-link`}
+                      className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                    >
+                      {i18n._(t`Miso`)}
+                    </a>
+                  </Link>
                 )}
               </div>
             </Popover.Panel>

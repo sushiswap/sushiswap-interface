@@ -68,10 +68,12 @@ const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token
 const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg'
 const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
 const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/okt.jpg'
-const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/dai.jpg'
+const xDaiLogo =
+  'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/xdai/assets/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d/logo.png'
 const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
+const PalmLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/palm.jpg'
 
-const logo: { readonly [chainId in ChainId]?: string } = {
+const LOGO: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: EthereumLogo,
   [ChainId.FANTOM]: FantomLogo,
   [ChainId.FANTOM_TESTNET]: FantomLogo,
@@ -92,6 +94,8 @@ const logo: { readonly [chainId in ChainId]?: string } = {
   [ChainId.ARBITRUM]: EthereumLogo,
   [ChainId.ARBITRUM_TESTNET]: EthereumLogo,
   [ChainId.CELO]: CeloLogo,
+  [ChainId.PALM]: PalmLogo,
+  [ChainId.PALM_TESTNET]: PalmLogo,
 }
 
 interface CurrencyLogoProps {
@@ -121,7 +125,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
     }
 
     if (currency.isNative || currency.equals(WNATIVE[currency.chainId])) {
-      return [logo[currency.chainId], unknown]
+      return [LOGO[currency.chainId], unknown]
     }
 
     if (currency.isToken) {

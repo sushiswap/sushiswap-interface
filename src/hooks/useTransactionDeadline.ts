@@ -1,13 +1,14 @@
-import { AppState } from '../state'
 import { BigNumber } from 'ethers'
+import { useAppSelector } from '../state/hooks'
 import useCurrentBlockTimestamp from './useCurrentBlockTimestamp'
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
 
 // combines the block timestamp with the user setting to give the deadline that should be used for any submitted transaction
 export default function useTransactionDeadline(): BigNumber | undefined {
-  const ttl = useSelector<AppState, number>((state) => state.user.userDeadline)
+  const ttl = useAppSelector((state) => state.user.userDeadline)
+
   const blockTimestamp = useCurrentBlockTimestamp()
+  console.log({ ttl, blockTimestamp })
   return useMemo(() => {
     if (blockTimestamp && ttl) return blockTimestamp.add(ttl)
     return undefined

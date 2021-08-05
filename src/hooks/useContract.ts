@@ -12,7 +12,6 @@ import {
   ROUTER_ADDRESS,
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
-  WETH9,
   WNATIVE,
 } from '@sushiswap/sdk'
 import {
@@ -20,13 +19,11 @@ import {
   BORING_HELPER_ADDRESS,
   CHAINLINK_ORACLE_ADDRESS,
   KASHI_ADDRESS,
-  SUSHISWAP_MULTISWAPPER_ADDRESS,
   SUSHISWAP_SWAPPER_ADDRESS,
   SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
   SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
 import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
-import { MULTICALL_ABI, MULTICALL_NETWORKS } from '../constants/multicall'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
 import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
@@ -35,9 +32,9 @@ import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
 import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
 import CHAINLINK_ORACLE_ABI from '../constants/abis/chainlink-oracle.json'
+import CLONE_REWARDER_ABI from '../constants/abis/clone-rewarder.json'
 import COMPLEX_REWARDER_ABI from '../constants/abis/complex-rewarder.json'
 import { Contract } from '@ethersproject/contracts'
-import DASHBOARD2_ABI from '../constants/abis/dashboard2.json'
 import DASHBOARD_ABI from '../constants/abis/dashboard.json'
 import EIP_2612_ABI from '../constants/abis/eip-2612.json'
 import ENS_ABI from '../constants/abis/ens-registrar.json'
@@ -45,8 +42,11 @@ import ENS_PUBLIC_RESOLVER_ABI from '../constants/abis/ens-public-resolver.json'
 import ERC20_ABI from '../constants/abis/erc20.json'
 import { ERC20_BYTES32_ABI } from '../constants/abis/erc20'
 import FACTORY_ABI from '../constants/abis/factory.json'
+import INARI_ABI from '../constants/abis/inari.json'
 import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
+import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json'
+import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
 import MASTERCHEF_V2_ABI from '../constants/abis/masterchef-v2.json'
@@ -58,14 +58,15 @@ import PENDING_ABI from '../constants/abis/pending.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SAAVE_ABI from '../constants/abis/saave.json'
 import SUSHIROLL_ABI from '@sushiswap/core/abi/SushiRoll.json'
-import SUSHISWAP_MULTISWAPPER_ABI from '../constants/abis/sushiswapmultiswapper.json'
 import SUSHISWAP_TWAP_ORACLE_ABI from '../constants/abis/sushiswap-slp-oracle.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZAPPER_ABI from '../constants/abis/zapper.json'
+import ZENKO_ABI from '../constants/abis/zenko.json'
 import { getContract } from '../functions/contract'
+import { getVerifyingContract } from 'limitorderv2-sdk'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
 
@@ -148,11 +149,6 @@ export function useBoringHelperContract(): Contract | null {
 
 export function usePendingContract(): Contract | null {
   return useContract('0x9aeadfE6cd03A2b5730474bF6dd79802d5bCD029', PENDING_ABI, false)
-}
-
-export function useMulticallContract(): Contract | null {
-  const { chainId } = useActiveWeb3React()
-  return useContract(chainId && MULTICALL_NETWORKS[chainId], MULTICALL_ABI, false)
 }
 
 export function useMulticall2Contract() {
@@ -642,6 +638,27 @@ export function useAlcxRewarderContract(withSignerIfPossible?: boolean): Contrac
   return useContract('0x7519C93fC5073E15d89131fD38118D73A72370F8', ALCX_REWARDER_ABI, withSignerIfPossible)
 }
 
+export function useCloneRewarderContract(address, withSignerIfPossibe?: boolean): Contract | null {
+  return useContract(address, CLONE_REWARDER_ABI, withSignerIfPossibe)
+}
+
 export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D', MEOWSHI_ABI, withSignerIfPossible)
+}
+
+export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(getVerifyingContract(chainId), LIMIT_ORDER_ABI, withSignerIfPossibe)
+}
+
+export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0xe2f736B7d1f6071124CBb5FC23E93d141CD24E12', LIMIT_ORDER_HELPER_ABI, withSignerIfPossible)
+}
+
+export function useInariContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0x195E8262AA81Ba560478EC6Ca4dA73745547073f', INARI_ABI, withSignerIfPossible)
+}
+
+export function useZenkoContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
 }

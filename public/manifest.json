@@ -1,8 +1,8 @@
 {
-  "name": "SUSHI App",
-  "short_name": "SUSHI",
+  "name": "SushiSwap",
+  "short_name": "SushiSwap",
   "lang": "en",
-  "description": "Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi",
+  "description": "Swap, yield, lend, borrow, leverage, limit, launch all on one community driven ecosystem",
   "background_color": "#0D0415",
   "theme_color": "#F338C3",
   "dir": "ltr",
@@ -12,6 +12,7 @@
   "start_url": "/",
   "splash_pages": null,
   "prefer_related_applications": false,
+  "iconPath": "logo.png",
   "icons": [
     {
         "src": "/android-chrome-36x36.png",

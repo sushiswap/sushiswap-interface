@@ -1,4 +1,4 @@
-import { useAlcxRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
+import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
@@ -32,28 +32,31 @@ const usePending = (farm) => {
   const { chainId, account, library } = useActiveWeb3React()
   const currentBlockNumber = useBlockNumber()
 
-  const aclxRewarder = useAlcxRewarderContract()
+  const cloneRewarder = useCloneRewarderContract(farm?.rewarder?.id)
 
   const complexRewarder = useComplexRewarderContract(farm?.rewarder?.id)
 
   const contract = useMemo(
     () => ({
-      [ChainId.MAINNET]: aclxRewarder,
+      [ChainId.MAINNET]: cloneRewarder,
       [ChainId.MATIC]: complexRewarder,
       [ChainId.XDAI]: complexRewarder,
       [ChainId.HARMONY]: complexRewarder,
     }),
-    [complexRewarder, aclxRewarder]
+    [complexRewarder, cloneRewarder]
   )
 
   useEffect(() => {
     async function fetchPendingReward() {
       try {
         const pending = await contract[chainId]?.pendingTokens(farm.id, account, '0')
-        // todo: do not assume [0] or that rewardToken has 18 decimals
-        const formatted = Fraction.from(BigNumber.from(pending?.rewardAmounts[0]), BigNumber.from(10).pow(18)).toString(
-          18
-        )
+        // todo: do not assume [0] or that rewardToken has 18 decimals (only works w/ mastechefv2 currently)
+        const formatted = farm.rewardToken
+          ? Fraction.from(
+              BigNumber.from(pending?.rewardAmounts[0]),
+              BigNumber.from(10).pow(farm.rewardToken.decimals)
+            ).toString(farm.rewardToken.decimals)
+          : Fraction.from(BigNumber.from(pending?.rewardAmounts[0]), BigNumber.from(10).pow(18)).toString(18)
         setBalance(formatted)
       } catch (error) {
         console.error(error)
@@ -62,14 +65,14 @@ const usePending = (farm) => {
     // id = 0 is evaluated as false
     if (
       account &&
-      aclxRewarder &&
+      cloneRewarder &&
       farm &&
       library &&
       (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF)
     ) {
       fetchPendingReward()
     }
-  }, [account, currentBlockNumber, aclxRewarder, complexRewarder, farm, library, contract, chainId])
+  }, [account, currentBlockNumber, cloneRewarder, complexRewarder, farm, library, contract, chainId])
 
   return balance
 }

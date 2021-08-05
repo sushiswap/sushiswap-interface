@@ -1,8 +1,9 @@
-import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { useEthPrice, useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
-import Search from '../../../components/Search'
-import { useFuse } from '../../../hooks'
+import { useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from '../../../services/graph'
+
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
+import Search from '../../../components/Search'
+import TokenList from '../../../features/analytics/Tokens/TokenList'
+import { useFuse } from '../../../hooks'
 
 export default function Tokens() {
   const block1d = useOneDayBlock()

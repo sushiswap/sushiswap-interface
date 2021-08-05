@@ -1,16 +1,13 @@
+import Container from '../../components/Container'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Image from '../../components/Image'
 import Link from 'next/link'
 import Main from '../../components/Main'
 import NavLink from '../../components/NavLink'
+import Popups from '../../components/Popups'
 import React from 'react'
-import { Zero } from '@ethersproject/constants'
-import { formatNumber } from '../../functions/format'
-import { getCurrency } from '../../functions/currency'
 import kashiLogo from '../../../public/kashi-logo.png'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { useBentoBalances } from '../../state/bentobox/hooks'
 import { useRouter } from 'next/router'
 
 interface LayoutProps {
@@ -25,14 +22,11 @@ export default function Layout({
   right = undefined,
 }: LayoutProps): JSX.Element {
   const router = useRouter()
-  // TODO: Fix, causing infinite loop
-  // const balances = useBentoBalances()
-  const { chainId } = useActiveWeb3React()
   return (
-    <div className="z-0 flex flex-col items-start w-full h-full overflow-x-hidden overflow-y-auto">
+    <div className="z-0 flex flex-col items-start w-full h-screen">
       <Header />
       <Main>
-        <div className="container px-0 mx-auto">
+        <Container className="px-4 py-4 md:py-8 lg:py-12" maxWidth="7xl">
           <div className={`mb-2 grid grid-cols-12 gap-4`}>
             <div className="flex justify-center col-span-12 xl:col-span-3 lg:justify-start">
               <Link href="/borrow">
@@ -133,8 +127,9 @@ export default function Layout({
               </div>
             )}
           </div>
-        </div>
+        </Container>
       </Main>
+      <Popups />
       <Footer />
     </div>
   )

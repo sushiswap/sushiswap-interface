@@ -8,8 +8,10 @@ import useMigrateState, { MigrateState } from '../../../hooks/useMigrateState'
 
 import { AddressZero } from '@ethersproject/constants'
 import Badge from '../../../components/Badge'
+import Container from '../../../components/Container'
 import Dots from '../../../components/Dots'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import Empty from '../../../components/Empty'
 import Head from 'next/head'
 import LPToken from '../../../types/LPToken'
@@ -307,8 +309,9 @@ export default function Migrate() {
   } else if (chainId === ChainId.MATIC) {
     exchange = 'QuickSwap'
   }
+
   return (
-    <>
+    <Container id="migrate-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="lg">
       <Head>
         <title>Migrate | Sushi</title>
         <meta key="description" name="description" content="Migrate your liquidity to SushiSwap." />
@@ -316,32 +319,34 @@ export default function Migrate() {
 
       <div className="mb-8 text-2xl text-center">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
 
-      <div className="w-full max-w-lg p-5 space-y-4 rounded bg-dark-900 shadow-swap">
-        {!account ? (
-          <Web3Connect color="blue" className="w-full" />
-        ) : state.loading ? (
-          <Typography variant="lg" className="p-4 text-center text-primary">
-            <Dots>{i18n._(t`Loading your ${exchange} liquidity positions`)}</Dots>
-          </Typography>
-        ) : (
-          <>
-            {!state.loading && <Typography variant="lg">{i18n._(t`Your Wallet`)}</Typography>}
-            <MigrateModeSelect state={state} />
-            {!state.loading && state.lpTokens.length > 0 && (
-              <div>
-                <Typography variant="lg">{i18n._(t`Your Liquidity`)}</Typography>
-                <Typography variant="sm" className="text-secondary">
-                  {t`Click on a pool below, input the amount you wish to migrate or select max, and click
+      <DoubleGlowShadow>
+        <div className="p-4 space-y-4 rounded bg-dark-900">
+          {!account ? (
+            <Web3Connect color="blue" className="w-full" />
+          ) : state.loading ? (
+            <Typography variant="lg" className="p-4 text-center text-primary">
+              <Dots>{i18n._(t`Loading your ${exchange} liquidity positions`)}</Dots>
+            </Typography>
+          ) : (
+            <>
+              {!state.loading && <Typography variant="lg">{i18n._(t`Your Wallet`)}</Typography>}
+              <MigrateModeSelect state={state} />
+              {!state.loading && state.lpTokens.length > 0 && (
+                <div>
+                  <Typography variant="lg">{i18n._(t`Your Liquidity`)}</Typography>
+                  <Typography variant="sm" className="text-secondary">
+                    {t`Click on a pool below, input the amount you wish to migrate or select max, and click
                         migrate`}
-                </Typography>
-              </div>
-            )}
-            <ExchangeLiquidityPairs state={state} exchange={exchange} />
-            <AmountInput state={state} />
-            {state.selectedLPToken && <MigrateButtons state={state} exchange={exchange} />}
-          </>
-        )}
-      </div>
-    </>
+                  </Typography>
+                </div>
+              )}
+              <ExchangeLiquidityPairs state={state} exchange={exchange} />
+              <AmountInput state={state} />
+              {state.selectedLPToken && <MigrateButtons state={state} exchange={exchange} />}
+            </>
+          )}
+        </div>
+      </DoubleGlowShadow>
+    </Container>
   )
 }

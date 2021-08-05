@@ -19,6 +19,7 @@ import Container from '../../../components/Container'
 import { Contract } from '@ethersproject/contracts'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import Dots from '../../../components/Dots'
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/burn/actions'
 import Head from 'next/head'
 import Header from '../../../components/ExchangeHeader'
@@ -708,35 +709,35 @@ export default function Remove() {
   )
 
   return (
-    <>
+    <Container id="remove-liquidity-page" className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Remove Liquidity | Sushi</title>
         <meta key="description" name="description" content="Remove liquidity from the SushiSwap AMM" />
       </Head>
+      <div className="px-4 mb-5">
+        <NavLink href="/pool">
+          <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">
+            <span>{i18n._(t`View Liquidity Positions`)}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </NavLink>
+      </div>
 
-      <Container id="remove-liquidity-page" maxWidth="2xl" className="space-y-4">
-        <div className="px-4 mb-5">
-          <NavLink href="/pool">
-            <a className="flex items-center space-x-2 text-base font-medium text-center cursor-pointer text-secondary hover:text-high-emphesis">
-              <span>{i18n._(t`View Liquidity Positions`)}</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-4 h-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
-          </NavLink>
-        </div>
-        <div className="p-4 space-y-4 rounded bg-dark-900 shadow-liquidity" style={{ zIndex: 1 }}>
+      <DoubleGlowShadow>
+        <div className="p-4 space-y-4 rounded bg-dark-900" style={{ zIndex: 1 }}>
           {/* <AddRemoveTabs
-            creating={false}
-            adding={false}
-            defaultSlippage={DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE}
-          /> */}
+          creating={false}
+          adding={false}
+          defaultSlippage={DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE}
+        /> */}
           <Header input={currencyA} output={currencyB} allowedSlippage={allowedSlippage} />
           <div>
             <TransactionConfirmationModal
@@ -862,7 +863,7 @@ export default function Remove() {
 
           {pair ? <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} /> : null}
         </div>
-      </Container>
-    </>
+      </DoubleGlowShadow>
+    </Container>
   )
 }

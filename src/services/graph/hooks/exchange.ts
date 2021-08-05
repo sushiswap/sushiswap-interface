@@ -6,9 +6,13 @@ import {
   getLiquidityPositions,
   getMaticPrice,
   getOnePrice,
+  getPicklePrice,
+  getMphPrice,
   getStakePrice,
   getSushiPrice,
-  getAvaxPrice,
+  getYggPrice,
+  getRulerPrice,
+  getTruPrice,
   getTokens,
   getDayData,
   getFactory,
@@ -16,6 +20,7 @@ import {
   getTokenPairs,
   getTransactions,
   getTokenDayData,
+  getAvaxPrice,
 } from '../fetchers'
 import { getEthPrice, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -83,6 +88,36 @@ export function useOnePrice(variables = undefined, swrConfig: SWRConfiguration =
   return data
 }
 
+export function useYggPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? ['yggPrice', JSON.stringify(variables)] : null,
+    () => getYggPrice(),
+    swrConfig
+  )
+  return data
+}
+
+export function useRulerPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? ['rulerPrice', JSON.stringify(variables)] : null,
+    () => getRulerPrice(variables),
+    swrConfig
+  )
+  return data
+}
+
+export function useTruPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? ['truPrice', JSON.stringify(variables)] : null,
+    () => getTruPrice(),
+    swrConfig
+  )
+  return data
+}
+
 export function useAlcxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.MAINNET
@@ -105,19 +140,33 @@ export function useCvxPrice(variables = undefined, swrConfig: SWRConfiguration =
   return data
 }
 
-export function useMaticPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['maticPrice', JSON.stringify(variables)], () => getMaticPrice(variables), swrConfig)
+export function usePicklePrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? ['picklePrice', JSON.stringify(variables)] : null,
+    () => getPicklePrice(),
+    swrConfig
+  )
+  return data
+}
+
+export function useMphPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.MAINNET ? ['mphPrice', JSON.stringify(variables)] : null,
+    () => getMphPrice(),
+    swrConfig
+  )
   return data
 }
 
 export function useAvaxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && chainId === ChainId.AVALANCHE
-  const { data } = useSWR(
-    shouldFetch ? ['avaxPrice', JSON.stringify(variables)] : null,
-    () => getAvaxPrice(variables),
-    swrConfig
-  )
+  const { data } = useSWR(['avaxPrice', JSON.stringify(variables)], () => getAvaxPrice(variables), swrConfig)
+  return data
+}
+
+export function useMaticPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['maticPrice', JSON.stringify(variables)], () => getMaticPrice(variables), swrConfig)
   return data
 }
 

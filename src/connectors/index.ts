@@ -1,5 +1,3 @@
-import { Web3Provider } from '@ethersproject/providers'
-
 import { BscConnector } from '@binance-chain/bsc-connector'
 import { ChainId } from '@sushiswap/sdk'
 import { FortmaticConnector } from './Fortmatic'
@@ -9,6 +7,7 @@ import { PortisConnector } from '@web3-react/portis-connector'
 import { TorusConnector } from '@web3-react/torus-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
+import { Web3Provider } from '@ethersproject/providers'
 
 const RPC = {
   [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
@@ -35,6 +34,7 @@ const RPC = {
   [ChainId.OKEX]: 'https://exchainrpc.okex.org',
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+  [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
 }
 
 export const network = new NetworkConnector({
@@ -73,6 +73,7 @@ export const injected = new InjectedConnector({
     65, // okex testnet
     42161, // arbitrum
     42220, // celo
+    11297108109, // palm
   ],
 })
 

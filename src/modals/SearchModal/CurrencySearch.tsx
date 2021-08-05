@@ -47,6 +47,9 @@ interface CurrencySearchProps {
   showManageView: () => void
   showImportView: () => void
   setImportToken: (token: Token) => void
+  currencyList?: string[]
+  includeNativeCurrency?: boolean
+  allowManageTokenList?: boolean
 }
 
 export function CurrencySearch({
@@ -59,6 +62,9 @@ export function CurrencySearch({
   showManageView,
   showImportView,
   setImportToken,
+  currencyList,
+  includeNativeCurrency = true,
+  allowManageTokenList = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -77,12 +83,17 @@ export function CurrencySearch({
   const router = useRouter()
 
   if (router.asPath.startsWith('/kashi/create')) {
-    allTokens = Object.keys(allTokens)
-      .filter((key) => CHAINLINK_TOKENS[chainId].find((address) => address === key))
-      .reduce((obj, key) => {
-        obj[key] = allTokens[key]
-        return obj
-      }, {})
+    allTokens = Object.keys(allTokens).reduce((obj, key) => {
+      if (CHAINLINK_TOKENS[chainId].find((address) => address === key)) obj[key] = allTokens[key]
+      return obj
+    }, {})
+  }
+
+  if (currencyList) {
+    allTokens = Object.keys(allTokens).reduce((obj, key) => {
+      if (currencyList.includes(key)) obj[key] = allTokens[key]
+      return obj
+    }, {})
   }
 
   // if they input an address, use it
@@ -180,19 +191,21 @@ export function CurrencySearch({
   return (
     <ContentWrapper>
       <ModalHeader onClose={onDismiss} title="Select a token" />
-      <div className="mt-3 mb-8">
-        <input
-          type="text"
-          id="token-search-input"
-          placeholder={i18n._(t`Search name or paste address`)}
-          autoComplete="off"
-          value={searchQuery}
-          ref={inputRef as RefObject<HTMLInputElement>}
-          onChange={handleInput}
-          onKeyDown={handleEnter}
-          className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
-        />
-      </div>
+      {!currencyList && (
+        <div className="mt-0 sm:mt-3 mb-3 sm:mb-8">
+          <input
+            type="text"
+            id="token-search-input"
+            placeholder={i18n._(t`Search name or paste address`)}
+            autoComplete="off"
+            value={searchQuery}
+            ref={inputRef as RefObject<HTMLInputElement>}
+            onChange={handleInput}
+            onKeyDown={handleEnter}
+            className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
+          />
+        </div>
+      )}
       {showCommonBases && (
         <div className="mb-4">
           <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
@@ -209,7 +222,7 @@ export function CurrencySearch({
             {({ height }) => (
               <CurrencyList
                 height={height}
-                currencies={filteredSortedTokensWithETH}
+                currencies={includeNativeCurrency ? filteredSortedTokensWithETH : filteredSortedTokens}
                 otherListTokens={filteredInactiveTokens}
                 onCurrencySelect={handleCurrencySelect}
                 otherCurrency={otherSelectedCurrency}
@@ -226,11 +239,13 @@ export function CurrencySearch({
           <div className="mb-8 text-center">{i18n._(t`No results found`)}</div>
         </Column>
       )}
-      <div className="mt-3">
-        <Button id="list-token-manage-button" onClick={showManageView} color="gray">
-          {i18n._(t`Manage Token Lists`)}
-        </Button>
-      </div>
+      {allowManageTokenList && (
+        <div className="mt-3">
+          <Button id="list-token-manage-button" onClick={showManageView} color="gray">
+            {i18n._(t`Manage Token Lists`)}
+          </Button>
+        </div>
+      )}
     </ContentWrapper>
   )
 }

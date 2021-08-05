@@ -10,7 +10,7 @@ import React from 'react'
 import cookie from 'cookie-cutter'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 
-const PARAMS: {
+export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
     chainId: string
     chainName: string
@@ -149,6 +149,17 @@ const PARAMS: {
     rpcUrls: ['https://forno.celo.org'],
     blockExplorerUrls: ['https://explorer.celo.org'],
   },
+  [ChainId.PALM]: {
+    chainId: '0x2A15C308D',
+    chainName: 'Palm',
+    nativeCurrency: {
+      name: 'Palm',
+      symbol: 'PALM',
+      decimals: 18,
+    },
+    rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
+    blockExplorerUrls: ['https://explorer.palm.io'],
+  },
 }
 
 export default function NetworkModal(): JSX.Element | null {
@@ -179,6 +190,7 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.HARMONY,
           ChainId.AVALANCHE,
           ChainId.CELO,
+          ChainId.PALM,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (
@@ -201,7 +213,7 @@ export default function NetworkModal(): JSX.Element | null {
               key={i}
               onClick={() => {
                 toggleNetworkModal()
-                const params = PARAMS[key]
+                const params = SUPPORTED_NETWORKS[key]
                 cookie.set('chainId', key)
                 if (key === ChainId.MAINNET) {
                   library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])

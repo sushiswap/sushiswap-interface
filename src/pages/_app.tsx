@@ -13,6 +13,7 @@ import store, { persistor } from '../state'
 import type { AppProps } from 'next/app'
 import ApplicationUpdater from '../state/application/updater'
 import DefaultLayout from '../layouts/Default'
+import Dots from '../components/Dots'
 import Head from 'next/head'
 import { I18nProvider } from '@lingui/react'
 import ListsUpdater from '../state/lists/updater'
@@ -27,6 +28,7 @@ import { Web3ReactProvider } from '@web3-react/core'
 import dynamic from 'next/dynamic'
 import getLibrary from '../functions/getLibrary'
 import { i18n } from '@lingui/core'
+import { persistStore } from 'redux-persist'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
@@ -41,6 +43,7 @@ function MyApp({
   pageProps,
 }: AppProps & {
   Component: NextComponentType<NextPageContext> & {
+    Guard: FunctionComponent
     Layout: FunctionComponent
     Provider: FunctionComponent
   }
@@ -83,6 +86,9 @@ function MyApp({
 
   // Allows for conditionally setting a layout to be hoisted per page
   const Layout = Component.Layout || DefaultLayout
+
+  // Allows for conditionally setting a guard to be hoisted per page
+  const Guard = Component.Guard || Fragment
 
   return (
     <Fragment>
@@ -138,7 +144,7 @@ function MyApp({
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
               <ReduxProvider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
+                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
                   <>
                     <ListsUpdater />
                     <UserUpdater />
@@ -148,7 +154,9 @@ function MyApp({
                   </>
                   <Provider>
                     <Layout>
-                      <Component {...pageProps} />
+                      <Guard>
+                        <Component {...pageProps} />
+                      </Guard>
                     </Layout>
                   </Provider>
                 </PersistGate>

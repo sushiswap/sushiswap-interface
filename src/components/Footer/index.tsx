@@ -51,6 +51,18 @@ const Footer = () => {
             {i18n._(t`Harmony Bridge`)}
           </ExternalLink>
         )}
+        {chainId && chainId === ChainId.XDAI && (
+          <ExternalLink id={`xdai-bridge-link`} href=" https://omni.xdaichain.com/" className="text-low-emphesis">
+            {i18n._(t`xDai Bridge`)}
+          </ExternalLink>
+        )}
+
+        {chainId && chainId === ChainId.PALM && (
+          <ExternalLink id={`palm-bridge-link`} href=" https://app.palm.io/bridge" className="text-low-emphesis">
+            {i18n._(t`Palm Bridge`)}
+          </ExternalLink>
+        )}
+
         <Polling />
       </div>
     </footer>
