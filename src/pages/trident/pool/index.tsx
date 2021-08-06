@@ -1,19 +1,18 @@
 import TridentLayout from '../../../layouts/Trident'
-import Typography from '../../../components/Typography'
-import Button from '../../../components/Button'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
 import SearchResultPools from '../../../features/trident/pool/SearchResultPools'
-import ListActions from '../../../features/trident/pool/ListActions'
+import PoolListActions from '../../../features/trident/pool/PoolListActions'
 import { TridentPoolPageContextProvider, useTridentPoolPageState } from '../../../features/trident/pool/context'
 import SuggestedPools from '../../../features/trident/pool/SuggestedPools'
 import { classNames } from '../../../functions'
+import { POOLS_ROUTE } from '../../../constants/routes'
+import Typography from '../../../components/Typography'
+import { t } from '@lingui/macro'
+import Button from '../../../components/Button'
+import { useLingui } from '@lingui/react'
 
-export async function getStaticProps() {
-  return {
-    props: { breadcrumbs: [{ label: 'Pools', slug: '/trident/pool' }] },
-  }
-}
+export const getStaticProps = async () => ({
+  props: { breadcrumbs: [POOLS_ROUTE] },
+})
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -39,7 +38,7 @@ const Pool = () => {
           </Button>
         </div>
       </div>
-      <ListActions />
+      <PoolListActions />
       <div className={classNames('flex gap-6', searchQuery ? 'flex-col-reverse' : 'flex-col')}>
         <SuggestedPools />
         <SearchResultPools />

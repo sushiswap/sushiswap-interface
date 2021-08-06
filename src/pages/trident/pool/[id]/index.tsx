@@ -16,35 +16,28 @@ import ListPanelFooter from '../../../../components/ListPanel/ListPanelFooter'
 import ListPanelItem from '../../../../components/ListPanel/ListPanelItem'
 import { useState } from 'react'
 import ToggleButtonGroup from '../../../../components/ToggleButton'
+import { POOLS_ROUTE } from '../../../../constants/routes'
+import PoolStats from '../../../../features/trident/pool/PoolStats'
+import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: { id: '1' },
-      },
-    ],
-    fallback: false,
-  }
-}
+export const getStaticPaths = async () => ({
+  paths: [{ params: { id: '1' } }],
+  fallback: false,
+})
 
-export async function getStaticProps({ params }) {
+export const getStaticProps = async ({ params }) => {
   const { id } = params
 
   return {
     props: {
       pool: POOL_TYPES[id],
-      breadcrumbs: [
-        { label: 'Pools', slug: '/trident/pool' },
-        { label: 'SUSHI-WETH - Classic - 0.05% Fee', slug: '/trident/pool/1' },
-      ],
+      breadcrumbs: [POOLS_ROUTE, { label: 'SUSHI-WETH - Classic - 0.05% Fee', slug: '/trident/pool/1' }],
     },
   }
 }
 
 const Pool = () => {
   const { i18n } = useLingui()
-  const [chartType, setChartType] = useState('Volume')
 
   const ListPanelItems = [
     <ListPanelItem
@@ -156,56 +149,8 @@ const Pool = () => {
           items={ListPanelItems}
         />
       </div>
-      <div className="mx-5 mt-5">
-        <ToggleButtonGroup value={chartType} onChange={setChartType}>
-          <ToggleButtonGroup.Button value="Volume">{i18n._(t`Volume`)}</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="TVL">{i18n._(t`TVL`)}</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="Liquidity Distribution">
-            {i18n._(t`Liquidity Distribution`)}
-          </ToggleButtonGroup.Button>
-        </ToggleButtonGroup>
-      </div>
-      <div className="flex flex-col mt-8 px-5 gap-3">
-        <div className="rounded flex justify-between bg-dark-900 p-3">
-          <Typography variant="sm" weight={700}>
-            {i18n._(t`Volume (24H)`)}
-          </Typography>
-          <div className="flex flex-row gap-2">
-            <Typography weight={700} className="text-high-emphesis">
-              $22,834,265.01
-            </Typography>
-            <Typography variant="sm" className="text-green">
-              +10%
-            </Typography>
-          </div>
-        </div>
-        <div className="rounded flex justify-between bg-dark-900 p-3">
-          <Typography variant="sm" weight={700}>
-            {i18n._(t`Fees (24H)`)}
-          </Typography>
-          <div className="flex flex-row gap-2">
-            <Typography weight={700} className="text-high-emphesis">
-              $68,237.72
-            </Typography>
-            <Typography variant="sm" className="text-green">
-              +4.5%
-            </Typography>
-          </div>
-        </div>
-        <div className="rounded flex justify-between bg-dark-900 p-3">
-          <Typography variant="sm" weight={700}>
-            {i18n._(t`Utilization (24H)`)}
-          </Typography>
-          <div className="flex flex-row gap-2">
-            <Typography weight={700} className="text-high-emphesis">
-              5.50%
-            </Typography>
-            <Typography variant="sm" className="text-red">
-              -0.31%
-            </Typography>
-          </div>
-        </div>
-      </div>
+      <PoolStatsChart />
+      <PoolStats />
     </div>
   )
 }

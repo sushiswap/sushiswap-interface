@@ -14,7 +14,7 @@ import Divider from '../../../components/Divider'
 
 interface SortSelectorProps {}
 
-const ListActions: FC<SortSelectorProps> = () => {
+const PoolListActions: FC<SortSelectorProps> = () => {
   const { i18n } = useLingui()
   const dispatch = useTridentPoolPageDispatch()
   const { sortType, filters } = useTridentPoolPageState()
@@ -184,4 +184,4 @@ const ListActions: FC<SortSelectorProps> = () => {
   )
 }
 
-export default ListActions
+export default PoolListActions

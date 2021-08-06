@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import { POOL_TYPES } from '../../../../features/trident/pool/context/constants'
 import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
@@ -7,25 +6,20 @@ import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useLingui } from '@lingui/react'
+import { POOLS_ROUTE, POOL_TYPE_ROUTE, POOL_TYPES_ROUTE } from '../../../../constants/routes'
 
-export const getStaticPaths = async () => {
-  return {
-    paths: POOL_TYPES.map((_, id) => ({ params: { id: `${id}` } })),
-    fallback: false,
-  }
-}
+export const getStaticPaths = async () => ({
+  paths: POOL_TYPES.map((_, id) => ({ params: { id: `${id}` } })),
+  fallback: false,
+})
 
-export async function getStaticProps({ params }) {
+export const getStaticProps = async ({ params }) => {
   const { id } = params
 
   return {
     props: {
       pool: POOL_TYPES[id],
-      breadcrumbs: [
-        { label: 'Pools', slug: '/trident/pool' },
-        { label: 'Pool Types', slug: '/trident/pool/types' },
-        { label: POOL_TYPES[id].label, slug: `/trident/pool/types/${id}` },
-      ],
+      breadcrumbs: [POOLS_ROUTE, POOL_TYPES_ROUTE, POOL_TYPE_ROUTE(id)],
     },
   }
 }

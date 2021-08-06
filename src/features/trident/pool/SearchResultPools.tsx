@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import ListCard from './ListCard'
+import PoolCard from './PoolCard'
 import Typography from '../../../components/Typography'
 import { useTridentPoolPageState } from './context'
 import { t } from '@lingui/macro'
@@ -16,8 +16,8 @@ const SearchResultPools: FC<SearchResultPoolsProps> = () => {
       <Typography variant="h3" weight={700}>
         {searchQuery ? i18n._(t`Results for '${searchQuery}'`) : i18n._(t`Results`)}
       </Typography>
-      <ListCard />
-      <ListCard />
+      <PoolCard />
+      <PoolCard />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import ListCard from './ListCard'
+import PoolCard from './PoolCard'
 import Typography from '../../../components/Typography'
 import ViewMore from '../../../components/ViewMore'
 import { useLingui } from '@lingui/react'
@@ -52,14 +52,14 @@ const SuggestedPools: FC<SuggestedPools> = () => {
       </div>
       {!hide && (
         <>
-          <ListCard />
-          <ListCard />
+          <PoolCard />
+          <PoolCard />
           {viewMore && (
             <>
-              <ListCard />
-              <ListCard />
-              <ListCard />
-              <ListCard />
+              <PoolCard />
+              <PoolCard />
+              <PoolCard />
+              <PoolCard />
             </>
           )}
           <ViewMore

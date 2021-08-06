@@ -10,29 +10,20 @@ import Typography from '../../../../components/Typography'
 import ToggleButtonGroup from '../../../../components/ToggleButton'
 import { useState } from 'react'
 import Alert from '../../../../components/Alert'
+import { ADD_LIQUIDITY_ROUTE, POOL_ROUTE, POOLS_ROUTE } from '../../../../constants/routes'
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: { id: '1' },
-      },
-    ],
-    fallback: false,
-  }
-}
+export const getStaticPaths = async () => ({
+  paths: [{ params: { id: '1' } }],
+  fallback: false,
+})
 
-export async function getStaticProps({ params }) {
+export const getStaticProps = async ({ params }) => {
   const { id } = params
 
   return {
     props: {
       pool: POOL_TYPES[id],
-      breadcrumbs: [
-        { label: 'Pools', slug: '/trident/pool' },
-        { label: 'SUSHI-WETH - Classic - 0.05% Fee', slug: '/trident/pool/1' },
-        { label: 'Add Liquidity', slug: '/trident/pool/1/add' },
-      ],
+      breadcrumbs: [POOLS_ROUTE, POOL_ROUTE('SUSHI-WETH - Classic - 0.05% Fee', id), ADD_LIQUIDITY_ROUTE],
     },
   }
 }
