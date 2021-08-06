@@ -56,6 +56,7 @@ export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   startIcon?: ReactNode
+  endIcon?: ReactNode
   color?: ButtonColor
   size?: ButtonSize
   variant?: ButtonVariant
@@ -69,6 +70,7 @@ function Button({
   size = 'default',
   variant = 'filled',
   startIcon = undefined,
+  endIcon = undefined,
   ...rest
 }: ButtonProps): JSX.Element {
   return (
@@ -76,7 +78,7 @@ function Button({
       className={classNames(
         VARIANT[variant][color],
         variant !== 'empty' && SIZE[size],
-        'rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center',
+        'rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
         // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
         className
       )}
@@ -84,6 +86,7 @@ function Button({
     >
       {startIcon && startIcon}
       {children}
+      {endIcon && endIcon}
     </button>
   )
 }

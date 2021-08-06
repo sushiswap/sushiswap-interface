@@ -15,7 +15,7 @@ const VARIANTS = {
   hero: 'text-hero',
   h1: 'text-4xl',
   h2: 'text-3xl tracking-[-0.02em]',
-  h3: 'text-2xl leading-7',
+  h3: 'text-2xl leading-7 tracking-[-0.01em]',
   lg: 'text-lg leading-6',
   base: 'text-base leading-5',
   sm: 'text-sm leading-5',

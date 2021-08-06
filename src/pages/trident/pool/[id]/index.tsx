@@ -11,11 +11,6 @@ import { SUSHI } from '../../../../constants'
 import { ChainId, WETH9 } from '@sushiswap/sdk'
 import Chip from '../../../../components/Chip'
 import ListPanel from '../../../../components/ListPanel'
-import ListPanelHeader from '../../../../components/ListPanel/ListPanelHeader'
-import ListPanelFooter from '../../../../components/ListPanel/ListPanelFooter'
-import ListPanelItem from '../../../../components/ListPanel/ListPanelItem'
-import { useState } from 'react'
-import ToggleButtonGroup from '../../../../components/ToggleButton'
 import { POOLS_ROUTE } from '../../../../constants/routes'
 import PoolStats from '../../../../features/trident/pool/PoolStats'
 import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
@@ -40,7 +35,7 @@ const Pool = () => {
   const { i18n } = useLingui()
 
   const ListPanelItems = [
-    <ListPanelItem
+    <ListPanel.Item
       key={0}
       left={
         <div className="flex flex-row gap-1">
@@ -56,7 +51,7 @@ const Pool = () => {
         </Typography>
       }
     />,
-    <ListPanelItem
+    <ListPanel.Item
       key={1}
       left={
         <div className="flex flex-row gap-1">
@@ -135,9 +130,9 @@ const Pool = () => {
           {i18n._(t`My Deposits`)}
         </Typography>
         <ListPanel
-          header={<ListPanelHeader title={i18n._(t`Assets`)} value="$16,720.00" subValue="54.32134 SLP" />}
+          header={<ListPanel.Header title={i18n._(t`Assets`)} value="$16,720.00" subValue="54.32134 SLP" />}
           items={ListPanelItems}
-          footer={<ListPanelFooter title={i18n._(t`Share of Pool`)} value="0.05%" />}
+          footer={<ListPanel.Footer title={i18n._(t`Share of Pool`)} value="0.05%" />}
         />
       </div>
       <div className="flex flex-col px-5 gap-5 mt-12">
@@ -145,7 +140,7 @@ const Pool = () => {
           {i18n._(t`Market`)}
         </Typography>
         <ListPanel
-          header={<ListPanelHeader title={i18n._(t`Assets`)} value="$356,227,073.45" subValue="1,837,294.56 SLP" />}
+          header={<ListPanel.Header title={i18n._(t`Assets`)} value="$356,227,073.45" subValue="1,837,294.56 SLP" />}
           items={ListPanelItems}
         />
       </div>

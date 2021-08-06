@@ -7,10 +7,14 @@ import { useLingui } from '@lingui/react'
 import TridentLayout from '../../../../layouts/Trident'
 import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
-import ToggleButtonGroup from '../../../../components/ToggleButton'
-import { useState } from 'react'
-import Alert from '../../../../components/Alert'
 import { ADD_LIQUIDITY_ROUTE, POOL_ROUTE, POOLS_ROUTE } from '../../../../constants/routes'
+import ZapModeToggle from '../../../../features/trident/add/ZapModeToggle'
+import {
+  TridentAddLiquidityPageContextProvider,
+  useTridentAddLiquidityPageState,
+} from '../../../../features/trident/add/context'
+import ZapMode from '../../../../features/trident/add/ZapMode'
+import { LiquidityMode } from '../../../../features/trident/add/context/types'
 
 export const getStaticPaths = async () => ({
   paths: [{ params: { id: '1' } }],
@@ -30,7 +34,7 @@ export const getStaticProps = async ({ params }) => {
 
 const Add = () => {
   const { i18n } = useLingui()
-  const [mode, setMode] = useState('Zap Mode')
+  const { liquidityMode } = useTridentAddLiquidityPageState()
 
   return (
     <div className="flex flex-col w-full mt-px">
@@ -61,29 +65,13 @@ const Add = () => {
         {/*spacer*/}
         <div className="h-2" />
       </div>
-      <div className="px-5 -mt-6">
-        <ToggleButtonGroup value={mode} onChange={setMode} className="bg-dark-900 shadow z-10">
-          <ToggleButtonGroup.Button value="Standard Mode" className="py-2.5">
-            {i18n._(t`Standard Mode`)}
-          </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="Zap Mode" className="py-2.5">
-            {i18n._(t`Zap Mode`)}
-          </ToggleButtonGroup.Button>
-        </ToggleButtonGroup>
-      </div>
-      <div className="px-5 mt-5">
-        <Alert
-          dismissable={false}
-          type="information"
-          showIcon
-          message={i18n._(t`In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights
-          automatically.`)}
-        />
-      </div>
+      <ZapModeToggle />
+      {liquidityMode === LiquidityMode.ZAP && <ZapMode />}
     </div>
   )
 }
 
 Add.Layout = TridentLayout
+Add.Provider = TridentAddLiquidityPageContextProvider
 
 export default Add

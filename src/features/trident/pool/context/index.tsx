@@ -26,14 +26,6 @@ export const TridentPoolPageContextProvider = ({ children }) => {
   )
 }
 
-export const useTridentPoolPageContext = () => {
-  return useContext(TridentPoolPageContext)
-}
-
-export const useTridentPoolPageState = () => {
-  return useContext(TridentPoolPageContext).state
-}
-
-export const useTridentPoolPageDispatch = () => {
-  return useContext(TridentPoolPageContext).dispatch
-}
+export const useTridentPoolPageContext = () => useContext(TridentPoolPageContext)
+export const useTridentPoolPageState = () => useContext(TridentPoolPageContext).state
+export const useTridentPoolPageDispatch = () => useContext(TridentPoolPageContext).dispatch

@@ -1,8 +1,12 @@
 import React, { createContext, useContext, useReducer, Dispatch, useMemo } from 'react'
 import reducer from './reducer'
-import { Reducer, State } from './types'
+import { LiquidityMode, Reducer, State } from './types'
 
-const initialState: State = {}
+const initialState: State = {
+  liquidityMode: LiquidityMode.ZAP,
+  currencies: [],
+  inputAmounts: [],
+}
 
 export const TridentAddLiquidityPageContext = createContext<{ state: State; dispatch: Dispatch<any> }>({
   state: initialState,
@@ -19,14 +23,6 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
   )
 }
 
-export const useTridentAddLiquidityPageContext = () => {
-  return useContext(TridentAddLiquidityPageContext)
-}
-
-export const useTridentAddLiquidityPageState = () => {
-  return useContext(TridentAddLiquidityPageContext).state
-}
-
-export const useTridentAddLiquidityPageDispatch = () => {
-  return useContext(TridentAddLiquidityPageContext).dispatch
-}
+export const useTridentAddLiquidityPageContext = () => useContext(TridentAddLiquidityPageContext)
+export const useTridentAddLiquidityPageState = () => useContext(TridentAddLiquidityPageContext).state
+export const useTridentAddLiquidityPageDispatch = () => useContext(TridentAddLiquidityPageContext).dispatch
