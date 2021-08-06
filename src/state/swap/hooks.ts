@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade, Price } from '@sushiswap/sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +9,7 @@ import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
 import useENS from '../../hooks/useENS'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { isAddress } from '../../utils'
-import { computeSlippageAdjustedAmounts } from '../../utils/prices'
+import { computeSlippageAdjustedAmounts, computeMaxAllowablePrice } from '../../utils/prices'
 import { AppDispatch, AppState } from '../index'
 import { useUserSlippageTolerance } from '../user/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
@@ -111,7 +111,8 @@ export function useDerivedSwapInfo(): {
     currencyBalances: { [field in Field]?: CurrencyAmount }
     parsedAmount: CurrencyAmount | undefined
     v2Trade: Trade | undefined
-    inputError?: string
+    inputError?: string,
+    maxAllowablePrice: Price | undefined
 } {
     const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
@@ -141,6 +142,8 @@ export function useDerivedSwapInfo(): {
     const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !isExactIn ? parsedAmount : undefined)
 
     const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
+
+    const { maxAllowablePrice } = computeMaxAllowablePrice(v2Trade ?? undefined)
 
     const currencyBalances = {
         [Field.INPUT]: relevantTokenBalances[0],
@@ -198,7 +201,8 @@ export function useDerivedSwapInfo(): {
         currencyBalances,
         parsedAmount,
         v2Trade: v2Trade ?? undefined,
-        inputError
+        inputError,
+        maxAllowablePrice
     }
 }
 

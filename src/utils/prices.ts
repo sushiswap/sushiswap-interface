@@ -1,4 +1,4 @@
-import { ChainId, CurrencyAmount, Fraction, JSBI, Percent, TokenAmount, Trade } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, Fraction, JSBI, Percent, TokenAmount, Trade, Price } from '@sushiswap/sdk'
 import {
     ALLOWED_PRICE_IMPACT_HIGH,
     ALLOWED_PRICE_IMPACT_LOW,
@@ -11,6 +11,7 @@ import { basisPointsToPercent } from './index'
 const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
 const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
+const MAX_ALLOW_PERCENT = ONE_HUNDRED_PERCENT.subtract(BLOCKED_PRICE_IMPACT_NON_EXPERT)
 
 // computes price breakdown for the trade
 export function computeTradePriceBreakdown(
@@ -77,4 +78,24 @@ export function formatExecutionPrice(trade?: Trade, inverted?: boolean, chainId?
         : `${trade.executionPrice.toSignificant(6)} ${trade.outputAmount.currency.getSymbol(
               chainId
           )} / ${trade.inputAmount.currency.getSymbol(chainId)}`
+}
+
+export function computeMaxAllowablePrice(trade?: Trade): {maxAllowablePrice: Price | undefined}{
+    if (!trade) {
+        return {
+            maxAllowablePrice: undefined
+        }
+    }
+    let maxAllowInputAmount = trade?.outputAmount.divide(MAX_ALLOW_PERCENT)
+    maxAllowInputAmount = maxAllowInputAmount.divide(trade?.route.midPrice.raw)
+    const allowablePrice = trade?.outputAmount.divide(maxAllowInputAmount)
+    const maxAllowablePrice = new Price(
+        trade.executionPrice.baseCurrency,
+        trade.executionPrice.quoteCurrency,
+        allowablePrice.denominator,
+        allowablePrice.numerator
+    )
+    return {
+        maxAllowablePrice
+    }
 }

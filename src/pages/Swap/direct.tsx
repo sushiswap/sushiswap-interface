@@ -84,7 +84,7 @@ export default function Swap() {
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
-    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
+    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError , maxAllowablePrice} = useDerivedSwapInfo()
     const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
         currencies[Field.INPUT],
         currencies[Field.OUTPUT],
@@ -559,6 +559,18 @@ export default function Swap() {
                                             >
                                                 {allowedSlippage / 100}%
                                             </ClickableText>
+                                        </RowBetween>
+                                    )}
+                                    {priceImpactSeverity > 3 && !isExpertMode && (
+                                        <RowBetween align="center">
+                                            <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                                {i18n._(t`Max Allowable Price`)}
+                                            </Text>
+                                            <TradePrice
+                                                price={maxAllowablePrice}
+                                                showInverted={showInverted}
+                                                setShowInverted={setShowInverted}
+                                            />
                                         </RowBetween>
                                     )}
                                 </AutoColumn>
