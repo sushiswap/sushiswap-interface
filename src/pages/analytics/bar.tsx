@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import ScrollableGraph from '../../components/ScrollableGraph'
 import AnalyticsContainer from '../../features/analytics/AnalyticsContainer'
 import InfoCard from '../../features/analytics/Bar/InfoCard'
-import { formatNumber, formatPercent } from '../../functions'
+import { classNames, formatNumber, formatPercent } from '../../functions'
 import { aprToApy } from '../../functions/convert/apyApr'
 import { useDayData, useFactory, useOneDayBlock, useSushiPrice, useTokenDayData } from '../../services/graph'
 import { useBar, useBarHistory } from '../../services/graph/hooks/bar'
@@ -24,7 +24,7 @@ export default function Bar() {
 
   const data = useMemo(
     () =>
-      barHistory && dayData && bar
+      barHistory && dayData && sushiDayData && bar
         ? barHistory.map((barDay) => {
             const exchangeDay = dayData.find((day) => day.date === barDay.date)
             const sushiDay = sushiDayData.find((day) => day.date === barDay.date)
@@ -110,14 +110,14 @@ export default function Bar() {
     <AnalyticsContainer>
       <div className="text-2xl font-bold text-high-emphesis">Sushi Bar</div>
       <div className="flex flex-row space-x-4 overflow-auto">
-        <InfoCard text="APY (24h)" number={formatPercent(APY1d)} />
-        <InfoCard text="APY (7d)" number={formatPercent(APY1w)} />
+        <InfoCard text="APY (24h)" number={APY1d !== 0 ? formatPercent(APY1d) : ''} />
+        <InfoCard text="APY (7d)" number={APY1w !== 0 ? formatPercent(APY1w) : ''} />
         <InfoCard text="xSUSHI in Circulation" number={bar ? formatNumber(bar.totalSupply) : ''} />
         <InfoCard text="xSUSHI : SUSHI" number={bar ? Number(bar.ratio).toFixed(4) : ''} />
       </div>
       <div className="space-y-4">
         {graphs.map((graph, i) => (
-          <div className="p-1 rounded bg-dark-900" key={i}>
+          <div className={classNames(graph.data[0].length === 0 && 'hidden', 'p-1 rounded bg-dark-900')} key={i}>
             <div className="w-full h-96">
               <ScrollableGraph
                 labels={graph.labels}

@@ -205,7 +205,11 @@ export default function Token(): JSX.Element {
 
   return (
     <>
-      <Container maxWidth="full" className="h-full grid-flow-col grid-cols-10 mx-auto md:grid">
+      <Container
+        id="token-page"
+        maxWidth="full"
+        className="h-full grid-flow-col grid-cols-10 px-4 py-4 mx-auto xl:grid md:py-8 lg:py-12"
+      >
         <div className="col-start-2 2xl:col-start-3">
           <button onClick={() => router.back()} className="font-bold">
             {'<'} Go Back

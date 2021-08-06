@@ -15,7 +15,7 @@ export default function AllocationTable({ allocations }: AllocationTableProps) {
         {allocations.map((alloc, i) => (
           <tr
             key={i}
-            className={alloc.allocation === 0 ? 'hidden' : ''}
+            className={alloc.allocation === 0 || isNaN(alloc.allocation) ? 'hidden' : ''}
             style={{ borderBottom: '24px solid transparent' }}
           >
             <td>

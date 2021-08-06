@@ -1,11 +1,10 @@
 import _ from 'lodash'
 import React, { useMemo } from 'react'
-import { classNames, formatNumber, formatNumberScale, formatPercent } from '../../../functions'
+import { formatNumber, formatNumberScale, formatPercent } from '../../../functions'
 import Table from '../../../components/Table'
-import ColoredNumber from '../../../features/analytics/ColoredNumber'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
 import { useCurrency } from '../../../hooks/Tokens'
-import CurrencyLogo from '../../../components/CurrencyLogo'
+import Image from 'next/image'
 
 interface PoolListProps {
   pools: {
@@ -29,9 +28,9 @@ interface PairListNameProps {
 }
 
 type Reward = {
-  address: string
-  symbol: string
-  amount: number
+  icon: string
+  token: string
+  rewardPerDay: number
 }
 
 function PairListName({ pair }: PairListNameProps): JSX.Element {
@@ -49,32 +48,31 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
 }
 
 function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
-  const currency0 = useCurrency(rewards[0].address)
-  const currency1 = useCurrency(rewards.length === 2 ? rewards[1].address : '')
-
-  const currencies = [currency0, currency1]
-
-  const size = useMemo(() => {
-    if (rewards.length === 1) return 28
-    if (rewards.length === 2) return 18
-  }, [rewards])
-
   return (
-    <div className="flex justify-end">
-      <table className="flex flex-col space-y-2 text-sm text-high-emphesis">
-        <tbody>
-          {rewards.map((reward, i) => (
-            <tr>
-              <td>
-                <CurrencyLogo currency={currencies[i]} size={size} />
-              </td>
-              <td>
-                <div className="ml-2 whitespace-nowrap">{`${reward.amount.toFixed(3)} ${reward.symbol} / day`}</div>
-              </td>
-            </tr>
+    <div>
+      <div className="inline-flex items-center space-x-4 flex-inline">
+        <div className="flex items-center space-x-2">
+          {rewards?.map((reward, i) => (
+            <div key={i} className="flex items-center">
+              <Image
+                src={reward.icon}
+                width="30px"
+                height="30px"
+                className="rounded-md"
+                layout="fixed"
+                alt={reward.token}
+              />
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+        <div className="flex flex-col space-y-1">
+          {rewards?.map((reward, i) => (
+            <div key={i} className="text-xs md:text-sm whitespace-nowrap">
+              {formatNumber(reward.rewardPerDay)} {reward.token} / DAY
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -98,10 +96,11 @@ export default function PoolList({ pools }: PoolListProps): JSX.Element {
         align: 'left',
       },
       {
-        Header: 'Reward per $1,000',
+        Header: 'Rewards',
         accessor: 'rewards',
         Cell: (props) => <Rewards rewards={props.value} />,
-        align: 'right',
+        disableSortBy: true,
+        align: 'left',
       },
       {
         Header: 'Liquidity',

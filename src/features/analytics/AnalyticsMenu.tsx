@@ -16,17 +16,17 @@ const Menu = () => {
         </a>
       </NavLink>
 
-      <NavLink
+      {/* <NavLink
         href="/analytics/portfolio"
         activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
       >
         <a className="flex items-center px-1 py-3 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
-          {/* <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="26" height="24" viewBox="0 0 26 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M25.4844 21.2969H2.64062V0.578125C2.64062 0.432031 2.52109 0.3125 2.375 0.3125H0.515625C0.369531 0.3125 0.25 0.432031 0.25 0.578125V23.4219C0.25 23.568 0.369531 23.6875 0.515625 23.6875H25.4844C25.6305 23.6875 25.75 23.568 25.75 23.4219V21.5625C25.75 21.4164 25.6305 21.2969 25.4844 21.2969ZM5.03125 19.1719H22.8281C22.9742 19.1719 23.0938 19.0523 23.0938 18.9062V4.42969C23.0938 4.19062 22.8049 4.07441 22.6389 4.24043L15.6562 11.223L11.4926 7.10586C11.4427 7.05643 11.3752 7.0287 11.305 7.0287C11.2347 7.0287 11.1673 7.05643 11.1174 7.10586L4.84199 13.4012C4.81762 13.4256 4.79832 13.4546 4.78521 13.4865C4.77211 13.5184 4.76545 13.5526 4.76562 13.5871V18.9062C4.76562 19.0523 4.88516 19.1719 5.03125 19.1719Z" fill="#BFBFBF"/>
-          </svg> */}
+          </svg>
           <div className="ml-5">Portfolio</div>
         </a>
-      </NavLink>
+      </NavLink> */}
 
       <NavLink
         href="/analytics/bar"

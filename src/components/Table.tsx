@@ -119,7 +119,7 @@ export default function Table({
                             i !== 0 && 'ml-2',
                             i !== columns.length - 1 && 'mr-2',
                             i === 0 && 'flex-row-reverse',
-                            i === 0 && column.align === 'right' ? 'justify-start' : 'justify-end',
+                            i === 0 ? (column.align === 'right' ? 'justify-start' : 'justify-end') : '',
                             'w-full flex whitespace-nowrap xl:mx-auto'
                           )}
                         >

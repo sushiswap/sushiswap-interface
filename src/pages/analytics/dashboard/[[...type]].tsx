@@ -21,6 +21,7 @@ import TokenList from '../../../features/analytics/Tokens/TokenList'
 import PoolList from '../../../features/analytics/Pools/PoolsList'
 import { useKashiPairs } from '../../../services/graph/index'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
+import useFarmRewards from '../../../hooks/useFarmRewards'
 
 // TODO: Top Pools: Rewards, APR
 export default function Dashboard(): JSX.Element {
@@ -59,37 +60,22 @@ export default function Dashboard(): JSX.Element {
   }, [type, pairs, pairs1d, pairs1w])
 
   // For Top Farms
-  const farms = useFarms()
+  const farms = useFarmRewards()
   const kashiPairs = useKashiPairs()
   const nativePrice = useNativePrice()
   const farmsFormatted = useMemo(() => {
     return farms && (pairs || (kashiPairs && nativePrice))
       ? farms
-          .map((farm) => {
-            const pair =
-              pairs?.find((pair) => pair.id === farm.pair) ?? kashiPairs?.find((pair) => pair.id === farm.pair)
-
-            if (!pair) return undefined
-
-            // It's a Kashi pair if pair.asset exists
-            const liquidity = pair.asset
-              ? (pair.assetAmount * pair.token0.derivedETH * nativePrice) / 10 ** pair.token0.decimals
-              : pair.reserveUSD
-
-            return {
-              pair: {
-                address0: pair.token0.id,
-                address1: pair.token1.id,
-                symbol: pair.symbol ?? `${pair.token0.symbol}-${pair.token1.symbol}`,
-              },
-              rewards: [
-                { address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2', symbol: 'SUSHI', amount: 10 },
-                { address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2', symbol: 'WETH', amount: 1.01 },
-              ],
-              liquidity: liquidity,
-              apr: 10,
-            }
-          })
+          .map((farm) => ({
+            pair: {
+              address0: farm.pair.token0.id,
+              address1: farm.pair.token1.id,
+              symbol: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
+            },
+            rewards: farm.rewards,
+            liquidity: farm.tvl,
+            apr: farm.roiPerYear * 100,
+          }))
           .filter((farm) => (farm ? true : false))
       : []
   }, [farms, pairs, kashiPairs])
@@ -129,7 +115,7 @@ export default function Dashboard(): JSX.Element {
       case 'pools':
         return {
           options: {
-            keys: ['pair.address0', 'pair.address1', 'pair.symbol0', 'pair.symbol1'],
+            keys: ['pair.address0', 'pair.address1', 'pair.symbol', 'pair.symbol'],
             threshold: 0.4,
           },
           data: farmsFormatted,

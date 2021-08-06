@@ -122,31 +122,7 @@ export default function Portfolio() {
       </div>
       <div className="border-b border-dark-800" />
       <div className="grid grid-flow-col grid-cols-5">
-        <div className="col-span-3">
-          {/* <div className="flex flex-row items-center justify-between">
-            <div className="font-bold text-secondary">Portfolio Balance</div>
-            <div className="pr-4 space-x-4">
-              {chartTimespans.map((timespan, i) => (
-                <button
-                  key={i}
-                  className={classNames(
-                    timespan === chartTimespan ? 'text-high-emphesis' : 'text-secondary',
-                    'font-bold text-sm'
-                  )}
-                  onClick={() => setChartTimespan(timespan)}
-                >
-                  {timespan}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-row items-center space-x-2">
-            <div className="text-lg font-bold text-high-emphesis">{totalUsd ? formatNumber(totalUsd, true) : ''}</div>
-          </div>
-          <div className="w-full h-52">
-            <LineGraph data={undefined} stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }} />
-          </div> */}
-        </div>
+        <div className="col-span-3"></div>
         <div className="flex flex-col col-span-2 space-y-4">
           <div className="font-bold text-secondary">Asset Allocation</div>
           <div className="border-b border-dark-800" />
