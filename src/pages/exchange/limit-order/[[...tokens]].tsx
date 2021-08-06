@@ -385,7 +385,7 @@ function LimitOrder() {
                 type="information"
                 title="Upgrade Notice"
                 message={
-                  'In order to incorporate more filler bots the ability to add new limit orders is temporarily paused. Existing orders are unaffected and can be edited at any time'
+                  'In order to incorporate more community filler bots the ability to add new limit orders is temporarily paused. Existing orders are unaffected and can be edited and cancelled at any time'
                 }
                 dismissable={false}
               />
