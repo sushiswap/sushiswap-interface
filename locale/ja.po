@@ -516,6 +516,9 @@ msgstr "貸出し済み"
 msgid "Limit"
 msgstr ""
 
+msgid "Limit Orders Disabled"
+msgstr ""
+
 msgid "Limit order"
 msgstr ""
 
