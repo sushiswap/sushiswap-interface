@@ -1156,7 +1156,7 @@ msgstr "Giao dịch của bạn có thể chạy trước"
 msgid "Your transaction may fail"
 msgstr "Giao dịch của bạn có thể thất bại"
 
-msgid "Your transaction will revert 23if the price changes unfavorably by more than this percentage."
+msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
 msgstr ""
 
 msgid "Your transaction will revert if it is pending for more than this long."

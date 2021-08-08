@@ -1156,7 +1156,7 @@ msgstr "거래가 프론트러닝될 수 있습니다"
 msgid "Your transaction may fail"
 msgstr "거래가 실패할 수 있습니다"
 
-msgid "Your transaction will revert 23if the price changes unfavorably by more than this percentage."
+msgid "Your transaction will revert if the price changes unfavorably by more than this percentage."
 msgstr ""
 
 msgid "Your transaction will revert if it is pending for more than this long."
