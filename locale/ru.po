@@ -128,6 +128,9 @@ msgstr ""
 msgid "Available"
 msgstr "Доступно"
 
+msgid "Available Assets"
+msgstr ""
+
 msgid "Available Networks"
 msgstr ""
 
@@ -327,7 +330,7 @@ msgstr "Депозит"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "Внесите SUSHI в BentoBox"
 
-msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr ""
 
 msgid "Deposit tokens into BentoBox for all the yields"
@@ -377,6 +380,9 @@ msgstr "Ввести"
 
 msgid "Enter Amount"
 msgstr "Ввести сумму"
+
+msgid "Enter Amounts"
+msgstr ""
 
 msgid "Enter a recipient"
 msgstr "Введите получателя"
@@ -659,6 +665,9 @@ msgstr ""
 
 msgid "Max"
 msgstr "Максимум"
+
+msgid "Max Deposit"
+msgstr ""
 
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Увеличьте доход, ставя SUSHI на xSUSHI"
@@ -1118,6 +1127,9 @@ msgstr "Попробуйте включить многоскачковые сд�
 msgid "Turn On Expert Mode"
 msgstr "Включите экспертный режим"
 
+msgid "Unavailable Assets"
+msgstr ""
+
 msgid "Unknown error{0}. Try increasing your slippage tolerance."
 msgstr ""
 
@@ -1228,6 +1240,11 @@ msgstr "Вы не в той сети"
 
 msgid "You don’t have liquidity in this pool yet"
 msgstr "У вас еще нет ликвидности в этом пуле"
+
+msgid ""
+"You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
+"ones you would like to deposit"
+msgstr ""
 
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Вам необходимо сначала утвердить токены LP, а затем перенести их"

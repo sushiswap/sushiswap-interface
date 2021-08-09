@@ -1,4 +1,4 @@
-import { POOL_TYPES } from '../features/trident/pool/context/constants'
+import { POOL_TYPES } from '../features/trident/constants'
 
 export const POOLS_ROUTE = { label: 'Pools', slug: '/trident/pool' }
 export const POOL_ROUTE = (label: string, id: number) => ({ label, slug: `/trident/pool/${id}` })

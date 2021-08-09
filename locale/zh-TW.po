@@ -128,6 +128,9 @@ msgstr ""
 msgid "Available"
 msgstr "可用的"
 
+msgid "Available Assets"
+msgstr ""
+
 msgid "Available Networks"
 msgstr ""
 
@@ -325,7 +328,7 @@ msgstr "存款"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "將SUSHI存入BentoBox"
 
-msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr ""
 
 msgid "Deposit tokens into BentoBox for all the yields"
@@ -375,6 +378,9 @@ msgstr "進入"
 
 msgid "Enter Amount"
 msgstr "輸入金額"
+
+msgid "Enter Amounts"
+msgstr ""
 
 msgid "Enter a recipient"
 msgstr "輸入收件人"
@@ -645,6 +651,9 @@ msgstr ""
 
 msgid "Max"
 msgstr "最大數量"
+
+msgid "Max Deposit"
+msgstr ""
 
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "將SUSHI質押成xSUSHI最大化收益"
@@ -1104,6 +1113,9 @@ msgstr "嘗試啟用多跳交易"
 msgid "Turn On Expert Mode"
 msgstr "開啟專家模式"
 
+msgid "Unavailable Assets"
+msgstr ""
+
 msgid "Unknown error{0}. Try increasing your slippage tolerance."
 msgstr ""
 
@@ -1214,6 +1226,11 @@ msgstr "您位在錯誤的網路"
 
 msgid "You don’t have liquidity in this pool yet"
 msgstr "您的這個池中還沒有流動性"
+
+msgid ""
+"You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
+"ones you would like to deposit"
+msgstr ""
 
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "您需要首先批準LP代幣，然後遷移它"

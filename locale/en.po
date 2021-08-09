@@ -128,6 +128,9 @@ msgstr "Auto"
 msgid "Available"
 msgstr "Available"
 
+msgid "Available Assets"
+msgstr "Available Assets"
+
 msgid "Available Networks"
 msgstr "Available Networks"
 
@@ -330,8 +333,8 @@ msgstr "Deposit"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "Deposit SUSHI into BentoBox"
 
-msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
-msgstr "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgstr "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Deposit tokens into BentoBox for all the yields"
@@ -380,6 +383,9 @@ msgstr "Enter"
 
 msgid "Enter Amount"
 msgstr "Enter Amount"
+
+msgid "Enter Amounts"
+msgstr "Enter Amounts"
 
 msgid "Enter a recipient"
 msgstr "Enter a recipient"
@@ -668,6 +674,9 @@ msgstr "Matic Bridge"
 
 msgid "Max"
 msgstr "Max"
+
+msgid "Max Deposit"
+msgstr "Max Deposit"
 
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Maximize yield by staking SUSHI for xSUSHI"
@@ -1131,6 +1140,9 @@ msgstr "Try enabling multi-hop trades"
 msgid "Turn On Expert Mode"
 msgstr "Turn On Expert Mode"
 
+msgid "Unavailable Assets"
+msgstr "Unavailable Assets"
+
 msgid "Unknown error{0}. Try increasing your slippage tolerance."
 msgstr "Unknown error{0}. Try increasing your slippage tolerance."
 
@@ -1241,6 +1253,13 @@ msgstr "You are on the wrong network"
 
 msgid "You don’t have liquidity in this pool yet"
 msgstr "You don’t have liquidity in this pool yet"
+
+msgid ""
+"You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
+"ones you would like to deposit"
+msgstr ""
+"You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
+"ones you would like to deposit"
 
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "You need to first approve LP tokens and then migrate it"

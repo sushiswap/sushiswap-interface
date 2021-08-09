@@ -1,4 +1,3 @@
-import { POOL_TYPES } from '../../../features/trident/pool/context/constants'
 import TridentLayout from '../../../layouts/Trident'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
@@ -8,21 +7,21 @@ import Link from 'next/link'
 import { useLingui } from '@lingui/react'
 import { POOLS_ROUTE, POOL_TYPE_ROUTE, POOL_TYPES_ROUTE } from '../../../constants/routes'
 
-export const getStaticPaths = async () => ({
-  paths: POOL_TYPES.map((_, id) => ({ params: { id: `${id}` } })),
-  fallback: false,
-})
-
-export const getStaticProps = async ({ params }) => {
-  const { id } = params
-
-  return {
-    props: {
-      pool: POOL_TYPES[id],
-      breadcrumbs: [POOLS_ROUTE, POOL_TYPES_ROUTE, POOL_TYPE_ROUTE(id)],
-    },
-  }
-}
+// export const getStaticPaths = async () => ({
+//   paths: POOL_TYPES.map((_, id) => ({ params: { id: `${id}` } })),
+//   fallback: false,
+// })
+//
+// export const getStaticProps = async ({ params }) => {
+//   const { id } = params
+//
+//   return {
+//     props: {
+//       pool: POOL_TYPES[id],
+//       breadcrumbs: [POOLS_ROUTE, POOL_TYPES_ROUTE, POOL_TYPE_ROUTE(id)],
+//     },
+//   }
+// }
 
 const PoolType = ({ pool }) => {
   const { i18n } = useLingui()

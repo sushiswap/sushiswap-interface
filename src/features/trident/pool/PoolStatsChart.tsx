@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import ToggleButtonGroup from '../../../components/ToggleButton'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'

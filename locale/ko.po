@@ -128,6 +128,9 @@ msgstr ""
 msgid "Available"
 msgstr "유효"
 
+msgid "Available Assets"
+msgstr ""
+
 msgid "Available Networks"
 msgstr ""
 
@@ -327,7 +330,7 @@ msgstr "예금"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "BentoBox에 SUSHI 입금"
 
-msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr ""
 
 msgid "Deposit tokens into BentoBox for all the yields"
@@ -377,6 +380,9 @@ msgstr "입력"
 
 msgid "Enter Amount"
 msgstr "금액 입력"
+
+msgid "Enter Amounts"
+msgstr ""
 
 msgid "Enter a recipient"
 msgstr "수신자 입력"
@@ -657,6 +663,9 @@ msgstr ""
 
 msgid "Max"
 msgstr "최대"
+
+msgid "Max Deposit"
+msgstr ""
 
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "xSUSHI에 대한 SUSHI 스테이킹으로 수익 극대화"
@@ -1116,6 +1125,9 @@ msgstr "멀티홉 거래 활성화하기"
 msgid "Turn On Expert Mode"
 msgstr "전문가 모드 켜기"
 
+msgid "Unavailable Assets"
+msgstr ""
+
 msgid "Unknown error{0}. Try increasing your slippage tolerance."
 msgstr ""
 
@@ -1226,6 +1238,11 @@ msgstr "잘못된 네트워크에 있습니다."
 
 msgid "You don’t have liquidity in this pool yet"
 msgstr "아직 이 풀에 유동성이 없습니다"
+
+msgid ""
+"You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
+"ones you would like to deposit"
+msgstr ""
 
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다"

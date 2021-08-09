@@ -128,6 +128,9 @@ msgstr ""
 msgid "Available"
 msgstr "Có sẵn"
 
+msgid "Available Assets"
+msgstr ""
+
 msgid "Available Networks"
 msgstr ""
 
@@ -325,7 +328,7 @@ msgstr "Ký quỹ"
 msgid "Deposit SUSHI into BentoBox"
 msgstr "Ký quỹ SUSHI vào BentoBox"
 
-msgid "Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
+msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr ""
 
 msgid "Deposit tokens into BentoBox for all the yields"
@@ -375,6 +378,9 @@ msgstr "Nhập"
 
 msgid "Enter Amount"
 msgstr "Nhập số tiền"
+
+msgid "Enter Amounts"
+msgstr ""
 
 msgid "Enter a recipient"
 msgstr "Nhập người nhận"
@@ -657,6 +663,9 @@ msgstr ""
 
 msgid "Max"
 msgstr "Tối đa"
+
+msgid "Max Deposit"
+msgstr ""
 
 msgid "Maximize yield by staking SUSHI for xSUSHI"
 msgstr "Tối đa hóa lợi suất bằng cách đặt cược SUSHI cho xSUSHI"
@@ -1116,6 +1125,9 @@ msgstr "Thử bật giao dịch nhiều bước"
 msgid "Turn On Expert Mode"
 msgstr "Bật chế độ Chuyên gia"
 
+msgid "Unavailable Assets"
+msgstr ""
+
 msgid "Unknown error{0}. Try increasing your slippage tolerance."
 msgstr ""
 
@@ -1226,6 +1238,11 @@ msgstr "Bạn đang kết nối sai mạng"
 
 msgid "You don’t have liquidity in this pool yet"
 msgstr "Bạn chưa có thanh khoản trong mạng lưới này"
+
+msgid ""
+"You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
+"ones you would like to deposit"
+msgstr ""
 
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "Trước tiên, bạn cần phê duyệt token LP và sau đó di chuyển"

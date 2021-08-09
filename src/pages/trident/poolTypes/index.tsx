@@ -1,12 +1,12 @@
-import TridentLayout from '../../../../layouts/Trident'
-import Typography from '../../../../components/Typography'
+import TridentLayout from '../../../layouts/Trident'
+import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from '../../../../components/Button'
+import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { POOLS_ROUTE, POOL_TYPES_ROUTE } from '../../../../constants/routes'
-import PoolTypesList from '../../../../features/trident/types/PoolTypesList'
+import { POOLS_ROUTE, POOL_TYPES_ROUTE } from '../../../constants/routes'
+import PoolTypesList from '../../../features/trident/types/PoolTypesList'
 
 export const getStaticProps = async () => ({
   props: {
