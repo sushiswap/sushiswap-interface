@@ -7,8 +7,7 @@ const BA_LIST = 'https://raw.githubusercontent.com/The-Blockchain-Association/se
 export const UNSUPPORTED_LIST_URLS: string[] = [BA_LIST]
 
 const YEARN_LIST = 'https://yearn.science/static/tokenlist.json'
-const NFTX_LIST_V1 = 'https://nftx.ethereumdb.com/v1/tokenlist/'
-const NFTX_LIST_V2 = 'https://nftx.ethereumdb.com/v2/tokenlist/'
+const NFTX_LIST = 'https://nftx.ethereumdb.com/v2/tokenlist/'
 const SYNTHETIX_LIST = 'synths.snx.eth'
 const OPYN_LIST = 'https://raw.githubusercontent.com/opynfinance/opyn-tokenlist/master/opyn-v1.tokenlist.json'
 const AAVE_LIST = 'tokenlist.aave.eth'
@@ -23,7 +22,7 @@ const ROLL_LIST = 'https://app.tryroll.com/tokens.json'
 const SET_LIST = 'https://raw.githubusercontent.com/SetProtocol/uniswap-tokenlist/main/set.tokenlist.json'
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
 const WRAPPED_LIST = 'wrapped.tokensoft.eth'
-const DHEDGE_LIST = 'https://ipfs.io/ipfs/QmRdKE7aiePYbhE7UtCWg9L9gsSw2Gx7pvTCSvkygrcg5U'
+const DHEDGE_LIST = 'https://list.dhedge.eth.link/'
 
 // lower index == higher priority for token import
 export const DEFAULT_LIST_OF_LISTS: string[] = [
@@ -40,8 +39,7 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   COINGECKO_LIST,
   KLEROS_LIST,
   OPYN_LIST,
-  NFTX_LIST_V1,
-  NFTX_LIST_V2,
+  NFTX_LIST,
   OPTIMISM_LIST,
   GEMINI_LIST,
   DHEDGE_LIST,
@@ -49,4 +47,4 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
 ]
 
 // default lists to be 'active' aka searched across
-export const DEFAULT_ACTIVE_LIST_URLS: string[] = [YEARN_LIST, GEMINI_LIST]
+export const DEFAULT_ACTIVE_LIST_URLS: string[] = [NFTX_LIST, YEARN_LIST, GEMINI_LIST]

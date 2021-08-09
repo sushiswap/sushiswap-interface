@@ -529,6 +529,9 @@ msgstr "Предоставлено в кредит"
 msgid "Limit"
 msgstr "Лимит"
 
+msgid "Limit Orders Disabled"
+msgstr ""
+
 msgid "Limit order"
 msgstr "Лимитная заявка"
 

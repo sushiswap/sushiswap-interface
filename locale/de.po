@@ -529,6 +529,9 @@ msgstr "Verliehen"
 msgid "Limit"
 msgstr "Limit"
 
+msgid "Limit Orders Disabled"
+msgstr ""
+
 msgid "Limit order"
 msgstr "Order limitieren"
 

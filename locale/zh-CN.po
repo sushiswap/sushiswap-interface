@@ -529,6 +529,9 @@ msgstr "借出"
 msgid "Limit"
 msgstr "限价"
 
+msgid "Limit Orders Disabled"
+msgstr ""
+
 msgid "Limit order"
 msgstr "限价单"
 

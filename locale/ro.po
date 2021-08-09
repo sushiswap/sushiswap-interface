@@ -529,6 +529,9 @@ msgstr "Împrumutat"
 msgid "Limit"
 msgstr "Limitare"
 
+msgid "Limit Orders Disabled"
+msgstr ""
+
 msgid "Limit order"
 msgstr "Limitare comandă"
 

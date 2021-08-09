@@ -529,6 +529,9 @@ msgstr "Đã cho vay"
 msgid "Limit"
 msgstr "Giới hạn"
 
+msgid "Limit Orders Disabled"
+msgstr ""
+
 msgid "Limit order"
 msgstr "Giới hạn lệnh"
 

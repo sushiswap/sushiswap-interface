@@ -545,6 +545,9 @@ msgstr "Lent"
 msgid "Limit"
 msgstr "Limit"
 
+msgid "Limit Orders Disabled"
+msgstr "Limit Orders Disabled"
+
 msgid "Limit order"
 msgstr "Limit order"
 
