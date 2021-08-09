@@ -183,7 +183,8 @@ export const ADDITIONAL_BASES: {
     [MATIC.FRAX.address]: [MATIC.FXS],
     [MATIC.FXS.address]: [MATIC.FRAX],
     [MATIC.DRAX.address]: [MATIC.DMAGIC],
-    [MATIC.DMAGIC.address]: [MATIC.DRAX],
+    [MATIC.AXMATIC.address]: [MATIC.DMAGIC],
+    //[MATIC.DMAGIC.address]: [MATIC.DRAX, MATIC.AXMATIC],
   },
 }
 
