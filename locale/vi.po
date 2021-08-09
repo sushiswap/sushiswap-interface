@@ -41,6 +41,12 @@ msgstr "Một phần của mỗi giao dịch (0,25%) được chuyển đến c�
 msgid "APR"
 msgstr "Lãi suất phần trăm hàng năm - APR"
 
+msgid "APY"
+msgstr ""
+
+msgid "APY (Annualized)"
+msgstr ""
+
 msgid "Accept"
 msgstr "Chấp nhận"
 
@@ -212,6 +218,9 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
+msgid "Choose an Asset"
+msgstr ""
+
 msgid "Claim SUSHI"
 msgstr "Yêu cầu SUSHI"
 
@@ -238,8 +247,14 @@ msgstr "Phê duyệt của cộng đồng"
 msgid "Confirm"
 msgstr "Xác nhận"
 
+msgid "Confirm Add Liquidity"
+msgstr ""
+
 msgid "Confirm Adding Liquidity"
 msgstr "Xác nhận thêm thanh khoản"
+
+msgid "Confirm Deposit"
+msgstr ""
 
 msgid "Confirm Limit Order"
 msgstr ""
@@ -404,6 +419,9 @@ msgstr ""
 msgid "Farm"
 msgstr ""
 
+msgid "Fees"
+msgstr ""
+
 msgid "Fees (24H)"
 msgstr ""
 
@@ -490,6 +508,9 @@ msgstr ""
 msgid ""
 "In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
 "automatically."
+msgstr ""
+
+msgid "Including fees"
 msgstr ""
 
 msgid "Input is estimated. You will sell at most"
@@ -679,6 +700,9 @@ msgstr ""
 msgid "My SUSHI"
 msgstr ""
 
+msgid "Network Fee"
+msgstr ""
+
 msgid "Network not supported yet"
 msgstr ""
 
@@ -737,6 +761,9 @@ msgid "Order Expiration"
 msgstr ""
 
 msgid "Order History"
+msgstr ""
+
+msgid "Output is estimated. If the price changes by more than 0.5% your transaction will revert."
 msgstr ""
 
 msgid ""
@@ -822,6 +849,9 @@ msgstr ""
 msgid "Rates"
 msgstr "Tỷ giá"
 
+msgid "Rates:"
+msgstr ""
+
 msgid "Receive"
 msgstr ""
 
@@ -888,6 +918,9 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "Tìm kiếm tên hoặc dán địa chỉ"
 
+msgid "Select a Token"
+msgstr ""
+
 msgid "Select a asset token"
 msgstr ""
 
@@ -904,6 +937,9 @@ msgid "Select a token to find your liquidity"
 msgstr "Chọn một token để tìm thanh khoản của bạn"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select token & enter amount"
 msgstr ""
 
 msgid "Send to:"
@@ -991,6 +1027,9 @@ msgstr "Hoán đổi sang:"
 msgid "TVL"
 msgstr "TVL"
 
+msgid "TVL:"
+msgstr ""
+
 msgid "Tap any to learn more"
 msgstr ""
 
@@ -1055,6 +1094,9 @@ msgstr "Công cụ để tối ưu hóa quy trình làm việc của bạn."
 
 msgid "Total"
 msgstr "Tổng cộng"
+
+msgid "Transaction Details"
+msgstr ""
 
 msgid "Transaction History {0}"
 msgstr ""
@@ -1146,11 +1188,17 @@ msgstr "Số dư trên ví"
 msgid "Weekly unlocks from the vesting period."
 msgstr ""
 
+msgid "What do these mean?"
+msgstr ""
+
 msgid "What kinds of liquidity pools are supported on Sushi?"
 msgstr ""
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "Khi tạo một cặp, bạn là nhà cung cấp thanh khoản đầu tiên. Tỷ lệ token bạn thêm vào sẽ thiết lập giá của mạng lưới này. Khi bạn hài lòng với tỷ lệ, hãy nhấp vào tổng cung để xem xét"
+
+msgid "Which will be converted to:"
+msgstr ""
 
 msgid "Withdraw"
 msgstr "Rút tiền"
@@ -1169,6 +1217,9 @@ msgstr ""
 
 msgid "You are creating a pool"
 msgstr "Bạn đang tạo một mạng lưới"
+
+msgid "You are depositing:"
+msgstr ""
 
 msgid "You are on the wrong network"
 msgstr "Bạn đang kết nối sai mạng"
@@ -1191,6 +1242,9 @@ msgstr ""
 msgid "You will receive"
 msgstr "Bạn sẽ nhận được"
 
+msgid "You'll receive:"
+msgstr ""
+
 msgid "Your"
 msgstr ""
 
@@ -1199,6 +1253,12 @@ msgstr "SUSHI có thể yêu cầu của bạn trong tuần này"
 
 msgid "Your Liquidity"
 msgstr "Tính thanh khoản của bạn"
+
+msgid "Your Pool Share"
+msgstr ""
+
+msgid "Your Pool Tokens"
+msgstr ""
 
 msgid "Your Staked"
 msgstr "Đặt cược của bạn"
@@ -1211,6 +1271,9 @@ msgstr "Ví của bạn"
 
 msgid "Your pool share"
 msgstr "Cổ phần trên mạng lưới của bạn"
+
+msgid "Your selected token will be split into:"
+msgstr ""
 
 msgid "Your total pool tokens"
 msgstr "Tổng số token trên mạng lưới của bạn"
@@ -1231,6 +1294,9 @@ msgid "Your transaction will revert if there is a large, unfavorable price movem
 msgstr "Giao dịch của bạn sẽ hoàn nguyên nếu có một biến động giá lớn, bất lợi trước khi được xác nhận."
 
 msgid "Your transactions will appear here..."
+msgstr ""
+
+msgid "Your {0} will be split into:"
 msgstr ""
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
@@ -1283,6 +1349,9 @@ msgstr[1] ""
 
 msgid "{0} Deposited"
 msgstr "{0} Đã ký quỹ"
+
+msgid "{0} Deposited:"
+msgstr ""
 
 msgid "{0} Strategy"
 msgstr "{0} Chiến lược"

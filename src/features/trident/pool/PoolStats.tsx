@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react'
 
 interface PoolStatsProps {}
 
-const PoolStats: FC = () => {
+const PoolStats: FC<PoolStatsProps> = () => {
   const { i18n } = useLingui()
 
   return (

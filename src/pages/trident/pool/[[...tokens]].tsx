@@ -1,76 +1,34 @@
-import TridentLayout from '../../../../layouts/Trident'
-import Typography from '../../../../components/Typography'
-import Button from '../../../../components/Button'
+import TridentLayout from '../../../layouts/Trident'
+import Typography from '../../../components/Typography'
+import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { POOL_TYPES } from '../../../../features/trident/pool/context/constants'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import CurrencyLogo, { CurrencyLogoArray } from '../../../../components/CurrencyLogo'
-import { SUSHI } from '../../../../constants'
-import { ChainId, WETH9 } from '@sushiswap/sdk'
-import Chip from '../../../../components/Chip'
-import ListPanel from '../../../../components/ListPanel'
-import { POOLS_ROUTE } from '../../../../constants/routes'
-import PoolStats from '../../../../features/trident/pool/PoolStats'
-import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
-
-export const getStaticPaths = async () => ({
-  paths: [{ params: { id: '1' } }],
-  fallback: false,
-})
-
-export const getStaticProps = async ({ params }) => {
-  const { id } = params
-
-  return {
-    props: {
-      pool: POOL_TYPES[id],
-      breadcrumbs: [POOLS_ROUTE, { label: 'SUSHI-WETH - Classic - 0.05% Fee', slug: '/trident/pool/1' }],
-    },
-  }
-}
+import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
+import Chip from '../../../components/Chip'
+import ListPanel from '../../../components/ListPanel'
+import PoolStats from '../../../features/trident/pool/PoolStats'
+import PoolStatsChart from '../../../features/trident/pool/PoolStatsChart'
+import { useRouter } from 'next/router'
+import { useTridentPool } from '../../../hooks/useTridentPools'
 
 const Pool = () => {
   const { i18n } = useLingui()
+  const { query } = useRouter()
+  const { tokens: tokenAddresses } = query
+  const [pool, { toHref }] = useTridentPool(tokenAddresses)
 
-  const ListPanelItems = [
+  const ListPanelItems = pool.amounts.map((amount, index) => (
     <ListPanel.Item
-      key={0}
-      left={
-        <div className="flex flex-row gap-1">
-          <CurrencyLogo currency={SUSHI[ChainId.MAINNET]} size={20} />
-          <Typography variant="sm" className="text-high-emphesis" weight={700}>
-            1,000.00 SUSHI
-          </Typography>
-        </div>
-      }
-      right={
-        <Typography variant="xs" weight={400} className="text-right">
-          $8,360.00
-        </Typography>
-      }
-    />,
-    <ListPanel.Item
-      key={1}
-      left={
-        <div className="flex flex-row gap-1">
-          <CurrencyLogo currency={WETH9[ChainId.MAINNET]} size={20} />
-          <Typography variant="sm" className="text-high-emphesis" weight={700}>
-            3.66 WETH
-          </Typography>
-        </div>
-      }
-      right={
-        <Typography variant="xs" weight={400} className="text-right">
-          $8,360.00
-        </Typography>
-      }
-    />,
-  ]
+      key={index}
+      left={<ListPanel.Item.Left amount={amount} />}
+      right={<ListPanel.Item.Right>$8,360.00</ListPanel.Item.Right>}
+    />
+  ))
 
   return (
-    <div className="flex flex-col w-full mt-px">
+    <div className="flex flex-col w-full mt-px mb-5">
       <div className="flex flex-col">
         <div className="flex flex-col bg-dark-900">
           <div className="flex flex-row p-5 justify-between bg-dots-pattern">
@@ -82,40 +40,40 @@ const Pool = () => {
                 className="rounded-full py-1 pl-2"
                 startIcon={<ChevronLeftIcon width={24} height={24} />}
               >
-                <Link href={'/trident/pool'}>{i18n._(t`Pools`)}</Link>
+                <Link href={'/trident/pools'}>{i18n._(t`Pools`)}</Link>
               </Button>
 
               {/*spacer*/}
               <div className="h-2" />
             </div>
             <div className="flex flex-col text-right gap-2">
-              <Typography variant="sm">APY (Annualized)</Typography>
+              <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
               <div className="flex flex-col">
                 <Typography variant="h3" className="text-high-emphesis" weight={700}>
-                  22.27%
+                  {pool.apy}
                 </Typography>
                 <Typography variant="xxs" className="text-secondary">
-                  Including fees
+                  {i18n._(t`Including fees`)}
                 </Typography>
               </div>
             </div>
           </div>
         </div>
         <div className="px-5 mt-[-32px] flex flex-col gap-2">
-          <CurrencyLogoArray currencies={[SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]]} size={64} />
+          <CurrencyLogoArray currencies={pool.tokens} size={64} />
           <Typography variant="h2" className="text-high-emphesis" weight={700}>
-            SUSHI-WETH
+            {pool.tokens.map((token) => token.symbol).join('-')}
           </Typography>
           <div className="flex flex-row gap-2 items-center">
             <Chip label="Classic Pool" color="purple" />
             <Typography weight={700} variant="sm">
-              0.05% Fees
+              {pool.fee} {i18n._(t`Fees`)}
             </Typography>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2 px-5 pt-6">
           <Button variant="outlined" color="gradient">
-            <Link href="/trident/pool/1/add">{i18n._(t`Add Liquidity`)}</Link>
+            <Link href={`/trident/add/${toHref(pool)}`}>{i18n._(t`Add Liquidity`)}</Link>
           </Button>
           <Button variant="outlined" color="gradient">
             {i18n._(t`Remove Liquidity`)}

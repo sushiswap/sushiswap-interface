@@ -1,5 +1,9 @@
 import { FC, ReactNode } from 'react'
 import Typography from '../Typography'
+import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
+import CurrencyLogo from '../CurrencyLogo'
+import { SUSHI } from '../../constants'
+import { formatNumber } from '../../functions'
 
 interface ListPanelProps {
   header?: ReactNode
@@ -78,7 +82,7 @@ interface ListPanelItemProps {
 
 // Default ListPanelFooter component, please note that you are not obliged to pass this to a ListPanel component
 // If you need different styling, please create another component and leave this one as is.
-const ListPanelItem: FC<ListPanelItemProps> = ({ left, right }) => {
+const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
   return (
     <div className="grid grid-cols-2 gap-2 px-4 h-11 flex items-center border-dark-700">
       {left}
@@ -87,7 +91,32 @@ const ListPanelItem: FC<ListPanelItemProps> = ({ left, right }) => {
   )
 }
 
+interface ListPanelItemLeftProps {
+  amount: CurrencyAmount<Token>
+}
+
+const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount }) => {
+  return (
+    <div className="flex flex-row gap-1.5">
+      <CurrencyLogo currency={amount?.currency} size={20} />
+      <Typography variant="sm" className="text-high-emphesis" weight={700}>
+        {amount?.toSignificant(6)} {amount?.currency.symbol}
+      </Typography>
+    </div>
+  )
+}
+
+const ListPanelItemRight: FC = ({ children }) => {
+  return (
+    <Typography variant="xs" weight={400} className="text-right">
+      {children}
+    </Typography>
+  )
+}
+
 ListPanel.Header = ListPanelHeader
+ListPanelItem.Left = ListPanelItemLeft
+ListPanelItem.Right = ListPanelItemRight
 ListPanel.Item = ListPanelItem
 ListPanel.Footer = ListPanelFooter
 

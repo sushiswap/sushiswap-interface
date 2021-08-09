@@ -41,6 +41,12 @@ msgstr "각 거래 금액의 일부(0.25%)는 프로토콜 인센티브로 유�
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
+msgid "APY (Annualized)"
+msgstr ""
+
 msgid "Accept"
 msgstr "동의"
 
@@ -212,6 +218,9 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
+msgid "Choose an Asset"
+msgstr ""
+
 msgid "Claim SUSHI"
 msgstr "SUSHI 청구"
 
@@ -240,8 +249,14 @@ msgstr "커뮤니티 승인"
 msgid "Confirm"
 msgstr "확인"
 
+msgid "Confirm Add Liquidity"
+msgstr ""
+
 msgid "Confirm Adding Liquidity"
 msgstr "유동성 추가 확인"
+
+msgid "Confirm Deposit"
+msgstr ""
 
 msgid "Confirm Limit Order"
 msgstr ""
@@ -406,6 +421,9 @@ msgstr ""
 msgid "Farm"
 msgstr ""
 
+msgid "Fees"
+msgstr ""
+
 msgid "Fees (24H)"
 msgstr ""
 
@@ -490,6 +508,9 @@ msgstr ""
 msgid ""
 "In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
 "automatically."
+msgstr ""
+
+msgid "Including fees"
 msgstr ""
 
 msgid "Input is estimated. You will sell at most"
@@ -679,6 +700,9 @@ msgstr ""
 msgid "My SUSHI"
 msgstr ""
 
+msgid "Network Fee"
+msgstr ""
+
 msgid "Network not supported yet"
 msgstr ""
 
@@ -737,6 +761,9 @@ msgid "Order Expiration"
 msgstr ""
 
 msgid "Order History"
+msgstr ""
+
+msgid "Output is estimated. If the price changes by more than 0.5% your transaction will revert."
 msgstr ""
 
 msgid ""
@@ -822,6 +849,9 @@ msgstr ""
 msgid "Rates"
 msgstr "요금"
 
+msgid "Rates:"
+msgstr ""
+
 msgid "Receive"
 msgstr ""
 
@@ -888,6 +918,9 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "이름 검색 또는 주소 붙여넣기"
 
+msgid "Select a Token"
+msgstr ""
+
 msgid "Select a asset token"
 msgstr ""
 
@@ -904,6 +937,9 @@ msgid "Select a token to find your liquidity"
 msgstr "토큰을 선택하여 유동성 찾기"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select token & enter amount"
 msgstr ""
 
 msgid "Send to:"
@@ -991,6 +1027,9 @@ msgstr "다음으로 스왑:"
 msgid "TVL"
 msgstr "전체 동결 가치"
 
+msgid "TVL:"
+msgstr ""
+
 msgid "Tap any to learn more"
 msgstr ""
 
@@ -1055,6 +1094,9 @@ msgstr "워크플로우 최적화 도구"
 
 msgid "Total"
 msgstr "합계"
+
+msgid "Transaction Details"
+msgstr ""
 
 msgid "Transaction History {0}"
 msgstr ""
@@ -1146,11 +1188,17 @@ msgstr "지갑 잔액"
 msgid "Weekly unlocks from the vesting period."
 msgstr ""
 
+msgid "What do these mean?"
+msgstr ""
+
 msgid "What kinds of liquidity pools are supported on Sushi?"
 msgstr ""
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "쌍을 만들 때 귀하는 최초의 유동성 공급자입니다. 추가하는 토큰의 비율이이 풀의 가격을 설정합니다. 요금에 만족하면 공급을 클릭하여 검토하세요."
+
+msgid "Which will be converted to:"
+msgstr ""
 
 msgid "Withdraw"
 msgstr "인출"
@@ -1169,6 +1217,9 @@ msgstr ""
 
 msgid "You are creating a pool"
 msgstr "풀 생성 중"
+
+msgid "You are depositing:"
+msgstr ""
 
 msgid "You are on the wrong network"
 msgstr "잘못된 네트워크에 있습니다."
@@ -1191,6 +1242,9 @@ msgstr ""
 msgid "You will receive"
 msgstr "예상 수령"
 
+msgid "You'll receive:"
+msgstr ""
+
 msgid "Your"
 msgstr ""
 
@@ -1199,6 +1253,12 @@ msgstr "이번 주에 출금가능한 SUSHI"
 
 msgid "Your Liquidity"
 msgstr "내 유동성"
+
+msgid "Your Pool Share"
+msgstr ""
+
+msgid "Your Pool Tokens"
+msgstr ""
 
 msgid "Your Staked"
 msgstr "귀하의 지분"
@@ -1211,6 +1271,9 @@ msgstr "내 지갑"
 
 msgid "Your pool share"
 msgstr "풀 점유율"
+
+msgid "Your selected token will be split into:"
+msgstr ""
 
 msgid "Your total pool tokens"
 msgstr "보유 중인 전체 풀 토큰"
@@ -1231,6 +1294,9 @@ msgid "Your transaction will revert if there is a large, unfavorable price movem
 msgstr "거래가 확인되기 전에 크게 불리한 가격 변동이 있는 경우 거래가 취소됩니다."
 
 msgid "Your transactions will appear here..."
+msgstr ""
+
+msgid "Your {0} will be split into:"
 msgstr ""
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
@@ -1283,6 +1349,9 @@ msgstr[1] ""
 
 msgid "{0} Deposited"
 msgstr "{0} 입금됨"
+
+msgid "{0} Deposited:"
+msgstr ""
 
 msgid "{0} Strategy"
 msgstr "{0} 전략"

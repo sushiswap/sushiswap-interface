@@ -1,4 +1,5 @@
 import { ChipColor } from '../../../../components/Chip'
+import { CurrencyAmount, Token } from '@sushiswap/sdk'
 
 export enum ActionType {
   SEARCH = 'SEARCH',

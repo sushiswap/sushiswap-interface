@@ -4,22 +4,17 @@ import PoolListActions from '../../../features/trident/pool/PoolListActions'
 import { TridentPoolPageContextProvider, useTridentPoolPageState } from '../../../features/trident/pool/context'
 import SuggestedPools from '../../../features/trident/pool/SuggestedPools'
 import { classNames } from '../../../functions'
-import { POOLS_ROUTE } from '../../../constants/routes'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
-
-export const getStaticProps = async () => ({
-  props: { breadcrumbs: [POOLS_ROUTE] },
-})
 
 const Pool = () => {
   const { i18n } = useLingui()
   const { searchQuery } = useTridentPoolPageState()
 
   return (
-    <div className="flex flex-col w-full gap-6 mt-px">
+    <div className="flex flex-col w-full gap-6 mt-px mb-5">
       <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-90 gap-6">
         <div className="">
           <Typography variant="h3" className="text-high-emphesis" weight={400}>

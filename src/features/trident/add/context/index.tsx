@@ -1,23 +1,48 @@
-import React, { createContext, useContext, useReducer, Dispatch, useMemo } from 'react'
+import React, { createContext, useContext, useReducer, Dispatch, useMemo, useCallback } from 'react'
 import reducer from './reducer'
-import { LiquidityMode, Reducer, State } from './types'
+import { ActionType, LiquidityMode, Reducer, State } from './types'
+import { useRouter } from 'next/router'
+import { useTridentPool } from '../../../../hooks/useTridentPools'
+import { Pool } from '../../types'
 
 const initialState: State = {
   liquidityMode: LiquidityMode.ZAP,
   currencies: [],
   inputAmounts: [],
+  showZapReview: false,
 }
 
-export const TridentAddLiquidityPageContext = createContext<{ state: State; dispatch: Dispatch<any> }>({
+export const TridentAddLiquidityPageContext = createContext<{
+  state: State
+  pool: Pool
+  execute: () => void
+  dispatch: Dispatch<any>
+}>({
   state: initialState,
+  pool: null,
+  execute: () => null,
   dispatch: () => null,
 })
 
 export const TridentAddLiquidityPageContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
+  const { query } = useRouter()
+  const [pool] = useTridentPool(query.tokens)
+
+  const execute = useCallback(async () => {
+    alert('Execute')
+
+    // Close modal
+    dispatch({
+      type: ActionType.SHOW_ZAP_REVIEW,
+      payload: false,
+    })
+  }, [])
 
   return (
-    <TridentAddLiquidityPageContext.Provider value={useMemo(() => ({ state, dispatch }), [state])}>
+    <TridentAddLiquidityPageContext.Provider
+      value={useMemo(() => ({ state, pool, execute, dispatch }), [execute, pool, state])}
+    >
       {children}
     </TridentAddLiquidityPageContext.Provider>
   )

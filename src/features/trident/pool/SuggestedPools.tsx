@@ -6,6 +6,7 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import Switch from '../../../components/Switch'
 import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/solid'
+import useTridentPools from '../../../hooks/useTridentPools'
 
 interface SuggestedPools {}
 
@@ -13,6 +14,8 @@ const SuggestedPools: FC<SuggestedPools> = () => {
   const { i18n } = useLingui()
   const [hide, setHide] = useState(false)
   const [viewMore, setViewMore] = useState(false)
+  const [pools] = useTridentPools()
+
   return (
     <div className="flex flex-col gap-2 px-5 mt-2">
       <div className="flex justify-between">
@@ -52,14 +55,14 @@ const SuggestedPools: FC<SuggestedPools> = () => {
       </div>
       {!hide && (
         <>
-          <PoolCard />
-          <PoolCard />
+          {pools.slice(0, 2).map((pool, index) => (
+            <PoolCard pool={pool} link={'/trident/pool'} key={index} />
+          ))}
           {viewMore && (
             <>
-              <PoolCard />
-              <PoolCard />
-              <PoolCard />
-              <PoolCard />
+              {pools.slice(pools.length - 2).map((pool, index) => (
+                <PoolCard pool={pool} link={'/trident/pool'} key={index} />
+              ))}
             </>
           )}
           <ViewMore

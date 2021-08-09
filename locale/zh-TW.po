@@ -41,6 +41,12 @@ msgstr "每筆交易的0.25%都會分給協議的流動性提供者。"
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
+msgid "APY (Annualized)"
+msgstr ""
+
 msgid "Accept"
 msgstr "接受"
 
@@ -212,6 +218,9 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
+msgid "Choose an Asset"
+msgstr ""
+
 msgid "Claim SUSHI"
 msgstr "獲取SUSHI"
 
@@ -238,8 +247,14 @@ msgstr "社區批準"
 msgid "Confirm"
 msgstr "確認"
 
+msgid "Confirm Add Liquidity"
+msgstr ""
+
 msgid "Confirm Adding Liquidity"
 msgstr "確認添加流動性"
+
+msgid "Confirm Deposit"
+msgstr ""
 
 msgid "Confirm Limit Order"
 msgstr ""
@@ -402,6 +417,9 @@ msgstr ""
 msgid "Farm"
 msgstr ""
 
+msgid "Fees"
+msgstr ""
+
 msgid "Fees (24H)"
 msgstr ""
 
@@ -481,6 +499,9 @@ msgstr ""
 msgid ""
 "In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
 "automatically."
+msgstr ""
+
+msgid "Including fees"
 msgstr ""
 
 msgid "Input is estimated. You will sell at most"
@@ -667,6 +688,9 @@ msgstr ""
 msgid "My SUSHI"
 msgstr ""
 
+msgid "Network Fee"
+msgstr ""
+
 msgid "Network not supported yet"
 msgstr ""
 
@@ -725,6 +749,9 @@ msgid "Order Expiration"
 msgstr ""
 
 msgid "Order History"
+msgstr ""
+
+msgid "Output is estimated. If the price changes by more than 0.5% your transaction will revert."
 msgstr ""
 
 msgid ""
@@ -810,6 +837,9 @@ msgstr ""
 msgid "Rates"
 msgstr "費率"
 
+msgid "Rates:"
+msgstr ""
+
 msgid "Receive"
 msgstr ""
 
@@ -876,6 +906,9 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "搜索名稱或粘貼地址"
 
+msgid "Select a Token"
+msgstr ""
+
 msgid "Select a asset token"
 msgstr ""
 
@@ -892,6 +925,9 @@ msgid "Select a token to find your liquidity"
 msgstr "选择代币以找到您的流动性"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select token & enter amount"
 msgstr ""
 
 msgid "Send to:"
@@ -979,6 +1015,9 @@ msgstr "交換至："
 msgid "TVL"
 msgstr "TVL"
 
+msgid "TVL:"
+msgstr ""
+
 msgid "Tap any to learn more"
 msgstr ""
 
@@ -1043,6 +1082,9 @@ msgstr "用於優化工作流程的工具。"
 
 msgid "Total"
 msgstr "總數"
+
+msgid "Transaction Details"
+msgstr ""
 
 msgid "Transaction History {0}"
 msgstr ""
@@ -1134,11 +1176,17 @@ msgstr "錢包余額"
 msgid "Weekly unlocks from the vesting period."
 msgstr ""
 
+msgid "What do these mean?"
+msgstr ""
+
 msgid "What kinds of liquidity pools are supported on Sushi?"
 msgstr ""
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "當創建一個交易對時，您是第一個流動性提供者。您添加的代幣比例將決定這個池子的價格。一旦您對該比率滿意，點擊供應進行查看"
+
+msgid "Which will be converted to:"
+msgstr ""
 
 msgid "Withdraw"
 msgstr "提取"
@@ -1157,6 +1205,9 @@ msgstr ""
 
 msgid "You are creating a pool"
 msgstr "您正在創建一個池"
+
+msgid "You are depositing:"
+msgstr ""
 
 msgid "You are on the wrong network"
 msgstr "您位在錯誤的網路"
@@ -1179,6 +1230,9 @@ msgstr ""
 msgid "You will receive"
 msgstr "您將收到"
 
+msgid "You'll receive:"
+msgstr ""
+
 msgid "Your"
 msgstr ""
 
@@ -1187,6 +1241,12 @@ msgstr "本周您可領取的SUSHI"
 
 msgid "Your Liquidity"
 msgstr "您的流動性"
+
+msgid "Your Pool Share"
+msgstr ""
+
+msgid "Your Pool Tokens"
+msgstr ""
 
 msgid "Your Staked"
 msgstr "您在流動性池的占比"
@@ -1199,6 +1259,9 @@ msgstr "您的钱包"
 
 msgid "Your pool share"
 msgstr "您在流動性池的佔比"
+
+msgid "Your selected token will be split into:"
+msgstr ""
 
 msgid "Your total pool tokens"
 msgstr "流動性池中的總代幣"
@@ -1219,6 +1282,9 @@ msgid "Your transaction will revert if there is a large, unfavorable price movem
 msgstr "如果交易在確認之前出現大的不利價格變動，則交易將恢復。"
 
 msgid "Your transactions will appear here..."
+msgstr ""
+
+msgid "Your {0} will be split into:"
 msgstr ""
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
@@ -1271,6 +1337,9 @@ msgstr[1] ""
 
 msgid "{0} Deposited"
 msgstr "{0}存入的"
+
+msgid "{0} Deposited:"
+msgstr ""
 
 msgid "{0} Strategy"
 msgstr "{0}策略"

@@ -41,6 +41,12 @@ msgstr "Una parte di ogni operazione (0,25%) va ai fornitori di liquidità come 
 msgid "APR"
 msgstr "APR"
 
+msgid "APY"
+msgstr ""
+
+msgid "APY (Annualized)"
+msgstr ""
+
 msgid "Accept"
 msgstr "Accetta"
 
@@ -212,6 +218,9 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
+msgid "Choose an Asset"
+msgstr ""
+
 msgid "Claim SUSHI"
 msgstr "Riscatta SUSHI"
 
@@ -240,8 +249,14 @@ msgstr "Approvazione della comunità"
 msgid "Confirm"
 msgstr "Conferma"
 
+msgid "Confirm Add Liquidity"
+msgstr ""
+
 msgid "Confirm Adding Liquidity"
 msgstr "Conferma aggiunta di liquidità"
+
+msgid "Confirm Deposit"
+msgstr ""
 
 msgid "Confirm Limit Order"
 msgstr ""
@@ -406,6 +421,9 @@ msgstr ""
 msgid "Farm"
 msgstr ""
 
+msgid "Fees"
+msgstr ""
+
 msgid "Fees (24H)"
 msgstr ""
 
@@ -492,6 +510,9 @@ msgstr ""
 msgid ""
 "In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights\n"
 "automatically."
+msgstr ""
+
+msgid "Including fees"
 msgstr ""
 
 msgid "Input is estimated. You will sell at most"
@@ -678,6 +699,9 @@ msgstr ""
 msgid "My SUSHI"
 msgstr ""
 
+msgid "Network Fee"
+msgstr ""
+
 msgid "Network not supported yet"
 msgstr ""
 
@@ -736,6 +760,9 @@ msgid "Order Expiration"
 msgstr ""
 
 msgid "Order History"
+msgstr ""
+
+msgid "Output is estimated. If the price changes by more than 0.5% your transaction will revert."
 msgstr ""
 
 msgid ""
@@ -821,6 +848,9 @@ msgstr ""
 msgid "Rates"
 msgstr "Tassi"
 
+msgid "Rates:"
+msgstr ""
+
 msgid "Receive"
 msgstr ""
 
@@ -887,6 +917,9 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "Cerca nome o incolla indirizzo"
 
+msgid "Select a Token"
+msgstr ""
+
 msgid "Select a asset token"
 msgstr ""
 
@@ -903,6 +936,9 @@ msgid "Select a token to find your liquidity"
 msgstr "Seleziona un token per trovare la tua liquidità"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select token & enter amount"
 msgstr ""
 
 msgid "Send to:"
@@ -990,6 +1026,9 @@ msgstr "Scambia in:"
 msgid "TVL"
 msgstr "TVL"
 
+msgid "TVL:"
+msgstr ""
+
 msgid "Tap any to learn more"
 msgstr ""
 
@@ -1054,6 +1093,9 @@ msgstr "Strumenti per ottimizzare il tuo flusso di lavoro."
 
 msgid "Total"
 msgstr "Totale"
+
+msgid "Transaction Details"
+msgstr ""
 
 msgid "Transaction History {0}"
 msgstr ""
@@ -1145,11 +1187,17 @@ msgstr "Saldo del wallet"
 msgid "Weekly unlocks from the vesting period."
 msgstr ""
 
+msgid "What do these mean?"
+msgstr ""
+
 msgid "What kinds of liquidity pools are supported on Sushi?"
 msgstr ""
 
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "Quando crei una coppia sei il primo fornitore di liquidità. Il rapporto dei token che aggiungi determinerà il prezzo di questo pool. Quando sei soddisfatto con il prezzo clicca su fornisci per verificare"
+
+msgid "Which will be converted to:"
+msgstr ""
 
 msgid "Withdraw"
 msgstr "Preleva"
@@ -1168,6 +1216,9 @@ msgstr ""
 
 msgid "You are creating a pool"
 msgstr "Stai creando un pool"
+
+msgid "You are depositing:"
+msgstr ""
 
 msgid "You are on the wrong network"
 msgstr "Sei connesso alla rete sbagliata"
@@ -1190,6 +1241,9 @@ msgstr ""
 msgid "You will receive"
 msgstr "Riceverai"
 
+msgid "You'll receive:"
+msgstr ""
+
 msgid "Your"
 msgstr ""
 
@@ -1198,6 +1252,12 @@ msgstr "I tuoi SUSHI riscattabili questa settimana"
 
 msgid "Your Liquidity"
 msgstr "La tua liquidità"
+
+msgid "Your Pool Share"
+msgstr ""
+
+msgid "Your Pool Tokens"
+msgstr ""
 
 msgid "Your Staked"
 msgstr "In staking"
@@ -1210,6 +1270,9 @@ msgstr "Il tuo wallet"
 
 msgid "Your pool share"
 msgstr "La tua quota del pool"
+
+msgid "Your selected token will be split into:"
+msgstr ""
 
 msgid "Your total pool tokens"
 msgstr "I tuoi pool token totali"
@@ -1230,6 +1293,9 @@ msgid "Your transaction will revert if there is a large, unfavorable price movem
 msgstr "La tua transazione verrà annullata in caso di un forte movimento del prezzo sfavorevole prima della conferma."
 
 msgid "Your transactions will appear here..."
+msgstr ""
+
+msgid "Your {0} will be split into:"
 msgstr ""
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
@@ -1282,6 +1348,9 @@ msgstr[1] ""
 
 msgid "{0} Deposited"
 msgstr "{0} depositato"
+
+msgid "{0} Deposited:"
+msgstr ""
 
 msgid "{0} Strategy"
 msgstr "Strategia {0}"

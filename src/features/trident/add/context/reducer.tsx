@@ -24,6 +24,11 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
             ? [action.payload.currency, state.currencies[1]]
             : [state.currencies[0], action.payload.currency],
       }
+    case ActionType.SHOW_ZAP_REVIEW:
+      return {
+        ...state,
+        showZapReview: action.payload,
+      }
     default:
       return state
   }

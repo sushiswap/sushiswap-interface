@@ -2,17 +2,25 @@ import { FC } from 'react'
 import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { isMobile } from 'react-device-detect'
+import { classNames } from '../../functions'
 
 interface ModalProps {
   isOpen: boolean
   onDismiss: () => void
   children?: React.ReactNode
+  className?: string
 }
 
-const HeadlessUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
+const HeadlessUIModal: FC<ModalProps> = ({ className, isOpen, onDismiss, children }) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
-      <Dialog as="div" static className="fixed z-10 inset-0 overflow-y-auto" open={isOpen} onClose={onDismiss}>
+      <Dialog
+        as="div"
+        static
+        className={classNames('fixed z-10 inset-0 overflow-y-auto bg-dark-900', className)}
+        open={isOpen}
+        onClose={onDismiss}
+      >
         {/*TODO change from !isMobile to isMobile*/}
         {!isMobile ? (
           <>
