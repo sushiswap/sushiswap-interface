@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react'
-import { ChainId, Currency } from '@sushiswap/sdk'
+import { ChainId, Currency, WETH9 } from '@sushiswap/sdk'
 import Button from '../Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -57,6 +57,22 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChang
           </div>
           <Typography variant="sm" className="text-high-emphesis" weight={700}>
             {SUSHI[ChainId.MAINNET].symbol}
+          </Typography>
+        </div>
+        <Typography variant="sm" className="text-high-emphesis" weight={700}>
+          300.00
+        </Typography>
+      </div>
+      <div
+        className="flex justify-between items-center p-5 cursor-pointer"
+        onClick={() => handleSelect(WETH9[ChainId.MAINNET])}
+      >
+        <div className="flex items-center gap-1.5">
+          <div className="rounded-full overflow-hidden">
+            <CurrencyLogo currency={WETH9[ChainId.MAINNET]} size={24} />
+          </div>
+          <Typography variant="sm" className="text-high-emphesis" weight={700}>
+            {WETH9[ChainId.MAINNET].symbol}
           </Typography>
         </div>
         <Typography variant="sm" className="text-high-emphesis" weight={700}>

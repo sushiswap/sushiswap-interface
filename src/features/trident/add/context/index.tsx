@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, Dispatch, useMemo, useCallback } from 'react'
+import React, { createContext, useContext, useReducer, Dispatch, useMemo, useCallback, useEffect } from 'react'
 import reducer from './reducer'
 import { ActionType, LiquidityMode, Reducer, State } from './types'
 import { useRouter } from 'next/router'
@@ -25,9 +25,12 @@ export const TridentAddLiquidityPageContext = createContext<{
 })
 
 export const TridentAddLiquidityPageContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
   const { query } = useRouter()
   const [pool] = useTridentPool(query.tokens)
+  const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, {
+    ...initialState,
+    currencies: pool.tokens,
+  })
 
   const execute = useCallback(async () => {
     alert('Execute')

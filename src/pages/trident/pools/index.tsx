@@ -1,17 +1,17 @@
 import TridentLayout from '../../../layouts/Trident'
-import SearchResultPools from '../../../features/trident/pool/SearchResultPools'
-import PoolListActions from '../../../features/trident/pool/PoolListActions'
-import { TridentPoolPageContextProvider, useTridentPoolPageState } from '../../../features/trident/pool/context'
-import SuggestedPools from '../../../features/trident/pool/SuggestedPools'
 import { classNames } from '../../../functions'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
+import { TridentPoolsPageContextProvider, useTridentPoolsPageState } from '../../../features/trident/pools/context'
+import SuggestedPools from '../../../features/trident/pools/SuggestedPools'
+import SearchResultPools from '../../../features/trident/pools/SearchResultPools'
+import PoolListActions from '../../../features/trident/pools/PoolListActions'
 
 const Pool = () => {
   const { i18n } = useLingui()
-  const { searchQuery } = useTridentPoolPageState()
+  const { searchQuery } = useTridentPoolsPageState()
 
   return (
     <div className="flex flex-col w-full gap-6 mt-px mb-5">
@@ -42,7 +42,7 @@ const Pool = () => {
   )
 }
 
-Pool.Provider = TridentPoolPageContextProvider
+Pool.Provider = TridentPoolsPageContextProvider
 Pool.Layout = TridentLayout
 
 export default Pool

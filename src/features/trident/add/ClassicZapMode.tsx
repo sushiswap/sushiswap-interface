@@ -16,13 +16,14 @@ import ZapModeTransactionReviewModal from './ZapModeTransactionReviewModal'
 import { tryParseAmount } from '../../../functions'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 
-const ZapMode = () => {
+const ClassicZapMode = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const { currencies, inputAmounts } = useTridentAddLiquidityPageState()
   const { pool, dispatch } = useTridentAddLiquidityPageContext()
   const balance = useTokenBalance(account, currencies[0])
-  const usdcValue = useUSDCValue(tryParseAmount(inputAmounts[0], currencies[0]))
+  const parsedAmount = tryParseAmount(inputAmounts[0], currencies[0])
+  const usdcValue = useUSDCValue(parsedAmount)
 
   const handleInput = useCallback(
     (amount: string) => {
@@ -75,6 +76,7 @@ const ZapMode = () => {
           onChange={handleInput}
           onSelect={handleSelect}
           onMax={() => handleInput(balance?.toExact())}
+          showMax={balance?.toExact() !== parsedAmount?.toExact()}
         />
         <Button
           color={inputAmounts[0] ? 'gradient' : 'gray'}
@@ -107,4 +109,4 @@ const ZapMode = () => {
   )
 }
 
-export default ZapMode
+export default ClassicZapMode

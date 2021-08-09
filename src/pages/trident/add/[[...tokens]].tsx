@@ -6,15 +6,19 @@ import { useLingui } from '@lingui/react'
 import TridentLayout from '../../../layouts/Trident'
 import SettingsTab from '../../../components/Settings'
 import Typography from '../../../components/Typography'
-import ZapModeToggle from '../../../features/trident/add/ZapModeToggle'
+import ModeToggle from '../../../features/trident/add/ModeToggle'
 import {
   TridentAddLiquidityPageContextProvider,
   useTridentAddLiquidityPageContext,
   useTridentAddLiquidityPageState,
 } from '../../../features/trident/add/context'
-import ZapMode from '../../../features/trident/add/ZapMode'
+import ClassicZapMode from '../../../features/trident/add/ClassicZapMode'
 import { LiquidityMode } from '../../../features/trident/add/context/types'
 import { toHref } from '../../../hooks/useTridentPools'
+import ClassicStandardMode from '../../../features/trident/add/ClassicStandardMode'
+import { PoolType } from '../../../features/trident/pool/context/types'
+import HybridZapMode from '../../../features/trident/add/HybridZapMode'
+import HybridStandardMode from '../../../features/trident/add/HybridStandardMode'
 
 const Add = () => {
   const { i18n } = useLingui()
@@ -42,7 +46,7 @@ const Add = () => {
           </Typography>
           <Typography variant="sm">
             {i18n._(
-              t`Deposit both pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode.`
+              t`Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode.`
             )}
           </Typography>
         </div>
@@ -50,8 +54,21 @@ const Add = () => {
         {/*spacer*/}
         <div className="h-2" />
       </div>
-      <ZapModeToggle />
-      {liquidityMode === LiquidityMode.ZAP && <ZapMode />}
+      <ModeToggle />
+
+      {pool.type === PoolType.CLASSIC && (
+        <>
+          {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
+          {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+        </>
+      )}
+
+      {pool.type === PoolType.HYBRID && (
+        <>
+          {liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
+          {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
+        </>
+      )}
     </div>
   )
 }

@@ -1,16 +1,16 @@
 import { FC } from 'react'
-import PoolCard from './PoolCard'
 import Typography from '../../../components/Typography'
-import { useTridentPoolPageState } from './context'
+import { useTridentPoolsPageState } from './context'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import useTridentPools from '../../../hooks/useTridentPools'
+import PoolCard from './PoolCard'
 
 interface SearchResultPoolsProps {}
 
 const SearchResultPools: FC<SearchResultPoolsProps> = () => {
   const { i18n } = useLingui()
-  const { searchQuery } = useTridentPoolPageState()
+  const { searchQuery } = useTridentPoolsPageState()
   const [pools] = useTridentPools()
 
   return (

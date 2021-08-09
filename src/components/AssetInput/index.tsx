@@ -19,9 +19,9 @@ import { useActiveWeb3React } from '../../hooks'
 interface AssetInputProps {
   value: string
   currency: Token
-  onSelect: (x: Token) => void
-  onChange: (x: string) => void
   onMax: () => void
+  onChange: (x: string) => void
+  onSelect?: (x: Token) => void
   showMax?: boolean
 }
 
@@ -45,13 +45,20 @@ const AssetInput = (props: AssetInputProps) => {
         <Typography variant="h3" weight={700} className="text-high-emphesis">
           {props.currency.symbol}
         </Typography>
-        <ChevronDownIcon width={24} height={24} className="text-secondary" />
-
-        {/*This is a bit nasty, have to define this modal twice as AssetInputPanel uses this as well.
-        I want both components completely decoupled so I feel like there's no other way*/}
-        <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
-          <CurrencySelectDialog currency={props.currency} onChange={props.onSelect} onDismiss={() => setOpen(false)} />
-        </HeadlessUIModal>
+        {props.onSelect && (
+          <>
+            <ChevronDownIcon width={24} height={24} className="text-secondary" />
+            {/*This is a bit nasty, have to define this modal twice as AssetInputPanel uses this as well.
+               I want both components completely decoupled so I feel like there's no other way*/}
+            <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
+              <CurrencySelectDialog
+                currency={props.currency}
+                onChange={props.onSelect}
+                onDismiss={() => setOpen(false)}
+              />
+            </HeadlessUIModal>
+          </>
+        )}
       </div>
     )
   }
@@ -79,7 +86,6 @@ const AssetInputPanel = ({
 }: AssetInputPanelProps) => {
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
-  const [focus, setFocus] = useState(false)
   const [open, setOpen] = useState(false)
 
   let content = (
@@ -87,20 +93,24 @@ const AssetInputPanel = ({
       <div className="w-12 h-12 rounded-full">
         <Lottie animationData={selectCoinAnimation} autoplay loop />
       </div>
-      <div className="inline-flex items-center">
-        <Button
-          color="blue"
-          variant="filled"
-          className="rounded-full px-3 py-0 h-[32px] shadow-md"
-          endIcon={<ChevronDownIcon width={24} height={24} />}
-          onClick={() => setOpen(true)}
-        >
-          <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
-        </Button>
-      </div>
-      <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
-        <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
-      </HeadlessUIModal>
+      {onSelect && (
+        <>
+          <div className="inline-flex items-center">
+            <Button
+              color="blue"
+              variant="filled"
+              className="rounded-full px-3 py-0 h-[32px] shadow-md"
+              endIcon={<ChevronDownIcon width={24} height={24} />}
+              onClick={() => setOpen(true)}
+            >
+              <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
+            </Button>
+          </div>
+          <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
+            <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
+          </HeadlessUIModal>
+        </>
+      )}
     </div>
   )
 
@@ -117,8 +127,6 @@ const AssetInputPanel = ({
             <NumericalInput
               value={value}
               onUserInput={onChange}
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
               placeholder="0.00"
               className="bg-transparent flex flex-grow w-full"
             />
@@ -142,7 +150,7 @@ const AssetInputPanel = ({
   return (
     <div
       className={classNames(
-        focus ? 'border-2' : 'border',
+        showMax ? 'border' : 'border-2',
         'rounded border-dark-700 bg-dark-900 flex flex-col overflow-hidden'
       )}
     >

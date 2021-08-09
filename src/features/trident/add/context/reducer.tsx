@@ -9,20 +9,20 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
         liquidityMode: action.payload,
       }
     case ActionType.SET_INPUT_AMOUNT:
+      const inputAmounts = [...state.inputAmounts]
+      inputAmounts[action.payload.position] = action.payload.amount
+
       return {
         ...state,
-        inputAmounts:
-          action.payload.position === 0
-            ? [action.payload.amount, state.inputAmounts[1]]
-            : [state.inputAmounts[0], action.payload.amount],
+        inputAmounts,
       }
     case ActionType.SET_CURRENCY:
+      const currencies = [...state.currencies]
+      currencies[action.payload.position] = action.payload.currency
+
       return {
         ...state,
-        currencies:
-          action.payload.position === 0
-            ? [action.payload.currency, state.currencies[1]]
-            : [state.currencies[0], action.payload.currency],
+        currencies,
       }
     case ActionType.SHOW_ZAP_REVIEW:
       return {

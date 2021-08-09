@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Pool } from '../types'
+import { POOL_TYPES } from '../constants'
 
 interface PoolCardProps {
   pool: Pool
@@ -20,7 +21,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool, link }) => {
       <div className="flex justify-between p-3 items-center">
         <div className="flex gap-2 items-center">
           <CurrencyLogoArray currencies={pool.tokens} size={30} dense maxLogos={4} />
-          <Chip label="Classic" />
+          <Chip label={POOL_TYPES[pool.type].label} color={POOL_TYPES[pool.type].color} />
         </div>
         <div className="flex gap-1.5 items-baseline">
           <Typography className="text-secondary" variant="sm" weight={400}>

@@ -4,20 +4,20 @@ import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import RadioGroup from '../../../components/RadioGroup'
 import { useLingui } from '@lingui/react'
-import { useTridentPoolPageDispatch, useTridentPoolPageState } from './context'
 import { ActionType } from './context/types'
 import BottomSlideIn from '../../../components/Dialog/BottomSlideIn'
 import Checkbox from '../../../components/Checkbox'
 import Chip from '../../../components/Chip'
-import { FEE_TIERS, POOL_TYPES, SORT_OPTIONS } from './context/constants'
+import { FEE_TIERS, POOL_TYPES, SORT_OPTIONS } from '../constants'
 import Divider from '../../../components/Divider'
+import { useTridentPoolsPageDispatch, useTridentPoolsPageState } from './context'
 
 interface SortSelectorProps {}
 
 const PoolListActions: FC<SortSelectorProps> = () => {
   const { i18n } = useLingui()
-  const dispatch = useTridentPoolPageDispatch()
-  const { sortType, filters } = useTridentPoolPageState()
+  const dispatch = useTridentPoolsPageDispatch()
+  const { sortType, filters } = useTridentPoolsPageState()
   const [hideSortTypes, setHideSortTypes] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -142,7 +142,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
                 By Pool Types:
               </Typography>
             </div>
-            {POOL_TYPES.map((poolType) => {
+            {Object.values(POOL_TYPES).map((poolType) => {
               const checked = !!filters.poolTypes.find((el) => el.label === poolType.label)
               return (
                 <div className="flex flex-row gap-3 items-center" key={poolType.label}>

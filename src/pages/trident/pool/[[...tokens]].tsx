@@ -7,25 +7,22 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
 import Chip from '../../../components/Chip'
-import ListPanel from '../../../components/ListPanel'
 import PoolStats from '../../../features/trident/pool/PoolStats'
 import PoolStatsChart from '../../../features/trident/pool/PoolStatsChart'
 import { useRouter } from 'next/router'
 import { useTridentPool } from '../../../hooks/useTridentPools'
+import { POOL_TYPES } from '../../../features/trident/constants'
+import ClassicMyDeposits from '../../../features/trident/pool/ClassicMyDeposits'
+import ClassicMarket from '../../../features/trident/pool/ClassicMarket'
+import { TridentPoolPageContextProvider } from '../../../features/trident/pool/context'
+import { PoolType } from '../../../features/trident/pool/context/types'
+import HybridPoolComposition from '../../../features/trident/pool/HybridPoolComposition'
 
 const Pool = () => {
   const { i18n } = useLingui()
   const { query } = useRouter()
   const { tokens: tokenAddresses } = query
   const [pool, { toHref }] = useTridentPool(tokenAddresses)
-
-  const ListPanelItems = pool.amounts.map((amount, index) => (
-    <ListPanel.Item
-      key={index}
-      left={<ListPanel.Item.Left amount={amount} />}
-      right={<ListPanel.Item.Right>$8,360.00</ListPanel.Item.Right>}
-    />
-  ))
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -65,49 +62,43 @@ const Pool = () => {
             {pool.tokens.map((token) => token.symbol).join('-')}
           </Typography>
           <div className="flex flex-row gap-2 items-center">
-            <Chip label="Classic Pool" color="purple" />
+            <Chip label={POOL_TYPES[pool.type].label} color={POOL_TYPES[pool.type].color} />
             <Typography weight={700} variant="sm">
               {pool.fee} {i18n._(t`Fees`)}
             </Typography>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2 px-5 pt-6">
-          <Button variant="outlined" color="gradient">
+          <Button variant="outlined" color="gradient" className="text-high-emphesis">
             <Link href={`/trident/add/${toHref(pool)}`}>{i18n._(t`Add Liquidity`)}</Link>
           </Button>
-          <Button variant="outlined" color="gradient">
+          <Button variant="outlined" color="gradient" className="text-high-emphesis">
             {i18n._(t`Remove Liquidity`)}
           </Button>
-          <Button variant="outlined" color="gray" className="w-full col-span-2">
+          <Button variant="outlined" color="gray" className="w-full col-span-2 text-high-emphesis py-3" size="xs">
             {i18n._(t`View Analytics`)}
           </Button>
         </div>
       </div>
-      <div className="flex flex-col px-5 gap-5 mt-12">
-        <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          {i18n._(t`My Deposits`)}
-        </Typography>
-        <ListPanel
-          header={<ListPanel.Header title={i18n._(t`Assets`)} value="$16,720.00" subValue="54.32134 SLP" />}
-          items={ListPanelItems}
-          footer={<ListPanel.Footer title={i18n._(t`Share of Pool`)} value="0.05%" />}
-        />
-      </div>
-      <div className="flex flex-col px-5 gap-5 mt-12">
-        <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          {i18n._(t`Market`)}
-        </Typography>
-        <ListPanel
-          header={<ListPanel.Header title={i18n._(t`Assets`)} value="$356,227,073.45" subValue="1,837,294.56 SLP" />}
-          items={ListPanelItems}
-        />
-      </div>
-      <PoolStatsChart />
-      <PoolStats />
+
+      {pool.type === PoolType.CLASSIC && (
+        <>
+          <ClassicMyDeposits />
+          <ClassicMarket />
+          <PoolStatsChart />
+          <PoolStats />
+        </>
+      )}
+      {pool.type === PoolType.HYBRID && (
+        <>
+          <HybridPoolComposition />
+        </>
+      )}
     </div>
   )
 }
 
+Pool.Provider = TridentPoolPageContextProvider
 Pool.Layout = TridentLayout
 
 export default Pool

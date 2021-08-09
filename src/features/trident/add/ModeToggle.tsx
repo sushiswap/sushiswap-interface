@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react'
 import { useTridentAddLiquidityPageDispatch, useTridentAddLiquidityPageState } from './context'
 import { ActionType, LiquidityMode } from './context/types'
 
-const ZapModeToggle: FC = () => {
+const ModeToggle: FC = () => {
   const { i18n } = useLingui()
   const { liquidityMode } = useTridentAddLiquidityPageState()
   const dispatch = useTridentAddLiquidityPageDispatch()
@@ -34,4 +34,4 @@ const ZapModeToggle: FC = () => {
   )
 }
 
-export default ZapModeToggle
+export default ModeToggle
