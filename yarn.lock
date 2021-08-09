@@ -1392,15 +1392,6 @@
     "@ethersproject/logger" "^5.4.0"
     bn.js "^4.11.9"
 
-"@ethersproject/bignumber@^5.4.1":
-  version "5.4.1"
-  resolved "https://registry.yarnpkg.com/@ethersproject/bignumber/-/bignumber-5.4.1.tgz#64399d3b9ae80aa83d483e550ba57ea062c1042d"
-  integrity sha512-fJhdxqoQNuDOk6epfM7yD6J8Pol4NUCy1vkaGAkuujZm0+lNow//MKu1hLhRiYV4BsOHyBv5/lsTjF+7hWwhJg==
-  dependencies:
-    "@ethersproject/bytes" "^5.4.0"
-    "@ethersproject/logger" "^5.4.0"
-    bn.js "^4.11.9"
-
 "@ethersproject/bytes@5.4.0", "@ethersproject/bytes@>=5.0.0-beta.129", "@ethersproject/bytes@^5.0.4", "@ethersproject/bytes@^5.4.0":
   version "5.4.0"
   resolved "https://registry.yarnpkg.com/@ethersproject/bytes/-/bytes-5.4.0.tgz#56fa32ce3bf67153756dbaefda921d1d4774404e"
@@ -2449,12 +2440,11 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.37":
-  version "5.0.0-canary.37"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.37.tgz#74082e3cb1ca664ccd93bf10a1496330a4c4023f"
-  integrity sha512-lZw7OZ3AnoJPzitd7pbUS6cfVPZlG2niAMMCZDsRAJMexG7Os2DMkL4CEscN+eUrWVnpipAgjrpCsFA+AkgF2g==
+"@sushiswap/sdk@5.0.0-canary.38":
+  version "5.0.0-canary.38"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.38.tgz#d59a8b3e38caef9bc36a7b129fe74a804039e05b"
+  integrity sha512-eDVCCB0TFmpxDTKmnKSFMnFj82c5Pg8SaHhN+wAZ92IBYWyP8ov2vlce52pxlQLPgN9ajzNyHoc7IRqfuSHD0Q==
   dependencies:
-    "@ethersproject/bignumber" "^5.4.1"
     "@sushiswap/core" "^2.0.0-canary.0"
     big.js "^5.2.2"
     decimal.js-light "^2.5.0"
