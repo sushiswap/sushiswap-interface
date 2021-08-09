@@ -29,6 +29,7 @@ import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 import AddressInputPanel from '../../../components/AddressInputPanel'
 import { AdvancedSwapDetails } from '../../../features/swap/AdvancedSwapDetails'
 import AdvancedSwapDetailsDropdown from '../../../features/swap/AdvancedSwapDetailsDropdown'
+import Alert from '../../../components/Alert'
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
 import ConfirmSwapModal from '../../../features/swap/ConfirmSwapModal'
@@ -63,7 +64,6 @@ import { useRouter } from 'next/router'
 import { useSwapCallback } from '../../../hooks/useSwapCallback'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { warningSeverity } from '../../../functions/prices'
-import Alert from '../../../components/Alert'
 
 export default function Swap() {
   const { i18n } = useLingui()
@@ -114,7 +114,8 @@ export default function Swap() {
 
   // archer
   const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
-  const doArcher = archerRelay !== undefined && useArcher
+  // const doArcher = archerRelay !== undefined && useArcher
+  const doArcher = undefined
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -566,7 +567,7 @@ export default function Swap() {
             </>
           )}
 
-          {showWrap ? null : (
+          {/* {showWrap ? null : (
             <div
               style={{
                 padding: showWrap ? '.25rem 1rem 0 1rem' : '0px',
@@ -574,7 +575,7 @@ export default function Swap() {
             >
               <div className="px-5 mt-1">{doArcher && userHasSpecifiedInputOutput && <MinerTip />}</div>
             </div>
-          )}
+          )} */}
           {/*
           {trade && (
             <div className="p-5 rounded bg-dark-800">
