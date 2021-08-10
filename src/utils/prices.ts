@@ -3,7 +3,8 @@ import {
     ALLOWED_PRICE_IMPACT_HIGH,
     ALLOWED_PRICE_IMPACT_LOW,
     ALLOWED_PRICE_IMPACT_MEDIUM,
-    BLOCKED_PRICE_IMPACT_NON_EXPERT
+    BLOCKED_PRICE_IMPACT_NON_EXPERT,
+    MAX_PRICE_IMPACT_NON_EXPERT
 } from '../constants'
 import { Field } from '../state/swap/actions'
 import { basisPointsToPercent } from './index'
@@ -11,12 +12,11 @@ import { basisPointsToPercent } from './index'
 const BASE_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
 const INPUT_FRACTION_AFTER_FEE = ONE_HUNDRED_PERCENT.subtract(BASE_FEE)
-const MAX_ALLOW_PERCENT = ONE_HUNDRED_PERCENT.subtract(BLOCKED_PRICE_IMPACT_NON_EXPERT)
 
 // computes price breakdown for the trade
 export function computeTradePriceBreakdown(
     trade?: Trade | null
-): { priceImpactWithoutFee: Percent | undefined; realizedLPFee: CurrencyAmount | undefined | null } {
+): { priceImpactWithoutFee: Percent | undefined; realizedLPFeeOrigin: Fraction | undefined, realizedLPFee: CurrencyAmount | undefined | null } {
     // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
     // e.g. for 3 tokens/2 hops: 1 - ((1 - .03) * (1-.03))
     const realizedLPFee = !trade
@@ -44,7 +44,7 @@ export function computeTradePriceBreakdown(
             ? new TokenAmount(trade.inputAmount.token, realizedLPFee.multiply(trade.inputAmount.raw).quotient)
             : CurrencyAmount.ether(realizedLPFee.multiply(trade.inputAmount.raw).quotient))
 
-    return { priceImpactWithoutFee: priceImpactWithoutFeePercent, realizedLPFee: realizedLPFeeAmount }
+    return { priceImpactWithoutFee: priceImpactWithoutFeePercent, realizedLPFeeOrigin: realizedLPFee, realizedLPFee: realizedLPFeeAmount }
 }
 
 // computes the minimum amount out and maximum amount in for a trade given a user specified allowed slippage in bips
@@ -80,22 +80,34 @@ export function formatExecutionPrice(trade?: Trade, inverted?: boolean, chainId?
           )} / ${trade.inputAmount.currency.getSymbol(chainId)}`
 }
 
-export function computeMaxAllowablePrice(trade?: Trade): {maxAllowablePrice: Price | undefined}{
+export function computeMaxAllowablePrice(trade?: Trade): {maxAllowOutputAmount: TokenAmount | undefined; maxAllowablePrice: Price | undefined}{
     if (!trade) {
         return {
+            maxAllowOutputAmount: undefined,
             maxAllowablePrice: undefined
         }
     }
-    let maxAllowInputAmount = trade?.outputAmount.divide(MAX_ALLOW_PERCENT)
-    maxAllowInputAmount = maxAllowInputAmount.divide(trade?.route.midPrice.raw)
-    const allowablePrice = trade?.outputAmount.divide(maxAllowInputAmount)
+    const { realizedLPFeeOrigin } = computeTradePriceBreakdown(trade)
+    let maxAllowPriceImpact
+    if (realizedLPFeeOrigin) {
+        maxAllowPriceImpact = realizedLPFeeOrigin?.add(MAX_PRICE_IMPACT_NON_EXPERT)
+    } else {
+        maxAllowPriceImpact = MAX_PRICE_IMPACT_NON_EXPERT
+    }
+    const exactQuote = trade?.route.midPrice.raw.multiply(trade?.inputAmount.raw)
+    const maxOutputAmount = exactQuote.subtract(exactQuote.multiply(MAX_PRICE_IMPACT_NON_EXPERT))
+    const allowablePrice = maxOutputAmount.divide(trade?.inputAmount.raw)
     const maxAllowablePrice = new Price(
         trade.executionPrice.baseCurrency,
         trade.executionPrice.quoteCurrency,
         allowablePrice.denominator,
         allowablePrice.numerator
     )
+    const maxAllowOutputAmount = trade.outputAmount instanceof TokenAmount
+     ? new TokenAmount(trade.outputAmount.token, maxOutputAmount.quotient)
+     : undefined
     return {
+        maxAllowOutputAmount,
         maxAllowablePrice
     }
 }

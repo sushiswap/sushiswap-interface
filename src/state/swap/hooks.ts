@@ -112,7 +112,8 @@ export function useDerivedSwapInfo(): {
     parsedAmount: CurrencyAmount | undefined
     v2Trade: Trade | undefined
     inputError?: string,
-    maxAllowablePrice: Price | undefined
+    maxAllowablePrice: Price | undefined,
+    maxAllowOutputAmount: TokenAmount | undefined
 } {
     const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
@@ -143,7 +144,7 @@ export function useDerivedSwapInfo(): {
 
     const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
 
-    const { maxAllowablePrice } = computeMaxAllowablePrice(v2Trade ?? undefined)
+    const { maxAllowablePrice, maxAllowOutputAmount } = computeMaxAllowablePrice(v2Trade ?? undefined)
 
     const currencyBalances = {
         [Field.INPUT]: relevantTokenBalances[0],
@@ -202,7 +203,8 @@ export function useDerivedSwapInfo(): {
         parsedAmount,
         v2Trade: v2Trade ?? undefined,
         inputError,
-        maxAllowablePrice
+        maxAllowablePrice,
+        maxAllowOutputAmount
     }
 }
 
