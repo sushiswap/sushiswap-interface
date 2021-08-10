@@ -19,7 +19,6 @@ import ImportRow from './ImportRow'
 import ModalHeader from '../../components/ModalHeader'
 import ReactGA from 'react-ga'
 import { isAddress } from '../../functions/validate'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useDebounce from '../../hooks/useDebounce'
@@ -28,14 +27,6 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { useRouter } from 'next/router'
 import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
-
-const ContentWrapper = styled(Column)`
-  height: 100%;
-  width: 100%;
-  flex: 1 1;
-  position: relative;
-  // overflow-y: hidden;
-`
 
 interface CurrencySearchProps {
   isOpen: boolean
@@ -189,10 +180,10 @@ export function CurrencySearch({
   )
 
   return (
-    <ContentWrapper>
+    <div className="w-full h-full">
       <ModalHeader onClose={onDismiss} title="Select a token" />
       {!currencyList && (
-        <div className="mt-0 sm:mt-3 mb-3 sm:mb-8">
+        <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
           <input
             type="text"
             id="token-search-input"
@@ -246,6 +237,6 @@ export function CurrencySearch({
           </Button>
         </div>
       )}
-    </ContentWrapper>
+    </div>
   )
 }

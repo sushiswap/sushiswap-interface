@@ -104,8 +104,25 @@ module.exports = {
         cardContent: '230px',
         fitContent: 'fit-content',
       },
+      minHeight: {
+        5: '1.25rem',
+      },
+      minWidth: {
+        5: '1.25rem',
+      },
       dropShadow: {
         currencyLogo: '0px 3px 6px rgba(15, 15, 15, 0.25)',
+      },
+      animation: {
+        ellipsis: 'ellipsis 1.25s infinite',
+        'spin-slow': 'spin 2s linear infinite',
+      },
+      keyframes: {
+        ellipsis: {
+          '0%': { content: '"."' },
+          '33%': { content: '".."' },
+          '66%': { content: '"..."' },
+        },
       },
     },
   },

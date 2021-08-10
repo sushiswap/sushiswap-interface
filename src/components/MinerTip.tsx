@@ -6,7 +6,6 @@ import {
 } from '../state/user/hooks'
 import { CurrencyAmount, Ether, ChainId } from '@sushiswap/sdk'
 import React from 'react'
-import { RowBetween } from './Row'
 import { StyledSlider } from '../features/swap/styleds'
 import Typography from './Typography'
 import useArcherMinerTips from '../hooks/useArcherMinerTips'
@@ -100,14 +99,14 @@ export default function MinerTip() {
 
   return (
     <>
-      <RowBetween align="center">
+      <div className="flex items-center justify-between w-full">
         <Typography variant="sm" className="text-secondary" onClick={toggleSettings}>
           Miner Tip
         </Typography>
         <Typography variant="sm" className="text-secondary" onClick={toggleSettings}>
           {CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), userETHTip).toFixed(3)} ETH
         </Typography>
-      </RowBetween>
+      </div>
       {!userTipManualOverride && (
         <StyledSlider defaultValue={0} marks={marks} max={max} onChange={handleChange} value={value} step={null} />
       )}

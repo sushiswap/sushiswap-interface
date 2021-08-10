@@ -1,24 +1,14 @@
-import styled from 'styled-components'
-
-const Dots = styled.span`
-  &::after {
-    display: inline-block;
-    animation: ellipsis 1.25s infinite;
-    content: '.';
-    width: 1em;
-    text-align: left;
-  }
-  @keyframes ellipsis {
-    0% {
-      content: '.';
-    }
-    33% {
-      content: '..';
-    }
-    66% {
-      content: '...';
-    }
-  }
-`
-
-export default Dots
+export default function Dots({ children = '' }) {
+  return (
+    <>
+      <style jsx>
+        {`
+          .dots::after {
+            content: '.';
+          }
+        `}
+      </style>
+      <span className="after:inline-block dots after:animate-ellipsis after:w-4 after:text-left">{children}</span>
+    </>
+  )
+}

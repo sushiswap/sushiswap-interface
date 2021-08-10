@@ -12,14 +12,6 @@ import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
-const ContentWrapper = styled(Column)`
-  height: 100%;
-  width: 100%;
-  flex: 1 1;
-  position: relative;
-  overflow-y: hidden;
-`
-
 function Manage({
   onDismiss,
   setModalView,
@@ -38,7 +30,7 @@ function Manage({
   const [tabIndex, setTabIndex] = useState(0)
 
   return (
-    <ContentWrapper>
+    <div className="w-full h-full bg-red">
       <ModalHeader
         onClose={onDismiss}
         title={i18n._(t`Manage`)}
@@ -64,14 +56,14 @@ function Manage({
             {i18n._(t`Tokens`)}
           </Tab>
         </TabList>
-        <TabPanel style={{ flexGrow: 1 }}>
+        <TabPanel style={{ flexGrow: 1, height: '100%', backgroundColor: 'blue' }}>
           <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
         </TabPanel>
         <TabPanel style={{ flexGrow: 1 }}>
           <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />
         </TabPanel>
       </Tabs>
-    </ContentWrapper>
+    </div>
   )
 }
 

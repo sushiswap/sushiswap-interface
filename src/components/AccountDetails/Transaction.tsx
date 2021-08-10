@@ -81,7 +81,7 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
   if (!chainId) return null
 
   return (
-    <div className="flex flex-col gap-2 bg-dark-800 rounded py-1 px-3 w-full">
+    <div className="flex flex-col w-full gap-2 px-3 py-1 rounded bg-dark-800">
       <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')} className="flex items-center gap-2">
         <Typography variant="sm" className="flex items-center hover:underline py-0.5">
           {summary ?? hash} ↗
@@ -103,7 +103,7 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
         </div>
       </ExternalLink>
       {archer && (
-        <Typography variant="sm" weight={400} className="flex justify-between items-center text-decoration-none pb-1">
+        <Typography variant="sm" weight={400} className="flex items-center justify-between pb-1 text-decoration-none">
           {`#${archer.nonce} - Tip ${CurrencyAmount.fromRawAmount(
             Ether.onChain(ChainId.MAINNET),
             archer.ethTip
@@ -115,7 +115,7 @@ const Transaction: FC<{ hash: string }> = ({ hash }) => {
               ) : (
                 <span className="text-high-emphesis">&#128337; {`<1 min`} </span>
               )}
-              <div className="cursor-pointer flex items-center" onClick={cancelPending}>
+              <div className="flex items-center cursor-pointer" onClick={cancelPending}>
                 {i18n._(t`Cancel`)}
               </div>
             </>
