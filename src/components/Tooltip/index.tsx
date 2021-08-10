@@ -29,14 +29,8 @@ export default function Tooltip({ text, ...rest }: TooltipProps) {
   )
 }
 
-// export default function Tooltip({ text, ...rest }: TooltipProps) {
-//   return (
-//     <Popover content={<TooltipContainer>{text}</TooltipContainer>} {...rest} />
-//   );
-// }
-
 export function TooltipContent({ content, ...rest }: TooltipContentProps) {
-  return <Popover content={<TooltipContainer>{content}</TooltipContainer>} {...rest} />
+  return <Popover content={<div className="w-64 py-[0.6rem] px-4 break-words">{content}</div>} {...rest} />
 }
 
 export function MouseoverTooltip({ children, ...rest }: Omit<TooltipProps, 'show'>) {

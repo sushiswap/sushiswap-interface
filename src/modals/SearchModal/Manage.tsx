@@ -30,7 +30,7 @@ function Manage({
   const [tabIndex, setTabIndex] = useState(0)
 
   return (
-    <div className="w-full h-full bg-red">
+    <div className="w-full h-full">
       <ModalHeader
         onClose={onDismiss}
         title={i18n._(t`Manage`)}
@@ -56,7 +56,7 @@ function Manage({
             {i18n._(t`Tokens`)}
           </Tab>
         </TabList>
-        <TabPanel style={{ flexGrow: 1, height: '100%', backgroundColor: 'blue' }}>
+        <TabPanel style={{ flexGrow: 1, height: '100%' }}>
           <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
         </TabPanel>
         <TabPanel style={{ flexGrow: 1 }}>

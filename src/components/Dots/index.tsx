@@ -1,4 +1,11 @@
-export default function Dots({ children = '' }) {
+import { classNames } from '../../functions'
+
+interface DotsProps {
+  children: any
+  className?: string
+}
+
+export default function Dots({ children = <span />, className }: DotsProps) {
   return (
     <>
       <style jsx>
@@ -8,7 +15,11 @@ export default function Dots({ children = '' }) {
           }
         `}
       </style>
-      <span className="after:inline-block dots after:animate-ellipsis after:w-4 after:text-left">{children}</span>
+      <span
+        className={classNames('after:inline-block dots after:animate-ellipsis after:w-4 after:text-left', className)}
+      >
+        {children}
+      </span>
     </>
   )
 }
