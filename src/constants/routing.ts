@@ -11,6 +11,7 @@ import {
   CVXCRV,
   DAI,
   DOUGH,
+  DPI,
   DUCK,
   ETH2X_FLI,
   FANTOM,
@@ -34,7 +35,6 @@ import {
   RUNE,
   STETH,
   SUSHI,
-  TRIBE,
   UMA,
   USDC,
   USDP,
@@ -156,8 +156,7 @@ export const ADDITIONAL_BASES: {
     '0xF16E4d813f4DcfDe4c5b44f305c908742De84eF0': [ETH2X_FLI],
     '0xe379a60A8FC7C9DD161887fFADF3054790576c8D': [XSUSHI], // XSUSHI 25 Call [30 June 2021]
     '0xB46F57e7Ce3a284d74b70447Ef9352B5E5Df8963': [UMA], // UMA 25 Call [30 June 2021]
-    [FEI.address]: [TRIBE],
-    [TRIBE.address]: [FEI],
+    [FEI.address]: [DPI],
     [FRAX.address]: [FXS],
     [FXS.address]: [FRAX],
     [WBTC.address]: [RENBTC],
