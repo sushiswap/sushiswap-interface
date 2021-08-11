@@ -8,6 +8,7 @@ export enum LiquidityMode {
 export enum ActionType {
   SET_LIQUIDITY_MODE = 'SET_LIQUIDITY_MODE',
   SET_INPUT_AMOUNT = 'SET_INPUT_AMOUNT',
+  SET_INPUT_AMOUNTS = 'SET_INPUT_AMOUNTS',
   SET_CURRENCY = 'SET_CURRENCY',
   SHOW_ZAP_REVIEW = 'SHOW_ZAP_REVIEW',
 }
@@ -19,7 +20,7 @@ export interface Reducer {
 
 export interface State {
   liquidityMode: LiquidityMode
-  currencies: Token[]
-  inputAmounts: string[]
+  currencies: Record<string, Token>
+  inputAmounts: Record<string, string>
   showZapReview: boolean
 }

@@ -4,7 +4,7 @@ import selectCoinAnimation from '../../animation/select-coin.json'
 import React, { FC, ReactNode, useState } from 'react'
 import Button from '../../components/Button'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import { classNames, tryParseAmount } from '../../functions'
+import { classNames, maxAmountSpend, tryParseAmount } from '../../functions'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
@@ -19,10 +19,8 @@ import { useActiveWeb3React } from '../../hooks'
 interface AssetInputProps {
   value: string
   currency: Token
-  onMax: () => void
   onChange: (x: string) => void
   onSelect?: (x: Token) => void
-  showMax?: boolean
 }
 
 // AssetInput exports its children so if you need a child component of this component,
@@ -32,6 +30,7 @@ const AssetInput = (props: AssetInputProps) => {
   const { account } = useActiveWeb3React()
   const balance = useTokenBalance(account, props.currency)
   const [open, setOpen] = useState(false)
+  const maxSpend = maxAmountSpend(balance)?.toExact()
 
   let title = (
     <Typography variant="h3" weight={700} className="text-high-emphesis">
@@ -66,13 +65,20 @@ const AssetInput = (props: AssetInputProps) => {
   return (
     <div className="mt-4 flex flex-col gap-4">
       {title}
-      <AssetInputPanel {...props} footer={<AssetInputPanel.Balance balance={balance} onClick={props.onMax} />} />
+      <AssetInputPanel
+        {...props}
+        onMax={() => props.onChange(maxSpend)}
+        showMax={balance?.toExact() !== props.value}
+        footer={<AssetInputPanel.Balance balance={balance} onClick={() => props.onChange(maxSpend)} />}
+      />
     </div>
   )
 }
 
 interface AssetInputPanelProps extends AssetInputProps {
+  onMax: () => void
   footer?: ReactNode
+  showMax?: boolean
 }
 
 const AssetInputPanel = ({
@@ -162,7 +168,7 @@ const AssetInputPanel = ({
 
 interface AssetInputPanelBalanceProps {
   balance: CurrencyAmount<Token>
-  onClick: () => void
+  onClick: (x: CurrencyAmount<Token>) => void
 }
 
 // This component seems to occur quite frequently which is why I gave it it's own component.
@@ -195,7 +201,7 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
         variant="sm"
         weight={700}
         className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
-        onClick={() => onClick()}
+        onClick={() => onClick(balance)}
       >
         {balance ? `${balance.toSignificant(6)} ${balance.currency.symbol}` : '0.0000'}
       </Typography>

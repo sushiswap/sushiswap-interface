@@ -1,4 +1,4 @@
-import { SUSHI, USDC, XSUSHI } from '../constants'
+import { SUSHI, USDC } from '../constants'
 import { ChainId, WETH9 } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
@@ -32,11 +32,11 @@ const useTridentPools = (): UsePoolsReturnType => {
       {
         type: PoolType.HYBRID,
         amounts: [
-          tryParseAmount('1232', XSUSHI),
+          tryParseAmount('1232', SUSHI[ChainId.MAINNET]),
           tryParseAmount('4.26', WETH9[ChainId.MAINNET]),
           tryParseAmount('4.26', USDC),
         ],
-        tokens: [XSUSHI, WETH9[ChainId.MAINNET], USDC],
+        tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET], USDC],
         apy: '37.8%',
         tvl: '$1,534,443.08',
         fee: '0.3%',

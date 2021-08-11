@@ -11,6 +11,26 @@ import ListPanel from '../../../components/ListPanel'
 import { tryParseAmount } from '../../../functions'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import Divider from '../../../components/Divider'
+import { Token } from '@sushiswap/sdk'
+
+interface DepositFieldProps {
+  inputAmount: string
+  currency: Token
+}
+
+// This wrapper is necessary because we need to use hooks in a loop
+const DepositField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
+  const parsedInputAmount = tryParseAmount(inputAmount, currency)
+  const usdcValue = useUSDCValue(parsedInputAmount)
+
+  return (
+    <ListPanel.Item
+      left={<ListPanel.Item.Left amount={parsedInputAmount} />}
+      right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
+      key={0}
+    />
+  )
+}
 
 const ZapModeTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
@@ -60,23 +80,23 @@ const ZapModeTransactionReviewModal: FC = () => {
               {i18n._(t`You are depositing:`)}
             </Typography>
             <ListPanel
-              items={[
-                <ListPanel.Item
-                  left={<ListPanel.Item.Left amount={parsedInputAmount} />}
-                  right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
-                  key={0}
-                />,
-              ]}
+              items={Object.entries(inputAmounts).reduce((acc, [address, amount]) => {
+                if (+amount > 0)
+                  acc.push(<DepositField inputAmount={amount} currency={currencies[address]} key={address} />)
+                return acc
+              }, [])}
             />
           </div>
           <div className="flex flex-col gap-3 px-5">
             <Typography weight={700} variant="lg">
               {i18n._(t`Which will be converted to:`)}
             </Typography>
+
+            {/*TODO this is not working yet*/}
             <ListPanel
               items={pool.tokens.map((token, index) => (
                 <ListPanel.Item
-                  left={<ListPanel.Item.Left amount={tryParseAmount(inputAmounts[0], token)} />}
+                  left={<ListPanel.Item.Left amount={tryParseAmount(inputAmounts[token.address], token)} />}
                   right={
                     <ListPanel.Item.Right>${usdcValue?.divide(pool.tokens.length)?.toFixed(2)}</ListPanel.Item.Right>
                   }

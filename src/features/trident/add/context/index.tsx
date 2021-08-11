@@ -7,8 +7,8 @@ import { Pool } from '../../types'
 
 const initialState: State = {
   liquidityMode: LiquidityMode.ZAP,
-  currencies: [],
-  inputAmounts: [],
+  currencies: {},
+  inputAmounts: {},
   showZapReview: false,
 }
 
@@ -16,11 +16,15 @@ export const TridentAddLiquidityPageContext = createContext<{
   state: State
   pool: Pool
   execute: () => void
+  handleInput: (amount: string, address: string) => void
+  showReview: () => void
   dispatch: Dispatch<any>
 }>({
   state: initialState,
   pool: null,
   execute: () => null,
+  handleInput: () => null,
+  showReview: () => null,
   dispatch: () => null,
 })
 
@@ -29,8 +33,29 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
   const [pool] = useTridentPool(query.tokens)
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, {
     ...initialState,
-    currencies: pool.tokens,
+    currencies: pool.tokens.reduce((acc, cur) => ((acc[cur.address] = cur), acc), {}),
+    inputAmounts: pool.tokens.reduce((acc, cur) => ((acc[cur.address] = ''), acc), {}),
   })
+
+  const handleInput = useCallback(
+    (amount: string, address: string) => {
+      dispatch({
+        type: ActionType.SET_INPUT_AMOUNT,
+        payload: {
+          amount,
+          address,
+        },
+      })
+    },
+    [dispatch]
+  )
+
+  const showReview = useCallback(() => {
+    dispatch({
+      type: ActionType.SHOW_ZAP_REVIEW,
+      payload: true,
+    })
+  }, [dispatch])
 
   const execute = useCallback(async () => {
     alert('Execute')
@@ -44,7 +69,10 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
 
   return (
     <TridentAddLiquidityPageContext.Provider
-      value={useMemo(() => ({ state, pool, execute, dispatch }), [execute, pool, state])}
+      value={useMemo(
+        () => ({ state, pool, handleInput, showReview, execute, dispatch }),
+        [execute, handleInput, showReview, pool, state]
+      )}
     >
       {children}
     </TridentAddLiquidityPageContext.Provider>

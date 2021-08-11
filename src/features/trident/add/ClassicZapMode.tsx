@@ -7,49 +7,22 @@ import { useLingui } from '@lingui/react'
 import Typography from '../../../components/Typography'
 import ListPanel from '../../../components/ListPanel'
 import AssetInput from '../../../components/AssetInput'
-import { Currency } from '@sushiswap/sdk'
-import { useTokenBalance } from '../../../state/wallet/hooks'
-import { useActiveWeb3React } from '../../../hooks'
+import { Token } from '@sushiswap/sdk'
 import ZapModeTransactionDetails from './ZapModeTransactionDetails'
-import React, { useCallback } from 'react'
-import ZapModeTransactionReviewModal from './ZapModeTransactionReviewModal'
+import React, { useCallback, useState } from 'react'
 import { tryParseAmount } from '../../../functions'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 
 const ClassicZapMode = () => {
   const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
   const { currencies, inputAmounts } = useTridentAddLiquidityPageState()
-  const { pool, dispatch } = useTridentAddLiquidityPageContext()
-  const balance = useTokenBalance(account, currencies[0])
+  const { pool, dispatch, handleInput } = useTridentAddLiquidityPageContext()
   const parsedAmount = tryParseAmount(inputAmounts[0], currencies[0])
   const usdcValue = useUSDCValue(parsedAmount)
 
-  const handleInput = useCallback(
-    (amount: string) => {
-      dispatch({
-        type: ActionType.SET_INPUT_AMOUNT,
-        payload: {
-          position: 0,
-          amount,
-        },
-      })
-    },
-    [dispatch]
-  )
-
-  const handleSelect = useCallback(
-    (currency: Currency) => {
-      dispatch({
-        type: ActionType.SET_CURRENCY,
-        payload: {
-          position: 0,
-          currency,
-        },
-      })
-    },
-    [dispatch]
-  )
+  // We can use a local select state here as zap mode is only one input,
+  // the modals check for each inputAmount if there's input entered
+  const [selected, setSelected] = useState<Token>()
 
   const handleClick = useCallback(() => {
     dispatch({
@@ -71,32 +44,30 @@ const ClassicZapMode = () => {
       </div>
       <div className="flex flex-col gap-4 px-5">
         <AssetInput
-          value={inputAmounts[0]}
-          currency={currencies[0]}
-          onChange={handleInput}
-          onSelect={handleSelect}
-          onMax={() => handleInput(balance?.toExact())}
-          showMax={balance?.toExact() !== parsedAmount?.toExact()}
+          value={inputAmounts[selected?.address]}
+          currency={selected}
+          onChange={(value) => handleInput(value, selected.address)}
+          onSelect={setSelected}
         />
         <Button
-          color={inputAmounts[0] ? 'gradient' : 'gray'}
-          disabled={!inputAmounts[0]}
+          color={inputAmounts[selected?.address] ? 'gradient' : 'gray'}
+          disabled={!inputAmounts[selected?.address]}
           className="font-bold text-sm"
           onClick={handleClick}
         >
-          {inputAmounts[0] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
+          {inputAmounts[selected?.address] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
         </Button>
       </div>
       <div className="flex flex-col gap-4 px-5 mt-10">
         <Typography weight={700} className="text-high-emphesis">
-          {currencies[0]
-            ? i18n._(t`Your ${currencies[0].symbol} will be split into:`)
+          {selected
+            ? i18n._(t`Your ${selected.symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
         <ListPanel
           items={pool.tokens.map((token, index) => (
             <ListPanel.Item
-              left={<ListPanel.Item.Left amount={tryParseAmount(inputAmounts[0], token)} />}
+              left={<ListPanel.Item.Left amount={tryParseAmount(inputAmounts[selected?.address], token)} />}
               right={<ListPanel.Item.Right>${usdcValue?.divide(pool.tokens.length)?.toFixed(2)}</ListPanel.Item.Right>}
               key={index}
             />
@@ -104,7 +75,6 @@ const ClassicZapMode = () => {
         />
       </div>
       <ZapModeTransactionDetails />
-      <ZapModeTransactionReviewModal />
     </>
   )
 }

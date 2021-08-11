@@ -19,6 +19,8 @@ import ClassicStandardMode from '../../../features/trident/add/ClassicStandardMo
 import { PoolType } from '../../../features/trident/pool/context/types'
 import HybridZapMode from '../../../features/trident/add/HybridZapMode'
 import HybridStandardMode from '../../../features/trident/add/HybridStandardMode'
+import ZapModeTransactionReviewModal from '../../../features/trident/add/ZapModeTransactionReviewModal'
+import React from 'react'
 
 const Add = () => {
   const { i18n } = useLingui()
@@ -69,6 +71,8 @@ const Add = () => {
           {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
         </>
       )}
+
+      <ZapModeTransactionReviewModal />
     </div>
   )
 }
