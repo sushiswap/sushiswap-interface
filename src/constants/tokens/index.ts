@@ -197,6 +197,8 @@ export const AXSUSHI = new Token(
   'Aave interest bearing XSUSHI'
 )
 
+export const DPI = new Token(ChainId.MAINNET, '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', 18, 'DefiPulse', 'DPI')
+
 type ChainTokenMap = {
   readonly [chainId in ChainId]?: Token
 }
