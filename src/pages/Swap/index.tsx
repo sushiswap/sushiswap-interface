@@ -100,7 +100,7 @@ export default function Swap() {
 
     // swap state
     const { independentField, typedValue, recipient } = useSwapState()
-    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError, maxAllowablePrice, maxAllowOutputAmount } = useDerivedSwapInfo()
+    const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError, maxAllowablePrice, maxAllowInputAmount, maxAllowOutputAmount } = useDerivedSwapInfo()
     const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
         currencies[Field.INPUT],
         currencies[Field.OUTPUT],
@@ -495,7 +495,7 @@ export default function Swap() {
                                     )}
                                     {isValid && priceImpactSeverity > 3 && !isExpertMode && (
                                         <>
-                                            <RowBetween align="center">
+                                            {/* <RowBetween align="center">
                                                 <Text fontWeight={500} fontSize={14} color={theme.text2}>
                                                     {i18n._(t`Should-have Price`)}
                                                 </Text>
@@ -504,15 +504,26 @@ export default function Swap() {
                                                     showInverted={showInverted}
                                                     setShowInverted={setShowInverted}
                                                 />
-                                            </RowBetween>
-                                            <RowBetween align="center">
-                                                <Text fontWeight={500} fontSize={14} color={theme.text2}>
-                                                    {i18n._(t`Should-have Output Amount`)}
-                                                </Text>
-                                                {maxAllowOutputAmount
-                                                    ? `${maxAllowOutputAmount.toSignificant(4)} ${trade?.outputAmount.currency.getSymbol(chainId)}`
-                                                    : '-'}
-                                            </RowBetween>
+                                            </RowBetween> */}
+                                            {independentField === Field.INPUT ? (
+                                                <RowBetween align="center">
+                                                    <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                                        {i18n._(t`Max allowable input amount`)}
+                                                    </Text>
+                                                    {maxAllowInputAmount
+                                                        ? `${maxAllowInputAmount.toSignificant(4)} ${trade?.inputAmount.currency.getSymbol(chainId)}`
+                                                        : '-'}
+                                                </RowBetween>
+                                            ) : (
+                                                <RowBetween align="center">
+                                                    <Text fontWeight={500} fontSize={14} color={theme.text2}>
+                                                        {i18n._(t`Max allowable output amount`)}
+                                                    </Text>
+                                                    {maxAllowOutputAmount
+                                                        ? `${maxAllowOutputAmount.toSignificant(4)} ${trade?.outputAmount.currency.getSymbol(chainId)}`
+                                                        : '-'}
+                                                </RowBetween>
+                                            )}
                                         </>
                                     )}
                                 </AutoColumn>

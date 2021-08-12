@@ -113,6 +113,7 @@ export function useDerivedSwapInfo(): {
     v2Trade: Trade | undefined
     inputError?: string,
     maxAllowablePrice: Price | undefined,
+    maxAllowInputAmount: TokenAmount | undefined,
     maxAllowOutputAmount: TokenAmount | undefined
 } {
     const { i18n } = useLingui()
@@ -144,7 +145,7 @@ export function useDerivedSwapInfo(): {
 
     const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
 
-    const { maxAllowablePrice, maxAllowOutputAmount } = computeMaxAllowablePrice(v2Trade ?? undefined)
+    const { maxAllowablePrice, maxAllowInputAmount, maxAllowOutputAmount } = computeMaxAllowablePrice(v2Trade ?? undefined)
 
     const currencyBalances = {
         [Field.INPUT]: relevantTokenBalances[0],
@@ -204,6 +205,7 @@ export function useDerivedSwapInfo(): {
         v2Trade: v2Trade ?? undefined,
         inputError,
         maxAllowablePrice,
+        maxAllowInputAmount,
         maxAllowOutputAmount
     }
 }

@@ -4,7 +4,8 @@ import {
     ALLOWED_PRICE_IMPACT_LOW,
     ALLOWED_PRICE_IMPACT_MEDIUM,
     BLOCKED_PRICE_IMPACT_NON_EXPERT,
-    MAX_PRICE_IMPACT_NON_EXPERT
+    MAX_PRICE_IMPACT_NON_EXPERT,
+    MAX_ALLOWABLE_SWAP_PERCENT
 } from '../constants'
 import { Field } from '../state/swap/actions'
 import { basisPointsToPercent } from './index'
@@ -80,9 +81,14 @@ export function formatExecutionPrice(trade?: Trade, inverted?: boolean, chainId?
           )} / ${trade.inputAmount.currency.getSymbol(chainId)}`
 }
 
-export function computeMaxAllowablePrice(trade?: Trade): {maxAllowOutputAmount: TokenAmount | undefined; maxAllowablePrice: Price | undefined}{
+export function getMaxAllowableSwapPercent(): Percent {
+    return MAX_ALLOWABLE_SWAP_PERCENT
+}
+
+export function computeMaxAllowablePrice(trade?: Trade): {maxAllowInputAmount: TokenAmount | undefined; maxAllowOutputAmount: TokenAmount | undefined; maxAllowablePrice: Price | undefined}{
     if (!trade) {
         return {
+            maxAllowInputAmount: undefined,
             maxAllowOutputAmount: undefined,
             maxAllowablePrice: undefined
         }
@@ -94,8 +100,12 @@ export function computeMaxAllowablePrice(trade?: Trade): {maxAllowOutputAmount: 
     } else {
         maxAllowPriceImpact = MAX_PRICE_IMPACT_NON_EXPERT
     }
-    const exactQuote = trade?.route.midPrice.raw.multiply(trade?.inputAmount.raw)
-    const maxOutputAmount = exactQuote.subtract(exactQuote.multiply(MAX_PRICE_IMPACT_NON_EXPERT))
+    // const exactQuote = trade?.route.midPrice.raw.multiply(trade?.inputAmount.raw)
+    // const maxOutputAmount = exactQuote.subtract(exactQuote.multiply(MAX_PRICE_IMPACT_NON_EXPERT))
+    const maxAllowableSwapPercent = getMaxAllowableSwapPercent()
+    const maxInputAmount = maxAllowableSwapPercent.multiply(trade?.inputAmount.raw)
+    const maxOutputAmount = maxAllowableSwapPercent.multiply(trade?.outputAmount.raw)
+
     const allowablePrice = maxOutputAmount.divide(trade?.inputAmount.raw)
     const maxAllowablePrice = new Price(
         trade.executionPrice.baseCurrency,
@@ -103,10 +113,14 @@ export function computeMaxAllowablePrice(trade?: Trade): {maxAllowOutputAmount: 
         allowablePrice.denominator,
         allowablePrice.numerator
     )
+    const maxAllowInputAmount = trade.outputAmount instanceof TokenAmount
+     ? new TokenAmount(trade.outputAmount.token, maxInputAmount.quotient)
+     : undefined
     const maxAllowOutputAmount = trade.outputAmount instanceof TokenAmount
      ? new TokenAmount(trade.outputAmount.token, maxOutputAmount.quotient)
      : undefined
     return {
+        maxAllowInputAmount,
         maxAllowOutputAmount,
         maxAllowablePrice
     }
