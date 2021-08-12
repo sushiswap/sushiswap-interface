@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react'
-import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../../connectors'
+import { injected } from '../../connectors'
 
 import { AppDispatch } from '../../state'
 import Button from '../Button'
@@ -73,25 +73,25 @@ const AccountDetails: FC<AccountDetailsProps> = ({
     if (connector === injected) {
       return null
       // return <IconWrapper size={16}>{/* <Identicon /> */}</IconWrapper>
-    } else if (connector === walletconnect) {
+    } else if (connector.constructor.name === 'WalletConnectConnector') {
       return <WalletIcon src="/wallet-connect.png" alt="Wallet Connect" size={16} />
-    } else if (connector === walletlink) {
+    } else if (connector.constructor.name === 'WalletLinkConnector') {
       return <WalletIcon src="/coinbase.svg" alt="Coinbase" size={16} />
-    } else if (connector === fortmatic) {
+    } else if (connector.constructor.name === 'FortmaticConnector') {
       return <WalletIcon src="/formatic.png" alt="Fortmatic" size={16} />
-    } else if (connector === portis) {
+    } else if (connector.constructor.name === 'PorticConnector') {
       return (
         <WalletIcon src="/portnis.png" alt="Portis" size={16}>
           <Button
-            onClick={() => {
-              portis.portis.showPortis()
+            onClick={async () => {
+              ;(connector as any).portis.showPortis()
             }}
           >
             Show Portis
           </Button>
         </WalletIcon>
       )
-    } else if (connector === torus) {
+    } else if (connector.constructor.name === 'TorusConnector') {
       return <WalletIcon src="/torus.png" alt="Torus" size={16} />
     }
     return null
@@ -110,8 +110,8 @@ const AccountDetails: FC<AccountDetailsProps> = ({
             {formatConnectorName()}
             <div className="flex space-x-3">
               {connector !== injected &&
-                connector !== walletlink &&
-                connector !== binance &&
+                connector.constructor.name !== 'WalletLinkConnector' &&
+                connector.constructor.name !== 'BscConnector' &&
                 connector.constructor.name !== 'KeystoneConnector' && (
                   <Button
                     variant="outlined"
@@ -139,12 +139,12 @@ const AccountDetails: FC<AccountDetailsProps> = ({
           <div id="web3-account-identifier-row" className="flex flex-col justify-center space-y-3">
             {ENSName ? (
               <div className="bg-dark-800">
-                {getStatusIcon()}
+                {/* {getStatusIcon()} */}
                 <Typography>{ENSName}</Typography>
               </div>
             ) : (
               <div className="bg-dark-800 py-2 px-3 rounded">
-                {getStatusIcon()}
+                {/* {getStatusIcon()} */}
                 <Typography>{account && shortenAddress(account)}</Typography>
               </div>
             )}

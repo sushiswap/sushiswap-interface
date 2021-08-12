@@ -1,12 +1,12 @@
-import { BscConnector } from '@binance-chain/bsc-connector'
+// import { BscConnector } from '@binance-chain/bsc-connector'
 import { ChainId } from '@sushiswap/sdk'
-import { FortmaticConnector } from './Fortmatic'
+// import { FortmaticConnector } from './Fortmatic'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from './NetworkConnector'
-import { PortisConnector } from '@web3-react/portis-connector'
-import { TorusConnector } from '@web3-react/torus-connector'
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { WalletLinkConnector } from '@web3-react/walletlink-connector'
+// import { PortisConnector } from '@web3-react/portis-connector'
+// import { TorusConnector } from '@web3-react/torus-connector'
+// import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+// import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { Web3Provider } from '@ethersproject/providers'
 
 const RPC = {
@@ -77,37 +77,37 @@ export const injected = new InjectedConnector({
   ],
 })
 
-// mainnet only
-export const walletconnect = new WalletConnectConnector({
-  rpc: RPC,
-  bridge: 'https://bridge.walletconnect.org',
-  qrcode: true,
-  pollingInterval: 15000,
-})
+// // mainnet only
+// export const walletconnect = new WalletConnectConnector({
+//   rpc: RPC,
+//   bridge: 'https://bridge.walletconnect.org',
+//   qrcode: true,
+//   pollingInterval: 15000,
+// })
 
-// mainnet only
-export const fortmatic = new FortmaticConnector({
-  apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
-  chainId: 1,
-})
+// // mainnet only
+// export const fortmatic = new FortmaticConnector({
+//   apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
+//   chainId: 1,
+// })
 
-// mainnet only
-export const portis = new PortisConnector({
-  dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
-  networks: [1],
-})
+// // mainnet only
+// export const portis = new PortisConnector({
+//   dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
+//   networks: [1],
+// })
 
-// mainnet only
-export const walletlink = new WalletLinkConnector({
-  url: RPC[ChainId.MAINNET],
-  appName: 'SushiSwap',
-  appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
-})
+// // mainnet only
+// export const walletlink = new WalletLinkConnector({
+//   url: RPC[ChainId.MAINNET],
+//   appName: 'SushiSwap',
+//   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
+// })
 
-// mainnet only
-export const torus = new TorusConnector({
-  chainId: 1,
-})
+// // mainnet only
+// export const torus = new TorusConnector({
+//   chainId: 1,
+// })
 
-// binance only
-export const binance = new BscConnector({ supportedChainIds: [56] })
+// // binance only
+// export const binance = new BscConnector({ supportedChainIds: [56] })
