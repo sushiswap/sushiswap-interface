@@ -84,6 +84,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
         <WalletIcon src="/portnis.png" alt="Portis" size={16}>
           <Button
             onClick={async () => {
+              // casting as PortisConnector here defeats the lazyload purpose
               ;(connector as any).portis.showPortis()
             }}
           >
