@@ -79,7 +79,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
       return <WalletIcon src="/coinbase.svg" alt="Coinbase" size={16} />
     } else if (connector.constructor.name === 'FortmaticConnector') {
       return <WalletIcon src="/formatic.png" alt="Fortmatic" size={16} />
-    } else if (connector.constructor.name === 'PorticConnector') {
+    } else if (connector.constructor.name === 'PortisConnector') {
       return (
         <WalletIcon src="/portnis.png" alt="Portis" size={16}>
           <Button

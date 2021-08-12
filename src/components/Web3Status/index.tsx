@@ -68,7 +68,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
         <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
       </IconWrapper>
     )
-  } else if (connector.constructor.name === 'PorticConnector') {
+  } else if (connector.constructor.name === 'PortisConnector') {
     return (
       <IconWrapper size={16}>
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
