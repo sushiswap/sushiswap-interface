@@ -193,7 +193,7 @@ export default function WalletStandalone({
 
   // close wallet modal if fortmatic modal is active
   useEffect(() => {
-    if (connector.constructor.name === 'FormaticConnector') {
+    if (connector?.constructor?.name === 'FormaticConnector') {
       connector.on(OVERLAY_READY, () => {
         toggleWalletModal()
       })
@@ -209,7 +209,7 @@ export default function WalletStandalone({
       // check for mobile options
       if (isMobile) {
         // disable portis on mobile for now
-        if (option.connector.constructor.name === 'PortisConnector') {
+        if (option.connector?.constructor?.name === 'PortisConnector') {
           return null
         }
 
