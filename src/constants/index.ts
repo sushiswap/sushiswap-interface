@@ -1,6 +1,5 @@
 import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
 import { injected } from '../connectors'
-// import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'

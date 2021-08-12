@@ -191,7 +191,7 @@ export default function WalletStandalone({
       })
   }
 
-  // // close wallet modal if fortmatic modal is active
+  // close wallet modal if fortmatic modal is active
   useEffect(() => {
     if (connector.constructor.name === 'FormaticConnector') {
       connector.on(OVERLAY_READY, () => {
