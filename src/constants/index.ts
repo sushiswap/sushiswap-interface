@@ -432,6 +432,8 @@ export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(
 export const MAX_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(JSBI.BigInt(1750), BIPS_BASE) // 17.5%
 export const MAX_ALLOWABLE_SWAP_PERCENT: Percent = new Percent(JSBI.BigInt(1800), BIPS_BASE) // 18%
 
+export const PERCENT_100: Percent = new Percent(JSBI.BigInt(10000), BIPS_BASE) // 100%
+
 // used to ensure the user doesn't send so much ETH so they end up with <.01
 export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16)) // .01 ETH
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), JSBI.BigInt(10000))

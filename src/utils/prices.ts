@@ -5,7 +5,8 @@ import {
     ALLOWED_PRICE_IMPACT_MEDIUM,
     BLOCKED_PRICE_IMPACT_NON_EXPERT,
     MAX_PRICE_IMPACT_NON_EXPERT,
-    MAX_ALLOWABLE_SWAP_PERCENT
+    MAX_ALLOWABLE_SWAP_PERCENT,
+    PERCENT_100
 } from '../constants'
 import { Field } from '../state/swap/actions'
 import { basisPointsToPercent } from './index'
@@ -102,9 +103,14 @@ export function computeMaxAllowablePrice(trade?: Trade): {maxAllowInputAmount: T
     }
     // const exactQuote = trade?.route.midPrice.raw.multiply(trade?.inputAmount.raw)
     // const maxOutputAmount = exactQuote.subtract(exactQuote.multiply(MAX_PRICE_IMPACT_NON_EXPERT))
-    const maxAllowableSwapPercent = getMaxAllowableSwapPercent()
-    const maxInputAmount = maxAllowableSwapPercent.multiply(trade?.inputAmount.raw)
-    const maxOutputAmount = maxAllowableSwapPercent.multiply(trade?.outputAmount.raw)
+    // const maxAllowableSwapPercent = getMaxAllowableSwapPercent()
+    // const maxInputAmount = maxAllowableSwapPercent.multiply(trade?.inputAmount.raw)
+    // const maxOutputAmount = maxAllowableSwapPercent.multiply(trade?.outputAmount.raw)
+
+    const maxInputAmount = BLOCKED_PRICE_IMPACT_NON_EXPERT.multiply(trade?.inputAmount.raw).divide(PERCENT_100.subtract(BLOCKED_PRICE_IMPACT_NON_EXPERT))
+
+    const maxOutputAmount = BLOCKED_PRICE_IMPACT_NON_EXPERT.multiply(trade?.outputAmount.raw).divide(PERCENT_100.subtract(BLOCKED_PRICE_IMPACT_NON_EXPERT)) 
+
 
     const allowablePrice = maxOutputAmount.divide(trade?.inputAmount.raw)
     const maxAllowablePrice = new Price(
