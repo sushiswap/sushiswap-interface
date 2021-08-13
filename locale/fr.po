@@ -529,6 +529,9 @@ msgstr "Prêté"
 msgid "Limit"
 msgstr "Limite"
 
+msgid "Limit Orders Disabled"
+msgstr ""
+
 msgid "Limit order"
 msgstr "Limite de commande"
 
