@@ -11,6 +11,17 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer(
   withPWA({
+    webpack: (config) => {
+      config.module.rules = [
+        ...config.module.rules,
+        {
+          resourceQuery: /raw-lingui/,
+          type: 'javascript/auto',
+        },
+      ]
+
+      return config
+    },
     pwa: {
       dest: 'public',
       runtimeCaching,
@@ -136,6 +147,7 @@ module.exports = withBundleAnalyzer(
       ]
     },
     i18n: {
+      localeDetection: true,
       locales,
       defaultLocale: sourceLocale,
     },
