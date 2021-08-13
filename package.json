@@ -24,7 +24,7 @@
     "*.{md,css}": "prettier --write"
   },
   "resolutions": {
-    "@walletconnect/web3-provider": "1.5.0-rc.5",
+    "@walletconnect/web3-provider": "1.6.0",
     "bn.js": "^4.1.0"
   },
   "devDependencies": {
