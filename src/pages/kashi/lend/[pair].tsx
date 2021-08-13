@@ -61,11 +61,13 @@ export default function Pair() {
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.tokenInfo.symbol}</div>
+                  <div className="text-3xl text-high-emphesis">
+                    {i18n._(t`Lend`)} {pair && pair.asset.tokenInfo.symbol}
+                  </div>
                   <div className="flex items-center">
-                    <div className="mr-1 text-sm text-secondary">Collateral:</div>
+                    <div className="mr-1 text-sm text-secondary">{i18n._(t`Collateral`)}:</div>
                     <div className="mr-2 text-sm text-high-emphesis">{pair && pair.collateral.tokenInfo.symbol}</div>
-                    <div className="mr-1 text-sm text-secondary">Oracle:</div>
+                    <div className="mr-1 text-sm text-secondary">{i18n._(t`Oracle`)}:</div>
                     <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
                   </div>
                 </div>
@@ -83,12 +85,12 @@ export default function Pair() {
             <div className="text-lg text-high-emphesis">{formatNumber(pair.currentUserAssetAmount.usd, true)}</div>
           </div>
           <div>
-            <div className="text-lg text-secondary">Borrowed</div>
+            <div className="text-lg text-secondary">{i18n._(t`Borrowed`)}</div>
             <div className="text-2xl text-high-emphesis">{formatPercent(pair.utilization.string)}</div>
           </div>
           <div className="text-right">
             <div>
-              <div className="text-lg text-secondary">Supply APR</div>
+              <div className="text-lg text-secondary">{i18n._(t`Supply APR`)}</div>
               <div className="text-2xl text-high-emphesis">{formatPercent(pair.supplyAPR.string)}</div>
             </div>
           </div>
@@ -100,13 +102,13 @@ export default function Pair() {
               className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
               selectedClassName="bg-dark-900 text-high-emphesis"
             >
-              Deposit {pair.asset.tokenInfo.symbol}
+              {i18n._(t`Deposit`)} {pair.asset.tokenInfo.symbol}
             </Tab>
             <Tab
               className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
               selectedClassName="bg-dark-900 text-high-emphesis"
             >
-              Withdraw {pair.asset.tokenInfo.symbol}
+              {i18n._(t`Withdraw`)} {pair.asset.tokenInfo.symbol}
             </Tab>
           </TabList>
           <TabPanel>

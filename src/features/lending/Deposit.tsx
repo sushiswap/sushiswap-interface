@@ -11,15 +11,17 @@ import { WNATIVE } from '@sushiswap/sdk'
 import { Warnings } from '../../entities/Warnings'
 import WarningsList from './WarningsList'
 import { formatNumber } from '../../functions/format'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { useKashiInfo } from './context'
+import { useLingui } from '@lingui/react'
 
 export default function Deposit({ pair }: any): JSX.Element {
   const { chainId } = useActiveWeb3React()
   const assetToken = useCurrency(pair.asset.address) || undefined
 
-  // console.log({ pair })
+  const { i18n } = useLingui()
 
   // State
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
@@ -37,7 +39,9 @@ export default function Deposit({ pair }: any): JSX.Element {
 
   warnings.add(
     balance?.lt(value.toBigNumber(pair.asset.tokenInfo.decimals)),
-    `Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to deposit and then try again.`,
+    i18n._(
+      t`Please make sure your ${useBento ? 'BentoBox' : 'wallet'} balance is sufficient to deposit and then try again.`
+    ),
     true
   )
 
@@ -46,10 +50,15 @@ export default function Deposit({ pair }: any): JSX.Element {
   if (value && !warnings.broken) {
     const amount = value.toBigNumber(pair.asset.tokenInfo.decimals)
     const newUserAssetAmount = pair.currentUserAssetAmount.value.add(amount)
-    transactionReview.addTokenAmount('Balance', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
-    transactionReview.addUSD('Balance USD', pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
+    transactionReview.addTokenAmount(
+      i18n._(t`Balance`),
+      pair.currentUserAssetAmount.value,
+      newUserAssetAmount,
+      pair.asset
+    )
+    transactionReview.addUSD(i18n._(t`Balance USD`), pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
     const newUtilization = e10(18).mulDiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.add(amount))
-    transactionReview.addPercentage('Borrowed', pair.utilization.value, newUtilization)
+    transactionReview.addPercentage(i18n._(t`Borrowed`), pair.utilization.value, newUtilization)
     if (pair.currentExchangeRate.isZero()) {
       transactionReview.add(
         'Exchange Rate',
@@ -62,7 +71,7 @@ export default function Deposit({ pair }: any): JSX.Element {
         Direction.UP
       )
     }
-    transactionReview.addPercentage('Supply APR', pair.supplyAPR.value, pair.currentSupplyAPR.value)
+    transactionReview.addPercentage(i18n._(t`Supply APR`), pair.supplyAPR.value, pair.currentSupplyAPR.value)
   }
 
   // Handlers
@@ -71,7 +80,7 @@ export default function Deposit({ pair }: any): JSX.Element {
       cooker.updateExchangeRate(false, ZERO, ZERO)
     }
     cooker.addAsset(value.toBigNumber(pair.asset.tokenInfo.decimals), useBento)
-    return `Deposit ${pair.asset.tokenInfo.symbol}`
+    return `${i18n._(t`Deposit`)} ${pair.asset.tokenInfo.symbol}`
   }
 
   return (
@@ -103,7 +112,7 @@ export default function Deposit({ pair }: any): JSX.Element {
               onClick={() => onCook(pair, onExecute)}
               disabled={value.toBigNumber(pair.asset.tokenInfo.decimals).lte(0) || warnings.broken}
             >
-              Deposit
+              {i18n._(t`Deposit`)}
             </Button>
           </TokenApproveButton>
         )}
