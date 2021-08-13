@@ -17,6 +17,7 @@ import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 
 interface AssetInputProps {
+  title?: string
   value: string
   currency: Token
   onChange: (x: string) => void
@@ -32,14 +33,14 @@ const AssetInput = (props: AssetInputProps) => {
   const [open, setOpen] = useState(false)
   const maxSpend = maxAmountSpend(balance)?.toExact()
 
-  let title = (
+  let header = (
     <Typography variant="h3" weight={700} className="text-high-emphesis">
-      {i18n._(t`Choose an Asset`)}
+      {props.title ? props.title : i18n._(t`Choose an Asset`)}
     </Typography>
   )
 
   if (props.currency) {
-    title = (
+    header = (
       <div className="flex gap-0.5 cursor-pointer items-center" onClick={() => setOpen(true)}>
         <Typography variant="h3" weight={700} className="text-high-emphesis">
           {props.currency.symbol}
@@ -64,7 +65,7 @@ const AssetInput = (props: AssetInputProps) => {
 
   return (
     <div className="mt-4 flex flex-col gap-4">
-      {title}
+      {header}
       <AssetInputPanel
         {...props}
         onMax={() => props.onChange(maxSpend)}

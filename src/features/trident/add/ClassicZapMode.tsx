@@ -15,14 +15,16 @@ import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 
 const ClassicZapMode = () => {
   const { i18n } = useLingui()
-  const { currencies, inputAmounts } = useTridentAddLiquidityPageState()
+  const { inputAmounts } = useTridentAddLiquidityPageState()
   const { pool, dispatch, handleInput } = useTridentAddLiquidityPageContext()
-  const parsedAmount = tryParseAmount(inputAmounts[0], currencies[0])
-  const usdcValue = useUSDCValue(parsedAmount)
 
   // We can use a local select state here as zap mode is only one input,
   // the modals check for each inputAmount if there's input entered
+  // (note the { clear: true } option given to the handleInput)
   const [selected, setSelected] = useState<Token>()
+
+  const parsedAmount = tryParseAmount(inputAmounts[0], selected)
+  const usdcValue = useUSDCValue(parsedAmount)
 
   const handleClick = useCallback(() => {
     dispatch({
@@ -33,7 +35,7 @@ const ClassicZapMode = () => {
 
   return (
     <>
-      <div className="px-5 mt-5">
+      <div className="px-5">
         <Alert
           dismissable={false}
           type="information"
@@ -46,7 +48,7 @@ const ClassicZapMode = () => {
         <AssetInput
           value={inputAmounts[selected?.address]}
           currency={selected}
-          onChange={(value) => handleInput(value, selected.address)}
+          onChange={(value) => handleInput(value, selected.address, { clear: true })}
           onSelect={setSelected}
         />
         <Button

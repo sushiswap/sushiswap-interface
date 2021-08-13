@@ -73,7 +73,7 @@ const Pool = () => {
             <Link href={`/trident/add/${toHref(pool)}`}>{i18n._(t`Add Liquidity`)}</Link>
           </Button>
           <Button variant="outlined" color="gradient" className="text-high-emphesis">
-            {i18n._(t`Remove Liquidity`)}
+            <Link href={`/trident/remove/${toHref(pool)}`}>{i18n._(t`Remove Liquidity`)}</Link>
           </Button>
           <Button variant="outlined" color="gray" className="w-full col-span-2 text-high-emphesis py-3" size="xs">
             {i18n._(t`View Analytics`)}

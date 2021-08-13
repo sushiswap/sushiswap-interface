@@ -4,7 +4,6 @@ export enum LiquidityMode {
 }
 
 export enum ActionType {
-  SET_BALANCED_MODE = 'SET_BALANCED_MODE',
   SET_LIQUIDITY_MODE = 'SET_LIQUIDITY_MODE',
   SET_INPUT_AMOUNT = 'SET_INPUT_AMOUNT',
   SET_INPUT_AMOUNT_WITH_CLEAR = 'SET_INPUT_AMOUNT_WITH_CLEAR',
@@ -21,5 +20,8 @@ export interface State {
   liquidityMode: LiquidityMode
   inputAmounts: Record<string, string>
   showZapReview: boolean
-  balancedMode: boolean
+}
+
+export interface HandleInputOptions {
+  clear?: boolean
 }

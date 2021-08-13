@@ -1,23 +1,37 @@
 import { Switch as HeadlessUiSwitch } from '@headlessui/react'
 import { ComponentProps, ReactNode } from 'react'
+import { classNames } from '../../functions'
+
+type SwitchColor = 'default' | 'gradient'
 
 type SwitchProps = ComponentProps<typeof HeadlessUiSwitch> & {
   checkedIcon?: ReactNode
   uncheckedIcon?: ReactNode
+  color?: SwitchColor
 }
 
-const Switch = ({ checked, onChange, checkedIcon = '', uncheckedIcon = '' }: SwitchProps) => {
+const COLOR = {
+  default: (checked) => (checked ? 'bg-high-emphesis' : 'bg-high-emphesis'),
+  gradient: (checked) => (checked ? 'bg-gradient-to-r from-blue to-pink' : 'bg-dark-700'),
+}
+
+const Switch = ({ checked, onChange, checkedIcon = '', uncheckedIcon = '', color = 'default' }: SwitchProps) => {
   return (
     <HeadlessUiSwitch
       checked={checked}
       onChange={onChange}
-      className={`${checked ? 'bg-teal-900' : 'bg-teal-700'}
-          flex items-center bg-dark-800 border border-dark-700 relative inline-flex flex-shrink-0 h-[36px] w-[65px] rounded-full cursor-pointer ease-in-out duration-200`}
+      className={classNames(
+        checked ? 'bg-teal-900' : 'bg-teal-700',
+        'flex items-center bg-dark-800 border border-dark-700 relative inline-flex flex-shrink-0 h-[36px] w-[65px] rounded-full cursor-pointer ease-in-out duration-200'
+      )}
     >
       <span
         aria-hidden="true"
-        className={`${checked ? 'translate-x-[30px]' : 'translate-x-[2px]'}
-            pointer-events-none inline-block h-[30px] w-[30px] rounded-full bg-high-emphesis shadow-md transform transition ease-in-out duration-200 flex items-center justify-center`}
+        className={classNames(
+          checked ? 'translate-x-[30px]' : 'translate-x-[2px]',
+          COLOR[color](checked),
+          'transition-colors transition-transform pointer-events-none inline-block h-[30px] w-[30px] p-1 rounded-full shadow-md ease-in-out duration-200 flex items-center justify-center'
+        )}
       >
         {checked ? checkedIcon : uncheckedIcon}
       </span>

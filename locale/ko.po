@@ -20,6 +20,9 @@ msgstr ""
 "(출시 예정) 플래시 대출 및 \n"
 " SUSHI 전략을 통해 자동 수익 창출"
 
+msgid "...and deposited to your:"
+msgstr ""
+
 msgid "1 Hour"
 msgstr ""
 
@@ -125,6 +128,9 @@ msgstr ""
 msgid "Auto"
 msgstr ""
 
+msgid "Auto-populate equal value amounts in other input fields, and require a balanced deposit amount."
+msgstr ""
+
 msgid "Available"
 msgstr "유효"
 
@@ -144,6 +150,18 @@ msgid "Balance"
 msgstr "잔액"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Balanced Mode:"
+msgstr ""
+
+msgid "Balanced Mode: Off"
+msgstr ""
+
+msgid "Balanced Mode: On"
+msgstr ""
+
+msgid "Balances"
 msgstr ""
 
 msgid "Based on your Wallet and BentoBox balances"
@@ -222,6 +240,9 @@ msgid "Chinese"
 msgstr ""
 
 msgid "Choose an Asset"
+msgstr ""
+
+msgid "Choose an Asset to Receive:"
 msgstr ""
 
 msgid "Claim SUSHI"
@@ -329,6 +350,9 @@ msgstr "예금"
 
 msgid "Deposit SUSHI into BentoBox"
 msgstr "BentoBox에 SUSHI 입금"
+
+msgid "Deposit Settings"
+msgstr ""
 
 msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr ""
@@ -487,6 +511,9 @@ msgstr ""
 msgid "Health"
 msgstr "건전성"
 
+msgid "Hide Balances"
+msgstr ""
+
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "잠긴 기록 합계: 지갑 연결"
 
@@ -564,6 +591,9 @@ msgid "Korean"
 msgstr ""
 
 msgid "LTV"
+msgstr ""
+
+msgid "Learn More"
 msgstr ""
 
 msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
@@ -751,6 +781,12 @@ msgstr ""
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
 
+msgid "Off"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "이런! 알 수 없는 오류가 발생했습니다. 페이지를 새로 고침하거나 다른 브라우저 또는 기기에서 방문하세요."
 
@@ -864,6 +900,9 @@ msgstr ""
 msgid "Receive"
 msgstr ""
 
+msgid "Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode."
+msgstr ""
+
 msgid "Recent Transactions"
 msgstr ""
 
@@ -963,6 +1002,9 @@ msgstr "풀 지분"
 msgid "Share of Pool:"
 msgstr "풀 지분:"
 
+msgid "Show Balances"
+msgstr ""
+
 msgid "Slippage tolerance"
 msgstr "슬리피지 허용 범위"
 
@@ -1039,6 +1081,9 @@ msgstr "전체 동결 가치"
 msgid "TVL:"
 msgstr ""
 
+msgid "Tap amount or type amount to continue"
+msgstr ""
+
 msgid "Tap any to learn more"
 msgstr ""
 
@@ -1074,6 +1119,9 @@ msgstr ""
 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "이 거래는 가격 변동이나 이체 수수료 문제로 불가능합니다. 슬리피지 허용치를 높이세요."
+
+msgid "This was previously required of providing liquidity, but now is optional."
+msgstr ""
 
 msgid "Tip to encourage miners to select this transaction."
 msgstr ""
@@ -1209,6 +1257,9 @@ msgstr ""
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "쌍을 만들 때 귀하는 최초의 유동성 공급자입니다. 추가하는 토큰의 비율이이 풀의 가격을 설정합니다. 요금에 만족하면 공급을 클릭하여 검토하세요."
 
+msgid "Which will be converted to..."
+msgstr ""
+
 msgid "Which will be converted to:"
 msgstr ""
 
@@ -1236,12 +1287,18 @@ msgstr ""
 msgid "You are on the wrong network"
 msgstr "잘못된 네트워크에 있습니다."
 
+msgid "You are removing:"
+msgstr ""
+
 msgid "You don’t have liquidity in this pool yet"
 msgstr "아직 이 풀에 유동성이 없습니다"
 
 msgid ""
 "You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
 "ones you would like to deposit"
+msgstr ""
+
+msgid "You have no balances of the following assets."
 msgstr ""
 
 msgid "You need to first approve LP tokens and then migrate it"
@@ -1372,6 +1429,9 @@ msgstr ""
 
 msgid "{0} Strategy"
 msgstr "{0} 전략"
+
+msgid "{0} {1, plural, one {Asset} other {Assets}} Selected"
+msgstr ""
 
 msgid "{0} {1} per {2}"
 msgstr ""

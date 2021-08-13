@@ -20,6 +20,9 @@ msgstr ""
 "(COMING SOON) Accrue automatic yield through flash loans and\n"
 "SUSHI strategies"
 
+msgid "...and deposited to your:"
+msgstr "...and deposited to your:"
+
 msgid "1 Hour"
 msgstr "1 Hour"
 
@@ -125,6 +128,9 @@ msgstr "Assets"
 msgid "Auto"
 msgstr "Auto"
 
+msgid "Auto-populate equal value amounts in other input fields, and require a balanced deposit amount."
+msgstr "Auto-populate equal value amounts in other input fields, and require a balanced deposit amount."
+
 msgid "Available"
 msgstr "Available"
 
@@ -145,6 +151,18 @@ msgstr "Balance"
 
 msgid "Balance:"
 msgstr "Balance:"
+
+msgid "Balanced Mode:"
+msgstr "Balanced Mode:"
+
+msgid "Balanced Mode: Off"
+msgstr "Balanced Mode: Off"
+
+msgid "Balanced Mode: On"
+msgstr "Balanced Mode: On"
+
+msgid "Balances"
+msgstr "Balances"
 
 msgid "Based on your Wallet and BentoBox balances"
 msgstr "Based on your Wallet and BentoBox balances"
@@ -226,6 +244,9 @@ msgstr "Chinese"
 
 msgid "Choose an Asset"
 msgstr "Choose an Asset"
+
+msgid "Choose an Asset to Receive:"
+msgstr "Choose an Asset to Receive:"
 
 msgid "Claim SUSHI"
 msgstr "Claim SUSHI"
@@ -332,6 +353,9 @@ msgstr "Deposit"
 
 msgid "Deposit SUSHI into BentoBox"
 msgstr "Deposit SUSHI into BentoBox"
+
+msgid "Deposit Settings"
+msgstr "Deposit Settings"
 
 msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
@@ -492,6 +516,9 @@ msgstr "Have assets you want to earn additional interest on? Lend them in isolat
 msgid "Health"
 msgstr "Health"
 
+msgid "Hide Balances"
+msgstr "Hide Balances"
+
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Historical Total Locked: Connect Wallet"
 
@@ -574,6 +601,9 @@ msgstr "Korean"
 
 msgid "LTV"
 msgstr "LTV"
+
+msgid "Learn More"
+msgstr "Learn More"
 
 msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
 msgstr "Learn more about the power of Sushi's AMM and Tines routing engine."
@@ -762,6 +792,12 @@ msgstr "Not approved"
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 
+msgid "Off"
+msgstr "Off"
+
+msgid "On"
+msgstr "On"
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 
@@ -877,6 +913,9 @@ msgstr "Rates:"
 msgid "Receive"
 msgstr "Receive"
 
+msgid "Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode."
+msgstr "Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode."
+
 msgid "Recent Transactions"
 msgstr "Recent Transactions"
 
@@ -976,6 +1015,9 @@ msgstr "Share of Pool"
 msgid "Share of Pool:"
 msgstr "Share of Pool:"
 
+msgid "Show Balances"
+msgstr "Show Balances"
+
 msgid "Slippage tolerance"
 msgstr "Slippage tolerance"
 
@@ -1052,6 +1094,9 @@ msgstr "TVL"
 msgid "TVL:"
 msgstr "TVL:"
 
+msgid "Tap amount or type amount to continue"
+msgstr "Tap amount or type amount to continue"
+
 msgid "Tap any to learn more"
 msgstr "Tap any to learn more"
 
@@ -1087,6 +1132,9 @@ msgstr "This transaction will not succeed due to price movement. Try increasing 
 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
+
+msgid "This was previously required of providing liquidity, but now is optional."
+msgstr "This was previously required of providing liquidity, but now is optional."
 
 msgid "Tip to encourage miners to select this transaction."
 msgstr "Tip to encourage miners to select this transaction."
@@ -1224,6 +1272,9 @@ msgstr "What kinds of liquidity pools are supported on Sushi?"
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 
+msgid "Which will be converted to..."
+msgstr "Which will be converted to..."
+
 msgid "Which will be converted to:"
 msgstr "Which will be converted to:"
 
@@ -1251,6 +1302,9 @@ msgstr "You are depositing:"
 msgid "You are on the wrong network"
 msgstr "You are on the wrong network"
 
+msgid "You are removing:"
+msgstr "You are removing:"
+
 msgid "You don’t have liquidity in this pool yet"
 msgstr "You don’t have liquidity in this pool yet"
 
@@ -1260,6 +1314,9 @@ msgid ""
 msgstr ""
 "You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
 "ones you would like to deposit"
+
+msgid "You have no balances of the following assets."
+msgstr "You have no balances of the following assets."
 
 msgid "You need to first approve LP tokens and then migrate it"
 msgstr "You need to first approve LP tokens and then migrate it"
@@ -1389,6 +1446,9 @@ msgstr "{0} Deposited:"
 
 msgid "{0} Strategy"
 msgstr "{0} Strategy"
+
+msgid "{0} {1, plural, one {Asset} other {Assets}} Selected"
+msgstr "{0} {1, plural, one {Asset} other {Assets}} Selected"
 
 msgid "{0} {1} per {2}"
 msgstr "{0} {1} per {2}"

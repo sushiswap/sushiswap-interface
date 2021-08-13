@@ -3,12 +3,6 @@ import { ActionType, Reducer, State } from './types'
 
 const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
   switch (action.type) {
-    case ActionType.SET_BALANCED_MODE: {
-      return {
-        ...state,
-        balancedMode: action.payload,
-      }
-    }
     case ActionType.SET_LIQUIDITY_MODE: {
       return {
         ...state,

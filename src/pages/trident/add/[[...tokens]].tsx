@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import TridentLayout from '../../../layouts/Trident'
-import SettingsTab from '../../../components/Settings'
 import Typography from '../../../components/Typography'
 import ModeToggle from '../../../features/trident/add/ModeToggle'
 import {
@@ -19,8 +18,10 @@ import ClassicStandardMode from '../../../features/trident/add/ClassicStandardMo
 import { PoolType } from '../../../features/trident/pool/context/types'
 import HybridZapMode from '../../../features/trident/add/HybridZapMode'
 import HybridStandardMode from '../../../features/trident/add/HybridStandardMode'
-import ZapModeTransactionReviewModal from '../../../features/trident/add/ZapModeTransactionReviewModal'
+import AddTransactionReviewModal from '../../../features/trident/add/AddTransactionReviewModal'
 import React from 'react'
+import BalancedModeModal from '../../../features/trident/add/BalancedModeModal'
+import BalancedModeHeader from '../../../features/trident/add/BalancedModeHeader'
 
 const Add = () => {
   const { i18n } = useLingui()
@@ -40,7 +41,7 @@ const Add = () => {
           >
             <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
-          <SettingsTab />
+          <BalancedModeModal />
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">
@@ -56,7 +57,9 @@ const Add = () => {
         {/*spacer*/}
         <div className="h-2" />
       </div>
+
       <ModeToggle />
+      <BalancedModeHeader />
 
       {pool.type === PoolType.CLASSIC && (
         <>
@@ -72,7 +75,7 @@ const Add = () => {
         </>
       )}
 
-      <ZapModeTransactionReviewModal />
+      <AddTransactionReviewModal />
     </div>
   )
 }

@@ -14,6 +14,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: (theme) => ({
+        'bars-pattern': "url('/images/trident/bars-pattern.png')",
         'binary-pattern': "url('/images/trident/binary-pattern.png')",
         'bubble-pattern': "url('/images/trident/bubble-pattern.png')",
         'dots-pattern': "url('/images/trident/dots-pattern.png')",

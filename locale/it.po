@@ -20,6 +20,9 @@ msgstr ""
 "(IN ARRIVO) Genera rendimento automatico tramite flash loan e\n"
 "strategie SUSHI"
 
+msgid "...and deposited to your:"
+msgstr ""
+
 msgid "1 Hour"
 msgstr ""
 
@@ -125,6 +128,9 @@ msgstr ""
 msgid "Auto"
 msgstr ""
 
+msgid "Auto-populate equal value amounts in other input fields, and require a balanced deposit amount."
+msgstr ""
+
 msgid "Available"
 msgstr "Disponibile"
 
@@ -144,6 +150,18 @@ msgid "Balance"
 msgstr "Saldo"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Balanced Mode:"
+msgstr ""
+
+msgid "Balanced Mode: Off"
+msgstr ""
+
+msgid "Balanced Mode: On"
+msgstr ""
+
+msgid "Balances"
 msgstr ""
 
 msgid "Based on your Wallet and BentoBox balances"
@@ -222,6 +240,9 @@ msgid "Chinese"
 msgstr ""
 
 msgid "Choose an Asset"
+msgstr ""
+
+msgid "Choose an Asset to Receive:"
 msgstr ""
 
 msgid "Claim SUSHI"
@@ -329,6 +350,9 @@ msgstr "Deposita"
 
 msgid "Deposit SUSHI into BentoBox"
 msgstr "Deposita SUSHI in BentoBox"
+
+msgid "Deposit Settings"
+msgstr ""
 
 msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr ""
@@ -489,6 +513,9 @@ msgstr ""
 msgid "Health"
 msgstr "Salute"
 
+msgid "Hide Balances"
+msgstr ""
+
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "Totale storico bloccato: collega wallet"
 
@@ -566,6 +593,9 @@ msgid "Korean"
 msgstr ""
 
 msgid "LTV"
+msgstr ""
+
+msgid "Learn More"
 msgstr ""
 
 msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
@@ -750,6 +780,12 @@ msgstr ""
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "USA QUESTA MODALITÀ SOLO SE SAI COSA STAI FACENDO."
 
+msgid "Off"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "Ops! Si è verificato un Errore imprevisto. Aggiorna la pagina o visita da un altro browser o dispositivo"
 
@@ -863,6 +899,9 @@ msgstr ""
 msgid "Receive"
 msgstr ""
 
+msgid "Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode."
+msgstr ""
+
 msgid "Recent Transactions"
 msgstr ""
 
@@ -962,6 +1001,9 @@ msgstr "Quota del pool"
 msgid "Share of Pool:"
 msgstr "Quota del pool:"
 
+msgid "Show Balances"
+msgstr ""
+
 msgid "Slippage tolerance"
 msgstr "Tolleranza slippage"
 
@@ -1038,6 +1080,9 @@ msgstr "TVL"
 msgid "TVL:"
 msgstr ""
 
+msgid "Tap amount or type amount to continue"
+msgstr ""
+
 msgid "Tap any to learn more"
 msgstr ""
 
@@ -1073,6 +1118,9 @@ msgstr ""
 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "Questa transazione non andrà a buon fine a causa del movimento del prezzo o della commissione sul trasferimento. Prova ad aumentare la tolleranza allo slippage."
+
+msgid "This was previously required of providing liquidity, but now is optional."
+msgstr ""
 
 msgid "Tip to encourage miners to select this transaction."
 msgstr ""
@@ -1208,6 +1256,9 @@ msgstr ""
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "Quando crei una coppia sei il primo fornitore di liquidità. Il rapporto dei token che aggiungi determinerà il prezzo di questo pool. Quando sei soddisfatto con il prezzo clicca su fornisci per verificare"
 
+msgid "Which will be converted to..."
+msgstr ""
+
 msgid "Which will be converted to:"
 msgstr ""
 
@@ -1235,12 +1286,18 @@ msgstr ""
 msgid "You are on the wrong network"
 msgstr "Sei connesso alla rete sbagliata"
 
+msgid "You are removing:"
+msgstr ""
+
 msgid "You don’t have liquidity in this pool yet"
 msgstr "Non hai ancora liquidità in questo pool"
 
 msgid ""
 "You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
 "ones you would like to deposit"
+msgstr ""
+
+msgid "You have no balances of the following assets."
 msgstr ""
 
 msgid "You need to first approve LP tokens and then migrate it"
@@ -1371,6 +1428,9 @@ msgstr ""
 
 msgid "{0} Strategy"
 msgstr "Strategia {0}"
+
+msgid "{0} {1, plural, one {Asset} other {Assets}} Selected"
+msgstr ""
 
 msgid "{0} {1} per {2}"
 msgstr ""

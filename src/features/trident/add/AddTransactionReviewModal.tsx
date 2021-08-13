@@ -32,11 +32,11 @@ const DepositField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
   )
 }
 
-const ZapModeTransactionReviewModal: FC = () => {
+const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
-  const { showZapReview, currencies, inputAmounts } = useTridentAddLiquidityPageState()
+  const { showZapReview, inputAmounts } = useTridentAddLiquidityPageState()
   const { pool, dispatch, execute } = useTridentAddLiquidityPageContext()
-  const parsedInputAmount = tryParseAmount(inputAmounts[0], currencies[0])
+  const parsedInputAmount = tryParseAmount(inputAmounts[0], pool.tokens[0])
   const usdcValue = useUSDCValue(parsedInputAmount)
 
   const closeModal = useCallback(() => {
@@ -82,7 +82,7 @@ const ZapModeTransactionReviewModal: FC = () => {
             <ListPanel
               items={Object.entries(inputAmounts).reduce((acc, [address, amount]) => {
                 if (+amount > 0)
-                  acc.push(<DepositField inputAmount={amount} currency={currencies[address]} key={address} />)
+                  acc.push(<DepositField inputAmount={amount} currency={pool.tokens[address]} key={address} />)
                 return acc
               }, [])}
             />
@@ -163,4 +163,4 @@ const ZapModeTransactionReviewModal: FC = () => {
   )
 }
 
-export default ZapModeTransactionReviewModal
+export default AddTransactionReviewModal

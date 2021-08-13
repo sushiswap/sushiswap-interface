@@ -20,6 +20,9 @@ msgstr ""
 "（即将推出）通过闪电贷和\n"
 "SUSHI策略累积自动获取收益"
 
+msgid "...and deposited to your:"
+msgstr ""
+
 msgid "1 Hour"
 msgstr ""
 
@@ -125,6 +128,9 @@ msgstr ""
 msgid "Auto"
 msgstr ""
 
+msgid "Auto-populate equal value amounts in other input fields, and require a balanced deposit amount."
+msgstr ""
+
 msgid "Available"
 msgstr "可用的"
 
@@ -144,6 +150,18 @@ msgid "Balance"
 msgstr "余额"
 
 msgid "Balance:"
+msgstr ""
+
+msgid "Balanced Mode:"
+msgstr ""
+
+msgid "Balanced Mode: Off"
+msgstr ""
+
+msgid "Balanced Mode: On"
+msgstr ""
+
+msgid "Balances"
 msgstr ""
 
 msgid "Based on your Wallet and BentoBox balances"
@@ -222,6 +240,9 @@ msgid "Chinese"
 msgstr ""
 
 msgid "Choose an Asset"
+msgstr ""
+
+msgid "Choose an Asset to Receive:"
 msgstr ""
 
 msgid "Claim SUSHI"
@@ -327,6 +348,9 @@ msgstr "存款"
 
 msgid "Deposit SUSHI into BentoBox"
 msgstr "将SUSHI存入BentoBox"
+
+msgid "Deposit Settings"
+msgstr ""
 
 msgid "Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode."
 msgstr ""
@@ -478,6 +502,9 @@ msgstr ""
 msgid "Health"
 msgstr "健康值"
 
+msgid "Hide Balances"
+msgstr ""
+
 msgid "Historical Total Locked: Connect Wallet"
 msgstr "锁仓的总数：连接钱包"
 
@@ -555,6 +582,9 @@ msgid "Korean"
 msgstr ""
 
 msgid "LTV"
+msgstr ""
+
+msgid "Learn More"
 msgstr ""
 
 msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
@@ -739,6 +769,12 @@ msgstr ""
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "请了解您在做什么之后再选择该模式。"
 
+msgid "Off"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "糟糕！出现未知错误。请刷新页面，或从其他浏览器或设备访问"
 
@@ -852,6 +888,9 @@ msgstr ""
 msgid "Receive"
 msgstr ""
 
+msgid "Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode."
+msgstr ""
+
 msgid "Recent Transactions"
 msgstr ""
 
@@ -951,6 +990,9 @@ msgstr "池子里的份额"
 msgid "Share of Pool:"
 msgstr "池子里的份额："
 
+msgid "Show Balances"
+msgstr ""
+
 msgid "Slippage tolerance"
 msgstr "可容忍滑点"
 
@@ -1027,6 +1069,9 @@ msgstr "TVL"
 msgid "TVL:"
 msgstr ""
 
+msgid "Tap amount or type amount to continue"
+msgstr ""
+
 msgid "Tap any to learn more"
 msgstr ""
 
@@ -1062,6 +1107,9 @@ msgstr ""
 
 msgid "This transaction will not succeed either due to price movement or fee on transfer. Try increasing your slippage tolerance."
 msgstr "交易未成功，可能因为价格变动，也可能转账中产生的费用。请提高您可接受的滑点。"
+
+msgid "This was previously required of providing liquidity, but now is optional."
+msgstr ""
 
 msgid "Tip to encourage miners to select this transaction."
 msgstr ""
@@ -1197,6 +1245,9 @@ msgstr ""
 msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
 msgstr "当创建一个交易对时，您是第一个流动性提供者。您添加的代币比例将决定这个池子的价格。一旦您对该比率满意，点击供应进行查看"
 
+msgid "Which will be converted to..."
+msgstr ""
+
 msgid "Which will be converted to:"
 msgstr ""
 
@@ -1224,12 +1275,18 @@ msgstr ""
 msgid "You are on the wrong network"
 msgstr "网络错误"
 
+msgid "You are removing:"
+msgstr ""
+
 msgid "You don’t have liquidity in this pool yet"
 msgstr "您的这个池中还没有流动性"
 
 msgid ""
 "You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which\n"
 "ones you would like to deposit"
+msgstr ""
+
+msgid "You have no balances of the following assets."
 msgstr ""
 
 msgid "You need to first approve LP tokens and then migrate it"
@@ -1360,6 +1417,9 @@ msgstr ""
 
 msgid "{0} Strategy"
 msgstr "{0}策略"
+
+msgid "{0} {1, plural, one {Asset} other {Assets}} Selected"
+msgstr ""
 
 msgid "{0} {1} per {2}"
 msgstr ""

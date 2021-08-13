@@ -94,7 +94,7 @@ const HybridStandardMode: FC = () => {
   }, [balances, inputAmounts, selected])
 
   return (
-    <div className="flex flex-col mt-8 px-5 gap-8">
+    <div className="flex flex-col px-5 gap-8">
       <div className="flex flex-col">
         <Disclosure defaultOpen>
           {({ open }) => (

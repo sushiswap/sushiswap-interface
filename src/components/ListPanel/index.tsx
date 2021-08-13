@@ -3,7 +3,7 @@ import Typography from '../Typography'
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
 import CurrencyLogo from '../CurrencyLogo'
 import { SUSHI } from '../../constants'
-import { formatNumber } from '../../functions'
+import { classNames, formatNumber } from '../../functions'
 
 interface ListPanelProps {
   header?: ReactNode
@@ -13,10 +13,20 @@ interface ListPanelProps {
 
 const ListPanel = ({ header, items, footer }: ListPanelProps) => {
   return (
-    <div className="flex flex-col border border-dark-700 rounded overflow-hidden">
-      {header && <div className="border-b border-dark-700">{header}</div>}
-      {items && <div className="bg-dark-800 divide-y">{items}</div>}
-      {footer && <div className="bg-dark-900 border-t border-dark-700">{footer}</div>}
+    <div className="flex flex-col">
+      {header && <div className="rounded-t overflow-hidden border border-dark-700">{header}</div>}
+      {items && (
+        <div
+          className={classNames(
+            header ? '' : 'border-t rounded-t',
+            footer ? '' : 'border-b rounded-b',
+            'border-l border-r border-dark-700 bg-dark-800 divide-y overflow-hidden'
+          )}
+        >
+          {items}
+        </div>
+      )}
+      {footer && <div className="rounded-b overflow-hidden border bg-dark-900 border-dark-700">{footer}</div>}
     </div>
   )
 }

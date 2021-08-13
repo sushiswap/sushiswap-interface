@@ -4,17 +4,17 @@ import React from 'react'
 import DepositButtons from './DepositButtons'
 
 const ClassicStandardMode = () => {
-  const { currencies, inputAmounts } = useTridentAddLiquidityPageState()
+  const { inputAmounts } = useTridentAddLiquidityPageState()
   const { pool, handleInput } = useTridentAddLiquidityPageContext()
 
   return (
-    <div className="flex flex-col mt-10 gap-3">
+    <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-4 px-5">
         {pool.tokens.map((token) => (
           <AssetInput
             key={token.address}
             value={inputAmounts[token.address]}
-            currency={currencies[token.address]}
+            currency={token}
             onChange={(val) => handleInput(val, token.address)}
           />
         ))}
