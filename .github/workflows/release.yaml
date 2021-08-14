@@ -5,7 +5,7 @@ on:
 
   # manual trigger
   workflow_dispatch:
-environment: test
+env: test
 jobs:
   bump_version:
     name: Bump Version
