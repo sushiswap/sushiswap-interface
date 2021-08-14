@@ -86,12 +86,11 @@ export function getMaxAllowableSwapPercent(): Percent {
     return MAX_ALLOWABLE_SWAP_PERCENT
 }
 
-export function computeMaxAllowablePrice(trade?: Trade): {maxAllowInputAmount: TokenAmount | undefined; maxAllowOutputAmount: TokenAmount | undefined; maxAllowablePrice: Price | undefined}{
+export function computeMaxEstimatedInputOutputAmount(trade?: Trade): {maxAllowInputAmount: string | undefined; maxAllowOutputAmount: string | undefined}{
     if (!trade) {
         return {
             maxAllowInputAmount: undefined,
-            maxAllowOutputAmount: undefined,
-            maxAllowablePrice: undefined
+            maxAllowOutputAmount: undefined
         }
     }
     const { realizedLPFeeOrigin } = computeTradePriceBreakdown(trade)
@@ -101,33 +100,17 @@ export function computeMaxAllowablePrice(trade?: Trade): {maxAllowInputAmount: T
     } else {
         maxAllowPriceImpact = MAX_PRICE_IMPACT_NON_EXPERT
     }
-    // const exactQuote = trade?.route.midPrice.raw.multiply(trade?.inputAmount.raw)
-    // const maxOutputAmount = exactQuote.subtract(exactQuote.multiply(MAX_PRICE_IMPACT_NON_EXPERT))
-    // const maxAllowableSwapPercent = getMaxAllowableSwapPercent()
-    // const maxInputAmount = maxAllowableSwapPercent.multiply(trade?.inputAmount.raw)
-    // const maxOutputAmount = maxAllowableSwapPercent.multiply(trade?.outputAmount.raw)
+    
+    const pair = trade?.route.pairs[0]
+    const inputTokenReserve = Number(pair.reserveOf(pair.token1).toFixed(4))
+    const outputTokenReserve = Number(pair.reserveOf(pair.token0).toFixed(4))
+    const priceImpactMaxPercent = Number(BLOCKED_PRICE_IMPACT_NON_EXPERT.toFixed(0)) / 100
 
-    const maxInputAmount = BLOCKED_PRICE_IMPACT_NON_EXPERT.multiply(trade?.inputAmount.raw).divide(PERCENT_100.subtract(BLOCKED_PRICE_IMPACT_NON_EXPERT))
+    const maxAllowInputAmount = parseFloat(`${priceImpactMaxPercent * inputTokenReserve}`).toFixed(4)
+    const maxAllowOutputAmount = parseFloat(`${priceImpactMaxPercent * outputTokenReserve}`).toFixed(4)
 
-    const maxOutputAmount = BLOCKED_PRICE_IMPACT_NON_EXPERT.multiply(trade?.outputAmount.raw).divide(PERCENT_100.subtract(BLOCKED_PRICE_IMPACT_NON_EXPERT)) 
-
-
-    const allowablePrice = maxOutputAmount.divide(trade?.inputAmount.raw)
-    const maxAllowablePrice = new Price(
-        trade.executionPrice.baseCurrency,
-        trade.executionPrice.quoteCurrency,
-        allowablePrice.denominator,
-        allowablePrice.numerator
-    )
-    const maxAllowInputAmount = trade.outputAmount instanceof TokenAmount
-     ? new TokenAmount(trade.outputAmount.token, maxInputAmount.quotient)
-     : undefined
-    const maxAllowOutputAmount = trade.outputAmount instanceof TokenAmount
-     ? new TokenAmount(trade.outputAmount.token, maxOutputAmount.quotient)
-     : undefined
     return {
         maxAllowInputAmount,
         maxAllowOutputAmount,
-        maxAllowablePrice
     }
 }

@@ -9,7 +9,7 @@ import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
 import useENS from '../../hooks/useENS'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { isAddress } from '../../utils'
-import { computeSlippageAdjustedAmounts, computeMaxAllowablePrice } from '../../utils/prices'
+import { computeSlippageAdjustedAmounts, computeMaxEstimatedInputOutputAmount } from '../../utils/prices'
 import { AppDispatch, AppState } from '../index'
 import { useUserSlippageTolerance } from '../user/hooks'
 import { useCurrencyBalances } from '../wallet/hooks'
@@ -112,9 +112,8 @@ export function useDerivedSwapInfo(): {
     parsedAmount: CurrencyAmount | undefined
     v2Trade: Trade | undefined
     inputError?: string,
-    maxAllowablePrice: Price | undefined,
-    maxAllowInputAmount: TokenAmount | undefined,
-    maxAllowOutputAmount: TokenAmount | undefined
+    maxAllowInputAmount: string | undefined,
+    maxAllowOutputAmount: string | undefined
 } {
     const { i18n } = useLingui()
     const { account, chainId } = useActiveWeb3React()
@@ -145,7 +144,7 @@ export function useDerivedSwapInfo(): {
 
     const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
 
-    const { maxAllowablePrice, maxAllowInputAmount, maxAllowOutputAmount } = computeMaxAllowablePrice(v2Trade ?? undefined)
+    const { maxAllowInputAmount, maxAllowOutputAmount } = computeMaxEstimatedInputOutputAmount(v2Trade ?? undefined)
 
     const currencyBalances = {
         [Field.INPUT]: relevantTokenBalances[0],
@@ -204,7 +203,6 @@ export function useDerivedSwapInfo(): {
         parsedAmount,
         v2Trade: v2Trade ?? undefined,
         inputError,
-        maxAllowablePrice,
         maxAllowInputAmount,
         maxAllowOutputAmount
     }
