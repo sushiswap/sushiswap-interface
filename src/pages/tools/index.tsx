@@ -15,18 +15,12 @@ const TOOLS = (i18n: I18n) => [
     description: i18n._(t`Redenominate xSUSHI into MEOWSHI`),
     href: '/tools/meowshi',
   },
-  // {
-  //   id: 2,
-  //   name: 'SAAVE',
-  //   description: '...',
-  //   href: '/tools/saave',
-  // },
-  // {
-  //   id: 3,
-  //   name: 'LP ZAP',
-  //   description: 'Zap into an LP position for any pool using any asset',
-  //   href: '/zap',
-  // },
+  {
+    id: 2,
+    name: 'INARI',
+    description: 'Deposit SUSHI in various strategies & platforms in one click!',
+    href: '/inari',
+  },
 ]
 
 export default function Tools() {
@@ -52,7 +46,7 @@ export default function Tools() {
                     <span className="absolute inset-0" aria-hidden="true" />
                     <div className="space-y-1">
                       <p className="text-xl font-bold truncate text-primary">{tool.name}</p>
-                      <p className="text-sm truncate text-secondary">{tool.description}</p>
+                      <p className="text-sm text-secondary">{tool.description}</p>
                     </div>
                     <ArrowRightIcon width={24} height={24} className="text-high-emphesis" />
                   </a>

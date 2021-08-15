@@ -74,7 +74,7 @@ function MyApp({
 
   useEffect(() => {
     async function load(locale) {
-      i18n.loadLocaleData(locale, { plurals: plurals[locale] })
+      i18n.loadLocaleData(locale, { plurals: plurals[locale.split('_')[0]] })
 
       try {
         // Load messages from AWS, use q session param to get latest version from cache

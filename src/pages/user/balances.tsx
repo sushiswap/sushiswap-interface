@@ -114,11 +114,11 @@ const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => 
             loader={cloudinaryLoader}
             height={56}
             width={56}
-            src={token.tokenInfo?.logoURI}
+            src={token?.tokenInfo ? token.tokenInfo.logoURI : '/images/tokens/unknown.png'}
             className="w-10 mr-4 rounded-lg sm:w-14"
-            alt={token.tokenInfo?.symbol}
+            alt={token?.tokenInfo ? token.tokenInfo.symbol : token?.symbol}
           />
-          <div>{token && token.tokenInfo.symbol}</div>
+          <div>{token && token?.tokenInfo ? token.tokenInfo.symbol : token?.symbol}</div>
         </div>
         <div className="flex items-center justify-end">
           <div>
@@ -167,8 +167,14 @@ export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): 
 
   const [approvalState, approve] = useApproveCallback(
     CurrencyAmount.fromRawAmount(
-      new Token(chainId, token.address, token.tokenInfo.decimals, token.tokenInfo.symbol, token.tokenInfo.name),
-      value.toBigNumber(token.tokenInfo.decimals).toString()
+      new Token(
+        chainId,
+        token.address,
+        token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals,
+        token?.tokenInfo ? token.tokenInfo.symbol : token?.symbol,
+        token?.tokenInfo ? token.tokenInfo.name : token?.name
+      ),
+      value.toBigNumber(token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals).toString()
     ),
     chainId && BENTOBOX_ADDRESS[chainId]
   )
@@ -182,7 +188,8 @@ export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): 
     <>
       {account && (
         <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
-          {i18n._(t`Wallet Balance`)}: {formatNumber(token.balance.toFixed(token.tokenInfo.decimals))}
+          {i18n._(t`Wallet Balance`)}:{' '}
+          {formatNumber(token.balance.toFixed(token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals))}
         </div>
       )}
       <div className="relative flex items-center w-full mb-4">
@@ -199,7 +206,7 @@ export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): 
             color="blue"
             size="xs"
             onClick={() => {
-              setValue(token.balance.toFixed(token.tokenInfo.decimals))
+              setValue(token.balance.toFixed(token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals))
             }}
             className="absolute right-4 focus:ring focus:ring-blue"
           >
@@ -219,7 +226,10 @@ export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): 
           disabled={pendingTx || !token || token.balance.lte(0)}
           onClick={async () => {
             setPendingTx(true)
-            await deposit(token.address, value.toBigNumber(token.tokenInfo.decimals))
+            await deposit(
+              token.address,
+              value.toBigNumber(token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals)
+            )
             setPendingTx(false)
           }}
         >
@@ -246,7 +256,9 @@ function Withdraw({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.El
         <div className="pr-4 mb-2 text-sm text-right cursor-pointer text-secondary">
           {i18n._(
             t`Bento Balance: ${formatNumber(
-              token.bentoBalance ? token.bentoBalance.toFixed(token.tokenInfo.decimals) : 0
+              token.bentoBalance
+                ? token.bentoBalance.toFixed(token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals)
+                : 0
             )}`
           )}
         </div>
@@ -265,7 +277,7 @@ function Withdraw({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.El
             color="pink"
             size="xs"
             onClick={() => {
-              setValue(token.bentoBalance.toFixed(token.tokenInfo.decimals))
+              setValue(token.bentoBalance.toFixed(token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals))
             }}
             className="absolute right-4 focus:ring focus:ring-pink"
           >
@@ -278,7 +290,10 @@ function Withdraw({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.El
         disabled={pendingTx || !token || token.bentoBalance.lte(0)}
         onClick={async () => {
           setPendingTx(true)
-          await withdraw(token.address, value.toBigNumber(token.tokenInfo.decimals))
+          await withdraw(
+            token.address,
+            value.toBigNumber(token?.tokenInfo ? token.tokenInfo.decimals : token?.decimals)
+          )
           setPendingTx(false)
         }}
       >
