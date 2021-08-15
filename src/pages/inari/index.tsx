@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Head from 'next/head'
 import Typography from '../../components/Typography'
 import { useLingui } from '@lingui/react'
@@ -11,18 +11,35 @@ import InariDescription from '../../features/inari/InariDescription'
 import SideSwitch from '../../features/inari/SideSwitch'
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import BalancePanel from '../../features/inari/BalancePanel'
-import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
+import {
+  useDerivedInariState,
+  useInariState,
+  useInariStrategies,
+  useSelectedInariStrategy,
+} from '../../state/inari/hooks'
 import NetworkGuard from '../../guards/Network'
 import { ChainId } from '@sushiswap/sdk'
 import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
 import StrategySelector from '../../features/inari/StrategySelector'
 import { Field } from '../../state/inari/types'
+import { useAppDispatch } from '../../state/hooks'
+import { setStrategy } from '../../state/inari/actions'
+import useStakeSushiToBentoStrategy from '../../state/inari/strategies/useStakeSushiToBentoStrategy'
 
 const Inari = () => {
   const { i18n } = useLingui()
   const { inputValue, outputValue } = useInariState()
   const { tokens, general } = useDerivedInariState()
   const { balances } = useSelectedInariStrategy()
+  const dispatch = useAppDispatch()
+
+  // Set initial strategy
+  const stakeSushiToBentoStrategy = useStakeSushiToBentoStrategy()
+  useEffect(() => {
+    dispatch(setStrategy(stakeSushiToBentoStrategy))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
