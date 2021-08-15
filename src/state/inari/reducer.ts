@@ -1,14 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { setStrategy, setValues, setZapIn } from './actions'
 import { InariState } from './types'
-import { general, tokenDefinitions } from './strategies/useStakeSushiToBentoStrategy'
+import { tokenDefinitions } from './strategies/useStakeSushiToBentoStrategy'
 
 const initialState: InariState = {
   id: 'stakeSushiToBentoStrategy',
   zapIn: true,
   inputValue: '',
   outputValue: '',
-  general,
+  general: null,
   tokens: tokenDefinitions,
 }
 

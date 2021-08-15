@@ -11,16 +11,18 @@ import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
 import { BigNumber } from 'ethers'
 import useBaseStrategy from './useBaseStrategy'
 import useBentoBoxTrait from '../traits/useBentoBoxTrait'
+import { I18n } from '@lingui/core'
+import { useLingui } from '@lingui/react'
 
-export const general: StrategyGeneralInfo = {
-  name: 'Cream → Bento',
-  steps: ['SUSHI', 'crXSUSHI', 'BentoBox'],
+export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
+  name: i18n._(t`Cream → Bento`),
+  steps: [i18n._(t`SUSHI`), i18n._(t`crXSUSHI`), i18n._(t`BentoBox`)],
   zapMethod: 'stakeSushiToCreamToBento',
   unzapMethod: 'unstakeSushiFromCreamFromBento',
-  description: t`Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click.`,
-  inputSymbol: 'SUSHI',
-  outputSymbol: 'crXSUSHI in BentoBox',
-}
+  description: i18n._(t`Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click.`),
+  inputSymbol: i18n._(t`SUSHI`),
+  outputSymbol: i18n._(t`crXSUSHI in BentoBox`),
+})
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
@@ -38,6 +40,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 }
 
 const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
+  const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const zenkoContract = useZenkoContract()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET]])
@@ -45,6 +48,7 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
   const crxSushiBentoBalance = useBentoBalance(CRXSUSHI.address)
 
   // Strategy ends in BentoBox so use BaseBentoBox strategy
+  const general = useMemo(() => GENERAL(i18n), [i18n])
   const baseStrategy = useBaseStrategy({
     id: 'stakeSushiToCreamToBentoStrategy',
     general,
