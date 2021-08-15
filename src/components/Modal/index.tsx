@@ -24,11 +24,12 @@ export default function Modal({
   padding = 5,
   maxWidth = 420,
 }: ModalProps) {
+  console.log({ maxHeight: `${maxHeight}vh` })
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" onClose={onDismiss} className="fixed inset-0 z-10 overflow-y-auto backdrop-blur-md">
-          <Dialog.Overlay className="fixed inset-0" />
+        <Dialog as="div" onClose={onDismiss} className="fixed inset-0 z-10 overflow-y-hidden backdrop-blur-md">
+          <Dialog.Overlay className="fixed inset-0 bg-black backdrop-blur-md opacity-30" />
           <div className="flex items-center justify-center h-screen px-4">
             <Transition.Child
               as={Fragment}
@@ -41,19 +42,14 @@ export default function Modal({
             >
               <div
                 className="transition-all transform"
-                style={{ width: isMobile ? `100%` : '65vw', maxWidth: `${maxWidth}px` }}
+                style={{
+                  width: isMobile ? `100%` : '65vw',
+                  maxWidth: `${maxWidth}px`,
+                }}
               >
                 <div className="w-full p-px rounded bg-gradient-to-r from-blue to-pink">
-                  <div className="flex flex-col w-full h-full p-6 overflow-y-auto rounded bg-dark-900">
-                    <div
-                      style={{
-                        minHeight: `${minHeight}vh`,
-                        maxHeight: `${maxHeight}vh`,
-                      }}
-                      className="h-full"
-                    >
-                      {children}
-                    </div>
+                  <div className="flex flex-col w-full h-full p-6 overflow-y-hidden rounded bg-dark-900">
+                    <div style={{ minHeight: `${minHeight}vh`, maxHeight: `${maxHeight}vh` }}>{children}</div>
                   </div>
                 </div>
               </div>

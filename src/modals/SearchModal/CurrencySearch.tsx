@@ -6,7 +6,6 @@ import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToke
 
 import AutoSizer from 'react-virtualized-auto-sizer'
 import Button from '../../components/Button'
-import ButtonText from '../../components/ButtonText'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
 import Column from '../../components/Column'
 import CommonBases from './CommonBases'
@@ -14,7 +13,6 @@ import CurrencyList from './CurrencyList'
 import { Edit } from 'react-feather'
 import { ExtendedEther } from '../../constants'
 import { FixedSizeList } from 'react-window'
-import IconWrapper from '../../components/IconWrapper'
 import ImportRow from './ImportRow'
 import ModalHeader from '../../components/ModalHeader'
 import ReactGA from 'react-ga'
@@ -180,8 +178,8 @@ export function CurrencySearch({
   )
 
   return (
-    <div className="w-full h-full">
-      <ModalHeader onClose={onDismiss} title="Select a token" />
+    <div className="flex flex-col max-h-[inherit]">
+      <ModalHeader className="h-full" onClose={onDismiss} title="Select a token" />
       {!currencyList && (
         <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
           <input
@@ -208,7 +206,7 @@ export function CurrencySearch({
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
         </Column>
       ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
-        <div className="flex-1 h-full">
+        <div className="h-screen">
           <AutoSizer disableWidth>
             {({ height }) => (
               <CurrencyList

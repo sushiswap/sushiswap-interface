@@ -1,8 +1,5 @@
 import { X } from 'react-feather'
-import styled from 'styled-components'
 
-const CloseIcon = styled(X)`
-  cursor: pointer;
-`
+const CloseIcon = (props) => <X className="cursor-pointer" {...props} />
 
 export default CloseIcon

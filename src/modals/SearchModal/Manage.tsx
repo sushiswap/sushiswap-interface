@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 import Column from '../../components/Column'
 import CurrencyModalView from './CurrencyModalView'
@@ -11,6 +11,7 @@ import { TokenList } from '@uniswap/token-lists'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { classNames } from '../../functions'
 
 function Manage({
   onDismiss,
@@ -30,39 +31,40 @@ function Manage({
   const [tabIndex, setTabIndex] = useState(0)
 
   return (
-    <div className="w-full h-full">
+    <div className="flex flex-col max-h-[inherit]">
       <ModalHeader
         onClose={onDismiss}
         title={i18n._(t`Manage`)}
         onBack={() => setModalView(CurrencyModalView.search)}
       />
-      <Tabs
-        forceRenderTabPanel
-        selectedIndex={tabIndex}
-        onSelect={(index: number) => setTabIndex(index)}
-        className="flex flex-col flex-grow"
-      >
-        <TabList className="flex flex-shrink-0 p-1 rounded bg-dark-800">
-          <Tab
-            className="flex items-center justify-center flex-1 px-1 py-2 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-            selectedClassName="bg-dark-900 text-high-emphesis"
+      <div className="flex p-1 rounded bg-dark-800">
+        {[i18n._(t`Lists`), i18n._(t`Tokens`)].map((title, i) => (
+          <div
+            className={classNames(
+              tabIndex === i && 'bg-dark-900 text-high-emphesis',
+              'flex items-center justify-center flex-1 px-1 py-2 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none'
+            )}
+            onClick={() => setTabIndex(i)}
           >
-            {i18n._(t`Lists`)}
-          </Tab>
-          <Tab
-            className="flex items-center justify-center flex-1 px-1 py-2 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-            selectedClassName="bg-dark-900 text-high-emphesis"
-          >
-            {i18n._(t`Tokens`)}
-          </Tab>
-        </TabList>
-        <TabPanel style={{ flexGrow: 1, height: '100%' }}>
-          <ManageLists setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
-        </TabPanel>
-        <TabPanel style={{ flexGrow: 1 }}>
-          <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />
-        </TabPanel>
-      </Tabs>
+            {title}
+          </div>
+        ))}
+      </div>
+      <div className="h-screen">
+        {tabIndex === 0 && (
+          <AutoSizer disableWidth>
+            {({ height }) => (
+              <ManageLists
+                height={height}
+                setModalView={setModalView}
+                setImportList={setImportList}
+                setListUrl={setListUrl}
+              />
+            )}
+          </AutoSizer>
+        )}
+        {tabIndex === 1 && <ManageTokens setModalView={setModalView} setImportToken={setImportToken} />}
+      </div>
     </div>
   )
 }

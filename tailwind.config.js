@@ -116,12 +116,17 @@ module.exports = {
       animation: {
         ellipsis: 'ellipsis 1.25s infinite',
         'spin-slow': 'spin 2s linear infinite',
+        fade: 'opacity 150ms linear',
       },
       keyframes: {
         ellipsis: {
           '0%': { content: '"."' },
           '33%': { content: '".."' },
           '66%': { content: '"..."' },
+        },
+        opacity: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 100 },
         },
       },
     },
