@@ -29,6 +29,7 @@ module.exports = withBundleAnalyzer(
       disable: process.env.NODE_ENV === 'development',
     },
     images: {
+      loader: 'imgix',
       domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
     },
     reactStrictMode: true,
@@ -158,11 +159,11 @@ module.exports = withBundleAnalyzer(
         },
       ]
     },
-    i18n: {
-      localeDetection: true,
-      locales,
-      defaultLocale: sourceLocale,
-    },
+    // i18n: {
+    //   localeDetection: true,
+    //   locales,
+    //   defaultLocale: sourceLocale,
+    // },
   })
 )
 
