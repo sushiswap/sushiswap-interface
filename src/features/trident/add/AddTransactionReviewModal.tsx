@@ -5,7 +5,7 @@ import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
 import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
-import { ActionType } from './context/types'
+import { ActionType, LiquidityMode } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
 import { tryParseAmount } from '../../../functions'
@@ -22,7 +22,7 @@ interface DepositFieldProps {
 const DepositField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
   const parsedInputAmount = tryParseAmount(inputAmount, currency)
   const usdcValue = useUSDCValue(parsedInputAmount)
-
+  console.log(inputAmount, currency)
   return (
     <ListPanel.Item
       left={<ListPanel.Item.Left amount={parsedInputAmount} />}
@@ -34,8 +34,8 @@ const DepositField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
-  const { showZapReview, inputAmounts } = useTridentAddLiquidityPageState()
-  const { pool, dispatch, execute } = useTridentAddLiquidityPageContext()
+  const { liquidityMode, showZapReview, inputAmounts } = useTridentAddLiquidityPageState()
+  const { pool, tokens, dispatch, execute } = useTridentAddLiquidityPageContext()
   const parsedInputAmount = tryParseAmount(inputAmounts[0], pool.tokens[0])
   const usdcValue = useUSDCValue(parsedInputAmount)
 
@@ -84,29 +84,31 @@ const AddTransactionReviewModal: FC = () => {
             <ListPanel
               items={Object.entries(inputAmounts).reduce((acc, [address, amount]) => {
                 if (+amount > 0)
-                  acc.push(<DepositField inputAmount={amount} currency={pool.tokens[address]} key={address} />)
+                  acc.push(<DepositField inputAmount={amount} currency={tokens[address]} key={address} />)
                 return acc
               }, [])}
             />
           </div>
-          <div className="flex flex-col gap-3 px-5">
-            <Typography weight={700} variant="lg">
-              {i18n._(t`Which will be converted to:`)}
-            </Typography>
+          {liquidityMode === LiquidityMode.ZAP && (
+            <div className="flex flex-col gap-3 px-5">
+              <Typography weight={700} variant="lg">
+                {i18n._(t`Which will be converted to:`)}
+              </Typography>
 
-            {/*TODO this is not working yet*/}
-            <ListPanel
-              items={pool.tokens.map((token, index) => (
-                <ListPanel.Item
-                  left={<ListPanel.Item.Left amount={tryParseAmount(inputAmounts[token.address], token)} />}
-                  right={
-                    <ListPanel.Item.Right>${usdcValue?.divide(pool.tokens.length)?.toFixed(2)}</ListPanel.Item.Right>
-                  }
-                  key={index}
-                />
-              ))}
-            />
-          </div>
+              {/*TODO this is not working yet*/}
+              <ListPanel
+                items={pool.tokens.map((token, index) => (
+                  <ListPanel.Item
+                    left={<ListPanel.Item.Left amount={tryParseAmount(inputAmounts[token.address], token)} />}
+                    right={
+                      <ListPanel.Item.Right>${usdcValue?.divide(pool.tokens.length)?.toFixed(2)}</ListPanel.Item.Right>
+                    }
+                    key={index}
+                  />
+                ))}
+              />
+            </div>
+          )}
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
               {i18n._(t`You'll receive:`)}

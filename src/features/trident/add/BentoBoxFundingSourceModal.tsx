@@ -39,7 +39,7 @@ const BentoBoxFundingSourceModal: FC = () => {
             </Typography>
           </div>
           <div className="flex flex-col">
-            <div className="grid grid-cols-2 flex-grow">
+            <div className="grid grid-cols-2 flex-grow min-h-[160px]">
               <div className="flex flex-col gap-4 p-3 px-8">
                 <div className="flex flex-row gap-8">
                   <div className={walletSelected ? 'text-low-emphesis' : 'text-high-emphesis'}>
@@ -80,7 +80,7 @@ const BentoBoxFundingSourceModal: FC = () => {
                 </Typography>
               </div>
               <div
-                className="h-full bg-contain bg-no-repeat"
+                className="h-full bg-contain bg-no-repeat bg-right"
                 style={{ backgroundImage: `url('/images/trident/AssetInputScreenshot.png')` }}
               />
             </div>
@@ -94,7 +94,7 @@ const BentoBoxFundingSourceModal: FC = () => {
               {i18n._(t`Wallet`)}
             </Typography>
           </div>
-          <div className="flex flex-col flex-grow">
+          <div className="flex flex-col flex-grow min-h-[160px]">
             <div className="grid grid-cols-2 flex-grow">
               <div
                 className="h-full bg-contain bg-no-repeat"

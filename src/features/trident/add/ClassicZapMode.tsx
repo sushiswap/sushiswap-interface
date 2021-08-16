@@ -2,21 +2,20 @@ import Alert from '../../../components/Alert'
 import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
-import { ActionType } from './context/types'
 import { useLingui } from '@lingui/react'
 import Typography from '../../../components/Typography'
 import ListPanel from '../../../components/ListPanel'
 import AssetInput from '../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import ZapModeTransactionDetails from './ZapModeTransactionDetails'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { tryParseAmount } from '../../../functions'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 
 const ClassicZapMode = () => {
   const { i18n } = useLingui()
   const { inputAmounts } = useTridentAddLiquidityPageState()
-  const { pool, dispatch, handleInput } = useTridentAddLiquidityPageContext()
+  const { pool, handleInput, showReview } = useTridentAddLiquidityPageContext()
 
   // We can use a local select state here as zap mode is only one input,
   // the modals check for each inputAmount if there's input entered
@@ -25,13 +24,6 @@ const ClassicZapMode = () => {
 
   const parsedAmount = tryParseAmount(inputAmounts[0], selected)
   const usdcValue = useUSDCValue(parsedAmount)
-
-  const handleClick = useCallback(() => {
-    dispatch({
-      type: ActionType.SHOW_ZAP_REVIEW,
-      payload: true,
-    })
-  }, [dispatch])
 
   return (
     <>
@@ -55,7 +47,7 @@ const ClassicZapMode = () => {
           color={inputAmounts[selected?.address] ? 'gradient' : 'gray'}
           disabled={!inputAmounts[selected?.address]}
           className="font-bold text-sm"
-          onClick={handleClick}
+          onClick={() => showReview(true)}
         >
           {inputAmounts[selected?.address] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
         </Button>

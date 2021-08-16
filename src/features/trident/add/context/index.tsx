@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useTridentPool } from '../../../../hooks/useTridentPools'
 import { Pool } from '../../types'
 import { HandleInputOptions } from '../../remove/context/types'
+import { Token } from '@sushiswap/sdk'
 
 const initialState: State = {
   liquidityMode: LiquidityMode.ZAP,
@@ -16,16 +17,18 @@ const initialState: State = {
 export const TridentAddLiquidityPageContext = createContext<{
   state: State
   pool: Pool
+  tokens: { [x: string]: Token }
   execute: () => void
   handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
-  showReview: () => void
+  showReview: (x: boolean) => void
   dispatch: Dispatch<any>
 }>({
   state: initialState,
   pool: null,
+  tokens: {},
   execute: () => null,
   handleInput: () => null,
-  showReview: () => null,
+  showReview: (x: boolean) => null,
   dispatch: () => null,
 })
 
@@ -36,6 +39,9 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
     ...initialState,
     inputAmounts: pool.tokens.reduce((acc, cur) => ((acc[cur.address] = ''), acc), {}),
   })
+
+  // Convenience variable to allow for indexing by address
+  const tokens = useMemo(() => pool.tokens.reduce((acc, cur) => ((acc[cur.address] = cur), acc), {}), [pool.tokens])
 
   const handleInput = useCallback(
     (amount: string, address: string, options: HandleInputOptions = {}) => {
@@ -70,8 +76,8 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
   return (
     <TridentAddLiquidityPageContext.Provider
       value={useMemo(
-        () => ({ state, pool, handleInput, showReview, execute, dispatch }),
-        [execute, handleInput, showReview, pool, state]
+        () => ({ state, pool, tokens, handleInput, showReview, execute, dispatch }),
+        [execute, handleInput, showReview, pool, tokens, state]
       )}
     >
       {children}

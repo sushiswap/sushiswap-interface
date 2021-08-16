@@ -27,7 +27,7 @@ const DepositButtons: FC<DepositButtonsProps> = ({ inputValid, isMaxInput, onMax
   return (
     <div className={classNames(onMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
       {onMax && onMaxButton}
-      <Button color="gradient" disabled={!inputValid} onClick={showReview}>
+      <Button color="gradient" disabled={!inputValid} onClick={() => showReview(true)}>
         <Typography variant="sm" weight={700} className={inputValid ? 'text-high-emphesis' : 'text-low-emphasis'}>
           {inputValid ? i18n._(t`Confirm Deposit`) : i18n._(t`Enter Amounts`)}
         </Typography>

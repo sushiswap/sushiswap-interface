@@ -13,6 +13,7 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
       return {
         ...state,
         liquidityMode: action.payload,
+        inputAmounts: {},
       }
     }
     case ActionType.SET_INPUT_AMOUNT: {
