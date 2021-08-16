@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
-import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../connectors'
+import { injected } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
@@ -112,7 +112,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#E8831D',
   },
   WALLET_CONNECT: {
-    connector: walletconnect,
+    connector: async () => {
+      const WalletConnectConnector = (await import('@web3-react/walletconnect-connector')).WalletConnectConnector
+      return new WalletConnectConnector({
+        rpc: RPC,
+        bridge: 'https://bridge.walletconnect.org',
+        qrcode: true,
+        pollingInterval: 15000,
+      })
+    },
     name: 'WalletConnect',
     iconName: 'wallet-connect.svg',
     description: 'Connect to Trust Wallet, Rainbow Wallet and more...',
@@ -152,7 +160,14 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
   },
   WALLET_LINK: {
-    connector: walletlink,
+    connector: async () => {
+      const WalletLinkConnector = (await import('@web3-react/walletlink-connector')).WalletLinkConnector
+      return new WalletLinkConnector({
+        url: RPC[ChainId.MAINNET],
+        appName: 'SushiSwap',
+        appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
+      })
+    },
     name: 'Coinbase Wallet',
     iconName: 'coinbase.svg',
     description: 'Use Coinbase Wallet app on mobile device',
@@ -169,7 +184,13 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobileOnly: true,
   },
   FORTMATIC: {
-    connector: fortmatic,
+    connector: async () => {
+      const FortmaticConnector = (await import('@web3-react/fortmatic-connector')).FortmaticConnector
+      return new FortmaticConnector({
+        apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
+        chainId: 1,
+      })
+    },
     name: 'Fortmatic',
     iconName: 'fortmatic.png',
     description: 'Login using Fortmatic hosted wallet',
@@ -178,7 +199,13 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
   },
   Portis: {
-    connector: portis,
+    connector: async () => {
+      const PortisConnector = (await import('@web3-react/portis-connector')).PortisConnector
+      return new PortisConnector({
+        dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
+        networks: [1],
+      })
+    },
     name: 'Portis',
     iconName: 'portis.png',
     description: 'Login using Portis hosted wallet',
@@ -187,7 +214,12 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
   },
   Torus: {
-    connector: torus,
+    connector: async () => {
+      const TorusConnector = (await import('@web3-react/torus-connector')).TorusConnector
+      return new TorusConnector({
+        chainId: 1,
+      })
+    },
     name: 'Torus',
     iconName: 'torus.png',
     description: 'Login using Torus hosted wallet',
@@ -196,7 +228,12 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
   },
   Binance: {
-    connector: binance,
+    connector: async () => {
+      const BscConnector = (await import('@binance-chain/bsc-connector')).BscConnector
+      return new BscConnector({
+        supportedChainIds: [56],
+      })
+    },
     name: 'Binance',
     iconName: 'bsc.jpg',
     description: 'Login using Binance hosted wallet',

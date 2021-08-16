@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { fortmatic, injected, portis, walletconnect, walletlink } from '../../connectors'
+import { injected } from '../../connectors'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -44,7 +44,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
   if (connector === injected) {
     return <Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />
     // return <Identicon />
-  } else if (connector === walletconnect) {
+  } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
       <IconWrapper size={16}>
         <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
@@ -56,19 +56,19 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
         <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
       </IconWrapper>
     )
-  } else if (connector === walletlink) {
+  } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
       <IconWrapper size={16}>
         <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
       </IconWrapper>
     )
-  } else if (connector === fortmatic) {
+  } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
       <IconWrapper size={16}>
         <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
       </IconWrapper>
     )
-  } else if (connector === portis) {
+  } else if (connector.constructor.name === 'PortisConnector') {
     return (
       <IconWrapper size={16}>
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />

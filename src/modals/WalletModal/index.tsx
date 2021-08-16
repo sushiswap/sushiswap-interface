@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { fortmatic, injected, portis } from '../../connectors'
+import { injected } from '../../connectors'
 import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -168,10 +168,12 @@ export default function WalletModal({
 
   // close wallet modal if fortmatic modal is active
   useEffect(() => {
-    fortmatic.on(OVERLAY_READY, () => {
-      toggleWalletModal()
-    })
-  }, [toggleWalletModal])
+    if (connector?.constructor?.name === 'FormaticConnector') {
+      connector.on(OVERLAY_READY, () => {
+        toggleWalletModal()
+      })
+    }
+  }, [toggleWalletModal, connector])
 
   // get wallets user can switch too, depending on device/browser
   function getOptions() {
@@ -182,7 +184,7 @@ export default function WalletModal({
       // check for mobile options
       if (isMobile) {
         // disable portis on mobile for now
-        if (option.connector === portis) {
+        if (option.name === 'Portis') {
           return null
         }
 
@@ -190,7 +192,7 @@ export default function WalletModal({
           return (
             <Option
               onClick={() => {
-                option.connector !== connector && !option.href && tryActivation(option.connector)
+                tryActivation(option.connector)
               }}
               id={`connect-${key}`}
               key={key}
