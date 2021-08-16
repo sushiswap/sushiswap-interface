@@ -117,7 +117,10 @@ function involvesAddress(trade: V2Trade<Currency, Currency, TradeType>, checksum
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedSwapInfo(doArcher = false): {
+export function useDerivedSwapInfo(
+  doArcher = false,
+  doManifold = false
+): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount<Currency> }
   parsedAmount: CurrencyAmount<Currency> | undefined
@@ -288,7 +291,7 @@ export function useDerivedSwapInfo(doArcher = false): {
         setUserGasEstimate(successfulEstimation.gasEstimate.toString())
       }
     }
-    if (doArcher && v2Trade && swapCalls && !userTipManualOverride) {
+    if ((doArcher || doManifold) && v2Trade && swapCalls && !userTipManualOverride) {
       estimateGas()
     }
   }, [doArcher, v2Trade, swapCalls, userTipManualOverride, library, setUserGasEstimate])

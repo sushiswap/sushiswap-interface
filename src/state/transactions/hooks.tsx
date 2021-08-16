@@ -25,6 +25,10 @@ export function useTransactionAdder(): (
       nonce: number
       ethTip: string
     }
+    manifold?: {
+      signedTx: string
+      deadline: number
+    }
   }
 ) => void {
   const { chainId, account } = useActiveWeb3React()

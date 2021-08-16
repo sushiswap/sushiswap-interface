@@ -45,6 +45,12 @@ export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
 }
 
+export const MANIFOLD_FINANCE_SUPPORTED_NETWORKS = [ChainId.MAINNET]
+
+export const MANIFOLD_FINANCE_URI: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]: 'https://api.sushirelay.com/v1',
+}
+
 // export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
 //     // [UNI_ADDRESS]: 'UNI',
 //     [TIMELOCK_ADDRESS]: 'Timelock',
@@ -320,6 +326,7 @@ export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
 }
 
 export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
+  [ChainId.MAINNET]: 12965000,
   [ChainId.ROPSTEN]: 10499401,
   [ChainId.GÖRLI]: 5062605,
   [ChainId.RINKEBY]: 8897988,

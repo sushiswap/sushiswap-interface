@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react'
 import {
   useExpertModeManager,
   useUserArcherUseRelay,
+  useUserManifoldFinanceRelay,
   useUserSingleHopOnly,
   useUserTransactionTTL,
 } from '../../state/user/hooks'
@@ -21,6 +22,7 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { MANIFOLD_FINANCE_SUPPORTED_NETWORKS } from '../../constants'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
@@ -42,6 +44,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
   const [ttl, setTtl] = useUserTransactionTTL()
 
   const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
+  const [userUseManifoldFinance, setUserUseManifoldFinance] = useUserManifoldFinanceRelay()
 
   return (
     <div className="relative flex" ref={node}>
@@ -118,10 +121,31 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 <Toggle
                   id="toggle-use-archer"
                   isActive={userUseArcher}
-                  toggle={() => setUserUseArcher(!userUseArcher)}
+                  toggle={() => {
+                    if (userUseManifoldFinance) setUserUseManifoldFinance(false)
+                    setUserUseArcher(!userUseArcher)
+                  }}
                 />
               </div>
             )} */}
+            {MANIFOLD_FINANCE_SUPPORTED_NETWORKS.includes(chainId) && (
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`MEV Gas Refunder`)}
+                  </Typography>
+                  <QuestionHelper text={i18n._(t`MEV Service that pays up to 95% of transaction fee for trading`)} />
+                </div>
+                <Toggle
+                  id="toggle-use-manifold"
+                  isActive={userUseManifoldFinance}
+                  toggle={() => {
+                    if (userUseArcher) setUserUseArcher(false)
+                    setUserUseManifoldFinance(!userUseManifoldFinance)
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
