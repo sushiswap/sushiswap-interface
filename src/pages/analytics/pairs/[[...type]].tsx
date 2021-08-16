@@ -1,14 +1,13 @@
 import { useCustomDayBlock, useOneDayBlock, useOneWeekBlock, useSushiPairs } from '../../../services/graph'
 
-import Container from '../../../components/Container'
-import Head from 'next/head'
-import Menu from '../../../features/analytics/AnalyticsMenu'
+import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import PairList from '../../../features/analytics/Pairs/PairList'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
 import Search from '../../../components/Search'
 import { useEffect } from 'react'
 import { useFuse } from '../../../hooks'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 
 export default function Pairs() {
   const router = useRouter()
@@ -29,8 +28,8 @@ export default function Pairs() {
   const pairs1w = useSushiPairs({ block: { number: Number(block1w) } })
   const pairs2w = useSushiPairs(type !== 'all' ? { block: { number: Number(block2w) } } : undefined)
 
-  const pairsFormatted =
-    type === 'all'
+  const pairsFormatted = useMemo(() => {
+    return type === 'all'
       ? pairs && pairs1d && pairs1w
         ? pairs.map((pair) => {
             const pair1d = pairs1d.find((p) => pair.id === p.id) ?? pair
@@ -83,11 +82,15 @@ export default function Pairs() {
           })
           .sort((a, b) => b.liquidityChangeNumber1d - a.liquidityChangeNumber1d)
       : []
+  }, [type, pairs, pairs1d, pairs2d, pairs1w, pairs2w])
 
-  const options = {
-    keys: ['pair.currency0', 'pair.currency1', 'pair.symbol0', 'pair.symbol1', 'pair.name0', 'pair.name1'],
-    threshold: 0.4,
-  }
+  const options = useMemo(
+    () => ({
+      keys: ['pair.currency0', 'pair.currency1', 'pair.symbol0', 'pair.symbol1', 'pair.name0', 'pair.name1'],
+      threshold: 0.4,
+    }),
+    []
+  )
 
   const {
     result: pairsSearched,
@@ -99,25 +102,13 @@ export default function Pairs() {
   })
 
   return (
-    <>
-      <Head>
-        <title>SushiSwap Liquidity Pair (SLP) Analytics | Sushi</title>
-        <meta name="description" content="SushiSwap Liquidity Pair (SLP) Analytics by Sushi" />
-      </Head>
-
-      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-5 mx-auto gap-9">
-        <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
-          <Menu />
-        </div>
-        <div className="col-span-5 space-y-6 lg:col-span-4">
-          <div className="flex flex-row items-center">
-            <div className="ml-3 text-2xl font-bold text-high-emphesis">Pairs</div>
-          </div>
-          <Search term={term} search={search} />
-          <PairTabs />
-          <PairList pairs={pairsSearched} type={type} />
-        </div>
-      </Container>
-    </>
+    <AnalyticsContainer>
+      <div className="flex flex-row items-center">
+        <div className="ml-3 text-2xl font-bold text-high-emphesis">Pairs</div>
+      </div>
+      <Search term={term} search={search} />
+      <PairTabs />
+      <PairList pairs={pairsSearched} type={type} />
+    </AnalyticsContainer>
   )
 }

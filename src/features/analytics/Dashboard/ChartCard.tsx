@@ -32,7 +32,7 @@ const types = {
     getData: (exchange, exchange1d, exchange2d, dayData) => ({
       figure: exchange && exchange1d ? exchange.volumeUSD - exchange1d.volumeUSD : 0,
       change:
-        exchange1d && exchange2d
+        exchange && exchange1d && exchange2d
           ? ((exchange.volumeUSD - exchange1d.volumeUSD) / (exchange1d.volumeUSD - exchange2d.volumeUSD)) * 100 - 100
           : 0,
       chart: dayData

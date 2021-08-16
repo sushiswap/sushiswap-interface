@@ -1,13 +1,14 @@
 import React, { FC } from 'react'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import useLimitOrders from '../../hooks/useLimitOrders'
+
 import Badge from '../../components/Badge'
+import CurrencyLogo from '../../components/CurrencyLogo'
 import Lottie from 'lottie-react'
-import loadingCircle from '../../animation/loading-circle.json'
-import Pagination from './Pagination'
 import { OrderStatus } from 'limitorderv2-sdk'
+import Pagination from './Pagination'
+import loadingCircle from '../../animation/loading-circle.json'
+import { t } from '@lingui/macro'
+import useLimitOrders from '../../hooks/useLimitOrders'
+import { useLingui } from '@lingui/react'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
@@ -15,7 +16,7 @@ const CompletedOrders: FC = () => {
 
   return (
     <>
-      <div className="text-xl text-high-emphesis flex items-center gap-2 border-b border-dark-800 pb-4">
+      <div className="flex items-center gap-2 pb-4 text-xl border-b text-high-emphesis border-dark-800">
         {i18n._(t`Order History`)}{' '}
         <span className="inline-flex">
           <Badge color="pink" size="medium">
@@ -23,26 +24,26 @@ const CompletedOrders: FC = () => {
           </Badge>
         </span>
       </div>
-      <div className="text-secondary text-center">
+      <div className="text-center text-secondary">
         {completed.loading ? (
           <div className="w-8 m-auto">
             <Lottie animationData={loadingCircle} autoplay loop />
           </div>
         ) : completed.data.length > 0 ? (
           <>
-            <div className="grid grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 pb-4 text-sm text-secondary font-bold">
+            <div className="grid grid-flow-col grid-cols-3 gap-4 px-4 pb-4 text-sm font-bold md:grid-cols-4 text-secondary">
               <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Receive`)}</div>
               <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Pay`)}</div>
-              <div className="flex items-center cursor-pointer hover:text-primary text-left hidden md:block">
+              <div className="flex items-center hidden text-left cursor-pointer hover:text-primary md:block">
                 {i18n._(t`Rate`)}
               </div>
-              <div className="flex items-center cursor-pointer hover:text-primary justify-end">{i18n._(t`Filled`)}</div>
+              <div className="flex items-center justify-end cursor-pointer hover:text-primary">{i18n._(t`Filled`)}</div>
             </div>
             <div className="flex flex-col gap-2 md:gap-5">
               {completed.data.map((order, index) => (
                 <div
                   key={index}
-                  className="block text-high-emphesis bg-dark-800 overflow-hidden rounded"
+                  className="block overflow-hidden rounded text-high-emphesis bg-dark-800"
                   style={{
                     background:
                       order.status === OrderStatus.FILLED
@@ -52,25 +53,25 @@ const CompletedOrders: FC = () => {
                         : 'linear-gradient(90deg, rgba(255, 56, 56, 0.15) 0%, rgba(255, 56, 56, 0) 50%), #202231',
                   }}
                 >
-                  <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
+                  <div className="grid items-center grid-flow-col grid-cols-3 gap-4 px-4 py-3 text-sm md:grid-cols-4 align-center text-primary">
                     <div className="flex flex-col">
-                      <div className="flex gap-4 font-bold items-center">
+                      <div className="flex items-center gap-4 font-bold">
                         <div className="min-w-[32px] flex items-center">
                           <CurrencyLogo size={32} currency={order.tokenOut} />
                         </div>
                         <div className="flex flex-col">
                           <div>{order.limitOrder.amountOut.toSignificant(6)} </div>
-                          <div className="text-left text-secondary text-xs">{order.tokenOut.symbol}</div>
+                          <div className="text-xs text-left text-secondary">{order.tokenOut.symbol}</div>
                         </div>
                       </div>
                     </div>
-                    <div className="text-left font-bold">
+                    <div className="font-bold text-left">
                       <div className="flex flex-col">
                         <div>{order.limitOrder.amountIn.toSignificant(6)} </div>
-                        <div className="text-left text-secondary text-xs">{order.tokenIn.symbol}</div>
+                        <div className="text-xs text-left text-secondary">{order.tokenIn.symbol}</div>
                       </div>
                     </div>
-                    <div className="hidden md:block text-left font-bold">
+                    <div className="hidden font-bold text-left md:block">
                       <div>{order.rate}</div>
                       <div className="text-xs text-secondary">
                         {order.tokenOut.symbol} per {order.tokenIn.symbol}

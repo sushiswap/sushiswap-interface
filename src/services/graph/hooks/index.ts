@@ -42,18 +42,26 @@ export function useMasterChefV1SushiPerBlock(swrConfig = undefined) {
   return data
 }
 
-export function useMasterChefV1Farms(swrConfig = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useMasterChefV1Farms(variables = undefined, chainId = undefined, swrConfig = undefined) {
+  chainId = chainId ?? useActiveWeb3React().chainId
   const shouldFetch = chainId && chainId === ChainId.MAINNET
-  const { data } = useSWR(shouldFetch ? 'masterChefV1Farms' : null, () => getMasterChefV1Farms(), swrConfig)
+  const { data } = useSWR(
+    shouldFetch ? ['masterChefV1Farms', JSON.stringify(variables)] : null,
+    () => getMasterChefV1Farms(variables),
+    swrConfig
+  )
   return useMemo(() => {
     if (!data) return []
     return data.map((data) => ({ ...data, chef: Chef.MASTERCHEF }))
   }, [data])
 }
 
-export function useMasterChefV2Farms(swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useMasterChefV2Farms(
+  variables = undefined,
+  chainId = undefined,
+  swrConfig: SWRConfiguration = undefined
+) {
+  chainId = chainId ?? useActiveWeb3React().chainId
   const shouldFetch = chainId && chainId === ChainId.MAINNET
   const { data } = useSWR(shouldFetch ? 'masterChefV2Farms' : null, () => getMasterChefV2Farms(), swrConfig)
   return useMemo(() => {
@@ -62,8 +70,8 @@ export function useMasterChefV2Farms(swrConfig: SWRConfiguration = undefined) {
   }, [data])
 }
 
-export function useMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useMiniChefFarms(variables = undefined, chainId = undefined, swrConfig: SWRConfiguration = undefined) {
+  chainId = chainId ?? useActiveWeb3React().chainId
   const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY].includes(chainId)
   const { data } = useSWR(
     shouldFetch ? ['miniChefFarms', chainId] : null,
@@ -76,10 +84,10 @@ export function useMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
   }, [data])
 }
 
-export function useFarms(swrConfig: SWRConfiguration = undefined) {
-  const masterChefV1Farms = useMasterChefV1Farms()
-  const masterChefV2Farms = useMasterChefV2Farms()
-  const miniChefFarms = useMiniChefFarms()
+export function useFarms(variables = undefined, chainId = undefined, swrConfig: SWRConfiguration = undefined) {
+  const masterChefV1Farms = useMasterChefV1Farms(variables, chainId)
+  const masterChefV2Farms = useMasterChefV2Farms(variables, chainId)
+  const miniChefFarms = useMiniChefFarms(variables, chainId)
   // useEffect(() => {
   //   console.log('debug', { masterChefV1Farms, masterChefV2Farms, miniChefFarms })
   // }, [masterChefV1Farms, masterChefV2Farms, miniChefFarms])

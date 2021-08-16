@@ -2,18 +2,17 @@ import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react'
 import { RowBetween, RowFixed } from '../../components/Row'
 import { useRemoveUserAddedToken, useUserAddedTokens } from '../../state/user/hooks'
 
-import ButtonText from '../../components/ButtonText'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import CurrencyModalView from './CurrencyModalView'
 import ExternalLink from '../../components/ExternalLink'
 import { ExternalLinkIcon } from '../../components/ExternalLinkIcon'
 import ImportRow from './ImportRow'
 import { Token } from '@sushiswap/sdk'
-import TrashIcon from '../../components/TrashIcon'
 import { getExplorerLink } from '../../functions/explorer'
 import { isAddress } from '../../functions/validate'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useToken } from '../../hooks/Tokens'
+import { Trash } from 'react-feather'
 
 function ManageTokens({
   setModalView,
@@ -62,7 +61,12 @@ function ManageTokens({
             </ExternalLink>
           </RowFixed>
           <RowFixed align="center">
-            <TrashIcon onClick={() => removeToken(chainId, token.address)} />
+            <div
+              className="flex items-center justify-center w-4 h-4 cursor-pointer hover:opacity-70"
+              onClick={() => removeToken(chainId, token.address)}
+            >
+              <Trash />
+            </div>
             <ExternalLinkIcon href={getExplorerLink(chainId, token.address, 'address')} />
           </RowFixed>
         </RowBetween>
@@ -98,9 +102,9 @@ function ManageTokens({
             {userAddedTokens?.length} Custom {userAddedTokens.length === 1 ? 'Token' : 'Tokens'}
           </div>
           {userAddedTokens.length > 0 && (
-            <ButtonText onClick={handleRemoveAll}>
-              <div>Clear all</div>
-            </ButtonText>
+            <button onClick={handleRemoveAll}>
+              <div className="hover:opacity-70">Clear all</div>
+            </button>
           )}
         </div>
         {tokenList}

@@ -1,11 +1,12 @@
 import { classNames, formatNumber } from '../../../functions'
 import {
   useCustomDayBlock,
-  useEthPrice,
   useFarms,
+  useNativePrice,
   useOneDayBlock,
   useSushiPairs,
   useToken,
+  useTokenDayData,
   useTokenPairs,
   useTransactions,
 } from '../../../services/graph'
@@ -13,14 +14,13 @@ import { useMemo, useState } from 'react'
 
 import ColoredNumber from '../../../features/analytics/ColoredNumber'
 import Container from '../../../components/Container'
-import CurrencyCard from '../../../features/analytics/Tokens/CurrencyCard'
+import CurrencyCard from '../../../features/analytics/Tokens/Token/CurrencyCard'
 import CurrencyLogo from '../../../components/CurrencyLogo'
-import InfoCard from '../../../features/analytics/Tokens/InfoCard'
+import InfoCard from '../../../features/analytics/Tokens/Token/InfoCard'
 import LineGraph from '../../../components/LineGraph'
-import TopFarmsList from '../../../features/analytics/Tokens/TopFarmsList'
-import TransactionList from '../../../features/analytics/Tokens/TransactionList'
-import { times } from 'lodash'
-import { tokenDayDatasQuery } from '../../../services/graph/queries'
+import Link from 'next/link'
+import TopFarmsList from '../../../features/analytics/Tokens/Token/TopFarmsList'
+import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
 
@@ -68,7 +68,6 @@ const socialsPlaceholder = [
 
 // TODO: Description, socials
 // TODO: Farms: Rewards, ROI
-// TODO: Top Moving: Fetch by?
 
 export default function Token(): JSX.Element {
   const [chartTimespan, setChartTimespan] = useState('1W')
@@ -81,79 +80,99 @@ export default function Token(): JSX.Element {
   const block2d = useCustomDayBlock(2)
 
   // General data (volume, liquidity)
-  const ethPrice = useEthPrice()
-  const ethPrice1d = useEthPrice({ block: { number: Number(block1d) } })
+  const nativePrice = useNativePrice()
+  const nativePrice1d = useNativePrice({ block: { number: Number(block1d) } })
 
   const token = useToken({ id: id })
   const token1d = useToken({ id: id, block: { number: Number(block1d) } })
   const token2d = useToken({ id: id, block: { number: Number(block2d) } })
 
   // For the graph
-  const tokenDayData = useToken(
-    {
-      first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
-      tokens: [id],
-    },
-    tokenDayDatasQuery
-  )
+  const tokenDayData = useTokenDayData({
+    first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
+    tokens: [id],
+  })
 
   // For Top Farms
   const farms = useFarms()
   const farmPairs = useSushiPairs({ where: { id_in: farms.map((farm) => farm.pair) } })
-  const farmsFormatted = farmPairs
-    ? farmPairs
-        .filter((farm) => farm.token0.id === id || farm.token1.id === id)
-        .map((farm, i) => ({
-          pair: {
-            token0: {
-              id: farm.token0.id,
-              symbol: farm.token0.symbol,
+  const farmsFormatted = useMemo(() => {
+    return farmPairs
+      ? farmPairs
+          .filter((farm) => farm.token0.id === id || farm.token1.id === id)
+          .map((farm, i) => ({
+            pair: {
+              token0: {
+                id: farm.token0.id,
+                symbol: farm.token0.symbol,
+              },
+              token1: {
+                id: farm.token1.id,
+                symbol: farm.token1.symbol,
+              },
             },
-            token1: {
-              id: farm.token1.id,
-              symbol: farm.token1.symbol,
-            },
-          },
-          roi: 10,
-          rewards: [<div key={i}></div>],
-        }))
-        .slice(0, 5)
-    : []
+            roi: 10,
+            rewards: [<div key={i}></div>],
+          }))
+          .slice(0, 5)
+      : []
+  }, [farmPairs])
 
   // For Transactions
   const tokenPairs = useTokenPairs({ id: id })
   const transactions = useTransactions({ pairAddresses: tokenPairs?.map((pair) => pair.id) })
-  const transactionsFormatted = transactions
-    ? transactions.map((tx) => {
-        const base = {
-          value: tx.amountUSD,
-          address: tx.to,
-          time: new Date(Number(tx.timestamp) * 1000),
-        }
+  const transactionsFormatted = useMemo(() => {
+    return transactions
+      ? transactions.map((tx) => {
+          const base = {
+            value: tx.amountUSD,
+            address: tx.to,
+            time: new Date(Number(tx.timestamp) * 1000),
+          }
 
-        if (tx.amount0In === '0') {
-          return {
-            symbols: {
-              incoming: tx.pair.token1.symbol,
-              outgoing: tx.pair.token0.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-            ...base,
+          if (tx.amount0In === '0') {
+            return {
+              symbols: {
+                incoming: tx.pair.token1.symbol,
+                outgoing: tx.pair.token0.symbol,
+              },
+              incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
+              outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
+              ...base,
+            }
+          } else {
+            return {
+              symbols: {
+                incoming: tx.pair.token0.symbol,
+                outgoing: tx.pair.token1.symbol,
+              },
+              incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
+              outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
+              ...base,
+            }
           }
-        } else {
-          return {
-            symbols: {
-              incoming: tx.pair.token0.symbol,
-              outgoing: tx.pair.token1.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-            ...base,
-          }
-        }
-      })
-    : undefined
+        })
+      : undefined
+  }, [transactions])
+
+  // For Top Moving
+  const tokenPairs1d = useTokenPairs({ id: id, block: { number: Number(block1d) } })
+  const tokenPairsFormatted = useMemo(() => {
+    return token && tokenPairs && tokenPairs1d
+      ? tokenPairs
+          .map((pair) => {
+            const pair1d = tokenPairs1d.find((p) => pair.id === p.id) ?? pair
+
+            return {
+              id: pair.token0.id === token.id ? pair.token1.id : pair.token0.id,
+              symbol: pair.token0.symbol === token.symbol ? pair.token1.symbol : pair.token0.symbol,
+              volume1d: pair.volumeUSD - pair1d.volumeUSD,
+            }
+          })
+          .sort((a, b) => b.volume1d - a.volume1d)
+          .slice(0, 8)
+      : []
+  }, [token, tokenPairs, tokenPairs1d])
 
   // For the logo
   const currency = useCurrency(token?.id)
@@ -161,18 +180,19 @@ export default function Token(): JSX.Element {
   // A bit messy, but allows for renders as info comes in
   const data = useMemo(() => {
     return {
-      price: token && ethPrice ? token.derivedETH * ethPrice : undefined,
+      price: token && nativePrice ? token.derivedETH * nativePrice : undefined,
       priceChange:
-        token && ethPrice && token1d && ethPrice1d
-          ? ((token.derivedETH * ethPrice) / (token1d.derivedETH * ethPrice1d)) * 100 - 100
+        token && nativePrice && token1d && nativePrice1d
+          ? ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100
           : undefined,
       chart: tokenDayData
         ? tokenDayData.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.priceUSD) }))
         : undefined,
-      liquidity: token && ethPrice ? token.liquidity * token.derivedETH * ethPrice : 0,
+      liquidity: token && nativePrice ? token.liquidity * token.derivedETH * nativePrice : 0,
       liquidityChange:
-        token && token1d && ethPrice && ethPrice1d
-          ? ((token.liquidity * token.derivedETH * ethPrice) / (token1d.liquidity * token1d.derivedETH * ethPrice1d)) *
+        token && token1d && nativePrice && nativePrice1d
+          ? ((token.liquidity * token.derivedETH * nativePrice) /
+              (token1d.liquidity * token1d.derivedETH * nativePrice1d)) *
               100 -
             100
           : 0,
@@ -182,29 +202,37 @@ export default function Token(): JSX.Element {
           ? ((token.volumeUSD - token1d.volumeUSD) / (token1d.volumeUSD - token2d.volumeUSD)) * 100 - 100
           : 0,
     }
-  }, [ethPrice, ethPrice1d, token, token1d, token2d, tokenDayData])
+  }, [nativePrice, nativePrice1d, token, token1d, token2d, tokenDayData])
 
   return (
     <>
-      <Container maxWidth="full" className="grid h-full grid-flow-col grid-cols-10 mx-auto">
-        <div className="col-start-2">
+      <Container
+        id="token-page"
+        maxWidth="full"
+        className="h-full grid-flow-col grid-cols-10 px-4 py-4 mx-auto xl:grid md:py-8 lg:py-12"
+      >
+        <div className="col-start-2 2xl:col-start-3">
           <button onClick={() => router.back()} className="font-bold">
             {'<'} Go Back
           </button>
         </div>
-        <div className="col-span-6 space-y-10">
+        <div className="col-span-6 space-y-10 2xl:col-span-4">
           <div className="flex flex-row">
             <div>
-              <button onClick={() => router.back()} className="font-bold text-purple">
-                Tokens
-              </button>
+              <Link href="/analytics/tokens">
+                <button className="font-bold text-purple">Tokens</button>
+              </Link>
             </div>
             <div className="font-bold">&nbsp;{`> ${token?.symbol}`}</div>
           </div>
           <div className="flex flex-row justify-between">
             <div className="flex flex-row items-center space-x-4">
               <CurrencyLogo currency={currency} size={53} />
-              <div className="text-4xl font-bold">{token?.symbol}</div>
+              {token?.symbol.length <= 6 ? (
+                <div className="text-4xl font-bold">{token?.symbol}</div>
+              ) : (
+                <div className="hidden text-4xl font-bold sm:block">{token?.symbol}</div>
+              )}
             </div>
             <div className="flex flex-row items-center space-x-4">
               <div className="text-4xl font-bold">{formatNumber(data.price, true)}</div>
@@ -230,7 +258,7 @@ export default function Token(): JSX.Element {
               </button>
             ))}
           </div>
-          <div className="flex flex-row justify-between space-x-6">
+          <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
             <InfoCard text="Liquidity (24H)" number={data.liquidity} percent={data.liquidityChange} />
             <InfoCard text="Volume (24H)" number={data.volume1d} percent={data.volume1dChange} />
             <InfoCard text="Fees (24H)" number={data.volume1d * 0.003} percent={data.volume1dChange} />
@@ -274,9 +302,9 @@ export default function Token(): JSX.Element {
           <div>
             <div className="mb-5 text-2xl font-bold text-high-emphesis">Top Moving Pairs</div>
             <div className="grid grid-cols-4 grid-rows-2 gap-5">
-              {times(8, (i) => (
+              {tokenPairsFormatted.map((pair, i) => (
                 <div key={i} className="flex items-center justify-center">
-                  <CurrencyCard token="0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2" symbol="ETH" />
+                  <CurrencyCard token={pair.id} symbol={pair.symbol} />
                 </div>
               ))}
             </div>

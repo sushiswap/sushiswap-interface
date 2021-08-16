@@ -11,6 +11,18 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer(
   withPWA({
+    webpack: (config) => {
+      config.module.rules = [
+        ...config.module.rules,
+        {
+          resourceQuery: /raw-lingui/,
+          type: 'javascript/auto',
+        },
+      ]
+
+      return config
+    },
+    experimental: { esmExternals: true },
     pwa: {
       dest: 'public',
       runtimeCaching,
@@ -45,6 +57,17 @@ module.exports = withBundleAnalyzer(
         {
           source: '/bento/kashi',
           destination: '/lend',
+          permanent: true,
+        },
+        // Analytics
+        {
+          source: '/analytics',
+          destination: '/analytics/dashboard',
+          permanent: true,
+        },
+        {
+          source: '/portfolio',
+          destination: '/analytics/portfolio',
           permanent: true,
         },
       ]
@@ -136,6 +159,7 @@ module.exports = withBundleAnalyzer(
       ]
     },
     i18n: {
+      localeDetection: true,
       locales,
       defaultLocale: sourceLocale,
     },

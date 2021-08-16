@@ -2,77 +2,9 @@ import React, { useCallback, useState } from 'react'
 
 import { Placement } from '@popperjs/core'
 import Portal from '@reach/portal'
-import styled from 'styled-components'
 import useInterval from '../../hooks/useInterval'
 import { usePopper } from 'react-popper'
-
-const PopoverContainer = styled.div<{ show: boolean }>`
-  z-index: 9999;
-
-  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.show ? 1 : 0)};
-  transition: visibility 150ms linear, opacity 150ms linear;
-
-  // background: ${({ theme }) => theme.bg2};
-  // border: 1px solid ${({ theme }) => theme.bg3};
-  // color: ${({ theme }) => theme.text2};
-  border-radius: 8px;
-`
-
-const ReferenceElement = styled.div`
-  display: inline-block;
-`
-
-const Arrow = styled.div`
-  width: 8px;
-  height: 8px;
-  z-index: 9998;
-
-  ::before {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    z-index: 9998;
-
-    content: '';
-    // border: 1px solid ${({ theme }) => theme.bg3};
-    transform: rotate(45deg);
-    // background: ${({ theme }) => theme.bg2};
-  }
-
-  &.arrow-top {
-    bottom: -5px;
-    ::before {
-      border-top: none;
-      border-left: none;
-    }
-  }
-
-  &.arrow-bottom {
-    top: -5px;
-    ::before {
-      border-bottom: none;
-      border-right: none;
-    }
-  }
-
-  &.arrow-left {
-    right: -5px;
-
-    ::before {
-      border-bottom: none;
-      border-left: none;
-    }
-  }
-
-  &.arrow-right {
-    left: -5px;
-    ::before {
-      border-right: none;
-      border-top: none;
-    }
-  }
-`
+import { classNames } from '../../functions'
 
 export interface PopoverProps {
   content: React.ReactNode
@@ -100,17 +32,22 @@ export default function Popover({ content, show, children, placement = 'auto' }:
 
   return (
     <>
-      <ReferenceElement ref={setReferenceElement as any}>{children}</ReferenceElement>
+      <div ref={setReferenceElement as any}>{children}</div>
       <Portal>
-        <PopoverContainer show={show} ref={setPopperElement as any} style={styles.popper} {...attributes.popper}>
+        <div
+          className={classNames(!show && 'hidden opacity-0', 'z-50 animate-fade')}
+          ref={setPopperElement as any}
+          style={styles.popper}
+          {...attributes.popper}
+        >
           {content}
-          <Arrow
-            className={`arrow-${attributes.popper?.['data-popper-placement'] ?? ''}`}
+          <div
+            className={classNames('w-2 h-2 z-50')}
             ref={setArrowElement as any}
             style={styles.arrow}
             {...attributes.arrow}
           />
-        </PopoverContainer>
+        </div>
       </Portal>
     </>
   )
