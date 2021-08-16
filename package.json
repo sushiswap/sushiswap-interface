@@ -6,7 +6,7 @@
     "analyze": "ANALYZE=true yarn build && serve .next -n",
     "dev": "next dev",
     "inspect": "NODE_OPTIONS='--inspect' next dev",
-    "build": "yarn lingui && next build",
+    "build": "yarn lingui && next build && next export",
     "start": "next start",
     "lingui": "lingui extract --clean --overwrite && lingui compile",
     "lokalise": "lokalise2 --config lokalise.yaml file download --format po --unzip-to . --original-filenames=false",
@@ -15,7 +15,8 @@
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next build && next export"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
