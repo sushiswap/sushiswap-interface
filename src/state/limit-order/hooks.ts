@@ -126,7 +126,7 @@ export function useDerivedLimitOrderInfo(): {
 
   const bentoBoxBalances = useBentoBalances()
   const balance = useMemo(
-    () => bentoBoxBalances?.find((el) => el.address === inputCurrency?.wrapped.address),
+    () => bentoBoxBalances?.find((el) => el.token.address === inputCurrency?.wrapped.address),
     [bentoBoxBalances, inputCurrency?.wrapped.address]
   )
 
@@ -142,10 +142,10 @@ export function useDerivedLimitOrderInfo(): {
 
   const bentoboxBalances = {
     [Field.INPUT]: inputCurrency
-      ? CurrencyAmount.fromRawAmount(inputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
+      ? CurrencyAmount.fromRawAmount(inputCurrency, balance?.bento ? balance.bento.quotient : 0)
       : undefined,
     [Field.OUTPUT]: outputCurrency
-      ? CurrencyAmount.fromRawAmount(outputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
+      ? CurrencyAmount.fromRawAmount(outputCurrency, balance?.bento ? balance.bento.quotient : 0)
       : undefined,
   }
 
