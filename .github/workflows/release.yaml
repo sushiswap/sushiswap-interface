@@ -51,7 +51,7 @@ jobs:
         uses: anantaramdas/ipfs-pinata-deploy-action@39bbda1ce1fe24c69c6f57861b8038278d53688d
         with:
           pin-name: Uniswap ${{ needs.bump_version.outputs.new_tag }}
-          path: './.next'
+          path: './out'
           pinata-api-key: ${{ secrets.PINATA_API_KEY }}
           pinata-secret-api-key: ${{ secrets.PINATA_API_SECRET_KEY }}
 
