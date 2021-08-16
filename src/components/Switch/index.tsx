@@ -26,11 +26,10 @@ const Switch = ({ checked, onChange, checkedIcon = '', uncheckedIcon = '', color
       )}
     >
       <span
-        aria-hidden="true"
         className={classNames(
           checked ? 'translate-x-[30px]' : 'translate-x-[2px]',
           COLOR[color](checked),
-          'transition-colors transition-transform pointer-events-none inline-block h-[30px] w-[30px] p-1 rounded-full shadow-md ease-in-out duration-200 flex items-center justify-center'
+          'transition-colors transition-transform pointer-events-none h-[30px] w-[30px] p-1 rounded-full shadow-md ease-in-out duration-200'
         )}
       >
         {checked ? checkedIcon : uncheckedIcon}

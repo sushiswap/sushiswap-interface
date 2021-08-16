@@ -10,9 +10,8 @@ import { ActionType, LiquidityMode } from './context/types'
 import Switch from '../../../components/Switch'
 import { PoolType } from '../pool/context/types'
 
-const BalancedModeModal: FC = () => {
+const DepositSettingsModal: FC = () => {
   const { i18n } = useLingui()
-  const [open, setOpen] = useState(false)
   const { balancedMode, liquidityMode } = useTridentAddLiquidityPageState()
   const { pool, dispatch } = useTridentAddLiquidityPageContext()
 
@@ -29,11 +28,14 @@ const BalancedModeModal: FC = () => {
   }
 
   return (
-    <>
-      <div className="flex items-center justify-center w-8 h-8 rounded cursor-pointer" onClick={() => setOpen(true)}>
-        <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90" />
-      </div>
-      <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
+    <HeadlessUIModal
+      trigger={
+        <div className="flex items-center justify-center w-8 h-8 rounded cursor-pointer">
+          <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90" />
+        </div>
+      }
+    >
+      {({ setOpen }) => (
         <div className="flex flex-col gap-8 h-full">
           <div className="relative">
             <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
@@ -80,14 +82,11 @@ const BalancedModeModal: FC = () => {
               {i18n._(t`This was previously required of providing liquidity, but now is optional.`)}
             </Typography>
             <div />
-            <Typography variant="xs" className="text-blue cursor-pointer" weight={400}>
-              {i18n._(t`Learn More`)}
-            </Typography>
           </div>
         </div>
-      </HeadlessUIModal>
-    </>
+      )}
+    </HeadlessUIModal>
   )
 }
 
-export default BalancedModeModal
+export default DepositSettingsModal

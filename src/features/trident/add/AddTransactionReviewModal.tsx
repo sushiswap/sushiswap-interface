@@ -46,8 +46,10 @@ const AddTransactionReviewModal: FC = () => {
     })
   }, [dispatch])
 
+  // Need to use controlled modal here as open variable comes from the liquidityPageState.
+  // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal isOpen={showZapReview} onDismiss={closeModal}>
+    <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={closeModal}>
       <div className="flex flex-col gap-8 h-full">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
@@ -159,7 +161,7 @@ const AddTransactionReviewModal: FC = () => {
           <span />
         </div>
       </div>
-    </HeadlessUIModal>
+    </HeadlessUIModal.Controlled>
   )
 }
 

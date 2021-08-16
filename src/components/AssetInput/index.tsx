@@ -3,7 +3,7 @@ import Lottie from 'lottie-react'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import React, { FC, ReactNode, useState } from 'react'
 import Button from '../../components/Button'
-import { ChevronDownIcon } from '@heroicons/react/solid'
+import { CheckIcon, ChevronDownIcon, XIcon } from '@heroicons/react/solid'
 import { classNames, maxAmountSpend, tryParseAmount } from '../../functions'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
@@ -15,6 +15,8 @@ import HeadlessUIModal from '../Modal/HeadlessUIModal'
 import CurrencySelectDialog from '../CurrencySelectDialog'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
+import Switch from '../Switch'
+import BentoBoxFundingSourceModal from '../../features/trident/add/BentoBoxFundingSourceModal'
 
 interface AssetInputProps {
   title?: string
@@ -22,6 +24,7 @@ interface AssetInputProps {
   currency: Token
   onChange: (x: string) => void
   onSelect?: (x: Token) => void
+  headerRight?: ReactNode
 }
 
 // AssetInput exports its children so if you need a child component of this component,
@@ -48,15 +51,13 @@ const AssetInput = (props: AssetInputProps) => {
         {props.onSelect && (
           <>
             <ChevronDownIcon width={24} height={24} className="text-secondary" />
-            {/*This is a bit nasty, have to define this modal twice as AssetInputPanel uses this as well.
-               I want both components completely decoupled so I feel like there's no other way*/}
-            <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
+            <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
               <CurrencySelectDialog
                 currency={props.currency}
                 onChange={props.onSelect}
                 onDismiss={() => setOpen(false)}
               />
-            </HeadlessUIModal>
+            </HeadlessUIModal.Controlled>
           </>
         )}
       </div>
@@ -65,7 +66,10 @@ const AssetInput = (props: AssetInputProps) => {
 
   return (
     <div className="mt-4 flex flex-col gap-4">
-      {header}
+      <div className="px-2 flex justify-between">
+        {header}
+        {props.headerRight && props.headerRight}
+      </div>
       <AssetInputPanel
         {...props}
         onMax={() => props.onChange(maxSpend)}
@@ -93,7 +97,6 @@ const AssetInputPanel = ({
 }: AssetInputPanelProps) => {
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
-  const [open, setOpen] = useState(false)
 
   let content = (
     <div className="flex flex-row gap-3 py-2.5 px-2">
@@ -102,19 +105,24 @@ const AssetInputPanel = ({
       </div>
       {onSelect && (
         <>
-          <div className="inline-flex items-center">
-            <Button
-              color="blue"
-              variant="filled"
-              className="rounded-full px-3 py-0 h-[32px] shadow-md"
-              endIcon={<ChevronDownIcon width={24} height={24} />}
-              onClick={() => setOpen(true)}
-            >
-              <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
-            </Button>
-          </div>
-          <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
-            <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
+          <HeadlessUIModal
+            trigger={({ setOpen }) => (
+              <div className="inline-flex items-center">
+                <Button
+                  color="blue"
+                  variant="filled"
+                  className="rounded-full px-3 py-0 h-[32px] shadow-md"
+                  endIcon={<ChevronDownIcon width={24} height={24} />}
+                  onClick={() => setOpen(true)}
+                >
+                  <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
+                </Button>
+              </div>
+            )}
+          >
+            {({ setOpen }) => (
+              <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
+            )}
           </HeadlessUIModal>
         </>
       )}
@@ -210,7 +218,40 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
   )
 }
 
+interface AssetInputWalletSwitchProps {
+  checked: boolean
+  onChange: (x: boolean) => void
+}
+
+const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onChange }) => {
+  return (
+    <div className="flex gap-1.5 items-center">
+      <div className="flex gap-3 items-center">
+        <div className="flex flex-col">
+          <Typography variant="xxs" weight={700} className="text-secondary text-right">
+            Funding source:
+          </Typography>
+          <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+            Wallet
+          </Typography>
+        </div>
+        <div>
+          <Switch
+            checked={checked}
+            onChange={onChange}
+            checkedIcon={<CheckIcon className="text-high-emphesis" />}
+            uncheckedIcon={<XIcon className="text-high-emphesis" />}
+          />
+        </div>
+      </div>
+
+      <BentoBoxFundingSourceModal />
+    </div>
+  )
+}
+
 AssetInputPanel.Balance = AssetInputPanelBalance
 AssetInput.Panel = AssetInputPanel
+AssetInput.WalletSwitch = AssetInputWalletSwitch
 
 export default AssetInput

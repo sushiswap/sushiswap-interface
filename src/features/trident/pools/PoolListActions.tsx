@@ -18,7 +18,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
   const { i18n } = useLingui()
   const dispatch = useTridentPoolsPageDispatch()
   const { sortType, filters } = useTridentPoolsPageState()
-  const [hideSortTypes, setHideSortTypes] = useState(false)
+  const [hideSortTypes, setHideSortTypes] = useState(true)
   const [open, setOpen] = useState(false)
 
   const handleSearch = useCallback(
@@ -67,7 +67,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
         <div className="flex gap-2 items-center rounded border border-dark-800 bg-dark-900 bg-opacity-50 py-2 px-3 flex-grow">
           <SearchIcon strokeWidth={5} width={20} height={20} />
           <input
-            className="bg-transparent text-high-emphesis"
+            className="bg-transparent text-high-emphesis w-full"
             placeholder={i18n._(t`Search by token`)}
             onChange={handleSearch}
           />

@@ -20,7 +20,7 @@ import HybridZapMode from '../../../features/trident/add/HybridZapMode'
 import HybridStandardMode from '../../../features/trident/add/HybridStandardMode'
 import AddTransactionReviewModal from '../../../features/trident/add/AddTransactionReviewModal'
 import React from 'react'
-import BalancedModeModal from '../../../features/trident/add/BalancedModeModal'
+import DepositSettingsModal from '../../../features/trident/add/DepositSettingsModal'
 import BalancedModeHeader from '../../../features/trident/add/BalancedModeHeader'
 
 const Add = () => {
@@ -41,7 +41,7 @@ const Add = () => {
           >
             <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
-          <BalancedModeModal />
+          <DepositSettingsModal />
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">

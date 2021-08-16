@@ -16,11 +16,21 @@ const SearchResultPools: FC<SearchResultPoolsProps> = () => {
   return (
     <div className="flex flex-col gap-2 px-5">
       <Typography variant="h3" weight={700}>
-        {searchQuery ? i18n._(t`Results for '${searchQuery}'`) : i18n._(t`Results`)}
+        {searchQuery ? i18n._(t`Results for ${`'${searchQuery}'`}`) : i18n._(t`Results`)}
       </Typography>
-      {pools.map((pool, index) => (
-        <PoolCard pool={pool} link={'/trident/pool/'} key={index} />
-      ))}
+      {pools.reduce((acc, cur, index) => {
+        const name = cur.tokens
+          .map((el) => el.symbol)
+          .join('-')
+          .toLowerCase()
+
+        console.log((searchQuery && name.includes(searchQuery.toLowerCase())) || searchQuery === '')
+        if ((searchQuery && name.includes(searchQuery.toLowerCase())) || searchQuery === '') {
+          acc.push(<PoolCard pool={cur} link={'/trident/pool/'} key={index} />)
+        }
+
+        return acc
+      }, [])}
     </div>
   )
 }
