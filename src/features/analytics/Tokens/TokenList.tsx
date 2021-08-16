@@ -34,7 +34,7 @@ function TokenListName({ token }: TokenListNameProps): JSX.Element {
   return (
     <>
       <div className="flex items-center">
-        <CurrencyLogo currency={currency} size={28} />
+        <CurrencyLogo currency={currency} size={32} />
         <div className="ml-3 font-bold text-high-emphesis">{token.symbol}</div>
       </div>
     </>
@@ -85,5 +85,16 @@ export default function TokenList({ tokens }: TokenListProps): JSX.Element {
     []
   )
 
-  return <>{tokens && <Table columns={columns} data={tokens} defaultSortBy={{ id: 'liquidity', desc: true }} />}</>
+  return (
+    <>
+      {tokens && (
+        <Table
+          columns={columns}
+          data={tokens}
+          defaultSortBy={{ id: 'liquidity', desc: true }}
+          link={{ href: '/analytics/tokens/', id: 'token.address' }}
+        />
+      )}
+    </>
+  )
 }

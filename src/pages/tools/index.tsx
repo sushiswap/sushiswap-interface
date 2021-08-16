@@ -46,7 +46,7 @@ export default function Tools() {
                     <span className="absolute inset-0" aria-hidden="true" />
                     <div className="space-y-1">
                       <p className="text-xl font-bold truncate text-primary">{tool.name}</p>
-                      <p className="text-sm text-secondary">{tool.description}</p>
+                      <p className="text-sm truncate text-secondary">{tool.description}</p>
                     </div>
                     <ArrowRightIcon width={24} height={24} className="text-high-emphesis" />
                   </a>

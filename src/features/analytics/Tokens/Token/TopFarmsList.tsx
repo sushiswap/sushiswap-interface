@@ -1,10 +1,8 @@
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
-import Table from '../../../components/Table'
-import { formatPercent } from '../../../functions'
-import { pairQuery } from '../../../services/graph/queries'
-import { useCurrency } from '../../../hooks/Tokens'
 import { useMemo } from 'react'
-import { useSushiPairs } from '../../../services/graph'
+import DoubleCurrencyLogo from '../../../../components/DoubleLogo'
+import { formatPercent } from '../../../../functions'
+import { useCurrency } from '../../../../hooks/Tokens'
+import Table from '../../../../components/Table'
 
 interface TopFarmsListProps {
   farms: {
@@ -22,7 +20,7 @@ interface TopFarmsListProps {
     rewards: {
       icon: JSX.Element
     }[]
-  }
+  }[]
 }
 
 interface FarmListNameProps {

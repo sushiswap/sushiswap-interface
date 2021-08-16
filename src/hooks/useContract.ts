@@ -161,16 +161,20 @@ export function useSushiContract(withSignerIfPossible = true): Contract | null {
   return useContract(chainId && SUSHI_ADDRESS[chainId], SUSHI_ABI, withSignerIfPossible)
 }
 
-export function useMasterChefContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
+export function useMasterChefContract(withSignerIfPossible?: boolean, chainId = undefined): Contract | null {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
   return useContract(chainId && MASTERCHEF_ADDRESS[chainId], MASTERCHEF_ABI, withSignerIfPossible)
 }
 
-export function useMasterChefV2Contract(withSignerIfPossible?: boolean): Contract | null {
+export function useMasterChefV2Contract(withSignerIfPossible?: boolean, chainId = undefined): Contract | null {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
   return useContract('0xEF0881eC094552b2e128Cf945EF17a6752B4Ec5d', MASTERCHEF_V2_ABI, withSignerIfPossible)
 }
-export function useMiniChefContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
+export function useMiniChefContract(withSignerIfPossible?: boolean, chainId = undefined): Contract | null {
+  const { chainId: chainIdSelected } = useActiveWeb3React()
+  chainId = chainId ?? chainIdSelected
   return useContract(chainId && MINICHEF_ADDRESS[chainId], MINICHEF_ABI, withSignerIfPossible)
 }
 

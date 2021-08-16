@@ -1,4 +1,4 @@
-import { formatDateAgo, formatNumber, shortenAddress } from '../../../functions'
+import { formatDateAgo, formatNumber, shortenAddress } from '../../../../functions'
 
 import Table from './Table'
 import { useMemo } from 'react'

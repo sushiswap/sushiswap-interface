@@ -21,7 +21,7 @@ import { t } from '@lingui/macro'
 
 const WalletIcon: FC<{ size?: number; src: string; alt: string }> = ({ size, src, alt, children }) => {
   return (
-    <div className="flex flex-row flex-nowrap items-end md:items-center justify-center mr-2">
+    <div className="flex flex-row items-end justify-center mr-2 flex-nowrap md:items-center">
       <Image src={src} alt={alt} width={size} height={size} />
       {children}
     </div>
@@ -30,7 +30,7 @@ const WalletIcon: FC<{ size?: number; src: string; alt: string }> = ({ size, src
 
 function renderTransactions(transactions: string[]) {
   return (
-    <div className="flex flex-col flex-nowrap gap-2">
+    <div className="flex flex-col gap-2 flex-nowrap">
       {transactions.map((hash, i) => {
         return <Transaction key={i} hash={hash} />
       })}
@@ -143,12 +143,12 @@ const AccountDetails: FC<AccountDetailsProps> = ({
                 <Typography>{ENSName}</Typography>
               </div>
             ) : (
-              <div className="bg-dark-800 py-2 px-3 rounded">
+              <div className="px-3 py-2 rounded bg-dark-800">
                 {getStatusIcon()}
                 <Typography>{account && shortenAddress(account)}</Typography>
               </div>
             )}
-            <div className="flex items-center space-x-3 gap-2">
+            <div className="flex items-center gap-2 space-x-3">
               {chainId && account && (
                 <ExternalLink
                   color="blue"

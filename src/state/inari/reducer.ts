@@ -1,6 +1,7 @@
-import { createReducer } from '@reduxjs/toolkit'
 import { setStrategy, setValues, setZapIn } from './actions'
+
 import { InariState } from './types'
+import { createReducer } from '@reduxjs/toolkit'
 import { tokenDefinitions } from './strategies/useStakeSushiToBentoStrategy'
 
 const initialState: InariState = {

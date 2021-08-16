@@ -14,6 +14,18 @@ export const bentoTokenFieldsQuery = gql`
   }
 `
 
+export const bentoUserTokensQuery = gql`
+  query bentoUserTokens($user: String!, $skip: Int = 0, $first: Int = 1000, $block: Block_height) {
+    userTokens(skip: $skip, first: $first, block: $block, where: { share_gt: 0, user: $user }) {
+      token {
+        ...bentoTokenFields
+      }
+      share
+    }
+  }
+  ${bentoTokenFieldsQuery}
+`
+
 export const kashiPairFieldsQuery = gql`
   fragment kashiPairFields on KashiPair {
     id
@@ -70,6 +82,20 @@ export const kashiPairsQuery = gql`
       orderDirection: $orderDirection
     ) {
       ...kashiPairFields
+    }
+  }
+  ${kashiPairFieldsQuery}
+`
+
+export const kashiUserPairsQuery = gql`
+  query kashiUserPairs($user: String!, $skip: Int = 0, $first: Int = 1000, $block: Block_height) {
+    userKashiPairs(skip: $skip, first: $first, block: $block, where: { user: $user }) {
+      assetFraction
+      collateralShare
+      borrowPart
+      pair {
+        ...kashiPairFields
+      }
     }
   }
   ${kashiPairFieldsQuery}

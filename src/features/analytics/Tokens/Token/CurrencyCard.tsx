@@ -1,5 +1,5 @@
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { useCurrency } from '../../../hooks/Tokens'
+import CurrencyLogo from '../../../../components/CurrencyLogo'
+import { useCurrency } from '../../../../hooks/Tokens'
 
 interface CurrencyCardProps {
   token: string
@@ -10,10 +10,10 @@ export default function CurrencyCard({ token, symbol }: CurrencyCardProps): JSX.
   const currency = useCurrency(token)
 
   return (
-    <div className="rounded bg-dark-900 w-full p-3">
+    <div className="p-3 rounded w-min sm:w-full bg-dark-900">
       <div className="flex flex-row items-center space-x-4">
         <CurrencyLogo currency={currency} size={40} />
-        <div className="text-high-emphesis text-lg font-bold">{symbol}</div>
+        <div className="hidden text-lg font-bold whitespace-nowrap sm:block text-high-emphesis">{symbol}</div>
       </div>
     </div>
   )

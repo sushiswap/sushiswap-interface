@@ -29,7 +29,6 @@ import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 import AddressInputPanel from '../../../components/AddressInputPanel'
 import { AdvancedSwapDetails } from '../../../features/swap/AdvancedSwapDetails'
 import AdvancedSwapDetailsDropdown from '../../../features/swap/AdvancedSwapDetailsDropdown'
-import Alert from '../../../components/Alert'
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
 import ConfirmSwapModal from '../../../features/swap/ConfirmSwapModal'
@@ -64,6 +63,7 @@ import { useRouter } from 'next/router'
 import { useSwapCallback } from '../../../hooks/useSwapCallback'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { warningSeverity } from '../../../functions/prices'
+import Alert from '../../../components/Alert'
 
 export default function Swap() {
   const { i18n } = useLingui()
