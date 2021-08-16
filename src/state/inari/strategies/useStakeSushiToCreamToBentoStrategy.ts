@@ -1,18 +1,19 @@
-import { t } from '@lingui/macro'
 import { CRXSUSHI, SUSHI } from '../../../constants'
 import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
-import { e10, tryParseAmount } from '../../../functions'
-import { useBentoBalance } from '../../bentobox/hooks'
-import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
-import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import { e10, tryParseAmount } from '../../../functions'
+import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
 import { useCallback, useEffect, useMemo } from 'react'
-import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
-import { BigNumber } from 'ethers'
-import useBaseStrategy from './useBaseStrategy'
-import useBentoBoxTrait from '../traits/useBentoBoxTrait'
+
+import { BigNumber } from '@ethersproject/bignumber'
 import { I18n } from '@lingui/core'
+import { t } from '@lingui/macro'
+import useBaseStrategy from './useBaseStrategy'
+import { useBentoBalance } from '../../bentobox/hooks'
+import useBentoBoxTrait from '../traits/useBentoBoxTrait'
 import { useLingui } from '@lingui/react'
+import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
+import { useTokenBalances } from '../../wallet/hooks'
 
 export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
   name: i18n._(t`Cream → Bento`),

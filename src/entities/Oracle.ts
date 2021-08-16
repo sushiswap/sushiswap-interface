@@ -5,9 +5,10 @@ import {
 } from '../constants/kashi'
 import { ChainId, Token } from '@sushiswap/sdk'
 
+import { AddressZero } from '@ethersproject/constants'
 import { CHAINLINK_MAPPING } from '../constants/chainlink'
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { e10 } from '../functions/math'
-import { ethers } from 'ethers'
 
 export interface Oracle {
   address: string
@@ -65,11 +66,11 @@ export class ChainlinkOracle extends AbstractOracle {
     if (!mapping) {
       return false
     }
-    const params = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'uint256'], this.data)
+    const params = defaultAbiCoder.decode(['address', 'address', 'uint256'], this.data)
     let decimals = 54
     let from = ''
     let to = ''
-    if (params[0] !== ethers.constants.AddressZero) {
+    if (params[0] !== AddressZero) {
       if (!mapping![params[0]]) {
         this.error = 'One of the Chainlink oracles used is not configured in this UI.'
         return false
@@ -79,7 +80,7 @@ export class ChainlinkOracle extends AbstractOracle {
         to = mapping![params[0]].to
       }
     }
-    if (params[1] !== ethers.constants.AddressZero) {
+    if (params[1] !== AddressZero) {
       if (!mapping![params[1]]) {
         this.error = 'One of the Chainlink oracles used is not configured in this UI.'
         return false

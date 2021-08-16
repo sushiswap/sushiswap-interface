@@ -1,4 +1,3 @@
-import { BigNumber, ethers } from 'ethers'
 import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
 import { KashiApproveButton, TokenApproveButton } from './Button'
 import { Percent, WNATIVE } from '@sushiswap/sdk'
@@ -6,8 +5,11 @@ import React, { useMemo, useState } from 'react'
 import { Warning, Warnings } from '../../entities/Warnings'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
 import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
+import { hexConcat, hexlify } from '@ethersproject/bytes'
 import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
 
+import { AddressZero } from '@ethersproject/constants'
+import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../../components/Button'
 import { Field } from '../../state/swap/actions'
 import KashiCooker from '../../entities/KashiCooker'
@@ -266,8 +268,8 @@ export default function Borrow({ pair }: BorrowProps) {
         pair.asset.address,
         pair.collateral.address,
         extraCollateral,
-        path.length > 2 ? path[1] : ethers.constants.AddressZero,
-        path.length > 3 ? path[2] : ethers.constants.AddressZero,
+        path.length > 2 ? path[1] : AddressZero,
+        path.length > 3 ? path[2] : AddressZero,
         account,
         toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.tokenInfo.decimals)),
         borrowValue.toBigNumber(pair.asset.tokenInfo.decimals),
@@ -279,8 +281,8 @@ export default function Borrow({ pair }: BorrowProps) {
           pair.asset.address,
           pair.collateral.address,
           extraCollateral,
-          path.length > 2 ? path[1] : ethers.constants.AddressZero,
-          path.length > 3 ? path[2] : ethers.constants.AddressZero,
+          path.length > 2 ? path[1] : AddressZero,
+          path.length > 3 ? path[2] : AddressZero,
           account,
           toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.tokenInfo.decimals)),
         ]
@@ -289,7 +291,7 @@ export default function Borrow({ pair }: BorrowProps) {
       cooker.action(
         SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1],
         ZERO,
-        ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
+        hexConcat([hexlify('0x3087d742'), data]),
         false,
         true,
         1
