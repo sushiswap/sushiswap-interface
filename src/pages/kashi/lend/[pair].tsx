@@ -203,7 +203,7 @@ const PairLayout = ({ children }) => {
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`${pair?.asset.tokenInfo.symbol} Strategy`)}</div>
-              <div className="text-lg text-high-emphesis">
+              <div className="flex flex-row text-lg text-high-emphesis">
                 {i18n._(t`None`)}
                 <QuestionHelper
                   text={i18n._(

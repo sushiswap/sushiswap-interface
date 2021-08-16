@@ -3,6 +3,7 @@ import '../styles/index.css'
 import '@fontsource/dm-sans/index.css'
 import 'react-virtualized/styles.css'
 import 'react-tabs/style/react-tabs.css'
+import 'rc-slider/assets/index.css'
 
 import * as plurals from 'make-plural/plurals'
 
@@ -29,12 +30,14 @@ import dynamic from 'next/dynamic'
 import getLibrary from '../functions/getLibrary'
 import { i18n } from '@lingui/core'
 import { nanoid } from '@reduxjs/toolkit'
-import { persistStore } from 'redux-persist'
 import { remoteLoader } from '@lingui/remote-loader'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
+
+// const Web3ReactManager = dynamic(() => import('../components/Web3ReactManager'), { ssr: false })
+
 const sessionId = nanoid()
 
 if (typeof window !== 'undefined' && !!window.ethereum) {

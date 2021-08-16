@@ -5,10 +5,10 @@ module.exports = {
   // important: '#__next',
   // darkMode: true,
   mode: 'jit',
-  future: {
-    purgeLayersByDefault: true,
-    applyComplexClasses: true,
-  },
+  // future: {
+  //   purgeLayersByDefault: true,
+  //   applyComplexClasses: true,
+  // },
   purge: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: false,
   theme: {
@@ -104,37 +104,59 @@ module.exports = {
         cardContent: '230px',
         fitContent: 'fit-content',
       },
+      minHeight: {
+        5: '1.25rem',
+      },
+      minWidth: {
+        5: '1.25rem',
+      },
       dropShadow: {
         currencyLogo: '0px 3px 6px rgba(15, 15, 15, 0.25)',
       },
       screens: {
         '3xl': '1600px',
+        animation: {
+          ellipsis: 'ellipsis 1.25s infinite',
+          'spin-slow': 'spin 2s linear infinite',
+          fade: 'opacity 150ms linear',
+        },
+        keyframes: {
+          ellipsis: {
+            '0%': { content: '"."' },
+            '33%': { content: '".."' },
+            '66%': { content: '"..."' },
+          },
+          opacity: {
+            '0%': { opacity: 0 },
+            '100%': { opacity: 100 },
+          },
+        },
       },
     },
-  },
-  variants: {
-    linearBorderGradients: ['responsive', 'hover', 'dark'], // defaults to ['responsive']
-    extend: {
-      backgroundColor: ['checked', 'disabled'],
-      backgroundImage: ['hover', 'focus'],
-      borderColor: ['checked', 'disabled'],
-      cursor: ['disabled'],
-      opacity: ['hover', 'disabled'],
-      placeholderColor: ['hover', 'active'],
-      ringWidth: ['disabled'],
-      ringColor: ['disabled'],
+    variants: {
+      linearBorderGradients: ['responsive', 'hover', 'dark'], // defaults to ['responsive']
+      extend: {
+        backgroundColor: ['checked', 'disabled'],
+        backgroundImage: ['hover', 'focus'],
+        borderColor: ['checked', 'disabled'],
+        cursor: ['disabled'],
+        opacity: ['hover', 'disabled'],
+        placeholderColor: ['hover', 'active'],
+        ringWidth: ['disabled'],
+        ringColor: ['disabled'],
+      },
     },
+    plugins: [
+      require('tailwindcss-border-gradient-radius'),
+      plugin(function ({ addUtilities }) {
+        addUtilities({
+          '.header-border-b': {
+            background:
+              'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left bottom no-repeat',
+            backgroundSize: '100% 1px',
+          },
+        })
+      }),
+    ],
   },
-  plugins: [
-    require('tailwindcss-border-gradient-radius'),
-    plugin(function ({ addUtilities }) {
-      addUtilities({
-        '.header-border-b': {
-          background:
-            'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left bottom no-repeat',
-          backgroundSize: '100% 1px',
-        },
-      })
-    }),
-  ],
 }

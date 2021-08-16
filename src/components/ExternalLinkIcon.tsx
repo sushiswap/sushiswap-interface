@@ -2,36 +2,6 @@ import React, { HTMLProps, useCallback } from 'react'
 
 import { ExternalLink } from 'react-feather'
 import ReactGA from 'react-ga'
-import styled from 'styled-components'
-
-export const LinkIcon = styled(ExternalLink)`
-  height: 16px;
-  width: 18px;
-  margin-left: 10px;
-  // stroke: ${({ theme }) => theme.blue1};
-`
-
-const LinkIconWrapper = styled.a`
-  text-decoration: none;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-
-  :hover {
-    text-decoration: none;
-    opacity: 0.7;
-  }
-
-  :focus {
-    outline: none;
-    text-decoration: none;
-  }
-
-  :active {
-    text-decoration: none;
-  }
-`
 
 export function ExternalLinkIcon({
   target = '_blank',
@@ -59,8 +29,15 @@ export function ExternalLinkIcon({
     [href, target]
   )
   return (
-    <LinkIconWrapper target={target} rel={rel} href={href} onClick={handleClick} {...rest}>
-      <LinkIcon />
-    </LinkIconWrapper>
+    <a
+      className="flex items-center justify-center hover:opacity-70"
+      target={target}
+      rel={rel}
+      href={href}
+      onClick={handleClick}
+      {...rest}
+    >
+      <ExternalLink className="h-4 w-[18px] ml-2.5" />
+    </a>
   )
 }

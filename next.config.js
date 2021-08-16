@@ -22,6 +22,7 @@ module.exports = withBundleAnalyzer(
 
       return config
     },
+    experimental: { esmExternals: true },
     pwa: {
       dest: 'public',
       runtimeCaching,
