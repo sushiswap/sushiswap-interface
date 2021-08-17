@@ -11,6 +11,7 @@ import ListPanel from '../../../components/ListPanel'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import Divider from '../../../components/Divider'
 import { CurrencyAmount, Token, ZERO } from '@sushiswap/sdk'
+import TransactionDetails from './TransactionDetails'
 
 interface DepositFieldProps {
   amount: CurrencyAmount<Token>
@@ -150,10 +151,8 @@ const AddTransactionReviewModal: FC = () => {
               Confirm Deposit
             </Typography>
           </Button>
-
-          {/*spacer*/}
-          <span />
         </div>
+        <TransactionDetails />
       </div>
     </HeadlessUIModal.Controlled>
   )

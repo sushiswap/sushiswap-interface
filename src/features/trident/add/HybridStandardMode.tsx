@@ -6,13 +6,14 @@ import { useTokenBalances } from '../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../hooks'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
-import { Currency, Token } from '@sushiswap/sdk'
+import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { classNames } from '../../../functions'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { Disclosure } from '@headlessui/react'
 import AssetInput from '../../../components/AssetInput'
 import DepositButtons from './DepositButtons'
 import { ActionType } from './context/types'
+import Checkbox from '../../../components/Checkbox'
 
 function toggleArrayItem(arr, item) {
   return arr.includes(item)
@@ -20,35 +21,53 @@ function toggleArrayItem(arr, item) {
     : [...arr, item] // add item
 }
 
-const TokenTile = ({
-  token,
-  onClick = null,
-  active = false,
-  vertical = false,
-}: {
-  token: Token
-  onClick?: () => void
-  active?: boolean
-  vertical?: boolean
-}) => {
+type TokenTileProps =
+  | {
+      amount: CurrencyAmount<Token>
+      token?: never
+      onClick?: () => void
+      active?: boolean
+      horizontal?: false
+    }
+  | {
+      token: Token
+      amount?: never
+      onClick?: () => void
+      active?: boolean
+      horizontal: true
+    }
+
+const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active = false, horizontal = false }) => {
   return (
     <div
       onClick={onClick}
       className={classNames(
         onClick ? 'cursor-pointer' : '',
-        vertical ? 'flex-row p-2' : 'flex-col p-3',
+        horizontal ? 'flex-row p-1.5' : 'flex-col p-3',
         active ? 'opacity-100' : 'opacity-50',
-        'flex border border-dark-700 bg-dark-900 rounded items-center justify-center gap-2'
+        'relative flex border border-dark-700 bg-dark-900 rounded items-center justify-center gap-1'
       )}
     >
-      <div className="rounded-full overflow-hidden">
-        <div>
-          <CurrencyLogo currency={token} size={vertical ? 26 : 38} />
+      {!horizontal && (
+        <div className="absolute top-2 right-2 z-10">
+          <Checkbox checked={active} color="pink" />
         </div>
+      )}
+      <CurrencyLogo
+        currency={amount ? amount.currency : token}
+        size={horizontal ? 26 : 38}
+        className="rounded-full filter drop-shadow-currencyLogo"
+      />
+      <div className="flex flex-col justify-center gap-0.5">
+        <Typography variant="sm" weight={active ? 700 : 400}>
+          {amount ? amount.currency.symbol : token.symbol}
+        </Typography>
+        {amount && (
+          <Typography variant="xs" weight={400} className="text-center">
+            {amount.toSignificant(6)}
+          </Typography>
+        )}
       </div>
-      <Typography variant="lg" className="text-high-emphesis">
-        {token.symbol}
-      </Typography>
     </div>
   )
 }
@@ -118,7 +137,7 @@ const HybridStandardMode: FC = () => {
                 <div className="grid grid-cols-4 mt-6 gap-4">
                   {availableAssets.map((balance, index) => (
                     <TokenTile
-                      token={balance.currency}
+                      amount={balance}
                       key={index}
                       active={selected.includes(balance.currency)}
                       onClick={() => setSelected((prevState) => toggleArrayItem(prevState, balance.currency))}
@@ -151,7 +170,7 @@ const HybridStandardMode: FC = () => {
                 </Typography>
                 <div className="flex flex-row mt-6 gap-4">
                   {unavailableAssets.map((token, index) => (
-                    <TokenTile token={token} key={index} vertical />
+                    <TokenTile token={token} key={index} horizontal />
                   ))}
                 </div>
               </Disclosure.Panel>

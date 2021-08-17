@@ -104,13 +104,7 @@ export interface CurrencyLogoProps {
 
 const unknown = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png'
 
-const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
-  currency,
-  size = '24px',
-  style,
-  className = '',
-  ...rest
-}) => {
+const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '24px', ...rest }) => {
   const uriLocations = useHttpLocations(
     currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
   )

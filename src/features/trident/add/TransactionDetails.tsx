@@ -2,19 +2,22 @@ import { FC } from 'react'
 import Typography from '../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
+import TransactionDetailsExplanationModal from './TransactionDetailsExplanationModal'
 
-const ZapModeTransactionDetails: FC = () => {
+const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex flex-col gap-4 px-5 mt-10">
+    <div className="flex flex-col gap-4 px-5">
       <div className="flex flex-row justify-between">
         <Typography weight={700} className="text-high-emphesis">
           {i18n._(t`Transaction Details`)}
         </Typography>
-        <Typography weight={700} variant="sm" className="text-blue">
-          {i18n._(t`What do these mean?`)}
-        </Typography>
+        <TransactionDetailsExplanationModal>
+          <Typography weight={700} variant="sm" className="text-blue">
+            {i18n._(t`What do these mean?`)}
+          </Typography>
+        </TransactionDetailsExplanationModal>
       </div>
       <div className="flex flex-col gap-1">
         <div className="flex flex-row justify-between">
@@ -70,4 +73,4 @@ const ZapModeTransactionDetails: FC = () => {
   )
 }
 
-export default ZapModeTransactionDetails
+export default TransactionDetails

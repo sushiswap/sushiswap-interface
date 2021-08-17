@@ -7,7 +7,7 @@ import Typography from '../../../components/Typography'
 import ListPanel from '../../../components/ListPanel'
 import AssetInput from '../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
-import ZapModeTransactionDetails from './ZapModeTransactionDetails'
+import TransactionDetails from './TransactionDetails'
 import React, { useState } from 'react'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 
@@ -33,7 +33,7 @@ const ClassicZapMode = () => {
           automatically.`)}
         />
       </div>
-      <div className="flex flex-col gap-4 px-5">
+      <div className="flex flex-col gap-5 px-5">
         <AssetInput
           value={inputAmounts[selected?.address]}
           currency={selected}
@@ -49,7 +49,7 @@ const ClassicZapMode = () => {
           {inputAmounts[selected?.address] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
         </Button>
       </div>
-      <div className="flex flex-col gap-4 px-5 mt-10">
+      <div className="flex flex-col gap-4 px-5 mt-6">
         <Typography weight={700} className="text-high-emphesis">
           {selected
             ? i18n._(t`Your ${selected.symbol} will be split into:`)
@@ -67,7 +67,9 @@ const ClassicZapMode = () => {
           ))}
         />
       </div>
-      <ZapModeTransactionDetails />
+      <div className="mt-6">
+        <TransactionDetails />
+      </div>
     </>
   )
 }

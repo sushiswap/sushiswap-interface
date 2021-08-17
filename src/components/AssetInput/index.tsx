@@ -164,9 +164,7 @@ const AssetInputPanel = ({
     content = (
       <div className="flex gap-3 py-4 px-3 items-center">
         <div>
-          <div className="rounded-full overflow-hidden">
-            <CurrencyLogo currency={currency} size={48} />
-          </div>
+          <CurrencyLogo currency={currency} size={48} className="rounded-full" />
         </div>
         <div className="flex flex-col flex-grow">
           <Typography variant="h3" weight={700}>
