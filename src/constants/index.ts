@@ -326,5 +326,4 @@ export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
 }
 
 export * from './routing'
-export * from './addresses'
 export * from './tokens'
