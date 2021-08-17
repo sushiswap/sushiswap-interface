@@ -2490,13 +2490,14 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.42":
-  version "5.0.0-canary.42"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.42.tgz#bdf58ac6dc83a4d18fa7f3339d8f14d531119373"
-  integrity sha512-5WLV89Ymnla/x5GGZA7gDgRHo+Q1BpayoYYtsaFfdAv+ObobK3Pjypdk567EvXbbe+pQBqrH3MgPQ1V/k8Xa9Q==
+"@sushiswap/sdk@5.0.0-canary.44":
+  version "5.0.0-canary.44"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.44.tgz#d21442f1f3c6fa0b865e9f2f35d5a1abfcabf8cd"
+  integrity sha512-HFhsAiFpFGYvMmrHAr7vJaFp9bennfIH2zOqkj/Y7UxFfQxz8cxj/geQp8WkIeJfbMhh5ncfFwJ7kFUn857EZw==
   dependencies:
     big.js "^6.1.0"
     decimal.js-light "^2.5.0"
+    isomorphic-unfetch "^3.1.0"
     jsbi "^3.1.0"
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
@@ -9796,6 +9797,14 @@ isomorphic-fetch@2.2.1:
     node-fetch "^1.0.1"
     whatwg-fetch ">=0.10.0"
 
+isomorphic-unfetch@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/isomorphic-unfetch/-/isomorphic-unfetch-3.1.0.tgz#87341d5f4f7b63843d468438128cb087b7c3e98f"
+  integrity sha512-geDJjpoZ8N0kWexiwkX8F9NkTsXhetLPVbZFQ+JTW239QNOwvB0gniuR1Wc6f0AMTn7/mFGyXvHTifrCp/GH8Q==
+  dependencies:
+    node-fetch "^2.6.1"
+    unfetch "^4.2.0"
+
 isomorphic-ws@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/isomorphic-ws/-/isomorphic-ws-4.0.1.tgz#55fd4cd6c5e6491e76dc125938dd863f5cd4f2dc"
@@ -15653,6 +15662,11 @@ underscore@1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
   integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
+
+unfetch@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-4.2.0.tgz#7e21b0ef7d363d8d9af0fb929a5555f6ef97a3be"
+  integrity sha512-F9p7yYCn6cIW9El1zi0HI6vqpeIvBsr3dSuRO6Xuppb1u5rXpCPmMvLSyECLhybr9isec8Ohl0hPekMVrEinDA==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
