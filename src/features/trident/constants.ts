@@ -1,5 +1,6 @@
 import { PoolType } from './pool/context/types'
 import { ChipColor } from '../../components/Chip'
+import { Percent } from '@sushiswap/sdk'
 
 export const SORT_OPTIONS = [
   { title: 'APY Highest to Lowest', desc: true },

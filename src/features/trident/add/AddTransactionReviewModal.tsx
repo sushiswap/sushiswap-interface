@@ -22,7 +22,6 @@ interface DepositFieldProps {
 const DepositField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
   const parsedInputAmount = tryParseAmount(inputAmount, currency)
   const usdcValue = useUSDCValue(parsedInputAmount)
-  console.log(inputAmount, currency)
   return (
     <ListPanel.Item
       left={<ListPanel.Item.Left amount={parsedInputAmount} />}

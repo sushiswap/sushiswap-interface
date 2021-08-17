@@ -97,9 +97,9 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect }) => {
         )}
       >
         {content}
-        <HeadlessUIModal isOpen={open} onDismiss={() => setOpen(false)}>
+        <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
           <CurrencySelectDialog currency={value} onChange={onSelect} onDismiss={() => setOpen(false)} />
-        </HeadlessUIModal>
+        </HeadlessUIModal.Controlled>
       </div>
       {value && balances && <BalancePanel currency={value} />}
     </>

@@ -3,6 +3,12 @@ import { ActionType, Reducer, State } from './types'
 
 const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
   switch (action.type) {
+    case ActionType.SET_SPEND_FROM_WALLET: {
+      return {
+        ...state,
+        spendFromWallet: action.payload,
+      }
+    }
     case ActionType.SET_BALANCED_MODE: {
       return {
         ...state,
@@ -10,10 +16,13 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
       }
     }
     case ActionType.SET_LIQUIDITY_MODE: {
+      const inputAmounts = { ...state.inputAmounts }
+      Object.keys(inputAmounts).forEach((key) => (inputAmounts[key] = ''))
+
       return {
         ...state,
         liquidityMode: action.payload,
-        inputAmounts: {},
+        inputAmounts,
       }
     }
     case ActionType.SET_INPUT_AMOUNT: {

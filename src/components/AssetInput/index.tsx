@@ -3,7 +3,7 @@ import Lottie from 'lottie-react'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import React, { FC, ReactNode, useState } from 'react'
 import Button from '../../components/Button'
-import { CheckIcon, ChevronDownIcon, XIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import { classNames, maxAmountSpend, tryParseAmount } from '../../functions'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
@@ -17,24 +17,34 @@ import { useTokenBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import Switch from '../Switch'
 import BentoBoxFundingSourceModal from '../../features/trident/add/BentoBoxFundingSourceModal'
+import { BentoBoxIcon, WalletIcon } from './icons'
+import { useBentoBalance2 } from '../../state/bentobox/hooks'
+import Alert from '../Alert'
+import { ExclamationCircleIcon } from '@heroicons/react/outline'
 
 interface AssetInputProps {
-  title?: string
   value: string
   currency: Token
   onChange: (x: string) => void
+  spendFromWallet?: boolean
+  title?: string
   onSelect?: (x: Token) => void
   headerRight?: ReactNode
 }
 
 // AssetInput exports its children so if you need a child component of this component,
 // for example if you want this component without the title, take a look at the components this file exports
-const AssetInput = (props: AssetInputProps) => {
+const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const balance = useTokenBalance(account, props.currency)
   const [open, setOpen] = useState(false)
+
+  const bentoBalance = useBentoBalance2(account, props.currency)
+  const walletBalance = useTokenBalance(account, props.currency)
+  const balance = spendFromWallet ? walletBalance : bentoBalance
   const maxSpend = maxAmountSpend(balance)?.toExact()
+  const parsedInput = tryParseAmount(props.value, props.currency)
+  const error = parsedInput?.greaterThan(balance)
 
   let header = (
     <Typography variant="h3" weight={700} className="text-high-emphesis">
@@ -72,10 +82,27 @@ const AssetInput = (props: AssetInputProps) => {
       </div>
       <AssetInputPanel
         {...props}
+        error={error}
+        spendFromWallet={spendFromWallet}
         onMax={() => props.onChange(maxSpend)}
         showMax={balance?.toExact() !== props.value}
-        footer={<AssetInputPanel.Balance balance={balance} onClick={() => props.onChange(maxSpend)} />}
+        footer={
+          <AssetInputPanel.Balance
+            balance={balance}
+            onClick={() => props.onChange(maxSpend)}
+            spendFromWallet={spendFromWallet}
+          />
+        }
       />
+      {error && (
+        <Alert
+          showIcon
+          type="error"
+          dismissable={false}
+          title={`Insufficient ${props.currency.symbol} balance`}
+          message="You do not have enough DAI to match the amount of WETH you have entered.  Please enter equal value amounts to continue with your deposit."
+        />
+      )}
     </div>
   )
 }
@@ -84,6 +111,7 @@ interface AssetInputPanelProps extends AssetInputProps {
   onMax: () => void
   footer?: ReactNode
   showMax?: boolean
+  error?: boolean
 }
 
 const AssetInputPanel = ({
@@ -94,6 +122,7 @@ const AssetInputPanel = ({
   onMax,
   footer,
   showMax = true,
+  error = false,
 }: AssetInputPanelProps) => {
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
@@ -150,13 +179,17 @@ const AssetInputPanel = ({
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
         </div>
-        {showMax && (
-          <div
-            onClick={() => onMax()}
-            className="cursor-pointer flex flex-col items-center justify-center rounded-full overflow-hidden bg-blue bg-opacity-20 border border-blue text-blue px-3 h-9"
-          >
-            <Typography>MAX</Typography>
-          </div>
+        {error ? (
+          <ExclamationCircleIcon className="text-red h-8 w-8 mr-2" />
+        ) : (
+          showMax && (
+            <div
+              onClick={() => onMax()}
+              className="cursor-pointer flex flex-col items-center justify-center rounded-full overflow-hidden bg-blue bg-opacity-20 border border-blue text-blue px-3 h-9"
+            >
+              <Typography>MAX</Typography>
+            </div>
+          )
         )}
       </div>
     )
@@ -166,7 +199,8 @@ const AssetInputPanel = ({
     <div
       className={classNames(
         showMax ? 'border' : 'border-2',
-        'rounded border-dark-700 bg-dark-900 flex flex-col overflow-hidden'
+        error ? 'border-red border-opacity-20' : 'border-dark-700',
+        'rounded bg-dark-900 flex flex-col overflow-hidden'
       )}
     >
       {content}
@@ -178,30 +212,23 @@ const AssetInputPanel = ({
 interface AssetInputPanelBalanceProps {
   balance: CurrencyAmount<Token>
   onClick: (x: CurrencyAmount<Token>) => void
+  spendFromWallet?: boolean
 }
 
 // This component seems to occur quite frequently which is why I gave it it's own component.
 // It's a child of AssetInputPanel so only use together with an AssetInputPanel
-const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onClick }) => {
+const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onClick, spendFromWallet = true }) => {
   const { i18n } = useLingui()
+
+  let icon = <WalletIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+  if (!spendFromWallet) {
+    icon = <BentoBoxIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+  }
+
   return (
     <div className="flex justify-between bg-dark-800 py-2 px-3">
       <div className="flex items-center gap-1.5">
-        <svg
-          className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
-          width="16"
-          height="13"
-          viewBox="0 0 16 13"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M13.9521 12.5362H0.97363C0.436511 12.5362 0 12.0724 0 11.5017V1.03448C0 0.463793 0.436511 0 0.97363 0H13.9521C14.4893 0 14.9257 0.463793 14.9257 1.03448V3.36897H10.2669C9.91804 3.36897 9.57727 3.4431 9.2576 3.58621C8.94928 3.72414 8.67181 3.92414 8.43488 4.17586C8.19798 4.42759 8.00973 4.72241 7.87991 5.05C7.7436 5.38966 7.67545 5.75172 7.67545 6.12241V6.41379C7.67545 6.78448 7.74522 7.14655 7.87991 7.48621C8.00973 7.81379 8.19796 8.10864 8.43488 8.36036C8.6718 8.61207 8.94928 8.81207 9.2576 8.95C9.57727 9.09484 9.91804 9.16724 10.2669 9.16724H14.9257V11.5017C14.9257 12.0724 14.4893 12.5362 13.9521 12.5362ZM15.2698 4.40332C15.6738 4.40332 16 4.74987 16 5.17918V7.35675C16 7.78606 15.6738 8.13261 15.2698 8.13261H14.9258H10.2669C9.37282 8.13261 8.64909 7.36367 8.64909 6.41367V6.12229C8.64909 5.17229 9.37281 4.40332 10.2669 4.40332H14.9258H15.2698ZM9.6714 6.26711C9.6714 6.7723 10.056 7.18091 10.5314 7.18091C11.0069 7.18091 11.3915 6.7723 11.3915 6.26711C11.3915 5.76194 11.0069 5.35332 10.5314 5.35332C10.056 5.35332 9.6714 5.76194 9.6714 6.26711Z"
-            fill="currentColor"
-          />
-        </svg>
+        {icon}
         <Typography variant="sm" className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}>
           {i18n._(t`Balance:`)}
         </Typography>
@@ -224,23 +251,33 @@ interface AssetInputWalletSwitchProps {
 }
 
 const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onChange }) => {
+  const { i18n } = useLingui()
+
   return (
     <div className="flex gap-1.5 items-center">
       <div className="flex gap-3 items-center">
         <div className="flex flex-col">
           <Typography variant="xxs" weight={700} className="text-secondary text-right">
-            Funding source:
+            {i18n._(t`Funding source:`)}
           </Typography>
           <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-            Wallet
+            {checked ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
           </Typography>
         </div>
         <div>
           <Switch
             checked={checked}
             onChange={onChange}
-            checkedIcon={<CheckIcon className="text-high-emphesis" />}
-            uncheckedIcon={<XIcon className="text-high-emphesis" />}
+            checkedIcon={
+              <div className="text-dark-700 flex justify-center items-center h-full w-full">
+                <WalletIcon />
+              </div>
+            }
+            uncheckedIcon={
+              <div className="text-dark-700 flex justify-center items-center h-full w-full">
+                <BentoBoxIcon />
+              </div>
+            }
           />
         </div>
       </div>

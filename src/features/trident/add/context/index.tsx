@@ -12,6 +12,7 @@ const initialState: State = {
   inputAmounts: {},
   showZapReview: false,
   balancedMode: false,
+  spendFromWallet: true,
 }
 
 export const TridentAddLiquidityPageContext = createContext<{

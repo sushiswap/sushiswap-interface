@@ -10,6 +10,7 @@ export enum ActionType {
   SET_INPUT_AMOUNT_WITH_CLEAR = 'SET_INPUT_AMOUNT_WITH_CLEAR',
   SET_INPUT_AMOUNTS = 'SET_INPUT_AMOUNTS',
   SHOW_ZAP_REVIEW = 'SHOW_ZAP_REVIEW',
+  SET_SPEND_FROM_WALLET = 'SET_SPEND_FROM_WALLET',
 }
 
 export interface Reducer {
@@ -22,4 +23,5 @@ export interface State {
   inputAmounts: Record<string, string>
   showZapReview: boolean
   balancedMode: boolean
+  spendFromWallet: boolean
 }

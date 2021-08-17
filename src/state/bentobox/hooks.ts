@@ -1,4 +1,4 @@
-import { Token, WNATIVE } from '@sushiswap/sdk'
+import { CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -147,6 +147,31 @@ export function useBentoBalance(tokenAddress: string): {
       fetchBentoBalance()
     }
   }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract, boringHelperContract])
+
+  return balance
+}
+
+export function useBentoBalance2(account: string, token: Token): CurrencyAmount<Token> | undefined {
+  const boringHelperContract = useBoringHelperContract()
+  const bentoBoxContract = useBentoBoxContract()
+  const currentTransactionStatus = useTransactionStatus()
+  const [balance, setBalance] = useState<CurrencyAmount<Token>>()
+
+  const fetch = useCallback(async () => {
+    const balances = await boringHelperContract.getBalances(account, [token.address])
+    setBalance(
+      CurrencyAmount.fromRawAmount(
+        token,
+        balances[0].bentoBalance.mulDiv(balances[0].bentoAmount, balances[0].bentoShare).toString()
+      )
+    )
+  }, [boringHelperContract, account, token])
+
+  useEffect(() => {
+    if (!account || !bentoBoxContract || !boringHelperContract || !token) return
+
+    fetch()
+  }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, token])
 
   return balance
 }
