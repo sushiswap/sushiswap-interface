@@ -1,29 +1,31 @@
-import { ARCHER_ROUTER_ADDRESS, MINICHEF_ADDRESS, MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
+import {
+  ARCHER_ROUTER_ADDRESS,
+  BAR_ADDRESS,
+  BENTOBOX_ADDRESS,
+  BORING_HELPER_ADDRESS,
+  CHAINLINK_ORACLE_ADDRESS,
+  ChainId,
+  FACTORY_ADDRESS,
+  KASHI_ADDRESS,
+  MAKER_ADDRESS,
+  MASTERCHEF_ADDRESS,
+  MERKLE_DISTRIBUTOR_ADDRESS,
+  MINICHEF_ADDRESS,
+  MULTICALL2_ADDRESS,
+  ROUTER_ADDRESS,
+  STOP_LIMIT_ORDER_ADDRESS,
+  SUSHISWAP_SWAPPER_ADDRESS,
+  SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
+  SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
+  SUSHI_ADDRESS,
+  TIMELOCK_ADDRESS,
+  WNATIVE,
+  ZAPPER_ADDRESS,
+} from '@sushiswap/sdk'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from '../constants/abis/argent-wallet-detector'
-import {
-  BAR_ADDRESS,
-  ChainId,
-  FACTORY_ADDRESS,
-  MAKER_ADDRESS,
-  MASTERCHEF_ADDRESS,
-  ROUTER_ADDRESS,
-  SUSHI_ADDRESS,
-  TIMELOCK_ADDRESS,
-  WNATIVE,
-} from '@sushiswap/sdk'
-import {
-  BENTOBOX_ADDRESS,
-  BORING_HELPER_ADDRESS,
-  CHAINLINK_ORACLE_ADDRESS,
-  KASHI_ADDRESS,
-  SUSHISWAP_SWAPPER_ADDRESS,
-  SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-  SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-} from '../constants/kashi'
-import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
 import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
@@ -66,7 +68,6 @@ import WETH9_ABI from '../constants/abis/weth.json'
 import ZAPPER_ABI from '../constants/abis/zapper.json'
 import ZENKO_ABI from '../constants/abis/zenko.json'
 import { getContract } from '../functions/contract'
-import { getVerifyingContract } from 'limitorderv2-sdk'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
 
@@ -648,7 +649,7 @@ export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | n
 
 export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(getVerifyingContract(chainId), LIMIT_ORDER_ABI, withSignerIfPossibe)
+  return useContract(STOP_LIMIT_ORDER_ADDRESS[chainId], LIMIT_ORDER_ABI, withSignerIfPossibe)
 }
 
 export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Contract | null {
