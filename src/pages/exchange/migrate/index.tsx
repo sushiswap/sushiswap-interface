@@ -15,7 +15,6 @@ import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import Empty from '../../../components/Empty'
 import Head from 'next/head'
 import LPToken from '../../../types/LPToken'
-import MetamaskError from '../../../types/MetamaskError'
 import { Input as NumericalInput } from '../../../components/NumericalInput'
 import Typography from '../../../components/Typography'
 import Web3Connect from '../../../components/Web3Connect'
@@ -171,7 +170,7 @@ const MigrateModeSelect = ({ state }: { state: MigrateState }) => {
 const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: string | undefined }) => {
   const { i18n } = useLingui()
 
-  const [error, setError] = useState<MetamaskError>({})
+  const [error, setError] = useState<{ code?: unknown; message?: string }>({})
   const sushiRollContract = useSushiRollContract(
     state.selectedLPToken?.version ? state.selectedLPToken?.version : undefined
   )

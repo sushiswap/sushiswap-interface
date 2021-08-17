@@ -29,7 +29,7 @@ export abstract class AbstractOracle implements Oracle {
   chainId = ChainId.MAINNET
   pair: any
   tokens: Token[]
-  valid
+  valid = false
 
   constructor(pair: any, chainId, tokens?: Token[]) {
     this.address = pair.oracle
@@ -37,7 +37,6 @@ export abstract class AbstractOracle implements Oracle {
     this.pair = pair
     this.chainId = chainId
     this.tokens = tokens
-    this.valid = false
   }
 }
 
@@ -127,7 +126,6 @@ function lowerEqual(value1: string, value2: string) {
 }
 
 export function getOracle(pair: any, chainId: ChainId, tokens: any): Oracle {
-  console.log(pair.oracle, CHAINLINK_ORACLE_ADDRESS)
   if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS)) {
     return new ChainlinkOracle(pair, chainId, tokens)
   } else if (pair.oracle === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
