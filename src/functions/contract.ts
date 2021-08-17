@@ -1,9 +1,8 @@
 // NOTE: Try not to add anything to thie file, it's almost entirely refactored out.
 
-import { ChainId, ROUTER_ADDRESS } from '@sushiswap/sdk'
+import { ARCHER_ROUTER_ADDRESS, ChainId, ROUTER_ADDRESS } from '@sushiswap/sdk'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 
-import { ARCHER_ROUTER_ADDRESS } from '../constants'
 import { AddressZero } from '@ethersproject/constants'
 import ArcherSwapRouterABI from '../constants/abis/archer-router.json'
 import { Contract } from '@ethersproject/contracts'
