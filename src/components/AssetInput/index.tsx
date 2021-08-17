@@ -99,8 +99,10 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
           showIcon
           type="error"
           dismissable={false}
-          title={`Insufficient ${props.currency.symbol} balance`}
-          message="You do not have enough DAI to match the amount of WETH you have entered.  Please enter equal value amounts to continue with your deposit."
+          title={i18n._(t`Insufficient ${props.currency.symbol} balance`)}
+          message={i18n._(
+            t`You do not have enough DAI to match the amount of WETH you have entered.  Please enter equal value amounts to continue with your deposit.`
+          )}
         />
       )}
     </div>
@@ -175,7 +177,7 @@ const AssetInputPanel = ({
               className="bg-transparent flex flex-grow w-full"
             />
           </Typography>
-          <Typography variant="sm" className="text-low-emphesis">
+          <Typography variant="sm" className={usdcValue ? 'text-green' : 'text-low-emphesis'}>
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
         </div>

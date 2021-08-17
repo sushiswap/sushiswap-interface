@@ -152,28 +152,45 @@ export function useBentoBalance(tokenAddress: string): {
 }
 
 export function useBentoBalance2(account: string, token: Token): CurrencyAmount<Token> | undefined {
+  const tokens = useMemo(() => [token], [token])
+  const balance = useBentoBalances2(account, tokens)
+  if (token && balance && balance[token.address]) {
+    return balance[token.address]
+  }
+
+  return undefined
+}
+
+export function useBentoBalances2(account: string, tokens: Token[]): Record<string, CurrencyAmount<Token> | undefined> {
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
   const currentTransactionStatus = useTransactionStatus()
-  const [balance, setBalance] = useState<CurrencyAmount<Token>>()
+  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>()
 
   const fetch = useCallback(async () => {
-    const balances = await boringHelperContract.getBalances(account, [token.address])
-    setBalance(
-      CurrencyAmount.fromRawAmount(
-        token,
-        balances[0].bentoBalance.mulDiv(balances[0].bentoAmount, balances[0].bentoShare).toString()
-      )
+    const balances = await boringHelperContract.getBalances(
+      account,
+      tokens.map((el) => el.address)
     )
-  }, [boringHelperContract, account, token])
+
+    setBalances(
+      balances.reduce((acc, balance, index) => {
+        acc[tokens[index].address] = CurrencyAmount.fromRawAmount(
+          tokens[index],
+          balance.bentoBalance.mulDiv(balance.bentoAmount, balance.bentoShare).toString()
+        )
+
+        return acc
+      }, {})
+    )
+  }, [boringHelperContract, account, tokens])
 
   useEffect(() => {
-    if (!account || !bentoBoxContract || !boringHelperContract || !token) return
-
+    if (!account || !bentoBoxContract || !boringHelperContract || !tokens.every((el) => el)) return
     fetch()
-  }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, token])
+  }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, tokens])
 
-  return balance
+  return balances
 }
 
 export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {

@@ -145,12 +145,12 @@ const PoolListActions: FC<SortSelectorProps> = () => {
             {Object.values(POOL_TYPES).map((poolType) => {
               const checked = !!filters.poolTypes.find((el) => el.label === poolType.label)
               return (
-                <div className="flex flex-row gap-3 items-center" key={poolType.label}>
-                  <Checkbox
-                    checked={checked}
-                    color="blue"
-                    set={() => handleAddOrDeletePoolTypeFilter(poolType, !checked)}
-                  />
+                <div
+                  className="flex flex-row gap-3 items-center"
+                  key={poolType.label}
+                  onClick={() => handleAddOrDeletePoolTypeFilter(poolType, !checked)}
+                >
+                  <Checkbox checked={checked} color="blue" />
                   <Typography className="text-secondary">{poolType.label}</Typography>
                 </div>
               )
@@ -166,12 +166,12 @@ const PoolListActions: FC<SortSelectorProps> = () => {
               {FEE_TIERS.map((feeTier) => {
                 const checked = !!filters.feeTiers.find((el) => el.label === feeTier.label)
                 return (
-                  <div className="flex flex-row gap-3 items-center" key={feeTier.label}>
-                    <Checkbox
-                      checked={checked}
-                      color="blue"
-                      set={() => handleAddOrDeleteFeeTierFilter(feeTier, !checked)}
-                    />
+                  <div
+                    className="flex flex-row gap-3 items-center"
+                    key={feeTier.label}
+                    onClick={() => handleAddOrDeleteFeeTierFilter(feeTier, !checked)}
+                  >
+                    <Checkbox checked={checked} color="blue" />
                     <Typography className="text-secondary">{feeTier.label}</Typography>
                   </div>
                 )

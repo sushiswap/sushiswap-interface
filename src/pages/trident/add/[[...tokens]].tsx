@@ -22,6 +22,7 @@ import AddTransactionReviewModal from '../../../features/trident/add/AddTransact
 import React from 'react'
 import DepositSettingsModal from '../../../features/trident/add/DepositSettingsModal'
 import BalancedModeHeader from '../../../features/trident/add/BalancedModeHeader'
+import SettingsTab from '../../../components/Settings'
 
 const Add = () => {
   const { i18n } = useLingui()
@@ -42,6 +43,7 @@ const Add = () => {
             <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <DepositSettingsModal />
+          {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">

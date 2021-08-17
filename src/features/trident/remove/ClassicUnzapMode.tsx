@@ -16,14 +16,13 @@ import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 const ClassicUnzapMode: FC = () => {
   const { i18n } = useLingui()
   const { inputAmounts } = useTridentRemoveLiquidityPageState()
-  const { pool, dispatch, handleInput } = useTridentRemoveLiquidityPageContext()
+  const { pool, dispatch, handleInput, parsedInputAmounts } = useTridentRemoveLiquidityPageContext()
 
   // We can use a local select state here as zap mode is only one input,
   // the modals check for each inputAmount if there's input entered
   // (note the { clear: true } option given to the handleInput)
   const [selected, setSelected] = useState<Token>(pool.tokens[0])
-  const parsedInputAmount = tryParseAmount(inputAmounts[selected?.address], selected)
-  const usdcValue = useUSDCValue(parsedInputAmount)
+  const usdcValue = useUSDCValue(parsedInputAmounts[selected?.address])
 
   const handleClick = useCallback(() => {
     dispatch({
@@ -40,6 +39,8 @@ const ClassicUnzapMode: FC = () => {
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
           </Typography>
+
+          {/*TODO GET HOW MUCH TOKENS WE HAVE IN LIQUIDITY*/}
           <ListPanel
             header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
             items={pool.tokens.map((token, index) => (

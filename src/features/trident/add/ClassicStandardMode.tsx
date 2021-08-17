@@ -1,12 +1,16 @@
 import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
 import AssetInput from '../../../components/AssetInput'
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import DepositButtons from './DepositButtons'
 import { ActionType } from './context/types'
+import useSufficientBalances from '../../../hooks/useSufficientBalances'
+import { ZERO } from '@sushiswap/sdk'
 
 const ClassicStandardMode = () => {
   const { inputAmounts, spendFromWallet } = useTridentAddLiquidityPageState()
-  const { pool, handleInput, dispatch } = useTridentAddLiquidityPageContext()
+  const { pool, handleInput, dispatch, parsedInputAmounts } = useTridentAddLiquidityPageContext()
+  const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
+  const validInputs = sufficientBalances && Object.values(parsedInputAmounts).every((el) => el?.greaterThan(ZERO))
 
   const setSpendFromWallet = useCallback(
     (checked) => {
@@ -17,6 +21,10 @@ const ClassicStandardMode = () => {
     },
     [dispatch]
   )
+
+  // TODO
+  const onMax = () => {}
+  const isMaxInput = false
 
   return (
     <div className="flex flex-col gap-4 px-5">
@@ -35,9 +43,9 @@ const ClassicStandardMode = () => {
         onChange={(val) => handleInput(val, pool.tokens[1].address)}
         spendFromWallet={spendFromWallet}
       />
-      {/*TODO implement max*/}
+
       <div className="flex flex-col">
-        <DepositButtons inputValid={Object.values(inputAmounts).every((el) => +el > 0)} isMaxInput={false} />
+        <DepositButtons inputValid={validInputs} onMax={onMax} isMaxInput={isMaxInput} />
       </div>
     </div>
   )

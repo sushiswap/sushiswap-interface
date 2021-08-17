@@ -24,9 +24,8 @@ const SearchResultPools: FC<SearchResultPoolsProps> = () => {
           .join('-')
           .toLowerCase()
 
-        console.log((searchQuery && name.includes(searchQuery.toLowerCase())) || searchQuery === '')
-        if ((searchQuery && name.includes(searchQuery.toLowerCase())) || searchQuery === '') {
-          acc.push(<PoolCard pool={cur} link={'/trident/pool/'} key={index} />)
+        if ((searchQuery && name.includes(searchQuery.toLowerCase())) || !searchQuery) {
+          acc.push(<PoolCard pool={cur} link={'/trident/pool'} key={index} />)
         }
 
         return acc

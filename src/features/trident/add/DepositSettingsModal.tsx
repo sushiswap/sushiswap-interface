@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback } from 'react'
 import { useLingui } from '@lingui/react'
 import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
 import Button from '../../../components/Button'

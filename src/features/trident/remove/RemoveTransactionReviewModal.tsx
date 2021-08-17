@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import React, { FC, useCallback } from 'react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -8,24 +8,21 @@ import { useTridentRemoveLiquidityPageContext, useTridentRemoveLiquidityPageStat
 import { ActionType } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
-import { tryParseAmount } from '../../../functions'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import Divider from '../../../components/Divider'
-import { Token } from '@sushiswap/sdk'
+import { CurrencyAmount, Token } from '@sushiswap/sdk'
 
-interface DepositFieldProps {
-  inputAmount: string
-  currency: Token
+interface WithdrawFieldProps {
+  amount: CurrencyAmount<Token>
 }
 
 // This wrapper is necessary because we need to use hooks in a loop
-const WithdrawField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
-  const parsedInputAmount = tryParseAmount(inputAmount, currency)
-  const usdcValue = useUSDCValue(parsedInputAmount)
+const WithdrawField: FC<WithdrawFieldProps> = ({ amount }) => {
+  const usdcValue = useUSDCValue(amount)
 
   return (
     <ListPanel.Item
-      left={<ListPanel.Item.Left amount={parsedInputAmount} />}
+      left={<ListPanel.Item.Left amount={amount} />}
       right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
       key={0}
     />
@@ -34,8 +31,8 @@ const WithdrawField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
 
 const RemoveTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
-  const { showZapReview, inputAmounts } = useTridentRemoveLiquidityPageState()
-  const { pool, dispatch, execute } = useTridentRemoveLiquidityPageContext()
+  const { showZapReview } = useTridentRemoveLiquidityPageState()
+  const { pool, dispatch, execute, parsedInputAmounts } = useTridentRemoveLiquidityPageContext()
 
   const closeModal = useCallback(() => {
     dispatch({
@@ -45,7 +42,7 @@ const RemoveTransactionReviewModal: FC = () => {
   }, [dispatch])
 
   return (
-    <HeadlessUIModal isOpen={showZapReview} onDismiss={closeModal}>
+    <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={closeModal}>
       <div className="flex flex-col gap-8 h-full">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
@@ -79,7 +76,7 @@ const RemoveTransactionReviewModal: FC = () => {
             </Typography>
             <ListPanel
               items={pool.tokens.map((token, index) => (
-                <WithdrawField inputAmount={'1'} currency={token} key={index} />
+                <WithdrawField amount={parsedInputAmounts[token.address]} key={index} />
               ))}
             />
           </div>
@@ -90,11 +87,13 @@ const RemoveTransactionReviewModal: FC = () => {
 
             {/*TODO this is not working yet*/}
             <ListPanel
-              items={Object.entries(inputAmounts).reduce((acc, [address, amount], index) => {
-                if (+amount > 0)
-                  acc.push(<WithdrawField inputAmount={amount} currency={pool.tokens[index]} key={address} />)
-                return acc
-              }, [])}
+              items={pool.tokens.map((token, index) => (
+                <ListPanel.Item
+                  left={<ListPanel.Item.Left amount={parsedInputAmounts[token.address]} />}
+                  right={<ListPanel.Item.Right>$</ListPanel.Item.Right>}
+                  key={index}
+                />
+              ))}
             />
           </div>
           <div className="flex flex-row justify-between px-5">
@@ -151,7 +150,7 @@ const RemoveTransactionReviewModal: FC = () => {
           <span />
         </div>
       </div>
-    </HeadlessUIModal>
+    </HeadlessUIModal.Controlled>
   )
 }
 

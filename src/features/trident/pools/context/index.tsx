@@ -2,6 +2,8 @@ import React, { createContext, useContext, useReducer, Dispatch, useMemo } from 
 import reducer from './reducer'
 import { Reducer, State } from './types'
 
+// STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
+// ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
 const initialState: State = {
   sortType: 0,
   searchQuery: null,

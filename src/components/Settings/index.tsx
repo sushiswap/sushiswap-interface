@@ -8,7 +8,7 @@ import {
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
-import { AdjustmentsIcon } from '@heroicons/react/outline'
+import { AdjustmentsIcon } from '@heroicons/react/solid'
 import { ApplicationModal } from '../../state/application/actions'
 import Button from '../Button'
 import Modal from '../Modal'

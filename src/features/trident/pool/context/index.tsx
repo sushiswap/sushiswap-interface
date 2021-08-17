@@ -5,6 +5,8 @@ import { Pool } from '../../types'
 import { useRouter } from 'next/router'
 import { useTridentPool } from '../../../../hooks/useTridentPools'
 
+// STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
+// ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
 const initialState: State = {}
 
 export const TridentPoolPageContext = createContext<{ state: State; pool: Pool; dispatch: Dispatch<any> }>({

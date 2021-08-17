@@ -1,14 +1,6 @@
 import React, { FC, useCallback } from 'react'
-import Typography from '../../../components/Typography'
-import ListPanel from '../../../components/ListPanel'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../../functions'
-import NumericalInput from '../../../components/NumericalInput'
-import ToggleButtonGroup from '../../../components/ToggleButton'
-import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
 import { useTridentRemoveLiquidityPageContext, useTridentRemoveLiquidityPageState } from './context'
-import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { ActionType } from '../add/context/types'
 
 const ClassicStandardMode: FC = () => {
@@ -28,53 +20,6 @@ const ClassicStandardMode: FC = () => {
       payload: true,
     })
   }, [dispatch])
-
-  // return (
-  //   <div className="px-5 mt-5">
-  //     <div className="flex flex-col gap-4">
-  //       <Typography variant="h3" weight={700} className="text-high-emphesis">
-  //         Amount to Remove:
-  //       </Typography>
-  //       <ListPanel
-  //         header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
-  //         items={pool.tokens.map((token, index) => (
-  //           <ListPanel.Item
-  //             left={<ListPanel.Item.Left amount={tryParseAmount('1', token)} />}
-  //             right={<ListPanel.Item.Right>$8,360.00</ListPanel.Item.Right>}
-  //             key={index}
-  //           />
-  //         ))}
-  //         footer={
-  //           <div className="flex justify-between items-center px-4 py-5 gap-3">
-  //             <NumericalInput
-  //               value={inputAmounts[selected?.address]}
-  //               onUserInput={(value: string) => handleInput(value, selected?.address, { clear: true })}
-  //               placeholder="0%"
-  //               className="bg-transparent text-3xl leading-7 tracking-[-0.01em] flex-grow"
-  //             />
-  //             <Typography variant="sm" className="text-low-emphesis">
-  //               ≈${usdcValue?.greaterThan('0') ? usdcValue?.toSignificant(6) : '0.0000'}
-  //             </Typography>
-  //           </div>
-  //         }
-  //       />
-  //       <ToggleButtonGroup
-  //         value={inputAmounts[selected?.address]}
-  //         onChange={(value: string) => handleInput(value, selected?.address, { clear: true })}
-  //       >
-  //         <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
-  //         <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
-  //         <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
-  //         <ToggleButtonGroup.Button value="25">25%</ToggleButtonGroup.Button>
-  //       </ToggleButtonGroup>
-  //       <Button color="gradient" disabled={!inputAmounts[selected?.address]} onClick={handleClick}>
-  //         {inputAmounts[selected?.address]
-  //           ? i18n._(t`Confirm Withdrawal`)
-  //           : i18n._(t`Tap amount or type amount to continue`)}
-  //       </Button>
-  //     </div>
-  //   </div>
-  // )
 
   return <span />
 }

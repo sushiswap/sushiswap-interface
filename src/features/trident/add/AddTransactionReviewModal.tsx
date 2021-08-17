@@ -8,23 +8,21 @@ import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } fr
 import { ActionType, LiquidityMode } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
-import { tryParseAmount } from '../../../functions'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import Divider from '../../../components/Divider'
-import { Token } from '@sushiswap/sdk'
+import { CurrencyAmount, Token, ZERO } from '@sushiswap/sdk'
 
 interface DepositFieldProps {
-  inputAmount: string
-  currency: Token
+  amount: CurrencyAmount<Token>
 }
 
 // This wrapper is necessary because we need to use hooks in a loop
-const DepositField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
-  const parsedInputAmount = tryParseAmount(inputAmount, currency)
-  const usdcValue = useUSDCValue(parsedInputAmount)
+const DepositField: FC<DepositFieldProps> = ({ amount }) => {
+  const usdcValue = useUSDCValue(amount)
+
   return (
     <ListPanel.Item
-      left={<ListPanel.Item.Left amount={parsedInputAmount} />}
+      left={<ListPanel.Item.Left amount={amount} />}
       right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
       key={0}
     />
@@ -33,10 +31,8 @@ const DepositField: FC<DepositFieldProps> = ({ inputAmount, currency }) => {
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview, inputAmounts } = useTridentAddLiquidityPageState()
-  const { pool, tokens, dispatch, execute } = useTridentAddLiquidityPageContext()
-  const parsedInputAmount = tryParseAmount(inputAmounts[0], pool.tokens[0])
-  const usdcValue = useUSDCValue(parsedInputAmount)
+  const { liquidityMode, showZapReview } = useTridentAddLiquidityPageState()
+  const { pool, dispatch, execute, parsedInputAmounts } = useTridentAddLiquidityPageContext()
 
   const closeModal = useCallback(() => {
     dispatch({
@@ -81,9 +77,8 @@ const AddTransactionReviewModal: FC = () => {
               {i18n._(t`You are depositing:`)}
             </Typography>
             <ListPanel
-              items={Object.entries(inputAmounts).reduce((acc, [address, amount]) => {
-                if (+amount > 0)
-                  acc.push(<DepositField inputAmount={amount} currency={tokens[address]} key={address} />)
+              items={Object.values(parsedInputAmounts).reduce((acc, cur, index) => {
+                if (cur?.greaterThan(ZERO)) acc.push(<DepositField amount={cur} key={index} />)
                 return acc
               }, [])}
             />
@@ -98,10 +93,8 @@ const AddTransactionReviewModal: FC = () => {
               <ListPanel
                 items={pool.tokens.map((token, index) => (
                   <ListPanel.Item
-                    left={<ListPanel.Item.Left amount={tryParseAmount(inputAmounts[token.address], token)} />}
-                    right={
-                      <ListPanel.Item.Right>${usdcValue?.divide(pool.tokens.length)?.toFixed(2)}</ListPanel.Item.Right>
-                    }
+                    left={<ListPanel.Item.Left amount={parsedInputAmounts[token.address]} />}
+                    right={<ListPanel.Item.Right>$</ListPanel.Item.Right>}
                     key={index}
                   />
                 ))}

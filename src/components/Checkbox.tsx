@@ -10,7 +10,7 @@ const COLOR = {
 
 export interface CheckboxProps {
   color: Color
-  set: (value: boolean) => void
+  set?: (value: boolean) => void
 }
 
 function Checkbox({
