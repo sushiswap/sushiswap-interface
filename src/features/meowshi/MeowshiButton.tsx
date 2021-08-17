@@ -7,7 +7,7 @@ import TransactionConfirmationModal, { ConfirmationModalContent } from '../../mo
 import Button from '../../components/Button'
 import { ChainId } from '@sushiswap/sdk'
 import Dots from '../../components/Dots'
-import { ethers } from 'ethers'
+import { parseUnits } from '@ethersproject/units'
 import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../functions'
 import { useLingui } from '@lingui/react'
@@ -54,26 +54,26 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
     if (doMeow) {
       if (currencies[Field.INPUT]?.symbol === 'SUSHI') {
         tx = await meowSushi({
-          value: ethers.utils.parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
           decimals: sushiBalance.currency.decimals,
         })
       }
       if (currencies[Field.INPUT]?.symbol === 'xSUSHI') {
         tx = await meow({
-          value: ethers.utils.parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
           decimals: xSushiBalance.currency.decimals,
         })
       }
     } else {
       if (currencies[Field.OUTPUT]?.symbol === 'SUSHI') {
         tx = await unmeowSushi({
-          value: ethers.utils.parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
           decimals: xSushiBalance.currency.decimals,
         })
       }
       if (currencies[Field.OUTPUT]?.symbol === 'xSUSHI') {
         tx = await unmeow({
-          value: ethers.utils.parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
           decimals: xSushiBalance.currency.decimals,
         })
       }

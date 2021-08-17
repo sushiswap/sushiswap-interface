@@ -23,7 +23,8 @@ import { TransactionReview } from '../../entities/TransactionReview'
 import TransactionReviewView from './TransactionReview'
 import WarningsView from './WarningsList'
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { ethers } from 'ethers'
+import { AddressZero } from '@ethersproject/constants'
+import { hexlify, hexConcat } from '@ethersproject/bytes'
 import { tryParseAmount } from '../../functions/parse'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
@@ -244,8 +245,8 @@ export default function Repay({ pair }: RepayProps) {
         pair.collateral.address,
         pair.asset.address,
         maxAmountIn,
-        path.length > 2 ? path[1] : ethers.constants.AddressZero,
-        path.length > 3 ? path[2] : ethers.constants.AddressZero,
+        path.length > 2 ? path[1] : AddressZero,
+        path.length > 3 ? path[2] : AddressZero,
         account,
         pair.userCollateralShare,
       ])
@@ -256,8 +257,8 @@ export default function Repay({ pair }: RepayProps) {
           pair.collateral.address,
           pair.asset.address,
           maxAmountIn,
-          path.length > 2 ? path[1] : ethers.constants.AddressZero,
-          path.length > 3 ? path[2] : ethers.constants.AddressZero,
+          path.length > 2 ? path[1] : AddressZero,
+          path.length > 3 ? path[2] : AddressZero,
           account,
           pair.userCollateralShare,
         ]
@@ -266,7 +267,7 @@ export default function Repay({ pair }: RepayProps) {
       cooker.action(
         SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS[chainId || 1],
         ZERO,
-        ethers.utils.hexConcat([ethers.utils.hexlify('0x3087d742'), data]),
+        hexConcat([hexlify('0x3087d742'), data]),
         true,
         false,
         1

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
-import { Contract } from 'ethers'
+import { Contract } from '@ethersproject/contracts'
 import ERC20_ABI from '../constants/abis/erc20.json'
 import { WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import { isAddress } from '../functions/validate'

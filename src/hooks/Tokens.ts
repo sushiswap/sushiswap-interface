@@ -6,7 +6,7 @@ import { createTokenFilterFunction, filterTokens } from '../functions/filtering'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 
 import { WrappedTokenInfo } from './../state/lists/wrappedTokenInfo'
-import { arrayify } from 'ethers/lib/utils'
+import { arrayify } from '@ethersproject/bytes'
 import { isAddress } from '../functions/validate'
 import { parseBytes32String } from '@ethersproject/strings'
 import { useActiveWeb3React } from './useActiveWeb3React'

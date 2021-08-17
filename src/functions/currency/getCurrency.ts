@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
+import { AddressZero } from '@ethersproject/constants'
 
 type Currency = { address: string; decimals: number }
 
@@ -50,7 +50,7 @@ export const USD_CURRENCY: { [chainId in ChainId]?: Currency } = {
 export function getCurrency(chainId: ChainId | void): Currency {
   return (
     USD_CURRENCY[chainId || 1] || {
-      address: ethers.constants.AddressZero,
+      address: AddressZero,
       decimals: 18,
     }
   )

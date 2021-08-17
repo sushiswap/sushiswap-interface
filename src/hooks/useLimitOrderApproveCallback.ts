@@ -6,9 +6,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
 
 import { Field } from '../state/swap/actions'
-import { MaxUint256 } from '@ethersproject/constants'
+import { AddressZero, HashZero } from '@ethersproject/constants'
+import { getAddress } from '@ethersproject/address'
 import { Token } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { useDispatch } from 'react-redux'
@@ -45,7 +45,7 @@ const useLimitOrderApproveCallback = () => {
   const masterContract = chainId && getVerifyingContract(chainId)
 
   const pendingApproval = useLimitOrderApprovalPending()
-  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
+  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
   const addTransaction = useTransactionAdder()
 
   // check the current approval status
@@ -121,14 +121,7 @@ const useLimitOrderApproveCallback = () => {
 
   const onApprove = async function () {
     if (fallback) {
-      const tx = await bentoBoxContract?.setMasterContractApproval(
-        account,
-        masterContract,
-        true,
-        0,
-        ethers.constants.HashZero,
-        ethers.constants.HashZero
-      )
+      const tx = await bentoBoxContract?.setMasterContractApproval(account, masterContract, true, 0, HashZero, HashZero)
       dispatch(setLimitOrderApprovalPending('Approve Limit Order'))
       await tx.wait()
       dispatch(setLimitOrderApprovalPending(''))
@@ -185,18 +178,12 @@ const useLimitOrderApproveCallback = () => {
       summary.push(`Deposit ${token.symbol} into BentoBox`)
       if (token.isNative) {
         batch.push(
-          bentoBoxContract?.interface?.encodeFunctionData('deposit', [
-            ethers.constants.AddressZero,
-            account,
-            account,
-            amount,
-            0,
-          ])
+          bentoBoxContract?.interface?.encodeFunctionData('deposit', [AddressZero, account, account, amount, 0])
         )
       } else {
         batch.push(
           bentoBoxContract?.interface?.encodeFunctionData('deposit', [
-            ethers.utils.getAddress(token.wrapped.address),
+            getAddress(token.wrapped.address),
             account,
             account,
             amount,

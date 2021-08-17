@@ -2,7 +2,6 @@ import KashiCooker, { signMasterContractApproval } from '../entities/KashiCooker
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { KASHI_ADDRESS } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
 import { setKashiApprovalPending } from '../state/application/actions'
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useBentoBoxContract } from './useContract'
@@ -10,6 +9,8 @@ import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { useDispatch } from 'react-redux'
 import { useKashiApprovalPending } from '../state/application/hooks'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import { AddressZero, HashZero } from '@ethersproject/constants'
+import { splitSignature } from '@ethersproject/bytes'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -59,7 +60,7 @@ function useKashiApproveCallback(): [
   const masterContract = chainId && KASHI_ADDRESS[chainId]
 
   const pendingApproval = useKashiApprovalPending()
-  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
+  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
   const addTransaction = useTransactionAdder()
 
   // check the current approval status
@@ -105,7 +106,7 @@ function useKashiApproveCallback(): [
         true,
         chainId
       )
-      const { v, r, s } = ethers.utils.splitSignature(signature)
+      const { v, r, s } = splitSignature(signature)
       return {
         outcome: BentoApproveOutcome.SUCCESS,
         permit: { account, masterContract, v, r, s },
@@ -126,14 +127,7 @@ function useKashiApproveCallback(): [
         setApproveKashiFallback(true)
       }
     } else {
-      const tx = await bentoBoxContract?.setMasterContractApproval(
-        account,
-        masterContract,
-        true,
-        0,
-        ethers.constants.HashZero,
-        ethers.constants.HashZero
-      )
+      const tx = await bentoBoxContract?.setMasterContractApproval(account, masterContract, true, 0, HashZero, HashZero)
       dispatch(setKashiApprovalPending('Approve Kashi'))
       await tx.wait()
       dispatch(setKashiApprovalPending(''))

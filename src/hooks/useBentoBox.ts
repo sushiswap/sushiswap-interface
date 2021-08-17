@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { getAddress } from '@ethersproject/address'
+import { AddressZero } from '@ethersproject/constants'
 import { WNATIVE_ADDRESS } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBentoBoxContract } from './useContract'
 import { useCallback } from 'react'
@@ -16,9 +17,9 @@ function useBentoBox() {
     async (tokenAddress: string, value: BigNumber) => {
       if (value && chainId) {
         try {
-          const tokenAddressChecksum = ethers.utils.getAddress(tokenAddress)
+          const tokenAddressChecksum = getAddress(tokenAddress)
           if (tokenAddressChecksum === WNATIVE_ADDRESS[chainId]) {
-            const tx = await bentoBoxContract?.deposit(ethers.constants.AddressZero, account, account, value, 0, {
+            const tx = await bentoBoxContract?.deposit(AddressZero, account, account, value, 0, {
               value,
             })
             return addTransaction(tx, { summary: 'Deposit to Bentobox' })
@@ -40,7 +41,7 @@ function useBentoBox() {
     async (tokenAddress: string, value: BigNumber) => {
       if (value && chainId) {
         try {
-          const tokenAddressChecksum = ethers.utils.getAddress(tokenAddress)
+          const tokenAddressChecksum = getAddress(tokenAddress)
           const tx = await bentoBoxContract?.withdraw(
             tokenAddressChecksum === WNATIVE_ADDRESS[chainId]
               ? '0x0000000000000000000000000000000000000000'
