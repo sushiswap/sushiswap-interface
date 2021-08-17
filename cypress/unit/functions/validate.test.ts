@@ -1,4 +1,4 @@
-import { isAddress } from '../../src/functions/validate'
+import { isAddress } from '../../../src/functions/validate'
 
 describe('#isAddress', () => {
     it('returns false if not', () => {

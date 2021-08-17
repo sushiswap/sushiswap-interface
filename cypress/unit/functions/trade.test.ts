@@ -2,7 +2,7 @@ import { ChainId, Token, TokenAmount } from '@sushiswap/sdk'
 import {
     calculateGasMargin,
     calculateSlippageAmount,
-} from '../../src/functions/trade'
+} from '../../../src/functions/trade'
 
 import { AddressZero } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'

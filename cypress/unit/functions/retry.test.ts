@@ -1,4 +1,4 @@
-import { RetryableError, retry } from '../../src/functions/retry'
+import { RetryableError, retry } from '../../../src/functions/retry'
 
 describe('retry', () => {
     function makeFn<T>(
