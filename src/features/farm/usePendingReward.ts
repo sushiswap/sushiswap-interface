@@ -1,5 +1,5 @@
-import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'

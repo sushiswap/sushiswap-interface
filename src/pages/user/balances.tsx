@@ -1,10 +1,9 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { BENTOBOX_ADDRESS, CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
 import { BentoBalance, useBentoBalances } from '../../state/bentobox/hooks'
-import { CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
 import React, { useState } from 'react'
 import { useFuse, useSortableData } from '../../hooks'
 
-import { BENTOBOX_ADDRESS } from '../../constants/kashi'
 import Back from '../../components/Back'
 import Button from '../../components/Button'
 import Card from '../../components/Card'
