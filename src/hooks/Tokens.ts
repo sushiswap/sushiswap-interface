@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token, WNATIVE, currencyEquals } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS, currencyEquals } from '@sushiswap/sdk'
 import { ExtendedEther, WETH9_EXTENDED } from '../constants'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
@@ -189,7 +189,7 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   const useNative = isETH && !isDual
 
   if (isETH && isDual) {
-    currencyId = WNATIVE[chainId].address
+    currencyId = WNATIVE_ADDRESS[chainId]
   }
 
   const token = useToken(useNative ? undefined : currencyId)

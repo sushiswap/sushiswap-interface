@@ -2,7 +2,7 @@ import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCall
 import { ArrowDown, Plus } from 'react-feather'
 import { AutoRow, RowBetween } from '../../../components/Row'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
-import { ChainId, Currency, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade'
@@ -783,8 +783,8 @@ export default function Remove() {
                           <RowBetween className="text-sm">
                             {oneCurrencyIsETH ? (
                               <Link
-                                href={`/remove/${currencyA?.isNative ? WNATIVE[chainId].address : currencyIdA}/${
-                                  currencyB?.isNative ? WNATIVE[chainId].address : currencyIdB
+                                href={`/remove/${currencyA?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdA}/${
+                                  currencyB?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdB
                                 }`}
                               >
                                 <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">

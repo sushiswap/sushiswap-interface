@@ -117,7 +117,6 @@ export function usePendingToken(farm, contract) {
 }
 
 export function useChefPositions(contract?: Contract | null, rewarder?: Contract | null, chainId = undefined) {
-  chainId = chainId ?? useActiveWeb3React().chainId
   const { account } = useActiveWeb3React()
 
   const numberOfPools = useSingleCallResult(contract ? contract : null, 'poolLength', undefined, NEVER_RELOAD)
@@ -170,9 +169,9 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
 
 export function usePositions(chainId = undefined) {
   const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
-    useChefPositions(useMasterChefContract(undefined, chainId), undefined, chainId),
-    useChefPositions(useMasterChefV2Contract(undefined, chainId), undefined, chainId),
-    useChefPositions(useMiniChefContract(undefined, chainId), undefined, chainId),
+    useChefPositions(useMasterChefContract(), undefined, chainId),
+    useChefPositions(useMasterChefV2Contract(), undefined, chainId),
+    useChefPositions(useMiniChefContract(), undefined, chainId),
   ]
   return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
 }

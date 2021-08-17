@@ -89,7 +89,7 @@
     "cookie-cutter": "^0.2.0",
     "copy-to-clipboard": "^3.3.1",
     "eslint": "^7.30.0",
-    "eslint-config-next": "^11.0.1",
+    "eslint-config-next": "^11.1.0",
     "eth-permit": "^0.1.10",
     "ethers": "^5.4.0",
     "fathom-client": "^3.0.0",

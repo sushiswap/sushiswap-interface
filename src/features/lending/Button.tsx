@@ -1,5 +1,5 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BENTOBOX_ADDRESS, WNATIVE } from '@sushiswap/sdk'
+import { BENTOBOX_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import useKashiApproveCallback, { BentoApprovalState } from '../../hooks/useKashiApproveCallback'
 
 import Alert from '../../components/Alert'
@@ -52,7 +52,7 @@ export function TokenApproveButton({ children, value, token, needed, color }: an
   const showApprove =
     chainId &&
     token &&
-    token.address !== WNATIVE[chainId].address &&
+    token.address !== WNATIVE_ADDRESS[chainId] &&
     needed &&
     value &&
     (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
