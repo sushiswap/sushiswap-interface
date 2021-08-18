@@ -15,15 +15,14 @@ export default function SwapHeader({ input = undefined, output = undefined }: an
     const [animateWallet, setAnimateWallet] = useState(false)
     return (
         <div className="flex justify-between space-x-3 pt-4 px-4">
-            <div className="grid grid-cols-2 rounded-md p-3px md:bg-dark-800">
+            <div className="grid grid-cols-2 rounded-md p-3px">
                 <NavLink
-                    className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
-                    activeClassName="font-bold text-high-emphesis md:bg-dark-900 md:border-gradient"
+                    className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary text-high-emphesis text-base font-medium md:bg-dark-800 mr-1"
+                    activeClassName="md:border-gradient"
                     to={{
                         pathname: '/swap',
-                        search: `?inputCurrency=${input && input.address ? input.address : 'ETH'}${
-                            output && output.address ? `&outputCurrency=${output.address}` : ''
-                        }`
+                        search: `?inputCurrency=${input && input.address ? input.address : 'ETH'}${output && output.address ? `&outputCurrency=${output.address}` : ''
+                            }`
                     }}
                 >
                     {i18n._(t`Swap`)}
@@ -36,11 +35,10 @@ export default function SwapHeader({ input = undefined, output = undefined }: an
                     Limit Order
                 </NavLink> */}
                 <NavLink
-                    className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary hover:text-high-emphesis text-base font-medium"
-                    activeClassName="text-high-emphesis font-bold md:bg-dark-900 md:border-gradient"
-                    to={`/add/${input && input.address ? input.address : 'ETH'}${
-                        output && output.address ? `/${output.address}` : ''
-                    }`}
+                    className="flex items-center justify-center px-4 md:px-10 rounded-md text-center text-secondary text-high-emphesis text-base font-medium md:bg-dark-800"
+                    activeClassName="md:border-gradient"
+                    to={`/add/${input && input.address ? input.address : 'ETH'}${output && output.address ? `/${output.address}` : ''
+                        }`}
                     isActive={(match, location) => {
                         console.log({ match, location })
                         return (

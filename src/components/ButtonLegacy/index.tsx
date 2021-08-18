@@ -5,7 +5,7 @@ import { Button as RebassButton, ButtonProps } from 'rebass/styled-components'
 import styled, { keyframes } from 'styled-components'
 import { RowBetween } from '../Row'
 
-const Base = styled(RebassButton)<{
+const Base = styled(RebassButton) <{
     padding?: string
     width?: string
     borderRadius?: string
@@ -108,9 +108,9 @@ export const ButtonPrimaryNormal = styled(Base)`
     }
     &:disabled {
         background-color: ${({ theme, altDisabledStyle, disabled }) =>
-            altDisabledStyle ? (disabled ? theme.bg3 : theme.primary1) : theme.bg3};
+        altDisabledStyle ? (disabled ? theme.bg3 : theme.primary1) : theme.bg3};
         color: ${({ theme, altDisabledStyle, disabled }) =>
-            altDisabledStyle ? (disabled ? theme.text3 : 'white') : theme.text3};
+        altDisabledStyle ? (disabled ? theme.text3 : 'white') : theme.text3};
         cursor: auto;
         box-shadow: none;
         border: 1px solid transparent;
@@ -120,26 +120,27 @@ export const ButtonPrimaryNormal = styled(Base)`
 `
 
 export const ButtonLight = styled(Base)`
-    background-color: ${({ theme }) => theme.primary5};
-    color: ${({ theme }) => theme.primaryText1};
-    font-size: 16px;
+    color: ${({ theme }) => theme.white};
+    border: solid 1px ${({ theme }) => theme.darkBlue};
+    background-image: linear-gradient(to right, ${({ theme }) => theme.blue2}, ${({ theme }) => theme.purple});
+    font-size: 18px;
     font-weight: 500;
-    &:focus {
-        box-shadow: 0 0 0 1pt ${({ theme, disabled }) => !disabled && darken(0.03, theme.primary5)};
-        background-color: ${({ theme, disabled }) => !disabled && darken(0.03, theme.primary5)};
-    }
+    border-radius: 8px;
     &:hover {
-        background-color: ${({ theme, disabled }) => !disabled && darken(0.03, theme.primary5)};
+        background-image: none;
+        background-color: ${({ theme, disabled }) => !disabled && darken(0.03, theme.purple)};
     }
-    &:active {
-        box-shadow: 0 0 0 1pt ${({ theme, disabled }) => !disabled && darken(0.05, theme.primary5)};
-        background-color: ${({ theme, disabled }) => !disabled && darken(0.05, theme.primary5)};
+    &:active, &:focus {
+        background-image: none;
+        box-shadow: 0 0 0 1pt ${({ theme, disabled }) => !disabled && darken(0.05, theme.blue2)};
+        background-color: ${({ theme, disabled }) => !disabled && darken(0.05, theme.purple)};
     }
     :disabled {
         opacity: 0.4;
         :hover {
             cursor: auto;
-            background-color: ${({ theme }) => theme.primary5};
+            background-image: none;
+            background-color: ${({ theme }) => theme.purple};
             box-shadow: none;
             border: 1px solid transparent;
             outline: none;

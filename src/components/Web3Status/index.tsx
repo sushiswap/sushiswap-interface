@@ -19,7 +19,7 @@ import { shortenAddress } from '../../utils'
 import { ButtonSecondary } from '../ButtonLegacy'
 import Loader from '../Loader'
 import WalletModal from '../WalletModal'
-import { ReactComponent as Chef } from '../../assets/images/chef.svg'
+import { ReactComponent as Wallet } from '../../assets/images/wallet.svg'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
@@ -56,7 +56,7 @@ const Web3StatusError = styled(Web3StatusGeneric)`
     }
 `
 
-const Web3StatusConnect = styled(Web3StatusGeneric)<{ faded?: boolean }>`
+const Web3StatusConnect = styled(Web3StatusGeneric) <{ faded?: boolean }>`
     background-color: ${({ theme }) => theme.primary4};
     border: none;
     color: ${({ theme }) => theme.primaryText1};
@@ -83,7 +83,7 @@ const Web3StatusConnect = styled(Web3StatusGeneric)<{ faded?: boolean }>`
         `}
 `
 
-const Web3StatusConnected = styled(Web3StatusGeneric)<{ pending?: boolean }>`
+const Web3StatusConnected = styled(Web3StatusGeneric) <{ pending?: boolean }>`
     background-color: ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg2)};
     border: 1px solid ${({ pending, theme }) => (pending ? theme.primary1 : theme.bg3)};
     color: ${({ pending, theme }) => (pending ? theme.white : theme.text1)};
@@ -91,7 +91,7 @@ const Web3StatusConnected = styled(Web3StatusGeneric)<{ pending?: boolean }>`
     :hover,
     :focus {
         background-color: ${({ pending, theme }) =>
-            pending ? darken(0.05, theme.primary1) : lighten(0.05, theme.bg2)};
+        pending ? darken(0.05, theme.primary1) : lighten(0.05, theme.bg2)};
 
         :focus {
             border: 1px solid
@@ -132,8 +132,7 @@ const SOCK = (
 // eslint-disable-next-line react/prop-types
 function StatusIcon({ connector }: { connector: AbstractConnector }) {
     if (connector === injected) {
-        return <Chef width={20} height={20} />
-        // return <Identicon />
+        return <span className="bg-dark-900 px-1.5 py-1.5 rounded-md"><Wallet width={10} height={10} /></span>
     } else if (connector === walletconnect) {
         return (
             <IconWrapper size={16}>

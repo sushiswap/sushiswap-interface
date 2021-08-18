@@ -113,13 +113,13 @@ export default function Swap() {
 
     const parsedAmounts = showWrap
         ? {
-              [Field.INPUT]: parsedAmount,
-              [Field.OUTPUT]: parsedAmount
-          }
+            [Field.INPUT]: parsedAmount,
+            [Field.OUTPUT]: parsedAmount
+        }
         : {
-              [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
-              [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
-          }
+            [Field.INPUT]: independentField === Field.INPUT ? parsedAmount : trade?.inputAmount,
+            [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedAmount : trade?.outputAmount
+        }
 
     const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
     const isValid = !swapInputError
@@ -163,8 +163,8 @@ export default function Swap() {
     const route = trade?.route
     const userHasSpecifiedInputOutput = Boolean(
         currencies[Field.INPUT] &&
-            currencies[Field.OUTPUT] &&
-            parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
+        currencies[Field.OUTPUT] &&
+        parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
     )
     const noRoute = !route
 
@@ -221,8 +221,8 @@ export default function Swap() {
                         recipient === null
                             ? 'Swap w/o Send'
                             : (recipientAddress ?? recipient) === account
-                            ? 'Swap w/o Send + recipient'
-                            : 'Swap w/ Send',
+                                ? 'Swap w/o Send + recipient'
+                                : 'Swap w/ Send',
                     label: [
                         trade?.inputAmount?.currency?.getSymbol(chainId),
                         trade?.outputAmount?.currency?.getSymbol(chainId)
@@ -400,7 +400,7 @@ export default function Swap() {
                                             loop={false}
                                             style={{ width: 32, height: 32 }}
 
-                                            // className="text-secondary fill-current"
+                                        // className="text-secondary fill-current"
                                         />
                                     </div>
                                 </button>
@@ -536,15 +536,15 @@ export default function Swap() {
                                 <TYPE.main mb="4px">{i18n._(t`Unsupported Asset`)}</TYPE.main>
                             </ButtonPrimary>
                         ) : !account ? (
-                            <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Connect Wallet`)}</ButtonLight>
+                            <ButtonLight onClick={toggleWalletModal}>{i18n._(t`Swap`)}</ButtonLight>
                         ) : showWrap ? (
                             <ButtonPrimary disabled={Boolean(wrapInputError)} onClick={onWrap}>
                                 {wrapInputError ??
                                     (wrapType === WrapType.WRAP
                                         ? i18n._(t`Wrap`)
                                         : wrapType === WrapType.UNWRAP
-                                        ? i18n._(t`Unwrap`)
-                                        : null)}
+                                            ? i18n._(t`Unwrap`)
+                                            : null)}
                             </ButtonPrimary>
                         ) : noRoute && userHasSpecifiedInputOutput ? (
                             <GreyCard style={{ textAlign: 'center' }}>
@@ -599,8 +599,8 @@ export default function Swap() {
                                         {priceImpactSeverity > 3 && !isExpertMode
                                             ? i18n._(t`Price Impact High`)
                                             : priceImpactSeverity > 2
-                                            ? i18n._(t`Swap Anyway`)
-                                            : i18n._(t`Swap`)}
+                                                ? i18n._(t`Swap Anyway`)
+                                                : i18n._(t`Swap`)}
                                     </Text>
                                 </ButtonError>
                             </RowBetween>
@@ -627,10 +627,10 @@ export default function Swap() {
                                     {swapInputError
                                         ? swapInputError
                                         : priceImpactSeverity > 3 && !isExpertMode
-                                        ? i18n._(t`Price Impact Too High`)
-                                        : priceImpactSeverity > 2
-                                        ? i18n._(t`Swap Anyway`)
-                                        : i18n._(t`Swap`)}
+                                            ? i18n._(t`Price Impact Too High`)
+                                            : priceImpactSeverity > 2
+                                                ? i18n._(t`Swap Anyway`)
+                                                : i18n._(t`Swap`)}
                                 </Text>
                             </ButtonError>
                         )}
@@ -673,7 +673,7 @@ export default function Swap() {
                             backgroundRepeat: 'no-repeat'
                         }}
                     > */}
-                        {/* <div className="justify-between flex pl-5 pr-8 items-center gap-6">
+                    {/* <div className="justify-between flex pl-5 pr-8 items-center gap-6">
                             <div style={{ maxWidth: 134 }}>
                                 <img src={SakeLogo} style={{ maxWidth: '100%' }} />
                             </div>
@@ -692,7 +692,7 @@ export default function Swap() {
                                 </div>
                             </div>
                         </div> */}
-                        {/* <div className="justify-between flex pl-5 pr-8 items-center gap-6">
+                    {/* <div className="justify-between flex pl-5 pr-8 items-center gap-6">
                             <span className="text-high-emphesis font-normal" style={{ lineHeight: 1.3, maxWidth: 250 }}>
                                 <Trans>
                                     Pour a hot bowl of MISO, the new <span className="font-bold">token launchpad</span>{' '}

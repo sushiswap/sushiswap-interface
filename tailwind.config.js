@@ -230,7 +230,7 @@ module.exports = {
         require('@tailwindcss/line-clamp'),
         require('@tailwindcss/aspect-ratio'),
         require('tailwindcss-border-gradient-radius'),
-        plugin(function({ addUtilities }) {
+        plugin(function ({ addUtilities }) {
             addUtilities({
                 '.gradiant-border-bottom': {
                     background:
@@ -239,14 +239,14 @@ module.exports = {
                 }
             })
         }),
-        plugin(function({ addUtilities }) {
+        plugin(function ({ addUtilities }) {
             addUtilities(
                 {
                     '.border-gradient': {
-                        border: 'double 1px transparent',
+                        border: 'double 2px transparent',
                         borderRadius: '0.375rem',
                         backgroundImage:
-                            'linear-gradient(#202231, #202231), linear-gradient(to right, #0993EC, #F338C3)',
+                            'linear-gradient(to bottom, #202231, #202231), linear-gradient(to right, #4f2bf8, #ac59ff)',
                         backgroundOrigin: 'border-box',
                         backgroundClip: 'padding-box, border-box'
                     }
