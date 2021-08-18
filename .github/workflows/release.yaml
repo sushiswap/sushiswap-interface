@@ -28,7 +28,6 @@ jobs:
     name: Create Release
     runs-on: ubuntu-latest
     needs: bump_version
-    environment: test
     if: ${{ needs.bump_version.outputs.new_tag != null }}
     steps:
       - name: Checkout
