@@ -13,10 +13,11 @@ import { toAmount, toShare } from '../../functions/bentobox'
 import { useBentoBoxContract, useBoringHelperContract } from '../../hooks/useContract'
 
 import { BigNumber } from '@ethersproject/bignumber'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { getAddress } from '@ethersproject/address'
 import Fraction from '../../entities/Fraction'
 import { USDC } from '../../hooks'
 import { bentobox } from '@sushiswap/sushi-data'
-import { ethers } from 'ethers'
 import { getCurrency } from '../../functions/currency'
 import { getOracle } from '../../entities/Oracle'
 import { toElastic } from '../../functions/rebase'
@@ -138,7 +139,7 @@ async function getPairs(bentoBoxContract: any, chainId: ChainId) {
   }
 
   return logs.map((log: any) => {
-    const deployParams = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], log.args?.data)
+    const deployParams = defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], log.args?.data)
     return {
       masterContract: log.args?.masterContract,
       address: log.args?.cloneAddress,
@@ -488,7 +489,7 @@ export function useKashiPair(address: string) {
     throw new Error('useKashiPair must be used within a KashiProvider')
   }
   return context.state.pairs.find((pair) => {
-    return ethers.utils.getAddress(pair.address) === ethers.utils.getAddress(address)
+    return getAddress(pair.address) === getAddress(address)
   })
 }
 

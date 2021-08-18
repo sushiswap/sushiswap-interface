@@ -4,11 +4,10 @@ import { useMeowshiContract, useSushiBarContract, useSushiContract } from './use
 import { ApprovalState } from './useApproveCallback'
 import { BalanceProps } from './useTokenBalance'
 import Fraction from '../entities/Fraction'
-import { ethers } from 'ethers'
+import { BigNumber } from '@ethersproject/bignumber'
+import { MaxUint256 } from '@ethersproject/constants'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useTransactionAdder } from '../state/transactions/hooks'
-
-const { BigNumber } = ethers
 
 const useMeowshi = (sushi: boolean) => {
   const { account } = useActiveWeb3React()
@@ -62,9 +61,9 @@ const useMeowshi = (sushi: boolean) => {
 
       let tx
       if (sushi) {
-        tx = await sushiContract?.approve(meowshiContract?.address, ethers.constants.MaxUint256.toString())
+        tx = await sushiContract?.approve(meowshiContract?.address, MaxUint256.toString())
       } else {
-        tx = await barContract?.approve(meowshiContract?.address, ethers.constants.MaxUint256.toString())
+        tx = await barContract?.approve(meowshiContract?.address, MaxUint256.toString())
       }
 
       addTransaction(tx, { summary: 'Approve' })

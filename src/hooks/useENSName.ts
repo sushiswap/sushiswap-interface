@@ -1,4 +1,5 @@
-import { isAddress, namehash } from 'ethers/lib/utils'
+import { isAddress } from '@ethersproject/address'
+import { namehash } from '@ethersproject/hash'
 import { useENSRegistrarContract, useENSResolverContract } from './useContract'
 
 import { isZero } from '../functions'

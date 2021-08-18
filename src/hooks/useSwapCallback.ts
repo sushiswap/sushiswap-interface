@@ -19,9 +19,10 @@ import Common from '@ethereumjs/common'
 import { SignatureData } from './useERC20Permit'
 import { TransactionFactory } from '@ethereumjs/tx'
 import { TransactionRequest } from '@ethersproject/abstract-provider'
+import { hexlify, arrayify, splitSignature } from '@ethersproject/bytes'
+import { keccak256 } from '@ethersproject/keccak256'
 import approveAmountCalldata from '../functions/approveAmountCalldata'
 import { calculateGasMargin } from '../functions/trade'
-import { ethers } from 'ethers'
 import { shortenAddress } from '../functions/format'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from './useActiveWeb3React'
@@ -452,24 +453,22 @@ export function useSwapCallback(
               const txParams = {
                 nonce:
                   fullTx.nonce !== undefined
-                    ? ethers.utils.hexlify(fullTx.nonce, {
+                    ? hexlify(fullTx.nonce, {
                         hexPad: 'left',
                       })
                     : undefined,
-                gasPrice:
-                  fullTx.gasPrice !== undefined ? ethers.utils.hexlify(fullTx.gasPrice, { hexPad: 'left' }) : undefined,
-                gasLimit:
-                  fullTx.gasLimit !== undefined ? ethers.utils.hexlify(fullTx.gasLimit, { hexPad: 'left' }) : undefined,
+                gasPrice: fullTx.gasPrice !== undefined ? hexlify(fullTx.gasPrice, { hexPad: 'left' }) : undefined,
+                gasLimit: fullTx.gasLimit !== undefined ? hexlify(fullTx.gasLimit, { hexPad: 'left' }) : undefined,
                 to: fullTx.to,
                 value:
                   fullTx.value !== undefined
-                    ? ethers.utils.hexlify(fullTx.value, {
+                    ? hexlify(fullTx.value, {
                         hexPad: 'left',
                       })
                     : undefined,
                 data: fullTx.data?.toString(),
-                chainId: fullTx.chainId !== undefined ? ethers.utils.hexlify(fullTx.chainId) : undefined,
-                type: fullTx.type !== undefined ? ethers.utils.hexlify(fullTx.type) : undefined,
+                chainId: fullTx.chainId !== undefined ? hexlify(fullTx.chainId) : undefined,
+                type: fullTx.type !== undefined ? hexlify(fullTx.type) : undefined,
               }
               const tx: any = TransactionFactory.fromTxData(txParams, {
                 common,
@@ -478,19 +477,19 @@ export function useSwapCallback(
               // console.log('unsignedTx', unsignedTx)
 
               return library.provider
-                .request({ method: 'eth_sign', params: [account, ethers.utils.hexlify(unsignedTx)] })
+                .request({ method: 'eth_sign', params: [account, hexlify(unsignedTx)] })
                 .then((signature) => {
-                  const signatureParts = ethers.utils.splitSignature(signature)
+                  const signatureParts = splitSignature(signature)
                   // really crossing the streams here
                   // eslint-disable-next-line
                   // @ts-ignore
                   const txWithSignature = tx._processSignature(
                     signatureParts.v,
-                    ethers.utils.arrayify(signatureParts.r),
-                    ethers.utils.arrayify(signatureParts.s)
+                    arrayify(signatureParts.r),
+                    arrayify(signatureParts.s)
                   )
                   return {
-                    signedTx: ethers.utils.hexlify(txWithSignature.serialize()),
+                    signedTx: hexlify(txWithSignature.serialize()),
                     fullTx,
                   }
                 })
@@ -508,7 +507,7 @@ export function useSwapCallback(
 
           return signedTxPromise
             .then(({ signedTx, fullTx }) => {
-              const hash = ethers.utils.keccak256(signedTx)
+              const hash = keccak256(signedTx)
               const inputSymbol = trade.inputAmount.currency.symbol
               const outputSymbol = trade.outputAmount.currency.symbol
               const inputAmount = trade.inputAmount.toSignificant(3)
@@ -527,7 +526,7 @@ export function useSwapCallback(
                   ? {
                       rawTransaction: signedTx,
                       deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
-                      nonce: ethers.BigNumber.from(fullTx.nonce).toNumber(),
+                      nonce: BigNumber.from(fullTx.nonce).toNumber(),
                       ethTip: archerETHTip,
                     }
                   : undefined

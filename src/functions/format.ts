@@ -2,9 +2,9 @@
 
 import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/sdk'
 
-import { BigNumber } from '@ethersproject/bignumber'
+import { BigNumberish } from '@ethersproject/bignumber'
+import { formatUnits } from '@ethersproject/units'
 import Numeral from 'numeral'
-import { ethers } from 'ethers'
 import { getAddress } from '@ethersproject/address'
 
 export const capitalize = (s) => {
@@ -129,8 +129,8 @@ export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
-export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
-  const formatted = ethers.utils.formatUnits(value, decimals)
+export const formatBalance = (value: BigNumberish, decimals = 18, maxFraction = 0) => {
+  const formatted = formatUnits(value, decimals)
   if (maxFraction > 0) {
     const split = formatted.split('.')
     if (split.length > 1) {

@@ -97,7 +97,6 @@
     "eslint": "^7.30.0",
     "eslint-config-next": "^11.1.0",
     "eth-permit": "^0.1.10",
-    "ethers": "^5.4.0",
     "fathom-client": "^3.0.0",
     "fuse.js": "^6.4.6",
     "graphql-tag": "^2.12.5",

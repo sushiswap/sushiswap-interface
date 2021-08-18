@@ -12,7 +12,8 @@ import { Field } from '../../../state/create/actions'
 import Head from 'next/head'
 import Layout from '../../../layouts/Kashi'
 import { e10 } from '../../../functions/math'
-import { ethers } from 'ethers'
+import { AddressZero } from '@ethersproject/constants'
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useBentoBoxContract } from '../../../hooks/useContract'
@@ -68,8 +69,8 @@ function Create() {
         mapping[address].address = address
       }
 
-      let multiply = ethers.constants.AddressZero
-      let divide = ethers.constants.AddressZero
+      let multiply = AddressZero
+      let divide = AddressZero
 
       const multiplyMatches = Object.values(mapping).filter(
         (m) => m.from === asset.wrapped.address && m.to === collateral.wrapped.address
@@ -107,7 +108,7 @@ function Create() {
           }
         }
       }
-      return ethers.utils.defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
+      return defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
     },
     [chainId]
   )
@@ -125,7 +126,7 @@ function Create() {
 
       const oracleAddress = CHAINLINK_ORACLE_ADDRESS
 
-      const kashiData = ethers.utils.defaultAbiCoder.encode(
+      const kashiData = defaultAbiCoder.encode(
         ['address', 'address', 'address', 'bytes'],
         [
           currencies[Field.COLLATERAL].wrapped.address,
