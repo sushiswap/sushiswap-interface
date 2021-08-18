@@ -17,11 +17,7 @@ const HybridPoolComposition: FC = () => {
       <ListPanel
         header={<ListPanel.Header title={i18n._(t`Assets`)} value="$20,000,000.00" />}
         items={pool.amounts.map((amount, index) => (
-          <ListPanel.Item
-            key={index}
-            left={<ListPanel.Item.Left amount={amount} />}
-            right={<ListPanel.Item.Right>$8,360.00</ListPanel.Item.Right>}
-          />
+          <ListPanel.CurrencyAmountItem amount={amount} key={index} />
         ))}
       />
     </div>

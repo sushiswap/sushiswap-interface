@@ -1,5 +1,4 @@
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import { PoolType } from './pool/context/types'
 
 export interface Pool {
   type: PoolType
@@ -8,4 +7,11 @@ export interface Pool {
   tvl: string
   apy: string
   fee: string
+}
+
+export enum PoolType {
+  CLASSIC = 'CLASSIC',
+  HYBRID = 'HYBRID',
+  CONCENTRATED = 'CONCENTRATED',
+  WEIGHTED = 'WEIGHTED',
 }

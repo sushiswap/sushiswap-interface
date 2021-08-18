@@ -13,7 +13,7 @@ import {
   useTridentRemoveLiquidityPageContext,
   useTridentRemoveLiquidityPageState,
 } from '../../../features/trident/remove/context'
-import { PoolType } from '../../../features/trident/pool/context/types'
+import { PoolType } from '../../../features/trident/types'
 import ClassicUnzapMode from '../../../features/trident/remove/ClassicUnzapMode'
 import { LiquidityMode } from '../../../features/trident/remove/context/types'
 import ModeToggle from '../../../features/trident/remove/ModeToggle'

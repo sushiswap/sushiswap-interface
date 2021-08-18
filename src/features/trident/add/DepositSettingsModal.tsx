@@ -8,7 +8,7 @@ import Typography from '../../../components/Typography'
 import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
 import { ActionType, LiquidityMode } from './context/types'
 import Switch from '../../../components/Switch'
-import { PoolType } from '../pool/context/types'
+import { PoolType } from '../types'
 
 const DepositSettingsModal: FC = () => {
   const { i18n } = useLingui()

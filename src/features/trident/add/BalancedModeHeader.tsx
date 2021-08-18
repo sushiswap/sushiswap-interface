@@ -1,11 +1,11 @@
 import React, { FC, useCallback } from 'react'
-import { PoolType } from '../pool/context/types'
 import { ActionType, LiquidityMode } from './context/types'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
 import { useLingui } from '@lingui/react'
 import BalancedModeExplanationModal from './BalancedModeExplanationModal'
+import { PoolType } from '../types'
 
 const BalancedModeHeader: FC = () => {
   const { i18n } = useLingui()

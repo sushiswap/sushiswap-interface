@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { tryParseAmount } from '../functions'
 import { Pool } from '../features/trident/types'
-import { PoolType } from '../features/trident/pool/context/types'
+import { PoolType } from '../features/trident/types'
 
 export const toHref = (pool: Pool) => {
   return pool.tokens.map((el) => el.address).join('/')

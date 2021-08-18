@@ -17,11 +17,7 @@ const ClassicMyDeposits: FC = () => {
       <ListPanel
         header={<ListPanel.Header title={i18n._(t`Assets`)} value="$16,720.00" subValue="54.32134 SLP" />}
         items={pool.amounts.map((amount, index) => (
-          <ListPanel.Item
-            key={index}
-            left={<ListPanel.Item.Left amount={amount} />}
-            right={<ListPanel.Item.Right>$8,360.00</ListPanel.Item.Right>}
-          />
+          <ListPanel.CurrencyAmountItem amount={amount} key={index} />
         ))}
         footer={<ListPanel.Footer title={i18n._(t`Share of Pool`)} value="0.05%" />}
       />

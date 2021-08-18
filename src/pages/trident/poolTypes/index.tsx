@@ -5,19 +5,8 @@ import { useLingui } from '@lingui/react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { POOLS_ROUTE, POOL_TYPES_ROUTE } from '../../../constants/routes'
 import PoolTypesList from '../../../features/trident/types/PoolTypesList'
-import { toHref } from '../../../hooks/useTridentPools'
-import DepositSettingsModal from '../../../features/trident/add/DepositSettingsModal'
-import { LiquidityMode } from '../../../features/trident/add/context/types'
-import SettingsTab from '../../../components/Settings'
 import React from 'react'
-
-export const getStaticProps = async () => ({
-  props: {
-    breadcrumbs: [POOLS_ROUTE, POOL_TYPES_ROUTE],
-  },
-})
 
 const PoolTypes = () => {
   const { i18n } = useLingui()

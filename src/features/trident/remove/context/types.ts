@@ -1,3 +1,7 @@
+import { Pool } from '../../types'
+import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Dispatch } from 'react'
+
 export enum LiquidityMode {
   STANDARD = 'Standard Mode',
   ZAP = 'Zap Mode',
@@ -24,4 +28,16 @@ export interface State {
 
 export interface HandleInputOptions {
   clear?: boolean
+}
+
+export interface Context {
+  state: State
+  pool: Pool
+  parsedInputAmounts: Record<string, CurrencyAmount<Token> | undefined>
+  parsedOutputAmounts: Record<string, CurrencyAmount<Token> | undefined>
+  tokens: { [x: string]: Token }
+  execute: () => void
+  handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
+  showReview: () => void
+  dispatch: Dispatch<any>
 }

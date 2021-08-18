@@ -29,10 +29,3 @@ export interface State {
     }[]
   }
 }
-
-export enum PoolType {
-  CLASSIC = 'CLASSIC',
-  HYBRID = 'HYBRID',
-  CONCENTRATED = 'CONCENTRATED',
-  WEIGHTED = 'WEIGHTED',
-}

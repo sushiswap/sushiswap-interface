@@ -1,12 +1,15 @@
-import React, { createContext, useContext, useReducer, Dispatch, useMemo, useCallback } from 'react'
+import React, { createContext, useContext, useReducer, useMemo, useCallback } from 'react'
 import reducer from './reducer'
-import { ActionType, LiquidityMode, Reducer, State } from './types'
+import { ActionType, Context, LiquidityMode, Reducer, State } from './types'
 import { useRouter } from 'next/router'
 import { useTridentPool } from '../../../../hooks/useTridentPools'
-import { Pool } from '../../types'
 import { HandleInputOptions } from '../../remove/context/types'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import useClassicPoolContext from './useClassicPoolContext'
 import { tryParseAmount } from '../../../../functions'
+import useConcentratedPoolContext from './useConcentratedPoolContext'
+import useHybridPoolContext from './useHybridPoolContext'
+import useWeightedPoolContext from './useWeightedPoolContext'
+import { PoolType } from '../../types'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -18,17 +21,7 @@ const initialState: State = {
   spendFromWallet: true,
 }
 
-export const TridentAddLiquidityPageContext = createContext<{
-  state: State
-  pool: Pool
-  parsedInputAmounts: Record<string, CurrencyAmount<Token> | undefined>
-  parsedOutputAmounts: Record<string, CurrencyAmount<Token> | undefined>
-  tokens: { [x: string]: Token }
-  execute: () => void
-  handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
-  showReview: (x: boolean) => void
-  dispatch: Dispatch<any>
-}>({
+export const TridentAddLiquidityPageContext = createContext<Context>({
   state: initialState,
   pool: null,
   parsedInputAmounts: {},
@@ -51,6 +44,8 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
   // Convenience variable to allow for indexing by address
   const tokens = useMemo(() => pool.tokens.reduce((acc, cur) => ((acc[cur.address] = cur), acc), {}), [pool.tokens])
 
+  // This function remains the same regarding poolType
+  // so defined here once and pass on to child contexts
   const handleInput = useCallback(
     (amount: string, address: string, options: HandleInputOptions = {}) => {
       dispatch({
@@ -64,6 +59,7 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
     [dispatch]
   )
 
+  // Default showReview dispatch action
   const showReview = useCallback(
     (payload = true) => {
       dispatch({
@@ -74,13 +70,15 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
     [dispatch]
   )
 
+  // Parent execution function that hides modal after execute
+  // Consider calling this function inside poolType context
   const execute = useCallback(async () => {
-    alert('Execute')
+    alert('Execute function inside parent context')
 
-    // Close modal
     showReview(false)
   }, [showReview])
 
+  // Default input parse
   // We don't want this in the state because the state should consist of primitive values only,
   // derived state should go here (in the context)
   const parsedInputAmounts = useMemo(() => {
@@ -90,6 +88,7 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
     }, {})
   }, [state.inputAmounts, tokens])
 
+  // Default output parse
   // For NORMAL mode, outputAmounts equals inputAmounts.
   // For ZAP mode, outputAmounts is the split inputAmount
   const parsedOutputAmounts = useMemo(() => {
@@ -108,21 +107,56 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
     }
   }, [state.inputAmounts, state.liquidityMode, tokens])
 
+  // Create memoized context object to send to child contexts
+  const contextArgs = useMemo(
+    () => ({
+      state,
+      pool,
+      dispatch,
+      execute,
+      showReview,
+      handleInput,
+      tokens,
+      parsedInputAmounts,
+      parsedOutputAmounts,
+    }),
+    [execute, handleInput, parsedInputAmounts, parsedOutputAmounts, pool, showReview, state, tokens]
+  )
+
+  // Hooks for context overrides
+  const classicPool = useClassicPoolContext(contextArgs)
+  const concentratedPool = useConcentratedPoolContext(contextArgs)
+  const hybridPool = useHybridPoolContext(contextArgs)
+  const weightedPool = useWeightedPoolContext(contextArgs)
+
+  // Get overrides for current pool type
+  const overrides = useMemo(
+    () =>
+      ({
+        [PoolType.CLASSIC]: classicPool,
+        [PoolType.CONCENTRATED]: concentratedPool,
+        [PoolType.HYBRID]: hybridPool,
+        [PoolType.WEIGHTED]: weightedPool,
+      }[pool.type]),
+    [classicPool, concentratedPool, hybridPool, pool.type, weightedPool]
+  )
+
   return (
     <TridentAddLiquidityPageContext.Provider
       value={useMemo(
         () => ({
           state,
-          parsedInputAmounts,
-          parsedOutputAmounts,
           pool,
           tokens,
           handleInput,
           showReview,
           execute,
           dispatch,
+          parsedInputAmounts,
+          parsedOutputAmounts,
+          ...overrides,
         }),
-        [state, parsedInputAmounts, parsedOutputAmounts, pool, tokens, handleInput, showReview, execute]
+        [state, pool, tokens, handleInput, showReview, execute, parsedInputAmounts, parsedOutputAmounts, overrides]
       )}
     >
       {children}

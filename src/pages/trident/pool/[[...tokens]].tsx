@@ -15,7 +15,7 @@ import { POOL_TYPES } from '../../../features/trident/constants'
 import ClassicMyDeposits from '../../../features/trident/pool/ClassicMyDeposits'
 import ClassicMarket from '../../../features/trident/pool/ClassicMarket'
 import { TridentPoolPageContextProvider } from '../../../features/trident/pool/context'
-import { PoolType } from '../../../features/trident/pool/context/types'
+import { PoolType } from '../../../features/trident/types'
 import HybridPoolComposition from '../../../features/trident/pool/HybridPoolComposition'
 
 const Pool = () => {

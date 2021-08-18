@@ -13,7 +13,7 @@ import CurrencySelectDialog from '../CurrencySelectDialog'
 import CurrencyLogo from '../CurrencyLogo'
 import ListPanel from '../ListPanel'
 import { useTokenBalance } from '../../state/wallet/hooks'
-import { useBentoBalance } from '../../state/bentobox/hooks'
+import { useBentoBalance, useBentoBalance2 } from '../../state/bentobox/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 
@@ -109,9 +109,8 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect }) => {
 const BalancePanel = ({ currency }: { currency: Token }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const bento = useBentoBalance(currency.address)
-  const bentoTokenAmount = tryParseAmount(bento?.value?.toString(), currency)
-  const bentoUSDC = useUSDCValue(bentoTokenAmount)
+  const bento = useBentoBalance2(account, currency)
+  const bentoUSDC = useUSDCValue(bento)
   const wallet = useTokenBalance(account, currency)
   const walletUSDC = useUSDCValue(wallet)
 
@@ -157,7 +156,7 @@ const BalancePanel = ({ currency }: { currency: Token }) => {
               {i18n._(t`In Bento:`)}
             </Typography>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {bentoTokenAmount?.greaterThan('0') ? bentoTokenAmount?.toSignificant(6) : '0.0000'}
+              {bento?.greaterThan('0') ? bento?.toSignificant(6) : '0.0000'}
             </Typography>
           </div>
           <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
