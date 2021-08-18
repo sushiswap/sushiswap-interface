@@ -1,9 +1,10 @@
 import {
   CHAINLINK_ORACLE_ADDRESS,
+  ChainId,
   SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
   SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-} from '../constants/kashi'
-import { ChainId, Token } from '@sushiswap/sdk'
+  Token,
+} from '@sushiswap/sdk'
 
 import { AddressZero } from '@ethersproject/constants'
 import { CHAINLINK_MAPPING } from '../constants/chainlink'
@@ -28,7 +29,7 @@ export abstract class AbstractOracle implements Oracle {
   chainId = ChainId.MAINNET
   pair: any
   tokens: Token[]
-  valid
+  valid = false
 
   constructor(pair: any, chainId, tokens?: Token[]) {
     this.address = pair.oracle
@@ -36,7 +37,6 @@ export abstract class AbstractOracle implements Oracle {
     this.pair = pair
     this.chainId = chainId
     this.tokens = tokens
-    this.valid = false
   }
 }
 

@@ -1,8 +1,15 @@
-import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
+import {
+  ARCHER_ROUTER_ADDRESS,
+  Currency,
+  CurrencyAmount,
+  Percent,
+  ROUTER_ADDRESS,
+  TradeType,
+  Trade as V2Trade,
+} from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 
-import { ARCHER_ROUTER_ADDRESS } from '../constants'
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { calculateGasMargin } from '../functions/trade'

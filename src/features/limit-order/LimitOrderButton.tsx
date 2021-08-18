@@ -1,6 +1,6 @@
 import { ApprovalState, useApproveCallback } from '../../hooks'
+import { BENTOBOX_ADDRESS, ChainId, Currency } from '@sushiswap/sdk'
 import Button, { ButtonProps } from '../../components/Button'
-import { ChainId, Currency } from '@sushiswap/sdk'
 import { Field, setFromBentoBalance } from '../../state/limit-order/actions'
 import React, { FC, useCallback, useState } from 'react'
 import { useAddPopup, useWalletModalToggle } from '../../state/application/hooks'
@@ -9,7 +9,6 @@ import useLimitOrderApproveCallback, { BentoApprovalState } from '../../hooks/us
 
 import Alert from '../../components/Alert'
 import { AppDispatch } from '../../state'
-import { BENTOBOX_ADDRESS } from '../../constants/kashi'
 import ConfirmLimitOrderModal from './ConfirmLimitOrderModal'
 import Dots from '../../components/Dots'
 import { LimitOrder } from 'limitorderv2-sdk'

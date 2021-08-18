@@ -1,4 +1,4 @@
-import { shortenAddress } from '../../src/functions/format'
+import { shortenAddress } from '../../../src/functions/format'
 
 describe('#shortenAddress', () => {
     it('throws on invalid address', () => {

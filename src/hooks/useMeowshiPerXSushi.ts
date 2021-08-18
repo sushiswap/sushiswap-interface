@@ -1,7 +1,8 @@
-import { useBentoBoxContract } from './useContract'
 import { useEffect, useState } from 'react'
-import { XSUSHI } from '../constants'
+
 import { BigNumber } from 'ethers'
+import { XSUSHI } from '../constants'
+import { useBentoBoxContract } from './useContract'
 
 export default function useMeowshiPerXSushi() {
   const bentoboxContract = useBentoBoxContract()

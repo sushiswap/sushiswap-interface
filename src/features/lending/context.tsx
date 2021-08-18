@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, KASHI_ADDRESS, NATIVE, Token, WNATIVE } from '@sushiswap/sdk'
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
 import {
@@ -14,7 +14,6 @@ import { useBentoBoxContract, useBoringHelperContract } from '../../hooks/useCon
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../../entities/Fraction'
-import { KASHI_ADDRESS } from '../../constants/kashi'
 import { USDC } from '../../hooks'
 import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
@@ -223,7 +222,7 @@ export function KashiProvider({ children }) {
 
       // Get the deployed pairs from the logs and decode
       const logPairs = await getPairs(bentoBoxContract, chainId)
-      // console.log({ logPairs })
+      console.log({ logPairs })
 
       // Filter all pairs by supported oracles and verify the oracle setup
 

@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from 'ethers'
 import ERC20_ABI from '../constants/abis/erc20.json'
-import { WNATIVE } from '@sushiswap/sdk'
+import { WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import { isAddress } from '../functions/validate'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBlockNumber } from '../state/application/hooks'
@@ -31,7 +31,7 @@ function useTokenBalance(tokenAddress: string): BalanceProps {
   const fetchBalance = useCallback(async () => {
     async function getBalance(contract: Contract | null, owner: string | null | undefined): Promise<BalanceProps> {
       try {
-        if (account && chainId && contract?.address === WNATIVE[chainId].address) {
+        if (account && chainId && contract?.address === WNATIVE_ADDRESS[chainId]) {
           const ethBalance = await library?.getBalance(account)
           return { value: BigNumber.from(ethBalance), decimals: 18 }
         }
