@@ -14,6 +14,7 @@ import AssetInput from '../../../components/AssetInput'
 import DepositButtons from './DepositButtons'
 import { ActionType } from './context/types'
 import Checkbox from '../../../components/Checkbox'
+import TransactionDetails from './TransactionDetails'
 
 function toggleArrayItem(arr, item) {
   return arr.includes(item)
@@ -112,6 +113,10 @@ const HybridStandardMode: FC = () => {
     return selected.every((el) => inputAmounts[el.address] === balances[el.address]?.toExact())
   }, [balances, inputAmounts, selected])
 
+  const validInputs = useMemo(() => {
+    return Object.values(inputAmounts).some((el) => +el > 0)
+  }, [inputAmounts])
+
   return (
     <div className="flex flex-col px-5 gap-8">
       <div className="flex flex-col">
@@ -188,7 +193,7 @@ const HybridStandardMode: FC = () => {
               {i18n._(t`${selected.length} ${plural(selected.length, { one: 'Asset', other: 'Assets' })} Selected`)}
             </Typography>
           </div>
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4">
             {selected.map((currency) => (
               <AssetInput
                 key={currency.address}
@@ -198,14 +203,11 @@ const HybridStandardMode: FC = () => {
               />
             ))}
 
-            <DepositButtons
-              onMax={onMax}
-              isMaxInput={isMaxInput}
-              inputValid={Object.values(inputAmounts).some((el) => +el > 0)}
-            />
+            <DepositButtons onMax={onMax} isMaxInput={isMaxInput} inputValid={validInputs} />
           </div>
         </>
       )}
+      {validInputs && <TransactionDetails />}
     </div>
   )
 }

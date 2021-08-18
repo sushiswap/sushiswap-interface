@@ -29,6 +29,9 @@ msgstr ""
 msgid "1 Week"
 msgstr ""
 
+msgid "1:1 Ratio:"
+msgstr ""
+
 msgid "24 Hours"
 msgstr ""
 
@@ -152,7 +155,7 @@ msgstr "Số dư"
 msgid "Balance:"
 msgstr ""
 
-msgid "Balanced Mode:"
+msgid "Balanced Mode is an optional UI setting to maintain the traditional style of equal-value adds and removes."
 msgstr ""
 
 msgid "Balanced Mode: Off"
@@ -424,6 +427,9 @@ msgstr ""
 msgid "Error connecting. Try refreshing the page."
 msgstr ""
 
+msgid "Estimated Network Fee"
+msgstr ""
+
 msgid "Exchange Rate"
 msgstr ""
 
@@ -447,6 +453,9 @@ msgid "Expired"
 msgstr ""
 
 msgid "Farm"
+msgstr ""
+
+msgid "Fee Breakdown"
 msgstr ""
 
 msgid "Fees"
@@ -478,6 +487,9 @@ msgstr ""
 "SUSHI đã ký quỹ ban đầu và mọi khoản phí bổ sung."
 
 msgid "French"
+msgstr ""
+
+msgid "Funding source:"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -593,7 +605,7 @@ msgstr ""
 msgid "LTV"
 msgstr ""
 
-msgid "Learn More"
+msgid "Learn more about BentoBox"
 msgstr ""
 
 msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
@@ -661,6 +673,9 @@ msgstr "Đang tải trạng thái thanh khoản {exchange}"
 
 msgid "Loading..."
 msgstr "Đang tải..."
+
+msgid "Lower price impacts. The closer to equilibrium you interact with a pool, the lower price impact there is on your investment."
+msgstr ""
 
 msgid "MAX"
 msgstr "TỐI ĐA"
@@ -873,6 +888,11 @@ msgstr ""
 msgid "Positions"
 msgstr "Vị thế"
 
+msgid ""
+"Previously, adding and removing liquidity had to be done with equal amounts of all assets. With the Trident\n"
+"update, this is no longer mandatory."
+msgstr ""
+
 msgid "Price Impact"
 msgstr "Tác động giá"
 
@@ -933,7 +953,7 @@ msgstr "Chỉ hạn chế hoán đổi đối với các cặp trực tiếp."
 msgid "Results"
 msgstr ""
 
-msgid "Results for '{searchQuery}'"
+msgid "Results for {0}"
 msgstr ""
 
 msgid "Review Limit Order"
@@ -958,6 +978,9 @@ msgid "Russian"
 msgstr ""
 
 msgid "SLP"
+msgstr ""
+
+msgid "SUSHI utilizes a token vault called BentoBox that has balances separate from your wallet."
 msgstr ""
 
 msgid "Search by token"
@@ -1090,10 +1113,16 @@ msgstr ""
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr ""
 
+msgid "The difference between market price and estimated price due to the proportional makeup of the assets deposited."
+msgstr ""
+
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "Sự khác biệt giữa giá thị trường và giá ước tính theo quy mô giao dịch."
 
 msgid "The input token cannot be transferred. There may be an issue with the input token."
+msgstr ""
+
+msgid "The minimum amount you’ll receive from your transaction, or else the transaction will revert."
 msgstr ""
 
 msgid "The onchain oracle that tracks the pricing for this pair"
@@ -1107,6 +1136,9 @@ msgstr ""
 
 msgid "Things you can do with your SUSHI"
 msgstr "Những điều bạn có thể làm với SUSHI của mình"
+
+msgid "This is our estimate of how much the gas cost for your transaction will be.  Your wallet will give the true and final gas cost, which may be different from what is quoted."
+msgstr ""
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
@@ -1194,6 +1226,9 @@ msgstr "Mở bọc"
 msgid "Use SUSHI"
 msgstr ""
 
+msgid "Use the toggle to switch between balances when interacting with our platform."
+msgstr ""
+
 msgid "Use this tool to find pairs that don't automatically appear in the interface"
 msgstr ""
 
@@ -1263,6 +1298,9 @@ msgstr ""
 msgid "Which will be converted to:"
 msgstr ""
 
+msgid "Why use Balance Mode?"
+msgstr ""
+
 msgid "Withdraw"
 msgstr "Rút tiền"
 
@@ -1288,6 +1326,15 @@ msgid "You are on the wrong network"
 msgstr "Bạn đang kết nối sai mạng"
 
 msgid "You are removing:"
+msgstr ""
+
+msgid "You can think of this like having \"account balances\" for each asset within sushi.com"
+msgstr ""
+
+msgid "You can toggle balance mode in Settings by tapping this icon."
+msgstr ""
+
+msgid "You do not have enough DAI to match the amount of WETH you have entered.  Please enter equal value amounts to continue with your deposit."
 msgstr ""
 
 msgid "You don’t have liquidity in this pool yet"
@@ -1375,6 +1422,9 @@ msgstr ""
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange} {0} / {1} thanh khoản của bạn sẽ trở thành thanh khoản SushiSwap {2}/{3} ."
+
+msgid "You’ll see these icons next to your balance in various input fields."
+msgstr ""
 
 msgid "Zap"
 msgstr ""

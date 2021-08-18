@@ -128,7 +128,9 @@ const AddTransactionReviewModal = () => {
             </Typography>
           </Button>
         </div>
-        <TransactionDetails />
+        <div className="flex flex-col px-5">
+          <TransactionDetails />
+        </div>
       </div>
     </HeadlessUIModal.Controlled>
   )

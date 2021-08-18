@@ -29,6 +29,9 @@ msgstr "1 Hour"
 msgid "1 Week"
 msgstr "1 Week"
 
+msgid "1:1 Ratio:"
+msgstr "1:1 Ratio:"
+
 msgid "24 Hours"
 msgstr "24 Hours"
 
@@ -152,8 +155,8 @@ msgstr "Balance"
 msgid "Balance:"
 msgstr "Balance:"
 
-msgid "Balanced Mode:"
-msgstr "Balanced Mode:"
+msgid "Balanced Mode is an optional UI setting to maintain the traditional style of equal-value adds and removes."
+msgstr "Balanced Mode is an optional UI setting to maintain the traditional style of equal-value adds and removes."
 
 msgid "Balanced Mode: Off"
 msgstr "Balanced Mode: Off"
@@ -429,6 +432,9 @@ msgstr "Error connecting"
 msgid "Error connecting. Try refreshing the page."
 msgstr "Error connecting. Try refreshing the page."
 
+msgid "Estimated Network Fee"
+msgstr "Estimated Network Fee"
+
 msgid "Exchange Rate"
 msgstr "Exchange Rate"
 
@@ -453,6 +459,9 @@ msgstr "Expired"
 
 msgid "Farm"
 msgstr "Farm"
+
+msgid "Fee Breakdown"
+msgstr "Fee Breakdown"
 
 msgid "Fees"
 msgstr "Fees"
@@ -484,6 +493,9 @@ msgstr ""
 
 msgid "French"
 msgstr "French"
+
+msgid "Funding source:"
+msgstr "Funding source:"
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
 msgstr "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
@@ -602,8 +614,8 @@ msgstr "Korean"
 msgid "LTV"
 msgstr "LTV"
 
-msgid "Learn More"
-msgstr "Learn More"
+msgid "Learn more about BentoBox"
+msgstr "Learn more about BentoBox"
 
 msgid "Learn more about the power of Sushi's AMM and Tines routing engine."
 msgstr "Learn more about the power of Sushi's AMM and Tines routing engine."
@@ -670,6 +682,9 @@ msgstr "Loading your {exchange} liquidity positions"
 
 msgid "Loading..."
 msgstr "Loading..."
+
+msgid "Lower price impacts. The closer to equilibrium you interact with a pool, the lower price impact there is on your investment."
+msgstr "Lower price impacts. The closer to equilibrium you interact with a pool, the lower price impact there is on your investment."
 
 msgid "MAX"
 msgstr "MAX"
@@ -886,6 +901,13 @@ msgstr "Pools"
 msgid "Positions"
 msgstr "Positions"
 
+msgid ""
+"Previously, adding and removing liquidity had to be done with equal amounts of all assets. With the Trident\n"
+"update, this is no longer mandatory."
+msgstr ""
+"Previously, adding and removing liquidity had to be done with equal amounts of all assets. With the Trident\n"
+"update, this is no longer mandatory."
+
 msgid "Price Impact"
 msgstr "Price Impact"
 
@@ -946,8 +968,8 @@ msgstr "Restricts swaps to direct pairs only."
 msgid "Results"
 msgstr "Results"
 
-msgid "Results for '{searchQuery}'"
-msgstr "Results for '{searchQuery}'"
+msgid "Results for {0}"
+msgstr "Results for {0}"
 
 msgid "Review Limit Order"
 msgstr "Review Limit Order"
@@ -972,6 +994,9 @@ msgstr "Russian"
 
 msgid "SLP"
 msgstr "SLP"
+
+msgid "SUSHI utilizes a token vault called BentoBox that has balances separate from your wallet."
+msgstr "SUSHI utilizes a token vault called BentoBox that has balances separate from your wallet."
 
 msgid "Search by token"
 msgstr "Search by token"
@@ -1103,11 +1128,17 @@ msgstr "Tap any to learn more"
 msgid "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 msgstr "The Uniswap invariant x*y=k was not satisfied by the swap. This usually means one of the tokens you are swapping incorporates custom behavior on transfer."
 
+msgid "The difference between market price and estimated price due to the proportional makeup of the assets deposited."
+msgstr "The difference between market price and estimated price due to the proportional makeup of the assets deposited."
+
 msgid "The difference between the market price and estimated price due to trade size."
 msgstr "The difference between the market price and estimated price due to trade size."
 
 msgid "The input token cannot be transferred. There may be an issue with the input token."
 msgstr "The input token cannot be transferred. There may be an issue with the input token."
+
+msgid "The minimum amount you’ll receive from your transaction, or else the transaction will revert."
+msgstr "The minimum amount you’ll receive from your transaction, or else the transaction will revert."
 
 msgid "The onchain oracle that tracks the pricing for this pair"
 msgstr "The onchain oracle that tracks the pricing for this pair"
@@ -1120,6 +1151,9 @@ msgstr "The transaction could not be sent because the deadline has passed. Pleas
 
 msgid "Things you can do with your SUSHI"
 msgstr "Things you can do with your SUSHI"
+
+msgid "This is our estimate of how much the gas cost for your transaction will be.  Your wallet will give the true and final gas cost, which may be different from what is quoted."
+msgstr "This is our estimate of how much the gas cost for your transaction will be.  Your wallet will give the true and final gas cost, which may be different from what is quoted."
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
@@ -1209,6 +1243,9 @@ msgstr "Unwrap"
 msgid "Use SUSHI"
 msgstr "Use SUSHI"
 
+msgid "Use the toggle to switch between balances when interacting with our platform."
+msgstr "Use the toggle to switch between balances when interacting with our platform."
+
 msgid "Use this tool to find pairs that don't automatically appear in the interface"
 msgstr "Use this tool to find pairs that don't automatically appear in the interface"
 
@@ -1278,6 +1315,9 @@ msgstr "Which will be converted to..."
 msgid "Which will be converted to:"
 msgstr "Which will be converted to:"
 
+msgid "Why use Balance Mode?"
+msgstr "Why use Balance Mode?"
+
 msgid "Withdraw"
 msgstr "Withdraw"
 
@@ -1304,6 +1344,15 @@ msgstr "You are on the wrong network"
 
 msgid "You are removing:"
 msgstr "You are removing:"
+
+msgid "You can think of this like having \"account balances\" for each asset within sushi.com"
+msgstr "You can think of this like having \"account balances\" for each asset within sushi.com"
+
+msgid "You can toggle balance mode in Settings by tapping this icon."
+msgstr "You can toggle balance mode in Settings by tapping this icon."
+
+msgid "You do not have enough DAI to match the amount of WETH you have entered.  Please enter equal value amounts to continue with your deposit."
+msgstr "You do not have enough DAI to match the amount of WETH you have entered.  Please enter equal value amounts to continue with your deposit."
 
 msgid "You don’t have liquidity in this pool yet"
 msgstr "You don’t have liquidity in this pool yet"
@@ -1392,6 +1441,9 @@ msgstr "Your {0} will be split into:"
 
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
+
+msgid "You’ll see these icons next to your balance in various input fields."
+msgstr "You’ll see these icons next to your balance in various input fields."
 
 msgid "Zap"
 msgstr "Zap"

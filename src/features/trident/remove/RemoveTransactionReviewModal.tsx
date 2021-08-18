@@ -5,14 +5,14 @@ import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
 import { useTridentRemoveLiquidityPageContext, useTridentRemoveLiquidityPageState } from './context'
-import { ActionType } from './context/types'
+import { ActionType, LiquidityMode } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 
 const RemoveTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
-  const { showZapReview } = useTridentRemoveLiquidityPageState()
+  const { liquidityMode, showZapReview } = useTridentRemoveLiquidityPageState()
   const { pool, dispatch, execute, parsedInputAmounts, parsedOutputAmounts } = useTridentRemoveLiquidityPageContext()
 
   const closeModal = useCallback(() => {
@@ -61,16 +61,18 @@ const RemoveTransactionReviewModal: FC = () => {
               ))}
             />
           </div>
-          <div className="flex flex-col gap-3 px-5">
-            <Typography weight={700} variant="lg">
-              {i18n._(t`Which will be converted to...`)}
-            </Typography>
-            <ListPanel
-              items={pool.tokens.map((token, index) => (
-                <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[token.address]} key={index} />
-              ))}
-            />
-          </div>
+          {liquidityMode === LiquidityMode.ZAP && (
+            <div className="flex flex-col gap-3 px-5">
+              <Typography weight={700} variant="lg">
+                {i18n._(t`Which will be converted to...`)}
+              </Typography>
+              <ListPanel
+                items={Object.values(parsedOutputAmounts).map((token, index) => (
+                  <ListPanel.CurrencyAmountItem amount={token} key={index} />
+                ))}
+              />
+            </div>
+          )}
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
               {i18n._(t`...and deposited to your:`)}

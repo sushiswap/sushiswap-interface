@@ -14,6 +14,7 @@ import { TridentAddClassicPoolContext, TridentAddClassicPoolContextProvider } fr
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
 const initialState: State = {
+  inputTokenAddress: null,
   liquidityMode: LiquidityMode.ZAP,
   inputAmounts: {},
   showZapReview: false,
@@ -29,6 +30,7 @@ export const TridentAddLiquidityPageContext = createContext<Context>({
   tokens: {},
   execute: () => null,
   handleInput: () => null,
+  selectInputToken: () => null,
   showReview: () => null,
   dispatch: () => null,
 })
@@ -65,6 +67,16 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
       dispatch({
         type: ActionType.SHOW_ZAP_REVIEW,
         payload,
+      })
+    },
+    [dispatch]
+  )
+
+  const selectInputToken = useCallback(
+    (address: string) => {
+      dispatch({
+        type: ActionType.SET_INPUT_TOKEN,
+        payload: address,
       })
     },
     [dispatch]
@@ -129,10 +141,21 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
           showReview,
           execute,
           dispatch,
+          selectInputToken,
           parsedInputAmounts,
           parsedOutputAmounts,
         }),
-        [state, pool, tokens, handleInput, showReview, execute, parsedInputAmounts, parsedOutputAmounts]
+        [
+          state,
+          pool,
+          tokens,
+          handleInput,
+          showReview,
+          execute,
+          selectInputToken,
+          parsedInputAmounts,
+          parsedOutputAmounts,
+        ]
       )}
     >
       <ChildProvider>{children}</ChildProvider>

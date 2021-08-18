@@ -16,6 +16,8 @@ import { TridentRemoveWeightedPoolContext, TridentRemoveWeightedPoolContextProvi
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
 const initialState: State = {
+  outputTokenAddress: null,
+  percentageAmount: '',
   liquidityMode: LiquidityMode.ZAP,
   inputAmounts: {},
   showZapReview: false,
@@ -28,6 +30,8 @@ export const TridentRemoveLiquidityPageContext = createContext<Context>({
   parsedOutputAmounts: {},
   tokens: {},
   execute: () => null,
+  handlePercentageAmount: () => null,
+  selectOutputToken: () => null,
   handleInput: () => null,
   showReview: () => null,
   dispatch: () => null,
@@ -59,12 +63,31 @@ export const TridentRemoveLiquidityPageContextProvider = ({ children }) => {
     [dispatch]
   )
 
-  // Default showReview dispatch action
+  const handlePercentageAmount = useCallback(
+    (amount: string) => {
+      dispatch({
+        type: ActionType.SET_PERCENTAGE_AMOUNT,
+        payload: amount,
+      })
+    },
+    [dispatch]
+  )
+
   const showReview = useCallback(
     (payload = true) => {
       dispatch({
         type: ActionType.SHOW_ZAP_REVIEW,
         payload,
+      })
+    },
+    [dispatch]
+  )
+
+  const selectOutputToken = useCallback(
+    (address: string) => {
+      dispatch({
+        type: ActionType.SET_OUTPUT_TOKEN,
+        payload: address,
       })
     },
     [dispatch]
@@ -127,13 +150,26 @@ export const TridentRemoveLiquidityPageContextProvider = ({ children }) => {
           pool,
           tokens,
           handleInput,
+          handlePercentageAmount,
+          selectOutputToken,
           showReview,
           execute,
           dispatch,
           parsedInputAmounts,
           parsedOutputAmounts,
         }),
-        [state, pool, tokens, handleInput, showReview, execute, parsedInputAmounts, parsedOutputAmounts]
+        [
+          state,
+          pool,
+          tokens,
+          handleInput,
+          handlePercentageAmount,
+          selectOutputToken,
+          showReview,
+          execute,
+          parsedInputAmounts,
+          parsedOutputAmounts,
+        ]
       )}
     >
       <ChildProvider>{children}</ChildProvider>

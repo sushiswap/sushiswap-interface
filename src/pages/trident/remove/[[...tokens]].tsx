@@ -18,8 +18,9 @@ import ClassicUnzapMode from '../../../features/trident/remove/ClassicUnzapMode'
 import { LiquidityMode } from '../../../features/trident/remove/context/types'
 import ModeToggle from '../../../features/trident/remove/ModeToggle'
 import RemoveTransactionReviewModal from '../../../features/trident/remove/RemoveTransactionReviewModal'
+import ClassicStandardMode from '../../../features/trident/remove/ClassicStandardMode'
 
-const Add = () => {
+const Remove = () => {
   const { i18n } = useLingui()
   const { liquidityMode } = useTridentRemoveLiquidityPageState()
   const { pool } = useTridentRemoveLiquidityPageContext()
@@ -56,14 +57,26 @@ const Add = () => {
 
       <ModeToggle />
 
-      {pool.type === PoolType.CLASSIC && <>{liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}</>}
+      {pool.type === PoolType.CLASSIC && (
+        <>
+          {liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
+          {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+        </>
+      )}
+
+      {pool.type === PoolType.HYBRID && (
+        <>
+          {/*{liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}*/}
+          {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
+        </>
+      )}
 
       <RemoveTransactionReviewModal />
     </div>
   )
 }
 
-Add.Layout = TridentLayout
-Add.Provider = TridentRemoveLiquidityPageContextProvider
+Remove.Layout = TridentLayout
+Remove.Provider = TridentRemoveLiquidityPageContextProvider
 
-export default Add
+export default Remove

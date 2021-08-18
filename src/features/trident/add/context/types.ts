@@ -9,6 +9,7 @@ export enum LiquidityMode {
 }
 
 export enum ActionType {
+  SET_INPUT_TOKEN = 'SET_INPUT_TOKEN',
   SET_BALANCED_MODE = 'SET_BALANCED_MODE',
   SET_LIQUIDITY_MODE = 'SET_LIQUIDITY_MODE',
   SET_INPUT_AMOUNT = 'SET_INPUT_AMOUNT',
@@ -24,6 +25,7 @@ export interface Reducer {
 }
 
 export interface State {
+  inputTokenAddress: string
   liquidityMode: LiquidityMode
   inputAmounts: Record<string, string>
   showZapReview: boolean
@@ -39,6 +41,7 @@ export interface Context {
   tokens: { [x: string]: Token }
   execute: () => void
   handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
+  selectInputToken: (address: string) => void
   showReview: (x: boolean) => void
   dispatch: Dispatch<any>
 }

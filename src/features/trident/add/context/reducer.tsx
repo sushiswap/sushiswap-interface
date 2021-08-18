@@ -3,6 +3,12 @@ import { ActionType, Reducer, State } from './types'
 
 const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
   switch (action.type) {
+    case ActionType.SET_INPUT_TOKEN: {
+      return {
+        ...state,
+        inputTokenAddress: action.payload,
+      }
+    }
     case ActionType.SET_SPEND_FROM_WALLET: {
       return {
         ...state,

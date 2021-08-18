@@ -8,7 +8,7 @@ const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex flex-col gap-4 px-5">
+    <div className="flex flex-col gap-4">
       <div className="flex flex-row justify-between">
         <Typography weight={700} className="text-high-emphesis">
           {i18n._(t`Transaction Details`)}

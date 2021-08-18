@@ -13,6 +13,8 @@ export enum ActionType {
   SET_INPUT_AMOUNT_WITH_CLEAR = 'SET_INPUT_AMOUNT_WITH_CLEAR',
   SET_INPUT_AMOUNTS = 'SET_INPUT_AMOUNTS',
   SHOW_ZAP_REVIEW = 'SHOW_ZAP_REVIEW',
+  SET_PERCENTAGE_AMOUNT = 'SET_PERCENTAGE_AMOUNT',
+  SET_OUTPUT_TOKEN = 'SET_OUTPUT_TOKEN',
 }
 
 export interface Reducer {
@@ -21,6 +23,8 @@ export interface Reducer {
 }
 
 export interface State {
+  outputTokenAddress: string
+  percentageAmount: string
   liquidityMode: LiquidityMode
   inputAmounts: Record<string, string>
   showZapReview: boolean
@@ -38,6 +42,8 @@ export interface Context {
   tokens: { [x: string]: Token }
   execute: () => void
   handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
+  handlePercentageAmount: (amount: string) => void
+  selectOutputToken: (address: string) => void
   showReview: () => void
   dispatch: Dispatch<any>
 }

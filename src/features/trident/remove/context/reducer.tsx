@@ -3,6 +3,18 @@ import { ActionType, Reducer, State } from './types'
 
 const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
   switch (action.type) {
+    case ActionType.SET_PERCENTAGE_AMOUNT: {
+      return {
+        ...state,
+        percentageAmount: action.payload,
+      }
+    }
+    case ActionType.SET_OUTPUT_TOKEN: {
+      return {
+        ...state,
+        outputTokenAddress: action.payload,
+      }
+    }
     case ActionType.SET_LIQUIDITY_MODE: {
       return {
         ...state,
