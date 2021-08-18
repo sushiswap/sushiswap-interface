@@ -166,10 +166,6 @@ export default function Farm(): JSX.Element {
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
-        const icon = `https://raw.githubusercontent.com/sushiswap/icons/master/token/${pool.rewardToken.symbol.toLowerCase()}.jpg`
-
-        const decimals = 10 ** pool.rewardToken.decimals
-
         const rewardPerSecond =
           ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
         const rewardPerBlock = rewardPerSecond * averageBlockTime
