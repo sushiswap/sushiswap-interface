@@ -38,7 +38,6 @@ import { useRouter } from 'next/router'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
-
   const router = useRouter()
 
   const type = router.query.filter == null ? 'all' : (router.query.filter as string)
@@ -129,15 +128,29 @@ export default function Farm(): JSX.Element {
 
         const decimals = 10 ** pool.rewardToken.decimals
 
+        /*const rewardPerBlock =
+          pool.rewardToken.symbol === 'ALCX'
+            ? pool.rewarder.rewardPerSecond / decimals
+            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime*/
+
         const rewardPerBlock =
           pool.rewardToken.symbol === 'ALCX'
             ? pool.rewarder.rewardPerSecond / decimals
+            : pool.rewardToken.symbol === 'LDO'
+            ? (77160493827160493 / decimals) * averageBlockTime
             : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
 
         const rewardPerDay =
           pool.rewardToken.symbol === 'ALCX'
             ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
+            : pool.rewardToken.symbol === 'LDO'
+            ? (77160493827160493 / decimals) * averageBlockTime * blocksPerDay
             : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
+
+        /*const rewardPerDay =
+          pool.rewardToken.symbol === 'ALCX'
+            ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
+            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay*/
 
         const reward = {
           token: pool.rewardToken.symbol,
@@ -152,6 +165,11 @@ export default function Farm(): JSX.Element {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
+
+        const icon = `https://raw.githubusercontent.com/sushiswap/icons/master/token/${pool.rewardToken.symbol.toLowerCase()}.jpg`
+
+        const decimals = 10 ** pool.rewardToken.decimals
+
         const rewardPerSecond =
           ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
         const rewardPerBlock = rewardPerSecond * averageBlockTime
