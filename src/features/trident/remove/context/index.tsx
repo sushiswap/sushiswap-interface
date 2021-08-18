@@ -4,11 +4,14 @@ import { ActionType, Context, HandleInputOptions, LiquidityMode, Reducer, State 
 import { useRouter } from 'next/router'
 import { useTridentPool } from '../../../../hooks/useTridentPools'
 import { tryParseAmount } from '../../../../functions'
-import useClassicPoolContext from './useClassicPoolContext'
-import useConcentratedPoolContext from './useConcentratedPoolContext'
-import useHybridPoolContext from './useHybridPoolContext'
-import useWeightedPoolContext from './useWeightedPoolContext'
 import { PoolType } from '../../types'
+import { TridentRemoveClassicPoolContext, TridentRemoveClassicPoolContextProvider } from './ClassicPoolContext'
+import {
+  TridentRemoveConcentratedPoolContext,
+  TridentRemoveConcentratedPoolContextProvider,
+} from './ConcentratedPoolContext'
+import { TridentRemoveHybridPoolContext, TridentRemoveHybridPoolContextProvider } from './HybridPoolContext'
+import { TridentRemoveWeightedPoolContext, TridentRemoveWeightedPoolContextProvider } from './WeightedPoolContext'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -105,38 +108,15 @@ export const TridentRemoveLiquidityPageContextProvider = ({ children }) => {
     }
   }, [state.inputAmounts, state.liquidityMode, tokens])
 
-  // Create memoized context object to send to child contexts
-  const contextArgs = useMemo(
-    () => ({
-      state,
-      pool,
-      dispatch,
-      execute,
-      showReview,
-      handleInput,
-      tokens,
-      parsedInputAmounts,
-      parsedOutputAmounts,
-    }),
-    [execute, handleInput, parsedInputAmounts, parsedOutputAmounts, pool, showReview, state, tokens]
-  )
-
-  // Hooks for context overrides
-  const classicPool = useClassicPoolContext(contextArgs)
-  const concentratedPool = useConcentratedPoolContext(contextArgs)
-  const hybridPool = useHybridPoolContext(contextArgs)
-  const weightedPool = useWeightedPoolContext(contextArgs)
-
-  // Get overrides for current pool type
-  const overrides = useMemo(
+  const ChildProvider = useMemo(
     () =>
       ({
-        [PoolType.CLASSIC]: classicPool,
-        [PoolType.CONCENTRATED]: concentratedPool,
-        [PoolType.HYBRID]: hybridPool,
-        [PoolType.WEIGHTED]: weightedPool,
+        [PoolType.CLASSIC]: TridentRemoveClassicPoolContextProvider,
+        [PoolType.CONCENTRATED]: TridentRemoveConcentratedPoolContextProvider,
+        [PoolType.HYBRID]: TridentRemoveHybridPoolContextProvider,
+        [PoolType.WEIGHTED]: TridentRemoveWeightedPoolContextProvider,
       }[pool.type]),
-    [classicPool, concentratedPool, hybridPool, pool.type, weightedPool]
+    [pool.type]
   )
 
   return (
@@ -145,23 +125,51 @@ export const TridentRemoveLiquidityPageContextProvider = ({ children }) => {
         () => ({
           state,
           pool,
-          dispatch,
-          execute,
-          showReview,
-          handleInput,
           tokens,
+          handleInput,
+          showReview,
+          execute,
+          dispatch,
           parsedInputAmounts,
           parsedOutputAmounts,
-          ...overrides,
         }),
-        [state, pool, execute, showReview, handleInput, tokens, parsedInputAmounts, parsedOutputAmounts, overrides]
+        [state, pool, tokens, handleInput, showReview, execute, parsedInputAmounts, parsedOutputAmounts]
       )}
     >
-      {children}
+      <ChildProvider>{children}</ChildProvider>
     </TridentRemoveLiquidityPageContext.Provider>
   )
 }
 
-export const useTridentRemoveLiquidityPageContext = () => useContext(TridentRemoveLiquidityPageContext)
-export const useTridentRemoveLiquidityPageState = () => useContext(TridentRemoveLiquidityPageContext).state
-export const useTridentRemoveLiquidityPageDispatch = () => useContext(TridentRemoveLiquidityPageContext).dispatch
+export const useTridentParentPageContext = () => useContext(TridentRemoveLiquidityPageContext)
+
+export const useTridentRemoveLiquidityPageContext = () => {
+  const parent = useContext(TridentRemoveLiquidityPageContext)
+  const classic = useContext(TridentRemoveClassicPoolContext)
+  const concentrated = useContext(TridentRemoveConcentratedPoolContext)
+  const hybrid = useContext(TridentRemoveHybridPoolContext)
+  const weighted = useContext(TridentRemoveWeightedPoolContext)
+
+  return useMemo(
+    () => ({
+      ...parent,
+      ...{
+        [PoolType.CLASSIC]: classic,
+        [PoolType.CONCENTRATED]: concentrated,
+        [PoolType.HYBRID]: hybrid,
+        [PoolType.WEIGHTED]: weighted,
+      }[parent.pool.type],
+    }),
+    [classic, concentrated, hybrid, parent, weighted]
+  )
+}
+
+export const useTridentRemoveLiquidityPageState = () => {
+  const { state } = useTridentRemoveLiquidityPageContext()
+  return state
+}
+
+export const useTridentRemoveLiquidityPageDispatch = () => {
+  const { dispatch } = useTridentRemoveLiquidityPageContext()
+  return dispatch
+}

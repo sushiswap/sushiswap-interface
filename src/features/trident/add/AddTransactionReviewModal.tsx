@@ -12,10 +12,10 @@ import Divider from '../../../components/Divider'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
 
-const AddTransactionReviewModal: FC = () => {
+const AddTransactionReviewModal = () => {
   const { i18n } = useLingui()
   const { liquidityMode, showZapReview } = useTridentAddLiquidityPageState()
-  const { pool, dispatch, execute, parsedInputAmounts, parsedOutputAmounts } = useTridentAddLiquidityPageContext()
+  const { pool, dispatch, parsedInputAmounts, execute, parsedOutputAmounts } = useTridentAddLiquidityPageContext()
 
   const closeModal = useCallback(() => {
     dispatch({
