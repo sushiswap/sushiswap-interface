@@ -8,31 +8,12 @@ import { useTridentRemoveLiquidityPageContext, useTridentRemoveLiquidityPageStat
 import { ActionType } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
-import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import Divider from '../../../components/Divider'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
-
-interface WithdrawFieldProps {
-  amount: CurrencyAmount<Token>
-}
-
-// This wrapper is necessary because we need to use hooks in a loop
-const WithdrawField: FC<WithdrawFieldProps> = ({ amount }) => {
-  const usdcValue = useUSDCValue(amount)
-
-  return (
-    <ListPanel.Item
-      left={<ListPanel.Item.Left amount={amount} />}
-      right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
-      key={0}
-    />
-  )
-}
 
 const RemoveTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
   const { showZapReview } = useTridentRemoveLiquidityPageState()
-  const { pool, dispatch, execute, parsedInputAmounts } = useTridentRemoveLiquidityPageContext()
+  const { pool, dispatch, execute, parsedInputAmounts, parsedOutputAmounts } = useTridentRemoveLiquidityPageContext()
 
   const closeModal = useCallback(() => {
     dispatch({
@@ -76,7 +57,7 @@ const RemoveTransactionReviewModal: FC = () => {
             </Typography>
             <ListPanel
               items={pool.tokens.map((token, index) => (
-                <WithdrawField amount={parsedInputAmounts[token.address]} key={index} />
+                <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[token.address]} key={index} />
               ))}
             />
           </div>
@@ -84,15 +65,9 @@ const RemoveTransactionReviewModal: FC = () => {
             <Typography weight={700} variant="lg">
               {i18n._(t`Which will be converted to...`)}
             </Typography>
-
-            {/*TODO this is not working yet*/}
             <ListPanel
               items={pool.tokens.map((token, index) => (
-                <ListPanel.Item
-                  left={<ListPanel.Item.Left amount={parsedInputAmounts[token.address]} />}
-                  right={<ListPanel.Item.Right>$</ListPanel.Item.Right>}
-                  key={index}
-                />
+                <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[token.address]} key={index} />
               ))}
             />
           </div>

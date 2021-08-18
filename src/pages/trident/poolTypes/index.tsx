@@ -7,6 +7,11 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { POOLS_ROUTE, POOL_TYPES_ROUTE } from '../../../constants/routes'
 import PoolTypesList from '../../../features/trident/types/PoolTypesList'
+import { toHref } from '../../../hooks/useTridentPools'
+import DepositSettingsModal from '../../../features/trident/add/DepositSettingsModal'
+import { LiquidityMode } from '../../../features/trident/add/context/types'
+import SettingsTab from '../../../components/Settings'
+import React from 'react'
 
 export const getStaticProps = async () => ({
   props: {
@@ -19,24 +24,26 @@ const PoolTypes = () => {
 
   return (
     <div className="flex flex-col w-full gap-9 mt-px">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-90">
-        <div className="flex flex-row items-start gap-3">
-          <Typography variant="h3" className="text-high-emphesis" weight={700}>
-            {i18n._(t`Pool Types`)}
-          </Typography>
+      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-90 gap-4">
+        <div className="flex flex-row justify-between">
           <Button
             color="blue"
             variant="outlined"
-            size="xs"
-            className="rounded-full py-0.5 pl-0.5"
-            startIcon={<ChevronLeftIcon width={16} height={16} />}
+            size="sm"
+            className="rounded-full py-1 pl-2"
+            startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={'/trident/pool'}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pools`}>{i18n._(t`Back`)}</Link>
           </Button>
         </div>
-        <Typography variant="sm" weight={400}>
-          {i18n._(t`Learn more about the power of Sushi's AMM and Tines routing engine.`)}
-        </Typography>
+        <div className="flex flex-col gap-2">
+          <Typography variant="h3" className="text-high-emphesis" weight={700}>
+            {i18n._(t`Pool Types`)}
+          </Typography>
+          <Typography variant="sm" weight={400}>
+            {i18n._(t`Learn more about the power of Sushi's AMM and Tines routing engine.`)}
+          </Typography>
+        </div>
       </div>
       <div className="px-5 flex flex-col gap-4">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>

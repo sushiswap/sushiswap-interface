@@ -8,32 +8,14 @@ import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } fr
 import { ActionType, LiquidityMode } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
-import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import Divider from '../../../components/Divider'
-import { CurrencyAmount, Token, ZERO } from '@sushiswap/sdk'
+import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
-
-interface DepositFieldProps {
-  amount: CurrencyAmount<Token>
-}
-
-// This wrapper is necessary because we need to use hooks in a loop
-const DepositField: FC<DepositFieldProps> = ({ amount }) => {
-  const usdcValue = useUSDCValue(amount)
-
-  return (
-    <ListPanel.Item
-      left={<ListPanel.Item.Left amount={amount} />}
-      right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
-      key={0}
-    />
-  )
-}
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
   const { liquidityMode, showZapReview } = useTridentAddLiquidityPageState()
-  const { pool, dispatch, execute, parsedInputAmounts } = useTridentAddLiquidityPageContext()
+  const { pool, dispatch, execute, parsedInputAmounts, parsedOutputAmounts } = useTridentAddLiquidityPageContext()
 
   const closeModal = useCallback(() => {
     dispatch({
@@ -79,7 +61,7 @@ const AddTransactionReviewModal: FC = () => {
             </Typography>
             <ListPanel
               items={Object.values(parsedInputAmounts).reduce((acc, cur, index) => {
-                if (cur?.greaterThan(ZERO)) acc.push(<DepositField amount={cur} key={index} />)
+                if (cur?.greaterThan(ZERO)) acc.push(<ListPanel.CurrencyAmountItem amount={cur} key={index} />)
                 return acc
               }, [])}
             />
@@ -89,15 +71,9 @@ const AddTransactionReviewModal: FC = () => {
               <Typography weight={700} variant="lg">
                 {i18n._(t`Which will be converted to:`)}
               </Typography>
-
-              {/*TODO this is not working yet*/}
               <ListPanel
                 items={pool.tokens.map((token, index) => (
-                  <ListPanel.Item
-                    left={<ListPanel.Item.Left amount={parsedInputAmounts[token.address]} />}
-                    right={<ListPanel.Item.Right>$</ListPanel.Item.Right>}
-                    key={index}
-                  />
+                  <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[token.address]} key={index} />
                 ))}
               />
             </div>

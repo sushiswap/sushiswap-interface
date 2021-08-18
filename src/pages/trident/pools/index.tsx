@@ -8,6 +8,7 @@ import { TridentPoolsPageContextProvider, useTridentPoolsPageState } from '../..
 import SuggestedPools from '../../../features/trident/pools/SuggestedPools'
 import SearchResultPools from '../../../features/trident/pools/SearchResultPools'
 import PoolListActions from '../../../features/trident/pools/PoolListActions'
+import Link from 'next/link'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -29,7 +30,7 @@ const Pool = () => {
             {i18n._(t`Create a New Pool`)}
           </Button>
           <Button color="gradient" variant="outlined" className="text-sm font-bold text-white py-2">
-            {i18n._(t`Pool Type Info`)}
+            <Link href={'/trident/poolTypes'}>{i18n._(t`Pool Type Info`)}</Link>
           </Button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
 import AssetInput from '../../../components/AssetInput'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import DepositButtons from './DepositButtons'
 import { ActionType } from './context/types'
 import useSufficientBalances from '../../../hooks/useSufficientBalances'

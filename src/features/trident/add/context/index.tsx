@@ -22,6 +22,7 @@ export const TridentAddLiquidityPageContext = createContext<{
   state: State
   pool: Pool
   parsedInputAmounts: Record<string, CurrencyAmount<Token> | undefined>
+  parsedOutputAmounts: Record<string, CurrencyAmount<Token> | undefined>
   tokens: { [x: string]: Token }
   execute: () => void
   handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
@@ -31,6 +32,7 @@ export const TridentAddLiquidityPageContext = createContext<{
   state: initialState,
   pool: null,
   parsedInputAmounts: {},
+  parsedOutputAmounts: {},
   tokens: {},
   execute: () => null,
   handleInput: () => null,
@@ -88,19 +90,39 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
     }, {})
   }, [state.inputAmounts, tokens])
 
-  // This will be used for ZAP mode only
+  // For NORMAL mode, outputAmounts equals inputAmounts.
+  // For ZAP mode, outputAmounts is the split inputAmount
   const parsedOutputAmounts = useMemo(() => {
-    return Object.entries(state.inputAmounts).reduce((acc, [k, v]) => {
-      acc[k] = tryParseAmount(v, tokens[k])
-      return acc
-    }, {})
-  }, [state.inputAmounts, tokens])
+    if (state.liquidityMode === LiquidityMode.STANDARD) {
+      return Object.entries(state.inputAmounts).reduce((acc, [k, v]) => {
+        acc[k] = tryParseAmount(v, tokens[k])
+        return acc
+      }, {})
+    }
+
+    if (state.liquidityMode === LiquidityMode.ZAP) {
+      return Object.entries(state.inputAmounts).reduce((acc, [k, v]) => {
+        acc[k] = tryParseAmount(v, tokens[k])
+        return acc
+      }, {})
+    }
+  }, [state.inputAmounts, state.liquidityMode, tokens])
 
   return (
     <TridentAddLiquidityPageContext.Provider
       value={useMemo(
-        () => ({ state, parsedInputAmounts, pool, tokens, handleInput, showReview, execute, dispatch }),
-        [state, parsedInputAmounts, pool, tokens, handleInput, showReview, execute]
+        () => ({
+          state,
+          parsedInputAmounts,
+          parsedOutputAmounts,
+          pool,
+          tokens,
+          handleInput,
+          showReview,
+          execute,
+          dispatch,
+        }),
+        [state, parsedInputAmounts, parsedOutputAmounts, pool, tokens, handleInput, showReview, execute]
       )}
     >
       {children}

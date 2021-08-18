@@ -1,9 +1,10 @@
-import { FC, ReactNode } from 'react'
+import React, { FC, ReactNode } from 'react'
 import Typography from '../Typography'
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
 import CurrencyLogo from '../CurrencyLogo'
 import { SUSHI } from '../../constants'
 import { classNames, formatNumber } from '../../functions'
+import { useUSDCValue } from '../../hooks/useUSDCPrice'
 
 interface ListPanelProps {
   header?: ReactNode
@@ -124,10 +125,28 @@ const ListPanelItemRight: FC = ({ children }) => {
   )
 }
 
+interface CurrencyAmountItemProps {
+  amount: CurrencyAmount<Token>
+}
+
+// ListPanelItem for displaying a CurrencyAmount
+const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount }) => {
+  const usdcValue = useUSDCValue(amount)
+
+  return (
+    <ListPanel.Item
+      left={<ListPanel.Item.Left amount={amount} />}
+      right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
+      key={0}
+    />
+  )
+}
+
 ListPanel.Header = ListPanelHeader
 ListPanelItem.Left = ListPanelItemLeft
 ListPanelItem.Right = ListPanelItemRight
 ListPanel.Item = ListPanelItem
+ListPanel.CurrencyAmountItem = CurrencyAmountItem
 ListPanel.Footer = ListPanelFooter
 
 export default ListPanel

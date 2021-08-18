@@ -9,18 +9,16 @@ import AssetInput from '../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
 import React, { useState } from 'react'
-import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 
 const ClassicZapMode = () => {
   const { i18n } = useLingui()
   const { inputAmounts } = useTridentAddLiquidityPageState()
-  const { pool, handleInput, showReview, parsedInputAmounts } = useTridentAddLiquidityPageContext()
+  const { pool, handleInput, showReview, parsedOutputAmounts } = useTridentAddLiquidityPageContext()
 
   // We can use a local select state here as zap mode is only one input,
   // the modals check for each inputAmount if there's input entered
   // (note the { clear: true } option given to the handleInput)
   const [selected, setSelected] = useState<Token>()
-  const usdcValue = useUSDCValue(parsedInputAmounts[selected?.address])
 
   return (
     <>
@@ -55,15 +53,9 @@ const ClassicZapMode = () => {
             ? i18n._(t`Your ${selected.symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
-
-        {/*TODO output CurrencyAmount*/}
         <ListPanel
           items={pool.tokens.map((token, index) => (
-            <ListPanel.Item
-              left={<ListPanel.Item.Left amount={parsedInputAmounts[token.address]} />}
-              right={<ListPanel.Item.Right>${usdcValue?.divide(pool.tokens.length)?.toFixed(2)}</ListPanel.Item.Right>}
-              key={index}
-            />
+            <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[token.address]} key={index} />
           ))}
         />
       </div>
