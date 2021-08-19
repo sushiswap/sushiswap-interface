@@ -42,7 +42,7 @@
     "@ethersproject/providers": "^5.4.0",
     "@fontsource/dm-sans": "^4.5.0",
     "@gnosis.pm/safe-apps-web3-react": "^0.6.0",
-    "@headlessui/react": "^1.3.0",
+    "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.2",
     "@keystonehq/keystone-connector": "^0.8.0",
     "@lingui/cli": "^3.10.2",

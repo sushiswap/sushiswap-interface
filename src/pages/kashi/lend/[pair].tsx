@@ -1,7 +1,7 @@
 import { Deposit, Withdraw } from '../../../features/lending'
 import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
 import React, { useState } from 'react'
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import { Tab } from '@headlessui/react'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
 import Card from '../../../components/Card'
@@ -96,28 +96,34 @@ export default function Pair() {
           </div>
         </div>
 
-        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
-          <TabList className="flex p-1 rounded bg-dark-800">
+        <Tab.Group>
+          <Tab.List className="flex p-1 rounded bg-dark-800">
             <Tab
-              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-              selectedClassName="bg-dark-900 text-high-emphesis"
+              className={({ selected }) =>
+                `${
+                  selected ? 'bg-dark-900 text-high-emphesis' : ''
+                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
+              }
             >
               {i18n._(t`Deposit`)} {pair.asset.tokenInfo.symbol}
             </Tab>
             <Tab
-              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-              selectedClassName="bg-dark-900 text-high-emphesis"
+              className={({ selected }) =>
+                `${
+                  selected ? 'bg-dark-900 text-high-emphesis' : ''
+                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
+              }
             >
               {i18n._(t`Withdraw`)} {pair.asset.tokenInfo.symbol}
             </Tab>
-          </TabList>
-          <TabPanel>
+          </Tab.List>
+          <Tab.Panel>
             <Deposit pair={pair} />
-          </TabPanel>
-          <TabPanel>
+          </Tab.Panel>
+          <Tab.Panel>
             <Withdraw pair={pair} />
-          </TabPanel>
-        </Tabs>
+          </Tab.Panel>
+        </Tab.Group>
       </Card>
     </div>
   )

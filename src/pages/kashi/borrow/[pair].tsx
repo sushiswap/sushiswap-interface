@@ -1,7 +1,7 @@
 import { Borrow, Repay } from '../../../features/lending'
 import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
 import React, { useCallback, useState } from 'react'
-import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
+import { Tab } from '@headlessui/react'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
 import { BorrowCardHeader } from '../../../components/CardHeader'
@@ -126,28 +126,40 @@ function Pair() {
             </div>
           </div>
         </div>
-        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
-          <TabList className="flex p-1 rounded bg-dark-800">
+        <Tab.Group
+        // forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}
+        >
+          <Tab.List className="flex p-1 rounded bg-dark-800">
             <Tab
-              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-              selectedClassName="bg-dark-900 text-high-emphesis"
+              // className={}
+              className={({ selected }) =>
+                `${
+                  selected ? 'bg-dark-900 text-high-emphesis' : ''
+                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
+              }
+              // selectedClassName="bg-dark-900 text-high-emphesis"
             >
               {i18n._(t`Borrow`)}
             </Tab>
             <Tab
-              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
-              selectedClassName="bg-dark-900 text-high-emphesis"
+              // className={}
+              className={({ selected }) =>
+                `${
+                  selected ? 'bg-dark-900 text-high-emphesis' : ''
+                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
+              }
+              // selectedClassName="bg-dark-900 text-high-emphesis"
             >
               {i18n._(t`Repay`)}
             </Tab>
-          </TabList>
-          <TabPanel>
+          </Tab.List>
+          <Tab.Panel>
             <Borrow pair={pair} />
-          </TabPanel>
-          <TabPanel>
+          </Tab.Panel>
+          <Tab.Panel>
             <Repay pair={pair} />
-          </TabPanel>
-        </Tabs>
+          </Tab.Panel>
+        </Tab.Group>
       </Card>
     </>
   )
