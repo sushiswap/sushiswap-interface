@@ -62,9 +62,10 @@ function useTokens() {
         const tokenTemplateId = await tokenFactoryContract?.currentTemplateId(templateType)
 
         const tokenData = [name, symbol, account, parseEther(totalSupply.toString())]
-        const data = defaultAbiCoder.encode(['string', 'uint256', 'uint256'], tokenData)
+        const data = defaultAbiCoder.encode(['string', 'string', 'address', 'uint256'], tokenData)
         const tx = await tokenFactoryContract?.createToken(tokenTemplateId, account, data)
-        return addTransaction(tx, { summary: 'Create Token for MISO' })
+        addTransaction(tx, { summary: 'Create Token for MISO' })
+        return tx
       } catch (e) {
         console.error('create token error:', e)
         return e

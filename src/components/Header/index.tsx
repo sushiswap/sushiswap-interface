@@ -109,7 +109,7 @@ function AppBar(): JSX.Element {
                           </a>
                         </NavLink>
                       )}
-                      {chainId === ChainId.MAINNET && (
+                      {[ChainId.MAINNET, ChainId.GÖRLI].includes(chainId) && (
                         <Link href={'/miso'}>
                           <a
                             id={`miso-nav-link`}
