@@ -5,27 +5,25 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
-import ModeToggle from '../../../../features/trident/add/ModeToggle'
-import {
-  TridentAddLiquidityPageContextProvider,
-  useTridentAddLiquidityPageContext,
-  useTridentAddLiquidityPageState,
-} from '../../../../features/trident/add/context'
-import ClassicZapMode from '../../../../features/trident/add/ClassicZapMode'
-import { LiquidityMode } from '../../../../features/trident/add/context/types'
+import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
 import { toHref } from '../../../../hooks/useTridentPools'
-import ClassicStandardMode from '../../../../features/trident/add/ClassicStandardMode'
+import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
 import AddTransactionReviewModal from '../../../../features/trident/add/AddTransactionReviewModal'
 import React from 'react'
-import DepositSettingsModal from '../../../../features/trident/add/DepositSettingsModal'
-import BalancedModeHeader from '../../../../features/trident/add/BalancedModeHeader'
 import SettingsTab from '../../../../components/Settings'
-import { PoolType } from '../../../../features/trident/types'
+import TridentAddClassicContextProvider, {
+  useTridentAddClassicContext,
+  useTridentAddClassicState,
+} from '../../../../features/trident/add/classic/context'
+import BalancedModeHeader from '../../../../features/trident/add/classic/BalancedModeHeader'
+import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
+import { LiquidityMode } from '../../../../features/trident/types'
+import ModeToggle from '../../../../features/trident/ModeToggle'
 
 const AddClassic = () => {
   const { i18n } = useLingui()
-  const { liquidityMode } = useTridentAddLiquidityPageState()
-  const { pool } = useTridentAddLiquidityPageContext()
+  const state = useTridentAddClassicState()
+  const context = useTridentAddClassicContext()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -38,10 +36,10 @@ const AddClassic = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref(context.pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <DepositSettingsModal />
-          {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
+          {state.liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">
@@ -58,18 +56,18 @@ const AddClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle />
+      <ModeToggle value={state.liquidityMode} onChange={context.setLiquidityMode} />
       <BalancedModeHeader />
 
-      {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
-      {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+      {state.liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
+      {state.liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
 
-      <AddTransactionReviewModal />
+      <AddTransactionReviewModal state={state} context={context} />
     </div>
   )
 }
 
 AddClassic.Layout = TridentLayout
-AddClassic.Provider = TridentAddLiquidityPageContextProvider(PoolType.CLASSIC)
+AddClassic.Provider = TridentAddClassicContextProvider
 
 export default AddClassic

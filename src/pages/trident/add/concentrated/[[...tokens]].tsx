@@ -5,25 +5,20 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
-import ModeToggle from '../../../../features/trident/add/ModeToggle'
-import {
-  TridentAddLiquidityPageContextProvider,
-  useTridentAddLiquidityPageContext,
-  useTridentAddLiquidityPageState,
-} from '../../../../features/trident/add/context'
-import { LiquidityMode } from '../../../../features/trident/add/context/types'
 import { toHref } from '../../../../hooks/useTridentPools'
 import AddTransactionReviewModal from '../../../../features/trident/add/AddTransactionReviewModal'
 import React from 'react'
-import DepositSettingsModal from '../../../../features/trident/add/DepositSettingsModal'
-import BalancedModeHeader from '../../../../features/trident/add/BalancedModeHeader'
-import SettingsTab from '../../../../components/Settings'
-import { PoolType } from '../../../../features/trident/types'
+import Chart from '../../../../features/trident/add/concentrated/Chart'
+import PriceRange from '../../../../features/trident/add/concentrated/PriceRange'
+import TridentAddConcentratedContextProvider, {
+  useTridentAddConcentratedContext,
+  useTridentAddConcentratedState,
+} from '../../../../features/trident/add/concentrated/context'
 
 const AddConcentrated = () => {
   const { i18n } = useLingui()
-  const { liquidityMode } = useTridentAddLiquidityPageState()
-  const { pool } = useTridentAddLiquidityPageContext()
+  const context = useTridentAddConcentratedContext()
+  const state = useTridentAddConcentratedState()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -36,10 +31,8 @@ const AddConcentrated = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref(context.pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
-          <DepositSettingsModal />
-          {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">
@@ -49,12 +42,16 @@ const AddConcentrated = () => {
         </div>
       </div>
 
-      <AddTransactionReviewModal />
+      <div className="flex flex-col gap-7">
+        <Chart />
+        <PriceRange />
+      </div>
+      <AddTransactionReviewModal context={context} state={state} />
     </div>
   )
 }
 
 AddConcentrated.Layout = TridentLayout
-AddConcentrated.Provider = TridentAddLiquidityPageContextProvider(PoolType.CONCENTRATED)
+AddConcentrated.Provider = TridentAddConcentratedContextProvider
 
 export default AddConcentrated

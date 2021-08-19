@@ -1,29 +1,26 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
-import { useTridentRemoveLiquidityPageContext, useTridentRemoveLiquidityPageState } from './context'
-import { ActionType, LiquidityMode } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
+import { LiquidityMode, TridentContext, TridentState } from '../types'
 
-const RemoveTransactionReviewModal: FC = () => {
+interface AddTransactionReviewModalProps {
+  state: Partial<TridentState>
+  context: Partial<TridentContext>
+}
+
+const RemoveTransactionReviewModal: FC<AddTransactionReviewModalProps> = ({ state, context }) => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview } = useTridentRemoveLiquidityPageState()
-  const { pool, dispatch, execute, parsedInputAmounts, parsedOutputAmounts } = useTridentRemoveLiquidityPageContext()
-
-  const closeModal = useCallback(() => {
-    dispatch({
-      type: ActionType.SHOW_ZAP_REVIEW,
-      payload: false,
-    })
-  }, [dispatch])
+  const { liquidityMode, showZapReview } = state
+  const { pool, showReview, execute, parsedInputAmounts, parsedOutputAmounts } = context
 
   return (
-    <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={closeModal}>
+    <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={() => showReview(false)}>
       <div className="flex flex-col gap-8 h-full">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
@@ -35,7 +32,7 @@ const RemoveTransactionReviewModal: FC = () => {
                 size="sm"
                 className="rounded-full py-1 pl-2 cursor-pointer"
                 startIcon={<ChevronLeftIcon width={24} height={24} />}
-                onClick={closeModal}
+                onClick={() => showReview(false)}
               >
                 {i18n._(t`Back`)}
               </Button>

@@ -1,33 +1,30 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
-import { useTridentAddLiquidityPageContext, useTridentAddLiquidityPageState } from './context'
-import { ActionType, LiquidityMode } from './context/types'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
+import { LiquidityMode, TridentContext, TridentState } from '../types'
 
-const AddTransactionReviewModal = () => {
+interface AddTransactionReviewModalProps {
+  state: Partial<TridentState>
+  context: Partial<TridentContext>
+}
+
+const AddTransactionReviewModal: FC<AddTransactionReviewModalProps> = ({ state, context }) => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview } = useTridentAddLiquidityPageState()
-  const { pool, dispatch, parsedInputAmounts, execute, parsedOutputAmounts } = useTridentAddLiquidityPageContext()
-
-  const closeModal = useCallback(() => {
-    dispatch({
-      type: ActionType.SHOW_ZAP_REVIEW,
-      payload: false,
-    })
-  }, [dispatch])
+  const { liquidityMode, showZapReview } = state
+  const { pool, parsedInputAmounts, execute, parsedOutputAmounts, showReview } = context
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={closeModal}>
+    <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={() => showReview(false)}>
       <div className="flex flex-col gap-8 h-full">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
@@ -39,7 +36,7 @@ const AddTransactionReviewModal = () => {
                 size="sm"
                 className="rounded-full py-1 pl-2 cursor-pointer"
                 startIcon={<ChevronLeftIcon width={24} height={24} />}
-                onClick={closeModal}
+                onClick={() => showReview(false)}
               >
                 {i18n._(t`Back`)}
               </Button>

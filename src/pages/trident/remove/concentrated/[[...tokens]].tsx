@@ -8,22 +8,16 @@ import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import React from 'react'
-import {
-  TridentRemoveLiquidityPageContextProvider,
-  useTridentRemoveLiquidityPageContext,
-  useTridentRemoveLiquidityPageState,
-} from '../../../../features/trident/remove/context'
-import { PoolType } from '../../../../features/trident/types'
-import ClassicUnzapMode from '../../../../features/trident/remove/ClassicUnzapMode'
-import { LiquidityMode } from '../../../../features/trident/remove/context/types'
-import ModeToggle from '../../../../features/trident/remove/ModeToggle'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
-import ClassicStandardMode from '../../../../features/trident/remove/ClassicStandardMode'
+import TridentRemoveConcentratedContextProvider, {
+  useTridentRemoveConcentratedContext,
+  useTridentRemoveConcentratedState,
+} from '../../../../features/trident/remove/concentrated/context'
 
 const RemoveConcentrated = () => {
   const { i18n } = useLingui()
-  const { liquidityMode } = useTridentRemoveLiquidityPageState()
-  const { pool } = useTridentRemoveLiquidityPageContext()
+  const state = useTridentRemoveConcentratedState()
+  const context = useTridentRemoveConcentratedContext()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -36,7 +30,7 @@ const RemoveConcentrated = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref(context.pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -55,17 +49,14 @@ const RemoveConcentrated = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle />
+      {/*{liquidityMode === LiquidityMode.ZAP && <ConcentratedMode />}*/}
 
-      {/*{liquidityMode === LiquidityMode.ZAP && <ConcentratedUnzapMode />}*/}
-      {/*{liquidityMode === LiquidityMode.STANDARD && <ConcentratedStandardMode />}*/}
-
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewModal context={context} state={state} />
     </div>
   )
 }
 
 RemoveConcentrated.Layout = TridentLayout
-RemoveConcentrated.Provider = TridentRemoveLiquidityPageContextProvider(PoolType.CONCENTRATED)
+RemoveConcentrated.Provider = TridentRemoveConcentratedContextProvider
 
 export default RemoveConcentrated

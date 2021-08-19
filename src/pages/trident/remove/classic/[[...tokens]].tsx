@@ -8,22 +8,20 @@ import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import React from 'react'
-import {
-  TridentRemoveLiquidityPageContextProvider,
-  useTridentRemoveLiquidityPageContext,
-  useTridentRemoveLiquidityPageState,
-} from '../../../../features/trident/remove/context'
-import { PoolType } from '../../../../features/trident/types'
-import ClassicUnzapMode from '../../../../features/trident/remove/ClassicUnzapMode'
-import { LiquidityMode } from '../../../../features/trident/remove/context/types'
-import ModeToggle from '../../../../features/trident/remove/ModeToggle'
+import ClassicUnzapMode from '../../../../features/trident/remove/classic/ClassicUnzapMode'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
-import ClassicStandardMode from '../../../../features/trident/remove/ClassicStandardMode'
+import ClassicStandardMode from '../../../../features/trident/remove/classic/ClassicStandardMode'
+import TridentRemoveClassicContextProvider, {
+  useTridentRemoveClassicContext,
+  useTridentRemoveClassicState,
+} from '../../../../features/trident/remove/classic/context'
+import ModeToggle from '../../../../features/trident/ModeToggle'
+import { LiquidityMode } from '../../../../features/trident/types'
 
 const RemoveClassic = () => {
   const { i18n } = useLingui()
-  const { liquidityMode } = useTridentRemoveLiquidityPageState()
-  const { pool } = useTridentRemoveLiquidityPageContext()
+  const state = useTridentRemoveClassicState()
+  const context = useTridentRemoveClassicContext()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -36,7 +34,7 @@ const RemoveClassic = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref(context.pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -55,19 +53,19 @@ const RemoveClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle />
+      <ModeToggle value={state.liquidityMode} onChange={context.setLiquidityMode} />
 
       <>
-        {liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
-        {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+        {state.liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
+        {state.liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
       </>
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewModal context={context} state={state} />
     </div>
   )
 }
 
 RemoveClassic.Layout = TridentLayout
-RemoveClassic.Provider = TridentRemoveLiquidityPageContextProvider(PoolType.CLASSIC)
+RemoveClassic.Provider = TridentRemoveClassicContextProvider
 
 export default RemoveClassic
