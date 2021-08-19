@@ -1,9 +1,5 @@
 import '../bootstrap'
 import '../styles/index.css'
-import '@fontsource/dm-sans/index.css'
-import 'react-virtualized/styles.css'
-import 'react-tabs/style/react-tabs.css'
-import 'rc-slider/assets/index.css'
 
 import * as plurals from 'make-plural/plurals'
 
