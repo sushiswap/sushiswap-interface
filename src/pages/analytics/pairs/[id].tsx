@@ -83,7 +83,7 @@ export default function Pair() {
 
   const utilisation1d = useMemo(() => (volumeUSD1d / pair?.reserveUSD) * 100, [volumeUSD1d, pair])
   const utilisation2d = useMemo(() => (volumeUSD2d / pair1d?.reserveUSD) * 100, [volumeUSD2d, pair])
-  const utilisation1dChange = useMemo(() => (utilisation1d / utilisation2d) * 100 - 100, [utilisation1d])
+  const utilisation1dChange = useMemo(() => (utilisation1d / utilisation2d) * 100 - 100, [utilisation1d, utilisation2d])
 
   return (
     <AnalyticsContainer>

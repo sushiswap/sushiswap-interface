@@ -17,7 +17,7 @@ export default function Token() {
   const id = (router.query.id as string).toLowerCase()
 
   const block1d = useBlock({ daysAgo: 1 })
-  const block2d = useBlock({ daysAgo: 1 })
+  const block2d = useBlock({ daysAgo: 2 })
   const block1w = useBlock({ daysAgo: 7 })
 
   // General data (volume, liquidity)
@@ -42,6 +42,7 @@ export default function Token() {
           pair: {
             token0: pair.token0,
             token1: pair.token1,
+            address: pair.id,
           },
           liquidity: pair.reserveUSD,
           volume1d: pair.volumeUSD - pair1d.volumeUSD,
@@ -108,10 +109,8 @@ export default function Token() {
   )
 
   const volumeUSD1d = useMemo(() => token?.volumeUSD - token1d?.volumeUSD, [token, token1d])
-  const volumeUSD1dChange = useMemo(
-    () => ((token?.volumeUSD - token1d?.volumeUSD) / (token1d?.volumeUSD - token2d?.volumeUSD)) * 100 - 100,
-    [token, token1d, token2d]
-  )
+  const volumeUSD2d = useMemo(() => token1d?.volumeUSD - token2d?.volumeUSD, [token1d, token2d])
+  const volumeUSD1dChange = useMemo(() => (volumeUSD1d / volumeUSD2d) * 100 - 100, [volumeUSD1d, volumeUSD2d])
 
   return (
     <AnalyticsContainer>
