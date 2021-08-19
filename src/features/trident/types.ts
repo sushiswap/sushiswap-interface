@@ -1,5 +1,6 @@
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Price, Token } from '@sushiswap/sdk'
 import { Dispatch } from 'react'
+import { TransactionResponse } from '@ethersproject/providers'
 
 export interface Pool {
   type: PoolType
@@ -33,6 +34,9 @@ export enum ActionType {
   SET_INPUT_AMOUNTS = 'SET_INPUT_AMOUNTS',
   SHOW_ZAP_REVIEW = 'SHOW_ZAP_REVIEW',
   SET_SPEND_FROM_WALLET = 'SET_SPEND_FROM_WALLET',
+  SET_MIN_PRICE = 'SET_MIN_PRICE',
+  SET_MAX_PRICE = 'SET_MAX_PRICE',
+  SET_TX_HASH = 'SET_TX_HASH',
 }
 
 export interface Reducer {
@@ -51,6 +55,7 @@ export interface TridentState {
   maxPrice: string
   balancedMode: boolean
   spendFromWallet: boolean
+  txHash: string
 }
 
 export interface HandleInputOptions {
@@ -71,4 +76,6 @@ export interface TridentContext {
   dispatch: Dispatch<any>
   handlePercentageAmount: (amount: string) => void
   selectOutputToken: (address: string) => void
+  setMinPrice: (price: string) => void
+  setMaxPrice: (price: string) => void
 }

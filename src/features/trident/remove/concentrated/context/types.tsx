@@ -18,5 +18,5 @@ export type ConcentratedPoolContext = {
 
 export type ConcentratedPoolState = Pick<
   TridentState,
-  'inputAmounts' | 'showZapReview' | 'outputTokenAddress' | 'liquidityMode' | 'percentageAmount'
+  'inputAmounts' | 'showZapReview' | 'outputTokenAddress' | 'liquidityMode' | 'percentageAmount' | 'txHash'
 >

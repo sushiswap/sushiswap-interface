@@ -17,5 +17,11 @@ export type WeightedPoolContext = {
 
 export type WeightedPoolState = Pick<
   TridentState,
-  'inputAmounts' | 'showZapReview' | 'balancedMode' | 'spendFromWallet' | 'inputTokenAddress' | 'liquidityMode'
+  | 'inputAmounts'
+  | 'showZapReview'
+  | 'balancedMode'
+  | 'spendFromWallet'
+  | 'inputTokenAddress'
+  | 'liquidityMode'
+  | 'txHash'
 >

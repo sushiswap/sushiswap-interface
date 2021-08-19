@@ -3,7 +3,7 @@ import { ConcentratedPoolContext, ConcentratedPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { Percent } from '@sushiswap/sdk'
 import { withTridentPool, WithTridentPool } from '../../../../../hooks/useTridentPools'
-import { LiquidityMode, Reducer } from '../../../types'
+import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import { handleInput, handlePercentageAmount, selectOutputToken, showReview } from '../../../context/actions'
 import reducer from '../../../context/reducer'
 
@@ -15,6 +15,7 @@ const initialState: ConcentratedPoolState = {
   liquidityMode: LiquidityMode.ZAP,
   inputAmounts: {},
   showZapReview: false,
+  txHash: null,
 }
 
 export const TridentRemoveConcentratedContext = createContext<ConcentratedPoolContext>({
@@ -88,7 +89,7 @@ const TridentRemoveConcentratedContextProvider: FC<WithTridentPool> = ({ childre
   )
 }
 
-export default withTridentPool(TridentRemoveConcentratedContextProvider)
+export default withTridentPool(PoolType.CONCENTRATED)(TridentRemoveConcentratedContextProvider)
 export const useTridentRemoveConcentratedContext = () => useContext(TridentRemoveConcentratedContext)
 export const useTridentRemoveConcentratedState = () => useContext(TridentRemoveConcentratedContext).state
 export const useTridentRemoveConcentratedDispatch = () => useContext(TridentRemoveConcentratedContext).dispatch

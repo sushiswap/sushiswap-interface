@@ -13,7 +13,7 @@ const Chart: FC = () => {
   return (
     <Disclosure>
       {({ open }) => (
-        <>
+        <div className="flex flex-col">
           <div className="flex justify-between items-center bg-dark-800 border border-dark-700 p-5">
             <div className="flex flex-col gap-1">
               <div className="flex flex-row gap-1 items-center">
@@ -93,7 +93,7 @@ const Chart: FC = () => {
               <Typography className="text-secondary">Insert chart here</Typography>
             </div>
           </Disclosure.Panel>
-        </>
+        </div>
       )}
     </Disclosure>
   )

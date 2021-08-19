@@ -3,7 +3,7 @@ import { WeightedPoolContext, WeightedPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { Percent } from '@sushiswap/sdk'
 import { withTridentPool, WithTridentPool } from '../../../../../hooks/useTridentPools'
-import { LiquidityMode, Reducer } from '../../../types'
+import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import { handleInput, handlePercentageAmount, selectOutputToken, showReview } from '../../../context/actions'
 
@@ -15,6 +15,7 @@ const initialState: WeightedPoolState = {
   liquidityMode: LiquidityMode.ZAP,
   inputAmounts: {},
   showZapReview: false,
+  txHash: null,
 }
 
 export const TridentRemoveWeightedContext = createContext<WeightedPoolContext>({
@@ -88,7 +89,7 @@ const TridentRemoveWeightedContextProvider: FC<WithTridentPool> = ({ children, p
   )
 }
 
-export default withTridentPool(TridentRemoveWeightedContextProvider)
+export default withTridentPool(PoolType.WEIGHTED)(TridentRemoveWeightedContextProvider)
 export const useTridentRemoveWeightedContext = () => useContext(TridentRemoveWeightedContext)
 export const useTridentRemoveWeightedState = () => useContext(TridentRemoveWeightedContext).state
 export const useTridentRemoveWeightedDispatch = () => useContext(TridentRemoveWeightedContext).dispatch

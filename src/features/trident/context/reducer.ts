@@ -74,6 +74,24 @@ const reducer: React.Reducer<TridentState, Reducer> = (state: any, action: any) 
         showZapReview: action.payload,
       }
     }
+    case ActionType.SET_MIN_PRICE: {
+      return {
+        ...state,
+        minPrice: action.payload,
+      }
+    }
+    case ActionType.SET_MAX_PRICE: {
+      return {
+        ...state,
+        maxPrice: action.payload,
+      }
+    }
+    case ActionType.SET_TX_HASH: {
+      return {
+        ...state,
+        txHash: action.payload,
+      }
+    }
     default:
       return state
   }

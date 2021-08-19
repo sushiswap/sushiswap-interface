@@ -4,7 +4,7 @@ import { ClassicPoolContext, ClassicPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
-import { handleInput, selectInputToken, setLiquidityMode, showReview } from '../../../context/actions'
+import { handleInput, selectInputToken, setLiquidityMode, setTxHash, showReview } from '../../../context/actions'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -15,6 +15,7 @@ const initialState: ClassicPoolState = {
   showZapReview: false,
   balancedMode: false,
   spendFromWallet: true,
+  txHash: null,
 }
 
 export const TridentAddClassicContext = createContext<ClassicPoolContext>({
@@ -65,7 +66,11 @@ const TridentAddClassicContextProvider: FC<WithTridentPool> = ({ children, pool,
 
   const execute = useCallback(async () => {
     // Do some custom execution
-    alert('Executing ClassicPool execute function')
+    console.log('Executing ClassicPool execute function')
+
+    // Spawn DepositSubmittedModal
+    showReview(dispatch)(false)
+    setTxHash(dispatch)('test')
   }, [])
 
   return (

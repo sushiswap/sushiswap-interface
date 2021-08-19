@@ -3,7 +3,7 @@ import { ClassicPoolContext, ClassicPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { Percent } from '@sushiswap/sdk'
 import { withTridentPool, WithTridentPool } from '../../../../../hooks/useTridentPools'
-import { LiquidityMode, Reducer } from '../../../types'
+import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import {
   handleInput,
@@ -21,6 +21,7 @@ const initialState: ClassicPoolState = {
   liquidityMode: LiquidityMode.ZAP,
   inputAmounts: {},
   showZapReview: false,
+  txHash: null,
 }
 
 export const TridentRemoveClassicContext = createContext<ClassicPoolContext>({
@@ -96,7 +97,7 @@ const TridentRemoveClassicContextProvider: FC<WithTridentPool> = ({ children, po
   )
 }
 
-export default withTridentPool(TridentRemoveClassicContextProvider)
+export default withTridentPool(PoolType.CLASSIC)(TridentRemoveClassicContextProvider)
 export const useTridentRemoveClassicContext = () => useContext(TridentRemoveClassicContext)
 export const useTridentRemoveClassicState = () => useContext(TridentRemoveClassicContext).state
 export const useTridentRemoveClassicDispatch = () => useContext(TridentRemoveClassicContext).dispatch

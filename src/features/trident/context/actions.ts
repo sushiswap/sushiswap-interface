@@ -1,4 +1,4 @@
-import { ActionType, HandleInputOptions } from '../types'
+import { ActionType, HandleInputOptions, LiquidityMode } from '../types'
 
 export const handleInput =
   (dispatch) =>
@@ -37,8 +37,26 @@ export const selectInputToken = (dispatch) => (address: string) =>
     payload: address,
   })
 
-export const setLiquidityMode = (dispatch) => (mode) =>
+export const setLiquidityMode = (dispatch) => (mode: LiquidityMode) =>
   dispatch({
     type: ActionType.SET_LIQUIDITY_MODE,
     payload: mode,
+  })
+
+export const setMinPrice = (dispatch) => (price: string) =>
+  dispatch({
+    type: ActionType.SET_MIN_PRICE,
+    payload: price,
+  })
+
+export const setMaxPrice = (dispatch) => (price: string) =>
+  dispatch({
+    type: ActionType.SET_MAX_PRICE,
+    payload: price,
+  })
+
+export const setTxHash = (dispatch) => (txHash: string) =>
+  dispatch({
+    type: ActionType.SET_TX_HASH,
+    payload: txHash,
   })

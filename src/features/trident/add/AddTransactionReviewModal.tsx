@@ -121,7 +121,7 @@ const AddTransactionReviewModal: FC<AddTransactionReviewModalProps> = ({ state, 
           </div>
           <Button color="gradient" size="lg" onClick={execute}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              Confirm Deposit
+              {i18n._(t`Confirm Deposit`)}
             </Typography>
           </Button>
         </div>

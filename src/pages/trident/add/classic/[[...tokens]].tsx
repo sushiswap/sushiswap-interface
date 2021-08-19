@@ -19,6 +19,7 @@ import BalancedModeHeader from '../../../../features/trident/add/classic/Balance
 import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
+import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 
 const AddClassic = () => {
   const { i18n } = useLingui()
@@ -63,6 +64,7 @@ const AddClassic = () => {
       {state.liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
 
       <AddTransactionReviewModal state={state} context={context} />
+      <DepositSubmittedModal txHash={state.txHash} />
     </div>
   )
 }

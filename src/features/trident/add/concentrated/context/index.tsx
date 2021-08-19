@@ -4,7 +4,7 @@ import { ConcentratedPoolContext, ConcentratedPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
-import { handleInput, showReview } from '../../../context/actions'
+import { handleInput, setMaxPrice, setMinPrice, showReview } from '../../../context/actions'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -15,6 +15,7 @@ const initialState: ConcentratedPoolState = {
   showZapReview: false,
   balancedMode: false,
   spendFromWallet: true,
+  txHash: null,
 }
 
 export const TridentAddConcentratedContext = createContext<ConcentratedPoolContext>({
@@ -27,6 +28,8 @@ export const TridentAddConcentratedContext = createContext<ConcentratedPoolConte
   handleInput: () => null,
   showReview: () => null,
   dispatch: () => null,
+  setMinPrice: () => null,
+  setMaxPrice: () => null,
 })
 
 const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
@@ -70,6 +73,8 @@ const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, 
           handleInput: handleInput(dispatch),
           showReview: showReview(dispatch),
           dispatch,
+          setMinPrice: setMinPrice(dispatch),
+          setMaxPrice: setMaxPrice(dispatch),
         }),
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}

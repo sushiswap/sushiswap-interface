@@ -15,6 +15,7 @@ const initialState: WeightedPoolState = {
   showZapReview: false,
   balancedMode: false,
   spendFromWallet: true,
+  txHash: null,
 }
 
 export const TridentAddWeightedContext = createContext<WeightedPoolContext>({

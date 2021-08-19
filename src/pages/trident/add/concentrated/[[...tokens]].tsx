@@ -14,6 +14,7 @@ import TridentAddConcentratedContextProvider, {
   useTridentAddConcentratedContext,
   useTridentAddConcentratedState,
 } from '../../../../features/trident/add/concentrated/context'
+import RangeBlocks from '../../../../features/trident/add/concentrated/RangeBlocks'
 
 const AddConcentrated = () => {
   const { i18n } = useLingui()
@@ -45,6 +46,7 @@ const AddConcentrated = () => {
       <div className="flex flex-col gap-7">
         <Chart />
         <PriceRange />
+        <RangeBlocks />
       </div>
       <AddTransactionReviewModal context={context} state={state} />
     </div>

@@ -19,5 +19,5 @@ export type HybridPoolContext = {
 
 export type HybridPoolState = Pick<
   TridentState,
-  'inputAmounts' | 'showZapReview' | 'outputTokenAddress' | 'liquidityMode' | 'percentageAmount'
+  'inputAmounts' | 'showZapReview' | 'outputTokenAddress' | 'liquidityMode' | 'percentageAmount' | 'txHash'
 >

@@ -15,6 +15,7 @@ const initialState: HybridPoolState = {
   showZapReview: false,
   balancedMode: false,
   spendFromWallet: true,
+  txHash: null,
 }
 
 export const TridentAddHybridContext = createContext<HybridPoolContext>({

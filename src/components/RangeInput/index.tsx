@@ -1,15 +1,20 @@
 import { FC } from 'react'
-import { Currency, Price } from '@sushiswap/sdk'
 import Typography from '../Typography'
 import { classNames } from '../../functions'
 import { Input as NumericalInput } from '../NumericalInput'
+import { useLingui } from '@lingui/react'
+import { t } from '@lingui/macro'
+import { Token } from '@sushiswap/sdk'
 
 type RangeInputColor = 'blue' | 'purple'
 
 interface RangeInputProps {
   color: RangeInputColor
   label: string
-  price: Price<Currency, Currency>
+  value: string
+  onChange: (val: string) => void
+  base: Token
+  quote: Token
 }
 
 const COLOR = {
@@ -17,17 +22,28 @@ const COLOR = {
   purple: 'border-purple bg-purple/25',
 }
 
-const RangeInput: FC<RangeInputProps> = ({ price, label, color = 'blue' }) => {
+const RangeInput: FC<RangeInputProps> = ({ value, label, color = 'blue', onChange, base, quote }) => {
+  const { i18n } = useLingui()
   return (
-    <div className="flex flex-col">
-      <Typography variant="sm" weight={700} className={classNames(COLOR[color], 'rounded-t border p-3')}>
+    <div className="flex flex-col w-full">
+      <Typography
+        variant="sm"
+        weight={700}
+        className={classNames(COLOR[color], 'rounded-t border px-3 py-2.5 text-center')}
+      >
         {label}
       </Typography>
-      <NumericalInput
-        value={price.toFixed()}
-        placeholder="0.000"
-        className="text-3xl trailing-7 letter-spacing-[-0.01em] font-bold"
-      />
+      <div className=" bg-dark-900 border-t border-l border-r border-dark-700">
+        <NumericalInput
+          value={value}
+          onUserInput={onChange}
+          placeholder="0.000"
+          className="text-3xl trailing-7 letter-spacing-[-0.01em] font-bold px-3 py-4 text-center bg-transparent w-full"
+        />
+      </div>
+      <Typography variant="sm" className="rounded-b bg-dark-800 px-3 py-2.5 text-center border border-dark-700">
+        {i18n._(t`${base.symbol} per ${quote.symbol}`)}
+      </Typography>
     </div>
   )
 }

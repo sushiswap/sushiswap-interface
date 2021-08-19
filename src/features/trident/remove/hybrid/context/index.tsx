@@ -3,7 +3,7 @@ import { HybridPoolContext, HybridPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { Percent } from '@sushiswap/sdk'
 import { withTridentPool, WithTridentPool } from '../../../../../hooks/useTridentPools'
-import { LiquidityMode, Reducer } from '../../../types'
+import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import {
   handleInput,
@@ -21,6 +21,7 @@ const initialState: HybridPoolState = {
   liquidityMode: LiquidityMode.ZAP,
   inputAmounts: {},
   showZapReview: false,
+  txHash: null,
 }
 
 export const TridentRemoveHybridContext = createContext<HybridPoolContext>({
@@ -96,7 +97,7 @@ const TridentRemoveHybridContextProvider: FC<WithTridentPool> = ({ children, poo
   )
 }
 
-export default withTridentPool(TridentRemoveHybridContextProvider)
+export default withTridentPool(PoolType.HYBRID)(TridentRemoveHybridContextProvider)
 export const useTridentRemoveHybridContext = () => useContext(TridentRemoveHybridContext)
 export const useTridentRemoveHybridState = () => useContext(TridentRemoveHybridContext).state
 export const useTridentRemoveHybridDispatch = () => useContext(TridentRemoveHybridContext).dispatch
