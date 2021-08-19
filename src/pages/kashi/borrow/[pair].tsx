@@ -26,7 +26,6 @@ import { useV2Pair } from '../../../hooks/useV2Pairs'
 function Pair() {
   const router = useRouter()
   const { i18n } = useLingui()
-  const [tabIndex, setTabIndex] = useState(0)
 
   const { account, library, chainId } = useActiveWeb3React()
 
@@ -126,29 +125,23 @@ function Pair() {
             </div>
           </div>
         </div>
-        <Tab.Group
-        // forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}
-        >
+        <Tab.Group>
           <Tab.List className="flex p-1 rounded bg-dark-800">
             <Tab
-              // className={}
               className={({ selected }) =>
                 `${
                   selected ? 'bg-dark-900 text-high-emphesis' : ''
                 } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
               }
-              // selectedClassName="bg-dark-900 text-high-emphesis"
             >
               {i18n._(t`Borrow`)}
             </Tab>
             <Tab
-              // className={}
               className={({ selected }) =>
                 `${
                   selected ? 'bg-dark-900 text-high-emphesis' : ''
                 } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
               }
-              // selectedClassName="bg-dark-900 text-high-emphesis"
             >
               {i18n._(t`Repay`)}
             </Tab>

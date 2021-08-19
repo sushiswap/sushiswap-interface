@@ -19,7 +19,6 @@ import { useRouter } from 'next/router'
 export default function Pair() {
   const router = useRouter()
   const { i18n } = useLingui()
-  const [tabIndex, setTabIndex] = useState(0)
 
   const pair = useKashiPair(router.query.pair as string)
   const info = useKashiInfo()
