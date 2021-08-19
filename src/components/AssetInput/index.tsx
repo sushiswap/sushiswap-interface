@@ -44,7 +44,7 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
   const balance = spendFromWallet ? walletBalance : bentoBalance
   const maxSpend = maxAmountSpend(balance)?.toExact()
   const parsedInput = tryParseAmount(props.value, props.currency)
-  const error = parsedInput?.greaterThan(balance)
+  const error = balance ? parsedInput?.greaterThan(balance) : false
 
   let header = (
     <Typography variant="h3" weight={700} className="text-high-emphesis">
@@ -94,7 +94,7 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
           />
         }
       />
-      {error && (
+      {error && props.currency && (
         <Alert
           showIcon
           type="error"

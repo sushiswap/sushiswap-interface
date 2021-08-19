@@ -8,17 +8,14 @@ import ListPanel from '../../../components/ListPanel'
 import AssetInput from '../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
-import React, { useState } from 'react'
+import React from 'react'
 
 const ClassicZapMode = () => {
   const { i18n } = useLingui()
-  const { inputAmounts } = useTridentAddLiquidityPageState()
-  const { pool, handleInput, showReview, parsedOutputAmounts } = useTridentAddLiquidityPageContext()
+  const { inputAmounts, inputTokenAddress } = useTridentAddLiquidityPageState()
+  const { tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } = useTridentAddLiquidityPageContext()
 
-  // We can use a local select state here as zap mode is only one input,
-  // the modals check for each inputAmount if there's input entered
-  // (note the { clear: true } option given to the handleInput)
-  const [selected, setSelected] = useState<Token>()
+  const validInput = inputTokenAddress && inputAmounts[inputTokenAddress]
 
   return (
     <>
@@ -31,37 +28,39 @@ const ClassicZapMode = () => {
           automatically.`)}
         />
       </div>
-      <div className="flex flex-col gap-5 px-5">
+      <div className="flex flex-col gap-4 px-5">
         <AssetInput
-          value={inputAmounts[selected?.address]}
-          currency={selected}
-          onChange={(value) => handleInput(value, selected.address, { clear: true })}
-          onSelect={setSelected}
+          value={inputAmounts[inputTokenAddress]}
+          currency={tokens[inputTokenAddress]}
+          onChange={(value) => handleInput(value, inputTokenAddress, { clear: true })}
+          onSelect={(token: Token) => selectInputToken(token.address)}
         />
         <Button
-          color={inputAmounts[selected?.address] ? 'gradient' : 'gray'}
-          disabled={!inputAmounts[selected?.address]}
+          color={inputAmounts[inputTokenAddress] ? 'gradient' : 'gray'}
+          disabled={!validInput}
           className="font-bold text-sm"
           onClick={() => showReview(true)}
         >
-          {inputAmounts[selected?.address] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
+          {inputAmounts[inputTokenAddress] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
         </Button>
       </div>
-      <div className="flex flex-col gap-4 px-5 mt-6">
+      <div className="flex flex-col gap-4 px-5 mt-8">
         <Typography weight={700} className="text-high-emphesis">
-          {selected
-            ? i18n._(t`Your ${selected.symbol} will be split into:`)
+          {inputTokenAddress
+            ? i18n._(t`Your ${tokens[inputTokenAddress].symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
         <ListPanel
-          items={pool.tokens.map((token, index) => (
-            <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[token.address]} key={index} />
+          items={Object.values(parsedOutputAmounts).map((amount, index) => (
+            <ListPanel.CurrencyAmountItem amount={amount} key={index} />
           ))}
         />
       </div>
-      <div className="mt-6">
-        <TransactionDetails />
-      </div>
+      {validInput && (
+        <div className="mt-6 px-5">
+          <TransactionDetails />
+        </div>
+      )}
     </>
   )
 }

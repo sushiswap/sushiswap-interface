@@ -50,7 +50,11 @@ const ClassicStandardMode = () => {
           <DepositButtons inputValid={validInputs} onMax={onMax} isMaxInput={isMaxInput} />
         </div>
       </div>
-      {validInputs && <TransactionDetails />}
+      {validInputs && (
+        <div className="flex flex-col px-5">
+          <TransactionDetails />
+        </div>
+      )}
     </div>
   )
 }
