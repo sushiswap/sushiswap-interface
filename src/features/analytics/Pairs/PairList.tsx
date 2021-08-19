@@ -9,10 +9,15 @@ import { useCurrency } from '../../../hooks/Tokens'
 interface PairListProps {
   pairs: {
     pair: {
-      address0: string
-      address1: string
-      symbol0: string
-      symbol1: string
+      token0: {
+        id: string
+        symbol: string
+      }
+      token1: {
+        id: string
+        symbol: string
+      }
+      address: string
     }
     liquidity: number
     volume1d: number
@@ -23,23 +28,27 @@ interface PairListProps {
 
 interface PairListNameProps {
   pair: {
-    address0: string
-    address1: string
-    symbol0: string
-    symbol1: string
+    token0: {
+      id: string
+      symbol: string
+    }
+    token1: {
+      id: string
+      symbol: string
+    }
   }
 }
 
 function PairListName({ pair }: PairListNameProps): JSX.Element {
-  const token0 = useCurrency(pair.address0)
-  const token1 = useCurrency(pair.address1)
+  const token0 = useCurrency(pair?.token0?.id)
+  const token1 = useCurrency(pair?.token1?.id)
 
   return (
     <>
       <div className="flex items-center">
         <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} />
         <div className="ml-3 font-bold text-high-emphesis whitespace-nowrap">
-          {pair.symbol0}-{pair.symbol1}
+          {pair?.token0?.symbol}-{pair?.token1?.symbol}
         </div>
       </div>
     </>
@@ -179,5 +188,16 @@ export default function PairList({ pairs, type }: PairListProps): JSX.Element {
     }
   }, [type])
 
-  return <>{pairs && <Table columns={columns} data={pairs} defaultSortBy={defaultSortBy} />}</>
+  return (
+    <>
+      {pairs && (
+        <Table
+          columns={columns}
+          data={pairs}
+          defaultSortBy={defaultSortBy}
+          link={{ href: '/analytics/pairs/', id: 'pair.address' }}
+        />
+      )}
+    </>
+  )
 }

@@ -1,18 +1,8 @@
-import { classNames, formatNumber, formatPercent } from '../../../functions'
-import {
-  useCustomDayBlock,
-  useDayData,
-  useExchange,
-  useFactory,
-  useFarms,
-  useOneDayBlock,
-} from '../../../services/graph'
+import { useBlock, useDayData, useFactory } from '../../../services/graph'
 import { useMemo, useState } from 'react'
+import ChartCard from '../ChartCard'
 
-import ColoredNumber from '../ColoredNumber'
-import LineGraph from '../../../components/LineGraph'
-
-interface ChartCardProps {
+interface DashboardChartCardProps {
   type: 'liquidity' | 'volume'
 }
 
@@ -42,14 +32,14 @@ const types = {
   },
 }
 
-export default function ChartCard(props: ChartCardProps): JSX.Element {
+export default function DashboardChartCard(props: DashboardChartCardProps): JSX.Element {
   const [chartTimespan, setChartTimespan] = useState('1W')
   const chartTimespans = ['1W', '1M', 'ALL']
 
   const type = types[props.type]
 
-  const block1d = useOneDayBlock()
-  const block2d = useCustomDayBlock(2)
+  const block1d = useBlock({ daysAgo: 1 })
+  const block2d = useBlock({ daysAgo: 2 })
 
   const exchange = useFactory()
   const exchange1d = useFactory({ block: { number: Number(block1d) } })
@@ -65,27 +55,14 @@ export default function ChartCard(props: ChartCardProps): JSX.Element {
   )
 
   return (
-    <div className="w-full font-bold rounded bg-dark-900">
-      <div className="p-4">
-        <div className="text-lg text-primary">{type.header}</div>
-        <div className="text-2xl text-high-emphesis">{formatNumber(data.figure, true, false)}</div>
-        <div className="flex flex-row items-center">
-          <ColoredNumber number={data.change} percent={true} />
-          <div className="ml-3 text-sm text-secondary">Last 24 Hours</div>
-        </div>
-      </div>
-      <div className="h-36">{data.chart && <LineGraph data={data.chart} />}</div>
-      <div className="flex flex-row justify-end pb-4 pr-4 space-x-2">
-        {chartTimespans.map((timespan, i) => (
-          <button
-            key={i}
-            className={classNames(timespan === chartTimespan ? 'text-high-emphesis' : 'text-secondary', 'font-bold')}
-            onClick={() => setChartTimespan(timespan)}
-          >
-            {timespan}
-          </button>
-        ))}
-      </div>
-    </div>
+    <ChartCard
+      header={type.header}
+      figure={data.figure}
+      change={data.change}
+      chart={data.chart}
+      currentTimespan={chartTimespan}
+      timespans={chartTimespans}
+      setTimespan={setChartTimespan}
+    />
   )
 }

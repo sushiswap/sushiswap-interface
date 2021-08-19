@@ -1,26 +1,20 @@
-import { useCustomDayBlock, useOneDayBlock, useOneWeekBlock, useSushiPairs } from '../../../services/graph'
+import { useBlock, useSushiPairs } from '../../../services/graph'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import PairList from '../../../features/analytics/Pairs/PairList'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
 import Search from '../../../components/Search'
-import { useEffect } from 'react'
 import { useFuse } from '../../../hooks'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 export default function Pairs() {
-  const router = useRouter()
-  const type: any = ['all', 'gainers', 'losers'].includes(router.query.type?.[0]) ? router.query.type?.[0] : 'all'
+  const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')
 
-  const block1d = useOneDayBlock()
-  const block2d = useCustomDayBlock(2)
-  const block1w = useOneWeekBlock()
-  const block2w = useCustomDayBlock(14)
-
-  // useEffect(() => {
-  //   console.log('debug', { block1d, block2d, block1w, block2w })
-  // }, [block1d, block2d, block1w, block2w])
+  const block1d = useBlock({ daysAgo: 1 })
+  const block2d = useBlock({ daysAgo: 2 })
+  const block1w = useBlock({ daysAgo: 7 })
+  const block2w = useBlock({ daysAgo: 14 })
 
   const pairs = useSushiPairs()
   const pairs1d = useSushiPairs({ block: { number: Number(block1d) } })
@@ -37,12 +31,9 @@ export default function Pairs() {
 
             return {
               pair: {
-                address0: pair.token0.id,
-                address1: pair.token1.id,
-                symbol0: pair.token0.symbol,
-                symbol1: pair.token1.symbol,
-                name0: pair.token0.name,
-                name1: pair.token1.name,
+                token0: pair.token0,
+                token1: pair.token1,
+                address: pair.id,
               },
               liquidity: pair.reserveUSD,
               volume1d: pair.volumeUSD - pair1d.volumeUSD,
@@ -60,12 +51,9 @@ export default function Pairs() {
 
             return {
               pair: {
-                address0: pair.token0.id,
-                address1: pair.token1.id,
-                symbol0: pair.token0.symbol,
-                symbol1: pair.token1.symbol,
-                name0: pair.token0.name,
-                name1: pair.token1.name,
+                token0: pair.token0,
+                token1: pair.token1,
+                address: pair.id,
               },
               liquidityChangeNumber1d: pair.reserveUSD - pair1d.reserveUSD,
               liquidityChangePercent1d: (pair.reserveUSD / pair1d.reserveUSD) * 100 - 100,
@@ -107,7 +95,7 @@ export default function Pairs() {
         <div className="ml-3 text-2xl font-bold text-high-emphesis">Pairs</div>
       </div>
       <Search term={term} search={search} />
-      <PairTabs />
+      <PairTabs currentType={type} setType={setType} />
       <PairList pairs={pairsSearched} type={type} />
     </AnalyticsContainer>
   )

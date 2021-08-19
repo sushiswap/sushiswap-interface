@@ -9,8 +9,8 @@ const blockFieldsQuery = gql`
 `
 
 export const blockQuery = gql`
-  query blockQuery($start: Int!, $end: Int!) {
-    blocks(first: 1, orderBy: timestamp, orderDirection: asc, where: { timestamp_gt: $start, timestamp_lt: $end }) {
+  query blockQuery($where: Block_filter) {
+    blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: $where) {
       ...blockFields
     }
   }

@@ -9,9 +9,14 @@ import Image from 'next/image'
 interface PoolListProps {
   pools: {
     pair: {
-      address0: string
-      address1: string
-      symbol: string
+      token0: {
+        id: string
+        symbol: string
+      }
+      token1: {
+        id: string
+        symbol: string
+      }
     }
     rewards: Reward[]
     liquidity: number
@@ -21,9 +26,14 @@ interface PoolListProps {
 
 interface PairListNameProps {
   pair: {
-    address0: string
-    address1: string
-    symbol: string
+    token0: {
+      id: string
+      symbol: string
+    }
+    token1: {
+      id: string
+      symbol: string
+    }
   }
 }
 
@@ -34,14 +44,16 @@ type Reward = {
 }
 
 function PairListName({ pair }: PairListNameProps): JSX.Element {
-  const token0 = useCurrency(pair.address0)
-  const token1 = useCurrency(pair.address1)
+  const token0 = useCurrency(pair?.token0?.id)
+  const token1 = useCurrency(pair?.token1?.id)
 
   return (
     <>
       <div className="flex items-center">
         <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} />
-        <div className="ml-3 font-bold whitespace-nowrap text-high-emphesis">{pair.symbol}</div>
+        <div className="ml-3 font-bold whitespace-nowrap text-high-emphesis">
+          {pair?.token0?.symbol}-{pair?.token1?.symbol}
+        </div>
       </div>
     </>
   )
@@ -118,5 +130,16 @@ export default function PoolList({ pools }: PoolListProps): JSX.Element {
     []
   )
 
-  return <>{pools && <Table columns={columns} data={pools} defaultSortBy={defaultSortBy} />}</>
+  return (
+    <>
+      {pools && (
+        <Table
+          columns={columns}
+          data={pools}
+          defaultSortBy={defaultSortBy}
+          // link={{ href: '/analytics/pools/', id: 'pair.address' }}
+        />
+      )}
+    </>
+  )
 }
