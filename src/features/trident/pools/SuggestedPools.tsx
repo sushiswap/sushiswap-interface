@@ -60,7 +60,7 @@ const SuggestedPools: FC<SuggestedPools> = () => {
           ))}
           {viewMore && (
             <>
-              {pools.slice(pools.length - 2).map((pool, index) => (
+              {pools.slice(pools.length - 1).map((pool, index) => (
                 <PoolCard pool={pool} link={'/trident/pool'} key={index} />
               ))}
             </>

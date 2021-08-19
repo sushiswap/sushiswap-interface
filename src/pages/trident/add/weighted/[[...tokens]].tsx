@@ -1,30 +1,28 @@
-import Button from '../../../components/Button'
+import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout from '../../../layouts/Trident'
-import Typography from '../../../components/Typography'
-import ModeToggle from '../../../features/trident/add/ModeToggle'
+import TridentLayout from '../../../../layouts/Trident'
+import Typography from '../../../../components/Typography'
+import ModeToggle from '../../../../features/trident/add/ModeToggle'
 import {
   TridentAddLiquidityPageContextProvider,
   useTridentAddLiquidityPageContext,
   useTridentAddLiquidityPageState,
-} from '../../../features/trident/add/context'
-import ClassicZapMode from '../../../features/trident/add/ClassicZapMode'
-import { LiquidityMode } from '../../../features/trident/add/context/types'
-import { toHref } from '../../../hooks/useTridentPools'
-import ClassicStandardMode from '../../../features/trident/add/ClassicStandardMode'
-import { PoolType } from '../../../features/trident/types'
-import HybridZapMode from '../../../features/trident/add/HybridZapMode'
-import HybridStandardMode from '../../../features/trident/add/HybridStandardMode'
-import AddTransactionReviewModal from '../../../features/trident/add/AddTransactionReviewModal'
+} from '../../../../features/trident/add/context'
+import { LiquidityMode } from '../../../../features/trident/add/context/types'
+import { toHref } from '../../../../hooks/useTridentPools'
+import HybridZapMode from '../../../../features/trident/add/HybridZapMode'
+import HybridStandardMode from '../../../../features/trident/add/HybridStandardMode'
+import AddTransactionReviewModal from '../../../../features/trident/add/AddTransactionReviewModal'
 import React from 'react'
-import DepositSettingsModal from '../../../features/trident/add/DepositSettingsModal'
-import BalancedModeHeader from '../../../features/trident/add/BalancedModeHeader'
-import SettingsTab from '../../../components/Settings'
+import DepositSettingsModal from '../../../../features/trident/add/DepositSettingsModal'
+import BalancedModeHeader from '../../../../features/trident/add/BalancedModeHeader'
+import SettingsTab from '../../../../components/Settings'
+import { PoolType } from '../../../../features/trident/types'
 
-const Add = () => {
+const AddWeighted = () => {
   const { i18n } = useLingui()
   const { liquidityMode } = useTridentAddLiquidityPageState()
   const { pool } = useTridentAddLiquidityPageContext()
@@ -63,26 +61,15 @@ const Add = () => {
       <ModeToggle />
       <BalancedModeHeader />
 
-      {pool.type === PoolType.CLASSIC && (
-        <>
-          {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
-          {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
-        </>
-      )}
-
-      {pool.type === PoolType.HYBRID && (
-        <>
-          {liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
-          {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
-        </>
-      )}
+      {liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
+      {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
 
       <AddTransactionReviewModal />
     </div>
   )
 }
 
-Add.Layout = TridentLayout
-Add.Provider = TridentAddLiquidityPageContextProvider
+AddWeighted.Layout = TridentLayout
+AddWeighted.Provider = TridentAddLiquidityPageContextProvider(PoolType.WEIGHTED)
 
-export default Add
+export default AddWeighted

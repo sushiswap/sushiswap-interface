@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useMemo, useCallback } from 'react'
+import React, { createContext, useContext, useReducer, useMemo, useCallback, FC } from 'react'
 import reducer from './reducer'
 import { ActionType, Context, LiquidityMode, Reducer, State } from './types'
 import { useRouter } from 'next/router'
@@ -35,9 +35,9 @@ export const TridentAddLiquidityPageContext = createContext<Context>({
   dispatch: () => null,
 })
 
-export const TridentAddLiquidityPageContextProvider = ({ children }) => {
+const ParentProvider: FC<{ poolType: PoolType }> = ({ children, poolType }) => {
   const { query } = useRouter()
-  const [pool] = useTridentPool(query.tokens)
+  const [pool] = useTridentPool(query.tokens, poolType)
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, {
     ...initialState,
     inputAmounts: pool.tokens.reduce((acc, cur) => ((acc[cur.address] = ''), acc), {}),
@@ -126,8 +126,8 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
         [PoolType.CONCENTRATED]: TridentAddConcentratedPoolContextProvider,
         [PoolType.HYBRID]: TridentAddHybridPoolContextProvider,
         [PoolType.WEIGHTED]: TridentAddWeightedPoolContextProvider,
-      }[pool.type]),
-    [pool.type]
+      }[poolType]),
+    [poolType]
   )
 
   return (
@@ -163,7 +163,9 @@ export const TridentAddLiquidityPageContextProvider = ({ children }) => {
   )
 }
 
-export const useTridentAddParentPageContext = () => useContext(TridentAddLiquidityPageContext)
+export const TridentAddLiquidityPageContextProvider = (poolType: PoolType) => {
+  return ({ children }) => <ParentProvider poolType={poolType}>{children}</ParentProvider>
+}
 
 export const useTridentAddLiquidityPageContext = () => {
   const parent = useContext(TridentAddLiquidityPageContext)
@@ -195,3 +197,5 @@ export const useTridentAddLiquidityPageDispatch = () => {
   const { dispatch } = useTridentAddLiquidityPageContext()
   return dispatch
 }
+
+export const useTridentAddParentPageContext = () => useContext(TridentAddLiquidityPageContext)

@@ -3,17 +3,16 @@ import { ChainId, WETH9 } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { tryParseAmount } from '../functions'
-import { Pool } from '../features/trident/types'
-import { PoolType } from '../features/trident/types'
+import { Pool, PoolType } from '../features/trident/types'
 
 export const toHref = (pool: Pool) => {
-  return pool.tokens.map((el) => el.address).join('/')
+  return `${pool.type.toLowerCase()}/${pool.tokens.map((el) => el.address).join('/')}`
 }
 
 type UsePoolsReturnType = [
   Pool[],
   {
-    getPoolByAddresses: (addresses: string[]) => Pool
+    getPoolByAddresses: (addresses: string[], type: PoolType) => Pool
     toHref: (pool: Pool) => string
   }
 ]
@@ -23,6 +22,22 @@ const useTridentPools = (): UsePoolsReturnType => {
     () => [
       {
         type: PoolType.CLASSIC,
+        amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
+        tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
+        apy: '37.8%',
+        tvl: '$1,534,443.08',
+        fee: '0.3%',
+      },
+      {
+        type: PoolType.CONCENTRATED,
+        amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
+        tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
+        apy: '37.8%',
+        tvl: '$1,534,443.08',
+        fee: '0.3%',
+      },
+      {
+        type: PoolType.WEIGHTED,
         amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
         tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
         apy: '37.8%',
@@ -46,12 +61,13 @@ const useTridentPools = (): UsePoolsReturnType => {
   )
 
   const getPoolByAddresses = useCallback(
-    (addresses: string[]) =>
-      pools.find((pool) =>
-        isEqual(
-          pool.amounts.map((el) => el.currency.address),
-          addresses
-        )
+    (addresses: string[], type: string) =>
+      pools.find(
+        (pool) =>
+          isEqual(
+            pool.amounts.map((el) => el.currency.address),
+            addresses
+          ) && type === pool.type
       ),
     [pools]
   )
@@ -66,11 +82,11 @@ type UsePoolReturnType = [
   }
 ]
 
-export const useTridentPool = (addresses: string | string[]): UsePoolReturnType => {
+export const useTridentPool = (addresses: string | string[], type: PoolType): UsePoolReturnType => {
   if (addresses.length < 2) throw new Error('Invalid pool')
 
   const [, { getPoolByAddresses }] = useTridentPools()
-  return [getPoolByAddresses(addresses as string[]), { toHref }]
+  return [getPoolByAddresses(addresses as string[], type), { toHref }]
 }
 
 export default useTridentPools

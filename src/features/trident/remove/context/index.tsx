@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useMemo, useCallback } from 'react'
+import React, { createContext, useContext, useReducer, useMemo, useCallback, FC } from 'react'
 import reducer from './reducer'
 import { ActionType, Context, HandleInputOptions, LiquidityMode, Reducer, State } from './types'
 import { useRouter } from 'next/router'
@@ -37,7 +37,7 @@ export const TridentRemoveLiquidityPageContext = createContext<Context>({
   dispatch: () => null,
 })
 
-export const TridentRemoveLiquidityPageContextProvider = ({ children }) => {
+const ParentProvider: FC<{ poolType: PoolType }> = ({ children, poolType }) => {
   const { query } = useRouter()
   const [pool] = useTridentPool(query.tokens)
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, {
@@ -177,7 +177,9 @@ export const TridentRemoveLiquidityPageContextProvider = ({ children }) => {
   )
 }
 
-export const useTridentParentPageContext = () => useContext(TridentRemoveLiquidityPageContext)
+export const TridentRemoveLiquidityPageContextProvider = (poolType: PoolType) => {
+  return ({ children }) => <ParentProvider poolType={poolType}>{children}</ParentProvider>
+}
 
 export const useTridentRemoveLiquidityPageContext = () => {
   const parent = useContext(TridentRemoveLiquidityPageContext)
@@ -209,3 +211,5 @@ export const useTridentRemoveLiquidityPageDispatch = () => {
   const { dispatch } = useTridentRemoveLiquidityPageContext()
   return dispatch
 }
+
+export const useTridentRemoveParentPageContext = () => useContext(TridentRemoveLiquidityPageContext)

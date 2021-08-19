@@ -7,6 +7,7 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Pool } from '../types'
 import { POOL_TYPES } from '../constants'
+import { toHref } from '../../../hooks/useTridentPools'
 
 interface PoolCardProps {
   pool: Pool
@@ -53,7 +54,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool, link }) => {
     </div>
   )
 
-  if (link) return <Link href={`${link}/${pool.tokens.map((token) => token.address).join('/')}`}>{content}</Link>
+  if (link) return <Link href={`${link}/${toHref(pool)}`}>{content}</Link>
 
   return content
 }
