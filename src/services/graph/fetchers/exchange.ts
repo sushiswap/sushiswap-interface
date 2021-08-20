@@ -187,8 +187,8 @@ export const getDayData = async (chainId = ChainId.MAINNET, query = dayDatasQuer
 }
 
 export const getFactory = async (chainId = ChainId.MAINNET, variables = undefined) => {
-  const { factory } = await exchange(chainId, factoryQuery, variables)
-  return factory
+  const { factories } = await exchange(chainId, factoryQuery, variables)
+  return factories[0]
 }
 
 export const getTransactions = async (chainId = ChainId.MAINNET, query = transactionsQuery, variables = undefined) => {

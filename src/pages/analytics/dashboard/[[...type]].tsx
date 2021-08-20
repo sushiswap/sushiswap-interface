@@ -1,19 +1,9 @@
-import {
-  useEthPrice,
-  useFarms,
-  useNativePrice,
-  useOneDayBlock,
-  useOneWeekBlock,
-  useSushiPairs,
-  useTokens,
-} from '../../../services/graph'
+import { useBlock, useEthPrice, useNativePrice, useSushiPairs, useTokens } from '../../../services/graph'
 import { useMemo, useState } from 'react'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import ChartCard from '../../../features/analytics/Dashboard/ChartCard'
-import Container from '../../../components/Container'
+import DashboardChartCard from '../../../features/analytics/Dashboard/DashboardChartCard'
 import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
-import Head from 'next/head'
 import PairList from '../../../features/analytics/Pairs/PairList'
 import PoolList from '../../../features/analytics/Pools/PoolsList'
 import Search from '../../../components/Search'
@@ -23,71 +13,68 @@ import { useFuse } from '../../../hooks'
 import { useKashiPairs } from '../../../services/graph/index'
 import { useRouter } from 'next/router'
 
-// TODO: Top Pools: Rewards, APR
 export default function Dashboard(): JSX.Element {
-  const router = useRouter()
-  const type: any = ['pools', 'pairs', 'tokens'].includes(router.query.type?.[0]) ? router.query.type?.[0] : 'pools'
+  const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
 
-  const block1d = useOneDayBlock()
-  const block1w = useOneWeekBlock()
+  const router = useRouter()
+
+  const block1d = useBlock({ daysAgo: 1 })
+  const block1w = useBlock({ daysAgo: 7 })
 
   // For Top Pairs
   const pairs = useSushiPairs()
-  const pairs1d = useSushiPairs({ block: { number: Number(block1d) } })
-  const pairs1w = useSushiPairs({ block: { number: Number(block1w) } })
+  const pairs1d = useSushiPairs({ block: { number: block1d } })
+  const pairs1w = useSushiPairs({ block: { number: block1w } })
 
-  const pairsFormatted = useMemo(() => {
-    return pairs && pairs1d && pairs1w
-      ? pairs.map((pair) => {
-          const pair1d = pairs1d.find((p) => pair.id === p.id) ?? pair
-          const pair1w = pairs1w.find((p) => pair.id === p.id) ?? pair1d
+  const pairsFormatted = useMemo(
+    () =>
+      pairs?.map((pair) => {
+        const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+        const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair1d
 
-          return {
-            pair: {
-              address0: pair.token0.id,
-              address1: pair.token1.id,
-              symbol0: pair.token0.symbol,
-              symbol1: pair.token1.symbol,
-              name0: pair.token0.name,
-              name1: pair.token1.name,
-            },
-            liquidity: pair.reserveUSD,
-            volume1d: pair.volumeUSD - pair1d.volumeUSD,
-            volume1w: pair.volumeUSD - pair1w.volumeUSD,
-          }
-        })
-      : []
-  }, [pairs, pairs1d, pairs1w])
+        return {
+          pair: {
+            token0: pair.token0,
+            token1: pair.token1,
+            address: pair.id,
+          },
+          liquidity: pair.reserveUSD,
+          volume1d: pair.volumeUSD - pair1d?.volumeUSD,
+          volume1w: pair.volumeUSD - pair1w?.volumeUSD,
+        }
+      }),
+    [pairs, pairs1d, pairs1w]
+  )
 
   // For Top Farms
   const farms = useFarmRewards()
   const kashiPairs = useKashiPairs()
   const nativePrice = useNativePrice()
-  const farmsFormatted = useMemo(() => {
-    return farms && (pairs || (kashiPairs && nativePrice))
-      ? farms
-          .map((farm) => ({
-            pair: {
-              address0: farm.pair.token0.id,
-              address1: farm.pair.token1.id,
-              symbol: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
-            },
-            rewards: farm.rewards,
-            liquidity: farm.tvl,
-            apr: farm.roiPerYear * 100,
-          }))
-          .filter((farm) => (farm ? true : false))
-      : []
-  }, [farms, pairs, kashiPairs, nativePrice])
+  const farmsFormatted = useMemo(
+    () =>
+      farms
+        ?.map((farm) => ({
+          pair: {
+            token0: farm.pair.token0,
+            token1: farm.pair.token1,
+            address: farm.pair.id,
+          },
+          rewards: farm.rewards,
+          liquidity: farm.tvl,
+          apr: farm.roiPerYear * 100,
+        }))
+        .filter((farm) => (farm ? true : false)),
+    [farms, pairs, kashiPairs, nativePrice]
+  )
 
   // For Top Tokens
   const ethPrice = useEthPrice()
-  const ethPrice1d = useEthPrice({ block: { number: Number(block1d) } })
-  const ethPrice1w = useEthPrice({ block: { number: Number(block1w) } })
+  const ethPrice1d = useEthPrice({ block: { number: block1d } })
+  const ethPrice1w = useEthPrice({ block: { number: block1w } })
 
   const tokens = useTokens()
-  const tokens1d = useTokens({ block: { number: Number(block1d) } })
-  const tokens1w = useTokens({ block: { number: Number(block1w) } })
+  const tokens1d = useTokens({ block: { number: block1d } })
+  const tokens1w = useTokens({ block: { number: block1w } })
 
   const tokensFormatted = useMemo(
     () =>
@@ -156,8 +143,8 @@ export default function Dashboard(): JSX.Element {
   return (
     <AnalyticsContainer>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <ChartCard type="liquidity" />
-        <ChartCard type="volume" />
+        <DashboardChartCard type="liquidity" />
+        <DashboardChartCard type="volume" />
       </div>
       <div className="flex flex-row items-center">
         <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -169,7 +156,7 @@ export default function Dashboard(): JSX.Element {
         <div className="ml-3 text-lg font-bold text-high-emphesis">Leaderboard</div>
       </div>
       <Search term={term} search={search} />
-      <DashboardTabs />
+      <DashboardTabs currentType={type} setType={setType} />
       {type === 'pools' && <PoolList pools={searched} />}
       {type === 'pairs' && <PairList pairs={searched} type={'all'} />}
       {type === 'tokens' && <TokenList tokens={searched} />}

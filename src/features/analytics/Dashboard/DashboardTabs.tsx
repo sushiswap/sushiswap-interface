@@ -3,7 +3,7 @@ import Tabs from './../Tabs'
 const tabs = [
   {
     name: 'Top Reward Pools',
-    href: '/analytics/dashboard',
+    type: 'pools',
     icon: (
       <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -28,7 +28,7 @@ const tabs = [
   },
   {
     name: 'Top Liquidity Pairs',
-    href: '/analytics/dashboard/pairs',
+    type: 'pairs',
     icon: (
       <svg width="23" height="16" viewBox="0 0 23 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -53,7 +53,7 @@ const tabs = [
   },
   {
     name: 'Top Tokens',
-    href: '/analytics/dashboard/tokens',
+    type: 'tokens',
     icon: (
       <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -78,10 +78,10 @@ const tabs = [
   },
 ]
 
-export default function DashboardTabs(): JSX.Element {
+export default function DashboardTabs({ currentType, setType }): JSX.Element {
   return (
     <>
-      <Tabs tabs={tabs} />
+      <Tabs tabs={tabs} currentType={currentType} setType={setType} />
     </>
   )
 }

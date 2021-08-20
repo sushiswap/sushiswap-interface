@@ -53,7 +53,7 @@ export function useNativePrice(variables = undefined, chainId = undefined, swrCo
   const { chainId: chainIdSelected } = useActiveWeb3React()
   chainId = chainId ?? chainIdSelected
 
-  console.log('use native price', chainId)
+  // console.log('use native price', chainId)
 
   // TODO: Check if all chains have correct native tokens (OKEX, FANTOM, CELO)
   const map = {
@@ -72,7 +72,7 @@ export function useNativePrice(variables = undefined, chainId = undefined, swrCo
 
   const { data } = useSWR([fetcher.name, JSON.stringify(variables)], () => fetcher(variables), swrConfig)
 
-  console.log({ data })
+  // console.log({ data })
 
   return data
 }

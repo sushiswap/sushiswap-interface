@@ -5,11 +5,11 @@ import AnalyticsContainer from '../../features/analytics/AnalyticsContainer'
 import InfoCard from '../../features/analytics/Bar/InfoCard'
 import { classNames, formatNumber, formatPercent } from '../../functions'
 import { aprToApy } from '../../functions/convert/apyApr'
-import { useDayData, useFactory, useOneDayBlock, useSushiPrice, useTokenDayData } from '../../services/graph'
+import { useBlock, useDayData, useFactory, useSushiPrice, useTokenDayData } from '../../services/graph'
 import { useBar, useBarHistory } from '../../services/graph/hooks/bar'
 
 export default function Bar() {
-  const block1d = useOneDayBlock()
+  const block1d = useBlock({ daysAgo: 1 })
 
   const exchange = useFactory()
   const exchange1d = useFactory({ block: { number: Number(block1d) } })
@@ -110,10 +110,10 @@ export default function Bar() {
     <AnalyticsContainer>
       <div className="text-2xl font-bold text-high-emphesis">Sushi Bar</div>
       <div className="flex flex-row space-x-4 overflow-auto">
-        <InfoCard text="APY (24h)" number={APY1d !== 0 ? formatPercent(APY1d) : ''} />
-        <InfoCard text="APY (7d)" number={APY1w !== 0 ? formatPercent(APY1w) : ''} />
-        <InfoCard text="xSUSHI in Circulation" number={bar ? formatNumber(bar.totalSupply) : ''} />
-        <InfoCard text="xSUSHI : SUSHI" number={bar ? Number(bar.ratio).toFixed(4) : ''} />
+        <InfoCard text="APY (24h)" number={formatPercent(APY1d)} />
+        <InfoCard text="APY (7d)" number={formatPercent(APY1w)} />
+        <InfoCard text="xSUSHI in Circulation" number={formatNumber(bar?.totalSupply)} />
+        <InfoCard text="xSUSHI : SUSHI" number={Number(bar?.ratio ?? 0)?.toFixed(4)} />
       </div>
       <div className="space-y-4">
         {graphs.map((graph, i) => (

@@ -1,14 +1,20 @@
 import Container from '../components/Container'
-import Head from 'next/head'
+import React from 'react'
+import { useBlock } from '../services/graph'
 
 export default function Test() {
+  const block = useBlock()
+  const block2 = useBlock({ daysAgo: 1 })
+  const block3 = useBlock({ daysAgo: 7 })
+  const block4 = useBlock({ timestamp: 1597579276 })
+
+  console.log(block, block2, block3, block4)
+
   return (
-    <Container id="test-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
-      <Head>
-        <title>Test | Sushi</title>
-        <meta name="description" content="Test" />
-      </Head>
-      <h1 role="heading">Test</h1>
+    <Container>
+      <div className="p-8 w-full bg-transparent border-2 border-transparent border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5">
+        Test
+      </div>
     </Container>
   )
 }
