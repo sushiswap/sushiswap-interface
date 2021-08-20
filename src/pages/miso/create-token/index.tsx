@@ -14,6 +14,7 @@ import useCopyClipboard from '../../../hooks/useCopyClipboard'
 import useTokens from '../../../hooks/miso/useTokens'
 import Layout from '../../../layouts/Miso'
 import childrenWithProps from '../../../layouts/Miso/children'
+import Divider from '../../../layouts/Miso/divider'
 
 import fixedToken from '../../../../public/images/miso/create-token/miso-fixed-token.svg'
 import mintableToken from '../../../../public/images/miso/create-token/miso-mintable-token.svg'
@@ -21,10 +22,6 @@ import sushiToken from '../../../../public/images/miso/create-token/miso-sushi-t
 import ExternalLink from '../../../components/ExternalLink'
 import { shortenAddress } from '../../../functions'
 import NavLink from '../../../components/NavLink'
-
-function Divider() {
-  return <div className="bg-[#202231] h-[2px] w-full" />
-}
 
 function TokenInfo({ label, value }) {
   return (
@@ -101,7 +98,7 @@ function CreateToken({ pageIndex, movePage }) {
         <meta key="description" name="description" content="MISO by Sushi, an initial Sushi offering on steroids ..." />
       </Head>
       <div>
-        {pageIndex === 1 && (
+        {pageIndex === 0 && (
           <div>
             <div className="grid grid-cols-3 gap-5 mb-16">
               <div>
@@ -161,7 +158,7 @@ function CreateToken({ pageIndex, movePage }) {
             </div>
           </div>
         )}
-        {pageIndex === 2 && (
+        {pageIndex === 1 && (
           <div>
             <div className="mb-16">
               <Input
@@ -203,7 +200,7 @@ function CreateToken({ pageIndex, movePage }) {
             </div>
           </div>
         )}
-        {pageIndex === 3 && (
+        {pageIndex === 2 && (
           <>
             {txState < 2 && (
               <div>
@@ -292,14 +289,18 @@ function CreateToken({ pageIndex, movePage }) {
                 </div>
                 <div className="flex flex-row gap-5">
                   <NavLink href="/miso/create-auction">
-                    <Button color="gradient" className="w-[200px]">
-                      Create Auction
-                    </Button>
+                    <div>
+                      <Button color="gradient" className="w-[200px]">
+                        Create Auction
+                      </Button>
+                    </div>
                   </NavLink>
                   <NavLink href="/miso">
-                    <Button variant="outlined" className="w-[200px]" color="gradient">
-                      Go To Marketplace
-                    </Button>
+                    <div>
+                      <Button variant="outlined" className="w-[200px]" color="gradient">
+                        Go To Marketplace
+                      </Button>
+                    </div>
                   </NavLink>
                 </div>
               </div>
@@ -312,7 +313,7 @@ function CreateToken({ pageIndex, movePage }) {
 }
 
 const CreateTokenLayout = ({ children }) => {
-  const [pageIndex, movePage] = React.useState(1)
+  const [pageIndex, movePage] = React.useState(0)
 
   return (
     <Layout

@@ -107,6 +107,9 @@ module.exports = {
       dropShadow: {
         currencyLogo: '0px 3px 6px rgba(15, 15, 15, 0.25)',
       },
+      backgroundImage: {
+        miso: "url('/images/miso/miso-header-background.svg')",
+      },
     },
   },
   variants: {

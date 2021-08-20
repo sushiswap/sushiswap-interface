@@ -25,22 +25,30 @@ function Launchpad() {
         <div className="mt-3 grid grid-cols-4 gap-5">
           <div className="cursor-pointer">
             <NavLink href="/miso/create-token">
-              <Image src={createTokenImage} layout="responsive" alt="Create Token" />
+              <div>
+                <Image src={createTokenImage} layout="responsive" alt="Create Token" />
+              </div>
             </NavLink>
           </div>
           <div className="cursor-pointer">
             <NavLink href="/miso/create-auction">
-              <Image src={setupAuctionImage} layout="responsive" alt="Setup Auction" />
+              <div>
+                <Image src={setupAuctionImage} layout="responsive" alt="Setup Auction" />
+              </div>
             </NavLink>
           </div>
           <div className="cursor-pointer">
             <NavLink href="/miso/permission-list">
-              <Image src={createPermissionListImage} layout="responsive" alt="Create Permission List" />
+              <div>
+                <Image src={createPermissionListImage} layout="responsive" alt="Create Permission List" />
+              </div>
             </NavLink>
           </div>
           <div className="cursor-pointer">
             <NavLink href="/miso/liquidity-launcher">
-              <Image src={setupLiquidityLauncherImage} layout="responsive" alt="Setup Liquidity Launcher" />
+              <div>
+                <Image src={setupLiquidityLauncherImage} layout="responsive" alt="Setup Liquidity Launcher" />
+              </div>
             </NavLink>
           </div>
         </div>
@@ -48,7 +56,9 @@ function Launchpad() {
       <div className="mt-5">
         <div className="flex justify-between">
           <span className="font-bold text-lg">{i18n._(t`Your Auctions:`)}</span>
-          <a className="text-blue text-sm cursor-pointer">{i18n._(t`Set Up Auction`)}</a>
+          <NavLink href="/miso/create-auction">
+            <a className="text-blue text-sm cursor-pointer">{i18n._(t`Set Up Auction`)}</a>
+          </NavLink>
         </div>
         <div className="mt-3 bg-[#161522] rounded">
           <div className="text-center py-10">

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { classNames } from '../../functions/styling'
+
 export const Radio = React.memo(
   ({
     label,
@@ -14,7 +16,7 @@ export const Radio = React.memo(
   } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'as'>) => {
     return (
       <div
-        className={`flex flex-row items-center cursor-pointer ${className}`}
+        className={classNames('flex flex-row items-center cursor-pointer', className)}
         {...rest}
         onClick={() => onSelect(label)}
       >
