@@ -78,7 +78,8 @@ function CreateToken({ pageIndex, movePage }) {
           .then((createReceipt) => {
             console.log(createReceipt)
             setRecipt(createReceipt)
-            setTxState(3)
+            if (createReceipt.status) setTxState(3)
+            else setTxState(4)
           })
           .catch((reason) => {
             console.log(reason)
@@ -286,6 +287,36 @@ function CreateToken({ pageIndex, movePage }) {
                 >
                   {shortenAddress(receipt.to)}
                   <DuplicateIcon className="w-5 h-5 ml-2 text-white" aria-hidden="true" />
+                </div>
+                <div className="flex flex-row gap-5">
+                  <NavLink href="/miso/create-auction">
+                    <div>
+                      <Button color="gradient" className="w-[200px]">
+                        Create Auction
+                      </Button>
+                    </div>
+                  </NavLink>
+                  <NavLink href="/miso">
+                    <div>
+                      <Button variant="outlined" className="w-[200px]" color="gradient">
+                        Go To Marketplace
+                      </Button>
+                    </div>
+                  </NavLink>
+                </div>
+              </div>
+            )}
+            {txState === 4 && (
+              <div>
+                <div className="text-2xl text-white font-bold mb-3">Transaction Failed!</div>
+                <div className="mb-12">
+                  <ExternalLink
+                    className="underline"
+                    color="blue"
+                    href={getExplorerLink(chainId, tx.hash, 'transaction')}
+                  >
+                    View on Explorer
+                  </ExternalLink>
                 </div>
                 <div className="flex flex-row gap-5">
                   <NavLink href="/miso/create-auction">

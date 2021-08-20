@@ -1,5 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { parseEther } from '@ethersproject/units'
+import { Token } from '@sushiswap/sdk'
 import { useCallback, useEffect, useState } from 'react'
 
 import { useMisoHelperContract, useTokenFactoryContract } from './useContracts'
@@ -26,17 +27,21 @@ const sort = (arr, obj, orderBy) => {
   }
 }
 
-export const useListTokens = () => {
+export function useListTokens(): Token[] {
   const misoHelperContract = useMisoHelperContract(false)
   const blockNumber = useBlockNumber()
+  const { chainId } = useActiveWeb3React()
 
-  const [tokens, setTokens] = useState([])
+  const [tokens, setTokens] = useState<Token[]>([])
   const fetchTokens = useCallback(async () => {
     try {
       const tokens = await misoHelperContract?.getTokens()
       const filtered = filterArrayToJson(tokens)
-      const sorted = sort(filtered, 'createdAt', 'desc')
-      setTokens(sorted)
+      let result: Token[] = []
+      filtered.forEach((token) => {
+        result.push(new Token(chainId, token.addr, token.decimals.toNumber(), token.symbol, token.name))
+      })
+      setTokens(result)
     } catch (error) {
       setTokens([])
       throw error

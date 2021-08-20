@@ -2,7 +2,6 @@ import { parseEther, parseUnits } from '@ethersproject/units'
 import { useCallback, useEffect, useState } from 'react'
 
 import {
-  useAuctionContract,
   getAuctionContract,
   useMisoHelperContract,
   useMisoMarketContract,
