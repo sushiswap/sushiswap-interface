@@ -1,22 +1,36 @@
 import { ExclamationCircleIcon as ExclamationCircleIconOutline } from '@heroicons/react/outline'
 import { ExclamationCircleIcon as ExclamationCircleIconSolid } from '@heroicons/react/solid'
+import { Token } from '@sushiswap/sdk'
 import Head from 'next/head'
 import React from 'react'
 
 import Button from '../../../components/Button'
 import ExternalLink from '../../../components/ExternalLink'
 import Image from '../../../components/Image'
+import Input from '../../../components/Miso/Input'
 import Radio from '../../../components/Miso/Radio'
+import TokenSelect from '../../../components/Miso/TokenSelect'
+import { MISO_MARKET_ADDRESS } from '../../../constants/miso'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import Layout from '../../../layouts/Miso'
 import childrenWithProps from '../../../layouts/Miso/children'
 import Divider from '../../../layouts/Miso/divider'
+import { useTokenAllowance, useTokenBalance } from '../../../state/wallet/hooks'
 
 import dutchAuction from '../../../../public/images/miso/create-auction/miso-dutch-auction.svg'
 import crowdsale from '../../../../public/images/miso/create-auction/miso-crowdsale.svg'
 import batchAuction from '../../../../public/images/miso/create-auction/miso-batch-auction.svg'
 
 function CreateAuction({ pageIndex, movePage }) {
+  const { account, chainId } = useActiveWeb3React()
+
   const [auctionType, setAuctionType] = React.useState('Dutch Auction')
+
+  const [token, selectToken] = React.useState<Token>(null)
+  const [tokenAllowance, setTokenAllowance] = React.useState('')
+  const [tokenAmount, setTokenAmount] = React.useState('')
+  const balance = useTokenBalance(account ?? undefined, token)
+  const allowance = useTokenAllowance(account ?? undefined, MISO_MARKET_ADDRESS[chainId], token)
 
   return (
     <>
@@ -95,6 +109,56 @@ function CreateAuction({ pageIndex, movePage }) {
             <Divider />
             <div className="flex justify-between mt-5">
               <Button color="gray" disabled className="w-[133px]">
+                Previous
+              </Button>
+              <Button color="blue" className="w-[133px]" onClick={() => movePage(pageIndex + 1)}>
+                Next
+              </Button>
+            </div>
+          </div>
+        )}
+        {pageIndex === 1 && (
+          <div>
+            <div className="mb-16">
+              <TokenSelect onTokenSelect={(token) => selectToken(token)} />
+              <Input
+                label="Auction Token Allowance*"
+                value={tokenAllowance}
+                type="digit"
+                placeholder="Enter the amount of token you would like to launch."
+                alert="Enter the amount that you would like to allocate for MISO auctions. If you plan to set up post auction liquidity launcher, you can also include the allowance here."
+                hint={
+                  <span>
+                    <b>Note</b>: Your auction token amount must be higher than or equal to token balance.
+                  </span>
+                }
+                trailing={<span>Your Token Balance: {balance ? balance.toSignificant(4) : 'N/A'}</span>}
+                onUserInput={(input) => setTokenAllowance(input)}
+              />
+              <Input
+                label="Auction Token Amount*"
+                value={tokenAmount}
+                type="digit"
+                placeholder="Enter the amount of token you would like to auction."
+                alert="This will be the number of tokens you will put into the auction contract. Please consider this carefully."
+                hint={
+                  <span>
+                    <b>Note</b>: Token amount must be lower or equal to allowance.
+                  </span>
+                }
+                trailing={
+                  <span>
+                    {token
+                      ? `Your Token Allowance: ${allowance ? allowance.toSignificant(4) : 'N/A'} ${token.symbol}`
+                      : ''}
+                  </span>
+                }
+                onUserInput={(input) => setTokenAmount(input)}
+              />
+            </div>
+            <Divider />
+            <div className="flex justify-between mt-5">
+              <Button color="gray" className="w-[133px]" onClick={() => movePage(pageIndex - 1)}>
                 Previous
               </Button>
               <Button color="blue" className="w-[133px]" onClick={() => movePage(pageIndex + 1)}>

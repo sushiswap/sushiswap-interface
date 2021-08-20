@@ -174,7 +174,7 @@ const Layout = ({
     <div className="z-0 flex flex-col items-center w-full h-screen">
       <Header />
       <Main>
-        <Container className="px-4 py-4 md:py-8 lg:py-12" maxWidth="5xl">
+        <Container className="px-4 pb-4 md:pb-8 lg:pb-12" maxWidth="5xl">
           <Navs data={navs} />
           <Title data={{ ...title, tabs, active }} isFactoryPage={isFactoryPage} />
           <div className="p-10">{children}</div>
