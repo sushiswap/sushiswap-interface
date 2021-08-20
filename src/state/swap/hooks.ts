@@ -8,6 +8,7 @@ import {
   TradeType,
   Trade as V2Trade,
   WNATIVE_ADDRESS,
+  SUSHI_ADDRESS,
 } from '@sushiswap/sdk'
 import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
 import {
@@ -342,16 +343,15 @@ function validatedRecipient(recipient: any): string | null {
 export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.MAINNET): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+  const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'
+  const sushi = SUSHI_ADDRESS[chainId]
   if (inputCurrency === '' && outputCurrency === '') {
-    if (chainId === ChainId.CELO) {
-      inputCurrency = WNATIVE_ADDRESS[chainId]
-    } else {
-      // default to ETH input
-      inputCurrency = 'ETH'
-    }
-  } else if (inputCurrency === outputCurrency) {
-    // clear output if identical
-    outputCurrency = ''
+    inputCurrency = eth
+    outputCurrency = sushi
+  } else if (inputCurrency === '') {
+    inputCurrency = outputCurrency === eth ? sushi : eth
+  } else if (outputCurrency === '' || inputCurrency === outputCurrency) {
+    outputCurrency = inputCurrency === eth ? sushi : eth
   }
 
   const recipient = validatedRecipient(parsedQs.recipient)
