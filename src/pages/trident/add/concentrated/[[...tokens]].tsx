@@ -7,7 +7,7 @@ import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import AddTransactionReviewModal from '../../../../features/trident/add/AddTransactionReviewModal'
-import React from 'react'
+import React, { useState } from 'react'
 import Chart from '../../../../features/trident/add/concentrated/Chart'
 import PriceRange from '../../../../features/trident/add/concentrated/PriceRange'
 import TridentAddConcentratedContextProvider, {
@@ -15,11 +15,15 @@ import TridentAddConcentratedContextProvider, {
   useTridentAddConcentratedState,
 } from '../../../../features/trident/add/concentrated/context'
 import RangeBlocks from '../../../../features/trident/add/concentrated/RangeBlocks'
+import StandardMode from '../../../../features/trident/add/concentrated/StandardMode'
+import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
+import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 
 const AddConcentrated = () => {
   const { i18n } = useLingui()
   const context = useTridentAddConcentratedContext()
   const state = useTridentAddConcentratedState()
+  const [next, setNext] = useState(false)
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -43,12 +47,32 @@ const AddConcentrated = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-7">
-        <Chart />
-        <PriceRange />
-        <RangeBlocks />
-      </div>
-      <AddTransactionReviewModal context={context} state={state} />
+      {!next ? (
+        <>
+          <div className="flex flex-col gap-7">
+            <Chart />
+            <PriceRange />
+            <RangeBlocks />
+          </div>
+          <div className="flex flex-col px-5 mt-5">
+            <Button
+              color="gradient"
+              disabled={!state.minPrice || !state.maxPrice || state.minPrice >= state.maxPrice}
+              onClick={() => setNext(true)}
+            >
+              Next
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div className="flex flex-col gap-7">
+          <FixedRatioHeader context={context} state={state} margin={false} />
+          <RangeBlocks />
+          <StandardMode />
+          <AddTransactionReviewModal context={context} state={state} />
+          <DepositSubmittedModal txHash={state.txHash} />
+        </div>
+      )}
     </div>
   )
 }

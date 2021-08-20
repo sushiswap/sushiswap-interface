@@ -17,6 +17,7 @@ import TridentAddHybridContextProvider, {
 } from '../../../../features/trident/add/hybrid/context'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
+import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 
 const AddHybrid = () => {
   const { i18n } = useLingui()
@@ -61,6 +62,7 @@ const AddHybrid = () => {
       </div>
 
       <AddTransactionReviewModal context={context} state={state} />
+      <DepositSubmittedModal txHash={state.txHash} />
     </div>
   )
 }

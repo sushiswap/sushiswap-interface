@@ -4,12 +4,12 @@ import { useTridentAddClassicContext, useTridentAddClassicState } from './contex
 import { useLingui } from '@lingui/react'
 import Typography from '../../../../components/Typography'
 import BalancedModeExplanationModal from './BalancedModeExplanationModal'
-import { ActionType, LiquidityMode, PoolType } from '../../types'
+import { ActionType, LiquidityMode } from '../../types'
 
 const BalancedModeHeader: FC = () => {
   const { i18n } = useLingui()
   const { balancedMode, liquidityMode } = useTridentAddClassicState()
-  const { dispatch, pool } = useTridentAddClassicContext()
+  const { dispatch } = useTridentAddClassicContext()
 
   const disableBalancedMode = useCallback(() => {
     dispatch({
@@ -18,8 +18,7 @@ const BalancedModeHeader: FC = () => {
     })
   }, [dispatch])
 
-  if (pool.type !== PoolType.CLASSIC || liquidityMode !== LiquidityMode.STANDARD || !balancedMode)
-    return <div className="pt-6" />
+  if (liquidityMode !== LiquidityMode.STANDARD || !balancedMode) return <div className="pt-6" />
 
   return (
     <div className="-top-6 pt-10 pb-5 relative z-0">
@@ -34,7 +33,7 @@ const BalancedModeHeader: FC = () => {
         </div>
 
         <Typography variant="sm" className="text-blue cursor-pointer" onClick={disableBalancedMode}>
-          Turn off
+          {i18n._(t`Turn off`)}
         </Typography>
       </div>
     </div>

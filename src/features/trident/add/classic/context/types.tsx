@@ -14,6 +14,7 @@ export type ClassicPoolContext = {
   | 'handleInput'
   | 'showReview'
   | 'dispatch'
+  | 'setSpendFromWallet'
 >
 
 export type ClassicPoolState = Pick<

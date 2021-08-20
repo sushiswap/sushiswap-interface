@@ -60,3 +60,15 @@ export const setTxHash = (dispatch) => (txHash: string) =>
     type: ActionType.SET_TX_HASH,
     payload: txHash,
   })
+
+export const setFixedRatioMode = (dispatch) => (mode: boolean) =>
+  dispatch({
+    type: ActionType.SET_FIXED_RATIO_MODE,
+    payload: mode,
+  })
+
+export const setSpendFromWallet = (dispatch) => (checked: boolean) =>
+  dispatch({
+    type: ActionType.SET_SPEND_FROM_WALLET,
+    payload: checked,
+  })

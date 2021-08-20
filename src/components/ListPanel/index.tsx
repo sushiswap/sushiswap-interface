@@ -5,6 +5,7 @@ import CurrencyLogo from '../CurrencyLogo'
 import { SUSHI } from '../../constants'
 import { classNames, formatNumber } from '../../functions'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
+import Chip from '../Chip'
 
 interface ListPanelProps {
   header?: ReactNode
@@ -104,11 +105,13 @@ const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
 
 interface ListPanelItemLeftProps {
   amount: CurrencyAmount<Token>
+  startAdornment?: ReactNode
 }
 
-const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount }) => {
+const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, startAdornment }) => {
   return (
-    <div className="flex flex-row gap-1.5">
+    <div className="flex flex-row gap-1.5 items-center">
+      {startAdornment && startAdornment}
       <CurrencyLogo currency={amount?.currency} size={20} />
       <Typography variant="sm" className="text-high-emphesis" weight={700}>
         {amount?.toSignificant(6)} {amount?.currency.symbol}
@@ -127,15 +130,21 @@ const ListPanelItemRight: FC = ({ children }) => {
 
 interface CurrencyAmountItemProps {
   amount: CurrencyAmount<Token>
+  weight?: string
 }
 
 // ListPanelItem for displaying a CurrencyAmount
-const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount }) => {
+const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount, weight }) => {
   const usdcValue = useUSDCValue(amount)
 
   return (
     <ListPanel.Item
-      left={<ListPanel.Item.Left amount={amount} />}
+      left={
+        <ListPanel.Item.Left
+          amount={amount}
+          {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
+        />
+      }
       right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
       key={0}
     />

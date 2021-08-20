@@ -4,13 +4,21 @@ import { ConcentratedPoolContext, ConcentratedPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
-import { handleInput, setMaxPrice, setMinPrice, showReview } from '../../../context/actions'
+import {
+  handleInput,
+  setMaxPrice,
+  setMinPrice,
+  setSpendFromWallet,
+  setTxHash,
+  showReview,
+} from '../../../context/actions'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
 const initialState: ConcentratedPoolState = {
-  minPrice: null,
-  maxPrice: null,
+  fixedRatio: false,
+  minPrice: '',
+  maxPrice: '',
   inputAmounts: {},
   showZapReview: false,
   balancedMode: false,
@@ -30,6 +38,7 @@ export const TridentAddConcentratedContext = createContext<ConcentratedPoolConte
   dispatch: () => null,
   setMinPrice: () => null,
   setMaxPrice: () => null,
+  setSpendFromWallet: () => null,
 })
 
 const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
@@ -41,6 +50,10 @@ const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, 
   const execute = useCallback(async () => {
     // Do some custom execution
     alert('Executing ConcentratedPool execute function')
+
+    // Spawn DepositSubmittedModal
+    showReview(dispatch)(false)
+    setTxHash(dispatch)('test')
   }, [])
 
   // Default input parse
@@ -75,6 +88,7 @@ const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, 
           dispatch,
           setMinPrice: setMinPrice(dispatch),
           setMaxPrice: setMaxPrice(dispatch),
+          setSpendFromWallet: setSpendFromWallet(dispatch),
         }),
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}

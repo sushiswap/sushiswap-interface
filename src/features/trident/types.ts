@@ -37,6 +37,7 @@ export enum ActionType {
   SET_MIN_PRICE = 'SET_MIN_PRICE',
   SET_MAX_PRICE = 'SET_MAX_PRICE',
   SET_TX_HASH = 'SET_TX_HASH',
+  SET_FIXED_RATIO_MODE = 'SET_FIXED_RATIO_MODE',
 }
 
 export interface Reducer {
@@ -45,6 +46,7 @@ export interface Reducer {
 }
 
 export interface TridentState {
+  fixedRatio: boolean
   inputTokenAddress: string
   outputTokenAddress: string
   percentageAmount: string
@@ -78,4 +80,5 @@ export interface TridentContext {
   selectOutputToken: (address: string) => void
   setMinPrice: (price: string) => void
   setMaxPrice: (price: string) => void
+  setSpendFromWallet: (x: boolean) => void
 }

@@ -1,20 +1,21 @@
+import React, { FC } from 'react'
 import AssetInput from '../../../../components/AssetInput'
-import React from 'react'
-import DepositButtons from './../DepositButtons'
-import useSufficientBalances from '../../../../hooks/useSufficientBalances'
+import DepositButtons from '../DepositButtons'
+import TransactionDetails from '../TransactionDetails'
+import { useTridentAddConcentratedContext, useTridentAddConcentratedState } from './context'
 import { ZERO } from '@sushiswap/sdk'
-import TransactionDetails from './../TransactionDetails'
-import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
+import useSufficientBalances from '../../../../hooks/useSufficientBalances'
 
-const ClassicStandardMode = () => {
-  const { inputAmounts, spendFromWallet } = useTridentAddClassicState()
-  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } = useTridentAddClassicContext()
+const StandardMode: FC = () => {
+  const { inputAmounts, spendFromWallet } = useTridentAddConcentratedState()
+  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } = useTridentAddConcentratedContext()
   const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
-  const validInputs = sufficientBalances && Object.values(parsedInputAmounts).every((el) => el?.greaterThan(ZERO))
 
   // TODO
   const onMax = () => {}
   const isMaxInput = false
+
+  const validInputs = sufficientBalances && Object.values(parsedInputAmounts).every((el) => el?.greaterThan(ZERO))
 
   return (
     <div className="flex flex-col gap-6">
@@ -53,4 +54,4 @@ const ClassicStandardMode = () => {
   )
 }
 
-export default ClassicStandardMode
+export default StandardMode

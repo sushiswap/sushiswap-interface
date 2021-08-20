@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import { classNames } from '../../functions'
 
 interface IconProps {
   className?: string

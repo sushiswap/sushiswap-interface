@@ -7,12 +7,12 @@ import { t } from '@lingui/macro'
 import Typography from '../../../../components/Typography'
 import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
 import Switch from '../../../../components/Switch'
-import { ActionType, LiquidityMode, PoolType } from '../../types'
+import { ActionType, LiquidityMode } from '../../types'
 
 const DepositSettingsModal: FC = () => {
   const { i18n } = useLingui()
   const { balancedMode, liquidityMode } = useTridentAddClassicState()
-  const { pool, dispatch } = useTridentAddClassicContext()
+  const { dispatch } = useTridentAddClassicContext()
 
   const toggle = useCallback(() => {
     dispatch({
@@ -21,8 +21,8 @@ const DepositSettingsModal: FC = () => {
     })
   }, [balancedMode, dispatch])
 
-  // Only applies to classic pools on standard mode
-  if (pool.type !== PoolType.CLASSIC || liquidityMode !== LiquidityMode.STANDARD) {
+  // Only applies on standard mode
+  if (liquidityMode !== LiquidityMode.STANDARD) {
     return null
   }
 

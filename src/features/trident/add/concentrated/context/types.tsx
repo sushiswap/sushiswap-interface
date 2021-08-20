@@ -14,9 +14,17 @@ export type ConcentratedPoolContext = {
   | 'dispatch'
   | 'setMaxPrice'
   | 'setMinPrice'
+  | 'setSpendFromWallet'
 >
 
 export type ConcentratedPoolState = Pick<
   TridentState,
-  'minPrice' | 'maxPrice' | 'inputAmounts' | 'showZapReview' | 'balancedMode' | 'spendFromWallet' | 'txHash'
+  | 'minPrice'
+  | 'maxPrice'
+  | 'inputAmounts'
+  | 'showZapReview'
+  | 'balancedMode'
+  | 'spendFromWallet'
+  | 'txHash'
+  | 'fixedRatio'
 >

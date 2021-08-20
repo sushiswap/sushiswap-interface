@@ -13,6 +13,8 @@ export type WeightedPoolContext = {
   | 'handleInput'
   | 'showReview'
   | 'dispatch'
+  | 'setLiquidityMode'
+  | 'setSpendFromWallet'
 >
 
 export type WeightedPoolState = Pick<

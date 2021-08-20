@@ -21,6 +21,7 @@ import { BentoBoxIcon, WalletIcon } from './icons'
 import { useBentoBalance2 } from '../../state/bentobox/hooks'
 import Alert from '../Alert'
 import { ExclamationCircleIcon } from '@heroicons/react/outline'
+import Chip from '../Chip'
 
 interface AssetInputProps {
   value: string
@@ -30,6 +31,7 @@ interface AssetInputProps {
   title?: string
   onSelect?: (x: Token) => void
   headerRight?: ReactNode
+  chip?: string
 }
 
 // AssetInput exports its children so if you need a child component of this component,
@@ -54,22 +56,25 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
 
   if (props.currency) {
     header = (
-      <div className="flex gap-0.5 cursor-pointer items-center" onClick={() => setOpen(true)}>
-        <Typography variant="h3" weight={700} className="text-high-emphesis">
-          {props.currency.symbol}
-        </Typography>
-        {props.onSelect && (
-          <>
-            <ChevronDownIcon width={24} height={24} className="text-secondary" />
-            <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
-              <CurrencySelectDialog
-                currency={props.currency}
-                onChange={props.onSelect}
-                onDismiss={() => setOpen(false)}
-              />
-            </HeadlessUIModal.Controlled>
-          </>
-        )}
+      <div className="flex gap-2.5 cursor-pointer items-center" onClick={() => setOpen(true)}>
+        <div className="flex gap-0.5 items-center">
+          <Typography variant="h3" weight={700} className="text-high-emphesis">
+            {props.currency.symbol}
+          </Typography>
+          {props.onSelect && (
+            <>
+              <ChevronDownIcon width={24} height={24} className="text-secondary" />
+              <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
+                <CurrencySelectDialog
+                  currency={props.currency}
+                  onChange={props.onSelect}
+                  onDismiss={() => setOpen(false)}
+                />
+              </HeadlessUIModal.Controlled>
+            </>
+          )}
+        </div>
+        {props.chip && <Chip color="white" label={props.chip} />}
       </div>
     )
   }

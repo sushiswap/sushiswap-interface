@@ -34,10 +34,13 @@ const reducer: React.Reducer<TridentState, Reducer> = (state: any, action: any) 
       }
     }
     case ActionType.SET_LIQUIDITY_MODE: {
+      const inputAmounts = { ...state.inputAmounts }
+      Object.keys(inputAmounts).forEach((key) => (inputAmounts[key] = ''))
+
       return {
         ...state,
         liquidityMode: action.payload,
-        inputAmounts: {},
+        inputAmounts,
       }
     }
     case ActionType.SET_INPUT_AMOUNT: {
@@ -90,6 +93,12 @@ const reducer: React.Reducer<TridentState, Reducer> = (state: any, action: any) 
       return {
         ...state,
         txHash: action.payload,
+      }
+    }
+    case ActionType.SET_FIXED_RATIO_MODE: {
+      return {
+        ...state,
+        fixedRatio: action.payload,
       }
     }
     default:

@@ -4,7 +4,14 @@ import { ClassicPoolContext, ClassicPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
-import { handleInput, selectInputToken, setLiquidityMode, setTxHash, showReview } from '../../../context/actions'
+import {
+  handleInput,
+  selectInputToken,
+  setLiquidityMode,
+  setSpendFromWallet,
+  setTxHash,
+  showReview,
+} from '../../../context/actions'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -30,6 +37,7 @@ export const TridentAddClassicContext = createContext<ClassicPoolContext>({
   setLiquidityMode: () => null,
   showReview: () => null,
   dispatch: () => null,
+  setSpendFromWallet: () => null,
 })
 
 const TridentAddClassicContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
@@ -88,6 +96,7 @@ const TridentAddClassicContextProvider: FC<WithTridentPool> = ({ children, pool,
           handleInput: handleInput(dispatch),
           showReview: showReview(dispatch),
           dispatch,
+          setSpendFromWallet: setSpendFromWallet(dispatch),
         }),
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}

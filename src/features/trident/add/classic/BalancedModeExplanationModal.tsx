@@ -23,7 +23,7 @@ const BalancedModeExplanationModal: FC = () => {
           <div className="flex flex-col flex-grow gap-8">
             <div className="flex justify-between">
               <Typography variant="h1" weight={700} className="text-high-emphesis">
-                What is Balance Mode?
+                {i18n._(t`What is Balance Mode?`)}
               </Typography>
               <div className="h-8 w-8 cursor-pointer" onClick={() => setOpen(false)}>
                 <XIcon className="text-high-emphesis" />

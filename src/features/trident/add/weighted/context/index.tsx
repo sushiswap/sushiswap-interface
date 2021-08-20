@@ -4,7 +4,14 @@ import { tryParseAmount } from '../../../../../functions'
 import { WithTridentPool, withTridentPool } from '../../../../../hooks/useTridentPools'
 import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
-import { handleInput, selectInputToken, showReview } from '../../../context/actions'
+import {
+  handleInput,
+  selectInputToken,
+  setLiquidityMode,
+  setSpendFromWallet,
+  setTxHash,
+  showReview,
+} from '../../../context/actions'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -27,8 +34,10 @@ export const TridentAddWeightedContext = createContext<WeightedPoolContext>({
   execute: () => null,
   handleInput: () => null,
   selectInputToken: () => null,
+  setLiquidityMode: () => null,
   showReview: () => null,
   dispatch: () => null,
+  setSpendFromWallet: () => null,
 })
 
 const TridentAddWeightedContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
@@ -66,6 +75,10 @@ const TridentAddWeightedContextProvider: FC<WithTridentPool> = ({ children, pool
   const execute = useCallback(async () => {
     // Do some custom execution
     alert('Executing WeightedPool execute function')
+
+    // Spawn DepositSubmittedModal
+    showReview(dispatch)(false)
+    setTxHash(dispatch)('test')
   }, [])
 
   return (
@@ -82,6 +95,8 @@ const TridentAddWeightedContextProvider: FC<WithTridentPool> = ({ children, pool
           handleInput: handleInput(dispatch),
           showReview: showReview(dispatch),
           dispatch,
+          setLiquidityMode: setLiquidityMode(dispatch),
+          setSpendFromWallet: setSpendFromWallet(dispatch),
         }),
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}

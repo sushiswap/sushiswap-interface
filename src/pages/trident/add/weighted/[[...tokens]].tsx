@@ -14,6 +14,11 @@ import TridentAddWeightedContextProvider, {
   useTridentAddWeightedState,
 } from '../../../../features/trident/add/weighted/context'
 import { LiquidityMode } from '../../../../features/trident/types'
+import ModeToggle from '../../../../features/trident/ModeToggle'
+import WeightedZapMode from '../../../../features/trident/add/weighted/WeightedZapMode'
+import WeightedStandardMode from '../../../../features/trident/add/weighted/WeightedStandardMode'
+import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
+import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 
 const AddWeighted = () => {
   const { i18n } = useLingui()
@@ -50,7 +55,14 @@ const AddWeighted = () => {
         <div className="h-2" />
       </div>
 
+      <ModeToggle value={state.liquidityMode} onChange={context.setLiquidityMode} />
+      <FixedRatioHeader context={context} state={state} />
+
+      {state.liquidityMode === LiquidityMode.ZAP && <WeightedZapMode />}
+      {state.liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
+
       <AddTransactionReviewModal context={context} state={state} />
+      <DepositSubmittedModal txHash={state.txHash} />
     </div>
   )
 }
