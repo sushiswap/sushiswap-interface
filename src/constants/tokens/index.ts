@@ -198,6 +198,15 @@ export const AXSUSHI = new Token(
 )
 
 export const DPI = new Token(ChainId.MAINNET, '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', 18, 'DefiPulse', 'DPI')
+export const RAI = new Token(
+  ChainId.MAINNET,
+  '0x03ab458634910AaD20eF5f1C8ee96F1D6ac54919',
+  18,
+  'Rai Reflex Index',
+  'RAI'
+)
+export const YFI = new Token(ChainId.MAINNET, '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e', 18, 'yearn', 'YFI')
+export const WOOFY = new Token(ChainId.MAINNET, '0xD0660cD418a64a1d44E9214ad8e459324D8157f1', 12, 'Woofy', 'WOOFY')
 
 type ChainTokenMap = {
   readonly [chainId in ChainId]?: Token
