@@ -132,6 +132,9 @@ module.exports = {
           '100%': { opacity: 100 },
         },
       },
+      backgroundImage: {
+        miso: "url('/images/miso/miso-header-background.svg')",
+      },
     },
   },
   variants: {

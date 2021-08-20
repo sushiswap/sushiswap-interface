@@ -2,6 +2,7 @@ import React from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
 
 import { escapeRegExp } from '../../functions'
+import { classNames } from '../../functions/styling'
 
 const digitRegex = RegExp(`^\\d*$`)
 
@@ -36,7 +37,7 @@ export const Input = React.memo(
         <div className="text-white text-xl">{label}</div>
         <div className="mt-2 py-2 px-5 rounded bg-dark-800 w-full">
           <input
-            className={`${error ? 'text-red' : ''} bg-transparent placeholder-low-emphesis w-full`}
+            className={classNames(error ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis w-full')}
             placeholder={placeholder}
             value={value}
             onChange={(e) => enforcer(e.target.value)}
