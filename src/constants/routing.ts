@@ -34,6 +34,7 @@ import {
   RENBTC,
   RAI,
   RUNE,
+  SPANK,
   STETH,
   SUSHI,
   UMA,
@@ -42,8 +43,10 @@ import {
   USDT,
   UST,
   WBTC,
+  WOOFY,
   XDAI,
   XSUSHI,
+  YFI,
 } from './tokens'
 // a list of tokens by chain
 import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/sdk'
@@ -115,7 +118,17 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, RUNE, NFTX, STETH, RAI, SUSHI],
+  [ChainId.MAINNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MAINNET],
+    DAI,
+    USDC,
+    USDT,
+    WBTC,
+    RUNE,
+    NFTX,
+    STETH,
+    SUSHI[ChainId.MAINNET],
+  ],
   [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
   [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
   [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB, BSC.WETH],
@@ -177,6 +190,7 @@ export const ADDITIONAL_BASES: {
     [CVXCRV.address]: [CRV],
     [CRV.address]: [CVXCRV],
     [WOOFY.address]: [YFI],
+    [RAI.address]: [SPANK],
   },
   [ChainId.MATIC]: {
     [MATIC.FRAX.address]: [MATIC.FXS],
