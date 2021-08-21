@@ -32,7 +32,9 @@ import {
   PONT,
   PWING,
   RENBTC,
+  RAI,
   RUNE,
+  SPANK,
   STETH,
   SUSHI,
   UMA,
@@ -41,8 +43,10 @@ import {
   USDT,
   UST,
   WBTC,
+  WOOFY,
   XDAI,
   XSUSHI,
+  YFI,
 } from './tokens'
 // a list of tokens by chain
 import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/sdk'
@@ -114,7 +118,17 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, RUNE, NFTX, STETH],
+  [ChainId.MAINNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MAINNET],
+    DAI,
+    USDC,
+    USDT,
+    WBTC,
+    RUNE,
+    NFTX,
+    STETH,
+    SUSHI[ChainId.MAINNET],
+  ],
   [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
   [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
   [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB, BSC.WETH],
@@ -154,8 +168,6 @@ export const ADDITIONAL_BASES: {
   [ChainId.MAINNET]: {
     ...MIRROR_ADDITIONAL_BASES,
     '0xF16E4d813f4DcfDe4c5b44f305c908742De84eF0': [ETH2X_FLI],
-    '0xe379a60A8FC7C9DD161887fFADF3054790576c8D': [XSUSHI], // XSUSHI 25 Call [30 June 2021]
-    '0xB46F57e7Ce3a284d74b70447Ef9352B5E5Df8963': [UMA], // UMA 25 Call [30 June 2021]
     [FEI.address]: [DPI],
     [FRAX.address]: [FXS],
     [FXS.address]: [FRAX],
@@ -177,6 +189,8 @@ export const ADDITIONAL_BASES: {
     [LFBTC.address]: [LIFT],
     [CVXCRV.address]: [CRV],
     [CRV.address]: [CVXCRV],
+    [WOOFY.address]: [YFI],
+    [RAI.address]: [SPANK],
   },
   [ChainId.MATIC]: {
     [MATIC.FRAX.address]: [MATIC.FXS],
