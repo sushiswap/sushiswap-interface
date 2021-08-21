@@ -1,7 +1,7 @@
 import { Currency, Token } from '@sushiswap/sdk'
 import { useCallback, useState } from 'react'
 
-import { getTokenLogoURL } from './../components/CurrencyLogo'
+import { getCurrencyLogoUrls } from './../components/CurrencyLogo'
 import { useActiveWeb3React } from './useActiveWeb3React'
 
 export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefined): {
@@ -26,7 +26,7 @@ export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefine
               address: token.address,
               symbol: token.symbol,
               decimals: token.decimals,
-              image: getTokenLogoURL(token.address, chainId),
+              image: getCurrencyLogoUrls(token),
             },
           },
         })
@@ -37,7 +37,7 @@ export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefine
     } else {
       setSuccess(false)
     }
-  }, [chainId, library, token])
+  }, [library, token])
 
   return { addToken, success }
 }

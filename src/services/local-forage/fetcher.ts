@@ -1,5 +1,6 @@
 import localForage from 'localforage'
 
+// Defaults to IndexDB, can change strategy.
 export default async function fetcher(key) {
   try {
     const value = await localForage.getItem<string>(key)

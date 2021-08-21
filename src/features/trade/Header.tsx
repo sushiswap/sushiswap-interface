@@ -2,7 +2,7 @@ import { ChainId, Currency, Percent } from '@sushiswap/sdk'
 import React, { FC, useState } from 'react'
 
 import Gas from '../../components/Gas'
-import MyOrders from '../limit-order/MyOrders'
+import MyOrders from '../exchange-v1/limit-order/MyOrders'
 import NavLink from '../../components/NavLink'
 import Settings from '../../components/Settings'
 import { currencyId } from '../../functions'

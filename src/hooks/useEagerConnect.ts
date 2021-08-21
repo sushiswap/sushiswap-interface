@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-import { injected } from '../config/connector'
+import { injected } from '../config/wallets'
 import { isMobile } from 'react-device-detect'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 

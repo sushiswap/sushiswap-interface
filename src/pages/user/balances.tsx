@@ -11,8 +11,8 @@ import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Image from '../../components/Image'
+import Input from '../../components/Input'
 import Layout from '../../layouts/Kashi'
-import { Input as NumericalInput } from '../../components/NumericalInput'
 import Paper from '../../components/Paper'
 import Search from '../../components/Search'
 import { Transition } from '@headlessui/react'
@@ -23,7 +23,6 @@ import { t } from '@lingui/macro'
 import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import useBentoBox from '../../hooks/useBentoBox'
 import { useLingui } from '@lingui/react'
-import useTokenBalance from '../../hooks/useTokenBalance'
 
 function Balances() {
   const { i18n } = useLingui()
@@ -191,7 +190,7 @@ export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): 
         </div>
       )}
       <div className="relative flex items-center w-full mb-4">
-        <NumericalInput
+        <Input.Numeric
           className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-blue"
           value={value}
           onUserInput={(value) => {
@@ -262,7 +261,7 @@ function Withdraw({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.El
         </div>
       )}
       <div className="relative flex items-center w-full mb-4">
-        <NumericalInput
+        <Input.Numeric
           className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-pink"
           value={value}
           onUserInput={(value) => {

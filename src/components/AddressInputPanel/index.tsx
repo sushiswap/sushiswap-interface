@@ -1,6 +1,8 @@
 import React, { FC, useCallback } from 'react'
-import useENS from '../../hooks/useENS'
+
+import Input from '../Input'
 import { t } from '@lingui/macro'
+import useENS from '../../hooks/useENS'
 import { useLingui } from '@lingui/react'
 
 interface AddressInputPanelProps {
@@ -31,25 +33,14 @@ const AddressInputPanel: FC<AddressInputPanelProps> = ({ id, value, onChange }) 
       }`}
       id={id}
     >
-      <div className="flex justify-between w-full sm:w-2/5 px-5">
+      <div className="flex justify-between w-full px-5 sm:w-2/5">
         <span className="text-[18px] text-primary">{i18n._(t`Send to:`)}</span>
-        <span className="text-blue text-sm underline cursor-pointer" onClick={() => onChange(null)}>
+        <span className="text-sm underline cursor-pointer text-blue" onClick={() => onChange(null)}>
           {i18n._(t`Remove`)}
         </span>
       </div>
-      <div className="flex w-full h-full sm:w-3/5 border-2 border-dark-800 rounded-r">
-        <input
-          className="p-3 w-full flex overflow-ellipsis font-bold recipient-address-input bg-dark-900 h-full w-full rounded placeholder-low-emphesis"
-          type="text"
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck="false"
-          placeholder="Wallet Address or ENS name"
-          pattern="^(0x[a-fA-F0-9]{40})$"
-          onChange={handleInput}
-          value={value}
-        />
+      <div className="flex w-full h-full border-2 rounded-r sm:w-3/5 border-dark-800">
+        <Input.Address onUserInput={handleInput} value={value} />
       </div>
     </div>
   )

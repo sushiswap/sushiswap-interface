@@ -43,23 +43,12 @@ import {
   WBTC,
   XDAI,
   XSUSHI,
-} from '../constants/tokens'
+} from '../config/tokens'
 // a list of tokens by chain
 import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/sdk'
 
-import { SupportedChainId } from './chains'
-
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
-}
-
-// // a list of tokens by chain
-// type ChainTokenList = {
-//     readonly [chainId in ChainId]: Token[]
-// }
-
-type ChainCurrencyList = {
-  readonly [chainId: number]: Currency[]
 }
 
 // List of all mirror's assets addresses.
@@ -201,25 +190,6 @@ export const CUSTOM_BASES: {
     [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE],
   },
 }
-
-/**
- * Shows up in the currency select for swap and add liquidity
- */
-// export const COMMON_BASES: ChainCurrencyList = {
-//     [ChainId.MAINNET]: [ExtendedEther.onChain(1), DAI, USDC, USDT, WBTC, WETH9_EXTENDED[1]],
-//     [3]: [ExtendedEther.onChain(3), WETH9_EXTENDED[3]],
-//     [4]: [ExtendedEther.onChain(4), WETH9_EXTENDED[4]],
-//     [5]: [ExtendedEther.onChain(5), WETH9_EXTENDED[5]],
-//     [42]: [ExtendedEther.onChain(42), WETH9_EXTENDED[42]],
-//     [SupportedChainId.ARBITRUM_KOVAN]: [
-//         ExtendedEther.onChain(SupportedChainId.ARBITRUM_KOVAN),
-//         WETH9_EXTENDED[SupportedChainId.ARBITRUM_KOVAN],
-//     ],
-//     [SupportedChainId.ARBITRUM_ONE]: [
-//         ExtendedEther.onChain(SupportedChainId.ARBITRUM_ONE),
-//         WETH9_EXTENDED[SupportedChainId.ARBITRUM_ONE],
-//     ],
-// }
 
 /**
  * Shows up in the currency select for swap and add liquidity

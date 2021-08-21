@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 
@@ -7,17 +8,14 @@ import AccountDetails from '../../components/AccountDetails'
 import { ApplicationModal } from '../../state/application/actions'
 import { ButtonError } from '../../components/Button'
 import ExternalLink from '../../components/ExternalLink'
-import Image from 'next/image'
 import Modal from '../../components/Modal'
 import ModalHeader from '../../components/ModalHeader'
 import { OVERLAY_READY } from '../../entities/FortmaticConnector'
 import Option from './Option'
 import PendingView from './PendingView'
 import ReactGA from 'react-ga'
-import { SUPPORTED_WALLETS } from '../../constants'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { XIcon } from '@heroicons/react/outline'
-import { injected } from '../../config/connector'
 import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
@@ -55,22 +53,6 @@ const UpperSection = styled.div`
   h4 {
     margin-top: 0;
     font-weight: 500;
-  }
-`
-
-const OptionGrid = styled.div`
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: 1fr;
-  // ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: 1fr;
-    grid-gap: 10px;
-  `};
-`
-
-const HoverText = styled.div`
-  :hover {
-    cursor: pointer;
   }
 `
 

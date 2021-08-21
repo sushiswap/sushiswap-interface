@@ -7,7 +7,7 @@ import {
 } from '@sushiswap/sdk'
 
 import { AddressZero } from '@ethersproject/constants'
-import { CHAINLINK_MAPPING } from '../config/chainlink'
+import { CHAINLINK_PRICE_FEED_MAP } from '../config/oracles/chainlink'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { e10 } from '../functions/math'
 
@@ -62,7 +62,7 @@ export class ChainlinkOracle extends AbstractOracle {
   }
 
   private validate() {
-    const mapping = CHAINLINK_MAPPING[this.chainId]
+    const mapping = CHAINLINK_PRICE_FEED_MAP[this.chainId]
     if (!mapping) {
       return false
     }

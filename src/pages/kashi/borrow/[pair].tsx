@@ -1,7 +1,8 @@
-import { Borrow, Repay } from '../../../features/lending'
-import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
+import { Borrow, Repay } from '../../../features/kashi'
+import Provider, { useKashiInfo, useKashiPair } from '../../../features/kashi/context'
 import React, { useCallback, useState } from 'react'
 import { formatNumber, formatPercent } from '../../../functions/format'
+
 import Card from '../../../components/Card'
 import Dots from '../../../components/Dots'
 import GradientDot from '../../../components/GradientDot'

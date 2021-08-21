@@ -4,7 +4,7 @@ import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '.
 
 import { AddressZero } from '@ethersproject/constants'
 import Button from '../../../components/Button'
-import { CHAINLINK_PRICE_FEED_MAP } from '../../../config/chainlink'
+import { CHAINLINK_PRICE_FEED_MAP } from '../../../config/oracles/chainlink'
 import Card from '../../../components/Card'
 import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'

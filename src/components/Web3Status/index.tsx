@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { injected } from '../../config/connector'
+import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
 import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'

@@ -1,4 +1,4 @@
-import { CRXSUSHI, SUSHI } from '../../../constants'
+import { CRXSUSHI, SUSHI } from '../../../config/tokens'
 import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import { e10, tryParseAmount } from '../../../functions'

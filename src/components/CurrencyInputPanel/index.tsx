@@ -8,8 +8,8 @@ import CurrencyLogo from '../CurrencyLogo'
 import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
 import DoubleCurrencyLogo from '../DoubleLogo'
 import { FiatValue } from './FiatValue'
+import Input from '../Input'
 import Lottie from 'lottie-react'
-import { Input as NumericalInput } from '../NumericalInput'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
@@ -149,7 +149,7 @@ export default function CurrencyInputPanel({
                   {i18n._(t`Max`)}
                 </Button>
               )}
-              <NumericalInput
+              <Input.Numeric
                 id="token-amount-input"
                 value={value}
                 onUserInput={(val) => {

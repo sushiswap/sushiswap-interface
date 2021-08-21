@@ -1,10 +1,5 @@
-import {
-  DEFAULT_ARCHER_ETH_TIP,
-  DEFAULT_ARCHER_GAS_ESTIMATE,
-  DEFAULT_ARCHER_GAS_PRICES,
-  DEFAULT_DEADLINE_FROM_NOW,
-  INITIAL_ALLOWED_SLIPPAGE,
-} from '../../constants'
+import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE, DEFAULT_ARCHER_GAS_PRICES } from '../../config/archer'
+import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import {
   SerializedPair,
   SerializedToken,

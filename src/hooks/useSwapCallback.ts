@@ -1,4 +1,4 @@
-import { ARCHER_RELAY_URI, BIPS_BASE, EIP_1559_ACTIVATION_BLOCK } from '../constants'
+import { BIPS_BASE, EIP_1559_ACTIVATION_BLOCK } from '../constants'
 import {
   ChainId,
   Currency,
@@ -10,19 +10,20 @@ import {
   TradeType,
   Trade as V2Trade,
 } from '@sushiswap/sdk'
+import { arrayify, hexlify, splitSignature } from '@ethersproject/bytes'
 import { isAddress, isZero } from '../functions/validate'
 import { useFactoryContract, useRouterContract } from './useContract'
 
+import { ARCHER_RELAY_URI } from '../config/archer'
 import { ArcherRouter } from '../functions/archerRouter'
 import { BigNumber } from '@ethersproject/bignumber'
 import Common from '@ethereumjs/common'
 import { SignatureData } from './useERC20Permit'
 import { TransactionFactory } from '@ethereumjs/tx'
 import { TransactionRequest } from '@ethersproject/abstract-provider'
-import { hexlify, arrayify, splitSignature } from '@ethersproject/bytes'
-import { keccak256 } from '@ethersproject/keccak256'
 import approveAmountCalldata from '../functions/approveAmountCalldata'
 import { calculateGasMargin } from '../functions/trade'
+import { keccak256 } from '@ethersproject/keccak256'
 import { shortenAddress } from '../functions/format'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from './useActiveWeb3React'

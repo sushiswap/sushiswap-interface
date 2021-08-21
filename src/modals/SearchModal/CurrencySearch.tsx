@@ -1,6 +1,5 @@
 import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
 import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Row, { RowFixed } from '../../components/Row'
 import { filterTokens, useSortedTokensByQuery } from '../../functions/filtering'
 import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from '../../hooks/Tokens'
 
@@ -10,8 +9,6 @@ import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chai
 import Column from '../../components/Column'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
-import { Edit } from 'react-feather'
-import { ExtendedEther } from '../../constants'
 import { FixedSizeList } from 'react-window'
 import ImportRow from './ImportRow'
 import ModalHeader from '../../components/ModalHeader'

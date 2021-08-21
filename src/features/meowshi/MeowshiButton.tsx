@@ -1,7 +1,7 @@
 import { ApprovalState, useActiveWeb3React } from '../../hooks'
 import { Field, MeowshiState } from '../../pages/tools/meowshi'
 import React, { FC, useMemo, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../constants'
+import { SUSHI, XSUSHI } from '../../config/tokens'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
 
 import Button from '../../components/Button'

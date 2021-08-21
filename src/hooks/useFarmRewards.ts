@@ -1,8 +1,4 @@
-import { getAddress } from '@ethersproject/address'
-import { ChainId } from '@sushiswap/sdk'
-import { useMemo } from 'react'
-import { Chef, PairType } from '../features/farm/enum'
-import { usePositions } from '../features/farm/hooks'
+import { Chef, PairType } from '../features/onsen/enum'
 import {
   useAverageBlockTime,
   useFarms,
@@ -15,7 +11,12 @@ import {
   useSushiPairs,
   useSushiPrice,
 } from '../services/graph'
+
+import { ChainId } from '@sushiswap/sdk'
+import { getAddress } from '@ethersproject/address'
 import useActiveWeb3React from './useActiveWeb3React'
+import { useMemo } from 'react'
+import { usePositions } from '../features/onsen/hooks'
 
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()

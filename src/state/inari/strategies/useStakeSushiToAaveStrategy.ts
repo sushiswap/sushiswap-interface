@@ -1,13 +1,14 @@
-import { t } from '@lingui/macro'
-import { AXSUSHI, SUSHI } from '../../../constants'
+import { AXSUSHI, SUSHI } from '../../../config/tokens'
 import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
-import { useActiveWeb3React } from '../../../hooks'
-import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import useBaseStrategy from './useBaseStrategy'
 import { useEffect, useMemo } from 'react'
+
 import { I18n } from '@lingui/core'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../../hooks'
+import useBaseStrategy from './useBaseStrategy'
 import { useLingui } from '@lingui/react'
+import { useTokenBalances } from '../../wallet/hooks'
 
 export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
   name: i18n._(t`SUSHI → Aave`),

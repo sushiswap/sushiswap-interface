@@ -1,8 +1,9 @@
 import { ChainId, Currency, CurrencyAmount, JSBI, Token } from '@sushiswap/sdk'
-import { MERKLE_ROOT, SUSHI } from './../../constants/index'
 import { getAddress, isAddress } from '@ethersproject/address'
 import { useEffect, useState } from 'react'
 
+import { MERKLE_ROOT } from './../../constants/index'
+import { SUSHI } from '../../config/tokens'
 import { TransactionResponse } from '@ethersproject/providers'
 import { calculateGasMargin } from '../../functions/trade'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'

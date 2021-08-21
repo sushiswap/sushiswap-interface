@@ -1,21 +1,22 @@
-import { ChainId } from '@sushiswap/sdk'
-import { uniq } from 'lodash'
-import { useMemo } from 'react'
-import { usePositions } from '../../../features/farm/hooks'
-import { getFraction } from '../../../functions'
-import { chainsWithFeature, Feature } from '../../../functions/feature'
-import { useActiveWeb3React } from '../../../hooks'
+import { Feature, chainsWithFeature } from '../../../functions/feature'
 import {
   useFarms,
+  useBentoUserTokens as useGetBentoUserTokens,
   useUserKashiPairs as useGetUserKashiPairs,
+  useKashiPairs,
   useLiquidityPositions,
   useNativePrice,
   useSushiPairs,
   useTokens,
-  useBentoUserTokens as useGetBentoUserTokens,
-  useKashiPairs,
 } from '../../../services/graph'
+
+import { ChainId } from '@sushiswap/sdk'
+import { getFraction } from '../../../functions'
+import { uniq } from 'lodash'
+import { useActiveWeb3React } from '../../../hooks'
 import { useAssets } from './../../../services/zerion/hooks'
+import { useMemo } from 'react'
+import { usePositions } from '../../onsen/hooks'
 
 export function useAllUserPairs() {
   let pairs = []

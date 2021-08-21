@@ -10,7 +10,7 @@ import {
   Trade as V2Trade,
   WNATIVE_ADDRESS,
 } from '@sushiswap/sdk'
-import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../config/archer'
 import {
   EstimatedSwapCall,
   SuccessfulCall,

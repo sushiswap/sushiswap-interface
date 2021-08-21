@@ -1,7 +1,7 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { BAR_ADDRESS, ZERO } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../constants'
+import { SUSHI, XSUSHI } from '../../config/tokens'
 
 import Button from '../../components/Button'
 import { ChainId } from '@sushiswap/sdk'
@@ -9,7 +9,7 @@ import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Image from 'next/image'
-import { Input as NumericalInput } from '../../components/NumericalInput'
+import Input from '../../components/Input'
 import TransactionFailedModal from '../../modals/TransactionFailedModal'
 import { request } from 'graphql-request'
 import styled from 'styled-components'
@@ -40,7 +40,7 @@ const sendTx = async (txFunc: () => Promise<any>): Promise<boolean> => {
   return success
 }
 
-const StyledNumericalInput = styled(NumericalInput)`
+const StyledNumericalInput = styled(Input.Numeric)`
   caret-color: #e3e3e3;
 `
 

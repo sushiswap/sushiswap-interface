@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
+
 import Loader from '../Loader'
 import { NetworkContextName } from '../../constants'
-import { network } from '../../config/connector'
+import dynamic from 'next/dynamic'
+import { network } from '../../config/wallets'
 import { t } from '@lingui/macro'
 import useEagerConnect from '../../hooks/useEagerConnect'
 import useInactiveListener from '../../hooks/useInactiveListener'

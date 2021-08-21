@@ -1,11 +1,12 @@
-import { useDerivedInariState } from '../hooks'
-import useTrait, { BaseTrait } from './useTrait'
-import { BaseStrategyHook } from '../strategies/useBaseStrategy'
-import { useActiveWeb3React, useInariContract } from '../../../hooks'
-import { useCallback } from 'react'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import { useTransactionAdder } from '../../transactions/hooks'
+import { useActiveWeb3React, useInariContract } from '../../../hooks'
+import useTrait, { BaseTrait } from './useTrait'
+
+import { BaseStrategyHook } from '../strategies/useBaseStrategy'
+import { useCallback } from 'react'
+import { useDerivedInariState } from '../hooks'
 import { useERC20Permit } from '../../../hooks/useERC20Permit'
+import { useTransactionAdder } from '../../transactions/hooks'
 
 const TRAIT_CONFIG = {
   overrides: ['approveCallback', 'execute'],

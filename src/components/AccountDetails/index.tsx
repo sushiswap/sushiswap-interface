@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react'
-import { injected } from '../../config/connector'
+import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
 
 import { AppDispatch } from '../../state'
 import Button from '../Button'
@@ -8,16 +8,15 @@ import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import ModalHeader from '../ModalHeader'
-import { SUPPORTED_WALLETS } from '../../constants'
 import Transaction from './Transaction'
+import Typography from '../Typography'
 import { clearAllTransactions } from '../../state/transactions/actions'
 import { getExplorerLink } from '../../functions/explorer'
 import { shortenAddress } from '../../functions'
+import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
-import Typography from '../Typography'
 import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
 
 const WalletIcon: FC<{ size?: number; src: string; alt: string }> = ({ size, src, alt, children }) => {
   return (
@@ -110,7 +109,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
           <div className="flex items-center justify-between">
             {formatConnectorName()}
             <div className="flex space-x-3">
-              {connector !== injected &&
+              {connector === injected &&
                 connector.constructor.name !== 'WalletLinkConnector' &&
                 connector.constructor.name !== 'BscConnector' &&
                 connector.constructor.name !== 'KeystoneConnector' && (

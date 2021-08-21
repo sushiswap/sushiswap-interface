@@ -1,3 +1,4 @@
+// Simple local storage fetcher
 export default async function fetcher(key) {
   const value = localStorage.getItem(key)
   if (!value) return undefined

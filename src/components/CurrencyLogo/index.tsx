@@ -26,7 +26,7 @@ function getCurrencySymbol(currency) {
   return currency.symbol.toLowerCase()
 }
 
-function getCurrencyLogoUrls(currency) {
+export function getCurrencyLogoUrls(currency) {
   const urls = []
 
   urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)

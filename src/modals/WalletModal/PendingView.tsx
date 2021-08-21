@@ -1,11 +1,11 @@
+import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
+
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import Dots from '../../components/Dots'
 import Loader from '../../components/Loader'
 import Option from './Option'
 import React from 'react'
-import { SUPPORTED_WALLETS } from '../../constants'
 import { darken } from 'polished'
-import { injected } from '../../config/connector'
 import styled from 'styled-components'
 
 const PendingSection = styled.div`
@@ -16,10 +16,6 @@ const PendingSection = styled.div`
   & > * {
     width: 100%;
   }
-`
-
-const StyledLoader = styled(Loader)`
-  margin-right: 1rem;
 `
 
 const LoadingMessage = styled.div<{ error?: boolean }>`

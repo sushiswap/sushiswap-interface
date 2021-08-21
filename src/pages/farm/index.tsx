@@ -1,4 +1,4 @@
-import { Chef, PairType } from '../../features/farm/enum'
+import { Chef, PairType } from '../../features/onsen/enum'
 import { useActiveWeb3React, useFuse } from '../../hooks'
 import {
   useAlcxPrice,
@@ -25,16 +25,16 @@ import {
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/sdk'
 import Container from '../../components/Container'
-import FarmList from '../../features/farm/FarmList'
+import FarmList from '../../features/onsen/FarmList'
 import Head from 'next/head'
-import Menu from '../../features/farm/FarmMenu'
+import Menu from '../../features/onsen/FarmMenu'
 import React from 'react'
 import Search from '../../components/Search'
 import { classNames } from '../../functions'
 import dynamic from 'next/dynamic'
 import { getAddress } from '@ethersproject/address'
 import useFarmRewards from '../../hooks/useFarmRewards'
-import { usePositions } from '../../features/farm/hooks'
+import { usePositions } from '../../features/onsen/hooks'
 import { useRouter } from 'next/router'
 
 export default function Farm(): JSX.Element {
