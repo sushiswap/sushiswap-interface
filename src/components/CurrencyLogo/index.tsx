@@ -3,20 +3,7 @@ import React, { FunctionComponent, useMemo } from 'react'
 
 import Logo from '../Logo'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { getMaticTokenLogoURL } from '../../constants/maticTokenMapping'
 import useHttpLocations from '../../hooks/useHttpLocations'
-
-export const getTokenLogoURL = (address: string, chainId: ChainId) => {
-  let imageURL
-  if (chainId === ChainId.MAINNET) {
-    imageURL = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`
-  } else if (chainId === ChainId.BSC) {
-    imageURL = `https://v1exchange.pancakeswap.finance/images/coins/${address}.png`
-  } else if (chainId === ChainId.MATIC) {
-    imageURL = getMaticTokenLogoURL(address)
-  }
-  return imageURL
-}
 
 const BLOCKCHAIN = {
   [ChainId.MAINNET]: 'ethereum',
