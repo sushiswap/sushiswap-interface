@@ -238,7 +238,6 @@ export const COMMON_BASES: ChainTokenList = {
     AVALANCHE.USDT,
     AVALANCHE.WBTC,
     AVALANCHE.WETH,
-    AVALANCHE.SUSHI,
     SUSHI[ChainId.AVALANCHE],
   ],
   [ChainId.HARMONY]: [
