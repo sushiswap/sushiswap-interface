@@ -1,15 +1,16 @@
 import React, { FC, useCallback } from 'react'
 import { t } from '@lingui/macro'
-import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
 import { useLingui } from '@lingui/react'
 import Typography from '../../../../components/Typography'
 import BalancedModeExplanationModal from './BalancedModeExplanationModal'
 import { ActionType, LiquidityMode } from '../../types'
+import { ClassicPoolContext, ClassicPoolState } from './context/types'
+import { useTridentAddContext, useTridentAddState } from '../../context'
 
 const BalancedModeHeader: FC = () => {
   const { i18n } = useLingui()
-  const { balancedMode, liquidityMode } = useTridentAddClassicState()
-  const { dispatch } = useTridentAddClassicContext()
+  const { balancedMode, liquidityMode } = useTridentAddState<ClassicPoolState>()
+  const { dispatch } = useTridentAddContext<ClassicPoolContext>()
 
   const disableBalancedMode = useCallback(() => {
     dispatch({

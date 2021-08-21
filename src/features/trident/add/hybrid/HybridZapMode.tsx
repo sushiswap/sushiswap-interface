@@ -8,12 +8,14 @@ import AssetInput from '../../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import TransactionDetails from '../TransactionDetails'
 import React from 'react'
-import { useTridentAddHybridContext, useTridentAddHybridState } from './context'
+import { useTridentAddContext, useTridentAddState } from '../../context'
+import { HybridPoolContext, HybridPoolState } from './context/types'
 
 const HybridZapMode = () => {
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentAddHybridState()
-  const { pool, tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } = useTridentAddHybridContext()
+  const { inputAmounts, inputTokenAddress } = useTridentAddState<HybridPoolState>()
+  const { pool, tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } =
+    useTridentAddContext<HybridPoolContext>()
 
   return (
     <div className="flex flex-col gap-6 px-5">

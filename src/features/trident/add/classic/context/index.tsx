@@ -12,6 +12,7 @@ import {
   setTxHash,
   showReview,
 } from '../../../context/actions'
+import TridentFacadeProvider from '../../../context'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -101,7 +102,7 @@ const TridentAddClassicContextProvider: FC<WithTridentPool> = ({ children, pool,
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}
     >
-      {children}
+      <TridentFacadeProvider pool={pool}>{children}</TridentFacadeProvider>
     </TridentAddClassicContext.Provider>
   )
 }

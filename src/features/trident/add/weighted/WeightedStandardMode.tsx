@@ -4,11 +4,13 @@ import DepositButtons from './../DepositButtons'
 import useSufficientBalances from '../../../../hooks/useSufficientBalances'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
-import { useTridentAddWeightedContext, useTridentAddWeightedState } from './context'
+import { useTridentAddContext, useTridentAddState } from '../../context'
+import { WeightedPoolContext, WeightedPoolState } from './context/types'
 
 const WeightedStandardMode = () => {
-  const { inputAmounts, spendFromWallet } = useTridentAddWeightedState()
-  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } = useTridentAddWeightedContext()
+  const { inputAmounts, spendFromWallet } = useTridentAddState<WeightedPoolState>()
+  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } =
+    useTridentAddContext<WeightedPoolContext>()
   const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
   const validInputs = sufficientBalances && Object.values(parsedInputAmounts).every((el) => el?.greaterThan(ZERO))
 

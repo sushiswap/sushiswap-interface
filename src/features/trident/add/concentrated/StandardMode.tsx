@@ -2,13 +2,15 @@ import React, { FC } from 'react'
 import AssetInput from '../../../../components/AssetInput'
 import DepositButtons from '../DepositButtons'
 import TransactionDetails from '../TransactionDetails'
-import { useTridentAddConcentratedContext, useTridentAddConcentratedState } from './context'
 import { ZERO } from '@sushiswap/sdk'
 import useSufficientBalances from '../../../../hooks/useSufficientBalances'
+import { ConcentratedPoolContext, ConcentratedPoolState } from './context/types'
+import { useTridentAddContext, useTridentAddState } from '../../context'
 
 const StandardMode: FC = () => {
-  const { inputAmounts, spendFromWallet } = useTridentAddConcentratedState()
-  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } = useTridentAddConcentratedContext()
+  const { inputAmounts, spendFromWallet } = useTridentAddState<ConcentratedPoolState>()
+  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } =
+    useTridentAddContext<ConcentratedPoolContext>()
   const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
 
   // TODO

@@ -1,6 +1,10 @@
 import { Currency, CurrencyAmount, Price, Token } from '@sushiswap/sdk'
 import { Dispatch } from 'react'
 import { TransactionResponse } from '@ethersproject/providers'
+import { ClassicPoolContext, ClassicPoolState } from './add/classic/context/types'
+import { WeightedPoolContext, WeightedPoolState } from './add/weighted/context/types'
+import { HybridPoolContext, HybridPoolState } from './add/hybrid/context/types'
+import { ConcentratedPoolContext, ConcentratedPoolState } from './add/concentrated/context/types'
 
 export interface Pool {
   type: PoolType
@@ -82,3 +86,6 @@ export interface TridentContext {
   setMaxPrice: (price: string) => void
   setSpendFromWallet: (x: boolean) => void
 }
+
+export type PoolStateType = ClassicPoolState | WeightedPoolState | HybridPoolState | ConcentratedPoolState
+export type PoolContextType = ClassicPoolContext | WeightedPoolContext | HybridPoolContext | ConcentratedPoolContext

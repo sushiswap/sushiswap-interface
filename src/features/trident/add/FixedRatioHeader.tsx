@@ -2,20 +2,21 @@ import React, { FC, useCallback } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
-import { TridentContext, TridentState } from '../types'
+import { PoolContextType, PoolStateType } from '../types'
 import { setFixedRatioMode } from '../context/actions'
 import Typography from '../../../components/Typography'
+import { useTridentAddContext, useTridentAddState } from '../context'
 
 interface FixedRatioHeaderProps {
-  state: Partial<TridentState>
-  context: Partial<TridentContext>
   margin?: boolean
 }
 
-const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ state, context, margin = true }) => {
+const FixedRatioHeader: FC<FixedRatioHeaderProps> = <S extends PoolStateType, C extends PoolContextType>({
+  margin = true,
+}) => {
   const { i18n } = useLingui()
-  const { fixedRatio } = state
-  const { dispatch } = context
+  const { fixedRatio } = useTridentAddState<S>()
+  const { dispatch } = useTridentAddContext<C>()
 
   const disableFixedRatio = useCallback(() => {
     setFixedRatioMode(dispatch)(!fixedRatio)

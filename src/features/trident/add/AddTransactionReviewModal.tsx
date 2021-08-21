@@ -9,17 +9,13 @@ import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
-import { LiquidityMode, TridentContext, TridentState } from '../types'
+import { LiquidityMode, PoolContextType, PoolStateType } from '../types'
+import { useTridentAddContext, useTridentAddState } from '../context'
 
-interface AddTransactionReviewModalProps {
-  state: Partial<TridentState>
-  context: Partial<TridentContext>
-}
-
-const AddTransactionReviewModal: FC<AddTransactionReviewModalProps> = ({ state, context }) => {
+const AddTransactionReviewModal = <S extends PoolStateType, C extends PoolContextType>() => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview } = state
-  const { pool, parsedInputAmounts, execute, parsedOutputAmounts, showReview } = context
+  const { liquidityMode, showZapReview } = useTridentAddState<S>()
+  const { pool, parsedInputAmounts, execute, parsedOutputAmounts, showReview } = useTridentAddContext<C>()
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
