@@ -45,41 +45,8 @@ export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
 }
 
-// export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
-//     // [UNI_ADDRESS]: 'UNI',
-//     [TIMELOCK_ADDRESS]: 'Timelock',
-// }
-
-// TODO: update weekly with new constant
 export const MERKLE_ROOT =
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-13/merkle-10959148-11550728.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-14/merkle-10959148-11596364.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-15/merkle-10959148-11641996.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-16/merkle-10959148-11687577.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-17/merkle-10959148-11733182.json'
-  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-18/merkle-10959148-11778625.json'
   'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-19/merkle-10959148-11824101.json'
-
-// /**
-//  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
-//  * tokens.
-//  */
-// export const CUSTOM_BASES: {
-//     [chainId in ChainId]?: { [tokenAddress: string]: Token[] }
-// } = {
-//     [ChainId.MAINNET]: {
-//         [AMPL.address]: [DAI, WETH[ChainId.MAINNET]],
-//         [DUCK.address]: [USDP, WETH[ChainId.MAINNET]],
-//         [BAB.address]: [BAC, WETH[ChainId.MAINNET]],
-//         [HBTC.address]: [CREAM, WETH[ChainId.MAINNET]],
-//         [FRAX.address]: [FXS, WETH[ChainId.MAINNET]],
-//         [IBETH.address]: [ALPHA, WETH[ChainId.MAINNET]],
-//         [PONT.address]: [PWING, WETH[ChainId.MAINNET]],
-//         [UMA_CALL.address]: [UMA, WETH[ChainId.MAINNET]],
-//         [PLAY.address]: [DOUGH, WETH[ChainId.MAINNET]],
-//         [XSUSHI_CALL.address]: [XSUSHI, WETH[ChainId.MAINNET]],
-//     },
-// }
 
 export interface WalletInfo {
   connector?: (() => Promise<AbstractConnector>) | AbstractConnector
@@ -299,12 +266,6 @@ export const BLOCKED_ADDRESSES: string[] = [
   '0x901bb9583b24D97e995513C6778dc6888AB6870e',
   '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
 ]
-
-// BentoBox Swappers
-export const BASE_SWAPPER: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: '0x0',
-  [ChainId.ROPSTEN]: '0xe4E2540D421e56b0B786d40c5F5268891288c6fb',
-}
 
 // Boring Helper
 // export const BORING_HELPER_ADDRESS = '0x11Ca5375AdAfd6205E41131A4409f182677996E6'
