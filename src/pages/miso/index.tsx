@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Layout from '../../layouts/Miso'
-import Articles from '../../features/miso/Article'
 import MisoInfo from './MisoInfo'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Article from '../../features/miso/Article'
 
 function MISO() {
   const { i18n } = useLingui()

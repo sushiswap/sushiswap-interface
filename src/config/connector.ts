@@ -1,10 +1,10 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from '../entities/NetworkConnector'
-import config from '.'
+import RPC from './rpc'
 
 export const network = new NetworkConnector({
   defaultChainId: 1,
-  urls: config.rpc,
+  urls: RPC,
 })
 
 export const injected = new InjectedConnector({

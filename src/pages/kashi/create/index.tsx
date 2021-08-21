@@ -4,7 +4,7 @@ import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '.
 
 import { AddressZero } from '@ethersproject/constants'
 import Button from '../../../components/Button'
-import { CHAINLINK_MAPPING } from '../../../config/chainlink'
+import { CHAINLINK_PRICE_FEED_MAP } from '../../../config/chainlink'
 import Card from '../../../components/Card'
 import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
@@ -62,7 +62,7 @@ function Create() {
     async (asset: Currency, collateral: Currency) => {
       const oracleData = ''
 
-      const mapping = CHAINLINK_MAPPING[chainId]
+      const mapping = CHAINLINK_PRICE_FEED_MAP[chainId]
 
       for (const address in mapping) {
         mapping[address].address = address

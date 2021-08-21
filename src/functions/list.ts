@@ -1,7 +1,7 @@
 import { contenthashToUri, uriToHttp } from './convert'
 
 import Ajv from 'ajv'
-import { DEFAULT_LIST_OF_LISTS } from '../constants/token-lists'
+import { DEFAULT_LIST_OF_LISTS } from '../config/token-lists'
 import { TokenList } from '@uniswap/token-lists'
 import { Version } from '@uniswap/token-lists'
 import { parseENSAddress } from './ens'

@@ -1,4 +1,4 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
+import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
 import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'

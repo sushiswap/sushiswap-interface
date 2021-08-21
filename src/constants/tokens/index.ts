@@ -1,6 +1,6 @@
 import { ChainId, Ether, SUSHI_ADDRESS, Token, WETH9, WNATIVE } from '@sushiswap/sdk'
 
-import { SupportedChainId } from '../chains'
+import { SupportedChainId } from '../../config/chains'
 
 export const CELO: { [key: string]: Token } = {
   mCUSD: new Token(ChainId.CELO, '0x64dEFa3544c695db8c535D289d843a189aa26b98', 18, 'mCUSD', 'Moola cUSD'),

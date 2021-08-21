@@ -1,18 +1,19 @@
 import React, { useMemo, useState } from 'react'
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import AllocationTable from '../../../features/analytics/Portfolio/AllocationTable'
 import { formatNumber, shortenAddress } from '../../../functions'
-import { useActiveWeb3React } from '../../../hooks'
 import {
-  useAllUserPairs,
-  useUserAssets,
   useAllUserFarms,
-  useBentoUserTokens,
   useAllUserKashiPairs,
+  useAllUserPairs,
+  useBentoUserTokens,
+  useUserAssets,
 } from './../../../features/analytics/Portfolio/hooks'
-import { uniq } from 'lodash'
-import { NETWORK_LABEL } from '../../../constants/networks'
+
+import AllocationTable from '../../../features/analytics/Portfolio/AllocationTable'
+import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import { ChainId } from '@sushiswap/sdk'
+import { NETWORK_LABEL } from '../../../config/networks'
+import { uniq } from 'lodash'
+import { useActiveWeb3React } from '../../../hooks'
 
 export default function Portfolio() {
   const [chartTimespan, setChartTimespan] = useState('1M')
