@@ -7,7 +7,7 @@ import {
 } from '@sushiswap/sdk'
 
 import { AddressZero } from '@ethersproject/constants'
-import { CHAINLINK_MAPPING } from '../constants/chainlink'
+import { CHAINLINK_MAPPING } from '../config/chainlink'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { e10 } from '../functions/math'
 

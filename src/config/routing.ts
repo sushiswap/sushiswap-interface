@@ -43,11 +43,11 @@ import {
   WBTC,
   XDAI,
   XSUSHI,
-} from './tokens'
+} from '../constants/tokens'
 // a list of tokens by chain
 import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/sdk'
 
-import { SupportedChainId } from './chains'
+import { SupportedChainId } from '../constants/chains'
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[]

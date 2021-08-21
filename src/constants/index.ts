@@ -286,5 +286,5 @@ export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {
   [ChainId.RINKEBY]: 8897988,
 }
 
-export * from './routing'
+export * from '../config/routing'
 export * from './tokens'

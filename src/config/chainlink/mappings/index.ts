@@ -6,7 +6,7 @@ import MAINNET from './mainnet'
 import MATIC from './matic'
 import XDAI from './xdai'
 
-export type ChainlinkMappingList = {
+export type ChainlinkPriceFeedMap = {
   readonly [address: string]: {
     from: string
     to: string
@@ -18,8 +18,8 @@ export type ChainlinkMappingList = {
   }
 }
 
-export const CHAINLINK_MAPPING: {
-  [chainId in ChainId]?: ChainlinkMappingList
+export const CHAINLINK_PRICE_FEED_MAP: {
+  [chainId in ChainId]?: ChainlinkPriceFeedMap
 } = {
   [ChainId.MAINNET]: MAINNET,
   [ChainId.KOVAN]: KOVAN,
