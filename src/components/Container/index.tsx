@@ -1,4 +1,4 @@
-import { classNames } from '../functions'
+import { classNames } from '../../functions'
 
 const MAX_WIDTH = {
   full: 'max-w-full',

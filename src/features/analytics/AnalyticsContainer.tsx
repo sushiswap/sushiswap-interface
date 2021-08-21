@@ -1,6 +1,6 @@
-import Head from 'next/head'
-import Container from '../../components/Container'
 import AnalyticsMenu from './AnalyticsMenu'
+import Container from '../../components/Container'
+import Head from 'next/head'
 
 export default function AnalyticsContainer({ children }): JSX.Element {
   return (

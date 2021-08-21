@@ -1,29 +1,30 @@
 import React, { useEffect } from 'react'
-import Head from 'next/head'
-import Typography from '../../components/Typography'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import Image from 'next/image'
-import Container from '../../components/Container'
-import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import InariButton from '../../features/inari/Button'
-import InariDescription from '../../features/inari/InariDescription'
-import SideSwitch from '../../features/inari/SideSwitch'
-import { ArrowRightIcon } from '@heroicons/react/outline'
-import BalancePanel from '../../features/inari/BalancePanel'
 import {
   useDerivedInariState,
   useInariState,
   useInariStrategies,
   useSelectedInariStrategy,
 } from '../../state/inari/hooks'
-import NetworkGuard from '../../guards/Network'
+
+import { ArrowRightIcon } from '@heroicons/react/outline'
+import BalancePanel from '../../features/inari/BalancePanel'
 import { ChainId } from '@sushiswap/sdk'
-import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
-import StrategySelector from '../../features/inari/StrategySelector'
+import Container from '../../components/Container'
+import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 import { Field } from '../../state/inari/types'
-import { useAppDispatch } from '../../state/hooks'
+import Head from 'next/head'
+import Image from 'next/image'
+import InariButton from '../../features/inari/Button'
+import InariDescription from '../../features/inari/InariDescription'
+import NetworkGuard from '../../guards/Network'
+import SideSwitch from '../../features/inari/SideSwitch'
+import StrategySelector from '../../features/inari/StrategySelector'
+import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
+import Typography from '../../components/Typography'
 import { setStrategy } from '../../state/inari/actions'
+import { t } from '@lingui/macro'
+import { useAppDispatch } from '../../state/hooks'
+import { useLingui } from '@lingui/react'
 import useStakeSushiToBentoStrategy from '../../state/inari/strategies/useStakeSushiToBentoStrategy'
 
 const Inari = () => {

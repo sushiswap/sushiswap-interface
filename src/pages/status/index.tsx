@@ -1,8 +1,7 @@
-import { Tab } from '@headlessui/react'
-
 import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
+import { Tab } from '@headlessui/react'
 import Typography from '../../components/Typography'
 import capitalize from 'lodash/capitalize'
 import { classNames } from '../../functions'

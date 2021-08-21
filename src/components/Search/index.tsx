@@ -1,6 +1,6 @@
 import React from 'react'
 import { Search as SearchIcon } from 'react-feather'
-import { classNames } from '../functions'
+import { classNames } from '../../functions'
 
 export default function Search({
   term,

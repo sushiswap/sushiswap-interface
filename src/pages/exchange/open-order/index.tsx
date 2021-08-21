@@ -1,3 +1,6 @@
+import useLimitOrderApproveCallback, { BentoApprovalState } from '../../../hooks/useLimitOrderApproveCallback'
+
+import Alert from '../../../components/Alert'
 import { ArrowLeftIcon } from '@heroicons/react/solid'
 import { ChainId } from '@sushiswap/sdk'
 import CompletedOrders from '../../../features/open-order/CompletedOrders'
@@ -7,12 +10,10 @@ import Head from 'next/head'
 import NavLink from '../../../components/NavLink'
 import NetworkGuard from '../../../guards/Network'
 import OpenOrders from '../../../features/open-order/OpenOrders'
-import { t } from '@lingui/macro'
 import React from 'react'
-import { useLingui } from '@lingui/react'
-import useLimitOrderApproveCallback, { BentoApprovalState } from '../../../hooks/useLimitOrderApproveCallback'
-import Alert from '../../../components/Alert'
+import { t } from '@lingui/macro'
 import useLimitOrders from '../../../hooks/useLimitOrders'
+import { useLingui } from '@lingui/react'
 
 function OpenOrdersPage() {
   const { i18n } = useLingui()

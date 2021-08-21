@@ -33,9 +33,9 @@ import Search from '../../components/Search'
 import { classNames } from '../../functions'
 import dynamic from 'next/dynamic'
 import { getAddress } from '@ethersproject/address'
+import useFarmRewards from '../../hooks/useFarmRewards'
 import { usePositions } from '../../features/farm/hooks'
 import { useRouter } from 'next/router'
-import useFarmRewards from '../../hooks/useFarmRewards'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()

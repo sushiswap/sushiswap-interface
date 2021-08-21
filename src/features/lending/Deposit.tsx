@@ -5,7 +5,7 @@ import { ZERO, e10 } from '../../functions/math'
 
 import Button from '../../components/Button'
 import KashiCooker from '../../entities/KashiCooker'
-import SmartNumberInput from '../../components/SmartNumberInput'
+import SmartNumberInput from './SmartNumberInput'
 import TransactionReviewList from './TransactionReview'
 import { WNATIVE } from '@sushiswap/sdk'
 import { Warnings } from '../../entities/Warnings'

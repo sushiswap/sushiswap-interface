@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useTable, usePagination, useSortBy } from 'react-table'
-import { classNames } from '../functions'
+import { classNames } from '../../functions'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 

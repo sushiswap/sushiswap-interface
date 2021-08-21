@@ -1,7 +1,6 @@
 import { Deposit, Withdraw } from '../../../features/lending'
 import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
 import React, { useState } from 'react'
-import { Tab } from '@headlessui/react'
 import { formatNumber, formatPercent } from '../../../functions/format'
 
 import Card from '../../../components/Card'
@@ -9,8 +8,8 @@ import Container from '../../../components/Container'
 import Head from 'next/head'
 import Image from '../../../components/Image'
 import Layout from '../../../layouts/Kashi'
-import { LendCardHeader } from '../../../components/CardHeader'
 import QuestionHelper from '../../../components/QuestionHelper'
+import { Tab } from '@headlessui/react'
 import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -34,7 +33,7 @@ export default function Pair() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <LendCardHeader>
+          <Card.Header className="border-b-8 bg-dark-blue border-blue">
             <div className="flex items-center">
               <div className="flex items-center mr-4 space-x-2">
                 {pair && (
@@ -72,7 +71,7 @@ export default function Pair() {
                 </div>
               </div>
             </div>
-          </LendCardHeader>
+          </Card.Header>
         }
       >
         <div className="flex justify-between mb-8">

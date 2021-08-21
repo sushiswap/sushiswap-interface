@@ -1,10 +1,7 @@
 import { Borrow, Repay } from '../../../features/lending'
 import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
 import React, { useCallback, useState } from 'react'
-import { Tab } from '@headlessui/react'
 import { formatNumber, formatPercent } from '../../../functions/format'
-
-import { BorrowCardHeader } from '../../../components/CardHeader'
 import Card from '../../../components/Card'
 import Dots from '../../../components/Dots'
 import GradientDot from '../../../components/GradientDot'
@@ -13,6 +10,7 @@ import Image from '../../../components/Image'
 import { KashiCooker } from '../../../entities'
 import Layout from '../../../layouts/Kashi'
 import QuestionHelper from '../../../components/QuestionHelper'
+import { Tab } from '@headlessui/react'
 import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
@@ -60,7 +58,7 @@ function Pair() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <BorrowCardHeader>
+          <Card.Header className="border-b-8 bg-dark-pink border-pink">
             <div className="flex items-center">
               <div className="flex items-center mr-4 space-x-2">
                 {pair && (
@@ -97,7 +95,7 @@ function Pair() {
                 </div>
               </div>
             </div>
-          </BorrowCardHeader>
+          </Card.Header>
         }
       >
         <div className="flex justify-between mb-8">

@@ -8,11 +8,11 @@ import ExternalLink from '../../components/ExternalLink'
 import { ExternalLinkIcon } from '../../components/ExternalLinkIcon'
 import ImportRow from './ImportRow'
 import { Token } from '@sushiswap/sdk'
+import { Trash } from 'react-feather'
 import { getExplorerLink } from '../../functions/explorer'
 import { isAddress } from '../../functions/validate'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useToken } from '../../hooks/Tokens'
-import { Trash } from 'react-feather'
 
 function ManageTokens({
   setModalView,

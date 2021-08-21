@@ -1,11 +1,12 @@
-import { pair } from '@sushiswap/sushi-data/typings/exchange'
-import { useMemo } from 'react'
-import Search from '../../../components/Search'
+import { useKashiPairs, useSushiPairs } from '../../../services/graph'
+
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import PoolList from '../../../features/analytics/Pools/PoolsList'
-import { useFuse } from '../../../hooks'
+import Search from '../../../components/Search'
+import { pair } from '@sushiswap/sushi-data/typings/exchange'
 import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useKashiPairs, useSushiPairs } from '../../../services/graph'
+import { useFuse } from '../../../hooks'
+import { useMemo } from 'react'
 
 export default function Pools(): JSX.Element {
   const pairs = useSushiPairs()

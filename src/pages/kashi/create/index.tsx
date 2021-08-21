@@ -2,18 +2,17 @@ import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/sd
 import React, { useCallback } from 'react'
 import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '../../../state/create/hook'
 
+import { AddressZero } from '@ethersproject/constants'
 import Button from '../../../components/Button'
 import { CHAINLINK_MAPPING } from '../../../constants/chainlink'
 import Card from '../../../components/Card'
-import CardHeader from '../../../components/CardHeader'
 import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import { Field } from '../../../state/create/actions'
 import Head from 'next/head'
 import Layout from '../../../layouts/Kashi'
-import { e10 } from '../../../functions/math'
-import { AddressZero } from '@ethersproject/constants'
 import { defaultAbiCoder } from '@ethersproject/abi'
+import { e10 } from '../../../functions/math'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useBentoBoxContract } from '../../../hooks/useContract'
@@ -164,9 +163,9 @@ function Create() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <CardHeader className="bg-dark-800">
+          <Card.Header className="bg-dark-800">
             <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>
-          </CardHeader>
+          </Card.Header>
         }
       >
         <Container maxWidth="full" className="space-y-6">

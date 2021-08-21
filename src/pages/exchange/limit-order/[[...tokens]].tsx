@@ -10,14 +10,16 @@ import {
 } from '../../../state/limit-order/hooks'
 
 import AddressInputPanel from '../../../components/AddressInputPanel'
+import Alert from '../../../components/Alert'
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import BalancePanel from '../../../features/limit-order/BalancePanel'
+import Button from '../../../components/Button'
 import Container from '../../../components/Container'
 import CurrencyInput from '../../../features/limit-order/CurrencyInput'
 import CurrencyInputPanel from '../../../features/limit-order/CurrencyInputPanel'
 import CurrencySelect from '../../../features/limit-order/CurrencySelect'
 import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
-import ExchangeHeader from '../../../components/ExchangeHeader'
+import ExchangeHeader from '../../../features/trade/Header'
 import { ExclamationIcon } from '@heroicons/react/solid'
 import ExpertModePanel from '../../../components/ExpertModePanel'
 import { Field } from '../../../state/swap/actions'
@@ -37,8 +39,6 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../hooks'
 import { useExpertModeManager } from '../../../state/user/hooks'
 import { useLingui } from '@lingui/react'
-import Alert from '../../../components/Alert'
-import Button from '../../../components/Button'
 
 const areEqual = (first, second) => {
   if (first.length !== second.length) {

@@ -7,7 +7,6 @@ import { useFuse, useSortableData } from '../../hooks'
 import Back from '../../components/Back'
 import Button from '../../components/Button'
 import Card from '../../components/Card'
-import CardHeader from '../../components/CardHeader'
 import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
@@ -49,7 +48,7 @@ function Balances() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <CardHeader className="flex items-center justify-between bg-dark-800">
+          <Card.Header className="flex items-center justify-between bg-dark-800">
             <div className="flex flex-col items-center justify-between w-full md:flex-row">
               <div className="flex items-baseline">
                 <div className="mr-4 text-3xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
@@ -58,7 +57,7 @@ function Balances() {
                 <Search search={search} term={term} />
               </div>
             </div>
-          </CardHeader>
+          </Card.Header>
         }
       >
         <div className="grid grid-flow-row gap-4 auto-rows-max">

@@ -1,15 +1,16 @@
+import { ChainId, CurrencyAmount, Ether } from '@sushiswap/sdk'
 import {
   useUserArcherETHTip,
   useUserArcherGasPrice,
   useUserArcherTipManualOverride,
   useUserSlippageTolerance,
-} from '../state/user/hooks'
-import { CurrencyAmount, Ether, ChainId } from '@sushiswap/sdk'
+} from '../../state/user/hooks'
+
 import React from 'react'
-import { StyledSlider } from '../features/swap/styleds'
-import Typography from './Typography'
-import useArcherMinerTips from '../hooks/useArcherMinerTips'
-import { useToggleSettingsMenu } from '../state/application/hooks'
+import { StyledSlider } from './styleds'
+import Typography from '../../components/Typography'
+import useArcherMinerTips from '../../hooks/useArcherMinerTips'
+import { useToggleSettingsMenu } from '../../state/application/hooks'
 
 const getMarkLabel = (index: number, length: number): string => {
   switch (index) {

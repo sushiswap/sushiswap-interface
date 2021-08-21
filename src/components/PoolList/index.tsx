@@ -3,14 +3,13 @@ import { formatNumber, formatPercent } from '../../functions/format'
 import { useFuse, useSortableData } from '../../hooks'
 
 import Card from '../../components/Card'
-import CardHeader from '../../components/CardHeader'
 import Dots from '../../components/Dots'
 import DoubleLogo from '../../components/DoubleLogo'
 import Head from 'next/head'
-import Paper from '../../components/Paper'
+import Paper from '../Paper'
 import React from 'react'
 import Router from 'next/router'
-import Search from '../../components/Search'
+import Search from '../Search'
 import { useCurrency } from '../../hooks/Tokens'
 import useFarms from '../../hooks/useZapperFarms'
 
@@ -78,7 +77,7 @@ const PoolList = () => {
         <Card
           className="h-full rounded bg-dark-900"
           header={
-            <CardHeader className="flex items-center justify-between bg-dark-800">
+            <Card.Header className="flex items-center justify-between bg-dark-800">
               <div className="flex flex-col items-center justify-between w-full">
                 <div className="items-center hidden md:flex">
                   {/* <BackButton defaultRoute="/pool" /> */}
@@ -86,7 +85,7 @@ const PoolList = () => {
                 </div>
                 <Search search={search} term={term} />
               </div>
-            </CardHeader>
+            </Card.Header>
           }
         >
           {/* All Farms */}

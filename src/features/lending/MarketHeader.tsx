@@ -1,14 +1,12 @@
-import { BorrowCardHeader, LendCardHeader } from './CardHeader'
-
 import React from 'react'
 import { Search } from 'react-feather'
+import Card from '../../components/Card'
+import { classNames } from '../../functions'
 
 function MarketHeader({ type = 'Borrow', lists }: any) {
   if (lists.setTerm) {
     lists = [lists]
   }
-
-  const Header = type === 'Borrow' ? BorrowCardHeader : LendCardHeader
 
   function onSearch(term: any) {
     lists.forEach((list: any) => {
@@ -17,10 +15,12 @@ function MarketHeader({ type = 'Borrow', lists }: any) {
   }
 
   return (
-    <Header>
-      <div className="flex flex-col md:flex-row items-center justify-between w-full">
+    <Card.Header
+      className={classNames('border-b-8', type === 'Borrow' ? 'bg-dark-pink border-pink' : 'bg-dark-blue border-blue')}
+    >
+      <div className="flex flex-col items-center justify-between w-full md:flex-row">
         <div className="flex items-center">
-          <div className="text-3xl text-high-emphesis mr-4">{type}</div>
+          <div className="mr-4 text-3xl text-high-emphesis">{type}</div>
         </div>
 
         <div className="flex justify-end w-full py-4 md:py-0">
@@ -34,13 +34,13 @@ function MarketHeader({ type = 'Borrow', lists }: any) {
               value={lists[0].term}
               placeholder="Search by symbol"
             />
-            <div className="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none">
               <Search size={16} />
             </div>
           </div>
         </div>
       </div>
-    </Header>
+    </Card.Header>
   )
 }
 

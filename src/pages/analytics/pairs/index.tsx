@@ -1,4 +1,5 @@
 import { useBlock, useSushiPairs } from '../../../services/graph'
+import { useMemo, useState } from 'react'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import PairList from '../../../features/analytics/Pairs/PairList'
@@ -6,7 +7,6 @@ import PairTabs from '../../../features/analytics/Pairs/PairTabs'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
 
 export default function Pairs() {
   const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')

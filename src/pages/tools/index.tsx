@@ -1,11 +1,11 @@
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import Container from '../../components/Container'
 import Head from 'next/head'
+import { I18n } from '@lingui/core'
 import Link from 'next/link'
 import Typography from '../../components/Typography'
-import { useLingui } from '@lingui/react'
-import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
 
 const TOOLS = (i18n: I18n) => [
