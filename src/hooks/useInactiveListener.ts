@@ -1,4 +1,4 @@
-import { injected } from '../connectors'
+import { injected } from '../config/connector'
 import { useEffect } from 'react'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 

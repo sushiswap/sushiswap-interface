@@ -1,7 +1,7 @@
-import RPC from './rpc'
+import rpc from './rpc'
 
 const config = {
-  rpc: RPC,
+  rpc,
 }
 
 export default config

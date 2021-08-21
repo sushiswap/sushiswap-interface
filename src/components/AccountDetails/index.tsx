@@ -1,5 +1,5 @@
 import React, { FC, useCallback } from 'react'
-import { injected } from '../../connectors'
+import { injected } from '../../config/connector'
 
 import { AppDispatch } from '../../state'
 import Button from '../Button'

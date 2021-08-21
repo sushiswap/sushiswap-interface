@@ -2,7 +2,7 @@ import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from '@ethersproject/bignumber'
-import { injected } from '../connectors'
+import { injected } from '../config/connector'
 
 export const RPC = {
   [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',

@@ -5,7 +5,7 @@ import Option from './Option'
 import React from 'react'
 import { SUPPORTED_WALLETS } from '../../constants'
 import { darken } from 'polished'
-import { injected } from '../../connectors'
+import { injected } from '../../config/connector'
 import styled from 'styled-components'
 
 const PendingSection = styled.div`
