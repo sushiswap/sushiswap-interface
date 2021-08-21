@@ -6,7 +6,7 @@ function fuzzySearch({ fuse, data, term }) {
   return term ? results.map((result) => result.item) : data
 }
 
-function useFuse({ data, options }) {
+async function useFuse({ data, options }) {
   const [term, setTerm] = useState<string>('')
   const fuseOptions = {
     ...options,

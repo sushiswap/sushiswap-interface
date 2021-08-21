@@ -1,14 +1,13 @@
+import { AddressZero, HashZero } from '@ethersproject/constants'
+import { STOP_LIMIT_ORDER_ADDRESS, Token, getSignatureWithProviderBentobox } from '@sushiswap/sdk'
 import { ZERO, calculateGasMargin } from '../functions'
-import { getSignatureWithProviderBentobox, getVerifyingContract } from 'limitorderv2-sdk'
 import { setFromBentoBalance, setLimitOrderApprovalPending } from '../state/limit-order/actions'
 import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
 
 import { Field } from '../state/swap/actions'
-import { AddressZero, HashZero } from '@ethersproject/constants'
 import { getAddress } from '@ethersproject/address'
-import { Token } from '@sushiswap/sdk'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { useDispatch } from 'react-redux'
@@ -42,7 +41,7 @@ const useLimitOrderApproveCallback = () => {
     setLimitOrderPermit(undefined)
   }, [account, chainId])
 
-  const masterContract = chainId && getVerifyingContract(chainId)
+  const masterContract = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
 
   const pendingApproval = useLimitOrderApprovalPending()
   const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
