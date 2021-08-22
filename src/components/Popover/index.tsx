@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react'
 
 import { Placement } from '@popperjs/core'
-import Portal from '@reach/portal'
 import useInterval from '../../hooks/useInterval'
 import { usePopper } from 'react-popper'
 import { classNames } from '../../functions'
+import { Popover as HeadlessuiPopover } from '@headlessui/react'
 
 export interface PopoverProps {
   content: React.ReactNode
@@ -31,24 +31,23 @@ export default function Popover({ content, show, children, placement = 'auto' }:
   useInterval(updateCallback, show ? 100 : null)
 
   return (
-    <>
+    <HeadlessuiPopover>
       <div ref={setReferenceElement as any}>{children}</div>
-      <Portal>
+      <HeadlessuiPopover.Panel
+        static
+        className={classNames(!show && 'hidden opacity-0', 'z-50 animate-fade')}
+        ref={setPopperElement as any}
+        style={styles.popper}
+        {...attributes.popper}
+      >
+        {content}
         <div
-          className={classNames(!show && 'hidden opacity-0', 'z-50 animate-fade')}
-          ref={setPopperElement as any}
-          style={styles.popper}
-          {...attributes.popper}
-        >
-          {content}
-          <div
-            className={classNames('w-2 h-2 z-50')}
-            ref={setArrowElement as any}
-            style={styles.arrow}
-            {...attributes.arrow}
-          />
-        </div>
-      </Portal>
-    </>
+          className={classNames('w-2 h-2 z-50')}
+          ref={setArrowElement as any}
+          style={styles.arrow}
+          {...attributes.arrow}
+        />
+      </HeadlessuiPopover.Panel>
+    </HeadlessuiPopover>
   )
 }

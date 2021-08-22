@@ -63,7 +63,6 @@
     "@next/bundle-analyzer": "^11.1.0",
     "@popperjs/core": "^2.9.2",
     "@ramp-network/ramp-instant-sdk": "^2.4.6",
-    "@reach/dialog": "^0.15.2",
     "@reduxjs/toolkit": "^1.6.0",
     "@sentry/nextjs": "^6.11.0",
     "@sushiswap/chainlink-whitelist": "0.2.2",

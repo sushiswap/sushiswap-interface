@@ -21,10 +21,9 @@ import { parseENSAddress } from '../../functions/ens'
 import { uriToHttp } from '../../functions/convert'
 import { useFetchListCallback } from '../../hooks/useFetchListCallback'
 import { useListColor } from '../../hooks/useColor'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { usePopper } from 'react-popper'
-import useToggle from '../../hooks/useToggle'
 import { classNames } from '../../functions'
+import { Popover } from '@headlessui/react'
 
 function listUrlRowHTMLId(listUrl: string) {
   return `list-row-${listUrl.replace(/\./g, '-')}`
@@ -38,14 +37,12 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
   const listColor = useListColor(list?.logoURI)
   const isActive = useIsListActive(listUrl)
 
-  const [open, toggle] = useToggle(false)
-  const node = useRef<HTMLDivElement>()
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement>()
   const [popperElement, setPopperElement] = useState<HTMLDivElement>()
 
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {})
-
-  useOnClickOutside(node, open ? toggle : undefined)
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'right',
+  })
 
   const handleAcceptListUpdate = useCallback(() => {
     if (!pending) return
@@ -113,35 +110,33 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
         </div>
         <div className="relative flex flex-row">
           <div className={classNames(isActive && 'text-white', 'text-xs')}>{list.tokens.length} tokens</div>
-          <div className="flex items-center justify-center" ref={node as any}>
-            <Button variant="empty" onClick={toggle} ref={setReferenceElement} style={{ padding: '0' }}>
+          <Popover className="flex items-center justify-center">
+            <Popover.Button ref={setReferenceElement as any}>
               <Settings size={12} className="ml-1 stroke-current" />
-            </Button>
-            {open && (
-              <div
-                className="z-20 flex flex-col p-4 space-y-2 border border-white rounded backdrop-blur whitespace-nowrap"
-                ref={setPopperElement as any}
-                style={styles.popper}
-                {...attributes.popper}
+            </Popover.Button>
+            <Popover.Panel
+              className="z-20 flex flex-col p-4 space-y-2 bg-black border border-white rounded bg-opacity-80 backdrop-blur whitespace-nowrap"
+              ref={setPopperElement as any}
+              style={styles.popper}
+              {...attributes.popper}
+            >
+              <div>{list && listVersionLabel(list.version)}</div>
+              <div />
+              <ExternalLink href={`https://tokenlists.org/token-list?url=${listUrl}`}>View list</ExternalLink>
+              <button
+                className="hover:text-high-emphesis text-primary"
+                onClick={handleRemoveList}
+                disabled={Object.keys(listsByUrl).length === 1}
               >
-                <div>{list && listVersionLabel(list.version)}</div>
-                <div />
-                <ExternalLink href={`https://tokenlists.org/token-list?url=${listUrl}`}>View list</ExternalLink>
-                <button
-                  className="hover:text-high-emphesis text-primary"
-                  onClick={handleRemoveList}
-                  disabled={Object.keys(listsByUrl).length === 1}
-                >
-                  Remove list
+                Remove list
+              </button>
+              {pending && (
+                <button className="hover:text-high-emphesis text-primary" onClick={handleAcceptListUpdate}>
+                  Update list
                 </button>
-                {pending && (
-                  <button className="hover:text-high-emphesis text-primary" onClick={handleAcceptListUpdate}>
-                    Update list
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
+              )}
+            </Popover.Panel>
+          </Popover>
         </div>
       </div>
       <ListToggle
