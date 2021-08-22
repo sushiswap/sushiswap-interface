@@ -1,6 +1,6 @@
 import Container from '../../components/Container'
 import Head from 'next/head'
-import Menu from '../../features/analytics/AnalyticsMenu'
+import Sidebar from '../../components/Sidebar'
 
 export default function Analytics() {
   return (
@@ -11,7 +11,30 @@ export default function Analytics() {
       </Head>
 
       <div className="sticky top-0 hidden lg:block md:col-span-1" style={{ maxHeight: '40rem' }}>
-        <Menu />
+        <Sidebar
+          items={[
+            {
+              text: 'Dashboard',
+              href: '/analytics/dashboard',
+            },
+            {
+              text: 'Bar',
+              href: '/analytics/bar',
+            },
+            {
+              text: 'Pools',
+              href: '/analytics/pools',
+            },
+            {
+              text: 'Pairs',
+              href: '/analytics/pairs',
+            },
+            {
+              text: 'Tokens',
+              href: '/analytics/tokens',
+            },
+          ]}
+        />
       </div>
     </Container>
   )
