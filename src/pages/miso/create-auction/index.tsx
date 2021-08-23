@@ -122,35 +122,24 @@ function CreateAuction({ pageIndex, movePage }) {
             <div className="mb-16">
               <TokenSelect onTokenSelect={(token) => selectToken(token)} />
               <Input
-                label="Auction Token Allowance*"
-                value={tokenAllowance}
-                type="digit"
-                placeholder="Enter the amount of token you would like to launch."
-                alert="Enter the amount that you would like to allocate for MISO auctions. If you plan to set up post auction liquidity launcher, you can also include the allowance here."
-                hint={
-                  <span>
-                    <b>Note</b>: Your auction token amount must be higher than or equal to token balance.
-                  </span>
-                }
-                trailing={<span>Your Token Balance: {balance ? balance.toSignificant(4) : 'N/A'}</span>}
-                onUserInput={(input) => setTokenAllowance(input)}
-              />
-              <Input
                 label="Auction Token Amount*"
                 value={tokenAmount}
                 type="digit"
                 placeholder="Enter the amount of token you would like to auction."
                 alert="This will be the number of tokens you will put into the auction contract. Please consider this carefully."
                 hint={
-                  <span>
-                    <b>Note</b>: Token amount must be lower or equal to allowance.
-                  </span>
+                  <div className="w-full flex flex-row justify-between pr-5">
+                    <span>
+                      <b>Note</b>: Token amount must be lower or equal to allowance.
+                    </span>
+                    <span>
+                      Your Token Allowance: {allowance ? allowance.toSignificant(4) : 'N/A'} {token?.symbol}
+                    </span>
+                  </div>
                 }
                 trailing={
                   <span>
-                    {token
-                      ? `Your Token Allowance: ${allowance ? allowance.toSignificant(4) : 'N/A'} ${token.symbol}`
-                      : ''}
+                    {token ? `Your Token Balance: ${balance ? balance.toSignificant(4) : 'N/A'} ${token?.symbol}` : ''}
                   </span>
                 }
                 onUserInput={(input) => setTokenAmount(input)}
