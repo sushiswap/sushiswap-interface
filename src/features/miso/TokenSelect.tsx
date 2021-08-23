@@ -5,10 +5,9 @@ import React from 'react'
 
 import { useTokenComparator } from './sorting'
 
-import CurrencyLogo from '../CurrencyLogo'
-import NavLink from '../NavLink'
-
+import CurrencyLogo from '../../components/CurrencyLogo'
 import Loader from '../../components/Loader'
+import NavLink from '../../components/NavLink'
 import { useSortedTokensByQuery } from '../../functions/filtering'
 import { isAddress } from '../../functions/validate'
 import { useListTokens } from '../../hooks/miso/useTokens'
