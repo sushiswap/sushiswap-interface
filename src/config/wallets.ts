@@ -3,6 +3,7 @@ import { ChainId } from '@sushiswap/sdk'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from '../entities/NetworkConnector'
 import RPC from './rpc'
+
 export const network = new NetworkConnector({
   defaultChainId: 1,
   urls: RPC,

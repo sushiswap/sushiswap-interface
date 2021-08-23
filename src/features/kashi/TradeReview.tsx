@@ -17,15 +17,8 @@ function TradeReview({
   allowedSlippage: any
 }) {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
-  const showRoute = Boolean(trade && trade.route.path.length > 2)
 
-  // const slippageAdjustedAmounts = computeSlippageAdjustedAmounts(
-  //   trade,
-  //   allowedSlippage
-  // );
-  // const { priceImpactWithoutFee, realizedLPFee } =
-  //   computeTradePriceBreakdown(trade);
+  const showRoute = Boolean(trade && trade.route.path.length > 2)
 
   const { realizedLPFee, priceImpact } = useMemo(() => {
     if (!trade) return { realizedLPFee: undefined, priceImpact: undefined }
