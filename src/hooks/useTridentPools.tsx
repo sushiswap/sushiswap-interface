@@ -1,10 +1,10 @@
-import { SUSHI, USDC } from '../constants'
 import { ChainId, Token, WETH9 } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { tryParseAmount } from '../functions'
 import { Pool, PoolType } from '../features/trident/types'
 import { useRouter } from 'next/router'
+import { SUSHI, USDC } from '../config/tokens'
 
 export const toHref = (pool: Pool) => {
   return `${pool.type.toLowerCase()}/${pool.tokens.map((el) => el.address).join('/')}`

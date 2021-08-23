@@ -19,6 +19,7 @@ module.exports = {
         'bubble-pattern': "url('/images/trident/bubble-pattern.png')",
         'dots-pattern': "url('/images/trident/dots-pattern.png')",
         'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
+        'wavy-pattern': "url('/images/trident/wavy-pattern.png')",
       }),
       linearBorderGradients: {
         directions: {
