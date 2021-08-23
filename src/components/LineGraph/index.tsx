@@ -36,7 +36,7 @@ function Graph({ data, stroke, strokeWidth, width, height }: GraphProps): JSX.El
         domain: [minBy(data, 'x')?.x, maxBy(data, 'x')?.x],
         range: [0, width],
       }),
-    [JSON.stringify(data), width]
+    [data, width]
   )
   const yScale = useMemo(
     () =>
@@ -44,7 +44,7 @@ function Graph({ data, stroke, strokeWidth, width, height }: GraphProps): JSX.El
         domain: [maxBy(data, 'y')?.y, minBy(data, 'y')?.y],
         range: [0, height],
       }),
-    [JSON.stringify(data), height]
+    [data, height]
   )
 
   return (

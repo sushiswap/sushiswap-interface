@@ -44,7 +44,7 @@ export function useListTokens(): Token[] {
       setTokens(result)
     } catch (error) {
       setTokens([])
-      throw error
+      console.log(error)
     }
   }, [misoHelperContract])
   useEffect(() => {

@@ -1,19 +1,41 @@
 import { CheckIcon, ChevronRightIcon } from '@heroicons/react/solid'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import styled from 'styled-components'
 
-import Container from '../../components/Container'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Main from '../../components/Main'
 import NavLink from '../../components/NavLink'
 import Popups from '../../components/Popups'
 import { classNames } from '../../functions/styling'
+import ExternalLink from '../../components/ExternalLink'
 
 const Navbar = styled.div`
   background: linear-gradient(90.12deg, rgba(9, 147, 236, 0.05) 12.77%, rgba(243, 56, 195, 0.05) 87.29%), #161522;
 `
+
+function Sidebar() {
+  const menuItems = [
+    { link: '/swap', title: 'Overview' },
+    { link: '/pool', title: 'Manage Pools' },
+    { link: '/incentive', title: 'Manage Incentives' },
+    { link: '/analytics', title: 'Analytics' },
+    { link: '/miso', title: 'MISO Launchpad' },
+    { link: '/settings', title: 'Settings' },
+  ]
+  return (
+    <div className="w-[250px] border-[#202231] border-r-2 p-4 flex flex-col">
+      {menuItems.map((item, index) => {
+        return (
+          <NavLink key={index} href={item.link} activeClassName="text-white bg-[#202231] rounded">
+            <a className="pl-5 py-2 my-1">{item.title}</a>
+          </NavLink>
+        )
+      })}
+    </div>
+  )
+}
 
 function Navs({ data }) {
   return (
@@ -44,16 +66,18 @@ function Title({ data, isFactoryPage }) {
           <div className="flex-[7]">{data.content}</div>
           <div className="h-[46px] flex justify-end flex-[3]">
             {isFactoryPage && (
-              <a className="px-12 py-3 text-base font-medium text-center text-white rounded-md font-bold cursor-pointer border rounded border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink">
-                {i18n._(t`Documentation`)}
-              </a>
+              <ExternalLink href="https://instantmiso.gitbook.io/miso/">
+                <a className="px-12 py-3 text-base font-medium text-center text-white rounded-md font-bold cursor-pointer border rounded border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink">
+                  {i18n._(t`Documentation`)}
+                </a>
+              </ExternalLink>
             )}
           </div>
         </div>
       </div>
       {steps.length > 0 && (
         <div className="lg:border-t lg:border-b lg:border-gray-500">
-          <nav className="mx-auto max-w-7xl" aria-label="Progress">
+          <nav className="mx-auto" aria-label="Progress">
             <ol role="list" className="rounded-md overflow-hidden lg:flex lg:border-gray-500 lg:rounded-none">
               {steps.map((step, stepIdx) => (
                 <li key={stepIdx} className="relative overflow-hidden lg:flex-1">
@@ -173,15 +197,18 @@ const Layout = ({
   return (
     <div className="z-0 flex flex-col items-center w-full h-screen">
       <Header />
-      <Main>
-        <Container className="px-4 pb-4 md:pb-8 lg:pb-12" maxWidth="5xl">
-          <Navs data={navs} />
-          <Title data={{ ...title, tabs, active }} isFactoryPage={isFactoryPage} />
-          <div className="p-10">{children}</div>
-        </Container>
-      </Main>
+      <div className="w-full flex flex-row">
+        <Sidebar />
+        <div className="w-full">
+          <Main>
+            <Navs data={navs} />
+            <Title data={{ ...title, tabs, active }} isFactoryPage={isFactoryPage} />
+            <div className="w-full p-10">{children}</div>
+          </Main>
+          <Footer />
+        </div>
+      </div>
       <Popups />
-      <Footer />
     </div>
   )
 }

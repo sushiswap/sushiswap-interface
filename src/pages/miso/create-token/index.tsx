@@ -8,6 +8,7 @@ import Button from '../../../components/Button'
 import Image from '../../../components/Image'
 import Input from '../../../components/Miso/Input'
 import Radio from '../../../components/Miso/Radio'
+import Web3Connect from '../../../components/Web3Connect'
 import { getExplorerLink } from '../../../functions/explorer'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
@@ -46,7 +47,7 @@ function CreateToken({ pageIndex, movePage }) {
     return false
   }
 
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { createToken } = useTokens()
   const [, setCopied] = useCopyClipboard()
   const [tx, setTx] = React.useState(null)
@@ -222,15 +223,19 @@ function CreateToken({ pageIndex, movePage }) {
                   >
                     Previous
                   </Button>
-                  <Button
-                    color="gradient"
-                    className="w-[133px] flex flex-row items-center justify-center"
-                    onClick={() => deployToken()}
-                    disabled={txState === 1}
-                  >
-                    {txState === 1 && <Lottie animationData={loadingCircle} autoplay loop className="mr-2 w-5" />}
-                    Deploy
-                  </Button>
+                  {account ? (
+                    <Button
+                      color="gradient"
+                      className="w-[133px] flex flex-row items-center justify-center"
+                      onClick={() => deployToken()}
+                      disabled={txState === 1}
+                    >
+                      {txState === 1 && <Lottie animationData={loadingCircle} autoplay loop className="mr-2 w-5" />}
+                      Deploy
+                    </Button>
+                  ) : (
+                    <Web3Connect size="lg" color="blue" className="w-[200px]" />
+                  )}
                 </div>
               </div>
             )}
@@ -254,17 +259,13 @@ function CreateToken({ pageIndex, movePage }) {
                   <Button color="gradient" className="w-[200px]" disabled>
                     Create Auction
                   </Button>
-                  <Button
-                    variant="outlined"
-                    className="w-[200px]"
-                    color="gradient"
-                    onClick={() => {
-                      movePage(pageIndex - 1)
-                      setTxState(0)
-                    }}
-                  >
-                    Go To Marketplace
-                  </Button>
+                  <NavLink href="/miso">
+                    <div>
+                      <Button variant="outlined" className="w-[200px]" color="gradient">
+                        Go To Marketplace
+                      </Button>
+                    </div>
+                  </NavLink>
                 </div>
               </div>
             )}
