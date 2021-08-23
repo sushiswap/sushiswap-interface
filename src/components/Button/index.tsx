@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { classNames } from '../../functions'
 
 const SIZE = {
   xs: 'px-2 py-1 text-xs',
-  sm: 'px-4 py-2 text-base',
-  default: 'px-4 py-3 text-base',
-  lg: 'px-6 py-4 text-base',
-  none: 'p-0 text-base',
+  sm: 'px-4 py-2 text-sm',
+  default: 'px-4 py-3 text-sm',
+  lg: 'px-6 py-4 text-lg',
+  none: 'p-0 text-sm',
 }
 
 const FILLED = {
@@ -17,7 +17,7 @@ const FILLED = {
   gray: 'border rounded shadow-sm focus:ring-2 focus:ring-offset-2 bg-dark-700 bg-opacity-80 w-full text-primary border-dark-800 hover:bg-opacity-100 focus:ring-offset-dark-700 focus:ring-dark-800 disabled:bg-opacity-80',
   green: 'bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
   gradient:
-    'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100 disabled:bg-opacity-80',
+    'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-100 md:opacity-80 hover:opacity-100 disabled:bg-opacity-80',
 }
 
 const OUTLINED = {
@@ -25,10 +25,10 @@ const OUTLINED = {
   red: 'bg-red bg-opacity-20 outline-red rounded text-red hover:bg-opacity-40 disabled:bg-opacity-20',
   blue: 'bg-blue bg-opacity-20 outline-blue rounded text-blue hover:bg-opacity-40 disabled:bg-opacity-20',
   pink: 'bg-pink bg-opacity-20 outline-pink rounded text-pink hover:bg-opacity-40 disabled:bg-opacity-20',
-  gray: 'bg-dark-700 bg-opacity-20 outline-gray rounded text-gray hover:bg-opacity-40 disabled:bg-opacity-20',
+  gray: 'bg-dark-1000 border border-dark-700 bg-opacity-20 outline-gray rounded text-gray hover:bg-opacity-40 disabled:bg-opacity-20',
   green: 'bg-green bg-opacity-20 border border-green rounded text-green hover:bg-opacity-40 disabled:bg-opacity-20',
   gradient:
-    'border border-transparent border-gradient-r-blue-pink-dark-900 opacity-80 hover:opacity-100 disabled:bg-opacity-20',
+    'border border-transparent border-gradient-r-blue-pink-dark-1000 opacity-100 md:opacity-80 hover:opacity-100 disabled:bg-opacity-20',
 }
 
 const EMPTY = {
@@ -55,6 +55,8 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  startIcon?: ReactNode
+  endIcon?: ReactNode
   color?: ButtonColor
   size?: ButtonSize
   variant?: ButtonVariant
@@ -67,20 +69,24 @@ function Button({
   color = 'default',
   size = 'default',
   variant = 'filled',
+  startIcon = undefined,
+  endIcon = undefined,
   ...rest
 }: ButtonProps): JSX.Element {
   return (
     <button
       className={classNames(
-        VARIANT[variant][color],
+        rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
         variant !== 'empty' && SIZE[size],
-        'rounded disabled:cursor-not-allowed focus:outline-none',
+        'font-bold rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
         // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
         className
       )}
       {...rest}
     >
+      {startIcon && startIcon}
       {children}
+      {endIcon && endIcon}
     </button>
   )
 }

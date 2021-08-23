@@ -1,0 +1,27 @@
+import { FC } from 'react'
+import Typography from '../../../components/Typography'
+import { t } from '@lingui/macro'
+import ListPanel from '../../../components/ListPanel'
+import { useLingui } from '@lingui/react'
+import { useTridentPoolPageContext } from './context'
+
+const ClassicMarket: FC = () => {
+  const { i18n } = useLingui()
+  const { pool } = useTridentPoolPageContext()
+
+  return (
+    <div className="flex flex-col px-5 gap-5 mt-12">
+      <Typography variant="h3" className="text-high-emphesis" weight={700}>
+        {i18n._(t`Market`)}
+      </Typography>
+      <ListPanel
+        header={<ListPanel.Header title={i18n._(t`Assets`)} value="$356,227,073.45" subValue="1,837,294.56 SLP" />}
+        items={pool.amounts.map((amount, index) => (
+          <ListPanel.CurrencyAmountItem amount={amount} key={index} />
+        ))}
+      />
+    </div>
+  )
+}
+
+export default ClassicMarket

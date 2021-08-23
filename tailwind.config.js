@@ -13,6 +13,13 @@ module.exports = {
   darkMode: false,
   theme: {
     extend: {
+      backgroundImage: (theme) => ({
+        'bars-pattern': "url('/images/trident/bars-pattern.png')",
+        'binary-pattern': "url('/images/trident/binary-pattern.png')",
+        'bubble-pattern': "url('/images/trident/bubble-pattern.png')",
+        'dots-pattern': "url('/images/trident/dots-pattern.png')",
+        'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
+      }),
       linearBorderGradients: {
         directions: {
           tr: 'to top right',
@@ -44,6 +51,8 @@ module.exports = {
         yellow: '#ffd166',
 
         'opaque-blue': '#0993ec80',
+        'transparent-blue': '#0993EC1A',
+        'transparent-pink': '#FE5A751A',
         'opaque-pink': '#f338c380',
         'pink-red': '#FE5A75',
         'light-brown': '#FEC464',
