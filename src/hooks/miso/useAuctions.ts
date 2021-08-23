@@ -25,7 +25,7 @@ export const useListAuctions = () => {
       setAuctions(filtered)
     } catch (error) {
       setAuctions([])
-      throw error
+      console.error(error)
     }
   }, [misoHelperContract])
   useEffect(() => {

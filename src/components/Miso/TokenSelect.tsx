@@ -87,7 +87,7 @@ export const TokenSelect = React.memo(
 
     React.useEffect(() => {
       onTokenSelect(token)
-    }, [token])
+    }, [token, onTokenSelect])
 
     const selectToken = (token: Token) => {
       setSearchQuery(token.address)
@@ -133,13 +133,22 @@ export const TokenSelect = React.memo(
           <div className="absolute top-2 right-5">{token?.symbol}</div>
 
           {searchVisible && (
-            <div className="absolute w-full left-0 top-[48px] rounded z-10">
-              <div className="rounded-t bg-dark-900 px-3 py-2">{searchQuery ? 'Results' : 'Suggested'}</div>
-              <div className="rounded-b bg-dark-800 px-3 py-2">
-                {filteredSortedTokens.map((token: Token) => {
-                  return <TokenRow key={token.address} token={token} onClick={(token) => selectToken(token)} />
-                })}
+            <div className="absolute w-full left-0 top-[48px] z-10">
+              <div className="w-full rounded">
+                <div className="rounded-t bg-dark-900 px-3 py-2">{searchQuery ? 'Results' : 'Suggested'}</div>
+                <div className="rounded-b bg-dark-800 px-3 py-2 h-[232px] overflow-y-scroll">
+                  {filteredSortedTokens.map((token: Token) => {
+                    return <TokenRow key={token.address} token={token} onClick={(token) => selectToken(token)} />
+                  })}
+                </div>
               </div>
+              {/* <div className="flex flex-row bg-[#A755DD2B] mt-2 p-3 rounded">
+                <ExclamationCircleIcon className="w-5 h-5 mr-2 text-[#A755DD]" aria-hidden="true" />
+                <div>
+                  Enter the token you’re looking to create an auction for. Either search by name or symbol, or paste in the
+                  token’s contract address.
+                </div>
+              </div> */}
             </div>
           )}
         </div>
@@ -149,15 +158,6 @@ export const TokenSelect = React.memo(
             <div className="text-blue underline ml-2 cursor-pointer">Create it now!</div>
           </NavLink>
         </div>
-        {alertVisible && (
-          <div className="flex flex-row bg-[#A755DD2B] mt-2 p-3 rounded">
-            <ExclamationCircleIcon className="w-5 h-5 mr-2 text-[#A755DD]" aria-hidden="true" />
-            <div>
-              Enter the token you’re looking to create an auction for. Either search by name or symbol, or paste in the
-              token’s contract address.
-            </div>
-          </div>
-        )}
       </div>
     )
   }

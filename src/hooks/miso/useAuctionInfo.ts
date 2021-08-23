@@ -22,7 +22,7 @@ export const useMarketTemplate = (auctionAddress: string) => {
       setMarketTemplate(marketTemplate.toString())
     } catch (error) {
       setMarketTemplate('0')
-      throw error
+      console.error(error)
     }
   }, [auctionContract])
   useEffect(() => {
@@ -101,7 +101,7 @@ export const useAuctionInfo = (auctionAddress: string) => {
       setAuctionInfo(auctionInfo)
     } catch (error) {
       setAuctionInfo([])
-      throw error
+      console.error(error)
     }
   }, [marketTemplate, misoHelperContract])
 
@@ -132,7 +132,7 @@ export const useCommitments = (auctionAddress: string, decimals: string | Number
       setCommitments(filtered)
     } catch (error) {
       setCommitments([])
-      throw error
+      console.error(error)
     }
   }, [auctionContract])
 

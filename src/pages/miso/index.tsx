@@ -1,16 +1,16 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Head from 'next/head'
-import Lottie from 'lottie-react'
 
-import loadingCircle from '../../animation/loading-circle.json'
 import Image from '../../components/Image'
 import NavLink from '../../components/NavLink'
 import Layout from '../../layouts/Miso'
+
 import createTokenImage from '../../../public/images/miso/launchpad/miso-create-token.svg'
 import setupAuctionImage from '../../../public/images/miso/launchpad/miso-setup-auction.svg'
 import createPermissionListImage from '../../../public/images/miso/launchpad/miso-create-permission-list.svg'
 import setupLiquidityLauncherImage from '../../../public/images/miso/launchpad/miso-setup-liquidity-launcher.svg'
+import loadingIndicator from '../../../public/images/miso/launchpad/miso-loading.svg'
 
 function Launchpad() {
   const { i18n } = useLingui()
@@ -62,11 +62,17 @@ function Launchpad() {
         </div>
         <div className="mt-3 bg-[#161522] rounded">
           <div className="text-center py-10">
-            <div className="w-8 m-auto">
-              <Lottie animationData={loadingCircle} autoplay loop />
+            <div className="w-6 m-auto">
+              <Image src={loadingIndicator} layout="responsive" alt="loading..." />
             </div>
-            <div>{i18n._(t`No auctions found.`)}</div>
-            <div>{i18n._(t`Please start by setting up a new auction.`)}</div>
+            <div className="mt-2">{i18n._(t`No auctions found.`)}</div>
+            <div>
+              {i18n._(t`Please start by`)}
+              <NavLink href="/miso/create-auction">
+                <a className="text-blue cursor-pointer ml-1">{i18n._(t`setting up a new auction`)}</a>
+              </NavLink>
+              .
+            </div>
           </div>
         </div>
       </div>
@@ -79,11 +85,17 @@ function Launchpad() {
         </div>
         <div className="mt-3 bg-[#161522] rounded">
           <div className="text-center py-10">
-            <div className="w-8 m-auto">
-              <Lottie animationData={loadingCircle} autoplay loop />
+            <div className="w-6 m-auto">
+              <Image src={loadingIndicator} layout="responsive" alt="loading..." />
             </div>
-            <div>{i18n._(t`No tokens found.`)}</div>
-            <div>{i18n._(t`Please start by creating a new token.`)}</div>
+            <div className="mt-2">{i18n._(t`No tokens found.`)}</div>
+            <div>
+              {i18n._(t`Please start by`)}
+              <NavLink href="/miso/create-token">
+                <a className="text-blue cursor-pointer ml-1">{i18n._(t`creating a new token`)}</a>
+              </NavLink>
+              .
+            </div>
           </div>
         </div>
       </div>

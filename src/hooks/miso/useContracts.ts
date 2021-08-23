@@ -93,7 +93,7 @@ export const useAuctionContract = (auctionAddress: string, withSignerIfPossible 
       setContract(contract)
     } catch (error) {
       setContract(null)
-      throw error
+      console.error(error)
     }
   }, [marketTemplate])
   useEffect(() => {
@@ -121,7 +121,6 @@ export const getAuctionContract = async (
         contract = getDutchAuctionContract(auctionAddress, library, account, withSignerIfPossible)
         break
       case '3':
-        console.log('here')
         contract = getBatchAuctionContract(auctionAddress, library, account, withSignerIfPossible)
         break
       default:

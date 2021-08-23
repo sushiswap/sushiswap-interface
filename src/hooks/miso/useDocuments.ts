@@ -17,7 +17,7 @@ export const useListDocuments = (auctionAddress: string) => {
       setDocuments(documents)
     } catch (error) {
       setDocuments([])
-      throw error
+      console.error(error)
     }
   }, [misoHelperContract])
   useEffect(() => {
