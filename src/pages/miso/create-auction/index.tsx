@@ -1,5 +1,7 @@
 import { ExclamationCircleIcon as ExclamationCircleIconOutline } from '@heroicons/react/outline'
 import { ExclamationCircleIcon as ExclamationCircleIconSolid } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/sdk'
 import Head from 'next/head'
 import React from 'react'
@@ -7,14 +9,15 @@ import React from 'react'
 import Button from '../../../components/Button'
 import ExternalLink from '../../../components/ExternalLink'
 import Image from '../../../components/Image'
+import Typography from '../../../components/Typography'
 import { MISO_MARKET_ADDRESS } from '../../../constants/miso'
+import Divider from '../../../features/miso/Divider'
 import Input from '../../../features/miso/Input'
 import Radio from '../../../features/miso/Radio'
 import TokenSelect from '../../../features/miso/TokenSelect'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import Layout from '../../../layouts/Miso'
 import childrenWithProps from '../../../layouts/Miso/children'
-import Divider from '../../../layouts/Miso/divider'
 import { useTokenAllowance, useTokenBalance } from '../../../state/wallet/hooks'
 
 import dutchAuction from '../../../../public/images/miso/create-auction/miso-dutch-auction.svg'
@@ -23,11 +26,11 @@ import batchAuction from '../../../../public/images/miso/create-auction/miso-bat
 
 function CreateAuction({ pageIndex, movePage }) {
   const { account, chainId } = useActiveWeb3React()
+  const { i18n } = useLingui()
 
   const [auctionType, setAuctionType] = React.useState('Dutch Auction')
 
   const [token, selectToken] = React.useState<Token>(null)
-  const [tokenAllowance, setTokenAllowance] = React.useState('')
   const [tokenAmount, setTokenAmount] = React.useState('')
   const balance = useTokenBalance(account ?? undefined, token)
   const allowance = useTokenAllowance(account ?? undefined, MISO_MARKET_ADDRESS[chainId], token)
@@ -41,22 +44,24 @@ function CreateAuction({ pageIndex, movePage }) {
       <div>
         {pageIndex === 0 && (
           <div>
-            <div className="flex flex-row items-start bg-[#A755DD2B] mt-2 p-3 rounded">
-              <ExclamationCircleIconSolid className="w-12 mt-1 mr-2 text-[#A755DD]" aria-hidden="true" />
-              <div>
-                Choose which type of auction you’d like to hold. Each of the three types has their own unique
+            <div className="flex flex-row items-start bg-purple bg-opacity-20 mt-2 p-3 rounded">
+              <ExclamationCircleIconSolid className="w-12 mt-1 mr-2 text-purple" aria-hidden="true" />
+              <Typography>
+                {i18n._(t`Choose which type of auction you’d like to hold. Each of the three types has their own unique
                 characteristics, so choose the one you think is most appropriate for your project. Need more information
-                on what these mean, and which is best for you? Read our documentation
+                on what these mean, and which is best for you? Read our documentation`)}
                 <ExternalLink href="https://instantmiso.gitbook.io/miso/markets/markets">
-                  <span className="text-blue"> here</span>
+                  <Typography component="span" className="text-blue ml-1">
+                    {i18n._(t`here`)}
+                  </Typography>
                 </ExternalLink>
                 .
-              </div>
+              </Typography>
             </div>
             <div className="grid grid-cols-3 gap-5 mt-5 mb-16">
               <div>
                 <div className="pl-10">
-                  <Image src={dutchAuction} height={64} alt="Fixed" />
+                  <Image src={dutchAuction} height={64} alt="Dutch" />
                 </div>
                 <Radio
                   label="Dutch Auction"
@@ -64,15 +69,19 @@ function CreateAuction({ pageIndex, movePage }) {
                   onSelect={(label) => setAuctionType(label)}
                   className="my-5"
                 />
-                <div>The price is set at a higher value per token than expected and descends linearly over time.</div>
+                <div>
+                  {i18n._(
+                    t`The price is set at a higher value per token than expected and descends linearly over time.`
+                  )}
+                </div>
                 <div className="flex flex-row items-start mt-3">
                   <ExclamationCircleIconOutline className="w-6 mr-2 mt-1" aria-hidden="true" />
-                  <div>Great for a completely novel item’s true price discovery</div>
+                  <div>{i18n._(t`Great for a completely novel item’s true price discovery`)}</div>
                 </div>
               </div>
               <div>
                 <div className="pl-10">
-                  <Image src={crowdsale} height={64} alt="Mintable" />
+                  <Image src={crowdsale} height={64} alt="Crowdsale" />
                 </div>
                 <Radio
                   label="Crowdsale"
@@ -81,17 +90,17 @@ function CreateAuction({ pageIndex, movePage }) {
                   className="my-5"
                 />
                 <div>
-                  A set amount of tokens are divided amongst all the contributors to the Market event, weighted
-                  according to their contribution to the pool.
+                  {i18n._(t`A set amount of tokens are divided amongst all the contributors to the Market event, weighted
+                  according to their contribution to the pool.`)}
                 </div>
                 <div className="flex flex-row items-start mt-3">
                   <ExclamationCircleIconOutline className="w-6 mr-2 mt-1" aria-hidden="true" />
-                  <div>Great for projects looking to ensure that everyone taking part is rewarded</div>
+                  <div>{i18n._(t`Great for projects looking to ensure that everyone taking part is rewarded`)}</div>
                 </div>
               </div>
               <div>
                 <div className="pl-10">
-                  <Image src={batchAuction} height={64} alt="Sushi" />
+                  <Image src={batchAuction} height={64} alt="Batch" />
                 </div>
                 <Radio
                   label="Batch Auction"
@@ -99,20 +108,20 @@ function CreateAuction({ pageIndex, movePage }) {
                   onSelect={(label) => setAuctionType(label)}
                   className="my-5"
                 />
-                <div>A fixed price and a fixed set of tokens.</div>
+                <div>{i18n._(t`A fixed price and a fixed set of tokens.`)}</div>
                 <div className="flex flex-row items-start mt-3">
                   <ExclamationCircleIconOutline className="w-6 mr-2 mt-1" aria-hidden="true" />
-                  <div>Great when the token price is already known or has been decided on previously</div>
+                  <div>{i18n._(t`Great when the token price is already known or has been decided on previously`)}</div>
                 </div>
               </div>
             </div>
             <Divider />
             <div className="flex justify-between mt-5">
               <Button color="gray" disabled className="w-[133px]">
-                Previous
+                {i18n._(t`Previous`)}
               </Button>
               <Button color="blue" className="w-[133px]" onClick={() => movePage(pageIndex + 1)}>
-                Next
+                {i18n._(t`Next`)}
               </Button>
             </div>
           </div>
@@ -130,16 +139,21 @@ function CreateAuction({ pageIndex, movePage }) {
                 hint={
                   <div className="w-full flex flex-row justify-between pr-5">
                     <span>
-                      <b>Note</b>: Token amount must be lower or equal to allowance.
+                      <b>{i18n._(t`Note`)}</b>: {i18n._(t`Token amount must be lower or equal to allowance.`)}
                     </span>
                     <span>
-                      Your Token Allowance: {allowance ? allowance.toSignificant(4) : 'N/A'} {token?.symbol}
+                      {i18n._(t`Your Token Allowance`)}: {allowance ? allowance.toSignificant(4) : 'N/A'}{' '}
+                      {token?.symbol}
                     </span>
                   </div>
                 }
                 trailing={
                   <span>
-                    {token ? `Your Token Balance: ${balance ? balance.toSignificant(4) : 'N/A'} ${token?.symbol}` : ''}
+                    {token
+                      ? `${i18n._(t`Your Token Balance`)}: ${balance ? balance.toSignificant(4) : 'N/A'} ${
+                          token?.symbol
+                        }`
+                      : ''}
                   </span>
                 }
                 onUserInput={(input) => setTokenAmount(input)}
@@ -148,10 +162,10 @@ function CreateAuction({ pageIndex, movePage }) {
             <Divider />
             <div className="flex justify-between mt-5">
               <Button color="gray" className="w-[133px]" onClick={() => movePage(pageIndex - 1)}>
-                Previous
+                {i18n._(t`Previous`)}
               </Button>
               <Button color="blue" className="w-[133px]" onClick={() => movePage(pageIndex + 1)}>
-                Next
+                {i18n._(t`Next`)}
               </Button>
             </div>
           </div>

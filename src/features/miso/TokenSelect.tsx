@@ -1,4 +1,5 @@
-import { ExclamationCircleIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/sdk'
 import { TokenInfo } from '@uniswap/token-lists'
 import React from 'react'
@@ -8,6 +9,7 @@ import { useTokenComparator } from './sorting'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import Loader from '../../components/Loader'
 import NavLink from '../../components/NavLink'
+import Typography from '../../components/Typography'
 import { useSortedTokensByQuery } from '../../functions/filtering'
 import { isAddress } from '../../functions/validate'
 import { useListTokens } from '../../hooks/miso/useTokens'
@@ -62,11 +64,11 @@ function TokenRow({ token, onClick }: { token: Token; onClick: (selectedToken: T
       }}
     >
       <CurrencyLogo currency={token} size={32} />
-      <div className="ml-3 w-[115px] text-white">{token.symbol}</div>
-      <div>{token.address}</div>
-      <div className="flex-1 flex justify-end">
+      <Typography className="ml-3 w-[115px] text-white">{token.symbol}</Typography>
+      <Typography>{token.address}</Typography>
+      <Typography className="flex-1 flex justify-end">
         {balance ? balance?.toSignificant(4) : account ? <Loader stroke="white" /> : null}
-      </div>
+      </Typography>
     </div>
   )
 }
@@ -79,9 +81,10 @@ export const TokenSelect = React.memo(
   }: {
     onTokenSelect?: (token: Token) => void
   } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
+    const { i18n } = useLingui()
+
     const [searchQuery, setSearchQuery] = React.useState('')
     const [token, setToken] = React.useState<Token>(null)
-    const [alertVisible, showAlert] = React.useState(false)
     const [searchVisible, showSearch] = React.useState(false)
 
     React.useEffect(() => {
@@ -111,20 +114,18 @@ export const TokenSelect = React.memo(
 
     return (
       <div className="mb-3">
-        <div className="text-white text-xl">Auction Token*</div>
+        <Typography className="text-white text-xl">{i18n._(t`Auction Token`)}*</Typography>
         <div className="mt-2 py-2 px-5 rounded bg-dark-800 w-full relative" ref={node}>
           <input
             className="bg-transparent placeholder-low-emphesis w-full"
-            placeholder="Search by symbol or Enter the address of the token you would like to auction."
+            placeholder={i18n._(t`Search by symbol or Enter the address of the token you would like to auction.`)}
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value)
               setToken(null)
             }}
-            onBlur={() => showAlert(false)}
             onFocus={() => {
               showSearch(true)
-              showAlert(true)
             }}
             {...rest}
           />
@@ -134,29 +135,24 @@ export const TokenSelect = React.memo(
           {searchVisible && (
             <div className="absolute w-full left-0 top-[48px] z-10">
               <div className="w-full rounded">
-                <div className="rounded-t bg-dark-900 px-3 py-2">{searchQuery ? 'Results' : 'Suggested'}</div>
+                <Typography className="rounded-t bg-dark-900 px-3 py-2">
+                  {searchQuery ? i18n._(t`Results`) : i18n._(t`Suggested`)}
+                </Typography>
                 <div className="rounded-b bg-dark-800 px-3 py-2 h-[232px] overflow-y-scroll">
                   {filteredSortedTokens.map((token: Token) => {
                     return <TokenRow key={token.address} token={token} onClick={(token) => selectToken(token)} />
                   })}
                 </div>
               </div>
-              {/* <div className="flex flex-row bg-[#A755DD2B] mt-2 p-3 rounded">
-                <ExclamationCircleIcon className="w-5 h-5 mr-2 text-[#A755DD]" aria-hidden="true" />
-                <div>
-                  Enter the token you’re looking to create an auction for. Either search by name or symbol, or paste in the
-                  token’s contract address.
-                </div>
-              </div> */}
             </div>
           )}
         </div>
-        <div className="mt-2 flex flex-row items-center">
-          Don&apos;t have a token?
+        <Typography className="mt-2 flex flex-row items-center">
+          {i18n._(t`Don't have a token?`)}
           <NavLink href="/miso/create-token">
-            <div className="text-blue underline ml-2 cursor-pointer">Create it now!</div>
+            <Typography className="text-blue underline ml-2">{i18n._(t`Create it now!`)}</Typography>
           </NavLink>
-        </div>
+        </Typography>
       </div>
     )
   }

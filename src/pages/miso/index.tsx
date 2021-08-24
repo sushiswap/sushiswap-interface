@@ -1,9 +1,10 @@
 import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui, Trans } from '@lingui/react'
 import Head from 'next/head'
 
 import Image from '../../components/Image'
 import NavLink from '../../components/NavLink'
+import Typography from '../../components/Typography'
 import Layout from '../../layouts/Miso'
 
 import createTokenImage from '../../../public/images/miso/launchpad/miso-create-token.svg'
@@ -21,7 +22,9 @@ function Launchpad() {
         <meta key="description" name="description" content="MISO by Sushi, an initial Sushi offering on steroids ..." />
       </Head>
       <div>
-        <div className="font-bold text-lg">{i18n._(t`Factory Options`)}</div>
+        <Typography variant="lg" weight={700}>
+          {i18n._(t`Factory Options`)}
+        </Typography>
         <div className="mt-3 grid grid-cols-4 gap-5">
           <div className="cursor-pointer">
             <NavLink href="/miso/create-token">
@@ -54,22 +57,26 @@ function Launchpad() {
         </div>
       </div>
       <div className="mt-5">
-        <div className="flex justify-between">
-          <span className="font-bold text-lg">{i18n._(t`Your Auctions:`)}</span>
+        <div className="flex items-end justify-between">
+          <Typography variant="lg" weight={700}>
+            {i18n._(t`Your Auctions:`)}
+          </Typography>
           <NavLink href="/miso/create-auction">
-            <a className="text-blue text-sm cursor-pointer">{i18n._(t`Set Up Auction`)}</a>
+            <Typography variant="sm" className="text-blue">
+              {i18n._(t`Set Up Auction`)}
+            </Typography>
           </NavLink>
         </div>
-        <div className="mt-3 bg-[#161522] rounded">
+        <div className="mt-3 bg-dark-900 rounded">
           <div className="text-center py-10">
             <div className="w-6 m-auto">
               <Image src={loadingIndicator} layout="responsive" alt="loading..." />
             </div>
-            <div className="mt-2">{i18n._(t`No auctions found.`)}</div>
-            <div>
-              {i18n._(t`Please start by`)}
+            <Typography className="mt-2">{i18n._(t`No auctions found.`)}</Typography>
+            <div className="flex flex-row justify-center">
+              <Typography>{i18n._(t`Please start by`)}</Typography>
               <NavLink href="/miso/create-auction">
-                <a className="text-blue cursor-pointer ml-1">{i18n._(t`setting up a new auction`)}</a>
+                <Typography className="text-blue ml-1">{i18n._(t`setting up a new auction`)}</Typography>
               </NavLink>
               .
             </div>
@@ -77,22 +84,26 @@ function Launchpad() {
         </div>
       </div>
       <div className="mt-5">
-        <div className="flex justify-between">
-          <span className="font-bold text-lg">{i18n._(t`Your Tokens:`)}</span>
+        <div className="flex items-end justify-between">
+          <Typography variant="lg" weight={700}>
+            {i18n._(t`Your Tokens:`)}
+          </Typography>
           <NavLink href="/miso/create-token">
-            <a className="text-blue text-sm cursor-pointer">{i18n._(t`Create Token`)}</a>
+            <Typography variant="sm" className="text-blue">
+              {i18n._(t`Create Token`)}
+            </Typography>
           </NavLink>
         </div>
-        <div className="mt-3 bg-[#161522] rounded">
+        <div className="mt-3 bg-dark-900 rounded">
           <div className="text-center py-10">
             <div className="w-6 m-auto">
               <Image src={loadingIndicator} layout="responsive" alt="loading..." />
             </div>
-            <div className="mt-2">{i18n._(t`No tokens found.`)}</div>
-            <div>
-              {i18n._(t`Please start by`)}
+            <Typography className="mt-2">{i18n._(t`No tokens found.`)}</Typography>
+            <div className="flex flex-row justify-center">
+              <Typography>{i18n._(t`Please start by`)}</Typography>
               <NavLink href="/miso/create-token">
-                <a className="text-blue cursor-pointer ml-1">{i18n._(t`creating a new token`)}</a>
+                <Typography className="text-blue ml-1">{i18n._(t`creating a new token`)}</Typography>
               </NavLink>
               .
             </div>
@@ -104,13 +115,16 @@ function Launchpad() {
 }
 
 const LaunchpadLayout = ({ children }) => {
+  const { i18n } = useLingui()
+
   return (
     <Layout
       navs={[{ link: '/miso', name: 'MISO Launchpad' }]}
       title={{
-        heading: 'MISO Launchpad',
-        content:
-          'Get Started by importing an exisiting pool or create a new pool. You can find the TVLs and your pool shares of your liquidity pools as well as adding and removing liquidity.',
+        heading: i18n._(t`MISO Launchpad`),
+        content: i18n._(
+          t`Get Started by importing an exisiting pool or create a new pool. You can find the TVLs and your pool shares of your liquidity pools as well as adding and removing liquidity.`
+        ),
       }}
     >
       {children}

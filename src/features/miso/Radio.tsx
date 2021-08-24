@@ -1,5 +1,8 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import React from 'react'
 
+import Typography from '../../components/Typography'
 import { classNames } from '../../functions/styling'
 
 export const Radio = React.memo(
@@ -14,6 +17,8 @@ export const Radio = React.memo(
     selected: boolean
     onSelect?: (string) => void
   } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'as'>) => {
+    const { i18n } = useLingui()
+
     return (
       <div
         className={classNames('flex flex-row items-center cursor-pointer', className)}
@@ -21,11 +26,11 @@ export const Radio = React.memo(
         onClick={() => onSelect(label)}
       >
         <div className="border-2 border-white rounded-full w-[18px] h-[18px] mr-2">
-          {selected && (
-            <div className="bg-gradient-to-r from-[#0993EC] to-[#F338C3] rounded-full w-[12px] h-[12px] m-[1px]" />
-          )}
+          {selected && <div className="bg-gradient-to-r from-blue to-pink rounded-full w-[12px] h-[12px] m-[1px]" />}
         </div>
-        <div className="text-lg text-white">{label}</div>
+        <Typography variant="lg" className="text-white">
+          {i18n._(t`${label}`)}
+        </Typography>
       </div>
     )
   }

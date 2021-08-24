@@ -1,6 +1,7 @@
 import { CheckIcon } from '@heroicons/react/solid'
 import React from 'react'
 
+import Typography from '../../components/Typography'
 import { classNames } from '../../functions/styling'
 
 export default function SplitPane({
@@ -36,8 +37,10 @@ export default function SplitPane({
                         </span>
                       </span>
                       <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-                        <span className="text-xs font-semibold tracking-wide uppercase text-white">{step.heading}</span>
-                        <span className="text-sm font-medium">{step.content}</span>
+                        <Typography variant="xs" className="font-semibold tracking-wide uppercase">
+                          {step.heading}
+                        </Typography>
+                        <Typography variant="sm">{step.content}</Typography>
                       </span>
                     </span>
                   </a>
@@ -54,8 +57,10 @@ export default function SplitPane({
                         </span>
                       </span>
                       <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-                        <span className="text-xs font-semibold text-white tracking-wide uppercase">{step.heading}</span>
-                        <span className="text-sm font-medium">{step.content}</span>
+                        <Typography variant="xs" className="font-semibold tracking-wide uppercase">
+                          {step.heading}
+                        </Typography>
+                        <Typography variant="sm">{step.content}</Typography>
                       </span>
                     </span>
                   </div>
@@ -72,10 +77,12 @@ export default function SplitPane({
                         </span>
                       </span>
                       <span className="mt-0.5 ml-4 min-w-0 flex flex-col">
-                        <span className="text-xs font-semibold text-gray-500 tracking-wide uppercase">
+                        <Typography variant="xs" className="font-semibold text-gray-500 tracking-wide uppercase">
                           {step.heading}
-                        </span>
-                        <span className="text-sm font-medium text-gray-500">{step.content}</span>
+                        </Typography>
+                        <Typography variant="sm" className="text-gray-500">
+                          {step.content}
+                        </Typography>
                       </span>
                     </span>
                   </div>

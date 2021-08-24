@@ -1,4 +1,6 @@
 import { DuplicateIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import Lottie from 'lottie-react'
 import Head from 'next/head'
 import React from 'react'
@@ -7,6 +9,7 @@ import loadingCircle from '../../../animation/loading-circle.json'
 import Button from '../../../components/Button'
 import Image from '../../../components/Image'
 import Web3Connect from '../../../components/Web3Connect'
+import Divider from '../../../features/miso/Divider'
 import Input from '../../../features/miso/Input'
 import Radio from '../../../features/miso/Radio'
 import { getExplorerLink } from '../../../functions/explorer'
@@ -15,7 +18,6 @@ import useCopyClipboard from '../../../hooks/useCopyClipboard'
 import useTokens from '../../../hooks/miso/useTokens'
 import Layout from '../../../layouts/Miso'
 import childrenWithProps from '../../../layouts/Miso/children'
-import Divider from '../../../layouts/Miso/divider'
 
 import fixedToken from '../../../../public/images/miso/create-token/miso-fixed-token.svg'
 import mintableToken from '../../../../public/images/miso/create-token/miso-mintable-token.svg'
@@ -23,17 +25,21 @@ import sushiToken from '../../../../public/images/miso/create-token/miso-sushi-t
 import ExternalLink from '../../../components/ExternalLink'
 import { shortenAddress } from '../../../functions'
 import NavLink from '../../../components/NavLink'
+import Typography from '../../../components/Typography'
 
 function TokenInfo({ label, value }) {
+  const { i18n } = useLingui()
   return (
     <div className="mr-12">
-      <div>{label}</div>
-      <div className="mt-2 py-2 px-5 rounded bg-dark-800">{value}</div>
+      <Typography>{i18n._(t`${label}`)}</Typography>
+      <Typography className="mt-2 py-2 px-5 rounded bg-dark-800">{value}</Typography>
     </div>
   )
 }
 
 function CreateToken({ pageIndex, movePage }) {
+  const { i18n } = useLingui()
+
   const [tokenType, setTokenType] = React.useState('Fixed')
 
   const [tokenName, setTokenName] = React.useState('')
@@ -113,10 +119,11 @@ function CreateToken({ pageIndex, movePage }) {
                   onSelect={(label) => setTokenType(label)}
                   className="my-5"
                 />
-                <div>
-                  A &quot;standard&quot; ERC20 token with a fixed supply and protections against further token minting
-                  or burning.
-                </div>
+                <Typography>
+                  {i18n._(
+                    t`A "standard" ERC20 token with a fixed supply and protections against further token minting or burning.`
+                  )}
+                </Typography>
               </div>
               <div>
                 <div className="pl-10">
@@ -128,10 +135,11 @@ function CreateToken({ pageIndex, movePage }) {
                   onSelect={(label) => setTokenType(label)}
                   className="my-5"
                 />
-                <div>
-                  An ERC20 token with a function allowing further minting at a later date. Creators will have to assign
-                  an owner for the minting controls.
-                </div>
+                <Typography>
+                  {i18n._(
+                    t`An ERC20 token with a function allowing further minting at a later date. Creators will have to assign an owner for the minting controls.`
+                  )}
+                </Typography>
               </div>
               <div>
                 <div className="pl-10">
@@ -143,19 +151,20 @@ function CreateToken({ pageIndex, movePage }) {
                   onSelect={(label) => setTokenType(label)}
                   className="my-5"
                 />
-                <div>
-                  Sushi tokens function similar to mintable tokens but with additional capabilities built into the
-                  token. Creators will have to assign an owner address for token functions during minting.
-                </div>
+                <Typography>
+                  {i18n._(
+                    t`Sushi tokens function similar to mintable tokens but with additional capabilities built into the token. Creators will have to assign an owner address for token functions during minting.`
+                  )}
+                </Typography>
               </div>
             </div>
             <Divider />
             <div className="flex justify-between mt-5">
               <Button color="gray" disabled className="w-[133px]">
-                Previous
+                {i18n._(t`Previous`)}
               </Button>
               <Button color="blue" className="w-[133px]" onClick={() => movePage(pageIndex + 1)}>
-                Next
+                {i18n._(t`Next`)}
               </Button>
             </div>
           </div>
@@ -189,7 +198,7 @@ function CreateToken({ pageIndex, movePage }) {
             <Divider />
             <div className="flex justify-between mt-5">
               <Button color="gray" className="w-[133px]" onClick={() => movePage(pageIndex - 1)}>
-                Previous
+                {i18n._(t`Previous`)}
               </Button>
               <Button
                 color="blue"
@@ -197,7 +206,7 @@ function CreateToken({ pageIndex, movePage }) {
                 onClick={() => movePage(pageIndex + 1)}
                 disabled={checkTokenInfo()}
               >
-                Next
+                {i18n._(t`Next`)}
               </Button>
             </div>
           </div>
@@ -206,7 +215,9 @@ function CreateToken({ pageIndex, movePage }) {
           <>
             {txState < 2 && (
               <div>
-                <div className="text-2xl text-white font-bold mb-5">Confirm Your Token Setup</div>
+                <Typography variant="h3" weight={700} className="text-white mb-5">
+                  {i18n._(t`Confirm Your Token Setup`)}
+                </Typography>
                 <div className="mb-16 grid grid-cols-2 gap-5">
                   <TokenInfo label="Token Type*" value={tokenType} />
                   <TokenInfo label="Initiali Supply*" value={tokenInitialSupply} />
@@ -221,7 +232,7 @@ function CreateToken({ pageIndex, movePage }) {
                     disabled={txState === 1}
                     onClick={() => movePage(pageIndex - 1)}
                   >
-                    Previous
+                    {i18n._(t`Previous`)}
                   </Button>
                   {account ? (
                     <Button
@@ -231,7 +242,7 @@ function CreateToken({ pageIndex, movePage }) {
                       disabled={txState === 1}
                     >
                       {txState === 1 && <Lottie animationData={loadingCircle} autoplay loop className="mr-2 w-5" />}
-                      Deploy
+                      {i18n._(t`Deploy`)}
                     </Button>
                   ) : (
                     <Web3Connect size="lg" color="blue" className="w-[200px]" />
@@ -241,28 +252,32 @@ function CreateToken({ pageIndex, movePage }) {
             )}
             {txState === 2 && (
               <div>
-                <div className="text-2xl text-white font-bold mb-3">Your Transaction is submitted...</div>
+                <Typography variant="h3" weight={700} className="text-white mb-3">
+                  {i18n._(t`Your Transaction is submitted...`)}
+                </Typography>
                 <div className="mb-12">
                   <ExternalLink
                     className="underline"
                     color="blue"
                     href={getExplorerLink(chainId, tx.hash, 'transaction')}
                   >
-                    View on Explorer
+                    {i18n._(t`View on Explorer`)}
                   </ExternalLink>
                 </div>
-                <div className="text-xl mb-3">Token Contract Address</div>
-                <div className="mb-5 w-[400px]">
-                  You can view the token contract address here once the transaction is completed
-                </div>
+                <Typography variant="lg" weight={700} className="mb-3">
+                  {i18n._(t`Token Contract Address`)}
+                </Typography>
+                <Typography className="mb-5 mqsd-w-[400px]">
+                  {i18n._(t`You can view the token contract address here once the transaction is completed`)}
+                </Typography>
                 <div className="flex flex-row gap-5">
                   <Button color="gradient" className="w-[200px]" disabled>
-                    Create Auction
+                    {i18n._(t`Create Auction`)}
                   </Button>
                   <NavLink href="/miso">
                     <div>
                       <Button variant="outlined" className="w-[200px]" color="gradient">
-                        Go To Marketplace
+                        {i18n._(t`Go To Marketplace`)}
                       </Button>
                     </div>
                   </NavLink>
@@ -271,17 +286,19 @@ function CreateToken({ pageIndex, movePage }) {
             )}
             {txState === 3 && (
               <div>
-                <div className="text-2xl text-white font-bold mb-3">Transaction Completed!</div>
+                <div className="text-2xl text-white font-bold mb-3">{i18n._(t`Transaction Completed!`)}</div>
                 <div className="mb-12">
                   <ExternalLink
                     className="underline"
                     color="blue"
                     href={getExplorerLink(chainId, tx.hash, 'transaction')}
                   >
-                    View on Explorer
+                    {i18n._(t`View on Explorer`)}
                   </ExternalLink>
                 </div>
-                <div className="text-xl mb-3">Token Contract Address</div>
+                <Typography variant="lg" weight={700} className="mb-3">
+                  {i18n._(t`Token Contract Address`)}
+                </Typography>
                 <div
                   className="mb-5 w-[400px] text-blue flex flex-row items-center cursor-pointer"
                   onClick={() => setCopied(receipt.to)}
@@ -293,14 +310,14 @@ function CreateToken({ pageIndex, movePage }) {
                   <NavLink href="/miso/create-auction">
                     <div>
                       <Button color="gradient" className="w-[200px]">
-                        Create Auction
+                        {i18n._(t`Create Auction`)}
                       </Button>
                     </div>
                   </NavLink>
                   <NavLink href="/miso">
                     <div>
                       <Button variant="outlined" className="w-[200px]" color="gradient">
-                        Go To Marketplace
+                        {i18n._(t`Go To Marketplace`)}
                       </Button>
                     </div>
                   </NavLink>
@@ -309,28 +326,28 @@ function CreateToken({ pageIndex, movePage }) {
             )}
             {txState === 4 && (
               <div>
-                <div className="text-2xl text-white font-bold mb-3">Transaction Failed!</div>
+                <div className="text-2xl text-white font-bold mb-3">{i18n._(t`Transaction Failed!`)}</div>
                 <div className="mb-12">
                   <ExternalLink
                     className="underline"
                     color="blue"
                     href={getExplorerLink(chainId, tx.hash, 'transaction')}
                   >
-                    View on Explorer
+                    {i18n._(t`View on Explorer`)}
                   </ExternalLink>
                 </div>
                 <div className="flex flex-row gap-5">
                   <NavLink href="/miso/create-auction">
                     <div>
                       <Button color="gradient" className="w-[200px]">
-                        Create Auction
+                        {i18n._(t`Create Auction`)}
                       </Button>
                     </div>
                   </NavLink>
                   <NavLink href="/miso">
                     <div>
                       <Button variant="outlined" className="w-[200px]" color="gradient">
-                        Go To Marketplace
+                        {i18n._(t`Go To Marketplace`)}
                       </Button>
                     </div>
                   </NavLink>
@@ -345,22 +362,23 @@ function CreateToken({ pageIndex, movePage }) {
 }
 
 const CreateTokenLayout = ({ children }) => {
+  const { i18n } = useLingui()
   const [pageIndex, movePage] = React.useState(0)
 
   return (
     <Layout
       navs={[
-        { link: '/miso', name: 'MISO Launchpad' },
-        { link: '/miso/create-token', name: 'Create Token' },
+        { link: '/miso', name: i18n._(t`MISO Launchpad`) },
+        { link: '/miso/create-token', name: i18n._(t`Create Token`) },
       ]}
       title={{
-        heading: 'Create Token',
+        heading: i18n._(t`Create Token`),
         content: 'Follow the instructions below, and deploy your token with MISO.',
       }}
       tabs={[
-        { heading: 'SELECT TOKEN TYPE', content: 'Decide on the type of token' },
-        { heading: 'SET PARAMETERS', content: 'Set up required token parameters' },
-        { heading: 'REVIEW', content: 'Deploy your token' },
+        { heading: i18n._(t`SELECT TOKEN TYPE`), content: i18n._(t`Decide on the type of token`) },
+        { heading: i18n._(t`SET PARAMETERS`), content: i18n._(t`Set up required token parameters`) },
+        { heading: i18n._(t`REVIEW`), content: i18n._(t`Deploy your token`) },
       ]}
       active={pageIndex}
     >

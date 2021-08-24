@@ -1,6 +1,9 @@
-import React from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import React from 'react'
 
+import Typography from '../../components/Typography'
 import { escapeRegExp } from '../../functions'
 import { classNames } from '../../functions/styling'
 
@@ -29,6 +32,8 @@ export const Input = React.memo(
     trailing?: any
     error?: boolean
   } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
+    const { i18n } = useLingui()
+
     const enforcer = (nextUserInput: string) => {
       if (type === 'digit' && !digitRegex.test(escapeRegExp(nextUserInput))) return
       onUserInput(nextUserInput)
@@ -37,12 +42,16 @@ export const Input = React.memo(
     const [alertVisible, showAlert] = React.useState(false)
 
     return (
-      <div className="mb-3">
-        <div className="text-white text-xl">{label}</div>
-        <div className="mt-2 py-2 px-5 rounded bg-dark-800 w-full relative">
+      <div className="mb-5">
+        <div className="text-white text-xl">{i18n._(t`${label}`)}</div>
+        <div className="mt-3 py-2 px-5 rounded bg-dark-800 w-full relative">
           <input
-            className={classNames(error ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis w-full')}
-            placeholder={placeholder}
+            className={classNames(
+              error ? 'text-red' : '',
+              value ? 'text-white' : '',
+              'bg-transparent placeholder-low-emphesis w-full'
+            )}
+            placeholder={i18n._(t`${placeholder}`)}
             value={value}
             onChange={(e) => enforcer(e.target.value)}
             color={error ? 'red' : ''}
@@ -56,9 +65,9 @@ export const Input = React.memo(
         {hint && <div className="mt-2 flex flex-row items-center">{hint}</div>}
 
         {alertVisible && (
-          <div className="flex flex-row bg-[#A755DD2B] mt-2 p-3 rounded">
-            <ExclamationCircleIcon className="w-5 h-5 mr-2 text-[#A755DD]" aria-hidden="true" />
-            <div>{alert}</div>
+          <div className="flex flex-row items-center bg-purple bg-opacity-20 bg- mt-2 p-3 rounded">
+            <ExclamationCircleIcon className="w-5 h-5 mr-2 text-purple" aria-hidden="true" />
+            <Typography>{i18n._(t`${alert}`)}</Typography>
           </div>
         )}
       </div>
