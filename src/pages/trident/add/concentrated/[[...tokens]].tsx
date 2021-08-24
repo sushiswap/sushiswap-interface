@@ -10,19 +10,21 @@ import AddTransactionReviewModal from '../../../../features/trident/add/AddTrans
 import React, { useState } from 'react'
 import Chart from '../../../../features/trident/add/concentrated/Chart'
 import PriceRange from '../../../../features/trident/add/concentrated/PriceRange'
-import TridentAddConcentratedContextProvider, {
-  useTridentAddConcentratedContext,
-  useTridentAddConcentratedState,
-} from '../../../../features/trident/add/concentrated/context'
+import TridentAddConcentratedContextProvider from '../../../../features/trident/add/concentrated/context'
 import RangeBlocks from '../../../../features/trident/add/concentrated/RangeBlocks'
 import StandardMode from '../../../../features/trident/add/concentrated/StandardMode'
 import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
+import { useTridentContext, useTridentState } from '../../../../features/trident/context'
+import {
+  ConcentratedPoolContext,
+  ConcentratedPoolState,
+} from '../../../../features/trident/add/concentrated/context/types'
 
 const AddConcentrated = () => {
   const { i18n } = useLingui()
-  const context = useTridentAddConcentratedContext()
-  const state = useTridentAddConcentratedState()
+  const { pool } = useTridentContext<ConcentratedPoolContext>()
+  const { minPrice, maxPrice } = useTridentState<ConcentratedPoolState>()
   const [next, setNext] = useState(false)
 
   return (
@@ -36,7 +38,7 @@ const AddConcentrated = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(context.pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
         </div>
         <div className="flex flex-col gap-2">
@@ -57,7 +59,7 @@ const AddConcentrated = () => {
           <div className="flex flex-col px-5 mt-5">
             <Button
               color="gradient"
-              disabled={!state.minPrice || !state.maxPrice || state.minPrice >= state.maxPrice}
+              disabled={!minPrice || !maxPrice || minPrice >= maxPrice}
               onClick={() => setNext(true)}
             >
               Next
@@ -66,11 +68,11 @@ const AddConcentrated = () => {
         </>
       ) : (
         <div className="flex flex-col gap-7">
-          <FixedRatioHeader context={context} state={state} margin={false} />
+          <FixedRatioHeader margin={false} />
           <RangeBlocks />
           <StandardMode />
-          <AddTransactionReviewModal context={context} state={state} />
-          <DepositSubmittedModal txHash={state.txHash} />
+          <AddTransactionReviewModal />
+          <DepositSubmittedModal />
         </div>
       )}
     </div>

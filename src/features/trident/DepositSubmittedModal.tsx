@@ -1,4 +1,3 @@
-import { FC } from 'react'
 import Typography from '../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
@@ -7,14 +6,13 @@ import { useActiveWeb3React } from '../../hooks'
 import Button from '../../components/Button'
 import Link from 'next/link'
 import HeadlessUiModal from '../../components/Modal/HeadlessUIModal'
+import { useTridentState } from './context'
+import { PoolContextType, PoolStateType } from './types'
 
-interface DepositSubmittedModalProps {
-  txHash: string
-}
-
-const DepositSubmittedModal: FC<DepositSubmittedModalProps> = ({ txHash }) => {
+const DepositSubmittedModal = <S extends PoolStateType, C extends PoolContextType>() => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
+  const { txHash } = useTridentState<S>()
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => {}}>

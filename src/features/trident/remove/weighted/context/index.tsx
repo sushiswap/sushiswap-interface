@@ -5,7 +5,14 @@ import { Percent } from '@sushiswap/sdk'
 import { withTridentPool, WithTridentPool } from '../../../../../hooks/useTridentPools'
 import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
-import { handleInput, handlePercentageAmount, selectOutputToken, showReview } from '../../../context/actions'
+import {
+  handleInput,
+  handlePercentageAmount,
+  selectOutputToken,
+  setLiquidityMode,
+  showReview,
+} from '../../../context/actions'
+import TridentFacadeProvider from '../../../context'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -30,6 +37,7 @@ export const TridentRemoveWeightedContext = createContext<WeightedPoolContext>({
   handleInput: () => null,
   showReview: () => null,
   dispatch: () => null,
+  setLiquidityMode: () => null,
 })
 
 const TridentRemoveWeightedContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
@@ -79,12 +87,13 @@ const TridentRemoveWeightedContextProvider: FC<WithTridentPool> = ({ children, p
           handleInput: handleInput(dispatch),
           handlePercentageAmount: handlePercentageAmount(dispatch),
           showReview: showReview(dispatch),
+          setLiquidityMode: setLiquidityMode(dispatch),
           dispatch,
         }),
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}
     >
-      {children}
+      <TridentFacadeProvider pool={pool}>{children}</TridentFacadeProvider>
     </TridentRemoveWeightedContext.Provider>
   )
 }

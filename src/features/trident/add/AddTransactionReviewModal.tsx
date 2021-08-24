@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FC } from 'react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -10,12 +10,12 @@ import Divider from '../../../components/Divider'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
 import { LiquidityMode, PoolContextType, PoolStateType } from '../types'
-import { useTridentAddContext, useTridentAddState } from '../context'
+import { useTridentContext, useTridentState } from '../context'
 
 const AddTransactionReviewModal = <S extends PoolStateType, C extends PoolContextType>() => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview } = useTridentAddState<S>()
-  const { pool, parsedInputAmounts, execute, parsedOutputAmounts, showReview } = useTridentAddContext<C>()
+  const { liquidityMode, showZapReview } = useTridentState<S>()
+  const { pool, parsedInputAmounts, execute, parsedOutputAmounts, showReview } = useTridentContext<C>()
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context

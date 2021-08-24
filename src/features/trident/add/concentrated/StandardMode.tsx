@@ -5,12 +5,12 @@ import TransactionDetails from '../TransactionDetails'
 import { ZERO } from '@sushiswap/sdk'
 import useSufficientBalances from '../../../../hooks/useSufficientBalances'
 import { ConcentratedPoolContext, ConcentratedPoolState } from './context/types'
-import { useTridentAddContext, useTridentAddState } from '../../context'
+import { useTridentContext, useTridentState } from '../../context'
 
 const StandardMode: FC = () => {
-  const { inputAmounts, spendFromWallet } = useTridentAddState<ConcentratedPoolState>()
+  const { inputAmounts, spendFromWallet } = useTridentState<ConcentratedPoolState>()
   const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } =
-    useTridentAddContext<ConcentratedPoolContext>()
+    useTridentContext<ConcentratedPoolContext>()
   const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
 
   // TODO

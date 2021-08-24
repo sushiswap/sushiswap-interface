@@ -23,6 +23,7 @@ const initialState: WeightedPoolState = {
   balancedMode: false,
   spendFromWallet: true,
   txHash: null,
+  fixedRatio: false,
 }
 
 export const TridentAddWeightedContext = createContext<WeightedPoolContext>({

@@ -4,12 +4,12 @@ import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
 import { Disclosure } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
-import { useTridentAddContext } from '../../context'
+import { useTridentContext } from '../../context'
 import { ConcentratedPoolContext } from './context/types'
 
 const Chart: FC = () => {
   const { i18n } = useLingui()
-  const { pool } = useTridentAddContext<ConcentratedPoolContext>()
+  const { pool } = useTridentContext<ConcentratedPoolContext>()
 
   return (
     <Disclosure>

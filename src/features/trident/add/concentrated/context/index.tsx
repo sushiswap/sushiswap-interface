@@ -2,10 +2,11 @@ import React, { createContext, FC, useCallback, useContext, useMemo, useReducer 
 import { WithTridentPool, withTridentPool } from '../../../../../hooks/useTridentPools'
 import { ConcentratedPoolContext, ConcentratedPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
-import { PoolType, Reducer } from '../../../types'
+import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import {
   handleInput,
+  setLiquidityMode,
   setMaxPrice,
   setMinPrice,
   setSpendFromWallet,
@@ -25,6 +26,7 @@ const initialState: ConcentratedPoolState = {
   balancedMode: false,
   spendFromWallet: true,
   txHash: null,
+  liquidityMode: LiquidityMode.STANDARD,
 }
 
 export const TridentAddConcentratedContext = createContext<ConcentratedPoolContext>({
@@ -40,6 +42,7 @@ export const TridentAddConcentratedContext = createContext<ConcentratedPoolConte
   setMinPrice: () => null,
   setMaxPrice: () => null,
   setSpendFromWallet: () => null,
+  setLiquidityMode: () => null,
 })
 
 const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
@@ -90,6 +93,7 @@ const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, 
           setMinPrice: setMinPrice(dispatch),
           setMaxPrice: setMaxPrice(dispatch),
           setSpendFromWallet: setSpendFromWallet(dispatch),
+          setLiquidityMode: setLiquidityMode(dispatch),
         }),
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}

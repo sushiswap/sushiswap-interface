@@ -11,18 +11,17 @@ import HybridStandardMode from '../../../../features/trident/add/hybrid/HybridSt
 import AddTransactionReviewModal from '../../../../features/trident/add/AddTransactionReviewModal'
 import React from 'react'
 import SettingsTab from '../../../../components/Settings'
-import TridentAddHybridContextProvider, {
-  useTridentAddHybridContext,
-  useTridentAddHybridState,
-} from '../../../../features/trident/add/hybrid/context'
+import TridentAddHybridContextProvider from '../../../../features/trident/add/hybrid/context'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
+import { useTridentContext, useTridentState } from '../../../../features/trident/context'
+import { HybridPoolContext, HybridPoolState } from '../../../../features/trident/add/hybrid/context/types'
 
 const AddHybrid = () => {
   const { i18n } = useLingui()
-  const state = useTridentAddHybridState()
-  const context = useTridentAddHybridContext()
+  const { liquidityMode } = useTridentState<HybridPoolState>()
+  const { pool } = useTridentContext<HybridPoolContext>()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -35,9 +34,9 @@ const AddHybrid = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(context.pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
-          {state.liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
+          {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">
@@ -54,15 +53,15 @@ const AddHybrid = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle value={state.liquidityMode} onChange={context.setLiquidityMode} />
+      <ModeToggle />
 
       <div className="flex flex-col mt-6">
-        {state.liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
-        {state.liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
+        {liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
+        {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
       </div>
 
-      <AddTransactionReviewModal context={context} state={state} />
-      <DepositSubmittedModal txHash={state.txHash} />
+      <AddTransactionReviewModal />
+      <DepositSubmittedModal />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Token } from '@sushiswap/sdk'
 import ListPanel from '../../../../components/ListPanel'
-import NumericalInput from '../../../../components/NumericalInput'
+import PercentInput from '../../../../components/Input/Percent'
 import Button from '../../../../components/Button'
 import ToggleButtonGroup from '../../../../components/ToggleButton'
 import AssetSelect from '../../../../components/AssetSelect'
@@ -31,7 +31,7 @@ const ClassicUnzapMode: FC = () => {
     <div className="px-5 mt-5">
       <div className="flex flex-col gap-8">
         <AssetSelect value={tokens[outputTokenAddress]} onSelect={(token: Token) => selectOutputToken(token.address)} />
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
           </Typography>
@@ -42,14 +42,11 @@ const ClassicUnzapMode: FC = () => {
             ))}
             footer={
               <div className="flex justify-between items-center px-4 py-5 gap-3">
-                <NumericalInput
-                  content="%"
+                <PercentInput
                   value={percentageAmount}
                   onUserInput={(value: string) => handlePercentageAmount(value)}
                   placeholder="0%"
                   className="bg-transparent text-3xl leading-7 tracking-[-0.01em] flex-grow after:content-['%']"
-                  max={100}
-                  min={0}
                 />
                 <Typography variant="sm" className="text-low-emphesis">
                   ≈${usdcValue?.greaterThan('0') ? usdcValue?.toSignificant(6) : '0.0000'}
@@ -57,7 +54,11 @@ const ClassicUnzapMode: FC = () => {
               </div>
             }
           />
-          <ToggleButtonGroup value={percentageAmount} onChange={(value: string) => handlePercentageAmount(value)}>
+          <ToggleButtonGroup
+            value={percentageAmount}
+            onChange={(value: string) => handlePercentageAmount(value)}
+            variant="outlined"
+          >
             <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
             <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
             <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>

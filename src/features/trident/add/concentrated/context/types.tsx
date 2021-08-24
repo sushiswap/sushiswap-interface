@@ -15,6 +15,7 @@ export type ConcentratedPoolContext = {
   | 'setMaxPrice'
   | 'setMinPrice'
   | 'setSpendFromWallet'
+  | 'setLiquidityMode'
 >
 
 export type ConcentratedPoolState = Pick<
@@ -27,4 +28,5 @@ export type ConcentratedPoolState = Pick<
   | 'spendFromWallet'
   | 'txHash'
   | 'fixedRatio'
+  | 'liquidityMode'
 >
