@@ -11,11 +11,15 @@ import React from 'react'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
 import TridentRemoveWeightedContextProvider from '../../../../features/trident/remove/weighted/context'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import { useTridentContext } from '../../../../features/trident/context'
-import { WeightedPoolContext } from '../../../../features/trident/remove/weighted/context/types'
+import { useTridentContext, useTridentState } from '../../../../features/trident/context'
+import { WeightedPoolContext, WeightedPoolState } from '../../../../features/trident/remove/weighted/context/types'
+import { LiquidityMode } from '../../../../features/trident/types'
+import WeightedUnzapMode from '../../../../features/trident/remove/weighted/WeightedUnzapMode'
+import WeightedStandardMode from '../../../../features/trident/remove/weighted/WeightedStandardMode'
 
 const RemoveWeighted = () => {
   const { i18n } = useLingui()
+  const { liquidityMode } = useTridentState<WeightedPoolState>()
   const { pool } = useTridentContext<WeightedPoolContext>()
 
   return (
@@ -49,6 +53,11 @@ const RemoveWeighted = () => {
       </div>
 
       <ModeToggle />
+
+      <>
+        {liquidityMode === LiquidityMode.ZAP && <WeightedUnzapMode />}
+        {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
+      </>
 
       <RemoveTransactionReviewModal />
     </div>
