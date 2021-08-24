@@ -58,7 +58,6 @@ ToggleButtonGroup.Button = ({
   variant = 'filled',
   className,
 }: ComponentProps<typeof HeadlessRadioGroup.Option>) => {
-  console.log(variant)
   return (
     <HeadlessRadioGroup.Option value={value} className="outline-none">
       {({ checked }) => (

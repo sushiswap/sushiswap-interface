@@ -33,6 +33,8 @@ import {
   ConcentratedPoolContext as ConcentratedPoolRemoveContext,
   ConcentratedPoolState as ConcentratedPoolRemoveState,
 } from './remove/concentrated/context/types'
+import { Field as MintField } from '../../state/mint/actions'
+import { Field as BurnField } from '../../state/burn/actions'
 
 export interface Pool {
   type: PoolType
@@ -91,10 +93,12 @@ export interface TridentState {
   balancedMode: boolean
   spendFromWallet: boolean
   txHash: string
+  typedField?: MintField | BurnField
 }
 
 export interface HandleInputOptions {
   clear?: boolean
+  typedField?: MintField | BurnField
 }
 
 export interface TridentContext {

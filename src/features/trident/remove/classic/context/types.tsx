@@ -19,5 +19,11 @@ export type ClassicPoolContext = {
 
 export type ClassicPoolState = Pick<
   TridentState,
-  'inputAmounts' | 'showZapReview' | 'outputTokenAddress' | 'liquidityMode' | 'percentageAmount' | 'txHash'
+  | 'inputAmounts'
+  | 'showZapReview'
+  | 'outputTokenAddress'
+  | 'liquidityMode'
+  | 'percentageAmount'
+  | 'txHash'
+  | 'typedField'
 >

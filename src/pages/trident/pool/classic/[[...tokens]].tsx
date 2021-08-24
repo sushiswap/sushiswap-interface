@@ -1,7 +1,7 @@
 import TridentLayout from '../../../../layouts/Trident'
 import PoolStats from '../../../../features/trident/pool/PoolStats'
 import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
-import ClassicMyDeposits from '../../../../features/trident/pool/classic/ClassicMyDeposits'
+import MyDeposits from '../../../../features/trident/pool/MyDeposits'
 import ClassicMarket from '../../../../features/trident/pool/classic/ClassicMarket'
 import { TridentPoolPageContextProvider } from '../../../../features/trident/pool/context'
 import Header from '../../../../features/trident/pool/Header'
@@ -13,7 +13,7 @@ const Pool = () => {
   return (
     <div className="flex flex-col w-full mt-px mb-5">
       <Header />
-      <ClassicMyDeposits />
+      <MyDeposits />
       <ClassicMyRewards />
       <ClassicMarket />
       <Rewards />

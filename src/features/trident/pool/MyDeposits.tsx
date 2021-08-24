@@ -1,11 +1,11 @@
 import { FC } from 'react'
-import Typography from '../../../../components/Typography'
+import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
-import ListPanel from '../../../../components/ListPanel'
+import ListPanel from '../../../components/ListPanel'
 import { useLingui } from '@lingui/react'
-import { useTridentPoolPageContext } from '../context'
+import { useTridentPoolPageContext } from './context'
 
-const ClassicMyDeposits: FC = () => {
+const MyDeposits: FC = () => {
   const { i18n } = useLingui()
   const { pool } = useTridentPoolPageContext()
 
@@ -25,4 +25,4 @@ const ClassicMyDeposits: FC = () => {
   )
 }
 
-export default ClassicMyDeposits
+export default MyDeposits

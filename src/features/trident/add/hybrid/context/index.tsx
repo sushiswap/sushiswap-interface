@@ -5,6 +5,7 @@ import { tryParseAmount } from '../../../../../functions'
 import { LiquidityMode, PoolType, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import { handleInput, selectInputToken, setLiquidityMode, setTxHash, showReview } from '../../../context/actions'
+import TridentFacadeProvider from '../../../context'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -92,7 +93,7 @@ const TridentAddHybridContextProvider: FC<WithTridentPool> = ({ children, pool, 
         [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
       )}
     >
-      {children}
+      <TridentFacadeProvider pool={pool}>{children}</TridentFacadeProvider>
     </TridentAddHybridContext.Provider>
   )
 }
