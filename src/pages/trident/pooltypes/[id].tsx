@@ -36,7 +36,13 @@ const PoolTypePage = () => {
           </Typography>
         </div>
         <div className="mt-[30px] relative">
-          <Image src={image.url} width={image.width * 2} height={image.height * 2} alt="pool image" />
+          <Image
+            src={image.url}
+            width={image.width * 2}
+            height={image.height * 2}
+            alt="pool image"
+            layout="responsive"
+          />
         </div>
       </div>
       <div className="px-5 flex flex-col gap-4">

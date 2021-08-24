@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import { useLingui } from '@lingui/react'
-import Typography from '../../../components/Typography'
-import ListPanel from '../../../components/ListPanel'
+import Typography from '../../../../components/Typography'
+import ListPanel from '../../../../components/ListPanel'
 import { t } from '@lingui/macro'
-import { useTridentPoolPageContext } from './context'
+import { useTridentPoolPageContext } from '../context'
 
 const HybridPoolComposition: FC = () => {
   const { i18n } = useLingui()

@@ -5,6 +5,7 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { XIcon } from '@heroicons/react/solid'
 import Button from '../../../components/Button'
+import Alert from '../../../components/Alert'
 
 const TransactionDetailsExplanationModal: FC = ({ children }) => {
   const { i18n } = useLingui()
@@ -49,14 +50,34 @@ const TransactionDetailsExplanationModal: FC = ({ children }) => {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <Typography weight={700} className="text-high-emphesis">
-                {i18n._(t`Estimated Network Fee`)}
+                {i18n._(t`Liquidity Provider Fee`)}
+              </Typography>
+              <Typography variant="sm">{i18n._(t`0.25% of each swap goes to liquidity providers.`)}</Typography>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Typography weight={700} className="text-high-emphesis">
+                {i18n._(t`xSUSHI Fee`)}
+              </Typography>
+              <Typography variant="sm">{i18n._(t`0.055% of each swap goes to xSUSHI holders.`)}</Typography>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Typography weight={700} className="text-high-emphesis">
+                {i18n._(t`Estimated network Fee`)}
               </Typography>
               <Typography variant="sm">
                 {i18n._(
-                  t`This is our estimate of how much the gas cost for your transaction will be.  Your wallet will give the true and final gas cost, which may be different from what is quoted.`
+                  t`This is our estimate of how much the gas cost for your transaction will be. Your wallet will give the true and final gas cost, which may be different from what is quoted.`
                 )}
               </Typography>
             </div>
+            <Alert
+              showIcon
+              dismissable={false}
+              type="information"
+              message={i18n._(
+                t`Depositing with Zap Mode involves swapping your asset for the assets in the pool - this makes your transaction subject to swap-related fees.`
+              )}
+            />
           </div>
 
           {/*HeadlessUIModals need a focusable element so this is a hack..*/}

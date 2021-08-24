@@ -11,6 +11,7 @@ import Chip from '../../../components/Chip'
 import { FEE_TIERS, POOL_TYPES, SORT_OPTIONS } from '../constants'
 import Divider from '../../../components/Divider'
 import { useTridentPoolsPageDispatch, useTridentPoolsPageState } from './context'
+import Button from '../../../components/Button'
 
 interface SortSelectorProps {}
 
@@ -56,6 +57,16 @@ const PoolListActions: FC<SortSelectorProps> = () => {
       dispatch({
         type: add ? ActionType.ADD_FEE_TIER_FILTER : ActionType.DELETE_FEE_TIER_FILTER,
         payload: feeTier,
+      })
+    },
+    [dispatch]
+  )
+
+  const handleFarmsOnlyFilter = useCallback(
+    (farmsOnly) => {
+      dispatch({
+        type: ActionType.SET_FARMS_ONLY_FILTER,
+        payload: farmsOnly,
       })
     },
     [dispatch]
@@ -134,48 +145,66 @@ const PoolListActions: FC<SortSelectorProps> = () => {
         </RadioGroup>
       )}
       <Divider />
-      <BottomSlideIn title={i18n._(t`Apply Pool Filters`)} open={open} onClose={() => setOpen(false)}>
-        <div className="bg-dark-800 rounded-t">
-          <div className="flex flex-col gap-5 p-5">
-            <div className="flex items-center justify-between gap-3">
-              <Typography variant="lg" weight={700} className="text-high-emphesis">
-                By Pool Types:
-              </Typography>
-            </div>
-            {Object.values(POOL_TYPES).map((poolType) => {
-              const checked = !!filters.poolTypes.find((el) => el.label === poolType.label)
-              return (
-                <div
-                  className="flex flex-row gap-3 items-center"
-                  key={poolType.label}
-                  onClick={() => handleAddOrDeletePoolTypeFilter(poolType, !checked)}
-                >
-                  <Checkbox checked={checked} color="blue" />
-                  <Typography className="text-secondary">{poolType.label}</Typography>
-                </div>
-              )
-            })}
+      <BottomSlideIn
+        title={i18n._(t`Select Filters`)}
+        open={open}
+        onClose={() => setOpen(false)}
+        closeTrigger={
+          <Button color="white" size="sm" onClick={() => setOpen(false)} className="h-[32px]">
+            <span className="px-3">{i18n._(t`Save & Close`)}</span>
+          </Button>
+        }
+      >
+        <div className="bg-dark-700 rounded-t">
+          <div
+            className="flex flex-row gap-3 items-center p-5"
+            onClick={() => handleFarmsOnlyFilter(!filters.farmsOnly)}
+          >
+            <Checkbox checked={filters.farmsOnly} color="blue" />
+            <Typography weight={700}>{i18n._(t`Farms only`)}</Typography>
           </div>
-          <div className="relative bg-dark-900 rounded-t">
+          <div className="bg-dark-800 rounded-t">
             <div className="flex flex-col gap-5 p-5">
               <div className="flex items-center justify-between gap-3">
                 <Typography variant="lg" weight={700} className="text-high-emphesis">
-                  By Fee Tier:
+                  By Pool Types:
                 </Typography>
               </div>
-              {FEE_TIERS.map((feeTier) => {
-                const checked = !!filters.feeTiers.find((el) => el.label === feeTier.label)
+              {Object.values(POOL_TYPES).map((poolType) => {
+                const checked = !!filters.poolTypes.find((el) => el.label === poolType.label)
                 return (
                   <div
                     className="flex flex-row gap-3 items-center"
-                    key={feeTier.label}
-                    onClick={() => handleAddOrDeleteFeeTierFilter(feeTier, !checked)}
+                    key={poolType.label}
+                    onClick={() => handleAddOrDeletePoolTypeFilter(poolType, !checked)}
                   >
                     <Checkbox checked={checked} color="blue" />
-                    <Typography className="text-secondary">{feeTier.label}</Typography>
+                    <Typography className="text-secondary">{poolType.label}</Typography>
                   </div>
                 )
               })}
+            </div>
+            <div className="relative bg-dark-900 rounded-t">
+              <div className="flex flex-col gap-5 p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <Typography variant="lg" weight={700} className="text-high-emphesis">
+                    By Fee Tier:
+                  </Typography>
+                </div>
+                {FEE_TIERS.map((feeTier) => {
+                  const checked = !!filters.feeTiers.find((el) => el.label === feeTier.label)
+                  return (
+                    <div
+                      className="flex flex-row gap-3 items-center"
+                      key={feeTier.label}
+                      onClick={() => handleAddOrDeleteFeeTierFilter(feeTier, !checked)}
+                    >
+                      <Checkbox checked={checked} color="blue" />
+                      <Typography className="text-secondary">{feeTier.label}</Typography>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </div>
         </div>

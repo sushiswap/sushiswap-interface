@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'

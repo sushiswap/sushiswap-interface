@@ -10,6 +10,7 @@ const initialState: State = {
   filters: {
     poolTypes: [],
     feeTiers: [],
+    farmsOnly: false,
   },
 }
 

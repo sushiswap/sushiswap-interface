@@ -69,17 +69,22 @@ export default function Alert({
   const { color, icon } = TYPE[type]
 
   return message && show ? (
-    <div className={classNames('flex flex-row rounded p-4 gap-3', color, className)}>
-      <div className="flex flex-col gap-2 justify-center">
+    <div className={classNames('flex flex-row rounded p-3 gap-3', color, className)}>
+      {showIcon && <div>{icon}</div>}
+      <div className="flex flex-col gap-1.5 justify-center">
         {title && (
-          <div className="flex flex-row gap-2 justify-center">
-            {showIcon && icon}
-            <Typography weight={700} className="inline text-high-emphesis leading-6 text-center">
-              {title}
-            </Typography>
-          </div>
+          <Typography
+            weight={700}
+            className={classNames(showIcon ? 'text-left' : 'text-center', 'inline text-high-emphesis leading-6')}
+          >
+            {title}
+          </Typography>
         )}
-        <Typography variant="xs" className="text-high-emphesis text-center">
+        <Typography
+          variant="xs"
+          weight={400}
+          className={classNames(showIcon ? 'text-left' : 'text-center', 'text-high-emphesis')}
+        >
           {message}
         </Typography>
       </div>

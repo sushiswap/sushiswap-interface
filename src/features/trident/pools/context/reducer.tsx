@@ -45,6 +45,14 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
           feeTiers: state.filters.feeTiers.filter((el) => el.label !== action.payload.label),
         },
       }
+    case ActionType.SET_FARMS_ONLY_FILTER:
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          farmsOnly: action.payload,
+        },
+      }
     default:
       return state
   }

@@ -1,4 +1,4 @@
-import { FC, Fragment } from 'react'
+import { FC, Fragment, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import Typography from '../Typography'
 import { XIcon } from '@heroicons/react/outline'
@@ -7,9 +7,10 @@ interface BottomSlideInProps {
   title: string
   open: boolean
   onClose: () => void
+  closeTrigger?: ReactNode
 }
 
-const BottomSlideIn: FC<BottomSlideInProps> = ({ title, open, onClose, children }) => {
+const BottomSlideIn: FC<BottomSlideInProps> = ({ title, open, onClose, children, closeTrigger }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" static className="fixed inset-0 overflow-hidden" open={open} onClose={onClose}>
@@ -43,10 +44,14 @@ const BottomSlideIn: FC<BottomSlideInProps> = ({ title, open, onClose, children 
                       <Typography variant="lg" weight={700} className="text-high-emphesis">
                         {title}
                       </Typography>
-                      <button onClick={onClose}>
-                        <span className="sr-only">Close panel</span>
-                        <XIcon className="h-6 w-6 text-high-emphesis" aria-hidden="true" />
-                      </button>
+                      {closeTrigger ? (
+                        closeTrigger
+                      ) : (
+                        <button onClick={onClose}>
+                          <span className="sr-only">Close panel</span>
+                          <XIcon className="h-6 w-6 text-high-emphesis" aria-hidden="true" />
+                        </button>
+                      )}
                     </div>
                   </div>
                   {children}

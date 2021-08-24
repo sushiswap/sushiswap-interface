@@ -1,0 +1,39 @@
+import React, { FC } from 'react'
+import { useLingui } from '@lingui/react'
+import { useTridentPoolPageContext } from './context'
+import ListPanel from '../../../components/ListPanel'
+import { SUSHI } from '../../../config/tokens'
+import { ChainId } from '@sushiswap/sdk'
+import { tryParseAmount } from '../../../functions'
+import { t } from '@lingui/macro'
+import Typography from '../../../components/Typography'
+
+const Rewards: FC = () => {
+  const { i18n } = useLingui()
+  const { pool } = useTridentPoolPageContext()
+
+  return (
+    <ListPanel
+      className="px-5 mt-5"
+      header={<ListPanel.Header title={i18n._(t`Rewards`)} />}
+      items={[
+        <ListPanel.Item
+          left={<ListPanel.Item.Left amount={tryParseAmount('401.34', SUSHI[ChainId.MAINNET])} />}
+          right={
+            <div className="flex flex-row gap-1 justify-end">
+              <Typography variant="sm" weight={700}>
+                SUSHI
+              </Typography>
+              <Typography variant="sm" className="text-secondary" weight={700}>
+                PER DAY
+              </Typography>
+            </div>
+          }
+          key={0}
+        />,
+      ]}
+    />
+  )
+}
+
+export default Rewards

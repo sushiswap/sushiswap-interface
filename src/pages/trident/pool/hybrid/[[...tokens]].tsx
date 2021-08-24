@@ -1,7 +1,7 @@
 import TridentLayout from '../../../../layouts/Trident'
 import { TridentPoolPageContextProvider } from '../../../../features/trident/pool/context'
 import { PoolType } from '../../../../features/trident/types'
-import HybridPoolComposition from '../../../../features/trident/pool/HybridPoolComposition'
+import HybridPoolComposition from '../../../../features/trident/pool/hybrid/HybridPoolComposition'
 import Header from '../../../../features/trident/pool/Header'
 
 const Pool = () => {

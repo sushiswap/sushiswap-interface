@@ -1,9 +1,8 @@
 import React, { FC, ReactNode } from 'react'
 import Typography from '../Typography'
-import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import CurrencyLogo from '../CurrencyLogo'
-import { SUSHI } from '../../constants'
-import { classNames, formatNumber } from '../../functions'
+import { classNames } from '../../functions'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import Chip from '../Chip'
 
@@ -11,11 +10,12 @@ interface ListPanelProps {
   header?: ReactNode
   items?: ReactNode[]
   footer?: ReactNode
+  className?: string
 }
 
-const ListPanel = ({ header, items, footer }: ListPanelProps) => {
+const ListPanel = ({ header, items, footer, className = '' }: ListPanelProps) => {
   return (
-    <div className="flex flex-col">
+    <div className={classNames(className, 'flex flex-col')}>
       {header && <div className="rounded-t overflow-hidden border border-dark-700">{header}</div>}
       {items && (
         <div

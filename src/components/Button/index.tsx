@@ -18,6 +18,7 @@ const FILLED = {
   green: 'bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
   gradient:
     'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-100 md:opacity-80 hover:opacity-100 disabled:bg-opacity-80',
+  white: 'bg-high-emphesis text-dark-700',
 }
 
 const OUTLINED = {
@@ -29,6 +30,7 @@ const OUTLINED = {
   green: 'bg-green bg-opacity-20 border border-green rounded text-green hover:bg-opacity-40 disabled:bg-opacity-20',
   gradient:
     'border border-transparent border-gradient-r-blue-pink-dark-1000 opacity-100 md:opacity-80 hover:opacity-100 disabled:bg-opacity-20',
+  white: 'bg-transparent opacity-80 hover:opacity-100',
 }
 
 const EMPTY = {
@@ -48,7 +50,7 @@ const VARIANT = {
   link: LINK,
 }
 
-export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'gray' | 'default' | 'red' | 'green'
+export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'gray' | 'default' | 'red' | 'green' | 'white'
 
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 

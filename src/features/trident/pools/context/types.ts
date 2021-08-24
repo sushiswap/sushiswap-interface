@@ -7,6 +7,7 @@ export enum ActionType {
   ADD_FEE_TIER_FILTER = 'ADD_FEE_TIER_FILTER',
   DELETE_POOL_TYPE_FILTER = 'DELETE_POOL_TYPE_FILTER',
   DELETE_FEE_TIER_FILTER = 'DELETE_FEE_TIER_FILTER',
+  SET_FARMS_ONLY_FILTER = 'SET_FARMS_ONLY_FILTER',
 }
 
 export interface Reducer {
@@ -27,5 +28,6 @@ export interface State {
       label: string
       color: ChipColor
     }[]
+    farmsOnly: boolean
   }
 }

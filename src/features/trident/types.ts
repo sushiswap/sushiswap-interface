@@ -1,6 +1,5 @@
-import { Currency, CurrencyAmount, Price, Token } from '@sushiswap/sdk'
+import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { Dispatch } from 'react'
-import { TransactionResponse } from '@ethersproject/providers'
 import { ClassicPoolContext, ClassicPoolState } from './add/classic/context/types'
 import { WeightedPoolContext, WeightedPoolState } from './add/weighted/context/types'
 import { HybridPoolContext, HybridPoolState } from './add/hybrid/context/types'
@@ -13,6 +12,7 @@ export interface Pool {
   tvl: string
   apy: string
   fee: string
+  isFarm: boolean
 }
 
 export enum PoolType {

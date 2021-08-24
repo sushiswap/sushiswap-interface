@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Typography from '../Typography'
 import { classNames } from '../../functions'
-import { Input as NumericalInput } from '../NumericalInput'
+import { Input as NumericalInput } from '../Input/Numeric'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Token } from '@sushiswap/sdk'

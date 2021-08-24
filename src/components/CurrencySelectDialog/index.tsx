@@ -6,7 +6,7 @@ import { t } from '@lingui/macro'
 import Typography from '../Typography'
 import { useLingui } from '@lingui/react'
 import CurrencyLogo from '../CurrencyLogo'
-import { SUSHI } from '../../constants'
+import { SUSHI } from '../../config/tokens'
 
 interface CurrencySelectDialogProps {
   currency: Currency
