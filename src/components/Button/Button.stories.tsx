@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import Button from '../components/Button'
 import { CheckIcon } from '@heroicons/react/outline'
+import Button from './index'
 
 export default {
   title: 'SushiSwap/Button',

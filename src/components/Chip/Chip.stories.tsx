@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
-import Chip from '../components/Chip'
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
+import Chip from './index'
 
 export default {
   title: 'SushiSwap/Chip',

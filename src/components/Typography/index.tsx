@@ -12,14 +12,14 @@ export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 's
 
 const VARIANTS = {
   hero: 'text-hero',
-  h1: 'text-4xl',
+  h1: 'text-4xl leading-[28px]',
   h2: 'text-3xl tracking-[-0.02em]',
   h3: 'text-2xl leading-7 tracking-[-0.01em]',
   lg: 'text-lg leading-6',
   base: 'text-base leading-5',
   sm: 'text-sm leading-5',
   xs: 'text-xs leading-4',
-  xxs: 'text-[0.625rem] leading-3',
+  xxs: 'text-[0.625rem] leading-[1.2]',
 }
 
 export interface TypographyProps {

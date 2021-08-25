@@ -3,7 +3,6 @@
 @import '/node_modules/@fontsource/dm-sans/index.css';
 @import '/node_modules/react-virtualized/styles.css';
 @import '/node_modules/rc-slider/assets/index.css';
-
 @import './variables.css';
 
 @tailwind components;

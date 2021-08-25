@@ -1,23 +1,35 @@
+import Chip from '../../../components/Chip'
+import Typography from '../../../components/Typography'
+import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
+import { t } from '@lingui/macro'
+import { toHref } from '../../../hooks/useTridentPools'
+import { useTridentPoolPageContext } from './context'
+import { POOL_TYPES } from '../constants'
+import { useLingui } from '@lingui/react'
+import { I18n } from '@lingui/core'
+import { FC } from 'react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { t } from '@lingui/macro'
-import Typography from '../../../components/Typography'
-import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
-import Chip from '../../../components/Chip'
-import { POOL_TYPES } from '../constants'
-import { useLingui } from '@lingui/react'
-import { useTridentPoolPageContext } from './context'
-import { toHref } from '../../../hooks/useTridentPools'
+import { Pool } from '../types'
 
-const Header = () => {
+const HeaderContainer = () => {
   const { i18n } = useLingui()
   const { pool } = useTridentPoolPageContext()
 
+  return <Header i18n={i18n} pool={pool} />
+}
+
+interface HeaderProps {
+  pool: Pool
+  i18n: I18n
+}
+
+export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col bg-dark-900">
-        <div className="flex flex-row p-5 justify-between bg-dots-pattern">
+        <div className="flex flex-row pt-4 pb-3 px-5 justify-between bg-dots-pattern">
           <div className="flex flex-col items-start gap-5">
             <Button
               color="blue"
@@ -28,19 +40,25 @@ const Header = () => {
             >
               <Link href={'/trident/pools'}>{i18n._(t`Pools`)}</Link>
             </Button>
-
-            {/*spacer*/}
-            <div className="h-2" />
           </div>
-          <div className="flex flex-col text-right gap-2">
+          <div className="flex flex-col text-right gap-3">
             <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
-            <div className="flex flex-col">
-              <Typography variant="h3" className="text-high-emphesis" weight={700}>
-                {pool.apy}
+            <div className="flex flex-col gap-2">
+              <Typography variant="h1" className="text-high-emphesis" weight={700}>
+                {pool.apy}%
               </Typography>
-              <Typography variant="xxs" className="text-secondary">
-                {i18n._(t`Including fees`)}
-              </Typography>
+              <div className="flex flex-row gap-2.5">
+                {pool.isFarm ? (
+                  <>
+                    <Typography variant="xxs">{i18n._(t`Rewards:`)} 3.6%</Typography>
+                    <Typography variant="xxs">{i18n._(t`Fees:`)} 3%</Typography>
+                  </>
+                ) : (
+                  <Typography variant="xxs" className="text-secondary">
+                    {i18n._(t`Including fees`)}
+                  </Typography>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -91,4 +109,4 @@ const Header = () => {
   )
 }
 
-export default Header
+export default HeaderContainer
