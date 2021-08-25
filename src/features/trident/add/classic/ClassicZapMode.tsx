@@ -9,13 +9,13 @@ import { Token } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
 import React from 'react'
 import { ClassicPoolContext, ClassicPoolState } from './context/types'
-import { useTridentAddContext, useTridentAddState } from '../../context'
+import { useTridentContext, useTridentState } from '../../context'
 
 const ClassicZapMode = () => {
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentAddState<ClassicPoolState>()
+  const { inputAmounts, inputTokenAddress } = useTridentState<ClassicPoolState>()
   const { tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } =
-    useTridentAddContext<ClassicPoolContext>()
+    useTridentContext<ClassicPoolContext>()
 
   const validInput = inputTokenAddress && inputAmounts[inputTokenAddress]
 

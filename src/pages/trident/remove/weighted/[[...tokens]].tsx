@@ -9,17 +9,18 @@ import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import React from 'react'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
-import TridentRemoveWeightedContextProvider, {
-  useTridentRemoveWeightedContext,
-  useTridentRemoveWeightedState,
-} from '../../../../features/trident/remove/weighted/context'
+import TridentRemoveWeightedContextProvider from '../../../../features/trident/remove/weighted/context'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import { setLiquidityMode } from '../../../../features/trident/context/actions'
+import { useTridentContext, useTridentState } from '../../../../features/trident/context'
+import { WeightedPoolContext, WeightedPoolState } from '../../../../features/trident/remove/weighted/context/types'
+import { LiquidityMode } from '../../../../features/trident/types'
+import WeightedUnzapMode from '../../../../features/trident/remove/weighted/WeightedUnzapMode'
+import WeightedStandardMode from '../../../../features/trident/remove/weighted/WeightedStandardMode'
 
 const RemoveWeighted = () => {
   const { i18n } = useLingui()
-  const context = useTridentRemoveWeightedContext()
-  const state = useTridentRemoveWeightedState()
+  const { liquidityMode } = useTridentState<WeightedPoolState>()
+  const { pool } = useTridentContext<WeightedPoolContext>()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -32,7 +33,7 @@ const RemoveWeighted = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(context.pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -51,9 +52,14 @@ const RemoveWeighted = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle value={state.liquidityMode} onChange={setLiquidityMode} />
+      <ModeToggle />
 
-      <RemoveTransactionReviewModal context={context} state={state} />
+      <>
+        {liquidityMode === LiquidityMode.ZAP && <WeightedUnzapMode />}
+        {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
+      </>
+
+      <RemoveTransactionReviewModal />
     </div>
   )
 }

@@ -26,4 +26,5 @@ export type WeightedPoolState = Pick<
   | 'inputTokenAddress'
   | 'liquidityMode'
   | 'txHash'
+  | 'fixedRatio'
 >

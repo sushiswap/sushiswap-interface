@@ -13,9 +13,8 @@ import AssetInput from '../../../../components/AssetInput'
 import DepositButtons from './../DepositButtons'
 import Checkbox from '../../../../components/Checkbox'
 import TransactionDetails from '../TransactionDetails'
-import { useTridentAddHybridContext, useTridentAddHybridState } from './context'
 import { ActionType } from '../../types'
-import { useTridentAddContext, useTridentAddState } from '../../context'
+import { useTridentContext, useTridentState } from '../../context'
 import { HybridPoolContext, HybridPoolState } from './context/types'
 
 function toggleArrayItem(arr, item) {
@@ -78,8 +77,8 @@ const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active =
 const HybridStandardMode: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { inputAmounts } = useTridentAddState<HybridPoolState>()
-  const { pool, handleInput, dispatch, showReview } = useTridentAddContext<HybridPoolContext>()
+  const { inputAmounts } = useTridentState<HybridPoolState>()
+  const { pool, handleInput, dispatch, showReview } = useTridentContext<HybridPoolContext>()
   const [selected, setSelected] = useState<Token[]>([])
   const balances = useTokenBalances(account, pool.tokens)
 

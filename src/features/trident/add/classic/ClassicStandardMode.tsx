@@ -5,18 +5,21 @@ import useSufficientBalances from '../../../../hooks/useSufficientBalances'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
 import { ClassicPoolContext, ClassicPoolState } from './context/types'
-import { useTridentAddContext, useTridentAddState } from '../../context'
+import { useTridentContext, useTridentState } from '../../context'
+import { Field } from '../../../../state/mint/actions'
 
 const ClassicStandardMode = () => {
-  const { inputAmounts, spendFromWallet } = useTridentAddState<ClassicPoolState>()
+  const { inputAmounts, spendFromWallet, typedField } = useTridentState<ClassicPoolState>()
   const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } =
-    useTridentAddContext<ClassicPoolContext>()
+    useTridentContext<ClassicPoolContext>()
   const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
   const validInputs = sufficientBalances && Object.values(parsedInputAmounts).every((el) => el?.greaterThan(ZERO))
 
   // TODO
   const onMax = () => {}
   const isMaxInput = false
+
+  console.log(typedField)
 
   return (
     <div className="flex flex-col gap-6">
@@ -25,7 +28,7 @@ const ClassicStandardMode = () => {
           key={pool.tokens[0].address}
           value={inputAmounts[pool.tokens[0].address]}
           currency={pool.tokens[0]}
-          onChange={(val) => handleInput(val, pool.tokens[0].address)}
+          onChange={(val) => handleInput(val, pool.tokens[0].address, { typedField: Field.CURRENCY_A })}
           headerRight={<AssetInput.WalletSwitch onChange={setSpendFromWallet} checked={spendFromWallet} />}
           spendFromWallet={spendFromWallet}
         />
@@ -33,7 +36,7 @@ const ClassicStandardMode = () => {
           key={pool.tokens[1].address}
           value={inputAmounts[pool.tokens[1].address]}
           currency={pool.tokens[1]}
-          onChange={(val) => handleInput(val, pool.tokens[1].address)}
+          onChange={(val) => handleInput(val, pool.tokens[1].address, { typedField: Field.CURRENCY_B })}
           spendFromWallet={spendFromWallet}
         />
 

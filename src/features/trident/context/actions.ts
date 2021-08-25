@@ -8,6 +8,7 @@ export const handleInput =
       payload: {
         amount,
         address,
+        options,
       },
     })
 

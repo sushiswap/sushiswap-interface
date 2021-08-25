@@ -2,21 +2,25 @@ import React, { FC, useCallback } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
-import { PoolContextType, PoolStateType } from '../types'
 import { setFixedRatioMode } from '../context/actions'
 import Typography from '../../../components/Typography'
-import { useTridentAddContext, useTridentAddState } from '../context'
+import { WeightedPoolContext, WeightedPoolState } from './weighted/context/types'
+import { ConcentratedPoolContext, ConcentratedPoolState } from './concentrated/context/types'
+import { useTridentContext, useTridentState } from '../context'
 
 interface FixedRatioHeaderProps {
   margin?: boolean
 }
 
-const FixedRatioHeader: FC<FixedRatioHeaderProps> = <S extends PoolStateType, C extends PoolContextType>({
+const FixedRatioHeader: FC<FixedRatioHeaderProps> = <
+  S extends WeightedPoolState | ConcentratedPoolState,
+  C extends WeightedPoolContext | ConcentratedPoolContext
+>({
   margin = true,
 }) => {
   const { i18n } = useLingui()
-  const { fixedRatio } = useTridentAddState<S>()
-  const { dispatch } = useTridentAddContext<C>()
+  const { fixedRatio } = useTridentState<S>()
+  const { dispatch } = useTridentContext<C>()
 
   const disableFixedRatio = useCallback(() => {
     setFixedRatioMode(dispatch)(!fixedRatio)

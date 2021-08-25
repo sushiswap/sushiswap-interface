@@ -5,8 +5,8 @@ import { useLingui } from '@lingui/react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import PoolTypesList from '../../../features/trident/pooltypes/PoolTypesList'
 import React from 'react'
+import PoolTypesList from '../../../features/trident/pooltypes/PoolTypesList'
 
 const PoolTypes = () => {
   const { i18n } = useLingui()
@@ -26,7 +26,7 @@ const PoolTypes = () => {
           </Button>
         </div>
         <div className="flex flex-col gap-2">
-          <Typography variant="h2" className="text-high-emphesis" weight={700}>
+          <Typography variant="h3" className="text-high-emphesis" weight={700}>
             {i18n._(t`Pool Types`)}
           </Typography>
           <Typography variant="sm" weight={400}>

@@ -2,36 +2,32 @@ import React, { FC } from 'react'
 import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Token } from '@sushiswap/sdk'
 import ListPanel from '../../../../components/ListPanel'
 import PercentInput from '../../../../components/Input/Percent'
 import Button from '../../../../components/Button'
 import ToggleButtonGroup from '../../../../components/ToggleButton'
-import AssetSelect from '../../../../components/AssetSelect'
 import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
-import { useTridentRemoveClassicContext, useTridentRemoveClassicState } from './context'
+import { useTridentRemoveWeightedContext, useTridentRemoveWeightedState } from './context'
 
-const ClassicUnzapMode: FC = () => {
+const WeightedUnzapMode: FC = () => {
   const { i18n } = useLingui()
-  const { percentageAmount, outputTokenAddress } = useTridentRemoveClassicState()
-  const {
-    pool,
-    showReview,
-    tokens,
-    handlePercentageAmount,
-    parsedInputAmounts,
-    selectOutputToken,
-    parsedOutputAmounts,
-  } = useTridentRemoveClassicContext()
+  const { percentageAmount, outputTokenAddress } = useTridentRemoveWeightedState()
+  const { pool, handlePercentageAmount, parsedInputAmounts, parsedOutputAmounts, showReview } =
+    useTridentRemoveWeightedContext()
 
   // TODO this value is incorrect
   const usdcValue = useUSDCValue(parsedInputAmounts[outputTokenAddress])
 
+  // TODO Fixture
+  const weights = {
+    [pool.tokens[0].address]: '70%',
+    [pool.tokens[1].address]: '30%',
+  }
+
   return (
     <div className="px-5 mt-5">
-      <div className="flex flex-col gap-8">
-        <AssetSelect value={tokens[outputTokenAddress]} onSelect={(token: Token) => selectOutputToken(token.address)} />
-        <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3 mt-4">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
           </Typography>
@@ -72,10 +68,10 @@ const ClassicUnzapMode: FC = () => {
           <div className="flex flex-col gap-4">
             <ListPanel
               items={Object.values(parsedOutputAmounts).map((amount, index) => (
-                <ListPanel.CurrencyAmountItem amount={amount} key={index} />
+                <ListPanel.CurrencyAmountItem amount={amount} key={index} weight={weights[amount?.currency.address]} />
               ))}
             />
-            <Button color="gradient" disabled={!percentageAmount} onClick={() => showReview}>
+            <Button color="gradient" disabled={!percentageAmount} onClick={() => showReview(true)}>
               {percentageAmount ? i18n._(t`Confirm Withdrawal`) : i18n._(t`Tap amount or type amount to continue`)}
             </Button>
           </div>
@@ -85,4 +81,4 @@ const ClassicUnzapMode: FC = () => {
   )
 }
 
-export default ClassicUnzapMode
+export default WeightedUnzapMode

@@ -9,11 +9,11 @@ import Button from '../../../../components/Button'
 import ToggleButtonGroup from '../../../../components/ToggleButton'
 import AssetSelect from '../../../../components/AssetSelect'
 import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
-import { useTridentRemoveClassicContext, useTridentRemoveClassicState } from './context'
+import { useTridentRemoveWeightedContext, useTridentRemoveWeightedState } from './context'
 
-const ClassicUnzapMode: FC = () => {
+const WeightedUnzapMode: FC = () => {
   const { i18n } = useLingui()
-  const { percentageAmount, outputTokenAddress } = useTridentRemoveClassicState()
+  const { percentageAmount, outputTokenAddress } = useTridentRemoveWeightedState()
   const {
     pool,
     showReview,
@@ -22,7 +22,7 @@ const ClassicUnzapMode: FC = () => {
     parsedInputAmounts,
     selectOutputToken,
     parsedOutputAmounts,
-  } = useTridentRemoveClassicContext()
+  } = useTridentRemoveWeightedContext()
 
   // TODO this value is incorrect
   const usdcValue = useUSDCValue(parsedInputAmounts[outputTokenAddress])
@@ -85,4 +85,4 @@ const ClassicUnzapMode: FC = () => {
   )
 }
 
-export default ClassicUnzapMode
+export default WeightedUnzapMode

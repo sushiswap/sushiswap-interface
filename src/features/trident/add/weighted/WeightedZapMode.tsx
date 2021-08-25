@@ -8,14 +8,14 @@ import AssetInput from '../../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
 import React from 'react'
-import { useTridentAddContext, useTridentAddState } from '../../context'
 import { WeightedPoolContext, WeightedPoolState } from './context/types'
+import { useTridentContext, useTridentState } from '../../context'
 
 const WeightedZapMode = () => {
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentAddState<WeightedPoolState>()
+  const { inputAmounts, inputTokenAddress } = useTridentState<WeightedPoolState>()
   const { pool, tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } =
-    useTridentAddContext<WeightedPoolContext>()
+    useTridentContext<WeightedPoolContext>()
 
   const validInput = inputTokenAddress && inputAmounts[inputTokenAddress]
 

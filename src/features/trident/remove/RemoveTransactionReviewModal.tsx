@@ -7,17 +7,18 @@ import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
-import { LiquidityMode, TridentContext, TridentState } from '../types'
+import { LiquidityMode, PoolContextType, PoolStateType } from '../types'
+import { useTridentContext, useTridentState } from '../context'
 
-interface AddTransactionReviewModalProps {
-  state: Partial<TridentState>
-  context: Partial<TridentContext>
-}
+interface AddTransactionReviewModalProps {}
 
-const RemoveTransactionReviewModal: FC<AddTransactionReviewModalProps> = ({ state, context }) => {
+const RemoveTransactionReviewModal: FC<AddTransactionReviewModalProps> = <
+  S extends PoolStateType,
+  C extends PoolContextType
+>() => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview } = state
-  const { pool, showReview, execute, parsedInputAmounts, parsedOutputAmounts } = context
+  const { liquidityMode, showZapReview } = useTridentState<S>()
+  const { pool, showReview, execute, parsedInputAmounts, parsedOutputAmounts } = useTridentContext<C>()
 
   return (
     <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={() => showReview(false)}>

@@ -14,6 +14,7 @@ export type WeightedPoolContext = {
   | 'handleInput'
   | 'showReview'
   | 'dispatch'
+  | 'setLiquidityMode'
 >
 
 export type WeightedPoolState = Pick<

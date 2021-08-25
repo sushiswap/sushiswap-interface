@@ -1,11 +1,11 @@
 import { FC } from 'react'
 import RangeInput from '../../../../components/RangeInput'
-import { useTridentAddContext, useTridentAddState } from '../../context'
+import { useTridentContext, useTridentState } from '../../context'
 import { ConcentratedPoolContext, ConcentratedPoolState } from './context/types'
 
 const RangeBlocks: FC = () => {
-  const { minPrice, maxPrice } = useTridentAddState<ConcentratedPoolState>()
-  const { setMinPrice, setMaxPrice, pool } = useTridentAddContext<ConcentratedPoolContext>()
+  const { minPrice, maxPrice } = useTridentState<ConcentratedPoolState>()
+  const { setMinPrice, setMaxPrice, pool } = useTridentContext<ConcentratedPoolContext>()
 
   return (
     <div className="grid grid-cols-2 gap-3 px-5">

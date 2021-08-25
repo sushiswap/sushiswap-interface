@@ -26,4 +26,5 @@ export type ClassicPoolState = Pick<
   | 'inputTokenAddress'
   | 'liquidityMode'
   | 'txHash'
+  | 'typedField'
 >

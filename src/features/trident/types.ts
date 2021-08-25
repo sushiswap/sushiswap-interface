@@ -1,9 +1,40 @@
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { Dispatch } from 'react'
-import { ClassicPoolContext, ClassicPoolState } from './add/classic/context/types'
-import { WeightedPoolContext, WeightedPoolState } from './add/weighted/context/types'
-import { HybridPoolContext, HybridPoolState } from './add/hybrid/context/types'
-import { ConcentratedPoolContext, ConcentratedPoolState } from './add/concentrated/context/types'
+import {
+  ClassicPoolContext as ClassicPoolAddContext,
+  ClassicPoolState as ClassicPoolAddState,
+} from './add/classic/context/types'
+import {
+  WeightedPoolContext as WeightedPoolAddContext,
+  WeightedPoolState as WeightedPoolAddState,
+} from './add/weighted/context/types'
+import {
+  HybridPoolContext as HybridPoolAddContext,
+  HybridPoolState as HybridPoolAddState,
+} from './add/hybrid/context/types'
+import {
+  ConcentratedPoolContext as ConcentratedPoolAddContext,
+  ConcentratedPoolState as ConcentratedPoolAddState,
+} from './add/concentrated/context/types'
+
+import {
+  ClassicPoolContext as ClassicPoolRemoveContext,
+  ClassicPoolState as ClassicPoolRemoveState,
+} from './remove/classic/context/types'
+import {
+  WeightedPoolContext as WeightedPoolRemoveContext,
+  WeightedPoolState as WeightedPoolRemoveState,
+} from './remove/weighted/context/types'
+import {
+  HybridPoolContext as HybridPoolRemoveContext,
+  HybridPoolState as HybridPoolRemoveState,
+} from './remove/hybrid/context/types'
+import {
+  ConcentratedPoolContext as ConcentratedPoolRemoveContext,
+  ConcentratedPoolState as ConcentratedPoolRemoveState,
+} from './remove/concentrated/context/types'
+import { Field as MintField } from '../../state/mint/actions'
+import { Field as BurnField } from '../../state/burn/actions'
 
 export interface Pool {
   type: PoolType
@@ -62,10 +93,12 @@ export interface TridentState {
   balancedMode: boolean
   spendFromWallet: boolean
   txHash: string
+  typedField?: MintField | BurnField
 }
 
 export interface HandleInputOptions {
   clear?: boolean
+  typedField?: MintField | BurnField
 }
 
 export interface TridentContext {
@@ -87,5 +120,22 @@ export interface TridentContext {
   setSpendFromWallet: (x: boolean) => void
 }
 
-export type PoolStateType = ClassicPoolState | WeightedPoolState | HybridPoolState | ConcentratedPoolState
-export type PoolContextType = ClassicPoolContext | WeightedPoolContext | HybridPoolContext | ConcentratedPoolContext
+export type PoolStateType =
+  | ClassicPoolAddState
+  | WeightedPoolAddState
+  | HybridPoolAddState
+  | ConcentratedPoolAddState
+  | ClassicPoolRemoveState
+  | WeightedPoolRemoveState
+  | HybridPoolRemoveState
+  | ConcentratedPoolRemoveState
+
+export type PoolContextType =
+  | ClassicPoolAddContext
+  | WeightedPoolAddContext
+  | HybridPoolAddContext
+  | ConcentratedPoolAddContext
+  | ClassicPoolRemoveContext
+  | WeightedPoolRemoveContext
+  | HybridPoolRemoveContext
+  | ConcentratedPoolRemoveContext

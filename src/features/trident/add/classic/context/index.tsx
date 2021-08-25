@@ -24,6 +24,7 @@ const initialState: ClassicPoolState = {
   balancedMode: false,
   spendFromWallet: true,
   txHash: null,
+  typedField: null,
 }
 
 export const TridentAddClassicContext = createContext<ClassicPoolContext>({

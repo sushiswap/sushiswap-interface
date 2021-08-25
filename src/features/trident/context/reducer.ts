@@ -50,6 +50,8 @@ const reducer: React.Reducer<TridentState, Reducer> = (state: any, action: any) 
       return {
         ...state,
         inputAmounts,
+        ...(action.payload.options &&
+          action.payload.options.typedField && { typedField: action.payload.options.typedField }),
       }
     }
     case ActionType.SET_INPUT_AMOUNTS: {
