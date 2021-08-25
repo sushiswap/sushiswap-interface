@@ -2389,10 +2389,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@14.8.0":
-  version "14.8.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-14.8.0.tgz#5339bea4799c9b6d6c0b8a45b15b49a20cb2c3de"
-  integrity sha512-aKM5Lq5gXK0X9WIDJ2ybwCAC3jX9mn3gjzlCwcHO7SOQ4tpbVWIzGidwI5QhptznER+ueHM8d9MGYv9ektrskQ==
+"@sushiswap/default-token-list@14.9.0":
+  version "14.9.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-14.9.0.tgz#d79e0c91a81eaf316fb43e211bf35ecf226dea40"
+  integrity sha512-Z/SqJDgeli9OIHpYZRwafQJJ4BLzVDy5Rf6Js37neyJMSXyFOeYFAQlMT9e3667JtXahkTrK9e8WFyxexsEDiA==
 
 "@sushiswap/default-token-list@^11.3.0":
   version "11.3.0"
