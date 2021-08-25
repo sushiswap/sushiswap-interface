@@ -104,7 +104,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
                   label={type.label}
                   color={type.color}
                   key={type.label}
-                  onDelete={() => handleAddOrDeletePoolTypeFilter(type, false)}
+                  onClick={() => handleAddOrDeletePoolTypeFilter(type, false)}
                 />
               ))}
               {filters.feeTiers.map((type) => (
@@ -113,7 +113,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
                   color={type.color}
                   {...type}
                   key={type.label}
-                  onDelete={() => handleAddOrDeleteFeeTierFilter(type, false)}
+                  onClick={() => handleAddOrDeleteFeeTierFilter(type, false)}
                 />
               ))}
             </div>

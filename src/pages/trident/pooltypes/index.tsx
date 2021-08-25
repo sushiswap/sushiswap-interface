@@ -5,8 +5,8 @@ import { useLingui } from '@lingui/react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import PoolTypesList from '../../../features/trident/types/PoolTypesList'
 import React from 'react'
+import PoolTypesList from '../../../features/trident/pooltypes/PoolTypesList'
 
 const PoolTypes = () => {
   const { i18n } = useLingui()

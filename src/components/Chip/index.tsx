@@ -10,17 +10,18 @@ const SIZE = {
 const FILLED = {
   default: 'bg-gray-700 text-white',
   white: 'bg-high-emphesis text-dark-700',
-  purple: 'bg-purple bg-opacity-40 text-purple',
+  purple: 'bg-purple bg-opacity-25 text-purple',
   yellow: 'bg-yellow bg-opacity-[0.35] text-yellow',
   blue: 'bg-blue bg-opacity-[0.35] text-blue',
   green: 'bg-green bg-opacity-50 text-green',
+  pink: 'bg-pink bg-opacity-25 text-pink',
 }
 
 const VARIANT = {
   filled: FILLED,
 }
 
-export type ChipColor = 'default' | 'purple' | 'yellow' | 'blue' | 'green' | 'white'
+export type ChipColor = 'default' | 'purple' | 'yellow' | 'blue' | 'green' | 'white' | 'pink'
 export type ChipSize = 'default' | 'sm'
 export type ChipVariant = 'filled'
 
@@ -30,8 +31,8 @@ export interface ChipProps {
   variant?: ChipVariant
   size?: ChipSize
   className?: string
-  onDelete?: (e) => void
-  deleteIcon?: ReactNode
+  onClick?: (e) => void
+  endIcon?: ReactNode
 }
 
 const Chip: FC<ChipProps> = ({
@@ -40,26 +41,26 @@ const Chip: FC<ChipProps> = ({
   variant = 'filled',
   size = 'default',
   className = '',
-  onDelete,
-  deleteIcon = <XIcon width={12} height={12} strokeWidth={5} />,
+  onClick,
+  endIcon = <XIcon width={12} height={12} strokeWidth={5} />,
 }) => {
   return (
     <div
       className={classNames(
         VARIANT[variant][color],
         SIZE[size],
-        onDelete ? 'pr-1' : 'pr-3',
+        onClick ? 'pr-1' : 'pr-3',
         `whitespace-nowrap inline-flex rounded-[12px] py-0.5 pl-3 font-bold text-xs leading-5 gap-2 items-center`,
         className
       )}
     >
       {label}
-      {onDelete && (
+      {onClick && (
         <div
           className="rounded bg-[rgba(255,255,255,0.12)] hover:bg-[rgba(255,255,255,0.24)] cursor-pointer p-0.5"
-          onClick={onDelete}
+          onClick={onClick}
         >
-          {deleteIcon}
+          {endIcon}
         </div>
       )}
     </div>
