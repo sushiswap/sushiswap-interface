@@ -59,7 +59,7 @@ export default function Farm(): JSX.Element {
 
   const farms = useFarms()
 
-  const positions = usePositions()
+  const positions = usePositions(chainId)
 
   const averageBlockTime = useAverageBlockTime()
 
