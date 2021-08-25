@@ -10,7 +10,6 @@ import {
 
 import { Interface } from '@ethersproject/abi'
 import { abi } from '@sushiswap/trident/artifacts/ConstantProductPool.json'
-import combinate from 'combinate'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 
@@ -33,6 +32,8 @@ export function useTridentClassicPools(
           tokenB &&
           tokenA.chainId === tokenB.chainId &&
           !tokenA.equals(tokenB) &&
+          fee &&
+          twap &&
           FACTORY_ADDRESS[tokenA.chainId]
           ? computeConstantProductPoolAddress({
               factoryAddress: FACTORY_ADDRESS[tokenA.chainId],
@@ -53,8 +54,8 @@ export function useTridentClassicPools(
       const { result: reserves, loading } = result
       const tokenA = pools[i][0]?.wrapped
       const tokenB = pools[i][1]?.wrapped
-      const fee = pools[i][2]
-      const twap = pools[i][3]
+      const fee = pools[i]?.[2]
+      const twap = pools[i]?.[3]
       if (loading) return [ConstantProductPoolState.LOADING, null]
       if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !twap) return [ConstantProductPoolState.INVALID, null]
       if (!reserves) return [ConstantProductPoolState.NOT_EXISTS, null]
