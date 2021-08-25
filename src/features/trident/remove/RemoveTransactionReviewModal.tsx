@@ -7,18 +7,37 @@ import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
-import { LiquidityMode, PoolContextType, PoolStateType } from '../types'
-import { useTridentContext, useTridentState } from '../context'
+import { LiquidityMode } from '../types'
+import {
+  ClassicPoolContext as ClassicPoolRemoveContext,
+  ClassicPoolState as ClassicPoolRemoveState,
+} from './classic/context/types'
+import {
+  WeightedPoolContext as WeightedPoolRemoveContext,
+  WeightedPoolState as WeightedPoolRemoveState,
+} from './weighted/context/types'
+import {
+  HybridPoolContext as HybridPoolRemoveContext,
+  HybridPoolState as HybridPoolRemoveState,
+} from './hybrid/context/types'
+import {
+  ConcentratedPoolContext as ConcentratedPoolRemoveContext,
+  ConcentratedPoolState as ConcentratedPoolRemoveState,
+} from './concentrated/context/types'
 
-interface AddTransactionReviewModalProps {}
+interface RemoveTransactionReviewModalProps {
+  state: ClassicPoolRemoveState | WeightedPoolRemoveState | HybridPoolRemoveState | ConcentratedPoolRemoveState
+  context:
+    | ClassicPoolRemoveContext
+    | WeightedPoolRemoveContext
+    | HybridPoolRemoveContext
+    | ConcentratedPoolRemoveContext
+}
 
-const RemoveTransactionReviewModal: FC<AddTransactionReviewModalProps> = <
-  S extends PoolStateType,
-  C extends PoolContextType
->() => {
+const RemoveTransactionReviewModal: FC<RemoveTransactionReviewModalProps> = ({ state, context }) => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview } = useTridentState<S>()
-  const { pool, showReview, execute, parsedInputAmounts, parsedOutputAmounts } = useTridentContext<C>()
+  const { liquidityMode, showZapReview } = state
+  const { currencies, showReview, execute, parsedInputAmounts, parsedOutputAmounts } = context
 
   return (
     <HeadlessUIModal.Controlled isOpen={showZapReview} onDismiss={() => showReview(false)}>
@@ -54,8 +73,8 @@ const RemoveTransactionReviewModal: FC<AddTransactionReviewModalProps> = <
               {i18n._(t`You are removing:`)}
             </Typography>
             <ListPanel
-              items={pool.tokens.map((token, index) => (
-                <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[token.address]} key={index} />
+              items={Object.keys(currencies).map((address, index) => (
+                <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[address]} key={index} />
               ))}
             />
           </div>
@@ -96,13 +115,13 @@ const RemoveTransactionReviewModal: FC<AddTransactionReviewModalProps> = <
           </div>
           <Divider />
           <div className="flex flex-col gap-1">
-            {pool.tokens.map((token, index) => (
+            {Object.values(currencies).map((token, index) => (
               <div className="flex justify-between" key={index}>
                 <Typography variant="sm" className="text-secondary">
-                  {i18n._(t`${token.symbol} Deposited:`)}
+                  {i18n._(t`${token?.symbol} Deposited:`)}
                 </Typography>
                 <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                  0.00 → 281.2334 {token.symbol}
+                  0.00 → 281.2334 {token?.symbol}
                 </Typography>
               </div>
             ))}

@@ -1,9 +1,8 @@
 import React, { createContext, FC, useCallback, useContext, useMemo, useReducer } from 'react'
 import { ClassicPoolContext, ClassicPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
-import { Percent } from '@sushiswap/sdk'
-import { withTridentPool, WithTridentPool } from '../../../../../hooks/useTridentPools'
-import { LiquidityMode, PoolType, Reducer } from '../../../types'
+import { Fee, Percent } from '@sushiswap/sdk'
+import { LiquidityMode, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import {
   handleInput,
@@ -12,7 +11,9 @@ import {
   setLiquidityMode,
   showReview,
 } from '../../../context/actions'
-import TridentFacadeProvider from '../../../context'
+import { useRouter } from 'next/router'
+import { useCurrency } from '../../../../../hooks/Tokens'
+import { useTridentClassicPool } from '../../../../../hooks/useTridentClassicPools'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -31,7 +32,7 @@ export const TridentRemoveClassicContext = createContext<ClassicPoolContext>({
   pool: null,
   parsedInputAmounts: {},
   parsedOutputAmounts: {},
-  tokens: {},
+  currencies: {},
   execute: () => null,
   handlePercentageAmount: () => null,
   selectOutputToken: () => null,
@@ -41,19 +42,34 @@ export const TridentRemoveClassicContext = createContext<ClassicPoolContext>({
   dispatch: () => null,
 })
 
-const TridentRemoveClassicContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
+const TridentRemoveClassicContextProvider: FC = ({ children }) => {
+  const { query } = useRouter()
+
+  const currencyA = useCurrency(query.tokens[0])
+  const currencyB = useCurrency(query.tokens[1])
+  const fee = Fee[query.fee as string]
+  const [loading, pool] = useTridentClassicPool(currencyA, currencyB, fee, !!query.twap)
+
+  const currencies = useMemo(
+    () => ({
+      [currencyA?.wrapped.address]: currencyA,
+      [currencyB?.wrapped.address]: currencyB,
+    }),
+    [currencyA, currencyB]
+  )
+
   const [state, dispatch] = useReducer<React.Reducer<ClassicPoolState, Reducer>>(reducer, {
     ...initialState,
-    inputAmounts: pool.tokens.reduce((acc, cur) => ((acc[cur.address] = ''), acc), {}),
+    inputAmounts: Object.keys(currencies).reduce((acc, cur) => ((acc[cur] = ''), acc), {}),
   })
 
   const parsedInputAmounts = useMemo(() => {
-    return pool.tokens.reduce((acc, cur) => {
+    return Object.entries(currencies).reduce((acc, [k, v]) => {
       // TODO change this 1 to balance in pool
-      acc[cur.address] = tryParseAmount('1', cur).multiply(new Percent(state.percentageAmount, '100'))
+      acc[k] = tryParseAmount('1', v).multiply(new Percent(state.percentageAmount, '100'))
       return acc
     }, {})
-  }, [pool.tokens, state.percentageAmount])
+  }, [currencies, state.percentageAmount])
 
   const parsedOutputAmounts = useMemo(() => {
     if (state.liquidityMode === LiquidityMode.STANDARD) {
@@ -80,7 +96,7 @@ const TridentRemoveClassicContextProvider: FC<WithTridentPool> = ({ children, po
         () => ({
           state,
           pool,
-          tokens,
+          currencies,
           selectOutputToken: selectOutputToken(dispatch),
           setLiquidityMode: setLiquidityMode(dispatch),
           parsedInputAmounts,
@@ -91,15 +107,15 @@ const TridentRemoveClassicContextProvider: FC<WithTridentPool> = ({ children, po
           showReview: showReview(dispatch),
           dispatch,
         }),
-        [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
+        [state, pool, currencies, parsedInputAmounts, parsedOutputAmounts, execute]
       )}
     >
-      <TridentFacadeProvider pool={pool}>{children}</TridentFacadeProvider>
+      {children}
     </TridentRemoveClassicContext.Provider>
   )
 }
 
-export default withTridentPool(PoolType.CLASSIC)(TridentRemoveClassicContextProvider)
+export default TridentRemoveClassicContextProvider
 export const useTridentRemoveClassicContext = () => useContext(TridentRemoveClassicContext)
 export const useTridentRemoveClassicState = () => useContext(TridentRemoveClassicContext).state
 export const useTridentRemoveClassicDispatch = () => useContext(TridentRemoveClassicContext).dispatch

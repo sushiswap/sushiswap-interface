@@ -8,14 +8,12 @@ import AssetInput from '../../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
 import React from 'react'
-import { ClassicPoolContext, ClassicPoolState } from './context/types'
-import { useTridentContext, useTridentState } from '../../context'
+import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
 
 const ClassicZapMode = () => {
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentState<ClassicPoolState>()
-  const { tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } =
-    useTridentContext<ClassicPoolContext>()
+  const { inputAmounts, inputTokenAddress } = useTridentAddClassicState()
+  const { currencies, handleInput, showReview, parsedOutputAmounts, selectInputToken } = useTridentAddClassicContext()
 
   const validInput = inputTokenAddress && inputAmounts[inputTokenAddress]
 
@@ -33,7 +31,7 @@ const ClassicZapMode = () => {
       <div className="flex flex-col gap-4 px-5">
         <AssetInput
           value={inputAmounts[inputTokenAddress]}
-          currency={tokens[inputTokenAddress]}
+          currency={currencies[inputTokenAddress]}
           onChange={(value) => handleInput(value, inputTokenAddress, { clear: true })}
           onSelect={(token: Token) => selectInputToken(token.address)}
         />
@@ -49,7 +47,7 @@ const ClassicZapMode = () => {
       <div className="flex flex-col gap-4 px-5 mt-8">
         <Typography weight={700} className="text-high-emphesis">
           {inputTokenAddress
-            ? i18n._(t`Your ${tokens[inputTokenAddress].symbol} will be split into:`)
+            ? i18n._(t`Your ${currencies[inputTokenAddress].symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
         <ListPanel

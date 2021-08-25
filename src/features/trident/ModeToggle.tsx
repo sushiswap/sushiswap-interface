@@ -2,21 +2,17 @@ import { FC } from 'react'
 import ToggleButtonGroup from '../../components/ToggleButton'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { LiquidityMode } from './types'
-import { useTridentContext, useTridentState } from './context'
-import { ClassicPoolContext, ClassicPoolState } from './add/classic/context/types'
-import { HybridPoolContext, HybridPoolState } from './add/hybrid/context/types'
-import { WeightedPoolContext, WeightedPoolState } from './add/weighted/context/types'
+import { LiquidityMode, PoolContextType, PoolStateType } from './types'
 
-interface ModeToggleProps {}
+interface ModeToggleProps {
+  state: PoolStateType
+  context: PoolContextType
+}
 
-const ModeToggle: FC<ModeToggleProps> = <
-  S extends ClassicPoolState | HybridPoolState | WeightedPoolState,
-  C extends ClassicPoolContext | HybridPoolContext | WeightedPoolContext
->() => {
+const ModeToggle: FC<ModeToggleProps> = ({ state, context }) => {
   const { i18n } = useLingui()
-  const { liquidityMode } = useTridentState<S>()
-  const { setLiquidityMode } = useTridentContext<C>()
+  const { liquidityMode } = state
+  const { setLiquidityMode } = context
 
   return (
     <div className="px-5 -mt-6 relative z-10">

@@ -4,13 +4,11 @@ import DepositButtons from './../DepositButtons'
 import useSufficientBalances from '../../../../hooks/useSufficientBalances'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
-import { WeightedPoolContext, WeightedPoolState } from './context/types'
-import { useTridentContext, useTridentState } from '../../context'
+import { useTridentAddWeightedContext, useTridentAddWeightedState } from './context'
 
 const WeightedStandardMode = () => {
-  const { inputAmounts, spendFromWallet } = useTridentState<WeightedPoolState>()
-  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } =
-    useTridentContext<WeightedPoolContext>()
+  const { inputAmounts, spendFromWallet } = useTridentAddWeightedState()
+  const { currencies, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } = useTridentAddWeightedContext()
   const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
   const validInputs = sufficientBalances && Object.values(parsedInputAmounts).every((el) => el?.greaterThan(ZERO))
 
@@ -19,30 +17,29 @@ const WeightedStandardMode = () => {
   const isMaxInput = false
 
   // TODO Fixture
+  const [addressA, addressB] = Object.keys(currencies)
   const weights = {
-    [pool.tokens[0].address]: '70%',
-    [pool.tokens[1].address]: '30%',
+    [addressA]: '70%',
+    [addressB]: '30%',
   }
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 px-5">
         <AssetInput
-          key={pool.tokens[0].address}
-          value={inputAmounts[pool.tokens[0].address]}
-          currency={pool.tokens[0]}
-          onChange={(val) => handleInput(val, pool.tokens[0].address)}
+          value={inputAmounts[addressA]}
+          currency={currencies[addressA]}
+          onChange={(val) => handleInput(val, addressA)}
           headerRight={<AssetInput.WalletSwitch onChange={setSpendFromWallet} checked={spendFromWallet} />}
           spendFromWallet={spendFromWallet}
-          chip={weights[pool.tokens[0].address]}
+          chip={weights[addressA]}
         />
         <AssetInput
-          key={pool.tokens[1].address}
-          value={inputAmounts[pool.tokens[1].address]}
-          currency={pool.tokens[1]}
-          onChange={(val) => handleInput(val, pool.tokens[1].address)}
+          value={inputAmounts[addressB]}
+          currency={currencies[addressB]}
+          onChange={(val) => handleInput(val, addressB)}
           spendFromWallet={spendFromWallet}
-          chip={weights[pool.tokens[1].address]}
+          chip={weights[addressB]}
         />
 
         <div className="flex flex-col">

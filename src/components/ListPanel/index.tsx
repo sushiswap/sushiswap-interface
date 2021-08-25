@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react'
 import Typography from '../Typography'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import CurrencyLogo from '../CurrencyLogo'
 import { classNames } from '../../functions'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
@@ -104,7 +104,7 @@ const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
 }
 
 interface ListPanelItemLeftProps {
-  amount: CurrencyAmount<Token>
+  amount: CurrencyAmount<Currency>
   startAdornment?: ReactNode
 }
 
@@ -129,7 +129,7 @@ const ListPanelItemRight: FC = ({ children }) => {
 }
 
 interface CurrencyAmountItemProps {
-  amount: CurrencyAmount<Token>
+  amount: CurrencyAmount<Currency>
   weight?: string
 }
 

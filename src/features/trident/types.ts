@@ -1,4 +1,4 @@
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { ConstantProductPool, Currency, CurrencyAmount } from '@sushiswap/sdk'
 import { Dispatch } from 'react'
 import {
   ClassicPoolContext as ClassicPoolAddContext,
@@ -35,16 +35,9 @@ import {
 } from './remove/concentrated/context/types'
 import { Field as MintField } from '../../state/mint/actions'
 import { Field as BurnField } from '../../state/burn/actions'
+import { ConstantProductPoolState } from '../../hooks/useTridentClassicPools'
 
-export interface Pool {
-  type: PoolType
-  amounts: CurrencyAmount<Token>[]
-  tokens: Token[]
-  tvl: string
-  apy: string
-  fee: string
-  isFarm: boolean
-}
+export type Pool = [ConstantProductPoolState, ConstantProductPool | null]
 
 export enum PoolType {
   CLASSIC = 'CLASSIC',
@@ -103,10 +96,10 @@ export interface HandleInputOptions {
 
 export interface TridentContext {
   state: Partial<TridentState>
-  pool: Pool
-  parsedInputAmounts: Record<string, CurrencyAmount<Token> | undefined>
-  parsedOutputAmounts: Record<string, CurrencyAmount<Token> | undefined>
-  tokens: { [x: string]: Token }
+  pool: null
+  parsedInputAmounts: Record<string, CurrencyAmount<Currency> | undefined>
+  parsedOutputAmounts: Record<string, CurrencyAmount<Currency> | undefined>
+  currencies: Record<string, Currency>
   execute: () => void
   handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
   selectInputToken: (address: string) => void

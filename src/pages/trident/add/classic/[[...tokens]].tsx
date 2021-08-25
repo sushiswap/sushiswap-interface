@@ -11,19 +11,20 @@ import ClassicStandardMode from '../../../../features/trident/add/classic/Classi
 import AddTransactionReviewModal from '../../../../features/trident/add/AddTransactionReviewModal'
 import React from 'react'
 import SettingsTab from '../../../../components/Settings'
-import TridentAddClassicContextProvider from '../../../../features/trident/add/classic/context'
+import TridentAddClassicContextProvider, {
+  useTridentAddClassicContext,
+  useTridentAddClassicState,
+} from '../../../../features/trident/add/classic/context'
 import BalancedModeHeader from '../../../../features/trident/add/classic/BalancedModeHeader'
 import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
-import { useTridentContext, useTridentState } from '../../../../features/trident/context'
-import { ClassicPoolContext, ClassicPoolState } from '../../../../features/trident/add/classic/context/types'
 
 const AddClassic = () => {
   const { i18n } = useLingui()
-  const { liquidityMode } = useTridentState<ClassicPoolState>()
-  const { pool } = useTridentContext<ClassicPoolContext>()
+  const state = useTridentAddClassicState()
+  const context = useTridentAddClassicContext()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -36,10 +37,10 @@ const AddClassic = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref('classic', context.currencies)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <DepositSettingsModal />
-          {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
+          {state.liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">
@@ -56,14 +57,14 @@ const AddClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle />
+      <ModeToggle state={state} context={context} />
       <BalancedModeHeader />
 
-      {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
-      {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+      {state.liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
+      {state.liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
 
-      <AddTransactionReviewModal />
-      <DepositSubmittedModal />
+      <AddTransactionReviewModal state={state} context={context} />
+      <DepositSubmittedModal state={state} />
     </div>
   )
 }

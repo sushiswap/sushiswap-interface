@@ -78,9 +78,10 @@ const HybridStandardMode: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { inputAmounts } = useTridentState<HybridPoolState>()
-  const { pool, handleInput, dispatch, showReview } = useTridentContext<HybridPoolContext>()
+  const { currencies, handleInput, dispatch, showReview } = useTridentContext<HybridPoolContext>()
   const [selected, setSelected] = useState<Token[]>([])
-  const balances = useTokenBalances(account, pool.tokens)
+  const tokens = Object.values(currencies).map((el) => el?.wrapped)
+  const balances = useTokenBalances(account, tokens)
 
   const availableAssets = useMemo(
     () =>
@@ -91,8 +92,8 @@ const HybridStandardMode: FC = () => {
   )
 
   const unavailableAssets = useMemo(
-    () => pool.tokens.filter((token) => !availableAssets.some((balance) => balance.currency === token)),
-    [pool.tokens, availableAssets]
+    () => tokens.filter((token) => !availableAssets.some((balance) => balance.currency === token)),
+    [tokens, availableAssets]
   )
 
   const onMax = useCallback(() => {
@@ -130,7 +131,7 @@ const HybridStandardMode: FC = () => {
                 </Typography>
                 <div className="flex gap-0.5">
                   <Typography variant="lg" weight={700} className="text-high-emphesis">
-                    <span className="text-blue">{availableAssets.length}</span>/{pool.tokens.length}
+                    <span className="text-blue">{availableAssets.length}</span>/{tokens.length}
                   </Typography>
                   <ChevronDownIcon className={open ? 'transform rotate-180' : ''} width={24} height={24} />
                 </div>
@@ -165,7 +166,7 @@ const HybridStandardMode: FC = () => {
                 </Typography>
                 <div className="flex gap-0.5">
                   <Typography variant="lg" weight={700} className="text-high-emphesis">
-                    <span className="text-secondary">{unavailableAssets.length}</span>/{pool.tokens.length}
+                    <span className="text-secondary">{unavailableAssets.length}</span>/{tokens.length}
                   </Typography>
                   <ChevronDownIcon className={open ? 'transform rotate-180' : ''} width={24} height={24} />
                 </div>

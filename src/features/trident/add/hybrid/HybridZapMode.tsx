@@ -8,14 +8,12 @@ import AssetInput from '../../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import TransactionDetails from '../TransactionDetails'
 import React from 'react'
-import { HybridPoolContext, HybridPoolState } from './context/types'
-import { useTridentContext, useTridentState } from '../../context'
+import { useTridentAddHybridContext, useTridentAddHybridState } from './context'
 
 const HybridZapMode = () => {
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentState<HybridPoolState>()
-  const { pool, tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } =
-    useTridentContext<HybridPoolContext>()
+  const { inputAmounts, inputTokenAddress } = useTridentAddHybridState()
+  const { currencies, handleInput, showReview, parsedOutputAmounts, selectInputToken } = useTridentAddHybridContext()
 
   return (
     <div className="flex flex-col gap-6 px-5">
@@ -29,7 +27,7 @@ const HybridZapMode = () => {
       <div className="flex flex-col gap-5">
         <AssetInput
           value={inputAmounts[inputTokenAddress]}
-          currency={tokens[inputTokenAddress]}
+          currency={currencies[inputTokenAddress]}
           onChange={(value) => handleInput(value, inputTokenAddress, { clear: true })}
           onSelect={(token: Token) => selectInputToken(token.address)}
         />
@@ -44,13 +42,13 @@ const HybridZapMode = () => {
       </div>
       <div className="flex flex-col gap-4 mt-4">
         <Typography weight={700} className="text-high-emphesis">
-          {tokens[inputTokenAddress]
-            ? i18n._(t`Your ${tokens[inputTokenAddress].symbol} will be split into:`)
+          {currencies[inputTokenAddress]
+            ? i18n._(t`Your ${currencies[inputTokenAddress].symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
         <ListPanel
-          items={pool.tokens.map((token, index) => (
-            <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[token.address]} key={index} />
+          items={Object.keys(currencies).map((address, index) => (
+            <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[address]} key={index} />
           ))}
         />
       </div>

@@ -1,13 +1,13 @@
 import { useBentoBalances2 } from '../state/bentobox/hooks'
 import { useTokenBalances } from '../state/wallet/hooks'
 import { useActiveWeb3React } from './index'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import { useMemo } from 'react'
 
-const useSufficientBalances = (amounts: Record<string, CurrencyAmount<Token> | undefined>, wallet = true) => {
+const useSufficientBalances = (amounts: Record<string, CurrencyAmount<Currency> | undefined>, wallet = true) => {
   const { account } = useActiveWeb3React()
 
-  const tokens = useMemo(() => Object.values(amounts).map((el) => el?.currency), [amounts])
+  const tokens = useMemo(() => Object.values(amounts).map((el) => el?.currency.wrapped), [amounts])
   const walletBalances = useTokenBalances(account, tokens)
   const bentoBalances = useBentoBalances2(account, tokens)
 

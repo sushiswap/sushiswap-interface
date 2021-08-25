@@ -9,14 +9,16 @@ import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import React from 'react'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
-import TridentRemoveHybridContextProvider from '../../../../features/trident/remove/hybrid/context'
+import TridentRemoveHybridContextProvider, {
+  useTridentRemoveHybridContext,
+  useTridentRemoveHybridState,
+} from '../../../../features/trident/remove/hybrid/context'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import { useTridentContext } from '../../../../features/trident/context'
-import { HybridPoolContext } from '../../../../features/trident/remove/hybrid/context/types'
 
 const RemoveHybrid = () => {
   const { i18n } = useLingui()
-  const { pool } = useTridentContext<HybridPoolContext>()
+  const state = useTridentRemoveHybridState()
+  const context = useTridentRemoveHybridContext()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -29,7 +31,7 @@ const RemoveHybrid = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref('currencies', context.currencies)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -48,14 +50,14 @@ const RemoveHybrid = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle />
+      <ModeToggle state={state} context={context} />
 
       <>
         {/*{liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}*/}
         {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
       </>
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewModal state={state} context={context} />
     </div>
   )
 }

@@ -8,21 +8,20 @@ import AssetInput from '../../../../components/AssetInput'
 import { Token } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
 import React from 'react'
-import { WeightedPoolContext, WeightedPoolState } from './context/types'
-import { useTridentContext, useTridentState } from '../../context'
+import { useTridentAddWeightedContext, useTridentAddWeightedState } from './context'
 
 const WeightedZapMode = () => {
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentState<WeightedPoolState>()
-  const { pool, tokens, handleInput, showReview, parsedOutputAmounts, selectInputToken } =
-    useTridentContext<WeightedPoolContext>()
+  const { inputAmounts, inputTokenAddress } = useTridentAddWeightedState()
+  const { currencies, handleInput, showReview, parsedOutputAmounts, selectInputToken } = useTridentAddWeightedContext()
 
   const validInput = inputTokenAddress && inputAmounts[inputTokenAddress]
 
   // TODO Fixture
+  const [addressA, addressB] = Object.keys(currencies)
   const weights = {
-    [pool.tokens[0].address]: '70%',
-    [pool.tokens[1].address]: '30%',
+    [addressA]: '70%',
+    [addressB]: '30%',
   }
 
   return (
@@ -39,7 +38,7 @@ const WeightedZapMode = () => {
       <div className="flex flex-col gap-4 px-5">
         <AssetInput
           value={inputAmounts[inputTokenAddress]}
-          currency={tokens[inputTokenAddress]}
+          currency={currencies[inputTokenAddress]}
           onChange={(value) => handleInput(value, inputTokenAddress, { clear: true })}
           onSelect={(token: Token) => selectInputToken(token.address)}
         />
@@ -55,12 +54,16 @@ const WeightedZapMode = () => {
       <div className="flex flex-col gap-4 px-5 mt-8">
         <Typography weight={700} className="text-high-emphesis">
           {inputTokenAddress
-            ? i18n._(t`Your ${tokens[inputTokenAddress].symbol} will be split into:`)
+            ? i18n._(t`Your ${currencies[inputTokenAddress].symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
         <ListPanel
           items={Object.values(parsedOutputAmounts).map((amount, index) => (
-            <ListPanel.CurrencyAmountItem amount={amount} key={index} weight={weights[amount?.currency.address]} />
+            <ListPanel.CurrencyAmountItem
+              amount={amount}
+              key={index}
+              weight={weights[amount?.currency?.wrapped.address]}
+            />
           ))}
         />
       </div>

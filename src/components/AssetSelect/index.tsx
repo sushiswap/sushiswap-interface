@@ -1,9 +1,9 @@
-import React, { FC, useMemo, useState } from 'react'
-import { Token } from '@sushiswap/sdk'
+import React, { FC, useState } from 'react'
+import { Currency } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
 import Typography from '../Typography'
 import { t } from '@lingui/macro'
-import { classNames, tryParseAmount } from '../../functions'
+import { classNames } from '../../functions'
 import Lottie from 'lottie-react'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import Button from '../Button'
@@ -13,14 +13,14 @@ import CurrencySelectDialog from '../CurrencySelectDialog'
 import CurrencyLogo from '../CurrencyLogo'
 import ListPanel from '../ListPanel'
 import { useTokenBalance } from '../../state/wallet/hooks'
-import { useBentoBalance, useBentoBalance2 } from '../../state/bentobox/hooks'
+import { useBentoBalance2 } from '../../state/bentobox/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 
 interface AssetSelectProps {
   title?: string
-  value: Token
-  onSelect: (x: Token) => void
+  value: Currency
+  onSelect: (x: Currency) => void
 }
 
 const AssetSelect = (props: AssetSelectProps) => {
@@ -106,12 +106,12 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect }) => {
   )
 }
 
-const BalancePanel = ({ currency }: { currency: Token }) => {
+const BalancePanel = ({ currency }: { currency: Currency }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const bento = useBentoBalance2(account, currency)
+  const bento = useBentoBalance2(account, currency?.wrapped)
   const bentoUSDC = useUSDCValue(bento)
-  const wallet = useTokenBalance(account, currency)
+  const wallet = useTokenBalance(account, currency?.wrapped)
   const walletUSDC = useUSDCValue(wallet)
 
   return (

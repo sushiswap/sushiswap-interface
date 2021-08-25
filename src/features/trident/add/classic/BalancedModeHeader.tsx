@@ -4,13 +4,12 @@ import { useLingui } from '@lingui/react'
 import Typography from '../../../../components/Typography'
 import BalancedModeExplanationModal from './BalancedModeExplanationModal'
 import { ActionType, LiquidityMode } from '../../types'
-import { ClassicPoolContext, ClassicPoolState } from './context/types'
-import { useTridentContext, useTridentState } from '../../context'
+import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
 
 const BalancedModeHeader: FC = () => {
   const { i18n } = useLingui()
-  const { balancedMode, liquidityMode } = useTridentState<ClassicPoolState>()
-  const { dispatch } = useTridentContext<ClassicPoolContext>()
+  const { balancedMode, liquidityMode } = useTridentAddClassicState()
+  const { dispatch } = useTridentAddClassicContext()
 
   const disableBalancedMode = useCallback(() => {
     dispatch({

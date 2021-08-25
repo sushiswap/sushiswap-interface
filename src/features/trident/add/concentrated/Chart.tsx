@@ -4,12 +4,13 @@ import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
 import { Disclosure } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
-import { useTridentContext } from '../../context'
-import { ConcentratedPoolContext } from './context/types'
+import { useTridentAddConcentratedContext } from './context'
 
 const Chart: FC = () => {
   const { i18n } = useLingui()
-  const { pool } = useTridentContext<ConcentratedPoolContext>()
+  const { currencies } = useTridentAddConcentratedContext()
+
+  const [currencyA, currencyB] = Object.values(currencies)
 
   return (
     <Disclosure>
@@ -25,7 +26,7 @@ const Chart: FC = () => {
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <Typography weight={700} className="text-high-emphesis">
-                  1 {pool.tokens[0].symbol}
+                  1 {currencyA?.symbol}
                 </Typography>
                 <svg
                   className="text-secondary"
@@ -41,7 +42,7 @@ const Chart: FC = () => {
                   />
                 </svg>
                 <Typography weight={700} className="text-high-emphesis">
-                  {pool.tokens[1].symbol}
+                  {currencyB?.symbol}
                 </Typography>
               </div>
             </div>

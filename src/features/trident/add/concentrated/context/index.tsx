@@ -1,8 +1,7 @@
 import React, { createContext, FC, useCallback, useContext, useMemo, useReducer } from 'react'
-import { WithTridentPool, withTridentPool } from '../../../../../hooks/useTridentPools'
 import { ConcentratedPoolContext, ConcentratedPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
-import { LiquidityMode, PoolType, Reducer } from '../../../types'
+import { LiquidityMode, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import {
   handleInput,
@@ -13,7 +12,10 @@ import {
   setTxHash,
   showReview,
 } from '../../../context/actions'
-import TridentFacadeProvider from '../../../context'
+import { useRouter } from 'next/router'
+import { useCurrency } from '../../../../../hooks/Tokens'
+import { Fee } from '../../../../../../../sushiswap-sdk'
+import { useTridentClassicPool } from '../../../../../hooks/useTridentClassicPools'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -32,7 +34,7 @@ const initialState: ConcentratedPoolState = {
 export const TridentAddConcentratedContext = createContext<ConcentratedPoolContext>({
   state: initialState,
   pool: null,
-  tokens: {},
+  currencies: {},
   parsedInputAmounts: {},
   parsedOutputAmounts: {},
   execute: () => null,
@@ -45,10 +47,27 @@ export const TridentAddConcentratedContext = createContext<ConcentratedPoolConte
   setLiquidityMode: () => null,
 })
 
-const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
+const TridentAddConcentratedContextProvider: FC = ({ children }) => {
+  const { query } = useRouter()
+
+  const currencyA = useCurrency(query.tokens[0])
+  const currencyB = useCurrency(query.tokens[1])
+  const fee = Fee[query.fee as string]
+
+  // TODO
+  const [loading, pool] = useTridentClassicPool(currencyA, currencyB, fee, !!query.twap)
+
+  const currencies = useMemo(
+    () => ({
+      [currencyA?.wrapped.address]: currencyA,
+      [currencyB?.wrapped.address]: currencyB,
+    }),
+    [currencyA, currencyB]
+  )
+
   const [state, dispatch] = useReducer<React.Reducer<ConcentratedPoolState, Reducer>>(reducer, {
     ...initialState,
-    inputAmounts: pool.tokens.reduce((acc, cur) => ((acc[cur.address] = ''), acc), {}),
+    inputAmounts: Object.keys(currencies).reduce((acc, cur) => ((acc[cur] = ''), acc), {}),
   })
 
   const execute = useCallback(async () => {
@@ -65,10 +84,10 @@ const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, 
   // derived state should go here (in the context)
   const parsedInputAmounts = useMemo(() => {
     return Object.entries(state.inputAmounts).reduce((acc, [k, v]) => {
-      acc[k] = tryParseAmount(v, tokens[k])
+      acc[k] = tryParseAmount(v, currencies[k])
       return acc
     }, {})
-  }, [state.inputAmounts, tokens])
+  }, [state.inputAmounts, currencies])
 
   // Default output parse
   // For NORMAL mode, outputAmounts equals inputAmounts.
@@ -83,7 +102,7 @@ const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, 
         () => ({
           state,
           pool,
-          tokens,
+          currencies,
           parsedInputAmounts,
           parsedOutputAmounts,
           execute,
@@ -95,15 +114,15 @@ const TridentAddConcentratedContextProvider: FC<WithTridentPool> = ({ children, 
           setSpendFromWallet: setSpendFromWallet(dispatch),
           setLiquidityMode: setLiquidityMode(dispatch),
         }),
-        [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
+        [state, pool, currencies, parsedInputAmounts, parsedOutputAmounts, execute]
       )}
     >
-      <TridentFacadeProvider pool={pool}>{children}</TridentFacadeProvider>
+      {children}
     </TridentAddConcentratedContext.Provider>
   )
 }
 
-export default withTridentPool(PoolType.CONCENTRATED)(TridentAddConcentratedContextProvider)
+export default TridentAddConcentratedContextProvider
 export const useTridentAddConcentratedContext = () => useContext(TridentAddConcentratedContext)
 export const useTridentAddConcentratedState = () => useContext(TridentAddConcentratedContext).state
 export const useTridentAddConcentratedDispatch = () => useContext(TridentAddConcentratedContext).dispatch

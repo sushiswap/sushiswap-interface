@@ -14,15 +14,8 @@ import { useTridentRemoveClassicContext, useTridentRemoveClassicState } from './
 const ClassicUnzapMode: FC = () => {
   const { i18n } = useLingui()
   const { percentageAmount, outputTokenAddress } = useTridentRemoveClassicState()
-  const {
-    pool,
-    showReview,
-    tokens,
-    handlePercentageAmount,
-    parsedInputAmounts,
-    selectOutputToken,
-    parsedOutputAmounts,
-  } = useTridentRemoveClassicContext()
+  const { showReview, currencies, handlePercentageAmount, parsedInputAmounts, selectOutputToken, parsedOutputAmounts } =
+    useTridentRemoveClassicContext()
 
   // TODO this value is incorrect
   const usdcValue = useUSDCValue(parsedInputAmounts[outputTokenAddress])
@@ -30,15 +23,18 @@ const ClassicUnzapMode: FC = () => {
   return (
     <div className="px-5 mt-5">
       <div className="flex flex-col gap-8">
-        <AssetSelect value={tokens[outputTokenAddress]} onSelect={(token: Token) => selectOutputToken(token.address)} />
+        <AssetSelect
+          value={currencies[outputTokenAddress]}
+          onSelect={(token: Token) => selectOutputToken(token.address)}
+        />
         <div className="flex flex-col gap-3">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
           </Typography>
           <ListPanel
             header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
-            items={pool.tokens.map((token, index) => (
-              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[token.address]} key={index} />
+            items={Object.keys(currencies).map((address, index) => (
+              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[address]} key={index} />
             ))}
             footer={
               <div className="flex justify-between items-center px-4 py-5 gap-3">

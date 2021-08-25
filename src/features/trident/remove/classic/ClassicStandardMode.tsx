@@ -12,7 +12,7 @@ import { useTridentRemoveClassicContext, useTridentRemoveClassicState } from './
 const ClassicUnzapMode: FC = () => {
   const { i18n } = useLingui()
   const { percentageAmount, outputTokenAddress } = useTridentRemoveClassicState()
-  const { pool, handlePercentageAmount, parsedInputAmounts, parsedOutputAmounts, showReview } =
+  const { currencies, handlePercentageAmount, parsedInputAmounts, parsedOutputAmounts, showReview } =
     useTridentRemoveClassicContext()
 
   // TODO this value is incorrect
@@ -27,8 +27,8 @@ const ClassicUnzapMode: FC = () => {
           </Typography>
           <ListPanel
             header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
-            items={pool.tokens.map((token, index) => (
-              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[token.address]} key={index} />
+            items={Object.keys(currencies).map((address, index) => (
+              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[address]} key={index} />
             ))}
             footer={
               <div className="flex justify-between items-center px-4 py-5 gap-3">

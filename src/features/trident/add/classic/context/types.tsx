@@ -1,11 +1,12 @@
 import { TridentContext, TridentState } from '../../../types'
+import { ConstantProductPool } from '../../../../../../../sushiswap-sdk'
 
 export type ClassicPoolContext = {
   state: ClassicPoolState
+  pool: ConstantProductPool | null
 } & Pick<
   TridentContext,
-  | 'pool'
-  | 'tokens'
+  | 'currencies'
   | 'parsedInputAmounts'
   | 'parsedOutputAmounts'
   | 'selectInputToken'

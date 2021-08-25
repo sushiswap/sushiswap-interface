@@ -9,13 +9,33 @@ import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 import { ZERO } from '@sushiswap/sdk'
 import TransactionDetails from './TransactionDetails'
-import { LiquidityMode, PoolContextType, PoolStateType } from '../types'
-import { useTridentContext, useTridentState } from '../context'
+import { LiquidityMode } from '../types'
+import {
+  ClassicPoolContext as ClassicPoolAddContext,
+  ClassicPoolState as ClassicPoolAddState,
+} from './classic/context/types'
+import {
+  WeightedPoolContext as WeightedPoolAddContext,
+  WeightedPoolState as WeightedPoolAddState,
+} from './weighted/context/types'
+import {
+  HybridPoolContext as HybridPoolAddContext,
+  HybridPoolState as HybridPoolAddState,
+} from './hybrid/context/types'
+import {
+  ConcentratedPoolContext as ConcentratedPoolAddContext,
+  ConcentratedPoolState as ConcentratedPoolAddState,
+} from './concentrated/context/types'
 
-const AddTransactionReviewModal = <S extends PoolStateType, C extends PoolContextType>() => {
+interface AddTransactionReviewModalProps {
+  state: ClassicPoolAddState | WeightedPoolAddState | HybridPoolAddState | ConcentratedPoolAddState
+  context: ClassicPoolAddContext | WeightedPoolAddContext | HybridPoolAddContext | ConcentratedPoolAddContext
+}
+
+const AddTransactionReviewModal: FC<AddTransactionReviewModalProps> = ({ state, context }) => {
   const { i18n } = useLingui()
-  const { liquidityMode, showZapReview } = useTridentState<S>()
-  const { pool, parsedInputAmounts, execute, parsedOutputAmounts, showReview } = useTridentContext<C>()
+  const { liquidityMode, showZapReview } = state
+  const { currencies, parsedInputAmounts, execute, parsedOutputAmounts, showReview } = context
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -65,8 +85,8 @@ const AddTransactionReviewModal = <S extends PoolStateType, C extends PoolContex
                 {i18n._(t`Which will be converted to:`)}
               </Typography>
               <ListPanel
-                items={pool.tokens.map((token, index) => (
-                  <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[token.address]} key={index} />
+                items={Object.keys(currencies).map((address, index) => (
+                  <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[address]} key={index} />
                 ))}
               />
             </div>
@@ -96,13 +116,13 @@ const AddTransactionReviewModal = <S extends PoolStateType, C extends PoolContex
           </div>
           <Divider />
           <div className="flex flex-col gap-1">
-            {pool.tokens.map((token, index) => (
+            {Object.values(currencies).map((token, index) => (
               <div className="flex justify-between" key={index}>
                 <Typography variant="sm" className="text-secondary">
-                  {i18n._(t`${token.symbol} Deposited:`)}
+                  {i18n._(t`${token?.symbol} Deposited:`)}
                 </Typography>
                 <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                  0.00 → 281.2334 {token.symbol}
+                  0.00 → 281.2334 {token?.symbol}
                 </Typography>
               </div>
             ))}

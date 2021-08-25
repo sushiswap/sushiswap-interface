@@ -12,16 +12,17 @@ import { useTridentRemoveWeightedContext, useTridentRemoveWeightedState } from '
 const WeightedUnzapMode: FC = () => {
   const { i18n } = useLingui()
   const { percentageAmount, outputTokenAddress } = useTridentRemoveWeightedState()
-  const { pool, handlePercentageAmount, parsedInputAmounts, parsedOutputAmounts, showReview } =
+  const { currencies, handlePercentageAmount, parsedInputAmounts, parsedOutputAmounts, showReview } =
     useTridentRemoveWeightedContext()
 
   // TODO this value is incorrect
   const usdcValue = useUSDCValue(parsedInputAmounts[outputTokenAddress])
 
   // TODO Fixture
+  const [addressA, addressB] = Object.keys(currencies)
   const weights = {
-    [pool.tokens[0].address]: '70%',
-    [pool.tokens[1].address]: '30%',
+    [addressA]: '70%',
+    [addressB]: '30%',
   }
 
   return (
@@ -33,8 +34,8 @@ const WeightedUnzapMode: FC = () => {
           </Typography>
           <ListPanel
             header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
-            items={pool.tokens.map((token, index) => (
-              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[token.address]} key={index} />
+            items={Object.keys(currencies).map((address, index) => (
+              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[address]} key={index} />
             ))}
             footer={
               <div className="flex justify-between items-center px-4 py-5 gap-3">
@@ -68,7 +69,11 @@ const WeightedUnzapMode: FC = () => {
           <div className="flex flex-col gap-4">
             <ListPanel
               items={Object.values(parsedOutputAmounts).map((amount, index) => (
-                <ListPanel.CurrencyAmountItem amount={amount} key={index} weight={weights[amount?.currency.address]} />
+                <ListPanel.CurrencyAmountItem
+                  amount={amount}
+                  key={index}
+                  weight={weights[amount?.currency?.wrapped.address]}
+                />
               ))}
             />
             <Button color="gradient" disabled={!percentageAmount} onClick={() => showReview(true)}>

@@ -4,13 +4,12 @@ import DepositButtons from '../DepositButtons'
 import TransactionDetails from '../TransactionDetails'
 import { ZERO } from '@sushiswap/sdk'
 import useSufficientBalances from '../../../../hooks/useSufficientBalances'
-import { ConcentratedPoolContext, ConcentratedPoolState } from './context/types'
-import { useTridentContext, useTridentState } from '../../context'
+import { useTridentAddConcentratedContext, useTridentAddConcentratedState } from './context'
 
 const StandardMode: FC = () => {
-  const { inputAmounts, spendFromWallet } = useTridentState<ConcentratedPoolState>()
-  const { pool, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } =
-    useTridentContext<ConcentratedPoolContext>()
+  const { inputAmounts, spendFromWallet } = useTridentAddConcentratedState()
+  const { currencies, handleInput, parsedInputAmounts, showReview, setSpendFromWallet } =
+    useTridentAddConcentratedContext()
   const sufficientBalances = useSufficientBalances(parsedInputAmounts, spendFromWallet)
 
   // TODO
@@ -18,23 +17,22 @@ const StandardMode: FC = () => {
   const isMaxInput = false
 
   const validInputs = sufficientBalances && Object.values(parsedInputAmounts).every((el) => el?.greaterThan(ZERO))
+  const [addressA, addressB] = Object.keys(currencies)
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 px-5">
         <AssetInput
-          key={pool.tokens[0].address}
-          value={inputAmounts[pool.tokens[0].address]}
-          currency={pool.tokens[0]}
-          onChange={(val) => handleInput(val, pool.tokens[0].address)}
+          value={inputAmounts[addressA]}
+          currency={currencies[addressA]}
+          onChange={(val) => handleInput(val, addressA)}
           headerRight={<AssetInput.WalletSwitch onChange={setSpendFromWallet} checked={spendFromWallet} />}
           spendFromWallet={spendFromWallet}
         />
         <AssetInput
-          key={pool.tokens[1].address}
-          value={inputAmounts[pool.tokens[1].address]}
-          currency={pool.tokens[1]}
-          onChange={(val) => handleInput(val, pool.tokens[1].address)}
+          value={inputAmounts[addressB]}
+          currency={currencies[addressB]}
+          onChange={(val) => handleInput(val, addressB)}
           spendFromWallet={spendFromWallet}
         />
 

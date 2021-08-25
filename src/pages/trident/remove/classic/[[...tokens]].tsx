@@ -11,16 +11,17 @@ import React from 'react'
 import ClassicUnzapMode from '../../../../features/trident/remove/classic/ClassicUnzapMode'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
 import ClassicStandardMode from '../../../../features/trident/remove/classic/ClassicStandardMode'
-import TridentRemoveClassicContextProvider from '../../../../features/trident/remove/classic/context'
+import TridentRemoveClassicContextProvider, {
+  useTridentRemoveClassicContext,
+  useTridentRemoveClassicState,
+} from '../../../../features/trident/remove/classic/context'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import { LiquidityMode } from '../../../../features/trident/types'
-import { useTridentContext, useTridentState } from '../../../../features/trident/context'
-import { ClassicPoolContext, ClassicPoolState } from '../../../../features/trident/remove/classic/context/types'
 
 const RemoveClassic = () => {
   const { i18n } = useLingui()
-  const { liquidityMode } = useTridentState<ClassicPoolState>()
-  const { pool } = useTridentContext<ClassicPoolContext>()
+  const state = useTridentRemoveClassicState()
+  const context = useTridentRemoveClassicContext()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -33,7 +34,7 @@ const RemoveClassic = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref('classic', context.currencies)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -52,14 +53,14 @@ const RemoveClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle />
+      <ModeToggle context={context} state={state} />
 
       <>
-        {liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
-        {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+        {state.liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
+        {state.liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
       </>
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewModal state={state} context={context} />
     </div>
   )
 }

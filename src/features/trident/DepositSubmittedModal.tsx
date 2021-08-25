@@ -6,13 +6,17 @@ import { useActiveWeb3React } from '../../hooks'
 import Button from '../../components/Button'
 import Link from 'next/link'
 import HeadlessUiModal from '../../components/Modal/HeadlessUIModal'
-import { useTridentState } from './context'
-import { PoolContextType, PoolStateType } from './types'
+import { PoolStateType } from './types'
+import { FC } from 'react'
 
-const DepositSubmittedModal = <S extends PoolStateType, C extends PoolContextType>() => {
+interface DepositSubmittedModalProps {
+  state: PoolStateType
+}
+
+const DepositSubmittedModal: FC<DepositSubmittedModalProps> = ({ state }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { txHash } = useTridentState<S>()
+  const { txHash } = state
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => {}}>

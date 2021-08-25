@@ -9,13 +9,15 @@ import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import React from 'react'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
-import TridentRemoveConcentratedContextProvider from '../../../../features/trident/remove/concentrated/context'
-import { ConcentratedPoolContext } from '../../../../features/trident/remove/concentrated/context/types'
-import { useTridentContext } from '../../../../features/trident/context'
+import TridentRemoveConcentratedContextProvider, {
+  useTridentRemoveConcentratedContext,
+  useTridentRemoveConcentratedState,
+} from '../../../../features/trident/remove/concentrated/context'
 
 const RemoveConcentrated = () => {
   const { i18n } = useLingui()
-  const { pool } = useTridentContext<ConcentratedPoolContext>()
+  const state = useTridentRemoveConcentratedState()
+  const context = useTridentRemoveConcentratedContext()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -28,7 +30,7 @@ const RemoveConcentrated = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref(pool)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref('concentrated', context.currencies)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -49,7 +51,7 @@ const RemoveConcentrated = () => {
 
       {/*{liquidityMode === LiquidityMode.ZAP && <ConcentratedMode />}*/}
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewModal state={state} context={context} />
     </div>
   )
 }

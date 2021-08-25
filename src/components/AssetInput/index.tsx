@@ -5,7 +5,7 @@ import React, { FC, ReactNode, useState } from 'react'
 import Button from '../../components/Button'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { classNames, maxAmountSpend, tryParseAmount } from '../../functions'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import CurrencyLogo from '../../components/CurrencyLogo'
@@ -25,7 +25,7 @@ import Chip from '../Chip'
 
 interface AssetInputProps {
   value: string
-  currency: Token
+  currency: Currency
   onChange: (x: string) => void
   spendFromWallet?: boolean
   title?: string
@@ -41,8 +41,8 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
   const { account } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
 
-  const bentoBalance = useBentoBalance2(account, props.currency)
-  const walletBalance = useTokenBalance(account, props.currency)
+  const bentoBalance = useBentoBalance2(account, props.currency?.wrapped)
+  const walletBalance = useTokenBalance(account, props.currency?.wrapped)
   const balance = spendFromWallet ? walletBalance : bentoBalance
   const maxSpend = maxAmountSpend(balance)?.toExact()
   const parsedInput = tryParseAmount(props.value, props.currency)

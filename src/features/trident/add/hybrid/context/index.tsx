@@ -1,11 +1,13 @@
 import React, { createContext, FC, useCallback, useContext, useMemo, useReducer } from 'react'
-import { WithTridentPool, withTridentPool } from '../../../../../hooks/useTridentPools'
 import { HybridPoolContext, HybridPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
-import { LiquidityMode, PoolType, Reducer } from '../../../types'
+import { LiquidityMode, Reducer } from '../../../types'
 import reducer from '../../../context/reducer'
 import { handleInput, selectInputToken, setLiquidityMode, setTxHash, showReview } from '../../../context/actions'
-import TridentFacadeProvider from '../../../context'
+import { useRouter } from 'next/router'
+import { useCurrency } from '../../../../../hooks/Tokens'
+import { Fee } from '../../../../../../../sushiswap-sdk'
+import { useTridentClassicPool } from '../../../../../hooks/useTridentClassicPools'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
@@ -22,7 +24,7 @@ const initialState: HybridPoolState = {
 export const TridentAddHybridContext = createContext<HybridPoolContext>({
   state: initialState,
   pool: null,
-  tokens: {},
+  currencies: {},
   parsedInputAmounts: {},
   parsedOutputAmounts: {},
   execute: () => null,
@@ -33,20 +35,37 @@ export const TridentAddHybridContext = createContext<HybridPoolContext>({
   dispatch: () => null,
 })
 
-const TridentAddHybridContextProvider: FC<WithTridentPool> = ({ children, pool, tokens }) => {
+const TridentAddHybridContextProvider: FC = ({ children }) => {
+  const { query } = useRouter()
+
+  const currencyA = useCurrency(query.tokens[0])
+  const currencyB = useCurrency(query.tokens[1])
+  const fee = Fee[query.fee as string]
+
+  // TODO
+  const [loading, pool] = useTridentClassicPool(currencyA, currencyB, fee, !!query.twap)
+
+  const currencies = useMemo(
+    () => ({
+      [currencyA?.wrapped.address]: currencyA,
+      [currencyB?.wrapped.address]: currencyB,
+    }),
+    [currencyA, currencyB]
+  )
+
   const [state, dispatch] = useReducer<React.Reducer<HybridPoolState, Reducer>>(reducer, {
     ...initialState,
-    inputAmounts: pool.tokens.reduce((acc, cur) => ((acc[cur.address] = ''), acc), {}),
+    inputAmounts: Object.keys(currencies).reduce((acc, cur) => ((acc[cur] = ''), acc), {}),
   })
 
   // We don't want this in the state because the state should consist of primitive values only,
   // derived state should go here (in the context)
   const parsedInputAmounts = useMemo(() => {
     return Object.entries(state.inputAmounts).reduce((acc, [k, v]) => {
-      acc[k] = tryParseAmount(v, tokens[k])
+      acc[k] = tryParseAmount(v, currencies[k])
       return acc
     }, {})
-  }, [state.inputAmounts, tokens])
+  }, [state.inputAmounts, currencies])
 
   const parsedOutputAmounts = useMemo(() => {
     // For NORMAL mode, outputAmounts equals inputAmounts.
@@ -56,14 +75,14 @@ const TridentAddHybridContextProvider: FC<WithTridentPool> = ({ children, pool, 
 
     // TODO this is not returning correct values for other tokens. Needs contract integration
     if (state.liquidityMode === LiquidityMode.ZAP) {
-      return pool.tokens.reduce((acc, cur) => {
-        acc[cur.address] = tryParseAmount(state.inputAmounts[state.inputTokenAddress], cur)?.divide(
+      return Object.entries(currencies).reduce((acc, [k, v]) => {
+        acc[k] = tryParseAmount(state.inputAmounts[state.inputTokenAddress], v)?.divide(
           Object.keys(state.inputAmounts).length
         )
         return acc
       }, {})
     }
-  }, [parsedInputAmounts, pool.tokens, state.inputAmounts, state.inputTokenAddress, state.liquidityMode])
+  }, [currencies, parsedInputAmounts, state.inputAmounts, state.inputTokenAddress, state.liquidityMode])
 
   const execute = useCallback(async () => {
     // Do some custom execution
@@ -80,7 +99,7 @@ const TridentAddHybridContextProvider: FC<WithTridentPool> = ({ children, pool, 
         () => ({
           state,
           pool,
-          tokens,
+          currencies,
           selectInputToken: selectInputToken(dispatch),
           setLiquidityMode: setLiquidityMode(dispatch),
           parsedInputAmounts,
@@ -90,14 +109,14 @@ const TridentAddHybridContextProvider: FC<WithTridentPool> = ({ children, pool, 
           showReview: showReview(dispatch),
           dispatch,
         }),
-        [state, pool, tokens, parsedInputAmounts, parsedOutputAmounts, execute]
+        [state, pool, currencies, parsedInputAmounts, parsedOutputAmounts, execute]
       )}
     >
-      <TridentFacadeProvider pool={pool}>{children}</TridentFacadeProvider>
+      {children}
     </TridentAddHybridContext.Provider>
   )
 }
-export default withTridentPool(PoolType.HYBRID)(TridentAddHybridContextProvider)
+export default TridentAddHybridContextProvider
 export const useTridentAddHybridContext = () => useContext(TridentAddHybridContext)
 export const useTridentAddHybridState = () => useContext(TridentAddHybridContext).state
 export const useTridentAddHybridDispatch = () => useContext(TridentAddHybridContext).dispatch

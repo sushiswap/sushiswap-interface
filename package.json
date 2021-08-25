@@ -78,7 +78,6 @@
     "@sushiswap/default-token-list": "14.1.0",
     "@sushiswap/limit-order-pair-list": "0.2.2",
     "@sushiswap/sushi-data": "^1.0.24",
-    "@sushiswap/sdk": "^5.0.0-canary.52",
     "@tailwindcss/jit": "^0.1.18",
     "@transak/transak-sdk": "^1.0.28",
     "@types/node": "^15.12.2",
@@ -179,5 +178,8 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "@sushiswap/sdk": "^5.0.0-canary.52"
+  }
 }
