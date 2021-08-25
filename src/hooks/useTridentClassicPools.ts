@@ -9,7 +9,7 @@ import {
 } from '@sushiswap/sdk'
 
 import { Interface } from '@ethersproject/abi'
-import { abi } from '@sushiswap/trident/artifacts/ConstantProductPool.json'
+import { abi } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 
@@ -27,7 +27,9 @@ export function useTridentClassicPools(
 ): [ConstantProductPoolState, ConstantProductPool | null][] {
   const poolAddresses = useMemo(
     () =>
-      pools.map(([tokenA, tokenB, fee, twap]) => {
+      pools.map(([currencyA, currencyB, fee, twap]) => {
+        const tokenA = currencyA?.wrapped
+        const tokenB = currencyB?.wrapped
         return tokenA &&
           tokenB &&
           tokenA.chainId === tokenB.chainId &&
