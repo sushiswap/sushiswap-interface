@@ -17,7 +17,7 @@ const NavLink = ({ children, exact = false, activeClassName = 'text-high-emphesi
     : asPath.startsWith(props.as || props.href.pathname || props.href)
 
   const className = isActive ? `${childClassName} ${activeClassName}`.trim() : childClassName
-
+  if (isActive) console.log(asPath, className)
   // console.log({ asPath, pathname, route, query })
 
   return (
