@@ -86,12 +86,7 @@ export interface TridentState {
   balancedMode: boolean
   spendFromWallet: boolean
   txHash: string
-  typedField?: MintField | BurnField
-}
-
-export interface HandleInputOptions {
-  clear?: boolean
-  typedField?: MintField | BurnField
+  typedFieldAddress?: string
 }
 
 export interface TridentContext {
@@ -101,7 +96,6 @@ export interface TridentContext {
   parsedOutputAmounts: Record<string, CurrencyAmount<Currency> | undefined>
   currencies: Record<string, Currency>
   execute: () => void
-  handleInput: (amount: string, address: string, options?: HandleInputOptions) => void
   selectInputToken: (address: string) => void
   setLiquidityMode: (x: LiquidityMode) => void
   showReview: (x: boolean) => void

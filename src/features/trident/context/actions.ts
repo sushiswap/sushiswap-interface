@@ -1,16 +1,10 @@
-import { ActionType, HandleInputOptions, LiquidityMode } from '../types'
+import { ActionType, LiquidityMode } from '../types'
 
-export const handleInput =
-  (dispatch) =>
-  (amount: string, address: string, options: HandleInputOptions = {}) =>
-    dispatch({
-      type: options.clear ? ActionType.SET_INPUT_AMOUNT_WITH_CLEAR : ActionType.SET_INPUT_AMOUNT,
-      payload: {
-        amount,
-        address,
-        options,
-      },
-    })
+export const handleInput = (dispatch) => (payload) =>
+  dispatch({
+    type: ActionType.SET_INPUT_AMOUNT,
+    payload,
+  })
 
 export const handlePercentageAmount = (dispatch) => (amount: string) =>
   dispatch({

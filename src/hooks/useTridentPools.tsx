@@ -6,8 +6,8 @@ import { Pool, PoolType } from '../features/trident/types'
 import { useRouter } from 'next/router'
 import { SUSHI, USDC } from '../config/tokens'
 
-export const toHref = (type: string, currencies: Record<string, Currency>) => {
-  const addresses = Object.keys(currencies)
+export const toHref = (type: string, currencies: Currency[]) => {
+  const addresses = currencies.map((el) => el?.wrapped.address)
   return `${type}/${addresses.join('/')}`
 }
 
@@ -95,22 +95,4 @@ export const useTridentPool = (addresses: string | string[], type: PoolType): Us
   return [getPoolByAddresses(addresses as string[], type), { toHref }]
 }
 
-export interface WithTridentPool {
-  pool: Pool
-  tokens: Record<string, Token>
-}
-
-export const withTridentPool = (poolType: PoolType) => (Component) => {
-  return ({ children }) => {
-    const { query } = useRouter()
-    const [pool] = useTridentPool(query.tokens, poolType)
-    const tokens = useMemo(() => pool.tokens.reduce((acc, cur) => ((acc[cur.address] = cur), acc), {}), [pool?.tokens])
-
-    return (
-      <Component pool={pool} tokens={tokens}>
-        {children}
-      </Component>
-    )
-  }
-}
 export default useTridentPools

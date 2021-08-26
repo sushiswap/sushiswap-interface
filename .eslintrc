@@ -2,6 +2,11 @@
   // "extends": ["next", "next/core-web-vitals"]
   "extends": ["next"],
   "rules": {
-    "react/display-name": "off"
+    "react/display-name": "off",
+    "react-hooks/exhaustive-deps": [
+      "warn", {
+        "additionalHooks": "useRecoilCallback|useRecoilTransaction_UNSTABLE"
+      }
+    ]
   }
 }

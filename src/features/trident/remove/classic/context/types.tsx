@@ -26,5 +26,5 @@ export type ClassicPoolState = Pick<
   | 'liquidityMode'
   | 'percentageAmount'
   | 'txHash'
-  | 'typedField'
+  | 'typedFieldAddress'
 >

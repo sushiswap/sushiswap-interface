@@ -24,7 +24,7 @@ const initialState: ClassicPoolState = {
   inputAmounts: {},
   showZapReview: false,
   txHash: null,
-  typedField: null,
+  typedFieldAddress: null,
 }
 
 export const TridentRemoveClassicContext = createContext<ClassicPoolContext>({

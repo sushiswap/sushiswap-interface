@@ -2,7 +2,6 @@ import React, { createContext, FC, useCallback, useContext, useMemo, useReducer 
 import { ClassicPoolContext, ClassicPoolState } from './types'
 import { tryParseAmount } from '../../../../../functions'
 import { LiquidityMode, Reducer } from '../../../types'
-import reducer from '../../../context/reducer'
 import {
   handleInput,
   selectInputToken,
@@ -15,25 +14,33 @@ import { useTridentClassicPool } from '../../../../../hooks/useTridentClassicPoo
 import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../../hooks/Tokens'
 import { Fee } from '../../../../../../../sushiswap-sdk'
+import { Field } from '../../../../../state/mint/actions'
+import reducer from './reducer'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,
 // ANY OTHER TYPE OF VARIABLE SHOULD BE DEFINED IN THE CONTEXT AND SEND AS DERIVED STATE
 const initialState: ClassicPoolState = {
   inputTokenAddress: null,
   liquidityMode: LiquidityMode.ZAP,
-  inputAmounts: {},
+  typedValue: '',
+  otherTypedValue: '',
+  noLiquidity: false,
+  independentField: Field.CURRENCY_A,
   showZapReview: false,
   balancedMode: false,
   spendFromWallet: true,
   txHash: null,
-  typedField: null,
+  typedFieldAddress: null,
 }
 
 export const TridentAddClassicContext = createContext<ClassicPoolContext>({
   state: initialState,
   pool: null,
-  currencies: {},
-  parsedInputAmounts: {},
+  poolState: null,
+  currencies: {
+    [Field.CURRENCY_A]: null,
+    [Field.CURRENCY_B]: null,
+  },
   parsedOutputAmounts: {},
   execute: () => null,
   handleInput: () => null,
@@ -50,29 +57,19 @@ const TridentAddClassicContextProvider: FC = ({ children }) => {
   const currencyA = useCurrency(query.tokens[0])
   const currencyB = useCurrency(query.tokens[1])
   const fee = Fee[query.fee as string]
-  const [loading, pool] = useTridentClassicPool(currencyA, currencyB, fee, !!query.twap)
+  const [poolState, pool] = useTridentClassicPool(currencyA, currencyB, fee, !!query.twap)
 
   const currencies = useMemo(
     () => ({
-      [currencyA?.wrapped.address]: currencyA,
-      [currencyB?.wrapped.address]: currencyB,
+      [Field.CURRENCY_A]: currencyA,
+      [Field.CURRENCY_B]: currencyB,
     }),
     [currencyA, currencyB]
   )
 
   const [state, dispatch] = useReducer<React.Reducer<ClassicPoolState, Reducer>>(reducer, {
     ...initialState,
-    inputAmounts: Object.keys(currencies).reduce((acc, cur) => ((acc[cur] = ''), acc), {}),
   })
-
-  // We don't want this in the state because the state should consist of primitive values only,
-  // derived state should go here (in the context)
-  const parsedInputAmounts = useMemo(() => {
-    return Object.entries(state.inputAmounts).reduce((acc, [k, v]) => {
-      acc[k] = tryParseAmount(v, currencies[k])
-      return acc
-    }, {})
-  }, [state.inputAmounts, currencies])
 
   const parsedOutputAmounts = useMemo(() => {
     // For NORMAL mode, outputAmounts equals inputAmounts.
@@ -106,10 +103,10 @@ const TridentAddClassicContextProvider: FC = ({ children }) => {
         () => ({
           state,
           pool,
+          poolState,
           currencies,
           selectInputToken: selectInputToken(dispatch),
           setLiquidityMode: setLiquidityMode(dispatch),
-          parsedInputAmounts,
           parsedOutputAmounts,
           execute,
           handleInput: handleInput(dispatch),
@@ -117,7 +114,7 @@ const TridentAddClassicContextProvider: FC = ({ children }) => {
           dispatch,
           setSpendFromWallet: setSpendFromWallet(dispatch),
         }),
-        [state, pool, currencies, parsedInputAmounts, parsedOutputAmounts, execute]
+        [state, pool, poolState, currencies, parsedOutputAmounts, execute]
       )}
     >
       {children}

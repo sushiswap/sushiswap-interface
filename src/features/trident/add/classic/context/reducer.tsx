@@ -1,7 +1,8 @@
 import React from 'react'
-import { ActionType, Reducer, TridentState } from '../types'
+import { ActionType, Reducer } from '../../../types'
+import { ClassicPoolState } from './types'
 
-const reducer: React.Reducer<TridentState, Reducer> = (state: any, action: any) => {
+const reducer: React.Reducer<ClassicPoolState, Reducer> = (state: any, action: any) => {
   switch (action.type) {
     case ActionType.SET_INPUT_TOKEN: {
       return {
