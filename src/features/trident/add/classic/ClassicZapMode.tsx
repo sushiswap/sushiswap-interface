@@ -3,19 +3,40 @@ import { t } from '@lingui/macro'
 import Button from '../../../../components/Button'
 import { useLingui } from '@lingui/react'
 import Typography from '../../../../components/Typography'
-import ListPanel from '../../../../components/ListPanel'
 import AssetInput from '../../../../components/AssetInput'
-import { Token } from '@sushiswap/sdk'
 import TransactionDetails from './../TransactionDetails'
 import React from 'react'
-import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
+import {
+  parsedZapAmountSelector,
+  poolAtom,
+  selectedZapCurrencyAtom,
+  showReviewAtom,
+  zapInputAtom,
+} from './context/atoms'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { PairState } from '../../../../hooks/useV2Pairs'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useCurrencyBalance } from '../../../../state/wallet/hooks'
 
 const ClassicZapMode = () => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentAddClassicState()
-  const { currencies, handleInput, showReview, parsedOutputAmounts, selectInputToken } = useTridentAddClassicContext()
+  const [poolState] = useRecoilValue(poolAtom)
+  const [zapInput, setZapInput] = useRecoilState(zapInputAtom)
+  const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
+  const [selectedZapCurrency, setSelectedZapCurrency] = useRecoilState(selectedZapCurrencyAtom)
+  const setShowReview = useSetRecoilState(showReviewAtom)
+  const balance = useCurrencyBalance(account ?? undefined, selectedZapCurrency)
 
-  const validInput = inputTokenAddress && inputAmounts[inputTokenAddress]
+  let error = !account
+    ? i18n._(t`Connect Wallet`)
+    : poolState === PairState.INVALID
+    ? i18n._(t`Invalid pair`)
+    : !zapInput
+    ? i18n._(t`Enter an amount`)
+    : parsedZapAmount && balance?.lessThan(parsedZapAmount)
+    ? i18n._(t`Insufficient ${selectedZapCurrency?.symbol} balance`)
+    : ''
 
   return (
     <>
@@ -30,33 +51,33 @@ const ClassicZapMode = () => {
       </div>
       <div className="flex flex-col gap-4 px-5">
         <AssetInput
-          value={inputAmounts[inputTokenAddress]}
-          currency={currencies[inputTokenAddress]}
-          onChange={(value) => handleInput(value, inputTokenAddress, { clear: true })}
-          onSelect={(token: Token) => selectInputToken(token.address)}
+          value={zapInput}
+          currency={selectedZapCurrency}
+          onChange={setZapInput}
+          onSelect={setSelectedZapCurrency}
         />
         <Button
-          color={inputAmounts[inputTokenAddress] ? 'gradient' : 'gray'}
-          disabled={!validInput}
+          color={zapInput ? 'gradient' : 'gray'}
+          disabled={!!error}
           className="font-bold text-sm"
-          onClick={() => showReview(true)}
+          onClick={() => setShowReview(true)}
         >
-          {inputAmounts[inputTokenAddress] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
+          {!error ? i18n._(t`Confirm Deposit`) : error}
         </Button>
       </div>
       <div className="flex flex-col gap-4 px-5 mt-8">
         <Typography weight={700} className="text-high-emphesis">
-          {inputTokenAddress
-            ? i18n._(t`Your ${currencies[inputTokenAddress].symbol} will be split into:`)
+          {selectedZapCurrency
+            ? i18n._(t`Your ${selectedZapCurrency.symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
-        <ListPanel
-          items={Object.values(parsedOutputAmounts).map((amount, index) => (
-            <ListPanel.CurrencyAmountItem amount={amount} key={index} />
-          ))}
-        />
+        {/*<ListPanel*/}
+        {/*  items={Object.values(parsedOutputAmounts).map((amount, index) => (*/}
+        {/*    <ListPanel.CurrencyAmountItem amount={amount} key={index} />*/}
+        {/*  ))}*/}
+        {/*/>*/}
       </div>
-      {validInput && (
+      {!error && (
         <div className="mt-6 px-5">
           <TransactionDetails />
         </div>

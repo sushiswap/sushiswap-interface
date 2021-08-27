@@ -11,50 +11,62 @@ import React, { useEffect } from 'react'
 import SettingsTab from '../../../../components/Settings'
 import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
 import { LiquidityMode } from '../../../../features/trident/types'
-import { atom, RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import { ConstantProductPool, Currency, Fee } from '../../../../../../sushiswap-sdk'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import {
   currenciesAtom,
   liquidityModeAtom,
   poolAtom,
+  poolBalanceAtom,
   totalSupplyAtom,
 } from '../../../../features/trident/add/classic/context/atoms'
 import { useV2Pair } from '../../../../hooks/useV2Pairs'
+import { useTokenBalance } from '../../../../state/wallet/hooks'
+import { useActiveWeb3React } from '../../../../hooks'
+import AddTransactionReviewModal from '../../../../features/trident/add/classic/AddTransactionReviewModal'
+import ModeToggle from '../../../../features/trident/ModeToggle'
+import BalancedModeHeader from '../../../../features/trident/add/classic/BalancedModeHeader'
+import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
 
 const AddClassic = () => {
+  const { account } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
 
-  const setPool = useSetRecoilState(poolAtom)
+  const [[, pool], setPool] = useRecoilState(poolAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [currencies, setCurrencies] = useRecoilState(currenciesAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
-
-  const currencyA = useCurrency(query.tokens[0])
-  const currencyB = useCurrency(query.tokens[1])
+  const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
   // TODO USE V2 FOR TESTING
+  const currencyA = useCurrency(query.tokens[0])
+  const currencyB = useCurrency(query.tokens[1])
   const classicPool = useV2Pair(currencyA, currencyB)
-
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, pool?.liquidityToken)
 
   useEffect(() => {
     if (!classicPool[1]) return
-
     setPool(classicPool)
   }, [classicPool, setPool])
 
   useEffect(() => {
+    if (!currencyA || !currencyB) return
     setCurrencies([currencyA, currencyB])
   }, [currencyA, currencyB, setCurrencies])
 
   useEffect(() => {
+    if (!totalSupply) return
     setTotalSupply(totalSupply)
   }, [setTotalSupply, totalSupply])
+
+  useEffect(() => {
+    if (!poolBalance) return
+    setPoolBalance(poolBalance)
+  }, [poolBalance, setPoolBalance])
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -87,14 +99,13 @@ const AddClassic = () => {
         <div className="h-2" />
       </div>
 
-      {/*<ModeToggle state={state} context={context} />*/}
-      {/*<BalancedModeHeader />*/}
+      <ModeToggle />
+      <BalancedModeHeader />
 
-      {/*{state.liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}*/}
-      {/*{state.liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}*/}
-      {/**/}
-      <ClassicStandardMode />
-      {/*<AddTransactionReviewModal state={state} context={context} />*/}
+      {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
+      {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+
+      <AddTransactionReviewModal />
       {/*<DepositSubmittedModal state={state} />*/}
     </div>
   )

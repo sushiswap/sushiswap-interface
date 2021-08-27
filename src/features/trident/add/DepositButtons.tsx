@@ -10,9 +10,10 @@ interface DepositButtonsProps {
   onMax?: () => void
   isMaxInput?: boolean
   onClick: () => void
+  errorMessage?: string
 }
 
-const DepositButtons: FC<DepositButtonsProps> = ({ inputValid, isMaxInput, onMax, onClick }) => {
+const DepositButtons: FC<DepositButtonsProps> = ({ inputValid, isMaxInput, onMax, onClick, errorMessage }) => {
   const { i18n } = useLingui()
 
   const onMaxButton = (
@@ -26,9 +27,9 @@ const DepositButtons: FC<DepositButtonsProps> = ({ inputValid, isMaxInput, onMax
   return (
     <div className={classNames(onMax && !isMaxInput ? 'grid grid-cols-2 gap-3' : 'flex')}>
       {!isMaxInput && onMaxButton}
-      <Button color="gradient" disabled={!inputValid} onClick={onClick}>
+      <Button color="gradient" disabled={!!errorMessage} onClick={onClick}>
         <Typography variant="sm" weight={700} className={inputValid ? 'text-high-emphesis' : 'text-low-emphasis'}>
-          {inputValid ? i18n._(t`Confirm Deposit`) : i18n._(t`Enter Amounts`)}
+          {!errorMessage ? i18n._(t`Confirm Deposit`) : errorMessage}
         </Typography>
       </Button>
     </div>

@@ -1,33 +1,33 @@
-import React, { FC } from 'react'
-import Button from '../../../components/Button'
-import { ChevronLeftIcon } from '@heroicons/react/solid'
-import { t } from '@lingui/macro'
-import Typography from '../../../components/Typography'
-import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
-import { useLingui } from '@lingui/react'
-import ListPanel from '../../../components/ListPanel'
-import Divider from '../../../components/Divider'
-import { ZERO } from '@sushiswap/sdk'
-import TransactionDetails from './TransactionDetails'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { FC } from 'react'
 import {
-  currenciesAtom,
+  currentLiquidityValueSelector,
+  currentPoolShareSelector,
   liquidityMintedSelector,
   liquidityModeAtom,
-  currentLiquidityValueSelector,
+  liquidityValueSelector,
   parsedAmountsSelector,
   poolAtom,
+  poolShareSelector,
   priceSelector,
   showReviewAtom,
-  liquidityValueSelector,
-  poolShareSelector,
-  currentPoolShareSelector,
-} from './classic/context/atoms'
+  useClassicExecute,
+} from './context/atoms'
+import ListPanel from '../../../../components/ListPanel'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import TransactionDetails from '../TransactionDetails'
+import Typography from '../../../../components/Typography'
+import { t } from '@lingui/macro'
+import Divider from '../../../../components/Divider'
+import { useLingui } from '@lingui/react'
+import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
+import { ChevronLeftIcon } from '@heroicons/react/solid'
+import Button from '../../../../components/Button'
+import { ZERO } from '@sushiswap/sdk'
+import { LiquidityMode } from '../../types'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
-  const currencies = useRecoilValue(currenciesAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
@@ -37,6 +37,8 @@ const AddTransactionReviewModal: FC = () => {
   const price = useRecoilValue(priceSelector)
   const poolTokenPercentage = useRecoilValue(poolShareSelector)
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
+
+  const { standardModeExecute, zapModeExecute } = useClassicExecute()
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -151,7 +153,11 @@ const AddTransactionReviewModal: FC = () => {
               </Typography>
             </div>
           </div>
-          <Button color="gradient" size="lg" onClick={() => {}}>
+          <Button
+            color="gradient"
+            size="lg"
+            onClick={liquidityMode === LiquidityMode.STANDARD ? standardModeExecute : zapModeExecute}
+          >
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`Confirm Deposit`)}
             </Typography>

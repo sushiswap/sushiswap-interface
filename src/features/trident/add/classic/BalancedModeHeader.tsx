@@ -1,22 +1,16 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from '../../../../components/Typography'
 import BalancedModeExplanationModal from './BalancedModeExplanationModal'
-import { ActionType, LiquidityMode } from '../../types'
-import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
+import { LiquidityMode } from '../../types'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { balancedModeAtom, liquidityModeAtom } from './context/atoms'
 
 const BalancedModeHeader: FC = () => {
   const { i18n } = useLingui()
-  const { balancedMode, liquidityMode } = useTridentAddClassicState()
-  const { dispatch } = useTridentAddClassicContext()
-
-  const disableBalancedMode = useCallback(() => {
-    dispatch({
-      type: ActionType.SET_BALANCED_MODE,
-      payload: false,
-    })
-  }, [dispatch])
+  const liquidityMode = useRecoilValue(liquidityModeAtom)
+  const [balancedMode, setBalancedMode] = useRecoilState(balancedModeAtom)
 
   if (liquidityMode !== LiquidityMode.STANDARD || !balancedMode) return <div className="pt-6" />
 
@@ -32,8 +26,8 @@ const BalancedModeHeader: FC = () => {
           <BalancedModeExplanationModal />
         </div>
 
-        <Typography variant="sm" className="text-blue cursor-pointer" onClick={disableBalancedMode}>
-          {i18n._(t`Turn off`)}
+        <Typography variant="sm" className="text-blue cursor-pointer" onClick={() => setBalancedMode(!balancedMode)}>
+          {balancedMode ? i18n._(t`Turn off`) : i18n._(t`Turn on`)}
         </Typography>
       </div>
     </div>

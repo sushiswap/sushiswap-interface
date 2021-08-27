@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { useLingui } from '@lingui/react'
 import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
 import Button from '../../../../components/Button'
@@ -6,20 +6,14 @@ import { AdjustmentsIcon, CheckIcon, ChevronLeftIcon, XIcon } from '@heroicons/r
 import { t } from '@lingui/macro'
 import Typography from '../../../../components/Typography'
 import Switch from '../../../../components/Switch'
-import { ActionType, LiquidityMode } from '../../types'
-import { useTridentAddClassicContext, useTridentAddClassicState } from './context'
+import { LiquidityMode } from '../../types'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { balancedModeAtom, liquidityModeAtom } from './context/atoms'
 
 const DepositSettingsModal: FC = () => {
   const { i18n } = useLingui()
-  const { balancedMode, liquidityMode } = useTridentAddClassicState()
-  const { dispatch } = useTridentAddClassicContext()
-
-  const toggle = useCallback(() => {
-    dispatch({
-      type: ActionType.SET_BALANCED_MODE,
-      payload: !balancedMode,
-    })
-  }, [balancedMode, dispatch])
+  const liquidityMode = useRecoilValue(liquidityModeAtom)
+  const [balancedMode, setBalancedMode] = useRecoilState(balancedModeAtom)
 
   // Only applies on standard mode
   if (liquidityMode !== LiquidityMode.STANDARD) {
@@ -65,7 +59,7 @@ const DepositSettingsModal: FC = () => {
               </Typography>
               <Switch
                 checked={balancedMode}
-                onChange={toggle}
+                onChange={() => setBalancedMode(!balancedMode)}
                 checkedIcon={<CheckIcon className="text-high-emphesis" />}
                 uncheckedIcon={<XIcon className="text-high-emphesis" />}
                 color="gradient"
