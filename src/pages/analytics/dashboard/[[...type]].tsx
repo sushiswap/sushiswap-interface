@@ -64,9 +64,8 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Tokens
-  const ethPrice = useEthPrice()
-  const ethPrice1d = useEthPrice({ block: { number: block1d } })
-  const ethPrice1w = useEthPrice({ block: { number: block1w } })
+  const nativePrice1d = useNativePrice({ block: block1d })
+  const nativePrice1w = useNativePrice({ block: block1w })
 
   const tokens = useTokens()
   const tokens1d = useTokens({ block: { number: block1d } })
@@ -74,7 +73,7 @@ export default function Dashboard(): JSX.Element {
 
   const tokensFormatted = useMemo(
     () =>
-      tokens && tokens1d && tokens1w && ethPrice && ethPrice1d && ethPrice1w
+      tokens && tokens1d && tokens1w && nativePrice && nativePrice1d && nativePrice1w
         ? tokens.map((token) => {
             const token1d = tokens1d.find((p) => token.id === p.id) ?? token
             const token1w = tokens1w.find((p) => token.id === p.id) ?? token
@@ -85,15 +84,15 @@ export default function Dashboard(): JSX.Element {
                 symbol: token.symbol,
                 name: token.name,
               },
-              liquidity: token.liquidity * token.derivedETH * ethPrice,
+              liquidity: token.liquidity * token.derivedETH * nativePrice,
               volume24h: token.volumeUSD - token1d.volumeUSD,
-              price: token.derivedETH * ethPrice,
-              change1d: ((token.derivedETH * ethPrice) / (token1d.derivedETH * ethPrice1d)) * 100 - 100,
-              change1w: ((token.derivedETH * ethPrice) / (token1w.derivedETH * ethPrice1w)) * 100 - 100,
+              price: token.derivedETH * nativePrice,
+              change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
+              change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
             }
           })
         : [],
-    [ethPrice, ethPrice1d, ethPrice1w, tokens, tokens1d, tokens1w]
+    [nativePrice, nativePrice1d, nativePrice1w, tokens, tokens1d, tokens1w]
   )
 
   const { options, data } = useMemo(() => {
