@@ -24,30 +24,27 @@ export default function Pairs() {
 
   const pairsFormatted = useMemo(() => {
     return type === 'all'
-      ? pairs && pairs1d && pairs1w
-        ? pairs.map((pair) => {
-            const pair1d = pairs1d.find((p) => pair.id === p.id) ?? pair
-            const pair1w = pairs1w.find((p) => pair.id === p.id) ?? pair1d
+      ? pairs?.map((pair) => {
+          const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+          const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair1d
 
-            return {
-              pair: {
-                token0: pair.token0,
-                token1: pair.token1,
-                address: pair.id,
-              },
-              liquidity: pair.reserveUSD,
-              volume1d: pair.volumeUSD - pair1d.volumeUSD,
-              volume1w: pair.volumeUSD - pair1w.volumeUSD,
-            }
-          })
-        : []
-      : pairs && pairs1d && pairs2d && pairs1w && pairs2w
-      ? pairs
-          .map((pair) => {
-            const pair1d = pairs1d.find((p) => pair.id === p.id) ?? pair
-            const pair2d = pairs2d.find((p) => pair.id === p.id) ?? pair1d
-            const pair1w = pairs1w.find((p) => pair.id === p.id) ?? pair2d
-            const pair2w = pairs2w.find((p) => pair.id === p.id) ?? pair1w
+          return {
+            pair: {
+              token0: pair.token0,
+              token1: pair.token1,
+              address: pair.id,
+            },
+            liquidity: pair.reserveUSD,
+            volume1d: pair.volumeUSD - pair1d.volumeUSD,
+            volume1w: pair.volumeUSD - pair1w.volumeUSD,
+          }
+        })
+      : pairs
+          ?.map((pair) => {
+            const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+            const pair2d = pairs2d?.find((p) => pair.id === p.id) ?? pair1d
+            const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair2d
+            const pair2w = pairs2w?.find((p) => pair.id === p.id) ?? pair1w
 
             return {
               pair: {
@@ -69,7 +66,6 @@ export default function Pairs() {
             }
           })
           .sort((a, b) => b.liquidityChangeNumber1d - a.liquidityChangeNumber1d)
-      : []
   }, [type, pairs, pairs1d, pairs2d, pairs1w, pairs2w])
 
   const options = useMemo(

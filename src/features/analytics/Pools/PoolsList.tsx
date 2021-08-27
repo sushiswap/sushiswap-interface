@@ -11,12 +11,11 @@ interface PoolListProps {
     pair: {
       token0: {
         id: string
-        symbol: string
       }
       token1: {
         id: string
-        symbol: string
       }
+      name: string
     }
     rewards: Reward[]
     liquidity: number
@@ -28,12 +27,11 @@ interface PairListNameProps {
   pair: {
     token0: {
       id: string
-      symbol: string
     }
     token1: {
       id: string
-      symbol: string
     }
+    name: string
   }
 }
 
@@ -51,9 +49,7 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
     <>
       <div className="flex items-center">
         <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} />
-        <div className="ml-3 font-bold whitespace-nowrap text-high-emphesis">
-          {pair?.token0?.symbol}-{pair?.token1?.symbol}
-        </div>
+        <div className="ml-3 font-bold whitespace-nowrap text-high-emphesis">{pair?.name}</div>
       </div>
     </>
   )

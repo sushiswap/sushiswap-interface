@@ -79,7 +79,7 @@ export default function Token(): JSX.Element {
 
   // General data (volume, liquidity)
   const nativePrice = useNativePrice()
-  const nativePrice1d = useNativePrice({ block: { number: Number(block1d) } })
+  const nativePrice1d = useNativePrice({ block: block1d })
 
   const token = useToken({ id: id })
   const token1d = useToken({ id: id, block: { number: Number(block1d) } })

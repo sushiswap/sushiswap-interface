@@ -42,8 +42,8 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
   const block2d = useBlock({ daysAgo: 2 })
 
   const exchange = useFactory()
-  const exchange1d = useFactory({ block: { number: Number(block1d) } })
-  const exchange2d = useFactory({ block: { number: Number(block2d) } })
+  const exchange1d = useFactory({ block: block1d })
+  const exchange2d = useFactory({ block: block2d })
 
   const dayData = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,

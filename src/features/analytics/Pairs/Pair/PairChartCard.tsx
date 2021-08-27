@@ -1,4 +1,4 @@
-import { useBlock, useDayData, useFactory, useNativePrice, useSushiPairs, useToken } from '../../../../services/graph'
+import { useBlock, useDayData, useSushiPairs } from '../../../../services/graph'
 import { useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
 

@@ -80,9 +80,9 @@ export function useUserFarms(chainId = undefined) {
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
 
   const sushiPairs = useSushiPairs({ where: { id_in: farmAddresses } }, undefined, chainId)
-  const kashiPairs = useKashiPairs({ where: { id_in: farmAddresses } }, chainId)
+  const kashiPairs = useKashiPairs({ chainId, subset: farmAddresses })
 
-  const nativePrice = useNativePrice(undefined, chainId)
+  const nativePrice = useNativePrice({ chainId })
 
   const userFarmsFormatted = useMemo(
     () =>
@@ -131,7 +131,7 @@ export function useBentoUserTokens(chainId = undefined) {
 
   const tokens = useTokens(undefined, undefined, chainId)
 
-  const nativePrice = useNativePrice(undefined, chainId)
+  const nativePrice = useNativePrice({ chainId })
 
   return useMemo(() => {
     return bentoUserTokens && tokens && nativePrice
@@ -172,7 +172,7 @@ export function useUserKashiPairs(chainId = undefined) {
 
   const tokens = useTokens({ where: { id_in: kashiTokenAddresses } }, undefined, chainId)
 
-  const nativePrice = useNativePrice(undefined, chainId)
+  const nativePrice = useNativePrice({ chainId })
 
   return useMemo(() => {
     return userKashiPairs && tokens && nativePrice

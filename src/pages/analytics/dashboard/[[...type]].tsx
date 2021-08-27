@@ -10,13 +10,9 @@ import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import useFarmRewards from '../../../hooks/useFarmRewards'
 import { useFuse } from '../../../hooks'
-import { useKashiPairs } from '../../../services/graph/index'
-import { useRouter } from 'next/router'
 
 export default function Dashboard(): JSX.Element {
   const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
-
-  const router = useRouter()
 
   const block1d = useBlock({ daysAgo: 1 })
   const block1w = useBlock({ daysAgo: 7 })
@@ -48,7 +44,6 @@ export default function Dashboard(): JSX.Element {
 
   // For Top Farms
   const farms = useFarmRewards()
-  const kashiPairs = useKashiPairs()
   const nativePrice = useNativePrice()
   const farmsFormatted = useMemo(
     () =>
@@ -58,13 +53,14 @@ export default function Dashboard(): JSX.Element {
             token0: farm.pair.token0,
             token1: farm.pair.token1,
             address: farm.pair.id,
+            name: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
           },
           rewards: farm.rewards,
           liquidity: farm.tvl,
           apr: farm.roiPerYear * 100,
         }))
         .filter((farm) => (farm ? true : false)),
-    [farms, pairs, kashiPairs, nativePrice]
+    [farms, nativePrice]
   )
 
   // For Top Tokens

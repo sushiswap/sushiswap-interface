@@ -10,8 +10,8 @@ export default function Tokens() {
   const block1w = useBlock({ daysAgo: 7 })
 
   const nativePrice = useNativePrice()
-  const nativePrice1d = useNativePrice({ block: { number: Number(block1d) } })
-  const nativePrice1w = useNativePrice({ block: { number: Number(block1w) } })
+  const nativePrice1d = useNativePrice({ block: block1d })
+  const nativePrice1w = useNativePrice({ block: block1w })
 
   const tokens = useTokens()
   const tokens1d = useTokens({ block: { number: Number(block1d) } })

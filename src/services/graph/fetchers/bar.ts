@@ -10,12 +10,12 @@ const BAR = {
 export const bar = async (query, variables = undefined) =>
   request(`https://api.thegraph.com/subgraphs/name/${BAR['1']}`, query, variables)
 
-export const getBar = async (query = barQuery, variables) => {
-  const { bar: barData } = await bar(query, variables)
+export const getBar = async (block: number) => {
+  const { bar: barData } = await bar(barQuery, { block: block ? { number: block } : undefined })
   return barData
 }
 
-export const getBarHistory = async (query = barHistoriesQuery, variables) => {
-  const { histories } = await bar(query, variables)
+export const getBarHistory = async () => {
+  const { histories } = await bar(barHistoriesQuery)
   return histories
 }

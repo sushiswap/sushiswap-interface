@@ -9,6 +9,7 @@ import {
   getLiquidityPositions,
   getMaticPrice,
   getMphPrice,
+  getNativePrice,
   getOnePrice,
   getPicklePrice,
   getRulerPrice,
@@ -28,49 +29,61 @@ import useSWR, { SWRConfiguration } from 'swr'
 import { ChainId } from '@sushiswap/sdk'
 import { ethPriceQuery } from '../queries'
 import { useActiveWeb3React } from '../../../hooks'
+import { useBlock } from './blocks'
 
-export function useExchange(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(
-    chainId ? [chainId, query, JSON.stringify(variables)] : null,
-    () => exchange(chainId, query, variables),
-    swrConfig
-  )
-  return data
+interface useFactoryProps {
+  timestamp?: number
+  block?: number
+  chainId?: number
+  shouldFetch?: boolean
 }
 
-export function useFactory(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
+export function useFactory(
+  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true }: useFactoryProps = {},
+  swrConfig: SWRConfiguration = undefined
+) {
+  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
+
+  shouldFetch = shouldFetch && !!chainId
+
+  const variables = {
+    block: block ? { number: block } : undefined,
+  }
+
   const { data } = useSWR(
-    chainId ? ['factory', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? ['factory', chainId, JSON.stringify(variables)] : null,
     () => getFactory(chainId, variables),
     swrConfig
   )
   return data
 }
 
-export function useNativePrice(variables = undefined, chainId = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId: chainIdSelected } = useActiveWeb3React()
-  chainId = chainId ?? chainIdSelected
+interface useNativePriceProps {
+  timestamp?: number
+  block?: number
+  chainId?: number
+  shouldFetch?: boolean
+}
 
-  // console.log('use native price', chainId)
+export function useNativePrice(
+  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true }: useNativePriceProps = {},
+  swrConfig: SWRConfiguration = undefined
+) {
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
 
-  // TODO: Check if all chains have correct native tokens (OKEX, FANTOM, CELO)
-  const map = {
-    [ChainId.MAINNET]: getEthPrice,
-    [ChainId.XDAI]: getStakePrice,
-    [ChainId.MATIC]: getEthPrice,
-    [ChainId.FANTOM]: getEthPrice,
-    [ChainId.BSC]: getEthPrice,
-    [ChainId.HARMONY]: getOnePrice,
-    [ChainId.OKEX]: getEthPrice,
-    [ChainId.AVALANCHE]: getAvaxPrice,
-    [ChainId.CELO]: getEthPrice,
+  shouldFetch = shouldFetch && !!chainId
+
+  const variables = {
+    block: block ? { number: block } : undefined,
   }
 
-  const fetcher = map[chainId] ?? getEthPrice
-
-  const { data } = useSWR([fetcher.name, JSON.stringify(variables)], () => fetcher(variables), swrConfig)
+  const { data } = useSWR(
+    shouldFetch ? ['nativePrice', chainId, JSON.stringify(variables)] : null,
+    () => getNativePrice(chainId, variables),
+    swrConfig
+  )
 
   // console.log({ data })
 

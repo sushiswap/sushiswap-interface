@@ -51,11 +51,7 @@ export default function Farm(): JSX.Element {
     },
   })
 
-  const kashiPairs = useKashiPairs({
-    where: {
-      id_in: pairAddresses,
-    },
-  })
+  const kashiPairs = useKashiPairs({ subset: pairAddresses })
 
   const farms = useFarms()
 

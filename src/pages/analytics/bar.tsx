@@ -1,4 +1,4 @@
-import { SUSHI_ADDRESS } from '@sushiswap/sdk'
+import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
 import ScrollableGraph from '../../components/ScrollableGraph'
 import AnalyticsContainer from '../../features/analytics/AnalyticsContainer'
@@ -9,10 +9,10 @@ import { useBlock, useDayData, useFactory, useSushiPrice, useTokenDayData } from
 import { useBar, useBarHistory } from '../../services/graph/hooks/bar'
 
 export default function Bar() {
-  const block1d = useBlock({ daysAgo: 1 })
+  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.MAINNET })
 
-  const exchange = useFactory()
-  const exchange1d = useFactory({ block: { number: Number(block1d) } })
+  const exchange = useFactory({ chainId: ChainId.MAINNET })
+  const exchange1d = useFactory({ block: block1d, chainId: ChainId.MAINNET })
 
   const dayData = useDayData()
 
