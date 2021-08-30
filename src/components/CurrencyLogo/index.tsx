@@ -143,8 +143,6 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
     }
   }, [currency, uriLocations])
 
-  console.log({ currency, wcurrency: WNATIVE[currency.chainId], symbol: currency?.symbol, srcs })
-
   return <Logo srcs={srcs} width={size} height={size} alt={currency?.symbol} {...rest} />
 }
 
