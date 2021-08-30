@@ -9,7 +9,7 @@ import TokenChartCard from '../../../features/analytics/Tokens/Token/TokenChartC
 import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
 import { formatNumber } from '../../../functions'
 import { useCurrency } from '../../../hooks/Tokens'
-import { useBlock, useNativePrice, useToken, useTokenPairs, useTransactions } from '../../../services/graph'
+import { useBlock, useNativePrice, useTokenPairs, useTokens, useTransactions } from '../../../services/graph'
 import { ExternalLink as LinkIcon } from 'react-feather'
 
 export default function Token() {
@@ -24,14 +24,14 @@ export default function Token() {
   const nativePrice = useNativePrice()
   const nativePrice1d = useNativePrice({ block: block1d })
 
-  const token = useToken({ id: id })
-  const token1d = useToken({ id: id, block: { number: block1d } })
-  const token2d = useToken({ id: id, block: { number: block2d } })
+  const token = useTokens({ subset: [id] })?.[0]
+  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d })?.[0]
+  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d })?.[0]
 
   // Token Pairs
-  const tokenPairs = useTokenPairs({ id: id })
-  const tokenPairs1d = useTokenPairs({ id: id, block: { number: block1d } })
-  const tokenPairs1w = useTokenPairs({ id: id, block: { number: block1w } })
+  const tokenPairs = useTokenPairs({ token: id })
+  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d })
+  const tokenPairs1w = useTokenPairs({ token: id, block: block1w, shouldFetch: !!block1w })
   const tokenPairsFormatted = useMemo(
     () =>
       tokenPairs?.map((pair) => {
@@ -53,7 +53,7 @@ export default function Token() {
   )
 
   // For Transactions
-  const transactions = useTransactions({ pairAddresses: tokenPairs?.map((pair) => pair.id) })
+  const transactions = useTransactions({ pairs: tokenPairs?.map((pair) => pair.id), shouldFetch: !!tokenPairs })
   const transactionsFormatted = useMemo(
     () =>
       transactions?.map((tx) => {

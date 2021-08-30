@@ -17,10 +17,10 @@ export default function Pairs() {
   const block2w = useBlock({ daysAgo: 14 })
 
   const pairs = useSushiPairs()
-  const pairs1d = useSushiPairs({ block: { number: Number(block1d) } })
-  const pairs2d = useSushiPairs(type !== 'all' ? { block: { number: Number(block2d) } } : undefined) // No need to fetch if we don't need the data
-  const pairs1w = useSushiPairs({ block: { number: Number(block1w) } })
-  const pairs2w = useSushiPairs(type !== 'all' ? { block: { number: Number(block2w) } } : undefined)
+  const pairs1d = useSushiPairs({ block: block1d, shouldFetch: !!block1d })
+  const pairs2d = useSushiPairs({ block: block2d, shouldFetch: !!block2d && type !== 'all' }) // No need to fetch if we don't need the data
+  const pairs1w = useSushiPairs({ block: block1w, shouldFetch: !!block1w })
+  const pairs2w = useSushiPairs({ block: block2w, shouldFetch: !!block2w && type !== 'all' })
 
   const pairsFormatted = useMemo(() => {
     return type === 'all'

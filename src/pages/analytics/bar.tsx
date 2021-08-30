@@ -17,7 +17,7 @@ export default function Bar() {
   const dayData = useDayData()
 
   const sushiPriceUSD = useSushiPrice()
-  const sushiDayData = useTokenDayData({ tokens: [`${SUSHI_ADDRESS['1'].toLowerCase()}`] })
+  const sushiDayData = useTokenDayData({ token: SUSHI_ADDRESS['1'], chainId: ChainId.MAINNET })
 
   const bar = useBar()
   const barHistory = useBarHistory()

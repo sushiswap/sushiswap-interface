@@ -19,8 +19,8 @@ export default function Dashboard(): JSX.Element {
 
   // For Top Pairs
   const pairs = useSushiPairs()
-  const pairs1d = useSushiPairs({ block: { number: block1d } })
-  const pairs1w = useSushiPairs({ block: { number: block1w } })
+  const pairs1d = useSushiPairs({ block: block1d })
+  const pairs1w = useSushiPairs({ block: block1w })
 
   const pairsFormatted = useMemo(
     () =>
@@ -68,8 +68,8 @@ export default function Dashboard(): JSX.Element {
   const nativePrice1w = useNativePrice({ block: block1w })
 
   const tokens = useTokens()
-  const tokens1d = useTokens({ block: { number: block1d } })
-  const tokens1w = useTokens({ block: { number: block1w } })
+  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d })
+  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w })
 
   const tokensFormatted = useMemo(
     () =>

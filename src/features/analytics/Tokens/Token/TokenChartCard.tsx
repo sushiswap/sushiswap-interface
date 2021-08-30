@@ -1,4 +1,4 @@
-import { useBlock, useDayData, useNativePrice, useToken } from '../../../../services/graph'
+import { useBlock, useDayData, useNativePrice, useTokens } from '../../../../services/graph'
 import { useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
 
@@ -39,9 +39,9 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 2 })
 
-  const token = useToken({ id: props.token })
-  const token1d = useToken({ id: props.token, block: { number: block1d } })
-  const token2d = useToken({ id: props.token, block: { number: block2d } })
+  const token = useTokens({ subset: [props.token] })?.[0]
+  const token1d = useTokens({ subset: [props.token], block: block1d, shouldFetch: !!block1d })?.[0]
+  const token2d = useTokens({ subset: [props.token], block: block2d, shouldFetch: !!block2d })?.[0]
 
   const nativePrice = useNativePrice()
   const nativePrice1d = useNativePrice({ block: block1d })

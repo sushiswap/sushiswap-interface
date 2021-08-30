@@ -14,8 +14,8 @@ export default function Tokens() {
   const nativePrice1w = useNativePrice({ block: block1w })
 
   const tokens = useTokens()
-  const tokens1d = useTokens({ block: { number: Number(block1d) } })
-  const tokens1w = useTokens({ block: { number: Number(block1w) } })
+  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d })
+  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w })
 
   const tokensFormatted =
     tokens && tokens1d && tokens1w && nativePrice && nativePrice1d && nativePrice1w

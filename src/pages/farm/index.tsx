@@ -45,11 +45,7 @@ export default function Farm(): JSX.Element {
 
   const pairAddresses = useFarmPairAddresses()
 
-  const swapPairs = useSushiPairs({
-    where: {
-      id_in: pairAddresses,
-    },
-  })
+  const swapPairs = useSushiPairs({ subset: pairAddresses, shouldFetch: !!pairAddresses })
 
   const kashiPairs = useKashiPairs({ subset: pairAddresses })
 

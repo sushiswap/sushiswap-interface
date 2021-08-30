@@ -35,9 +35,9 @@ export default function PairChartCard(props: PairChartCardProps): JSX.Element {
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 2 })
 
-  const pair = useSushiPairs({ where: { id: props.pair } })?.[0]
-  const pair1d = useSushiPairs({ where: { id: props.pair }, block: { number: block1d } })?.[0]
-  const pair2d = useSushiPairs({ where: { id: props.pair }, block: { number: block2d } })?.[0]
+  const pair = useSushiPairs({ subset: [props.pair], shouldFetch: !!props.pair })?.[0]
+  const pair1d = useSushiPairs({ subset: [props.pair], block: block1d, shouldFetch: !!props.pair && !!block1d })?.[0]
+  const pair2d = useSushiPairs({ subset: [props.pair], block: block2d, shouldFetch: !!props.pair && !!block2d })?.[0]
 
   const dayData = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,

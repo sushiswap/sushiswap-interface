@@ -20,14 +20,14 @@ export default function Pair() {
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 2 })
 
-  const pair = useSushiPairs({ where: { id: id } })?.[0]
-  const pair1d = useSushiPairs({ where: { id: id }, block: { number: block1d } })?.[0]
-  const pair2d = useSushiPairs({ where: { id: id }, block: { number: block2d } })?.[0]
+  const pair = useSushiPairs({ subset: [id] })?.[0]
+  const pair1d = useSushiPairs({ subset: [id], block: block1d, shouldFetch: !!block1d })?.[0]
+  const pair2d = useSushiPairs({ subset: [id], block: block2d, shouldFetch: !!block2d })?.[0]
 
   const nativePrice = useNativePrice()
 
   // For Transactions
-  const transactions = useTransactions({ pairAddresses: [id] })
+  const transactions = useTransactions({ pairs: [id] })
   const transactionsFormatted = useMemo(
     () =>
       transactions?.map((tx) => {
