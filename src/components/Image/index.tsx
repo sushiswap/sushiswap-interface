@@ -37,7 +37,7 @@ const Image = ({
   height = undefined,
   layout = undefined,
   loader = undefined,
-  style,
+  style = undefined,
   ...rest
 }) => {
   const useBlur = parseInt(String(height), 10) >= 40 && parseInt(String(width), 10) >= 40
