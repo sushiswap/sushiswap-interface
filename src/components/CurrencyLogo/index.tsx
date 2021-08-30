@@ -27,6 +27,7 @@ const BLOCKCHAIN = {
   [ChainId.MATIC]: 'polygon',
   [ChainId.XDAI]: 'xdai',
   // [ChainId.OKEX]: 'okex',
+  // [ChainId.MOONRIVER]: 'moonriver'
 }
 
 function getCurrencySymbol(currency) {
@@ -36,6 +37,9 @@ function getCurrencySymbol(currency) {
   if (currency.symbol === 'WETH') {
     return 'eth'
   }
+  // if (currency.symbol === 'WMOVR') {
+  //   return 'movr'
+  // }
   return currency.symbol.toLowerCase()
 }
 
@@ -138,6 +142,8 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
       return defaultUrls
     }
   }, [currency, uriLocations])
+
+  console.log({ currency, wcurrency: WNATIVE[currency.chainId], symbol: currency?.symbol, srcs })
 
   return <Logo srcs={srcs} width={size} height={size} alt={currency?.symbol} {...rest} />
 }
