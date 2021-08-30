@@ -1,4 +1,5 @@
 import React, { ReactNode } from 'react'
+import { Dots } from '../../features/exchange-v1/swap/styleds'
 import { classNames } from '../../functions'
 
 const SIZE = {
@@ -93,8 +94,6 @@ function Button({
   )
 }
 
-export default Button
-
 export function ButtonConfirmed({
   confirmed,
   disabled,
@@ -130,3 +129,15 @@ export function ButtonError({
     return <Button color={disabled ? 'gray' : 'gradient'} disabled={disabled} size="lg" {...rest} />
   }
 }
+
+function DottedButton({ pending, children, ...rest }: { pending: boolean } & ButtonProps) {
+  const buttonText = pending ? <Dots>{children}</Dots> : children
+  return (
+    <Button {...rest} {...(pending && { disabled: true })}>
+      {buttonText}
+    </Button>
+  )
+}
+
+Button.Dotted = DottedButton
+export default Button

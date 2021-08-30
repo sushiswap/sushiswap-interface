@@ -5,7 +5,7 @@ import Typography from '../../../../components/Typography'
 import BalancedModeExplanationModal from './BalancedModeExplanationModal'
 import { LiquidityMode } from '../../types'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { balancedModeAtom, liquidityModeAtom } from './context/atoms'
+import { balancedModeAtom, liquidityModeAtom } from '../../context/atoms'
 
 const BalancedModeHeader: FC = () => {
   const { i18n } = useLingui()

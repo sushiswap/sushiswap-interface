@@ -3,25 +3,67 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout from '../../../../layouts/Trident'
 import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
-import React from 'react'
-import ClassicUnzapMode from '../../../../features/trident/remove/classic/ClassicUnzapMode'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
+import React, { useEffect } from 'react'
 import ClassicStandardMode from '../../../../features/trident/remove/classic/ClassicStandardMode'
-import TridentRemoveClassicContextProvider, {
-  useTridentRemoveClassicContext,
-  useTridentRemoveClassicState,
-} from '../../../../features/trident/remove/classic/context'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import { LiquidityMode } from '../../../../features/trident/types'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import {
+  currenciesAtom,
+  liquidityModeAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
+import TridentLayout from '../../../../layouts/Trident'
+import ClassicUnzapMode from '../../../../features/trident/remove/classic/ClassicUnzapMode'
+import { useCurrency } from '../../../../hooks/Tokens'
+import { useV2Pair } from '../../../../hooks/useV2Pairs'
+import { useTotalSupply } from '../../../../hooks/useTotalSupply'
+import { useTokenBalance } from '../../../../state/wallet/hooks'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useRouter } from 'next/router'
+import { poolAtom } from '../../../../features/trident/remove/classic/context/atoms'
+import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
 
 const RemoveClassic = () => {
+  const { account } = useActiveWeb3React()
+  const { query } = useRouter()
   const { i18n } = useLingui()
-  const state = useTridentRemoveClassicState()
-  const context = useTridentRemoveClassicContext()
+
+  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const liquidityMode = useRecoilValue(liquidityModeAtom)
+  const [currencies, setCurrencies] = useRecoilState(currenciesAtom)
+  const setTotalSupply = useSetRecoilState(totalSupplyAtom)
+  const setPoolBalance = useSetRecoilState(poolBalanceAtom)
+
+  const currencyA = useCurrency(query.tokens[0])
+  const currencyB = useCurrency(query.tokens[1])
+  const classicPool = useV2Pair(currencyA, currencyB)
+  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, pool?.liquidityToken)
+
+  useEffect(() => {
+    if (!classicPool[1]) return
+    setPool(classicPool)
+  }, [classicPool, setPool])
+
+  useEffect(() => {
+    if (!currencyA || !currencyB) return
+    setCurrencies([currencyA, currencyB])
+  }, [currencyA, currencyB, setCurrencies])
+
+  useEffect(() => {
+    if (!totalSupply) return
+    setTotalSupply(totalSupply)
+  }, [setTotalSupply, totalSupply])
+
+  useEffect(() => {
+    if (!poolBalance) return
+    setPoolBalance(poolBalance)
+  }, [poolBalance, setPoolBalance])
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -34,7 +76,7 @@ const RemoveClassic = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref('classic', context.currencies)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/${toHref('classic', currencies)}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -53,19 +95,20 @@ const RemoveClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle context={context} state={state} />
+      {/*TODO*/}
+      <ModeToggle onChange={() => {}} />
 
       <>
-        {state.liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
-        {state.liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+        {liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
+        {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
       </>
 
-      <RemoveTransactionReviewModal state={state} context={context} />
+      <RemoveTransactionReviewModal />
     </div>
   )
 }
 
 RemoveClassic.Layout = TridentLayout
-RemoveClassic.Provider = TridentRemoveClassicContextProvider
+RemoveClassic.Provider = RecoilRoot
 
 export default RemoveClassic

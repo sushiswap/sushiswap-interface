@@ -1,30 +1,18 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
-import { setFixedRatioMode } from '../context/actions'
 import Typography from '../../../components/Typography'
-import { WeightedPoolContext, WeightedPoolState } from './weighted/context/types'
-import { ConcentratedPoolContext, ConcentratedPoolState } from './concentrated/context/types'
-import { useTridentContext, useTridentState } from '../context'
+import { useRecoilState } from 'recoil'
+import { fixedRatioAtom } from '../context/atoms'
 
 interface FixedRatioHeaderProps {
   margin?: boolean
 }
 
-const FixedRatioHeader: FC<FixedRatioHeaderProps> = <
-  S extends WeightedPoolState | ConcentratedPoolState,
-  C extends WeightedPoolContext | ConcentratedPoolContext
->({
-  margin = true,
-}) => {
+const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   const { i18n } = useLingui()
-  const { fixedRatio } = useTridentState<S>()
-  const { dispatch } = useTridentContext<C>()
-
-  const disableFixedRatio = useCallback(() => {
-    setFixedRatioMode(dispatch)(!fixedRatio)
-  }, [dispatch, fixedRatio])
+  const [fixedRatio, setFixedRatio] = useRecoilState(fixedRatioAtom)
 
   return (
     <div className={margin ? '-top-6 pt-10 pb-5 relative z-0' : 'py-5 relative z-0'}>
@@ -38,7 +26,12 @@ const FixedRatioHeader: FC<FixedRatioHeaderProps> = <
           <FixedRatioExplanationModal />
         </div>
 
-        <Typography role="button" variant="sm" className="text-blue cursor-pointer" onClick={disableFixedRatio}>
+        <Typography
+          role="button"
+          variant="sm"
+          className="text-blue cursor-pointer"
+          onClick={() => setFixedRatio(!fixedRatio)}
+        >
           {fixedRatio ? i18n._(t`Turn off`) : i18n._(t`Turn on`)}
         </Typography>
       </div>

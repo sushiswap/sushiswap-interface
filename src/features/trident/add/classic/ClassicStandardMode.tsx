@@ -5,15 +5,12 @@ import TransactionDetails from './../TransactionDetails'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import {
-  currenciesAtom,
   formattedAmountsSelector,
   inputFieldAtom,
   mainInputAtom,
   parsedAmountsSelector,
   poolAtom,
   secondaryInputSelector,
-  showReviewAtom,
-  spendFromWalletAtom,
 } from './context/atoms'
 import { Field } from '../../../../state/trident/add/classic'
 import { ApprovalState, useActiveWeb3React, useApproveCallback, useRouterContract } from '../../../../hooks'
@@ -23,6 +20,7 @@ import { useLingui } from '@lingui/react'
 import { useCurrencyBalances } from '../../../../state/wallet/hooks'
 import { ZERO } from '@sushiswap/sdk'
 import Button from '../../../../components/Button'
+import { currenciesAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
@@ -81,15 +79,19 @@ const ClassicStandardMode = () => {
 
         <div className="flex flex-col">
           <div className="flex flex-row gap-3">
-            {approveA === ApprovalState.NOT_APPROVED && (
-              <Button color="blue" onClick={approveACallback}>
-                Approve {parsedAmountA?.currency.symbol}
-              </Button>
+            {approveA !== ApprovalState.APPROVED && (
+              <Button.Dotted pending={approveA === ApprovalState.PENDING} color="blue" onClick={approveACallback}>
+                {approveA === ApprovalState.PENDING
+                  ? i18n._(t`Approving ${parsedAmountA?.currency.symbol}`)
+                  : i18n._(t`Approve ${parsedAmountA?.currency.symbol}`)}
+              </Button.Dotted>
             )}
-            {approveB === ApprovalState.NOT_APPROVED && (
-              <Button color="blue" onClick={approveBCallback}>
-                Approve {parsedAmountB?.currency.symbol}
-              </Button>
+            {approveB !== ApprovalState.NOT_APPROVED && (
+              <Button.Dotted pending={approveB === ApprovalState.PENDING} color="blue" onClick={approveBCallback}>
+                {approveB === ApprovalState.PENDING
+                  ? i18n._(t`Approving ${parsedAmountB?.currency.symbol}`)
+                  : i18n._(t`Approve ${parsedAmountB?.currency.symbol}`)}
+              </Button.Dotted>
             )}
           </div>
           {approveA === ApprovalState.APPROVED && approveB === ApprovalState.APPROVED && (

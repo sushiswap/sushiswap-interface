@@ -8,7 +8,7 @@ import Typography from '../../../../components/Typography'
 import Switch from '../../../../components/Switch'
 import { LiquidityMode } from '../../types'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { balancedModeAtom, liquidityModeAtom } from './context/atoms'
+import { balancedModeAtom, liquidityModeAtom } from '../../context/atoms'
 
 const DepositSettingsModal: FC = () => {
   const { i18n } = useLingui()

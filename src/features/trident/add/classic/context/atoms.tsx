@@ -1,6 +1,5 @@
 import { atom, selector, useRecoilValue, useSetRecoilState } from 'recoil'
-import { Currency, CurrencyAmount, JSBI, Pair, Percent, Price } from '../../../../../../../sushiswap-sdk'
-import { LiquidityMode } from '../../../types'
+import { Currency, CurrencyAmount, JSBI, Pair, Percent, Price } from '@sushiswap/sdk'
 import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
 import { PairState } from '../../../../../hooks/useV2Pairs'
 import { Field } from '../../../../../state/trident/add/classic'
@@ -14,6 +13,14 @@ import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/h
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponseLight, useTransactionAdder } from '../../../../../state/transactions/hooks'
 import { useLingui } from '@lingui/react'
+import {
+  attemptingTxnAtom,
+  currenciesAtom,
+  noLiquiditySelector,
+  poolBalanceAtom,
+  totalSupplyAtom,
+  txHashAtom,
+} from '../../../context/atoms'
 
 const ZERO = JSBI.BigInt(0)
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
@@ -21,51 +28,6 @@ const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 export const poolAtom = atom<[PairState, Pair | null]>({
   key: 'poolAtom',
   default: [null, null],
-})
-
-export const currenciesAtom = atom<Currency[]>({
-  key: 'currencies',
-  default: [],
-})
-
-export const liquidityModeAtom = atom<LiquidityMode>({
-  key: 'liquidityMode',
-  default: LiquidityMode.STANDARD,
-})
-
-export const balancedModeAtom = atom<boolean>({
-  key: 'balancedModeAtom',
-  default: true,
-})
-
-export const spendFromWalletAtom = atom<boolean>({
-  key: 'spendFromWalletAtom',
-  default: true,
-})
-
-export const totalSupplyAtom = atom<CurrencyAmount<Currency>>({
-  key: 'totalSupplyAtom',
-  default: null,
-})
-
-export const poolBalanceAtom = atom<CurrencyAmount<Currency>>({
-  key: 'poolBalanceAtom',
-  default: null,
-})
-
-export const showReviewAtom = atom<boolean>({
-  key: 'showReviewAtom',
-  default: false,
-})
-
-export const attemptingTxnAtom = atom<boolean>({
-  key: 'attemptingTxnAtom',
-  default: false,
-})
-
-export const txHashAtom = atom<string>({
-  key: 'txHashAtom',
-  default: null,
 })
 
 export const inputFieldAtom = atom<Field>({
@@ -156,25 +118,6 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
   },
 })
 
-export const noLiquiditySelector = selector<boolean>({
-  key: 'noLiquiditySelector',
-  get: ({ get }) => {
-    const [poolState, pool] = get(poolAtom)
-    const totalSupply = get(totalSupplyAtom)
-
-    return (
-      poolState === PairState.NOT_EXISTS ||
-      Boolean(totalSupply && JSBI.equal(totalSupply.quotient, ZERO)) ||
-      Boolean(
-        poolState === PairState.EXISTS &&
-          pool &&
-          JSBI.equal(pool.reserve0.quotient, ZERO) &&
-          JSBI.equal(pool.reserve1.quotient, ZERO)
-      )
-    )
-  },
-})
-
 export const formattedAmountsSelector = selector<[string, string]>({
   key: 'formattedAmountsSelector',
   get: ({ get }) => {
@@ -203,40 +146,6 @@ export const parsedAmountsSelector = selector<[CurrencyAmount<Currency>, Currenc
   key: 'parsedAmountsSelector',
   get: ({ get }) => {
     return [get(mainInputCurrencyAmountSelector), get(secondaryInputCurrencyAmountSelector)]
-  },
-})
-
-export const priceSelector = selector<Price<Currency, Currency>>({
-  key: 'priceSelector',
-  get: ({ get }) => {
-    const noLiquidity = get(noLiquiditySelector)
-    const [currencyAAmount, currencyBAmount] = get(parsedAmountsSelector)
-
-    if (noLiquidity) {
-      if (currencyAAmount?.greaterThan(0) && currencyBAmount?.greaterThan(0)) {
-        const value = currencyBAmount.divide(currencyAAmount)
-        return new Price(currencyAAmount.currency, currencyBAmount.currency, value.denominator, value.numerator)
-      }
-    } else {
-      const [, pool] = get(poolAtom)
-      return pool && currencyAAmount?.wrapped ? pool.priceOf(currencyAAmount?.currency.wrapped) : undefined
-    }
-    return undefined
-  },
-})
-
-export const currentPoolShareSelector = selector({
-  key: 'currentPoolShareSelector',
-  get: ({ get }) => {
-    const [, pool] = get(poolAtom)
-    const totalSupply = get(totalSupplyAtom)
-    const userPoolBalance = get(poolBalanceAtom)
-
-    if (pool && totalSupply && userPoolBalance) {
-      return new Percent(userPoolBalance.quotient, totalSupply.quotient)
-    }
-
-    return undefined
   },
 })
 
@@ -270,6 +179,25 @@ export const poolShareSelector = selector({
       return new Percent(liquidityMinted.quotient, totalSupply.add(liquidityMinted).quotient)
     }
 
+    return undefined
+  },
+})
+
+export const priceSelector = selector<Price<Currency, Currency>>({
+  key: 'priceSelector',
+  get: ({ get }) => {
+    const noLiquidity = get(noLiquiditySelector)
+    const [currencyAAmount, currencyBAmount] = get(parsedAmountsSelector)
+
+    if (noLiquidity) {
+      if (currencyAAmount?.greaterThan(0) && currencyBAmount?.greaterThan(0)) {
+        const value = currencyBAmount.divide(currencyAAmount)
+        return new Price(currencyAAmount.currency, currencyBAmount.currency, value.denominator, value.numerator)
+      }
+    } else {
+      const [, pool] = get(poolAtom)
+      return pool && currencyAAmount?.wrapped ? pool.priceOf(currencyAAmount?.currency.wrapped) : undefined
+    }
     return undefined
   },
 })
@@ -321,7 +249,7 @@ export const liquidityValueSelector = selector({
   },
 })
 
-export const useClassicExecute = () => {
+export const useClassicAddExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
   const router = useRouterContract()

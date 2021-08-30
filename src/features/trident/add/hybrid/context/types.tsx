@@ -1,5 +1,5 @@
 import { TridentContext, TridentState } from '../../../types'
-import { ConstantProductPool } from '../../../../../../../sushiswap-sdk'
+import { ConstantProductPool } from '@sushiswap/sdk'
 
 export type HybridPoolContext = {
   state: HybridPoolState

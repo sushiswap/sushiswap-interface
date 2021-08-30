@@ -3,29 +3,28 @@ import ToggleButtonGroup from '../../components/ToggleButton'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { LiquidityMode } from './types'
-import { useRecoilState, useResetRecoilState } from 'recoil'
-import { liquidityModeAtom, mainInputAtom, secondaryInputSelector, zapInputAtom } from './add/classic/context/atoms'
+import { useRecoilState } from 'recoil'
+import { liquidityModeAtom } from './context/atoms'
 
-const ModeToggle: FC = () => {
+interface ModeToggleProps {
+  onChange: () => void
+}
+
+const ModeToggle: FC<ModeToggleProps> = ({ onChange }) => {
   const { i18n } = useLingui()
   const [liquidityMode, setLiquidityMode] = useRecoilState(liquidityModeAtom)
-  const mainInputReset = useResetRecoilState(mainInputAtom)
-  const secondaryInputReset = useResetRecoilState(secondaryInputSelector)
-  const zapInputReset = useResetRecoilState(zapInputAtom)
 
-  const onChange = useCallback(
+  const handleChange = useCallback(
     (val: LiquidityMode) => {
-      mainInputReset()
-      secondaryInputReset()
-      zapInputReset()
+      onChange()
       setLiquidityMode(val)
     },
-    [mainInputReset, secondaryInputReset, setLiquidityMode, zapInputReset]
+    [onChange, setLiquidityMode]
   )
 
   return (
     <div className="px-5 -mt-6 relative z-10">
-      <ToggleButtonGroup value={liquidityMode} onChange={onChange} className="bg-dark-900 shadow">
+      <ToggleButtonGroup value={liquidityMode} onChange={handleChange} className="bg-dark-900 shadow">
         <ToggleButtonGroup.Button value={LiquidityMode.STANDARD} className="py-2.5">
           {i18n._(t`Standard Mode`)}
         </ToggleButtonGroup.Button>

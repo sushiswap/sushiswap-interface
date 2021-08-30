@@ -6,17 +6,12 @@ import Typography from '../../../../components/Typography'
 import AssetInput from '../../../../components/AssetInput'
 import TransactionDetails from './../TransactionDetails'
 import React from 'react'
-import {
-  parsedZapAmountSelector,
-  poolAtom,
-  selectedZapCurrencyAtom,
-  showReviewAtom,
-  zapInputAtom,
-} from './context/atoms'
+import { parsedZapAmountSelector, poolAtom, selectedZapCurrencyAtom, zapInputAtom } from './context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { PairState } from '../../../../hooks/useV2Pairs'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useCurrencyBalance } from '../../../../state/wallet/hooks'
+import { showReviewAtom } from '../../context/atoms'
 
 const ClassicZapMode = () => {
   const { account } = useActiveWeb3React()

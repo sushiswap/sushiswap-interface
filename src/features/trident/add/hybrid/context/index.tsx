@@ -6,7 +6,7 @@ import reducer from '../../../context/reducer'
 import { handleInput, selectInputToken, setLiquidityMode, setTxHash, showReview } from '../../../context/actions'
 import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../../hooks/Tokens'
-import { Fee } from '../../../../../../../sushiswap-sdk'
+import { Fee } from '@sushiswap/sdk'
 import { useTridentClassicPool } from '../../../../../hooks/useTridentClassicPools'
 
 // STATE SHOULD ONLY CONTAIN PRIMITIVE VALUES,

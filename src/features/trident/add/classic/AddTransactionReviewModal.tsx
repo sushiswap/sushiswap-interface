@@ -1,16 +1,12 @@
 import { FC } from 'react'
 import {
   currentLiquidityValueSelector,
-  currentPoolShareSelector,
   liquidityMintedSelector,
-  liquidityModeAtom,
   liquidityValueSelector,
   parsedAmountsSelector,
   poolAtom,
   poolShareSelector,
-  priceSelector,
-  showReviewAtom,
-  useClassicExecute,
+  useClassicAddExecute,
 } from './context/atoms'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -24,6 +20,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Button from '../../../../components/Button'
 import { ZERO } from '@sushiswap/sdk'
 import { LiquidityMode } from '../../types'
+import { currentPoolShareSelector, liquidityModeAtom, priceSelector, showReviewAtom } from '../../context/atoms'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
@@ -38,7 +35,7 @@ const AddTransactionReviewModal: FC = () => {
   const poolTokenPercentage = useRecoilValue(poolShareSelector)
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
 
-  const { standardModeExecute, zapModeExecute } = useClassicExecute()
+  const { standardModeExecute, zapModeExecute } = useClassicAddExecute()
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context

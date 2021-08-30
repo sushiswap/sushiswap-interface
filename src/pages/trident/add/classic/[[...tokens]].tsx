@@ -7,20 +7,19 @@ import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import SettingsTab from '../../../../components/Settings'
 import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
 import { LiquidityMode } from '../../../../features/trident/types'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../hooks/Tokens'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import {
-  currenciesAtom,
-  liquidityModeAtom,
+  mainInputAtom,
   poolAtom,
-  poolBalanceAtom,
-  totalSupplyAtom,
+  secondaryInputSelector,
+  zapInputAtom,
 } from '../../../../features/trident/add/classic/context/atoms'
 import { useV2Pair } from '../../../../hooks/useV2Pairs'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
@@ -29,6 +28,12 @@ import AddTransactionReviewModal from '../../../../features/trident/add/classic/
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import BalancedModeHeader from '../../../../features/trident/add/classic/BalancedModeHeader'
 import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
+import {
+  currenciesAtom,
+  liquidityModeAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
 
 const AddClassic = () => {
   const { account } = useActiveWeb3React()
@@ -40,6 +45,9 @@ const AddClassic = () => {
   const [currencies, setCurrencies] = useRecoilState(currenciesAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
+  const mainInputReset = useResetRecoilState(mainInputAtom)
+  const secondaryInputReset = useResetRecoilState(secondaryInputSelector)
+  const zapInputReset = useResetRecoilState(zapInputAtom)
 
   // TODO USE V2 FOR TESTING
   const currencyA = useCurrency(query.tokens[0])
@@ -67,6 +75,12 @@ const AddClassic = () => {
     if (!poolBalance) return
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
+
+  const handleLiquidityModeChange = useCallback(() => {
+    mainInputReset()
+    secondaryInputReset()
+    zapInputReset()
+  }, [mainInputReset, secondaryInputReset, zapInputReset])
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -99,7 +113,7 @@ const AddClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle />
+      <ModeToggle onChange={handleLiquidityModeChange} />
       <BalancedModeHeader />
 
       {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
