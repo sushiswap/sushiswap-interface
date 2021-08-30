@@ -148,7 +148,8 @@ const useLPTokensState = () => {
             )
           )
         )?.reduce((acc: any, cur: any) => {
-          acc[cur[0]] = cur
+          acc[cur[0]] = { ...cur }
+          acc[cur[0]].decimals = acc[cur[0]].decimals.toNumber()
           return acc
         }, {})
 
