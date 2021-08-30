@@ -3,14 +3,6 @@ import Fraction from './src/entities/Fraction'
 
 declare module 'fortmatic'
 
-declare module '@ethersproject/bignumber' {
-  interface BigNumber {
-    mulDiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
-    toFixed(decimals: BigNumberish): string
-    toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
-  }
-}
-
 declare global {
   interface String {
     toBigNumber(decimals: number): BigNumber
@@ -46,3 +38,11 @@ declare module 'jazzicon' {
 }
 
 declare module 'react-tradingview-widget'
+
+declare module '@ethersproject/bignumber' {
+  interface BigNumber {
+    mulDiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
+    toFixed(decimals: BigNumberish): string
+    toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
+  }
+}

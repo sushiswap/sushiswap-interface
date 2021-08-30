@@ -166,7 +166,18 @@ const builders = {
     }
   },
   palm: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
-    const prefix = 'https://explorer.palm.io'
+    const prefix = ''
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      case 'token':
+        return `${prefix}/tokens/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+  moonriver: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://blockscout.moonriver.moonbeam.network'
     switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
@@ -285,6 +296,10 @@ const chains: ChainObject = {
   [ChainId.PALM]: {
     chainName: '',
     builder: builders.palm,
+  },
+  [ChainId.MOONRIVER]: {
+    chainName: '',
+    builder: builders.moonriver,
   },
 }
 

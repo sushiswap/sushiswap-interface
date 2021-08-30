@@ -31,8 +31,8 @@ import {
   PLAY,
   PONT,
   PWING,
-  RENBTC,
   RAI,
+  RENBTC,
   RUNE,
   SPANK,
   STETH,
@@ -113,6 +113,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.OKEX]: [WNATIVE[ChainId.OKEX]],
   [ChainId.OKEX_TESTNET]: [WNATIVE[ChainId.OKEX_TESTNET]],
   [ChainId.CELO]: [WNATIVE[ChainId.CELO]],
+  [ChainId.MOONRIVER]: [WNATIVE[ChainId.MOONRIVER]],
 }
 
 // used to construct intermediary pairs for trading
@@ -160,6 +161,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     CELO.cEURO,
     CELO.cBTC,
   ],
+  [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
 }
 
 export const ADDITIONAL_BASES: {
@@ -269,6 +271,7 @@ export const COMMON_BASES: ChainTokenList = {
   //   CELO.mcEURO,
   //   CELO.cEUR,
   // ],
+  [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -304,6 +307,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   //   CELO.mcEURO,
   //   CELO.cEUR,
   // ],
+  [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
 }
 
 export const PINNED_PAIRS: {

@@ -74,6 +74,7 @@ export const injected = new InjectedConnector({
     42161, // arbitrum
     42220, // celo
     11297108109, // palm
+    1285, // moonriver
   ],
 })
 
