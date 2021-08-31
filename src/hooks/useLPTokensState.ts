@@ -1,10 +1,11 @@
 import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
-import { useBoringHelperContract, useDashboardContract, useQuickSwapFactoryContract } from '../hooks/useContract'
+import { useBoringHelperContract, useDashboardContract, useQuickSwapFactoryContract } from './useContract'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import LPToken from '../types/LPToken'
 import { getAddress } from '@ethersproject/address'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useAllTokens } from './Tokens'
 
 export interface LPTokensState {
   updateLPTokens: () => Promise<void>
@@ -26,6 +27,7 @@ const useLPTokensState = () => {
   const [selectedLPToken, setSelectedLPToken] = useState<LPToken>()
   const [selectedLPTokenAllowed, setSelectedLPTokenAllowed] = useState(false)
   const [loading, setLoading] = useState(true)
+  const tokens = useAllTokens()
   const updatingLPTokens = useRef(false)
   const updateLPTokens = useCallback(async () => {
     try {
@@ -153,7 +155,7 @@ const useLPTokensState = () => {
           return acc
         }, {})
 
-        const lpTokens = userLP?.map((pair: any, index: number) => {
+        const lpTokens = userLP?.map((pair: any) => {
           const token = new Token(
             chainId as ChainId,
             getAddress(pair.pool_token.contract_address),
@@ -171,8 +173,24 @@ const useLPTokensState = () => {
             symbol: `${tokenA.symbol}-${tokenB.symbol}`,
             balance: CurrencyAmount.fromRawAmount(token, pair.pool_token.balance),
             totalSupply: pair.pool_token.total_supply,
-            tokenA: new Token(chainId as ChainId, tokenA.token, tokenA.decimals, tokenA.symbol, tokenA.name),
-            tokenB: new Token(chainId as ChainId, tokenB.token, tokenB.decimals, tokenB.symbol, tokenB.name),
+            tokenA:
+              tokens[getAddress(pair.token_0.contract_address)] ||
+              new Token(
+                chainId as ChainId,
+                tokenA.address || tokenA.token,
+                tokenA.decimals,
+                tokenA.symbol,
+                tokenA.name
+              ),
+            tokenB:
+              tokens[getAddress(pair.token_1.contract_address)] ||
+              new Token(
+                chainId as ChainId,
+                tokenB.address || tokenB.token,
+                tokenB.decimals,
+                tokenB.symbol,
+                tokenB.name
+              ),
             version: pair.version,
           } as LPToken
         })
@@ -184,7 +202,7 @@ const useLPTokensState = () => {
       setLoading(false)
       updatingLPTokens.current = false
     }
-  }, [chainId, account, boringHelperContract, dashboardContract, quickSwapFactoryContract])
+  }, [chainId, quickSwapFactoryContract, boringHelperContract, account, dashboardContract, tokens])
 
   useEffect(() => {
     if (chainId && account && boringHelperContract && !updatingLPTokens.current) {
