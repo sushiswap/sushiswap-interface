@@ -8,33 +8,31 @@ import { useMemo } from 'react'
 
 let store
 
-const PERSISTED_KEYS: string[] = ['user', 'transactions']
+const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
-const persistConfig = {
+const persistConfig: any = {
   key: 'root',
   whitelist: PERSISTED_KEYS,
   storage,
+  stateReconciler: false,
 }
+
+const persistedReducer = persistReducer(persistConfig, reducer)
 
 function makeStore(preloadedState = undefined) {
   return configureStore({
-    reducer: persistReducer(persistConfig, reducer),
-    middleware: getDefaultMiddleware({
-      thunk: true,
-      immutableCheck: true,
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        thunk: true,
+        immutableCheck: true,
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+      }),
     devTools: process.env.NODE_ENV === 'development',
     preloadedState,
   })
-
-  // return createStore(
-  //   persistedReducer,
-  //   initialState,
-  //   composeWithDevTools(applyMiddleware())
-  // )
 }
 
 export const getOrCreateStore = (preloadedState = undefined) => {
@@ -70,7 +68,6 @@ store = getOrCreateStore()
 export type AppState = ReturnType<typeof store.getState>
 
 export type AppDispatch = typeof store.dispatch
-
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, AppState, unknown, Action<string>>
 
 export default store

@@ -2,7 +2,18 @@ import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallbac
 import { AutoRow, RowBetween, RowFixed } from '../../components/Row'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import Button, { ButtonError } from '../../components/Button'
-import { ChainId, Currency, Ether, JSBI, NATIVE, Percent, ROUTER_ADDRESS, Trade, WNATIVE } from '@sushiswap/sdk'
+import {
+  ChainId,
+  Currency,
+  Ether,
+  JSBI,
+  NATIVE,
+  Percent,
+  ROUTER_ADDRESS,
+  Trade,
+  WNATIVE,
+  ZAPPER_ADDRESS,
+} from '@sushiswap/sdk'
 import Column, { AutoColumn } from '../../components/Column'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
@@ -16,6 +27,7 @@ import { ArrowLeft } from 'react-feather'
 import CurrencyInputPanel from '../../components/CurrencyInputPanel'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import DoubleCurrencyLogo from '../../components/DoubleLogo'
+import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 import FormattedPriceImpact from '../../features/swap/FormattedPriceImpact'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -26,7 +38,6 @@ import QuestionHelper from '../../components/QuestionHelper'
 import Router from 'next/router'
 import Settings from '../../components/Settings'
 import SwapRoute from '../../features/swap/SwapRoute'
-import { ZAPPER_ADDRESS } from '../../constants/addresses'
 import { currencyId as getCurrencyId } from '../../functions/currency/currencyId'
 import { maxAmountSpend } from '../../functions/currency/maxAmountSpend'
 import { resetZapState } from '../../state/zap/actions'
@@ -40,7 +51,6 @@ import usePool from '../../hooks/usePool'
 import { useRouterContract } from '../../hooks/useContract'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import useZapper from '../../hooks/useZapper'
-import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 
 const PoolAllocationWrapper = styled.div`
   margin-top: 1rem;

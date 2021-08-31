@@ -59,7 +59,7 @@ const builders = {
 
   // token is not yet supported for arbitrum
   arbitrum: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
-    const prefix = `https://mainnet-arb-explorer.netlify.app`
+    const prefix = `https://arbiscan.io`
     switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`

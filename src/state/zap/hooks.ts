@@ -11,6 +11,7 @@ import {
   Trade,
   TradeType,
   WNATIVE,
+  ZAPPER_ADDRESS,
 } from '@sushiswap/sdk'
 import { Field, typeInput } from './actions'
 import { PairState, useV2Pair } from '../../hooks/useV2Pairs'
@@ -23,7 +24,6 @@ import {
 } from '../../state/user/hooks'
 
 import ROUTER_ABI_SLIM from '../../constants/abis/router-slim.json'
-import { ZAPPER_ADDRESS } from '../../constants/addresses'
 import { basisPointsToPercent } from '../../functions'
 import { ethers } from 'ethers'
 import { tryParseAmount } from '../../functions/parse'

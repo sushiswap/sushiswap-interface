@@ -1,11 +1,18 @@
-import { ChainId, CurrencyAmount, JSBI, MASTERCHEF_ADDRESS } from '@sushiswap/sdk'
+import {
+  ChainId,
+  CurrencyAmount,
+  JSBI,
+  MASTERCHEF_ADDRESS,
+  MASTERCHEF_V2_ADDRESS,
+  MINICHEF_ADDRESS,
+} from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
-import { MASTERCHEF_V2_ADDRESS, MINICHEF_ADDRESS, SUSHI } from '../../constants'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
 import { useCallback, useMemo } from 'react'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks'
 
 import { Contract } from '@ethersproject/contracts'
+import { SUSHI } from '../../constants'
 import { Zero } from '@ethersproject/constants'
 import concat from 'lodash/concat'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'

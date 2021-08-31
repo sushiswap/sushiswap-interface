@@ -1,19 +1,23 @@
-import { ARCHER_ROUTER_ADDRESS, MINICHEF_ADDRESS, MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses'
 import {
-  ARGENT_WALLET_DETECTOR_ABI,
-  ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
-} from '../constants/abis/argent-wallet-detector'
-import {
+  ARCHER_ROUTER_ADDRESS,
   BAR_ADDRESS,
   ChainId,
   FACTORY_ADDRESS,
   MAKER_ADDRESS,
   MASTERCHEF_ADDRESS,
+  MERKLE_DISTRIBUTOR_ADDRESS,
+  MINICHEF_ADDRESS,
+  MULTICALL2_ADDRESS,
   ROUTER_ADDRESS,
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
   WNATIVE,
+  ZAPPER_ADDRESS,
 } from '@sushiswap/sdk'
+import {
+  ARGENT_WALLET_DETECTOR_ABI,
+  ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
+} from '../constants/abis/argent-wallet-detector'
 import {
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
@@ -23,7 +27,6 @@ import {
   SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
   SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
 } from '../constants/kashi'
-import { MERKLE_DISTRIBUTOR_ADDRESS, SUSHI } from '../constants'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
 import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
