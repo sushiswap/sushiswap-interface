@@ -20,7 +20,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
-import { SignatureData, useV2LiquidityTokenPermit } from '../../../../../hooks/useERC20Permit'
+import { SignatureData } from '../../../../../hooks/useERC20Permit'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 

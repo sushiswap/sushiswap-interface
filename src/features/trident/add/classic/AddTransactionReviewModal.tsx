@@ -6,6 +6,7 @@ import {
   parsedAmountsSelector,
   poolAtom,
   poolShareSelector,
+  priceSelector,
   useClassicAddExecute,
 } from './context/atoms'
 import ListPanel from '../../../../components/ListPanel'
@@ -20,7 +21,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Button from '../../../../components/Button'
 import { ZERO } from '@sushiswap/sdk'
 import { LiquidityMode } from '../../types'
-import { currentPoolShareSelector, liquidityModeAtom, priceSelector, showReviewAtom } from '../../context/atoms'
+import { currentPoolShareSelector, liquidityModeAtom, showReviewAtom } from '../../context/atoms'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()

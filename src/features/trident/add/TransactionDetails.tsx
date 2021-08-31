@@ -4,8 +4,8 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import TransactionDetailsExplanationModal from './TransactionDetailsExplanationModal'
 import { useRecoilValue } from 'recoil'
-import { liquidityMintedSelector, poolAtom, poolShareSelector } from './classic/context/atoms'
-import { currentPoolShareSelector, poolBalanceAtom, priceSelector } from '../context/atoms'
+import { liquidityMintedSelector, poolAtom, poolShareSelector, priceSelector } from './classic/context/atoms'
+import { currentPoolShareSelector, poolBalanceAtom } from '../context/atoms'
 
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
