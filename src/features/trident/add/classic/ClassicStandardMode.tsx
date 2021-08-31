@@ -76,32 +76,31 @@ const ClassicStandardMode = () => {
           }}
           spendFromWallet={spendFromWallet}
         />
-
-        <div className="flex flex-col">
-          <div className="flex flex-row gap-3">
-            {approveA !== ApprovalState.APPROVED && (
-              <Button.Dotted pending={approveA === ApprovalState.PENDING} color="blue" onClick={approveACallback}>
-                {approveA === ApprovalState.PENDING
-                  ? i18n._(t`Approving ${parsedAmountA?.currency.symbol}`)
-                  : i18n._(t`Approve ${parsedAmountA?.currency.symbol}`)}
-              </Button.Dotted>
-            )}
-            {approveB !== ApprovalState.NOT_APPROVED && (
-              <Button.Dotted pending={approveB === ApprovalState.PENDING} color="blue" onClick={approveBCallback}>
-                {approveB === ApprovalState.PENDING
-                  ? i18n._(t`Approving ${parsedAmountB?.currency.symbol}`)
-                  : i18n._(t`Approve ${parsedAmountB?.currency.symbol}`)}
-              </Button.Dotted>
-            )}
-          </div>
+        <div className="grid grid-cols-2 gap-3">
+          {[ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveA) && (
+            <Button.Dotted pending={approveA === ApprovalState.PENDING} color="blue" onClick={approveACallback}>
+              {approveA === ApprovalState.PENDING
+                ? i18n._(t`Approving ${parsedAmountA?.currency.symbol}`)
+                : i18n._(t`Approve ${parsedAmountA?.currency.symbol}`)}
+            </Button.Dotted>
+          )}
+          {[ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveB) && (
+            <Button.Dotted pending={approveB === ApprovalState.PENDING} color="blue" onClick={approveBCallback}>
+              {approveB === ApprovalState.PENDING
+                ? i18n._(t`Approving ${parsedAmountB?.currency.symbol}`)
+                : i18n._(t`Approve ${parsedAmountB?.currency.symbol}`)}
+            </Button.Dotted>
+          )}
           {approveA === ApprovalState.APPROVED && approveB === ApprovalState.APPROVED && (
-            <DepositButtons
-              errorMessage={error}
-              inputValid={true}
-              onMax={() => {}}
-              isMaxInput={false}
-              onClick={() => setShowReview(true)}
-            />
+            <div className="col-span-2">
+              <DepositButtons
+                errorMessage={error}
+                inputValid={true}
+                onMax={() => {}}
+                isMaxInput={false}
+                onClick={() => setShowReview(true)}
+              />
+            </div>
           )}
         </div>
       </div>

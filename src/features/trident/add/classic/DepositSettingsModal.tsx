@@ -8,12 +8,12 @@ import Typography from '../../../../components/Typography'
 import Switch from '../../../../components/Switch'
 import { LiquidityMode } from '../../types'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { balancedModeAtom, liquidityModeAtom } from '../../context/atoms'
+import { fixedRatioAtom, liquidityModeAtom } from '../../context/atoms'
 
 const DepositSettingsModal: FC = () => {
   const { i18n } = useLingui()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const [balancedMode, setBalancedMode] = useRecoilState(balancedModeAtom)
+  const [fixedRatio, setFixedRatio] = useRecoilState(fixedRatioAtom)
 
   // Only applies on standard mode
   if (liquidityMode !== LiquidityMode.STANDARD) {
@@ -55,11 +55,11 @@ const DepositSettingsModal: FC = () => {
           <div className="grid grid-cols-3 px-5 gap-3">
             <div className="flex flex-row justify-between col-span-3 items-center">
               <Typography variant="h3" weight={700} className="text-high-emphesis">
-                {balancedMode ? i18n._(t`Balanced Mode: On`) : i18n._(t`Balanced Mode: Off`)}
+                {fixedRatio ? i18n._(t`Balanced Mode: On`) : i18n._(t`Balanced Mode: Off`)}
               </Typography>
               <Switch
-                checked={balancedMode}
-                onChange={() => setBalancedMode(!balancedMode)}
+                checked={fixedRatio}
+                onChange={() => setFixedRatio(!fixedRatio)}
                 checkedIcon={<CheckIcon className="text-high-emphesis" />}
                 uncheckedIcon={<XIcon className="text-high-emphesis" />}
                 color="gradient"

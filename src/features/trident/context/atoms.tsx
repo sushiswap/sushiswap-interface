@@ -46,11 +46,6 @@ export const liquidityModeAtom = atom<LiquidityMode>({
   default: LiquidityMode.STANDARD,
 })
 
-export const balancedModeAtom = atom<boolean>({
-  key: 'balancedModeAtom',
-  default: true,
-})
-
 export const spendFromWalletAtom = atom<boolean>({
   key: 'spendFromWalletAtom',
   default: true,

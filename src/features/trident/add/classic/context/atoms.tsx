@@ -16,8 +16,10 @@ import { useLingui } from '@lingui/react'
 import {
   attemptingTxnAtom,
   currenciesAtom,
+  fixedRatioAtom,
   noLiquiditySelector,
   poolBalanceAtom,
+  showReviewAtom,
   totalSupplyAtom,
   txHashAtom,
 } from '../../../context/atoms'
@@ -89,15 +91,20 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
     const [, pool] = get(poolAtom)
     const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
     const noLiquidity = get(noLiquiditySelector)
+    const fixedRatio = get(fixedRatioAtom)
 
     // we wrap the currencies just to get the price in terms of the other token
     if (!noLiquidity) {
-      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-      if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
-        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
-        return pool?.token1?.isNative
-          ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
-          : dependentTokenAmount
+      if (fixedRatio) {
+        const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+        if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
+          const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
+          return pool?.token1?.isNative
+            ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
+            : dependentTokenAmount
+        }
+      } else {
+        return tryParseAmount(get(secondaryInputAtom), pool?.token1)
       }
     }
 
@@ -106,11 +113,15 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
   set: ({ set, get }, newValue: CurrencyAmount<Currency>) => {
     const [, pool] = get(poolAtom)
     const noLiquidity = get(noLiquiditySelector)
+    const fixedRatio = get(fixedRatioAtom)
+
     if (!noLiquidity) {
-      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-      if (tokenA && tokenB && newValue?.wrapped && pool) {
-        const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
-        set(mainInputAtom, dependentTokenAmount?.toExact())
+      if (fixedRatio) {
+        const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+        if (tokenA && tokenB && newValue?.wrapped && pool) {
+          const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
+          set(mainInputAtom, dependentTokenAmount?.toExact())
+        }
       }
     }
 
@@ -261,6 +272,7 @@ export const useClassicAddExecute = () => {
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const addTransaction = useTransactionAdder()
   const setTxHash = useSetRecoilState(txHashAtom)
+  const setShowReview = useSetRecoilState(showReviewAtom)
 
   const standardModeExecute = useCallback(async () => {
     if (
@@ -333,6 +345,7 @@ export const useClassicAddExecute = () => {
           })
 
           setTxHash(response.hash)
+          setShowReview(false)
 
           ReactGA.event({
             category: 'Liquidity',
@@ -363,10 +376,13 @@ export const useClassicAddExecute = () => {
     parsedAmountB,
     router,
     setAttemptingTxn,
+    setShowReview,
     setTxHash,
   ])
 
-  const zapModeExecute = useCallback(() => {}, [])
+  const zapModeExecute = useCallback(() => {
+    setShowReview(false)
+  }, [])
 
   return {
     standardModeExecute,

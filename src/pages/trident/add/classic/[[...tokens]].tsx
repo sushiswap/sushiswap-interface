@@ -26,7 +26,6 @@ import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
 import AddTransactionReviewModal from '../../../../features/trident/add/classic/AddTransactionReviewModal'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import BalancedModeHeader from '../../../../features/trident/add/classic/BalancedModeHeader'
 import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
 import {
   currenciesAtom,
@@ -34,6 +33,7 @@ import {
   poolBalanceAtom,
   totalSupplyAtom,
 } from '../../../../features/trident/context/atoms'
+import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 
 const AddClassic = () => {
   const { account } = useActiveWeb3React()
@@ -114,7 +114,7 @@ const AddClassic = () => {
       </div>
 
       <ModeToggle onChange={handleLiquidityModeChange} />
-      <BalancedModeHeader />
+      <FixedRatioHeader />
 
       {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
       {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
