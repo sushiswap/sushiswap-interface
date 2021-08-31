@@ -55,7 +55,7 @@ const DepositSettingsModal: FC = () => {
           <div className="grid grid-cols-3 px-5 gap-3">
             <div className="flex flex-row justify-between col-span-3 items-center">
               <Typography variant="h3" weight={700} className="text-high-emphesis">
-                {fixedRatio ? i18n._(t`Balanced Mode: On`) : i18n._(t`Balanced Mode: Off`)}
+                {fixedRatio ? i18n._(t`Fixed Ratio: On`) : i18n._(t`Fixed Ratio: Off`)}
               </Typography>
               <Switch
                 checked={fixedRatio}

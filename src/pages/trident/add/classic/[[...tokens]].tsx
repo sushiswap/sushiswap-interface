@@ -11,7 +11,14 @@ import React, { useCallback, useEffect } from 'react'
 import SettingsTab from '../../../../components/Settings'
 import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
 import { LiquidityMode } from '../../../../features/trident/types'
-import { RecoilRoot, useRecoilState, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
+import {
+  RecoilRoot,
+  useRecoilCallback,
+  useRecoilState,
+  useRecoilValue,
+  useResetRecoilState,
+  useSetRecoilState,
+} from 'recoil'
 import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../hooks/Tokens'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
@@ -45,9 +52,6 @@ const AddClassic = () => {
   const [currencies, setCurrencies] = useRecoilState(currenciesAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
-  const mainInputReset = useResetRecoilState(mainInputAtom)
-  const secondaryInputReset = useResetRecoilState(secondaryInputSelector)
-  const zapInputReset = useResetRecoilState(zapInputAtom)
 
   // TODO USE V2 FOR TESTING
   const currencyA = useCurrency(query.tokens[0])
@@ -76,11 +80,15 @@ const AddClassic = () => {
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
 
-  const handleLiquidityModeChange = useCallback(() => {
-    mainInputReset()
-    secondaryInputReset()
-    zapInputReset()
-  }, [mainInputReset, secondaryInputReset, zapInputReset])
+  const handleLiquidityModeChange = useRecoilCallback(
+    ({ reset }) =>
+      async () => {
+        reset(mainInputAtom)
+        reset(secondaryInputSelector)
+        reset(zapInputAtom)
+      },
+    []
+  )
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">

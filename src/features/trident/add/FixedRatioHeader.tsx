@@ -3,8 +3,9 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
 import Typography from '../../../components/Typography'
-import { useRecoilState } from 'recoil'
-import { fixedRatioAtom } from '../context/atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { fixedRatioAtom, liquidityModeAtom } from '../context/atoms'
+import { LiquidityMode } from '../types'
 
 interface FixedRatioHeaderProps {
   margin?: boolean
@@ -13,6 +14,9 @@ interface FixedRatioHeaderProps {
 const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   const { i18n } = useLingui()
   const [fixedRatio, setFixedRatio] = useRecoilState(fixedRatioAtom)
+  const liquidityMode = useRecoilValue(liquidityModeAtom)
+
+  if (liquidityMode !== LiquidityMode.STANDARD || !fixedRatio) return <div className="pt-6" />
 
   return (
     <div className={margin ? '-top-6 pt-10 pb-5 relative z-0' : 'py-5 relative z-0'}>

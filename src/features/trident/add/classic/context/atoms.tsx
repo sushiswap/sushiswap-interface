@@ -133,13 +133,11 @@ export const formattedAmountsSelector = selector<[string, string]>({
   key: 'formattedAmountsSelector',
   get: ({ get }) => {
     const inputField = get(inputFieldAtom)
+    const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
+
     return [
-      inputField === Field.CURRENCY_A
-        ? get(mainInputAtom) ?? ''
-        : get(mainInputCurrencyAmountSelector)?.toSignificant(6) ?? '',
-      inputField === Field.CURRENCY_B
-        ? get(secondaryInputAtom) ?? ''
-        : get(secondaryInputCurrencyAmountSelector)?.toSignificant(6) ?? '',
+      inputField === Field.CURRENCY_A ? parsedAmountA?.toExact() ?? '' : parsedAmountA?.toSignificant(6) ?? '',
+      inputField === Field.CURRENCY_B ? parsedAmountB?.toExact() ?? '' : parsedAmountB?.toSignificant(6) ?? '',
     ]
   },
 })
@@ -153,10 +151,21 @@ export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
   },
 })
 
+// Derive parsedAmounts from formattedAmounts
 export const parsedAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
   key: 'parsedAmountsSelector',
   get: ({ get }) => {
-    return [get(mainInputCurrencyAmountSelector), get(secondaryInputCurrencyAmountSelector)]
+    const inputField = get(inputFieldAtom)
+    const [, pool] = get(poolAtom)
+
+    return [
+      inputField === Field.CURRENCY_A
+        ? tryParseAmount(get(mainInputAtom), pool?.token0)
+        : get(mainInputCurrencyAmountSelector),
+      inputField === Field.CURRENCY_B
+        ? tryParseAmount(get(secondaryInputAtom), pool?.token1)
+        : get(secondaryInputCurrencyAmountSelector),
+    ]
   },
 })
 

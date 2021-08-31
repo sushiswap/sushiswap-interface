@@ -1,8 +1,8 @@
 import AssetInput from '../../../../components/AssetInput'
-import React from 'react'
+import React, { useMemo } from 'react'
 import DepositButtons from './../DepositButtons'
 import TransactionDetails from './../TransactionDetails'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import {
   formattedAmountsSelector,
@@ -20,7 +20,9 @@ import { useLingui } from '@lingui/react'
 import { useCurrencyBalances } from '../../../../state/wallet/hooks'
 import { ZERO } from '@sushiswap/sdk'
 import Button from '../../../../components/Button'
-import { currenciesAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { currenciesAtom, fixedRatioAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
+import { maxAmountSpend } from '../../../../functions'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
@@ -35,10 +37,37 @@ const ClassicStandardMode = () => {
   const setSecondaryInput = useSetRecoilState(secondaryInputSelector)
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
   const balances = useCurrencyBalances(account ?? undefined, currencies)
-
+  const fixedRatio = useRecoilValue(fixedRatioAtom)
   const router = useRouterContract()
   const [approveA, approveACallback] = useApproveCallback(parsedAmountA, router?.address)
   const [approveB, approveBCallback] = useApproveCallback(parsedAmountB, router?.address)
+
+  const usdcA = useUSDCValue(balances?.[0])
+  const usdcB = useUSDCValue(balances?.[1])
+
+  const onMax = useRecoilCallback(
+    ({ set }) =>
+      async () => {
+        if (fixedRatio) {
+          usdcA?.lessThan(usdcB)
+            ? set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
+            : set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
+        }
+      },
+    [balances, fixedRatio, usdcA, usdcB]
+  )
+
+  const isMax = useMemo(() => {
+    if (!balances) return false
+
+    if (fixedRatio) {
+      return usdcA?.lessThan(usdcB)
+        ? parsedAmountA?.equalTo(maxAmountSpend(balances[0]))
+        : parsedAmountB?.equalTo(maxAmountSpend(balances[1]))
+    } else {
+      return parsedAmountA?.equalTo(maxAmountSpend(balances[0])) && parsedAmountB?.equalTo(maxAmountSpend(balances[1]))
+    }
+  }, [balances, fixedRatio, parsedAmountA, parsedAmountB, usdcA, usdcB])
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
@@ -91,17 +120,9 @@ const ClassicStandardMode = () => {
                 : i18n._(t`Approve ${parsedAmountB?.currency.symbol}`)}
             </Button.Dotted>
           )}
-          {approveA === ApprovalState.APPROVED && approveB === ApprovalState.APPROVED && (
-            <div className="col-span-2">
-              <DepositButtons
-                errorMessage={error}
-                inputValid={true}
-                onMax={() => {}}
-                isMaxInput={false}
-                onClick={() => setShowReview(true)}
-              />
-            </div>
-          )}
+          <div className="col-span-2">
+            <DepositButtons errorMessage={error} onMax={onMax} isMaxInput={isMax} onClick={() => setShowReview(true)} />
+          </div>
         </div>
       </div>
       {!error && (
