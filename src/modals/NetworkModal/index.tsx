@@ -136,7 +136,7 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
     },
     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-    blockExplorerUrls: ['https://mainnet-arb-explorer.netlify.app'],
+    blockExplorerUrls: ['https://arbiscan.io'],
   },
   [ChainId.CELO]: {
     chainId: '0xA4EC',

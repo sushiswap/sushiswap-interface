@@ -63,6 +63,11 @@ const Footer = () => {
           </ExternalLink>
         )}
 
+        {chainId && chainId === ChainId.ARBITRUM && (
+          <ExternalLink id={`arbitrum-bridge-link`} href=" https://bridge.arbitrum.io/" className="text-low-emphesis">
+            {i18n._(t`Arbitrum Bridge`)}
+          </ExternalLink>
+        )}
         <Polling />
       </div>
     </footer>
