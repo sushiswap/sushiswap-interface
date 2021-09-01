@@ -189,6 +189,16 @@ export default function Farm(): JSX.Element {
           },
         }
 
+        if (chainId === ChainId.ARBITRUM) {
+          return [
+            {
+              ...defaultReward,
+              rewardPerBlock: sushiPerBlock,
+              rewardPerDay: sushiPerDay,
+            },
+          ]
+        }
+
         return [
           {
             ...defaultReward,
@@ -255,6 +265,8 @@ export default function Farm(): JSX.Element {
     '2x': (farm) => (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) && farm.allocPoint !== '0',
   }
 
+  console.log({ swapPairs, kashiPairs })
+
   const data = farms
     .filter((farm) => {
       return (
@@ -266,6 +278,8 @@ export default function Farm(): JSX.Element {
     .filter((farm) => {
       return type in FILTER ? FILTER[type](farm) : true
     })
+
+  console.log({ data })
 
   const options = {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],

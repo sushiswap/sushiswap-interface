@@ -8,7 +8,7 @@ import { useActiveWeb3React } from '../../../hooks'
 export function useKashiPairs(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
 
-  const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.MATIC)
+  const shouldFetch = chainId && [ChainId.MAINNET, ChainId.MATIC, ChainId.ARBITRUM].includes(chainId)
 
   // useEffect(() => {
   //   console.log('debug', { shouldFetch, chainId, pairAddresses })

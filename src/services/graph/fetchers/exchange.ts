@@ -26,6 +26,7 @@ export const EXCHANGE = {
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
   [ChainId.CELO]: 'sushiswap/celo-exchange',
+  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
 }
 
 export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
@@ -33,6 +34,7 @@ export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
 
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
+  console.log({ chainId, pairs })
   return pairs
 }
 
