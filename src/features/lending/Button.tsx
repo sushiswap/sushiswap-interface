@@ -1,12 +1,11 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { BENTOBOX_ADDRESS, WNATIVE } from '@sushiswap/sdk'
 import useKashiApproveCallback, { BentoApprovalState } from '../../hooks/useKashiApproveCallback'
 
 import Alert from '../../components/Alert'
-import { BENTOBOX_ADDRESS } from '../../constants/kashi'
 import Button from '../../components/Button'
 import Dots from '../../components/Dots'
 import React from 'react'
-import { WNATIVE } from '@sushiswap/sdk'
 import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../functions/parse'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'

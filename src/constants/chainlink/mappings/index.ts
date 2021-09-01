@@ -1,3 +1,4 @@
+import ARBITRUM from './arbitrum'
 import BSC from './bsc'
 import { ChainId } from '@sushiswap/sdk'
 import HECO from './heco'
@@ -27,4 +28,5 @@ export const CHAINLINK_MAPPING: {
   [ChainId.HECO]: HECO,
   [ChainId.MATIC]: MATIC,
   [ChainId.XDAI]: XDAI,
+  [ChainId.ARBITRUM]: ARBITRUM,
 }

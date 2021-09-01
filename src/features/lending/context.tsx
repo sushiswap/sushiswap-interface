@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, KASHI_ADDRESS, NATIVE, Token, USDC, WNATIVE } from '@sushiswap/sdk'
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
 import {
@@ -14,8 +14,6 @@ import { useBentoBoxContract, useBoringHelperContract } from '../../hooks/useCon
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../../entities/Fraction'
-import { KASHI_ADDRESS } from '../../constants/kashi'
-import { USDC } from '../../hooks'
 import { bentobox } from '@sushiswap/sushi-data'
 import { ethers } from 'ethers'
 import { getCurrency } from '../../functions/currency'
@@ -210,7 +208,7 @@ export function KashiProvider({ children }) {
     if (
       !account ||
       !chainId ||
-      ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI].includes(chainId)
+      ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI, ChainId.ARBITRUM].includes(chainId)
     ) {
       return
     }
@@ -244,6 +242,8 @@ export function KashiProvider({ children }) {
 
       // Get full info on all the verified pairs
       const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
+
+      console.log({ pairs })
 
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()

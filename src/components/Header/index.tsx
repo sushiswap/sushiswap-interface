@@ -80,9 +80,14 @@ function AppBar(): JSX.Element {
                           </NavLink>
                         )}
                       {chainId &&
-                        [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI].includes(
-                          chainId
-                        ) && (
+                        [
+                          ChainId.MAINNET,
+                          ChainId.KOVAN,
+                          ChainId.BSC,
+                          ChainId.MATIC,
+                          ChainId.XDAI,
+                          ChainId.ARBITRUM,
+                        ].includes(chainId) && (
                           <>
                             <NavLink href={'/lend'}>
                               <a
@@ -323,27 +328,28 @@ function AppBar(): JSX.Element {
                     </Link>
                   )}
 
-                {chainId && [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC].includes(chainId) && (
-                  <>
-                    <Link href={'/lend'}>
-                      <a
-                        id={`lend-nav-link`}
-                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                      >
-                        {i18n._(t`Lend`)}
-                      </a>
-                    </Link>
+                {chainId &&
+                  [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.ARBITRUM].includes(chainId) && (
+                    <>
+                      <Link href={'/lend'}>
+                        <a
+                          id={`lend-nav-link`}
+                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                        >
+                          {i18n._(t`Lend`)}
+                        </a>
+                      </Link>
 
-                    <Link href={'/borrow'}>
-                      <a
-                        id={`borrow-nav-link`}
-                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                      >
-                        {i18n._(t`Borrow`)}
-                      </a>
-                    </Link>
-                  </>
-                )}
+                      <Link href={'/borrow'}>
+                        <a
+                          id={`borrow-nav-link`}
+                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                        >
+                          {i18n._(t`Borrow`)}
+                        </a>
+                      </Link>
+                    </>
+                  )}
                 {chainId === ChainId.MAINNET && (
                   <Link href={'/stake'}>
                     <a

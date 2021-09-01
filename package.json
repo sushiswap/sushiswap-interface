@@ -54,7 +54,7 @@
     "@ramp-network/ramp-instant-sdk": "^2.4.6",
     "@reach/dialog": "^0.15.2",
     "@reduxjs/toolkit": "^1.6.0",
-    "@sushiswap/chainlink-whitelist": "0.2.2",
+    "@sushiswap/chainlink-whitelist": "0.2.3",
     "@sushiswap/core": "2.0.0-canary.0",
     "@sushiswap/default-token-list": "14.14.0",
     "@sushiswap/limit-order-pair-list": "0.2.2",

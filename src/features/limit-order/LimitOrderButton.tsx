@@ -1,23 +1,23 @@
-import { useLingui } from '@lingui/react'
-import Alert from '../../components/Alert'
-import { t } from '@lingui/macro'
-import Button, { ButtonProps } from '../../components/Button'
-import React, { FC, useCallback, useState } from 'react'
-import useLimitOrderApproveCallback, { BentoApprovalState } from '../../hooks/useLimitOrderApproveCallback'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../hooks'
-import { BENTOBOX_ADDRESS } from '../../constants/kashi'
-import { ChainId, Currency } from '@sushiswap/sdk'
-import Dots from '../../components/Dots'
+import { BENTOBOX_ADDRESS, ChainId, Currency } from '@sushiswap/sdk'
+import Button, { ButtonProps } from '../../components/Button'
+import { Field, setFromBentoBalance } from '../../state/limit-order/actions'
+import React, { FC, useCallback, useState } from 'react'
 import { useAddPopup, useWalletModalToggle } from '../../state/application/hooks'
 import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../state/limit-order/hooks'
-import { Field, setFromBentoBalance } from '../../state/limit-order/actions'
-import ConfirmLimitOrderModal from './ConfirmLimitOrderModal'
-import { OrderExpiration } from '../../state/limit-order/reducer'
-import { LimitOrder } from 'limitorderv2-sdk'
-import useLimitOrders from '../../hooks/useLimitOrders'
-import { useDispatch } from 'react-redux'
+import useLimitOrderApproveCallback, { BentoApprovalState } from '../../hooks/useLimitOrderApproveCallback'
+
+import Alert from '../../components/Alert'
 import { AppDispatch } from '../../state'
+import ConfirmLimitOrderModal from './ConfirmLimitOrderModal'
+import Dots from '../../components/Dots'
+import { LimitOrder } from 'limitorderv2-sdk'
+import { OrderExpiration } from '../../state/limit-order/reducer'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useDispatch } from 'react-redux'
+import useLimitOrders from '../../hooks/useLimitOrders'
+import { useLingui } from '@lingui/react'
 
 interface LimitOrderButtonProps extends ButtonProps {
   currency: Currency
@@ -182,13 +182,13 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     )
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className="flex flex-col flex-1">
       {fallback && (
         <Alert
           message={i18n._(
             t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used`
           )}
-          className="mb-4 flex flex-row w-full"
+          className="flex flex-row w-full mb-4"
         />
       )}
       {button}

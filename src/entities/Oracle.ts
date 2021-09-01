@@ -1,9 +1,4 @@
-import {
-  CHAINLINK_ORACLE_ADDRESS,
-  SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-  SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-} from '../constants/kashi'
-import { ChainId, Token } from '@sushiswap/sdk'
+import { CHAINLINK_ORACLE_ADDRESS, ChainId, Token } from '@sushiswap/sdk'
 
 import { CHAINLINK_MAPPING } from '../constants/chainlink'
 import { e10 } from '../functions/math'
@@ -125,11 +120,7 @@ function lowerEqual(value1: string, value2: string) {
 }
 
 export function getOracle(pair: any, chainId: ChainId, tokens: any): Oracle {
-  if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS)) {
+  if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS[chainId])) {
     return new ChainlinkOracle(pair, chainId, tokens)
-  } else if (pair.oracle === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
-    return new SushiSwapTWAP0Oracle(pair, chainId, tokens)
-  } else if (pair.oracle === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
-    return new SushiSwapTWAP1Oracle(pair, chainId, tokens)
   }
 }

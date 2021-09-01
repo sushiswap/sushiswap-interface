@@ -1,14 +1,19 @@
 import {
   ARCHER_ROUTER_ADDRESS,
   BAR_ADDRESS,
+  BENTOBOX_ADDRESS,
+  BORING_HELPER_ADDRESS,
+  CHAINLINK_ORACLE_ADDRESS,
   ChainId,
   FACTORY_ADDRESS,
+  KASHI_ADDRESS,
   MAKER_ADDRESS,
   MASTERCHEF_ADDRESS,
   MERKLE_DISTRIBUTOR_ADDRESS,
   MINICHEF_ADDRESS,
   MULTICALL2_ADDRESS,
   ROUTER_ADDRESS,
+  SUSHISWAP_SWAPPER_ADDRESS,
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
   WNATIVE,
@@ -18,15 +23,6 @@ import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from '../constants/abis/argent-wallet-detector'
-import {
-  BENTOBOX_ADDRESS,
-  BORING_HELPER_ADDRESS,
-  CHAINLINK_ORACLE_ADDRESS,
-  KASHI_ADDRESS,
-  SUSHISWAP_SWAPPER_ADDRESS,
-  SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-  SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-} from '../constants/kashi'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
 import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
@@ -226,7 +222,8 @@ export function useSushiSwapSwapper(): Contract | null {
 }
 
 export function useChainlinkOracle(): Contract | null {
-  return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false)
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && CHAINLINK_ORACLE_ADDRESS[chainId], CHAINLINK_ORACLE_ABI, false)
 }
 
 // experimental:
@@ -452,25 +449,6 @@ export function useDashboardContract(): Contract | null {
     }
   }
   return useContract(address, DASHBOARD_ABI, false)
-}
-
-export function useSushiSwapTWAP0Oracle(): Contract | null {
-  return useContract(SUSHISWAP_TWAP_0_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
-}
-
-export function useSushiSwapTWAP1Oracle(): Contract | null {
-  return useContract(SUSHISWAP_TWAP_1_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
-}
-
-export function useSushiSwapTWAPContract(address?: string): Contract | null {
-  const TWAP_0 = useContract(SUSHISWAP_TWAP_0_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
-  const TWAP_1 = useContract(SUSHISWAP_TWAP_1_ORACLE_ADDRESS, SUSHISWAP_TWAP_ORACLE_ABI)
-  if (address === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
-    return TWAP_0
-  } else if (address === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
-    return TWAP_1
-  }
-  return undefined
 }
 
 export function useZapperContract(withSignerIfPossible?: boolean): Contract | null {

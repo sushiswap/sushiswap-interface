@@ -1,4 +1,4 @@
-import { CHAINLINK_ORACLE_ADDRESS, KASHI_ADDRESS } from '../../../constants/kashi'
+import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/sdk'
 import React, { useCallback } from 'react'
 import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '../../../state/create/hook'
 
@@ -7,7 +7,6 @@ import { CHAINLINK_MAPPING } from '../../../constants/chainlink'
 import Card from '../../../components/Card'
 import CardHeader from '../../../components/CardHeader'
 import Container from '../../../components/Container'
-import { Currency } from '@sushiswap/sdk'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import { Field } from '../../../state/create/actions'
 import Head from 'next/head'
@@ -124,7 +123,7 @@ function Create() {
         return
       }
 
-      const oracleAddress = CHAINLINK_ORACLE_ADDRESS
+      const oracleAddress = CHAINLINK_ORACLE_ADDRESS[chainId]
 
       const kashiData = ethers.utils.defaultAbiCoder.encode(
         ['address', 'address', 'address', 'bytes'],
