@@ -111,7 +111,7 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
   }
 }
 
-async function getPairs(bentoBoxContract: any, chainId: ChainId) {
+async function getPairs(bentoBoxContract, chainId: ChainId) {
   let logs = []
   let success = false
   const masterAddress = KASHI_ADDRESS[chainId]
@@ -136,7 +136,7 @@ async function getPairs(bentoBoxContract: any, chainId: ChainId) {
     })
   }
 
-  return logs.map((log: any) => {
+  return logs.map((log) => {
     const deployParams = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], log.args?.data)
     return {
       masterContract: log.args?.masterContract,
@@ -223,29 +223,28 @@ export function KashiProvider({ children }) {
 
       // Get the deployed pairs from the logs and decode
       const logPairs = await getPairs(bentoBoxContract, chainId)
-      // console.log({ logPairs })
+      console.log({ logPairs })
 
       // Filter all pairs by supported oracles and verify the oracle setup
 
-      const invalidOracles: any = []
+      const invalidOracles = []
 
       const allPairAddresses = logPairs
-        .filter((pair: any) => {
+        .filter((pair) => {
           const oracle = getOracle(pair, chainId, tokens)
-          if (!oracle.valid) {
-            // console.log(pair, oracle.valid, oracle.error)
-            invalidOracles.push({ pair, error: oracle.error })
+          if (!oracle) {
+            return false
+          } else if (!oracle.valid) {
+            invalidOracles.push({ pair, error: oracle?.error })
           }
           return oracle.valid
         })
-        .map((pair: any) => pair.address)
+        .map((pair) => pair.address)
 
       console.log('invalidOracles', invalidOracles)
 
       // Get full info on all the verified pairs
       const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
-
-      // console.log({ pairs })
 
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import dynamic from 'next/dynamic'
+
 import Loader from '../Loader'
 import { NetworkContextName } from '../../constants'
+import dynamic from 'next/dynamic'
 import { network } from '../../connectors'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'

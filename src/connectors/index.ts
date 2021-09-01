@@ -37,6 +37,13 @@ const RPC = {
   [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
 }
 
+export function getNetwork(defaultChainId, urls = RPC) {
+  return new NetworkConnector({
+    defaultChainId,
+    urls,
+  })
+}
+
 export const network = new NetworkConnector({
   defaultChainId: 1,
   urls: RPC,

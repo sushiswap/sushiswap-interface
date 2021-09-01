@@ -230,6 +230,10 @@ export default function Farm(): JSX.Element {
       ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
       : balance * kashiPair.token0.derivedETH * ethPrice
 
+    if (!swapPair) {
+      console.log({ balance, tvl, kashiPair })
+    }
+
     const roiPerBlock =
       rewards.reduce((previousValue, currentValue) => {
         return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
@@ -286,14 +290,10 @@ export default function Farm(): JSX.Element {
       return type in FILTER ? FILTER[type](farm) : true
     })
 
-  console.log({ data })
-
   const options = {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
     threshold: 0.4,
   }
-
-  // console.log({ data })
 
   const { result, term, search } = useFuse({
     data,
