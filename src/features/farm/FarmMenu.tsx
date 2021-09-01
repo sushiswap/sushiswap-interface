@@ -30,7 +30,7 @@ const Menu = ({ positionsLength }) => {
         </a>
       </NavLink>
 
-      {chainId === ChainId.MAINNET && (
+      {[ChainId.MAINNET, ChainId.ARBITRUM].includes(chainId) && (
         <>
           <NavLink
             exact
