@@ -7,18 +7,11 @@ import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import { toHref } from '../../../../hooks/useTridentPools'
 import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import SettingsTab from '../../../../components/Settings'
 import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
 import { LiquidityMode } from '../../../../features/trident/types'
-import {
-  RecoilRoot,
-  useRecoilCallback,
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-  useSetRecoilState,
-} from 'recoil'
+import { RecoilRoot, useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../hooks/Tokens'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
@@ -31,7 +24,7 @@ import {
 import { useV2Pair } from '../../../../hooks/useV2Pairs'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
-import AddTransactionReviewModal from '../../../../features/trident/add/classic/AddTransactionReviewModal'
+import AddTransactionReviewModalStandard from '../../../../features/trident/add/classic/AddTransactionReviewModal'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
 import {
@@ -127,7 +120,8 @@ const AddClassic = () => {
       {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
       {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
 
-      <AddTransactionReviewModal />
+      <AddTransactionReviewModalStandard />
+
       {/*<DepositSubmittedModal state={state} />*/}
     </div>
   )

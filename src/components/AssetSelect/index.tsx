@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 import { Currency } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
 import Typography from '../Typography'
@@ -21,19 +21,20 @@ interface AssetSelectProps {
   title?: string
   value: Currency
   onSelect: (x: Currency) => void
+  header?: ReactNode
 }
 
 const AssetSelect = (props: AssetSelectProps) => {
   const { i18n } = useLingui()
 
-  let header = (
-    <Typography variant="h3" weight={700} className="text-high-emphesis">
+  let header = props.header || (
+    <Typography variant="h3" weight={700} className="text-high-emphesis mb-4">
       {props.title ? props.title : i18n._(t`Choose an Asset to Receive:`)}
     </Typography>
   )
 
   return (
-    <div className="mt-4 flex flex-col gap-4">
+    <div className="mt-4 flex flex-col z-10">
       {header}
       <AssetSelectPanel value={props.value} onSelect={props.onSelect} />
     </div>
@@ -92,8 +93,7 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect }) => {
     <>
       <div
         className={classNames(
-          value ? 'border-2' : 'border',
-          'rounded border-dark-700 bg-dark-900 flex flex-col overflow-hidden h-[68px] justify-center pl-2 pr-3'
+          'border rounded border-dark-700 bg-dark-900 flex flex-col overflow-hidden h-[68px] justify-center pl-2 pr-3'
         )}
       >
         {content}
@@ -101,7 +101,11 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect }) => {
           <CurrencySelectDialog currency={value} onChange={onSelect} onDismiss={() => setOpen(false)} />
         </HeadlessUIModal.Controlled>
       </div>
-      {value && balances && <BalancePanel currency={value} />}
+      {value && balances && (
+        <div className="mt-4">
+          <BalancePanel currency={value} />
+        </div>
+      )}
     </>
   )
 }

@@ -13,8 +13,8 @@ const FixedRatioExplanationModal: FC = () => {
   return (
     <HeadlessUIModal
       trigger={
-        <div className="flex items-center justify-center w-4 h-4 rounded cursor-pointer">
-          <QuestionMarkCircleIcon className="w-4 h-4 text-high-emphesis" />
+        <div className="flex items-center justify-center w-6 h-6 rounded cursor-pointer">
+          <QuestionMarkCircleIcon className="w-6 h-6 text-high-emphesis" />
         </div>
       }
     >

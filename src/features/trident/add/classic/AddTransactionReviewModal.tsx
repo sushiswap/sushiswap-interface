@@ -4,6 +4,7 @@ import {
   liquidityMintedSelector,
   liquidityValueSelector,
   parsedAmountsSelector,
+  parsedZapAmountSelector,
   poolAtom,
   poolShareSelector,
   priceSelector,
@@ -35,6 +36,7 @@ const AddTransactionReviewModal: FC = () => {
   const price = useRecoilValue(priceSelector)
   const poolTokenPercentage = useRecoilValue(poolShareSelector)
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
+  const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
 
   const { standardModeExecute, zapModeExecute } = useClassicAddExecute()
 
@@ -73,25 +75,30 @@ const AddTransactionReviewModal: FC = () => {
             <Typography weight={700} variant="lg">
               {i18n._(t`You are depositing:`)}
             </Typography>
-            <ListPanel
-              items={parsedAmounts.reduce((acc, cur, index) => {
-                if (cur?.greaterThan(ZERO)) acc.push(<ListPanel.CurrencyAmountItem amount={cur} key={index} />)
-                return acc
-              }, [])}
-            />
+            {liquidityMode === LiquidityMode.STANDARD && (
+              <ListPanel
+                items={parsedAmounts.reduce((acc, cur, index) => {
+                  if (cur?.greaterThan(ZERO)) acc.push(<ListPanel.CurrencyAmountItem amount={cur} key={index} />)
+                  return acc
+                }, [])}
+              />
+            )}
+            {liquidityMode === LiquidityMode.ZAP && (
+              <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedZapAmount} key={0} />]} />
+            )}
           </div>
-          {/*{liquidityMode === LiquidityMode.ZAP && (*/}
-          {/*  <div className="flex flex-col gap-3 px-5">*/}
-          {/*    <Typography weight={700} variant="lg">*/}
-          {/*      {i18n._(t`Which will be converted to:`)}*/}
-          {/*    </Typography>*/}
-          {/*    <ListPanel*/}
-          {/*      items={currencies.map((currency, index) => (*/}
-          {/*        <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[address]} key={index} />*/}
-          {/*      ))}*/}
-          {/*    />*/}
-          {/*  </div>*/}
-          {/*)}*/}
+          {liquidityMode === LiquidityMode.ZAP && (
+            <div className="flex flex-col gap-3 px-5">
+              <Typography weight={700} variant="lg">
+                {i18n._(t`Which will be converted to:`)}
+              </Typography>
+              {/*<ListPanel*/}
+              {/*  items={currencies.map((currency, index) => (*/}
+              {/*    <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[address]} key={index} />*/}
+              {/*  ))}*/}
+              {/*/>*/}
+            </div>
+          )}
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
               {i18n._(t`You'll receive:`)}

@@ -5,25 +5,35 @@ import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
 import Link from 'next/link'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Pool } from '../types'
+import { Pool, PoolType } from '../types'
 import { POOL_TYPES } from '../constants'
 import { toHref } from '../../../hooks/useTridentPools'
 import { classNames } from '../../../functions'
+import { ConstantProductPool } from '@sushiswap/sdk'
 
 interface PoolCardProps {
   pool: Pool
   link: string
 }
 
-const PoolCard: FC<PoolCardProps> = ({ pool, link }) => {
+const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const { i18n } = useLingui()
+  const [, pool] = poolProp
+
+  const currencies = [pool?.token0, pool?.token1]
+  const poolType = pool instanceof ConstantProductPool ? PoolType.CLASSIC : ''
+  // : pool instanceof HybridPool
+  // ? PoolType.HYBRID
+  // : pool instanceof WeightedPool
+  // ? PoolType.WEIGHTED
+  // : PoolType.CONCENTRATED
 
   const content = (
     <div className="rounded border border-dark-700 bg-dark-900 overflow-hidden">
       <div className="flex justify-between p-3 items-center">
         <div className="flex gap-2 items-center">
-          <CurrencyLogoArray currencies={pool.tokens} size={30} dense maxLogos={4} />
-          <Chip label={POOL_TYPES[pool.type].label} color={POOL_TYPES[pool.type].color} />
+          <CurrencyLogoArray currencies={currencies} size={30} dense maxLogos={4} />
+          <Chip label={POOL_TYPES[poolType].label} color={POOL_TYPES[poolType].color} />
         </div>
         <div className="flex gap-1.5 items-baseline">
           <Typography className={pool.isFarm ? '' : 'text-secondary'} variant="sm" weight={400}>
@@ -63,7 +73,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool, link }) => {
       <div className="flex justify-between items-center bg-dark-800 px-3 pt-2.5 pb-1.5">
         <div className="flex flex-col gap-0.5">
           <Typography className="text-high-emphesis leading-5" variant="lg" weight={400}>
-            {pool.tokens.map((token) => token.symbol).join('-')}
+            {currencies.map((token) => token.symbol).join('-')}
           </Typography>
           <Typography className="text-high-emphesis" variant="xxs">
             $1,504,320
@@ -76,7 +86,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool, link }) => {
     </div>
   )
 
-  if (link) return <Link href={`${link}/${toHref(pool)}`}>{content}</Link>
+  if (link) return <Link href={`${link}/${toHref(poolType.toLowerCase(), currencies)}`}>{content}</Link>
 
   return content
 }

@@ -75,7 +75,12 @@ export const POOL_TYPES: PoolTypesInterface = {
   },
 }
 
-export const FEE_TIERS = [
+export interface FeeFilterType {
+  label: string
+  color: ChipColor
+}
+
+export const FEE_TIERS: FeeFilterType[] = [
   { label: '1%', color: 'blue' },
   { label: '0.5%', color: 'blue' },
   { label: '0.1%', color: 'blue' },

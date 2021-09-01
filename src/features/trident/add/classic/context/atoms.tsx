@@ -5,7 +5,7 @@ import { PairState } from '../../../../../hooks/useV2Pairs'
 import { Field } from '../../../../../state/trident/add/classic'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../../../../../constants'
 import { useCallback } from 'react'
-import { useActiveWeb3React, useRouterContract } from '../../../../../hooks'
+import { useActiveWeb3React, useRouterContract, useTridentRouterContract } from '../../../../../hooks'
 import useTransactionDeadline from '../../../../../hooks/useTransactionDeadline'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
@@ -151,6 +151,14 @@ export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
   },
 })
 
+export const parsedZapSplitAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
+  key: 'parsedZapSlitAmountsSelector',
+  get: ({ get }) => {
+    const inputAmount = get(parsedZapAmountSelector)
+    return [null, null]
+  },
+})
+
 // Derive parsedAmounts from formattedAmounts
 export const parsedAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
   key: 'parsedAmountsSelector',
@@ -272,7 +280,6 @@ export const liquidityValueSelector = selector({
 export const useClassicAddExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const router = useRouterContract()
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const [currencyA, currencyB] = useRecoilValue(currenciesAtom)
   const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
@@ -282,6 +289,7 @@ export const useClassicAddExecute = () => {
   const addTransaction = useTransactionAdder()
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
+  const router = useTridentRouterContract()
 
   const standardModeExecute = useCallback(async () => {
     if (

@@ -1,9 +1,6 @@
-import { ConstantProductPool, Currency, CurrencyAmount } from '@sushiswap/sdk'
+import { ConstantProductPool, Currency, CurrencyAmount, HybridPool } from '@sushiswap/sdk'
 import { Dispatch } from 'react'
-import {
-  ClassicPoolContext as ClassicPoolAddContext,
-  ClassicPoolState as ClassicPoolAddState,
-} from './add/classic/context/types'
+
 import {
   WeightedPoolContext as WeightedPoolAddContext,
   WeightedPoolState as WeightedPoolAddState,
@@ -17,10 +14,6 @@ import {
   ConcentratedPoolState as ConcentratedPoolAddState,
 } from './add/concentrated/context/types'
 
-import {
-  ClassicPoolContext as ClassicPoolRemoveContext,
-  ClassicPoolState as ClassicPoolRemoveState,
-} from './remove/classic/context/types'
 import {
   WeightedPoolContext as WeightedPoolRemoveContext,
   WeightedPoolState as WeightedPoolRemoveState,
@@ -108,21 +101,17 @@ export interface TridentContext {
 }
 
 export type PoolStateType =
-  | ClassicPoolAddState
   | WeightedPoolAddState
   | HybridPoolAddState
   | ConcentratedPoolAddState
-  | ClassicPoolRemoveState
   | WeightedPoolRemoveState
   | HybridPoolRemoveState
   | ConcentratedPoolRemoveState
 
 export type PoolContextType =
-  | ClassicPoolAddContext
   | WeightedPoolAddContext
   | HybridPoolAddContext
   | ConcentratedPoolAddContext
-  | ClassicPoolRemoveContext
   | WeightedPoolRemoveContext
   | HybridPoolRemoveContext
   | ConcentratedPoolRemoveContext

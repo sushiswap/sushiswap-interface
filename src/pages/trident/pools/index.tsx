@@ -4,15 +4,16 @@ import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
-import { TridentPoolsPageContextProvider, useTridentPoolsPageState } from '../../../features/trident/pools/context'
 import SuggestedPools from '../../../features/trident/pools/SuggestedPools'
 import SearchResultPools from '../../../features/trident/pools/SearchResultPools'
 import PoolListActions from '../../../features/trident/pools/PoolListActions'
 import Link from 'next/link'
+import { RecoilRoot, useRecoilValue } from 'recoil'
+import { searchQueryAtom } from '../../../features/trident/pools/context/atoms'
 
 const Pool = () => {
   const { i18n } = useLingui()
-  const { searchQuery } = useTridentPoolsPageState()
+  const searchQuery = useRecoilValue(searchQueryAtom)
 
   return (
     <div className="flex flex-col w-full gap-6 mt-px mb-5">
@@ -27,7 +28,7 @@ const Pool = () => {
         </div>
         <div className="grid grid-cols-2 gap-3">
           <Button color="gradient" size="sm" className="text-sm font-bold text-white py-2">
-            {i18n._(t`Create a New Pool`)}
+            <Link href={'/trident/create'}>{i18n._(t`Create a New Pool`)}</Link>
           </Button>
           <Button color="gradient" variant="outlined" className="text-sm font-bold text-white py-2">
             <Link href={'/trident/poolTypes'}>{i18n._(t`Pool Type Info`)}</Link>
@@ -43,7 +44,7 @@ const Pool = () => {
   )
 }
 
-Pool.Provider = TridentPoolsPageContextProvider
+Pool.Provider = RecoilRoot
 Pool.Layout = TridentLayout
 
 export default Pool

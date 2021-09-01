@@ -3,11 +3,10 @@ import {
   BAR_ADDRESS,
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
-  CHAINLINK_ORACLE_ADDRESS,
   ChainId,
+  CHAINLINK_ORACLE_ADDRESS,
   ENS_REGISTRAR_ADDRESS,
   FACTORY_ADDRESS,
-  KASHI_ADDRESS,
   MAKER_ADDRESS,
   MASTERCHEF_ADDRESS,
   MASTERCHEF_V2_ADDRESS,
@@ -53,10 +52,11 @@ import MULTICALL2_ABI from '../constants/abis/multicall2.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
+import TRIDENT_ROUTER_ABI from '../constants/abis/trident-router.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZENKO_ABI from '../constants/abis/zenko.json'
-import { getContract } from '../functions/contract'
+import { getContract } from '../functions'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
 
@@ -162,6 +162,11 @@ export function useRouterContract(useArcher = false, withSignerIfPossible?: bool
   const abi = useArcher ? ARCHER_ROUTER_ABI : ROUTER_ABI
 
   return useContract(address, abi, withSignerIfPossible)
+}
+
+// TODO hardcoded kovan contract
+export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0x760ef4F484EbF2668001B090291f84A3CDf2f3aa', TRIDENT_ROUTER_ABI, withSignerIfPossible)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {

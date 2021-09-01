@@ -1,75 +1,57 @@
-import { ChangeEvent, FC, useCallback, useState } from 'react'
+import { FC, useState } from 'react'
 import { ChevronDownIcon, SearchIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import RadioGroup from '../../../components/RadioGroup'
 import { useLingui } from '@lingui/react'
-import { ActionType } from './context/types'
+import { PoolFilterType } from './context/types'
 import BottomSlideIn from '../../../components/Dialog/BottomSlideIn'
 import Checkbox from '../../../components/Checkbox'
 import Chip from '../../../components/Chip'
-import { FEE_TIERS, POOL_TYPES, SORT_OPTIONS } from '../constants'
+import { FEE_TIERS, FeeFilterType, POOL_TYPES, SORT_OPTIONS } from '../constants'
 import Divider from '../../../components/Divider'
-import { useTridentPoolsPageDispatch, useTridentPoolsPageState } from './context'
 import Button from '../../../components/Button'
+import { farmsOnlyAtom, feeTiersAtom, poolTypesAtom, searchQueryAtom, sortTypeAtom } from './context/atoms'
+import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 interface SortSelectorProps {}
 
 const PoolListActions: FC<SortSelectorProps> = () => {
   const { i18n } = useLingui()
-  const dispatch = useTridentPoolsPageDispatch()
-  const { sortType, filters } = useTridentPoolsPageState()
+  const setSearchQuery = useSetRecoilState(searchQueryAtom)
+  const [sortType, setSortType] = useRecoilState(sortTypeAtom)
+  const feeTiers = useRecoilValue(feeTiersAtom)
+  const poolTypes = useRecoilValue(poolTypesAtom)
   const [hideSortTypes, setHideSortTypes] = useState(true)
   const [open, setOpen] = useState(false)
+  const [farmsOnly, setFarmsOnly] = useRecoilState(farmsOnlyAtom)
 
-  const handleSearch = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      dispatch({
-        type: ActionType.SEARCH,
-        payload: e.target.value,
-      })
-    },
-    [dispatch]
+  const handleAddOrDeletePoolTypeFilter = useRecoilCallback<[PoolFilterType, boolean], void>(
+    ({ snapshot, set }) =>
+      async (poolType, add) => {
+        const poolTypes = await snapshot.getPromise(poolTypesAtom)
+        add
+          ? set(poolTypesAtom, [poolType, ...poolTypes])
+          : set(
+              poolTypesAtom,
+              poolTypes.filter((el) => el.label !== poolType.label)
+            )
+      },
+    []
   )
 
-  const handleSortType = useCallback(
-    (sortType) => {
-      dispatch({
-        type: ActionType.SET_SORT_TYPE,
-        payload: sortType,
-      })
-    },
-    [dispatch]
-  )
-
-  const handleAddOrDeletePoolTypeFilter = useCallback(
-    (poolType, add) => {
-      dispatch({
-        type: add ? ActionType.ADD_POOL_TYPE_FILTER : ActionType.DELETE_POOL_TYPE_FILTER,
-        payload: poolType,
-      })
-    },
-    [dispatch]
-  )
-
-  const handleAddOrDeleteFeeTierFilter = useCallback(
-    (feeTier, add) => {
-      dispatch({
-        type: add ? ActionType.ADD_FEE_TIER_FILTER : ActionType.DELETE_FEE_TIER_FILTER,
-        payload: feeTier,
-      })
-    },
-    [dispatch]
-  )
-
-  const handleFarmsOnlyFilter = useCallback(
-    (farmsOnly) => {
-      dispatch({
-        type: ActionType.SET_FARMS_ONLY_FILTER,
-        payload: farmsOnly,
-      })
-    },
-    [dispatch]
+  const handleAddOrDeleteFeeTierFilter = useRecoilCallback<[FeeFilterType, boolean], void>(
+    ({ snapshot, set }) =>
+      async (feeTier, add) => {
+        const feeTiers = await snapshot.getPromise(feeTiersAtom)
+        add
+          ? set(feeTiersAtom, [feeTier, ...feeTiers])
+          : set(
+              feeTiersAtom,
+              feeTiers.filter((el) => el.label !== feeTier.label)
+            )
+      },
+    []
   )
 
   return (
@@ -80,7 +62,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
           <input
             className="bg-transparent text-high-emphesis w-full"
             placeholder={i18n._(t`Search by token`)}
-            onChange={handleSearch}
+            onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div onClick={() => setOpen(true)}>
@@ -94,12 +76,12 @@ const PoolListActions: FC<SortSelectorProps> = () => {
           </svg>
         </div>
       </div>
-      {filters.poolTypes.length + filters.feeTiers.length > 0 && (
+      {poolTypes.length + feeTiers.length > 0 && (
         <>
           <div className="flex justify-between items-start gap-3">
             <Typography weight={400}>{i18n._(t`Filters:`)}</Typography>
             <div className="flex gap-2 items-center flex-wrap">
-              {filters.poolTypes.map((type) => (
+              {poolTypes.map((type) => (
                 <Chip
                   label={type.label}
                   color={type.color}
@@ -107,7 +89,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
                   onClick={() => handleAddOrDeletePoolTypeFilter(type, false)}
                 />
               ))}
-              {filters.feeTiers.map((type) => (
+              {feeTiers.map((type) => (
                 <Chip
                   label={type.label}
                   color={type.color}
@@ -136,7 +118,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
         </div>
       </div>
       {!hideSortTypes && (
-        <RadioGroup value={sortType} onChange={handleSortType} className="space-y-3.5">
+        <RadioGroup value={sortType} onChange={(sortType: number) => setSortType(sortType)} className="space-y-3.5">
           {SORT_OPTIONS.map((option, index) => (
             <RadioGroup.Option value={index} key={index}>
               {option.title}
@@ -156,11 +138,8 @@ const PoolListActions: FC<SortSelectorProps> = () => {
         }
       >
         <div className="bg-dark-700 rounded-t">
-          <div
-            className="flex flex-row gap-3 items-center p-5"
-            onClick={() => handleFarmsOnlyFilter(!filters.farmsOnly)}
-          >
-            <Checkbox checked={filters.farmsOnly} color="blue" />
+          <div className="flex flex-row gap-3 items-center p-5" onClick={() => setFarmsOnly(!farmsOnly)}>
+            <Checkbox checked={farmsOnly} color="blue" />
             <Typography weight={700}>{i18n._(t`Farms only`)}</Typography>
           </div>
           <div className="bg-dark-800 rounded-t">
@@ -171,7 +150,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
                 </Typography>
               </div>
               {Object.values(POOL_TYPES).map((poolType) => {
-                const checked = !!filters.poolTypes.find((el) => el.label === poolType.label)
+                const checked = !!poolTypes.find((el) => el.label === poolType.label)
                 return (
                   <div
                     className="flex flex-row gap-3 items-center"
@@ -192,7 +171,7 @@ const PoolListActions: FC<SortSelectorProps> = () => {
                   </Typography>
                 </div>
                 {FEE_TIERS.map((feeTier) => {
-                  const checked = !!filters.feeTiers.find((el) => el.label === feeTier.label)
+                  const checked = !!feeTiers.find((el) => el.label === feeTier.label)
                   return (
                     <div
                       className="flex flex-row gap-3 items-center"

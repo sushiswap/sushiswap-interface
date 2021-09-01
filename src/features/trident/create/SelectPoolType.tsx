@@ -1,0 +1,99 @@
+import { FC } from 'react'
+import { useLingui } from '@lingui/react'
+import Typography from '../../../components/Typography'
+import { t } from '@lingui/macro'
+import RadioGroup from '../../../components/RadioGroup'
+
+import { selectedPoolTypeAtom } from './atoms'
+import { useRecoilState } from 'recoil'
+import { PoolType } from '../types'
+import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
+import { classNames } from '../../../functions'
+import Button from '../../../components/Button'
+
+const RadioOption = ({ value, title, description }) => {
+  return (
+    <HeadlessRadioGroup.Option value={value} className={classNames('outline-non py-4 border-dark-800')}>
+      {({ checked }) => (
+        <>
+          <div className={classNames(checked ? '' : 'items-center', 'flex text-sm cursor-pointer gap-3.5')}>
+            <div className="min-h-6 min-w-6">
+              <span
+                className={classNames(
+                  checked ? 'bg-gradient-to-r from-blue to-pink' : 'border border-dark-700 bg-dark-800',
+                  'h-6 w-6 rounded-full flex items-center justify-center'
+                )}
+                aria-hidden="true"
+              >
+                {checked && <span className="rounded-full bg-white w-2.5 h-2.5" />}
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              <HeadlessRadioGroup.Label as="span">
+                <Typography
+                  className={classNames(checked ? 'mt-[2px]' : '', 'text-high-emphesis')}
+                  weight={checked ? 700 : 400}
+                >
+                  {title}
+                </Typography>
+              </HeadlessRadioGroup.Label>
+              {checked && (
+                <Typography variant="sm" className="text-secondary">
+                  {description}
+                </Typography>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </HeadlessRadioGroup.Option>
+  )
+}
+
+const SelectPoolType: FC = () => {
+  const { i18n } = useLingui()
+  const [selectedPoolType, setSelectedPoolType] = useRecoilState(selectedPoolTypeAtom)
+
+  return (
+    <div className="flex flex-col p-5 pt-8 gap-5">
+      <Typography variant="h3" weight={700} className="text-high-emphesis">
+        {i18n._(t`Select Pool Type`)}
+      </Typography>
+      <div className="rounded px-5 bg-dark-900">
+        <RadioGroup value={selectedPoolType} onChange={setSelectedPoolType} className="divide-y">
+          <RadioOption
+            value={PoolType.CLASSIC}
+            title={i18n._(t`Classic`)}
+            description={i18n._(t`This type of pool consists of 2 tokens, 50% each.  This is currently most common.`)}
+          />
+          <RadioOption
+            value={PoolType.CONCENTRATED}
+            title={i18n._(t`Concentrated Price Range`)}
+            description={i18n._(
+              t`This is like a traditional 50/50 pool but within specified price ranges, to maximize exposure to swap fees.`
+            )}
+          />
+          <RadioOption
+            value={PoolType.WEIGHTED}
+            title={i18n._(t`Weighted`)}
+            description={i18n._(
+              t`This type of pool consists of 2 tokens, assigned weights for each token by the pool creator.`
+            )}
+          />
+          <RadioOption
+            value={PoolType.HYBRID}
+            title={i18n._(t`Multi-Asset`)}
+            description={i18n._(
+              t`This type of pool consists of up to 10 tokens, equal weight each. It is best utilized for swapping likekind assets.`
+            )}
+          />
+        </RadioGroup>
+      </div>
+      <Button color="gradient" onClick={() => {}}>
+        {i18n._(t`Continue`)}
+      </Button>
+    </div>
+  )
+}
+
+export default SelectPoolType
