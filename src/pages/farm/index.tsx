@@ -60,7 +60,7 @@ export default function Farm(): JSX.Element {
 
   const positions = usePositions()
 
-  const averageBlockTime = useAverageBlockTime()
+  let averageBlockTime = useAverageBlockTime()
 
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
 
@@ -76,7 +76,7 @@ export default function Farm(): JSX.Element {
     useOnePrice(),
   ]
 
-  const blocksPerDay = 86400 / Number(averageBlockTime)
+  let blocksPerDay = 86400 / Number(averageBlockTime)
 
   const map = (pool) => {
     // TODO: Account for fees generated in case of swap pairs, and use standard compounding
@@ -162,9 +162,16 @@ export default function Farm(): JSX.Element {
 
         return [...defaultRewards, reward]
       } else if (pool.chef === Chef.MINICHEF) {
+        if (ChainId.ARBITRUM === chainId) {
+          blocksPerDay = 17064
+          averageBlockTime = 17064 / 86400
+        }
+
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
-        const sushiPerDay = sushiPerBlock * blocksPerDay
+        // const sushiPerDay = sushiPerBlock * blocksPerDay
+
+        const sushiPerDay = sushiPerSecond * 86400
 
         const rewardPerSecond =
           ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
