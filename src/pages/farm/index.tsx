@@ -128,11 +128,6 @@ export default function Farm(): JSX.Element {
 
         const decimals = 10 ** pool.rewardToken.decimals
 
-        /*const rewardPerBlock =
-          pool.rewardToken.symbol === 'ALCX'
-            ? pool.rewarder.rewardPerSecond / decimals
-            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime*/
-
         const rewardPerBlock =
           pool.rewardToken.symbol === 'ALCX'
             ? pool.rewarder.rewardPerSecond / decimals
@@ -147,11 +142,6 @@ export default function Farm(): JSX.Element {
             ? (77160493827160493 / decimals) * averageBlockTime * blocksPerDay
             : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
 
-        /*const rewardPerDay =
-          pool.rewardToken.symbol === 'ALCX'
-            ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
-            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay*/
-
         const reward = {
           token: pool.rewardToken.symbol,
           icon: icon,
@@ -162,16 +152,9 @@ export default function Farm(): JSX.Element {
 
         return [...defaultRewards, reward]
       } else if (pool.chef === Chef.MINICHEF) {
-        if (ChainId.ARBITRUM === chainId) {
-          blocksPerDay = 17064
-          averageBlockTime = 17064 / 86400
-        }
-
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
-        // const sushiPerDay = sushiPerBlock * blocksPerDay
-
-        const sushiPerDay = sushiPerSecond * 86400
+        const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
           ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
@@ -230,10 +213,6 @@ export default function Farm(): JSX.Element {
       ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
       : balance * kashiPair.token0.derivedETH * ethPrice
 
-    if (!swapPair) {
-      console.log({ balance, tvl, kashiPair })
-    }
-
     const roiPerBlock =
       rewards.reduce((previousValue, currentValue) => {
         return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
@@ -275,8 +254,6 @@ export default function Farm(): JSX.Element {
     kashi: (farm) => farm.pair.type === PairType.KASHI && farm.allocPoint !== '0',
     '2x': (farm) => (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) && farm.allocPoint !== '0',
   }
-
-  console.log({ swapPairs, kashiPairs })
 
   const data = farms
     .filter((farm) => {

@@ -2,13 +2,16 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 
 import Dots from '../../components/Dots'
 import FarmListItem from './FarmListItem'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import React from 'react'
 import { t } from '@lingui/macro'
+import { useInfiniteScroll } from './hooks'
 import { useLingui } from '@lingui/react'
 import useSortableData from '../../hooks/useSortableData'
 
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms)
+  const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
   const { i18n } = useLingui()
   return items ? (
     <>
@@ -47,11 +50,18 @@ const FarmList = ({ farms, term }) => {
               (sortConfig.direction === 'descending' && <ChevronDownIcon width={12} height={12} />))}
         </div>
       </div>
-      <div className="flex-col space-y-4">
-        {items.map((farm, index) => (
-          <FarmListItem key={index} farm={farm} />
-        ))}
-      </div>
+      <InfiniteScroll
+        dataLength={numDisplayed}
+        next={() => setNumDisplayed(numDisplayed + 5)}
+        hasMore={true}
+        loader={null}
+      >
+        <div className="space-y-4">
+          {items.slice(0, numDisplayed).map((farm, index) => (
+            <FarmListItem key={index} farm={farm} />
+          ))}
+        </div>
+      </InfiniteScroll>
     </>
   ) : (
     <div className="w-full py-6 text-center">{term ? <span>No Results.</span> : <Dots>Loading</Dots>}</div>

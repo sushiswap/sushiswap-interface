@@ -201,10 +201,7 @@ export function KashiProvider({ children }) {
   //   [KASHI_ADDRESS[chainId]],
   // ])?.result?.[0]
 
-  // console.log({ info })
-
   const updatePairs = useCallback(async () => {
-    console.log('update pairs')
     if (
       !account ||
       !chainId ||
@@ -214,16 +211,12 @@ export function KashiProvider({ children }) {
     }
 
     if (boringHelperContract && bentoBoxContract) {
-      // // console.log('READY TO RUMBLE')
       const info = rpcToObj(
         await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
       )
 
-      console.log({ info })
-
       // Get the deployed pairs from the logs and decode
       const logPairs = await getPairs(bentoBoxContract, chainId)
-      console.log({ logPairs })
 
       // Filter all pairs by supported oracles and verify the oracle setup
 

@@ -7,8 +7,8 @@ import {
   MINICHEF_ADDRESS,
 } from '@sushiswap/sdk'
 import { Chef, PairType } from './enum'
+import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
-import { useCallback, useMemo } from 'react'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks'
 
 import { Contract } from '@ethersproject/contracts'
@@ -174,4 +174,15 @@ export function usePositions() {
     useChefPositions(useMiniChefContract()),
   ]
   return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
+}
+
+/*
+  Currently expensive to render farm list item. The infinite scroll is used to
+  to minimize this impact. This hook pairs with it, keeping track of visible
+  items and passes this to <InfiniteScroll> component.
+*/
+export function useInfiniteScroll(items): [number, Dispatch<number>] {
+  const [itemsDisplayed, setItemsDisplayed] = useState(10)
+  useEffect(() => setItemsDisplayed(10), [items.length])
+  return [itemsDisplayed, setItemsDisplayed]
 }

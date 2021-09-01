@@ -3,12 +3,14 @@ import { ChainId } from '@sushiswap/sdk'
 import NavLink from '../../components/NavLink'
 import React from 'react'
 import { useActiveWeb3React } from '../../hooks'
+import { useWalletModalToggle } from '../../state/application/hooks'
 
 const Menu = ({ positionsLength }) => {
   const { account, chainId } = useActiveWeb3React()
+  const toggleWalletModal = useWalletModalToggle()
   return (
     <div className="space-y-4">
-      {account && positionsLength > 0 && (
+      {account ? (
         <NavLink
           exact
           href={`/farm?filter=portfolio`}
@@ -18,7 +20,16 @@ const Menu = ({ positionsLength }) => {
             Your Farms
           </a>
         </NavLink>
+      ) : (
+        <a
+          className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer striped-background text-secondary bg-dark-900 hover:bg-dark-800"
+          onClick={toggleWalletModal}
+        >
+          Your Farms
+        </a>
       )}
+
+      <div className="w-full h-0 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20" />
 
       <NavLink
         exact

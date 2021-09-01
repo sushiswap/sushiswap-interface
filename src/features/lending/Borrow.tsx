@@ -261,16 +261,16 @@ export default function Borrow({ pair }: BorrowProps) {
         throw 'Path too long'
       }
 
-      console.log('debug', [
-        pair.asset.address,
-        pair.collateral.address,
-        extraCollateral,
-        path.length > 2 ? path[1] : ethers.constants.AddressZero,
-        path.length > 3 ? path[2] : ethers.constants.AddressZero,
-        account,
-        toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.tokenInfo.decimals)),
-        borrowValue.toBigNumber(pair.asset.tokenInfo.decimals),
-      ])
+      // console.log('debug', [
+      //   pair.asset.address,
+      //   pair.collateral.address,
+      //   extraCollateral,
+      //   path.length > 2 ? path[1] : ethers.constants.AddressZero,
+      //   path.length > 3 ? path[2] : ethers.constants.AddressZero,
+      //   account,
+      //   toShare(pair.collateral, collateralValue.toBigNumber(pair.collateral.tokenInfo.decimals)),
+      //   borrowValue.toBigNumber(pair.asset.tokenInfo.decimals),
+      // ])
 
       const data = defaultAbiCoder.encode(
         ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
