@@ -219,6 +219,8 @@ export function KashiProvider({ children }) {
         await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
       )
 
+      console.log({ info })
+
       // Get the deployed pairs from the logs and decode
       const logPairs = await getPairs(bentoBoxContract, chainId)
       // console.log({ logPairs })
@@ -243,7 +245,7 @@ export function KashiProvider({ children }) {
       // Get full info on all the verified pairs
       const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
 
-      console.log({ pairs })
+      // console.log({ pairs })
 
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()

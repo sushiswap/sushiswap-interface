@@ -44,12 +44,13 @@ export const USD_CURRENCY: { [chainId in ChainId]?: Currency } = {
     decimals: 6,
   },
   [ChainId.MATIC_TESTNET]: { address: '', decimals: 6 },
-  [ChainId.XDAI]: { address: '', decimals: 6 },
+  [ChainId.XDAI]: { address: '0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83', decimals: 6 },
+  [ChainId.ARBITRUM]: { address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', decimals: 6 },
 }
 
-export function getCurrency(chainId: ChainId | void): Currency {
+export function getCurrency(chainId: ChainId): Currency {
   return (
-    USD_CURRENCY[chainId || 1] || {
+    USD_CURRENCY[chainId] || {
       address: ethers.constants.AddressZero,
       decimals: 18,
     }
