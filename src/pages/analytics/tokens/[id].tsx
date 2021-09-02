@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import CurrencyLogo from '../../../components/CurrencyLogo'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import ColoredNumber from '../../../features/analytics/ColoredNumber'
@@ -15,12 +15,23 @@ import Background from '../../../features/analytics/Background'
 import Link from 'next/link'
 import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
+import { useTokenContract } from '../../../hooks'
 
 export default function Token() {
   const router = useRouter()
   const id = (router.query.id as string).toLowerCase()
 
   const [isCopied, setCopied] = useCopyClipboard()
+
+  const [totalSupply, setTotalSupply] = useState(0)
+  const tokenContract = useTokenContract(id)
+
+  useEffect(() => {
+    const fetch = async () => {
+      setTotalSupply(await tokenContract.totalSupply())
+    }
+    fetch()
+  }, [tokenContract])
 
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 2 })
@@ -163,7 +174,9 @@ export default function Token() {
             <div className="flex flex-col">
               <div>Market Cap</div>
               <div className="flex items-center space-x-2">
-                <div className="text-lg font-medium text-high-emphesis">{formatNumber(price ?? 0, true, false)}</div>
+                <div className="text-lg font-medium text-high-emphesis">
+                  {formatNumber(price * (totalSupply / 10 ** token?.decimals) ?? 0, true, false)}
+                </div>
                 <ColoredNumber number={priceChange} percent={true} />
               </div>
             </div>
