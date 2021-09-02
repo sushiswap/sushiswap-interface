@@ -71,7 +71,7 @@ export default function Token(): JSX.Element {
   const chartTimespans = ['1W', '1M', 'ALL']
 
   const router = useRouter()
-  const id = (router.query.id as string).toLowerCase()
+  const id = '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272'.toLowerCase() //(router.query.id as string).toLowerCase()
 
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 1 })
@@ -113,7 +113,7 @@ export default function Token(): JSX.Element {
           }))
           .slice(0, 5)
       : []
-  }, [farmPairs])
+  }, [id, farmPairs])
 
   // For Transactions
   const tokenPairs = useTokenPairs({ token: id })
@@ -216,7 +216,7 @@ export default function Token(): JSX.Element {
         <div className="col-span-6 space-y-10 2xl:col-span-4">
           <div className="flex flex-row">
             <div>
-              <Link href="/analytics/tokens">
+              <Link href="/analytics/tokens" passHref>
                 <button className="font-bold text-purple">Tokens</button>
               </Link>
             </div>

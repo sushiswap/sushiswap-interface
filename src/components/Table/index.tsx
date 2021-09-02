@@ -110,7 +110,7 @@ export default function Table({
                         'select-none w-full'
                       )}
                     >
-                      <div className={classNames('text-secondary font-bold text-sm flex flex-row')}>
+                      <div className="flex flex-row pb-2 text-sm text-secondary">
                         <div
                           className={classNames(
                             i !== 0 && column.align === 'right' && `justify-end`,
@@ -176,7 +176,7 @@ export default function Table({
                               cI === 0 && 'rounded-l pl-4',
                               cI === row.cells.length - 1 && 'rounded-r pr-4',
                               link && 'cursor-pointer',
-                              'h-16 text-high-emphesis text-sm font-bold bg-dark-900 flex items-center'
+                              'h-20 text-primary bg-dark-900 flex items-center'
                             )}
                           >
                             <div

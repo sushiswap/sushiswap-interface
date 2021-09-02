@@ -1,13 +1,29 @@
-import { classNames, formatNumberScale, formatPercent } from '../../functions'
+import { classNames, formatNumber, formatNumberScale, formatPercent } from '../../functions'
 
-export default function ColoredNumber({ number, percent = false }: { number: number; percent?: boolean }): JSX.Element {
+interface ColoredNumberProps {
+  number: number
+  scaleNumber?: boolean
+  percent?: boolean
+  className?: string
+}
+
+export default function ColoredNumber({
+  number,
+  scaleNumber = true,
+  percent = false,
+  className = '',
+}: ColoredNumberProps): JSX.Element {
   if (isNaN(number) || number === Infinity) number = 0
 
   return (
     <>
-      <div className={classNames(number >= 0 ? 'text-green' : 'text-red', 'font-normal')}>
+      <div className={classNames(number >= 0 ? 'text-green' : 'text-red', 'font-normal', className)}>
         {(number >= 0 ? '+' : '-') +
-          (percent ? formatPercent(number).replace('-', '') : formatNumberScale(number, true).replace('-', ''))}
+          (percent
+            ? formatPercent(number).replace('-', '')
+            : scaleNumber
+            ? formatNumberScale(number, true).replace('-', '')
+            : formatNumber(number, true, false).replace('-', ''))}
       </div>
     </>
   )

@@ -6,7 +6,7 @@ import PairList from '../../../features/analytics/Pairs/PairList'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
 import Search from '../../../components/Search'
 import { useFuse } from '../../../hooks'
-import { useRouter } from 'next/router'
+import Background from '../../../features/analytics/Background'
 
 export default function Pairs() {
   const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')
@@ -70,7 +70,7 @@ export default function Pairs() {
 
   const options = useMemo(
     () => ({
-      keys: ['pair.currency0', 'pair.currency1', 'pair.symbol0', 'pair.symbol1', 'pair.name0', 'pair.name1'],
+      keys: ['pair.token0.symbol', 'pair.token1.symbol', 'pair.token0.name', 'pair.token1.name'],
       threshold: 0.4,
     }),
     []
@@ -87,12 +87,26 @@ export default function Pairs() {
 
   return (
     <AnalyticsContainer>
-      <div className="flex flex-row items-center">
-        <div className="ml-3 text-2xl font-bold text-high-emphesis">Pairs</div>
-      </div>
-      <Search term={term} search={search} />
+      <Background background="pools">
+        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+          <div>
+            <div className="text-3xl font-bold text-high-emphesis">Pairs</div>
+            <div className="">
+              Click on the column name to sort pairs by its TVL, <br /> volume or fees gained.
+            </div>
+          </div>
+          <Search
+            term={term}
+            search={search}
+            inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
+            className="border shadow-2xl border-dark-800"
+          />
+        </div>
+      </Background>
       <PairTabs currentType={type} setType={setType} />
-      <PairList pairs={pairsSearched} type={type} />
+      <div className="pt-4 lg:px-14">
+        <PairList pairs={pairsSearched} type={type} />
+      </div>
     </AnalyticsContainer>
   )
 }

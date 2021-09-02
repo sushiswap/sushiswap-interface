@@ -4,6 +4,7 @@ import ChartCard from '../../ChartCard'
 
 interface DashboardChartCardProps {
   type: 'liquidity' | 'volume'
+  name: string
   token: string
 }
 
@@ -31,7 +32,7 @@ const types = {
 }
 
 export default function TokenChartCard(props: DashboardChartCardProps): JSX.Element {
-  const [chartTimespan, setChartTimespan] = useState('1W')
+  const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', 'ALL']
 
   const type = types[props.type]
@@ -58,6 +59,7 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
   return (
     <ChartCard
       header={type.header}
+      subheader={props.name}
       figure={data.figure}
       change={data.change}
       chart={data.chart}

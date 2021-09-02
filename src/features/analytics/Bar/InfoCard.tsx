@@ -8,9 +8,9 @@ interface InfoCardProps {
 
 export default function InfoCard({ text, number }: InfoCardProps) {
   return (
-    <div className="w-full p-6 rounded bg-dark-900">
-      <div className="text-lg whitespace-nowrap">{text}</div>
-      <div className="text-2xl font-bold text-high-emphesis">{number}</div>
+    <div className="w-full py-3 border rounded px-9 bg-dark-900 border-dark-700">
+      <div className="whitespace-nowrap">{text}</div>
+      <div className="text-2xl font-bold">{number}</div>
     </div>
   )
 }

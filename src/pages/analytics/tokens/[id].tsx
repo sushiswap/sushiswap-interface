@@ -7,14 +7,20 @@ import PairList from '../../../features/analytics/Pairs/PairList'
 import InfoCard from '../../../features/analytics/InfoCard'
 import TokenChartCard from '../../../features/analytics/Tokens/Token/TokenChartCard'
 import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
-import { formatNumber } from '../../../functions'
+import { formatNumber, shortenAddress } from '../../../functions'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useBlock, useNativePrice, useTokenPairs, useTokens, useTransactions } from '../../../services/graph'
 import { ExternalLink as LinkIcon } from 'react-feather'
+import Background from '../../../features/analytics/Background'
+import Link from 'next/link'
+import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
+import useCopyClipboard from '../../../hooks/useCopyClipboard'
 
 export default function Token() {
   const router = useRouter()
   const id = (router.query.id as string).toLowerCase()
+
+  const [isCopied, setCopied] = useCopyClipboard()
 
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 2 })
@@ -114,37 +120,67 @@ export default function Token() {
 
   return (
     <AnalyticsContainer>
-      <div>
-        <button onClick={() => router.back()} className="font-bold">
-          {'<'} Go Back
-        </button>
-      </div>
-      <div className="flex flex-row justify-between">
-        <div className="flex flex-row items-center space-x-4">
-          <CurrencyLogo currency={currency} size={53} />
-          {token?.symbol.length <= 6 ? (
-            <div className="text-4xl font-bold">{token?.symbol}</div>
-          ) : (
-            <div className="hidden text-4xl font-bold sm:block">{token?.symbol}</div>
-          )}
+      <div className="relative h-8">
+        <div className="absolute w-full h-full bg-gradient-to-r from-blue to-pink opacity-5" />
+        <div className="absolute flex items-center w-full p-2 lg:pl-14">
+          <div className="text-xs font-medium text-secondary">
+            <Link href="/analytics/dashboard">Analytics</Link>&nbsp;
+            {'>'}&nbsp;
+            <Link href="/analytics/tokens">Tokens</Link>&nbsp;
+            {'> '}&nbsp;
+          </div>
+          <div className="text-xs font-bold text-high-emphesis">{token?.symbol}</div>
         </div>
-        <div className="flex flex-row items-center space-x-4">
-          <div className="text-4xl font-bold">{formatNumber(price, true)}</div>
-          <div>
-            <ColoredNumber number={priceChange} percent={true} />
+      </div>
+      <Background background="token">
+        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+          <div className="items-center -mt-4 space-y-6">
+            <button onClick={() => router.back()} className="text-sm text-blue">
+              {'<'} Go Back
+            </button>
+            <div className="flex items-center space-x-4">
+              <CurrencyLogo className="rounded-full" currency={currency} size={60} />
+              <div>
+                <div className="text-sm font-medium text-secondary">{token?.symbol}</div>
+                <div className="text-lg font-bold text-high-emphesis">{token?.name}</div>
+              </div>
+              <div className="rounded-3xl text-sm bg-[#414a6c] py-px px-2 flex items-center space-x-1">
+                <div>{shortenAddress(id)}</div>
+                <div className="cursor-pointer" onClick={() => setCopied(id)}>
+                  {isCopied ? <CheckIcon height={16} /> : <DuplicateIcon height={16} className="scale-x-[-1]" />}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex space-x-12">
+            <div className="flex flex-col">
+              <div>Price</div>
+              <div className="flex items-center space-x-2">
+                <div className="text-lg font-medium text-high-emphesis">{formatNumber(price ?? 0, true)}</div>
+                <ColoredNumber number={priceChange} percent={true} />
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <div>Market Cap</div>
+              <div className="flex items-center space-x-2">
+                <div className="text-lg font-medium text-high-emphesis">{formatNumber(price ?? 0, true, false)}</div>
+                <ColoredNumber number={priceChange} percent={true} />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <TokenChartCard type="liquidity" token={id} />
-        <TokenChartCard type="volume" token={id} />
-      </div>
-      <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
-        <InfoCard text="Liquidity (24H)" number={liquidityUSD} percent={liquidityUSDChange} />
-        <InfoCard text="Volume (24H)" number={volumeUSD1d} percent={volumeUSD1dChange} />
-        <InfoCard text="Fees (24H)" number={volumeUSD1d * 0.003} percent={volumeUSD1dChange} />
-      </div>
-      <div>
+      </Background>
+      <div className="pt-4 space-y-4 lg:px-14">
+        <div className="text-3xl font-bold text-high-emphesis">Overview</div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <TokenChartCard type="liquidity" name={token?.symbol} token={id} />
+          <TokenChartCard type="volume" name={token?.symbol} token={id} />
+        </div>
+        <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
+          <InfoCard text="Liquidity (24H)" number={liquidityUSD} percent={liquidityUSDChange} />
+          <InfoCard text="Volume (24H)" number={volumeUSD1d} percent={volumeUSD1dChange} />
+          <InfoCard text="Fees (24H)" number={volumeUSD1d * 0.003} percent={volumeUSD1dChange} />
+        </div>
         <div className="text-2xl font-bold text-high-emphesis">Information</div>
         <div className="px-4 text-sm leading-48px text-high-emphesis">
           <table className="w-full table-fixed">
@@ -178,15 +214,15 @@ export default function Token() {
             </tbody>
           </table>
         </div>
-      </div>
-      <div>
-        <div className="text-2xl font-bold text-high-emphesis">Pairs</div>
-        <PairList pairs={tokenPairsFormatted} type="all" />
-      </div>
-      <div>
-        <div className="text-2xl font-bold text-high-emphesis">Transactions</div>
-        <div className="px-4">
-          <TransactionList transactions={transactionsFormatted} />
+        <div>
+          <div className="text-2xl font-bold text-high-emphesis">Top Pairs</div>
+          <PairList pairs={tokenPairsFormatted} type="all" />
+        </div>
+        <div>
+          <div className="text-2xl font-bold text-high-emphesis">Transactions</div>
+          <div className="px-4">
+            <TransactionList transactions={transactionsFormatted} />
+          </div>
         </div>
       </div>
     </AnalyticsContainer>

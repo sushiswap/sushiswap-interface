@@ -308,9 +308,10 @@ export const tokensQuery = gql`
   query tokensQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: Token_filter) {
     tokens(first: $first, skip: $skip, orderBy: volumeUSD, orderDirection: desc, block: $block, where: $where) {
       ...tokenFields
-      dayData(first: 7, skip: 0, orderBy: date, order: asc) {
+      dayData(first: 7, orderBy: date, orderDirection: desc) {
         id
         priceUSD
+        date
       }
     }
   }

@@ -4,6 +4,7 @@ import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import { useFuse } from '../../../hooks'
+import Background from '../../../features/analytics/Background'
 
 export default function Tokens() {
   const block1d = useBlock({ daysAgo: 1 })
@@ -30,10 +31,15 @@ export default function Tokens() {
               name: token.name,
             },
             liquidity: token.liquidity * token.derivedETH * nativePrice,
-            volume24h: token.volumeUSD - token1d.volumeUSD,
+            volume1d: token.volumeUSD - token1d.volumeUSD,
+            volume1w: token.volumeUSD - token1w.volumeUSD,
             price: token.derivedETH * nativePrice,
             change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
             change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
+            graph: token.dayData
+              .slice(0)
+              .reverse()
+              .map((day, i) => ({ x: i, y: Number(day.priceUSD) })),
           }
         })
       : []
@@ -54,11 +60,23 @@ export default function Tokens() {
 
   return (
     <AnalyticsContainer>
-      <div className="flex flex-row items-center">
-        <div className="ml-3 text-2xl font-bold text-high-emphesis">Tokens</div>
+      <Background background="tokens">
+        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+          <div>
+            <div className="text-3xl font-bold text-high-emphesis">Tokens</div>
+            <div>Click on the column name to sort tokens by it&apos;s price or trading volume.</div>
+          </div>
+          <Search
+            term={term}
+            search={search}
+            inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
+            className="border shadow-2xl border-dark-800"
+          />
+        </div>
+      </Background>
+      <div className="pt-4 lg:px-14">
+        <TokenList tokens={tokensSearched} />
       </div>
-      <Search term={term} search={search} />
-      <TokenList tokens={tokensSearched} />
     </AnalyticsContainer>
   )
 }

@@ -4,6 +4,7 @@ import ChartCard from '../../ChartCard'
 
 interface PairChartCardProps {
   type: 'liquidity' | 'volume'
+  name: string
   pair: string
 }
 
@@ -27,7 +28,7 @@ const types = {
 }
 
 export default function PairChartCard(props: PairChartCardProps): JSX.Element {
-  const [chartTimespan, setChartTimespan] = useState('1W')
+  const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', 'ALL']
 
   const type = types[props.type]
@@ -48,6 +49,7 @@ export default function PairChartCard(props: PairChartCardProps): JSX.Element {
   return (
     <ChartCard
       header={type.header}
+      subheader={props.name}
       figure={data.figure}
       change={data.change}
       chart={data.chart}
