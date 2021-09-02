@@ -115,42 +115,45 @@ export const TokenSelect = React.memo(
     return (
       <div className="mb-3">
         <Typography className="text-white text-xl">{i18n._(t`Auction Token`)}*</Typography>
-        <div className="mt-2 py-2 px-5 rounded bg-dark-800 w-full relative" ref={node}>
-          <input
-            className="bg-transparent placeholder-low-emphesis w-full"
-            placeholder={i18n._(t`Search by symbol or Enter the address of the token you would like to auction.`)}
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value)
-              setToken(null)
-            }}
-            onFocus={() => {
-              showSearch(true)
-            }}
-            {...rest}
-          />
+        <div className="mt-3 w-full flex flex-row">
+          <div className="flex-1 py-2 px-5 rounded bg-dark-800 w-full relative" ref={node}>
+            <input
+              className="bg-transparent placeholder-low-emphesis w-full"
+              placeholder={i18n._(t`Search by symbol or Enter the address of the token you would like to auction.`)}
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+                setToken(null)
+              }}
+              onFocus={() => {
+                showSearch(true)
+              }}
+              {...rest}
+            />
 
-          <div className="absolute top-2 right-5">{token?.symbol}</div>
+            <div className="absolute top-2 right-5">{token?.symbol}</div>
 
-          {searchVisible && (
-            <div className="absolute w-full left-0 top-[48px] z-10">
-              <div className="w-full rounded">
-                <Typography className="rounded-t bg-dark-900 px-3 py-2">
-                  {searchQuery ? i18n._(t`Results`) : i18n._(t`Suggested`)}
-                </Typography>
-                <div className="rounded-b bg-dark-800 px-3 py-2 h-[232px] overflow-y-scroll">
-                  {filteredSortedTokens.map((token: Token) => {
-                    return <TokenRow key={token.address} token={token} onClick={(token) => selectToken(token)} />
-                  })}
+            {searchVisible && (
+              <div className="absolute w-full left-0 top-[48px] z-10">
+                <div className="w-full rounded">
+                  <Typography className="rounded-t bg-dark-900 px-3 py-2">
+                    {searchQuery ? i18n._(t`Results`) : i18n._(t`Suggested`)}
+                  </Typography>
+                  <div className="rounded-b bg-dark-800 px-3 py-2 h-[232px] overflow-y-scroll">
+                    {filteredSortedTokens.map((token: Token) => {
+                      return <TokenRow key={token.address} token={token} onClick={(token) => selectToken(token)} />
+                    })}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
+          <div className="ml-3 w-[200px]"></div>
         </div>
         <Typography className="mt-2 flex flex-row items-center">
           {i18n._(t`Don't have a token?`)}
           <NavLink href="/miso/create-token">
-            <Typography className="text-blue underline ml-2">{i18n._(t`Create it now!`)}</Typography>
+            <div className="text-blue underline ml-2 cursor-pointer">{i18n._(t`Create it now!`)}</div>
           </NavLink>
         </Typography>
       </div>

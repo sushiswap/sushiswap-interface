@@ -15,10 +15,12 @@ import Divider from '../../../features/miso/Divider'
 import Input from '../../../features/miso/Input'
 import Radio from '../../../features/miso/Radio'
 import TokenSelect from '../../../features/miso/TokenSelect'
+import { tryParseAmount } from '../../../functions/parse'
 import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
 import Layout from '../../../layouts/Miso'
 import childrenWithProps from '../../../layouts/Miso/children'
-import { useTokenAllowance, useTokenBalance } from '../../../state/wallet/hooks'
+import { useTokenBalance } from '../../../state/wallet/hooks'
 
 import dutchAuction from '../../../../public/images/miso/create-auction/miso-dutch-auction.svg'
 import crowdsale from '../../../../public/images/miso/create-auction/miso-crowdsale.svg'
@@ -33,7 +35,9 @@ function CreateAuction({ pageIndex, movePage }) {
   const [token, selectToken] = React.useState<Token>(null)
   const [tokenAmount, setTokenAmount] = React.useState('')
   const balance = useTokenBalance(account ?? undefined, token)
-  const allowance = useTokenAllowance(account ?? undefined, MISO_MARKET_ADDRESS[chainId], token)
+
+  const typedTokenAmount = tryParseAmount(tokenAmount, token)
+  const [approvalState, approve] = useApproveCallback(typedTokenAmount, MISO_MARKET_ADDRESS[chainId])
 
   return (
     <>
@@ -136,16 +140,11 @@ function CreateAuction({ pageIndex, movePage }) {
                 type="digit"
                 placeholder="Enter the amount of token you would like to auction."
                 alert="This will be the number of tokens you will put into the auction contract. Please consider this carefully."
+                error={!(balance && !balance.lessThan(tokenAmount.toBigNumber(token.decimals).toString()))}
                 hint={
-                  <div className="w-full flex flex-row justify-between pr-5">
-                    <span>
-                      <b>{i18n._(t`Note`)}</b>: {i18n._(t`Token amount must be lower or equal to allowance.`)}
-                    </span>
-                    <span>
-                      {i18n._(t`Your Token Allowance`)}: {allowance ? allowance.toSignificant(4) : 'N/A'}{' '}
-                      {token?.symbol}
-                    </span>
-                  </div>
+                  <span>
+                    <b>{i18n._(t`Note`)}</b>: {i18n._(t`Token amount must be lower or equal to allowance.`)}
+                  </span>
                 }
                 trailing={
                   <span>
@@ -157,6 +156,10 @@ function CreateAuction({ pageIndex, movePage }) {
                   </span>
                 }
                 onUserInput={(input) => setTokenAmount(input)}
+                onAction={approve}
+                actionTitle={`Approve ${token?.symbol}`}
+                actionVisible={approvalState === ApprovalState.NOT_APPROVED}
+                actionPending={approvalState === ApprovalState.PENDING}
               />
             </div>
             <Divider />

@@ -22,11 +22,11 @@ function Sidebar() {
     { link: '/settings', title: i18n._(t`Settings`) },
   ]
   return (
-    <div className="w-[250px] border-gray-800 border-r-[1px] p-4 flex flex-col">
+    <div className="w-[250px] h-full p-4 flex flex-col">
       {menuItems.map((item, index) => {
         return (
           <NavLink key={index} href={item.link} activeClassName="text-white bg-gray-800 rounded">
-            <Typography className="pl-5 py-2 my-1">{item.title}</Typography>
+            <div className="pl-5 py-2 my-1 cursor-pointer">{item.title}</div>
           </NavLink>
         )
       })}
@@ -98,7 +98,7 @@ const Layout = ({
       <Header />
       <div className="w-full flex flex-row">
         <Sidebar />
-        <div className="w-full">
+        <div className="w-full border-gray-800 border-l-[1px] ">
           <Main>
             <Navs data={navs} />
             <Title data={{ ...title, tabs, active }} isFactoryPage={isFactoryPage} />
