@@ -2,6 +2,7 @@ import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Main from '../../components/Main'
 import Banner from '../../components/Banner'
+import Popups from '../../components/Popups'
 
 const Layout = ({ children, banner = undefined }) => {
   return (
@@ -9,6 +10,7 @@ const Layout = ({ children, banner = undefined }) => {
       {banner && <Banner />}
       <Header />
       <Main>{children}</Main>
+      <Popups />
       <Footer />
     </div>
   )

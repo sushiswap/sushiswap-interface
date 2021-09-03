@@ -12,7 +12,7 @@ export default function InfoCard({ text, number, numberType = 'usd', percent }: 
   function switchNumber() {
     switch (numberType) {
       case 'usd':
-        return formatNumber(number, true)
+        return formatNumber(number, true, false)
       case 'text':
         return number
       case 'percent':
@@ -21,10 +21,10 @@ export default function InfoCard({ text, number, numberType = 'usd', percent }: 
   }
 
   return (
-    <div className="w-full p-6 rounded bg-dark-900">
-      <div className="text-sm text-secondary whitespace-nowrap">{text}</div>
-      <div className="text-2xl font-bold text-high-emphesis">{switchNumber()}</div>
-      <div>
+    <div className="w-full px-6 py-4 border rounded bg-dark-900 border-dark-700">
+      <div className="whitespace-nowrap">{text}</div>
+      <div className="flex items-center space-x-2">
+        <div className="text-2xl font-bold">{switchNumber()}</div>
         <ColoredNumber number={percent} percent={true} />
       </div>
     </div>

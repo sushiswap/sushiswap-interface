@@ -4,9 +4,9 @@ import {
   useFarms,
   useNativePrice,
   useSushiPairs,
-  useToken,
   useTokenDayData,
   useTokenPairs,
+  useTokens,
   useTransactions,
 } from '../../../services/graph'
 import { useMemo, useState } from 'react'
@@ -19,7 +19,6 @@ import InfoCard from '../../../features/analytics/InfoCard'
 import LineGraph from '../../../components/LineGraph'
 import Link from 'next/link'
 import TopFarmsList from '../../../features/analytics/Tokens/Token/TopFarmsList'
-import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
 
@@ -72,28 +71,28 @@ export default function Token(): JSX.Element {
   const chartTimespans = ['1W', '1M', 'ALL']
 
   const router = useRouter()
-  const id = (router.query.id as string).toLowerCase()
+  const id = '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272'.toLowerCase() //(router.query.id as string).toLowerCase()
 
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 1 })
 
   // General data (volume, liquidity)
   const nativePrice = useNativePrice()
-  const nativePrice1d = useNativePrice({ block: { number: Number(block1d) } })
+  const nativePrice1d = useNativePrice({ block: block1d })
 
-  const token = useToken({ id: id })
-  const token1d = useToken({ id: id, block: { number: Number(block1d) } })
-  const token2d = useToken({ id: id, block: { number: Number(block2d) } })
+  const token = useTokens({ subset: [id] })?.[0]
+  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d })?.[0]
+  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d })?.[0]
 
   // For the graph
   const tokenDayData = useTokenDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
-    tokens: [id],
+    token: id,
   })
 
   // For Top Farms
   const farms = useFarms()
-  const farmPairs = useSushiPairs({ where: { id_in: farms.map((farm) => farm.pair) } })
+  const farmPairs = useSushiPairs({ subset: farms.map((farm) => farm.pair), shouldFetch: !!farms })
   const farmsFormatted = useMemo(() => {
     return farmPairs
       ? farmPairs
@@ -114,11 +113,11 @@ export default function Token(): JSX.Element {
           }))
           .slice(0, 5)
       : []
-  }, [farmPairs])
+  }, [id, farmPairs])
 
   // For Transactions
-  const tokenPairs = useTokenPairs({ id: id })
-  const transactions = useTransactions({ pairAddresses: tokenPairs?.map((pair) => pair.id) })
+  const tokenPairs = useTokenPairs({ token: id })
+  const transactions = useTransactions({ pairs: tokenPairs?.map((pair) => pair.id), shouldFetch: !!tokenPairs })
   const transactionsFormatted = useMemo(() => {
     return transactions
       ? transactions.map((tx) => {
@@ -154,7 +153,7 @@ export default function Token(): JSX.Element {
   }, [transactions])
 
   // For Top Moving
-  const tokenPairs1d = useTokenPairs({ id: id, block: { number: Number(block1d) } })
+  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d })
   const tokenPairsFormatted = useMemo(() => {
     return token && tokenPairs && tokenPairs1d
       ? tokenPairs
@@ -217,7 +216,7 @@ export default function Token(): JSX.Element {
         <div className="col-span-6 space-y-10 2xl:col-span-4">
           <div className="flex flex-row">
             <div>
-              <Link href="/analytics/tokens">
+              <Link href="/analytics/tokens" passHref>
                 <button className="font-bold text-purple">Tokens</button>
               </Link>
             </div>

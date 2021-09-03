@@ -21,6 +21,7 @@ interface LineGraphProps {
           to: string
         }
       }
+  strokeWidth?: number
 }
 
 interface GraphProps extends LineGraphProps {
@@ -28,11 +29,11 @@ interface GraphProps extends LineGraphProps {
   height: number
 }
 
-function Graph({ data, stroke, width, height }: GraphProps): JSX.Element {
+function Graph({ data, stroke, strokeWidth, width, height }: GraphProps): JSX.Element {
   const xScale = useMemo(
     () =>
       scaleLinear<number>({
-        domain: [minBy(data, 'x').x, maxBy(data, 'x').x],
+        domain: [minBy(data, 'x')?.x, maxBy(data, 'x')?.x],
         range: [0, width],
       }),
     [JSON.stringify(data), width]
@@ -40,7 +41,7 @@ function Graph({ data, stroke, width, height }: GraphProps): JSX.Element {
   const yScale = useMemo(
     () =>
       scaleLinear<number>({
-        domain: [maxBy(data, 'y').y, minBy(data, 'y').y],
+        domain: [maxBy(data, 'y')?.y, minBy(data, 'y')?.y],
         range: [0, height],
       }),
     [JSON.stringify(data), height]
@@ -57,19 +58,25 @@ function Graph({ data, stroke, width, height }: GraphProps): JSX.Element {
           x={(d) => xScale(d.x) ?? 0}
           y={(d) => yScale(d.y) ?? 0}
           stroke={'solid' in stroke ? stroke.solid : "url('#gradient')"}
-          strokeWidth={2}
+          strokeWidth={strokeWidth}
         />
       </svg>
     </div>
   )
 }
 
-export default function LineGraph({ data, stroke = { solid: '#0993EC' } }: LineGraphProps): JSX.Element {
+export default function LineGraph({
+  data,
+  stroke = { solid: '#0993EC' },
+  strokeWidth = 2,
+}: LineGraphProps): JSX.Element {
   return (
     <>
       {data && (
         <AutoSizer>
-          {({ width, height }) => <Graph data={data} stroke={stroke} width={width} height={height} />}
+          {({ width, height }) => (
+            <Graph data={data} stroke={stroke} strokeWidth={strokeWidth} width={width} height={height} />
+          )}
         </AutoSizer>
       )}
     </>

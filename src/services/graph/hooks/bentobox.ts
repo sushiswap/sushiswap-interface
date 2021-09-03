@@ -4,16 +4,41 @@ import useSWR, { SWRConfiguration } from 'swr'
 import { ChainId } from '@sushiswap/sdk'
 import { getKashiPairs, getUserKashiPairs, getBentoUserTokens } from '../fetchers/bentobox'
 import { useActiveWeb3React } from '../../../hooks'
+import { useBlock } from './blocks'
+import { Feature, featureEnabled } from '../../../functions/feature'
 
-export function useKashiPairs(variables = undefined, chainId = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId: chainIdSelected } = useActiveWeb3React()
-  chainId = chainId ?? chainIdSelected
+interface useKashiPairsProps {
+  timestamp?: number
+  block?: number
+  chainId?: number
+  shouldFetch?: boolean
+  user?: string
+  subset?: string[]
+}
 
-  const shouldFetch = chainId && (chainId === ChainId.MAINNET || chainId === ChainId.MATIC)
+export function useKashiPairs(
+  {
+    timestamp,
+    block,
+    chainId = useActiveWeb3React().chainId,
+    shouldFetch = true,
+    user,
+    subset,
+  }: useKashiPairsProps = {},
+  swrConfig: SWRConfiguration = undefined
+) {
+  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
 
-  // useEffect(() => {
-  //   console.log('debug', { shouldFetch, chainId, pairAddresses })
-  // }, [shouldFetch, chainId, pairAddresses])
+  shouldFetch = shouldFetch ? featureEnabled(Feature['KASHI'], chainId) : false
+
+  const variables = {
+    block: block ? { number: block } : undefined,
+    where: {
+      user: user?.toLowerCase(),
+      id_in: subset?.map((id) => id.toLowerCase()),
+    },
+  }
 
   const { data } = useSWR(
     shouldFetch ? () => ['kashiPairs', chainId, JSON.stringify(variables)] : null,

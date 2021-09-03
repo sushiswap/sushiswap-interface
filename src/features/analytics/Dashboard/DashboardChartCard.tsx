@@ -8,7 +8,7 @@ interface DashboardChartCardProps {
 
 const types = {
   liquidity: {
-    header: 'Liquidity',
+    header: 'TVL',
     getData: (exchange, exchange1d, exchange2d, dayData) => ({
       figure: exchange ? exchange.liquidityUSD : 0,
       change: exchange1d && exchange2d ? (exchange1d.liquidityUSD / exchange2d.liquidityUSD) * 100 - 100 : 0,
@@ -33,8 +33,8 @@ const types = {
 }
 
 export default function DashboardChartCard(props: DashboardChartCardProps): JSX.Element {
-  const [chartTimespan, setChartTimespan] = useState('1W')
-  const chartTimespans = ['1W', '1M', 'ALL']
+  const [chartTimespan, setChartTimespan] = useState('1M')
+  const chartTimespans = ['1W', '1M', '1Y', 'ALL']
 
   const type = types[props.type]
 
@@ -42,11 +42,11 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
   const block2d = useBlock({ daysAgo: 2 })
 
   const exchange = useFactory()
-  const exchange1d = useFactory({ block: { number: Number(block1d) } })
-  const exchange2d = useFactory({ block: { number: Number(block2d) } })
+  const exchange1d = useFactory({ block: block1d })
+  const exchange2d = useFactory({ block: block2d })
 
   const dayData = useDayData({
-    first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
+    first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : chartTimespan === '1Y' ? 365 : undefined,
   })
 
   const data = useMemo(
@@ -57,6 +57,7 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
   return (
     <ChartCard
       header={type.header}
+      subheader={'SUSHI AMM'}
       figure={data.figure}
       change={data.change}
       chart={data.chart}

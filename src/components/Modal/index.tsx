@@ -24,7 +24,6 @@ export default function Modal({
   padding = 5,
   maxWidth = 420,
 }: ModalProps) {
-  // console.log({ maxHeight: `${maxHeight}vh` })
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>

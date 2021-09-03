@@ -44,9 +44,9 @@ export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {
   return tokens
 }
 
-export const getTokens = async (chainId = ChainId.MAINNET, query = tokensQuery, variables) => {
+export const getTokens = async (chainId = ChainId.MAINNET, variables) => {
   // console.log('getTokens')
-  const { tokens } = await exchange(chainId, query, variables)
+  const { tokens } = await exchange(chainId, tokensQuery, variables)
   return tokens
 }
 
@@ -56,9 +56,9 @@ export const getToken = async (chainId = ChainId.MAINNET, query = tokenQuery, va
   return token
 }
 
-export const getTokenDayData = async (chainId = ChainId.MAINNET, query = tokenDayDatasQuery, variables) => {
+export const getTokenDayData = async (chainId = ChainId.MAINNET, variables) => {
   // console.log('getTokens')
-  const { tokenDayDatas } = await exchange(chainId, query, variables)
+  const { tokenDayDatas } = await exchange(chainId, tokenDayDatasQuery, variables)
   return tokenDayDatas
 }
 
@@ -182,8 +182,8 @@ export const getLiquidityPositions = async (chainId = ChainId.MAINNET, variables
   return liquidityPositions
 }
 
-export const getDayData = async (chainId = ChainId.MAINNET, query = dayDatasQuery, variables = undefined) => {
-  const { dayDatas } = await exchange(chainId, query, variables)
+export const getDayData = async (chainId = ChainId.MAINNET, variables = undefined) => {
+  const { dayDatas } = await exchange(chainId, dayDatasQuery, variables)
   return dayDatas
 }
 
@@ -192,12 +192,12 @@ export const getFactory = async (chainId = ChainId.MAINNET, variables = undefine
   return factories[0]
 }
 
-export const getTransactions = async (chainId = ChainId.MAINNET, query = transactionsQuery, variables = undefined) => {
-  const { swaps } = await exchange(chainId, query, variables)
+export const getTransactions = async (chainId = ChainId.MAINNET, variables = undefined) => {
+  const { swaps } = await exchange(chainId, transactionsQuery, variables)
   return swaps
 }
 
-export const getTokenPairs = async (chainId = ChainId.MAINNET, query = tokenPairsQuery, variables = undefined) => {
-  const { pairs0, pairs1 } = await exchange(chainId, query, variables)
+export const getTokenPairs = async (chainId = ChainId.MAINNET, variables = undefined) => {
+  const { pairs0, pairs1 } = await exchange(chainId, tokenPairsQuery, variables)
   return pairs0 || pairs1 ? [...(pairs0 ? pairs0 : []), ...(pairs1 ? pairs1 : [])] : undefined
 }
