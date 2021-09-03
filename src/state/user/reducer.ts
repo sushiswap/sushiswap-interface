@@ -1,4 +1,5 @@
 import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE, DEFAULT_ARCHER_GAS_PRICES } from '../../config/archer'
+import { DEFAULT_OPENMEV_ETH_TIP, DEFAULT_OPENMEV_GAS_ESTIMATE, DEFAULT_OPENMEV_GAS_PRICES } from '../../config/openmev'
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import {
   SerializedPair,
@@ -58,6 +59,13 @@ export interface UserState {
 
   timestamp: number
   URLWarningVisible: boolean
+
+// @openemv
+  userOpenMevUseRelay: boolean // use relay or go directly to router
+  userOpenMevGasPrice: string // Current gas price
+  userOpenMevETHTip: string // ETH tip for relay, as full BigInt string
+  userOpenMevGasEstimate: string // Gas estimate for trade
+  userOpenMevTipManualOverride: boolean // is user manually entering tip
 
   userArcherUseRelay: boolean // use relay or go directly to router
   userArcherGasPrice: string // Current gas price
