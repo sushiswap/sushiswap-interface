@@ -1,7 +1,8 @@
-import { Currency, FACTORY_ADDRESS, Fee, computeConstantProductPoolAddress, CurrencyAmount } from '@sushiswap/sdk'
-import { ConstantProductPool } from '@sushiswap/sdk/dist/entities/ConstantProductPool'
+import { Currency, CurrencyAmount, FACTORY_ADDRESS, Fee, computeConstantProductPoolAddress } from '@sushiswap/sdk'
+
+import { ConstantProductPool } from '@sushiswap/sdk'
 import { Interface } from '@ethersproject/abi'
-import abi from '../constants/abis/constant-product-factory.json'
+import abi from '../constants/abis/constant-product-pool.json'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 

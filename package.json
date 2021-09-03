@@ -180,7 +180,7 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@sushiswap/sdk": "^5.0.0-canary.63",
+    "@sushiswap/sdk": "5.0.0-canary.66",
     "recoil": "^0.4.0"
   }
 }
