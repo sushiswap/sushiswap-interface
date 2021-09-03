@@ -9,8 +9,9 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Stepper from '../../../components/Stepper'
 import SelectPoolType from '../../../features/trident/create/SelectPoolType'
 import { pageAtom } from '../../../features/trident/create/atoms'
-import SetupPoolClassic from '../../../features/trident/create/SetupPoolClassic'
-import DepositAssets from '../../../features/trident/create/DepositAssets'
+import ClassicSetupPool from '../../../features/trident/create/ClassicSetupPool'
+import CreateReviewModal from '../../../features/trident/create/CreateReviewModal'
+import ClassicDepositAssets from '../../../features/trident/create/ClassicDepositAssets'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -54,13 +55,14 @@ const Pool = () => {
             <SelectPoolType />
           </Stepper.Panel>
           <Stepper.Panel>
-            <SetupPoolClassic />
+            <ClassicSetupPool />
           </Stepper.Panel>
           <Stepper.Panel>
-            <DepositAssets />
+            <ClassicDepositAssets />
           </Stepper.Panel>
         </Stepper.Panels>
       </Stepper>
+      <CreateReviewModal />
     </div>
   )
 }

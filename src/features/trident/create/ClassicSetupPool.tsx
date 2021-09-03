@@ -11,7 +11,7 @@ import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import { PlusIcon } from '@heroicons/react/solid'
 
-const SetupPoolClassic: FC = () => {
+const ClassicSetupPool: FC = () => {
   const { i18n } = useLingui()
   const selectedPoolCurrencies = useRecoilValue(selectedPoolCurrenciesAtom)
   const [feeTier, setFeeTier] = useRecoilState(feeTierAtom)
@@ -80,12 +80,12 @@ const SetupPoolClassic: FC = () => {
           {i18n._(t`Select Fee Tier`)}
         </Typography>
         <ToggleButtonGroup value={feeTier} onChange={setFeeTier} variant="outlined">
-          <ToggleButtonGroup.Button value="0.05">0.05%</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="0.1">0.1%</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="0.5">0.5%</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="1">1%</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={5}>0.05%</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={10}>0.1%</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={50}>0.5%</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={100}>1%</ToggleButtonGroup.Button>
         </ToggleButtonGroup>
-        {feeTier === '0.5' && (
+        {feeTier === 50 && (
           <Typography variant="sm" className="italic text-center">
             * This is suggested for most pairs
           </Typography>
@@ -98,4 +98,4 @@ const SetupPoolClassic: FC = () => {
   )
 }
 
-export default SetupPoolClassic
+export default ClassicSetupPool

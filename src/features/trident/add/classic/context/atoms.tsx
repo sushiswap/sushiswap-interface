@@ -1,11 +1,10 @@
-import { atom, selector, useRecoilValue, useSetRecoilState } from 'recoil'
-import { Currency, CurrencyAmount, JSBI, Pair, Percent, Price } from '@sushiswap/sdk'
+import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
+import { ConstantProductPool, Currency, CurrencyAmount, JSBI, Percent, Price } from '@sushiswap/sdk'
 import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
-import { PairState } from '../../../../../hooks/useV2Pairs'
 import { Field } from '../../../../../state/trident/add/classic'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../../../../../constants'
 import { useCallback } from 'react'
-import { useActiveWeb3React, useRouterContract, useTridentRouterContract } from '../../../../../hooks'
+import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
 import useTransactionDeadline from '../../../../../hooks/useTransactionDeadline'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
@@ -23,11 +22,12 @@ import {
   totalSupplyAtom,
   txHashAtom,
 } from '../../../context/atoms'
+import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
 
 const ZERO = JSBI.BigInt(0)
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
-export const poolAtom = atom<[PairState, Pair | null]>({
+export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({
   key: 'poolAtom',
   default: [null, null],
 })
@@ -253,8 +253,8 @@ export const currentLiquidityValueSelector = selector({
 
     if (pool && poolBalance && totalSupply) {
       return [
-        pool.getLiquidityValue(pool.token0, totalSupply?.wrapped, poolBalance?.wrapped, false),
-        pool.getLiquidityValue(pool.token1, totalSupply?.wrapped, poolBalance?.wrapped, false),
+        pool.getLiquidityValue(pool.token0, totalSupply?.wrapped, poolBalance?.wrapped),
+        pool.getLiquidityValue(pool.token1, totalSupply?.wrapped, poolBalance?.wrapped),
       ]
     }
 
@@ -280,77 +280,80 @@ export const liquidityValueSelector = selector({
 export const useClassicAddExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const noLiquidity = useRecoilValue(noLiquiditySelector)
-  const [currencyA, currencyB] = useRecoilValue(currenciesAtom)
-  const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
   const deadline = useTransactionDeadline()
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
-  const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const addTransaction = useTransactionAdder()
+  const router = useTridentRouterContract()
+  const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const router = useTridentRouterContract()
 
-  const standardModeExecute = useCallback(async () => {
-    if (
-      !chainId ||
-      !library ||
-      !account ||
-      !router ||
-      !parsedAmountA ||
-      !parsedAmountB ||
-      !currencyA ||
-      !currencyB ||
-      !deadline
-    )
-      return
+  const standardModeExecute = useRecoilCallback(
+    ({ snapshot }) =>
+      async () => {
+        const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
+        const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
+        const [parsedAmountA, parsedAmountB] = await snapshot.getPromise(parsedAmountsSelector)
 
-    const amountsMin = {
-      [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
-      [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
-    }
+        if (
+          !chainId ||
+          !library ||
+          !account ||
+          !router ||
+          !parsedAmountA ||
+          !parsedAmountB ||
+          !currencyA ||
+          !currencyB ||
+          !deadline
+        )
+          return
 
-    let estimate
-    let method: (...args: any) => Promise<TransactionResponseLight>
-    let args: Array<string | string[] | number>
-    let value: BigNumber | null
+        const amountsMin = {
+          [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
+          [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
+        }
 
-    if (currencyA.isNative || currencyB.isNative) {
-      const tokenBIsETH = currencyB.isNative
-      estimate = router.estimateGas.addLiquidityETH
-      method = router.addLiquidityETH
-      args = [
-        (tokenBIsETH ? currencyA : currencyB)?.wrapped?.address ?? '', // token
-        (tokenBIsETH ? parsedAmountA : parsedAmountB).quotient.toString(), // token desired
-        amountsMin[tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
-        amountsMin[tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
-        account,
-        deadline.toHexString(),
-      ]
-      value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).quotient.toString())
-    } else {
-      estimate = router.estimateGas.addLiquidity
-      method = router.addLiquidity
-      args = [
-        currencyA?.wrapped?.address ?? '',
-        currencyB?.wrapped?.address ?? '',
-        parsedAmountA.quotient.toString(),
-        parsedAmountB.quotient.toString(),
-        amountsMin[Field.CURRENCY_A].toString(),
-        amountsMin[Field.CURRENCY_B].toString(),
-        account,
-        deadline.toHexString(),
-      ]
-      value = null
-    }
+        let estimate
+        let method: (...args: any) => Promise<TransactionResponseLight>
+        let args: Array<string | string[] | number>
+        let value: BigNumber | null
 
-    setAttemptingTxn(true)
-    await estimate(...args, value ? { value } : {})
-      .then((estimatedGasLimit) =>
-        method(...args, {
-          ...(value ? { value } : {}),
-          gasLimit: calculateGasMargin(estimatedGasLimit),
-        }).then((response) => {
+        if (currencyA.isNative || currencyB.isNative) {
+          const tokenBIsETH = currencyB.isNative
+          estimate = router.estimateGas.addLiquidityETH
+          method = router.addLiquidityETH
+          args = [
+            (tokenBIsETH ? currencyA : currencyB)?.wrapped?.address ?? '', // token
+            (tokenBIsETH ? parsedAmountA : parsedAmountB).quotient.toString(), // token desired
+            amountsMin[tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
+            amountsMin[tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
+            account,
+            deadline.toHexString(),
+          ]
+          value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).quotient.toString())
+        } else {
+          estimate = router.estimateGas.addLiquidity
+          method = router.addLiquidity
+          args = [
+            currencyA?.wrapped?.address ?? '',
+            currencyB?.wrapped?.address ?? '',
+            parsedAmountA.quotient.toString(),
+            parsedAmountB.quotient.toString(),
+            amountsMin[Field.CURRENCY_A].toString(),
+            amountsMin[Field.CURRENCY_B].toString(),
+            account,
+            deadline.toHexString(),
+          ]
+          value = null
+        }
+
+        try {
+          setAttemptingTxn(true)
+          const estimatedGasLimit = await estimate(...args, value ? { value } : {})
+          const response = await method(...args, {
+            ...(value ? { value } : {}),
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
           setAttemptingTxn(false)
 
           addTransaction(response, {
@@ -369,33 +372,28 @@ export const useClassicAddExecute = () => {
             action: 'Add',
             label: [currencyA?.symbol, currencyB?.symbol].join('/'),
           })
-        })
-      )
-      .catch((error) => {
-        setAttemptingTxn(false)
-        // we only care if the error is something _other_ than the user rejected the tx
-        if (error?.code !== 4001) {
-          console.error(error)
+        } catch (error) {
+          setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (error?.code !== 4001) {
+            console.error(error)
+          }
         }
-      })
-  }, [
-    account,
-    addTransaction,
-    allowedSlippage,
-    chainId,
-    currencyA,
-    currencyB,
-    deadline,
-    i18n,
-    library,
-    noLiquidity,
-    parsedAmountA,
-    parsedAmountB,
-    router,
-    setAttemptingTxn,
-    setShowReview,
-    setTxHash,
-  ])
+      },
+    [
+      account,
+      addTransaction,
+      allowedSlippage,
+      chainId,
+      deadline,
+      i18n,
+      library,
+      router,
+      setAttemptingTxn,
+      setShowReview,
+      setTxHash,
+    ]
+  )
 
   const zapModeExecute = useCallback(() => {
     setShowReview(false)

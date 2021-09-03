@@ -53,6 +53,8 @@ import ROUTER_ABI from '../constants/abis/router.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
 import TRIDENT_ROUTER_ABI from '../constants/abis/trident-router.json'
+import MASTER_DEPLOYER_ABI from '../constants/abis/master-deployer.json'
+import CONSTANT_PRODUCT_POOL_FACTORY_ABI from '../constants/abis/constant-product-factory.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZENKO_ABI from '../constants/abis/zenko.json'
@@ -164,11 +166,6 @@ export function useRouterContract(useArcher = false, withSignerIfPossible?: bool
   return useContract(address, abi, withSignerIfPossible)
 }
 
-// TODO hardcoded kovan contract
-export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract('0x760ef4F484EbF2668001B090291f84A3CDf2f3aa', TRIDENT_ROUTER_ABI, withSignerIfPossible)
-}
-
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && BAR_ADDRESS[chainId], BAR_ABI, withSignerIfPossible)
@@ -224,4 +221,23 @@ export function useInariContract(withSignerIfPossible?: boolean): Contract | nul
 
 export function useZenkoContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
+}
+
+// TODO hardcoded kovan contract
+export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0x760ef4F484EbF2668001B090291f84A3CDf2f3aa', TRIDENT_ROUTER_ABI, withSignerIfPossible)
+}
+
+// TODO hardcoded kovan contract
+export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
+  return useContract('0xD264b48092EFEd096a616b97DF401c01b4FD0501', MASTER_DEPLOYER_ABI, withSignerIfPossible)
+}
+
+// TODO hardcoded kovan contract
+export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
+  return useContract(
+    '0x2d7933851D0b372ffB810793Cf86D33177F6812f',
+    CONSTANT_PRODUCT_POOL_FACTORY_ABI,
+    withSignerIfPossible
+  )
 }

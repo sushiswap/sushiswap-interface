@@ -8,24 +8,26 @@ import TransactionDetails from './../TransactionDetails'
 import React from 'react'
 import { parsedZapAmountSelector, poolAtom, selectedZapCurrencyAtom, zapInputAtom } from './context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { PairState } from '../../../../hooks/useV2Pairs'
-import { useActiveWeb3React } from '../../../../hooks'
+import { ApprovalState, useActiveWeb3React, useApproveCallback, useTridentRouterContract } from '../../../../hooks'
 import { useCurrencyBalance } from '../../../../state/wallet/hooks'
 import { showReviewAtom } from '../../context/atoms'
+import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
 
 const ClassicZapMode = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
+  const router = useTridentRouterContract()
   const [poolState] = useRecoilValue(poolAtom)
   const [zapInput, setZapInput] = useRecoilState(zapInputAtom)
   const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
   const [selectedZapCurrency, setSelectedZapCurrency] = useRecoilState(selectedZapCurrencyAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
   const balance = useCurrencyBalance(account ?? undefined, selectedZapCurrency)
+  const [approve, approveCallback] = useApproveCallback(parsedZapAmount, router?.address)
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
-    : poolState === PairState.INVALID
+    : poolState === ConstantProductPoolState.INVALID
     ? i18n._(t`Invalid pair`)
     : !zapInput
     ? i18n._(t`Enter an amount`)
@@ -51,14 +53,25 @@ const ClassicZapMode = () => {
           onChange={setZapInput}
           onSelect={setSelectedZapCurrency}
         />
-        <Button
-          color={zapInput ? 'gradient' : 'gray'}
-          disabled={!!error}
-          className="font-bold text-sm"
-          onClick={() => setShowReview(true)}
-        >
-          {!error ? i18n._(t`Confirm Deposit`) : error}
-        </Button>
+        <div className="grid grid-cols-2 gap-3">
+          {[ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approve) && (
+            <Button.Dotted pending={approve === ApprovalState.PENDING} color="blue" onClick={approveCallback}>
+              {approve === ApprovalState.PENDING
+                ? i18n._(t`Approving ${parsedZapAmount?.currency.symbol}`)
+                : i18n._(t`Approve ${parsedZapAmount?.currency.symbol}`)}
+            </Button.Dotted>
+          )}
+          <div className="col-span-2">
+            <Button
+              color={zapInput ? 'gradient' : 'gray'}
+              disabled={!!error}
+              className="font-bold text-sm"
+              onClick={() => setShowReview(true)}
+            >
+              {!error ? i18n._(t`Confirm Deposit`) : error}
+            </Button>
+          </div>
+        </div>
       </div>
       <div className="flex flex-col gap-4 px-5 mt-8">
         <Typography weight={700} className="text-high-emphesis">

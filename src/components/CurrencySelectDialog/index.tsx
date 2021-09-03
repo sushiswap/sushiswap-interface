@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react'
-import { ChainId, Currency, WETH9 } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, USDC, WETH9, WNATIVE } from '@sushiswap/sdk'
 import Button from '../Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -7,6 +7,8 @@ import Typography from '../Typography'
 import { useLingui } from '@lingui/react'
 import CurrencyLogo from '../CurrencyLogo'
 import { SUSHI } from '../../config/tokens'
+import { useActiveWeb3React } from '../../hooks'
+import { useAllTokenBalances } from '../../state/wallet/hooks'
 
 interface CurrencySelectDialogProps {
   currency: Currency
@@ -16,6 +18,8 @@ interface CurrencySelectDialogProps {
 
 const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChange, onDismiss }) => {
   const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
+  const balances = useAllTokenBalances()
 
   const handleSelect = useCallback(
     (x: Currency) => {
@@ -24,6 +28,8 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChang
     },
     [onChange, onDismiss]
   )
+
+  const tokens = [NATIVE[chainId], SUSHI[chainId], USDC[chainId]]
 
   return (
     <div className="bg-dark-900 h-full">
@@ -47,38 +53,25 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChang
           </Typography>
         </div>
       </div>
-      <div
-        className="flex justify-between items-center p-5 cursor-pointer"
-        onClick={() => handleSelect(SUSHI[ChainId.MAINNET])}
-      >
-        <div className="flex items-center gap-1.5">
-          <div className="rounded-full overflow-hidden">
-            <CurrencyLogo currency={SUSHI[ChainId.MAINNET]} size={24} />
+      {tokens.map((token, index) => (
+        <div
+          className="flex justify-between items-center p-5 cursor-pointer"
+          onClick={() => handleSelect(token)}
+          key={index}
+        >
+          <div className="flex items-center gap-1.5">
+            <div className="rounded-full overflow-hidden">
+              <CurrencyLogo currency={token} size={24} />
+            </div>
+            <Typography variant="sm" className="text-high-emphesis" weight={700}>
+              {token.symbol}
+            </Typography>
           </div>
           <Typography variant="sm" className="text-high-emphesis" weight={700}>
-            {SUSHI[ChainId.MAINNET].symbol}
+            {balances[token]?.toSignificant(6)}
           </Typography>
         </div>
-        <Typography variant="sm" className="text-high-emphesis" weight={700}>
-          300.00
-        </Typography>
-      </div>
-      <div
-        className="flex justify-between items-center p-5 cursor-pointer"
-        onClick={() => handleSelect(WETH9[ChainId.MAINNET])}
-      >
-        <div className="flex items-center gap-1.5">
-          <div className="rounded-full overflow-hidden">
-            <CurrencyLogo currency={WETH9[ChainId.MAINNET]} size={24} />
-          </div>
-          <Typography variant="sm" className="text-high-emphesis" weight={700}>
-            {WETH9[ChainId.MAINNET].symbol}
-          </Typography>
-        </div>
-        <Typography variant="sm" className="text-high-emphesis" weight={700}>
-          300.00
-        </Typography>
-      </div>
+      ))}
     </div>
   )
 }

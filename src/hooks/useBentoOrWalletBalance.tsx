@@ -2,7 +2,7 @@ import { useActiveWeb3React } from './index'
 import { useMemo } from 'react'
 import { useTokenBalances } from '../state/wallet/hooks'
 import { useBentoBalances2 } from '../state/bentobox/hooks'
-import { Currency } from '../../../sushiswap-sdk'
+import { Currency } from '@sushiswap/sdk'
 
 const useBentoOrWalletBalance = (currencies: Currency[], bentoBox: boolean) => {
   const { account } = useActiveWeb3React()

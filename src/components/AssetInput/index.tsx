@@ -13,7 +13,7 @@ import NumericalInput from '../../components/Input/Numeric'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import HeadlessUIModal from '../Modal/HeadlessUIModal'
 import CurrencySelectDialog from '../CurrencySelectDialog'
-import { useTokenBalance } from '../../state/wallet/hooks'
+import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import Switch from '../Switch'
 import BentoBoxFundingSourceModal from '../../features/trident/add/BentoBoxFundingSourceModal'
@@ -41,8 +41,8 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
   const { account } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
 
-  const bentoBalance = useBentoBalance2(account, props.currency?.wrapped)
-  const walletBalance = useTokenBalance(account, props.currency?.wrapped)
+  const bentoBalance = useBentoBalance2(account, spendFromWallet ? undefined : props.currency?.wrapped)
+  const walletBalance = useCurrencyBalance(account, spendFromWallet ? props.currency : undefined)
   const balance = spendFromWallet ? walletBalance : bentoBalance
   const maxSpend = maxAmountSpend(balance)?.toExact()
   const parsedInput = tryParseAmount(props.value, props.currency)
@@ -215,8 +215,8 @@ const AssetInputPanel = ({
 }
 
 interface AssetInputPanelBalanceProps {
-  balance: CurrencyAmount<Token>
-  onClick: (x: CurrencyAmount<Token>) => void
+  balance: CurrencyAmount<Currency>
+  onClick: (x: CurrencyAmount<Currency>) => void
   spendFromWallet?: boolean
 }
 

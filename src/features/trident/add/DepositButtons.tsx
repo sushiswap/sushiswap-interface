@@ -7,6 +7,7 @@ import { classNames } from '../../../functions'
 import Dots from '../../../components/Dots'
 
 interface DepositButtonsProps {
+  disabled?: boolean
   onMax?: () => void
   isMaxInput?: boolean
   onClick: () => void
@@ -14,7 +15,7 @@ interface DepositButtonsProps {
   pending?: boolean
 }
 
-const DepositButtons: FC<DepositButtonsProps> = ({ isMaxInput, onMax, onClick, errorMessage, pending }) => {
+const DepositButtons: FC<DepositButtonsProps> = ({ disabled, isMaxInput, onMax, onClick, errorMessage, pending }) => {
   const { i18n } = useLingui()
 
   const onMaxButton = (
@@ -30,7 +31,7 @@ const DepositButtons: FC<DepositButtonsProps> = ({ isMaxInput, onMax, onClick, e
   return (
     <div className={classNames(onMax && !isMaxInput ? 'grid grid-cols-2 gap-3' : 'flex')}>
       {!isMaxInput && onMaxButton}
-      <Button color="gradient" disabled={!!errorMessage} onClick={onClick}>
+      <Button color="gradient" disabled={disabled} onClick={onClick}>
         <Typography variant="sm" weight={700} className={!errorMessage ? 'text-high-emphesis' : 'text-low-emphasis'}>
           {pending ? <Dots>{buttonText}</Dots> : buttonText}
         </Typography>

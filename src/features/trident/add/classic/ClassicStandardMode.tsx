@@ -13,9 +13,8 @@ import {
   secondaryInputSelector,
 } from './context/atoms'
 import { Field } from '../../../../state/trident/add/classic'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useRouterContract } from '../../../../hooks'
+import { ApprovalState, useActiveWeb3React, useApproveCallback, useTridentRouterContract } from '../../../../hooks'
 import { t } from '@lingui/macro'
-import { PairState } from '../../../../hooks/useV2Pairs'
 import { useLingui } from '@lingui/react'
 import { useCurrencyBalances } from '../../../../state/wallet/hooks'
 import { ZERO } from '@sushiswap/sdk'
@@ -23,6 +22,7 @@ import Button from '../../../../components/Button'
 import { currenciesAtom, fixedRatioAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
 import { maxAmountSpend } from '../../../../functions'
+import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
@@ -38,7 +38,7 @@ const ClassicStandardMode = () => {
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
   const balances = useCurrencyBalances(account ?? undefined, currencies)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
-  const router = useRouterContract()
+  const router = useTridentRouterContract()
   const [approveA, approveACallback] = useApproveCallback(parsedAmountA, router?.address)
   const [approveB, approveBCallback] = useApproveCallback(parsedAmountB, router?.address)
 
@@ -71,7 +71,7 @@ const ClassicStandardMode = () => {
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
-    : poolState === PairState.INVALID
+    : poolState === ConstantProductPoolState.INVALID
     ? i18n._(t`Invalid pair`)
     : !parsedAmountA?.greaterThan(ZERO) || !parsedAmountB?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
@@ -121,7 +121,17 @@ const ClassicStandardMode = () => {
             </Button.Dotted>
           )}
           <div className="col-span-2">
-            <DepositButtons errorMessage={error} onMax={onMax} isMaxInput={isMax} onClick={() => setShowReview(true)} />
+            <DepositButtons
+              disabled={
+                !!error ||
+                [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveA) ||
+                [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveB)
+              }
+              errorMessage={error}
+              onMax={onMax}
+              isMaxInput={isMax}
+              onClick={() => setShowReview(true)}
+            />
           </div>
         </div>
       </div>

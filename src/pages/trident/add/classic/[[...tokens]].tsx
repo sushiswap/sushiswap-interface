@@ -21,7 +21,6 @@ import {
   secondaryInputSelector,
   zapInputAtom,
 } from '../../../../features/trident/add/classic/context/atoms'
-import { useV2Pair } from '../../../../hooks/useV2Pairs'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
 import AddTransactionReviewModalStandard from '../../../../features/trident/add/classic/AddTransactionReviewModal'
@@ -34,9 +33,12 @@ import {
   totalSupplyAtom,
 } from '../../../../features/trident/context/atoms'
 import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
+import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
+import { SUSHI } from '../../../../config/tokens'
+import { NATIVE } from '@sushiswap/sdk'
 
 const AddClassic = () => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
 
@@ -46,12 +48,11 @@ const AddClassic = () => {
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
-  // TODO USE V2 FOR TESTING
-  const currencyA = useCurrency(query.tokens[0])
-  const currencyB = useCurrency(query.tokens[1])
-  const classicPool = useV2Pair(currencyA, currencyB)
+  const currencyA = useCurrency(query.tokens?.[0]) || SUSHI[chainId]
+  const currencyB = useCurrency(query.tokens?.[1]) || NATIVE[chainId]
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, pool?.liquidityToken)
+  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
 
   useEffect(() => {
     if (!classicPool[1]) return

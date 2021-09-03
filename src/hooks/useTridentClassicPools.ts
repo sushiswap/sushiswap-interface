@@ -1,15 +1,7 @@
-import {
-  ConstantProductPool,
-  Currency,
-  CurrencyAmount,
-  FACTORY_ADDRESS,
-  Fee,
-  Pair,
-  computeConstantProductPoolAddress,
-} from '@sushiswap/sdk'
-
+import { Currency, FACTORY_ADDRESS, Fee, computeConstantProductPoolAddress, CurrencyAmount } from '@sushiswap/sdk'
+import { ConstantProductPool } from '@sushiswap/sdk/dist/entities/ConstantProductPool'
 import { Interface } from '@ethersproject/abi'
-import { abi } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
+import abi from '../constants/abis/constant-product-factory.json'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 
@@ -38,7 +30,7 @@ export function useTridentClassicPools(
           twap &&
           FACTORY_ADDRESS[tokenA.chainId]
           ? computeConstantProductPoolAddress({
-              factoryAddress: FACTORY_ADDRESS[tokenA.chainId],
+              factoryAddress: '0x2d7933851D0b372ffB810793Cf86D33177F6812f',
               tokenA,
               tokenB,
               fee,
@@ -61,7 +53,7 @@ export function useTridentClassicPools(
       if (loading) return [ConstantProductPoolState.LOADING, null]
       if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !twap) return [ConstantProductPoolState.INVALID, null]
       if (!reserves) return [ConstantProductPoolState.NOT_EXISTS, null]
-      const { reserve0, reserve1 } = reserves
+      const [reserve0, reserve1] = reserves
       const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
       return [
         ConstantProductPoolState.EXISTS,

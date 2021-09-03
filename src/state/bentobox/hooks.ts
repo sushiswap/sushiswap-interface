@@ -167,11 +167,14 @@ export function useBentoBalances2(account: string, tokens: Token[]): Record<stri
   const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>()
 
   const fetch = useCallback(async () => {
+    console.log(
+      account,
+      tokens.map((el) => el.address)
+    )
     const balances = await boringHelperContract.getBalances(
       account,
       tokens.map((el) => el.address)
     )
-
     setBalances(
       balances.reduce((acc, balance, index) => {
         acc[tokens[index].address] = CurrencyAmount.fromRawAmount(
