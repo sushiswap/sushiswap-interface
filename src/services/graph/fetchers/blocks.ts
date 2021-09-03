@@ -1,4 +1,4 @@
-import { blocksQuery, massBlocksQuery, blockQuery } from '../queries'
+import { blockQuery, blocksQuery, massBlocksQuery } from '../queries'
 import { getUnixTime, startOfHour, subDays, subHours } from 'date-fns'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -14,6 +14,7 @@ export const BLOCKS = {
   [ChainId.HARMONY]: 'sushiswap/harmony-blocks',
   [ChainId.AVALANCHE]: 'matthewlilley/avalanche-blocks',
   [ChainId.CELO]: 'sushiswap/celo-blocks',
+  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-blocks',
 }
 
 export const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) => {

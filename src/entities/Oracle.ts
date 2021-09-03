@@ -1,10 +1,4 @@
-import {
-  CHAINLINK_ORACLE_ADDRESS,
-  ChainId,
-  SUSHISWAP_TWAP_0_ORACLE_ADDRESS,
-  SUSHISWAP_TWAP_1_ORACLE_ADDRESS,
-  Token,
-} from '@sushiswap/sdk'
+import { CHAINLINK_ORACLE_ADDRESS, ChainId, Token } from '@sushiswap/sdk'
 
 import { AddressZero } from '@ethersproject/constants'
 import { CHAINLINK_PRICE_FEED_MAP } from '../config/oracles/chainlink'
@@ -41,21 +35,21 @@ export abstract class AbstractOracle implements Oracle {
 }
 
 export class SushiSwapTWAP0Oracle extends AbstractOracle {
-  constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
+  constructor(pair, chainId: ChainId, tokens?: Token[]) {
     super(pair, chainId, tokens)
     this.name = 'SushiSwap'
   }
 }
 
 export class SushiSwapTWAP1Oracle extends AbstractOracle {
-  constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
+  constructor(pair, chainId: ChainId, tokens?: Token[]) {
     super(pair, chainId, tokens)
     this.name = 'SushiSwap'
   }
 }
 
 export class ChainlinkOracle extends AbstractOracle {
-  constructor(pair: any, chainId: ChainId, tokens?: Token[]) {
+  constructor(pair, chainId: ChainId, tokens?: Token[]) {
     super(pair, chainId, tokens)
     this.name = 'Chainlink'
     this.valid = this.validate()
@@ -125,12 +119,8 @@ function lowerEqual(value1: string, value2: string) {
   return value1.toLowerCase() === value2.toLowerCase()
 }
 
-export function getOracle(pair: any, chainId: ChainId, tokens: any): Oracle {
-  if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS)) {
+export function getOracle(pair, chainId: ChainId = 1, tokens: any): Oracle {
+  if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS[chainId])) {
     return new ChainlinkOracle(pair, chainId, tokens)
-  } else if (pair.oracle === SUSHISWAP_TWAP_0_ORACLE_ADDRESS) {
-    return new SushiSwapTWAP0Oracle(pair, chainId, tokens)
-  } else if (pair.oracle === SUSHISWAP_TWAP_1_ORACLE_ADDRESS) {
-    return new SushiSwapTWAP1Oracle(pair, chainId, tokens)
   }
 }

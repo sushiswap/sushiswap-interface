@@ -1,6 +1,6 @@
-import { IconProps } from 'react-feather'
 import React, { FC, useState } from 'react'
 
+import { IconProps } from 'react-feather'
 import Image from '../Image'
 import { classNames } from '../../functions'
 import { cloudinaryLoader } from '../../functions/cloudinary'

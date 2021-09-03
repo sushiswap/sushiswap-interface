@@ -1,4 +1,4 @@
-import { ChainId, Currency, KASHI_ADDRESS, NATIVE, Token, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, KASHI_ADDRESS, NATIVE, Token, USDC_ADDRESS, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { ZERO, e10, maximum, minimum } from '../../../functions/math'
 import {
@@ -14,7 +14,6 @@ import { useBentoBoxContract, useBoringHelperContract } from '../../../hooks/use
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../../../entities/Fraction'
-import { USDC } from '../../../hooks'
 import { bentobox } from '@sushiswap/sushi-data'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
@@ -113,7 +112,7 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
   }
 }
 
-async function getPairs(bentoBoxContract: any, chainId: ChainId) {
+async function getPairs(bentoBoxContract, chainId: ChainId) {
   let logs = []
   let success = false
   const masterAddress = KASHI_ADDRESS[chainId]
@@ -138,7 +137,7 @@ async function getPairs(bentoBoxContract: any, chainId: ChainId) {
     })
   }
 
-  return logs.map((log: any) => {
+  return logs.map((log) => {
     const deployParams = defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], log.args?.data)
     return {
       masterContract: log.args?.masterContract,
@@ -187,9 +186,9 @@ export function KashiProvider({ children }) {
 
   const { account, chainId } = useActiveWeb3React()
 
-  const weth = WNATIVE[chainId]
+  const wnative = WNATIVE_ADDRESS[chainId]
 
-  const currency = USDC[chainId]
+  const currency = USDC_ADDRESS[chainId]
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
@@ -210,16 +209,14 @@ export function KashiProvider({ children }) {
     if (
       !account ||
       !chainId ||
-      ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI].includes(chainId)
+      ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI, ChainId.ARBITRUM].includes(chainId)
     ) {
       return
     }
 
     if (boringHelperContract && bentoBoxContract) {
       // // console.log('READY TO RUMBLE')
-      const info = rpcToObj(
-        await boringHelperContract.getUIInfo(account, [], currency.address, [KASHI_ADDRESS[chainId]])
-      )
+      const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], currency, [KASHI_ADDRESS[chainId]]))
 
       // Get the deployed pairs from the logs and decode
       const logPairs = await getPairs(bentoBoxContract, chainId)
@@ -230,7 +227,7 @@ export function KashiProvider({ children }) {
       const invalidOracles: any = []
 
       const allPairAddresses = logPairs
-        .filter((pair: any) => {
+        .filter((pair) => {
           const oracle = getOracle(pair, chainId, tokens)
           if (!oracle.valid) {
             // console.log(pair, oracle.valid, oracle.error)
@@ -238,7 +235,7 @@ export function KashiProvider({ children }) {
           }
           return oracle.valid
         })
-        .map((pair: any) => pair.address)
+        .map((pair) => pair.address)
 
       console.log('invalidOracles', invalidOracles)
 
@@ -248,7 +245,7 @@ export function KashiProvider({ children }) {
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()
 
-      pairTokens.add(currency.address)
+      pairTokens.add(currency)
 
       pairs.forEach((pair, i: number) => {
         pair.address = allPairAddresses[i]
@@ -279,8 +276,8 @@ export function KashiProvider({ children }) {
 
       // Calculate the USD price for each token
       Object.values(pairTokens).forEach((token) => {
-        token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.tokenInfo.symbol
-        token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency.address].rate, token.rate)
+        token.symbol = token.address === wnative ? NATIVE[chainId].symbol : token.tokenInfo.symbol
+        token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency].rate, token.rate)
       })
 
       dispatch({
@@ -447,7 +444,7 @@ export function KashiProvider({ children }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, currency.address, tokens, weth.address])
+  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, wnative])
 
   const previousBlockNumber = usePrevious(blockNumber)
 

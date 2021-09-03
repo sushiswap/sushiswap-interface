@@ -2,7 +2,7 @@ import { Currency, CurrencyAmount, JSBI } from '@sushiswap/sdk'
 
 import { parseUnits } from '@ethersproject/units'
 
-export const parseBalance = (value: string, decimals = 18) => {
+export function parseBalance(value: string, decimals = 18) {
   return parseUnits(value || '0', decimals)
 }
 

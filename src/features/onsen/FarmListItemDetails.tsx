@@ -54,6 +54,7 @@ const FarmListItem = ({ farm }) => {
       [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
       [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
       [ChainId.HARMONY]: MINICHEF_ADDRESS[ChainId.HARMONY],
+      [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
     },
   }
 

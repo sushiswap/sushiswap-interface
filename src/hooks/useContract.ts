@@ -185,7 +185,8 @@ export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | 
 }
 
 export function useChainlinkOracle(): Contract | null {
-  return useContract(CHAINLINK_ORACLE_ADDRESS, CHAINLINK_ORACLE_ABI, false)
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && CHAINLINK_ORACLE_ADDRESS[chainId], CHAINLINK_ORACLE_ABI, false)
 }
 
 export function useUniV2FactoryContract(): Contract | null {

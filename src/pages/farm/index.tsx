@@ -175,6 +175,16 @@ export default function Farm(): JSX.Element {
           },
         }
 
+        if (!reward[chainId]) {
+          return [
+            {
+              ...defaultReward,
+              rewardPerBlock: sushiPerBlock,
+              rewardPerDay: sushiPerDay,
+            },
+          ]
+        }
+
         return [
           {
             ...defaultReward,

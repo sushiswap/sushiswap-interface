@@ -1,12 +1,10 @@
-import { KASHI_ADDRESS, Token, WNATIVE_ADDRESS } from '@sushiswap/sdk'
+import { KASHI_ADDRESS, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import ERC20_ABI from '../../constants/abis/erc20.json'
-import { USDC } from '../../hooks'
 import { WrappedTokenInfo } from '../lists/wrappedTokenInfo'
-import { Zero } from '@ethersproject/constants'
 import { e10 } from '../../functions/math'
 import { easyAmount } from '../../functions/kashi'
 import { getAddress } from '@ethersproject/address'
@@ -43,7 +41,7 @@ export function useBentoBalances(): BentoBalance[] {
   const uiData = useSingleCallResult(boringHelperContract, 'getUIInfo', [
     account,
     [],
-    USDC[chainId].address,
+    USDC_ADDRESS[chainId],
     [KASHI_ADDRESS[chainId]],
   ])
 

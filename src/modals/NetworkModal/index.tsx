@@ -160,6 +160,17 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
     blockExplorerUrls: ['https://explorer.palm.io'],
   },
+  [ChainId.MOONRIVER]: {
+    chainId: '0x505',
+    chainName: 'Moonriver',
+    nativeCurrency: {
+      name: 'Moonriver',
+      symbol: 'MOVR',
+      decimals: 18,
+    },
+    rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
+    blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
+  },
 }
 
 export default function NetworkModal(): JSX.Element | null {
@@ -182,7 +193,7 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.MAINNET,
           ChainId.MATIC,
           ChainId.FANTOM,
-          // ChainId.ARBITRUM,
+          ChainId.ARBITRUM,
           ChainId.OKEX,
           ChainId.HECO,
           ChainId.BSC,
@@ -191,6 +202,7 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.AVALANCHE,
           ChainId.CELO,
           ChainId.PALM,
+          ChainId.MOONRIVER,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (

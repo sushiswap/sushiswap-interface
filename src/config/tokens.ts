@@ -1,5 +1,15 @@
 import { ChainId, Ether, SUSHI_ADDRESS, Token, WETH9, WNATIVE } from '@sushiswap/sdk'
 
+export const ARBITRUM: { [key: string]: Token } = {
+  USDC: new Token(ChainId.ARBITRUM, '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', 6, 'USDC', 'USD Coin'),
+  WBTC: new Token(ChainId.ARBITRUM, '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', 8, 'WBTC', 'Wrapped Bitcoin'),
+}
+
+export const PALM: { [key: string]: Token } = {
+  DAI: new Token(ChainId.PALM, '0x4C1f6fCBd233241bF2f4D02811E3bF8429BC27B8', 18, 'DAI', 'Dai Stablecoin'),
+  WETH: new Token(ChainId.PALM, '0x726138359C17F1E56bA8c4F737a7CAf724F6010b', 18, 'WETH', 'Wrapped Ether'),
+}
+
 export const CELO: { [key: string]: Token } = {
   mCUSD: new Token(ChainId.CELO, '0x64dEFa3544c695db8c535D289d843a189aa26b98', 18, 'mCUSD', 'Moola cUSD'),
   mCELO: new Token(ChainId.CELO, '0x7037F7296B2fc7908de7b57a89efaa8319f0C500', 18, 'mCELO', 'Moola CELO'),
@@ -7,6 +17,7 @@ export const CELO: { [key: string]: Token } = {
   cUSD: new Token(ChainId.CELO, '0x765DE816845861e75A25fCA122bb6898B8B1282a', 18, 'cUSD', 'Celo Dollar'),
   cEURO: new Token(ChainId.CELO, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
   cBTC: new Token(ChainId.CELO, '0xD629eb00dEced2a080B7EC630eF6aC117e614f1b', 18, 'cBTC', 'Wrapped Bitcoin'),
+  cETH: new Token(ChainId.CELO, '0x2DEf4285787d58a2f811AF24755A8150622f4361', 18, 'cETH', 'Wrapped Ether'),
 }
 
 export const BSC: { [key: string]: Token } = {
@@ -212,11 +223,11 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.FANTOM]: new Token(ChainId.FANTOM, SUSHI_ADDRESS[ChainId.FANTOM], 18, 'SUSHI', 'SushiToken'),
   [ChainId.XDAI]: new Token(ChainId.XDAI, SUSHI_ADDRESS[ChainId.XDAI], 18, 'SUSHI', 'SushiToken'),
   [ChainId.BSC]: new Token(ChainId.BSC, SUSHI_ADDRESS[ChainId.BSC], 18, 'SUSHI', 'SushiToken'),
-  // [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, SUSHI_ADDRESS[ChainId.ARBITRUM], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, SUSHI_ADDRESS[ChainId.ARBITRUM], 18, 'SUSHI', 'SushiToken'),
   [ChainId.AVALANCHE]: new Token(ChainId.AVALANCHE, SUSHI_ADDRESS[ChainId.AVALANCHE], 18, 'SUSHI', 'SushiToken'),
   [ChainId.OKEX]: new Token(ChainId.OKEX, SUSHI_ADDRESS[ChainId.OKEX], 18, 'SUSHI', 'SushiToken'),
   [ChainId.HARMONY]: new Token(ChainId.HARMONY, SUSHI_ADDRESS[ChainId.HARMONY], 18, 'SUSHI', 'SushiToken'),
-  // [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {
@@ -243,24 +254,4 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
     'WFTM',
     'Wrapped Fantom'
   ),
-
-  // [SupportedChainId.CELO]: new Token(
-  //   SupportedChainId.CELO,
-  //   "0x471EcE3750Da237f93B8E339c536989b8978a438",
-  //   18,
-  //   "CELO",
-  //   "Celo"
-  // ),
 }
-
-// export class ExtendedCelo extends Celo {
-//   public get wrapped(): Token {
-//     if (this.chainId in WNATIVE) return WNATIVE[this.chainId];
-
-//     throw new Error("Unsupported chain ID");
-//   }
-
-//   public static onChain(chainId: number): ExtendedCelo {
-//     return new ExtendedCelo(chainId);
-//   }
-// }
