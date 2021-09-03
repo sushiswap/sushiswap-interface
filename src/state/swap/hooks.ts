@@ -11,6 +11,7 @@ import {
   WNATIVE_ADDRESS,
 } from '@sushiswap/sdk'
 import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../config/archer'
+import { DEFAULT_OPENMEV_ETH_TIP, DEFAULT_OPENMEV_GAS_ESTIMATE } from '../../config/openmev'
 import {
   EstimatedSwapCall,
   SuccessfulCall,
@@ -129,7 +130,7 @@ function involvesAddress(trade: V2Trade<Currency, Currency, TradeType>, checksum
 // from the current swap inputs, compute the best trade and return it.
 export function useDerivedSwapInfo(
   doArcher = false,
-  doManifold = false
+  doOpenMev = false
 ): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount<Currency> }
