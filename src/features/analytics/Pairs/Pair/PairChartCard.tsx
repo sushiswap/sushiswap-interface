@@ -1,9 +1,10 @@
-import { useBlock, useDayData, useFactory, useNativePrice, useSushiPairs, useToken } from '../../../../services/graph'
+import { useBlock, useDayData, useSushiPairs } from '../../../../services/graph'
 import { useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
 
 interface PairChartCardProps {
   type: 'liquidity' | 'volume'
+  name: string
   pair: string
 }
 
@@ -27,7 +28,7 @@ const types = {
 }
 
 export default function PairChartCard(props: PairChartCardProps): JSX.Element {
-  const [chartTimespan, setChartTimespan] = useState('1W')
+  const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', 'ALL']
 
   const type = types[props.type]
@@ -35,9 +36,9 @@ export default function PairChartCard(props: PairChartCardProps): JSX.Element {
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 2 })
 
-  const pair = useSushiPairs({ where: { id: props.pair } })?.[0]
-  const pair1d = useSushiPairs({ where: { id: props.pair }, block: { number: block1d } })?.[0]
-  const pair2d = useSushiPairs({ where: { id: props.pair }, block: { number: block2d } })?.[0]
+  const pair = useSushiPairs({ subset: [props.pair], shouldFetch: !!props.pair })?.[0]
+  const pair1d = useSushiPairs({ subset: [props.pair], block: block1d, shouldFetch: !!props.pair && !!block1d })?.[0]
+  const pair2d = useSushiPairs({ subset: [props.pair], block: block2d, shouldFetch: !!props.pair && !!block2d })?.[0]
 
   const dayData = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
@@ -48,6 +49,7 @@ export default function PairChartCard(props: PairChartCardProps): JSX.Element {
   return (
     <ChartCard
       header={type.header}
+      subheader={props.name}
       figure={data.figure}
       change={data.change}
       chart={data.chart}

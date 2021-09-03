@@ -1,17 +1,33 @@
 import useSWR, { SWRConfiguration } from 'swr'
 import { useActiveWeb3React } from '../../../hooks'
 import { getBar, getBarHistory } from '../fetchers/bar'
+import { useBlock } from './blocks'
 
-export function useBar(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['bar', query, JSON.stringify(variables)], () => getBar(query, variables), swrConfig)
+interface useBarProps {
+  timestamp?: number
+  block?: number
+  shouldFetch?: boolean
+}
+
+export function useBar(
+  { timestamp, block, shouldFetch = true }: useBarProps = {},
+  swrConfig: SWRConfiguration = undefined
+) {
+  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
+
+  const { data } = useSWR(shouldFetch ? ['bar', block] : null, () => getBar(block), swrConfig)
   return data
 }
 
-export function useBarHistory(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(
-    ['barHistory', query, JSON.stringify(variables)],
-    () => getBarHistory(query, variables),
-    swrConfig
-  )
+interface useBarHistoryProps {
+  shouldFetch?: boolean
+}
+
+export function useBarHistory(
+  { shouldFetch = true }: useBarHistoryProps = {},
+  swrConfig: SWRConfiguration = undefined
+) {
+  const { data } = useSWR(shouldFetch ? ['barHistory'] : null, () => getBarHistory(), swrConfig)
   return data
 }

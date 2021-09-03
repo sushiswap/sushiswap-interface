@@ -25,8 +25,8 @@ export default function useFarmRewards() {
 
   const farms = useFarms()
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
-  const swapPairs = useSushiPairs({ where: { id_in: farmAddresses } })
-  const kashiPairs = useKashiPairs({ where: { id_in: farmAddresses } })
+  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
 
   const averageBlockTime = useAverageBlockTime()
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()

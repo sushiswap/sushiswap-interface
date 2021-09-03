@@ -30,20 +30,12 @@ export function useUserPairs(chainId = undefined) {
   const { chainId: chainIdSelected, account } = useActiveWeb3React()
   chainId = chainId ?? chainIdSelected
 
-  const userPairs = useLiquidityPositions(
-    {
-      where: {
-        user: account?.toLowerCase(),
-        liquidityTokenBalance_gt: '0',
-      },
-    },
-    chainId
-  )
-  const pairsFiltered = useSushiPairs(
-    userPairs ? { where: { id_in: userPairs.map((pair) => pair.pair.id) } } : undefined,
-    undefined,
-    chainId
-  )
+  const userPairs = useLiquidityPositions({ user: account, chainId })
+  const pairsFiltered = useSushiPairs({
+    subset: userPairs.map((pair) => pair.pair.id),
+    chainId,
+    shouldFetch: !!userPairs,
+  })
   const userPairsFormatted = useMemo(() => {
     return pairsFiltered && userPairs
       ? pairsFiltered.map((pair) => {
@@ -79,10 +71,10 @@ export function useUserFarms(chainId = undefined) {
 
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
 
-  const sushiPairs = useSushiPairs({ where: { id_in: farmAddresses } }, undefined, chainId)
-  const kashiPairs = useKashiPairs({ where: { id_in: farmAddresses } }, chainId)
+  const sushiPairs = useSushiPairs({ subset: farmAddresses, chainId, shouldFetch: !!farmAddresses })
+  const kashiPairs = useKashiPairs({ subset: farmAddresses, chainId, shouldFetch: !!farmAddresses })
 
-  const nativePrice = useNativePrice(undefined, chainId)
+  const nativePrice = useNativePrice({ chainId })
 
   const userFarmsFormatted = useMemo(
     () =>
@@ -129,9 +121,9 @@ export function useBentoUserTokens(chainId = undefined) {
 
   const bentoUserTokens = useGetBentoUserTokens(undefined, chainId)
 
-  const tokens = useTokens(undefined, undefined, chainId)
+  const tokens = useTokens({ chainId })
 
-  const nativePrice = useNativePrice(undefined, chainId)
+  const nativePrice = useNativePrice({ chainId })
 
   return useMemo(() => {
     return bentoUserTokens && tokens && nativePrice
@@ -170,9 +162,9 @@ export function useUserKashiPairs(chainId = undefined) {
     [userKashiPairs]
   )
 
-  const tokens = useTokens({ where: { id_in: kashiTokenAddresses } }, undefined, chainId)
+  const tokens = useTokens({ subset: kashiTokenAddresses, chainId, shouldFetch: !!kashiTokenAddresses })
 
-  const nativePrice = useNativePrice(undefined, chainId)
+  const nativePrice = useNativePrice({ chainId })
 
   return useMemo(() => {
     return userKashiPairs && tokens && nativePrice

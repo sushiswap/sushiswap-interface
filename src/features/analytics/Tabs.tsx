@@ -1,41 +1,32 @@
 import { classNames } from '../../functions'
 
-interface PairTabsProps {
+interface TabsProps {
   tabs: any[]
   currentType: string
   setType: Function
 }
 
-export default function PairTabs({ tabs, currentType, setType }: PairTabsProps): JSX.Element {
+export default function Tabs({ tabs, currentType, setType }: TabsProps): JSX.Element {
   return (
     <>
-      <div className="border-b border-gray-700">
-        <nav className="flex -mb-px space-x-4 overflow-x-auto whitespace-nowrap" aria-label="Tabs">
+      <div className="border-t border-b border-gray-700">
+        <nav className="grid items-center grid-flow-col -mb-px overflow-x-auto whitespace-nowrap" aria-label="Tabs">
           {tabs.map((tab) => (
-            <div key={tab.name}>
-              <div
-                className={classNames(
-                  tab.type === currentType
-                    ? tab.customCurrent ?? 'bg-gradient-to-r from-blue to-pink text-transparent bg-clip-text'
-                    : 'text-primary hover:text-gray-200',
-                  'group flex flex-auto flex-col px-1 font-bold text-lg cursor-pointer'
-                )}
-                onClick={() => setType(tab.type)}
-              >
-                <div className="inline-flex items-center py-2">
-                  {tab.icon && (
-                    <div className={'mr-2'} style={tab.type !== currentType ? { visibility: 'hidden' } : {}}>
-                      {tab.icon}
-                    </div>
-                  )}
-                  <span>{tab.name}</span>
-                </div>
-                <div className="">
+            <div
+              key={tab.name}
+              className={classNames(
+                tab.type !== currentType && 'opacity-40 hover:opacity-80',
+                'flex flex-col font-bold cursor-pointer text-high-emphesis'
+              )}
+              onClick={() => setType(tab.type)}
+            >
+              <div className="inline-flex items-center justify-center pt-4 pb-2">
+                <div>
+                  <div className="pb-2">{tab.name}</div>
                   <div
                     className={classNames(
-                      tab.type === currentType &&
-                        'border-gradient-r-blue-pink-dark-900 border bg-transparent border-transparent',
-                      'w-full'
+                      tab.type === currentType && 'border-dark-700',
+                      '-mb-2 border-4 border-transparent'
                     )}
                   />
                 </div>

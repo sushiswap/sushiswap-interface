@@ -67,14 +67,14 @@ export function formatPercent(percentString: any) {
   }
 }
 
-export const formatNumber = (number: any, usd = false, scale = true) => {
+export const formatNumber = (number: any, usd = false, scale = true, decimals = 0) => {
   if (isNaN(number) || number === '' || number === undefined) {
     return usd ? '$0.00' : '0'
   }
   const num = parseFloat(number)
 
   if (num > 500000000 && scale) {
-    return (usd ? '$' : '') + formatK(num.toFixed(0))
+    return (usd ? '$' : '') + formatK(num.toFixed(decimals))
   }
 
   if (num === 0) {
@@ -88,10 +88,12 @@ export const formatNumber = (number: any, usd = false, scale = true) => {
     return usd ? '< $0.0001' : '< 0.0001'
   }
 
-  if (num > 1000) {
-    return usd
-      ? '$' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
-      : '' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+  if (num > 1000 || num < -1000) {
+    return (
+      (num > 1000 ? '' : '-') +
+      (usd ? '$' : '') +
+      Number(parseFloat(String(Math.abs(num))).toFixed(decimals)).toLocaleString()
+    )
   }
 
   if (usd) {

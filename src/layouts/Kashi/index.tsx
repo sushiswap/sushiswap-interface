@@ -5,6 +5,7 @@ import Image from '../../components/Image'
 import Link from 'next/link'
 import Main from '../../components/Main'
 import NavLink from '../../components/NavLink'
+import Popups from '../../components/Popups'
 import React from 'react'
 import kashiLogo from '../../../public/kashi-logo.png'
 import { useRouter } from 'next/router'
@@ -128,6 +129,7 @@ export default function Layout({
           </div>
         </Container>
       </Main>
+      <Popups />
       <Footer />
     </div>
   )

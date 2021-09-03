@@ -45,21 +45,13 @@ export default function Farm(): JSX.Element {
 
   const pairAddresses = useFarmPairAddresses()
 
-  const swapPairs = useSushiPairs({
-    where: {
-      id_in: pairAddresses,
-    },
-  })
+  const swapPairs = useSushiPairs({ subset: pairAddresses, shouldFetch: !!pairAddresses })
 
-  const kashiPairs = useKashiPairs({
-    where: {
-      id_in: pairAddresses,
-    },
-  })
+  const kashiPairs = useKashiPairs({ subset: pairAddresses })
 
   const farms = useFarms()
 
-  const positions = usePositions()
+  const positions = usePositions(chainId)
 
   const averageBlockTime = useAverageBlockTime()
 
@@ -173,6 +165,16 @@ export default function Farm(): JSX.Element {
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
             rewardPrice: onePrice,
           },
+        }
+
+        if (!reward[chainId]) {
+          return [
+            {
+              ...defaultReward,
+              rewardPerBlock: sushiPerBlock,
+              rewardPerDay: sushiPerDay,
+            },
+          ]
         }
 
         return [

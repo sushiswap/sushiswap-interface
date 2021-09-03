@@ -74,7 +74,7 @@ export default function Portfolio() {
         allocation: userKashiPairsAlloc,
       },
     ]
-  }, [userFarms, userPairs, userAssets, userBentoTokens, userKashiPairs])
+  }, [totalUsd, userFarms, userPairs, userAssets, userBentoTokens, userKashiPairs])
 
   const chainAllocations = useMemo(() => {
     const networks = uniq([
@@ -108,7 +108,7 @@ export default function Portfolio() {
         allocation: (totalNetwork / totalUsd) * 100,
       }
     })
-  }, [userFarms, userPairs, userAssets, userBentoTokens, userKashiPairs])
+  }, [totalUsd, userFarms, userPairs, userAssets, userBentoTokens, userKashiPairs])
 
   return (
     <AnalyticsContainer>

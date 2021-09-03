@@ -263,14 +263,8 @@ export const tokenIdsQuery = gql`
 `
 
 export const tokenDayDatasQuery = gql`
-  query tokenDayDatasQuery($first: Int! = 1000, $skip: Int, $tokens: [Bytes]!, $date: Int! = 0) {
-    tokenDayDatas(
-      first: $first
-      skip: $skip
-      orderBy: date
-      orderDirection: desc
-      where: { token_in: $tokens, date_gt: $date }
-    ) {
+  query tokenDayDatasQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: TokenDayData_filter) {
+    tokenDayDatas(first: $first, skip: $skip, orderBy: date, orderDirection: desc, where: $where, block: $block) {
       id
       date
       token {
@@ -314,9 +308,10 @@ export const tokensQuery = gql`
   query tokensQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: Token_filter) {
     tokens(first: $first, skip: $skip, orderBy: volumeUSD, orderDirection: desc, block: $block, where: $where) {
       ...tokenFields
-      dayData(first: 7, skip: 0, orderBy: date, order: asc) {
+      dayData(first: 7, orderBy: date, orderDirection: desc) {
         id
         priceUSD
+        date
       }
     }
   }
@@ -348,8 +343,8 @@ export const tokenSubsetQuery = gql`
 
 // Transactions...
 export const transactionsQuery = gql`
-  query transactionsQuery($pairAddresses: [Bytes]!) {
-    swaps(orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairAddresses }) {
+  query transactionsQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: Swap_filter) {
+    swaps(orderBy: timestamp, orderDirection: desc, where: $where) {
       id
       timestamp
       pair {
@@ -368,7 +363,7 @@ export const transactionsQuery = gql`
       amountUSD
       to
     }
-    mints(orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairAddresses }) {
+    mints(orderBy: timestamp, orderDirection: desc, where: $where) {
       id
       timestamp
       pair {
@@ -385,7 +380,7 @@ export const transactionsQuery = gql`
       amountUSD
       to
     }
-    burns(orderBy: timestamp, orderDirection: desc, where: { pair_in: $pairAddresses }) {
+    burns(orderBy: timestamp, orderDirection: desc, where: $where) {
       id
       timestamp
       pair {

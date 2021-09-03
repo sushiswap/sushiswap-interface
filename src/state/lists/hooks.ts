@@ -76,6 +76,7 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     42220: { ...map1[42220], ...map2[42220] }, // celo
     11297108109: { ...map1[11297108109], ...map2[11297108109] }, // palm
     11297108099: { ...map1[11297108099], ...map2[11297108099] }, // palm testnet
+    1285: { ...map1[1285], ...map2[1285] }, // moonriver
   }
 }
 

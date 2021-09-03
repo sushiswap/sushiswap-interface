@@ -1,9 +1,10 @@
-import { useBlock, useDayData, useFactory, useNativePrice, useToken } from '../../../../services/graph'
+import { useBlock, useDayData, useNativePrice, useTokens } from '../../../../services/graph'
 import { useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
 
 interface DashboardChartCardProps {
   type: 'liquidity' | 'volume'
+  name: string
   token: string
 }
 
@@ -31,7 +32,7 @@ const types = {
 }
 
 export default function TokenChartCard(props: DashboardChartCardProps): JSX.Element {
-  const [chartTimespan, setChartTimespan] = useState('1W')
+  const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', 'ALL']
 
   const type = types[props.type]
@@ -39,12 +40,12 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
   const block1d = useBlock({ daysAgo: 1 })
   const block2d = useBlock({ daysAgo: 2 })
 
-  const token = useToken({ id: props.token })
-  const token1d = useToken({ id: props.token, block: { number: block1d } })
-  const token2d = useToken({ id: props.token, block: { number: block2d } })
+  const token = useTokens({ subset: [props.token] })?.[0]
+  const token1d = useTokens({ subset: [props.token], block: block1d, shouldFetch: !!block1d })?.[0]
+  const token2d = useTokens({ subset: [props.token], block: block2d, shouldFetch: !!block2d })?.[0]
 
   const nativePrice = useNativePrice()
-  const nativePrice1d = useNativePrice({ block: { number: block1d } })
+  const nativePrice1d = useNativePrice({ block: block1d })
 
   const dayData = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
@@ -58,6 +59,7 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
   return (
     <ChartCard
       header={type.header}
+      subheader={props.name}
       figure={data.figure}
       change={data.change}
       chart={data.chart}

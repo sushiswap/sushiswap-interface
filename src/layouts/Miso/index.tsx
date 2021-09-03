@@ -1,5 +1,6 @@
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
+import Popups from '../../components/Popups'
 
 const Layout = ({ children }) => {
   return (
@@ -12,6 +13,7 @@ const Layout = ({ children }) => {
       >
         {children}
       </main>
+      <Popups />
       <Footer />
     </div>
   )

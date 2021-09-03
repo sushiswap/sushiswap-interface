@@ -123,7 +123,7 @@ function Create() {
         return
       }
 
-      const oracleAddress = CHAINLINK_ORACLE_ADDRESS
+      const oracleAddress = CHAINLINK_ORACLE_ADDRESS[chainId]
 
       const kashiData = defaultAbiCoder.encode(
         ['address', 'address', 'address', 'bytes'],
