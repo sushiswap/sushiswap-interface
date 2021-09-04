@@ -1,7 +1,11 @@
 import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
+import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/weekly/hooks'
+import {
+  useClaimCallback as useProtocolClaimCallback,
+  useUserUnclaimedAmount as useUserUnclaimedProtocolAmount,
+} from '../../state/claim/protocol/hooks'
 import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'
@@ -163,8 +167,8 @@ const ProtocolVesting = () => {
 
   const { account } = useActiveWeb3React()
   const [attempting, setAttempting] = useState<boolean>(false)
-  const { claimCallback } = useClaimCallback(account)
-  const unclaimedAmount: CurrencyAmount<Currency> | undefined = useUserUnclaimedAmount(account)
+  const { claimCallback } = useProtocolClaimCallback(account)
+  const unclaimedAmount: CurrencyAmount<Currency> | undefined = useUserUnclaimedProtocolAmount(account)
   const { claimSubmitted } = useUserHasSubmittedClaim(account ?? undefined)
   const claimConfirmed = false
 
@@ -204,7 +208,7 @@ const ProtocolVesting = () => {
             <div className="font-bold text-white text-[36px]">
               {unclaimedAmount?.toFixed(4, { groupSeparator: ',' } ?? {})}
             </div>
-            <div className="text-sm text-secondary">{i18n._(t`Total Locked from Protocols`)}</div>
+            <div className="text-sm text-secondary">{i18n._(t`Pending Treasury Transfer`)}</div>
           </div>
 
           <Button

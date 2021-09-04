@@ -51,7 +51,7 @@ export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
 // }
 
 // TODO: update weekly with new constant
-export const MERKLE_ROOT =
+export const WEEKLY_MERKLE_ROOT =
   //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-13/merkle-10959148-11550728.json'
   //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-14/merkle-10959148-11596364.json'
   //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-15/merkle-10959148-11641996.json'
@@ -61,6 +61,9 @@ export const MERKLE_ROOT =
   //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-19/merkle-10959148-11824101.json'
   //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-20/merkle-10959148-11869658.json'
   'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-21/merkle-10959148-11915191.json'
+
+export const PROTOCOL_MERKLE_ROOT = null
+//'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-13/merkle-10959148-11550728.json'
 
 // /**
 //  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these
