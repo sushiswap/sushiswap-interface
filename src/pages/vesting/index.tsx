@@ -117,7 +117,7 @@ const VestingLayout = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex px-0 md:flex-row md:space-x-8">
+    <div className="flex flex-col w-full space-y-4 md:flex-row md:space-x-8 md:space-y-0">
       <div className="hidden space-y-10 md:block">
         <div className="relative w-full p-4 overflow-hidden rounded bg-dark-900">
           <div className="font-bold text-white">{i18n._(t`Community Approval`)}</div>
@@ -192,7 +192,7 @@ const ProtocolVesting = () => {
   const pendingTreasurySignature = false
 
   return (
-    <div className="flex flex-col gap-3 max-w-[400px]">
+    <div className="flex flex-col gap-3 md:max-w-[400px]">
       <div className="relative w-full h-full overflow-hidden rounded bg-dark-900">
         <div className="flex flex-col gap-3 p-4">
           <div className="flex flex-row justify-between">
@@ -317,7 +317,7 @@ const WeeklyVesting = () => {
   }
 
   return (
-    <div className="flex flex-col gap-3 max-w-[400px]">
+    <div className="flex flex-col gap-3 md:max-w-[400px]">
       <div className="relative w-full h-full overflow-hidden rounded bg-dark-900">
         <div className="flex flex-col gap-3 p-4">
           <div className="flex flex-row justify-between">
