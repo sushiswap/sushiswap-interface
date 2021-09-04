@@ -5,6 +5,7 @@ import Background from '../../../features/analytics/Background'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import { useFuse } from '../../../hooks'
+import { useMemo } from 'react'
 
 export default function Tokens() {
   const block1d = useBlock({ daysAgo: 1 })
@@ -18,33 +19,32 @@ export default function Tokens() {
   const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d })
   const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w })
 
-  console.log(tokens, tokens1d, tokens1w, nativePrice, nativePrice1d, nativePrice1w)
+  const tokensFormatted = useMemo(
+    () =>
+      tokens?.map((token) => {
+        const token1d = tokens1d?.find((p) => token.id === p.id) ?? token
+        const token1w = tokens1w?.find((p) => token.id === p.id) ?? token
 
-  const tokensFormatted =
-    tokens && tokens1d && tokens1w && nativePrice && nativePrice1d && nativePrice1w
-      ? tokens.map((token) => {
-          const token1d = tokens1d.find((p) => token.id === p.id) ?? token
-          const token1w = tokens1w.find((p) => token.id === p.id) ?? token
-
-          return {
-            token: {
-              address: token.id,
-              symbol: token.symbol,
-              name: token.name,
-            },
-            liquidity: token.liquidity * token.derivedETH * nativePrice,
-            volume1d: token.volumeUSD - token1d.volumeUSD,
-            volume1w: token.volumeUSD - token1w.volumeUSD,
-            price: token.derivedETH * nativePrice,
-            change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
-            change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
-            graph: token.dayData
-              .slice(0)
-              .reverse()
-              .map((day, i) => ({ x: i, y: Number(day.priceUSD) })),
-          }
-        })
-      : []
+        return {
+          token: {
+            address: token.id,
+            symbol: token.symbol,
+            name: token.name,
+          },
+          liquidity: token.liquidity * token.derivedETH * nativePrice,
+          volume1d: token.volumeUSD - token1d.volumeUSD,
+          volume1w: token.volumeUSD - token1w.volumeUSD,
+          price: token.derivedETH * nativePrice,
+          change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
+          change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
+          graph: token.dayData
+            .slice(0)
+            .reverse()
+            .map((day, i) => ({ x: i, y: Number(day.priceUSD) })),
+        }
+      }),
+    [tokens, tokens1d, tokens1w, nativePrice, nativePrice1d, nativePrice1w]
+  )
 
   const options = {
     keys: ['token.address', 'token.symbol', 'token.name'],
@@ -59,8 +59,6 @@ export default function Tokens() {
     data: tokensFormatted,
     options,
   })
-
-  console.log({ tokensSearched })
 
   return (
     <AnalyticsContainer>

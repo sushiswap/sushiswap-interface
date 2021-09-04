@@ -1,5 +1,5 @@
 import { useBlock, useDayData, useSushiPairs } from '../../../../services/graph'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
 
 interface PairChartCardProps {
@@ -11,25 +11,29 @@ interface PairChartCardProps {
 const types = {
   liquidity: {
     header: 'Liquidity',
-    getData: (pair, pair1d, pair2d, dayData) => ({
+    getData: (pair, pair1d) => ({
       figure: pair?.reserveUSD,
       change: (pair?.reserveUSD / pair1d?.reserveUSD) * 100 - 100,
-      chart: dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.liquidityUSD) })),
     }),
+    getChart: (dayData) =>
+      dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.liquidityUSD) })),
   },
   volume: {
     header: 'Volume',
-    getData: (pair, pair1d, pair2d, dayData) => ({
+    getData: (pair, pair1d, pair2d) => ({
       figure: pair?.volumeUSD - pair1d?.volumeUSD,
       change: ((pair?.volumeUSD - pair1d?.volumeUSD) / (pair1d?.volumeUSD - pair2d?.volumeUSD)) * 100 - 100,
-      chart: dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.volumeUSD) })),
     }),
+    getChart: (dayData) =>
+      dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.volumeUSD) })),
   },
 }
 
 export default function PairChartCard(props: PairChartCardProps): JSX.Element {
   const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', 'ALL']
+
+  const [chart, setChart] = useState(undefined)
 
   const type = types[props.type]
 
@@ -44,7 +48,14 @@ export default function PairChartCard(props: PairChartCardProps): JSX.Element {
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
   })
 
-  const data = useMemo(() => type.getData(pair, pair1d, pair2d, dayData), [pair, pair1d, pair2d, dayData])
+  // To prevent the chart from dissapearing while fetching new data
+  useEffect(() => {
+    if (dayData) {
+      setChart(type.getChart(dayData))
+    }
+  }, [dayData])
+
+  const data = useMemo(() => type.getData(pair, pair1d, pair2d), [pair, pair1d, pair2d])
 
   return (
     <ChartCard
@@ -52,7 +63,7 @@ export default function PairChartCard(props: PairChartCardProps): JSX.Element {
       subheader={props.name}
       figure={data.figure}
       change={data.change}
-      chart={data.chart}
+      chart={chart}
       currentTimespan={chartTimespan}
       timespans={chartTimespans}
       setTimespan={setChartTimespan}

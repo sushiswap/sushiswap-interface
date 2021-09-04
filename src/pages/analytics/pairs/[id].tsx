@@ -74,23 +74,23 @@ export default function Pair() {
   const currency1 = useCurrency(pair?.token1?.id)
 
   // For the Info Cards
-  const liquidityUSDChange = useMemo(() => (pair?.reserveUSD / pair1d?.reserveUSD) * 100 - 100, [pair, pair1d])
+  const liquidityUSDChange = pair?.reserveUSD / pair1d?.reserveUSD
 
-  const volumeUSD1d = useMemo(() => pair?.volumeUSD - pair1d?.volumeUSD, [pair, pair1d])
-  const volumeUSD2d = useMemo(() => pair1d?.volumeUSD - pair2d?.volumeUSD, [pair1d, pair2d])
-  const volumeUSD1dChange = useMemo(() => (volumeUSD1d / volumeUSD2d) * 100 - 100, [volumeUSD1d, volumeUSD2d])
+  const volumeUSD1d = pair?.volumeUSD - pair1d?.volumeUSD
+  const volumeUSD2d = pair1d?.volumeUSD - pair2d?.volumeUSD
+  const volumeUSD1dChange = (volumeUSD1d / volumeUSD2d) * 100 - 100
 
-  const tx1d = useMemo(() => pair?.txCount - pair1d?.txCount, [pair, pair1d])
-  const tx2d = useMemo(() => pair1d?.txCount - pair2d?.txCount, [pair1d, pair2d])
-  const tx1dChange = useMemo(() => (tx1d / tx2d) * 100 - 100, [tx1d, tx2d])
+  const tx1d = pair?.txCount - pair1d?.txCount
+  const tx2d = pair1d?.txCount - pair2d?.txCount
+  const tx1dChange = (tx1d / tx2d) * 100 - 100
 
-  const avgTrade1d = useMemo(() => volumeUSD1d / tx1d, [volumeUSD1d, tx1d])
-  const avgTrade2d = useMemo(() => volumeUSD2d / tx2d, [volumeUSD2d, tx2d])
-  const avgTrade1dChange = useMemo(() => (avgTrade1d / avgTrade2d) * 100 - 100, [avgTrade1d, avgTrade2d])
+  const avgTrade1d = volumeUSD1d / tx1d
+  const avgTrade2d = volumeUSD2d / tx2d
+  const avgTrade1dChange = (avgTrade1d / avgTrade2d) * 100 - 100
 
-  const utilisation1d = useMemo(() => (volumeUSD1d / pair?.reserveUSD) * 100, [volumeUSD1d, pair])
-  const utilisation2d = useMemo(() => (volumeUSD2d / pair1d?.reserveUSD) * 100, [volumeUSD2d, pair1d])
-  const utilisation1dChange = useMemo(() => (utilisation1d / utilisation2d) * 100 - 100, [utilisation1d, utilisation2d])
+  const utilisation1d = (volumeUSD1d / pair?.reserveUSD) * 100
+  const utilisation2d = (volumeUSD2d / pair1d?.reserveUSD) * 100
+  const utilisation1dChange = (utilisation1d / utilisation2d) * 100 - 100
 
   return (
     <AnalyticsContainer>

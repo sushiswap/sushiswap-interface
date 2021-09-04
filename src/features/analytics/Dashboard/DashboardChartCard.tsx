@@ -1,5 +1,5 @@
 import { useBlock, useDayData, useFactory } from '../../../services/graph'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import ChartCard from '../ChartCard'
 
@@ -10,32 +10,30 @@ interface DashboardChartCardProps {
 const types = {
   liquidity: {
     header: 'TVL',
-    getData: (exchange, exchange1d, exchange2d, dayData) => ({
-      figure: exchange ? exchange.liquidityUSD : 0,
-      change: exchange1d && exchange2d ? (exchange1d.liquidityUSD / exchange2d.liquidityUSD) * 100 - 100 : 0,
-      chart: dayData
-        ? dayData.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.liquidityUSD) }))
-        : undefined,
+    getData: (exchange, exchange1d, exchange2d) => ({
+      figure: exchange?.liquidityUSD,
+      change: (exchange1d?.liquidityUSD / exchange2d?.liquidityUSD) * 100 - 100,
     }),
+    getChart: (dayData) =>
+      dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.liquidityUSD) })),
   },
   volume: {
     header: 'Volume',
-    getData: (exchange, exchange1d, exchange2d, dayData) => ({
+    getData: (exchange, exchange1d, exchange2d) => ({
       figure: exchange && exchange1d ? exchange.volumeUSD - exchange1d.volumeUSD : 0,
       change:
-        exchange && exchange1d && exchange2d
-          ? ((exchange.volumeUSD - exchange1d.volumeUSD) / (exchange1d.volumeUSD - exchange2d.volumeUSD)) * 100 - 100
-          : 0,
-      chart: dayData
-        ? dayData.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.volumeUSD) }))
-        : undefined,
+        ((exchange?.volumeUSD - exchange1d?.volumeUSD) / (exchange1d?.volumeUSD - exchange2d?.volumeUSD)) * 100 - 100,
     }),
+    getChart: (dayData) =>
+      dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.volumeUSD) })),
   },
 }
 
 export default function DashboardChartCard(props: DashboardChartCardProps): JSX.Element {
   const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', '1Y', 'ALL']
+
+  const [chart, setChart] = useState(undefined)
 
   const type = types[props.type]
 
@@ -50,10 +48,14 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : chartTimespan === '1Y' ? 365 : undefined,
   })
 
-  const data = useMemo(
-    () => type.getData(exchange, exchange1d, exchange2d, dayData),
-    [type, exchange, exchange1d, exchange2d, dayData]
-  )
+  // To prevent the chart from dissapearing while fetching new data
+  useEffect(() => {
+    if (dayData) {
+      setChart(type.getChart(dayData))
+    }
+  }, [dayData])
+
+  const data = useMemo(() => type.getData(exchange, exchange1d, exchange2d), [type, exchange, exchange1d, exchange2d])
 
   return (
     <ChartCard
@@ -61,7 +63,7 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
       subheader={'SUSHI AMM'}
       figure={data.figure}
       change={data.change}
-      chart={data.chart}
+      chart={chart}
       currentTimespan={chartTimespan}
       timespans={chartTimespans}
       setTimespan={setChartTimespan}

@@ -1,5 +1,5 @@
 import { useBlock, useDayData, useNativePrice, useTokens } from '../../../../services/graph'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
 
 interface DashboardChartCardProps {
@@ -18,22 +18,26 @@ const types = {
           (token1d?.liquidity * token1d?.derivedETH * nativePrice1d)) *
           100 -
         100,
-      chart: dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.liquidityUSD) })),
     }),
+    getChart: (dayData) =>
+      dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.liquidityUSD) })),
   },
   volume: {
     header: 'Volume',
-    getData: (token, token1d, token2d, dayData) => ({
+    getData: (token, token1d, token2d) => ({
       figure: token?.volumeUSD - token1d?.volumeUSD,
       change: ((token?.volumeUSD - token1d?.volumeUSD) / (token1d?.volumeUSD - token2d?.volumeUSD)) * 100 - 100,
-      chart: dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.volumeUSD) })),
     }),
+    getChart: (dayData) =>
+      dayData?.sort((a, b) => a.date - b.date).map((day, i) => ({ x: i, y: Number(day.volumeUSD) })),
   },
 }
 
 export default function TokenChartCard(props: DashboardChartCardProps): JSX.Element {
   const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', 'ALL']
+
+  const [chart, setChart] = useState(undefined)
 
   const type = types[props.type]
 
@@ -51,6 +55,13 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
   })
 
+  // To prevent the chart from dissapearing while fetching new data
+  useEffect(() => {
+    if (dayData) {
+      setChart(type.getChart(dayData))
+    }
+  }, [dayData])
+
   const data = useMemo(
     () => type.getData(token, token1d, token2d, dayData, nativePrice, nativePrice1d),
     [token, token1d, token2d, dayData, nativePrice, nativePrice1d]
@@ -62,7 +73,7 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
       subheader={props.name}
       figure={data.figure}
       change={data.change}
-      chart={data.chart}
+      chart={chart}
       currentTimespan={chartTimespan}
       timespans={chartTimespans}
       setTimespan={setChartTimespan}
