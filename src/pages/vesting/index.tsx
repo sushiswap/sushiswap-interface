@@ -1,22 +1,19 @@
 import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
 import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'
 import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../../components/Button'
-import { ChevronRight } from 'react-feather'
 import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import ExternalLink from '../../components/ExternalLink'
 import Fraction from '../../entities/Fraction'
 import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
 import Loader from '../../components/Loader'
 import QuestionHelper from '../../components/QuestionHelper'
-import { cloudinaryLoader } from '../../functions/cloudinary'
 import { formatNumber } from '../../functions/format'
 import { isAddress } from 'ethers/lib/utils'
 import { t } from '@lingui/macro'
@@ -24,7 +21,6 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 
-import Typography from '../../components/Typography'
 import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 import InariButton from '../../features/inari/Button'
 import InariDescription from '../../features/inari/InariDescription'
@@ -58,6 +54,13 @@ const Strategies = () => {
           <div className="col-span-12 md:col-span-3">
             <div className="flex flex-col gap-5">
               <StrategySelector />
+              <Link href={'/tools/meowshi'}>
+                <div
+                  className={`bg-dark-900 cursor-pointer border border-transparent pl-5 py-2 rounded whitespace-nowrap w-full font-bold h-[48px] flex items-center text-sm`}
+                >
+                  {'SUSHI → MEOW'}
+                </div>
+              </Link>
             </div>
           </div>
           <div className="grid col-span-12 gap-4 md:col-span-9">
