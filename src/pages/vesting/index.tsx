@@ -205,7 +205,15 @@ const ProtocolVesting = () => {
           </div>
 
           <Button
-            color="gradient"
+            color={
+              !isAddress(account ?? '') ||
+              claimConfirmed ||
+              !unclaimedAmount ||
+              Number(unclaimedAmount?.toFixed(8)) <= 0 ||
+              pendingTreasurySignature
+                ? 'gray'
+                : 'gradient'
+            }
             disabled={
               !isAddress(account ?? '') ||
               claimConfirmed ||
@@ -332,7 +340,15 @@ const WeeklyVesting = () => {
           </div>
 
           <Button
-            color="gradient"
+            color={
+              !isAddress(account ?? '') ||
+              claimConfirmed ||
+              !unclaimedAmount ||
+              Number(unclaimedAmount?.toFixed(8)) <= 0 ||
+              pendingTreasurySignature
+                ? 'gray'
+                : 'gradient'
+            }
             disabled={
               !isAddress(account ?? '') ||
               claimConfirmed ||
