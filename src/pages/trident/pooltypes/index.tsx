@@ -1,25 +1,25 @@
+import Button from '../../../components/Button'
+import { ChevronLeftIcon } from '@heroicons/react/solid'
+import Link from 'next/link'
+import PoolTypesList from '../../../features/trident/pooltypes/PoolTypesList'
+import React from 'react'
 import TridentLayout from '../../../layouts/Trident'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from '../../../components/Button'
-import { ChevronLeftIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
-import PoolTypesList from '../../../features/trident/types/PoolTypesList'
-import React from 'react'
 
 const PoolTypes = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex flex-col w-full gap-9 mt-px">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-90 gap-4">
+    <div className="flex flex-col w-full mt-px gap-9">
+      <div className="flex flex-col gap-4 p-5 bg-auto bg-dark-800 bg-binary-pattern bg-opacity-90">
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
             variant="outlined"
             size="sm"
-            className="rounded-full py-1 pl-2"
+            className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             <Link href={`/trident/pools`}>{i18n._(t`Back`)}</Link>
@@ -34,7 +34,7 @@ const PoolTypes = () => {
           </Typography>
         </div>
       </div>
-      <div className="px-5 flex flex-col gap-4">
+      <div className="flex flex-col gap-4 px-5">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
           {i18n._(t`What kinds of liquidity pools are supported on Sushi?`)}
         </Typography>
@@ -47,7 +47,7 @@ const PoolTypes = () => {
       <div className="px-5">
         <Typography
           variant="lg"
-          className="bg-gradient-to-r from-blue to-pink bg-clip-text text-transparent"
+          className="text-transparent bg-gradient-to-r from-blue to-pink bg-clip-text"
           weight={700}
         >
           {i18n._(t`CURRENT POOL TYPES`)}

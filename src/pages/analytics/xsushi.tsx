@@ -1,11 +1,7 @@
 import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
-import ScrollableGraph from '../../components/ScrollableGraph'
-import AnalyticsContainer from '../../features/analytics/AnalyticsContainer'
-import Background from '../../features/analytics/Background'
-import InfoCard from '../../features/analytics/Bar/InfoCard'
 import { classNames, formatNumber, formatPercent } from '../../functions'
-import { aprToApy } from '../../functions/convert/apyApr'
+import { useBar, useBarHistory } from '../../services/graph/hooks/bar'
 import {
   useBlock,
   useDayData,
@@ -15,9 +11,14 @@ import {
   useTokenDayData,
   useTokens,
 } from '../../services/graph'
-import { useBar, useBarHistory } from '../../services/graph/hooks/bar'
+
+import AnalyticsContainer from '../../features/analytics/AnalyticsContainer'
+import Background from '../../features/analytics/Background'
 import ColoredNumber from '../../features/analytics/ColoredNumber'
+import InfoCard from '../../features/analytics/Bar/InfoCard'
+import ScrollableGraph from '../../components/ScrollableGraph'
 import { XSUSHI } from '../../config/tokens'
+import { aprToApy } from '../../functions/convert/apyApr'
 
 export default function XSushi() {
   const block1d = useBlock({ daysAgo: 1, chainId: ChainId.MAINNET })

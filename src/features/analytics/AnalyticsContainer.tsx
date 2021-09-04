@@ -20,7 +20,7 @@ export default function AnalyticsContainer({ children }): JSX.Element {
               },
               {
                 text: 'xSushi',
-                href: '/analytics/xSushi',
+                href: '/analytics/xsushi',
               },
               {
                 text: 'Farms',

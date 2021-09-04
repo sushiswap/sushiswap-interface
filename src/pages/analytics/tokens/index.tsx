@@ -1,10 +1,10 @@
 import { useBlock, useNativePrice, useTokens } from '../../../services/graph'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
+import Background from '../../../features/analytics/Background'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import { useFuse } from '../../../hooks'
-import Background from '../../../features/analytics/Background'
 
 export default function Tokens() {
   const block1d = useBlock({ daysAgo: 1 })
@@ -17,6 +17,8 @@ export default function Tokens() {
   const tokens = useTokens()
   const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d })
   const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w })
+
+  console.log(tokens, tokens1d, tokens1w, nativePrice, nativePrice1d, nativePrice1w)
 
   const tokensFormatted =
     tokens && tokens1d && tokens1w && nativePrice && nativePrice1d && nativePrice1w
@@ -57,6 +59,8 @@ export default function Tokens() {
     data: tokensFormatted,
     options,
   })
+
+  console.log({ tokensSearched })
 
   return (
     <AnalyticsContainer>

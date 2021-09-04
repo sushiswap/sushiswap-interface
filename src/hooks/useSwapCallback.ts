@@ -15,7 +15,6 @@ import { isAddress, isZero } from '../functions/validate'
 import { useFactoryContract, useRouterContract } from './useContract'
 
 import { ARCHER_RELAY_URI } from '../config/archer'
-import { ArcherRouter } from '../functions/archerRouter'
 import { BigNumber } from '@ethersproject/bignumber'
 import Common from '@ethereumjs/common'
 import { SignatureData } from './useERC20Permit'
@@ -96,33 +95,22 @@ export function useSwapCallArguments(
     if (trade instanceof V2Trade) {
       if (!routerContract) return []
       const swapMethods = []
-      if (!useArcher) {
+      swapMethods.push(
+        Router.swapCallParameters(trade, {
+          feeOnTransfer: false,
+          allowedSlippage,
+          recipient,
+          deadline: deadline.toNumber(),
+        })
+      )
+
+      if (trade.tradeType === TradeType.EXACT_INPUT) {
         swapMethods.push(
           Router.swapCallParameters(trade, {
-            feeOnTransfer: false,
+            feeOnTransfer: true,
             allowedSlippage,
             recipient,
             deadline: deadline.toNumber(),
-          })
-        )
-
-        if (trade.tradeType === TradeType.EXACT_INPUT) {
-          swapMethods.push(
-            Router.swapCallParameters(trade, {
-              feeOnTransfer: true,
-              allowedSlippage,
-              recipient,
-              deadline: deadline.toNumber(),
-            })
-          )
-        }
-      } else {
-        swapMethods.push(
-          ArcherRouter.swapCallParameters(factoryContract.address, trade, {
-            allowedSlippage,
-            recipient,
-            ttl: deadline.toNumber(),
-            ethTip: CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), archerETHTip),
           })
         )
       }
@@ -152,20 +140,7 @@ export function useSwapCallArguments(
         }
       })
     }
-  }, [
-    account,
-    allowedSlippage,
-    archerETHTip,
-    argentWalletContract,
-    chainId,
-    deadline,
-    library,
-    factoryContract,
-    recipient,
-    routerContract,
-    trade,
-    useArcher,
-  ])
+  }, [account, allowedSlippage, argentWalletContract, chainId, deadline, library, recipient, routerContract, trade])
 }
 
 /**

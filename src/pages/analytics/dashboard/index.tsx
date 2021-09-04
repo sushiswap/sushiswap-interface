@@ -2,6 +2,7 @@ import { useBlock, useEthPrice, useNativePrice, useSushiPairs, useTokens } from 
 import { useMemo, useState } from 'react'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
+import Background from '../../../features/analytics/Background'
 import DashboardChartCard from '../../../features/analytics/Dashboard/DashboardChartCard'
 import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
 import PairList from '../../../features/analytics/Pairs/PairList'
@@ -10,7 +11,6 @@ import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import useFarmRewards from '../../../hooks/useFarmRewards'
 import { useFuse } from '../../../hooks'
-import Background from '../../../features/analytics/Background'
 
 export default function Dashboard(): JSX.Element {
   const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')

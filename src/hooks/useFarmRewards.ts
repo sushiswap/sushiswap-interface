@@ -137,6 +137,16 @@ export default function useFarmRewards() {
           },
         }
 
+        if (!(chainId in reward)) {
+          return [
+            {
+              ...defaultReward,
+              rewardPerBlock: sushiPerBlock,
+              rewardPerDay: sushiPerDay,
+            },
+          ]
+        }
+
         return [
           {
             ...defaultReward,

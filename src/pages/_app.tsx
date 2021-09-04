@@ -18,6 +18,7 @@ import MulticallUpdater from '../state/multicall/updater'
 import { PersistGate } from 'redux-persist/integration/react'
 import ReactGA from 'react-ga'
 import { Provider as ReduxProvider } from 'react-redux'
+import { SWRConfig } from 'swr'
 import TransactionUpdater from '../state/transactions/updater'
 import UserUpdater from '../state/user/updater'
 import Web3ReactManager from '../components/Web3ReactManager'
@@ -40,16 +41,7 @@ if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
 
-function MyApp({
-  Component,
-  pageProps,
-}: AppProps & {
-  Component: NextComponentType<NextPageContext> & {
-    Guard: FunctionComponent
-    Layout: FunctionComponent
-    Provider: FunctionComponent
-  }
-}) {
+function MyApp({ Component, pageProps, fallback }) {
   const { pathname, query, locale } = useRouter()
 
   useEffect(() => {

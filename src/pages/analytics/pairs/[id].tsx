@@ -1,21 +1,22 @@
 import React, { useMemo } from 'react'
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import { useRouter } from 'next/router'
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
-import { useBlock, useNativePrice, useSushiPairs, useTransactions } from '../../../services/graph'
-import { useCurrency } from '../../../hooks/Tokens'
-import { times } from 'lodash'
-import CurrencyLogo from '../../../components/CurrencyLogo'
 import { formatNumber, shortenAddress } from '../../../functions'
-import PairChartCard from '../../../features/analytics/Pairs/Pair/PairChartCard'
-import InfoCard from '../../../features/analytics/InfoCard'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import Link from 'next/link'
-import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
+import { useBlock, useNativePrice, useSushiPairs, useTransactions } from '../../../services/graph'
+
+import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Background from '../../../features/analytics/Background'
-import useCopyClipboard from '../../../hooks/useCopyClipboard'
-import { DuplicateIcon } from '@heroicons/react/outline'
 import { CheckIcon } from '@heroicons/react/solid'
+import CurrencyLogo from '../../../components/CurrencyLogo'
+import DoubleCurrencyLogo from '../../../components/DoubleLogo'
+import { DuplicateIcon } from '@heroicons/react/outline'
+import InfoCard from '../../../features/analytics/InfoCard'
+import Link from 'next/link'
+import { ExternalLink as LinkIcon } from 'react-feather'
+import PairChartCard from '../../../features/analytics/Pairs/Pair/PairChartCard'
+import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
+import { times } from 'lodash'
+import useCopyClipboard from '../../../hooks/useCopyClipboard'
+import { useCurrency } from '../../../hooks/Tokens'
+import { useRouter } from 'next/router'
 
 export default function Pair() {
   const router = useRouter()
@@ -97,7 +98,7 @@ export default function Pair() {
         <div className="absolute w-full h-full bg-gradient-to-r from-blue to-pink opacity-5" />
         <div className="absolute flex items-center w-full p-2 lg:pl-14">
           <div className="text-xs font-medium text-secondary">
-            <Link href="/analytics/dashboard">Analytics</Link>&nbsp;
+            <Link href="/analytics">Analytics</Link>&nbsp;
             {'>'}&nbsp;
             <Link href="/analytics/pairs">Pairs</Link>&nbsp;
             {'> '}&nbsp;

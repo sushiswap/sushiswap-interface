@@ -28,9 +28,10 @@ import useSWR, { SWRConfiguration } from 'swr'
 
 import { ChainId } from '@sushiswap/sdk'
 import { ethPriceQuery } from '../queries'
+import { first } from 'lodash'
 import { useActiveWeb3React } from '../../../hooks'
 import { useBlock } from './blocks'
-import { first } from 'lodash'
+import { useMemo } from 'react'
 
 interface useFactoryProps {
   timestamp?: number
@@ -291,7 +292,7 @@ interface useTokensProps {
 
 export function useTokens(
   { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, subset }: useTokensProps = {},
-  swrConfig: SWRConfiguration = undefined
+  swrConfig: SWRConfiguration = { fallbackData: [] }
 ) {
   const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
@@ -310,6 +311,7 @@ export function useTokens(
     (_, chainId) => getTokens(chainId, variables),
     swrConfig
   )
+
   return data
 }
 

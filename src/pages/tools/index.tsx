@@ -19,7 +19,7 @@ const TOOLS = (i18n: I18n) => [
     id: 2,
     name: 'INARI',
     description: 'Deposit SUSHI in various strategies & platforms in one click!',
-    href: '/inari',
+    href: '/tools/inari',
   },
 ]
 

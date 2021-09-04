@@ -22,18 +22,12 @@ export const fetcher = async (chainId = ChainId.MAINNET, query, variables = unde
 }
 
 export const getBlock = async (chainId = ChainId.MAINNET, timestamp: number) => {
-  const { blocks } = await fetcher(
-    chainId,
-    blockQuery,
-    timestamp
-      ? {
-          where: {
-            timestamp_gt: timestamp - 600,
-            timestamp_lt: timestamp,
-          },
-        }
-      : {}
-  )
+  const { blocks } = await fetcher(chainId, blockQuery, {
+    where: {
+      timestamp_gt: timestamp - 600,
+      timestamp_lt: timestamp,
+    },
+  })
 
   return Number(blocks?.[0]?.number)
 }

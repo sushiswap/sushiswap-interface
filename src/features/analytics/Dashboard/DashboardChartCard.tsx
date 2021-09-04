@@ -1,5 +1,6 @@
 import { useBlock, useDayData, useFactory } from '../../../services/graph'
 import { useMemo, useState } from 'react'
+
 import ChartCard from '../ChartCard'
 
 interface DashboardChartCardProps {
@@ -51,7 +52,7 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
 
   const data = useMemo(
     () => type.getData(exchange, exchange1d, exchange2d, dayData),
-    [exchange, exchange1d, exchange2d, dayData]
+    [type, exchange, exchange1d, exchange2d, dayData]
   )
 
   return (

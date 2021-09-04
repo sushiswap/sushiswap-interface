@@ -39,45 +39,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   async redirects() {
-    return [
-      // {
-      //   source: '/',
-      //   destination: '/swap',
-      //   permanent: true,
-      // },
-
-      {
-        source: '/zap',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/yield',
-        destination: '/farm',
-        permanent: true,
-      },
-      {
-        source: '/bento',
-        destination: '/bentobox',
-        permanent: true,
-      },
-      {
-        source: '/bento/kashi',
-        destination: '/lend',
-        permanent: true,
-      },
-      // Analytics
-      {
-        source: '/analytics',
-        destination: '/analytics/dashboard',
-        permanent: true,
-      },
-      {
-        source: '/portfolio',
-        destination: '/analytics/portfolio',
-        permanent: true,
-      },
-    ]
+    return []
   },
   async rewrites() {
     return [
@@ -118,10 +80,6 @@ const nextConfig = {
         destination: '/exchange/open-order',
       },
       {
-        source: '/migrate',
-        destination: '/exchange/migrate',
-      },
-      {
         source: '/pool',
         destination: '/exchange/pool',
       },
@@ -146,15 +104,6 @@ const nextConfig = {
         source: '/lend/:token*',
         destination: '/kashi/lend/:token*',
       },
-      // Onsen
-      // {
-      //   source: '/farm',
-      //   destination: '/onsen',
-      // },
-      // {
-      //   source: '/farm/:type*',
-      //   destination: '/onsen/:type*',
-      // },
       {
         source: '/me',
         destination: '/user',

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
 import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
 import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
@@ -15,6 +15,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
 import Loader from '../../components/Loader'
+import NetworkGuard from '../../guards/Network'
 import QuestionHelper from '../../components/QuestionHelper'
 import { cloudinaryLoader } from '../../functions/cloudinary'
 import { formatNumber } from '../../functions/format'
@@ -24,7 +25,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
 
-export default function Vesting() {
+function Vesting() {
   const { i18n } = useLingui()
 
   const isOpen = useModalOpen(ApplicationModal.SELF_CLAIM)
@@ -245,3 +246,7 @@ export default function Vesting() {
     </Container>
   )
 }
+
+Vesting.Guard = NetworkGuard([ChainId.MAINNET])
+
+export default Vesting

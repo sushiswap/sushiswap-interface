@@ -1,17 +1,7 @@
-import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
 import { ConstantProductPool, Currency, CurrencyAmount, JSBI, Percent, Price } from '@sushiswap/sdk'
-import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
-import { Field } from '../../../../../state/trident/add/classic'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../../../../../constants'
-import { useCallback } from 'react'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
-import useTransactionDeadline from '../../../../../hooks/useTransactionDeadline'
-import { t } from '@lingui/macro'
-import ReactGA from 'react-ga'
-import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
-import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponseLight, useTransactionAdder } from '../../../../../state/transactions/hooks'
-import { useLingui } from '@lingui/react'
+import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
 import {
   attemptingTxnAtom,
   currenciesAtom,
@@ -22,7 +12,18 @@ import {
   totalSupplyAtom,
   txHashAtom,
 } from '../../../context/atoms'
+import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
+import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
+
+import { BigNumber } from '@ethersproject/bignumber'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
+import { Field } from '../../../../../state/trident/add/classic'
+import ReactGA from 'react-ga'
+import { t } from '@lingui/macro'
+import { useCallback } from 'react'
+import { useLingui } from '@lingui/react'
+import useTransactionDeadline from '../../../../../hooks/useTransactionDeadline'
+import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
 
 const ZERO = JSBI.BigInt(0)
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
@@ -134,7 +135,6 @@ export const formattedAmountsSelector = selector<[string, string]>({
   get: ({ get }) => {
     const inputField = get(inputFieldAtom)
     const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
-
     return [
       inputField === Field.CURRENCY_A ? parsedAmountA?.toExact() ?? '' : parsedAmountA?.toSignificant(6) ?? '',
       inputField === Field.CURRENCY_B ? parsedAmountB?.toExact() ?? '' : parsedAmountB?.toSignificant(6) ?? '',
@@ -165,7 +165,6 @@ export const parsedAmountsSelector = selector<[CurrencyAmount<Currency>, Currenc
   get: ({ get }) => {
     const inputField = get(inputFieldAtom)
     const [, pool] = get(poolAtom)
-
     return [
       inputField === Field.CURRENCY_A
         ? tryParseAmount(get(mainInputAtom), pool?.token0)

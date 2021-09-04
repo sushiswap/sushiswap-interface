@@ -1,20 +1,21 @@
-import { useRouter } from 'next/router'
+import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
 import React, { useEffect, useMemo, useState } from 'react'
-import CurrencyLogo from '../../../components/CurrencyLogo'
+import { formatNumber, shortenAddress } from '../../../functions'
+import { useBlock, useNativePrice, useTokenPairs, useTokens, useTransactions } from '../../../services/graph'
+
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
+import Background from '../../../features/analytics/Background'
 import ColoredNumber from '../../../features/analytics/ColoredNumber'
-import PairList from '../../../features/analytics/Pairs/PairList'
+import CurrencyLogo from '../../../components/CurrencyLogo'
 import InfoCard from '../../../features/analytics/InfoCard'
+import Link from 'next/link'
+import { ExternalLink as LinkIcon } from 'react-feather'
+import PairList from '../../../features/analytics/Pairs/PairList'
 import TokenChartCard from '../../../features/analytics/Tokens/Token/TokenChartCard'
 import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
-import { formatNumber, shortenAddress } from '../../../functions'
-import { useCurrency } from '../../../hooks/Tokens'
-import { useBlock, useNativePrice, useTokenPairs, useTokens, useTransactions } from '../../../services/graph'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import Background from '../../../features/analytics/Background'
-import Link from 'next/link'
-import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
+import { useCurrency } from '../../../hooks/Tokens'
+import { useRouter } from 'next/router'
 import { useTokenContract } from '../../../hooks'
 
 export default function Token() {
@@ -135,7 +136,7 @@ export default function Token() {
         <div className="absolute w-full h-full bg-gradient-to-r from-blue to-pink opacity-5" />
         <div className="absolute flex items-center w-full p-2 lg:pl-14">
           <div className="text-xs font-medium text-secondary">
-            <Link href="/analytics/dashboard">Analytics</Link>&nbsp;
+            <Link href="/analytics">Analytics</Link>&nbsp;
             {'>'}&nbsp;
             <Link href="/analytics/tokens">Tokens</Link>&nbsp;
             {'> '}&nbsp;

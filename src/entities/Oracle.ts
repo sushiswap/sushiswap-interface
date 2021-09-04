@@ -25,7 +25,7 @@ export abstract class AbstractOracle implements Oracle {
   tokens: Token[]
   valid = false
 
-  constructor(pair: any, chainId, tokens?: Token[]) {
+  constructor(pair, chainId, tokens?: Token[]) {
     this.address = pair.oracle
     this.data = pair.oracleData
     this.pair = pair

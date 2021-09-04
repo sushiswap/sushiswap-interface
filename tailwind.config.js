@@ -5,10 +5,6 @@ module.exports = {
   // important: '#__next',
   // darkMode: true,
   mode: 'jit',
-  // future: {
-  //   purgeLayersByDefault: true,
-  //   applyComplexClasses: true,
-  // },
   purge: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: false,
   theme: {

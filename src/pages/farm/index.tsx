@@ -167,7 +167,7 @@ export default function Farm(): JSX.Element {
           },
         }
 
-        if (!reward[chainId]) {
+        if (!(chainId in reward)) {
           return [
             {
               ...defaultReward,

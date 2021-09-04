@@ -1,9 +1,6 @@
-import AssetInput from '../../../../components/AssetInput'
+import { ApprovalState, useActiveWeb3React, useApproveCallback, useTridentRouterContract } from '../../../../hooks'
 import React, { useMemo } from 'react'
-import DepositButtons from './../DepositButtons'
-import TransactionDetails from './../TransactionDetails'
-import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-
+import { currenciesAtom, fixedRatioAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import {
   formattedAmountsSelector,
   inputFieldAtom,
@@ -12,17 +9,20 @@ import {
   poolAtom,
   secondaryInputSelector,
 } from './context/atoms'
-import { Field } from '../../../../state/trident/add/classic'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useTridentRouterContract } from '../../../../hooks'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { useCurrencyBalances } from '../../../../state/wallet/hooks'
-import { ZERO } from '@sushiswap/sdk'
+import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+
+import AssetInput from '../../../../components/AssetInput'
 import Button from '../../../../components/Button'
-import { currenciesAtom, fixedRatioAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
-import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
-import { maxAmountSpend } from '../../../../functions'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
+import DepositButtons from './../DepositButtons'
+import { Field } from '../../../../state/trident/add/classic'
+import TransactionDetails from './../TransactionDetails'
+import { ZERO } from '@sushiswap/sdk'
+import { maxAmountSpend } from '../../../../functions'
+import { t } from '@lingui/macro'
+import { useCurrencyBalances } from '../../../../state/wallet/hooks'
+import { useLingui } from '@lingui/react'
+import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
@@ -30,11 +30,15 @@ const ClassicStandardMode = () => {
   const [poolState] = useRecoilValue(poolAtom)
   const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
   const formattedAmounts = useRecoilValue(formattedAmountsSelector)
+
+  console.log({ parsedAmountA, parsedAmountB, formattedAmounts })
+
   const setInputField = useSetRecoilState(inputFieldAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
   const currencies = useRecoilValue(currenciesAtom)
   const setMainInput = useSetRecoilState(mainInputAtom)
   const setSecondaryInput = useSetRecoilState(secondaryInputSelector)
+
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
   const balances = useCurrencyBalances(account ?? undefined, currencies)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
@@ -81,6 +85,8 @@ const ClassicStandardMode = () => {
     ? i18n._(t`Insufficient ${currencies[1]?.symbol} balance`)
     : ''
 
+  console.log({ formattedAmounts })
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 px-5">
@@ -88,6 +94,7 @@ const ClassicStandardMode = () => {
           value={formattedAmounts[0]}
           currency={currencies[0]}
           onChange={(val) => {
+            console.log({ a: val })
             setInputField(Field.CURRENCY_A)
             setMainInput(val)
           }}
@@ -100,6 +107,7 @@ const ClassicStandardMode = () => {
           value={formattedAmounts[1]}
           currency={currencies[1]}
           onChange={(val) => {
+            console.log({ b: val })
             setInputField(Field.CURRENCY_B)
             setSecondaryInput(val)
           }}
