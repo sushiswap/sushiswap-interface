@@ -77,7 +77,7 @@ export default function useFarmRewards() {
         rewardPrice: sushiPrice,
       }
 
-      const defaultRewards = [defaultReward]
+      let rewards = [defaultReward]
 
       if (pool.chef === Chef.MASTERCHEF_V2) {
         // override for mcv2...
@@ -109,7 +109,7 @@ export default function useFarmRewards() {
           rewardPrice: pool.rewardToken.derivedETH * nativePrice,
         }
 
-        return [...defaultRewards, reward]
+        rewards[1] = reward
       } else if (pool.chef === Chef.MINICHEF) {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
@@ -124,33 +124,37 @@ export default function useFarmRewards() {
             token: 'MATIC',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg',
             rewardPrice: maticPrice,
+            rewardPerBlock,
+            rewardPerDay,
           },
           [ChainId.XDAI]: {
             token: 'STAKE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/stake.jpg',
+            rewardPerBlock,
+            rewardPerDay,
             rewardPrice: stakePrice,
           },
           [ChainId.HARMONY]: {
             token: 'ONE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
+            rewardPerBlock,
+            rewardPerDay,
             rewardPrice: nativePrice, // Reward token = Native token
           },
         }
 
-        return [
-          {
-            ...defaultReward,
-            rewardPerBlock: sushiPerBlock,
-            rewardPerDay: sushiPerDay,
-          },
-          {
-            ...reward[chainId],
-            rewardPerBlock: rewardPerBlock,
-            rewardPerDay: rewardPerDay,
-          },
-        ]
+        rewards[0] = {
+          ...defaultReward,
+          rewardPerBlock: sushiPerBlock,
+          rewardPerDay: sushiPerDay,
+        }
+
+        if (chainId in reward) {
+          rewards[1] = reward[chainId]
+        }
       }
-      return defaultRewards
+
+      return rewards
     }
 
     const rewards = getRewards()
@@ -165,7 +169,7 @@ export default function useFarmRewards() {
       rewards.reduce((previousValue, currentValue) => {
         return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
       }, 0) / tvl
-
+    console.log({ rewards })
     const roiPerHour = roiPerBlock * blocksPerHour
 
     const roiPerDay = roiPerHour * 24
