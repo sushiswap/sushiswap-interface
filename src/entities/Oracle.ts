@@ -119,7 +119,7 @@ function lowerEqual(value1: string, value2: string) {
   return value1.toLowerCase() === value2.toLowerCase()
 }
 
-export function getOracle(pair, chainId: ChainId = 1, tokens: any): Oracle {
+export function getOracle(pair, chainId: ChainId, tokens): Oracle {
   if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS[chainId])) {
     return new ChainlinkOracle(pair, chainId, tokens)
   }

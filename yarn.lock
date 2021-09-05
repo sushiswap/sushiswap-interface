@@ -2598,10 +2598,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.58":
-  version "5.0.0-canary.58"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.58.tgz#b107cddc990b31741a9999ee081707d5bc2b1488"
-  integrity sha512-+saNcinUUhxnRVJluawlpzZddfwMSEBdZC5+VrLZ4f7JPzueCZ3JmwBOlpxwJ+L98HBAobGaXOvFL67nGTeBeA==
+"@sushiswap/sdk@5.0.0-canary.66":
+  version "5.0.0-canary.66"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.66.tgz#e80cfa1205e8f4d31953bbdcccf8b1eb1cfa9311"
+  integrity sha512-/d2NDtBIM7H1fsJnGmWDGmqY5gsGyJ+Pj3c7RJPl+hVsDEz0NYcWzr7Yy991nS+FU56ny4RgKIpmPdmkGdJHwg==
   dependencies:
     big.js "^6.1.0"
     decimal.js-light "^2.5.0"
@@ -8906,9 +8906,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0,
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
   integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
 
-"graph-results-pager@git+https://github.com/LufyCZ/graph-results-pager.git":
+"graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
   version "1.0.3"
-  resolved "git+https://github.com/LufyCZ/graph-results-pager.git#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
+  resolved "https://github.com/LufyCZ/graph-results-pager#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
   dependencies:
     node-fetch "2.6.1"
 
