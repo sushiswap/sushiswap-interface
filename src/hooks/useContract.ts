@@ -141,6 +141,11 @@ export function useMerkleDistributorContract(): Contract | null {
   return useContract(chainId ? MERKLE_DISTRIBUTOR_ADDRESS[chainId] : undefined, MERKLE_DISTRIBUTOR_ABI, true)
 }
 
+export function useProtocolMerkleDistributorContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? '0x70595d235Aa9DD7De236314C1C384D78fe2411dD' : undefined, MERKLE_DISTRIBUTOR_ABI, true)
+}
+
 export function useBoringHelperContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && BORING_HELPER_ADDRESS[chainId], BORING_HELPER_ABI, false)

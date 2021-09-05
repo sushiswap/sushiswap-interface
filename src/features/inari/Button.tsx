@@ -52,7 +52,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
   if (!inputValue || inputValue.equalTo(ZERO))
     return (
       <Button {...rest} disabled color="gray">
-        {i18n._(t`Enter an mount`)}
+        {i18n._(t`Enter an amount`)}
       </Button>
     )
 
