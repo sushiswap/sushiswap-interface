@@ -1,10 +1,12 @@
 import { FC, ReactNode } from 'react'
-import { classNames } from '../../functions'
+
 import { XIcon } from '@heroicons/react/solid'
+import { classNames } from '../../functions'
 
 const SIZE = {
   default: 'h-[24px]',
   sm: 'h-5 text-[10px]',
+  lg: 'h-12 text-[14px]',
 }
 
 const FILLED = {
@@ -32,6 +34,7 @@ export interface ChipProps {
   size?: ChipSize
   className?: string
   onClick?: (e) => void
+  icon?: ReactNode
   endIcon?: ReactNode
 }
 
@@ -42,6 +45,7 @@ const Chip: FC<ChipProps> = ({
   size = 'default',
   className = '',
   onClick,
+  icon = undefined,
   endIcon = <XIcon width={12} height={12} strokeWidth={5} />,
 }) => {
   return (
@@ -54,6 +58,12 @@ const Chip: FC<ChipProps> = ({
         className
       )}
     >
+      {icon && (
+        <div className="rounded" onClick={onClick}>
+          {icon}
+        </div>
+      )}
+
       {label}
       {onClick && (
         <div

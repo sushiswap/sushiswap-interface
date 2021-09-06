@@ -3,6 +3,8 @@ const runtimeCaching = require('next-pwa/cache')
 
 const linguiConfig = require('./lingui.config.js')
 
+const { ChainId } = require('@sushiswap/sdk')
+
 const { locales, sourceLocale } = linguiConfig
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -118,6 +120,20 @@ const nextConfig = {
     localeDetection: true,
     locales,
     defaultLocale: sourceLocale,
+  },
+  network: {
+    chainIds: [ChainId.MAINNET, ChainId.ARBITRUM],
+    defaultChainId: ChainId.MAINNET,
+    domains: [
+      {
+        domain: 'sushi.com',
+        defaultChainId: ChainId.MAINNET,
+      },
+      {
+        domain: 'arbitrum.sushi.com',
+        defaultChainId: ChainId.ARBITRUM,
+      },
+    ],
   },
 }
 

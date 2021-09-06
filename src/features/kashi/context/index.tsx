@@ -126,7 +126,7 @@ async function getPairs(bentoBoxContract, chainId: ChainId) {
         masterAddress,
         chainId,
       })) as any
-    ).map((clone: any) => {
+    ).map((clone) => {
       return {
         args: {
           masterContract: masterAddress,
@@ -175,7 +175,7 @@ export function rpcToObj(rpc_obj: any, obj?: any) {
       }
       return obj
     }
-    return rpc_obj.map((item: any) => rpcToObj(item))
+    return rpc_obj.map((item) => rpcToObj(item))
   }
   return rpc_obj
 }
@@ -220,11 +220,11 @@ export function KashiProvider({ children }) {
 
       // Get the deployed pairs from the logs and decode
       const logPairs = await getPairs(bentoBoxContract, chainId)
-      console.log({ logPairs })
+      // console.log({ logPairs })
 
       // Filter all pairs by supported oracles and verify the oracle setup
 
-      const invalidOracles: any = []
+      const invalidOracles = []
 
       const allPairAddresses = logPairs
         .filter((pair) => {

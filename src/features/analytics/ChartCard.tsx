@@ -1,4 +1,5 @@
 import { classNames, formatNumber } from '../../functions'
+
 import ColoredNumber from './ColoredNumber'
 import LineGraph from '../../components/LineGraph'
 
@@ -39,7 +40,7 @@ export default function ChartCard({
         </div>
       </div>
       <div className="py-8 h-36">
-        {chart && <LineGraph data={chart} stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }} strokeWidth={1} />}
+        {chart && <LineGraph data={chart} stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }} strokeWidth={2} />}
       </div>
       <div className="flex flex-row justify-end space-x-4">
         {timespans.map((timespan, i) => (
