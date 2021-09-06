@@ -26,6 +26,9 @@ import {
   useUserArcherETHTip,
   useUserArcherGasPrice,
   useUserArcherUseRelay,
+  useUserOpenMevETHTip,
+  useUserOpenMevGasPrice,
+  useUserOpenMevUseRelay,
   useUserSingleHopOnly,
   useUserSlippageTolerance,
   useUserTransactionTTL,
@@ -34,6 +37,8 @@ import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } fr
 import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 
 import { ARCHER_RELAY_URI } from '../../../config/archer'
+import { OPENMEV_RELAY_URI } from '../../../config/openmev'
+
 import AddressInputPanel from '../../../components/AddressInputPanel'
 import { AdvancedSwapDetails } from '../../../features/exchange-v1/swap/AdvancedSwapDetails'
 import AdvancedSwapDetailsDropdown from '../../../features/exchange-v1/swap/AdvancedSwapDetailsDropdown'
@@ -122,10 +127,20 @@ export default function Swap() {
   const [archerETHTip] = useUserArcherETHTip()
   const [archerGasPrice] = useUserArcherGasPrice()
 
+// @openmev
+  const [useOpenMev] = useUserOpenMevUseRelay()
+  const [openmevETHTip] = useUserOpenMevETHTip()
+  const [openmevGasPrice] = useUserOpenMevGasPrice()
+
   // archer
   const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
   // const doArcher = archerRelay !== undefined && useArcher
   const doArcher = undefined
+
+  // @openmev
+  const openmevRelay = chainId ? OPENMEV_RELAY_URI?.[chainId] : undefined
+  /** @type {doOpenMev} */
+  const doOpenMev = !doArcher && openmevRelay !== undefined && useOpenMev
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -136,7 +151,7 @@ export default function Swap() {
     currencies,
     inputError: swapInputError,
     allowedSlippage,
-  } = useDerivedSwapInfo(doArcher)
+  } = useDerivedSwapInfo(doArcher, doOpenMev)
 
   const {
     wrapType,
@@ -267,7 +282,9 @@ export default function Swap() {
     allowedSlippage,
     recipient,
     signatureData,
-    doArcher ? ttl : undefined
+    doOpenMev,
+    doArcher,
+    ttl // can be undefined
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
