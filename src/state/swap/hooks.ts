@@ -231,7 +231,7 @@ export function useDerivedSwapInfo(
   const [userGasPrice] = useUserArcherGasPrice()
   const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
 
-// @openmev
+  // @openmev
   useEffect(() => {
     if (doOpenMev) {
       setUserTipManualOverride(false)
@@ -240,24 +240,21 @@ export function useDerivedSwapInfo(
     }
   }, [doOpenMev, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
 
-
   useEffect(() => {
-    if (doOpenMev && !userTipManualOverride ) {
+    if (doOpenMev && !userTipManualOverride) {
       setUserTipManualOverride(false)
       setUserETHTip(DEFAULT_OPENMEV_ETH_TIP.toString())
       setUserGasEstimate(DEFAULT_OPENMEV_GAS_ESTIMATE.toString())
     }
   }, [doOpenMev, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
 
-
   useEffect(() => {
-    if (doArcher || doOpenMev ) {
+    if (doArcher || doOpenMev) {
       setUserTipManualOverride(false)
       setUserETHTip(DEFAULT_OPENMEV_ETH_TIP.toString())
       setUserGasEstimate(DEFAULT_OPENMEV_GAS_ESTIMATE.toString())
     }
   }, [doOpenMev, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
-
 
   useEffect(() => {
     if (doArcher) {

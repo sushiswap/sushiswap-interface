@@ -99,12 +99,11 @@ export function useSwapCallArguments(
   return useMemo(() => {
     if (!trade || !recipient || !library || !account || !chainId || !deadline) return []
 
-
     if (trade instanceof V2Trade) {
       if (!routerContract) return []
       const swapMethods = []
-      
-      if (!useArcher){
+
+      if (!useArcher) {
         swapMethods.push(
           Router.swapCallParameters(trade, {
             feeOnTransfer: false,
@@ -163,7 +162,7 @@ export function useSwapCallArguments(
   }, [
     account,
     allowedSlippage,
-    // @openmev 
+    // @openmev
     // @param openmevETHTip
     archerETHTip,
     openmevETHTip,
@@ -234,8 +233,8 @@ export function useSwapCallback(
   signatureData: SignatureData | undefined | null,
   useArcher: boolean,
   useOpenMev: boolean,
-  archerRelayDeadline?: number, // deadline to use for archer relay -- set to undefined for no relay
-  // openmevRelayDeadline?: number // @openmev 
+  archerRelayDeadline?: number // deadline to use for archer relay -- set to undefined for no relay
+  // openmevRelayDeadline?: number // @openmev
 ): {
   state: SwapCallbackState
   callback: null | (() => Promise<string>)
@@ -248,18 +247,15 @@ export function useSwapCallback(
   const eip1559 =
     EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
 
+  // const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useOpenMev)
 
+  // const useArcher = archerRelayDeadline !== undefined
 
-// const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useOpenMev)
-
-// const useArcher = archerRelayDeadline !== undefined
-
-// @openmev 
-// @param useOpenMev
-// @const swapCalls
+  // @openmev
+  // @param useOpenMev
+  // @const swapCalls
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useArcher)
 
-  
   // console.log({ swapCalls, trade })
 
   const addTransaction = useTransactionAdder()
@@ -317,8 +313,7 @@ export function useSwapCallback(
             // library.getGasPrice().then((gasPrice) => console.log({ gasPrice }))
 
             try {
-              const gasEstimate = await library
-                .estimateGas(tx)
+              const gasEstimate = await library.estimateGas(tx)
               return {
                 call,
                 gasEstimate,
@@ -326,8 +321,7 @@ export function useSwapCallback(
             } catch (gasError) {
               console.debug('Gas estimate failed, trying eth_call to extract error', call)
               try {
-                const result = await library
-                  .call(tx)
+                const result = await library.call(tx)
                 console.debug('Unexpected successful call after failed estimate gas', call, gasError, result)
                 return {
                   call,
@@ -507,7 +501,7 @@ export function useSwapCallback(
               // let the wallet try if we can't estimate the gas
               ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
               ...(value && !isZero(value) ? { value } : {}),
-              // @openemv 
+              // @openemv
               // @param !useOpenMev && !archerRelayDeadline
               ...(!useOpenMev && !archerRelayDeadline && !eip1559 ? { gasPrice: 0 } : {}),
             })
@@ -527,7 +521,7 @@ export function useSwapCallback(
               const common = new Common({
                 chain,
                 hardfork: 'berlin',
-                // @openemv 
+                // @openemv
                 eips: eip1559 ? [1559] : [],
               })
               const txParams = {
@@ -585,78 +579,91 @@ export function useSwapCallback(
             })
           }
 
-          return signedTxPromise
-          // @openemv 
-          // @note make async
-            .then(async ({ signedTx, fullTx }) => {
-              const hash = keccak256(signedTx)
-              const inputSymbol = trade.inputAmount.currency.symbol
-              const outputSymbol = trade.outputAmount.currency.symbol
-              const inputAmount = trade.inputAmount.toSignificant(3)
-              const outputAmount = trade.outputAmount.toSignificant(3)
-              const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
-              const withRecipient =
-                (recipient === account
-                  ? base
-                  : `${base} to ${
-                      recipientAddressOrName && isAddress(recipientAddressOrName)
-                        ? shortenAddress(recipientAddressOrName)
-                        : recipientAddressOrName
-                    }`) + (archerRelayDeadline ? ' 🏹' : '')
-              const archer =
-                useArcher && archerRelayDeadline
+          return (
+            signedTxPromise
+              // @openemv
+              // @note make async
+              .then(async ({ signedTx, fullTx }) => {
+                const hash = keccak256(signedTx)
+                const inputSymbol = trade.inputAmount.currency.symbol
+                const outputSymbol = trade.outputAmount.currency.symbol
+                const inputAmount = trade.inputAmount.toSignificant(3)
+                const outputAmount = trade.outputAmount.toSignificant(3)
+                const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
+                const withRecipient =
+                  (recipient === account
+                    ? base
+                    : `${base} to ${
+                        recipientAddressOrName && isAddress(recipientAddressOrName)
+                          ? shortenAddress(recipientAddressOrName)
+                          : recipientAddressOrName
+                      }`) + (archerRelayDeadline ? ' 🏹' : '')
+                const archer =
+                  useArcher && archerRelayDeadline
+                    ? {
+                        rawTransaction: signedTx,
+                        deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
+                        nonce: BigNumber.from(fullTx.nonce).toNumber(),
+                        ethTip: archerETHTip,
+                      }
+                    : undefined
+                // console.log('archer', archer)
+                // @openmev
+                // @const useOpenMev
+                const openmev = useOpenMev
                   ? {
-                      rawTransaction: signedTx,
+                      signedTx,
                       deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
-                      nonce: BigNumber.from(fullTx.nonce).toNumber(),
-                      ethTip: archerETHTip,
                     }
                   : undefined
-              // console.log('archer', archer)
-              // @openmev
-              // @const useOpenMev
-              const openmev = useOpenMev
-              ? {
-                  signedTx,
-                  deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
-                }
-              : undefined
 
-            if (archer) {
-              await postToArcherRelay(archer.rawTransaction, archer.deadline)
-            } else if (openmev) {
-              await postToOpenMevRelay(openmev.signedTx, isMetamask)
-            }
-              addTransaction(
-                { hash },
-                {
-                  summary: withRecipient,
-                  archer,
+                if (archer) {
+                  await postToArcherRelay(archer.rawTransaction, archer.deadline)
+                } else if (openmev) {
+                  await postToOpenMevRelay(openmev.signedTx, isMetamask)
                 }
-              )
-              // @openmev 
-              // @return hash
-              return hash
-             // return archer ? postToArcherRelay(archer.rawTransaction, archer.deadline).then(() => hash) : hash
-            })
-            .catch((error: any) => {
-              // if the user rejected the tx, pass this along
-              if (error?.code === 4001) {
-                throw new Error('Transaction rejected.')
-              } else {
-                // otherwise, the error was unexpected and we need to convey that
-                console.error(`Swap failed`, error)
-                throw new Error(`Swap failed: ${error.message}`)
-              }
-            })
-            .finally(() => {
-              if (isMetamask) library.provider.isMetaMask = true
-            })
+                addTransaction(
+                  { hash },
+                  {
+                    summary: withRecipient,
+                    archer,
+                  }
+                )
+                // @openmev
+                // @return hash
+                return hash
+                // return archer ? postToArcherRelay(archer.rawTransaction, archer.deadline).then(() => hash) : hash
+              })
+              .catch((error: any) => {
+                // if the user rejected the tx, pass this along
+                if (error?.code === 4001) {
+                  throw new Error('Transaction rejected.')
+                } else {
+                  // otherwise, the error was unexpected and we need to convey that
+                  console.error(`Swap failed`, error)
+                  throw new Error(`Swap failed: ${error.message}`)
+                }
+              })
+              .finally(() => {
+                if (isMetamask) library.provider.isMetaMask = true
+              })
+          )
         }
       },
       error: null,
     }
-    // @openemev 
-    // @param useOpenMev 
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, useOpenMev, useArcher, addTransaction])
+    // @openemev
+    // @param useOpenMev
+  }, [
+    trade,
+    library,
+    account,
+    chainId,
+    recipient,
+    recipientAddressOrName,
+    swapCalls,
+    useOpenMev,
+    useArcher,
+    addTransaction,
+  ])
 }
