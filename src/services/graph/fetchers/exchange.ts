@@ -27,6 +27,7 @@ export const EXCHANGE = {
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
   [ChainId.CELO]: 'sushiswap/celo-exchange',
+  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
 }
 
 export const exchange = async (chainId = ChainId.MAINNET, query, variables = {}) =>

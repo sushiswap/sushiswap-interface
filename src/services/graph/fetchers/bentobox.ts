@@ -1,9 +1,9 @@
-import { getTokenSubset } from './exchange'
+import { bentoUserTokensQuery, kashiPairsQuery, kashiUserPairsQuery } from '../queries/bentobox'
+import { getFraction, toAmount } from '../../../functions'
 
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
-import { bentoUserTokensQuery, kashiPairsQuery, kashiUserPairsQuery } from '../queries/bentobox'
-import { getFraction, toAmount } from '../../../functions'
+import { getTokenSubset } from './exchange'
 import { pager } from '.'
 
 export const BENTOBOX = {
@@ -12,6 +12,7 @@ export const BENTOBOX = {
   [ChainId.MATIC]: 'sushiswap/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
+  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
 }
 export const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) =>
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)

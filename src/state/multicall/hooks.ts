@@ -103,7 +103,7 @@ function useCallsData(
   )
 }
 
-export interface CallState {
+interface CallState {
   readonly valid: boolean
   // the result, or undefined if loading or errored/no data
   readonly result: Result | undefined

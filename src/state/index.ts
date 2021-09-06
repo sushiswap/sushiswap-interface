@@ -10,11 +10,11 @@ let store
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
-const persistConfig: any = {
+const persistConfig = {
   key: 'root',
   whitelist: PERSISTED_KEYS,
   storage,
-  stateReconciler: false,
+  // stateReconciler: false,
 }
 
 const persistedReducer = persistReducer(persistConfig, reducer)
