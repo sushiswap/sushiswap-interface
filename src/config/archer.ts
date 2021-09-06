@@ -6,6 +6,9 @@ export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'https://api.archerdao.io/v1/transaction',
 }
 
+// @param ARCHER_GAS_URI
+// @returns {Object<GAS_ESTIMATE>}
+// @example "code":200,"data":{"immediate":"542799267303","rapid":"45685429104","fast":"24016140413","standard":"1163903657","slow":"0","slower":"0","slowest":"0"}
 export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
 }

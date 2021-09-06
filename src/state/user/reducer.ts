@@ -20,6 +20,11 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
+  updateUserOpenMevETHTip,
+  updateUserOpenMevGasEstimate,
+  updateUserOpenMevGasPrice,
+  updateUserOpenMevTipManualOverride,
+  updateUserOpenMevUseRelay,
 } from './actions'
 
 import { createReducer } from '@reduxjs/toolkit'
@@ -94,6 +99,15 @@ export const initialState: UserState = {
   userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
   userArcherGasEstimate: DEFAULT_ARCHER_GAS_ESTIMATE.toString(),
   userArcherTipManualOverride: false,
+  // @openmev
+  // @param userOpenMevUseRelay
+  // @returns {true}
+  // @type boolean
+  userOpenMevUseRelay: true,
+  userOpenMevGasPrice: DEFAULT_OPENMEV_GAS_PRICES[4].toString(),
+  userOpenMevETHTip: DEFAULT_OPENMEV_ETH_TIP.toString(),
+  userOpenMevGasEstimate: DEFAULT_OPENMEV_GAS_ESTIMATE.toString(),
+  userOpenMevTipManualOverride: false
 }
 
 export default createReducer(initialState, (builder) =>
@@ -168,9 +182,24 @@ export default createReducer(initialState, (builder) =>
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
     })
-    .addCase(updateUserArcherUseRelay, (state, action) => {
-      state.userArcherUseRelay = action.payload.userArcherUseRelay
+    .addCase(updateUserOpenMevUseRelay, (state, action) => {
+      state.userOpenMevUseRelay = action.payload.userOpenMevUseRelay
     })
+    .addCase(updateUserOpenMevGasPrice, (state, action) => {
+      state.userOpenMevGasPrice = action.payload.userOpenMevGasPrice
+    })
+    .addCase(updateUserOpenMevETHTip, (state, action) => {
+      state.userOpenMevETHTip = action.payload.userOpenMevETHTip
+    })
+    .addCase(updateUserOpenMevGasEstimate, (state, action) => {
+      state.userOpenMevGasEstimate = action.payload.userOpenMevGasEstimate
+    })
+    .addCase(updateUserOpenMevTipManualOverride, (state, action) => {
+      state.userOpenMevTipManualOverride = action.payload.userOpenMevTipManualOverride
+    })
+  .addCase(updateUserArcherUseRelay, (state, action) => {
+    state.userArcherUseRelay = action.payload.userArcherUseRelay
+  })
     .addCase(updateUserArcherGasPrice, (state, action) => {
       state.userArcherGasPrice = action.payload.userArcherGasPrice
     })
@@ -183,4 +212,4 @@ export default createReducer(initialState, (builder) =>
     .addCase(updateUserArcherTipManualOverride, (state, action) => {
       state.userArcherTipManualOverride = action.payload.userArcherTipManualOverride
     })
-)
+);

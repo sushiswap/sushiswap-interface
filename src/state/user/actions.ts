@@ -38,7 +38,26 @@ export const removeSerializedPair = createAction<{
   tokenAAddress: string
   tokenBAddress: string
 }>('user/removeSerializedPair')
+// @openmev
+// @exports updateUserOpenMevUseRelay
+export const updateUserOpenMevUseRelay = createAction<{
+  userOpenMevUseRelay: boolean
+}>('user/updateUserOpenMevUseRelay')
+export const updateUserOpenMevGasPrice = createAction<{
+  userOpenMevGasPrice: string
+}>('user/updateUserOpenMevGasPrice')
+export const updateUserOpenMevETHTip = createAction<{
+  userOpenMevETHTip: string
+}>('user/updateUserOpenMevETHTip')
+export const updateUserOpenMevGasEstimate = createAction<{
+  userOpenMevGasEstimate: string
+}>('user/updateUserOpenMevGasEstimate')
+export const updateUserOpenMevTipManualOverride = createAction<{
+  userOpenMevTipManualOverride: boolean
+}>('user/updateUserOpenMevTipManualOverride')
+
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
+// @archerdao
 export const updateUserArcherUseRelay = createAction<{
   userArcherUseRelay: boolean
 }>('user/updateUserArcherUseRelay')
