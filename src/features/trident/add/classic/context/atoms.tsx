@@ -5,15 +5,15 @@ import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
 import {
   attemptingTxnAtom,
   currenciesAtom,
-  fixedRatioAtom,
   noLiquiditySelector,
   poolBalanceAtom,
   showReviewAtom,
+  spendFromWalletAtom,
   totalSupplyAtom,
   txHashAtom,
 } from '../../../context/atoms'
 import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
+import { useActiveWeb3React, useConstantProductPoolFactory, useTridentRouterContract } from '../../../../../hooks'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
@@ -24,6 +24,7 @@ import { useCallback } from 'react'
 import { useLingui } from '@lingui/react'
 import useTransactionDeadline from '../../../../../hooks/useTransactionDeadline'
 import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
+import { ethers } from 'ethers'
 
 const ZERO = JSBI.BigInt(0)
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
@@ -92,20 +93,15 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
     const [, pool] = get(poolAtom)
     const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
     const noLiquidity = get(noLiquiditySelector)
-    const fixedRatio = get(fixedRatioAtom)
 
     // we wrap the currencies just to get the price in terms of the other token
     if (!noLiquidity) {
-      if (fixedRatio) {
-        const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-        if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
-          const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
-          return pool?.token1?.isNative
-            ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
-            : dependentTokenAmount
-        }
-      } else {
-        return tryParseAmount(get(secondaryInputAtom), pool?.token1)
+      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+      if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
+        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
+        return pool?.token1?.isNative
+          ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
+          : dependentTokenAmount
       }
     }
 
@@ -114,15 +110,12 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
   set: ({ set, get }, newValue: CurrencyAmount<Currency>) => {
     const [, pool] = get(poolAtom)
     const noLiquidity = get(noLiquiditySelector)
-    const fixedRatio = get(fixedRatioAtom)
 
     if (!noLiquidity) {
-      if (fixedRatio) {
-        const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-        if (tokenA && tokenB && newValue?.wrapped && pool) {
-          const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
-          set(mainInputAtom, dependentTokenAmount?.toExact())
-        }
+      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+      if (tokenA && tokenB && newValue?.wrapped && pool) {
+        const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
+        set(mainInputAtom, dependentTokenAmount?.toExact())
       }
     }
 
@@ -136,8 +129,12 @@ export const formattedAmountsSelector = selector<[string, string]>({
     const inputField = get(inputFieldAtom)
     const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
     return [
-      inputField === Field.CURRENCY_A ? parsedAmountA?.toExact() ?? '' : parsedAmountA?.toSignificant(6) ?? '',
-      inputField === Field.CURRENCY_B ? parsedAmountB?.toExact() ?? '' : parsedAmountB?.toSignificant(6) ?? '',
+      inputField === Field.CURRENCY_A
+        ? parsedAmountA?.toExact() ?? get(mainInputAtom) ?? ''
+        : parsedAmountA?.toSignificant(6) ?? '',
+      inputField === Field.CURRENCY_B
+        ? parsedAmountB?.toExact() ?? get(secondaryInputAtom) ?? ''
+        : parsedAmountB?.toSignificant(6) ?? '',
     ]
   },
 })
@@ -257,7 +254,7 @@ export const currentLiquidityValueSelector = selector({
       ]
     }
 
-    return undefined
+    return [undefined, undefined]
   },
 })
 
@@ -269,10 +266,13 @@ export const liquidityValueSelector = selector({
 
     if (pool && currencyAAmount && currencyBAmount) {
       const [currentAAmount, currentBAmount] = get(currentLiquidityValueSelector)
-      return [currencyAAmount.add(currentAAmount), currencyBAmount.add(currentBAmount)]
+      return [
+        currentAAmount ? currencyAAmount.add(currentAAmount) : currencyAAmount,
+        currentBAmount ? currencyBAmount.add(currentBAmount) : currencyBAmount,
+      ]
     }
 
-    return undefined
+    return [undefined, undefined]
   },
 })
 
@@ -394,9 +394,65 @@ export const useClassicAddExecute = () => {
     ]
   )
 
-  const zapModeExecute = useCallback(() => {
-    setShowReview(false)
-  }, [])
+  const zapModeExecute = useRecoilCallback(
+    ({ snapshot }) =>
+      async () => {
+        const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
+        const parsedZapAmount = await snapshot.getPromise(parsedZapAmountSelector)
+        const [, pool] = await snapshot.getPromise(poolAtom)
+
+        if (!pool || !chainId || !library || !account || !router || !parsedZapAmount || !currencyA || !currencyB) return
+
+        const liquidityInput = [
+          {
+            token: parsedZapAmount.currency.wrapped.address,
+            native: true,
+            amount: parsedZapAmount.quotient.toString(),
+          },
+        ]
+
+        const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
+        const estimate = router.estimateGas.addLiquidity
+        const method = router.addLiquidity
+        const args = [liquidityInput, pool.liquidityToken.address, 1, encoded]
+        const value = parsedZapAmount.currency.isNative ? { value: parsedZapAmount.quotient.toString() } : {}
+
+        try {
+          setAttemptingTxn(true)
+          const estimatedGasLimit = await estimate(...args, value)
+          const response = await method(...args, {
+            ...value,
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
+
+          setAttemptingTxn(false)
+
+          addTransaction(response, {
+            summary: i18n._(
+              t`Zap ${parsedZapAmount.toSignificant(3)} ${parsedZapAmount.currency.symbol} into ${currencyA.symbol}/${
+                currencyB.symbol
+              }`
+            ),
+          })
+
+          setTxHash(response.hash)
+          setShowReview(false)
+
+          ReactGA.event({
+            category: 'Liquidity',
+            action: 'Zap',
+            label: [currencyA.symbol, currencyB.symbol].join('/'),
+          })
+        } catch (error) {
+          setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (error?.code !== 4001) {
+            console.error(error)
+          }
+        }
+      },
+    [account, addTransaction, chainId, i18n, library, router, setAttemptingTxn, setShowReview, setTxHash]
+  )
 
   return {
     standardModeExecute,

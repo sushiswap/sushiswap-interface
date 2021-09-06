@@ -90,7 +90,7 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
         error={error}
         spendFromWallet={spendFromWallet}
         onMax={() => props.onChange(maxSpend)}
-        showMax={balance?.toExact() !== props.value}
+        showMax={balance?.greaterThan('0') ? parsedInput?.equalTo(balance) : false}
         footer={
           <AssetInputPanel.Balance
             balance={balance}
@@ -203,7 +203,7 @@ const AssetInputPanel = ({
   return (
     <div
       className={classNames(
-        showMax ? 'border' : 'border-2',
+        'border',
         error ? 'border-red border-opacity-20' : 'border-dark-700',
         'rounded bg-dark-900 flex flex-col overflow-hidden'
       )}

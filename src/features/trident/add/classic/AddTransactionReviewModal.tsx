@@ -5,6 +5,7 @@ import {
   liquidityValueSelector,
   parsedAmountsSelector,
   parsedZapAmountSelector,
+  parsedZapSplitAmountsSelector,
   poolAtom,
   poolShareSelector,
   priceSelector,
@@ -37,6 +38,7 @@ const AddTransactionReviewModal: FC = () => {
   const poolTokenPercentage = useRecoilValue(poolShareSelector)
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
   const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
+  const parsedZapSplitAmounts = useRecoilValue(parsedZapSplitAmountsSelector)
 
   const { standardModeExecute, zapModeExecute } = useClassicAddExecute()
 
@@ -92,11 +94,11 @@ const AddTransactionReviewModal: FC = () => {
               <Typography weight={700} variant="lg">
                 {i18n._(t`Which will be converted to:`)}
               </Typography>
-              {/*<ListPanel*/}
-              {/*  items={currencies.map((currency, index) => (*/}
-              {/*    <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[address]} key={index} />*/}
-              {/*  ))}*/}
-              {/*/>*/}
+              <ListPanel
+                items={parsedZapSplitAmounts.map((amount, index) => (
+                  <ListPanel.CurrencyAmountItem amount={amount} key={index} />
+                ))}
+              />
             </div>
           )}
           <div className="flex flex-row justify-between px-5">

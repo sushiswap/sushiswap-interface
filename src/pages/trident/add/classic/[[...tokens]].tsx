@@ -18,8 +18,6 @@ import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
 import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
-import DepositSettingsModal from '../../../../features/trident/add/classic/DepositSettingsModal'
-import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 import Link from 'next/link'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
@@ -98,7 +96,6 @@ const AddClassic = () => {
           >
             <Link href={`/trident/pool/${toHref('classic', currencies)}`}>{i18n._(t`Back`)}</Link>
           </Button>
-          <DepositSettingsModal />
           {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
         <div className="flex flex-col gap-2">
