@@ -20,10 +20,6 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
-  updateUserOpenMevETHTip,
-  updateUserOpenMevGasEstimate,
-  updateUserOpenMevGasPrice,
-  updateUserOpenMevTipManualOverride,
   updateUserOpenMevUseRelay,
 } from './actions'
 
@@ -66,12 +62,7 @@ export interface UserState {
   URLWarningVisible: boolean
 
   // @openemv
-  userOpenMevUseRelay: boolean // use relay or go directly to router
-  userOpenMevGasPrice: string // Current gas price
-  userOpenMevETHTip: string // ETH tip for relay, as full BigInt string
-  userOpenMevGasEstimate: string // Gas estimate for trade
-  userOpenMevTipManualOverride: boolean // is user manually entering tip
-
+  userOpenMevUseRelay: boolean
   userArcherUseRelay: boolean // use relay or go directly to router
   userArcherGasPrice: string // Current gas price
   userArcherETHTip: string // ETH tip for relay, as full BigInt string
@@ -104,10 +95,6 @@ export const initialState: UserState = {
   // @returns {true}
   // @type boolean
   userOpenMevUseRelay: true,
-  userOpenMevGasPrice: DEFAULT_OPENMEV_GAS_PRICES[4].toString(),
-  userOpenMevETHTip: DEFAULT_OPENMEV_ETH_TIP.toString(),
-  userOpenMevGasEstimate: DEFAULT_OPENMEV_GAS_ESTIMATE.toString(),
-  userOpenMevTipManualOverride: false,
 }
 
 export default createReducer(initialState, (builder) =>
@@ -184,18 +171,6 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(updateUserOpenMevUseRelay, (state, action) => {
       state.userOpenMevUseRelay = action.payload.userOpenMevUseRelay
-    })
-    .addCase(updateUserOpenMevGasPrice, (state, action) => {
-      state.userOpenMevGasPrice = action.payload.userOpenMevGasPrice
-    })
-    .addCase(updateUserOpenMevETHTip, (state, action) => {
-      state.userOpenMevETHTip = action.payload.userOpenMevETHTip
-    })
-    .addCase(updateUserOpenMevGasEstimate, (state, action) => {
-      state.userOpenMevGasEstimate = action.payload.userOpenMevGasEstimate
-    })
-    .addCase(updateUserOpenMevTipManualOverride, (state, action) => {
-      state.userOpenMevTipManualOverride = action.payload.userOpenMevTipManualOverride
     })
     .addCase(updateUserArcherUseRelay, (state, action) => {
       state.userArcherUseRelay = action.payload.userArcherUseRelay

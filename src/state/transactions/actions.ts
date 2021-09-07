@@ -28,7 +28,6 @@ export const addTransaction = createAction<{
   openmev?: {
     signedTx: string
     deadline: number
-    ethTip: string
   }
 }>('transactions/addTransaction')
 export const clearAllTransactions = createAction<{ chainId: ChainId }>('transactions/clearAllTransactions')

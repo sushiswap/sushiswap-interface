@@ -44,7 +44,7 @@ export const updateUserOpenMevUseRelay = createAction<{
   userOpenMevUseRelay: boolean
 }>('user/updateUserOpenMevUseRelay')
 
-
+/**
  export const updateUserOpenMevGasPrice = createAction<{
   userOpenMevGasPrice: string
 }>('user/updateUserOpenMevGasPrice')
@@ -58,7 +58,7 @@ export const updateUserOpenMevTipManualOverride = createAction<{
   userOpenMevTipManualOverride: boolean
 }>('user/updateUserOpenMevTipManualOverride')
 
-
+ */
 
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
 // @archerdao
