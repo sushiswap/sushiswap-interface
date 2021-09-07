@@ -5,6 +5,7 @@ import {
   useUserArcherUseRelay,
   useUserSingleHopOnly,
   useUserTransactionTTL,
+  useUserOpenMevUseRelay,
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
@@ -21,6 +22,8 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+
+import { OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
@@ -42,6 +45,9 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
   const [ttl, setTtl] = useUserTransactionTTL()
 
   const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
+
+  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMevUseRelay()
+
 
   return (
     <div className="relative flex" ref={node}>
@@ -103,7 +109,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </div>
-            {/* {chainId == ChainId.MAINNET && (
+           {chainId == ChainId.MAINNET && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
@@ -115,13 +121,35 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                     )}
                   />
                 </div>
+                {/** @openmev UI Toggle */}
                 <Toggle
                   id="toggle-use-archer"
                   isActive={userUseArcher}
-                  toggle={() => setUserUseArcher(!userUseArcher)}
+                  toggle={() => {
+                    if (userUseOpenMev) setUserUseOpenMev(false)
+                    setUserUseArcher(!userUseArcher)
+                  }}
                 />
               </div>
-            )} */}
+            )}
+            {OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`OpenMEV Transaction Cost Refunder`)}
+                  </Typography>
+                  <QuestionHelper text={i18n._(t`MEV Service that pays up to 95% of transaction fee for trading`)} />
+                </div>
+                <Toggle
+                  id="toggle-use-openmev"
+                  isActive={userUseOpenMev}
+                  toggle={() => {
+                    if (userUseArcher) setUserUseArcher(false)
+                    setUserUseOpenMev(!userUseOpenMev)
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -157,3 +185,5 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
     </div>
   )
 }
+
+

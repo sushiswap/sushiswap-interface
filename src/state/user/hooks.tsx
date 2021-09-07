@@ -396,21 +396,22 @@ export function useUserOpenMevTipManualOverride(): [boolean, (newManualOverride:
 
 
 
+
 export function useUserArcherUseRelay(): [boolean, (newUseRelay: boolean) => void] {
   const dispatch = useAppDispatch()
 
-  const useRelay = useSelector<AppState, AppState['user']['userArcherUseRelay']>(
+  const useArcherRelay = useSelector<AppState, AppState['user']['userArcherUseRelay']>(
     (state) => state.user.userArcherUseRelay
   )
 
-  const setUseRelay = useCallback(
+  const setArcherUseRelay = useCallback(
     (newUseRelay: boolean) => {
       dispatch(updateUserArcherUseRelay({ userArcherUseRelay: newUseRelay }))
     },
     [dispatch]
   )
 
-  return [useRelay, setUseRelay]
+  return [useArcherRelay, setArcherUseRelay]
 }
 
 export function useUserArcherGasPrice(): [string, (newGasPrice: string) => void] {
