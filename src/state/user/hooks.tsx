@@ -18,10 +18,6 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
-  updateUserOpenMevETHTip,
-  updateUserOpenMevGasEstimate,
-  updateUserOpenMevGasPrice,
-  updateUserOpenMevTipManualOverride,
   updateUserOpenMevUseRelay,
 } from './actions'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
@@ -305,113 +301,21 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   }, [combinedList])
 }
 
-export function useUserOpenMevUseRelay(): [boolean, (newUseRelay: boolean) => void] {
-  const dispatch = useAppDispatch()
-
-  const useRelay = useSelector<AppState, AppState['user']['userOpenMevUseRelay']>(
-    (state) => state.user.userOpenMevUseRelay
-  )
-
-  const setUseRelay = useCallback(
-    (newUseRelay: boolean) => {
-      dispatch(updateUserOpenMevUseRelay({ userOpenMevUseRelay: newUseRelay }))
-    },
-    [dispatch]
-  )
-
-  return [useRelay, setUseRelay]
-}
-
-export function useUserOpenMevGasPrice(): [string, (newGasPrice: string) => void] {
-  const dispatch = useAppDispatch()
-  const userGasPrice = useSelector<AppState, AppState['user']['userOpenMevGasPrice']>((state) => {
-    return state.user.userOpenMevGasPrice
-  })
-
-  const setUserGasPrice = useCallback(
-    (newGasPrice: string) => {
-      dispatch(updateUserOpenMevGasPrice({ userOpenMevGasPrice: newGasPrice }))
-    },
-    [dispatch]
-  )
-
-  return [userGasPrice, setUserGasPrice]
-}
-
-export function useUserOpenMevETHTip(): [string, (newETHTip: string) => void] {
-  const dispatch = useAppDispatch()
-  const userETHTip = useSelector<AppState, AppState['user']['userOpenMevETHTip']>((state) => {
-    return state.user.userOpenMevETHTip
-  })
-
-  const setUserETHTip = useCallback(
-    (newETHTip: string) => {
-      dispatch(updateUserOpenMevETHTip({ userOpenMevETHTip: newETHTip }))
-    },
-    [dispatch]
-  )
-
-  return [userETHTip, setUserETHTip]
-}
-
-export function useUserOpenMevGasEstimate(): [string, (newGasEstimate: string) => void] {
-  const dispatch = useAppDispatch()
-  const userGasEstimate = useSelector<AppState, AppState['user']['userOpenMevGasEstimate']>((state) => {
-    return state.user.userOpenMevGasEstimate
-  })
-
-  const setUserGasEstimate = useCallback(
-    (newGasEstimate: string) => {
-      dispatch(
-        updateUserOpenMevGasEstimate({
-          userOpenMevGasEstimate: newGasEstimate,
-        })
-      )
-    },
-    [dispatch]
-  )
-
-  return [userGasEstimate, setUserGasEstimate]
-}
-
-export function useUserOpenMevTipManualOverride(): [boolean, (newManualOverride: boolean) => void] {
-  const dispatch = useAppDispatch()
-  const userTipManualOverride = useSelector<AppState, AppState['user']['userOpenMevTipManualOverride']>((state) => {
-    return state.user.userOpenMevTipManualOverride
-  })
-
-  const setUserTipManualOverride = useCallback(
-    (newManualOverride: boolean) => {
-      dispatch(
-        updateUserOpenMevTipManualOverride({
-          userOpenMevTipManualOverride: newManualOverride,
-        })
-      )
-    },
-    [dispatch]
-  )
-
-  return [userTipManualOverride, setUserTipManualOverride]
-}
-
-
-
-
 export function useUserArcherUseRelay(): [boolean, (newUseRelay: boolean) => void] {
   const dispatch = useAppDispatch()
 
-  const useArcherRelay = useSelector<AppState, AppState['user']['userArcherUseRelay']>(
+  const useRelay = useSelector<AppState, AppState['user']['userArcherUseRelay']>(
     (state) => state.user.userArcherUseRelay
   )
 
-  const setArcherUseRelay = useCallback(
+  const setUseRelay = useCallback(
     (newUseRelay: boolean) => {
       dispatch(updateUserArcherUseRelay({ userArcherUseRelay: newUseRelay }))
     },
     [dispatch]
   )
 
-  return [useArcherRelay, setArcherUseRelay]
+  return [useRelay, setUseRelay]
 }
 
 export function useUserArcherGasPrice(): [string, (newGasPrice: string) => void] {
@@ -484,6 +388,23 @@ export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: 
   )
 
   return [userTipManualOverride, setUserTipManualOverride]
+}
+
+export function useUserOpenMevRelay(): [boolean, (newUseRelay: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  const useRelay = useSelector<AppState, AppState['user']['userOpenMevUseRelay']>(
+    (state) => state.user.userOpenMevUseRelay
+  )
+
+  const setUseRelay = useCallback(
+    (newUseRelay: boolean) => {
+      dispatch(updateUserOpenMevUseRelay({ userOpenMevUseRelay: newUseRelay }))
+    },
+    [dispatch]
+  )
+
+  return [useRelay, setUseRelay]
 }
 
 /**

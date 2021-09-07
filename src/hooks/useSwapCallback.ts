@@ -34,7 +34,8 @@ import useENS from './useENS'
 import { useMemo } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
-import { useUserArcherETHTip, useUserOpenMevETHTip } from '../state/user/hooks'
+// useUserOpenMevETHTip
+import { useUserArcherETHTip,  } from '../state/user/hooks'
 
 import { ethers } from 'ethers'
 
@@ -94,7 +95,7 @@ export function useSwapCallArguments(
 
   const [archerETHTip] = useUserArcherETHTip()
 
-  const [openmevETHTip] = useUserOpenMevETHTip()
+  // const [openmevETHTip] = useUserOpenMevETHTip()
 
   return useMemo(() => {
     if (!trade || !recipient || !library || !account || !chainId || !deadline) return []
@@ -165,7 +166,7 @@ export function useSwapCallArguments(
     // @openmev
     // @param openmevETHTip
     archerETHTip,
-    openmevETHTip,
+   // openmevETHTip,
     argentWalletContract,
     chainId,
     deadline,

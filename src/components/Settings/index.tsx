@@ -5,7 +5,7 @@ import {
   useUserArcherUseRelay,
   useUserSingleHopOnly,
   useUserTransactionTTL,
-  useUserOpenMevUseRelay,
+  useUserOpenMevRelay,
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
@@ -46,7 +46,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
 
   const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
 
-  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMevUseRelay()
+  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMevRelay()
 
 
   return (

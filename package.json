@@ -1,21 +1,22 @@
 {
   "name": "sushiswap-interface",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
+  "types": "typings.d.ts",
   "scripts": {
-    "analyze": "ANALYZE=true yarn build && serve .next -n",
-    "dev": "next dev",
+    "analyze": "ANALYZE=true yarn build && npx serve .next -n",
+    "dev": "npx next dev",
     "inspect": "NODE_OPTIONS='--inspect' next dev",
-    "build": "yarn lingui && next build",
-    "start": "next start",
-    "lingui": "lingui extract --clean --overwrite && lingui compile",
+    "build": "yarn lingui && npx next build",
+    "start": "npx next start",
+    "lingui": "npx lingui extract --clean --overwrite && npx lingui compile",
     "lokalise": "lokalise2 --config lokalise.yaml file download --format po --unzip-to . --original-filenames=false",
     "circular": "madge --circular src --extensions ts,tsx,js,jsx",
     "unused": "next-unused",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "prettier": "prettier --write 'src/**/*.{ts,tsx}'",
-    "lint": "next lint",
+    "lint": "npx next lint",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "e2e": "start-server-and-test start http://localhost:3000 cypress",
@@ -32,8 +33,6 @@
   },
   "devDependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
-    "@commitlint/cli": "^13.0.0",
-    "@commitlint/config-conventional": "^13.0.0",
     "@ethereumjs/common": "^2.4.0",
     "@ethereumjs/tx": "^3.3.0",
     "@ethersproject/abi": "^5.4.0",
@@ -101,11 +100,11 @@
     "babel-plugin-styled-components": "^1.13.1",
     "cookie-cutter": "^0.2.0",
     "copy-to-clipboard": "^3.3.1",
-    "cypress": "8.2.0",
     "eip-712": "^0.4.3",
     "eslint": "^7.30.0",
     "eslint-config-next": "^11.1.0",
     "eth-permit": "^0.1.10",
+    "ethers": "^5.4.6",
     "fuse.js": "^6.4.6",
     "graphql-tag": "^2.12.5",
     "husky": "^7.0.0",
@@ -144,7 +143,6 @@
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
-    "serve": "^12.0.0",
     "sharp": "^0.29.0",
     "start-server-and-test": "1.13.1",
     "styled-components": "^5.3.0",
@@ -164,10 +162,19 @@
       "src/pages"
     ]
   },
-  "browserslist": [
-    ">0.3%",
-    "not ie 11",
-    "not dead",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.3%",
+      "not dead",
+      "not op_mini all",
+      "not IE > 0",
+      "not samsung 4",
+      "not and_uc 12.12"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 edge version"
+    ]
+  }
 }

@@ -12,8 +12,9 @@ export const OPENMEV_RELAY_URI: { [chainId in ChainId]?: string } = {
     [ChainId.MAINNET]: 'https://api.sushirelay.com/v1',
   }
   
+  // @TODO change to our endpoint 
   export const OPENMEV_GAS_URI: { [chainId in ChainId]?: string } = {
-    [ChainId.MAINNET]: 'https://api.txprice.com',
+    [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
   }
 
 export const DEFAULT_OPENMEV_GAS_ESTIMATE: BigNumber = BigNumber.from(250000)

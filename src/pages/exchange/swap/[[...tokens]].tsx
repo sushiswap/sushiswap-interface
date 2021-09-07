@@ -26,9 +26,7 @@ import {
   useUserArcherETHTip,
   useUserArcherGasPrice,
   useUserArcherUseRelay,
-  useUserOpenMevETHTip,
-  useUserOpenMevGasPrice,
-  useUserOpenMevUseRelay,
+  useUserOpenMevRelay,
   useUserSingleHopOnly,
   useUserSlippageTolerance,
   useUserTransactionTTL,
@@ -127,21 +125,21 @@ export default function Swap() {
   const [archerETHTip] = useUserArcherETHTip()
   const [archerGasPrice] = useUserArcherGasPrice()
 
-// @openmev
-  const [useOpenMev] = useUserOpenMevUseRelay()
-  const [openmevETHTip] = useUserOpenMevETHTip()
-  const [openmevGasPrice] = useUserOpenMevGasPrice()
+ /** @openmev start */
+  const [useOpenMev] = useUserOpenMevRelay()
+ //const [openmevETHTip] = useUserOpenMevETHTip()
+ // const [openmevGasPrice] = useUserOpenMevGasPrice()
 
   // archer
   const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
   // const doArcher = archerRelay !== undefined && useArcher
   const doArcher = undefined
 
-  // @openmev
-  const openmevRelay = chainId ? OPENMEV_RELAY_URI?.[chainId] : undefined
-  /** @type {doOpenMev} */
-  const doOpenMev = !doArcher && openmevRelay !== undefined && useOpenMev
 
+  const openmevRelay = chainId ? OPENMEV_RELAY_URI?.[chainId] : undefined
+ 
+  const doOpenMev = !doArcher && openmevRelay !== undefined && useOpenMev
+ /** @openmev end */
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
   const {
