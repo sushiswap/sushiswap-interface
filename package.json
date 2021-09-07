@@ -2,11 +2,11 @@
   "name": "sushiswap-interface",
   "version": "0.1.0",
   "private": true,
-  "types": "typings.d.ts",
   "scripts": {
     "analyze": "ANALYZE=true yarn build && npx serve .next -n",
     "dev": "npx next dev",
     "inspect": "NODE_OPTIONS='--inspect' next dev",
+    "prod": "./build_env.sh",
     "build": "yarn lingui && npx next build",
     "start": "npx next start",
     "lingui": "npx lingui extract --clean --overwrite && npx lingui compile",
@@ -149,6 +149,7 @@
     "swr": "^1.0.0",
     "tailwindcss": "^2.2.9",
     "tailwindcss-border-gradient-radius": "^2.0.0",
+    "tslib": "^2.3.1",
     "typescript": "^4.3.5",
     "wcag-contrast": "^3.0.0"
   },

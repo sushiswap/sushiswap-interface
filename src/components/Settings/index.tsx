@@ -113,7 +113,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
-                    {i18n._(t`MEV Shield by Archer DAO`)}
+                    {i18n._(t`ArcherDAO`)}
                   </Typography>
                   <QuestionHelper
                     text={i18n._(
@@ -136,9 +136,9 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
-                    {i18n._(t`OpenMEV Transaction Cost Refunder`)}
+                    {i18n._(t`OpenMEV Gas Refunder`)}
                   </Typography>
-                  <QuestionHelper text={i18n._(t`MEV Service that pays up to 95% of transaction fee for trading`)} />
+                  <QuestionHelper text={i18n._(t`OpenMEV refunds up to 95% of transaction costs in 35 blocks`)} />
                 </div>
                 <Toggle
                   id="toggle-use-openmev"

@@ -32,7 +32,7 @@ import { useRouter } from 'next/router'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
-// const Web3ReactManager = dynamic(() => import('../components/Web3ReactManager'), { ssr: false })
+//const Web3ReactManager = dynamic(() => import('../components/Web3ReactManager'), { ssr: false })
 
 const sessionId = nanoid()
 
