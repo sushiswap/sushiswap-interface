@@ -16,7 +16,7 @@ const FarmListItem = ({ farm, ...rest }) => {
   return (
     <Disclosure {...rest}>
       {({ open }) => (
-        <>
+        <div>
           <Disclosure.Button
             className={classNames(
               open && 'rounded-b-none',
@@ -98,7 +98,7 @@ const FarmListItem = ({ farm, ...rest }) => {
             </div>
           </Disclosure.Button>
           {open && <FarmListItemDetails farm={farm} />}
-        </>
+        </div>
       )}
     </Disclosure>
   )
