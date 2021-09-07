@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { Input as NumericalInput } from '../../components/NumericalInput'
@@ -16,13 +16,24 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
   const { limitPrice } = useLimitOrderState()
   const { currencies, currentPrice } = useDerivedLimitOrderInfo()
   const { i18n } = useLingui()
+  const [price, setPrice] = useState<string>()
+  const [inverted, setInverted] = useState(false)
+
   const handleInput = useCallback(
     (value) => {
-      dispatch(setLimitPrice(value))
+      setPrice(value)
+
+      // Make sure to always send in normal form
+      dispatch(setLimitPrice(inverted ? `${1 / +value}` : value))
       onBlur(value)
     },
-    [dispatch, onBlur]
+    [dispatch, inverted, onBlur]
   )
+
+  const handleInvert = useCallback(() => {
+    setPrice((prevState) => `${1 / +prevState}`)
+    setInverted((prevState) => !prevState)
+  }, [])
 
   const disabled = !currencies[Field.INPUT] || !currencies[Field.OUTPUT]
 
@@ -47,14 +58,20 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
         <NumericalInput
           disabled={disabled}
           className="w-full bg-transparent font-medium text-2xl"
-          placeholder={currentPrice ? currentPrice.toSignificant(6) : '0.0'}
+          placeholder={
+            currentPrice ? (inverted ? currentPrice.invert().toSignificant(6) : currentPrice.toSignificant(6)) : '0.0'
+          }
           id="limit-price-input"
-          value={limitPrice || ''}
+          value={price || ''}
           onUserInput={handleInput}
           onBlur={() => onBlur(limitPrice)}
         />
-        <div className="text-xs text-secondary whitespace-nowrap">
-          {currencies.OUTPUT?.symbol} per {currencies.INPUT?.symbol}
+        <div
+          className="text-xs whitespace-nowrap cursor-pointer rounded-full border border-dark-800 px-3 py-0.5"
+          onClick={handleInvert}
+        >
+          {inverted ? currencies.INPUT?.symbol : currencies.OUTPUT?.symbol} per{' '}
+          {inverted ? currencies.OUTPUT?.symbol : currencies.INPUT?.symbol}
         </div>
       </div>
     </div>

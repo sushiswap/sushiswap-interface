@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import { formatNumber, shortenAddress } from '../../functions'
 import { useActiveWeb3React, useUSDCPrice } from '../../hooks'
 import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../state/limit-order/hooks'
@@ -11,6 +11,7 @@ import Modal from '../../components/Modal'
 import { USDC } from '@sushiswap/sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Price } from '@sushiswap/sdk'
 
 interface ConfirmLimitOrderModalProps {
   open: boolean
@@ -49,6 +50,14 @@ const ConfirmLimitOrderTopContent = () => {
   )?.toFixed(18)
   const outputValueUSDC = formatNumber(Number(parsedAmounts[Field.OUTPUT].toSignificant(6)) * Number(outputUSDC))
 
+  const rate = useMemo(
+    () =>
+      parsedAmounts[Field.INPUT] && parsedAmounts[Field.OUTPUT]
+        ? new Price({ baseAmount: parsedAmounts[Field.INPUT], quoteAmount: parsedAmounts[Field.OUTPUT] })
+        : null,
+    [parsedAmounts]
+  )
+
   return (
     <div className="py-8">
       <div className="flex flex-col gap-6">
@@ -65,9 +74,15 @@ const ConfirmLimitOrderTopContent = () => {
         </div>
         <div className="flex justify-between px-5 py-3 rounded bg-dark-800">
           <span className="font-bold text-secondary">{i18n._(t`Rate`)}</span>
-          <span className="text-primary">
-            {limitPrice} {currencies[Field.OUTPUT]?.symbol} per {currencies[Field.INPUT]?.symbol}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-primary">
+              {rate?.toSignificant(6)} <b>{rate?.baseCurrency.symbol}</b> per <b>{rate?.quoteCurrency.symbol}</b>
+            </span>
+            <span className="text-primary">
+              {rate?.invert().toSignificant(6)} <b>{rate?.quoteCurrency.symbol}</b> per{' '}
+              <b>{rate?.baseCurrency.symbol}</b>
+            </span>
+          </div>
         </div>
         <div className="flex flex-col gap-3">
           <div className="flex gap-2 text-xl font-bold text-white">{i18n._(t`You receive`)}</div>

@@ -1,20 +1,20 @@
 import { ApprovalState, useApproveCallback } from '../../hooks'
-import { BENTOBOX_ADDRESS, ChainId, Currency } from '@sushiswap/sdk'
+import { BENTOBOX_ADDRESS, Currency } from '@sushiswap/sdk'
 import Button, { ButtonProps } from '../../components/Button'
 import { Field, setFromBentoBalance } from '../../state/limit-order/actions'
 import React, { FC, useCallback, useState } from 'react'
+import useLimitOrderApproveCallback, { BentoApprovalState } from '../../hooks/useLimitOrderApproveCallback'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import Dots from '../../components/Dots'
 import { useAddPopup, useWalletModalToggle } from '../../state/application/hooks'
 import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../state/limit-order/hooks'
-import useLimitOrderApproveCallback, { BentoApprovalState } from '../../hooks/useLimitOrderApproveCallback'
 
 import Alert from '../../components/Alert'
 import { AppDispatch } from '../../state'
 import ConfirmLimitOrderModal from './ConfirmLimitOrderModal'
-import Dots from '../../components/Dots'
 import { LimitOrder } from 'limitorderv2-sdk'
 import { OrderExpiration } from '../../state/limit-order/reducer'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useDispatch } from 'react-redux'
 import useLimitOrders from '../../hooks/useLimitOrders'
 import { useLingui } from '@lingui/react'
@@ -36,7 +36,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
   const { fromBentoBalance, orderExpiration, recipient } = useLimitOrderState()
   const { parsedAmounts, inputError } = useDerivedLimitOrderInfo()
   const [approvalState, fallback, permit, onApprove, execute] = useLimitOrderApproveCallback()
-  const { mutate } = useLimitOrders()
+  const { save } = useLimitOrders()
 
   const [tokenApprovalState, tokenApprove] = useApproveCallback(
     parsedAmounts[Field.INPUT],
@@ -72,8 +72,8 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
       case OrderExpiration.week:
         endTime = Math.floor(new Date().getTime() / 1000) + 604800
         break
-      case OrderExpiration.never:
-        endTime = Number.MAX_SAFE_INTEGER
+      case OrderExpiration.month:
+        endTime = Math.floor(new Date().getTime() / 1000) + 86400 * 30
     }
 
     const order = new LimitOrder(
@@ -94,9 +94,10 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
         addPopup({
           txn: { hash: null, summary: 'Limit order created', success: true },
         })
-        await mutate()
+        await save(order)
       }
     } catch (e) {
+      console.log(e)
       addPopup({
         txn: {
           hash: null,
@@ -105,7 +106,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
         },
       })
     }
-  }, [account, addPopup, chainId, library, mutate, orderExpiration.value, parsedAmounts, recipient])
+  }, [account, addPopup, chainId, library, orderExpiration.value, parsedAmounts, recipient, save])
 
   const deposit = useCallback(async () => {
     const tx = await execute(currency)

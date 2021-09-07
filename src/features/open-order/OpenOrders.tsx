@@ -16,7 +16,7 @@ import Pagination from './Pagination'
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()
-  const { pending, mutate } = useLimitOrders()
+  const { pending, setPage, save } = useLimitOrders()
   const limitOrderContract = useLimitOrderContract(true)
   const addTransaction = useTransactionAdder()
   const [hash, setHash] = useState('')
@@ -28,9 +28,10 @@ const OpenOrders: FC = () => {
     })
 
     setHash(tx.hash)
-
     await tx.wait()
-    await mutate((data) => ({ ...data }))
+
+    // TODO broadcast edit
+    await save(limitOrder)
   }
 
   return (
@@ -67,53 +68,55 @@ const OpenOrders: FC = () => {
               <div className="flex items-center cursor-pointer hover:text-primary justify-end" />
             </div>
             <div className="flex flex-col gap-2 md:gap-5">
-              {pending.data.map((order, index) => (
-                <div key={index} className="block text-high-emphesis bg-dark-800 overflow-hidden rounded">
-                  <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
-                    <div className="flex flex-col">
-                      <div className="flex gap-4 font-bold items-center">
-                        <div className="min-w-[32px] flex items-center">
-                          <CurrencyLogo size={32} currency={order.tokenOut} />
-                        </div>
-                        <div className="flex flex-col">
-                          <div>{order.limitOrder.amountOut.toSignificant(6)} </div>
-                          <div className="text-left text-secondary text-xs">{order.tokenOut.symbol}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-left font-bold">
+              {pending.data
+                .slice((pending.page - 1) * pending.pageSize, pending.page * pending.pageSize)
+                .map((order, index) => (
+                  <div key={index} className="block text-high-emphesis bg-dark-800 overflow-hidden rounded">
+                    <div className="grid items-center grid-flow-col grid-cols-3 md:grid-cols-4 gap-4 px-4 py-3 text-sm align-center text-primary">
                       <div className="flex flex-col">
-                        <div>{order.limitOrder.amountIn.toSignificant(6)} </div>
-                        <div className="text-left text-secondary text-xs">{order.tokenIn.symbol}</div>
+                        <div className="flex gap-4 font-bold items-center">
+                          <div className="min-w-[32px] flex items-center">
+                            <CurrencyLogo size={32} currency={order.tokenOut} />
+                          </div>
+                          <div className="flex flex-col">
+                            <div>{order.limitOrder.amountOut.toSignificant(6)} </div>
+                            <div className="text-left text-secondary text-xs">{order.tokenOut.symbol}</div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-left font-bold hidden md:block">
-                      <div>{order.rate}</div>
-                      <div className="text-xs text-secondary">
-                        {order.tokenOut.symbol} per {order.tokenIn.symbol}
+                      <div className="text-left font-bold">
+                        <div className="flex flex-col">
+                          <div>{order.limitOrder.amountIn.toSignificant(6)} </div>
+                          <div className="text-left text-secondary text-xs">{order.tokenIn.symbol}</div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="text-right font-bold">
-                      <div className="mb-1">
-                        {order.filledPercent}% {i18n._(t`Filled`)}
+                      <div className="text-left font-bold hidden md:block">
+                        <div>{order.rate}</div>
+                        <div className="text-xs text-secondary">
+                          {order.tokenOut.symbol} per {order.tokenIn.symbol}
+                        </div>
                       </div>
-                      <div>
-                        <Button
-                          color="pink"
-                          variant="outlined"
-                          size="xs"
-                          onClick={() => cancelOrder(order.limitOrder, `Cancel order`)}
-                        >
-                          {i18n._(t`Cancel Order`)}
-                        </Button>
+                      <div className="text-right font-bold">
+                        <div className="mb-1">
+                          {order.filledPercent}% {i18n._(t`Filled`)}
+                        </div>
+                        <div>
+                          <Button
+                            color="pink"
+                            variant="outlined"
+                            size="xs"
+                            onClick={() => cancelOrder(order.limitOrder, `Cancel order`)}
+                          >
+                            {i18n._(t`Cancel Order`)}
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
             <Pagination
-              onChange={pending.setPage}
+              onChange={setPage('pending')}
               totalPages={pending.maxPages}
               currentPage={pending.page}
               pageNeighbours={2}

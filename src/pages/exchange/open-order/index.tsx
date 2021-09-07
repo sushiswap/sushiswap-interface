@@ -8,8 +8,8 @@ import NavLink from '../../../components/NavLink'
 import NetworkGuard from '../../../guards/Network'
 import OpenOrders from '../../../features/open-order/OpenOrders'
 import { t } from '@lingui/macro'
-import React from 'react'
 import { useLingui } from '@lingui/react'
+import { GunProvider } from '../../../components/Gun'
 import useLimitOrderApproveCallback, { BentoApprovalState } from '../../../hooks/useLimitOrderApproveCallback'
 import Alert from '../../../components/Alert'
 import useLimitOrders from '../../../hooks/useLimitOrders'
@@ -56,6 +56,7 @@ function OpenOrdersPage() {
   )
 }
 
+OpenOrdersPage.Provider = GunProvider
 OpenOrdersPage.Guard = NetworkGuard([ChainId.MATIC])
 
 export default OpenOrdersPage

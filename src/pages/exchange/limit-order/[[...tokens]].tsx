@@ -38,7 +38,7 @@ import { useActiveWeb3React } from '../../../hooks'
 import { useExpertModeManager } from '../../../state/user/hooks'
 import { useLingui } from '@lingui/react'
 import Alert from '../../../components/Alert'
-import Button from '../../../components/Button'
+import { GunProvider } from '../../../components/Gun'
 
 const areEqual = (first, second) => {
   if (first.length !== second.length) {
@@ -380,19 +380,8 @@ function LimitOrder() {
               <OrderExpirationDropdown />
             </div>
 
-            <div className="flex flex-col gap-3">
-              <Alert
-                type="information"
-                title="Upgrade Notice"
-                message={
-                  'In order to incorporate more community filler bots the ability to add new limit orders is temporarily paused. Existing orders are unaffected and can be edited and cancelled at any time'
-                }
-                dismissable={false}
-              />
-              <Button disabled={true} color={'gray'}>
-                {i18n._(t`Limit Orders Disabled`)}
-              </Button>
-              {/*<LimitOrderButton color="gradient" className="font-bold" currency={currencies[Field.INPUT]} />*/}
+            <div className="flex">
+              <LimitOrderButton color="gradient" className="font-bold" currency={currencies[Field.INPUT]} />
             </div>
           </div>
         </DoubleGlowShadow>
@@ -401,6 +390,7 @@ function LimitOrder() {
   )
 }
 
+LimitOrder.Provider = GunProvider
 LimitOrder.Guard = NetworkGuard([ChainId.MATIC])
 
 export default LimitOrder

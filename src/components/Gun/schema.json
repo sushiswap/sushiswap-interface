@@ -1,0 +1,71 @@
+{
+  "type": "object",
+  "properties": {
+    "maker": {
+      "type": "string"
+    },
+    "tokenIn": {
+      "type": "string"
+    },
+    "tokenOut": {
+      "type": "string"
+    },
+    "amountIn": {
+      "type": "string"
+    },
+    "amountOut": {
+      "type": "string"
+    },
+    "recipient": {
+      "type": "string"
+    },
+    "startTime": {
+      "type": "string"
+    },
+    "endTime": {
+      "type": "string"
+    },
+    "stopPrice": {
+      "type": "string"
+    },
+    "oracleAddress": {
+      "type": "string"
+    },
+    "oracleData": {
+      "type": "string"
+    },
+    "chainId": {
+      "type": "integer"
+    },
+    "tokenInDecimals": {
+      "type": "integer"
+    },
+    "tokenOutDecimals": {
+      "type": "integer"
+    },
+    "tokenInSymbol": {
+      "type": "string"
+    },
+    "tokenOutSymbol": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "maker",
+    "tokenIn",
+    "tokenOut",
+    "amountIn",
+    "amountOut",
+    "recipient",
+    "startTime",
+    "endTime",
+    "stopPrice",
+    "oracleAddress",
+    "oracleData",
+    "chainId",
+    "tokenInDecimals",
+    "tokenOutDecimals",
+    "tokenInSymbol",
+    "tokenOutSymbol"
+  ]
+}

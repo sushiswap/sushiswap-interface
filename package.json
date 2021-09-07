@@ -88,6 +88,7 @@
     "fathom-client": "^3.0.0",
     "fuse.js": "^6.4.6",
     "graphql-tag": "^2.12.5",
+    "gun": "^0.2020.1232",
     "husky": "^7.0.0",
     "limitorderv2-sdk": "^0.1.62",
     "lint-staged": "^11.0.0",

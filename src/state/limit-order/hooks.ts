@@ -11,11 +11,11 @@ import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { ParsedQs } from 'qs'
 import { OrderExpiration } from './reducer'
 import { useBentoBalances } from '../bentobox/hooks'
-import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
 import useENS from '../../hooks/useENS'
 import { t } from '@lingui/macro'
 import { i18n } from '@lingui/core'
-import { useExpertModeManager, useUserSingleHopOnly } from '../user/hooks'
+import { useExpertModeManager } from '../user/hooks'
+import { useUSDCValue } from '../../hooks/useUSDCPrice'
 
 export function useLimitOrderActionHandlers(): {
   onCurrencySelection: (field: Field, currency: Currency) => void
@@ -72,7 +72,6 @@ export function useDerivedLimitOrderInfo(): {
   currentPrice: Price<Currency, Currency>
 } {
   const { account, chainId } = useActiveWeb3React()
-  const [singleHopOnly] = useUserSingleHopOnly()
   const {
     [Field.INPUT]: { currencyId: inputCurrencyId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
@@ -86,13 +85,21 @@ export function useDerivedLimitOrderInfo(): {
 
   const inputCurrency = useCurrency(inputCurrencyId)
   const outputCurrency = useCurrency(outputCurrencyId)
-  const recipientLookup = useENS(recipient ?? undefined)
-  const to: string | null = (recipient === null ? account : recipientLookup.address) ?? null
+  const oneInputAmount = useMemo(() => tryParseAmount('1', inputCurrency), [inputCurrency])
+  const oneOutputAmount = useMemo(() => tryParseAmount('1', outputCurrency), [outputCurrency])
+  const inputUSDC = useUSDCValue(oneInputAmount)
+  const outputUSDC = useUSDCValue(oneOutputAmount)
 
-  const isExactIn: boolean = independentField === Field.INPUT
+  const rate =
+    inputUSDC && outputUSDC
+      ? new Price<Currency, Currency>({ baseAmount: inputUSDC, quoteAmount: outputUSDC })
+      : undefined
+
+  const recipientLookup = useENS(recipient ?? undefined)
+  const to = (recipient === null ? account : recipientLookup.address) ?? null
+  const isExactIn = independentField === Field.INPUT
   const parsedInputAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
   let parsedRate = limitPrice ? tryParseAmount(limitPrice, WNATIVE[chainId]) : undefined
-
   const parsedOutputAmount =
     outputCurrency && parsedRate && parsedInputAmount
       ? isExactIn
@@ -113,17 +120,6 @@ export function useDerivedLimitOrderInfo(): {
           )
       : undefined
 
-  const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedInputAmount : undefined, outputCurrency ?? undefined, {
-    maxHops: singleHopOnly ? 1 : undefined,
-  })
-
-  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !isExactIn ? parsedInputAmount : undefined, {
-    maxHops: singleHopOnly ? 1 : undefined,
-  })
-
-  const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
-  const rate = trade?.executionPrice
-
   const bentoBoxBalances = useBentoBalances()
   const balance = useMemo(
     () => bentoBoxBalances?.find((el) => el.address === inputCurrency?.wrapped.address),
@@ -135,29 +131,41 @@ export function useDerivedLimitOrderInfo(): {
     outputCurrency ?? undefined,
   ])
 
-  const walletBalances = {
-    [Field.INPUT]: relevantTokenBalances[0],
-    [Field.OUTPUT]: relevantTokenBalances[1],
-  }
+  const walletBalances = useMemo(
+    () => ({
+      [Field.INPUT]: relevantTokenBalances[0],
+      [Field.OUTPUT]: relevantTokenBalances[1],
+    }),
+    [relevantTokenBalances]
+  )
 
-  const bentoboxBalances = {
-    [Field.INPUT]: inputCurrency
-      ? CurrencyAmount.fromRawAmount(inputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
-      : undefined,
-    [Field.OUTPUT]: outputCurrency
-      ? CurrencyAmount.fromRawAmount(outputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
-      : undefined,
-  }
+  const bentoboxBalances = useMemo(
+    () => ({
+      [Field.INPUT]: inputCurrency
+        ? CurrencyAmount.fromRawAmount(inputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
+        : undefined,
+      [Field.OUTPUT]: outputCurrency
+        ? CurrencyAmount.fromRawAmount(outputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
+        : undefined,
+    }),
+    [balance?.bentoBalance, inputCurrency, outputCurrency]
+  )
 
-  const parsedAmounts = {
-    [Field.INPUT]: independentField === Field.INPUT ? parsedInputAmount : parsedOutputAmount,
-    [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedInputAmount : parsedOutputAmount,
-  }
+  const parsedAmounts = useMemo(
+    () => ({
+      [Field.INPUT]: independentField === Field.INPUT ? parsedInputAmount : parsedOutputAmount,
+      [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedInputAmount : parsedOutputAmount,
+    }),
+    [independentField, parsedInputAmount, parsedOutputAmount]
+  )
 
-  const currencies: { [field in Field]?: Currency } = {
-    [Field.INPUT]: inputCurrency ?? undefined,
-    [Field.OUTPUT]: outputCurrency ?? undefined,
-  }
+  const currencies = useMemo(
+    () => ({
+      [Field.INPUT]: inputCurrency ?? undefined,
+      [Field.OUTPUT]: outputCurrency ?? undefined,
+    }),
+    [inputCurrency, outputCurrency]
+  )
 
   let inputError: string | undefined
   if (!account) {
@@ -269,7 +277,7 @@ export function queryParametersToSwapState(chainId: ChainId, parsedQs: ParsedQs)
     recipient: validatedRecipient(parsedQs.recipient),
     limitPrice: parseTokenAmountURLParameter(parsedQs.exactRate),
     fromBentoBalance: parseBooleanFieldParameter(parsedQs.fromBento),
-    orderExpiration: { value: OrderExpiration.never, label: i18n._(t`Never`) },
+    orderExpiration: { value: OrderExpiration.month, label: i18n._(t`30 Days`) },
   }
 }
 

@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import QuestionHelper from '../../components/QuestionHelper'
@@ -13,13 +13,15 @@ const OrderExpirationDropdown: FC = () => {
   const { i18n } = useLingui()
   const dispatch = useDispatch<AppDispatch>()
   const { orderExpiration } = useLimitOrderState()
-  const items = {
-    [OrderExpiration.never]: i18n._(t`Never`),
-    [OrderExpiration.hour]: i18n._(t`1 Hour`),
-    [OrderExpiration.day]: i18n._(t`24 Hours`),
-    [OrderExpiration.week]: i18n._(t`1 Week`),
-    [OrderExpiration.month]: i18n._(t`30 Days`),
-  }
+  const items = useMemo(
+    () => ({
+      [OrderExpiration.hour]: i18n._(t`1 Hour`),
+      [OrderExpiration.day]: i18n._(t`24 Hours`),
+      [OrderExpiration.week]: i18n._(t`1 Week`),
+      [OrderExpiration.month]: i18n._(t`30 Days`),
+    }),
+    [i18n]
+  )
 
   const handler = useCallback(
     (e, item) => {

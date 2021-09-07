@@ -13,7 +13,6 @@ import {
 } from './actions'
 
 export enum OrderExpiration {
-  never = 'never',
   hour = 'hour',
   day = 'day',
   week = 'week',
