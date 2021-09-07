@@ -11,6 +11,7 @@ import { classNames } from '../../functions'
 import useFarmRewards from '../../hooks/useFarmRewards'
 import { usePositions } from '../../features/onsen/hooks'
 import { useRouter } from 'next/router'
+import Provider from '../../features/kashi/context'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
@@ -77,3 +78,5 @@ export default function Farm(): JSX.Element {
     </Container>
   )
 }
+
+Farm.Provider = Provider
