@@ -96,7 +96,7 @@ export const AVALANCHE: { [key: string]: Token } = {
     'Wrapped Bitcoin Old'
   ),
   WETH_OLD: new Token(ChainId.AVALANCHE, '0xf20d962a6c8f70c731bd838a3a388D7d48fA6e15', 18, 'WETH', 'Wrapped Ether Old'),
-  USDC: new Token(ChainId.XDAI, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC/e', 'USD Coin'),
+  USDC: new Token(ChainId.AVALANCHE, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC/e', 'USD Coin'),
   DAI: new Token(ChainId.AVALANCHE, '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70', 18, 'DAI/e', 'Dai Stablecoin'),
   USDT: new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT/e', 'Tether USD'),
   WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC/e', 'Wrapped Bitcoin'),
