@@ -133,6 +133,8 @@ export default function Farm(): JSX.Element {
             ? pool.rewarder.rewardPerSecond / decimals
             : pool.rewardToken.symbol === 'LDO'
             ? (77160493827160493 / decimals) * averageBlockTime
+            : pool.rewarder.rewardToken === '0x0000000000000000000000000000000000000000'
+            ? 0
             : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
 
         const rewardPerDay =
@@ -140,14 +142,21 @@ export default function Farm(): JSX.Element {
             ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
             : pool.rewardToken.symbol === 'LDO'
             ? (77160493827160493 / decimals) * averageBlockTime * blocksPerDay
+            : pool.rewarder.rewardToken === '0x0000000000000000000000000000000000000000'
+            ? 0
             : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
+
+        const rewardPrice =
+          pool.rewarder.rewardToken === '0x0000000000000000000000000000000000000000'
+            ? 0
+            : pool.rewardToken.derivedETH * ethPrice
 
         const reward = {
           token: pool.rewardToken.symbol,
           icon: icon,
           rewardPerBlock: rewardPerBlock,
           rewardPerDay: rewardPerDay,
-          rewardPrice: pool.rewardToken.derivedETH * ethPrice,
+          rewardPrice: rewardPrice,
         }
 
         return [...defaultRewards, reward]
@@ -218,6 +227,9 @@ export default function Farm(): JSX.Element {
         return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
       }, 0) / tvl
 
+    console.log(rewards)
+    console.log(roiPerBlock)
+
     const roiPerHour = roiPerBlock * blocksPerHour
 
     const roiPerDay = roiPerHour * 24
@@ -266,6 +278,8 @@ export default function Farm(): JSX.Element {
     .filter((farm) => {
       return type in FILTER ? FILTER[type](farm) : true
     })
+
+  console.log(data)
 
   const options = {
     keys: ['pair.id', 'pair.token0.symbol', 'pair.token1.symbol'],
