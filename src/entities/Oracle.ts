@@ -92,14 +92,15 @@ export class ChainlinkOracle extends AbstractOracle {
         }
       }
     }
+
     if (
-      from === this.pair.assetAddress &&
-      to === this.pair.collateralAddress &&
-      this.tokens[this.pair.collateralAddress] &&
-      this.tokens[this.pair.assetAddress]
+      from === this.pair.asset.address &&
+      to === this.pair.collateral.address &&
+      this.tokens[this.pair.collateral.address] &&
+      this.tokens[this.pair.asset.address]
     ) {
       const needed =
-        this.tokens[this.pair.collateralAddress].decimals + 18 - this.tokens[this.pair.assetAddress].decimals
+        this.tokens[this.pair.collateral.address].decimals + 18 - this.tokens[this.pair.asset.address].decimals
       const divider = e10(decimals - needed)
       if (!divider.eq(params[2])) {
         this.error =
