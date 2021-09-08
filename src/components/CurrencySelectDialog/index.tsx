@@ -1,5 +1,5 @@
 import { FC, useCallback } from 'react'
-import { ChainId, Currency, NATIVE, USDC, WETH9, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Token, USDC } from '@sushiswap/sdk'
 import Button from '../Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -29,7 +29,14 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChang
     [onChange, onDismiss]
   )
 
-  const tokens = [NATIVE[chainId], SUSHI[chainId], USDC[chainId]]
+  // TODO ramin: remove
+  const tokens = [
+    NATIVE[chainId],
+    SUSHI[chainId],
+    USDC[chainId],
+    new Token(ChainId.KOVAN, '0xa36085f69e2889c224210f603d836748e7dc0088', 18, 'LINK', 'LINK'),
+    new Token(ChainId.KOVAN, '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa', 18, 'DAI', 'DAI'),
+  ]
 
   return (
     <div className="bg-dark-900 h-full">

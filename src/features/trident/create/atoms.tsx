@@ -67,8 +67,8 @@ export const priceSelector = selector<Price<Currency, Currency>>({
 
 export const useCreateExecute = () => {
   const { i18n } = useLingui()
-  const masterDeployer = useMasterDeployerContract(true)
-  const constantProductPoolFactory = useConstantProductPoolFactory(true)
+  const masterDeployer = useMasterDeployerContract()
+  const constantProductPoolFactory = useConstantProductPoolFactory()
   const addTransaction = useTransactionAdder()
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
@@ -79,8 +79,6 @@ export const useCreateExecute = () => {
     ({ snapshot }) =>
       async () => {
         const selectedPoolCurrencies = await snapshot.getPromise(selectedPoolCurrenciesAtom)
-        const parsedInputAmounts = await snapshot.getPromise(parsedInputAmountsSelector)
-        const spendFromWallet = await snapshot.getPromise(spendFromWalletAtom)
         const feeTier = await snapshot.getPromise(feeTierAtom)
         const twap = await snapshot.getPromise(twapAtom)
 
@@ -93,12 +91,14 @@ export const useCreateExecute = () => {
         )
           throw new Error('missing dependencies')
 
-        console.log([...selectedPoolCurrencies.map((el) => el.wrapped.address).sort(), feeTier, twap])
+        const [a, b] = selectedPoolCurrencies.map((el) => el.wrapped)
+        const [token0, token1] = a.sortsBefore(b) ? [a, b] : [b, a]
+
         const estimate = masterDeployer.estimateGas.deployPool
         const method = masterDeployer.deployPool
         const deployData = ethers.utils.defaultAbiCoder.encode(
           ['address', 'address', 'uint8', 'bool'],
-          [...selectedPoolCurrencies.map((el) => el.wrapped.address).sort(), 50, twap]
+          [...[token0.address, token1.address].sort(), feeTier, twap]
         )
 
         try {

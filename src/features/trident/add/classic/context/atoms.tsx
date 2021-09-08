@@ -1,6 +1,6 @@
 import { ConstantProductPool, Currency, CurrencyAmount, JSBI, Percent, Price } from '@sushiswap/sdk'
 import { ONE_HUNDRED_PERCENT, ZERO_PERCENT } from '../../../../../constants'
-import { TransactionResponseLight, useTransactionAdder } from '../../../../../state/transactions/hooks'
+import { useTransactionAdder } from '../../../../../state/transactions/hooks'
 import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
 import {
   attemptingTxnAtom,
@@ -13,30 +13,21 @@ import {
   txHashAtom,
 } from '../../../context/atoms'
 import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
-import { useActiveWeb3React, useConstantProductPoolFactory, useTridentRouterContract } from '../../../../../hooks'
-
-import { BigNumber } from '@ethersproject/bignumber'
+import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
-import { Field } from '../../../../../state/trident/add/classic'
 import ReactGA from 'react-ga'
 import { t } from '@lingui/macro'
-import { useCallback } from 'react'
 import { useLingui } from '@lingui/react'
-import useTransactionDeadline from '../../../../../hooks/useTransactionDeadline'
 import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
 import { ethers } from 'ethers'
+import { BigNumber } from '@ethersproject/bignumber'
+import { toShare } from '../../../../../../../sushiswap-sdk/dist/functions/bentobox'
 
-const ZERO = JSBI.BigInt(0)
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({
   key: 'poolAtom',
   default: [null, null],
-})
-
-export const inputFieldAtom = atom<Field>({
-  key: 'inputFieldAtom',
-  default: Field.CURRENCY_A,
 })
 
 export const selectedZapCurrencyAtom = atom<Currency>({
@@ -64,78 +55,60 @@ export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>
   get: ({ get }) => {
     const value = get(mainInputAtom)
     const currencies = get(currenciesAtom)
-    return tryParseAmount(value, currencies[0]?.wrapped)
-  },
-})
-
-export const secondaryInputSelector = selector<string>({
-  key: 'secondaryInputSelector',
-  get: ({ get }) => {
-    return get(secondaryInputCurrencyAmountSelector)?.toExact()
-  },
-  set: ({ get, set }, newValue: string) => {
-    const currencies = get(currenciesAtom)
-    const tokenAmount = tryParseAmount(newValue, currencies[1]?.wrapped)
-
-    if (tokenAmount?.greaterThan(ZERO)) {
-      set(secondaryInputCurrencyAmountSelector, tokenAmount)
-      set(secondaryInputAtom, newValue)
-    } else {
-      set(mainInputAtom, newValue)
-      set(secondaryInputAtom, newValue)
-    }
+    return tryParseAmount(value, currencies[0])
   },
 })
 
 export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>>({
   key: 'secondaryInputCurrencyAmountSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
-    const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
+    const value = get(secondaryInputAtom)
+    const currencies = get(currenciesAtom)
     const noLiquidity = get(noLiquiditySelector)
 
-    // we wrap the currencies just to get the price in terms of the other token
-    if (!noLiquidity) {
-      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-      if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
-        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
-        return pool?.token1?.isNative
-          ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
-          : dependentTokenAmount
-      }
-    }
+    return noLiquidity ? tryParseAmount(value, currencies[1]) : get(secondaryInputCurrencyAmountFixedRatioSelector)
+  },
+})
 
-    return undefined
+export const secondaryInputCurrencyAmountFixedRatioSelector = selector<CurrencyAmount<Currency>>({
+  key: 'secondaryInputCurrencyAmountFixedRatioSelector',
+  get: ({ get }) => {
+    const [, pool] = get(poolAtom)
+    const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
+
+    // we wrap the currencies just to get the price in terms of the other token
+    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+    if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
+      const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
+      return pool?.token1?.isNative
+        ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
+        : dependentTokenAmount
+    }
   },
   set: ({ set, get }, newValue: CurrencyAmount<Currency>) => {
     const [, pool] = get(poolAtom)
-    const noLiquidity = get(noLiquiditySelector)
+    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
 
-    if (!noLiquidity) {
-      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-      if (tokenA && tokenB && newValue?.wrapped && pool) {
-        const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
-        set(mainInputAtom, dependentTokenAmount?.toExact())
-      }
+    if (tokenA && tokenB && newValue?.wrapped && pool) {
+      const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
+      set(mainInputAtom, dependentTokenAmount?.toExact())
     }
-
-    return undefined
   },
 })
 
 export const formattedAmountsSelector = selector<[string, string]>({
   key: 'formattedAmountsSelector',
   get: ({ get }) => {
-    const inputField = get(inputFieldAtom)
     const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
-    return [
-      inputField === Field.CURRENCY_A
-        ? parsedAmountA?.toExact() ?? get(mainInputAtom) ?? ''
-        : parsedAmountA?.toSignificant(6) ?? '',
-      inputField === Field.CURRENCY_B
-        ? parsedAmountB?.toExact() ?? get(secondaryInputAtom) ?? ''
-        : parsedAmountB?.toSignificant(6) ?? '',
-    ]
+    return [parsedAmountA?.toExact() ?? '', parsedAmountB?.toExact() ?? '']
+  },
+})
+
+// Derive parsedAmounts from formattedAmounts
+export const parsedAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
+  key: 'parsedAmountsSelector',
+  get: ({ get }) => {
+    return [get(mainInputCurrencyAmountSelector), get(secondaryInputCurrencyAmountSelector)]
   },
 })
 
@@ -153,23 +126,6 @@ export const parsedZapSplitAmountsSelector = selector<[CurrencyAmount<Currency>,
   get: ({ get }) => {
     const inputAmount = get(parsedZapAmountSelector)
     return [null, null]
-  },
-})
-
-// Derive parsedAmounts from formattedAmounts
-export const parsedAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
-  key: 'parsedAmountsSelector',
-  get: ({ get }) => {
-    const inputField = get(inputFieldAtom)
-    const [, pool] = get(poolAtom)
-    return [
-      inputField === Field.CURRENCY_A
-        ? tryParseAmount(get(mainInputAtom), pool?.token0)
-        : get(mainInputCurrencyAmountSelector),
-      inputField === Field.CURRENCY_B
-        ? tryParseAmount(get(secondaryInputAtom), pool?.token1)
-        : get(secondaryInputCurrencyAmountSelector),
-    ]
   },
 })
 
@@ -279,7 +235,6 @@ export const liquidityValueSelector = selector({
 export const useClassicAddExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const deadline = useTransactionDeadline()
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
   const addTransaction = useTransactionAdder()
   const router = useTridentRouterContract()
@@ -290,11 +245,14 @@ export const useClassicAddExecute = () => {
   const standardModeExecute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
+        const [, pool] = await snapshot.getPromise(poolAtom)
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
         const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
         const [parsedAmountA, parsedAmountB] = await snapshot.getPromise(parsedAmountsSelector)
+        const native = await snapshot.getPromise(spendFromWalletAtom)
 
         if (
+          !pool ||
           !chainId ||
           !library ||
           !account ||
@@ -302,63 +260,63 @@ export const useClassicAddExecute = () => {
           !parsedAmountA ||
           !parsedAmountB ||
           !currencyA ||
-          !currencyB ||
-          !deadline
+          !currencyB
         )
           return
 
-        const amountsMin = {
-          [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
-          [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
-        }
+        const amountsMin = [
+          calculateSlippageAmount(parsedAmountA, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
+          calculateSlippageAmount(parsedAmountB, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0],
+        ]
 
-        let estimate
-        let method: (...args: any) => Promise<TransactionResponseLight>
-        let args: Array<string | string[] | number>
-        let value: BigNumber | null
+        const liquidityInput = [
+          {
+            token: parsedAmountA.currency.wrapped.address,
+            native,
+            amount: amountsMin[0].toString(),
+            // TODO ramin: bentoShare
+            // amount: toShare(parsedAmountA.currency.wrapped, BigNumber.from(amountsMin[0].toString())),
+          },
+          {
+            token: parsedAmountB.currency.wrapped.address,
+            native,
+            amount: amountsMin[1].toString(),
+            // TODO ramin: bentoShare
+            // amount: toShare(parsedAmountB.currency.wrapped, BigNumber.from(amountsMin[1].toString())),
+          },
+        ]
 
-        if (currencyA.isNative || currencyB.isNative) {
-          const tokenBIsETH = currencyB.isNative
-          estimate = router.estimateGas.addLiquidityETH
-          method = router.addLiquidityETH
-          args = [
-            (tokenBIsETH ? currencyA : currencyB)?.wrapped?.address ?? '', // token
-            (tokenBIsETH ? parsedAmountA : parsedAmountB).quotient.toString(), // token desired
-            amountsMin[tokenBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
-            amountsMin[tokenBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
-            account,
-            deadline.toHexString(),
-          ]
-          value = BigNumber.from((tokenBIsETH ? parsedAmountB : parsedAmountA).quotient.toString())
-        } else {
-          estimate = router.estimateGas.addLiquidity
-          method = router.addLiquidity
-          args = [
-            currencyA?.wrapped?.address ?? '',
-            currencyB?.wrapped?.address ?? '',
-            parsedAmountA.quotient.toString(),
-            parsedAmountB.quotient.toString(),
-            amountsMin[Field.CURRENCY_A].toString(),
-            amountsMin[Field.CURRENCY_B].toString(),
-            account,
-            deadline.toHexString(),
-          ]
-          value = null
-        }
+        console.log(router.address)
+        console.log('0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a', pool.liquidityToken.address)
+
+        const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
+        console.log('0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a')
+        console.log(encoded)
+        const estimate = router.estimateGas.addLiquidity
+        const method = router.addLiquidity
+        const args = [liquidityInput, '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a', 1, encoded]
+        const value = parsedAmountA.currency.isNative
+          ? { value: amountsMin[0].toString() }
+          : parsedAmountB.currency.isNative
+          ? { value: amountsMin[1].toString() }
+          : {}
 
         try {
           setAttemptingTxn(true)
-          const estimatedGasLimit = await estimate(...args, value ? { value } : {})
+          const estimatedGasLimit = await estimate(...args, value)
           const response = await method(...args, {
-            ...(value ? { value } : {}),
+            ...value,
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
+
           setAttemptingTxn(false)
 
           addTransaction(response, {
             summary: i18n._(
-              t`Add ${parsedAmountA?.toSignificant(3)} ${currencyA?.symbol} and ${parsedAmountB?.toSignificant(3)} ${
-                currencyB?.symbol
+              t`Add ${parsedAmountA.toSignificant(3)} ${
+                parsedAmountA.currency.symbol
+              } and ${parsedAmountB.toSignificant(3)} ${parsedAmountB.currency.symbol} into ${currencyA.symbol}/${
+                currencyB.symbol
               }`
             ),
           })
@@ -369,7 +327,7 @@ export const useClassicAddExecute = () => {
           ReactGA.event({
             category: 'Liquidity',
             action: 'Add',
-            label: [currencyA?.symbol, currencyB?.symbol].join('/'),
+            label: [currencyA.symbol, currencyB.symbol].join('/'),
           })
         } catch (error) {
           setAttemptingTxn(false)
@@ -384,7 +342,6 @@ export const useClassicAddExecute = () => {
       addTransaction,
       allowedSlippage,
       chainId,
-      deadline,
       i18n,
       library,
       router,
@@ -400,14 +357,24 @@ export const useClassicAddExecute = () => {
         const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
         const parsedZapAmount = await snapshot.getPromise(parsedZapAmountSelector)
         const [, pool] = await snapshot.getPromise(poolAtom)
+        const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
+        const native = await snapshot.getPromise(spendFromWalletAtom)
 
         if (!pool || !chainId || !library || !account || !router || !parsedZapAmount || !currencyA || !currencyB) return
 
+        const amountMin = calculateSlippageAmount(parsedZapAmount, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0]
         const liquidityInput = [
           {
             token: parsedZapAmount.currency.wrapped.address,
-            native: true,
-            amount: parsedZapAmount.quotient.toString(),
+            native,
+            amount: amountMin.toString(),
+
+            // TODO ramin: bentoShare
+            // amount: toShare(
+            //   parsedZapAmount.currency.wrapped,
+            //
+            //   amountMin.toString().toBigNumber(parsedZapAmount.currency.decimals),
+            // ),
           },
         ]
 
@@ -451,7 +418,18 @@ export const useClassicAddExecute = () => {
           }
         }
       },
-    [account, addTransaction, chainId, i18n, library, router, setAttemptingTxn, setShowReview, setTxHash]
+    [
+      account,
+      addTransaction,
+      allowedSlippage,
+      chainId,
+      i18n,
+      library,
+      router,
+      setAttemptingTxn,
+      setShowReview,
+      setTxHash,
+    ]
   )
 
   return {

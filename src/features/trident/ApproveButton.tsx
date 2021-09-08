@@ -1,4 +1,4 @@
-import React, { FC, memo, ReactNode, useMemo } from 'react'
+import React, { FC, memo, ReactNode, useEffect, useState } from 'react'
 import Button from '../../components/Button'
 import { ApprovalState, useApproveCallback, useBentoBoxContract, useTridentRouterContract } from '../../hooks'
 import useBentoMasterApproveCallback, { BentoApprovalState } from '../../hooks/useBentoMasterApproveCallback'
@@ -6,54 +6,36 @@ import { t } from '@lingui/macro'
 import { Currency, CurrencyAmount } from '@sushiswap/sdk'
 import { useLingui } from '@lingui/react'
 
-interface TokenApproveGateProps extends TridentApproveGateProps {
-  status: boolean[]
-  loading: boolean[]
+interface TokenApproveButtonProps {
+  inputAmount: CurrencyAmount<Currency>
+  onStateChange: React.Dispatch<React.SetStateAction<any>>
 }
 
-const TokenApproveGate: FC<TokenApproveGateProps> = memo(
-  ({ inputAmounts: inputAmountsProp = [], children, status, loading }) => {
-    const { i18n } = useLingui()
+const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onStateChange }) => {
+  const { i18n } = useLingui()
+  const bentoBox = useBentoBoxContract()
+  const [approveState, approveCallback] = useApproveCallback(inputAmount?.wrapped, bentoBox?.address)
 
-    // Uses recursion, pops one element off of array and sends array to child minus this element
-    const inputAmounts = useMemo(() => [...inputAmountsProp], [inputAmountsProp])
-    const inputAmount = inputAmounts.length > 0 ? inputAmounts.pop() : undefined
-    const bentoBox = useBentoBoxContract()
-    const [approveState, approveCallback] = useApproveCallback(inputAmount?.wrapped, bentoBox?.address)
+  useEffect(() => {
+    if (!inputAmount?.currency.wrapped.address) return
 
-    // If our array is empty, we are at leafNode
-    if (inputAmountsProp.length === 0) {
-      return (
-        <>{children({ approved: status.every((el) => el === true), loading: loading.some((el) => el === true) })}</>
-      )
-    }
+    onStateChange((prevState) => ({
+      ...prevState,
+      [inputAmount?.currency.wrapped.address]: approveState,
+    }))
+  }, [approveState, inputAmount?.currency.wrapped.address, onStateChange])
 
-    // We are not yet in a leafNode so render approve button for this inputAmount
-    // and use recursion for remaining inputAmounts
-    let approveButton
-    if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState))
-      approveButton = (
-        <Button.Dotted pending={approveState === ApprovalState.PENDING} color="blue" onClick={approveCallback}>
-          {approveState === ApprovalState.PENDING
-            ? i18n._(t`Approving ${inputAmount?.currency.symbol}`)
-            : i18n._(t`Approve ${inputAmount?.currency.symbol}`)}
-        </Button.Dotted>
-      )
-
+  if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState))
     return (
-      <>
-        {approveButton}
-        <TokenApproveGate
-          inputAmounts={inputAmounts}
-          status={[...status, approveState === ApprovalState.APPROVED]}
-          loading={[...loading, inputAmount && approveState === ApprovalState.UNKNOWN]}
-        >
-          {children}
-        </TokenApproveGate>
-      </>
+      <Button.Dotted pending={approveState === ApprovalState.PENDING} color="blue" onClick={approveCallback}>
+        {approveState === ApprovalState.PENDING
+          ? i18n._(t`Approving ${inputAmount?.currency.symbol}`)
+          : i18n._(t`Approve ${inputAmount?.currency.symbol}`)}
+      </Button.Dotted>
     )
-  }
-)
+
+  return <></>
+})
 
 interface TridentApproveGateProps {
   inputAmounts: CurrencyAmount<Currency>[]
@@ -62,8 +44,15 @@ interface TridentApproveGateProps {
 
 const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, children }) => {
   const { i18n } = useLingui()
+  const [status, setStatus] = useState({})
   const router = useTridentRouterContract()
+
   const { approve: bApproveCallback, approvalState: bApprove } = useBentoMasterApproveCallback(router?.address, {})
+
+  const loading =
+    Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || bApprove === BentoApprovalState.UNKNOWN
+  const approved =
+    Object.values(status).every((el) => el === ApprovalState.APPROVED) && bApprove === BentoApprovalState.APPROVED
 
   return (
     <div className="flex flex-col gap-3">
@@ -74,13 +63,10 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, childre
             : i18n._(t`Approve BentoBox to spend tokens`)}
         </Button.Dotted>
       )}
-      <TokenApproveGate
-        inputAmounts={inputAmounts}
-        status={[bApprove === BentoApprovalState.APPROVED]}
-        loading={[bApprove === BentoApprovalState.UNKNOWN]}
-      >
-        {children}
-      </TokenApproveGate>
+      {inputAmounts.map((amount, index) => (
+        <TokenApproveButton inputAmount={amount} key={index} onStateChange={setStatus} />
+      ))}
+      {children({ approved, loading })}
     </div>
   )
 }

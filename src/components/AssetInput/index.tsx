@@ -32,6 +32,7 @@ interface AssetInputProps {
   onSelect?: (x: Token) => void
   headerRight?: ReactNode
   chip?: string
+  disabled?: boolean
 }
 
 // AssetInput exports its children so if you need a child component of this component,
@@ -90,7 +91,7 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
         error={error}
         spendFromWallet={spendFromWallet}
         onMax={() => props.onChange(maxSpend)}
-        showMax={balance?.greaterThan('0') ? parsedInput?.equalTo(balance) : false}
+        showMax={balance?.greaterThan('0') ? !parsedInput?.equalTo(maxAmountSpend(balance)) : false}
         footer={
           <AssetInputPanel.Balance
             balance={balance}
@@ -128,6 +129,7 @@ const AssetInputPanel = ({
   onSelect,
   onMax,
   footer,
+  disabled,
   showMax = true,
   error = false,
 }: AssetInputPanelProps) => {
@@ -145,6 +147,7 @@ const AssetInputPanel = ({
             trigger={({ setOpen }) => (
               <div className="inline-flex items-center">
                 <Button
+                  disabled={disabled}
                   color="blue"
                   variant="filled"
                   className="rounded-full px-3 py-0 h-[32px] shadow-md"
@@ -174,6 +177,7 @@ const AssetInputPanel = ({
         <div className="flex flex-col flex-grow">
           <Typography variant="h3" weight={700}>
             <NumericalInput
+              disabled={disabled}
               value={value}
               onUserInput={onChange}
               placeholder="0.00"

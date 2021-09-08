@@ -47,21 +47,34 @@ const ClassicZapMode = () => {
 
   return (
     <>
-      <div className="px-5 pt-5">
-        <Alert
-          dismissable={false}
-          type="information"
-          showIcon
-          message={i18n._(t`In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights
+      {noLiquidity ? (
+        <div className="px-5 pt-5">
+          <Alert
+            dismissable={false}
+            type="error"
+            showIcon
+            message={i18n._(t`Zap mode is unavailable when there is no liquidity in the pool`)}
+          />
+        </div>
+      ) : (
+        <div className="px-5 pt-5">
+          <Alert
+            dismissable={false}
+            type="information"
+            showIcon
+            message={i18n._(t`In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights
           automatically.`)}
-        />
-      </div>
+          />
+        </div>
+      )}
+
       <div className="flex flex-col gap-3 px-5">
         <AssetInput
           value={zapInput}
           currency={selectedZapCurrency}
           onChange={setZapInput}
           onSelect={setSelectedZapCurrency}
+          disabled={noLiquidity}
         />
         <div className="flex flex-col gap-3">
           <TridentApproveGate inputAmounts={[parsedZapAmount]}>

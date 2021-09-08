@@ -1,4 +1,5 @@
 import { Currency, CurrencyAmount, FACTORY_ADDRESS, Fee, computeConstantProductPoolAddress } from '@sushiswap/sdk'
+import { address as CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS } from '@sushiswap/trident/deployments/kovan/ConstantProductPoolFactory.json'
 
 import { ConstantProductPool } from '@sushiswap/sdk'
 import { Interface } from '@ethersproject/abi'
@@ -23,6 +24,17 @@ export function useTridentClassicPools(
       pools.map(([currencyA, currencyB, fee, twap]) => {
         const tokenA = currencyA?.wrapped
         const tokenB = currencyB?.wrapped
+
+        console.log(
+          computeConstantProductPoolAddress({
+            factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
+            tokenA,
+            tokenB,
+            fee,
+            twap,
+          })
+        )
+
         return tokenA &&
           tokenB &&
           tokenA.chainId === tokenB.chainId &&
@@ -30,8 +42,10 @@ export function useTridentClassicPools(
           fee &&
           twap &&
           FACTORY_ADDRESS[tokenA.chainId]
-          ? computeConstantProductPoolAddress({
-              factoryAddress: '0x2d7933851D0b372ffB810793Cf86D33177F6812f',
+          ? // ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
+            // : // TODO ramin: hardcoded
+            computeConstantProductPoolAddress({
+              factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
               tokenA,
               tokenB,
               fee,
@@ -43,7 +57,6 @@ export function useTridentClassicPools(
   )
 
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
-
   return useMemo(() => {
     return results.map((result, i) => {
       const { result: reserves, loading } = result

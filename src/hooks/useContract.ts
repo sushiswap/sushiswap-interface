@@ -20,6 +20,19 @@ import {
   WNATIVE_ADDRESS,
 } from '@sushiswap/sdk'
 import {
+  address as MASTER_DEPLOYER_ADDRESS,
+  abi as MASTER_DEPLOYER_ABI,
+} from '@sushiswap/trident/deployments/kovan/MasterDeployer.json'
+import {
+  address as CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
+  abi as CONSTANT_PRODUCT_POOL_FACTORY_ABI,
+} from '@sushiswap/trident/deployments/kovan/ConstantProductPoolFactory.json'
+import {
+  address as TRIDENT_ROUTER_ADDRESS,
+  abi as TRIDENT_ROUTER_ABI,
+} from '@sushiswap/trident/deployments/kovan/TridentRouter.json'
+
+import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from '../constants/abis/argent-wallet-detector'
@@ -52,9 +65,6 @@ import MULTICALL2_ABI from '../constants/abis/multicall2.json'
 import ROUTER_ABI from '../constants/abis/router.json'
 import SUSHI_ABI from '../constants/abis/sushi.json'
 import TIMELOCK_ABI from '../constants/abis/timelock.json'
-import TRIDENT_ROUTER_ABI from '../constants/abis/trident-router.json'
-import MASTER_DEPLOYER_ABI from '../constants/abis/master-deployer.json'
-import CONSTANT_PRODUCT_POOL_FACTORY_ABI from '../constants/abis/constant-product-factory.json'
 import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZENKO_ABI from '../constants/abis/zenko.json'
@@ -224,21 +234,19 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
   return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
 }
 
-// TODO hardcoded kovan contract
+// TODO ramin: use chainId index here for contract
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract('0x760ef4F484EbF2668001B090291f84A3CDf2f3aa', TRIDENT_ROUTER_ABI, withSignerIfPossible)
+  return useContract(TRIDENT_ROUTER_ADDRESS, TRIDENT_ROUTER_ABI, withSignerIfPossible)
 }
 
-// TODO hardcoded kovan contract
+// TODO ramin: use chainId index here for contract
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract('0xD264b48092EFEd096a616b97DF401c01b4FD0501', MASTER_DEPLOYER_ABI, withSignerIfPossible)
+  console.log(`Masterdeployer ${MASTER_DEPLOYER_ADDRESS}`)
+  return useContract(MASTER_DEPLOYER_ADDRESS, MASTER_DEPLOYER_ABI, withSignerIfPossible)
 }
 
-// TODO hardcoded kovan contract
+// TODO ramin: use chainId index here for contract
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
-  return useContract(
-    '0x2d7933851D0b372ffB810793Cf86D33177F6812f',
-    CONSTANT_PRODUCT_POOL_FACTORY_ABI,
-    withSignerIfPossible
-  )
+  console.log(`CPP ${CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS}`)
+  return useContract(CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS, CONSTANT_PRODUCT_POOL_FACTORY_ABI, withSignerIfPossible)
 }

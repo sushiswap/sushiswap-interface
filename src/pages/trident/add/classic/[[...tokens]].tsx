@@ -6,12 +6,7 @@ import {
   poolBalanceAtom,
   totalSupplyAtom,
 } from '../../../../features/trident/context/atoms'
-import {
-  mainInputAtom,
-  poolAtom,
-  secondaryInputSelector,
-  zapInputAtom,
-} from '../../../../features/trident/add/classic/context/atoms'
+import { mainInputAtom, poolAtom, zapInputAtom } from '../../../../features/trident/add/classic/context/atoms'
 
 import AddTransactionReviewModalStandard from '../../../../features/trident/add/classic/AddTransactionReviewModal'
 import Button from '../../../../components/Button'
@@ -21,7 +16,7 @@ import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapM
 import Link from 'next/link'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import { NATIVE } from '@sushiswap/sdk'
+import { NATIVE, WNATIVE } from '@sushiswap/sdk'
 import { SUSHI } from '../../../../config/tokens'
 import SettingsTab from '../../../../components/Settings'
 import TridentLayout from '../../../../layouts/Trident'
@@ -34,14 +29,15 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
+import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
+import Alert from '../../../../components/Alert'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
 
-  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const [pool, setPool] = useRecoilState(poolAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [currencies, setCurrencies] = useRecoilState(currenciesAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
@@ -49,19 +45,18 @@ const AddClassic = () => {
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
 
   useEffect(() => {
     if (!classicPool[1]) return
     setPool(classicPool)
-  }, [classicPool, setPool])
-
-  useEffect(() => {
-    if (!currencyA || !currencyB) return
-    setCurrencies([currencyA, currencyB])
-  }, [currencyA, currencyB, setCurrencies])
+    setCurrencies([
+      classicPool[1].token0 === WNATIVE[chainId] ? NATIVE[chainId] : classicPool[1].token0,
+      classicPool[1].token1 === WNATIVE[chainId] ? NATIVE[chainId] : classicPool[1].token1,
+    ])
+  }, [chainId, classicPool, setCurrencies, setPool])
 
   useEffect(() => {
     if (!totalSupply) return
@@ -77,7 +72,6 @@ const AddClassic = () => {
     ({ reset }) =>
       async () => {
         reset(mainInputAtom)
-        reset(secondaryInputSelector)
         reset(zapInputAtom)
       },
     []
@@ -115,8 +109,21 @@ const AddClassic = () => {
 
       <ModeToggle onChange={handleLiquidityModeChange} />
 
-      {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
-      {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+      {pool[0] === ConstantProductPoolState.NOT_EXISTS ? (
+        <div className="px-5 pt-5">
+          <Alert
+            dismissable={false}
+            type="error"
+            showIcon
+            message={i18n._(t`A Pool could not be found for selected parameters`)}
+          />
+        </div>
+      ) : (
+        <>
+          {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
+          {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+        </>
+      )}
 
       <AddTransactionReviewModalStandard />
 
