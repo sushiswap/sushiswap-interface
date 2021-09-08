@@ -1,17 +1,17 @@
 import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useTridentPoolPageContext } from '../context'
 import Typography from '../../../../components/Typography'
 import ListPanel from '../../../../components/ListPanel'
 import Button from '../../../../components/Button'
-import { SUSHI } from '../../../../config/tokens'
-import { ChainId } from '@sushiswap/sdk'
-import { tryParseAmount } from '../../../../functions'
+import { useRecoilValue } from 'recoil'
+import { currentLiquidityValueSelector } from './context/atoms'
 
 const ClassicMyRewards: FC = () => {
   const { i18n } = useLingui()
-  const { pool } = useTridentPoolPageContext()
+
+  // TODO ramin: this is incorrect
+  const currentLiquidityValues = useRecoilValue(currentLiquidityValueSelector)
 
   return (
     <ListPanel
@@ -26,7 +26,9 @@ const ClassicMyRewards: FC = () => {
           </Button>
         </div>
       }
-      items={[<ListPanel.CurrencyAmountItem amount={tryParseAmount('10.2', SUSHI[ChainId.MAINNET])} key={0} />]}
+      items={currentLiquidityValues.map((el, index) => (
+        <ListPanel.CurrencyAmountItem amount={el} key={index} />
+      ))}
     />
   )
 }

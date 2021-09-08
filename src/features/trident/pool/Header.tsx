@@ -2,8 +2,6 @@ import Chip from '../../../components/Chip'
 import Typography from '../../../components/Typography'
 import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
 import { t } from '@lingui/macro'
-import { toHref } from '../../../hooks/useTridentPools'
-import { useTridentPoolPageContext } from './context'
 import { POOL_TYPES } from '../constants'
 import { useLingui } from '@lingui/react'
 import { I18n } from '@lingui/core'
@@ -11,21 +9,31 @@ import { FC } from 'react'
 import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
-import { Pool } from '../types'
+import { useRecoilValue } from 'recoil'
+import { poolAtom } from './classic/context/atoms'
+import { ConstantProductPool } from '../../../../../sushiswap-sdk'
+import { PoolType } from '../types'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
-  const { pool } = useTridentPoolPageContext()
+  const [, pool] = useRecoilValue(poolAtom)
 
   return <Header i18n={i18n} pool={pool} />
 }
 
 interface HeaderProps {
-  pool: Pool
+  // TODO ramin: should be every pool type instead of ConstantProductPool only
+  pool: ConstantProductPool
   i18n: I18n
 }
 
 export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
+  // TODO ramin: remove this make dynamic
+  const apy = 3.6
+  const isFarm = true
+  const type = PoolType.CLASSIC
+  const fees = '3343.34'
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col bg-dark-900">
@@ -45,13 +53,15 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
             <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
             <div className="flex flex-col gap-2">
               <Typography variant="h1" className="text-high-emphesis" weight={700}>
-                {pool.apy}%
+                {apy}%
               </Typography>
               <div className="flex flex-row gap-2.5">
-                {pool.isFarm ? (
+                {isFarm ? (
                   <>
                     <Typography variant="xxs">{i18n._(t`Rewards:`)} 3.6%</Typography>
-                    <Typography variant="xxs">{i18n._(t`Fees:`)} 3%</Typography>
+                    <Typography variant="xxs">
+                      {i18n._(t`Fees:`)} {pool?.fee / 100}%
+                    </Typography>
                   </>
                 ) : (
                   <Typography variant="xxs" className="text-secondary">
@@ -64,12 +74,12 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
         </div>
       </div>
       <div className="px-5 mt-[-32px] flex flex-col gap-2">
-        <CurrencyLogoArray currencies={pool.tokens} size={64} />
+        <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} />
         <div className="flex flex-row gap-2 items-center">
           <Typography variant="h2" className="text-high-emphesis" weight={700}>
-            {pool.tokens.map((token) => token.symbol).join('-')}
+            {pool?.token0.symbol}-{pool?.token1.symbol}
           </Typography>
-          {pool.isFarm && (
+          {isFarm && (
             <>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -86,20 +96,22 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
           )}
         </div>
         <div className="flex flex-row gap-2 items-center">
-          <Chip label={POOL_TYPES[pool.type].label} color={POOL_TYPES[pool.type].color} />
+          <Chip label={POOL_TYPES[type].label} color={POOL_TYPES[type].color} />
           <Typography weight={700} variant="sm">
-            {pool.fee} {i18n._(t`Fees`)}
+            {fees} {i18n._(t`Fees`)}
           </Typography>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2 px-5 pt-6">
         <Button variant="outlined" color="gradient" className="text-high-emphesis">
-          <Link href={`/trident/add/${toHref(pool)}`}>
-            {pool.isFarm ? i18n._(t`Add Liquidity / Stake`) : i18n._(t`Add Liquidity`)}
+          <Link href={`/trident/add/${pool?.token0.address}/${pool?.token1.address}`}>
+            {isFarm ? i18n._(t`Add Liquidity / Stake`) : i18n._(t`Add Liquidity`)}
           </Link>
         </Button>
         <Button variant="outlined" color="gradient" className="text-high-emphesis">
-          <Link href={`/trident/remove/${toHref(pool)}`}>{i18n._(t`Remove Liquidity`)}</Link>
+          <Link href={`/trident/remove/${pool?.token0.address}/${pool?.token1.address}`}>
+            {i18n._(t`Remove Liquidity`)}
+          </Link>
         </Button>
         <Button variant="outlined" color="gray" className="w-full col-span-2 text-high-emphesis py-3" size="xs">
           {i18n._(t`View Analytics`)}

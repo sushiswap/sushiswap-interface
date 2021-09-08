@@ -20,8 +20,6 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
 import { ethers } from 'ethers'
-import { BigNumber } from '@ethersproject/bignumber'
-import { toShare } from '../../../../../../../sushiswap-sdk/dist/functions/bentobox'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
