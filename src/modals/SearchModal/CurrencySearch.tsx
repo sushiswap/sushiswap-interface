@@ -51,6 +51,7 @@ interface CurrencySearchProps {
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
   hideBalance: boolean
+  showSearch: boolean
 }
 
 export function CurrencySearch({
@@ -67,6 +68,7 @@ export function CurrencySearch({
   includeNativeCurrency = true,
   allowManageTokenList = true,
   hideBalance = false,
+  showSearch = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -193,7 +195,7 @@ export function CurrencySearch({
   return (
     <ContentWrapper>
       <ModalHeader onClose={onDismiss} title="Select a token" />
-      {!currencyList && (
+      {!currencyList && showSearch && (
         <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
           <input
             type="text"

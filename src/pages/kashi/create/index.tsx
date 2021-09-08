@@ -180,6 +180,7 @@ function Create() {
               otherCurrency={currencies[Field.ASSET]}
               showCommonBases={false}
               allowManageTokenList={false}
+              showSearch={false}
               id="kashi-currency-collateral"
             />
 
@@ -193,6 +194,7 @@ function Create() {
               otherCurrency={currencies[Field.COLLATERAL]}
               showCommonBases={false}
               allowManageTokenList={false}
+              showSearch={false}
               id="kashi-currency-asset"
             />
           </div>

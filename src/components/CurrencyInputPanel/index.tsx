@@ -37,6 +37,7 @@ interface CurrencyInputPanelProps {
   renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode
   locked?: boolean
   customBalanceText?: string
+  showSearch?: boolean
 }
 
 export default function CurrencyInputPanel({
@@ -60,6 +61,7 @@ export default function CurrencyInputPanel({
   locked = false,
   customBalanceText,
   allowManageTokenList = true,
+  showSearch = true,
 }: CurrencyInputPanelProps) {
   const { i18n } = useLingui()
   const [modalOpen, setModalOpen] = useState(false)
@@ -186,6 +188,7 @@ export default function CurrencyInputPanel({
           showCommonBases={showCommonBases}
           allowManageTokenList={allowManageTokenList}
           hideBalance={hideBalance}
+          showSearch={showSearch}
         />
       )}
     </div>
