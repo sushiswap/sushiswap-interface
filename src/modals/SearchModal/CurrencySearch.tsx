@@ -65,6 +65,7 @@ export function CurrencySearch({
   currencyList,
   includeNativeCurrency = true,
   allowManageTokenList = true,
+  hideBalance = false,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -192,7 +193,7 @@ export function CurrencySearch({
     <ContentWrapper>
       <ModalHeader onClose={onDismiss} title="Select a token" />
       {!currencyList && (
-        <div className="mt-0 sm:mt-3 mb-3 sm:mb-8">
+        <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
           <input
             type="text"
             id="token-search-input"
@@ -230,6 +231,7 @@ export function CurrencySearch({
                 fixedListRef={fixedList}
                 showImportView={showImportView}
                 setImportToken={setImportToken}
+                hideBalance={hideBalance}
               />
             )}
           </AutoSizer>

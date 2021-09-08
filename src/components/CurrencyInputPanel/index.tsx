@@ -33,6 +33,7 @@ interface CurrencyInputPanelProps {
   priceImpact?: Percent
   id: string
   showCommonBases?: boolean
+  allowManageTokenList?: boolean
   renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode
   locked?: boolean
   customBalanceText?: string
@@ -58,6 +59,7 @@ export default function CurrencyInputPanel({
   hideInput = false,
   locked = false,
   customBalanceText,
+  allowManageTokenList = true,
 }: CurrencyInputPanelProps) {
   const { i18n } = useLingui()
   const [modalOpen, setModalOpen] = useState(false)
@@ -182,6 +184,8 @@ export default function CurrencyInputPanel({
           selectedCurrency={currency}
           otherSelectedCurrency={otherCurrency}
           showCommonBases={showCommonBases}
+          allowManageTokenList={allowManageTokenList}
+          hideBalance={hideBalance}
         />
       )}
     </div>

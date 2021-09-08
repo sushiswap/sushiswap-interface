@@ -101,11 +101,13 @@ function CurrencyRow({
   isSelected,
   otherSelected,
   style,
+  hideBalance = false,
 }: {
   currency: Currency
   onSelect: () => void
   isSelected: boolean
   otherSelected: boolean
+  hideBalance: boolean
   style: CSSProperties
 }) {
   const { account, chainId } = useActiveWeb3React()
@@ -137,9 +139,11 @@ function CurrencyRow({
         </div>
       </Column>
       <TokenTags currency={currency} />
-      <div className="flex items-center justify-end">
-        {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
-      </div>
+      {!hideBalance && (
+        <div className="flex items-center justify-end">
+          {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
+        </div>
+      )}
     </MenuItem>
   )
 }
@@ -180,6 +184,7 @@ export default function CurrencyList({
   fixedListRef,
   showImportView,
   setImportToken,
+  hideBalance = false,
 }: {
   height: number
   currencies: Currency[]
@@ -228,6 +233,7 @@ export default function CurrencyList({
             isSelected={isSelected}
             onSelect={handleSelect}
             otherSelected={otherSelected}
+            hideBalance={hideBalance}
           />
         )
       } else {

@@ -22,6 +22,7 @@ interface CurrencySearchModalProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
+  hideBalance?: boolean
 }
 
 function CurrencySearchModal({
@@ -34,6 +35,7 @@ function CurrencySearchModal({
   showCommonBases = false,
   includeNativeCurrency = true,
   allowManageTokenList = true,
+  hideBalance = false,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
   const lastOpen = useLast(isOpen)
@@ -81,6 +83,7 @@ function CurrencySearchModal({
           currencyList={currencyList}
           includeNativeCurrency={includeNativeCurrency}
           allowManageTokenList={allowManageTokenList}
+          hideBalance={hideBalance}
         />
       ) : modalView === CurrencyModalView.importToken && importToken ? (
         <ImportToken
@@ -108,7 +111,5 @@ function CurrencySearchModal({
     </Modal>
   )
 }
-
-CurrencySearchModal.whyDidYouRender = true
 
 export default CurrencySearchModal
