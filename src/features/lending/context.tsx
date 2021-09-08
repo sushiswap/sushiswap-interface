@@ -235,7 +235,6 @@ export function KashiProvider({ children }) {
       const allPairAddresses = logPairs
         .filter((pair) => {
           const oracle = getOracle(pair, chainId, tokens)
-          console.log({ oracle, valid: oracle.valid })
           if (!oracle) {
             return false
           } else if (!oracle.valid) {
