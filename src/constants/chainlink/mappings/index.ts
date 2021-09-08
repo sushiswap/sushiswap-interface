@@ -1,4 +1,5 @@
 import ARBITRUM from './arbitrum'
+import AVALANCHE from './avalanche'
 import BSC from './bsc'
 import { ChainId } from '@sushiswap/sdk'
 import HECO from './heco'
@@ -29,4 +30,5 @@ export const CHAINLINK_MAPPING: {
   [ChainId.MATIC]: MATIC,
   [ChainId.XDAI]: XDAI,
   [ChainId.ARBITRUM]: ARBITRUM,
+  [ChainId.AVALANCHE]: AVALANCHE,
 }

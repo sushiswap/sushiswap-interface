@@ -87,6 +87,7 @@ function AppBar(): JSX.Element {
                           ChainId.MATIC,
                           ChainId.XDAI,
                           ChainId.ARBITRUM,
+                          ChainId.AVALANCHE,
                         ].includes(chainId) && (
                           <>
                             <NavLink href={'/lend'}>
@@ -329,7 +330,14 @@ function AppBar(): JSX.Element {
                   )}
 
                 {chainId &&
-                  [ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.ARBITRUM].includes(chainId) && (
+                  [
+                    ChainId.MAINNET,
+                    ChainId.KOVAN,
+                    ChainId.BSC,
+                    ChainId.MATIC,
+                    ChainId.ARBITRUM,
+                    ChainId.AVALANCHE,
+                  ].includes(chainId) && (
                     <>
                       <Link href={'/lend'}>
                         <a

@@ -2362,20 +2362,20 @@
     ejs "^2.6.1"
     magic-string "^0.25.0"
 
-"@sushiswap/chainlink-whitelist@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.3.tgz#3a8d7b030e60422d0b760ee8ef87f2b296ee6319"
-  integrity sha512-7I/CKjzTB0TYvpk/FEopHVGVcaZFGXlsifa2SB7AyOBdu4jPYf1JPyJH89iKZI4JRAIB7Qf1Gd38ow3lTp39rg==
+"@sushiswap/chainlink-whitelist@0.2.5":
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.5.tgz#fcf3f36fee62bcfbe2389587d5dd3657ecb00bfb"
+  integrity sha512-XJ7D1zOITrLjKYpweHafroxu1xsQ1mJiDsvhjBVs6snT5zNPyfRXNxhB6sD3VXseDkQmqNWtgkSe4UJ8t8TrcQ==
 
 "@sushiswap/core@2.0.0-canary.0":
   version "2.0.0-canary.0"
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
   integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
 
-"@sushiswap/default-token-list@15.2.0":
-  version "15.2.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-15.2.0.tgz#c3b5235b7527460af3de53893ce97281c5ce4829"
-  integrity sha512-2o0NKC0V+YQbW/QHVfwW3ghfZ21zSMgsbPlWSYniGjRlOJ6QSB1Od3zVHJUORJhlmbxObtodhdiWzkVIZnowCQ==
+"@sushiswap/default-token-list@15.4.0":
+  version "15.4.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-15.4.0.tgz#311fe73b5adcf3246147244495d300a712d1ebad"
+  integrity sha512-+6H+HrNrxDinYjioziClu+MsEauzpwG4R+G/7dgoufOq+L0QJpxtc6OhVlr9mCdcE7oSfIi1Rsy7xc4dzVaifg==
 
 "@sushiswap/default-token-list@^11.3.0":
   version "11.5.0"
@@ -2389,10 +2389,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.66":
-  version "5.0.0-canary.66"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.66.tgz#e80cfa1205e8f4d31953bbdcccf8b1eb1cfa9311"
-  integrity sha512-/d2NDtBIM7H1fsJnGmWDGmqY5gsGyJ+Pj3c7RJPl+hVsDEz0NYcWzr7Yy991nS+FU56ny4RgKIpmPdmkGdJHwg==
+"@sushiswap/sdk@5.0.0-canary.69":
+  version "5.0.0-canary.69"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.69.tgz#91d9579ccbe32ec5bf2bbb786b3a1a01b0762529"
+  integrity sha512-Qgk+XCH9quos+yC3P/JPz19Z5Z3+ESAvnd6531QUoYx8e/SVMhWsZDCZbrPvZIoV3Tzu4y0UcMZduVW1DWGSFw==
   dependencies:
     big.js "^6.1.0"
     decimal.js-light "^2.5.0"
