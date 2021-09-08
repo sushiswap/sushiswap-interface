@@ -50,6 +50,7 @@ interface CurrencySearchProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
+  hideBalance: boolean
 }
 
 export function CurrencySearch({

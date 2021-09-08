@@ -195,6 +195,7 @@ export default function CurrencyList({
   fixedListRef?: MutableRefObject<FixedSizeList | undefined>
   showImportView: () => void
   setImportToken: (token: Token) => void
+  hideBalance: boolean
 }) {
   const itemData: (Currency | BreakLine)[] = useMemo(() => {
     if (otherListTokens && otherListTokens?.length > 0) {
