@@ -228,8 +228,6 @@ export function KashiProvider({ children }) {
         (pair) => !BLACKLISTED_ORACLES.includes(pair.oracle)
       )
 
-      console.log({ logPairs })
-
       // Filter all pairs by supported oracles and verify the oracle setup
 
       const invalidOracles = []
@@ -249,12 +247,8 @@ export function KashiProvider({ children }) {
 
       console.log('invalidOracles', invalidOracles)
 
-      console.log({ allPairAddresses })
-
       // Get full info on all the verified pairs
       const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
-
-      console.log({ pairs })
 
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()
