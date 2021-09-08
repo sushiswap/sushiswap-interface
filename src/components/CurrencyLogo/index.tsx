@@ -31,10 +31,10 @@ const BLOCKCHAIN = {
 }
 
 function getCurrencySymbol(currency) {
-  if (currency.symbol === 'WBTC') {
+  if (currency.symbol.replace('/e', '') === 'WBTC') {
     return 'btc'
   }
-  if (currency.symbol === 'WETH') {
+  if (currency.symbol.replace('/e', '') === 'WETH') {
     return 'eth'
   }
 
