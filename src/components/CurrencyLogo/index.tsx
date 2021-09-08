@@ -40,6 +40,11 @@ function getCurrencySymbol(currency) {
   // if (currency.symbol === 'WMOVR') {
   //   return 'movr'
   // }
+
+  if (currency.chainId === ChainId.AVALANCHE) {
+    return currency.symbol.replace('/e', '').toLowerCase()
+  }
+
   return currency.symbol.toLowerCase()
 }
 
