@@ -1,9 +1,10 @@
+import { maxBy, minBy } from 'lodash'
+
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { useMemo } from 'react'
-import { scaleLinear } from '@visx/scale'
 import { LinePath } from '@visx/shape'
-import { minBy, maxBy } from 'lodash'
 import { LinearGradient } from '@visx/gradient'
+import { scaleLinear } from '@visx/scale'
+import { useMemo } from 'react'
 
 interface LineGraphProps {
   data: {

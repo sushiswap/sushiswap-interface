@@ -1,10 +1,9 @@
 import {
-  ARCHER_ROUTER_ADDRESS,
   BAR_ADDRESS,
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
-  ChainId,
   CHAINLINK_ORACLE_ADDRESS,
+  ChainId,
   ENS_REGISTRAR_ADDRESS,
   FACTORY_ADDRESS,
   MAKER_ADDRESS,
@@ -37,7 +36,6 @@ import {
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from '../constants/abis/argent-wallet-detector'
 
-import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
 import BAR_ABI from '../constants/abis/bar.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
 import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
@@ -169,11 +167,7 @@ export function useFactoryContract(): Contract | null {
 
 export function useRouterContract(useArcher = false, withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-
-  const address = useArcher ? ARCHER_ROUTER_ADDRESS[chainId] : ROUTER_ADDRESS[chainId]
-  const abi = useArcher ? ARCHER_ROUTER_ABI : ROUTER_ABI
-
-  return useContract(address, abi, withSignerIfPossible)
+  return useContract(ROUTER_ADDRESS[chainId], ROUTER_ABI, withSignerIfPossible)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {
