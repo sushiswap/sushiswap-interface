@@ -75,7 +75,8 @@ export default function LineGraph({
       {data && (
         <AutoSizer>
           {({ width, height }) => (
-            <Graph data={data} stroke={stroke} strokeWidth={strokeWidth} width={width} height={height} />
+            console.log({ width, height }, 'dimensions'),
+            (<Graph data={data} stroke={stroke} strokeWidth={strokeWidth} width={width} height={height} />)
           )}
         </AutoSizer>
       )}

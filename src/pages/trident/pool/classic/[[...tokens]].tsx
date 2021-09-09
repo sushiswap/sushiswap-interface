@@ -18,6 +18,7 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useEffect } from 'react'
 import { poolAtom } from '../../../../features/trident/pool/classic/context/atoms'
+import { BarGraph } from '../../../../components/BarGraph'
 
 const Pool = () => {
   const { account, chainId } = useActiveWeb3React()
