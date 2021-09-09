@@ -52,7 +52,6 @@ export const currentPoolShareSelector = selector({
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const userPoolBalance = get(poolBalanceAtom)
-
     if (pool && totalSupply && userPoolBalance) {
       return new Percent(userPoolBalance.quotient, totalSupply.quotient)
     }

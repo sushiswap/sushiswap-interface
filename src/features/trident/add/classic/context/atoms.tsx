@@ -316,12 +316,7 @@ export const useClassicAddExecute = () => {
           },
         ]
 
-        console.log(router.address)
-        console.log('0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a', pool.liquidityToken.address)
-
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
-        console.log('0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a')
-        console.log(encoded)
         const estimate = router.estimateGas.addLiquidity
         const method = router.addLiquidity
         const args = [liquidityInput, '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a', 1, encoded]

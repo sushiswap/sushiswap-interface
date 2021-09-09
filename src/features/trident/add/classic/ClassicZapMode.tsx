@@ -13,7 +13,7 @@ import {
   zapInputAtom,
 } from './context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { useActiveWeb3React } from '../../../../hooks'
+import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import { useCurrencyBalance } from '../../../../state/wallet/hooks'
 import { noLiquiditySelector, showReviewAtom } from '../../context/atoms'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
@@ -26,6 +26,7 @@ import Lottie from 'lottie-react'
 const ClassicZapMode = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
+  const bentoBox = useBentoBoxContract()
   const [poolState] = useRecoilValue(poolAtom)
   const [zapInput, setZapInput] = useRecoilState(zapInputAtom)
   const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
@@ -77,7 +78,7 @@ const ClassicZapMode = () => {
           disabled={noLiquidity}
         />
         <div className="flex flex-col gap-3">
-          <TridentApproveGate inputAmounts={[parsedZapAmount]}>
+          <TridentApproveGate inputAmounts={[parsedZapAmount]} tokenApproveOn={bentoBox?.address}>
             {({ loading, approved }) => (
               <Button
                 {...(loading && {

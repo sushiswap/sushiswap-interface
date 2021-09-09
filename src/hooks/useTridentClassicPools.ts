@@ -22,8 +22,9 @@ export function useTridentClassicPools(
   const poolAddresses = useMemo(
     () =>
       pools.map(([currencyA, currencyB, fee, twap]) => {
-        const tokenA = currencyA?.wrapped
-        const tokenB = currencyB?.wrapped
+        const [tokenA, tokenB] = currencyA?.wrapped.sortsBefore(currencyB?.wrapped)
+          ? [currencyA?.wrapped, currencyB?.wrapped]
+          : [currencyB?.wrapped, currencyA?.wrapped]
 
         console.log(
           computeConstantProductPoolAddress({

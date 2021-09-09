@@ -8,12 +8,12 @@ import ClassicMyRewards from '../../../../features/trident/pool/classic/ClassicM
 import Rewards from '../../../../features/trident/pool/Rewards'
 import { RecoilRoot, useSetRecoilState } from 'recoil'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE, WNATIVE } from '../../../../../../sushiswap-sdk'
+import { NATIVE } from '@sushiswap/sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useRouter } from 'next/router'
 import { useActiveWeb3React } from '../../../../hooks'
-import { currenciesAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
+import { poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useEffect } from 'react'
@@ -24,7 +24,6 @@ const Pool = () => {
   const { query } = useRouter()
 
   const setPool = useSetRecoilState(poolAtom)
-  const setCurrencies = useSetRecoilState(currenciesAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
@@ -37,11 +36,7 @@ const Pool = () => {
   useEffect(() => {
     if (!classicPool[1]) return
     setPool(classicPool)
-    setCurrencies([
-      classicPool[1].token0 === WNATIVE[chainId] ? NATIVE[chainId] : classicPool[1].token0,
-      classicPool[1].token1 === WNATIVE[chainId] ? NATIVE[chainId] : classicPool[1].token1,
-    ])
-  }, [chainId, classicPool, setCurrencies, setPool])
+  }, [chainId, classicPool, setPool])
 
   useEffect(() => {
     if (!totalSupply) return

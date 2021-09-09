@@ -5,55 +5,50 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
-import { toHref } from '../../../../hooks/useTridentPools'
 import React, { useEffect } from 'react'
 import ClassicStandardMode from '../../../../features/trident/remove/classic/ClassicStandardMode'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import { LiquidityMode } from '../../../../features/trident/types'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  currenciesAtom,
-  liquidityModeAtom,
-  poolBalanceAtom,
-  totalSupplyAtom,
-} from '../../../../features/trident/context/atoms'
+import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
 import TridentLayout from '../../../../layouts/Trident'
 import ClassicUnzapMode from '../../../../features/trident/remove/classic/ClassicUnzapMode'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { useV2Pair } from '../../../../hooks/useV2Pairs'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
-import { poolAtom } from '../../../../features/trident/remove/classic/context/atoms'
+import { poolAtom, slippageAtom } from '../../../../features/trident/remove/classic/context/atoms'
 import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
+import { NATIVE, Percent } from '../../../../../../sushiswap-sdk'
+import { SUSHI } from '../../../../config/tokens'
+import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
+import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
+
+const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 const RemoveClassic = () => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
 
   const [[, pool], setPool] = useRecoilState(poolAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const [currencies, setCurrencies] = useRecoilState(currenciesAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
+  const setSlippage = useSetRecoilState(slippageAtom)
 
-  const currencyA = useCurrency(query.tokens[0])
-  const currencyB = useCurrency(query.tokens[1])
-  const classicPool = useV2Pair(currencyA, currencyB)
+  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
+  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, pool?.liquidityToken)
+  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE) // custom from users
 
   useEffect(() => {
     if (!classicPool[1]) return
     setPool(classicPool)
   }, [classicPool, setPool])
-
-  useEffect(() => {
-    if (!currencyA || !currencyB) return
-    setCurrencies([currencyA, currencyB])
-  }, [currencyA, currencyB, setCurrencies])
 
   useEffect(() => {
     if (!totalSupply) return
@@ -64,6 +59,11 @@ const RemoveClassic = () => {
     if (!poolBalance) return
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
+
+  useEffect(() => {
+    if (!allowedSlippage) return
+    setSlippage(allowedSlippage)
+  })
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -76,7 +76,7 @@ const RemoveClassic = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref('classic', currencies)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/classic/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>

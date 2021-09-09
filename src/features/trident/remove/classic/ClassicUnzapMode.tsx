@@ -2,7 +2,6 @@ import React, { FC } from 'react'
 import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Token } from '@sushiswap/sdk'
 import ListPanel from '../../../../components/ListPanel'
 import PercentInput from '../../../../components/Input/Percent'
 import Button from '../../../../components/Button'
@@ -12,31 +11,27 @@ import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   currentLiquidityValueSelector,
-  outputTokenAddressAtom,
-  parsedInputAmountsSelector,
+  selectedZapCurrencyAtom,
   percentageAmountAtom,
+  parsedZapAmountSelector,
 } from './context/atoms'
-import { currenciesAtom, showReviewAtom } from '../../context/atoms'
+import { showReviewAtom } from '../../context/atoms'
 
 const ClassicUnzapMode: FC = () => {
   const { i18n } = useLingui()
   const [percentageAmount, setPercentageAmount] = useRecoilState(percentageAmountAtom)
   const [liquidityA, liquidityB] = useRecoilValue(currentLiquidityValueSelector)
-  const [outputTokenAddress, setOutputTokenAddress] = useRecoilState(outputTokenAddressAtom)
+  const [selectedZapCurrency, setSelectedZapCurrency] = useRecoilState(selectedZapCurrencyAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const currencies = useRecoilValue(currenciesAtom)
-  const parsedInputAmounts = useRecoilValue(parsedInputAmountsSelector)
   const usdcAValue = useUSDCValue(liquidityA)
   const usdcBValue = useUSDCValue(liquidityB)
   const liquidityValueInUsdc = usdcAValue?.add(usdcBValue)
+  const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
 
   return (
     <div className="px-5 mt-5">
       <div className="flex flex-col gap-8">
-        <AssetSelect
-          value={currencies[outputTokenAddress]}
-          onSelect={(token: Token) => setOutputTokenAddress(token.address)}
-        />
+        <AssetSelect value={selectedZapCurrency} onSelect={setSelectedZapCurrency} />
         <div className="flex flex-col gap-3">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
@@ -44,8 +39,8 @@ const ClassicUnzapMode: FC = () => {
           <ListPanel
             header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
             items={[
-              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[0]} key={0} />,
-              <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[1]} key={1} />,
+              <ListPanel.CurrencyAmountItem amount={liquidityA} key={0} />,
+              <ListPanel.CurrencyAmountItem amount={liquidityB} key={1} />,
             ]}
             footer={
               <div className="flex justify-between items-center px-4 py-5 gap-3">
@@ -77,12 +72,7 @@ const ClassicUnzapMode: FC = () => {
             {i18n._(t`Receive:`)}
           </Typography>
           <div className="flex flex-col gap-4">
-            <ListPanel
-              items={[
-                <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[0]} key={0} />,
-                <ListPanel.CurrencyAmountItem amount={parsedInputAmounts[1]} key={1} />,
-              ]}
-            />
+            <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedZapAmount} key={0} />]} />
             <Button color="gradient" disabled={!percentageAmount} onClick={() => setShowReview(true)}>
               {percentageAmount ? i18n._(t`Confirm Withdrawal`) : i18n._(t`Tap amount or type amount to continue`)}
             </Button>

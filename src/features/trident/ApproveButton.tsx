@@ -9,12 +9,12 @@ import { useLingui } from '@lingui/react'
 interface TokenApproveButtonProps {
   inputAmount: CurrencyAmount<Currency>
   onStateChange: React.Dispatch<React.SetStateAction<any>>
+  tokenApproveOn: string
 }
 
-const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onStateChange }) => {
+const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onStateChange, tokenApproveOn }) => {
   const { i18n } = useLingui()
-  const bentoBox = useBentoBoxContract()
-  const [approveState, approveCallback] = useApproveCallback(inputAmount?.wrapped, bentoBox?.address)
+  const [approveState, approveCallback] = useApproveCallback(inputAmount?.wrapped, tokenApproveOn)
 
   useEffect(() => {
     if (!inputAmount?.currency.wrapped.address) return
@@ -40,9 +40,10 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 interface TridentApproveGateProps {
   inputAmounts: CurrencyAmount<Currency>[]
   children: ({ approved, loading }: { approved: boolean; loading: boolean }) => ReactNode
+  tokenApproveOn: string
 }
 
-const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, children }) => {
+const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, tokenApproveOn, children }) => {
   const { i18n } = useLingui()
   const [status, setStatus] = useState({})
   const router = useTridentRouterContract()
@@ -64,7 +65,12 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, childre
         </Button.Dotted>
       )}
       {inputAmounts.map((amount, index) => (
-        <TokenApproveButton inputAmount={amount} key={index} onStateChange={setStatus} />
+        <TokenApproveButton
+          inputAmount={amount}
+          key={index}
+          onStateChange={setStatus}
+          tokenApproveOn={tokenApproveOn}
+        />
       ))}
       {children({ approved, loading })}
     </div>

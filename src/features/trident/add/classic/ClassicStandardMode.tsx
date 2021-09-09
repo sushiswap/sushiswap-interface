@@ -1,4 +1,4 @@
-import { useActiveWeb3React } from '../../../../hooks'
+import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import React, { useMemo } from 'react'
 import { noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import {
@@ -32,6 +32,7 @@ const ClassicStandardMode = () => {
   const { account } = useActiveWeb3React()
   const [poolState, pool] = useRecoilValue(poolAtom)
   const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
+  const bentoBox = useBentoBoxContract()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
   const setMainInput = useSetRecoilState(mainInputAtom)
@@ -115,7 +116,7 @@ const ClassicStandardMode = () => {
             spendFromWallet={spendFromWallet}
           />
           <div className="flex flex-col gap-3">
-            <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]}>
+            <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
               {({ approved, loading }) => {
                 const disabled = !!error || !approved || loading
                 const buttonText = loading ? '' : error ? error : i18n._(t`Confirm Deposit`)

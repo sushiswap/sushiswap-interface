@@ -1,30 +1,24 @@
 import { atom, selector, useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
-import { PairState } from '../../../../../hooks/useV2Pairs'
-import { Currency, Pair, Percent, Price } from '@sushiswap/sdk'
+import { ConstantProductPool, Currency, CurrencyAmount, JSBI, Percent, Price, Token } from '@sushiswap/sdk'
 import {
   attemptingTxnAtom,
-  currenciesAtom,
   noLiquiditySelector,
   poolBalanceAtom,
+  showReviewAtom,
   totalSupplyAtom,
   txHashAtom,
 } from '../../../context/atoms'
-import { useCallback, useMemo } from 'react'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useRouterContract } from '../../../../../hooks'
-import useTransactionDeadline from '../../../../../hooks/useTransactionDeadline'
+import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
 import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
 import { useTransactionAdder } from '../../../../../state/transactions/hooks'
-import { Field } from '../../../../../state/burn/actions'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../../../functions'
-import { BigNumber } from '@ethersproject/bignumber'
-import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
-import { SignatureData } from '../../../../../hooks/useERC20Permit'
+import { ethers } from 'ethers'
+import { useLingui } from '@lingui/react'
+import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
 
-const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
-
-export const poolAtom = atom<[PairState, Pair | null]>({
+export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({
   key: 'poolAtom',
   default: [null, null],
 })
@@ -34,14 +28,35 @@ export const percentageAmountAtom = atom<string>({
   default: '',
 })
 
-export const outputTokenAddressAtom = atom<string>({
-  key: 'outputTokenAddressAtom',
-  default: '',
+export const selectedZapCurrencyAtom = atom<Currency>({
+  key: 'selectedZapCurrencyAtom',
+  default: null,
 })
 
-export const permitAtom = atom<SignatureData>({
-  key: 'permitAtom',
+export const outputToWalletAtom = atom<boolean>({
+  key: 'outputToWalletAtom',
+  default: true,
+})
+
+export const slippageAtom = atom<Percent>({
+  key: 'slippageAtom',
   default: null,
+})
+
+export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
+  key: 'parsedZapAmountSelector',
+  get: ({ get }) => {
+    const poolBalance = get(poolBalanceAtom)
+    const allowedSlippage = get(slippageAtom)
+
+    const parsedZapAmount = poolBalance?.multiply(new Percent(get(percentageAmountAtom), '100'))
+    if (allowedSlippage && parsedZapAmount) {
+      const minAmount = calculateSlippageAmount(parsedZapAmount, allowedSlippage)[0]
+      return CurrencyAmount.fromRawAmount(parsedZapAmount.currency, minAmount.toString())
+    }
+
+    return undefined
+  },
 })
 
 export const currentLiquidityValueSelector = selector({
@@ -51,14 +66,20 @@ export const currentLiquidityValueSelector = selector({
     const poolBalance = get(poolBalanceAtom)
     const totalSupply = get(totalSupplyAtom)
 
-    if (pool && totalSupply && poolBalance) {
-      return [
-        pool.getLiquidityValue(pool.token0, totalSupply.wrapped, poolBalance.wrapped, false),
-        pool.getLiquidityValue(pool.token1, totalSupply.wrapped, poolBalance.wrapped, false),
-      ]
-    } else {
-      return [undefined, undefined]
-    }
+    return [
+      pool && totalSupply && poolBalance && JSBI.greaterThanOrEqual(totalSupply.quotient, poolBalance.quotient)
+        ? CurrencyAmount.fromRawAmount(
+            pool.token0,
+            pool.getLiquidityValue(pool.token0, totalSupply.wrapped, poolBalance.wrapped, false).quotient
+          )
+        : undefined,
+      pool && totalSupply && poolBalance && JSBI.greaterThanOrEqual(totalSupply.quotient, poolBalance.quotient)
+        ? CurrencyAmount.fromRawAmount(
+            pool.token1,
+            pool.getLiquidityValue(pool.token1, totalSupply.wrapped, poolBalance.wrapped, false).quotient
+          )
+        : undefined,
+    ]
   },
 })
 
@@ -66,7 +87,7 @@ export const priceSelector = selector<Price<Currency, Currency>>({
   key: 'priceSelector',
   get: ({ get }) => {
     const noLiquidity = get(noLiquiditySelector)
-    const [currencyAAmount, currencyBAmount] = get(parsedInputAmountsSelector)
+    const [currencyAAmount, currencyBAmount] = get(parsedAmountsSelector)
 
     if (noLiquidity) {
       if (currencyAAmount?.greaterThan(0) && currencyBAmount?.greaterThan(0)) {
@@ -81,219 +102,199 @@ export const priceSelector = selector<Price<Currency, Currency>>({
   },
 })
 
-export const parsedInputAmountsSelector = selector({
-  key: 'parsedInputAmountsSelector',
+export const parsedAmountsSelector = selector({
+  key: 'parsedAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
-    const poolBalance = get(poolBalanceAtom)
-    const totalSupply = get(totalSupplyAtom)
     const percentageAmount = get(percentageAmountAtom)
+    const currentLiquidityValue = get(currentLiquidityValueSelector)
+    const percentage = new Percent(percentageAmount, '100')
+    const allowedSlippage = get(slippageAtom)
 
-    if (pool && totalSupply && poolBalance) {
-      return [
-        pool.getLiquidityValue(
-          pool.token0,
-          totalSupply.wrapped,
-          poolBalance.wrapped.multiply(new Percent(percentageAmount, '100')),
-          false
-        ),
-        pool.getLiquidityValue(
-          pool.token1,
-          totalSupply.wrapped,
-          poolBalance.wrapped.multiply(new Percent(percentageAmount, '100')),
-          false
-        ),
+    const amounts = [
+      pool && percentageAmount && percentage.greaterThan('0') && currentLiquidityValue[0]
+        ? CurrencyAmount.fromRawAmount(pool.token0, percentage.multiply(currentLiquidityValue[0].quotient).quotient)
+        : undefined,
+      pool && percentageAmount && percentage.greaterThan('0') && currentLiquidityValue[1]
+        ? CurrencyAmount.fromRawAmount(pool.token1, percentage.multiply(currentLiquidityValue[1].quotient).quotient)
+        : undefined,
+    ]
+
+    if (allowedSlippage && amounts[0] && amounts[1]) {
+      const amountsMin = [
+        calculateSlippageAmount(amounts[0], allowedSlippage)[0],
+        calculateSlippageAmount(amounts[1], allowedSlippage)[0],
       ]
-    } else {
-      return [undefined, undefined]
+
+      return [
+        CurrencyAmount.fromRawAmount(pool.token0, amountsMin[0].toString()),
+        CurrencyAmount.fromRawAmount(pool.token1, amountsMin[1].toString()),
+      ]
     }
+
+    return [undefined, undefined]
   },
 })
 
 export const useClassicRemoveExecute = () => {
+  const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const router = useRouterContract()
-  const deadline = useTransactionDeadline()
+  const router = useTridentRouterContract()
   const addTransaction = useTransactionAdder()
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE) // custom from users
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
-  const [approval] = useApproveCallback(poolBalance, router?.address)
+  const setShowReview = useSetRecoilState(showReviewAtom)
 
   const standardModeExecute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
+        const [, pool] = await snapshot.getPromise(poolAtom)
         const percentageAmount = await snapshot.getPromise(percentageAmountAtom)
-        const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
-        const [parsedAmountA, parsedAmountB] = await snapshot.getPromise(parsedInputAmountsSelector)
-        const [tokenA, tokenB] = [currencyA?.wrapped, currencyB?.wrapped]
-        const permit = await snapshot.getPromise(permitAtom)
+        const [parsedAmountA, parsedAmountB] = await snapshot.getPromise(parsedAmountsSelector)
+        const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
         const liquidityAmount = poolBalance?.multiply(new Percent(percentageAmount, '100'))
+        const outputToWallet = await snapshot.getPromise(outputToWalletAtom)
 
         if (
           !chainId ||
           !library ||
           !account ||
-          !deadline ||
           !router ||
           !parsedAmountA ||
           !parsedAmountB ||
-          !currencyA ||
-          !currencyB ||
-          !permit
+          !tokenA ||
+          !tokenB ||
+          !liquidityAmount
         )
           throw new Error('missing dependencies')
 
-        const amountsMin = {
-          [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, allowedSlippage)[0],
-          [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, allowedSlippage)[0],
-        }
+        const liquidityOutput = [
+          {
+            token: parsedAmountA.currency.wrapped.address,
+            amount: parsedAmountA.quotient.toString(),
+          },
+          {
+            token: parsedAmountB.currency.wrapped.address,
+            amount: parsedAmountB.quotient.toString(),
+          },
+        ]
 
-        if (!liquidityAmount) {
-          throw new Error('missing liquidity amount')
-        }
+        const encoded = ethers.utils.defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
+        const estimate = router.estimateGas.burnLiquidity
+        const method = router.burnLiquidity
+        const args = [pool.liquidityToken.address, liquidityAmount.quotient.toString(), encoded, liquidityOutput]
 
-        const currencyBIsETH = currencyB.isNative
-        const oneCurrencyIsETH = currencyA.isNative || currencyBIsETH
+        try {
+          setAttemptingTxn(true)
+          const estimatedGasLimit = await estimate(...args, {})
+          const response = await method(...args, {
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
 
-        if (!tokenA || !tokenB) {
-          throw new Error('could not wrap')
-        }
+          setAttemptingTxn(false)
 
-        let methodNames: string[]
-        let args: Array<string | string[] | number | boolean>
+          addTransaction(response, {
+            summary: i18n._(
+              t`Remove ${parsedAmountA.toSignificant(3)} ${
+                parsedAmountA.currency.symbol
+              } and ${parsedAmountB.toSignificant(3)} ${parsedAmountB.currency.symbol} from ${pool.token0.symbol}/${
+                pool.token1.symbol
+              }`
+            ),
+          })
 
-        // We have approval, use normal remove liquidity
-        if (approval === ApprovalState.APPROVED) {
-          if (oneCurrencyIsETH) {
-            methodNames = ['removeLiquidityETH', 'removeLiquidityETHSupportingFeeOnTransferTokens']
-            args = [
-              currencyBIsETH ? tokenA.address : tokenB.address,
-              liquidityAmount.quotient.toString(),
-              amountsMin[currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(),
-              amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
-              account,
-              deadline.toHexString(),
-            ]
-          } else {
-            methodNames = ['removeLiquidity']
-            args = [
-              tokenA.address,
-              tokenB.address,
-              liquidityAmount.quotient.toString(),
-              amountsMin[Field.CURRENCY_A].toString(),
-              amountsMin[Field.CURRENCY_B].toString(),
-              account,
-              deadline.toHexString(),
-            ]
-          }
-        }
+          setTxHash(response.hash)
+          setShowReview(false)
 
-        // We have a signature, use permit versions of remove liquidity
-        else if (permit !== null) {
-          if (oneCurrencyIsETH) {
-            methodNames = ['removeLiquidityETHWithPermit', 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens']
-            args = [
-              currencyBIsETH ? tokenA.address : tokenB.address,
-              liquidityAmount.quotient.toString(),
-              amountsMin[currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(),
-              amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
-              account,
-              permit.deadline,
-              false,
-              permit.v,
-              permit.r,
-              permit.s,
-            ]
-          } else {
-            methodNames = ['removeLiquidityWithPermit']
-            args = [
-              tokenA.address,
-              tokenB.address,
-              liquidityAmount.quotient.toString(),
-              amountsMin[Field.CURRENCY_A].toString(),
-              amountsMin[Field.CURRENCY_B].toString(),
-              account,
-              permit.deadline,
-              false,
-              permit.v,
-              permit.r,
-              permit.s,
-            ]
-          }
-        } else {
-          throw new Error('Attempting to confirm without approval or a signature. Please contact support.')
-        }
-
-        const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
-          methodNames.map((methodName) =>
-            router.estimateGas[methodName](...args)
-              .then(calculateGasMargin)
-              .catch((error) => {
-                console.error(`estimateGas failed`, methodName, args, error)
-                return undefined
-              })
-          )
-        )
-
-        const indexOfSuccessfulEstimation = safeGasEstimates.findIndex((safeGasEstimate) =>
-          BigNumber.isBigNumber(safeGasEstimate)
-        )
-
-        // all estimations failed...
-        if (indexOfSuccessfulEstimation === -1) {
-          console.error('This transaction would fail. Please contact support.')
-        } else {
-          const methodName = methodNames[indexOfSuccessfulEstimation]
-          const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
-
-          try {
-            setAttemptingTxn(true)
-            const response = await router[methodName](...args, {
-              gasLimit: safeGasEstimate,
-            })
-
-            setAttemptingTxn(false)
-
-            addTransaction(response, {
-              summary: t`Remove ${parsedAmountA?.toSignificant(3)} ${
-                currencyA?.symbol
-              } and ${parsedAmountB?.toSignificant(3)} ${currencyB?.symbol}`,
-            })
-
-            setTxHash(response.hash)
-
-            ReactGA.event({
-              category: 'Liquidity',
-              action: 'Remove',
-              label: [currencyA?.symbol, currencyB?.symbol].join('/'),
-            })
-          } catch (error) {
-            setAttemptingTxn(false)
-            // we only care if the error is something _other_ than the user rejected the tx
-            if (error?.code !== 4001) {
-              console.error(error)
-            }
+          ReactGA.event({
+            category: 'Liquidity',
+            action: 'Burn',
+            label: [pool.token0.symbol, pool.token1.symbol].join('/'),
+          })
+        } catch (error) {
+          setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (error?.code !== 4001) {
+            console.error(error)
           }
         }
       },
-    [
-      poolBalance,
-      chainId,
-      library,
-      account,
-      deadline,
-      router,
-      allowedSlippage,
-      approval,
-      setAttemptingTxn,
-      addTransaction,
-      setTxHash,
-    ]
+    [poolBalance, chainId, library, account, router, setAttemptingTxn, addTransaction, i18n, setTxHash, setShowReview]
   )
 
-  const zapModeExecute = useCallback(() => {}, [])
+  const zapModeExecute = useRecoilCallback(
+    ({ snapshot }) =>
+      async () => {
+        const [, pool] = await snapshot.getPromise(poolAtom)
+        const percentageAmount = await snapshot.getPromise(percentageAmountAtom)
+        const parsedZapAmount = await snapshot.getPromise(parsedZapAmountSelector)
+        const [parsedAmountA, parsedAmountB] = await snapshot.getPromise(parsedAmountsSelector)
+        const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+        const liquidityAmount = poolBalance?.multiply(new Percent(percentageAmount, '100'))
+        const outputToWallet = await snapshot.getPromise(outputToWalletAtom)
+
+        if (
+          !chainId ||
+          !library ||
+          !account ||
+          !router ||
+          !parsedZapAmount ||
+          !parsedAmountA ||
+          !parsedAmountB ||
+          !tokenA ||
+          !tokenB ||
+          !liquidityAmount
+        )
+          throw new Error('missing dependencies')
+
+        const liquidityOutput = {
+          token: parsedZapAmount.currency.wrapped.address,
+          amount: parsedZapAmount.quotient.toString(),
+        }
+
+        const encoded = ethers.utils.defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
+        const estimate = router.estimateGas.burnLiquiditySingle
+        const method = router.burnLiquiditySingle
+        const args = [pool.liquidityToken.address, liquidityAmount.quotient.toString(), encoded, liquidityOutput]
+
+        try {
+          setAttemptingTxn(true)
+          const estimatedGasLimit = await estimate(...args, {})
+          const response = await method(...args, {
+            gasLimit: calculateGasMargin(estimatedGasLimit),
+          })
+
+          setAttemptingTxn(false)
+
+          addTransaction(response, {
+            summary: i18n._(
+              t`Remove ${parsedAmountA.toSignificant(3)} ${
+                parsedAmountA.currency.symbol
+              } and ${parsedAmountB.toSignificant(3)} ${parsedAmountB.currency.symbol} from ${pool.token0.symbol}/${
+                pool.token1.symbol
+              }`
+            ),
+          })
+
+          setTxHash(response.hash)
+          setShowReview(false)
+
+          ReactGA.event({
+            category: 'Liquidity',
+            action: 'Burn',
+            label: [pool.token0.symbol, pool.token1.symbol].join('/'),
+          })
+        } catch (error) {
+          setAttemptingTxn(false)
+          // we only care if the error is something _other_ than the user rejected the tx
+          if (error?.code !== 4001) {
+            console.error(error)
+          }
+        }
+      },
+    [account, addTransaction, chainId, i18n, library, poolBalance, router, setAttemptingTxn, setShowReview, setTxHash]
+  )
 
   return {
     standardModeExecute,
