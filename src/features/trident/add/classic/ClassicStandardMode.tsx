@@ -1,6 +1,6 @@
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
+import { useActiveWeb3React } from '../../../../hooks'
 import React, { useMemo } from 'react'
-import { currenciesAtom, noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import {
   formattedAmountsSelector,
   mainInputAtom,
@@ -28,17 +28,16 @@ import loadingCircle from '../../../../animation/loading-circle.json'
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const [poolState] = useRecoilValue(poolAtom)
+  const [poolState, pool] = useRecoilValue(poolAtom)
   const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
   const formattedAmounts = useRecoilValue(formattedAmountsSelector)
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const currencies = useRecoilValue(currenciesAtom)
   const [mainInput, setMainInput] = useRecoilState(mainInputAtom)
   const [secondaryInput, setSecondaryInput] = useRecoilState(secondaryInputAtom)
 
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
-  const balances = useCurrencyBalances(account ?? undefined, currencies)
+  const balances = useCurrencyBalances(account ?? undefined, [pool?.token0, pool?.token1])
   const noLiquidity = useRecoilValue(noLiquiditySelector)
 
   const usdcA = useUSDCValue(balances?.[0])
@@ -80,9 +79,9 @@ const ClassicStandardMode = () => {
     : !parsedAmountA?.greaterThan(ZERO) || !parsedAmountB?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : parsedAmountA && balances[0]?.lessThan(parsedAmountA)
-    ? i18n._(t`Insufficient ${currencies[0]?.symbol} balance`)
+    ? i18n._(t`Insufficient ${pool?.token0?.symbol} balance`)
     : parsedAmountB && balances?.length && balances[1]?.lessThan(parsedAmountB)
-    ? i18n._(t`Insufficient ${currencies[1]?.symbol} balance`)
+    ? i18n._(t`Insufficient ${pool?.token1?.symbol} balance`)
     : ''
 
   return (
@@ -91,7 +90,7 @@ const ClassicStandardMode = () => {
         <div className="flex flex-col gap-4 px-5">
           <AssetInput
             value={parsedAmountA?.greaterThan(0) ? formattedAmounts[0] : mainInput}
-            currency={currencies[0]}
+            currency={pool?.token0}
             onChange={setMainInput}
             headerRight={
               <AssetInput.WalletSwitch
@@ -103,7 +102,7 @@ const ClassicStandardMode = () => {
           />
           <AssetInput
             value={parsedAmountB?.greaterThan(0) ? formattedAmounts[1] : secondaryInput}
-            currency={currencies[1]}
+            currency={pool?.token1}
             onChange={setSecondaryInput}
             spendFromWallet={spendFromWallet}
           />

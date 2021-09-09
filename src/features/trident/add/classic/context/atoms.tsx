@@ -4,7 +4,6 @@ import { useTransactionAdder } from '../../../../../state/transactions/hooks'
 import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
 import {
   attemptingTxnAtom,
-  currenciesAtom,
   noLiquiditySelector,
   poolBalanceAtom,
   showReviewAtom,
@@ -52,8 +51,8 @@ export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>
   key: 'mainInputCurrencyAmountSelector',
   get: ({ get }) => {
     const value = get(mainInputAtom)
-    const currencies = get(currenciesAtom)
-    return tryParseAmount(value, currencies[0])
+    const [, pool] = get(poolAtom)
+    return tryParseAmount(value, pool?.token0)
   },
 })
 
@@ -61,10 +60,18 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
   key: 'secondaryInputCurrencyAmountSelector',
   get: ({ get }) => {
     const value = get(secondaryInputAtom)
-    const currencies = get(currenciesAtom)
+    const [, pool] = get(poolAtom)
+
     const noLiquidity = get(noLiquiditySelector)
 
-    return noLiquidity ? tryParseAmount(value, currencies[1]) : get(secondaryInputCurrencyAmountFixedRatioSelector)
+    return noLiquidity ? tryParseAmount(value, pool?.token1) : get(secondaryInputCurrencyAmountFixedRatioSelector)
+  },
+  set: ({ set, get }, newValue) => {
+    const value = get(secondaryInputAtom)
+    const [, pool] = get(poolAtom)
+    const noLiquidity = get(noLiquiditySelector)
+
+    if (!noLiquidity) set(secondaryInputCurrencyAmountFixedRatioSelector, tryParseAmount(value, pool?.token1))
   },
 })
 
@@ -245,7 +252,6 @@ export const useClassicAddExecute = () => {
       async () => {
         const [, pool] = await snapshot.getPromise(poolAtom)
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
-        const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
         const [parsedAmountA, parsedAmountB] = await snapshot.getPromise(parsedAmountsSelector)
         const native = await snapshot.getPromise(spendFromWalletAtom)
 
@@ -257,8 +263,8 @@ export const useClassicAddExecute = () => {
           !router ||
           !parsedAmountA ||
           !parsedAmountB ||
-          !currencyA ||
-          !currencyB
+          !pool?.token0 ||
+          !pool?.token1
         )
           return
 
@@ -313,8 +319,8 @@ export const useClassicAddExecute = () => {
             summary: i18n._(
               t`Add ${parsedAmountA.toSignificant(3)} ${
                 parsedAmountA.currency.symbol
-              } and ${parsedAmountB.toSignificant(3)} ${parsedAmountB.currency.symbol} into ${currencyA.symbol}/${
-                currencyB.symbol
+              } and ${parsedAmountB.toSignificant(3)} ${parsedAmountB.currency.symbol} into ${pool.token0.symbol}/${
+                pool.token1.symbol
               }`
             ),
           })
@@ -325,7 +331,7 @@ export const useClassicAddExecute = () => {
           ReactGA.event({
             category: 'Liquidity',
             action: 'Add',
-            label: [currencyA.symbol, currencyB.symbol].join('/'),
+            label: [pool.token0.symbol, pool.token1.symbol].join('/'),
           })
         } catch (error) {
           setAttemptingTxn(false)
@@ -352,13 +358,13 @@ export const useClassicAddExecute = () => {
   const zapModeExecute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
-        const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
         const parsedZapAmount = await snapshot.getPromise(parsedZapAmountSelector)
         const [, pool] = await snapshot.getPromise(poolAtom)
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
         const native = await snapshot.getPromise(spendFromWalletAtom)
 
-        if (!pool || !chainId || !library || !account || !router || !parsedZapAmount || !currencyA || !currencyB) return
+        if (!pool || !chainId || !library || !account || !router || !parsedZapAmount || !pool?.token0 || !pool?.token1)
+          return
 
         const amountMin = calculateSlippageAmount(parsedZapAmount, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0]
         const liquidityInput = [
@@ -394,8 +400,8 @@ export const useClassicAddExecute = () => {
 
           addTransaction(response, {
             summary: i18n._(
-              t`Zap ${parsedZapAmount.toSignificant(3)} ${parsedZapAmount.currency.symbol} into ${currencyA.symbol}/${
-                currencyB.symbol
+              t`Zap ${parsedZapAmount.toSignificant(3)} ${parsedZapAmount.currency.symbol} into ${pool.token0.symbol}/${
+                pool.token1.symbol
               }`
             ),
           })
@@ -406,7 +412,7 @@ export const useClassicAddExecute = () => {
           ReactGA.event({
             category: 'Liquidity',
             action: 'Zap',
-            label: [currencyA.symbol, currencyB.symbol].join('/'),
+            label: [pool.token0.symbol, pool.token1.symbol].join('/'),
           })
         } catch (error) {
           setAttemptingTxn(false)

@@ -36,11 +36,6 @@ export const fixedRatioAtom = atom<boolean>({
   default: true,
 })
 
-export const currenciesAtom = atom<Currency[]>({
-  key: 'currencies',
-  default: [],
-})
-
 export const liquidityModeAtom = atom<LiquidityMode>({
   key: 'liquidityMode',
   default: LiquidityMode.STANDARD,

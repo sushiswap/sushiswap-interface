@@ -42,16 +42,16 @@ export function useTridentClassicPools(
           fee &&
           twap &&
           FACTORY_ADDRESS[tokenA.chainId]
-          ? // ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
-            // : // TODO ramin: hardcoded
-            computeConstantProductPoolAddress({
-              factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
-              tokenA,
-              tokenB,
-              fee,
-              twap,
-            })
-          : undefined
+          ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
+          : // // : // TODO ramin: hardcoded
+            // computeConstantProductPoolAddress({
+            //   factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
+            //   tokenA,
+            //   tokenB,
+            //   fee,
+            //   twap,
+            // })
+            undefined
       }),
     [pools]
   )

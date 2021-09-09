@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react'
 import { RecoilRoot, useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  currenciesAtom,
-  liquidityModeAtom,
-  poolBalanceAtom,
-  totalSupplyAtom,
-} from '../../../../features/trident/context/atoms'
+import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
 import { mainInputAtom, poolAtom, zapInputAtom } from '../../../../features/trident/add/classic/context/atoms'
 
 import AddTransactionReviewModalStandard from '../../../../features/trident/add/classic/AddTransactionReviewModal'
@@ -16,13 +11,12 @@ import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapM
 import Link from 'next/link'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import { NATIVE, WNATIVE } from '@sushiswap/sdk'
+import { NATIVE } from '@sushiswap/sdk'
 import { SUSHI } from '../../../../config/tokens'
 import SettingsTab from '../../../../components/Settings'
 import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
-import { toHref } from '../../../../hooks/useTridentPools'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useCurrency } from '../../../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
@@ -37,26 +31,21 @@ const AddClassic = () => {
   const { query } = useRouter()
   const { i18n } = useLingui()
 
-  const [pool, setPool] = useRecoilState(poolAtom)
+  const [[poolState, pool], setPool] = useRecoilState(poolAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const [currencies, setCurrencies] = useRecoilState(currenciesAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
 
   useEffect(() => {
     if (!classicPool[1]) return
     setPool(classicPool)
-    setCurrencies([
-      classicPool[1].token0 === WNATIVE[chainId] ? NATIVE[chainId] : classicPool[1].token0,
-      classicPool[1].token1 === WNATIVE[chainId] ? NATIVE[chainId] : classicPool[1].token1,
-    ])
-  }, [chainId, classicPool, setCurrencies, setPool])
+  }, [chainId, classicPool, setPool])
 
   useEffect(() => {
     if (!totalSupply) return
@@ -88,7 +77,7 @@ const AddClassic = () => {
             className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref('classic', currencies)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/classic/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
           {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
@@ -109,7 +98,7 @@ const AddClassic = () => {
 
       <ModeToggle onChange={handleLiquidityModeChange} />
 
-      {pool[0] === ConstantProductPoolState.NOT_EXISTS ? (
+      {poolState === ConstantProductPoolState.NOT_EXISTS ? (
         <div className="px-5 pt-5">
           <Alert
             dismissable={false}
