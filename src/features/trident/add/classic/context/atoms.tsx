@@ -21,6 +21,10 @@ import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/h
 import { ethers } from 'ethers'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
+export enum TypedField {
+  A,
+  B,
+}
 
 export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({
   key: 'poolAtom',
@@ -42,9 +46,63 @@ export const mainInputAtom = atom<string>({
   default: '',
 })
 
+// Just an atom that acts as a copy state to hold a previous value
 export const secondaryInputAtom = atom<string>({
   key: 'secondaryInputAtom',
   default: '',
+})
+
+export const typedFieldAtom = atom<TypedField>({
+  key: 'typedFieldAtom',
+  default: TypedField.A,
+})
+
+export const secondaryInputSelector = selector<string>({
+  key: 'secondaryInputSelector',
+  get: ({ get }) => {
+    const [, pool] = get(poolAtom)
+    const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
+    const noLiquidity = get(noLiquiditySelector)
+    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+
+    // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
+    if (!noLiquidity) {
+      if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
+        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
+        return (
+          pool?.token1?.isNative
+            ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
+            : dependentTokenAmount
+        ).toExact()
+      }
+    }
+
+    // If we don't have liquidity and we 'get' this value, return previous value as no side effects will happen
+    return get(secondaryInputAtom)
+  },
+  set: ({ set, get }, newValue: string) => {
+    const [, pool] = get(poolAtom)
+    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+    const noLiquidity = get(noLiquiditySelector)
+    const typedField = get(typedFieldAtom)
+    const newValueCA = tryParseAmount(newValue, pool?.token1)
+
+    // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
+    if (!noLiquidity) {
+      if (tokenA && tokenB && pool && newValueCA?.wrapped) {
+        const dependentTokenAmount = pool.priceOf(tokenB).quote(newValueCA?.wrapped)
+        set(mainInputAtom, dependentTokenAmount?.toExact())
+      }
+
+      // Edge case where if we enter 0 on secondary input, also set mainInput to 0
+      else if (typedField === TypedField.B) {
+        set(mainInputAtom, '')
+      }
+    }
+
+    // In any case, 'set' this value directly to the atom to keep a copy saved as a string
+    set(secondaryInputAtom, newValue)
+  },
 })
 
 export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>>({
@@ -59,53 +117,21 @@ export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>
 export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>>({
   key: 'secondaryInputCurrencyAmountSelector',
   get: ({ get }) => {
-    const value = get(secondaryInputAtom)
+    const value = get(secondaryInputSelector)
     const [, pool] = get(poolAtom)
-
-    const noLiquidity = get(noLiquiditySelector)
-
-    return noLiquidity ? tryParseAmount(value, pool?.token1) : get(secondaryInputCurrencyAmountFixedRatioSelector)
-  },
-  set: ({ set, get }, newValue) => {
-    const value = get(secondaryInputAtom)
-    const [, pool] = get(poolAtom)
-    const noLiquidity = get(noLiquiditySelector)
-
-    if (!noLiquidity) set(secondaryInputCurrencyAmountFixedRatioSelector, tryParseAmount(value, pool?.token1))
-  },
-})
-
-export const secondaryInputCurrencyAmountFixedRatioSelector = selector<CurrencyAmount<Currency>>({
-  key: 'secondaryInputCurrencyAmountFixedRatioSelector',
-  get: ({ get }) => {
-    const [, pool] = get(poolAtom)
-    const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
-
-    // we wrap the currencies just to get the price in terms of the other token
-    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-    if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
-      const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
-      return pool?.token1?.isNative
-        ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
-        : dependentTokenAmount
-    }
-  },
-  set: ({ set, get }, newValue: CurrencyAmount<Currency>) => {
-    const [, pool] = get(poolAtom)
-    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-
-    if (tokenA && tokenB && newValue?.wrapped && pool) {
-      const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
-      set(mainInputAtom, dependentTokenAmount?.toExact())
-    }
+    return tryParseAmount(value, pool?.token1)
   },
 })
 
 export const formattedAmountsSelector = selector<[string, string]>({
   key: 'formattedAmountsSelector',
   get: ({ get }) => {
+    const inputField = get(typedFieldAtom)
     const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
-    return [parsedAmountA?.toExact() ?? '', parsedAmountB?.toExact() ?? '']
+    return [
+      (inputField === TypedField.A ? get(mainInputAtom) : parsedAmountA?.toSignificant(6)) ?? '',
+      (inputField === TypedField.B ? get(secondaryInputAtom) : parsedAmountB?.toSignificant(6)) ?? '',
+    ]
   },
 })
 

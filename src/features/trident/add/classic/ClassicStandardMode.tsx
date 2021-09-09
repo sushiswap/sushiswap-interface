@@ -6,7 +6,9 @@ import {
   mainInputAtom,
   parsedAmountsSelector,
   poolAtom,
-  secondaryInputAtom,
+  secondaryInputSelector,
+  TypedField,
+  typedFieldAtom,
 } from './context/atoms'
 import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
@@ -30,12 +32,12 @@ const ClassicStandardMode = () => {
   const { account } = useActiveWeb3React()
   const [poolState, pool] = useRecoilValue(poolAtom)
   const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
-  const formattedAmounts = useRecoilValue(formattedAmountsSelector)
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [mainInput, setMainInput] = useRecoilState(mainInputAtom)
-  const [secondaryInput, setSecondaryInput] = useRecoilState(secondaryInputAtom)
-
+  const setMainInput = useSetRecoilState(mainInputAtom)
+  const setSecondaryInput = useSetRecoilState(secondaryInputSelector)
+  const formattedAmounts = useRecoilValue(formattedAmountsSelector)
+  const setTypedField = useSetRecoilState(typedFieldAtom)
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
   const balances = useCurrencyBalances(account ?? undefined, [pool?.token0, pool?.token1])
   const noLiquidity = useRecoilValue(noLiquiditySelector)
@@ -51,10 +53,10 @@ const ClassicStandardMode = () => {
         if (!noLiquidity) {
           usdcA?.lessThan(usdcB)
             ? set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-            : set(secondaryInputAtom, maxAmountSpend(balances[1])?.toExact())
+            : set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
         } else {
           set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-          set(secondaryInputAtom, maxAmountSpend(balances[1])?.toExact())
+          set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
         }
       },
     [balances, noLiquidity, usdcA, usdcB]
@@ -89,9 +91,12 @@ const ClassicStandardMode = () => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4 px-5">
           <AssetInput
-            value={parsedAmountA?.greaterThan(0) ? formattedAmounts[0] : mainInput}
+            value={formattedAmounts[0]}
             currency={pool?.token0}
-            onChange={setMainInput}
+            onChange={(val) => {
+              setTypedField(TypedField.A)
+              setMainInput(val)
+            }}
             headerRight={
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWallet(!spendFromWallet)}
@@ -101,9 +106,12 @@ const ClassicStandardMode = () => {
             spendFromWallet={spendFromWallet}
           />
           <AssetInput
-            value={parsedAmountB?.greaterThan(0) ? formattedAmounts[1] : secondaryInput}
+            value={formattedAmounts[1]}
             currency={pool?.token1}
-            onChange={setSecondaryInput}
+            onChange={(val) => {
+              setTypedField(TypedField.B)
+              setSecondaryInput(val)
+            }}
             spendFromWallet={spendFromWallet}
           />
           <div className="flex flex-col gap-3">
