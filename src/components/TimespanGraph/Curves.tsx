@@ -1,25 +1,28 @@
 import { AxisBottom, AxisLeft } from '@visx/axis'
 import { GridColumns, GridRows } from '@visx/grid'
-import { MarkerArrow, MarkerCross, MarkerLine, MarkerX } from '@visx/marker'
-import { scaleLinear, scaleOrdinal, scaleTime } from '@visx/scale'
-import { timeFormat, timeParse } from 'd3-time-format'
-import { useMemo, useState } from 'react'
+import { scaleLinear, scaleTime } from '@visx/scale'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { Brush } from '@visx/brush'
-import Curve from './Curve'
 import { Group } from '@visx/group'
-import { LegendOrdinal } from '@visx/legend'
-import { LinearGradient } from '@visx/gradient'
 import { PatternLines } from '@visx/pattern'
 import React from 'react'
-import { Text } from '@visx/text'
 import { extent } from 'd3-array'
 import millify from 'millify'
+import { LinePath } from '@visx/shape'
+import { TimespanGraphProps } from '.'
+import { classNames } from '../../functions'
+import BaseBrush, { BaseBrushState, UpdateBrush } from '@visx/brush/lib/BaseBrush'
 
 export const getX = (data) => new Date(data.date)
 export const getY = (data) => data.value
 
-const brushMargin = { top: 10, bottom: 15, left: 50, right: 20 }
+interface Dimensions {
+  width: number
+  height: number
+}
+
+const brushMargin = { top: 10, bottom: 15, left: 50, right: 50 }
 const chartSeparation = 30
 const PATTERN_ID = 'brush_pattern'
 
@@ -30,44 +33,41 @@ const selectedBrushStyle = {
   stroke: 'currentColor',
 }
 
-const parseDate = timeParse('%Y-%m-%d')
-
-const format = timeFormat('%b %d')
-
-const formatDate = (date) => format(parseDate(date))
-
-const axisColor = 'currentColor'
+const axisColor = 'rgba(191, 191, 191, 0.4)'
 
 const axisBottomTickLabelProps = {
   textAnchor: 'middle' as 'middle',
-  fontFamily: 'Arial',
+  fontFamily: 'Helvetica',
   fontSize: 10,
   fill: axisColor,
 }
 const axisLeftTickLabelProps = {
   dx: '-0.25em',
   dy: '0.25em',
-  fontFamily: 'Arial',
+  fontFamily: 'Helvetica',
   fontSize: 10,
   textAnchor: 'end' as 'end',
   fill: axisColor,
 }
 
-const purple1 = '#6c5efb'
-const purple2 = '#c998ff'
-const purple3 = '#a44afe'
+const purple1 = '#A755DD'
+const purple2 = '#F338C3'
+const purple3 = '#0993EC'
 
 const Curves = ({
-  compact = false,
   width,
   height,
-  margin = { top: 64, right: 32, bottom: 16, left: 64 },
+  margin = { top: 96, right: 48, bottom: 16, left: 64 },
   data,
-  title = undefined,
+  title = '',
   labels = undefined,
-  note = undefined,
+  timespans = [],
+  defaultTimespan = undefined,
   colors = [purple1, purple2, purple3],
-}) => {
+}: Dimensions & TimespanGraphProps) => {
+  const [timespan, setTimespan] = useState(timespans?.find((t) => t.text === defaultTimespan))
+  const brushRef = useRef<BaseBrush | null>(null)
+
   const allData = data.reduce((previousValue, currentValue) => previousValue.concat(currentValue), [])
 
   const [filteredData, setFilteredData] = useState(
@@ -88,12 +88,12 @@ const Curves = ({
   }
 
   const innerHeight = height - margin.top - margin.bottom
-
-  const topChartBottomMargin = compact ? chartSeparation / 2 : chartSeparation + 10
-
+  const topChartBottomMargin = chartSeparation + 10
   const topChartHeight = 0.8 * innerHeight - topChartBottomMargin
-
   const bottomChartHeight = innerHeight - topChartHeight - chartSeparation
+
+  const numTicksY = 7
+  const numTicksX = width > 520 ? 10 : 5
 
   // Max
   const xMax = Math.max(width - margin.left - margin.right, 0)
@@ -108,6 +108,7 @@ const Curves = ({
           filteredData.reduce((previousValue, currentValue) => previousValue.concat(currentValue), []),
           getX
         ),
+        nice: true,
       }),
     [xMax, filteredData]
   )
@@ -142,7 +143,7 @@ const Curves = ({
         range: [0, xBrushMax],
         domain: extent(allData, getX),
       }),
-    [xBrushMax]
+    [xBrushMax, allData]
   )
   const brushYScale = useMemo(
     () =>
@@ -151,63 +152,90 @@ const Curves = ({
         domain: [Math.min(...allData.map((d) => getY(d))), Math.max(...allData.map((d) => getY(d)))],
         nice: true,
       }),
-    [yBrushMax]
+    [yBrushMax, allData]
   )
 
-  const initialBrushPosition = useMemo(
-    () => ({
+  const initialBrushPosition = useMemo(() => {
+    return {
       start: {
         x: brushXScale(getX(data[0][data[0].length >= 60 ? data[0].length - 60 : 0])),
       },
       end: { x: brushXScale(getX(data[0][data[0].length - 1])) },
-    }),
-    [brushXScale]
-  )
+    }
+  }, [brushXScale, data])
 
-  const colorScale = scaleOrdinal({
-    domain: labels,
-    range: colors,
-  })
+  const onTimespanChange = (t: any) => {
+    if (brushRef?.current) {
+      const updater: UpdateBrush = (prevBrush) => {
+        const lastDate = data[0][data[0].length - 1].date
+        const firstDate = data[0].find((data) => data.date >= lastDate - t.length * 1000)
+
+        const newExtent = brushRef.current!.getExtent(
+          { x: brushXScale(getX(firstDate)), y: (initialBrushPosition.start as any).y },
+          initialBrushPosition.end
+        )
+
+        const newState: BaseBrushState = {
+          ...prevBrush,
+          start: { y: newExtent.y0, x: newExtent.x0 },
+          end: { y: newExtent.y1, x: newExtent.x1 },
+          extent: newExtent,
+        }
+
+        return newState
+      }
+
+      brushRef.current.updateBrush(updater)
+    }
+  }
+
+  useEffect(
+    () => onTimespanChange(timespans?.find((t) => t.text === defaultTimespan)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
 
   if (width < 10) {
     return null
   }
 
   return (
-    <div className="w-full h-full">
-      {labels && (
-        <div
-          className="absolute flex justify-center w-full text-base"
-          style={{
-            top: margin.top / 2 - 10,
-          }}
-        >
-          <LegendOrdinal scale={colorScale} direction="row" labelMargin="0 15px 0 0" />
+    <div className="relative h-full" style={{ width }}>
+      <div className="absolute w-full p-6">
+        <div className="flex flex-row items-center space-x-4">
+          <div className="text-2xl font-bold text-high-emphesis whitespace-nowrap">{title}</div>
+          <div className="flex flex-row space-x-2">
+            {labels?.map((label, i) => (
+              <div
+                key={label}
+                className="flex flex-row items-center px-2 py-1 text-xs bg-opacity-30 rounded-xl whitespace-nowrap"
+                style={{ color: colors[i], backgroundColor: `${colors[i]}25` }}
+              >
+                <div className="h-[6px] w-[6px] rounded-full mr-1" style={{ backgroundColor: colors[i] }} /> {label}
+              </div>
+            ))}
+          </div>
         </div>
-      )}
-
-      {title && (
-        <div
-          className="absolute flex justify-center w-full text-base"
-          style={{
-            top: margin.top / 2 - 10,
-          }}
-        >
-          <LegendOrdinal scale={scaleOrdinal({ domain: [title] })} direction="row" labelMargin="0 15px 0 0" />
+        <div className="flex justify-end">
+          {timespans?.map((t) => (
+            <button
+              key={t.text}
+              className={classNames(
+                t === timespan
+                  ? 'text-blue bg-blue bg-opacity-30 rounded-xl font-bold border border-blue border-opacity-50'
+                  : 'text-secondary',
+                'text-sm px-3 py-0.5'
+              )}
+              onClick={() => {
+                setTimespan(t)
+                onTimespanChange(t)
+              }}
+            >
+              {t.text}
+            </button>
+          ))}
         </div>
-      )}
-
-      {note && (
-        <div
-          className="absolute flex justify-end w-full text-sm"
-          style={{
-            top: margin.top / 2 - 10,
-            right: margin.right,
-          }}
-        >
-          <LegendOrdinal scale={scaleOrdinal({ domain: [note] })} direction="row" labelMargin="0 4px 0 0" />
-        </div>
-      )}
+      </div>
 
       <svg width={width} height={height}>
         <rect x={0} y={0} width={width} height={height} fill="transparent" />
@@ -217,106 +245,60 @@ const Curves = ({
           scale={yScale}
           width={xMax}
           height={yMax}
-          strokeDasharray="1,3"
-          stroke="currentColor"
-          strokeOpacity={0.2}
-          pointerEvents="none"
+          numTicks={numTicksY}
+          stroke={axisColor}
+          strokeOpacity={0.4}
         />
         <GridColumns
           top={margin.top}
           left={margin.left}
           scale={xScale}
           height={yMax}
-          strokeDasharray="1,3"
-          stroke="currentColor"
-          strokeOpacity={0.2}
-          pointerEvents="none"
+          numTicks={numTicksX}
+          stroke={axisColor}
+          strokeOpacity={0.4}
         />
         <Group top={margin.top} left={margin.left}>
           {width > 8 &&
-            filteredData.map((curve, i) => {
-              const even = i % 2 === 0
-              let markerStart = even ? 'url(#marker-cross)' : 'url(#marker-x)'
-              if (i === 1) markerStart = 'url(#marker-line)'
-              const markerEnd = even ? 'url(#marker-arrow)' : 'url(#marker-arrow-odd)'
-              return (
-                <Group
-                  key={`chart-${i}`}
-                  // top={margin.top}
-                  // left={margin.left}
-                  // right={margin.right}
-                >
-                  <MarkerX id="marker-x" stroke={colors[i]} size={22} strokeWidth={4} markerUnits="userSpaceOnUse" />
-                  <MarkerCross
-                    id="marker-cross"
-                    stroke={colors[i]}
-                    size={22}
-                    strokeWidth={4}
-                    strokeOpacity={0.6}
-                    markerUnits="userSpaceOnUse"
-                  />
-                  {/* <MarkerCircle
-                    id="marker-circle"
-                    fill={colors[i]}
-                    size={2}
-                    refX={2}
-                  /> */}
-                  <MarkerArrow id="marker-arrow-odd" stroke={colors[i]} size={8} strokeWidth={1} />
-                  <MarkerLine id="marker-line" fill={colors[i]} size={16} strokeWidth={1} />
-                  <MarkerArrow id="marker-arrow" fill={colors[i]} refX={2} size={6} />
-                  <Curve
-                    hideBottomAxis
-                    hideLeftAxis
-                    data={curve}
-                    width={width}
-                    xScale={xScale}
-                    yScale={yScale}
-                    stroke={colors[i]}
-                    strokeWidth={2}
-                    strokeOpacity={1}
-                    markerMid="url(#marker-circle)"
-                    markerStart={markerStart}
-                    markerEnd={markerEnd}
-                  />
-                </Group>
-              )
-            })}
+            filteredData.map((curve, i) => (
+              <LinePath
+                key={`chart-${i}-${timespan?.text}`}
+                data={curve}
+                x={(d) => xScale(getX(d)) ?? 0}
+                y={(d) => yScale(getY(d)) ?? 0}
+                stroke={colors[i]}
+                strokeWidth={2}
+                strokeOpacity={1}
+              />
+            ))}
           <AxisBottom
             top={yMax}
             scale={xScale}
-            numTicks={width > 520 ? 10 : 5}
             stroke={axisColor}
-            tickStroke={axisColor}
+            strokeWidth={0.4}
             tickLabelProps={() => axisBottomTickLabelProps}
           />
           <AxisLeft
             scale={yScale}
-            numTicks={5}
+            numTicks={numTicksY}
             tickFormat={millify as any}
             stroke={axisColor}
-            tickStroke={axisColor}
+            strokeWidth={0.4}
             tickLabelProps={() => axisLeftTickLabelProps}
           />
         </Group>
 
         <Group top={topChartHeight + topChartBottomMargin + margin.top} left={brushMargin.left}>
           {data.map((brushData, i) => {
-            const even = i % 2 === 0
-            let markerStart = even ? 'url(#marker-cross)' : 'url(#marker-x)'
-            if (i === 1) markerStart = 'url(#marker-line)'
-            const markerEnd = even ? 'url(#marker-arrow)' : 'url(#marker-arrow-odd)'
             return (
-              <Curve
+              <LinePath
                 stroke={colors[i]}
                 strokeWidth={2}
                 strokeOpacity={1}
-                hideBottomAxis
-                hideLeftAxis
                 data={brushData}
                 width={width}
-                yMax={yBrushMax}
-                xScale={brushXScale}
-                yScale={brushYScale}
+                x={(d) => brushXScale(getX(d)) ?? 0}
+                y={(d) => brushYScale(getY(d)) ?? 0}
                 key={i}
               />
             )
@@ -330,6 +312,7 @@ const Curves = ({
             orientation={['diagonal']}
           />
           <Brush
+            innerRef={brushRef}
             xScale={brushXScale}
             yScale={brushYScale}
             width={xBrushMax}

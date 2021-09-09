@@ -53,7 +53,7 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
     if (dayData) {
       setChart(type.getChart(dayData))
     }
-  }, [dayData])
+  }, [type, dayData])
 
   const data = useMemo(() => type.getData(exchange, exchange1d, exchange2d), [type, exchange, exchange1d, exchange2d])
 
