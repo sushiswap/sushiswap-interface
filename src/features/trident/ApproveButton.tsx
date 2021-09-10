@@ -1,6 +1,6 @@
 import React, { FC, memo, ReactNode, useEffect, useState } from 'react'
 import Button from '../../components/Button'
-import { ApprovalState, useApproveCallback, useBentoBoxContract, useTridentRouterContract } from '../../hooks'
+import { ApprovalState, useApproveCallback, useTridentRouterContract } from '../../hooks'
 import useBentoMasterApproveCallback, { BentoApprovalState } from '../../hooks/useBentoMasterApproveCallback'
 import { t } from '@lingui/macro'
 import { Currency, CurrencyAmount } from '@sushiswap/sdk'

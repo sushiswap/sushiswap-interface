@@ -6,17 +6,14 @@ import { useActiveWeb3React } from '../../hooks'
 import Button from '../../components/Button'
 import Link from 'next/link'
 import HeadlessUiModal from '../../components/Modal/HeadlessUIModal'
-import { PoolStateType } from './types'
 import { FC } from 'react'
+import { useRecoilValue } from 'recoil'
+import { txHashAtom } from './context/atoms'
 
-interface DepositSubmittedModalProps {
-  state: PoolStateType
-}
-
-const DepositSubmittedModal: FC<DepositSubmittedModalProps> = ({ state }) => {
+const DepositSubmittedModal: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { txHash } = state
+  const txHash = useRecoilValue(txHashAtom)
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => {}}>

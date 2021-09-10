@@ -6,19 +6,60 @@ import { useLingui } from '@lingui/react'
 import TridentLayout from '../../../../layouts/Trident'
 import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
-import { toHref } from '../../../../hooks/useTridentPools'
-import React from 'react'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/RemoveTransactionReviewModal'
-import TridentRemoveHybridContextProvider, {
-  useTridentRemoveHybridContext,
-  useTridentRemoveHybridState,
-} from '../../../../features/trident/remove/hybrid/context'
+import React, { useEffect } from 'react'
 import ModeToggle from '../../../../features/trident/ModeToggle'
+import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
+import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useRouter } from 'next/router'
+import { poolAtom, slippageAtom } from '../../../../features/trident/remove/classic/context/atoms'
+import { poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
+import { useCurrency } from '../../../../hooks/Tokens'
+import { NATIVE, Percent } from '../../../../../../sushiswap-sdk'
+import { SUSHI } from '../../../../config/tokens'
+import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
+import { useTotalSupply } from '../../../../hooks/useTotalSupply'
+import { useTokenBalance } from '../../../../state/wallet/hooks'
+import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
+
+const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 const RemoveHybrid = () => {
+  const { account, chainId } = useActiveWeb3React()
+  const { query } = useRouter()
   const { i18n } = useLingui()
-  const state = useTridentRemoveHybridState()
-  const context = useTridentRemoveHybridContext()
+
+  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const setTotalSupply = useSetRecoilState(totalSupplyAtom)
+  const setPoolBalance = useSetRecoilState(poolBalanceAtom)
+  const setSlippage = useSetRecoilState(slippageAtom)
+
+  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
+  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE) // custom from users
+
+  useEffect(() => {
+    if (!classicPool[1]) return
+    setPool(classicPool)
+  }, [classicPool, setPool])
+
+  useEffect(() => {
+    if (!totalSupply) return
+    setTotalSupply(totalSupply)
+  }, [setTotalSupply, totalSupply])
+
+  useEffect(() => {
+    if (!poolBalance) return
+    setPoolBalance(poolBalance)
+  }, [poolBalance, setPoolBalance])
+
+  useEffect(() => {
+    if (!allowedSlippage) return
+    setSlippage(allowedSlippage)
+  })
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -31,7 +72,8 @@ const RemoveHybrid = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref('currencies', context.currencies)}`}>{i18n._(t`Back`)}</Link>
+            {/*TODO ramin*/}
+            <Link href={`/trident/pool/hybrid/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -50,19 +92,20 @@ const RemoveHybrid = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle state={state} context={context} />
+      {/*TODO ramin*/}
+      <ModeToggle onChange={() => {}} />
 
       <>
         {/*{liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}*/}
         {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
       </>
 
-      <RemoveTransactionReviewModal state={state} context={context} />
+      <RemoveTransactionReviewModal />
     </div>
   )
 }
 
+RemoveHybrid.Provider = RecoilRoot
 RemoveHybrid.Layout = TridentLayout
-RemoveHybrid.Provider = TridentRemoveHybridContextProvider
 
 export default RemoveHybrid

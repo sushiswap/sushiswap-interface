@@ -1,8 +1,7 @@
 import TridentLayout from '../../../../layouts/Trident'
-import { TridentPoolPageContextProvider } from '../../../../features/trident/pool/context'
-import { PoolType } from '../../../../features/trident/types'
 import HybridPoolComposition from '../../../../features/trident/pool/hybrid/HybridPoolComposition'
 import Header from '../../../../features/trident/pool/Header'
+import { RecoilRoot } from 'recoil'
 
 const Pool = () => {
   return (
@@ -13,7 +12,7 @@ const Pool = () => {
   )
 }
 
-Pool.Provider = TridentPoolPageContextProvider(PoolType.HYBRID)
+Pool.Provider = RecoilRoot
 Pool.Layout = TridentLayout
 
 export default Pool
