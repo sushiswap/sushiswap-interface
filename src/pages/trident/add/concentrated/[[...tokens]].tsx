@@ -5,25 +5,58 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
-import { toHref } from '../../../../hooks/useTridentPools'
-import AddTransactionReviewModal from '../../../../features/trident/add/AddTransactionReviewModal'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Chart from '../../../../features/trident/add/concentrated/Chart'
 import PriceRange from '../../../../features/trident/add/concentrated/PriceRange'
-import TridentAddConcentratedContextProvider, {
-  useTridentAddConcentratedContext,
-  useTridentAddConcentratedState,
-} from '../../../../features/trident/add/concentrated/context'
 import RangeBlocks from '../../../../features/trident/add/concentrated/RangeBlocks'
-import StandardMode from '../../../../features/trident/add/concentrated/StandardMode'
 import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { poolAtom } from '../../../../features/trident/add/classic/context/atoms'
+import { poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
+import { useCurrency } from '../../../../hooks/Tokens'
+import { NATIVE } from '../../../../../../sushiswap-sdk'
+import { SUSHI } from '../../../../config/tokens'
+import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
+import { useTotalSupply } from '../../../../hooks/useTotalSupply'
+import { useTokenBalance } from '../../../../state/wallet/hooks'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useRouter } from 'next/router'
+import ConcentratedStandardMode from '../../../../features/trident/add/concentrated/ConcentratedStandardMode'
+import AddTransactionReviewModal from '../../../../features/trident/create/CreateReviewModal'
+import { maxPriceAtom, minPriceAtom } from '../../../../features/trident/add/concentrated/context/atoms'
 
 const AddConcentrated = () => {
+  const { account, chainId } = useActiveWeb3React()
+  const { query } = useRouter()
   const { i18n } = useLingui()
-  const context = useTridentAddConcentratedContext()
-  const state = useTridentAddConcentratedState()
   const [next, setNext] = useState(false)
+
+  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const setTotalSupply = useSetRecoilState(totalSupplyAtom)
+  const setPoolBalance = useSetRecoilState(poolBalanceAtom)
+  const minPrice = useRecoilValue(minPriceAtom)
+  const maxPrice = useRecoilValue(maxPriceAtom)
+  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
+  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+
+  useEffect(() => {
+    if (!classicPool[1]) return
+    setPool(classicPool)
+  }, [chainId, classicPool, setPool])
+
+  useEffect(() => {
+    if (!totalSupply) return
+    setTotalSupply(totalSupply)
+  }, [setTotalSupply, totalSupply])
+
+  useEffect(() => {
+    if (!poolBalance) return
+    setPoolBalance(poolBalance)
+  }, [poolBalance, setPoolBalance])
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -36,7 +69,7 @@ const AddConcentrated = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/${toHref('concentrated', context.currencies)}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/classic/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
         </div>
         <div className="flex flex-col gap-2">
@@ -57,7 +90,7 @@ const AddConcentrated = () => {
           <div className="flex flex-col px-5 mt-5">
             <Button
               color="gradient"
-              disabled={!state.minPrice || !state.maxPrice || state.minPrice >= state.maxPrice}
+              disabled={!minPrice || !maxPrice || minPrice >= maxPrice}
               onClick={() => setNext(true)}
             >
               Next
@@ -68,16 +101,18 @@ const AddConcentrated = () => {
         <div className="flex flex-col gap-7">
           <FixedRatioHeader margin={false} />
           <RangeBlocks />
-          <StandardMode />
-          <AddTransactionReviewModal state={state} context={context} />
-          <DepositSubmittedModal state={state} />
+          <ConcentratedStandardMode />
+          <AddTransactionReviewModal />
+
+          {/*TODO ramin*/}
+          {/*<DepositSubmittedModal />*/}
         </div>
       )}
     </div>
   )
 }
 
+AddConcentrated.Provider = RecoilRoot
 AddConcentrated.Layout = TridentLayout
-AddConcentrated.Provider = TridentAddConcentratedContextProvider
 
 export default AddConcentrated

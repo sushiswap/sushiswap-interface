@@ -77,6 +77,7 @@ const ClassicStandardMode = () => {
     }
   }, [balances, noLiquidity, parsedAmountA, parsedAmountB, usdcA, usdcB])
 
+  // TODO ramin: balance check for bento
   let error = !account
     ? i18n._(t`Connect Wallet`)
     : poolState === ConstantProductPoolState.INVALID
