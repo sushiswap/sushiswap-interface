@@ -1,5 +1,11 @@
 import React, { FC } from 'react'
-import { currentPoolShareSelector, liquidityModeAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  currentPoolShareSelector,
+  liquidityModeAtom,
+  showReviewAtom,
+  spendFromWalletAtom,
+} from '../../context/atoms'
 import { Percent } from '@sushiswap/sdk'
 import ListPanel from '../../../../components/ListPanel'
 import { priceSelector, useClassicRemoveExecute } from './context/atoms'
@@ -27,6 +33,7 @@ const RemoveTransactionReviewModal: FC<RemoveTransactionReviewModalProps> = () =
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
   const currentLiquidityValues = useRecoilValue(currentLiquidityValueSelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { standardModeExecute, zapModeExecute } = useClassicRemoveExecute()
 
@@ -133,6 +140,7 @@ const RemoveTransactionReviewModal: FC<RemoveTransactionReviewModalProps> = () =
             </div>
           </div>
           <Button
+            disabled={attemptingTxn}
             color="gradient"
             size="lg"
             onClick={liquidityMode === LiquidityMode.STANDARD ? standardModeExecute : zapModeExecute}

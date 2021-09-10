@@ -1,25 +1,26 @@
-import { FC, useCallback } from 'react'
-import { ChainId, Currency, NATIVE, Token, USDC } from '@sushiswap/sdk'
+import { FC, useCallback, useMemo } from 'react'
+import { Currency, NATIVE } from '@sushiswap/sdk'
 import Button from '../Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import Typography from '../Typography'
 import { useLingui } from '@lingui/react'
 import CurrencyLogo from '../CurrencyLogo'
-import { SUSHI } from '../../config/tokens'
 import { useActiveWeb3React } from '../../hooks'
-import { useAllTokenBalances } from '../../state/wallet/hooks'
+import { useCurrencyBalances } from '../../state/wallet/hooks'
 
 interface CurrencySelectDialogProps {
   currency: Currency
   onChange: (x: Currency) => void
   onDismiss: () => void
+  currencies?: Currency[]
 }
 
-const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChange, onDismiss }) => {
+const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currencies = [], onChange, onDismiss }) => {
+  const { account, chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
-  const balances = useAllTokenBalances()
+  const list = useMemo(() => [NATIVE[chainId], ...currencies], [chainId, currencies])
+  const balances = useCurrencyBalances(account, list)
 
   const handleSelect = useCallback(
     (x: Currency) => {
@@ -28,15 +29,6 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChang
     },
     [onChange, onDismiss]
   )
-
-  // TODO ramin: remove
-  const tokens = [
-    NATIVE[chainId],
-    SUSHI[chainId],
-    USDC[chainId],
-    new Token(ChainId.KOVAN, '0xa36085f69e2889c224210f603d836748e7dc0088', 18, 'LINK', 'LINK'),
-    new Token(ChainId.KOVAN, '0x4F96Fe3b7A6Cf9725f59d353F723c1bDb64CA6Aa', 18, 'DAI', 'DAI'),
-  ]
 
   return (
     <div className="bg-dark-900 h-full">
@@ -60,22 +52,22 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, onChang
           </Typography>
         </div>
       </div>
-      {tokens.map((token, index) => (
+      {balances.map((balance, index) => (
         <div
           className="flex justify-between items-center p-5 cursor-pointer"
-          onClick={() => handleSelect(token)}
+          onClick={() => handleSelect(balance?.currency)}
           key={index}
         >
           <div className="flex items-center gap-1.5">
             <div className="rounded-full overflow-hidden">
-              <CurrencyLogo currency={token} size={24} />
+              <CurrencyLogo currency={balance?.currency} size={24} />
             </div>
             <Typography variant="sm" className="text-high-emphesis" weight={700}>
-              {token.symbol}
+              {balance?.currency.symbol}
             </Typography>
           </div>
           <Typography variant="sm" className="text-high-emphesis" weight={700}>
-            {balances[token]?.toSignificant(6)}
+            {balance?.toSignificant(6)}
           </Typography>
         </div>
       ))}

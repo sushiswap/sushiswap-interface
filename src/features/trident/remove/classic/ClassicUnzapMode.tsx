@@ -14,24 +14,31 @@ import {
   selectedZapCurrencyAtom,
   percentageAmountAtom,
   parsedZapAmountSelector,
+  poolAtom,
 } from './context/atoms'
-import { showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, showReviewAtom } from '../../context/atoms'
 
 const ClassicUnzapMode: FC = () => {
   const { i18n } = useLingui()
+  const [, pool] = useRecoilValue(poolAtom)
   const [percentageAmount, setPercentageAmount] = useRecoilState(percentageAmountAtom)
   const [liquidityA, liquidityB] = useRecoilValue(currentLiquidityValueSelector)
   const [selectedZapCurrency, setSelectedZapCurrency] = useRecoilState(selectedZapCurrencyAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
   const usdcAValue = useUSDCValue(liquidityA)
   const usdcBValue = useUSDCValue(liquidityB)
-  const liquidityValueInUsdc = usdcAValue?.add(usdcBValue)
   const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const liquidityValueInUsdc = usdcAValue?.add(usdcBValue)
 
   return (
     <div className="px-5 mt-5">
       <div className="flex flex-col gap-8">
-        <AssetSelect value={selectedZapCurrency} onSelect={setSelectedZapCurrency} />
+        <AssetSelect
+          value={selectedZapCurrency}
+          onSelect={setSelectedZapCurrency}
+          currencies={[pool?.token0, pool?.token1]}
+        />
         <div className="flex flex-col gap-3">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
@@ -73,8 +80,12 @@ const ClassicUnzapMode: FC = () => {
           </Typography>
           <div className="flex flex-col gap-4">
             <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedZapAmount} key={0} />]} />
-            <Button color="gradient" disabled={!percentageAmount} onClick={() => setShowReview(true)}>
-              {percentageAmount ? i18n._(t`Confirm Withdrawal`) : i18n._(t`Tap amount or type amount to continue`)}
+            <Button color="gradient" disabled={!percentageAmount || attemptingTxn} onClick={() => setShowReview(true)}>
+              {attemptingTxn
+                ? i18n._(t`Withdrawing`)
+                : percentageAmount
+                ? i18n._(t`Confirm Withdrawal`)
+                : i18n._(t`Tap amount or type amount to continue`)}
             </Button>
           </div>
         </div>

@@ -15,19 +15,21 @@ import {
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import { useCurrencyBalance } from '../../../../state/wallet/hooks'
-import { noLiquiditySelector, showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, noLiquiditySelector, showReviewAtom } from '../../context/atoms'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
 import ListPanel from '../../../../components/ListPanel'
 import TridentApproveGate from '../../ApproveButton'
 import Button from '../../../../components/Button'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import Lottie from 'lottie-react'
+import Dots from '../../../../components/Dots'
 
 const ClassicZapMode = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
-  const [poolState] = useRecoilValue(poolAtom)
+
+  const [poolState, pool] = useRecoilValue(poolAtom)
   const [zapInput, setZapInput] = useRecoilState(zapInputAtom)
   const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
   const parsedZapSplitAmounts = useRecoilValue(parsedZapSplitAmountsSelector)
@@ -35,6 +37,7 @@ const ClassicZapMode = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const balance = useCurrencyBalance(account ?? undefined, selectedZapCurrency)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
@@ -76,6 +79,7 @@ const ClassicZapMode = () => {
           onChange={setZapInput}
           onSelect={setSelectedZapCurrency}
           disabled={noLiquidity}
+          currencies={[pool?.token0, pool?.token1]}
         />
         <div className="flex flex-col gap-3">
           <TridentApproveGate inputAmounts={[parsedZapAmount]} tokenApproveOn={bentoBox?.address}>
@@ -89,11 +93,11 @@ const ClassicZapMode = () => {
                   ),
                 })}
                 color={zapInput ? 'gradient' : 'gray'}
-                disabled={!!error || !approved}
+                disabled={!!error || !approved || attemptingTxn}
                 className="font-bold text-sm"
                 onClick={() => setShowReview(true)}
               >
-                {loading ? '' : !error ? i18n._(t`Confirm Deposit`) : error}
+                {attemptingTxn ? <Dots>Depositing</Dots> : loading ? '' : !error ? i18n._(t`Confirm Deposit`) : error}
               </Button>
             )}
           </TridentApproveGate>

@@ -23,7 +23,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Button from '../../../../components/Button'
 import { ZERO } from '@sushiswap/sdk'
 import { LiquidityMode } from '../../types'
-import { currentPoolShareSelector, liquidityModeAtom, showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, currentPoolShareSelector, liquidityModeAtom, showReviewAtom } from '../../context/atoms'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
@@ -39,6 +39,7 @@ const AddTransactionReviewModal: FC = () => {
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
   const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
   const parsedZapSplitAmounts = useRecoilValue(parsedZapSplitAmountsSelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { standardModeExecute, zapModeExecute } = useClassicAddExecute()
 
@@ -161,6 +162,7 @@ const AddTransactionReviewModal: FC = () => {
             </div>
           </div>
           <Button
+            disabled={attemptingTxn}
             color="gradient"
             size="lg"
             onClick={liquidityMode === LiquidityMode.STANDARD ? standardModeExecute : zapModeExecute}

@@ -12,7 +12,7 @@ import {
   txHashAtom,
 } from '../../../context/atoms'
 import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
+import { useActiveWeb3React, useBentoBoxContract, useTridentRouterContract } from '../../../../../hooks'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
 import ReactGA from 'react-ga'
 import { t } from '@lingui/macro'
@@ -272,6 +272,7 @@ export const useClassicAddExecute = () => {
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
+  const bentoboxContract = useBentoBoxContract()
 
   const standardModeExecute = useRecoilCallback(
     ({ snapshot }) =>
@@ -290,7 +291,8 @@ export const useClassicAddExecute = () => {
           !parsedAmountA ||
           !parsedAmountB ||
           !pool?.token0 ||
-          !pool?.token1
+          !pool?.token1 ||
+          !bentoboxContract
         )
           return
 
@@ -303,16 +305,20 @@ export const useClassicAddExecute = () => {
           {
             token: parsedAmountA.currency.wrapped.address,
             native,
-            amount: amountsMin[0].toString(),
-            // TODO ramin: bentoShare
-            // amount: toShare(parsedAmountA.currency.wrapped, BigNumber.from(amountsMin[0].toString())),
+            amount: await bentoboxContract.toShare(
+              parsedAmountA.currency.wrapped.address,
+              amountsMin[0].toString(),
+              false
+            ),
           },
           {
             token: parsedAmountB.currency.wrapped.address,
             native,
-            amount: amountsMin[1].toString(),
-            // TODO ramin: bentoShare
-            // amount: toShare(parsedAmountB.currency.wrapped, BigNumber.from(amountsMin[1].toString())),
+            amount: await bentoboxContract.toShare(
+              parsedAmountB.currency.wrapped.address,
+              amountsMin[1].toString(),
+              false
+            ),
           },
         ]
 
@@ -329,14 +335,15 @@ export const useClassicAddExecute = () => {
         try {
           setAttemptingTxn(true)
           const estimatedGasLimit = await estimate(...args, value)
-          const response = await method(...args, {
+          const tx = await method(...args, {
             ...value,
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
-          setAttemptingTxn(false)
+          setShowReview(false)
+          await tx.wait()
 
-          addTransaction(response, {
+          addTransaction(tx, {
             summary: i18n._(
               t`Add ${parsedAmountA.toSignificant(3)} ${
                 parsedAmountA.currency.symbol
@@ -346,8 +353,8 @@ export const useClassicAddExecute = () => {
             ),
           })
 
-          setTxHash(response.hash)
-          setShowReview(false)
+          setAttemptingTxn(false)
+          setTxHash(tx.hash)
 
           ReactGA.event({
             category: 'Liquidity',
@@ -366,6 +373,7 @@ export const useClassicAddExecute = () => {
       account,
       addTransaction,
       allowedSlippage,
+      bentoboxContract,
       chainId,
       i18n,
       library,
@@ -384,7 +392,17 @@ export const useClassicAddExecute = () => {
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
         const native = await snapshot.getPromise(spendFromWalletAtom)
 
-        if (!pool || !chainId || !library || !account || !router || !parsedZapAmount || !pool?.token0 || !pool?.token1)
+        if (
+          !pool ||
+          !chainId ||
+          !library ||
+          !account ||
+          !router ||
+          !parsedZapAmount ||
+          !pool?.token0 ||
+          !pool?.token1 ||
+          !bentoboxContract
+        )
           return
 
         const amountMin = calculateSlippageAmount(parsedZapAmount, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0]
@@ -392,14 +410,11 @@ export const useClassicAddExecute = () => {
           {
             token: parsedZapAmount.currency.wrapped.address,
             native,
-            amount: amountMin.toString(),
-
-            // TODO ramin: bentoShare
-            // amount: toShare(
-            //   parsedZapAmount.currency.wrapped,
-            //
-            //   amountMin.toString().toBigNumber(parsedZapAmount.currency.decimals),
-            // ),
+            amount: await bentoboxContract.toShare(
+              parsedZapAmount.currency.wrapped.address,
+              amountMin.toString(),
+              false
+            ),
           },
         ]
 
@@ -407,19 +422,20 @@ export const useClassicAddExecute = () => {
         const estimate = router.estimateGas.addLiquidity
         const method = router.addLiquidity
         const args = [liquidityInput, pool.liquidityToken.address, 1, encoded]
-        const value = parsedZapAmount.currency.isNative ? { value: parsedZapAmount.quotient.toString() } : {}
+        const value = parsedZapAmount.currency.isNative ? { value: amountMin.toString() } : {}
 
         try {
           setAttemptingTxn(true)
           const estimatedGasLimit = await estimate(...args, value)
-          const response = await method(...args, {
+          const tx = await method(...args, {
             ...value,
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
-          setAttemptingTxn(false)
+          setShowReview(false)
+          await tx.wait()
 
-          addTransaction(response, {
+          addTransaction(tx, {
             summary: i18n._(
               t`Zap ${parsedZapAmount.toSignificant(3)} ${parsedZapAmount.currency.symbol} into ${pool.token0.symbol}/${
                 pool.token1.symbol
@@ -427,8 +443,8 @@ export const useClassicAddExecute = () => {
             ),
           })
 
-          setTxHash(response.hash)
-          setShowReview(false)
+          setAttemptingTxn(false)
+          setTxHash(tx.hash)
 
           ReactGA.event({
             category: 'Liquidity',
@@ -447,6 +463,7 @@ export const useClassicAddExecute = () => {
       account,
       addTransaction,
       allowedSlippage,
+      bentoboxContract,
       chainId,
       i18n,
       library,

@@ -15,7 +15,7 @@ import {
   percentageAmountAtom,
   poolAtom,
 } from './context/atoms'
-import { poolBalanceAtom, showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, poolBalanceAtom, showReviewAtom } from '../../context/atoms'
 import { Percent, ZERO } from '@sushiswap/sdk'
 import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
@@ -23,6 +23,7 @@ import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import TridentApproveGate from '../../ApproveButton'
 import AssetInput from '../../../../components/AssetInput'
+import Dots from '../../../../components/Dots'
 
 const ClassicUnzapMode: FC = () => {
   const { account } = useActiveWeb3React()
@@ -39,6 +40,7 @@ const ClassicUnzapMode: FC = () => {
   const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
   const currentLiquidityValueInUsdc = usdcAValue?.add(usdcBValue)
   const selectedLiquidityValueInUsdc = currentLiquidityValueInUsdc?.multiply(new Percent(percentageAmount, '100'))
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -115,8 +117,16 @@ const ClassicUnzapMode: FC = () => {
               tokenApproveOn={router?.address}
             >
               {({ approved, loading }) => {
-                const disabled = !!error || !approved || loading
-                const buttonText = loading ? '' : error ? error : i18n._(t`Confirm Withdrawal`)
+                const disabled = !!error || !approved || loading || attemptingTxn
+                const buttonText = attemptingTxn ? (
+                  <Dots>{i18n._(t`Withdrawing`)}</Dots>
+                ) : loading ? (
+                  ''
+                ) : error ? (
+                  error
+                ) : (
+                  i18n._(t`Confirm Withdrawal`)
+                )
 
                 return (
                   <Button

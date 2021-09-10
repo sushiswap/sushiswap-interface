@@ -8,7 +8,7 @@ import {
   totalSupplyAtom,
   txHashAtom,
 } from '../../../context/atoms'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
+import { useActiveWeb3React, useBentoBoxContract, useTridentRouterContract } from '../../../../../hooks'
 import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
 import { useTransactionAdder } from '../../../../../state/transactions/hooks'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../../../functions'
@@ -17,6 +17,7 @@ import ReactGA from 'react-ga'
 import { ethers } from 'ethers'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
+import { XSUSHI } from '../../../../../config/tokens'
 
 export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({
   key: 'poolAtom',
@@ -145,6 +146,7 @@ export const useClassicRemoveExecute = () => {
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
+  const bentoboxContract = useBentoBoxContract()
 
   const standardModeExecute = useRecoilCallback(
     ({ snapshot }) =>
@@ -165,18 +167,27 @@ export const useClassicRemoveExecute = () => {
           !parsedAmountB ||
           !tokenA ||
           !tokenB ||
-          !liquidityAmount
+          !liquidityAmount ||
+          !bentoboxContract
         )
           throw new Error('missing dependencies')
 
         const liquidityOutput = [
           {
             token: parsedAmountA.currency.wrapped.address,
-            amount: parsedAmountA.quotient.toString(),
+            amount: await bentoboxContract.toShare(
+              parsedAmountA.currency.wrapped.address,
+              parsedAmountA.quotient.toString(),
+              false
+            ),
           },
           {
             token: parsedAmountB.currency.wrapped.address,
-            amount: parsedAmountB.quotient.toString(),
+            amount: await bentoboxContract.toShare(
+              parsedAmountB.currency.wrapped.address,
+              parsedAmountB.quotient.toString(),
+              false
+            ),
           },
         ]
 
@@ -188,13 +199,14 @@ export const useClassicRemoveExecute = () => {
         try {
           setAttemptingTxn(true)
           const estimatedGasLimit = await estimate(...args, {})
-          const response = await method(...args, {
+          const tx = await method(...args, {
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
-          setAttemptingTxn(false)
+          setShowReview(false)
+          await tx.wait()
 
-          addTransaction(response, {
+          addTransaction(tx, {
             summary: i18n._(
               t`Remove ${parsedAmountA.toSignificant(3)} ${
                 parsedAmountA.currency.symbol
@@ -204,8 +216,8 @@ export const useClassicRemoveExecute = () => {
             ),
           })
 
-          setTxHash(response.hash)
-          setShowReview(false)
+          setAttemptingTxn(false)
+          setTxHash(tx.hash)
 
           ReactGA.event({
             category: 'Liquidity',
@@ -220,7 +232,19 @@ export const useClassicRemoveExecute = () => {
           }
         }
       },
-    [poolBalance, chainId, library, account, router, setAttemptingTxn, addTransaction, i18n, setTxHash, setShowReview]
+    [
+      poolBalance,
+      chainId,
+      library,
+      account,
+      router,
+      bentoboxContract,
+      setAttemptingTxn,
+      setShowReview,
+      addTransaction,
+      i18n,
+      setTxHash,
+    ]
   )
 
   const zapModeExecute = useRecoilCallback(
@@ -244,13 +268,18 @@ export const useClassicRemoveExecute = () => {
           !parsedAmountB ||
           !tokenA ||
           !tokenB ||
-          !liquidityAmount
+          !liquidityAmount ||
+          !bentoboxContract
         )
           throw new Error('missing dependencies')
 
         const liquidityOutput = {
           token: parsedZapAmount.currency.wrapped.address,
-          amount: parsedZapAmount.quotient.toString(),
+          amount: await bentoboxContract.toShare(
+            parsedZapAmount.currency.wrapped.address,
+            parsedZapAmount.quotient.toString(),
+            false
+          ),
         }
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
@@ -261,13 +290,14 @@ export const useClassicRemoveExecute = () => {
         try {
           setAttemptingTxn(true)
           const estimatedGasLimit = await estimate(...args, {})
-          const response = await method(...args, {
+          const tx = await method(...args, {
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
-          setAttemptingTxn(false)
+          setShowReview(false)
+          await tx.wait()
 
-          addTransaction(response, {
+          addTransaction(tx, {
             summary: i18n._(
               t`Remove ${parsedAmountA.toSignificant(3)} ${
                 parsedAmountA.currency.symbol
@@ -277,8 +307,8 @@ export const useClassicRemoveExecute = () => {
             ),
           })
 
-          setTxHash(response.hash)
-          setShowReview(false)
+          setAttemptingTxn(false)
+          setTxHash(tx.hash)
 
           ReactGA.event({
             category: 'Liquidity',
@@ -293,7 +323,19 @@ export const useClassicRemoveExecute = () => {
           }
         }
       },
-    [account, addTransaction, chainId, i18n, library, poolBalance, router, setAttemptingTxn, setShowReview, setTxHash]
+    [
+      account,
+      addTransaction,
+      bentoboxContract,
+      chainId,
+      i18n,
+      library,
+      poolBalance,
+      router,
+      setAttemptingTxn,
+      setShowReview,
+      setTxHash,
+    ]
   )
 
   return {

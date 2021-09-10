@@ -1,6 +1,6 @@
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import React, { useMemo } from 'react'
-import { noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { attemptingTxnAtom, noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import {
   formattedAmountsSelector,
   mainInputAtom,
@@ -26,6 +26,7 @@ import Button from '../../../../components/Button'
 import Typography from '../../../../components/Typography'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
+import Dots from '../../../../components/Dots'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
@@ -42,6 +43,7 @@ const ClassicStandardMode = () => {
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
   const balances = useCurrencyBalances(account ?? undefined, [pool?.token0, pool?.token1])
   const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const usdcA = useUSDCValue(balances?.[0])
   const usdcB = useUSDCValue(balances?.[1])
@@ -118,8 +120,16 @@ const ClassicStandardMode = () => {
           <div className="flex flex-col gap-3">
             <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
               {({ approved, loading }) => {
-                const disabled = !!error || !approved || loading
-                const buttonText = loading ? '' : error ? error : i18n._(t`Confirm Deposit`)
+                const disabled = !!error || !approved || loading || attemptingTxn
+                const buttonText = attemptingTxn ? (
+                  <Dots>{i18n._(t`Depositing`)}</Dots>
+                ) : loading ? (
+                  ''
+                ) : error ? (
+                  error
+                ) : (
+                  i18n._(t`Confirm Deposit`)
+                )
 
                 return (
                   <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
