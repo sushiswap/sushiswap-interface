@@ -1,14 +1,24 @@
-import { ChainId, Currency, Token, WETH9 } from '@sushiswap/sdk'
+import { ChainId, Currency, PoolType, WETH9 } from '@sushiswap/sdk'
 import { useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { tryParseAmount } from '../functions'
-import { Pool, PoolType } from '../features/trident/types'
-import { useRouter } from 'next/router'
+import { Pool } from '../features/trident/types'
 import { SUSHI, USDC } from '../config/tokens'
 
-export const toHref = (type: string, currencies: Currency[]) => {
+export const toHref = (type: PoolType, currencies: Currency[]) => {
+  const typeString =
+    type === PoolType.ConstantProduct
+      ? 'classic'
+      : type === PoolType.ConcentratedLiquidity
+      ? 'concentrated'
+      : type === PoolType.Hybrid
+      ? 'hybrid'
+      : type === PoolType.Weighted
+      ? 'weighted'
+      : null
+
   const addresses = currencies.map((el) => el?.wrapped.address)
-  return `${type}/${addresses.join('/')}`
+  return `${typeString}/${addresses.join('/')}`
 }
 
 type UsePoolsReturnType = [
@@ -23,7 +33,7 @@ const useTridentPools = (): UsePoolsReturnType => {
   const pools: Pool[] = useMemo(
     () => [
       {
-        type: PoolType.CLASSIC,
+        type: PoolType.ConstantProduct,
         amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
         tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
         apy: '37.8',
@@ -32,7 +42,7 @@ const useTridentPools = (): UsePoolsReturnType => {
         isFarm: true,
       },
       {
-        type: PoolType.CONCENTRATED,
+        type: PoolType.ConcentratedLiquidity,
         amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
         tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
         apy: '84.5',
@@ -41,7 +51,7 @@ const useTridentPools = (): UsePoolsReturnType => {
         isFarm: false,
       },
       {
-        type: PoolType.WEIGHTED,
+        type: PoolType.Weighted,
         amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
         tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
         apy: '12.0',
@@ -50,7 +60,7 @@ const useTridentPools = (): UsePoolsReturnType => {
         isFarm: false,
       },
       {
-        type: PoolType.HYBRID,
+        type: PoolType.Hybrid,
         amounts: [
           tryParseAmount('1232', SUSHI[ChainId.MAINNET]),
           tryParseAmount('4.26', WETH9[ChainId.MAINNET]),

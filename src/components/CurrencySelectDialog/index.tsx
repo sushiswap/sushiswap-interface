@@ -17,10 +17,9 @@ interface CurrencySelectDialogProps {
 }
 
 const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currencies = [], onChange, onDismiss }) => {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const list = useMemo(() => [NATIVE[chainId], ...currencies], [chainId, currencies])
-  const balances = useCurrencyBalances(account, list)
+  const balances = useCurrencyBalances(account, currencies)
 
   const handleSelect = useCallback(
     (x: Currency) => {

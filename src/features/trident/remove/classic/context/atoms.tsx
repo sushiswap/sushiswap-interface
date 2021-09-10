@@ -9,7 +9,6 @@ import {
   txHashAtom,
 } from '../../../context/atoms'
 import { useActiveWeb3React, useBentoBoxContract, useTridentRouterContract } from '../../../../../hooks'
-import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/hooks'
 import { useTransactionAdder } from '../../../../../state/transactions/hooks'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../../../functions'
 import { t } from '@lingui/macro'
@@ -17,7 +16,6 @@ import ReactGA from 'react-ga'
 import { ethers } from 'ethers'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
-import { XSUSHI } from '../../../../../config/tokens'
 
 export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({
   key: 'poolAtom',

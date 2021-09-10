@@ -16,7 +16,7 @@ import {
 import { showReviewAtom, spendFromWalletAtom } from '../context/atoms'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
-import { PoolType } from '../types'
+import { PoolType } from '@sushiswap/sdk'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
@@ -65,13 +65,10 @@ const AddTransactionReviewModal: FC = () => {
               {i18n._(t`You are creating a:`)}
             </Typography>
             <Typography weight={700} variant="lg" className="text-high-emphesis">
-              {selectedPoolType === PoolType.CLASSIC
-                ? i18n._(t`Classic Pool`)
-                : selectedPoolType === PoolType.WEIGHTED
-                ? i18n._(t`Weighted Pool`)
-                : selectedPoolType === PoolType.HYBRID
-                ? i18n._(t`Multi-Asset Pool`)
-                : i18n._(t`Concentrated Pool`)}
+              {selectedPoolType === PoolType.ConstantProduct && i18n._(t`Classic Pool`)}
+              {selectedPoolType === PoolType.Weighted && i18n._(t`Weighted Pool`)}
+              {selectedPoolType === PoolType.Hybrid && i18n._(t`Multi-Asset Pool`)}
+              {selectedPoolType === PoolType.ConcentratedLiquidity && i18n._(t`Concentrated Pool`)}
             </Typography>
           </div>
           <div className="flex flex-row justify-between px-5">
@@ -118,11 +115,11 @@ const AddTransactionReviewModal: FC = () => {
             color="gradient"
             size="lg"
             onClick={
-              selectedPoolType === PoolType.CLASSIC
+              selectedPoolType === PoolType.ConstantProduct
                 ? classicExecute
-                : selectedPoolType === PoolType.WEIGHTED
+                : selectedPoolType === PoolType.Weighted
                 ? weightedExecute
-                : selectedPoolType === PoolType.HYBRID
+                : selectedPoolType === PoolType.Hybrid
                 ? hybridExecute
                 : concentratedExecute
             }

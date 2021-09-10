@@ -4,18 +4,20 @@ import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
 import Link from 'next/link'
-import { RecoilRoot, useRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Stepper from '../../../components/Stepper'
 import SelectPoolType from '../../../features/trident/create/SelectPoolType'
-import { pageAtom } from '../../../features/trident/create/atoms'
-import ClassicSetupPool from '../../../features/trident/create/ClassicSetupPool'
+import { pageAtom, selectedPoolTypeAtom } from '../../../features/trident/create/atoms'
 import CreateReviewModal from '../../../features/trident/create/CreateReviewModal'
 import ClassicDepositAssets from '../../../features/trident/create/ClassicDepositAssets'
+import { PoolType } from '@sushiswap/sdk'
+import ClassicSetupPool from '../../../features/trident/create/ClassicSetupPool'
 
 const Pool = () => {
   const { i18n } = useLingui()
   const [page, setPage] = useRecoilState(pageAtom)
+  const selectedPoolType = useRecoilValue(selectedPoolTypeAtom)
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -41,10 +43,14 @@ const Pool = () => {
         </div>
 
         {/*spacer*/}
-        <div className="h-2" />
+        <div className="h-8" />
       </div>
 
-      <Stepper onChange={(index) => setPage(index)}>
+      <Stepper
+        onChange={(index) => setPage(index)}
+        value={page}
+        className="flex flex-col mt-[-53px] border-t border-dark-700"
+      >
         <Stepper.List>
           <Stepper.Tab>Select Type</Stepper.Tab>
           <Stepper.Tab>Setup</Stepper.Tab>
@@ -54,9 +60,7 @@ const Pool = () => {
           <Stepper.Panel>
             <SelectPoolType />
           </Stepper.Panel>
-          <Stepper.Panel>
-            <ClassicSetupPool />
-          </Stepper.Panel>
+          <Stepper.Panel>{selectedPoolType === PoolType.ConstantProduct && <ClassicSetupPool />}</Stepper.Panel>
           <Stepper.Panel>
             <ClassicDepositAssets />
           </Stepper.Panel>

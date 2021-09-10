@@ -23,9 +23,10 @@ import Button from '../../../../components/Button'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import Lottie from 'lottie-react'
 import Dots from '../../../../components/Dots'
+import { NATIVE } from '../../../../../../sushiswap-sdk'
 
 const ClassicZapMode = () => {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
 
@@ -79,7 +80,7 @@ const ClassicZapMode = () => {
           onChange={setZapInput}
           onSelect={setSelectedZapCurrency}
           disabled={noLiquidity}
-          currencies={[pool?.token0, pool?.token1]}
+          currencies={[NATIVE[chainId], pool?.token0, pool?.token1]}
         />
         <div className="flex flex-col gap-3">
           <TridentApproveGate inputAmounts={[parsedZapAmount]} tokenApproveOn={bentoBox?.address}>
