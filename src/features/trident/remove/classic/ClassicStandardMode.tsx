@@ -47,7 +47,7 @@ const ClassicUnzapMode: FC = () => {
     : poolState === ConstantProductPoolState.INVALID
     ? i18n._(t`Invalid pair`)
     : !parsedAmountA?.greaterThan(ZERO) || !parsedAmountB?.greaterThan(ZERO)
-    ? i18n._(t`Enter an amount`)
+    ? i18n._(t`Tap amount or type amount to continue`)
     : ''
 
   return (
