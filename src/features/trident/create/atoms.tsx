@@ -26,7 +26,7 @@ export const twapAtom = atom<boolean>({
 
 export const selectedPoolCurrenciesAtom = atom<Currency[]>({
   key: 'selectedPoolCurrenciesAtom',
-  default: [],
+  default: [null, null],
 })
 
 export const feeTierAtom = atom<number>({

@@ -13,6 +13,7 @@ import CreateReviewModal from '../../../features/trident/create/CreateReviewModa
 import ClassicDepositAssets from '../../../features/trident/create/ClassicDepositAssets'
 import { PoolType } from '@sushiswap/sdk'
 import ClassicSetupPool from '../../../features/trident/create/ClassicSetupPool'
+import HybridSetupPool from '../../../features/trident/create/HybridSetupPool'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -60,7 +61,10 @@ const Pool = () => {
           <Stepper.Panel>
             <SelectPoolType />
           </Stepper.Panel>
-          <Stepper.Panel>{selectedPoolType === PoolType.ConstantProduct && <ClassicSetupPool />}</Stepper.Panel>
+          <Stepper.Panel>
+            {selectedPoolType === PoolType.ConstantProduct && <ClassicSetupPool />}
+            {selectedPoolType === PoolType.Hybrid && <HybridSetupPool />}
+          </Stepper.Panel>
           <Stepper.Panel>
             <ClassicDepositAssets />
           </Stepper.Panel>
