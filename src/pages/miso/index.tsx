@@ -24,9 +24,9 @@ function MISO() {
         }}
       >
         <div className="flex justify-center my-6">
-          <div className="flex flex-col w-full max-w-5xl items-center mx-8">
-            <div className="gap-4 grid grid-cols-12 min-h-1/2 mb-6 w-full">
-              <div className="col-span-12 lg:col-span-6 mx-auto">
+          <div className="flex flex-col items-center w-full max-w-5xl mx-8">
+            <div className="grid w-full grid-cols-12 gap-4 mb-6 min-h-1/2">
+              <div className="col-span-12 mx-auto lg:col-span-6">
                 <div className="mx-auto" style={{ position: 'relative' }}>
                   <div className="flex flex-col" style={{ position: 'absolute', left: '0px', top: '0px' }}>
                     <div className="mb-3">
@@ -45,7 +45,7 @@ function MISO() {
                     <div>
                       <div style={{ width: 2, height: '70%', backgroundColor: '#888' }}></div>
                     </div>
-                    <div className="flex-1 flex flex-col">
+                    <div className="flex flex-col flex-1">
                       <div className="flex flex-row">
                         <div className="flex-1" style={{ height: 2, backgroundColor: '#888' }}></div>
                         <div className="flex flex-row" style={{ marginTop: '-12px' }}>
@@ -67,25 +67,25 @@ function MISO() {
                           </div>
                         </div>
                       </div>
-                      <video
+                      {/* <video
                         className="flex-1 mt-1 ml-2"
                         autoPlay
                         loop
                         style={{ width: 408, height: 408, zIndex: 100 }}
                       >
                         <source src="/images/miso/trident/trident_video.mp4" />
-                      </video>
+                      </video> */}
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="col-span-12 lg:col-span-6 max-w-md mx-auto">
+              <div className="max-w-md col-span-12 mx-auto lg:col-span-6">
                 <MisoInfo />
               </div>
             </div>
-            <div className="gap-4 grid grid-cols-12 min-h-1/2 mb-6">
-              <div className="col-span-12 flex flex-row items-center xl:mx-8 my-8">
+            <div className="grid grid-cols-12 gap-4 mb-6 min-h-1/2">
+              <div className="flex flex-row items-center col-span-12 my-8 xl:mx-8">
                 <div>{'FAQ'}</div>
                 <div
                   className="flex-1 mx-3"
