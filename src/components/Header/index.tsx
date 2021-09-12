@@ -250,6 +250,9 @@ function AppBar(): JSX.Element {
                 </div>
                 <div className="flex -mr-2 sm:hidden">
                   {/* Mobile menu button */}
+                  <div className="block mr-2 md:hidden">
+                    <LanguageSwitch />
+                  </div>
                   <Popover.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
                     <span className="sr-only">{i18n._(t`Open main menu`)}</span>
                     {open ? (

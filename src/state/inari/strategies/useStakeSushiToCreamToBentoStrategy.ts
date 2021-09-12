@@ -31,7 +31,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
   },
   outputToken: {
     chainId: ChainId.MAINNET,
-    address: '0x228619cca194fbe3ebeb2f835ec1ea5080dafbb2',
+    address: '0x228619CCa194Fbe3Ebeb2f835eC1eA5080DaFbb2',
     decimals: 8,
     symbol: 'crXSUSHI',
   },
