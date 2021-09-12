@@ -81,7 +81,7 @@ export function useSwapCallArguments(
   const recipient = recipientAddressOrName === null ? account : recipientAddress
   const deadline = useTransactionDeadline()
 
-  const routerContract = useRouterContract(useArcher)
+  const routerContract = useRouterContract()
   const factoryContract = useFactoryContract()
 
   const argentWalletContract = useArgentWalletContract()

@@ -46,6 +46,12 @@ function PairListName({ pair }: PairListNameProps): JSX.Element {
   )
 }
 
+const getApy = (volume, liquidity) => {
+  const apy = aprToApy((((volume / 7) * 365 * 0.0025) / liquidity) * 100, 3650)
+  if (apy > 1000) return '>10,000%'
+  return formatPercent(apy)
+}
+
 const allColumns = [
   {
     Header: 'Pair',
@@ -60,10 +66,15 @@ const allColumns = [
     align: 'right',
   },
   {
+<<<<<<< HEAD
     Header: 'Volume (24h)',
     HideHeader: '(7d)',
     accessor: 'volume1d',
     Cell: (props) => formatNumber(props.value, true),
+=======
+    Header: 'Annual APY',
+    accessor: (row) => <div className="text-high-emphesis">{getApy(row.volume1w, row.liquidity)}</div>,
+>>>>>>> e1b70a57 (feat: fee apy for farms)
     align: 'right',
   },
   {

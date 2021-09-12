@@ -22,7 +22,9 @@ export default function Tooltip({ text, ...rest }: TooltipProps) {
   return (
     <Popover
       content={
-        <div className="w-[228px] px-2 py-1 font-medium bg-dark-700 border border-gray-600 rounded text-sm">{text}</div>
+        <div className="w-full max-w-[228px] px-2 py-1 font-medium bg-dark-700 border border-gray-600 rounded text-sm">
+          {text}
+        </div>
       }
       {...rest}
     />

@@ -65,8 +65,6 @@ export default function Remove() {
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
 
-  const { price } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
-
   // burn state
   const { independentField, typedValue } = useBurnState()
   const { pair, parsedAmounts, error } = useDerivedBurnInfo(currencyA ?? undefined, currencyB ?? undefined)
@@ -110,6 +108,7 @@ export default function Remove() {
     parsedAmounts[Field.LIQUIDITY],
     routerContract?.address
   )
+
   const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], routerContract?.address)
 
   async function onAttemptToApprove() {
@@ -290,7 +289,7 @@ export default function Remove() {
         .catch((error: Error) => {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
-          console.error(error)
+          console.log(error)
         })
     }
   }

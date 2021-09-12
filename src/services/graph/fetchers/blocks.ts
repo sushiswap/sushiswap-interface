@@ -1,8 +1,8 @@
-import { getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subHours } from 'date-fns'
+import { blockQuery, blocksQuery, massBlocksQuery } from '../queries'
+import { getUnixTime, startOfHour, subDays, subHours } from 'date-fns'
 
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
-import { blocksQuery } from '../queries'
 import { request } from 'graphql-request'
 
 export const BLOCKS = {
@@ -15,10 +15,30 @@ export const BLOCKS = {
   [ChainId.AVALANCHE]: 'matthewlilley/avalanche-blocks',
   [ChainId.CELO]: 'sushiswap/celo-blocks',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-blocks',
+  [ChainId.OKEX]: 'okexchain-blocks/oec',
+  [ChainId.HECO]: 'hecoblocks/heco',
 }
 
-export const fetcher = async (chainId = ChainId.MAINNET, query, variables) =>
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BLOCKS[chainId]}`, query, variables)
+export const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) => {
+  return request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BLOCKS[chainId]}`, query, variables)
+}
+
+export const getBlock = async (chainId = ChainId.MAINNET, timestamp: number) => {
+  const { blocks } = await fetcher(
+    chainId,
+    blockQuery,
+    timestamp
+      ? {
+          where: {
+            timestamp_gt: timestamp - 600,
+            timestamp_lt: timestamp,
+          },
+        }
+      : {}
+  )
+
+  return Number(blocks?.[0]?.number)
+}
 
 export const getBlocks = async (chainId = ChainId.MAINNET, start, end) => {
   const { blocks } = await fetcher(chainId, blocksQuery, {
@@ -28,31 +48,12 @@ export const getBlocks = async (chainId = ChainId.MAINNET, start, end) => {
   return blocks
 }
 
-export const getOneDayBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfHour(subDays(Date.now(), 1))
-  const start = Math.floor(Number(date) / 1000)
-  const end = Math.floor(Number(date) / 1000) + 600
-  const { blocks } = await fetcher(chainId, blocksQuery, { start, end })
-  return blocks?.[0]?.number
-}
-
-export const getOneWeekBlock = async (chainId = ChainId.MAINNET) => {
-  const date = startOfHour(subDays(Date.now(), 7))
-  const start = Math.floor(Number(date) / 1000)
-  const end = Math.floor(Number(date) / 1000) + 600
-  const { blocks } = await fetcher(chainId, blocksQuery, { start, end })
-  return blocks?.[0]?.number
-}
-
-export const getCustomDayBlock = async (chainId = ChainId.MAINNET, days: number) => {
-  const date = startOfHour(subDays(Date.now(), days))
-  const start = Math.floor(Number(date) / 1000)
-  const end = Math.floor(Number(date) / 1000) + 600
-  const { blocks } = await request(`https://api.thegraph.com/subgraphs/name/${BLOCKS[chainId]}`, blocksQuery, {
-    start,
-    end,
-  })
-  return blocks?.[0]?.number
+export const getMassBlocks = async (chainId = ChainId.MAINNET, timestamps) => {
+  const data = await fetcher(chainId, massBlocksQuery(timestamps))
+  return Object.values(data).map((entry) => ({
+    number: Number(entry[0].number),
+    timestamp: Number(entry[0].timestamp),
+  }))
 }
 
 // Grabs the last 1000 (a sample statistical) blocks and averages

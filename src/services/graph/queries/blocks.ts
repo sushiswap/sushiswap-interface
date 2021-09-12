@@ -31,3 +31,18 @@ export const blocksQuery = gql`
   }
   ${blockFieldsQuery}
 `
+
+export const massBlocksQuery = (timestamps: number[] | string[]) =>
+  gql`
+  {
+    ${timestamps.map(
+      (timestamp) =>
+        `
+        block${timestamp}: blocks(first: 1, orderBy: timestamp, orderDirection: asc, where: { timestamp_gt: ${timestamp} }) {
+            ...blockFields
+        },
+      `
+    )},
+  }
+  ${blockFieldsQuery}
+  `

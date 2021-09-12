@@ -116,8 +116,8 @@ export function usePendingToken(farm, contract) {
   return useMemo(() => pendingTokens, [pendingTokens])
 }
 
-export function useChefPositions(contract?: Contract | null, rewarder?: Contract | null) {
-  const { account, chainId } = useActiveWeb3React()
+export function useChefPositions(contract?: Contract | null, rewarder?: Contract | null, chainId = undefined) {
+  const { account } = useActiveWeb3React()
 
   const numberOfPools = useSingleCallResult(contract ? contract : null, 'poolLength', undefined, NEVER_RELOAD)
     ?.result?.[0]
@@ -167,11 +167,11 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
   }, [args, getChef, pendingSushi, userInfo])
 }
 
-export function usePositions() {
+export function usePositions(chainId = undefined) {
   const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
-    useChefPositions(useMasterChefContract()),
-    useChefPositions(useMasterChefV2Contract()),
-    useChefPositions(useMiniChefContract()),
+    useChefPositions(useMasterChefContract(), undefined, chainId),
+    useChefPositions(useMasterChefV2Contract(), undefined, chainId),
+    useChefPositions(useMiniChefContract(), undefined, chainId),
   ]
   return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
 }
