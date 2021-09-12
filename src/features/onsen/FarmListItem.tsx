@@ -7,6 +7,7 @@ import Image from '../../components/Image'
 import { PairType } from './enum'
 import React from 'react'
 import { useCurrency } from '../../hooks/Tokens'
+import QuestionHelper from '../../components/QuestionHelper'
 
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
@@ -65,9 +66,32 @@ const FarmListItem = ({ farm, ...rest }) => {
                 </div>
               </div>
               <div className="flex flex-col items-end justify-center">
-                <div className="font-bold text-righttext-high-emphesis">
-                  {formatPercent(farm?.roiPerYear * 100)}
-                  {/* {farm?.roiPerYear > 100 ? '10000%+' : formatPercent(farm?.roiPerYear * 100)} */}
+                <div className="flex flex-row items-center font-bold text-right text-high-emphesis">
+                  {farm?.tvl !== 0
+                    ? farm?.roiPerYear > 10000
+                      ? '>10,000%'
+                      : formatPercent(farm?.roiPerYear * 100)
+                    : 'Infinite'}
+                  {!!farm?.feeApyPerYear && (
+                    <QuestionHelper
+                      text={
+                        <div className="flex flex-col">
+                          <div>
+                            Reward APR:{' '}
+                            {farm?.tvl !== 0
+                              ? farm?.rewardAprPerYear > 10000
+                                ? '>10,000%'
+                                : formatPercent(farm?.rewardAprPerYear * 100)
+                              : 'Infinite'}
+                          </div>
+                          <div>
+                            Fee APY:{' '}
+                            {farm?.feeApyPerYear < 10000 ? formatPercent(farm?.feeApyPerYear * 100) : '>10,000%'}
+                          </div>
+                        </div>
+                      }
+                    />
+                  )}
                 </div>
                 <div className="text-xs text-right md:text-base text-secondary">annualized</div>
               </div>
