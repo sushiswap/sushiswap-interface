@@ -7,16 +7,16 @@ import Button from '../../components/Button'
 import Link from 'next/link'
 import HeadlessUiModal from '../../components/Modal/HeadlessUIModal'
 import React, { FC } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { txHashAtom } from './context/atoms'
-import suppySubmitted from '../../animation/supply-submitted.json'
+import withdrawSubmitted from '../../animation/withdraw-submitted.json'
 import Lottie from 'lottie-react'
 import { useAllTransactions } from '../../state/transactions/hooks'
 import { XCircleIcon } from '@heroicons/react/outline'
 import { CheckCircleIcon } from '@heroicons/react/outline'
 import loadingCircle from '../../animation/loading-circle.json'
 
-const DepositSubmittedModal: FC = () => {
+const WithdrawSubmittedModal: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useRecoilState(txHashAtom)
@@ -31,10 +31,10 @@ const DepositSubmittedModal: FC = () => {
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash(null)}>
       <div className="flex flex-col items-center justify-center px-8 bg-dark-800/90 h-full gap-3">
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
-          <Lottie animationData={suppySubmitted} autoplay loop />
+          <Lottie animationData={withdrawSubmitted} autoplay loop />
         </div>
         <Typography variant="h3" weight={700} className="text-high-emphesis">
-          {i18n._(t`Success! Deposit Submitted`)}
+          {i18n._(t`Success! Withdraw Submitted`)}
         </Typography>
         <div className="flex flex-col gap-1 rounded py-2 px-3">
           <div className="flex gap-2 items-center justify-center">
@@ -67,4 +67,4 @@ const DepositSubmittedModal: FC = () => {
   )
 }
 
-export default DepositSubmittedModal
+export default WithdrawSubmittedModal

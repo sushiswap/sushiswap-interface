@@ -24,6 +24,7 @@ import { NATIVE, Percent } from '../../../../../../sushiswap-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
+import WithdrawalSubmittedModal from '../../../../features/trident/WithdrawalSubmittedModal'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
@@ -104,6 +105,7 @@ const RemoveClassic = () => {
       </>
 
       <RemoveTransactionReviewModal />
+      <WithdrawalSubmittedModal />
     </div>
   )
 }

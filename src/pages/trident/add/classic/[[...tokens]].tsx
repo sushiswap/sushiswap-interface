@@ -25,6 +25,7 @@ import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import Alert from '../../../../components/Alert'
+import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -115,8 +116,7 @@ const AddClassic = () => {
       )}
 
       <AddTransactionReviewModalStandard />
-
-      {/*<DepositSubmittedModal state={state} />*/}
+      <DepositSubmittedModal />
     </div>
   )
 }

@@ -201,6 +201,7 @@ export const useClassicRemoveExecute = () => {
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
+          setTxHash(tx.hash)
           setShowReview(false)
           await tx.wait()
 
@@ -215,7 +216,6 @@ export const useClassicRemoveExecute = () => {
           })
 
           setAttemptingTxn(false)
-          setTxHash(tx.hash)
 
           ReactGA.event({
             category: 'Liquidity',
@@ -292,6 +292,7 @@ export const useClassicRemoveExecute = () => {
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
+          setTxHash(tx.hash)
           setShowReview(false)
           await tx.wait()
 
@@ -306,7 +307,6 @@ export const useClassicRemoveExecute = () => {
           })
 
           setAttemptingTxn(false)
-          setTxHash(tx.hash)
 
           ReactGA.event({
             category: 'Liquidity',
