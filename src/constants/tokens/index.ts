@@ -262,7 +262,7 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.AVALANCHE]: new Token(ChainId.AVALANCHE, SUSHI_ADDRESS[ChainId.AVALANCHE], 18, 'SUSHI', 'SushiToken'),
   [ChainId.OKEX]: new Token(ChainId.OKEX, SUSHI_ADDRESS[ChainId.OKEX], 18, 'SUSHI', 'SushiToken'),
   [ChainId.HARMONY]: new Token(ChainId.HARMONY, SUSHI_ADDRESS[ChainId.HARMONY], 18, 'SUSHI', 'SushiToken'),
-  // [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {
@@ -281,22 +281,6 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
     'WETH',
     'Wrapped Ether'
   ),
-
-  [SupportedChainId.FANTOM]: new Token(
-    ChainId.FANTOM,
-    '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
-    18,
-    'WFTM',
-    'Wrapped Fantom'
-  ),
-
-  // [SupportedChainId.CELO]: new Token(
-  //   SupportedChainId.CELO,
-  //   "0x471EcE3750Da237f93B8E339c536989b8978a438",
-  //   18,
-  //   "CELO",
-  //   "Celo"
-  // ),
 }
 
 export class ExtendedEther extends Ether {
@@ -311,15 +295,3 @@ export class ExtendedEther extends Ether {
     return new ExtendedEther(chainId)
   }
 }
-
-// export class ExtendedCelo extends Celo {
-//   public get wrapped(): Token {
-//     if (this.chainId in WNATIVE) return WNATIVE[this.chainId];
-
-//     throw new Error("Unsupported chain ID");
-//   }
-
-//   public static onChain(chainId: number): ExtendedCelo {
-//     return new ExtendedCelo(chainId);
-//   }
-// }
