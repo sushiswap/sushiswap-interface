@@ -3,22 +3,22 @@ import {
   getAlcxPrice,
   getBundle,
   getCvxPrice,
-  getLiquidityPositions,
-  getMaticPrice,
-  getOnePrice,
-  getPicklePrice,
-  getMphPrice,
-  getStakePrice,
-  getSushiPrice,
-  getYggPrice,
-  getRulerPrice,
-  getTruPrice,
-  getTokens,
   getDayData,
   getFactory,
+  getLiquidityPositions,
+  getMaticPrice,
+  getMphPrice,
+  getOnePrice,
+  getPicklePrice,
+  getRulerPrice,
+  getStakePrice,
+  getSushiPrice,
   getToken,
   getTokenPairs,
+  getTokens,
   getTransactions,
+  getTruPrice,
+  getYggPrice,
 } from '../fetchers'
 import { getEthPrice, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -26,6 +26,7 @@ import useSWR, { SWRConfiguration } from 'swr'
 import { ChainId } from '@sushiswap/sdk'
 import { ethPriceQuery } from '../queries'
 import { useActiveWeb3React } from '../../../hooks'
+import { useBlock } from '../../graph'
 
 export function useExchange(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
@@ -153,23 +154,74 @@ export function useLiquidityPositions(variables = undefined, swrConfig: SWRConfi
   return data
 }
 
-export function useSushiPairs(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
+interface useSushiPairsProps {
+  timestamp?: number
+  block?: number
+  chainId?: number
+  shouldFetch?: boolean
+  user?: string
+  subset?: string[]
+}
+
+export function useSushiPairs(
+  {
+    timestamp,
+    block,
+    chainId = useActiveWeb3React().chainId,
+    shouldFetch = true,
+    user,
+    subset,
+  }: useSushiPairsProps = {},
+  swrConfig: SWRConfiguration = undefined
+) {
+  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
+
+  shouldFetch = shouldFetch && !!chainId
+
+  const variables = {
+    block: block ? { number: block } : undefined,
+    where: {
+      user: user?.toLowerCase(),
+      id_in: subset?.map((id) => id.toLowerCase()),
+    },
+  }
+
   const { data } = useSWR(
     shouldFetch ? ['sushiPairs', chainId, JSON.stringify(variables)] : null,
-    (_, chainId) => getPairs(chainId, variables, query),
+    (_, chainId) => getPairs(chainId, variables),
     swrConfig
   )
   return data
 }
 
-export function useTokens(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
+interface useTokensProps {
+  timestamp?: number
+  block?: number
+  chainId?: number
+  shouldFetch?: boolean
+  subset?: string[]
+}
+
+export function useTokens(
+  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, subset }: useTokensProps = {},
+  swrConfig: SWRConfiguration = undefined
+) {
+  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
+
+  shouldFetch = shouldFetch && !!chainId
+
+  const variables = {
+    block: block ? { number: block } : undefined,
+    where: {
+      id_in: subset?.map((id) => id.toLowerCase()),
+    },
+  }
+
   const { data } = useSWR(
-    shouldFetch ? ['tokens', chainId, query, JSON.stringify(variables)] : null,
-    (_, chainId) => getTokens(chainId, query, variables),
+    shouldFetch ? ['tokens', chainId, JSON.stringify(variables)] : null,
+    (_, chainId) => getTokens(chainId, variables),
     swrConfig
   )
   return data

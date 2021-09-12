@@ -26,11 +26,17 @@ export default function useFarmRewards() {
 
   const positions = usePositions()
 
+  const block1d = useBlock({ daysAgo: 1 })
   const block1w = useBlock({ daysAgo: 7 })
 
   const farms = useFarms()
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
   const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const swapPairs1d = useSushiPairs({
+    subset: farmAddresses,
+    block: block1d,
+    shouldFetch: !!block1d && !!farmAddresses,
+  })
   const swapPairs1w = useSushiPairs({
     subset: farmAddresses,
     block: block1w,
@@ -58,11 +64,10 @@ export default function useFarmRewards() {
     pool.balance = pool?.balance || pool?.slpBalance
 
     const swapPair = swapPairs?.find((pair) => pair.id === pool.pair)
-    const swapPair1w = swapPairs1w?.find((pair) => pair.id === pool.pair)
+    const swapPair1d = swapPairs1d?.find((pair) => pair.id === pool.pair)
     const kashiPair = kashiPairs?.find((pair) => pair.id === pool.pair)
 
     const pair = swapPair || kashiPair
-    const pair1w = swapPair1w
 
     const type = swapPair ? PairType.SWAP : PairType.KASHI
 
@@ -99,32 +104,43 @@ export default function useFarmRewards() {
 
         const decimals = 10 ** pool.rewardToken.decimals
 
-        const rewardPerBlock =
-          pool.rewardToken.symbol === 'ALCX'
-            ? pool.rewarder.rewardPerSecond / decimals
-            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
+        if (pool.rewarder.rewardToken !== '0x0000000000000000000000000000000000000000') {
+          const rewardPerBlock =
+            pool.rewardToken.symbol === 'ALCX'
+              ? pool.rewarder.rewardPerSecond / decimals
+              : pool.rewardToken.symbol === 'LDO'
+              ? (77160493827160493 / decimals) * averageBlockTime
+              : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
 
-        const rewardPerDay =
-          pool.rewardToken.symbol === 'ALCX'
-            ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
-            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
+          const rewardPerDay =
+            pool.rewardToken.symbol === 'ALCX'
+              ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
+              : pool.rewardToken.symbol === 'LDO'
+              ? (77160493827160493 / decimals) * averageBlockTime * blocksPerDay
+              : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
 
-        const reward = {
-          token: pool.rewardToken.symbol,
-          icon: icon,
-          rewardPerBlock: rewardPerBlock,
-          rewardPerDay: rewardPerDay,
-          rewardPrice: pool.rewardToken.derivedETH * ethPrice,
+          const rewardPrice = pool.rewardToken.derivedETH * ethPrice
+
+          const reward = {
+            token: pool.rewardToken.symbol,
+            icon: icon,
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice,
+          }
+
+          rewards[1] = reward
         }
-
-        rewards[1] = reward
       } else if (pool.chef === Chef.MINICHEF) {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
+
         const rewardPerSecond =
           ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+
         const rewardPerBlock = rewardPerSecond * averageBlockTime
+
         const rewardPerDay = rewardPerBlock * blocksPerDay
 
         const reward = {
@@ -145,6 +161,8 @@ export default function useFarmRewards() {
           [ChainId.HARMONY]: {
             token: 'ONE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
+            rewardPerBlock,
+            rewardPerDay,
             rewardPrice: onePrice,
           },
         }
@@ -171,9 +189,10 @@ export default function useFarmRewards() {
       ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
       : balance * kashiPair.token0.derivedETH * ethPrice
 
-    const feeApyPerYear = swapPair
-      ? aprToApy((((((pair?.volumeUSD - pair1w?.volumeUSD) * 0.0025) / 7) * 365) / pair?.reserveUSD) * 100, 3650) / 100
-      : 0
+    const feeApyPerYear =
+      swapPair && swapPair1d
+        ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.reserveUSD) * 100, 3650) / 100
+        : 0
 
     const feeApyPerMonth = feeApyPerYear / 12
     const feeApyPerDay = feeApyPerMonth / 30
@@ -195,6 +214,34 @@ export default function useFarmRewards() {
     const roiPerYear = rewardAprPerYear + feeApyPerYear
 
     const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
+
+    if (pair.id === '0xe4ebd836832f1a8a81641111a5b081a2f90b9430') {
+      console.log('dydx pair', {
+        ...pool,
+        ...position,
+        pair: {
+          ...pair,
+          decimals: pair.type === PairType.KASHI ? Number(pair.asset.tokenInfo.decimals) : 18,
+          type,
+        },
+        balance,
+        feeApyPerHour,
+        feeApyPerDay,
+        feeApyPerMonth,
+        feeApyPerYear,
+        rewardAprPerHour,
+        rewardAprPerDay,
+        rewardAprPerMonth,
+        rewardAprPerYear,
+        roiPerBlock,
+        roiPerHour,
+        roiPerDay,
+        roiPerMonth,
+        roiPerYear,
+        rewards,
+        tvl,
+      })
+    }
 
     return {
       ...pool,

@@ -1,11 +1,4 @@
-import {
-  getAverageBlockTime,
-  getBlock,
-  getCustomDayBlock,
-  getMassBlocks,
-  getOneDayBlock,
-  getOneWeekBlock,
-} from '../fetchers'
+import { getAverageBlockTime, getBlock, getMassBlocks } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import { useActiveWeb3React } from '../../../hooks'
@@ -28,7 +21,11 @@ export function useBlock(
       ? Number(timestamp)
       : Math.floor(Number(timestamp) / 1000)
     : undefined
-  timestamp = useMemo(() => (daysAgo ? Math.floor(Date.now() / 1000) - daysAgo * 86400 : timestamp), [daysAgo])
+
+  timestamp = useMemo(
+    () => (daysAgo ? Math.floor(Date.now() / 1000) - daysAgo * 86400 : timestamp),
+    [daysAgo, timestamp]
+  )
 
   const { data } = useSWR(
     shouldFetch ? ['block', chainId, timestamp] : null,
@@ -57,38 +54,6 @@ export function useAverageBlockTime(swrConfig = undefined) {
   const { data } = useSWR(
     chainId ? ['averageBlockTime', chainId] : null,
     (_, chainId) => getAverageBlockTime(chainId),
-    swrConfig
-  )
-
-  return data
-}
-
-export function useOneDayBlock(swrConfig = undefined) {
-  const { chainId } = useActiveWeb3React()
-
-  const { data } = useSWR(chainId ? ['oneDayBlock', chainId] : null, (_, chainId) => getOneDayBlock(chainId), swrConfig)
-
-  return data
-}
-
-export function useOneWeekBlock(swrConfig = undefined) {
-  const { chainId } = useActiveWeb3React()
-
-  const { data } = useSWR(
-    chainId ? ['oneWeekBlock', chainId] : null,
-    (_, chainId) => getOneWeekBlock(chainId),
-    swrConfig
-  )
-
-  return data
-}
-
-export function useCustomDayBlock(days: number, swrConfig = undefined) {
-  const { chainId } = useActiveWeb3React()
-
-  const { data } = useSWR(
-    chainId ? ['customDayBlock', chainId, days] : null,
-    (_, chainId) => getCustomDayBlock(chainId, days),
     swrConfig
   )
 

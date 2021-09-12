@@ -203,9 +203,9 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
     setError({})
     try {
       await state.onMigrate()
-    } catch (e) {
-      console.log(e)
-      setError(e)
+    } catch (error) {
+      console.log(error)
+      setError(error)
     }
   }
 

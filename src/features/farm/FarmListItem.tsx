@@ -97,7 +97,6 @@ const FarmListItem = ({ farm, ...rest }) => {
               </div>
             </div>
           </Disclosure.Button>
-
           {open && <FarmListItemDetails farm={farm} />}
         </>
       )}

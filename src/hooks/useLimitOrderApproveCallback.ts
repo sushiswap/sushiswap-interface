@@ -1,17 +1,18 @@
-import { useActiveWeb3React } from './useActiveWeb3React'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
-import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
-import { ethers } from 'ethers'
-import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
-import { useDispatch } from 'react-redux'
-import { setFromBentoBalance, setLimitOrderApprovalPending } from '../state/limit-order/actions'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { Token } from '@sushiswap/sdk'
+import { ZERO, calculateGasMargin } from '../functions'
 import { getSignatureWithProviderBentobox, getVerifyingContract } from 'limitorderv2-sdk'
+import { setFromBentoBalance, setLimitOrderApprovalPending } from '../state/limit-order/actions'
+import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
+
 import { Field } from '../state/swap/actions'
-import { calculateGasMargin, ZERO } from '../functions'
 import { MaxUint256 } from '@ethersproject/constants'
+import { Token } from '@sushiswap/sdk'
+import { ethers } from 'ethers'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
+import { useDispatch } from 'react-redux'
+import { useTransactionAdder } from '../state/transactions/hooks'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -110,8 +111,8 @@ const useLimitOrderApproveCallback = () => {
           s,
         ]),
       }
-    } catch (e) {
-      console.log(e)
+    } catch (error) {
+      console.log(error)
       return {
         outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
       }
