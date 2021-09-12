@@ -31,17 +31,15 @@ export default function useFarmRewards() {
 
   const farms = useFarms()
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
-  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
+
   const swapPairs1d = useSushiPairs({
     subset: farmAddresses,
     block: block1d,
     shouldFetch: !!block1d && !!farmAddresses,
+    chainId,
   })
-  const swapPairs1w = useSushiPairs({
-    subset: farmAddresses,
-    block: block1w,
-    shouldFetch: !!block1w && !!farmAddresses,
-  })
+
   const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
 
   const averageBlockTime = useAverageBlockTime()

@@ -157,21 +157,14 @@ export function useLiquidityPositions(variables = undefined, swrConfig: SWRConfi
 interface useSushiPairsProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   user?: string
   subset?: string[]
 }
 
 export function useSushiPairs(
-  {
-    timestamp,
-    block,
-    chainId = useActiveWeb3React().chainId,
-    shouldFetch = true,
-    user,
-    subset,
-  }: useSushiPairsProps = {},
+  { timestamp, block, chainId, shouldFetch = true, user, subset }: useSushiPairsProps,
   swrConfig: SWRConfiguration = undefined
 ) {
   const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
@@ -204,7 +197,7 @@ interface useTokensProps {
 }
 
 export function useTokens(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, subset }: useTokensProps = {},
+  { timestamp, block, chainId, shouldFetch = true, subset }: useTokensProps,
   swrConfig: SWRConfiguration = undefined
 ) {
   const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
