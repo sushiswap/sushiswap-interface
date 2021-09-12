@@ -85,7 +85,7 @@ const FarmListItem = ({ farm, ...rest }) => {
                               : 'Infinite'}
                           </div>
                           <div>
-                            Fee APY:{' '}
+                            Fee APR:{' '}
                             {farm?.feeApyPerYear < 10000 ? formatPercent(farm?.feeApyPerYear * 100) : '>10,000%'}
                           </div>
                         </div>
