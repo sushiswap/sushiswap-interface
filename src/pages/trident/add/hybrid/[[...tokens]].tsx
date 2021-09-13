@@ -20,7 +20,7 @@ import { useRouter } from 'next/router'
 import { poolAtom } from '../../../../features/trident/add/classic/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
 import { NATIVE } from '../../../../../../sushiswap-sdk'
-import { SUSHI } from '../../../../config/tokens'
+import { SUSHI, USDC, XSUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
@@ -43,6 +43,8 @@ const AddHybrid = () => {
 
   useEffect(() => {
     if (!classicPool[1]) return
+    // TODO ramin: remove
+    classicPool[1].tokens = [USDC[chainId], XSUSHI, SUSHI[chainId]]
     setPool(classicPool)
   }, [chainId, classicPool, setPool])
 

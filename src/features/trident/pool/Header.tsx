@@ -11,8 +11,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 import { poolAtom } from './classic/context/atoms'
-import { ConstantProductPool } from '../../../../../sushiswap-sdk'
-import { PoolType } from '../types'
+import { ConstantProductPool, PoolType } from '@sushiswap/sdk'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
@@ -31,7 +30,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   // TODO ramin: remove this make dynamic
   const apy = 3.6
   const isFarm = true
-  const type = PoolType.CLASSIC
+  const type = PoolType.ConstantProduct
   const fees = '3343.34'
 
   return (

@@ -3,6 +3,7 @@ import { Currency, CurrencyAmount, JSBI, Percent } from '@sushiswap/sdk'
 import { LiquidityMode } from '../types'
 import { poolAtom } from '../remove/classic/context/atoms'
 import { PairState } from '../../../hooks/useV2Pairs'
+import { ConstantProductPoolState } from '../../../hooks/useTridentClassicPools'
 
 const ZERO = JSBI.BigInt(0)
 
@@ -60,6 +61,7 @@ export const currentPoolShareSelector = selector({
   },
 })
 
+// TODO ramin:
 export const noLiquiditySelector = selector<boolean>({
   key: 'noLiquiditySelector',
   get: ({ get }) => {
@@ -67,10 +69,10 @@ export const noLiquiditySelector = selector<boolean>({
     const totalSupply = get(totalSupplyAtom)
 
     return (
-      poolState === PairState.NOT_EXISTS ||
+      poolState === ConstantProductPoolState.NOT_EXISTS ||
       Boolean(totalSupply && JSBI.equal(totalSupply.quotient, ZERO)) ||
       Boolean(
-        poolState === PairState.EXISTS &&
+        poolState === ConstantProductPoolState.EXISTS &&
           pool &&
           JSBI.equal(pool.reserve0.quotient, ZERO) &&
           JSBI.equal(pool.reserve1.quotient, ZERO)

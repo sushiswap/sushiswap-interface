@@ -1,70 +1,73 @@
 import React, { FC } from 'react'
+import AssetSelect from '../../../../components/AssetSelect'
 import Typography from '../../../../components/Typography'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
 import ListPanel from '../../../../components/ListPanel'
+import { t } from '@lingui/macro'
 import PercentInput from '../../../../components/Input/Percent'
-import Button from '../../../../components/Button'
 import ToggleButtonGroup from '../../../../components/ToggleButton'
-import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  currentLiquidityValueSelector,
-  outputToWalletAtom,
-  parsedAmountsSelector,
-  percentageAmountAtom,
-  poolAtom,
-} from './context/atoms'
-import { attemptingTxnAtom, poolBalanceAtom, showReviewAtom } from '../../context/atoms'
-import { Percent, ZERO } from '@sushiswap/sdk'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
-import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
+import TridentApproveGate from '../../ApproveButton'
+import { Percent } from '@sushiswap/sdk'
+import Dots from '../../../../components/Dots'
+import Button from '../../../../components/Button'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
-import TridentApproveGate from '../../ApproveButton'
 import AssetInput from '../../../../components/AssetInput'
-import Dots from '../../../../components/Dots'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
+import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
+import { useLingui } from '@lingui/react'
+import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
+import {
+  currentLiquidityValueSelector,
+  parsedZapAmountSelector,
+  percentageAmountAtom,
+  poolAtom,
+  selectedZapCurrencyAtom,
+} from './context/atoms'
+import { attemptingTxnAtom, poolBalanceAtom, showReviewAtom } from '../../context/atoms'
+import { outputToWalletAtom } from '../classic/context/atoms'
 
-const ClassicUnzapMode: FC = () => {
+// TODO ramin: should be using arrays
+const HybridUnzapMode: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const router = useTridentRouterContract()
-  const [poolState] = useRecoilValue(poolAtom)
-  const [percentageAmount, handlePercentageAmount] = useRecoilState(percentageAmountAtom)
+  const [poolState, pool] = useRecoilValue(poolAtom)
+  const [percentageAmount, setPercentageAmount] = useRecoilState(percentageAmountAtom)
   const [liquidityA, liquidityB] = useRecoilValue(currentLiquidityValueSelector)
+  const [selectedZapCurrency, setSelectedZapCurrency] = useRecoilState(selectedZapCurrencyAtom)
+  const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
-  const poolBalance = useRecoilValue(poolBalanceAtom)
   const usdcAValue = useUSDCValue(liquidityA)
   const usdcBValue = useUSDCValue(liquidityB)
-  const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
-  const currentLiquidityValueInUsdc = usdcAValue?.add(usdcBValue)
-  const selectedLiquidityValueInUsdc = currentLiquidityValueInUsdc?.multiply(new Percent(percentageAmount, '100'))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const liquidityValueInUsdc = usdcAValue?.add(usdcBValue)
+  const poolBalance = useRecoilValue(poolBalanceAtom)
+  const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
 
+  // TODO ramin: typescript
   const error = !account
     ? i18n._(t`Connect Wallet`)
     : poolState === ConstantProductPoolState.INVALID
     ? i18n._(t`Invalid pair`)
-    : !parsedAmountA?.greaterThan(ZERO) || !parsedAmountB?.greaterThan(ZERO)
+    : !percentageAmount
     ? i18n._(t`Tap amount or type amount to continue`)
     : ''
 
   return (
     <div className="px-5 mt-5">
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-3 mt-4">
+      <div className="flex flex-col gap-8">
+        <AssetSelect
+          value={selectedZapCurrency}
+          onSelect={setSelectedZapCurrency}
+          currencies={[pool?.token0, pool?.token1]}
+        />
+        <div className="flex flex-col gap-3">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
           </Typography>
           <ListPanel
-            header={
-              <ListPanel.Header
-                title={i18n._(t`Balances`)}
-                value={`$${currentLiquidityValueInUsdc ? currentLiquidityValueInUsdc.toSignificant(6) : '0.0000'}`}
-                subValue={`${poolBalance ? poolBalance.toSignificant(6) : '0.0000'} SLP`}
-              />
-            }
+            header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
             items={[
               <ListPanel.CurrencyAmountItem amount={liquidityA} key={0} />,
               <ListPanel.CurrencyAmountItem amount={liquidityB} key={1} />,
@@ -73,22 +76,19 @@ const ClassicUnzapMode: FC = () => {
               <div className="flex justify-between items-center px-4 py-5 gap-3">
                 <PercentInput
                   value={percentageAmount}
-                  onUserInput={(value: string) => handlePercentageAmount(value)}
+                  onUserInput={(value: string) => setPercentageAmount(value)}
                   placeholder="0%"
                   className="bg-transparent text-3xl leading-7 tracking-[-0.01em] flex-grow after:content-['%']"
                 />
                 <Typography variant="sm" className="text-low-emphesis">
-                  ≈$
-                  {selectedLiquidityValueInUsdc?.greaterThan('0')
-                    ? selectedLiquidityValueInUsdc?.toSignificant(6)
-                    : '0.0000'}
+                  ≈${liquidityValueInUsdc?.greaterThan('0') ? liquidityValueInUsdc?.toSignificant(6) : '0.0000'}
                 </Typography>
               </div>
             }
           />
           <ToggleButtonGroup
             value={percentageAmount}
-            onChange={(value: string) => handlePercentageAmount(value)}
+            onChange={(value: string) => setPercentageAmount(value)}
             variant="outlined"
           >
             <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
@@ -109,7 +109,7 @@ const ClassicUnzapMode: FC = () => {
               ) : error ? (
                 error
               ) : (
-                i18n._(t`Review and Confirm`)
+                i18n._(t`Confirm Withdrawal`)
               )
 
               return (
@@ -140,27 +140,9 @@ const ClassicUnzapMode: FC = () => {
             </Typography>
             <AssetInput.WalletSwitch onChange={() => setOutputToWallet(!outputToWallet)} checked={outputToWallet} />
           </div>
-
+          {/*TODO ramin: */}
           <div className="flex flex-col gap-4">
-            <ListPanel
-              items={[
-                <ListPanel.CurrencyAmountItem amount={parsedAmountA} key={0} />,
-                <ListPanel.CurrencyAmountItem amount={parsedAmountB} key={1} />,
-              ]}
-              footer={
-                <div className="flex justify-between px-4 py-3.5 bg-dark-800">
-                  <Typography weight={700} className="text-high-emphesis">
-                    {i18n._(t`Total Amount`)}
-                  </Typography>
-                  <Typography weight={700} className="text-high-emphesis text-right">
-                    ≈$
-                    {selectedLiquidityValueInUsdc?.greaterThan('0')
-                      ? selectedLiquidityValueInUsdc?.toSignificant(6)
-                      : '0.0000'}
-                  </Typography>
-                </div>
-              }
-            />
+            <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedZapAmount} key={0} />]} />
           </div>
         </div>
       </div>
@@ -168,4 +150,4 @@ const ClassicUnzapMode: FC = () => {
   )
 }
 
-export default ClassicUnzapMode
+export default HybridUnzapMode

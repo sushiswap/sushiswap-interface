@@ -5,15 +5,51 @@ import { useLingui } from '@lingui/react'
 import Typography from '../../../../components/Typography'
 import ListPanel from '../../../../components/ListPanel'
 import AssetInput from '../../../../components/AssetInput'
-import { Token } from '@sushiswap/sdk'
+import { NATIVE } from '@sushiswap/sdk'
 import TransactionDetails from '../TransactionDetails'
 import React from 'react'
-import { useTridentAddHybridContext, useTridentAddHybridState } from './context'
+import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { attemptingTxnAtom, noLiquiditySelector, showReviewAtom } from '../../context/atoms'
+import { useCurrencyBalance } from '../../../../state/wallet/hooks'
+import TridentApproveGate from '../../ApproveButton'
+import Lottie from 'lottie-react'
+import loadingCircle from '../../../../animation/loading-circle.json'
+import Dots from '../../../../components/Dots'
+import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
+import {
+  parsedZapAmountSelector,
+  parsedZapSplitAmountsSelector,
+  poolAtom,
+  selectedZapCurrencyAtom,
+  zapInputAtom,
+} from './context/atoms'
 
 const HybridZapMode = () => {
+  const { account, chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { inputAmounts, inputTokenAddress } = useTridentAddHybridState()
-  const { currencies, handleInput, showReview, parsedOutputAmounts, selectInputToken } = useTridentAddHybridContext()
+  const bentoBox = useBentoBoxContract()
+
+  const [poolState, pool] = useRecoilValue(poolAtom)
+  const [zapInput, setZapInput] = useRecoilState(zapInputAtom)
+  const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
+  const parsedZapSplitAmounts = useRecoilValue(parsedZapSplitAmountsSelector)
+  const [selectedZapCurrency, setSelectedZapCurrency] = useRecoilState(selectedZapCurrencyAtom)
+  const setShowReview = useSetRecoilState(showReviewAtom)
+  const balance = useCurrencyBalance(account ?? undefined, selectedZapCurrency)
+  const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+
+  // TODO ramin
+  let error = !account
+    ? i18n._(t`Connect Wallet`)
+    : poolState === ConstantProductPoolState.INVALID
+    ? i18n._(t`Invalid pair`)
+    : !zapInput
+    ? i18n._(t`Enter an amount`)
+    : parsedZapAmount && balance?.lessThan(parsedZapAmount)
+    ? i18n._(t`Insufficient ${selectedZapCurrency?.symbol} balance`)
+    : ''
 
   return (
     <div className="flex flex-col gap-6 px-5">
@@ -26,33 +62,52 @@ const HybridZapMode = () => {
       />
       <div className="flex flex-col gap-5">
         <AssetInput
-          value={inputAmounts[inputTokenAddress]}
-          currency={currencies[inputTokenAddress]}
-          onChange={(value) => handleInput(value, inputTokenAddress, { clear: true })}
-          onSelect={(token: Token) => selectInputToken(token.address)}
+          value={zapInput}
+          currency={selectedZapCurrency}
+          onChange={setZapInput}
+          onSelect={setSelectedZapCurrency}
+          disabled={noLiquidity}
+          currencies={[NATIVE[chainId], pool?.token0, pool?.token1]}
         />
-        <Button
-          color={inputAmounts[inputTokenAddress] ? 'gradient' : 'gray'}
-          disabled={!inputAmounts[inputTokenAddress]}
-          className="font-bold text-sm"
-          onClick={() => showReview(true)}
-        >
-          {inputAmounts[inputTokenAddress] ? i18n._(t`Confirm Deposit`) : i18n._(t`Select token & enter amount`)}
-        </Button>
+        <div className="flex flex-col gap-3">
+          <TridentApproveGate inputAmounts={[parsedZapAmount]} tokenApproveOn={bentoBox?.address}>
+            {({ loading, approved }) => (
+              <Button
+                {...(loading && {
+                  startIcon: (
+                    <div className="w-5 h-5 mr-1">
+                      <Lottie animationData={loadingCircle} autoplay loop />
+                    </div>
+                  ),
+                })}
+                color={zapInput ? 'gradient' : 'gray'}
+                disabled={!!error || !approved || attemptingTxn}
+                className="font-bold text-sm"
+                onClick={() => setShowReview(true)}
+              >
+                {attemptingTxn ? <Dots>Depositing</Dots> : loading ? '' : !error ? i18n._(t`Confirm Deposit`) : error}
+              </Button>
+            )}
+          </TridentApproveGate>
+        </div>
       </div>
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-4 px-5 mt-8">
         <Typography weight={700} className="text-high-emphesis">
-          {currencies[inputTokenAddress]
-            ? i18n._(t`Your ${currencies[inputTokenAddress].symbol} will be split into:`)
+          {selectedZapCurrency
+            ? i18n._(t`Your ${selectedZapCurrency.symbol} will be split into:`)
             : i18n._(t`Your selected token will be split into:`)}
         </Typography>
         <ListPanel
-          items={Object.keys(currencies).map((address, index) => (
-            <ListPanel.CurrencyAmountItem amount={parsedOutputAmounts[address]} key={index} />
+          items={parsedZapSplitAmounts.map((amount, index) => (
+            <ListPanel.CurrencyAmountItem amount={amount} key={index} />
           ))}
         />
       </div>
-      <TransactionDetails />
+      {!error && (
+        <div className="mt-6 px-5">
+          <TransactionDetails />
+        </div>
+      )}
     </div>
   )
 }

@@ -17,7 +17,7 @@ import {
 } from '../classic/context/atoms'
 import { percentageAmountAtom } from './context/atoms'
 import { attemptingTxnAtom, poolBalanceAtom, showReviewAtom } from '../../context/atoms'
-import { Percent, ZERO } from '../../../../../../sushiswap-sdk'
+import { Percent } from '@sushiswap/sdk'
 import Dots from '../../../../components/Dots'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'

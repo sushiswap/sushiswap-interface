@@ -17,7 +17,7 @@ const HybridPoolComposition: FC = () => {
       </Typography>
       <ListPanel
         header={<ListPanel.Header title={i18n._(t`Assets`)} value="$20,000,000.00" />}
-        items={pool.amounts.map((amount, index) => (
+        items={pool?.tokens.map((amount, index) => (
           <ListPanel.CurrencyAmountItem amount={amount} key={index} />
         ))}
       />

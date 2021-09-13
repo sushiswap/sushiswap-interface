@@ -23,7 +23,7 @@ import loadingCircle from '../../../../animation/loading-circle.json'
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
-import { ZERO } from '../../../../../../sushiswap-sdk'
+import { ZERO } from '@sushiswap/sdk'
 import { useCurrencyBalances } from '../../../../state/wallet/hooks'
 import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
 

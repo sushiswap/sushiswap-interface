@@ -23,7 +23,7 @@ import Button from '../../../../components/Button'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import Lottie from 'lottie-react'
 import Dots from '../../../../components/Dots'
-import { NATIVE } from '../../../../../../sushiswap-sdk'
+import { NATIVE } from '@sushiswap/sdk'
 
 const ClassicZapMode = () => {
   const { account, chainId } = useActiveWeb3React()

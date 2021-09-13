@@ -1,21 +1,25 @@
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { plural, t } from '@lingui/macro'
 import { useTokenBalances } from '../../../../state/wallet/hooks'
-import { useActiveWeb3React } from '../../../../hooks'
+import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import CurrencyLogo from '../../../../components/CurrencyLogo'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
 import { classNames } from '../../../../functions'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { Disclosure } from '@headlessui/react'
 import AssetInput from '../../../../components/AssetInput'
-import DepositButtons from './../DepositButtons'
 import Checkbox from '../../../../components/Checkbox'
 import TransactionDetails from '../TransactionDetails'
-import { ActionType } from '../../types'
-import { useTridentContext, useTridentState } from '../../context'
-import { HybridPoolContext, HybridPoolState } from './context/types'
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
+import { amountsSelector, parsedAmountsSelector, poolAtom } from './context/atoms'
+import { attemptingTxnAtom, showReviewAtom } from '../../context/atoms'
+import TridentApproveGate from '../../ApproveButton'
+import Dots from '../../../../components/Dots'
+import Button from '../../../../components/Button'
+import Lottie from 'lottie-react'
+import loadingCircle from '../../../../animation/loading-circle.json'
 
 function toggleArrayItem(arr, item) {
   return arr.includes(item)
@@ -77,11 +81,14 @@ const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active =
 const HybridStandardMode: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { inputAmounts } = useTridentState<HybridPoolState>()
-  const { currencies, handleInput, dispatch, showReview } = useTridentContext<HybridPoolContext>()
+  const [, pool] = useRecoilValue(poolAtom)
+  const amounts = useRecoilValue(amountsSelector)
+  const parsedAmounts = useRecoilValue(parsedAmountsSelector)
+  const setShowReview = useSetRecoilState(showReviewAtom)
   const [selected, setSelected] = useState<Token[]>([])
-  const tokens = Object.values(currencies).map((el) => el?.wrapped)
-  const balances = useTokenBalances(account, tokens)
+  const balances = useTokenBalances(account, pool?.tokens)
+  const bentoBox = useBentoBoxContract()
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const availableAssets = useMemo(
     () =>
@@ -92,32 +99,40 @@ const HybridStandardMode: FC = () => {
   )
 
   const unavailableAssets = useMemo(
-    () => tokens.filter((token) => !availableAssets.some((balance) => balance.currency === token)),
-    [tokens, availableAssets]
+    () => pool?.tokens.filter((token) => !availableAssets.some((balance) => balance.currency === token)),
+    [pool?.tokens, availableAssets]
   )
 
-  const onMax = useCallback(() => {
-    dispatch({
-      type: ActionType.SET_INPUT_AMOUNTS,
-      payload: availableAssets.reduce((acc, cur) => {
-        if (selected.includes(cur.currency))
-          acc.push({
-            amount: cur.toExact(),
-            address: cur.currency.address,
-          })
-
-        return acc
-      }, []),
-    })
-  }, [availableAssets, dispatch, selected])
-
-  const isMaxInput = useMemo(() => {
-    return selected.every((el) => inputAmounts[el.address] === balances[el.address]?.toExact())
-  }, [balances, inputAmounts, selected])
-
   const validInputs = useMemo(() => {
-    return Object.values(inputAmounts).some((el) => +el > 0)
-  }, [inputAmounts])
+    return Object.values(parsedAmounts).every((el) => el?.greaterThan(0))
+  }, [parsedAmounts])
+
+  const isMax = useMemo(() => {
+    return selected.every((el) => parsedAmounts[el.address].equalTo(balances[el.address]))
+  }, [balances, parsedAmounts, selected])
+
+  const onMax = useRecoilCallback(
+    ({ snapshot, set }) =>
+      async () => {
+        const parsedAmounts = { ...(await snapshot.getPromise(parsedAmountsSelector)) }
+        availableAssets.forEach((el) => {
+          parsedAmounts[el?.currency.address] = el
+        })
+
+        set(parsedAmountsSelector, parsedAmounts)
+      },
+    [availableAssets]
+  )
+
+  const handleInput = useRecoilCallback<[string, string], void>(({ snapshot, set }) => async (value, address) => {
+    const amounts = await snapshot.getPromise(amountsSelector)
+    set(amountsSelector, {
+      ...amounts,
+      [address]: value,
+    })
+  })
+
+  const error = !validInputs
 
   return (
     <div className="flex flex-col px-5 gap-8">
@@ -131,7 +146,7 @@ const HybridStandardMode: FC = () => {
                 </Typography>
                 <div className="flex gap-0.5">
                   <Typography variant="lg" weight={700} className="text-high-emphesis">
-                    <span className="text-blue">{availableAssets.length}</span>/{tokens.length}
+                    <span className="text-blue">{availableAssets.length}</span>/{pool?.tokens.length}
                   </Typography>
                   <ChevronDownIcon className={open ? 'transform rotate-180' : ''} width={24} height={24} />
                 </div>
@@ -166,7 +181,7 @@ const HybridStandardMode: FC = () => {
                 </Typography>
                 <div className="flex gap-0.5">
                   <Typography variant="lg" weight={700} className="text-high-emphesis">
-                    <span className="text-secondary">{unavailableAssets.length}</span>/{tokens.length}
+                    <span className="text-secondary">{unavailableAssets.length}</span>/{pool?.tokens.length}
                   </Typography>
                   <ChevronDownIcon className={open ? 'transform rotate-180' : ''} width={24} height={24} />
                 </div>
@@ -200,17 +215,68 @@ const HybridStandardMode: FC = () => {
               <AssetInput
                 key={currency.address}
                 currency={currency}
-                value={inputAmounts[currency.address]}
+                value={amounts[currency.address]}
                 onChange={(val) => handleInput(val, currency.address)}
               />
             ))}
 
-            <DepositButtons
-              onMax={onMax}
-              isMaxInput={isMaxInput}
-              inputValid={validInputs}
-              onClick={() => showReview(true)}
-            />
+            <div className="flex flex-col gap-3">
+              <TridentApproveGate inputAmounts={Object.values(parsedAmounts)} tokenApproveOn={bentoBox?.address}>
+                {({ approved, loading }) => {
+                  const disabled = !!error || !approved || loading || attemptingTxn
+                  const buttonText = attemptingTxn ? (
+                    <Dots>{i18n._(t`Depositing`)}</Dots>
+                  ) : loading ? (
+                    ''
+                  ) : error ? (
+                    error
+                  ) : (
+                    i18n._(t`Confirm Deposit`)
+                  )
+
+                  return (
+                    <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
+                      {!isMax && (
+                        <Button
+                          color="gradient"
+                          variant={isMax ? 'filled' : 'outlined'}
+                          disabled={isMax}
+                          onClick={onMax}
+                        >
+                          <Typography
+                            variant="sm"
+                            weight={700}
+                            className={!isMax ? 'text-high-emphesis' : 'text-low-emphasis'}
+                          >
+                            {i18n._(t`Max Deposit`)}
+                          </Typography>
+                        </Button>
+                      )}
+                      <Button
+                        {...(loading && {
+                          startIcon: (
+                            <div className="w-4 h-4 mr-1">
+                              <Lottie animationData={loadingCircle} autoplay loop />
+                            </div>
+                          ),
+                        })}
+                        color="gradient"
+                        disabled={disabled}
+                        onClick={() => setShowReview(true)}
+                      >
+                        <Typography
+                          variant="sm"
+                          weight={700}
+                          className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}
+                        >
+                          {buttonText}
+                        </Typography>
+                      </Button>
+                    </div>
+                  )
+                }}
+              </TridentApproveGate>
+            </div>
           </div>
         </>
       )}
