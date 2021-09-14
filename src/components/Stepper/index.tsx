@@ -94,7 +94,7 @@ const Tab: FC<TabProps> = ({ lastChild, ...props }) => {
             weight={700}
             className={classNames(selected ? 'text-high-emphesis' : 'text-secondary')}
           >
-            1
+            {props.index + 1}
           </Typography>
         </div>
         <Typography

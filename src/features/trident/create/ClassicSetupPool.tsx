@@ -3,18 +3,20 @@ import Typography from '../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import AssetSelect from '../../../components/AssetSelect'
-import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { feeTierAtom, selectedPoolCurrenciesAtom } from './atoms'
 import { Currency } from '@sushiswap/sdk'
 import ToggleButtonGroup from '../../../components/ToggleButton'
 import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import { PlusIcon } from '@heroicons/react/solid'
+import { showReviewAtom } from '../context/atoms'
 
 const ClassicSetupPool: FC = () => {
   const { i18n } = useLingui()
   const selectedPoolCurrencies = useRecoilValue(selectedPoolCurrenciesAtom)
   const [feeTier, setFeeTier] = useRecoilState(feeTierAtom)
+  const setShowReview = useSetRecoilState(showReviewAtom)
 
   const handleSelectedPoolTokens = useRecoilCallback<[Currency, number], void>(
     ({ snapshot, set }) =>
@@ -80,18 +82,19 @@ const ClassicSetupPool: FC = () => {
           {i18n._(t`Select Fee Tier`)}
         </Typography>
         <ToggleButtonGroup value={feeTier} onChange={setFeeTier} variant="outlined">
-          <ToggleButtonGroup.Button value={5}>0.05%</ToggleButtonGroup.Button>
           <ToggleButtonGroup.Button value={10}>0.1%</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={30}>0.3%</ToggleButtonGroup.Button>
           <ToggleButtonGroup.Button value={50}>0.5%</ToggleButtonGroup.Button>
           <ToggleButtonGroup.Button value={100}>1%</ToggleButtonGroup.Button>
         </ToggleButtonGroup>
         {feeTier === 50 && (
           <Typography variant="sm" className="italic text-center">
-            * This is suggested for most pairs
+            {i18n._(t`* This is suggested for most pairs`)}
           </Typography>
         )}
-        <Button color="gradient" disabled={error.length > 0}>
-          {error.length > 0 ? `Select ${error.join(' & ')}` : 'Continue'}
+
+        <Button disabled={!!error} color="gradient" onClick={() => setShowReview(true)}>
+          {error.length > 0 ? `Select ${error.join(' & ')}` : 'Review & Confirm'}
         </Button>
       </div>
     </div>

@@ -3,17 +3,19 @@ import Typography from '../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import AssetSelect from '../../../components/AssetSelect'
-import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { feeTierAtom, selectedPoolCurrenciesAtom } from './atoms'
 import { Currency } from '@sushiswap/sdk'
 import ToggleButtonGroup from '../../../components/ToggleButton'
 import Button from '../../../components/Button'
 import { PlusIcon } from '@heroicons/react/solid'
+import { showReviewAtom } from '../context/atoms'
 
 const HybridSetupPool: FC = () => {
   const { i18n } = useLingui()
   const selectedPoolCurrencies = useRecoilValue(selectedPoolCurrenciesAtom)
   const [feeTier, setFeeTier] = useRecoilState(feeTierAtom)
+  const setShowReview = useSetRecoilState(showReviewAtom)
 
   const handleSelectedPoolTokens = useRecoilCallback<[Currency, number], void>(
     ({ snapshot, set }) =>
@@ -92,8 +94,8 @@ const HybridSetupPool: FC = () => {
             * This is suggested for most pairs
           </Typography>
         )}
-        <Button color="gradient" disabled={error.length > 0}>
-          {error.length > 0 ? `Select ${error.join(' & ')}` : 'Continue'}
+        <Button disabled={!!error} color="gradient" onClick={() => setShowReview(true)}>
+          {error.length > 0 ? `Select ${error.join(' & ')}` : 'Review & Confirm'}
         </Button>
       </div>
     </div>
