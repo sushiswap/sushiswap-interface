@@ -1,3 +1,10 @@
 {
-  "baseUrl": "http://localhost:3000"
+  "baseUrl": "http://localhost:3000",
+  "downloadsFolder": "test/downloads",
+  "fixturesFolder": "test/fixtures",
+  "integrationFolder": "test/integration",
+  "pluginsFile": "test/plugins/index.ts",
+  "screenshotsFolder": "test/screenshots",
+  "supportFile": "test/support/index.ts",
+  "videosFolder": "test/videos"
 }
