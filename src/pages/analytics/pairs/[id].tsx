@@ -136,7 +136,7 @@ export default function Pair() {
           </div>
         </div>
       </Background>
-      <div className="pt-4 space-y-4 lg:px-14">
+      <div className="px-4 pt-4 space-y-4 lg:px-14">
         <div className="relative h-12">
           <div className="absolute w-full h-full">
             <div className="h-1/3" />
