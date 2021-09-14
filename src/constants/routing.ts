@@ -117,6 +117,7 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.CELO]: [WNATIVE[ChainId.CELO]],
   [ChainId.MOONRIVER]: [WNATIVE[ChainId.MOONRIVER]],
   [ChainId.PALM]: [WNATIVE[ChainId.PALM]],
+  [ChainId.FUSE]: [WNATIVE[ChainId.FUSE]],
 }
 
 // used to construct intermediary pairs for trading
@@ -173,6 +174,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ],
   [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE]],
 }
 
 export const ADDITIONAL_BASES: {
@@ -309,6 +311,7 @@ export const COMMON_BASES: ChainTokenList = {
   [ChainId.CELO]: [...WRAPPED_NATIVE_ONLY[ChainId.CELO], CELO.cETH, CELO.cUSD, CELO.cEURO, CELO.cBTC],
   [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE]],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -356,6 +359,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ],
   [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE]],
 }
 
 export const PINNED_PAIRS: {

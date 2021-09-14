@@ -30,6 +30,7 @@ export const RPC = {
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
   [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
+  [ChainId.FUSE]: 'https://rpc.fuse.io',
 }
 
 export const POOL_DENY = ['14', '29', '45', '30']
@@ -285,7 +286,7 @@ export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
   [ChainId.BSC]: 'https://analytics-bsc.sushi.com',
   [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
   [ChainId.HARMONY]: 'https://analytics-harmony.sushi.com',
-  [ChainId.ARBITRUM]: undefined,
+  [ChainId.ARBITRUM]: 'https://analytics-arbitrum.sushi.com',
 }
 
 export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {

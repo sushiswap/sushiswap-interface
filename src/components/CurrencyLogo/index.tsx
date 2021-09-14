@@ -83,6 +83,7 @@ const xDaiLogo =
 const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
 const PalmLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/palm.jpg'
 const MovrLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/movr.jpg'
+const FuseLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
 
 const LOGO: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: EthereumLogo,
@@ -108,6 +109,7 @@ const LOGO: { readonly [chainId in ChainId]?: string } = {
   [ChainId.PALM]: PalmLogo,
   [ChainId.PALM_TESTNET]: PalmLogo,
   [ChainId.MOONRIVER]: MovrLogo,
+  [ChainId.FUSE]: FuseLogo,
 }
 
 interface CurrencyLogoProps {

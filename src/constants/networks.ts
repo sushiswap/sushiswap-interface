@@ -19,6 +19,7 @@ const xDai = '/images/networks/xdai-network.jpg'
 const Celo = '/images/networks/celo-network.jpg'
 const Palm = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/palm.jpg'
 const Movr = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonriver.jpg'
+const Fuse = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
 
 export const NETWORK_ICON = {
   [ChainId.MAINNET]: Mainnet,
@@ -47,6 +48,7 @@ export const NETWORK_ICON = {
   [ChainId.CELO]: Celo,
   [ChainId.PALM]: Palm,
   [ChainId.MOONRIVER]: Movr,
+  [ChainId.FUSE]: Fuse,
 }
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
@@ -76,4 +78,5 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.CELO]: 'Celo',
   [ChainId.PALM]: 'Palm',
   [ChainId.MOONRIVER]: 'Moonriver',
+  [ChainId.FUSE]: 'Fuse',
 }

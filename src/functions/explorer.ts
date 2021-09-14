@@ -187,6 +187,17 @@ const builders = {
         return `${prefix}/${type}/${data}`
     }
   },
+  fuse: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://explorer.fuse.io'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`
+      case 'token':
+        return `${prefix}/tokens/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
 }
 
 interface ChainObject {
@@ -300,6 +311,10 @@ const chains: ChainObject = {
   [ChainId.MOONRIVER]: {
     chainName: '',
     builder: builders.moonriver,
+  },
+  [ChainId.FUSE]: {
+    chainName: '',
+    builder: builders.fuse,
   },
 }
 
