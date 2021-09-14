@@ -184,7 +184,7 @@ export default function Token() {
           </div>
         </div>
       </Background>
-      <div className="pt-4 space-y-4 lg:px-14">
+      <div className="px-4 pt-4 space-y-4 lg:px-14">
         <div className="text-3xl font-bold text-high-emphesis">Overview</div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <TokenChartCard type="liquidity" name={token?.symbol} token={id} />

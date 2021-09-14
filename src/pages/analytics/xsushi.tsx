@@ -173,7 +173,7 @@ export default function XSushi() {
           </div>
         </div>
       </Background>
-      <div className="pt-4 space-y-5 lg:px-14">
+      <div className="px-4 pt-4 space-y-5 lg:px-14">
         <div className="flex flex-row space-x-4 overflow-auto">
           <InfoCard text="APY (Last 24 Hours)" number={formatPercent(APY1d)} />
           <InfoCard text="APY (Last 7 Days)" number={formatPercent(APY1w)} />
