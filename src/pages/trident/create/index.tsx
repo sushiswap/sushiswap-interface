@@ -55,7 +55,7 @@ const Pool = () => {
         <Stepper.List>
           <Stepper.Tab>Select Type</Stepper.Tab>
           <Stepper.Tab>Setup</Stepper.Tab>
-          <Stepper.Tab>Deposit</Stepper.Tab>
+          {/*<Stepper.Tab>Deposit</Stepper.Tab>*/}
         </Stepper.List>
         <Stepper.Panels>
           <Stepper.Panel>
@@ -65,9 +65,9 @@ const Pool = () => {
             {selectedPoolType === PoolType.ConstantProduct && <ClassicSetupPool />}
             {selectedPoolType === PoolType.Hybrid && <HybridSetupPool />}
           </Stepper.Panel>
-          <Stepper.Panel>
-            <ClassicDepositAssets />
-          </Stepper.Panel>
+          {/*<Stepper.Panel>*/}
+          {/*  <ClassicDepositAssets />*/}
+          {/*</Stepper.Panel>*/}
         </Stepper.Panels>
       </Stepper>
       <CreateReviewModal />
