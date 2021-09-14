@@ -16,24 +16,27 @@ import Background from '../../../features/analytics/Background'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
 import { DuplicateIcon } from '@heroicons/react/outline'
 import { CheckIcon } from '@heroicons/react/solid'
+import { useActiveWeb3React } from '../../../hooks'
 
 export default function Pair() {
   const router = useRouter()
   const id = (router.query.id as string).toLowerCase()
 
+  const { chainId } = useActiveWeb3React()
+
   const [isCopied, setCopied] = useCopyClipboard()
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block2d = useBlock({ daysAgo: 2 })
+  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block2d = useBlock({ daysAgo: 2, chainId })
 
-  const pair = useSushiPairs({ subset: [id] })?.[0]
-  const pair1d = useSushiPairs({ subset: [id], block: block1d, shouldFetch: !!block1d })?.[0]
-  const pair2d = useSushiPairs({ subset: [id], block: block2d, shouldFetch: !!block2d })?.[0]
+  const pair = useSushiPairs({ subset: [id], chainId })?.[0]
+  const pair1d = useSushiPairs({ subset: [id], block: block1d, shouldFetch: !!block1d, chainId })?.[0]
+  const pair2d = useSushiPairs({ subset: [id], block: block2d, shouldFetch: !!block2d, chainId })?.[0]
 
-  const nativePrice = useNativePrice()
+  const nativePrice = useNativePrice({ chainId })
 
   // For Transactions
-  const transactions = useTransactions({ pairs: [id] })
+  const transactions = useTransactions({ pairs: [id], chainId })
   const transactionsFormatted = useMemo(
     () =>
       transactions?.map((tx) => {

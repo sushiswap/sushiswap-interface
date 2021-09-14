@@ -21,6 +21,7 @@ import Link from 'next/link'
 import TopFarmsList from '../../../features/analytics/Tokens/Token/TopFarmsList'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
+import { useActiveWeb3React } from '../../../hooks'
 
 const socialsPlaceholder = [
   {
@@ -70,29 +71,32 @@ export default function Token(): JSX.Element {
   const [chartTimespan, setChartTimespan] = useState('1W')
   const chartTimespans = ['1W', '1M', 'ALL']
 
+  const { chainId } = useActiveWeb3React()
+
   const router = useRouter()
   const id = '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272'.toLowerCase() //(router.query.id as string).toLowerCase()
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block2d = useBlock({ daysAgo: 1 })
+  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block2d = useBlock({ daysAgo: 1, chainId })
 
   // General data (volume, liquidity)
-  const nativePrice = useNativePrice()
-  const nativePrice1d = useNativePrice({ block: block1d })
+  const nativePrice = useNativePrice({ chainId })
+  const nativePrice1d = useNativePrice({ block: block1d, chainId })
 
-  const token = useTokens({ subset: [id] })?.[0]
-  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d })?.[0]
-  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d })?.[0]
+  const token = useTokens({ subset: [id], chainId })?.[0]
+  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d, chainId })?.[0]
+  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d, chainId })?.[0]
 
   // For the graph
   const tokenDayData = useTokenDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
     token: id,
+    chainId,
   })
 
   // For Top Farms
-  const farms = useFarms()
-  const farmPairs = useSushiPairs({ subset: farms.map((farm) => farm.pair), shouldFetch: !!farms })
+  const farms = useFarms({ chainId })
+  const farmPairs = useSushiPairs({ subset: farms.map((farm) => farm.pair), shouldFetch: !!farms, chainId })
   const farmsFormatted = useMemo(() => {
     return farmPairs
       ? farmPairs
@@ -116,8 +120,12 @@ export default function Token(): JSX.Element {
   }, [id, farmPairs])
 
   // For Transactions
-  const tokenPairs = useTokenPairs({ token: id })
-  const transactions = useTransactions({ pairs: tokenPairs?.map((pair) => pair.id), shouldFetch: !!tokenPairs })
+  const tokenPairs = useTokenPairs({ token: id, chainId })
+  const transactions = useTransactions({
+    pairs: tokenPairs?.map((pair) => pair.id),
+    shouldFetch: !!tokenPairs,
+    chainId,
+  })
   const transactionsFormatted = useMemo(() => {
     return transactions
       ? transactions.map((tx) => {
@@ -153,7 +161,7 @@ export default function Token(): JSX.Element {
   }, [transactions])
 
   // For Top Moving
-  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d })
+  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d, chainId })
   const tokenPairsFormatted = useMemo(() => {
     return token && tokenPairs && tokenPairs1d
       ? tokenPairs

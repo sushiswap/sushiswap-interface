@@ -27,17 +27,18 @@ export default function useFarmRewards() {
 
   const positions = usePositions()
 
-  const block1w = useBlock({ daysAgo: 7 })
+  const block1w = useBlock({ daysAgo: 7, chainId })
 
-  const farms = useFarms()
+  const farms = useFarms({ chainId })
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
-  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
   const swapPairs1w = useSushiPairs({
     subset: farmAddresses,
     block: block1w,
     shouldFetch: !!block1w && !!farmAddresses,
+    chainId,
   })
-  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
 
   const averageBlockTime = useAverageBlockTime()
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()

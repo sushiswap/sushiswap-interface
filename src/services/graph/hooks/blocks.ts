@@ -7,12 +7,12 @@ import { useMemo } from 'react'
 interface useBlockProps {
   timestamp?: number
   daysAgo?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
 }
 
 export function useBlock(
-  { timestamp, daysAgo, chainId = useActiveWeb3React().chainId, shouldFetch = true }: useBlockProps = {},
+  { timestamp, daysAgo, chainId, shouldFetch = true }: useBlockProps,
   swrConfig: SWRConfiguration = undefined
 ) {
   shouldFetch = shouldFetch && !!chainId
