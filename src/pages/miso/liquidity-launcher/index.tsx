@@ -196,6 +196,7 @@ function LiquidityLauncher({ pageIndex, movePage }) {
             </div>
             <div className="mt-5">
               <Input
+                label=""
                 value={liquidityAmount}
                 type="digit"
                 onUserInput={(input) => setLiquidityAmount(input)}

@@ -25,6 +25,7 @@ export default function ManualAddresses({ addresses, setAddresses }: any) {
         {addresses.map((address, index) => [
           <div key={'col_1_' + index} className="col-span-7">
             <Input
+              label=""
               value={addresses[index].address}
               type="text"
               placeholder="Enter an address"
@@ -38,6 +39,7 @@ export default function ManualAddresses({ addresses, setAddresses }: any) {
           </div>,
           <div key={'col_2_' + index} className="col-span-4 w-full">
             <Input
+              label=""
               value={addresses[index].purchaseLimit}
               type="decimal"
               placeholder=""

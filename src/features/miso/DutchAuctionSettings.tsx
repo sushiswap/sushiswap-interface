@@ -28,6 +28,7 @@ export default function DutchAuctionSettings({
             {i18n._(t`Dutch auctions start high, and lowers over time`)}
           </Typography>
           <Input
+            label=""
             value={startingPrice}
             type="decimal"
             placeholder="0.00"
@@ -52,6 +53,7 @@ export default function DutchAuctionSettings({
           <Typography className="text-secondary font-bold">{i18n._(t`ENDING PRICE`)}</Typography>
           <Typography className="text-low-emphesis text-sm">{i18n._(t`Auction ends at this price`)}</Typography>
           <Input
+            label=""
             value={endingPrice}
             type="decimal"
             placeholder="0.00"
