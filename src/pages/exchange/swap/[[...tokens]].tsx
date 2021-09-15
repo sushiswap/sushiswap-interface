@@ -74,6 +74,8 @@ import { useSwapCallback } from '../../../hooks/useSwapCallback'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { warningSeverity } from '../../../functions/prices'
 
+import Image from 'next/image'
+
 export default function Swap() {
   const { i18n } = useLingui()
 
@@ -709,6 +711,27 @@ export default function Swap() {
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
           )}
         </div>
+        {chainId && chainId === ChainId.MAINNET && (
+          <a
+            href="https://miso.sushi.com"
+            className="hidden w-full py-6 mt-2 rounded cursor-pointer sm:block"
+            style={{
+              backgroundImage: `url('/images/miso/banner.jpg')`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            <div className="flex items-center justify-between gap-6 pl-5 pr-8">
+              <span className="font-normal text-high-emphesis" style={{ lineHeight: 1.3, maxWidth: 250 }}>
+                You need a &apos;Dona - <span className="font-bold">End of Summer Sellathon</span>
+              </span>
+              <div style={{ maxWidth: 195 }}>
+                <img src="/images/miso/logo.png" style={{ maxWidth: '100%' }} alt="" />
+              </div>
+            </div>
+          </a>
+        )}
       </DoubleGlowShadow>
     </Container>
   )
