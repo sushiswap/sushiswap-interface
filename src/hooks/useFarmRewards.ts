@@ -24,7 +24,7 @@ import { usePositions } from '../features/farm/hooks'
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()
 
-  const positions = usePositions()
+  const positions = usePositions(chainId)
 
   const block1d = useBlock({ daysAgo: 1 })
   const block1w = useBlock({ daysAgo: 7 })
