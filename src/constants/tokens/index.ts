@@ -2,9 +2,18 @@ import { ChainId, Ether, SUSHI_ADDRESS, Token, WETH9, WNATIVE } from '@sushiswap
 
 import { SupportedChainId } from '../chains'
 
+export const FUSE: { [key: string]: Token } = {
+  WETH: new Token(ChainId.FUSE, '0xa722c13135930332Eb3d749B2F0906559D2C5b99', 18, 'WETH', 'Wrapped Ether'),
+  WBTC: new Token(ChainId.FUSE, '0x33284f95ccb7B948d9D352e1439561CF83d8d00d', 8, 'WBTC', 'Wrapped Bitcoin'),
+  USDC: new Token(ChainId.FUSE, '0x620fd5fa44BE6af63715Ef4E65DDFA0387aD13F5', 6, 'USDC', 'USD Coin'),
+  USDT: new Token(ChainId.FUSE, '0x33284f95ccb7B948d9D352e1439561CF83d8d00d', 8, 'USDT', 'Tether USD'),
+  DAI: new Token(ChainId.FUSE, '0x94Ba7A27c7A95863d1bdC7645AC2951E0cca06bA', 18, 'DAI', 'Dai Stablecoin'),
+}
+
 export const ARBITRUM: { [key: string]: Token } = {
   USDC: new Token(ChainId.ARBITRUM, '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', 6, 'USDC', 'USD Coin'),
   WBTC: new Token(ChainId.ARBITRUM, '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', 8, 'WBTC', 'Wrapped Bitcoin'),
+  USDT: new Token(ChainId.ARBITRUM, '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', 8, 'USDT', 'Tether USD'),
 }
 
 export const PALM: { [key: string]: Token } = {

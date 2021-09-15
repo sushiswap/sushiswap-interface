@@ -11,6 +11,8 @@ import Button from '../Button'
 import CurrencyLogo from '../CurrencyLogo'
 import Dots from '../Dots'
 import DoubleCurrencyLogo from '../DoubleLogo'
+import { Transition } from '@headlessui/react'
+import { classNames } from '../../functions'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useColor } from '../../hooks'
@@ -18,8 +20,6 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { classNames } from '../../functions'
-import { Transition } from '@headlessui/react'
 
 interface PositionCardProps {
   pair: Pair
@@ -195,12 +195,12 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               <div>{i18n._(t`Your total pool tokens`)}:</div>
               <div className="font-semibold">{userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}</div>
             </div>
-            {stakedBalance && (
+            {/* {stakedBalance && (
               <div className="flex items-center justify-between">
                 <div>{i18n._(t`Pool tokens in rewards pool`)}:</div>
                 <div className="font-semibold">{stakedBalance.toSignificant(4)}</div>
               </div>
-            )}
+            )} */}
             <div className="flex items-center justify-between">
               <div>{i18n._(t`Pooled ${currency0?.symbol}`)}:</div>
               {token0Deposited ? (

@@ -533,14 +533,14 @@ export default function Remove() {
                       <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
                         <CurrencyLogo currency={currencyA} size="46px" />
                         <AutoColumn>
-                          <div className="text-white">{formattedAmounts[Field.CURRENCY_A] || '-'}</div>
+                          <div className="text-white truncate">{formattedAmounts[Field.CURRENCY_A] || '-'}</div>
                           <div className="text-sm">{currencyA?.symbol}</div>
                         </AutoColumn>
                       </div>
                       <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
                         <CurrencyLogo currency={currencyB} size="46px" />
                         <AutoColumn>
-                          <div className="text-white">{formattedAmounts[Field.CURRENCY_B] || '-'}</div>
+                          <div className="text-white truncate">{formattedAmounts[Field.CURRENCY_B] || '-'}</div>
                           <div className="text-sm">{currencyB?.symbol}</div>
                         </AutoColumn>
                       </div>
