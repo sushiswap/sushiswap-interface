@@ -25,7 +25,7 @@ export default function XSushi() {
   const exchange = useFactory({ chainId: ChainId.MAINNET })
   const exchange1d = useFactory({ block: block1d, chainId: ChainId.MAINNET })
 
-  const dayData = useDayData()
+  const dayData = useDayData({ chainId: ChainId.MAINNET })
 
   const ethPrice = useNativePrice({ chainId: ChainId.MAINNET })
   const ethPrice1d = useNativePrice({ block: block1d, chainId: ChainId.MAINNET, shouldFetch: !!block1d })

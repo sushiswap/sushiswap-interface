@@ -35,15 +35,15 @@ import { first } from 'lodash'
 interface useFactoryProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
 }
 
 export function useFactory(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true }: useFactoryProps = {},
+  { timestamp, block, chainId, shouldFetch = true }: useFactoryProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId
@@ -63,12 +63,12 @@ export function useFactory(
 interface useNativePriceProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
 }
 
 export function useNativePrice(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true }: useNativePriceProps = {},
+  { timestamp, block, chainId, shouldFetch = true }: useNativePriceProps,
   swrConfig: SWRConfiguration = undefined
 ) {
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
@@ -204,19 +204,13 @@ export function useBundle(variables = undefined, swrConfig: SWRConfiguration = u
 interface useLiquidityPositionsProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   user?: string
 }
 
 export function useLiquidityPositions(
-  {
-    timestamp,
-    block,
-    chainId = useActiveWeb3React().chainId,
-    shouldFetch = true,
-    user,
-  }: useLiquidityPositionsProps = {},
+  { timestamp, block, chainId, shouldFetch = true, user }: useLiquidityPositionsProps,
   swrConfig: SWRConfiguration = undefined
 ) {
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
@@ -243,24 +237,17 @@ export function useLiquidityPositions(
 interface useSushiPairsProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   user?: string
   subset?: string[]
 }
 
 export function useSushiPairs(
-  {
-    timestamp,
-    block,
-    chainId = useActiveWeb3React().chainId,
-    shouldFetch = true,
-    user,
-    subset,
-  }: useSushiPairsProps = {},
+  { timestamp, block, chainId, shouldFetch = true, user, subset }: useSushiPairsProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId
@@ -284,16 +271,16 @@ export function useSushiPairs(
 interface useTokensProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   subset?: string[]
 }
 
 export function useTokens(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, subset }: useTokensProps = {},
+  { timestamp, block, chainId, shouldFetch = true, subset }: useTokensProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId
@@ -316,17 +303,17 @@ export function useTokens(
 interface useTokenDayDataProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   token: string
   first?: number
 }
 
 export function useTokenDayData(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, token, first }: useTokenDayDataProps,
+  { timestamp, block, chainId, shouldFetch = true, token, first }: useTokenDayDataProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId
@@ -350,16 +337,16 @@ export function useTokenDayData(
 interface useDayDataProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   first?: number
 }
 
 export function useDayData(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, first }: useDayDataProps = {},
+  { timestamp, block, chainId, shouldFetch = true, first }: useDayDataProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId
@@ -380,17 +367,17 @@ export function useDayData(
 interface useTransactionsProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   first?: number
   pairs: string[]
 }
 
 export function useTransactions(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, first, pairs }: useTransactionsProps,
+  { timestamp, block, chainId, shouldFetch = true, first, pairs }: useTransactionsProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId
@@ -414,16 +401,16 @@ export function useTransactions(
 interface useTokenPairsProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   token: string
 }
 
 export function useTokenPairs(
-  { timestamp, block, chainId = useActiveWeb3React().chainId, shouldFetch = true, token }: useTokenPairsProps,
+  { timestamp, block, chainId, shouldFetch = true, token }: useTokenPairsProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId

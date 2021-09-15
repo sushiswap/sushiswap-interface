@@ -1,6 +1,7 @@
 import { useBlock, useDayData, useFactory } from '../../../services/graph'
 import { useMemo, useState } from 'react'
 import ChartCard from '../ChartCard'
+import { useActiveWeb3React } from '../../../hooks'
 
 interface DashboardChartCardProps {
   type: 'liquidity' | 'volume'
@@ -36,17 +37,20 @@ export default function DashboardChartCard(props: DashboardChartCardProps): JSX.
   const [chartTimespan, setChartTimespan] = useState('1M')
   const chartTimespans = ['1W', '1M', '1Y', 'ALL']
 
+  const { chainId } = useActiveWeb3React()
+
   const type = types[props.type]
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block2d = useBlock({ daysAgo: 2 })
+  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block2d = useBlock({ daysAgo: 2, chainId })
 
-  const exchange = useFactory()
-  const exchange1d = useFactory({ block: block1d })
-  const exchange2d = useFactory({ block: block2d })
+  const exchange = useFactory({ chainId })
+  const exchange1d = useFactory({ block: block1d, chainId })
+  const exchange2d = useFactory({ block: block2d, chainId })
 
   const dayData = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : chartTimespan === '1Y' ? 365 : undefined,
+    chainId,
   })
 
   const data = useMemo(

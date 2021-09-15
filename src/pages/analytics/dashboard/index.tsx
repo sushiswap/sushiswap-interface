@@ -9,19 +9,21 @@ import PoolList from '../../../features/analytics/Farms/FarmList'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useFuse } from '../../../hooks'
+import { useActiveWeb3React, useFuse } from '../../../hooks'
 import Background from '../../../features/analytics/Background'
 
 export default function Dashboard(): JSX.Element {
   const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block1w = useBlock({ daysAgo: 7 })
+  const { chainId } = useActiveWeb3React()
+
+  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block1w = useBlock({ daysAgo: 7, chainId })
 
   // For Top Pairs
-  const pairs = useSushiPairs()
-  const pairs1d = useSushiPairs({ block: block1d })
-  const pairs1w = useSushiPairs({ block: block1w })
+  const pairs = useSushiPairs({ chainId })
+  const pairs1d = useSushiPairs({ block: block1d, chainId })
+  const pairs1w = useSushiPairs({ block: block1w, chainId })
 
   const pairsFormatted = useMemo(
     () =>
@@ -45,7 +47,7 @@ export default function Dashboard(): JSX.Element {
 
   // For Top Farms
   const farms = useFarmRewards()
-  const nativePrice = useNativePrice()
+  const nativePrice = useNativePrice({ chainId })
   const farmsFormatted = useMemo(
     () =>
       farms
@@ -70,12 +72,12 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Tokens
-  const nativePrice1d = useNativePrice({ block: block1d })
-  const nativePrice1w = useNativePrice({ block: block1w })
+  const nativePrice1d = useNativePrice({ block: block1d, chainId })
+  const nativePrice1w = useNativePrice({ block: block1w, chainId })
 
-  const tokens = useTokens()
-  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d })
-  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w })
+  const tokens = useTokens({ chainId })
+  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d, chainId })
+  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w, chainId })
 
   const tokensFormatted = useMemo(
     () =>

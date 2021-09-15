@@ -78,10 +78,10 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
         </div>
         <div className="flex flex-col space-y-1">
           {rewards?.map((reward, i) => {
-            const decimals = 6 - String(reward.rewardPerDay.toFixed(0)).length
+            const decimals = 6 - String(reward?.rewardPerDay?.toFixed(0)).length
             return (
               <div key={i} className="text-base whitespace-nowrap">
-                {reward.rewardPerDay.toFixed(decimals > 0 ? decimals : 0)} {reward.token}
+                {reward?.rewardPerDay?.toFixed(decimals > 0 ? decimals : 0)} {reward.token}
               </div>
             )
           })}
@@ -114,9 +114,13 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
         accessor: 'apr',
         Cell: (props) => (
           <div className="inline-flex flex-row font-medium">
-            <ColoredNumber number={props.value.annual} percent={true} />
-            &nbsp;/ {formatPercent(props.value.monthly)}
-            &nbsp;/ {formatPercent(props.value.daily)}
+            {props.value.annual < 10000 ? (
+              <ColoredNumber number={props.value.annual} percent={true} />
+            ) : (
+              <div className="font-normal text-green">{'>10,000%'}</div>
+            )}
+            &nbsp;/ {props.value.monthly > 10000 ? '>10,000%' : formatPercent(props.value.monthly * 100)}
+            &nbsp;/ {props.value.daily > 10000 ? '>10,000%' : formatPercent(props.value.daily * 100)}
           </div>
         ),
         align: 'right',
