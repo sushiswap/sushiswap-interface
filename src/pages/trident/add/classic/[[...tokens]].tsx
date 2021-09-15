@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
-import { RecoilRoot, useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
-import { mainInputAtom, poolAtom, zapInputAtom } from '../../../../features/trident/add/classic/context/atoms'
-
-import AddTransactionReviewModalStandard from '../../../../features/trident/add/classic/AddTransactionReviewModal'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import {
+  liquidityModeAtom,
+  poolAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
 import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
@@ -26,6 +28,8 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import Alert from '../../../../components/Alert'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
+import TransactionReviewStandardModal from '../../../../features/trident/add/classic/TransactionReviewStandardModal'
+import TransactionReviewZapModal from '../../../../features/trident/add/classic/TransactionReviewZapModal'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -58,15 +62,6 @@ const AddClassic = () => {
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
 
-  const handleLiquidityModeChange = useRecoilCallback(
-    ({ reset }) =>
-      async () => {
-        reset(mainInputAtom)
-        reset(zapInputAtom)
-      },
-    []
-  )
-
   return (
     <div className="flex flex-col w-full mt-px mb-5">
       <div className="flex flex-col gap-4 p-5 bg-auto bg-dark-800 bg-bubble-pattern bg-opacity-60">
@@ -97,7 +92,7 @@ const AddClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle onChange={handleLiquidityModeChange} />
+      <ModeToggle onChange={() => {}} />
 
       {poolState === ConstantProductPoolState.NOT_EXISTS ? (
         <div className="px-5 pt-5">
@@ -110,12 +105,21 @@ const AddClassic = () => {
         </div>
       ) : (
         <>
-          {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
-          {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+          {liquidityMode === LiquidityMode.ZAP && (
+            <>
+              <ClassicZapMode />
+              <TransactionReviewZapModal />
+            </>
+          )}
+          {liquidityMode === LiquidityMode.STANDARD && (
+            <>
+              <ClassicStandardMode />
+              <TransactionReviewStandardModal />
+            </>
+          )}
         </>
       )}
 
-      <AddTransactionReviewModalStandard />
       <DepositSubmittedModal />
     </div>
   )

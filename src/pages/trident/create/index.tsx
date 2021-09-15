@@ -4,21 +4,24 @@ import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
 import Link from 'next/link'
-import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil'
+import { RecoilRoot, useRecoilState } from 'recoil'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Stepper from '../../../components/Stepper'
 import SelectPoolType from '../../../features/trident/create/SelectPoolType'
-import { pageAtom, selectedPoolTypeAtom } from '../../../features/trident/create/atoms'
 import CreateReviewModal from '../../../features/trident/create/CreateReviewModal'
-import ClassicDepositAssets from '../../../features/trident/create/ClassicDepositAssets'
 import { PoolType } from '@sushiswap/sdk'
-import ClassicSetupPool from '../../../features/trident/create/ClassicSetupPool'
-import HybridSetupPool from '../../../features/trident/create/HybridSetupPool'
+import ClassicSetupPool from '../../../features/trident/create/classic/ClassicSetupPool'
+import ClassicDepositAssets from '../../../features/trident/create/classic/ClassicDepositAssets'
+import { useSetupPoolProperties } from '../../../features/trident/context/hooks/useSetupPoolProperties'
+import HybridSetupPool from '../../../features/trident/create/hybrid/HybridSetupPool'
+import { poolCreationPageAtom } from '../../../features/trident/context/atoms'
 
 const Pool = () => {
   const { i18n } = useLingui()
-  const [page, setPage] = useRecoilState(pageAtom)
-  const selectedPoolType = useRecoilValue(selectedPoolTypeAtom)
+  const [page, setPage] = useRecoilState(poolCreationPageAtom)
+  const {
+    poolType: [poolType],
+  } = useSetupPoolProperties()
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -55,19 +58,22 @@ const Pool = () => {
         <Stepper.List>
           <Stepper.Tab>Select Type</Stepper.Tab>
           <Stepper.Tab>Setup</Stepper.Tab>
-          {/*<Stepper.Tab>Deposit</Stepper.Tab>*/}
+          <Stepper.Tab>Deposit</Stepper.Tab>
         </Stepper.List>
         <Stepper.Panels>
           <Stepper.Panel>
             <SelectPoolType />
           </Stepper.Panel>
           <Stepper.Panel>
-            {selectedPoolType === PoolType.ConstantProduct && <ClassicSetupPool />}
-            {selectedPoolType === PoolType.Hybrid && <HybridSetupPool />}
+            {poolType === PoolType.ConstantProduct && <ClassicSetupPool />}
+            {poolType === PoolType.Hybrid && <HybridSetupPool />}
           </Stepper.Panel>
-          {/*<Stepper.Panel>*/}
-          {/*  <ClassicDepositAssets />*/}
-          {/*</Stepper.Panel>*/}
+          <Stepper.Panel>
+            {poolType === PoolType.ConstantProduct && <ClassicDepositAssets />}
+            {/*{selectedPoolType === PoolType.Hybrid && <HybridStandardMode />}*/}
+            {/*{selectedPoolType === PoolType.Weighted && <WeightedStandardMode />}*/}
+            {/*{selectedPoolType === PoolType.ConcentratedLiquidity && <ConcentratedStandardMode />}*/}
+          </Stepper.Panel>
         </Stepper.Panels>
       </Stepper>
       <CreateReviewModal />

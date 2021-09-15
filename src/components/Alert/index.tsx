@@ -77,7 +77,7 @@ export default function Alert({
             {title}
           </Typography>
         )}
-        <Typography variant="xs" weight={400} className={classNames('text-left text-high-emphesis')}>
+        <Typography variant="sm" weight={400} className={classNames('text-left text-high-emphesis')}>
           {message}
         </Typography>
       </div>

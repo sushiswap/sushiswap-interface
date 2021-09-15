@@ -1,11 +1,13 @@
 import { atom, selector } from 'recoil'
-import { Currency, CurrencyAmount, JSBI, Percent } from '@sushiswap/sdk'
-import { LiquidityMode } from '../types'
-import { poolAtom } from '../remove/classic/context/atoms'
-import { PairState } from '../../../hooks/useV2Pairs'
-import { ConstantProductPoolState } from '../../../hooks/useTridentClassicPools'
+import { Currency, CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/sdk'
+import { LiquidityMode, PoolAtomType } from '../types'
 
-const ZERO = JSBI.BigInt(0)
+export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
+
+export const poolAtom = atom<PoolAtomType>({
+  key: 'poolAtom',
+  default: [null, null],
+})
 
 export const showReviewAtom = atom<boolean>({
   key: 'showReviewAtom',
@@ -47,6 +49,37 @@ export const spendFromWalletAtom = atom<boolean>({
   default: true,
 })
 
+export const poolCreationPageAtom = atom<number>({
+  key: 'poolCreationPageAtom',
+  default: 0,
+})
+
+export const minPriceAtom = atom<string>({
+  key: 'minPriceAtom',
+  default: null,
+})
+
+export const maxPriceAtom = atom<string>({
+  key: 'maxPriceAtom',
+  default: null,
+})
+
+export const noLiquiditySelector = selector<boolean>({
+  key: 'noLiquiditySelector',
+  get: ({ get }) => {
+    const [poolState, pool] = get<PoolAtomType>(poolAtom)
+    const totalSupply = get(totalSupplyAtom)
+
+    return (
+      poolState === 1 ||
+      Boolean(totalSupply && JSBI.equal(totalSupply.quotient, ZERO)) ||
+      Boolean(
+        poolState === 2 && pool && JSBI.equal(pool.reserve0.quotient, ZERO) && JSBI.equal(pool.reserve1.quotient, ZERO)
+      )
+    )
+  },
+})
+
 export const currentPoolShareSelector = selector({
   key: 'currentPoolShareSelector',
   get: ({ get }) => {
@@ -61,22 +94,20 @@ export const currentPoolShareSelector = selector({
   },
 })
 
-// TODO ramin:
-export const noLiquiditySelector = selector<boolean>({
-  key: 'noLiquiditySelector',
+export const currentLiquidityValueSelector = selector({
+  key: 'currentLiquidityValueSelector',
   get: ({ get }) => {
-    const [poolState, pool] = get(poolAtom)
+    const [, pool] = get(poolAtom)
+    const poolBalance = get(poolBalanceAtom)
     const totalSupply = get(totalSupplyAtom)
 
-    return (
-      poolState === ConstantProductPoolState.NOT_EXISTS ||
-      Boolean(totalSupply && JSBI.equal(totalSupply.quotient, ZERO)) ||
-      Boolean(
-        poolState === ConstantProductPoolState.EXISTS &&
-          pool &&
-          JSBI.equal(pool.reserve0.quotient, ZERO) &&
-          JSBI.equal(pool.reserve1.quotient, ZERO)
-      )
-    )
+    if (pool && poolBalance && totalSupply) {
+      return [
+        pool.getLiquidityValue(pool.token0, totalSupply?.wrapped, poolBalance?.wrapped),
+        pool.getLiquidityValue(pool.token1, totalSupply?.wrapped, poolBalance?.wrapped),
+      ]
+    }
+
+    return [undefined, undefined]
   },
 })

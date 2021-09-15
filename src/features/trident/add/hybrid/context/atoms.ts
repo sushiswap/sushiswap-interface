@@ -25,7 +25,7 @@ export const zapInputAtom = atom<string>({
 })
 
 export const poolTokensSelector = selector<Record<string, Token>>({
-  key: 'poolAtom',
+  key: 'poolTokensSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
     return pool?.tokens.reduce((acc, cur) => {
@@ -36,7 +36,7 @@ export const poolTokensSelector = selector<Record<string, Token>>({
 })
 
 export const amountsSelector = atom<Record<string, string>>({
-  key: 'inputsAtom',
+  key: 'amountsSelector',
   default: {},
 })
 
@@ -70,7 +70,7 @@ export const parsedZapSplitAmountsSelector = selector<[CurrencyAmount<Currency>,
 })
 
 export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
-  key: 'parsedZapAmount',
+  key: 'parsedZapAmountSelector',
   get: ({ get }) => {
     const value = get(zapInputAtom)
     const currency = get(selectedZapCurrencyAtom)

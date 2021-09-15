@@ -1,35 +1,32 @@
-import { useBentoBoxContract } from '../../../../hooks'
-import React from 'react'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-
-import AssetInput from '../../../../components/AssetInput'
-import TransactionDetails from './../TransactionDetails'
-import { classNames } from '../../../../functions'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import TridentApproveGate from '../../ApproveButton'
-import Button from '../../../../components/Button'
+import React, { FC } from 'react'
 import Typography from '../../../../components/Typography'
+import { useLingui } from '@lingui/react'
+import { t } from '@lingui/macro'
+import AssetInput from '../../../../components/AssetInput'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import Button from '../../../../components/Button'
+import { useBentoBoxContract } from '../../../../hooks'
+import { classNames } from '../../../../functions'
+import TridentApproveGate from '../../ApproveButton'
+import Dots from '../../../../components/Dots'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
-import Dots from '../../../../components/Dots'
-import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
+import Alert from '../../../../components/Alert'
+import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
 
-const ClassicStandardMode = () => {
+const ClassicDepositAssets: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
   const bentoBox = useBentoBoxContract()
   const {
-    mainInput: [, setMainInput],
-    secondaryInput: [, setSecondaryInput],
-    formattedAmounts,
-    parsedAmounts: [parsedAmountA, parsedAmountB],
-    typedField: [, setTypedField],
-    onMax,
+    currencies: [currencies],
     isMax,
+    onMax,
     error,
-  } = useDependentAssetInputs()
+    setInputAtIndex,
+    formattedAmounts,
+    parsedAmounts,
+  } = useIndependentAssetInputs()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
@@ -37,15 +34,24 @@ const ClassicStandardMode = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-col px-5 mt-6 gap-6">
+          <Typography variant="h3" className="text-high-emphesis" weight={700}>
+            {i18n._(t`Deposit Assets`)}
+          </Typography>
+          <Alert
+            dismissable={false}
+            message={i18n._(
+              t`When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click ‘Create Pool’.`
+            )}
+            type="information"
+          />
+        </div>
         <div className="flex flex-col gap-4 px-5">
           <AssetInput
             value={formattedAmounts[0]}
-            currency={pool?.token0}
-            onChange={(val) => {
-              setTypedField(TypedField.A)
-              setMainInput(val)
-            }}
+            currency={currencies[0]}
+            onChange={(val) => setInputAtIndex(val, 0)}
             headerRight={
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWallet(!spendFromWallet)}
@@ -56,15 +62,12 @@ const ClassicStandardMode = () => {
           />
           <AssetInput
             value={formattedAmounts[1]}
-            currency={pool?.token1}
-            onChange={(val) => {
-              setTypedField(TypedField.B)
-              setSecondaryInput(val)
-            }}
+            currency={currencies[1]}
+            onChange={(val) => setInputAtIndex(val, 1)}
             spendFromWallet={spendFromWallet}
           />
           <div className="flex flex-col gap-3">
-            <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
+            <TridentApproveGate inputAmounts={parsedAmounts} tokenApproveOn={bentoBox?.address}>
               {({ approved, loading }) => {
                 const disabled = !!error || !approved || loading || attemptingTxn
                 const buttonText = attemptingTxn ? (
@@ -116,14 +119,9 @@ const ClassicStandardMode = () => {
             </TridentApproveGate>
           </div>
         </div>
-        {!error && (
-          <div className="flex flex-col px-5">
-            <TransactionDetails />
-          </div>
-        )}
       </div>
     </>
   )
 }
 
-export default ClassicStandardMode
+export default ClassicDepositAssets

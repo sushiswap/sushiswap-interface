@@ -1,16 +1,4 @@
 import { FC } from 'react'
-import {
-  currentLiquidityValueSelector,
-  liquidityMintedSelector,
-  liquidityValueSelector,
-  parsedAmountsSelector,
-  parsedZapAmountSelector,
-  parsedZapSplitAmountsSelector,
-  poolAtom,
-  poolShareSelector,
-  priceSelector,
-  useClassicAddExecute,
-} from './context/atoms'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import TransactionDetails from '../TransactionDetails'
@@ -22,26 +10,21 @@ import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Button from '../../../../components/Button'
 import { ZERO } from '@sushiswap/sdk'
-import { LiquidityMode } from '../../types'
-import { attemptingTxnAtom, currentPoolShareSelector, liquidityModeAtom, showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, poolAtom, showReviewAtom } from '../../context/atoms'
+import { useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
+import { usePoolDetails } from '../../context/hooks/usePoolDetails'
+import { useClassicStandardAddExecute } from '../../context/hooks/useClassicStandardAddExecute'
 
-const AddTransactionReviewModal: FC = () => {
+const TransactionReviewStandardModal: FC = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
-  const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const parsedAmounts = useRecoilValue(parsedAmountsSelector)
-  const liquidityMinted = useRecoilValue(liquidityMintedSelector)
-  const liquidityValue = useRecoilValue(liquidityValueSelector)
-  const currentLiquidityValues = useRecoilValue(currentLiquidityValueSelector)
-  const price = useRecoilValue(priceSelector)
-  const poolTokenPercentage = useRecoilValue(poolShareSelector)
-  const currentPoolShare = useRecoilValue(currentPoolShareSelector)
-  const parsedZapAmount = useRecoilValue(parsedZapAmountSelector)
-  const parsedZapSplitAmounts = useRecoilValue(parsedZapSplitAmountsSelector)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
-  const { standardModeExecute, zapModeExecute } = useClassicAddExecute()
+  const { parsedAmounts } = useDependentAssetInputs()
+  const { execute } = useClassicStandardAddExecute()
+  const { currentLiquidityValue, liquidityMinted, liquidityValue, poolShare, currentPoolShare, price } =
+    usePoolDetails(parsedAmounts)
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -78,30 +61,13 @@ const AddTransactionReviewModal: FC = () => {
             <Typography weight={700} variant="lg">
               {i18n._(t`You are depositing:`)}
             </Typography>
-            {liquidityMode === LiquidityMode.STANDARD && (
-              <ListPanel
-                items={parsedAmounts.reduce((acc, cur, index) => {
-                  if (cur?.greaterThan(ZERO)) acc.push(<ListPanel.CurrencyAmountItem amount={cur} key={index} />)
-                  return acc
-                }, [])}
-              />
-            )}
-            {liquidityMode === LiquidityMode.ZAP && (
-              <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedZapAmount} key={0} />]} />
-            )}
+            <ListPanel
+              items={parsedAmounts.reduce((acc, cur, index) => {
+                if (cur?.greaterThan(ZERO)) acc.push(<ListPanel.CurrencyAmountItem amount={cur} key={index} />)
+                return acc
+              }, [])}
+            />
           </div>
-          {liquidityMode === LiquidityMode.ZAP && (
-            <div className="flex flex-col gap-3 px-5">
-              <Typography weight={700} variant="lg">
-                {i18n._(t`Which will be converted to:`)}
-              </Typography>
-              <ListPanel
-                items={parsedZapSplitAmounts.map((amount, index) => (
-                  <ListPanel.CurrencyAmountItem amount={amount} key={index} />
-                ))}
-              />
-            </div>
-          )}
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
               {i18n._(t`You'll receive:`)}
@@ -127,14 +93,14 @@ const AddTransactionReviewModal: FC = () => {
           </div>
           <Divider />
           <div className="flex flex-col gap-1">
-            {currentLiquidityValues && liquidityValue && (
+            {currentLiquidityValue && liquidityValue && (
               <>
                 <div className="flex justify-between">
                   <Typography variant="sm" className="text-secondary">
                     {i18n._(t`${pool?.token0?.symbol} Deposited:`)}
                   </Typography>
                   <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                    {currentLiquidityValues[0] ? currentLiquidityValues[0].toSignificant(6) : '0.000'} →{' '}
+                    {currentLiquidityValue[0] ? currentLiquidityValue[0].toSignificant(6) : '0.000'} →{' '}
                     {liquidityValue[0] ? liquidityValue[0].toSignificant(6) : '0.000'}
                     {pool?.token0?.symbol}
                   </Typography>
@@ -144,7 +110,7 @@ const AddTransactionReviewModal: FC = () => {
                     {i18n._(t`${pool?.token1?.symbol} Deposited:`)}
                   </Typography>
                   <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                    {currentLiquidityValues[1] ? currentLiquidityValues[1].toSignificant(6) : '0.000'} →{' '}
+                    {currentLiquidityValue[1] ? currentLiquidityValue[1].toSignificant(6) : '0.000'} →{' '}
                     {liquidityValue[1] ? liquidityValue[1].toSignificant(6) : '0.000'}
                     {pool?.token1?.symbol}
                   </Typography>
@@ -157,16 +123,11 @@ const AddTransactionReviewModal: FC = () => {
               </Typography>
               <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                 {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}% →{' '}
-                {poolTokenPercentage?.toSignificant(6) || '0.000'}%
+                {poolShare?.toSignificant(6) || '0.000'}%
               </Typography>
             </div>
           </div>
-          <Button
-            disabled={attemptingTxn}
-            color="gradient"
-            size="lg"
-            onClick={liquidityMode === LiquidityMode.STANDARD ? standardModeExecute : zapModeExecute}
-          >
+          <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={execute}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`Confirm Deposit`)}
             </Typography>
@@ -180,4 +141,4 @@ const AddTransactionReviewModal: FC = () => {
   )
 }
 
-export default AddTransactionReviewModal
+export default TransactionReviewStandardModal

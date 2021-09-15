@@ -1,11 +1,12 @@
 import { Currency, CurrencyAmount, FACTORY_ADDRESS, Fee, computeConstantProductPoolAddress } from '@sushiswap/sdk'
-import { address as CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS } from '@sushiswap/trident/deployments/kovan/ConstantProductPoolFactory.json'
+import TRIDENT from '@sushiswap/trident/exports/all.json'
 
 import { ConstantProductPool } from '@sushiswap/sdk'
 import { Interface } from '@ethersproject/abi'
 import abi from '../constants/abis/constant-product-pool.json'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
+import { useActiveWeb3React } from './index'
 
 const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(abi)
 
@@ -19,43 +20,47 @@ export enum ConstantProductPoolState {
 export function useTridentClassicPools(
   pools: [Currency | undefined, Currency | undefined, Fee | undefined, boolean | undefined][]
 ): [ConstantProductPoolState, ConstantProductPool | null][] {
-  const poolAddresses = useMemo(
-    () =>
-      pools.map(([currencyA, currencyB, fee, twap]) => {
-        const [tokenA, tokenB] = currencyA?.wrapped.sortsBefore(currencyB?.wrapped)
-          ? [currencyA?.wrapped, currencyB?.wrapped]
-          : [currencyB?.wrapped, currencyA?.wrapped]
+  const { chainId } = useActiveWeb3React()
+  const poolAddresses = useMemo(() => {
+    if (!chainId) return []
 
-        console.log(
-          computeConstantProductPoolAddress({
-            factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
-            tokenA,
-            tokenB,
-            fee,
-            twap,
-          })
-        )
+    return pools.map(([currencyA, currencyB, fee, twap]) => {
+      if (!currencyA || !currencyB || currencyA === currencyB) return undefined
 
-        return tokenA &&
-          tokenB &&
-          tokenA.chainId === tokenB.chainId &&
-          !tokenA.equals(tokenB) &&
-          fee &&
-          twap &&
-          FACTORY_ADDRESS[tokenA.chainId]
-          ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
-          : // // : // TODO ramin: hardcoded
-            // computeConstantProductPoolAddress({
-            //   factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
-            //   tokenA,
-            //   tokenB,
-            //   fee,
-            //   twap,
-            // })
-            undefined
-      }),
-    [pools]
-  )
+      const [tokenA, tokenB] = currencyA?.wrapped.sortsBefore(currencyB?.wrapped)
+        ? [currencyA?.wrapped, currencyB?.wrapped]
+        : [currencyB?.wrapped, currencyA?.wrapped]
+
+      // console.log(
+      //   computeConstantProductPoolAddress({
+      //     // TODO Ramin:
+      //     factoryAddress: TRIDENT[`${chainId}`]['kovan'].contracts.ConstantProductPoolFactory.address,
+      //     tokenA,
+      //     tokenB,
+      //     fee,
+      //     twap,
+      //   })
+      // )
+
+      return tokenA &&
+        tokenB &&
+        tokenA.chainId === tokenB.chainId &&
+        !tokenA.equals(tokenB) &&
+        fee &&
+        twap &&
+        FACTORY_ADDRESS[tokenA.chainId]
+        ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
+        : // // : // TODO ramin: hardcoded
+          // computeConstantProductPoolAddress({
+          //   factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
+          //   tokenA,
+          //   tokenB,
+          //   fee,
+          //   twap,
+          // })
+          undefined
+    })
+  }, [chainId, pools])
 
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {

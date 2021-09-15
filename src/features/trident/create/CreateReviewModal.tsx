@@ -6,28 +6,28 @@ import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import {
-  parsedInputAmountsSelector,
-  priceSelector,
-  selectedPoolCurrenciesAtom,
-  selectedPoolTypeAtom,
-  useCreateExecute,
-} from './atoms'
 import { showReviewAtom, spendFromWalletAtom } from '../context/atoms'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 import { PoolType } from '@sushiswap/sdk'
+import { useIndependentAssetInputs } from '../context/hooks/useIndependentAssetInputs'
+import { usePoolDetails } from '../context/hooks/usePoolDetails'
+import { usePoolCreateExecute } from '../context/hooks/usePoolCreateExecute'
+import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
-  const selectedPoolCurrencies = useRecoilValue(selectedPoolCurrenciesAtom)
-  const selectedPoolType = useRecoilValue(selectedPoolTypeAtom)
-  const parsedInputAmounts = useRecoilValue(parsedInputAmountsSelector)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const price = useRecoilValue(priceSelector)
-
-  const { classicExecute, hybridExecute, concentratedExecute, weightedExecute } = useCreateExecute()
+  const {
+    parsedAmounts,
+    currencies: [selectedPoolCurrencies],
+  } = useIndependentAssetInputs()
+  const { price } = usePoolDetails(parsedAmounts)
+  const { classicExecute, weightedExecute, concentratedExecute, hybridExecute } = usePoolCreateExecute()
+  const {
+    poolType: [selectedPoolType],
+  } = useSetupPoolProperties()
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -84,7 +84,7 @@ const AddTransactionReviewModal: FC = () => {
               {i18n._(t`You are depositing:`)}
             </Typography>
             <ListPanel
-              items={parsedInputAmounts.map((amount, index) => (
+              items={parsedAmounts.map((amount, index) => (
                 <ListPanel.CurrencyAmountItem amount={amount} key={index} />
               ))}
             />

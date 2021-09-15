@@ -109,7 +109,7 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
           dismissable={false}
           title={i18n._(t`Insufficient ${props.currency.symbol} balance`)}
           message={i18n._(
-            t`You do not have enough DAI to match the amount of WETH you have entered.  Please enter equal value amounts to continue with your deposit.`
+            t`You do not have enough ${props.currency.symbol}. Please enter a value lower of equal than your balance to continue with your deposit.`
           )}
         />
       )}
