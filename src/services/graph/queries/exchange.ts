@@ -144,14 +144,8 @@ export const pairCountQuery = gql`
 `
 
 export const pairDayDatasQuery = gql`
-  query pairDayDatasQuery($first: Int = 1000, $skip: Int, $date: Int = 0, $pairs: [Bytes]!) {
-    pairDayDatas(
-      first: $first
-      skip: $skip
-      orderBy: date
-      orderDirection: desc
-      where: { pair_in: $pairs, date_gt: $date }
-    ) {
+  query pairDayDatasQuery($first: Int = 1000, $skip: Int, $block: Block_height, $where: PairDayData_filter) {
+    pairDayDatas(first: $first, skip: $skip, orderBy: date, orderDirection: desc, where: $where, block: $block) {
       date
       pair {
         id
