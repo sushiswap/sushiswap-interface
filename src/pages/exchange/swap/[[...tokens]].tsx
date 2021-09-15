@@ -716,7 +716,7 @@ export default function Swap() {
             href="https://miso.sushi.com"
             className="hidden w-full py-6 mt-2 rounded cursor-pointer sm:block"
             style={{
-              backgroundImage: `url('/images/miso/banner.jpg')`,
+              backgroundImage: `url('/images/miso/banner-jaypegs2.jpg')`,
               backgroundPosition: 'center',
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
@@ -724,11 +724,13 @@ export default function Swap() {
           >
             <div className="flex items-center justify-between gap-6 pl-5 pr-8">
               <span className="font-normal text-high-emphesis" style={{ lineHeight: 1.3, maxWidth: 250 }}>
-                You need a &apos;Dona - <span className="font-bold">End of Summer Sellathon</span>
+                You need a &apos;Dona! Learn More
+                <br />
+                <span className="font-bold">End of Summer NFT Fair Launch</span>
               </span>
-              <div style={{ maxWidth: 195 }}>
+              {/* <div style={{ maxWidth: 195 }}>
                 <img src="/images/miso/logo.png" style={{ maxWidth: '100%' }} alt="" />
-              </div>
+              </div> */}
             </div>
           </a>
         )}
