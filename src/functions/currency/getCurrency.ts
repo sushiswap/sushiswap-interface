@@ -46,6 +46,8 @@ export const USD_CURRENCY: { [chainId in ChainId]?: Currency } = {
   [ChainId.MATIC_TESTNET]: { address: '', decimals: 6 },
   [ChainId.XDAI]: { address: '0xDDAfbb505ad214D7b80b1f830fcCc89B60fb7A83', decimals: 6 },
   [ChainId.ARBITRUM]: { address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', decimals: 6 },
+  // TODO: Update below with new stable once liquidty is sufficient
+  [ChainId.AVALANCHE]: { address: '0xde3A24028580884448a5397872046a019649b084', decimals: 6 },
 }
 
 export function getCurrency(chainId: ChainId): Currency {
