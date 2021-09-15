@@ -50,13 +50,13 @@ function BaseModal({
         {children}
 
         <Button color="gradient" size="default" className="mt-8" onClick={onAction}>
-          {i18n._(t`${actionTitle}`)}
+          {i18n._(`${actionTitle}`)}
         </Button>
         {/* <button
           onClick={onDismiss}
           className="flex items-center justify-center w-full h-12 text-lg font-medium rounded bg-pink hover:bg-opacity-90 text-high-emphesis"
         >
-          {i18n._(t`${actionTitle}`)}
+          {i18n._(`${actionTitle}`)}
         </button> */}
         <Typography variant="sm" className="mt-3 text-center">
           {actionDescription}

@@ -31,7 +31,7 @@ function TokenInfo({ label, value }) {
   const { i18n } = useLingui()
   return (
     <div className="mr-12">
-      <Typography>{i18n._(t`${label}`)}</Typography>
+      <Typography>{i18n._(`${label}`)}</Typography>
       <Typography className="mt-2 py-2 px-5 rounded bg-dark-800">{value}</Typography>
     </div>
   )

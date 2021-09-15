@@ -44,7 +44,7 @@ export default function DutchAuctionSettings({
           </Typography>
           <Typography className="mt-2 inline-block text-primary text-sm rounded bg-blue bg-opacity-50 px-3 py-0.5">
             {startingPrice && paymentCurrency && tokenAmount
-              ? i18n._(t`${tokenAmount * parseFloat(startingPrice)} ${paymentCurrency}`)
+              ? i18n._(`${tokenAmount * parseFloat(startingPrice)} ${paymentCurrency}`)
               : '0.00 ETH'}
           </Typography>
         </div>
@@ -68,7 +68,7 @@ export default function DutchAuctionSettings({
           </Typography>
           <Typography className="mt-2 inline-block text-primary text-sm rounded bg-blue bg-opacity-50 px-3 py-0.5">
             {endingPrice && paymentCurrency && tokenAmount
-              ? i18n._(t`${tokenAmount * parseFloat(endingPrice)} ${paymentCurrency}`)
+              ? i18n._(`${tokenAmount * parseFloat(endingPrice)} ${paymentCurrency}`)
               : '0.00 ETH'}
           </Typography>
         </div>

@@ -63,10 +63,10 @@ export const Input = React.memo(
 
     return (
       <div className="mb-5">
-        <div className="text-primary text-xl">{i18n._(t`${label}`)}</div>
+        <div className="text-primary text-xl">{i18n._(`${label}`)}</div>
         <div className="mt-3 w-full flex flex-row">
           <div className="flex-1">
-            {description && <Typography className="mb-2 text-secondary">{i18n._(t`${description}`)}</Typography>}
+            {description && <Typography className="mb-2 text-secondary">{i18n._(`${description}`)}</Typography>}
 
             {type !== 'hidden' && (
               <div className="flex items-center py-2 px-3 rounded bg-dark-900 border border-dark-800 w-full relative">
@@ -77,7 +77,7 @@ export const Input = React.memo(
                       error ? 'text-red' : value ? 'text-primary' : '',
                       'bg-transparent placeholder-low-emphesis flex-1'
                     )}
-                    placeholder={i18n._(t`${placeholder}`)}
+                    placeholder={i18n._(`${placeholder}`)}
                     value={value}
                     onChange={(e) => enforcer(e.target.value)}
                     color={error ? 'red' : ''}
@@ -93,7 +93,7 @@ export const Input = React.memo(
                         value ? 'text-primary' : null,
                         'bg-transparent outline-none h-24 placeholder-low-emphesis resize-none overflow-hidden w-full'
                       )}
-                      placeholder={i18n._(t`${placeholder}`)}
+                      placeholder={i18n._(`${placeholder}`)}
                       value={value}
                       onChange={(e) => enforcer(e.target.value)}
                       onBlur={() => showAlert(false)}
@@ -118,7 +118,7 @@ export const Input = React.memo(
             {alert && alertVisible && (
               <div className="flex flex-row items-center bg-purple bg-opacity-20 bg- mt-2 p-3 rounded">
                 <ExclamationCircleIcon className="w-5 h-5 mr-2 text-purple" aria-hidden="true" />
-                <Typography>{i18n._(t`${alert}`)}</Typography>
+                <Typography>{i18n._(`${alert}`)}</Typography>
               </div>
             )}
           </div>
@@ -137,7 +137,7 @@ export const Input = React.memo(
                       <Lottie animationData={loadingCircle} autoplay loop size={8} />
                     </div>
                   )}
-                  {i18n._(t`${actionTitle}`)}
+                  {i18n._(`${actionTitle}`)}
                 </Typography>
               )}
             </div>

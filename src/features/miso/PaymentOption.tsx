@@ -22,11 +22,11 @@ export default function PaymentOption({ className, title, description, selected,
         {selected && <div className="bg-gradient-to-r from-blue to-pink rounded-full w-[12px] h-[12px] m-[1px]" />}
       </div>
       <Typography variant="lg" className={classNames(selected ? 'text-primary' : 'text-secondary')}>
-        {i18n._(t`${title}`)}
+        {i18n._(`${title}`)}
       </Typography>
       <div className="flex-1"></div>
       <Typography variant="lg" className="text-secondary">
-        {i18n._(t`${description}`)}
+        {i18n._(`${description}`)}
       </Typography>
     </div>
   )

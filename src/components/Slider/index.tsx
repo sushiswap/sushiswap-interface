@@ -20,7 +20,7 @@ function Slider({ className, currentValue, minValue, maxValue, onChange }: any) 
     <div className={classNames(className, '')}>
       <div className="flex justify-between">
         <Typography className={classNames(percentage == 0 ? 'text-secondary' : 'text-primary')}>
-          {i18n._(t`${percentage}%`)}
+          {i18n._(`${percentage}%`)}
         </Typography>
         <Typography className="text-secondary">{i18n._(t`100%`)}</Typography>
       </div>

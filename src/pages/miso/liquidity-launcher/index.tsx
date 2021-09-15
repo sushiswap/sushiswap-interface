@@ -181,13 +181,13 @@ function LiquidityLauncher({ pageIndex, movePage }) {
                 <div>
                   <Typography className="text-secondary">{i18n._(t`Your Token Balance`)}</Typography>
                   <Typography className="text-primary">
-                    {i18n._(t`${numberWithCommas(token.balance)} ${token.symbol}`)}
+                    {i18n._(`${numberWithCommas(token.balance)} ${token.symbol}`)}
                   </Typography>
                 </div>
                 <div>
                   <Typography className="text-secondary">{i18n._(t`Your Token Allowance`)}</Typography>
                   <Typography className="text-primary">
-                    {i18n._(t`${numberWithCommas(token.allowance)} ${token.symbol}`)}
+                    {i18n._(`${numberWithCommas(token.allowance)} ${token.symbol}`)}
                   </Typography>
                 </div>
               </div>
@@ -274,18 +274,18 @@ function LiquidityLauncher({ pageIndex, movePage }) {
             >
               <div className="flex">
                 <Typography className="flex-1 text-secondary">{i18n._(t`Deployment TX ID`)}</Typography>
-                <Typography className="text-blue">{i18n._(t`${shortenAddress(deploymentTx)}`)}</Typography>
+                <Typography className="text-blue">{i18n._(`${shortenAddress(deploymentTx)}`)}</Typography>
                 <DuplicateIcon className="cursor-pointer w-[20px] h-[20px]" onClick={() => setCopied(deploymentTx)} />
               </div>
               <div className="flex">
                 <Typography className="flex-1 text-secondary">{i18n._(t`Auction Address`)}</Typography>
-                <Typography className="text-blue">{i18n._(t`${shortenAddress(auctionAddress)}`)}</Typography>
+                <Typography className="text-blue">{i18n._(`${shortenAddress(auctionAddress)}`)}</Typography>
                 <DuplicateIcon className="cursor-pointer w-[20px] h-[20px]" onClick={() => setCopied(auctionAddress)} />
               </div>
               <div className="flex">
                 <Typography className="flex-1 text-secondary">{i18n._(t`Liquidity Launcher Address`)}</Typography>
                 {liquidityLauncherAddress ? (
-                  <Typography className="text-blue">{i18n._(t`${liquidityLauncherAddress}`)}</Typography>
+                  <Typography className="text-blue">{i18n._(`${liquidityLauncherAddress}`)}</Typography>
                 ) : (
                   <Typography className="text-high-emphesis mr-[20px]">{i18n._(t`Pending`)}</Typography>
                 )}

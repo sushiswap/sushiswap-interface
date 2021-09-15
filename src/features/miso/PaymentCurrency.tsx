@@ -24,7 +24,7 @@ export default function ({ className, label, paymentCurrency, onChange }: any) {
       }}
       ref={node}
     >
-      <Typography className="text-primary text-xl">{i18n._(t`${label}`)}</Typography>
+      <Typography className="text-primary text-xl">{i18n._(`${label}`)}</Typography>
       <div className="flex items-center">
         <div className="flex-1 grid grid-cols-12 gap-3 my-3 pr-3">
           <PaymentOption

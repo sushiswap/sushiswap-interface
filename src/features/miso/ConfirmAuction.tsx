@@ -19,20 +19,20 @@ function PriceRow({ title1, title2, price1, price2, currency }) {
     <div className="grid grid-cols-2 gap-8 text-primary mb-2">
       <div>
         <Typography variant="sm" className="text-primary mb-1">
-          {i18n._(t`${title1}`)}
+          {i18n._(`${title1}`)}
         </Typography>
-        <Typography className="rounded bg-dark-900 px-4 py-0.5">{i18n._(t`${price1} ${currency}`)}</Typography>
+        <Typography className="rounded bg-dark-900 px-4 py-0.5">{i18n._(`${price1} ${currency}`)}</Typography>
       </div>
       <div className="flex items-start">
         <div className="flex flex-col items-center">
           <div className="flex space-x-1 mb-1">
             <ArrowSmRightIcon className="text-secondary w-[20px] h-[20px] transform rotate-45" />
             <Typography variant="sm" className="text-primary">
-              {i18n._(t`${title2}`)}
+              {i18n._(`${title2}`)}
             </Typography>
           </div>
           <Typography variant="sm" className="rounded bg-blue bg-opacity-50 px-2">
-            {i18n._(t`${price2} ${currency}`)}
+            {i18n._(`${price2} ${currency}`)}
           </Typography>
         </div>
       </div>

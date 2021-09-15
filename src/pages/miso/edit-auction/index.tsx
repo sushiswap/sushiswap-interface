@@ -234,7 +234,7 @@ function EditAuction({ pageIndex, movePage }) {
                 actionVisible={true}
                 hint={
                   <div className="text-secondary flex space-x-5">
-                    <b>{i18n._(t`Status`)}</b>: {i18n._(t`${permissionListStatus}`)}
+                    <b>{i18n._(t`Status`)}</b>: {i18n._(`${permissionListStatus}`)}
                     <div
                       className="text-blue underline ml-2 cursor-pointer text-sm"
                       onClick={() => enablePermissionList()}
@@ -325,11 +325,11 @@ function EditAuction({ pageIndex, movePage }) {
               <div className="flex items-center">
                 <div className="flex-1 flex space-x-5">
                   <Typography className="inline-block text-primary text-sm rounded bg-blue bg-opacity-50 px-3 py-0.5">
-                    {i18n._(t`${numberWithCommas(ethAmount)} ${ethCurrency}`)}
+                    {i18n._(`${numberWithCommas(ethAmount)} ${ethCurrency}`)}
                   </Typography>
                   <Typography className="">{i18n._(t`+`)}</Typography>
                   <Typography className="inline-block text-primary text-sm rounded bg-blue bg-opacity-50 px-3 py-0.5">
-                    {i18n._(t`${numberWithCommas(tokenAmount)} ${tokenCurrency}`)}
+                    {i18n._(`${numberWithCommas(tokenAmount)} ${tokenCurrency}`)}
                   </Typography>
                 </div>
                 <div className="w-[200px]">

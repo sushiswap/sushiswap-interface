@@ -29,7 +29,7 @@ export const Radio = React.memo(
           {selected && <div className="bg-gradient-to-r from-blue to-pink rounded-full w-[12px] h-[12px] m-[1px]" />}
         </div>
         <Typography variant="lg" className="text-white">
-          {i18n._(t`${label}`)}
+          {i18n._(`${label}`)}
         </Typography>
       </div>
     )

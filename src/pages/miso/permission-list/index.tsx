@@ -174,11 +174,11 @@ function PermissionList({ pageIndex, movePage }) {
                 {addressPack.map((pack, index) => [
                   <div key={'col_1_' + index} className="flex items-center">
                     <Typography className="text-primary rounded bg-blue px-4 py-0.5">
-                      {i18n._(t`${pack.from} - ${pack.to}`)}
+                      {i18n._(`${pack.from} - ${pack.to}`)}
                     </Typography>
                   </div>,
                   <div key={'col_2_' + index} className="flex items-center">
-                    <Typography className="text-primary">{i18n._(t`${pack.status}`)}</Typography>
+                    <Typography className="text-primary">{i18n._(`${pack.status}`)}</Typography>
                   </div>,
                   <div key={'col_3_' + index} className="flex justify-end">
                     {pack.status == 'Not Added' ? (
@@ -228,7 +228,7 @@ function PermissionList({ pageIndex, movePage }) {
             >
               <div className="flex">
                 <Typography className="flex-1 text-secondary">{i18n._(t`Permission List Contract Address`)}</Typography>
-                <Typography className="text-blue">{i18n._(t`${shortenAddress(permissionListAddress)}`)}</Typography>
+                <Typography className="text-blue">{i18n._(`${shortenAddress(permissionListAddress)}`)}</Typography>
                 <DuplicateIcon
                   className="cursor-pointer w-[20px] h-[20px]"
                   onClick={() => setCopied(permissionListAddress)}
