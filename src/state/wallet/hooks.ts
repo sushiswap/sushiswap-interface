@@ -98,7 +98,9 @@ export function useTokenBalances(
   address?: string,
   tokens?: (Token | undefined)[]
 ): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
-  return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
+  const balances = useTokenBalancesWithLoadingIndicator(address, tokens)[0]
+  const memoizedBalances = useMemo(() => JSON.stringify(balances), [balances])
+  return useMemo(() => balances, [memoizedBalances])
 }
 
 // get the balance for a single token/account combo
