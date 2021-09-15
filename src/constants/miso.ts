@@ -1,7 +1,7 @@
 import { ChainId } from '@sushiswap/sdk'
 
 export const MISO_HELPER_ADDRESS: {
-  [chainId in ChainId]: string
+  [chainId in ChainId]?: string
 } = {
   [ChainId.MAINNET]: '0xAea50fa0a2aB411807131ADC10016FE0FfB506b4',
   [ChainId.ROPSTEN]: '0xAea50fa0a2aB411807131ADC10016FE0FfB506b4',
@@ -37,7 +37,7 @@ export const BAD_AUCTIONS: string[] = [
 ]
 
 export const TOKEN_FACTORY_ADDRESS: {
-  [chainId in ChainId]: string
+  [chainId in ChainId]?: string
 } = {
   [ChainId.MAINNET]: '0x1eC9e6f1aDF139A41B94d2590078103f7b8a09DD',
   [ChainId.ROPSTEN]: '0x1eC9e6f1aDF139A41B94d2590078103f7b8a09DD',
@@ -68,7 +68,7 @@ export const TOKEN_FACTORY_ADDRESS: {
 }
 
 export const MISO_MARKET_ADDRESS: {
-  [chainId in ChainId]: string
+  [chainId in ChainId]?: string
 } = {
   [ChainId.MAINNET]: '0x9d6c60d26B8f776B85d5731AD56b88973C3D370b',
   [ChainId.ROPSTEN]: '0x9d6c60d26B8f776B85d5731AD56b88973C3D370b',
@@ -99,7 +99,7 @@ export const MISO_MARKET_ADDRESS: {
 }
 
 export const DAI_ADDRESS: {
-  [chainId in ChainId]: string
+  [chainId in ChainId]?: string
 } = {
   [ChainId.MAINNET]: '0x6b175474e89094c44da98b954eedeac495271d0f',
   [ChainId.ROPSTEN]: '',
@@ -130,7 +130,7 @@ export const DAI_ADDRESS: {
 }
 
 export const TETHER_ADDRESS: {
-  [chainId in ChainId]: string
+  [chainId in ChainId]?: string
 } = {
   [ChainId.MAINNET]: '0xdac17f958d2ee523a2206206994597c13d831ec7',
   [ChainId.ROPSTEN]: '',
@@ -161,7 +161,7 @@ export const TETHER_ADDRESS: {
 }
 
 export const USDC_ADDRESS: {
-  [chainId in ChainId]: string
+  [chainId in ChainId]?: string
 } = {
   [ChainId.MAINNET]: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
   [ChainId.ROPSTEN]: '',
@@ -192,7 +192,7 @@ export const USDC_ADDRESS: {
 }
 
 export const SUSHI_ADDRESS: {
-  [chainId in ChainId]: string
+  [chainId in ChainId]?: string
 } = {
   [ChainId.MAINNET]: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
   [ChainId.ROPSTEN]: '',
