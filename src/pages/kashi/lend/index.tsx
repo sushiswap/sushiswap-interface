@@ -20,7 +20,7 @@ function Lend() {
   const { i18n } = useLingui()
   const fullPairs = useKashiPairs()
   const positions = useSearchAndSort(
-    fullPairs.filter((pair: any) => pair.userAssetFraction.gt(0)),
+    fullPairs.filter((pair) => pair.userAssetFraction.gt(0)),
     { keys: ['search'], threshold: 0.1 },
     { key: 'currentUserAssetAmount.usdValue', direction: 'descending' }
   )

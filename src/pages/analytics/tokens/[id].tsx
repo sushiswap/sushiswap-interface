@@ -15,11 +15,13 @@ import Background from '../../../features/analytics/Background'
 import Link from 'next/link'
 import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
-import { useTokenContract } from '../../../hooks'
+import { useActiveWeb3React, useTokenContract } from '../../../hooks'
 
 export default function Token() {
   const router = useRouter()
   const id = (router.query.id as string).toLowerCase()
+
+  const { chainId } = useActiveWeb3React()
 
   const [isCopied, setCopied] = useCopyClipboard()
 
@@ -33,22 +35,22 @@ export default function Token() {
     fetch()
   }, [tokenContract])
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block2d = useBlock({ daysAgo: 2 })
-  const block1w = useBlock({ daysAgo: 7 })
+  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block2d = useBlock({ daysAgo: 2, chainId })
+  const block1w = useBlock({ daysAgo: 7, chainId })
 
   // General data (volume, liquidity)
-  const nativePrice = useNativePrice()
-  const nativePrice1d = useNativePrice({ block: block1d })
+  const nativePrice = useNativePrice({ chainId })
+  const nativePrice1d = useNativePrice({ block: block1d, chainId })
 
-  const token = useTokens({ subset: [id] })?.[0]
-  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d })?.[0]
-  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d })?.[0]
+  const token = useTokens({ subset: [id], chainId })?.[0]
+  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d, chainId })?.[0]
+  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d, chainId })?.[0]
 
   // Token Pairs
-  const tokenPairs = useTokenPairs({ token: id })
-  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d })
-  const tokenPairs1w = useTokenPairs({ token: id, block: block1w, shouldFetch: !!block1w })
+  const tokenPairs = useTokenPairs({ token: id, chainId })
+  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d, chainId })
+  const tokenPairs1w = useTokenPairs({ token: id, block: block1w, shouldFetch: !!block1w, chainId })
   const tokenPairsFormatted = useMemo(
     () =>
       tokenPairs?.map((pair) => {
@@ -70,7 +72,11 @@ export default function Token() {
   )
 
   // For Transactions
-  const transactions = useTransactions({ pairs: tokenPairs?.map((pair) => pair.id), shouldFetch: !!tokenPairs })
+  const transactions = useTransactions({
+    pairs: tokenPairs?.map((pair) => pair.id),
+    shouldFetch: !!tokenPairs,
+    chainId,
+  })
   const transactionsFormatted = useMemo(
     () =>
       transactions?.map((tx) => {
