@@ -25,7 +25,7 @@ import { aprToApy } from '../functions/convert/apyApr'
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()
 
-  const positions = usePositions()
+  const positions = usePositions(chainId)
 
   const block1w = useBlock({ daysAgo: 7, chainId })
 
