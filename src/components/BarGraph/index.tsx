@@ -7,8 +7,8 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 const verticalMargin = 40
 
 // accessors
-const getTime = (d) => d.time
-const getPrice = (d) => Number(d.price)
+const getX = (d) => d.x
+const getY = (d) => Number(d.y)
 
 type Props = {
   data: any
@@ -30,7 +30,7 @@ function Graph({ data, width, height, setSelectedDatum, events = false, ...rest 
       scaleBand<string>({
         range: [0, xMax],
         round: true,
-        domain: data.map(getTime),
+        domain: data.map(getX),
         padding: 0.1,
       }),
     [xMax, data]
@@ -43,7 +43,7 @@ function Graph({ data, width, height, setSelectedDatum, events = false, ...rest 
         round: true,
         // Make the chart domain as small as possible while showing all bars
         // This allows us to use less height for the graph
-        domain: [Math.min(...data.map(getPrice)) * 0.9, Math.max(...data.map(getPrice))],
+        domain: [Math.min(...data.map(getY)) * 0.9, Math.max(...data.map(getY))],
       }),
     [yMax, data]
   )
@@ -52,14 +52,14 @@ function Graph({ data, width, height, setSelectedDatum, events = false, ...rest 
     <svg width={width} height={height}>
       <Group top={verticalMargin / 2}>
         {data.map((d) => {
-          const time = getTime(d)
+          const x = getX(d)
           const barWidth = xScale.bandwidth()
-          const barHeight = yMax - (yScale(getPrice(d)) ?? 0)
-          const barX = xScale(time)
+          const barHeight = yMax - (yScale(getY(d)) ?? 0)
+          const barX = xScale(x)
           const barY = yMax - barHeight
           return (
             <Bar
-              key={`bar-${time}`}
+              key={`bar-${x}`}
               x={barX}
               y={barY}
               width={barWidth}

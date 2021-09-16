@@ -26,15 +26,13 @@ export function useTridentClassicPools(
         const tokenB = currencyB?.wrapped
 
         console.log(
-          { CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS, tokenA, tokenB, fee, twap },
           computeConstantProductPoolAddress({
             factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
             tokenA,
             tokenB,
             fee,
             twap,
-          }),
-          'testing here'
+          })
         )
 
         return tokenA &&
