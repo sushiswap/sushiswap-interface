@@ -19,7 +19,6 @@ type Props = {
 }
 
 function Graph({ data, width, height, setSelectedDatum, events = false, ...rest }: Props) {
-  console.log({ data, width, height, setSelectedDatum, events, rest })
   // bounds
   const xMax = width
   const yMax = height - verticalMargin

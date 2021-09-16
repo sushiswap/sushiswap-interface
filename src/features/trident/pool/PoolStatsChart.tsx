@@ -11,7 +11,10 @@ const PoolStatsChart = () => {
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState('Volume')
   const [chartRange, setChartRange] = useState('ALL')
-  const graphData = chartType === 'Volume' ? volumeData : tvlData
+  const graphData =
+    chartType === 'Volume'
+      ? volumeData.map((e) => ({ x: e.time, y: e.price }))
+      : tvlData.map((e) => ({ x: e.time, y: e.price }))
   const [selectedDatum, setSelectedDatum] = useState(graphData[graphData.length - 1])
 
   return (
@@ -24,10 +27,10 @@ const PoolStatsChart = () => {
       </div>
       <div className="w-full h-40 px-5 mt-5 mb-5">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          ${selectedDatum.price}
+          ${selectedDatum.y}
         </Typography>
         <Typography variant="sm" className="text-gray-500 text-high-emphesis" weight={700}>
-          {selectedDatum.time}
+          {selectedDatum.x}
         </Typography>
         {/* @ts-ignore */}
         <BarGraph data={graphData} setSelectedDatum={setSelectedDatum} />
