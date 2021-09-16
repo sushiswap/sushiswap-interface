@@ -11,9 +11,9 @@ const ClassicMarket: FC = () => {
   const [, pool] = useRecoilValue(poolAtom)
 
   return (
-    <div className="flex flex-col px-5 gap-5 mt-12">
+    <div className="flex flex-col gap-5 px-5 mt-12">
       <Typography variant="h3" className="text-high-emphesis" weight={700}>
-        {i18n._(t`Market`)}
+        {i18n._(t`Market Information`)}
       </Typography>
       <ListPanel
         header={<ListPanel.Header title={i18n._(t`Assets`)} value="$356,227,073.45" subValue="1,837,294.56 SLP" />}
