@@ -57,9 +57,7 @@ const Pool = () => {
   return (
     <div className="flex flex-col w-full mt-px mb-5">
       <Header />
-      {/* <MyDeposits /> */}
       <ClassicMarket />
-      <Rewards />
       <PoolStatsChart />
       <PoolStats />
     </div>
