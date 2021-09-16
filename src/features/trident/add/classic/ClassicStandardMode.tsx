@@ -1,12 +1,14 @@
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
+import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import React, { useMemo } from 'react'
-import { currenciesAtom, noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { attemptingTxnAtom, noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import {
   formattedAmountsSelector,
   mainInputAtom,
   parsedAmountsSelector,
   poolAtom,
-  secondaryInputAtom,
+  secondaryInputSelector,
+  TypedField,
+  typedFieldAtom,
 } from './context/atoms'
 import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
@@ -24,22 +26,24 @@ import Button from '../../../../components/Button'
 import Typography from '../../../../components/Typography'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
+import Dots from '../../../../components/Dots'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const [poolState] = useRecoilValue(poolAtom)
+  const [poolState, pool] = useRecoilValue(poolAtom)
   const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
-  const formattedAmounts = useRecoilValue(formattedAmountsSelector)
+  const bentoBox = useBentoBoxContract()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const currencies = useRecoilValue(currenciesAtom)
-  const [mainInput, setMainInput] = useRecoilState(mainInputAtom)
-  const [secondaryInput, setSecondaryInput] = useRecoilState(secondaryInputAtom)
-
+  const setMainInput = useSetRecoilState(mainInputAtom)
+  const setSecondaryInput = useSetRecoilState(secondaryInputSelector)
+  const formattedAmounts = useRecoilValue(formattedAmountsSelector)
+  const setTypedField = useSetRecoilState(typedFieldAtom)
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
-  const balances = useCurrencyBalances(account ?? undefined, currencies)
+  const balances = useCurrencyBalances(account ?? undefined, [pool?.token0, pool?.token1])
   const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const usdcA = useUSDCValue(balances?.[0])
   const usdcB = useUSDCValue(balances?.[1])
@@ -52,10 +56,10 @@ const ClassicStandardMode = () => {
         if (!noLiquidity) {
           usdcA?.lessThan(usdcB)
             ? set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-            : set(secondaryInputAtom, maxAmountSpend(balances[1])?.toExact())
+            : set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
         } else {
           set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-          set(secondaryInputAtom, maxAmountSpend(balances[1])?.toExact())
+          set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
         }
       },
     [balances, noLiquidity, usdcA, usdcB]
@@ -73,6 +77,7 @@ const ClassicStandardMode = () => {
     }
   }, [balances, noLiquidity, parsedAmountA, parsedAmountB, usdcA, usdcB])
 
+  // TODO ramin: balance check for bento
   let error = !account
     ? i18n._(t`Connect Wallet`)
     : poolState === ConstantProductPoolState.INVALID
@@ -80,9 +85,9 @@ const ClassicStandardMode = () => {
     : !parsedAmountA?.greaterThan(ZERO) || !parsedAmountB?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : parsedAmountA && balances[0]?.lessThan(parsedAmountA)
-    ? i18n._(t`Insufficient ${currencies[0]?.symbol} balance`)
+    ? i18n._(t`Insufficient ${pool?.token0?.symbol} balance`)
     : parsedAmountB && balances?.length && balances[1]?.lessThan(parsedAmountB)
-    ? i18n._(t`Insufficient ${currencies[1]?.symbol} balance`)
+    ? i18n._(t`Insufficient ${pool?.token1?.symbol} balance`)
     : ''
 
   return (
@@ -90,9 +95,12 @@ const ClassicStandardMode = () => {
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-4 px-5">
           <AssetInput
-            value={parsedAmountA?.greaterThan(0) ? formattedAmounts[0] : mainInput}
-            currency={currencies[0]}
-            onChange={setMainInput}
+            value={formattedAmounts[0]}
+            currency={pool?.token0}
+            onChange={(val) => {
+              setTypedField(TypedField.A)
+              setMainInput(val)
+            }}
             headerRight={
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWallet(!spendFromWallet)}
@@ -102,16 +110,27 @@ const ClassicStandardMode = () => {
             spendFromWallet={spendFromWallet}
           />
           <AssetInput
-            value={parsedAmountB?.greaterThan(0) ? formattedAmounts[1] : secondaryInput}
-            currency={currencies[1]}
-            onChange={setSecondaryInput}
+            value={formattedAmounts[1]}
+            currency={pool?.token1}
+            onChange={(val) => {
+              setTypedField(TypedField.B)
+              setSecondaryInput(val)
+            }}
             spendFromWallet={spendFromWallet}
           />
           <div className="flex flex-col gap-3">
-            <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]}>
+            <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
               {({ approved, loading }) => {
-                const disabled = !!error || !approved || loading
-                const buttonText = loading ? '' : error ? error : i18n._(t`Confirm Deposit`)
+                const disabled = !!error || !approved || loading || attemptingTxn
+                const buttonText = attemptingTxn ? (
+                  <Dots>{i18n._(t`Depositing`)}</Dots>
+                ) : loading ? (
+                  ''
+                ) : error ? (
+                  error
+                ) : (
+                  i18n._(t`Confirm Deposit`)
+                )
 
                 return (
                   <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>

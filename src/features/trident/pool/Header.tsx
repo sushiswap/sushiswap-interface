@@ -11,8 +11,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 import { poolAtom } from './classic/context/atoms'
-import { ConstantProductPool } from '../../../../../sushiswap-sdk'
-import { PoolType } from '../types'
+import { ConstantProductPool, PoolType } from '@sushiswap/sdk'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
@@ -31,7 +30,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   // TODO ramin: remove this make dynamic
   const apy = 3.6
   const isFarm = true
-  const type = PoolType.CLASSIC
+  const type = PoolType.ConstantProduct
   const fees = '3343.34'
 
   return (
@@ -104,12 +103,14 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
       </div>
       <div className="grid grid-cols-2 gap-2 px-5 pt-6">
         <Button variant="outlined" color="gradient" className="text-high-emphesis">
-          <Link href={`/trident/add/${pool?.token0.address}/${pool?.token1.address}`}>
+          {/*TODO ramin: classic hardcoded here*/}
+          <Link href={`/trident/add/classic/${pool?.token0.address}/${pool?.token1.address}`}>
             {isFarm ? i18n._(t`Add Liquidity / Stake`) : i18n._(t`Add Liquidity`)}
           </Link>
         </Button>
         <Button variant="outlined" color="gradient" className="text-high-emphesis">
-          <Link href={`/trident/remove/${pool?.token0.address}/${pool?.token1.address}`}>
+          {/*TODO ramin: classic hardcoded here*/}
+          <Link href={`/trident/remove/classic/${pool?.token0.address}/${pool?.token1.address}`}>
             {i18n._(t`Remove Liquidity`)}
           </Link>
         </Button>

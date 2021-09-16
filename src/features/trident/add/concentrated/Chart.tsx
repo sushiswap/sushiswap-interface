@@ -4,13 +4,12 @@ import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
 import { Disclosure } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
-import { useTridentAddConcentratedContext } from './context'
+import { useRecoilValue } from 'recoil'
+import { poolAtom } from './context/atoms'
 
 const Chart: FC = () => {
   const { i18n } = useLingui()
-  const { currencies } = useTridentAddConcentratedContext()
-
-  const [currencyA, currencyB] = Object.values(currencies)
+  const [, pool] = useRecoilValue(poolAtom)
 
   return (
     <Disclosure>
@@ -26,7 +25,7 @@ const Chart: FC = () => {
               </div>
               <div className="flex flex-row gap-2 items-center">
                 <Typography weight={700} className="text-high-emphesis">
-                  1 {currencyA?.symbol}
+                  1 {pool?.token0.symbol}
                 </Typography>
                 <svg
                   className="text-secondary"
@@ -42,7 +41,7 @@ const Chart: FC = () => {
                   />
                 </svg>
                 <Typography weight={700} className="text-high-emphesis">
-                  {currencyB?.symbol}
+                  {pool?.token1?.symbol}
                 </Typography>
               </div>
             </div>

@@ -1,5 +1,11 @@
 import React, { FC } from 'react'
-import { currentPoolShareSelector, liquidityModeAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  currentPoolShareSelector,
+  liquidityModeAtom,
+  showReviewAtom,
+  spendFromWalletAtom,
+} from '../../context/atoms'
 import { Percent } from '@sushiswap/sdk'
 import ListPanel from '../../../../components/ListPanel'
 import { priceSelector, useClassicRemoveExecute } from './context/atoms'
@@ -7,12 +13,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { LiquidityMode } from '../../types'
 import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
-import {
-  currentLiquidityValueSelector,
-  parsedInputAmountsSelector,
-  percentageAmountAtom,
-  poolAtom,
-} from './context/atoms'
+import { currentLiquidityValueSelector, parsedAmountsSelector, percentageAmountAtom, poolAtom } from './context/atoms'
 import Divider from '../../../../components/Divider'
 import { useLingui } from '@lingui/react'
 import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
@@ -27,11 +28,12 @@ const RemoveTransactionReviewModal: FC<RemoveTransactionReviewModalProps> = () =
   const percentageAmount = useRecoilValue(percentageAmountAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const parsedInputAmounts = useRecoilValue(parsedInputAmountsSelector)
+  const parsedInputAmounts = useRecoilValue(parsedAmountsSelector)
   const price = useRecoilValue(priceSelector)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
   const currentLiquidityValues = useRecoilValue(currentLiquidityValueSelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { standardModeExecute, zapModeExecute } = useClassicRemoveExecute()
 
@@ -120,7 +122,9 @@ const RemoveTransactionReviewModal: FC<RemoveTransactionReviewModalProps> = () =
                 </Typography>
                 <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                   {liquidityValue?.toSignificant(6)} →{' '}
-                  {liquidityValue?.subtract(parsedInputAmounts[index])?.toSignificant(6)}{' '}
+                  {parsedInputAmounts[index]
+                    ? liquidityValue?.subtract(parsedInputAmounts[index])?.toSignificant(6)
+                    : ''}{' '}
                   {liquidityValue?.currency?.symbol}
                 </Typography>
               </div>
@@ -136,6 +140,7 @@ const RemoveTransactionReviewModal: FC<RemoveTransactionReviewModalProps> = () =
             </div>
           </div>
           <Button
+            disabled={attemptingTxn}
             color="gradient"
             size="lg"
             onClick={liquidityMode === LiquidityMode.STANDARD ? standardModeExecute : zapModeExecute}

@@ -61,7 +61,7 @@ const Curves = ({
   compact = false,
   width,
   height,
-  margin = { top: 0, right: 0, bottom: 0, left: 0 },
+  margin = { top: 64, right: 32, bottom: 16, left: 64 },
   data,
   title = undefined,
   labels = undefined,

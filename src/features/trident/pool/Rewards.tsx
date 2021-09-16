@@ -26,7 +26,7 @@ const Rewards: FC = () => {
                 SUSHI
               </Typography>
               <Typography variant="sm" className="text-secondary" weight={700}>
-                PER DAY
+                {i18n._(t`PER DAY`)}
               </Typography>
             </div>
           }

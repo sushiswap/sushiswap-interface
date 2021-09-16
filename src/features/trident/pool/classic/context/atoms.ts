@@ -1,6 +1,6 @@
 import { atom, selector } from 'recoil'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
-import { ConstantProductPool } from '../../../../../../../sushiswap-sdk'
+import { ConstantProductPool } from '@sushiswap/sdk'
 import { poolBalanceAtom, totalSupplyAtom } from '../../../context/atoms'
 
 export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({

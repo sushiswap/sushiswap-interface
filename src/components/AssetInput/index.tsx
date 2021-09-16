@@ -33,6 +33,7 @@ interface AssetInputProps {
   headerRight?: ReactNode
   chip?: string
   disabled?: boolean
+  currencies?: Currency[]
 }
 
 // AssetInput exports its children so if you need a child component of this component,
@@ -70,6 +71,7 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
                   currency={props.currency}
                   onChange={props.onSelect}
                   onDismiss={() => setOpen(false)}
+                  currencies={props.currencies}
                 />
               </HeadlessUIModal.Controlled>
             </>
@@ -132,6 +134,7 @@ const AssetInputPanel = ({
   disabled,
   showMax = true,
   error = false,
+  currencies = [],
 }: AssetInputPanelProps) => {
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
@@ -160,7 +163,12 @@ const AssetInputPanel = ({
             )}
           >
             {({ setOpen }) => (
-              <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
+              <CurrencySelectDialog
+                currency={currency}
+                onChange={onSelect}
+                onDismiss={() => setOpen(false)}
+                currencies={currencies}
+              />
             )}
           </HeadlessUIModal>
         </>

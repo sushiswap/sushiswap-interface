@@ -3,11 +3,12 @@ import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
 import ListPanel from '../../../../components/ListPanel'
 import { useLingui } from '@lingui/react'
-import { useTridentPoolPageContext } from '../context'
+import { useRecoilValue } from 'recoil'
+import { poolAtom } from './context/atoms'
 
 const ConcentratedMarket: FC = () => {
   const { i18n } = useLingui()
-  const { pool } = useTridentPoolPageContext()
+  const [, pool] = useRecoilValue(poolAtom)
 
   return (
     <div className="flex flex-col px-5 gap-5 mt-12">

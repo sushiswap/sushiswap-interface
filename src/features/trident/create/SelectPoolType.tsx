@@ -4,12 +4,12 @@ import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import RadioGroup from '../../../components/RadioGroup'
 
-import { selectedPoolTypeAtom } from './atoms'
-import { useRecoilState } from 'recoil'
-import { PoolType } from '../types'
+import { pageAtom, selectedPoolTypeAtom } from './atoms'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
 import { classNames } from '../../../functions'
 import Button from '../../../components/Button'
+import { PoolType } from '@sushiswap/sdk'
 
 const RadioOption = ({ value, title, description }) => {
   return (
@@ -53,6 +53,7 @@ const RadioOption = ({ value, title, description }) => {
 const SelectPoolType: FC = () => {
   const { i18n } = useLingui()
   const [selectedPoolType, setSelectedPoolType] = useRecoilState(selectedPoolTypeAtom)
+  const setPage = useSetRecoilState(pageAtom)
 
   return (
     <div className="flex flex-col p-5 pt-8 gap-5">
@@ -62,26 +63,26 @@ const SelectPoolType: FC = () => {
       <div className="rounded px-5 bg-dark-900">
         <RadioGroup value={selectedPoolType} onChange={setSelectedPoolType} className="divide-y">
           <RadioOption
-            value={PoolType.CLASSIC}
+            value={PoolType.ConstantProduct}
             title={i18n._(t`Classic`)}
             description={i18n._(t`This type of pool consists of 2 tokens, 50% each.  This is currently most common.`)}
           />
           <RadioOption
-            value={PoolType.CONCENTRATED}
+            value={PoolType.ConcentratedLiquidity}
             title={i18n._(t`Concentrated Price Range`)}
             description={i18n._(
               t`This is like a traditional 50/50 pool but within specified price ranges, to maximize exposure to swap fees.`
             )}
           />
           <RadioOption
-            value={PoolType.WEIGHTED}
+            value={PoolType.Weighted}
             title={i18n._(t`Weighted`)}
             description={i18n._(
               t`This type of pool consists of 2 tokens, assigned weights for each token by the pool creator.`
             )}
           />
           <RadioOption
-            value={PoolType.HYBRID}
+            value={PoolType.Hybrid}
             title={i18n._(t`Multi-Asset`)}
             description={i18n._(
               t`This type of pool consists of up to 10 tokens, equal weight each. It is best utilized for swapping likekind assets.`
@@ -89,7 +90,7 @@ const SelectPoolType: FC = () => {
           />
         </RadioGroup>
       </div>
-      <Button color="gradient" onClick={() => {}}>
+      <Button color="gradient" onClick={() => setPage(1)}>
         {i18n._(t`Continue`)}
       </Button>
     </div>

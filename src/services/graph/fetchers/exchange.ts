@@ -11,6 +11,7 @@ import {
   tokenSubsetQuery,
   tokensQuery,
   transactionsQuery,
+  pairDayDatasQuery,
 } from '../queries'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -36,6 +37,12 @@ export const exchange = async (chainId = ChainId.MAINNET, query, variables = {})
 export const getPairs = async (chainId = ChainId.MAINNET, variables = undefined, query = pairsQuery) => {
   const { pairs } = await exchange(chainId, query, variables)
   return pairs
+}
+
+export const getPairDayData = async (chainId = ChainId.MAINNET, variables) => {
+  // console.log('getTokens')
+  const { pairDayDatas } = await exchange(chainId, pairDayDatasQuery, variables)
+  return pairDayDatas
 }
 
 export const getTokenSubset = async (chainId = ChainId.MAINNET, variables) => {

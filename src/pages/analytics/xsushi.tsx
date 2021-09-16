@@ -2,23 +2,34 @@ import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
 import { classNames, formatNumber, formatPercent } from '../../functions'
 import { useBar, useBarHistory } from '../../services/graph/hooks/bar'
-import {
-  useBlock,
-  useDayData,
-  useEthPrice,
-  useFactory,
-  useNativePrice,
-  useTokenDayData,
-  useTokens,
-} from '../../services/graph'
+import { useBlock, useDayData, useFactory, useNativePrice, useTokenDayData, useTokens } from '../../services/graph'
 
 import AnalyticsContainer from '../../features/analytics/AnalyticsContainer'
 import Background from '../../features/analytics/Background'
 import ColoredNumber from '../../features/analytics/ColoredNumber'
 import InfoCard from '../../features/analytics/Bar/InfoCard'
-import ScrollableGraph from '../../components/ScrollableGraph'
+import TimespanGraph from '../../components/TimespanGraph'
 import { XSUSHI } from '../../config/tokens'
 import { aprToApy } from '../../functions/convert/apyApr'
+
+const chartTimespans = [
+  {
+    text: '1W',
+    length: 604800,
+  },
+  {
+    text: '1M',
+    length: 2629746,
+  },
+  {
+    text: '1Y',
+    length: 31556952,
+  },
+  {
+    text: 'ALL',
+    length: Infinity,
+  },
+]
 
 export default function XSushi() {
   const block1d = useBlock({ daysAgo: 1, chainId: ChainId.MAINNET })
@@ -67,8 +78,8 @@ export default function XSushi() {
               xSushiSupply: barDay.xSushiSupply,
               date: barDay.date,
               feesReceived: exchangeDay.volumeUSD * 0.0005,
-              sushiStakedUSD: barDay.sushiStakedUSD,
-              sushiHarvestedUSD: barDay.sushiHarvestedUSD,
+              sushiStaked: barDay.sushiStaked,
+              sushiHarvested: barDay.sushiHarvested,
             }
           })
         : [],
@@ -83,7 +94,8 @@ export default function XSushi() {
   const graphs = useMemo(
     () => [
       {
-        labels: ['APY', 'APR'],
+        title: 'xSushi Performance',
+        labels: ['Daily APY', 'Daily APR'],
         data: [
           data.map((d) => ({
             date: d.date * 1000,
@@ -96,7 +108,8 @@ export default function XSushi() {
         ],
       },
       {
-        title: 'Fees received (USD)',
+        title: 'Daily Fees Received',
+        labels: ['Fees (USD)'],
         data: [
           data.map((d) => ({
             date: d.date * 1000,
@@ -105,21 +118,22 @@ export default function XSushi() {
         ],
       },
       {
-        labels: ['Sushi Staked (USD)', 'Sushi Harvested (USD)'],
-        note: '/ day',
+        title: 'xSushi Supply Movements',
+        labels: ['Daily Minted', 'Daily Burned'],
         data: [
           data.map((d) => ({
             date: d.date * 1000,
-            value: d.sushiStakedUSD,
+            value: d.sushiStaked,
           })),
           data.map((d) => ({
             date: d.date * 1000,
-            value: d.sushiHarvestedUSD,
+            value: d.sushiHarvested,
           })),
         ],
       },
       {
         title: 'xSushi Total Supply',
+        labels: ['Supply'],
         data: [
           data.map((d) => ({
             date: d.date * 1000,
@@ -159,7 +173,7 @@ export default function XSushi() {
           </div>
         </div>
       </Background>
-      <div className="pt-4 space-y-5 lg:px-14">
+      <div className="px-4 pt-4 space-y-5 lg:px-14">
         <div className="flex flex-row space-x-4 overflow-auto">
           <InfoCard text="APY (Last 24 Hours)" number={formatPercent(APY1d)} />
           <InfoCard text="APY (Last 7 Days)" number={formatPercent(APY1w)} />
@@ -176,12 +190,12 @@ export default function XSushi() {
               key={i}
             >
               <div className="w-full h-96">
-                <ScrollableGraph
+                <TimespanGraph
                   labels={graph.labels}
                   title={graph.title}
-                  note={graph.note}
+                  timespans={chartTimespans}
+                  defaultTimespan="1M"
                   data={graph.data}
-                  margin={{ top: 64, right: 32, bottom: 16, left: 64 }}
                 />
               </div>
             </div>

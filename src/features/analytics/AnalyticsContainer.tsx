@@ -10,7 +10,11 @@ export default function AnalyticsContainer({ children }): JSX.Element {
         <meta name="description" content="SushiSwap Liquidity Pair (SLP) Analytics by Sushi" />
       </Head>
 
-      <Container id="analytics" maxWidth="full" className="grid h-full grid-flow-col grid-cols-10 px-4 mx-auto gap-9">
+      <Container
+        id="analytics"
+        maxWidth="full"
+        className="grid h-full grid-flow-col grid-cols-10 mx-auto lg:px-4 gap-9"
+      >
         <div className="sticky top-0 hidden lg:block md:col-span-2 3xl:col-start-2 3xl:col-span-1">
           <Sidebar
             items={[

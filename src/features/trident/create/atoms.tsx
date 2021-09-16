@@ -1,6 +1,5 @@
 import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
-import { PoolType } from '../types'
-import { Currency, CurrencyAmount, Price } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, PoolType, Price } from '@sushiswap/sdk'
 import { calculateGasMargin, tryParseAmount } from '../../../functions'
 import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../context/atoms'
 import { useConstantProductPoolFactory, useMasterDeployerContract } from '../../../hooks'
@@ -12,7 +11,7 @@ import { useLingui } from '@lingui/react'
 
 export const selectedPoolTypeAtom = atom<PoolType>({
   key: 'selectedPoolTypeAtom',
-  default: PoolType.CLASSIC,
+  default: PoolType.ConstantProduct,
 })
 
 export const pageAtom = atom<number>({
@@ -27,7 +26,7 @@ export const twapAtom = atom<boolean>({
 
 export const selectedPoolCurrenciesAtom = atom<Currency[]>({
   key: 'selectedPoolCurrenciesAtom',
-  default: [],
+  default: [null, null],
 })
 
 export const feeTierAtom = atom<number>({

@@ -22,6 +22,7 @@ interface AssetSelectProps {
   value: Currency
   onSelect: (x: Currency) => void
   header?: ReactNode
+  currencies?: Currency[]
 }
 
 const AssetSelect = (props: AssetSelectProps) => {
@@ -36,14 +37,14 @@ const AssetSelect = (props: AssetSelectProps) => {
   return (
     <div className="mt-4 flex flex-col z-10">
       {header}
-      <AssetSelectPanel value={props.value} onSelect={props.onSelect} />
+      <AssetSelectPanel value={props.value} onSelect={props.onSelect} currencies={props.currencies} />
     </div>
   )
 }
 
 interface AssetSelectPanelProps extends AssetSelectProps {}
 
-const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect }) => {
+const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currencies }) => {
   const { i18n } = useLingui()
   const [open, setOpen] = useState(false)
   const [balances, setBalances] = useState(false)
@@ -98,7 +99,12 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect }) => {
       >
         {content}
         <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
-          <CurrencySelectDialog currency={value} onChange={onSelect} onDismiss={() => setOpen(false)} />
+          <CurrencySelectDialog
+            currency={value}
+            onChange={onSelect}
+            onDismiss={() => setOpen(false)}
+            currencies={currencies}
+          />
         </HeadlessUIModal.Controlled>
       </div>
       {value && balances && (

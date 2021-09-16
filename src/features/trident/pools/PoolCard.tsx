@@ -5,11 +5,11 @@ import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
 import Link from 'next/link'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Pool, PoolType } from '../types'
+import { Pool } from '../types'
 import { POOL_TYPES } from '../constants'
 import { toHref } from '../../../hooks/useTridentPools'
 import { classNames } from '../../../functions'
-import { ConstantProductPool } from '@sushiswap/sdk'
+import { ConstantProductPool, PoolType } from '@sushiswap/sdk'
 
 interface PoolCardProps {
   pool: Pool
@@ -21,12 +21,13 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const [, pool] = poolProp
 
   const currencies = [pool?.token0, pool?.token1]
-  const poolType = pool instanceof ConstantProductPool ? PoolType.CLASSIC : ''
-  // : pool instanceof HybridPool
-  // ? PoolType.HYBRID
-  // : pool instanceof WeightedPool
-  // ? PoolType.WEIGHTED
-  // : PoolType.CONCENTRATED
+
+  // TODO ramin: add other types
+  const poolType = pool instanceof ConstantProductPool ? PoolType.ConstantProduct : null
+
+  // TODO ramin: remove
+  const isFarm = true
+  const apy = '3.6'
 
   const content = (
     <div className="rounded border border-dark-700 bg-dark-900 overflow-hidden">
@@ -36,22 +37,20 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
           <Chip label={POOL_TYPES[poolType].label} color={POOL_TYPES[poolType].color} />
         </div>
         <div className="flex gap-1.5 items-baseline">
-          <Typography className={pool.isFarm ? '' : 'text-secondary'} variant="sm" weight={400}>
-            {pool.isFarm ? i18n._(t`FARM APY`) : i18n._(t`APY`)}
+          <Typography className={isFarm ? '' : 'text-secondary'} variant="sm" weight={400}>
+            {isFarm ? i18n._(t`FARM APY`) : i18n._(t`APY`)}
           </Typography>
           <Typography
             className={classNames(
-              +pool.apy > 25
-                ? 'bg-gradient-to-r from-blue to-pink bg-clip-text text-transparent'
-                : 'text-high-emphesis',
+              +apy > 25 ? 'bg-gradient-to-r from-blue to-pink bg-clip-text text-transparent' : 'text-high-emphesis',
               'leading-5'
             )}
             variant="lg"
             weight={700}
           >
-            {pool.apy}%
+            {apy}%
           </Typography>
-          {pool.isFarm && (
+          {isFarm && (
             <svg
               className="text-high-emphesis"
               width="13"
@@ -86,7 +85,8 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
     </div>
   )
 
-  if (link) return <Link href={`${link}/${toHref(poolType.toLowerCase(), currencies)}`}>{content}</Link>
+  // TODO ramin: dynamic
+  if (link) return <Link href={`${link}/${toHref(poolType, currencies)}`}>{content}</Link>
 
   return content
 }

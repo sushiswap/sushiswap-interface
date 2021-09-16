@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo } from 'react'
+import React, { FC } from 'react'
 import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
@@ -10,78 +10,45 @@ import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
   currentLiquidityValueSelector,
-  parsedInputAmountsSelector,
+  outputToWalletAtom,
+  parsedAmountsSelector,
   percentageAmountAtom,
-  permitAtom,
   poolAtom,
 } from './context/atoms'
-import { poolBalanceAtom, showReviewAtom } from '../../context/atoms'
-import { PairState } from '../../../../hooks/useV2Pairs'
-import { ChainId, Percent, ZERO } from '@sushiswap/sdk'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useRouterContract } from '../../../../hooks'
-import { useV2LiquidityTokenPermit } from '../../../../hooks/useERC20Permit'
-import useTransactionDeadline from '../../../../hooks/useTransactionDeadline'
+import { attemptingTxnAtom, poolBalanceAtom, showReviewAtom } from '../../context/atoms'
+import { Percent, ZERO } from '@sushiswap/sdk'
+import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
+import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
+import Lottie from 'lottie-react'
+import loadingCircle from '../../../../animation/loading-circle.json'
+import TridentApproveGate from '../../ApproveButton'
+import AssetInput from '../../../../components/AssetInput'
+import Dots from '../../../../components/Dots'
 
 const ClassicUnzapMode: FC = () => {
-  const { chainId, library, account } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const deadline = useTransactionDeadline()
-  const [poolState, pool] = useRecoilValue(poolAtom)
+  const router = useTridentRouterContract()
+  const [poolState] = useRecoilValue(poolAtom)
   const [percentageAmount, handlePercentageAmount] = useRecoilState(percentageAmountAtom)
   const [liquidityA, liquidityB] = useRecoilValue(currentLiquidityValueSelector)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedInputAmountsSelector)
+  const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const usdcAValue = useUSDCValue(liquidityA)
   const usdcBValue = useUSDCValue(liquidityB)
-  const setPermit = useSetRecoilState(permitAtom)
+  const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
   const currentLiquidityValueInUsdc = usdcAValue?.add(usdcBValue)
   const selectedLiquidityValueInUsdc = currentLiquidityValueInUsdc?.multiply(new Percent(percentageAmount, '100'))
-  const liquidityAmount = useMemo(
-    () => poolBalance?.multiply(new Percent(percentageAmount, '100')),
-    [percentageAmount, poolBalance]
-  )
-
-  // Allowance handling
-  const router = useRouterContract()
-  const [approval, approveCallback] = useApproveCallback(poolBalance, router?.address)
-  const { gatherPermitSignature, signatureData } = useV2LiquidityTokenPermit(liquidityAmount?.wrapped, router?.address)
-
-  // Set permit when we have signatureData
-  useEffect(() => {
-    setPermit(signatureData)
-  }, [setPermit, signatureData])
-
-  // Function that tries to either approve using a permit of using a callback if the permit fails
-  const onAttemptToApprove = useCallback(async () => {
-    if (!pool || !library || !deadline) throw new Error('missing dependencies')
-    if (chainId !== ChainId.HARMONY && gatherPermitSignature) {
-      try {
-        await gatherPermitSignature()
-      } catch (error) {
-        if (error?.code !== 4001) await approveCallback()
-      }
-    } else {
-      await approveCallback()
-    }
-  }, [approveCallback, chainId, deadline, gatherPermitSignature, library, pool])
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
-    : poolState === PairState.INVALID
+    : poolState === ConstantProductPoolState.INVALID
     ? i18n._(t`Invalid pair`)
     : !parsedAmountA?.greaterThan(ZERO) || !parsedAmountB?.greaterThan(ZERO)
-    ? i18n._(t`Enter an amount`)
+    ? i18n._(t`Tap amount or type amount to continue`)
     : ''
-
-  const needsApprove = !(approval === ApprovalState.APPROVED || signatureData !== null)
-  const buttonText = needsApprove
-    ? i18n._(t`Approve`)
-    : approval === ApprovalState.PENDING
-    ? i18n._(t`Approving`)
-    : error
-    ? error
-    : i18n._(t`Confirm Withdrawal`)
 
   return (
     <div className="px-5 mt-5">
@@ -129,26 +96,71 @@ const ClassicUnzapMode: FC = () => {
             <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
             <ToggleButtonGroup.Button value="25">25%</ToggleButtonGroup.Button>
           </ToggleButtonGroup>
+          <TridentApproveGate
+            inputAmounts={[poolBalance?.multiply(new Percent(percentageAmount, '100'))]}
+            tokenApproveOn={router?.address}
+          >
+            {({ approved, loading }) => {
+              const disabled = !!error || !approved || loading || attemptingTxn
+              const buttonText = attemptingTxn ? (
+                <Dots>{i18n._(t`Withdrawing`)}</Dots>
+              ) : loading ? (
+                ''
+              ) : error ? (
+                error
+              ) : (
+                i18n._(t`Review and Confirm`)
+              )
+
+              return (
+                <Button
+                  {...(loading && {
+                    startIcon: (
+                      <div className="w-4 h-4 mr-1">
+                        <Lottie animationData={loadingCircle} autoplay loop />
+                      </div>
+                    ),
+                  })}
+                  color={approved ? 'gradient' : 'blue'}
+                  disabled={disabled}
+                  onClick={() => setShowReview(true)}
+                >
+                  <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
+                    {buttonText}
+                  </Typography>
+                </Button>
+              )
+            }}
+          </TridentApproveGate>
         </div>
         <div className="flex flex-col gap-5">
-          <Typography variant="h3" weight={700} className="text-high-emphesis">
-            {i18n._(t`Receive:`)}
-          </Typography>
+          <div className="flex justify-between gap-3">
+            <Typography variant="h3" weight={700} className="text-high-emphesis">
+              {i18n._(t`Receive:`)}
+            </Typography>
+            <AssetInput.WalletSwitch onChange={() => setOutputToWallet(!outputToWallet)} checked={outputToWallet} />
+          </div>
+
           <div className="flex flex-col gap-4">
             <ListPanel
               items={[
                 <ListPanel.CurrencyAmountItem amount={parsedAmountA} key={0} />,
                 <ListPanel.CurrencyAmountItem amount={parsedAmountB} key={1} />,
               ]}
+              footer={
+                <div className="flex justify-between px-4 py-3.5 bg-dark-800">
+                  <Typography weight={700} className="text-high-emphesis">
+                    {i18n._(t`Total Amount`)}
+                  </Typography>
+                  <Typography weight={700} className="text-high-emphesis text-right">
+                    ≈$
+                    {selectedLiquidityValueInUsdc?.greaterThan('0')
+                      ? selectedLiquidityValueInUsdc?.toSignificant(6)
+                      : '0.0000'}
+                  </Typography>
+                </div>
+              }
             />
-            <Button.Dotted
-              pending={approval === ApprovalState.PENDING}
-              color={needsApprove ? 'blue' : 'gradient'}
-              disabled={!!error}
-              onClick={needsApprove ? onAttemptToApprove : () => setShowReview(true)}
-            >
-              {buttonText}
-            </Button.Dotted>
           </div>
         </div>
       </div>

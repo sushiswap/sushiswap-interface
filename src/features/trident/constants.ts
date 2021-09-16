@@ -1,5 +1,5 @@
+import { PoolType } from '@sushiswap/sdk'
 import { ChipColor } from '../../components/Chip'
-import { PoolType } from './types'
 
 export const SORT_OPTIONS = [
   { title: 'APY Highest to Lowest', desc: true },
@@ -21,7 +21,7 @@ type PoolTypesInterface = Record<
 >
 
 export const POOL_TYPES: PoolTypesInterface = {
-  [PoolType.CLASSIC]: {
+  [PoolType.ConstantProduct]: {
     label: 'Classic',
     label_long: 'Classic Pool',
     color: 'default',
@@ -34,7 +34,7 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.WEIGHTED]: {
+  [PoolType.Weighted]: {
     label: 'Weighted',
     label_long: 'Weighted Pool',
     color: 'yellow',
@@ -47,7 +47,7 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.CONCENTRATED]: {
+  [PoolType.ConcentratedLiquidity]: {
     label: 'Concentrated',
     label_long: 'Concentrated Range',
     color: 'purple',
@@ -60,7 +60,7 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.HYBRID]: {
+  [PoolType.Hybrid]: {
     label: 'Hybrid',
     label_long: 'Hybrid Pool',
     color: 'blue',

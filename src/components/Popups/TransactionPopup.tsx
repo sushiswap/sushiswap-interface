@@ -18,7 +18,7 @@ export default function TransactionPopup({
   const { chainId } = useActiveWeb3React()
 
   return (
-    <div className="flex flex-row w-full flex-nowrap" style={{ zIndex: 1000 }}>
+    <div className="flex flex-row w-full flex-nowrap z-[1000]">
       <div className="pr-4">
         {success ? <CheckCircle className="text-2xl text-green" /> : <AlertCircle className="text-2xl text-red" />}
       </div>

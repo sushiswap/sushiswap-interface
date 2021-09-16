@@ -23,7 +23,7 @@ export function useBlock(
     : undefined
   timestamp = useMemo(() => (daysAgo ? Math.floor(Date.now() / 1000) - daysAgo * 86400 : timestamp), [daysAgo])
 
-  const { data } = useSWR(
+  const { data, error } = useSWR(
     shouldFetch ? ['block', chainId, timestamp] : null,
     (_, chainId, timestamp) => getBlock(chainId, timestamp),
     swrConfig

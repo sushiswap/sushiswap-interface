@@ -4,7 +4,6 @@ import { useTransactionAdder } from '../../../../../state/transactions/hooks'
 import { atom, selector, useRecoilCallback, useSetRecoilState } from 'recoil'
 import {
   attemptingTxnAtom,
-  currenciesAtom,
   noLiquiditySelector,
   poolBalanceAtom,
   showReviewAtom,
@@ -13,7 +12,7 @@ import {
   txHashAtom,
 } from '../../../context/atoms'
 import { calculateGasMargin, calculateSlippageAmount, tryParseAmount } from '../../../../../functions'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../../hooks'
+import { useActiveWeb3React, useBentoBoxContract, useTridentRouterContract } from '../../../../../hooks'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
 import ReactGA from 'react-ga'
 import { t } from '@lingui/macro'
@@ -22,6 +21,10 @@ import { useUserSlippageToleranceWithDefault } from '../../../../../state/user/h
 import { ethers } from 'ethers'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
+export enum TypedField {
+  A,
+  B,
+}
 
 export const poolAtom = atom<[ConstantProductPoolState, ConstantProductPool | null]>({
   key: 'poolAtom',
@@ -43,62 +46,92 @@ export const mainInputAtom = atom<string>({
   default: '',
 })
 
+// Just an atom that acts as a copy state to hold a previous value
 export const secondaryInputAtom = atom<string>({
   key: 'secondaryInputAtom',
   default: '',
+})
+
+export const typedFieldAtom = atom<TypedField>({
+  key: 'typedFieldAtom',
+  default: TypedField.A,
+})
+
+export const secondaryInputSelector = selector<string>({
+  key: 'secondaryInputSelector',
+  get: ({ get }) => {
+    const [, pool] = get(poolAtom)
+    const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
+    const noLiquidity = get(noLiquiditySelector)
+    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+
+    // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
+    if (!noLiquidity) {
+      if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
+        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
+        return (
+          pool?.token1?.isNative
+            ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
+            : dependentTokenAmount
+        ).toExact()
+      }
+    }
+
+    // If we don't have liquidity and we 'get' this value, return previous value as no side effects will happen
+    return get(secondaryInputAtom)
+  },
+  set: ({ set, get }, newValue: string) => {
+    const [, pool] = get(poolAtom)
+    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+    const noLiquidity = get(noLiquiditySelector)
+    const typedField = get(typedFieldAtom)
+    const newValueCA = tryParseAmount(newValue, pool?.token1)
+
+    // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
+    if (!noLiquidity) {
+      if (tokenA && tokenB && pool && newValueCA?.wrapped) {
+        const dependentTokenAmount = pool.priceOf(tokenB).quote(newValueCA?.wrapped)
+        set(mainInputAtom, dependentTokenAmount?.toExact())
+      }
+
+      // Edge case where if we enter 0 on secondary input, also set mainInput to 0
+      else if (typedField === TypedField.B) {
+        set(mainInputAtom, '')
+      }
+    }
+
+    // In any case, 'set' this value directly to the atom to keep a copy saved as a string
+    set(secondaryInputAtom, newValue)
+  },
 })
 
 export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>>({
   key: 'mainInputCurrencyAmountSelector',
   get: ({ get }) => {
     const value = get(mainInputAtom)
-    const currencies = get(currenciesAtom)
-    return tryParseAmount(value, currencies[0])
+    const [, pool] = get(poolAtom)
+    return tryParseAmount(value, pool?.token0)
   },
 })
 
 export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>>({
   key: 'secondaryInputCurrencyAmountSelector',
   get: ({ get }) => {
-    const value = get(secondaryInputAtom)
-    const currencies = get(currenciesAtom)
-    const noLiquidity = get(noLiquiditySelector)
-
-    return noLiquidity ? tryParseAmount(value, currencies[1]) : get(secondaryInputCurrencyAmountFixedRatioSelector)
-  },
-})
-
-export const secondaryInputCurrencyAmountFixedRatioSelector = selector<CurrencyAmount<Currency>>({
-  key: 'secondaryInputCurrencyAmountFixedRatioSelector',
-  get: ({ get }) => {
+    const value = get(secondaryInputSelector)
     const [, pool] = get(poolAtom)
-    const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
-
-    // we wrap the currencies just to get the price in terms of the other token
-    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-    if (tokenA && tokenB && mainInputCurrencyAmount?.wrapped && pool) {
-      const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
-      return pool?.token1?.isNative
-        ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
-        : dependentTokenAmount
-    }
-  },
-  set: ({ set, get }, newValue: CurrencyAmount<Currency>) => {
-    const [, pool] = get(poolAtom)
-    const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-
-    if (tokenA && tokenB && newValue?.wrapped && pool) {
-      const dependentTokenAmount = pool.priceOf(tokenB).quote(newValue?.wrapped)
-      set(mainInputAtom, dependentTokenAmount?.toExact())
-    }
+    return tryParseAmount(value, pool?.token1)
   },
 })
 
 export const formattedAmountsSelector = selector<[string, string]>({
   key: 'formattedAmountsSelector',
   get: ({ get }) => {
+    const inputField = get(typedFieldAtom)
     const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
-    return [parsedAmountA?.toExact() ?? '', parsedAmountB?.toExact() ?? '']
+    return [
+      (inputField === TypedField.A ? get(mainInputAtom) : parsedAmountA?.toSignificant(6)) ?? '',
+      (inputField === TypedField.B ? get(secondaryInputAtom) : parsedAmountB?.toSignificant(6)) ?? '',
+    ]
   },
 })
 
@@ -239,13 +272,13 @@ export const useClassicAddExecute = () => {
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
+  const bentoboxContract = useBentoBoxContract()
 
   const standardModeExecute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
         const [, pool] = await snapshot.getPromise(poolAtom)
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
-        const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
         const [parsedAmountA, parsedAmountB] = await snapshot.getPromise(parsedAmountsSelector)
         const native = await snapshot.getPromise(spendFromWalletAtom)
 
@@ -257,8 +290,9 @@ export const useClassicAddExecute = () => {
           !router ||
           !parsedAmountA ||
           !parsedAmountB ||
-          !currencyA ||
-          !currencyB
+          !pool?.token0 ||
+          !pool?.token1 ||
+          !bentoboxContract
         )
           return
 
@@ -271,25 +305,24 @@ export const useClassicAddExecute = () => {
           {
             token: parsedAmountA.currency.wrapped.address,
             native,
-            amount: amountsMin[0].toString(),
-            // TODO ramin: bentoShare
-            // amount: toShare(parsedAmountA.currency.wrapped, BigNumber.from(amountsMin[0].toString())),
+            amount: await bentoboxContract.toShare(
+              parsedAmountA.currency.wrapped.address,
+              amountsMin[0].toString(),
+              false
+            ),
           },
           {
             token: parsedAmountB.currency.wrapped.address,
             native,
-            amount: amountsMin[1].toString(),
-            // TODO ramin: bentoShare
-            // amount: toShare(parsedAmountB.currency.wrapped, BigNumber.from(amountsMin[1].toString())),
+            amount: await bentoboxContract.toShare(
+              parsedAmountB.currency.wrapped.address,
+              amountsMin[1].toString(),
+              false
+            ),
           },
         ]
 
-        console.log(router.address)
-        console.log('0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a', pool.liquidityToken.address)
-
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
-        console.log('0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a')
-        console.log(encoded)
         const estimate = router.estimateGas.addLiquidity
         const method = router.addLiquidity
         const args = [liquidityInput, '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a', 1, encoded]
@@ -302,30 +335,31 @@ export const useClassicAddExecute = () => {
         try {
           setAttemptingTxn(true)
           const estimatedGasLimit = await estimate(...args, value)
-          const response = await method(...args, {
+          const tx = await method(...args, {
             ...value,
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
-          setAttemptingTxn(false)
+          setTxHash(tx.hash)
+          setShowReview(false)
+          await tx.wait()
 
-          addTransaction(response, {
+          addTransaction(tx, {
             summary: i18n._(
               t`Add ${parsedAmountA.toSignificant(3)} ${
                 parsedAmountA.currency.symbol
-              } and ${parsedAmountB.toSignificant(3)} ${parsedAmountB.currency.symbol} into ${currencyA.symbol}/${
-                currencyB.symbol
+              } and ${parsedAmountB.toSignificant(3)} ${parsedAmountB.currency.symbol} into ${pool.token0.symbol}/${
+                pool.token1.symbol
               }`
             ),
           })
 
-          setTxHash(response.hash)
-          setShowReview(false)
+          setAttemptingTxn(false)
 
           ReactGA.event({
             category: 'Liquidity',
             action: 'Add',
-            label: [currencyA.symbol, currencyB.symbol].join('/'),
+            label: [pool.token0.symbol, pool.token1.symbol].join('/'),
           })
         } catch (error) {
           setAttemptingTxn(false)
@@ -339,6 +373,7 @@ export const useClassicAddExecute = () => {
       account,
       addTransaction,
       allowedSlippage,
+      bentoboxContract,
       chainId,
       i18n,
       library,
@@ -352,27 +387,34 @@ export const useClassicAddExecute = () => {
   const zapModeExecute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
-        const [currencyA, currencyB] = await snapshot.getPromise(currenciesAtom)
         const parsedZapAmount = await snapshot.getPromise(parsedZapAmountSelector)
         const [, pool] = await snapshot.getPromise(poolAtom)
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
         const native = await snapshot.getPromise(spendFromWalletAtom)
 
-        if (!pool || !chainId || !library || !account || !router || !parsedZapAmount || !currencyA || !currencyB) return
+        if (
+          !pool ||
+          !chainId ||
+          !library ||
+          !account ||
+          !router ||
+          !parsedZapAmount ||
+          !pool?.token0 ||
+          !pool?.token1 ||
+          !bentoboxContract
+        )
+          return
 
         const amountMin = calculateSlippageAmount(parsedZapAmount, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0]
         const liquidityInput = [
           {
             token: parsedZapAmount.currency.wrapped.address,
             native,
-            amount: amountMin.toString(),
-
-            // TODO ramin: bentoShare
-            // amount: toShare(
-            //   parsedZapAmount.currency.wrapped,
-            //
-            //   amountMin.toString().toBigNumber(parsedZapAmount.currency.decimals),
-            // ),
+            amount: await bentoboxContract.toShare(
+              parsedZapAmount.currency.wrapped.address,
+              amountMin.toString(),
+              false
+            ),
           },
         ]
 
@@ -380,33 +422,34 @@ export const useClassicAddExecute = () => {
         const estimate = router.estimateGas.addLiquidity
         const method = router.addLiquidity
         const args = [liquidityInput, pool.liquidityToken.address, 1, encoded]
-        const value = parsedZapAmount.currency.isNative ? { value: parsedZapAmount.quotient.toString() } : {}
+        const value = parsedZapAmount.currency.isNative ? { value: amountMin.toString() } : {}
 
         try {
           setAttemptingTxn(true)
           const estimatedGasLimit = await estimate(...args, value)
-          const response = await method(...args, {
+          const tx = await method(...args, {
             ...value,
             gasLimit: calculateGasMargin(estimatedGasLimit),
           })
 
-          setAttemptingTxn(false)
+          setTxHash(tx.hash)
+          setShowReview(false)
+          await tx.wait()
 
-          addTransaction(response, {
+          addTransaction(tx, {
             summary: i18n._(
-              t`Zap ${parsedZapAmount.toSignificant(3)} ${parsedZapAmount.currency.symbol} into ${currencyA.symbol}/${
-                currencyB.symbol
+              t`Zap ${parsedZapAmount.toSignificant(3)} ${parsedZapAmount.currency.symbol} into ${pool.token0.symbol}/${
+                pool.token1.symbol
               }`
             ),
           })
 
-          setTxHash(response.hash)
-          setShowReview(false)
+          setAttemptingTxn(false)
 
           ReactGA.event({
             category: 'Liquidity',
             action: 'Zap',
-            label: [currencyA.symbol, currencyB.symbol].join('/'),
+            label: [pool.token0.symbol, pool.token1.symbol].join('/'),
           })
         } catch (error) {
           setAttemptingTxn(false)
@@ -420,6 +463,7 @@ export const useClassicAddExecute = () => {
       account,
       addTransaction,
       allowedSlippage,
+      bentoboxContract,
       chainId,
       i18n,
       library,

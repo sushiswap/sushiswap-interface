@@ -14,7 +14,7 @@ const FILLED = {
 const OUTLINED = {
   group: 'gap-2',
   option: {
-    checked: (checked) => (checked ? 'border-transparent border-gradient-r-blue-pink-dark-1000' : 'border-dark-700'),
+    checked: (checked) => (checked ? 'border-dark-700 bg-gradient-to-r from-blue to-pink' : 'border-dark-700'),
     default: 'py-3 rounded border',
   },
 }
