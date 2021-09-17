@@ -1,7 +1,7 @@
-import { Currency, CurrencyAmount, FACTORY_ADDRESS, Fee, computeConstantProductPoolAddress } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, FACTORY_ADDRESS, Fee, computeConstantProductPoolAddress } from '@sushiswap/core'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 
-import { ConstantProductPool } from '@sushiswap/sdk'
+import { ConstantProductPool } from '@sushiswap/trident'
 import { Interface } from '@ethersproject/abi'
 import abi from '../constants/abis/constant-product-pool.json'
 import { useMemo } from 'react'

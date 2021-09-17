@@ -183,15 +183,18 @@ export const useDependentAssetInputs = () => {
     ? i18n._(t`Insufficient ${insufficientBalance.currency.symbol} balance`)
     : ''
 
-  return {
-    inputs: [mainInput[0], secondaryInput[0]],
-    mainInput,
-    secondaryInput,
-    formattedAmounts,
-    parsedAmounts,
-    typedField,
-    onMax,
-    isMax,
-    error,
-  }
+  return useMemo(
+    () => ({
+      inputs: [mainInput[0], secondaryInput[0]],
+      mainInput,
+      secondaryInput,
+      formattedAmounts,
+      parsedAmounts,
+      typedField,
+      onMax,
+      isMax,
+      error,
+    }),
+    [error, formattedAmounts, isMax, mainInput, onMax, parsedAmounts, secondaryInput, typedField]
+  )
 }

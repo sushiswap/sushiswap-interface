@@ -30,12 +30,12 @@ export const usePoolDetails = (parsedAmounts) => {
 
   // Returns the resulting pool share taking into account current pool share and inputs
   const poolShare = useMemo(() => {
-    if (liquidityMinted && totalSupply) {
-      return new Percent(liquidityMinted.quotient, totalSupply.add(liquidityMinted).quotient)
+    if (liquidityMinted && totalSupply && poolBalance) {
+      return new Percent(poolBalance.add(liquidityMinted).quotient, totalSupply.add(liquidityMinted).quotient)
     }
 
     return undefined
-  }, [liquidityMinted, totalSupply])
+  }, [liquidityMinted, poolBalance, totalSupply])
 
   const price = useMemo(() => {
     if (noLiquidity) {
@@ -84,13 +84,16 @@ export const usePoolDetails = (parsedAmounts) => {
     return [undefined, undefined]
   }, [currencyAAmount, currencyBAmount, currentLiquidityValue, pool])
 
-  return {
-    poolShare,
-    currentPoolShare,
-    liquidityMinted,
-    liquidityValue,
-    currentLiquidityValue,
-    price,
-    priceImpact,
-  }
+  return useMemo(
+    () => ({
+      poolShare,
+      currentPoolShare,
+      liquidityMinted,
+      liquidityValue,
+      currentLiquidityValue,
+      price,
+      priceImpact,
+    }),
+    [currentLiquidityValue, currentPoolShare, liquidityMinted, liquidityValue, poolShare, price, priceImpact]
+  )
 }

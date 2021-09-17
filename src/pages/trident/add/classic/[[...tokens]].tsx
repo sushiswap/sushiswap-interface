@@ -117,10 +117,9 @@ const AddClassic = () => {
               <TransactionReviewStandardModal />
             </>
           )}
+          <DepositSubmittedModal />
         </>
       )}
-
-      <DepositSubmittedModal />
     </div>
   )
 }

@@ -7,44 +7,32 @@ import TransactionDetails from './../TransactionDetails'
 import React from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
-import { useCurrencyBalance } from '../../../../state/wallet/hooks'
 import { attemptingTxnAtom, noLiquiditySelector, poolAtom, showReviewAtom } from '../../context/atoms'
-import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
 import ListPanel from '../../../../components/ListPanel'
 import TridentApproveGate from '../../ApproveButton'
 import Button from '../../../../components/Button'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import Lottie from 'lottie-react'
 import Dots from '../../../../components/Dots'
-import { NATIVE } from '@sushiswap/sdk'
+import { NATIVE } from '@sushiswap/core-sdk'
 import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
 
 const ClassicZapMode = () => {
-  const { account, chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
 
-  const [poolState, pool] = useRecoilValue(poolAtom)
+  const [, pool] = useRecoilValue(poolAtom)
   const {
     zapInputAmount: [zapInputAmount, setZapInputAmount],
     parsedAmount,
     zapCurrency: [zapCurrency, setZapCurrency],
     parsedSplitAmounts,
+    error,
   } = useZapAssetInput()
-  const balance = useCurrencyBalance(account ?? undefined, zapCurrency)
   const setShowReview = useSetRecoilState(showReviewAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-
-  let error = !account
-    ? i18n._(t`Connect Wallet`)
-    : poolState === ConstantProductPoolState.INVALID
-    ? i18n._(t`Invalid pair`)
-    : !zapInputAmount
-    ? i18n._(t`Enter an amount`)
-    : parsedAmount && balance?.lessThan(parsedAmount)
-    ? i18n._(t`Insufficient ${parsedAmount?.currency.symbol} balance`)
-    : ''
 
   return (
     <>

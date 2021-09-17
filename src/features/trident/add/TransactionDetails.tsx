@@ -15,7 +15,10 @@ const TransactionDetails: FC = () => {
   const [, pool] = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const { parsedAmounts } = useDependentAssetInputs()
+
+  // TODO parsedSplitAmounts is still empty
   const { parsedSplitAmounts } = useZapAssetInput()
+
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(
     liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts

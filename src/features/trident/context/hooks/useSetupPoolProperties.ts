@@ -1,5 +1,6 @@
 import { atom, useRecoilState } from 'recoil'
-import { PoolType } from '@sushiswap/sdk'
+import { PoolType } from '@sushiswap/trident-sdk'
+import { useMemo } from 'react'
 
 export const selectedPoolTypeAtom = atom<PoolType>({
   key: 'selectedPoolTypeAtom',
@@ -21,9 +22,12 @@ export const useSetupPoolProperties = () => {
   const twap = useRecoilState(twapAtom)
   const feeTier = useRecoilState(feeTierAtom)
 
-  return {
-    poolType,
-    twap,
-    feeTier,
-  }
+  return useMemo(
+    () => ({
+      poolType,
+      twap,
+      feeTier,
+    }),
+    [feeTier, poolType, twap]
+  )
 }

@@ -186,7 +186,7 @@ export function useBentoBalances2(account: string, tokens: Token[]): Record<stri
     fetch()
   }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, tokens])
 
-  return balances
+  return useMemo(() => balances, [balances])
 }
 
 export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {

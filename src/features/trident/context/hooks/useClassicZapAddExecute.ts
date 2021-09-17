@@ -18,6 +18,7 @@ import { ZERO_PERCENT } from '../../../../constants'
 import { ethers } from 'ethers'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
+import { useMemo } from 'react'
 
 export const useClassicZapAddExecute = () => {
   const { i18n } = useLingui()
@@ -117,5 +118,5 @@ export const useClassicZapAddExecute = () => {
     ]
   )
 
-  return { execute }
+  return useMemo(() => ({ execute }), [execute])
 }

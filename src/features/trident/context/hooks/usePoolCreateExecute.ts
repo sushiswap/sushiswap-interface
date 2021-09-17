@@ -8,7 +8,7 @@ import { ethers } from 'ethers'
 import { calculateGasMargin } from '../../../../functions'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useIndependentAssetInputs } from './useIndependentAssetInputs'
 
 export const usePoolCreateExecute = () => {
@@ -110,10 +110,13 @@ export const usePoolCreateExecute = () => {
     []
   )
 
-  return {
-    classicExecute,
-    hybridExecute,
-    weightedExecute,
-    concentratedExecute,
-  }
+  return useMemo(
+    () => ({
+      classicExecute,
+      hybridExecute,
+      weightedExecute,
+      concentratedExecute,
+    }),
+    [classicExecute, concentratedExecute, hybridExecute, weightedExecute]
+  )
 }
