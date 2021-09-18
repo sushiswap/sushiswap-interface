@@ -1,14 +1,14 @@
-import { ChainId, Currency } from '@sushiswap/sdk'
+import { ChainId, Currency } from '@sushiswap/sdk';
 
 export function currencyId(currency: Currency): string {
   if ([ChainId.CELO].includes(currency.chainId)) {
-    return currency.wrapped.address
+    return currency.wrapped.address;
   }
 
-  if (currency.isNative) return 'ETH'
+  if (currency.isNative) return 'ETH';
 
-  if (currency.isToken) return currency.address
-  throw new Error('invalid currency')
+  if (currency.isToken) return currency.address;
+  throw new Error('invalid currency');
 }
 
 // export function currencyId(

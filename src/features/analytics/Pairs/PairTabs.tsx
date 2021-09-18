@@ -1,9 +1,9 @@
-import Tabs from './../Tabs'
+import Tabs from './../Tabs';
 
 const tabs = [
   {
     name: 'All',
-    type: 'all',
+    href: '/analytics/pairs',
     icon: (
       <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -28,7 +28,7 @@ const tabs = [
   },
   {
     name: 'Gainers',
-    type: 'gainers',
+    href: '/analytics/pairs/gainers',
     icon: (
       <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -53,7 +53,7 @@ const tabs = [
   },
   {
     name: 'Losers',
-    type: 'losers',
+    href: '/analytics/pairs/losers',
     icon: (
       <svg width="22" height="21" viewBox="0 0 22 21" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path
@@ -79,12 +79,12 @@ const tabs = [
       </svg>
     ),
   },
-]
+];
 
-export default function PairTabs({ currentType, setType }): JSX.Element {
+export default function PairTabs(): JSX.Element {
   return (
     <>
-      <Tabs tabs={tabs} currentType={currentType} setType={setType} />
+      <Tabs tabs={tabs} />
     </>
-  )
+  );
 }

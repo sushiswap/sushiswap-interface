@@ -1,13 +1,13 @@
-import { ChevronLeftIcon, XIcon } from '@heroicons/react/outline'
+import { ChevronLeftIcon, XIcon } from '@heroicons/react/outline';
 
-import React, { FC } from 'react'
-import Typography from '../Typography'
+import React, { FC } from 'react';
+import Typography from '../Typography';
 
 interface ModalHeaderProps {
-  title?: string
-  className?: string
-  onClose?: () => void
-  onBack?: () => void
+  title?: string;
+  className?: string;
+  onClose?: () => void;
+  onBack?: () => void;
 }
 
 const ModalHeader: FC<ModalHeaderProps> = ({
@@ -31,7 +31,7 @@ const ModalHeader: FC<ModalHeaderProps> = ({
         <XIcon width={24} height={24} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ModalHeader
+export default ModalHeader;

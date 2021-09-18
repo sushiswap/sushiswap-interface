@@ -1,6 +1,6 @@
-import Container from '../../components/Container'
-import Head from 'next/head'
-import Typography from '../../components/Typography'
+import Container from '../../components/Container';
+import Head from 'next/head';
+import Typography from '../../components/Typography';
 
 export default function Saave() {
   return (
@@ -20,5 +20,5 @@ export default function Saave() {
         </Typography>
       </Container>
     </Container>
-  )
+  );
 }

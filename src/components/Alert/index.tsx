@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-import { XIcon } from '@heroicons/react/solid'
-import { classNames } from '../../functions'
+import { XIcon } from '@heroicons/react/solid';
+import { classNames } from '../../functions';
 
 const TYPE = {
   information: {
@@ -60,14 +60,14 @@ const TYPE = {
       </svg>
     ),
   },
-}
+};
 
 export interface AlertProps {
-  title?: string
-  message?: string | React.ReactChild | React.ReactChild[]
-  type?: 'warning' | 'error' | 'information'
-  showIcon?: boolean
-  dismissable?: boolean
+  title?: string;
+  message?: string | React.ReactChild | React.ReactChild[];
+  type?: 'warning' | 'error' | 'information';
+  showIcon?: boolean;
+  dismissable?: boolean;
 }
 
 export default function Alert({
@@ -79,8 +79,8 @@ export default function Alert({
   dismissable = true,
 }: AlertProps & React.HTMLAttributes<HTMLDivElement>): JSX.Element | null {
   // TODO: Persist this...
-  const [show, setShow] = useState(true)
-  const { color, icon } = TYPE[type]
+  const [show, setShow] = useState(true);
+  const { color, icon } = TYPE[type];
   return message && show ? (
     <div className={classNames('block relative w-full rounded text-sm p-4', show && 'pr-10', color, className)}>
       {title && <div className="mb-1 text-2xl font-medium">{title}</div>}
@@ -103,5 +103,5 @@ export default function Alert({
         </div>
       )}
     </div>
-  ) : null
+  ) : null;
 }

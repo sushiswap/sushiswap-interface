@@ -1,5 +1,5 @@
-import Container from '../../components/Container'
-import Head from 'next/head'
+import Container from '../../components/Container';
+import Head from 'next/head';
 
 export default function Tokens() {
   return (
@@ -9,5 +9,5 @@ export default function Tokens() {
         <meta key="description" name="description" content="SushiSwap tokens." />
       </Head>
     </Container>
-  )
+  );
 }

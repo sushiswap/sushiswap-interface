@@ -1,28 +1,19 @@
-import { Currency } from '@sushiswap/sdk'
-import CurrencyLogo from '../CurrencyLogo'
-import React from 'react'
-import { classNames } from '../../functions'
+import { Currency } from '@sushiswap/sdk';
+import CurrencyLogo from '../CurrencyLogo';
+import React from 'react';
 
 interface DoubleCurrencyLogoProps {
-  margin?: boolean
-  size?: number
-  currency0?: Currency
-  currency1?: Currency
-  className?: string
-  logoClassName?: string
+  margin?: boolean;
+  size?: number;
+  currency0?: Currency;
+  currency1?: Currency;
 }
 
-export default function DoubleCurrencyLogo({
-  currency0,
-  currency1,
-  size = 16,
-  className,
-  logoClassName,
-}: DoubleCurrencyLogoProps) {
+export default function DoubleCurrencyLogo({ currency0, currency1, size = 16 }: DoubleCurrencyLogoProps) {
   return (
-    <div className={classNames('flex items-center space-x-2', className)}>
-      <CurrencyLogo className={logoClassName} currency={currency0} size={size.toString() + 'px'} />
-      <CurrencyLogo className={logoClassName} currency={currency1} size={size.toString() + 'px'} />
+    <div className="flex items-center space-x-2">
+      <CurrencyLogo currency={currency0} size={size.toString() + 'px'} />
+      <CurrencyLogo currency={currency1} size={size.toString() + 'px'} />
     </div>
-  )
+  );
 }

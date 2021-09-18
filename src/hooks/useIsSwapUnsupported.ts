@@ -1,7 +1,7 @@
-import { Currency, Token } from '@sushiswap/sdk'
+import { Currency, Token } from '@sushiswap/sdk';
 
-import { useMemo } from 'react'
-import { useUnsupportedTokens } from './Tokens'
+import { useMemo } from 'react';
+import { useUnsupportedTokens } from './Tokens';
 
 /**
  * Returns true if the input currency or output currency cannot be traded in the interface
@@ -9,7 +9,7 @@ import { useUnsupportedTokens } from './Tokens'
  * @param currencyOut the output currency to check
  */
 export function useIsSwapUnsupported(currencyIn?: Currency, currencyOut?: Currency): boolean {
-  const unsupportedTokens: { [address: string]: Token } = useUnsupportedTokens()
+  const unsupportedTokens: { [address: string]: Token } = useUnsupportedTokens();
 
   return useMemo(() => {
     // if unsupported list loaded & either token on list, mark as unsupported
@@ -17,6 +17,6 @@ export function useIsSwapUnsupported(currencyIn?: Currency, currencyOut?: Curren
       unsupportedTokens &&
         ((currencyIn?.isToken && unsupportedTokens[currencyIn.address]) ||
           (currencyOut?.isToken && unsupportedTokens[currencyOut.address]))
-    )
-  }, [currencyIn, currencyOut, unsupportedTokens])
+    );
+  }, [currencyIn, currencyOut, unsupportedTokens]);
 }

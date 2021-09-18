@@ -1,41 +1,41 @@
-import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk'
-import React, { ReactNode, useCallback, useState } from 'react'
-import { classNames, formatCurrencyAmount } from '../../functions'
+import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk';
+import React, { ReactNode, useCallback, useState } from 'react';
+import { classNames, formatCurrencyAmount } from '../../functions';
 
-import Button from '../Button'
-import { ChevronDownIcon } from '@heroicons/react/outline'
-import CurrencyLogo from '../CurrencyLogo'
-import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
-import DoubleCurrencyLogo from '../DoubleLogo'
-import { FiatValue } from './FiatValue'
-import Input from '../Input'
-import Lottie from 'lottie-react'
-import selectCoinAnimation from '../../animation/select-coin.json'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { useLingui } from '@lingui/react'
+import Button from '../Button';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import CurrencyLogo from '../CurrencyLogo';
+import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal';
+import DoubleCurrencyLogo from '../DoubleLogo';
+import { FiatValue } from './FiatValue';
+import Lottie from 'lottie-react';
+import { Input as NumericalInput } from '../NumericalInput';
+import selectCoinAnimation from '../../animation/select-coin.json';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import { useCurrencyBalance } from '../../state/wallet/hooks';
+import { useLingui } from '@lingui/react';
 
 interface CurrencyInputPanelProps {
-  value?: string
-  onUserInput?: (value: string) => void
-  onMax?: () => void
-  showMaxButton: boolean
-  label?: string
-  onCurrencySelect?: (currency: Currency) => void
-  currency?: Currency | null
-  disableCurrencySelect?: boolean
-  hideBalance?: boolean
-  pair?: Pair | null
-  hideInput?: boolean
-  otherCurrency?: Currency | null
-  fiatValue?: CurrencyAmount<Token> | null
-  priceImpact?: Percent
-  id: string
-  showCommonBases?: boolean
-  renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode
-  locked?: boolean
-  customBalanceText?: string
+  value?: string;
+  onUserInput?: (value: string) => void;
+  onMax?: () => void;
+  showMaxButton: boolean;
+  label?: string;
+  onCurrencySelect?: (currency: Currency) => void;
+  currency?: Currency | null;
+  disableCurrencySelect?: boolean;
+  hideBalance?: boolean;
+  pair?: Pair | null;
+  hideInput?: boolean;
+  otherCurrency?: Currency | null;
+  fiatValue?: CurrencyAmount<Token> | null;
+  priceImpact?: Percent;
+  id: string;
+  showCommonBases?: boolean;
+  renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode;
+  locked?: boolean;
+  customBalanceText?: string;
 }
 
 export default function CurrencyInputPanel({
@@ -59,14 +59,17 @@ export default function CurrencyInputPanel({
   locked = false,
   customBalanceText,
 }: CurrencyInputPanelProps) {
-  const { i18n } = useLingui()
-  const [modalOpen, setModalOpen] = useState(false)
-  const { account } = useActiveWeb3React()
-  const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  const { i18n } = useLingui();
+  const [modalOpen, setModalOpen] = useState(false);
+  const { account } = useActiveWeb3React();
+  const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined);
 
   const handleDismissSearch = useCallback(() => {
-    setModalOpen(false)
-  }, [setModalOpen])
+    setModalOpen(false);
+  }, [setModalOpen]);
+
+  // console.log('selected currency balance:', selectedCurrencyBalance);
+  // console.log('fiat value:', fiatValue);
 
   return (
     <div id={id} className={classNames(hideInput ? 'p-4' : 'p-5', 'rounded bg-dark-800')}>
@@ -80,7 +83,7 @@ export default function CurrencyInputPanel({
             )}
             onClick={() => {
               if (onCurrencySelect) {
-                setModalOpen(true)
+                setModalOpen(true);
               }
             }}
           >
@@ -149,11 +152,11 @@ export default function CurrencyInputPanel({
                   {i18n._(t`Max`)}
                 </Button>
               )}
-              <Input.Numeric
+              <NumericalInput
                 id="token-amount-input"
                 value={value}
                 onUserInput={(val) => {
-                  onUserInput(val)
+                  onUserInput(val);
                 }}
               />
               {!hideBalance && currency && selectedCurrencyBalance ? (
@@ -185,5 +188,5 @@ export default function CurrencyInputPanel({
         />
       )}
     </div>
-  )
+  );
 }

@@ -1,42 +1,42 @@
-import { ChainId, CurrencyAmount, JSBI, NATIVE, Pair } from '@sushiswap/sdk'
-import React, { useMemo } from 'react'
-import { classNames, currencyId } from '../../../functions'
-import { toV2LiquidityToken, useTrackedTokenPairs } from '../../../state/user/hooks'
+import { ChainId, CurrencyAmount, JSBI, NATIVE, Pair } from '@sushiswap/sdk';
+import React, { useMemo } from 'react';
+import { classNames, currencyId } from '../../../functions';
+import { toV2LiquidityToken, useTrackedTokenPairs } from '../../../state/user/hooks';
 
-import Alert from '../../../components/Alert'
-import { BIG_INT_ZERO } from '../../../constants'
-import Back from '../../../components/Back'
-import Button from '../../../components/Button'
-import Card from '../../../components/Card'
-import Container from '../../../components/Container'
-import { Currency } from '@sushiswap/sdk'
-import Dots from '../../../components/Dots'
-import Empty from '../../../components/Empty'
-import ExternalLink from '../../../components/ExternalLink'
-import FullPositionCard from '../../../components/PositionCard'
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import { MigrationSupported } from '../../../features/migration'
-import Typography from '../../../components/Typography'
-import Web3Connect from '../../../components/Web3Connect'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useETHBalances } from '../../../state/wallet/hooks'
-import { useLingui } from '@lingui/react'
-import { useRouter } from 'next/router'
-import { useTokenBalancesWithLoadingIndicator } from '../../../state/wallet/hooks'
-import { useV2Pairs } from '../../../hooks/useV2Pairs'
+import Alert from '../../../components/Alert';
+import { BIG_INT_ZERO } from '../../../constants';
+import Back from '../../../components/Back';
+import Button from '../../../components/Button';
+import Card from '../../../components/Card';
+import Container from '../../../components/Container';
+import { Currency } from '@sushiswap/sdk';
+import Dots from '../../../components/Dots';
+import Empty from '../../../components/Empty';
+import ExternalLink from '../../../components/ExternalLink';
+import FullPositionCard from '../../../components/PositionCard';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import { MigrationSupported } from '../../../features/migration';
+import Typography from '../../../components/Typography';
+import Web3Connect from '../../../components/Web3Connect';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React';
+import { useETHBalances } from '../../../state/wallet/hooks';
+import { useLingui } from '@lingui/react';
+import { useRouter } from 'next/router';
+import { useTokenBalancesWithLoadingIndicator } from '../../../state/wallet/hooks';
+import { useV2Pairs } from '../../../hooks/useV2Pairs';
 
 export default function Pool() {
-  const { i18n } = useLingui()
-  const router = useRouter()
-  const { account, chainId } = useActiveWeb3React()
+  const { i18n } = useLingui();
+  const router = useRouter();
+  const { account, chainId } = useActiveWeb3React();
 
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? ''];
 
   // fetch the user's balances of all tracked V2 LP tokens
-  const trackedTokenPairs = useTrackedTokenPairs()
+  const trackedTokenPairs = useTrackedTokenPairs();
   const tokenPairsWithLiquidityTokens = useMemo(
     () =>
       trackedTokenPairs.map((tokens) => ({
@@ -44,15 +44,15 @@ export default function Pool() {
         tokens,
       })),
     [trackedTokenPairs]
-  )
+  );
   const liquidityTokens = useMemo(
     () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
     [tokenPairsWithLiquidityTokens]
-  )
+  );
   const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
     account ?? undefined,
     liquidityTokens
-  )
+  );
 
   // fetch the reserves for all V2 pools in which the user has a balance
   const liquidityTokensWithBalances = useMemo(
@@ -61,13 +61,15 @@ export default function Pool() {
         v2PairsBalances[liquidityToken.address]?.greaterThan('0')
       ),
     [tokenPairsWithLiquidityTokens, v2PairsBalances]
-  )
+  );
 
-  const v2Pairs = useV2Pairs(liquidityTokensWithBalances.map(({ tokens }) => tokens))
+  const v2Pairs = useV2Pairs(liquidityTokensWithBalances.map(({ tokens }) => tokens));
   const v2IsLoading =
-    fetchingV2PairBalances || v2Pairs?.length < liquidityTokensWithBalances.length || v2Pairs?.some((V2Pair) => !V2Pair)
+    fetchingV2PairBalances ||
+    v2Pairs?.length < liquidityTokensWithBalances.length ||
+    v2Pairs?.some((V2Pair) => !V2Pair);
 
-  const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
+  const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair));
 
   // TODO: Replicate this!
   // show liquidity even if its deposited in rewards contract
@@ -85,7 +87,7 @@ export default function Pool() {
   //       .filter((stakingPair) => stakingPair?.liquidityToken.address === v2Pair.liquidityToken.address).length === 0
   //   )
   // })
-  const migrationSupported = chainId in MigrationSupported
+  const migrationSupported = chainId in MigrationSupported;
   return (
     <Container id="pool-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
@@ -165,5 +167,5 @@ export default function Pool() {
         </div>
       </div>
     </Container>
-  )
+  );
 }

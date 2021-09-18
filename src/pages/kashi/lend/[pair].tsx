@@ -1,28 +1,30 @@
-import { Deposit, Withdraw } from '../../../features/kashi'
-import Provider, { useKashiInfo, useKashiPair } from '../../../features/kashi/context'
-import React, { useState } from 'react'
-import { formatNumber, formatPercent } from '../../../functions/format'
+import { Deposit, Withdraw } from '../../../features/lending';
+import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context';
+import React, { useState } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { formatNumber, formatPercent } from '../../../functions/format';
 
-import Card from '../../../components/Card'
-import Container from '../../../components/Container'
-import Head from 'next/head'
-import Image from '../../../components/Image'
-import Layout from '../../../layouts/Kashi'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { Tab } from '@headlessui/react'
-import { cloudinaryLoader } from '../../../functions/cloudinary'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { useRouter } from 'next/router'
+import Card from '../../../components/Card';
+import Container from '../../../components/Container';
+import Head from 'next/head';
+import Image from '../../../components/Image';
+import Layout from '../../../layouts/Kashi';
+import { LendCardHeader } from '../../../components/CardHeader';
+import QuestionHelper from '../../../components/QuestionHelper';
+import { cloudinaryLoader } from '../../../functions/cloudinary';
+import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import { useRouter } from 'next/router';
 
 export default function Pair() {
-  const router = useRouter()
-  const { i18n } = useLingui()
+  const router = useRouter();
+  const { i18n } = useLingui();
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const pair = useKashiPair(router.query.pair as string)
-  const info = useKashiInfo()
+  const pair = useKashiPair(router.query.pair as string);
+  const info = useKashiInfo();
 
-  if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
+  if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend');
 
   return (
     <div id={`lend-${router.query.pair}-page`}>
@@ -33,7 +35,7 @@ export default function Pair() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <Card.Header className="border-b-8 bg-dark-blue border-blue">
+          <LendCardHeader>
             <div className="flex items-center">
               <div className="flex items-center mr-4 space-x-2">
                 {pair && (
@@ -59,19 +61,17 @@ export default function Pair() {
               </div>
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-3xl text-high-emphesis">
-                    {i18n._(t`Lend`)} {pair && pair.asset.tokenInfo.symbol}
-                  </div>
+                  <div className="text-3xl text-high-emphesis">Lend {pair && pair.asset.tokenInfo.symbol}</div>
                   <div className="flex items-center">
-                    <div className="mr-1 text-sm text-secondary">{i18n._(t`Collateral`)}:</div>
+                    <div className="mr-1 text-sm text-secondary">Collateral:</div>
                     <div className="mr-2 text-sm text-high-emphesis">{pair && pair.collateral.tokenInfo.symbol}</div>
-                    <div className="mr-1 text-sm text-secondary">{i18n._(t`Oracle`)}:</div>
+                    <div className="mr-1 text-sm text-secondary">Oracle:</div>
                     <div className="text-sm text-high-emphesis">{pair && pair.oracle.name}</div>
                   </div>
                 </div>
               </div>
             </div>
-          </Card.Header>
+          </LendCardHeader>
         }
       >
         <div className="flex justify-between mb-8">
@@ -83,56 +83,50 @@ export default function Pair() {
             <div className="text-lg text-high-emphesis">{formatNumber(pair.currentUserAssetAmount.usd, true)}</div>
           </div>
           <div>
-            <div className="text-lg text-secondary">{i18n._(t`Borrowed`)}</div>
+            <div className="text-lg text-secondary">Borrowed</div>
             <div className="text-2xl text-high-emphesis">{formatPercent(pair.utilization.string)}</div>
           </div>
           <div className="text-right">
             <div>
-              <div className="text-lg text-secondary">{i18n._(t`Supply APR`)}</div>
+              <div className="text-lg text-secondary">Supply APR</div>
               <div className="text-2xl text-high-emphesis">{formatPercent(pair.supplyAPR.string)}</div>
             </div>
           </div>
         </div>
 
-        <Tab.Group>
-          <Tab.List className="flex p-1 rounded bg-dark-800">
+        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
+          <TabList className="flex p-1 rounded bg-dark-800">
             <Tab
-              className={({ selected }) =>
-                `${
-                  selected ? 'bg-dark-900 text-high-emphesis' : ''
-                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
-              }
+              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
-              {i18n._(t`Deposit`)} {pair.asset.tokenInfo.symbol}
+              Deposit {pair.asset.tokenInfo.symbol}
             </Tab>
             <Tab
-              className={({ selected }) =>
-                `${
-                  selected ? 'bg-dark-900 text-high-emphesis' : ''
-                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
-              }
+              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
-              {i18n._(t`Withdraw`)} {pair.asset.tokenInfo.symbol}
+              Withdraw {pair.asset.tokenInfo.symbol}
             </Tab>
-          </Tab.List>
-          <Tab.Panel>
+          </TabList>
+          <TabPanel>
             <Deposit pair={pair} />
-          </Tab.Panel>
-          <Tab.Panel>
+          </TabPanel>
+          <TabPanel>
             <Withdraw pair={pair} />
-          </Tab.Panel>
-        </Tab.Group>
+          </TabPanel>
+        </Tabs>
       </Card>
     </div>
-  )
+  );
 }
 
-Pair.Provider = Provider
+Pair.Provider = Provider;
 
 const PairLayout = ({ children }) => {
-  const router = useRouter()
-  const { i18n } = useLingui()
-  const pair = useKashiPair(router.query.pair as string)
+  const router = useRouter();
+  const { i18n } = useLingui();
+  const pair = useKashiPair(router.query.pair as string);
   return pair ? (
     <Layout
       left={
@@ -207,7 +201,7 @@ const PairLayout = ({ children }) => {
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`${pair?.asset.tokenInfo.symbol} Strategy`)}</div>
-              <div className="flex flex-row text-lg text-high-emphesis">
+              <div className="text-lg text-high-emphesis">
                 {i18n._(t`None`)}
                 <QuestionHelper
                   text={i18n._(
@@ -222,7 +216,7 @@ const PairLayout = ({ children }) => {
     >
       {children}
     </Layout>
-  ) : null
-}
+  ) : null;
+};
 
-Pair.Layout = PairLayout
+Pair.Layout = PairLayout;

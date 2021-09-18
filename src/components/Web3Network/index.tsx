@@ -1,17 +1,17 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
+import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks';
 
-import Image from 'next/image'
-import NetworkModel from '../../modals/NetworkModal'
-import React from 'react'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useNetworkModalToggle } from '../../state/application/hooks'
+import Image from 'next/image';
+import NetworkModel from '../../modals/NetworkModal';
+import React from 'react';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import { useNetworkModalToggle } from '../../state/application/hooks';
 
 function Web3Network(): JSX.Element | null {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
-  const toggleNetworkModal = useNetworkModalToggle()
+  const toggleNetworkModal = useNetworkModalToggle();
 
-  if (!chainId) return null
+  if (!chainId) return null;
 
   return (
     <div
@@ -24,7 +24,7 @@ function Web3Network(): JSX.Element | null {
       </div>
       <NetworkModel />
     </div>
-  )
+  );
 }
 
-export default Web3Network
+export default Web3Network;

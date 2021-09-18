@@ -1,162 +1,162 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BAR_ADDRESS, ZERO } from '@sushiswap/sdk'
-import React, { useEffect, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../config/tokens'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback';
+import { BAR_ADDRESS, ZERO } from '@sushiswap/sdk';
+import React, { useEffect, useState } from 'react';
+import { SUSHI, XSUSHI } from '../../constants';
 
-import Button from '../../components/Button'
-import { ChainId } from '@sushiswap/sdk'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import Head from 'next/head'
-import Image from 'next/image'
-import Input from '../../components/Input'
-import TransactionFailedModal from '../../modals/TransactionFailedModal'
-import { request } from 'graphql-request'
-import styled from 'styled-components'
-import sushiData from '@sushiswap/sushi-data'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions/parse'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import useSWR from 'swr'
-import useSushiBar from '../../hooks/useSushiBar'
-import { useSushiPrice } from '../../services/graph'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { useWalletModalToggle } from '../../state/application/hooks'
+import Button from '../../components/Button';
+import { ChainId } from '@sushiswap/sdk';
+import Container from '../../components/Container';
+import Dots from '../../components/Dots';
+import Head from 'next/head';
+import Image from 'next/image';
+import { Input as NumericalInput } from '../../components/NumericalInput';
+import TransactionFailedModal from '../../components/TransactionFailedModal';
+import { request } from 'graphql-request';
+import styled from 'styled-components';
+import sushiData from '@sushiswap/sushi-data';
+import { t } from '@lingui/macro';
+import { tryParseAmount } from '../../functions/parse';
+import useActiveWeb3React from '../../hooks/useActiveWeb3React';
+import { useLingui } from '@lingui/react';
+import useSWR from 'swr';
+import useSushiBar from '../../hooks/useSushiBar';
+import { useSushiPrice } from '../../services/graph';
+import { useTokenBalance } from '../../state/wallet/hooks';
+import { useWalletModalToggle } from '../../state/application/hooks';
 
-const INPUT_CHAR_LIMIT = 18
+const INPUT_CHAR_LIMIT = 18;
 
 const sendTx = async (txFunc: () => Promise<any>): Promise<boolean> => {
-  let success = true
+  let success = true;
   try {
-    const ret = await txFunc()
+    const ret = await txFunc();
     if (ret?.error) {
-      success = false
+      success = false;
     }
   } catch (e) {
-    console.error(e)
-    success = false
+    console.error(e);
+    success = false;
   }
-  return success
-}
+  return success;
+};
 
-const StyledNumericalInput = styled(Input.Numeric)`
+const StyledNumericalInput = styled(NumericalInput)`
   caret-color: #e3e3e3;
-`
+`;
 
-const tabStyle = 'flex justify-center items-center h-full w-full rounded-lg cursor-pointer text-sm md:text-base'
-const activeTabStyle = `${tabStyle} text-high-emphesis font-bold bg-dark-900`
-const inactiveTabStyle = `${tabStyle} text-secondary`
+const tabStyle = 'flex justify-center items-center h-full w-full rounded-lg cursor-pointer text-sm md:text-base';
+const activeTabStyle = `${tabStyle} text-high-emphesis font-bold bg-dark-900`;
+const inactiveTabStyle = `${tabStyle} text-secondary`;
 
 const buttonStyle =
-  'flex justify-center items-center w-full h-14 rounded font-bold md:font-medium md:text-lg mt-5 text-sm focus:outline-none focus:ring'
-const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r from-pink-red to-light-brown hover:opacity-90`
-const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
-const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
-const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
+  'flex justify-center items-center w-full h-14 rounded font-bold md:font-medium md:text-lg mt-5 text-sm focus:outline-none focus:ring';
+const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r from-pink-red to-light-brown hover:opacity-90`;
+const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`;
+const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`;
+const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`;
 
-const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
+const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query);
 
 export default function Stake() {
-  const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
-  const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.MAINNET])
-  const xSushiBalance = useTokenBalance(account ?? undefined, XSUSHI)
+  const { i18n } = useLingui();
+  const { account } = useActiveWeb3React();
+  const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.MAINNET]);
+  const xSushiBalance = useTokenBalance(account ?? undefined, XSUSHI);
 
-  const sushiPrice = useSushiPrice()
+  const sushiPrice = useSushiPrice();
 
-  const { enter, leave } = useSushiBar()
+  const { enter, leave } = useSushiBar();
 
-  const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio, totalSupply}}`, fetcher)
+  const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio, totalSupply}}`, fetcher);
 
-  const xSushiPerSushi = parseFloat(data?.bar?.ratio)
+  const xSushiPerSushi = parseFloat(data?.bar?.ratio);
 
-  const walletConnected = !!account
-  const toggleWalletModal = useWalletModalToggle()
+  const walletConnected = !!account;
+  const toggleWalletModal = useWalletModalToggle();
 
-  const [activeTab, setActiveTab] = useState(0)
-  const [modalOpen, setModalOpen] = useState(false)
+  const [activeTab, setActiveTab] = useState(0);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const [input, setInput] = useState<string>('')
-  const [usingBalance, setUsingBalance] = useState(false)
+  const [input, setInput] = useState<string>('');
+  const [usingBalance, setUsingBalance] = useState(false);
 
-  const balance = activeTab === 0 ? sushiBalance : xSushiBalance
+  const balance = activeTab === 0 ? sushiBalance : xSushiBalance;
 
-  const formattedBalance = balance?.toSignificant(4)
+  const formattedBalance = balance?.toSignificant(4);
 
-  const parsedAmount = usingBalance ? balance : tryParseAmount(input, balance?.currency)
+  const parsedAmount = usingBalance ? balance : tryParseAmount(input, balance?.currency);
 
-  const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.MAINNET])
+  const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.MAINNET]);
 
   const handleInput = (v: string) => {
     if (v.length <= INPUT_CHAR_LIMIT) {
-      setUsingBalance(false)
-      setInput(v)
+      setUsingBalance(false);
+      setInput(v);
     }
-  }
+  };
 
   const handleClickMax = () => {
-    setInput(parsedAmount ? parsedAmount.toSignificant(balance.currency.decimals).substring(0, INPUT_CHAR_LIMIT) : '')
-    setUsingBalance(true)
-  }
+    setInput(parsedAmount ? parsedAmount.toSignificant(balance.currency.decimals).substring(0, INPUT_CHAR_LIMIT) : '');
+    setUsingBalance(true);
+  };
 
-  const insufficientFunds = (balance && balance.equalTo(ZERO)) || parsedAmount?.greaterThan(balance)
+  const insufficientFunds = (balance && balance.equalTo(ZERO)) || parsedAmount?.greaterThan(balance);
 
-  const inputError = insufficientFunds
+  const inputError = insufficientFunds;
 
-  const [pendingTx, setPendingTx] = useState(false)
+  const [pendingTx, setPendingTx] = useState(false);
 
-  const buttonDisabled = !input || pendingTx || (parsedAmount && parsedAmount.equalTo(ZERO))
+  const buttonDisabled = !input || pendingTx || (parsedAmount && parsedAmount.equalTo(ZERO));
 
   const handleClickButton = async () => {
-    if (buttonDisabled) return
+    if (buttonDisabled) return;
 
     if (!walletConnected) {
-      toggleWalletModal()
+      toggleWalletModal();
     } else {
-      setPendingTx(true)
+      setPendingTx(true);
 
       if (activeTab === 0) {
         if (approvalState === ApprovalState.NOT_APPROVED) {
-          const success = await sendTx(() => approve())
+          const success = await sendTx(() => approve());
           if (!success) {
-            setPendingTx(false)
+            setPendingTx(false);
             // setModalOpen(true)
-            return
+            return;
           }
         }
-        const success = await sendTx(() => enter(parsedAmount))
+        const success = await sendTx(() => enter(parsedAmount));
         if (!success) {
-          setPendingTx(false)
+          setPendingTx(false);
           // setModalOpen(true)
-          return
+          return;
         }
       } else if (activeTab === 1) {
-        const success = await sendTx(() => leave(parsedAmount))
+        const success = await sendTx(() => leave(parsedAmount));
         if (!success) {
-          setPendingTx(false)
+          setPendingTx(false);
           // setModalOpen(true)
-          return
+          return;
         }
       }
 
-      handleInput('')
-      setPendingTx(false)
+      handleInput('');
+      setPendingTx(false);
     }
-  }
+  };
 
-  const [apr, setApr] = useState<any>()
+  const [apr, setApr] = useState<any>();
 
   // TODO: DROP AND USE SWR HOOKS INSTEAD
   useEffect(() => {
     const fetchData = async () => {
-      const results = await sushiData.exchange.dayData()
-      const apr = (((results[1].volumeUSD * 0.05) / data?.bar?.totalSupply) * 365) / (data?.bar?.ratio * sushiPrice)
+      const results = await sushiData.exchange.dayData();
+      const apr = (((results[1].volumeUSD * 0.05) / data?.bar?.totalSupply) * 365) / (data?.bar?.ratio * sushiPrice);
 
-      setApr(apr)
-    }
-    fetchData()
-  }, [data?.bar?.ratio, data?.bar?.totalSupply, sushiPrice])
+      setApr(apr);
+    };
+    fetchData();
+  }, [data?.bar?.ratio, data?.bar?.totalSupply, sushiPrice]);
 
   return (
     <Container id="bar-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
@@ -197,7 +197,7 @@ export default function Stake() {
             </div>
             <div className="max-w-lg pr-3 mb-2 text-sm leading-5 text-gray-500 md:text-base md:mb-4 md:pr-0">
               {i18n._(t`For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI
-                                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive
+                                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve
                                 xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
                                 Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
                                 SUSHI and any additional from fees.`)}
@@ -261,8 +261,8 @@ export default function Stake() {
                   <div
                     className="h-full w-6/12 p-0.5"
                     onClick={() => {
-                      setActiveTab(0)
-                      handleInput('')
+                      setActiveTab(0);
+                      handleInput('');
                     }}
                   >
                     <div className={activeTab === 0 ? activeTabStyle : inactiveTabStyle}>
@@ -272,8 +272,8 @@ export default function Stake() {
                   <div
                     className="h-full w-6/12 p-0.5"
                     onClick={() => {
-                      setActiveTab(1)
-                      handleInput('')
+                      setActiveTab(1);
+                      handleInput('');
                     }}
                   >
                     <div className={activeTab === 1 ? activeTabStyle : inactiveTabStyle}>
@@ -461,5 +461,5 @@ export default function Stake() {
         </div>
       </div>
     </Container>
-  )
+  );
 }

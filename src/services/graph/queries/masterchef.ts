@@ -1,22 +1,8 @@
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 export const poolsQuery = gql`
-  query poolsQuery(
-    $first: Int! = 1000
-    $skip: Int! = 0
-    $orderBy: String! = "id"
-    $orderDirection: String! = "desc"
-    $block: Block_height
-    $where: Pool_filter! = { allocPoint_gt: 0, accSushiPerShare_gt: 0 }
-  ) {
-    pools(
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      block: $block
-      where: $where
-    ) {
+  query poolsQuery($first: Int! = 1000, $skip: Int! = 0, $orderBy: String! = "id", $orderDirection: String! = "desc") {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       pair
       allocPoint
@@ -31,7 +17,7 @@ export const poolsQuery = gql`
       }
     }
   }
-`
+`;
 
 export const masterChefV1PairAddressesQuery = gql`
   query masterChefV1PairAddresses(
@@ -39,9 +25,8 @@ export const masterChefV1PairAddressesQuery = gql`
     $skip: Int! = 0
     $orderBy: String! = "id"
     $orderDirection: String! = "desc"
-    $where: Pool_filter! = { allocPoint_gt: 0, accSushiPerShare_gt: 0 }
   ) {
-    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       allocPoint
       accSushiPerShare
@@ -50,7 +35,7 @@ export const masterChefV1PairAddressesQuery = gql`
       }
     }
   }
-`
+`;
 
 export const masterChefV1TotalAllocPointQuery = gql`
   query masterChefV1TotalAllocPoint($id: String! = "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd") {
@@ -59,7 +44,7 @@ export const masterChefV1TotalAllocPointQuery = gql`
       totalAllocPoint
     }
   }
-`
+`;
 
 export const masterChefV1SushiPerBlockQuery = gql`
   query masterChefV1SushiPerBlock($id: String! = "0xc2edad668740f1aa35e4d8f227fb8e17dca888cd") {
@@ -68,4 +53,4 @@ export const masterChefV1SushiPerBlockQuery = gql`
       sushiPerBlock
     }
   }
-`
+`;

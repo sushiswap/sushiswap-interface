@@ -1,13 +1,13 @@
-import { Popover, Transition } from '@headlessui/react'
-import React, { Fragment } from 'react'
+import { Popover, Transition } from '@headlessui/react';
+import React, { Fragment } from 'react';
 
-import ExternalLink from '../ExternalLink'
-import { I18n } from '@lingui/core'
-import Image from 'next/image'
-import { classNames } from '../../functions/styling'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import NavLink from '../NavLink'
+import ExternalLink from '../ExternalLink';
+import { I18n } from '@lingui/core';
+import Image from 'next/image';
+import { classNames } from '../../functions/styling';
+import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import NavLink from '../NavLink';
 
 const items = (i18n: I18n) => [
   {
@@ -46,11 +46,11 @@ const items = (i18n: I18n) => [
     href: '/vesting',
     external: false,
   },
-]
+];
 
 export default function Menu() {
-  const { i18n } = useLingui()
-  const solutions = items(i18n)
+  const { i18n } = useLingui();
+  const solutions = items(i18n);
 
   return (
     <Popover className="relative ml-auto md:m-0">
@@ -136,5 +136,5 @@ export default function Menu() {
         </>
       )}
     </Popover>
-  )
+  );
 }

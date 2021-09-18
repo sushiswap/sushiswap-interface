@@ -1,5 +1,5 @@
-import Container from '../../components/Container'
-import Head from 'next/head'
+import Container from '../../components/Container';
+import Head from 'next/head';
 
 export default function Vaults() {
   return (
@@ -9,5 +9,5 @@ export default function Vaults() {
         <meta key="description" name="description" content="Sushi vaults..." />
       </Head>
     </Container>
-  )
+  );
 }

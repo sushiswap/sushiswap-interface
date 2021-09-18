@@ -1,50 +1,52 @@
-import { Borrow, Repay } from '../../../features/kashi'
-import Provider, { useKashiInfo, useKashiPair } from '../../../features/kashi/context'
-import React, { useCallback, useState } from 'react'
-import { formatNumber, formatPercent } from '../../../functions/format'
+import { Borrow, Repay } from '../../../features/lending';
+import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context';
+import React, { useCallback, useState } from 'react';
+import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
+import { formatNumber, formatPercent } from '../../../functions/format';
 
-import Card from '../../../components/Card'
-import Dots from '../../../components/Dots'
-import GradientDot from '../../../components/GradientDot'
-import Head from 'next/head'
-import Image from '../../../components/Image'
-import { KashiCooker } from '../../../entities'
-import Layout from '../../../layouts/Kashi'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { Tab } from '@headlessui/react'
-import { cloudinaryLoader } from '../../../functions/cloudinary'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import { useRouter } from 'next/router'
-import { useToken } from '../../../hooks/Tokens'
-import { useTransactionAdder } from '../../../state/transactions/hooks'
-import { useUSDCPrice } from '../../../hooks'
-import { useV2Pair } from '../../../hooks/useV2Pairs'
+import { BorrowCardHeader } from '../../../components/CardHeader';
+import Card from '../../../components/Card';
+import Dots from '../../../components/Dots';
+import GradientDot from '../../../components/GradientDot';
+import Head from 'next/head';
+import Image from '../../../components/Image';
+import { KashiCooker } from '../../../entities';
+import Layout from '../../../layouts/Kashi';
+import QuestionHelper from '../../../components/QuestionHelper';
+import { cloudinaryLoader } from '../../../functions/cloudinary';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React';
+import { useLingui } from '@lingui/react';
+import { useRouter } from 'next/router';
+import { useToken } from '../../../hooks/Tokens';
+import { useTransactionAdder } from '../../../state/transactions/hooks';
+import { useUSDCPrice } from '../../../hooks';
+import { useV2Pair } from '../../../hooks/useV2Pairs';
 
 function Pair() {
-  const router = useRouter()
-  const { i18n } = useLingui()
+  const router = useRouter();
+  const { i18n } = useLingui();
+  const [tabIndex, setTabIndex] = useState(0);
 
-  const { account, library, chainId } = useActiveWeb3React()
+  const { account, library, chainId } = useActiveWeb3React();
 
-  const pair = useKashiPair(router.query.pair as string)
-  const asset = useToken(pair?.asset.address)
-  const collateral = useToken(pair?.collateral.address)
-  const [pairState, liquidityPair] = useV2Pair(asset, collateral)
+  const pair = useKashiPair(router.query.pair as string);
+  const asset = useToken(pair?.asset.address);
+  const collateral = useToken(pair?.collateral.address);
+  const [pairState, liquidityPair] = useV2Pair(asset, collateral);
 
-  const info = useKashiInfo()
+  const info = useKashiInfo();
 
-  const addTransaction = useTransactionAdder()
+  const addTransaction = useTransactionAdder();
   const onUpdateExchangeRate = useCallback(async () => {
-    const cooker = new KashiCooker(pair, account, library, chainId)
-    const result = await cooker.updateExchangeRate().cook()
+    const cooker = new KashiCooker(pair, account, library, chainId);
+    const result = await cooker.updateExchangeRate().cook();
     addTransaction(result.tx, {
       summary: `Update ${pair.collateral.tokenInfo.symbol}/${pair.asset.tokenInfo.symbol} exchange rate`,
-    })
-  }, [account, addTransaction, chainId, library, pair])
+    });
+  }, [account, addTransaction, chainId, library, pair]);
 
-  if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/borrow')
+  if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/borrow');
 
   return (
     <>
@@ -59,7 +61,7 @@ function Pair() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <Card.Header className="border-b-8 bg-dark-pink border-pink">
+          <BorrowCardHeader>
             <div className="flex items-center">
               <div className="flex items-center mr-4 space-x-2">
                 {pair && (
@@ -96,7 +98,7 @@ function Pair() {
                 </div>
               </div>
             </div>
-          </Card.Header>
+          </BorrowCardHeader>
         }
       >
         <div className="flex justify-between mb-8">
@@ -124,50 +126,44 @@ function Pair() {
             </div>
           </div>
         </div>
-        <Tab.Group>
-          <Tab.List className="flex p-1 rounded bg-dark-800">
+        <Tabs forceRenderTabPanel selectedIndex={tabIndex} onSelect={(index: number) => setTabIndex(index)}>
+          <TabList className="flex p-1 rounded bg-dark-800">
             <Tab
-              className={({ selected }) =>
-                `${
-                  selected ? 'bg-dark-900 text-high-emphesis' : ''
-                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
-              }
+              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
               {i18n._(t`Borrow`)}
             </Tab>
             <Tab
-              className={({ selected }) =>
-                `${
-                  selected ? 'bg-dark-900 text-high-emphesis' : ''
-                } flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none`
-              }
+              className="flex items-center justify-center flex-1 px-3 py-4 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none"
+              selectedClassName="bg-dark-900 text-high-emphesis"
             >
               {i18n._(t`Repay`)}
             </Tab>
-          </Tab.List>
-          <Tab.Panel>
+          </TabList>
+          <TabPanel>
             <Borrow pair={pair} />
-          </Tab.Panel>
-          <Tab.Panel>
+          </TabPanel>
+          <TabPanel>
             <Repay pair={pair} />
-          </Tab.Panel>
-        </Tab.Group>
+          </TabPanel>
+        </Tabs>
       </Card>
     </>
-  )
+  );
 }
 
-Pair.Provider = Provider
+Pair.Provider = Provider;
 
 const PairLayout = ({ children }) => {
-  const { i18n } = useLingui()
-  const router = useRouter()
-  const pair = useKashiPair(router.query.pair as string)
-  const asset = useToken(pair?.asset.address)
-  const collateral = useToken(pair?.collateral.address)
-  const [pairState, liquidityPair] = useV2Pair(asset, collateral)
-  const assetPrice = useUSDCPrice(asset)
-  const collateralPrice = useUSDCPrice(collateral)
+  const { i18n } = useLingui();
+  const router = useRouter();
+  const pair = useKashiPair(router.query.pair as string);
+  const asset = useToken(pair?.asset.address);
+  const collateral = useToken(pair?.collateral.address);
+  const [pairState, liquidityPair] = useV2Pair(asset, collateral);
+  const assetPrice = useUSDCPrice(asset);
+  const collateralPrice = useUSDCPrice(collateral);
   // console.log('render borrow pair layout', { pair })
 
   return pair ? (
@@ -233,7 +229,7 @@ const PairLayout = ({ children }) => {
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`${pair?.collateral.tokenInfo.symbol} Strategy`)}</div>
-              <div className="flex flex-row text-lg text-high-emphesis">
+              <div className="text-lg text-high-emphesis">
                 {i18n._(t`None`)}
                 <QuestionHelper
                   text={i18n._(
@@ -283,9 +279,9 @@ const PairLayout = ({ children }) => {
     >
       {children}
     </Layout>
-  ) : null
-}
+  ) : null;
+};
 
-Pair.Layout = PairLayout
+Pair.Layout = PairLayout;
 
-export default Pair
+export default Pair;

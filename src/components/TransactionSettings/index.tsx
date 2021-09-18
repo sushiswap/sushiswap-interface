@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react'
-import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks'
+import React, { useRef, useState } from 'react';
+import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks';
 
-import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
-import { Percent } from '@sushiswap/sdk'
-import QuestionHelper from '../QuestionHelper'
-import Typography from '../Typography'
-import { classNames } from '../../functions'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import Button from '../Button'
+import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants';
+import { Percent } from '@sushiswap/sdk';
+import QuestionHelper from '../QuestionHelper';
+import Typography from '../Typography';
+import { classNames } from '../../functions';
+import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import Button from '../Button';
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',
@@ -21,67 +21,67 @@ enum DeadlineError {
 }
 
 export interface TransactionSettingsProps {
-  placeholderSlippage?: Percent // varies according to the context in which the settings dialog is placed
+  placeholderSlippage?: Percent; // varies according to the context in which the settings dialog is placed
 }
 
 export default function TransactionSettings({ placeholderSlippage }: TransactionSettingsProps) {
-  const { i18n } = useLingui()
+  const { i18n } = useLingui();
 
-  const inputRef = useRef<HTMLInputElement>()
+  const inputRef = useRef<HTMLInputElement>();
 
-  const userSlippageTolerance = useUserSlippageTolerance()
-  const setUserSlippageTolerance = useSetUserSlippageTolerance()
+  const userSlippageTolerance = useUserSlippageTolerance();
+  const setUserSlippageTolerance = useSetUserSlippageTolerance();
 
-  const [deadline, setDeadline] = useUserTransactionTTL()
+  const [deadline, setDeadline] = useUserTransactionTTL();
 
-  const [slippageInput, setSlippageInput] = useState('')
-  const [slippageError, setSlippageError] = useState<SlippageError | false>(false)
+  const [slippageInput, setSlippageInput] = useState('');
+  const [slippageError, setSlippageError] = useState<SlippageError | false>(false);
 
-  const [deadlineInput, setDeadlineInput] = useState('')
-  const [deadlineError, setDeadlineError] = useState<DeadlineError | false>(false)
+  const [deadlineInput, setDeadlineInput] = useState('');
+  const [deadlineError, setDeadlineError] = useState<DeadlineError | false>(false);
 
   function parseSlippageInput(value: string) {
     // populate what the user typed and clear the error
-    setSlippageInput(value)
-    setSlippageError(false)
+    setSlippageInput(value);
+    setSlippageError(false);
 
     if (value.length === 0) {
-      setUserSlippageTolerance('auto')
+      setUserSlippageTolerance('auto');
     } else {
-      const parsed = Math.floor(Number.parseFloat(value) * 100)
+      const parsed = Math.floor(Number.parseFloat(value) * 100);
 
       if (!Number.isInteger(parsed) || parsed < 0 || parsed > 5000) {
-        setUserSlippageTolerance('auto')
+        setUserSlippageTolerance('auto');
         if (value !== '.') {
-          setSlippageError(SlippageError.InvalidInput)
+          setSlippageError(SlippageError.InvalidInput);
         }
       } else {
-        setUserSlippageTolerance(new Percent(parsed, 10_000))
+        setUserSlippageTolerance(new Percent(parsed, 10_000));
       }
     }
   }
 
-  const tooLow = userSlippageTolerance !== 'auto' && userSlippageTolerance.lessThan(new Percent(5, 10_000))
-  const tooHigh = userSlippageTolerance !== 'auto' && userSlippageTolerance.greaterThan(new Percent(1, 100))
+  const tooLow = userSlippageTolerance !== 'auto' && userSlippageTolerance.lessThan(new Percent(5, 10_000));
+  const tooHigh = userSlippageTolerance !== 'auto' && userSlippageTolerance.greaterThan(new Percent(1, 100));
 
   function parseCustomDeadline(value: string) {
     // populate what the user typed and clear the error
-    setDeadlineInput(value)
-    setDeadlineError(false)
+    setDeadlineInput(value);
+    setDeadlineError(false);
 
     if (value.length === 0) {
-      setDeadline(DEFAULT_DEADLINE_FROM_NOW)
+      setDeadline(DEFAULT_DEADLINE_FROM_NOW);
     } else {
       try {
-        const parsed: number = Math.floor(Number.parseFloat(value) * 60)
+        const parsed: number = Math.floor(Number.parseFloat(value) * 60);
         if (!Number.isInteger(parsed) || parsed < 60 || parsed > 180 * 60) {
-          setDeadlineError(DeadlineError.InvalidInput)
+          setDeadlineError(DeadlineError.InvalidInput);
         } else {
-          setDeadline(parsed)
+          setDeadline(parsed);
         }
       } catch (error) {
-        console.error(error)
-        setDeadlineError(DeadlineError.InvalidInput)
+        console.error(error);
+        setDeadlineError(DeadlineError.InvalidInput);
       }
     }
   }
@@ -114,7 +114,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
             )}
             tabIndex={-1}
           >
-            <div className="flex items-center justify-between gap-1">
+            <div className="flex justify-between items-center gap-1">
               {tooLow || tooHigh ? (
                 <span className="hidden sm:inline text-yellow" role="img" aria-label="warning">
                   ⚠️
@@ -132,8 +132,8 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
                 }
                 onChange={(e) => parseSlippageInput(e.target.value)}
                 onBlur={() => {
-                  setSlippageInput('')
-                  setSlippageError(false)
+                  setSlippageInput('');
+                  setSlippageError(false);
                 }}
                 color={slippageError ? 'red' : ''}
               />
@@ -145,7 +145,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
             color={userSlippageTolerance === 'auto' ? 'blue' : 'gray'}
             variant={userSlippageTolerance === 'auto' ? 'filled' : 'outlined'}
             onClick={() => {
-              parseSlippageInput('')
+              parseSlippageInput('');
             }}
           >
             {i18n._(t`Auto`)}
@@ -196,8 +196,8 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
               }
               onChange={(e) => parseCustomDeadline(e.target.value)}
               onBlur={() => {
-                setDeadlineInput('')
-                setDeadlineError(false)
+                setDeadlineInput('');
+                setDeadlineError(false);
               }}
               color={deadlineError ? 'red' : ''}
             />
@@ -206,5 +206,5 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
         </div>
       </div>
     </div>
-  )
+  );
 }

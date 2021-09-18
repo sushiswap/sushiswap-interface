@@ -1,13 +1,13 @@
-import Container from '../../components/Container'
-import Head from 'next/head'
-import Typography from '../../components/Typography'
-import useSWR from 'swr'
+import Container from '../../components/Container';
+import Head from 'next/head';
+import Typography from '../../components/Typography';
+import useSWR from 'swr';
 
-const getChains = (url = 'https://chainid.network/chains.json') => fetch(url).then((res) => res.json())
+const getChains = (url = 'https://chainid.network/chains.json') => fetch(url).then((res) => res.json());
 
-export default function Status({ fallbackData }) {
-  const res = useSWR('https://chainid.network/chains.json', getChains, { fallbackData })
-  const { data } = res
+export default function Status({ initialData }) {
+  const res = useSWR('https://chainid.network/chains.json', getChains, { initialData });
+  const { data } = res;
   return (
     <Container id="chains-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="6xl">
       <Head>
@@ -26,14 +26,14 @@ export default function Status({ fallbackData }) {
                   <code>{JSON.stringify(chain, null, 2)}</code>
                 </pre>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </Container>
-  )
+  );
 }
 
 export async function getStaticProps() {
-  return { props: { fallbackData: await getChains() } }
+  return { props: { initialData: await getChains() } };
 }

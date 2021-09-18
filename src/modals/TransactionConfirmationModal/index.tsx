@@ -1,26 +1,26 @@
-import { AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather'
-import { ChainId, Currency } from '@sushiswap/sdk'
-import React, { FC } from 'react'
-import { Trans, t } from '@lingui/macro'
+import { AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather';
+import { ChainId, Currency } from '@sushiswap/sdk';
+import React, { FC } from 'react';
+import { Trans, t } from '@lingui/macro';
 
-import Button from '../../components/Button'
-import CloseIcon from '../../components/CloseIcon'
-import ExternalLink from '../../components/ExternalLink'
-import Image from '../../components/Image'
-import Lottie from 'lottie-react'
-import Modal from '../../components/Modal'
-import ModalHeader from '../../components/ModalHeader'
-import { RowFixed } from '../../components/Row'
-import { getExplorerLink } from '../../functions/explorer'
-import loadingRollingCircle from '../../animation/loading-rolling-circle.json'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import useAddTokenToMetaMask from '../../hooks/useAddTokenToMetaMask'
-import { useLingui } from '@lingui/react'
+import Button from '../../components/Button';
+import CloseIcon from '../../components/CloseIcon';
+import ExternalLink from '../../components/ExternalLink';
+import Image from '../../components/Image';
+import Lottie from 'lottie-react';
+import Modal from '../../components/Modal';
+import ModalHeader from '../../components/ModalHeader';
+import { RowFixed } from '../../components/Row';
+import { getExplorerLink } from '../../functions/explorer';
+import loadingRollingCircle from '../../animation/loading-rolling-circle.json';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import useAddTokenToMetaMask from '../../hooks/useAddTokenToMetaMask';
+import { useLingui } from '@lingui/react';
 
 interface ConfirmationPendingContentProps {
-  onDismiss: () => void
-  pendingText: string
-  pendingText2: string
+  onDismiss: () => void;
+  pendingText: string;
+  pendingText2: string;
 }
 
 export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({
@@ -28,7 +28,7 @@ export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = (
   pendingText,
   pendingText2,
 }) => {
-  const { i18n } = useLingui()
+  const { i18n } = useLingui();
   return (
     <div>
       <div className="flex justify-end">
@@ -44,15 +44,15 @@ export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = (
         <div className="text-sm font-bold text-secondary">{i18n._(t`Confirm this transaction in your wallet`)}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface TransactionSubmittedContentProps {
-  onDismiss: () => void
-  hash: string | undefined
-  chainId: ChainId
-  currencyToAdd?: Currency | undefined
-  inline?: boolean // not in modal
+  onDismiss: () => void;
+  hash: string | undefined;
+  chainId: ChainId;
+  currencyToAdd?: Currency | undefined;
+  inline?: boolean; // not in modal
 }
 
 export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> = ({
@@ -61,9 +61,9 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
   hash,
   currencyToAdd,
 }) => {
-  const { i18n } = useLingui()
-  const { library } = useActiveWeb3React()
-  const { addToken, success } = useAddTokenToMetaMask(currencyToAdd)
+  const { i18n } = useLingui();
+  const { library } = useActiveWeb3React();
+  const { addToken, success } = useAddTokenToMetaMask(currencyToAdd);
   return (
     <div>
       <div className="flex justify-end">
@@ -105,14 +105,14 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
         </Button> */}
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface ConfirmationModelContentProps {
-  title: string
-  onDismiss: () => void
-  topContent: () => React.ReactNode
-  bottomContent: () => React.ReactNode
+  title: string;
+  onDismiss: () => void;
+  topContent: () => React.ReactNode;
+  bottomContent: () => React.ReactNode;
 }
 
 export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
@@ -127,16 +127,16 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
       {topContent()}
       {bottomContent()}
     </div>
-  )
-}
+  );
+};
 
 interface TransactionErrorContentProps {
-  message: string
-  onDismiss: () => void
+  message: string;
+  onDismiss: () => void;
 }
 
 export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ message, onDismiss }) => {
-  const { i18n } = useLingui()
+  const { i18n } = useLingui();
 
   return (
     <div className="grid gap-6">
@@ -156,18 +156,18 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ mess
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface ConfirmationModalProps {
-  isOpen: boolean
-  onDismiss: () => void
-  hash: string | undefined
-  content: () => React.ReactNode
-  attemptingTxn: boolean
-  pendingText: string
-  pendingText2?: string
-  currencyToAdd?: Currency | undefined
+  isOpen: boolean;
+  onDismiss: () => void;
+  hash: string | undefined;
+  content: () => React.ReactNode;
+  attemptingTxn: boolean;
+  pendingText: string;
+  pendingText2?: string;
+  currencyToAdd?: Currency | undefined;
 }
 
 const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -180,9 +180,9 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   content,
   currencyToAdd,
 }) => {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
-  if (!chainId) return null
+  if (!chainId) return null;
 
   // confirmation screen
   return (
@@ -200,7 +200,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
         content()
       )}
     </Modal>
-  )
-}
+  );
+};
 
-export default TransactionConfirmationModal
+export default TransactionConfirmationModal;

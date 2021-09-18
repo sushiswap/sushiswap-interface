@@ -1,35 +1,38 @@
-import { ChainId, Currency, Token, currencyEquals } from '@sushiswap/sdk'
+import { ChainId, Currency, Token, currencyEquals } from '@sushiswap/sdk';
 
-import { AutoColumn } from '../../components/Column'
-import { AutoRow } from '../../components/Row'
-import Button from '../../components/Button'
-import { COMMON_BASES } from '../../config/routing'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import QuestionHelper from '../../components/QuestionHelper'
-import React from 'react'
-import Typography from '../../components/Typography'
-import { currencyId } from '../../functions'
+import { AutoColumn } from '../../components/Column';
+import { AutoRow } from '../../components/Row';
+import Button from '../../components/Button';
+import { COMMON_BASES } from '../../constants/routing';
+import CurrencyLogo from '../../components/CurrencyLogo';
+import QuestionHelper from '../../components/QuestionHelper';
+import React from 'react';
+import Typography from '../../components/Typography';
+import { currencyId } from '../../functions';
 
+/*
+  Changed to function as List of Collateral Assets
+*/
 export default function CommonBases({
   chainId,
   onSelect,
   selectedCurrency,
 }: {
-  chainId?: number
-  selectedCurrency?: Currency | null
-  onSelect: (currency: Currency) => void
+  chainId?: number;
+  selectedCurrency?: Currency | null;
+  onSelect: (currency: Currency) => void;
 }) {
-  const bases = typeof chainId !== 'undefined' ? COMMON_BASES[chainId] ?? [] : []
+  const bases = typeof chainId !== 'undefined' ? COMMON_BASES[chainId] ?? [] : [];
 
   return (
     <div className="flex flex-col space-y-2">
       <div className="flex flex-row">
-        Common bases
-        <QuestionHelper text="These tokens are commonly paired with other tokens." />
+        Collateral Assets
+        <QuestionHelper text="These tokens can be used as collateral." />
       </div>
       <div className="flex flex-wrap">
         {bases.map((currency: Currency) => {
-          const isSelected = selectedCurrency?.equals(currency)
+          const isSelected = selectedCurrency?.equals(currency);
           return (
             <Button
               variant="empty"
@@ -44,9 +47,9 @@ export default function CommonBases({
                 {currency.symbol}
               </Typography>
             </Button>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }

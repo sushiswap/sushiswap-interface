@@ -1,11 +1,11 @@
-import { FC } from 'react'
-import React, { Fragment } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { FC } from 'react';
+import React, { Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 
 interface ModalProps {
-  isOpen: boolean
-  onDismiss: () => void
-  children?: React.ReactNode
+  isOpen: boolean;
+  onDismiss: () => void;
+  children?: React.ReactNode;
 }
 
 const HeadlessUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
@@ -49,7 +49,7 @@ const HeadlessUIModal: FC<ModalProps> = ({ isOpen, onDismiss, children }) => {
         </div>
       </Dialog>
     </Transition.Root>
-  )
-}
+  );
+};
 
-export default HeadlessUIModal
+export default HeadlessUIModal;

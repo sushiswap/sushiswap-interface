@@ -1,163 +1,283 @@
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/sdk';
 
-const explorers = {
-  etherscan: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+// Multichain Explorer
+const builders = {
+  etherscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}etherscan.io`;
     switch (type) {
       case 'transaction':
-        return `${link}/tx/${data}`
+        return `${prefix}/tx/${data}`;
       default:
-        return `${link}/${type}/${data}`
+        return `${prefix}/${type}/${data}`;
     }
   },
 
-  blockscout: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+  fantom: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://ftmscan.com';
     switch (type) {
       case 'transaction':
-        return `${link}/tx/${data}`
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+
+  xdai: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://blockscout.com/poa/xdai`;
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
       case 'token':
-        return `${link}/tokens/${data}`
+        return `${prefix}/tokens/${data}`;
       default:
-        return `${link}/${type}/${data}`
+        return `${prefix}/${type}/${data}`;
     }
   },
 
-  harmony: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+  bscscan: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}bscscan.com`;
     switch (type) {
       case 'transaction':
-        return `${link}/tx/${data}`
-      case 'token':
-        return `${link}/address/${data}`
+        return `${prefix}/tx/${data}`;
       default:
-        return `${link}/${type}/${data}`
+        return `${prefix}/${type}/${data}`;
     }
   },
 
-  okex: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+  matic: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    // const prefix = `https://explorer-${chainName}.maticvigil.com`
+    const prefix = 'https://polygonscan.com';
     switch (type) {
       case 'transaction':
-        return `${link}/tx/${data}`
+        return `${prefix}/tx/${data}`;
       case 'token':
-        return `${link}/tokenAddr/${data}`
+        return `${prefix}/tokens/${data}`;
       default:
-        return `${link}/${type}/${data}`
+        return `${prefix}/${type}/${data}`;
     }
   },
-}
+
+  // token is not yet supported for arbitrum
+  arbitrum: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://mainnet-arb-explorer.netlify.app`;
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+
+  // token is not yet supported for arbitrum
+  arbitrumTestnet: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://explorer.offchainlabs.com/#`;
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      case 'token':
+        return prefix;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+  moonbase: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://moonbeam-explorer.netlify.app';
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      case 'address':
+        return `${prefix}/address/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+
+  avalanche: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://cchain.explorer.avax${chainName ? `-${chainName}` : ''}.network`;
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+
+  heco: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = `https://${chainName ? `${chainName}.` : ''}hecoinfo.com`;
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+
+  harmony: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://beta.explorer.harmony.one/#';
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+
+  harmonyTestnet: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://explorer.pops.one/#';
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+  okex: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://www.oklink.com/okexchain';
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      case 'token':
+        return `${prefix}/tokenAddr/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+  okexTestnet: (chainName = '', data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://www.oklink.com/okexchain-test';
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      case 'token':
+        return `${prefix}/tokenAddr/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+
+  celo: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://explorer.celo.org';
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/tx/${data}`;
+      case 'token':
+        return `${prefix}/tokens/${data}`;
+      default:
+        return `${prefix}/${type}/${data}`;
+    }
+  },
+};
+
 interface ChainObject {
   [chainId: number]: {
-    link: string
-    builder: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => string
-  }
+    chainName: string;
+    builder: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => string;
+  };
 }
 
 const chains: ChainObject = {
   [ChainId.MAINNET]: {
-    link: 'https://etherscan.io',
-    builder: explorers.etherscan,
+    chainName: '',
+    builder: builders.etherscan,
   },
   [ChainId.ROPSTEN]: {
-    link: 'https://ropsten.etherscan.io',
-    builder: explorers.etherscan,
+    chainName: 'ropsten',
+    builder: builders.etherscan,
   },
   [ChainId.RINKEBY]: {
-    link: 'https://rinkeby.etherscan.io',
-    builder: explorers.etherscan,
+    chainName: 'rinkeby',
+    builder: builders.etherscan,
   },
   [ChainId.GÖRLI]: {
-    link: 'https://goerli.etherscan.io',
-    builder: explorers.etherscan,
+    chainName: 'goerli',
+    builder: builders.etherscan,
   },
   [ChainId.KOVAN]: {
-    link: 'https://kovan.etherscan.io',
-    builder: explorers.etherscan,
+    chainName: 'kovan',
+    builder: builders.etherscan,
   },
   [ChainId.MATIC]: {
-    link: 'https://polygonscan.com',
-    builder: explorers.etherscan,
+    chainName: 'mainnet',
+    builder: builders.matic,
   },
   [ChainId.MATIC_TESTNET]: {
-    link: 'https://mumbai.polygonscan.com',
-    builder: explorers.etherscan,
+    chainName: 'mumbai',
+    builder: builders.matic,
   },
   [ChainId.FANTOM]: {
-    link: 'https://ftmscan.com',
-    builder: explorers.etherscan,
+    chainName: '',
+    builder: builders.fantom,
   },
   [ChainId.FANTOM_TESTNET]: {
-    link: 'https://testnet.ftmscan.com',
-    builder: explorers.etherscan,
+    chainName: 'testnet',
+    builder: builders.fantom,
   },
   [ChainId.XDAI]: {
-    link: 'https://blockscout.com/xdai/mainnet',
-    builder: explorers.blockscout,
+    chainName: 'xdai',
+    builder: builders.xdai,
   },
   [ChainId.BSC]: {
-    link: 'https://bscscan.com',
-    builder: explorers.etherscan,
+    chainName: '',
+    builder: builders.bscscan,
   },
   [ChainId.BSC_TESTNET]: {
-    link: 'https://testnet.bscscan.com',
-    builder: explorers.etherscan,
+    chainName: 'testnet',
+    builder: builders.bscscan,
   },
   [ChainId.ARBITRUM]: {
-    link: 'https://arbiscan.io',
-    builder: explorers.etherscan,
+    chainName: '',
+    builder: builders.arbitrum,
+  },
+  [ChainId.ARBITRUM_TESTNET]: {
+    chainName: 'arbitrum',
+    builder: builders.arbitrumTestnet,
   },
   [ChainId.MOONBEAM_TESTNET]: {
-    link: 'https://moonbeam-explorer.netlify.app',
-    builder: explorers.blockscout,
+    chainName: '',
+    builder: builders.moonbase,
   },
   [ChainId.AVALANCHE]: {
-    link: 'https://cchain.explorer.avax.network',
-    builder: explorers.blockscout,
+    chainName: '',
+    builder: builders.avalanche,
   },
   [ChainId.AVALANCHE_TESTNET]: {
-    link: 'https://cchain.explorer.avax-test.network',
-    builder: explorers.etherscan,
+    chainName: 'test',
+    builder: builders.avalanche,
   },
   [ChainId.HECO]: {
-    link: 'https://hecoinfo.com',
-    builder: explorers.etherscan,
+    chainName: '',
+    builder: builders.heco,
   },
   [ChainId.HECO_TESTNET]: {
-    link: 'https://testnet.hecoinfo.com',
-    builder: explorers.etherscan,
+    chainName: 'testnet',
+    builder: builders.heco,
   },
   [ChainId.HARMONY]: {
-    link: 'https://beta.explorer.harmony.one/#',
-    builder: explorers.harmony,
+    chainName: '',
+    builder: builders.harmony,
   },
   [ChainId.HARMONY_TESTNET]: {
-    link: 'https://explorer.pops.one/#',
-    builder: explorers.harmony,
+    chainName: '',
+    builder: builders.harmonyTestnet,
   },
   [ChainId.OKEX]: {
-    link: 'https://www.oklink.com/okexchain',
-    builder: explorers.okex,
+    chainName: '',
+    builder: builders.okex,
   },
   [ChainId.OKEX_TESTNET]: {
-    link: 'https://www.oklink.com/okexchain-test',
-    builder: explorers.okex,
+    chainName: '',
+    builder: builders.okexTestnet,
   },
   [ChainId.CELO]: {
-    link: 'https://explorer.celo.org',
-    builder: explorers.blockscout,
+    chainName: '',
+    builder: builders.celo,
   },
-  [ChainId.PALM]: {
-    link: '', // ??
-    builder: explorers.blockscout,
-  },
-  [ChainId.MOONRIVER]: {
-    link: 'https://blockscout.moonriver.moonbeam.network',
-    builder: explorers.blockscout,
-  },
-}
+};
 
 export function getExplorerLink(
   chainId: ChainId,
   data: string,
   type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
-  const chain = chains[chainId]
-  return chain.builder(chain.link, data, type)
+  const chain = chains[chainId];
+  return chain.builder(chain.chainName, data, type);
 }

@@ -1,9 +1,9 @@
-import { createStore, Store } from 'redux'
-import { Field, selectCurrency } from './actions'
-import reducer, { SwapState } from './reducer'
+import { createStore, Store } from 'redux';
+import { Field, selectCurrency } from './actions';
+import reducer, { SwapState } from './reducer';
 
 describe('swap reducer', () => {
-  let store: Store<SwapState>
+  let store: Store<SwapState>;
 
   beforeEach(() => {
     store = createStore(reducer, {
@@ -12,8 +12,8 @@ describe('swap reducer', () => {
       typedValue: '',
       independentField: Field.INPUT,
       recipient: null,
-    })
-  })
+    });
+  });
 
   describe('selectToken', () => {
     it('changes token', () => {
@@ -22,7 +22,7 @@ describe('swap reducer', () => {
           field: Field.OUTPUT,
           currencyId: '0x0000',
         })
-      )
+      );
 
       expect(store.getState()).toEqual({
         [Field.OUTPUT]: { currencyId: '0x0000' },
@@ -30,7 +30,7 @@ describe('swap reducer', () => {
         typedValue: '',
         independentField: Field.INPUT,
         recipient: null,
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});

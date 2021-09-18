@@ -1,40 +1,48 @@
-import { classNames } from '../../functions'
+import Link from 'next/link';
+import { classNames } from '../../functions';
+import { useRouter } from 'next/router';
 
-interface TabsProps {
-  tabs: any[]
-  currentType: string
-  setType: Function
-}
+export default function PairTabs({ tabs }: { tabs: any[] }): JSX.Element {
+  const router = useRouter();
 
-export default function Tabs({ tabs, currentType, setType }: TabsProps): JSX.Element {
   return (
     <>
-      <div className="border-t border-b border-gray-700">
-        <nav className="grid items-center grid-flow-col -mb-px overflow-x-auto whitespace-nowrap" aria-label="Tabs">
+      <div className="border-b border-gray-700">
+        <nav className="flex -mb-px space-x-4" aria-label="Tabs">
           {tabs.map((tab) => (
-            <div
-              key={tab.name}
-              className={classNames(
-                tab.type !== currentType && 'opacity-40 hover:opacity-80',
-                'flex flex-col font-bold cursor-pointer text-high-emphesis'
-              )}
-              onClick={() => setType(tab.type)}
-            >
-              <div className="inline-flex items-center justify-center pt-4 pb-2">
-                <div>
-                  <div className="pb-2">{tab.name}</div>
-                  <div
-                    className={classNames(
-                      tab.type === currentType && 'border-dark-700',
-                      '-mb-2 border-4 border-transparent'
+            <div key={tab.name}>
+              <Link href={tab.href}>
+                <a
+                  className={classNames(
+                    router.asPath === tab.href
+                      ? tab.customCurrent ?? 'bg-gradient-to-r from-gray-600 to-gray-300 text-transparent bg-clip-text'
+                      : 'text-primary hover:text-gray-200',
+                    'group flex flex-auto flex-col px-1 font-bold text-lg'
+                  )}
+                >
+                  <div className="inline-flex items-center py-2">
+                    {tab.icon && (
+                      <div className={'mr-2'} style={router.asPath !== tab.href ? { visibility: 'hidden' } : {}}>
+                        {tab.icon}
+                      </div>
                     )}
-                  />
-                </div>
-              </div>
+                    <span>{tab.name}</span>
+                  </div>
+                  <div className="">
+                    <div
+                      className={classNames(
+                        router.asPath === tab.href &&
+                          'border-gradient-r-blue-pink-dark-900 border bg-transparent border-transparent',
+                        'w-full'
+                      )}
+                    />
+                  </div>
+                </a>
+              </Link>
             </div>
           ))}
         </nav>
       </div>
     </>
-  )
+  );
 }

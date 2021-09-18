@@ -1,11 +1,12 @@
-import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/sdk';
 
-import { tryParseAmount } from '../functions/parse'
-import { useActiveWeb3React } from './useActiveWeb3React'
-import { useCurrencyBalance } from '../state/wallet/hooks'
-import { useMemo } from 'react'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { useWETH9Contract } from './useContract'
+import { WETH9_EXTENDED } from '../constants/tokens';
+import { tryParseAmount } from '../functions/parse';
+import { useActiveWeb3React } from './useActiveWeb3React';
+import { useCurrencyBalance } from '../state/wallet/hooks';
+import { useMemo } from 'react';
+import { useTransactionAdder } from '../state/transactions/hooks';
+import { useWETH9Contract } from './useContract';
 
 export enum WrapType {
   NOT_APPLICABLE,
@@ -13,7 +14,7 @@ export enum WrapType {
   UNWRAP,
 }
 
-const NOT_APPLICABLE = { wrapType: WrapType.NOT_APPLICABLE }
+const NOT_APPLICABLE = { wrapType: WrapType.NOT_APPLICABLE };
 /**
  * Given the selected input and output currency, return a wrap callback
  * @param inputCurrency the selected input currency
@@ -25,25 +26,25 @@ export default function useWrapCallback(
   outputCurrency: Currency | undefined,
   typedValue: string | undefined
 ): {
-  wrapType: WrapType
-  execute?: undefined | (() => Promise<void>)
-  inputError?: string
+  wrapType: WrapType;
+  execute?: undefined | (() => Promise<void>);
+  inputError?: string;
 } {
-  const { chainId, account } = useActiveWeb3React()
-  const wethContract = useWETH9Contract()
-  const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
+  const { chainId, account } = useActiveWeb3React();
+  const wethContract = useWETH9Contract();
+  const balance = useCurrencyBalance(account ?? undefined, inputCurrency);
   // we can always parse the amount typed as the input currency, since wrapping is 1:1
-  const inputAmount = useMemo(() => tryParseAmount(typedValue, inputCurrency), [inputCurrency, typedValue])
-  const addTransaction = useTransactionAdder()
+  const inputAmount = useMemo(() => tryParseAmount(typedValue, inputCurrency), [inputCurrency, typedValue]);
+  const addTransaction = useTransactionAdder();
 
   return useMemo(() => {
     if (!wethContract || !chainId || !inputCurrency || !outputCurrency || chainId === ChainId.CELO)
-      return NOT_APPLICABLE
-    const weth = WNATIVE[chainId]
-    if (!weth) return NOT_APPLICABLE
+      return NOT_APPLICABLE;
+    const weth = WNATIVE[chainId];
+    if (!weth) return NOT_APPLICABLE;
 
-    const hasInputAmount = Boolean(inputAmount?.greaterThan('0'))
-    const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
+    const hasInputAmount = Boolean(inputAmount?.greaterThan('0'));
+    const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount);
 
     if (inputCurrency.isNative && weth.equals(outputCurrency)) {
       return {
@@ -54,14 +55,14 @@ export default function useWrapCallback(
                 try {
                   const txReceipt = await wethContract.deposit({
                     value: `0x${inputAmount.quotient.toString(16)}`,
-                  })
+                  });
                   addTransaction(txReceipt, {
                     summary: `Wrap ${inputAmount.toSignificant(6)} ${NATIVE[chainId].symbol} to ${
                       WNATIVE[chainId].symbol
                     }`,
-                  })
+                  });
                 } catch (error) {
-                  console.error('Could not deposit', error)
+                  console.error('Could not deposit', error);
                 }
               }
             : undefined,
@@ -70,7 +71,7 @@ export default function useWrapCallback(
           : hasInputAmount
           ? `Insufficient ${NATIVE[chainId].symbol} balance`
           : `Enter ${NATIVE[chainId].symbol} amount`,
-      }
+      };
     } else if (weth.equals(inputCurrency) && outputCurrency.isNative) {
       return {
         wrapType: WrapType.UNWRAP,
@@ -78,14 +79,14 @@ export default function useWrapCallback(
           sufficientBalance && inputAmount
             ? async () => {
                 try {
-                  const txReceipt = await wethContract.withdraw(`0x${inputAmount.quotient.toString(16)}`)
+                  const txReceipt = await wethContract.withdraw(`0x${inputAmount.quotient.toString(16)}`);
                   addTransaction(txReceipt, {
                     summary: `Unwrap ${inputAmount.toSignificant(6)} ${WNATIVE[chainId].symbol} to ${
                       NATIVE[chainId].symbol
                     }`,
-                  })
+                  });
                 } catch (error) {
-                  console.error('Could not withdraw', error)
+                  console.error('Could not withdraw', error);
                 }
               }
             : undefined,
@@ -94,9 +95,9 @@ export default function useWrapCallback(
           : hasInputAmount
           ? `Insufficient ${WNATIVE[chainId].symbol} balance`
           : `Enter ${WNATIVE[chainId].symbol} amount`,
-      }
+      };
     } else {
-      return NOT_APPLICABLE
+      return NOT_APPLICABLE;
     }
-  }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction])
+  }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction]);
 }

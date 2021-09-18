@@ -1,16 +1,16 @@
-import { FC } from 'react'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import { XCircleIcon } from '@heroicons/react/outline'
+import { FC } from 'react';
+import { useLingui } from '@lingui/react';
+import { t } from '@lingui/macro';
+import { XCircleIcon } from '@heroicons/react/outline';
 
 interface ExpertModePanelProps {
-  active: boolean
-  onClose: () => void
+  active: boolean;
+  onClose: () => void;
 }
 
 const ExpertModePanel: FC<ExpertModePanelProps> = ({ active, children, onClose }) => {
-  const { i18n } = useLingui()
-  if (!active) return <>{children}</>
+  const { i18n } = useLingui();
+  if (!active) return <>{children}</>;
 
   return (
     <div className="">
@@ -24,7 +24,7 @@ const ExpertModePanel: FC<ExpertModePanelProps> = ({ active, children, onClose }
       </div>
       <div className="border border-[2px] border-gray-800 rounded bg-dark-900">{children}</div>
     </div>
-  )
-}
+  );
+};
 
-export default ExpertModePanel
+export default ExpertModePanel;

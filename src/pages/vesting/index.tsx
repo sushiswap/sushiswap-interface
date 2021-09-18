@@ -1,72 +1,72 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
-import React, { useEffect, useState } from 'react'
-import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
-import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk';
+import React, { useEffect, useState } from 'react';
+import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks';
+import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks';
 
-import { ApplicationModal } from '../../state/application/actions'
-import { BigNumber } from '@ethersproject/bignumber'
-import Button from '../../components/Button'
-import { ChevronRight } from 'react-feather'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import ExternalLink from '../../components/ExternalLink'
-import Fraction from '../../entities/Fraction'
-import Head from 'next/head'
-import Image from 'next/image'
-import Link from 'next/link'
-import Loader from '../../components/Loader'
-import QuestionHelper from '../../components/QuestionHelper'
-import { cloudinaryLoader } from '../../functions/cloudinary'
-import { formatNumber } from '../../functions/format'
-import { isAddress } from '@ethersproject/address'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
+import { ApplicationModal } from '../../state/application/actions';
+import { BigNumber } from '@ethersproject/bignumber';
+import Button from '../../components/Button';
+import { ChevronRight } from 'react-feather';
+import Container from '../../components/Container';
+import Dots from '../../components/Dots';
+import ExternalLink from '../../components/ExternalLink';
+import Fraction from '../../entities/Fraction';
+import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
+import Loader from '../../components/Loader';
+import QuestionHelper from '../../components/QuestionHelper';
+import { cloudinaryLoader } from '../../functions/cloudinary';
+import { formatNumber } from '../../functions/format';
+import { isAddress } from 'ethers/lib/utils';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import { useLingui } from '@lingui/react';
+import { useUserHasSubmittedClaim } from '../../state/transactions/hooks';
 
 export default function Vesting() {
-  const { i18n } = useLingui()
+  const { i18n } = useLingui();
 
-  const isOpen = useModalOpen(ApplicationModal.SELF_CLAIM)
-  const toggleClaimModal = useToggleSelfClaimModal()
+  const isOpen = useModalOpen(ApplicationModal.SELF_CLAIM);
+  const toggleClaimModal = useToggleSelfClaimModal();
 
-  const { account } = useActiveWeb3React()
+  const { account } = useActiveWeb3React();
 
   // used for UI loading states
-  const [attempting, setAttempting] = useState<boolean>(false)
+  const [attempting, setAttempting] = useState<boolean>(false);
 
   // get user claim data
   // const userClaimData = useUserClaimData(account)
 
   // monitor the status of the claim from contracts and txns
-  const { claimCallback } = useClaimCallback(account)
-  const unclaimedAmount: CurrencyAmount<Currency> | undefined = useUserUnclaimedAmount(account)
+  const { claimCallback } = useClaimCallback(account);
+  const unclaimedAmount: CurrencyAmount<Currency> | undefined = useUserUnclaimedAmount(account);
   // console.log('unclaimedAmount:', unclaimedAmount)
-  const { claimSubmitted } = useUserHasSubmittedClaim(account ?? undefined)
+  const { claimSubmitted } = useUserHasSubmittedClaim(account ?? undefined);
   // const claimConfirmed = Boolean(claimTxn?.receipt)
-  const claimConfirmed = false
+  const claimConfirmed = false;
 
   function onClaim() {
-    setAttempting(true)
+    setAttempting(true);
     claimCallback()
       // reset modal and log error
       .catch((error) => {
-        setAttempting(false)
-        console.log(error)
-      })
+        setAttempting(false);
+        console.log(error);
+      });
   }
 
   // once confirmed txn is found, if modal is closed open, mark as not attempting regradless
   useEffect(() => {
     if (claimConfirmed && claimSubmitted && attempting) {
-      setAttempting(false)
+      setAttempting(false);
       if (!isOpen) {
-        toggleClaimModal()
+        toggleClaimModal();
       }
     }
-  }, [attempting, claimConfirmed, claimSubmitted, isOpen, toggleClaimModal])
+  }, [attempting, claimConfirmed, claimSubmitted, isOpen, toggleClaimModal]);
 
-  const [totalLocked, setTotalLocked] = useState<string>()
+  const [totalLocked, setTotalLocked] = useState<string>();
   useEffect(() => {
     const fetchLockup = async () => {
       if (account) {
@@ -74,30 +74,30 @@ export default function Vesting() {
           .then((response) => response.json())
           .then((data) => {
             // console.log('vesting:', data)
-            const userLockedAmount = data[account.toLowerCase()] ? data[account.toLowerCase()] : '0'
-            const userLocked = Fraction.from(BigNumber.from(userLockedAmount), BigNumber.from(10).pow(18)).toString()
-            setTotalLocked(userLocked)
+            const userLockedAmount = data[account.toLowerCase()] ? data[account.toLowerCase()] : '0';
+            const userLocked = Fraction.from(BigNumber.from(userLockedAmount), BigNumber.from(10).pow(18)).toString();
+            setTotalLocked(userLocked);
             // console.log('userLocked:', userLocked)
           })
           .catch((error) => {
-            console.log(error)
-          })
+            console.log(error);
+          });
       }
-      return []
-    }
-    fetchLockup()
-  }, [account])
+      return [];
+    };
+    fetchLockup();
+  }, [account]);
 
   // remove once treasury signature passed
-  const pendingTreasurySignature = false
+  const pendingTreasurySignature = false;
 
-  let vault = ''
+  let vault = '';
   if (!pendingTreasurySignature && Number(unclaimedAmount?.toFixed(8)) > 0) {
-    vault = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png'
+    vault = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/sushi-vault-reverse.png';
   } else if (!pendingTreasurySignature && Number(unclaimedAmount?.toFixed(8)) <= 0) {
-    vault = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-off.png'
+    vault = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-off.png';
   } else if (pendingTreasurySignature) {
-    vault = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-closed.png'
+    vault = 'https://raw.githubusercontent.com/sushiswap/sushi-content/master/images/vesting-safe-closed.png';
   }
 
   return (
@@ -243,5 +243,5 @@ export default function Vesting() {
         </div>
       </div>
     </Container>
-  )
+  );
 }

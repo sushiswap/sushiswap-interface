@@ -1,27 +1,28 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
-import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
+import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks';
+import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks';
 
-import { ApplicationModal } from '../../state/application/actions'
-import { ChainId } from '@sushiswap/sdk'
-import Image from 'next/image'
-import Modal from '../../components/Modal'
-import ModalHeader from '../../components/ModalHeader'
-import React from 'react'
-import cookie from 'cookie-cutter'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { ApplicationModal } from '../../state/application/actions';
+import { ChainId } from '@sushiswap/sdk';
+import Image from 'next/image';
+import Modal from '../../components/Modal';
+import ModalHeader from '../../components/ModalHeader';
+import React from 'react';
+import cookie from 'cookie-cutter';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import { APP_NAME } from '../../constants';
 
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
-    chainId: string
-    chainName: string
+    chainId: string;
+    chainName: string;
     nativeCurrency: {
-      name: string
-      symbol: string
-      decimals: number
-    }
-    rpcUrls: string[]
-    blockExplorerUrls: string[]
-  }
+      name: string;
+      symbol: string;
+      decimals: number;
+    };
+    rpcUrls: string[];
+    blockExplorerUrls: string[];
+  };
 } = {
   [ChainId.MAINNET]: {
     chainId: '0x1',
@@ -149,64 +150,41 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://forno.celo.org'],
     blockExplorerUrls: ['https://explorer.celo.org'],
   },
-  [ChainId.PALM]: {
-    chainId: '0x2A15C308D',
-    chainName: 'Palm',
-    nativeCurrency: {
-      name: 'Palm',
-      symbol: 'PALM',
-      decimals: 18,
-    },
-    rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
-    blockExplorerUrls: ['https://explorer.palm.io'],
-  },
-  [ChainId.MOONRIVER]: {
-    chainId: '0x505',
-    chainName: 'Moonriver',
-    nativeCurrency: {
-      name: 'Moonriver',
-      symbol: 'MOVR',
-      decimals: 18,
-    },
-    rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
-    blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
-  },
-}
+};
 
 export default function NetworkModal(): JSX.Element | null {
-  const { chainId, library, account } = useActiveWeb3React()
-  const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
-  const toggleNetworkModal = useNetworkModalToggle()
+  const { chainId, library, account } = useActiveWeb3React();
+  const networkModalOpen = useModalOpen(ApplicationModal.NETWORK);
+  const toggleNetworkModal = useNetworkModalToggle();
 
-  if (!chainId) return null
+  if (!chainId) return null;
 
   return (
     <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal} maxWidth={672}>
       <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
       <div className="mb-6 text-lg text-primary">
-        You are currently browsing <span className="font-bold text-pink">SUSHI</span>
-        <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
+        <span className="font-bold text-indigo-300">{APP_NAME}</span> on the{' '}
+        <span className="font-bold text-gray-500">{NETWORK_LABEL[chainId]}</span> network
       </div>
 
       <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
         {[
           ChainId.MAINNET,
           ChainId.MATIC,
-          ChainId.FANTOM,
-          ChainId.ARBITRUM,
-          ChainId.OKEX,
-          ChainId.HECO,
-          ChainId.BSC,
-          ChainId.XDAI,
-          ChainId.HARMONY,
-          ChainId.AVALANCHE,
-          ChainId.CELO,
-          ChainId.PALM,
-          ChainId.MOONRIVER,
+          ChainId.RINKEBY,
+          //ChainId.FANTOM,
+          // ChainId.ARBITRUM,
+          //ChainId.OKEX,
+          //ChainId.HECO,
+          //ChainId.BSC,
+          //ChainId.XDAI,
+          //ChainId.HARMONY,
+          //ChainId.AVALANCHE,
+          //ChainId.CELO,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (
-              <button key={i} className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink">
+              <button key={i} className="w-full col-span-1 p-px rounded bg-gradient-to-r from-gray-500 to-gray-700">
                 <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
                   <Image
                     src={NETWORK_ICON[key]}
@@ -218,19 +196,19 @@ export default function NetworkModal(): JSX.Element | null {
                   <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
                 </div>
               </button>
-            )
+            );
           }
           return (
             <button
               key={i}
               onClick={() => {
-                toggleNetworkModal()
-                const params = SUPPORTED_NETWORKS[key]
-                cookie.set('chainId', key)
+                toggleNetworkModal();
+                const params = SUPPORTED_NETWORKS[key];
+                cookie.set('chainId', key);
                 if (key === ChainId.MAINNET) {
-                  library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
+                  library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account]);
                 } else {
-                  library?.send('wallet_addEthereumChain', [params, account])
+                  library?.send('wallet_addEthereumChain', [params, account]);
                 }
               }}
               className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
@@ -238,7 +216,7 @@ export default function NetworkModal(): JSX.Element | null {
               <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
               <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
             </button>
-          )
+          );
         })}
         {/* {['Clover', 'Telos', 'Optimism'].map((network, i) => (
           <button
@@ -257,5 +235,5 @@ export default function NetworkModal(): JSX.Element | null {
         ))} */}
       </div>
     </Modal>
-  )
+  );
 }

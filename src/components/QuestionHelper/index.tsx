@@ -1,12 +1,12 @@
-import React, { FC, useCallback, useState } from 'react'
-import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
-import Tooltip from '../Tooltip'
+import React, { FC, useCallback, useState } from 'react';
+import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid';
+import Tooltip from '../Tooltip';
 
-const QuestionHelper: FC<{ text?: any }> = ({ children, text }) => {
-  const [show, setShow] = useState<boolean>(false)
+const QuestionHelper: FC<{ text: any }> = ({ children, text }) => {
+  const [show, setShow] = useState<boolean>(false);
 
-  const open = useCallback(() => setShow(true), [setShow])
-  const close = useCallback(() => setShow(false), [setShow])
+  const open = useCallback(() => setShow(true), [setShow]);
+  const close = useCallback(() => setShow(false), [setShow]);
 
   if (children) {
     return (
@@ -20,7 +20,7 @@ const QuestionHelper: FC<{ text?: any }> = ({ children, text }) => {
           {children}
         </div>
       </Tooltip>
-    )
+    );
   }
 
   return (
@@ -36,7 +36,7 @@ const QuestionHelper: FC<{ text?: any }> = ({ children, text }) => {
         </div>
       </Tooltip>
     </span>
-  )
-}
+  );
+};
 
-export default QuestionHelper
+export default QuestionHelper;

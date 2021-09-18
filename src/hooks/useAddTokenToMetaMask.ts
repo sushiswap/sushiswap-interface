@@ -1,18 +1,18 @@
-import { Currency, Token } from '@sushiswap/sdk'
-import { useCallback, useState } from 'react'
+import { Currency, Token } from '@sushiswap/sdk';
+import { useCallback, useState } from 'react';
 
-import { getCurrencyLogoUrls } from './../components/CurrencyLogo'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { getTokenLogoURL } from './../components/CurrencyLogo';
+import { useActiveWeb3React } from './useActiveWeb3React';
 
 export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefined): {
-  addToken: () => void
-  success: boolean | undefined
+  addToken: () => void;
+  success: boolean | undefined;
 } {
-  const { chainId, library } = useActiveWeb3React()
+  const { chainId, library } = useActiveWeb3React();
 
-  const token: Token | undefined = currencyToAdd?.wrapped
+  const token: Token | undefined = currencyToAdd?.wrapped;
 
-  const [success, setSuccess] = useState<boolean | undefined>()
+  const [success, setSuccess] = useState<boolean | undefined>();
 
   const addToken = useCallback(() => {
     if (library && library.provider.isMetaMask && library.provider.request && token) {
@@ -26,18 +26,18 @@ export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefine
               address: token.address,
               symbol: token.symbol,
               decimals: token.decimals,
-              image: getCurrencyLogoUrls(token),
+              image: getTokenLogoURL(token.address, chainId),
             },
           },
         })
         .then((success) => {
-          setSuccess(success)
+          setSuccess(success);
         })
-        .catch(() => setSuccess(false))
+        .catch(() => setSuccess(false));
     } else {
-      setSuccess(false)
+      setSuccess(false);
     }
-  }, [library, token])
+  }, [chainId, library, token]);
 
-  return { addToken, success }
+  return { addToken, success };
 }

@@ -4,5 +4,5 @@
 
 yarn lint
 yarn lint-staged
-yarn lingui
+#yarn lingui
 # yarn test

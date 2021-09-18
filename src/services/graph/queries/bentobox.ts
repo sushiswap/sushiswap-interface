@@ -1,4 +1,4 @@
-import gql from 'graphql-tag'
+import gql from 'graphql-tag';
 
 export const bentoTokenFieldsQuery = gql`
   fragment bentoTokenFields on Token {
@@ -12,19 +12,7 @@ export const bentoTokenFieldsQuery = gql`
     block
     timestamp
   }
-`
-
-export const bentoUserTokensQuery = gql`
-  query bentoUserTokens($user: String!, $skip: Int = 0, $first: Int = 1000, $block: Block_height) {
-    userTokens(skip: $skip, first: $first, block: $block, where: { share_gt: 0, user: $user }) {
-      token {
-        ...bentoTokenFields
-      }
-      share
-    }
-  }
-  ${bentoTokenFieldsQuery}
-`
+`;
 
 export const kashiPairFieldsQuery = gql`
   fragment kashiPairFields on KashiPair {
@@ -62,7 +50,7 @@ export const kashiPairFieldsQuery = gql`
     timestamp
   }
   ${bentoTokenFieldsQuery}
-`
+`;
 
 export const kashiPairsQuery = gql`
   query kashiPairs(
@@ -85,18 +73,4 @@ export const kashiPairsQuery = gql`
     }
   }
   ${kashiPairFieldsQuery}
-`
-
-export const kashiUserPairsQuery = gql`
-  query kashiUserPairs($user: String!, $skip: Int = 0, $first: Int = 1000, $block: Block_height) {
-    userKashiPairs(skip: $skip, first: $first, block: $block, where: { user: $user }) {
-      assetFraction
-      collateralShare
-      borrowPart
-      pair {
-        ...kashiPairFields
-      }
-    }
-  }
-  ${kashiPairFieldsQuery}
-`
+`;

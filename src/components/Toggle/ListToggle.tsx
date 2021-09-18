@@ -1,10 +1,10 @@
-import React from 'react'
+import React from 'react';
 
 export interface ToggleProps {
-  id?: string
-  isActive: boolean
-  bgColor: string
-  toggle: () => void
+  id?: string;
+  isActive: boolean;
+  bgColor: string;
+  toggle: () => void;
 }
 
 export default function ListToggle({ id, isActive, bgColor, toggle }: ToggleProps) {
@@ -23,5 +23,5 @@ export default function ListToggle({ id, isActive, bgColor, toggle }: ToggleProp
       />
       {!isActive && <div className="my-1.5 font-semibold">OFF</div>}
     </div>
-  )
+  );
 }

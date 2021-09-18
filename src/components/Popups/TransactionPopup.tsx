@@ -1,24 +1,30 @@
-import { AlertCircle, CheckCircle } from 'react-feather'
+import { AlertCircle, CheckCircle } from 'react-feather';
 
-import ExternalLink from '../../components/ExternalLink'
-import { getExplorerLink } from '../../functions/explorer'
-import { useActiveWeb3React } from '../../hooks'
-import { ExternalLinkIcon } from '@heroicons/react/outline'
-import React from 'react'
+import { AutoRow } from '../Row';
+import ExternalLink from '../../components/ExternalLink';
+import { getExplorerLink } from '../../functions/explorer';
+import styled from 'styled-components';
+import { useActiveWeb3React } from '../../hooks';
+import { ExternalLinkIcon } from '@heroicons/react/outline';
+import React from 'react';
+
+const RowNoFlex = styled(AutoRow)`
+  flex-wrap: nowrap;
+`;
 
 export default function TransactionPopup({
   hash,
   success,
   summary,
 }: {
-  hash: string
-  success?: boolean
-  summary?: string
+  hash: string;
+  success?: boolean;
+  summary?: string;
 }) {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
   return (
-    <div className="flex flex-row w-full flex-nowrap" style={{ zIndex: 1000 }}>
+    <RowNoFlex style={{ zIndex: 1000 }}>
       <div className="pr-4">
         {success ? <CheckCircle className="text-2xl text-green" /> : <AlertCircle className="text-2xl text-red" />}
       </div>
@@ -28,7 +34,7 @@ export default function TransactionPopup({
         </div>
         {chainId && hash && (
           <ExternalLink
-            className="p-0 text-blue hover:underline md:p-0"
+            className="text-blue hover:underline p-0 md:p-0"
             href={getExplorerLink(chainId, hash, 'transaction')}
           >
             <div className="flex flex-row items-center gap-1">
@@ -37,6 +43,6 @@ export default function TransactionPopup({
           </ExternalLink>
         )}
       </div>
-    </div>
-  )
+    </RowNoFlex>
+  );
 }

@@ -1,21 +1,21 @@
-import { ArrowDownIcon, InformationCircleIcon } from '@heroicons/react/solid'
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
-import { MEOW, SUSHI, XSUSHI } from '../../config/tokens'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { ArrowDownIcon, InformationCircleIcon } from '@heroicons/react/solid';
+import { ChainId, Currency, Token } from '@sushiswap/sdk';
+import { MEOW, SUSHI, XSUSHI } from '../../constants';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import Container from '../../components/Container'
-import CurrencyInputPanel from '../../features/meowshi/CurrencyInputPanel'
-import Head from 'next/head'
-import HeaderToggle from '../../features/meowshi/HeaderToggle'
-import Image from 'next/image'
-import MeowshiButton from '../../features/meowshi/MeowshiButton'
-import NetworkGuard from '../../guards/Network'
-import Typography from '../../components/Typography'
-import { e10 } from '../../functions'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import useMeowshiPerXSushi from '../../hooks/useMeowshiPerXSushi'
-import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
+import Container from '../../components/Container';
+import CurrencyInputPanel from '../../features/meowshi/CurrencyInputPanel';
+import Head from 'next/head';
+import HeaderToggle from '../../features/meowshi/HeaderToggle';
+import Image from 'next/image';
+import MeowshiButton from '../../features/meowshi/MeowshiButton';
+import NetworkGuard from '../../guards/Network';
+import Typography from '../../components/Typography';
+import { e10 } from '../../functions';
+import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import useMeowshiPerXSushi from '../../hooks/useMeowshiPerXSushi';
+import useSushiPerXSushi from '../../hooks/useXSushiPerSushi';
 
 export enum Field {
   INPUT = 'INPUT',
@@ -24,35 +24,35 @@ export enum Field {
 
 export interface MeowshiState {
   currencies: {
-    [Field.INPUT]: Token
-    [Field.OUTPUT]: Token
-  }
-  setCurrency: (x: Token, field: Field) => void
+    [Field.INPUT]: Token;
+    [Field.OUTPUT]: Token;
+  };
+  setCurrency: (x: Token, field: Field) => void;
   fields: {
-    independentField: Field
-    [Field.INPUT]: string | null
-    [Field.OUTPUT]: string | null
-  }
-  handleInput: (x: string, field: Field) => void
-  switchCurrencies: () => void
-  meow: boolean
+    independentField: Field;
+    [Field.INPUT]: string | null;
+    [Field.OUTPUT]: string | null;
+  };
+  handleInput: (x: string, field: Field) => void;
+  switchCurrencies: () => void;
+  meow: boolean;
 }
 
 export default function Meowshi() {
-  const { i18n } = useLingui()
-  const sushiPerXSushi = useSushiPerXSushi()
-  const [meowshiPerXSushi, xSushiPerMeowshi] = useMeowshiPerXSushi()
+  const { i18n } = useLingui();
+  const sushiPerXSushi = useSushiPerXSushi();
+  const [meowshiPerXSushi, xSushiPerMeowshi] = useMeowshiPerXSushi();
 
   const [fields, setFields] = useState({
     independentField: Field.INPUT,
     [Field.INPUT]: '',
     [Field.OUTPUT]: '',
-  })
+  });
 
   const [currencies, setCurrencies] = useState({
     [Field.INPUT]: SUSHI[ChainId.MAINNET],
     [Field.OUTPUT]: MEOW,
-  })
+  });
 
   const handleInput = useCallback(
     async (val, field) => {
@@ -60,11 +60,11 @@ export default function Meowshi() {
         const inputRate =
           currencies[Field.INPUT] === XSUSHI
             ? meowshiPerXSushi.mul(e10(5))
-            : meowshiPerXSushi.mul(e10(5)).mulDiv(e10(18), sushiPerXSushi.toString().toBigNumber(18))
+            : meowshiPerXSushi.mul(e10(5)).mulDiv(e10(18), sushiPerXSushi.toString().toBigNumber(18));
         const outputRate =
           currencies[Field.OUTPUT] === XSUSHI
             ? xSushiPerMeowshi.div(e10(5))
-            : xSushiPerMeowshi.mulDiv(sushiPerXSushi.toString().toBigNumber(18), e10(18)).div(e10(5))
+            : xSushiPerMeowshi.mulDiv(sushiPerXSushi.toString().toBigNumber(18), e10(18)).div(e10(5));
 
         if (field === Field.INPUT) {
           if (currencies[Field.OUTPUT] === MEOW) {
@@ -72,13 +72,13 @@ export default function Meowshi() {
               independentField: Field.INPUT,
               [Field.INPUT]: val || prevState[Field.INPUT],
               [Field.OUTPUT]: inputRate.mulDiv((val || prevState[Field.INPUT]).toBigNumber(18), e10(18))?.toFixed(18),
-            }
+            };
           } else {
             return {
               independentField: Field.INPUT,
               [Field.INPUT]: val || prevState[Field.INPUT],
               [Field.OUTPUT]: outputRate.mulDiv((val || prevState[Field.INPUT]).toBigNumber(18), e10(18))?.toFixed(18),
-            }
+            };
           }
         } else {
           if (currencies[Field.OUTPUT] === MEOW) {
@@ -86,37 +86,37 @@ export default function Meowshi() {
               independentField: Field.OUTPUT,
               [Field.INPUT]: (val || prevState[Field.OUTPUT]).toBigNumber(18).mulDiv(e10(18), inputRate)?.toFixed(18),
               [Field.OUTPUT]: val || prevState[Field.OUTPUT],
-            }
+            };
           } else {
             return {
               independentField: Field.OUTPUT,
               [Field.INPUT]: (val || prevState[Field.OUTPUT]).toBigNumber(18).mulDiv(e10(18), outputRate)?.toFixed(18),
               [Field.OUTPUT]: val || prevState[Field.OUTPUT],
-            }
+            };
           }
         }
-      })
+      });
     },
     [currencies, meowshiPerXSushi, sushiPerXSushi, xSushiPerMeowshi]
-  )
+  );
 
   const setCurrency = useCallback((currency: Currency, field: Field) => {
     setCurrencies((prevState) => ({
       ...prevState,
       [field]: currency,
-    }))
-  }, [])
+    }));
+  }, []);
 
   useEffect(() => {
-    handleInput(null, fields.independentField)
-  }, [fields.independentField, handleInput])
+    handleInput(null, fields.independentField);
+  }, [fields.independentField, handleInput]);
 
   const switchCurrencies = useCallback(() => {
     setCurrencies((prevState) => ({
       [Field.INPUT]: prevState[Field.OUTPUT],
       [Field.OUTPUT]: prevState[Field.INPUT],
-    }))
-  }, [])
+    }));
+  }, []);
 
   const meowshiState = useMemo<MeowshiState>(
     () => ({
@@ -128,7 +128,7 @@ export default function Meowshi() {
       handleInput,
     }),
     [currencies, fields, handleInput, setCurrency, switchCurrencies]
-  )
+  );
 
   return (
     <Container id="meowshi-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
@@ -172,7 +172,7 @@ export default function Meowshi() {
         <MeowshiButton meowshiState={meowshiState} />
       </div>
     </Container>
-  )
+  );
 }
 
-Meowshi.Guard = NetworkGuard([ChainId.MAINNET])
+Meowshi.Guard = NetworkGuard([ChainId.MAINNET]);

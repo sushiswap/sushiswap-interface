@@ -1,4 +1,4 @@
-import { activeListeningKeys, outdatedListeningKeys } from './updater'
+import { activeListeningKeys, outdatedListeningKeys } from './updater';
 
 describe('multicall updater', () => {
   describe('#activeListeningKeys', () => {
@@ -17,8 +17,8 @@ describe('multicall updater', () => {
         )
       ).toEqual({
         abc: 4,
-      })
-    })
+      });
+    });
     it('applies min', () => {
       expect(
         activeListeningKeys(
@@ -35,8 +35,8 @@ describe('multicall updater', () => {
         )
       ).toEqual({
         abc: 3,
-      })
-    })
+      });
+    });
     it('works for infinity', () => {
       expect(
         activeListeningKeys(
@@ -56,8 +56,8 @@ describe('multicall updater', () => {
       ).toEqual({
         abc: 4,
         def: Infinity,
-      })
-    })
+      });
+    });
     it('multiple keys', () => {
       expect(
         activeListeningKeys(
@@ -78,8 +78,8 @@ describe('multicall updater', () => {
       ).toEqual({
         abc: 4,
         def: 2,
-      })
-    })
+      });
+    });
     it('ignores negative numbers', () => {
       expect(
         activeListeningKeys(
@@ -96,8 +96,8 @@ describe('multicall updater', () => {
         )
       ).toEqual({
         abc: 4,
-      })
-    })
+      });
+    });
     it('applies min to infinity', () => {
       expect(
         activeListeningKeys(
@@ -114,24 +114,24 @@ describe('multicall updater', () => {
         )
       ).toEqual({
         abc: 4,
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('#outdatedListeningKeys', () => {
     it('returns empty if missing block number or chain id', () => {
-      expect(outdatedListeningKeys({}, { abc: 2 }, undefined, undefined)).toEqual([])
-      expect(outdatedListeningKeys({}, { abc: 2 }, 1, undefined)).toEqual([])
-      expect(outdatedListeningKeys({}, { abc: 2 }, undefined, 1)).toEqual([])
-    })
+      expect(outdatedListeningKeys({}, { abc: 2 }, undefined, undefined)).toEqual([]);
+      expect(outdatedListeningKeys({}, { abc: 2 }, 1, undefined)).toEqual([]);
+      expect(outdatedListeningKeys({}, { abc: 2 }, undefined, 1)).toEqual([]);
+    });
     it('returns everything for no results', () => {
-      expect(outdatedListeningKeys({}, { abc: 2, def: 3 }, 1, 1)).toEqual(['abc', 'def'])
-    })
+      expect(outdatedListeningKeys({}, { abc: 2, def: 3 }, 1, 1)).toEqual(['abc', 'def']);
+    });
     it('returns only outdated keys', () => {
       expect(outdatedListeningKeys({ 1: { abc: { data: '0x', blockNumber: 2 } } }, { abc: 1, def: 1 }, 1, 2)).toEqual([
         'def',
-      ])
-    })
+      ]);
+    });
     it('returns only keys not being fetched', () => {
       expect(
         outdatedListeningKeys(
@@ -145,8 +145,8 @@ describe('multicall updater', () => {
           1,
           2
         )
-      ).toEqual([])
-    })
+      ).toEqual([]);
+    });
     it('returns keys being fetched for old blocks', () => {
       expect(
         outdatedListeningKeys(
@@ -160,8 +160,8 @@ describe('multicall updater', () => {
           1,
           2
         )
-      ).toEqual(['def'])
-    })
+      ).toEqual(['def']);
+    });
     it('respects blocks per fetch', () => {
       expect(
         outdatedListeningKeys(
@@ -175,7 +175,7 @@ describe('multicall updater', () => {
           1,
           3
         )
-      ).toEqual(['def'])
-    })
-  })
-})
+      ).toEqual(['def']);
+    });
+  });
+});

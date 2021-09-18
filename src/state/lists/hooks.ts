@@ -1,31 +1,31 @@
-import { AppState } from '..'
-import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
-import { TokenList } from '@uniswap/token-lists'
-import { UNSUPPORTED_LIST_URLS } from '../../config/token-lists'
-import UNSUPPORTED_TOKEN_LIST from '../../constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
-import { WrappedTokenInfo } from './wrappedTokenInfo'
-import { sortByListPriority } from '../../functions/list'
-import { useAppSelector } from '../hooks'
-import { useMemo } from 'react'
+import { AppState } from '..';
+import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list';
+import { TokenList } from '@uniswap/token-lists';
+import { UNSUPPORTED_LIST_URLS } from '../../constants/token-lists';
+import UNSUPPORTED_TOKEN_LIST from '../../constants/token-lists/sushiswap-v2-unsupported.tokenlist.json';
+import { WrappedTokenInfo } from './wrappedTokenInfo';
+import { sortByListPriority } from '../../functions/list';
+import { useAppSelector } from '../hooks';
+import { useMemo } from 'react';
 
 export type TokenAddressMap = Readonly<{
   [chainId: number]: Readonly<{
-    [tokenAddress: string]: { token: WrappedTokenInfo; list: TokenList }
-  }>
-}>
+    [tokenAddress: string]: { token: WrappedTokenInfo; list: TokenList };
+  }>;
+}>;
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
-  typeof WeakMap !== 'undefined' ? new WeakMap<TokenList, TokenAddressMap>() : null
+  typeof WeakMap !== 'undefined' ? new WeakMap<TokenList, TokenAddressMap>() : null;
 
 export function listToTokenMap(list: TokenList): TokenAddressMap {
-  const result = listCache?.get(list)
-  if (result) return result
+  const result = listCache?.get(list);
+  if (result) return result;
 
   const map = list.tokens.reduce<TokenAddressMap>((tokenMap, tokenInfo) => {
-    const token = new WrappedTokenInfo(tokenInfo, list)
+    const token = new WrappedTokenInfo(tokenInfo, list);
     if (tokenMap[token.chainId]?.[token.address] !== undefined) {
-      console.error(new Error(`Duplicate token! ${token.address}`))
-      return tokenMap
+      console.error(new Error(`Duplicate token! ${token.address}`));
+      return tokenMap;
     }
     return {
       ...tokenMap,
@@ -36,16 +36,16 @@ export function listToTokenMap(list: TokenList): TokenAddressMap {
           list,
         },
       },
-    }
-  }, {})
-  listCache?.set(list, map)
-  return map
+    };
+  }, {});
+  listCache?.set(list, map);
+  return map;
 }
 
-const TRANSFORMED_DEFAULT_TOKEN_LIST = listToTokenMap(DEFAULT_TOKEN_LIST)
+const TRANSFORMED_DEFAULT_TOKEN_LIST = listToTokenMap(DEFAULT_TOKEN_LIST);
 
 export function useAllLists(): AppState['lists']['byUrl'] {
-  return useAppSelector((state) => state.lists.byUrl)
+  return useAppSelector((state) => state.lists.byUrl);
 }
 
 function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddressMap {
@@ -74,70 +74,67 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     66: { ...map1[66], ...map2[66] }, // okex
     65: { ...map1[65], ...map2[65] }, // okex testnet
     42220: { ...map1[42220], ...map2[42220] }, // celo
-    11297108109: { ...map1[11297108109], ...map2[11297108109] }, // palm
-    11297108099: { ...map1[11297108099], ...map2[11297108099] }, // palm testnet
-    1285: { ...map1[1285], ...map2[1285] }, // moonriver
-  }
+  };
 }
 
 // merge tokens contained within lists from urls
 function useCombinedTokenMapFromUrls(urls: string[] | undefined): TokenAddressMap {
-  const lists = useAllLists()
+  const lists = useAllLists();
   return useMemo(() => {
-    if (!urls) return {}
+    if (!urls) return {};
     return (
       urls
         .slice()
         // sort by priority so top priority goes last
         .sort(sortByListPriority)
         .reduce((allTokens, currentUrl) => {
-          const current = lists[currentUrl]?.current
-          if (!current) return allTokens
+          const current = lists[currentUrl]?.current;
+          if (!current) return allTokens;
           try {
-            return combineMaps(allTokens, listToTokenMap(current))
+            return combineMaps(allTokens, listToTokenMap(current));
           } catch (error) {
-            console.error('Could not show token list due to error', error)
-            return allTokens
+            console.error('Could not show token list due to error', error);
+            return allTokens;
           }
         }, {})
-    )
-  }, [lists, urls])
+    );
+  }, [lists, urls]);
 }
 
 // filter out unsupported lists
 export function useActiveListUrls(): string[] | undefined {
-  return useAppSelector((state) => state.lists.activeListUrls)?.filter((url) => !UNSUPPORTED_LIST_URLS.includes(url))
+  return useAppSelector((state) => state.lists.activeListUrls)?.filter((url) => !UNSUPPORTED_LIST_URLS.includes(url));
 }
 
 export function useInactiveListUrls(): string[] {
-  const lists = useAllLists()
-  const allActiveListUrls = useActiveListUrls()
-  return Object.keys(lists).filter((url) => !allActiveListUrls?.includes(url) && !UNSUPPORTED_LIST_URLS.includes(url))
+  const lists = useAllLists();
+  const allActiveListUrls = useActiveListUrls();
+  return Object.keys(lists).filter((url) => !allActiveListUrls?.includes(url) && !UNSUPPORTED_LIST_URLS.includes(url));
 }
 
 // get all the tokens from active lists, combine with local default tokens
 export function useCombinedActiveList(): TokenAddressMap {
-  const activeListUrls = useActiveListUrls()
-  const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  return combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST)
+  const activeListUrls = useActiveListUrls();
+  const activeTokens = useCombinedTokenMapFromUrls(activeListUrls);
+  return combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST);
 }
 
 // list of tokens not supported on interface, used to show warnings and prevent swaps and adds
 export function useUnsupportedTokenList(): TokenAddressMap {
   // get hard coded unsupported tokens
-  const localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST)
+  const localUnsupportedListMap = listToTokenMap(UNSUPPORTED_TOKEN_LIST);
 
   // get any loaded unsupported tokens
-  const loadedUnsupportedListMap = useCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS)
+  const loadedUnsupportedListMap = useCombinedTokenMapFromUrls(UNSUPPORTED_LIST_URLS);
 
   // format into one token address map
   return useMemo(
     () => combineMaps(localUnsupportedListMap, loadedUnsupportedListMap),
     [localUnsupportedListMap, loadedUnsupportedListMap]
-  )
+  );
 }
 
 export function useIsListActive(url: string): boolean {
-  const activeListUrls = useActiveListUrls()
-  return Boolean(activeListUrls?.includes(url))
+  const activeListUrls = useActiveListUrls();
+  return Boolean(activeListUrls?.includes(url));
 }

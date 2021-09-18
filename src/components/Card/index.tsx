@@ -1,21 +1,14 @@
-import React from 'react'
-import { classNames } from '../../functions/styling'
-
-function Header({ className, children }) {
-  return (
-    <div className={classNames('flex items-center rounded-t px-4 sm:px-8 py-4 sm:py-6', className)}>{children}</div>
-  )
-}
+import React from 'react';
 
 type CardProps = {
-  header?: React.ReactChild
-  footer?: React.ReactChild
-  backgroundImage?: string
-  title?: string
-  description?: string
-} & React.HTMLAttributes<HTMLDivElement>
+  header?: React.ReactChild;
+  footer?: React.ReactChild;
+  backgroundImage?: string;
+  title?: string;
+  description?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
 
-function Card({
+export default function Card({
   header = undefined,
   footer = undefined,
   backgroundImage = '',
@@ -45,9 +38,5 @@ function Card({
 
       {footer && <>{footer}</>}
     </div>
-  )
+  );
 }
-
-Card.Header = Header
-
-export default Card

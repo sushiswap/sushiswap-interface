@@ -1,49 +1,52 @@
-import { KASHI_ADDRESS, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/sdk'
-import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Token, WNATIVE } from '@sushiswap/sdk';
+import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { BigNumber } from '@ethersproject/bignumber'
-import ERC20_ABI from '../../constants/abis/erc20.json'
-import { WrappedTokenInfo } from '../lists/wrappedTokenInfo'
-import { e10 } from '../../functions/math'
-import { easyAmount } from '../../functions/kashi'
-import { getAddress } from '@ethersproject/address'
-import { toAmount } from '../../functions/bentobox'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTokens } from '../../hooks/Tokens'
-import { useSingleCallResult } from '../multicall/hooks'
-import useTransactionStatus from '../../hooks/useTransactionStatus'
+import { BigNumber } from '@ethersproject/bignumber';
+import ERC20_ABI from '../../constants/abis/erc20.json';
+import { KASHI_ADDRESS } from '../../constants/kashi';
+import { USDC } from '../../hooks';
+import { WrappedTokenInfo } from '../lists/wrappedTokenInfo';
+import { Zero } from '@ethersproject/constants';
+import { e10 } from '../../functions/math';
+import { easyAmount } from '../../functions/kashi';
+import { getAddress } from '@ethersproject/address';
+import { toAmount } from '../../functions/bentobox';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import { useAllTokens } from '../../hooks/Tokens';
+import { useSingleCallResult } from '../multicall/hooks';
+import useTransactionStatus from '../../hooks/useTransactionStatus';
 
 export interface BentoBalance {
-  address: string
-  name: string
-  symbol: string
-  decimals: number
-  balance: any
-  bentoBalance: any
-  wallet: any
-  bento: any
+  address: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  balance: any;
+  bentoBalance: any;
+  wallet: any;
+  bento: any;
 }
 
 export function useBentoBalances(): BentoBalance[] {
-  const { chainId, account } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React();
 
-  const boringHelperContract = useBoringHelperContract()
+  const boringHelperContract = useBoringHelperContract();
 
-  const tokens = useAllTokens()
+  const tokens = useAllTokens();
 
-  const weth = WNATIVE_ADDRESS[chainId]
+  const weth = WNATIVE[chainId].address;
 
-  const tokenAddresses = Object.keys(tokens)
+  const tokenAddresses = Object.keys(tokens);
 
-  const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
+  const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses]);
 
   const uiData = useSingleCallResult(boringHelperContract, 'getUIInfo', [
     account,
     [],
-    USDC_ADDRESS[chainId],
+    USDC[chainId].address,
     [KASHI_ADDRESS[chainId]],
-  ])
+  ]);
 
   // IERC20 token = addresses[i];
   // balances[i].totalSupply = token.totalSupply();
@@ -64,18 +67,18 @@ export function useBentoBalances(): BentoBalance[] {
       !uiData.result ||
       !balanceData.result
     )
-      return []
+      return [];
     return tokenAddresses
       .map((key: string, i: number) => {
-        const token = tokens[key]
+        const token = tokens[key];
 
-        const usd = e10(token.decimals).mulDiv(uiData.result[0].ethRate, balanceData.result[0][i].rate)
+        const usd = e10(token.decimals).mulDiv(uiData.result[0].ethRate, balanceData.result[0][i].rate);
 
         const full = {
           ...token,
           ...balanceData.result[0][i],
           usd,
-        }
+        };
         return {
           ...token,
           usd,
@@ -90,9 +93,9 @@ export function useBentoBalances(): BentoBalance[] {
             full
           ),
           bento: easyAmount(toAmount(full, balanceData.result[0][i].bentoBalance), full),
-        }
+        };
       })
-      .filter((token) => token.balance.gt('0') || token.bentoBalance.gt('0'))
+      .filter((token) => token.balance.gt('0') || token.bentoBalance.gt('0'));
   }, [
     uiData.loading,
     uiData.error,
@@ -103,57 +106,57 @@ export function useBentoBalances(): BentoBalance[] {
     tokenAddresses,
     tokens,
     weth,
-  ])
+  ]);
 }
 
 export function useBentoBalance(tokenAddress: string): {
-  value: BigNumber
-  decimals: number
+  value: BigNumber;
+  decimals: number;
 } {
-  const { account } = useActiveWeb3React()
+  const { account } = useActiveWeb3React();
 
-  const boringHelperContract = useBoringHelperContract()
-  const bentoBoxContract = useBentoBoxContract()
-  const tokenAddressChecksum = getAddress(tokenAddress)
-  const tokenContract = useContract(tokenAddressChecksum ? tokenAddressChecksum : undefined, ERC20_ABI)
+  const boringHelperContract = useBoringHelperContract();
+  const bentoBoxContract = useBentoBoxContract();
+  const tokenAddressChecksum = getAddress(tokenAddress);
+  const tokenContract = useContract(tokenAddressChecksum ? tokenAddressChecksum : undefined, ERC20_ABI);
 
-  const currentTransactionStatus = useTransactionStatus()
+  const currentTransactionStatus = useTransactionStatus();
 
-  const [balance, setBalance] = useState<any>()
+  const [balance, setBalance] = useState<any>();
 
   // const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
 
   const fetchBentoBalance = useCallback(async () => {
-    const balances = await boringHelperContract?.getBalances(account, [tokenAddressChecksum])
-    const decimals = await tokenContract?.decimals()
+    const balances = await boringHelperContract?.getBalances(account, [tokenAddressChecksum]);
+    const decimals = await tokenContract?.decimals();
 
     const amount = BigNumber.from(balances[0].bentoShare).isZero()
       ? BigNumber.from(0)
       : BigNumber.from(balances[0].bentoBalance)
           .mul(BigNumber.from(balances[0].bentoAmount))
-          .div(BigNumber.from(balances[0].bentoShare))
+          .div(BigNumber.from(balances[0].bentoShare));
 
     setBalance({
       value: amount,
       decimals: decimals,
-    })
-  }, [account, tokenAddressChecksum, tokenContract, boringHelperContract])
+    });
+  }, [account, tokenAddressChecksum, tokenContract, boringHelperContract]);
 
   useEffect(() => {
     if (account && bentoBoxContract && boringHelperContract && tokenContract) {
-      fetchBentoBalance()
+      fetchBentoBalance();
     }
-  }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract, boringHelperContract])
+  }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract, boringHelperContract]);
 
-  return balance
+  return balance;
 }
 
 export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {
-  const contract = useBentoBoxContract()
+  const contract = useBentoBoxContract();
 
-  const inputs = useMemo(() => [masterContract, user], [masterContract, user])
+  const inputs = useMemo(() => [masterContract, user], [masterContract, user]);
 
-  const allowed = useSingleCallResult(contract, 'masterContractApproved', inputs).result
+  const allowed = useSingleCallResult(contract, 'masterContractApproved', inputs).result;
 
-  return useMemo(() => (allowed ? allowed[0] : undefined), [allowed])
+  return useMemo(() => (allowed ? allowed[0] : undefined), [allowed]);
 }

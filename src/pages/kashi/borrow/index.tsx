@@ -1,35 +1,35 @@
-import Provider, { useKashiPairs } from '../../../features/kashi/context'
-import { formatNumber, formatPercent } from '../../../functions/format'
+import Provider, { useKashiPairs } from '../../../features/lending/context';
+import { formatNumber, formatPercent } from '../../../functions/format';
 
-import Card from '../../../components/Card'
-import GradientDot from '../../../components/GradientDot'
-import Head from 'next/head'
-import Image from '../../../components/Image'
-import Layout from '../../../layouts/Kashi'
-import Link from 'next/link'
-import ListHeaderWithSort from '../../../features/kashi/ListHeaderWithSort'
-import MarketHeader from '../../../features/kashi/MarketHeader'
-import React from 'react'
-import { cloudinaryLoader } from '../../../functions/cloudinary'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import useSearchAndSort from '../../../hooks/useSearchAndSort'
+import Card from '../../../components/Card';
+import GradientDot from '../../../components/GradientDot';
+import Head from 'next/head';
+import Image from '../../../components/Image';
+import Layout from '../../../layouts/Kashi';
+import Link from 'next/link';
+import ListHeaderWithSort from '../../../components/ListHeaderWithSort';
+import MarketHeader from '../../../components/MarketHeader';
+import React from 'react';
+import { cloudinaryLoader } from '../../../functions/cloudinary';
+import { t } from '@lingui/macro';
+import { useLingui } from '@lingui/react';
+import useSearchAndSort from '../../../hooks/useSearchAndSort';
 
 function Borrow() {
-  const { i18n } = useLingui()
-  const fullPairs = useKashiPairs()
+  const { i18n } = useLingui();
+  const fullPairs = useKashiPairs();
 
   const positions = useSearchAndSort(
     fullPairs.filter((pair: any) => pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)),
     { keys: ['search'], threshold: 0.1 },
     { key: 'health.value', direction: 'descending' }
-  )
+  );
 
   const pairs = useSearchAndSort(
     fullPairs,
     { keys: ['search'], threshold: 0.1 },
     { key: 'totalAssetAmount.usdValue', direction: 'descending' }
-  )
+  );
 
   return (
     <>
@@ -148,7 +148,7 @@ function Borrow() {
                         </a>
                       </Link>
                     </div>
-                  )
+                  );
                 })}
               </div>
             </div>
@@ -266,18 +266,18 @@ function Borrow() {
                     </a>
                   </Link>
                 </div>
-              )
+              );
             })}
         </div>
       </Card>
     </>
-  )
+  );
 }
 
-Borrow.Provider = Provider
+Borrow.Provider = Provider;
 
 const BorrowLayout = ({ children }) => {
-  const { i18n } = useLingui()
+  const { i18n } = useLingui();
   return (
     <Layout
       left={
@@ -293,9 +293,9 @@ const BorrowLayout = ({ children }) => {
     >
       {children}
     </Layout>
-  )
-}
+  );
+};
 
-Borrow.Layout = BorrowLayout
+Borrow.Layout = BorrowLayout;
 
-export default Borrow
+export default Borrow;

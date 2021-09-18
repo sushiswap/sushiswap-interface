@@ -1,148 +1,132 @@
-import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/sdk'
-import React, { useCallback } from 'react'
-import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '../../../state/create/hook'
+import { CHAINLINK_ORACLE_ADDRESS, KASHI_ADDRESS } from '../../../constants/kashi';
+import React, { useCallback } from 'react';
+import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '../../../state/create/hook';
 
-import { AddressZero } from '@ethersproject/constants'
-import Button from '../../../components/Button'
-import { CHAINLINK_PRICE_FEED_MAP } from '../../../config/oracles/chainlink'
-import Card from '../../../components/Card'
-import Container from '../../../components/Container'
-import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
-import { Field } from '../../../state/create/actions'
-import Head from 'next/head'
-import Layout from '../../../layouts/Kashi'
-import { defaultAbiCoder } from '@ethersproject/abi'
-import { e10 } from '../../../functions/math'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useBentoBoxContract } from '../../../hooks/useContract'
-import { useLingui } from '@lingui/react'
-import { useRouter } from 'next/router'
-import { useTransactionAdder } from '../../../state/transactions/hooks'
+import Button from '../../../components/Button';
+import { CHAINLINK_MAPPING } from '../../../constants/chainlink';
+import Card from '../../../components/Card';
+import CardHeader from '../../../components/CardHeader';
+import Container from '../../../components/Container';
+import { Currency } from '@sushiswap/sdk';
+import CurrencyInputPanel from '../../../components/CurrencyInputPanel';
+import { Field } from '../../../state/create/actions';
+import Head from 'next/head';
+import Layout from '../../../layouts/Kashi';
+import { e10 } from '../../../functions/math';
+import { ethers } from 'ethers';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React';
+import { useBentoBoxContract } from '../../../hooks/useContract';
+import { useLingui } from '@lingui/react';
+import { useRouter } from 'next/router';
+import { useTransactionAdder } from '../../../state/transactions/hooks';
 
 export type ChainlinkToken = {
-  symbol: string
-  name: string
-  address: string
-  decimals: number
-}
+  symbol: string;
+  name: string;
+  address: string;
+  decimals: number;
+};
 
 function Create() {
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React();
 
-  const bentoBoxContract = useBentoBoxContract()
+  const bentoBoxContract = useBentoBoxContract();
 
-  const addTransaction = useTransactionAdder()
+  const addTransaction = useTransactionAdder();
 
-  const router = useRouter()
+  const router = useRouter();
 
   // swap state
-  const { independentField, typedValue } = useCreateState()
-  const { onSwitchTokens, onCurrencySelection, onUserInput } = useCreateActionHandlers()
+  const { independentField, typedValue } = useCreateState();
+  const { onSwitchTokens, onCurrencySelection, onUserInput } = useCreateActionHandlers();
 
-  const { currencies, inputError } = useDerivedCreateInfo()
+  const { currencies, inputError } = useDerivedCreateInfo();
 
   const handleCollateralSelect = useCallback(
     (collateralCurrency) => {
-      onCurrencySelection(Field.COLLATERAL, collateralCurrency)
+      onCurrencySelection(Field.COLLATERAL, collateralCurrency);
     },
     [onCurrencySelection]
-  )
+  );
 
   const handleAssetSelect = useCallback(
     (assetCurrency) => {
-      onCurrencySelection(Field.ASSET, assetCurrency)
+      onCurrencySelection(Field.ASSET, assetCurrency);
     },
     [onCurrencySelection]
-  )
+  );
 
-  const both = Boolean(currencies[Field.COLLATERAL] && currencies[Field.ASSET])
+  const both = Boolean(currencies[Field.COLLATERAL] && currencies[Field.ASSET]);
 
   const getOracleData = useCallback(
     async (asset: Currency, collateral: Currency) => {
-      const oracleData = ''
+      const oracleData = '';
 
-      const mapping = CHAINLINK_PRICE_FEED_MAP[chainId]
+      const mapping = CHAINLINK_MAPPING[chainId];
 
       for (const address in mapping) {
-        mapping[address].address = address
+        mapping[address].address = address;
       }
 
-      let multiply = AddressZero
-      let divide = AddressZero
+      let multiply = ethers.constants.AddressZero;
+      let divide = ethers.constants.AddressZero;
 
       const multiplyMatches = Object.values(mapping).filter(
         (m) => m.from === asset.wrapped.address && m.to === collateral.wrapped.address
-      )
+      );
 
-      let decimals = 0
+      let decimals = 0;
 
       if (multiplyMatches.length) {
-        const match = multiplyMatches[0]
-        multiply = match.address!
-        decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals
+        const match = multiplyMatches[0];
+        multiply = match.address!;
+        decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals;
       } else {
         const divideMatches = Object.values(mapping).filter(
           (m) => m.from === collateral.wrapped.address && m.to === asset.wrapped.address
-        )
+        );
         if (divideMatches.length) {
-          const match = divideMatches[0]
-          divide = match.address!
-          decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals
+          const match = divideMatches[0];
+          divide = match.address!;
+          decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals;
         } else {
-          const mapFrom = Object.values(mapping).filter((m) => m.from === asset.wrapped.address)
-          const mapTo = Object.values(mapping).filter((m) => m.from === collateral.wrapped.address)
+          const mapFrom = Object.values(mapping).filter((m) => m.from === asset.wrapped.address);
+          const mapTo = Object.values(mapping).filter((m) => m.from === collateral.wrapped.address);
           const match = mapFrom
             .map((mfrom) => ({
               mfrom: mfrom,
               mto: mapTo.filter((mto) => mfrom.to === mto.to),
             }))
-            .filter((path) => path.mto.length)
+            .filter((path) => path.mto.length);
           if (match.length) {
-            multiply = match[0].mfrom.address!
-            divide = match[0].mto[0].address!
-            decimals = 18 + match[0].mfrom.decimals - match[0].mto[0].decimals - collateral.decimals + asset.decimals
+            multiply = match[0].mfrom.address!;
+            divide = match[0].mto[0].address!;
+            decimals = 18 + match[0].mfrom.decimals - match[0].mto[0].decimals - collateral.decimals + asset.decimals;
           } else {
-            return ''
+            return '';
           }
         }
       }
-
-      console.log({
-        multiply,
-        divide,
-        decimals: e10(decimals),
-      })
-
-      return defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
+      return ethers.utils.defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)]);
     },
     [chainId]
-  )
+  );
 
   const handleCreate = async () => {
     try {
-      if (!both) return
+      if (!both) return;
 
-      const oracleData = await getOracleData(currencies[Field.ASSET], currencies[Field.COLLATERAL])
+      const oracleData = await getOracleData(currencies[Field.ASSET], currencies[Field.COLLATERAL]);
 
       if (!oracleData) {
-        console.log('No path')
-        return
+        console.log('No path');
+        return;
       }
 
-      if (!(chainId in CHAINLINK_ORACLE_ADDRESS)) {
-        console.log('No chainlink oracle address')
-        return
-      }
+      const oracleAddress = CHAINLINK_ORACLE_ADDRESS;
 
-      if (!(chainId in KASHI_ADDRESS)) {
-        console.log('No kashi address')
-        return
-      }
-
-      const oracleAddress = CHAINLINK_ORACLE_ADDRESS[chainId]
-
-      const kashiData = defaultAbiCoder.encode(
+      const kashiData = ethers.utils.defaultAbiCoder.encode(
         ['address', 'address', 'address', 'bytes'],
         [
           currencies[Field.COLLATERAL].wrapped.address,
@@ -150,26 +134,26 @@ function Create() {
           oracleAddress,
           oracleData,
         ]
-      )
+      );
 
       console.log([
         currencies[Field.COLLATERAL].wrapped.address,
         currencies[Field.ASSET].wrapped.address,
         oracleAddress,
         oracleData,
-      ])
+      ]);
 
-      const tx = await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true)
+      const tx = await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true);
 
       addTransaction(tx, {
         summary: `Add Kashi market ${currencies[Field.ASSET].symbol}/${currencies[Field.COLLATERAL].symbol} Chainlink`,
-      })
+      });
 
-      router.push('/lend')
+      router.push('/lend');
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-  }
+  };
 
   return (
     <>
@@ -180,9 +164,9 @@ function Create() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <Card.Header className="bg-dark-800">
+          <CardHeader className="bg-dark-800">
             <div className="text-3xl text-high-emphesis leading-48px">Create a Market</div>
-          </Card.Header>
+          </CardHeader>
         }
       >
         <Container maxWidth="full" className="space-y-6">
@@ -223,11 +207,11 @@ function Create() {
         </Container>
       </Card>
     </>
-  )
+  );
 }
 
 const CreateLayout = ({ children }) => {
-  const { i18n } = useLingui()
+  const { i18n } = useLingui();
   return (
     <Layout
       left={
@@ -243,9 +227,9 @@ const CreateLayout = ({ children }) => {
     >
       {children}
     </Layout>
-  )
-}
+  );
+};
 
-Create.Layout = CreateLayout
+Create.Layout = CreateLayout;
 
-export default Create
+export default Create;

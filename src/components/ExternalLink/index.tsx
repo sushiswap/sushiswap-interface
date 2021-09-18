@@ -1,17 +1,17 @@
-import React, { FC, HTMLProps, useCallback } from 'react'
+import React, { FC, HTMLProps, useCallback } from 'react';
 
-import ReactGA from 'react-ga'
-import { classNames } from '../../functions'
+import ReactGA from 'react-ga';
+import { classNames } from '../../functions';
 
 const COLOR = {
   default: 'text-primary hover:text-high-emphesis focus:text-high-emphesis',
   blue: 'text-blue opacity-80 hover:opacity-100 focus:opacity-100',
-}
+};
 
 interface ExternalLinkProps extends Omit<HTMLProps<HTMLAnchorElement>, 'as' | 'ref' | 'onClick'> {
-  href: string
-  startIcon?: JSX.Element
-  endIcon?: JSX.Element
+  href: string;
+  startIcon?: JSX.Element;
+  endIcon?: JSX.Element;
 }
 
 const ExternalLink: FC<ExternalLinkProps> = ({
@@ -30,18 +30,18 @@ const ExternalLink: FC<ExternalLinkProps> = ({
       // don't prevent default, don't redirect if it's a new tab
       if (target === '_blank' || event.ctrlKey || event.metaKey) {
         ReactGA.outboundLink({ label: href }, () => {
-          console.debug('Fired outbound link event', href)
-        })
+          console.debug('Fired outbound link event', href);
+        });
       } else {
-        event.preventDefault()
+        event.preventDefault();
         // send a ReactGA event and then trigger a location change
         ReactGA.outboundLink({ label: href }, () => {
-          window.location.href = href
-        })
+          window.location.href = href;
+        });
       }
     },
     [href, target]
-  )
+  );
 
   return (
     <a
@@ -61,7 +61,7 @@ const ExternalLink: FC<ExternalLinkProps> = ({
       {children}
       {endIcon && endIcon}
     </a>
-  )
-}
+  );
+};
 
-export default ExternalLink
+export default ExternalLink;

@@ -1,17 +1,17 @@
-import React, { FC, MouseEvent, useRef } from 'react'
-import { ChevronDownIcon } from '@heroicons/react/outline'
-import useToggle from '../../hooks/useToggle'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import React, { FC, MouseEvent, useRef } from 'react';
+import { ChevronDownIcon } from '@heroicons/react/outline';
+import useToggle from '../../hooks/useToggle';
+import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 
 interface NeonSelectProps {
-  value
-  children: React.ReactElement<NeonSelectItemProps> | React.ReactElement<NeonSelectItemProps>[]
+  value;
+  children: React.ReactElement<NeonSelectItemProps> | React.ReactElement<NeonSelectItemProps>[];
 }
 
 const NeonSelect: FC<NeonSelectProps> = ({ value, children }) => {
-  const [open, toggle] = useToggle(false)
-  const node = useRef<HTMLDivElement>()
-  useOnClickOutside(node, open ? toggle : undefined)
+  const [open, toggle] = useToggle(false);
+  const node = useRef<HTMLDivElement>();
+  useOnClickOutside(node, open ? toggle : undefined);
 
   return (
     <div className="relative" ref={node} onClick={toggle}>
@@ -29,12 +29,12 @@ const NeonSelect: FC<NeonSelectProps> = ({ value, children }) => {
         {children}
       </div>
     </div>
-  )
-}
+  );
+};
 
 interface NeonSelectItemProps {
-  onClick: (e: MouseEvent<HTMLDivElement>, idx: number | string) => void
-  value: number | string
+  onClick: (e: MouseEvent<HTMLDivElement>, idx: number | string) => void;
+  value: number | string;
 }
 
 export const NeonSelectItem: FC<NeonSelectItemProps> = ({ onClick, value, children }) => {
@@ -45,7 +45,7 @@ export const NeonSelectItem: FC<NeonSelectItemProps> = ({ onClick, value, childr
     >
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default NeonSelect
+export default NeonSelect;

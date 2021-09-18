@@ -1,11 +1,11 @@
-import React from 'react'
-import { Switch } from '@headlessui/react'
-import { classNames } from '../../functions'
+import React from 'react';
+import { Switch } from '@headlessui/react';
+import { classNames } from '../../functions';
 
 export interface ToggleProps {
-  id?: string
-  isActive: boolean
-  toggle: () => void
+  id?: string;
+  isActive: boolean;
+  toggle: () => void;
 }
 
 export default function Toggle({ id, isActive, toggle }: ToggleProps) {
@@ -55,5 +55,5 @@ export default function Toggle({ id, isActive, toggle }: ToggleProps) {
         </span>
       </span>
     </Switch>
-  )
+  );
 }

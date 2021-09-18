@@ -1,6 +1,6 @@
-import { ChainId } from '@sushiswap/sdk'
-import { GRAPH_HOST } from '../constants'
-import { request } from 'graphql-request'
+import { ChainId } from '@sushiswap/sdk';
+import { GRAPH_HOST } from '../constants';
+import { request } from 'graphql-request';
 
 export const status = async (chainId = ChainId.MAINNET, subgraphName) =>
   request(
@@ -27,4 +27,4 @@ export const status = async (chainId = ChainId.MAINNET, subgraphName) =>
             }
           }
         `
-  )
+  );

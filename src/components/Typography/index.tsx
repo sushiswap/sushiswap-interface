@@ -1,14 +1,15 @@
-import React from 'react'
-import { classNames } from '../../functions'
+import React from 'react';
 
-export type TypographyWeight = 400 | 700
+import { classNames } from '../../functions';
+
+export type TypographyWeight = 400 | 700;
 
 const WEIGHTS = {
   400: 'font-medium',
   700: 'font-bold',
-}
+};
 
-export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 'sm' | 'xs'
+export type TypographyVariant = 'hero' | 'h1' | 'h2' | 'h3' | 'lg' | 'base' | 'sm' | 'xs';
 
 const VARIANTS = {
   hero: 'text-hero',
@@ -19,14 +20,15 @@ const VARIANTS = {
   base: 'text-base',
   sm: 'text-sm',
   xs: 'text-xs',
-}
+};
 
 export interface TypographyProps {
-  variant?: TypographyVariant
-  weight?: TypographyWeight
-  component?: keyof React.ReactHTML
-  className?: string
-  clickable?: boolean
+  variant?: TypographyVariant;
+  weight?: TypographyWeight;
+  component?: keyof React.ReactHTML;
+  className?: string;
+  // children?: React.ReactNode | React.ReactNode[]
+  clickable?: boolean;
 }
 
 function Typography({
@@ -47,7 +49,7 @@ function Typography({
       ...rest,
     },
     children
-  )
+  );
 }
 
-export default Typography
+export default Typography;

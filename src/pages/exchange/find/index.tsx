@@ -1,26 +1,26 @@
-import { Currency, CurrencyAmount, Ether, JSBI, NATIVE, Token } from '@sushiswap/sdk'
-import { PairState, useV2Pair } from '../../../hooks/useV2Pairs'
-import React, { useCallback, useEffect, useState } from 'react'
+import { Currency, CurrencyAmount, Ether, JSBI, NATIVE, Token } from '@sushiswap/sdk';
+import { PairState, useV2Pair } from '../../../hooks/useV2Pairs';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import Alert from '../../../components/Alert'
-import { AutoColumn } from '../../../components/Column'
-import { AutoRow } from '../../../components/Row'
-import Back from '../../../components/Back'
-import Container from '../../../components/Container'
-import CurrencySelectPanel from '../../../components/CurrencySelectPanel'
-import Dots from '../../../components/Dots'
-import Head from 'next/head'
-import Link from 'next/link'
-import { MinimalPositionCard } from '../../../components/PositionCard'
-import { Plus } from 'react-feather'
-import Typography from '../../../components/Typography'
-import Web3Connect from '../../../components/Web3Connect'
-import { currencyId } from '../../../functions/currency'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import { usePairAdder } from '../../../state/user/hooks'
-import { useTokenBalance } from '../../../state/wallet/hooks'
+import Alert from '../../../components/Alert';
+import { AutoColumn } from '../../../components/Column';
+import { AutoRow } from '../../../components/Row';
+import Back from '../../../components/Back';
+import Container from '../../../components/Container';
+import CurrencySelectPanel from '../../../components/CurrencySelectPanel';
+import Dots from '../../../components/Dots';
+import Head from 'next/head';
+import Link from 'next/link';
+import { MinimalPositionCard } from '../../../components/PositionCard';
+import { Plus } from 'react-feather';
+import Typography from '../../../components/Typography';
+import Web3Connect from '../../../components/Web3Connect';
+import { currencyId } from '../../../functions/currency';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React';
+import { useLingui } from '@lingui/react';
+import { usePairAdder } from '../../../state/user/hooks';
+import { useTokenBalance } from '../../../state/wallet/hooks';
 
 enum Fields {
   TOKEN0 = 0,
@@ -28,21 +28,21 @@ enum Fields {
 }
 
 export default function PoolFinder() {
-  const { i18n } = useLingui()
-  const { account, chainId } = useActiveWeb3React()
+  const { i18n } = useLingui();
+  const { account, chainId } = useActiveWeb3React();
 
-  const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
+  const [activeField, setActiveField] = useState<number>(Fields.TOKEN1);
 
-  const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? NATIVE[chainId] : null))
-  const [currency1, setCurrency1] = useState<Currency | null>(null)
+  const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? NATIVE[chainId] : null));
+  const [currency1, setCurrency1] = useState<Currency | null>(null);
 
-  const [pairState, pair] = useV2Pair(currency0 ?? undefined, currency1 ?? undefined)
-  const addPair = usePairAdder()
+  const [pairState, pair] = useV2Pair(currency0 ?? undefined, currency1 ?? undefined);
+  const addPair = usePairAdder();
   useEffect(() => {
     if (pair) {
-      addPair(pair)
+      addPair(pair);
     }
-  }, [pair, addPair])
+  }, [pair, addPair]);
 
   const validPairNoLiquidity: boolean =
     pairState === PairState.NOT_EXISTS ||
@@ -51,26 +51,26 @@ export default function PoolFinder() {
         pair &&
         JSBI.equal(pair.reserve0.quotient, JSBI.BigInt(0)) &&
         JSBI.equal(pair.reserve1.quotient, JSBI.BigInt(0))
-    )
+    );
 
-  const position: CurrencyAmount<Token> | undefined = useTokenBalance(account ?? undefined, pair?.liquidityToken)
+  const position: CurrencyAmount<Token> | undefined = useTokenBalance(account ?? undefined, pair?.liquidityToken);
 
-  const hasPosition = Boolean(position && JSBI.greaterThan(position.quotient, JSBI.BigInt(0)))
+  const hasPosition = Boolean(position && JSBI.greaterThan(position.quotient, JSBI.BigInt(0)));
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
       if (activeField === Fields.TOKEN0) {
-        setCurrency0(currency)
+        setCurrency0(currency);
       } else {
-        setCurrency1(currency)
+        setCurrency1(currency);
       }
     },
     [activeField]
-  )
+  );
 
   const prerequisiteMessage = (
     <div className="p-5 text-center rounded bg-dark-800">{i18n._(t`Select a token to find your liquidity`)}</div>
-  )
+  );
 
   return (
     <Container id="find-pool-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
@@ -178,5 +178,5 @@ export default function PoolFinder() {
         )}
       </div>
     </Container>
-  )
+  );
 }

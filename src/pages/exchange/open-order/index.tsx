@@ -1,24 +1,23 @@
-import useLimitOrderApproveCallback, { BentoApprovalState } from '../../../hooks/useLimitOrderApproveCallback'
-
-import Alert from '../../../components/Alert'
-import { ArrowLeftIcon } from '@heroicons/react/solid'
-import { ChainId } from '@sushiswap/sdk'
-import CompletedOrders from '../../../features/exchange-v1/open-order/CompletedOrders'
-import Container from '../../../components/Container'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
-import Head from 'next/head'
-import NavLink from '../../../components/NavLink'
-import NetworkGuard from '../../../guards/Network'
-import OpenOrders from '../../../features/exchange-v1/open-order/OpenOrders'
-import React from 'react'
-import { t } from '@lingui/macro'
-import useLimitOrders from '../../../hooks/useLimitOrders'
-import { useLingui } from '@lingui/react'
+import { ArrowLeftIcon } from '@heroicons/react/solid';
+import { ChainId } from '@sushiswap/sdk';
+import CompletedOrders from '../../../features/open-order/CompletedOrders';
+import Container from '../../../components/Container';
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow';
+import Head from 'next/head';
+import NavLink from '../../../components/NavLink';
+import NetworkGuard from '../../../guards/Network';
+import OpenOrders from '../../../features/open-order/OpenOrders';
+import { t } from '@lingui/macro';
+import React from 'react';
+import { useLingui } from '@lingui/react';
+import useLimitOrderApproveCallback, { BentoApprovalState } from '../../../hooks/useLimitOrderApproveCallback';
+import Alert from '../../../components/Alert';
+import useLimitOrders from '../../../hooks/useLimitOrders';
 
 function OpenOrdersPage() {
-  const { i18n } = useLingui()
-  const [approvalState] = useLimitOrderApproveCallback()
-  const { pending } = useLimitOrders()
+  const { i18n } = useLingui();
+  const [approvalState] = useLimitOrderApproveCallback();
+  const { pending } = useLimitOrders();
 
   return (
     <Container id="open-order-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
@@ -54,9 +53,9 @@ function OpenOrdersPage() {
         </DoubleGlowShadow>
       </div>
     </Container>
-  )
+  );
 }
 
-OpenOrdersPage.Guard = NetworkGuard([ChainId.MATIC])
+OpenOrdersPage.Guard = NetworkGuard([ChainId.MATIC]);
 
-export default OpenOrdersPage
+export default OpenOrdersPage;

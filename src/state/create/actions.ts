@@ -1,4 +1,4 @@
-import { createAction } from '@reduxjs/toolkit'
+import { createAction } from '@reduxjs/toolkit';
 
 export enum Field {
   COLLATERAL = 'COLLATERAL',
@@ -6,17 +6,17 @@ export enum Field {
 }
 
 export const selectCurrency = createAction<{
-  field: Field
-  currencyId: string
-}>('create/selectCurrency')
+  field: Field;
+  currencyId: string;
+}>('create/selectCurrency');
 
-export const switchCurrencies = createAction<void>('create/switchCurrencies')
+export const switchCurrencies = createAction<void>('create/switchCurrencies');
 
-export const typeInput = createAction<{ field: Field; typedValue: string }>('create/typeInput')
+export const typeInput = createAction<{ field: Field; typedValue: string }>('create/typeInput');
 
 export const replaceCreateState = createAction<{
-  field: Field
-  typedValue: string
-  collateralId?: string
-  assetId?: string
-}>('create/replaceCreateState')
+  field: Field;
+  typedValue: string;
+  collateralId?: string;
+  assetId?: string;
+}>('create/replaceCreateState');

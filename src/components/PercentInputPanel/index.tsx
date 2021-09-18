@@ -1,10 +1,10 @@
-import Input from '../Input'
-import React from 'react'
+import { Input as PercentInput } from '../PercentInput';
+import React from 'react';
 
 interface PercentInputPanelProps {
-  value: string
-  onUserInput: (value: string) => void
-  id: string
+  value: string;
+  onUserInput: (value: string) => void;
+  id: string;
 }
 
 export default function PercentInputPanel({ value, onUserInput, id }: PercentInputPanelProps) {
@@ -15,11 +15,11 @@ export default function PercentInputPanel({ value, onUserInput, id }: PercentInp
           Amount to Remove
         </div>
         <div className="flex items-center w-full p-3 space-x-3 text-xl font-bold rounded bg-dark-900 sm:w-3/5">
-          <Input.Percent
+          <PercentInput
             className="token-amount-input"
             value={value}
             onUserInput={(val) => {
-              onUserInput(val)
+              onUserInput(val);
             }}
             align="right"
           />
@@ -27,5 +27,5 @@ export default function PercentInputPanel({ value, onUserInput, id }: PercentInp
         </div>
       </div>
     </div>
-  )
+  );
 }

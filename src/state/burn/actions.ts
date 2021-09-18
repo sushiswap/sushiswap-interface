@@ -1,4 +1,4 @@
-import { createAction } from '@reduxjs/toolkit'
+import { createAction } from '@reduxjs/toolkit';
 
 export enum Field {
   LIQUIDITY_PERCENT = 'LIQUIDITY_PERCENT',
@@ -7,4 +7,4 @@ export enum Field {
   CURRENCY_B = 'CURRENCY_B',
 }
 
-export const typeInput = createAction<{ field: Field; typedValue: string }>('burn/typeInputBurn')
+export const typeInput = createAction<{ field: Field; typedValue: string }>('burn/typeInputBurn');

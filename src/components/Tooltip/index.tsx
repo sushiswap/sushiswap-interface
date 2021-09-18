@@ -1,48 +1,61 @@
-import Popover, { PopoverProps } from '../Popover'
-import React, { ReactNode, useCallback, useState } from 'react'
+import Popover, { PopoverProps } from '../Popover';
+import React, { ReactNode, useCallback, useState } from 'react';
+
+import styled from 'styled-components/macro';
+
+const TooltipContainer = styled.div`
+  width: 256px;
+  padding: 0.6rem 1rem;
+  font-weight: 400;
+  word-break: break-word;
+`;
 
 interface TooltipProps extends Omit<PopoverProps, 'content'> {
-  text: ReactNode
+  text: ReactNode;
 }
 
 interface TooltipContentProps extends Omit<PopoverProps, 'content'> {
-  content: ReactNode
+  content: ReactNode;
 }
 
 export default function Tooltip({ text, ...rest }: TooltipProps) {
   return (
     <Popover
       content={
-        <div className="w-full max-w-[228px] px-2 py-1 font-medium bg-dark-700 border border-gray-600 rounded text-sm">
-          {text}
-        </div>
+        <div className="w-[228px] px-2 py-1 font-medium bg-dark-700 border border-gray-600 rounded text-sm">{text}</div>
       }
       {...rest}
     />
-  )
+  );
 }
 
+// export default function Tooltip({ text, ...rest }: TooltipProps) {
+//   return (
+//     <Popover content={<TooltipContainer>{text}</TooltipContainer>} {...rest} />
+//   );
+// }
+
 export function TooltipContent({ content, ...rest }: TooltipContentProps) {
-  return <Popover content={<div className="w-64 py-[0.6rem] px-4 break-words">{content}</div>} {...rest} />
+  return <Popover content={<TooltipContainer>{content}</TooltipContainer>} {...rest} />;
 }
 
 export function MouseoverTooltip({ children, ...rest }: Omit<TooltipProps, 'show'>) {
-  const [show, setShow] = useState(false)
-  const open = useCallback(() => setShow(true), [setShow])
-  const close = useCallback(() => setShow(false), [setShow])
+  const [show, setShow] = useState(false);
+  const open = useCallback(() => setShow(true), [setShow]);
+  const close = useCallback(() => setShow(false), [setShow]);
   return (
     <Tooltip {...rest} show={show}>
       <div onMouseEnter={open} onMouseLeave={close}>
         {children}
       </div>
     </Tooltip>
-  )
+  );
 }
 
 export function MouseoverTooltipContent({ content, children, ...rest }: Omit<TooltipContentProps, 'show'>) {
-  const [show, setShow] = useState(false)
-  const open = useCallback(() => setShow(true), [setShow])
-  const close = useCallback(() => setShow(false), [setShow])
+  const [show, setShow] = useState(false);
+  const open = useCallback(() => setShow(true), [setShow]);
+  const close = useCallback(() => setShow(false), [setShow]);
   return (
     <TooltipContent {...rest} show={show} content={content}>
       <div
@@ -53,5 +66,5 @@ export function MouseoverTooltipContent({ content, children, ...rest }: Omit<Too
         {children}
       </div>
     </TooltipContent>
-  )
+  );
 }

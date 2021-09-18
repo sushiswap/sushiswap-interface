@@ -1,28 +1,28 @@
-import React, { FC } from 'react'
+import React, { FC } from 'react';
 
-import { MeowshiState } from '../../pages/tools/meowshi'
-import { RadioGroup } from '@headlessui/react'
-import Typography from '../../components/Typography'
-import { classNames } from '../../functions'
+import { MeowshiState } from '../../pages/tools/meowshi';
+import { RadioGroup } from '@headlessui/react';
+import Typography from '../../components/Typography';
+import { classNames } from '../../functions';
 
 interface HeaderToggleProps {
-  meowshiState: MeowshiState
+  meowshiState: MeowshiState;
 }
 
 const HeaderToggle: FC<HeaderToggleProps> = ({ meowshiState }) => {
-  const { meow, switchCurrencies } = meowshiState
+  const { meow, switchCurrencies } = meowshiState;
 
   return (
     <div className="flex justify-between">
       <RadioGroup
         value={meow}
         onChange={switchCurrencies}
-        className="flex flex-row bg-dark-800 rounded p-3px cursor-pointer"
+        className="flex flex-row rounded cursor-pointer bg-dark-800 p-3px"
       >
         <RadioGroup.Option
           value={true}
           className={({ checked }) =>
-            classNames('px-8 py-2 rounded', `${checked ? 'bg-gradient-to-r from-blue to-pink' : ''}`)
+            classNames('px-8 py-2 rounded', `${checked ? 'bg-gradient-to-r from-gray-600 to-gray-300' : ''}`)
           }
         >
           {({ checked }) => (
@@ -34,7 +34,7 @@ const HeaderToggle: FC<HeaderToggleProps> = ({ meowshiState }) => {
         <RadioGroup.Option
           value={false}
           className={({ checked }) =>
-            classNames('px-8 py-2 rounded', `${checked ? 'bg-gradient-to-r from-blue to-pink' : ''}`)
+            classNames('px-8 py-2 rounded', `${checked ? 'bg-gradient-to-r from-gray-600 to-gray-300' : ''}`)
           }
         >
           {({ checked }) => (
@@ -48,7 +48,7 @@ const HeaderToggle: FC<HeaderToggleProps> = ({ meowshiState }) => {
         1 xSUSHI ≈ 100k MEOW
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HeaderToggle
+export default HeaderToggle;

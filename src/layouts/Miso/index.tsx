@@ -1,6 +1,8 @@
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
-import Popups from '../../components/Popups'
+import Banner from '../../components/Banner';
+import Footer from '../../components/Footer';
+import Header from '../../components/Header';
+import Main from '../../components/Main';
+import Popups from '../../components/Popups';
 
 const Layout = ({ children }) => {
   return (
@@ -13,10 +15,9 @@ const Layout = ({ children }) => {
       >
         {children}
       </main>
-      <Popups />
       <Footer />
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

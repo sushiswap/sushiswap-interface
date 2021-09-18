@@ -1,14 +1,16 @@
 @tailwind base;
 
-@import '@fontsource/dm-sans/index.css';
-@import 'react-virtualized/styles.css';
-@import 'rc-slider/assets/index.css';
-
 @import './variables.css';
 
 @tailwind components;
 
 @tailwind utilities;
+
+@layer utilities {
+  .square {
+    aspect-ratio: 7/5
+  }
+}
 
 *,
 *:before,
@@ -55,10 +57,6 @@ button:focus {
 input:focus {
   box-shadow: none;
   outline: none;
-}
-
-.striped-background {
-  background: repeating-linear-gradient(45deg, #161522, #161522 10px, #0d0415 10px, #0d0415 20px);
 }
 
 /* *::-webkit-scrollbar {

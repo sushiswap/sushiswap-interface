@@ -1,53 +1,53 @@
-import { ExternalLink, User } from 'react-feather'
-import React, { useCallback, useMemo } from 'react'
-import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
-import useSWR, { SWRResponse } from 'swr'
+import { ExternalLink, User } from 'react-feather';
+import React, { useCallback, useMemo } from 'react';
+import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks';
+import useSWR, { SWRResponse } from 'swr';
 
-import Back from '../../components/Back'
-import Button from '../../components/Button'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import Head from 'next/head'
-import { NETWORK_LABEL } from '../../config/networks'
-import { TransactionDetails } from '../../state/transactions/reducer'
-import TransactionList from '../../features/user/TransactionList'
-import Typography from '../../components/Typography'
-import { clearAllTransactions } from '../../state/transactions/actions'
-import { getExplorerLink } from '../../functions/explorer'
-import { shortenAddress } from '../../functions/format'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAppDispatch } from '../../state/hooks'
-import useENSName from '../../hooks/useENSName'
-import { useETHBalances } from '../../state/wallet/hooks'
-import { useLingui } from '@lingui/react'
+import Back from '../../components/Back';
+import Button from '../../components/Button';
+import Container from '../../components/Container';
+import Dots from '../../components/Dots';
+import Head from 'next/head';
+import { NETWORK_LABEL } from '../../constants/networks';
+import { TransactionDetails } from '../../state/transactions/reducer';
+import TransactionList from '../../components/TransactionList';
+import Typography from '../../components/Typography';
+import { clearAllTransactions } from '../../state/transactions/actions';
+import { getExplorerLink } from '../../functions/explorer';
+import { shortenAddress } from '../../functions/format';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import { useAppDispatch } from '../../state/hooks';
+import useENSName from '../../hooks/useENSName';
+import { useETHBalances } from '../../state/wallet/hooks';
+import { useLingui } from '@lingui/react';
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
-  return b.addedTime - a.addedTime
+  return b.addedTime - a.addedTime;
 }
 
 export default function Me() {
-  const { i18n } = useLingui()
-  const { chainId, account } = useActiveWeb3React()
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
-  const dispatch = useAppDispatch()
+  const { i18n } = useLingui();
+  const { chainId, account } = useActiveWeb3React();
+  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? ''];
+  const dispatch = useAppDispatch();
 
-  const { ENSName } = useENSName(account ?? undefined)
+  const { ENSName } = useENSName(account ?? undefined);
 
-  const allTransactions = useAllTransactions()
+  const allTransactions = useAllTransactions();
 
   const sortedRecentTransactions = useMemo(() => {
-    const txs = Object.values(allTransactions)
-    return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
-  }, [allTransactions])
+    const txs = Object.values(allTransactions);
+    return txs.filter(isTransactionRecent).sort(newTransactionsFirst);
+  }, [allTransactions]);
 
-  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
-  const confirmed = sortedRecentTransactions.filter((tx) => tx.receipt).map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash);
+  const confirmed = sortedRecentTransactions.filter((tx) => tx.receipt).map((tx) => tx.hash);
 
   const clearAllTransactionsCallback = useCallback(() => {
-    if (chainId) dispatch(clearAllTransactions({ chainId }))
-  }, [dispatch, chainId])
+    if (chainId) dispatch(clearAllTransactions({ chainId }));
+  }, [dispatch, chainId]);
 
   const { data, error }: SWRResponse<any, Error> = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/address/${account}/stacks/sushiswap/acts/?&key=ckey_cba3674f2ce5450f9d5dd290589&swaps=true&quote-currency=usd`,
@@ -55,10 +55,10 @@ export default function Me() {
       fetch(url)
         .then((r) => r.json())
         .then((j) => j.data)
-  )
+  );
 
-  if (error) return <div>{i18n._(t`failed to load`)}</div>
-  if (!data) return <div>{i18n._(t`loading...`)}</div>
+  if (error) return <div>{i18n._(t`failed to load`)}</div>;
+  if (!data) return <div>{i18n._(t`loading...`)}</div>;
 
   return (
     <Container id="user-page" className="py-4 space-y-3 md:py-8 lg:py-12" maxWidth="2xl">
@@ -134,5 +134,5 @@ export default function Me() {
         {/* <TransactionList transactions={data.items} /> */}
       </div>
     </Container>
-  )
+  );
 }

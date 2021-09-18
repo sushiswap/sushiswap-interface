@@ -1,86 +1,87 @@
-import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback'
-import { ArrowDown, Plus } from 'react-feather'
-import { AutoRow, RowBetween } from '../../../components/Row'
-import { ButtonConfirmed, ButtonError } from '../../../components/Button'
-import { ChainId, Currency, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/sdk'
-import React, { useCallback, useMemo, useState } from 'react'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
-import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade'
-import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../../state/burn/hooks'
-import { usePairContract, useRouterContract } from '../../../hooks/useContract'
+import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCallback';
+import { ArrowDown, Plus } from 'react-feather';
+import { AutoRow, RowBetween } from '../../../components/Row';
+import { ButtonConfirmed, ButtonError } from '../../../components/Button';
+import { ChainId, Currency, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk';
+import React, { useCallback, useMemo, useState } from 'react';
+import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal';
+import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade';
+import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../../state/burn/hooks';
+import { usePairContract, useRouterContract } from '../../../hooks/useContract';
 
-import Alert from '../../../components/Alert'
-import { ArrowDownIcon } from '@heroicons/react/solid'
-import { AutoColumn } from '../../../components/Column'
-import { BigNumber } from '@ethersproject/bignumber'
-import Button from '../../../components/Button'
-import Container from '../../../components/Container'
-import { Contract } from '@ethersproject/contracts'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import Dots from '../../../components/Dots'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
-import { Field } from '../../../state/burn/actions'
-import Head from 'next/head'
-import Header from '../../../features/trade/Header'
-import Link from 'next/link'
-import LiquidityHeader from '../../../features/exchange-v1/liquidity/LiquidityHeader'
-import LiquidityPrice from '../../../features/exchange-v1/liquidity/LiquidityPrice'
-import { MinimalPositionCard } from '../../../components/PositionCard'
-import NavLink from '../../../components/NavLink'
-import PercentInputPanel from '../../../components/PercentInputPanel'
-import ReactGA from 'react-ga'
-import RemoveLiquidityReceiveDetails from '../../../features/exchange-v1/liquidity/RemoveLiquidityReceiveDetails'
-import { TransactionResponse } from '@ethersproject/providers'
-import Web3Connect from '../../../components/Web3Connect'
-import { currencyId } from '../../../functions/currency'
-import { splitSignature } from '@ethersproject/bytes'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useCurrency } from '../../../hooks/Tokens'
-import useDebouncedChangeHandler from '../../../hooks/useDebouncedChangeHandler'
-import { useDerivedMintInfo } from '../../../state/mint/hooks'
-import useIsArgentWallet from '../../../hooks/useIsArgentWallet'
-import { useLingui } from '@lingui/react'
-import { useRouter } from 'next/router'
-import { useTransactionAdder } from '../../../state/transactions/hooks'
-import useTransactionDeadline from '../../../hooks/useTransactionDeadline'
-import { useUserSlippageToleranceWithDefault } from '../../../state/user/hooks'
-import { useV2LiquidityTokenPermit } from '../../../hooks/useERC20Permit'
-import { useWalletModalToggle } from '../../../state/application/hooks'
+import { AddRemoveTabs } from '../../../components/NavigationTabs';
+import Alert from '../../../components/Alert';
+import { ArrowDownIcon } from '@heroicons/react/solid';
+import { AutoColumn } from '../../../components/Column';
+import { BigNumber } from '@ethersproject/bignumber';
+import Button from '../../../components/Button';
+import Container from '../../../components/Container';
+import { Contract } from '@ethersproject/contracts';
+import CurrencyLogo from '../../../components/CurrencyLogo';
+import Dots from '../../../components/Dots';
+import DoubleGlowShadow from '../../../components/DoubleGlowShadow';
+import { Field } from '../../../state/burn/actions';
+import Head from 'next/head';
+import Header from '../../../components/ExchangeHeader';
+import Link from 'next/link';
+import LiquidityHeader from '../../../features/liquidity/LiquidityHeader';
+import LiquidityPrice from '../../../features/liquidity/LiquidityPrice';
+import { MinimalPositionCard } from '../../../components/PositionCard';
+import NavLink from '../../../components/NavLink';
+import PercentInputPanel from '../../../components/PercentInputPanel';
+import ReactGA from 'react-ga';
+import RemoveLiquidityReceiveDetails from '../../../features/liquidity/RemoveLiquidityReceiveDetails';
+import { TransactionResponse } from '@ethersproject/providers';
+import Web3Connect from '../../../components/Web3Connect';
+import { currencyId } from '../../../functions/currency';
+import { splitSignature } from '@ethersproject/bytes';
+import { t } from '@lingui/macro';
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React';
+import { useCurrency } from '../../../hooks/Tokens';
+import useDebouncedChangeHandler from '../../../hooks/useDebouncedChangeHandler';
+import { useDerivedMintInfo } from '../../../state/mint/hooks';
+import useIsArgentWallet from '../../../hooks/useIsArgentWallet';
+import { useLingui } from '@lingui/react';
+import { useRouter } from 'next/router';
+import { useTransactionAdder } from '../../../state/transactions/hooks';
+import useTransactionDeadline from '../../../hooks/useTransactionDeadline';
+import { useUserSlippageToleranceWithDefault } from '../../../state/user/hooks';
+import { useV2LiquidityTokenPermit } from '../../../hooks/useERC20Permit';
+import { useWalletModalToggle } from '../../../state/application/hooks';
 
-const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
+const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100);
 
-const REMOVE_TIPS = {}
+const REMOVE_TIPS = {};
 
 export default function Remove() {
-  const { i18n } = useLingui()
-  const router = useRouter()
-  const tokens = router.query.tokens
-  const [currencyIdA, currencyIdB] = tokens || [undefined, undefined]
-  const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined]
-  const { account, chainId, library } = useActiveWeb3React()
-  const [tokenA, tokenB] = useMemo(() => [currencyA?.wrapped, currencyB?.wrapped], [currencyA, currencyB])
+  const { i18n } = useLingui();
+  const router = useRouter();
+  const tokens = router.query.tokens;
+  const [currencyIdA, currencyIdB] = tokens || [undefined, undefined];
+  const [currencyA, currencyB] = [useCurrency(currencyIdA) ?? undefined, useCurrency(currencyIdB) ?? undefined];
+  const { account, chainId, library } = useActiveWeb3React();
+  const [tokenA, tokenB] = useMemo(() => [currencyA?.wrapped, currencyB?.wrapped], [currencyA, currencyB]);
 
   // toggle wallet when disconnected
-  const toggleWalletModal = useWalletModalToggle()
+  const toggleWalletModal = useWalletModalToggle();
 
-  const { price } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
+  const { price } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined);
 
   // burn state
-  const { independentField, typedValue } = useBurnState()
-  const { pair, parsedAmounts, error } = useDerivedBurnInfo(currencyA ?? undefined, currencyB ?? undefined)
-  const { onUserInput: _onUserInput } = useBurnActionHandlers()
-  const isValid = !error
+  const { independentField, typedValue } = useBurnState();
+  const { pair, parsedAmounts, error } = useDerivedBurnInfo(currencyA ?? undefined, currencyB ?? undefined);
+  const { onUserInput: _onUserInput } = useBurnActionHandlers();
+  const isValid = !error;
 
   // modal and loading
-  const [showConfirm, setShowConfirm] = useState<boolean>(false)
-  const [showDetailed, setShowDetailed] = useState<boolean>(false)
-  const [attemptingTxn, setAttemptingTxn] = useState(false) // clicked confirm
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
+  const [showDetailed, setShowDetailed] = useState<boolean>(false);
+  const [attemptingTxn, setAttemptingTxn] = useState(false); // clicked confirm
 
   // txn values
-  const [txHash, setTxHash] = useState<string>('')
-  const deadline = useTransactionDeadline()
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE)
+  const [txHash, setTxHash] = useState<string>('');
+  const deadline = useTransactionDeadline();
+  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE);
 
   const formattedAmounts = {
     [Field.LIQUIDITY_PERCENT]: parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo('0')
@@ -94,93 +95,93 @@ export default function Remove() {
       independentField === Field.CURRENCY_A ? typedValue : parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',
     [Field.CURRENCY_B]:
       independentField === Field.CURRENCY_B ? typedValue : parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) ?? '',
-  }
+  };
 
-  const atMaxAmount = parsedAmounts[Field.LIQUIDITY_PERCENT]?.equalTo(new Percent('1'))
+  const atMaxAmount = parsedAmounts[Field.LIQUIDITY_PERCENT]?.equalTo(new Percent('1'));
 
   // pair contract
-  const pairContract: Contract | null = usePairContract(pair?.liquidityToken?.address)
+  const pairContract: Contract | null = usePairContract(pair?.liquidityToken?.address);
 
   // router contract
-  const routerContract = useRouterContract()
+  const routerContract = useRouterContract();
 
   // allowance handling
   const { gatherPermitSignature, signatureData } = useV2LiquidityTokenPermit(
     parsedAmounts[Field.LIQUIDITY],
     routerContract?.address
-  )
-  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], routerContract?.address)
+  );
+  const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], routerContract?.address);
 
   async function onAttemptToApprove() {
-    if (!pairContract || !pair || !library || !deadline) throw new Error('missing dependencies')
-    const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
-    if (!liquidityAmount) throw new Error('missing liquidity amount')
+    if (!pairContract || !pair || !library || !deadline) throw new Error('missing dependencies');
+    const liquidityAmount = parsedAmounts[Field.LIQUIDITY];
+    if (!liquidityAmount) throw new Error('missing liquidity amount');
 
     if (chainId !== ChainId.HARMONY && gatherPermitSignature) {
       try {
-        await gatherPermitSignature()
+        await gatherPermitSignature();
       } catch (error) {
         // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
         if (error?.code !== 4001) {
-          await approveCallback()
+          await approveCallback();
         }
       }
     } else {
-      await approveCallback()
+      await approveCallback();
     }
   }
 
   // wrapped onUserInput to clear signatures
   const onUserInput = useCallback(
     (field: Field, typedValue: string) => {
-      return _onUserInput(field, typedValue)
+      return _onUserInput(field, typedValue);
     },
     [_onUserInput]
-  )
+  );
 
   const onLiquidityInput = useCallback(
     (typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue),
     [onUserInput]
-  )
+  );
   const onCurrencyAInput = useCallback(
     (typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue),
     [onUserInput]
-  )
+  );
   const onCurrencyBInput = useCallback(
     (typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue),
     [onUserInput]
-  )
+  );
 
   // tx sending
-  const addTransaction = useTransactionAdder()
+  const addTransaction = useTransactionAdder();
 
   async function onRemove() {
-    if (!chainId || !library || !account || !deadline || !router) throw new Error('missing dependencies')
-    const { [Field.CURRENCY_A]: currencyAmountA, [Field.CURRENCY_B]: currencyAmountB } = parsedAmounts
+    if (!chainId || !library || !account || !deadline || !router) throw new Error('missing dependencies');
+    const { [Field.CURRENCY_A]: currencyAmountA, [Field.CURRENCY_B]: currencyAmountB } = parsedAmounts;
     if (!currencyAmountA || !currencyAmountB) {
-      throw new Error('missing currency amounts')
+      throw new Error('missing currency amounts');
     }
 
     const amountsMin = {
       [Field.CURRENCY_A]: calculateSlippageAmount(currencyAmountA, allowedSlippage)[0],
       [Field.CURRENCY_B]: calculateSlippageAmount(currencyAmountB, allowedSlippage)[0],
-    }
+    };
 
-    if (!currencyA || !currencyB) throw new Error('missing tokens')
-    const liquidityAmount = parsedAmounts[Field.LIQUIDITY]
-    if (!liquidityAmount) throw new Error('missing liquidity amount')
+    if (!currencyA || !currencyB) throw new Error('missing tokens');
+    const liquidityAmount = parsedAmounts[Field.LIQUIDITY];
+    if (!liquidityAmount) throw new Error('missing liquidity amount');
 
-    const currencyBIsETH = currencyB.isNative
-    const oneCurrencyIsETH = currencyA.isNative || currencyBIsETH
+    const currencyBIsETH = currencyB.isNative;
+    const oneCurrencyIsETH = currencyA.isNative || currencyBIsETH;
 
-    if (!tokenA || !tokenB) throw new Error('could not wrap')
+    if (!tokenA || !tokenB) throw new Error('could not wrap');
 
-    let methodNames: string[], args: Array<string | string[] | number | boolean>
+    let methodNames: string[], args: Array<string | string[] | number | boolean>;
     // we have approval, use normal remove liquidity
     if (approval === ApprovalState.APPROVED) {
       // removeLiquidityETH
       if (oneCurrencyIsETH) {
-        methodNames = ['removeLiquidityETH', 'removeLiquidityETHSupportingFeeOnTransferTokens']
+        methodNames = ['removeLiquidityETH', 'removeLiquidityETHSupportingFeeOnTransferTokens'];
         args = [
           currencyBIsETH ? tokenA.address : tokenB.address,
           liquidityAmount.quotient.toString(),
@@ -188,11 +189,11 @@ export default function Remove() {
           amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
           account,
           deadline.toHexString(),
-        ]
+        ];
       }
       // removeLiquidity
       else {
-        methodNames = ['removeLiquidity']
+        methodNames = ['removeLiquidity'];
         args = [
           tokenA.address,
           tokenB.address,
@@ -201,14 +202,14 @@ export default function Remove() {
           amountsMin[Field.CURRENCY_B].toString(),
           account,
           deadline.toHexString(),
-        ]
+        ];
       }
     }
     // we have a signature, use permit versions of remove liquidity
     else if (signatureData !== null) {
       // removeLiquidityETHWithPermit
       if (oneCurrencyIsETH) {
-        methodNames = ['removeLiquidityETHWithPermit', 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens']
+        methodNames = ['removeLiquidityETHWithPermit', 'removeLiquidityETHWithPermitSupportingFeeOnTransferTokens'];
         args = [
           currencyBIsETH ? tokenA.address : tokenB.address,
           liquidityAmount.quotient.toString(),
@@ -220,11 +221,11 @@ export default function Remove() {
           signatureData.v,
           signatureData.r,
           signatureData.s,
-        ]
+        ];
       }
       // removeLiquidityETHWithPermit
       else {
-        methodNames = ['removeLiquidityWithPermit']
+        methodNames = ['removeLiquidityWithPermit'];
         args = [
           tokenA.address,
           tokenB.address,
@@ -237,10 +238,10 @@ export default function Remove() {
           signatureData.v,
           signatureData.r,
           signatureData.s,
-        ]
+        ];
       }
     } else {
-      throw new Error('Attempting to confirm without approval or a signature. Please contact support.')
+      throw new Error('Attempting to confirm without approval or a signature. Please contact support.');
     }
 
     const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
@@ -248,49 +249,49 @@ export default function Remove() {
         routerContract.estimateGas[methodName](...args)
           .then(calculateGasMargin)
           .catch((error) => {
-            console.error(`estimateGas failed`, methodName, args, error)
-            return undefined
+            console.error(`estimateGas failed`, methodName, args, error);
+            return undefined;
           })
       )
-    )
+    );
 
     const indexOfSuccessfulEstimation = safeGasEstimates.findIndex((safeGasEstimate) =>
       BigNumber.isBigNumber(safeGasEstimate)
-    )
+    );
 
     // all estimations failed...
     if (indexOfSuccessfulEstimation === -1) {
-      console.error('This transaction would fail. Please contact support.')
+      console.error('This transaction would fail. Please contact support.');
     } else {
-      const methodName = methodNames[indexOfSuccessfulEstimation]
-      const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
+      const methodName = methodNames[indexOfSuccessfulEstimation];
+      const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation];
 
-      setAttemptingTxn(true)
+      setAttemptingTxn(true);
       await routerContract[methodName](...args, {
         gasLimit: safeGasEstimate,
       })
         .then((response: TransactionResponse) => {
-          setAttemptingTxn(false)
+          setAttemptingTxn(false);
 
           addTransaction(response, {
             summary: t`Remove ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)} ${
               currencyA?.symbol
             } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(3)} ${currencyB?.symbol}`,
-          })
+          });
 
-          setTxHash(response.hash)
+          setTxHash(response.hash);
 
           ReactGA.event({
             category: 'Liquidity',
             action: 'Remove',
             label: [currencyA?.symbol, currencyB?.symbol].join('/'),
-          })
+          });
         })
         .catch((error: Error) => {
-          setAttemptingTxn(false)
+          setAttemptingTxn(false);
           // we only care if the error is something _other_ than the user rejected the tx
-          console.error(error)
-        })
+          console.error(error);
+        });
     }
   }
 
@@ -604,7 +605,7 @@ export default function Remove() {
           )}% your transaction will revert.`}
         </div>
       </div>
-    )
+    );
   }
 
   function modalBottom() {
@@ -649,63 +650,63 @@ export default function Remove() {
           {i18n._(t`Confirm`)}
         </Button>
       </div>
-    )
+    );
   }
 
   const pendingText = i18n._(
     t`Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.symbol} and ${parsedAmounts[
       Field.CURRENCY_B
     ]?.toSignificant(6)} ${currencyB?.symbol}`
-  )
+  );
 
   const liquidityPercentChangeCallback = useCallback(
     (value: string) => {
-      onUserInput(Field.LIQUIDITY_PERCENT, value)
+      onUserInput(Field.LIQUIDITY_PERCENT, value);
     },
     [onUserInput]
-  )
+  );
 
-  const oneCurrencyIsETH = currencyA?.isNative || currencyB?.isNative
+  const oneCurrencyIsETH = currencyA?.isNative || currencyB?.isNative;
 
   const oneCurrencyIsWETH = Boolean(
     chainId && WNATIVE[chainId] && (currencyA?.equals(WNATIVE[chainId]) || currencyB?.equals(WNATIVE[chainId]))
-  )
+  );
 
   const handleSelectCurrencyA = useCallback(
     (currency: Currency) => {
       if (currencyIdB && currencyId(currency) === currencyIdB) {
-        router.push(`/remove/${currencyId(currency)}/${currencyIdA}`)
+        router.push(`/remove/${currencyId(currency)}/${currencyIdA}`);
       } else {
-        router.push(`/remove/${currencyId(currency)}/${currencyIdB}`)
+        router.push(`/remove/${currencyId(currency)}/${currencyIdB}`);
       }
     },
     [currencyIdA, currencyIdB, router]
-  )
+  );
 
   const handleSelectCurrencyB = useCallback(
     (currency: Currency) => {
       if (currencyIdA && currencyId(currency) === currencyIdA) {
-        router.push(`/remove/${currencyIdB}/${currencyId(currency)}`)
+        router.push(`/remove/${currencyIdB}/${currencyId(currency)}`);
       } else {
-        router.push(`/remove/${currencyIdA}/${currencyId(currency)}`)
+        router.push(`/remove/${currencyIdA}/${currencyId(currency)}`);
       }
     },
     [currencyIdA, currencyIdB, router]
-  )
+  );
 
   const handleDismissConfirmation = useCallback(() => {
-    setShowConfirm(false)
+    setShowConfirm(false);
     // if there was a tx hash, we want to clear the input
     if (txHash) {
-      onUserInput(Field.LIQUIDITY_PERCENT, '0')
+      onUserInput(Field.LIQUIDITY_PERCENT, '0');
     }
-    setTxHash('')
-  }, [onUserInput, txHash])
+    setTxHash('');
+  }, [onUserInput, txHash]);
 
   const [innerLiquidityPercentage, setInnerLiquidityPercentage] = useDebouncedChangeHandler(
     parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
     liquidityPercentChangeCallback
-  )
+  );
 
   return (
     <Container id="remove-liquidity-page" className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="2xl">
@@ -783,8 +784,8 @@ export default function Remove() {
                           <RowBetween className="text-sm">
                             {oneCurrencyIsETH ? (
                               <Link
-                                href={`/remove/${currencyA?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdA}/${
-                                  currencyB?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdB
+                                href={`/remove/${currencyA?.isNative ? WNATIVE[chainId].address : currencyIdA}/${
+                                  currencyB?.isNative ? WNATIVE[chainId].address : currencyIdB
                                 }`}
                               >
                                 <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">
@@ -847,7 +848,7 @@ export default function Remove() {
                     </ButtonConfirmed>
                     <ButtonError
                       onClick={() => {
-                        setShowConfirm(true)
+                        setShowConfirm(true);
                       }}
                       disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
                       error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
@@ -864,5 +865,5 @@ export default function Remove() {
         </div>
       </DoubleGlowShadow>
     </Container>
-  )
+  );
 }

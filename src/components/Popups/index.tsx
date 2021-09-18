@@ -1,13 +1,13 @@
-import { FC } from 'react'
-import { useActivePopups } from '../../state/application/hooks'
-import { useURLWarningVisible } from '../../state/user/hooks'
-import PopupItem from './PopupItem'
+import { FC } from 'react';
+import { useActivePopups } from '../../state/application/hooks';
+import { useURLWarningVisible } from '../../state/user/hooks';
+import PopupItem from './PopupItem';
 
 const Popups: FC = () => {
-  const activePopups = useActivePopups()
-  const urlWarningActive = useURLWarningVisible()
+  const activePopups = useActivePopups();
+  const urlWarningActive = useURLWarningVisible();
 
-  if (activePopups.length === 0) return <span />
+  if (activePopups.length === 0) return <span />;
 
   return (
     <>
@@ -34,7 +34,7 @@ const Popups: FC = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Popups
+export default Popups;

@@ -1,6 +1,6 @@
-import { AppDispatch, AppState } from '..'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../config/routing'
-import { ChainId, FACTORY_ADDRESS, JSBI, Pair, Percent, Token, computePairAddress } from '@sushiswap/sdk'
+import { AppDispatch, AppState } from '..';
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants';
+import { ChainId, FACTORY_ADDRESS, JSBI, Pair, Percent, Token, computePairAddress } from '@sushiswap/sdk';
 import {
   SerializedPair,
   SerializedToken,
@@ -18,15 +18,15 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
-} from './actions'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { useCallback, useMemo } from 'react'
+} from './actions';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import { useCallback, useMemo } from 'react';
 
-import ReactGA from 'react-ga'
-import flatMap from 'lodash/flatMap'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTokens } from '../../hooks/Tokens'
+import ReactGA from 'react-ga';
+import flatMap from 'lodash/flatMap';
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
+import { useAllTokens } from '../../hooks/Tokens';
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -35,7 +35,7 @@ function serializeToken(token: Token): SerializedToken {
     decimals: token.decimals,
     symbol: token.symbol,
     name: token.name,
-  }
+  };
 }
 
 function deserializeToken(serializedToken: SerializedToken): Token {
@@ -45,7 +45,7 @@ function deserializeToken(serializedToken: SerializedToken): Token {
     serializedToken.decimals,
     serializedToken.symbol,
     serializedToken.name
-  )
+  );
 }
 
 export function useIsDarkMode(): boolean {
@@ -55,76 +55,76 @@ export function useIsDarkMode(): boolean {
       matchesDarkMode,
     }),
     shallowEqual
-  )
+  );
 
-  return userDarkMode === null ? matchesDarkMode : userDarkMode
+  return userDarkMode === null ? matchesDarkMode : userDarkMode;
 }
 
 export function useDarkModeManager(): [boolean, () => void] {
-  const dispatch = useAppDispatch()
-  const darkMode = useIsDarkMode()
+  const dispatch = useAppDispatch();
+  const darkMode = useIsDarkMode();
 
   const toggleSetDarkMode = useCallback(() => {
-    dispatch(updateUserDarkMode({ userDarkMode: !darkMode }))
-  }, [darkMode, dispatch])
+    dispatch(updateUserDarkMode({ userDarkMode: !darkMode }));
+  }, [darkMode, dispatch]);
 
-  return [darkMode, toggleSetDarkMode]
+  return [darkMode, toggleSetDarkMode];
 }
 
 export function useIsExpertMode(): boolean {
-  return useAppSelector((state) => state.user.userExpertMode)
+  return useAppSelector((state) => state.user.userExpertMode);
 }
 
 export function useExpertModeManager(): [boolean, () => void] {
-  const dispatch = useAppDispatch()
-  const expertMode = useIsExpertMode()
+  const dispatch = useAppDispatch();
+  const expertMode = useIsExpertMode();
 
   const toggleSetExpertMode = useCallback(() => {
-    dispatch(updateUserExpertMode({ userExpertMode: !expertMode }))
-  }, [expertMode, dispatch])
+    dispatch(updateUserExpertMode({ userExpertMode: !expertMode }));
+  }, [expertMode, dispatch]);
 
-  return [expertMode, toggleSetExpertMode]
+  return [expertMode, toggleSetExpertMode];
 }
 
 export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) => void] {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
-  const singleHopOnly = useAppSelector((state) => state.user.userSingleHopOnly)
+  const singleHopOnly = useAppSelector((state) => state.user.userSingleHopOnly);
 
   const setSingleHopOnly = useCallback(
     (newSingleHopOnly: boolean) => {
       ReactGA.event({
         category: 'Routing',
         action: newSingleHopOnly ? 'enable single hop' : 'disable single hop',
-      })
-      dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }))
+      });
+      dispatch(updateUserSingleHopOnly({ userSingleHopOnly: newSingleHopOnly }));
     },
     [dispatch]
-  )
+  );
 
-  return [singleHopOnly, setSingleHopOnly]
+  return [singleHopOnly, setSingleHopOnly];
 }
 
 export function useSetUserSlippageTolerance(): (slippageTolerance: Percent | 'auto') => void {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   return useCallback(
     (userSlippageTolerance: Percent | 'auto') => {
-      let value: 'auto' | number
+      let value: 'auto' | number;
       try {
         value =
-          userSlippageTolerance === 'auto' ? 'auto' : JSBI.toNumber(userSlippageTolerance.multiply(10_000).quotient)
+          userSlippageTolerance === 'auto' ? 'auto' : JSBI.toNumber(userSlippageTolerance.multiply(10_000).quotient);
       } catch (error) {
-        value = 'auto'
+        value = 'auto';
       }
       dispatch(
         updateUserSlippageTolerance({
           userSlippageTolerance: value,
         })
-      )
+      );
     },
     [dispatch]
-  )
+  );
 }
 
 /**
@@ -132,86 +132,86 @@ export function useSetUserSlippageTolerance(): (slippageTolerance: Percent | 'au
  */
 export function useUserSlippageTolerance(): Percent | 'auto' {
   const userSlippageTolerance = useAppSelector((state) => {
-    return state.user.userSlippageTolerance
-  })
+    return state.user.userSlippageTolerance;
+  });
 
   return useMemo(
     () => (userSlippageTolerance === 'auto' ? 'auto' : new Percent(userSlippageTolerance, 10_000)),
     [userSlippageTolerance]
-  )
+  );
 }
 
 export function useUserTransactionTTL(): [number, (slippage: number) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>((state) => {
-    return state.user.userDeadline
-  })
+    return state.user.userDeadline;
+  });
 
   const setUserDeadline = useCallback(
     (userDeadline: number) => {
-      dispatch(updateUserDeadline({ userDeadline }))
+      dispatch(updateUserDeadline({ userDeadline }));
     },
     [dispatch]
-  )
+  );
 
-  return [userDeadline, setUserDeadline]
+  return [userDeadline, setUserDeadline];
 }
 
 export function useAddUserToken(): (token: Token) => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>();
   return useCallback(
     (token: Token) => {
-      dispatch(addSerializedToken({ serializedToken: serializeToken(token) }))
+      dispatch(addSerializedToken({ serializedToken: serializeToken(token) }));
     },
     [dispatch]
-  )
+  );
 }
 
 export function useRemoveUserAddedToken(): (chainId: number, address: string) => void {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   return useCallback(
     (chainId: number, address: string) => {
-      dispatch(removeSerializedToken({ chainId, address }))
+      dispatch(removeSerializedToken({ chainId, address }));
     },
     [dispatch]
-  )
+  );
 }
 
 export function useUserAddedTokens(): Token[] {
-  const { chainId } = useActiveWeb3React()
-  const serializedTokensMap = useAppSelector(({ user: { tokens } }) => tokens)
+  const { chainId } = useActiveWeb3React();
+  const serializedTokensMap = useAppSelector(({ user: { tokens } }) => tokens);
 
   return useMemo(() => {
-    if (!chainId) return []
-    return Object.values(serializedTokensMap?.[chainId] ?? {}).map(deserializeToken)
-  }, [serializedTokensMap, chainId])
+    if (!chainId) return [];
+    return Object.values(serializedTokensMap?.[chainId] ?? {}).map(deserializeToken);
+  }, [serializedTokensMap, chainId]);
 }
 
 function serializePair(pair: Pair): SerializedPair {
   return {
     token0: serializeToken(pair.token0),
     token1: serializeToken(pair.token1),
-  }
+  };
 }
 
 export function usePairAdder(): (pair: Pair) => void {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   return useCallback(
     (pair: Pair) => {
-      dispatch(addSerializedPair({ serializedPair: serializePair(pair) }))
+      dispatch(addSerializedPair({ serializedPair: serializePair(pair) }));
     },
     [dispatch]
-  )
+  );
 }
 
 export function useURLWarningVisible(): boolean {
-  return useAppSelector((state: AppState) => state.user.URLWarningVisible)
+  return useAppSelector((state: AppState) => state.user.URLWarningVisible);
 }
 
 export function useURLWarningToggle(): () => void {
-  const dispatch = useAppDispatch()
-  return useCallback(() => dispatch(toggleURLWarning()), [dispatch])
+  const dispatch = useAppDispatch();
+  return useCallback(() => dispatch(toggleURLWarning()), [dispatch]);
 }
 
 /**
@@ -220,9 +220,9 @@ export function useURLWarningToggle(): () => void {
  * @param tokenB the other token
  */
 export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
-  if (tokenA.chainId !== tokenB.chainId) throw new Error('Not matching chain IDs')
-  if (tokenA.equals(tokenB)) throw new Error('Tokens cannot be equal')
-  if (!FACTORY_ADDRESS[tokenA.chainId]) throw new Error('No V2 factory address on this chain')
+  if (tokenA.chainId !== tokenB.chainId) throw new Error('Not matching chain IDs');
+  if (tokenA.equals(tokenB)) throw new Error('Tokens cannot be equal');
+  if (!FACTORY_ADDRESS[tokenA.chainId]) throw new Error('No V2 factory address on this chain');
 
   return new Token(
     tokenA.chainId,
@@ -230,25 +230,25 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
     18,
     'UNI-V2',
     'Uniswap V2'
-  )
+  );
 }
 
 /**
  * Returns all the pairs of tokens that are tracked by the user for the current chain ID.
  */
 export function useTrackedTokenPairs(): [Token, Token][] {
-  const { chainId } = useActiveWeb3React()
-  const tokens = useAllTokens()
+  const { chainId } = useActiveWeb3React();
+  const tokens = useAllTokens();
 
   // pinned pairs
-  const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])
+  const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId]);
 
   // pairs for every token against every base
   const generatedPairs: [Token, Token][] = useMemo(
     () =>
       chainId
         ? flatMap(Object.keys(tokens), (tokenAddress) => {
-            const token = tokens[tokenAddress]
+            const token = tokens[tokenAddress];
             // for each token on the current chain,
             return (
               // loop though all bases on the current chain
@@ -256,104 +256,104 @@ export function useTrackedTokenPairs(): [Token, Token][] {
                 // to construct pairs of the given token with each base
                 .map((base) => {
                   if (base.address === token.address) {
-                    return null
+                    return null;
                   } else {
-                    return [base, token]
+                    return [base, token];
                   }
                 })
                 .filter((p): p is [Token, Token] => p !== null)
-            )
+            );
           })
         : [],
     [tokens, chainId]
-  )
+  );
 
   // pairs saved by users
-  const savedSerializedPairs = useAppSelector(({ user: { pairs } }) => pairs)
+  const savedSerializedPairs = useAppSelector(({ user: { pairs } }) => pairs);
 
   const userPairs: [Token, Token][] = useMemo(() => {
-    if (!chainId || !savedSerializedPairs) return []
-    const forChain = savedSerializedPairs[chainId]
-    if (!forChain) return []
+    if (!chainId || !savedSerializedPairs) return [];
+    const forChain = savedSerializedPairs[chainId];
+    if (!forChain) return [];
 
     return Object.keys(forChain).map((pairId) => {
-      return [deserializeToken(forChain[pairId].token0), deserializeToken(forChain[pairId].token1)]
-    })
-  }, [savedSerializedPairs, chainId])
+      return [deserializeToken(forChain[pairId].token0), deserializeToken(forChain[pairId].token1)];
+    });
+  }, [savedSerializedPairs, chainId]);
 
   const combinedList = useMemo(
     () => userPairs.concat(generatedPairs).concat(pinnedPairs),
     [generatedPairs, pinnedPairs, userPairs]
-  )
+  );
 
   return useMemo(() => {
     // dedupes pairs of tokens in the combined list
     const keyed = combinedList.reduce<{ [key: string]: [Token, Token] }>((memo, [tokenA, tokenB]) => {
-      const sorted = tokenA.sortsBefore(tokenB)
-      const key = sorted ? `${tokenA.address}:${tokenB.address}` : `${tokenB.address}:${tokenA.address}`
-      if (memo[key]) return memo
-      memo[key] = sorted ? [tokenA, tokenB] : [tokenB, tokenA]
-      return memo
-    }, {})
+      const sorted = tokenA.sortsBefore(tokenB);
+      const key = sorted ? `${tokenA.address}:${tokenB.address}` : `${tokenB.address}:${tokenA.address}`;
+      if (memo[key]) return memo;
+      memo[key] = sorted ? [tokenA, tokenB] : [tokenB, tokenA];
+      return memo;
+    }, {});
 
-    return Object.keys(keyed).map((key) => keyed[key])
-  }, [combinedList])
+    return Object.keys(keyed).map((key) => keyed[key]);
+  }, [combinedList]);
 }
 
 export function useUserArcherUseRelay(): [boolean, (newUseRelay: boolean) => void] {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
 
   const useRelay = useSelector<AppState, AppState['user']['userArcherUseRelay']>(
     (state) => state.user.userArcherUseRelay
-  )
+  );
 
   const setUseRelay = useCallback(
     (newUseRelay: boolean) => {
-      dispatch(updateUserArcherUseRelay({ userArcherUseRelay: newUseRelay }))
+      dispatch(updateUserArcherUseRelay({ userArcherUseRelay: newUseRelay }));
     },
     [dispatch]
-  )
+  );
 
-  return [useRelay, setUseRelay]
+  return [useRelay, setUseRelay];
 }
 
 export function useUserArcherGasPrice(): [string, (newGasPrice: string) => void] {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const userGasPrice = useSelector<AppState, AppState['user']['userArcherGasPrice']>((state) => {
-    return state.user.userArcherGasPrice
-  })
+    return state.user.userArcherGasPrice;
+  });
 
   const setUserGasPrice = useCallback(
     (newGasPrice: string) => {
-      dispatch(updateUserArcherGasPrice({ userArcherGasPrice: newGasPrice }))
+      dispatch(updateUserArcherGasPrice({ userArcherGasPrice: newGasPrice }));
     },
     [dispatch]
-  )
+  );
 
-  return [userGasPrice, setUserGasPrice]
+  return [userGasPrice, setUserGasPrice];
 }
 
 export function useUserArcherETHTip(): [string, (newETHTip: string) => void] {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const userETHTip = useSelector<AppState, AppState['user']['userArcherETHTip']>((state) => {
-    return state.user.userArcherETHTip
-  })
+    return state.user.userArcherETHTip;
+  });
 
   const setUserETHTip = useCallback(
     (newETHTip: string) => {
-      dispatch(updateUserArcherETHTip({ userArcherETHTip: newETHTip }))
+      dispatch(updateUserArcherETHTip({ userArcherETHTip: newETHTip }));
     },
     [dispatch]
-  )
+  );
 
-  return [userETHTip, setUserETHTip]
+  return [userETHTip, setUserETHTip];
 }
 
 export function useUserArcherGasEstimate(): [string, (newGasEstimate: string) => void] {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const userGasEstimate = useSelector<AppState, AppState['user']['userArcherGasEstimate']>((state) => {
-    return state.user.userArcherGasEstimate
-  })
+    return state.user.userArcherGasEstimate;
+  });
 
   const setUserGasEstimate = useCallback(
     (newGasEstimate: string) => {
@@ -361,19 +361,19 @@ export function useUserArcherGasEstimate(): [string, (newGasEstimate: string) =>
         updateUserArcherGasEstimate({
           userArcherGasEstimate: newGasEstimate,
         })
-      )
+      );
     },
     [dispatch]
-  )
+  );
 
-  return [userGasEstimate, setUserGasEstimate]
+  return [userGasEstimate, setUserGasEstimate];
 }
 
 export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: boolean) => void] {
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const userTipManualOverride = useSelector<AppState, AppState['user']['userArcherTipManualOverride']>((state) => {
-    return state.user.userArcherTipManualOverride
-  })
+    return state.user.userArcherTipManualOverride;
+  });
 
   const setUserTipManualOverride = useCallback(
     (newManualOverride: boolean) => {
@@ -381,12 +381,12 @@ export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: 
         updateUserArcherTipManualOverride({
           userArcherTipManualOverride: newManualOverride,
         })
-      )
+      );
     },
     [dispatch]
-  )
+  );
 
-  return [userTipManualOverride, setUserTipManualOverride]
+  return [userTipManualOverride, setUserTipManualOverride];
 }
 
 /**
@@ -394,9 +394,9 @@ export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: 
  * @param defaultSlippageTolerance the default value to replace auto with
  */
 export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Percent): Percent {
-  const allowedSlippage = useUserSlippageTolerance()
+  const allowedSlippage = useUserSlippageTolerance();
   return useMemo(
     () => (allowedSlippage === 'auto' ? defaultSlippageTolerance : allowedSlippage),
     [allowedSlippage, defaultSlippageTolerance]
-  )
+  );
 }

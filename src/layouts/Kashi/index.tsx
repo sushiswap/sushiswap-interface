@@ -1,19 +1,19 @@
-import Container from '../../components/Container'
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
-import Image from '../../components/Image'
-import Link from 'next/link'
-import Main from '../../components/Main'
-import NavLink from '../../components/NavLink'
-import Popups from '../../components/Popups'
-import React from 'react'
-import kashiLogo from '../../../public/kashi-logo.png'
-import { useRouter } from 'next/router'
+import Container from '../../components/Container';
+import Footer from '../../components/Footer';
+import Header from '../../components/Header';
+import Image from '../../components/Image';
+import Link from 'next/link';
+import Main from '../../components/Main';
+import NavLink from '../../components/NavLink';
+import Popups from '../../components/Popups';
+import React from 'react';
+import kashiLogo from '../../../public/kashi-logo.png';
+import { useRouter } from 'next/router';
 
 interface LayoutProps {
-  left?: JSX.Element
-  children?: React.ReactChild | React.ReactChild[]
-  right?: JSX.Element
+  left?: JSX.Element;
+  children?: React.ReactChild | React.ReactChild[];
+  right?: JSX.Element;
 }
 
 export default function Layout({
@@ -21,7 +21,7 @@ export default function Layout({
   children = undefined,
   right = undefined,
 }: LayoutProps): JSX.Element {
-  const router = useRouter()
+  const router = useRouter();
   return (
     <div className="z-0 flex flex-col items-start w-full h-screen">
       <Header />
@@ -132,5 +132,5 @@ export default function Layout({
       <Popups />
       <Footer />
     </div>
-  )
+  );
 }
