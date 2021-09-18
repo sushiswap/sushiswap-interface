@@ -38,6 +38,9 @@ function AppBar(): JSX.Element {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Image src="/logo.png" alt="DeBlock" width="48px" height="48px" />
+                  <a id={'deblock-title'} style={{ padding: '4px' }}>
+                    DeBlock DePaul
+                  </a>
                   <div className="hidden sm:block sm:ml-4">
                     <div className="flex space-x-2">
                       {/* <Buy /> */}
