@@ -45,7 +45,7 @@ const Inari = () => {
   return (
     <>
       <Head>
-        <title>Inari | Sushi</title>
+        <title>Inari | DeBlock</title>
         <meta name="description" content="Inari..." />
       </Head>
       <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8">

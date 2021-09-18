@@ -161,7 +161,7 @@ export default function Stake() {
   return (
     <Container id="bar-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
       <Head>
-        <title key="title">Stake | Sushi</title>
+        <title key="title">Stake | DeBLock</title>
         <meta
           key="description"
           name="description"

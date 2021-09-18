@@ -33,7 +33,7 @@ function Lend() {
   return fullPairs ? (
     <>
       <Head>
-        <title>Lend | Sushi</title>
+        <title>Lend | DeBlock</title>
         <meta
           key="description"
           name="description"

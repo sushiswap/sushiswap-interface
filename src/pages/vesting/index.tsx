@@ -103,7 +103,7 @@ export default function Vesting() {
   return (
     <Container id="vesting-page" className="py-4 md:py-8 lg:py-12 m-auto w-full max-w-[900px]">
       <Head>
-        <title>Vesting | Sushi</title>
+        <title>Vesting | DeBlock</title>
         <meta key="description" name="description" content="SushiSwap vesting..." />
       </Head>
       <div className="flex px-0 sm:px-4 md:flex-row md:space-x-10 lg:space-x-20 md:px-10">

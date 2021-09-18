@@ -15,7 +15,7 @@ export default function Status({ initialData }) {
   return (
     <Container id="status-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
       <Head>
-        <title>Status | Sushi</title>
+        <title>Status | DeBlock</title>
         <meta key="description" name="description" content="Sushi Status..." />
       </Head>
       {/* <div className="w-full max-w-6xl mx-auto">

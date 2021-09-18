@@ -133,7 +133,7 @@ export default function Meowshi() {
   return (
     <Container id="meowshi-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
-        <title>Meowshi | Sushi</title>
+        <title>Meowshi | DeBlock</title>
         <meta key="description" name="description" content="SushiSwap Meowshi..." />
       </Head>
 

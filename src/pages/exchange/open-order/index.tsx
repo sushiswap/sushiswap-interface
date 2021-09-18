@@ -23,7 +23,7 @@ function OpenOrdersPage() {
   return (
     <Container id="open-order-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
-        <title>Open Orders | Sushi</title>
+        <title>Open Orders | DeBlock</title>
         <meta name="description" content="Open orders..." />
       </Head>
       <div className="min-w-0 md:min-w-[672px]">

@@ -11,7 +11,7 @@ export default function Status({ fallbackData }) {
   return (
     <Container id="chains-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="6xl">
       <Head>
-        <title>Chains | Sushi</title>
+        <title>Chains | DeBlock</title>
         <meta key="description" name="description" content="Chains..." />
       </Head>
       <div className="w-full max-w-6xl mx-auto">

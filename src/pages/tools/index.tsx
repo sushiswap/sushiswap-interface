@@ -30,7 +30,7 @@ export default function Tools() {
   return (
     <Container id="tools-page" className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="xl">
       <Head>
-        <title>Tools | Sushi</title>
+        <title>Tools | DeBlock</title>
         <meta key="description" name="description" content="SushiSwap tools..." />
       </Head>
       <Typography variant="h1" component="h1">
