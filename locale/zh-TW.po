@@ -13,13 +13,6 @@ msgstr ""
 "POT-Creation-Date: \n"
 "Plural-Forms: \n"
 
-msgid ""
-"(COMING SOON) Accrue automatic yield through flash loans and\n"
-"SUSHI strategies"
-msgstr ""
-"（即將推出）通過閃電貸和\n"
-"SUSHI策略累積自動獲取收益"
-
 msgid "1 Hour"
 msgstr ""
 
@@ -50,17 +43,11 @@ msgstr "添加"
 msgid "Add Liquidity"
 msgstr "添加流動性"
 
-msgid "Add SUSHI to your MetaMask wallet"
-msgstr ""
-
 msgid "Add collateral in order to borrow assets"
 msgstr "添加抵押品以借出資產"
 
 msgid "Add liquidity"
 msgstr "添加流動性"
-
-msgid "Add xSUSHI to your MetaMask wallet"
-msgstr ""
 
 msgid "Add {0} to MetaMask"
 msgstr ""
@@ -71,17 +58,11 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-msgid "Additional records and weekly merkle updates can be found on"
-msgstr ""
-
 msgid "Amount of Tokens"
 msgstr "代幣數量"
 
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
 msgstr ""
-
-msgid "Analytics"
-msgstr "分析界面"
 
 msgid "Approve"
 msgstr "批准"
@@ -133,12 +114,6 @@ msgstr "Bento余额： {0}"
 
 msgid "BentoBox"
 msgstr "BentoBox"
-
-msgid "BentoBox Apps"
-msgstr "BentoBox應用"
-
-msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
-msgstr "BentoBox可以實現用很低的gas費用體驗高收益的dapp。"
 
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
 msgstr "BentoBox通過在集成的dapp中使用閃電貸、策略以及固定和低Gas的轉賬，來提供額外收益"
@@ -197,12 +172,6 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
-msgid "Claim SUSHI"
-msgstr "獲取SUSHI"
-
-msgid "Claimed"
-msgstr "已獲取"
-
 msgid "Clear History"
 msgstr "清除歷史"
 
@@ -217,9 +186,6 @@ msgstr "點擊下面的一個池子，輸入您想遷移的數量或選擇最大
 msgid "Collateral"
 msgstr "抵押品"
 
-msgid "Community Approval"
-msgstr "社區批準"
-
 msgid "Confirm"
 msgstr "確認"
 
@@ -228,9 +194,6 @@ msgstr "確認添加流動性"
 
 msgid "Confirm Limit Order"
 msgstr ""
-
-msgid "Confirm Staking"
-msgstr "確認質押"
 
 msgid "Confirm Supply"
 msgstr "確認供應"
@@ -286,13 +249,13 @@ msgstr ""
 msgid "Deposit"
 msgstr "存款"
 
-msgid "Deposit SUSHI into BentoBox"
-msgstr "將SUSHI存入BentoBox"
-
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "將代幣存入BentoBox，以獲得所有收益。"
 
 msgid "Deposit {0} into BentoBox"
+msgstr ""
+
+msgid "Deposit:"
 msgstr ""
 
 msgid "Depositing {0} into BentoBox"
@@ -327,12 +290,6 @@ msgstr ""
 
 msgid "English"
 msgstr ""
-
-msgid "Enter"
-msgstr "進入"
-
-msgid "Enter Amount"
-msgstr "輸入金額"
 
 msgid "Enter a recipient"
 msgstr "輸入收件人"
@@ -372,33 +329,17 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-msgid "Farm"
-msgstr ""
-
 msgid "Filled"
 msgstr ""
 
 msgid "Find Pool"
 msgstr "查找池"
 
-msgid ""
-"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
-"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
-"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
-"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
-"SUSHI and any additional from fees."
-msgstr "每條鏈上每筆交易手續費的0.05%都分給SushiBar（以SUSHI的形式）。當您的SUSHI質押在SushiBar的時候，您將會收到xSUSHI，它有治理權及可以與其它協議交互。xSUSHI可持續復利，當您解除質押時，您將收到質押時的SUSHI及手續費。"
-
 msgid "French"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
 msgstr "在不減少資產的情況下獲得代幣的敞口。杠桿將使您能夠對資產做空，並從下跌趨勢中獲利。"
-
-msgid ""
-"Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
-"all swaps from all chains)"
-msgstr "通過xSUSHI獲得治理權，並獲得5%的年利率（來自所有鏈上交易手續費的0.05%）"
 
 msgid "German"
 msgstr ""
@@ -409,9 +350,6 @@ msgstr ""
 msgid "Hardware Wallet"
 msgstr "硬件錢包"
 
-msgid "Harmony Bridge"
-msgstr ""
-
 msgid "Harvest {0} SUSHI {1}"
 msgstr ""
 
@@ -420,15 +358,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "健康值"
-
-msgid "Historical Total Locked: Connect Wallet"
-msgstr "鎖倉的總數：連接錢包"
-
-msgid "Historical Total Locked: Fetching Total"
-msgstr "鎖倉的總數：獲取總數"
-
-msgid "Historical Total Locked: {0} SUSHI"
-msgstr "锁仓的总数：{0}SUSHI"
 
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
@@ -492,9 +421,6 @@ msgstr ""
 msgid "Learn more about wallets"
 msgstr ""
 
-msgid "Lend"
-msgstr "借貸"
-
 msgid "Lend assets for interest from borrowers."
 msgstr "向借款人收取的利息"
 
@@ -543,9 +469,6 @@ msgstr ""
 msgid "Loading your {exchange} liquidity positions"
 msgstr "正在加載您的{exchange}您的流動性倉位"
 
-msgid "Loading..."
-msgstr "載入中..."
-
 msgid "MAX"
 msgstr "最大數量"
 
@@ -572,14 +495,8 @@ msgstr ""
 msgid "Markets"
 msgstr "市場"
 
-msgid "Matic Bridge"
-msgstr ""
-
 msgid "Max"
 msgstr "最大數量"
-
-msgid "Maximize yield by staking SUSHI for xSUSHI"
-msgstr "將SUSHI質押成xSUSHI最大化收益"
 
 msgid "Maximum sent"
 msgstr ""
@@ -604,9 +521,6 @@ msgstr ""
 
 msgid "Minimum received"
 msgstr "最少可獲得的數量"
-
-msgid "Miso"
-msgstr ""
 
 msgid "My Liquidity Positions"
 msgstr ""
@@ -700,16 +614,10 @@ msgstr ""
 msgid "Pending"
 msgstr "處理中"
 
-msgid "Pending Treasury Transfer"
-msgstr "等待金庫轉賬"
-
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
 msgid "Please enter an amount"
-msgstr ""
-
-msgid "Please refer to the"
 msgstr ""
 
 msgid "Pool"
@@ -847,27 +755,8 @@ msgstr "在簽署批準時出現錯誤。可能是硬件錢包例如Trezor和Led
 msgid "Spanish"
 msgstr ""
 
-msgid "Stack Yields with SAAVE"
-msgstr "使用SAAVE疊加收益"
-
 msgid "Stake"
 msgstr "質押"
-
-msgid "Stake SUSHI"
-msgstr "質押SUSHI"
-
-msgid "Stake SUSHI for xSUSHI"
-msgstr "將SUSHI質押成xSUSHI"
-
-msgid ""
-"Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
-"one click"
-msgstr ""
-"放入xSUSHI進行抵押，將抵押品作為axSUSHI添加到\n"
-"一鍵中"
-
-msgid "Staking APR"
-msgstr "質押APR"
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "提供{0} {1}和{2} {3}"
@@ -916,9 +805,6 @@ msgstr ""
 
 msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
 msgstr ""
-
-msgid "Things you can do with your SUSHI"
-msgstr "SUSHI可以做的事情"
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
@@ -985,9 +871,6 @@ msgstr ""
 msgid "Unstake"
 msgstr "解除抵押"
 
-msgid "Unstaked"
-msgstr "解除質押"
-
 msgid "Unsupported Asset"
 msgstr "不支持的資產"
 
@@ -1009,17 +892,11 @@ msgstr ""
 msgid "Vesting"
 msgstr "鎖倉"
 
-msgid "Vesting is executed within the guidelines selected by the community in"
-msgstr ""
-
 msgid "Vietnamese"
 msgstr ""
 
 msgid "View Liquidity Positions"
 msgstr ""
-
-msgid "View Stats"
-msgstr "查看數據"
 
 msgid "View on explorer"
 msgstr "在瀏覽器查看"
@@ -1047,9 +924,6 @@ msgstr "包裹"
 
 msgid "Wrong Network"
 msgstr "錯誤的網絡"
-
-msgid "Yesterday's APR"
-msgstr "昨天的APR"
 
 msgid "You Pay:"
 msgstr ""
@@ -1081,17 +955,11 @@ msgstr "您將收到"
 msgid "Your"
 msgstr ""
 
-msgid "Your Claimable SUSHI this Week"
-msgstr "本周您可領取的SUSHI"
-
 msgid "Your Liquidity"
 msgstr "您的流動性"
 
 msgid "Your Staked"
 msgstr "您在流動性池的占比"
-
-msgid "Your SushiBar Stats"
-msgstr "您的SushiBar統計信息"
 
 msgid "Your Wallet"
 msgstr "您的钱包"
@@ -1123,9 +991,6 @@ msgstr ""
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "您的{exchange} {0} / {1}流動性將變為SushiSwap {2} / {3}的流動性。"
 
-msgid "Zap"
-msgstr ""
-
 msgid "above"
 msgstr ""
 
@@ -1134,12 +999,6 @@ msgstr ""
 
 msgid "failed to load"
 msgstr "加載失敗"
-
-msgid "for deliberations on additional points."
-msgstr ""
-
-msgid "forum discussion"
-msgstr ""
 
 msgid "home page"
 msgstr ""
@@ -1151,9 +1010,6 @@ msgid "minutes"
 msgstr "分鐘"
 
 msgid "or the transaction will revert."
-msgstr ""
-
-msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

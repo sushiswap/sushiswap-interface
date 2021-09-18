@@ -13,13 +13,6 @@ msgstr ""
 "POT-Creation-Date: \n"
 "Plural-Forms: \n"
 
-msgid ""
-"(COMING SOON) Accrue automatic yield through flash loans and\n"
-"SUSHI strategies"
-msgstr ""
-"(SẮP RA MẮT) Tích lũy lợi suất tự động thông qua các khoản vay nhanh và chiến lược\n"
-"SUSHI"
-
 msgid "1 Hour"
 msgstr ""
 
@@ -50,17 +43,11 @@ msgstr "Thêm"
 msgid "Add Liquidity"
 msgstr "Thêm thanh khoản"
 
-msgid "Add SUSHI to your MetaMask wallet"
-msgstr ""
-
 msgid "Add collateral in order to borrow assets"
 msgstr "Thêm tài sản thế chấp để vay tài sản"
 
 msgid "Add liquidity"
 msgstr "Thêm thanh khoản"
-
-msgid "Add xSUSHI to your MetaMask wallet"
-msgstr ""
 
 msgid "Add {0} to MetaMask"
 msgstr ""
@@ -71,17 +58,11 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-msgid "Additional records and weekly merkle updates can be found on"
-msgstr ""
-
 msgid "Amount of Tokens"
 msgstr "Số lượng token"
 
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
 msgstr ""
-
-msgid "Analytics"
-msgstr "Phân tích"
 
 msgid "Approve"
 msgstr "Phê duyệt"
@@ -133,12 +114,6 @@ msgstr "Số dư Bento: {0}"
 
 msgid "BentoBox"
 msgstr "BentoBox"
-
-msgid "BentoBox Apps"
-msgstr "Ứng dụng BentoBox"
-
-msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
-msgstr "BentoBox là một cách sáng tạo để sử dụng hiệu quả khí các ứng dụng phi tập trung và tăng thêm lợi suất."
 
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
 msgstr "BentoBox cung cấp thêm lợi suất ký quỹ với cho vay nhanh, chiến lược và chuyển khoản cố định, tiết kiệm giữa các ứng dụng phi tập trung được tích hợp, như thị trường Kashi"
@@ -197,12 +172,6 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
-msgid "Claim SUSHI"
-msgstr "Yêu cầu SUSHI"
-
-msgid "Claimed"
-msgstr "Đã yêu cầu"
-
 msgid "Clear History"
 msgstr "Xóa lịch sử"
 
@@ -217,9 +186,6 @@ msgstr "Nhấp vào mạng lưới bên dưới, nhập số tiền bạn muốn
 msgid "Collateral"
 msgstr "Tài sản thế chấp"
 
-msgid "Community Approval"
-msgstr "Phê duyệt của cộng đồng"
-
 msgid "Confirm"
 msgstr "Xác nhận"
 
@@ -228,9 +194,6 @@ msgstr "Xác nhận thêm thanh khoản"
 
 msgid "Confirm Limit Order"
 msgstr ""
-
-msgid "Confirm Staking"
-msgstr "Xác nhận đặt cược"
 
 msgid "Confirm Supply"
 msgstr "Xác nhận tổng cung"
@@ -286,13 +249,13 @@ msgstr ""
 msgid "Deposit"
 msgstr "Ký quỹ"
 
-msgid "Deposit SUSHI into BentoBox"
-msgstr "Ký quỹ SUSHI vào BentoBox"
-
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Ký quỹ token vào BentoBox để nhận tất cả lợi suất"
 
 msgid "Deposit {0} into BentoBox"
+msgstr ""
+
+msgid "Deposit:"
 msgstr ""
 
 msgid "Depositing {0} into BentoBox"
@@ -327,12 +290,6 @@ msgstr ""
 
 msgid "English"
 msgstr ""
-
-msgid "Enter"
-msgstr "Nhập"
-
-msgid "Enter Amount"
-msgstr "Nhập số tiền"
 
 msgid "Enter a recipient"
 msgstr "Nhập người nhận"
@@ -374,40 +331,17 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-msgid "Farm"
-msgstr ""
-
 msgid "Filled"
 msgstr ""
 
 msgid "Find Pool"
 msgstr "Tìm mạng lưới"
 
-msgid ""
-"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
-"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
-"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
-"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
-"SUSHI and any additional from fees."
-msgstr ""
-"Đối với mỗi giao dịch hoán đổi trên sàn giao dịch trên mọi chuỗi, 0,05% phí hoán đổi được phân bổ dưới dạng SUSHI\n"
-"tương ứng với cổ phần của bạn trên SushiBar. Khi đặt cược SUSHI vào SushiBar, bạn sẽ nhận được\n"
-"xSUSHI để đổi lại quyền biểu quyết và một token có thể tổng hợp đầy đủ có thể tương tác với các giao thức khác.\n"
-"XSUSHI của bạn được hưởng lãi kép liên tục, khi bạn hủy bỏ hủy đặt cược, bạn sẽ nhận được tất cả số\n"
-"SUSHI đã ký quỹ ban đầu và mọi khoản phí bổ sung."
-
 msgid "French"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
 msgstr "Có cơ hội tiếp cận với các token mà không làm giảm tài sản của bạn. Đòn bẩy sẽ cho phép bạn thực hiện các vị thế bán đối với tài sản và kiếm tiền từ các biến động giảm giá."
-
-msgid ""
-"Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
-"all swaps from all chains)"
-msgstr ""
-"Nhận quyền quản trị với xSUSHI và kiếm 5% lãi suất phần trăm hàng năm (0,05% trong số\n"
-"tất cả các giao dịch hoán đổi từ tất cả các chuỗi)"
 
 msgid "German"
 msgstr ""
@@ -418,9 +352,6 @@ msgstr ""
 msgid "Hardware Wallet"
 msgstr "Ví cứng"
 
-msgid "Harmony Bridge"
-msgstr ""
-
 msgid "Harvest {0} SUSHI {1}"
 msgstr ""
 
@@ -429,15 +360,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "Sức khỏe"
-
-msgid "Historical Total Locked: Connect Wallet"
-msgstr "Tổng số lịch sử đã khóa: Kết nối ví"
-
-msgid "Historical Total Locked: Fetching Total"
-msgstr "Tổng số lịch sử đã khóa: Tải tổng số"
-
-msgid "Historical Total Locked: {0} SUSHI"
-msgstr "Tổng số lịch sử đã khóa: {0} SUSHI"
 
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
@@ -501,9 +423,6 @@ msgstr ""
 msgid "Learn more about wallets"
 msgstr ""
 
-msgid "Lend"
-msgstr "Cho vay"
-
 msgid "Lend assets for interest from borrowers."
 msgstr "Cho khách hàng vay tài sản lấy lãi."
 
@@ -555,9 +474,6 @@ msgstr ""
 msgid "Loading your {exchange} liquidity positions"
 msgstr "Đang tải trạng thái thanh khoản {exchange}"
 
-msgid "Loading..."
-msgstr "Đang tải..."
-
 msgid "MAX"
 msgstr "TỐI ĐA"
 
@@ -584,14 +500,8 @@ msgstr ""
 msgid "Markets"
 msgstr "Thị trường"
 
-msgid "Matic Bridge"
-msgstr ""
-
 msgid "Max"
 msgstr "Tối đa"
-
-msgid "Maximize yield by staking SUSHI for xSUSHI"
-msgstr "Tối đa hóa lợi suất bằng cách đặt cược SUSHI cho xSUSHI"
 
 msgid "Maximum sent"
 msgstr ""
@@ -616,9 +526,6 @@ msgstr ""
 
 msgid "Minimum received"
 msgstr "Số tiền nhận được tối thiểu"
-
-msgid "Miso"
-msgstr ""
 
 msgid "My Liquidity Positions"
 msgstr ""
@@ -712,16 +619,10 @@ msgstr ""
 msgid "Pending"
 msgstr "Đang chờ xử lý"
 
-msgid "Pending Treasury Transfer"
-msgstr "Chuyển tiền đang chờ xử lý"
-
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
 msgid "Please enter an amount"
-msgstr ""
-
-msgid "Please refer to the"
 msgstr ""
 
 msgid "Pool"
@@ -859,27 +760,8 @@ msgstr "Đã xảy ra sự cố khi ký phê duyệt. Điều này được mong
 msgid "Spanish"
 msgstr ""
 
-msgid "Stack Yields with SAAVE"
-msgstr "Lợi suất cộng dồn với SAAVE"
-
 msgid "Stake"
 msgstr "Đặt cược"
-
-msgid "Stake SUSHI"
-msgstr "Đặt cược SUSHI"
-
-msgid "Stake SUSHI for xSUSHI"
-msgstr "Đặt cược SUSHI cho xSUSHI"
-
-msgid ""
-"Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
-"one click"
-msgstr ""
-"Đặt cược vào xSUSHI, thêm tài sản thế chấp là axSUSHI trên Aave tất cả trong\n"
-"một cú nhấp chuột"
-
-msgid "Staking APR"
-msgstr "APR đặt cược"
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Tổng cung {0} {1} và {2} {3}"
@@ -928,9 +810,6 @@ msgstr ""
 
 msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
 msgstr ""
-
-msgid "Things you can do with your SUSHI"
-msgstr "Những điều bạn có thể làm với SUSHI của mình"
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
@@ -997,9 +876,6 @@ msgstr ""
 msgid "Unstake"
 msgstr "Hủy đặt cược"
 
-msgid "Unstaked"
-msgstr "Đã hủy đặt cược"
-
 msgid "Unsupported Asset"
 msgstr "Tài sản không được hỗ trợ"
 
@@ -1021,17 +897,11 @@ msgstr ""
 msgid "Vesting"
 msgstr "Quyền được hưởng"
 
-msgid "Vesting is executed within the guidelines selected by the community in"
-msgstr ""
-
 msgid "Vietnamese"
 msgstr ""
 
 msgid "View Liquidity Positions"
 msgstr ""
-
-msgid "View Stats"
-msgstr "Xem số liệu thống kê"
 
 msgid "View on explorer"
 msgstr "Xem trên explorer"
@@ -1059,9 +929,6 @@ msgstr "Bọc lại"
 
 msgid "Wrong Network"
 msgstr "Mạng không chính xác"
-
-msgid "Yesterday's APR"
-msgstr "Tỷ suất lợi nhuận hàng năm của ngày hôm qua"
 
 msgid "You Pay:"
 msgstr ""
@@ -1093,17 +960,11 @@ msgstr "Bạn sẽ nhận được"
 msgid "Your"
 msgstr ""
 
-msgid "Your Claimable SUSHI this Week"
-msgstr "SUSHI có thể yêu cầu của bạn trong tuần này"
-
 msgid "Your Liquidity"
 msgstr "Tính thanh khoản của bạn"
 
 msgid "Your Staked"
 msgstr "Đặt cược của bạn"
-
-msgid "Your SushiBar Stats"
-msgstr "Thống kê SushiBar của bạn"
 
 msgid "Your Wallet"
 msgstr "Ví của bạn"
@@ -1135,9 +996,6 @@ msgstr ""
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange} {0} / {1} thanh khoản của bạn sẽ trở thành thanh khoản SushiSwap {2}/{3} ."
 
-msgid "Zap"
-msgstr ""
-
 msgid "above"
 msgstr ""
 
@@ -1146,12 +1004,6 @@ msgstr ""
 
 msgid "failed to load"
 msgstr "Tải không thành công"
-
-msgid "for deliberations on additional points."
-msgstr ""
-
-msgid "forum discussion"
-msgstr ""
 
 msgid "home page"
 msgstr ""
@@ -1163,9 +1015,6 @@ msgid "minutes"
 msgstr "phút"
 
 msgid "or the transaction will revert."
-msgstr ""
-
-msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

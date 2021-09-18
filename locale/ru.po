@@ -13,13 +13,6 @@ msgstr ""
 "POT-Creation-Date: \n"
 "Plural-Forms: \n"
 
-msgid ""
-"(COMING SOON) Accrue automatic yield through flash loans and\n"
-"SUSHI strategies"
-msgstr ""
-"(СКОРО) Накопление автоматического дохода с помощью экспресс-кредитов и\n"
-"стратегий SUSHI."
-
 msgid "1 Hour"
 msgstr ""
 
@@ -50,17 +43,11 @@ msgstr "Добавить"
 msgid "Add Liquidity"
 msgstr "Добавить ликвидность"
 
-msgid "Add SUSHI to your MetaMask wallet"
-msgstr ""
-
 msgid "Add collateral in order to borrow assets"
 msgstr "Добавьте залог, чтобы заимствовать активы"
 
 msgid "Add liquidity"
 msgstr "Добавить ликвидность"
-
-msgid "Add xSUSHI to your MetaMask wallet"
-msgstr ""
 
 msgid "Add {0} to MetaMask"
 msgstr ""
@@ -71,17 +58,11 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-msgid "Additional records and weekly merkle updates can be found on"
-msgstr ""
-
 msgid "Amount of Tokens"
 msgstr "Количество токенов"
 
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
 msgstr ""
-
-msgid "Analytics"
-msgstr "Аналитика"
 
 msgid "Approve"
 msgstr "Утвердить"
@@ -133,12 +114,6 @@ msgstr "Баланс Bento: {0}"
 
 msgid "BentoBox"
 msgstr "BentoBox"
-
-msgid "BentoBox Apps"
-msgstr "Приложения BentoBox"
-
-msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
-msgstr "BentoBox – это инновационный способ экономного использования децентрализованных приложений и получения дополнительной прибыли."
 
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
 msgstr "BentoBox обеспечивает дополнительную доходность по депозитам с помощью мгновенного кредитования, стратегий и экономичных фиксированных переводов между такими интегрированными децентрализованными приложениями, как рынки Kashi"
@@ -197,12 +172,6 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
-msgid "Claim SUSHI"
-msgstr "Сделать запрос SUSHI"
-
-msgid "Claimed"
-msgstr "Сделан запрос"
-
 msgid "Clear History"
 msgstr "Очистить историю"
 
@@ -219,9 +188,6 @@ msgstr ""
 msgid "Collateral"
 msgstr "Обеспечение"
 
-msgid "Community Approval"
-msgstr "Утверждение сообщества"
-
 msgid "Confirm"
 msgstr "Подтвердить"
 
@@ -230,9 +196,6 @@ msgstr "Подтвердите добавление ликвидности"
 
 msgid "Confirm Limit Order"
 msgstr ""
-
-msgid "Confirm Staking"
-msgstr "Подтвердите стейкинг"
 
 msgid "Confirm Supply"
 msgstr "Подтвердите поставку"
@@ -288,13 +251,13 @@ msgstr ""
 msgid "Deposit"
 msgstr "Депозит"
 
-msgid "Deposit SUSHI into BentoBox"
-msgstr "Внесите SUSHI в BentoBox"
-
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "Внесите токены в BentoBox для всех доходов"
 
 msgid "Deposit {0} into BentoBox"
+msgstr ""
+
+msgid "Deposit:"
 msgstr ""
 
 msgid "Depositing {0} into BentoBox"
@@ -329,12 +292,6 @@ msgstr ""
 
 msgid "English"
 msgstr ""
-
-msgid "Enter"
-msgstr "Ввести"
-
-msgid "Enter Amount"
-msgstr "Ввести сумму"
 
 msgid "Enter a recipient"
 msgstr "Введите получателя"
@@ -376,40 +333,17 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-msgid "Farm"
-msgstr ""
-
 msgid "Filled"
 msgstr ""
 
 msgid "Find Pool"
 msgstr "Найти пул"
 
-msgid ""
-"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
-"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
-"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
-"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
-"SUSHI and any additional from fees."
-msgstr ""
-"Для каждого обмена на бирже в каждой цепочке 0,05% комиссии за обмен распределяются как SUSHI\n"
-" пропорционально вашей доле в SushiBar. Когда ваш SUSHI размещен в SushiBar, вы получаете\n"
-"xSUSHI в обмен на право голоса и полностью составляемый токен, который может взаимодействовать с другими протоколами.\n"
-"Ваш xSUSHI постоянно увеличивается. Когда вы отменяете ставку, вы получаете все изначально внесенные\n"
-"SUSHI и любые дополнительные комиссии."
-
 msgid "French"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
 msgstr "Получите доступ к токенам, не уменьшая свои активы. Кредитное плечо позволит вам открывать короткие позиции по активам и зарабатывать на движении вниз."
-
-msgid ""
-"Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
-"all swaps from all chains)"
-msgstr ""
-"Получите права управления с xSUSHI и заработайте 5% годовых (0,05% от\n"
-"всех обменов из всех цепочек)"
 
 msgid "German"
 msgstr ""
@@ -420,9 +354,6 @@ msgstr ""
 msgid "Hardware Wallet"
 msgstr "Аппаратный кошелек"
 
-msgid "Harmony Bridge"
-msgstr ""
-
 msgid "Harvest {0} SUSHI {1}"
 msgstr ""
 
@@ -431,15 +362,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "Здоровье"
-
-msgid "Historical Total Locked: Connect Wallet"
-msgstr "Всего заблокировано исторически: подключение кошелька"
-
-msgid "Historical Total Locked: Fetching Total"
-msgstr "Всего заблокировано исторически: получение итогов"
-
-msgid "Historical Total Locked: {0} SUSHI"
-msgstr "Всего заблокировано исторически {0} SUSHI"
 
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
@@ -503,9 +425,6 @@ msgstr ""
 msgid "Learn more about wallets"
 msgstr ""
 
-msgid "Lend"
-msgstr "Предоставить кредит"
-
 msgid "Lend assets for interest from borrowers."
 msgstr "Давайте активы в кредит под проценты от заемщиков."
 
@@ -557,9 +476,6 @@ msgstr ""
 msgid "Loading your {exchange} liquidity positions"
 msgstr "Загрузка ваших позиций ликвидности {exchange}"
 
-msgid "Loading..."
-msgstr "Загрузка..."
-
 msgid "MAX"
 msgstr "МАКСИМУМ"
 
@@ -586,14 +502,8 @@ msgstr ""
 msgid "Markets"
 msgstr "Рынки"
 
-msgid "Matic Bridge"
-msgstr ""
-
 msgid "Max"
 msgstr "Максимум"
-
-msgid "Maximize yield by staking SUSHI for xSUSHI"
-msgstr "Увеличьте доход, ставя SUSHI на xSUSHI"
 
 msgid "Maximum sent"
 msgstr ""
@@ -618,9 +528,6 @@ msgstr ""
 
 msgid "Minimum received"
 msgstr "Полученный минимум"
-
-msgid "Miso"
-msgstr ""
 
 msgid "My Liquidity Positions"
 msgstr ""
@@ -714,16 +621,10 @@ msgstr ""
 msgid "Pending"
 msgstr "В ожидании"
 
-msgid "Pending Treasury Transfer"
-msgstr "Перевод казначейства в ожидании"
-
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
 msgid "Please enter an amount"
-msgstr ""
-
-msgid "Please refer to the"
 msgstr ""
 
 msgid "Pool"
@@ -861,27 +762,8 @@ msgstr "Что-то пошло не так при подписании разр�
 msgid "Spanish"
 msgstr ""
 
-msgid "Stack Yields with SAAVE"
-msgstr "Суммируйте доходность с помощью SAAVE"
-
 msgid "Stake"
 msgstr "Сделать ставку"
-
-msgid "Stake SUSHI"
-msgstr "Ставка SUSHI"
-
-msgid "Stake SUSHI for xSUSHI"
-msgstr "Ставка SUSHI на xSUSHI"
-
-msgid ""
-"Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
-"one click"
-msgstr ""
-"Сделайте ставку в xSUSHI и добавьте залог как axSUSHI на Aave\n"
-"одним щелчком мыши"
-
-msgid "Staking APR"
-msgstr "Ставка годовых"
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "Поставка {0} {1} и {2} {3}"
@@ -930,9 +812,6 @@ msgstr ""
 
 msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
 msgstr ""
-
-msgid "Things you can do with your SUSHI"
-msgstr "Что вы можете делать со своими SUSHI"
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
@@ -999,9 +878,6 @@ msgstr ""
 msgid "Unstake"
 msgstr "Отменить ставку"
 
-msgid "Unstaked"
-msgstr "Без ставки"
-
 msgid "Unsupported Asset"
 msgstr "Неподдерживаемый актив"
 
@@ -1023,17 +899,11 @@ msgstr ""
 msgid "Vesting"
 msgstr "Передача прав на ценные бумаги"
 
-msgid "Vesting is executed within the guidelines selected by the community in"
-msgstr ""
-
 msgid "Vietnamese"
 msgstr ""
 
 msgid "View Liquidity Positions"
 msgstr ""
-
-msgid "View Stats"
-msgstr "Посмотреть статистику"
 
 msgid "View on explorer"
 msgstr "Посмотреть в проводнике"
@@ -1061,9 +931,6 @@ msgstr "Завернуть"
 
 msgid "Wrong Network"
 msgstr "Неправильная сеть"
-
-msgid "Yesterday's APR"
-msgstr "Вчерашняя годовая процентная ставка"
 
 msgid "You Pay:"
 msgstr ""
@@ -1095,17 +962,11 @@ msgstr "Вы получите"
 msgid "Your"
 msgstr ""
 
-msgid "Your Claimable SUSHI this Week"
-msgstr "SUSHI, которые вы можете запросить на этой неделе"
-
 msgid "Your Liquidity"
 msgstr "Ваша ликвидность"
 
 msgid "Your Staked"
 msgstr "Ваша ставка"
-
-msgid "Your SushiBar Stats"
-msgstr "Статистика вашего SushiBar"
 
 msgid "Your Wallet"
 msgstr "Ваш кошелек"
@@ -1137,9 +998,6 @@ msgstr ""
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "Ваша ликвидность {exchange} {0}/{1} станет ликвидностью SushiSwap {2}/{3}."
 
-msgid "Zap"
-msgstr ""
-
 msgid "above"
 msgstr ""
 
@@ -1148,12 +1006,6 @@ msgstr ""
 
 msgid "failed to load"
 msgstr "не удалось загрузить"
-
-msgid "for deliberations on additional points."
-msgstr ""
-
-msgid "forum discussion"
-msgstr ""
 
 msgid "home page"
 msgstr ""
@@ -1165,9 +1017,6 @@ msgid "minutes"
 msgstr "минут"
 
 msgid "or the transaction will revert."
-msgstr ""
-
-msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"

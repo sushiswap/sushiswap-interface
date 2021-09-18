@@ -13,13 +13,6 @@ msgstr ""
 "POT-Creation-Date: \n"
 "Plural-Forms: \n"
 
-msgid ""
-"(COMING SOON) Accrue automatic yield through flash loans and\n"
-"SUSHI strategies"
-msgstr ""
-"(출시 예정) 플래시 대출 및 \n"
-" SUSHI 전략을 통해 자동 수익 창출"
-
 msgid "1 Hour"
 msgstr ""
 
@@ -50,17 +43,11 @@ msgstr "추가"
 msgid "Add Liquidity"
 msgstr "유동성 추가"
 
-msgid "Add SUSHI to your MetaMask wallet"
-msgstr ""
-
 msgid "Add collateral in order to borrow assets"
 msgstr "자산을 빌리려면 담보를 추가하세요"
 
 msgid "Add liquidity"
 msgstr "유동성 추가"
-
-msgid "Add xSUSHI to your MetaMask wallet"
-msgstr ""
 
 msgid "Add {0} to MetaMask"
 msgstr ""
@@ -71,17 +58,11 @@ msgstr ""
 msgid "Added"
 msgstr ""
 
-msgid "Additional records and weekly merkle updates can be found on"
-msgstr ""
-
 msgid "Amount of Tokens"
 msgstr "토큰 양"
 
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
 msgstr ""
-
-msgid "Analytics"
-msgstr "애널리틱스"
 
 msgid "Approve"
 msgstr "승인"
@@ -133,12 +114,6 @@ msgstr "Bento 잔액 : {0}"
 
 msgid "BentoBox"
 msgstr "BentoBox"
-
-msgid "BentoBox Apps"
-msgstr "BentoBox 앱"
-
-msgid "BentoBox is an innovative way to use dapps gas-efficiently and gain extra yield."
-msgstr "BentoBox는 dapp을 가스 효율적으로 사용하고 추가 수익을 얻을 수있는 혁신적인 방법입니다."
 
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
 msgstr "BentoBox는 Kashi 시장과 같은 통합 dapp 간의 플래시 대출, 전략 및 고정 저가스 전송을 통해 예금에 대한 추가 수익률을 제공합니다."
@@ -197,12 +172,6 @@ msgstr ""
 msgid "Chinese"
 msgstr ""
 
-msgid "Claim SUSHI"
-msgstr "SUSHI 청구"
-
-msgid "Claimed"
-msgstr "청구됨"
-
 msgid "Clear History"
 msgstr "기록 지우기"
 
@@ -219,9 +188,6 @@ msgstr ""
 msgid "Collateral"
 msgstr "담보"
 
-msgid "Community Approval"
-msgstr "커뮤니티 승인"
-
 msgid "Confirm"
 msgstr "확인"
 
@@ -230,9 +196,6 @@ msgstr "유동성 추가 확인"
 
 msgid "Confirm Limit Order"
 msgstr ""
-
-msgid "Confirm Staking"
-msgstr "스테이킹 확인"
 
 msgid "Confirm Supply"
 msgstr "공급 확인"
@@ -288,13 +251,13 @@ msgstr ""
 msgid "Deposit"
 msgstr "예금"
 
-msgid "Deposit SUSHI into BentoBox"
-msgstr "BentoBox에 SUSHI 입금"
-
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "모든 수익에 대한 토큰을 BentoBox에 입금하세요"
 
 msgid "Deposit {0} into BentoBox"
+msgstr ""
+
+msgid "Deposit:"
 msgstr ""
 
 msgid "Depositing {0} into BentoBox"
@@ -329,12 +292,6 @@ msgstr ""
 
 msgid "English"
 msgstr ""
-
-msgid "Enter"
-msgstr "입력"
-
-msgid "Enter Amount"
-msgstr "금액 입력"
 
 msgid "Enter a recipient"
 msgstr "수신자 입력"
@@ -376,38 +333,17 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-msgid "Farm"
-msgstr ""
-
 msgid "Filled"
 msgstr ""
 
 msgid "Find Pool"
 msgstr "풀 찾기"
 
-msgid ""
-"For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI\n"
-"proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve\n"
-"xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.\n"
-"Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited\n"
-"SUSHI and any additional from fees."
-msgstr ""
-"모든 체인에 있는 거래소의 모든 스왑에 대해 스왑 수수료의 0.05 %가\n"
-"SushiBar 지분에 비례하여 SUSHI로 지급됩니다. SUSHI가 SushiBar에 스테이킹되면 투표 권한을 포함하는 xSUSHI 토큰을 받게 됩니다.\n"
-"xSUSHI 이자는 누적되며 이후에 출금할 때는 처음 스테이킹한 SUSHI에 더해 추가 수수료를 돌려 받게 됩니다."
-
 msgid "French"
 msgstr ""
 
 msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
 msgstr "자산총액 감소 없이 토큰에 노출됩니다. 레버리지를 사용하면 자산에 대해 숏 포지션을 취하고 하락 시 수익을 올릴 수 있습니다."
-
-msgid ""
-"Gain governance rights with xSUSHI and earn 5% APR (0.05% of\n"
-"all swaps from all chains)"
-msgstr ""
-"xSUSHI로 거버넌스 권한을 얻고 APR 5 % 수익\n"
-"(모든 체인에서 발생하는 0.05% 스왑 수수료)을 얻으세요"
 
 msgid "German"
 msgstr ""
@@ -418,9 +354,6 @@ msgstr ""
 msgid "Hardware Wallet"
 msgstr "하드웨어 지갑"
 
-msgid "Harmony Bridge"
-msgstr ""
-
 msgid "Harvest {0} SUSHI {1}"
 msgstr ""
 
@@ -429,15 +362,6 @@ msgstr ""
 
 msgid "Health"
 msgstr "건전성"
-
-msgid "Historical Total Locked: Connect Wallet"
-msgstr "잠긴 기록 합계: 지갑 연결"
-
-msgid "Historical Total Locked: Fetching Total"
-msgstr "잠긴 기록 합계: 전체 금액 가져오는 중"
-
-msgid "Historical Total Locked: {0} SUSHI"
-msgstr "잠긴 기록 합계: {0} SUSHI"
 
 msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
@@ -501,9 +425,6 @@ msgstr ""
 msgid "Learn more about wallets"
 msgstr ""
 
-msgid "Lend"
-msgstr "대출해주기"
-
 msgid "Lend assets for interest from borrowers."
 msgstr "자산을 대출하고 대출에 대한 이자수익을 벌어보세요."
 
@@ -555,9 +476,6 @@ msgstr ""
 msgid "Loading your {exchange} liquidity positions"
 msgstr "{exchange} 유동성 포지션 로드 중"
 
-msgid "Loading..."
-msgstr "로드 중..."
-
 msgid "MAX"
 msgstr "최대"
 
@@ -584,14 +502,8 @@ msgstr ""
 msgid "Markets"
 msgstr "마켓"
 
-msgid "Matic Bridge"
-msgstr ""
-
 msgid "Max"
 msgstr "최대"
-
-msgid "Maximize yield by staking SUSHI for xSUSHI"
-msgstr "xSUSHI에 대한 SUSHI 스테이킹으로 수익 극대화"
 
 msgid "Maximum sent"
 msgstr ""
@@ -616,9 +528,6 @@ msgstr ""
 
 msgid "Minimum received"
 msgstr "최소 수령"
-
-msgid "Miso"
-msgstr ""
 
 msgid "My Liquidity Positions"
 msgstr ""
@@ -712,16 +621,10 @@ msgstr ""
 msgid "Pending"
 msgstr "보류 중"
 
-msgid "Pending Treasury Transfer"
-msgstr "보류 중인 자금 이체"
-
 msgid "Please connect to the appropriate Ethereum network."
 msgstr ""
 
 msgid "Please enter an amount"
-msgstr ""
-
-msgid "Please refer to the"
 msgstr ""
 
 msgid "Pool"
@@ -859,27 +762,8 @@ msgstr "허가에 서명하는 동안 문제가 발생했습니다. 이는 Trezo
 msgid "Spanish"
 msgstr ""
 
-msgid "Stack Yields with SAAVE"
-msgstr "SAAVE로 수익을 쌓으세요"
-
 msgid "Stake"
 msgstr "스테이킹"
-
-msgid "Stake SUSHI"
-msgstr "SUSHI 스테이킹"
-
-msgid "Stake SUSHI for xSUSHI"
-msgstr "SUSHI를 스테이크하고 xSUSHI를 얻으세요"
-
-msgid ""
-"Stake into xSUSHI add collateral as axSUSHI on Aave all in\n"
-"one click"
-msgstr ""
-"한 번의 클릭으로 xSUSHI를 스테이크하고, \n"
-"Aave에 axSUSHI로 담보를 추가합니다"
-
-msgid "Staking APR"
-msgstr "APR 스테이킹"
 
 msgid "Supplying {0} {1} and {2} {3}"
 msgstr "{0} {1} 및 {2} {3} 공급 중"
@@ -928,9 +812,6 @@ msgstr ""
 
 msgid "The transaction could not be sent because the deadline has passed. Please check that your transaction deadline is not too low."
 msgstr ""
-
-msgid "Things you can do with your SUSHI"
-msgstr "SUSHI로 할 수 있는 것들"
 
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
@@ -997,9 +878,6 @@ msgstr ""
 msgid "Unstake"
 msgstr "언스테이크"
 
-msgid "Unstaked"
-msgstr "지분 없음"
-
 msgid "Unsupported Asset"
 msgstr "지원되지 않는 자산"
 
@@ -1021,17 +899,11 @@ msgstr ""
 msgid "Vesting"
 msgstr "베스팅"
 
-msgid "Vesting is executed within the guidelines selected by the community in"
-msgstr ""
-
 msgid "Vietnamese"
 msgstr ""
 
 msgid "View Liquidity Positions"
 msgstr ""
-
-msgid "View Stats"
-msgstr "통계 보기"
 
 msgid "View on explorer"
 msgstr "탐색기에서 보기"
@@ -1059,9 +931,6 @@ msgstr "랩"
 
 msgid "Wrong Network"
 msgstr "잘못된 네트워크"
-
-msgid "Yesterday's APR"
-msgstr "어제의 APR"
 
 msgid "You Pay:"
 msgstr ""
@@ -1093,17 +962,11 @@ msgstr "예상 수령"
 msgid "Your"
 msgstr ""
 
-msgid "Your Claimable SUSHI this Week"
-msgstr "이번 주에 출금가능한 SUSHI"
-
 msgid "Your Liquidity"
 msgstr "내 유동성"
 
 msgid "Your Staked"
 msgstr "귀하의 지분"
-
-msgid "Your SushiBar Stats"
-msgstr "내 SushiBar 통계"
 
 msgid "Your Wallet"
 msgstr "내 지갑"
@@ -1135,9 +998,6 @@ msgstr ""
 msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
 msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변환됩니다."
 
-msgid "Zap"
-msgstr ""
-
 msgid "above"
 msgstr ""
 
@@ -1146,12 +1006,6 @@ msgstr ""
 
 msgid "failed to load"
 msgstr "로드하지 못함"
-
-msgid "for deliberations on additional points."
-msgstr ""
-
-msgid "forum discussion"
-msgstr ""
 
 msgid "home page"
 msgstr ""
@@ -1163,9 +1017,6 @@ msgid "minutes"
 msgstr "분"
 
 msgid "or the transaction will revert."
-msgstr ""
-
-msgid "xDai Bridge"
 msgstr ""
 
 msgid "xSUSHI Fee"
