@@ -35,9 +35,9 @@ const items = (i18n: I18n) => [
     external: false,
   },
   {
-    name: i18n._(t`Discord`),
-    description: i18n._(t`Join the community on Discord.`),
-    href: 'https://discord.gg/NVPXN4e',
+    name: i18n._(t`DeBlock Discord`),
+    description: i18n._(t`Join the DeBlock community on Discord.`),
+    href: 'https://discord.gg/2D4dJjrSFN',
     external: true,
   },
   {
