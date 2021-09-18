@@ -1,0 +1,5 @@
+# gitattirbutes
+# linguist directive to reduce diff churn on PR
+locale/**/* linguist-generated=true
+# shell files shoud always have lf termination
+*.sh text eol=lf
