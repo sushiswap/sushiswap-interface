@@ -1,6 +1,6 @@
 import { ChainId, JSBI, Pair, Route, Token, TokenAmount, Trade, TradeType } from '@sushiswap/sdk'
 
-import { computeTradePriceBreakdown } from '../../../../src/functions/prices'
+import { computeTradePriceBreakdown } from '../../../src/functions/prices'
 
 describe('prices', () => {
   const token1 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000001', 18)
@@ -23,7 +23,7 @@ describe('prices', () => {
         computeTradePriceBreakdown(
           new Trade(new Route([pair12], token1), new TokenAmount(token1, JSBI.BigInt(1000)), TradeType.EXACT_INPUT)
         ).realizedLPFee
-      ).to.equal(new TokenAmount(token1, JSBI.BigInt(3)))
+      ).toEqual(new TokenAmount(token1, JSBI.BigInt(3)))
     })
 
     it('correct realized lp fee for double hop', () => {

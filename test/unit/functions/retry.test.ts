@@ -1,4 +1,4 @@
-import { RetryableError, retry } from '../../../../src/functions/retry'
+import { RetryableError, retry } from '../../../src/functions/retry'
 
 describe('retry', () => {
   function makeFn<T>(fails: number, result: T, retryable = true): () => Promise<T> {
@@ -12,23 +12,21 @@ describe('retry', () => {
   }
 
   it('fails for non-retryable error', async () => {
-    retry(makeFn(1, 'abc', false), { n: 3, maxWait: 0, minWait: 0 }).promise.catch((err) =>
-      expect(err.message).to.equal('bad failure')
+    await expect(retry(makeFn(1, 'abc', false), { n: 3, maxWait: 0, minWait: 0 }).promise).rejects.toThrow(
+      'bad failure'
     )
   })
 
   it('works after one fail', async () => {
-    retry(makeFn(1, 'abc'), { n: 3, maxWait: 0, minWait: 0 }).promise.then((res) => expect(res).to.equal('abc'))
+    await expect(retry(makeFn(1, 'abc'), { n: 3, maxWait: 0, minWait: 0 }).promise).resolves.toEqual('abc')
   })
 
   it('works after two fails', async () => {
-    retry(makeFn(2, 'abc'), { n: 3, maxWait: 0, minWait: 0 }).promise.then((res) => expect(res).to.equal('abc'))
+    await expect(retry(makeFn(2, 'abc'), { n: 3, maxWait: 0, minWait: 0 }).promise).resolves.toEqual('abc')
   })
 
   it('throws if too many fails', async () => {
-    retry(makeFn(4, 'abc'), { n: 3, maxWait: 0, minWait: 0 }).promise.catch((err) =>
-      expect(err.message).to.equal('failure')
-    )
+    await expect(retry(makeFn(4, 'abc'), { n: 3, maxWait: 0, minWait: 0 }).promise).rejects.toThrow('failure')
   })
 
   it('cancel causes promise to reject', async () => {
@@ -38,7 +36,7 @@ describe('retry', () => {
       maxWait: 100,
     })
     cancel()
-    promise.catch((err) => expect(err.message).to.equal('Cancelled'))
+    await expect(promise).rejects.toThrow('Cancelled')
   })
 
   it('cancel no-op after complete', async () => {
@@ -49,15 +47,15 @@ describe('retry', () => {
     })
     // defer
     setTimeout(cancel, 0)
-    promise.then((res) => expect(res).to.equal('abc'))
+    await expect(promise).resolves.toEqual('abc')
   })
 
   async function checkTime(fn: () => Promise<any>, min: number, max: number) {
     const time = new Date().getTime()
     await fn()
     const diff = new Date().getTime() - time
-    expect(diff >= min).to.be.true
-    expect(diff <= max).to.be.true
+    expect(diff).toBeGreaterThanOrEqual(min)
+    expect(diff).toBeLessThanOrEqual(max)
   }
 
   it('waits random amount of time between min and max', async () => {
@@ -66,11 +64,13 @@ describe('retry', () => {
       promises.push(
         checkTime(
           () =>
-            retry(makeFn(4, 'abc'), {
-              n: 3,
-              maxWait: 100,
-              minWait: 50,
-            }).promise.catch((err) => expect(err.message).to.equal('failure')),
+            expect(
+              retry(makeFn(4, 'abc'), {
+                n: 3,
+                maxWait: 100,
+                minWait: 50,
+              }).promise
+            ).rejects.toThrow('failure'),
           150,
           400
         )
