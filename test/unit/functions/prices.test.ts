@@ -1,3 +1,4 @@
+import { expect } from '@jest/globals'
 import { ChainId, JSBI, Pair, Route, Token, TokenAmount, Trade, TradeType } from '@sushiswap/sdk'
 
 import { computeTradePriceBreakdown } from '../../../src/functions/prices'

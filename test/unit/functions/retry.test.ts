@@ -1,4 +1,6 @@
-import { RetryableError, retry } from '../../../src/functions/retry'
+import { expect } from '@jest/globals'
+
+import { retry, RetryableError } from '../../../src/functions/retry'
 
 describe('retry', () => {
   function makeFn<T>(fails: number, result: T, retryable = true): () => Promise<T> {

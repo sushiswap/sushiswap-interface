@@ -1,5 +1,6 @@
-import { isAddress } from '../../../src/functions/validate'
 import { expect } from '@jest/globals'
+
+import { isAddress } from '../../../src/functions/validate'
 
 describe('#isAddress', () => {
   it('returns false if not', () => {
