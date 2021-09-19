@@ -49,6 +49,8 @@ module.exports = {
         'light-brown': '#FEC464',
         'light-yellow': '#FFD166',
         'cyan-blue': '#0993EC',
+        'deblock-lightblue': '#72B9D7',
+        'deblock-darkblue': '#0a5a96',
         'dark-pink': '#221825',
         'dark-blue': '#0F182A',
         'dark-1000': '#0D0415',
