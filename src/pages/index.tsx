@@ -5,7 +5,7 @@ import { APP_NAME, APP_NAME_URL } from '../constants';
 import usePasswordCheck from '../hooks/usePasswordCheck';
 
 export default function Dashboard() {
-  usePasswordCheck();
+  // usePasswordCheck();
 
   return (
     <Container id="dashboard-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
