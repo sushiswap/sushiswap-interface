@@ -10,7 +10,7 @@ import { useLingui } from '@lingui/react'
 import useSortableData from '../../hooks/useSortableData'
 
 const FarmList = ({ farms, term }) => {
-  const { items, requestSort, sortConfig } = useSortableData(farms)
+  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'roiPerYear' })
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
   const { i18n } = useLingui()
   return items ? (
