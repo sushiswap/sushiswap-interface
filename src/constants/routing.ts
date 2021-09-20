@@ -270,6 +270,7 @@ export const COMMON_BASES: ChainTokenList = {
     ARBITRUM.USDC,
     ARBITRUM.USDT,
     SUSHI[ChainId.ARBITRUM],
+    new Token(ChainId.ARBITRUM, '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF', 18, 'SPELL', 'Spell Token'),
   ],
   [ChainId.XDAI]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.XDAI],
