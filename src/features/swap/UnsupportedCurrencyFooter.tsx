@@ -32,9 +32,9 @@ const DetailsFooter = styled.div<{ show: boolean }>`
 
 const AddressText = styled.div`
   font-size: 12px;
-  ${({ theme }) => theme.mediaWidth.upToSmall`
+  /* ${({ theme }) => theme.mediaWidth.upToSmall`
     font-size: 10px;
-`}
+`} */
 `
 
 export default function UnsupportedCurrencyFooter({
