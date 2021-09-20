@@ -10,7 +10,7 @@ import {
   useTokens,
 } from '../../../services/graph'
 
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { getFraction } from '../../../functions'
 import { uniq } from 'lodash'
 import { useActiveWeb3React } from '../../../hooks'

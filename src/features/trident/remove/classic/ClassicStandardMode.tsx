@@ -16,7 +16,7 @@ import {
   poolAtom,
 } from './context/atoms'
 import { attemptingTxnAtom, poolBalanceAtom, showReviewAtom } from '../../context/atoms'
-import { Percent, ZERO } from '@sushiswap/sdk'
+import { Percent, ZERO } from '@sushiswap/core-sdk'
 import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
 import Lottie from 'lottie-react'

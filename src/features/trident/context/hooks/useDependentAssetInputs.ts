@@ -1,6 +1,6 @@
 import { atom, selector, useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
 import { noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
-import { Currency, CurrencyAmount, ZERO } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import { useMemo } from 'react'
 import { maxAmountSpend, tryParseAmount } from '../../../../functions'
 import { useActiveWeb3React } from '../../../../hooks'

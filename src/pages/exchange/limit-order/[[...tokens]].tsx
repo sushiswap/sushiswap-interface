@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@sushiswap/sdk'
+import { ChainId, Token } from '@sushiswap/core-sdk'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { formatPercent, maxAmountSpend, tryParseAmount } from '../../../functions'
 import { useAllTokens, useCurrency } from '../../../hooks/Tokens'

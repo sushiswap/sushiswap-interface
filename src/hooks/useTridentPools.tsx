@@ -1,4 +1,4 @@
-import { ChainId, Currency, PoolType, WETH9 } from '@sushiswap/sdk'
+import { ChainId, Currency, PoolType, WETH9 } from '@sushiswap/core-sdk'
 import { useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { tryParseAmount } from '../functions'

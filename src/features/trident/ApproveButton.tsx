@@ -3,7 +3,7 @@ import Button from '../../components/Button'
 import { ApprovalState, useApproveCallback, useTridentRouterContract } from '../../hooks'
 import useBentoMasterApproveCallback, { BentoApprovalState } from '../../hooks/useBentoMasterApproveCallback'
 import { t } from '@lingui/macro'
-import { Currency, CurrencyAmount } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
 
 interface TokenApproveButtonProps {

@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useMemo } from 'react'
-import { Currency } from '@sushiswap/sdk'
+import { Currency } from '@sushiswap/core-sdk'
 import Button from '../Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'

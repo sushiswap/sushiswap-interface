@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useState } from 'react'
-import { Currency } from '@sushiswap/sdk'
+import { Currency } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
 import Typography from '../Typography'
 import { t } from '@lingui/macro'

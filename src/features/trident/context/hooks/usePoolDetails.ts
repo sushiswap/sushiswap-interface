@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil'
-import { JSBI, Percent, Price, ZERO } from '@sushiswap/sdk'
+import { JSBI, Percent, Price, ZERO } from '@sushiswap/core-sdk'
 import { ONE_HUNDRED_PERCENT } from '../../../../constants'
 import { currentPoolShareSelector, noLiquiditySelector, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 import { useMemo } from 'react'

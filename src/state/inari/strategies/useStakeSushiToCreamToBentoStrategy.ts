@@ -1,5 +1,5 @@
 import { CRXSUSHI, SUSHI } from '../../../config/tokens'
-import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
+import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import { e10, tryParseAmount } from '../../../functions'
 import { useActiveWeb3React, useZenkoContract } from '../../../hooks'

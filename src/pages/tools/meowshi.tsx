@@ -1,5 +1,5 @@
 import { ArrowDownIcon, InformationCircleIcon } from '@heroicons/react/solid'
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, Token } from '@sushiswap/core-sdk'
 import { MEOW, SUSHI, XSUSHI } from '../../config/tokens'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 

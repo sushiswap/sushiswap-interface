@@ -13,11 +13,11 @@ import {
   MINICHEF_ADDRESS,
   MULTICALL2_ADDRESS,
   ROUTER_ADDRESS,
-  STOP_LIMIT_ORDER_ADDRESS,
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
   WNATIVE_ADDRESS,
-} from '@sushiswap/sdk'
+} from '@sushiswap/core-sdk'
+import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 
 import {

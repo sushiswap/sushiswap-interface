@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil'
-import { ConstantProductPool, Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { ConstantProductPool, Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
 import { tryParseAmount } from '../../../../../functions'
 

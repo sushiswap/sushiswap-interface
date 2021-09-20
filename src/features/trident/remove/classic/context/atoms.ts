@@ -1,5 +1,5 @@
 import { atom, selector, useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
-import { ConstantProductPool, Currency, CurrencyAmount, JSBI, Percent, Price, Token } from '@sushiswap/sdk'
+import { ConstantProductPool, Currency, CurrencyAmount, JSBI, Percent, Price, Token } from '@sushiswap/core-sdk'
 import {
   attemptingTxnAtom,
   noLiquiditySelector,

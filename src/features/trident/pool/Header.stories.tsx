@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import { ChainId, WETH9 } from '@sushiswap/sdk'
+import { ChainId, WETH9 } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
 import { PoolType } from '../types'
 import { tryParseAmount } from '../../../functions'

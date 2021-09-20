@@ -11,7 +11,7 @@ import {
 import { useEffect, useMemo } from 'react'
 import useSWR, { SWRConfiguration } from 'swr'
 
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { Chef } from '../../../features/onsen/enum'
 import concat from 'lodash/concat'
 import useActiveWeb3React from '../../../hooks/useActiveWeb3React'

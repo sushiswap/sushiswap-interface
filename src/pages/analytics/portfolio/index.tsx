@@ -10,7 +10,7 @@ import {
 
 import AllocationTable from '../../../features/analytics/Portfolio/AllocationTable'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { NETWORK_LABEL } from '../../../config/networks'
 import { uniq } from 'lodash'
 import { useActiveWeb3React } from '../../../hooks'

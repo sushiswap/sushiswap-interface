@@ -13,7 +13,7 @@ import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapM
 import Link from 'next/link'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import { NATIVE } from '@sushiswap/sdk'
+import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import SettingsTab from '../../../../components/Settings'
 import TridentLayout from '../../../../layouts/Trident'

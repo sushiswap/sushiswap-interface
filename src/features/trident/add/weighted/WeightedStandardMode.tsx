@@ -1,6 +1,6 @@
 import AssetInput from '../../../../components/AssetInput'
 import React, { useMemo } from 'react'
-import { ZERO } from '@sushiswap/sdk'
+import { ZERO } from '@sushiswap/core-sdk'
 import TransactionDetails from './../TransactionDetails'
 import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { attemptingTxnAtom, noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'

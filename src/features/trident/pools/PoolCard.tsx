@@ -9,7 +9,7 @@ import { Pool } from '../types'
 import { POOL_TYPES } from '../constants'
 import { toHref } from '../../../hooks/useTridentPools'
 import { classNames } from '../../../functions'
-import { ConstantProductPool, PoolType } from '@sushiswap/sdk'
+import { ConstantProductPool, PoolType } from '@sushiswap/core-sdk'
 
 interface PoolCardProps {
   pool: Pool

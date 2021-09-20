@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil'
-import { Currency, CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
 import { LiquidityMode, PoolAtomType } from '../types'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)

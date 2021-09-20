@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { useSingleCallResult } from '../state/multicall/hooks'

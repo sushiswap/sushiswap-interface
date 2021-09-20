@@ -1,4 +1,4 @@
-import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import React, { useEffect, useState } from 'react'
 import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
 import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'

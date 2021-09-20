@@ -6,7 +6,7 @@ import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalan
 import { maxAmountSpend, tryParseAmount } from '../../../../functions'
 import { useMemo } from 'react'
 import { t } from '@lingui/macro'
-import { Currency, CurrencyAmount, ZERO } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 
 export const selectedPoolCurrenciesAtom = atomFamily<Currency[], number>({
   key: 'selectedPoolCurrenciesAtom',

@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react'
 import Typography from '../Typography'
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import CurrencyLogo from '../CurrencyLogo'
 import { classNames } from '../../functions'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'

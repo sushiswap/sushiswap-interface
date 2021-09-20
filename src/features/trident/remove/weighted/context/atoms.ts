@@ -1,5 +1,5 @@
 import { atom, selector } from 'recoil'
-import { ConstantProductPool, Currency, CurrencyAmount, Percent } from '@sushiswap/sdk'
+import { ConstantProductPool, Currency, CurrencyAmount, Percent } from '@sushiswap/core-sdk'
 import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
 import { poolBalanceAtom } from '../../../context/atoms'
 import { calculateSlippageAmount } from '../../../../../functions'

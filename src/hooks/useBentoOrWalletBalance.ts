@@ -1,4 +1,4 @@
-import { Currency, Token } from '@sushiswap/sdk'
+import { Currency, Token } from '@sushiswap/core-sdk'
 import { useCurrencyBalances } from '../state/wallet/hooks'
 import { useBentoBalances2 } from '../state/bentobox/hooks'
 import { useMemo } from 'react'

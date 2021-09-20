@@ -18,7 +18,7 @@ import {
   outputToWalletAtom,
 } from './context/atoms'
 import { attemptingTxnAtom, poolBalanceAtom, showReviewAtom } from '../../context/atoms'
-import { Percent } from '@sushiswap/sdk'
+import { Percent } from '@sushiswap/core-sdk'
 import Dots from '../../../../components/Dots'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'

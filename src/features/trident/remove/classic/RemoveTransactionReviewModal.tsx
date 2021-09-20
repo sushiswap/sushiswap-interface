@@ -6,7 +6,7 @@ import {
   showReviewAtom,
   spendFromWalletAtom,
 } from '../../context/atoms'
-import { Percent } from '@sushiswap/sdk'
+import { Percent } from '@sushiswap/core-sdk'
 import ListPanel from '../../../../components/ListPanel'
 import { priceSelector, useClassicRemoveExecute } from './context/atoms'
 import { useRecoilState, useRecoilValue } from 'recoil'

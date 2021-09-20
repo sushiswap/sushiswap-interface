@@ -1,4 +1,4 @@
-import { PoolType } from '@sushiswap/sdk'
+import { PoolType } from '@sushiswap/core-sdk'
 import { ChipColor } from '../../components/Chip'
 
 export const SORT_OPTIONS = [

@@ -1,5 +1,5 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { Currency, CurrencyAmount } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../../../functions'
 import { t } from '@lingui/macro'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'

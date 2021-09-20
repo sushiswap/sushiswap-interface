@@ -1,5 +1,5 @@
 import { AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather'
-import { ChainId, Currency } from '@sushiswap/sdk'
+import { ChainId, Currency } from '@sushiswap/core-sdk'
 import React, { FC } from 'react'
 import { Trans, t } from '@lingui/macro'
 

@@ -8,7 +8,7 @@ import ClassicMyRewards from '../../../../features/trident/pool/classic/ClassicM
 import Rewards from '../../../../features/trident/pool/Rewards'
 import { RecoilRoot, useSetRecoilState } from 'recoil'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE } from '@sushiswap/sdk'
+import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useRouter } from 'next/router'

@@ -1,4 +1,4 @@
-import { CurrencyAmount, KASHI_ADDRESS, Token, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/sdk'
+import { CurrencyAmount, KASHI_ADDRESS, Token, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
