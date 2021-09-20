@@ -11,9 +11,10 @@ export default function Dashboard() {
         <meta name="description" content={APP_NAME} />
       </Head>
 
-      <PageLink linkHref="/deposit" linkText="Deposit" />
-      <PageLink linkHref="/sandbox" linkText="Sandbox" />
-      <PageLink linkHref="/exp" linkText="Experiments" />
+      <PageLink linkHref="/lend" linkText="Deposit" />
+      <PageLink linkHref="/lend" linkText="Borrow" />
+      <PageLink linkHref="/markets" linkText="Markets" />
+      <PageLink linkHref="/yield" linkText="Yield Strategies" />
     </Container>
   );
 }
