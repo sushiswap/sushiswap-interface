@@ -1,34 +1,14 @@
 import { atom, selector } from 'recoil'
-import { ConstantProductPool, Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { ConstantProductPoolState } from '../../../../../hooks/useTridentClassicPools'
+import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../../../../functions'
-
-// TODO ramin: remove
-interface HybridPool extends ConstantProductPool {
-  tokens: Token[]
-}
-
-// TODO ramin: import HybridPool from SDK
-export const poolAtom = atom<[ConstantProductPoolState, HybridPool | null]>({
-  key: 'poolAtom',
-  default: [null, null],
-})
-
-export const selectedZapCurrencyAtom = atom<Currency>({
-  key: 'selectedZapCurrencyAtom',
-  default: null,
-})
-
-export const zapInputAtom = atom<string>({
-  key: 'zapInputAtom',
-  default: '',
-})
+import { poolAtom } from '../../../context/atoms'
 
 export const poolTokensSelector = selector<Record<string, Token>>({
   key: 'poolTokensSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
-    return pool?.tokens.reduce((acc, cur) => {
+    const tokens = [pool?.token0, pool?.token1]
+    return tokens.reduce((acc, cur) => {
       acc[cur.address] = cur
       return acc
     }, {})
@@ -58,22 +38,5 @@ export const parsedAmountsSelector = selector<Record<string, CurrencyAmount<Toke
         return acc
       }, {})
     )
-  },
-})
-
-export const parsedZapSplitAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
-  key: 'parsedZapSlitAmountsSelector',
-  get: ({ get }) => {
-    const inputAmount = get(parsedZapAmountSelector)
-    return [null, null]
-  },
-})
-
-export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
-  key: 'parsedZapAmountSelector',
-  get: ({ get }) => {
-    const value = get(zapInputAtom)
-    const currency = get(selectedZapCurrencyAtom)
-    return tryParseAmount(value, currency)
   },
 })

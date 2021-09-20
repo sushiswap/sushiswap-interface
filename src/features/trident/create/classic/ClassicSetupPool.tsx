@@ -41,10 +41,9 @@ const ClassicSetupPool: FC = () => {
     ? i18n._(t`Select tokens`)
     : !feeTier
     ? i18n._(t`Select fee tier`)
-    : // TODO ramin: uncomment
-      // : poolState === ConstantProductPoolState.EXISTS
-      // ? i18n._(t`Pool already exists`)
-      ''
+    : poolState === ConstantProductPoolState.EXISTS
+    ? i18n._(t`Pool already exists`)
+    : ''
 
   return (
     <div className="flex flex-col gap-10 p-5">

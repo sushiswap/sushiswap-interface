@@ -6,10 +6,10 @@ import RadioGroup from '../../../components/RadioGroup'
 import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
 import { classNames } from '../../../functions'
 import Button from '../../../components/Button'
-import { PoolType } from '@sushiswap/core-sdk'
 import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
-import { useRecoilState, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { poolCreationPageAtom } from '../context/atoms'
+import { PoolType } from '../types'
 
 const RadioOption = ({ value, title, description }) => {
   return (

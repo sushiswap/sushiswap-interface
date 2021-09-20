@@ -11,6 +11,7 @@ import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAss
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRecoilState } from 'recoil'
 import { poolCreationPageAtom } from '../../context/atoms'
+import { HybridPoolState, useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
 
 const HybridSetupPool: FC = () => {
   const { account } = useActiveWeb3React()
@@ -24,6 +25,9 @@ const HybridSetupPool: FC = () => {
     currencies: [currencies, setCurrencies],
     numberOfInputs: [numberOfInputs, setNumberOfInputs],
   } = useIndependentAssetInputs()
+
+  // TODO ramin a = null
+  const [poolState] = useTridentHybridPool(currencies[0], currencies[1], feeTier, null)
 
   const handleSelectedPoolTokens = useCallback(
     (currency, index) => {
@@ -40,10 +44,9 @@ const HybridSetupPool: FC = () => {
     ? i18n._(t`Select tokens`)
     : !feeTier
     ? i18n._(t`Select fee tier`)
-    : // TODO ramin: uncomment
-      // : poolState === HybridPoolState.EXISTS
-      // ? i18n._(t`Pool already exists`)
-      ''
+    : poolState === HybridPoolState.EXISTS
+    ? i18n._(t`Pool already exists`)
+    : ''
 
   return (
     <div className="flex flex-col gap-10 p-5">

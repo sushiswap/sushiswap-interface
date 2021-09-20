@@ -4035,10 +4035,10 @@
   dependencies:
     "@sushiswap/core-sdk" "0.1.0"
 
-"@sushiswap/trident-sdk@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-0.1.0.tgz#74db09bc27c2fafbcdf5f5bd94888a1d1ec3699b"
-  integrity sha512-w9h3RvyMY9iOss205gsbK0S7EkzSBdRmrQFKQezTZo2Ikx88qamxVGtkoh22fiWbAVOL6+M8JQOYqXoblU0PHg==
+"@sushiswap/trident-sdk@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-0.1.1.tgz#e2c27fa7d4c794dcba958b746a0bb3d1c8d363a8"
+  integrity sha512-Lvml/K8nAVPI4SferBKVjlKaJgDGhetiBYmRxeuuRkDQYAs0Io4VlcE7oUah6r2Qy7yLxjeDt0jQscGZGFmahA==
   dependencies:
     "@sushiswap/core-sdk" "0.1.0"
     "@sushiswap/trident" "1.0.0-canary.1"

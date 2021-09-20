@@ -1,8 +1,8 @@
-import { ChainId, Currency, PoolType, WETH9 } from '@sushiswap/core-sdk'
+import { ChainId, Currency, WETH9 } from '@sushiswap/core-sdk'
 import { useCallback, useMemo } from 'react'
 import isEqual from 'lodash/isEqual'
 import { tryParseAmount } from '../functions'
-import { Pool } from '../features/trident/types'
+import { Pool, PoolType } from '../features/trident/types'
 import { SUSHI, USDC } from '../config/tokens'
 
 export const toHref = (type: PoolType, currencies: Currency[]) => {

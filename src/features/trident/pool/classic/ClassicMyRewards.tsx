@@ -5,7 +5,7 @@ import Typography from '../../../../components/Typography'
 import ListPanel from '../../../../components/ListPanel'
 import Button from '../../../../components/Button'
 import { useRecoilValue } from 'recoil'
-import { currentLiquidityValueSelector } from './context/atoms'
+import { currentLiquidityValueSelector } from '../../context/atoms'
 
 const ClassicMyRewards: FC = () => {
   const { i18n } = useLingui()

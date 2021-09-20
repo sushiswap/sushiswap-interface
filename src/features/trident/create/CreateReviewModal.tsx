@@ -9,11 +9,11 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { showReviewAtom, spendFromWalletAtom } from '../context/atoms'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
-import { PoolType } from '@sushiswap/core-sdk'
 import { useIndependentAssetInputs } from '../context/hooks/useIndependentAssetInputs'
 import { usePoolDetails } from '../context/hooks/usePoolDetails'
 import { usePoolCreateExecute } from '../context/hooks/usePoolCreateExecute'
 import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
+import { PoolType } from '../types'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()

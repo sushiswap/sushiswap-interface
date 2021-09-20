@@ -1,6 +1,6 @@
 import { atom, useRecoilState } from 'recoil'
-import { PoolType } from '@sushiswap/trident-sdk'
 import { useMemo } from 'react'
+import { PoolType } from '../../types'
 
 export const selectedPoolTypeAtom = atom<PoolType>({
   key: 'selectedPoolTypeAtom',

@@ -41,7 +41,10 @@ export const useZapAssetInput = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const [poolState] = useRecoilValue(poolAtom)
-  const [zapCurrency, setZapCurrency] = useRecoilState(selectedZapCurrencyAtom)
+
+  const zapCurrencyState = useRecoilState(selectedZapCurrencyAtom)
+  const [zapCurrency] = zapCurrencyState
+
   const currency = useMemo(() => [zapCurrency], [zapCurrency])
   const zapInputAmount = useRecoilState(zapInputAmountAtom)
   const parsedAmount = useRecoilValue(parsedZapAmountSelector)
@@ -61,12 +64,12 @@ export const useZapAssetInput = () => {
 
   return useMemo(
     () => ({
-      zapCurrency: [zapCurrency, setZapCurrency],
+      zapCurrency: zapCurrencyState,
       zapInputAmount,
       parsedAmount,
       parsedSplitAmounts,
       error,
     }),
-    [error, parsedAmount, parsedSplitAmounts, setZapCurrency, zapCurrency, zapInputAmount]
+    [error, parsedAmount, parsedSplitAmounts, zapCurrencyState, zapInputAmount]
   )
 }
