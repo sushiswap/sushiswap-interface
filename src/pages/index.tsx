@@ -2,8 +2,11 @@ import Container from '../components/Container';
 import Head from 'next/head';
 import Link from 'next/link';
 import { APP_NAME, APP_NAME_URL } from '../constants';
+import usePasswordCheck from '../hooks/usePasswordCheck';
 
 export default function Dashboard() {
+  usePasswordCheck();
+
   return (
     <Container id="dashboard-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>

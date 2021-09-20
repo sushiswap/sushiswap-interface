@@ -33,6 +33,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { APP_NAME_URL } from '../constants';
 
+import { RecoilRoot } from 'recoil';
+
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false });
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
@@ -136,32 +138,34 @@ function MyApp({
           content="Be a DeFi Chef with Sushi. Swap, earn, stack yields, lend, borrow, leverage all on one decentralized, community driven platform. Welcome home to DeFi"
         />
       </Head>
-      <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
-        <Web3ReactProvider getLibrary={getLibrary}>
-          <Web3ProviderNetwork getLibrary={getLibrary}>
-            <Web3ReactManager>
-              <ReduxProvider store={store}>
-                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
-                  <>
-                    <ListsUpdater />
-                    <UserUpdater />
-                    <ApplicationUpdater />
-                    <TransactionUpdater />
-                    <MulticallUpdater />
-                  </>
-                  <Provider>
-                    <Layout>
-                      <Guard>
-                        <Component {...pageProps} />
-                      </Guard>
-                    </Layout>
-                  </Provider>
-                </PersistGate>
-              </ReduxProvider>
-            </Web3ReactManager>
-          </Web3ProviderNetwork>
-        </Web3ReactProvider>
-      </I18nProvider>
+      <RecoilRoot>
+        <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
+          <Web3ReactProvider getLibrary={getLibrary}>
+            <Web3ProviderNetwork getLibrary={getLibrary}>
+              <Web3ReactManager>
+                <ReduxProvider store={store}>
+                  <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                    <>
+                      <ListsUpdater />
+                      <UserUpdater />
+                      <ApplicationUpdater />
+                      <TransactionUpdater />
+                      <MulticallUpdater />
+                    </>
+                    <Provider>
+                      <Layout>
+                        <Guard>
+                          <Component {...pageProps} />
+                        </Guard>
+                      </Layout>
+                    </Provider>
+                  </PersistGate>
+                </ReduxProvider>
+              </Web3ReactManager>
+            </Web3ProviderNetwork>
+          </Web3ReactProvider>
+        </I18nProvider>
+      </RecoilRoot>
     </Fragment>
   );
 }
