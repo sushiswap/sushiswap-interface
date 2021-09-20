@@ -177,7 +177,7 @@ export default function useFarmRewards() {
           rewards[1] = reward[chainId]
         }
 
-        if (chainId === ChainId.ARBITRUM && ['9'].includes(pool.id)) {
+        if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
           // console.log({ rewardPerBlock, rewardPerDay, spellPrice })
           rewards[1] = {
             token: 'SPELL',
