@@ -144,6 +144,12 @@ export const getOnePrice = async () => {
   })
 }
 
+export const getSpellPrice = async () => {
+  return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
+    id: '0x090185f2135308bad17527004364ebcc2d37e5f6',
+  })
+}
+
 export const getBundle = async (
   chainId = ChainId.MAINNET,
   query = ethPriceQuery,

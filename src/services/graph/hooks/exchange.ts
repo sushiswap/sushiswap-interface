@@ -11,6 +11,7 @@ import {
   getOnePrice,
   getPicklePrice,
   getRulerPrice,
+  getSpellPrice,
   getStakePrice,
   getSushiPrice,
   getToken,
@@ -62,6 +63,11 @@ export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.XDAI
   const { data } = useSWR(shouldFetch ? 'stakePrice' : null, () => getStakePrice(), swrConfig)
+  return data
+}
+
+export function useSpellPrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR('spellPrice', () => getSpellPrice(), swrConfig)
   return data
 }
 

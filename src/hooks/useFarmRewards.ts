@@ -9,6 +9,7 @@ import {
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useOnePrice,
+  useSpellPrice,
   useStakePrice,
   useSushiPairs,
   useSushiPrice,
@@ -46,12 +47,13 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice] = [
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
     useStakePrice(),
     useOnePrice(),
+    useSpellPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -173,6 +175,17 @@ export default function useFarmRewards() {
 
         if (chainId in reward) {
           rewards[1] = reward[chainId]
+        }
+
+        if (chainId === ChainId.ARBITRUM && ['9'].includes(pool.id)) {
+          // console.log({ rewardPerBlock, rewardPerDay, spellPrice })
+          rewards[1] = {
+            token: 'SPELL',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/spell.jpg',
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: spellPrice,
+          }
         }
       }
 
