@@ -136,8 +136,9 @@ export default function useFarmRewards() {
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
-        const rewardPerSecond =
-          ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+        const rewardPerSecond = pool.rewarder.rewardPerSecond
+          ? pool.rewarder.rewardPerSecond / 1e18
+          : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
         const rewardPerBlock = rewardPerSecond * averageBlockTime
 
@@ -147,22 +148,22 @@ export default function useFarmRewards() {
           [ChainId.MATIC]: {
             token: 'MATIC',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg',
-            rewardPrice: maticPrice,
             rewardPerBlock,
-            rewardPerDay,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: maticPrice,
           },
           [ChainId.XDAI]: {
             token: 'STAKE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/stake.jpg',
             rewardPerBlock,
-            rewardPerDay,
+            rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: stakePrice,
           },
           [ChainId.HARMONY]: {
             token: 'ONE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
             rewardPerBlock,
-            rewardPerDay,
+            rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: onePrice,
           },
         }
@@ -177,8 +178,7 @@ export default function useFarmRewards() {
           rewards[1] = reward[chainId]
         }
 
-        if (chainId === ChainId.ARBITRUM && ['9'].includes(pool.id)) {
-          // console.log({ rewardPerBlock, rewardPerDay, spellPrice })
+        if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
           rewards[1] = {
             token: 'SPELL',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/spell.jpg',
@@ -225,34 +225,6 @@ export default function useFarmRewards() {
     const roiPerYear = rewardAprPerYear + feeApyPerYear
 
     const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
-
-    if (pair.id === '0xe4ebd836832f1a8a81641111a5b081a2f90b9430') {
-      console.log('dydx pair', {
-        ...pool,
-        ...position,
-        pair: {
-          ...pair,
-          decimals: pair.type === PairType.KASHI ? Number(pair.asset.tokenInfo.decimals) : 18,
-          type,
-        },
-        balance,
-        feeApyPerHour,
-        feeApyPerDay,
-        feeApyPerMonth,
-        feeApyPerYear,
-        rewardAprPerHour,
-        rewardAprPerDay,
-        rewardAprPerMonth,
-        rewardAprPerYear,
-        roiPerBlock,
-        roiPerHour,
-        roiPerDay,
-        roiPerMonth,
-        roiPerYear,
-        rewards,
-        tvl,
-      })
-    }
 
     return {
       ...pool,
