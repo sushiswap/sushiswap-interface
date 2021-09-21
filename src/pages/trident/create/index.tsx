@@ -9,12 +9,12 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Stepper from '../../../components/Stepper'
 import SelectPoolType from '../../../features/trident/create/SelectPoolType'
 import CreateReviewModal from '../../../features/trident/create/CreateReviewModal'
-import { PoolType } from '@sushiswap/trident-sdk'
 import ClassicSetupPool from '../../../features/trident/create/classic/ClassicSetupPool'
 import ClassicDepositAssets from '../../../features/trident/create/classic/ClassicDepositAssets'
 import { useSetupPoolProperties } from '../../../features/trident/context/hooks/useSetupPoolProperties'
 import HybridSetupPool from '../../../features/trident/create/hybrid/HybridSetupPool'
 import { poolCreationPageAtom } from '../../../features/trident/context/atoms'
+import { PoolType } from '../../../features/trident/types'
 
 const Pool = () => {
   const { i18n } = useLingui()

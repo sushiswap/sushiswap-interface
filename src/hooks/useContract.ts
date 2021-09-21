@@ -16,6 +16,7 @@ import {
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
   WNATIVE_ADDRESS,
+  ChainKey,
 } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
@@ -174,9 +175,11 @@ export function useTimelockContract(): Contract | null {
   return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
 }
 
+// TODO ramin hardcoded
 export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && BENTOBOX_ADDRESS[chainId], BENTOBOX_ABI, withSignerIfPossible)
+  const { abi, address } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.BentoBoxV1
+  return useContract(address, abi, withSignerIfPossible)
 }
 
 export function useChainlinkOracle(): Contract | null {
@@ -217,23 +220,23 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
   return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
 }
 
-// TODO Ramin:
+// TODO Ramin: kovan hardcoded
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { address, abi } = TRIDENT[`${chainId}`]['kovan'].contracts.TridentRouter
+  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.TridentRouter
   return useContract(address, abi, withSignerIfPossible)
 }
 
-// TODO Ramin:
+// TODO Ramin: kovan hardcoded
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { address, abi } = TRIDENT[`${chainId}`]['kovan'].contracts.MasterDeployer
+  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.MasterDeployer
   return useContract(address, abi, withSignerIfPossible)
 }
 
-// TODO Ramin:
+// TODO Ramin: kovan hardcoded
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { address, abi } = TRIDENT[`${chainId}`]['kovan'].contracts.ConstantProductPoolFactory
+  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory
   return useContract(address, abi, withSignerIfPossible)
 }

@@ -162,7 +162,7 @@ export function useBentoBalances2(account: string, tokens: Token[]): Record<stri
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
   const currentTransactionStatus = useTransactionStatus()
-  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>()
+  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>({})
 
   const fetch = useCallback(async () => {
     const balances = await boringHelperContract.getBalances(

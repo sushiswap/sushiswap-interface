@@ -8,7 +8,7 @@ import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
 import React, { useEffect } from 'react'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
+import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
@@ -103,7 +103,7 @@ const RemoveHybrid = () => {
         {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
       </>
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewStandardModal />
     </div>
   )
 }

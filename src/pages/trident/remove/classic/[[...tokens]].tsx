@@ -10,7 +10,13 @@ import ClassicStandardMode from '../../../../features/trident/remove/classic/Cla
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import { LiquidityMode } from '../../../../features/trident/types'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
+import {
+  liquidityModeAtom,
+  poolAtom,
+  poolBalanceAtom,
+  slippageAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
 import TridentLayout from '../../../../layouts/Trident'
 import ClassicUnzapMode from '../../../../features/trident/remove/classic/ClassicUnzapMode'
 import { useCurrency } from '../../../../hooks/Tokens'
@@ -18,13 +24,13 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
-import { poolAtom, slippageAtom } from '../../../../features/trident/remove/classic/context/atoms'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
 import { NATIVE, Percent } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
 import WithdrawalSubmittedModal from '../../../../features/trident/WithdrawalSubmittedModal'
+import RemoveTransactionReviewZapModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewZapModal'
+import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewStandardModal'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
@@ -100,11 +106,20 @@ const RemoveClassic = () => {
       <ModeToggle onChange={() => {}} />
 
       <>
-        {liquidityMode === LiquidityMode.ZAP && <ClassicUnzapMode />}
-        {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+        {liquidityMode === LiquidityMode.ZAP && (
+          <>
+            <ClassicUnzapMode />
+            <RemoveTransactionReviewZapModal />
+          </>
+        )}
+        {liquidityMode === LiquidityMode.STANDARD && (
+          <>
+            <ClassicStandardMode />
+            <RemoveTransactionReviewStandardModal />
+          </>
+        )}
       </>
 
-      <RemoveTransactionReviewModal />
       <WithdrawalSubmittedModal />
     </div>
   )

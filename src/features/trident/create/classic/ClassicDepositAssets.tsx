@@ -8,7 +8,7 @@ import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom } from '../../co
 import Button from '../../../../components/Button'
 import { useBentoBoxContract } from '../../../../hooks'
 import { classNames } from '../../../../functions'
-import TridentApproveGate from '../../ApproveButton'
+import TridentApproveGate from '../../TridentApproveGate'
 import Dots from '../../../../components/Dots'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'

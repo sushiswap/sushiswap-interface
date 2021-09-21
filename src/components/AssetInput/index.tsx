@@ -186,7 +186,7 @@ const AssetInputPanel = ({
           <Typography variant="h3" weight={700}>
             <NumericalInput
               disabled={disabled}
-              value={value}
+              value={value || ''}
               onUserInput={onChange}
               placeholder="0.00"
               className="bg-transparent flex flex-grow w-full"

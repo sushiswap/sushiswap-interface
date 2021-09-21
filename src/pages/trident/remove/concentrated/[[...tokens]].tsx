@@ -19,7 +19,7 @@ import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
+import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
@@ -92,7 +92,7 @@ const RemoveConcentrated = () => {
 
       {/*{liquidityMode === LiquidityMode.ZAP && <ConcentratedMode />}*/}
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewStandardModal />
     </div>
   )
 }

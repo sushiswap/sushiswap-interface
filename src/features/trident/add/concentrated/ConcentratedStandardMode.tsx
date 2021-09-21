@@ -4,7 +4,7 @@ import TransactionDetails from '../TransactionDetails'
 import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import TridentApproveGate from '../../ApproveButton'
+import TridentApproveGate from '../../TridentApproveGate'
 import Dots from '../../../../components/Dots'
 import { t } from '@lingui/macro'
 import { classNames } from '../../../../functions'

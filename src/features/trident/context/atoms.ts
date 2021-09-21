@@ -49,6 +49,11 @@ export const spendFromWalletAtom = atom<boolean>({
   default: true,
 })
 
+export const outputToWalletAtom = atom<boolean>({
+  key: 'outputToWalletAtom',
+  default: true,
+})
+
 export const poolCreationPageAtom = atom<number>({
   key: 'poolCreationPageAtom',
   default: 0,
@@ -61,6 +66,11 @@ export const minPriceAtom = atom<string>({
 
 export const maxPriceAtom = atom<string>({
   key: 'maxPriceAtom',
+  default: null,
+})
+
+export const slippageAtom = atom<Percent>({
+  key: 'slippageAtom',
   default: null,
 })
 
@@ -94,6 +104,7 @@ export const currentPoolShareSelector = selector({
   },
 })
 
+// Returns the currency liquidity value expressed in underlying tokens not taking into account input values
 export const currentLiquidityValueSelector = selector({
   key: 'currentLiquidityValueSelector',
   get: ({ get }) => {

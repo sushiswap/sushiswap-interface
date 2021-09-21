@@ -21,7 +21,7 @@ import { Percent } from '@sushiswap/core-sdk'
 import Dots from '../../../../components/Dots'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
-import TridentApproveGate from '../../ApproveButton'
+import TridentApproveGate from '../../TridentApproveGate'
 import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
 

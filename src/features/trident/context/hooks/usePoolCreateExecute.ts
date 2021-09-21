@@ -1,17 +1,24 @@
 import { useLingui } from '@lingui/react'
-import { useConstantProductPoolFactory, useMasterDeployerContract } from '../../../../hooks'
+import {
+  useActiveWeb3React,
+  useBentoBoxContract,
+  useConstantProductPoolFactory,
+  useMasterDeployerContract,
+  useTridentRouterContract,
+} from '../../../../hooks'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
-import { useRecoilCallback, useSetRecoilState } from 'recoil'
-import { attemptingTxnAtom, showReviewAtom, txHashAtom } from '../atoms'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
 import { useSetupPoolProperties } from './useSetupPoolProperties'
 import { ethers } from 'ethers'
-import { calculateGasMargin } from '../../../../functions'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
 import { useCallback, useMemo } from 'react'
 import { useIndependentAssetInputs } from './useIndependentAssetInputs'
+import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
 
 export const usePoolCreateExecute = () => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const masterDeployer = useMasterDeployerContract()
   const constantProductPoolFactory = useConstantProductPoolFactory()
@@ -19,41 +26,70 @@ export const usePoolCreateExecute = () => {
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
+  const bentoboxContract = useBentoBoxContract()
+  const spendFromWallet = useRecoilValue(spendFromWalletAtom)
+  const router = useTridentRouterContract()
+
   const {
     feeTier: [feeTier],
     twap: [twap],
   } = useSetupPoolProperties()
   const {
     currencies: [selectedPoolCurrencies],
+    parsedAmounts,
   } = useIndependentAssetInputs()
 
-  // TODO Doesn't add liquidity yet, merely creates the pool
-  const classicExecute = useCallback(async () => {
+  const execute = useCallback(async () => {
     if (
+      !account ||
+      !bentoboxContract ||
       !masterDeployer ||
       !constantProductPoolFactory ||
       !selectedPoolCurrencies[0] ||
       !selectedPoolCurrencies[1] ||
-      !feeTier
+      !feeTier ||
+      !parsedAmounts.every((el) => el?.greaterThan(0))
     )
       throw new Error('missing dependencies')
 
+    // Pool creation data
     const [a, b] = selectedPoolCurrencies.map((el) => el.wrapped)
-    const [token0, token1] = a.sortsBefore(b) ? [a, b] : [b, a]
-
-    const estimate = masterDeployer.estimateGas.deployPool
-    const method = masterDeployer.deployPool
+    const [tokenA, tokenB] = a.sortsBefore(b) ? [a, b] : [b, a]
     const deployData = ethers.utils.defaultAbiCoder.encode(
       ['address', 'address', 'uint8', 'bool'],
-      [...[token0.address, token1.address].sort(), feeTier, twap]
+      [...[tokenA.address, tokenB.address].sort(), feeTier, twap]
     )
+
+    // Adding liquidity data
+    const indexOfNative = parsedAmounts.findIndex((el) => el.currency.isNative)
+    const value = indexOfNative ? { value: parsedAmounts[indexOfNative].quotient.toString() } : {}
+    const liquidityInput = await Promise.all(
+      parsedAmounts.map(async (el, index) => ({
+        token: el.currency.wrapped.address,
+        native: spendFromWallet,
+        amount: await bentoboxContract.toShare(el.currency.wrapped.address, el.quotient.toString(), false),
+      }))
+    )
+
+    const batch = [
+      router?.interface?.encodeFunctionData('deployPool', [constantProductPoolFactory.address, deployData]),
+      router?.interface?.encodeFunctionData('addLiquidity', [
+        liquidityInput,
+        computeConstantProductPoolAddress({
+          factoryAddress: constantProductPoolFactory.address,
+          tokenA,
+          tokenB,
+          fee: feeTier,
+          twap,
+        }),
+        1,
+        ethers.utils.defaultAbiCoder.encode(['address'], [account]),
+      ]),
+    ]
 
     try {
       setAttemptingTxn(true)
-      const estimatedGasLimit = await estimate(constantProductPoolFactory.address, deployData, {})
-      const tx = await method(constantProductPoolFactory.address, deployData, {
-        gasLimit: calculateGasMargin(estimatedGasLimit),
-      })
+      const tx = await router?.batch(batch, value)
 
       setTxHash(tx.hash)
       setShowReview(false)
@@ -61,7 +97,7 @@ export const usePoolCreateExecute = () => {
 
       addTransaction(tx, {
         summary: i18n._(
-          t`Create pool for tokens ${selectedPoolCurrencies[0].symbol} and ${selectedPoolCurrencies[1].symbol}`
+          t`Create pool and add liquidity for tokens ${selectedPoolCurrencies[0].symbol} and ${selectedPoolCurrencies[1].symbol}`
         ),
       })
 
@@ -80,43 +116,22 @@ export const usePoolCreateExecute = () => {
       }
     }
   }, [
+    account,
     addTransaction,
+    bentoboxContract,
     constantProductPoolFactory,
     feeTier,
     i18n,
     masterDeployer,
+    parsedAmounts,
+    router,
     selectedPoolCurrencies,
     setAttemptingTxn,
     setShowReview,
     setTxHash,
+    spendFromWallet,
     twap,
   ])
 
-  const hybridExecute = useRecoilCallback(
-    ({ snapshot }) =>
-      async () => {},
-    []
-  )
-
-  const weightedExecute = useRecoilCallback(
-    ({ snapshot }) =>
-      async () => {},
-    []
-  )
-
-  const concentratedExecute = useRecoilCallback(
-    ({ snapshot }) =>
-      async () => {},
-    []
-  )
-
-  return useMemo(
-    () => ({
-      classicExecute,
-      hybridExecute,
-      weightedExecute,
-      concentratedExecute,
-    }),
-    [classicExecute, concentratedExecute, hybridExecute, weightedExecute]
-  )
+  return useMemo(() => ({ execute }), [execute])
 }

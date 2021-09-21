@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, FACTORY_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, ChainKey, Currency, CurrencyAmount, FACTORY_ADDRESS } from '@sushiswap/core-sdk'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 
 import { ConstantProductPool, Fee, computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
@@ -31,17 +31,6 @@ export function useTridentClassicPools(
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
 
-      // console.log(
-      //   computeConstantProductPoolAddress({
-      //     // TODO Ramin:
-      //     factoryAddress: TRIDENT[`${chainId}`]['kovan'].contracts.ConstantProductPoolFactory.address,
-      //     tokenA,
-      //     tokenB,
-      //     fee,
-      //     twap,
-      //   })
-      // )
-
       return tokenA &&
         tokenB &&
         tokenA.chainId === tokenB.chainId &&
@@ -49,16 +38,14 @@ export function useTridentClassicPools(
         fee &&
         twap &&
         FACTORY_ADDRESS[tokenA.chainId]
-        ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
-        : // // : // TODO ramin: hardcoded
-          // computeConstantProductPoolAddress({
-          //   factoryAddress: CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
-          //   tokenA,
-          //   tokenB,
-          //   fee,
-          //   twap,
-          // })
-          undefined
+        ? computeConstantProductPoolAddress({
+            factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+            tokenA,
+            tokenB,
+            fee,
+            twap,
+          })
+        : undefined
     })
   }, [chainId, pools])
 

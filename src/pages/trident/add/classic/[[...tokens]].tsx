@@ -43,7 +43,7 @@ const AddClassic = () => {
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
 

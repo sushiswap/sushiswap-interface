@@ -3994,7 +3994,7 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.3.tgz#3a8d7b030e60422d0b760ee8ef87f2b296ee6319"
   integrity sha512-7I/CKjzTB0TYvpk/FEopHVGVcaZFGXlsifa2SB7AyOBdu4jPYf1JPyJH89iKZI4JRAIB7Qf1Gd38ow3lTp39rg==
 
-"@sushiswap/core-sdk@0.1.0", "@sushiswap/core-sdk@^0.1.0":
+"@sushiswap/core-sdk@0.1.0", "@sushiswap/core-sdk@^0.1.0", "@sushiswap/core-sdk@latest":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-0.1.0.tgz#a178549ab8d18d99a5d1a57978265ebaed2a1b87"
   integrity sha512-vtaPhsWZvpvl5Pf943UQ7ZK8774IzszouN0nqylTgEJn2R4gdX5u0t9zowt0j6tjhj1V/mFFPXwkZUrvFWfAhA==
@@ -4035,23 +4035,18 @@
   dependencies:
     "@sushiswap/core-sdk" "0.1.0"
 
-"@sushiswap/trident-sdk@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-0.1.1.tgz#e2c27fa7d4c794dcba958b746a0bb3d1c8d363a8"
-  integrity sha512-Lvml/K8nAVPI4SferBKVjlKaJgDGhetiBYmRxeuuRkDQYAs0Io4VlcE7oUah6r2Qy7yLxjeDt0jQscGZGFmahA==
+"@sushiswap/trident-sdk@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-0.1.2.tgz#897c1f07d703535bfff5621c30882c690e04b639"
+  integrity sha512-Gng4Ly4KoT2ixweL+gaVjXnjmnQRC3GBbPBkaR5O6DlS+hy04nA/KjzEZL8r+4He8MCvxixG/2+PSKT9/VW8WA==
   dependencies:
-    "@sushiswap/core-sdk" "0.1.0"
-    "@sushiswap/trident" "1.0.0-canary.1"
+    "@sushiswap/core-sdk" latest
+    "@sushiswap/trident" latest
 
-"@sushiswap/trident@1.0.0-canary.1":
-  version "1.0.0-canary.1"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.1.tgz#362988950e57fc29f97cae3c1204759b1b1e3f34"
-  integrity sha512-HpEus5Yh418xjYQfNZtAhYtA/sQa3OcuSZe1+a3oJcclVXxQ8Eb4rMAe8fL5FfYlyvee/oibIIzVc0PtSHzrdA==
-
-"@sushiswap/trident@1.0.0-canary.2":
-  version "1.0.0-canary.2"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.2.tgz#8dfca32acaf0f79e71ccaa2fd03361cec7338403"
-  integrity sha512-HYLRDCd8uZpN3EraMz3f6baWyH54k8d9HCOUfCSuUBXkx6epxiFdzdcPwPx1oa/0McZtYGzsDDvBqoT94V8fVQ==
+"@sushiswap/trident@1.0.0-canary.3", "@sushiswap/trident@latest":
+  version "1.0.0-canary.3"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.3.tgz#4db4882aad79fefd4bcc30208bcca3631e3836a4"
+  integrity sha512-wCu/uhxsIfUx5yqepDTPZbnfzLJppXCRzsBGVV5RVk1i1Ce0D4TMgLRJHCir7bk5WT1X9RwMl7lsxqzJC8HpUQ==
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"

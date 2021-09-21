@@ -12,7 +12,7 @@ import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { attemptingTxnAtom, noLiquiditySelector, poolAtom, showReviewAtom } from '../../context/atoms'
-import TridentApproveGate from '../../ApproveButton'
+import TridentApproveGate from '../../TridentApproveGate'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import Dots from '../../../../components/Dots'

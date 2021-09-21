@@ -24,6 +24,7 @@ const ClassicSetupPool: FC = () => {
   const {
     feeTier: [feeTier, setFeeTier],
   } = useSetupPoolProperties()
+
   const [poolState] = useTridentClassicPool(currencies[0], currencies[1], feeTier, true)
 
   const handleSelectedPoolTokens = useCallback(

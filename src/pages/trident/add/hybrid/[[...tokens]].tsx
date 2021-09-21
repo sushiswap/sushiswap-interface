@@ -13,11 +13,14 @@ import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
-import AddTransactionReviewModal from '../../../../features/trident/add/classic/AddTransactionReviewModal'
+import {
+  liquidityModeAtom,
+  poolAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
-import { poolAtom } from '../../../../features/trident/add/classic/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
 import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI, USDC, XSUSHI } from '../../../../config/tokens'
@@ -97,7 +100,8 @@ const AddHybrid = () => {
         {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
       </div>
 
-      <AddTransactionReviewModal />
+      {/*TODO*/}
+      {/*<AddTransactionReviewModal />*/}
       <DepositSubmittedModal />
     </div>
   )

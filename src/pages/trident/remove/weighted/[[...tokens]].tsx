@@ -12,7 +12,7 @@ import { LiquidityMode } from '../../../../features/trident/types'
 import WeightedUnzapMode from '../../../../features/trident/remove/weighted/WeightedUnzapMode'
 import WeightedStandardMode from '../../../../features/trident/remove/weighted/WeightedStandardMode'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
+import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
 import { poolAtom, slippageAtom } from '../../../../features/trident/remove/classic/context/atoms'
@@ -103,7 +103,7 @@ const RemoveWeighted = () => {
         {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
       </>
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewStandardModal />
     </div>
   )
 }
