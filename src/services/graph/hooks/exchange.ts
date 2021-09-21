@@ -11,6 +11,7 @@ import {
   getMphPrice,
   getNativePrice,
   getOnePrice,
+  getPairDayData,
   getPicklePrice,
   getRulerPrice,
   getStakePrice,
@@ -315,6 +316,40 @@ export function useTokens(
   return data
 }
 
+interface usePairDayDataProps {
+  timestamp?: number
+  block?: number
+  chainId: number
+  shouldFetch?: boolean
+  pair: string
+  first?: number
+}
+
+export function usePairDayData(
+  { timestamp, block, chainId, shouldFetch = true, pair, first }: usePairDayDataProps,
+  swrConfig: SWRConfiguration = undefined
+) {
+  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
+
+  shouldFetch = shouldFetch && !!chainId
+
+  const variables = {
+    first: first,
+    block: block ? { number: block } : undefined,
+    where: {
+      pair: pair?.toLowerCase(),
+    },
+  }
+
+  const { data } = useSWR(
+    shouldFetch ? ['pairDayData', chainId, JSON.stringify(variables)] : null,
+    (_, chainId) => getPairDayData(chainId, variables),
+    swrConfig
+  )
+  return data
+}
+
 interface useTokenDayDataProps {
   timestamp?: number
   block?: number
@@ -342,7 +377,7 @@ export function useTokenDayData(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['tokenDayDaya', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? ['tokenDayData', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getTokenDayData(chainId, variables),
     swrConfig
   )

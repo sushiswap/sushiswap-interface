@@ -169,7 +169,7 @@ export default function useFarmRewards() {
       rewards.reduce((previousValue, currentValue) => {
         return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
       }, 0) / tvl
-    console.log({ rewards })
+
     const roiPerHour = roiPerBlock * blocksPerHour
 
     const roiPerDay = roiPerHour * 24

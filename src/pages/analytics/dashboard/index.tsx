@@ -1,22 +1,77 @@
-import { useBlock, useEthPrice, useNativePrice, useSushiPairs, useTokens } from '../../../services/graph'
+import {
+  useBlock,
+  useDayData,
+  useEthPrice,
+  useFactory,
+  useNativePrice,
+  useSushiPairs,
+  useTokens,
+} from '../../../services/graph'
 import { useMemo, useState } from 'react'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Background from '../../../features/analytics/Background'
-import DashboardChartCard from '../../../features/analytics/Dashboard/DashboardChartCard'
 import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
 import PairList from '../../../features/analytics/Pairs/PairList'
 import PoolList from '../../../features/analytics/Farms/FarmList'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useFuse } from '../../../hooks'
+import { useActiveWeb3React, useFuse } from '../../../hooks'
+import ChartCard from '../../../features/analytics/ChartCard'
+
+const chartTimespans = [
+  {
+    text: '1W',
+    length: 604800,
+  },
+  {
+    text: '1M',
+    length: 2629746,
+  },
+  {
+    text: '1Y',
+    length: 31556952,
+  },
+  {
+    text: 'ALL',
+    length: Infinity,
+  },
+]
 
 export default function Dashboard(): JSX.Element {
   const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
 
+  const { chainId } = useActiveWeb3React()
+
   const block1d = useBlock({ daysAgo: 1 })
+  const block2d = useBlock({ daysAgo: 2 })
   const block1w = useBlock({ daysAgo: 7 })
+
+  // For the charts
+  const exchange = useFactory({ chainId })
+  const exchange1d = useFactory({ block: block1d, chainId })
+  const exchange2d = useFactory({ block: block2d, chainId })
+
+  const dayData = useDayData({ chainId })
+
+  const chartData = useMemo(
+    () => ({
+      liquidity: exchange?.liquidityUSD,
+      liquidityChange: (exchange1d?.liquidityUSD / exchange2d?.liquidityUSD) * 100 - 100,
+      liquidityChart: dayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.liquidityUSD) })),
+
+      volume1d: exchange?.volumeUSD - exchange1d?.volumeUSD,
+      volume1dChange:
+        ((exchange?.volumeUSD - exchange1d?.volumeUSD) / (exchange1d?.volumeUSD - exchange2d?.volumeUSD)) * 100 - 100,
+      volumeChart: dayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
+    }),
+    [exchange, exchange1d, exchange2d, dayData]
+  )
 
   // For Top Pairs
   const pairs = useSushiPairs()
@@ -168,8 +223,24 @@ export default function Dashboard(): JSX.Element {
       <div className="px-4 py-6 space-y-4 lg:px-14">
         <div className="text-2xl font-bold text-high-emphesis">Overview</div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <DashboardChartCard type="liquidity" />
-          <DashboardChartCard type="volume" />
+          <ChartCard
+            header="TVL"
+            subheader="SUSHI AMM"
+            figure={chartData.liquidity}
+            change={chartData.liquidityChange}
+            chart={chartData.liquidityChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
+          <ChartCard
+            header="Volume"
+            subheader="SUSHI AMM"
+            figure={chartData.volume1d}
+            change={chartData.volume1dChange}
+            chart={chartData.volumeChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
         </div>
       </div>
       <DashboardTabs currentType={type} setType={setType} />

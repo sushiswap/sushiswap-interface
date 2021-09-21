@@ -1,6 +1,13 @@
 import React, { useMemo } from 'react'
 import { formatNumber, shortenAddress } from '../../../functions'
-import { useBlock, useNativePrice, useSushiPairs, useTransactions } from '../../../services/graph'
+import {
+  useBlock,
+  useDayData,
+  useNativePrice,
+  usePairDayData,
+  useSushiPairs,
+  useTransactions,
+} from '../../../services/graph'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Background from '../../../features/analytics/Background'
@@ -11,16 +18,38 @@ import { DuplicateIcon } from '@heroicons/react/outline'
 import InfoCard from '../../../features/analytics/InfoCard'
 import Link from 'next/link'
 import { ExternalLink as LinkIcon } from 'react-feather'
-import PairChartCard from '../../../features/analytics/Pairs/Pair/PairChartCard'
 import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
 import { times } from 'lodash'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
+import { useActiveWeb3React } from '../../../hooks'
+import ChartCard from '../../../features/analytics/ChartCard'
+
+const chartTimespans = [
+  {
+    text: '1W',
+    length: 604800,
+  },
+  {
+    text: '1M',
+    length: 2629746,
+  },
+  {
+    text: '1Y',
+    length: 31556952,
+  },
+  {
+    text: 'ALL',
+    length: Infinity,
+  },
+]
 
 export default function Pair() {
   const router = useRouter()
   const id = (router.query.id as string).toLowerCase()
+
+  const { chainId } = useActiveWeb3React()
 
   const [isCopied, setCopied] = useCopyClipboard()
 
@@ -31,7 +60,27 @@ export default function Pair() {
   const pair1d = useSushiPairs({ subset: [id], block: block1d, shouldFetch: !!block1d })?.[0]
   const pair2d = useSushiPairs({ subset: [id], block: block2d, shouldFetch: !!block2d })?.[0]
 
+  const pairDayData = usePairDayData({ pair: id, chainId, shouldFetch: !!id })
+
   const nativePrice = useNativePrice()
+
+  // For the charts
+  const chartData = useMemo(
+    () => ({
+      liquidity: pair?.reserveUSD,
+      liquidityChange: (pair?.reserveUSD / pair1d?.reserveUSD) * 100 - 100,
+      liquidityChart: pairDayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.reserveUSD) })),
+
+      volume1d: pair?.volumeUSD - pair1d?.volumeUSD,
+      volume1dChange: ((pair?.volumeUSD - pair1d?.volumeUSD) / (pair1d?.volumeUSD - pair2d?.volumeUSD)) * 100 - 100,
+      volumeChart: pairDayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
+    }),
+    [pair, pair1d, pair2d, pairDayData]
+  )
 
   // For Transactions
   const transactions = useTransactions({ pairs: [id] })
@@ -145,8 +194,24 @@ export default function Pair() {
           <div className="absolute text-3xl font-bold text-high-emphesis">Pool Overview</div>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <PairChartCard type="liquidity" name={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`} pair={id} />
-          <PairChartCard type="volume" name={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`} pair={id} />
+          <ChartCard
+            header="Liquidity"
+            subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
+            figure={chartData.liquidity}
+            change={chartData.liquidityChange}
+            chart={chartData.liquidityChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
+          <ChartCard
+            header="Volume"
+            subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
+            figure={chartData.volume1d}
+            change={chartData.volume1dChange}
+            chart={chartData.volumeChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {times(2).map((i) => (

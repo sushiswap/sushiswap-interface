@@ -38,16 +38,10 @@ export function useTridentClassicPools(
         fee &&
         twap &&
         FACTORY_ADDRESS[tokenA.chainId]
-        ? computeConstantProductPoolAddress({
-            factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
-            tokenA,
-            tokenB,
-            fee,
-            twap,
-          })
+        ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
         : undefined
     })
-  }, [chainId, pools])
+  }, [pools])
 
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {

@@ -82,7 +82,7 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
             const decimals = 6 - String(reward?.rewardPerDay?.toFixed(0)).length
             return (
               <div key={i} className="text-base whitespace-nowrap">
-                {reward.rewardPerDay.toFixed(decimals > 0 ? decimals : 0)} {reward.token}
+                {reward?.rewardPerDay?.toFixed(decimals > 0 ? decimals : 0)} {reward.token}
               </div>
             )
           })}
