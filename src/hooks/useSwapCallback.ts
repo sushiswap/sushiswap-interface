@@ -36,8 +36,8 @@ import { useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
 // useUserOpenMevETHTip
 import { useUserArcherETHTip } from '../state/user/hooks'
-
-import { ethers } from 'ethers'
+import { id } from '@ethersproject/hash'
+//import { utils } from 'ethers'
 
 export enum SwapCallbackState {
   INVALID,
@@ -456,7 +456,7 @@ export function useSwapCallback(
 
             const signer = await library.getSigner().getAddress()
             // @TODO fix import to just specific package not entire ethers package
-            const signedPayload = await library.getSigner().signMessage(ethers.utils.id(body))
+            const signedPayload = await library.getSigner().signMessage(id(body))
 
             // Restore back behavior
             if (isMetamask) library.provider.isMetaMask = false
@@ -502,7 +502,7 @@ export function useSwapCallback(
               // let the wallet try if we can't estimate the gas
               ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
               ...(value && !isZero(value) ? { value } : {}),
-              // @openemv
+              // @openmev
               // @param !useOpenMev && !archerRelayDeadline
               ...(!useOpenMev && !archerRelayDeadline && !eip1559 ? { gasPrice: 0 } : {}),
             })
@@ -522,7 +522,7 @@ export function useSwapCallback(
               const common = new Common({
                 chain,
                 hardfork: 'berlin',
-                // @openemv
+                // @openmev
                 eips: eip1559 ? [1559] : [],
               })
               const txParams = {
@@ -582,7 +582,7 @@ export function useSwapCallback(
 
           return (
             signedTxPromise
-              // @openemv
+              // @openmev
               // @note make async
               .then(async ({ signedTx, fullTx }) => {
                 const hash = keccak256(signedTx)
@@ -653,7 +653,7 @@ export function useSwapCallback(
       },
       error: null,
     }
-    // @openemev
+    // @openmev
     // @param useOpenMev
   }, [
     trade,
