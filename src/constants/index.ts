@@ -57,7 +57,7 @@ export const BLOCKED_ADDRESSES: string[] = [
   '0x7Db418b5D567A4e0E8c59Ad71BE1FcE48f3E6107',
   '0x72a5843cc08275C8171E582972Aa4fDa8C397B2A',
   '0x7F19720A857F834887FC9A7bC0a0fBe7Fc7f8102',
-  '0x9f4cda013e354b8fc285bf4b9a60460cee7f7ea9'
+  '0x9f4cda013e354b8fc285bf4b9a60460cee7f7ea9',
 ]
 
 export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {

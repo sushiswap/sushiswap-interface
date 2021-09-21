@@ -125,21 +125,20 @@ export default function Swap() {
   const [archerETHTip] = useUserArcherETHTip()
   const [archerGasPrice] = useUserArcherGasPrice()
 
- /** @openmev start */
+  /** @openmev start */
   const [useOpenMev] = useUserOpenMevRelay()
- //const [openmevETHTip] = useUserOpenMevETHTip()
- // const [openmevGasPrice] = useUserOpenMevGasPrice()
+  //const [openmevETHTip] = useUserOpenMevETHTip()
+  // const [openmevGasPrice] = useUserOpenMevGasPrice()
 
   // archer
   const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
   // const doArcher = archerRelay !== undefined && useArcher
   const doArcher = undefined
 
-
   const openmevRelay = chainId ? OPENMEV_RELAY_URI?.[chainId] : undefined
- 
+
   const doOpenMev = !doArcher && openmevRelay !== undefined && useOpenMev
- /** @openmev end */
+  /** @openmev end */
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
   const {

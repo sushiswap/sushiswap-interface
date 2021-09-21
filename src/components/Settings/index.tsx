@@ -48,7 +48,6 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
 
   const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMevRelay()
 
-
   return (
     <div className="relative flex" ref={node}>
       <div
@@ -109,7 +108,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </div>
-           {chainId == ChainId.MAINNET && (
+            {chainId == ChainId.MAINNET && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
@@ -185,5 +184,3 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
     </div>
   )
 }
-
-

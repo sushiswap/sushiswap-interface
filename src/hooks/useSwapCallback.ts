@@ -35,7 +35,7 @@ import { useMemo } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
 // useUserOpenMevETHTip
-import { useUserArcherETHTip,  } from '../state/user/hooks'
+import { useUserArcherETHTip } from '../state/user/hooks'
 
 import { ethers } from 'ethers'
 
@@ -166,7 +166,7 @@ export function useSwapCallArguments(
     // @openmev
     // @param openmevETHTip
     archerETHTip,
-   // openmevETHTip,
+    // openmevETHTip,
     argentWalletContract,
     chainId,
     deadline,

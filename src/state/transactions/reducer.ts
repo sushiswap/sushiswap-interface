@@ -10,7 +10,7 @@ import { createReducer } from '@reduxjs/toolkit'
 
 const now = () => new Date().getTime()
 
-// @openmev 
+// @openmev
 export interface TransactionDetails {
   hash: string
   approval?: { tokenAddress: string; spender: string }
