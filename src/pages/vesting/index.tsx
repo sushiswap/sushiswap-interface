@@ -192,8 +192,32 @@ const ProtocolVesting = () => {
     }
   }, [attempting, claimConfirmed, claimSubmitted, isOpen, toggleClaimModal])
 
+  const [totalLocked, setTotalLocked] = useState<string>()
+  useEffect(() => {
+    const fetchLockup = async () => {
+      if (account) {
+        fetch(
+          'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/amounts-protocols-10959148-12171394.json'
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            // console.log('vesting:', data)
+            const userLockedAmount = data[account.toLowerCase()] ? data[account.toLowerCase()] : '0'
+            const userLocked = Fraction.from(BigNumber.from(userLockedAmount), BigNumber.from(10).pow(18)).toString()
+            setTotalLocked(userLocked)
+            // console.log('userLocked:', userLocked)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
+      }
+      return []
+    }
+    fetchLockup()
+  }, [account])
+
   // remove once treasury signature passed
-  const pendingTreasurySignature = false
+  const pendingTreasurySignature = true
 
   return (
     <div className="flex flex-col gap-3 md:max-w-[400px]">
@@ -208,7 +232,17 @@ const ProtocolVesting = () => {
             <div className="font-bold text-white text-[36px]">
               {unclaimedAmount?.toFixed(4, { groupSeparator: ',' } ?? {})}
             </div>
-            <div className="text-sm text-secondary">{i18n._(t`Pending Treasury Transfer`)}</div>
+            {account ? (
+              <div className="text-sm text-secondary">
+                {totalLocked ? (
+                  i18n._(t`Historical Total Locked: ${formatNumber(totalLocked)} SUSHI`)
+                ) : (
+                  <Dots>{i18n._(t`Historical Total Locked: Fetching Total`)}</Dots>
+                )}
+              </div>
+            ) : (
+              <div className="text-sm text-secondary">{i18n._(t`Historical Total Locked: Connect Wallet`)}</div>
+            )}
           </div>
 
           <Button
