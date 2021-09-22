@@ -3994,10 +3994,22 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.3.tgz#3a8d7b030e60422d0b760ee8ef87f2b296ee6319"
   integrity sha512-7I/CKjzTB0TYvpk/FEopHVGVcaZFGXlsifa2SB7AyOBdu4jPYf1JPyJH89iKZI4JRAIB7Qf1Gd38ow3lTp39rg==
 
-"@sushiswap/core-sdk@0.1.0", "@sushiswap/core-sdk@^0.1.0", "@sushiswap/core-sdk@latest":
+"@sushiswap/core-sdk@0.1.0", "@sushiswap/core-sdk@latest":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-0.1.0.tgz#a178549ab8d18d99a5d1a57978265ebaed2a1b87"
   integrity sha512-vtaPhsWZvpvl5Pf943UQ7ZK8774IzszouN0nqylTgEJn2R4gdX5u0t9zowt0j6tjhj1V/mFFPXwkZUrvFWfAhA==
+  dependencies:
+    big.js "^6.1.0"
+    decimal.js-light "^2.5.0"
+    jsbi "^3.1.0"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.0"
+    toformat "^2.0.0"
+
+"@sushiswap/core-sdk@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-0.1.2.tgz#d6ae5d252bb603b2664f119988da50d96d0fff01"
+  integrity sha512-z7ks+cVG8nH5jiHMtZp4HzdDcnSLEm/Pd+aNav1ZjfgKrsVNNSAs6a6tjoEvK7GRj6XhM4RFyV772y4mIAkxjQ==
   dependencies:
     big.js "^6.1.0"
     decimal.js-light "^2.5.0"
@@ -4035,15 +4047,22 @@
   dependencies:
     "@sushiswap/core-sdk" "0.1.0"
 
-"@sushiswap/trident-sdk@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-0.1.2.tgz#897c1f07d703535bfff5621c30882c690e04b639"
-  integrity sha512-Gng4Ly4KoT2ixweL+gaVjXnjmnQRC3GBbPBkaR5O6DlS+hy04nA/KjzEZL8r+4He8MCvxixG/2+PSKT9/VW8WA==
+"@sushiswap/trident-sdk@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-0.1.3.tgz#35b31bb235ee36341f59ddc50a23aeda69b93b05"
+  integrity sha512-2sZMVkgKLbFtE4/x+hfPV2dg0SEYrbTLJzl8X/KXnD0sTTImJdBPat4Pn2fwktjyPR9MakzYNeWgHo2JuEBd5A==
   dependencies:
     "@sushiswap/core-sdk" latest
     "@sushiswap/trident" latest
 
-"@sushiswap/trident@1.0.0-canary.3", "@sushiswap/trident@latest":
+"@sushiswap/trident@1.0.0-canary.5":
+  version "1.0.0-canary.5"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.5.tgz#c6f3d025928dd21fae95d58f87fae31cdbdbccb7"
+  integrity sha512-iaIiGaNobuNwSKoa3Le7oQJnpOv6lvKMiQpkr7XhrL54URmvd8aHe7WnPQh4v7/eh09nex0KhzkhaI2C5ToqUA==
+  dependencies:
+    "@sushiswap/core-sdk" "^0.1.2"
+
+"@sushiswap/trident@latest":
   version "1.0.0-canary.3"
   resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.3.tgz#4db4882aad79fefd4bcc30208bcca3631e3836a4"
   integrity sha512-wCu/uhxsIfUx5yqepDTPZbnfzLJppXCRzsBGVV5RVk1i1Ce0D4TMgLRJHCir7bk5WT1X9RwMl7lsxqzJC8HpUQ==

@@ -11,7 +11,7 @@ import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 import { useIndependentAssetInputs } from '../context/hooks/useIndependentAssetInputs'
 import { usePoolDetails } from '../context/hooks/usePoolDetails'
-import { usePoolCreateExecute } from '../context/hooks/usePoolCreateExecute'
+import { useClassicPoolCreateExecute } from '../context/hooks/useClassicPoolCreateExecute'
 import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
 import { PoolType } from '../types'
 
@@ -24,7 +24,7 @@ const AddTransactionReviewModal: FC = () => {
     currencies: [selectedPoolCurrencies],
   } = useIndependentAssetInputs()
   const { price } = usePoolDetails(parsedAmounts)
-  const { classicExecute, weightedExecute, concentratedExecute, hybridExecute } = usePoolCreateExecute()
+  const { execute } = useClassicPoolCreateExecute()
   const {
     poolType: [selectedPoolType],
   } = useSetupPoolProperties()
@@ -111,19 +111,7 @@ const AddTransactionReviewModal: FC = () => {
               <Divider />
             </>
           )}
-          <Button
-            color="gradient"
-            size="lg"
-            onClick={
-              selectedPoolType === PoolType.ConstantProduct
-                ? classicExecute
-                : selectedPoolType === PoolType.Weighted
-                ? weightedExecute
-                : selectedPoolType === PoolType.Hybrid
-                ? hybridExecute
-                : concentratedExecute
-            }
-          >
+          <Button color="gradient" size="lg" onClick={execute}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`Confirm Pool Creation`)}
             </Typography>

@@ -30,6 +30,7 @@ import Alert from '../../../../components/Alert'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 import TransactionReviewStandardModal from '../../../../features/trident/add/classic/TransactionReviewStandardModal'
 import TransactionReviewZapModal from '../../../../features/trident/add/classic/TransactionReviewZapModal'
+import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -93,6 +94,7 @@ const AddClassic = () => {
       </div>
 
       <ModeToggle onChange={() => {}} />
+      <FixedRatioHeader />
 
       {poolState === ConstantProductPoolState.NOT_EXISTS ? (
         <div className="px-5 pt-5">

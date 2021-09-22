@@ -83,7 +83,7 @@ export const useClassicStandardAddExecute = () => {
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
         const estimate = router.estimateGas.addLiquidity
         const method = router.addLiquidity
-        const args = [liquidityInput, '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a', 1, encoded]
+        const args = [liquidityInput, pool?.liquidityToken.address, 1, encoded]
         const value = parsedAmountA.currency.isNative
           ? { value: amountsMin[0].toString() }
           : parsedAmountB.currency.isNative

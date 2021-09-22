@@ -17,7 +17,7 @@ import { useCallback, useMemo } from 'react'
 import { useIndependentAssetInputs } from './useIndependentAssetInputs'
 import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
 
-export const usePoolCreateExecute = () => {
+export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const masterDeployer = useMasterDeployerContract()
@@ -62,7 +62,7 @@ export const usePoolCreateExecute = () => {
 
     // Adding liquidity data
     const indexOfNative = parsedAmounts.findIndex((el) => el.currency.isNative)
-    const value = indexOfNative ? { value: parsedAmounts[indexOfNative].quotient.toString() } : {}
+    const value = indexOfNative > 0 ? { value: parsedAmounts[indexOfNative].quotient.toString() } : {}
     const liquidityInput = await Promise.all(
       parsedAmounts.map(async (el, index) => ({
         token: el.currency.wrapped.address,

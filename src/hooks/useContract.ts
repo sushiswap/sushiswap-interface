@@ -175,11 +175,9 @@ export function useTimelockContract(): Contract | null {
   return useContract(chainId && TIMELOCK_ADDRESS[chainId], TIMELOCK_ABI, false)
 }
 
-// TODO ramin hardcoded
 export function useBentoBoxContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { abi, address } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.BentoBoxV1
-  return useContract(address, abi, withSignerIfPossible)
+  return useContract(chainId && BENTOBOX_ADDRESS[chainId], BENTOBOX_ABI, withSignerIfPossible)
 }
 
 export function useChainlinkOracle(): Contract | null {
@@ -222,21 +220,18 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
 
 // TODO Ramin: kovan hardcoded
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
   const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.TridentRouter
   return useContract(address, abi, withSignerIfPossible)
 }
 
 // TODO Ramin: kovan hardcoded
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
   const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.MasterDeployer
   return useContract(address, abi, withSignerIfPossible)
 }
 
 // TODO Ramin: kovan hardcoded
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React()
   const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory
   return useContract(address, abi, withSignerIfPossible)
 }

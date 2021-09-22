@@ -77,7 +77,7 @@ const ClassicDepositAssets: FC = () => {
                 ) : error ? (
                   error
                 ) : (
-                  i18n._(t`Confirm Deposit`)
+                  i18n._(t`Review & Confirm`)
                 )
 
                 return (
