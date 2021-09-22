@@ -5,14 +5,14 @@ import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
 import Link from 'next/link'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Pool } from '../types'
+import { PoolAtomType, PoolType } from '../types'
 import { POOL_TYPES } from '../constants'
 import { toHref } from '../../../hooks/useTridentPools'
 import { classNames } from '../../../functions'
-import { ConstantProductPool, PoolType } from '@sushiswap/sdk'
+import { ConstantProductPool } from '@sushiswap/trident-sdk'
 
 interface PoolCardProps {
-  pool: Pool
+  pool: PoolAtomType
   link: string
 }
 

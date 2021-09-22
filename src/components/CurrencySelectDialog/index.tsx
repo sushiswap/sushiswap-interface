@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useMemo } from 'react'
-import { Currency } from '@sushiswap/sdk'
+import React, { FC, useCallback, useMemo, useState } from 'react'
+import { Currency } from '@sushiswap/core-sdk'
 import Button from '../Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -11,13 +11,7 @@ import { useAllTokenBalances, useCurrencyBalances, useTokenBalance } from '../..
 import { useAllTokens, useToken } from '../../hooks/Tokens'
 import loadingCircle from '../../animation/loading-circle.json'
 import Lottie from 'lottie-react'
-import { atom, useRecoilState, useRecoilValue } from 'recoil'
 import { isValidAddress } from '@walletconnect/utils'
-
-const currencySelectDialogSearchAtom = atom<string>({
-  key: 'currencySelectDialogSearchAtom',
-  default: null,
-})
 
 interface ProvidedCurrenciesProps {
   currencies: Currency[]
@@ -33,7 +27,7 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
       {balances.map((balance, index) => (
         <div
           className="flex justify-between items-center p-5 cursor-pointer"
-          onClick={() => handleSelect(balance?.currency)}
+          onClick={() => balance && handleSelect(balance.currency)}
           key={index}
         >
           <div className="flex items-center gap-1.5">
@@ -55,11 +49,11 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
 
 interface AllCurrenciesProps {
   handleSelect: (x: Currency) => void
+  search: string
 }
 
-const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect }) => {
+const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
   const { account } = useActiveWeb3React()
-  const search = useRecoilValue(currencySelectDialogSearchAtom)
   const balances = useAllTokenBalances()
   const tokens = useAllTokens()
 
@@ -135,7 +129,7 @@ interface CurrencySelectDialogProps {
 }
 
 const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currencies = [], onChange, onDismiss }) => {
-  const [search, setSearch] = useRecoilState<string>(currencySelectDialogSearchAtom)
+  const [search, setSearch] = useState<string>()
   const { i18n } = useLingui()
 
   const handleSelect = useCallback(
@@ -170,8 +164,8 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currenc
           {currencies.length === 0 && (
             <div className="rounded border border-gradient-r-blue-pink-dark-1000 border-transparent">
               <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value.toLowerCase())}
+                value={search || ''}
+                onChange={(e) => e.target.value.length > 0 && setSearch(e.target.value.toLowerCase())}
                 className="bg-transparent font-bold h-[54px] w-full px-5"
                 placeholder={i18n._(t`Select name or paste address`)}
               />
@@ -182,7 +176,7 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currenc
       {currencies.length > 0 ? (
         <ProvidedCurrencies currencies={currencies} handleSelect={handleSelect} />
       ) : (
-        <AllCurrencies handleSelect={handleSelect} />
+        <AllCurrencies handleSelect={handleSelect} search={search} />
       )}
     </div>
   )

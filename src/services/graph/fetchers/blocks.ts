@@ -1,7 +1,7 @@
 import { blockQuery, blocksQuery, massBlocksQuery } from '../queries'
 import { getUnixTime, startOfHour, subDays, subHours } from 'date-fns'
 
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from '../constants'
 import { request } from 'graphql-request'
 

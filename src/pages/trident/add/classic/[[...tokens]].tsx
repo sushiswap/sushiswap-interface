@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
-import { RecoilRoot, useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
-import { mainInputAtom, poolAtom, zapInputAtom } from '../../../../features/trident/add/classic/context/atoms'
-
-import AddTransactionReviewModalStandard from '../../../../features/trident/add/classic/AddTransactionReviewModal'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import {
+  liquidityModeAtom,
+  poolAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
 import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
@@ -11,7 +13,7 @@ import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapM
 import Link from 'next/link'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
-import { NATIVE } from '@sushiswap/sdk'
+import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import SettingsTab from '../../../../components/Settings'
 import TridentLayout from '../../../../layouts/Trident'
@@ -26,6 +28,9 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import Alert from '../../../../components/Alert'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
+import TransactionReviewStandardModal from '../../../../features/trident/add/classic/TransactionReviewStandardModal'
+import TransactionReviewZapModal from '../../../../features/trident/add/classic/TransactionReviewZapModal'
+import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -39,7 +44,7 @@ const AddClassic = () => {
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
 
@@ -57,15 +62,6 @@ const AddClassic = () => {
     if (!poolBalance) return
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
-
-  const handleLiquidityModeChange = useRecoilCallback(
-    ({ reset }) =>
-      async () => {
-        reset(mainInputAtom)
-        reset(zapInputAtom)
-      },
-    []
-  )
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -97,7 +93,8 @@ const AddClassic = () => {
         <div className="h-2" />
       </div>
 
-      <ModeToggle onChange={handleLiquidityModeChange} />
+      <ModeToggle onChange={() => {}} />
+      <FixedRatioHeader />
 
       {poolState === ConstantProductPoolState.NOT_EXISTS ? (
         <div className="px-5 pt-5">
@@ -110,13 +107,21 @@ const AddClassic = () => {
         </div>
       ) : (
         <>
-          {liquidityMode === LiquidityMode.ZAP && <ClassicZapMode />}
-          {liquidityMode === LiquidityMode.STANDARD && <ClassicStandardMode />}
+          {liquidityMode === LiquidityMode.ZAP && (
+            <>
+              <ClassicZapMode />
+              <TransactionReviewZapModal />
+            </>
+          )}
+          {liquidityMode === LiquidityMode.STANDARD && (
+            <>
+              <ClassicStandardMode />
+              <TransactionReviewStandardModal />
+            </>
+          )}
+          <DepositSubmittedModal />
         </>
       )}
-
-      <AddTransactionReviewModalStandard />
-      <DepositSubmittedModal />
     </div>
   )
 }

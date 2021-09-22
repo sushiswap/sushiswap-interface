@@ -5,7 +5,7 @@ import { plural, t } from '@lingui/macro'
 import { useTokenBalances } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import CurrencyLogo from '../../../../components/CurrencyLogo'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
+import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { classNames } from '../../../../functions'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { Disclosure } from '@headlessui/react'
@@ -13,9 +13,9 @@ import AssetInput from '../../../../components/AssetInput'
 import Checkbox from '../../../../components/Checkbox'
 import TransactionDetails from '../TransactionDetails'
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
-import { amountsSelector, parsedAmountsSelector, poolAtom } from './context/atoms'
-import { attemptingTxnAtom, showReviewAtom } from '../../context/atoms'
-import TridentApproveGate from '../../ApproveButton'
+import { amountsSelector, parsedAmountsSelector } from './context/atoms'
+import { attemptingTxnAtom, poolAtom, showReviewAtom } from '../../context/atoms'
+import TridentApproveGate from '../../TridentApproveGate'
 import Dots from '../../../../components/Dots'
 import Button from '../../../../components/Button'
 import Lottie from 'lottie-react'
@@ -86,7 +86,8 @@ const HybridStandardMode: FC = () => {
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const setShowReview = useSetRecoilState(showReviewAtom)
   const [selected, setSelected] = useState<Token[]>([])
-  const balances = useTokenBalances(account, pool?.tokens)
+  const tokens = useMemo(() => [pool?.token0, pool?.token1], [pool?.token0, pool?.token1])
+  const balances = useTokenBalances(account, tokens)
   const bentoBox = useBentoBoxContract()
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
@@ -99,8 +100,8 @@ const HybridStandardMode: FC = () => {
   )
 
   const unavailableAssets = useMemo(
-    () => pool?.tokens.filter((token) => !availableAssets.some((balance) => balance.currency === token)),
-    [pool?.tokens, availableAssets]
+    () => tokens.filter((token) => !availableAssets.some((balance) => balance.currency === token)),
+    [tokens, availableAssets]
   )
 
   const validInputs = useMemo(() => {
@@ -146,7 +147,7 @@ const HybridStandardMode: FC = () => {
                 </Typography>
                 <div className="flex gap-0.5">
                   <Typography variant="lg" weight={700} className="text-high-emphesis">
-                    <span className="text-blue">{availableAssets.length}</span>/{pool?.tokens.length}
+                    <span className="text-blue">{availableAssets.length}</span>/{tokens.length}
                   </Typography>
                   <ChevronDownIcon className={open ? 'transform rotate-180' : ''} width={24} height={24} />
                 </div>
@@ -181,7 +182,7 @@ const HybridStandardMode: FC = () => {
                 </Typography>
                 <div className="flex gap-0.5">
                   <Typography variant="lg" weight={700} className="text-high-emphesis">
-                    <span className="text-secondary">{unavailableAssets.length}</span>/{pool?.tokens.length}
+                    <span className="text-secondary">{unavailableAssets.length}</span>/{tokens.length}
                   </Typography>
                   <ChevronDownIcon className={open ? 'transform rotate-180' : ''} width={24} height={24} />
                 </div>

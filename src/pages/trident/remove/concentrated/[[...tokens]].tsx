@@ -13,13 +13,13 @@ import { useRouter } from 'next/router'
 import { poolAtom, slippageAtom } from '../../../../features/trident/remove/classic/context/atoms'
 import { poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE, Percent } from '../../../../../../sushiswap-sdk'
+import { NATIVE, Percent } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
+import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
@@ -92,7 +92,7 @@ const RemoveConcentrated = () => {
 
       {/*{liquidityMode === LiquidityMode.ZAP && <ConcentratedMode />}*/}
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewStandardModal />
     </div>
   )
 }

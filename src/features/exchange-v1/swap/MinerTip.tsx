@@ -1,4 +1,4 @@
-import { ChainId, CurrencyAmount, Ether } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, Ether } from '@sushiswap/core-sdk'
 import {
   useUserArcherETHTip,
   useUserArcherGasPrice,

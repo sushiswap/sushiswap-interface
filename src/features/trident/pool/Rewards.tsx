@@ -2,12 +2,12 @@ import React, { FC } from 'react'
 import { useLingui } from '@lingui/react'
 import ListPanel from '../../../components/ListPanel'
 import { SUSHI } from '../../../config/tokens'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../../functions'
 import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import { useRecoilValue } from 'recoil'
-import { poolAtom } from './classic/context/atoms'
+import { poolAtom } from '../context/atoms'
 
 const Rewards: FC = () => {
   const { i18n } = useLingui()

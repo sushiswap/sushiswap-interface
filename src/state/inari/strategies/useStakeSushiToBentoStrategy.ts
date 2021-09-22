@@ -1,4 +1,4 @@
-import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
+import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { SUSHI, XSUSHI } from '../../../config/tokens'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import { useEffect, useMemo } from 'react'

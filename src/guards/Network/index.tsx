@@ -2,7 +2,7 @@ import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
 import React, { FC, Fragment } from 'react'
 import { Trans, useLingui } from '@lingui/react'
 
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import HeadlessUIModal from '../../components/Modal/HeadlessUIModal'
 import Image from 'next/image'
 import NavLink from '../../components/NavLink'

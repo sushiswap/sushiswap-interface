@@ -10,12 +10,16 @@ import Chart from '../../../../features/trident/add/concentrated/Chart'
 import PriceRange from '../../../../features/trident/add/concentrated/PriceRange'
 import RangeBlocks from '../../../../features/trident/add/concentrated/RangeBlocks'
 import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
-import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { poolAtom } from '../../../../features/trident/add/classic/context/atoms'
-import { poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
+import {
+  maxPriceAtom,
+  minPriceAtom,
+  poolAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE } from '../../../../../../sushiswap-sdk'
+import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
@@ -24,7 +28,6 @@ import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
 import ConcentratedStandardMode from '../../../../features/trident/add/concentrated/ConcentratedStandardMode'
 import AddTransactionReviewModal from '../../../../features/trident/create/CreateReviewModal'
-import { maxPriceAtom, minPriceAtom } from '../../../../features/trident/add/concentrated/context/atoms'
 
 const AddConcentrated = () => {
   const { account, chainId } = useActiveWeb3React()

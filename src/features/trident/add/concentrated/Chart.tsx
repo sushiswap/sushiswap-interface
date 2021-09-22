@@ -5,7 +5,7 @@ import { t } from '@lingui/macro'
 import { Disclosure } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
 import { useRecoilValue } from 'recoil'
-import { poolAtom } from './context/atoms'
+import { poolAtom } from '../../context/atoms'
 
 const Chart: FC = () => {
   const { i18n } = useLingui()

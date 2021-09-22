@@ -1,7 +1,7 @@
 import React from 'react'
 import { ComponentStory, ComponentMeta } from '@storybook/react'
 
-import { ChainId, WETH9 } from '@sushiswap/sdk'
+import { ChainId, WETH9 } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
 import { PoolType } from '../types'
 import { tryParseAmount } from '../../../functions'
@@ -33,7 +33,7 @@ const Template: ComponentStory<typeof Header> = (args) => {
 export const Pool = Template.bind({})
 Pool.args = {
   pool: {
-    type: PoolType.CLASSIC,
+    type: PoolType.ConstantProduct,
     amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
     tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
     apy: '37.8',
@@ -46,7 +46,7 @@ Pool.args = {
 export const Farm = Template.bind({})
 Farm.args = {
   pool: {
-    type: PoolType.CLASSIC,
+    type: PoolType.ConstantProduct,
     amounts: [tryParseAmount('1000', SUSHI[ChainId.MAINNET]), tryParseAmount('3.66', WETH9[ChainId.MAINNET])],
     tokens: [SUSHI[ChainId.MAINNET], WETH9[ChainId.MAINNET]],
     apy: '37.8',

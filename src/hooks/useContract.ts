@@ -13,23 +13,13 @@ import {
   MINICHEF_ADDRESS,
   MULTICALL2_ADDRESS,
   ROUTER_ADDRESS,
-  STOP_LIMIT_ORDER_ADDRESS,
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
   WNATIVE_ADDRESS,
-} from '@sushiswap/sdk'
-import {
-  address as MASTER_DEPLOYER_ADDRESS,
-  abi as MASTER_DEPLOYER_ABI,
-} from '@sushiswap/trident/deployments/kovan/MasterDeployer.json'
-import {
-  address as CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS,
-  abi as CONSTANT_PRODUCT_POOL_FACTORY_ABI,
-} from '@sushiswap/trident/deployments/kovan/ConstantProductPoolFactory.json'
-import {
-  address as TRIDENT_ROUTER_ADDRESS,
-  abi as TRIDENT_ROUTER_ABI,
-} from '@sushiswap/trident/deployments/kovan/TridentRouter.json'
+  ChainKey,
+} from '@sushiswap/core-sdk'
+import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
+import TRIDENT from '@sushiswap/trident/exports/all.json'
 
 import {
   ARGENT_WALLET_DETECTOR_ABI,
@@ -228,19 +218,20 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
   return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
 }
 
-// TODO ramin: use chainId index here for contract
+// TODO Ramin: kovan hardcoded
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract(TRIDENT_ROUTER_ADDRESS, TRIDENT_ROUTER_ABI, withSignerIfPossible)
+  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.TridentRouter
+  return useContract(address, abi, withSignerIfPossible)
 }
 
-// TODO ramin: use chainId index here for contract
+// TODO Ramin: kovan hardcoded
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
-  console.log(`Masterdeployer ${MASTER_DEPLOYER_ADDRESS}`)
-  return useContract(MASTER_DEPLOYER_ADDRESS, MASTER_DEPLOYER_ABI, withSignerIfPossible)
+  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.MasterDeployer
+  return useContract(address, abi, withSignerIfPossible)
 }
 
-// TODO ramin: use chainId index here for contract
+// TODO Ramin: kovan hardcoded
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
-  console.log(`CPP ${CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS}`)
-  return useContract(CONSTANT_PRODUCT_POOL_FACTORY_ADDRESS, CONSTANT_PRODUCT_POOL_FACTORY_ABI, withSignerIfPossible)
+  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory
+  return useContract(address, abi, withSignerIfPossible)
 }

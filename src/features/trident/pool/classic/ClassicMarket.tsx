@@ -4,7 +4,7 @@ import { t } from '@lingui/macro'
 import ListPanel from '../../../../components/ListPanel'
 import { useLingui } from '@lingui/react'
 import { useRecoilValue } from 'recoil'
-import { poolAtom } from './context/atoms'
+import { poolAtom } from '../../context/atoms'
 
 const ClassicMarket: FC = () => {
   const { i18n } = useLingui()

@@ -4,7 +4,7 @@ import { classNames } from '../../functions'
 import { Input as NumericalInput } from '../Input/Numeric'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Currency, Token } from '@sushiswap/sdk'
+import { Currency, Token } from '@sushiswap/core-sdk'
 
 type RangeInputColor = 'blue' | 'purple'
 

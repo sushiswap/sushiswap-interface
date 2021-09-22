@@ -1,94 +1,39 @@
-import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
-import React, { useMemo } from 'react'
-import { attemptingTxnAtom, noLiquiditySelector, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
-import {
-  formattedAmountsSelector,
-  mainInputAtom,
-  parsedAmountsSelector,
-  poolAtom,
-  secondaryInputSelector,
-  TypedField,
-  typedFieldAtom,
-} from './context/atoms'
-import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useBentoBoxContract } from '../../../../hooks'
+import React from 'react'
+import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import AssetInput from '../../../../components/AssetInput'
-import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
 import TransactionDetails from './../TransactionDetails'
-import { ZERO } from '@sushiswap/sdk'
-import { classNames, maxAmountSpend } from '../../../../functions'
+import { classNames } from '../../../../functions'
 import { t } from '@lingui/macro'
-import { useCurrencyBalances } from '../../../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
-import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
-import TridentApproveGate from '../../ApproveButton'
+import TridentApproveGate from '../../TridentApproveGate'
 import Button from '../../../../components/Button'
 import Typography from '../../../../components/Typography'
 import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import Dots from '../../../../components/Dots'
+import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
-  const [poolState, pool] = useRecoilValue(poolAtom)
-  const [parsedAmountA, parsedAmountB] = useRecoilValue(parsedAmountsSelector)
+  const [, pool] = useRecoilValue(poolAtom)
   const bentoBox = useBentoBoxContract()
+  const {
+    mainInput: [, setMainInput],
+    secondaryInput: [, setSecondaryInput],
+    formattedAmounts,
+    parsedAmounts: [parsedAmountA, parsedAmountB],
+    typedField: [, setTypedField],
+    onMax,
+    isMax,
+    error,
+  } = useDependentAssetInputs()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const setMainInput = useSetRecoilState(mainInputAtom)
-  const setSecondaryInput = useSetRecoilState(secondaryInputSelector)
-  const formattedAmounts = useRecoilValue(formattedAmountsSelector)
-  const setTypedField = useSetRecoilState(typedFieldAtom)
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
-  const balances = useCurrencyBalances(account ?? undefined, [pool?.token0, pool?.token1])
-  const noLiquidity = useRecoilValue(noLiquiditySelector)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-
-  const usdcA = useUSDCValue(balances?.[0])
-  const usdcB = useUSDCValue(balances?.[1])
-
-  const onMax = useRecoilCallback(
-    ({ set }) =>
-      async () => {
-        if (!balances || !usdcA || !usdcB) return
-
-        if (!noLiquidity) {
-          usdcA?.lessThan(usdcB)
-            ? set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-            : set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
-        } else {
-          set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-          set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
-        }
-      },
-    [balances, noLiquidity, usdcA, usdcB]
-  )
-
-  const isMax = useMemo(() => {
-    if (!balances || !usdcA || !usdcB) return false
-
-    if (!noLiquidity) {
-      return usdcA?.lessThan(usdcB)
-        ? parsedAmountA?.equalTo(maxAmountSpend(balances[0]))
-        : parsedAmountB?.equalTo(maxAmountSpend(balances[1]))
-    } else {
-      return parsedAmountA?.equalTo(maxAmountSpend(balances[0])) && parsedAmountB?.equalTo(maxAmountSpend(balances[1]))
-    }
-  }, [balances, noLiquidity, parsedAmountA, parsedAmountB, usdcA, usdcB])
-
-  // TODO ramin: balance check for bento
-  let error = !account
-    ? i18n._(t`Connect Wallet`)
-    : poolState === ConstantProductPoolState.INVALID
-    ? i18n._(t`Invalid pair`)
-    : !parsedAmountA?.greaterThan(ZERO) || !parsedAmountB?.greaterThan(ZERO)
-    ? i18n._(t`Enter an amount`)
-    : parsedAmountA && balances[0]?.lessThan(parsedAmountA)
-    ? i18n._(t`Insufficient ${pool?.token0?.symbol} balance`)
-    : parsedAmountB && balances?.length && balances[1]?.lessThan(parsedAmountB)
-    ? i18n._(t`Insufficient ${pool?.token1?.symbol} balance`)
-    : ''
 
   return (
     <>

@@ -2,7 +2,7 @@ import { Field, MeowshiState } from '../../pages/tools/meowshi'
 import React, { FC } from 'react'
 import { SUSHI, XSUSHI } from '../../config/tokens'
 
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import Image from 'next/image'
 import Input from '../../components/Input'
 import Typography from '../../components/Typography'

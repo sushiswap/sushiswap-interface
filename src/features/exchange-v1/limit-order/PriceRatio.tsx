@@ -1,4 +1,4 @@
-import { Currency, Price } from '@sushiswap/sdk'
+import { Currency, Price } from '@sushiswap/core-sdk'
 import { FC, useState } from 'react'
 import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../../state/limit-order/hooks'
 

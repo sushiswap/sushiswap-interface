@@ -1,4 +1,4 @@
-import { CurrencyAmount, KASHI_ADDRESS, Token, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/sdk'
+import { CurrencyAmount, KASHI_ADDRESS, Token, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -162,13 +162,9 @@ export function useBentoBalances2(account: string, tokens: Token[]): Record<stri
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
   const currentTransactionStatus = useTransactionStatus()
-  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>()
+  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>({})
 
   const fetch = useCallback(async () => {
-    console.log(
-      account,
-      tokens.map((el) => el.address)
-    )
     const balances = await boringHelperContract.getBalances(
       account,
       tokens.map((el) => el.address)
@@ -190,7 +186,7 @@ export function useBentoBalances2(account: string, tokens: Token[]): Record<stri
     fetch()
   }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, tokens])
 
-  return balances
+  return useMemo(() => balances, [balances])
 }
 
 export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {

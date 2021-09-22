@@ -1,44 +1,52 @@
-import React, { FC } from 'react'
-import Typography from '../../../components/Typography'
+import React, { FC, useCallback } from 'react'
+import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import AssetSelect from '../../../components/AssetSelect'
-import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { feeTierAtom, selectedPoolCurrenciesAtom } from './atoms'
-import { Currency } from '@sushiswap/sdk'
-import ToggleButtonGroup from '../../../components/ToggleButton'
-import Button from '../../../components/Button'
+import AssetSelect from '../../../../components/AssetSelect'
+import ToggleButtonGroup from '../../../../components/ToggleButton'
+import Button from '../../../../components/Button'
 import { PlusIcon } from '@heroicons/react/solid'
-import { showReviewAtom } from '../context/atoms'
+import { useSetupPoolProperties } from '../../context/hooks/useSetupPoolProperties'
+import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useRecoilState } from 'recoil'
+import { poolCreationPageAtom } from '../../context/atoms'
+import { HybridPoolState, useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
 
 const HybridSetupPool: FC = () => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const selectedPoolCurrencies = useRecoilValue(selectedPoolCurrenciesAtom)
-  const [feeTier, setFeeTier] = useRecoilState(feeTierAtom)
-  const setShowReview = useSetRecoilState(showReviewAtom)
+  const [page, setPage] = useRecoilState(poolCreationPageAtom)
+  const {
+    feeTier: [feeTier, setFeeTier],
+  } = useSetupPoolProperties()
 
-  const handleSelectedPoolTokens = useRecoilCallback<[Currency, number], void>(
-    ({ snapshot, set }) =>
-      async (currency, index) => {
-        const currencies = [...(await snapshot.getPromise(selectedPoolCurrenciesAtom))]
-        currencies[index] = currency
-        set(selectedPoolCurrenciesAtom, currencies)
-      },
-    []
+  const {
+    currencies: [currencies, setCurrencies],
+    numberOfInputs: [numberOfInputs, setNumberOfInputs],
+  } = useIndependentAssetInputs()
+
+  // TODO ramin a = null
+  const [poolState] = useTridentHybridPool(currencies[0], currencies[1], feeTier, null)
+
+  const handleSelectedPoolTokens = useCallback(
+    (currency, index) => {
+      const copy = [...currencies]
+      copy[index] = currency
+      setCurrencies(copy)
+    },
+    [currencies, setCurrencies]
   )
 
-  const onAddToken = useRecoilCallback(
-    ({ snapshot, set }) =>
-      async () => {
-        const currencies = [...(await snapshot.getPromise(selectedPoolCurrenciesAtom))]
-        set(selectedPoolCurrenciesAtom, [...currencies, null])
-      },
-    []
-  )
-
-  const error = [selectedPoolCurrencies.some((el) => !el) ? 'tokens' : null, !feeTier ? 'fee tier' : null].filter(
-    (el) => el
-  )
+  const error = !account
+    ? i18n._(t`Connect Wallet`)
+    : !currencies.every((el) => el)
+    ? i18n._(t`Select tokens`)
+    : !feeTier
+    ? i18n._(t`Select fee tier`)
+    : poolState === HybridPoolState.EXISTS
+    ? i18n._(t`Pool already exists`)
+    : ''
 
   return (
     <div className="flex flex-col gap-10 p-5">
@@ -47,10 +55,10 @@ const HybridSetupPool: FC = () => {
           {i18n._(t`Select Pool Tokens`)}
         </Typography>
         <div className="flex flex-col gap-2 z-10">
-          {selectedPoolCurrencies.map((cur, index) => (
+          {currencies.map((cur, index) => (
             <div className="flex flex-col relative" key={index}>
               <AssetSelect
-                value={selectedPoolCurrencies[index]}
+                value={currencies[index]}
                 onSelect={(cur) => handleSelectedPoolTokens(cur, index)}
                 header={
                   <Typography variant="xs" className="text-secondary tracking-[2.04px] mb-2 ml-4" weight={700}>
@@ -58,10 +66,7 @@ const HybridSetupPool: FC = () => {
                   </Typography>
                 }
               />
-              <div
-                className="absolute right-2 z-0"
-                style={{ bottom: index === selectedPoolCurrencies.length - 1 ? -58 : -56 }}
-              >
+              <div className="absolute right-2 z-0" style={{ bottom: index === currencies.length - 1 ? -58 : -56 }}>
                 <div className="border-[3px] border-dark-900 bg-dark-800 rounded-full w-[64px] h-[64px] flex items-center justify-center text-high-emphesis">
                   <PlusIcon width={46} height={46} />
                 </div>
@@ -69,12 +74,12 @@ const HybridSetupPool: FC = () => {
             </div>
           ))}
 
-          <div className="flex px-3 py-3 gap-2 cursor-pointer" onClick={onAddToken}>
+          <div className="flex px-3 py-3 gap-2 cursor-pointer" onClick={() => setNumberOfInputs(numberOfInputs + 1)}>
             <Typography className="text-blue" weight={700} variant="sm">
               {i18n._(t`Add Another Token`)}
             </Typography>
             <Typography className="text-secondary" weight={700} variant="sm">
-              {i18n._(t`(${10 - selectedPoolCurrencies.length}/10 Remaining)`)}
+              {i18n._(t`(${10 - currencies.length}/10 Remaining)`)}
             </Typography>
           </div>
         </div>
@@ -94,8 +99,8 @@ const HybridSetupPool: FC = () => {
             * This is suggested for most pairs
           </Typography>
         )}
-        <Button disabled={!!error} color="gradient" onClick={() => setShowReview(true)}>
-          {error.length > 0 ? `Select ${error.join(' & ')}` : 'Review & Confirm'}
+        <Button disabled={error.length > 0} color="gradient" onClick={() => setPage(page + 1)}>
+          {error ? error : i18n._(t`Continue`)}
         </Button>
       </div>
     </div>

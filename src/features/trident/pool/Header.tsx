@@ -11,7 +11,8 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 import { poolAtom } from './classic/context/atoms'
-import { ConstantProductPool, PoolType } from '@sushiswap/sdk'
+import { ConstantProductPool } from '@sushiswap/trident-sdk'
+import { PoolType } from '../types'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()

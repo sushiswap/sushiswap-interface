@@ -17,7 +17,7 @@ import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'r
 import { poolAtom } from '../../../../features/trident/add/classic/context/atoms'
 import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE } from '../../../../../../sushiswap-sdk'
+import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'

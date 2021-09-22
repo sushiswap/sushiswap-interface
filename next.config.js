@@ -3,7 +3,7 @@ const runtimeCaching = require('next-pwa/cache')
 
 const linguiConfig = require('./lingui.config.js')
 
-const { ChainId } = require('@sushiswap/sdk')
+const { ChainId } = require('@sushiswap/core-sdk')
 
 const { locales, sourceLocale } = linguiConfig
 

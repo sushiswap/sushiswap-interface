@@ -1,5 +1,5 @@
-import { PoolType } from '@sushiswap/sdk'
 import { ChipColor } from '../../components/Chip'
+import { PoolType } from './types'
 
 export const SORT_OPTIONS = [
   { title: 'APY Highest to Lowest', desc: true },

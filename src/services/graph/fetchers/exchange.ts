@@ -14,7 +14,7 @@ import {
   pairDayDatasQuery,
 } from '../queries'
 
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from '../constants'
 import { pager } from './'
 

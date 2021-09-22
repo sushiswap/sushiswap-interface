@@ -3,13 +3,13 @@ import { useLingui } from '@lingui/react'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import RadioGroup from '../../../components/RadioGroup'
-
-import { pageAtom, selectedPoolTypeAtom } from './atoms'
-import { useRecoilState, useSetRecoilState } from 'recoil'
 import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
 import { classNames } from '../../../functions'
 import Button from '../../../components/Button'
-import { PoolType } from '@sushiswap/sdk'
+import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
+import { useSetRecoilState } from 'recoil'
+import { poolCreationPageAtom } from '../context/atoms'
+import { PoolType } from '../types'
 
 const RadioOption = ({ value, title, description }) => {
   return (
@@ -52,8 +52,11 @@ const RadioOption = ({ value, title, description }) => {
 
 const SelectPoolType: FC = () => {
   const { i18n } = useLingui()
-  const [selectedPoolType, setSelectedPoolType] = useRecoilState(selectedPoolTypeAtom)
-  const setPage = useSetRecoilState(pageAtom)
+  const setPage = useSetRecoilState(poolCreationPageAtom)
+
+  const {
+    poolType: [selectedPoolType, setSelectedPoolType],
+  } = useSetupPoolProperties()
 
   return (
     <div className="flex flex-col p-5 pt-8 gap-5">

@@ -7,7 +7,7 @@ import {
   Token,
   TradeType,
   Trade as V2Trade,
-} from '@sushiswap/sdk'
+} from '@sushiswap/core-sdk'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../../hooks/useApproveCallback'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/exchange-v1/swap/styleds'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'

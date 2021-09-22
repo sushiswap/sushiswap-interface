@@ -1,4 +1,4 @@
-import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
+import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import React, { useMemo } from 'react'
 import { classNames, formatNumber, formatPercent } from '../../functions'
 import { useBar, useBarHistory } from '../../services/graph/hooks/bar'

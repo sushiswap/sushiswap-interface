@@ -12,13 +12,13 @@ import { LiquidityMode } from '../../../../features/trident/types'
 import WeightedUnzapMode from '../../../../features/trident/remove/weighted/WeightedUnzapMode'
 import WeightedStandardMode from '../../../../features/trident/remove/weighted/WeightedStandardMode'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import RemoveTransactionReviewModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
+import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewModal'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
 import { poolAtom, slippageAtom } from '../../../../features/trident/remove/classic/context/atoms'
 import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE, Percent } from '../../../../../../sushiswap-sdk'
+import { NATIVE, Percent } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
@@ -103,7 +103,7 @@ const RemoveWeighted = () => {
         {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
       </>
 
-      <RemoveTransactionReviewModal />
+      <RemoveTransactionReviewStandardModal />
     </div>
   )
 }

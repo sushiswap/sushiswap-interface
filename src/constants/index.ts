@@ -1,4 +1,4 @@
-import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
+import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
 
 export const POOL_DENY = ['14', '29', '45', '30']
 

@@ -4,7 +4,7 @@ import Typography from '../../../../components/Typography'
 import ListPanel from '../../../../components/ListPanel'
 import { t } from '@lingui/macro'
 import { useRecoilValue } from 'recoil'
-import { poolAtom } from '../concentrated/context/atoms'
+import { poolAtom } from '../../context/atoms'
 
 const HybridPoolComposition: FC = () => {
   const { i18n } = useLingui()
@@ -17,7 +17,7 @@ const HybridPoolComposition: FC = () => {
       </Typography>
       <ListPanel
         header={<ListPanel.Header title={i18n._(t`Assets`)} value="$20,000,000.00" />}
-        items={pool?.tokens.map((amount, index) => (
+        items={[pool?.reserve0, pool?.reserve1].map((amount, index) => (
           <ListPanel.CurrencyAmountItem amount={amount} key={index} />
         ))}
       />

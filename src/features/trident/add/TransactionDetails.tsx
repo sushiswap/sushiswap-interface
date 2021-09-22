@@ -4,17 +4,25 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import TransactionDetailsExplanationModal from './TransactionDetailsExplanationModal'
 import { useRecoilValue } from 'recoil'
-import { liquidityMintedSelector, poolAtom, poolShareSelector, priceSelector } from './classic/context/atoms'
-import { currentPoolShareSelector, poolBalanceAtom } from '../context/atoms'
+import { liquidityModeAtom, poolAtom, poolBalanceAtom } from '../context/atoms'
+import { useDependentAssetInputs } from '../context/hooks/useDependentAssetInputs'
+import { usePoolDetails } from '../context/hooks/usePoolDetails'
+import { useZapAssetInput } from '../context/hooks/useZapAssetInput'
+import { LiquidityMode } from '../types'
 
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
-  const liquidityMinted = useRecoilValue(liquidityMintedSelector)
   const poolBalance = useRecoilValue(poolBalanceAtom)
-  const poolTokenPercentage = useRecoilValue(poolShareSelector)
-  const currentPoolShare = useRecoilValue(currentPoolShareSelector)
-  const price = useRecoilValue(priceSelector)
+  const { parsedAmounts } = useDependentAssetInputs()
+
+  // TODO parsedSplitAmounts is still empty
+  const { parsedSplitAmounts } = useZapAssetInput()
+
+  const liquidityMode = useRecoilValue(liquidityModeAtom)
+  const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(
+    liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
+  )
 
   return (
     <div className="flex flex-col gap-4">
@@ -70,7 +78,7 @@ const TransactionDetails: FC = () => {
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis">
             {'<'} {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'} →{' '}
-            <span className="text-green">{poolTokenPercentage?.toSignificant(6) || '0.000'}%</span>
+            <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
           </Typography>
         </div>
         {/*<div className="flex flex-row justify-between">*/}

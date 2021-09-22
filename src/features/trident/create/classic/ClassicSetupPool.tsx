@@ -1,37 +1,50 @@
-import React, { FC } from 'react'
-import Typography from '../../../components/Typography'
+import React, { FC, useCallback } from 'react'
+import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import AssetSelect from '../../../components/AssetSelect'
-import { useRecoilCallback, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { feeTierAtom, selectedPoolCurrenciesAtom } from './atoms'
-import { Currency } from '@sushiswap/sdk'
-import ToggleButtonGroup from '../../../components/ToggleButton'
-import Button from '../../../components/Button'
-import Card from '../../../components/Card'
+import AssetSelect from '../../../../components/AssetSelect'
+import ToggleButtonGroup from '../../../../components/ToggleButton'
+import Button from '../../../../components/Button'
+import Card from '../../../../components/Card'
 import { PlusIcon } from '@heroicons/react/solid'
-import { showReviewAtom } from '../context/atoms'
+import { useActiveWeb3React } from '../../../../hooks'
+import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
+import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
+import { useSetupPoolProperties } from '../../context/hooks/useSetupPoolProperties'
+import { useRecoilState } from 'recoil'
+import { poolCreationPageAtom } from '../../context/atoms'
 
 const ClassicSetupPool: FC = () => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const selectedPoolCurrencies = useRecoilValue(selectedPoolCurrenciesAtom)
-  const [feeTier, setFeeTier] = useRecoilState(feeTierAtom)
-  const setShowReview = useSetRecoilState(showReviewAtom)
+  const [page, setPage] = useRecoilState(poolCreationPageAtom)
+  const {
+    currencies: [currencies, setCurrencies],
+  } = useIndependentAssetInputs()
+  const {
+    feeTier: [feeTier, setFeeTier],
+  } = useSetupPoolProperties()
 
-  const handleSelectedPoolTokens = useRecoilCallback<[Currency, number], void>(
-    ({ snapshot, set }) =>
-      async (currency, index) => {
-        const currencies = [...(await snapshot.getPromise(selectedPoolCurrenciesAtom))]
-        currencies[index] = currency
-        set(selectedPoolCurrenciesAtom, currencies)
-      },
-    []
+  const [poolState] = useTridentClassicPool(currencies[0], currencies[1], feeTier, true)
+
+  const handleSelectedPoolTokens = useCallback(
+    (currency, index) => {
+      const copy = [...currencies]
+      copy[index] = currency
+      setCurrencies(copy)
+    },
+    [currencies, setCurrencies]
   )
 
-  const error = [
-    !selectedPoolCurrencies[0] || !selectedPoolCurrencies[1] ? 'tokens' : null,
-    !feeTier ? 'fee tier' : null,
-  ].filter((el) => el)
+  const error = !account
+    ? i18n._(t`Connect Wallet`)
+    : !currencies[0] || !currencies[1]
+    ? i18n._(t`Select tokens`)
+    : !feeTier
+    ? i18n._(t`Select fee tier`)
+    : poolState === ConstantProductPoolState.EXISTS
+    ? i18n._(t`Pool already exists`)
+    : ''
 
   return (
     <div className="flex flex-col gap-10 p-5">
@@ -53,7 +66,7 @@ const ClassicSetupPool: FC = () => {
         </Typography>
         <div className="flex flex-col gap-2 relative z-10">
           <AssetSelect
-            value={selectedPoolCurrencies[0]}
+            value={currencies[0]}
             onSelect={(cur) => handleSelectedPoolTokens(cur, 0)}
             header={
               <Typography variant="xs" className="text-secondary tracking-[2.04px] mb-2 ml-4" weight={700}>
@@ -67,7 +80,7 @@ const ClassicSetupPool: FC = () => {
             </div>
           </div>
           <AssetSelect
-            value={selectedPoolCurrencies[1]}
+            value={currencies[1]}
             onSelect={(cur) => handleSelectedPoolTokens(cur, 1)}
             header={
               <Typography variant="xs" className="text-secondary tracking-[2.04px] mb-2 ml-4" weight={700}>
@@ -93,8 +106,8 @@ const ClassicSetupPool: FC = () => {
           </Typography>
         )}
 
-        <Button disabled={!!error} color="gradient" onClick={() => setShowReview(true)}>
-          {error.length > 0 ? `Select ${error.join(' & ')}` : 'Review & Confirm'}
+        <Button disabled={error.length > 0} color="gradient" onClick={() => setPage(page + 1)}>
+          {error ? error : i18n._(t`Continue`)}
         </Button>
       </div>
     </div>

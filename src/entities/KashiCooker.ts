@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { ChainId, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, WNATIVE } from '@sushiswap/core-sdk'
 import { getProviderOrSigner, getSigner } from '../functions/contract'
 
 import { AddressZero } from '@ethersproject/constants'

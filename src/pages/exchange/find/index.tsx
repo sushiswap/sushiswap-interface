@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Ether, JSBI, NATIVE, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Ether, JSBI, NATIVE, Token } from '@sushiswap/core-sdk'
 import { PairState, useV2Pair } from '../../../hooks/useV2Pairs'
 import React, { useCallback, useEffect, useState } from 'react'
 
