@@ -55,13 +55,15 @@ export const useClassicStandardRemoveExecute = () => {
         )
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
-        const estimate = router.estimateGas.burnLiquidity
-        const method = router.burnLiquidity
-        const args = [pool.liquidityToken.address, liquidityAmount.quotient.toString(), encoded, liquidityOutput]
 
         try {
           setAttemptingTxn(true)
-          const tx = await method(...args)
+          const tx = await router.burnLiquidity(
+            pool.liquidityToken.address,
+            liquidityAmount.quotient.toString(),
+            encoded,
+            liquidityOutput
+          )
 
           setTxHash(tx.hash)
           setShowReview(false)

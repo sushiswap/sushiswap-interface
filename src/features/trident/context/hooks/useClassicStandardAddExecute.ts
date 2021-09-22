@@ -81,9 +81,6 @@ export const useClassicStandardAddExecute = () => {
         ]
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
-        const estimate = router.estimateGas.addLiquidity
-        const method = router.addLiquidity
-        const args = [liquidityInput, pool?.liquidityToken.address, 1, encoded]
         const value = parsedAmountA.currency.isNative
           ? { value: amountsMin[0].toString() }
           : parsedAmountB.currency.isNative
@@ -92,11 +89,7 @@ export const useClassicStandardAddExecute = () => {
 
         try {
           setAttemptingTxn(true)
-          const estimatedGasLimit = await estimate(...args, value)
-          const tx = await method(...args, {
-            ...value,
-            gasLimit: calculateGasMargin(estimatedGasLimit),
-          })
+          const tx = await router.addLiquidity(liquidityInput, pool?.liquidityToken.address, 1, encoded, value)
 
           setTxHash(tx.hash)
           setShowReview(false)

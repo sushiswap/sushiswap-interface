@@ -62,18 +62,11 @@ export const useClassicZapAddExecute = () => {
         ]
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
-        const estimate = router.estimateGas.addLiquidity
-        const method = router.addLiquidity
-        const args = [liquidityInput, pool.liquidityToken.address, 1, encoded]
         const value = parsedAmount.currency.isNative ? { value: amountMin.toString() } : {}
 
         try {
           setAttemptingTxn(true)
-          const estimatedGasLimit = await estimate(...args, value)
-          const tx = await method(...args, {
-            ...value,
-            gasLimit: calculateGasMargin(estimatedGasLimit),
-          })
+          const tx = await router.addLiquidity(liquidityInput, pool.liquidityToken.address, 1, encoded, value)
 
           setTxHash(tx.hash)
           setShowReview(false)
