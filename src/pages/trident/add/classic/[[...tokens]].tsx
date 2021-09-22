@@ -1,3 +1,4 @@
+import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import React, { useEffect } from 'react'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import {
@@ -6,16 +7,22 @@ import {
   poolBalanceAtom,
   totalSupplyAtom,
 } from '../../../../features/trident/context/atoms'
+
+import Alert from '../../../../components/Alert'
 import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
 import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
+import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
+import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 import Link from 'next/link'
 import { LiquidityMode } from '../../../../features/trident/types'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import SettingsTab from '../../../../components/Settings'
+import TransactionReviewStandardModal from '../../../../features/trident/add/classic/TransactionReviewStandardModal'
+import TransactionReviewZapModal from '../../../../features/trident/add/classic/TransactionReviewZapModal'
 import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
@@ -25,12 +32,6 @@ import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import Alert from '../../../../components/Alert'
-import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
-import TransactionReviewStandardModal from '../../../../features/trident/add/classic/TransactionReviewStandardModal'
-import TransactionReviewZapModal from '../../../../features/trident/add/classic/TransactionReviewZapModal'
-import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -45,6 +46,7 @@ const AddClassic = () => {
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
   const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
+
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
 

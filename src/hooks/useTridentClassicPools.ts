@@ -1,12 +1,12 @@
 import { ChainId, ChainKey, Currency, CurrencyAmount, FACTORY_ADDRESS } from '@sushiswap/core-sdk'
-import TRIDENT from '@sushiswap/trident/exports/all.json'
-
 import { ConstantProductPool, Fee, computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
+
 import { Interface } from '@ethersproject/abi'
-import abi from '../constants/abis/constant-product-pool.json'
+import TRIDENT from '@sushiswap/trident/exports/all.json'
+import { abi } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
+import { useActiveWeb3React } from './index'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
-import { useActiveWeb3React } from './index'
 
 const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(abi)
 
@@ -31,13 +31,30 @@ export function useTridentClassicPools(
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
 
+      console.log(
+        {
+          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+          tokenA,
+          tokenB,
+          fee,
+          twap,
+        },
+        computeConstantProductPoolAddress({
+          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+          tokenA,
+          tokenB,
+          fee,
+          twap,
+        })
+      )
+
       return tokenA &&
         tokenB &&
         tokenA.chainId === tokenB.chainId &&
         !tokenA.equals(tokenB) &&
         fee &&
         twap &&
-        FACTORY_ADDRESS[tokenA.chainId]
+        TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address
         ? computeConstantProductPoolAddress({
             factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
             tokenA,
@@ -48,6 +65,9 @@ export function useTridentClassicPools(
         : undefined
     })
   }, [chainId, pools])
+
+  console.log({ poolAddresses })
+
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {
     return results.map((result, i) => {
