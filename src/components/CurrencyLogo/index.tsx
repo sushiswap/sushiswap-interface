@@ -149,7 +149,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
     if (currency.isToken) {
       const defaultUrls = [...getCurrencyLogoUrls(currency)]
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, ...defaultUrls, unknown]
+        return [...defaultUrls, ...uriLocations, unknown]
       }
       return defaultUrls
     }
