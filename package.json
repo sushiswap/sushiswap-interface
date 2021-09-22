@@ -78,6 +78,7 @@
     "@testing-library/react": "^12.1.0",
     "@transak/transak-sdk": "^1.0.28",
     "@types/node": "^15.12.2",
+    "@types/qs": "^6.9.7",
     "@types/react": "^17.0.11",
     "@uniswap/token-lists": "1.0.0-beta.24",
     "@visx/axis": "^1.17.1",
