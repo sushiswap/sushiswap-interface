@@ -19,7 +19,7 @@ import { request } from 'graphql-request'
 export const EXCHANGE = {
   [ChainId.MAINNET]: 'sushiswap/exchange',
   [ChainId.XDAI]: 'sushiswap/xdai-exchange',
-  [ChainId.MATIC]: 'medariox/quicksushi',
+  [ChainId.MATIC]: 'sushiswap/matic-exchange',
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
