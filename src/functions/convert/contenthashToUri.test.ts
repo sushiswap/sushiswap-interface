@@ -1,7 +1,5 @@
+import { expect } from '@jest/globals'
 import { contenthashToUri, hexToUint8Array } from './contenthashToUri'
-
-// this test is skipped for now because importing CID results in
-// TypeError: TextDecoder is not a constructor
 
 describe('#contenthashToUri', () => {
   it('1inch.tokens.eth contenthash', () => {

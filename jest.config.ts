@@ -15,7 +15,12 @@ const config: Config.InitialOptions = {
     https://jestjs.io/docs/webpack#handling-static-assets */
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },
-  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/', '<rootDir>/test/cypress/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/.next/',
+    '<rootDir>/test/cypress/',
+    '<rootDir>/src/pages/api/test.ts',
+  ],
   testEnvironment: '<rootDir>/test/unit/custom-test-env.ts',
   transform: {
     /* Use babel-jest to transpile tests with the next/babel preset
