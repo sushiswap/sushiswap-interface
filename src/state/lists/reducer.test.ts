@@ -1,9 +1,10 @@
+import { expect } from '@jest/globals'
 import { Store, createStore } from 'redux'
 import { acceptListUpdate, addList, enableList, fetchTokenList, removeList } from './actions'
 import reducer, { ListsState } from './reducer'
 
-import { DEFAULT_ACTIVE_LIST_URLS } from '../../constants/token-lists'
-import { DEFAULT_LIST_OF_LISTS } from '../../constants/token-lists'
+import { DEFAULT_ACTIVE_LIST_URLS } from '../../config/token-lists'
+import { DEFAULT_LIST_OF_LISTS } from '../../config/token-lists'
 import { updateVersion } from '../global/actions'
 
 const STUB_TOKEN_LIST = {

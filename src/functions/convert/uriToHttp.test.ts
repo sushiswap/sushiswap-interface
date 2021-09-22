@@ -1,4 +1,5 @@
-import uriToHttp from './uriToHttp'
+import { expect } from '@jest/globals'
+import { uriToHttp } from './uriToHttp'
 
 describe('uriToHttp', () => {
   it('returns .eth.link for ens names', () => {
