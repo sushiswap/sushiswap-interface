@@ -84,7 +84,7 @@ export default function useFarmRewards() {
 
       const defaultReward = {
         token: 'SUSHI',
-        icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/sushi.jpg',
+        icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2.jpg',
         rewardPerBlock,
         rewardPerDay: rewardPerBlock * blocksPerDay,
         rewardPrice: sushiPrice,
@@ -96,11 +96,9 @@ export default function useFarmRewards() {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
-        const icon = ['0', '3', '4', '8'].includes(pool.id)
-          ? `https://raw.githubusercontent.com/sushiswap/icons/master/token/${pool.rewardToken.symbol.toLowerCase()}.jpg`
-          : `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/${getAddress(
-              pool.rewarder.rewardToken
-            )}/logo.png`
+        const icon = `https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/${getAddress(
+          pool.rewarder.rewardToken
+        )}.jpg`
 
         const decimals = 10 ** pool.rewardToken.decimals
 
@@ -147,21 +145,21 @@ export default function useFarmRewards() {
         const reward = {
           [ChainId.MATIC]: {
             token: 'MATIC',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/matic/0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270.jpg',
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: maticPrice,
           },
           [ChainId.XDAI]: {
             token: 'STAKE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/stake.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/xdai/0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e.jpg',
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: stakePrice,
           },
           [ChainId.HARMONY]: {
             token: 'ONE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/harmony/0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a.jpg',
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: onePrice,
@@ -181,7 +179,7 @@ export default function useFarmRewards() {
         if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
           rewards[1] = {
             token: 'SPELL',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/spell.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x090185f2135308BaD17527004364eBcC2D37e5F6.jpg',
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: spellPrice,
