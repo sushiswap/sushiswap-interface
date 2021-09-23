@@ -103,7 +103,7 @@ export const currentPoolShareSelector = selector({
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const userPoolBalance = get(poolBalanceAtom)
-    if (pool && totalSupply && userPoolBalance) {
+    if (pool && totalSupply && userPoolBalance && totalSupply?.greaterThan(ZERO)) {
       return new Percent(userPoolBalance.quotient, totalSupply.quotient)
     }
 
@@ -119,7 +119,7 @@ export const currentLiquidityValueSelector = selector({
     const poolBalance = get(poolBalanceAtom)
     const totalSupply = get(totalSupplyAtom)
 
-    if (pool && poolBalance && totalSupply) {
+    if (pool && poolBalance && totalSupply && totalSupply?.greaterThan(ZERO)) {
       return [
         pool.getLiquidityValue(pool.token0, totalSupply?.wrapped, poolBalance?.wrapped),
         pool.getLiquidityValue(pool.token1, totalSupply?.wrapped, poolBalance?.wrapped),

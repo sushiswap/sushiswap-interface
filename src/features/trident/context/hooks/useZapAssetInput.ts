@@ -3,7 +3,7 @@ import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../../../functions'
 import { t } from '@lingui/macro'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
-import { poolAtom, spendFromWalletAtom } from '../atoms'
+import { noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useCurrencyBalance } from '../../../../state/wallet/hooks'
@@ -41,7 +41,7 @@ export const useZapAssetInput = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const [poolState] = useRecoilValue(poolAtom)
-
+  const noLiquidity = useRecoilValue(noLiquiditySelector)
   const zapCurrencyState = useRecoilState(selectedZapCurrencyAtom)
   const [zapCurrency] = zapCurrencyState
 
@@ -60,6 +60,8 @@ export const useZapAssetInput = () => {
     ? i18n._(t`Enter an amount`)
     : parsedAmount && balance?.[0].lessThan(parsedAmount)
     ? i18n._(t`Insufficient ${parsedAmount?.currency.symbol} balance`)
+    : noLiquidity
+    ? i18n._(t`No liquidity`)
     : ''
 
   return useMemo(

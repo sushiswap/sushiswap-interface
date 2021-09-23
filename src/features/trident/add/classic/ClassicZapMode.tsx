@@ -37,7 +37,7 @@ const ClassicZapMode = () => {
   return (
     <>
       {noLiquidity ? (
-        <div className="px-5 pt-5">
+        <div className="px-5 mb-2">
           <Alert
             dismissable={false}
             type="error"
@@ -46,7 +46,7 @@ const ClassicZapMode = () => {
           />
         </div>
       ) : (
-        <div className="px-5 pt-5">
+        <div className="px-5 mb-2">
           <Alert
             dismissable={false}
             type="information"

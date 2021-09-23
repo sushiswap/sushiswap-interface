@@ -1,6 +1,6 @@
 import { useBentoBoxContract } from '../../../../hooks'
 import React from 'react'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import AssetInput from '../../../../components/AssetInput'
@@ -15,10 +15,10 @@ import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import Dots from '../../../../components/Dots'
 import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
+import useCurrenciesFromURL from '../../context/hooks/useCurrenciesFromURL'
 
 const ClassicStandardMode = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
   const bentoBox = useBentoBoxContract()
   const {
     mainInput: [, setMainInput],
@@ -30,7 +30,7 @@ const ClassicStandardMode = () => {
     isMax,
     error,
   } = useDependentAssetInputs()
-
+  const [[currencyA, currencyB], setURLCurrency] = useCurrenciesFromURL()
   const setShowReview = useSetRecoilState(showReviewAtom)
   const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
@@ -41,11 +41,12 @@ const ClassicStandardMode = () => {
         <div className="flex flex-col gap-4 px-5">
           <AssetInput
             value={formattedAmounts[0]}
-            currency={pool?.token0}
+            currency={currencyA}
             onChange={(val) => {
               setTypedField(TypedField.A)
               setMainInput(val)
             }}
+            onSelect={(cur) => setURLCurrency(cur, 0)}
             headerRight={
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWallet(!spendFromWallet)}
@@ -56,11 +57,12 @@ const ClassicStandardMode = () => {
           />
           <AssetInput
             value={formattedAmounts[1]}
-            currency={pool?.token1}
+            currency={currencyB}
             onChange={(val) => {
               setTypedField(TypedField.B)
               setSecondaryInput(val)
             }}
+            onSelect={(cur) => setURLCurrency(cur, 1)}
             spendFromWallet={spendFromWallet}
           />
           <div className="flex flex-col gap-3">
