@@ -1,10 +1,11 @@
 import React, { FC, memo, ReactNode, useEffect, useState } from 'react'
 import Button from '../../components/Button'
-import { ApprovalState, useApproveCallback, useTridentRouterContract } from '../../hooks'
+import { useActiveWeb3React, ApprovalState, useApproveCallback, useTridentRouterContract } from '../../hooks'
 import useBentoMasterApproveCallback, { BentoApprovalState } from '../../hooks/useBentoMasterApproveCallback'
 import { t } from '@lingui/macro'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
+import { useWalletModalToggle } from '../../state/application/hooks'
 
 interface TokenApproveButtonProps {
   inputAmount: CurrencyAmount<Currency>
@@ -44,9 +45,11 @@ interface TridentApproveGateProps {
 }
 
 const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, tokenApproveOn, children }) => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [status, setStatus] = useState({})
   const router = useTridentRouterContract()
+  const toggleWalletModal = useWalletModalToggle()
 
   const { approve: bApproveCallback, approvalState: bApprove } = useBentoMasterApproveCallback(router?.address, {})
 
@@ -72,7 +75,13 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, tokenAp
           tokenApproveOn={tokenApproveOn}
         />
       ))}
-      {children({ approved, loading })}
+      {!account ? (
+        <Button color="gradient" onClick={toggleWalletModal}>
+          {i18n._(t`Connect Wallet`)}
+        </Button>
+      ) : (
+        children({ approved, loading })
+      )}
     </div>
   )
 }
