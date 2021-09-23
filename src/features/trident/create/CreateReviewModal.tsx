@@ -26,7 +26,7 @@ const AddTransactionReviewModal: FC = () => {
     poolType: [selectedPoolType],
   } = useSetupPoolProperties()
   const { execute } = useClassicPoolCreateExecute()
-  const { price } = usePoolDetails(parsedAmounts)
+  const { price, liquidityMinted } = usePoolDetails(parsedAmounts)
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -74,6 +74,14 @@ const AddTransactionReviewModal: FC = () => {
                 <ListPanel.CurrencyAmountItem amount={amount} key={index} />
               ))}
             />
+          </div>
+          <div className="flex flex-row justify-between px-5">
+            <Typography weight={700} variant="lg">
+              {i18n._(t`You'll receive:`)}
+            </Typography>
+            <Typography weight={700} variant="lg" className="text-high-emphesis">
+              {liquidityMinted?.toSignificant(6)} SLP
+            </Typography>
           </div>
         </div>
         <div className="flex flex-col px-5 gap-5">
