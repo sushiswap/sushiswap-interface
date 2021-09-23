@@ -6,6 +6,8 @@ import { signMasterContractApproval } from '../entities/KashiCooker'
 import { Contract } from '@ethersproject/contracts'
 import { AddressZero, HashZero } from '@ethersproject/constants'
 import { splitSignature } from '@ethersproject/bytes'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -66,6 +68,7 @@ const useBentoMasterApproveCallback = (
   masterContract: string,
   { otherBentoBoxContract, contractName, functionFragment }: BentoMasterApproveCallbackOptions
 ): BentoMasterApproveCallback => {
+  const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
   const bentoBoxContract = useBentoBoxContract()
   const addTransaction = useTransactionAdder()
@@ -144,10 +147,12 @@ const useBentoMasterApproveCallback = (
       const tx = await bentoBoxContract?.setMasterContractApproval(account, masterContract, true, 0, HashZero, HashZero)
 
       return addTransaction(tx, {
-        summary: `Approving ${contractName} Master Contract`,
+        summary: contractName
+          ? i18n._(t`Approving ${contractName} Master Contract`)
+          : i18n._(t`Approving Master Contract`),
       })
     } catch (e) {}
-  }, [account, addTransaction, bentoBoxContract, contractName, masterContract])
+  }, [account, addTransaction, bentoBoxContract, contractName, i18n, masterContract])
 
   return {
     approvalState,

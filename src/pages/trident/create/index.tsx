@@ -4,7 +4,7 @@ import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
 import Link from 'next/link'
-import { RecoilRoot, useRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Stepper from '../../../components/Stepper'
 import SelectPoolType from '../../../features/trident/create/SelectPoolType'
@@ -13,16 +13,34 @@ import ClassicSetupPool from '../../../features/trident/create/classic/ClassicSe
 import ClassicDepositAssets from '../../../features/trident/create/classic/ClassicDepositAssets'
 import { useSetupPoolProperties } from '../../../features/trident/context/hooks/useSetupPoolProperties'
 import HybridSetupPool from '../../../features/trident/create/hybrid/HybridSetupPool'
-import { poolCreationPageAtom } from '../../../features/trident/context/atoms'
+import { poolAtom, poolCreationPageAtom } from '../../../features/trident/context/atoms'
 import { PoolType } from '../../../features/trident/types'
 import PoolCreationSubmittedModal from '../../../features/trident/PoolCreationSubmittedModal'
+import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
+import { useEffect } from 'react'
+import { useIndependentAssetInputs } from '../../../features/trident/context/hooks/useIndependentAssetInputs'
 
 const Pool = () => {
   const { i18n } = useLingui()
   const [page, setPage] = useRecoilState(poolCreationPageAtom)
+  const setPool = useSetRecoilState(poolAtom)
+
+  const { parsedAmounts } = useIndependentAssetInputs()
   const {
     poolType: [poolType],
+    feeTier: [feeTier],
   } = useSetupPoolProperties()
+
+  useEffect(() => {
+    const pool =
+      parsedAmounts &&
+      parsedAmounts.every((el) => el?.greaterThan(0)) &&
+      (poolType === PoolType.ConstantProduct
+        ? new ConstantProductPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier, true)
+        : new HybridPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier))
+
+    setPool([1, pool ? pool : null])
+  }, [feeTier, parsedAmounts, poolType, setPool])
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">

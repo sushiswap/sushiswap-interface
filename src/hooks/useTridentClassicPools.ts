@@ -1,4 +1,4 @@
-import { ChainId, ChainKey, Currency, CurrencyAmount, FACTORY_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, ChainKey, Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { ConstantProductPool, Fee, computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
 
 import { Interface } from '@ethersproject/abi'
@@ -31,23 +31,6 @@ export function useTridentClassicPools(
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
 
-      console.log(
-        {
-          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
-          tokenA,
-          tokenB,
-          fee,
-          twap,
-        },
-        computeConstantProductPoolAddress({
-          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
-          tokenA,
-          tokenB,
-          fee,
-          twap,
-        })
-      )
-
       return tokenA &&
         tokenB &&
         tokenA.chainId === tokenB.chainId &&
@@ -65,8 +48,6 @@ export function useTridentClassicPools(
         : undefined
     })
   }, [chainId, pools])
-
-  console.log({ poolAddresses })
 
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {
