@@ -8,8 +8,9 @@ export const poolTokensSelector = selector<Record<string, Token>>({
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
     const tokens = [pool?.token0, pool?.token1]
+    console.log(tokens, 'HERE ARE TOKENS ')
     return tokens.reduce((acc, cur) => {
-      acc[cur.address] = cur
+      acc[cur?.address] = cur
       return acc
     }, {})
   },

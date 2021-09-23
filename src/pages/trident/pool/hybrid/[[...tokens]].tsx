@@ -18,6 +18,7 @@ import { useEffect } from 'react'
 import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
 import PoolStats from '../../../../features/trident/pool/PoolStats'
 import Typography from '../../../../components/Typography'
+import { useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
 
 const Pool = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -30,14 +31,14 @@ const Pool = () => {
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
-
+  const hybridPool = useTridentHybridPool(currencyA, currencyB, 30, true)
+  const totalSupply = useTotalSupply(hybridPool ? hybridPool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, hybridPool[1]?.liquidityToken)
+  hybridPool
   useEffect(() => {
-    if (!classicPool[1]) return
-    setPool(classicPool)
-  }, [chainId, classicPool, setPool])
+    if (!hybridPool[1]) return
+    setPool(hybridPool)
+  }, [chainId, hybridPool, setPool])
 
   useEffect(() => {
     if (!totalSupply) return
