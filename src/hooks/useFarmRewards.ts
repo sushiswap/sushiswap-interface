@@ -135,7 +135,9 @@ export default function useFarmRewards() {
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+            ? pool.rewarder.rewardPerSecond / 1e18
+            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
         const rewardPerBlock = rewardPerSecond * averageBlockTime
 
