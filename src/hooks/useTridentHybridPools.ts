@@ -1,4 +1,4 @@
-import { ChainId, ChainKey, Currency, CurrencyAmount, FACTORY_ADDRESS, ONE } from '@sushiswap/core-sdk'
+import { ChainId, ChainKey, Currency, CurrencyAmount, FACTORY_ADDRESS, JSBI } from '@sushiswap/core-sdk'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 
 import { computeHybridPoolAddress, Fee, HybridPool } from '@sushiswap/trident-sdk'
@@ -7,11 +7,6 @@ import { abi } from '@sushiswap/trident/artifacts/contracts/pool/HybridPool.sol/
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 import { useActiveWeb3React } from './index'
-
-console.log(
-  TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.HybridPoolFactory.address,
-  'TRIDENT HYBRID POOL FCTORY ADDRESS'
-)
 
 const HYBRID_POOL_INTERFACE = new Interface(abi)
 
@@ -23,58 +18,40 @@ export enum HybridPoolState {
 }
 
 export function useTridentHybridPools(
-  pools: [Currency | undefined, Currency | undefined, Fee | undefined, boolean | undefined][]
+  pools: [Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined][]
 ): [HybridPoolState, HybridPool | null][] {
   const { chainId } = useActiveWeb3React()
 
   const poolAddresses = useMemo(() => {
     if (!chainId) return []
 
-    return pools.map(([currencyA, currencyB, fee, twap]) => {
+    return pools.map(([currencyA, currencyB, fee, a]) => {
       if (!currencyA || !currencyB || currencyA === currencyB) return undefined
+
+      console.log({ currencyA, currencyB, fee, a })
 
       const [tokenA, tokenB] = currencyA?.wrapped.sortsBefore(currencyB?.wrapped)
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
-
-      console.log(
-        {
-          factoryAddress: '0x4fbeDaEcb25C8094a5bd3b75CD51F02EC956Ad31',
-          tokenA,
-          tokenB,
-          fee,
-          twap,
-        },
-        computeHybridPoolAddress({
-          factoryAddress: '0x4fbeDaEcb25C8094a5bd3b75CD51F02EC956Ad31',
-          tokenA,
-          tokenB,
-          fee,
-          // TODO: Jack - work out what this number is
-          a: ONE,
-        }),
-        'HYBRID BABY'
-      )
 
       return tokenA &&
         tokenB &&
         tokenA.chainId === tokenB.chainId &&
         !tokenA.equals(tokenB) &&
         fee &&
-        twap &&
+        a &&
         TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.HybridPoolFactory.address
         ? computeHybridPoolAddress({
-            // TODO: Jack Fix
-            factoryAddress: '0x4fbeDaEcb25C8094a5bd3b75CD51F02EC956Ad31',
+            factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.HybridPoolFactory.address,
             tokenA,
             tokenB,
             fee,
             // TODO: Jack - work out what this number is
-            a: ONE,
+            a,
           })
         : undefined
     })
-  }, [pools])
+  }, [pools, chainId])
 
   console.log({ poolAddresses })
 
@@ -85,9 +62,9 @@ export function useTridentHybridPools(
       const tokenA = pools[i][0]?.wrapped
       const tokenB = pools[i][1]?.wrapped
       const fee = pools[i]?.[2]
-      const twap = pools[i]?.[3]
+      const a = pools[i]?.[3]
       if (loading) return [HybridPoolState.LOADING, null]
-      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !twap) return [HybridPoolState.INVALID, null]
+      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !a) return [HybridPoolState.INVALID, null]
       if (!reserves) return [HybridPoolState.NOT_EXISTS, null]
       const [reserve0, reserve1] = reserves
       const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
@@ -97,7 +74,7 @@ export function useTridentHybridPools(
           CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
           CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
           fee,
-          ONE
+          a
         ),
       ]
     })
@@ -108,11 +85,11 @@ export function useTridentHybridPool(
   tokenA?: Currency,
   tokenB?: Currency,
   fee?: Fee,
-  twap?: boolean
+  a?: JSBI
 ): [HybridPoolState, HybridPool | null] {
-  const inputs: [[Currency | undefined, Currency | undefined, Fee | undefined, boolean | undefined]] = useMemo(
-    () => [[tokenA, tokenB, fee, twap]],
-    [tokenA, tokenB, fee, twap]
+  const inputs: [[Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined]] = useMemo(
+    () => [[tokenA, tokenB, fee, a]],
+    [tokenA, tokenB, fee, a]
   )
   return useTridentHybridPools(inputs)[0]
 }
