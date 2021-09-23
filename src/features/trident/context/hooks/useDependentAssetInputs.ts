@@ -1,6 +1,6 @@
 import { atom, selector, useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
-import { noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
-import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { fixedRatioAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
+import { ChainId, Currency, CurrencyAmount, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import { useMemo } from 'react'
 import { maxAmountSpend, tryParseAmount } from '../../../../functions'
 import { useActiveWeb3React } from '../../../../hooks'
@@ -35,9 +35,10 @@ export const secondaryInputSelector = selector<string>({
   get: ({ get }) => {
     const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
     const noLiquidity = get(noLiquiditySelector)
+    const fixedRatio = get(fixedRatioAtom)
 
     // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
-    if (!noLiquidity) {
+    if (!noLiquidity && fixedRatio) {
       const [, pool] = get(poolAtom)
       const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
 
@@ -57,9 +58,10 @@ export const secondaryInputSelector = selector<string>({
   set: ({ set, get }, newValue: string) => {
     const noLiquidity = get(noLiquiditySelector)
     const typedField = get(typedFieldAtom)
+    const fixedRatio = get(fixedRatioAtom)
 
     // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
-    if (!noLiquidity) {
+    if (!noLiquidity && fixedRatio) {
       const [, pool] = get(poolAtom)
       const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
       const newValueCA = tryParseAmount(newValue, pool?.token1)
@@ -129,10 +131,10 @@ export const useDependentAssetInputs = () => {
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const typedField = useRecoilState(typedFieldAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const currencies = useMemo(() => [pool?.token0, pool?.token1], [pool])
   const balances = useBentoOrWalletBalance(account, currencies, spendFromWallet)
-
   const usdcA = useUSDCValue(balances?.[0])
   const usdcB = useUSDCValue(balances?.[1])
 
@@ -140,8 +142,7 @@ export const useDependentAssetInputs = () => {
     ({ set }) =>
       async () => {
         if (!balances || !usdcA || !usdcB) return
-
-        if (!noLiquidity) {
+        if (!noLiquidity && fixedRatio) {
           usdcA?.lessThan(usdcB)
             ? set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
             : set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
@@ -150,13 +151,13 @@ export const useDependentAssetInputs = () => {
           set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
         }
       },
-    [balances, noLiquidity, usdcA, usdcB]
+    [balances, fixedRatio, noLiquidity, usdcA, usdcB]
   )
 
   const isMax = useMemo(() => {
     if (!balances || !usdcA || !usdcB) return false
 
-    if (!noLiquidity) {
+    if (!noLiquidity && fixedRatio) {
       return usdcA?.lessThan(usdcB)
         ? parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]))
         : parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]))
@@ -165,7 +166,7 @@ export const useDependentAssetInputs = () => {
         parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0])) && parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]))
       )
     }
-  }, [balances, noLiquidity, parsedAmounts, usdcA, usdcB])
+  }, [balances, fixedRatio, noLiquidity, parsedAmounts, usdcA, usdcB])
 
   const insufficientBalance = useMemo(() => {
     return parsedAmounts.find((el, index) => {

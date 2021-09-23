@@ -18,6 +18,7 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useEffect } from 'react'
 import { poolAtom } from '../../../../features/trident/context/atoms'
+import { BarGraph } from '../../../../components/BarGraph'
 
 const Pool = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -51,10 +52,7 @@ const Pool = () => {
   return (
     <div className="flex flex-col w-full mt-px mb-5">
       <Header />
-      <MyDeposits />
-      <ClassicMyRewards />
       <ClassicMarket />
-      <Rewards />
       <PoolStatsChart />
       <PoolStats />
     </div>

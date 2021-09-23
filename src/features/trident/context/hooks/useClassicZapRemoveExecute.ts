@@ -46,16 +46,15 @@ export const useClassicZapRemoveExecute = () => {
         }
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
-        const estimate = router.estimateGas.burnLiquiditySingle
-        const method = router.burnLiquiditySingle
-        const args = [pool.liquidityToken.address, liquidityAmount.quotient.toString(), encoded, liquidityOutput]
 
         try {
           setAttemptingTxn(true)
-          const estimatedGasLimit = await estimate(...args, {})
-          const tx = await method(...args, {
-            gasLimit: calculateGasMargin(estimatedGasLimit),
-          })
+          const tx = await router.burnLiquiditySingle(
+            pool.liquidityToken.address,
+            liquidityAmount.quotient.toString(),
+            encoded,
+            liquidityOutput
+          )
 
           setTxHash(tx.hash)
           setShowReview(false)

@@ -15,6 +15,7 @@ import { useSetupPoolProperties } from '../../../features/trident/context/hooks/
 import HybridSetupPool from '../../../features/trident/create/hybrid/HybridSetupPool'
 import { poolCreationPageAtom } from '../../../features/trident/context/atoms'
 import { PoolType } from '../../../features/trident/types'
+import PoolCreationSubmittedModal from '../../../features/trident/PoolCreationSubmittedModal'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -77,6 +78,7 @@ const Pool = () => {
         </Stepper.Panels>
       </Stepper>
       <CreateReviewModal />
+      <PoolCreationSubmittedModal />
     </div>
   )
 }

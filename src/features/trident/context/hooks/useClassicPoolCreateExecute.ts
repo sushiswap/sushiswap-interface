@@ -1,4 +1,4 @@
-import { useLingui } from '@lingui/react'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
 import {
   useActiveWeb3React,
   useBentoBoxContract,
@@ -6,18 +6,19 @@ import {
   useMasterDeployerContract,
   useTridentRouterContract,
 } from '../../../../hooks'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
+import { useCallback, useMemo } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
-import { useSetupPoolProperties } from './useSetupPoolProperties'
+
+import ReactGA from 'react-ga'
+import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
 import { ethers } from 'ethers'
 import { t } from '@lingui/macro'
-import ReactGA from 'react-ga'
-import { useCallback, useMemo } from 'react'
 import { useIndependentAssetInputs } from './useIndependentAssetInputs'
-import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
+import { useLingui } from '@lingui/react'
+import { useSetupPoolProperties } from './useSetupPoolProperties'
+import { useTransactionAdder } from '../../../../state/transactions/hooks'
 
-export const usePoolCreateExecute = () => {
+export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const masterDeployer = useMasterDeployerContract()
@@ -62,13 +63,30 @@ export const usePoolCreateExecute = () => {
 
     // Adding liquidity data
     const indexOfNative = parsedAmounts.findIndex((el) => el.currency.isNative)
-    const value = indexOfNative ? { value: parsedAmounts[indexOfNative].quotient.toString() } : {}
+    const value = indexOfNative > 0 ? { value: parsedAmounts[indexOfNative].quotient.toString() } : {}
     const liquidityInput = await Promise.all(
       parsedAmounts.map(async (el, index) => ({
         token: el.currency.wrapped.address,
         native: spendFromWallet,
         amount: await bentoboxContract.toShare(el.currency.wrapped.address, el.quotient.toString(), false),
       }))
+    )
+
+    console.log(
+      {
+        factoryAddress: constantProductPoolFactory.address,
+        tokenA,
+        tokenB,
+        fee: feeTier,
+        twap,
+      },
+      computeConstantProductPoolAddress({
+        factoryAddress: constantProductPoolFactory.address,
+        tokenA,
+        tokenB,
+        fee: feeTier,
+        twap,
+      })
     )
 
     const batch = [

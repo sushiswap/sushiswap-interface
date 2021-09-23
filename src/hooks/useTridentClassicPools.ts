@@ -3,11 +3,10 @@ import TRIDENT from '@sushiswap/trident/exports/all.json'
 
 import { ConstantProductPool, Fee, computeConstantProductPoolAddress, HybridPool } from '@sushiswap/trident-sdk'
 import { Interface } from '@ethersproject/abi'
-import abi from '../constants/abis/constant-product-pool.json'
+import { abi } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 import { useActiveWeb3React } from './index'
-import { HybridPoolState } from './useTridentHybridPools'
 
 const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(abi)
 
@@ -32,17 +31,42 @@ export function useTridentClassicPools(
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
 
+      console.log(
+        {
+          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+          tokenA,
+          tokenB,
+          fee,
+          twap,
+        },
+        computeConstantProductPoolAddress({
+          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+          tokenA,
+          tokenB,
+          fee,
+          twap,
+        })
+      )
+
       return tokenA &&
         tokenB &&
         tokenA.chainId === tokenB.chainId &&
         !tokenA.equals(tokenB) &&
         fee &&
         twap &&
-        FACTORY_ADDRESS[tokenA.chainId]
-        ? '0x9a5bb67bba24c6e64c3c05e3a73e89d2e029080a'
+        TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address
+        ? computeConstantProductPoolAddress({
+            factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+            tokenA,
+            tokenB,
+            fee,
+            twap,
+          })
         : undefined
     })
   }, [pools])
+
+  console.log({ poolAddresses })
 
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {
