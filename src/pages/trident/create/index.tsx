@@ -50,8 +50,6 @@ const Pool = () => {
     setPool([1, pool ? pool : null])
   }, [feeTier, parsedAmounts, poolType, setPool])
 
-  console.log(pool, 'HERE IS POOL ON CREATE')
-
   useEffect(() => {
     if (!pool) return
     setTotalSupply(CurrencyAmount.fromRawAmount(pool?.liquidityToken, ZERO))

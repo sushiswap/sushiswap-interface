@@ -28,8 +28,6 @@ export function useTridentHybridPools(
     return pools.map(([currencyA, currencyB, fee, a]) => {
       if (!currencyA || !currencyB || currencyA === currencyB) return undefined
 
-      console.log({ currencyA, currencyB, fee, a })
-
       const [tokenA, tokenB] = currencyA?.wrapped.sortsBefore(currencyB?.wrapped)
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
@@ -52,8 +50,6 @@ export function useTridentHybridPools(
         : undefined
     })
   }, [pools, chainId])
-
-  console.log({ poolAddresses })
 
   const results = useMultipleContractSingleData(poolAddresses, HYBRID_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {
