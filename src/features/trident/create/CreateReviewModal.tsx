@@ -5,29 +5,28 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import Typography from '../../../components/Typography'
 import { useLingui } from '@lingui/react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { showReviewAtom, spendFromWalletAtom } from '../context/atoms'
+import { useRecoilState } from 'recoil'
+import { showReviewAtom } from '../context/atoms'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 import { useIndependentAssetInputs } from '../context/hooks/useIndependentAssetInputs'
 import { usePoolDetails } from '../context/hooks/usePoolDetails'
 import { useClassicPoolCreateExecute } from '../context/hooks/useClassicPoolCreateExecute'
-import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
 import { PoolType } from '../types'
+import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const {
     parsedAmounts,
     currencies: [selectedPoolCurrencies],
   } = useIndependentAssetInputs()
-  const { price } = usePoolDetails(parsedAmounts)
-  const { execute } = useClassicPoolCreateExecute()
   const {
     poolType: [selectedPoolType],
   } = useSetupPoolProperties()
+  const { execute } = useClassicPoolCreateExecute()
+  const { price, liquidityMinted } = usePoolDetails(parsedAmounts)
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -54,34 +53,21 @@ const AddTransactionReviewModal: FC = () => {
                 {i18n._(t`Confirm Pool Creation`)}
               </Typography>
               <Typography variant="sm">
-                {i18n._(t`Output is estimated. If the price changes by more than 0.5% your transaction will revert.`)}
+                {i18n._(
+                  t`When creating a pool you are the first liquidity provider. The ratio of tokens you add will set the price of this pool.`
+                )}
               </Typography>
             </div>
           </div>
         </div>
         <div className="flex flex-col gap-6">
-          <div className="flex flex-row justify-between px-5">
-            <Typography weight={700} variant="lg">
-              {i18n._(t`You are creating a:`)}
-            </Typography>
-            <Typography weight={700} variant="lg" className="text-high-emphesis">
-              {selectedPoolType === PoolType.ConstantProduct && i18n._(t`Classic Pool`)}
-              {selectedPoolType === PoolType.Weighted && i18n._(t`Weighted Pool`)}
-              {selectedPoolType === PoolType.Hybrid && i18n._(t`Multi-Asset Pool`)}
-              {selectedPoolType === PoolType.ConcentratedLiquidity && i18n._(t`Concentrated Pool`)}
-            </Typography>
-          </div>
-          <div className="flex flex-row justify-between px-5">
-            <Typography weight={700} variant="lg">
-              {i18n._(t`using funds from your:`)}
-            </Typography>
-            <Typography weight={700} variant="lg" className="text-high-emphesis">
-              {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
-            </Typography>
-          </div>
           <div className="flex flex-col gap-3 px-5">
             <Typography weight={700} variant="lg">
-              {i18n._(t`You are depositing:`)}
+              {selectedPoolType === PoolType.ConstantProduct && i18n._(t`You are creating a classic pool with:`)}
+              {selectedPoolType === PoolType.Weighted && i18n._(t`You are creating a weighted pool with:`)}
+              {selectedPoolType === PoolType.Hybrid && i18n._(t`You are creating a multi-asset pool with:`)}
+              {selectedPoolType === PoolType.ConcentratedLiquidity &&
+                i18n._(t`You are creating a concentrated liquidity pool with:`)}
             </Typography>
             <ListPanel
               items={parsedAmounts.map((amount, index) => (
@@ -89,28 +75,57 @@ const AddTransactionReviewModal: FC = () => {
               ))}
             />
           </div>
+          <div className="flex flex-row justify-between px-5">
+            <Typography weight={700} variant="lg">
+              {i18n._(t`You'll receive:`)}
+            </Typography>
+            <Typography weight={700} variant="lg" className="text-high-emphesis">
+              {liquidityMinted?.toSignificant(6)} SLP
+            </Typography>
+          </div>
         </div>
         <div className="flex flex-col px-5 gap-5">
-          {price && (
-            <>
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between">
-                  <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
-                  <Typography variant="sm" className="text-right">
-                    1 {selectedPoolCurrencies[0]?.symbol} = {price?.toSignificant(6)}{' '}
-                    {selectedPoolCurrencies[1]?.symbol}
-                  </Typography>
-                </div>
-                <div className="flex justify-end">
-                  <Typography variant="sm" className="text-right">
-                    1 {selectedPoolCurrencies[1]?.symbol} = {price?.invert().toSignificant(6)}{' '}
-                    {selectedPoolCurrencies[0]?.symbol}
-                  </Typography>
-                </div>
-              </div>
-              <Divider />
-            </>
-          )}
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between">
+              <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
+              <Typography variant="sm" className="text-right">
+                1 {selectedPoolCurrencies[0]?.symbol} = {price?.toSignificant(6)} {selectedPoolCurrencies[1]?.symbol}
+              </Typography>
+            </div>
+            <div className="flex justify-end">
+              <Typography variant="sm" className="text-right">
+                1 {selectedPoolCurrencies[1]?.symbol} = {price?.invert().toSignificant(6)}{' '}
+                {selectedPoolCurrencies[0]?.symbol}
+              </Typography>
+            </div>
+          </div>
+          <Divider />
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between">
+              <Typography variant="sm" className="text-secondary">
+                {i18n._(t`${selectedPoolCurrencies[0]?.symbol} Deposited:`)}
+              </Typography>
+              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+                0.00 → {parsedAmounts[0]?.toSignificant(6)} {parsedAmounts[0]?.currency.symbol}
+              </Typography>
+            </div>
+            <div className="flex justify-between">
+              <Typography variant="sm" className="text-secondary">
+                {i18n._(t`${selectedPoolCurrencies[1]?.symbol} Deposited:`)}
+              </Typography>
+              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+                0.00 → {parsedAmounts[1]?.toSignificant(6)} {parsedAmounts[1]?.currency.symbol}
+              </Typography>
+            </div>
+            <div className="flex justify-between">
+              <Typography variant="sm" className="text-secondary">
+                {i18n._(t`Share of Pool`)}
+              </Typography>
+              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+                0.00% → <span className="text-green">100%</span>
+              </Typography>
+            </div>
+          </div>
           <Button color="gradient" size="lg" onClick={execute}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`Confirm Pool Creation`)}

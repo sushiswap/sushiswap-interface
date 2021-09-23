@@ -72,23 +72,6 @@ export const useClassicPoolCreateExecute = () => {
       }))
     )
 
-    console.log(
-      {
-        factoryAddress: constantProductPoolFactory.address,
-        tokenA,
-        tokenB,
-        fee: feeTier,
-        twap,
-      },
-      computeConstantProductPoolAddress({
-        factoryAddress: constantProductPoolFactory.address,
-        tokenA,
-        tokenB,
-        fee: feeTier,
-        twap,
-      })
-    )
-
     const batch = [
       router?.interface?.encodeFunctionData('deployPool', [constantProductPoolFactory.address, deployData]),
       router?.interface?.encodeFunctionData('addLiquidity', [

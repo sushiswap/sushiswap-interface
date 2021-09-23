@@ -13,7 +13,7 @@ import {
 } from '../atoms'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
 import { useRecoilCallback, useSetRecoilState } from 'recoil'
-import { calculateGasMargin, calculateSlippageAmount } from '../../../../functions'
+import { calculateSlippageAmount } from '../../../../functions'
 import { ZERO_PERCENT } from '../../../../constants'
 import { ethers } from 'ethers'
 import { t } from '@lingui/macro'

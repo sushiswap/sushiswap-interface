@@ -80,13 +80,20 @@ export const noLiquiditySelector = selector<boolean>({
     const [poolState, pool] = get<PoolAtomType>(poolAtom)
     const totalSupply = get(totalSupplyAtom)
 
-    return (
-      poolState === 1 ||
-      Boolean(totalSupply && JSBI.equal(totalSupply.quotient, ZERO)) ||
-      Boolean(
-        poolState === 2 && pool && JSBI.equal(pool.reserve0.quotient, ZERO) && JSBI.equal(pool.reserve1.quotient, ZERO)
+    if (pool) {
+      return (
+        poolState === 1 ||
+        Boolean(totalSupply && JSBI.equal(totalSupply.quotient, ZERO)) ||
+        Boolean(
+          poolState === 2 &&
+            pool &&
+            JSBI.equal(pool.reserve0.quotient, ZERO) &&
+            JSBI.equal(pool.reserve1.quotient, ZERO)
+        )
       )
-    )
+    }
+
+    return undefined
   },
 })
 
