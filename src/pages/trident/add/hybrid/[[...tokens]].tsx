@@ -27,6 +27,7 @@ import { SUSHI, USDC, XSUSHI } from '../../../../config/tokens'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
+import AddTransactionReviewModal from '../../../../features/trident/create/CreateReviewModal'
 
 const AddHybrid = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -40,14 +41,13 @@ const AddHybrid = () => {
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const hybridPool = useTridentHybridPool(currencyA, currencyB, 50, true)
+  const hybridPool = useTridentHybridPool(currencyA, currencyB, 50)
   const totalSupply = useTotalSupply(hybridPool ? hybridPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, hybridPool[1]?.liquidityToken)
 
   useEffect(() => {
     if (!hybridPool[1]) return
     // TODO ramin: remove
-    // hybridPool[1].tokens = [USDC[chainId], XSUSHI, SUSHI[chainId]]
     setPool(hybridPool)
   }, [chainId, hybridPool, setPool])
 
@@ -60,20 +60,6 @@ const AddHybrid = () => {
     if (!poolBalance) return
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
-
-  console.log(
-    {
-      currencyA,
-      currencyB,
-      hybridPool,
-      totalSupply,
-      poolBalance,
-      chainId,
-      liquidityMode,
-      account,
-    },
-    'component info here'
-  )
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
@@ -115,7 +101,7 @@ const AddHybrid = () => {
       </div>
 
       {/*TODO*/}
-      {/*<AddTransactionReviewModal />*/}
+      <AddTransactionReviewModal />
       <DepositSubmittedModal />
     </div>
   )

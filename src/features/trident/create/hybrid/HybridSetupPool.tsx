@@ -51,12 +51,12 @@ const HybridSetupPool: FC = () => {
   return (
     <div className="flex flex-col gap-10 p-5">
       <div className="flex flex-col mt-4">
-        <Typography variant="h3" className="text-high-emphesis mb-1" weight={700}>
+        <Typography variant="h3" className="mb-1 text-high-emphesis" weight={700}>
           {i18n._(t`Select Pool Tokens`)}
         </Typography>
-        <div className="flex flex-col gap-2 z-10">
+        <div className="z-10 flex flex-col gap-2">
           {currencies.map((cur, index) => (
-            <div className="flex flex-col relative" key={index}>
+            <div className="relative flex flex-col" key={index}>
               <AssetSelect
                 value={currencies[index]}
                 onSelect={(cur) => handleSelectedPoolTokens(cur, index)}
@@ -66,7 +66,7 @@ const HybridSetupPool: FC = () => {
                   </Typography>
                 }
               />
-              <div className="absolute right-2 z-0" style={{ bottom: index === currencies.length - 1 ? -58 : -56 }}>
+              <div className="absolute z-0 right-2" style={{ bottom: index === currencies.length - 1 ? -58 : -56 }}>
                 <div className="border-[3px] border-dark-900 bg-dark-800 rounded-full w-[64px] h-[64px] flex items-center justify-center text-high-emphesis">
                   <PlusIcon width={46} height={46} />
                 </div>
@@ -74,7 +74,7 @@ const HybridSetupPool: FC = () => {
             </div>
           ))}
 
-          <div className="flex px-3 py-3 gap-2 cursor-pointer" onClick={() => setNumberOfInputs(numberOfInputs + 1)}>
+          <div className="flex gap-2 px-3 py-3 cursor-pointer" onClick={() => setNumberOfInputs(numberOfInputs + 1)}>
             <Typography className="text-blue" weight={700} variant="sm">
               {i18n._(t`Add Another Token`)}
             </Typography>
@@ -85,7 +85,7 @@ const HybridSetupPool: FC = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <Typography variant="h3" className="text-high-emphesis mb-2" weight={700}>
+        <Typography variant="h3" className="mb-2 text-high-emphesis" weight={700}>
           {i18n._(t`Select Fee Tier`)}
         </Typography>
         <ToggleButtonGroup value={feeTier} onChange={setFeeTier} variant="outlined">

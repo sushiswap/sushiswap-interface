@@ -25,6 +25,7 @@ import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { useEffect } from 'react'
 import { useIndependentAssetInputs } from '../../../features/trident/context/hooks/useIndependentAssetInputs'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import HybridStandardMode from '../../../features/trident/add/hybrid/HybridStandardMode'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -49,6 +50,8 @@ const Pool = () => {
     setPool([1, pool ? pool : null])
   }, [feeTier, parsedAmounts, poolType, setPool])
 
+  console.log(pool, 'HERE IS POOL ON CREATE')
+
   useEffect(() => {
     if (!pool) return
     setTotalSupply(CurrencyAmount.fromRawAmount(pool?.liquidityToken, ZERO))
@@ -61,13 +64,13 @@ const Pool = () => {
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-60 gap-4">
+      <div className="flex flex-col gap-4 p-5 bg-auto bg-dark-800 bg-binary-pattern bg-opacity-60">
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
             variant="outlined"
             size="sm"
-            className="rounded-full py-1 pl-2"
+            className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             <Link href={`/trident/pools`}>{i18n._(t`Pools`)}</Link>
@@ -106,7 +109,7 @@ const Pool = () => {
           </Stepper.Panel>
           <Stepper.Panel>
             {poolType === PoolType.ConstantProduct && <ClassicDepositAssets />}
-            {/*{selectedPoolType === PoolType.Hybrid && <HybridStandardMode />}*/}
+            {poolType === PoolType.Hybrid && <HybridStandardMode />}
             {/*{selectedPoolType === PoolType.Weighted && <WeightedStandardMode />}*/}
             {/*{selectedPoolType === PoolType.ConcentratedLiquidity && <ConcentratedStandardMode />}*/}
           </Stepper.Panel>

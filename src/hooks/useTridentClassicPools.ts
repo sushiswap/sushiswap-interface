@@ -46,7 +46,7 @@ export function useTridentClassicPools(
           })
         : undefined
     })
-  }, [pools])
+  }, [chainId, pools])
 
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {
