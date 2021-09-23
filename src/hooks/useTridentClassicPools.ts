@@ -1,12 +1,13 @@
 import { ChainId, ChainKey, Currency, CurrencyAmount, FACTORY_ADDRESS } from '@sushiswap/core-sdk'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 
-import { ConstantProductPool, Fee, computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
+import { ConstantProductPool, Fee, computeConstantProductPoolAddress, HybridPool } from '@sushiswap/trident-sdk'
 import { Interface } from '@ethersproject/abi'
 import abi from '../constants/abis/constant-product-pool.json'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from '../state/multicall/hooks'
 import { useActiveWeb3React } from './index'
+import { HybridPoolState } from './useTridentHybridPools'
 
 const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(abi)
 
