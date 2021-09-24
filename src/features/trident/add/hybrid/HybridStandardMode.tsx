@@ -55,7 +55,7 @@ const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active =
       )}
     >
       {!horizontal && (
-        <div className="absolute top-2 right-2 z-10">
+        <div className="absolute z-10 top-2 right-2">
           <Checkbox checked={active} color="pink" />
         </div>
       )}
@@ -66,7 +66,7 @@ const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active =
       />
       <div className="flex flex-col justify-center gap-0.5">
         <Typography variant="sm" weight={active ? 700 : 400}>
-          {amount ? amount.currency.symbol : token.symbol}
+          {amount ? amount?.currency?.symbol : token?.symbol}
         </Typography>
         {amount && (
           <Typography variant="xs" weight={400} className="text-center">
@@ -136,7 +136,7 @@ const HybridStandardMode: FC = () => {
   const error = !validInputs
 
   return (
-    <div className="flex flex-col px-5 gap-8">
+    <div className="flex flex-col gap-8 px-5">
       <div className="flex flex-col">
         <Disclosure defaultOpen>
           {({ open }) => (
@@ -153,11 +153,11 @@ const HybridStandardMode: FC = () => {
                 </div>
               </Disclosure.Button>
               <Disclosure.Panel>
-                <Typography variant="sm" className="text-high-emphesis mt-3">
+                <Typography variant="sm" className="mt-3 text-high-emphesis">
                   {i18n._(t`You have balances of each of the following assets, ordered from greatest to least amount. Tap to toggle which
         ones you would like to deposit`)}
                 </Typography>
-                <div className="grid grid-cols-4 mt-6 gap-4">
+                <div className="grid grid-cols-4 gap-4 mt-6">
                   {availableAssets.map((balance, index) => (
                     <TokenTile
                       amount={balance}
@@ -188,10 +188,10 @@ const HybridStandardMode: FC = () => {
                 </div>
               </Disclosure.Button>
               <Disclosure.Panel>
-                <Typography variant="sm" className="text-high-emphesis mt-3">
+                <Typography variant="sm" className="mt-3 text-high-emphesis">
                   {i18n._(t`You have no balances of the following assets.`)}
                 </Typography>
-                <div className="flex flex-row mt-6 gap-4">
+                <div className="flex flex-row gap-4 mt-6">
                   {unavailableAssets.map((token, index) => (
                     <TokenTile token={token} key={index} horizontal />
                   ))}

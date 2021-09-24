@@ -24,9 +24,10 @@ import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../hooks/Tokens'
 import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI, USDC, XSUSHI } from '../../../../config/tokens'
-import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
+import { useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
+import AddTransactionReviewModal from '../../../../features/trident/create/CreateReviewModal'
 
 const AddHybrid = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -40,16 +41,15 @@ const AddHybrid = () => {
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+  const hybridPool = useTridentHybridPool(currencyA, currencyB, 50)
+  const totalSupply = useTotalSupply(hybridPool ? hybridPool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, hybridPool[1]?.liquidityToken)
 
   useEffect(() => {
-    if (!classicPool[1]) return
+    if (!hybridPool[1]) return
     // TODO ramin: remove
-    classicPool[1].tokens = [USDC[chainId], XSUSHI, SUSHI[chainId]]
-    setPool(classicPool)
-  }, [chainId, classicPool, setPool])
+    setPool(hybridPool)
+  }, [chainId, hybridPool, setPool])
 
   useEffect(() => {
     if (!totalSupply) return
@@ -63,13 +63,13 @@ const AddHybrid = () => {
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-bubble-pattern bg-opacity-60 gap-4">
+      <div className="flex flex-col gap-4 p-5 bg-auto bg-dark-800 bg-bubble-pattern bg-opacity-60">
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
             variant="outlined"
             size="sm"
-            className="rounded-full py-1 pl-2"
+            className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             {/*TODO ramin*/}
@@ -101,7 +101,7 @@ const AddHybrid = () => {
       </div>
 
       {/*TODO*/}
-      {/*<AddTransactionReviewModal />*/}
+      <AddTransactionReviewModal />
       <DepositSubmittedModal />
     </div>
   )

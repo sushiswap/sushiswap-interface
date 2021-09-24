@@ -9,7 +9,7 @@ export const poolTokensSelector = selector<Record<string, Token>>({
     const [, pool] = get(poolAtom)
     const tokens = [pool?.token0, pool?.token1]
     return tokens.reduce((acc, cur) => {
-      acc[cur.address] = cur
+      acc[cur?.address] = cur
       return acc
     }, {})
   },

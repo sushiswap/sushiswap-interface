@@ -10,8 +10,8 @@ import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-import { poolAtom } from './classic/context/atoms'
-import { ConstantProductPool } from '@sushiswap/trident-sdk'
+import { poolAtom } from '../context/atoms'
+import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { PoolType } from '../types'
 
 const HeaderContainer = () => {
@@ -23,7 +23,7 @@ const HeaderContainer = () => {
 
 interface HeaderProps {
   // TODO ramin: should be every pool type instead of ConstantProductPool only
-  pool: ConstantProductPool
+  pool: ConstantProductPool | HybridPool
   i18n: I18n
 }
 
@@ -37,19 +37,19 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   return (
     <div className="flex flex-col">
       <div className="flex flex-col bg-dark-900">
-        <div className="flex flex-row pt-4 pb-3 px-5 justify-between bg-dots-pattern">
+        <div className="flex flex-row justify-between px-5 pt-4 pb-3 bg-dots-pattern">
           <div className="flex flex-col items-start gap-5">
             <Button
               color="blue"
               variant="outlined"
               size="sm"
-              className="rounded-full py-1 pl-2"
+              className="py-1 pl-2 rounded-full"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link href={'/trident/pools'}>{i18n._(t`Pools`)}</Link>
             </Button>
           </div>
-          <div className="flex flex-col text-right gap-3">
+          <div className="flex flex-col gap-3 text-right">
             <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
             <div className="flex flex-col gap-2">
               <Typography variant="h1" className="text-high-emphesis" weight={700}>
@@ -75,7 +75,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
       </div>
       <div className="px-5 mt-[-32px] flex flex-col gap-2">
         <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} />
-        <div className="flex flex-row gap-2 items-center">
+        <div className="flex flex-row items-center gap-2">
           <Typography variant="h2" className="text-high-emphesis" weight={700}>
             {pool?.token0.symbol}-{pool?.token1.symbol}
           </Typography>
@@ -95,7 +95,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
             </>
           )}
         </div>
-        <div className="flex flex-row gap-2 items-center">
+        <div className="flex flex-row items-center gap-2">
           <Chip label={POOL_TYPES[type].label} color={POOL_TYPES[type].color} />
           <Typography weight={700} variant="sm">
             {fees} {i18n._(t`Fees`)}
@@ -115,7 +115,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
             {i18n._(t`Remove Liquidity`)}
           </Link>
         </Button>
-        <Button variant="outlined" color="gray" className="w-full col-span-2 text-high-emphesis py-3" size="xs">
+        <Button variant="outlined" color="gray" className="w-full col-span-2 py-3 text-high-emphesis" size="xs">
           {i18n._(t`View Analytics`)}
         </Button>
       </div>
