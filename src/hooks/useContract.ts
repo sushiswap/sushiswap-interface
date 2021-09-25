@@ -144,7 +144,7 @@ export function useMerkleDistributorContract(): Contract | null {
 
 export function useProtocolMerkleDistributorContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId ? '0x70595d235Aa9DD7De236314C1C384D78fe2411dD' : undefined, MERKLE_DISTRIBUTOR_ABI, true)
+  return useContract(chainId ? '0x1026cbed7b7E851426b959BC69dcC1bf5876512d' : undefined, MERKLE_DISTRIBUTOR_ABI, true)
 }
 
 export function useBoringHelperContract(): Contract | null {

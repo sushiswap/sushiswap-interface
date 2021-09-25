@@ -217,7 +217,7 @@ const ProtocolVesting = () => {
   }, [account])
 
   // remove once treasury signature passed
-  const pendingTreasurySignature = true
+  const pendingTreasurySignature = false
 
   return (
     <div className="flex flex-col gap-3 md:max-w-[400px]">
