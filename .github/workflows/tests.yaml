@@ -4,13 +4,11 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
 
 jobs:
   integration-tests:
     name: Integration tests
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -35,7 +33,7 @@ jobs:
       - run: yarn build
         env:
           CI: false
-          REACT_APP_NETWORK_URL: "https://mainnet.infura.io/v3/4bf032f2d38a4ed6bb975b80d6340847"
+          REACT_APP_NETWORK_URL: 'https://mainnet.infura.io/v3/4bf032f2d38a4ed6bb975b80d6340847'
       - run: yarn integration-test
 
   unit-tests:
@@ -61,5 +59,4 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
       - run: yarn install --frozen-lockfile
-      - run: yarn test
-
+      - run: yarn test:ci
