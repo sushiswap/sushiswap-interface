@@ -165,7 +165,8 @@ const ProtocolVesting = () => {
   const isOpen = useModalOpen(ApplicationModal.SELF_CLAIM)
   const toggleClaimModal = useToggleSelfClaimModal()
 
-  const { account } = useActiveWeb3React()
+  //const { account } = useActiveWeb3React()
+  const account = '0x4bb4c1b0745ef7b4642feeccd0740dec417ca0a0'
   const [attempting, setAttempting] = useState<boolean>(false)
   const { claimCallback } = useProtocolClaimCallback(account)
   const unclaimedAmount: CurrencyAmount<Currency> | undefined = useUserUnclaimedProtocolAmount(account)
@@ -217,7 +218,7 @@ const ProtocolVesting = () => {
   }, [account])
 
   // remove once treasury signature passed
-  const pendingTreasurySignature = true
+  const pendingTreasurySignature = false
 
   return (
     <div className="flex flex-col gap-3 md:max-w-[400px]">
