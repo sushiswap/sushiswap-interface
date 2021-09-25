@@ -1,3 +1,4 @@
+import { ChainId } from '@sushiswap/sdk'
 import useSWR, { SWRConfiguration } from 'swr'
 import { useActiveWeb3React } from '../../../hooks'
 import { getBar, getBarHistory } from '../fetchers/bar'
@@ -13,7 +14,7 @@ export function useBar(
   { timestamp, block, shouldFetch = true }: useBarProps = {},
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId: ChainId.MAINNET, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   const { data } = useSWR(shouldFetch ? ['bar', block] : null, () => getBar(block), swrConfig)
