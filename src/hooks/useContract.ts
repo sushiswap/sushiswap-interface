@@ -1,4 +1,10 @@
-import { ARCHER_ROUTER_ADDRESS, MINICHEF_ADDRESS, MULTICALL2_ADDRESS, ZAPPER_ADDRESS } from '../constants/addresses';
+import {
+  ARCHER_ROUTER_ADDRESS,
+  MINICHEF_ADDRESS,
+  MULTICALL2_ADDRESS,
+  ZAPPER_ADDRESS,
+  SILO_FACTORY_ADDRESS,
+} from '../constants/addresses';
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
@@ -68,6 +74,9 @@ import WETH9_ABI from '../constants/abis/weth.json';
 import ZAPPER_ABI from '../constants/abis/zapper.json';
 import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json';
 import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json';
+// SILO
+import SILO_FACTORY_ABI from '../constants/abis/MockSiloFactory.json';
+
 import { getContract } from '../functions/contract';
 import { useActiveWeb3React } from './useActiveWeb3React';
 import { useMemo } from 'react';
@@ -144,6 +153,12 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 export function useMerkleDistributorContract(): Contract | null {
   const { chainId } = useActiveWeb3React();
   return useContract(chainId ? MERKLE_DISTRIBUTOR_ADDRESS[chainId] : undefined, MERKLE_DISTRIBUTOR_ABI, true);
+}
+
+// SILO
+export function useSiloFactoryContract(withSignerIfPossible: boolean = false): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(chainId ? SILO_FACTORY_ADDRESS[chainId] : undefined, SILO_FACTORY_ABI, withSignerIfPossible);
 }
 
 export function useBoringHelperContract(): Contract | null {

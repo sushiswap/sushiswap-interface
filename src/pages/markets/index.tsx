@@ -1,23 +1,10 @@
-import { t } from '@lingui/macro';
-import { useLingui } from '@lingui/react';
 import React, { useState } from 'react';
 import Container from '../../components/Container';
 import { APP_NAME_URL, APP_SHORT_BLURB } from '../../constants';
-import useTokenSetup from '../../hooks/useTokenSetup';
-import { Field } from '../tools/meowshi';
 import Head from 'next/head';
-import CurrencyInputPanel from '../../components/CurrencyInputPanel';
 import Button from '../../components/Button';
 import { useActiveWeb3React } from '../../hooks';
-import Web3Status from '../../components/Web3Status';
-import { Currency } from '@sushiswap/sdk';
-import { CurrencySearch } from '../../modals/SearchModal/CurrencySearch';
-
-/**
- * !!! Contract on Chain Id (Rinkeby | Matic Mainnet)
- */
-// rinkeby markets factory contract
-// 0xAAc3Fb8732F415f8DE86Ae5819E16d6233e78423
+import { useSiloFactoryContract } from '../../hooks/useContract';
 
 /**
  *
@@ -26,7 +13,36 @@ import { CurrencySearch } from '../../modals/SearchModal/CurrencySearch';
 // graph url
 // https://api.studio.thegraph.com/query/9379/silo/0.3
 
+/*** TOD0:
+ *     0) delete market event
+ *     1) wallet connected?
+ *     2) abi stripping (just input array) for useContract abi.map error
+ *     3) typechain import
+ *     4) gas estimation (on matic?)
+ */
+
+type SilomMarket = {
+  name: string;
+  address: string;
+};
+
+const useSiloMarkets = () => {
+  const { chainId, account } = useActiveWeb3React();
+  const siloFactoryContract = useSiloFactoryContract(true);
+
+  const createSiloMarket = async () => {
+    console.log('on chain:', chainId);
+    await siloFactoryContract.addMarket(account, 'FirstMarket');
+  };
+
+  //  const removeSiloMarket = async() => {}
+
+  return { createSiloMarket };
+};
+
 export default function Markets() {
+  const { createSiloMarket } = useSiloMarkets();
+
   return (
     <Container id="supply-page" className="py-12 md:py-14 lg:py-16">
       <Head>
@@ -39,11 +55,12 @@ export default function Markets() {
           <Button
             color="gradient"
             className="text-gray-900 font-semibold"
-            onClick={() => {
+            onClick={async () => {
               console.log('createMarket.click()');
+              await createSiloMarket();
             }}
           >
-            Create Market
+            Create New Silo Market
           </Button>
         </div>
       </div>
