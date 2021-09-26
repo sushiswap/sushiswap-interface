@@ -34,6 +34,9 @@ import { useRouter } from 'next/router';
 import { APP_NAME_URL, APP_SHORT_BLURB } from '../constants';
 
 import { RecoilRoot } from 'recoil';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
+const queryClient = new QueryClient();
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false });
 
@@ -131,32 +134,34 @@ function MyApp({
         <meta key="og:description" property="og:description" content="Enabling lending and borrowing of any asset" />
       </Head>
       <RecoilRoot>
-        <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
-          <Web3ReactProvider getLibrary={getLibrary}>
-            <Web3ProviderNetwork getLibrary={getLibrary}>
-              <Web3ReactManager>
-                <ReduxProvider store={store}>
-                  <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
-                    <>
-                      <ListsUpdater />
-                      <UserUpdater />
-                      <ApplicationUpdater />
-                      <TransactionUpdater />
-                      <MulticallUpdater />
-                    </>
-                    <Provider>
-                      <Layout>
-                        <Guard>
-                          <Component {...pageProps} />
-                        </Guard>
-                      </Layout>
-                    </Provider>
-                  </PersistGate>
-                </ReduxProvider>
-              </Web3ReactManager>
-            </Web3ProviderNetwork>
-          </Web3ReactProvider>
-        </I18nProvider>
+        <QueryClientProvider client={queryClient}>
+          <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
+            <Web3ReactProvider getLibrary={getLibrary}>
+              <Web3ProviderNetwork getLibrary={getLibrary}>
+                <Web3ReactManager>
+                  <ReduxProvider store={store}>
+                    <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                      <>
+                        <ListsUpdater />
+                        <UserUpdater />
+                        <ApplicationUpdater />
+                        <TransactionUpdater />
+                        <MulticallUpdater />
+                      </>
+                      <Provider>
+                        <Layout>
+                          <Guard>
+                            <Component {...pageProps} />
+                          </Guard>
+                        </Layout>
+                      </Provider>
+                    </PersistGate>
+                  </ReduxProvider>
+                </Web3ReactManager>
+              </Web3ProviderNetwork>
+            </Web3ReactProvider>
+          </I18nProvider>
+        </QueryClientProvider>
       </RecoilRoot>
     </Fragment>
   );
