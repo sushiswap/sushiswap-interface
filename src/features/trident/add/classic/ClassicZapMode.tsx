@@ -37,7 +37,7 @@ const ClassicZapMode = () => {
   return (
     <>
       {noLiquidity ? (
-        <div className="px-5 mb-2">
+        <div className="mb-2">
           <Alert
             dismissable={false}
             type="error"
@@ -46,7 +46,7 @@ const ClassicZapMode = () => {
           />
         </div>
       ) : (
-        <div className="px-5 mb-2">
+        <div className="mb-2">
           <Alert
             dismissable={false}
             type="information"
@@ -57,7 +57,7 @@ const ClassicZapMode = () => {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 px-5">
+      <div className="flex flex-col gap-3">
         <AssetInput
           value={zapInputAmount}
           currency={zapCurrency}
@@ -88,7 +88,7 @@ const ClassicZapMode = () => {
           </TridentApproveGate>
         </div>
       </div>
-      <div className="flex flex-col gap-4 px-5 mt-8">
+      <div className="flex flex-col gap-4 mt-8">
         <Typography weight={700} className="text-high-emphesis">
           {zapCurrency
             ? i18n._(t`Your ${zapCurrency.symbol} will be split into:`)

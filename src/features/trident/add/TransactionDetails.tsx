@@ -25,7 +25,7 @@ const TransactionDetails: FC = () => {
   )
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 lg:gap-8">
       <div className="flex flex-row justify-between">
         <Typography weight={700} className="text-high-emphesis">
           {i18n._(t`Transaction Details`)}

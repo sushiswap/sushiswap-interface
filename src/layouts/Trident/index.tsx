@@ -32,7 +32,7 @@ const TridentLayout: FC<ComponentProps> = ({
           >
             <div className={classNames(headerBg, 'w-full h-full opacity-25')} />
           </div>
-          <Container maxWidth="6xl" className="flex flex-col gap-5 p-5 z-[1]">
+          <Container maxWidth="7xl" className="flex flex-col gap-5 p-5 z-[1]">
             {children}
           </Container>
         </Main>

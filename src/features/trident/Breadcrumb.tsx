@@ -32,7 +32,6 @@ interface BreadcrumbProps {
   breadcrumbs: BreadcrumbItem[]
 }
 
-// TODO: WIP
 const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   const [, pool] = useRecoilValue(poolAtom)
   const formatted = useMemo(() => {
@@ -47,7 +46,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
 
   return (
     <div className="w-full border-b border-dark-900 py-2 flex justify-center bg-gradient-to-r from-transparent-blue to-transparent-pink">
-      <Container maxWidth="6xl" className="px-5 flex items-center">
+      <Container maxWidth="7xl" className="px-5 flex items-center">
         {formatted
           .map(({ label, link }, index) => (
             <Typography

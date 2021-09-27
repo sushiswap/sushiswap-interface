@@ -38,7 +38,7 @@ const ClassicStandardMode = () => {
   return (
     <>
       <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4 px-5">
+        <div className="flex flex-col gap-4">
           <AssetInput
             value={formattedAmounts[0]}
             currency={currencyA}
@@ -63,6 +63,12 @@ const ClassicStandardMode = () => {
               setSecondaryInput(val)
             }}
             onSelect={(cur) => setURLCurrency(cur, 1)}
+            headerRight={
+              <AssetInput.WalletSwitch
+                onChange={() => setSpendFromWallet(!spendFromWallet)}
+                checked={spendFromWallet}
+              />
+            }
             spendFromWallet={spendFromWallet}
           />
           <div className="flex flex-col gap-3">
@@ -119,7 +125,7 @@ const ClassicStandardMode = () => {
           </div>
         </div>
         {!error && (
-          <div className="flex flex-col px-5">
+          <div className="flex flex-col">
             <TransactionDetails />
           </div>
         )}

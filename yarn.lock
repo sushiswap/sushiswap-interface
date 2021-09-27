@@ -20683,6 +20683,11 @@ tailwindcss-border-gradient-radius@^2.0.0:
     color "^3.1.2"
     lodash "^4.17.19"
 
+tailwindcss-pseudo-elements@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/tailwindcss-pseudo-elements/-/tailwindcss-pseudo-elements-2.0.0.tgz#778a29b9aafeef89fe2e22efe047ae56822627a3"
+  integrity sha512-cbnF8Rg1tJjsgrUK1sLt/TNAea9zKNhWGTI5NtKxZ8WhYjHCMAGOjaHg+iql8UlXaW1U9jPeyJsGlQsLGrbomQ==
+
 tailwindcss@^2.2.9:
   version "2.2.15"
   resolved "https://registry.yarnpkg.com/tailwindcss/-/tailwindcss-2.2.15.tgz#8bee3ebe68b988c050508ce20633f35b040dd9fe"
