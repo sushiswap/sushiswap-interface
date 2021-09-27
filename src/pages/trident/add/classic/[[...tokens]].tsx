@@ -29,6 +29,8 @@ import { useLingui } from '@lingui/react'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import useCurrenciesFromURL from '../../../../features/trident/context/hooks/useCurrenciesFromURL'
+import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
+import Pool from '../../pool/classic/[[...tokens]]'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -122,7 +124,14 @@ const AddClassic = () => {
   )
 }
 
-AddClassic.Layout = TridentLayout
 AddClassic.Provider = RecoilRoot
+AddClassic.Layout = (props) => (
+  <TridentLayout
+    {...props}
+    headerBg="bg-dots-pattern"
+    headerHeight="h-[220px]"
+    breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic'], BREADCRUMBS['add_classic']]}
+  />
+)
 
 export default AddClassic

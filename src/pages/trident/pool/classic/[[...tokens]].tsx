@@ -21,6 +21,7 @@ import { t } from '@lingui/macro'
 import Button from '../../../../components/Button'
 import { useLingui } from '@lingui/react'
 import Rewards from '../../../../features/trident/pool/Rewards'
+import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -103,6 +104,13 @@ const Pool = () => {
 }
 
 Pool.Provider = RecoilRoot
-Pool.Layout = (props) => <TridentLayout headerBg="bg-chevron-pattern" headerHeight="h-[220px]" {...props} />
+Pool.Layout = (props) => (
+  <TridentLayout
+    {...props}
+    headerBg="bg-dots-pattern"
+    headerHeight="h-[220px]"
+    breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic']]}
+  />
+)
 
 export default Pool

@@ -20,11 +20,12 @@ module.exports = {
       }),
       linearBorderGradients: {
         directions: {
+          t: 'to top',
           tr: 'to top right',
           r: 'to right',
         },
         colors: {
-          'blue-pink': ['#27B0E6', '#FA52A0'],
+          'blue-pink': ['#0993ec', '#f338c3'],
           'pink-red-light-brown': ['#FE5A75', '#FEC464'],
         },
         background: {

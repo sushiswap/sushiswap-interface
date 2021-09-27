@@ -2,20 +2,26 @@ import React, { FC } from 'react'
 import Main from '../../components/Main'
 import Popups from '../../components/Popups'
 import Header from '../../components/Header'
-import Breadcrumb from '../../features/trident/Breadcrumb'
+import Breadcrumb, { BreadcrumbItem } from '../../features/trident/Breadcrumb'
 import Container from '../../components/Container'
 import { classNames } from '../../functions'
 
 interface ComponentProps {
+  breadcrumbs: BreadcrumbItem[]
   headerBg?: string
   headerHeight?: string
 }
 
-const TridentLayout: FC<ComponentProps> = ({ children = [], headerBg = 'bg-dots-pattern', headerHeight = 'h-40' }) => {
+const TridentLayout: FC<ComponentProps> = ({
+  children = [],
+  headerBg = 'bg-dots-pattern',
+  headerHeight = 'h-40',
+  breadcrumbs,
+}) => {
   return (
     <div className="z-0 flex flex-col items-center w-full h-screen">
       <Header />
-      <Breadcrumb />
+      <Breadcrumb breadcrumbs={breadcrumbs} />
       <div className="relative w-full">
         <Main>
           <div

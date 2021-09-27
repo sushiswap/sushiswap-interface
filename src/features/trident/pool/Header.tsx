@@ -46,7 +46,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
     <div className="flex justify-between">
       <div className="flex flex-col gap-2 lg:gap-5">
         <div className="lg:flex lg:flex-row lg:gap-3 lg:order-0 lg:items-center">
-          <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} />
+          <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} dense />
           <div className="hidden lg:flex lg:flex-col lg:gap-2">{properties}</div>
         </div>
         <div className="lg:order-2 flex flex-row gap-2 items-center">
