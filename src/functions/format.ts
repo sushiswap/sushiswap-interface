@@ -183,3 +183,9 @@ export function formatDateAgo(date: Date) {
 
   return `${Math.floor(secondsAgo / 31536000)} Year${secondsAgo / 63072000 >= 1 ? 's' : ''} Ago`
 }
+
+export const formatDate = (date: Date) =>
+  `${date.toLocaleDateString('default', { month: 'short' })} ${date.getDate()}, '${String(date.getFullYear()).replace(
+    '20',
+    ''
+  )}`

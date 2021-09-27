@@ -70,7 +70,7 @@ ToggleButtonGroup.Button = ({
           )}
         >
           <Typography
-            className={classNames('text-center', checked ? 'text-high-emphesis' : '')}
+            className={classNames('text-center', checked ? 'text-high-emphesis' : 'text-secondary')}
             variant="sm"
             weight={700}
           >

@@ -22,7 +22,6 @@ import {
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI, USDC, XSUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
@@ -38,8 +37,8 @@ const AddHybrid = () => {
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
-  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
-  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const currencyA = useCurrency(query.tokens?.[0])
+  const currencyB = useCurrency(query.tokens?.[1])
   const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)

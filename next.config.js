@@ -2,10 +2,12 @@ const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
 
 const linguiConfig = require('./lingui.config.js')
+const defaultTheme = require('tailwindcss/defaultTheme')
 
 const { ChainId } = require('@sushiswap/core-sdk')
 
 const { locales, sourceLocale } = linguiConfig
+const { screens } = defaultTheme
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -134,6 +136,9 @@ const nextConfig = {
         defaultChainId: ChainId.ARBITRUM,
       },
     ],
+  },
+  publicRuntimeConfig: {
+    breakpoints: screens,
   },
 }
 

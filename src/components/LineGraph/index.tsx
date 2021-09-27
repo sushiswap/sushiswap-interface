@@ -1,16 +1,15 @@
-import { cloneDeepWith, maxBy, minBy } from 'lodash'
-
+import { TouchEvent, MouseEvent, FC, useRef } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { LinePath, Bar } from '@visx/shape'
 import { LinearGradient } from '@visx/gradient'
-import { scaleLinear, scaleTime } from '@visx/scale'
-import { useMemo, useState } from 'react'
+import { scaleLinear } from '@visx/scale'
+import { useCallback, useMemo } from 'react'
 import { localPoint } from '@visx/event'
 import { bisector } from 'd3-array'
 
 interface LineGraphProps {
   data: {
-    x: Date
+    x: number
     y: number
   }[]
   stroke?:
@@ -24,8 +23,7 @@ interface LineGraphProps {
         }
       }
   strokeWidth?: number
-  overrideFigure?: (figure: number) => void
-  overrideDate?: (date: Date) => void
+  setSelectedIndex?: (x: number) => void
 }
 
 interface GraphProps extends LineGraphProps {
@@ -33,53 +31,64 @@ interface GraphProps extends LineGraphProps {
   height: number
 }
 
-const bisectDate = bisector((d) => d.x).left
+const bisect = bisector((d) => d.x).center
 
-function Graph({ data, stroke, strokeWidth, width, height, overrideFigure, overrideDate }: GraphProps): JSX.Element {
-  const [tooltipCords, setTooltipCords] = useState<{ x: number; y: number }>(undefined)
-
+const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSelectedIndex }) => {
+  const dRef = useRef<number>()
+  const circleRef = useRef<SVGCircleElement>()
+  const serializedData = useMemo(() => data.toString(), [data])
   const xScale = useMemo(
     () =>
-      scaleTime<number>({
-        domain: [minBy(data, 'x')?.x, maxBy(data, 'x')?.x],
-        range: [0, width],
-      }),
-    [JSON.stringify(data), width]
-  )
-  const yScale = useMemo(
-    () =>
       scaleLinear<number>({
-        domain: [maxBy(data, 'y')?.y, minBy(data, 'y')?.y],
-        range: [0, height],
+        domain: [Math.min(data[0].x, data[data.length - 1].x), Math.max(data[0].x, data[data.length - 1].x)],
+        range: [10, width - 10],
       }),
-    [JSON.stringify(data), height]
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [serializedData, width]
   )
 
-  const handleTooltip = (event: React.TouchEvent<SVGRectElement> | React.MouseEvent<SVGRectElement>) => {
-    const { x } = localPoint(event) || { x: 0 }
-    const x0 = xScale.invert(x)
-    const index = bisectDate(data, x0.getTime(), 1)
-    const d0 = data[index - 1]
-    const d1 = data[index]
-    let d = d0
-    if (d1 && d1.x) {
-      d = x0.valueOf() - d0.x.valueOf() > d1.x.valueOf() - x0.valueOf() ? d1 : d0
-    }
+  const yScale = useMemo(
+    () => {
+      const y = data.map((el) => el.y)
+      return scaleLinear<number>({
+        domain: [Math.max.apply(Math, y), Math.min.apply(Math, y)],
+        range: [10, height - 10],
+      })
+    },
 
-    const multiplier = -1 * (Math.abs(x - xScale(d.x)) / Math.abs(xScale(d1.x) - xScale(d0.x)))
-    const offset = multiplier * (d.x === d1.x ? d.y - d0.y : d.y - d1.y)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [serializedData, height]
+  )
 
-    overrideFigure(d.y)
-    overrideDate(d.x)
+  const handleTooltip = useCallback(
+    (event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
+      const { x } = localPoint(event) || { x: 0 }
+      const x0 = xScale.invert(x)
+      const index = bisect(data, x0, 0)
+      const d = data[index]
 
-    setTooltipCords({ x, y: yScale(d.y + offset) })
-  }
+      // Add check to avoid unnecessary changes and setState to DOM
+      if (d && dRef.current !== index) {
+        dRef.current = index
+        circleRef.current.setAttribute('cx', xScale(d.x).toString())
+        circleRef.current.setAttribute('cy', yScale(d.y).toString())
+        setSelectedIndex(index)
+      }
+    },
+    [data, setSelectedIndex, xScale, yScale]
+  )
 
-  const hideTooltip = () => {
-    overrideFigure(undefined)
-    overrideDate(undefined)
-    setTooltipCords(undefined)
-  }
+  const showTooltip = useCallback(() => {
+    circleRef.current.setAttribute('display', 'block')
+  }, [])
+
+  const hideTooltip = useCallback(() => {
+    setSelectedIndex(data.length - 1)
+    circleRef.current.setAttribute('display', 'none')
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serializedData, setSelectedIndex])
 
   return (
     <div className="w-full h-full">
@@ -87,7 +96,11 @@ function Graph({ data, stroke, strokeWidth, width, height, overrideFigure, overr
         {'gradient' in stroke && (
           <LinearGradient id="gradient" from={stroke.gradient.from} to={stroke.gradient.to} vertical={false} />
         )}
-        <g>{tooltipCords && <circle cx={tooltipCords.x} cy={tooltipCords.y} r={4} fill="#FFFFFF" />}</g>
+        {setSelectedIndex && (
+          <g>
+            <circle ref={circleRef} r={4} fill="#FFFFFF" />
+          </g>
+        )}
         <LinePath
           data={data}
           x={(d) => xScale(d.x) ?? 0}
@@ -98,33 +111,34 @@ function Graph({ data, stroke, strokeWidth, width, height, overrideFigure, overr
         <Bar
           width={width}
           height={height}
-          onTouchStart={handleTooltip}
-          onTouchMove={handleTooltip}
-          onMouseMove={handleTooltip}
-          onMouseLeave={() => hideTooltip()}
           fill={'transparent'}
+          {...(setSelectedIndex && {
+            onTouchStart: handleTooltip,
+            onTouchMove: handleTooltip,
+            onMouseEnter: showTooltip,
+            onMouseMove: handleTooltip,
+            onMouseLeave: hideTooltip,
+          })}
         />
       </svg>
     </div>
   )
 }
 
-export default function LineGraph({
+const LineGraph: FC<LineGraphProps> = ({
   data,
   stroke = { solid: '#0993EC' },
   strokeWidth = 1.5,
-  overrideFigure = (f) => {},
-  overrideDate = (d) => {},
-}: LineGraphProps): JSX.Element {
-  return (
-    <>
-      {data && (
-        <AutoSizer>
-          {({ width, height }) => (
-            <Graph {...{ data, stroke, strokeWidth, width, height, overrideDate, overrideFigure }} />
-          )}
-        </AutoSizer>
-      )}
-    </>
-  )
+  setSelectedIndex,
+}) => {
+  if (data)
+    return (
+      <AutoSizer>
+        {({ width, height }) => <Graph {...{ data, stroke, strokeWidth, width, height, setSelectedIndex }} />}
+      </AutoSizer>
+    )
+
+  return <></>
 }
+
+export default LineGraph

@@ -24,8 +24,7 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
-import { NATIVE, Percent } from '@sushiswap/core-sdk'
-import { SUSHI } from '../../../../config/tokens'
+import { Percent } from '@sushiswap/core-sdk'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
 import WithdrawalSubmittedModal from '../../../../features/trident/WithdrawalSubmittedModal'
@@ -35,7 +34,7 @@ import RemoveTransactionReviewStandardModal from '../../../../features/trident/r
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 const RemoveClassic = () => {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
 
@@ -45,8 +44,8 @@ const RemoveClassic = () => {
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
   const setSlippage = useSetRecoilState(slippageAtom)
 
-  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
-  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const currencyA = useCurrency(query.tokens?.[0])
+  const currencyB = useCurrency(query.tokens?.[1])
   const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)

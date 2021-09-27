@@ -150,6 +150,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.4",
+    "react-responsive": "^9.0.0-beta.4",
     "react-table": "^7.7.0",
     "react-test-renderer": "^17.0.2",
     "react-virtualized": "^9.22.3",

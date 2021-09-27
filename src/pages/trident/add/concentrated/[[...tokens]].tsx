@@ -19,8 +19,6 @@ import {
   totalSupplyAtom,
 } from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE } from '@sushiswap/core-sdk'
-import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
@@ -40,8 +38,8 @@ const AddConcentrated = () => {
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
   const minPrice = useRecoilValue(minPriceAtom)
   const maxPrice = useRecoilValue(maxPriceAtom)
-  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
-  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const currencyA = useCurrency(query.tokens?.[0])
+  const currencyB = useCurrency(query.tokens?.[1])
   const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
