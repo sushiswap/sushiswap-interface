@@ -1,7 +1,7 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, ZERO } from '@sushiswap/core-sdk'
 import { calculateSlippageAmount } from '../../../../functions'
-import { currentLiquidityValueSelector, poolAtom, slippageAtom } from '../atoms'
+import { poolAtom, poolBalanceAtom, slippageAtom, totalSupplyAtom } from '../atoms'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
@@ -12,21 +12,30 @@ export const percentageAmountAtom = atom<string>({
   default: '',
 })
 
+export const parsedSLPAmountSelector = selector<CurrencyAmount<Currency>>({
+  key: 'parsedInputAmount',
+  get: ({ get }) => {
+    const poolBalance = get(poolBalanceAtom)
+    const percentageAmount = get(percentageAmountAtom)
+    const percentage = new Percent(percentageAmount, '100')
+    return poolBalance?.multiply(percentage)
+  },
+})
+
 export const parsedAmountsSelector = selector<CurrencyAmount<Currency>[]>({
-  key: 'parsedAmountsSelector',
+  key: 'percentageInputParsedAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
-    const percentageAmount = get(percentageAmountAtom)
-    const currentLiquidityValue = get(currentLiquidityValueSelector)
-    const percentage = new Percent(percentageAmount, '100')
+    const totalSupply = get(totalSupplyAtom)
+    const parsedSLPAmount = get(parsedSLPAmountSelector)
     const allowedSlippage = get(slippageAtom)
 
     const amounts = [
-      pool && percentageAmount && percentage.greaterThan('0') && currentLiquidityValue[0]
-        ? CurrencyAmount.fromRawAmount(pool.token0, percentage.multiply(currentLiquidityValue[0].quotient).quotient)
+      pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
+        ? pool.getLiquidityValue(pool.token0, totalSupply?.wrapped, parsedSLPAmount?.wrapped)
         : undefined,
-      pool && percentageAmount && percentage.greaterThan('0') && currentLiquidityValue[1]
-        ? CurrencyAmount.fromRawAmount(pool.token1, percentage.multiply(currentLiquidityValue[1].quotient).quotient)
+      pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
+        ? pool.getLiquidityValue(pool.token1, totalSupply?.wrapped, parsedSLPAmount?.wrapped)
         : undefined,
     ]
 
@@ -42,6 +51,7 @@ export const parsedAmountsSelector = selector<CurrencyAmount<Currency>[]>({
       ]
     }
 
+    if (pool) return [CurrencyAmount.fromRawAmount(pool.token0, '0'), CurrencyAmount.fromRawAmount(pool.token1, '0')]
     return [undefined, undefined]
   },
 })
@@ -52,6 +62,7 @@ const usePercentageInput = () => {
   const [poolState] = useRecoilValue(poolAtom)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
+  const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -64,10 +75,11 @@ const usePercentageInput = () => {
   return useMemo(
     () => ({
       parsedAmounts,
+      parsedSLPAmount,
       percentageInput,
       error,
     }),
-    [error, parsedAmounts, percentageInput]
+    [error, parsedAmounts, parsedSLPAmount, percentageInput]
   )
 }
 

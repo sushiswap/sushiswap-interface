@@ -1,31 +1,19 @@
-import { FC, ReactNode, useEffect } from 'react'
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
-import { atom, useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
 
-const sumUSDCValuesStateAtom = atom<Record<string, CurrencyAmount<Currency>>>({
-  key: 'sumUSDCValuesStateAtom',
-  default: {},
-})
-
-interface USDCValueProps {
-  amount: CurrencyAmount<Currency>
-}
-
-const USDCValue: FC<USDCValueProps> = ({ amount }) => {
+// Dummy component that fetches usdcValue
+const USDCValue: FC<{ amount: CurrencyAmount<Currency>; update(address: string, value: CurrencyAmount<Currency>) }> = ({
+  amount,
+  update,
+}) => {
   const usdcValue = useUSDCValue(amount)
-  const update = useRecoilCallback(
-    ({ snapshot }) =>
-      async () => {
-        const values = { ...(await snapshot.getPromise(sumUSDCValuesStateAtom)) }
-        values[amount?.wrapped.currency.address] = usdcValue
-      },
-    [amount?.wrapped.currency.address, usdcValue]
-  )
 
   useEffect(() => {
-    update()
-  }, [update])
+    if (amount?.currency.wrapped.address) {
+      update(amount?.currency.wrapped.address, usdcValue)
+    }
+  }, [amount?.currency.wrapped.address, update, usdcValue])
 
   return <></>
 }
@@ -36,15 +24,25 @@ interface SumUSDCValuesProps {
 }
 
 const SumUSDCValues: FC<SumUSDCValuesProps> = ({ amounts, children }) => {
-  const state = useRecoilValue(sumUSDCValuesStateAtom)
-  const values = Object.values(state)
-  const loading = !(values.length === amounts.length && values.every((el) => el.greaterThan(0)))
-  const amount = loading ? null : values.reduce((acc, cur) => acc.add(cur))
+  const [state, setState] = useState<Record<string, CurrencyAmount<Currency>>>({})
+  const update = useCallback((address, value) => {
+    setState((prevState) => ({
+      ...prevState,
+      [address]: value,
+    }))
+  }, [])
+
+  const values = useMemo(() => Object.values(state), [state])
+  const loading = useMemo(
+    () => !(values.length === amounts.length && values.every((el) => el.greaterThan(0))),
+    [amounts.length, values]
+  )
+  const amount = useMemo(() => (loading ? null : values.reduce((acc, cur) => acc.add(cur))), [loading, values])
 
   return (
     <>
       {amounts.map((el, index) => (
-        <USDCValue amount={el} key={index} />
+        <USDCValue amount={el} key={index} update={update} />
       ))}
       {children({ amount, loading })}
     </>

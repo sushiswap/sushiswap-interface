@@ -36,7 +36,7 @@ const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
 
-  const [[poolState, pool], setPool] = useRecoilState(poolAtom)
+  const [[, pool], setPool] = useRecoilState(poolAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
@@ -95,15 +95,13 @@ const AddClassic = () => {
           <ModeToggle />
           <FixedRatioHeader />
 
-          {poolState === ConstantProductPoolState.NOT_EXISTS && (
-            <div className="mb-3">
-              <Alert
-                dismissable={false}
-                type="error"
-                showIcon
-                message={i18n._(t`A Pool could not be found for provided currencies`)}
-              />
-            </div>
+          {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+            <Alert
+              dismissable={false}
+              type="error"
+              showIcon
+              message={i18n._(t`A Pool could not be found for provided currencies`)}
+            />
           )}
 
           <>
