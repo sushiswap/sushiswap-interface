@@ -3,12 +3,12 @@ import { useMultipleContractSingleData, useSingleContractMultipleData } from '..
 
 import ERC20_ABI from '../../constants/abis/erc20.json'
 import { Interface } from '@ethersproject/abi'
-import { SUSHI } from './../../config/tokens'
 import { isAddress } from '../../functions/validate'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useMemo } from 'react'
 import { useMulticall2Contract } from '../../hooks/useContract'
+import { TokenBalancesMap } from './types'
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
@@ -54,7 +54,7 @@ export function useETHBalances(uncheckedAddresses?: (string | undefined)[]): {
 export function useTokenBalancesWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
-): [{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }, boolean] {
+): [TokenBalancesMap, boolean] {
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
@@ -77,9 +77,7 @@ export function useTokenBalancesWithLoadingIndicator(
     useMemo(
       () =>
         address && validatedTokens.length > 0
-          ? validatedTokens.reduce<{
-              [tokenAddress: string]: CurrencyAmount<Token> | undefined
-            }>((memo, token, i) => {
+          ? validatedTokens.reduce<TokenBalancesMap>((memo, token, i) => {
               const value = balances?.[i]?.result?.[0]
               const amount = value ? JSBI.BigInt(value.toString()) : undefined
               if (amount) {
@@ -94,12 +92,15 @@ export function useTokenBalancesWithLoadingIndicator(
   ]
 }
 
-export function useTokenBalances(
-  address?: string,
-  tokens?: (Token | undefined)[]
-): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
+export const serializeBalancesMap = (mapping: Record<string, CurrencyAmount<Token>>): string => {
+  return Object.entries(mapping)
+    .map(([address, currencyAmount]) => currencyAmount.serialize())
+    .join()
+}
+
+export function useTokenBalances(address?: string, tokens?: (Token | undefined)[]): TokenBalancesMap {
   const balances = useTokenBalancesWithLoadingIndicator(address, tokens)[0]
-  const memoizedBalances = useMemo(() => JSON.stringify(balances), [balances])
+  const memoizedBalances = useMemo(() => serializeBalancesMap(balances), [balances])
   return useMemo(() => balances, [memoizedBalances])
 }
 
@@ -140,14 +141,11 @@ export function useCurrencyBalance(account?: string, currency?: Currency): Curre
 }
 
 // mimics useAllBalances
-export function useAllTokenBalances(): {
-  [tokenAddress: string]: CurrencyAmount<Token> | undefined
-} {
+export function useAllTokenBalances(): TokenBalancesMap {
   const { account } = useActiveWeb3React()
   const allTokens = useAllTokens()
   const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
-  const balances = useTokenBalances(account ?? undefined, allTokensArray)
-  return balances ?? {}
+  return useTokenBalances(account ?? undefined, allTokensArray)
 }
 
 // TODO: Replace
