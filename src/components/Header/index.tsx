@@ -1,9 +1,8 @@
-import { ChainId, Currency, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { Feature, featureEnabled } from '../../functions/feature'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { ANALYTICS_URL } from '../../constants'
-import Buy from '../../features/on-ramp/ramp'
 import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import LanguageSwitch from '../LanguageSwitch'
@@ -19,8 +18,9 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 
-// import { ExternalLink, NavLink } from "./Link";
-// import { ReactComponent as Burger } from "../assets/images/burger.svg";
+const NAV_BASE_CLASS =
+  'py-1.5 px-3.5 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis whitespace-nowrap'
+const ACTIVE_NAV_LINK_CLASS = 'font-bold text-high-emphesis bg-dark-800 rounded-md'
 
 function AppBar(): JSX.Element {
   const { i18n } = useLingui()
@@ -29,7 +29,6 @@ function AppBar(): JSX.Element {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
   return (
-    //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
     <header className="flex-shrink-0 w-full">
       <Popover as="nav" className="z-10 w-full bg-transparent header-border-b">
         {({ open }) => (
@@ -37,76 +36,38 @@ function AppBar(): JSX.Element {
             <div className="px-4 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Image src="/logo.png" alt="Sushi" width="32px" height="32px" />
-                  <div className="hidden sm:block sm:ml-4">
-                    <div className="flex space-x-2">
-                      {/* <Buy /> */}
-                      <NavLink href="/swap">
-                        <a
-                          id={`swap-nav-link`}
-                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                        >
-                          {i18n._(t`Swap`)}
-                        </a>
-                      </NavLink>
-                      <NavLink href="/pool">
-                        <a
-                          id={`pool-nav-link`}
-                          className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                        >
-                          {i18n._(t`Pool`)}
-                        </a>
-                      </NavLink>
-                      {chainId && featureEnabled(Feature.MIGRATE, chainId) && (
-                        <NavLink href={'/migrate'}>
-                          <a
-                            id={`migrate-nav-link`}
-                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                          >
-                            {i18n._(t`Migrate`)}
-                          </a>
-                        </NavLink>
-                      )}
+                  <Image src="/logo.svg" alt="Sushi logo" width="32px" height="32px" />
+                  <div className="hidden sm:block sm:ml-8">
+                    <div className="flex space-x-1.5">
                       {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
-                        <NavLink href={'/farm'}>
-                          <a
-                            id={`farm-nav-link`}
-                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                          >
-                            {i18n._(t`Farm`)}
+                        <NavLink href="/farm" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                          <a id="farm-nav-link" className={NAV_BASE_CLASS}>
+                            {i18n._(t`Explore`)}
                           </a>
                         </NavLink>
                       )}
+                      <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                        <a id="pool-nav-link" className={NAV_BASE_CLASS}>
+                          {i18n._(t`Invest`)}
+                        </a>
+                      </NavLink>
+                      <NavLink href="/swap" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                        <a id="swap-nav-link" className={NAV_BASE_CLASS}>
+                          {i18n._(t`Trade`)}
+                        </a>
+                      </NavLink>
                       {chainId && featureEnabled(Feature.KASHI, chainId) && (
                         <>
-                          <NavLink href={'/lend'}>
-                            <a
-                              id={`lend-nav-link`}
-                              className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                            >
-                              {i18n._(t`Lend`)}
-                            </a>
-                          </NavLink>
-                          <NavLink href={'/borrow'}>
-                            <a
-                              id={`borrow-nav-link`}
-                              className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                            >
-                              {i18n._(t`Borrow`)}
+                          <NavLink href="/lend" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                            <a id="lend-nav-link" className={NAV_BASE_CLASS}>
+                              {i18n._(t`Lending`)}
                             </a>
                           </NavLink>
                         </>
                       )}
-                      {chainId && featureEnabled(Feature.STAKING, chainId) && (
-                        <NavLink href={'/stake'}>
-                          <a
-                            id={`stake-nav-link`}
-                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                          >
-                            {i18n._(t`Stake`)}
-                          </a>
-                        </NavLink>
-                      )}
+                      <ExternalLink href="https://miso.sushi.com/" className={NAV_BASE_CLASS}>
+                        Launchpad
+                      </ExternalLink>
                     </div>
                   </div>
                 </div>
@@ -267,38 +228,26 @@ function AppBar(): JSX.Element {
 
             <Popover.Panel className="sm:hidden">
               <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
-                <Link href={'/swap'}>
-                  <a
-                    id={`swap-nav-link`}
-                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                  >
+                <Link href="/swap">
+                  <a id="swap-nav-link" className={NAV_BASE_CLASS}>
                     {i18n._(t`Swap`)}
                   </a>
                 </Link>
-                <Link href={'/pool'}>
-                  <a
-                    id={`pool-nav-link`}
-                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                  >
+                <Link href="/pool">
+                  <a id="pool-nav-link" className={NAV_BASE_CLASS}>
                     {i18n._(t`Pool`)}
                   </a>
                 </Link>
 
-                <Link href={'/migrate'}>
-                  <a
-                    id={`migrate-nav-link`}
-                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                  >
+                <Link href="/migrate">
+                  <a id="migrate-nav-link" className={NAV_BASE_CLASS}>
                     {i18n._(t`Migrate`)}
                   </a>
                 </Link>
 
                 {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
-                  <Link href={'/farm'}>
-                    <a
-                      id={`farm-nav-link`}
-                      className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                    >
+                  <Link href="/farm">
+                    <a id="farm-nav-link" className={NAV_BASE_CLASS}>
                       {' '}
                       {i18n._(t`Farm`)}
                     </a>
@@ -307,20 +256,14 @@ function AppBar(): JSX.Element {
 
                 {chainId && featureEnabled(Feature.KASHI, chainId) && (
                   <>
-                    <Link href={'/lend'}>
-                      <a
-                        id={`lend-nav-link`}
-                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                      >
+                    <Link href="/lend">
+                      <a id="lend-nav-link" className={NAV_BASE_CLASS}>
                         {i18n._(t`Lend`)}
                       </a>
                     </Link>
 
-                    <Link href={'/borrow'}>
-                      <a
-                        id={`borrow-nav-link`}
-                        className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                      >
+                    <Link href="/borrow">
+                      <a id="borrow-nav-link" className={NAV_BASE_CLASS}>
                         {i18n._(t`Borrow`)}
                       </a>
                     </Link>
@@ -328,11 +271,8 @@ function AppBar(): JSX.Element {
                 )}
 
                 {chainId && featureEnabled(Feature.STAKING, chainId) && (
-                  <Link href={'/stake'}>
-                    <a
-                      id={`stake-nav-link`}
-                      className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                    >
+                  <Link href="/stake">
+                    <a id="stake-nav-link" className={NAV_BASE_CLASS}>
                       {i18n._(t`Stake`)}
                     </a>
                   </Link>
@@ -340,9 +280,9 @@ function AppBar(): JSX.Element {
 
                 {chainId && featureEnabled(Feature.ANALYTICS, chainId) && (
                   <ExternalLink
-                    id={`analytics-nav-link`}
+                    id="analytics-nav-link"
                     href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
-                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
+                    className={NAV_BASE_CLASS}
                   >
                     {i18n._(t`Analytics`)}
                   </ExternalLink>
