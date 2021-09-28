@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Popover } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
-function MobileMenuToggle({ isOpen }: { isOpen: boolean }): JSX.Element {
+interface MobileMenuToggleProps {
+  isOpen: boolean
+}
+
+export const MobileMenuToggle: FC<MobileMenuToggleProps> = ({ isOpen }) => {
   const { i18n } = useLingui()
 
   return (

@@ -1,21 +1,20 @@
-import React from 'react'
+import React, { FC } from 'react'
 import { Search } from 'react-feather'
+import { useLingui } from '@lingui/react'
+import { t } from '@lingui/macro'
 
-function HeaderSearchBox(): JSX.Element {
+// NOT FINALIZED WITH DESIGN YET
+const HeaderSearchBox: FC = () => {
+  const { i18n } = useLingui()
   return (
-    <div className="relative w-full max-w-md">
-      <input
-        // className={`py-3 pl-4 pr-14 rounded w-full focus:outline-none focus:ring ${
-        //   type === 'Borrow' ? 'focus:ring-pink' : 'focus:ring-blue'
-        // }`}
-        // onChange={(e) => onSearch(e.target.value)}
-        style={{ background: '#161522' }}
-        // value={lists[0].term}
-        placeholder="Search by symbol"
-      />
-      <div className="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none">
-        <Search size={16} />
+    <div className="relative w-full mx-4">
+      <div className="absolute inset-y-0 left-4 flex items-center pr-6 pointer-events-none">
+        <Search size={16} className="text-blue" />
       </div>
+      <input
+        className="py-2.5 pl-12 pr-4 rounded w-full focus:outline-none focus:ring focus:ring-blue bg-dark-900 text-sm"
+        placeholder={i18n._(t`Search for tokens, pairs, farms`)}
+      />
     </div>
   )
 }

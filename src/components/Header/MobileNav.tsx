@@ -1,5 +1,5 @@
 import { Feature, featureEnabled } from '../../functions/feature'
-import React from 'react'
+import React, { FC } from 'react'
 import ExternalLink from '../ExternalLink'
 import { Popover } from '@headlessui/react'
 import { t } from '@lingui/macro'
@@ -9,7 +9,7 @@ import { NAV_BASE_CLASS } from './styles'
 import Link from 'next/link'
 import { ANALYTICS_URL } from '../../constants'
 
-function MobileNav(): JSX.Element {
+export const MobileNav: FC = () => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
@@ -79,5 +79,3 @@ function MobileNav(): JSX.Element {
     </Popover.Panel>
   )
 }
-
-export default MobileNav

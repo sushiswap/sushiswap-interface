@@ -1,6 +1,6 @@
 import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { Feature, featureEnabled } from '../../functions/feature'
-import React from 'react'
+import React, { FC } from 'react'
 import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import LanguageSwitch from '../LanguageSwitch'
@@ -15,8 +15,13 @@ import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 import { ACTIVE_NAV_LINK_CLASS, NAV_BASE_CLASS } from './styles'
 import MobileMenuToggle from './MobileMenuToggle'
+import HeaderSearchBox from './HeaderSearchBox'
 
-function DesktopNav({ mobileMenuOpen }: { mobileMenuOpen: boolean }): JSX.Element {
+interface DesktopNavProps {
+  mobileMenuOpen: boolean
+}
+
+export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
 
@@ -25,7 +30,7 @@ function DesktopNav({ mobileMenuOpen }: { mobileMenuOpen: boolean }): JSX.Elemen
   return (
     <div className="px-4 py-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
+        <div className="flex items-center flex-shrink-0">
           <Image src="/logo.svg" alt="Sushi logo" width="32px" height="32px" />
           <div className="hidden sm:block sm:ml-8">
             <div className="flex space-x-1.5">
@@ -62,7 +67,9 @@ function DesktopNav({ mobileMenuOpen }: { mobileMenuOpen: boolean }): JSX.Elemen
           </div>
         </div>
 
-        <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
+        <HeaderSearchBox />
+
+        <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 xl:relative xl:p-0 xl:bg-transparent flex-shrink-0">
           <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
             {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
               <>
@@ -183,5 +190,3 @@ function DesktopNav({ mobileMenuOpen }: { mobileMenuOpen: boolean }): JSX.Elemen
     </div>
   )
 }
-
-export default DesktopNav
