@@ -309,8 +309,8 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
   return (
     <div
       className={classNames(
-        error ? 'lg:border-red/40' : '',
-        'lg:p-4 flex gap-1.5 items-center lg:border-r lg:border-t lg:border-b lg:border-dark-700 lg:bg-dark-900 lg:rounded-r lg:justify-center lg:min-w-[120px]'
+        error ? 'lg:border-red/40' : 'lg:border-dark-700',
+        'lg:p-4 flex gap-1.5 items-center lg:border-r lg:border-t lg:border-b lg:bg-dark-900 lg:rounded-r lg:justify-center lg:min-w-[120px]'
       )}
     >
       <div className="flex gap-3 items-center lg:flex-col">
