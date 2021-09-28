@@ -3,7 +3,7 @@ import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../../../functions'
 import { t } from '@lingui/macro'
 import { ConstantProductPoolState } from '../../../../hooks/useTridentClassicPools'
-import { noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
+import { noLiquiditySelector, poolAtom, spendFromWalletAtom, spendFromWalletSelector } from '../atoms'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useCurrencyBalance } from '../../../../state/wallet/hooks'
@@ -32,8 +32,12 @@ export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
 export const parsedZapSplitAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
   key: 'parsedZapSplitAmountsSelector',
   get: ({ get }) => {
+    const [, pool] = get(poolAtom)
     const inputAmount = get(parsedZapAmountSelector)
-    return [inputAmount, null]
+
+    // TODO ramin: output amount calculation
+    if (pool) return [CurrencyAmount.fromRawAmount(pool?.token0, '0'), CurrencyAmount.fromRawAmount(pool?.token1, '0')]
+    return [null, null]
   },
 })
 
@@ -49,7 +53,7 @@ export const useZapAssetInput = () => {
   const zapInputAmount = useRecoilState(zapInputAmountAtom)
   const parsedAmount = useRecoilValue(parsedZapAmountSelector)
   const parsedSplitAmounts = useRecoilValue(parsedZapSplitAmountsSelector)
-  const spendFromWallet = useRecoilValue(spendFromWalletAtom)
+  const spendFromWallet = useRecoilValue(spendFromWalletSelector(zapCurrency?.wrapped.address))
   const balance = useBentoOrWalletBalance(account ?? undefined, currency, spendFromWallet)
 
   let error = !account

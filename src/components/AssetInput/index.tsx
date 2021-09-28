@@ -1,7 +1,7 @@
 import Typography from '../../components/Typography'
 import Lottie from 'lottie-react'
 import selectCoinAnimation from '../../animation/select-coin.json'
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import React, { createContext, FC, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import Button from '../../components/Button'
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { classNames, maxAmountSpend, tryParseAmount } from '../../functions'
@@ -37,9 +37,17 @@ interface AssetInputProps {
   currencies?: Currency[]
 }
 
+type AssetInput<P> = FC<P> & {
+  WalletSwitch: FC<AssetInputWalletSwitchProps>
+  Panel: FC<AssetInputPanelProps>
+}
+
+const AssetInputContext = createContext<boolean>(false)
+const useAssetInputContextError = () => useContext(AssetInputContext)
+
 // AssetInput exports its children so if you need a child component of this component,
 // for example if you want this component without the title, take a look at the components this file exports
-const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
+const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...props }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
@@ -85,42 +93,32 @@ const AssetInput = ({ spendFromWallet = true, ...props }: AssetInputProps) => {
   }
 
   return (
-    <div className="mt-4 flex flex-col gap-4">
-      <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
-        {!isDesktop && (
-          <div className="px-2 flex justify-between">
-            {header}
-            {props.headerRight && props.headerRight}
-          </div>
-        )}
-        <AssetInputPanel
-          {...props}
-          error={error}
-          spendFromWallet={spendFromWallet}
-          onMax={() => props.onChange(maxSpend)}
-          showMax={balance?.greaterThan('0') ? !parsedInput?.equalTo(maxAmountSpend(balance)) : false}
-          footer={
-            <AssetInputPanel.Balance
-              balance={balance}
-              onClick={() => props.onChange(maxSpend)}
-              spendFromWallet={spendFromWallet}
-            />
-          }
-        />
-        {isDesktop && props.headerRight}
-      </div>
-      {error && props.currency && (
-        <Alert
-          showIcon
-          type="error"
-          dismissable={false}
-          title={i18n._(t`Insufficient ${props.currency.symbol} balance`)}
-          message={i18n._(
-            t`You do not have enough ${props.currency.symbol}. Please enter a value lower of equal than your balance to continue with your deposit.`
+    <AssetInputContext.Provider value={useMemo(() => error, [error])}>
+      <div className="mt-4 flex flex-col gap-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
+          {!isDesktop && (
+            <div className="px-2 flex justify-between">
+              {header}
+              {props.headerRight && props.headerRight}
+            </div>
           )}
-        />
-      )}
-    </div>
+          <AssetInputPanel
+            {...props}
+            spendFromWallet={spendFromWallet}
+            onMax={() => props.onChange(maxSpend)}
+            showMax={balance?.greaterThan('0') ? !parsedInput?.equalTo(maxAmountSpend(balance)) : false}
+            footer={
+              <AssetInputPanel.Balance
+                balance={balance}
+                onClick={() => props.onChange(maxSpend)}
+                spendFromWallet={spendFromWallet}
+              />
+            }
+          />
+          {isDesktop && props.headerRight}
+        </div>
+      </div>
+    </AssetInputContext.Provider>
   )
 }
 
@@ -140,9 +138,9 @@ const AssetInputPanel = ({
   footer,
   disabled,
   showMax = true,
-  error = false,
   currencies = [],
 }: AssetInputPanelProps) => {
+  const error = useAssetInputContextError()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
@@ -150,11 +148,11 @@ const AssetInputPanel = ({
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
-    if (isDesktop) setWidth(span?.current?.offsetWidth + 6)
+    if (isDesktop) setWidth(span?.current?.clientWidth + 6)
   }, [isDesktop, value])
 
   let content = (
-    <div className="flex flex-row gap-3 py-2.5 px-2">
+    <div className="flex flex-row gap-3 py-2.5 px-2 flex-grow">
       <div className="w-12 h-12 rounded-full">
         <Lottie animationData={selectCoinAnimation} autoplay loop />
       </div>
@@ -192,17 +190,17 @@ const AssetInputPanel = ({
 
   if (currency) {
     content = (
-      <div className="flex gap-3 py-4 px-3 items-center">
+      <div
+        className={classNames(
+          error ? 'border-red border-opacity-40' : 'border-dark-700',
+          'flex gap-3 py-4 px-3 items-center border-b'
+        )}
+      >
         <div>
           <CurrencyLogo currency={currency} size={48} className="rounded-full" />
         </div>
         <div className="flex flex-col flex-grow">
           <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
-            {/*This acts as a reference to get input width*/}
-            <span ref={span} className="opacity-0 absolute pointer-events-none">
-              {`${value ? value : '0.00'}`}
-            </span>
-
             <NumericalInput
               disabled={disabled}
               value={value || ''}
@@ -218,7 +216,7 @@ const AssetInputPanel = ({
               </span>
             )}
           </Typography>
-          <Typography variant="sm" className={usdcValue ? 'text-green' : 'text-low-emphesis'}>
+          <Typography variant="sm" className={error ? 'text-red' : usdcValue ? 'text-green' : 'text-low-emphesis'}>
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
         </div>
@@ -242,10 +240,16 @@ const AssetInputPanel = ({
     <div
       className={classNames(
         'border',
-        error ? 'border-red border-opacity-20' : 'border-dark-700',
+        error ? 'border-red border-opacity-40' : 'border-dark-700',
         'flex-1 rounded lg:rounded-l lg:rounded-r-[0px] bg-dark-900 flex flex-col overflow-hidden'
       )}
     >
+      {/*This acts as a reference to get input width*/}
+      <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
+        <span ref={span} className="opacity-0 absolute pointer-events-none tracking-[0]">
+          {`${value ? value : '0.00'}`}
+        </span>
+      </Typography>
       {content}
       {footer && footer}
     </div>
@@ -262,6 +266,7 @@ interface AssetInputPanelBalanceProps {
 // It's a child of AssetInputPanel so only use together with an AssetInputPanel
 const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onClick, spendFromWallet = true }) => {
   const { i18n } = useLingui()
+  const error = useAssetInputContextError()
 
   let icon = <WalletIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
   if (!spendFromWallet) {
@@ -269,7 +274,7 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
   }
 
   return (
-    <div className="flex justify-between bg-dark-800 py-2 px-3 border-t border-dark-700">
+    <div className={classNames(error ? 'bg-red/10' : '', 'flex justify-between bg-dark-800 py-2 px-3')}>
       <div className="flex items-center gap-1.5">
         {icon}
         <Typography variant="sm" className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}>
@@ -294,13 +299,20 @@ interface AssetInputWalletSwitchProps {
 }
 
 const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onChange }) => {
+  const error = useAssetInputContextError()
+
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
 
   const helper = <BentoBoxFundingSourceModal />
 
   return (
-    <div className="lg:p-4 flex gap-1.5 items-center lg:border-r lg:border-t lg:border-b lg:border-dark-700 lg:bg-dark-900 lg:rounded-r">
+    <div
+      className={classNames(
+        error ? 'lg:border-red/40' : '',
+        'lg:p-4 flex gap-1.5 items-center lg:border-r lg:border-t lg:border-b lg:border-dark-700 lg:bg-dark-900 lg:rounded-r lg:justify-center lg:min-w-[120px]'
+      )}
+    >
       <div className="flex gap-3 items-center lg:flex-col">
         <div className="flex flex-col order-1 lg:order-2">
           <Typography variant="xxs" weight={700} className="text-secondary text-right lg:text-center">

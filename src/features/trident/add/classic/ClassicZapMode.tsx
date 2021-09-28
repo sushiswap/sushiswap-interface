@@ -5,9 +5,15 @@ import Typography from '../../../../components/Typography'
 import AssetInput from '../../../../components/AssetInput'
 import TransactionDetails from './../TransactionDetails'
 import React from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
-import { attemptingTxnAtom, noLiquiditySelector, poolAtom, showReviewAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  noLiquiditySelector,
+  poolAtom,
+  showReviewAtom,
+  spendFromWalletSelector,
+} from '../../context/atoms'
 import ListPanel from '../../../../components/ListPanel'
 import TridentApproveGate from '../../TridentApproveGate'
 import Button from '../../../../components/Button'
@@ -16,8 +22,10 @@ import Lottie from 'lottie-react'
 import Dots from '../../../../components/Dots'
 import { NATIVE } from '@sushiswap/core-sdk'
 import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
+import useDesktopMediaQuery from '../../../../hooks/useDesktopMediaQuery'
 
 const ClassicZapMode = () => {
+  const isDesktop = useDesktopMediaQuery()
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
@@ -33,6 +41,7 @@ const ClassicZapMode = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletSelector(zapCurrency?.wrapped.address))
 
   return (
     <>
@@ -58,6 +67,9 @@ const ClassicZapMode = () => {
       )}
 
       <div className="flex flex-col gap-3">
+        <Typography variant="h3" weight={700} className="text-high-emphesis hidden lg:block">
+          {i18n._(t`Choose an asset from your wallet/BentoBox:`)}
+        </Typography>
         <AssetInput
           value={zapInputAmount}
           currency={zapCurrency}
@@ -65,6 +77,10 @@ const ClassicZapMode = () => {
           onSelect={setZapCurrency}
           disabled={noLiquidity}
           currencies={[NATIVE[chainId], pool?.token0, pool?.token1]}
+          headerRight={
+            <AssetInput.WalletSwitch onChange={() => setSpendFromWallet(!spendFromWallet)} checked={spendFromWallet} />
+          }
+          spendFromWallet={spendFromWallet}
         />
         <div className="flex flex-col gap-3">
           <TridentApproveGate inputAmounts={[parsedAmount]} tokenApproveOn={bentoBox?.address}>
@@ -100,7 +116,7 @@ const ClassicZapMode = () => {
           ))}
         />
       </div>
-      {!error && (
+      {!error && !isDesktop && (
         <div className="mt-6 px-5">
           <TransactionDetails />
         </div>

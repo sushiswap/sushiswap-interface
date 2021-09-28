@@ -24,7 +24,9 @@ export const BREADCRUMBS: Record<string, BreadcrumbItem> = {
   }),
   pool_classic: (pool) => ({
     link: `/trident/pool/classic/${pool?.token0.address}/${pool?.token1.address}`,
-    label: `${pool?.token0.symbol}-${pool?.token1.symbol} - Classic - ${formatPercent(pool?.fee.valueOf() / 100)}`,
+    label: pool
+      ? `${pool?.token0.symbol}-${pool?.token1.symbol} - Classic - ${formatPercent(pool?.fee.valueOf() / 100)}`
+      : 'Pool not found',
   }),
 }
 

@@ -30,6 +30,7 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import useCurrenciesFromURL from '../../../../features/trident/context/hooks/useCurrenciesFromURL'
 import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
 import ClassicStandardAside from '../../../../features/trident/add/classic/ClassicStandardAside'
+import ClassicZapAside from '../../../../features/trident/add/classic/ClassicZapAside'
 
 const AddClassic = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -71,12 +72,12 @@ const AddClassic = () => {
           startIcon={<ChevronLeftIcon width={24} height={24} />}
         >
           <Link href={`/trident/pool/classic/${pool?.token0.address}/${pool?.token1.address}`}>
-            {`${pool?.token0.symbol}-${pool?.token1.symbol}`}
+            {pool ? `${pool?.token0.symbol}-${pool?.token1.symbol}` : i18n._(t`Back`)}
           </Link>
         </Button>
       </div>
       <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10 lg:justify-around">
-        <div className="lg:w-7/12 flex flex-col lg:gap-5">
+        <div className="lg:w-7/12 flex flex-col gap-5">
           <div className="flex flex-col">
             <Typography variant="h2" weight={700} className="text-high-emphesis">
               {i18n._(t`Add Liquidity`)}
@@ -121,8 +122,9 @@ const AddClassic = () => {
             <DepositSubmittedModal />
           </>
         </div>
+
         <div className="hidden lg:block lg:w-4/12 flex flex-col">
-          <ClassicStandardAside />
+          {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
         </div>
       </div>
     </>
@@ -134,7 +136,7 @@ AddClassic.Layout = (props) => (
   <TridentLayout
     {...props}
     headerBg="bg-bubble-pattern"
-    headerHeight="h-[190px]"
+    headerHeight="h-[194px]"
     breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic'], BREADCRUMBS['add_classic']]}
   />
 )

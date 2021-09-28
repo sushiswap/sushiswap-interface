@@ -1,6 +1,6 @@
 import { useBentoBoxContract } from '../../../../hooks'
 import React from 'react'
-import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import AssetInput from '../../../../components/AssetInput'
@@ -16,8 +16,10 @@ import loadingCircle from '../../../../animation/loading-circle.json'
 import Dots from '../../../../components/Dots'
 import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 import useCurrenciesFromURL from '../../context/hooks/useCurrenciesFromURL'
+import useDesktopMediaQuery from '../../../../hooks/useDesktopMediaQuery'
 
 const ClassicStandardMode = () => {
+  const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
   const {
@@ -31,8 +33,11 @@ const ClassicStandardMode = () => {
     error,
   } = useDependentAssetInputs()
   const [[currencyA, currencyB], setURLCurrency] = useCurrenciesFromURL()
+
+  const [, pool] = useRecoilValue(poolAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(pool?.token0.address))
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(pool?.token1.address))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (
@@ -49,11 +54,11 @@ const ClassicStandardMode = () => {
             onSelect={(cur) => setURLCurrency(cur, 0)}
             headerRight={
               <AssetInput.WalletSwitch
-                onChange={() => setSpendFromWallet(!spendFromWallet)}
-                checked={spendFromWallet}
+                onChange={() => setSpendFromWalletA(!spendFromWalletA)}
+                checked={spendFromWalletA}
               />
             }
-            spendFromWallet={spendFromWallet}
+            spendFromWallet={spendFromWalletA}
           />
           <AssetInput
             value={formattedAmounts[1]}
@@ -65,11 +70,11 @@ const ClassicStandardMode = () => {
             onSelect={(cur) => setURLCurrency(cur, 1)}
             headerRight={
               <AssetInput.WalletSwitch
-                onChange={() => setSpendFromWallet(!spendFromWallet)}
-                checked={spendFromWallet}
+                onChange={() => setSpendFromWalletB(!spendFromWalletB)}
+                checked={spendFromWalletB}
               />
             }
-            spendFromWallet={spendFromWallet}
+            spendFromWallet={spendFromWalletB}
           />
           <div className="flex flex-col gap-3">
             <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
@@ -124,7 +129,7 @@ const ClassicStandardMode = () => {
             </TridentApproveGate>
           </div>
         </div>
-        {!error && (
+        {!error && !isDesktop && (
           <div className="flex flex-col">
             <TransactionDetails />
           </div>

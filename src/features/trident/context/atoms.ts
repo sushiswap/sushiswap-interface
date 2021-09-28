@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
 import { LiquidityMode, PoolAtomType } from '../types'
-import { atom, selector } from 'recoil'
+import { atom, selector, selectorFamily } from 'recoil'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
@@ -44,9 +44,35 @@ export const liquidityModeAtom = atom<LiquidityMode>({
   default: LiquidityMode.STANDARD,
 })
 
-export const spendFromWalletAtom = atom<boolean>({
+export const spendFromWalletAtom = atom<Record<string, boolean>>({
   key: 'spendFromWalletAtom',
-  default: true,
+  default: selector({
+    key: 'spendFromWalletAtom/Default',
+    get: ({ get }) => {
+      const [, pool] = get(poolAtom)
+
+      // TODO ramin: adjust for hybrid
+      return {
+        [pool?.token0.address]: true,
+        [pool?.token1.address]: true,
+      }
+    },
+  }),
+})
+
+export const spendFromWalletSelector = selectorFamily<boolean, string>({
+  key: 'spendFromWalletSelector',
+  get:
+    (address) =>
+    ({ get }) =>
+      get(spendFromWalletAtom)[address],
+  set:
+    (address) =>
+    ({ get, set }, newValue: boolean) => {
+      const spendFromWallet = { ...get(spendFromWalletAtom) }
+      spendFromWallet[address] = newValue
+      set(spendFromWalletAtom, spendFromWallet)
+    },
 })
 
 export const outputToWalletAtom = atom<boolean>({

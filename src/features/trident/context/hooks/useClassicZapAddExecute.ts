@@ -8,7 +8,7 @@ import {
   noLiquiditySelector,
   poolAtom,
   showReviewAtom,
-  spendFromWalletAtom,
+  spendFromWalletSelector,
   txHashAtom,
 } from '../atoms'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
@@ -37,7 +37,6 @@ export const useClassicZapAddExecute = () => {
       async () => {
         const [, pool] = await snapshot.getPromise(poolAtom)
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
-        const native = await snapshot.getPromise(spendFromWalletAtom)
 
         if (
           !pool ||
@@ -52,6 +51,7 @@ export const useClassicZapAddExecute = () => {
         )
           return
 
+        const native = await snapshot.getPromise(spendFromWalletSelector(parsedAmount.currency.wrapped.address))
         const amountMin = calculateSlippageAmount(parsedAmount, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0]
         const liquidityInput = [
           {
