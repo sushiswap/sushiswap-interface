@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Bar } from '@visx/shape'
 import { Group } from '@visx/group'
 import { scaleBand, scaleLinear } from '@visx/scale'
@@ -7,21 +7,26 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 const verticalMargin = 40
 
 // accessors
-const getX = (d) => d.x
-const getY = (d) => Number(d.y)
+const getX = (d: DataTuple) => d.x
+const getY = (d: DataTuple) => d.y
 
-type Props = {
-  data: any
+interface DataTuple {
+  x: string
+  y: number
+}
+
+type BarGraphProps = {
+  data: DataTuple[]
   width: number
   height: number
   events?: boolean
-  setSelectedDatum?: any
+  setSelectedDatum?: (x: DataTuple) => void
 }
 
-function Graph({ data, width, height, setSelectedDatum, events = false, ...rest }: Props) {
+const Graph: FC<BarGraphProps> = ({ data, width, height, setSelectedDatum, events = false }) => {
   // bounds
-  const xMax = width
-  const yMax = height - verticalMargin
+  const xMax = useMemo(() => width, [width])
+  const yMax = useMemo(() => height - verticalMargin, [height])
 
   // scales, memoize for performance
   const xScale = useMemo(
@@ -31,6 +36,7 @@ function Graph({ data, width, height, setSelectedDatum, events = false, ...rest 
         round: true,
         domain: data.map(getX),
         padding: 0.1,
+        paddingOuter: 0,
       }),
     [xMax, data]
   )
@@ -76,7 +82,5 @@ function Graph({ data, width, height, setSelectedDatum, events = false, ...rest 
 }
 
 export const BarGraph = ({ data, ...rest }) => (
-  <>
-    <AutoSizer>{({ width, height }) => <Graph data={data} width={width} height={height} {...rest} />}</AutoSizer>
-  </>
+  <AutoSizer>{({ width, height }) => <Graph data={data} width={width} height={height} {...rest} />}</AutoSizer>
 )

@@ -7,7 +7,7 @@ import { useRecoilState } from 'recoil'
 import { liquidityModeAtom } from './context/atoms'
 
 interface ModeToggleProps {
-  onChange: () => void
+  onChange?: () => void
 }
 
 const ModeToggle: FC<ModeToggleProps> = ({ onChange }) => {
@@ -16,14 +16,14 @@ const ModeToggle: FC<ModeToggleProps> = ({ onChange }) => {
 
   const handleChange = useCallback(
     (val: LiquidityMode) => {
-      onChange()
+      onChange && onChange()
       setLiquidityMode(val)
     },
     [onChange, setLiquidityMode]
   )
 
   return (
-    <div className="px-5 -mt-6 relative z-10">
+    <div className="-mt-6 relative z-10">
       <ToggleButtonGroup value={liquidityMode} onChange={handleChange} className="bg-dark-900 shadow">
         <ToggleButtonGroup.Button value={LiquidityMode.STANDARD} className="py-2.5">
           {i18n._(t`Standard Mode`)}

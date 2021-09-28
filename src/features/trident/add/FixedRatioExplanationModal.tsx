@@ -13,7 +13,7 @@ const FixedRatioExplanationModal: FC = () => {
   return (
     <>
       <div className="flex items-center justify-center w-6 h-6 rounded cursor-pointer" onClick={() => setOpen(true)}>
-        <QuestionMarkCircleIcon className="w-6 h-6 text-high-emphesis" />
+        <QuestionMarkCircleIcon className="w-6 h-6 lg:w-4 lg:h-4 text-high-emphesis" />
       </div>
       <BottomSlideIn open={open} onClose={() => setOpen(false)}>
         <div className="flex flex-col h-full p-5 gap-8 bg-dark-900">

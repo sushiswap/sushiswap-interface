@@ -15,8 +15,8 @@ const BentoBoxFundingSourceModal: FC = () => {
   return (
     <HeadlessUiModal
       trigger={
-        <div className="flex items-center justify-center w-6 h-6 rounded cursor-pointer">
-          <QuestionMarkCircleIcon className="w-6 h-6 text-high-emphesis" />
+        <div className="flex items-center justify-center lg:w-3 lg:h-3 rounded cursor-pointer">
+          <QuestionMarkCircleIcon className="lg:w-3 lg:h-3 w-6 h-6 text-high-emphesis" />
         </div>
       }
     >

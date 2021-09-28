@@ -1,4 +1,4 @@
-import { classNames, formatDateAgo, formatNumber } from '../../functions'
+import { classNames, formatDate, formatNumber } from '../../functions'
 
 import ColoredNumber from './ColoredNumber'
 import LineGraph from '../../components/LineGraph'
@@ -20,12 +20,6 @@ interface ChartCardProps {
   }[]
 }
 
-const formatDate = (date: Date) =>
-  `${date.toLocaleDateString('default', { month: 'short' })} ${date.getDate()}, '${String(date.getFullYear()).replace(
-    '20',
-    ''
-  )}`
-
 export default function ChartCard({
   header,
   subheader,
@@ -36,13 +30,25 @@ export default function ChartCard({
   timespans,
 }: ChartCardProps): JSX.Element {
   const [timespan, setTimespan] = useState(timespans?.find((t) => t.text === defaultTimespan))
-  const [overrideFigure, setOverrideFigure] = useState(undefined)
-  const [overrideDate, setOverrideDate] = useState(undefined)
 
   const chartFiltered = useMemo(() => {
     const currentDate = Math.round(Date.now() / 1000)
-    return chart?.filter((e) => Math.round(e.x.getTime() / 1000) >= currentDate - timespan?.length)
+    return chart?.reduce((acc, cur) => {
+      const x = cur.x.getTime()
+      if (Math.round(x / 1000) >= currentDate - timespan?.length) {
+        acc.push({
+          x,
+          y: cur.y,
+        })
+      }
+
+      return acc
+    }, [])
   }, [chart, timespan?.length])
+
+  const [selectedIndex, setSelectedIndex] = useState(chartFiltered?.length - 1)
+  const overrideFigure = useMemo(() => chartFiltered?.[selectedIndex]?.y, [chartFiltered, selectedIndex])
+  const overrideDate = useMemo(() => chartFiltered?.[selectedIndex]?.x, [chartFiltered, selectedIndex])
 
   return (
     <div className="w-full p-5 space-y-4 font-bold border rounded bg-dark-900 border-dark-700">
@@ -57,7 +63,9 @@ export default function ChartCard({
           </div>
           <div className="flex flex-row items-center justify-end">
             {!overrideFigure && <ColoredNumber number={change} percent={true} />}
-            <div className="ml-3 font-normal">{overrideDate ? formatDate(overrideDate) : 'Past 24 Hours'}</div>
+            <div className="ml-3 font-normal">
+              {overrideDate ? formatDate(new Date(overrideDate)) : 'Past 24 Hours'}
+            </div>
           </div>
         </div>
       </div>
@@ -66,8 +74,7 @@ export default function ChartCard({
           <LineGraph
             data={chartFiltered}
             stroke={{ gradient: { from: '#27B0E6', to: '#FA52A0' } }}
-            overrideFigure={setOverrideFigure}
-            overrideDate={setOverrideDate}
+            setSelectedIndex={setSelectedIndex}
           />
         )}
       </div>

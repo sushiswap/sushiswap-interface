@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil'
-import { JSBI, Percent, Price, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Price, ZERO } from '@sushiswap/core-sdk'
 import { ONE_HUNDRED_PERCENT } from '../../../../constants'
 import {
   currentLiquidityValueSelector,
@@ -11,13 +11,12 @@ import {
 } from '../atoms'
 import { useMemo } from 'react'
 
-export const usePoolDetails = (parsedAmounts, add: boolean = true) => {
+export const usePoolDetails = (parsedAmounts: CurrencyAmount<Currency>[]) => {
   const [currencyAAmount, currencyBAmount] = parsedAmounts
   const [, pool] = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const poolBalance = useRecoilValue(poolBalanceAtom)
-  const method = add ? 'add' : 'subtract'
 
   // Returns the current pool share not taking into account current input values
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
@@ -28,7 +27,7 @@ export const usePoolDetails = (parsedAmounts, add: boolean = true) => {
   // Returns the SLP that will get minted given current input amounts
   const liquidityMinted = useMemo(() => {
     const [tokenAmountA, tokenAmountB] = [currencyAAmount?.wrapped, currencyBAmount?.wrapped]
-    if (pool && totalSupply && tokenAmountA && tokenAmountB) {
+    if (pool && totalSupply && tokenAmountA?.greaterThan(0) && tokenAmountB?.greaterThan(0)) {
       try {
         return pool.getLiquidityMinted(totalSupply?.wrapped, tokenAmountA, tokenAmountB)
       } catch (error) {
@@ -42,11 +41,11 @@ export const usePoolDetails = (parsedAmounts, add: boolean = true) => {
   // Returns the resulting pool share taking into account current pool share and inputs
   const poolShare = useMemo(() => {
     if (liquidityMinted && totalSupply && poolBalance) {
-      return new Percent(poolBalance[method](liquidityMinted).quotient, totalSupply[method](liquidityMinted).quotient)
+      return new Percent(poolBalance.add(liquidityMinted).quotient, totalSupply.add(liquidityMinted).quotient)
     }
 
     return undefined
-  }, [liquidityMinted, method, poolBalance, totalSupply])
+  }, [liquidityMinted, poolBalance, totalSupply])
 
   const price = useMemo(() => {
     if (noLiquidity) {
@@ -75,13 +74,13 @@ export const usePoolDetails = (parsedAmounts, add: boolean = true) => {
     if (pool && currencyAAmount && currencyBAmount) {
       const [currentAAmount, currentBAmount] = currentLiquidityValue
       return [
-        currentAAmount ? currencyAAmount[method](currentAAmount) : currencyAAmount,
-        currentBAmount ? currencyBAmount[method](currentBAmount) : currencyBAmount,
+        currentAAmount ? currencyAAmount.add(currentAAmount) : currencyAAmount,
+        currentBAmount ? currencyBAmount.add(currentBAmount) : currencyBAmount,
       ]
     }
 
     return [undefined, undefined]
-  }, [currencyAAmount, currencyBAmount, currentLiquidityValue, method, pool])
+  }, [currencyAAmount, currencyBAmount, currentLiquidityValue, pool])
 
   return useMemo(
     () => ({
@@ -94,5 +93,34 @@ export const usePoolDetails = (parsedAmounts, add: boolean = true) => {
       priceImpact,
     }),
     [currentLiquidityValue, currentPoolShare, liquidityMinted, liquidityValue, poolShare, price, priceImpact]
+  )
+}
+
+export const usePoolDetailsRemove = (slpAmount: CurrencyAmount<Currency>) => {
+  const poolBalance = useRecoilValue(poolBalanceAtom)
+  const totalSupply = useRecoilValue(totalSupplyAtom)
+
+  // Returns the current pool share not taking into account current input values
+  const currentPoolShare = useRecoilValue(currentPoolShareSelector)
+
+  // Returns the currency liquidity value expressed in underlying tokens not taking into account input values
+  const currentLiquidityValue = useRecoilValue(currentLiquidityValueSelector)
+
+  // Returns the resulting pool share taking into account current pool share and inputs
+  const poolShare = useMemo(() => {
+    if (slpAmount && totalSupply && poolBalance) {
+      return new Percent(poolBalance.subtract(slpAmount).quotient, totalSupply.subtract(slpAmount).quotient)
+    }
+
+    return undefined
+  }, [poolBalance, slpAmount, totalSupply])
+
+  return useMemo(
+    () => ({
+      currentPoolShare,
+      currentLiquidityValue,
+      poolShare,
+    }),
+    [currentLiquidityValue, currentPoolShare, poolShare]
   )
 }

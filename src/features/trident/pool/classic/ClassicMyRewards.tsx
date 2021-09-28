@@ -15,7 +15,6 @@ const ClassicMyRewards: FC = () => {
 
   return (
     <ListPanel
-      className="px-5 mt-5"
       header={
         <div className="flex flex-row justify-between pl-4 pr-3 py-3 items-center">
           <Typography variant="lg" className="text-high-emphesis flex-grow" weight={700}>

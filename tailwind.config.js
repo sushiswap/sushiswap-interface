@@ -16,14 +16,16 @@ module.exports = {
         'dots-pattern': "url('/images/trident/dots-pattern.png')",
         'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
         'wavy-pattern': "url('/images/trident/wavy-pattern.png')",
+        'chevron-pattern': "url('/images/trident/chevron-pattern.png')",
       }),
       linearBorderGradients: {
         directions: {
+          t: 'to top',
           tr: 'to top right',
           r: 'to right',
         },
         colors: {
-          'blue-pink': ['#27B0E6', '#FA52A0'],
+          'blue-pink': ['#0993ec', '#f338c3'],
           'pink-red-light-brown': ['#FE5A75', '#FEC464'],
         },
         background: {

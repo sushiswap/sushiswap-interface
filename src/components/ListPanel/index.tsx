@@ -5,6 +5,7 @@ import CurrencyLogo from '../CurrencyLogo'
 import { classNames } from '../../functions'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import Chip from '../Chip'
+import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 
 interface ListPanelProps {
   header?: ReactNode
@@ -59,13 +60,14 @@ interface ListPanelHeaderProps {
   title: string
   value?: string
   subValue?: string
+  className?: string
 }
 
 // Default ListPanelHeader component, please note that you are not obliged to pass this to a ListPanel component
 // If you need different styling, please create another component and leave this one as is.
-const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue }) => {
+const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue, className }) => {
   return (
-    <div className="flex flex-row justify-between px-4 py-[10px] items-center">
+    <div className={classNames(className, 'flex flex-row justify-between px-4 py-[10px] items-center')}>
       <Typography variant="lg" className="text-high-emphesis" weight={700}>
         {title}
       </Typography>
@@ -96,7 +98,7 @@ interface ListPanelItemProps {
 // If you need different styling, please create another component and leave this one as is.
 const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
   return (
-    <div className="grid grid-cols-2 gap-2 px-4 h-11 flex items-center border-dark-700">
+    <div className="grid grid-cols-2 gap-2 px-4 py-3 flex items-center border-dark-700">
       {left}
       {right}
     </div>
@@ -109,10 +111,12 @@ interface ListPanelItemLeftProps {
 }
 
 const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, startAdornment }) => {
+  const isDesktop = useDesktopMediaQuery()
+
   return (
-    <div className="flex flex-row gap-1.5 items-center">
+    <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
       {startAdornment && startAdornment}
-      <CurrencyLogo currency={amount?.currency} size={20} />
+      <CurrencyLogo currency={amount?.currency} size={isDesktop ? 30 : 20} />
       <Typography variant="sm" className="text-high-emphesis" weight={700}>
         {amount?.toSignificant(6)} {amount?.currency.symbol}
       </Typography>
@@ -145,7 +149,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount, weight }) => 
           {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
         />
       }
-      right={<ListPanel.Item.Right>≈${usdcValue?.toFixed(2)}</ListPanel.Item.Right>}
+      right={<ListPanel.Item.Right>≈${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>}
       key={0}
     />
   )

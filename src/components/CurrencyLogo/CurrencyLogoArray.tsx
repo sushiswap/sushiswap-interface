@@ -25,7 +25,7 @@ const CurrencyLogoArray: FC<CurrencyLogosProps> = ({ currencies, dense = false, 
             className="rounded-full overflow-hidden"
             key={index}
             style={{
-              marginLeft: maxLogos > 1 ? (index === 0 ? '' : dense ? -Math.floor(size / 2 + 2) : -6) : 0,
+              marginLeft: maxLogos > 1 ? (index === 0 ? '' : dense ? -Math.floor(size / 2 - 4) : -6) : 0,
               filter: 'drop-shadow(0px 3px 6px rgba(15, 15, 15, 0.25))',
             }}
           >

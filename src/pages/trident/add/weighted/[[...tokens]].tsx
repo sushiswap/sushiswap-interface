@@ -14,17 +14,19 @@ import WeightedStandardMode from '../../../../features/trident/add/weighted/Weig
 import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
 import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { poolAtom } from '../../../../features/trident/add/classic/context/atoms'
-import { liquidityModeAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
+import {
+  liquidityModeAtom,
+  poolAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { NATIVE } from '@sushiswap/core-sdk'
-import { SUSHI } from '../../../../config/tokens'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
-import AddTransactionReviewModal from '../../../../features/trident/add/classic/AddTransactionReviewModal'
+import AddTransactionReviewModal from '../../../../features/trident/create/CreateReviewModal'
 
 const AddWeighted = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -36,8 +38,8 @@ const AddWeighted = () => {
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
-  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
-  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const currencyA = useCurrency(query.tokens?.[0])
+  const currencyB = useCurrency(query.tokens?.[1])
   const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)

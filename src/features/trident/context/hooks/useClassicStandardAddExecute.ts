@@ -8,12 +8,12 @@ import {
   noLiquiditySelector,
   poolAtom,
   showReviewAtom,
-  spendFromWalletAtom,
+  spendFromWalletSelector,
   txHashAtom,
 } from '../atoms'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
 import { useRecoilCallback, useSetRecoilState } from 'recoil'
-import { calculateGasMargin, calculateSlippageAmount } from '../../../../functions'
+import { calculateSlippageAmount } from '../../../../functions'
 import { ZERO_PERCENT } from '../../../../constants'
 import { ethers } from 'ethers'
 import { t } from '@lingui/macro'
@@ -38,7 +38,8 @@ export const useClassicStandardAddExecute = () => {
         const [, pool] = await snapshot.getPromise(poolAtom)
         const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
         const [parsedAmountA, parsedAmountB] = parsedAmounts
-        const native = await snapshot.getPromise(spendFromWalletAtom)
+        const nativeA = await snapshot.getPromise(spendFromWalletSelector(pool?.token0.address))
+        const nativeB = await snapshot.getPromise(spendFromWalletSelector(pool?.token1.address))
 
         if (
           !pool ||
@@ -62,7 +63,7 @@ export const useClassicStandardAddExecute = () => {
         const liquidityInput = [
           {
             token: parsedAmountA.currency.wrapped.address,
-            native,
+            native: nativeA,
             amount: await bentoboxContract.toShare(
               parsedAmountA.currency.wrapped.address,
               amountsMin[0].toString(),
@@ -71,7 +72,7 @@ export const useClassicStandardAddExecute = () => {
           },
           {
             token: parsedAmountB.currency.wrapped.address,
-            native,
+            native: nativeB,
             amount: await bentoboxContract.toShare(
               parsedAmountB.currency.wrapped.address,
               amountsMin[1].toString(),
