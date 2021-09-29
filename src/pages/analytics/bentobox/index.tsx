@@ -1,13 +1,13 @@
-import { useBentoBox, useBlock, useNativePrice, useTokens } from '../../../services/graph'
 import { useMemo } from 'react'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
+import Background from '../../../features/analytics/Background'
+import InfoCard from '../../../features/analytics/Bar/InfoCard'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { useActiveWeb3React } from '../../../hooks'
-import Background from '../../../features/analytics/Background'
 import { formatNumber } from '../../../functions'
-import InfoCard from '../../../features/analytics/Bar/InfoCard'
+import { useActiveWeb3React } from '../../../hooks'
+import { useBentoBox, useBlock, useNativePrice, useTokens } from '../../../services/graph'
 
 export default function Dashboard(): JSX.Element {
   const { chainId } = useActiveWeb3React()
@@ -19,37 +19,36 @@ export default function Dashboard(): JSX.Element {
   const nativePrice1d = useNativePrice({ block: block1d, chainId })
   const nativePrice1w = useNativePrice({ block: block1w, chainId })
 
+  // Get exchange data
   const tokens = useTokens({ chainId })
   const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d, chainId })
   const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w, chainId })
 
+  // Creating map to easily reference TokenId -> Token
   const tokenIdToPrice = useMemo<
     Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>
   >(() => {
-    return tokens ? new Map(tokens.map((token) => [token.id, token])) : new Map([])
+    return new Map(tokens.map((token) => [token.id, token]))
   }, [tokens])
   const token1dIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
-    return tokens1d ? new Map(tokens1d.map((token) => [token.id, token])) : new Map([])
+    return new Map(tokens1d.map((token) => [token.id, token]))
   }, [tokens1d])
   const token1wIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
-    return tokens1w ? new Map(tokens1w.map((token) => [token.id, token])) : new Map([])
+    return new Map(tokens1w.map((token) => [token.id, token]))
   }, [tokens1w])
 
   const bentoBox = useBentoBox({ chainId })
 
+  // Combine Bento Box Tokens with Token data from exchange
   const bentoBoxTokensFormatted = useMemo<Array<any>>(
     () =>
       (bentoBox?.tokens || [])
         .map(({ id, totalSupplyElastic, decimals, symbol, name }) => {
-          const supply = totalSupplyElastic / Math.pow(10, decimals)
-
           const token = tokenIdToPrice.get(id)
-          if (!token) {
-            return undefined
-          }
           const token1d = token1dIdToPrice.get(id)
           const token1w = token1wIdToPrice.get(id)
 
+          const supply = totalSupplyElastic / Math.pow(10, decimals)
           const tokenDerivedETH = token?.derivedETH
           const price = (tokenDerivedETH ?? 0) * nativePrice
           const tvl = price * supply
@@ -67,8 +66,6 @@ export default function Dashboard(): JSX.Element {
             liquidity: tvl,
             change1d: (price / token1dPrice) * 100 - 100,
             change1w: (price / token1wPrice) * 100 - 100,
-            volume1d: token?.volumeUSD - token1d?.volumeUSD,
-            volume1w: token?.volumeUSD - token1w?.volumeUSD,
             graph: token?.dayData
               .slice(0)
               .reverse()
@@ -95,7 +92,7 @@ export default function Dashboard(): JSX.Element {
           />
         </div>
       </Background>
-      <div className="py-6 space-y-4 px-14">
+      <div className="py-6 space-y-4 lg:px-14">
         <div className="text-2xl font-bold text-high-emphesis">Overview</div>
         <div className="flex flex-row space-x-4 overflow-auto">
           <InfoCard
@@ -110,9 +107,12 @@ export default function Dashboard(): JSX.Element {
           <InfoCard text="Total Kashi Pairs" number={bentoBox?.totalKashiPairs} />
         </div>
       </div>
-      <div className="py-6 space-y-4 text-2xl font-bold text-high-emphesis px-14">Tokens</div>
+      <div className="py-6 space-y-4 text-2xl font-bold text-high-emphesis lg:px-14">Tokens</div>
       <div className="pt-4 lg:px-14">
-        <TokenList tokens={bentoBoxTokensFormatted} />
+        <TokenList
+          tokens={bentoBoxTokensFormatted}
+          enabledColumns={['name', 'liquidity', 'price', 'priceChange', 'lastWeekGraph']}
+        />
       </div>
     </AnalyticsContainer>
   )
