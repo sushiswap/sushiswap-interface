@@ -17,6 +17,16 @@ export const percentageAmountAtom = atom<string>({
   default: '',
 })
 
+export const parsedSLPAmountSelector = selector<CurrencyAmount<Currency>>({
+  key: 'parsedInputAmount',
+  get: ({ get }) => {
+    const poolBalance = get(poolBalanceAtom)
+    const percentageAmount = get(percentageAmountAtom)
+    const percentage = new Percent(percentageAmount, '100')
+    return poolBalance?.multiply(percentage)
+  },
+})
+
 export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
   key: 'parsedZapAmountSelector',
   get: ({ get }) => {
@@ -63,6 +73,7 @@ const useZapPercentageInput = () => {
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const parsedOutputAmount = useRecoilValue(parsedZapAmountSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
+  const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -77,10 +88,11 @@ const useZapPercentageInput = () => {
       zapCurrency,
       parsedAmounts,
       parsedOutputAmount,
+      parsedSLPAmount,
       percentageInput,
       error,
     }),
-    [error, parsedAmounts, parsedOutputAmount, percentageInput, zapCurrency]
+    [error, parsedAmounts, parsedOutputAmount, parsedSLPAmount, percentageInput, zapCurrency]
   )
 }
 

@@ -1,4 +1,5 @@
-import { JSBI, LAMBDA_URL, LimitOrder, OrderStatus, Percent, Token } from '@sushiswap/core-sdk'
+import { JSBI, Percent, Token } from '@sushiswap/core-sdk'
+import { LAMBDA_URL, LimitOrder, OrderStatus } from '@sushiswap/limit-order-sdk'
 import { useActiveWeb3React, useLimitOrderContract } from '.'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useSWR, { SWRResponse } from 'swr'

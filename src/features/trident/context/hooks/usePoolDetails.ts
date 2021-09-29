@@ -97,6 +97,7 @@ export const usePoolDetails = (parsedAmounts: CurrencyAmount<Currency>[]) => {
 }
 
 export const usePoolDetailsRemove = (slpAmount: CurrencyAmount<Currency>) => {
+  const [, pool] = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
 
@@ -115,12 +116,21 @@ export const usePoolDetailsRemove = (slpAmount: CurrencyAmount<Currency>) => {
     return undefined
   }, [poolBalance, slpAmount, totalSupply])
 
+  // Returns the currency liquidity value expressed in underlying tokens also taking into account current input values
+  const liquidityValue = useMemo(() => {
+    return [
+      pool?.getLiquidityValue(pool?.token0, totalSupply?.wrapped, poolBalance?.multiply(poolShare)?.wrapped),
+      pool?.getLiquidityValue(pool?.token1, totalSupply?.wrapped, poolBalance?.multiply(poolShare)?.wrapped),
+    ]
+  }, [pool, poolBalance, poolShare, totalSupply?.wrapped])
+
   return useMemo(
     () => ({
       currentPoolShare,
+      liquidityValue,
       currentLiquidityValue,
       poolShare,
     }),
-    [currentLiquidityValue, currentPoolShare, poolShare]
+    [currentLiquidityValue, currentPoolShare, liquidityValue, poolShare]
   )
 }

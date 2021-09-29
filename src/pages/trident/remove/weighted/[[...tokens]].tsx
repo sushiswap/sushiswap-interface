@@ -9,8 +9,6 @@ import Typography from '../../../../components/Typography'
 import React, { useEffect } from 'react'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import { LiquidityMode } from '../../../../features/trident/types'
-import WeightedUnzapMode from '../../../../features/trident/remove/weighted/WeightedUnzapMode'
-import WeightedStandardMode from '../../../../features/trident/remove/weighted/WeightedStandardMode'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
@@ -100,11 +98,11 @@ const RemoveWeighted = () => {
       </div>
 
       {/*TODO ramin*/}
-      <ModeToggle onChange={() => {}} />
+      <ModeToggle />
 
       <>
-        {liquidityMode === LiquidityMode.ZAP && <WeightedUnzapMode />}
-        {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
+        {/*{liquidityMode === LiquidityMode.ZAP && <WeightedUnzapMode />}*/}
+        {/*{liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}*/}
       </>
 
       <RemoveTransactionReviewStandardModal />

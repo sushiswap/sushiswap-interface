@@ -1,7 +1,13 @@
 import React, { FC } from 'react'
 import AssetInput from '../../../../components/AssetInput'
 import TransactionDetails from '../TransactionDetails'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  poolAtom,
+  showReviewAtom,
+  spendFromWalletAtom,
+  spendFromWalletSelector,
+} from '../../context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import TridentApproveGate from '../../TridentApproveGate'
@@ -33,7 +39,8 @@ const ConcentratedStandardMode: FC = () => {
   } = useDependentAssetInputs()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(pool?.token0.address))
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(pool?.token1.address))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (
@@ -47,9 +54,12 @@ const ConcentratedStandardMode: FC = () => {
             setMainInput(val)
           }}
           headerRight={
-            <AssetInput.WalletSwitch onChange={() => setSpendFromWallet(!spendFromWallet)} checked={spendFromWallet} />
+            <AssetInput.WalletSwitch
+              onChange={() => setSpendFromWalletA(!spendFromWalletA)}
+              checked={spendFromWalletA}
+            />
           }
-          spendFromWallet={spendFromWallet}
+          spendFromWallet={spendFromWalletA}
         />
         <AssetInput
           value={formattedAmounts[1]}
@@ -58,7 +68,13 @@ const ConcentratedStandardMode: FC = () => {
             setTypedField(TypedField.B)
             setSecondaryInput(val)
           }}
-          spendFromWallet={spendFromWallet}
+          headerRight={
+            <AssetInput.WalletSwitch
+              onChange={() => setSpendFromWalletB(!spendFromWalletB)}
+              checked={spendFromWalletB}
+            />
+          }
+          spendFromWallet={spendFromWalletB}
         />
 
         <div className="flex flex-col gap-3">

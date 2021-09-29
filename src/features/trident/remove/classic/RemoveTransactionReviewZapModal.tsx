@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
-import { Percent } from '@sushiswap/core-sdk'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Typography from '../../../../components/Typography'
@@ -12,7 +11,7 @@ import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import useZapPercentageInput from '../../context/hooks/useZapPercentageInput'
 import { useClassicZapRemoveExecute } from '../../context/hooks/useClassicZapRemoveExecute'
-import { usePoolDetails } from '../../context/hooks/usePoolDetails'
+import { usePoolDetailsRemove } from '../../context/hooks/usePoolDetails'
 
 interface RemoveTransactionReviewZapModal {}
 
@@ -20,14 +19,8 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
 
-  const {
-    percentageInput: [percentageInput],
-    parsedAmounts,
-    parsedOutputAmount,
-  } = useZapPercentageInput()
-
-  const { liquidityValue, currentPoolShare, currentLiquidityValue, price } = usePoolDetails(parsedAmounts, false)
-
+  const { parsedOutputAmount, parsedSLPAmount } = useZapPercentageInput()
+  const { currentLiquidityValue, liquidityValue, currentPoolShare, poolShare } = usePoolDetailsRemove(parsedSLPAmount)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
@@ -83,12 +76,12 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
             <div className="flex justify-between">
               <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
               <Typography variant="sm" className="text-right">
-                1 {pool?.token0?.symbol} = {price?.toSignificant(6)} {pool?.token1?.symbol}
+                1 {pool?.token0?.symbol} = {pool?.token1Price?.toSignificant(6)} {pool?.token1?.symbol}
               </Typography>
             </div>
             <div className="flex justify-end">
               <Typography variant="sm" className="text-right">
-                1 {pool?.token1?.symbol} = {price?.invert().toSignificant(6)} {pool?.token0?.symbol}
+                1 {pool?.token1?.symbol} = {pool?.token0Price?.toSignificant(6)} {pool?.token0?.symbol}
               </Typography>
             </div>
           </div>
@@ -110,9 +103,9 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`Share of Pool`)}
               </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}% →{' '}
-                {currentPoolShare?.multiply(new Percent(percentageInput, '100'))?.toSignificant(6) || '0.000'}%
+              <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
+                {'<'} {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'} →{' '}
+                <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
               </Typography>
             </div>
           </div>

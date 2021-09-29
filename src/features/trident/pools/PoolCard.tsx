@@ -7,7 +7,6 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { PoolAtomType, PoolType } from '../types'
 import { POOL_TYPES } from '../constants'
-import { toHref } from '../../../hooks/useTridentPools'
 import { classNames } from '../../../functions'
 import { ConstantProductPool } from '@sushiswap/trident-sdk'
 
@@ -20,6 +19,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const { i18n } = useLingui()
   const [, pool] = poolProp
 
+  // TODO ramin: use getAssets when available
   const currencies = [pool?.token0, pool?.token1]
 
   // TODO ramin: add other types
@@ -86,7 +86,8 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   )
 
   // TODO ramin: dynamic
-  if (link) return <Link href={`${link}/${toHref(poolType, currencies)}`}>{content}</Link>
+  if (link)
+    return <Link href={`${link}/${poolType}/${currencies.map((el) => el?.wrapped.address).join('/')}`}>{content}</Link>
 
   return content
 }

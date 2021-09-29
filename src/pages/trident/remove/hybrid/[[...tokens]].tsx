@@ -25,7 +25,6 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
 import { LiquidityMode } from '../../../../features/trident/types'
-import HybridUnzapMode from '../../../../features/trident/remove/hybrid/HybridUnzapMode'
 import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewStandardModal'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
@@ -103,7 +102,7 @@ const RemoveHybrid = () => {
       <ModeToggle onChange={() => {}} />
 
       <>
-        {liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}
+        {/*{liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}*/}
         {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
       </>
 

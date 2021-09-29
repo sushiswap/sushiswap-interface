@@ -2,7 +2,13 @@ import AssetInput from '../../../../components/AssetInput'
 import React from 'react'
 import TransactionDetails from './../TransactionDetails'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  poolAtom,
+  showReviewAtom,
+  spendFromWalletAtom,
+  spendFromWalletSelector,
+} from '../../context/atoms'
 import { useLingui } from '@lingui/react'
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import TridentApproveGate from '../../TridentApproveGate'
@@ -31,7 +37,8 @@ const WeightedStandardMode = () => {
   } = useDependentAssetInputs()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(pool?.token0.address))
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(pool?.token1.address))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (
@@ -45,9 +52,12 @@ const WeightedStandardMode = () => {
             setMainInput(val)
           }}
           headerRight={
-            <AssetInput.WalletSwitch onChange={() => setSpendFromWallet(!spendFromWallet)} checked={spendFromWallet} />
+            <AssetInput.WalletSwitch
+              onChange={() => setSpendFromWalletA(!spendFromWalletA)}
+              checked={spendFromWalletA}
+            />
           }
-          spendFromWallet={spendFromWallet}
+          spendFromWallet={spendFromWalletA}
         />
         <AssetInput
           value={formattedAmounts[1]}
@@ -56,7 +66,13 @@ const WeightedStandardMode = () => {
             setTypedField(TypedField.B)
             setSecondaryInput(val)
           }}
-          spendFromWallet={spendFromWallet}
+          headerRight={
+            <AssetInput.WalletSwitch
+              onChange={() => setSpendFromWalletB(!spendFromWalletB)}
+              checked={spendFromWalletB}
+            />
+          }
+          spendFromWallet={spendFromWalletB}
         />
 
         <div className="flex flex-col gap-3">

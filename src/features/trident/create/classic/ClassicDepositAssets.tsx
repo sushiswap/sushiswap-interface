@@ -4,7 +4,13 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import AssetInput from '../../../../components/AssetInput'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  poolAtom,
+  showReviewAtom,
+  spendFromWalletAtom,
+  spendFromWalletSelector,
+} from '../../context/atoms'
 import Button from '../../../../components/Button'
 import { useBentoBoxContract } from '../../../../hooks'
 import { classNames } from '../../../../functions'
@@ -28,8 +34,10 @@ const ClassicDepositAssets: FC = () => {
     parsedAmounts,
   } = useIndependentAssetInputs()
 
+  const [, pool] = useRecoilValue(poolAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletAtom)
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(pool?.token0.address))
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(pool?.token1.address))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (
@@ -54,17 +62,23 @@ const ClassicDepositAssets: FC = () => {
             onChange={(val) => setInputAtIndex(val, 0)}
             headerRight={
               <AssetInput.WalletSwitch
-                onChange={() => setSpendFromWallet(!spendFromWallet)}
-                checked={spendFromWallet}
+                onChange={() => setSpendFromWalletA(!spendFromWalletA)}
+                checked={spendFromWalletA}
               />
             }
-            spendFromWallet={spendFromWallet}
+            spendFromWallet={spendFromWalletA}
           />
           <AssetInput
             value={formattedAmounts[1]}
             currency={currencies[1]}
             onChange={(val) => setInputAtIndex(val, 1)}
-            spendFromWallet={spendFromWallet}
+            headerRight={
+              <AssetInput.WalletSwitch
+                onChange={() => setSpendFromWalletB(!spendFromWalletB)}
+                checked={spendFromWalletB}
+              />
+            }
+            spendFromWallet={spendFromWalletB}
           />
           <div className="flex flex-col gap-3">
             <TridentApproveGate inputAmounts={parsedAmounts} tokenApproveOn={bentoBox?.address}>

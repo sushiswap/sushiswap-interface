@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
-import { Percent } from '@sushiswap/core-sdk'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Typography from '../../../../components/Typography'
@@ -11,7 +10,7 @@ import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
 import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import usePercentageInput from '../../context/hooks/usePercentageInput'
-import { usePoolDetails } from '../../context/hooks/usePoolDetails'
+import { usePoolDetailsRemove } from '../../context/hooks/usePoolDetails'
 import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
 
 interface RemoveTransactionReviewStandardModal {}
@@ -20,11 +19,8 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
 
-  const {
-    percentageInput: [percentageInput],
-    parsedAmounts,
-  } = usePercentageInput()
-  const { price, currentLiquidityValue, liquidityValue, currentPoolShare } = usePoolDetails(parsedAmounts, false)
+  const { parsedAmounts, parsedSLPAmount } = usePercentageInput()
+  const { currentLiquidityValue, liquidityValue, currentPoolShare, poolShare } = usePoolDetailsRemove(parsedSLPAmount)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
@@ -84,12 +80,12 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
             <div className="flex justify-between">
               <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
               <Typography variant="sm" className="text-right">
-                1 {pool?.token0?.symbol} = {price?.toSignificant(6)} {pool?.token1?.symbol}
+                1 {pool?.token0.symbol} = {pool?.token1Price.toSignificant(6)} {pool?.token1.symbol}
               </Typography>
             </div>
             <div className="flex justify-end">
               <Typography variant="sm" className="text-right">
-                1 {pool?.token1?.symbol} = {price?.invert().toSignificant(6)} {pool?.token0?.symbol}
+                1 {pool?.token1.symbol} = {pool?.token0Price.toSignificant(6)} {pool?.token0.symbol}
               </Typography>
             </div>
           </div>
@@ -102,7 +98,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
                 </Typography>
                 <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                   {currentLiquidityValue?.toSignificant(6)} →{' '}
-                  {liquidityValue[index] ? liquidityValue[index].toSignificant(6) : '0.000'}
+                  {liquidityValue[index] ? liquidityValue[index]?.toSignificant(6) : '0.000'}
                   {currentLiquidityValue?.currency?.symbol}
                 </Typography>
               </div>
@@ -111,9 +107,9 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`Share of Pool`)}
               </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}% →{' '}
-                {currentPoolShare?.multiply(new Percent(percentageInput, '100'))?.toSignificant(6) || '0.000'}%
+              <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
+                {'<'} {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'} →{' '}
+                <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
               </Typography>
             </div>
           </div>
