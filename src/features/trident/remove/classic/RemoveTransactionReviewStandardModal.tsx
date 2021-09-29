@@ -104,7 +104,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
                 </Typography>
                 <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                   {currentLiquidityValue?.toSignificant(6)} →{' '}
-                  {liquidityValue[index] ? liquidityValue[index]?.toSignificant(6) : '0.000'}
+                  {liquidityValue[index] ? liquidityValue[index]?.toSignificant(6) : '0.000'}{' '}
                   {currentLiquidityValue?.currency?.symbol}
                 </Typography>
               </div>

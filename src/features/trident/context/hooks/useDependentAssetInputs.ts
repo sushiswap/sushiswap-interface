@@ -1,7 +1,7 @@
 import { atom, selector, useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
 import { fixedRatioAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 import { ChainId, Currency, CurrencyAmount, WNATIVE, ZERO } from '@sushiswap/core-sdk'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { maxAmountSpend, tryParseAmount } from '../../../../functions'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
@@ -135,30 +135,24 @@ export const useDependentAssetInputs = () => {
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const currencies = useMemo(() => [pool?.token0, pool?.token1], [pool])
   const balances = useBentoOrWalletBalance(account, currencies, spendFromWallet)
-  const usdcA = useUSDCValue(balances?.[0])
-  const usdcB = useUSDCValue(balances?.[1])
 
-  const onMax = useRecoilCallback(
-    ({ set }) =>
-      async () => {
-        if (!balances || !usdcA || !usdcB) return
-        if (!noLiquidity && fixedRatio) {
-          usdcA?.lessThan(usdcB)
-            ? set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-            : set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
-        } else {
-          set(mainInputAtom, maxAmountSpend(balances[0])?.toExact())
-          set(secondaryInputSelector, maxAmountSpend(balances[1])?.toExact())
-        }
-      },
-    [balances, fixedRatio, noLiquidity, usdcA, usdcB]
-  )
+  const onMax = useCallback(async () => {
+    if (!balances || !pool) return
+    if (!noLiquidity && fixedRatio) {
+      pool.priceOf(pool?.token0).quote(balances[0]?.wrapped)?.lessThan(balances[1])
+        ? mainInput[1](maxAmountSpend(balances[0])?.toExact())
+        : secondaryInput[1](maxAmountSpend(balances[1])?.toExact())
+    } else {
+      mainInput[1](maxAmountSpend(balances[0])?.toExact())
+      secondaryInput[1](maxAmountSpend(balances[1])?.toExact())
+    }
+  }, [balances, fixedRatio, mainInput, noLiquidity, pool, secondaryInput])
 
   const isMax = useMemo(() => {
-    if (!balances || !usdcA || !usdcB) return false
+    if (!balances || !pool) return false
 
     if (!noLiquidity && fixedRatio) {
-      return usdcA?.lessThan(usdcB)
+      return pool.priceOf(pool?.token0).quote(balances[0]?.wrapped)?.lessThan(balances[1])
         ? parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]))
         : parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]))
     } else {
@@ -166,7 +160,7 @@ export const useDependentAssetInputs = () => {
         parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0])) && parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]))
       )
     }
-  }, [balances, fixedRatio, noLiquidity, parsedAmounts, usdcA, usdcB])
+  }, [balances, fixedRatio, noLiquidity, parsedAmounts, pool])
 
   const insufficientBalance = useMemo(() => {
     return parsedAmounts.find((el, index) => {
