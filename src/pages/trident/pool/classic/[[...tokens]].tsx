@@ -15,6 +15,7 @@ import { useLingui } from '@lingui/react'
 import Rewards from '../../../../features/trident/pool/Rewards'
 import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
 import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
+import { Transactions } from '../../../../features/trident/pool/transactions/Transactions'
 
 const Pool = () => {
   useInitClassicPoolState()
@@ -67,6 +68,7 @@ const Pool = () => {
           </div>
         </div>
       </div>
+      <Transactions />
     </>
   )
 }
