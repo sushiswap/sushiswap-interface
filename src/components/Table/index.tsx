@@ -8,7 +8,7 @@ export interface Column {
   Cell?: (props: any) => ReactNode
   Header: string
   accessor: string | ((row: any) => ReactNode)
-  align: string
+  align?: string
   disableSortBy?: boolean
   sortType?: (a, b) => number
 }
