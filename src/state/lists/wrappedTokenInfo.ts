@@ -79,4 +79,11 @@ export class WrappedTokenInfo implements Token {
   public get wrapped(): Token {
     return this
   }
+
+  /**
+   * Returns token address. Useful in cases where a dependency is needed to detect changes (e.g. useEffect).
+   */
+  public serialize(): string {
+    return this.wrapped.address
+  }
 }
