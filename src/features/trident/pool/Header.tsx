@@ -6,13 +6,12 @@ import { POOL_TYPES } from '../constants'
 import { useLingui } from '@lingui/react'
 import { I18n } from '@lingui/core'
 import { FC } from 'react'
-import Button from '../../../components/Button'
-import { ChevronLeftIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
-import { poolAtom } from '../context/atoms'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { PoolType } from '../types'
+import { poolAtom } from '../context/atoms'
+import { formatPercent } from '../../../functions'
+import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
@@ -22,61 +21,36 @@ const HeaderContainer = () => {
 }
 
 interface HeaderProps {
-  // TODO ramin: should be every pool type instead of ConstantProductPool only
   pool: ConstantProductPool | HybridPool
   i18n: I18n
 }
 
 export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
+  const isDesktop = useDesktopMediaQuery()
+
   // TODO ramin: remove this make dynamic
   const apy = 3.6
   const isFarm = true
   const type = PoolType.ConstantProduct
-  const fees = '3343.34'
+
+  const properties = (
+    <>
+      <Chip label={POOL_TYPES[type].label} color="purple" />
+      <Typography weight={700} variant="sm">
+        {formatPercent(pool?.fee?.valueOf() / 100)} {i18n._(t`Fees`)}
+      </Typography>
+    </>
+  )
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col bg-dark-900">
-        <div className="flex flex-row justify-between px-5 pt-4 pb-3 bg-dots-pattern">
-          <div className="flex flex-col items-start gap-5">
-            <Button
-              color="blue"
-              variant="outlined"
-              size="sm"
-              className="py-1 pl-2 rounded-full"
-              startIcon={<ChevronLeftIcon width={24} height={24} />}
-            >
-              <Link href={'/trident/pools'}>{i18n._(t`Pools`)}</Link>
-            </Button>
-          </div>
-          <div className="flex flex-col gap-3 text-right">
-            <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
-            <div className="flex flex-col gap-2">
-              <Typography variant="h1" className="text-high-emphesis" weight={700}>
-                {apy}%
-              </Typography>
-              <div className="flex flex-row gap-2.5">
-                {isFarm ? (
-                  <>
-                    <Typography variant="xxs">{i18n._(t`Rewards:`)} 3.6%</Typography>
-                    <Typography variant="xxs">
-                      {i18n._(t`Fees:`)} {pool?.fee / 100}%
-                    </Typography>
-                  </>
-                ) : (
-                  <Typography variant="xxs" className="text-secondary">
-                    {i18n._(t`Including fees`)}
-                  </Typography>
-                )}
-              </div>
-            </div>
-          </div>
+    <div className="flex justify-between">
+      <div className="flex flex-col gap-2 lg:gap-5">
+        <div className="lg:flex lg:flex-row lg:gap-3 lg:order-0 lg:items-center">
+          <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} dense />
+          <div className="hidden lg:flex lg:flex-col lg:gap-2">{properties}</div>
         </div>
-      </div>
-      <div className="px-5 mt-[-32px] flex flex-col gap-2">
-        <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} />
-        <div className="flex flex-row items-center gap-2">
-          <Typography variant="h2" className="text-high-emphesis" weight={700}>
+        <div className="lg:order-2 flex flex-row gap-2 items-center">
+          <Typography variant={isDesktop ? 'h3' : 'h2'} className="text-high-emphesis" weight={700}>
             {pool?.token0.symbol}-{pool?.token1.symbol}
           </Typography>
           {isFarm && (
@@ -95,29 +69,29 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
             </>
           )}
         </div>
-        <div className="flex flex-row items-center gap-2">
-          <Chip label={POOL_TYPES[type].label} color={POOL_TYPES[type].color} />
-          <Typography weight={700} variant="sm">
-            {fees} {i18n._(t`Fees`)}
-          </Typography>
-        </div>
+        <div className="lg:order-1 flex flex-row gap-2 items-center lg:hidden">{properties}</div>
       </div>
-      <div className="grid grid-cols-2 gap-2 px-5 pt-6">
-        <Button variant="outlined" color="gradient" className="text-high-emphesis">
-          {/*TODO ramin: classic hardcoded here*/}
-          <Link href={`/trident/add/classic/${pool?.token0.address}/${pool?.token1.address}`}>
-            {isFarm ? i18n._(t`Add Liquidity / Stake`) : i18n._(t`Add Liquidity`)}
-          </Link>
-        </Button>
-        <Button variant="outlined" color="gradient" className="text-high-emphesis">
-          {/*TODO ramin: classic hardcoded here*/}
-          <Link href={`/trident/remove/classic/${pool?.token0.address}/${pool?.token1.address}`}>
-            {i18n._(t`Remove Liquidity`)}
-          </Link>
-        </Button>
-        <Button variant="outlined" color="gray" className="w-full col-span-2 py-3 text-high-emphesis" size="xs">
-          {i18n._(t`View Analytics`)}
-        </Button>
+      <div className="flex flex-col text-right gap-3">
+        <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
+        <div className="flex flex-col gap-2">
+          <Typography variant="h1" className="text-high-emphesis" weight={700}>
+            {apy}%
+          </Typography>
+          <div className="flex flex-row gap-2.5">
+            {isFarm ? (
+              <>
+                <Typography variant="xxs">{i18n._(t`Rewards:`)} 3.6%</Typography>
+                <Typography variant="xxs">
+                  {i18n._(t`Fees:`)} {pool?.fee / 100}%
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="xxs" className="text-secondary">
+                {i18n._(t`Including fees`)}
+              </Typography>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   )

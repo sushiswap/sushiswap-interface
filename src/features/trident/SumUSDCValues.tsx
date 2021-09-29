@@ -24,7 +24,7 @@ interface SumUSDCValuesProps {
 }
 
 const SumUSDCValues: FC<SumUSDCValuesProps> = ({ amounts, children }) => {
-  const [state, setState] = useState<Record<string, CurrencyAmount<Currency>>>({})
+  const [state, setState] = useState<Record<string, CurrencyAmount<Currency> | null>>({})
   const update = useCallback((address, value) => {
     setState((prevState) => ({
       ...prevState,
@@ -34,7 +34,7 @@ const SumUSDCValues: FC<SumUSDCValuesProps> = ({ amounts, children }) => {
 
   const values = useMemo(() => Object.values(state), [state])
   const loading = useMemo(
-    () => !(values.length === amounts.length && values.every((el) => el.greaterThan(0))),
+    () => !(values.length === amounts.length && values.every((el) => el?.greaterThan(0))),
     [amounts.length, values]
   )
   const amount = useMemo(() => (loading ? null : values.reduce((acc, cur) => acc.add(cur))), [loading, values])
