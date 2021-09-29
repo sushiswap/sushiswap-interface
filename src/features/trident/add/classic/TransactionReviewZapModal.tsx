@@ -29,7 +29,7 @@ const TransactionReviewZapModal: FC = () => {
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
-      <div className="flex flex-col gap-8 h-full">
+      <div className="flex flex-col gap-8 h-full pb-4">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
           <div className="px-5 pt-5 pb-8 flex flex-col gap-4">

@@ -1,5 +1,11 @@
 import React, { FC } from 'react'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  outputToWalletAtom,
+  poolAtom,
+  showReviewAtom,
+  spendFromWalletAtom,
+} from '../../context/atoms'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Typography from '../../../../components/Typography'
@@ -22,7 +28,7 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
   const { parsedOutputAmount, parsedSLPAmount } = useZapPercentageInput()
   const { currentLiquidityValue, liquidityValue, currentPoolShare, poolShare } = usePoolDetailsRemove(parsedSLPAmount)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const spendFromWallet = useRecoilValue(spendFromWalletAtom)
+  const outputToWallet = useRecoilValue(outputToWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { execute } = useClassicZapRemoveExecute()
@@ -67,7 +73,7 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
               {i18n._(t`...and deposited to your:`)}
             </Typography>
             <Typography weight={700} variant="lg" className="text-high-emphesis">
-              {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
+              {outputToWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
             </Typography>
           </div>
         </div>

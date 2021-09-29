@@ -2,7 +2,7 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../../../functions'
 import { t } from '@lingui/macro'
-import { noLiquiditySelector, poolAtom, spendFromWalletAtom, spendFromWalletSelector } from '../atoms'
+import { noLiquiditySelector, poolAtom, spendFromWalletAtom, spendFromWalletSelector, totalSupplyAtom } from '../atoms'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalance'
@@ -31,7 +31,6 @@ export const parsedZapSplitAmountsSelector = selector<[CurrencyAmount<Currency>,
   key: 'parsedZapSplitAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
-    const inputAmount = get(parsedZapAmountSelector)
 
     // TODO ramin: output amount calculation
     if (pool) return [CurrencyAmount.fromRawAmount(pool?.token0, '0'), CurrencyAmount.fromRawAmount(pool?.token1, '0')]
@@ -60,7 +59,7 @@ export const useZapAssetInput = () => {
     ? i18n._(t`Invalid pool`)
     : !zapInputAmount
     ? i18n._(t`Enter an amount`)
-    : parsedAmount && balance?.[0].lessThan(parsedAmount)
+    : parsedAmount && balance[0]?.lessThan(parsedAmount)
     ? i18n._(t`Insufficient ${parsedAmount?.currency.symbol} balance`)
     : noLiquidity
     ? i18n._(t`No liquidity`)

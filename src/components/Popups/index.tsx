@@ -12,7 +12,7 @@ const Popups: FC = () => {
   return (
     <>
       <div
-        className={`hidden md:block fixed right-[36px] max-w-[355px] w-full z-3 flex flex-col ${
+        className={`hidden md:block fixed right-[36px] max-w-[355px] w-full z-30 flex flex-col ${
           urlWarningActive ? 'top-[108px]' : 'top-[88px]'
         }`}
       >

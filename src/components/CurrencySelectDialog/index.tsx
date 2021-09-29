@@ -23,10 +23,10 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
   const balances = useCurrencyBalances(account, currencies)
 
   return (
-    <>
+    <div className="overflow-y-auto h-full">
       {balances.map((balance, index) => (
         <div
-          className="flex justify-between items-center p-5 cursor-pointer"
+          className="flex justify-between items-center px-5 py-3 cursor-pointer"
           onClick={() => balance && handleSelect(balance.currency)}
           key={index}
         >
@@ -43,7 +43,7 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
           </Typography>
         </div>
       ))}
-    </>
+    </div>
   )
 }
 
@@ -71,7 +71,7 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
   }, [search, tokensArr])
 
   return (
-    <>
+    <div className="overflow-y-auto h-full">
       {token && (
         <div className="flex justify-between items-center px-5 py-3 cursor-pointer" onClick={() => handleSelect(token)}>
           <div className="flex items-center gap-1.5">
@@ -117,7 +117,7 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
           </div>
         )
       })}
-    </>
+    </div>
   )
 }
 
@@ -142,8 +142,8 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currenc
   )
 
   return (
-    <div className="bg-dark-900 h-full">
-      <div className="relative">
+    <div className="bg-dark-900 h-full lg:max-w-lg lg:w-[32rem] lg:max-h-[92vh] lg:h-[40rem]">
+      <div className="relative shadow-lg">
         <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
         <div className="p-5 flex flex-col gap-4">
           <div className="flex flex-row justify-between">

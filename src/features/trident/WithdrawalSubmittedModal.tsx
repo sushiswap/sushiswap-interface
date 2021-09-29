@@ -7,7 +7,7 @@ import Button from '../../components/Button'
 import Link from 'next/link'
 import HeadlessUiModal from '../../components/Modal/HeadlessUIModal'
 import React, { FC } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil'
 import { txHashAtom } from './context/atoms'
 import withdrawSubmitted from '../../animation/withdraw-submitted.json'
 import Lottie from 'lottie-react'
@@ -29,7 +29,7 @@ const WithdrawSubmittedModal: FC = () => {
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash(null)}>
-      <div className="flex flex-col items-center justify-center px-8 bg-dark-800/90 h-full gap-3">
+      <div className="flex flex-col items-center justify-center px-8 lg:p-12 bg-dark-800/90 h-full gap-3">
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
           <Lottie animationData={withdrawSubmitted} autoplay loop />
         </div>

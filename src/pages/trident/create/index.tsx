@@ -22,7 +22,7 @@ import {
 import { PoolType } from '../../../features/trident/types'
 import PoolCreationSubmittedModal from '../../../features/trident/PoolCreationSubmittedModal'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useIndependentAssetInputs } from '../../../features/trident/context/hooks/useIndependentAssetInputs'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import HybridStandardMode from '../../../features/trident/add/hybrid/HybridStandardMode'
@@ -120,6 +120,8 @@ const Pool = () => {
 }
 
 Pool.Provider = RecoilRoot
-Pool.Layout = TridentLayout
+Pool.Layout = (props) => (
+  <TridentLayout {...props} headerBg="bg-bubble-pattern" headerHeight="h-[194px]" breadcrumbs={[]} />
+)
 
 export default Pool

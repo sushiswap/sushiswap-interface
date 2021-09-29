@@ -9,6 +9,7 @@ import { usePoolDetails } from '../context/hooks/usePoolDetails'
 import { useZapAssetInput } from '../context/hooks/useZapAssetInput'
 import { LiquidityMode } from '../types'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
+import { formatPercent } from '../../../functions'
 
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
@@ -20,9 +21,9 @@ const TransactionDetails: FC = () => {
   const { parsedSplitAmounts } = useZapAssetInput()
 
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(
-    liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
-  )
+  const input = liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
+  const validInputs = input[0] && input[1]
+  const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(input)
 
   return (
     <div className="flex flex-col gap-4 lg:gap-8">
@@ -70,10 +71,15 @@ const TransactionDetails: FC = () => {
             {i18n._(t`Your Pool Tokens`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {poolBalance?.greaterThan(0) ? poolBalance?.toSignificant(6) : '0.000'} →{' '}
-            <span className="text-green">
-              {poolBalance && liquidityMinted ? poolBalance.add(liquidityMinted)?.toSignificant(6) : '0.000'} SLP
-            </span>
+            {poolBalance?.greaterThan(0) ? poolBalance?.toSignificant(6) : '0.000'}
+            {validInputs && (
+              <>
+                →{' '}
+                <span className="text-green">
+                  {poolBalance && liquidityMinted ? poolBalance.add(liquidityMinted)?.toSignificant(6) : '0.000'} SLP
+                </span>
+              </>
+            )}
           </Typography>
         </div>
         <div className="flex flex-row justify-between">
@@ -81,8 +87,12 @@ const TransactionDetails: FC = () => {
             {i18n._(t`Your Pool Share`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {'<'} {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'} →{' '}
-            <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
+            {'<'} {currentPoolShare?.greaterThan(0) ? formatPercent(currentPoolShare?.toSignificant(6)) : '0.000%'}
+            {validInputs && (
+              <>
+                → <span className="text-green">{formatPercent(poolShare?.toSignificant(6)) || '0.000%'}</span>
+              </>
+            )}
           </Typography>
         </div>
         {/*<div className="flex flex-row justify-between">*/}

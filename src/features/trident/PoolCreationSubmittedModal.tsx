@@ -29,7 +29,7 @@ const PoolCreationSubmittedModal: FC = () => {
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash(null)}>
-      <div className="flex flex-col items-center justify-center px-8 bg-dark-800/90 h-full gap-3">
+      <div className="flex flex-col items-center justify-center px-8 lg:p-12 bg-dark-800/90 h-full gap-3">
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
           <Lottie animationData={receiptPrinting} autoplay loop />
         </div>

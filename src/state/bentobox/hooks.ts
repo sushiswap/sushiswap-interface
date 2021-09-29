@@ -13,6 +13,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useSingleCallResult } from '../multicall/hooks'
 import useTransactionStatus from '../../hooks/useTransactionStatus'
+import { serializeBalancesMap } from '../wallet/hooks'
 
 export interface BentoBalance {
   address: string
@@ -163,6 +164,7 @@ export function useBentoBalances2(account: string, tokens: Token[]): Record<stri
   const bentoBoxContract = useBentoBoxContract()
   const currentTransactionStatus = useTransactionStatus()
   const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>({})
+  const memoizedBalances = useMemo(() => serializeBalancesMap(balances), [balances])
 
   const fetch = useCallback(async () => {
     const balances = await boringHelperContract.getBalances(
@@ -186,7 +188,8 @@ export function useBentoBalances2(account: string, tokens: Token[]): Record<stri
     fetch()
   }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, tokens])
 
-  return useMemo(() => balances, [balances])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => balances, [memoizedBalances])
 }
 
 export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {

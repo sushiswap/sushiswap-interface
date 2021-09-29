@@ -13,7 +13,7 @@ const TransactionDetailsExplanationModal: FC = ({ children }) => {
   return (
     <HeadlessUiModal trigger={children}>
       {({ setOpen }) => (
-        <div className="flex flex-col gap-9 px-7 py-9">
+        <div className="flex flex-col gap-9 px-7 py-9 lg:max-w-2xl">
           <div className="flex justify-between gap-3">
             <Typography variant="h3" weight={700} className="text-high-emphesis">
               {i18n._(t`Transaction Details`)}

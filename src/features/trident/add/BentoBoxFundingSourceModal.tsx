@@ -15,13 +15,13 @@ const BentoBoxFundingSourceModal: FC = () => {
   return (
     <HeadlessUiModal
       trigger={
-        <div className="flex items-center justify-center lg:w-3 lg:h-3 rounded cursor-pointer">
-          <QuestionMarkCircleIcon className="lg:w-3 lg:h-3 w-6 h-6 text-high-emphesis" />
+        <div className="flex items-center justify-center lg:w-4 lg:h-4 rounded cursor-pointer">
+          <QuestionMarkCircleIcon className="lg:w-4 lg:h-4 w-6 h-6 text-high-emphesis" />
         </div>
       }
     >
       {({ setOpen }) => (
-        <div className="flex flex-col h-full pt-5 gap-5">
+        <div className="flex flex-col h-full pt-5 gap-5 lg:max-w-lg">
           <div className="absolute right-5 top-5 w-6 h-6" onClick={() => setOpen(false)}>
             <XIcon className="w-6 h-6 text-high-emphesis cursor-pointer" />
           </div>

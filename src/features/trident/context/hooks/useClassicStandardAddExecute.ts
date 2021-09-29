@@ -41,6 +41,7 @@ export const useClassicStandardAddExecute = () => {
         const nativeA = await snapshot.getPromise(spendFromWalletSelector(pool?.token0.address))
         const nativeB = await snapshot.getPromise(spendFromWalletSelector(pool?.token1.address))
 
+        console.log(nativeA, nativeB)
         if (
           !pool ||
           !chainId ||
