@@ -170,7 +170,7 @@ export const useDependentAssetInputs = () => {
 
   const insufficientBalance = useMemo(() => {
     return parsedAmounts.find((el, index) => {
-      return balances && el ? balances[index].lessThan(el) : false
+      return balances && el ? balances?.[index]?.lessThan(el) : false
     })
   }, [balances, parsedAmounts])
 
