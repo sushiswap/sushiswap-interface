@@ -1,21 +1,22 @@
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { BENTOBOX_ADDRESS, CurrencyAmount, WNATIVE } from '@sushiswap/sdk'
-import React, { useState } from 'react'
-import Button, { ButtonError } from '../../components/Button'
-import Dots from '../../components/Dots'
-import Web3Connect from '../../components/Web3Connect'
-import { KashiCooker } from '../../entities'
-import { ZERO } from '../../functions/math'
 import { ApprovalState, useActiveWeb3React, useApproveCallback } from '../../hooks'
-import { useCurrency } from '../../hooks/Tokens'
-import useKashiApproveCallback, { BentoApprovalState } from '../../hooks/useKashiApproveCallback'
-import CurrencyInputPanel from './CurrencyInputPanel'
+import { BENTOBOX_ADDRESS, CurrencyAmount, WNATIVE } from '@sushiswap/core-sdk'
+import Button, { ButtonError } from '../../components/Button'
 import Provider, { useKashiInfo } from '../kashi/context'
-import { tryParseAmount } from '../../functions'
+import React, { useState } from 'react'
+import useKashiApproveCallback, { BentoApprovalState } from '../../hooks/useKashiApproveCallback'
+
 import Alert from '../../components/Alert'
-import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import { BigNumber } from '@ethersproject/bignumber'
+import CurrencyInputPanel from './CurrencyInputPanel'
+import Dots from '../../components/Dots'
+import { KashiCooker } from '../../entities'
+import Web3Connect from '../../components/Web3Connect'
+import { ZERO } from '../../functions/math'
+import { t } from '@lingui/macro'
+import { tryParseAmount } from '../../functions'
+import { useCurrency } from '../../hooks/Tokens'
+import { useLingui } from '@lingui/react'
+import { useUSDCValue } from '../../hooks/useUSDCPrice'
 
 const KashiDeposit = ({ pair, useBento }) => {
   const { i18n } = useLingui()
@@ -32,7 +33,7 @@ const KashiDeposit = ({ pair, useBento }) => {
   const balance =
     assetToken &&
     balanceAmount &&
-    CurrencyAmount.fromRawAmount(assetNative ? WNATIVE[chainId || 1] : assetToken, balanceAmount)
+    CurrencyAmount.fromRawAmount(assetNative ? WNATIVE[chainId] : assetToken, balanceAmount)
 
   const maxAmount = balance
 

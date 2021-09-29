@@ -4186,10 +4186,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/limit-order-sdk@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-sdk/-/limit-order-sdk-0.1.0.tgz#23793d683a90b1fd810a7b4bf40f340b6fa20133"
-  integrity sha512-Nv2KPp9sSdEff+ME50ZLaJUDmUvike0871K3WbQTYpX42UtFLN9yGVqYFymQRMVGEB5NXZwMS0qPdDeOuNfbaA==
+"@sushiswap/limit-order-sdk@1.0.0-canary.0":
+  version "1.0.0-canary.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-sdk/-/limit-order-sdk-1.0.0-canary.0.tgz#5fa4be08b2de9aba71547d6b2abb93b73cacce72"
+  integrity sha512-lwA2Gm/K1W4jnEK1zKk45wy9KtO63criWgqIzbq3d0odHQNIRPceulkk4YnEIe0q+TGjlFqeXbmYJ2YUHaJzEw==
   dependencies:
     "@sushiswap/core-sdk" "0.1.0"
 
