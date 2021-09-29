@@ -16,6 +16,8 @@ import useENSName from '../../hooks/useENSName'
 import { useLingui } from '@lingui/react'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { useWeb3React } from '@web3-react/core'
+import { Web3Provider } from '@ethersproject/providers'
+import Davatar from '@davatar/react'
 
 const IconWrapper = styled.div<{ size?: number }>`
   display: flex;
@@ -40,10 +42,25 @@ const SOCK = (
 )
 
 // eslint-disable-next-line react/prop-types
-function StatusIcon({ connector }: { connector: AbstractConnector }) {
+function StatusIcon({
+  connector,
+  account,
+  provider,
+}: {
+  connector: AbstractConnector
+  account: string
+  provider: Web3Provider
+}) {
   if (connector === injected) {
-    return <Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />
-    // return <Identicon />
+    return (
+      <Davatar
+        size={20}
+        address={account}
+        defaultComponent={<Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />}
+        style={{ borderRadius: 5 }}
+        provider={provider}
+      />
+    )
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
       <IconWrapper size={16}>
@@ -86,7 +103,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
 
 function Web3StatusInner() {
   const { i18n } = useLingui()
-  const { account, connector } = useWeb3React()
+  const { account, connector, library } = useWeb3React()
 
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -130,7 +147,9 @@ function Web3StatusInner() {
         ) : (
           <div className="mr-2">{ENSName || shortenAddress(account)}</div>
         )}
-        {!hasPendingTransactions && connector && <StatusIcon connector={connector} />}
+        {!hasPendingTransactions && connector && (
+          <StatusIcon connector={connector} account={account} provider={library} />
+        )}
       </div>
     )
   } else {
