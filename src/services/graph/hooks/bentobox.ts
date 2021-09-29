@@ -2,10 +2,11 @@ import { useEffect, useMemo } from 'react'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import { ChainId } from '@sushiswap/sdk'
-import { getKashiPairs, getUserKashiPairs, getBentoUserTokens } from '../fetchers/bentobox'
+import { getKashiPairs, getUserKashiPairs, getBentoUserTokens, getBentoBox } from '../fetchers/bentobox'
 import { useActiveWeb3React } from '../../../hooks'
 import { useBlock } from './blocks'
 import { Feature, featureEnabled } from '../../../functions/feature'
+import AccountDetails from '../../../components/AccountDetails'
 
 interface useKashiPairsProps {
   timestamp?: number
@@ -83,6 +84,28 @@ export function useBentoUserTokens(
   const { data } = useSWR(
     shouldFetch ? ['bentoUserTokens', chainId, JSON.stringify(variables)] : null,
     () => getBentoUserTokens(chainId, variables),
+    swrConfig
+  )
+
+  return data
+}
+
+export function useBentoBox(
+  variables = undefined,
+  { chainId, account } = useActiveWeb3React(),
+  swrConfig?: SWRConfiguration
+) {
+  const shouldFetch = chainId && account
+
+  variables = Object.keys(variables ?? {}).includes('user')
+    ? variables
+    : account
+    ? { ...variables, user: account.toLowerCase() }
+    : ''
+
+  const { data } = useSWR(
+    shouldFetch ? ['bentoBox', chainId, JSON.stringify(variables)] : null,
+    () => getBentoBox(chainId, variables),
     swrConfig
   )
 

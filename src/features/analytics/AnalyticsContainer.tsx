@@ -11,7 +11,7 @@ export default function AnalyticsContainer({ children }): JSX.Element {
       </Head>
 
       <Container id="analytics" maxWidth="full" className="grid h-full grid-flow-col grid-cols-10 px-4 mx-auto gap-9">
-        <div className="sticky top-0 hidden lg:block md:col-span-2 3xl:col-start-2 3xl:col-span-1">
+        <div className="sticky top-0 hidden lg:block md:col-span-2 3xl:col-start-1 3xl:col-span-2">
           <Sidebar
             items={[
               {
@@ -33,6 +33,10 @@ export default function AnalyticsContainer({ children }): JSX.Element {
               {
                 text: 'Tokens',
                 href: '/analytics/tokens',
+              },
+              {
+                text: 'Bento Box',
+                href: '/analytics/bentobox',
               },
             ]}
           />
