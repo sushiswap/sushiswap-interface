@@ -9,7 +9,7 @@ import { formatNumber } from '../../../functions'
 import { useActiveWeb3React } from '../../../hooks'
 import { useBentoBox, useBlock, useNativePrice, useTokens } from '../../../services/graph'
 
-export default function Dashboard(): JSX.Element {
+export default function BentoBox(): JSX.Element {
   const { chainId } = useActiveWeb3React()
 
   const block1d = useBlock({ daysAgo: 1, chainId })
