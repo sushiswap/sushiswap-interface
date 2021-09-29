@@ -10,24 +10,17 @@ import { Feature, featureEnabled } from '../../../functions/feature'
 interface useKashiPairsProps {
   timestamp?: number
   block?: number
-  chainId?: number
+  chainId: number
   shouldFetch?: boolean
   user?: string
   subset?: string[]
 }
 
 export function useKashiPairs(
-  {
-    timestamp,
-    block,
-    chainId = useActiveWeb3React().chainId,
-    shouldFetch = true,
-    user,
-    subset,
-  }: useKashiPairsProps = {},
+  { timestamp, block, chainId, shouldFetch = true, user, subset }: useKashiPairsProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch ? featureEnabled(Feature['KASHI'], chainId) : false

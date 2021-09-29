@@ -1,12 +1,15 @@
 import { Chef, PairType } from '../features/onsen/enum'
 import {
   useAverageBlockTime,
+  useBlock,
+  useEthPrice,
   useFarms,
   useKashiPairs,
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useNativePrice,
+  useOnePrice,
   useStakePrice,
   useSushiPairs,
   useSushiPrice,
@@ -17,46 +20,53 @@ import { getAddress } from '@ethersproject/address'
 import useActiveWeb3React from './useActiveWeb3React'
 import { useMemo } from 'react'
 import { usePositions } from '../features/onsen/hooks'
+import { aprToApy } from '../functions/convert/apyApr'
 
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()
 
-  const positions = usePositions()
+  const positions = usePositions(chainId)
 
-  const farms = useFarms()
+  const block1w = useBlock({ daysAgo: 7, chainId })
+
+  const farms = useFarms({ chainId })
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
-  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
-  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
+  const swapPairs1w = useSushiPairs({
+    subset: farmAddresses,
+    block: block1w,
+    shouldFetch: !!block1w && !!farmAddresses,
+    chainId,
+  })
+  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
 
   const averageBlockTime = useAverageBlockTime()
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, nativePrice, maticPrice, stakePrice] = [
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice] = [
     useSushiPrice(),
-    useNativePrice(),
+    useEthPrice(),
     useMaticPrice(),
     useStakePrice(),
+    useOnePrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
 
   const map = (pool) => {
-    // TODO: Account for fees generated in case of swap pairs, and use standard compounding
-    // algorithm with the same intervals acrosss chains to account for consistency.
-    // For lending pairs, what should the equivilent for fees generated? Interest gained?
-    // How can we include this?
-
     // TODO: Deal with inconsistencies between properties on subgraph
     pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
     pool.balance = pool?.balance || pool?.slpBalance
 
     const swapPair = swapPairs?.find((pair) => pair.id === pool.pair)
+    const swapPair1w = swapPairs1w?.find((pair) => pair.id === pool.pair)
     const kashiPair = kashiPairs?.find((pair) => pair.id === pool.pair)
 
-    const type = swapPair ? PairType.SWAP : PairType.KASHI
-
     const pair = swapPair || kashiPair
+    const pair1w = swapPair1w
+
+    const type = swapPair ? PairType.SWAP : PairType.KASHI
 
     const blocksPerHour = 3600 / averageBlockTime
 
@@ -106,7 +116,7 @@ export default function useFarmRewards() {
           icon: icon,
           rewardPerBlock: rewardPerBlock,
           rewardPerDay: rewardPerDay,
-          rewardPrice: pool.rewardToken.derivedETH * nativePrice,
+          rewardPrice: pool.rewardToken.derivedETH * ethPrice,
         }
 
         rewards[1] = reward
@@ -137,9 +147,7 @@ export default function useFarmRewards() {
           [ChainId.HARMONY]: {
             token: 'ONE',
             icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: nativePrice, // Reward token = Native token
+            rewardPrice: onePrice,
           },
         }
 
@@ -163,20 +171,30 @@ export default function useFarmRewards() {
 
     const tvl = swapPair
       ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
-      : balance * kashiPair.token0.derivedETH * nativePrice
+      : balance * kashiPair.token0.derivedETH * ethPrice
+
+    const feeApyPerYear = swapPair
+      ? aprToApy((((((pair?.volumeUSD - pair1w?.volumeUSD) * 0.0025) / 7) * 365) / pair?.reserveUSD) * 100, 3650) / 100
+      : 0
+
+    const feeApyPerMonth = feeApyPerYear / 12
+    const feeApyPerDay = feeApyPerMonth / 30
+    const feeApyPerHour = feeApyPerDay / blocksPerHour
 
     const roiPerBlock =
       rewards.reduce((previousValue, currentValue) => {
         return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
       }, 0) / tvl
 
-    const roiPerHour = roiPerBlock * blocksPerHour
+    const rewardAprPerHour = roiPerBlock * blocksPerHour
+    const rewardAprPerDay = rewardAprPerHour * 24
+    const rewardAprPerMonth = rewardAprPerDay * 30
+    const rewardAprPerYear = rewardAprPerMonth * 12
 
-    const roiPerDay = roiPerHour * 24
-
-    const roiPerMonth = roiPerDay * 30
-
-    const roiPerYear = roiPerMonth * 12
+    const roiPerHour = rewardAprPerHour + feeApyPerHour
+    const roiPerMonth = rewardAprPerMonth + feeApyPerMonth
+    const roiPerDay = rewardAprPerDay + feeApyPerDay
+    const roiPerYear = rewardAprPerYear + feeApyPerYear
 
     const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
 
@@ -189,6 +207,14 @@ export default function useFarmRewards() {
         type,
       },
       balance,
+      feeApyPerHour,
+      feeApyPerDay,
+      feeApyPerMonth,
+      feeApyPerYear,
+      rewardAprPerHour,
+      rewardAprPerDay,
+      rewardAprPerMonth,
+      rewardAprPerYear,
       roiPerBlock,
       roiPerHour,
       roiPerDay,

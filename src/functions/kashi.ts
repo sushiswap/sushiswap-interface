@@ -10,7 +10,7 @@ import {
   PROTOCOL_FEE,
   PROTOCOL_FEE_DIVISOR,
   STARTING_INTEREST_PER_YEAR,
-} from '@sushiswap/core-sdk'
+} from '@sushiswap/sdk'
 import { ZERO, e10 } from './math'
 
 import { getCurrency } from './currency/getCurrency'

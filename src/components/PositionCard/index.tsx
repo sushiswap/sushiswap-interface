@@ -238,7 +238,7 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               <Button
                 color="blue"
                 onClick={() => {
-                  router.push(`/add/${pair.liquidityToken.address}`)
+                  router.push(`/add/${currencyId(currency0)}/${currencyId(currency1)}`)
                 }}
               >
                 {i18n._(t`Add`)}

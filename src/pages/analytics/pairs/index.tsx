@@ -5,22 +5,24 @@ import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import PairList from '../../../features/analytics/Pairs/PairList'
 import PairTabs from '../../../features/analytics/Pairs/PairTabs'
 import Search from '../../../components/Search'
-import { useFuse } from '../../../hooks'
+import { useActiveWeb3React, useFuse } from '../../../hooks'
 import Background from '../../../features/analytics/Background'
 
 export default function Pairs() {
   const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block2d = useBlock({ daysAgo: 2 })
-  const block1w = useBlock({ daysAgo: 7 })
-  const block2w = useBlock({ daysAgo: 14 })
+  const { chainId } = useActiveWeb3React()
 
-  const pairs = useSushiPairs()
-  const pairs1d = useSushiPairs({ block: block1d, shouldFetch: !!block1d })
-  const pairs2d = useSushiPairs({ block: block2d, shouldFetch: !!block2d && type !== 'all' }) // No need to fetch if we don't need the data
-  const pairs1w = useSushiPairs({ block: block1w, shouldFetch: !!block1w })
-  const pairs2w = useSushiPairs({ block: block2w, shouldFetch: !!block2w && type !== 'all' })
+  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block2d = useBlock({ daysAgo: 2, chainId })
+  const block1w = useBlock({ daysAgo: 7, chainId })
+  const block2w = useBlock({ daysAgo: 14, chainId })
+
+  const pairs = useSushiPairs({ chainId })
+  const pairs1d = useSushiPairs({ block: block1d, shouldFetch: !!block1d, chainId })
+  const pairs2d = useSushiPairs({ block: block2d, shouldFetch: !!block2d && type !== 'all', chainId }) // No need to fetch if we don't need the data
+  const pairs1w = useSushiPairs({ block: block1w, shouldFetch: !!block1w, chainId })
+  const pairs2w = useSushiPairs({ block: block2w, shouldFetch: !!block2w && type !== 'all', chainId })
 
   const pairsFormatted = useMemo(() => {
     return type === 'all'

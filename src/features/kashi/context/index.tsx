@@ -151,8 +151,8 @@ async function getPairs(bentoBoxContract, chainId: ChainId) {
     return {
       masterContract: log.args?.masterContract,
       address: log.args?.cloneAddress,
-      collateralAddress: deployParams[0],
-      assetAddress: deployParams[1],
+      collateral: { address: deployParams[0] },
+      asset: { address: deployParams[1] },
       oracle: deployParams[2],
       oracleData: deployParams[3],
     }
@@ -189,6 +189,8 @@ export function rpcToObj(rpc_obj: any, obj?: any) {
   return rpc_obj
 }
 
+const BLACKLISTED_ORACLES = ['0x8f2CC3376078568a04eBC600ae5F0a036DBfd812']
+
 export function KashiProvider({ children }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
   const blockNumber = useBlockNumber()
@@ -197,7 +199,7 @@ export function KashiProvider({ children }) {
 
   const wnative = WNATIVE_ADDRESS[chainId]
 
-  const currency = USDC_ADDRESS[chainId]
+  const currency = getCurrency(chainId).address
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
@@ -218,7 +220,15 @@ export function KashiProvider({ children }) {
     if (
       !account ||
       !chainId ||
-      ![ChainId.MAINNET, ChainId.KOVAN, ChainId.BSC, ChainId.MATIC, ChainId.XDAI, ChainId.ARBITRUM].includes(chainId)
+      ![
+        ChainId.MAINNET,
+        ChainId.KOVAN,
+        ChainId.BSC,
+        ChainId.MATIC,
+        ChainId.XDAI,
+        ChainId.ARBITRUM,
+        ChainId.AVALANCHE,
+      ].includes(chainId)
     ) {
       return
     }
@@ -228,8 +238,10 @@ export function KashiProvider({ children }) {
       const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], currency, [KASHI_ADDRESS[chainId]]))
 
       // Get the deployed pairs from the logs and decode
-      const logPairs = await getPairs(bentoBoxContract, chainId)
-      // console.log({ logPairs })
+      const logPairs = (await getPairs(bentoBoxContract, chainId)).filter(
+        (pair) => !BLACKLISTED_ORACLES.includes(pair.oracle)
+      )
+      console.log({ logPairs })
 
       // Filter all pairs by supported oracles and verify the oracle setup
 
@@ -238,6 +250,7 @@ export function KashiProvider({ children }) {
       const allPairAddresses = logPairs
         .filter((pair) => {
           const oracle = getOracle(pair, chainId, tokens)
+
           if (!oracle.valid) {
             // console.log(pair, oracle.valid, oracle.error)
             invalidOracles.push({ pair, error: oracle.error })
@@ -250,6 +263,7 @@ export function KashiProvider({ children }) {
 
       // Get full info on all the verified pairs
       const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
+      console.log({ pairs })
 
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()

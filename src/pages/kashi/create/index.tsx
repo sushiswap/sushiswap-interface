@@ -107,6 +107,13 @@ function Create() {
           }
         }
       }
+
+      console.log({
+        multiply,
+        divide,
+        decimals: e10(decimals),
+      })
+
       return defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
     },
     [chainId]
@@ -120,6 +127,16 @@ function Create() {
 
       if (!oracleData) {
         console.log('No path')
+        return
+      }
+
+      if (!(chainId in CHAINLINK_ORACLE_ADDRESS)) {
+        console.log('No chainlink oracle address')
+        return
+      }
+
+      if (!(chainId in KASHI_ADDRESS)) {
+        console.log('No kashi address')
         return
       }
 

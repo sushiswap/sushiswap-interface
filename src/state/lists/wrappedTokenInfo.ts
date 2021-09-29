@@ -79,4 +79,8 @@ export class WrappedTokenInfo implements Token {
   public get wrapped(): Token {
     return this
   }
+
+  serialize(): string {
+    return this.address
+  }
 }

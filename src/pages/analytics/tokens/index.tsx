@@ -4,20 +4,22 @@ import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Background from '../../../features/analytics/Background'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { useFuse } from '../../../hooks'
+import { useFuse, useActiveWeb3React } from '../../../hooks'
 import { useMemo } from 'react'
 
 export default function Tokens() {
-  const block1d = useBlock({ daysAgo: 1 })
-  const block1w = useBlock({ daysAgo: 7 })
+  const { chainId } = useActiveWeb3React()
 
-  const nativePrice = useNativePrice()
-  const nativePrice1d = useNativePrice({ block: block1d })
-  const nativePrice1w = useNativePrice({ block: block1w })
+  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block1w = useBlock({ daysAgo: 7, chainId })
 
-  const tokens = useTokens()
-  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d })
-  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w })
+  const nativePrice = useNativePrice({ chainId })
+  const nativePrice1d = useNativePrice({ block: block1d, chainId })
+  const nativePrice1w = useNativePrice({ block: block1w, chainId })
+
+  const tokens = useTokens({ chainId })
+  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d, chainId })
+  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w, chainId })
 
   const tokensFormatted = useMemo(
     () =>

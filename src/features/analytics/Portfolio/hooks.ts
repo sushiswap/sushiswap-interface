@@ -49,7 +49,7 @@ export function useUserPairs(chainId = undefined) {
           }
         })
       : []
-  }, [pairsFiltered])
+  }, [pairsFiltered, chainId, userPairs])
 
   return userPairsFormatted
 }
@@ -67,7 +67,7 @@ export function useUserFarms(chainId = undefined) {
   chainId = chainId ?? chainIdSelected
 
   const userPositions = usePositions(chainId)
-  const farms = useFarms(undefined, chainId)
+  const farms = useFarms({ chainId })
 
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
 
@@ -102,7 +102,7 @@ export function useUserFarms(chainId = undefined) {
             })
             .filter((position) => position)
         : [],
-    [userPositions, farms, sushiPairs, kashiPairs]
+    [userPositions, farms, sushiPairs, kashiPairs, chainId, nativePrice]
   )
   return userFarmsFormatted
 }
@@ -137,7 +137,7 @@ export function useBentoUserTokens(chainId = undefined) {
           }
         })
       : []
-  }, [bentoUserTokens, tokens, nativePrice])
+  }, [bentoUserTokens, tokens, nativePrice, chainId])
 }
 
 export function useAllUserKashiPairs() {
@@ -187,7 +187,7 @@ export function useUserKashiPairs(chainId = undefined) {
           }
         })
       : []
-  }, [userKashiPairs, tokens, nativePrice])
+  }, [userKashiPairs, tokens, nativePrice, chainId])
 }
 
 export function useUserAssets() {
