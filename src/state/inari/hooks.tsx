@@ -66,14 +66,12 @@ export function useSelectedInariStrategy() {
 export function useInariStrategies() {
   const stakeSushiToBentoStrategy = useStakeSushiToBentoStrategy()
   const stakeSushiToCreamStrategy = useStakeSushiToCreamStrategy()
-  // const stakeSushiToCreamToBentoStrategy = useStakeSushiToCreamToBentoStrategy()
   const stakeSushiToAaveStrategy = useStakeSushiToAaveStrategy()
 
   return useMemo(
     () => ({
       [stakeSushiToBentoStrategy.id]: stakeSushiToBentoStrategy,
       [stakeSushiToCreamStrategy.id]: stakeSushiToCreamStrategy,
-      // [stakeSushiToCreamToBentoStrategy.id]: stakeSushiToCreamToBentoStrategy,
       [stakeSushiToAaveStrategy.id]: stakeSushiToAaveStrategy,
     }),
     [stakeSushiToAaveStrategy, stakeSushiToBentoStrategy, stakeSushiToCreamStrategy]

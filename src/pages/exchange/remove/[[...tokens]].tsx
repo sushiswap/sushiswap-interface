@@ -2,14 +2,13 @@ import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCall
 import { ArrowDown, Plus } from 'react-feather'
 import { AutoRow, RowBetween } from '../../../components/Row'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
-import { ChainId, Currency, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade'
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../../state/burn/hooks'
 import { usePairContract, useRouterContract } from '../../../hooks/useContract'
 
-import { AddRemoveTabs } from '../../../components/NavigationTabs'
 import Alert from '../../../components/Alert'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { AutoColumn } from '../../../components/Column'
@@ -22,15 +21,15 @@ import Dots from '../../../components/Dots'
 import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/burn/actions'
 import Head from 'next/head'
-import Header from '../../../components/ExchangeHeader'
+import Header from '../../../features/trade/Header'
 import Link from 'next/link'
-import LiquidityHeader from '../../../features/liquidity/LiquidityHeader'
-import LiquidityPrice from '../../../features/liquidity/LiquidityPrice'
+import LiquidityHeader from '../../../features/exchange-v1/liquidity/LiquidityHeader'
+import LiquidityPrice from '../../../features/exchange-v1/liquidity/LiquidityPrice'
 import { MinimalPositionCard } from '../../../components/PositionCard'
 import NavLink from '../../../components/NavLink'
 import PercentInputPanel from '../../../components/PercentInputPanel'
 import ReactGA from 'react-ga'
-import RemoveLiquidityReceiveDetails from '../../../features/liquidity/RemoveLiquidityReceiveDetails'
+import RemoveLiquidityReceiveDetails from '../../../features/exchange-v1/liquidity/RemoveLiquidityReceiveDetails'
 import { TransactionResponse } from '@ethersproject/providers'
 import Web3Connect from '../../../components/Web3Connect'
 import { currencyId } from '../../../functions/currency'
@@ -505,8 +504,8 @@ export default function Remove() {
                           <RowBetween className="text-sm">
                             {oneCurrencyIsETH ? (
                               <Link
-                                href={`/remove/${currencyA?.isNative ? WNATIVE[chainId].address : currencyIdA}/${
-                                  currencyB?.isNative ? WNATIVE[chainId].address : currencyIdB
+                                href={`/remove/${currencyA?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdA}/${
+                                  currencyB?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdB
                                 }`}
                               >
                                 <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">

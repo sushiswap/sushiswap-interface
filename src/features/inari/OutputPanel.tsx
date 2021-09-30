@@ -1,5 +1,6 @@
 import React, { FC } from 'react'
-import CurrencyInputPanel from '../limit-order/CurrencyInputPanel'
+
+import CurrencyInputPanel from '../exchange-v1/limit-order/CurrencyInputPanel'
 import Typography from '../../components/Typography'
 
 interface OutputPanelProps {

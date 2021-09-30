@@ -1,23 +1,28 @@
-import { t } from '@lingui/macro'
-import { CRXSUSHI, SUSHI, XSUSHI } from '../../../constants'
+import { CRXSUSHI, SUSHI, XSUSHI } from '../../../config/tokens'
 import { ChainId, CurrencyAmount, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
-import { tryParseAmount } from '../../../functions'
-import { useActiveWeb3React, useApproveCallback, useInariContract, useZenkoContract } from '../../../hooks'
-import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import useBaseStrategy from './useBaseStrategy'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useDerivedInariState } from '../hooks'
+import { useActiveWeb3React, useApproveCallback, useInariContract, useZenkoContract } from '../../../hooks'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
-export const general: StrategyGeneralInfo = {
-  name: 'SUSHI → Cream',
-  steps: ['SUSHI', 'xSUSHI', 'Cream'],
+import { I18n } from '@lingui/core'
+import { t } from '@lingui/macro'
+import { tryParseAmount } from '../../../functions'
+import useBaseStrategy from './useBaseStrategy'
+import { useDerivedInariState } from '../hooks'
+import { useLingui } from '@lingui/react'
+import { useTokenBalances } from '../../wallet/hooks'
+
+export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
+  name: i18n._(t`SUSHI → Cream`),
+  steps: [i18n._(t`SUSHI`), i18n._(t`xSUSHI`), i18n._(t`Cream`)],
   zapMethod: 'stakeSushiToCream',
   unzapMethod: 'unstakeSushiFromCream',
-  description: t`Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing.`,
-  inputSymbol: 'SUSHI',
-  outputSymbol: 'xSUSHI in Cream',
-}
+  description: i18n._(
+    t`Stake SUSHI for xSUSHI and deposit into Cream in one click. xSUSHI in Cream (crXSUSHI) can be lent or used as collateral for borrowing.`
+  ),
+  inputSymbol: i18n._(t`SUSHI`),
+  outputSymbol: i18n._(t`xSUSHI in Cream`),
+})
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
@@ -35,6 +40,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 }
 
 const useStakeSushiToCreamStrategy = (): StrategyHook => {
+  const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const { zapIn, inputValue } = useDerivedInariState()
   const zenkoContract = useZenkoContract()
@@ -45,6 +51,7 @@ const useStakeSushiToCreamStrategy = (): StrategyHook => {
 
   // Override approveCallback for this strategy as we need to approve CRXSUSHI on zapOut
   const approveCallback = useApproveCallback(approveAmount, inariContract?.address)
+  const general = useMemo(() => GENERAL(i18n), [i18n])
   const { execute, setBalances, ...baseStrategy } = useBaseStrategy({
     id: 'stakeSushiToCreamStrategy',
     general,

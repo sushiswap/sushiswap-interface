@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import MisoArticles from '../../components/Miso/MisoArticles'
-import MisoInfo from './MisoInfo'
 import Layout from '../../layouts/Miso'
+import MisoInfo from './MisoInfo'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import Article from '../../features/miso/Article'
 
 function MISO() {
   const { i18n } = useLingui()
@@ -98,7 +98,7 @@ function MISO() {
                   }}
                 ></div>
               </div>
-              <MisoArticles
+              <Article
                 title={`How does a batch auction work?`}
                 content={`In this auction, 20 of $LSD is on sale. This amount will be divided amongst all
                           the contributors at the end of the auction, weighted according to their contribution to the pool. 
@@ -106,14 +106,14 @@ function MISO() {
                           offer you will receive. The more you invest the more you get.`}
               />
 
-              <MisoArticles
+              <Article
                 title={`How do I participate?`}
                 content={`The auction receives $SUSHI as its payment token currency. Go to auction page, 
                           commit the amount of $SUSHI you’d like and claim your purchase after the 
                           auction finishes.`}
               />
 
-              <MisoArticles
+              <Article
                 title={`Learn more about MISO`}
                 content={`MISO is a suite of open-source smart contracts created to ease the process of launching 
                           a new project on the SushiSwap exchange. MISO aims to drive new capital and trade to the exchange 

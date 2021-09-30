@@ -2,9 +2,9 @@
 
 import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/sdk'
 
-import { BigNumber } from '@ethersproject/bignumber'
+import { BigNumberish } from '@ethersproject/bignumber'
+import { formatUnits } from '@ethersproject/units'
 import Numeral from 'numeral'
-import { ethers } from 'ethers'
 import { getAddress } from '@ethersproject/address'
 
 export const capitalize = (s) => {
@@ -73,14 +73,14 @@ export function formatPercent(percentString) {
   }
 }
 
-export const formatNumber = (number: any, usd = false, scale = true) => {
+export const formatNumber = (number: any, usd = false, scale = true, decimals = 0) => {
   if (isNaN(number) || number === '' || number === undefined) {
     return usd ? '$0.00' : '0'
   }
   const num = parseFloat(number)
 
   if (num > 500000000 && scale) {
-    return (usd ? '$' : '') + formatK(num.toFixed(0))
+    return (usd ? '$' : '') + formatK(num.toFixed(decimals))
   }
 
   if (num === 0) {
@@ -94,10 +94,12 @@ export const formatNumber = (number: any, usd = false, scale = true) => {
     return usd ? '< $0.0001' : '< 0.0001'
   }
 
-  if (num > 1000) {
-    return usd
-      ? '$' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
-      : '' + Number(parseFloat(String(num)).toFixed(0)).toLocaleString()
+  if (num > 1000 || num < -1000) {
+    return (
+      (num > 1000 ? '' : '-') +
+      (usd ? '$' : '') +
+      Number(parseFloat(String(Math.abs(num))).toFixed(decimals)).toLocaleString()
+    )
   }
 
   if (usd) {
@@ -135,8 +137,8 @@ export function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
-export const formatBalance = (value: ethers.BigNumberish, decimals = 18, maxFraction = 0) => {
-  const formatted = ethers.utils.formatUnits(value, decimals)
+export const formatBalance = (value: BigNumberish, decimals = 18, maxFraction = 0) => {
+  const formatted = formatUnits(value, decimals)
   if (maxFraction > 0) {
     const split = formatted.split('.')
     if (split.length > 1) {

@@ -1,57 +1,5 @@
-import { AutoColumn } from '../Column'
 import React from 'react'
-import { RowBetween } from '../Row'
-import styled from 'styled-components'
-import { transparentize } from 'polished'
-
-const Wrapper = styled(AutoColumn)``
-
-const Grouping = styled(RowBetween)`
-  width: 50%;
-`
-
-const Circle = styled.div<{ confirmed?: boolean; disabled?: boolean }>`
-  min-width: 20px;
-  min-height: 20px;
-  background-color: ${({ confirmed, disabled }) =>
-    disabled ? '#202231' : confirmed ? 'rgb(124, 255, 107)' : '#FA52A0'};
-  border-radius: 50%;
-  color: #bfbfbf;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 8px;
-  font-size: 12px;
-`
-
-const CircleRow = styled.div`
-  width: calc(100% - 20px);
-  display: flex;
-  align-items: center;
-`
-
-const Connector = styled.div<{ prevConfirmed?: boolean; disabled?: boolean }>`
-  width: 100%;
-  height: 2px;
-  background-color: ;
-  background: linear-gradient(
-    90deg,
-    ${({ prevConfirmed, disabled }) =>
-        disabled ? '#0D0415' : transparentize(0.5, prevConfirmed ? 'rgb(124, 255, 107)' : '#FA52A0')}
-      0%,
-    ${({ prevConfirmed, disabled }) => (disabled ? '#202231' : prevConfirmed ? '#FA52A0' : '#202231')} 80%
-  );
-  opacity: 0.6;
-`
-
-// background: linear-gradient(
-//     90deg,
-//     ${({ theme, prevConfirmed, disabled }) =>
-//             disabled ? theme.bg4 : transparentize(0.5, prevConfirmed ? theme.green1 : theme.primary1)}
-//         0%,
-//     ${({ theme, prevConfirmed, disabled }) => (disabled ? theme.bg4 : prevConfirmed ? theme.primary1 : theme.bg4)}
-//         80%
-// );
+import { classNames } from '../../functions'
 
 interface ProgressCirclesProps {
   steps: boolean[]
@@ -70,20 +18,41 @@ interface ProgressCirclesProps {
  */
 export default function ProgressCircles({ steps, disabled = false, ...rest }: ProgressCirclesProps) {
   return (
-    <Wrapper justify={'center'} {...rest}>
-      <Grouping>
+    <div className="flex justify-center" {...rest}>
+      <div className="flex justify-between w-1/2">
         {steps.map((step, i) => {
           return (
-            <CircleRow key={i}>
-              <Circle confirmed={step} disabled={disabled || (!steps[i - 1] && i !== 0)}>
+            <div className="flex items-center w-full" key={i}>
+              <div
+                className={classNames(
+                  step ? 'bg-green' : 'bg-pink',
+                  (disabled || (!steps[i - 1] && i !== 0)) && 'bg-dark-800',
+                  'min-w-5 min-h-5 rounded-full flex justify-center items-center text-xs'
+                )}
+              >
                 {step ? '✓' : i + 1}
-              </Circle>
-              <Connector prevConfirmed={step} disabled={disabled} />
-            </CircleRow>
+              </div>
+              <div
+                className={classNames(
+                  disabled && 'bg-dark-1000',
+                  step && 'bg-gradient-to-r from-green to-pink',
+                  steps[i - 1] ? 'bg-gradient-to-r from-pink to-dark-1000' : 'bg-dark-900',
+                  'w-full h-0.5 opacity-60'
+                )}
+              />
+              {/* <Connector prevConfirmed={step} disabled={disabled} /> */}
+            </div>
           )
         })}
-        <Circle disabled={disabled || !steps[steps.length - 1]}>{steps.length + 1}</Circle>
-      </Grouping>
-    </Wrapper>
+        <div
+          className={classNames(
+            (disabled || !steps[steps.length - 1]) && 'bg-dark-800',
+            'min-w-5 min-h-5 rounded-full flex justify-center items-center text-xs'
+          )}
+        >
+          {steps.length + 1}
+        </div>
+      </div>
+    </div>
   )
 }

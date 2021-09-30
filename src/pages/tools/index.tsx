@@ -1,14 +1,18 @@
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import Container from '../../components/Container'
 import Head from 'next/head'
+import { I18n } from '@lingui/core'
 import Link from 'next/link'
 import Typography from '../../components/Typography'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { useMemo } from 'react'
 
-const tools = [
+const TOOLS = (i18n: I18n) => [
   {
     id: 1,
     name: 'MEOWSHI',
-    description: 'Redonominate xSUSHI into MEOWSHI',
+    description: i18n._(t`Redenominate xSUSHI into MEOWSHI`),
     href: '/tools/meowshi',
   },
   {
@@ -20,6 +24,9 @@ const tools = [
 ]
 
 export default function Tools() {
+  const { i18n } = useLingui()
+  const tools = useMemo(() => TOOLS(i18n), [i18n])
+
   return (
     <Container id="tools-page" className="py-4 space-y-4 md:py-8 lg:py-12" maxWidth="xl">
       <Head>
@@ -39,7 +46,7 @@ export default function Tools() {
                     <span className="absolute inset-0" aria-hidden="true" />
                     <div className="space-y-1">
                       <p className="text-xl font-bold truncate text-primary">{tool.name}</p>
-                      <p className="text-sm text-secondary">{tool.description}</p>
+                      <p className="text-sm truncate text-secondary">{tool.description}</p>
                     </div>
                     <ArrowRightIcon width={24} height={24} className="text-high-emphesis" />
                   </a>

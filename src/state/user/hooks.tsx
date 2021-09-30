@@ -1,5 +1,5 @@
 import { AppDispatch, AppState } from '..'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../config/routing'
 import { ChainId, FACTORY_ADDRESS, JSBI, Pair, Percent, Token, computePairAddress } from '@sushiswap/sdk'
 import {
   SerializedPair,
@@ -18,6 +18,7 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
+  updateUserOpenMevUseRelay,
 } from './actions'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { useAppDispatch, useAppSelector } from '../hooks'
@@ -387,6 +388,23 @@ export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: 
   )
 
   return [userTipManualOverride, setUserTipManualOverride]
+}
+
+export function useUserOpenMevRelay(): [boolean, (newUseRelay: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  const useRelay = useSelector<AppState, AppState['user']['userOpenMevUseRelay']>(
+    (state) => state.user.userOpenMevUseRelay
+  )
+
+  const setUseRelay = useCallback(
+    (newUseRelay: boolean) => {
+      dispatch(updateUserOpenMevUseRelay({ userOpenMevUseRelay: newUseRelay }))
+    },
+    [dispatch]
+  )
+
+  return [useRelay, setUseRelay]
 }
 
 /**

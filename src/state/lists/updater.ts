@@ -1,7 +1,7 @@
 import { VersionUpgrade, getVersionUpgrade, minVersionBump } from '@uniswap/token-lists'
 import { useCallback, useEffect } from 'react'
 
-import { UNSUPPORTED_LIST_URLS } from '../../constants/token-lists'
+import { UNSUPPORTED_LIST_URLS } from '../../config/token-lists'
 import { acceptListUpdate } from './actions'
 import { useActiveListUrls } from './hooks'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'

@@ -1,21 +1,26 @@
-import { t } from '@lingui/macro'
-import { AXSUSHI, SUSHI } from '../../../constants'
+import { AXSUSHI, SUSHI } from '../../../config/tokens'
 import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
-import { useActiveWeb3React } from '../../../hooks'
-import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import useBaseStrategy from './useBaseStrategy'
 import { useEffect, useMemo } from 'react'
 
-export const general: StrategyGeneralInfo = {
-  name: 'SUSHI → Aave',
-  steps: ['SUSHI', 'xSUSHI', 'Aave'],
+import { I18n } from '@lingui/core'
+import { t } from '@lingui/macro'
+import { useActiveWeb3React } from '../../../hooks'
+import useBaseStrategy from './useBaseStrategy'
+import { useLingui } from '@lingui/react'
+import { useTokenBalances } from '../../wallet/hooks'
+
+export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
+  name: i18n._(t`SUSHI → Aave`),
+  steps: [i18n._(t`SUSHI`), i18n._(t`xSUSHI`), i18n._(t`Aave`)],
   zapMethod: 'stakeSushiToAave',
   unzapMethod: 'unstakeSushiFromAave',
-  description: t`Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing.`,
-  inputSymbol: 'SUSHI',
-  outputSymbol: 'xSUSHI in Aave',
-}
+  description: i18n._(
+    t`Stake SUSHI for xSUSHI and deposit into Aave in one click. xSUSHI in Aave (aXSUSHI) can be lent or used as collateral for borrowing.`
+  ),
+  inputSymbol: i18n._(t`SUSHI`),
+  outputSymbol: i18n._(t`xSUSHI in Aave`),
+})
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
@@ -33,8 +38,10 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 }
 
 const useStakeSushiToAaveStrategy = (): StrategyHook => {
+  const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], AXSUSHI])
+  const general = useMemo(() => GENERAL(i18n), [i18n])
   const { setBalances, ...strategy } = useBaseStrategy({
     id: 'stakeSushiToAaveStrategy',
     general,

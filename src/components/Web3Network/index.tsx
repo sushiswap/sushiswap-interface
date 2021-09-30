@@ -1,4 +1,4 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
+import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
 
 import Image from 'next/image'
 import NetworkModel from '../../modals/NetworkModal'

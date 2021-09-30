@@ -1,7 +1,7 @@
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import { BAR_ADDRESS, ZERO } from '@sushiswap/sdk'
 import React, { useEffect, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../constants'
+import { SUSHI, XSUSHI } from '../../config/tokens'
 
 import Button from '../../components/Button'
 import { ChainId } from '@sushiswap/sdk'
@@ -9,8 +9,8 @@ import Container from '../../components/Container'
 import Dots from '../../components/Dots'
 import Head from 'next/head'
 import Image from 'next/image'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import TransactionFailedModal from '../../components/TransactionFailedModal'
+import Input from '../../components/Input'
+import TransactionFailedModal from '../../modals/TransactionFailedModal'
 import { request } from 'graphql-request'
 import styled from 'styled-components'
 import sushiData from '@sushiswap/sushi-data'
@@ -40,7 +40,7 @@ const sendTx = async (txFunc: () => Promise<any>): Promise<boolean> => {
   return success
 }
 
-const StyledNumericalInput = styled(NumericalInput)`
+const StyledNumericalInput = styled(Input.Numeric)`
   caret-color: #e3e3e3;
 `
 
@@ -197,7 +197,7 @@ export default function Stake() {
             </div>
             <div className="max-w-lg pr-3 mb-2 text-sm leading-5 text-gray-500 md:text-base md:mb-4 md:pr-0">
               {i18n._(t`For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI
-                                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve
+                                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive
                                 xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
                                 Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
                                 SUSHI and any additional from fees.`)}

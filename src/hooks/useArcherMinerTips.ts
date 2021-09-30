@@ -1,6 +1,7 @@
-import { ChainId } from '@sushiswap/sdk'
 import { useEffect, useState } from 'react'
-import { ARCHER_GAS_URI } from '../constants'
+
+import { ARCHER_GAS_URI } from '../config/archer'
+import { ChainId } from '@sushiswap/sdk'
 import useActiveWeb3React from './useActiveWeb3React'
 
 type T = Record<string, string>

@@ -57,7 +57,7 @@ export abstract class ArcherRouter {
   /**
    * Cannot be constructed.
    */
-  /* eslint-disable @typescript-eslint/no-empty-function */
+
   private constructor() {}
   /**
    * Produces the on-chain method name to call and the hex encoded parameters to pass as arguments for a given trade.

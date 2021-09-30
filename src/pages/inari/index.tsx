@@ -1,28 +1,46 @@
-import React from 'react'
-import Head from 'next/head'
-import Typography from '../../components/Typography'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import Image from 'next/image'
-import Container from '../../components/Container'
-import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import InariButton from '../../features/inari/Button'
-import InariDescription from '../../features/inari/InariDescription'
-import SideSwitch from '../../features/inari/SideSwitch'
+import React, { useEffect } from 'react'
+import {
+  useDerivedInariState,
+  useInariState,
+  useInariStrategies,
+  useSelectedInariStrategy,
+} from '../../state/inari/hooks'
+
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import BalancePanel from '../../features/inari/BalancePanel'
-import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
-import NetworkGuard from '../../guards/Network'
 import { ChainId } from '@sushiswap/sdk'
-import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
-import StrategySelector from '../../features/inari/StrategySelector'
+import Container from '../../components/Container'
+import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 import { Field } from '../../state/inari/types'
+import Head from 'next/head'
+import Image from 'next/image'
+import InariButton from '../../features/inari/Button'
+import InariDescription from '../../features/inari/InariDescription'
+import NetworkGuard from '../../guards/Network'
+import SideSwitch from '../../features/inari/SideSwitch'
+import StrategySelector from '../../features/inari/StrategySelector'
+import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
+import Typography from '../../components/Typography'
+import { setStrategy } from '../../state/inari/actions'
+import { t } from '@lingui/macro'
+import { useAppDispatch } from '../../state/hooks'
+import { useLingui } from '@lingui/react'
+import useStakeSushiToBentoStrategy from '../../state/inari/strategies/useStakeSushiToBentoStrategy'
 
 const Inari = () => {
   const { i18n } = useLingui()
   const { inputValue, outputValue } = useInariState()
   const { tokens, general } = useDerivedInariState()
   const { balances } = useSelectedInariStrategy()
+  const dispatch = useAppDispatch()
+
+  // Set initial strategy
+  const stakeSushiToBentoStrategy = useStakeSushiToBentoStrategy()
+  useEffect(() => {
+    dispatch(setStrategy(stakeSushiToBentoStrategy))
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
@@ -30,13 +48,13 @@ const Inari = () => {
         <title>Inari | Sushi</title>
         <meta name="description" content="Inari..." />
       </Head>
-      <Container maxWidth="5xl" className="flex flex-col gap-8 py-8 px-4">
-        <div className="flex gap-8 items-center">
+      <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8">
+        <div className="flex items-center gap-8">
           <div className="min-w-[140px] min-h-[105px]">
             <Image src="/inari-sign.png" alt="inari-sign" width={140} height={105} />
           </div>
           <div className="flex flex-col">
-            <Typography variant="h3" className="text-high-emphesis mb-2" weight={700}>
+            <Typography variant="h3" className="mb-2 text-high-emphesis" weight={700}>
               {i18n._(t`One-Click Strategies`)}
             </Typography>
             <Typography>
@@ -45,21 +63,21 @@ const Inari = () => {
             </Typography>
           </div>
         </div>
-        <div className="grid grid-cols-12 md:gap-10 space-y-10 md:space-y-0">
+        <div className="grid grid-cols-12 space-y-10 md:gap-10 md:space-y-0">
           <div className="col-span-12 md:col-span-3">
             <div className="flex flex-col gap-5">
               <StrategySelector />
             </div>
           </div>
-          <div className="col-span-12 md:col-span-9 grid gap-4">
-            <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+          <div className="grid col-span-12 gap-4 md:col-span-9">
+            <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
               <StrategyStepDisplay />
               <SideSwitch />
             </div>
             <DoubleGlowShadow className="max-w-[100%]">
-              <div className="bg-dark-900 border-dark-700 rounded border-2 p-5 grid gap-8">
-                <div className="flex flex-col md:flex-row items-start">
-                  <div className="w-full md:w-3/5 mr-2">
+              <div className="grid gap-8 p-5 border-2 rounded bg-dark-900 border-dark-700">
+                <div className="flex flex-col items-start md:flex-row">
+                  <div className="w-full mr-2 md:w-3/5">
                     <BalancePanel
                       label={i18n._(t`From`)}
                       showMax
@@ -89,7 +107,7 @@ const Inari = () => {
                 <InariButton color="gradient" className="font-bold">
                   Execute
                 </InariButton>
-                <div className="relative -m-5 p-7 mt-0 bg-dark-700 rounded-b">
+                <div className="relative mt-0 -m-5 rounded-b p-7 bg-dark-700">
                   <InariDescription />
                 </div>
               </div>

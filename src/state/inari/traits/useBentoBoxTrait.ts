@@ -1,11 +1,12 @@
-import { useDerivedInariState } from '../hooks'
-import useBentoMasterApproveCallback, { BentoMasterApproveCallback } from '../../../hooks/useBentoMasterApproveCallback'
 import { ApprovalState, useActiveWeb3React, useInariContract } from '../../../hooks'
-import { useCallback } from 'react'
 import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import { useTransactionAdder } from '../../transactions/hooks'
+import useBentoMasterApproveCallback, { BentoMasterApproveCallback } from '../../../hooks/useBentoMasterApproveCallback'
 import useTrait, { BaseTrait } from './useTrait'
+
 import { BaseStrategyHook } from '../strategies/useBaseStrategy'
+import { useCallback } from 'react'
+import { useDerivedInariState } from '../hooks'
+import { useTransactionAdder } from '../../transactions/hooks'
 
 const TRAIT_CONFIG = {
   overrides: ['execute', 'approveCallback', 'bentoApproveCallback'],

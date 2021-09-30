@@ -1,2 +1,13 @@
 # Ignore all CSS files:
 *.css
+locale/
+public/
+test/
+.github/
+build/
+dist/
+docs/
+*.min.js
+*.html
+*.json
+src/constants/abis

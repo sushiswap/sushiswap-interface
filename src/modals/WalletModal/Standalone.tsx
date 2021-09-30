@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { fortmatic, injected, portis } from '../../connectors'
 import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -8,11 +8,10 @@ import AccountDetails from '../../components/AccountDetails'
 import { ApplicationModal } from '../../state/application/actions'
 import ExternalLink from '../../components/ExternalLink'
 // import MetamaskIcon from '../../assets/images/metamask.png'
-import { OVERLAY_READY } from '../../connectors/Fortmatic'
+import { OVERLAY_READY } from '../../entities/FortmaticConnector'
 import Option from './Option'
 import PendingView from './PendingView'
 import ReactGA from 'react-ga'
-import { SUPPORTED_WALLETS } from '../../constants'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 // import { ReactComponent as Close } from '../../assets/images/x.svg'
 import { XIcon } from '@heroicons/react/outline'
@@ -193,10 +192,12 @@ export default function WalletStandalone({
 
   // close wallet modal if fortmatic modal is active
   useEffect(() => {
-    fortmatic.on(OVERLAY_READY, () => {
-      toggleWalletModal()
-    })
-  }, [toggleWalletModal])
+    if (connector?.constructor?.name === 'FormaticConnector') {
+      connector.on(OVERLAY_READY, () => {
+        toggleWalletModal()
+      })
+    }
+  }, [toggleWalletModal, connector])
 
   // get wallets user can switch too, depending on device/browser
   function getOptions() {
@@ -207,7 +208,7 @@ export default function WalletStandalone({
       // check for mobile options
       if (isMobile) {
         // disable portis on mobile for now
-        if (option.connector === portis) {
+        if (option.connector?.constructor?.name === 'PortisConnector') {
           return null
         }
 
