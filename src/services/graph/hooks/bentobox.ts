@@ -87,18 +87,25 @@ export function useBentoUserTokens(
   return data
 }
 
+interface useBentoBoxProps {
+  timestamp?: number
+  block?: number
+  chainId: number
+  shouldFetch?: boolean
+}
+
 export function useBentoBox(
-  variables = undefined,
-  { chainId, account } = useActiveWeb3React(),
+  { timestamp, block, chainId, shouldFetch = true }: useBentoBoxProps,
   swrConfig?: SWRConfiguration
 ) {
-  const shouldFetch = chainId && account
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
 
-  variables = Object.keys(variables ?? {}).includes('user')
-    ? variables
-    : account
-    ? { ...variables, user: account.toLowerCase() }
-    : ''
+  shouldFetch = shouldFetch && chainId ? featureEnabled(Feature.BENTOBOX, chainId) : false
+
+  const variables = {
+    block: block ? { number: block } : undefined,
+  }
 
   const { data } = useSWR(
     shouldFetch ? ['bentoBox', chainId, JSON.stringify(variables)] : null,

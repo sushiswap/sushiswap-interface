@@ -102,8 +102,12 @@ export const kashiUserPairsQuery = gql`
 `
 
 export const bentoBoxQuery = gql`
-  query bentoBoxQuery($id: String! = "0xf5bce5077908a1b7370b9ae04adc565ebd643966") {
-    bentoBox(id: $id) {
+  query bentoBoxQuery(
+    $id: String! = "0xf5bce5077908a1b7370b9ae04adc565ebd643966"
+    $block: Block_height
+    $where: BentoBox_filter
+  ) {
+    bentoBox(id: $id, block: $block, where: $where) {
       id
       totalUsers
       totalTokens

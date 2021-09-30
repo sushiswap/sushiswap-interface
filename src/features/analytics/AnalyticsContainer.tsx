@@ -35,7 +35,7 @@ export default function AnalyticsContainer({ children }): JSX.Element {
                 href: '/analytics/tokens',
               },
               {
-                text: 'Bento Box',
+                text: 'BentoBox',
                 href: '/analytics/bentobox',
               },
             ]}
