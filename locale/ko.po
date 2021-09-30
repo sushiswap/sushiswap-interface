@@ -257,9 +257,6 @@ msgstr "모든 수익에 대한 토큰을 BentoBox에 입금하세요"
 msgid "Deposit {0} into BentoBox"
 msgstr ""
 
-msgid "Deposit:"
-msgstr ""
-
 msgid "Depositing {0} into BentoBox"
 msgstr ""
 
@@ -736,6 +733,9 @@ msgid "Select a token to find your liquidity"
 msgstr "토큰을 선택하여 유동성 찾기"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select:"
 msgstr ""
 
 msgid "Send to:"

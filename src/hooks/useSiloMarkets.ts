@@ -44,13 +44,13 @@ const useSiloMarkets = () => {
   const createSiloMarket = async (marketName: string, address: string) => {
     console.log('createMarket() -> on chain:, marketName:', chainId, marketName);
 
-    if (marketName) await siloFactoryContract.addMarket(address, marketName);
+    if (marketName) return await siloFactoryContract.addMarket(address, marketName);
 
     //TODO:  invalidate react-query markets cache
   };
 
   const removeSiloMarket = async (address: string) => {
-    if (address) await siloFactoryContract.removeMarket(address);
+    if (address) return await siloFactoryContract.removeMarket(address);
   };
 
   return {

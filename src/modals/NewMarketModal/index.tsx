@@ -17,6 +17,7 @@ import { useLingui } from '@lingui/react';
 import { t } from '@lingui/macro';
 import CurrencyInputPanel from '../../components/CurrencyInputPanel';
 import useSiloMarkets from '../../hooks/useSiloMarkets';
+import { useTransactionAdder } from '../../state/transactions/hooks';
 
 export default function NewMarketModal(): JSX.Element | null {
   const { chainId, library, account } = useActiveWeb3React();
@@ -35,6 +36,7 @@ export default function NewMarketModal(): JSX.Element | null {
     handleInputSelect,
   } = useTokenSetup();
   const { createSiloMarket } = useSiloMarkets();
+  const addTransaction = useTransactionAdder();
 
   if (!chainId) return null;
 
@@ -78,16 +80,19 @@ export default function NewMarketModal(): JSX.Element | null {
             <Button
               color="indigo"
               onClick={async () => {
-                const selected = currencies[Field.INPUT];
+                //TODO: fix typing on currencies (sub types)
+                const selected: any = currencies[Field.INPUT];
                 const token = selected?.tokenInfo;
                 // console.log('token address', selected?.tokenInfo.address)
                 // const address = selected?tokenInfo?
                 console.log('token:', token);
 
                 if (token) {
-                  await createSiloMarket(token.symbol, token.address);
+                  const result = await createSiloMarket(token.symbol, token.address);
 
-                  //TODO: transaction into state
+                  addTransaction(result, {
+                    summary: `Added silo market ${token.symbol}-ETH`,
+                  });
 
                   toggleModal();
                 }
@@ -101,3 +106,18 @@ export default function NewMarketModal(): JSX.Element | null {
     </Modal>
   );
 }
+
+/**
+ * 
+ * const addTransaction = useTransactionAdder();
+  const onUpdateExchangeRate = useCallback(async () => {
+    const cooker = new KashiCooker(pair, account, library, chainId);
+    const result = await cooker.updateExchangeRate().cook();
+    addTransaction(result.tx, {
+      summary: `Update ${pair.collateral.tokenInfo.symbol}/${pair.asset.tokenInfo.symbol} exchange rate`,
+    });
+  }, [account, addTransaction, chainId, library, pair]);
+ * 
+ * 
+ * 
+ */

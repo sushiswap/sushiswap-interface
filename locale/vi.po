@@ -255,9 +255,6 @@ msgstr "Ký quỹ token vào BentoBox để nhận tất cả lợi suất"
 msgid "Deposit {0} into BentoBox"
 msgstr ""
 
-msgid "Deposit:"
-msgstr ""
-
 msgid "Depositing {0} into BentoBox"
 msgstr ""
 
@@ -734,6 +731,9 @@ msgid "Select a token to find your liquidity"
 msgstr "Chọn một token để tìm thanh khoản của bạn"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select:"
 msgstr ""
 
 msgid "Send to:"

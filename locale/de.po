@@ -257,9 +257,6 @@ msgstr "Zahlen Sie Token für alle Erträge in BentoBox ein"
 msgid "Deposit {0} into BentoBox"
 msgstr ""
 
-msgid "Deposit:"
-msgstr ""
-
 msgid "Depositing {0} into BentoBox"
 msgstr ""
 
@@ -736,6 +733,9 @@ msgid "Select a token to find your liquidity"
 msgstr "Wählen Sie einen Token aus, um Ihre Liquidität zu ermitteln"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select:"
 msgstr ""
 
 msgid "Send to:"

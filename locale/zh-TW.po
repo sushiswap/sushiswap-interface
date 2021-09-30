@@ -255,9 +255,6 @@ msgstr "將代幣存入BentoBox，以獲得所有收益。"
 msgid "Deposit {0} into BentoBox"
 msgstr ""
 
-msgid "Deposit:"
-msgstr ""
-
 msgid "Depositing {0} into BentoBox"
 msgstr ""
 
@@ -729,6 +726,9 @@ msgid "Select a token to find your liquidity"
 msgstr "选择代币以找到您的流动性"
 
 msgid "Select an order expiration"
+msgstr ""
+
+msgid "Select:"
 msgstr ""
 
 msgid "Send to:"
