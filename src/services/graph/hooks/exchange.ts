@@ -297,7 +297,7 @@ export function useTokens(
     (_, chainId) => getTokens(chainId, variables),
     swrConfig
   )
-  return data
+  return data ?? []
 }
 
 interface useTokenDayDataProps {
