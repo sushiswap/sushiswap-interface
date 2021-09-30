@@ -18,13 +18,14 @@ import { DuplicateIcon } from '@heroicons/react/outline'
 import InfoCard from '../../../features/analytics/InfoCard'
 import Link from 'next/link'
 import { ExternalLink as LinkIcon } from 'react-feather'
-import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
 import { times } from 'lodash'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
 import { useActiveWeb3React } from '../../../hooks'
 import ChartCard from '../../../features/analytics/ChartCard'
+import { getExplorerLink } from '../../../functions/explorer'
+import { Transactions } from '../../../features/transactions/Transactions'
 
 const chartTimespans = [
   {
@@ -44,7 +45,6 @@ const chartTimespans = [
     length: Infinity,
   },
 ]
-import { getExplorerLink } from '../../../functions/explorer'
 
 export default function Pair() {
   const router = useRouter()
@@ -81,42 +81,6 @@ export default function Pair() {
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
     }),
     [pair, pair1d, pair2d, pairDayData]
-  )
-
-  // For Transactions
-  const transactions = useTransactions({ pairs: [id], chainId })
-  const transactionsFormatted = useMemo(
-    () =>
-      transactions?.map((tx) => {
-        const base = {
-          value: tx.amountUSD,
-          address: tx.to,
-          time: new Date(Number(tx.timestamp) * 1000),
-        }
-
-        if (tx.amount0In === '0') {
-          return {
-            symbols: {
-              incoming: tx.pair.token1.symbol,
-              outgoing: tx.pair.token0.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-            ...base,
-          }
-        } else {
-          return {
-            symbols: {
-              incoming: tx.pair.token0.symbol,
-              outgoing: tx.pair.token1.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-            ...base,
-          }
-        }
-      }),
-    [transactions]
   )
 
   // For the logos
@@ -301,10 +265,7 @@ export default function Pair() {
             </table>
           </div>
         </div>
-        <div className="text-2xl font-bold text-high-emphesis">Transactions</div>
-        <div className="px-4">
-          <TransactionList transactions={transactionsFormatted} />
-        </div>
+        <Transactions pairs={[id]} />
       </div>
     </AnalyticsContainer>
   )

@@ -121,44 +121,6 @@ export default function Token(): JSX.Element {
 
   // For Transactions
   const tokenPairs = useTokenPairs({ token: id, chainId })
-  const transactions = useTransactions({
-    pairs: tokenPairs?.map((pair) => pair.id),
-    shouldFetch: !!tokenPairs,
-    chainId,
-  })
-  const transactionsFormatted = useMemo(() => {
-    return transactions
-      ? transactions.map((tx) => {
-          const base = {
-            value: tx.amountUSD,
-            address: tx.to,
-            time: new Date(Number(tx.timestamp) * 1000),
-          }
-
-          if (tx.amount0In === '0') {
-            return {
-              symbols: {
-                incoming: tx.pair.token1.symbol,
-                outgoing: tx.pair.token0.symbol,
-              },
-              incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-              outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-              ...base,
-            }
-          } else {
-            return {
-              symbols: {
-                incoming: tx.pair.token0.symbol,
-                outgoing: tx.pair.token1.symbol,
-              },
-              incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-              outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-              ...base,
-            }
-          }
-        })
-      : undefined
-  }, [transactions])
 
   // For Top Moving
   const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d, chainId })

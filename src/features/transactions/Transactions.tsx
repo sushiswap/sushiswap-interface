@@ -1,15 +1,19 @@
 import React, { FC } from 'react'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import Typography from '../../../../components/Typography'
+import Typography from '../../components/Typography'
 import { usePagination, useTable, useFlexLayout } from 'react-table'
 import { TableInstance } from './types'
 import { MobilePageToggler } from './MobilePageToggler'
 import { useTransactionsData } from './useTransactionsData'
 
-export const Transactions: FC = () => {
+interface TransactionsProps {
+  pairs: string[]
+}
+
+export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
   const { i18n } = useLingui()
-  const { config, loading, error, totalTransactions, requestMoreTransactions } = useTransactionsData()
+  const { config, loading, error, totalTransactions, requestMoreTransactions } = useTransactionsData(pairs)
 
   const {
     getTableProps,

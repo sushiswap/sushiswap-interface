@@ -1,14 +1,7 @@
 import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
 import React, { useEffect, useMemo, useState } from 'react'
 import { formatNumber, shortenAddress } from '../../../functions'
-import {
-  useBlock,
-  useNativePrice,
-  useTokenDayData,
-  useTokenPairs,
-  useTokens,
-  useTransactions,
-} from '../../../services/graph'
+import { useBlock, useNativePrice, useTokenDayData, useTokenPairs, useTokens } from '../../../services/graph'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Background from '../../../features/analytics/Background'
@@ -18,12 +11,13 @@ import InfoCard from '../../../features/analytics/InfoCard'
 import Link from 'next/link'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import PairList from '../../../features/analytics/Pairs/PairList'
-import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
 import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
 import { useActiveWeb3React, useTokenContract } from '../../../hooks'
 import ChartCard from '../../../features/analytics/ChartCard'
+import { getExplorerLink } from '../../../functions/explorer'
+import { Transactions } from '../../../features/transactions/Transactions'
 
 const chartTimespans = [
   {
@@ -43,8 +37,6 @@ const chartTimespans = [
     length: Infinity,
   },
 ]
-
-import { getExplorerLink } from '../../../functions/explorer'
 
 export default function Token() {
   const router = useRouter()
@@ -98,46 +90,6 @@ export default function Token() {
         }
       }),
     [tokenPairs, tokenPairs1d, tokenPairs1w]
-  )
-
-  // For Transactions
-  const transactions = useTransactions({
-    pairs: tokenPairs?.map((pair) => pair.id),
-    shouldFetch: !!tokenPairs,
-    chainId,
-  })
-  const transactionsFormatted = useMemo(
-    () =>
-      transactions?.map((tx) => {
-        const base = {
-          value: tx.amountUSD,
-          address: tx.to,
-          time: new Date(Number(tx.timestamp) * 1000),
-        }
-
-        if (tx.amount0In === '0') {
-          return {
-            symbols: {
-              incoming: tx.pair.token1.symbol,
-              outgoing: tx.pair.token0.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-            ...base,
-          }
-        } else {
-          return {
-            symbols: {
-              incoming: tx.pair.token0.symbol,
-              outgoing: tx.pair.token1.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-            ...base,
-          }
-        }
-      }),
-    [transactions]
   )
 
   // For the logo
@@ -289,12 +241,7 @@ export default function Token() {
           <div className="text-2xl font-bold text-high-emphesis">Top Pairs</div>
           <PairList pairs={tokenPairsFormatted} type="all" />
         </div>
-        <div>
-          <div className="text-2xl font-bold text-high-emphesis">Transactions</div>
-          <div className="px-4">
-            <TransactionList transactions={transactionsFormatted} />
-          </div>
-        </div>
+        <Transactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
       </div>
     </AnalyticsContainer>
   )

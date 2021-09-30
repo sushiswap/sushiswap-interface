@@ -201,7 +201,7 @@ export const getFactory = async (chainId = ChainId.MAINNET, variables = undefine
   return factories[0]
 }
 
-export const getTransactions = async (chainId = ChainId.MAINNET, variables = undefined) => {
+export const getTransactions = async (chainId = ChainId.MAINNET, variables?: object) => {
   const { swaps } = await exchange(chainId, transactionsQuery, variables)
   return swaps
 }

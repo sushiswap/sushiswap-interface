@@ -15,7 +15,7 @@ import { useLingui } from '@lingui/react'
 import Rewards from '../../../../features/trident/pool/Rewards'
 import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
 import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
-import { Transactions } from '../../../../features/trident/pool/transactions/Transactions'
+import { Transactions } from '../../../../features/transactions/Transactions'
 
 const Pool = () => {
   useInitClassicPoolState()
@@ -68,7 +68,8 @@ const Pool = () => {
           </div>
         </div>
       </div>
-      <Transactions />
+      {/* Temporary until subgraph finalized */}
+      <Transactions pairs={['0xceff51756c56ceffca006cd410b03ffc46dd3a58']} />
     </>
   )
 }

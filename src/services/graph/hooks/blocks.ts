@@ -14,7 +14,7 @@ interface useBlockProps {
 export function useBlock(
   { timestamp, daysAgo, chainId, shouldFetch = true }: useBlockProps,
   swrConfig: SWRConfiguration = undefined
-) {
+): number | undefined {
   shouldFetch = shouldFetch && !!chainId
   timestamp = timestamp
     ? String(timestamp).length !== 13
