@@ -10,20 +10,20 @@ on:
 jobs:
   integration-tests:
     name: Integration tests
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14.x'
           always-auth: true
           registry-url: https://registry.npmjs.org
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -43,17 +43,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+        uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14.x'
           always-auth: true
           registry-url: https://registry.npmjs.org
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
