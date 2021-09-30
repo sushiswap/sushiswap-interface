@@ -7,6 +7,7 @@ import { useActiveWeb3React } from '../../hooks';
 import { useNewMarketModalToggle } from '../../state/application/hooks';
 import NewMarketModal from '../../modals/NewMarketModal';
 import useSiloMarkets from '../../hooks/useSiloMarkets';
+import { useTransactionAdder } from '../../state/transactions/hooks';
 
 /**
  *
@@ -109,6 +110,7 @@ const MarketData = ({ markets }) => {
 
 const Market = ({ market }) => {
   const { removeSiloMarket } = useSiloMarkets();
+  const addTransaction = useTransactionAdder();
 
   const M_STYLE = 'text-xs sm:text-sm md:text-base text-high-emphesis';
 
@@ -130,7 +132,10 @@ const Market = ({ market }) => {
                 onClick={async (evt) => {
                   evt.preventDefault();
                   console.log('deleting market:', market.address);
-                  await removeSiloMarket(market.address);
+                  const result = await removeSiloMarket(market.address);
+                  addTransaction(result, {
+                    summary: `Removed silo market ${market.name}`,
+                  });
                 }}
               >
                 x
