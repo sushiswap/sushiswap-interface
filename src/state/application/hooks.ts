@@ -39,6 +39,11 @@ export function useNetworkModalToggle(): () => void {
   return useToggleModal(ApplicationModal.NETWORK);
 }
 
+//silo
+export function useNewMarketModalToggle(): () => void {
+  return useToggleModal(ApplicationModal.NEW_MARKET);
+}
+
 export function useToggleSettingsMenu(): () => void {
   return useToggleModal(ApplicationModal.SETTINGS);
 }

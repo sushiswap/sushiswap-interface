@@ -4,94 +4,141 @@ import { APP_NAME_URL, APP_SHORT_BLURB } from '../../constants';
 import Head from 'next/head';
 import Button from '../../components/Button';
 import { useActiveWeb3React } from '../../hooks';
-import { useSiloFactoryContract } from '../../hooks/useContract';
-import { request, GraphQLClient } from 'graphql-request';
-import { useQuery } from 'react-query';
-
-export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.4';
-
-const client = new GraphQLClient(GRAPH_ENDPOINT);
-
-const siloMarketsQuery = `
-{
-  silos {
-		id
-    name
-    address
-  }
-}
-`;
+import { useNewMarketModalToggle } from '../../state/application/hooks';
+import NewMarketModal from '../../modals/NewMarketModal';
+import useSiloMarkets from '../../hooks/useSiloMarkets';
 
 /**
  *
  * !!! Graph on Chain Id (Rinkeby | Matic Mainnet)
  */
 // graph url
-// https://api.studio.thegraph.com/query/9379/silo/0.4
+// https://api.studio.thegraph.com/query/9379/silo/0.7
 
 /*** TOD0:
- *     0) delete market event
+ *
+ *     7) refactor into seperate hook for graph related
  *     1) wallet connected?
  *     2) abi stripping (just input array) for useContract abi.map error
  *     3) typechain import
  *     4) gas estimation (on matic?)
- *     5) market data fetch (by chainid)
+ *     5) market data fetch (by chainid?)
  *     6) externalize endpoint
+ *     7) search assets (not "Markets")
+ *     8) busy state for while in transaction
+ *
  */
-
-type SilomMarket = {
-  name: string;
-  address: string;
-};
-
-const useSiloMarkets = () => {
-  const { chainId, account } = useActiveWeb3React();
-  const siloFactoryContract = useSiloFactoryContract(true);
-  const { isLoading, isError, data, error } = useQuery('siloMarketData', async () => {
-    return await client.request(siloMarketsQuery);
-  });
-
-  const createSiloMarket = async () => {
-    console.log('on chain:', chainId);
-    await siloFactoryContract.addMarket(account, 'FirstMarket');
-
-    //TODO:  invalidate react-query markets cache
-  };
-
-  //  const removeSiloMarket = async() => {}
-
-  return {
-    siloMarkets: data,
-    createSiloMarket,
-  };
-};
 
 export default function Markets() {
   const { createSiloMarket, siloMarkets } = useSiloMarkets();
+  const toggleNewMarketModal = useNewMarketModalToggle();
+  const { account, chainId } = useActiveWeb3React();
 
   console.log('siloMarkets:', siloMarkets);
 
   return (
-    <Container id="supply-page" className="py-12 md:py-14 lg:py-16">
-      <Head>
-        <title>{APP_NAME_URL}</title>
-        <meta key="description" name="description" content={APP_SHORT_BLURB} />
-      </Head>
-      <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary flex justify-between">
-        <h1 className="text-lg font-semibold p-2.5">Markets</h1>
-        <div>
-          <Button
-            color="gradient"
-            className="text-gray-900 font-semibold"
-            onClick={async () => {
-              console.log('createMarket.click()');
-              await createSiloMarket();
-            }}
-          >
-            Create New Silo Market
-          </Button>
+    <>
+      <Container id="supply-page" maxWidth="3xl" className="pt-12 md:pt-14 lg:pt-16">
+        <Head>
+          <title>{APP_NAME_URL}</title>
+          <meta key="description" name="description" content={APP_SHORT_BLURB} />
+        </Head>
+        <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary flex justify-between">
+          <h1 className="text-lg font-semibold p-2.5">Markets</h1>
+          <div>
+            {account ? (
+              <Button
+                color="gradient"
+                className="text-gray-900 font-semibold"
+                onClick={() => {
+                  console.log('createMarket.click()');
+                  // await createSiloMarket();
+                  toggleNewMarketModal();
+                }}
+              >
+                Create New Silo Market
+              </Button>
+            ) : (
+              <p> </p>
+            )}
+          </div>
         </div>
-      </div>
-    </Container>
+      </Container>
+
+      <NewMarketModal />
+
+      <MarketData markets={siloMarkets} />
+    </>
   );
 }
+
+const MarketData = ({ markets }) => {
+  if (!markets || (markets && markets.silos.length < 1)) {
+    return (
+      <Container id="markets" maxWidth="3xl" className="pt-4 md:pt-6 lg:pt-8">
+        <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary text-high-emphesis">
+          No Markets. Click button above to create one.
+        </div>
+      </Container>
+    );
+  }
+
+  const MD_STYLE = 'font-semibold text-xs sm:text-sm md:text-base';
+
+  return (
+    <>
+      <Container id="markets" maxWidth="3xl" className="pt-2 md:pt-4 lg:pt-6">
+        <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary">
+          <div className="grid grid-cols-6 gap-2">
+            <div className={MD_STYLE}>Asset</div>
+            <div className={MD_STYLE}>Bridge Asset</div>
+            <div className={MD_STYLE}>Market Size</div>
+            <div className={MD_STYLE}>Total Borrowed</div>
+            <div className={MD_STYLE}>Deposit APY</div>
+            <div className={MD_STYLE}>Borrow APY</div>
+          </div>
+        </div>
+      </Container>
+
+      <Container id="markets" maxWidth="3xl">
+        {markets && markets.silos.map((m) => <Market key={m.address} market={m} />)}
+      </Container>
+    </>
+  );
+};
+
+const Market = ({ market }) => {
+  const { removeSiloMarket } = useSiloMarkets();
+
+  const M_STYLE = 'text-xs sm:text-sm md:text-base text-high-emphesis';
+
+  return (
+    <div className="mt-4 p-4 rounded-lg shadow-lg bg-dark-800 text-secondary">
+      <div className="grid grid-cols-6 gap-2">
+        <div className={M_STYLE}>{market.name}</div>
+        <div className={M_STYLE}>ETH</div>
+        <div className={M_STYLE}>n/a</div>
+        <div className={M_STYLE}>n/a</div>
+        <div className={M_STYLE}>n/a</div>
+        <div className={M_STYLE}>
+          <div className="flex justify-between">
+            <div>n/a</div>
+
+            <div className="text-dark-900">
+              <button
+                className="hover:text-red"
+                onClick={async (evt) => {
+                  evt.preventDefault();
+                  console.log('deleting market:', market.address);
+                  await removeSiloMarket(market.address);
+                }}
+              >
+                x
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -29,6 +29,7 @@ export enum ApplicationModal {
   VOTE,
   LANGUAGE,
   NETWORK,
+  NEW_MARKET, //silo
 }
 
 export const updateBlockNumber = createAction<{
