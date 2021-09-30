@@ -401,38 +401,34 @@ export function useDayData(
   return data
 }
 
-interface useTransactionsProps {
-  timestamp?: number
-  block?: number
-  chainId: number
-  shouldFetch?: boolean
-  first?: number
-  pairs: string[]
+export interface TransactionData {
+  amount0In: string
+  amount0Out: string
+  amount1In: string
+  amount1Out: string
+  amountUSD: string
+  id: string
+  pair: {
+    token0: {
+      symbol: string
+    }
+    token1: {
+      symbol: string
+    }
+  }
+  sender: string
+  timestamp: string
+  to: string
 }
 
-export function useTransactions(
-  { timestamp, block, chainId, shouldFetch = true, first, pairs }: useTransactionsProps,
-  swrConfig: SWRConfiguration = undefined
-) {
-  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  shouldFetch = shouldFetch && !!chainId
-
-  const variables = {
-    first: first,
-    block: block ? { number: block } : undefined,
-    where: {
-      pair_in: pairs?.map((id) => id.toLowerCase()),
-    },
-  }
-
-  const { data } = useSWR(
-    shouldFetch ? ['transactions', chainId, JSON.stringify(variables)] : null,
-    (_, chainId) => getTransactions(chainId, variables),
-    swrConfig
+export const useTransactions = (pairs?: string[]) => {
+  const { chainId } = useActiveWeb3React()
+  const variables = { where: { pair_in: pairs } }
+  const { data, error } = useSWR<TransactionData[]>(
+    !!chainId && !!pairs ? ['transactions', chainId, JSON.stringify(variables)] : null,
+    () => getTransactions(chainId, variables)
   )
-  return data
+  return { transactions: data, error }
 }
 
 interface useTokenPairsProps {
