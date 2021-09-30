@@ -82,7 +82,7 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({ className, isOpen
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 filter backdrop-blur-md bg-[rgb(0,0,0,0.40)]" />
+              <Dialog.Overlay className="fixed inset-0 filter backdrop-blur-[10px] bg-[rgb(0,0,0,0.4)]" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}

@@ -8,24 +8,26 @@ import classNames from 'classnames'
 import Container from '../../components/Container'
 import { AllPools } from './types'
 import { formatPercent } from '../../functions'
+import { Currency } from '@sushiswap/core-sdk'
+import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
 
 export type BreadcrumbTuple = { link: string; label: string }
-export type BreadcrumbItem = ((pool: AllPools) => BreadcrumbTuple) | BreadcrumbTuple
+export type BreadcrumbItem = ((currencies: Currency[], pool?: AllPools) => BreadcrumbTuple) | BreadcrumbTuple
 
 export const BREADCRUMBS: Record<string, BreadcrumbItem> = {
   pools: { link: '/trident/pools', label: 'Pools' },
-  add_classic: (pool) => ({
-    link: `/trident/add/classic/${pool?.token0.address}/${pool?.token1.address}`,
+  add_classic: (currencies) => ({
+    link: `/trident/add/classic/${currencies.map((el) => el.symbol).join('/')}`,
     label: `Add Liquidity`,
   }),
-  remove_classic: (pool) => ({
-    link: `/trident/add/classic/${pool?.token0.address}/${pool?.token1.address}`,
+  remove_classic: (currencies) => ({
+    link: `/trident/add/classic/${currencies.map((el) => el.symbol).join('/')}`,
     label: `Remove Liquidity`,
   }),
-  pool_classic: (pool) => ({
-    link: `/trident/pool/classic/${pool?.token0.address}/${pool?.token1.address}`,
-    label: pool
-      ? `${pool?.token0.symbol}-${pool?.token1.symbol} - Classic - ${formatPercent(pool?.fee.valueOf() / 100)}`
+  pool_classic: (currencies, pool) => ({
+    link: `/trident/pool/classic/${currencies.map((el) => el.symbol).join('/')}`,
+    label: currencies
+      ? `${currencies.map((el) => el.symbol).join('-')} - Classic - ${formatPercent(pool?.fee.valueOf() / 100)}`
       : 'Pool not found',
   }),
 }
@@ -36,15 +38,17 @@ interface BreadcrumbProps {
 
 const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   const [, pool] = useRecoilValue(poolAtom)
+  const [currencies] = useCurrenciesFromURL()
+
   const formatted = useMemo(() => {
     return breadcrumbs.map((el) => {
       if (typeof el === 'function') {
-        return el(pool)
+        return el(currencies, pool)
       }
 
       return el
-    })
-  }, [breadcrumbs, pool])
+    }) as BreadcrumbTuple[]
+  }, [breadcrumbs, currencies, pool])
 
   return (
     <div className="w-full border-b border-dark-900 py-2 flex justify-center bg-gradient-to-r from-transparent-blue to-transparent-pink">

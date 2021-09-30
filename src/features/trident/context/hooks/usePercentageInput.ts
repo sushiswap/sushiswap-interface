@@ -1,5 +1,5 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { Currency, CurrencyAmount, Percent, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
 import { calculateSlippageAmount } from '../../../../functions'
 import { poolAtom, poolBalanceAtom, slippageAtom, totalSupplyAtom } from '../atoms'
 import { t } from '@lingui/macro'
@@ -12,7 +12,7 @@ export const percentageAmountAtom = atom<string>({
   default: '',
 })
 
-export const parsedSLPAmountSelector = selector<CurrencyAmount<Currency>>({
+export const parsedSLPAmountSelector = selector<CurrencyAmount<Token>>({
   key: 'parsedInputAmount',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
@@ -32,10 +32,10 @@ export const parsedAmountsSelector = selector<CurrencyAmount<Currency>[]>({
 
     const amounts = [
       pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
-        ? pool.getLiquidityValue(pool.token0, totalSupply?.wrapped, parsedSLPAmount?.wrapped)
+        ? pool.getLiquidityValue(pool.token0, totalSupply, parsedSLPAmount)
         : undefined,
       pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
-        ? pool.getLiquidityValue(pool.token1, totalSupply?.wrapped, parsedSLPAmount?.wrapped)
+        ? pool.getLiquidityValue(pool.token1, totalSupply, parsedSLPAmount)
         : undefined,
     ]
 
@@ -60,6 +60,7 @@ const usePercentageInput = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [poolState] = useRecoilValue(poolAtom)
+  const poolBalance = useRecoilValue(poolBalanceAtom)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
   const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
@@ -68,6 +69,10 @@ const usePercentageInput = () => {
     ? i18n._(t`Connect Wallet`)
     : poolState === 3
     ? i18n._(t`Invalid pool`)
+    : poolBalance?.lessThan(parsedSLPAmount)
+    ? i18n._(t`Insufficient Balance`)
+    : poolBalance?.equalTo(ZERO)
+    ? i18n._(t`No Balance`)
     : !parsedAmounts.every((el) => el?.greaterThan(ZERO))
     ? i18n._(t`Enter an amount`)
     : ''

@@ -1,6 +1,7 @@
-import { Currency, CurrencyAmount, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 import { LiquidityMode, PoolAtomType } from '../types'
 import { atom, selector, selectorFamily } from 'recoil'
+import { toAmountJSBI } from '../../../functions'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
@@ -24,14 +25,24 @@ export const txHashAtom = atom<string>({
   default: null,
 })
 
-export const totalSupplyAtom = atom<CurrencyAmount<Currency>>({
+export const totalSupplyAtom = atom<CurrencyAmount<Token>>({
   key: 'totalSupplyAtom',
   default: null,
 })
 
-export const poolBalanceAtom = atom<CurrencyAmount<Currency>>({
+export const poolBalanceAtom = atom<CurrencyAmount<Token>>({
   key: 'poolBalanceAtom',
   default: null,
+})
+
+export const currenciesAtom = atom<Currency[]>({
+  key: 'currenciesAtom',
+  default: [],
+})
+
+export const bentoboxRebasesAtom = atom<Rebase[]>({
+  key: 'bentoboxRebasesAtom',
+  default: [],
 })
 
 export const fixedRatioAtom = atom<boolean>({
@@ -128,9 +139,9 @@ export const currentPoolShareSelector = selector({
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
-    const userPoolBalance = get(poolBalanceAtom)
-    if (pool && totalSupply && userPoolBalance && totalSupply?.greaterThan(ZERO)) {
-      return new Percent(userPoolBalance.quotient, totalSupply.quotient)
+    const poolBalance = get(poolBalanceAtom)
+    if (pool && totalSupply && poolBalance && totalSupply?.greaterThan(ZERO)) {
+      return new Percent(poolBalance.quotient, totalSupply.quotient)
     }
 
     return undefined
@@ -144,11 +155,32 @@ export const currentLiquidityValueSelector = selector({
     const [, pool] = get(poolAtom)
     const poolBalance = get(poolBalanceAtom)
     const totalSupply = get(totalSupplyAtom)
+    const bentoboxRebases = get(bentoboxRebasesAtom)
 
-    if (pool && poolBalance && totalSupply && totalSupply?.greaterThan(ZERO)) {
+    if (
+      pool &&
+      poolBalance &&
+      totalSupply &&
+      totalSupply?.greaterThan(ZERO) &&
+      bentoboxRebases[0] &&
+      bentoboxRebases[1]
+    ) {
+      // Convert from shares to amount
       return [
-        pool.getLiquidityValue(pool.token0, totalSupply?.wrapped, poolBalance?.wrapped),
-        pool.getLiquidityValue(pool.token1, totalSupply?.wrapped, poolBalance?.wrapped),
+        CurrencyAmount.fromRawAmount(
+          pool.token0,
+          toAmountJSBI(
+            bentoboxRebases[0],
+            pool.getLiquidityValue(pool.token0, totalSupply.wrapped, poolBalance.wrapped).quotient
+          )
+        ),
+        CurrencyAmount.fromRawAmount(
+          pool.token1,
+          toAmountJSBI(
+            bentoboxRebases[1],
+            pool.getLiquidityValue(pool.token1, totalSupply.wrapped, poolBalance.wrapped).quotient
+          )
+        ),
       ]
     }
 

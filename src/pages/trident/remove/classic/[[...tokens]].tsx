@@ -34,41 +34,23 @@ import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
 import Alert from '../../../../components/Alert'
 import ClassicStandardAside from '../../../../features/trident/remove/classic/ClassicStandardAside'
 import ClassicZapAside from '../../../../features/trident/remove/classic/ClassicZapAside'
+import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
+import useCurrenciesFromURL from '../../../../features/trident/context/hooks/useCurrenciesFromURL'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 const RemoveClassic = () => {
-  const { account } = useActiveWeb3React()
-  const { query } = useRouter()
+  useInitClassicPoolState()
+
   const { i18n } = useLingui()
-
-  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const { query } = useRouter()
+  const [[currencyA, currencyB]] = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const setTotalSupply = useSetRecoilState(totalSupplyAtom)
-  const setPoolBalance = useSetRecoilState(poolBalanceAtom)
+  const [, pool] = useRecoilValue(poolAtom)
+
+  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
   const setSlippage = useSetRecoilState(slippageAtom)
-
-  const currencyA = useCurrency(query.tokens?.[0])
-  const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE) // custom from users
-
-  useEffect(() => {
-    if (!classicPool[1]) return
-    setPool(classicPool)
-  }, [classicPool, setPool])
-
-  useEffect(() => {
-    if (!totalSupply) return
-    setTotalSupply(totalSupply)
-  }, [setTotalSupply, totalSupply])
-
-  useEffect(() => {
-    if (!poolBalance) return
-    setPoolBalance(poolBalance)
-  }, [poolBalance, setPoolBalance])
 
   useEffect(() => {
     if (!allowedSlippage) return
@@ -86,9 +68,9 @@ const RemoveClassic = () => {
             className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/classic/${pool?.token0.address}/${pool?.token1.address}`}>
-              {pool ? `${pool?.token0.symbol}-${pool?.token1.symbol}` : i18n._(t`Back`)}
-            </Link>{' '}
+            <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>
+              {pool ? `${currencyA?.symbol}-${currencyB?.symbol}` : i18n._(t`Back`)}
+            </Link>
           </Button>
           <SettingsTab />
         </div>

@@ -60,7 +60,7 @@ export const useClassicZapRemoveExecute = () => {
           await tx.wait()
 
           addTransaction(tx, {
-            summary: i18n._(t`Remove ${liquidityAmount?.toSignificant(3)} ${liquidityAmount?.wrapped.currency.symbol}`),
+            summary: i18n._(t`Remove ${liquidityAmount?.toSignificant(3)} ${liquidityAmount?.currency.symbol}`),
           })
 
           setAttemptingTxn(false)

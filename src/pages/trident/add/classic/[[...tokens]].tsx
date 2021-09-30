@@ -1,12 +1,7 @@
 import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import React, { useEffect } from 'react'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  liquidityModeAtom,
-  poolAtom,
-  poolBalanceAtom,
-  totalSupplyAtom,
-} from '../../../../features/trident/context/atoms'
+import React from 'react'
+import { RecoilRoot, useRecoilValue } from 'recoil'
+import { liquidityModeAtom, poolAtom } from '../../../../features/trident/context/atoms'
 
 import Alert from '../../../../components/Alert'
 import Button from '../../../../components/Button'
@@ -23,43 +18,23 @@ import TransactionReviewZapModal from '../../../../features/trident/add/classic/
 import TridentLayout from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
-import { useTokenBalance } from '../../../../state/wallet/hooks'
-import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import useCurrenciesFromURL from '../../../../features/trident/context/hooks/useCurrenciesFromURL'
 import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
 import ClassicStandardAside from '../../../../features/trident/add/classic/ClassicStandardAside'
 import ClassicZapAside from '../../../../features/trident/add/classic/ClassicZapAside'
+import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
+import { useRouter } from 'next/router'
 
 const AddClassic = () => {
-  const { account, chainId } = useActiveWeb3React()
+  useInitClassicPoolState()
+
   const { i18n } = useLingui()
-
-  const [[, pool], setPool] = useRecoilState(poolAtom)
-  const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const setTotalSupply = useSetRecoilState(totalSupplyAtom)
-  const setPoolBalance = useSetRecoilState(poolBalanceAtom)
-
+  const { query } = useRouter()
   const [[currencyA, currencyB]] = useCurrenciesFromURL()
+  const liquidityMode = useRecoilValue(liquidityModeAtom)
+  const [, pool] = useRecoilValue(poolAtom)
   const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
-
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
-
-  useEffect(() => {
-    setPool(classicPool)
-  }, [chainId, classicPool, setPool])
-
-  useEffect(() => {
-    if (!totalSupply) return
-    setTotalSupply(totalSupply)
-  }, [setTotalSupply, totalSupply])
-
-  useEffect(() => {
-    if (!poolBalance) return
-    setPoolBalance(poolBalance)
-  }, [poolBalance, setPoolBalance])
 
   return (
     <>
@@ -71,12 +46,12 @@ const AddClassic = () => {
           className="py-1 pl-2 rounded-full"
           startIcon={<ChevronLeftIcon width={24} height={24} />}
         >
-          <Link href={`/trident/pool/classic/${pool?.token0.address}/${pool?.token1.address}`}>
-            {pool ? `${pool?.token0.symbol}-${pool?.token1.symbol}` : i18n._(t`Back`)}
+          <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>
+            {pool ? `${currencyA?.symbol}-${currencyB?.symbol}` : i18n._(t`Back`)}
           </Link>
         </Button>
       </div>
-      <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10 lg:justify-around">
+      <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10 lg:justify-between">
         <div className="lg:w-7/12 flex flex-col gap-5">
           <div className="flex flex-col">
             <Typography variant="h2" weight={700} className="text-high-emphesis">

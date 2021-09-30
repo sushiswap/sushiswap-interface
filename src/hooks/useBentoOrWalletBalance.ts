@@ -14,7 +14,7 @@ export const useBentoOrWalletBalance = (
   const serializedBalance = useMemo(() => balance.map((el) => el?.serialize()).join('-'), [balance])
 
   return useMemo(() => {
-    return tokens.reduce((acc, cur) => {
+    return currencies.reduce((acc, cur) => {
       if (walletOrBento?.[cur?.wrapped.address] === true) {
         acc.push(balance.find((el) => el?.currency.wrapped.address === cur?.wrapped.address))
       }

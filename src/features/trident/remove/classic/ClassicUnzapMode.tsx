@@ -44,13 +44,25 @@ const ClassicUnzapMode: FC = () => {
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
 
+  const toggleButtonGroup = (
+    <ToggleButtonGroup value={percentageInput} onChange={setPercentageInput} variant="outlined">
+      <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
+      <ToggleButtonGroup.Button value="25">25%</ToggleButtonGroup.Button>
+    </ToggleButtonGroup>
+  )
+
   return (
     <div className="flex flex-col gap-8">
       <AssetSelect value={zapCurrency} onSelect={setZapCurrency} currencies={[pool?.token0, pool?.token1]} />
       <div className="flex flex-col gap-3">
-        <Typography variant="h3" weight={700} className="text-high-emphesis">
-          Amount to Remove:
-        </Typography>
+        <div className="flex justify-between gap-10 items-center lg:mb-2">
+          <Typography variant="h3" weight={700} className="text-high-emphesis">
+            Amount to Remove:
+          </Typography>
+          <div className="flex-1 hidden lg:block">{toggleButtonGroup}</div>
+        </div>
         <ListPanel
           header={<ListPanel.Header title={i18n._(t`Balances`)} value="$16,720.00" subValue="54.32134 SLP" />}
           items={[
@@ -74,12 +86,7 @@ const ClassicUnzapMode: FC = () => {
             </SumUSDCValues>
           }
         />
-        <ToggleButtonGroup value={percentageInput} onChange={setPercentageInput} variant="outlined">
-          <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value="25">25%</ToggleButtonGroup.Button>
-        </ToggleButtonGroup>
+        <div className="block lg:hidden">{toggleButtonGroup}</div>
         <TridentApproveGate
           inputAmounts={[poolBalance?.multiply(new Percent(percentageInput, '100'))]}
           tokenApproveOn={router?.address}
@@ -117,7 +124,7 @@ const ClassicUnzapMode: FC = () => {
           }}
         </TridentApproveGate>
       </div>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-5 block lg:hidden">
         <div className="flex justify-between gap-3">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             {i18n._(t`Receive:`)}

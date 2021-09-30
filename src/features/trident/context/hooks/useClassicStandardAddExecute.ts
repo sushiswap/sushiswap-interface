@@ -19,10 +19,12 @@ import { ethers } from 'ethers'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
 import { useMemo } from 'react'
+import useCurrenciesFromURL from './useCurrenciesFromURL'
 
 export const useClassicStandardAddExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
+  const [[currencyA, currencyB]] = useCurrenciesFromURL()
   const { parsedAmounts } = useDependentAssetInputs()
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
   const addTransaction = useTransactionAdder()
@@ -41,7 +43,6 @@ export const useClassicStandardAddExecute = () => {
         const nativeA = await snapshot.getPromise(spendFromWalletSelector(pool?.token0.address))
         const nativeB = await snapshot.getPromise(spendFromWalletSelector(pool?.token1.address))
 
-        console.log(nativeA, nativeB)
         if (
           !pool ||
           !chainId ||
@@ -50,6 +51,8 @@ export const useClassicStandardAddExecute = () => {
           !router ||
           !parsedAmountA ||
           !parsedAmountB ||
+          !currencyA ||
+          !currencyB ||
           !pool?.token0 ||
           !pool?.token1 ||
           !bentoboxContract
@@ -83,10 +86,10 @@ export const useClassicStandardAddExecute = () => {
         ]
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
-        const value = parsedAmountA.currency.isNative
-          ? { value: amountsMin[0].toString() }
-          : parsedAmountB.currency.isNative
-          ? { value: amountsMin[1].toString() }
+        const value = currencyA.isNative
+          ? { value: parsedAmountA.quotient.toString() }
+          : currencyB.isNative
+          ? { value: parsedAmountB.quotient.toString() }
           : {}
 
         try {

@@ -57,7 +57,7 @@ const ClassicStandardAside = () => {
       </div>
       <div className="flex flex-col gap-5">
         <Typography variant="lg" weight={700} className="text-high-emphesis">
-          {i18n._(t`You'll Receive:`)}
+          {i18n._(t`You'll Receive (at least):`)}
         </Typography>
         {parsedAmounts.map((el, index) => (
           <div className="flex justify-between items-center" key={index}>
@@ -71,7 +71,7 @@ const ClassicStandardAside = () => {
               </Typography>
             </div>
             <Typography variant="sm" weight={700} className="text-secondary">
-              ≈${usdcValues[index]?.greaterThan(0) ? usdcValues[index].toSignificant(2) : '0.00'}
+              ≈${usdcValues[index]?.greaterThan(0) ? usdcValues[index].toSignificant(6) : '0.00'}
             </Typography>
           </div>
         ))}
@@ -82,7 +82,7 @@ const ClassicStandardAside = () => {
           </Typography>
           <Typography weight={700} className="text-high-emphesis">
             <SumUSDCValues amounts={parsedAmounts}>
-              {({ amount }) => (amount ? `≈$${amount?.toSignificant(2)}` : '')}
+              {({ amount }) => (amount ? `≈$${amount?.toSignificant(6)}` : '')}
             </SumUSDCValues>
           </Typography>
         </div>

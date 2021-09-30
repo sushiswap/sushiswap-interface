@@ -22,12 +22,11 @@ const TransactionDetails: FC = () => {
 
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const input = liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
-  const validInputs = input[0] && input[1]
   const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(input)
 
   return (
     <div className="flex flex-col gap-4 lg:gap-8">
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between gap-2">
         <Typography weight={700} className="text-high-emphesis">
           {i18n._(t`Transaction Details`)}
         </Typography>
@@ -40,7 +39,7 @@ const TransactionDetails: FC = () => {
       <div className="flex flex-col gap-1">
         {pool && (
           <>
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row justify-between gap-2">
               <Typography variant="sm" className="text-secondary">
                 1 {pool?.token0?.symbol}
               </Typography>
@@ -58,7 +57,7 @@ const TransactionDetails: FC = () => {
             </div>
           </>
         )}
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between gap-2">
           <Typography variant="sm" className="text-secondary">
             {i18n._(t`Minimum Received`)}
           </Typography>
@@ -66,14 +65,15 @@ const TransactionDetails: FC = () => {
             {liquidityMinted?.toSignificant(6) || '0.000'} SLP
           </Typography>
         </div>
-        <div className="flex flex-row justify-between">
-          <Typography variant="sm" className="text-secondary">
+        <div className="flex flex-row justify-between gap-2">
+          <Typography variant="sm" className="text-secondary whitespace-nowrap">
             {i18n._(t`Your Pool Tokens`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
             {poolBalance?.greaterThan(0) ? poolBalance?.toSignificant(6) : '0.000'}
-            {validInputs && (
+            {liquidityMinted?.greaterThan(0) && (
               <>
+                {' '}
                 →{' '}
                 <span className="text-green">
                   {poolBalance && liquidityMinted ? poolBalance.add(liquidityMinted)?.toSignificant(6) : '0.000'} SLP
@@ -82,15 +82,15 @@ const TransactionDetails: FC = () => {
             )}
           </Typography>
         </div>
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between gap-2">
           <Typography variant="sm" className="text-secondary">
             {i18n._(t`Your Pool Share`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {'<'} {currentPoolShare?.greaterThan(0) ? formatPercent(currentPoolShare?.toSignificant(6)) : '0.000%'}
-            {validInputs && (
+            {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}%
+            {poolShare?.greaterThan(0) && (
               <>
-                → <span className="text-green">{formatPercent(poolShare?.toSignificant(6)) || '0.000%'}</span>
+                → <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
               </>
             )}
           </Typography>

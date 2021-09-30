@@ -42,25 +42,38 @@ const TransactionDetails: FC = () => {
         </TransactionDetailsExplanationModal>
       </div>
       <div className="flex flex-col gap-1">
-        <div className="flex flex-row justify-between">
-          <Typography variant="sm" className="text-secondary">
+        <div className="flex flex-row justify-between gap-2">
+          <Typography variant="sm" className="text-secondary whitespace-nowrap">
             {i18n._(t`Your Pool Tokens`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {poolBalance?.greaterThan(0) ? poolBalance?.toSignificant(6) : '0.000'} →{' '}
-            <span className="text-green">
-              {poolBalance && toRemoveSLPAmount ? poolBalance.subtract(toRemoveSLPAmount)?.toSignificant(6) : '0.000'}{' '}
-              SLP
-            </span>
+            {poolBalance?.greaterThan(0) ? poolBalance?.toSignificant(6) : '0.000'}
+            {parsedSLPAmount?.greaterThan(0) && (
+              <>
+                {' '}
+                →{' '}
+                <span className="text-green">
+                  {poolBalance && toRemoveSLPAmount
+                    ? poolBalance.subtract(toRemoveSLPAmount)?.toSignificant(6)
+                    : '0.000'}{' '}
+                  SLP
+                </span>
+              </>
+            )}
           </Typography>
         </div>
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between gap-2">
           <Typography variant="sm" className="text-secondary">
             {i18n._(t`Your Pool Share`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {'<'} {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'} →{' '}
-            <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
+            {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}
+            {parsedSLPAmount?.greaterThan(0) && (
+              <>
+                {' '}
+                → <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
+              </>
+            )}
           </Typography>
         </div>
         {/*<div className="flex flex-row justify-between">*/}

@@ -3,15 +3,7 @@ import PoolStats from '../../../../features/trident/pool/PoolStats'
 import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
 import ClassicMarket from '../../../../features/trident/pool/classic/ClassicMarket'
 import Header from '../../../../features/trident/pool/Header'
-import { RecoilRoot, useSetRecoilState } from 'recoil'
-import { useCurrency } from '../../../../hooks/Tokens'
-import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import { useRouter } from 'next/router'
-import { useActiveWeb3React } from '../../../../hooks'
-import { poolAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
-import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../../../state/wallet/hooks'
-import { useEffect } from 'react'
+import { RecoilRoot } from 'recoil'
 import ClassicMyRewards from '../../../../features/trident/pool/classic/ClassicMyRewards'
 import ClassicMyPosition from '../../../../features/trident/pool/classic/ClassicMyPosition'
 import ClassicLinkButtons from '../../../../features/trident/pool/classic/ClassicLinkButtons'
@@ -22,36 +14,12 @@ import Button from '../../../../components/Button'
 import { useLingui } from '@lingui/react'
 import Rewards from '../../../../features/trident/pool/Rewards'
 import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
+import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
 
 const Pool = () => {
+  useInitClassicPoolState()
+
   const { i18n } = useLingui()
-  const { account, chainId } = useActiveWeb3React()
-  const { query } = useRouter()
-
-  const setPool = useSetRecoilState(poolAtom)
-  const setTotalSupply = useSetRecoilState(totalSupplyAtom)
-  const setPoolBalance = useSetRecoilState(poolBalanceAtom)
-
-  const currencyA = useCurrency(query.tokens?.[0])
-  const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
-
-  useEffect(() => {
-    if (!classicPool[1]) return
-    setPool(classicPool)
-  }, [chainId, classicPool, setPool])
-
-  useEffect(() => {
-    if (!totalSupply) return
-    setTotalSupply(totalSupply)
-  }, [setTotalSupply, totalSupply])
-
-  useEffect(() => {
-    if (!poolBalance) return
-    setPoolBalance(poolBalance)
-  }, [poolBalance, setPoolBalance])
 
   const linkButtons = <ClassicLinkButtons />
 

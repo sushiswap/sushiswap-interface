@@ -9,7 +9,6 @@ import { poolAtom } from '../atoms'
 const useCurrenciesFromURL = (): [Currency[], (cur: Currency, index: number) => void] => {
   const { chainId } = useActiveWeb3React()
   const router = useRouter()
-  const [, pool] = useRecoilValue(poolAtom)
 
   const currencyA = useCurrency(router.query.tokens?.[0])
   const currencyB = useCurrency(router.query.tokens?.[1])
@@ -30,8 +29,11 @@ const useCurrenciesFromURL = (): [Currency[], (cur: Currency, index: number) => 
   )
 
   return useMemo(
-    () => [[pool ? pool.token0 : currencyA, pool ? pool.token1 : currencyB], setURLCurrency],
-    [currencyA, currencyB, pool, setURLCurrency]
+    () => [
+      currencyA?.wrapped.sortsBefore(currencyB?.wrapped) ? [currencyA, currencyB] : [currencyB, currencyA],
+      setURLCurrency,
+    ],
+    [currencyA, currencyB, setURLCurrency]
   )
 }
 

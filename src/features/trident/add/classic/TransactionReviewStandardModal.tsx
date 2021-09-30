@@ -1,7 +1,6 @@
 import { FC } from 'react'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import TransactionDetails from '../TransactionDetails'
 import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
 import Divider from '../../../../components/Divider'
@@ -30,7 +29,7 @@ const TransactionReviewStandardModal: FC = () => {
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
-      <div className="flex flex-col gap-8 h-full pb-4">
+      <div className="flex flex-col gap-8 h-full pb-4 lg:max-w-lg">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
           <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
@@ -101,8 +100,7 @@ const TransactionReviewStandardModal: FC = () => {
                   </Typography>
                   <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                     {currentLiquidityValue[0] ? currentLiquidityValue[0].toSignificant(6) : '0.000'} →{' '}
-                    {liquidityValue[0] ? liquidityValue[0].toSignificant(6) : '0.000'}
-                    {pool?.token0?.symbol}
+                    {liquidityValue[0] ? liquidityValue[0].toSignificant(6) : '0.000'} {pool?.token0?.symbol}
                   </Typography>
                 </div>
                 <div className="flex justify-between">
@@ -111,8 +109,7 @@ const TransactionReviewStandardModal: FC = () => {
                   </Typography>
                   <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                     {currentLiquidityValue[1] ? currentLiquidityValue[1].toSignificant(6) : '0.000'} →{' '}
-                    {liquidityValue[1] ? liquidityValue[1].toSignificant(6) : '0.000'}
-                    {pool?.token1?.symbol}
+                    {liquidityValue[1] ? liquidityValue[1].toSignificant(6) : '0.000'} {pool?.token1?.symbol}
                   </Typography>
                 </div>
               </>
@@ -132,9 +129,6 @@ const TransactionReviewStandardModal: FC = () => {
               {i18n._(t`Confirm Deposit`)}
             </Typography>
           </Button>
-        </div>
-        <div className="flex flex-col px-5">
-          <TransactionDetails />
         </div>
       </div>
     </HeadlessUIModal.Controlled>
