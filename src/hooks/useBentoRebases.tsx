@@ -3,12 +3,12 @@ import { Currency, JSBI, Rebase } from '@sushiswap/core-sdk'
 import { useSingleContractMultipleData } from '../state/multicall/hooks'
 import { useMemo } from 'react'
 
-const useBentoRebases = (tokens: Currency[]): [Rebase[], boolean] => {
+const useBentoRebases = (tokens: (Currency | undefined)[]): [Rebase[], boolean] => {
   const bentoboxContract = useBentoBoxContract()
   const results = useSingleContractMultipleData(
     bentoboxContract,
     'totals',
-    tokens.map((token) => [token.wrapped.address])
+    tokens.map((token) => [token?.wrapped.address])
   )
 
   const anyLoading: boolean = useMemo(() => results.some((callState) => callState.loading), [results])

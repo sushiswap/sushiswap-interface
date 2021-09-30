@@ -1,5 +1,5 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { Currency, CurrencyAmount, Percent, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
 import { calculateSlippageAmount, tryParseAmount } from '../../../../functions'
 import { currentLiquidityValueSelector, poolAtom, poolBalanceAtom, slippageAtom } from '../atoms'
 import { t } from '@lingui/macro'
@@ -17,7 +17,7 @@ export const percentageAmountAtom = atom<string>({
   default: '',
 })
 
-export const parsedSLPAmountSelector = selector<CurrencyAmount<Currency>>({
+export const parsedSLPAmountSelector = selector<CurrencyAmount<Token>>({
   key: 'parsedInputAmount',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
