@@ -1,4 +1,4 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
+import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
 import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'
@@ -64,8 +64,8 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'MATIC',
       decimals: 18,
     },
-    rpcUrls: ['https://polygon-rpc.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
-    blockExplorerUrls: ['https://polygonscan.com'],
+    rpcUrls: ['https://rpc-mainnet.maticvigil.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
+    blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com'],
   },
   [ChainId.HECO]: {
     chainId: '0x80',
@@ -136,7 +136,7 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
     },
     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-    blockExplorerUrls: ['https://arbiscan.io'],
+    blockExplorerUrls: ['https://mainnet-arb-explorer.netlify.app'],
   },
   [ChainId.CELO]: {
     chainId: '0xA4EC',
@@ -171,17 +171,6 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
     blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
   },
-  [ChainId.FUSE]: {
-    chainId: '0x7A',
-    chainName: 'Fuse',
-    nativeCurrency: {
-      name: 'Fuse',
-      symbol: 'FUSE',
-      decimals: 18,
-    },
-    rpcUrls: ['https://rpc.fuse.io'],
-    blockExplorerUrls: ['https://explorer.fuse.io'],
-  },
 }
 
 export default function NetworkModal(): JSX.Element | null {
@@ -214,7 +203,6 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.CELO,
           ChainId.PALM,
           ChainId.MOONRIVER,
-          // ChainId.FUSE,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (

@@ -1,25 +1,19 @@
 import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
 import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Row, { RowFixed } from '../../components/Row'
 import { filterTokens, useSortedTokensByQuery } from '../../functions/filtering'
 import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from '../../hooks/Tokens'
 
 import AutoSizer from 'react-virtualized-auto-sizer'
 import Button from '../../components/Button'
-import ButtonText from '../../components/ButtonText'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
 import Column from '../../components/Column'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
-import { Edit } from 'react-feather'
-import { ExtendedEther } from '../../constants'
 import { FixedSizeList } from 'react-window'
-import IconWrapper from '../../components/IconWrapper'
 import ImportRow from './ImportRow'
 import ModalHeader from '../../components/ModalHeader'
 import ReactGA from 'react-ga'
 import { isAddress } from '../../functions/validate'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import useDebounce from '../../hooks/useDebounce'
@@ -28,14 +22,6 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { useRouter } from 'next/router'
 import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
-
-const ContentWrapper = styled(Column)`
-  height: 100%;
-  width: 100%;
-  flex: 1 1;
-  position: relative;
-  // overflow-y: hidden;
-`
 
 interface CurrencySearchProps {
   isOpen: boolean
@@ -50,8 +36,6 @@ interface CurrencySearchProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
-  hideBalance: boolean
-  showSearch: boolean
 }
 
 export function CurrencySearch({
@@ -67,8 +51,6 @@ export function CurrencySearch({
   currencyList,
   includeNativeCurrency = true,
   allowManageTokenList = true,
-  hideBalance = false,
-  showSearch = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -193,9 +175,9 @@ export function CurrencySearch({
   )
 
   return (
-    <ContentWrapper>
-      <ModalHeader onClose={onDismiss} title="Select a token" />
-      {!currencyList && showSearch && (
+    <div className="flex flex-col max-h-[inherit]">
+      <ModalHeader className="h-full" onClose={onDismiss} title="Select a token" />
+      {!currencyList && (
         <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
           <input
             type="text"
@@ -221,7 +203,7 @@ export function CurrencySearch({
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
         </Column>
       ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
-        <div className="flex-1 h-full">
+        <div className="h-screen">
           <AutoSizer disableWidth>
             {({ height }) => (
               <CurrencyList
@@ -234,7 +216,6 @@ export function CurrencySearch({
                 fixedListRef={fixedList}
                 showImportView={showImportView}
                 setImportToken={setImportToken}
-                hideBalance={hideBalance}
               />
             )}
           </AutoSizer>
@@ -251,6 +232,6 @@ export function CurrencySearch({
           </Button>
         </div>
       )}
-    </ContentWrapper>
+    </div>
   )
 }

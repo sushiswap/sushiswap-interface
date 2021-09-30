@@ -22,8 +22,6 @@ interface CurrencySearchModalProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
-  hideBalance?: boolean
-  showSearch?: boolean
 }
 
 function CurrencySearchModal({
@@ -34,10 +32,8 @@ function CurrencySearchModal({
   otherSelectedCurrency,
   currencyList,
   showCommonBases = false,
-  showSearch = true,
   includeNativeCurrency = true,
   allowManageTokenList = true,
-  hideBalance = false,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
   const lastOpen = useLast(isOpen)
@@ -67,10 +63,10 @@ function CurrencySearchModal({
   const [listURL, setListUrl] = useState<string | undefined>()
 
   // change min height if not searching
-  const minHeight = modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 80
+  const minHeight = modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 75
 
   return (
-    <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={80} minHeight={minHeight} padding={1}>
+    <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={75} minHeight={minHeight} padding={1}>
       {modalView === CurrencyModalView.search ? (
         <CurrencySearch
           isOpen={isOpen}
@@ -85,8 +81,6 @@ function CurrencySearchModal({
           currencyList={currencyList}
           includeNativeCurrency={includeNativeCurrency}
           allowManageTokenList={allowManageTokenList}
-          hideBalance={hideBalance}
-          showSearch={showSearch}
         />
       ) : modalView === CurrencyModalView.importToken && importToken ? (
         <ImportToken
@@ -114,5 +108,7 @@ function CurrencySearchModal({
     </Modal>
   )
 }
+
+CurrencySearchModal.whyDidYouRender = true
 
 export default CurrencySearchModal
