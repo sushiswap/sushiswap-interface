@@ -103,7 +103,7 @@ export const getBentoUserTokens = async (chainId = ChainId.MAINNET, variables) =
 }
 
 export const getBentoBox = async (chainId = ChainId.MAINNET, variables) => {
-  const { bentoBox } = await fetcher(chainId, bentoBoxQuery, variables)
+  const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
 
-  return bentoBox
+  return bentoBoxes[0]
 }

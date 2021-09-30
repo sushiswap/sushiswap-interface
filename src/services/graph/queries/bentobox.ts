@@ -107,7 +107,7 @@ export const bentoBoxQuery = gql`
     $block: Block_height
     $where: BentoBox_filter
   ) {
-    bentoBox(id: $id, block: $block, where: $where) {
+    bentoBoxes(first: 1, block: $block, where: $where) {
       id
       totalUsers
       totalTokens
