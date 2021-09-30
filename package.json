@@ -142,5 +142,20 @@
     "entrypoints": [
       "src/pages"
     ]
-  }
+    },
+  "browserslist": {
+    "production": [
+      ">0.3%",
+      "not dead",
+      "not op_mini all",
+      "not IE > 0",
+      "not samsung 4",
+      "not and_uc 12.12"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 edge version"
+    ]
+}
 }
