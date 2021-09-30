@@ -6,7 +6,7 @@ import InfoCard from '../../../features/analytics/Bar/InfoCard'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import { formatNumber } from '../../../functions'
-import { useActiveWeb3React } from '../../../hooks'
+import { useActiveWeb3React, useFuse } from '../../../hooks'
 import { useBentoBox, useBlock, useNativePrice, useTokens } from '../../../services/graph'
 
 export default function BentoBox(): JSX.Element {
@@ -76,6 +76,18 @@ export default function BentoBox(): JSX.Element {
     [bentoBox, tokenIdToPrice, nativePrice, token1dIdToPrice, token1wIdToPrice, nativePrice1d, nativePrice1w]
   )
 
+  const {
+    result: searched,
+    term,
+    search,
+  } = useFuse({
+    options: {
+      keys: ['token.address', 'token.symbol', 'token.name'],
+      threshold: 0.4,
+    },
+    data: bentoBoxTokensFormatted,
+  })
+
   return (
     <AnalyticsContainer>
       <Background background="dashboard">
@@ -85,8 +97,8 @@ export default function BentoBox(): JSX.Element {
             <div className="">Click on the column name to sort tokens by it&apos;s pass price or liquidity.</div>
           </div>
           <Search
-            term={''}
-            search={() => {}}
+            term={term}
+            search={search}
             inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
             className="border shadow-2xl border-dark-800"
           />
@@ -109,10 +121,7 @@ export default function BentoBox(): JSX.Element {
       </div>
       <div className="py-6 space-y-4 text-2xl font-bold text-high-emphesis lg:px-14">Tokens</div>
       <div className="pt-4 lg:px-14">
-        <TokenList
-          tokens={bentoBoxTokensFormatted}
-          enabledColumns={['name', 'liquidity', 'price', 'priceChange', 'lastWeekGraph']}
-        />
+        <TokenList tokens={searched} enabledColumns={['name', 'liquidity', 'price', 'priceChange', 'lastWeekGraph']} />
       </div>
     </AnalyticsContainer>
   )
