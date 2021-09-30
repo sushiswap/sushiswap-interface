@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import { useSushiBarContract, useSushiContract } from './useContract'
 
 import Fraction from '../entities/Fraction'
-import { ethers } from 'ethers'
+import { BigNumber } from '@ethersproject/bignumber'
+import { MaxUint256 } from '@ethersproject/constants'
+import { parseUnits } from '@ethersproject/units'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useTransactionAdder } from '../state/transactions/hooks'
-
-const { BigNumber } = ethers
 
 const useSushiBar = () => {
   const { account } = useActiveWeb3React()
@@ -39,7 +39,7 @@ const useSushiBar = () => {
 
   const approve = useCallback(async () => {
     try {
-      const tx = await sushiContract?.approve(barContract?.address, ethers.constants.MaxUint256.toString())
+      const tx = await sushiContract?.approve(barContract?.address, MaxUint256.toString())
       return addTransaction(tx, { summary: 'Approve' })
     } catch (e) {
       return e
@@ -50,7 +50,7 @@ const useSushiBar = () => {
     // todo: this should be updated with BigNumber as opposed to string
     async (amount: string) => {
       try {
-        const tx = await barContract?.enter(ethers.utils.parseUnits(amount))
+        const tx = await barContract?.enter(parseUnits(amount))
         return addTransaction(tx, { summary: 'Enter SushiBar' })
       } catch (e) {
         return e
@@ -63,7 +63,7 @@ const useSushiBar = () => {
     // todo: this should be updated with BigNumber as opposed to string
     async (amount: string) => {
       try {
-        const tx = await barContract?.leave(ethers.utils.parseUnits(amount))
+        const tx = await barContract?.leave(parseUnits(amount))
         return addTransaction(tx, { summary: 'Leave SushiBar' })
       } catch (e) {
         console.error(e)

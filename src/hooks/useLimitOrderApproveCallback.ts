@@ -1,14 +1,13 @@
+import { AddressZero, HashZero } from '@ethersproject/constants'
+import { STOP_LIMIT_ORDER_ADDRESS, Token, getSignatureWithProviderBentobox } from '@sushiswap/sdk'
 import { ZERO, calculateGasMargin } from '../functions'
-import { getSignatureWithProviderBentobox, getVerifyingContract } from 'limitorderv2-sdk'
 import { setFromBentoBalance, setLimitOrderApprovalPending } from '../state/limit-order/actions'
 import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
 
 import { Field } from '../state/swap/actions'
-import { MaxUint256 } from '@ethersproject/constants'
-import { Token } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
+import { getAddress } from '@ethersproject/address'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { useDispatch } from 'react-redux'
@@ -42,10 +41,10 @@ const useLimitOrderApproveCallback = () => {
     setLimitOrderPermit(undefined)
   }, [account, chainId])
 
-  const masterContract = chainId && getVerifyingContract(chainId)
+  const masterContract = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
 
   const pendingApproval = useLimitOrderApprovalPending()
-  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
+  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
   const addTransaction = useTransactionAdder()
 
   // check the current approval status
@@ -111,24 +110,17 @@ const useLimitOrderApproveCallback = () => {
           s,
         ]),
       }
-    } catch (error) {
-      console.log(error)
+    } catch (e) {
+      console.log(e)
       return {
-        outcome: error.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
+        outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
       }
     }
   }, [approvalState, account, library, chainId, bentoBoxContract, masterContract])
 
   const onApprove = async function () {
     if (fallback) {
-      const tx = await bentoBoxContract?.setMasterContractApproval(
-        account,
-        masterContract,
-        true,
-        0,
-        ethers.constants.HashZero,
-        ethers.constants.HashZero
-      )
+      const tx = await bentoBoxContract?.setMasterContractApproval(account, masterContract, true, 0, HashZero, HashZero)
       dispatch(setLimitOrderApprovalPending('Approve Limit Order'))
       await tx.wait()
       dispatch(setLimitOrderApprovalPending(''))
@@ -185,18 +177,12 @@ const useLimitOrderApproveCallback = () => {
       summary.push(`Deposit ${token.symbol} into BentoBox`)
       if (token.isNative) {
         batch.push(
-          bentoBoxContract?.interface?.encodeFunctionData('deposit', [
-            ethers.constants.AddressZero,
-            account,
-            account,
-            amount,
-            0,
-          ])
+          bentoBoxContract?.interface?.encodeFunctionData('deposit', [AddressZero, account, account, amount, 0])
         )
       } else {
         batch.push(
           bentoBoxContract?.interface?.encodeFunctionData('deposit', [
-            ethers.utils.getAddress(token.wrapped.address),
+            getAddress(token.wrapped.address),
             account,
             account,
             amount,

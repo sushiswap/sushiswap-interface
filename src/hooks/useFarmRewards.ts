@@ -1,4 +1,4 @@
-import { Chef, PairType } from '../features/farm/enum'
+import { Chef, PairType } from '../features/onsen/enum'
 import {
   useAverageBlockTime,
   useBlock,
@@ -8,52 +8,48 @@ import {
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
+  useNativePrice,
   useOnePrice,
-  useSpellPrice,
   useStakePrice,
   useSushiPairs,
   useSushiPrice,
 } from '../services/graph'
 
 import { ChainId } from '@sushiswap/sdk'
-import { aprToApy } from '../functions/convert/apyApr'
 import { getAddress } from '@ethersproject/address'
 import useActiveWeb3React from './useActiveWeb3React'
 import { useMemo } from 'react'
-import { usePositions } from '../features/farm/hooks'
+import { usePositions } from '../features/onsen/hooks'
+import { aprToApy } from '../functions/convert/apyApr'
 
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()
 
   const positions = usePositions(chainId)
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block1w = useBlock({ daysAgo: 7 })
+  const block1w = useBlock({ daysAgo: 7, chainId })
 
-  const farms = useFarms()
+  const farms = useFarms({ chainId })
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
   const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
-
-  const swapPairs1d = useSushiPairs({
+  const swapPairs1w = useSushiPairs({
     subset: farmAddresses,
-    block: block1d,
-    shouldFetch: !!block1d && !!farmAddresses,
+    block: block1w,
+    shouldFetch: !!block1w && !!farmAddresses,
     chainId,
   })
-
-  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
 
   const averageBlockTime = useAverageBlockTime()
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice] = [
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
     useStakePrice(),
     useOnePrice(),
-    useSpellPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -64,10 +60,11 @@ export default function useFarmRewards() {
     pool.balance = pool?.balance || pool?.slpBalance
 
     const swapPair = swapPairs?.find((pair) => pair.id === pool.pair)
-    const swapPair1d = swapPairs1d?.find((pair) => pair.id === pool.pair)
+    const swapPair1w = swapPairs1w?.find((pair) => pair.id === pool.pair)
     const kashiPair = kashiPairs?.find((pair) => pair.id === pool.pair)
 
     const pair = swapPair || kashiPair
+    const pair1w = swapPair1w
 
     const type = swapPair ? PairType.SWAP : PairType.KASHI
 
@@ -84,7 +81,7 @@ export default function useFarmRewards() {
 
       const defaultReward = {
         token: 'SUSHI',
-        icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2.jpg',
+        icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/sushi.jpg',
         rewardPerBlock,
         rewardPerDay: rewardPerBlock * blocksPerDay,
         rewardPrice: sushiPrice,
@@ -96,73 +93,60 @@ export default function useFarmRewards() {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
-        const icon = `https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/${getAddress(
-          pool.rewarder.rewardToken
-        )}.jpg`
+        const icon = ['0', '3', '4', '8'].includes(pool.id)
+          ? `https://raw.githubusercontent.com/sushiswap/icons/master/token/${pool.rewardToken.symbol.toLowerCase()}.jpg`
+          : `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/${getAddress(
+              pool.rewarder.rewardToken
+            )}/logo.png`
 
         const decimals = 10 ** pool.rewardToken.decimals
 
-        if (pool.rewarder.rewardToken !== '0x0000000000000000000000000000000000000000') {
-          const rewardPerBlock =
-            pool.rewardToken.symbol === 'ALCX'
-              ? pool.rewarder.rewardPerSecond / decimals
-              : pool.rewardToken.symbol === 'LDO'
-              ? (77160493827160493 / decimals) * averageBlockTime
-              : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
+        const rewardPerBlock =
+          pool.rewardToken.symbol === 'ALCX'
+            ? pool.rewarder.rewardPerSecond / decimals
+            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime
 
-          const rewardPerDay =
-            pool.rewardToken.symbol === 'ALCX'
-              ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
-              : pool.rewardToken.symbol === 'LDO'
-              ? (77160493827160493 / decimals) * averageBlockTime * blocksPerDay
-              : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
+        const rewardPerDay =
+          pool.rewardToken.symbol === 'ALCX'
+            ? (pool.rewarder.rewardPerSecond / decimals) * blocksPerDay
+            : (pool.rewarder.rewardPerSecond / decimals) * averageBlockTime * blocksPerDay
 
-          const rewardPrice = pool.rewardToken.derivedETH * ethPrice
-
-          const reward = {
-            token: pool.rewardToken.symbol,
-            icon: icon,
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice,
-          }
-
-          rewards[1] = reward
+        const reward = {
+          token: pool.rewardToken.symbol,
+          icon: icon,
+          rewardPerBlock: rewardPerBlock,
+          rewardPerDay: rewardPerDay,
+          rewardPrice: pool.rewardToken.derivedETH * ethPrice,
         }
+
+        rewards[1] = reward
       } else if (pool.chef === Chef.MINICHEF) {
         const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
         const sushiPerBlock = sushiPerSecond * averageBlockTime
         const sushiPerDay = sushiPerBlock * blocksPerDay
-
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
-            ? pool.rewarder.rewardPerSecond / 1e18
-            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
-
+          ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
         const rewardPerBlock = rewardPerSecond * averageBlockTime
-
         const rewardPerDay = rewardPerBlock * blocksPerDay
 
         const reward = {
           [ChainId.MATIC]: {
             token: 'MATIC',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/matic/0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270.jpg',
-            rewardPerBlock,
-            rewardPerDay: rewardPerSecond * 86400,
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg',
             rewardPrice: maticPrice,
+            rewardPerBlock,
+            rewardPerDay,
           },
           [ChainId.XDAI]: {
             token: 'STAKE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/xdai/0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/stake.jpg',
             rewardPerBlock,
-            rewardPerDay: rewardPerSecond * 86400,
+            rewardPerDay,
             rewardPrice: stakePrice,
           },
           [ChainId.HARMONY]: {
             token: 'ONE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/harmony/0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a.jpg',
-            rewardPerBlock,
-            rewardPerDay: rewardPerSecond * 86400,
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg',
             rewardPrice: onePrice,
           },
         }
@@ -175,16 +159,6 @@ export default function useFarmRewards() {
 
         if (chainId in reward) {
           rewards[1] = reward[chainId]
-        }
-
-        if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
-          rewards[1] = {
-            token: 'SPELL',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x090185f2135308BaD17527004364eBcC2D37e5F6.jpg',
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: spellPrice,
-          }
         }
       }
 
@@ -199,10 +173,9 @@ export default function useFarmRewards() {
       ? (balance / Number(swapPair.totalSupply)) * Number(swapPair.reserveUSD)
       : balance * kashiPair.token0.derivedETH * ethPrice
 
-    const feeApyPerYear =
-      swapPair && swapPair1d
-        ? aprToApy((((pair?.volumeUSD - swapPair1d?.volumeUSD) * 0.0025 * 365) / pair?.reserveUSD) * 100, 3650) / 100
-        : 0
+    const feeApyPerYear = swapPair
+      ? aprToApy((((((pair?.volumeUSD - pair1w?.volumeUSD) * 0.0025) / 7) * 365) / pair?.reserveUSD) * 100, 3650) / 100
+      : 0
 
     const feeApyPerMonth = feeApyPerYear / 12
     const feeApyPerDay = feeApyPerMonth / 30

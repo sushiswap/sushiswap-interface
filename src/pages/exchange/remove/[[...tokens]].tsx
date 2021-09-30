@@ -2,14 +2,13 @@ import { ApprovalState, useApproveCallback } from '../../../hooks/useApproveCall
 import { ArrowDown, Plus } from 'react-feather'
 import { AutoRow, RowBetween } from '../../../components/Row'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
-import { ChainId, Currency, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
 import { calculateGasMargin, calculateSlippageAmount } from '../../../functions/trade'
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from '../../../state/burn/hooks'
 import { usePairContract, useRouterContract } from '../../../hooks/useContract'
 
-import { AddRemoveTabs } from '../../../components/NavigationTabs'
 import Alert from '../../../components/Alert'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { AutoColumn } from '../../../components/Column'
@@ -22,15 +21,15 @@ import Dots from '../../../components/Dots'
 import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/burn/actions'
 import Head from 'next/head'
-import Header from '../../../components/ExchangeHeader'
+import Header from '../../../features/trade/Header'
 import Link from 'next/link'
-import LiquidityHeader from '../../../features/liquidity/LiquidityHeader'
-import LiquidityPrice from '../../../features/liquidity/LiquidityPrice'
+import LiquidityHeader from '../../../features/exchange-v1/liquidity/LiquidityHeader'
+import LiquidityPrice from '../../../features/exchange-v1/liquidity/LiquidityPrice'
 import { MinimalPositionCard } from '../../../components/PositionCard'
 import NavLink from '../../../components/NavLink'
 import PercentInputPanel from '../../../components/PercentInputPanel'
 import ReactGA from 'react-ga'
-import RemoveLiquidityReceiveDetails from '../../../features/liquidity/RemoveLiquidityReceiveDetails'
+import RemoveLiquidityReceiveDetails from '../../../features/exchange-v1/liquidity/RemoveLiquidityReceiveDetails'
 import { TransactionResponse } from '@ethersproject/providers'
 import Web3Connect from '../../../components/Web3Connect'
 import { currencyId } from '../../../functions/currency'
@@ -64,6 +63,8 @@ export default function Remove() {
 
   // toggle wallet when disconnected
   const toggleWalletModal = useWalletModalToggle()
+
+  const { price } = useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
 
   // burn state
   const { independentField, typedValue } = useBurnState()
@@ -108,7 +109,6 @@ export default function Remove() {
     parsedAmounts[Field.LIQUIDITY],
     routerContract?.address
   )
-
   const [approval, approveCallback] = useApproveCallback(parsedAmounts[Field.LIQUIDITY], routerContract?.address)
 
   async function onAttemptToApprove() {
@@ -289,10 +289,288 @@ export default function Remove() {
         .catch((error: Error) => {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
-          console.log(error)
+          console.error(error)
         })
     }
   }
+
+  // const isArgentWallet = useIsArgentWallet();
+
+  // async function onAttemptToApprove() {
+  //   if (!pairContract || !pair || !library || !deadline)
+  //     throw new Error("missing dependencies");
+  //   const liquidityAmount = parsedAmounts[Field.LIQUIDITY];
+  //   if (!liquidityAmount) throw new Error("missing liquidity amount");
+
+  //   if (isArgentWallet) {
+  //     return approveCallback();
+  //   }
+
+  //   if (chainId !== ChainId.HARMONY) {
+  //     // try to gather a signature for permission
+  //     const nonce = await pairContract.nonces(account);
+
+  //     const EIP712Domain = [
+  //       { name: "name", type: "string" },
+  //       { name: "version", type: "string" },
+  //       { name: "chainId", type: "uint256" },
+  //       { name: "verifyingContract", type: "address" },
+  //     ];
+  //     const domain = {
+  //       name: "SushiSwap LP Token",
+  //       version: "1",
+  //       chainId: chainId,
+  //       verifyingContract: pair.liquidityToken.address,
+  //     };
+  //     const Permit = [
+  //       { name: "owner", type: "address" },
+  //       { name: "spender", type: "address" },
+  //       { name: "value", type: "uint256" },
+  //       { name: "nonce", type: "uint256" },
+  //       { name: "deadline", type: "uint256" },
+  //     ];
+  //     const message = {
+  //       owner: account,
+  //       spender: getRouterAddress(chainId),
+  //       value: liquidityAmount.raw.toString(),
+  //       nonce: nonce.toHexString(),
+  //       deadline: deadline.toNumber(),
+  //     };
+  //     const data = JSON.stringify({
+  //       types: {
+  //         EIP712Domain,
+  //         Permit,
+  //       },
+  //       domain,
+  //       primaryType: "Permit",
+  //       message,
+  //     });
+
+  //     library
+  //       .send("eth_signTypedData_v4", [account, data])
+  //       .then(splitSignature)
+  //       .then((signature) => {
+  //         setSignatureData({
+  //           v: signature.v,
+  //           r: signature.r,
+  //           s: signature.s,
+  //           deadline: deadline.toNumber(),
+  //         });
+  //       })
+  //       .catch((error) => {
+  //         // for all errors other than 4001 (EIP-1193 user rejected request), fall back to manual approve
+  //         if (error?.code !== 4001) {
+  //           approveCallback();
+  //         }
+  //       });
+  //   } else {
+  //     return approveCallback();
+  //   }
+  // }
+
+  // // wrapped onUserInput to clear signatures
+  // const onUserInput = useCallback(
+  //   (field: Field, typedValue: string) => {
+  //     setSignatureData(null);
+  //     return _onUserInput(field, typedValue);
+  //   },
+  //   [_onUserInput]
+  // );
+
+  // const onLiquidityPercentInput = useCallback(
+  //   (typedValue: string): void =>
+  //     onUserInput(Field.LIQUIDITY_PERCENT, typedValue),
+  //   [onUserInput]
+  // );
+  // const onLiquidityInput = useCallback(
+  //   (typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue),
+  //   [onUserInput]
+  // );
+  // const onCurrencyAInput = useCallback(
+  //   (typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue),
+  //   [onUserInput]
+  // );
+  // const onCurrencyBInput = useCallback(
+  //   (typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue),
+  //   [onUserInput]
+  // );
+
+  // // tx sending
+  // const addTransaction = useTransactionAdder();
+  // async function onRemove() {
+  //   if (!chainId || !library || !account || !deadline)
+  //     throw new Error("missing dependencies");
+  //   const {
+  //     [Field.CURRENCY_A]: currencyAmountA,
+  //     [Field.CURRENCY_B]: currencyAmountB,
+  //   } = parsedAmounts;
+  //   if (!currencyAmountA || !currencyAmountB) {
+  //     throw new Error("missing currency amounts");
+  //   }
+  //   const router = getRouterContract(chainId, library, account);
+
+  //   const amountsMin = {
+  //     [Field.CURRENCY_A]: calculateSlippageAmount(
+  //       currencyAmountA,
+  //       allowedSlippage
+  //     )[0],
+  //     [Field.CURRENCY_B]: calculateSlippageAmount(
+  //       currencyAmountB,
+  //       allowedSlippage
+  //     )[0],
+  //   };
+
+  //   if (!currencyA || !currencyB) throw new Error("missing tokens");
+  //   const liquidityAmount = parsedAmounts[Field.LIQUIDITY];
+  //   if (!liquidityAmount) throw new Error("missing liquidity amount");
+
+  //   const currencyBIsETH = currencyB === Currency.getNativeCurrency(chainId);
+  //   const oneCurrencyIsETH =
+  //     currencyA === Currency.getNativeCurrency(chainId) || currencyBIsETH;
+
+  //   if (!tokenA || !tokenB) throw new Error("could not wrap");
+
+  //   let methodNames: string[];
+  //   let args: Array<string | string[] | number | boolean>;
+  //   // we have approval, use normal remove liquidity
+  //   if (approval === ApprovalState.APPROVED) {
+  //     // removeLiquidityETH
+  //     if (oneCurrencyIsETH && ![ChainId.CELO].includes(chainId)) {
+  //       methodNames = [
+  //         "removeLiquidityETH",
+  //         "removeLiquidityETHSupportingFeeOnTransferTokens",
+  //       ];
+  //       args = [
+  //         currencyBIsETH ? tokenA.address : tokenB.address,
+  //         liquidityAmount.raw.toString(),
+  //         amountsMin[
+  //           currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B
+  //         ].toString(),
+  //         amountsMin[
+  //           currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A
+  //         ].toString(),
+  //         account,
+  //         deadline.toHexString(),
+  //       ];
+  //     }
+  //     // removeLiquidity
+  //     else {
+  //       methodNames = ["removeLiquidity"];
+  //       args = [
+  //         tokenA.address,
+  //         tokenB.address,
+  //         liquidityAmount.raw.toString(),
+  //         amountsMin[Field.CURRENCY_A].toString(),
+  //         amountsMin[Field.CURRENCY_B].toString(),
+  //         account,
+  //         deadline.toHexString(),
+  //       ];
+  //     }
+  //   }
+  //   // we have a signataure, use permit versions of remove liquidity
+  //   else if (signatureData !== null) {
+  //     // removeLiquidityETHWithPermit
+  //     if (oneCurrencyIsETH && ![ChainId.CELO].includes(chainId)) {
+  //       methodNames = [
+  //         "removeLiquidityETHWithPermit",
+  //         "removeLiquidityETHWithPermitSupportingFeeOnTransferTokens",
+  //       ];
+  //       args = [
+  //         currencyBIsETH ? tokenA.address : tokenB.address,
+  //         liquidityAmount.raw.toString(),
+  //         amountsMin[
+  //           currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B
+  //         ].toString(),
+  //         amountsMin[
+  //           currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A
+  //         ].toString(),
+  //         account,
+  //         signatureData.deadline,
+  //         false,
+  //         signatureData.v,
+  //         signatureData.r,
+  //         signatureData.s,
+  //       ];
+  //     }
+  //     // removeLiquidityETHWithPermit
+  //     else {
+  //       methodNames = ["removeLiquidityWithPermit"];
+  //       args = [
+  //         tokenA.address,
+  //         tokenB.address,
+  //         liquidityAmount.raw.toString(),
+  //         amountsMin[Field.CURRENCY_A].toString(),
+  //         amountsMin[Field.CURRENCY_B].toString(),
+  //         account,
+  //         signatureData.deadline,
+  //         false,
+  //         signatureData.v,
+  //         signatureData.r,
+  //         signatureData.s,
+  //       ];
+  //     }
+  //   } else {
+  //     throw new Error(
+  //       "Attempting to confirm without approval or a signature. Please contact support."
+  //     );
+  //   }
+
+  //   const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
+  //     methodNames.map((methodName) =>
+  //       router.estimateGas[methodName](...args)
+  //         .then(calculateGasMargin)
+  //         .catch((error) => {
+  //           console.error(`estimateGas failed`, methodName, args, error);
+  //           return undefined;
+  //         })
+  //     )
+  //   );
+
+  //   const indexOfSuccessfulEstimation = safeGasEstimates.findIndex(
+  //     (safeGasEstimate) => BigNumber.isBigNumber(safeGasEstimate)
+  //   );
+
+  //   // all estimations failed...
+  //   if (indexOfSuccessfulEstimation === -1) {
+  //     console.error("This transaction would fail. Please contact support.");
+  //   } else {
+  //     const methodName = methodNames[indexOfSuccessfulEstimation];
+  //     const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation];
+
+  //     setAttemptingTxn(true);
+  //     await router[methodName](...args, {
+  //       gasLimit: safeGasEstimate,
+  //     })
+  //       .then((response: TransactionResponse) => {
+  //         setAttemptingTxn(false);
+
+  //         addTransaction(response, {
+  //           summary:
+  //             "Remove " +
+  //             parsedAmounts[Field.CURRENCY_A]?.toSignificant(3) +
+  //             " " +
+  //             currencyA?.symbol +
+  //             " and " +
+  //             parsedAmounts[Field.CURRENCY_B]?.toSignificant(3) +
+  //             " " +
+  //             currencyB?.symbol,
+  //         });
+
+  //         setTxHash(response.hash);
+
+  //         ReactGA.event({
+  //           category: "Liquidity",
+  //           action: "Remove",
+  //           label: [currencyA?.symbol, currencyB?.symbol].join("/"),
+  //         });
+  //       })
+  //       .catch((error: Error) => {
+  //         setAttemptingTxn(false);
+  //         // we only care if the error is something _other_ than the user rejected the tx
+  //         console.error(error);
+  //       });
+  //   }
+  // }
 
   function modalHeader() {
     return (
@@ -505,8 +783,8 @@ export default function Remove() {
                           <RowBetween className="text-sm">
                             {oneCurrencyIsETH ? (
                               <Link
-                                href={`/remove/${currencyA?.isNative ? WNATIVE[chainId].address : currencyIdA}/${
-                                  currencyB?.isNative ? WNATIVE[chainId].address : currencyIdB
+                                href={`/remove/${currencyA?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdA}/${
+                                  currencyB?.isNative ? WNATIVE_ADDRESS[chainId] : currencyIdB
                                 }`}
                               >
                                 <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">
@@ -533,14 +811,14 @@ export default function Remove() {
                       <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
                         <CurrencyLogo currency={currencyA} size="46px" />
                         <AutoColumn>
-                          <div className="text-white truncate">{formattedAmounts[Field.CURRENCY_A] || '-'}</div>
+                          <div className="text-white">{formattedAmounts[Field.CURRENCY_A] || '-'}</div>
                           <div className="text-sm">{currencyA?.symbol}</div>
                         </AutoColumn>
                       </div>
                       <div className="flex flex-row items-center w-full p-3 pr-8 space-x-3 rounded bg-dark-900">
                         <CurrencyLogo currency={currencyB} size="46px" />
                         <AutoColumn>
-                          <div className="text-white truncate">{formattedAmounts[Field.CURRENCY_B] || '-'}</div>
+                          <div className="text-white">{formattedAmounts[Field.CURRENCY_B] || '-'}</div>
                           <div className="text-sm">{currencyB?.symbol}</div>
                         </AutoColumn>
                       </div>

@@ -1,10 +1,6 @@
-import {
-  DEFAULT_ARCHER_ETH_TIP,
-  DEFAULT_ARCHER_GAS_ESTIMATE,
-  DEFAULT_ARCHER_GAS_PRICES,
-  DEFAULT_DEADLINE_FROM_NOW,
-  INITIAL_ALLOWED_SLIPPAGE,
-} from '../../constants'
+import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE, DEFAULT_ARCHER_GAS_PRICES } from '../../config/archer'
+import { DEFAULT_OPENMEV_ETH_TIP, DEFAULT_OPENMEV_GAS_ESTIMATE, DEFAULT_OPENMEV_GAS_PRICES } from '../../config/openmev'
+import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import {
   SerializedPair,
   SerializedToken,
@@ -24,6 +20,7 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
+  updateUserOpenMevUseRelay,
 } from './actions'
 
 import { createReducer } from '@reduxjs/toolkit'
@@ -64,6 +61,8 @@ export interface UserState {
   timestamp: number
   URLWarningVisible: boolean
 
+  // @openemv
+  userOpenMevUseRelay: boolean
   userArcherUseRelay: boolean // use relay or go directly to router
   userArcherGasPrice: string // Current gas price
   userArcherETHTip: string // ETH tip for relay, as full BigInt string
@@ -91,6 +90,11 @@ export const initialState: UserState = {
   userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
   userArcherGasEstimate: DEFAULT_ARCHER_GAS_ESTIMATE.toString(),
   userArcherTipManualOverride: false,
+  // @openmev
+  // @param userOpenMevUseRelay
+  // @returns {true}
+  // @type boolean
+  userOpenMevUseRelay: true,
 }
 
 export default createReducer(initialState, (builder) =>
@@ -164,6 +168,9 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
+    })
+    .addCase(updateUserOpenMevUseRelay, (state, action) => {
+      state.userOpenMevUseRelay = action.payload.userOpenMevUseRelay
     })
     .addCase(updateUserArcherUseRelay, (state, action) => {
       state.userArcherUseRelay = action.payload.userArcherUseRelay

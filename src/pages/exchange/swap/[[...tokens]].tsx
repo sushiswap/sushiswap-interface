@@ -1,4 +1,3 @@
-import { ARCHER_RELAY_URI, INITIAL_ALLOWED_SLIPPAGE } from '../../../constants'
 import {
   ARCHER_ROUTER_ADDRESS,
   ChainId,
@@ -10,8 +9,7 @@ import {
   Trade as V2Trade,
 } from '@sushiswap/sdk'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../../hooks/useApproveCallback'
-import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/swap/styleds'
-import { AutoRow, RowBetween, RowFixed } from '../../../components/Row'
+import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/exchange-v1/swap/styleds'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
 import Column, { AutoColumn } from '../../../components/Column'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -28,6 +26,7 @@ import {
   useUserArcherETHTip,
   useUserArcherGasPrice,
   useUserArcherUseRelay,
+  useUserOpenMevRelay,
   useUserSingleHopOnly,
   useUserSlippageTolerance,
   useUserTransactionTTL,
@@ -35,31 +34,36 @@ import {
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from '../../../state/application/hooks'
 import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 
+import { ARCHER_RELAY_URI } from '../../../config/archer'
+import { OPENMEV_RELAY_URI } from '../../../config/openmev'
+
 import AddressInputPanel from '../../../components/AddressInputPanel'
-import { AdvancedSwapDetails } from '../../../features/swap/AdvancedSwapDetails'
-import AdvancedSwapDetailsDropdown from '../../../features/swap/AdvancedSwapDetailsDropdown'
+import { AdvancedSwapDetails } from '../../../features/exchange-v1/swap/AdvancedSwapDetails'
+import AdvancedSwapDetailsDropdown from '../../../features/exchange-v1/swap/AdvancedSwapDetailsDropdown'
 import Alert from '../../../components/Alert'
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
-import ConfirmSwapModal from '../../../features/swap/ConfirmSwapModal'
+import ConfirmSwapModal from '../../../features/exchange-v1/swap/ConfirmSwapModal'
 import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/swap/actions'
 import Head from 'next/head'
+import { INITIAL_ALLOWED_SLIPPAGE } from '../../../constants'
 import Loader from '../../../components/Loader'
 import Lottie from 'lottie-react'
-import MinerTip from '../../../components/MinerTip'
+import MinerTip from '../../../features/exchange-v1/swap/MinerTip'
 import ProgressSteps from '../../../components/ProgressSteps'
 import ReactGA from 'react-ga'
-import SwapHeader from '../../../components/ExchangeHeader'
+import SwapHeader from '../../../features/trade/Header'
 import TokenWarningModal from '../../../modals/TokenWarningModal'
-import TradePrice from '../../../features/swap/TradePrice'
+import TradePrice from '../../../features/exchange-v1/swap/TradePrice'
 import Typography from '../../../components/Typography'
-import UnsupportedCurrencyFooter from '../../../features/swap/UnsupportedCurrencyFooter'
+import UnsupportedCurrencyFooter from '../../../features/exchange-v1/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../../components/Web3Connect'
+import { classNames } from '../../../functions'
 import { computeFiatValuePriceImpact } from '../../../functions/trade'
-import confirmPriceImpactWithoutFee from '../../../features/swap/confirmPriceImpactWithoutFee'
+import confirmPriceImpactWithoutFee from '../../../features/exchange-v1/swap/confirmPriceImpactWithoutFee'
 import { maxAmountSpend } from '../../../functions/currency'
 import swapArrowsAnimationData from '../../../animation/swap-arrows.json'
 import { t } from '@lingui/macro'
@@ -73,8 +77,6 @@ import { useRouter } from 'next/router'
 import { useSwapCallback } from '../../../hooks/useSwapCallback'
 import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { warningSeverity } from '../../../functions/prices'
-
-import Image from 'next/image'
 
 export default function Swap() {
   const { i18n } = useLingui()
@@ -123,11 +125,20 @@ export default function Swap() {
   const [archerETHTip] = useUserArcherETHTip()
   const [archerGasPrice] = useUserArcherGasPrice()
 
+  /** @openmev start */
+  const [useOpenMev] = useUserOpenMevRelay()
+  //const [openmevETHTip] = useUserOpenMevETHTip()
+  // const [openmevGasPrice] = useUserOpenMevGasPrice()
+
   // archer
   const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
   // const doArcher = archerRelay !== undefined && useArcher
   const doArcher = undefined
 
+  const openmevRelay = chainId ? OPENMEV_RELAY_URI?.[chainId] : undefined
+
+  const doOpenMev = !doArcher && openmevRelay !== undefined && useOpenMev
+  /** @openmev end */
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
   const {
@@ -137,7 +148,7 @@ export default function Swap() {
     currencies,
     inputError: swapInputError,
     allowedSlippage,
-  } = useDerivedSwapInfo(doArcher)
+  } = useDerivedSwapInfo(doArcher, doOpenMev)
 
   const {
     wrapType,
@@ -268,7 +279,9 @@ export default function Swap() {
     allowedSlippage,
     recipient,
     signatureData,
-    doArcher ? ttl : undefined
+    doOpenMev,
+    doArcher,
+    ttl // can be undefined
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -492,7 +505,9 @@ export default function Swap() {
               id="swap-currency-input"
             />
             <AutoColumn justify="space-between" className="py-3">
-              <AutoRow justify={isExpertMode ? 'space-between' : 'flex-start'} style={{ padding: '0 1rem' }}>
+              <div
+                className={classNames(isExpertMode ? 'justify-between' : 'flex-start', 'px-4 flex-wrap w-full flex')}
+              >
                 <button
                   className="z-10 -mt-6 -mb-6 rounded-full"
                   onClick={() => {
@@ -531,7 +546,7 @@ export default function Swap() {
                     </Button>
                   )
                 ) : null}
-              </AutoRow>
+              </div>
             </AutoColumn>
 
             <div>
@@ -616,16 +631,18 @@ export default function Swap() {
                 {singleHopOnly && <div className="mb-1">{i18n._(t`Try enabling multi-hop trades`)}</div>}
               </div>
             ) : showApproveFlow ? (
-              <RowBetween>
+              <div>
                 {approvalState !== ApprovalState.APPROVED && (
                   <ButtonConfirmed
                     onClick={handleApprove}
                     disabled={approvalState !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                    size="lg"
                   >
                     {approvalState === ApprovalState.PENDING ? (
-                      <AutoRow gap="6px" justify="center">
-                        Approving <Loader stroke="white" />
-                      </AutoRow>
+                      <div className="flex items-center justify-center h-full space-x-2">
+                        <div>Approving</div>
+                        <Loader stroke="white" />
+                      </div>
                     ) : (
                       i18n._(t`Approve ${currencies[Field.INPUT]?.symbol}`)
                     )}
@@ -662,7 +679,7 @@ export default function Swap() {
                       : i18n._(t`Swap`)}
                   </ButtonError>
                 )}
-              </RowBetween>
+              </div>
             ) : (
               <ButtonError
                 onClick={() => {
@@ -711,29 +728,6 @@ export default function Swap() {
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
           )}
         </div>
-        {/*{chainId && chainId === ChainId.MAINNET && (*/}
-        {/*  <a*/}
-        {/*    href="https://miso.sushi.com"*/}
-        {/*    className="hidden w-full py-6 mt-2 rounded cursor-pointer sm:block"*/}
-        {/*    style={{*/}
-        {/*      backgroundImage: `url('/images/miso/banner-jaypegs2.jpg')`,*/}
-        {/*      backgroundPosition: 'center',*/}
-        {/*      backgroundSize: 'cover',*/}
-        {/*      backgroundRepeat: 'no-repeat',*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    <div className="flex items-center justify-between gap-6 pl-5 pr-8">*/}
-        {/*      <span className="font-normal text-high-emphesis" style={{ lineHeight: 1.3, maxWidth: 250 }}>*/}
-        {/*        You need a &apos;Dona! Learn More*/}
-        {/*        <br />*/}
-        {/*        <span className="font-bold">End of Summer NFT Fair Launch</span>*/}
-        {/*      </span>*/}
-        {/*      /!* <div style={{ maxWidth: 195 }}>*/}
-        {/*        <img src="/images/miso/logo.png" style={{ maxWidth: '100%' }} alt="" />*/}
-        {/*      </div> *!/*/}
-        {/*    </div>*/}
-        {/*  </a>*/}
-        {/*)}*/}
       </DoubleGlowShadow>
     </Container>
   )

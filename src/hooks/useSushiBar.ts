@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 
 import { useCallback } from 'react'
-import { useSushiBarContract } from '../hooks/useContract'
+import { useSushiBarContract } from './useContract'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 const useSushiBar = () => {

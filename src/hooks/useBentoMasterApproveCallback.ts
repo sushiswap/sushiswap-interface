@@ -1,10 +1,11 @@
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
-import { ethers } from 'ethers'
 import { useActiveWeb3React, useBentoBoxContract } from './index'
 import { useAllTransactions, useTransactionAdder } from '../state/transactions/hooks'
 import { useCallback, useMemo, useState } from 'react'
 import { signMasterContractApproval } from '../entities/KashiCooker'
 import { Contract } from '@ethersproject/contracts'
+import { AddressZero, HashZero } from '@ethersproject/constants'
+import { splitSignature } from '@ethersproject/bytes'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -68,7 +69,7 @@ const useBentoMasterApproveCallback = (
   const { account, chainId, library } = useActiveWeb3React()
   const bentoBoxContract = useBentoBoxContract()
   const addTransaction = useTransactionAdder()
-  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
+  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
   const pendingApproval = useBentoHasPendingApproval(masterContract, account, contractName)
   const [permit, setPermit] = useState<BentoPermit>(null)
 
@@ -110,7 +111,7 @@ const useBentoMasterApproveCallback = (
         chainId
       )
 
-      const { v, r, s } = ethers.utils.splitSignature(signature)
+      const { v, r, s } = splitSignature(signature)
       const permit = {
         outcome: BentoApproveOutcome.SUCCESS,
         signature: { v, r, s },
@@ -140,14 +141,7 @@ const useBentoMasterApproveCallback = (
 
   const approve = useCallback(async () => {
     try {
-      const tx = await bentoBoxContract?.setMasterContractApproval(
-        account,
-        masterContract,
-        true,
-        0,
-        ethers.constants.HashZero,
-        ethers.constants.HashZero
-      )
+      const tx = await bentoBoxContract?.setMasterContractApproval(account, masterContract, true, 0, HashZero, HashZero)
 
       return addTransaction(tx, {
         summary: `Approving ${contractName} Master Contract`,

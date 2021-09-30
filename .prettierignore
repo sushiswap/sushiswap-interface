@@ -1,2 +1,7 @@
 # Ignore all CSS files:
 *.css
+*.json
+*.min.js
+*.html
+*.scss
+
