@@ -1,7 +1,6 @@
 import { AppDispatch, AppState } from '../../state'
 import { CheckCircle, Settings } from 'react-feather'
 import { AutoColumn } from '../../components/Column'
-import { PaddedColumn } from './styleds'
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Row, { RowBetween, RowFixed } from '../../components/Row'
 import { acceptListUpdate, disableList, enableList, removeList } from '../../state/lists/actions'
@@ -270,7 +269,7 @@ function ManageLists({
         </div>
       ) : null}
       {tempList && (
-        <PaddedColumn style={{ paddingTop: 0 }}>
+        <div className="px-5">
           <RowBetween>
             <RowFixed>
               {tempList.logoURI && <ListLogo logoURI={tempList.logoURI} size="40px" />}
@@ -298,7 +297,7 @@ function ManageLists({
               </Button>
             )}
           </RowBetween>
-        </PaddedColumn>
+        </div>
       )}
       <div className="flex flex-col h-full p-2 space-y-4 overflow-y-auto">
         {sortedLists.map((listUrl) => (

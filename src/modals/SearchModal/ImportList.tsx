@@ -1,5 +1,4 @@
 import { AlertTriangle } from 'react-feather'
-import { Checkbox, TextDot } from './styleds'
 import React, { useCallback, useState } from 'react'
 import { enableList, removeList } from '../../state/lists/actions'
 
@@ -80,7 +79,6 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
           <AutoColumn gap="sm" style={{ marginLeft: '20px' }}>
             <div className="flex flex-row">
               <div className="mr-1.5 font-semibold">{list.name}</div>
-              <TextDot />
               <div className="ml-1.5">{list.tokens.length} tokens</div>
             </div>
             <ExternalLink className="overflow-hidden" href={`https://tokenlists.org/token-list?url=${listURL}`}>
@@ -105,7 +103,13 @@ function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
             </div>
           </div>
           <div className="flex flex-row justify-center cursor-pointer" onClick={() => setConfirmed(!confirmed)}>
-            <Checkbox name="confirmed" type="checkbox" checked={confirmed} onChange={() => setConfirmed(!confirmed)} />
+            <input
+              className="h-5 m-0"
+              name="confirmed"
+              type="checkbox"
+              checked={confirmed}
+              onChange={() => setConfirmed(!confirmed)}
+            />
             <div className="text-red ml-2.5 font-medium">I understand</div>
           </div>
 
