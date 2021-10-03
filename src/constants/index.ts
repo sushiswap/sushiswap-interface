@@ -9,14 +9,14 @@ export const APP_NAME = 'SILO';
 export const APP_SHORT_BLURB = 'Enabling lending and borrowing of any asset';
 
 /**
- * ! ONLY RINKEBY SETUP on ALCHEMY!
+ * ! ONLY RINKEBY & KOVAN SETUP on ALCHEMY!
  */
 export const RPC = {
   [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
   [ChainId.ROPSTEN]: 'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
   [ChainId.RINKEBY]: 'https://eth-rinkeby.alchemyapi.io/v2/UgPzeLM40RhClPKr7EDIFpgCDdZqEP90',
   [ChainId.GÖRLI]: 'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
-  [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
+  [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/GbSmjHTvEBmpw1xCqYRViOUCHIIDWinR',
   [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
   [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
   [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',

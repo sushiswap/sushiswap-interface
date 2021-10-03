@@ -11,10 +11,10 @@ import { useTransactionAdder } from '../../state/transactions/hooks';
 
 /**
  *
- * !!! Graph on Chain Id (Rinkeby | Matic Mainnet)
+ * !!! Graph on Chain Id (Kovan | Matic Mainnet)
  */
 // graph url
-// https://api.studio.thegraph.com/query/9379/silo/0.7
+// https://api.studio.thegraph.com/query/9379/silo/0.9
 
 /*** TOD0:
  *
@@ -66,7 +66,7 @@ export default function Markets() {
         </div>
       </Container>
 
-      {/**  <NewMarketModal /> */}
+      <NewMarketModal />
       <MarketData markets={siloMarkets} />
     </>
   );
@@ -113,12 +113,14 @@ const Market = ({ market }) => {
   const { removeSiloMarket } = useSiloMarkets();
   const addTransaction = useTransactionAdder();
 
+  console.log('market', market);
+
   const M_STYLE = 'text-xs sm:text-sm md:text-base text-high-emphesis';
 
   return (
     <div className="mt-4 p-4 rounded-lg shadow-lg bg-dark-800 text-secondary">
       <div className="grid grid-cols-6 gap-2">
-        <div className={M_STYLE}>{market.name}</div>
+        <div className={M_STYLE}>{market.symbol}</div>
         <div className={M_STYLE}>ETH</div>
         <div className={M_STYLE}>n/a</div>
         <div className={M_STYLE}>n/a</div>
