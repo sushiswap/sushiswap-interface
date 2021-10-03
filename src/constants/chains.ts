@@ -23,4 +23,5 @@ export enum SupportedChainId {
   OKEX = 66,
   OKEX_TESTNET = 65,
   CELO = 42220,
+  HARDHAT = 1337,
 }

@@ -13,6 +13,10 @@ function Web3Network(): JSX.Element | null {
 
   if (!chainId) return null;
 
+  console.log('chainId:', chainId);
+  console.log('network icon map:', NETWORK_ICON);
+  console.log(NETWORK_ICON[chainId]);
+
   return (
     <div
       className="flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto"

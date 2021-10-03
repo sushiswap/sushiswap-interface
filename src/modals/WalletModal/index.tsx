@@ -136,6 +136,11 @@ export default function WalletModal({
     let name = '';
     let conn = typeof connector === 'function' ? await connector() : connector;
 
+    console.log('connector', connector);
+    console.log('supported wallets', SUPPORTED_WALLETS);
+    console.log('using connector (conn)', conn);
+    console.log('walet view', walletView);
+
     Object.keys(SUPPORTED_WALLETS).map((key) => {
       if (connector === SUPPORTED_WALLETS[key].connector) {
         return (name = SUPPORTED_WALLETS[key].name);
@@ -148,6 +153,9 @@ export default function WalletModal({
       action: 'Change Wallet',
       label: name,
     });
+
+    console.log('supported connector name:', name);
+
     setPendingWallet(conn); // set wallet for pending view
     setWalletView(WALLET_VIEWS.PENDING);
 

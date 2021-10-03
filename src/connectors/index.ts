@@ -38,6 +38,7 @@ const RPC = {
   [ChainId.OKEX]: 'https://exchainrpc.okex.org',
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
+  [1337]: 'http://localhost:8545',
 };
 
 export const network = new NetworkConnector({
@@ -76,6 +77,7 @@ export const injected = new InjectedConnector({
     65, // okex testnet
     42161, // arbitrum
     42220, // celo
+    1337, //hardhat
   ],
 });
 
