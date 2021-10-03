@@ -13,9 +13,9 @@ function Web3Network(): JSX.Element | null {
 
   if (!chainId) return null;
 
-  console.log('chainId:', chainId);
-  console.log('network icon map:', NETWORK_ICON);
-  console.log(NETWORK_ICON[chainId]);
+  // console.log('chainId:', chainId);
+  // console.log('network icon map:', NETWORK_ICON);
+  // console.log(NETWORK_ICON[chainId]);
 
   return (
     <div

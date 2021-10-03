@@ -182,7 +182,8 @@ export default function NetworkModal(): JSX.Element | null {
         {[
           ChainId.MAINNET,
           ChainId.MATIC,
-          ChainId.RINKEBY,
+          ChainId.KOVAN,
+          //ChainId.RINKEBY,
           //  1337,
           //ChainId.FANTOM,
           // ChainId.ARBITRUM,

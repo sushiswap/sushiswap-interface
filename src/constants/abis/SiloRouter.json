@@ -1,0 +1,92 @@
+[
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_factory",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "collateral",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "borrow",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "ethSilo",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "depositAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "borrowAmount",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct SiloRouter.Position[]",
+          "name": "positions",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "borrow",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "bridgePool",
+      "outputs": [
+        {
+          "internalType": "contract ISiloBridgePool",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "factory",
+      "outputs": [
+        {
+          "internalType": "contract ISiloFactory",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "wrappedToken",
+      "outputs": [
+        {
+          "internalType": "contract IWrappedToken",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]

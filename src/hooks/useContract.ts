@@ -3,7 +3,12 @@ import {
   MINICHEF_ADDRESS,
   MULTICALL2_ADDRESS,
   ZAPPER_ADDRESS,
-  SILO_FACTORY_ADDRESS,
+  CHAINLINK_FEED_REGISTRY,
+  SILO_BRIDGE,
+  SILO_FACTORY,
+  SILO_INTEREST_RATE_MODEL,
+  SILO_ORACLE,
+  SILO_ROUTER,
 } from '../constants/addresses';
 import {
   ARGENT_WALLET_DETECTOR_ABI,
@@ -74,8 +79,14 @@ import WETH9_ABI from '../constants/abis/weth.json';
 import ZAPPER_ABI from '../constants/abis/zapper.json';
 import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json';
 import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json';
+
 // SILO
-import SILO_FACTORY_ABI from '../constants/abis/MockSiloFactory.json';
+import SILO_INTEREST_RATE_MODEL_ABI from '../constants/abis/InterestRateModel.json';
+import SILO_BRIDGE_ABI from '../constants/abis/SiloBridgePool.json';
+import SILO_FACTORY_ABI from '../constants/abis/SiloFactory.json';
+import SILO_ORACLE_ABI from '../constants/abis/SiloOracle.json';
+import SILO_ROUTER_ABI from '../constants/abis/SiloRouter.json';
+import CHAINLINK_FEED_REGISTRY_ABI from '../constants/abis/ChainLinkFeedRegistry.json';
 
 import { getContract } from '../functions/contract';
 import { useActiveWeb3React } from './useActiveWeb3React';
@@ -156,9 +167,37 @@ export function useMerkleDistributorContract(): Contract | null {
 }
 
 // SILO
+export function useSiloInterestRateContract(withSignerIfPossible: boolean = false): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(
+    chainId ? SILO_INTEREST_RATE_MODEL[chainId] : undefined,
+    SILO_INTEREST_RATE_MODEL_ABI,
+    withSignerIfPossible
+  );
+}
+
 export function useSiloFactoryContract(withSignerIfPossible: boolean = false): Contract | null {
   const { chainId } = useActiveWeb3React();
-  return useContract(chainId ? SILO_FACTORY_ADDRESS[chainId] : undefined, SILO_FACTORY_ABI, withSignerIfPossible);
+  return useContract(chainId ? SILO_FACTORY[chainId] : undefined, SILO_FACTORY_ABI, withSignerIfPossible);
+}
+
+export function useSiloOracleContract(withSignerIfPossible: boolean = false): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(chainId ? SILO_ORACLE[chainId] : undefined, SILO_ORACLE_ABI, withSignerIfPossible);
+}
+
+export function useSiloRouterContract(withSignerIfPossible: boolean = false): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(chainId ? SILO_ROUTER[chainId] : undefined, SILO_ROUTER_ABI, withSignerIfPossible);
+}
+
+export function useChainlinkFeedRegistryContract(withSignerIfPossible: boolean = false): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(
+    chainId ? CHAINLINK_FEED_REGISTRY[chainId] : undefined,
+    CHAINLINK_FEED_REGISTRY_ABI,
+    withSignerIfPossible
+  );
 }
 
 export function useBoringHelperContract(): Contract | null {

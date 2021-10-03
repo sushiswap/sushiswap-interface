@@ -33,6 +33,10 @@ type SiloMarket = {
   bridgeAssetAddr: string;
 };
 
+/**
+ * TODO:  invalidate react-query markets cache
+ */
+
 const useSiloMarkets = () => {
   const { chainId, account } = useActiveWeb3React();
   const siloFactoryContract = useSiloFactoryContract(true);
@@ -45,8 +49,6 @@ const useSiloMarkets = () => {
     console.log('createMarket() -> on chain:, marketName:', chainId, marketName);
 
     if (marketName) return await siloFactoryContract.addMarket(address, marketName);
-
-    //TODO:  invalidate react-query markets cache
   };
 
   const removeSiloMarket = async (address: string) => {

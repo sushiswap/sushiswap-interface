@@ -66,14 +66,15 @@ export default function Markets() {
         </div>
       </Container>
 
-      <NewMarketModal />
-
+      {/**  <NewMarketModal /> */}
       <MarketData markets={siloMarkets} />
     </>
   );
 }
 
 const MarketData = ({ markets }) => {
+  console.log('markets', markets);
+
   if (!markets || (markets && markets.silos.length < 1)) {
     return (
       <Container id="markets" maxWidth="3xl" className="pt-4 md:pt-6 lg:pt-8">
