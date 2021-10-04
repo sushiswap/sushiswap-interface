@@ -31,7 +31,7 @@ export default function Markets() {
   const toggleNewMarketModal = useNewMarketModalToggle();
   const { account } = useActiveWeb3React();
 
-  // console.log('siloMarkets:', siloMarkets);
+  console.log('siloMarkets:', siloMarkets);
 
   return (
     <>
@@ -68,8 +68,6 @@ export default function Markets() {
 }
 
 const MarketData = ({ markets }) => {
-  // console.log('markets', markets);
-
   if (!markets || (markets && markets.silos.length < 1)) {
     return (
       <Container id="markets" maxWidth="3xl" className="pt-4 md:pt-6 lg:pt-8">
@@ -115,12 +113,12 @@ const Market = ({ market }) => {
       <div className="grid grid-cols-6 gap-2">
         <div className={M_STYLE}>{market.symbol}</div>
         <div className={M_STYLE}>ETH</div>
-        <div className={M_STYLE}>n/a</div>
-        <div className={M_STYLE}>n/a</div>
-        <div className={M_STYLE}>n/a</div>
+        <div className={M_STYLE}>--</div>
+        <div className={M_STYLE}>--</div>
+        <div className={M_STYLE}>--</div>
         <div className={M_STYLE}>
           <div className="flex justify-between">
-            <div>n/a</div>
+            <div>--</div>
 
             <div className="text-dark-900">
               <button

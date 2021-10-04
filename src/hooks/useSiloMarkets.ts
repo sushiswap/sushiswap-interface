@@ -6,7 +6,7 @@ import { useActiveWeb3React } from '../hooks';
 import { useSiloFactoryContract } from '../hooks/useContract';
 import useTokenOracleLookup from './useTokenOracleLookup';
 
-export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.10';
+export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.11';
 const client = new GraphQLClient(GRAPH_ENDPOINT);
 
 const siloMarketsQuery = `
@@ -15,6 +15,7 @@ const siloMarketsQuery = `
     id
     name
     address
+    assetAddress
     symbol
     bridgeAssetName
     bridgeAssetAddr
@@ -65,10 +66,28 @@ const useSiloMarkets = () => {
     if (address) return await siloFactoryContract.removeMarket(address);
   };
 
+  const deposit = () => {};
+
+  const tokenInSilo = (tokenAddress: string): boolean => {
+    console.log('markets:', data);
+    let isIn = false;
+
+    data.silos.forEach((silo) => {
+      if (silo.assetAddress.toLowerCase() === tokenAddress.toLowerCase()) {
+        isIn = true;
+        return;
+      }
+    });
+
+    return isIn;
+  };
+
   return {
     siloMarkets: data,
     createSiloMarket,
     removeSiloMarket,
+    tokenInSilo,
+    deposit,
   };
 };
 
