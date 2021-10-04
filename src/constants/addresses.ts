@@ -9,16 +9,16 @@ export const ARCHER_ROUTER_ADDRESS: AddressMap = {
 };
 
 /*
-deploying "SiloFactory" 0x828Bd34C9Ec210D7560Aa1719ae9da72F0439558 with 4134225 gas
-deploying "SiloBridgePool" (tx: 0x1b662d77ad8fb94a6f9af4f38d80a32edb704281a0282c330c05b5ccdf7eaefb)...: deployed at 0x977081CDbbb40f63d3bc44009ec0c73674D3CEc8 with 3800680 gas
+deploying "SiloFactory" deployed at 0x828Bd34C9Ec210D7560Aa1719ae9da72F0439558 with 4134225 gas
+deploying "SiloBridgePool" deployed at 0x977081CDbbb40f63d3bc44009ec0c73674D3CEc8 with 3800680 gas
 executing SiloFactory.setBridgePool (tx: 0xd1017e82cc20e0d3e7a65e3a778054254ae676ac89b44df8f7b3cc42036f0d08) ...: performed with 47573 gas
-deploying "InterestRateModel" (tx: 0x2032a3c05915cdbd0242cc1bd112bc54e17eb53e622998d9a176479eeb3cb0eb)...: deployed at 0x37502037C2475Ac07934E142E858b83D257F6d4f with 333182 gas
+deploying  deployed at 0x37502037C2475Ac07934E142E858b83D257F6d4f with 333182 gas
 executing SiloFactory.setInterestRateModel (tx: 0xa47f10312031b75c213b6c981f3c9bb3a10ecad5c8c26ad2f529931f0809c9a1) ...: performed with 47584 gas
 deploying "SiloOracle" (tx: 0xc8a5a96f7b1a5d3a468a3d3643bc6f219cec21b0aefabab300cb60937ea53c56)...: deployed at 0xE8818FfB5b15c2f167cD3c65ebBa0f2DaC0C036c with 537546 gas
 executing SiloFactory.setOracle (tx: 0x78e4bc4af0c94de5e6b2875acbf8199d528500438273a2de3ee85490418d7a6c) ...: performed with 47585 gas
-deploying "ChainlinkOracle" (tx: 0x7bc7f87272eccf6b8aaec25097672e20547bd7ce281fd2502f7c1fd2f353d2be)...: deployed at 0xDE450f5B964856CFfb3eb8F30592A4570b152AFb with 326802 gas
-deploying "UniswapV3Oracle" (tx: 0xe561f789fd34b1fd17bab7220ac68f4cb5cb30c1b0178ea6d91c88255acc0e8d)...: deployed at 0x16B635899c837d1517C1af6B298f740FAB94814b with 652071 gas
-deploying "SiloRouter" (tx: 0x51eefb9d9aa3c5014ac2d136509b4e90d53f1e9806a1a64ed6c8206155a60585)...: deployed at 0xFD1B31e8894a2E5f3f78d1896f3d16a49106737C with 961775 gas
+deploying "ChainlinkOracle"  deployed at 0xDE450f5B964856CFfb3eb8F30592A4570b152AFb with 326802 gas
+deploying "UniswapV3Oracle" deployed at 0x16B635899c837d1517C1af6B298f740FAB94814b with 652071 gas
+deploying "SiloRouter" deployed at 0xFD1B31e8894a2E5f3f78d1896f3d16a49106737C with 961775 gas
 executing SiloFactory.setRouter (tx: 0x55227a289df011b05aa4eba113fcf6c8e73f38033ead9bbf88aac55036fe9151) ...: performed with 47650 gas
 */
 
