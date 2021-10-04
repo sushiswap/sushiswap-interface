@@ -4,6 +4,7 @@ import { request, GraphQLClient } from 'graphql-request';
 import { useQuery } from 'react-query';
 import { useActiveWeb3React } from '../hooks';
 import { useSiloFactoryContract } from '../hooks/useContract';
+import useTokenOracleLookup from './useTokenOracleLookup';
 
 export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.9';
 
@@ -43,6 +44,7 @@ type SiloMarket = {
 const useSiloMarkets = () => {
   const { chainId, account } = useActiveWeb3React();
   const siloFactoryContract = useSiloFactoryContract(true);
+  const { tokenOracleData } = useTokenOracleLookup();
 
   const { isLoading, isError, data, error } = useQuery('siloMarketData', async () => {
     return await client.request(siloMarketsQuery);
@@ -54,29 +56,18 @@ const useSiloMarkets = () => {
   // let tx = await siloFactory.newSilo(asset, assetOracle, oracleData);
 
   const createSiloMarket = async (assetAddress: string) => {
-    // console.log('createMarket() -> on chain:, marketName:', chainId, marketName);
+    console.log('createMarket() -> assetAddress:', assetAddress);
 
     if (assetAddress) {
       //TODO: dynamically lookup oracle price feed
 
-      // try{
-      const linkAddress = '0xa36085F69e2889c224210F603D836748e7dC0088'; //kovan link
-      const LINK_PRICEFEED = '0x2c1d072e956AFFC0D435Cb7AC38EF18d24d9127c'; //LINK/USD (mainnet)
-      //const assetOracle = CHAINLINK_ORACLE_ADDRESS;
-      const assetOracle = '0xe93232A71Bf453e9f83b8f41D0B6c4409725f0d1'; //silo chainlink oracle contract
-      const oracleData = ethers.utils.defaultAbiCoder.encode(['address'], [LINK_PRICEFEED]);
+      const oracleInfo = tokenOracleData(assetAddress.toLowerCase());
 
-      console.log('link address:', linkAddress);
-      console.log('assetOracle:', assetOracle);
-      console.log('link pricefeed', LINK_PRICEFEED);
-      console.log('oracle data:', oracleData);
+      console.log('oracleData:', oracleInfo);
 
-      const result = await siloFactoryContract.newSilo(linkAddress, assetOracle, oracleData);
+      const result = await siloFactoryContract.newSilo(assetAddress, oracleInfo.assetOracle, oracleInfo.oracleData);
+
       return result;
-
-      // }catch (error){
-      //   console.error(error);
-      // }
     }
   };
 

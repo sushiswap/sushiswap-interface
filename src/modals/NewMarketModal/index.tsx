@@ -23,7 +23,7 @@ export default function NewMarketModal(): JSX.Element | null {
   const modalOpen = useModalOpen(ApplicationModal.NEW_MARKET);
   const toggleModal = useNewMarketModalToggle();
   const { i18n } = useLingui();
-  /*const {
+  const {
     independentField,
     showWrap,
     formattedAmounts,
@@ -33,7 +33,7 @@ export default function NewMarketModal(): JSX.Element | null {
     handleMaxInput,
     fiatValueInput,
     handleInputSelect,
-  } = useTokenSetup();*/
+  } = useTokenSetup();
 
   const { createSiloMarket } = useSiloMarkets();
   const addTransaction = useTransactionAdder();
@@ -48,7 +48,7 @@ export default function NewMarketModal(): JSX.Element | null {
         <div>Select asset</div>
         <div>Bridge asset</div>
         <div>
-          {/*   <CurrencyInputPanel
+          <CurrencyInputPanel
             // priceImpact={priceImpact}
             label={independentField === Field.OUTPUT && !showWrap ? i18n._(t`Select:`) : i18n._(t`Select:`)}
             value={formattedAmounts[Field.INPUT]}
@@ -63,7 +63,7 @@ export default function NewMarketModal(): JSX.Element | null {
             id="swap-currency-input"
             hideBalance={true}
             hideInput={true}
-       /> */}
+          />
         </div>
         <div>
           <div className="bg-dark-800 rounded h-full w-full flex flex-cols items-center">
@@ -81,26 +81,20 @@ export default function NewMarketModal(): JSX.Element | null {
               color="indigo"
               onClick={async () => {
                 //TODO: fix typing on currencies (sub types)
-                /*const selected: any = currencies[Field.INPUT];
-                const token = selected?.tokenInfo;
-        
-                if (token) {
-                  const result = await createSiloMarket(token.symbol, token.address);
+                const selected: any = currencies[Field.INPUT];
+                const tokenAddress = selected?.address;
+
+                if (tokenAddress) {
+                  console.log('creating market for:', selected);
+
+                  const result = await createSiloMarket(tokenAddress);
 
                   addTransaction(result, {
-                    summary: `Added silo market ${token.symbol}-ETH`,
+                    summary: `Added silo market ${selected.symbol}-ETH`,
                   });
 
                   toggleModal();
-                }*/
-
-                console.log('click() - create silo market');
-                const result = await createSiloMarket('dummydata');
-                const tokenName = 'LINK';
-
-                addTransaction(result, {
-                  summary: `Added silo market ${tokenName}-ETH`,
-                });
+                }
               }}
             >
               Create Market
@@ -111,18 +105,3 @@ export default function NewMarketModal(): JSX.Element | null {
     </Modal>
   );
 }
-
-/**
- * 
- * const addTransaction = useTransactionAdder();
-  const onUpdateExchangeRate = useCallback(async () => {
-    const cooker = new KashiCooker(pair, account, library, chainId);
-    const result = await cooker.updateExchangeRate().cook();
-    addTransaction(result.tx, {
-      summary: `Update ${pair.collateral.tokenInfo.symbol}/${pair.asset.tokenInfo.symbol} exchange rate`,
-    });
-  }, [account, addTransaction, chainId, library, pair]);
- * 
- * 
- * 
- */

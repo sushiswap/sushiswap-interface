@@ -31,7 +31,7 @@ export default function Markets() {
   const toggleNewMarketModal = useNewMarketModalToggle();
   const { account, chainId } = useActiveWeb3React();
 
-  console.log('siloMarkets:', siloMarkets);
+  // console.log('siloMarkets:', siloMarkets);
 
   return (
     <>
@@ -48,8 +48,7 @@ export default function Markets() {
                 color="gradient"
                 className="text-gray-900 font-semibold"
                 onClick={() => {
-                  console.log('createMarket.click()');
-                  // await createSiloMarket();
+                  // console.log('createMarket.click()');
                   toggleNewMarketModal();
                 }}
               >
@@ -69,7 +68,7 @@ export default function Markets() {
 }
 
 const MarketData = ({ markets }) => {
-  console.log('markets', markets);
+  // console.log('markets', markets);
 
   if (!markets || (markets && markets.silos.length < 1)) {
     return (
@@ -109,8 +108,6 @@ const Market = ({ market }) => {
   const { removeSiloMarket } = useSiloMarkets();
   const addTransaction = useTransactionAdder();
 
-  console.log('market', market);
-
   const M_STYLE = 'text-xs sm:text-sm md:text-base text-high-emphesis';
 
   return (
@@ -130,11 +127,12 @@ const Market = ({ market }) => {
                 className="hover:text-red"
                 onClick={async (evt) => {
                   evt.preventDefault();
-                  console.log('deleting market:', market.address);
-                  const result = await removeSiloMarket(market.address);
-                  addTransaction(result, {
-                    summary: `Removed silo market ${market.name}`,
-                  });
+                  // console.log('deleting market:', market.address);
+                  // const result = await removeSiloMarket(market.address);
+                  // addTransaction(result, {
+                  //   summary: `Removed silo market ${market.name}`,
+                  // });
+                  console.warn('deleting markets is not enabled');
                 }}
               >
                 x
