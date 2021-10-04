@@ -46,7 +46,7 @@ export const transactionDataFormatter = (rawData: TransactionData[]): FormattedT
           }
     return {
       value: formatNumber(tx.amountUSD, true),
-      address: shortenAddress(tx.to),
+      address: tx.to,
       time: formatDateAgo(new Date(Number(tx.timestamp) * 1000)),
       ...props,
     }

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { transactionDataFormatter } from './table-utils'
+import { shortenAddress, transactionDataFormatter } from './table-utils'
 import ExternalLink from '../../components/ExternalLink'
 import { useTransactions } from '../../services/graph'
 
@@ -33,7 +33,7 @@ export const useTransactionsData = (pairs: string[]) => {
         Cell: (props) => {
           return (
             <ExternalLink color="blue" href={`https://etherscan.io/address/${props.cell.value}`}>
-              {props.cell.value}
+              {shortenAddress(props.cell.value)}
             </ExternalLink>
           )
         },
