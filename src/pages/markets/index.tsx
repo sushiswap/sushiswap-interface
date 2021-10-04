@@ -11,10 +11,6 @@ import { useTransactionAdder } from '../../state/transactions/hooks';
 
 /**
  *
- * !!! Graph on Chain Id (Kovan | Matic Mainnet)
- */
-// graph url
-// https://api.studio.thegraph.com/query/9379/silo/0.9
 
 /*** TOD0:
  *

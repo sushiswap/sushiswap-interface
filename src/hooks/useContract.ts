@@ -121,6 +121,10 @@ export function useTokenContract(tokenAddress?: string, withSignerIfPossible?: b
 
 export function useWETH9Contract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React();
+
+  //kovan patch
+  // if (chainId===42) return useContract('0xd0A1E359811322d97991E03f863a0C30C2cF029C', WETH9_ABI, withSignerIfPossible)
+
   return useContract(chainId ? WNATIVE[chainId].address : undefined, WETH9_ABI, withSignerIfPossible);
 }
 
