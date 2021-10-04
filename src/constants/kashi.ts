@@ -63,6 +63,12 @@ export const PROTOCOL_FEE_DIVISOR = BigNumber.from('100000');
 
 // export const BENTOBOX_ADDRESS = '0xF5BCE5077908a1b7370B9ae04AdC565EBd643966'
 
+export const CHAINLINK_ORACLE_ADDRESS = '0x00632CFe43d8F9f8E6cD0d39Ffa3D4fa7ec73CFB';
+export const PEGGED_ORACLE_ADDRESS = '0x6cbfbB38498Df0E1e7A4506593cDB02db9001564';
+export const SUSHISWAP_TWAP_0_ORACLE_ADDRESS = '0x66F03B0d30838A3fee971928627ea6F59B236065';
+export const SUSHISWAP_TWAP_1_ORACLE_ADDRESS = '0x0D51b575591F8f74a2763Ade75D3CDCf6789266f';
+
+// @ts-ignore
 export const BENTOBOX_ADDRESS: {
   [chainId in ChainId]: string;
 } = {
@@ -92,6 +98,7 @@ export const BENTOBOX_ADDRESS: {
   [ChainId.CELO]: '',
 };
 
+// @ts-ignore
 export const KASHI_ADDRESS: {
   [chainId in ChainId]: string;
 } = {
@@ -122,7 +129,7 @@ export const KASHI_ADDRESS: {
 };
 
 // export const KASHI_ADDRESS = '0x2cBA6Ab6574646Badc84F0544d05059e57a5dc42'
-
+// @ts-ignore
 export const SUSHISWAP_SWAPPER_ADDRESS: {
   [chainId in ChainId]: string;
 } = {
@@ -151,7 +158,7 @@ export const SUSHISWAP_SWAPPER_ADDRESS: {
   [ChainId.OKEX_TESTNET]: '',
   [ChainId.CELO]: '',
 };
-
+// @ts-ignore
 export const SUSHISWAP_MULTISWAPPER_ADDRESS: {
   [chainId in ChainId]: string;
 } = {
@@ -207,14 +214,6 @@ export const SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS = {
   [ChainId.OKEX_TESTNET]: '',
   [ChainId.CELO]: '',
 };
-
-export const PEGGED_ORACLE_ADDRESS = '0x6cbfbB38498Df0E1e7A4506593cDB02db9001564';
-
-export const SUSHISWAP_TWAP_0_ORACLE_ADDRESS = '0x66F03B0d30838A3fee971928627ea6F59B236065';
-
-export const SUSHISWAP_TWAP_1_ORACLE_ADDRESS = '0x0D51b575591F8f74a2763Ade75D3CDCf6789266f';
-
-export const CHAINLINK_ORACLE_ADDRESS = '0x00632CFe43d8F9f8E6cD0d39Ffa3D4fa7ec73CFB';
 
 export const BORING_HELPER_ADDRESS = {
   [ChainId.MAINNET]: '0x11Ca5375AdAfd6205E41131A4409f182677996E6',

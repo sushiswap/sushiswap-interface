@@ -13,18 +13,6 @@ msgstr ""
 "POT-Creation-Date: \n"
 "Plural-Forms: \n"
 
-msgid "1 Hour"
-msgstr ""
-
-msgid "1 Week"
-msgstr ""
-
-msgid "24 Hours"
-msgstr ""
-
-msgid "30 Days"
-msgstr ""
-
 msgid "A portion of each trade (0.05%) goes to xSUSHI holders as a protocol incentive."
 msgstr ""
 
@@ -43,23 +31,11 @@ msgstr "추가"
 msgid "Add Liquidity"
 msgstr "유동성 추가"
 
-msgid "Add collateral in order to borrow assets"
-msgstr "자산을 빌리려면 담보를 추가하세요"
-
-msgid "Add liquidity"
-msgstr "유동성 추가"
-
 msgid "Add {0} to MetaMask"
-msgstr ""
-
-msgid "Add {0} {1} and {2} {3}"
 msgstr ""
 
 msgid "Added"
 msgstr ""
-
-msgid "Amount of Tokens"
-msgstr "토큰 양"
 
 msgid "An error occurred when trying to execute this swap. You may need to increase your slippage tolerance. If that does not work, there may be an incompatibility with the token you are trading. Note fee on transfer and rebase tokens are incompatible with Uniswap V3."
 msgstr ""
@@ -70,23 +46,8 @@ msgstr "승인"
 msgid "Approve Kashi"
 msgstr "카시 허용"
 
-msgid "Approve Limit Order"
-msgstr ""
-
-msgid "Approve {0}"
-msgstr "{0} 승인하기"
-
-msgid "Approved"
-msgstr "승인됨"
-
 msgid "Approving"
 msgstr "승인"
-
-msgid "Approving Limit Order"
-msgstr ""
-
-msgid "Approving {0}"
-msgstr "{0} 승인"
 
 msgid "Are you sure?"
 msgstr "확실합니까?"
@@ -94,17 +55,8 @@ msgstr "확실합니까?"
 msgid "Auto"
 msgstr ""
 
-msgid "Available"
-msgstr "유효"
-
 msgid "Available Networks"
 msgstr ""
-
-msgid "Back to Limit Orders"
-msgstr ""
-
-msgid "Balance"
-msgstr "잔액"
 
 msgid "Balance:"
 msgstr ""
@@ -118,37 +70,7 @@ msgstr "BentoBox"
 msgid "BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets"
 msgstr "BentoBox는 Kashi 시장과 같은 통합 dapp 간의 플래시 대출, 전략 및 고정 저가스 전송을 통해 예금에 대한 추가 수익률을 제공합니다."
 
-msgid "BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox."
-msgstr "벤토박스의 전략은 자산이 대출운용되지 않는 동안에도 담보자산에 대한 수익을 창출할 수 있게 해줍니다. 해당 토큰에 대한 전략은 아직 벤토박스에 없습니다."
-
-msgid "BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox."
-msgstr "벤토박스의 전략은 자산이 대출운용되지 않는 동안에도 유동성에 대한 수익을 창출할 수 있게 해줍니다. 해당 토큰에 대한 전략은 아직 벤토박스에 없습니다."
-
-msgid "Borrow"
-msgstr "대출"
-
-msgid "Borrow assets and leverage up"
-msgstr "자산을 대출받아 레버리지를 올리세요"
-
-msgid "Borrow {0}"
-msgstr "{0} 대출"
-
-msgid "Borrow {0}-{1}"
-msgstr "{0}-{1} 대출"
-
-msgid "Borrowed"
-msgstr "차용금액"
-
-msgid "Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest."
-msgstr "대출을 통해 자산 매도 없이 유동성을 얻을 수 있습니다. 대출 한도는 예치된 담보 금액에 따라 다릅니다. 담보의 최대 75%를 빌릴 수 있으며 발생된 이자와 함께 언제든지 상환할 수 있습니다."
-
 msgid "Buy"
-msgstr ""
-
-msgid ""
-"By adding liquidity you'll earn 0.25% of all trades on this pair\n"
-"proportional to your share of the pool. Fees are added to the pool, accrue in real time and can be\n"
-"claimed by withdrawing your liquidity."
 msgstr ""
 
 msgid "Bypasses confirmation modals and allows high slippage trades. Use at your own risk."
@@ -157,16 +79,10 @@ msgstr "확인 양식을 우회하고 높은 슬리피지 거래를 허용합니
 msgid "Cancel"
 msgstr ""
 
-msgid "Cancel Order"
-msgstr ""
-
 msgid "Cancelled"
 msgstr ""
 
 msgid "Change"
-msgstr ""
-
-msgid "Change Recipient"
 msgstr ""
 
 msgid "Chinese"
@@ -178,33 +94,11 @@ msgstr "기록 지우기"
 msgid "Clear all"
 msgstr ""
 
-msgid ""
-"Click on a pool below, input the amount you wish to migrate or select max, and click\n"
-"migrate"
-msgstr ""
-"아래 풀을 클릭하고 마이그레이션할 금액을 입력하거나 최대치를 선택한 다음\n"
-"마이그레이션을 클릭"
-
-msgid "Collateral"
-msgstr "담보"
-
-msgid "Confirm"
-msgstr "확인"
-
-msgid "Confirm Adding Liquidity"
-msgstr "유동성 추가 확인"
-
-msgid "Confirm Limit Order"
-msgstr ""
-
 msgid "Confirm Supply"
 msgstr "공급 확인"
 
 msgid "Confirm Swap"
 msgstr "스왑 확인"
-
-msgid "Confirm Withdrawal"
-msgstr "출금 확인"
 
 msgid "Confirm convert"
 msgstr ""
@@ -236,29 +130,14 @@ msgstr ""
 msgid "Create Pool & Supply"
 msgstr "풀 생성 및 공급"
 
-msgid "Create a new Kashi Market"
-msgstr ""
-
 msgid "Create a pair"
 msgstr "쌍 만들기"
-
-msgid "Create pool"
-msgstr "풀 만들기"
-
-msgid "Current"
-msgstr ""
 
 msgid "Deposit"
 msgstr "예금"
 
 msgid "Deposit tokens into BentoBox for all the yields"
 msgstr "모든 수익에 대한 토큰을 BentoBox에 입금하세요"
-
-msgid "Deposit {0} into BentoBox"
-msgstr ""
-
-msgid "Depositing {0} into BentoBox"
-msgstr ""
 
 msgid "Dev"
 msgstr "개발자"
@@ -324,23 +203,11 @@ msgstr ""
 "전문가 모드는 거래 확인 알림은 비활성화하며\n"
 "손실금을 초래할 수 있는 하이 슬리피지 거래를 활성화합니다."
 
-msgid "Expiration is the time at which the order will become invalid"
-msgstr ""
-
 msgid "Expired"
 msgstr ""
 
-msgid "Filled"
-msgstr ""
-
-msgid "Find Pool"
-msgstr "풀 찾기"
-
 msgid "French"
 msgstr ""
-
-msgid "Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements."
-msgstr "자산총액 감소 없이 토큰에 노출됩니다. 레버리지를 사용하면 자산에 대해 숏 포지션을 취하고 하락 시 수익을 올릴 수 있습니다."
 
 msgid "German"
 msgstr ""
@@ -348,19 +215,7 @@ msgstr ""
 msgid "Go Back"
 msgstr ""
 
-msgid "Hardware Wallet"
-msgstr "하드웨어 지갑"
-
 msgid "Harvest {0} SUSHI {1}"
-msgstr ""
-
-msgid "Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers."
-msgstr ""
-
-msgid "Health"
-msgstr "건전성"
-
-msgid "If you want to supply to a market that is not listed yet, you can use this tool to create a new pair."
 msgstr ""
 
 msgid "Import"
@@ -369,20 +224,11 @@ msgstr ""
 msgid "Import Pool"
 msgstr "풀 가져오기"
 
-msgid "In Bento:"
-msgstr ""
-
-msgid "In Wallet:"
-msgstr ""
-
 msgid "Input is estimated. You will sell at most"
 msgstr ""
 
 msgid "Insufficient Balance"
 msgstr "잔액 부족"
-
-msgid "Insufficient liquidity for this trade"
-msgstr "이 거래를 위한 유동성 부족"
 
 msgid "Insufficient {0} balance"
 msgstr "{0} 잔액 부족"
@@ -396,14 +242,6 @@ msgstr "잘못된 쌍"
 msgid "Invalid recipient"
 msgstr "잘못된 수신자"
 
-msgid "Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency."
-msgstr "격리 대출 시장은 자산 대출자에 대한 위험을 완화합니다. 상대방 파산 시 어떤 담보를 사용할 수 있는지 정확히 알아보세요."
-
-msgid ""
-"It seems like you have some open orders while the limit order master contract is not yet approved. Please make\n"
-"sure you have approved the limit order master contract or the order will not execute"
-msgstr ""
-
 msgid "Italian"
 msgstr ""
 
@@ -416,47 +254,11 @@ msgstr "Discord 커뮤니티에 가입하세요."
 msgid "Korean"
 msgstr ""
 
-msgid "LTV"
-msgstr ""
-
 msgid "Learn more about wallets"
 msgstr ""
 
-msgid "Lend assets for interest from borrowers."
-msgstr "자산을 대출하고 대출에 대한 이자수익을 벌어보세요."
-
-msgid "Lend your assets, earn yield with no impermanent loss"
-msgstr "자산을 빌려주고 영구적 손실 없이 수익을 창출하세요"
-
-msgid "Lending"
-msgstr "대출"
-
-msgid "Lent"
-msgstr "차용"
-
-msgid "Limit"
-msgstr ""
-
-msgid "Limit order"
-msgstr ""
-
-msgid "Liquidity"
-msgstr "유동성"
-
 msgid "Liquidity Provider Fee"
 msgstr "유동성 제공자 수수료"
-
-msgid "Liquidity Provider Rewards"
-msgstr "유동성 제공자 보상"
-
-msgid ""
-"Liquidity providers earn a 0.25% fee on all trades proportional to their share of\n"
-"the pool. Fees are added to the pool, accrue in real time and can be claimed by\n"
-"withdrawing your liquidity"
-msgstr ""
-"유동성 공급자들은 풀에 대한 지분에 따라 거래 시 발생하는 0.25%의 수수료의 일부를 받게 됩니다.\n"
-"수수료는 풀에 포함되며 실시간으로 발생하고 유동성 출금 시에 받게 됩니다.\n"
-""
 
 msgid "Lists"
 msgstr "리스트"
@@ -469,9 +271,6 @@ msgstr ""
 
 msgid "Loading balance"
 msgstr ""
-
-msgid "Loading your {exchange} liquidity positions"
-msgstr "{exchange} 유동성 포지션 로드 중"
 
 msgid "MAX"
 msgstr "최대"
@@ -490,47 +289,17 @@ msgstr "관리"
 msgid "Manage Token Lists"
 msgstr ""
 
-msgid "Manage this pool"
-msgstr "이 풀 관리"
-
-msgid "Market"
-msgstr ""
-
-msgid "Markets"
-msgstr "마켓"
-
 msgid "Max"
 msgstr "최대"
 
 msgid "Maximum sent"
 msgstr ""
 
-msgid "Migrate"
-msgstr "마이그레이션"
-
-msgid "Migrate {exchange} Liquidity"
-msgstr "{exchange} 유동성 마이그레이션"
-
-msgid "Migrating"
-msgstr "마이그레이션"
-
-msgid "Migration is done in one-click using your signature (permit)"
-msgstr "귀하의 서명(허가)과  한 번의 클릭으로 마이그레이션이 수행됩니다"
-
 msgid "Miner Tip"
-msgstr ""
-
-msgid "Minimum Received"
 msgstr ""
 
 msgid "Minimum received"
 msgstr "최소 수령"
-
-msgid "My Liquidity Positions"
-msgstr ""
-
-msgid "My Orders"
-msgstr ""
 
 msgid "My SUSHI"
 msgstr ""
@@ -544,32 +313,11 @@ msgstr ""
 msgid "New to Ethereum?"
 msgstr ""
 
-msgid "No Liquidity found"
-msgstr "유동성 없음"
-
 msgid "No liquidity found to do swap"
 msgstr "스왑할 유동성 없음"
 
-msgid "No liquidity was found."
-msgstr ""
-
-msgid "No order history"
-msgstr ""
-
-msgid "No pool found"
-msgstr "풀 없음"
-
 msgid "No results found"
 msgstr "검색 결과가 없습니다"
-
-msgid "Non-hardware Wallet"
-msgstr "비-하드웨어 지갑"
-
-msgid "None"
-msgstr "없음"
-
-msgid "Not approved"
-msgstr ""
 
 msgid "ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING."
 msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
@@ -577,42 +325,16 @@ msgstr "잘 이해한 경우에만 해당 모드를 사용하세요."
 msgid "Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device"
 msgstr "이런! 알 수 없는 오류가 발생했습니다. 페이지를 새로 고침하거나 다른 브라우저 또는 기기에서 방문하세요."
 
-msgid "Open Orders"
-msgstr ""
-
 msgid "Open Source"
 msgstr "오픈 소스"
 
 msgid "Open main menu"
 msgstr "메인 메뉴 열기"
 
-msgid "Oracle"
-msgstr "오라클"
-
-msgid "Order Expiration"
-msgstr ""
-
-msgid "Order History"
-msgstr ""
-
-msgid ""
-"Output is estimated. If the price changes by more than {0}% your transaction\n"
-"will revert."
-msgstr ""
-
-msgid "Output is estimated. If the price changes by more than {0}% your transaction will revert."
-msgstr "결과는 예상치입니다. 가격이 {0}% 이상 변동하면 거래가 취소됩니다."
-
 msgid "Output is estimated. You will receive at least"
 msgstr ""
 
 msgid "Output will be sent to"
-msgstr ""
-
-msgid "Pay"
-msgstr ""
-
-msgid "Pay from:"
 msgstr ""
 
 msgid "Pending"
@@ -627,46 +349,22 @@ msgstr ""
 msgid "Pool"
 msgstr "풀"
 
-msgid "Pool Found!"
-msgstr "풀을 찾았습니다!"
-
-msgid "Pool Tokens"
-msgstr "풀 토큰"
-
 msgid "Pool tokens in rewards pool"
 msgstr "보상 풀의 풀 토큰"
 
 msgid "Pooled {0}"
 msgstr "{0} 풀에 추가됨"
 
-msgid "Positions"
-msgstr "포지션"
-
 msgid "Price Impact"
 msgstr "가격 영향"
-
-msgid "Price Impact High"
-msgstr "가격 영향 높음"
-
-msgid "Price Impact Too High"
-msgstr "가격 영향이 너무 높음"
 
 msgid "Price Updated"
 msgstr "가격이 업데이트되었습니다"
 
-msgid "Rate"
-msgstr ""
-
 msgid "Rates"
 msgstr "요금"
 
-msgid "Receive"
-msgstr ""
-
 msgid "Recent Transactions"
-msgstr ""
-
-msgid "Recipient"
 msgstr ""
 
 msgid "Remove"
@@ -675,23 +373,8 @@ msgstr "제거"
 msgid "Remove Liquidity"
 msgstr "유동성 제거"
 
-msgid "Remove recipient"
-msgstr ""
-
-msgid "Remove {0} {1} and {2} {3}"
-msgstr ""
-
-msgid "Removing {0} {1} and {2} {3}"
-msgstr "{0} {1} 및 {2} {3} 제거 중"
-
-msgid "Repay"
-msgstr "상환"
-
 msgid "Restricts swaps to direct pairs only."
 msgstr "스왑을 직접적인 거래쌍으로만 제한합니다."
-
-msgid "Review Limit Order"
-msgstr ""
 
 msgid "Rewards"
 msgstr ""
@@ -711,9 +394,6 @@ msgstr "다음 토큰을 통한 라우팅을 통해 최적의 가격이 산출�
 msgid "Russian"
 msgstr ""
 
-msgid "SLP"
-msgstr ""
-
 msgid "Search name or paste address"
 msgstr "이름 검색 또는 주소 붙여넣기"
 
@@ -728,9 +408,6 @@ msgstr ""
 
 msgid "Select a token"
 msgstr "토큰 선택"
-
-msgid "Select a token to find your liquidity"
-msgstr "토큰을 선택하여 유동성 찾기"
 
 msgid "Select an order expiration"
 msgstr ""
@@ -765,32 +442,8 @@ msgstr ""
 msgid "Stake"
 msgstr "스테이킹"
 
-msgid "Supplying {0} {1} and {2} {3}"
-msgstr "{0} {1} 및 {2} {3} 공급 중"
-
 msgid "Sushi is a supporter of Open Source."
 msgstr "스시는 오픈 소스를 지지합니다."
-
-msgid "SushiSwap"
-msgstr ""
-
-msgid "Swap"
-msgstr "스왑"
-
-msgid "Swap Anyway"
-msgstr "바로 스왑"
-
-msgid "Swap From (est.):"
-msgstr "다음에서 스왑(예상):"
-
-msgid "Swap From:"
-msgstr "다음에서 스왑:"
-
-msgid "Swap To (est.):"
-msgstr "다음으로 스왑(예상):"
-
-msgid "Swap To:"
-msgstr "다음으로 스왑:"
 
 msgid "TVL"
 msgstr "전체 동결 가치"
@@ -804,9 +457,6 @@ msgstr "시장 가격과 거래 규모로 인한 예상 가격의 차이."
 msgid "The input token cannot be transferred. There may be an issue with the input token."
 msgstr ""
 
-msgid "The onchain oracle that tracks the pricing for this pair"
-msgstr "해당 거래쌍의 가격을 추적하는 온체인 오라클"
-
 msgid "The output token cannot be transferred. There may be an issue with the output token."
 msgstr ""
 
@@ -816,9 +466,6 @@ msgstr ""
 msgid "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade."
 msgstr ""
 
-msgid "This transaction is below market rate"
-msgstr ""
-
 msgid "This transaction will not succeed due to price movement. Try increasing your slippage tolerance."
 msgstr ""
 
@@ -826,9 +473,6 @@ msgid "This transaction will not succeed either due to price movement or fee on 
 msgstr "이 거래는 가격 변동이나 이체 수수료 문제로 불가능합니다. 슬리피지 허용치를 높이세요."
 
 msgid "Tip to encourage miners to select this transaction."
-msgstr ""
-
-msgid "Tip:"
 msgstr ""
 
 msgid "Toggle Expert Mode"
@@ -851,9 +495,6 @@ msgstr "도구"
 msgid "Tools to optimize your workflow."
 msgstr "워크플로우 최적화 도구"
 
-msgid "Total"
-msgstr "합계"
-
 msgid "Transaction History {0}"
 msgstr ""
 
@@ -866,9 +507,6 @@ msgstr ""
 msgid "Transaction deadline"
 msgstr "거래 제한시간"
 
-msgid "Try enabling multi-hop trades"
-msgstr "멀티홉 거래 활성화하기"
-
 msgid "Turn On Expert Mode"
 msgstr "전문가 모드 켜기"
 
@@ -878,31 +516,16 @@ msgstr ""
 msgid "Unstake"
 msgstr "언스테이크"
 
-msgid "Unsupported Asset"
-msgstr "지원되지 않는 자산"
-
-msgid "Unwrap"
-msgstr "언랩"
-
 msgid "Use SUSHI"
 msgstr ""
 
-msgid "Use this tool to find pairs that don't automatically appear in the interface"
-msgstr ""
-
 msgid "Use xSUSHI"
-msgstr ""
-
-msgid "Used"
 msgstr ""
 
 msgid "Vesting"
 msgstr "베스팅"
 
 msgid "Vietnamese"
-msgstr ""
-
-msgid "View Liquidity Positions"
 msgstr ""
 
 msgid "View on explorer"
@@ -920,56 +543,17 @@ msgstr "지갑 잔액"
 msgid "Weekly unlocks from the vesting period."
 msgstr ""
 
-msgid "When creating a pair you are the first liquidity provider. The ratio of tokens you add will set the price of this pool. Once you are happy with the rate, click supply to review"
-msgstr "쌍을 만들 때 귀하는 최초의 유동성 공급자입니다. 추가하는 토큰의 비율이이 풀의 가격을 설정합니다. 요금에 만족하면 공급을 클릭하여 검토하세요."
-
 msgid "Withdraw"
 msgstr "인출"
-
-msgid "Wrap"
-msgstr "랩"
 
 msgid "Wrong Network"
 msgstr "잘못된 네트워크"
 
-msgid "You Pay:"
-msgstr ""
-
-msgid "You are creating a pool"
-msgstr "풀 생성 중"
-
 msgid "You are on the wrong network"
 msgstr "잘못된 네트워크에 있습니다."
 
-msgid "You don’t have liquidity in this pool yet"
-msgstr "아직 이 풀에 유동성이 없습니다"
-
-msgid "You need to first approve LP tokens and then migrate it"
-msgstr "먼저 LP 토큰을 승인 한 다음 마이그레이션해야 합니다"
-
-msgid "You pay"
-msgstr ""
-
-msgid "You receive"
-msgstr ""
-
-msgid "You receive:"
-msgstr ""
-
-msgid "You will receive"
-msgstr "예상 수령"
-
-msgid "Your"
-msgstr ""
-
-msgid "Your Liquidity"
-msgstr "내 유동성"
-
 msgid "Your Staked"
 msgstr "귀하의 지분"
-
-msgid "Your Wallet"
-msgstr "내 지갑"
 
 msgid "Your pool share"
 msgstr "풀 점유율"
@@ -993,15 +577,6 @@ msgid "Your transaction will revert if there is a large, unfavorable price movem
 msgstr "거래가 확인되기 전에 크게 불리한 가격 변동이 있는 경우 거래가 취소됩니다."
 
 msgid "Your transactions will appear here..."
-msgstr ""
-
-msgid "Your {exchange} {0}/{1} liquidity will become SushiSwap {2}/{3} liquidity."
-msgstr "{exchange}의 {0}/{1} 유동성이 SushiSwap {2}/{3} 유동성으로 변환됩니다."
-
-msgid "above"
-msgstr ""
-
-msgid "below"
 msgstr ""
 
 msgid "failed to load"
@@ -1031,14 +606,5 @@ msgstr[1] ""
 msgid "{0} Deposited"
 msgstr "{0} 입금됨"
 
-msgid "{0} Strategy"
-msgstr "{0} 전략"
-
 msgid "{0} {1} per {2}"
-msgstr ""
-
-msgid "{0} {sign} market rate"
-msgstr ""
-
-msgid "{0}/{1} Burned"
 msgstr ""

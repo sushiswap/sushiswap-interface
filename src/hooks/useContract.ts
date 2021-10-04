@@ -710,7 +710,7 @@ export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | n
 }
 
 export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract | null {
-  const { chainId } = useActiveWeb3React();
+  const { chainId }: any = useActiveWeb3React();
   return useContract(getVerifyingContract(chainId), LIMIT_ORDER_ABI, withSignerIfPossibe);
 }
 

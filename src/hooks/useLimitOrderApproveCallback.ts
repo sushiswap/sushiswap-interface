@@ -29,7 +29,7 @@ export enum BentoApproveOutcome {
 }
 
 const useLimitOrderApproveCallback = () => {
-  const { account, library, chainId } = useActiveWeb3React();
+  const { account, library, chainId }: any = useActiveWeb3React();
   const dispatch = useDispatch();
 
   const { fromBentoBalance } = useLimitOrderState();
