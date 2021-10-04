@@ -12,22 +12,22 @@ import { Currency } from '@sushiswap/core-sdk'
 import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
 
 export type BreadcrumbTuple = { link: string; label: string }
-export type BreadcrumbItem = ((currencies: Currency[], pool?: AllPools) => BreadcrumbTuple) | BreadcrumbTuple
+export type BreadcrumbItem = ((currencies: (Currency | null)[], pool?: AllPools) => BreadcrumbTuple) | BreadcrumbTuple
 
 export const BREADCRUMBS: Record<string, BreadcrumbItem> = {
   pools: { link: '/trident/pools', label: 'Pools' },
-  add_classic: (currencies) => ({
-    link: `/trident/add/classic/${currencies.map((el) => el.symbol).join('/')}`,
+  add_classic: ([a, b]) => ({
+    link: `/trident/add/classic/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
     label: `Add Liquidity`,
   }),
-  remove_classic: (currencies) => ({
-    link: `/trident/add/classic/${currencies.map((el) => el.symbol).join('/')}`,
+  remove_classic: ([a, b]) => ({
+    link: `/trident/add/classic/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
     label: `Remove Liquidity`,
   }),
-  pool_classic: (currencies, pool) => ({
-    link: `/trident/pool/classic/${currencies.map((el) => el.symbol).join('/')}`,
-    label: currencies
-      ? `${currencies.map((el) => el.symbol).join('-')} - Classic - ${formatPercent(pool?.fee.valueOf() / 100)}`
+  pool_classic: ([a, b], pool) => ({
+    link: `/trident/pool/classic/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
+    label: pool
+      ? `${pool.token0.symbol}-${pool.token1.symbol} - Classic - ${formatPercent(pool.fee.valueOf() / 100)}`
       : 'Pool not found',
   }),
 }
