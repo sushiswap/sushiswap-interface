@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 import { t } from '@lingui/macro'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 
-export const selectedPoolCurrenciesAtom = atomFamily<Currency[], number>({
+export const selectedPoolCurrenciesAtom = atomFamily<(Currency | undefined)[], number>({
   key: 'selectedPoolCurrenciesAtom',
   default: (length) => new Array(length).fill(null),
 })
@@ -28,7 +28,7 @@ export const inputAmountsAtom = atomFamily<string[], number>({
   default: (length) => new Array(length).fill(null),
 })
 
-export const parsedAmountsSelector = selectorFamily<CurrencyAmount<Currency>[], number>({
+export const parsedAmountsSelector = selectorFamily<(CurrencyAmount<Currency> | undefined)[], number>({
   key: 'parsedAmountsSelector',
   get:
     (length) =>
@@ -36,12 +36,14 @@ export const parsedAmountsSelector = selectorFamily<CurrencyAmount<Currency>[], 
       const spendFromWallet = get(spendFromWalletAtom)
       const inputAmounts = get(inputAmountsAtom(length))
       const selectedPoolCurrencies = get(selectedPoolCurrenciesAtom(length))
-      return inputAmounts.map((amount, index) =>
-        tryParseAmount(
-          amount,
-          spendFromWallet ? selectedPoolCurrencies?.[index] : selectedPoolCurrencies?.[index].wrapped
-        )
-      )
+      return inputAmounts.map((amount, index) => {
+        if (selectedPoolCurrencies[index]) {
+          const currency = spendFromWallet ? selectedPoolCurrencies[index] : selectedPoolCurrencies[index]?.wrapped
+          return tryParseAmount(amount, currency ? currency : undefined)
+        }
+
+        return undefined
+      })
     },
   set:
     (length) =>
@@ -77,7 +79,7 @@ export const useIndependentAssetInputs = () => {
   const inputs = useRecoilValue(inputAmountsAtom(numberOfInputs[0]))
   const parsedAmounts = useRecoilValue(parsedAmountsSelector(numberOfInputs[0]))
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const balances = useBentoOrWalletBalance(account, currencies[0], spendFromWallet)
+  const balances = useBentoOrWalletBalance(account ? account : undefined, currencies[0], spendFromWallet)
 
   const setInputAtIndex = useRecoilCallback<[string, number], void>(
     ({ snapshot, set }) =>
@@ -102,12 +104,19 @@ export const useIndependentAssetInputs = () => {
   )
 
   const isMax = useMemo(() => {
-    return parsedAmounts.every((el, index) => el?.equalTo(maxAmountSpend(balances?.[index])))
+    return parsedAmounts.every((el, index) => {
+      const maxSpend = maxAmountSpend(balances?.[index])
+      if (el && maxSpend) {
+        return el.equalTo(maxSpend)
+      }
+
+      return false
+    })
   }, [balances, parsedAmounts])
 
   const insufficientBalance = useMemo(() => {
     return parsedAmounts.find((el, index) => {
-      return balances && el ? balances[index].lessThan(el) : false
+      return balances && balances[index] && el ? balances[index]?.lessThan(el) : false
     })
   }, [balances, parsedAmounts])
 

@@ -5,7 +5,7 @@ import { toAmountJSBI } from '../../../functions'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
-export const poolAtom = atom<PoolAtomType>({
+export const poolAtom = atom<PoolAtomType | [null, null]>({
   key: 'poolAtom',
   default: [null, null],
 })
@@ -20,17 +20,17 @@ export const attemptingTxnAtom = atom<boolean>({
   default: false,
 })
 
-export const txHashAtom = atom<string>({
+export const txHashAtom = atom<string | null>({
   key: 'txHashAtom',
   default: null,
 })
 
-export const totalSupplyAtom = atom<CurrencyAmount<Token>>({
+export const totalSupplyAtom = atom<CurrencyAmount<Token> | null>({
   key: 'totalSupplyAtom',
   default: null,
 })
 
-export const poolBalanceAtom = atom<CurrencyAmount<Token>>({
+export const poolBalanceAtom = atom<CurrencyAmount<Token> | null>({
   key: 'poolBalanceAtom',
   default: null,
 })
@@ -55,7 +55,7 @@ export const liquidityModeAtom = atom<LiquidityMode>({
   default: LiquidityMode.STANDARD,
 })
 
-export const spendFromWalletAtom = atom<Record<string, boolean>>({
+export const spendFromWalletAtom = atom<Record<string, boolean> | undefined>({
   key: 'spendFromWalletAtom',
   default: selector({
     key: 'spendFromWalletAtom/Default',
@@ -63,26 +63,42 @@ export const spendFromWalletAtom = atom<Record<string, boolean>>({
       const [, pool] = get(poolAtom)
 
       // TODO ramin: adjust for hybrid
-      return {
-        [pool?.token0.address]: true,
-        [pool?.token1.address]: true,
+      // true by default
+      if (pool) {
+        return {
+          [pool.token0.address]: true,
+          [pool.token1.address]: true,
+        }
       }
+
+      return undefined
     },
   }),
 })
 
-export const spendFromWalletSelector = selectorFamily<boolean, string>({
+export const spendFromWalletSelector = selectorFamily<boolean, string | undefined>({
   key: 'spendFromWalletSelector',
   get:
     (address) =>
-    ({ get }) =>
-      get(spendFromWalletAtom)[address],
+    ({ get }) => {
+      if (address) {
+        const spendFromWallet = get(spendFromWalletAtom)
+        if (spendFromWallet) {
+          return spendFromWallet[address]
+        }
+      }
+
+      // true by default
+      return true
+    },
   set:
     (address) =>
     ({ get, set }, newValue: boolean) => {
       const spendFromWallet = { ...get(spendFromWalletAtom) }
-      spendFromWallet[address] = newValue
-      set(spendFromWalletAtom, spendFromWallet)
+      if (address) {
+        spendFromWallet[address] = newValue
+        set(spendFromWalletAtom, spendFromWallet)
+      }
     },
 })
 
@@ -96,25 +112,25 @@ export const poolCreationPageAtom = atom<number>({
   default: 0,
 })
 
-export const minPriceAtom = atom<string>({
+export const minPriceAtom = atom<string | null>({
   key: 'minPriceAtom',
   default: null,
 })
 
-export const maxPriceAtom = atom<string>({
+export const maxPriceAtom = atom<string | null>({
   key: 'maxPriceAtom',
   default: null,
 })
 
-export const slippageAtom = atom<Percent>({
+export const slippageAtom = atom<Percent | null>({
   key: 'slippageAtom',
   default: null,
 })
 
-export const noLiquiditySelector = selector<boolean>({
+export const noLiquiditySelector = selector<boolean | undefined>({
   key: 'noLiquiditySelector',
   get: ({ get }) => {
-    const [poolState, pool] = get<PoolAtomType>(poolAtom)
+    const [poolState, pool] = get<PoolAtomType | [null, null]>(poolAtom)
     const totalSupply = get(totalSupplyAtom)
 
     if (pool) {

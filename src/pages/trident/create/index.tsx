@@ -40,12 +40,12 @@ const Pool = () => {
   } = useSetupPoolProperties()
 
   useEffect(() => {
+    if (!parsedAmounts.every((el) => el?.greaterThan(0))) return
+
     const pool =
-      parsedAmounts &&
-      parsedAmounts.every((el) => el?.greaterThan(0)) &&
-      (poolType === PoolType.ConstantProduct
+      poolType === PoolType.ConstantProduct
         ? new ConstantProductPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier, true)
-        : new HybridPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier))
+        : new HybridPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier)
 
     setPool([1, pool ? pool : null])
   }, [feeTier, parsedAmounts, poolType, setPool])
@@ -58,7 +58,7 @@ const Pool = () => {
   useEffect(() => {
     if (!pool) return
     setPoolBalance(CurrencyAmount.fromRawAmount(pool?.liquidityToken, ZERO))
-  }, [pool, setPoolBalance, setTotalSupply])
+  }, [pool, setPoolBalance])
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">

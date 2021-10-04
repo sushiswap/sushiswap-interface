@@ -4,13 +4,7 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import AssetInput from '../../../../components/AssetInput'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  attemptingTxnAtom,
-  poolAtom,
-  showReviewAtom,
-  spendFromWalletAtom,
-  spendFromWalletSelector,
-} from '../../context/atoms'
+import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import Button from '../../../../components/Button'
 import { useBentoBoxContract } from '../../../../hooks'
 import { classNames } from '../../../../functions'
@@ -95,7 +89,7 @@ const ClassicDepositAssets: FC = () => {
                 )
 
                 return (
-                  <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
+                  <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                     {!isMax && (
                       <Button color="gradient" variant={isMax ? 'filled' : 'outlined'} disabled={isMax} onClick={onMax}>
                         <Typography
