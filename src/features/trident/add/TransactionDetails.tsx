@@ -9,7 +9,6 @@ import { usePoolDetails } from '../context/hooks/usePoolDetails'
 import { useZapAssetInput } from '../context/hooks/useZapAssetInput'
 import { LiquidityMode } from '../types'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
-import { formatPercent } from '../../../functions'
 
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()

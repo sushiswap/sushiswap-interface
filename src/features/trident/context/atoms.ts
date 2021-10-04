@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 import { LiquidityMode, PoolAtomType } from '../types'
-import { atom, selector, selectorFamily } from 'recoil'
+import { atom, atomFamily, selector, selectorFamily } from 'recoil'
 import { toAmountJSBI } from '../../../functions'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
@@ -57,23 +57,7 @@ export const liquidityModeAtom = atom<LiquidityMode>({
 
 export const spendFromWalletAtom = atom<Record<string, boolean> | undefined>({
   key: 'spendFromWalletAtom',
-  default: selector({
-    key: 'spendFromWalletAtom/Default',
-    get: ({ get }) => {
-      const [, pool] = get(poolAtom)
-
-      // TODO ramin: adjust for hybrid
-      // true by default
-      if (pool) {
-        return {
-          [pool.token0.address]: true,
-          [pool.token1.address]: true,
-        }
-      }
-
-      return undefined
-    },
-  }),
+  default: {},
 })
 
 export const spendFromWalletSelector = selectorFamily<boolean, string | undefined>({
@@ -82,9 +66,9 @@ export const spendFromWalletSelector = selectorFamily<boolean, string | undefine
     (address) =>
     ({ get }) => {
       if (address) {
-        const spendFromWallet = get(spendFromWalletAtom)
-        if (spendFromWallet) {
-          return spendFromWallet[address]
+        const spendFromWallet = get(spendFromWalletAtom)?.[address]
+        if (typeof spendFromWallet !== 'undefined') {
+          return spendFromWallet
         }
       }
 
@@ -112,14 +96,14 @@ export const poolCreationPageAtom = atom<number>({
   default: 0,
 })
 
-export const minPriceAtom = atom<string | null>({
+export const minPriceAtom = atom<string>({
   key: 'minPriceAtom',
-  default: null,
+  default: '',
 })
 
-export const maxPriceAtom = atom<string | null>({
+export const maxPriceAtom = atom<string>({
   key: 'maxPriceAtom',
-  default: null,
+  default: '',
 })
 
 export const slippageAtom = atom<Percent | null>({

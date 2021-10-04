@@ -35,6 +35,7 @@ export const useClassicStandardRemoveExecute = () => {
         const outputToWallet = await snapshot.getPromise(outputToWalletAtom)
 
         if (
+          !pool ||
           !chainId ||
           !library ||
           !account ||
@@ -49,8 +50,8 @@ export const useClassicStandardRemoveExecute = () => {
 
         const liquidityOutput = await Promise.all(
           parsedAmounts.map(async (el) => ({
-            token: el.currency.wrapped.address,
-            amount: await bentoboxContract.toShare(el.currency.wrapped.address, el.quotient.toString(), false),
+            token: el?.currency.wrapped.address,
+            amount: await bentoboxContract.toShare(el?.currency.wrapped.address, el?.quotient.toString(), false),
           }))
         )
 

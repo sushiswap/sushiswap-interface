@@ -12,7 +12,9 @@ import { Currency } from '@sushiswap/core-sdk'
 import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
 
 export type BreadcrumbTuple = { link: string; label: string }
-export type BreadcrumbItem = ((currencies: (Currency | null)[], pool?: AllPools) => BreadcrumbTuple) | BreadcrumbTuple
+export type BreadcrumbItem =
+  | ((currencies: (Currency | undefined)[], pool?: AllPools) => BreadcrumbTuple)
+  | BreadcrumbTuple
 
 export const BREADCRUMBS: Record<string, BreadcrumbItem> = {
   pools: { link: '/trident/pools', label: 'Pools' },

@@ -16,7 +16,7 @@ export async function signMasterContractApproval(
   bentoBoxContract: Contract | null,
   masterContract: string | undefined,
   user: string,
-  library: Web3Provider,
+  library: Web3Provider | undefined,
   approved: boolean,
   chainId: ChainId | undefined
 ): Promise<string> {

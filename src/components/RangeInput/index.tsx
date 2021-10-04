@@ -13,8 +13,8 @@ interface RangeInputProps {
   label: string
   value: string
   onChange: (val: string) => void
-  base: Currency
-  quote: Currency
+  base: Currency | undefined
+  quote: Currency | undefined
 }
 
 const COLOR = {
@@ -42,7 +42,7 @@ const RangeInput: FC<RangeInputProps> = ({ value, label, color = 'blue', onChang
         />
       </div>
       <Typography variant="sm" className="rounded-b bg-dark-800 px-3 py-2.5 text-center border border-dark-700">
-        {i18n._(t`${base.symbol} per ${quote.symbol}`)}
+        {i18n._(t`${base?.symbol} per ${quote?.symbol}`)}
       </Typography>
     </div>
   )

@@ -20,14 +20,13 @@ export const useBentoOrWalletBalance = (
         return acc
       }
 
-      if (walletOrBento?.[cur?.wrapped.address] === true) {
-        const element = balance.find((el) => el?.currency.wrapped.address === cur?.wrapped.address)
-        if (element) acc.push(element)
-      }
-
-      if (walletOrBento?.[cur?.wrapped.address] === false) {
+      const element = walletOrBento?.[cur?.wrapped.address]
+      if (element === false) {
         const element = bentoBalance[cur?.wrapped.address]
-        if (element) acc.push(element)
+        acc.push(element)
+      } else {
+        const element = balance.find((el) => el?.currency.wrapped.address === cur?.wrapped.address)
+        acc.push(element)
       }
 
       return acc

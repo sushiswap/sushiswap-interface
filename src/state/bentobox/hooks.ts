@@ -149,7 +149,10 @@ export function useBentoBalance(tokenAddress: string): {
   return balance
 }
 
-export function useBentoBalance2(account: string, token: Token): CurrencyAmount<Token> | undefined {
+export function useBentoBalance2(
+  account: string | undefined,
+  token: Token | undefined
+): CurrencyAmount<Token> | undefined {
   const tokens = useMemo(() => [token], [token])
   const balance = useBentoBalances2(account, tokens)
   if (token && balance && balance[token.address]) {

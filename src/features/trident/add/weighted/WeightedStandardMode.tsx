@@ -2,15 +2,9 @@ import AssetInput from '../../../../components/AssetInput'
 import React from 'react'
 import TransactionDetails from './../TransactionDetails'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  attemptingTxnAtom,
-  poolAtom,
-  showReviewAtom,
-  spendFromWalletAtom,
-  spendFromWalletSelector,
-} from '../../context/atoms'
+import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import { useLingui } from '@lingui/react'
-import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
+import { useBentoBoxContract } from '../../../../hooks'
 import TridentApproveGate from '../../TridentApproveGate'
 import Dots from '../../../../components/Dots'
 import { t } from '@lingui/macro'
@@ -49,7 +43,7 @@ const WeightedStandardMode = () => {
           currency={pool?.token0}
           onChange={(val) => {
             setTypedField(TypedField.A)
-            setMainInput(val)
+            setMainInput(val || '')
           }}
           headerRight={
             <AssetInput.WalletSwitch
@@ -64,7 +58,7 @@ const WeightedStandardMode = () => {
           currency={pool?.token1}
           onChange={(val) => {
             setTypedField(TypedField.B)
-            setSecondaryInput(val)
+            setSecondaryInput(val || '')
           }}
           headerRight={
             <AssetInput.WalletSwitch
@@ -90,7 +84,7 @@ const WeightedStandardMode = () => {
               )
 
               return (
-                <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
+                <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                   {!isMax && (
                     <Button color="gradient" variant={isMax ? 'filled' : 'outlined'} disabled={isMax} onClick={onMax}>
                       <Typography

@@ -12,7 +12,7 @@ export const percentageAmountAtom = atom<string>({
   default: '',
 })
 
-export const parsedSLPAmountSelector = selector<CurrencyAmount<Token>>({
+export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefined>({
   key: 'parsedInputAmount',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
@@ -22,7 +22,7 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token>>({
   },
 })
 
-export const parsedAmountsSelector = selector<CurrencyAmount<Currency>[]>({
+export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
   key: 'percentageInputParsedAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
@@ -39,7 +39,7 @@ export const parsedAmountsSelector = selector<CurrencyAmount<Currency>[]>({
         : undefined,
     ]
 
-    if (allowedSlippage && amounts[0] && amounts[1]) {
+    if (pool && allowedSlippage && amounts[0] && amounts[1]) {
       const amountsMin = [
         calculateSlippageAmount(amounts[0], allowedSlippage)[0],
         calculateSlippageAmount(amounts[1], allowedSlippage)[0],
@@ -69,12 +69,12 @@ const usePercentageInput = () => {
     ? i18n._(t`Connect Wallet`)
     : poolState === 3
     ? i18n._(t`Invalid pool`)
+    : !parsedSLPAmount
+    ? i18n._(t`Enter a percentage`)
     : poolBalance?.lessThan(parsedSLPAmount)
     ? i18n._(t`Insufficient Balance`)
     : poolBalance?.equalTo(ZERO)
     ? i18n._(t`No Balance`)
-    : !parsedAmounts.every((el) => el?.greaterThan(ZERO))
-    ? i18n._(t`Enter an amount`)
     : ''
 
   return useMemo(

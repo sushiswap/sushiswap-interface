@@ -1,13 +1,7 @@
 import React, { FC } from 'react'
 import AssetInput from '../../../../components/AssetInput'
 import TransactionDetails from '../TransactionDetails'
-import {
-  attemptingTxnAtom,
-  poolAtom,
-  showReviewAtom,
-  spendFromWalletAtom,
-  spendFromWalletSelector,
-} from '../../context/atoms'
+import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import TridentApproveGate from '../../TridentApproveGate'
@@ -51,7 +45,7 @@ const ConcentratedStandardMode: FC = () => {
           currency={pool?.token0}
           onChange={(val) => {
             setTypedField(TypedField.A)
-            setMainInput(val)
+            setMainInput(val || '')
           }}
           headerRight={
             <AssetInput.WalletSwitch
@@ -66,7 +60,7 @@ const ConcentratedStandardMode: FC = () => {
           currency={pool?.token1}
           onChange={(val) => {
             setTypedField(TypedField.B)
-            setSecondaryInput(val)
+            setSecondaryInput(val || '')
           }}
           headerRight={
             <AssetInput.WalletSwitch
@@ -92,7 +86,7 @@ const ConcentratedStandardMode: FC = () => {
               )
 
               return (
-                <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
+                <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                   {!isMax && (
                     <Button color="gradient" variant={isMax ? 'filled' : 'outlined'} disabled={isMax} onClick={onMax}>
                       <Typography

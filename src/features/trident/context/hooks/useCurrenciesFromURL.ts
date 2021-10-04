@@ -4,7 +4,7 @@ import { Currency, NATIVE } from '@sushiswap/core-sdk'
 import { useCallback, useMemo } from 'react'
 import { useActiveWeb3React } from '../../../../hooks'
 
-const useCurrenciesFromURL = (): [(Currency | null)[], (cur: Currency, index: number) => void] => {
+const useCurrenciesFromURL = (): [(Currency | undefined)[], (cur: Currency, index: number) => void] => {
   const { chainId } = useActiveWeb3React()
   const router = useRouter()
 
@@ -35,7 +35,7 @@ const useCurrenciesFromURL = (): [(Currency | null)[], (cur: Currency, index: nu
         ? currencyA.wrapped.sortsBefore(currencyB.wrapped)
           ? [currencyA, currencyB]
           : [currencyB, currencyA]
-        : [null, null],
+        : [undefined, undefined],
       setURLCurrency,
     ],
     [currencyA, currencyB, setURLCurrency]

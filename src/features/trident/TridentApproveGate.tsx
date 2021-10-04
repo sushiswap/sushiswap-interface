@@ -51,7 +51,10 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, tokenAp
   const router = useTridentRouterContract()
   const toggleWalletModal = useWalletModalToggle()
 
-  const { approve: bApproveCallback, approvalState: bApprove } = useBentoMasterApproveCallback(router?.address, {})
+  const { approve: bApproveCallback, approvalState: bApprove } = useBentoMasterApproveCallback(
+    router ? router.address : undefined,
+    {}
+  )
 
   const loading =
     Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || bApprove === BentoApprovalState.UNKNOWN

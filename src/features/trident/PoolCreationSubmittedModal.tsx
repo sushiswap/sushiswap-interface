@@ -22,7 +22,7 @@ const PoolCreationSubmittedModal: FC = () => {
   const [txHash, setTxHash] = useRecoilState(txHashAtom)
   const allTransactions = useAllTransactions()
 
-  const tx = allTransactions?.[txHash]
+  const tx = txHash && allTransactions ? allTransactions[txHash] : undefined
   const pending = !tx?.receipt
   const success = !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
   const cancelled = tx?.receipt && tx.receipt.status === 1337
