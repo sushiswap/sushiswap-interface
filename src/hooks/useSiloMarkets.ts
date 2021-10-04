@@ -6,8 +6,7 @@ import { useActiveWeb3React } from '../hooks';
 import { useSiloFactoryContract } from '../hooks/useContract';
 import useTokenOracleLookup from './useTokenOracleLookup';
 
-export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.9';
-
+export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.10';
 const client = new GraphQLClient(GRAPH_ENDPOINT);
 
 const siloMarketsQuery = `
@@ -50,23 +49,14 @@ const useSiloMarkets = () => {
     return await client.request(siloMarketsQuery);
   });
 
-  // const asset = LINK_ADDRESS;
-  // const assetOracle = (await deployments.get('ChainlinkOracle')).address;
-  // const oracleData = ethers.utils.defaultAbiCoder.encode(["address"], [LINK_PRICEFEED]);
-  // let tx = await siloFactory.newSilo(asset, assetOracle, oracleData);
-
+  //TODO: dynamically lookup oracle price feed
   const createSiloMarket = async (assetAddress: string) => {
     console.log('createMarket() -> assetAddress:', assetAddress);
 
     if (assetAddress) {
-      //TODO: dynamically lookup oracle price feed
-
       const oracleInfo = tokenOracleData(assetAddress.toLowerCase());
-
       console.log('oracleData:', oracleInfo);
-
       const result = await siloFactoryContract.newSilo(assetAddress, oracleInfo.assetOracle, oracleInfo.oracleData);
-
       return result;
     }
   };

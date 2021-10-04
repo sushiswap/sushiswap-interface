@@ -8,67 +8,49 @@ export const ARCHER_ROUTER_ADDRESS: AddressMap = {
   [ChainId.MAINNET]: '0x9917C083FF9FbD29Df1367FBF7F2388A9a202431',
 };
 
-/*
-deploying "SiloFactory" deployed at 0x828Bd34C9Ec210D7560Aa1719ae9da72F0439558 with 4134225 gas
-deploying "SiloBridgePool" deployed at 0x977081CDbbb40f63d3bc44009ec0c73674D3CEc8 with 3800680 gas
-executing SiloFactory.setBridgePool (tx: 0xd1017e82cc20e0d3e7a65e3a778054254ae676ac89b44df8f7b3cc42036f0d08) ...: performed with 47573 gas
-deploying  deployed at 0x37502037C2475Ac07934E142E858b83D257F6d4f with 333182 gas
-executing SiloFactory.setInterestRateModel (tx: 0xa47f10312031b75c213b6c981f3c9bb3a10ecad5c8c26ad2f529931f0809c9a1) ...: performed with 47584 gas
-deploying "SiloOracle" (tx: 0xc8a5a96f7b1a5d3a468a3d3643bc6f219cec21b0aefabab300cb60937ea53c56)...: deployed at 0xE8818FfB5b15c2f167cD3c65ebBa0f2DaC0C036c with 537546 gas
-executing SiloFactory.setOracle (tx: 0x78e4bc4af0c94de5e6b2875acbf8199d528500438273a2de3ee85490418d7a6c) ...: performed with 47585 gas
-deploying "ChainlinkOracle"  deployed at 0xDE450f5B964856CFfb3eb8F30592A4570b152AFb with 326802 gas
-deploying "UniswapV3Oracle" deployed at 0x16B635899c837d1517C1af6B298f740FAB94814b with 652071 gas
-deploying "SiloRouter" deployed at 0xFD1B31e8894a2E5f3f78d1896f3d16a49106737C with 961775 gas
-executing SiloFactory.setRouter (tx: 0x55227a289df011b05aa4eba113fcf6c8e73f38033ead9bbf88aac55036fe9151) ...: performed with 47650 gas
-*/
+/**
+ * SILO
+ *
+ */
 
-// silo interest rate model -   "0xAC05cf69afbb40d0ddD3afD8DeefD6EfC1A7F880",
-// silo bridge -                "0x4682a52a66531B0223713a2E77e2539504095A5f",
-// silo factory -               "0x9284C3b8BeDbE86FA4CdC0933003A631fEcE5787",
-// silo oracle -                "0x260E38FF798942D69A82f08239378612eaea6248",
-// silo router -                "0x859e634335071ADDF3965Fe3896BBfEEfe196966",
-// reusing "UniswapV3Oracle" at  0x095A4FE85Df9aD1Cac8D81651BE9DdeC0aB392e6
-// deploying "ChainlinkOracle"   0xe93232A71Bf453e9f83b8f41D0B6c4409725f0d1
-
-// SILO MOCK FACTORY
-// export const SILO_FACTORY_ADDRESS: AddressMap = {
-//   [ChainId.RINKEBY]: '0x6A5885D500c753B62f11Fd40e538c2BB20A497b7',
-//   [ChainId.MATIC]: '0x6A5885D500c753B62f11Fd40e538c2BB20A497b7',
-// };
+export const SILO_FACTORY: AddressMap = {
+  [ChainId.KOVAN]: '0x828Bd34C9Ec210D7560Aa1719ae9da72F0439558',
+  [ChainId.MATIC]: '0x828Bd34C9Ec210D7560Aa1719ae9da72F0439558',
+};
 
 export const SILO_INTEREST_RATE_MODEL: AddressMap = {
-  [ChainId.KOVAN]: '0xAC05cf69afbb40d0ddD3afD8DeefD6EfC1A7F8807',
-  [ChainId.MATIC]: '0xAC05cf69afbb40d0ddD3afD8DeefD6EfC1A7F8807',
+  [ChainId.KOVAN]: '0x37502037C2475Ac07934E142E858b83D257F6d4f',
+  [ChainId.MATIC]: '0x37502037C2475Ac07934E142E858b83D257F6d4f',
 };
 
 export const SILO_BRIDGE: AddressMap = {
-  [ChainId.KOVAN]: '0x4682a52a66531B0223713a2E77e2539504095A5f',
-  [ChainId.MATIC]: '0x4682a52a66531B0223713a2E77e2539504095A5f',
-};
-
-export const SILO_FACTORY: AddressMap = {
-  [ChainId.KOVAN]: '0x9284C3b8BeDbE86FA4CdC0933003A631fEcE5787',
-  [ChainId.MATIC]: '0x9284C3b8BeDbE86FA4CdC0933003A631fEcE5787',
+  [ChainId.KOVAN]: '0x977081CDbbb40f63d3bc44009ec0c73674D3CEc8',
+  [ChainId.MATIC]: '0x977081CDbbb40f63d3bc44009ec0c73674D3CEc8',
 };
 
 export const SILO_ORACLE: AddressMap = {
-  [ChainId.KOVAN]: '0x260E38FF798942D69A82f08239378612eaea6248',
-  [ChainId.MATIC]: '0x260E38FF798942D69A82f08239378612eaea6248',
+  [ChainId.KOVAN]: '0xE8818FfB5b15c2f167cD3c65ebBa0f2DaC0C036c',
+  [ChainId.MATIC]: '0xE8818FfB5b15c2f167cD3c65ebBa0f2DaC0C036c',
+};
+
+export const SILO_CHAINLINK_ORACLE: AddressMap = {
+  [ChainId.KOVAN]: '0xDE450f5B964856CFfb3eb8F30592A4570b152AFb',
+  [ChainId.MATIC]: '0xDE450f5B964856CFfb3eb8F30592A4570b152AFb',
 };
 
 export const SILO_ROUTER: AddressMap = {
-  [ChainId.KOVAN]: '0x859e634335071ADDF3965Fe3896BBfEEfe196966',
-  [ChainId.MATIC]: '0x859e634335071ADDF3965Fe3896BBfEEfe196966',
+  [ChainId.KOVAN]: '0xFD1B31e8894a2E5f3f78d1896f3d16a49106737C',
+  [ChainId.MATIC]: '0xFD1B31e8894a2E5f3f78d1896f3d16a49106737C',
 };
 
 export const CHAINLINK_FEED_REGISTRY: AddressMap = {
   [ChainId.KOVAN]: '0xAa7F6f7f507457a1EE157fE97F6c7DB2BEec5cD0',
 };
 
-// export const SILO_CHAINLINK_ORACLE: AddressMap = {
-//   [ChainId.KOVAN]: '0xe93232A71Bf453e9f83b8f41D0B6c4409725f0d1',
-//   [ChainId.MATIC]: '0xe93232A71Bf453e9f83b8f41D0B6c4409725f0d1',
-// };
+/**
+ * SUSHI
+ *
+ */
 
 export const MINICHEF_ADDRESS: AddressMap = {
   [ChainId.MATIC]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',

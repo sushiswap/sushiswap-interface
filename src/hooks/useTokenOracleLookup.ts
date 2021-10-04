@@ -1,5 +1,7 @@
+import { ChainId } from '@sushiswap/sdk';
 import { ethers } from 'ethers';
 import { useActiveWeb3React } from '.';
+import { SILO_CHAINLINK_ORACLE } from '../constants';
 import { SupportedChainId } from '../constants/chains';
 
 type OracleInfo = {
@@ -18,7 +20,7 @@ export const KOVAN_TOKEN_PRICEFEED_MAP: { [key: string]: string } = {
   // '0x33a368b290589ce8cf781ab4331fe52e77478736': '0xcc70f09a6cc17553b2e31954cd36e4a2d89501f7', //KOVAN SUSHI
 };
 
-const SILO_ASSET_ORACLE = '0xe93232A71Bf453e9f83b8f41D0B6c4409725f0d1'; //silo chainlink oracle contract
+// const SILO_ASSET_ORACLE = '0xe93232A71Bf453e9f83b8f41D0B6c4409725f0d1'; //silo chainlink oracle contract
 
 const useTokenToPriceFeedLookup = () => {
   const { chainId } = useActiveWeb3React();
@@ -37,7 +39,7 @@ const useTokenToPriceFeedLookup = () => {
     if (priceFeed) {
       console.log('price feed lokup found:', priceFeed);
       oracleInfo = {
-        assetOracle: SILO_ASSET_ORACLE,
+        assetOracle: SILO_CHAINLINK_ORACLE[chainId],
         oraclePriceFeed: priceFeed,
         oracleData: ethers.utils.defaultAbiCoder.encode(['address'], [priceFeed]),
       };

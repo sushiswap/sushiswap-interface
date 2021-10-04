@@ -27,9 +27,9 @@ import { useTransactionAdder } from '../../state/transactions/hooks';
  */
 
 export default function Markets() {
-  const { createSiloMarket, siloMarkets } = useSiloMarkets();
+  const { siloMarkets } = useSiloMarkets();
   const toggleNewMarketModal = useNewMarketModalToggle();
-  const { account, chainId } = useActiveWeb3React();
+  const { account } = useActiveWeb3React();
 
   // console.log('siloMarkets:', siloMarkets);
 
