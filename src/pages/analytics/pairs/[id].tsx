@@ -1,13 +1,6 @@
 import React, { useMemo } from 'react'
 import { formatNumber, shortenAddress } from '../../../functions'
-import {
-  useBlock,
-  useDayData,
-  useNativePrice,
-  usePairDayData,
-  useSushiPairs,
-  useTransactions,
-} from '../../../services/graph'
+import { useBlock, useDayData, useNativePrice, usePairDayData, useSushiPairs } from '../../../services/graph'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Background from '../../../features/analytics/Background'
