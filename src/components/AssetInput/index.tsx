@@ -97,7 +97,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
 
   return (
     <AssetInputContext.Provider value={useMemo(() => (error ? error : false), [error])}>
-      <div className="mt-4 flex flex-col gap-4">
+      <div className="mt-4 lg:mt-0 flex flex-col gap-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
           {!isDesktop && (
             <div className="px-2 flex justify-between">
@@ -264,7 +264,7 @@ const AssetInputPanel = ({
 }
 
 interface AssetInputPanelBalanceProps {
-  balance: CurrencyAmount<Currency> | undefined
+  balance?: CurrencyAmount<Currency>
   onClick: (x: CurrencyAmount<Currency> | undefined) => void
   spendFromWallet?: boolean
 }
