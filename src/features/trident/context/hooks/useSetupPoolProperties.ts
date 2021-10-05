@@ -14,7 +14,7 @@ export const twapAtom = atom<boolean>({
 
 export const feeTierAtom = atom<number>({
   key: 'feeTierAtom',
-  default: null,
+  default: 30,
 })
 
 export const useSetupPoolProperties = () => {

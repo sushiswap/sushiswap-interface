@@ -2,15 +2,15 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../../../functions'
 import { t } from '@lingui/macro'
-import { noLiquiditySelector, poolAtom, spendFromWalletAtom, spendFromWalletSelector, totalSupplyAtom } from '../atoms'
+import { noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalance'
 import { useMemo } from 'react'
 
-export const selectedZapCurrencyAtom = atom<Currency>({
+export const selectedZapCurrencyAtom = atom<Currency | undefined>({
   key: 'selectedZapCurrencyAtom',
-  default: null,
+  default: undefined,
 })
 
 export const zapInputAmountAtom = atom<string>({
@@ -18,23 +18,29 @@ export const zapInputAmountAtom = atom<string>({
   default: '',
 })
 
-export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
+export const parsedZapAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
   key: 'parsedZapAmountSelector',
   get: ({ get }) => {
     const value = get(zapInputAmountAtom)
     const currency = get(selectedZapCurrencyAtom)
-    return tryParseAmount(value, currency)
+    if (currency) {
+      return tryParseAmount(value, currency)
+    }
+
+    return undefined
   },
 })
 
-export const parsedZapSplitAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
+export const parsedZapSplitAmountsSelector = selector<
+  [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
+>({
   key: 'parsedZapSplitAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
 
     // TODO ramin: output amount calculation
     if (pool) return [CurrencyAmount.fromRawAmount(pool?.token0, '0'), CurrencyAmount.fromRawAmount(pool?.token1, '0')]
-    return [null, null]
+    return [undefined, undefined]
   },
 })
 

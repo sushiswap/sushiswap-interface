@@ -17,6 +17,7 @@ import { useIndependentAssetInputs } from './useIndependentAssetInputs'
 import { useLingui } from '@lingui/react'
 import { useSetupPoolProperties } from './useSetupPoolProperties'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 
 export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()
@@ -48,13 +49,15 @@ export const useClassicPoolCreateExecute = () => {
       !constantProductPoolFactory ||
       !selectedPoolCurrencies[0] ||
       !selectedPoolCurrencies[1] ||
+      !parsedAmounts[0] ||
+      !parsedAmounts[1] ||
       !feeTier ||
       !parsedAmounts.every((el) => el?.greaterThan(0))
     )
       throw new Error('missing dependencies')
 
     // Pool creation data
-    const [a, b] = selectedPoolCurrencies.map((el) => el.wrapped)
+    const [a, b] = selectedPoolCurrencies.map((el: Currency) => el.wrapped)
     const [tokenA, tokenB] = a.sortsBefore(b) ? [a, b] : [b, a]
     const deployData = ethers.utils.defaultAbiCoder.encode(
       ['address', 'address', 'uint8', 'bool'],
@@ -62,10 +65,10 @@ export const useClassicPoolCreateExecute = () => {
     )
 
     // Adding liquidity data
-    const indexOfNative = parsedAmounts.findIndex((el) => el.currency.isNative)
-    const value = indexOfNative > 0 ? { value: parsedAmounts[indexOfNative].quotient.toString() } : {}
+    const indexOfNative = parsedAmounts.findIndex((el: CurrencyAmount<Currency>) => el.currency.isNative)
+    const value = indexOfNative > 0 ? { value: parsedAmounts[indexOfNative]?.quotient.toString() } : {}
     const liquidityInput = await Promise.all(
-      parsedAmounts.map(async (el, index) => ({
+      parsedAmounts.map(async (el: CurrencyAmount<Currency>) => ({
         token: el.currency.wrapped.address,
         native: spendFromWallet,
         amount: await bentoboxContract.toShare(el.currency.wrapped.address, el.quotient.toString(), false),

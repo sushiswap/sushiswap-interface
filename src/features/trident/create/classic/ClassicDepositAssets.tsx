@@ -4,13 +4,7 @@ import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import AssetInput from '../../../../components/AssetInput'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  attemptingTxnAtom,
-  poolAtom,
-  showReviewAtom,
-  spendFromWalletAtom,
-  spendFromWalletSelector,
-} from '../../context/atoms'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import Button from '../../../../components/Button'
 import { useBentoBoxContract } from '../../../../hooks'
 import { classNames } from '../../../../functions'
@@ -34,10 +28,13 @@ const ClassicDepositAssets: FC = () => {
     parsedAmounts,
   } = useIndependentAssetInputs()
 
-  const [, pool] = useRecoilValue(poolAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(pool?.token0.address))
-  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(pool?.token1.address))
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(
+    spendFromWalletSelector(currencies[0]?.wrapped.address)
+  )
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(
+    spendFromWalletSelector(currencies[1]?.wrapped.address)
+  )
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (
@@ -95,7 +92,7 @@ const ClassicDepositAssets: FC = () => {
                 )
 
                 return (
-                  <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
+                  <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                     {!isMax && (
                       <Button color="gradient" variant={isMax ? 'filled' : 'outlined'} disabled={isMax} onClick={onMax}>
                         <Typography

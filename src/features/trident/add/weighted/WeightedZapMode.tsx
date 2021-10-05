@@ -63,7 +63,7 @@ const WeightedZapMode = () => {
         <AssetInput
           value={zapInputAmount}
           currency={zapCurrency}
-          onChange={setZapInputAmount}
+          onChange={(val) => setZapInputAmount(val || '')}
           onSelect={setZapCurrency}
           disabled={noLiquidity}
           currencies={[NATIVE[chainId], pool?.token0, pool?.token1]}

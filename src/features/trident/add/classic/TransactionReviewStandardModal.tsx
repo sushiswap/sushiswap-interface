@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Typography from '../../../../components/Typography'
@@ -61,7 +61,7 @@ const TransactionReviewStandardModal: FC = () => {
               {i18n._(t`You are depositing:`)}
             </Typography>
             <ListPanel
-              items={parsedAmounts.reduce((acc, cur, index) => {
+              items={parsedAmounts.reduce<ReactNode[]>((acc, cur, index) => {
                 if (cur?.greaterThan(ZERO)) acc.push(<ListPanel.CurrencyAmountItem amount={cur} key={index} />)
                 return acc
               }, [])}

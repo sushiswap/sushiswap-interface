@@ -11,7 +11,7 @@ import {
 } from '../atoms'
 import { useMemo } from 'react'
 
-export const usePoolDetails = (parsedAmounts: CurrencyAmount<Currency>[]) => {
+export const usePoolDetails = (parsedAmounts: (CurrencyAmount<Currency> | undefined)[]) => {
   const [currencyAAmount, currencyBAmount] = parsedAmounts
   const [, pool] = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
@@ -62,7 +62,7 @@ export const usePoolDetails = (parsedAmounts: CurrencyAmount<Currency>[]) => {
   const priceImpact = useMemo(() => {
     const [wrappedAAmount, wrappedBAmount] = [currencyAAmount?.wrapped, currencyBAmount?.wrapped]
 
-    if (!wrappedAAmount || !wrappedBAmount) return undefined
+    if (!wrappedAAmount || !wrappedBAmount || !currencyAAmount || !currencyBAmount) return undefined
     if (!currencyAAmount.currency.equals(currencyBAmount.currency)) return undefined
     if (JSBI.equal(wrappedAAmount.quotient, ZERO)) return undefined
     const pct = ONE_HUNDRED_PERCENT.subtract(wrappedBAmount.divide(wrappedAAmount))

@@ -149,7 +149,10 @@ export function useBentoBalance(tokenAddress: string): {
   return balance
 }
 
-export function useBentoBalance2(account: string, token: Token): CurrencyAmount<Token> | undefined {
+export function useBentoBalance2(
+  account: string | undefined,
+  token: Token | undefined
+): CurrencyAmount<Token> | undefined {
   const tokens = useMemo(() => [token], [token])
   const balance = useBentoBalances2(account, tokens)
   if (token && balance && balance[token.address]) {
@@ -159,33 +162,44 @@ export function useBentoBalance2(account: string, token: Token): CurrencyAmount<
   return undefined
 }
 
-export function useBentoBalances2(account: string, tokens: Token[]): Record<string, CurrencyAmount<Token> | undefined> {
+export function useBentoBalances2(
+  account?: string,
+  tokens?: (Token | undefined)[]
+): Record<string, CurrencyAmount<Token> | undefined> {
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
   const currentTransactionStatus = useTransactionStatus()
-  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token> | undefined>>({})
+  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token>>>({})
   const memoizedBalances = useMemo(() => serializeBalancesMap(balances), [balances])
 
   const fetch = useCallback(async () => {
-    const balances = await boringHelperContract.getBalances(
-      account,
-      tokens.map((el) => el.address)
-    )
-    setBalances(
-      balances.reduce((acc, balance, index) => {
-        acc[tokens[index].address] = CurrencyAmount.fromRawAmount(
-          tokens[index],
-          balance.bentoBalance.mulDiv(balance.bentoAmount, balance.bentoShare).toString()
-        )
+    if (!boringHelperContract || !tokens) return
+    if (tokens.every((el) => el)) {
+      const balances = await boringHelperContract.getBalances(
+        account,
+        tokens.map((el: Token) => el.address)
+      )
 
-        return acc
-      }, {})
-    )
+      setBalances(
+        balances.reduce((acc, balance, index) => {
+          const token = tokens[index]
+          if (token?.address) {
+            acc[token?.address] = CurrencyAmount.fromRawAmount(
+              token,
+              balance.bentoBalance.mulDiv(balance.bentoAmount, balance.bentoShare).toString()
+            )
+          }
+
+          return acc
+        }, {})
+      )
+    }
   }, [boringHelperContract, account, tokens])
 
   useEffect(() => {
-    if (!account || !bentoBoxContract || !boringHelperContract || !tokens.every((el) => el)) return
-    fetch()
+    if (!account || !bentoBoxContract || !boringHelperContract || !tokens?.every((el) => el)) {
+      fetch()
+    }
   }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, tokens])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

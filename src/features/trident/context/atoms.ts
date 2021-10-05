@@ -1,13 +1,13 @@
 import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 import { LiquidityMode, PoolAtomType } from '../types'
-import { atom, selector, selectorFamily } from 'recoil'
+import { atom, atomFamily, selector, selectorFamily } from 'recoil'
 import { toAmountJSBI } from '../../../functions'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
-export const poolAtom = atom<PoolAtomType>({
+export const poolAtom = atom<PoolAtomType | [undefined, undefined]>({
   key: 'poolAtom',
-  default: [null, null],
+  default: [undefined, undefined],
 })
 
 export const showReviewAtom = atom<boolean>({
@@ -22,17 +22,17 @@ export const attemptingTxnAtom = atom<boolean>({
 
 export const txHashAtom = atom<string>({
   key: 'txHashAtom',
-  default: null,
+  default: '',
 })
 
-export const totalSupplyAtom = atom<CurrencyAmount<Token>>({
+export const totalSupplyAtom = atom<CurrencyAmount<Token> | undefined>({
   key: 'totalSupplyAtom',
-  default: null,
+  default: undefined,
 })
 
-export const poolBalanceAtom = atom<CurrencyAmount<Token>>({
+export const poolBalanceAtom = atom<CurrencyAmount<Token> | undefined>({
   key: 'poolBalanceAtom',
-  default: null,
+  default: undefined,
 })
 
 export const currenciesAtom = atom<Currency[]>({
@@ -55,34 +55,34 @@ export const liquidityModeAtom = atom<LiquidityMode>({
   default: LiquidityMode.STANDARD,
 })
 
-export const spendFromWalletAtom = atom<Record<string, boolean>>({
+export const spendFromWalletAtom = atom<Record<string, boolean> | undefined>({
   key: 'spendFromWalletAtom',
-  default: selector({
-    key: 'spendFromWalletAtom/Default',
-    get: ({ get }) => {
-      const [, pool] = get(poolAtom)
-
-      // TODO ramin: adjust for hybrid
-      return {
-        [pool?.token0.address]: true,
-        [pool?.token1.address]: true,
-      }
-    },
-  }),
+  default: {},
 })
 
-export const spendFromWalletSelector = selectorFamily<boolean, string>({
+export const spendFromWalletSelector = selectorFamily<boolean, string | undefined>({
   key: 'spendFromWalletSelector',
   get:
     (address) =>
-    ({ get }) =>
-      get(spendFromWalletAtom)[address],
+    ({ get }) => {
+      if (address) {
+        const spendFromWallet = get(spendFromWalletAtom)?.[address]
+        if (typeof spendFromWallet !== 'undefined') {
+          return spendFromWallet
+        }
+      }
+
+      // true by default
+      return true
+    },
   set:
     (address) =>
     ({ get, set }, newValue: boolean) => {
       const spendFromWallet = { ...get(spendFromWalletAtom) }
-      spendFromWallet[address] = newValue
-      set(spendFromWalletAtom, spendFromWallet)
+      if (address) {
+        spendFromWallet[address] = newValue
+        set(spendFromWalletAtom, spendFromWallet)
+      }
     },
 })
 
@@ -98,23 +98,23 @@ export const poolCreationPageAtom = atom<number>({
 
 export const minPriceAtom = atom<string>({
   key: 'minPriceAtom',
-  default: null,
+  default: '',
 })
 
 export const maxPriceAtom = atom<string>({
   key: 'maxPriceAtom',
-  default: null,
+  default: '',
 })
 
-export const slippageAtom = atom<Percent>({
+export const slippageAtom = atom<Percent | null>({
   key: 'slippageAtom',
   default: null,
 })
 
-export const noLiquiditySelector = selector<boolean>({
+export const noLiquiditySelector = selector<boolean | undefined>({
   key: 'noLiquiditySelector',
   get: ({ get }) => {
-    const [poolState, pool] = get<PoolAtomType>(poolAtom)
+    const [poolState, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
 
     if (pool) {

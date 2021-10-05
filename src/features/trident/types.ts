@@ -3,7 +3,7 @@ import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { HybridPoolState } from '../../hooks/useTridentHybridPools'
 
 // TODO add last two pool types
-export type AllPools = ConstantProductPool | HybridPool
+export type PoolUnion = ConstantProductPool | HybridPool
 
 export enum PoolType {
   ConstantProduct = 'ConstantProduct',
@@ -18,4 +18,4 @@ export enum LiquidityMode {
 }
 
 // TODO should be all
-export type PoolAtomType = [ConstantProductPoolState | HybridPoolState, ConstantProductPool | HybridPool | null]
+export type PoolAtomType = [ConstantProductPoolState | HybridPoolState, PoolUnion | null]

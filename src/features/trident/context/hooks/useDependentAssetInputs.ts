@@ -83,7 +83,7 @@ export const secondaryInputSelector = selector<string>({
   },
 })
 
-export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>>({
+export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
   key: 'mainInputCurrencyAmountSelector',
   get: ({ get }) => {
     const value = get(mainInputAtom)
@@ -92,7 +92,7 @@ export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>
   },
 })
 
-export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>>({
+export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
   key: 'secondaryInputCurrencyAmountSelector',
   get: ({ get }) => {
     const value = get(secondaryInputSelector)
@@ -114,7 +114,9 @@ export const formattedAmountsSelector = selector<[string, string]>({
 })
 
 // Derive parsedAmounts from formattedAmounts
-export const parsedAmountsSelector = selector<[CurrencyAmount<Currency>, CurrencyAmount<Currency>]>({
+export const parsedAmountsSelector = selector<
+  [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
+>({
   key: 'parsedAmountsSelector',
   get: ({ get }) => {
     return [get(mainInputCurrencyAmountSelector), get(secondaryInputCurrencyAmountSelector)]
@@ -135,21 +137,21 @@ export const useDependentAssetInputs = () => {
   const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const [currencies] = useCurrenciesFromURL()
-  const balances = useBentoOrWalletBalance(account, currencies, spendFromWallet)
+  const balances = useBentoOrWalletBalance(account ? account : undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {
     if (!balances || !pool || !balances[0] || !balances[1]) return
     if (!noLiquidity && fixedRatio) {
       if (pool.priceOf(pool.token0).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)) {
         typedField[1](TypedField.A)
-        mainInput[1](maxAmountSpend(balances[0])?.toExact())
+        mainInput[1](maxAmountSpend(balances[0])?.toExact() || '')
       } else {
         typedField[1](TypedField.B)
-        secondaryInput[1](maxAmountSpend(balances[1])?.toExact())
+        secondaryInput[1](maxAmountSpend(balances[1])?.toExact() || '')
       }
     } else {
-      mainInput[1](maxAmountSpend(balances[0])?.toExact())
-      secondaryInput[1](maxAmountSpend(balances[1])?.toExact())
+      mainInput[1](maxAmountSpend(balances[0])?.toExact() || '')
+      secondaryInput[1](maxAmountSpend(balances[1])?.toExact() || '')
     }
   }, [balances, fixedRatio, mainInput, noLiquidity, pool, secondaryInput, typedField])
 
@@ -158,11 +160,12 @@ export const useDependentAssetInputs = () => {
 
     if (!noLiquidity && fixedRatio) {
       return pool.priceOf(pool.token0).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)
-        ? parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]))
-        : parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]))
+        ? parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]) || '')
+        : parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]) || '')
     } else {
       return (
-        parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0])) && parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]))
+        parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]) || '') &&
+        parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]) || '')
       )
     }
   }, [balances, fixedRatio, noLiquidity, parsedAmounts, pool])

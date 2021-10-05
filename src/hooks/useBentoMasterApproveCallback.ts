@@ -24,7 +24,7 @@ export enum BentoApproveOutcome {
   NOT_READY,
 }
 
-const useBentoHasPendingApproval = (masterContract: string, account: string, contractName?: string) => {
+const useBentoHasPendingApproval = (masterContract?: string, account?: string, contractName?: string) => {
   const allTransactions = useAllTransactions()
   return useMemo(
     () =>
@@ -41,7 +41,7 @@ const useBentoHasPendingApproval = (masterContract: string, account: string, con
           return summary === `Approving ${contractName} Master Contract`
         }
       }),
-    [allTransactions, account, masterContract]
+    [allTransactions, account, masterContract, contractName]
   )
 }
 
@@ -54,8 +54,8 @@ export interface BentoPermit {
 export interface BentoMasterApproveCallback {
   approvalState: BentoApprovalState
   approve: () => Promise<void>
-  getPermit: () => Promise<BentoPermit>
-  permit: BentoPermit
+  getPermit: () => Promise<BentoPermit | undefined>
+  permit: BentoPermit | undefined
 }
 
 export interface BentoMasterApproveCallbackOptions {
@@ -65,7 +65,7 @@ export interface BentoMasterApproveCallbackOptions {
 }
 
 const useBentoMasterApproveCallback = (
-  masterContract: string,
+  masterContract: string | undefined,
   { otherBentoBoxContract, contractName, functionFragment }: BentoMasterApproveCallbackOptions
 ): BentoMasterApproveCallback => {
   const { i18n } = useLingui()
@@ -73,8 +73,8 @@ const useBentoMasterApproveCallback = (
   const bentoBoxContract = useBentoBoxContract()
   const addTransaction = useTransactionAdder()
   const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
-  const pendingApproval = useBentoHasPendingApproval(masterContract, account, contractName)
-  const [permit, setPermit] = useState<BentoPermit>(null)
+  const pendingApproval = useBentoHasPendingApproval(masterContract, account ? account : undefined, contractName)
+  const [permit, setPermit] = useState<BentoPermit | undefined>()
 
   const approvalState: BentoApprovalState = useMemo(() => {
     if (permit) return BentoApprovalState.APPROVED

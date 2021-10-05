@@ -4,13 +4,13 @@ import { atom, atomFamily, selectorFamily, useRecoilCallback, useRecoilState, us
 import { spendFromWalletAtom } from '../atoms'
 import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalance'
 import { maxAmountSpend, tryParseAmount } from '../../../../functions'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { t } from '@lingui/macro'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 
-export const selectedPoolCurrenciesAtom = atomFamily<Currency[], number>({
+export const selectedPoolCurrenciesAtom = atomFamily<(Currency | undefined)[], number>({
   key: 'selectedPoolCurrenciesAtom',
-  default: (length) => new Array(length).fill(null),
+  default: (length) => new Array(length).fill(undefined),
 })
 
 export const numberOfInputsAtom = atom<number>({
@@ -23,25 +23,26 @@ export const typedInputIndexAtom = atom<number>({
   default: 0,
 })
 
-export const inputAmountsAtom = atomFamily<string[], number>({
+export const inputAmountsAtom = atomFamily<(string | undefined)[], number>({
   key: 'inputAmountsAtom',
-  default: (length) => new Array(length).fill(null),
+  default: (length) => new Array(length).fill(undefined),
 })
 
-export const parsedAmountsSelector = selectorFamily<CurrencyAmount<Currency>[], number>({
+export const parsedAmountsSelector = selectorFamily<(CurrencyAmount<Currency> | undefined)[], number>({
   key: 'parsedAmountsSelector',
   get:
     (length) =>
     ({ get }) => {
-      const spendFromWallet = get(spendFromWalletAtom)
       const inputAmounts = get(inputAmountsAtom(length))
       const selectedPoolCurrencies = get(selectedPoolCurrenciesAtom(length))
-      return inputAmounts.map((amount, index) =>
-        tryParseAmount(
-          amount,
-          spendFromWallet ? selectedPoolCurrencies?.[index] : selectedPoolCurrencies?.[index].wrapped
-        )
-      )
+      return inputAmounts.map((amount, index) => {
+        const currency = selectedPoolCurrencies[index]
+        if (currency) {
+          return tryParseAmount(amount, currency ? currency : undefined)
+        }
+
+        return undefined
+      })
     },
   set:
     (length) =>
@@ -53,7 +54,7 @@ export const parsedAmountsSelector = selectorFamily<CurrencyAmount<Currency>[], 
     },
 })
 
-export const formattedAmountsSelector = selectorFamily<string[], number>({
+export const formattedAmountsSelector = selectorFamily<(string | undefined)[], number>({
   key: 'formattedAmountsSelector',
   get:
     (length) =>
@@ -75,11 +76,11 @@ export const useIndependentAssetInputs = () => {
   const currencies = useRecoilState(selectedPoolCurrenciesAtom(numberOfInputs[0]))
   const formattedAmounts = useRecoilValue(formattedAmountsSelector(numberOfInputs[0]))
   const inputs = useRecoilValue(inputAmountsAtom(numberOfInputs[0]))
-  const parsedAmounts = useRecoilValue(parsedAmountsSelector(numberOfInputs[0]))
+  const [parsedAmounts, setParsedAmounts] = useRecoilState(parsedAmountsSelector(numberOfInputs[0]))
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const balances = useBentoOrWalletBalance(account, currencies[0], spendFromWallet)
+  const balances = useBentoOrWalletBalance(account ? account : undefined, currencies[0], spendFromWallet)
 
-  const setInputAtIndex = useRecoilCallback<[string, number], void>(
+  const setInputAtIndex = useRecoilCallback<[string | undefined, number], void>(
     ({ snapshot, set }) =>
       async (val, index) => {
         const inputAmounts = [...(await snapshot.getPromise(inputAmountsAtom(numberOfInputs[0])))]
@@ -90,24 +91,24 @@ export const useIndependentAssetInputs = () => {
     [numberOfInputs]
   )
 
-  const onMax = useRecoilCallback(
-    ({ set }) =>
-      async () => {
-        set(
-          parsedAmountsSelector(numberOfInputs[0]),
-          balances?.map((balance) => maxAmountSpend(balance))
-        )
-      },
-    [balances, numberOfInputs]
-  )
+  const onMax = useCallback(async () => {
+    setParsedAmounts(balances?.map((balance) => maxAmountSpend(balance)))
+  }, [balances, setParsedAmounts])
 
   const isMax = useMemo(() => {
-    return parsedAmounts.every((el, index) => el?.equalTo(maxAmountSpend(balances?.[index])))
+    return parsedAmounts.every((el, index) => {
+      const maxSpend = maxAmountSpend(balances?.[index])
+      if (el && maxSpend) {
+        return el.equalTo(maxSpend)
+      }
+
+      return false
+    })
   }, [balances, parsedAmounts])
 
   const insufficientBalance = useMemo(() => {
     return parsedAmounts.find((el, index) => {
-      return balances && el ? balances[index].lessThan(el) : false
+      return balances && balances[index] && el ? balances[index]?.lessThan(el) : false
     })
   }, [balances, parsedAmounts])
 

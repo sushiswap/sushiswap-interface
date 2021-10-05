@@ -49,7 +49,7 @@ const ClassicStandardMode = () => {
             currency={currencyA}
             onChange={(val) => {
               setTypedField(TypedField.A)
-              setMainInput(val)
+              setMainInput(val || '')
             }}
             onSelect={(cur) => setURLCurrency(cur, 0)}
             headerRight={
@@ -65,7 +65,7 @@ const ClassicStandardMode = () => {
             currency={currencyB}
             onChange={(val) => {
               setTypedField(TypedField.B)
-              setSecondaryInput(val)
+              setSecondaryInput(val || '')
             }}
             onSelect={(cur) => setURLCurrency(cur, 1)}
             headerRight={
@@ -91,7 +91,7 @@ const ClassicStandardMode = () => {
                 )
 
                 return (
-                  <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
+                  <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                     {!isMax && (
                       <Button color="gradient" variant={isMax ? 'filled' : 'outlined'} disabled={isMax} onClick={onMax}>
                         <Typography

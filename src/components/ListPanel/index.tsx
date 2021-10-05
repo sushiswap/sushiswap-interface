@@ -65,7 +65,7 @@ interface ListPanelHeaderProps {
 
 // Default ListPanelHeader component, please note that you are not obliged to pass this to a ListPanel component
 // If you need different styling, please create another component and leave this one as is.
-const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue, className }) => {
+const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue, className = '' }) => {
   return (
     <div className={classNames(className, 'flex flex-row justify-between px-4 py-[10px] items-center')}>
       <Typography variant="lg" className="text-high-emphesis" weight={700}>
@@ -106,7 +106,7 @@ const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
 }
 
 interface ListPanelItemLeftProps {
-  amount: CurrencyAmount<Currency>
+  amount: CurrencyAmount<Currency> | undefined
   startAdornment?: ReactNode
 }
 
@@ -133,7 +133,7 @@ const ListPanelItemRight: FC = ({ children }) => {
 }
 
 interface CurrencyAmountItemProps {
-  amount: CurrencyAmount<Currency>
+  amount?: CurrencyAmount<Currency>
   weight?: string
 }
 

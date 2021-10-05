@@ -8,9 +8,9 @@ import { useLingui } from '@lingui/react'
 import { useWalletModalToggle } from '../../state/application/hooks'
 
 interface TokenApproveButtonProps {
-  inputAmount: CurrencyAmount<Currency>
+  inputAmount: CurrencyAmount<Currency> | undefined
   onStateChange: React.Dispatch<React.SetStateAction<any>>
-  tokenApproveOn: string
+  tokenApproveOn: string | undefined
 }
 
 const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onStateChange, tokenApproveOn }) => {
@@ -39,9 +39,9 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 })
 
 interface TridentApproveGateProps {
-  inputAmounts: CurrencyAmount<Currency>[]
+  inputAmounts: (CurrencyAmount<Currency> | undefined)[]
   children: ({ approved, loading }: { approved: boolean; loading: boolean }) => ReactNode
-  tokenApproveOn: string
+  tokenApproveOn: string | undefined
 }
 
 const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, tokenApproveOn, children }) => {
@@ -51,7 +51,10 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, tokenAp
   const router = useTridentRouterContract()
   const toggleWalletModal = useWalletModalToggle()
 
-  const { approve: bApproveCallback, approvalState: bApprove } = useBentoMasterApproveCallback(router?.address, {})
+  const { approve: bApproveCallback, approvalState: bApprove } = useBentoMasterApproveCallback(
+    router ? router.address : undefined,
+    {}
+  )
 
   const loading =
     Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || bApprove === BentoApprovalState.UNKNOWN

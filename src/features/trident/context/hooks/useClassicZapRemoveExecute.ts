@@ -32,7 +32,16 @@ export const useClassicZapRemoveExecute = () => {
         const liquidityAmount = poolBalance?.multiply(new Percent(percentageInput, '100'))
         const outputToWallet = await snapshot.getPromise(outputToWalletAtom)
 
-        if (!chainId || !library || !account || !router || !parsedOutputAmount || !liquidityAmount || !bentoboxContract)
+        if (
+          !pool ||
+          !chainId ||
+          !library ||
+          !account ||
+          !router ||
+          !parsedOutputAmount ||
+          !liquidityAmount ||
+          !bentoboxContract
+        )
           throw new Error('missing dependencies')
 
         const liquidityOutput = {

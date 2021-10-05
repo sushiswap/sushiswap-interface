@@ -20,7 +20,7 @@ interface ProvidedCurrenciesProps {
 
 const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSelect }) => {
   const { account } = useActiveWeb3React()
-  const balances = useCurrencyBalances(account, currencies)
+  const balances = useCurrencyBalances(account ? account : undefined, currencies)
 
   return (
     <div className="overflow-y-auto h-full">
@@ -49,7 +49,7 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
 
 interface AllCurrenciesProps {
   handleSelect: (x: Currency) => void
-  search: string
+  search?: string
 }
 
 const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
@@ -57,9 +57,8 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
   const balances = useAllTokenBalances()
   const tokens = useAllTokens()
 
-  const valid = isValidAddress(search)
-  const token = useToken(valid ? search : undefined)
-  const customBalance = useTokenBalance(account, token ? token : undefined)
+  const token = useToken(isValidAddress(search || '') ? (search as string) : undefined)
+  const customBalance = useTokenBalance(account ? account : undefined, token ? token : undefined)
 
   // Create a lightweight arr for searching
   const tokensArr = useMemo(() => {
@@ -122,21 +121,21 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
 }
 
 interface CurrencySelectDialogProps {
-  currency: Currency
+  currency?: Currency
   onChange: (x: Currency) => void
   onDismiss: () => void
   currencies?: Currency[]
 }
 
 const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currencies = [], onChange, onDismiss }) => {
-  const [search, setSearch] = useState<string>()
+  const [search, setSearch] = useState<string | undefined>(undefined)
   const { i18n } = useLingui()
 
   const handleSelect = useCallback(
     async (x: Currency) => {
       await onChange(x)
       await onDismiss()
-      setSearch(null)
+      setSearch(undefined)
     },
     [onChange, onDismiss, setSearch]
   )

@@ -24,9 +24,9 @@ import Chip from '../Chip'
 import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 
 interface AssetInputProps {
-  value: string
-  currency: Currency
-  onChange: (x: string) => void
+  value?: string
+  currency?: Currency
+  onChange: (x: string | undefined) => void
   spendFromWallet?: boolean
   title?: string
   onSelect?: (x: Token) => void
@@ -52,10 +52,14 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
   const { account } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
 
-  const bentoBalance = useBentoBalance2(account, spendFromWallet ? undefined : props.currency?.wrapped)
-  const walletBalance = useCurrencyBalance(account, spendFromWallet ? props.currency : undefined)
+  const bentoBalance = useBentoBalance2(
+    account ? account : undefined,
+    spendFromWallet ? undefined : props.currency?.wrapped
+  )
+  const walletBalance = useCurrencyBalance(account ? account : undefined, spendFromWallet ? props.currency : undefined)
   const balance = spendFromWallet ? walletBalance : bentoBalance
   const maxSpend = maxAmountSpend(balance)?.toExact()
+  const maxSpendAsFraction = maxAmountSpend(balance)?.asFraction
   const parsedInput = tryParseAmount(props.value, props.currency)
   const error = balance ? parsedInput?.greaterThan(balance) : false
 
@@ -92,8 +96,8 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
   }
 
   return (
-    <AssetInputContext.Provider value={useMemo(() => error, [error])}>
-      <div className="mt-4 flex flex-col gap-4">
+    <AssetInputContext.Provider value={useMemo(() => (error ? error : false), [error])}>
+      <div className="mt-4 lg:mt-0 flex flex-col gap-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
           {!isDesktop && (
             <div className="px-2 flex justify-between">
@@ -105,7 +109,11 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
             {...props}
             spendFromWallet={spendFromWallet}
             onMax={() => props.onChange(maxSpend)}
-            showMax={balance?.greaterThan('0') ? !parsedInput?.equalTo(maxAmountSpend(balance)) : false}
+            showMax={
+              balance && maxSpendAsFraction && balance.greaterThan('0')
+                ? !parsedInput?.equalTo(maxSpendAsFraction)
+                : false
+            }
             footer={
               <AssetInputPanel.Balance
                 balance={balance}
@@ -143,11 +151,11 @@ const AssetInputPanel = ({
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
-  const span = useRef(null)
+  const span = useRef<HTMLSpanElement>(null)
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
-    if (isDesktop) setWidth(span?.current?.clientWidth + 6)
+    if (isDesktop && span.current) setWidth(span?.current?.clientWidth + 6)
   }, [isDesktop, value])
 
   let content = (
@@ -256,8 +264,8 @@ const AssetInputPanel = ({
 }
 
 interface AssetInputPanelBalanceProps {
-  balance: CurrencyAmount<Currency>
-  onClick: (x: CurrencyAmount<Currency>) => void
+  balance?: CurrencyAmount<Currency>
+  onClick: (x: CurrencyAmount<Currency> | undefined) => void
   spendFromWallet?: boolean
 }
 

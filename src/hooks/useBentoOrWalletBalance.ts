@@ -1,12 +1,12 @@
-import { Currency, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { useCurrencyBalances } from '../state/wallet/hooks'
 import { useBentoBalances2 } from '../state/bentobox/hooks'
 import { useMemo } from 'react'
 
 export const useBentoOrWalletBalance = (
-  account: string,
-  currencies: (Currency | Token)[],
-  walletOrBento: Record<string, boolean>
+  account: string | undefined,
+  currencies: (Currency | Token | undefined)[],
+  walletOrBento?: Record<string, boolean>
 ) => {
   const tokens = useMemo(() => currencies.map((el) => el?.wrapped), [currencies])
   const balance = useCurrencyBalances(account, currencies)
@@ -14,13 +14,19 @@ export const useBentoOrWalletBalance = (
   const serializedBalance = useMemo(() => balance.map((el) => el?.serialize()).join('-'), [balance])
 
   return useMemo(() => {
-    return currencies.reduce((acc, cur) => {
-      if (walletOrBento?.[cur?.wrapped.address] === true) {
-        acc.push(balance.find((el) => el?.currency.wrapped.address === cur?.wrapped.address))
+    return currencies.reduce<(CurrencyAmount<Currency> | undefined)[]>((acc, cur) => {
+      if (!cur) {
+        acc.push(undefined)
+        return acc
       }
 
-      if (walletOrBento?.[cur?.wrapped.address] === false) {
-        acc.push(bentoBalance[cur?.wrapped.address])
+      const element = walletOrBento?.[cur?.wrapped.address]
+      if (element === false) {
+        const element = bentoBalance[cur?.wrapped.address]
+        acc.push(element)
+      } else {
+        const element = balance.find((el) => el?.currency.wrapped.address === cur?.wrapped.address)
+        acc.push(element)
       }
 
       return acc

@@ -36,7 +36,7 @@ type TokenTileProps =
       horizontal?: false
     }
   | {
-      token: Token
+      token: Token | undefined
       amount?: never
       onClick?: () => void
       active?: boolean
@@ -46,7 +46,7 @@ type TokenTileProps =
 const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active = false, horizontal = false }) => {
   return (
     <div
-      onClick={onClick}
+      {...(onClick && { onClick })}
       className={classNames(
         onClick ? 'cursor-pointer' : '',
         horizontal ? 'flex-row p-1.5' : 'flex-col p-3',
@@ -87,7 +87,7 @@ const HybridStandardMode: FC = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const [selected, setSelected] = useState<Token[]>([])
   const tokens = useMemo(() => [pool?.token0, pool?.token1], [pool?.token0, pool?.token1])
-  const balances = useTokenBalances(account, tokens)
+  const balances = useTokenBalances(account ? account : undefined, tokens)
   const bentoBox = useBentoBoxContract()
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
@@ -217,7 +217,7 @@ const HybridStandardMode: FC = () => {
                 key={currency.address}
                 currency={currency}
                 value={amounts[currency.address]}
-                onChange={(val) => handleInput(val, currency.address)}
+                onChange={(val) => handleInput(val || '', currency.address)}
               />
             ))}
 
@@ -236,7 +236,7 @@ const HybridStandardMode: FC = () => {
                   )
 
                   return (
-                    <div className={classNames(onMax && !isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
+                    <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                       {!isMax && (
                         <Button
                           color="gradient"

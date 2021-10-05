@@ -7,9 +7,9 @@ import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
 
-export const percentageZapCurrencyAtom = atom<Currency>({
+export const percentageZapCurrencyAtom = atom<Currency | undefined>({
   key: 'percentageZapCurrencyAtom',
-  default: null,
+  default: undefined,
 })
 
 export const percentageAmountAtom = atom<string>({
@@ -17,7 +17,7 @@ export const percentageAmountAtom = atom<string>({
   default: '',
 })
 
-export const parsedSLPAmountSelector = selector<CurrencyAmount<Token>>({
+export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefined>({
   key: 'parsedInputAmount',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
@@ -27,7 +27,7 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token>>({
   },
 })
 
-export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
+export const parsedZapAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
   key: 'parsedZapAmountSelector',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
@@ -36,11 +36,15 @@ export const parsedZapAmountSelector = selector<CurrencyAmount<Currency>>({
     const currency = get(percentageZapCurrencyAtom)
 
     // TODO calculate output amount
-    return tryParseAmount('1', currency)
+    if (currency) {
+      return tryParseAmount('1', currency)
+    }
+
+    return undefined
   },
 })
 
-export const parsedAmountsSelector = selector<CurrencyAmount<Currency>[]>({
+export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
   key: 'parsedAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
@@ -49,19 +53,24 @@ export const parsedAmountsSelector = selector<CurrencyAmount<Currency>[]>({
     const percentage = new Percent(percentageAmount, '100')
     const allowedSlippage = get(slippageAtom)
 
-    const tokens = [pool?.token0, pool?.token1]
-    const amounts = tokens.map((el, index) =>
-      pool && percentageAmount && percentage.greaterThan('0') && currentLiquidityValue[index]
-        ? CurrencyAmount.fromRawAmount(el, percentage.multiply(currentLiquidityValue[index].quotient).quotient)
-        : undefined
-    )
+    if (pool) {
+      const tokens = [pool.token0, pool.token1]
+      const amounts = tokens.map((el, index) => {
+        const element = currentLiquidityValue[index]
+        return pool && percentageAmount && percentage.greaterThan('0') && element
+          ? CurrencyAmount.fromRawAmount(el, percentage.multiply(element?.quotient).quotient)
+          : undefined
+      })
 
-    if (allowedSlippage && amounts[0] && amounts[1]) {
-      const amountsMin = amounts.map((el, index) => calculateSlippageAmount(el, allowedSlippage)[0])
-      return amountsMin.map((el, index) => CurrencyAmount.fromRawAmount(tokens[index], el.toString()))
+      if (allowedSlippage && amounts[0] && amounts[1]) {
+        const amountsMin = amounts.map((el) => (el ? calculateSlippageAmount(el, allowedSlippage)[0] : undefined))
+        return amountsMin.map((el, index) =>
+          el ? CurrencyAmount.fromRawAmount(tokens[index], el.toString()) : undefined
+        )
+      }
     }
 
-    return new Array(tokens.length).fill(undefined)
+    return [undefined, undefined]
   },
 })
 
