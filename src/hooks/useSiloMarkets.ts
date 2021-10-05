@@ -1,6 +1,7 @@
 import { CHAINLINK_ORACLE_ADDRESS } from '@sushiswap/sdk';
 import { ethers } from 'ethers';
 import { request, GraphQLClient } from 'graphql-request';
+import { useState } from 'react';
 import { useQuery } from 'react-query';
 import { useActiveWeb3React } from '../hooks';
 import { useSiloFactoryContract } from '../hooks/useContract';
@@ -42,6 +43,7 @@ type SiloMarket = {
  */
 
 const useSiloMarkets = () => {
+  const [currentSilo, setCurrentSilo] = useState(null);
   const { chainId, account } = useActiveWeb3React();
   const siloFactoryContract = useSiloFactoryContract(true);
   const { tokenOracleData } = useTokenOracleLookup();
@@ -66,8 +68,6 @@ const useSiloMarkets = () => {
     if (address) return await siloFactoryContract.removeMarket(address);
   };
 
-  const deposit = () => {};
-
   const tokenInSilo = (tokenAddress: string): boolean => {
     console.log('markets:', data);
     let isIn = false;
@@ -75,6 +75,7 @@ const useSiloMarkets = () => {
     data.silos.forEach((silo) => {
       if (silo.assetAddress.toLowerCase() === tokenAddress.toLowerCase()) {
         isIn = true;
+        setCurrentSilo(silo);
         return;
       }
     });
@@ -82,12 +83,15 @@ const useSiloMarkets = () => {
     return isIn;
   };
 
+  const deposit = () => {};
+
   return {
     siloMarkets: data,
     createSiloMarket,
     removeSiloMarket,
     tokenInSilo,
     deposit,
+    currentSilo,
   };
 };
 

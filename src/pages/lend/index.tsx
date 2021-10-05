@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '../../components/Container';
 import { APP_NAME_URL, APP_SHORT_BLURB } from '../../constants';
 import Head from 'next/head';
@@ -7,12 +7,13 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel';
 import useSiloMarkets from '../../hooks/useSiloMarkets';
 import { useTransactionAdder } from '../../state/transactions/hooks';
 import useTokenSetup from '../../hooks/useTokenSetup';
-import { useActiveWeb3React } from '../../hooks';
+import { useActiveWeb3React, useApproveCallback } from '../../hooks';
 import { Field } from '../../state/swap/actions';
 import { t } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import SupportedSilos from '../../components/SupportedSilos';
-import { constSelector } from 'recoil';
+import { tryParseAmount } from '../../functions';
+import { useSiloBridgePoolContract, useSiloContract, useTokenContract } from '../../hooks/useContract';
 
 export default function Lending() {
   const {
@@ -27,10 +28,23 @@ export default function Lending() {
     handleInputSelect,
   } = useTokenSetup();
 
-  const { createSiloMarket, tokenInSilo } = useSiloMarkets();
+  const { createSiloMarket, tokenInSilo, currentSilo } = useSiloMarkets();
   const addTransaction = useTransactionAdder();
   const { chainId, library, account } = useActiveWeb3React();
   const { i18n } = useLingui();
+
+  const selected: any = currencies[Field.INPUT];
+  const tokenAddress = selected?.address;
+  const amount = formattedAmounts.INPUT;
+  const siloBridgePool = useSiloBridgePoolContract(true);
+  const tokenContract = useTokenContract(currentSilo && currentSilo.assetAddress, true);
+  const siloContract = useSiloContract(currentSilo && currentSilo.address, true);
+  // const [approvalState, approve] = useApproveCallback(amount, currentSilo && currentSilo.address);
+
+  // if a token is selected, lets check if in a silo, and set the current silo
+  useEffect(() => {
+    if (tokenAddress) tokenInSilo(tokenAddress);
+  }, [tokenAddress]);
 
   if (!chainId) return null;
 
@@ -62,47 +76,86 @@ export default function Lending() {
           />
         </div>
 
-        <div className="flex mt-8 mb-4 ml-5">
-          <Button type="button" color="indigo">
+        <div className="flex space-x-2 mt-8 mb-4 ml-5">
+          <Button
+            type="button"
+            color="gray"
+            variant="outlined"
+            onClick={async () => {
+              console.log('Silo.approve()');
+
+              if (tokenAddress && currentSilo) {
+                if (amount > 0) {
+                  console.log('selected:', selected);
+                  console.log('tokenAddress:', tokenAddress);
+                  console.log('amount:', amount);
+                  console.log('current silo:', currentSilo);
+
+                  if (currentSilo) {
+                    const result = await tokenContract.approve(currentSilo.address, amount);
+                  } else {
+                    console.warn('no current silo');
+                  }
+                }
+              }
+            }}
+          >
             Approve
           </Button>
 
           <Button
-            disabled={true}
-            color="gray"
+            color="darkindigo"
             type="button"
             onClick={async () => {
-              console.log('Silo.deposit.click()');
-              const selected: any = currencies[Field.INPUT];
-              const tokenAddress = selected?.address;
+              console.log('Silo.deposit.deposit()');
+
+              //have a token address, and this token address exists in a silo
+              if (tokenAddress && currentSilo) {
+                if (amount > 0) {
+                  console.log('selected:', selected);
+                  console.log('tokenAddress:', tokenAddress);
+                  console.log('amount:', amount);
+                  console.log('current silo:', currentSilo);
+
+                  if (currentSilo) {
+                    const result = await siloContract.deposit(amount);
+
+                    addTransaction(result, {
+                      summary: `Deposit ${amount} ${selected.symbol} into ${currentSilo.name}`,
+                    });
+                  } else {
+                    console.warn('no current silo');
+                  }
+                }
+              }
+            }}
+          >
+            Deposit
+          </Button>
+          <Button
+            type="button"
+            color="gray"
+            onClick={async () => {
+              console.log('Silo.deposit.withdraw()');
 
               // have a token address, and this token address exists in a silo
               if (tokenAddress && tokenInSilo(tokenAddress)) {
                 console.log('selected:', selected);
                 console.log('tokenAddress:', tokenAddress);
 
-                const amount = formattedAmounts.INPUT && formattedAmounts.INPUT;
-
                 if (amount > 0) {
-                  console.log('deposit amount:', amount);
+                  console.log('withdraw amount:', amount);
 
-                  //TODO: Check balance
+                  const result = await siloContract.withdraw(amount);
+
+                  addTransaction(result, {
+                    summary: `Withdraw ${amount} ${selected.symbol} from ${currentSilo.name}`,
+                  });
                 }
               }
-
-              // if (tokenAddress) {
-              //   console.log('creating market for:', selected);
-
-              //   const result = await createSiloMarket(tokenAddress);
-
-              //   addTransaction(result, {
-              //     summary: `Added silo market ${selected.symbol}-ETH`,
-              //   });
-
-              // }
             }}
           >
-            Deposit
+            Withdraw
           </Button>
         </div>
       </div>

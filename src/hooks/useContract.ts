@@ -81,6 +81,7 @@ import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json';
 import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json';
 
 // SILO
+import SILO_ABI from '../constants/abis/Silo.json';
 import SILO_INTEREST_RATE_MODEL_ABI from '../constants/abis/InterestRateModel.json';
 import SILO_BRIDGE_ABI from '../constants/abis/SiloBridgePool.json';
 import SILO_FACTORY_ABI from '../constants/abis/SiloFactory.json';
@@ -178,6 +179,16 @@ export function useSiloInterestRateContract(withSignerIfPossible: boolean = fals
     SILO_INTEREST_RATE_MODEL_ABI,
     withSignerIfPossible
   );
+}
+
+export function useSiloContract(address: string, withSignerIfPossible: boolean = false): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(chainId ? address : undefined, SILO_ABI, withSignerIfPossible);
+}
+
+export function useSiloBridgePoolContract(withSignerIfPossible: boolean = false): Contract | null {
+  const { chainId } = useActiveWeb3React();
+  return useContract(chainId ? SILO_BRIDGE[chainId] : undefined, SILO_BRIDGE_ABI, withSignerIfPossible);
 }
 
 export function useSiloFactoryContract(withSignerIfPossible: boolean = false): Contract | null {
