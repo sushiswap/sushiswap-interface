@@ -12,7 +12,6 @@ import Image from 'next/image'
 import Input from '../../components/Input'
 import TransactionFailedModal from '../../modals/TransactionFailedModal'
 import { request } from 'graphql-request'
-import styled from 'styled-components'
 import sushiData from '@sushiswap/sushi-data'
 import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../functions/parse'
@@ -23,6 +22,7 @@ import useSushiBar from '../../hooks/useSushiBar'
 import { useSushiPrice } from '../../services/graph'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import { useWalletModalToggle } from '../../state/application/hooks'
+import { classNames } from '../../functions'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -39,10 +39,6 @@ const sendTx = async (txFunc: () => Promise<any>): Promise<boolean> => {
   }
   return success
 }
-
-const StyledNumericalInput = styled(Input.Numeric)`
-  caret-color: #e3e3e3;
-`
 
 const tabStyle = 'flex justify-center items-center h-full w-full rounded-lg cursor-pointer text-sm md:text-base'
 const activeTabStyle = `${tabStyle} text-high-emphesis font-bold bg-dark-900`
@@ -281,7 +277,6 @@ export default function Stake() {
                     </div>
                   </div>
                 </div>
-
                 <div className="flex items-center justify-between w-full mt-6">
                   <p className="font-bold text-large md:text-2xl text-high-emphesis">
                     {activeTab === 0 ? i18n._(t`Stake SUSHI`) : i18n._(t`Unstake`)}
@@ -291,12 +286,13 @@ export default function Stake() {
                   </div>
                 </div>
 
-                <StyledNumericalInput
+                <Input.Numeric
                   value={input}
                   onUserInput={handleInput}
-                  className={`w-full h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-sm md:text-lg font-bold text-dark-800 whitespace-nowrap${
+                  className={classNames(
+                    'w-full h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-sm md:text-lg font-bold text-dark-800 whitespace-nowrap caret-high-emphesis',
                     inputError ? ' pl-9 md:pl-12' : ''
-                  }`}
+                  )}
                   placeholder=" "
                 />
 

@@ -6,7 +6,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/sdk'
 import React, { useCallback, useMemo, useState } from 'react'
-import { calculateSlippageAmount, calculateGasMargin } from '../../functions'
+import { calculateSlippageAmount, calculateGasMargin, classNames } from '../../functions'
 import { ApprovalState, useActiveWeb3React, useApproveCallback, usePairContract, useRouterContract } from '../../hooks'
 import { useV2LiquidityTokenPermit } from '../../hooks/useERC20Permit'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
@@ -408,8 +408,8 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
       <div className="flex flex-col space-y-4">
         <div className="flex flex-col space-y-2">
           <div id="liquidity-percent" className="p-5 rounded bg-dark-900">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between w-full">
                 <div className="whitespace-nowrap">{i18n._(t`Amount to Remove`)}</div>
                 <div className="flex items-center space-x-1">
                   <Input.Percent
@@ -423,7 +423,7 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
                   <Typography className="text-xl font-bold">%</Typography>
                 </div>
               </div>
-              <div className="flex justify-end space-x-4">
+              <div className="flex justify-end space-x-4 sm:w-full">
                 {['25', '50', '75', '100'].map((multipler, i) => (
                   <Button
                     variant="outlined"
@@ -433,7 +433,10 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
                     onClick={() => {
                       setInnerLiquidityPercentage(multipler)
                     }}
-                    className="text-md focus:ring-pink"
+                    className={classNames(
+                      'text-md border border-opacity-50 border-pink focus:ring-pink',
+                      multipler === '100' ? '' : 'hidden sm:block'
+                    )}
                   >
                     {multipler === '100' ? 'MAX' : multipler + '%'}
                   </Button>

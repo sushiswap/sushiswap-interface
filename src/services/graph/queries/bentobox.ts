@@ -100,3 +100,26 @@ export const kashiUserPairsQuery = gql`
   }
   ${kashiPairFieldsQuery}
 `
+
+export const bentoBoxQuery = gql`
+  query bentoBoxQuery(
+    $id: String! = "0xf5bce5077908a1b7370b9ae04adc565ebd643966"
+    $block: Block_height
+    $where: BentoBox_filter
+  ) {
+    bentoBoxes(first: 1, block: $block, where: $where) {
+      id
+      totalUsers
+      totalTokens
+      totalKashiPairs
+      tokens(first: 1000) {
+        id
+        name
+        symbol
+        decimals
+        totalSupplyBase
+        totalSupplyElastic
+      }
+    }
+  }
+`
