@@ -139,7 +139,7 @@ export default function Lending() {
               console.log('Silo.deposit.withdraw()');
 
               // have a token address, and this token address exists in a silo
-              if (tokenAddress && tokenInSilo(tokenAddress)) {
+              if (tokenAddress && currentSilo) {
                 console.log('selected:', selected);
                 console.log('tokenAddress:', tokenAddress);
 
@@ -156,6 +156,66 @@ export default function Lending() {
             }}
           >
             Withdraw
+          </Button>
+        </div>
+
+        <div className="flex space-x-2 mt-2 mb-4 ml-5">
+          <div className="ml-24" />
+
+          <Button
+            color="darkindigo"
+            type="button"
+            onClick={async () => {
+              console.log('Silo.deposit.borrow Eth via bridge()');
+
+              // have a token address, and this token address exists in a silo
+              if (tokenAddress && currentSilo) {
+                console.log('selected:', selected);
+                console.log('tokenAddress:', tokenAddress);
+
+                if (amount > 0) {
+                  console.log('borrow amount:', amount);
+                  console.log('current silo:', currentSilo);
+
+                  try {
+                    const result = await siloBridgePool.borrow(currentSilo.address, amount);
+
+                    addTransaction(result, {
+                      summary: `Borrow ${amount} ETH from ${currentSilo.name}`,
+                    });
+                  } catch (error) {
+                    console.error(error);
+                  }
+                }
+              }
+            }}
+          >
+            Borrow Eth from Silo
+          </Button>
+          <Button
+            type="button"
+            color="gray"
+            onClick={async () => {
+              console.log('Silo.deposit.repay()');
+
+              // // have a token address, and this token address exists in a silo
+              // if (tokenAddress && tokenInSilo(tokenAddress)) {
+              //   console.log('selected:', selected);
+              //   console.log('tokenAddress:', tokenAddress);
+
+              //   if (amount > 0) {
+              //     console.log('withdraw amount:', amount);
+
+              //     const result = await siloContract.withdraw(amount);
+
+              //     addTransaction(result, {
+              //       summary: `Withdraw ${amount} ${selected.symbol} from ${currentSilo.name}`,
+              //     });
+              //   }
+              // }
+            }}
+          >
+            Repay Eth to Silo
           </Button>
         </div>
       </div>
