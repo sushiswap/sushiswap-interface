@@ -1,4 +1,4 @@
-import { bentoUserTokensQuery, kashiPairsQuery, kashiUserPairsQuery } from '../queries/bentobox'
+import { bentoBoxQuery, bentoUserTokensQuery, kashiPairsQuery, kashiUserPairsQuery } from '../queries/bentobox'
 import { getFraction, toAmount } from '../../../functions'
 
 import { ChainId } from '@sushiswap/core-sdk'
@@ -100,4 +100,10 @@ export const getBentoUserTokens = async (chainId = ChainId.MAINNET, variables) =
         token.shares.toBigNumber(0)
       ).toString(),
     }))
+}
+
+export const getBentoBox = async (chainId = ChainId.MAINNET, variables) => {
+  const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
+
+  return bentoBoxes[0]
 }

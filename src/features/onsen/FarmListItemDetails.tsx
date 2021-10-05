@@ -43,7 +43,7 @@ const FarmListItemDetails = ({ farm }) => {
     >
       <Disclosure.Panel className="flex w-full border-t-0 rounded rounded-t-none bg-dark-800" static>
         <InformationDisclosure farm={farm} />
-        <div className="flex flex-col w-full p-6 space-y-8">
+        <div className="flex flex-col w-full p-6 pl-2 space-y-8 sm:pl-6">
           <div className="flex items-center justify-between">
             <div className="text-xl font-bold cursor-pointer">
               {toggleView ? i18n._(t`Investment Details`) : i18n._(t`Manage Position`)}

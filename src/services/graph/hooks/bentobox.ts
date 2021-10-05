@@ -1,8 +1,6 @@
-import { useEffect, useMemo } from 'react'
 import useSWR, { SWRConfiguration } from 'swr'
 
-import { ChainId } from '@sushiswap/core-sdk'
-import { getKashiPairs, getUserKashiPairs, getBentoUserTokens } from '../fetchers/bentobox'
+import { getKashiPairs, getUserKashiPairs, getBentoUserTokens, getBentoBox } from '../fetchers/bentobox'
 import { useActiveWeb3React } from '../../../hooks'
 import { useBlock } from './blocks'
 import { Feature, featureEnabled } from '../../../functions/feature'
@@ -83,6 +81,35 @@ export function useBentoUserTokens(
   const { data } = useSWR(
     shouldFetch ? ['bentoUserTokens', chainId, JSON.stringify(variables)] : null,
     () => getBentoUserTokens(chainId, variables),
+    swrConfig
+  )
+
+  return data
+}
+
+interface useBentoBoxProps {
+  timestamp?: number
+  block?: number
+  chainId: number
+  shouldFetch?: boolean
+}
+
+export function useBentoBox(
+  { timestamp, block, chainId, shouldFetch = true }: useBentoBoxProps,
+  swrConfig?: SWRConfiguration
+) {
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
+  block = block ?? (timestamp ? blockFetched : undefined)
+
+  shouldFetch = shouldFetch && chainId ? featureEnabled(Feature.BENTOBOX, chainId) : false
+
+  const variables = {
+    block: block ? { number: block } : undefined,
+  }
+
+  const { data } = useSWR(
+    shouldFetch ? ['bentoBox', chainId, JSON.stringify(variables)] : null,
+    () => getBentoBox(chainId, variables),
     swrConfig
   )
 
