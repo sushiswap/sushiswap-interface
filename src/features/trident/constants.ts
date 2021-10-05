@@ -1,5 +1,5 @@
 import { ChipColor } from '../../components/Chip'
-import { AllPools, PoolAtomType, PoolType } from './types'
+import { PoolUnion, PoolAtomType, PoolType } from './types'
 import { formatPercent } from '../../functions'
 
 export const SORT_OPTIONS = [

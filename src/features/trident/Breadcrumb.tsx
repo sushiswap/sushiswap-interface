@@ -6,14 +6,14 @@ import { useRecoilValue } from 'recoil'
 import { poolAtom } from './context/atoms'
 import classNames from 'classnames'
 import Container from '../../components/Container'
-import { AllPools } from './types'
+import { PoolUnion } from './types'
 import { formatPercent } from '../../functions'
 import { Currency } from '@sushiswap/core-sdk'
 import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
 
 export type BreadcrumbTuple = { link: string; label: string }
 export type BreadcrumbItem =
-  | ((currencies: (Currency | undefined)[], pool?: AllPools) => BreadcrumbTuple)
+  | ((currencies: (Currency | undefined)[], pool?: PoolUnion) => BreadcrumbTuple)
   | BreadcrumbTuple
 
 export const BREADCRUMBS: Record<string, BreadcrumbItem> = {

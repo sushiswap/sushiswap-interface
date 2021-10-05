@@ -24,8 +24,8 @@ import Chip from '../Chip'
 import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 
 interface AssetInputProps {
-  value: string | undefined
-  currency: Currency | undefined
+  value?: string
+  currency?: Currency
   onChange: (x: string | undefined) => void
   spendFromWallet?: boolean
   title?: string

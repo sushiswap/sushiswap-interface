@@ -40,8 +40,7 @@ const Pool = () => {
   } = useSetupPoolProperties()
 
   useEffect(() => {
-    if (parsedAmounts.length > 1 && parsedAmounts.every((el) => el != null)) {
-      console.log(parsedAmounts)
+    if (parsedAmounts.length > 1 && parsedAmounts.every((el) => el)) {
       const pool =
         poolType === PoolType.ConstantProduct
           ? new ConstantProductPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier, true)

@@ -49,7 +49,7 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
 
 interface AllCurrenciesProps {
   handleSelect: (x: Currency) => void
-  search: string | null
+  search?: string
 }
 
 const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
@@ -128,14 +128,14 @@ interface CurrencySelectDialogProps {
 }
 
 const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currencies = [], onChange, onDismiss }) => {
-  const [search, setSearch] = useState<string | null>(null)
+  const [search, setSearch] = useState<string | undefined>(undefined)
   const { i18n } = useLingui()
 
   const handleSelect = useCallback(
     async (x: Currency) => {
       await onChange(x)
       await onDismiss()
-      setSearch(null)
+      setSearch(undefined)
     },
     [onChange, onDismiss, setSearch]
   )

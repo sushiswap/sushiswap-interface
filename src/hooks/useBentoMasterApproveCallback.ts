@@ -24,11 +24,7 @@ export enum BentoApproveOutcome {
   NOT_READY,
 }
 
-const useBentoHasPendingApproval = (
-  masterContract: string | undefined,
-  account: string | undefined,
-  contractName?: string
-) => {
+const useBentoHasPendingApproval = (masterContract?: string, account?: string, contractName?: string) => {
   const allTransactions = useAllTransactions()
   return useMemo(
     () =>

@@ -133,7 +133,7 @@ const ListPanelItemRight: FC = ({ children }) => {
 }
 
 interface CurrencyAmountItemProps {
-  amount: CurrencyAmount<Currency> | undefined
+  amount?: CurrencyAmount<Currency>
   weight?: string
 }
 

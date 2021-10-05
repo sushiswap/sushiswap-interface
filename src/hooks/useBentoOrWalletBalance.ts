@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 export const useBentoOrWalletBalance = (
   account: string | undefined,
   currencies: (Currency | Token | undefined)[],
-  walletOrBento: Record<string, boolean> | undefined
+  walletOrBento?: Record<string, boolean>
 ) => {
   const tokens = useMemo(() => currencies.map((el) => el?.wrapped), [currencies])
   const balance = useCurrencyBalances(account, currencies)

@@ -5,9 +5,9 @@ import { toAmountJSBI } from '../../../functions'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
-export const poolAtom = atom<PoolAtomType | [null, null]>({
+export const poolAtom = atom<PoolAtomType | [undefined, undefined]>({
   key: 'poolAtom',
-  default: [null, null],
+  default: [undefined, undefined],
 })
 
 export const showReviewAtom = atom<boolean>({
@@ -20,19 +20,19 @@ export const attemptingTxnAtom = atom<boolean>({
   default: false,
 })
 
-export const txHashAtom = atom<string | null>({
+export const txHashAtom = atom<string>({
   key: 'txHashAtom',
-  default: null,
+  default: '',
 })
 
-export const totalSupplyAtom = atom<CurrencyAmount<Token> | null>({
+export const totalSupplyAtom = atom<CurrencyAmount<Token> | undefined>({
   key: 'totalSupplyAtom',
-  default: null,
+  default: undefined,
 })
 
-export const poolBalanceAtom = atom<CurrencyAmount<Token> | null>({
+export const poolBalanceAtom = atom<CurrencyAmount<Token> | undefined>({
   key: 'poolBalanceAtom',
-  default: null,
+  default: undefined,
 })
 
 export const currenciesAtom = atom<Currency[]>({
@@ -114,7 +114,7 @@ export const slippageAtom = atom<Percent | null>({
 export const noLiquiditySelector = selector<boolean | undefined>({
   key: 'noLiquiditySelector',
   get: ({ get }) => {
-    const [poolState, pool] = get<PoolAtomType | [null, null]>(poolAtom)
+    const [poolState, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
 
     if (pool) {

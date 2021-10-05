@@ -4,7 +4,7 @@ import { classNames } from '../../functions'
 import { Input as NumericalInput } from '../Input/Numeric'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Currency, Token } from '@sushiswap/core-sdk'
+import { Currency } from '@sushiswap/core-sdk'
 
 type RangeInputColor = 'blue' | 'purple'
 
@@ -13,8 +13,8 @@ interface RangeInputProps {
   label: string
   value: string
   onChange: (val: string) => void
-  base: Currency | undefined
-  quote: Currency | undefined
+  base?: Currency
+  quote?: Currency
 }
 
 const COLOR = {
