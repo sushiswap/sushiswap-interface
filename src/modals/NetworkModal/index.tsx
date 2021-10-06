@@ -150,17 +150,6 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://forno.celo.org'],
     blockExplorerUrls: ['https://explorer.celo.org'],
   },
-  [ChainId.HARDHAT]: {
-    chainId: '0x0539',
-    chainName: 'HardHat',
-    nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18,
-    },
-    rpcUrls: ['http://localhost:8545'],
-    blockExplorerUrls: [''],
-  },
 };
 
 export default function NetworkModal(): JSX.Element | null {
@@ -184,7 +173,6 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.MATIC,
           ChainId.KOVAN,
           //ChainId.RINKEBY,
-          //  1337,
           //ChainId.FANTOM,
           // ChainId.ARBITRUM,
           //ChainId.OKEX,
