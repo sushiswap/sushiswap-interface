@@ -7,7 +7,7 @@ import Container from '../../components/Container'
 import { classNames } from '../../functions'
 
 interface ComponentProps {
-  breadcrumbs: BreadcrumbItem[]
+  breadcrumbs?: BreadcrumbItem[]
   headerBg?: string
   headerHeight?: string
 }
@@ -16,7 +16,7 @@ const TridentLayout: FC<ComponentProps> = ({
   children = [],
   headerBg = 'bg-dots-pattern',
   headerHeight = 'h-40',
-  breadcrumbs,
+  breadcrumbs = [],
 }) => {
   return (
     <div className="z-0 flex flex-col items-center w-full h-screen">
