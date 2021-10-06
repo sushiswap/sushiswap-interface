@@ -7,6 +7,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/outline'
 
 const TYPE = {
   information: {
+    text: 'text-high-emphesis',
     color: 'bg-purple bg-opacity-20 text-high-emphesis',
     icon: (
       <svg
@@ -25,6 +26,7 @@ const TYPE = {
     ),
   },
   warning: {
+    text: 'text-high-emphesis',
     color: 'bg-yellow bg-opacity-25 text-high-emphesis',
     icon: (
       <svg
@@ -43,8 +45,9 @@ const TYPE = {
     ),
   },
   error: {
+    text: 'text-red',
     color: 'bg-red bg-opacity-25 text-high-emphesis',
-    icon: <ExclamationCircleIcon className="h-5 w-5" />,
+    icon: <ExclamationCircleIcon className="h-5 w-5 text-red" />,
   },
 }
 
@@ -66,18 +69,18 @@ export default function Alert({
 }: AlertProps & React.HTMLAttributes<HTMLDivElement>): JSX.Element | null {
   // TODO: Persist this...
   const [show, setShow] = useState(true)
-  const { color, icon } = TYPE[type]
+  const { color, icon, text } = TYPE[type]
 
   return message && show ? (
     <div className={classNames('flex flex-row rounded p-4 gap-3', color, className)}>
       {showIcon && <div>{icon}</div>}
       <div className="flex flex-col gap-1.5 justify-center">
         {title && (
-          <Typography weight={700} className={classNames('text-left inline text-high-emphesis leading-6')}>
+          <Typography weight={700} className={classNames(text, 'text-left inline leading-6')}>
             {title}
           </Typography>
         )}
-        <Typography variant="sm" weight={400} className={classNames('text-left text-high-emphesis')}>
+        <Typography variant="sm" weight={700} className={classNames(text, 'text-left')}>
           {message}
         </Typography>
       </div>
