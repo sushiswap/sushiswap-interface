@@ -3,23 +3,21 @@ import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 
 // Dummy component that fetches usdcValue
-const USDCValue: FC<{ amount: CurrencyAmount<Currency>; update(address: string, value: CurrencyAmount<Currency>) }> = ({
-  amount,
-  update,
-}) => {
-  const usdcValue = useUSDCValue(amount)
+const USDCValue: FC<{ amount?: CurrencyAmount<Currency>; update(address: string, value: CurrencyAmount<Currency>) }> =
+  ({ amount, update }) => {
+    const usdcValue = useUSDCValue(amount)
 
-  useEffect(() => {
-    if (amount?.currency.wrapped.address && usdcValue) {
-      update(amount?.currency.wrapped.address, usdcValue)
-    }
-  }, [amount?.currency.wrapped.address, update, usdcValue])
+    useEffect(() => {
+      if (amount?.currency.wrapped.address && usdcValue) {
+        update(amount?.currency.wrapped.address, usdcValue)
+      }
+    }, [amount?.currency.wrapped.address, update, usdcValue])
 
-  return <></>
-}
+    return <></>
+  }
 
 interface SumUSDCValuesProps {
-  amounts: CurrencyAmount<Currency>[]
+  amounts: (CurrencyAmount<Currency> | undefined)[]
   children: ({ amount, loading }: { amount: CurrencyAmount<Currency> | null; loading: boolean }) => ReactNode
 }
 
