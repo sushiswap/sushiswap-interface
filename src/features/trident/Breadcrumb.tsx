@@ -40,7 +40,7 @@ interface BreadcrumbProps {
 
 const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   const [, pool] = useRecoilValue(poolAtom)
-  const [currencies] = useCurrenciesFromURL()
+  const { currencies } = useCurrenciesFromURL()
 
   const formatted = useMemo(() => {
     return breadcrumbs.map((el) => {
@@ -53,8 +53,8 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   }, [breadcrumbs, currencies, pool])
 
   return (
-    <div className="w-full border-b border-dark-900 py-2 flex justify-center bg-gradient-to-r from-transparent-blue to-transparent-pink">
-      <Container maxWidth="7xl" className="px-5 flex items-center">
+    <div className="flex justify-center w-full py-2 border-b border-dark-900 bg-gradient-to-r from-transparent-blue to-transparent-pink">
+      <Container maxWidth="7xl" className="flex items-center px-5">
         {formatted
           .map(({ label, link }, index) => (
             <Typography

@@ -24,7 +24,7 @@ import useCurrenciesFromURL from './useCurrenciesFromURL'
 export const useClassicStandardAddExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const [[currencyA, currencyB]] = useCurrenciesFromURL()
+  const { currencies } = useCurrenciesFromURL()
   const { parsedAmounts } = useDependentAssetInputs()
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
   const addTransaction = useTransactionAdder()
@@ -51,8 +51,8 @@ export const useClassicStandardAddExecute = () => {
           !router ||
           !parsedAmountA ||
           !parsedAmountB ||
-          !currencyA ||
-          !currencyB ||
+          !currencies?.[0] ||
+          !currencies?.[1] ||
           !pool?.token0 ||
           !pool?.token1 ||
           !bentoboxContract
@@ -86,9 +86,9 @@ export const useClassicStandardAddExecute = () => {
         ]
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
-        const value = currencyA.isNative
+        const value = currencies?.[0].isNative
           ? { value: parsedAmountA.quotient.toString() }
-          : currencyB.isNative
+          : currencies?.[1].isNative
           ? { value: parsedAmountB.quotient.toString() }
           : {}
 
@@ -138,6 +138,7 @@ export const useClassicStandardAddExecute = () => {
       setAttemptingTxn,
       setShowReview,
       setTxHash,
+      currencies,
     ]
   )
 

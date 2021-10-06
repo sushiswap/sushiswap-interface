@@ -32,7 +32,7 @@ const ClassicStandardMode = () => {
     isMax,
     error,
   } = useDependentAssetInputs()
-  const [[currencyA, currencyB], setURLCurrency] = useCurrenciesFromURL()
+  const { currencies, setURLCurrency } = useCurrenciesFromURL()
 
   const [, pool] = useRecoilValue(poolAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
@@ -46,7 +46,7 @@ const ClassicStandardMode = () => {
         <div className="flex flex-col gap-4">
           <AssetInput
             value={formattedAmounts[0]}
-            currency={currencyA}
+            currency={currencies?.[0]}
             onChange={(val) => {
               setTypedField(TypedField.A)
               setMainInput(val || '')
@@ -62,7 +62,7 @@ const ClassicStandardMode = () => {
           />
           <AssetInput
             value={formattedAmounts[1]}
-            currency={currencyB}
+            currency={currencies?.[1]}
             onChange={(val) => {
               setTypedField(TypedField.B)
               setSecondaryInput(val || '')

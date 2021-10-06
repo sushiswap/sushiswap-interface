@@ -31,10 +31,10 @@ const AddClassic = () => {
 
   const { i18n } = useLingui()
   const { query } = useRouter()
-  const [[currencyA, currencyB]] = useCurrenciesFromURL()
+  const { currencies, twap, fee } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [, pool] = useRecoilValue(poolAtom)
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
+  const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
 
   return (
     <>
@@ -46,13 +46,13 @@ const AddClassic = () => {
           className="py-1 pl-2 rounded-full"
           startIcon={<ChevronLeftIcon width={24} height={24} />}
         >
-          <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>
-            {pool ? `${currencyA?.symbol}-${currencyB?.symbol}` : i18n._(t`Back`)}
+          <Link href={`/trident/pool/classic/${query.tokens?.[0]}/${query?.tokens?.[1]}`}>
+            {pool ? `${currencies[0]?.symbol}-${currencies[1]?.symbol}` : i18n._(t`Back`)}
           </Link>
         </Button>
       </div>
-      <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10 lg:justify-between">
-        <div className="lg:w-7/12 flex flex-col gap-5">
+      <div className="flex flex-col w-full gap-10 mt-px mb-5 lg:flex-row lg:justify-between">
+        <div className="flex flex-col gap-5 lg:w-7/12">
           <div className="flex flex-col">
             <Typography variant="h2" weight={700} className="text-high-emphesis">
               {i18n._(t`Add Liquidity`)}
@@ -96,7 +96,7 @@ const AddClassic = () => {
           </>
         </div>
 
-        <div className="hidden lg:block lg:w-4/12 flex flex-col">
+        <div className="flex flex-col hidden lg:block lg:w-4/12">
           {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
         </div>
       </div>

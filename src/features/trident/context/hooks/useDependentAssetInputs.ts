@@ -136,7 +136,7 @@ export const useDependentAssetInputs = () => {
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const [currencies] = useCurrenciesFromURL()
+  const { currencies } = useCurrenciesFromURL()
   const balances = useBentoOrWalletBalance(account ? account : undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {
