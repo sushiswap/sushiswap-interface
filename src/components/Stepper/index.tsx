@@ -1,6 +1,7 @@
 import { Children, cloneElement, FC, isValidElement, createContext, useMemo, useContext } from 'react'
 import { classNames } from '../../functions'
 import Typography from '../Typography'
+import { HorizontalLine } from '../HorizontalLine'
 
 interface StepperProps {
   onChange: (x: number) => void
@@ -38,7 +39,7 @@ const List: FC = ({ children }) => {
   const count = Children.count(children)
 
   return (
-    <div className="flex border-b border-dark-700">
+    <div className="flex">
       {Children.map(children, (child, index) => {
         if (isValidElement(child)) return cloneElement(child, { lastChild: count === index + 1, index })
         return child
