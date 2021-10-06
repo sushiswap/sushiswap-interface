@@ -43,6 +43,7 @@ const ClassicStandardMode = () => {
   return (
     <>
       <div className="flex flex-col gap-6">
+        <div />
         <div className="flex flex-col gap-4">
           <AssetInput
             value={formattedAmounts[0]}
@@ -60,6 +61,7 @@ const ClassicStandardMode = () => {
             }
             spendFromWallet={spendFromWalletA}
           />
+          <div />
           <AssetInput
             value={formattedAmounts[1]}
             currency={currencyB}

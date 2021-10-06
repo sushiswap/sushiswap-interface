@@ -30,7 +30,8 @@
     "*.{md,css}": "prettier --write"
   },
   "resolutions": {
-    "@walletconnect/web3-provider": "1.6.0"
+    "@walletconnect/web3-provider": "1.6.0",
+    "@sushiswap/core-sdk": "1.0.0-canary.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",
@@ -81,7 +82,7 @@
     "@sushiswap/limit-order-sdk": "1.0.0-canary.0",
     "@sushiswap/sdk": "5.0.0-canary.89",
     "@sushiswap/sushi-data": "^1.0.24",
-    "@sushiswap/trident": "1.0.0-canary.14",
+    "@sushiswap/trident": "1.0.0-canary.21",
     "@sushiswap/trident-sdk": "1.0.0-canary.3",
     "@tailwindcss/jit": "^0.1.18",
     "@transak/transak-sdk": "^1.0.28",

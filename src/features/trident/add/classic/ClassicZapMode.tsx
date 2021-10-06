@@ -67,9 +67,6 @@ const ClassicZapMode = () => {
       )}
 
       <div className="flex flex-col gap-3">
-        <Typography variant="h3" weight={700} className="text-high-emphesis hidden lg:block">
-          {i18n._(t`Choose an asset from your wallet/BentoBox:`)}
-        </Typography>
         <AssetInput
           value={zapInputAmount}
           currency={zapCurrency}

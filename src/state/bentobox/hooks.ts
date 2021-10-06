@@ -1,10 +1,9 @@
-import { CurrencyAmount, KASHI_ADDRESS, Token, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { KASHI_ADDRESS, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import ERC20_ABI from '../../constants/abis/erc20.json'
-import { WrappedTokenInfo } from '../lists/wrappedTokenInfo'
 import { e10 } from '../../functions/math'
 import { easyAmount } from '../../functions/kashi'
 import { getAddress } from '@ethersproject/address'
@@ -13,7 +12,6 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useSingleCallResult } from '../multicall/hooks'
 import useTransactionStatus from '../../hooks/useTransactionStatus'
-import { serializeBalancesMap } from '../wallet/hooks'
 
 export interface BentoBalance {
   address: string
@@ -147,63 +145,6 @@ export function useBentoBalance(tokenAddress: string): {
   }, [account, bentoBoxContract, currentTransactionStatus, fetchBentoBalance, tokenContract, boringHelperContract])
 
   return balance
-}
-
-export function useBentoBalance2(
-  account: string | undefined,
-  token: Token | undefined
-): CurrencyAmount<Token> | undefined {
-  const tokens = useMemo(() => [token], [token])
-  const balance = useBentoBalances2(account, tokens)
-  if (token && balance && balance[token.address]) {
-    return balance[token.address]
-  }
-
-  return undefined
-}
-
-export function useBentoBalances2(
-  account?: string,
-  tokens?: (Token | undefined)[]
-): Record<string, CurrencyAmount<Token> | undefined> {
-  const boringHelperContract = useBoringHelperContract()
-  const bentoBoxContract = useBentoBoxContract()
-  const currentTransactionStatus = useTransactionStatus()
-  const [balances, setBalances] = useState<Record<string, CurrencyAmount<Token>>>({})
-  const memoizedBalances = useMemo(() => serializeBalancesMap(balances), [balances])
-
-  const fetch = useCallback(async () => {
-    if (!boringHelperContract || !tokens) return
-    if (tokens.every((el) => el)) {
-      const balances = await boringHelperContract.getBalances(
-        account,
-        tokens.map((el: Token) => el.address)
-      )
-
-      setBalances(
-        balances.reduce((acc, balance, index) => {
-          const token = tokens[index]
-          if (token?.address) {
-            acc[token?.address] = CurrencyAmount.fromRawAmount(
-              token,
-              balance.bentoBalance.mulDiv(balance.bentoAmount, balance.bentoShare).toString()
-            )
-          }
-
-          return acc
-        }, {})
-      )
-    }
-  }, [boringHelperContract, account, tokens])
-
-  useEffect(() => {
-    if (!account || !bentoBoxContract || !boringHelperContract || !tokens?.every((el) => el)) {
-      fetch()
-    }
-  }, [account, bentoBoxContract, currentTransactionStatus, fetch, boringHelperContract, tokens])
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useMemo(() => balances, [memoizedBalances])
 }
 
 export function useBentoMasterContractAllowed(masterContract?: string, user?: string): boolean | undefined {

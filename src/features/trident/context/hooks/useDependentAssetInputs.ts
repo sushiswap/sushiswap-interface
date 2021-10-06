@@ -1,13 +1,22 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { currenciesAtom, fixedRatioAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
+import {
+  bentoboxRebasesAtom,
+  currenciesAtom,
+  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
+  fixedRatioAtom,
+  noLiquiditySelector,
+  poolAtom,
+  spendFromWalletAtom,
+} from '../atoms'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import { useCallback, useMemo } from 'react'
-import { maxAmountSpend, tryParseAmount } from '../../../../functions'
+import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from '../../../../functions'
 import { useActiveWeb3React } from '../../../../hooks'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalance'
+import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
 import useCurrenciesFromURL from './useCurrenciesFromURL'
+import useParsedAmountsWithSlippage from './useParsedAmountsWithSlippage'
 
 export enum TypedField {
   A,
@@ -37,6 +46,7 @@ export const secondaryInputSelector = selector<string>({
     const noLiquidity = get(noLiquiditySelector)
     const fixedRatio = get(fixedRatioAtom)
     const typedField = get(typedFieldAtom)
+    const rebases = get(bentoboxRebasesAtom)
 
     // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
     if (!noLiquidity && fixedRatio && typedField === TypedField.A) {
@@ -44,7 +54,11 @@ export const secondaryInputSelector = selector<string>({
       const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
 
       if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
-        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
+        const dependentTokenAmount = toAmountCurrencyAmount(
+          rebases[1],
+          pool.priceOf(tokenA).quote(toShareCurrencyAmount(rebases[0], mainInputCurrencyAmount?.wrapped))
+        )
+
         return (
           pool?.token1?.isNative
             ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
@@ -60,6 +74,7 @@ export const secondaryInputSelector = selector<string>({
     const noLiquidity = get(noLiquiditySelector)
     const typedField = get(typedFieldAtom)
     const fixedRatio = get(fixedRatioAtom)
+    const rebases = get(bentoboxRebasesAtom)
 
     // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
     if (!noLiquidity && fixedRatio) {
@@ -68,7 +83,10 @@ export const secondaryInputSelector = selector<string>({
       const newValueCA = tryParseAmount(newValue, pool?.token1)
 
       if (tokenA && tokenB && pool && newValueCA?.wrapped) {
-        const dependentTokenAmount = pool.priceOf(tokenB).quote(newValueCA?.wrapped)
+        const dependentTokenAmount = toAmountCurrencyAmount(
+          rebases[0],
+          pool.priceOf(tokenB).quote(toShareCurrencyAmount(rebases[1], newValueCA?.wrapped))
+        )
         set(mainInputAtom, dependentTokenAmount?.toExact())
       }
 
@@ -132,12 +150,17 @@ export const useDependentAssetInputs = () => {
   const secondaryInput = useRecoilState(secondaryInputSelector)
   const formattedAmounts = useRecoilValue(formattedAmountsSelector)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
-  const typedField = useRecoilState(typedFieldAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const parsedAmountsWithSlippage = useParsedAmountsWithSlippage(
+    parsedAmounts,
+    noLiquidity,
+    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
+  )
+  const typedField = useRecoilState(typedFieldAtom)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const [currencies] = useCurrenciesFromURL()
-  const balances = useBentoOrWalletBalance(account ? account : undefined, currencies, spendFromWallet)
+  const balances = useBentoOrWalletBalances(account ?? undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {
     if (!balances || !pool || !balances[0] || !balances[1]) return
@@ -193,11 +216,22 @@ export const useDependentAssetInputs = () => {
       secondaryInput,
       formattedAmounts,
       parsedAmounts,
+      parsedAmountsWithSlippage,
       typedField,
       onMax,
       isMax,
       error,
     }),
-    [error, formattedAmounts, isMax, mainInput, onMax, parsedAmounts, secondaryInput, typedField]
+    [
+      error,
+      formattedAmounts,
+      isMax,
+      mainInput,
+      onMax,
+      parsedAmounts,
+      parsedAmountsWithSlippage,
+      secondaryInput,
+      typedField,
+    ]
   )
 }

@@ -14,13 +14,13 @@ const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
-  const { parsedAmounts } = useDependentAssetInputs()
+  const { parsedAmountsWithSlippage } = useDependentAssetInputs()
 
   // TODO parsedSplitAmounts is still empty
   const { parsedSplitAmounts } = useZapAssetInput()
 
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const input = liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
+  const input = liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmountsWithSlippage
   const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(input)
 
   return (

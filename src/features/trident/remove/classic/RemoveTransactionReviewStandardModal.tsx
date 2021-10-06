@@ -1,11 +1,5 @@
 import React, { FC } from 'react'
-import {
-  attemptingTxnAtom,
-  outputToWalletAtom,
-  poolAtom,
-  showReviewAtom,
-  spendFromWalletAtom,
-} from '../../context/atoms'
+import { attemptingTxnAtom, outputToWalletAtom, poolAtom, showReviewAtom } from '../../context/atoms'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Typography from '../../../../components/Typography'
@@ -25,7 +19,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
 
-  const { parsedAmounts, parsedSLPAmount } = usePercentageInput()
+  const { parsedAmounts, parsedAmountsWithSlippage, parsedSLPAmount } = usePercentageInput()
   const { currentLiquidityValue, liquidityValue, currentPoolShare, poolShare } = usePoolDetailsRemove(parsedSLPAmount)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const outputToWallet = useRecoilValue(outputToWalletAtom)
@@ -72,9 +66,19 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
               ))}
             />
           </div>
+          <div className="flex flex-col gap-3 px-5">
+            <Typography weight={700} variant="lg">
+              {i18n._(t`And you'll receive (at least):`)}
+            </Typography>
+            <ListPanel
+              items={parsedAmountsWithSlippage.map((parsedInputAmount, index) => (
+                <ListPanel.CurrencyAmountItem amount={parsedInputAmount} key={index} />
+              ))}
+            />
+          </div>
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
-              {i18n._(t`...and deposited to your:`)}
+              {i18n._(t`...deposited to your:`)}
             </Typography>
             <Typography weight={700} variant="lg" className="text-high-emphesis">
               {outputToWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}

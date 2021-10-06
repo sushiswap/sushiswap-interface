@@ -123,7 +123,8 @@ export function useMerkleDistributorContract(): Contract | null {
 
 export function useBoringHelperContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(chainId && BORING_HELPER_ADDRESS[chainId], BORING_HELPER_ABI, false)
+  // TODO ramin update in sdk
+  return useContract('0x5bd6e4eFA335192FDA5D6B42a344ccA3d45894B8', BORING_HELPER_ABI, false)
 }
 
 export function useMulticall2Contract() {

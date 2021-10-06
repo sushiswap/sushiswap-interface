@@ -20,10 +20,10 @@ const TransactionReviewStandardModal: FC = () => {
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
-  const { parsedAmounts } = useDependentAssetInputs()
+  const { parsedAmounts, parsedAmountsWithSlippage } = useDependentAssetInputs()
   const { execute } = useClassicStandardAddExecute()
   const { currentLiquidityValue, liquidityMinted, liquidityValue, poolShare, currentPoolShare, price } =
-    usePoolDetails(parsedAmounts)
+    usePoolDetails(parsedAmountsWithSlippage)
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context

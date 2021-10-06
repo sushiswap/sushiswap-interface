@@ -5,7 +5,7 @@ import { t } from '@lingui/macro'
 import { noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
-import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalance'
+import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
 import { useMemo } from 'react'
 
 export const selectedZapCurrencyAtom = atom<Currency | undefined>({
@@ -57,7 +57,7 @@ export const useZapAssetInput = () => {
   const parsedAmount = useRecoilValue(parsedZapAmountSelector)
   const parsedSplitAmounts = useRecoilValue(parsedZapSplitAmountsSelector)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const balance = useBentoOrWalletBalance(account ?? undefined, currency, spendFromWallet)
+  const balance = useBentoOrWalletBalances(account ?? undefined, currency, spendFromWallet)
 
   let error = !account
     ? i18n._(t`Connect Wallet`)

@@ -3,7 +3,7 @@ import { Currency } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
 import Typography from '../Typography'
 import { t } from '@lingui/macro'
-import { classNames } from '../../functions'
+import { classNames, tryParseAmount } from '../../functions'
 import Lottie from 'lottie-react'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import Button from '../Button'
@@ -13,9 +13,9 @@ import CurrencySelectDialog from '../CurrencySelectDialog'
 import CurrencyLogo from '../CurrencyLogo'
 import ListPanel from '../ListPanel'
 import { useTokenBalance } from '../../state/wallet/hooks'
-import { useBentoBalance2 } from '../../state/bentobox/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
+import { useBentoBalance } from '../../state/bentobox/hooks'
 
 interface AssetSelectProps {
   title?: string
@@ -119,9 +119,10 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
 const BalancePanel = ({ currency }: { currency: Currency }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const bento = useBentoBalance2(account, currency?.wrapped)
-  const bentoUSDC = useUSDCValue(bento)
-  const wallet = useTokenBalance(account, currency?.wrapped)
+  const bento = useBentoBalance(currency?.wrapped.address)
+  const bentoAmount = tryParseAmount(bento?.value.toFraction.toString(), currency)
+  const bentoUSDC = useUSDCValue(bentoAmount)
+  const wallet = useTokenBalance(account ?? undefined, currency?.wrapped)
   const walletUSDC = useUSDCValue(wallet)
 
   return (
@@ -166,7 +167,7 @@ const BalancePanel = ({ currency }: { currency: Currency }) => {
               {i18n._(t`In Bento:`)}
             </Typography>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {bento?.greaterThan('0') ? bento?.toSignificant(6) : '0.0000'}
+              {bentoAmount?.greaterThan('0') ? bentoAmount?.toSignificant(6) : '0.0000'}
             </Typography>
           </div>
           <Typography variant="sm" weight={700} className="text-high-emphesis text-right">

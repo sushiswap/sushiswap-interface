@@ -3,30 +3,17 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
-import React, { useEffect } from 'react'
+import React from 'react'
 import ClassicStandardMode from '../../../../features/trident/remove/classic/ClassicStandardMode'
 import ModeToggle from '../../../../features/trident/ModeToggle'
 import { LiquidityMode } from '../../../../features/trident/types'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  liquidityModeAtom,
-  poolAtom,
-  poolBalanceAtom,
-  slippageAtom,
-  totalSupplyAtom,
-} from '../../../../features/trident/context/atoms'
+import { RecoilRoot, useRecoilValue } from 'recoil'
+import { liquidityModeAtom, poolAtom } from '../../../../features/trident/context/atoms'
 import TridentLayout from '../../../../layouts/Trident'
 import ClassicUnzapMode from '../../../../features/trident/remove/classic/ClassicUnzapMode'
-import { useCurrency } from '../../../../hooks/Tokens'
-import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../../../state/wallet/hooks'
-import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
-import { Percent } from '@sushiswap/core-sdk'
 import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
 import WithdrawalSubmittedModal from '../../../../features/trident/WithdrawalSubmittedModal'
 import RemoveTransactionReviewZapModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewZapModal'
 import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewStandardModal'
@@ -37,8 +24,6 @@ import ClassicZapAside from '../../../../features/trident/remove/classic/Classic
 import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
 import useCurrenciesFromURL from '../../../../features/trident/context/hooks/useCurrenciesFromURL'
 
-const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
-
 const RemoveClassic = () => {
   useInitClassicPoolState()
 
@@ -47,15 +32,7 @@ const RemoveClassic = () => {
   const [[currencyA, currencyB]] = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [, pool] = useRecoilValue(poolAtom)
-
   const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
-  const setSlippage = useSetRecoilState(slippageAtom)
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE) // custom from users
-
-  useEffect(() => {
-    if (!allowedSlippage) return
-    setSlippage(allowedSlippage)
-  })
 
   return (
     <>
@@ -72,7 +49,6 @@ const RemoveClassic = () => {
               {pool ? `${currencyA?.symbol}-${currencyB?.symbol}` : i18n._(t`Back`)}
             </Link>
           </Button>
-          <SettingsTab />
         </div>
       </div>
       <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10 lg:justify-around">

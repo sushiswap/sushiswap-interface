@@ -13,15 +13,14 @@ import NumericalInput from '../../components/Input/Numeric'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import HeadlessUIModal from '../Modal/HeadlessUIModal'
 import CurrencySelectDialog from '../CurrencySelectDialog'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../hooks'
 import Switch from '../Switch'
 import BentoBoxFundingSourceModal from '../../features/trident/add/BentoBoxFundingSourceModal'
 import { BentoBoxIcon, WalletIcon } from './icons'
-import { useBentoBalance2 } from '../../state/bentobox/hooks'
 import { ExclamationCircleIcon } from '@heroicons/react/outline'
 import Chip from '../Chip'
 import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
+import { useBentoOrWalletBalance } from '../../hooks/useBentoOrWalletBalance'
 
 interface AssetInputProps {
   value?: string
@@ -52,12 +51,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
   const { account } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
 
-  const bentoBalance = useBentoBalance2(
-    account ? account : undefined,
-    spendFromWallet ? undefined : props.currency?.wrapped
-  )
-  const walletBalance = useCurrencyBalance(account ? account : undefined, spendFromWallet ? props.currency : undefined)
-  const balance = spendFromWallet ? walletBalance : bentoBalance
+  const balance = useBentoOrWalletBalance(account ? account : undefined, props.currency, spendFromWallet)
   const maxSpend = maxAmountSpend(balance)?.toExact()
   const maxSpendAsFraction = maxAmountSpend(balance)?.asFraction
   const parsedInput = tryParseAmount(props.value, props.currency)
@@ -98,13 +92,11 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
   return (
     <AssetInputContext.Provider value={useMemo(() => (error ? error : false), [error])}>
       <div className="mt-4 lg:mt-0 flex flex-col gap-4">
+        <div className="px-2 flex justify-between">
+          {header}
+          {!isDesktop && props.headerRight && props.headerRight}
+        </div>
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
-          {!isDesktop && (
-            <div className="px-2 flex justify-between">
-              {header}
-              {props.headerRight && props.headerRight}
-            </div>
-          )}
           <AssetInputPanel
             {...props}
             spendFromWallet={spendFromWallet}

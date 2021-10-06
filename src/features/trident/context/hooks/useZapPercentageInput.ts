@@ -1,11 +1,17 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import { calculateSlippageAmount, tryParseAmount } from '../../../../functions'
-import { currentLiquidityValueSelector, poolAtom, poolBalanceAtom, slippageAtom } from '../atoms'
+import {
+  currentLiquidityValueSelector,
+  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
+  noLiquiditySelector,
+  poolAtom,
+  poolBalanceAtom,
+} from '../atoms'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
+import useParsedAmountsWithSlippage from './useParsedAmountsWithSlippage'
 
 export const percentageZapCurrencyAtom = atom<Currency | undefined>({
   key: 'percentageZapCurrencyAtom',
@@ -27,23 +33,6 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefine
   },
 })
 
-export const parsedZapAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'parsedZapAmountSelector',
-  get: ({ get }) => {
-    const poolBalance = get(poolBalanceAtom)
-    const percentageAmount = get(percentageAmountAtom)
-    const percentage = new Percent(percentageAmount, '100')
-    const currency = get(percentageZapCurrencyAtom)
-
-    // TODO calculate output amount
-    if (currency) {
-      return tryParseAmount('1', currency)
-    }
-
-    return undefined
-  },
-})
-
 export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
   key: 'parsedAmountsSelector',
   get: ({ get }) => {
@@ -51,23 +40,15 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
     const percentageAmount = get(percentageAmountAtom)
     const currentLiquidityValue = get(currentLiquidityValueSelector)
     const percentage = new Percent(percentageAmount, '100')
-    const allowedSlippage = get(slippageAtom)
 
     if (pool) {
       const tokens = [pool.token0, pool.token1]
-      const amounts = tokens.map((el, index) => {
+      return tokens.map((el, index) => {
         const element = currentLiquidityValue[index]
         return pool && percentageAmount && percentage.greaterThan('0') && element
           ? CurrencyAmount.fromRawAmount(el, percentage.multiply(element?.quotient).quotient)
           : undefined
       })
-
-      if (allowedSlippage && amounts[0] && amounts[1]) {
-        const amountsMin = amounts.map((el) => (el ? calculateSlippageAmount(el, allowedSlippage)[0] : undefined))
-        return amountsMin.map((el, index) =>
-          el ? CurrencyAmount.fromRawAmount(tokens[index], el.toString()) : undefined
-        )
-      }
     }
 
     return [undefined, undefined]
@@ -80,15 +61,20 @@ const useZapPercentageInput = () => {
   const [poolState] = useRecoilValue(poolAtom)
   const zapCurrency = useRecoilState(percentageZapCurrencyAtom)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
-  const parsedOutputAmount = useRecoilValue(parsedZapAmountSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
   const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
+  const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const parsedAmountsWithSlippage = useParsedAmountsWithSlippage(
+    parsedAmounts,
+    noLiquidity,
+    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
+  )
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
     : poolState === 3
     ? i18n._(t`Invalid pool`)
-    : !parsedOutputAmount?.greaterThan(ZERO)
+    : !parsedSLPAmount?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : ''
 
@@ -96,12 +82,12 @@ const useZapPercentageInput = () => {
     () => ({
       zapCurrency,
       parsedAmounts,
-      parsedOutputAmount,
+      parsedAmountsWithSlippage,
       parsedSLPAmount,
       percentageInput,
       error,
     }),
-    [error, parsedAmounts, parsedOutputAmount, parsedSLPAmount, percentageInput, zapCurrency]
+    [error, parsedAmounts, parsedAmountsWithSlippage, parsedSLPAmount, percentageInput, zapCurrency]
   )
 }
 

@@ -1,11 +1,17 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import { calculateSlippageAmount } from '../../../../functions'
-import { poolAtom, poolBalanceAtom, slippageAtom, totalSupplyAtom } from '../atoms'
+import {
+  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
+  noLiquiditySelector,
+  poolAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from '../atoms'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
+import useParsedAmountsWithSlippage from './useParsedAmountsWithSlippage'
 
 export const percentageAmountAtom = atom<string>({
   key: 'percentageAmountAtom',
@@ -28,9 +34,8 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const parsedSLPAmount = get(parsedSLPAmountSelector)
-    const allowedSlippage = get(slippageAtom)
 
-    const amounts = [
+    return [
       pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
         ? pool.getLiquidityValue(pool.token0, totalSupply, parsedSLPAmount)
         : undefined,
@@ -38,21 +43,6 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
         ? pool.getLiquidityValue(pool.token1, totalSupply, parsedSLPAmount)
         : undefined,
     ]
-
-    if (pool && allowedSlippage && amounts[0] && amounts[1]) {
-      const amountsMin = [
-        calculateSlippageAmount(amounts[0], allowedSlippage)[0],
-        calculateSlippageAmount(amounts[1], allowedSlippage)[0],
-      ]
-
-      return [
-        CurrencyAmount.fromRawAmount(pool.token0, amountsMin[0].toString()),
-        CurrencyAmount.fromRawAmount(pool.token1, amountsMin[1].toString()),
-      ]
-    }
-
-    if (pool) return [CurrencyAmount.fromRawAmount(pool.token0, '0'), CurrencyAmount.fromRawAmount(pool.token1, '0')]
-    return [undefined, undefined]
   },
 })
 
@@ -61,9 +51,15 @@ const usePercentageInput = () => {
   const { i18n } = useLingui()
   const [poolState] = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
+  const noLiquidity = useRecoilValue(noLiquiditySelector)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
   const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
+  const parsedAmountsWithSlippage = useParsedAmountsWithSlippage(
+    parsedAmounts,
+    noLiquidity,
+    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
+  )
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -80,11 +76,12 @@ const usePercentageInput = () => {
   return useMemo(
     () => ({
       parsedAmounts,
+      parsedAmountsWithSlippage,
       parsedSLPAmount,
       percentageInput,
       error,
     }),
-    [error, parsedAmounts, parsedSLPAmount, percentageInput]
+    [error, parsedAmounts, parsedAmountsWithSlippage, parsedSLPAmount, percentageInput]
   )
 }
 
