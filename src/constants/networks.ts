@@ -44,7 +44,6 @@ export const NETWORK_ICON = {
   [ChainId.OKEX]: OKEx,
   [ChainId.OKEX_TESTNET]: OKEx,
   [ChainId.CELO]: Celo,
-  ['1337']: HardHat,
 };
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
@@ -72,5 +71,4 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.OKEX]: 'OKEx',
   [ChainId.OKEX_TESTNET]: 'OKEx',
   [ChainId.CELO]: 'Celo',
-  ['1337']: 'HardHat',
 };
