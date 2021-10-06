@@ -1,4 +1,4 @@
-import { Children, cloneElement, FC, isValidElement, createContext, useMemo, useContext } from 'react'
+import React, { Children, cloneElement, FC, isValidElement, createContext, useMemo, useContext } from 'react'
 import { classNames } from '../../functions'
 import Typography from '../Typography'
 import { HorizontalLine } from '../HorizontalLine'
@@ -12,11 +12,12 @@ interface StepperProps {
 type Stepper<P> = FC<P> & {
   Panel: FC<PanelProps>
   Tab: FC<TabProps>
-  List: FC
+  List: FC<ListProps>
   Panels: FC
 }
 
-const StepperContext = createContext<{ onChange(index: number): void; value: number }>(null)
+const defaultContext = { onChange: () => undefined, value: 0 }
+const StepperContext = createContext<{ onChange(index: number): void; value: number }>(defaultContext)
 const useStepperContext = () => useContext(StepperContext)
 
 const Stepper: Stepper<StepperProps> = ({ onChange, value, children, className = 'flex flex-col' }) => {
@@ -35,16 +36,21 @@ const Stepper: Stepper<StepperProps> = ({ onChange, value, children, className =
   )
 }
 
-const List: FC = ({ children }) => {
-  const count = Children.count(children)
+interface ListProps {
+  tabs: { title: string; subtitle: string }[]
+}
 
+const List: FC<ListProps> = ({ tabs }) => {
   return (
-    <div className="flex">
-      {Children.map(children, (child, index) => {
-        if (isValidElement(child)) return cloneElement(child, { lastChild: count === index + 1, index })
-        return child
-      })}
-    </div>
+    <>
+      <HorizontalLine />
+      <div className="flex">
+        {tabs.map(({ title, subtitle }, index) => (
+          <Tab title={title} subtitle={subtitle} index={index} isLastChild={index === tabs.length - 1} key={index} />
+        ))}
+      </div>
+      <HorizontalLine />
+    </>
   )
 }
 
@@ -71,41 +77,50 @@ const Panel: FC<PanelProps> = (props) => {
 }
 
 interface TabProps {
-  lastChild?: boolean
-  index?: number
+  title: string
+  subtitle: string
+  index: number
+  isLastChild: boolean
 }
 
-const Tab: FC<TabProps> = ({ lastChild, ...props }) => {
+const Tab: FC<TabProps> = ({ title, subtitle, index, isLastChild }) => {
   const { value, onChange } = useStepperContext()
-  const selected = props.index === value
+  const selected = index === value
 
   return (
-    <div className={classNames('cursor-pointer', lastChild ? 'flex-grow' : '')} onClick={() => onChange(props.index)}>
-      <div
-        className={classNames('flex flex-row gap-3 items-center h-[52px] relative px-5', lastChild ? 'flex-grow' : '')}
-      >
+    <div className="cursor-pointer flex-1" onClick={() => onChange(index)}>
+      <div className="flex flex-row gap-3 items-center md:h-20 h-16 relative px-5">
         <div
           className={classNames(
-            'rounded-full w-5 h-5 flex items-center justify-center',
-            selected ? 'bg-blue' : 'bg-dark-700'
+            'rounded-full w-10 h-10 flex items-center justify-center border-2 flex-shrink-0',
+            selected ? 'border-blue' : 'border-secondary'
           )}
         >
           <Typography
-            variant="xs"
+            variant="sm"
             weight={700}
             className={classNames(selected ? 'text-high-emphesis' : 'text-secondary')}
           >
-            {props.index + 1}
+            {index + 1}
           </Typography>
         </div>
-        <Typography
-          variant="xs"
-          weight={700}
-          className={classNames('uppercase', selected ? 'text-high-emphesis' : 'text-secondary')}
-        >
-          {props.children}
-        </Typography>
-        {!lastChild && (
+        <div>
+          <Typography
+            variant="sm"
+            weight={700}
+            className={classNames('uppercase', selected ? 'text-high-emphesis' : 'text-secondary')}
+          >
+            {title}
+          </Typography>
+          <Typography
+            variant="sm"
+            weight={700}
+            className={classNames('hidden md:block', selected ? 'currentColor' : 'text-secondary')}
+          >
+            {subtitle}
+          </Typography>
+        </div>
+        {!isLastChild && (
           <div className="h-[52px] absolute flex items-center text-dark-700 bottom-[-2px] top-0 right-[-6px]">
             <svg
               width="7"

@@ -26,7 +26,6 @@ import React, { useEffect } from 'react'
 import { useIndependentAssetInputs } from '../../../features/trident/context/hooks/useIndependentAssetInputs'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import HybridStandardMode from '../../../features/trident/add/hybrid/HybridStandardMode'
-import { HorizontalLine } from '../../../components/HorizontalLine'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -64,7 +63,7 @@ const Pool = () => {
   return (
     <div className="flex flex-col w-full mt-px mb-5">
       <div className="flex flex-col gap-4 p-5 pb-10">
-        <div className="flex flex-row gap-2 justify-between">
+        <div className="flex lg:flex-row flex-col gap-2 justify-between">
           <div className="flex gap-4">
             <Typography variant="h2" weight={700} className="text-high-emphesis inline">
               {i18n._(t`Create New Liquidity Pool`)}
@@ -73,7 +72,7 @@ const Pool = () => {
               color="blue"
               variant="outlined"
               size="xs"
-              className="pl-2 pr-5 rounded-full inline"
+              className="pl-1 pr-4 rounded-full inline flex-shrink-0 h-8"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link href={`/trident/pools`}>{i18n._(t`Pools`)}</Link>
@@ -86,13 +85,13 @@ const Pool = () => {
       </div>
 
       <Stepper onChange={(index) => setPage(index)} value={page} className="flex flex-col">
-        <HorizontalLine />
-        <Stepper.List>
-          <Stepper.Tab>Select Type</Stepper.Tab>
-          <Stepper.Tab>Setup</Stepper.Tab>
-          <Stepper.Tab>Deposit</Stepper.Tab>
-        </Stepper.List>
-        <HorizontalLine />
+        <Stepper.List
+          tabs={[
+            { title: 'Select Type', subtitle: 'Choose a pool type for your assets' },
+            { title: 'Setup', subtitle: 'Deposit assets & set fees' },
+            { title: 'Confirm', subtitle: 'Review and invest' },
+          ]}
+        />
         <Stepper.Panels>
           <Stepper.Panel>
             <SelectPoolType />
@@ -120,11 +119,8 @@ Pool.Layout = (props) => (
   <TridentLayout
     {...props}
     headerBg="bg-binary-pattern"
-    headerHeight="h-[170px]"
-    breadcrumbs={[
-      { link: '/trident/pools', label: 'Pools' },
-      { link: '/trident/create', label: 'Create Pool' },
-    ]}
+    headerHeight="lg:h-[198px] h-0"
+    breadcrumbs={[{ link: '/trident/pools', label: 'Pools' }, { label: 'Create Pool' }]}
   />
 )
 
