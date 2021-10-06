@@ -68,7 +68,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 function Button({
   children,
-  className = undefined,
+  className = '',
   color = 'default',
   size = 'default',
   variant = 'filled',

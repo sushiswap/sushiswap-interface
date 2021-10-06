@@ -62,41 +62,36 @@ const Pool = () => {
 
   return (
     <div className="flex flex-col w-full mt-px mb-5">
-      <div className="flex flex-col gap-4 p-5 bg-auto bg-dark-800 bg-binary-pattern bg-opacity-60">
-        <div className="flex flex-row justify-between">
-          <Button
-            color="blue"
-            variant="outlined"
-            size="sm"
-            className="py-1 pl-2 rounded-full"
-            startIcon={<ChevronLeftIcon width={24} height={24} />}
-          >
-            <Link href={`/trident/pools`}>{i18n._(t`Pools`)}</Link>
-          </Button>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Typography variant="h2" weight={700} className="text-high-emphesis">
-            {i18n._(t`Create new Pool`)}
+      <div className="flex flex-col gap-4 p-5 pb-10">
+        <div className="flex lg:flex-row flex-col gap-2 justify-between">
+          <div className="flex gap-4">
+            <Typography variant="h2" weight={700} className="text-high-emphesis inline">
+              {i18n._(t`Create New Liquidity Pool`)}
+            </Typography>
+            <Button
+              color="blue"
+              variant="outlined"
+              size="xs"
+              className="pl-1 pr-4 rounded-full inline flex-shrink-0 h-8"
+              startIcon={<ChevronLeftIcon width={24} height={24} />}
+            >
+              <Link href={`/trident/pools`}>{i18n._(t`Pools`)}</Link>
+            </Button>
+          </div>
+          <Typography variant="sm" className="flex items-center">
+            {i18n._(t`Decide on a pool type, deposit assets, and create your pool on Sushi.`)}
           </Typography>
-          <Typography variant="sm">
-            {i18n._(t`Start by selecting a pool type, tap on each option learn more.`)}
-          </Typography>
         </div>
-
-        {/*spacer*/}
-        <div className="h-8" />
       </div>
 
-      <Stepper
-        onChange={(index) => setPage(index)}
-        value={page}
-        className="flex flex-col mt-[-53px] border-t border-dark-700"
-      >
-        <Stepper.List>
-          <Stepper.Tab>Select Type</Stepper.Tab>
-          <Stepper.Tab>Setup</Stepper.Tab>
-          <Stepper.Tab>Deposit</Stepper.Tab>
-        </Stepper.List>
+      <Stepper onChange={(index) => setPage(index)} value={page} className="flex flex-col">
+        <Stepper.List
+          tabs={[
+            { title: 'Select Type', subtitle: 'Choose a pool type for your assets' },
+            { title: 'Setup', subtitle: 'Deposit assets & set fees' },
+            { title: 'Confirm', subtitle: 'Review and invest' },
+          ]}
+        />
         <Stepper.Panels>
           <Stepper.Panel>
             <SelectPoolType />
@@ -121,7 +116,12 @@ const Pool = () => {
 
 Pool.Provider = RecoilRoot
 Pool.Layout = (props) => (
-  <TridentLayout {...props} headerBg="bg-bubble-pattern" headerHeight="h-[194px]" breadcrumbs={[]} />
+  <TridentLayout
+    {...props}
+    headerBg="bg-binary-pattern"
+    headerHeight="lg:h-[198px] h-0"
+    breadcrumbs={[{ link: '/trident/pools', label: 'Pools' }, { label: 'Create Pool' }]}
+  />
 )
 
 export default Pool

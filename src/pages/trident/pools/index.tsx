@@ -1,3 +1,4 @@
+import React from 'react'
 import TridentLayout from '../../../layouts/Trident'
 import { classNames } from '../../../functions'
 import Typography from '../../../components/Typography'
@@ -45,6 +46,6 @@ const Pool = () => {
 }
 
 Pool.Provider = RecoilRoot
-Pool.Layout = TridentLayout
+Pool.Layout = (props) => <TridentLayout {...props} headerBg="bg-binary-pattern" headerHeight="h-[220px]" />
 
 export default Pool

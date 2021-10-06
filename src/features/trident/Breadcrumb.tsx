@@ -11,7 +11,7 @@ import { formatPercent } from '../../functions'
 import { Currency } from '@sushiswap/core-sdk'
 import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
 
-export type BreadcrumbTuple = { link: string; label: string }
+export type BreadcrumbTuple = { link?: string; label: string }
 export type BreadcrumbItem =
   | ((currencies: (Currency | undefined)[], pool?: PoolUnion) => BreadcrumbTuple)
   | BreadcrumbTuple
@@ -66,7 +66,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
                 index === breadcrumbs.length - 1 ? 'text-high-emphesis' : 'text-secondary'
               )}
             >
-              <Link href={link}>{label}</Link>
+              {link ? <Link href={link}>{label}</Link> : label}
             </Typography>
           ))
           .reduce(
