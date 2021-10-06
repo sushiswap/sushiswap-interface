@@ -34,42 +34,71 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
           <Image src="/logo.svg" alt="Sushi logo" width="32px" height="32px" />
           <div className="hidden sm:block sm:ml-8">
             <div className="flex space-x-1.5">
-              {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
-                <NavLink href="/farm" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                  <a id="farm-nav-link" className={NAV_BASE_CLASS}>
-                    {i18n._(t`Explore`)}
+              <NavLink href="/swap" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                <a id="swap-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Swap`)}
+                </a>
+              </NavLink>
+
+              <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                <a id="trident-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Trident`)}
+                </a>
+              </NavLink>
+
+              <NavLink href="/pool" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                <a id="pool-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Pool`)}
+                </a>
+              </NavLink>
+
+              {chainId && featureEnabled(Feature.MIGRATE, chainId) && (
+                <NavLink href={'/migrate'} activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <a id="migrate-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Migrate`)}
                   </a>
                 </NavLink>
               )}
-              <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                <a id="pool-nav-link" className={NAV_BASE_CLASS}>
-                  {i18n._(t`Invest`)}
-                </a>
-              </NavLink>
-              <NavLink href="/swap" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                <a id="swap-nav-link" className={NAV_BASE_CLASS}>
-                  {i18n._(t`Trade`)}
-                </a>
-              </NavLink>
+
+              {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
+                <NavLink href="/farm" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <a id="farm-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Farm`)}
+                  </a>
+                </NavLink>
+              )}
+
               {chainId && featureEnabled(Feature.KASHI, chainId) && (
                 <>
                   <NavLink href="/lend" activeClassName={ACTIVE_NAV_LINK_CLASS}>
                     <a id="lend-nav-link" className={NAV_BASE_CLASS}>
-                      {i18n._(t`Lending`)}
+                      {i18n._(t`Lend`)}
+                    </a>
+                  </NavLink>
+
+                  <NavLink href="/lend" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                    <a id="borrow-nav-link" className={NAV_BASE_CLASS}>
+                      {i18n._(t`Borrow`)}
                     </a>
                   </NavLink>
                 </>
               )}
-              <ExternalLink href="https://miso.sushi.com/" className={NAV_BASE_CLASS}>
-                Launchpad
-              </ExternalLink>
+
+              {chainId && featureEnabled(Feature.STAKING, chainId) && (
+                <NavLink href="/stake">
+                  <a id="stake-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Stake`)}
+                  </a>
+                </NavLink>
+              )}
             </div>
           </div>
         </div>
 
-        <HeaderSearchBox />
+        {/* Not ready for prod */}
+        {/*<HeaderSearchBox />*/}
 
-        <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 xl:relative xl:p-0 xl:bg-transparent flex-shrink-0">
+        <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent flex-shrink-0">
           <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
             {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
               <>
