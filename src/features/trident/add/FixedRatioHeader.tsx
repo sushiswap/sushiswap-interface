@@ -35,11 +35,11 @@ const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   )
 
   if (isDesktop) {
-    return content
+    return <div className="py-7">{content}</div>
   }
 
   return (
-    <div className={margin ? '-top-10 -ml-5 -mr-5 pt-10 pb-5 relative z-0 -mb-10' : 'py-5 relative z-0'}>
+    <div className={margin ? 'top-0 -ml-5 -mr-5 pt-5 pb-5 relative z-0' : 'py-5 relative z-0'}>
       <div className="top-0 pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-40" />
       <div className="px-5">{content}</div>
     </div>
