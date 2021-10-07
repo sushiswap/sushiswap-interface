@@ -34,7 +34,7 @@ type SiloUserInfo = {
   // collaterilizationLevel?: string;
   // debtLevel?: string;
   underlyingBalance?: string;
-  underlyingNativeBalance?: string;
+  underlyingBridgeBalance?: string;
 };
 
 const bigNumberFormat = (valueStr: string) => {
@@ -109,16 +109,19 @@ export default function Lending() {
   //   function getDebtValue(address _user) public returns (uint256) {
 
   const fetchCurrentSiloUserData = useCallback(async () => {
-    const userInfo: SiloUserInfo = {};
-    console.log('getting current user silo data');
-    console.log('user address:', account);
-    userInfo.address = account;
-    userInfo.underlyingBalance = await siloContract.balanceOfUnderlaying(account);
-    // userInfo.isSolvent = await siloContract.isSolvent(account);
-    // userInfo.collaterilizationLevel = await siloContract.getCollateralization(account);
-    // userInfo.debtLevel = await siloContract.getDebtValue(account);
-    setCurrentSiloUserInfo(userInfo);
-  }, [account, siloContract]);
+    if (currentSilo) {
+      const userInfo: SiloUserInfo = {};
+      console.log('getting current user silo data');
+      console.log('user address:', account);
+      userInfo.address = account;
+      userInfo.underlyingBalance = await siloContract.balanceOfUnderlaying(account);
+      userInfo.underlyingBridgeBalance = await siloBridgePool.balanceOfUnderlaying(currentSilo.address, account);
+      // userInfo.isSolvent = await siloContract.isSolvent(account);
+      // userInfo.collaterilizationLevel = await siloContract.getCollateralization(account);
+      // userInfo.debtLevel = await siloContract.getDebtValue(account);
+      setCurrentSiloUserInfo(userInfo);
+    }
+  }, [account, currentSilo, siloBridgePool, siloContract]);
 
   // if we have a silo, lets get the current data off the silo
   useEffect(() => {
@@ -172,11 +175,13 @@ export default function Lending() {
         </div>
         {currentSilo && currentSiloUserInfo && (
           <>
-            <div className="mt-4 mx-2 text-sm flex space-x-6 text-high-emphesis">
+            <div className="mt-4 mx-2 text-sm flex space-x-10 text-high-emphesis">
               <div>
                 {currentSilo.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBalance.toString())}
               </div>
-              <div></div>
+              <div>
+                {wrappedNative.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBridgeBalance.toString())}
+              </div>
             </div>
 
             <div className="flex space-x-2 mt-8 mb-4 ml-5">
