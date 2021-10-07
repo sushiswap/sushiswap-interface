@@ -65,6 +65,7 @@ export default function Lending() {
   const siloBridgePool = useSiloBridgePoolContract(true);
   const tokenContract = useTokenContract(currentSilo && currentSilo.assetAddress, true);
   const siloContract = useSiloContract(currentSilo && currentSilo.address, true);
+  // const siloAssetContract = useTokenContract(currentSilo && currentSilo.address, true);
 
   // const [approvalState, approve] = useApproveCallback(amount, currentSilo && currentSilo.address);
   const wrappedNative = WNATIVE[chainId];
@@ -381,7 +382,23 @@ export default function Lending() {
             </div>
 
             <div className="flex space-x-2 mt-2 mb-4 ml-5">
-              <div className="ml-24" />
+              <Button
+                type="button"
+                color="gray"
+                variant="outlined"
+                onClick={async () => {
+                  console.log('silo.approve.siloAsset()');
+
+                  if (tokenAddress && currentSilo && amount > 0) {
+                    consoleState();
+                    const result = await tokenContract.approve(currentSilo.address, parsedAmt);
+                  } else {
+                    console.warn('no current silo');
+                  }
+                }}
+              >
+                Approve
+              </Button>
 
               <Button
                 type="button"
@@ -395,12 +412,12 @@ export default function Lending() {
                     const result = await siloContract.borrow(parsedAmt);
 
                     addTransaction(result, {
-                      summary: `Borrow ${amount} ${currentSilo.symbol} from ${currentSilo.name}`,
+                      summary: `Borrow ${amount} ${selected?.symbol} from ${currentSilo.name}`,
                     });
                   }
                 }}
               >
-                Borrow {currentSilo.symbol}
+                Borrow {selected?.symbol}
               </Button>
               <Button
                 type="button"
@@ -414,12 +431,12 @@ export default function Lending() {
                     const result = await siloContract.repay(parsedAmt);
 
                     addTransaction(result, {
-                      summary: `Repay ${amount} ${currentSilo.symbol} from ${currentSilo.name}`,
+                      summary: `Repay ${amount} ${selected?.symbol} from ${currentSilo.name}`,
                     });
                   }
                 }}
               >
-                Repay {currentSilo.symbol}
+                Repay {selected?.symbol}
               </Button>
             </div>
           </>
