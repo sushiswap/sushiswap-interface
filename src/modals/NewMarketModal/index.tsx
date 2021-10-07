@@ -1,7 +1,7 @@
 import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks';
 import { useModalOpen, useNetworkModalToggle, useNewMarketModalToggle } from '../../state/application/hooks';
 import { ApplicationModal } from '../../state/application/actions';
-import { ChainId } from '@sushiswap/sdk';
+import { ChainId, WNATIVE } from '@sushiswap/sdk';
 import Image from 'next/image';
 import Modal from '../../components/Modal';
 import ModalHeader from '../../components/ModalHeader';
@@ -18,6 +18,7 @@ import CurrencyInputPanel from '../../components/CurrencyInputPanel';
 import useSiloMarkets from '../../hooks/useSiloMarkets';
 import { useTransactionAdder } from '../../state/transactions/hooks';
 import SupportedSilos from '../../components/SupportedSilos';
+import { chain } from 'lodash';
 
 export default function NewMarketModal(): JSX.Element | null {
   const { chainId, library, account } = useActiveWeb3React();
@@ -70,9 +71,15 @@ export default function NewMarketModal(): JSX.Element | null {
           <div className="bg-dark-800 rounded h-full w-full flex flex-cols items-center">
             <div className="flex w-full items-center space-x-4 mt-4 md:mt-2 md:mx-6 md:my-0 m-5">
               <div>
-                <Image src={NETWORK_ICON[1]} alt="Bridge Asset" className="rounded-md" width="48px" height="48px" />
+                <Image
+                  src={NETWORK_ICON[chainId]}
+                  alt="Bridge Asset"
+                  className="rounded-md"
+                  width="48px"
+                  height="48px"
+                />
               </div>
-              <div className="text-2xl font-bold">ETH</div>
+              <div className="text-2xl font-bold">{WNATIVE[chainId].symbol}</div>
             </div>
           </div>
         </div>
@@ -91,7 +98,7 @@ export default function NewMarketModal(): JSX.Element | null {
                   const result = await createSiloMarket(tokenAddress);
 
                   addTransaction(result, {
-                    summary: `Added silo market ${selected.symbol}-ETH`,
+                    summary: `Added silo market ${selected.symbol}-${WNATIVE[chainId].symbol}`,
                   });
 
                   toggleModal();

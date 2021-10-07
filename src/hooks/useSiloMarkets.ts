@@ -3,12 +3,10 @@ import { ethers } from 'ethers';
 import { request, GraphQLClient } from 'graphql-request';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
+import { GRAPH_ENDPOINT } from '../constants';
 import { useActiveWeb3React } from '../hooks';
 import { useSiloFactoryContract } from '../hooks/useContract';
 import useTokenOracleLookup from './useTokenOracleLookup';
-
-export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.13';
-const client = new GraphQLClient(GRAPH_ENDPOINT);
 
 const siloMarketsQuery = `
 {
@@ -59,6 +57,7 @@ const useSiloMarkets = () => {
   const { tokenOracleData } = useTokenOracleLookup();
 
   const { isLoading, isError, data, error } = useQuery('siloMarketData', async () => {
+    const client = new GraphQLClient(GRAPH_ENDPOINT[chainId]);
     return await client.request(siloMarketsQuery);
   });
 
