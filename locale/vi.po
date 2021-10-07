@@ -397,6 +397,9 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "Tìm kiếm tên hoặc dán địa chỉ"
 
+msgid "Select Silo:"
+msgstr ""
+
 msgid "Select a asset token"
 msgstr ""
 

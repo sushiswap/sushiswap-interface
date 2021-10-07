@@ -397,6 +397,9 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "Rechercher un nom ou coller une adresse"
 
+msgid "Select Silo:"
+msgstr ""
+
 msgid "Select a asset token"
 msgstr ""
 

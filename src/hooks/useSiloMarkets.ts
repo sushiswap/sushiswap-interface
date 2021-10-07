@@ -7,7 +7,7 @@ import { useActiveWeb3React } from '../hooks';
 import { useSiloFactoryContract } from '../hooks/useContract';
 import useTokenOracleLookup from './useTokenOracleLookup';
 
-export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.11';
+export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.13';
 const client = new GraphQLClient(GRAPH_ENDPOINT);
 
 const siloMarketsQuery = `
@@ -31,11 +31,21 @@ const siloMarketsQuery = `
 }
 `;
 
-type SiloMarket = {
+export type SiloMarket = {
+  id: string;
   name: string;
   address: string;
+  assetAddress: string;
+  symbol: string;
   bridgeAssetName: string;
   bridgeAssetAddr: string;
+  marketSize: string;
+  totalBorrowed: string;
+  depositApy: string;
+  borrowApy: string;
+  oracle: string;
+  borrowed: string;
+  available: string;
 };
 
 /**
@@ -43,7 +53,7 @@ type SiloMarket = {
  */
 
 const useSiloMarkets = () => {
-  const [currentSilo, setCurrentSilo] = useState(null);
+  const [currentSilo, setCurrentSilo] = useState<SiloMarket | null>(null);
   const { chainId, account } = useActiveWeb3React();
   const siloFactoryContract = useSiloFactoryContract(true);
   const { tokenOracleData } = useTokenOracleLookup();
