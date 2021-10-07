@@ -9,9 +9,10 @@ import Background from '../../features/trident/Background'
 interface ComponentProps {
   breadcrumbs?: BreadcrumbItem[]
   headerBackground?: string
+  headerBgPadding?: number
 }
 
-const TridentLayout: FC<ComponentProps> = ({ children = [], headerBackground, breadcrumbs = [] }) => {
+const TridentLayout: FC<ComponentProps> = ({ children = [], headerBackground, headerBgPadding, breadcrumbs = [] }) => {
   return (
     <>
       <div className="flex flex-col items-center w-full h-screen">
@@ -21,7 +22,9 @@ const TridentLayout: FC<ComponentProps> = ({ children = [], headerBackground, br
         </div>
         <Main>
           <Container maxWidth="7xl" className="flex flex-col gap-5 p-5 z-[1]">
-            <Background pattern={headerBackground}>{children}</Background>
+            <Background bottomPadding={headerBgPadding} pattern={headerBackground}>
+              {children}
+            </Background>
           </Container>
         </Main>
         <Popups />

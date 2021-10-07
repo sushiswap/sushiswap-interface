@@ -46,6 +46,6 @@ const Pool = () => {
 }
 
 Pool.Provider = RecoilRoot
-Pool.Layout = (props) => <TridentLayout {...props} headerBg="bg-binary-pattern" headerHeight="h-[220px]" />
+Pool.Layout = (props) => <TridentLayout {...props} headerBg="bg-binary-pattern" />
 
 export default Pool

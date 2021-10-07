@@ -106,6 +106,7 @@ AddClassic.Layout = (props) => (
   <TridentLayout
     {...props}
     headerBackground="bg-bubble-pattern"
+    headerBgPadding={20}
     breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic'], BREADCRUMBS['add_classic']]}
   />
 )
