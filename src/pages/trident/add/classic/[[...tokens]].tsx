@@ -35,12 +35,12 @@ const AddClassic = () => {
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [, pool] = useRecoilValue(poolAtom)
   const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
-  const bgRef = useBackgroundRef()
+  const { bottomOfEl } = useBackgroundRef()
 
   return (
-    <div className="relative flex flex-col w-full gap-10 mt-px mb-5 lg:flex-row lg:justify-between">
-      <div className="flex flex-col lg:w-7/12">
-        <div className="flex flex-col mb-6">
+    <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10 lg:justify-between relative">
+      <div className="lg:w-7/12 flex flex-col">
+        <div className="flex flex-col mb-6" ref={bottomOfEl}>
           <div className="mb-6">
             <Button
               color="blue"
@@ -64,7 +64,7 @@ const AddClassic = () => {
           </Typography>
         </div>
 
-        <div ref={bgRef}>
+        <div>
           <FixedRatioHeader />
 
           {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
@@ -105,7 +105,8 @@ AddClassic.Provider = RecoilRoot
 AddClassic.Layout = (props) => (
   <TridentLayout
     {...props}
-    background="bg-bubble-pattern"
+    headerBackground="bg-bubble-pattern"
+    headerBgPadding={20}
     breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic'], BREADCRUMBS['add_classic']]}
   />
 )
