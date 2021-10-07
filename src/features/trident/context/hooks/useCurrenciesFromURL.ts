@@ -39,12 +39,15 @@ const useCurrenciesFromURL = (): {
     [chainId, router]
   )
 
-  return {
-    currencies: [currencyA, currencyB],
-    setURLCurrency,
-    fee,
-    twap,
-  }
+  return useMemo(
+    () => ({
+      currencies: [currencyA, currencyB],
+      setURLCurrency,
+      fee,
+      twap,
+    }),
+    [currencyA, currencyB, setURLCurrency, fee, twap]
+  )
 }
 
 export default useCurrenciesFromURL
