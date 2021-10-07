@@ -1,31 +1,45 @@
-import React, { createContext, RefObject, useContext, useEffect, useRef } from 'react'
+import React, { createContext, ReactNode, RefObject, useContext, useEffect, useRef, useState } from 'react'
+import classNames from 'classnames'
 
-const HEADER_HEIGHT = 106
+interface BgContextProps {
+  bottomOfEl: RefObject<HTMLDivElement>
+}
 
-const BackgroundContext = createContext<RefObject<HTMLDivElement>>(null)
+const BackgroundContext = createContext<BgContextProps>({} as any)
 export const useBackgroundRef = () => useContext(BackgroundContext)
 
-const Background = ({ children }) => {
+interface BackgroundProps {
+  pattern?: string
+  children?: ReactNode
+}
+
+const Background = ({ pattern, children }: BackgroundProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
 
+  // How can we allow consumers to set this? 🤔
+  const [padding, setPadding] = useState(0)
+
   useEffect(() => {
     if (ref.current && bgRef.current) {
-      const { offsetTop } = ref.current
-      bgRef.current.style.height = `${offsetTop + 20}px`
+      const bgDistanceFromTopOfPage = bgRef.current.getBoundingClientRect().top + window.scrollY
+      const headerBottomDistanceFromTopOfPage = ref.current.getBoundingClientRect().bottom + window.scrollY
+      bgRef.current.style.height = `${headerBottomDistanceFromTopOfPage - bgDistanceFromTopOfPage + padding}px`
     }
-  }, [ref, bgRef])
+  }, [ref, bgRef, padding])
 
   return (
-    <BackgroundContext.Provider value={ref}>
+    <BackgroundContext.Provider value={{ bottomOfEl: ref }}>
+      <div className="relative z-10">{children}</div>
       <div
         ref={bgRef}
-        style={{ top: HEADER_HEIGHT }}
-        className={`absolute border-t border-dark-1000 h-full pointer-events-none w-full left-0 bg-dark-1000 bg-bubble-pattern`}
+        className={classNames(
+          'absolute z-0 border-t border-dark-1000 pointer-events-none left-0 right-0 bg-dark-1000 -mt-5',
+          pattern ? pattern : 'bg-bubble-pattern'
+        )}
       >
         <div className="w-full h-full bg-dark-900 bg-opacity-80" />
       </div>
-      {children}
     </BackgroundContext.Provider>
   )
 }
