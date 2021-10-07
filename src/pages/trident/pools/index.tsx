@@ -1,5 +1,4 @@
 import React from 'react'
-import TridentLayout from '../../../layouts/Trident'
 import { classNames } from '../../../functions'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
@@ -11,15 +10,16 @@ import PoolListActions from '../../../features/trident/pools/PoolListActions'
 import Link from 'next/link'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import { searchQueryAtom } from '../../../features/trident/pools/context/atoms'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../layouts/Trident'
 
 const Pool = () => {
   const { i18n } = useLingui()
   const searchQuery = useRecoilValue(searchQueryAtom)
 
   return (
-    <div className="flex flex-col w-full gap-6 mt-px mb-5">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-binary-pattern bg-opacity-90 gap-6">
-        <div className="">
+    <>
+      <TridentHeader pattern="bg-binary-pattern">
+        <div>
           <Typography variant="h3" className="text-high-emphesis" weight={400}>
             {i18n._(t`Provide liquidity & earn.`)}
           </Typography>
@@ -35,17 +35,19 @@ const Pool = () => {
             <Link href={'/trident/poolTypes'}>{i18n._(t`Pool Type Info`)}</Link>
           </Button>
         </div>
-      </div>
-      <PoolListActions />
-      <div className={classNames('flex gap-6', searchQuery ? 'flex-col-reverse' : 'flex-col')}>
-        <SuggestedPools />
-        <SearchResultPools />
-      </div>
-    </div>
+      </TridentHeader>
+      <TridentBody>
+        <PoolListActions />
+        <div className={classNames('flex gap-6', searchQuery ? 'flex-col-reverse' : 'flex-col')}>
+          <SuggestedPools />
+          <SearchResultPools />
+        </div>
+      </TridentBody>
+    </>
   )
 }
 
 Pool.Provider = RecoilRoot
-Pool.Layout = (props) => <TridentLayout {...props} headerBg="bg-binary-pattern" />
+Pool.Layout = TridentLayout
 
 export default Pool

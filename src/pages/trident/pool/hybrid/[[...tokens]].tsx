@@ -1,4 +1,4 @@
-import TridentLayout from '../../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import HybridPoolComposition from '../../../../features/trident/pool/hybrid/HybridPoolComposition'
 import Header from '../../../../features/trident/pool/Header'
 import { RecoilRoot, useSetRecoilState } from 'recoil'
@@ -10,6 +10,8 @@ import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useEffect } from 'react'
+import ConcentratedMarket from '../../../../features/trident/pool/concentrated/ConcentratedMarket'
+import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
 
 const Pool = () => {
   const { account, chainId } = useActiveWeb3React()
@@ -41,10 +43,14 @@ const Pool = () => {
   }, [poolBalance, setPoolBalance])
 
   return (
-    <div className="flex flex-col w-full mt-px mb-5">
-      <Header />
-      <HybridPoolComposition />
-    </div>
+    <>
+      <TridentHeader>
+        <Header />
+      </TridentHeader>
+      <TridentBody>
+        <HybridPoolComposition />
+      </TridentBody>
+    </>
   )
 }
 

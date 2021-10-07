@@ -3,7 +3,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout from '../../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import React, { useEffect, useState } from 'react'
 import Chart from '../../../../features/trident/add/concentrated/Chart'
@@ -60,8 +60,8 @@ const AddConcentrated = () => {
   }, [poolBalance, setPoolBalance])
 
   return (
-    <div className="flex flex-col w-full mt-px mb-5">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-bubble-pattern bg-opacity-60 gap-4">
+    <>
+      <TridentHeader>
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
@@ -79,37 +79,38 @@ const AddConcentrated = () => {
           </Typography>
           <Typography variant="sm">{i18n._(t`Select a price range for the assets you're providing.`)}</Typography>
         </div>
-      </div>
-
-      {!next ? (
-        <>
+      </TridentHeader>
+      <TridentBody>
+        {!next ? (
+          <>
+            <div className="flex flex-col gap-7">
+              <Chart />
+              <PriceRange />
+              <RangeBlocks />
+            </div>
+            <div className="flex flex-col px-5 mt-5">
+              <Button
+                color="gradient"
+                disabled={!minPrice || !maxPrice || minPrice >= maxPrice}
+                onClick={() => setNext(true)}
+              >
+                Next
+              </Button>
+            </div>
+          </>
+        ) : (
           <div className="flex flex-col gap-7">
-            <Chart />
-            <PriceRange />
+            <FixedRatioHeader margin={false} />
             <RangeBlocks />
-          </div>
-          <div className="flex flex-col px-5 mt-5">
-            <Button
-              color="gradient"
-              disabled={!minPrice || !maxPrice || minPrice >= maxPrice}
-              onClick={() => setNext(true)}
-            >
-              Next
-            </Button>
-          </div>
-        </>
-      ) : (
-        <div className="flex flex-col gap-7">
-          <FixedRatioHeader margin={false} />
-          <RangeBlocks />
-          <ConcentratedStandardMode />
-          <AddTransactionReviewModal />
+            <ConcentratedStandardMode />
+            <AddTransactionReviewModal />
 
-          {/*TODO ramin*/}
-          {/*<DepositSubmittedModal />*/}
-        </div>
-      )}
-    </div>
+            {/*TODO ramin*/}
+            {/*<DepositSubmittedModal />*/}
+          </div>
+        )}
+      </TridentBody>
+    </>
   )
 }
 

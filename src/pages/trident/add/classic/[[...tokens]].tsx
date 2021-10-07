@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { LiquidityMode } from '../../../../features/trident/types'
 import TransactionReviewStandardModal from '../../../../features/trident/add/classic/TransactionReviewStandardModal'
 import TransactionReviewZapModal from '../../../../features/trident/add/classic/TransactionReviewZapModal'
-import TridentLayout from '../../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -24,7 +24,6 @@ import ClassicStandardAside from '../../../../features/trident/add/classic/Class
 import ClassicZapAside from '../../../../features/trident/add/classic/ClassicZapAside'
 import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
 import { useRouter } from 'next/router'
-import { useBackgroundRef } from '../../../../features/trident/Background'
 
 const AddClassic = () => {
   useInitClassicPoolState()
@@ -35,13 +34,12 @@ const AddClassic = () => {
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [, pool] = useRecoilValue(poolAtom)
   const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
-  const { bottomOfEl } = useBackgroundRef()
 
   return (
-    <div className="relative flex flex-col w-full gap-10 mt-px mb-5 lg:flex-row lg:justify-between">
-      <div className="flex flex-col lg:w-7/12">
-        <div className="flex flex-col mb-6" ref={bottomOfEl}>
-          <div className="mb-6">
+    <>
+      <TridentHeader pattern="bg-bubble-pattern">
+        <div className="flex flex-col w-full mt-px gap-5 lg:justify-between relative lg:w-7/12">
+          <div>
             <Button
               color="blue"
               variant="outlined"
@@ -69,41 +67,44 @@ const AddClassic = () => {
             )}
           </Typography>
         </div>
+      </TridentHeader>
 
-        <div>
-          <FixedRatioHeader />
+      <TridentBody className="pt-0">
+        <div className="flex flex-row justify-between">
+          <div className="lg:w-7/12 w-full flex flex-col">
+            <FixedRatioHeader />
 
-          {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
-            <Alert
-              dismissable={false}
-              type="error"
-              showIcon
-              message={i18n._(t`A Pool could not be found for provided currencies`)}
-            />
-          )}
-
-          <>
-            {liquidityMode === LiquidityMode.ZAP && (
-              <>
-                <ClassicZapMode />
-                <TransactionReviewZapModal />
-              </>
+            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+              <Alert
+                dismissable={false}
+                type="error"
+                showIcon
+                message={i18n._(t`A Pool could not be found for provided currencies`)}
+              />
             )}
-            {liquidityMode === LiquidityMode.STANDARD && (
-              <>
-                <ClassicStandardMode />
-                <TransactionReviewStandardModal />
-              </>
-            )}
-            <DepositSubmittedModal />
-          </>
+
+            <>
+              {liquidityMode === LiquidityMode.ZAP && (
+                <>
+                  <ClassicZapMode />
+                  <TransactionReviewZapModal />
+                </>
+              )}
+              {liquidityMode === LiquidityMode.STANDARD && (
+                <>
+                  <ClassicStandardMode />
+                  <TransactionReviewStandardModal />
+                </>
+              )}
+              <DepositSubmittedModal />
+            </>
+          </div>
+          <div className="hidden lg:block lg:w-4/12 flex flex-col -mt-28">
+            {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
+          </div>
         </div>
-      </div>
-
-      <div className="flex flex-col hidden lg:block lg:w-4/12 lg:mt-10 lg:relative">
-        {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
-      </div>
-    </div>
+      </TridentBody>
+    </>
   )
 }
 
@@ -111,8 +112,6 @@ AddClassic.Provider = RecoilRoot
 AddClassic.Layout = (props) => (
   <TridentLayout
     {...props}
-    headerBackground="bg-bubble-pattern"
-    headerBgPadding={20}
     breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic'], BREADCRUMBS['add_classic']]}
   />
 )

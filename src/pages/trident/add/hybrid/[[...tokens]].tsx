@@ -3,7 +3,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout from '../../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import HybridZapMode from '../../../../features/trident/add/hybrid/HybridZapMode'
 import HybridStandardMode from '../../../../features/trident/add/hybrid/HybridStandardMode'
@@ -62,8 +62,8 @@ const AddHybrid = () => {
   }, [poolBalance, setPoolBalance])
 
   return (
-    <div className="flex flex-col w-full mt-px mb-5">
-      <div className="flex flex-col gap-4 p-5 bg-auto bg-dark-800 bg-bubble-pattern bg-opacity-60">
+    <>
+      <TridentHeader>
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
@@ -90,20 +90,21 @@ const AddHybrid = () => {
 
         {/*spacer*/}
         <div className="h-2" />
-      </div>
+      </TridentHeader>
+      <TridentBody>
+        {/*TODO ramin*/}
+        <ModeToggle onChange={() => {}} />
 
-      {/*TODO ramin*/}
-      <ModeToggle onChange={() => {}} />
-
-      <div className="flex flex-col mt-6">
-        {liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
-        {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
-      </div>
+        <div className="flex flex-col mt-6">
+          {liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
+          {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
+        </div>
+      </TridentBody>
 
       {/*TODO*/}
       <AddTransactionReviewModal />
       <DepositSubmittedModal />
-    </div>
+    </>
   )
 }
 

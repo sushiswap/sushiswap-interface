@@ -42,7 +42,7 @@ interface ListProps {
 
 const List: FC<ListProps> = ({ tabs }) => {
   return (
-    <>
+    <div>
       <HorizontalLine />
       <div className="flex">
         {tabs.map(({ title, subtitle }, index) => (
@@ -50,7 +50,7 @@ const List: FC<ListProps> = ({ tabs }) => {
         ))}
       </div>
       <HorizontalLine />
-    </>
+    </div>
   )
 }
 

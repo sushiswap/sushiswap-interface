@@ -5,6 +5,7 @@ import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useLingui } from '@lingui/react'
+import { RecoilRoot } from 'recoil'
 
 const PoolType = ({ pool }) => {
   const { i18n } = useLingui()
@@ -39,6 +40,7 @@ const PoolType = ({ pool }) => {
   )
 }
 
+PoolType.Provider = RecoilRoot
 PoolType.Layout = TridentLayout
 
 export default PoolType

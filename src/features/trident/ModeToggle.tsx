@@ -23,7 +23,7 @@ const ModeToggle: FC<ModeToggleProps> = ({ onChange }) => {
   )
 
   return (
-    <div className="-mt-6 relative z-10">
+    <div className="-mt-10 relative z-10">
       <ToggleButtonGroup value={liquidityMode} onChange={handleChange} className="bg-dark-900 shadow">
         <ToggleButtonGroup.Button value={LiquidityMode.STANDARD} className="py-2.5">
           {i18n._(t`Standard Mode`)}
