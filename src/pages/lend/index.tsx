@@ -512,7 +512,7 @@ const SiloData = ({ currentSilo, siloInfo }: { currentSilo: SiloMarket; siloInfo
 const UserSiloData = ({ currentSilo, siloUserInfo }: { currentSilo: SiloMarket; siloUserInfo: SiloUserInfo }) => {
   const [fanOpen, setFanOpen] = useState(false);
 
-  console.log('siloUserInfo', siloUserInfo);
+  // console.log('siloUserInfo', siloUserInfo);
 
   return (
     <Container id="supply-page" className="py-2 md:py-4 lg:py-6">

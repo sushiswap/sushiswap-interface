@@ -1,14 +1,9 @@
- [
+[
     {
       "inputs": [
         {
           "internalType": "address",
-          "name": "_quoteToken",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_factory",
+          "name": "_ethPriceFeed",
           "type": "address"
         }
       ],
@@ -17,7 +12,7 @@
     },
     {
       "inputs": [],
-      "name": "ONE",
+      "name": "DECIMALS",
       "outputs": [
         {
           "internalType": "uint256",
@@ -30,7 +25,7 @@
     },
     {
       "inputs": [],
-      "name": "factory",
+      "name": "ethPriceFeed",
       "outputs": [
         {
           "internalType": "address",
@@ -44,12 +39,12 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
+          "internalType": "uint256",
+          "name": "usd",
+          "type": "uint256"
         }
       ],
-      "name": "getPrice",
+      "name": "fromUSDtoETH",
       "outputs": [
         {
           "internalType": "uint256",
@@ -57,7 +52,31 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "priceFeed",
+          "type": "address"
+        }
+      ],
+      "name": "getLatestPrice",
+      "outputs": [
+        {
+          "internalType": "int256",
+          "name": "price",
+          "type": "int256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timeStamp",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -71,67 +90,6 @@
           "internalType": "address",
           "name": "_quote",
           "type": "address"
-        }
-      ],
-      "name": "getPriceQuote",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "oracles",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "oracleImpl",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes",
-          "name": "data",
-          "type": "bytes"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "quoteToken",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_oracle",
-          "type": "address"
         },
         {
           "internalType": "bytes",
@@ -139,9 +97,28 @@
           "type": "bytes"
         }
       ],
-      "name": "registerToken",
-      "outputs": [],
-      "stateMutability": "nonpayable",
+      "name": "getPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isSiloOracle",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
       "type": "function"
     }
   ]

@@ -38,8 +38,8 @@ export const PRICE_FEED_MAP = {
 //  export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.13';
 
 export const GRAPH_ENDPOINT = {
-  [ChainId.KOVAN]: 'https://api.studio.thegraph.com/query/9379/silo/0.15.k',
-  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.15.m',
+  [ChainId.KOVAN]: 'https://api.studio.thegraph.com/query/9379/silo/0.16.k',
+  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.16.m',
 };
 
 /**

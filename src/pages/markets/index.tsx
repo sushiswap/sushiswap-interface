@@ -8,6 +8,8 @@ import { useNewMarketModalToggle } from '../../state/application/hooks';
 import NewMarketModal from '../../modals/NewMarketModal';
 import useSiloMarkets from '../../hooks/useSiloMarkets';
 import { useTransactionAdder } from '../../state/transactions/hooks';
+import { WNATIVE } from '@sushiswap/sdk';
+import { chain } from 'lodash';
 
 /**
  *
@@ -29,7 +31,7 @@ import { useTransactionAdder } from '../../state/transactions/hooks';
 export default function Markets() {
   const { siloMarkets } = useSiloMarkets();
   const toggleNewMarketModal = useNewMarketModalToggle();
-  const { account } = useActiveWeb3React();
+  const { account, chainId } = useActiveWeb3React();
 
   console.log('siloMarkets:', siloMarkets);
 
@@ -105,6 +107,7 @@ const MarketData = ({ markets }) => {
 const Market = ({ market }) => {
   const { removeSiloMarket } = useSiloMarkets();
   const addTransaction = useTransactionAdder();
+  const { account, chainId } = useActiveWeb3React();
 
   const M_STYLE = 'text-xs sm:text-sm md:text-base text-high-emphesis';
 
@@ -112,7 +115,7 @@ const Market = ({ market }) => {
     <div className="mt-4 p-4 rounded-lg shadow-lg bg-dark-800 text-secondary">
       <div className="grid grid-cols-6 gap-2">
         <div className={M_STYLE}>{market.symbol}</div>
-        <div className={M_STYLE}>ETH</div>
+        <div className={M_STYLE}>{WNATIVE[chainId].symbol}</div>
         <div className={M_STYLE}>--</div>
         <div className={M_STYLE}>--</div>
         <div className={M_STYLE}>--</div>
