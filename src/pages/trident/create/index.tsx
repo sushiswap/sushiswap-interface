@@ -26,6 +26,7 @@ import React, { useEffect } from 'react'
 import { useIndependentAssetInputs } from '../../../features/trident/context/hooks/useIndependentAssetInputs'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import HybridStandardMode from '../../../features/trident/add/hybrid/HybridStandardMode'
+import { useBackgroundRef } from '../../../features/trident/Background'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -38,6 +39,7 @@ const Pool = () => {
     poolType: [poolType],
     feeTier: [feeTier],
   } = useSetupPoolProperties()
+  const { bottomOfEl } = useBackgroundRef()
 
   useEffect(() => {
     if (parsedAmounts.length > 1 && parsedAmounts.every((el) => el)) {
@@ -85,13 +87,15 @@ const Pool = () => {
       </div>
 
       <Stepper onChange={(index) => setPage(index)} value={page} className="flex flex-col">
-        <Stepper.List
-          tabs={[
-            { title: 'Select Type', subtitle: 'Choose a pool type for your assets' },
-            { title: 'Setup', subtitle: 'Deposit assets & set fees' },
-            { title: 'Confirm', subtitle: 'Review and invest' },
-          ]}
-        />
+        <div ref={bottomOfEl}>
+          <Stepper.List
+            tabs={[
+              { title: 'Select Type', subtitle: 'Choose a pool type for your assets' },
+              { title: 'Setup', subtitle: 'Deposit assets & set fees' },
+              { title: 'Confirm', subtitle: 'Review and invest' },
+            ]}
+          />
+        </div>
         <Stepper.Panels>
           <Stepper.Panel>
             <SelectPoolType />

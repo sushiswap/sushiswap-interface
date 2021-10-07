@@ -11,22 +11,20 @@ export const useBackgroundRef = () => useContext(BackgroundContext)
 interface BackgroundProps {
   pattern?: string
   children?: ReactNode
+  bottomPadding?: number
 }
 
-const Background = ({ pattern, children }: BackgroundProps) => {
+const Background = ({ pattern, children, bottomPadding = 0 }: BackgroundProps) => {
   const ref = useRef<HTMLDivElement>(null)
   const bgRef = useRef<HTMLDivElement>(null)
-
-  // How can we allow consumers to set this? 🤔
-  const [padding, setPadding] = useState(0)
 
   useEffect(() => {
     if (ref.current && bgRef.current) {
       const bgDistanceFromTopOfPage = bgRef.current.getBoundingClientRect().top + window.scrollY
       const headerBottomDistanceFromTopOfPage = ref.current.getBoundingClientRect().bottom + window.scrollY
-      bgRef.current.style.height = `${headerBottomDistanceFromTopOfPage - bgDistanceFromTopOfPage + padding}px`
+      bgRef.current.style.height = `${headerBottomDistanceFromTopOfPage - bgDistanceFromTopOfPage + bottomPadding}px`
     }
-  }, [ref, bgRef, padding])
+  }, [ref, bgRef, bottomPadding])
 
   return (
     <BackgroundContext.Provider value={{ bottomOfEl: ref }}>
@@ -35,7 +33,7 @@ const Background = ({ pattern, children }: BackgroundProps) => {
         ref={bgRef}
         className={classNames(
           'absolute z-0 border-t border-dark-1000 pointer-events-none left-0 right-0 bg-dark-1000 -mt-5',
-          pattern ? pattern : 'bg-bubble-pattern'
+          pattern || 'bg-bubble-pattern'
         )}
       >
         <div className="w-full h-full bg-dark-900 bg-opacity-80" />
