@@ -1,8 +1,8 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { tryParseAmount } from '../../../../functions'
+import { toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from '../../../../functions'
 import { t } from '@lingui/macro'
-import { noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
+import { bentoboxRebasesAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
@@ -37,9 +37,21 @@ export const parsedZapSplitAmountsSelector = selector<
   key: 'parsedZapSplitAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
+    const parsedAmount = get(parsedZapAmountSelector)
+    const rebases = get(bentoboxRebasesAtom)
 
-    // TODO ramin: output amount calculation
-    if (pool) return [CurrencyAmount.fromRawAmount(pool?.token0, '0'), CurrencyAmount.fromRawAmount(pool?.token1, '0')]
+    if (pool && parsedAmount) {
+      const index = pool.token0.address === parsedAmount.currency.wrapped.address ? 0 : 1
+      const otherAmount = toAmountCurrencyAmount(
+        rebases[index === 0 ? 1 : 0],
+        pool
+          .priceOf(parsedAmount.currency.wrapped)
+          .quote(toShareCurrencyAmount(rebases[index], parsedAmount?.divide(2).wrapped))
+      )
+
+      return [index === 0 ? parsedAmount.divide(2) : otherAmount, index === 1 ? parsedAmount.divide(2) : otherAmount]
+    }
+
     return [undefined, undefined]
   },
 })

@@ -1,30 +1,28 @@
 import { useRecoilValue } from 'recoil'
-import { Currency, CurrencyAmount, Percent, Price, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
 import {
   bentoboxRebasesAtom,
   currentLiquidityValueSelector,
   currentPoolShareSelector,
-  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
+  fixedRatioAtom,
   noLiquiditySelector,
   poolAtom,
   poolBalanceAtom,
   totalSupplyAtom,
 } from '../atoms'
 import { useMemo } from 'react'
-import { toAmountCurrencyAmount, toShareCurrencyAmount } from '../../../../functions'
-import useParsedAmountsWithSlippage from './useParsedAmountsWithSlippage'
+import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from '../../../../functions'
+import { ZERO_PERCENT } from '../../../../constants'
 
-export const usePoolDetails = (parsedAmounts: (CurrencyAmount<Currency> | undefined)[]) => {
+export const usePoolDetails = (
+  parsedAmounts: (CurrencyAmount<Currency> | undefined)[] | undefined,
+  slippage: Percent
+) => {
   const [, pool] = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
-  const [minAmountA, minAmountB] = useParsedAmountsWithSlippage(
-    parsedAmounts,
-    noLiquidity,
-    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-  )
 
   // Returns the current pool share before execution
   const currentPoolShare = useRecoilValue(currentPoolShareSelector)
@@ -34,20 +32,35 @@ export const usePoolDetails = (parsedAmounts: (CurrencyAmount<Currency> | undefi
 
   // Returns the minimum SLP that will get minted given current input amounts
   const liquidityMinted = useMemo(() => {
-    if (pool && totalSupply && minAmountA?.greaterThan(0) && minAmountB?.greaterThan(0) && rebases[0] && rebases[1]) {
+    if (pool && totalSupply && rebases[0] && rebases[1]) {
+      const amountA = toShareCurrencyAmount(
+        rebases[0],
+        parsedAmounts && parsedAmounts[0]
+          ? parsedAmounts[0].wrapped
+          : CurrencyAmount.fromRawAmount(pool.token0, '0').wrapped
+      )
+
+      const amountB = toShareCurrencyAmount(
+        rebases[1],
+        parsedAmounts && parsedAmounts[1]
+          ? parsedAmounts[1].wrapped
+          : CurrencyAmount.fromRawAmount(pool.token1, '0').wrapped
+      )
+
+      // Both can't be zero
+      if (amountA.equalTo(ZERO) && amountB.equalTo(ZERO)) return undefined
+
       try {
-        return pool.getLiquidityMinted(
-          totalSupply,
-          toShareCurrencyAmount(rebases[0], minAmountA?.wrapped),
-          toShareCurrencyAmount(rebases[1], minAmountB?.wrapped)
-        )
+        const slp = pool.getLiquidityMinted(totalSupply, amountA, amountB)
+        const minSLP = calculateSlippageAmount(slp, noLiquidity ? ZERO_PERCENT : slippage)[0]
+        return CurrencyAmount.fromRawAmount(slp.currency, minSLP.toString())
       } catch (error) {
         console.error(error)
       }
     }
 
     return undefined
-  }, [minAmountA, minAmountB, pool, rebases, totalSupply])
+  }, [noLiquidity, parsedAmounts, pool, rebases, slippage, totalSupply])
 
   // Returns the resulting pool share after execution
   const poolShare = useMemo(() => {
@@ -60,24 +73,35 @@ export const usePoolDetails = (parsedAmounts: (CurrencyAmount<Currency> | undefi
 
   const price = useMemo(() => {
     if (noLiquidity) {
-      if (minAmountA?.greaterThan(0) && minAmountB?.greaterThan(0)) {
-        const value = minAmountB.divide(minAmountA)
-        return new Price(minAmountA.currency, minAmountB.currency, value.denominator, value.numerator)
+      if (parsedAmounts?.[0]?.greaterThan(0) && parsedAmounts?.[1]?.greaterThan(0)) {
+        const value = parsedAmounts[1].divide(parsedAmounts[0])
+        return new Price(parsedAmounts[0].currency, parsedAmounts[1].currency, value.denominator, value.numerator)
       }
-    } else {
-      return pool && minAmountA?.wrapped ? pool.priceOf(minAmountA?.currency.wrapped) : undefined
+    } else if (parsedAmounts?.[1]) {
+      return pool && parsedAmounts[0]?.wrapped ? pool.priceOf(parsedAmounts[1]?.currency.wrapped) : undefined
     }
     return undefined
-  }, [minAmountA, minAmountB, noLiquidity, pool])
+  }, [noLiquidity, parsedAmounts, pool])
 
   // Returns the resulting deposited tokens after execution
   const liquidityValue = useMemo(() => {
-    if (pool && totalSupply && minAmountA && minAmountB) {
-      return [currentLiquidityValue[0]?.add(minAmountA.wrapped), currentLiquidityValue[1]?.add(minAmountB.wrapped)]
+    if (
+      rebases[0] &&
+      rebases[1] &&
+      pool &&
+      totalSupply &&
+      parsedAmounts?.[0] &&
+      parsedAmounts?.[1] &&
+      liquidityMinted
+    ) {
+      return [
+        currentLiquidityValue[0]?.add(parsedAmounts[0].wrapped),
+        currentLiquidityValue[1]?.add(parsedAmounts[1].wrapped),
+      ]
     }
 
     return [undefined, undefined]
-  }, [currentLiquidityValue, minAmountA, minAmountB, pool, totalSupply])
+  }, [currentLiquidityValue, liquidityMinted, parsedAmounts, pool, rebases, totalSupply])
 
   return useMemo(
     () => ({

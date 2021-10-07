@@ -30,8 +30,7 @@
     "*.{md,css}": "prettier --write"
   },
   "resolutions": {
-    "@walletconnect/web3-provider": "1.6.0",
-    "@sushiswap/core-sdk": "1.0.0-canary.1"
+    "@walletconnect/web3-provider": "1.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

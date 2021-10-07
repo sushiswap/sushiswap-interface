@@ -1,17 +1,10 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import {
-  currentLiquidityValueSelector,
-  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
-  noLiquiditySelector,
-  poolAtom,
-  poolBalanceAtom,
-} from '../atoms'
+import { currentLiquidityValueSelector, poolAtom, poolBalanceAtom } from '../atoms'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
-import useParsedAmountsWithSlippage from './useParsedAmountsWithSlippage'
 
 export const percentageZapCurrencyAtom = atom<Currency | undefined>({
   key: 'percentageZapCurrencyAtom',
@@ -63,12 +56,6 @@ const useZapPercentageInput = () => {
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
   const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
-  const noLiquidity = useRecoilValue(noLiquiditySelector)
-  const parsedAmountsWithSlippage = useParsedAmountsWithSlippage(
-    parsedAmounts,
-    noLiquidity,
-    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-  )
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -82,12 +69,11 @@ const useZapPercentageInput = () => {
     () => ({
       zapCurrency,
       parsedAmounts,
-      parsedAmountsWithSlippage,
       parsedSLPAmount,
       percentageInput,
       error,
     }),
-    [error, parsedAmounts, parsedAmountsWithSlippage, parsedSLPAmount, percentageInput, zapCurrency]
+    [error, parsedAmounts, parsedSLPAmount, percentageInput, zapCurrency]
   )
 }
 

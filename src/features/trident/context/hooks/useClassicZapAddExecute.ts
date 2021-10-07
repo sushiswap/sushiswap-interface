@@ -1,11 +1,9 @@
 import { useLingui } from '@lingui/react'
 import { useActiveWeb3React, useBentoBoxContract, useTridentRouterContract } from '../../../../hooks'
 import { useZapAssetInput } from './useZapAssetInput'
-import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
 import {
   attemptingTxnAtom,
   DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
-  noLiquiditySelector,
   poolAtom,
   showReviewAtom,
   spendFromWalletSelector,
@@ -13,30 +11,28 @@ import {
 } from '../atoms'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
 import { useRecoilCallback, useSetRecoilState } from 'recoil'
-import { calculateSlippageAmount } from '../../../../functions'
-import { ZERO_PERCENT } from '../../../../constants'
 import { ethers } from 'ethers'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
 import { useMemo } from 'react'
+import { usePoolDetails } from './usePoolDetails'
 
 export const useClassicZapAddExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
   const { parsedAmount } = useZapAssetInput()
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
   const addTransaction = useTransactionAdder()
   const router = useTridentRouterContract()
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
   const bentoboxContract = useBentoBoxContract()
+  const { liquidityMinted } = usePoolDetails([parsedAmount], DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE)
 
   const execute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
         const [, pool] = await snapshot.getPromise(poolAtom)
-        const noLiquidity = await snapshot.getPromise(noLiquiditySelector)
 
         if (
           !pool ||
@@ -47,26 +43,36 @@ export const useClassicZapAddExecute = () => {
           !parsedAmount ||
           !pool?.token0 ||
           !pool?.token1 ||
-          !bentoboxContract
+          !bentoboxContract ||
+          !liquidityMinted
         )
           return
 
         const native = await snapshot.getPromise(spendFromWalletSelector(parsedAmount.currency.wrapped.address))
-        const amountMin = calculateSlippageAmount(parsedAmount, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0]
         const liquidityInput = [
           {
             token: parsedAmount.currency.wrapped.address,
             native,
-            amount: await bentoboxContract.toShare(parsedAmount.currency.wrapped.address, amountMin.toString(), false),
+            amount: await bentoboxContract.toShare(
+              parsedAmount.currency.wrapped.address,
+              parsedAmount.quotient.toString(),
+              false
+            ),
           },
         ]
 
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
-        const value = parsedAmount.currency.isNative ? { value: amountMin.toString() } : {}
+        const value = parsedAmount.currency.isNative ? { value: parsedAmount.quotient.toString() } : {}
 
         try {
           setAttemptingTxn(true)
-          const tx = await router.addLiquidity(liquidityInput, pool.liquidityToken.address, 1, encoded, value)
+          const tx = await router.addLiquidity(
+            liquidityInput,
+            pool.liquidityToken.address,
+            liquidityMinted.quotient.toString(),
+            encoded,
+            value
+          )
 
           setTxHash(tx.hash)
           setShowReview(false)
@@ -98,11 +104,11 @@ export const useClassicZapAddExecute = () => {
     [
       account,
       addTransaction,
-      allowedSlippage,
       bentoboxContract,
       chainId,
       i18n,
       library,
+      liquidityMinted,
       parsedAmount,
       router,
       setAttemptingTxn,

@@ -1,17 +1,10 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import {
-  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
-  noLiquiditySelector,
-  poolAtom,
-  poolBalanceAtom,
-  totalSupplyAtom,
-} from '../atoms'
+import { poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
-import useParsedAmountsWithSlippage from './useParsedAmountsWithSlippage'
 
 export const percentageAmountAtom = atom<string>({
   key: 'percentageAmountAtom',
@@ -51,15 +44,9 @@ const usePercentageInput = () => {
   const { i18n } = useLingui()
   const [poolState] = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
-  const noLiquidity = useRecoilValue(noLiquiditySelector)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
   const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
-  const parsedAmountsWithSlippage = useParsedAmountsWithSlippage(
-    parsedAmounts,
-    noLiquidity,
-    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-  )
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -76,12 +63,11 @@ const usePercentageInput = () => {
   return useMemo(
     () => ({
       parsedAmounts,
-      parsedAmountsWithSlippage,
       parsedSLPAmount,
       percentageInput,
       error,
     }),
-    [error, parsedAmounts, parsedAmountsWithSlippage, parsedSLPAmount, percentageInput]
+    [error, parsedAmounts, parsedSLPAmount, percentageInput]
   )
 }
 

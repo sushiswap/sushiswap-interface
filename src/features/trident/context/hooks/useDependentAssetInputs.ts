@@ -2,7 +2,6 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import {
   bentoboxRebasesAtom,
   currenciesAtom,
-  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
   fixedRatioAtom,
   noLiquiditySelector,
   poolAtom,
@@ -16,7 +15,6 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
 import useCurrenciesFromURL from './useCurrenciesFromURL'
-import useParsedAmountsWithSlippage from './useParsedAmountsWithSlippage'
 
 export enum TypedField {
   A,
@@ -151,11 +149,6 @@ export const useDependentAssetInputs = () => {
   const formattedAmounts = useRecoilValue(formattedAmountsSelector)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
-  const parsedAmountsWithSlippage = useParsedAmountsWithSlippage(
-    parsedAmounts,
-    noLiquidity,
-    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-  )
   const typedField = useRecoilState(typedFieldAtom)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
@@ -203,7 +196,7 @@ export const useDependentAssetInputs = () => {
     ? i18n._(t`Connect Wallet`)
     : poolState === 3
     ? i18n._(t`Invalid pool`)
-    : !parsedAmounts[0]?.greaterThan(ZERO) || !parsedAmounts[1]?.greaterThan(ZERO)
+    : !parsedAmounts[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : insufficientBalance
     ? i18n._(t`Insufficient ${insufficientBalance.currency.symbol} balance`)
@@ -216,22 +209,11 @@ export const useDependentAssetInputs = () => {
       secondaryInput,
       formattedAmounts,
       parsedAmounts,
-      parsedAmountsWithSlippage,
       typedField,
       onMax,
       isMax,
       error,
     }),
-    [
-      error,
-      formattedAmounts,
-      isMax,
-      mainInput,
-      onMax,
-      parsedAmounts,
-      parsedAmountsWithSlippage,
-      secondaryInput,
-      typedField,
-    ]
+    [error, formattedAmounts, isMax, mainInput, onMax, parsedAmounts, secondaryInput, typedField]
   )
 }
