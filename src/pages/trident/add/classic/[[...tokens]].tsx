@@ -50,7 +50,7 @@ const AddClassic = () => {
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>
-                {pool ? `${currencies[0]?.symbol}-${currencies[1]?.symbol}` : i18n._(t`Back`)}
+                {pool ? `${currencies?.[0]?.symbol}-${currencies?.[1]?.symbol}` : i18n._(t`Back`)}
               </Link>
             </Button>
           </div>
