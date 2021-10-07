@@ -1,35 +1,81 @@
-import { FC } from 'react'
-import Typography from '../../../components/Typography'
+import React, { FC } from 'react'
+import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import PoolCard from './PoolCard'
-import { useRecoilValue } from 'recoil'
-import { searchQueryAtom } from './context/atoms'
+import { TableInstance } from '../../transactions/types'
+import { useFlexLayout, usePagination, useTable } from 'react-table'
+import { poolTypeToStr, usePoolsTableData } from './usePoolsTableData'
+import { classNames } from '../../../functions'
 
-interface SearchResultPoolsProps {}
-
-const SearchResultPools: FC<SearchResultPoolsProps> = () => {
+const SearchResultPools: FC = () => {
   const { i18n } = useLingui()
-  const searchQuery = useRecoilValue(searchQueryAtom)
-  const pools = []
+  const { config, loading, error } = usePoolsTableData()
+
+  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow }: TableInstance = useTable(
+    config,
+    usePagination,
+    useFlexLayout
+  )
 
   return (
     <div className="flex flex-col gap-2 px-5">
-      <Typography variant="h3" weight={700}>
-        {searchQuery ? i18n._(t`Results for ${`'${searchQuery}'`}`) : i18n._(t`Results`)}
-      </Typography>
-      {pools.reduce((acc, cur, index) => {
-        const name = cur.tokens
-          .map((el) => el.symbol)
-          .join('-')
-          .toLowerCase()
+      <table {...getTableProps()} className="w-full">
+        <thead>
+          {headerGroups.map((headerGroup, i) => (
+            <tr {...headerGroup.getHeaderGroupProps()} key={i}>
+              {headerGroup.headers.map((column, i) => (
+                <th
+                  key={i}
+                  {...column.getHeaderProps()}
+                  className={`text-secondary text-sm pt-1 pb-3 ${i === 0 ? 'text-left' : 'text-right'}`}
+                >
+                  {column.render('Header')}
+                  {i === 0 && (
+                    <>
+                      <div
+                        className={`animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue inline-block ml-3 transition ${
+                          loading ? 'opacity-100' : 'opacity-0'
+                        }`}
+                      />
+                      {error && <span className="text-sm italic text-red -ml-2">{i18n._(t`⚠️ Loading Error`)}</span>}
+                    </>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, i) => {
+            prepareRow(row)
 
-        if ((searchQuery && name.includes(searchQuery.toLowerCase())) || !searchQuery) {
-          acc.push(<PoolCard pool={cur} link={'/trident/pool'} key={index} />)
-        }
+            const poolPath = `/trident/pool/${poolTypeToStr[
+              row.original.type
+            ].toLowerCase()}/${row.original.currencyIds.join('/')}`
 
-        return acc
-      }, [])}
+            return (
+              <Link href={poolPath} key={i} passHref>
+                <tr {...row.getRowProps()} className="hover:bg-gray-800 hover:cursor-pointer">
+                  {row.cells.map((cell, i) => {
+                    return (
+                      <td
+                        key={i}
+                        {...cell.getCellProps()}
+                        className={classNames(
+                          'py-3 border-t border-gray-800 flex items-center',
+                          i === 0 ? 'justify-start' : 'justify-end'
+                        )}
+                      >
+                        {cell.render('Cell')}
+                      </td>
+                    )
+                  })}
+                </tr>
+              </Link>
+            )
+          })}
+        </tbody>
+      </table>
     </div>
   )
 }

@@ -4,9 +4,7 @@ import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
-import SuggestedPools from '../../../features/trident/pools/SuggestedPools'
 import SearchResultPools from '../../../features/trident/pools/SearchResultPools'
-import PoolListActions from '../../../features/trident/pools/PoolListActions'
 import Link from 'next/link'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import { searchQueryAtom } from '../../../features/trident/pools/context/atoms'
@@ -37,9 +35,11 @@ const Pool = () => {
         </div>
       </TridentHeader>
       <TridentBody>
-        <PoolListActions />
+        {/* FOLLOW UP PR TO IMPLEMENT */}
+        {/*<PoolListActions />*/}
         <div className={classNames('flex gap-6', searchQuery ? 'flex-col-reverse' : 'flex-col')}>
-          <SuggestedPools />
+          {/* Designs TBD about this feature */}
+          {/*<SuggestedPools />*/}
           <SearchResultPools />
         </div>
       </TridentBody>
