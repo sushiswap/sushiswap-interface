@@ -153,7 +153,9 @@ export default function Lending() {
         <meta key="description" name="description" content={APP_SHORT_BLURB} />
       </Head>
       <div className="p-4 pb-6 rounded-lg shadow-lg bg-dark-900 text-secondary">
-        <h1 className="text-lg font-semibold">Deposit & Borrow in Silos</h1>
+        <h1 className="text-xl font-semibold">
+          Deposit & Borrow in Silos <span className="text-sm font-thin ">(Isolated Markets)</span>
+        </h1>
 
         <div className="mt-8">
           <CurrencyInputPanel
@@ -175,12 +177,13 @@ export default function Lending() {
         </div>
         {currentSilo && currentSiloUserInfo && (
           <>
-            <div className="mt-4 mx-2 text-sm flex space-x-10 text-high-emphesis">
+            <div className="mt-4 mx-6 text-sm flex space-x-10 text-high-emphesis">
+              <div className="text-low-emphesis">positions: </div>
               <div>
                 {currentSilo.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBalance.toString())}
               </div>
               <div>
-                {wrappedNative.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBridgeBalance.toString())}
+                silo{wrappedNative.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBridgeBalance.toString())}
               </div>
             </div>
 
@@ -245,7 +248,22 @@ export default function Lending() {
             </div>
 
             <div className="flex space-x-2 mt-2 mb-4 ml-5">
-              <div className="ml-24" />
+              <Button
+                type="button"
+                color="gray"
+                variant="outlined"
+                onClick={async () => {
+                  console.log('SiloBridge.approve()');
+
+                  if (wrappedNative && currentSilo && amount) {
+                    const result = await nativeTokenContract.approve(siloBridgePool.address, parsedAmt);
+                  } else {
+                    console.warn('no current silo');
+                  }
+                }}
+              >
+                Approve
+              </Button>
 
               <Button
                 color="darkindigo"
@@ -277,6 +295,21 @@ export default function Lending() {
                 color="gray"
                 onClick={async () => {
                   console.log('Silo.deposit.repay()');
+
+                  if (tokenAddress && currentSilo && amount) {
+                    consoleState();
+
+                    try {
+                      const result = await siloBridgePool.repay(currentSilo.address, parsedAmt);
+
+                      addTransaction(result, {
+                        summary: `Repay ${amount} ETH from ${currentSilo.name}`,
+                      });
+                    } catch (error) {
+                      console.error(error);
+                      //notify user
+                    }
+                  }
                 }}
               >
                 Repay {wrappedNative.symbol} to Silo
@@ -374,6 +407,16 @@ export default function Lending() {
                 color="gray"
                 onClick={async () => {
                   console.log('Silo.deposit.repay()');
+
+                  if (tokenAddress && currentSilo && amount) {
+                    consoleState();
+
+                    const result = await siloContract.repay(parsedAmt);
+
+                    addTransaction(result, {
+                      summary: `Repay ${amount} ${currentSilo.symbol} from ${currentSilo.name}`,
+                    });
+                  }
                 }}
               >
                 Repay {currentSilo.symbol}
