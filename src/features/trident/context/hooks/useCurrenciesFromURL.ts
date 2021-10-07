@@ -4,12 +4,20 @@ import { Currency, NATIVE } from '@sushiswap/core-sdk'
 import { useCallback, useMemo } from 'react'
 import { useActiveWeb3React } from '../../../../hooks'
 
-const useCurrenciesFromURL = (): [(Currency | undefined)[], (cur: Currency, index: number) => void] => {
+const useCurrenciesFromURL = (): {
+  currencies: (Currency | undefined)[]
+  setURLCurrency: (cur: Currency, index: number) => void
+  fee: number
+  twap: boolean
+} => {
   const { chainId } = useActiveWeb3React()
   const router = useRouter()
 
   const currencyA = useCurrency(router.query.tokens?.[0])
   const currencyB = useCurrency(router.query.tokens?.[1])
+
+  const fee = Number(router.query.fee ?? 30)
+  const twap = router.query.twap !== 'false'
 
   const setURLCurrency = useCallback(
     async (cur: Currency, index: number) => {
@@ -29,17 +37,22 @@ const useCurrenciesFromURL = (): [(Currency | undefined)[], (cur: Currency, inde
     [chainId, router]
   )
 
-  return useMemo(
-    () => [
+  const currencies = useMemo(
+    () =>
       currencyA && currencyB
         ? currencyA.wrapped.sortsBefore(currencyB.wrapped)
           ? [currencyA, currencyB]
           : [currencyB, currencyA]
         : [undefined, undefined],
-      setURLCurrency,
-    ],
-    [currencyA, currencyB, setURLCurrency]
+    [currencyA, currencyB]
   )
+
+  return {
+    currencies,
+    setURLCurrency,
+    fee,
+    twap,
+  }
 }
 
 export default useCurrenciesFromURL

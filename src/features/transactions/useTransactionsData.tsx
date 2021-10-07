@@ -4,7 +4,7 @@ import ExternalLink from '../../components/ExternalLink'
 import { useTransactions } from '../../services/graph'
 
 export const useTransactionsData = (pairs: string[]) => {
-  const { transactions, error } = useTransactions(pairs)
+  const { transactions, error, loading } = useTransactions(pairs)
   const formattedTransactions = useMemo(() => transactionDataFormatter(transactions || []), [transactions])
 
   const TransactionColumns = useMemo(
@@ -55,11 +55,11 @@ export const useTransactionsData = (pairs: string[]) => {
         data: formattedTransactions,
         defaultColumn,
       },
-      loading: !transactions && !error,
+      loading,
       error,
       totalTransactions: transactions ? transactions.length : 0,
       requestMoreTransactions: () => undefined,
     }),
-    [TransactionColumns, defaultColumn, error, formattedTransactions, transactions]
+    [TransactionColumns, defaultColumn, error, formattedTransactions, loading, transactions]
   )
 }

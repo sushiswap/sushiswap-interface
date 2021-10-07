@@ -52,11 +52,7 @@ export const secondaryInputSelector = selector<string>({
       const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
 
       if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
-        const dependentTokenAmount = toAmountCurrencyAmount(
-          rebases[1],
-          pool.priceOf(tokenA).quote(toShareCurrencyAmount(rebases[0], mainInputCurrencyAmount?.wrapped))
-        )
-
+        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
         return (
           pool?.token1?.isNative
             ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
@@ -152,7 +148,7 @@ export const useDependentAssetInputs = () => {
   const typedField = useRecoilState(typedFieldAtom)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const [currencies] = useCurrenciesFromURL()
+  const { currencies } = useCurrenciesFromURL()
   const balances = useBentoOrWalletBalances(account ?? undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {

@@ -31,10 +31,10 @@ const AddClassic = () => {
 
   const { i18n } = useLingui()
   const { query } = useRouter()
-  const [[currencyA, currencyB]] = useCurrenciesFromURL()
+  const { currencies, twap, fee } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [, pool] = useRecoilValue(poolAtom)
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
+  const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
   const bgRef = useBackgroundRef()
 
   return (
@@ -50,7 +50,7 @@ const AddClassic = () => {
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>
-                {pool ? `${currencyA?.symbol}-${currencyB?.symbol}` : i18n._(t`Back`)}
+                {pool ? `${currencies[0]?.symbol}-${currencies[1]?.symbol}` : i18n._(t`Back`)}
               </Link>
             </Button>
           </div>

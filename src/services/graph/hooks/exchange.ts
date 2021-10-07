@@ -299,8 +299,7 @@ export function useTokens(
     (_, chainId) => getTokens(chainId, variables),
     swrConfig
   )
-
-  return data
+  return data ?? []
 }
 
 interface usePairDayDataProps {
@@ -424,11 +423,11 @@ export interface TransactionData {
 export const useTransactions = (pairs?: string[]) => {
   const { chainId } = useActiveWeb3React()
   const variables = { where: { pair_in: pairs } }
-  const { data, error } = useSWR<TransactionData[]>(
+  const { data, error, isValidating } = useSWR<TransactionData[]>(
     !!chainId && !!pairs ? ['transactions', chainId, JSON.stringify(variables)] : null,
     () => getTransactions(chainId, variables)
   )
-  return { transactions: data, error }
+  return { transactions: data, error, loading: isValidating }
 }
 
 interface useTokenPairsProps {

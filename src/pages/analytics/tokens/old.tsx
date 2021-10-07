@@ -7,7 +7,6 @@ import {
   useTokenDayData,
   useTokenPairs,
   useTokens,
-  useTransactions,
 } from '../../../services/graph'
 import { useMemo, useState } from 'react'
 

@@ -11,7 +11,7 @@ import { formatPercent } from '../../functions'
 import { Currency } from '@sushiswap/core-sdk'
 import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
 
-export type BreadcrumbTuple = { link: string; label: string }
+export type BreadcrumbTuple = { link?: string; label: string }
 export type BreadcrumbItem =
   | ((currencies: (Currency | undefined)[], pool?: PoolUnion) => BreadcrumbTuple)
   | BreadcrumbTuple
@@ -40,7 +40,7 @@ interface BreadcrumbProps {
 
 const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   const [, pool] = useRecoilValue(poolAtom)
-  const [currencies] = useCurrenciesFromURL()
+  const { currencies } = useCurrenciesFromURL()
 
   const formatted = useMemo(() => {
     return breadcrumbs.map((el) => {
@@ -53,8 +53,8 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   }, [breadcrumbs, currencies, pool])
 
   return (
-    <div className="w-full border-b border-dark-900 py-2 flex justify-center bg-gradient-to-r from-transparent-blue to-transparent-pink">
-      <Container maxWidth="7xl" className="px-5 flex items-center">
+    <div className="flex justify-center w-full py-2 border-b border-dark-900 bg-gradient-to-r from-transparent-blue to-transparent-pink">
+      <Container maxWidth="7xl" className="flex items-center px-5">
         {formatted
           .map(({ label, link }, index) => (
             <Typography
@@ -66,7 +66,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
                 index === breadcrumbs.length - 1 ? 'text-high-emphesis' : 'text-secondary'
               )}
             >
-              <Link href={link}>{label}</Link>
+              {link ? <Link href={link}>{label}</Link> : label}
             </Typography>
           ))
           .reduce(
