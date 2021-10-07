@@ -14,7 +14,6 @@ import { useActiveWeb3React } from '../../../../hooks'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
-import useCurrenciesFromURL from './useCurrenciesFromURL'
 
 export enum TypedField {
   A,
@@ -52,7 +51,11 @@ export const secondaryInputSelector = selector<string>({
       const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
 
       if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
-        const dependentTokenAmount = pool.priceOf(tokenA).quote(mainInputCurrencyAmount?.wrapped)
+        const dependentTokenAmount = toAmountCurrencyAmount(
+          rebases[1],
+          pool.priceOf(tokenA).quote(toShareCurrencyAmount(rebases[0], mainInputCurrencyAmount?.wrapped))
+        )
+
         return (
           pool?.token1?.isNative
             ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
@@ -148,7 +151,10 @@ export const useDependentAssetInputs = () => {
   const typedField = useRecoilState(typedFieldAtom)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const { currencies } = useCurrenciesFromURL()
+  const currencies = useMemo(
+    () => parsedAmounts.reduce<Currency[]>((acc, cur) => [...acc, ...(cur ? [cur.currency] : [])], []),
+    [parsedAmounts]
+  )
   const balances = useBentoOrWalletBalances(account ?? undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {
