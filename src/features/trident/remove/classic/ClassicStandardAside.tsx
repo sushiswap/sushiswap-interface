@@ -16,7 +16,7 @@ import BentoBoxFundingSourceModal from '../../add/BentoBoxFundingSourceModal'
 
 const ClassicStandardAside = () => {
   const { i18n } = useLingui()
-  const { parsedAmounts, error } = usePercentageInput()
+  const { parsedAmounts, parsedAmountsWithSlippage, error } = usePercentageInput()
   const usdcValues = [useUSDCValue(parsedAmounts?.[0]), useUSDCValue(parsedAmounts?.[1])]
   const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
 
@@ -59,7 +59,7 @@ const ClassicStandardAside = () => {
         <Typography variant="lg" weight={700} className="text-high-emphesis">
           {i18n._(t`You'll Receive (at least):`)}
         </Typography>
-        {parsedAmounts.map((el, index) => (
+        {parsedAmountsWithSlippage.map((el, index) => (
           <div className="flex justify-between items-center" key={index}>
             <div className="flex gap-1.5 items-center">
               <CurrencyLogo currency={el?.currency} size={20} />
@@ -71,7 +71,7 @@ const ClassicStandardAside = () => {
               </Typography>
             </div>
             <Typography variant="sm" weight={700} className="text-secondary">
-              ≈${usdcValues[index]?.greaterThan(0) ? usdcValues[index].toSignificant(6) : '0.00'}
+              ≈${usdcValues[index]?.greaterThan(0) ? usdcValues[index]?.toSignificant(6) : '0.00'}
             </Typography>
           </div>
         ))}

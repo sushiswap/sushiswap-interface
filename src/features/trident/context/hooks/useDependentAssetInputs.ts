@@ -1,12 +1,19 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { currenciesAtom, fixedRatioAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
+import {
+  bentoboxRebasesAtom,
+  currenciesAtom,
+  fixedRatioAtom,
+  noLiquiditySelector,
+  poolAtom,
+  spendFromWalletAtom,
+} from '../atoms'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import { useCallback, useMemo } from 'react'
-import { maxAmountSpend, tryParseAmount } from '../../../../functions'
+import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from '../../../../functions'
 import { useActiveWeb3React } from '../../../../hooks'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalance'
+import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
 import useCurrenciesFromURL from './useCurrenciesFromURL'
 
 export enum TypedField {
@@ -37,6 +44,7 @@ export const secondaryInputSelector = selector<string>({
     const noLiquidity = get(noLiquiditySelector)
     const fixedRatio = get(fixedRatioAtom)
     const typedField = get(typedFieldAtom)
+    const rebases = get(bentoboxRebasesAtom)
 
     // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
     if (!noLiquidity && fixedRatio && typedField === TypedField.A) {
@@ -60,6 +68,7 @@ export const secondaryInputSelector = selector<string>({
     const noLiquidity = get(noLiquiditySelector)
     const typedField = get(typedFieldAtom)
     const fixedRatio = get(fixedRatioAtom)
+    const rebases = get(bentoboxRebasesAtom)
 
     // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
     if (!noLiquidity && fixedRatio) {
@@ -68,7 +77,10 @@ export const secondaryInputSelector = selector<string>({
       const newValueCA = tryParseAmount(newValue, pool?.token1)
 
       if (tokenA && tokenB && pool && newValueCA?.wrapped) {
-        const dependentTokenAmount = pool.priceOf(tokenB).quote(newValueCA?.wrapped)
+        const dependentTokenAmount = toAmountCurrencyAmount(
+          rebases[0],
+          pool.priceOf(tokenB).quote(toShareCurrencyAmount(rebases[1], newValueCA?.wrapped))
+        )
         set(mainInputAtom, dependentTokenAmount?.toExact())
       }
 
@@ -132,12 +144,12 @@ export const useDependentAssetInputs = () => {
   const secondaryInput = useRecoilState(secondaryInputSelector)
   const formattedAmounts = useRecoilValue(formattedAmountsSelector)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
-  const typedField = useRecoilState(typedFieldAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
+  const typedField = useRecoilState(typedFieldAtom)
   const fixedRatio = useRecoilValue(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const { currencies } = useCurrenciesFromURL()
-  const balances = useBentoOrWalletBalance(account ? account : undefined, currencies, spendFromWallet)
+  const balances = useBentoOrWalletBalances(account ?? undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {
     if (!balances || !pool || !balances[0] || !balances[1]) return
@@ -180,7 +192,7 @@ export const useDependentAssetInputs = () => {
     ? i18n._(t`Connect Wallet`)
     : poolState === 3
     ? i18n._(t`Invalid pool`)
-    : !parsedAmounts[0]?.greaterThan(ZERO) || !parsedAmounts[1]?.greaterThan(ZERO)
+    : !parsedAmounts[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : insufficientBalance
     ? i18n._(t`Insufficient ${insufficientBalance.currency.symbol} balance`)

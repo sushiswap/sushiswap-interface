@@ -39,7 +39,9 @@ const WithdrawSubmittedModal: FC = () => {
         <div className="flex flex-col gap-1 rounded py-2 px-3">
           <div className="flex gap-2 items-center justify-center">
             <Typography variant="sm" weight={700} className="text-blue">
-              <a href={getExplorerLink(chainId, txHash, 'transaction')}>{i18n._(t`View on Explorer`)}</a>
+              <a target="_blank" rel="noreferrer" href={getExplorerLink(chainId, txHash, 'transaction')}>
+                {i18n._(t`View on Explorer`)}
+              </a>
             </Typography>
           </div>
           <div className="flex flex-row items-center gap-2 justify-center">

@@ -3,7 +3,7 @@ import Typography from '../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { useRecoilValue } from 'recoil'
-import { liquidityModeAtom, poolAtom, poolBalanceAtom } from '../context/atoms'
+import { DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, liquidityModeAtom, poolAtom, poolBalanceAtom } from '../context/atoms'
 import { useDependentAssetInputs } from '../context/hooks/useDependentAssetInputs'
 import { usePoolDetails } from '../context/hooks/usePoolDetails'
 import { useZapAssetInput } from '../context/hooks/useZapAssetInput'
@@ -21,7 +21,10 @@ const TransactionDetails: FC = () => {
 
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const input = liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
-  const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(input)
+  const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(
+    input,
+    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
+  )
 
   return (
     <div className="flex flex-col gap-4 lg:gap-8">

@@ -2,7 +2,7 @@ import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { atom, atomFamily, selectorFamily, useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
 import { spendFromWalletAtom } from '../atoms'
-import { useBentoOrWalletBalance } from '../../../../hooks/useBentoOrWalletBalance'
+import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
 import { maxAmountSpend, tryParseAmount } from '../../../../functions'
 import { useCallback, useMemo } from 'react'
 import { t } from '@lingui/macro'
@@ -78,7 +78,7 @@ export const useIndependentAssetInputs = () => {
   const inputs = useRecoilValue(inputAmountsAtom(numberOfInputs[0]))
   const [parsedAmounts, setParsedAmounts] = useRecoilState(parsedAmountsSelector(numberOfInputs[0]))
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const balances = useBentoOrWalletBalance(account ? account : undefined, currencies[0], spendFromWallet)
+  const balances = useBentoOrWalletBalances(account ?? undefined, currencies[0], spendFromWallet)
 
   const setInputAtIndex = useRecoilCallback<[string | undefined, number], void>(
     ({ snapshot, set }) =>

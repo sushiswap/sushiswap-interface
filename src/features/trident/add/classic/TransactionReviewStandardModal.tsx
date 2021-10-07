@@ -9,7 +9,7 @@ import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Button from '../../../../components/Button'
 import { ZERO } from '@sushiswap/core-sdk'
-import { attemptingTxnAtom, poolAtom, showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, poolAtom, showReviewAtom } from '../../context/atoms'
 import { useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 import { usePoolDetails } from '../../context/hooks/usePoolDetails'
 import { useClassicStandardAddExecute } from '../../context/hooks/useClassicStandardAddExecute'
@@ -22,8 +22,10 @@ const TransactionReviewStandardModal: FC = () => {
 
   const { parsedAmounts } = useDependentAssetInputs()
   const { execute } = useClassicStandardAddExecute()
-  const { currentLiquidityValue, liquidityMinted, liquidityValue, poolShare, currentPoolShare, price } =
-    usePoolDetails(parsedAmounts)
+  const { currentLiquidityValue, liquidityMinted, liquidityValue, poolShare, currentPoolShare } = usePoolDetails(
+    parsedAmounts,
+    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
+  )
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -69,7 +71,7 @@ const TransactionReviewStandardModal: FC = () => {
           </div>
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
-              {i18n._(t`You'll receive:`)}
+              {i18n._(t`You'll receive (at least):`)}
             </Typography>
             <Typography weight={700} variant="lg" className="text-high-emphesis">
               {liquidityMinted?.toSignificant(6)} SLP
@@ -77,19 +79,6 @@ const TransactionReviewStandardModal: FC = () => {
           </div>
         </div>
         <div className="flex flex-col px-5 gap-5">
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
-              <Typography variant="sm" className="text-right">
-                1 {pool?.token0?.symbol} = {price?.toSignificant(6)} {pool?.token1?.symbol}
-              </Typography>
-            </div>
-            <div className="flex justify-end">
-              <Typography variant="sm" className="text-right">
-                1 {pool?.token1?.symbol} = {price?.invert().toSignificant(6)} {pool?.token0?.symbol}
-              </Typography>
-            </div>
-          </div>
           <Divider />
           <div className="flex flex-col gap-1">
             {currentLiquidityValue && liquidityValue && (

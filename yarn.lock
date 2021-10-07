@@ -4128,34 +4128,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.5.tgz#fcf3f36fee62bcfbe2389587d5dd3657ecb00bfb"
   integrity sha512-XJ7D1zOITrLjKYpweHafroxu1xsQ1mJiDsvhjBVs6snT5zNPyfRXNxhB6sD3VXseDkQmqNWtgkSe4UJ8t8TrcQ==
 
-"@sushiswap/core-sdk@0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-0.1.0.tgz#a178549ab8d18d99a5d1a57978265ebaed2a1b87"
-  integrity sha512-vtaPhsWZvpvl5Pf943UQ7ZK8774IzszouN0nqylTgEJn2R4gdX5u0t9zowt0j6tjhj1V/mFFPXwkZUrvFWfAhA==
-  dependencies:
-    big.js "^6.1.0"
-    decimal.js-light "^2.5.0"
-    jsbi "^3.1.0"
-    tiny-invariant "^1.1.0"
-    tiny-warning "^1.0.0"
-    toformat "^2.0.0"
-
-"@sushiswap/core-sdk@1.0.0-canary.1":
+"@sushiswap/core-sdk@0.1.0", "@sushiswap/core-sdk@1.0.0-canary.1", "@sushiswap/core-sdk@^0.1.2":
   version "1.0.0-canary.1"
   resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.1.tgz#95c254924dcefb6f3940dade6583bf362e4c2652"
   integrity sha512-nrLZl+ItsONit0O1yJfR4rRQM5yycGy5puTR4G3xqrnDE4YRdNQxhVxRwA1BQ/y5515grOyVN0yRG9HaRdbDxA==
-  dependencies:
-    big.js "^6.1.0"
-    decimal.js-light "^2.5.0"
-    jsbi "^3.1.0"
-    tiny-invariant "^1.1.0"
-    tiny-warning "^1.0.0"
-    toformat "^2.0.0"
-
-"@sushiswap/core-sdk@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-0.1.2.tgz#d6ae5d252bb603b2664f119988da50d96d0fff01"
-  integrity sha512-z7ks+cVG8nH5jiHMtZp4HzdDcnSLEm/Pd+aNav1ZjfgKrsVNNSAs6a6tjoEvK7GRj6XhM4RFyV772y4mIAkxjQ==
   dependencies:
     big.js "^6.1.0"
     decimal.js-light "^2.5.0"
@@ -4234,6 +4210,13 @@
   version "1.0.0-canary.14"
   resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.14.tgz#48c158cad077edc1c403ac94b3789de3f04113fa"
   integrity sha512-Urnm/GeVFJVfTOHR1rJur0tLHm9wdIRi9eetV3XmexkqW6QAtIh60bi8tQSVH4LcKez+mdISOol0H0D0wKc9+w==
+  dependencies:
+    "@sushiswap/core-sdk" "^0.1.2"
+
+"@sushiswap/trident@1.0.0-canary.21":
+  version "1.0.0-canary.21"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.21.tgz#2625fc11257ab9e75c9aa51cb45cfc1720fd14f6"
+  integrity sha512-NTAFUidaNJcA0BQBUK1GBBRw3NXH6MsDerPj64gKgVwOGIEoSAOK8dmuxPoNyd2oENoPWfFXKOKyO6X/purv8A==
   dependencies:
     "@sushiswap/core-sdk" "^0.1.2"
 

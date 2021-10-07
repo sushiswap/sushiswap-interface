@@ -4,15 +4,25 @@ import { t } from '@lingui/macro'
 import ListPanel from '../../../../components/ListPanel'
 import { useLingui } from '@lingui/react'
 import { useRecoilValue } from 'recoil'
-import { poolAtom, totalSupplyAtom } from '../../context/atoms'
+import { bentoboxRebasesAtom, poolAtom, totalSupplyAtom } from '../../context/atoms'
 import SumUSDCValues from '../../SumUSDCValues'
+import { toAmountCurrencyAmount } from '../../../../functions'
 
 const ClassicMarket: FC = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
-
+  const rebases = useRecoilValue(bentoboxRebasesAtom)
   const amounts = [pool?.reserve0, pool?.reserve1]
+
+  const reserves = amounts.map((el, index) => {
+    const amount = amounts[index]
+    if (el && pool && totalSupply && amount) {
+      return toAmountCurrencyAmount(rebases[index], amount.wrapped)
+    }
+
+    return undefined
+  })
 
   return (
     <SumUSDCValues amounts={amounts}>
@@ -40,7 +50,7 @@ const ClassicMarket: FC = () => {
                 subValue={`${totalSupply?.toSignificant(6)} ${pool?.liquidityToken.symbol}`}
               />
             }
-            items={[pool?.reserve0, pool?.reserve1].map((amount, index) => (
+            items={reserves.map((amount, index) => (
               <ListPanel.CurrencyAmountItem amount={amount} key={index} />
             ))}
           />

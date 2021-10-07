@@ -1,7 +1,6 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import { calculateSlippageAmount } from '../../../../functions'
-import { poolAtom, poolBalanceAtom, slippageAtom, totalSupplyAtom } from '../atoms'
+import { poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
@@ -28,9 +27,8 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const parsedSLPAmount = get(parsedSLPAmountSelector)
-    const allowedSlippage = get(slippageAtom)
 
-    const amounts = [
+    return [
       pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
         ? pool.getLiquidityValue(pool.token0, totalSupply, parsedSLPAmount)
         : undefined,
@@ -38,21 +36,6 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
         ? pool.getLiquidityValue(pool.token1, totalSupply, parsedSLPAmount)
         : undefined,
     ]
-
-    if (pool && allowedSlippage && amounts[0] && amounts[1]) {
-      const amountsMin = [
-        calculateSlippageAmount(amounts[0], allowedSlippage)[0],
-        calculateSlippageAmount(amounts[1], allowedSlippage)[0],
-      ]
-
-      return [
-        CurrencyAmount.fromRawAmount(pool.token0, amountsMin[0].toString()),
-        CurrencyAmount.fromRawAmount(pool.token1, amountsMin[1].toString()),
-      ]
-    }
-
-    if (pool) return [CurrencyAmount.fromRawAmount(pool.token0, '0'), CurrencyAmount.fromRawAmount(pool.token1, '0')]
-    return [undefined, undefined]
   },
 })
 

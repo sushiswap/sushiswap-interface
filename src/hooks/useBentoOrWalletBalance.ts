@@ -1,37 +1,88 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Rebase, Token } from '@sushiswap/core-sdk'
 import { useCurrencyBalances } from '../state/wallet/hooks'
-import { useBentoBalances2 } from '../state/bentobox/hooks'
 import { useMemo } from 'react'
+import { useSingleCallResult } from '../state/multicall/hooks'
+import { useBoringHelperContract } from './useContract'
+import useActiveWeb3React from './useActiveWeb3React'
+import { toAmountCurrencyAmount } from '../functions'
 
-export const useBentoOrWalletBalance = (
+export const useBentoBalances = (tokens?: Token[]) => {
+  const { account } = useActiveWeb3React()
+  const boringHelperContract = useBoringHelperContract()
+  const tokenAddresses = tokens ? tokens.map((el) => el.address) : undefined
+  const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
+
+  return useMemo(() => {
+    if (!tokens || !tokenAddresses || !balanceData.result) return []
+
+    return tokenAddresses.reduce<CurrencyAmount<Token>[]>((acc, cur, index) => {
+      acc.push(
+        toAmountCurrencyAmount(
+          {
+            elastic: JSBI.BigInt(balanceData.result[0][index].bentoAmount.toString()),
+            base: JSBI.BigInt(balanceData.result[0][index].bentoShare.toString()),
+          } as Rebase,
+          CurrencyAmount.fromRawAmount(tokens[index], balanceData.result[0][index].bentoBalance)
+        )
+      )
+      return acc
+    }, [])
+  }, [balanceData.result, tokenAddresses, tokens])
+}
+
+export const useBentoOrWalletBalances = (
   account: string | undefined,
   currencies: (Currency | Token | undefined)[],
   walletOrBento?: Record<string, boolean>
 ) => {
-  const tokens = useMemo(() => currencies.map((el) => el?.wrapped), [currencies])
+  const tokens = useMemo(
+    () => (currencies.every((el) => el) ? currencies.map((el: Currency) => el.wrapped) : undefined),
+    [currencies]
+  )
+
   const balance = useCurrencyBalances(account, currencies)
-  const bentoBalance = useBentoBalances2(account, tokens)
-  const serializedBalance = useMemo(() => balance.map((el) => el?.serialize()).join('-'), [balance])
+  const bentoBalance = useBentoBalances(tokens)
 
   return useMemo(() => {
+    if (!currencies.every((el) => !!el) || !bentoBalance) {
+      return []
+    }
+
     return currencies.reduce<(CurrencyAmount<Currency> | undefined)[]>((acc, cur) => {
       if (!cur) {
         acc.push(undefined)
         return acc
       }
 
-      const element = walletOrBento?.[cur?.wrapped.address]
-      if (element === false) {
-        const element = bentoBalance[cur?.wrapped.address]
-        acc.push(element)
+      let element: CurrencyAmount<Currency> | undefined
+      const tokenBalanceFromWallet = walletOrBento?.[cur.wrapped.address]
+      if (tokenBalanceFromWallet === false) {
+        element = bentoBalance.find((el) => el?.currency.wrapped.address === cur.wrapped.address)
       } else {
-        const element = balance.find((el) => el?.currency.wrapped.address === cur?.wrapped.address)
-        acc.push(element)
+        element = balance.find((el) => el?.currency.wrapped.address === cur.wrapped.address)
       }
 
+      if (!element) {
+        element = CurrencyAmount.fromRawAmount(cur.wrapped, '0')
+      }
+
+      acc.push(element)
       return acc
     }, [])
+  }, [currencies, bentoBalance, walletOrBento, balance])
+}
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [serializedBalance, bentoBalance, tokens, walletOrBento])
+export const useBentoOrWalletBalance = (account?: string, currency?: Currency, walletOrBento?: boolean) => {
+  const walletOrBentoObj = useMemo<Record<string, boolean> | undefined>(() => {
+    if (currency && typeof walletOrBento === 'boolean') {
+      return {
+        [currency?.wrapped.address]: walletOrBento,
+      }
+    }
+
+    return undefined
+  }, [currency, walletOrBento])
+
+  const balances = useBentoOrWalletBalances(account, [currency], walletOrBentoObj)
+  return useMemo(() => (balances && currency ? balances[0] : undefined), [balances, currency])
 }

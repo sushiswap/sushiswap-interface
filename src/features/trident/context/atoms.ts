@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 import { LiquidityMode, PoolAtomType } from '../types'
-import { atom, atomFamily, selector, selectorFamily } from 'recoil'
-import { toAmountJSBI } from '../../../functions'
+import { atom, selector, selectorFamily } from 'recoil'
+import { toAmountCurrencyAmount } from '../../../functions'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
@@ -47,7 +47,7 @@ export const bentoboxRebasesAtom = atom<Rebase[]>({
 
 export const fixedRatioAtom = atom<boolean>({
   key: 'fixedRatioAtom',
-  default: true,
+  default: false,
 })
 
 export const liquidityModeAtom = atom<LiquidityMode>({
@@ -106,11 +106,6 @@ export const maxPriceAtom = atom<string>({
   default: '',
 })
 
-export const slippageAtom = atom<Percent | null>({
-  key: 'slippageAtom',
-  default: null,
-})
-
 export const noLiquiditySelector = selector<boolean | undefined>({
   key: 'noLiquiditySelector',
   get: ({ get }) => {
@@ -167,19 +162,13 @@ export const currentLiquidityValueSelector = selector({
     ) {
       // Convert from shares to amount
       return [
-        CurrencyAmount.fromRawAmount(
-          pool.token0,
-          toAmountJSBI(
-            bentoboxRebases[0],
-            pool.getLiquidityValue(pool.token0, totalSupply.wrapped, poolBalance.wrapped).quotient
-          )
+        toAmountCurrencyAmount(
+          bentoboxRebases[0],
+          pool.getLiquidityValue(pool.token0, totalSupply.wrapped, poolBalance.wrapped)
         ),
-        CurrencyAmount.fromRawAmount(
-          pool.token1,
-          toAmountJSBI(
-            bentoboxRebases[1],
-            pool.getLiquidityValue(pool.token1, totalSupply.wrapped, poolBalance.wrapped).quotient
-          )
+        toAmountCurrencyAmount(
+          bentoboxRebases[1],
+          pool.getLiquidityValue(pool.token1, totalSupply.wrapped, poolBalance.wrapped)
         ),
       ]
     }
