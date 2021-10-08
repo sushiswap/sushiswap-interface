@@ -10,19 +10,16 @@ import useSiloMarkets from '../../hooks/useSiloMarkets';
 import { useTransactionAdder } from '../../state/transactions/hooks';
 import { WNATIVE } from '@sushiswap/sdk';
 import { chain } from 'lodash';
+import Web3Status from '../../components/Web3Status';
+import { useRouter } from 'next/router';
 
 /**
  *
 
 /*** TOD0:
  *
- *     7) refactor into seperate hook for graph related
- *     1) wallet connected?
  *     2) abi stripping (just input array) for useContract abi.map error
  *     3) typechain import
- *     4) gas estimation (on matic?)
- *     5) market data fetch (by chainid?)
- *     6) externalize endpoint
  *     7) search assets (not "Markets")
  *     8) busy state for while in transaction
  *
@@ -57,7 +54,9 @@ export default function Markets() {
                 Create New Silo Market
               </Button>
             ) : (
-              <p> </p>
+              <div>
+                <Web3Status />{' '}
+              </div>
             )}
           </div>
         </div>
@@ -86,13 +85,12 @@ const MarketData = ({ markets }) => {
     <>
       <Container id="markets" maxWidth="3xl" className="pt-2 md:pt-4 lg:pt-6">
         <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary">
-          <div className="grid grid-cols-6 gap-2">
+          <div className="grid grid-cols-5 gap-2">
             <div className={MD_STYLE}>Asset</div>
             <div className={MD_STYLE}>Bridge Asset</div>
             <div className={MD_STYLE}>Market Size</div>
             <div className={MD_STYLE}>Total Borrowed</div>
-            <div className={MD_STYLE}>Deposit APY</div>
-            <div className={MD_STYLE}>Borrow APY</div>
+            <div className={MD_STYLE}> </div>
           </div>
         </div>
       </Container>
@@ -109,20 +107,27 @@ const Market = ({ market }) => {
   const addTransaction = useTransactionAdder();
   const { account, chainId } = useActiveWeb3React();
 
-  const M_STYLE = 'text-xs sm:text-sm md:text-base text-high-emphesis';
+  const M_STYLE = 'text-xs sm:text-sm md:text-base text-high-emphesis flex items-center';
 
   return (
     <div className="mt-4 p-4 rounded-lg shadow-lg bg-dark-800 text-secondary">
-      <div className="grid grid-cols-6 gap-2">
+      <div className="grid grid-cols-5 gap-2">
         <div className={M_STYLE}>{market.symbol}</div>
         <div className={M_STYLE}>{WNATIVE[chainId].symbol}</div>
         <div className={M_STYLE}>--</div>
         <div className={M_STYLE}>--</div>
-        <div className={M_STYLE}>--</div>
         <div className={M_STYLE}>
           <div className="flex justify-between">
-            <div>--</div>
+            <div>
+              {account && (
+                <>
+                  <LinkButton href="/quick">QuickBorrow</LinkButton>
+                  <LinkButton href="/lend">Deposit+Borrow</LinkButton>
+                </>
+              )}
+            </div>
 
+            {/*
             <div className="text-dark-900">
               <button
                 className="hover:text-red"
@@ -139,9 +144,26 @@ const Market = ({ market }) => {
                 x
               </button>
             </div>
+            */}
           </div>
         </div>
       </div>
     </div>
+  );
+};
+
+const LinkButton = ({ children, href }) => {
+  const router = useRouter();
+
+  return (
+    <button
+      className="text-sm bg-dark-600 rounded p-1 px-4 hover:opacity-70"
+      onClick={(evt) => {
+        evt.preventDefault();
+        router.push(href);
+      }}
+    >
+      {children}
+    </button>
   );
 };
