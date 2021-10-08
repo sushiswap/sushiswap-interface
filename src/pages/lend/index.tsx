@@ -12,11 +12,10 @@ import { Field } from '../../state/swap/actions';
 import { t } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
 import SupportedSilos from '../../components/SupportedSilos';
-import { tryParseAmountToString } from '../../functions';
+import { bigNumberFormat, tryParseAmountToString } from '../../functions';
 import { useSiloBridgePoolContract, useSiloContract, useTokenContract } from '../../hooks/useContract';
 import { WNATIVE } from '@sushiswap/sdk';
-import JSBI from 'jsbi';
-import { BigNumber, ethers } from 'ethers';
+import SiloPositions from '../../components/SiloPositions';
 
 type SiloInfo = {
   lastUpdateTimestamp?: string;
@@ -35,11 +34,6 @@ type SiloUserInfo = {
   // debtLevel?: string;
   underlyingBalance?: string;
   underlyingBridgeBalance?: string;
-};
-
-const bigNumberFormat = (valueStr: string) => {
-  const value = BigNumber.from(valueStr);
-  return ethers.utils.formatEther(value);
 };
 
 export default function Lending() {
@@ -176,17 +170,13 @@ export default function Lending() {
             hideInput={false}
           />
         </div>
-        {currentSilo && currentSiloUserInfo && (
+        {currentSilo && currentSiloUserInfo && wrappedNative && (
           <>
-            <div className="mt-4 mx-6 text-sm flex space-x-10 text-high-emphesis">
-              <div className="text-low-emphesis">positions: </div>
-              <div>
-                {currentSilo.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBalance.toString())}
-              </div>
-              <div>
-                silo{wrappedNative.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBridgeBalance.toString())}
-              </div>
-            </div>
+            <SiloPositions
+              currentSilo={currentSilo}
+              currentSiloUserInfo={currentSiloUserInfo}
+              wrappedNative={wrappedNative}
+            />
 
             <div className="flex space-x-2 mt-8 mb-4 ml-5">
               <Button
@@ -458,7 +448,7 @@ const SiloData = ({ currentSilo, siloInfo }: { currentSilo: SiloMarket; siloInfo
   const [fanOpen, setFanOpen] = useState(false);
 
   return (
-    <Container id="supply-page" className="py-2 md:py-4 lg:py-6">
+    <Container id="supply-page" className="pt-2 md:pt-4 lg:pt-6">
       <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary">
         <div className="flex justify-between">
           <h1 className="text-lg font-semibold">Silo Info</h1>

@@ -1,6 +1,7 @@
 import { Currency, CurrencyAmount, JSBI } from '@sushiswap/sdk';
 
 import { parseUnits } from '@ethersproject/units';
+import { BigNumber, ethers } from 'ethers';
 
 export const parseBalance = (value: string, decimals = 18) => {
   return parseUnits(value || '0', decimals);
@@ -39,3 +40,8 @@ export function tryParseAmountToString<T extends Currency>(value?: string, curre
   // necessary for all paths to return a value
   return undefined;
 }
+
+export const bigNumberFormat = (valueStr: string) => {
+  const value = BigNumber.from(valueStr);
+  return ethers.utils.formatEther(value);
+};

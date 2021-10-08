@@ -17,6 +17,7 @@ import { useSiloBridgePoolContract, useSiloContract, useTokenContract } from '..
 import { WNATIVE } from '@sushiswap/sdk';
 import JSBI from 'jsbi';
 import { BigNumber, ethers } from 'ethers';
+import Web3Status from '../../components/Web3Status';
 
 type SiloInfo = {
   lastUpdateTimestamp?: string;
@@ -53,15 +54,21 @@ export default function Lending() {
     handleMaxInput,
     fiatValueInput,
     handleInputSelect,
+    handleOutputSelect,
   } = useTokenSetup();
 
   const { createSiloMarket, tokenInSilo, currentSilo } = useSiloMarkets();
   const addTransaction = useTransactionAdder();
   const { chainId, library, account } = useActiveWeb3React();
   const { i18n } = useLingui();
+
+  //TODO: memo all this, with the parse
   const selected: any = currencies[Field.INPUT];
+  const selectedOut: any = currencies[Field.OUTPUT];
   const tokenAddress = selected?.address;
+  const tokenAddressOut = selected?.address;
   const amount = formattedAmounts.INPUT;
+  const amountOut = formattedAmounts.OUTPUT;
   const siloBridgePool = useSiloBridgePoolContract(true);
   const tokenContract = useTokenContract(currentSilo && currentSilo.assetAddress, true);
   const siloContract = useSiloContract(currentSilo && currentSilo.address, true);
@@ -142,7 +149,9 @@ export default function Lending() {
     console.log('native asset on this chain is:', wrappedNative);
   };
 
+  //TODO: parsed amounts should be in a memo
   const parsedAmt = amount && selected && tryParseAmountToString(amount, selected);
+  const parsedAmtOut = amount && selected && tryParseAmountToString(amount, selectedOut);
 
   // no chain, no page
   if (!chainId) return null;
@@ -155,7 +164,10 @@ export default function Lending() {
       </Head>
       <div className="p-4 pb-6 rounded-lg shadow-lg bg-dark-900 text-secondary">
         <h1 className="text-xl font-semibold">
-          Quick Borrow <span className="text-sm font-thin ">(Isolated Markets)</span>
+          Quick Borrow{' '}
+          <span className="text-sm font-thin ">
+            (deposit - silo A - borrow bridge asset {'-->'} deposit silo B - borrow silo B asset)
+          </span>
         </h1>
 
         <div className="mt-8">
@@ -170,390 +182,33 @@ export default function Lending() {
             fiatValue={fiatValueInput ?? undefined}
             onCurrencySelect={handleInputSelect}
             otherCurrency={currencies[Field.OUTPUT]}
-            showCommonBases={true}
+            showCommonBases={false}
             id="swap-currency-input"
             hideBalance={false}
             hideInput={false}
           />
         </div>
-        {currentSilo && currentSiloUserInfo && (
-          <>
-            <div className="mt-4 mx-6 text-sm flex space-x-10 text-high-emphesis">
-              <div className="text-low-emphesis">positions: </div>
-              <div>
-                {currentSilo.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBalance.toString())}
-              </div>
-              <div>
-                silo{wrappedNative.symbol}: {bigNumberFormat(currentSiloUserInfo.underlyingBridgeBalance.toString())}
-              </div>
-            </div>
+        <div className="mt-2">
+          <CurrencyInputPanel
+            // priceImpact={priceImpact}
+            label={independentField === Field.OUTPUT && !showWrap ? i18n._(t`Select Silo:`) : i18n._(t`Select Silo:`)}
+            value={formattedAmounts[Field.OUTPUT]}
+            showMaxButton={false}
+            currency={currencies[Field.OUTPUT]}
+            onUserInput={handleTypeInput}
+            onMax={handleMaxInput}
+            fiatValue={fiatValueInput ?? undefined}
+            onCurrencySelect={handleOutputSelect}
+            otherCurrency={currencies[Field.INPUT]}
+            showCommonBases={false}
+            id="swap-currency-output"
+            hideBalance={false}
+            hideInput={false}
+          />
+        </div>
 
-            <div className="flex space-x-2 mt-8 mb-4 ml-5">
-              <Button
-                type="button"
-                color="gray"
-                variant="outlined"
-                onClick={async () => {
-                  console.log('Silo.approve()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    const result = await tokenContract.approve(currentSilo.address, parsedAmt);
-                  } else {
-                    console.warn('no current silo');
-                  }
-                }}
-              >
-                Approve
-              </Button>
-
-              <Button
-                color="darkindigo"
-                type="button"
-                onClick={async () => {
-                  console.log('Silo.deposit.deposit()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-                    const result = await siloContract.deposit(parsedAmt);
-
-                    addTransaction(result, {
-                      summary: `Deposit ${amount} ${selected.symbol} into ${currentSilo.name}`,
-                    });
-                  } else {
-                    console.warn('no current silo');
-                  }
-                }}
-              >
-                Deposit {selected && selected?.symbol}
-              </Button>
-              <Button
-                type="button"
-                color="gray"
-                onClick={async () => {
-                  console.log('Silo.deposit.withdraw()');
-
-                  // have a token address, and this token address exists in a silo
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    const result = await siloContract.withdraw(parsedAmt);
-
-                    addTransaction(result, {
-                      summary: `Withdraw ${amount} ${selected.symbol} from ${currentSilo.name}`,
-                    });
-                  }
-                }}
-              >
-                Withdraw {selected && selected?.symbol}
-              </Button>
-            </div>
-
-            <div className="flex space-x-2 mt-2 mb-4 ml-5">
-              <Button
-                type="button"
-                color="gray"
-                variant="outlined"
-                onClick={async () => {
-                  console.log('SiloBridge.approve()');
-
-                  if (wrappedNative && currentSilo && amount) {
-                    const result = await nativeTokenContract.approve(siloBridgePool.address, parsedAmt);
-                  } else {
-                    console.warn('no current silo');
-                  }
-                }}
-              >
-                Approve
-              </Button>
-
-              <Button
-                color="darkindigo"
-                type="button"
-                onClick={async () => {
-                  console.log('Silo.deposit.borrow Eth via bridge()');
-
-                  // have a token address, and this token address exists in a silo
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    try {
-                      const result = await siloBridgePool.borrow(currentSilo.address, parsedAmt);
-
-                      addTransaction(result, {
-                        summary: `Borrow ${amount} ETH from ${currentSilo.name}`,
-                      });
-                    } catch (error) {
-                      console.error(error);
-                      //notify user
-                    }
-                  }
-                }}
-              >
-                Borrow {wrappedNative.symbol} from Silo
-              </Button>
-              <Button
-                type="button"
-                color="gray"
-                onClick={async () => {
-                  console.log('Silo.deposit.repay()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    try {
-                      const result = await siloBridgePool.repay(currentSilo.address, parsedAmt);
-
-                      addTransaction(result, {
-                        summary: `Repay ${amount} ETH from ${currentSilo.name}`,
-                      });
-                    } catch (error) {
-                      console.error(error);
-                      //notify user
-                    }
-                  }
-                }}
-              >
-                Repay {wrappedNative.symbol} to Silo
-              </Button>
-            </div>
-
-            <div className="flex space-x-2 mt-2 mb-4 ml-5">
-              <Button
-                type="button"
-                color="gray"
-                variant="outlined"
-                onClick={async () => {
-                  console.log('BridgePool.approve()');
-
-                  if (tokenAddress && currentSilo && amount > 0) {
-                    consoleState();
-                    const result = await nativeTokenContract.approve(siloBridgePool.address, parsedAmt);
-                  } else {
-                    console.warn('no current silo');
-                  }
-                }}
-              >
-                Approve
-              </Button>
-
-              <Button
-                color="darkindigo"
-                type="button"
-                onClick={async () => {
-                  console.log('Silo.deposit.Bridgepool Weth via bridge()');
-
-                  // have a token address, and this token address exists in a silo
-                  if (tokenAddress && currentSilo && amount > 0) {
-                    const result = await siloBridgePool.deposit(currentSilo.address, parsedAmt);
-                    consoleState();
-
-                    addTransaction(result, {
-                      summary: `Deposit ${amount} ${wrappedNative.symbol} to silo ${currentSilo.name}`,
-                    });
-                  }
-                }}
-              >
-                Deposit {wrappedNative.symbol} to BridgePool
-              </Button>
-              <Button
-                type="button"
-                color="gray"
-                onClick={async () => {
-                  console.log('Silo.nothing.yet()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    try {
-                      const result = await siloBridgePool.withdraw(currentSilo.address, parsedAmt);
-
-                      addTransaction(result, {
-                        summary: `Withdraw ${amount} ${wrappedNative.symbol} from ${currentSilo.name}`,
-                      });
-                    } catch (error) {
-                      console.error(error);
-                      //notify user
-                    }
-                  }
-                }}
-              >
-                Withdraw {wrappedNative.symbol} BridgePool
-              </Button>
-            </div>
-
-            <div className="flex space-x-2 mt-2 mb-4 ml-5">
-              <Button
-                type="button"
-                color="gray"
-                variant="outlined"
-                onClick={async () => {
-                  console.log('silo.approve.siloAsset()');
-
-                  if (tokenAddress && currentSilo && amount > 0) {
-                    consoleState();
-                    const result = await tokenContract.approve(currentSilo.address, parsedAmt);
-                  } else {
-                    console.warn('no current silo');
-                  }
-                }}
-              >
-                Approve
-              </Button>
-
-              <Button
-                type="button"
-                color="darkindigo"
-                onClick={async () => {
-                  console.log('Silo.borrow.silo()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    const result = await siloContract.borrow(parsedAmt);
-
-                    addTransaction(result, {
-                      summary: `Borrow ${amount} ${selected?.symbol} from ${currentSilo.name}`,
-                    });
-                  }
-                }}
-              >
-                Borrow {selected?.symbol}
-              </Button>
-              <Button
-                type="button"
-                color="gray"
-                onClick={async () => {
-                  console.log('Silo.deposit.repay()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    const result = await siloContract.repay(parsedAmt);
-
-                    addTransaction(result, {
-                      summary: `Repay ${amount} ${selected?.symbol} from ${currentSilo.name}`,
-                    });
-                  }
-                }}
-              >
-                Repay {selected?.symbol}
-              </Button>
-            </div>
-          </>
-        )}
-      </div>
-
-      <SiloData currentSilo={currentSilo} siloInfo={currentSiloInfo} />
-      <UserSiloData currentSilo={currentSilo} siloUserInfo={currentSiloUserInfo} />
-
-      <div className="mt-10 ml-5 text-gray-600">
-        <SupportedSilos />
+        <div className="mt-4">{account ? <Button color="darkindigo">Quick Borrow</Button> : <Web3Status />}</div>
       </div>
     </Container>
   );
 }
-
-const SiloData = ({ currentSilo, siloInfo }: { currentSilo: SiloMarket; siloInfo: SiloInfo }) => {
-  // console.log('siloInfo', siloInfo);
-  const [fanOpen, setFanOpen] = useState(false);
-
-  return (
-    <Container id="supply-page" className="py-2 md:py-4 lg:py-6">
-      <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary">
-        <div className="flex justify-between">
-          <h1 className="text-lg font-semibold">Silo Info</h1>
-          <div>
-            <Button
-              color="gray"
-              variant="outlined"
-              onClick={() => {
-                setFanOpen(!fanOpen);
-              }}
-            >
-              ^
-            </Button>
-          </div>
-        </div>
-        {siloInfo === null && fanOpen && <p>Loading...</p>}
-
-        {fanOpen && siloInfo && (
-          <div className="grid grid-cols-2 gap-1">
-            <div>silo name</div>
-            <div>{currentSilo.name}</div>
-            <div>silo asset</div>
-            <div>{currentSilo.symbol}</div>
-            <div>protocol fees</div>
-            <div>{siloInfo.protocolFees.toString()}</div>
-            <div>interest rate</div>
-            <div>{siloInfo.interestRate.toString()}</div>
-            <div>total borrow</div>
-            <div>{bigNumberFormat(siloInfo.totalBorrowAmount)}</div>
-            <div>total share</div>
-            <div>{bigNumberFormat(siloInfo.totalBorrowShare)}</div>
-            <div>liquidity</div>
-            <div>{bigNumberFormat(siloInfo.liquidity)}</div>
-            <div>total deposits</div>
-            <div>{bigNumberFormat(siloInfo.totalDeposits)}</div>
-            <div className="text-xs">silo address</div>{' '}
-            <div>
-              <span className="text-xs">{currentSilo.address}</span>
-            </div>
-            <div className="text-xs">timestamp</div>{' '}
-            <div>
-              <span className="text-xs">{siloInfo.lastUpdateTimestamp.toString()}</span>
-            </div>
-          </div>
-        )}
-      </div>
-    </Container>
-  );
-};
-
-const UserSiloData = ({ currentSilo, siloUserInfo }: { currentSilo: SiloMarket; siloUserInfo: SiloUserInfo }) => {
-  const [fanOpen, setFanOpen] = useState(false);
-
-  // console.log('siloUserInfo', siloUserInfo);
-
-  return (
-    <Container id="supply-page" className="py-2 md:py-4 lg:py-6">
-      <div className="p-4 rounded-lg shadow-lg bg-dark-900 text-secondary">
-        <div className="flex justify-between">
-          <h1 className="text-lg font-semibold">User Info</h1>
-          <div>
-            <Button
-              color="gray"
-              variant="outlined"
-              onClick={() => {
-                setFanOpen(!fanOpen);
-              }}
-            >
-              ^
-            </Button>
-          </div>
-        </div>
-        {siloUserInfo === null && fanOpen && <p>Loading...</p>}
-
-        {fanOpen && siloUserInfo && (
-          <div className="grid grid-cols-2">
-            {/*}  <div>collaterilizationLevel</div>{' '}
-            <div>
-              <span>{siloUserInfo.collaterilizationLevel}</span>
-            </div>
-            <div>debtLevel</div>{' '}
-            <div>
-              <span>{siloUserInfo.debtLevel}</span>
-            </div>
-            <div>isSolvent</div>{' '}
-            <div>
-              <span>{siloUserInfo.isSolvent}</span> 
-            </div>*/}
-            <div className="text-xs">user address</div>{' '}
-            <div>
-              <span className="text-xs">{siloUserInfo.address}</span>
-            </div>
-          </div>
-        )}
-      </div>
-    </Container>
-  );
-};

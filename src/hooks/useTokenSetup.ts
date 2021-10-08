@@ -387,6 +387,7 @@ const useTokenSetup = () => {
     handleMaxInput,
     fiatValueInput,
     handleInputSelect,
+    handleOutputSelect,
   };
 };
 
