@@ -4,7 +4,7 @@ import Image from 'next/image'
 import { addMinutes, format } from 'date-fns'
 
 function MisoInfo({
-  name = 'Bad Trip',
+  name = 'Whiplash',
   symbol = '$LSD',
   auctionType = 'Batch Auction',
   minRaised = 1380,
@@ -75,7 +75,7 @@ function MisoInfo({
       {/* Name and Symbol */}
       <div className="flex flex-row items-end mt-6">
         <Image src="/images/miso/trident/trident-auction-icon.png" width={85} height={85} />
-        <div className="flex flex-col items-center flex-1 mx-6">
+        <div className="flex flex-col flex-1 items-center mx-6">
           <div>
             <div className="text-base font-bold sm:text-xl">{'Trident NFT'}</div>
             <div className="text-2xl font-bold tracking-normal text-white sm:text-3xl md:text-5xl sm:tracking-widest">
@@ -91,10 +91,10 @@ function MisoInfo({
         </div>
       </div>
       {/* Type, rasied, for sale */}
-      <div className="grid grid-cols-12 mt-6 divide-x divide-white divide-opacity-50">
+      <div className="grid flex-auto grid-cols-12 divide-x divide-white divide-opacity-50 gt-6">
         <div className="flex flex-col col-span-4">
           <div className="text-sm sm:text-lg">{'Auction Type'}</div>
-          <div className="text-base font-bold text-white md:text-xl">{auctionType}</div>
+          <div className="text-base font-bold text-pink md:text-xl">{auctionType}</div>
           <div>
             <Image src="/images/miso/trident/trident_auction_type.png" width={25} height={25} />
           </div>
@@ -102,22 +102,19 @@ function MisoInfo({
         <div className="flex flex-col col-span-4">
           <div className="mx-auto">
             <div className="text-sm sm:text-lg">{'MIN Raised'}</div>
-            <div className="text-base font-bold text-white md:text-xl">{`${minRaised} $SUSHI`}</div>
+            <div className="text-base font-bold text-pink md:text-xl">{`${minRaised} $SUSHI`}</div>
             <div className="text-sm sm:text-base">{`$${minRaisedUsd} USD`}</div>
           </div>
         </div>
         <div className="flex flex-col col-span-4">
           <div className="ml-auto">
             <div className="text-sm sm:text-lg">{'Token For Sale'}</div>
-            <div className="text-base font-bold text-white md:text-xl">{tokenForSale}</div>
+            <div className="text-base font-bold text-pink md:text-xl">{tokenForSale}</div>
             <div className="text-sm sm:text-base">{symbol}</div>
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-row mt-6">
-        <div className="flex flex-col">
+            <div className="flex flex-col col-span-4"> 
+          <div className="mx-auto-">
           <div className="text-sm sm:text-lg">{'Auction ends on'}</div>
-          <div className="text-base font-bold text-white md:text-xl">{formatDate(new Date(auctionEndDate))} GMT</div>
+          <div className="text-base font-bold text-pink md:text-xl">{formatDate(new Date(auctionEndDate))} GMT</div>
           {remainingTime != '' && (
             <div className="flex flex-row items-center text-base">
               <Image src="/images/miso/trident/trident_timer.png" width={15} height={15} />
@@ -125,16 +122,12 @@ function MisoInfo({
             </div>
           )}
         </div>
-        <div className="ml-5 cursor-pointer md:ml-8">
-          <a
-            href="https://miso.sushi.com/auctions/0x15c5E87Ce788F0dEBcAF70cF1dde69E3Bc3E6Ad1"
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            <Image src="/images/miso/trident/trident_view_auction.svg" width={91} height={88} />
-          </a>
+        
+      </div>
+          </div>
         </div>
       </div>
+      
       <div className="flex flex-col mt-6">
         <div>About</div>
         <div>
