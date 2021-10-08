@@ -118,7 +118,7 @@ const Market = ({ market }) => {
         <div className={M_STYLE}>--</div>
         <div className={M_STYLE}>
           <div className="flex justify-between">
-            <div>
+            <div className="space-y-1">
               {account && (
                 <>
                   <LinkButton href="/quick">QuickBorrow</LinkButton>
@@ -157,7 +157,7 @@ const LinkButton = ({ children, href }) => {
 
   return (
     <button
-      className="text-sm bg-dark-600 rounded p-1 px-4 hover:opacity-70"
+      className="text-sm bg-dark-700 rounded p-1 px-4 hover:opacity-70"
       onClick={(evt) => {
         evt.preventDefault();
         router.push(href);

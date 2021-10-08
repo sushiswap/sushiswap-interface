@@ -10,7 +10,7 @@ import DoubleCurrencyLogo from '../DoubleLogo';
 import { FiatValue } from './FiatValue';
 import Lottie from 'lottie-react';
 import { Input as NumericalInput } from '../NumericalInput';
-// import selectCoinAnimation from '../../animation/select-coin.json';
+import selectCoinAnimation from '../../animation/select-coin.json';
 import { t } from '@lingui/macro';
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React';
 import { useCurrencyBalance } from '../../state/wallet/hooks';
@@ -97,7 +97,7 @@ export default function CurrencyInputPanel({
               ) : (
                 <div className="rounded bg-dark-700" style={{ maxWidth: 54, maxHeight: 54 }}>
                   <div style={{ width: 54, height: 54 }}>
-                    {/*<Lottie animationData={selectCoinAnimation} autoplay loop />*/}
+                    <Lottie animationData={selectCoinAnimation} autoplay={false} loop={false} />
                   </div>
                 </div>
               )}

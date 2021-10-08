@@ -52,6 +52,7 @@ export type SiloMarket = {
 
 const useSiloMarkets = () => {
   const [currentSilo, setCurrentSilo] = useState<SiloMarket | null>(null);
+  const [currentOutSilo, setCurrentOutSilo] = useState<SiloMarket | null>(null);
   const { chainId, account } = useActiveWeb3React();
   const siloFactoryContract = useSiloFactoryContract(true);
   const { tokenOracleData } = useTokenOracleLookup();
@@ -77,14 +78,22 @@ const useSiloMarkets = () => {
     if (address) return await siloFactoryContract.removeMarket(address);
   };
 
-  const tokenInSilo = (tokenAddress: string): boolean => {
+  // setCurrentSilo(silo);
+  // tokenInSilo (address, isOutSilo=false)
+  const tokenInSilo = (tokenAddress: string, isOutSilo: boolean = false): boolean => {
     console.log('markets:', data);
     let isIn = false;
 
     data.silos.forEach((silo) => {
       if (silo.assetAddress.toLowerCase() === tokenAddress.toLowerCase()) {
         isIn = true;
-        setCurrentSilo(silo);
+
+        // if is OutSilo setCurrentOutSilo
+        if (isOutSilo) {
+          setCurrentOutSilo(silo);
+        } else {
+          setCurrentSilo(silo);
+        }
         return;
       }
     });
@@ -101,6 +110,7 @@ const useSiloMarkets = () => {
     tokenInSilo,
     deposit,
     currentSilo,
+    currentOutSilo,
   };
 };
 

@@ -16,25 +16,7 @@ import { bigNumberFormat, tryParseAmountToString } from '../../functions';
 import { useSiloBridgePoolContract, useSiloContract, useTokenContract } from '../../hooks/useContract';
 import { WNATIVE } from '@sushiswap/sdk';
 import SiloPositions from '../../components/SiloPositions';
-
-type SiloInfo = {
-  lastUpdateTimestamp?: string;
-  totalDeposits?: string;
-  totalBorrowShare?: string;
-  totalBorrowAmount?: string;
-  interestRate?: string;
-  protocolFees?: string;
-  liquidity?: string;
-};
-
-type SiloUserInfo = {
-  address?: string;
-  // isSolvent?: string;
-  // collaterilizationLevel?: string;
-  // debtLevel?: string;
-  underlyingBalance?: string;
-  underlyingBridgeBalance?: string;
-};
+import { SiloInfo, SiloUserInfo } from '../../types/SiloTypes';
 
 export default function Lending() {
   const {
