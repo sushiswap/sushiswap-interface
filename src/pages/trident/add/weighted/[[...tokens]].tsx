@@ -3,7 +3,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout from '../../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
 import React, { useEffect } from 'react'
 import SettingsTab from '../../../../components/Settings'
@@ -60,8 +60,8 @@ const AddWeighted = () => {
   }, [poolBalance, setPoolBalance])
 
   return (
-    <div className="flex flex-col w-full mt-px mb-5">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-bubble-pattern bg-opacity-60 gap-4">
+    <>
+      <TridentHeader>
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
@@ -87,18 +87,20 @@ const AddWeighted = () => {
 
         {/*spacer*/}
         <div className="h-2" />
-      </div>
+      </TridentHeader>
 
-      {/*TODO ramin*/}
-      <ModeToggle onChange={() => {}} />
-      <FixedRatioHeader />
+      <TridentBody>
+        {/*TODO ramin*/}
+        <ModeToggle onChange={() => {}} />
+        <FixedRatioHeader />
 
-      {liquidityMode === LiquidityMode.ZAP && <WeightedZapMode />}
-      {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
+        {liquidityMode === LiquidityMode.ZAP && <WeightedZapMode />}
+        {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
 
-      <AddTransactionReviewModal />
-      <DepositSubmittedModal />
-    </div>
+        <AddTransactionReviewModal />
+        <DepositSubmittedModal />
+      </TridentBody>
+    </>
   )
 }
 

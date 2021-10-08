@@ -3,17 +3,18 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import PoolTypesList from '../../../features/trident/pooltypes/PoolTypesList'
 import React from 'react'
-import TridentLayout from '../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../layouts/Trident'
 import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { RecoilRoot } from 'recoil'
 
 const PoolTypes = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex flex-col w-full mt-px gap-9">
-      <div className="flex flex-col gap-4 p-5 bg-auto bg-dark-800 bg-binary-pattern bg-opacity-90">
+    <>
+      <TridentHeader>
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
@@ -33,32 +34,35 @@ const PoolTypes = () => {
             {i18n._(t`Learn more about the power of Sushi's AMM and Tines routing engine.`)}
           </Typography>
         </div>
-      </div>
-      <div className="flex flex-col gap-4 px-5">
-        <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          {i18n._(t`What kinds of liquidity pools are supported on Sushi?`)}
-        </Typography>
-        <Typography variant="sm">
-          {i18n._(
-            t`Currently, there are four pool types on the platform.  However, our infrastructure has been built in a way to support more and more pool types as they emerge.`
-          )}
-        </Typography>
-      </div>
-      <div className="px-5">
-        <Typography
-          variant="lg"
-          className="text-transparent bg-gradient-to-r from-blue to-pink bg-clip-text"
-          weight={700}
-        >
-          {i18n._(t`CURRENT POOL TYPES`)}
-        </Typography>
-        <Typography variant="sm">{i18n._(t`Tap any to learn more`)}</Typography>
-      </div>
-      <PoolTypesList />
-    </div>
+      </TridentHeader>
+      <TridentBody>
+        <div className="flex flex-col gap-4 px-5">
+          <Typography variant="h3" className="text-high-emphesis" weight={700}>
+            {i18n._(t`What kinds of liquidity pools are supported on Sushi?`)}
+          </Typography>
+          <Typography variant="sm">
+            {i18n._(
+              t`Currently, there are four pool types on the platform.  However, our infrastructure has been built in a way to support more and more pool types as they emerge.`
+            )}
+          </Typography>
+        </div>
+        <div className="px-5">
+          <Typography
+            variant="lg"
+            className="text-transparent bg-gradient-to-r from-blue to-pink bg-clip-text"
+            weight={700}
+          >
+            {i18n._(t`CURRENT POOL TYPES`)}
+          </Typography>
+          <Typography variant="sm">{i18n._(t`Tap any to learn more`)}</Typography>
+        </div>
+        <PoolTypesList />
+      </TridentBody>
+    </>
   )
 }
 
+PoolTypes.Provider = RecoilRoot
 PoolTypes.Layout = TridentLayout
 
 export default PoolTypes

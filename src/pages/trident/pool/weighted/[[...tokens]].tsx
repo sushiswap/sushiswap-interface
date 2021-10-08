@@ -1,14 +1,18 @@
-import TridentLayout from '../../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import Header from '../../../../features/trident/pool/Header'
 import MyDeposits from '../../../../features/trident/pool/MyDeposits'
 import { RecoilRoot } from 'recoil'
 
 const Pool = () => {
   return (
-    <div className="flex flex-col w-full mt-px mb-5">
-      <Header />
-      <MyDeposits />
-    </div>
+    <>
+      <TridentHeader>
+        <Header />
+      </TridentHeader>
+      <TridentBody>
+        <MyDeposits />
+      </TridentBody>
+    </>
   )
 }
 

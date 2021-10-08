@@ -3,7 +3,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout from '../../../../layouts/Trident'
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import SettingsTab from '../../../../components/Settings'
 import Typography from '../../../../components/Typography'
 import React, { useEffect } from 'react'
@@ -68,8 +68,8 @@ const RemoveHybrid = () => {
   })
 
   return (
-    <div className="flex flex-col w-full mt-px mb-5">
-      <div className="flex flex-col p-5 bg-dark-800 bg-auto bg-bars-pattern bg-opacity-60 gap-4">
+    <>
+      <TridentHeader pattern="bg-bars-pattern">
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
@@ -96,18 +96,20 @@ const RemoveHybrid = () => {
 
         {/*spacer*/}
         <div className="h-2" />
-      </div>
+      </TridentHeader>
 
-      {/*TODO ramin*/}
-      <ModeToggle onChange={() => {}} />
+      <TridentBody>
+        {/*TODO ramin*/}
+        <ModeToggle onChange={() => {}} />
 
-      <>
-        {/*{liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}*/}
-        {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
-      </>
+        <>
+          {/*{liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}*/}
+          {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
+        </>
 
-      <RemoveTransactionReviewStandardModal />
-    </div>
+        <RemoveTransactionReviewStandardModal />
+      </TridentBody>
+    </>
   )
 }
 
