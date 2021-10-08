@@ -38,8 +38,8 @@ const AddClassic = () => {
   const { bottomOfEl } = useBackgroundRef()
 
   return (
-    <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10 lg:justify-between relative">
-      <div className="lg:w-7/12 flex flex-col">
+    <div className="relative flex flex-col w-full gap-10 mt-px mb-5 lg:flex-row lg:justify-between">
+      <div className="flex flex-col lg:w-7/12">
         <div className="flex flex-col mb-6" ref={bottomOfEl}>
           <div className="mb-6">
             <Button
@@ -49,7 +49,13 @@ const AddClassic = () => {
               className="py-1 pl-2 rounded-full"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
-              <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>
+              <Link
+                href={
+                  query.tokens[0] && query.tokens[1]
+                    ? `/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`
+                    : '/trident/pools'
+                }
+              >
                 {pool ? `${currencies?.[0]?.symbol}-${currencies?.[1]?.symbol}` : i18n._(t`Back`)}
               </Link>
             </Button>
@@ -94,7 +100,7 @@ const AddClassic = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block lg:w-4/12 flex flex-col lg:mt-10 lg:relative">
+      <div className="flex flex-col hidden lg:block lg:w-4/12 lg:mt-10 lg:relative">
         {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
       </div>
     </div>

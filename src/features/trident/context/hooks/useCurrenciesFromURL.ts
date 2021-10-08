@@ -24,7 +24,9 @@ const useCurrenciesFromURL = (): {
       let tokens: string[] = []
       if (chainId && router.query?.tokens && router.query?.tokens.length > 0) {
         tokens = [...router.query.tokens]
-        tokens[index] = cur.isNative ? NATIVE[chainId].symbol : cur.wrapped.address
+        const newToken = cur.isNative ? NATIVE[chainId].symbol : cur.wrapped.address
+        if (tokens.includes(newToken)) return // return if token already selected
+        tokens[index] = newToken
       }
 
       await router.push({
@@ -37,22 +39,15 @@ const useCurrenciesFromURL = (): {
     [chainId, router]
   )
 
-  const currencies = useMemo(
-    () =>
-      currencyA && currencyB
-        ? currencyA.wrapped.sortsBefore(currencyB.wrapped)
-          ? [currencyA, currencyB]
-          : [currencyB, currencyA]
-        : [undefined, undefined],
-    [currencyA, currencyB]
+  return useMemo(
+    () => ({
+      currencies: [currencyA, currencyB],
+      setURLCurrency,
+      fee,
+      twap,
+    }),
+    [currencyA, currencyB, setURLCurrency, fee, twap]
   )
-
-  return {
-    currencies,
-    setURLCurrency,
-    fee,
-    twap,
-  }
 }
 
 export default useCurrenciesFromURL
