@@ -1,5 +1,10 @@
 import React, { FC } from 'react'
-import { attemptingTxnAtom, outputToWalletAtom, poolAtom, showReviewAtom } from '../../context/atoms'
+import {
+  attemptingTxnAtom,
+  DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
+  outputToWalletAtom,
+  showReviewAtom,
+} from '../../context/atoms'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import Typography from '../../../../components/Typography'
@@ -10,17 +15,17 @@ import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
 import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import usePercentageInput from '../../context/hooks/usePercentageInput'
-import { usePoolDetailsRemove } from '../../context/hooks/usePoolDetails'
+import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
 import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
 
 interface RemoveTransactionReviewStandardModal {}
 
 const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardModal> = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
 
-  const { parsedAmounts, parsedAmountsWithSlippage, parsedSLPAmount } = usePercentageInput()
-  const { currentLiquidityValue, liquidityValue, currentPoolShare, poolShare } = usePoolDetailsRemove(parsedSLPAmount)
+  const { parsedAmounts, parsedSLPAmount } = usePercentageInput()
+  const { liquidityValueBefore, liquidityValueAfter, poolShareBefore, poolShareAfter, minLiquidityOutput } =
+    usePoolDetailsBurn(parsedSLPAmount, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const outputToWallet = useRecoilValue(outputToWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
@@ -71,8 +76,8 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
               {i18n._(t`And you'll receive (at least):`)}
             </Typography>
             <ListPanel
-              items={parsedAmountsWithSlippage.map((parsedInputAmount, index) => (
-                <ListPanel.CurrencyAmountItem amount={parsedInputAmount} key={index} />
+              items={minLiquidityOutput?.map((el, index) => (
+                <ListPanel.CurrencyAmountItem amount={el} key={index} />
               ))}
             />
           </div>
@@ -86,29 +91,16 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
           </div>
         </div>
         <div className="flex flex-col px-5 gap-5">
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
-              <Typography variant="sm" className="text-right">
-                1 {pool?.token0.symbol} = {pool?.token1Price.toSignificant(6)} {pool?.token1.symbol}
-              </Typography>
-            </div>
-            <div className="flex justify-end">
-              <Typography variant="sm" className="text-right">
-                1 {pool?.token1.symbol} = {pool?.token0Price.toSignificant(6)} {pool?.token0.symbol}
-              </Typography>
-            </div>
-          </div>
           <Divider />
           <div className="flex flex-col gap-1">
-            {currentLiquidityValue.map((currentLiquidityValue, index) => (
+            {liquidityValueBefore.map((currentLiquidityValue, index) => (
               <div className="flex justify-between" key={index}>
                 <Typography variant="sm" className="text-secondary">
                   {i18n._(t`${currentLiquidityValue?.currency.symbol} Deposited:`)}
                 </Typography>
                 <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                   {currentLiquidityValue?.toSignificant(6)} →{' '}
-                  {liquidityValue[index] ? liquidityValue[index]?.toSignificant(6) : '0.000'}{' '}
+                  {liquidityValueAfter[index] ? liquidityValueAfter[index]?.toSignificant(6) : '0.000'}{' '}
                   {currentLiquidityValue?.currency?.symbol}
                 </Typography>
               </div>
@@ -118,8 +110,8 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
                 {i18n._(t`Share of Pool`)}
               </Typography>
               <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-                {'<'} {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'} →{' '}
-                <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
+                {'<'} {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'} →{' '}
+                <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
               </Typography>
             </div>
           </div>

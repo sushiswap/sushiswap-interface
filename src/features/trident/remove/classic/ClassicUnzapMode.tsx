@@ -33,7 +33,7 @@ const ClassicUnzapMode: FC = () => {
 
   const {
     percentageInput: [percentageInput, setPercentageInput],
-    parsedOutputAmount,
+    parsedAmounts,
     zapCurrency: [zapCurrency, setZapCurrency],
     error,
   } = useZapPercentageInput()
@@ -133,7 +133,7 @@ const ClassicUnzapMode: FC = () => {
         </div>
         {/*TODO ramin: */}
         <div className="flex flex-col gap-4">
-          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedOutputAmount} key={0} />]} />
+          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedAmounts} key={0} />]} />
         </div>
       </div>
     </div>

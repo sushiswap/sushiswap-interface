@@ -25,3 +25,8 @@ export type LiquidityInput = {
   native: boolean
   amount: string
 }
+
+export type LiquidityOutput = {
+  token: string
+  amount: string
+}

@@ -1,10 +1,9 @@
 import React, { FC } from 'react'
 import {
   attemptingTxnAtom,
+  DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
   outputToWalletAtom,
-  poolAtom,
   showReviewAtom,
-  spendFromWalletAtom,
 } from '../../context/atoms'
 import ListPanel from '../../../../components/ListPanel'
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -16,22 +15,19 @@ import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
 import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import useZapPercentageInput from '../../context/hooks/useZapPercentageInput'
-import { useClassicZapRemoveExecute } from '../../context/hooks/useClassicZapRemoveExecute'
-import { usePoolDetailsRemove } from '../../context/hooks/usePoolDetails'
+import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
 
 interface RemoveTransactionReviewZapModal {}
 
 const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
 
-  const { parsedOutputAmount, parsedSLPAmount } = useZapPercentageInput()
-  const { currentLiquidityValue, liquidityValue, currentPoolShare, poolShare } = usePoolDetailsRemove(parsedSLPAmount)
+  const { parsedSLPAmount } = useZapPercentageInput()
+  const { liquidityValueAfter, liquidityValueBefore, minLiquidityOutput, poolShareAfter, poolShareBefore } =
+    usePoolDetailsBurn(parsedSLPAmount, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const outputToWallet = useRecoilValue(outputToWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-
-  const { execute } = useClassicZapRemoveExecute()
 
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
@@ -66,7 +62,11 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
             <Typography weight={700} variant="lg">
               {i18n._(t`Which will be converted to...`)}
             </Typography>
-            <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedOutputAmount} key={0} />]} />
+            <ListPanel
+              items={minLiquidityOutput?.map((el, index) => (
+                <ListPanel.CurrencyAmountItem amount={el} key={index} />
+              ))}
+            />
           </div>
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
@@ -78,29 +78,16 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
           </div>
         </div>
         <div className="flex flex-col px-5 gap-5">
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
-              <Typography variant="sm" className="text-right">
-                1 {pool?.token0?.symbol} = {pool?.token1Price?.toSignificant(6)} {pool?.token1?.symbol}
-              </Typography>
-            </div>
-            <div className="flex justify-end">
-              <Typography variant="sm" className="text-right">
-                1 {pool?.token1?.symbol} = {pool?.token0Price?.toSignificant(6)} {pool?.token0?.symbol}
-              </Typography>
-            </div>
-          </div>
           <Divider />
           <div className="flex flex-col gap-1">
-            {currentLiquidityValue.map((currentLiquidityValue, index) => (
+            {liquidityValueBefore.map((currentLiquidityValue, index) => (
               <div className="flex justify-between" key={index}>
                 <Typography variant="sm" className="text-secondary">
                   {i18n._(t`${currentLiquidityValue?.currency.symbol} Deposited:`)}
                 </Typography>
                 <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
                   {currentLiquidityValue?.toSignificant(6)} →{' '}
-                  {liquidityValue[index] ? liquidityValue[index]?.toSignificant(6) : '0.000'}
+                  {liquidityValueAfter[index] ? liquidityValueAfter[index]?.toSignificant(6) : '0.000'}
                   {currentLiquidityValue?.currency?.symbol}
                 </Typography>
               </div>
@@ -110,12 +97,12 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewZapModal> = () 
                 {i18n._(t`Share of Pool`)}
               </Typography>
               <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-                {'<'} {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'} →{' '}
-                <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
+                {'<'} {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'} →{' '}
+                <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
               </Typography>
             </div>
           </div>
-          <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={execute}>
+          <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={() => {}}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`Confirm Withdrawal`)}
             </Typography>

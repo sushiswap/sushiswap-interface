@@ -4,7 +4,6 @@ import { useDependentAssetInputs } from './useDependentAssetInputs'
 import {
   attemptingTxnAtom,
   bentoboxRebasesAtom,
-  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
   poolAtom,
   showReviewAtom,
   spendFromWalletSelector,
@@ -16,7 +15,7 @@ import { ethers } from 'ethers'
 import { t } from '@lingui/macro'
 import ReactGA from 'react-ga'
 import { useMemo } from 'react'
-import { usePoolDetails } from './usePoolDetails'
+import { usePoolDetailsMint } from './usePoolDetails'
 import { toShareJSBI } from '../../../../functions'
 import { LiquidityInput } from '../../types'
 
@@ -30,7 +29,7 @@ export const useClassicStandardAddExecute = () => {
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
-  const { liquidityMinted } = usePoolDetails(parsedAmounts, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE)
+  const { liquidityMinted } = usePoolDetailsMint(parsedAmounts)
 
   const execute = useRecoilCallback(
     ({ snapshot }) =>
@@ -40,28 +39,31 @@ export const useClassicStandardAddExecute = () => {
         const nativeA = await snapshot.getPromise(spendFromWalletSelector(pool?.token0.address))
         const nativeB = await snapshot.getPromise(spendFromWalletSelector(pool?.token1.address))
 
-        if (!pool || !chainId || !library || !account || !router || !rebases[0] || !rebases[1] || !liquidityMinted)
-          return
+        if (!pool || !chainId || !library || !account || !router || !liquidityMinted) return
 
         let value = {}
         const liquidityInput: LiquidityInput[] = []
         const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
 
-        if (parsedAmountA) {
+        if (parsedAmountA && rebases[parsedAmountA.wrapped.currency.address]) {
           value = parsedAmountA.currency.isNative ? { value: parsedAmountA.quotient.toString() } : {}
           liquidityInput.push({
             token: parsedAmountA.currency.wrapped.address,
             native: nativeA,
-            amount: toShareJSBI(rebases[0], parsedAmountA.quotient).toString(),
+            amount: nativeA
+              ? parsedAmountA.quotient.toString()
+              : toShareJSBI(rebases[parsedAmountA.wrapped.currency.address], parsedAmountA.quotient).toString(),
           })
         }
 
-        if (parsedAmountB) {
+        if (parsedAmountB && rebases[parsedAmountB.wrapped.currency.address]) {
           value = parsedAmountB.currency.isNative ? { value: parsedAmountB.quotient.toString() } : {}
           liquidityInput.push({
             token: parsedAmountB.currency.wrapped.address,
             native: nativeB,
-            amount: toShareJSBI(rebases[1], parsedAmountB.quotient).toString(),
+            amount: nativeB
+              ? parsedAmountB.quotient.toString()
+              : toShareJSBI(rebases[parsedAmountB.wrapped.currency.address], parsedAmountB.quotient).toString(),
           })
         }
 
