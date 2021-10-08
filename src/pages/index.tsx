@@ -2,10 +2,12 @@ import Container from '../components/Container';
 import Head from 'next/head';
 import Link from 'next/link';
 import { APP_NAME, APP_NAME_URL } from '../constants';
-import usePasswordCheck from '../hooks/usePasswordCheck';
+import { useWeb3React } from '@web3-react/core';
+import { ChainId } from '@sushiswap/sdk';
 
 export default function Dashboard() {
   // usePasswordCheck();
+  const { chainId } = useWeb3React();
 
   return (
     <Container id="dashboard-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
@@ -14,10 +16,19 @@ export default function Dashboard() {
         <meta name="description" content={APP_NAME} />
       </Head>
 
-      <PageLink linkHref="/lend" linkText="Deposit" />
-      <PageLink linkHref="/lend" linkText="Borrow" />
+      {chainId === ChainId.MATIC && (
+        <div>
+          <p className="font-semibold">
+            EthOnline Hackathon version - <span className="text-dark-500">you are on polygon mainnet</span> - do not use
+          </p>
+        </div>
+      )}
+
       <PageLink linkHref="/markets" linkText="Markets" />
+      <PageLink linkHref="/quick" linkText="QuickBorrow" />
+      <PageLink linkHref="/lend" linkText="Deposit+Borrow" />
       <PageLink linkHref="/yield" linkText="Yield Strategies" />
+      <PageLink linkHref="/dashboard" linkText="Dashboard" />
     </Container>
   );
 }

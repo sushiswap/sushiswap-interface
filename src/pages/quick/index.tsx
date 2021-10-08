@@ -155,7 +155,7 @@ export default function Lending() {
       </Head>
       <div className="p-4 pb-6 rounded-lg shadow-lg bg-dark-900 text-secondary">
         <h1 className="text-xl font-semibold">
-          Deposit+Borrow in Silos <span className="text-sm font-thin ">(Isolated Markets)</span>
+          Quick Borrow <span className="text-sm font-thin ">(Isolated Markets)</span>
         </h1>
 
         <div className="mt-8">

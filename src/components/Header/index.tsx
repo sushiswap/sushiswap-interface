@@ -311,8 +311,8 @@ const HeaderNavLink = ({ href, children }) => (
 const HeaderLinks = () => (
   <>
     <HeaderNavLink href="/markets">Markets</HeaderNavLink>
-    <HeaderNavLink href="/lend">Deposit</HeaderNavLink>
-    <HeaderNavLink href="/lend">Borrow</HeaderNavLink>
+    <HeaderNavLink href="/quick">QuickBorrow</HeaderNavLink>
+    <HeaderNavLink href="/lend">Deposit+Borrow</HeaderNavLink>
     <HeaderNavLink href="/yield">Yield</HeaderNavLink>
     <HeaderNavLink href="/dashboard">Dashboard</HeaderNavLink>
   </>
