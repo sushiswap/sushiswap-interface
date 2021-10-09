@@ -13,9 +13,6 @@ import { chain } from 'lodash';
 import Web3Status from '../../components/Web3Status';
 import { useRouter } from 'next/router';
 
-/**
- *
-
 /*** TOD0:
  *
  *     2) abi stripping (just input array) for useContract abi.map error

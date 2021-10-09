@@ -160,7 +160,11 @@ export default function Lending() {
               wrappedNative={wrappedNative}
             />
 
-            <div className="flex space-x-2 mt-8 mb-4 ml-5">
+            <div className="mt-6 ml-4">
+              <h2 className="font-semibold text-dark-500">Deposit</h2>
+            </div>
+
+            <div className="flex space-x-2 mt-2 mb-4 ml-5">
               <Button
                 type="button"
                 color="gray"
@@ -217,6 +221,133 @@ export default function Lending() {
                 }}
               >
                 Withdraw {selected && selected?.symbol}
+              </Button>
+            </div>
+
+            <div className="flex space-x-2 mt-2 mb-4 ml-5">
+              <Button
+                type="button"
+                color="gray"
+                variant="outlined"
+                onClick={async () => {
+                  console.log('BridgePool.approve()');
+
+                  if (tokenAddress && currentSilo && amount > 0) {
+                    consoleState();
+                    const result = await nativeTokenContract.approve(siloBridgePool.address, parsedAmt);
+                  } else {
+                    console.warn('no current silo');
+                  }
+                }}
+              >
+                Approve
+              </Button>
+
+              <Button
+                color="darkindigo"
+                type="button"
+                onClick={async () => {
+                  console.log('Silo.deposit.Bridgepool Weth via bridge()');
+
+                  // have a token address, and this token address exists in a silo
+                  if (tokenAddress && currentSilo && amount > 0) {
+                    const result = await siloBridgePool.deposit(currentSilo.address, parsedAmt);
+                    consoleState();
+
+                    addTransaction(result, {
+                      summary: `Deposit ${amount} ${wrappedNative.symbol} to silo ${currentSilo.name}`,
+                    });
+                  }
+                }}
+              >
+                Deposit {wrappedNative.symbol} to BridgePool
+              </Button>
+              <Button
+                type="button"
+                color="gray"
+                onClick={async () => {
+                  console.log('Silo.nothing.yet()');
+
+                  if (tokenAddress && currentSilo && amount) {
+                    consoleState();
+
+                    try {
+                      const result = await siloBridgePool.withdraw(currentSilo.address, parsedAmt);
+
+                      addTransaction(result, {
+                        summary: `Withdraw ${amount} ${wrappedNative.symbol} from ${currentSilo.name}`,
+                      });
+                    } catch (error) {
+                      console.error(error);
+                      //notify user
+                    }
+                  }
+                }}
+              >
+                Withdraw {wrappedNative.symbol} BridgePool
+              </Button>
+            </div>
+
+            <div>
+              <h2 className="font-semibold text-dark-500 ml-4">Borrow</h2>
+            </div>
+
+            <div className="flex space-x-2 mt-2 mb-4 ml-5">
+              <Button
+                type="button"
+                color="gray"
+                variant="outlined"
+                onClick={async () => {
+                  console.log('silo.approve.siloAsset()');
+
+                  if (tokenAddress && currentSilo && amount > 0) {
+                    consoleState();
+                    const result = await tokenContract.approve(currentSilo.address, parsedAmt);
+                  } else {
+                    console.warn('no current silo');
+                  }
+                }}
+              >
+                Approve
+              </Button>
+
+              <Button
+                type="button"
+                color="darkindigo"
+                onClick={async () => {
+                  console.log('Silo.borrow.silo()');
+
+                  if (tokenAddress && currentSilo && amount) {
+                    consoleState();
+
+                    const result = await siloContract.borrow(parsedAmt);
+
+                    addTransaction(result, {
+                      summary: `Borrow ${amount} ${selected?.symbol} from ${currentSilo.name}`,
+                    });
+                  }
+                }}
+              >
+                Borrow {selected?.symbol}
+              </Button>
+              <Button
+                type="button"
+                color="gray"
+                onClick={async () => {
+                  console.log('Silo.deposit.repay()');
+
+                  if (tokenAddress && currentSilo && amount) {
+                    consoleState();
+
+                    const result = await siloContract.repay(parsedAmt);
+
+                    addTransaction(result, {
+                      summary: `Repay ${amount} ${selected?.symbol} from ${currentSilo.name}`,
+                    });
+                  }
+                }}
+              >
+                Repay {selected?.symbol}
               </Button>
             </div>
 
@@ -286,129 +417,6 @@ export default function Lending() {
                 }}
               >
                 Repay {wrappedNative.symbol} to Silo
-              </Button>
-            </div>
-
-            <div className="flex space-x-2 mt-2 mb-4 ml-5">
-              <Button
-                type="button"
-                color="gray"
-                variant="outlined"
-                onClick={async () => {
-                  console.log('BridgePool.approve()');
-
-                  if (tokenAddress && currentSilo && amount > 0) {
-                    consoleState();
-                    const result = await nativeTokenContract.approve(siloBridgePool.address, parsedAmt);
-                  } else {
-                    console.warn('no current silo');
-                  }
-                }}
-              >
-                Approve
-              </Button>
-
-              <Button
-                color="darkindigo"
-                type="button"
-                onClick={async () => {
-                  console.log('Silo.deposit.Bridgepool Weth via bridge()');
-
-                  // have a token address, and this token address exists in a silo
-                  if (tokenAddress && currentSilo && amount > 0) {
-                    const result = await siloBridgePool.deposit(currentSilo.address, parsedAmt);
-                    consoleState();
-
-                    addTransaction(result, {
-                      summary: `Deposit ${amount} ${wrappedNative.symbol} to silo ${currentSilo.name}`,
-                    });
-                  }
-                }}
-              >
-                Deposit {wrappedNative.symbol} to BridgePool
-              </Button>
-              <Button
-                type="button"
-                color="gray"
-                onClick={async () => {
-                  console.log('Silo.nothing.yet()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    try {
-                      const result = await siloBridgePool.withdraw(currentSilo.address, parsedAmt);
-
-                      addTransaction(result, {
-                        summary: `Withdraw ${amount} ${wrappedNative.symbol} from ${currentSilo.name}`,
-                      });
-                    } catch (error) {
-                      console.error(error);
-                      //notify user
-                    }
-                  }
-                }}
-              >
-                Withdraw {wrappedNative.symbol} BridgePool
-              </Button>
-            </div>
-
-            <div className="flex space-x-2 mt-2 mb-4 ml-5">
-              <Button
-                type="button"
-                color="gray"
-                variant="outlined"
-                onClick={async () => {
-                  console.log('silo.approve.siloAsset()');
-
-                  if (tokenAddress && currentSilo && amount > 0) {
-                    consoleState();
-                    const result = await tokenContract.approve(currentSilo.address, parsedAmt);
-                  } else {
-                    console.warn('no current silo');
-                  }
-                }}
-              >
-                Approve
-              </Button>
-
-              <Button
-                type="button"
-                color="darkindigo"
-                onClick={async () => {
-                  console.log('Silo.borrow.silo()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    const result = await siloContract.borrow(parsedAmt);
-
-                    addTransaction(result, {
-                      summary: `Borrow ${amount} ${selected?.symbol} from ${currentSilo.name}`,
-                    });
-                  }
-                }}
-              >
-                Borrow {selected?.symbol}
-              </Button>
-              <Button
-                type="button"
-                color="gray"
-                onClick={async () => {
-                  console.log('Silo.deposit.repay()');
-
-                  if (tokenAddress && currentSilo && amount) {
-                    consoleState();
-
-                    const result = await siloContract.repay(parsedAmt);
-
-                    addTransaction(result, {
-                      summary: `Repay ${amount} ${selected?.symbol} from ${currentSilo.name}`,
-                    });
-                  }
-                }}
-              >
-                Repay {selected?.symbol}
               </Button>
             </div>
           </>

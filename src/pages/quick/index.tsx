@@ -17,11 +17,13 @@ import {
   useSiloContract,
   useTokenContract,
   useSiloRouterContract,
+  useSiloOracleContract,
 } from '../../hooks/useContract';
 import { JSBI, WNATIVE } from '@sushiswap/sdk';
 import Web3Status from '../../components/Web3Status';
 import SiloPosistions from '../../components/SiloPositions';
 import { SiloInfo, SiloRouterPosistion, SiloUserInfo } from '../../types/SiloTypes';
+import { ethers } from 'ethers';
 
 /**
  * TODO:
@@ -59,6 +61,7 @@ export default function Lending() {
   const siloBridgePool = useSiloBridgePoolContract(true);
   const tokenContract = useTokenContract(currentSilo && currentSilo.assetAddress, true);
   const siloContract = useSiloContract(currentSilo && currentSilo.address, true);
+  const siloOracleContract = useSiloOracleContract(true);
   // const siloAssetContract = useTokenContract(currentSilo && currentSilo.address, true);
   const siloRouterContract = useSiloRouterContract(true);
   // const [approvalState, approve] = useApproveCallback(amount, currentSilo && currentSilo.address);
@@ -137,6 +140,8 @@ export default function Lending() {
     console.log('tokenAddress:', tokenAddress);
     console.log('amount:', amount);
     console.log('parsedAmt:', parsedAmt);
+    console.log('parsedAmt:', parsedAmt);
+    console.log('parseOutAmt:', parsedAmtOut);
     console.log('current silo:', currentSilo);
     console.log('current Out silo:', currentOutSilo);
     console.log('native asset on this chain is:', wrappedNative);
@@ -153,22 +158,93 @@ export default function Lending() {
       console.log('doing quick borrow...');
       consoleState();
 
-      const routerPosistion: SiloRouterPosistion = {};
-      routerPosistion.collateral = currentSilo.address;
-      routerPosistion.depositAmount = parsedAmt;
-      routerPosistion.borrow = currentOutSilo.address;
-      routerPosistion.ethSilo = currentOutSilo.address;
-      const halfValue = JSBI.BigInt(parsedAmtOut);
+      const oraclePriceForAssetB = await siloOracleContract.callStatic.getPrice(tokenAddressOut);
+      // await oraclePriceForAssetB.wait();
+      const bnOraclePriceAssetB = JSBI.BigInt(oraclePriceForAssetB);
+      console.log(`oracle price for AssetB: ${JSON.stringify(bnOraclePriceAssetB.toString())}`);
 
+      const oraclePriceForNative = await siloOracleContract.callStatic.getPrice(nativeTokenContract.address);
+      const bnOraclePriceNativeAsset = JSBI.BigInt(oraclePriceForNative);
+
+      console.log(`oracle price for native: ${JSON.stringify(bnOraclePriceNativeAsset.toString())}`);
+
+      /** critical need oracle values to proceed */
+      if (
+        !(
+          JSBI.greaterThan(bnOraclePriceAssetB, JSBI.BigInt(0)) &&
+          JSBI.greaterThan(bnOraclePriceNativeAsset, JSBI.BigInt(0))
+        )
+      ) {
+        console.error('price oracle failed for either assetB or native asset');
+        return;
+      }
+
+      /**  TODO: just verify the path
+            1. - oracled asset a, gives asset b $ equivalent
+            2a. - a$ -> b$, you have b$max, you then have bLiquidtymax
+            2b. - a$ -> native$, b$ -> native$, gives a$native -> b$native ratio
+            2c. - maxout b$native while less than b$max and bLiquiditymax
+            3. - pre-load asset b available liquidity (otherwise this is max)
+            [DEMO] 1)oracle price A & price A in native * QTY set as [collateral], 2)same for B 
+            4) borrow 40% $val for B set as Router[borrow], set as Router[native]
+      */
+
+      // uni price * amount (uni price in weth) * 3 (to be save) = (weth equiv link deposit needed)
+      // USE DEMO (this is likely wrong)
+      const nativeBorrow = JSBI.multiply(JSBI.multiply(bnOraclePriceAssetB, bnOraclePriceNativeAsset), JSBI.BigInt(3));
+
+      // const routerPosistion: SiloRouterPosistion = {};
+      // routerPosistion.collateral = currentSilo.assetAddress;
+      // routerPosistion.depositAmount = parsedAmt;
+      // routerPosistion.borrow = currentOutSilo.assetAddress;
+      // routerPosistion.ethSilo = ethers.constants.AddressZero;
+      // const halfValue = JSBI.BigInt(parsedAmtOut);
       //TODO: temporarily borrow half of the $ amount equivalent
-      routerPosistion.borrowAmount = JSBI.divide(halfValue, JSBI.BigInt(2)).toString();
-      console.log('routerPosistion:', routerPosistion);
+      // routerPosistion.borrowAmount = JSBI.divide(halfValue, JSBI.BigInt(10)).toString();
+      // console.log('routerPosistion:', routerPosistion);
 
-      const result = await siloRouterContract.borrow([routerPosistion]);
+      // const positions: any = [
+      //   {
+      //     collateral: LINK_ADDRESS,
+      //     borrow: WETH_ADDRESS,
+      //     ethSilo: ethers.constants.AddressZero,
+      //     depositAmount: linkDeposit,
+      //     borrowAmount: ethBorrow
+      //   },
+      //   {
+      //     collateral: WETH_ADDRESS,
+      //     borrow: RAI_ADDRESS,
+      //     ethSilo: raiSilo.address,
+      //     depositAmount: ethDeposit,
+      //     borrowAmount: raiBorrow
+      //   }
+      // ];
 
-      addTransaction(result, {
-        summary: `QuickBorrow collateral - silo market ${currentSilo.symbol} borrow - ${currentOutSilo.symbol}`,
-      });
+      const LINK_AMT = JSBI.BigInt('100000000000000000');
+      const ETH_BORROW = JSBI.BigInt('10000000000000');
+      const UNI_BORROW = JSBI.BigInt('10000000000');
+
+      const rp1: SiloRouterPosistion = {};
+      rp1.collateral = currentSilo.assetAddress;
+      rp1.depositAmount = LINK_AMT.toString();
+      rp1.borrow = nativeTokenContract.address;
+      rp1.ethSilo = ethers.constants.AddressZero;
+      rp1.borrowAmount = ETH_BORROW.toString();
+
+      const rp2: SiloRouterPosistion = {};
+      rp2.collateral = nativeTokenContract.address;
+      rp2.depositAmount = ETH_BORROW.toString();
+      rp2.borrow = currentOutSilo.assetAddress;
+      rp2.ethSilo = currentOutSilo.address;
+      rp2.borrowAmount = UNI_BORROW.toString();
+
+      console.log([rp1, rp2]);
+
+      // const result = await siloRouterContract.borrow([rp1, rp2]);
+
+      // addTransaction(result, {
+      //   summary: `QuickBorrow collateral - silo market ${currentSilo.symbol} borrow - ${currentOutSilo.symbol}`,
+      // });
     } else {
       console.warn('both silos are not selected or amount not entered');
     }
@@ -233,7 +309,7 @@ export default function Lending() {
               showCommonBases={false}
               id="swap-currency-output"
               hideBalance={false}
-              hideInput={false}
+              hideInput={true}
             />
           </div>
 
@@ -248,7 +324,7 @@ export default function Lending() {
                     console.log('Silo.approve()');
 
                     if (tokenAddress && currentSilo && amount) {
-                      const result = await tokenContract.approve(currentSilo.address, parsedAmt);
+                      const result = await tokenContract.approve(siloRouterContract.address, parsedAmt);
                     } else {
                       console.warn('no current silo');
                     }
