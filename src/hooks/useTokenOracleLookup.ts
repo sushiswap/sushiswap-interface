@@ -1,7 +1,7 @@
 import { ChainId } from '@sushiswap/sdk';
 import { ethers } from 'ethers';
 import { useActiveWeb3React } from '.';
-import { PRICE_FEED_MAP, SILO_CHAINLINK_ORACLE } from '../constants';
+import { CHAINLINK_USD_PRICE_FEED_MAP, SILO_CHAINLINK_ORACLE, UNI_V2_PRICE_FEED_MAP } from '../constants';
 import { SupportedChainId } from '../constants/chains';
 
 type OracleInfo = {
@@ -13,23 +13,35 @@ type OracleInfo = {
 const useTokenToPriceFeedLookup = () => {
   const { chainId } = useActiveWeb3React();
 
-  const lookUpPriceFeed = (tokenAddress: string) => {
-    return PRICE_FEED_MAP[chainId][tokenAddress];
+  const lookUpChainLinkPriceFeed = (tokenAddress: string) => {
+    return CHAINLINK_USD_PRICE_FEED_MAP[chainId][tokenAddress];
+  };
+
+  const lookUpUniPriceFeed = (tokenAddress: string) => {
+    return UNI_V2_PRICE_FEED_MAP[chainId][tokenAddress];
   };
 
   const tokenOracleData = (tokenAddress: string) => {
     let oracleInfo: OracleInfo = null;
 
-    const priceFeed = lookUpPriceFeed(tokenAddress);
+    const chainLinkPriceFeed = lookUpChainLinkPriceFeed(tokenAddress);
+    const uniPriceFeed = lookUpUniPriceFeed(tokenAddress);
 
-    if (priceFeed) {
-      console.log('price feed lokup found:', priceFeed);
+    if (chainLinkPriceFeed) {
+      console.log('price feed lokup found:', chainLinkPriceFeed);
       oracleInfo = {
         assetOracle: SILO_CHAINLINK_ORACLE[chainId],
-        oraclePriceFeed: priceFeed,
-        oracleData: ethers.utils.defaultAbiCoder.encode(['address'], [priceFeed]),
+        oraclePriceFeed: chainLinkPriceFeed,
+        oracleData: ethers.utils.defaultAbiCoder.encode(['address'], [chainLinkPriceFeed]),
+      };
+    } else {
+      oracleInfo = {
+        assetOracle: SILO_CHAINLINK_ORACLE[chainId],
+        oraclePriceFeed: uniPriceFeed,
+        oracleData: ethers.constants.AddressZero,
       };
     }
+
     return oracleInfo;
   };
   return { tokenOracleData };

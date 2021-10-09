@@ -1,4 +1,4 @@
-[
+ [
     {
       "inputs": [
         {
@@ -22,11 +22,6 @@
             {
               "internalType": "address",
               "name": "borrow",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "ethSilo",
               "type": "address"
             },
             {

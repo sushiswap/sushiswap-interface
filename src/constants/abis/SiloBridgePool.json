@@ -255,7 +255,7 @@
           "type": "address"
         }
       ],
-      "name": "balanceOfUnderlaying",
+      "name": "balanceOfUnderlying",
       "outputs": [
         {
           "internalType": "uint256",

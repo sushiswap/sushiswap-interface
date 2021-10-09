@@ -21,7 +21,7 @@ export type SiloUserInfo = {
 export type SiloRouterPosistion = {
   collateral?: string; // address - what do you use for collateral
   borrow?: string; // address - what do you want to borrow
-  ethSilo?: string; // address - where to deposit ETH if used as collateral
+  // ethSilo?: string; // address - where to deposit ETH if used as collateral
   depositAmount?: string; // uint256 - amount to collateral
   borrowAmount?: string; // uint256 - amount to borrow
 };

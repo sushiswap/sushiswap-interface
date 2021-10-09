@@ -91,8 +91,8 @@ export default function Lending() {
       console.log('getting current user silo data');
       console.log('user address:', account);
       userInfo.address = account;
-      userInfo.underlyingBalance = await siloContract.balanceOfUnderlaying(account);
-      userInfo.underlyingBridgeBalance = await siloBridgePool.balanceOfUnderlaying(currentSilo.address, account);
+      userInfo.underlyingBalance = await siloContract.balanceOfUnderlying(account);
+      userInfo.underlyingBridgeBalance = await siloBridgePool.balanceOfUnderlying(currentSilo.address, account);
       // userInfo.isSolvent = await siloContract.isSolvent(account);
       // userInfo.collaterilizationLevel = await siloContract.getCollateralization(account);
       // userInfo.debtLevel = await siloContract.getDebtValue(account);

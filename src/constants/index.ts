@@ -8,29 +8,31 @@ export const APP_NAME_URL = 'silo.finance';
 export const APP_NAME = 'SILO';
 export const APP_SHORT_BLURB = 'Enabling lending and borrowing of any asset';
 
-/**
- * Static Oracle Lookups
- */
-
-// CHAIN
-// type - chainlink usd, chainlink eth, univ2, univ3?
-
-// for chain & type, get oracle ... for chain and type, get pricemap
-
-export const KOVAN_TOKEN_PRICEFEED_MAP: { [key: string]: string } = {
+export const KOVAN_TOKEN_CHAINLINK_USD_PRICEFEED_MAP: { [key: string]: string } = {
   '0xa36085f69e2889c224210f603d836748e7dc0088': '0x396c5E36DD0a0F5a5D33dae44368D4193f69a1F0', //KOVAN LINK-> KOVAN LINK/USD
   '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984': '0xDA5904BdBfB4EF12a3955aEcA103F51dc87c7C39', //KOVAN UNI
 };
 
-export const MATIC_TOKEN_PRICEFEED_MAP: { [key: string]: string } = {
+export const MATIC_TOKEN_CHAINLINK_USD_PRICEFEED_MAP: { [key: string]: string } = {
   '0xb0897686c545045afc77cf20ec7a532e3120e0f1': '0xd9FFdb71EbE7496cC440152d43986Aae0AB76665', //MATIC LINK -> MATIC LINK/USD
   '0xb33eaad8d922b1083446dc23f610c2567fb5180f': '0xdf0Fb4e4F928d2dCB76f438575fDD8682386e13C', //MATIC UNI -> ''
   '0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a': '0x49B0c695039243BBfEb8EcD054EB70061fd54aa0', //MATIC SUSHI -> '
 };
 
-export const PRICE_FEED_MAP = {
-  [ChainId.KOVAN]: KOVAN_TOKEN_PRICEFEED_MAP,
-  [ChainId.MATIC]: MATIC_TOKEN_PRICEFEED_MAP,
+export const KOVAN_TOKEN_UNI_V2_PRICEFEED_MAP: { [key: string]: string } = {};
+
+export const MATIC_TOKEN_UNI_V2_PRICEFEED_MAP: { [key: string]: string } = {
+  '0x6d1f762cE9a613688eAF10e3687A9b6f103de0E2': '0x6446887ea1CD794697093E08D00BcbE311256282', //MATIC EDD -> UNIv2
+};
+
+export const CHAINLINK_USD_PRICE_FEED_MAP = {
+  [ChainId.KOVAN]: KOVAN_TOKEN_CHAINLINK_USD_PRICEFEED_MAP,
+  [ChainId.MATIC]: MATIC_TOKEN_CHAINLINK_USD_PRICEFEED_MAP,
+};
+
+export const UNI_V2_PRICE_FEED_MAP = {
+  [ChainId.KOVAN]: KOVAN_TOKEN_UNI_V2_PRICEFEED_MAP,
+  [ChainId.MATIC]: MATIC_TOKEN_UNI_V2_PRICEFEED_MAP,
 };
 
 /**
@@ -39,8 +41,8 @@ export const PRICE_FEED_MAP = {
 //  export const GRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/9379/silo/0.13';
 
 export const GRAPH_ENDPOINT = {
-  [ChainId.KOVAN]: 'https://api.studio.thegraph.com/query/9379/silo/0.16.k',
-  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.16.m',
+  [ChainId.KOVAN]: 'https://api.studio.thegraph.com/query/9379/silo/0.17.k',
+  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.17.m',
 };
 
 /**

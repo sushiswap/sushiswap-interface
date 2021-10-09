@@ -116,8 +116,8 @@ export default function Lending() {
       console.log('getting current user silo data');
       console.log('user address:', account);
       userInfo.address = account;
-      userInfo.underlyingBalance = await siloContract.balanceOfUnderlaying(account);
-      userInfo.underlyingBridgeBalance = await siloBridgePool.balanceOfUnderlaying(currentSilo.address, account);
+      userInfo.underlyingBalance = await siloContract.balanceOfUnderlying(account);
+      userInfo.underlyingBridgeBalance = await siloBridgePool.balanceOfUnderlying(currentSilo.address, account);
       // userInfo.isSolvent = await siloContract.isSolvent(account);
       // userInfo.collaterilizationLevel = await siloContract.getCollateralization(account);
       // userInfo.debtLevel = await siloContract.getDebtValue(account);
@@ -155,11 +155,11 @@ export default function Lending() {
     const rp1: SiloRouterPosistion = {};
     rp1.collateral = currentSilo.assetAddress;
     rp1.borrow = nativeTokenContract.address;
-    rp1.ethSilo = ethers.constants.AddressZero;
+    // rp1.ethSilo = ethers.constants.AddressZero;
     const rp2: SiloRouterPosistion = {};
     rp2.collateral = nativeTokenContract.address;
     rp2.borrow = currentOutSilo.assetAddress;
-    rp2.ethSilo = currentOutSilo.address;
+    // rp2.ethSilo = currentOutSilo.address;
     return [rp1, rp2];
   };
 
@@ -288,14 +288,23 @@ export default function Lending() {
           <meta key="description" name="description" content={APP_SHORT_BLURB} />
         </Head>
         <div className="p-4 pb-6 rounded-lg shadow-lg bg-dark-900 text-secondary">
-          <h1 className="text-xl font-semibold">
-            Quick Borrow{' '}
-            <span className="text-sm font-thin ">
-              (deposit - silo A - borrow bridge asset {'-->'} deposit silo B - borrow silo B asset)
-            </span>
-          </h1>
+          <h1 className="text-xl font-semibold">Quick Borrow </h1>
 
-          <div className="mt-8">
+          <div className="text-xs font-thin mt-4 flex">
+            {currentSilo && currentOutSilo && amount && amountOut && (
+              <>
+                <div>
+                  Deposit {currentSilo.symbol} {'->'} Borrow {wrappedNative.symbol}
+                </div>
+                <div className="ml-4">{'---->'}</div>
+                <div className="ml-4">
+                  Deposit {wrappedNative.symbol} {'->'} Borrow {currentOutSilo.symbol}
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className="mt-4">
             <CurrencyInputPanel
               // priceImpact={priceImpact}
               label={
