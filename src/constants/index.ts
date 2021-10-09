@@ -12,19 +12,20 @@ export const APP_SHORT_BLURB = 'Enabling lending and borrowing of any asset';
  * Static Oracle Lookups
  */
 
+// CHAIN
+// type - chainlink usd, chainlink eth, univ2, univ3?
+
+// for chain & type, get oracle ... for chain and type, get pricemap
+
 export const KOVAN_TOKEN_PRICEFEED_MAP: { [key: string]: string } = {
   '0xa36085f69e2889c224210f603d836748e7dc0088': '0x396c5E36DD0a0F5a5D33dae44368D4193f69a1F0', //KOVAN LINK-> KOVAN LINK/USD
-  // '0x22f1ba6dB6ca0A065e1b7EAe6FC22b7E675310EF': '0xdc3ea94cd0ac27d9a86c180091e7f78c683d3699',  //KOVAN SNX -> ''
-  // '0xb597cd8d3217ea6477232f9217fa70837ff667af': '0x547a514d5e3769680ce22b2361c10ea13619e8a9',  //KOVAN AAVE
-  // '0x61460874a7196d6a22d1ee4922473664b3e95270': '0xdbd020caef83efd542f4de03e3cf0c28a4428bd5',  //KOVAN COMP
   '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984': '0xDA5904BdBfB4EF12a3955aEcA103F51dc87c7C39', //KOVAN UNI
-  // '0xac94ea989f6955c67200dd67f0101e1865a560ea': '0xec1d1b3b0443256cc3860e24a46f108e699484aa',  //KOVAN MKR
-  // '0x33a368b290589ce8cf781ab4331fe52e77478736': '0xcc70f09a6cc17553b2e31954cd36e4a2d89501f7',  //KOVAN SUSHI
 };
 
 export const MATIC_TOKEN_PRICEFEED_MAP: { [key: string]: string } = {
   '0xb0897686c545045afc77cf20ec7a532e3120e0f1': '0xd9FFdb71EbE7496cC440152d43986Aae0AB76665', //MATIC LINK -> MATIC LINK/USD
   '0xb33eaad8d922b1083446dc23f610c2567fb5180f': '0xdf0Fb4e4F928d2dCB76f438575fDD8682386e13C', //MATIC UNI -> ''
+  '0x0b3f868e0be5597d5db7feb59e1cadbb0fdda50a': '0x49B0c695039243BBfEb8EcD054EB70061fd54aa0', //MATIC SUSHI -> '
 };
 
 export const PRICE_FEED_MAP = {

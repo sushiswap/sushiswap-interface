@@ -160,7 +160,7 @@ export default function Lending() {
               wrappedNative={wrappedNative}
             />
 
-            <div className="mt-6 ml-4">
+            <div className="mt-6 ml-4 flex justify-end">
               <h2 className="font-semibold text-dark-500">Deposit</h2>
             </div>
 
@@ -224,7 +224,7 @@ export default function Lending() {
               </Button>
             </div>
 
-            <div className="flex space-x-2 mt-2 mb-4 ml-5">
+            <div className="flex space-x-2 mt-2 mb-6 ml-5">
               <Button
                 type="button"
                 color="gray"
@@ -288,7 +288,7 @@ export default function Lending() {
               </Button>
             </div>
 
-            <div>
+            <div className="flex justify-end">
               <h2 className="font-semibold text-dark-500 ml-4">Borrow</h2>
             </div>
 
