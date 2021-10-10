@@ -1,4 +1,4 @@
-[
+ [
     {
       "inputs": [
         {
@@ -467,6 +467,13 @@
         }
       ],
       "name": "depositFor",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "emergencyExit",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

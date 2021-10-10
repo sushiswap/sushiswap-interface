@@ -397,6 +397,12 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "이름 검색 또는 주소 붙여넣기"
 
+msgid "Select Borrow Silo:"
+msgstr ""
+
+msgid "Select Collateral Silo:"
+msgstr ""
+
 msgid "Select Silo:"
 msgstr ""
 

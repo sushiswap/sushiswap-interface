@@ -399,6 +399,12 @@ msgstr "Russian"
 msgid "Search name or paste address"
 msgstr "Search name or paste address"
 
+msgid "Select Borrow Silo:"
+msgstr "Select Borrow Silo:"
+
+msgid "Select Collateral Silo:"
+msgstr "Select Collateral Silo:"
+
 msgid "Select Silo:"
 msgstr "Select Silo:"
 

@@ -397,6 +397,12 @@ msgstr ""
 msgid "Search name or paste address"
 msgstr "Tìm kiếm tên hoặc dán địa chỉ"
 
+msgid "Select Borrow Silo:"
+msgstr ""
+
+msgid "Select Collateral Silo:"
+msgstr ""
+
 msgid "Select Silo:"
 msgstr ""
 

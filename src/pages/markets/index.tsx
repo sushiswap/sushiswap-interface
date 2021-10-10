@@ -100,6 +100,10 @@ const MarketData = ({ markets }) => {
 };
 
 const Market = ({ market }) => {
+  const sanitizeName = (name: string) => {
+    return name.replace('silo', '');
+  };
+
   const { removeSiloMarket } = useSiloMarkets();
   const addTransaction = useTransactionAdder();
   const { account, chainId } = useActiveWeb3React();
@@ -109,7 +113,7 @@ const Market = ({ market }) => {
   return (
     <div className="mt-4 p-4 rounded-lg shadow-lg bg-dark-800 text-secondary">
       <div className="grid grid-cols-5 gap-2">
-        <div className={M_STYLE}>{market.symbol}</div>
+        <div className={M_STYLE}>{sanitizeName(market.symbol)}</div>
         <div className={M_STYLE}>{WNATIVE[chainId].symbol}</div>
         <div className={M_STYLE}>--</div>
         <div className={M_STYLE}>--</div>

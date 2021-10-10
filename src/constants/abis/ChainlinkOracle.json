@@ -1,4 +1,4 @@
-[
+ [
     {
       "inputs": [],
       "name": "DECIMALS",
@@ -59,6 +59,35 @@
         {
           "internalType": "uint256",
           "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_base",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_quote",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "_data",
+          "type": "bytes"
+        }
+      ],
+      "name": "getPriceStatic",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "price",
           "type": "uint256"
         }
       ],

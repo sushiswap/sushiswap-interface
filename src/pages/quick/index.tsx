@@ -24,6 +24,7 @@ import Web3Status from '../../components/Web3Status';
 import SiloPosistions from '../../components/SiloPositions';
 import { SiloInfo, SiloRouterPosistion, SiloUserInfo } from '../../types/SiloTypes';
 import { ethers } from 'ethers';
+import SupportedSilos from '../../components/SupportedSilos';
 
 /**
  * TODO:
@@ -69,6 +70,10 @@ export default function Lending() {
   const nativeTokenContract = useTokenContract(wrappedNative.address, true);
   const [currentSiloInfo, setCurrentSiloInfo] = useState<SiloInfo | null>(null);
   const [currentSiloUserInfo, setCurrentSiloUserInfo] = useState<SiloUserInfo | null>(null);
+
+  const [depositVal, setDepositVal] = useState(null);
+  const [borrowVal, setBorrowVal] = useState(null);
+  const [nativeVal, setNativeVal] = useState(null);
 
   // if a token is selected, lets check if in a silo, and set the current silo
   useEffect(() => {
@@ -230,15 +235,29 @@ export default function Lending() {
     console.log('doing quick borrow...');
     consoleState();
 
-    const oraclePriceForAssetA = await siloOracleContract.callStatic.getPrice(tokenAddress);
-    const oraclePriceForAssetB = await siloOracleContract.callStatic.getPrice(tokenAddressOut);
-    const oraclePriceForNative = await siloOracleContract.callStatic.getPrice(nativeTokenContract.address);
+    const callOptions = { gasLimit: 1000000 };
+
+    // console.log('using siloOracleContract at address:', siloOracleContract.address);
+    // console.log('getting oracle price for token A:', tokenAddress);
+    const oraclePriceForAssetA = await siloOracleContract.getPriceStatic(tokenAddress, callOptions);
+    // const oraclePriceForAssetA = await siloOracleContract.getPrice(tokenAddress);
+    // console.log('getting oracle price for token B:', tokenAddressOut);
+    // frtnDecConsole('oracle value of A', oraclePriceForAssetA);
+
+    const oraclePriceForAssetB = await siloOracleContract.getPriceStatic(tokenAddressOut, callOptions);
+    // console.log('getting oracle price for native token:', nativeTokenContract.address);
+    const oraclePriceForNative = await siloOracleContract.getPriceStatic(nativeTokenContract.address, callOptions);
     // await oraclePriceForAssetB.wait();
     const bnOraclePriceAssetA = JSBI.BigInt(oraclePriceForAssetA);
     const bnOraclePriceAssetB = JSBI.BigInt(oraclePriceForAssetB);
     const bnOraclePriceNativeAsset = JSBI.BigInt(oraclePriceForNative);
 
     /** critical need oracle values to proceed */
+
+    frtnDecConsole('oracle value of A', bnOraclePriceAssetA);
+    frtnDecConsole('oracle value of B', bnOraclePriceAssetB);
+    frtnDecConsole('oracle value of native', bnOraclePriceNativeAsset);
+
     if (
       !(
         JSBI.greaterThan(bnOraclePriceAssetA, JSBI.BigInt(0)) &&
@@ -263,11 +282,19 @@ export default function Lending() {
     frtnDecConsole('value of B', valueB);
 
     const maxBorrowB = divByNum(valueB, 180);
-    let nativeAmount = divByNum(valueB, 10);
+    let nativeAmount = divByNum(valueB, 6);
     nativeAmount = bnMult(nativeAmount, bnOraclePriceNativeAsset);
 
     frtnDecConsole('borrow on B', maxBorrowB);
     frtnDecConsole('native amount to borrow on B', nativeAmount);
+
+    // setBorrowVal(maxBorrowB.toString());
+    // setNativeVal(nativeAmount.toString());
+    // setDepositVal(parsedAmt);
+
+    // console.log('deposit val', depositVal);
+    // console.log('native val', nativeVal);
+    // console.log('borrow val', borrowVal);
 
     const [rp1, rp2] = quickBorrowPreload();
     rp1.depositAmount = parsedAmt.toString();
