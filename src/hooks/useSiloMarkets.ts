@@ -81,7 +81,7 @@ const useSiloMarkets = () => {
   // setCurrentSilo(silo);
   // tokenInSilo (address, isOutSilo=false)
   const tokenInSilo = (tokenAddress: string, isOutSilo: boolean = false): boolean => {
-    console.log('markets:', data);
+    // console.log('markets:', data);
     let isIn = false;
 
     data.silos.forEach((silo) => {

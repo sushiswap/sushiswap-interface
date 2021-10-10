@@ -142,9 +142,9 @@ export default function Lending() {
   const parsedAmtOut = amountOut && selectedOut && tryParseAmountToString(amountOut, selectedOut);
   const parsedBorrow = tryParseBorrowToString(borrowVal, selectedOut);
 
-  console.log('parsedBorrowVal', parsedBorrow);
-  console.log('borrowVal', borrowVal?.toString());
-  console.log('amount:', amount);
+  // console.log('parsedBorrowVal', parsedBorrow);
+  // console.log('borrowVal', borrowVal?.toString());
+  // console.log('amount:', amount);
 
   const quickBorrowPreload = () => {
     const rp1: SiloRouterPosistion = {};

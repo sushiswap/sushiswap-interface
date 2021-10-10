@@ -51,15 +51,15 @@ export const deDecimal = (val, precision = 18) => {
 };
 
 export function tryParseBorrowToString<T extends Currency>(inValue?: string, currency?: T): string | undefined {
-  console.log('incoming value:', inValue?.toString());
+  // console.log('incoming value:', inValue?.toString());
 
   if (!inValue) {
     return '0';
   }
 
   const value = inValue.toString();
-  console.log('value:', value);
-  console.log('currency decimals:', currency?.decimals);
+  // console.log('value:', value);
+  // console.log('currency decimals:', currency?.decimals);
 
   try {
     // const typedValueParsed = parseUnits(value, currency.decimals).toString();
