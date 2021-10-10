@@ -281,8 +281,8 @@ export default function Lending() {
     frtnDecConsole('value of A', valueA);
     frtnDecConsole('value of B', valueB);
 
-    const maxBorrowB = divByNum(valueB, 180);
-    let nativeAmount = divByNum(valueB, 6);
+    const maxBorrowB = divByNum(valueB, 200);
+    let nativeAmount = divByNum(valueB, 4);
     nativeAmount = bnMult(nativeAmount, bnOraclePriceNativeAsset);
 
     frtnDecConsole('borrow on B', maxBorrowB);
