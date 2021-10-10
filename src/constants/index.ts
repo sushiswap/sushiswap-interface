@@ -42,7 +42,7 @@ export const UNI_V2_PRICE_FEED_MAP = {
 
 export const GRAPH_ENDPOINT = {
   [ChainId.KOVAN]: 'https://api.studio.thegraph.com/query/9379/silo/0.17.k',
-  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.19.m',
+  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.20.m',
 };
 
 /**
