@@ -45,3 +45,30 @@ export const bigNumberFormat = (valueStr: string) => {
   const value = BigNumber.from(valueStr);
   return ethers.utils.formatEther(value);
 };
+
+export const deDecimal = (val, precision = 18) => {
+  return JSBI.divide(val, JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(precision)));
+};
+
+export function tryParseBorrowToString<T extends Currency>(inValue?: string, currency?: T): string | undefined {
+  console.log('incoming value:', inValue?.toString());
+
+  if (!inValue) {
+    return '0';
+  }
+
+  const value = inValue.toString();
+  console.log('value:', value);
+  console.log('currency decimals:', currency?.decimals);
+
+  try {
+    // const typedValueParsed = parseUnits(value, currency.decimals).toString();
+    const typedValueParsed = bigNumberFormat(value);
+    if (typedValueParsed !== '0') return typedValueParsed;
+  } catch (error) {
+    // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
+    console.debug(`Failed to parse input amount: "${value}"`, error);
+  }
+  // necessary for all paths to return a value
+  return undefined;
+}

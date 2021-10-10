@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Container from '../../components/Container';
 import { APP_NAME_URL, APP_SHORT_BLURB } from '../../constants';
 import Head from 'next/head';
 import Button from '../../components/Button';
 import CurrencyInputPanel from '../../components/CurrencyInputPanel';
+import NoTokenCurrencyInputPanel from '../../components/NoTokenCurrencyInputPanel';
 import useSiloMarkets from '../../hooks/useSiloMarkets';
 import { useTransactionAdder } from '../../state/transactions/hooks';
 import useTokenSetup from '../../hooks/useTokenSetup';
@@ -11,7 +12,7 @@ import { useActiveWeb3React } from '../../hooks';
 import { Field } from '../../state/swap/actions';
 import { t } from '@lingui/macro';
 import { useLingui } from '@lingui/react';
-import { tryParseAmountToString } from '../../functions';
+import { deDecimal, tryParseAmountToString, tryParseBorrowToString } from '../../functions';
 import {
   useSiloBridgePoolContract,
   useSiloContract,
@@ -28,11 +29,11 @@ import SupportedSilos from '../../components/SupportedSilos';
 
 /**
  * TODO:
- * 1) check output is a silo
- * 2) calculate output amount from oracle and display
- * 3) this and borrow + lend should be checking collateral level, and that there is liquidity
- *    on both sides of the silo(s)
+ * 1) test "path in todo below"
  */
+
+const callOptions = { gasLimit: 1000000 };
+
 export default function Lending() {
   const {
     independentField,
@@ -84,13 +85,6 @@ export default function Lending() {
     if (tokenAddressOut) tokenInSilo(tokenAddressOut, true);
   }, [tokenAddressOut, tokenInSilo]);
 
-  // uint256 public lastUpdateTimestamp;
-  // uint256 public totalDeposits;
-  // uint256 public totalBorrowShare;
-  // uint256 public totalBorrowAmount;
-  // uint256 public interestRate;
-  // uint256 public protocolFees;
-
   //TODO: batch this with promise.all() or use lib to batch
   //TODO: should pull stale'ish values from the graph, then after interval fetch to be efficent
   //      or graph values are always up to date
@@ -106,14 +100,6 @@ export default function Lending() {
     siloInfo.liquidity = await siloContract.liquidity();
     setCurrentSiloInfo(siloInfo);
   }, [siloContract]);
-
-  //   function isSolvent(address _user) public override returns (bool) {
-  //   /// @ev ratio between value borrowed by user in this silo to collateral value provided in bridge pool for this silo
-  //   function getCollateralization(address _user) public returns (uint256) {
-  //   /// @dev value of collateral (asset) provided by user
-  //   function getCollateralValue(address _user) public override returns (uint256)
-  //   /// @dev value of asset borrowed by user
-  //   function getDebtValue(address _user) public returns (uint256) {
 
   const fetchCurrentSiloUserData = useCallback(async () => {
     if (currentSilo) {
@@ -152,9 +138,13 @@ export default function Lending() {
     console.log('native asset on this chain is:', wrappedNative);
   };
 
-  //TODO: parsed amounts should be in a memo
   const parsedAmt = amount && selected && tryParseAmountToString(amount, selected);
   const parsedAmtOut = amountOut && selectedOut && tryParseAmountToString(amountOut, selectedOut);
+  const parsedBorrow = tryParseBorrowToString(borrowVal, selectedOut);
+
+  console.log('parsedBorrowVal', parsedBorrow);
+  console.log('borrowVal', borrowVal?.toString());
+  console.log('amount:', amount);
 
   const quickBorrowPreload = () => {
     const rp1: SiloRouterPosistion = {};
@@ -181,64 +171,35 @@ export default function Lending() {
     }
   };
 
-  const deDecimal = (val, precision = 18) => {
-    return JSBI.divide(val, JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(precision)));
-  };
-
-  const multByNum = (val, num) => {
+  const multByNum = useCallback((val, num) => {
     let temp = JSBI.multiply(val, JSBI.BigInt(num));
     return deDecimal(temp);
-  };
+  }, []);
 
   const divByNum = (val, num) => {
     return JSBI.divide(val, JSBI.BigInt(num));
   };
 
-  const bnMult = (val1, val2) => {
+  const bnMult = useCallback((val1, val2) => {
     const temp = JSBI.multiply(val1, val2);
     return deDecimal(temp);
-  };
+  }, []);
 
-  const frtnDecConsole = (text, val, decimals = 14) => {
+  const frtnDecConsole = useCallback((text, val, decimals = 14) => {
     console.log(`${text} (${decimals} dec):`, deDecimal(val, decimals).toString());
-  };
-
-  const quickTestBorrow = async () => {
-    console.log('doTestBorrow()');
-    const SILO_A_AMT = JSBI.BigInt('1000000000000000');
-    const NATIVE_BORROW = JSBI.BigInt('100000000000');
-    const SILO_B_BORROW = JSBI.BigInt('100000000');
-
-    const [rp1, rp2] = quickBorrowPreload();
-    rp1.depositAmount = SILO_A_AMT.toString();
-    rp1.borrowAmount = NATIVE_BORROW.toString();
-
-    rp2.depositAmount = NATIVE_BORROW.toString();
-    rp2.borrowAmount = SILO_B_BORROW.toString();
-
-    console.log('quickTestBorrow() - with:', rp1, rp2);
-    await quickBorrow(rp1, rp2);
-  };
+  }, []);
 
   /**  TODO: just verify the path
-            1. - oracled asset a, gives asset b $ equivalent
+            1.  - oracled asset a, gives asset b $ equivalent
             2a. - a$ -> b$, you have b$max, you then have bLiquidtymax
             2b. - a$ -> native$, b$ -> native$, gives a$native -> b$native ratio
             2c. - maxout b$native while less than b$max and bLiquiditymax
-            3. - pre-load asset b available liquidity (otherwise this is max)
-            [DEMO] 1)oracle price A & price A in native * QTY set as [collateral], 2)same for B 
-            4) borrow 40% $val for B set as Router[borrow], set as Router[native]
+            3.  - pre-load asset b available liquidity (otherwise this is max)
+            4.  - this and borrow + lend should be checking collateral level, and that there is liquidity
+ *               on both sides of the silo(s)
       */
-  const doOracledQuickBorrow = async () => {
-    console.log('doQuickBorrow()');
 
-    console.log('doing quick borrow...');
-    consoleState();
-
-    const callOptions = { gasLimit: 1000000 };
-
-    // console.log('using siloOracleContract at address:', siloOracleContract.address);
-    // console.log('getting oracle price for token A:', tokenAddress);
+  const calculateOracledValues = useCallback(async () => {
     const oraclePriceForAssetA = await siloOracleContract.getPriceStatic(tokenAddress, callOptions);
     // const oraclePriceForAssetA = await siloOracleContract.getPrice(tokenAddress);
     // console.log('getting oracle price for token B:', tokenAddressOut);
@@ -288,20 +249,38 @@ export default function Lending() {
     frtnDecConsole('borrow on B', maxBorrowB);
     frtnDecConsole('native amount to borrow on B', nativeAmount);
 
-    // setBorrowVal(maxBorrowB.toString());
-    // setNativeVal(nativeAmount.toString());
-    // setDepositVal(parsedAmt);
+    setBorrowVal(maxBorrowB);
+    setNativeVal(nativeAmount);
+  }, [
+    amount,
+    amountOut,
+    bnMult,
+    frtnDecConsole,
+    multByNum,
+    nativeTokenContract.address,
+    parsedAmt,
+    parsedAmtOut,
+    siloOracleContract,
+    tokenAddress,
+    tokenAddressOut,
+  ]);
 
-    // console.log('deposit val', depositVal);
-    // console.log('native val', nativeVal);
-    // console.log('borrow val', borrowVal);
+  //calculate values on change
+  useEffect(() => {
+    if (amount && amountOut && tokenAddress && tokenAddressOut && nativeTokenContract) {
+      calculateOracledValues();
+    }
+  }, [tokenAddress, tokenAddressOut, nativeTokenContract, amount, amountOut, calculateOracledValues]);
+
+  const doCalculatedQuickBorrow = async () => {
+    console.log('doCalculatedQuickBorrow()');
 
     const [rp1, rp2] = quickBorrowPreload();
     rp1.depositAmount = parsedAmt.toString();
-    rp1.borrowAmount = nativeAmount.toString();
-    rp2.depositAmount = nativeAmount.toString();
-    rp2.borrowAmount = maxBorrowB.toString();
-    await quickBorrow(rp1, rp2);
+    // rp1.borrowAmount = nativeAmount.toString();
+    // rp2.depositAmount = nativeAmount.toString();
+    // rp2.borrowAmount = maxBorrowB.toString();
+    // await quickBorrow(rp1, rp2);
   };
 
   // no chain, no page
@@ -353,7 +332,7 @@ export default function Lending() {
               hideInput={false}
             />
           </div>
-          <div className="mt-2">
+          {/*} <div className="mt-2">
             <CurrencyInputPanel
               // priceImpact={priceImpact}
               label={
@@ -374,8 +353,40 @@ export default function Lending() {
               hideBalance={false}
               hideInput={false}
             />
+            </div> */}
+          <div className="flex bg-dark-900">
+            <div className="mt-2 bg-dark-900">
+              <CurrencyInputPanel
+                // priceImpact={priceImpact}
+                label={
+                  independentField === Field.OUTPUT && !showWrap
+                    ? i18n._(t`Select Borrow Silo:`)
+                    : i18n._(t`Select Borrow Silo:`)
+                }
+                value={formattedAmounts[Field.OUTPUT]}
+                showMaxButton={false}
+                currency={currencies[Field.OUTPUT]}
+                onUserInput={handleTypeInput}
+                onMax={handleMaxInput}
+                fiatValue={fiatValueInput ?? undefined}
+                onCurrencySelect={handleOutputSelect}
+                otherCurrency={currencies[Field.INPUT]}
+                showCommonBases={false}
+                id="swap-currency-output"
+                hideBalance={false}
+                hideInput={true}
+              />
+            </div>
+            <div className="mt-2 w-full">
+              <NoTokenCurrencyInputPanel
+                id="borrow-value"
+                value={parsedBorrow}
+                currency={currencies[Field.OUTPUT]}
+                showMaxButton={false}
+                // priceImpact={priceImpact}
+              />
+            </div>
           </div>
-
           <div className="mt-2">
             {account ? (
               <div className="flex space-x-2">
@@ -396,7 +407,7 @@ export default function Lending() {
                 >
                   Approve
                 </Button>
-                <Button onClick={doOracledQuickBorrow} color="darkindigo">
+                <Button onClick={doCalculatedQuickBorrow} color="darkindigo">
                   Quick Borrow
                 </Button>
               </div>
@@ -418,3 +429,91 @@ export default function Lending() {
     </>
   );
 }
+
+// const quickTestBorrow = async () => {
+//   console.log('doTestBorrow()');
+//   const SILO_A_AMT = JSBI.BigInt('1000000000000000');
+//   const NATIVE_BORROW = JSBI.BigInt('100000000000');
+//   const SILO_B_BORROW = JSBI.BigInt('100000000');
+
+//   const [rp1, rp2] = quickBorrowPreload();
+//   rp1.depositAmount = SILO_A_AMT.toString();
+//   rp1.borrowAmount = NATIVE_BORROW.toString();
+
+//   rp2.depositAmount = NATIVE_BORROW.toString();
+//   rp2.borrowAmount = SILO_B_BORROW.toString();
+
+//   console.log('quickTestBorrow() - with:', rp1, rp2);
+//   await quickBorrow(rp1, rp2);
+// };
+
+// const doOracledQuickBorrow = async () => {
+//   console.log('doQuickBorrow()');
+
+//   console.log('doing quick borrow...');
+//   consoleState();
+
+//   // console.log('using siloOracleContract at address:', siloOracleContract.address);
+//   // console.log('getting oracle price for token A:', tokenAddress);
+//   const oraclePriceForAssetA = await siloOracleContract.getPriceStatic(tokenAddress, callOptions);
+//   // const oraclePriceForAssetA = await siloOracleContract.getPrice(tokenAddress);
+//   // console.log('getting oracle price for token B:', tokenAddressOut);
+//   // frtnDecConsole('oracle value of A', oraclePriceForAssetA);
+
+//   const oraclePriceForAssetB = await siloOracleContract.getPriceStatic(tokenAddressOut, callOptions);
+//   // console.log('getting oracle price for native token:', nativeTokenContract.address);
+//   const oraclePriceForNative = await siloOracleContract.getPriceStatic(nativeTokenContract.address, callOptions);
+//   // await oraclePriceForAssetB.wait();
+//   const bnOraclePriceAssetA = JSBI.BigInt(oraclePriceForAssetA);
+//   const bnOraclePriceAssetB = JSBI.BigInt(oraclePriceForAssetB);
+//   const bnOraclePriceNativeAsset = JSBI.BigInt(oraclePriceForNative);
+
+//   /** critical need oracle values to proceed */
+
+//   frtnDecConsole('oracle value of A', bnOraclePriceAssetA);
+//   frtnDecConsole('oracle value of B', bnOraclePriceAssetB);
+//   frtnDecConsole('oracle value of native', bnOraclePriceNativeAsset);
+
+//   if (
+//     !(
+//       JSBI.greaterThan(bnOraclePriceAssetA, JSBI.BigInt(0)) &&
+//       JSBI.greaterThan(bnOraclePriceAssetB, JSBI.BigInt(0)) &&
+//       JSBI.greaterThan(bnOraclePriceNativeAsset, JSBI.BigInt(0))
+//     )
+//   ) {
+//     console.error('price oracle failed for either assetB or native asset');
+//     return;
+//   }
+
+//   frtnDecConsole('oracle value of A', bnOraclePriceAssetA);
+//   frtnDecConsole('oracle value of B', bnOraclePriceAssetB);
+//   frtnDecConsole('oracle value of native', bnOraclePriceNativeAsset);
+//   console.log('amt A', amount);
+//   console.log('amt B', amountOut);
+
+//   let valueA = multByNum(bnOraclePriceAssetA, parsedAmt);
+//   let valueB = multByNum(bnOraclePriceAssetB, parsedAmtOut);
+
+//   frtnDecConsole('value of A', valueA);
+//   frtnDecConsole('value of B', valueB);
+
+//   const maxBorrowB = divByNum(valueB, 200);
+//   let nativeAmount = divByNum(valueB, 4);
+//   nativeAmount = bnMult(nativeAmount, bnOraclePriceNativeAsset);
+
+//   frtnDecConsole('borrow on B', maxBorrowB);
+//   frtnDecConsole('native amount to borrow on B', nativeAmount);
+
+//   // setBorrowVal(maxBorrowB.toString());
+
+//   // console.log('deposit val', depositVal);
+//   // console.log('native val', nativeVal);
+//   // console.log('borrow val', borrowVal);
+
+//   const [rp1, rp2] = quickBorrowPreload();
+//   rp1.depositAmount = parsedAmt.toString();
+//   rp1.borrowAmount = nativeAmount.toString();
+//   rp2.depositAmount = nativeAmount.toString();
+//   rp2.borrowAmount = maxBorrowB.toString();
+//   await quickBorrow(rp1, rp2);
+// };

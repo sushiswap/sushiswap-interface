@@ -3,6 +3,7 @@ import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink,
 
 import { AbstractConnector } from '@web3-react/abstract-connector';
 import { BigNumber } from 'ethers';
+import { UNISWAP_V2_ORACLE } from './addresses';
 
 export const APP_NAME_URL = 'silo.finance';
 export const APP_NAME = 'SILO';
@@ -22,7 +23,7 @@ export const MATIC_TOKEN_CHAINLINK_USD_PRICEFEED_MAP: { [key: string]: string } 
 export const KOVAN_TOKEN_UNI_V2_PRICEFEED_MAP: { [key: string]: string } = {};
 
 export const MATIC_TOKEN_UNI_V2_PRICEFEED_MAP: { [key: string]: string } = {
-  '0x6d1f762cE9a613688eAF10e3687A9b6f103de0E2': '0x6446887ea1CD794697093E08D00BcbE311256282', //MATIC EDD -> UNIv2
+  '0x6d1f762cE9a613688eAF10e3687A9b6f103de0E2': UNISWAP_V2_ORACLE[ChainId.MATIC], //MATIC EDD -> UNIv2
 };
 
 export const CHAINLINK_USD_PRICE_FEED_MAP = {
@@ -42,7 +43,7 @@ export const UNI_V2_PRICE_FEED_MAP = {
 
 export const GRAPH_ENDPOINT = {
   [ChainId.KOVAN]: 'https://api.studio.thegraph.com/query/9379/silo/0.17.k',
-  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.20.m',
+  [ChainId.MATIC]: 'https://api.studio.thegraph.com/query/9379/silo/0.22.m',
 };
 
 /**
