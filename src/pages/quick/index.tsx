@@ -270,6 +270,11 @@ export default function Lending() {
     if (amount && amountOut && tokenAddress && tokenAddressOut && nativeTokenContract) {
       calculateOracledValues();
     }
+
+    //TODO: fixme, workaround for no value
+    if (!amount) {
+      setBorrowVal(JSBI.BigInt(0));
+    }
   }, [tokenAddress, tokenAddressOut, nativeTokenContract, amount, amountOut, calculateOracledValues]);
 
   const doCalculatedQuickBorrow = async () => {
@@ -277,10 +282,13 @@ export default function Lending() {
 
     const [rp1, rp2] = quickBorrowPreload();
     rp1.depositAmount = parsedAmt.toString();
-    // rp1.borrowAmount = nativeAmount.toString();
-    // rp2.depositAmount = nativeAmount.toString();
-    // rp2.borrowAmount = maxBorrowB.toString();
-    // await quickBorrow(rp1, rp2);
+    rp1.borrowAmount = nativeVal.toString();
+    rp2.depositAmount = nativeVal.toString();
+    rp2.borrowAmount = borrowVal.toString();
+
+    console.log('router posistions:', rp1, rp2);
+
+    await quickBorrow(rp1, rp2);
   };
 
   // no chain, no page
@@ -355,7 +363,7 @@ export default function Lending() {
             />
             </div> */}
           <div className="flex bg-dark-900">
-            <div className="mt-2 bg-dark-900">
+            <div className="mt-2 ">
               <CurrencyInputPanel
                 // priceImpact={priceImpact}
                 label={
@@ -377,7 +385,7 @@ export default function Lending() {
                 hideInput={true}
               />
             </div>
-            <div className="mt-2 w-full">
+            <div className="mt-2 w-full bg-dark-900">
               <NoTokenCurrencyInputPanel
                 id="borrow-value"
                 value={parsedBorrow}
