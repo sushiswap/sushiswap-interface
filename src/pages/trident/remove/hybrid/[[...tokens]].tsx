@@ -15,7 +15,6 @@ import {
   liquidityModeAtom,
   poolAtom,
   poolBalanceAtom,
-  slippageAtom,
   totalSupplyAtom,
 } from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
@@ -37,7 +36,6 @@ const RemoveHybrid = () => {
   const [[, pool], setPool] = useRecoilState(poolAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
-  const setSlippage = useSetRecoilState(slippageAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
 
   const currencyA = useCurrency(query.tokens?.[0])
@@ -45,7 +43,6 @@ const RemoveHybrid = () => {
   const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE) // custom from users
 
   useEffect(() => {
     if (!classicPool[1]) return
@@ -62,11 +59,6 @@ const RemoveHybrid = () => {
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
 
-  useEffect(() => {
-    if (!allowedSlippage) return
-    setSlippage(allowedSlippage)
-  })
-
   return (
     <>
       <TridentHeader pattern="bg-bars-pattern">
@@ -75,7 +67,7 @@ const RemoveHybrid = () => {
             color="blue"
             variant="outlined"
             size="sm"
-            className="rounded-full py-1 pl-2"
+            className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             {/*TODO ramin*/}
