@@ -1,7 +1,7 @@
 import { Currency, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import React, { useMemo } from 'react'
 
-import FormattedPriceImpact from '../exchange-v1/swap/FormattedPriceImpact'
+import FormattedPriceImpact from '../../components/FormattedPriceImpact'
 import QuestionHelper from '../../components/QuestionHelper'
 import SwapRoute from '../exchange-v1/swap/SwapRoute'
 import { computeRealizedLPFeePercent } from '../../functions/prices'

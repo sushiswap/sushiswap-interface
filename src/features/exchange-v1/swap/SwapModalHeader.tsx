@@ -22,7 +22,6 @@ export default function SwapModalHeader({
   recipient,
   showAcceptChanges,
   onAcceptChanges,
-  minerBribe,
 }: {
   trade: V2Trade<Currency, Currency, TradeType>
   allowedSlippage: Percent
@@ -77,7 +76,7 @@ export default function SwapModalHeader({
         className="px-0"
       />
 
-      <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} minerBribe={minerBribe} />
+      <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} />
 
       {showAcceptChanges ? (
         <div className="flex items-center justify-between p-2 px-3 border border-gray-800 rounded">
