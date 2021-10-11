@@ -1,7 +1,7 @@
 import { Currency, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import React, { ReactNode } from 'react'
 import { ButtonError } from '../../../components/Button'
-import { SwapCallbackError } from './styleds'
+import { SwapCallbackError } from './SwapCallbackError'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 

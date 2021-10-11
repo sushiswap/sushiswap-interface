@@ -19,7 +19,7 @@ import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
-import { ConfirmAddModalBottom } from '../exchange-v1/liquidity/ConfirmAddModalBottom'
+import { ConfirmAddModalBottom } from '../legacy/liquidity/ConfirmAddModalBottom'
 import CurrencyInputPanel from './CurrencyInputPanel'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)

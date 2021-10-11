@@ -3,10 +3,9 @@ import React, { useMemo } from 'react'
 
 import FormattedPriceImpact from '../../components/FormattedPriceImpact'
 import QuestionHelper from '../../components/QuestionHelper'
-import SwapRoute from '../exchange-v1/swap/SwapRoute'
+import SwapRoute from '../legacy/swap/SwapRoute'
 import { computeRealizedLPFeePercent } from '../../functions/prices'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
 
 function TradeReview({

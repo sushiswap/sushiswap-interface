@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, JSBI, Token, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../../hooks/useApproveCallback'
-import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/exchange-v1/swap/styleds'
+import { SwapCallbackError } from '../../../features/legacy/swap/SwapCallbackError'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
 import Column, { AutoColumn } from '../../../components/Column'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -17,31 +17,26 @@ import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } fr
 import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 
 import AddressInputPanel from '../../../components/AddressInputPanel'
-import { AdvancedSwapDetails } from '../../../features/exchange-v1/swap/AdvancedSwapDetails'
-import AdvancedSwapDetailsDropdown from '../../../features/exchange-v1/swap/AdvancedSwapDetailsDropdown'
 import Alert from '../../../components/Alert'
-import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
-import ConfirmSwapModal from '../../../features/exchange-v1/swap/ConfirmSwapModal'
+import ConfirmSwapModal from '../../../features/legacy/swap/ConfirmSwapModal'
 import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/swap/actions'
 import Head from 'next/head'
-import { INITIAL_ALLOWED_SLIPPAGE } from '../../../constants'
 import Loader from '../../../components/Loader'
 import Lottie from 'lottie-react'
 import ProgressSteps from '../../../components/ProgressSteps'
 import ReactGA from 'react-ga'
 import SwapHeader from '../../../features/trade/Header'
 import TokenWarningModal from '../../../modals/TokenWarningModal'
-import TradePrice from '../../../features/exchange-v1/swap/TradePrice'
-import Typography from '../../../components/Typography'
-import UnsupportedCurrencyFooter from '../../../features/exchange-v1/swap/UnsupportedCurrencyFooter'
+import TradePrice from '../../../features/legacy/swap/TradePrice'
+import UnsupportedCurrencyFooter from '../../../features/legacy/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../../components/Web3Connect'
 import { classNames } from '../../../functions'
 import { computeFiatValuePriceImpact } from '../../../functions/trade'
-import confirmPriceImpactWithoutFee from '../../../features/exchange-v1/swap/confirmPriceImpactWithoutFee'
+import confirmPriceImpactWithoutFee from '../../../functions/prices'
 import { maxAmountSpend } from '../../../functions/currency'
 import swapArrowsAnimationData from '../../../animation/swap-arrows.json'
 import { t } from '@lingui/macro'
@@ -526,7 +521,7 @@ export default function Swap() {
               )}
             </>
           )}
-          <BottomGrouping>
+          <div className="mt-4">
             {swapIsUnsupported ? (
               <Button color="red" size="lg" disabled>
                 {i18n._(t`Unsupported Asset`)}
@@ -631,7 +626,7 @@ export default function Swap() {
               </Column>
             )}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-          </BottomGrouping>
+          </div>
           {!swapIsUnsupported ? null : (
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
           )}
