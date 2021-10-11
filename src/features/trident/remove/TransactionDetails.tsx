@@ -3,11 +3,10 @@ import Typography from '../../../components/Typography'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import { useRecoilValue } from 'recoil'
-import { liquidityModeAtom, poolBalanceAtom } from '../context/atoms'
-import { usePoolDetailsRemove } from '../context/hooks/usePoolDetails'
+import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, liquidityModeAtom, poolBalanceAtom } from '../context/atoms'
+import { usePoolDetailsBurn } from '../context/hooks/usePoolDetails'
 import { LiquidityMode } from '../types'
 import usePercentageInput from '../context/hooks/usePercentageInput'
-import useZapPercentageInput from '../context/hooks/useZapPercentageInput'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
 
 const TransactionDetails: FC = () => {
@@ -18,16 +17,10 @@ const TransactionDetails: FC = () => {
   const { parsedSLPAmount } = usePercentageInput()
 
   // TODO ramin: fix for zap mode
-  const toRemoveSLPAmount = liquidityMode === LiquidityMode.STANDARD ? parsedSLPAmount : null
-
-  const {
-    percentageInput: [zapPercentageInput],
-  } = useZapPercentageInput()
+  const input = liquidityMode === LiquidityMode.STANDARD ? parsedSLPAmount : undefined
 
   // TODO ramin: fix for zap mode
-  const { currentPoolShare, poolShare } = usePoolDetailsRemove(
-    liquidityMode === LiquidityMode.STANDARD ? parsedSLPAmount : null
-  )
+  const { poolShareBefore, poolShareAfter } = usePoolDetailsBurn(input, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE)
 
   return (
     <div className="flex flex-col gap-4 lg:gap-8">
@@ -53,9 +46,7 @@ const TransactionDetails: FC = () => {
                 {' '}
                 →{' '}
                 <span className="text-green">
-                  {poolBalance && toRemoveSLPAmount
-                    ? poolBalance.subtract(toRemoveSLPAmount)?.toSignificant(6)
-                    : '0.000'}{' '}
+                  {poolBalance && parsedSLPAmount ? poolBalance.subtract(parsedSLPAmount)?.toSignificant(6) : '0.000'}{' '}
                   SLP
                 </span>
               </>
@@ -67,11 +58,11 @@ const TransactionDetails: FC = () => {
             {i18n._(t`Your Pool Share`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}
+            {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'}
             {parsedSLPAmount?.greaterThan(0) && (
               <>
                 {' '}
-                → <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
+                → <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
               </>
             )}
           </Typography>

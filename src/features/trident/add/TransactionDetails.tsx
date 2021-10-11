@@ -5,7 +5,7 @@ import { t } from '@lingui/macro'
 import { useRecoilValue } from 'recoil'
 import { DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, liquidityModeAtom, poolAtom, poolBalanceAtom } from '../context/atoms'
 import { useDependentAssetInputs } from '../context/hooks/useDependentAssetInputs'
-import { usePoolDetails } from '../context/hooks/usePoolDetails'
+import { usePoolDetailsMint } from '../context/hooks/usePoolDetails'
 import { useZapAssetInput } from '../context/hooks/useZapAssetInput'
 import { LiquidityMode } from '../types'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
@@ -21,7 +21,7 @@ const TransactionDetails: FC = () => {
 
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const input = liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
-  const { price, currentPoolShare, liquidityMinted, poolShare } = usePoolDetails(
+  const { price, poolShareBefore, liquidityMinted, poolShareAfter } = usePoolDetailsMint(
     input,
     DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
   )
@@ -89,10 +89,10 @@ const TransactionDetails: FC = () => {
             {i18n._(t`Your Pool Share`)}
           </Typography>
           <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}%
-            {poolShare?.greaterThan(0) && (
+            {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'}%
+            {poolShareAfter?.greaterThan(0) && (
               <>
-                → <span className="text-green">{poolShare?.toSignificant(6) || '0.000'}%</span>
+                → <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
               </>
             )}
           </Typography>

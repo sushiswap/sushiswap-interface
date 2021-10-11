@@ -4,6 +4,7 @@ import { atom, selector, selectorFamily } from 'recoil'
 import { toAmountCurrencyAmount } from '../../../functions'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
+export const DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 export const poolAtom = atom<PoolAtomType | [undefined, undefined]>({
   key: 'poolAtom',
@@ -40,9 +41,9 @@ export const currenciesAtom = atom<Currency[]>({
   default: [],
 })
 
-export const bentoboxRebasesAtom = atom<Rebase[]>({
+export const bentoboxRebasesAtom = atom<Record<string, Rebase>>({
   key: 'bentoboxRebasesAtom',
-  default: [],
+  default: {},
 })
 
 export const fixedRatioAtom = atom<boolean>({
@@ -150,24 +151,24 @@ export const currentLiquidityValueSelector = selector({
     const [, pool] = get(poolAtom)
     const poolBalance = get(poolBalanceAtom)
     const totalSupply = get(totalSupplyAtom)
-    const bentoboxRebases = get(bentoboxRebasesAtom)
+    const rebases = get(bentoboxRebasesAtom)
 
     if (
       pool &&
       poolBalance &&
       totalSupply &&
       totalSupply?.greaterThan(ZERO) &&
-      bentoboxRebases[0] &&
-      bentoboxRebases[1]
+      rebases[pool.token0.wrapped.address] &&
+      rebases[pool.token1.wrapped.address]
     ) {
       // Convert from shares to amount
       return [
         toAmountCurrencyAmount(
-          bentoboxRebases[0],
+          rebases[pool.token0.wrapped.address],
           pool.getLiquidityValue(pool.token0, totalSupply.wrapped, poolBalance.wrapped)
         ),
         toAmountCurrencyAmount(
-          bentoboxRebases[1],
+          rebases[pool.token1.wrapped.address],
           pool.getLiquidityValue(pool.token1, totalSupply.wrapped, poolBalance.wrapped)
         ),
       ]

@@ -1,10 +1,11 @@
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import { poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
+import { bentoboxRebasesAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
+import { toAmountCurrencyAmount } from '../../../../functions'
 
 export const percentageAmountAtom = atom<string>({
   key: 'percentageAmountAtom',
@@ -27,13 +28,20 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const parsedSLPAmount = get(parsedSLPAmountSelector)
+    const rebases = get(bentoboxRebasesAtom)
 
     return [
       pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
-        ? pool.getLiquidityValue(pool.token0, totalSupply, parsedSLPAmount)
+        ? toAmountCurrencyAmount(
+            rebases[pool.token0.wrapped.address],
+            pool.getLiquidityValue(pool.token0, totalSupply, parsedSLPAmount)
+          )
         : undefined,
       pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO)
-        ? pool.getLiquidityValue(pool.token1, totalSupply, parsedSLPAmount)
+        ? toAmountCurrencyAmount(
+            rebases[pool.token1.wrapped.address],
+            pool.getLiquidityValue(pool.token1, totalSupply, parsedSLPAmount)
+          )
         : undefined,
     ]
   },

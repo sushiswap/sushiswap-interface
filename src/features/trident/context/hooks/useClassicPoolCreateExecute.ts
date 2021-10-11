@@ -1,7 +1,6 @@
 import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
 import {
   useActiveWeb3React,
-  useBentoBoxContract,
   useConstantProductPoolFactory,
   useMasterDeployerContract,
   useTridentRouterContract,
@@ -18,6 +17,8 @@ import { useLingui } from '@lingui/react'
 import { useSetupPoolProperties } from './useSetupPoolProperties'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import useBentoRebases from '../../../../hooks/useBentoRebases'
+import { toShareJSBI } from '../../../../functions'
 
 export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()
@@ -28,10 +29,8 @@ export const useClassicPoolCreateExecute = () => {
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const bentoboxContract = useBentoBoxContract()
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const router = useTridentRouterContract()
-
   const {
     feeTier: [feeTier],
     twap: [twap],
@@ -41,10 +40,11 @@ export const useClassicPoolCreateExecute = () => {
     parsedAmounts,
   } = useIndependentAssetInputs()
 
+  const [rebases, rebasesLoading] = useBentoRebases(selectedPoolCurrencies)
+
   const execute = useCallback(async () => {
     if (
       !account ||
-      !bentoboxContract ||
       !masterDeployer ||
       !constantProductPoolFactory ||
       !selectedPoolCurrencies[0] ||
@@ -52,7 +52,8 @@ export const useClassicPoolCreateExecute = () => {
       !parsedAmounts[0] ||
       !parsedAmounts[1] ||
       !feeTier ||
-      !parsedAmounts.every((el) => el?.greaterThan(0))
+      !parsedAmounts.every((el) => el?.greaterThan(0)) ||
+      rebasesLoading
     )
       throw new Error('missing dependencies')
 
@@ -67,13 +68,11 @@ export const useClassicPoolCreateExecute = () => {
     // Adding liquidity data
     const indexOfNative = parsedAmounts.findIndex((el: CurrencyAmount<Currency>) => el.currency.isNative)
     const value = indexOfNative > 0 ? { value: parsedAmounts[indexOfNative]?.quotient.toString() } : {}
-    const liquidityInput = await Promise.all(
-      parsedAmounts.map(async (el: CurrencyAmount<Currency>) => ({
-        token: el.currency.wrapped.address,
-        native: spendFromWallet,
-        amount: await bentoboxContract.toShare(el.currency.wrapped.address, el.quotient.toString(), false),
-      }))
-    )
+    const liquidityInput = parsedAmounts.map((el: CurrencyAmount<Currency>, index) => ({
+      token: el.currency.wrapped.address,
+      native: spendFromWallet,
+      amount: spendFromWallet ? el.quotient.toString() : toShareJSBI(rebases[index], el.quotient).toString(),
+    }))
 
     const batch = [
       router?.interface?.encodeFunctionData('deployPool', [constantProductPoolFactory.address, deployData]),
@@ -122,12 +121,13 @@ export const useClassicPoolCreateExecute = () => {
   }, [
     account,
     addTransaction,
-    bentoboxContract,
     constantProductPoolFactory,
     feeTier,
     i18n,
     masterDeployer,
     parsedAmounts,
+    rebases,
+    rebasesLoading,
     router,
     selectedPoolCurrencies,
     setAttemptingTxn,

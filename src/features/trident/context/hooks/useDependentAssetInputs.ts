@@ -52,8 +52,10 @@ export const secondaryInputSelector = selector<string>({
 
       if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
         const dependentTokenAmount = toAmountCurrencyAmount(
-          rebases[1],
-          pool.priceOf(tokenA).quote(toShareCurrencyAmount(rebases[0], mainInputCurrencyAmount?.wrapped))
+          rebases[tokenB.wrapped.address],
+          pool
+            .priceOf(tokenA)
+            .quote(toShareCurrencyAmount(rebases[tokenA.wrapped.address], mainInputCurrencyAmount?.wrapped))
         )
 
         return (
@@ -81,8 +83,8 @@ export const secondaryInputSelector = selector<string>({
 
       if (tokenA && tokenB && pool && newValueCA?.wrapped) {
         const dependentTokenAmount = toAmountCurrencyAmount(
-          rebases[0],
-          pool.priceOf(tokenB).quote(toShareCurrencyAmount(rebases[1], newValueCA?.wrapped))
+          rebases[tokenA.wrapped.address],
+          pool.priceOf(tokenB).quote(toShareCurrencyAmount(rebases[tokenB.wrapped.address], newValueCA?.wrapped))
         )
         set(mainInputAtom, dependentTokenAmount?.toExact())
       }

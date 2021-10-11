@@ -4,7 +4,8 @@ import {
   bentoboxRebasesAtom,
   currentLiquidityValueSelector,
   currentPoolShareSelector,
-  fixedRatioAtom,
+  DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE,
+  DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
   noLiquiditySelector,
   poolAtom,
   poolBalanceAtom,
@@ -13,38 +14,50 @@ import {
 import { useMemo } from 'react'
 import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from '../../../../functions'
 import { ZERO_PERCENT } from '../../../../constants'
+import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
+import useCurrenciesFromURL from './useCurrenciesFromURL'
 
-export const usePoolDetails = (
+export const usePoolDetailsMint = (
   parsedAmounts: (CurrencyAmount<Currency> | undefined)[] | undefined,
-  slippage: Percent
+  defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
 ) => {
   const [, pool] = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
+  const slippage = useUserSlippageToleranceWithDefault(defaultSlippage)
+  const { currencies } = useCurrenciesFromURL()
 
   // Returns the current pool share before execution
-  const currentPoolShare = useRecoilValue(currentPoolShareSelector)
+  const poolShareBefore = useRecoilValue(currentPoolShareSelector)
 
   // Returns the current deposited tokens before execution
-  const currentLiquidityValue = useRecoilValue(currentLiquidityValueSelector)
+  const liquidityValueBefore = useRecoilValue(currentLiquidityValueSelector)
 
   // Returns the minimum SLP that will get minted given current input amounts
   const liquidityMinted = useMemo(() => {
-    if (pool && totalSupply && rebases[0] && rebases[1]) {
+    if (
+      pool &&
+      totalSupply &&
+      currencies[0] &&
+      currencies[1] &&
+      rebases[currencies[0].wrapped.address] &&
+      rebases[currencies[1].wrapped.address]
+    ) {
       const amountA = toShareCurrencyAmount(
-        rebases[0],
+        rebases[currencies[0].wrapped.address],
         parsedAmounts && parsedAmounts[0]
           ? parsedAmounts[0].wrapped
-          : CurrencyAmount.fromRawAmount(pool.token0, '0').wrapped
+          : // TODO ramin, pool tokens are sorted, parsed amounts aren't
+            CurrencyAmount.fromRawAmount(currencies[0], '0').wrapped
       )
 
       const amountB = toShareCurrencyAmount(
-        rebases[1],
+        rebases[currencies[1].wrapped.address],
         parsedAmounts && parsedAmounts[1]
           ? parsedAmounts[1].wrapped
-          : CurrencyAmount.fromRawAmount(pool.token1, '0').wrapped
+          : CurrencyAmount.fromRawAmount(currencies[1], '0').wrapped
       )
 
       // Both can't be zero
@@ -60,10 +73,10 @@ export const usePoolDetails = (
     }
 
     return undefined
-  }, [noLiquidity, parsedAmounts, pool, rebases, slippage, totalSupply])
+  }, [currencies, noLiquidity, parsedAmounts, pool, rebases, slippage, totalSupply])
 
   // Returns the resulting pool share after execution
-  const poolShare = useMemo(() => {
+  const poolShareAfter = useMemo(() => {
     if (liquidityMinted && totalSupply && poolBalance) {
       return new Percent(poolBalance.add(liquidityMinted).quotient, totalSupply.add(liquidityMinted).quotient)
     }
@@ -84,52 +97,67 @@ export const usePoolDetails = (
   }, [noLiquidity, parsedAmounts, pool])
 
   // Returns the resulting deposited tokens after execution
-  const liquidityValue = useMemo(() => {
+  const liquidityValueAfter = useMemo(() => {
     if (
-      rebases[0] &&
-      rebases[1] &&
+      liquidityMinted &&
       pool &&
       totalSupply &&
-      parsedAmounts?.[0] &&
-      parsedAmounts?.[1] &&
-      liquidityMinted
+      liquidityValueBefore[0] &&
+      liquidityValueBefore[1] &&
+      rebases[liquidityValueBefore[0].currency.wrapped.address] &&
+      rebases[liquidityValueBefore[1].currency.wrapped.address]
     ) {
       return [
-        currentLiquidityValue[0]?.add(parsedAmounts[0].wrapped),
-        currentLiquidityValue[1]?.add(parsedAmounts[1].wrapped),
+        liquidityValueBefore[0].add(
+          toAmountCurrencyAmount(
+            rebases[liquidityValueBefore[0].currency.wrapped.address],
+            pool.getLiquidityValue(liquidityValueBefore[0].currency, totalSupply, liquidityMinted)
+          )
+        ),
+        liquidityValueBefore[1].add(
+          toAmountCurrencyAmount(
+            rebases[liquidityValueBefore[1].currency.wrapped.address],
+            pool.getLiquidityValue(liquidityValueBefore[1].currency, totalSupply, liquidityMinted)
+          )
+        ),
       ]
     }
 
     return [undefined, undefined]
-  }, [currentLiquidityValue, liquidityMinted, parsedAmounts, pool, rebases, totalSupply])
+  }, [liquidityValueBefore, liquidityMinted, pool, rebases, totalSupply])
 
   return useMemo(
     () => ({
-      poolShare,
-      currentPoolShare,
+      poolShareBefore,
+      poolShareAfter,
       liquidityMinted,
-      liquidityValue,
-      currentLiquidityValue,
+      liquidityValueAfter,
+      liquidityValueBefore,
       price,
     }),
-    [currentLiquidityValue, currentPoolShare, liquidityMinted, liquidityValue, poolShare, price]
+    [poolShareBefore, poolShareAfter, liquidityMinted, liquidityValueAfter, liquidityValueBefore, price]
   )
 }
 
-export const usePoolDetailsRemove = (slpAmount?: CurrencyAmount<Token>) => {
+export const usePoolDetailsBurn = (
+  slpAmount: CurrencyAmount<Token> | undefined,
+  defaultSlippage: Percent = DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
+) => {
   const [, pool] = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
+  const slippage = useUserSlippageToleranceWithDefault(defaultSlippage)
+  const { currencies } = useCurrenciesFromURL()
 
   // Returns the current pool share before execution
-  const currentPoolShare = useRecoilValue(currentPoolShareSelector)
+  const poolShareBefore = useRecoilValue(currentPoolShareSelector)
 
   // Returns the current deposited tokens before execution
-  const currentLiquidityValue = useRecoilValue(currentLiquidityValueSelector)
+  const liquidityValueBefore = useRecoilValue(currentLiquidityValueSelector)
 
   // Returns the resulting pool share after execution
-  const poolShare = useMemo(() => {
+  const poolShareAfter = useMemo(() => {
     if (slpAmount && totalSupply && poolBalance) {
       return new Percent(poolBalance.subtract(slpAmount).quotient, totalSupply.subtract(slpAmount).quotient)
     }
@@ -137,39 +165,74 @@ export const usePoolDetailsRemove = (slpAmount?: CurrencyAmount<Token>) => {
     return undefined
   }, [poolBalance, slpAmount, totalSupply])
 
-  // Returns the resulting deposited tokens after execution
-  const liquidityValue = useMemo(() => {
+  // Returns the resulting withdrawn tokens after execution
+  const liquidityValueAfter = useMemo(() => {
     if (
       slpAmount &&
       pool &&
       totalSupply &&
-      poolBalance &&
-      poolShare &&
-      currentLiquidityValue[0] &&
-      currentLiquidityValue[1] &&
-      rebases[0] &&
-      rebases[1]
+      liquidityValueBefore[0] &&
+      liquidityValueBefore[1] &&
+      rebases[liquidityValueBefore[0].currency.wrapped.address] &&
+      rebases[liquidityValueBefore[1].currency.wrapped.address]
     ) {
       return [
-        currentLiquidityValue[0].subtract(
-          toAmountCurrencyAmount(rebases[0], pool.getLiquidityValue(pool.token0, totalSupply, slpAmount))
+        liquidityValueBefore[0].subtract(
+          toAmountCurrencyAmount(
+            rebases[liquidityValueBefore[0].currency.wrapped.address],
+            pool.getLiquidityValue(liquidityValueBefore[0].currency, totalSupply, slpAmount)
+          )
         ),
-        currentLiquidityValue[1].subtract(
-          toAmountCurrencyAmount(rebases[1], pool.getLiquidityValue(pool.token1, totalSupply, slpAmount))
+        liquidityValueBefore[1].subtract(
+          toAmountCurrencyAmount(
+            rebases[liquidityValueBefore[1].currency.wrapped.address],
+            pool.getLiquidityValue(liquidityValueBefore[1].currency, totalSupply, slpAmount)
+          )
         ),
       ]
     }
 
     return [undefined, undefined]
-  }, [currentLiquidityValue, pool, poolBalance, poolShare, rebases, slpAmount, totalSupply])
+  }, [liquidityValueBefore, pool, rebases, slpAmount, totalSupply])
+
+  const minLiquidityOutput = useMemo(() => {
+    if (
+      pool &&
+      totalSupply &&
+      slpAmount &&
+      currencies[0] &&
+      currencies[1] &&
+      rebases[pool.token0.wrapped.address] &&
+      rebases[pool.token1.wrapped.address]
+    ) {
+      const amounts = [
+        calculateSlippageAmount(pool.getLiquidityValue(pool.token0, totalSupply, slpAmount), slippage)[0],
+        calculateSlippageAmount(pool.getLiquidityValue(pool.token1, totalSupply, slpAmount), slippage)[0],
+      ]
+
+      return [
+        toAmountCurrencyAmount(
+          rebases[pool.token0.wrapped.address],
+          CurrencyAmount.fromRawAmount(pool.token0, amounts[0].toString())
+        ),
+        toAmountCurrencyAmount(
+          rebases[pool.token1.wrapped.address],
+          CurrencyAmount.fromRawAmount(pool.token1, amounts[1].toString())
+        ),
+      ]
+    }
+
+    return [undefined, undefined]
+  }, [currencies, pool, rebases, slippage, slpAmount, totalSupply])
 
   return useMemo(
     () => ({
-      currentPoolShare,
-      liquidityValue,
-      currentLiquidityValue,
-      poolShare,
+      poolShareBefore,
+      poolShareAfter,
+      liquidityValueAfter,
+      minLiquidityOutput,
+      liquidityValueBefore,
     }),
-    [currentLiquidityValue, currentPoolShare, liquidityValue, poolShare]
+    [poolShareBefore, poolShareAfter, liquidityValueAfter, minLiquidityOutput, liquidityValueBefore]
   )
 }
