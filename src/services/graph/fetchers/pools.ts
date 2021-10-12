@@ -2,8 +2,8 @@ import { getTridentPoolsQuery } from '../queries'
 
 import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from '../constants'
-import { request } from 'graphql-request'
 import { PoolType } from '../../../features/trident/types'
+import { pager } from './index'
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
   concentratedLiquidityPools: PoolType.ConcentratedLiquidity,
@@ -50,7 +50,7 @@ interface TridentPoolQueryResult {
 }
 
 export const getTridentPools = async (chainId: ChainId = ChainId.MAINNET): Promise<TridentPool[]> => {
-  const result = await request<TridentPoolQueryResult>(
+  const result: TridentPoolQueryResult = await pager(
     `${GRAPH_HOST[chainId]}/subgraphs/name/sushiswap/trident`,
     getTridentPoolsQuery
   )

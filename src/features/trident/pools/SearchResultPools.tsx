@@ -6,16 +6,23 @@ import { TableInstance } from '../../transactions/types'
 import { useFlexLayout, usePagination, useTable } from 'react-table'
 import { poolTypeToStr, usePoolsTableData } from './usePoolsTableData'
 import { classNames } from '../../../functions'
+import { TablePageToggler } from '../../transactions/TablePageToggler'
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()
   const { config, loading, error } = usePoolsTableData()
 
-  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow }: TableInstance = useTable(
-    config,
-    usePagination,
-    useFlexLayout
-  )
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    gotoPage,
+    canPreviousPage,
+    canNextPage,
+    prepareRow,
+    state: { pageIndex, pageSize },
+  }: TableInstance = useTable(config, usePagination, useFlexLayout)
 
   return (
     <div className="flex flex-col gap-2 px-5">
@@ -76,6 +83,15 @@ const SearchResultPools: FC = () => {
           })}
         </tbody>
       </table>
+      <TablePageToggler
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        totalItems={config.data.length}
+        gotoPage={gotoPage}
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        loading={loading}
+      />
     </div>
   )
 }

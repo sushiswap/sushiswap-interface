@@ -5,14 +5,20 @@ export const generateSummaryString = (
   pageIndex: number,
   pageSize: number,
   totalTransactions: number,
-  noTransactionsString: string
+  noTransactionsString: string,
+  isLoading: boolean,
+  loadingString: string
 ): string => {
-  if (totalTransactions === 0) return noTransactionsString
-  const startingNumber = pageIndex * pageSize + 1
-  const endingNumber = pageIndex * pageSize + pageSize
-  return `${startingNumber}-${
-    endingNumber < totalTransactions ? endingNumber : totalTransactions
-  } of ${totalTransactions}`
+  if (totalTransactions === 0) {
+    if (isLoading) return loadingString
+    return noTransactionsString
+  } else {
+    const startingNumber = pageIndex * pageSize + 1
+    const endingNumber = pageIndex * pageSize + pageSize
+    return `${startingNumber}-${
+      endingNumber < totalTransactions ? endingNumber : totalTransactions
+    } of ${totalTransactions}`
+  }
 }
 
 export const shortenAddress = (address: string): string => {

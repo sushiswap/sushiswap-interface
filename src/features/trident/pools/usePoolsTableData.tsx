@@ -42,6 +42,7 @@ export const usePoolsTableData = () => {
       config: {
         columns: columns,
         data: data ?? [],
+        initialState: { pageSize: 15 },
       },
       loading: isValidating,
       error,
