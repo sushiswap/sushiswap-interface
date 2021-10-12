@@ -29,6 +29,7 @@ const features = {
   [ChainId.OKEX]: [Feature.AMM],
   [ChainId.OKEX_TESTNET]: [Feature.AMM],
   [ChainId.XDAI]: [Feature.AMM],
+  [ChainId.CELO]: [Feature.AMM],
 }
 
 export function featureEnabled(feature: Feature, chainId: ChainId): boolean {
