@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import { searchQueryAtom } from '../../../features/trident/pools/context/atoms'
 import TridentLayout, { TridentBody, TridentHeader } from '../../../layouts/Trident'
+import PoolListActions from '../../../features/trident/pools/PoolListActions'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -35,8 +36,7 @@ const Pool = () => {
         </div>
       </TridentHeader>
       <TridentBody>
-        {/* FOLLOW UP PR TO IMPLEMENT */}
-        {/*<PoolListActions />*/}
+        <PoolListActions />
         <div className={classNames('flex gap-6', searchQuery ? 'flex-col-reverse' : 'flex-col')}>
           {/* Designs TBD about this feature */}
           {/*<SuggestedPools />*/}

@@ -1,10 +1,11 @@
 import gql from 'graphql-tag'
 
 const subQuery = `
-  totalValueLocked
+  totalValueLockedUSD
   assets {
     id
     symbol
+    name
   }
 `
 
@@ -14,7 +15,7 @@ export const getTridentPoolsQuery = gql`
   {
     ${allPools.map(
       (pool) =>
-        `${pool} { 
+        `${pool}(orderBy:totalValueLockedUSD, orderDirection:desc) {
           ${subQuery}
          }
         `

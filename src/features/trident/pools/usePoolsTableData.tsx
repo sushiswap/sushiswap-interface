@@ -9,7 +9,7 @@ export const poolTypeToStr: Record<PoolType, string> = {
   [PoolType.ConstantProduct]: 'Classic',
   [PoolType.ConcentratedLiquidity]: 'Concentrated',
   [PoolType.Hybrid]: 'Hybrid',
-  [PoolType.Weighted]: 'Index',
+  [PoolType.Weighted]: 'Weighted',
 }
 
 export const usePoolsTableData = () => {
@@ -23,11 +23,20 @@ export const usePoolsTableData = () => {
         Cell: (props) => {
           return <PoolCell symbols={props.value} currencyIds={props.row.original.currencyIds} />
         },
+        filter: (rows, id, filterValue) => {
+          return rows.filter((row) => {
+            // Allow searching for symbol (LINK) or name (chainlink)
+            const searchableText = row.values.symbols.concat(row.original.names).join(' ').toLowerCase()
+            return !filterValue.length || searchableText.includes(filterValue.toLowerCase())
+          })
+        },
       },
       {
         Header: 'Type',
         accessor: 'type',
         Cell: (props: { value: PoolType }) => poolTypeToStr[props.value],
+        filter: (rows, id, filterValue) =>
+          rows.filter((row) => !filterValue.length || filterValue.includes(poolTypeToStr[row.values.type])),
       },
       {
         Header: 'TVL',
@@ -43,6 +52,7 @@ export const usePoolsTableData = () => {
         columns: columns,
         data: data ?? [],
         initialState: { pageSize: 15 },
+        autoResetFilters: false,
       },
       loading: isValidating,
       error,

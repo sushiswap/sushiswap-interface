@@ -13,6 +13,7 @@ const gqlPoolTypeMap: Record<string, PoolType> = {
 }
 
 interface TridentPool {
+  names: string[]
   symbols: string[]
   currencyIds: string[]
   type: PoolType
@@ -24,21 +25,23 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
     .filter(([, assets]) => assets.length)
     .flatMap(([poolType, poolList]) =>
       poolList.map(
-        ({ assets, totalValueLocked }) =>
+        ({ assets, totalValueLockedUSD }) =>
           ({
             currencyIds: assets.map((asset) => asset.id),
             symbols: assets.map((asset) => asset.symbol),
             type: gqlPoolTypeMap[poolType],
-            totalValueLocked,
+            totalValueLocked: totalValueLockedUSD,
+            names: assets.map((asset) => asset.name),
           } as TridentPool)
       )
     )
 
 interface PoolData {
-  totalValueLocked: string
+  totalValueLockedUSD: string
   assets: {
     id: string
     symbol: string
+    name: string
   }[]
 }
 

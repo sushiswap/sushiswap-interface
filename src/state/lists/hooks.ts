@@ -119,7 +119,7 @@ export function useInactiveListUrls(): string[] {
 export function useCombinedActiveList(): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  return combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST)
+  return useMemo(() => combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST), [activeTokens])
 }
 
 // list of tokens not supported on interface, used to show warnings and prevent swaps and adds

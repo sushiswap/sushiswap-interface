@@ -19,4 +19,5 @@ export interface TableInstance {
   canNextPage: boolean
   prepareRow: (arg0: any) => any
   state: { pageIndex: number; pageSize: number }
+  setFilter: (columnId: string, filterValue: any) => void
 }
