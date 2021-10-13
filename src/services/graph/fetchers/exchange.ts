@@ -145,7 +145,7 @@ export const getOnePrice = async () => {
 }
 
 export const getCeloPrice = async () => {
-  return getTokenprice(ChainId.CELO, tokenPriceQuery, {
+  return getTokenPrice(ChainId.CELO, tokenPriceQuery, {
     id: '0x471ece3750da237f93b8e339c536989b8978a438',
   })
 }
