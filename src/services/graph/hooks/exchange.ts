@@ -2,6 +2,7 @@ import {
   exchange,
   getAlcxPrice,
   getBundle,
+  getCeloPrice,
   getCvxPrice,
   getDayData,
   getFactory,
