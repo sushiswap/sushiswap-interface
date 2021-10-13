@@ -4,7 +4,7 @@ import { t } from '@lingui/macro'
 import Typography from '../../components/Typography'
 import { usePagination, useTable, useFlexLayout } from 'react-table'
 import { TableInstance } from './types'
-import { MobilePageToggler } from './MobilePageToggler'
+import { TablePageToggler } from './TablePageToggler'
 import { useTransactionsData } from './useTransactionsData'
 
 interface TransactionsProps {
@@ -13,7 +13,7 @@ interface TransactionsProps {
 
 export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
   const { i18n } = useLingui()
-  const { config, loading, error, totalTransactions, requestMoreTransactions } = useTransactionsData(pairs)
+  const { config, loading, error, totalTransactions } = useTransactionsData(pairs)
 
   const {
     getTableProps,
@@ -78,15 +78,14 @@ export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
           </tbody>
         </table>
       </div>
-      <MobilePageToggler
+      <TablePageToggler
         pageIndex={pageIndex}
         pageSize={pageSize}
-        loadedTransactions={config.data.length}
-        totalTransactions={totalTransactions}
-        requestMoreTransactions={requestMoreTransactions}
+        totalItems={totalTransactions}
         gotoPage={gotoPage}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
+        loading={loading}
       />
     </div>
   )

@@ -58,7 +58,6 @@ export const useTransactionsData = (pairs: string[]) => {
       loading,
       error,
       totalTransactions: transactions ? transactions.length : 0,
-      requestMoreTransactions: () => undefined,
     }),
     [TransactionColumns, defaultColumn, error, formattedTransactions, loading, transactions]
   )

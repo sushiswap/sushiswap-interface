@@ -21,8 +21,8 @@ export const PoolCell: FC<PoolCellProps> = ({ symbols, currencyIds }) => {
     <>
       <div className="flex items-center gap-2">
         <div className="flex ml-2">
-          {currencyIds.map((id) => (
-            <CurrencyLogoWrapper key={id} currencyId={id} />
+          {currencyIds.map((id, i) => (
+            <CurrencyLogoWrapper key={i} currencyId={id} />
           ))}
         </div>
         <div className="text-high-emphesis font-bold">{symbols.join('-')}</div>

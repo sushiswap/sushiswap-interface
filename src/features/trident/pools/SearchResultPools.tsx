@@ -3,19 +3,29 @@ import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TableInstance } from '../../transactions/types'
-import { useFlexLayout, usePagination, useTable } from 'react-table'
+import { useFilters, useFlexLayout, usePagination, useTable } from 'react-table'
 import { poolTypeToStr, usePoolsTableData } from './usePoolsTableData'
 import { classNames } from '../../../functions'
+import { TablePageToggler } from '../../transactions/TablePageToggler'
+import { useInstantiateFilters } from './useInstantiateFilters'
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()
   const { config, loading, error } = usePoolsTableData()
-
-  const { getTableProps, getTableBodyProps, headerGroups, page, prepareRow }: TableInstance = useTable(
-    config,
-    usePagination,
-    useFlexLayout
-  )
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    page,
+    gotoPage,
+    canPreviousPage,
+    canNextPage,
+    prepareRow,
+    setFilter,
+    state: { pageIndex, pageSize },
+  }: TableInstance = useTable(config, useFlexLayout, useFilters, usePagination)
+  useInstantiateFilters(setFilter)
 
   return (
     <div className="flex flex-col gap-2 px-5">
@@ -76,6 +86,15 @@ const SearchResultPools: FC = () => {
           })}
         </tbody>
       </table>
+      <TablePageToggler
+        pageIndex={pageIndex}
+        pageSize={pageSize}
+        totalItems={rows.length}
+        gotoPage={gotoPage}
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        loading={loading}
+      />
     </div>
   )
 }
