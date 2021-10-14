@@ -24,7 +24,7 @@
     "*.{md,css}": "prettier --write"
   },
   "resolutions": {
-    "@walletconnect/web3-provider": "1.6.0",
+    "@walletconnect/web3-provider": "1.6.5",
     "bn.js": "^4.1.0"
   },
   "devDependencies": {
@@ -62,7 +62,7 @@
     "@sushiswap/sushi-data": "^1.0.24",
     "@tailwindcss/jit": "^0.1.18",
     "@transak/transak-sdk": "^1.0.28",
-    "@types/node": "^15.12.2",
+    "@types/node": "^14",
     "@types/react": "^17.0.11",
     "@uniswap/token-lists": "1.0.0-beta.24",
     "@visx/gradient": "^1.7.0",
@@ -130,6 +130,7 @@
     "swr": "^0.5.6",
     "tailwindcss": "2.2.4",
     "tailwindcss-border-gradient-radius": "^2.0.0",
+    "tslib": "^2.3.1",
     "typescript": "^4.3.5",
     "wcag-contrast": "^3.0.0"
   },
@@ -142,5 +143,13 @@
     "entrypoints": [
       "src/pages"
     ]
-  }
+  },
+  "browserslist": [
+    ">0.3%",
+    "not dead",
+    "not op_mini all",
+    "not IE > 0",
+    "not samsung 4",
+    "not and_uc 12.12"
+  ]
 }

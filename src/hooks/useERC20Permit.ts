@@ -2,7 +2,7 @@ import { Currency, CurrencyAmount, JSBI, Percent, Token, TradeType, Trade as V2T
 import { DAI, SUSHI, USDC } from '../constants/tokens'
 import { useMemo, useState } from 'react'
 
-import { splitSignature } from 'ethers/lib/utils'
+import { splitSignature } from '@ethersproject/bytes'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'

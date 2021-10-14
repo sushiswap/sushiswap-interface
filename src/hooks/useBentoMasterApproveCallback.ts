@@ -5,6 +5,8 @@ import { useAllTransactions, useTransactionAdder } from '../state/transactions/h
 import { useCallback, useMemo, useState } from 'react'
 import { signMasterContractApproval } from '../entities/KashiCooker'
 import { Contract } from '@ethersproject/contracts'
+import { AddressZero, HashZero } from '@ethersproject/constants'
+import { splitSignature } from '@ethersproject/bytes'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -110,7 +112,7 @@ const useBentoMasterApproveCallback = (
         chainId
       )
 
-      const { v, r, s } = ethers.utils.splitSignature(signature)
+      const { v, r, s } = splitSignature(signature)
       const permit = {
         outcome: BentoApproveOutcome.SUCCESS,
         signature: { v, r, s },

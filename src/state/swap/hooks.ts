@@ -1,6 +1,28 @@
 import { AppDispatch, AppState } from '../index'
-import { ChainId, Currency, CurrencyAmount, JSBI, Percent, TradeType, Trade as V2Trade, WNATIVE } from '@sushiswap/sdk'
-import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  Percent,
+  SUSHI_ADDRESS,
+  TradeType,
+  Trade as V2Trade,
+  WNATIVE_ADDRESS,
+} from '@sushiswap/sdk'
+import {
+  DEFAULT_ARCHER_ETH_TIP,
+  DEFAULT_ARCHER_GAS_ESTIMATE,
+  DEFAULT_OPENMEV_GAS_ESTIMATE,
+  DEFAULT_OPENMEV_ETH_TIP,
+} from '../../config/archer'
+//import { DEFAULT_OPENMEV_ETH_TIP, DEFAULT_OPENMEV_GAS_ESTIMATE } from '../../config/openmev'
+import {
+  EstimatedSwapCall,
+  SuccessfulCall,
+  swapErrorToUserReadableMessage,
+  useSwapCallArguments,
+} from '../../hooks/useSwapCallback'
 // import {
 //   EstimatedSwapCall,
 //   SuccessfulCall,
@@ -11,7 +33,6 @@ import { isAddress, isZero } from '../../functions/validate'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
 import {
   useExpertModeManager,
   useUserArcherETHTip,
@@ -21,6 +42,7 @@ import {
   useUserSingleHopOnly,
   useUserSlippageTolerance,
 } from '../user/hooks'
+import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
 
 import { ParsedQs } from 'qs'
 import { SwapState } from './reducer'
@@ -32,13 +54,7 @@ import { useCurrencyBalances } from '../wallet/hooks'
 import useENS from '../../hooks/useENS'
 import { useLingui } from '@lingui/react'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
-import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
-import {
-  EstimatedSwapCall,
-  SuccessfulCall,
-  swapErrorToUserReadableMessage,
-  useSwapCallArguments,
-} from '../../hooks/useSwapCallback'
+import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTolerance'
 
 export function useSwapState(): AppState['swap'] {
   return useAppSelector((state) => state.swap)
@@ -117,7 +133,10 @@ function involvesAddress(trade: V2Trade<Currency, Currency, TradeType>, checksum
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedSwapInfo(doArcher = false): {
+export function useDerivedSwapInfo(
+  doArcher = false,
+  doOpenMev = false
+): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount<Currency> }
   parsedAmount: CurrencyAmount<Currency> | undefined
@@ -222,6 +241,31 @@ export function useDerivedSwapInfo(doArcher = false): {
   const [userGasEstimate, setUserGasEstimate] = useUserArcherGasEstimate()
   const [userGasPrice] = useUserArcherGasPrice()
   const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
+
+  // @openmev
+  useEffect(() => {
+    if (doOpenMev) {
+      setUserTipManualOverride(false)
+      setUserETHTip(DEFAULT_OPENMEV_ETH_TIP.toString())
+      setUserGasEstimate(DEFAULT_OPENMEV_GAS_ESTIMATE.toString())
+    }
+  }, [doOpenMev, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
+
+  useEffect(() => {
+    if (doOpenMev && !userTipManualOverride) {
+      setUserTipManualOverride(false)
+      setUserETHTip(DEFAULT_OPENMEV_ETH_TIP.toString())
+      setUserGasEstimate(DEFAULT_OPENMEV_GAS_ESTIMATE.toString())
+    }
+  }, [doOpenMev, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
+
+  useEffect(() => {
+    if (doArcher || doOpenMev) {
+      setUserTipManualOverride(false)
+      setUserETHTip(DEFAULT_OPENMEV_ETH_TIP.toString())
+      setUserGasEstimate(DEFAULT_OPENMEV_GAS_ESTIMATE.toString())
+    }
+  }, [doOpenMev, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
 
   useEffect(() => {
     if (doArcher) {
@@ -339,16 +383,15 @@ function validatedRecipient(recipient: any): string | null {
 export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.MAINNET): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+  const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'
+  const sushi = SUSHI_ADDRESS[chainId]
   if (inputCurrency === '' && outputCurrency === '') {
-    if (chainId === ChainId.CELO) {
-      inputCurrency = WNATIVE[chainId].address
-    } else {
-      // default to ETH input
-      inputCurrency = 'ETH'
-    }
-  } else if (inputCurrency === outputCurrency) {
-    // clear output if identical
-    outputCurrency = ''
+    inputCurrency = eth
+    outputCurrency = sushi
+  } else if (inputCurrency === '') {
+    inputCurrency = outputCurrency === eth ? sushi : eth
+  } else if (outputCurrency === '' || inputCurrency === outputCurrency) {
+    outputCurrency = inputCurrency === eth ? sushi : eth
   }
 
   const recipient = validatedRecipient(parsedQs.recipient)

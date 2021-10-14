@@ -19,6 +19,7 @@ import {
   updateUserArcherGasPrice,
   updateUserArcherTipManualOverride,
   updateUserArcherUseRelay,
+  updateUserOpenMevUseRelay,
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
@@ -64,6 +65,13 @@ export interface UserState {
   timestamp: number
   URLWarningVisible: boolean
 
+  /**
+   * @interface OpenMev
+   * @param userOpenMevUseRelay
+   * @param userArcherUseRelay
+   * @summary use relay or go directly to router
+   */
+  userOpenMevUseRelay: boolean
   userArcherUseRelay: boolean // use relay or go directly to router
   userArcherGasPrice: string // Current gas price
   userArcherETHTip: string // ETH tip for relay, as full BigInt string
@@ -75,6 +83,11 @@ function pairKey(token0Address: string, token1Address: string) {
   return `${token0Address};${token1Address}`
 }
 
+/**
+ * @const initialState
+ * @param UserState
+ * @implements {OpenMev}
+ */
 export const initialState: UserState = {
   userDarkMode: null,
   matchesDarkMode: false,
@@ -91,6 +104,7 @@ export const initialState: UserState = {
   userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
   userArcherGasEstimate: DEFAULT_ARCHER_GAS_ESTIMATE.toString(),
   userArcherTipManualOverride: false,
+  userOpenMevUseRelay: true,
 }
 
 export default createReducer(initialState, (builder) =>
@@ -164,6 +178,9 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
+    })
+    .addCase(updateUserOpenMevUseRelay, (state, action) => {
+      state.userOpenMevUseRelay = action.payload.userOpenMevUseRelay
     })
     .addCase(updateUserArcherUseRelay, (state, action) => {
       state.userArcherUseRelay = action.payload.userArcherUseRelay

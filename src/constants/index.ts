@@ -36,7 +36,7 @@ export const RPC = {
 export const POOL_DENY = ['14', '29', '45', '30']
 
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
-export const AVERAGE_BLOCK_TIME_IN_SECS = 13
+export const AVERAGE_BLOCK_TIME_IN_SECS = 14
 
 export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'https://api.archerdao.io/v1/transaction',
@@ -44,6 +44,19 @@ export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
 
 export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
+}
+
+/**
+ * @const OPENMEV_SUPPORTED_NETWORKS
+ * @returns {ChainId.?}
+ */
+export const OPENMEV_SUPPORTED_NETWORKS = [ChainId.MAINNET]
+/**
+ * @const OPENMEV_URI
+ * @param process.env.NEXT_PUBLIC_OPENMEV_URI
+ */
+export const OPENMEV_URI: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]: process.env.NEXT_PUBLIC_OPENMEV_URI ?? 'https://api.staging.sushirelay.com/v1',
 }
 
 // export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
@@ -269,12 +282,25 @@ export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), JSB
 export const ZERO_PERCENT = new Percent('0')
 export const ONE_HUNDRED_PERCENT = new Percent('1')
 
-// SDN OFAC addresses
+// SDN OFAC addresses; updated Wed Sep 22 00:14:11 UTC 2021
 export const BLOCKED_ADDRESSES: string[] = [
   '0x7F367cC41522cE07553e823bf3be79A889DEbe1B',
   '0xd882cFc20F52f2599D84b8e8D58C7FB62cfE344b',
   '0x901bb9583b24D97e995513C6778dc6888AB6870e',
   '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
+  '0xd882cfc20f52f2599d84b8e8d58c7fb62cfe344b',
+  '0x901bb9583b24d97e995513c6778dc6888ab6870e',
+  '0xa7e5d5a720f06526557c513402f2e6b5fa20b00',
+  '0x8576acc5c05d6ce88f4e49bf65bdf0c62f91353c',
+  '0x1da5821544e25c636c1417ba96ade4cf6d2f9b5a',
+  '0x7Db418b5D567A4e0E8c59Ad71BE1FcE48f3E6107',
+  '0x72a5843cc08275C8171E582972Aa4fDa8C397B2A',
+  '0x7F19720A857F834887FC9A7bC0a0fBe7Fc7f8102',
+  '0x9f4cda013e354b8fc285bf4b9a60460cee7f7ea9',
+  '0x2f389ce8bd8ff92de3402ffce4691d17fc4f6535',
+  '0x19aa5fe80d33a56d56c78e82ea5e50e5d80b4dff',
+  '0xe7aa314c77f4233c18c6cc84384a9247c0cf367b',
+  '0x308ed4b7b49797e1a98d3818bff6fe5385410370',
 ]
 
 // BentoBox Swappers

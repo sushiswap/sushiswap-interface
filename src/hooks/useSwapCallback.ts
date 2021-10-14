@@ -1,4 +1,4 @@
-import { ARCHER_RELAY_URI, BIPS_BASE, EIP_1559_ACTIVATION_BLOCK } from '../constants'
+import { BIPS_BASE, EIP_1559_ACTIVATION_BLOCK } from '../constants'
 import {
   ChainId,
   Currency,
@@ -11,17 +11,19 @@ import {
   Trade as V2Trade,
 } from '@sushiswap/sdk'
 import { isAddress, isZero } from '../functions/validate'
+import { arrayify, hexlify, splitSignature } from '@ethersproject/bytes'
 import { useFactoryContract, useRouterContract } from './useContract'
-
+import { ARCHER_RELAY_URI } from '../config/archer'
+import { OPENMEV_URI } from '../config/openmev'
 import { ArcherRouter } from '../functions/archerRouter'
 import { BigNumber } from '@ethersproject/bignumber'
 import Common from '@ethereumjs/common'
 import { SignatureData } from './useERC20Permit'
 import { TransactionFactory } from '@ethereumjs/tx'
 import { TransactionRequest } from '@ethersproject/abstract-provider'
+import { keccak256 } from '@ethersproject/keccak256'
 import approveAmountCalldata from '../functions/approveAmountCalldata'
 import { calculateGasMargin } from '../functions/trade'
-import { ethers } from 'ethers'
 import { shortenAddress } from '../functions/format'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from './useActiveWeb3React'
@@ -32,6 +34,7 @@ import { useMemo } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
 import { useUserArcherETHTip } from '../state/user/hooks'
+import { id } from '@ethersproject/hash'
 
 export enum SwapCallbackState {
   INVALID,
@@ -215,6 +218,8 @@ export function useSwapCallback(
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | undefined | null,
+  useArcher: boolean,
+  useOpenMev: boolean,
   archerRelayDeadline?: number // deadline to use for archer relay -- set to undefined for no relay
 ): {
   state: SwapCallbackState
@@ -228,7 +233,7 @@ export function useSwapCallback(
   const eip1559 =
     EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
 
-  const useArcher = archerRelayDeadline !== undefined
+  // const useArcher = archerRelayDeadline !== undefined
 
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useArcher)
 
@@ -341,8 +346,8 @@ export function useSwapCallback(
 
         // console.log({ bestCallOption })
 
-        if (!useArcher) {
-          // console.log('SWAP WITHOUT ARCHER')
+        if (!useArcher && !useOpenMev) {
+          //  console.log('swap WITHOUT ARCHER / OpenMEV')
           // console.log(
           //   'gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}
           // )
@@ -391,7 +396,7 @@ export function useSwapCallback(
               }
             })
         } else {
-          const postToRelay = (rawTransaction: string, deadline: number) => {
+          const postToArcherRelay = (rawTransaction: string, deadline: number) => {
             // as a wise man on the critically acclaimed hit TV series "MTV's Cribs" once said:
             // "this is where the magic happens"
             const relayURI = chainId ? ARCHER_RELAY_URI[chainId] : undefined
@@ -409,6 +414,59 @@ export function useSwapCallback(
                 'Content-Type': 'application/json',
               },
             }).then((res) => {
+              if (res.status !== 200) throw Error(res.statusText)
+            })
+          }
+          /**
+           * postToOpenMevRelay
+           * @const postToOpenMevRelay
+           *
+           * @async
+           * @param {string} signedTx
+           * @param {boolean} isMetamask
+           * @returns {res.statusText}
+           */
+          const postToOpenMevRelay = async (signedTx: string, isMetamask: boolean) => {
+            const relayURI = chainId ? OPENMEV_URI[chainId] : undefined
+            if (!relayURI) throw new Error('Could not determine relay URI for this network')
+
+            const body = JSON.stringify({
+              jsonrpc: '2.0',
+              id: new Date().getTime(),
+              method: 'manifold_sendTransaction',
+              params: [signedTx],
+            })
+
+            console.log(`Body to sign:`, body)
+
+            // For signing the message we restore proper behavior if on MetaMask
+            // ethers will change eth_sign to personal_sign if it detects metamask
+            // https://github.com/ethers-io/ethers.js/blob/2a7dbf05718e29e550f7a208d35a095547b9ccc2/packages/providers/src.ts/web3-provider.ts#L33
+            if (isMetamask) library.provider.isMetaMask = true
+
+            const signer = await library.getSigner().getAddress()
+            const signedPayload = await library.getSigner().signMessage(id(body))
+
+            // Restore back behavior
+            if (isMetamask) library.provider.isMetaMask = false
+
+            console.log(`Sending to URI: ${relayURI} with X-Manifold-Signature: ${signer}:${signedPayload}`)
+
+            return fetch(relayURI, {
+              method: 'POST',
+              body,
+              headers: {
+                'X-Manifold-Signature': `${signer}:${signedPayload}`,
+                'Content-Type': 'application/json',
+              },
+            }).then(async (res) => {
+              // Handle specific error cases
+              if (res.status === 200) {
+                const json = await res.json()
+                if (json.error) throw Error(`${json.error.message}`)
+              }
+
+              // Generic error
               if (res.status !== 200) throw Error(res.statusText)
             })
           }
@@ -452,24 +510,22 @@ export function useSwapCallback(
               const txParams = {
                 nonce:
                   fullTx.nonce !== undefined
-                    ? ethers.utils.hexlify(fullTx.nonce, {
+                    ? hexlify(fullTx.nonce, {
                         hexPad: 'left',
                       })
                     : undefined,
-                gasPrice:
-                  fullTx.gasPrice !== undefined ? ethers.utils.hexlify(fullTx.gasPrice, { hexPad: 'left' }) : undefined,
-                gasLimit:
-                  fullTx.gasLimit !== undefined ? ethers.utils.hexlify(fullTx.gasLimit, { hexPad: 'left' }) : undefined,
+                gasPrice: fullTx.gasPrice !== undefined ? hexlify(fullTx.gasPrice, { hexPad: 'left' }) : undefined,
+                gasLimit: fullTx.gasLimit !== undefined ? hexlify(fullTx.gasLimit, { hexPad: 'left' }) : undefined,
                 to: fullTx.to,
                 value:
                   fullTx.value !== undefined
-                    ? ethers.utils.hexlify(fullTx.value, {
+                    ? hexlify(fullTx.value, {
                         hexPad: 'left',
                       })
                     : undefined,
                 data: fullTx.data?.toString(),
-                chainId: fullTx.chainId !== undefined ? ethers.utils.hexlify(fullTx.chainId) : undefined,
-                type: fullTx.type !== undefined ? ethers.utils.hexlify(fullTx.type) : undefined,
+                chainId: fullTx.chainId !== undefined ? hexlify(fullTx.chainId) : undefined,
+                type: fullTx.type !== undefined ? hexlify(fullTx.type) : undefined,
               }
               const tx: any = TransactionFactory.fromTxData(txParams, {
                 common,
@@ -478,19 +534,19 @@ export function useSwapCallback(
               // console.log('unsignedTx', unsignedTx)
 
               return library.provider
-                .request({ method: 'eth_sign', params: [account, ethers.utils.hexlify(unsignedTx)] })
+                .request({ method: 'eth_sign', params: [account, hexlify(unsignedTx)] })
                 .then((signature) => {
-                  const signatureParts = ethers.utils.splitSignature(signature)
+                  const signatureParts = splitSignature(signature)
                   // really crossing the streams here
                   // eslint-disable-next-line
                   // @ts-ignore
                   const txWithSignature = tx._processSignature(
                     signatureParts.v,
-                    ethers.utils.arrayify(signatureParts.r),
-                    ethers.utils.arrayify(signatureParts.s)
+                    arrayify(signatureParts.r),
+                    arrayify(signatureParts.s)
                   )
                   return {
-                    signedTx: ethers.utils.hexlify(txWithSignature.serialize()),
+                    signedTx: hexlify(txWithSignature.serialize()),
                     fullTx,
                   }
                 })
@@ -507,8 +563,8 @@ export function useSwapCallback(
           }
 
           return signedTxPromise
-            .then(({ signedTx, fullTx }) => {
-              const hash = ethers.utils.keccak256(signedTx)
+            .then(async ({ signedTx, fullTx }) => {
+              const hash = keccak256(signedTx)
               const inputSymbol = trade.inputAmount.currency.symbol
               const outputSymbol = trade.outputAmount.currency.symbol
               const inputAmount = trade.inputAmount.toSignificant(3)
@@ -527,19 +583,34 @@ export function useSwapCallback(
                   ? {
                       rawTransaction: signedTx,
                       deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
-                      nonce: ethers.BigNumber.from(fullTx.nonce).toNumber(),
+                      nonce: BigNumber.from(fullTx.nonce).toNumber(),
                       ethTip: archerETHTip,
                     }
                   : undefined
               // console.log('archer', archer)
+              const openmev = useOpenMev
+                ? {
+                    signedTx,
+                    deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
+                  }
+                : undefined
+
+              if (archer) {
+                console.log('archer', archer)
+                await postToArcherRelay(archer.rawTransaction, archer.deadline)
+              } else if (openmev) {
+                console.log('openmev', openmev)
+                await postToOpenMevRelay(openmev.signedTx, isMetamask)
+              }
               addTransaction(
                 { hash },
                 {
                   summary: withRecipient,
                   archer,
+                  //         openmev,
                 }
               )
-              return archer ? postToRelay(archer.rawTransaction, archer.deadline).then(() => hash) : hash
+              return hash
             })
             .catch((error: any) => {
               // if the user rejected the tx, pass this along
@@ -558,5 +629,16 @@ export function useSwapCallback(
       },
       error: null,
     }
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, useArcher, addTransaction])
+  }, [
+    trade,
+    library,
+    account,
+    chainId,
+    recipient,
+    recipientAddressOrName,
+    swapCalls,
+    useArcher,
+    useOpenMev,
+    addTransaction,
+  ])
 }

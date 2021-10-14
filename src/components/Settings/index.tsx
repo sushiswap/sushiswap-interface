@@ -5,6 +5,7 @@ import {
   useUserArcherUseRelay,
   useUserSingleHopOnly,
   useUserTransactionTTL,
+  useUserOpenMevRelay,
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
@@ -21,6 +22,8 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+
+import { OPENMEV_SUPPORTED_NETWORKS } from '../../constants'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
@@ -42,6 +45,8 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
   const [ttl, setTtl] = useUserTransactionTTL()
 
   const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
+
+  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMevRelay()
 
   return (
     <div className="relative flex" ref={node}>
@@ -103,11 +108,11 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </div>
-            {/* {chainId == ChainId.MAINNET && (
+            {chainId == ChainId.MAINNET && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
-                    {i18n._(t`MEV Shield by Archer DAO`)}
+                    {i18n._(t`ArcherDAO`)}
                   </Typography>
                   <QuestionHelper
                     text={i18n._(
@@ -115,13 +120,35 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                     )}
                   />
                 </div>
+                {/** @openmev UI Toggle */}
                 <Toggle
                   id="toggle-use-archer"
                   isActive={userUseArcher}
-                  toggle={() => setUserUseArcher(!userUseArcher)}
+                  toggle={() => {
+                    if (userUseOpenMev) setUserUseOpenMev(false)
+                    setUserUseArcher(!userUseArcher)
+                  }}
                 />
               </div>
-            )} */}
+            )}
+            {OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`OpenMEV Gas Refunder`)}
+                  </Typography>
+                  <QuestionHelper text={i18n._(t`OpenMEV refunds up to 95% of transaction costs in 35 blocks`)} />
+                </div>
+                <Toggle
+                  id="toggle-use-openmev"
+                  isActive={userUseOpenMev}
+                  toggle={() => {
+                    if (userUseArcher) setUserUseArcher(false)
+                    setUserUseOpenMev(!userUseOpenMev)
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
