@@ -169,7 +169,7 @@ export default function useFarmRewards() {
           },
           [ChainId.CELO]: {
             token: 'CELO',
-            icon: 'https://github.com/sushiswap/icons/blob/master/token/celo.jpg',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg',
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: celoPrice,
