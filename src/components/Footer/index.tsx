@@ -63,6 +63,12 @@ const Footer = () => {
           </ExternalLink>
         )}
 
+        {chainId && chainId === ChainId.AVAX && (
+          <ExternalLink id={`palm-bridge-link`} href=" hhttps://app.relaychain.com/#/cross-chain-bridge-transfer" className="text-low-emphesis">
+            {i18n._(t`Relaychain AVAX Bridge`)}
+          </ExternalLink>
+        )}
+        
         <Polling />
       </div>
     </footer>
