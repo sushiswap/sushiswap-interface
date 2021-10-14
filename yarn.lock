@@ -2367,12 +2367,6 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.5.tgz#fcf3f36fee62bcfbe2389587d5dd3657ecb00bfb"
   integrity sha512-XJ7D1zOITrLjKYpweHafroxu1xsQ1mJiDsvhjBVs6snT5zNPyfRXNxhB6sD3VXseDkQmqNWtgkSe4UJ8t8TrcQ==
 
-"@sushiswap/core@2.0.0-canary.0":
-  version "2.0.0-canary.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.0.tgz#582605e6968f634684da7cc3308c3353595e326b"
-  integrity sha512-dr+GL+KmAOpQva/NlcIij061LZFUMUv2S5o8HZvGK4vOKvWX9apzlBn9ZRS73Kj5ASKu8x4hc+ExD8XGLIxvjw==
-
-<<<<<<< HEAD
 "@sushiswap/core@^2.0.0-canary.1":
   version "2.0.0-canary.1"
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
@@ -2382,17 +2376,6 @@
   version "16.23.0"
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-16.23.0.tgz#253c53b479ff4eafa778f3d2aa02b6ce3a51d40a"
   integrity sha512-wA65smxOeuQTnSQ6CpuvdtlgQXy80EPguwwiMFqV/xk/OsviHBCCI6PyKNHKld30R+SyAag5qw/5A/b0q8KTeg==
-=======
-"@sushiswap/default-token-list@16.20.0":
-  version "16.20.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-16.20.0.tgz#f83271e532abb5251ae226379cbca3589b288e59"
-  integrity sha512-PEBBNrUM5xC/dgmVt2qtmMSnzJOVrX6ASY0h0Tgk9pePoq5fGDerPZs2qCCoi5rlwUe/PbZX4nSnn/d0S6TbyQ==
->>>>>>> 0418413ac46d43f4e5a5ef5545f8d165fba39626
-
-"@sushiswap/default-token-list@^11.3.0":
-  version "11.5.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-11.5.0.tgz#07f31e6771c31fff44ca1a6a37697f266dd486a7"
-  integrity sha512-XuouWhMJdhz/QaWOLuPb/PkPzqfnipBi3VBzUuMisWdCAiUy7mhh2ep209/qoQcOAXj0Dgzz/cuHYTy20Uab5w==
 
 "@sushiswap/limit-order-pair-list@0.2.2":
   version "0.2.2"
