@@ -67,9 +67,14 @@ function AppBar(): JSX.Element {
                         </NavLink>
                       )}
                       {chainId &&
-                        [ChainId.MAINNET, ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM].includes(
-                          chainId
-                        ) && (
+                        [
+                          ChainId.MAINNET,
+                          ChainId.MATIC,
+                          ChainId.XDAI,
+                          ChainId.HARMONY,
+                          ChainId.ARBITRUM,
+                          ChainId.CELO,
+                        ].includes(chainId) && (
                           <NavLink href={'/farm'}>
                             <a
                               id={`farm-nav-link`}

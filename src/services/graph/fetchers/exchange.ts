@@ -144,6 +144,12 @@ export const getOnePrice = async () => {
   })
 }
 
+export const getCeloPrice = async () => {
+  return getTokenPrice(ChainId.CELO, tokenPriceQuery, {
+    id: '0x471ece3750da237f93b8e339c536989b8978a438',
+  })
+}
+
 export const getSpellPrice = async () => {
   return getTokenPrice(ChainId.MAINNET, tokenPriceQuery, {
     id: '0x090185f2135308bad17527004364ebcc2d37e5f6',

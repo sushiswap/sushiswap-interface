@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import Image from '../../components/Image'
 import React, { useState } from 'react'
 import { useActiveWeb3React } from '../../hooks'
-import { CurrencyAmount, JSBI, Token, USDC, ZERO } from '@sushiswap/sdk'
+import { CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/sdk'
 import { getAddress } from '@ethersproject/address'
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
@@ -62,13 +62,13 @@ const InvestmentDetails = ({ farm }) => {
   const pendingSushi = usePendingSushi(farm)
 
   const positionFiatValue = CurrencyAmount.fromRawAmount(
-    USDC[chainId],
+    USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiAssetAmount?.usdValue.toString() ?? ZERO
       : JSBI.BigInt(
           ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            .toFixed(USDC[chainId].decimals)
-            .toBigNumber(USDC[chainId].decimals)
+            .toFixed(USD[chainId].decimals)
+            .toBigNumber(USD[chainId].decimals)
         )
   )
 
