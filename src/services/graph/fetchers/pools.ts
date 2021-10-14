@@ -18,6 +18,8 @@ interface TridentPool {
   currencyIds: string[]
   type: PoolType
   totalValueLocked: string
+  twapEnabled: boolean
+  swapFeePercent: number
 }
 
 const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
@@ -25,19 +27,23 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
     .filter(([, assets]) => assets.length)
     .flatMap(([poolType, poolList]) =>
       poolList.map(
-        ({ assets, totalValueLockedUSD }) =>
+        ({ assets, totalValueLockedUSD, twapEnabled, swapFee }) =>
           ({
             currencyIds: assets.map((asset) => asset.id),
             symbols: assets.map((asset) => asset.symbol),
             type: gqlPoolTypeMap[poolType],
             totalValueLocked: totalValueLockedUSD,
             names: assets.map((asset) => asset.name),
+            swapFeePercent: parseInt(swapFee) / 100,
+            twapEnabled,
           } as TridentPool)
       )
     )
 
 interface PoolData {
   totalValueLockedUSD: string
+  twapEnabled: boolean
+  swapFee: string
   assets: {
     id: string
     symbol: string

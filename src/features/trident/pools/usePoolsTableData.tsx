@@ -39,6 +39,19 @@ export const usePoolsTableData = () => {
           rows.filter((row) => !filterValue.length || filterValue.includes(poolTypeToStr[row.values.type])),
       },
       {
+        Header: 'Fee',
+        accessor: 'swapFeePercent',
+        Cell: (props) => <span>{props.value}%</span>,
+      },
+      {
+        Header: 'Twap',
+        accessor: 'twapEnabled',
+        Cell(props) {
+          if (props.value) return <span>yes</span>
+          return <span>no</span>
+        },
+      },
+      {
         Header: 'TVL',
         accessor: 'totalValueLocked',
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,

@@ -2,6 +2,8 @@ import gql from 'graphql-tag'
 
 const subQuery = `
   totalValueLockedUSD
+  twapEnabled
+  swapFee
   assets {
     id
     symbol
