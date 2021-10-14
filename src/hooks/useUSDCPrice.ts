@@ -3,6 +3,7 @@ import { ChainId, Currency, CurrencyAmount, Price, Token, USDC } from '@sushiswa
 import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
 import { useMemo } from 'react'
 import { useV2TradeExactOut } from './useV2Trades'
+import { CELO as CELO_TOKENS } from '../constants/tokens'
 
 // import { wrappedCurrency } from "../functions/currency/wrappedCurrency";
 
@@ -20,7 +21,7 @@ const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
   [ChainId.OKEX]: CurrencyAmount.fromRawAmount(USDC[ChainId.OKEX], 100_000e18),
   [ChainId.XDAI]: CurrencyAmount.fromRawAmount(USDC[ChainId.XDAI], 100_000e6),
   [ChainId.ARBITRUM]: CurrencyAmount.fromRawAmount(USDC[ChainId.ARBITRUM], 100_000e6),
-  [ChainId.CELO]: undefined,
+  [ChainId.CELO]: CurrencyAmount.fromRawAmount(CELO_TOKENS.cUSD, 100_000e18),
 }
 
 /**
