@@ -30,6 +30,16 @@ export function useTridentClassicPools(
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
 
+      console.log({
+        addy: computeConstantProductPoolAddress({
+          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+          tokenA,
+          tokenB,
+          fee,
+          twap,
+        }),
+      })
+
       return tokenA &&
         tokenB &&
         tokenA.chainId === tokenB.chainId &&

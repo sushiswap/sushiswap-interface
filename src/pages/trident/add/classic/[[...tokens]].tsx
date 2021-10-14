@@ -38,7 +38,7 @@ const AddClassic = () => {
   return (
     <>
       <TridentHeader pattern="bg-bubble-pattern">
-        <div className="flex flex-col w-full mt-px gap-5 lg:justify-between relative lg:w-7/12">
+        <div className="relative flex flex-col w-full gap-5 mt-px lg:justify-between lg:w-7/12">
           <div>
             <Button
               color="blue"
@@ -71,7 +71,7 @@ const AddClassic = () => {
 
       <TridentBody className="pt-0">
         <div className="flex flex-row justify-between">
-          <div className="lg:w-7/12 w-full flex flex-col">
+          <div className="flex flex-col w-full lg:w-7/12">
             <FixedRatioHeader />
 
             {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
@@ -99,7 +99,7 @@ const AddClassic = () => {
               <DepositSubmittedModal />
             </>
           </div>
-          <div className="hidden lg:block lg:w-4/12 flex flex-col -mt-28">
+          <div className="flex flex-col hidden lg:block lg:w-4/12 -mt-28">
             {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
           </div>
         </div>
