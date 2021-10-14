@@ -1,12 +1,5 @@
 import Image from 'next/image'
 import React from 'react'
-import styled from 'styled-components'
-
-const SubHeader = styled.div`
-  // color: ${({ theme }) => theme.text1};
-  margin-top: 10px;
-  font-size: 12px;
-`
 
 export default function Option({
   link = null,
@@ -43,7 +36,7 @@ export default function Option({
           {active && <div className="w-4 h-4 mr-4 rounded-full" style={{ background: color }} />}
           {header}
         </div>
-        {subheader && <SubHeader>{subheader}</SubHeader>}
+        {subheader && <div className="mt-2.5 text-xs">{subheader}</div>}
       </div>
       <Image src={icon} alt={'Icon'} width="32px" height="32px" />
     </div>

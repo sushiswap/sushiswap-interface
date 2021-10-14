@@ -15,46 +15,10 @@ import Option from './Option'
 import PendingView from './PendingView'
 import ReactGA from 'react-ga'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { XIcon } from '@heroicons/react/outline'
 import { isMobile } from 'react-device-detect'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import usePrevious from '../../hooks/usePrevious'
-
-const CloseIcon = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-  &:hover {
-    cursor: pointer;
-    opacity: 0.6;
-  }
-`
-
-const HeaderRow = styled.div`
-  margin-bottom: 1rem;
-`
-
-const UpperSection = styled.div`
-  position: relative;
-
-  h5 {
-    margin: 0;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-    font-weight: 400;
-  }
-
-  h5:last-child {
-    margin-bottom: 0px;
-  }
-
-  h4 {
-    margin-top: 0;
-    font-weight: 500;
-  }
-`
 
 const WALLET_VIEWS = {
   OPTIONS: 'options',
@@ -247,13 +211,11 @@ export default function WalletModal({
   function getModalContent() {
     if (error) {
       return (
-        <UpperSection>
-          <CloseIcon onClick={toggleWalletModal}>
-            <XIcon width="24px" height="24px" />
-          </CloseIcon>
-          <HeaderRow style={{ paddingLeft: 0, paddingRight: 0 }}>
-            {error instanceof UnsupportedChainIdError ? i18n._(t`Wrong Network`) : i18n._(t`Error connecting`)}
-          </HeaderRow>
+        <div>
+          <ModalHeader
+            title={error instanceof UnsupportedChainIdError ? i18n._(t`Wrong Network`) : i18n._(t`Error connecting`)}
+            onClose={toggleWalletModal}
+          />
           <div>
             {error instanceof UnsupportedChainIdError ? (
               <h5>{i18n._(t`Please connect to the appropriate Ethereum network.`)}</h5>
@@ -265,7 +227,7 @@ export default function WalletModal({
               {i18n._(t`Disconnect`)}
             </ButtonError>
           </div>
-        </UpperSection>
+        </div>
       )
     }
     if (account && walletView === WALLET_VIEWS.ACCOUNT) {

@@ -2,63 +2,8 @@ import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import Dots from '../../components/Dots'
-import Loader from '../../components/Loader'
 import Option from './Option'
 import React from 'react'
-import { darken } from 'polished'
-import styled from 'styled-components'
-
-const PendingSection = styled.div`
-  // ${({ theme }) => theme.flexColumnNoWrap};
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  & > * {
-    width: 100%;
-  }
-`
-
-const LoadingMessage = styled.div<{ error?: boolean }>`
-  // ${({ theme }) => theme.flexRowNoWrap};
-  align-items: center;
-  justify-content: flex-start;
-  // border-radius: ${({ theme }) => theme.borderRadius};
-  margin-bottom: 20px;
-  // color: ${({ theme, error }) => (error ? theme.red1 : 'inherit')};
-  // border: 1px solid ${({ theme, error }) => (error ? theme.red1 : theme.text4)};
-
-  & > * {
-    padding: 1rem;
-  }
-`
-
-const ErrorGroup = styled.div`
-  // ${({ theme }) => theme.flexRowNoWrap};
-  align-items: center;
-  justify-content: flex-start;
-`
-
-const ErrorButton = styled.div`
-  border-radius: 8px;
-  font-size: 12px;
-  // color: ${({ theme }) => theme.text1};
-  // background-color: ${({ theme }) => theme.bg4};
-  margin-left: 1rem;
-  padding: 0.5rem;
-  font-weight: 600;
-  user-select: none;
-
-  &:hover {
-    cursor: pointer;
-    // background-color: ${({ theme }) => darken(0.1, theme.text4)};
-  }
-`
-
-const LoadingWrapper = styled.div`
-  // ${({ theme }) => theme.flexRowNoWrap};
-  align-items: center;
-  justify-content: center;
-`
 
 export default function PendingView({
   connector,
@@ -74,26 +19,27 @@ export default function PendingView({
   const isMetamask = window?.ethereum?.isMetaMask
 
   return (
-    <PendingSection>
-      <LoadingMessage error={error}>
-        <LoadingWrapper>
+    <div>
+      <div className="p-4 mb-5">
+        <div>
           {error ? (
-            <ErrorGroup>
+            <div>
               <div>Error connecting.</div>
-              <ErrorButton
+              <div
+                className="p-2 ml-4 text-xs font-semibold select-none hover:cursor-pointer"
                 onClick={() => {
                   setPendingError(false)
                   connector && tryActivation(connector)
                 }}
               >
                 Try Again
-              </ErrorButton>
-            </ErrorGroup>
+              </div>
+            </div>
           ) : (
             <Dots>Initializing</Dots>
           )}
-        </LoadingWrapper>
-      </LoadingMessage>
+        </div>
+      </div>
       {Object.keys(SUPPORTED_WALLETS).map((key) => {
         const option = SUPPORTED_WALLETS[key]
         if (option.connector === connector) {
@@ -119,6 +65,6 @@ export default function PendingView({
         }
         return null
       })}
-    </PendingSection>
+    </div>
   )
 }
