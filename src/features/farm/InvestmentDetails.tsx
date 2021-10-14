@@ -111,7 +111,7 @@ const InvestmentDetails = ({ farm }) => {
               )}
               {farm.pair.type === PairType.SWAP && (
                 <Typography>
-                  {formatNumber((farm.pair.reserve0 * Number(stakedAmount.toExact())) / farm.pair.totalSupply)}
+                  {formatNumber((farm.pair.reserve0 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
                 </Typography>
               )}
               <Typography>{token0?.symbol}</Typography>
@@ -120,7 +120,7 @@ const InvestmentDetails = ({ farm }) => {
               <div className="flex items-center space-x-2">
                 <CurrencyLogo currency={token1} size="30px" />
                 <Typography>
-                  {formatNumber((farm.pair.reserve1 * Number(stakedAmount.toExact())) / farm.pair.totalSupply)}
+                  {formatNumber((farm.pair.reserve1 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
                 </Typography>
                 <Typography>{token1?.symbol}</Typography>
               </div>
