@@ -19,9 +19,7 @@ import { Transactions } from '../../../../features/transactions/Transactions'
 
 const Pool = () => {
   useInitClassicPoolState()
-
   const { i18n } = useLingui()
-
   const linkButtons = <ClassicLinkButtons />
 
   return (

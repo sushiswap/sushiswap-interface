@@ -1,5 +1,5 @@
 import { ChainId, ChainKey, Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { ConstantProductPool, Fee, computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
+import { computeConstantProductPoolAddress, ConstantProductPool, Fee } from '@sushiswap/trident-sdk'
 import { Interface } from '@ethersproject/abi'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 import { abi } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
@@ -29,16 +29,6 @@ export function useTridentClassicPools(
       const [tokenA, tokenB] = currencyA?.wrapped.sortsBefore(currencyB?.wrapped)
         ? [currencyA?.wrapped, currencyB?.wrapped]
         : [currencyB?.wrapped, currencyA?.wrapped]
-
-      console.log({
-        addy: computeConstantProductPoolAddress({
-          factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
-          tokenA,
-          tokenB,
-          fee,
-          twap,
-        }),
-      })
 
       return tokenA &&
         tokenB &&

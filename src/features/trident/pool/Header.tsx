@@ -1,17 +1,14 @@
-import Chip from '../../../components/Chip'
 import Typography from '../../../components/Typography'
 import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
 import { t } from '@lingui/macro'
-import { POOL_TYPES } from '../constants'
 import { useLingui } from '@lingui/react'
 import { I18n } from '@lingui/core'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
-import { PoolType } from '../types'
 import { poolAtom } from '../context/atoms'
-import { formatPercent } from '../../../functions'
 import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
+import { PoolProperties } from './PoolProperties'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
@@ -21,7 +18,7 @@ const HeaderContainer = () => {
 }
 
 interface HeaderProps {
-  pool: ConstantProductPool | HybridPool
+  pool?: ConstantProductPool | HybridPool
   i18n: I18n
 }
 
@@ -29,25 +26,16 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const isDesktop = useDesktopMediaQuery()
 
   // TODO ramin: remove this make dynamic
-  const apy = 3.6
   const isFarm = true
-  const type = PoolType.ConstantProduct
-
-  const properties = (
-    <>
-      <Chip label={POOL_TYPES[type].label} color="purple" />
-      <Typography weight={700} variant="sm">
-        {formatPercent(pool?.fee?.valueOf() / 100)} {i18n._(t`Fees`)}
-      </Typography>
-    </>
-  )
 
   return (
     <div className="flex justify-between">
       <div className="flex flex-col gap-2 lg:gap-5">
         <div className="lg:flex lg:flex-row lg:gap-3 lg:order-0 lg:items-center">
           <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} dense />
-          <div className="hidden lg:flex lg:flex-col lg:gap-2">{properties}</div>
+          <div className="hidden lg:flex lg:flex-col lg:gap-2">
+            <PoolProperties pool={pool} i18n={i18n} />
+          </div>
         </div>
         <div className="lg:order-2 flex flex-row gap-2 items-center">
           <Typography variant={isDesktop ? 'h3' : 'h2'} className="text-high-emphesis" weight={700}>
@@ -69,18 +57,20 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
             </>
           )}
         </div>
-        <div className="lg:order-1 flex flex-row gap-2 items-center lg:hidden">{properties}</div>
+        <div className="lg:order-1 flex flex-row gap-2 items-center lg:hidden">
+          <PoolProperties pool={pool} i18n={i18n} />
+        </div>
       </div>
       <div className="flex flex-col text-right gap-3">
         <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
         <div className="flex flex-col gap-2">
           <Typography variant="h1" className="text-high-emphesis" weight={700}>
-            {apy}%
+            XX%
           </Typography>
           <div className="flex flex-row gap-2.5">
             {isFarm ? (
               <>
-                <Typography variant="xxs">{i18n._(t`Rewards:`)} 3.6%</Typography>
+                <Typography variant="xxs">{i18n._(t`Rewards:`)} XX%</Typography>
                 <Typography variant="xxs">
                   {i18n._(t`Fees:`)} {pool?.fee / 100}%
                 </Typography>
