@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
 import React, { useCallback, useState } from 'react'
 import ReactGA from 'react-ga'
 import Button, { ButtonError } from '../../components/Button'
@@ -28,7 +28,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
 
-  const [useETH, setUseETH] = useState(true)
+  const [useETH, setUseETH] = chainId != ChainId.CELO ? useState(true) : useState(false)
 
   chainId && useETH && currencyA && currencyEquals(currencyA, WNATIVE[chainId]) && (currencyA = NATIVE[chainId])
   chainId && useETH && currencyB && currencyEquals(currencyB, WNATIVE[chainId]) && (currencyB = NATIVE[chainId])
@@ -298,7 +298,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
             currencyBalance={currencyBalances[Field.CURRENCY_B]}
             fiatValue={currencyBFiatValue}
           />
-          {(oneCurrencyIsETH || oneCurrencyIsWETH) && (
+          {(oneCurrencyIsETH || oneCurrencyIsWETH) && chainId != ChainId.CELO && (
             <a
               className="cursor-pointer text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap"
               onClick={() => setUseETH(!useETH)}
