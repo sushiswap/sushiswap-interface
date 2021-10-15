@@ -34,6 +34,8 @@ import { useAllTokens } from '../../../hooks/Tokens'
 import { useBlockNumber } from '../../../state/application/hooks'
 import usePrevious from '../../../hooks/usePrevious'
 import { useSingleCallResult } from '../../../state/multicall/hooks'
+import { useBentoStrategies } from '../../../services/graph/hooks'
+import { formatPercent } from '../../../functions'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -205,6 +207,7 @@ export function KashiProvider({ children }) {
   const bentoBoxContract = useBentoBoxContract()
 
   const tokens = useAllTokens()
+  const strategies = useBentoStrategies({ chainId })
 
   // const info = useSingleCallResult(boringHelperContract, 'getUIInfo', [
   //   account,
@@ -241,7 +244,6 @@ export function KashiProvider({ children }) {
       const logPairs = (await getPairs(bentoBoxContract, chainId)).filter(
         (pair) => !BLACKLISTED_ORACLES.includes(pair.oracle)
       )
-      console.log({ logPairs })
 
       // Filter all pairs by supported oracles and verify the oracle setup
 
@@ -250,7 +252,7 @@ export function KashiProvider({ children }) {
       const allPairAddresses = logPairs
         .filter((pair) => {
           const oracle = getOracle(pair, chainId, tokens)
-
+          if (!oracle) return false
           if (!oracle.valid) {
             // console.log(pair, oracle.valid, oracle.error)
             invalidOracles.push({ pair, error: oracle.error })
@@ -301,6 +303,7 @@ export function KashiProvider({ children }) {
       Object.values(pairTokens).forEach((token) => {
         token.symbol = token.address === wnative ? NATIVE[chainId].symbol : token.tokenInfo.symbol
         token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency].rate, token.rate)
+        token.strategy = strategies?.find((strategy) => strategy.token === token.address.toLowerCase())
       })
 
       dispatch({
@@ -431,13 +434,30 @@ export function KashiProvider({ children }) {
                 string: pair.interestPerYear.toFixed(16),
               }
 
+              pair.strategyAPY = {
+                asset: {
+                  value: BigNumber.from(String(Math.floor((pair.asset.strategy?.apy ?? 0) * 1e16))),
+                  string: String(pair.asset.strategy?.apy ?? 0),
+                },
+                collateral: {
+                  value: BigNumber.from(String(Math.floor((pair.collateral.strategy?.apy ?? 0) * 1e16))),
+                  string: String(pair.collateral.strategy?.apy ?? 0),
+                },
+              }
               pair.supplyAPR = {
                 value: pair.supplyAPR,
+                valueWithStrategy: pair.supplyAPR.add(pair.strategyAPY.asset.value),
                 string: Fraction.from(pair.supplyAPR, e10(16)).toString(),
+                stringWithStrategy: Fraction.from(pair.strategyAPY.asset.value.add(pair.supplyAPR), e10(16)).toString(),
               }
               pair.currentSupplyAPR = {
                 value: pair.currentSupplyAPR,
+                valueWithStrategy: pair.currentSupplyAPR.add(pair.strategyAPY.asset.value),
                 string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString(),
+                stringWithStrategy: Fraction.from(
+                  pair.currentSupplyAPR.add(pair.strategyAPY.asset.value),
+                  e10(16)
+                ).toString(),
               }
               pair.currentInterestPerYear = {
                 value: pair.currentInterestPerYear,
@@ -467,13 +487,15 @@ export function KashiProvider({ children }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, wnative])
+  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, wnative, strategies])
 
   const previousBlockNumber = usePrevious(blockNumber)
+  const previousStrategies = usePrevious(strategies)
 
   useEffect(() => {
     blockNumber !== previousBlockNumber && updatePairs()
-  }, [blockNumber, previousBlockNumber, updatePairs])
+    strategies !== previousStrategies && updatePairs()
+  }, [blockNumber, previousBlockNumber, strategies, previousStrategies, updatePairs])
 
   return (
     <KashiContext.Provider
