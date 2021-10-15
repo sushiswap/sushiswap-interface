@@ -37,7 +37,6 @@ export default function ConfirmSwapModal({
   isOpen,
   attemptingTxn,
   txHash,
-  minerBribe,
 }: {
   isOpen: boolean
   trade: V2Trade<Currency, Currency, TradeType> | undefined
@@ -46,7 +45,6 @@ export default function ConfirmSwapModal({
   txHash: string | undefined
   recipient: string | null
   allowedSlippage: Percent
-  minerBribe?: string
   onAcceptChanges: () => void
   onConfirm: () => void
   swapErrorMessage: string | undefined
@@ -65,7 +63,6 @@ export default function ConfirmSwapModal({
         recipient={recipient}
         showAcceptChanges={showAcceptChanges}
         onAcceptChanges={onAcceptChanges}
-        minerBribe={minerBribe}
       />
     ) : null
   }, [allowedSlippage, onAcceptChanges, recipient, showAcceptChanges, trade])
@@ -85,16 +82,6 @@ export default function ConfirmSwapModal({
   const pendingText = `Swapping ${trade?.inputAmount?.toSignificant(6)} ${
     trade?.inputAmount?.currency?.symbol
   } for ${trade?.outputAmount?.toSignificant(6)} ${trade?.outputAmount?.currency?.symbol}`
-
-  const pendingText2 = minerBribe
-    ? trade?.outputAmount.currency.isNative
-      ? `Minus ${CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), minerBribe).toSignificant(
-          6
-        )} ETH Miner Tip`
-      : `Plus ${CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), minerBribe).toSignificant(
-          6
-        )} ETH Miner Tip`
-    : undefined
 
   const confirmationContent = useCallback(
     () =>
@@ -119,7 +106,6 @@ export default function ConfirmSwapModal({
       hash={txHash}
       content={confirmationContent}
       pendingText={pendingText}
-      pendingText2={pendingText2}
       currencyToAdd={trade?.outputAmount.currency}
     />
   )

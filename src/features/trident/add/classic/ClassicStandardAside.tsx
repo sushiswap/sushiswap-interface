@@ -16,7 +16,7 @@ const ClassicStandardAside = () => {
         </Typography>
         <Typography variant="sm">
           {i18n._(
-            t`You can withdraw to one or both of these assets, in any amount.  If you would like to receive your investment as another token (e.g. in USDC), then withdraw using Zap mode.`
+            t`Select any asset from your wallet or BentoBox balance to invest in this pool.  That asset will be split and converted into the pool assets and deposited in equal value.`
           )}
         </Typography>
       </div>

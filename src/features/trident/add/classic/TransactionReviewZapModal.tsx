@@ -9,8 +9,7 @@ import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Button from '../../../../components/Button'
 import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, poolAtom, showReviewAtom } from '../../context/atoms'
-import { usePoolDetails } from '../../context/hooks/usePoolDetails'
-import { useClassicZapAddExecute } from '../../context/hooks/useClassicZapAddExecute'
+import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
 import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
 
 const TransactionReviewZapModal: FC = () => {
@@ -20,11 +19,8 @@ const TransactionReviewZapModal: FC = () => {
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { parsedAmount, parsedSplitAmounts } = useZapAssetInput()
-  const { execute } = useClassicZapAddExecute()
-  const { currentLiquidityValue, liquidityMinted, liquidityValue, poolShare, currentPoolShare, price } = usePoolDetails(
-    parsedSplitAmounts,
-    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-  )
+  const { liquidityValueBefore, liquidityValueAfter, poolShareBefore, poolShareAfter, liquidityMinted } =
+    usePoolDetailsMint(parsedSplitAmounts, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE)
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -85,15 +81,15 @@ const TransactionReviewZapModal: FC = () => {
         <div className="flex flex-col px-5 gap-5">
           <Divider />
           <div className="flex flex-col gap-1">
-            {currentLiquidityValue && liquidityValue && (
+            {liquidityValueBefore && liquidityValueAfter && (
               <>
                 <div className="flex justify-between">
                   <Typography variant="sm" className="text-secondary">
                     {i18n._(t`${pool?.token0?.symbol} Deposited:`)}
                   </Typography>
                   <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                    {currentLiquidityValue[0] ? currentLiquidityValue[0].toSignificant(6) : '0.000'} →{' '}
-                    {liquidityValue[0] ? liquidityValue[0].toSignificant(6) : '0.000'} {pool?.token0?.symbol}
+                    {liquidityValueBefore[0] ? liquidityValueBefore[0].toSignificant(6) : '0.000'} →{' '}
+                    {liquidityValueAfter[0] ? liquidityValueAfter[0].toSignificant(6) : '0.000'} {pool?.token0?.symbol}
                   </Typography>
                 </div>
                 <div className="flex justify-between">
@@ -101,8 +97,8 @@ const TransactionReviewZapModal: FC = () => {
                     {i18n._(t`${pool?.token1?.symbol} Deposited:`)}
                   </Typography>
                   <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                    {currentLiquidityValue[1] ? currentLiquidityValue[1].toSignificant(6) : '0.000'} →{' '}
-                    {liquidityValue[1] ? liquidityValue[1].toSignificant(6) : '0.000'} {pool?.token1?.symbol}
+                    {liquidityValueBefore[1] ? liquidityValueBefore[1].toSignificant(6) : '0.000'} →{' '}
+                    {liquidityValueAfter[1] ? liquidityValueAfter[1].toSignificant(6) : '0.000'} {pool?.token1?.symbol}
                   </Typography>
                 </div>
               </>
@@ -112,12 +108,12 @@ const TransactionReviewZapModal: FC = () => {
                 {i18n._(t`Share of Pool`)}
               </Typography>
               <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                {currentPoolShare?.greaterThan(0) ? currentPoolShare?.toSignificant(6) : '0.000'}% →{' '}
-                {poolShare?.toSignificant(6) || '0.000'}%
+                {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'}% →{' '}
+                {poolShareAfter?.toSignificant(6) || '0.000'}%
               </Typography>
             </div>
           </div>
-          <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={execute}>
+          <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={() => {}}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`Confirm Deposit`)}
             </Typography>

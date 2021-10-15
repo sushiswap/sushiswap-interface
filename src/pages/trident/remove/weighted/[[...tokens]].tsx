@@ -16,18 +16,13 @@ import {
   liquidityModeAtom,
   poolAtom,
   poolBalanceAtom,
-  slippageAtom,
   totalSupplyAtom,
 } from '../../../../features/trident/context/atoms'
 import { useCurrency } from '../../../../hooks/Tokens'
-import { Percent } from '@sushiswap/core-sdk'
 import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
-import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
 import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewStandardModal'
-
-const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 const RemoveWeighted = () => {
   const { account } = useActiveWeb3React()
@@ -38,14 +33,12 @@ const RemoveWeighted = () => {
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
-  const setSlippage = useSetRecoilState(slippageAtom)
 
   const currencyA = useCurrency(query.tokens?.[0])
   const currencyB = useCurrency(query.tokens?.[1])
   const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE) // custom from users
 
   useEffect(() => {
     if (!classicPool[1]) return
@@ -62,11 +55,6 @@ const RemoveWeighted = () => {
     setPoolBalance(poolBalance)
   }, [poolBalance, setPoolBalance])
 
-  useEffect(() => {
-    if (!allowedSlippage) return
-    setSlippage(allowedSlippage)
-  })
-
   return (
     <>
       <TridentHeader pattern="bg-bars-pattern">
@@ -75,7 +63,7 @@ const RemoveWeighted = () => {
             color="blue"
             variant="outlined"
             size="sm"
-            className="rounded-full py-1 pl-2"
+            className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             <Link href={`/trident/pool/weighted/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>

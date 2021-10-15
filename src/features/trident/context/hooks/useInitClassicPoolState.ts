@@ -43,9 +43,16 @@ const useInitClassicPoolState = () => {
   }, [currencies, setCurrencies])
 
   useEffect(() => {
-    if (rebasesLoading || !rebases[0] || !rebases[1]) return
+    if (
+      rebasesLoading ||
+      !currencies[0] ||
+      !currencies[1] ||
+      !rebases[currencies[0]?.wrapped.address] ||
+      !rebases[currencies[1]?.wrapped.address]
+    )
+      return
     setBentoboxRebases(rebases)
-  }, [rebases, rebasesLoading, setBentoboxRebases])
+  }, [currencies, rebases, rebasesLoading, setBentoboxRebases])
 
   return useMemo(
     () => classicPool && totalSupply && poolBalance && rebases,

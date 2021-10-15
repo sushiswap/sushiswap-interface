@@ -17,8 +17,8 @@ const ClassicMarket: FC = () => {
 
   const reserves = amounts.map((el, index) => {
     const amount = amounts[index]
-    if (el && pool && totalSupply && amount) {
-      return toAmountCurrencyAmount(rebases[index], amount.wrapped)
+    if (el && pool && totalSupply && amount && rebases[amount.wrapped.currency.address]) {
+      return toAmountCurrencyAmount(rebases[amount.wrapped.currency.address], amount.wrapped)
     }
 
     return undefined

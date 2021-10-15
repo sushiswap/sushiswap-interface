@@ -10,7 +10,7 @@ import { showReviewAtom } from '../context/atoms'
 import ListPanel from '../../../components/ListPanel'
 import Divider from '../../../components/Divider'
 import { useIndependentAssetInputs } from '../context/hooks/useIndependentAssetInputs'
-import { usePoolDetails } from '../context/hooks/usePoolDetails'
+import { usePoolDetailsMint } from '../context/hooks/usePoolDetails'
 import { useClassicPoolCreateExecute } from '../context/hooks/useClassicPoolCreateExecute'
 import { PoolType } from '../types'
 import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
@@ -26,13 +26,13 @@ const AddTransactionReviewModal: FC = () => {
     poolType: [selectedPoolType],
   } = useSetupPoolProperties()
   const { execute } = useClassicPoolCreateExecute()
-  const { price, liquidityMinted } = usePoolDetails(parsedAmounts)
+  const { price } = usePoolDetailsMint(parsedAmounts)
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
-      <div className="flex flex-col gap-8 h-full">
+      <div className="flex flex-col gap-8 h-full pb-4 lg:max-w-lg">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
           <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
@@ -74,14 +74,6 @@ const AddTransactionReviewModal: FC = () => {
                 <ListPanel.CurrencyAmountItem amount={amount} key={index} />
               ))}
             />
-          </div>
-          <div className="flex flex-row justify-between px-5">
-            <Typography weight={700} variant="lg">
-              {i18n._(t`You'll receive:`)}
-            </Typography>
-            <Typography weight={700} variant="lg" className="text-high-emphesis">
-              {liquidityMinted?.toSignificant(6)} SLP
-            </Typography>
           </div>
         </div>
         <div className="flex flex-col px-5 gap-5">

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import { Dots } from '../../features/exchange-v1/swap/styleds'
+import Dots from '../Dots'
 import { classNames } from '../../functions'
 
 const SIZE = {

@@ -1,15 +1,6 @@
-import {
-  ARCHER_ROUTER_ADDRESS,
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  JSBI,
-  Token,
-  TradeType,
-  Trade as V2Trade,
-} from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Token, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../../hooks/useApproveCallback'
-import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/exchange-v1/swap/styleds'
+import { SwapCallbackError } from '../../../features/legacy/swap/SwapCallbackError'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
 import Column, { AutoColumn } from '../../../components/Column'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -21,46 +12,31 @@ import {
   useSwapActionHandlers,
   useSwapState,
 } from '../../../state/swap/hooks'
-import {
-  useExpertModeManager,
-  useUserArcherETHTip,
-  useUserArcherGasPrice,
-  useUserArcherUseRelay,
-  useUserSingleHopOnly,
-  useUserSlippageTolerance,
-  useUserTransactionTTL,
-} from '../../../state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly, useUserTransactionTTL } from '../../../state/user/hooks'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from '../../../state/application/hooks'
 import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
 
-import { ARCHER_RELAY_URI } from '../../../config/archer'
 import AddressInputPanel from '../../../components/AddressInputPanel'
-import { AdvancedSwapDetails } from '../../../features/exchange-v1/swap/AdvancedSwapDetails'
-import AdvancedSwapDetailsDropdown from '../../../features/exchange-v1/swap/AdvancedSwapDetailsDropdown'
 import Alert from '../../../components/Alert'
-import { ArrowDownIcon } from '@heroicons/react/outline'
 import Button from '../../../components/Button'
-import ConfirmSwapModal from '../../../features/exchange-v1/swap/ConfirmSwapModal'
+import ConfirmSwapModal from '../../../features/legacy/swap/ConfirmSwapModal'
 import Container from '../../../components/Container'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import { Field } from '../../../state/swap/actions'
 import Head from 'next/head'
-import { INITIAL_ALLOWED_SLIPPAGE } from '../../../constants'
 import Loader from '../../../components/Loader'
 import Lottie from 'lottie-react'
-import MinerTip from '../../../features/exchange-v1/swap/MinerTip'
 import ProgressSteps from '../../../components/ProgressSteps'
 import ReactGA from 'react-ga'
 import SwapHeader from '../../../features/trade/Header'
 import TokenWarningModal from '../../../modals/TokenWarningModal'
-import TradePrice from '../../../features/exchange-v1/swap/TradePrice'
-import Typography from '../../../components/Typography'
-import UnsupportedCurrencyFooter from '../../../features/exchange-v1/swap/UnsupportedCurrencyFooter'
+import TradePrice from '../../../features/legacy/swap/TradePrice'
+import UnsupportedCurrencyFooter from '../../../features/legacy/swap/UnsupportedCurrencyFooter'
 import Web3Connect from '../../../components/Web3Connect'
 import { classNames } from '../../../functions'
 import { computeFiatValuePriceImpact } from '../../../functions/trade'
-import confirmPriceImpactWithoutFee from '../../../features/exchange-v1/swap/confirmPriceImpactWithoutFee'
+import confirmPriceImpactWithoutFee from '../../../functions/prices'
 import { maxAmountSpend } from '../../../functions/currency'
 import swapArrowsAnimationData from '../../../animation/swap-arrows.json'
 import { t } from '@lingui/macro'
@@ -118,14 +94,6 @@ export default function Swap() {
 
   // get custom setting values for user
   const [ttl] = useUserTransactionTTL()
-  const [useArcher] = useUserArcherUseRelay()
-  const [archerETHTip] = useUserArcherETHTip()
-  const [archerGasPrice] = useUserArcherGasPrice()
-
-  // archer
-  const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
-  // const doArcher = archerRelay !== undefined && useArcher
-  const doArcher = undefined
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -136,7 +104,7 @@ export default function Swap() {
     currencies,
     inputError: swapInputError,
     allowedSlippage,
-  } = useDerivedSwapInfo(doArcher)
+  } = useDerivedSwapInfo()
 
   const {
     wrapType,
@@ -221,7 +189,7 @@ export default function Swap() {
   const routeNotFound = !trade?.route
 
   // check whether the user has approved the router on the input token
-  const [approvalState, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, doArcher)
+  const [approvalState, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage)
 
   const signatureData = undefined
 
@@ -266,8 +234,7 @@ export default function Swap() {
     trade,
     allowedSlippage,
     recipient,
-    signatureData,
-    doArcher ? ttl : undefined
+    signatureData
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -407,34 +374,11 @@ export default function Swap() {
     [onCurrencySelection]
   )
 
-  // useEffect(() => {
-  //   if (
-  //     doArcher &&
-  //     parsedAmounts[Field.INPUT] &&
-  //     maxAmountInput &&
-  //     parsedAmounts[Field.INPUT]?.greaterThan(maxAmountInput)
-  //   ) {
-  //     handleMaxInput();
-  //   }
-  // }, [handleMaxInput, parsedAmounts, maxAmountInput, doArcher]);
-
   const swapIsUnsupported = useIsSwapUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
   const priceImpactTooHigh = priceImpactSeverity > 3 && !isExpertMode
 
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
-
-  const previousChainId = usePrevious<ChainId>(chainId)
-
-  // useEffect(() => {
-  //   if (
-  //     previousChainId &&
-  //     previousChainId !== chainId &&
-  //     router.asPath.includes(Currency.getNativeCurrencySymbol(previousChainId))
-  //   ) {
-  //     router.push(`/swap/${Currency.getNativeCurrencySymbol(chainId)}`);
-  //   }
-  // }, [chainId, previousChainId, router]);
 
   return (
     <Container id="swap-page" className="py-4 md:py-8 lg:py-12">
@@ -471,7 +415,6 @@ export default function Swap() {
             onConfirm={handleSwap}
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
-            minerBribe={doArcher ? archerETHTip : undefined}
           />
           <div>
             <CurrencyInputPanel
@@ -578,24 +521,7 @@ export default function Swap() {
               )}
             </>
           )}
-
-          {/* {showWrap ? null : (
-            <div
-              style={{
-                padding: showWrap ? '.25rem 1rem 0 1rem' : '0px',
-              }}
-            >
-              <div className="px-5 mt-1">{doArcher && userHasSpecifiedInputOutput && <MinerTip />}</div>
-            </div>
-          )} */}
-          {/*
-          {trade && (
-            <div className="p-5 rounded bg-dark-800">
-              <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} />
-            </div>
-          )} */}
-
-          <BottomGrouping>
+          <div className="mt-4">
             {swapIsUnsupported ? (
               <Button color="red" size="lg" disabled>
                 {i18n._(t`Unsupported Asset`)}
@@ -700,16 +626,7 @@ export default function Swap() {
               </Column>
             )}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-          </BottomGrouping>
-          {/* {!swapIsUnsupported ? (
-        <AdvancedSwapDetailsDropdown trade={trade} />
-      ) : (
-        <UnsupportedCurrencyFooter
-          show={swapIsUnsupported}
-          currencies={[currencies.INPUT, currencies.OUTPUT]}
-        />
-      )} */}
-
+          </div>
           {!swapIsUnsupported ? null : (
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
           )}

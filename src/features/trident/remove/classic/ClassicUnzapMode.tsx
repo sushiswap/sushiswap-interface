@@ -33,7 +33,7 @@ const ClassicUnzapMode: FC = () => {
 
   const {
     percentageInput: [percentageInput, setPercentageInput],
-    parsedOutputAmount,
+    parsedAmounts,
     zapCurrency: [zapCurrency, setZapCurrency],
     error,
   } = useZapPercentageInput()
@@ -57,7 +57,7 @@ const ClassicUnzapMode: FC = () => {
     <div className="flex flex-col gap-8">
       <AssetSelect value={zapCurrency} onSelect={setZapCurrency} currencies={[pool?.token0, pool?.token1]} />
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between gap-10 items-center lg:mb-2">
+        <div className="flex items-center justify-between gap-10 lg:mb-2">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             Amount to Remove:
           </Typography>
@@ -71,7 +71,7 @@ const ClassicUnzapMode: FC = () => {
           footer={
             <SumUSDCValues amounts={currentLiquidityValue}>
               {({ amount }) => (
-                <div className="flex justify-between items-center px-4 py-5 gap-3">
+                <div className="flex items-center justify-between gap-3 px-4 py-5">
                   <PercentInput
                     value={percentageInput}
                     onUserInput={setPercentageInput}
@@ -124,7 +124,7 @@ const ClassicUnzapMode: FC = () => {
           }}
         </TridentApproveGate>
       </div>
-      <div className="flex flex-col gap-5 block lg:hidden">
+      <div className="flex flex-col block gap-5 lg:hidden">
         <div className="flex justify-between gap-3">
           <Typography variant="h3" weight={700} className="text-high-emphesis">
             {i18n._(t`Receive:`)}
@@ -133,7 +133,7 @@ const ClassicUnzapMode: FC = () => {
         </div>
         {/*TODO ramin: */}
         <div className="flex flex-col gap-4">
-          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedOutputAmount} key={0} />]} />
+          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedAmounts[0]} key={0} />]} />
         </div>
       </div>
     </div>
