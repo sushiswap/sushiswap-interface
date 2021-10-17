@@ -41,7 +41,7 @@ export default function Tools() {
           <li key={tool.id} className="relative w-full p-4 rounded bg-dark-900 hover:bg-dark-800">
             <div className="flex justify-between space-x-4">
               <div className="flex-1 min-w-0">
-                <Link href={tool.href}>
+                <Link prefetch={false} href={tool.href}>
                   <a className="flex items-center justify-between focus:outline-none">
                     <span className="absolute inset-0" aria-hidden="true" />
                     <div className="space-y-1">

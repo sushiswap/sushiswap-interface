@@ -63,7 +63,7 @@ export default function LangSwitcher() {
                   return (
                     <Menu.Item key={locale}>
                       {({ active }) => (
-                        <Link href={asPath} locale={locale}>
+                        <Link prefetch={false} href={asPath} locale={locale}>
                           <a
                             href="#"
                             className={classNames(

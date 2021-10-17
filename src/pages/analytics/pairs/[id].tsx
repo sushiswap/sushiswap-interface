@@ -101,9 +101,9 @@ export default function Pair() {
         <div className="absolute w-full h-full bg-gradient-to-r from-blue to-pink opacity-5" />
         <div className="absolute flex items-center w-full p-2 lg:pl-14">
           <div className="text-xs font-medium text-secondary">
-            <Link href="/analytics/dashboard">Analytics</Link>&nbsp;
+            <Link prefetch={false} href="/analytics/dashboard">Analytics</Link>&nbsp;
             {'>'}&nbsp;
-            <Link href="/analytics/pairs">Pairs</Link>&nbsp;
+            <Link prefetch={false} href="/analytics/pairs">Pairs</Link>&nbsp;
             {'> '}&nbsp;
           </div>
           <div className="text-xs font-bold text-high-emphesis">
@@ -199,7 +199,7 @@ export default function Pair() {
                 <tr>
                   <td>
                     <div className="flex items-center justify-center w-11/12 space-x-1">
-                      <Link href={`/analytics/tokens/${pair?.id}`} passHref>
+                      <Link prefetch={false} href={`/analytics/tokens/${pair?.id}`} passHref>
                         <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap">
                           {pair?.id}
                         </div>
@@ -211,7 +211,7 @@ export default function Pair() {
                   </td>
                   <td>
                     <div className="flex items-center w-11/12 space-x-1">
-                      <Link href={`/analytics/tokens/${pair?.token0?.id}`} passHref>
+                      <Link prefetch={false} href={`/analytics/tokens/${pair?.token0?.id}`} passHref>
                         <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
                           {pair?.token0?.id}
                         </div>
@@ -223,7 +223,7 @@ export default function Pair() {
                   </td>
                   <td>
                     <div className="flex items-center w-11/12 space-x-1">
-                      <Link href={`/analytics/tokens/${pair?.token1?.id}`} passHref>
+                      <Link prefetch={false} href={`/analytics/tokens/${pair?.token1?.id}`} passHref>
                         <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap text-purple">
                           {pair?.token1?.id}
                         </div>

@@ -224,7 +224,7 @@ export default function Token(): JSX.Element {
         <div className="col-span-6 space-y-10 2xl:col-span-4">
           <div className="flex flex-row">
             <div>
-              <Link href="/analytics/tokens" passHref>
+              <Link prefetch={false} href="/analytics/tokens" passHref>
                 <button className="font-bold text-purple">Tokens</button>
               </Link>
             </div>

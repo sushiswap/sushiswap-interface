@@ -21,7 +21,7 @@ const NavLink = ({ children, exact = false, activeClassName = 'text-high-emphesi
   // console.log({ asPath, pathname, route, query })
 
   return (
-    <Link href={props.href} {...props}>
+    <Link prefetch={false} href={props.href} {...props}>
       {React.cloneElement(child, {
         className: className || null,
       })}

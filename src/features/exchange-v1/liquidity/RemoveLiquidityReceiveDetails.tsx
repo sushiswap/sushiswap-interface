@@ -37,7 +37,7 @@ export default function RemoveLiquidityReceiveDetails({
             <div>You Will Receive:</div>
             <RowBetween className="text-sm">
               {hasWETH ? (
-                <Link href={`/remove/${currencyId(currencyA)}/${currencyId(currencyB)}`}>
+                <Link prefetch={false} href={`/remove/${currencyId(currencyA)}/${currencyId(currencyB)}`}>
                   <a>Receive {WNATIVE[chainId].symbol}</a>
                 </Link>
               ) : hasETH ? (

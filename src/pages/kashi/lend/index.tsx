@@ -88,7 +88,7 @@ function Lend() {
                 {positions.items.map((pair: any) => {
                   return (
                     <div key={pair.address}>
-                      <Link href={'/lend/' + pair.address}>
+                      <Link prefetch={false} href={'/lend/' + pair.address}>
                         <a className="block text-high-emphesis">
                           <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
                             <div className="flex flex-col items-start sm:flex-row sm:items-center">
@@ -193,7 +193,7 @@ function Lend() {
               pairs.items.map((pair) => {
                 return (
                   <div key={pair.address}>
-                    <Link href={'/lend/' + String(pair.address).toLowerCase()}>
+                    <Link prefetch={false} href={'/lend/' + String(pair.address).toLowerCase()}>
                       <a className="block text-high-emphesis">
                         <div className="grid items-center grid-flow-col grid-cols-3 gap-4 px-4 py-4 text-sm rounded sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
                           <div className="flex flex-col items-start sm:flex-row sm:items-center">

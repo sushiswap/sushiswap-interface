@@ -198,7 +198,7 @@ export default function Vesting() {
             <div className="flex flex-col gap-3 p-4">
               <div className="font-bold text-white">{i18n._(t`Things you can do with your SUSHI`)}</div>
               <div className="p-4 rounded bg-dark-800">
-                <Link href="/stake">
+                <Link prefetch={false} href="/stake">
                   <a className="flex items-center justify-between gap-3">
                     <div className="flex flex-col gap-1">
                       <div className="font-bold text-white">{i18n._(t`Stake SUSHI for xSUSHI`)}</div>
@@ -214,7 +214,7 @@ export default function Vesting() {
                 </Link>
               </div>
               <div className="p-4 rounded bg-dark-800">
-                <Link href={`/saave`}>
+                <Link prefetch={false} href={`/saave`}>
                   <a className="flex items-center justify-between gap-3">
                     <div className="flex flex-col gap-1">
                       <div className="font-bold text-white">{i18n._(t`Stack Yields with SAAVE`)}</div>
