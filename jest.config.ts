@@ -3,7 +3,7 @@ import type { Config } from '@jest/types'
 const config: Config.InitialOptions = {
   verbose: true,
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
-  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/', '<rootDir>/test/cypress/'],
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   moduleNameMapper: {
     /* Handle CSS imports (with CSS modules)
     https://jestjs.io/docs/webpack#mocking-css-modules */
@@ -16,12 +16,7 @@ const config: Config.InitialOptions = {
     https://jestjs.io/docs/webpack#handling-static-assets */
     '^.+\\.(jpg|jpeg|png|gif|webp|svg)$': '<rootDir>/__mocks__/fileMock.js',
   },
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/.next/',
-    '<rootDir>/test/cypress/',
-    '<rootDir>/src/pages/api/test.ts',
-  ],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/', '<rootDir>/src/pages/api/test.ts'],
   testEnvironment: '<rootDir>/test/unit/custom-test-env.ts',
   transform: {
     /* Use babel-jest to transpile tests with the next/babel preset
