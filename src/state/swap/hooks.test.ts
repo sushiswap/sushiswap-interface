@@ -1,8 +1,9 @@
-import { Field } from './actions'
 import { parse } from 'qs'
+
+import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
+
+import { Field } from './actions'
 import { queryParametersToSwapState } from './hooks'
-import { expect } from '@jest/globals'
-import { SUSHI_ADDRESS, ChainId } from '@sushiswap/sdk'
 
 describe('hooks', () => {
   const sushiAddress = SUSHI_ADDRESS[ChainId.MAINNET]

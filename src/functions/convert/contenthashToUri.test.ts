@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import { contenthashToUri, hexToUint8Array } from './contenthashToUri'
 
 describe('#contenthashToUri', () => {

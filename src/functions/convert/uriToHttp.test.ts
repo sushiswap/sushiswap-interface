@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import { uriToHttp } from './uriToHttp'
 
 describe('uriToHttp', () => {

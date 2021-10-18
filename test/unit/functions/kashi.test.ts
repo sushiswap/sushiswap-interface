@@ -1,7 +1,6 @@
 import '../../../src/bootstrap'
 
 import { BigNumber } from '@ethersproject/bignumber'
-import { expect, jest } from '@jest/globals'
 import {
   MAXIMUM_INTEREST_PER_YEAR,
   MAXIMUM_TARGET_UTILIZATION,

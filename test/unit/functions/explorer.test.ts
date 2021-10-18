@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import { ChainId } from '@sushiswap/sdk'
 
 import { getExplorerLink } from '../../../src/functions/explorer'

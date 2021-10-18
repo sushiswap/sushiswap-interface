@@ -1,5 +1,3 @@
-import { expect } from '@jest/globals'
-
 import { retry, RetryableError } from '../../../src/functions/retry'
 
 describe('retry', () => {

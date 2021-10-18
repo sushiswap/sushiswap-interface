@@ -1,7 +1,6 @@
-import { expect } from '@jest/globals'
 import { BigNumber } from '@ethersproject/bignumber'
 import { AddressZero } from '@ethersproject/constants'
-import { ChainId, Token, CurrencyAmount, Percent } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, Percent, Token } from '@sushiswap/sdk'
 
 import { calculateGasMargin, calculateSlippageAmount } from '../../../src/functions/trade'
 

@@ -1,5 +1,4 @@
 import { AddressZero } from '@ethersproject/constants'
-import { expect } from '@jest/globals'
 import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
 
 import approveAmountCalldata, { toHex } from '../../../src/functions/approveAmountCalldata'

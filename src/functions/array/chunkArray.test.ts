@@ -1,4 +1,3 @@
-import { expect } from '@jest/globals'
 import { chunkArray } from './chunkArray'
 
 describe('#chunkArray', () => {

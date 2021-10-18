@@ -1,5 +1,3 @@
-import { expect } from '@jest/globals'
-
 import { shortenAddress } from '../../../src/functions/format'
 
 describe('#shortenAddress', () => {

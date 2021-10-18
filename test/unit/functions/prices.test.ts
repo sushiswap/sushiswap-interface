@@ -1,5 +1,4 @@
-import { expect } from '@jest/globals'
-import { ChainId, JSBI, Pair, Route, Token, CurrencyAmount, Trade, TradeType } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, JSBI, Pair, Route, Token, Trade, TradeType } from '@sushiswap/sdk'
 
 import { computeRealizedLPFeeAmount } from '../../../src/functions/prices'
 

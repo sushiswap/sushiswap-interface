@@ -1,5 +1,3 @@
-import { expect } from '@jest/globals'
-
 import { parseENSAddress } from '../../../src/functions/ens'
 
 describe('parseENSAddress', () => {
