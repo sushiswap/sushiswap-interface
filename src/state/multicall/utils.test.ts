@@ -1,4 +1,4 @@
-import { parseCallKey, toCallKey } from './actions'
+import { parseCallKey, toCallKey } from './utils'
 
 describe('actions', () => {
   describe('#parseCallKey', () => {
@@ -29,25 +29,6 @@ describe('actions', () => {
   })
 
   describe('#toCallKey', () => {
-    it('throws for invalid address', () => {
-      expect(() => toCallKey({ callData: '0x', address: '0x' })).toThrow('Invalid address: 0x')
-    })
-    it('throws for invalid calldata', () => {
-      expect(() =>
-        toCallKey({
-          address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-          callData: 'abc',
-        })
-      ).toThrow('Invalid hex: abc')
-    })
-    it('throws for uppercase hex', () => {
-      expect(() =>
-        toCallKey({
-          address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-          callData: '0xabcD',
-        })
-      ).toThrow('Invalid hex: 0xabcD')
-    })
     it('concatenates address to data', () => {
       expect(
         toCallKey({
@@ -55,6 +36,20 @@ describe('actions', () => {
           callData: '0xabcd',
         })
       ).toEqual('0x6b175474e89094c44da98b954eedeac495271d0f-0xabcd')
+    })
+    it('concatenates gasRequired to data', () => {
+      expect(
+        toCallKey({
+          address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+          callData: '0xabcd',
+          gasRequired: 1000,
+        })
+      ).toEqual('0x6b175474e89094c44da98b954eedeac495271d0f-0xabcd-1000')
+    })
+    it('throws for unsafe integer', () => {
+      expect(() => toCallKey({ callData: '0x', address: '0x', gasRequired: Math.pow(2, 53) })).toThrow(
+        `Invalid number: ${Math.pow(2, 53)}`
+      )
     })
   })
 })
