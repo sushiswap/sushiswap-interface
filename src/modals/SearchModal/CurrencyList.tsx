@@ -8,7 +8,6 @@ import CurrencyLogo from '../../components/CurrencyLogo'
 import { FixedSizeList } from 'react-window'
 import ImportRow from './ImportRow'
 import Loader from '../../components/Loader'
-import { MenuItem } from './styleds'
 import { MouseoverTooltip } from '../../components/Tooltip'
 import QuestionHelper from '../../components/QuestionHelper'
 import Typography from '../../components/Typography'
@@ -22,6 +21,7 @@ import { useCombinedActiveList } from '../../state/lists/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
+import { classNames } from '../../functions'
 
 function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
@@ -117,30 +117,32 @@ function CurrencyRow({
 
   // only show add or remove buttons if not on selected list
   return (
-    <MenuItem
+    <RowBetween
       id={`token-item-${key}`}
       style={style}
-      className={`hover:bg-dark-800 rounded`}
+      className="px-5 py-1 rounded cursor-pointer hover:bg-dark-800"
       onClick={() => (isSelected ? null : onSelect())}
       disabled={isSelected}
       selected={otherSelected}
     >
-      <div className="flex items-center">
-        <CurrencyLogo currency={currency} size={32} />
+      <div className="flex flex-row items-center space-x-4">
+        <div className="flex items-center">
+          <CurrencyLogo currency={currency} size={32} />
+        </div>
+        <div>
+          <div title={currency.name} className="text-sm font-medium">
+            {currency.symbol}
+          </div>
+          <div className="text-sm font-thin truncate">
+            {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
+          </div>
+        </div>
       </div>
-      <Column>
-        <div title={currency.name} className="text-sm font-medium">
-          {currency.symbol}
-        </div>
-        <div className="text-sm font-thin truncate">
-          {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
-        </div>
-      </Column>
       <TokenTags currency={currency} />
       <div className="flex items-center justify-end">
         {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
       </div>
-    </MenuItem>
+    </RowBetween>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sushiswap/sdk'
 import { Field, typeInput } from './actions'
 import { useAppDispatch, useAppSelector } from '../hooks'
 
@@ -28,6 +28,7 @@ export function useDerivedBurnInfo(
     [Field.CURRENCY_B]?: CurrencyAmount<Currency>
   }
   error?: string
+  userLiquidity: CurrencyAmount<Token> | undefined
 } {
   const { account, chainId } = useActiveWeb3React()
 
@@ -138,7 +139,11 @@ export function useDerivedBurnInfo(
     error = error ?? i18n._(t`Enter an amount`)
   }
 
-  return { pair, parsedAmounts, error }
+  if (parsedAmounts[Field.CURRENCY_A]?.equalTo(ZERO) && parsedAmounts[Field.CURRENCY_B]?.equalTo(ZERO)) {
+    error = error ?? i18n._(t`Insufficient SLP balance`)
+  }
+
+  return { pair, parsedAmounts, error, userLiquidity }
 }
 
 export function useBurnActionHandlers(): {
