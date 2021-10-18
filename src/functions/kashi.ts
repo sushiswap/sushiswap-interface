@@ -49,10 +49,9 @@ export function interestAccrue(pair: any, interest: BigNumber): BigNumber {
 
   let currentInterest = interest
   if (pair.utilization.lt(MINIMUM_TARGET_UTILIZATION)) {
-    const underFactor = MINIMUM_TARGET_UTILIZATION.sub(pair.utilization).mulDiv(
-      FACTOR_PRECISION,
-      MINIMUM_TARGET_UTILIZATION
-    )
+    const underFactor = BigNumber.from(MINIMUM_TARGET_UTILIZATION)
+      .sub(pair.utilization)
+      .mulDiv(FACTOR_PRECISION, MINIMUM_TARGET_UTILIZATION)
     const scale = INTEREST_ELASTICITY.add(underFactor.mul(underFactor).mul(pair.elapsedSeconds))
     currentInterest = currentInterest.mul(INTEREST_ELASTICITY).div(scale)
 
