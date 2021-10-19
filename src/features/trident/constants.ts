@@ -1,13 +1,5 @@
 import { ChipColor } from '../../components/Chip'
-import { PoolUnion, PoolAtomType, PoolType } from './types'
-import { formatPercent } from '../../functions'
-
-export const SORT_OPTIONS = [
-  { title: 'APY Highest to Lowest', desc: true },
-  { title: 'APY Lowest to Highest', desc: false },
-  { title: 'TVL Highest to Lowest', desc: true },
-  { title: 'TVL Lowest to Highest', desc: false },
-]
+import { PoolType } from './types'
 
 type PoolTypesInterface = Record<
   PoolType,
@@ -75,15 +67,3 @@ export const POOL_TYPES: PoolTypesInterface = {
     },
   },
 }
-
-export interface FeeFilterType {
-  label: string
-  color: ChipColor
-}
-
-export const FEE_TIERS: FeeFilterType[] = [
-  { label: '1%', color: 'blue' },
-  { label: '0.5%', color: 'blue' },
-  { label: '0.1%', color: 'blue' },
-  { label: '0.05%', color: 'blue' },
-]

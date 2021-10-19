@@ -18,8 +18,8 @@ const Pool = () => {
     <div className="flex justify-center">
       <div className="flex w-full max-w-7xl">
         <SearchSidebar />
-        <div className="flex-grow">
-          <TridentHeader pattern="bg-binary-pattern" className="!flex-row justify-between items-center">
+        <div className="w-full">
+          <TridentHeader pattern="bg-binary-pattern" className="sm:!flex-row justify-between items-center">
             <div>
               <Typography variant="h2" className="text-high-emphesis" weight={700}>
                 {i18n._(t`Provide liquidity & earn.`)}
@@ -29,11 +29,11 @@ const Pool = () => {
               </Typography>
             </div>
             <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8 px-12">
-              <Link href={'/trident/pools'}>{i18n._(t`My Positions`)}</Link>
+              <Link href={'/trident/create'}>{i18n._(t`Create New Pool`)}</Link>
             </Button>
           </TridentHeader>
           <TridentBody>
-            <div className="flex flex-row justify-between gap-32 items-center">
+            <div className="flex flex-col sm:flex-row justify-between md:gap-24 gap-4 items-center">
               <PoolSearch />
               <PoolSort />
             </div>

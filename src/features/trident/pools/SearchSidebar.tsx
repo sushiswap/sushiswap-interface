@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import Divider from '../../../components/Divider'
 import Checkbox from '../../../components/Checkbox'
-import { useRecoilState } from 'recoil'
+import { SetterOrUpdater, useRecoilState } from 'recoil'
 import { farmsOnlyAtom, feeTiersFilterAtom, showTWAPOnlyAtom } from './context/atoms'
 import { FeeTier } from '../../../services/graph/fetchers/pools'
 
@@ -31,23 +31,39 @@ const Selection: FC<SelectionProps> = ({ title, checked, setter }) => {
   )
 }
 
+export const removeOrAddFeeTier = (tier: FeeTier, currentSelection: FeeTier[], setter: SetterOrUpdater<FeeTier[]>) => {
+  if (currentSelection.includes(tier)) {
+    setter(currentSelection.filter((t) => t !== tier))
+  } else {
+    setter([...currentSelection, tier])
+  }
+}
+
 const FeeTiers: FC = () => {
   const [feeTiers, setFeeTiers] = useRecoilState(feeTiersFilterAtom)
 
-  const removeOrAdd = (tier: FeeTier) => {
-    if (feeTiers.includes(tier)) {
-      setFeeTiers(feeTiers.filter((t) => t !== tier))
-    } else {
-      setFeeTiers([...feeTiers, tier])
-    }
-  }
-
   return (
     <Section title="Fee Tiers">
-      <Selection title="1%" checked={feeTiers.includes(1)} setter={() => removeOrAdd(1)} />
-      <Selection title="0.3%" checked={feeTiers.includes(0.3)} setter={() => removeOrAdd(0.3)} />
-      <Selection title="0.1%" checked={feeTiers.includes(0.1)} setter={() => removeOrAdd(0.1)} />
-      <Selection title="0.05%" checked={feeTiers.includes(0.05)} setter={() => removeOrAdd(0.05)} />
+      <Selection
+        title="1%"
+        checked={feeTiers.includes(1)}
+        setter={() => removeOrAddFeeTier(1, feeTiers, setFeeTiers)}
+      />
+      <Selection
+        title="0.3%"
+        checked={feeTiers.includes(0.3)}
+        setter={() => removeOrAddFeeTier(0.3, feeTiers, setFeeTiers)}
+      />
+      <Selection
+        title="0.1%"
+        checked={feeTiers.includes(0.1)}
+        setter={() => removeOrAddFeeTier(0.1, feeTiers, setFeeTiers)}
+      />
+      <Selection
+        title="0.05%"
+        checked={feeTiers.includes(0.05)}
+        setter={() => removeOrAddFeeTier(0.05, feeTiers, setFeeTiers)}
+      />
     </Section>
   )
 }
@@ -57,7 +73,7 @@ export const SearchSidebar: FC = () => {
   const [twapOnly, setTwapOnly] = useRecoilState(showTWAPOnlyAtom)
 
   return (
-    <div className="w-48 border-r border-gray-800 pt-8 p-4">
+    <div className="flex-none w-48 border-r border-gray-800 pt-8 p-4 hidden lg:block">
       <div className="pb-6">Search Settings</div>
 
       <Section title="Yield Farms">

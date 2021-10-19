@@ -14,7 +14,7 @@ export const SearchCategoryLabel: FC = () => {
         {searchQuery ? `Search results for '${searchQuery}'` : 'Top Liquidity Pools'}
       </Typography>
       <div className="flex gap-1">
-        <Image src={rssSVG} alt="rss icon" />
+        <Image layout="fixed" src={rssSVG} alt="rss icon" />
         <div className="text-xs text-secondary">*Pairs with this symbol have a TWAP oracle.</div>
       </div>
     </div>

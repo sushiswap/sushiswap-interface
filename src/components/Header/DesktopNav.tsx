@@ -40,7 +40,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
 
               <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
                 <a id="trident-nav-link" className={NAV_BASE_CLASS}>
-                  {i18n._(t`Invest`)}
+                  {i18n._(t`Trident`)}
                 </a>
               </NavLink>
 
