@@ -5,9 +5,9 @@ import DoubleLogo from '../../components/DoubleLogo'
 import FarmListItemDetails from './FarmListItemDetails'
 import Image from '../../components/Image'
 import { PairType } from './enum'
+import QuestionHelper from '../../components/QuestionHelper'
 import React from 'react'
 import { useCurrency } from '../../hooks/Tokens'
-import QuestionHelper from '../../components/QuestionHelper'
 
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
@@ -16,7 +16,7 @@ const FarmListItem = ({ farm, ...rest }) => {
   return (
     <Disclosure {...rest}>
       {({ open }) => (
-        <>
+        <div>
           <Disclosure.Button
             className={classNames(
               open && 'rounded-b-none',
@@ -98,7 +98,7 @@ const FarmListItem = ({ farm, ...rest }) => {
             </div>
           </Disclosure.Button>
           {open && <FarmListItemDetails farm={farm} />}
-        </>
+        </div>
       )}
     </Disclosure>
   )

@@ -18,7 +18,8 @@ export const MINICHEF = {
   [ChainId.MATIC]: 'sushiswap/matic-minichef',
   [ChainId.XDAI]: 'matthewlilley/xdai-minichef',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
-  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-minichef',
+  [ChainId.ARBITRUM]: 'matthewlilley/arbitrum-minichef',
+  [ChainId.CELO]: 'sushiswap/celo-minichef',
 }
 
 export const miniChef = async (query, chainId = ChainId.MAINNET) =>

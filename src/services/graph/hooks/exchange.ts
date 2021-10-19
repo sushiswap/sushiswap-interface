@@ -2,6 +2,7 @@ import {
   exchange,
   getAlcxPrice,
   getBundle,
+  getCeloPrice,
   getCvxPrice,
   getDayData,
   getFactory,
@@ -11,6 +12,7 @@ import {
   getOnePrice,
   getPicklePrice,
   getRulerPrice,
+  getSpellPrice,
   getStakePrice,
   getSushiPrice,
   getToken,
@@ -65,10 +67,22 @@ export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+export function useSpellPrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR('spellPrice', () => getSpellPrice(), swrConfig)
+  return data
+}
+
 export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.HARMONY
   const { data } = useSWR(shouldFetch ? 'onePrice' : null, () => getOnePrice(), swrConfig)
+  return data
+}
+
+export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.CELO
+  const { data } = useSWR(shouldFetch ? 'celoPrice' : null, () => getCeloPrice(), swrConfig)
   return data
 }
 

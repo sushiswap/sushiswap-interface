@@ -52,8 +52,12 @@ function getCurrencySymbol(currency) {
 function getCurrencyLogoUrls(currency) {
   const urls = []
 
-  urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
   if (currency.chainId in BLOCKCHAIN) {
+    urls.push(
+      `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
+        currency.address
+      }.jpg`
+    )
     urls.push(
       `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
@@ -145,7 +149,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
     if (currency.isToken) {
       const defaultUrls = [...getCurrencyLogoUrls(currency)]
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, ...defaultUrls, unknown]
+        return [...defaultUrls, ...uriLocations, unknown]
       }
       return defaultUrls
     }

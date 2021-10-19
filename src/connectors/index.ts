@@ -34,6 +34,7 @@ const RPC = {
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
   [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
   [ChainId.FUSE]: 'https://rpc.fuse.io',
+  [ChainId.CELO]: 'https://forno.celo.org',
 }
 
 export function getNetwork(defaultChainId, urls = RPC) {

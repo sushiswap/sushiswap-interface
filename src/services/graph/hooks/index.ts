@@ -64,7 +64,8 @@ export function useMasterChefV2Farms(swrConfig: SWRConfiguration = undefined) {
 
 export function useMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM].includes(chainId)
+  const shouldFetch =
+    chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM, ChainId.CELO].includes(chainId)
   const { data } = useSWR(
     shouldFetch ? ['miniChefFarms', chainId] : null,
     (_, chainId) => getMiniChefFarms(chainId),
@@ -115,7 +116,8 @@ export function useMasterChefV2PairAddresses() {
 
 export function useMiniChefPairAddresses() {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM].includes(chainId)
+  const shouldFetch =
+    chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM, ChainId.CELO].includes(chainId)
   const { data } = useSWR(shouldFetch ? ['miniChefPairAddresses', chainId] : null, (_, chainId) =>
     getMiniChefPairAddreses(chainId)
   )
