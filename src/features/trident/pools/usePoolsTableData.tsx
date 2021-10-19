@@ -17,7 +17,6 @@ export const usePoolsTableData = () => {
       {
         Header: 'Assets',
         accessor: 'symbols',
-        minWidth: 200,
         Cell: ({ value, row: { original } }) => {
           return <PoolCell symbols={value} currencyIds={original.currencyIds} twapEnabled={original.twapEnabled} />
         },
@@ -26,6 +25,7 @@ export const usePoolsTableData = () => {
       {
         Header: 'Pool Type',
         accessor: 'type',
+        maxWidth: 100,
         Cell: (props: { value: PoolType }) => <Chip label={props.value} color={chipPoolColorMapper[props.value]} />,
         filter: (rows, id, filterValue) =>
           rows.filter((row) => !filterValue.length || filterValue.includes(row.values.type)),
@@ -33,22 +33,26 @@ export const usePoolsTableData = () => {
       {
         Header: 'Fee Tier',
         accessor: 'swapFeePercent',
+        maxWidth: 100,
         Cell: (props) => <span>{props.value}%</span>,
         filter: feeTiersFilter,
       },
       {
         Header: 'TVL',
         accessor: 'totalValueLocked',
+        maxWidth: 100,
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
       },
       {
         Header: 'APY',
         accessor: 'apy',
+        maxWidth: 100,
         Cell: (props) => <span>{formatPercent(props.value)}</span>,
       },
       {
         Header: 'Actions',
         accessor: 'actions',
+        maxWidth: 100,
         Cell: ({ row: { original } }) => {
           const poolPath = `/trident/pool/${original.type.toLowerCase()}/${original.currencyIds.join('/')}`
 
