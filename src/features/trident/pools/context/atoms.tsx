@@ -1,6 +1,8 @@
 import { atom } from 'recoil'
 import { PoolFilterType } from './types'
 import { FeeFilterType } from '../../constants'
+import { FeeTier } from '../../../../services/graph/fetchers/pools'
+import { TableInstance } from '../../../transactions/types'
 
 export const sortTypeAtom = atom<number>({
   key: 'sortTypeAtom',
@@ -25,4 +27,19 @@ export const feeTiersAtom = atom<FeeFilterType[]>({
 export const farmsOnlyAtom = atom<boolean>({
   key: 'farmsOnlyAtom',
   default: false,
+})
+
+export const showTWAPOnlyAtom = atom<boolean>({
+  key: 'showTWAPOnlyAtom',
+  default: false,
+})
+
+export const feeTiersFilterAtom = atom<FeeTier[]>({
+  key: 'feeTiersFilterAtom',
+  default: [],
+})
+
+export const sortTableFuncAtom = atom<TableInstance['toggleSortBy']>({
+  key: 'sortTableFunc',
+  default: () => undefined,
 })

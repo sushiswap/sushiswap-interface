@@ -12,32 +12,31 @@ const gqlPoolTypeMap: Record<string, PoolType> = {
   indexPools: PoolType.Weighted,
 }
 
-interface TridentPool {
+export type FeeTier = 1 | 0.3 | 0.1 | 0.05
+
+export interface TridentPool {
   names: string[]
   symbols: string[]
   currencyIds: string[]
   type: PoolType
   totalValueLocked: string
   twapEnabled: boolean
-  swapFeePercent: number
+  swapFeePercent: FeeTier
 }
 
 const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
   Object.entries(pools)
     .filter(([, assets]) => assets.length)
-    .flatMap(([poolType, poolList]) =>
-      poolList.map(
-        ({ assets, totalValueLockedUSD, twapEnabled, swapFee }) =>
-          ({
-            currencyIds: assets.map((asset) => asset.id),
-            symbols: assets.map((asset) => asset.symbol),
-            type: gqlPoolTypeMap[poolType],
-            totalValueLocked: totalValueLockedUSD,
-            names: assets.map((asset) => asset.name),
-            swapFeePercent: parseInt(swapFee) / 100,
-            twapEnabled,
-          } as TridentPool)
-      )
+    .flatMap(([poolType, poolList]: [string, PoolData[]]) =>
+      poolList.map(({ assets, totalValueLockedUSD, twapEnabled, swapFee }) => ({
+        currencyIds: assets.map((asset) => asset.id),
+        symbols: assets.map((asset) => asset.metaData.symbol),
+        type: gqlPoolTypeMap[poolType],
+        totalValueLocked: totalValueLockedUSD,
+        names: assets.map((asset) => asset.metaData.name),
+        swapFeePercent: (parseInt(swapFee) / 100) as FeeTier,
+        twapEnabled,
+      }))
     )
 
 interface PoolData {
@@ -46,8 +45,10 @@ interface PoolData {
   swapFee: string
   assets: {
     id: string
-    symbol: string
-    name: string
+    metaData: {
+      symbol: string
+      name: string
+    }
   }[]
 }
 

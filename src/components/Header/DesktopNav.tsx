@@ -1,7 +1,6 @@
 import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { Feature, featureEnabled } from '../../functions/feature'
 import React, { FC } from 'react'
-import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
 import LanguageSwitch from '../LanguageSwitch'
 import More from './More'
@@ -15,7 +14,6 @@ import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 import { ACTIVE_NAV_LINK_CLASS, NAV_BASE_CLASS } from './styles'
 import MobileMenuToggle from './MobileMenuToggle'
-import HeaderSearchBox from './HeaderSearchBox'
 
 interface DesktopNavProps {
   mobileMenuOpen: boolean
@@ -42,7 +40,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
 
               <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
                 <a id="trident-nav-link" className={NAV_BASE_CLASS}>
-                  {i18n._(t`Trident`)}
+                  {i18n._(t`Invest`)}
                 </a>
               </NavLink>
 

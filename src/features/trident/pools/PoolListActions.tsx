@@ -61,19 +61,9 @@ const PoolListActions: FC<SortSelectorProps> = () => {
           <SearchIcon strokeWidth={5} width={20} height={20} />
           <input
             className="bg-transparent text-high-emphesis w-full"
-            placeholder={i18n._(t`Search by token`)}
+            placeholder={i18n._(t`Search by token or pair`)}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-        </div>
-        <div onClick={() => setOpen(true)}>
-          <svg width="25" height="20" viewBox="0 0 25 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M10 0C10.8284 0 11.5 0.671573 11.5 1.5V2.99994L23.5 2.99988C24.3284 2.99987 25 3.67144 25 4.49987C25 5.3283 24.3284 5.99987 23.5 5.99988L11.5 5.99994V7.5C11.5 8.32843 10.8284 9 10 9C9.17157 9 8.5 8.32843 8.5 7.5V4.49996V1.5C8.5 0.671573 9.17157 0 10 0ZM3.29088e-10 4.49985C1.71665e-05 3.67142 0.671604 2.99986 1.50003 2.99988L5.00003 2.99995C5.82846 2.99997 6.50002 3.67155 6.5 4.49998C6.49998 5.32841 5.8284 5.99997 4.99997 5.99995L1.49997 5.99988C0.671542 5.99986 -1.71658e-05 5.32827 3.29088e-10 4.49985ZM13 14L1.5 14C0.671571 14 3.29088e-10 14.6716 3.29088e-10 15.5C3.29088e-10 16.3284 0.671575 17 1.5 17L13 17C13.8284 17 14.5 16.3284 14.5 15.5C14.5 14.6716 13.8284 14 13 14ZM16.5 15.5V12.5C16.5 11.6716 17.1716 11 18 11C18.8284 11 19.5 11.6716 19.5 12.5V14L23.5 14C24.3284 14 25 14.6716 25 15.5C25 16.3284 24.3284 17 23.5 17L19.5 17V18.5C19.5 19.3284 18.8284 20 18 20C17.1716 20 16.5 19.3284 16.5 18.5V15.5Z"
-              fill="#E3E3E3"
-            />
-          </svg>
         </div>
       </div>
       {poolTypes.length + feeTiers.length > 0 && (

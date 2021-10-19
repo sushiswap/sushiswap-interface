@@ -6,12 +6,15 @@ const subQuery = `
   swapFee
   assets {
     id
-    symbol
-    name
+    metaData {
+      name
+      symbol
+    }
   }
 `
 
-const allPools = ['constantProductPools', 'concentratedLiquidityPools', 'indexPools', 'hybridPools']
+// Schema not finalized for: 'concentratedLiquidityPools', 'indexPools', 'hybridPools'
+const allPools = ['constantProductPools']
 
 export const getTridentPoolsQuery = gql`
   {
