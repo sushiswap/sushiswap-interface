@@ -4,7 +4,7 @@ import Popups from '../../components/Popups'
 import Breadcrumb, { BreadcrumbItem } from '../../features/trident/Breadcrumb'
 import Container from '../../components/Container'
 import Header from '../../components/Header'
-import classNames from 'classnames'
+import { classNames } from '../../functions'
 
 type HeaderBackground =
   | 'bg-bars-pattern'
@@ -26,7 +26,7 @@ export const TridentHeader: FC<TridentHeaderProps> = ({ children, className, pat
       className={classNames('relative w-full bg-opacity-80 flex flex-col items-center', pattern || 'bg-bubble-pattern')}
     >
       <div className="absolute w-full h-full bg-dark-900 bg-opacity-80 z-0" />
-      <Container maxWidth="7xl" className={classNames('flex flex-col gap-5 z-[1] px-5 pt-5 pb-5', className)}>
+      <Container maxWidth="7xl" className={classNames('flex flex-col gap-5 z-[1] p-10', className)}>
         {children}
       </Container>
     </header>

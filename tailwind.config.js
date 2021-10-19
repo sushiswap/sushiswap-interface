@@ -50,8 +50,8 @@ module.exports = {
         yellow: '#ffd166',
 
         'opaque-blue': '#0993ec80',
-        'transparent-blue': '#0993EC1A',
-        'transparent-pink': '#FE5A751A',
+        'transparent-blue': '#0993EC2A',
+        'transparent-pink': '#FE5A752A',
         'opaque-pink': '#f338c380',
         'pink-red': '#FE5A75',
         'light-brown': '#FEC464',

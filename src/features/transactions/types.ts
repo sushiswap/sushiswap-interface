@@ -20,4 +20,5 @@ export interface TableInstance {
   prepareRow: (arg0: any) => any
   state: { pageIndex: number; pageSize: number }
   setFilter: (columnId: string, filterValue: any) => void
+  toggleSortBy: (columnId: string, descending: boolean, isMulti?: boolean) => void
 }

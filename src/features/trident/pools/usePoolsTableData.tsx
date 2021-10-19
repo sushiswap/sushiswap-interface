@@ -1,16 +1,13 @@
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
 import { getTridentPools } from '../../../services/graph/fetchers/pools'
-import { formatNumber } from '../../../functions'
-import { PoolType } from '../types'
+import { formatNumber, formatPercent } from '../../../functions'
 import { PoolCell } from './PoolCell'
-
-export const poolTypeToStr: Record<PoolType, string> = {
-  [PoolType.ConstantProduct]: 'Classic',
-  [PoolType.ConcentratedLiquidity]: 'Concentrated',
-  [PoolType.Hybrid]: 'Hybrid',
-  [PoolType.Weighted]: 'Weighted',
-}
+import { chipPoolColorMapper, PoolType } from '../types'
+import Chip from '../../../components/Chip'
+import Button from '../../../components/Button'
+import Link from 'next/link'
+import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
 
 export const usePoolsTableData = () => {
   const { data, error, isValidating } = useSWR('getAllTridentPools', () => getTridentPools())
@@ -18,43 +15,54 @@ export const usePoolsTableData = () => {
   const columns = useMemo(() => {
     return [
       {
-        Header: 'Pool',
+        Header: 'Assets',
         accessor: 'symbols',
-        Cell: (props) => {
-          return <PoolCell symbols={props.value} currencyIds={props.row.original.currencyIds} />
+        minWidth: 200,
+        Cell: ({ value, row: { original } }) => {
+          return <PoolCell symbols={value} currencyIds={original.currencyIds} twapEnabled={original.twapEnabled} />
         },
-        filter: (rows, id, filterValue) => {
-          return rows.filter((row) => {
-            // Allow searching for symbol (LINK) or name (chainlink)
-            const searchableText = row.values.symbols.concat(row.original.names).join(' ').toLowerCase()
-            return !filterValue.length || searchableText.includes(filterValue.toLowerCase())
-          })
-        },
+        filter: filterForSearchQueryAndTWAP,
       },
       {
-        Header: 'Type',
+        Header: 'Pool Type',
         accessor: 'type',
-        Cell: (props: { value: PoolType }) => poolTypeToStr[props.value],
+        Cell: (props: { value: PoolType }) => <Chip label={props.value} color={chipPoolColorMapper[props.value]} />,
         filter: (rows, id, filterValue) =>
-          rows.filter((row) => !filterValue.length || filterValue.includes(poolTypeToStr[row.values.type])),
+          rows.filter((row) => !filterValue.length || filterValue.includes(row.values.type)),
       },
       {
-        Header: 'Fee',
+        Header: 'Fee Tier',
         accessor: 'swapFeePercent',
         Cell: (props) => <span>{props.value}%</span>,
-      },
-      {
-        Header: 'Twap',
-        accessor: 'twapEnabled',
-        Cell(props) {
-          if (props.value) return <span>yes</span>
-          return <span>no</span>
-        },
+        filter: feeTiersFilter,
       },
       {
         Header: 'TVL',
         accessor: 'totalValueLocked',
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
+      },
+      {
+        Header: 'APY',
+        accessor: 'apy',
+        Cell: (props) => <span>{formatPercent(props.value)}</span>,
+      },
+      {
+        Header: 'Actions',
+        accessor: 'actions',
+        Cell: ({ row: { original } }) => {
+          const poolPath = `/trident/pool/${original.type.toLowerCase()}/${original.currencyIds.join('/')}`
+
+          return (
+            <Link href={poolPath} passHref>
+              {/* DIV needed for forwardRef issue */}
+              <div>
+                <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
+                  Invest
+                </Button>
+              </div>
+            </Link>
+          )
+        },
       },
     ]
   }, [])

@@ -1,13 +1,13 @@
 import React, { FC } from 'react'
-import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TableInstance } from '../../transactions/types'
-import { useFilters, useFlexLayout, usePagination, useTable } from 'react-table'
-import { poolTypeToStr, usePoolsTableData } from './usePoolsTableData'
+import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
+import { usePoolsTableData } from './usePoolsTableData'
 import { classNames } from '../../../functions'
 import { TablePageToggler } from '../../transactions/TablePageToggler'
-import { useInstantiateFilters } from './useInstantiateFilters'
+import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
+import { SearchCategoryLabel } from './SearchCategoryLabel'
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()
@@ -23,12 +23,14 @@ const SearchResultPools: FC = () => {
     canNextPage,
     prepareRow,
     setFilter,
+    toggleSortBy,
     state: { pageIndex, pageSize },
-  }: TableInstance = useTable(config, useFlexLayout, useFilters, usePagination)
-  useInstantiateFilters(setFilter)
+  }: TableInstance = useTable(config, useFlexLayout, useFilters, useSortBy, usePagination)
+  useInstantiateTableFeatures(setFilter, toggleSortBy)
 
   return (
     <div className="flex flex-col gap-2 px-5">
+      <SearchCategoryLabel />
       <table {...getTableProps()} className="w-full">
         <thead>
           {headerGroups.map((headerGroup, i) => (
@@ -47,7 +49,7 @@ const SearchResultPools: FC = () => {
                           loading ? 'opacity-100' : 'opacity-0'
                         }`}
                       />
-                      {error && <span className="text-sm italic text-red -ml-2">{i18n._(t`⚠️ Loading Error`)}</span>}
+                      {error && <span className="text-sm italic text-red ml-2">{i18n._(t`⚠️ Loading Error`)}</span>}
                     </>
                   )}
                 </th>
@@ -59,29 +61,23 @@ const SearchResultPools: FC = () => {
           {page.map((row, i) => {
             prepareRow(row)
 
-            const poolPath = `/trident/pool/${poolTypeToStr[
-              row.original.type
-            ].toLowerCase()}/${row.original.currencyIds.join('/')}`
-
             return (
-              <Link href={poolPath} key={i} passHref>
-                <tr {...row.getRowProps()} className="hover:bg-gray-800 hover:cursor-pointer">
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <td
-                        key={i}
-                        {...cell.getCellProps()}
-                        className={classNames(
-                          'py-3 border-t border-gray-800 flex items-center',
-                          i === 0 ? 'justify-start' : 'justify-end'
-                        )}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    )
-                  })}
-                </tr>
-              </Link>
+              <tr {...row.getRowProps()} key={i}>
+                {row.cells.map((cell, i) => {
+                  return (
+                    <td
+                      key={i}
+                      {...cell.getCellProps()}
+                      className={classNames(
+                        'py-3 border-t border-gray-800 flex items-center',
+                        i === 0 ? 'justify-start' : 'justify-end'
+                      )}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  )
+                })}
+              </tr>
             )
           })}
         </tbody>
