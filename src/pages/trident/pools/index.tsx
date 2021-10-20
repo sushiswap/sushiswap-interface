@@ -16,7 +16,7 @@ const Pool = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="flex w-full max-w-7xl">
+      <div className="flex w-full">
         <SearchSidebar />
         <div className="w-full">
           <TridentHeader pattern="bg-binary-pattern" className="sm:!flex-row justify-between items-center">

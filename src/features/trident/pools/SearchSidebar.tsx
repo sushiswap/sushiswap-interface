@@ -73,7 +73,7 @@ export const SearchSidebar: FC = () => {
   const [twapOnly, setTwapOnly] = useRecoilState(showTWAPOnlyAtom)
 
   return (
-    <div className="flex-none w-48 border-r border-gray-800 pt-8 p-4 hidden lg:block">
+    <div className="flex-none w-52 border-r border-gray-800 pt-8 p-6 hidden lg:block">
       <div className="pb-6">Search Settings</div>
 
       <Section title="Yield Farms">
