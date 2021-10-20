@@ -19,7 +19,11 @@ const Pool = () => {
       <div className="flex w-full">
         <SearchSidebar />
         <div className="w-full">
-          <TridentHeader pattern="bg-binary-pattern" className="sm:!flex-row justify-between items-center">
+          <TridentHeader
+            maxWidth="full"
+            pattern="bg-binary-pattern"
+            className="sm:!flex-row justify-between items-center"
+          >
             <div>
               <Typography variant="h2" className="text-high-emphesis" weight={700}>
                 {i18n._(t`Provide liquidity & earn.`)}
@@ -32,7 +36,7 @@ const Pool = () => {
               <Link href={'/trident/create'}>{i18n._(t`Create New Pool`)}</Link>
             </Button>
           </TridentHeader>
-          <TridentBody>
+          <TridentBody maxWidth="full">
             <div className="flex flex-col sm:flex-row justify-between md:gap-24 gap-4 items-center">
               <PoolSearch />
               <PoolSort />

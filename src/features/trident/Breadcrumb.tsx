@@ -5,7 +5,6 @@ import Typography from '../../components/Typography'
 import { useRecoilValue } from 'recoil'
 import { poolAtom } from './context/atoms'
 import classNames from 'classnames'
-import Container from '../../components/Container'
 import { PoolUnion } from './types'
 import { formatPercent } from '../../functions'
 import { Currency } from '@sushiswap/core-sdk'
@@ -53,38 +52,36 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   }, [breadcrumbs, currencies, pool])
 
   return (
-    <div className="flex justify-center w-full py-2 border-b border-dark-900 bg-gradient-to-r from-transparent-blue to-transparent-pink">
-      <Container maxWidth="7xl" className="flex items-center px-5">
-        {formatted
-          .map(({ label, link }, index) => (
-            <Typography
-              variant="xs"
-              weight={400}
-              key={label}
-              className={classNames(
-                'capitalize',
-                index === breadcrumbs.length - 1 ? 'text-high-emphesis' : 'text-secondary'
-              )}
-            >
-              {link ? <Link href={link}>{label}</Link> : label}
-            </Typography>
-          ))
-          .reduce(
-            (acc, x) =>
-              acc === null ? (
-                x
-              ) : (
-                <>
-                  {acc}{' '}
-                  <div className="px-1 text-secondary">
-                    <ChevronRight width={12} height={12} strokeWidth={4} />
-                  </div>{' '}
-                  {x}
-                </>
-              ),
-            null
-          )}
-      </Container>
+    <div className="flex w-full px-6 py-2 border-b border-dark-900 bg-gradient-to-r from-transparent-blue to-transparent-pink">
+      {formatted
+        .map(({ label, link }, index) => (
+          <Typography
+            variant="xs"
+            weight={400}
+            key={label}
+            className={classNames(
+              'capitalize',
+              index === breadcrumbs.length - 1 ? 'text-high-emphesis' : 'text-secondary'
+            )}
+          >
+            {link ? <Link href={link}>{label}</Link> : label}
+          </Typography>
+        ))
+        .reduce(
+          (acc, x) =>
+            acc === null ? (
+              x
+            ) : (
+              <>
+                {acc}{' '}
+                <div className="px-1 text-secondary">
+                  <ChevronRight width={12} height={12} strokeWidth={4} />
+                </div>{' '}
+                {x}
+              </>
+            ),
+          null
+        )}
     </div>
   )
 }
