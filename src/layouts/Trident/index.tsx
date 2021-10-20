@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import Main from '../../components/Main'
 import Popups from '../../components/Popups'
 import Breadcrumb, { BreadcrumbItem } from '../../features/trident/Breadcrumb'
-import Container from '../../components/Container'
+import Container, { MaxWidth } from '../../components/Container'
 import Header from '../../components/Header'
 import { classNames } from '../../functions'
 
@@ -18,25 +18,31 @@ type HeaderBackground =
 interface TridentHeaderProps {
   className?: string
   pattern?: HeaderBackground
+  maxWidth?: MaxWidth
 }
 
-export const TridentHeader: FC<TridentHeaderProps> = ({ children, className, pattern }) => {
+export const TridentHeader: FC<TridentHeaderProps> = ({ children, className, pattern, maxWidth = '7xl' }) => {
   return (
     <header
       className={classNames('relative w-full bg-opacity-80 flex flex-col items-center', pattern || 'bg-bubble-pattern')}
     >
       <div className="absolute w-full h-full bg-dark-900 bg-opacity-80 z-0" />
-      <Container maxWidth="7xl" className={classNames('flex flex-col gap-5 z-[1] p-10', className)}>
+      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-5 z-[1] p-10', className)}>
         {children}
       </Container>
     </header>
   )
 }
 
-export const TridentBody: FC<{ className?: string }> = ({ children, className }) => {
+interface TridentBodyProps {
+  className?: string
+  maxWidth?: MaxWidth
+}
+
+export const TridentBody: FC<TridentBodyProps> = ({ children, className, maxWidth = '7xl' }) => {
   return (
     <Main>
-      <Container maxWidth="7xl" className={classNames('flex flex-col gap-5 p-5 z-[1]', className)}>
+      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-5 p-5 z-[1]', className)}>
         {children}
       </Container>
     </Main>
