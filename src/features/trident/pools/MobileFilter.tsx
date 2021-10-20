@@ -62,13 +62,13 @@ const FeeTierFilter: FC = () => {
         <Checkbox checked={feeTiers.includes(0.3)} color="blue" />
         <Typography className="text-secondary">0.3%</Typography>
       </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.1, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(0.1)} color="blue" />
-        <Typography className="text-secondary">0.1%</Typography>
-      </div>
       <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.05, feeTiers, setFeeTiers)}>
         <Checkbox checked={feeTiers.includes(0.05)} color="blue" />
         <Typography className="text-secondary">0.05%</Typography>
+      </div>
+      <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.01, feeTiers, setFeeTiers)}>
+        <Checkbox checked={feeTiers.includes(0.01)} color="blue" />
+        <Typography className="text-secondary">0.1%</Typography>
       </div>
     </div>
   )

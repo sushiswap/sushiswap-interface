@@ -1,0 +1,26 @@
+import React, { FC } from 'react'
+import Typography from '../../../components/Typography'
+import { classNames } from '../../../functions'
+
+interface PoolSelectorProps {
+  title: string
+  comingSoon?: boolean
+  active: boolean
+}
+
+export const PoolSelector: FC<PoolSelectorProps> = ({ title, comingSoon, active }) => {
+  return (
+    <div
+      style={active ? { boxShadow: '#27b0e6 0px 7px 67px -33px' } : {}}
+      className={classNames(
+        'flex flex-col rounded justify-center border p-8 border-dark-700 ',
+        active ? 'text-high-emphesis' : 'text-secondary'
+      )}
+    >
+      <Typography variant="h3" weight={700}>
+        {title}
+      </Typography>
+      {comingSoon && <div>Coming soon</div>}
+    </div>
+  )
+}

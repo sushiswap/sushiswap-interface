@@ -74,7 +74,7 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
             ) : (
               <>
                 {acc}{' '}
-                <div className="px-1 text-secondary">
+                <div className="px-1 text-secondary flex flex-col justify-center">
                   <ChevronRight width={12} height={12} strokeWidth={4} />
                 </div>{' '}
                 {x}

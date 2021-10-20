@@ -11,7 +11,7 @@ import { SearchSidebar } from '../../../features/trident/pools/SearchSidebar'
 import { PoolSearch } from '../../../features/trident/pools/PoolSearch'
 import { PoolSort } from '../../../features/trident/pools/PoolSort'
 
-const Pool = () => {
+const DiscoverPools = () => {
   const { i18n } = useLingui()
 
   return (
@@ -36,7 +36,7 @@ const Pool = () => {
               <Link href={'/trident/create'}>{i18n._(t`Create New Pool`)}</Link>
             </Button>
           </TridentHeader>
-          <TridentBody maxWidth="full">
+          <TridentBody maxWidth="full" className="!p-7">
             <div className="flex flex-col sm:flex-row justify-between md:gap-24 gap-4 items-center">
               <PoolSearch />
               <PoolSort />
@@ -49,7 +49,9 @@ const Pool = () => {
   )
 }
 
-Pool.Provider = RecoilRoot
-Pool.Layout = (props) => <TridentLayout {...props} breadcrumbs={[{ label: 'Pools' }, { label: 'Search Results' }]} />
+DiscoverPools.Provider = RecoilRoot
+DiscoverPools.Layout = (props) => (
+  <TridentLayout {...props} breadcrumbs={[{ label: 'Pools' }, { label: 'Search Results' }]} />
+)
 
-export default Pool
+export default DiscoverPools

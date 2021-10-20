@@ -19,7 +19,7 @@ import { useBentoBalance } from '../../state/bentobox/hooks'
 
 interface AssetSelectProps {
   title?: string
-  value: Currency
+  value?: Currency
   onSelect: (x: Currency) => void
   header?: ReactNode
   currencies?: Currency[]
@@ -35,7 +35,7 @@ const AssetSelect = (props: AssetSelectProps) => {
   )
 
   return (
-    <div className="mt-4 flex flex-col z-10">
+    <div className="mt-4 flex flex-col relative z-10">
       {header}
       <AssetSelectPanel value={props.value} onSelect={props.onSelect} currencies={props.currencies} />
     </div>

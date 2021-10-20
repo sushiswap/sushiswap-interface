@@ -9,8 +9,8 @@ export type PoolUnion = ConstantProductPool | HybridPool
 export enum PoolType {
   ConstantProduct = 'Classic',
   ConcentratedLiquidity = 'Concentrated',
-  Weighted = 'Weighted',
-  Hybrid = 'Hybrid',
+  Weighted = 'Index',
+  Hybrid = 'Stable',
 }
 
 export const chipPoolColorMapper: Record<PoolType, ChipColor> = {

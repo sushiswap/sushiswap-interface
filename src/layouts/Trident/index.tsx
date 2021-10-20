@@ -42,7 +42,7 @@ interface TridentBodyProps {
 export const TridentBody: FC<TridentBodyProps> = ({ children, className, maxWidth = '7xl' }) => {
   return (
     <Main>
-      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-5 p-5 z-[1]', className)}>
+      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-5 p-10 z-[1]', className)}>
         {children}
       </Container>
     </Main>

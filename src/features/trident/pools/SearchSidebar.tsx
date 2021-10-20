@@ -55,14 +55,14 @@ const FeeTiers: FC = () => {
         setter={() => removeOrAddFeeTier(0.3, feeTiers, setFeeTiers)}
       />
       <Selection
-        title="0.1%"
-        checked={feeTiers.includes(0.1)}
-        setter={() => removeOrAddFeeTier(0.1, feeTiers, setFeeTiers)}
-      />
-      <Selection
         title="0.05%"
         checked={feeTiers.includes(0.05)}
         setter={() => removeOrAddFeeTier(0.05, feeTiers, setFeeTiers)}
+      />
+      <Selection
+        title="0.01%"
+        checked={feeTiers.includes(0.01)}
+        setter={() => removeOrAddFeeTier(0.01, feeTiers, setFeeTiers)}
       />
     </Section>
   )

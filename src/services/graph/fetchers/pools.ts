@@ -12,7 +12,7 @@ const gqlPoolTypeMap: Record<string, PoolType> = {
   indexPools: PoolType.Weighted,
 }
 
-export type FeeTier = 1 | 0.3 | 0.1 | 0.05
+export type FeeTier = 1 | 0.3 | 0.05 | 0.01
 
 export interface TridentPool {
   names: string[]

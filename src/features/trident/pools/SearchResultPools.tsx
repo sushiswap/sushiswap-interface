@@ -29,7 +29,7 @@ const SearchResultPools: FC = () => {
   useInstantiateTableFeatures(setFilter, toggleSortBy)
 
   return (
-    <div className="flex flex-col gap-2 px-5">
+    <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
       <div className="overflow-x-auto">
         <table {...getTableProps()} className="w-full">
