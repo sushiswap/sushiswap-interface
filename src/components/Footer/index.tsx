@@ -64,7 +64,7 @@ const Footer = () => {
         )}
 
         {chainId && chainId === ChainId.AVALANCHE && (
-          <ExternalLink id={`avalanche-bridge-link`} href=" hhttps://app.relaychain.com/#/cross-chain-bridge-transfer" className="text-low-emphesis">
+          <ExternalLink id={`avalanche-bridge-link`} href=" https://app.relaychain.com/#/cross-chain-bridge-transfer" className="text-low-emphesis">
             {i18n._(t`Relaychain AVAX Bridge`)}
           </ExternalLink>
         )}
