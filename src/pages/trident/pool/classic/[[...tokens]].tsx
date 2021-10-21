@@ -24,14 +24,14 @@ const Pool = () => {
 
   return (
     <>
-      <TridentHeader pattern="bg-chevron-pattern">
-        <div className="lg:w-8/12 flex flex-col lg:gap-5 pr-5">
+      <TridentHeader pattern="bg-chevron-pattern" condensed>
+        <div className="lg:w-8/12 flex flex-col lg:gap-5 gap-3 lg:pr-6">
           <div>
             <Button
               color="blue"
               variant="outlined"
               size="sm"
-              className="rounded-full py-1 pl-2"
+              className="rounded-full !pl-2 !py-1"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link href={'/trident/pools'}>{i18n._(t`Pools`)}</Link>
@@ -46,7 +46,7 @@ const Pool = () => {
 
       <TridentBody>
         <div className="flex flex-col lg:flex-row w-full mt-px mb-5 gap-10">
-          <div className="lg:w-8/12 flex flex-col lg:gap-10">
+          <div className="lg:w-8/12 flex flex-col lg:gap-10 gap-5">
             <div className="order-5 lg:order-1">
               <PoolStatsChart />
             </div>
@@ -61,7 +61,7 @@ const Pool = () => {
             </div>
           </div>
           <div className="lg:w-4/12">
-            <div className="flex flex-col gap-5 sticky top-5 lg:-mt-44">
+            <div className="flex flex-col gap-5 sticky top-5 lg:-mt-52">
               <div className="order-0">
                 <ClassicMyPosition />
               </div>

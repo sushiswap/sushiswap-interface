@@ -43,7 +43,7 @@ const RemoveClassic = () => {
               color="blue"
               variant="outlined"
               size="sm"
-              className="py-1 pl-2 rounded-full"
+              className="!pl-2 !py-1 rounded-full"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>

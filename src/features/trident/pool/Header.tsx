@@ -26,7 +26,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const isDesktop = useDesktopMediaQuery()
 
   // TODO ramin: remove this make dynamic
-  const isFarm = true
+  const isFarm = false
 
   return (
     <div className="flex justify-between">
@@ -67,7 +67,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
           <Typography variant="h1" className="text-high-emphesis" weight={700}>
             XX%
           </Typography>
-          <div className="flex flex-row gap-2.5">
+          <div className="flex flex-row justify-end gap-2.5">
             {isFarm ? (
               <>
                 <Typography variant="xxs">{i18n._(t`Rewards:`)} XX%</Typography>

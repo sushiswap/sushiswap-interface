@@ -19,15 +19,25 @@ interface TridentHeaderProps {
   className?: string
   pattern?: HeaderBackground
   maxWidth?: MaxWidth
+  condensed?: boolean
 }
 
-export const TridentHeader: FC<TridentHeaderProps> = ({ children, className, pattern, maxWidth = '7xl' }) => {
+export const TridentHeader: FC<TridentHeaderProps> = ({
+  children,
+  className,
+  pattern,
+  maxWidth = '7xl',
+  condensed,
+}) => {
   return (
     <header
       className={classNames('relative w-full bg-opacity-80 flex flex-col items-center', pattern || 'bg-bubble-pattern')}
     >
       <div className="absolute w-full h-full bg-dark-900 bg-opacity-80 z-0" />
-      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-5 z-[1] p-10', className)}>
+      <Container
+        maxWidth={maxWidth}
+        className={classNames('flex flex-col gap-5 z-[1] p-10', condensed && 'py-5', className)}
+      >
         {children}
       </Container>
     </header>

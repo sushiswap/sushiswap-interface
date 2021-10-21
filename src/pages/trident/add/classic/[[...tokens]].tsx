@@ -1,5 +1,5 @@
 import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import React, { FC } from 'react'
+import React from 'react'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import { liquidityModeAtom, poolAtom } from '../../../../features/trident/context/atoms'
 
@@ -24,6 +24,7 @@ import ClassicStandardAside from '../../../../features/trident/add/classic/Class
 import ClassicZapAside from '../../../../features/trident/add/classic/ClassicZapAside'
 import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
 import { useRouter } from 'next/router'
+import ModeToggle from '../../../../features/trident/ModeToggle'
 
 const AddClassic = () => {
   useInitClassicPoolState()
@@ -44,7 +45,7 @@ const AddClassic = () => {
               color="blue"
               variant="outlined"
               size="sm"
-              className="py-1 pl-2 rounded-full"
+              className="!pl-2 !py-1 rounded-full"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link
@@ -58,22 +59,24 @@ const AddClassic = () => {
               </Link>
             </Button>
           </div>
-          <Typography variant="h2" weight={700} className="text-high-emphesis">
-            {i18n._(t`Add Liquidity`)}
-          </Typography>
-          <Typography variant="sm">
-            {i18n._(
-              t`Deposit any or all pool tokens directly with Standard mode,  or invest with any asset in Zap mode.`
-            )}
-          </Typography>
+          <div>
+            <Typography variant="h2" weight={700} className="text-high-emphesis">
+              {i18n._(t`Add Liquidity`)}
+            </Typography>
+            <Typography variant="sm">
+              {i18n._(
+                t`Deposit any or all pool tokens directly with Standard mode,  or invest with any asset in Zap mode.`
+              )}
+            </Typography>
+          </div>
         </div>
       </TridentHeader>
 
-      <TridentBody className="pt-0">
+      <TridentBody>
         <div className="flex flex-row justify-between">
           <div className="flex flex-col w-full lg:w-7/12">
+            <ModeToggle />
             <FixedRatioHeader />
-
             {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
               <Alert
                 dismissable={false}
@@ -82,7 +85,6 @@ const AddClassic = () => {
                 message={i18n._(t`A Pool could not be found for provided currencies`)}
               />
             )}
-
             <>
               {liquidityMode === LiquidityMode.ZAP && (
                 <>
@@ -99,7 +101,7 @@ const AddClassic = () => {
               <DepositSubmittedModal />
             </>
           </div>
-          <div className="flex flex-col hidden lg:block lg:w-4/12 -mt-28">
+          <div className="flex flex-col hidden lg:block lg:w-4/12 -mt-40">
             {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
           </div>
         </div>
