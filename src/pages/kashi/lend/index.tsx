@@ -85,64 +85,8 @@ function Lend() {
                 </ListHeaderWithSort>
               </div>
               <div className="flex-col space-y-2">
-                {positions.items.map((pair: any) => {
-                  return (
-                    <div key={pair.address}>
-                      <Link href={'/lend/' + pair.address}>
-                        <a className="block text-high-emphesis">
-                          <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
-                            <div className="flex flex-col items-start sm:flex-row sm:items-center">
-                              <div className="hidden space-x-2 md:flex">
-                                <Image
-                                  loader={cloudinaryLoader}
-                                  height={48}
-                                  width={48}
-                                  src={pair.asset.tokenInfo.logoURI}
-                                  className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
-                                  alt={pair.asset.tokenInfo.symbol}
-                                />
-
-                                <Image
-                                  loader={cloudinaryLoader}
-                                  height={48}
-                                  width={48}
-                                  src={pair.collateral.tokenInfo.logoURI}
-                                  className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
-                                  alt={pair.collateral.tokenInfo.symbol}
-                                />
-                              </div>
-                              <div className="sm:items-end md:hidden">
-                                <div>
-                                  <strong>{pair.asset.tokenInfo.symbol}</strong> / {pair.collateral.tokenInfo.symbol}
-                                </div>
-                                <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">
-                                  {pair.oracle.name}
-                                </div>
-                              </div>
-                            </div>
-                            <div className="hidden text-white md:block">
-                              <strong>{pair.asset.tokenInfo.symbol}</strong>
-                            </div>
-                            <div className="hidden md:block">{pair.collateral.tokenInfo.symbol}</div>
-                            <div className="hidden lg:block">{pair.oracle.name}</div>
-                            <div className="text-right">
-                              <div>
-                                {formatNumber(pair.currentUserAssetAmount.string, false)} {pair.asset.tokenInfo.symbol}
-                              </div>
-                              <div className="text-sm text-secondary">
-                                {formatNumber(pair.currentUserAssetAmount.usd, true)}
-                              </div>
-                            </div>
-                            <div className="text-right">
-                              <div>{formatPercent(pair.utilization.string)}</div>
-                              <div className="text-secondary">{formatNumber(pair.currentUserLentAmount.usd, true)}</div>
-                            </div>
-                            <div className="text-right">{formatPercent(pair.supplyAPR.string)}</div>
-                          </div>
-                        </a>
-                      </Link>
-                    </div>
-                  )
+                {positions.items.map((pair) => {
+                  return <LendEntry key={pair.address} pair={pair} userPosition={true} />
                 })}
               </div>
             </div>
@@ -189,67 +133,83 @@ function Lend() {
             </ListHeaderWithSort>
           </div>
           <div className="flex-col space-y-2">
-            {pairs.items &&
-              pairs.items.map((pair) => {
-                return (
-                  <div key={pair.address}>
-                    <Link href={'/lend/' + String(pair.address).toLowerCase()}>
-                      <a className="block text-high-emphesis">
-                        <div className="grid items-center grid-flow-col grid-cols-3 gap-4 px-4 py-4 text-sm rounded sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
-                          <div className="flex flex-col items-start sm:flex-row sm:items-center">
-                            <div className="hidden space-x-2 md:flex">
-                              <Image
-                                loader={cloudinaryLoader}
-                                height={48}
-                                width={48}
-                                src={pair.asset.tokenInfo.logoURI}
-                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
-                                alt={pair.asset.tokenInfo.symbol}
-                              />
-
-                              <Image
-                                loader={cloudinaryLoader}
-                                height={48}
-                                width={48}
-                                src={pair.collateral.tokenInfo.logoURI}
-                                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
-                                alt={pair.collateral.tokenInfo.symbol}
-                              />
-                            </div>
-                            <div className="sm:items-end md:hidden">
-                              <div className="flex flex-col md:flex-row">
-                                <div className="font-semibold">{pair.asset.tokenInfo.symbol} / </div>
-                                <div>{pair.collateral.tokenInfo.symbol}</div>
-                              </div>
-                              <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">
-                                {pair.oracle.name}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="hidden text-left md:block">
-                            <strong>{pair.asset.tokenInfo.symbol}</strong>
-                          </div>
-                          <div className="hidden text-left md:block">{pair.collateral.tokenInfo.symbol}</div>
-                          <div className="hidden text-left lg:block">{pair.oracle.name}</div>
-                          <div className="text-center sm:text-right">{formatPercent(pair.currentSupplyAPR.string)}</div>
-                          <div className="hidden text-right sm:block">{formatPercent(pair.utilization.string)}</div>
-                          <div className="text-right">
-                            <div>
-                              {formatNumber(pair.currentAllAssets.string)} {pair.asset.tokenInfo.symbol}
-                            </div>
-                            <div className="text-secondary">{formatNumber(pair.currentAllAssets.usd, true)}</div>
-                          </div>
-                        </div>
-                      </a>
-                    </Link>
-                  </div>
-                )
-              })}
+            {pairs?.items?.map((pair) => (
+              <LendEntry key={pair.address} pair={pair} userPosition={false} />
+            ))}
           </div>
         </div>
       </Card>
     </>
   ) : null
+}
+
+const LendEntry = ({ pair, userPosition = false }) => {
+  return (
+    <Link href={'/lend/' + pair.address}>
+      <a className="block text-high-emphesis">
+        <div className="grid items-center grid-flow-col grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-blue">
+          <div className="flex flex-col items-start sm:flex-row sm:items-center">
+            <div className="hidden space-x-2 md:flex">
+              <Image
+                loader={cloudinaryLoader}
+                height={48}
+                width={48}
+                src={pair.asset.tokenInfo.logoURI}
+                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                alt={pair.asset.tokenInfo.symbol}
+              />
+
+              <Image
+                loader={cloudinaryLoader}
+                height={48}
+                width={48}
+                src={pair.collateral.tokenInfo.logoURI}
+                className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                alt={pair.collateral.tokenInfo.symbol}
+              />
+            </div>
+            <div className="sm:items-end md:hidden">
+              <div>
+                <strong>{pair.asset.tokenInfo.symbol}</strong> / {pair.collateral.tokenInfo.symbol}
+              </div>
+              <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">{pair.oracle.name}</div>
+            </div>
+          </div>
+          <div className="hidden text-white md:block">
+            <strong>{pair.asset.tokenInfo.symbol}</strong>
+          </div>
+          <div className="hidden md:block">{pair.collateral.tokenInfo.symbol}</div>
+          <div className="hidden lg:block">{pair.oracle.name}</div>
+          {userPosition ? (
+            <>
+              <div className="text-right">
+                <div>
+                  {formatNumber(pair.currentUserAssetAmount.string, false)} {pair.asset.tokenInfo.symbol}
+                </div>
+                <div className="text-sm text-secondary">{formatNumber(pair.currentUserAssetAmount.usd, true)}</div>
+              </div>
+              <div className="text-right">
+                <div>{formatPercent(pair.utilization.string)}</div>
+                <div className="text-secondary">{formatNumber(pair.currentUserLentAmount.usd, true)}</div>
+              </div>
+              <div className="text-right">{formatPercent(pair.supplyAPR.stringWithStrategy)}</div>{' '}
+            </>
+          ) : (
+            <>
+              <div className="text-center sm:text-right">{formatPercent(pair.currentSupplyAPR.stringWithStrategy)}</div>
+              <div className="hidden text-right sm:block">{formatPercent(pair.utilization.string)}</div>
+              <div className="text-right">
+                <div>
+                  {formatNumber(pair.currentAllAssets.string)} {pair.asset.tokenInfo.symbol}
+                </div>
+                <div className="text-secondary">{formatNumber(pair.currentAllAssets.usd, true)}</div>
+              </div>
+            </>
+          )}
+        </div>
+      </a>
+    </Link>
+  )
 }
 
 Lend.Provider = Provider

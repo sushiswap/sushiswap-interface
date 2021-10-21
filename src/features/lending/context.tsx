@@ -15,7 +15,8 @@ import { useBentoBoxContract, useBoringHelperContract } from '../../hooks/useCon
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../../entities/Fraction'
 import { bentobox } from '@sushiswap/sushi-data'
-import { ethers } from 'ethers'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { getAddress } from '@ethersproject/address'
 import { getCurrency } from '../../functions/currency'
 import { getOracle } from '../../entities/Oracle'
 import { toElastic } from '../../functions/rebase'
@@ -23,7 +24,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useBlockNumber } from '../../state/application/hooks'
 import usePrevious from '../../hooks/usePrevious'
-import { useSingleCallResult } from '../../state/multicall/hooks'
+import { useBentoStrategies } from '../../services/graph/hooks'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -137,7 +138,7 @@ async function getPairs(bentoBoxContract, chainId: ChainId) {
   }
 
   return logs.map((log) => {
-    const deployParams = ethers.utils.defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], log.args?.data)
+    const deployParams = defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], log.args?.data)
     return {
       masterContract: log.args?.masterContract,
       address: log.args?.cloneAddress,
@@ -195,6 +196,7 @@ export function KashiProvider({ children }) {
   const bentoBoxContract = useBentoBoxContract()
 
   const tokens = useAllTokens()
+  const strategies = useBentoStrategies({ chainId })
 
   // const info = useSingleCallResult(boringHelperContract, 'getUIInfo', [
   //   account,
@@ -235,10 +237,10 @@ export function KashiProvider({ children }) {
       const allPairAddresses = logPairs
         .filter((pair) => {
           const oracle = getOracle(pair, chainId, tokens)
-          if (!oracle) {
-            return false
-          } else if (!oracle.valid) {
-            invalidOracles.push({ pair, error: oracle?.error })
+          if (!oracle) return false
+          if (!oracle.valid) {
+            // console.log(pair, oracle.valid, oracle.error)
+            invalidOracles.push({ pair, error: oracle.error })
           }
           return oracle.valid
         })
@@ -285,6 +287,7 @@ export function KashiProvider({ children }) {
       Object.values(pairTokens).forEach((token) => {
         token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.tokenInfo.symbol
         token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency].rate, token.rate)
+        token.strategy = strategies?.find((strategy) => strategy.token === token.address.toLowerCase())
       })
 
       dispatch({
@@ -415,13 +418,30 @@ export function KashiProvider({ children }) {
                 string: pair.interestPerYear.toFixed(16),
               }
 
+              pair.strategyAPY = {
+                asset: {
+                  value: BigNumber.from(String(Math.floor((pair.asset.strategy?.apy ?? 0) * 1e16))),
+                  string: String(pair.asset.strategy?.apy ?? 0),
+                },
+                collateral: {
+                  value: BigNumber.from(String(Math.floor((pair.collateral.strategy?.apy ?? 0) * 1e16))),
+                  string: String(pair.collateral.strategy?.apy ?? 0),
+                },
+              }
               pair.supplyAPR = {
                 value: pair.supplyAPR,
+                valueWithStrategy: pair.supplyAPR.add(pair.strategyAPY.asset.value),
                 string: Fraction.from(pair.supplyAPR, e10(16)).toString(),
+                stringWithStrategy: Fraction.from(pair.strategyAPY.asset.value.add(pair.supplyAPR), e10(16)).toString(),
               }
               pair.currentSupplyAPR = {
                 value: pair.currentSupplyAPR,
+                valueWithStrategy: pair.currentSupplyAPR.add(pair.strategyAPY.asset.value),
                 string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString(),
+                stringWithStrategy: Fraction.from(
+                  pair.currentSupplyAPR.add(pair.strategyAPY.asset.value),
+                  e10(16)
+                ).toString(),
               }
               pair.currentInterestPerYear = {
                 value: pair.currentInterestPerYear,
@@ -451,13 +471,15 @@ export function KashiProvider({ children }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, weth.address])
+  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, strategies])
 
   const previousBlockNumber = usePrevious(blockNumber)
+  const previousStrategies = usePrevious(strategies)
 
   useEffect(() => {
     blockNumber !== previousBlockNumber && updatePairs()
-  }, [blockNumber, previousBlockNumber, updatePairs])
+    strategies !== previousStrategies && updatePairs()
+  }, [blockNumber, previousBlockNumber, strategies, previousStrategies, updatePairs])
 
   return (
     <KashiContext.Provider
@@ -493,7 +515,7 @@ export function useKashiPair(address: string) {
     throw new Error('useKashiPair must be used within a KashiProvider')
   }
   return context.state.pairs.find((pair) => {
-    return ethers.utils.getAddress(pair.address) === ethers.utils.getAddress(address)
+    return getAddress(pair.address) === getAddress(address)
   })
 }
 
