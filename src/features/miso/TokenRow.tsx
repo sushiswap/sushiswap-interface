@@ -45,41 +45,41 @@ export default function TokenRow({ token }: any) {
             <CurrencyLogo currency={currency} size={'40px'} />
             <div className="flex flex-col">
               <Typography variant="base" className=" text-primary">
-                {i18n._(t`${token.symbol}`)}
+                {i18n._(`${token.symbol}`)}
               </Typography>
               <Typography variant="sm" className=" text-secondary">
-                {i18n._(t`${token.name}`)}
+                {i18n._(`${token.name}`)}
               </Typography>
             </div>
           </div>
 
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`$${tokenDetails.price}`)}
+              {i18n._(`$${tokenDetails.price}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
-              {i18n._(t`${tokenDetails.priceChange}%`)}
+              {i18n._(`${tokenDetails.priceChange}%`)}
             </Typography>
           </div>
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`$${tokenDetails.marketCap}`)}
+              {i18n._(`$${tokenDetails.marketCap}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
-              {i18n._(t`${tokenDetails.marketCapChange}%`)}
+              {i18n._(`${tokenDetails.marketCapChange}%`)}
             </Typography>
           </div>
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`$${tokenDetails.volume24h}`)}
+              {i18n._(`$${tokenDetails.volume24h}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
-              {i18n._(t`${tokenDetails.volume24hChange}%`)}
+              {i18n._(`${tokenDetails.volume24hChange}%`)}
             </Typography>
           </div>
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`${tokenDetails.totalSupply} ${token.symbol}`)}
+              {i18n._(`${tokenDetails.totalSupply} ${token.symbol}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
               {i18n._(t``)}
@@ -87,7 +87,7 @@ export default function TokenRow({ token }: any) {
           </div>
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`${tokenDetails.circulatingSupply} ${token.symbol}`)}
+              {i18n._(`${tokenDetails.circulatingSupply} ${token.symbol}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
               {i18n._(t``)}

@@ -105,45 +105,45 @@ export default function AuctionRow({ auction, timestamp }: any) {
             <CurrencyLogo currency={auctionToken} size={'40px'} />
             <div className="flex flex-col">
               <Typography variant="base" className=" text-primary">
-                {i18n._(t`${auctionToken.symbol}`)}
+                {i18n._(`${auctionToken.symbol}`)}
               </Typography>
               <Typography variant="sm" className=" text-secondary">
-                {i18n._(t`${auctionDetails.auctionType}`)}
+                {i18n._(`${auctionDetails.auctionType}`)}
               </Typography>
             </div>
           </div>
 
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`${auctionDetails.tokenValue.toFixed(2)} ${auctionInfo['paymentCurrencyInfo'].symbol}`)}
+              {i18n._(`${auctionDetails.tokenValue.toFixed(2)} ${auctionInfo['paymentCurrencyInfo'].symbol}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
-              {i18n._(t`$${paymentCurrencyPrice}`)}
+              {i18n._(`$${paymentCurrencyPrice}`)}
             </Typography>
           </div>
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`${auctionDetails.currentPrice.toFixed(2)} ${auctionInfo['paymentCurrencyInfo'].symbol}`)}
+              {i18n._(`${auctionDetails.currentPrice.toFixed(2)} ${auctionInfo['paymentCurrencyInfo'].symbol}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
-              {i18n._(t`$60.24`)}
+              {i18n._(`$60.24`)}
             </Typography>
           </div>
           <div className="flex flex-col">
             <Typography variant="base" className="text-primary">
-              {i18n._(t`${auctionDetails.totalRaised.toFixed(2)} ${auctionInfo['paymentCurrencyInfo'].symbol}`)}
+              {i18n._(`${auctionDetails.totalRaised.toFixed(2)} ${auctionInfo['paymentCurrencyInfo'].symbol}`)}
             </Typography>
             <Typography variant="sm" className="text-secondary">
-              {i18n._(t`$300,00.24`)}
+              {i18n._(`$300,00.24`)}
             </Typography>
           </div>
           {auctionDetails.minTargetLeft != 0 ? (
             <div className="flex flex-col">
               <Typography variant="base" className="text-primary">
-                {i18n._(t`${auctionDetails.minTargetLeft.toFixed(2)}`)} ${auctionInfo['paymentCurrencyInfo'].symbol}
+                {i18n._(`${auctionDetails.minTargetLeft.toFixed(2)}`)} ${auctionInfo['paymentCurrencyInfo'].symbol}
               </Typography>
               <Typography variant="sm" className="text-secondary">
-                {i18n._(t`$270,045.24`)}
+                {i18n._(`$270,045.24`)}
               </Typography>
             </div>
           ) : (
@@ -152,7 +152,7 @@ export default function AuctionRow({ auction, timestamp }: any) {
             </div>
           )}
           <Typography variant="base" className={classNames('my-auto', 'text-' + auctionColor)}>
-            {i18n._(t`${timeString}`)}
+            {i18n._(`${timeString}`)}
           </Typography>
         </div>
       </NavLink>
