@@ -100,7 +100,8 @@ export const MobileFilter: FC = () => {
         }
       >
         <div className="bg-dark-700 rounded-t">
-          <YieldFarmFilter />
+          {/* To Be Built */}
+          {/*<YieldFarmFilter />*/}
           <div className="bg-dark-800 rounded-t">
             <TwapOnlyFilter />
             <div className="relative bg-dark-900 rounded-t">

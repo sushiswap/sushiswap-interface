@@ -14,11 +14,11 @@ import { ethers } from 'ethers'
 import { t } from '@lingui/macro'
 import { useIndependentAssetInputs } from './useIndependentAssetInputs'
 import { useLingui } from '@lingui/react'
-import { useSetupPoolProperties } from './useSetupPoolProperties'
 import { useTransactionAdder } from '../../../../state/transactions/hooks'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import useBentoRebases from '../../../../hooks/useBentoRebases'
 import { toShareJSBI } from '../../../../functions'
+import { selectedFeeTierAtom, twapAtom } from '../../create/context/atoms'
 
 export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()
@@ -31,10 +31,8 @@ export const useClassicPoolCreateExecute = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const router = useTridentRouterContract()
-  const {
-    feeTier: [feeTier],
-    twap: [twap],
-  } = useSetupPoolProperties()
+  const feeTier = useRecoilValue(selectedFeeTierAtom)
+  const twap = useRecoilValue(twapAtom)
   const {
     currencies: [selectedPoolCurrencies],
     parsedAmounts,

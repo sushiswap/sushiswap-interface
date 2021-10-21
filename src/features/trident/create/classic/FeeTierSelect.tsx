@@ -1,14 +1,14 @@
 import React, { FC } from 'react'
 import { SetterOrUpdater } from 'recoil'
-import { FeeTier } from '../../../services/graph/fetchers/pools'
-import { classNames } from '../../../functions'
-import Typography from '../../../components/Typography'
+import { classNames } from '../../../../functions'
+import Typography from '../../../../components/Typography'
+import { Fee } from '@sushiswap/trident-sdk'
 
 interface FeeTierSelectProps {
-  tier: FeeTier
+  tier: Fee
   subtitle: string
-  selectedFeeTier: FeeTier | undefined
-  setter: SetterOrUpdater<FeeTier>
+  selectedFeeTier: Fee | undefined
+  setter: SetterOrUpdater<Fee>
 }
 
 export const FeeTierSelect: FC<FeeTierSelectProps> = ({ tier, subtitle, selectedFeeTier, setter }) => {
@@ -24,7 +24,7 @@ export const FeeTierSelect: FC<FeeTierSelectProps> = ({ tier, subtitle, selected
       onClick={() => setter(tier)}
     >
       <Typography variant="h3" weight={700}>
-        {tier}%
+        {tier / 100}%
       </Typography>
       <div>{subtitle}</div>
     </div>

@@ -6,8 +6,8 @@ const WETH_LOGO = 'https://raw.githubusercontent.com/sushiswap/icons/master/toke
 
 export const SushiWethExample: FC = () => {
   return (
-    <div className="p-4 border border-dark-700 bg-dark-900 w-full rounded mt-2 grid grid-cols-2">
-      <div>
+    <div className="p-4 border border-dark-700 bg-dark-900 w-full rounded mt-2 grid grid-cols-5">
+      <div className="col-span-2">
         <div>
           <Image alt="sushi logo" className="rounded-full" height="30" width="30" src={SUSHI_LOGO} />
           <div className="-ml-2 inline">
@@ -16,7 +16,7 @@ export const SushiWethExample: FC = () => {
         </div>
         <div className="font-bold text-high-emphesis">SUSHI-WETH</div>
       </div>
-      <div className="flex flex-col justify-center text-sm">
+      <div className="flex flex-col justify-center text-sm col-span-3">
         <div className="flex justify-between">
           <div className="flex flex-row items-center gap-2 mb-2">
             <Image alt="sushi logo" className="rounded-full" height="20" width="20" src={SUSHI_LOGO} />

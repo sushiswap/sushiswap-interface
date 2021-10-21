@@ -13,11 +13,11 @@ export const PoolSelector: FC<PoolSelectorProps> = ({ title, comingSoon, active 
     <div
       style={active ? { boxShadow: '#27b0e6 0px 7px 67px -33px' } : {}}
       className={classNames(
-        'flex flex-col rounded justify-center border p-8 border-dark-700 ',
+        'flex flex-col rounded justify-center border p-8 border-dark-700 overflow-hidden',
         active ? 'text-high-emphesis' : 'text-secondary'
       )}
     >
-      <Typography variant="h3" weight={700}>
+      <Typography variant="h3" weight={700} className="truncate">
         {title}
       </Typography>
       {comingSoon && <div>Coming soon</div>}

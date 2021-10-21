@@ -26,7 +26,7 @@ import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRouter } from 'next/router'
-import AddTransactionReviewModal from '../../../../features/trident/create/CreateReviewModal'
+import AddTransactionReviewModal from '../../../../features/trident/create/old/CreateReviewModal'
 
 const AddWeighted = () => {
   const { account, chainId } = useActiveWeb3React()

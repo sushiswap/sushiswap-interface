@@ -10,9 +10,9 @@ import { PlusIcon } from '@heroicons/react/solid'
 import { useActiveWeb3React } from '../../../../hooks'
 import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
-import { useSetupPoolProperties } from '../../context/hooks/useSetupPoolProperties'
 import { useRecoilState } from 'recoil'
 import { poolCreationPageAtom } from '../../context/atoms'
+import { selectedFeeTierAtom } from '../context/atoms'
 
 const ClassicSetupPool: FC = () => {
   const { account } = useActiveWeb3React()
@@ -21,9 +21,7 @@ const ClassicSetupPool: FC = () => {
   const {
     currencies: [currencies, setCurrencies],
   } = useIndependentAssetInputs()
-  const {
-    feeTier: [feeTier, setFeeTier],
-  } = useSetupPoolProperties()
+  const [feeTier, setFeeTier] = useRecoilState(selectedFeeTierAtom)
 
   const [poolState] = useTridentClassicPool(currencies[0], currencies[1], feeTier, true)
 

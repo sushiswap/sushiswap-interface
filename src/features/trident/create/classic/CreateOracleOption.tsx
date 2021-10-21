@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import Typography from '../../../components/Typography'
-import Checkbox from '../../../components/Checkbox'
+import Typography from '../../../../components/Typography'
+import Checkbox from '../../../../components/Checkbox'
 import { useRecoilState } from 'recoil'
-import { createAnOracleSelectionAtom } from './context/atoms'
+import { createAnOracleSelectionAtom } from '../context/atoms'
 
 export const CreateOracleOption: FC = () => {
   const [createAnOracle, setCreateAnOracle] = useRecoilState(createAnOracleSelectionAtom)

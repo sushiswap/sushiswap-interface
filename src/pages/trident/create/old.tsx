@@ -4,14 +4,13 @@ import { t } from '@lingui/macro'
 import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
 import Link from 'next/link'
-import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import Stepper from '../../../components/Stepper'
-import SelectPoolType from '../../../features/trident/create/SelectPoolType'
-import CreateReviewModal from '../../../features/trident/create/CreateReviewModal'
+import SelectPoolType from '../../../features/trident/create/old/SelectPoolType'
+import CreateReviewModal from '../../../features/trident/create/old/CreateReviewModal'
 import ClassicSetupPool from '../../../features/trident/create/classic/ClassicSetupPool'
-import ClassicDepositAssets from '../../../features/trident/create/classic/ClassicDepositAssets'
-import { useSetupPoolProperties } from '../../../features/trident/context/hooks/useSetupPoolProperties'
+import ClassicDepositAssets from '../../../features/trident/create/classic/old/ClassicDepositAssets'
 import HybridSetupPool from '../../../features/trident/create/hybrid/HybridSetupPool'
 import {
   poolAtom,
@@ -26,6 +25,7 @@ import React, { useEffect } from 'react'
 import { useIndependentAssetInputs } from '../../../features/trident/context/hooks/useIndependentAssetInputs'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import HybridStandardMode from '../../../features/trident/add/hybrid/HybridStandardMode'
+import { selectedFeeTierAtom, selectedPoolTypeAtom } from '../../../features/trident/create/context/atoms'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -34,10 +34,8 @@ const Pool = () => {
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
   const { parsedAmounts } = useIndependentAssetInputs()
-  const {
-    poolType: [poolType],
-    feeTier: [feeTier],
-  } = useSetupPoolProperties()
+  const poolType = useRecoilValue(selectedPoolTypeAtom)
+  const feeTier = useRecoilValue(selectedFeeTierAtom)
 
   useEffect(() => {
     if (parsedAmounts.length > 1 && parsedAmounts.every((el) => el)) {

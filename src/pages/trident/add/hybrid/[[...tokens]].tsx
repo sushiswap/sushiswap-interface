@@ -27,7 +27,7 @@ import { SUSHI } from '../../../../config/tokens'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
-import AddTransactionReviewModal from '../../../../features/trident/create/CreateReviewModal'
+import AddTransactionReviewModal from '../../../../features/trident/create/old/CreateReviewModal'
 
 const AddHybrid = () => {
   const { account, chainId } = useActiveWeb3React()

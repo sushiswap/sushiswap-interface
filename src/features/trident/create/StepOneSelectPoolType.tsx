@@ -10,7 +10,8 @@ import { PoolSelector } from './PoolSelector'
 import { useRecoilValue } from 'recoil'
 import { selectedPoolTypeAtom } from './context/atoms'
 import { PoolType } from '../types'
-import { ClassicDescription } from './ClassicDescription'
+import { ClassicDescription } from './classic/ClassicDescription'
+import { MobileStepper } from './MobileStepper'
 
 export const StepOneSelectPoolType: FC = () => {
   const { i18n } = useLingui()
@@ -36,9 +37,10 @@ export const StepOneSelectPoolType: FC = () => {
         <Typography variant="sm" weight={400}>
           {i18n._(t`Select a pool type, deposit assets, and create your pool on Sushi.`)}
         </Typography>
+        <MobileStepper />
       </TridentHeader>
       <TridentBody maxWidth="full">
-        <div className="grid grid-cols-4 gap-3 select-none">
+        <div className="grid lg:grid-cols-4 grid-cols-2 gap-3 select-none">
           <PoolSelector title="Classic" active={poolSelected === PoolType.ConstantProduct} />
           <PoolSelector title="Concentrated" active={poolSelected === PoolType.ConcentratedLiquidity} comingSoon />
           <PoolSelector title="Index" active={poolSelected === PoolType.Weighted} comingSoon />
@@ -46,7 +48,6 @@ export const StepOneSelectPoolType: FC = () => {
         </div>
 
         {poolSelected === PoolType.ConstantProduct && <ClassicDescription />}
-        {/*  Other descriptions TBD  */}
       </TridentBody>
     </div>
   )

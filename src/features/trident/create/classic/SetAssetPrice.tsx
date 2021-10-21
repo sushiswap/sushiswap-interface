@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import Alert from '../../../components/Alert'
+import Alert from '../../../../components/Alert'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 

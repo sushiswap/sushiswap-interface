@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 import { t } from '@lingui/macro'
-import Button from '../../../components/Button'
+import Button from '../../../../components/Button'
 import { useLingui } from '@lingui/react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { currentStepAtom, selectedFeeTierAtom } from './context/atoms'
-import { useActiveWeb3React } from '../../../hooks'
-import { useIndependentAssetInputs } from '../context/hooks/useIndependentAssetInputs'
-import { ConstantProductPoolState, useTridentClassicPool } from '../../../hooks/useTridentClassicPools'
+import { currentStepAtom, selectedFeeTierAtom } from '../context/atoms'
+import { useActiveWeb3React } from '../../../../hooks'
+import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
+import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
 
 export const StepTwoContinueButton: FC = () => {
   const { i18n } = useLingui()
@@ -18,8 +18,8 @@ export const StepTwoContinueButton: FC = () => {
     currencies: [currencies],
   } = useIndependentAssetInputs()
 
-  // TODO: How to convert selected fee tier to FEE? And then what to do with selectedFee tier afterward?
-  const [poolState] = useTridentClassicPool(currencies[0], currencies[1], (selectedFeeTier || 0) * 100, true)
+  // TODO: what to do with selectedFee tier afterward? Why is this always INVALID state?
+  const [poolState] = useTridentClassicPool(currencies[0], currencies[1], selectedFeeTier, true)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)

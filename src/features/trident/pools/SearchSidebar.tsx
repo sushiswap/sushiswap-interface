@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import Divider from '../../../components/Divider'
 import Checkbox from '../../../components/Checkbox'
 import { SetterOrUpdater, useRecoilState } from 'recoil'
-import { farmsOnlyAtom, feeTiersFilterAtom, showTWAPOnlyAtom } from './context/atoms'
+import { feeTiersFilterAtom, showTWAPOnlyAtom } from './context/atoms'
 import { FeeTier } from '../../../services/graph/fetchers/pools'
 
 const Section: FC<{ title: string }> = ({ children, title }) => {
@@ -69,16 +69,16 @@ const FeeTiers: FC = () => {
 }
 
 export const SearchSidebar: FC = () => {
-  const [farmsOnly, setFarmsOnly] = useRecoilState(farmsOnlyAtom)
   const [twapOnly, setTwapOnly] = useRecoilState(showTWAPOnlyAtom)
 
   return (
     <div className="flex-none w-52 border-r border-gray-800 pt-8 p-6 hidden lg:block">
       <div className="pb-6">Search Settings</div>
 
-      <Section title="Yield Farms">
-        <Selection title="Show farms only" checked={farmsOnly} setter={() => setFarmsOnly(!farmsOnly)} />
-      </Section>
+      {/* TO BE BUILT */}
+      {/*<Section title="Yield Farms">*/}
+      {/*  <Selection title="Show farms only" checked={farmsOnly} setter={() => setFarmsOnly(!farmsOnly)} />*/}
+      {/*</Section>*/}
       <Section title="TWAP Oracles">
         <Selection title="Show oracle pairs only" checked={twapOnly} setter={() => setTwapOnly(!twapOnly)} />
       </Section>

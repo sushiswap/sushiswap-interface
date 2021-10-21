@@ -6,20 +6,18 @@ import AssetSelect from '../../../../components/AssetSelect'
 import ToggleButtonGroup from '../../../../components/ToggleButton'
 import Button from '../../../../components/Button'
 import { PlusIcon } from '@heroicons/react/solid'
-import { useSetupPoolProperties } from '../../context/hooks/useSetupPoolProperties'
 import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
 import { useActiveWeb3React } from '../../../../hooks'
 import { useRecoilState } from 'recoil'
 import { poolCreationPageAtom } from '../../context/atoms'
 import { HybridPoolState, useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
+import { selectedFeeTierAtom } from '../context/atoms'
 
 const HybridSetupPool: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [page, setPage] = useRecoilState(poolCreationPageAtom)
-  const {
-    feeTier: [feeTier, setFeeTier],
-  } = useSetupPoolProperties()
+  const [feeTier, setFeeTier] = useRecoilState(selectedFeeTierAtom)
 
   const {
     currencies: [currencies, setCurrencies],

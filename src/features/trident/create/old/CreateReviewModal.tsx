@@ -1,19 +1,19 @@
 import React, { FC } from 'react'
-import HeadlessUIModal from '../../../components/Modal/HeadlessUIModal'
-import Button from '../../../components/Button'
+import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
+import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
-import Typography from '../../../components/Typography'
+import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
-import { useRecoilState } from 'recoil'
-import { showReviewAtom } from '../context/atoms'
-import ListPanel from '../../../components/ListPanel'
-import Divider from '../../../components/Divider'
-import { useIndependentAssetInputs } from '../context/hooks/useIndependentAssetInputs'
-import { usePoolDetailsMint } from '../context/hooks/usePoolDetails'
-import { useClassicPoolCreateExecute } from '../context/hooks/useClassicPoolCreateExecute'
-import { PoolType } from '../types'
-import { useSetupPoolProperties } from '../context/hooks/useSetupPoolProperties'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { showReviewAtom } from '../../context/atoms'
+import ListPanel from '../../../../components/ListPanel'
+import Divider from '../../../../components/Divider'
+import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
+import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
+import { useClassicPoolCreateExecute } from '../../context/hooks/useClassicPoolCreateExecute'
+import { PoolType } from '../../types'
+import { selectedPoolTypeAtom } from '../context/atoms'
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()
@@ -22,9 +22,7 @@ const AddTransactionReviewModal: FC = () => {
     parsedAmounts,
     currencies: [selectedPoolCurrencies],
   } = useIndependentAssetInputs()
-  const {
-    poolType: [selectedPoolType],
-  } = useSetupPoolProperties()
+  const selectedPoolType = useRecoilValue(selectedPoolTypeAtom)
   const { execute } = useClassicPoolCreateExecute()
   const { price } = usePoolDetailsMint(parsedAmounts)
 

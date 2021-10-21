@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import { classNames } from '../../../functions'
 import { useRecoilState } from 'recoil'
 import { currentStepAtom } from './context/atoms'
 import { activeStepColor, completedStepGradient, stepAheadColor, StepProps, stepTitleText } from './StepConstants'
+import { classNames } from '../../../functions'
 
 const Step: FC<StepProps> = ({ stepNum, title, currentStep, stepSetter }) => {
   const isActive = stepNum === currentStep
@@ -10,32 +10,28 @@ const Step: FC<StepProps> = ({ stepNum, title, currentStep, stepSetter }) => {
 
   return (
     <div
-      className={classNames(
-        'flex mt-5 select-none',
-        isActive ? 'text-high-emphesis' : 'text-secondary',
-        isCompleted && 'hover:cursor-pointer'
-      )}
       onClick={() => isCompleted && stepSetter(stepNum)}
+      className={classNames(isActive ? 'text-high-emphesis' : 'text-secondary', isCompleted && 'hover:cursor-pointer')}
     >
+      <div className="p-4">
+        <div>Step {stepNum}</div>
+        <div className="truncate">{title}</div>
+      </div>
       <div
         className={classNames(
-          'w-1.5',
-          isActive ? activeStepColor : isCompleted ? `bg-gradient-to-b ${completedStepGradient}` : stepAheadColor
+          'h-1.5',
+          isActive ? activeStepColor : isCompleted ? `bg-gradient-to-r ${completedStepGradient}` : stepAheadColor
         )}
       />
-      <div className="ml-5">
-        <div>Step {stepNum}</div>
-        <div>{title}</div>
-      </div>
     </div>
   )
 }
 
-export const StepperSidebar: FC = () => {
+export const MobileStepper: FC = () => {
   const [currentStep, setCurrentStep] = useRecoilState(currentStepAtom)
 
   return (
-    <div className="flex-none w-52 border-r border-gray-800 mt-6 hidden lg:block">
+    <div className="lg:hidden grid grid-cols-3 gap-6 -mb-10">
       <Step stepNum={1} title={stepTitleText[1]} currentStep={currentStep} stepSetter={setCurrentStep} />
       <Step stepNum={2} title={stepTitleText[2]} currentStep={currentStep} stepSetter={setCurrentStep} />
       <Step stepNum={3} title={stepTitleText[3]} currentStep={currentStep} stepSetter={setCurrentStep} />
