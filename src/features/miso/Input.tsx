@@ -63,7 +63,7 @@ export const Input = React.memo(
 
     return (
       <div className="mb-5">
-        <div className="text-primary text-xl">{i18n._(`${label}`)}</div>
+        {label && <div className="text-primary text-xl">{i18n._(`${label}`)}</div>}
         <div className="mt-3 w-full flex flex-row">
           <div className="flex-1">
             {description && <Typography className="mb-2 text-secondary">{i18n._(`${description}`)}</Typography>}

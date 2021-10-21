@@ -197,7 +197,7 @@ export const SUSHI_ADDRESS: {
   [ChainId.MAINNET]: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2',
   [ChainId.ROPSTEN]: '',
   [ChainId.RINKEBY]: '',
-  [ChainId.GÖRLI]: '',
+  [ChainId.GÖRLI]: '0x0769fd68dFb93167989C6f7254cd0D766Fb2841F',
   [ChainId.KOVAN]: '',
   [ChainId.FANTOM]: '',
   [ChainId.FANTOM_TESTNET]: '',

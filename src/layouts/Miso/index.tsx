@@ -44,12 +44,17 @@ function Navs({ data }) {
           return (
             <div className="flex flex-row items-center justify-center text-secondary" key={index}>
               <NavLink href={item.link} exact>
-                <Typography
-                  variant="sm"
-                  className={classNames('mr-2', index === data.length - 1 ? 'text-high-emphesis' : null)}
-                >
-                  {item.name}
-                </Typography>
+                <div>
+                  <Typography
+                    variant="sm"
+                    className={classNames(
+                      'mr-2 cursor-pointer',
+                      index === data.length - 1 ? 'text-high-emphesis' : null
+                    )}
+                  >
+                    {item.name}
+                  </Typography>
+                </div>
               </NavLink>
               {index !== data.length - 1 && <ChevronRightIcon className="w-5 h-5 mr-2" aria-hidden="true" />}
             </div>
@@ -73,8 +78,10 @@ function Title({ data, isFactoryPage, onTabChange }) {
         </Typography>
         <div className="flex flex-row">
           <div className="flex flex-col">
-            {contents.map((content) => (
-              <Typography className="flex-[7]">{content}</Typography>
+            {contents.map((content, index) => (
+              <Typography key={index} className="flex-[7]">
+                {content}
+              </Typography>
             ))}
           </div>
           <div className="flex justify-end flex-[3]">

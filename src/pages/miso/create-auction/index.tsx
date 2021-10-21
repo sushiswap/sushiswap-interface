@@ -2,7 +2,7 @@ import { ArrowSmRightIcon, ExclamationCircleIcon as ExclamationCircleIconOutline
 import { ExclamationCircleIcon as ExclamationCircleIconSolid } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/sdk'
+import { Currency, Token } from '@sushiswap/sdk'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 
@@ -28,20 +28,27 @@ import batchAuction from '../../../../public/images/miso/create-auction/miso-bat
 import PaymentCurrency from '../../../features/miso/PaymentCurrency'
 import DutchAuctionSettings from '../../../features/miso/DutchAuctionSettings'
 import AuctionPeriod from '../../../features/miso/AuctionPeriod'
-import ConfirmAuction from '../../../features/miso/ConfirmAuction'
 import NavLink from '../../../components/NavLink'
-import { classNames } from '../../../functions'
+import { classNames, shortenString } from '../../../functions'
 import { getPaymentCurrency } from '../../../features/miso/helper/PaymentCurrencies'
+import ConfirmAuctionRow from '../../../features/miso/ConfirmAuctionRow'
+import { useTokenAllowance } from '../../../hooks/useTokenAllowance'
+import { format } from 'date-fns'
+import { useCurrency } from '../../../hooks/Tokens'
+import useAuctions from '../../../hooks/miso/useAuctions'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { getExplorerLink } from '../../../functions/explorer'
+import { parseUnits } from '@ethersproject/units'
 
 function CreateAuction({ pageIndex, movePage }) {
   const { account, chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
 
-  const [auctionType, setAuctionType] = useState('Dutch Auction')
+  const [auctionType, setAuctionType] = useState('2')
 
   const [token, selectToken] = useState<Token>(null)
   const [tokenAmount, setTokenAmount] = useState(null)
-  const [paymentCurrency, setPaymentCurrency] = useState(null)
+  const [currencyId, setCurrencyId] = useState(null)
   const [fundWallet, setFundWallet] = useState(null)
 
   const [startingPrice, setStartingPrice] = useState(null)
@@ -52,10 +59,19 @@ function CreateAuction({ pageIndex, movePage }) {
 
   const balance = useTokenBalance(account ?? undefined, token)
 
+  const paymentCurrency = useCurrency(currencyId)
+
+  const tokenAllowance = useTokenAllowance(token, account ?? undefined, MISO_MARKET_ADDRESS[chainId])
+
   const typedTokenAmount = tryParseAmount(tokenAmount, token)
   const [approvalState, approve] = useApproveCallback(typedTokenAmount, MISO_MARKET_ADDRESS[chainId])
 
+  const { createMarket } = useAuctions()
+
   const [currentStep, setCurrentStep] = useState(0)
+  const [txState, setTxState] = React.useState(0)
+  const [tx, setTx] = React.useState(null)
+  const [receipt, setRecipt] = React.useState(null)
 
   useEffect(() => {
     if (startDate || endDate) {
@@ -64,14 +80,91 @@ function CreateAuction({ pageIndex, movePage }) {
       setCurrentStep(4)
     } else if (fundWallet) {
       setCurrentStep(3)
-    } else if (paymentCurrency) {
+    } else if (currencyId) {
       setCurrentStep(2)
     } else if (tokenAmount) {
       setCurrentStep(1)
     } else {
       setCurrentStep(0)
     }
-  }, [token, tokenAmount, paymentCurrency, fundWallet, startingPrice, endingPrice, startDate, endDate])
+  }, [token, tokenAmount, currencyId, fundWallet, startingPrice, endingPrice, startDate, endDate])
+
+  const makeDutchData = () => {
+    const _startDate = Math.floor(startDate.getTime() / 1000)
+    const _endDate = Math.floor(endDate.getTime() / 1000)
+
+    const pointList = '0x0000000000000000000000000000000000000000'
+
+    return defaultAbiCoder.encode(
+      [
+        'address',
+        'address',
+        'uint256',
+        'uint256',
+        'uint256',
+        'address',
+        'uint256',
+        'uint256',
+        'address',
+        'address',
+        'address',
+      ],
+      [
+        MISO_MARKET_ADDRESS[chainId],
+        token.address,
+        parseUnits(tokenAmount, token.decimals).toString(),
+        _startDate,
+        _endDate,
+        paymentCurrency instanceof Token ? paymentCurrency.address : '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        parseUnits(startingPrice, paymentCurrency.decimals).toString(),
+        parseUnits(endingPrice, paymentCurrency.decimals).toString(),
+        account,
+        pointList,
+        fundWallet,
+      ]
+    )
+  }
+
+  const makeCrowdsaleData = () => {}
+
+  const makeBatchData = () => {}
+
+  const deployAuction = () => {
+    let data
+    if (auctionType == '2') {
+      data = makeDutchData()
+    } else if (auctionType == '1') {
+      data = makeCrowdsaleData()
+    } else if (auctionType == '3') {
+      data = makeBatchData()
+    }
+
+    const txPromise = createMarket(auctionType, token.address, tokenAmount, data)
+    setTxState(1)
+    txPromise
+      .then((createTx) => {
+        console.log(createTx)
+        setTx(createTx)
+        setTxState(2)
+        movePage(pageIndex + 1)
+        createTx
+          .wait()
+          .then((createReceipt) => {
+            console.log(createReceipt)
+            setRecipt(createReceipt)
+            if (createReceipt.status) setTxState(3)
+            else setTxState(4)
+          })
+          .catch((reason) => {
+            console.log(reason)
+            setTxState(4)
+          })
+      })
+      .catch((reason) => {
+        console.log(reason)
+        setTxState(0)
+      })
+  }
 
   return (
     <>
@@ -103,8 +196,8 @@ function CreateAuction({ pageIndex, movePage }) {
                 </div>
                 <Radio
                   label="Dutch Auction"
-                  selected={auctionType === 'Dutch Auction'}
-                  onSelect={(label) => setAuctionType(label)}
+                  selected={auctionType === '2'}
+                  onSelect={() => setAuctionType('2')}
                   className="my-5"
                 />
                 <div>
@@ -125,8 +218,8 @@ function CreateAuction({ pageIndex, movePage }) {
                 </div>
                 <Radio
                   label="Crowdsale"
-                  selected={auctionType === 'Crowdsale'}
-                  onSelect={(label) => setAuctionType(label)}
+                  selected={auctionType === '1'}
+                  onSelect={(label) => setAuctionType('1')}
                   className="my-5"
                 />
                 <div>
@@ -146,8 +239,8 @@ function CreateAuction({ pageIndex, movePage }) {
                 </div>
                 <Radio
                   label="Batch Auction"
-                  selected={auctionType === 'Batch Auction'}
-                  onSelect={(label) => setAuctionType(label)}
+                  selected={auctionType === '3'}
+                  onSelect={(label) => setAuctionType('3')}
                   className="my-5"
                 />
                 <div>{i18n._(t`A fixed price and a fixed set of tokens.`)}</div>
@@ -207,9 +300,10 @@ function CreateAuction({ pageIndex, movePage }) {
               </div>
               <PaymentCurrency
                 label="Payment Currency*"
+                chainId={chainId}
                 className={classNames(currentStep < 2 ? 'opacity-50' : null)}
-                paymentCurrency={paymentCurrency}
-                onChange={(value) => setPaymentCurrency(value)}
+                paymentCurrency={currencyId}
+                onChange={(value) => setCurrencyId(value)}
               />
               <div className={classNames('mt-8', currentStep < 3 ? 'opacity-50' : null)}>
                 <Input
@@ -265,25 +359,95 @@ function CreateAuction({ pageIndex, movePage }) {
         {pageIndex === 2 && (
           <div>
             <div className="mb-16">
-              <ConfirmAuction
-                auctionType={auctionType}
-                auctionToken={token}
-                auctionTokenAllowance={tokenAmount}
-                auctionTokenAmount={tokenAmount}
-                auctionStartDate={startDate}
-                auctionEndDate={endDate}
-                paymentCurrency={getPaymentCurrency(paymentCurrency, chainId)}
-                fundWallet={fundWallet}
-                startingPrice={startingPrice}
-                endingPrice={endingPrice}
-              />
+              <Typography variant="h3" className="text-primary font-bold">
+                {i18n._(t`Confirm Your Auction Setup`)}
+              </Typography>
+              <div className="grid grid-cols-12 gap-10 mt-3">
+                <div className="col-span-7">
+                  <ConfirmAuctionRow title="Auction Type" content={auctionType} />
+                  <ConfirmAuctionRow
+                    title="Auction Token"
+                    content={token.name + ' (' + token.symbol + ')'}
+                    toCopy={token.address}
+                    showCopy
+                  />
+                  <ConfirmAuctionRow
+                    title="Auction Token Allowance"
+                    content={shortenString(tokenAllowance.toSignificant(6), 20) + ' ' + token.symbol}
+                  />
+                  <ConfirmAuctionRow title="Auction Token Amount" content={tokenAmount + ' ' + token.symbol} />
+                  <ConfirmAuctionRow
+                    title="Auction Start &amp; End"
+                    content={format(startDate, 'PPpp') + ' - ' + format(endDate, 'PPpp')}
+                  />
+                </div>
+                <div className="col-span-5">
+                  <ConfirmAuctionRow
+                    title="Payment Currency"
+                    content={paymentCurrency.name + '(' + paymentCurrency.symbol + ')'}
+                    toCopy={paymentCurrency instanceof Token ? paymentCurrency.address : ''}
+                    showCopy
+                  />
+                  <ConfirmAuctionRow title="Fund Wallet" toCopy={fundWallet} showCopy />
+
+                  <Typography className="text-secondary font-bold my-1">{i18n._(t`Price Settings`)}*</Typography>
+                  <div className="grid grid-cols-2 gap-8 text-primary mb-2">
+                    <div>
+                      <Typography variant="sm" className="text-primary mb-1">
+                        {i18n._(`STARTING PRICE`)}
+                      </Typography>
+                      <Typography className="rounded bg-dark-900 px-4 py-0.5">
+                        {i18n._(`${startingPrice} ${paymentCurrency.symbol}`)}
+                      </Typography>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="flex flex-col items-center">
+                        <div className="flex space-x-1 mb-1">
+                          <ArrowSmRightIcon className="text-secondary w-[20px] h-[20px] transform rotate-45" />
+                          <Typography variant="sm" className="text-primary">
+                            {i18n._(`MAXIMUM RAISED`)}
+                          </Typography>
+                        </div>
+                        <Typography variant="sm" className="rounded bg-blue bg-opacity-50 px-2">
+                          {i18n._(`${tokenAmount * parseFloat(startingPrice)} ${paymentCurrency.symbol}`)}
+                        </Typography>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Typography className="text-secondary font-bold my-1">{i18n._(t`Price Settings`)}*</Typography>
+                  <div className="grid grid-cols-2 gap-8 text-primary mb-2">
+                    <div>
+                      <Typography variant="sm" className="text-primary mb-1">
+                        {i18n._(`ENDING PRICE`)}
+                      </Typography>
+                      <Typography className="rounded bg-dark-900 px-4 py-0.5">
+                        {i18n._(`${endingPrice} ${paymentCurrency.symbol}`)}
+                      </Typography>
+                    </div>
+                    <div className="flex items-start">
+                      <div className="flex flex-col items-center">
+                        <div className="flex space-x-1 mb-1">
+                          <ArrowSmRightIcon className="text-secondary w-[20px] h-[20px] transform rotate-45" />
+                          <Typography variant="sm" className="text-primary">
+                            {i18n._(`MINIMUM RAISED`)}
+                          </Typography>
+                        </div>
+                        <Typography variant="sm" className="rounded bg-blue bg-opacity-50 px-2">
+                          {i18n._(`${tokenAmount * parseFloat(endingPrice)} ${paymentCurrency.symbol}`)}
+                        </Typography>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <Divider />
             <div className="flex justify-between mt-5">
               <Button color="gray" size="sm" className="w-[133px]" onClick={() => movePage(pageIndex - 1)}>
                 {i18n._(t`Previous`)}
               </Button>
-              <Button color="gradient" size="sm" className="w-[133px]" onClick={() => movePage(pageIndex + 1)}>
+              <Button color="gradient" size="sm" className="w-[133px]" onClick={() => deployAuction()}>
                 {i18n._(t`Deploy`)}
               </Button>
             </div>
@@ -293,9 +457,10 @@ function CreateAuction({ pageIndex, movePage }) {
           <div className="grid grid-cols-2 gap-16">
             <div>
               <Typography variant="h3" className="text-high-emphesis">
-                {i18n._(t`Your Transaction is submitted...`)}
+                {txState === 3 && i18n._(t`Transaction Completed!`)}
+                {txState === 2 && i18n._(t`Your Transaction is submitted...`)}
               </Typography>
-              <ExternalLink className="underline" color="blue" href="#">
+              <ExternalLink className="underline" color="blue" href={getExplorerLink(chainId, tx.hash, 'transaction')}>
                 {i18n._(t`View on Explorer`)}
               </ExternalLink>
               <Typography variant="lg" weight={700} className="text-secondary mt-10">

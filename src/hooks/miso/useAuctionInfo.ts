@@ -98,7 +98,7 @@ export const useAuctionInfo = (auctionAddress: string) => {
         default:
           break
       }
-      setAuctionInfo(auctionInfo)
+      setAuctionInfo({ ...auctionInfo, marketTemplate: marketTemplate })
     } catch (error) {
       setAuctionInfo([])
       console.error(error)

@@ -8,8 +8,9 @@ import { classNames } from '../../functions/styling'
 import PaymentCustomOption from './PaymentCustomOption'
 import PaymentOption from './PaymentOption'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { TETHER_ADDRESS, USDC_ADDRESS, SUSHI_ADDRESS, DAI_ADDRESS } from '../../constants/miso'
 
-export default function ({ className, label, paymentCurrency, onChange }: any) {
+export default function ({ className, label, paymentCurrency, chainId, onChange }: any) {
   const { i18n } = useLingui()
   const [_alertVisible, showAlert] = React.useState(false)
 
@@ -38,33 +39,33 @@ export default function ({ className, label, paymentCurrency, onChange }: any) {
             className="col-span-6"
             title="SUSHI"
             description="Our Favorite"
-            onSelected={() => onChange('SUSHI')}
-            selected={paymentCurrency == 'SUSHI'}
+            onSelected={() => onChange(SUSHI_ADDRESS[chainId])}
+            selected={paymentCurrency == SUSHI_ADDRESS[chainId]}
           />
           <PaymentOption
             className="col-span-4 flex-1"
             title="DAI"
             description=""
-            onSelected={() => onChange('DAI')}
-            selected={paymentCurrency == 'DAI'}
+            onSelected={() => onChange(DAI_ADDRESS[chainId])}
+            selected={paymentCurrency == DAI_ADDRESS[chainId]}
           />
           <PaymentOption
             className="col-span-4 flex-1"
             title="USDCOIN"
             description=""
-            onSelected={() => onChange('USDC')}
-            selected={paymentCurrency == 'USDC'}
+            onSelected={() => onChange(USDC_ADDRESS[chainId])}
+            selected={paymentCurrency == USDC_ADDRESS[chainId]}
           />
           <PaymentOption
             className="col-span-4 flex-1"
             title="TETHER(USDT)"
             description=""
-            onSelected={() => onChange('USDT')}
-            selected={paymentCurrency == 'USDT'}
+            onSelected={() => onChange(TETHER_ADDRESS[chainId])}
+            selected={paymentCurrency == TETHER_ADDRESS[chainId]}
           />
           <PaymentCustomOption
             className="col-span-12"
-            onSelected={() => onChange('CUSTOM')}
+            onSelected={(address) => onChange(address)}
             selected={paymentCurrency == 'CUSTOM'}
           />
         </div>

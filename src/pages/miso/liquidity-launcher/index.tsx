@@ -28,7 +28,6 @@ import batchAuction from '../../../../public/images/miso/create-auction/miso-bat
 import PaymentCurrency from '../../../features/miso/PaymentCurrency'
 import DutchAuctionSettings from '../../../features/miso/DutchAuctionSettings'
 import AuctionPeriod from '../../../features/miso/AuctionPeriod'
-import ConfirmAuction from '../../../features/miso/ConfirmAuction'
 import NavLink from '../../../components/NavLink'
 import { classNames, shortenAddress } from '../../../functions'
 import { getPaymentCurrency } from '../../../features/miso/helper/PaymentCurrencies'
