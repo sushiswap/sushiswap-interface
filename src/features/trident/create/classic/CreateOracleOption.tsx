@@ -20,7 +20,7 @@ export const CreateOracleOption: FC = () => {
         className="flex gap-2 items-center mt-8 hover:cursor-pointer"
         onClick={() => setCreateAnOracle(!createAnOracle)}
       >
-        <Checkbox color="blue" checked={createAnOracle} />
+        <Checkbox checked={createAnOracle} />
         <span className="text-xs">Yes create an oracle</span>
       </div>
     </div>

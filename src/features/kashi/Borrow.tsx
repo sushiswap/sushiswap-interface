@@ -3,7 +3,7 @@ import { KashiApproveButton, TokenApproveButton } from './Button'
 import { Percent, SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
 import React, { useMemo, useState } from 'react'
 import { Warning, Warnings } from '../../entities/Warnings'
-import { ZERO, e10, maximum, minimum } from '../../functions/math'
+import { e10, maximum, minimum, ZERO } from '../../functions/math'
 import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
 import { hexConcat, hexlify } from '@ethersproject/bytes'
 import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
@@ -11,7 +11,6 @@ import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../..
 import { AddressZero } from '@ethersproject/constants'
 import { BigNumber } from '@ethersproject/bignumber'
 import Button from '../../components/Button'
-import { Field } from '../../state/swap/actions'
 import KashiCooker from '../../entities/KashiCooker'
 import SmartNumberInput from './SmartNumberInput'
 import TradeReview from './TradeReview'
@@ -388,7 +387,6 @@ export default function Borrow({ pair }: BorrowProps) {
 
       {borrowValueSet && (
         <ExchangeRateCheckBox
-          color="pink"
           pair={pair}
           updateOracle={updateOracle}
           setUpdateOracle={setUpdateOracle}

@@ -372,7 +372,6 @@ export default function Repay({ pair }: RepayProps) {
 
       {removeValueSet && (
         <ExchangeRateCheckBox
-          color="pink"
           pair={pair}
           updateOracle={updateOracle}
           setUpdateOracle={setUpdateOracle}

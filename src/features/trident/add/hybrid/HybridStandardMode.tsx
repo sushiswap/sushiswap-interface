@@ -56,7 +56,7 @@ const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active =
     >
       {!horizontal && (
         <div className="absolute z-10 top-2 right-2">
-          <Checkbox checked={active} color="pink" />
+          <Checkbox checked={active} />
         </div>
       )}
       <CurrencyLogo

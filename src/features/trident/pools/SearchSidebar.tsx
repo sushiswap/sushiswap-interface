@@ -26,7 +26,8 @@ interface SelectionProps {
 const Selection: FC<SelectionProps> = ({ title, checked, setter }) => {
   return (
     <div className="flex gap-2 items-center">
-      <Checkbox color="blue" checked={checked} set={setter} /> <span className="text-xs">{title}</span>
+      <Checkbox checked={checked} set={setter} />
+      <span className="text-xs">{title}</span>
     </div>
   )
 }

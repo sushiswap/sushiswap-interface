@@ -19,7 +19,7 @@ const YieldFarmFilter: FC = () => {
         </Typography>
       </div>
       <div className="flex flex-row gap-3 items-center" onClick={() => setFarmsOnly(!farmsOnly)}>
-        <Checkbox checked={farmsOnly} color="blue" />
+        <Checkbox checked={farmsOnly} />
         <Typography className="text-secondary">Show farms only</Typography>
       </div>
     </div>
@@ -37,7 +37,7 @@ const TwapOnlyFilter: FC = () => {
         </Typography>
       </div>
       <div className="flex flex-row gap-3 items-center" onClick={() => setTwapOnly(!twapOnly)}>
-        <Checkbox checked={twapOnly} color="blue" />
+        <Checkbox checked={twapOnly} />
         <Typography className="text-secondary">Show oracle pairs only</Typography>
       </div>
     </div>
@@ -55,19 +55,19 @@ const FeeTierFilter: FC = () => {
         </Typography>
       </div>
       <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(1, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(1)} color="blue" />
+        <Checkbox checked={feeTiers.includes(1)} />
         <Typography className="text-secondary">1%</Typography>
       </div>
       <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.3, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(0.3)} color="blue" />
+        <Checkbox checked={feeTiers.includes(0.3)} />
         <Typography className="text-secondary">0.3%</Typography>
       </div>
       <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.05, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(0.05)} color="blue" />
+        <Checkbox checked={feeTiers.includes(0.05)} />
         <Typography className="text-secondary">0.05%</Typography>
       </div>
       <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.01, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(0.01)} color="blue" />
+        <Checkbox checked={feeTiers.includes(0.01)} />
         <Typography className="text-secondary">0.1%</Typography>
       </div>
     </div>

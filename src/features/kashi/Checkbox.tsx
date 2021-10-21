@@ -4,7 +4,7 @@ import React from 'react'
 import Settings from '../../components/Settings'
 import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
 
-export function ExchangeRateCheckBox({ color, pair, updateOracle, setUpdateOracle, desiredDirection }: any) {
+export function ExchangeRateCheckBox({ pair, updateOracle, setUpdateOracle, desiredDirection }: any) {
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
   const show =
     displayUpdateOracle || desiredDirection === 'up'
@@ -14,12 +14,7 @@ export function ExchangeRateCheckBox({ color, pair, updateOracle, setUpdateOracl
   return (
     show && (
       <div className="flex items-center mb-4">
-        <Checkbox
-          color={color}
-          checked={displayUpdateOracle}
-          disabled={pair.currentExchangeRate.isZero()}
-          set={setUpdateOracle}
-        />
+        <Checkbox checked={displayUpdateOracle} disabled={pair.currentExchangeRate.isZero()} set={setUpdateOracle} />
         <span className="ml-2 mr-1 text-primary">Update exchange rate from the oracle</span>
         <QuestionHelper
           text={
