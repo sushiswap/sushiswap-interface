@@ -157,7 +157,7 @@ function Launchpad() {
           </NavLink>
         </div>
         <div className="mt-3 bg-dark-900 rounded overflow-hidden border-dark-700 border">
-          {auctions.length == 0 ? (
+          {tokens.length == 0 ? (
             <div className="text-center py-10">
               <div className="w-6 m-auto">
                 <Image src={loadingIndicator} layout="responsive" alt="loading..." />
