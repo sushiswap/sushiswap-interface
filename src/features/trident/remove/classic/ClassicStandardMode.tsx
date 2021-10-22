@@ -55,7 +55,7 @@ const ClassicUnstandardMode: FC = () => {
         const selectedLiquidityValueInUsdc = amount?.multiply(new Percent(percentageInput, '100'))
         return (
           <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-3 mt-4">
+            <div className="flex flex-col gap-3">
               <div className="flex justify-between gap-10 items-center lg:mb-2">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
                   Amount to Remove:

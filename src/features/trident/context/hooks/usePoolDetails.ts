@@ -96,46 +96,15 @@ export const usePoolDetailsMint = (
     return undefined
   }, [noLiquidity, parsedAmounts, pool])
 
-  // Returns the resulting deposited tokens after execution
-  const liquidityValueAfter = useMemo(() => {
-    if (
-      liquidityMinted &&
-      pool &&
-      totalSupply &&
-      liquidityValueBefore[0] &&
-      liquidityValueBefore[1] &&
-      rebases[liquidityValueBefore[0].currency.wrapped.address] &&
-      rebases[liquidityValueBefore[1].currency.wrapped.address]
-    ) {
-      return [
-        liquidityValueBefore[0].add(
-          toAmountCurrencyAmount(
-            rebases[liquidityValueBefore[0].currency.wrapped.address],
-            pool.getLiquidityValue(liquidityValueBefore[0].currency, totalSupply, liquidityMinted)
-          )
-        ),
-        liquidityValueBefore[1].add(
-          toAmountCurrencyAmount(
-            rebases[liquidityValueBefore[1].currency.wrapped.address],
-            pool.getLiquidityValue(liquidityValueBefore[1].currency, totalSupply, liquidityMinted)
-          )
-        ),
-      ]
-    }
-
-    return [undefined, undefined]
-  }, [liquidityValueBefore, liquidityMinted, pool, rebases, totalSupply])
-
   return useMemo(
     () => ({
       poolShareBefore,
       poolShareAfter,
       liquidityMinted,
-      liquidityValueAfter,
       liquidityValueBefore,
       price,
     }),
-    [poolShareBefore, poolShareAfter, liquidityMinted, liquidityValueAfter, liquidityValueBefore, price]
+    [poolShareBefore, poolShareAfter, liquidityMinted, liquidityValueBefore, price]
   )
 }
 

@@ -48,19 +48,25 @@ export const secondaryInputSelector = selector<string>({
     // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
     if (!noLiquidity && fixedRatio && typedField === TypedField.A) {
       const [, pool] = get(poolAtom)
-      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
+      const [currencyA, currencyB] = get(currenciesAtom)
+      const [tokenA, tokenB] = [currencyA?.wrapped, currencyB?.wrapped]
 
       if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
         const dependentTokenAmount = toAmountCurrencyAmount(
           rebases[tokenB.wrapped.address],
           pool
-            .priceOf(tokenA)
-            .quote(toShareCurrencyAmount(rebases[tokenA.wrapped.address], mainInputCurrencyAmount?.wrapped))
+            .priceOf(mainInputCurrencyAmount?.wrapped.currency)
+            .quote(
+              toShareCurrencyAmount(
+                rebases[mainInputCurrencyAmount?.wrapped.currency.address],
+                mainInputCurrencyAmount?.wrapped
+              )
+            )
         )
 
         return (
-          pool?.token1?.isNative
-            ? CurrencyAmount.fromRawAmount(pool?.token1, dependentTokenAmount.quotient)
+          currencyB?.isNative
+            ? CurrencyAmount.fromRawAmount(currencyB, dependentTokenAmount.quotient)
             : dependentTokenAmount
         ).toExact()
       }
@@ -78,8 +84,9 @@ export const secondaryInputSelector = selector<string>({
     // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
     if (!noLiquidity && fixedRatio) {
       const [, pool] = get(poolAtom)
-      const [tokenA, tokenB] = [pool?.token0?.wrapped, pool?.token1?.wrapped]
-      const newValueCA = tryParseAmount(newValue, pool?.token1)
+      const [currencyA, currencyB] = get(currenciesAtom)
+      const [tokenA, tokenB] = [currencyA?.wrapped, currencyB?.wrapped]
+      const newValueCA = tryParseAmount(newValue, tokenB)
 
       if (tokenA && tokenB && pool && newValueCA?.wrapped) {
         const dependentTokenAmount = toAmountCurrencyAmount(
@@ -162,7 +169,7 @@ export const useDependentAssetInputs = () => {
   const onMax = useCallback(async () => {
     if (!balances || !pool || !balances[0] || !balances[1]) return
     if (!noLiquidity && fixedRatio) {
-      if (pool.priceOf(pool.token0).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)) {
+      if (pool.priceOf(currencies[0]?.wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)) {
         typedField[1](TypedField.A)
         mainInput[1](maxAmountSpend(balances[0])?.toExact() || '')
       } else {
@@ -173,13 +180,13 @@ export const useDependentAssetInputs = () => {
       mainInput[1](maxAmountSpend(balances[0])?.toExact() || '')
       secondaryInput[1](maxAmountSpend(balances[1])?.toExact() || '')
     }
-  }, [balances, fixedRatio, mainInput, noLiquidity, pool, secondaryInput, typedField])
+  }, [balances, currencies, fixedRatio, mainInput, noLiquidity, pool, secondaryInput, typedField])
 
   const isMax = useMemo(() => {
     if (!balances || !pool || !balances[0] || !balances[1]) return false
 
     if (!noLiquidity && fixedRatio) {
-      return pool.priceOf(pool.token0).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)
+      return pool.priceOf(currencies[0]?.wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)
         ? parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]) || '')
         : parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]) || '')
     } else {
@@ -188,7 +195,7 @@ export const useDependentAssetInputs = () => {
         parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]) || '')
       )
     }
-  }, [balances, fixedRatio, noLiquidity, parsedAmounts, pool])
+  }, [balances, currencies, fixedRatio, noLiquidity, parsedAmounts, pool])
 
   const insufficientBalance = useMemo(() => {
     return parsedAmounts.find((el, index) => {
