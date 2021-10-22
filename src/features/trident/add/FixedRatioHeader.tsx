@@ -35,7 +35,7 @@ const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   )
 
   if (isDesktop) {
-    return <div className="py-7">{content}</div>
+    return <div className="pb-1">{content}</div>
   }
 
   return (
