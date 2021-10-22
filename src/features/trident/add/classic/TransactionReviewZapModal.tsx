@@ -19,8 +19,10 @@ const TransactionReviewZapModal: FC = () => {
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { parsedAmount, parsedSplitAmounts } = useZapAssetInput()
-  const { liquidityValueBefore, liquidityValueAfter, poolShareBefore, poolShareAfter, liquidityMinted } =
-    usePoolDetailsMint(parsedSplitAmounts, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE)
+  const { liquidityValueBefore, poolShareBefore, poolShareAfter, liquidityMinted } = usePoolDetailsMint(
+    parsedSplitAmounts,
+    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
+  )
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
@@ -81,28 +83,6 @@ const TransactionReviewZapModal: FC = () => {
         <div className="flex flex-col px-5 gap-5">
           <Divider />
           <div className="flex flex-col gap-1">
-            {liquidityValueBefore && liquidityValueAfter && (
-              <>
-                <div className="flex justify-between">
-                  <Typography variant="sm" className="text-secondary">
-                    {i18n._(t`${pool?.token0?.symbol} Deposited:`)}
-                  </Typography>
-                  <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                    {liquidityValueBefore[0] ? liquidityValueBefore[0].toSignificant(6) : '0.000'} →{' '}
-                    {liquidityValueAfter[0] ? liquidityValueAfter[0].toSignificant(6) : '0.000'} {pool?.token0?.symbol}
-                  </Typography>
-                </div>
-                <div className="flex justify-between">
-                  <Typography variant="sm" className="text-secondary">
-                    {i18n._(t`${pool?.token1?.symbol} Deposited:`)}
-                  </Typography>
-                  <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                    {liquidityValueBefore[1] ? liquidityValueBefore[1].toSignificant(6) : '0.000'} →{' '}
-                    {liquidityValueAfter[1] ? liquidityValueAfter[1].toSignificant(6) : '0.000'} {pool?.token1?.symbol}
-                  </Typography>
-                </div>
-              </>
-            )}
             <div className="flex justify-between">
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`Share of Pool`)}
