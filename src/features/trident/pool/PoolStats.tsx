@@ -7,7 +7,7 @@ import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
 import { useBlock } from '../../../services/graph'
 import { useActiveWeb3React } from '../../../hooks'
 import { useTridentPools } from '../../../services/graph/hooks/pools'
-import { useRecoilState } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { poolAtom } from '../context/atoms'
 
 interface PoolStatsProps {}
@@ -18,7 +18,7 @@ const PoolStats: FC<PoolStatsProps> = () => {
 
   const { chainId } = useActiveWeb3React()
 
-  const poolAddress = useRecoilState(poolAtom)?.[0]?.[2]
+  const poolAddress = useRecoilValue(poolAtom)?.[0]?.[2]
 
   const block1d = useBlock({ chainId, daysAgo: 1 })
   const block2d = useBlock({ chainId, daysAgo: 2 })
