@@ -6,7 +6,6 @@ import { useLingui } from '@lingui/react'
 import Typography from '../../../../components/Typography'
 import React from 'react'
 import ClassicStandardMode from '../../../../features/trident/remove/classic/ClassicStandardMode'
-import ModeToggle from '../../../../features/trident/ModeToggle'
 import { LiquidityMode } from '../../../../features/trident/types'
 import { RecoilRoot, useRecoilValue } from 'recoil'
 import { liquidityModeAtom, poolAtom } from '../../../../features/trident/context/atoms'
@@ -65,8 +64,6 @@ const RemoveClassic = () => {
       <TridentBody>
         <div className="flex flex-row justify-between">
           <div className="lg:w-7/12 w-full flex flex-col gap-5">
-            <ModeToggle />
-
             {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
               <Alert
                 dismissable={false}

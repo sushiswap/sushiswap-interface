@@ -24,8 +24,10 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
   const { i18n } = useLingui()
 
   const { parsedAmounts, parsedSLPAmount } = usePercentageInput()
-  const { liquidityValueBefore, liquidityValueAfter, poolShareBefore, poolShareAfter, minLiquidityOutput } =
-    usePoolDetailsBurn(parsedSLPAmount, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE)
+  const { poolShareBefore, poolShareAfter, minLiquidityOutput } = usePoolDetailsBurn(
+    parsedSLPAmount,
+    DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
+  )
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const outputToWallet = useRecoilValue(outputToWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
@@ -93,24 +95,12 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
         <div className="flex flex-col px-5 gap-5">
           <Divider />
           <div className="flex flex-col gap-1">
-            {liquidityValueBefore.map((currentLiquidityValue, index) => (
-              <div className="flex justify-between" key={index}>
-                <Typography variant="sm" className="text-secondary">
-                  {i18n._(t`${currentLiquidityValue?.currency.symbol} Deposited:`)}
-                </Typography>
-                <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                  {currentLiquidityValue?.toSignificant(6)} →{' '}
-                  {liquidityValueAfter[index] ? liquidityValueAfter[index]?.toSignificant(6) : '0.000'}{' '}
-                  {currentLiquidityValue?.currency?.symbol}
-                </Typography>
-              </div>
-            ))}
             <div className="flex justify-between">
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`Share of Pool`)}
               </Typography>
               <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-                {'<'} {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'} →{' '}
+                {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'} →{' '}
                 <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
               </Typography>
             </div>

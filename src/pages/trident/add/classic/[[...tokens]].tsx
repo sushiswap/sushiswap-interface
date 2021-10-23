@@ -24,7 +24,6 @@ import ClassicStandardAside from '../../../../features/trident/add/classic/Class
 import ClassicZapAside from '../../../../features/trident/add/classic/ClassicZapAside'
 import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
 import { useRouter } from 'next/router'
-import ModeToggle from '../../../../features/trident/ModeToggle'
 
 const AddClassic = () => {
   useInitClassicPoolState()
@@ -75,7 +74,6 @@ const AddClassic = () => {
       <TridentBody>
         <div className="flex flex-row justify-between">
           <div className="flex flex-col w-full lg:w-7/12">
-            <ModeToggle />
             <FixedRatioHeader />
             {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
               <Alert
