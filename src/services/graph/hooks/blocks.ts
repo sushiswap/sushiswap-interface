@@ -21,6 +21,8 @@ export function useBlock(
       ? Number(timestamp)
       : Math.floor(Number(timestamp) / 1000)
     : undefined
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   timestamp = useMemo(() => (daysAgo ? Math.floor(Date.now() / 1000) - daysAgo * 86400 : timestamp), [daysAgo])
 
   const { data, error } = useSWR(

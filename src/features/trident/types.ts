@@ -26,7 +26,7 @@ export enum LiquidityMode {
 }
 
 // TODO should be all
-export type PoolAtomType = [ConstantProductPoolState | HybridPoolState, PoolUnion | null]
+export type PoolAtomType = [ConstantProductPoolState | HybridPoolState, PoolUnion | null, string | null]
 
 export type LiquidityInput = {
   token: string

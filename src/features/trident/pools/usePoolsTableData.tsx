@@ -8,17 +8,19 @@ import Chip from '../../../components/Chip'
 import Button from '../../../components/Button'
 import Link from 'next/link'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
+import { useActiveWeb3React } from '../../../hooks'
 
 export const usePoolsTableData = () => {
-  const { data, error, isValidating } = useSWR('getAllTridentPools', () => getTridentPools())
+  const { chainId } = useActiveWeb3React()
+  const { data, error, isValidating } = useSWR('getAllTridentPools', () => getTridentPools(chainId))
 
   const columns = useMemo(() => {
     return [
       {
         Header: 'Assets',
-        accessor: 'symbols',
+        accessor: 'assets',
         Cell: ({ value, row: { original } }) => {
-          return <PoolCell symbols={value} currencyIds={original.currencyIds} twapEnabled={original.twapEnabled} />
+          return <PoolCell assets={value} twapEnabled={original.twapEnabled} />
         },
         filter: filterForSearchQueryAndTWAP,
       },
@@ -39,7 +41,7 @@ export const usePoolsTableData = () => {
       },
       {
         Header: 'TVL',
-        accessor: 'totalValueLocked',
+        accessor: 'totalValueLockedUSD',
         maxWidth: 100,
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
       },
@@ -54,13 +56,15 @@ export const usePoolsTableData = () => {
         accessor: 'actions',
         maxWidth: 100,
         Cell: ({ row: { original } }) => {
-          const poolPath = `/trident/pool/${original.type.toLowerCase()}/${original.currencyIds.join('/')}`
+          const poolPath = `/trident/pool/${original.type.toLowerCase()}/${original.assets
+            .map((asset) => asset.id)
+            .join('/')}`
 
           return (
             <Link href={poolPath} passHref>
               {/* DIV needed for forwardRef issue */}
               <div>
-                <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
+                <Button color="gradient" variant="outlined" className="h-8 text-sm font-bold text-white">
                   Invest
                 </Button>
               </div>

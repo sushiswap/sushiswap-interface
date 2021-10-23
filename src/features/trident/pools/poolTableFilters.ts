@@ -11,7 +11,11 @@ export const filterForSearchQueryAndTWAP: FilterSymbolsFunc<{ searchQuery: strin
     if (original.twapEnabled !== filterValue.twapEnabled) return false
 
     // Allow searching for symbol (LINK) or name (chainlink)
-    const searchableText = original.symbols.concat(original.names).join(' ').toLowerCase()
+    const searchableText = original.assets
+      .map((asset) => asset.symbol)
+      .concat(original.assets.map((asset) => asset.name))
+      .join(' ')
+      .toLowerCase()
     return !filterValue.searchQuery.length || searchableText.includes(filterValue.searchQuery.toLowerCase())
   })
 }

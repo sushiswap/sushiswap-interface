@@ -19,7 +19,7 @@ export enum HybridPoolState {
 
 export function useTridentHybridPools(
   pools: [Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined][]
-): [HybridPoolState, HybridPool | null][] {
+): [HybridPoolState, HybridPool | null, string | null][] {
   const { chainId } = useActiveWeb3React()
 
   const poolAddresses = useMemo(() => {
@@ -59,9 +59,9 @@ export function useTridentHybridPools(
       const tokenB = pools[i][1]?.wrapped
       const fee = pools[i]?.[2]
       const a = pools[i]?.[3]
-      if (loading) return [HybridPoolState.LOADING, null]
-      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !a) return [HybridPoolState.INVALID, null]
-      if (!reserves) return [HybridPoolState.NOT_EXISTS, null]
+      if (loading) return [HybridPoolState.LOADING, null, null]
+      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !a) return [HybridPoolState.INVALID, null, null]
+      if (!reserves) return [HybridPoolState.NOT_EXISTS, null, null]
       const [reserve0, reserve1] = reserves
       const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
       return [
@@ -72,9 +72,10 @@ export function useTridentHybridPools(
           fee,
           a
         ),
+        poolAddresses[i],
       ]
     })
-  }, [results, pools])
+  }, [results, pools, poolAddresses])
 }
 
 export function useTridentHybridPool(
@@ -82,7 +83,7 @@ export function useTridentHybridPool(
   tokenB?: Currency,
   fee?: Fee,
   a?: JSBI
-): [HybridPoolState, HybridPool | null] {
+): [HybridPoolState, HybridPool | null, string | null] {
   const inputs: [[Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined]] = useMemo(
     () => [[tokenA, tokenB, fee, a]],
     [tokenA, tokenB, fee, a]

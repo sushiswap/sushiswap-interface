@@ -18,7 +18,7 @@ export enum ConstantProductPoolState {
 
 export function useTridentClassicPools(
   pools: [Currency | undefined, Currency | undefined, Fee | undefined, boolean | undefined][]
-): [ConstantProductPoolState, ConstantProductPool | null][] {
+): [ConstantProductPoolState, ConstantProductPool | null, string | null][] {
   const { chainId } = useActiveWeb3React()
   const poolAddresses = useMemo(() => {
     if (!chainId) return []
@@ -56,9 +56,10 @@ export function useTridentClassicPools(
       const tokenB = pools[i][1]?.wrapped
       const fee = pools[i]?.[2]
       const twap = pools[i]?.[3]
-      if (loading) return [ConstantProductPoolState.LOADING, null]
-      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !twap) return [ConstantProductPoolState.INVALID, null]
-      if (!reserves) return [ConstantProductPoolState.NOT_EXISTS, null]
+      if (loading) return [ConstantProductPoolState.LOADING, null, null]
+      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !twap)
+        return [ConstantProductPoolState.INVALID, null, null]
+      if (!reserves) return [ConstantProductPoolState.NOT_EXISTS, null, null]
       const [reserve0, reserve1] = reserves
       const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
       return [
@@ -69,9 +70,10 @@ export function useTridentClassicPools(
           fee,
           twap
         ),
+        poolAddresses[i],
       ]
     })
-  }, [results, pools])
+  }, [results, pools, poolAddresses])
 }
 
 export function useTridentClassicPool(
@@ -79,7 +81,7 @@ export function useTridentClassicPool(
   tokenB?: Currency,
   fee?: Fee,
   twap?: boolean
-): [ConstantProductPoolState, ConstantProductPool | null] {
+): [ConstantProductPoolState, ConstantProductPool | null, string | null] {
   const inputs: [[Currency | undefined, Currency | undefined, Fee | undefined, boolean | undefined]] = useMemo(
     () => [[tokenA, tokenB, fee, twap]],
     [tokenA, tokenB, fee, twap]

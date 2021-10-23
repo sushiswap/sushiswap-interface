@@ -6,7 +6,7 @@ import { TableInstance } from '../../transactions/types'
 const useInstantiateFilters = (setFilter: TableInstance['setFilter']) => {
   const searchQuery = useRecoilValue(searchQueryAtom)
   const twapEnabled = useRecoilValue(showTWAPOnlyAtom)
-  useMemo(() => setFilter('symbols', { searchQuery, twapEnabled }), [searchQuery, setFilter, twapEnabled])
+  useMemo(() => setFilter('assets', { searchQuery, twapEnabled }), [searchQuery, setFilter, twapEnabled])
 
   const feeTiersSelected = useRecoilValue(feeTiersFilterAtom)
   useMemo(() => setFilter('swapFeePercent', { feeTiersSelected }), [feeTiersSelected, setFilter])

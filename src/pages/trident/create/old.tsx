@@ -44,7 +44,7 @@ const Pool = () => {
           ? new ConstantProductPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier, true)
           : new HybridPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier)
 
-      setPool([1, pool ? pool : null])
+      setPool([1, pool ? pool : null, ''])
     }
   }, [feeTier, parsedAmounts, poolType, setPool])
 
@@ -63,16 +63,16 @@ const Pool = () => {
       <Stepper onChange={(index) => setPage(index)} value={page}>
         <TridentHeader className="pb-0">
           <div className="flex flex-col gap-4 p-5">
-            <div className="flex lg:flex-row flex-col gap-2 justify-between">
+            <div className="flex flex-col justify-between gap-2 lg:flex-row">
               <div className="flex gap-4">
-                <Typography variant="h2" weight={700} className="text-high-emphesis inline">
+                <Typography variant="h2" weight={700} className="inline text-high-emphesis">
                   {i18n._(t`Create New Liquidity Pool`)}
                 </Typography>
                 <Button
                   color="blue"
                   variant="outlined"
                   size="xs"
-                  className="pl-1 pr-4 rounded-full inline flex-shrink-0 h-8"
+                  className="flex-shrink-0 inline h-8 pl-1 pr-4 rounded-full"
                   startIcon={<ChevronLeftIcon width={24} height={24} />}
                 >
                   <Link href={`/trident/pools`}>{i18n._(t`Pools`)}</Link>
