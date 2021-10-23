@@ -9,6 +9,9 @@ jobs:
   unit-tests:
     name: Unit tests
     runs-on: ubuntu-latest
+    env:
+      NEXT_TELEMETRY_DISABLED: 1
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,12 +24,14 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v1
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      - uses: actions/cache@v2
         with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+            path: ${{ github.workspace }}/.next/cache
+            key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
+            restore-keys: |
+             ${{ runner.os }}-yarn-
+             
       - run: yarn install --frozen-lockfile
+        id: install
       - run: yarn test:ci
+        id: test
