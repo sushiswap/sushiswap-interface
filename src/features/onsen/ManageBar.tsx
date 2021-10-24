@@ -126,7 +126,7 @@ const ManageBar = ({ farm }) => {
 
   return (
     <div className="flex flex-col space-y-2">
-      <div className="flex justify-between pb-2">
+      <div className="flex items-center justify-between pb-2">
         <Switch.Group>
           <div className="flex items-center">
             <Switch
@@ -159,7 +159,11 @@ const ManageBar = ({ farm }) => {
                   ? setDepositValue(balance.multiply(multipler).divide(100).toExact())
                   : setWithdrawValue(stakedAmount.multiply(multipler).divide(100).toExact())
               }}
-              className={classNames('text-md', toggle ? 'focus:ring-blue' : 'focus:ring-pink')}
+              className={classNames(
+                'text-md border border-opacity-50',
+                toggle ? 'focus:ring-blue border-blue' : 'focus:ring-pink border-pink',
+                multipler === '25' || multipler === '75' ? 'hidden sm:block' : ''
+              )}
             >
               {multipler === '100' ? 'MAX' : multipler + '%'}
             </Button>

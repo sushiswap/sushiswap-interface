@@ -14,6 +14,15 @@ export const bentoTokenFieldsQuery = gql`
   }
 `
 
+export const bentoTokensQuery = gql`
+  query bentoTokens($first: Int = 1000, $block: Block_height, $where: Token_filter) {
+    tokens(first: $first, skip: $skip, block: $block, where: $where) {
+      ...bentoTokenFields
+    }
+  }
+  ${bentoTokenFieldsQuery}
+`
+
 export const bentoUserTokensQuery = gql`
   query bentoUserTokens($user: String!, $skip: Int = 0, $first: Int = 1000, $block: Block_height) {
     userTokens(skip: $skip, first: $first, block: $block, where: { share_gt: 0, user: $user }) {
@@ -99,4 +108,51 @@ export const kashiUserPairsQuery = gql`
     }
   }
   ${kashiPairFieldsQuery}
+`
+
+export const bentoBoxQuery = gql`
+  query bentoBoxQuery(
+    $id: String! = "0xf5bce5077908a1b7370b9ae04adc565ebd643966"
+    $block: Block_height
+    $where: BentoBox_filter
+  ) {
+    bentoBoxes(first: 1, block: $block, where: $where) {
+      id
+      totalUsers
+      totalTokens
+      totalKashiPairs
+      tokens(first: 1000) {
+        id
+        name
+        symbol
+        decimals
+        totalSupplyBase
+        totalSupplyElastic
+      }
+    }
+  }
+`
+
+export const bentoStrategiesQuery = gql`
+  query bentoStrategies($first: Int = 1000, $firstHarvests: Int = 2, $block: Block_height, $where: Strategy_filter) {
+    strategies(first: $first, block: $block, where: $where) {
+      token {
+        id
+        decimals
+        strategyTargetPercentage
+      }
+      balance
+      totalProfit
+      harvests(first: $firstHarvests, orderBy: timestamp, orderDirection: desc) {
+        id
+        profit
+        tokenElastic
+        timestamp
+        block
+      }
+      timestamp
+      block
+    }
+  }
+  ${bentoTokenFieldsQuery}
 `

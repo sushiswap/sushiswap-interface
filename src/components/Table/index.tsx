@@ -1,12 +1,21 @@
-import React, { useState } from 'react'
-import { useTable, usePagination, useSortBy } from 'react-table'
-import { classNames } from '../../functions'
+import React, { ReactNode, useState } from 'react'
 import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
+import { classNames } from '../../functions'
 import { useRouter } from 'next/router'
+import { useTable, usePagination, useSortBy } from 'react-table'
 
-interface TableProps {
-  columns: any[]
-  data: any[]
+export interface Column {
+  Cell?: (props: any) => ReactNode
+  Header: string
+  accessor: string | ((row: any) => ReactNode)
+  align?: string
+  disableSortBy?: boolean
+  sortType?: (a, b) => number
+}
+
+interface TableProps<T> {
+  columns: Column[]
+  data: T[]
   columnsHideable?: string[]
   defaultSortBy: {
     id: string
@@ -19,14 +28,14 @@ interface TableProps {
   loading?: boolean
 }
 
-export default function Table({
+export default function Table<T>({
   columns,
   data,
   columnsHideable = [],
   defaultSortBy = { id: '', desc: false },
   link,
   loading = true,
-}: TableProps) {
+}: TableProps<T>) {
   const [isHidden, setHidden] = useState(columnsHideable.length === 0 ? false : true)
   const router = useRouter()
 
@@ -37,8 +46,6 @@ export default function Table({
     prepareRow,
     rows,
     page,
-    pageCount,
-    gotoPage,
     nextPage,
     previousPage,
     canPreviousPage,
@@ -74,6 +81,10 @@ export default function Table({
 
   const getProperty = (obj, prop) => {
     var parts = prop.split('.')
+
+    if (parts.length === 1) {
+      return obj[prop]
+    }
 
     if (Array.isArray(parts)) {
       var last = parts.pop(),
@@ -168,7 +179,7 @@ export default function Table({
                       <td key={cI} className="pb-3 pl-0 pr-0" {...cell.getCellProps()}>
                         <div
                           onClick={
-                            link ? () => router.push(link.href + getProperty(cell.row.values, link.id)) : () => {}
+                            link ? () => router.push(link.href + getProperty(cell.row.original, link.id)) : () => {}
                           }
                         >
                           <div
