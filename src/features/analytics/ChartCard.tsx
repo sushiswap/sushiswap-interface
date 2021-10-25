@@ -62,7 +62,7 @@ export default function ChartCard({
             {formatNumber(overrideFigure ?? figure, true, false)}
           </div>
           <div className="flex flex-row items-center justify-end">
-            {!overrideFigure && <ColoredNumber number={change} percent={true} />}
+            {selectedIndex === chartFiltered?.length - 1 && <ColoredNumber number={change} percent={true} />}
             <div className="ml-3 font-normal">
               {overrideDate ? formatDate(new Date(overrideDate)) : 'Past 24 Hours'}
             </div>

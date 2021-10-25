@@ -98,7 +98,7 @@ const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSe
         )}
         {setSelectedIndex && (
           <g>
-            <circle ref={circleRef} r={4} fill="#FFFFFF" />
+            <circle ref={circleRef} r={4} fill="#FFFFFF" display="none" />
           </g>
         )}
         <LinePath
