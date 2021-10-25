@@ -16,7 +16,7 @@ import { useClassicStandardAddExecute } from '../../context/hooks/useClassicStan
 
 const TransactionReviewStandardModal: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 

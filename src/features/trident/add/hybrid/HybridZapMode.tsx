@@ -22,7 +22,7 @@ const HybridZapMode = () => {
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
 
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const {
     zapInputAmount: [zapInputAmount, setZapInputAmount],
     zapCurrency: [zapCurrency, setZapCurrency],

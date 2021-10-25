@@ -17,7 +17,7 @@ import { formatPercent } from '../../../functions'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
 
   return <Header i18n={i18n} pool={pool} />
 }

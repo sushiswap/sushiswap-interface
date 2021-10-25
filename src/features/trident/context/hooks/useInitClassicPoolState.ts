@@ -18,12 +18,12 @@ const useInitClassicPoolState = () => {
 
   const { currencies } = useCurrenciesFromURL()
   const classicPool = useTridentClassicPool(currencies?.[0], currencies?.[1], 30, true)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+  const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
   const [rebases, rebasesLoading] = useBentoRebases(currencies)
 
   useEffect(() => {
-    if (!classicPool[1]) return
+    if (!classicPool.pool) return
     setPool(classicPool)
   }, [chainId, classicPool, setPool])
 

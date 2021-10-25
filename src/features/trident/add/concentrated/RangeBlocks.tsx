@@ -4,7 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil'
 import { poolAtom, maxPriceAtom, minPriceAtom } from '../../context/atoms'
 
 const RangeBlocks: FC = () => {
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const [minPrice, setMinPrice] = useRecoilState(minPriceAtom)
   const [maxPrice, setMaxPrice] = useRecoilState(maxPriceAtom)
 

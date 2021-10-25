@@ -34,7 +34,7 @@ export const useClassicStandardAddExecute = () => {
   const execute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
-        const [, pool] = await snapshot.getPromise(poolAtom)
+        const { pool } = await snapshot.getPromise(poolAtom)
         const [parsedAmountA, parsedAmountB] = parsedAmounts
         const nativeA = await snapshot.getPromise(spendFromWalletSelector(pool?.token0.address))
         const nativeB = await snapshot.getPromise(spendFromWalletSelector(pool?.token1.address))

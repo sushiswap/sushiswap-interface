@@ -34,7 +34,7 @@ const AddHybrid = () => {
   const { query } = useRouter()
   const { i18n } = useLingui()
 
-  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const [{ pool }, setPool] = useRecoilState(poolAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
@@ -42,11 +42,11 @@ const AddHybrid = () => {
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
   const hybridPool = useTridentHybridPool(currencyA, currencyB, 50)
-  const totalSupply = useTotalSupply(hybridPool ? hybridPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, hybridPool[1]?.liquidityToken)
+  const totalSupply = useTotalSupply(hybridPool ? hybridPool.pool?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, hybridPool.pool?.liquidityToken)
 
   useEffect(() => {
-    if (!hybridPool[1]) return
+    if (!hybridPool.pool) return
     // TODO ramin: remove
     setPool(hybridPool)
   }, [chainId, hybridPool, setPool])

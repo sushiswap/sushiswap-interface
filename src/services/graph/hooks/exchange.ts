@@ -422,7 +422,7 @@ export interface TransactionData {
 
 export const useTransactions = (pairs?: string[]) => {
   const { chainId } = useActiveWeb3React()
-  const variables = { where: { pair_in: pairs } }
+  const variables = { where: { pair_in: pairs?.map((pair) => pair?.toLowerCase()) } }
   const { data, error, isValidating } = useSWR<TransactionData[]>(
     !!chainId && !!pairs ? ['transactions', chainId, JSON.stringify(variables)] : null,
     () => getTransactions(chainId, variables)

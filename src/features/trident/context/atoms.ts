@@ -6,9 +6,9 @@ import { toAmountCurrencyAmount } from '../../../functions'
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 export const DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
-export const poolAtom = atom<PoolAtomType | [undefined, undefined]>({
+export const poolAtom = atom<PoolAtomType>({
   key: 'poolAtom',
-  default: [undefined, undefined],
+  default: {},
 })
 
 export const showReviewAtom = atom<boolean>({
@@ -110,18 +110,15 @@ export const maxPriceAtom = atom<string>({
 export const noLiquiditySelector = selector<boolean | undefined>({
   key: 'noLiquiditySelector',
   get: ({ get }) => {
-    const [poolState, pool] = get(poolAtom)
+    const { state, pool } = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
 
     if (pool) {
       return (
-        poolState === 1 ||
+        state === 1 || // NOT_EXISTS
         Boolean(totalSupply && JSBI.equal(totalSupply.quotient, ZERO)) ||
         Boolean(
-          poolState === 2 &&
-            pool &&
-            JSBI.equal(pool.reserve0.quotient, ZERO) &&
-            JSBI.equal(pool.reserve1.quotient, ZERO)
+          state === 2 && pool && JSBI.equal(pool.reserve0.quotient, ZERO) && JSBI.equal(pool.reserve1.quotient, ZERO) // EXISTS
         )
       )
     }
@@ -133,7 +130,7 @@ export const noLiquiditySelector = selector<boolean | undefined>({
 export const currentPoolShareSelector = selector({
   key: 'currentPoolShareSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
+    const { pool } = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const poolBalance = get(poolBalanceAtom)
     if (pool && totalSupply && poolBalance && totalSupply?.greaterThan(ZERO)) {
@@ -148,7 +145,7 @@ export const currentPoolShareSelector = selector({
 export const currentLiquidityValueSelector = selector({
   key: 'currentLiquidityValueSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
+    const { pool } = get(poolAtom)
     const poolBalance = get(poolBalanceAtom)
     const totalSupply = get(totalSupplyAtom)
     const rebases = get(bentoboxRebasesAtom)

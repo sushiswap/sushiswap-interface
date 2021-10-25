@@ -10,7 +10,7 @@ import { toAmountCurrencyAmount } from '../../../../functions'
 
 const ClassicMarket: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
   const amounts = [pool?.reserve0, pool?.reserve1]
@@ -36,7 +36,7 @@ const ClassicMarket: FC = () => {
               <Typography variant="sm" className="text-high-emphesis">
                 Total Assets
               </Typography>
-              <Typography weight={700} className="text-high-emphesis text-right">
+              <Typography weight={700} className="text-right text-high-emphesis">
                 {amount ? `${amount.toSignificant(6)}` : '$0.000'}
               </Typography>
             </div>

@@ -30,7 +30,7 @@ import { selectedFeeTierAtom, selectedPoolTypeAtom } from '../../../features/tri
 const Pool = () => {
   const { i18n } = useLingui()
   const [page, setPage] = useRecoilState(poolCreationPageAtom)
-  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const [{ pool }, setPool] = useRecoilState(poolAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
   const { parsedAmounts } = useIndependentAssetInputs()
@@ -44,7 +44,7 @@ const Pool = () => {
           ? new ConstantProductPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier, true)
           : new HybridPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier)
 
-      setPool([1, pool ? pool : null, ''])
+      setPool({ state: 1, pool: pool }) // NOT_EXISTS
     }
   }, [feeTier, parsedAmounts, poolType, setPool])
 

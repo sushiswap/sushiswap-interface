@@ -29,7 +29,7 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefine
 export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
   key: 'parsedAmountsSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
+    const { pool } = get(poolAtom)
     const percentageAmount = get(percentageAmountAtom)
     const currentLiquidityValue = get(currentLiquidityValueSelector)
     const percentage = new Percent(percentageAmount, '100')
@@ -51,7 +51,7 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
 const useZapPercentageInput = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [poolState] = useRecoilValue(poolAtom)
+  const { state: poolState } = useRecoilValue(poolAtom)
   const zapCurrency = useRecoilState(percentageZapCurrencyAtom)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)

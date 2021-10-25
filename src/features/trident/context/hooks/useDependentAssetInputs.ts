@@ -47,7 +47,7 @@ export const secondaryInputSelector = selector<string>({
 
     // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
     if (!noLiquidity && fixedRatio && typedField === TypedField.A) {
-      const [, pool] = get(poolAtom)
+      const { pool } = get(poolAtom)
       const [currencyA, currencyB] = get(currenciesAtom)
       const [tokenA, tokenB] = [currencyA?.wrapped, currencyB?.wrapped]
 
@@ -83,7 +83,7 @@ export const secondaryInputSelector = selector<string>({
 
     // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
     if (!noLiquidity && fixedRatio) {
-      const [, pool] = get(poolAtom)
+      const { pool } = get(poolAtom)
       const [currencyA, currencyB] = get(currenciesAtom)
       const [tokenA, tokenB] = [currencyA?.wrapped, currencyB?.wrapped]
       const newValueCA = tryParseAmount(newValue, tokenB)
@@ -151,7 +151,7 @@ export const parsedAmountsSelector = selector<
 export const useDependentAssetInputs = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const [poolState, pool] = useRecoilValue(poolAtom)
+  const { state: poolState, pool } = useRecoilValue(poolAtom)
   const mainInput = useRecoilState(mainInputAtom)
   const secondaryInput = useRecoilState(secondaryInputSelector)
   const formattedAmounts = useRecoilValue(formattedAmountsSelector)

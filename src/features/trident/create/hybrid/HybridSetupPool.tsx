@@ -25,7 +25,7 @@ const HybridSetupPool: FC = () => {
   } = useIndependentAssetInputs()
 
   // TODO ramin a = null
-  const [poolState] = useTridentHybridPool(currencies[0], currencies[1], feeTier, null)
+  const { state: poolState } = useTridentHybridPool(currencies[0], currencies[1], feeTier, null)
 
   const handleSelectedPoolTokens = useCallback(
     (currency, index) => {

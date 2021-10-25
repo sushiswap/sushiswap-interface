@@ -19,7 +19,7 @@ export const StepTwoContinueButton: FC = () => {
   } = useIndependentAssetInputs()
 
   // TODO: what to do with selectedFee tier afterward? Why is this always INVALID state?
-  const [poolState] = useTridentClassicPool(currencies[0], currencies[1], selectedFeeTier, true)
+  const { state: poolState } = useTridentClassicPool(currencies[0], currencies[1], selectedFeeTier, true)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)

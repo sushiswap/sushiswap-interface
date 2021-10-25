@@ -8,7 +8,7 @@ import { poolAtom } from '../../context/atoms'
 
 const HybridPoolComposition: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
 
   return (
     <div className="flex flex-col gap-4 px-5 mt-12">

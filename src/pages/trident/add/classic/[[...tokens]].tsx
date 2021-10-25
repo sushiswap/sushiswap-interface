@@ -32,7 +32,7 @@ const AddClassic = () => {
   const { query } = useRouter()
   const { currencies, twap, fee } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
 
   return (
@@ -75,7 +75,9 @@ const AddClassic = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-col w-full lg:w-7/12">
             <FixedRatioHeader />
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
+              classicPool.state as ConstantProductPoolState
+            ) && (
               <Alert
                 dismissable={false}
                 type="error"
@@ -99,7 +101,7 @@ const AddClassic = () => {
               <DepositSubmittedModal />
             </>
           </div>
-          <div className="flex flex-col hidden lg:block lg:w-4/12 -mt-40">
+          <div className="flex flex-col hidden -mt-40 lg:block lg:w-4/12">
             {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
           </div>
         </div>

@@ -8,7 +8,7 @@ import { poolAtom, poolBalanceAtom } from '../../context/atoms'
 
 const ClassicLinkButtons: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
 
   // TODO ramin: make dynamic

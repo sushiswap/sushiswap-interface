@@ -6,7 +6,7 @@ import { poolAtom } from '../../../context/atoms'
 export const poolTokensSelector = selector<Record<string, Token>>({
   key: 'poolTokensSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
+    const { pool } = get(poolAtom)
     const tokens = [pool?.token0, pool?.token1]
     return tokens.reduce((acc, cur) => {
       acc[cur?.address] = cur

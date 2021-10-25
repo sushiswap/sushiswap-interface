@@ -36,7 +36,7 @@ export const parsedZapSplitAmountsSelector = selector<
 >({
   key: 'parsedZapSplitAmountsSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
+    const { pool } = get(poolAtom)
     const parsedAmount = get(parsedZapAmountSelector)
     const rebases = get(bentoboxRebasesAtom)
 
@@ -59,7 +59,7 @@ export const parsedZapSplitAmountsSelector = selector<
 export const useZapAssetInput = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const [poolState] = useRecoilValue(poolAtom)
+  const { state: poolState } = useRecoilValue(poolAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const zapCurrencyState = useRecoilState(selectedZapCurrencyAtom)
   const [zapCurrency] = zapCurrencyState

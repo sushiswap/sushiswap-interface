@@ -21,7 +21,7 @@ export const usePoolDetailsMint = (
   parsedAmounts: (CurrencyAmount<Currency> | undefined)[] | undefined,
   defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
 ) => {
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const poolBalance = useRecoilValue(poolBalanceAtom)
@@ -112,7 +112,7 @@ export const usePoolDetailsBurn = (
   slpAmount: CurrencyAmount<Token> | undefined,
   defaultSlippage: Percent = DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
 ) => {
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)

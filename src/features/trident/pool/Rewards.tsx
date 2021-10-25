@@ -16,7 +16,7 @@ const Rewards: FC = () => {
   const { chainId } = useActiveWeb3React()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
 
   // TODO ramin:
   const rewardCurrency = SUSHI[chainId]

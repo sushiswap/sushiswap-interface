@@ -29,7 +29,7 @@ import SumUSDCValues from '../../SumUSDCValues'
 const ClassicUnzapMode: FC = () => {
   const { i18n } = useLingui()
   const router = useTridentRouterContract()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
 
   const {
     percentageInput: [percentageInput, setPercentageInput],

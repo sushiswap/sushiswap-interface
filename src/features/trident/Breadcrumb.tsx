@@ -38,7 +38,7 @@ interface BreadcrumbProps {
 }
 
 const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const { currencies } = useCurrenciesFromURL()
 
   const formatted = useMemo(() => {

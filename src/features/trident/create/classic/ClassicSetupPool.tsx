@@ -23,7 +23,7 @@ const ClassicSetupPool: FC = () => {
   } = useIndependentAssetInputs()
   const [feeTier, setFeeTier] = useRecoilState(selectedFeeTierAtom)
 
-  const [poolState] = useTridentClassicPool(currencies[0], currencies[1], feeTier, true)
+  const { state: poolState } = useTridentClassicPool(currencies[0], currencies[1], feeTier, true)
 
   const handleSelectedPoolTokens = useCallback(
     (currency, index) => {
@@ -54,15 +54,15 @@ const ClassicSetupPool: FC = () => {
         </Typography>
 
         {/*TODO link*/}
-        <Typography variant="xs" className="text-blue cursor-pointer" weight={400}>
+        <Typography variant="xs" className="cursor-pointer text-blue" weight={400}>
           {i18n._(t`Learn More about Classic Pools`)}
         </Typography>
       </Card.Gradient>
       <div className="flex flex-col">
-        <Typography variant="h3" className="text-high-emphesis mb-1" weight={700}>
+        <Typography variant="h3" className="mb-1 text-high-emphesis" weight={700}>
           {i18n._(t`Select Pool Tokens`)}
         </Typography>
-        <div className="flex flex-col gap-2 relative z-10">
+        <div className="relative z-10 flex flex-col gap-2">
           <AssetSelect
             value={currencies[0]}
             onSelect={(cur) => handleSelectedPoolTokens(cur, 0)}
@@ -89,7 +89,7 @@ const ClassicSetupPool: FC = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4">
-        <Typography variant="h3" className="text-high-emphesis mb-2" weight={700}>
+        <Typography variant="h3" className="mb-2 text-high-emphesis" weight={700}>
           {i18n._(t`Select Fee Tier`)}
         </Typography>
         <ToggleButtonGroup value={feeTier} onChange={setFeeTier} variant="outlined">

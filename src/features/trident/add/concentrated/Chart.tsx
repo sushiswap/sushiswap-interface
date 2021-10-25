@@ -9,7 +9,7 @@ import { poolAtom } from '../../context/atoms'
 
 const Chart: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
 
   return (
     <Disclosure>
