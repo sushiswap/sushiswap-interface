@@ -82,6 +82,10 @@ export default function Table<T>({
   const getProperty = (obj, prop) => {
     var parts = prop.split('.')
 
+    if (parts.length === 1) {
+      return obj[prop]
+    }
+
     if (Array.isArray(parts)) {
       var last = parts.pop(),
         l = parts.length,
@@ -175,7 +179,7 @@ export default function Table<T>({
                       <td key={cI} className="pb-3 pl-0 pr-0" {...cell.getCellProps()}>
                         <div
                           onClick={
-                            link ? () => router.push(link.href + getProperty(cell.row.values, link.id)) : () => {}
+                            link ? () => router.push(link.href + getProperty(cell.row.original, link.id)) : () => {}
                           }
                         >
                           <div

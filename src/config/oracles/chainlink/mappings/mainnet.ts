@@ -287,22 +287,6 @@ const MAINNET_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 8,
   },
-  // COVER / ETH
-  '0x7B6230EF79D5E97C11049ab362c0b685faCBA0C2': {
-    from: '0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 18,
-    toDecimals: 18,
-  },
-  // COVER / USD
-  '0x0ad50393F11FfAc4dd0fe5F1056448ecb75226Cf': {
-    from: '0x4688a8b1F292FDaB17E9a90c8Bc379dC1DBd8713',
-    to: '0x0000000000000000000000000000000000000001',
-    decimals: 8,
-    fromDecimals: 18,
-    toDecimals: 8,
-  },
   // CREAM / ETH
   '0x82597CFE6af8baad7c0d441AA82cbC3b51759607': {
     from: '0x2ba592F78dB6436527729929AAf6c908497cB200',

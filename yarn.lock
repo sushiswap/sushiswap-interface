@@ -4165,15 +4165,27 @@
     tiny-warning "^1.0.0"
     toformat "^2.0.0"
 
+"@sushiswap/core-sdk@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-0.1.2.tgz#d6ae5d252bb603b2664f119988da50d96d0fff01"
+  integrity sha512-z7ks+cVG8nH5jiHMtZp4HzdDcnSLEm/Pd+aNav1ZjfgKrsVNNSAs6a6tjoEvK7GRj6XhM4RFyV772y4mIAkxjQ==
+  dependencies:
+    big.js "^6.1.0"
+    decimal.js-light "^2.5.0"
+    jsbi "^3.1.0"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.0"
+    toformat "^2.0.0"
+
 "@sushiswap/core@^2.0.0-canary.1":
   version "2.0.0-canary.1"
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@15.4.0":
-  version "15.4.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-15.4.0.tgz#311fe73b5adcf3246147244495d300a712d1ebad"
-  integrity sha512-+6H+HrNrxDinYjioziClu+MsEauzpwG4R+G/7dgoufOq+L0QJpxtc6OhVlr9mCdcE7oSfIi1Rsy7xc4dzVaifg==
+"@sushiswap/default-token-list@16.18.0":
+  version "16.18.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-16.18.0.tgz#5fbf277bac9d1baabfa12ea838e311cfabc92b2a"
+  integrity sha512-ZXcCTddFUUUpxxLJeJ95bxc+8K9MhejJ7PkHPFlPd7o/UTUx/7dFL4Q4i6w101uP92zEx9Nlbr1HYEAGz2NCIw==
 
 "@sushiswap/default-token-list@^11.3.0":
   version "11.5.0"

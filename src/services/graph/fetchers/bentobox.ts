@@ -1,4 +1,11 @@
-import { bentoBoxQuery, bentoUserTokensQuery, kashiPairsQuery, kashiUserPairsQuery } from '../queries/bentobox'
+import {
+  bentoBoxQuery,
+  bentoStrategiesQuery,
+  bentoTokensQuery,
+  bentoUserTokensQuery,
+  kashiPairsQuery,
+  kashiUserPairsQuery,
+} from '../queries/bentobox'
 import { getFraction, toAmount } from '../../../functions'
 
 import { ChainId } from '@sushiswap/core-sdk'
@@ -7,9 +14,9 @@ import { getTokenSubset } from './exchange'
 import { pager } from '.'
 
 export const BENTOBOX = {
-  [ChainId.MAINNET]: 'sushiswap/bentobox',
+  [ChainId.MAINNET]: 'lufycz/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
-  [ChainId.MATIC]: 'sushiswap/matic-bentobox',
+  [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
@@ -106,4 +113,37 @@ export const getBentoBox = async (chainId = ChainId.MAINNET, variables) => {
   const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
 
   return bentoBoxes[0]
+}
+
+export const getBentoTokens = async (chainId = ChainId.MAINNET, variables) => {
+  const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
+
+  return tokens
+}
+
+export const getBentoStrategies = async (chainId = ChainId.MAINNET, variables) => {
+  const { strategies } = await fetcher(chainId, bentoStrategiesQuery, variables)
+
+  const SECONDS_IN_YEAR = 60 * 60 * 24 * 365
+
+  return strategies?.map((strategy) => {
+    const [lastHarvest, previousHarvest] = [strategy.harvests?.[0], strategy.harvests?.[1]]
+
+    const profitPerYear =
+      ((SECONDS_IN_YEAR / (lastHarvest.timestamp - previousHarvest.timestamp)) * lastHarvest.profit) /
+      10 ** strategy.token.decimals
+
+    const [tvl, tvlPrevious] = [
+      lastHarvest?.tokenElastic / 10 ** strategy.token.decimals,
+      previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
+    ]
+
+    const apy = (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100
+
+    return {
+      token: strategy.token.id,
+      apy: !isNaN(apy) ? apy : 0,
+      targetPercentage: Number(strategy.token.strategyTargetPercentage ?? 0),
+    }
+  })
 }
