@@ -1,7 +1,7 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/core-sdk'
 import React, { FunctionComponent, useMemo } from 'react'
 
-import Logo from '../Logo'
+import Logo, { UNKNOWN_ICON } from '../Logo'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import useHttpLocations from '../../hooks/useHttpLocations'
 
@@ -26,8 +26,8 @@ function getCurrencySymbol(currency) {
   return currency.symbol.toLowerCase()
 }
 
-export function getCurrencyLogoUrls(currency) {
-  const urls = []
+export const getCurrencyLogoUrls = (currency): string[] => {
+  const urls: string[] = []
 
   urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
   if (currency.chainId in BLOCKCHAIN) {
@@ -42,7 +42,6 @@ export function getCurrencyLogoUrls(currency) {
       }/logo.png`
     )
   }
-
   return urls
 }
 
@@ -100,32 +99,28 @@ export interface CurrencyLogoProps {
   className?: string
 }
 
-const unknown = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png'
-
-const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '24px', className, ...rest }) => {
+const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '24px', className, style }) => {
   const uriLocations = useHttpLocations(
     currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
   )
 
-  const srcs = useMemo(() => {
-    if (!currency) {
-      return [unknown]
+  const srcs: string[] = useMemo(() => {
+    if (currency?.isNative || currency?.equals(WNATIVE[currency.chainId])) {
+      return [LOGO[currency.chainId], UNKNOWN_ICON]
     }
 
-    if (currency.isNative || currency.equals(WNATIVE[currency.chainId])) {
-      return [LOGO[currency.chainId], unknown]
-    }
-
-    if (currency.isToken) {
+    if (currency?.isToken) {
       const defaultUrls = [...getCurrencyLogoUrls(currency)]
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, ...defaultUrls, unknown]
+        return [...uriLocations, ...defaultUrls, UNKNOWN_ICON]
       }
       return defaultUrls
     }
+
+    return [UNKNOWN_ICON]
   }, [currency, uriLocations])
 
-  return <Logo srcs={srcs} width={size} height={size} alt={currency?.symbol} className={className} {...rest} />
+  return <Logo srcs={srcs} width={size} height={size} alt={currency?.symbol} className={className} style={style} />
 }
 
 export default CurrencyLogo

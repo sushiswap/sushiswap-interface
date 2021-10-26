@@ -39,7 +39,6 @@ export default function Pair() {
                 {pair && (
                   <>
                     <Image
-                      loader={cloudinaryLoader}
                       height={48}
                       width={48}
                       src={pair.asset.tokenInfo.logoURI}
@@ -47,7 +46,6 @@ export default function Pair() {
                       alt={pair.asset.tokenInfo.symbol}
                     />
                     <Image
-                      loader={cloudinaryLoader}
                       height={48}
                       width={48}
                       src={pair.collateral.tokenInfo.logoURI}

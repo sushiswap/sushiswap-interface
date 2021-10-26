@@ -65,7 +65,6 @@ function Pair() {
                 {pair && (
                   <>
                     <Image
-                      loader={cloudinaryLoader}
                       height={48}
                       width={48}
                       src={pair.asset.tokenInfo.logoURI}
@@ -74,7 +73,6 @@ function Pair() {
                     />
 
                     <Image
-                      loader={cloudinaryLoader}
                       height={48}
                       width={48}
                       src={pair.collateral.tokenInfo.logoURI}

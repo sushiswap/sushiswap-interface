@@ -151,7 +151,6 @@ const LendEntry = ({ pair, userPosition = false }) => {
           <div className="flex flex-col items-start sm:flex-row sm:items-center">
             <div className="hidden space-x-2 md:flex">
               <Image
-                loader={cloudinaryLoader}
                 height={48}
                 width={48}
                 src={pair.asset.tokenInfo.logoURI}
@@ -160,7 +159,6 @@ const LendEntry = ({ pair, userPosition = false }) => {
               />
 
               <Image
-                loader={cloudinaryLoader}
                 height={48}
                 width={48}
                 src={pair.collateral.tokenInfo.logoURI}

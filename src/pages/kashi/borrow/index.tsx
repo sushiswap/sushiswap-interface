@@ -99,7 +99,6 @@ function Borrow() {
                           <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                             <div className="hidden space-x-2 md:flex">
                               <Image
-                                loader={cloudinaryLoader}
                                 height={48}
                                 width={48}
                                 src={pair.asset.tokenInfo.logoURI}
@@ -108,7 +107,6 @@ function Borrow() {
                               />
 
                               <Image
-                                loader={cloudinaryLoader}
                                 height={48}
                                 width={48}
                                 src={pair.collateral.tokenInfo.logoURI}
@@ -204,7 +202,6 @@ function Borrow() {
                         <div className="flex flex-col items-start sm:flex-row sm:items-center">
                           <div className="hidden space-x-2 md:flex">
                             <Image
-                              loader={cloudinaryLoader}
                               height={48}
                               width={48}
                               src={pair.asset.tokenInfo.logoURI}
@@ -212,7 +209,6 @@ function Borrow() {
                               alt={pair.asset.tokenInfo.symbol}
                             />
                             <Image
-                              loader={cloudinaryLoader}
                               height={48}
                               width={48}
                               src={pair.collateral.tokenInfo.logoURI}
