@@ -1,4 +1,4 @@
-import { getTridentPoolsQuery } from '../queries'
+import { getSwapsForPoolQuery, getTridentPoolsQuery } from '../queries'
 
 import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from '../constants'
@@ -65,4 +65,10 @@ export const getTridentPools = async (chainId: ChainId = ChainId.MAINNET): Promi
     getTridentPoolsQuery
   )
   return formatPools(result)
+}
+
+export const getTridentPoolTransactions = async (poolAddress) => {
+  return await pager('https://api.thegraph.com/subgraphs/name/sushiswap/trident', getSwapsForPoolQuery, {
+    poolAddress: poolAddress.toLowerCase(),
+  })
 }

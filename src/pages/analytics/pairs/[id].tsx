@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { formatNumber, shortenAddress } from '../../../functions'
-import { useBlock, useDayData, useNativePrice, usePairDayData, useSushiPairs } from '../../../services/graph'
+import { useBlock, useNativePrice, usePairDayData, useSushiPairs } from '../../../services/graph'
 
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import Background from '../../../features/analytics/Background'
@@ -18,7 +18,7 @@ import { useRouter } from 'next/router'
 import { useActiveWeb3React } from '../../../hooks'
 import ChartCard from '../../../features/analytics/ChartCard'
 import { getExplorerLink } from '../../../functions/explorer'
-import { Transactions } from '../../../features/transactions/Transactions'
+import { LegacyTransactions } from '../../../features/transactions/Transactions'
 
 const chartTimespans = [
   {
@@ -258,7 +258,7 @@ export default function Pair() {
             </table>
           </div>
         </div>
-        <Transactions pairs={[id]} />
+        <LegacyTransactions pairs={[id]} />
       </div>
     </AnalyticsContainer>
   )

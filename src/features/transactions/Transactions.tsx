@@ -2,18 +2,26 @@ import React, { FC } from 'react'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
 import Typography from '../../components/Typography'
-import { usePagination, useTable, useFlexLayout } from 'react-table'
-import { TableInstance } from './types'
+import { useFlexLayout, usePagination, useTable } from 'react-table'
+import { TableInstance, TransactionFetcherState } from './types'
 import { TablePageToggler } from './TablePageToggler'
-import { useTransactionsData } from './useTransactionsData'
+import { useTableConfig } from './useTableConfig'
+import { useTridentTransactions } from '../../services/graph/hooks/transactions/trident'
+import { useLegacyTransactions } from '../../services/graph/hooks/transactions/legacy'
 
-interface TransactionsProps {
-  pairs: string[]
+export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
+  const { transactions, error, loading } = useLegacyTransactions(pairs)
+  return <_Transactions transactions={transactions} error={error} loading={loading} />
 }
 
-export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
+export const TridentTransactions: FC<{ poolAddress?: string }> = ({ poolAddress }) => {
+  const { transactions, error, loading } = useTridentTransactions(poolAddress)
+  return <_Transactions transactions={transactions} error={error} loading={loading} />
+}
+
+const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loading }) => {
   const { i18n } = useLingui()
-  const { config, loading, error, totalTransactions } = useTransactionsData(pairs)
+  const { config } = useTableConfig(transactions)
 
   const {
     getTableProps,
@@ -81,7 +89,7 @@ export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
       <TablePageToggler
         pageIndex={pageIndex}
         pageSize={pageSize}
-        totalItems={totalTransactions}
+        totalItems={transactions ? transactions.length : 0}
         gotoPage={gotoPage}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}

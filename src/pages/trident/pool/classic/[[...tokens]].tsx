@@ -3,7 +3,7 @@ import PoolStats from '../../../../features/trident/pool/PoolStats'
 import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
 import ClassicMarket from '../../../../features/trident/pool/classic/ClassicMarket'
 import Header from '../../../../features/trident/pool/Header'
-import { RecoilRoot } from 'recoil'
+import { RecoilRoot, useRecoilValue } from 'recoil'
 import ClassicMyRewards from '../../../../features/trident/pool/classic/ClassicMyRewards'
 import ClassicMyPosition from '../../../../features/trident/pool/classic/ClassicMyPosition'
 import ClassicLinkButtons from '../../../../features/trident/pool/classic/ClassicLinkButtons'
@@ -15,12 +15,14 @@ import { useLingui } from '@lingui/react'
 import Rewards from '../../../../features/trident/pool/Rewards'
 import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
 import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
-import { Transactions } from '../../../../features/transactions/Transactions'
+import { TridentTransactions } from '../../../../features/transactions/Transactions'
+import { poolAtom } from '../../../../features/trident/context/atoms'
 
 const Pool = () => {
   useInitClassicPoolState()
   const { i18n } = useLingui()
   const linkButtons = <ClassicLinkButtons />
+  const [, pool] = useRecoilValue(poolAtom)
 
   return (
     <>
@@ -72,9 +74,7 @@ const Pool = () => {
             </div>
           </div>
         </div>
-
-        {/* Temporary until subgraph finalized */}
-        <Transactions pairs={['0xceff51756c56ceffca006cd410b03ffc46dd3a58']} />
+        <TridentTransactions poolAddress={pool?.liquidityToken.address} />
       </TridentBody>
     </>
   )

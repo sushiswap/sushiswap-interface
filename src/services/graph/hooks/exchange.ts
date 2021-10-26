@@ -1,10 +1,10 @@
 import {
-  exchange,
   getAlcxPrice,
   getAvaxPrice,
   getBundle,
   getCvxPrice,
   getDayData,
+  getEthPrice,
   getFactory,
   getLiquidityPositions,
   getMaticPrice,
@@ -12,27 +12,23 @@ import {
   getNativePrice,
   getOnePrice,
   getPairDayData,
+  getPairs,
   getPicklePrice,
   getRulerPrice,
   getStakePrice,
   getSushiPrice,
-  getToken,
   getTokenDayData,
   getTokenPairs,
   getTokens,
-  getTransactions,
   getTruPrice,
   getYggPrice,
 } from '../fetchers'
-import { getEthPrice, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import { ChainId } from '@sushiswap/core-sdk'
 import { ethPriceQuery } from '../queries'
-import { first } from 'lodash'
 import { useActiveWeb3React } from '../../../hooks'
 import { useBlock } from './blocks'
-import { useMemo } from 'react'
 
 interface useFactoryProps {
   timestamp?: number
@@ -398,36 +394,6 @@ export function useDayData(
     swrConfig
   )
   return data
-}
-
-export interface TransactionData {
-  amount0In: string
-  amount0Out: string
-  amount1In: string
-  amount1Out: string
-  amountUSD: string
-  id: string
-  pair: {
-    token0: {
-      symbol: string
-    }
-    token1: {
-      symbol: string
-    }
-  }
-  sender: string
-  timestamp: string
-  to: string
-}
-
-export const useTransactions = (pairs?: string[]) => {
-  const { chainId } = useActiveWeb3React()
-  const variables = { where: { pair_in: pairs } }
-  const { data, error, isValidating } = useSWR<TransactionData[]>(
-    !!chainId && !!pairs ? ['transactions', chainId, JSON.stringify(variables)] : null,
-    () => getTransactions(chainId, variables)
-  )
-  return { transactions: data, error, loading: isValidating }
 }
 
 interface useTokenPairsProps {

@@ -1,12 +1,9 @@
 import React, { useMemo } from 'react'
-import { shortenAddress, transactionDataFormatter } from './table-utils'
+import { shortenAddress } from './table-utils'
 import ExternalLink from '../../components/ExternalLink'
-import { useTransactions } from '../../services/graph'
+import { Transactions } from './types'
 
-export const useTransactionsData = (pairs: string[]) => {
-  const { transactions, error, loading } = useTransactions(pairs)
-  const formattedTransactions = useMemo(() => transactionDataFormatter(transactions || []), [transactions])
-
+export const useTableConfig = (transactions?: Transactions[]) => {
   const TransactionColumns = useMemo(
     () => [
       {
@@ -52,13 +49,10 @@ export const useTransactionsData = (pairs: string[]) => {
     () => ({
       config: {
         columns: TransactionColumns,
-        data: formattedTransactions,
+        data: transactions,
         defaultColumn,
       },
-      loading,
-      error,
-      totalTransactions: transactions ? transactions.length : 0,
     }),
-    [TransactionColumns, defaultColumn, error, formattedTransactions, loading, transactions]
+    [TransactionColumns, defaultColumn, transactions]
   )
 }

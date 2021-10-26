@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { useActiveWeb3React, useTokenContract } from '../../../hooks'
 import ChartCard from '../../../features/analytics/ChartCard'
 import { getExplorerLink } from '../../../functions/explorer'
-import { Transactions } from '../../../features/transactions/Transactions'
+import { LegacyTransactions } from '../../../features/transactions/Transactions'
 
 const chartTimespans = [
   {
@@ -241,7 +241,7 @@ export default function Token() {
           <div className="text-2xl font-bold text-high-emphesis">Top Pairs</div>
           <PairList pairs={tokenPairsFormatted} type="all" />
         </div>
-        <Transactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
+        <LegacyTransactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
       </div>
     </AnalyticsContainer>
   )
