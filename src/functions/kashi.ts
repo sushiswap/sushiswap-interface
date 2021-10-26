@@ -104,3 +104,12 @@ export function takeFee(amount: BigNumber): BigNumber {
 export function addBorrowFee(amount: BigNumber): BigNumber {
   return amount.mul(BigNumber.from(10005)).div(BigNumber.from(10000))
 }
+
+export function getFraction({
+  totalAssetBase,
+  totalAssetElastic,
+  totalBorrowElastic,
+  token0: { totalSupplyBase, totalSupplyElastic },
+}) {
+  return totalAssetBase / (Number(totalAssetElastic) + (totalBorrowElastic * totalSupplyBase) / totalSupplyElastic)
+}
