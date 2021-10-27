@@ -2,6 +2,7 @@ import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { PoolType } from '@sushiswap/tines'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import Button from 'components/Button'
 import Stepper from 'components/Stepper'
@@ -16,7 +17,6 @@ import CreateReviewModal from 'features/trident/create/old/CreateReviewModal'
 import SelectPoolType from 'features/trident/create/old/SelectPoolType'
 import StableSetupPool from 'features/trident/create/stable/StableSetupPool'
 import PoolCreationSubmittedModal from 'features/trident/PoolCreationSubmittedModal'
-import { PoolType } from 'features/trident/types'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
@@ -35,7 +35,7 @@ const Pool = () => {
   useEffect(() => {
     if (parsedAmounts.length > 1 && parsedAmounts.every((el) => el)) {
       const pool =
-        poolType === PoolType.Classic
+        poolType === PoolType.ConstantProduct
           ? new ConstantProductPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier, true)
           : new HybridPool(parsedAmounts[0].wrapped, parsedAmounts[1].wrapped, feeTier)
 
@@ -93,12 +93,12 @@ const Pool = () => {
               <SelectPoolType />
             </Stepper.Panel>
             <Stepper.Panel>
-              {poolType === PoolType.Classic && <ClassicSetupPool />}
-              {poolType === PoolType.Stable && <StableSetupPool />}
+              {poolType === PoolType.ConstantProduct && <ClassicSetupPool />}
+              {poolType === PoolType.Hybrid && <StableSetupPool />}
             </Stepper.Panel>
             <Stepper.Panel>
-              {poolType === PoolType.Classic && <ClassicDepositAssets />}
-              {poolType === PoolType.Stable && <StableStandardMode />}
+              {poolType === PoolType.ConstantProduct && <ClassicDepositAssets />}
+              {poolType === PoolType.Hybrid && <StableStandardMode />}
               {/*{selectedPoolType === PoolType.Weighted && <IndexStandardMode />}*/}
               {/*{selectedPoolType === PoolType.ConcentratedLiquidity && <ConcentratedStandardMode />}*/}
             </Stepper.Panel>

@@ -1,15 +1,15 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { PoolType } from 'features/trident/types'
 import { GRAPH_HOST } from 'services/graph/constants'
 import { getSwapsForPoolQuery, getTridentPoolsQuery } from 'services/graph/queries'
 
 import { pager } from './pager'
+import { PoolType } from '@sushiswap/tines'
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
-  concentratedLiquidityPools: PoolType.Concentrated,
-  constantProductPools: PoolType.Classic,
-  hybridPools: PoolType.Stable,
-  indexPools: PoolType.Index,
+  concentratedLiquidityPools: PoolType.ConcentratedLiquidity,
+  constantProductPools: PoolType.ConstantProduct,
+  hybridPools: PoolType.Hybrid,
+  indexPools: PoolType.Weighted,
 }
 
 export type FeeTier = 1 | 0.3 | 0.05 | 0.01

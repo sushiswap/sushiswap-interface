@@ -1,14 +1,16 @@
+import React, { FC } from 'react'
+import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import { TableInstance } from 'app/features/transactions/types'
 import { classNames } from 'app/functions/styling'
-import React, { FC } from 'react'
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { SearchCategoryLabel } from './SearchCategoryLabel'
 import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
 import { usePoolsTableData } from './usePoolsTableData'
+import { poolTypeNameMapper } from 'app/features/trident/types'
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()
@@ -63,23 +65,29 @@ const SearchResultPools: FC = () => {
             {page.map((row, i) => {
               prepareRow(row)
 
+              const poolPath = `/trident/pool/${poolTypeNameMapper[
+                row.original.type
+              ].toLowerCase()}/${row.original.currencyIds.join('/')}`
+
               return (
-                <tr {...row.getRowProps()} key={i}>
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <td
-                        key={i}
-                        {...cell.getCellProps()}
-                        className={classNames(
-                          'py-3 border-t border-gray-800 flex items-center',
-                          i === 0 ? 'justify-start' : 'justify-end'
-                        )}
-                      >
-                        {cell.render('Cell')}
-                      </td>
-                    )
-                  })}
-                </tr>
+                <Link href={poolPath} key={i} passHref>
+                  <tr {...row.getRowProps()} className="hover:bg-gray-900 hover:cursor-pointer">
+                    {row.cells.map((cell, i) => {
+                      return (
+                        <td
+                          key={i}
+                          {...cell.getCellProps()}
+                          className={classNames(
+                            'py-3 border-t border-gray-800 flex items-center',
+                            i === 0 ? 'justify-start' : 'justify-end'
+                          )}
+                        >
+                          {cell.render('Cell')}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                </Link>
               )
             })}
           </tbody>

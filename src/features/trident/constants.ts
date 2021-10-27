@@ -1,6 +1,5 @@
 import { ChipColor } from 'components/Chip'
-
-import { PoolType } from './types'
+import { PoolType } from '@sushiswap/tines'
 
 type PoolTypesInterface = Record<
   PoolType,
@@ -15,7 +14,7 @@ type PoolTypesInterface = Record<
 >
 
 export const POOL_TYPES: PoolTypesInterface = {
-  [PoolType.Classic]: {
+  ConstantProduct: {
     label: 'Classic',
     label_long: 'Classic Pool',
     color: 'default',
@@ -28,7 +27,7 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.Index]: {
+  Weighted: {
     label: 'Index',
     label_long: 'Index Pool',
     color: 'yellow',
@@ -41,7 +40,7 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.Concentrated]: {
+  ConcentratedLiquidity: {
     label: 'Concentrated',
     label_long: 'Concentrated Range',
     color: 'purple',
@@ -54,7 +53,7 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.Stable]: {
+  Hybrid: {
     label: 'Stable',
     label_long: 'Stable Pool',
     color: 'blue',
