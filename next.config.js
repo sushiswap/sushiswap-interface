@@ -32,6 +32,10 @@ const nextConfig = {
 
     return config
   },
+  experimental: {
+    concurrentFeatures: true,
+    serverComponents: true,
+  },
   pwa: {
     dest: 'public',
     runtimeCaching,
