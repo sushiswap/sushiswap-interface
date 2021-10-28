@@ -4602,6 +4602,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/gtag.js@^0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@types/gtag.js/-/gtag.js-0.0.7.tgz#ac3c2008a5f943fa503d17355a8a8bbc80b603ed"
+  integrity sha512-Kl5beBoB0OXw7WeFgHHpLEchvC7HyIu3v1AksNNTemAF6jmEmQGqhZQSHcG6BOU/Lq0xsByQNqLzicLPjVkxYQ==
+
 "@types/hast@^2.0.0":
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/@types/hast/-/hast-2.3.4.tgz#8aa5ef92c117d20d974a82bdfb6a648b08c0bafc"
@@ -12065,9 +12070,9 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.5
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.8.tgz#e412b8d33f5e006593cbd3cee6df9f2cebbe802a"
   integrity sha512-qkIilPUYcNhJpd33n0GBXTB1MMPp14TxEsEs0pTrsSVucApsYzW5V+Q8Qxhik6KU3evy+qkAAowTByymK0avdg==
 
-"graph-results-pager@git+https://github.com/LufyCZ/graph-results-pager.git":
+"graph-results-pager@https://github.com/LufyCZ/graph-results-pager":
   version "1.0.3"
-  resolved "git+https://github.com/LufyCZ/graph-results-pager.git#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
+  resolved "https://github.com/LufyCZ/graph-results-pager#9b230f05b8d79aeedc9e167ac5a1fea33e04d51f"
   dependencies:
     node-fetch "2.6.1"
 

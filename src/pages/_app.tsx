@@ -3,8 +3,7 @@ import '../styles/index.css'
 
 import * as plurals from 'make-plural/plurals'
 
-import { Fragment, FunctionComponent } from 'react'
-import { NextComponentType, NextPageContext } from 'next'
+import { Fragment } from 'react'
 import store, { persistor } from '../state'
 
 import type { AppProps } from 'next/app'
@@ -16,9 +15,7 @@ import { I18nProvider } from '@lingui/react'
 import ListsUpdater from '../state/lists/updater'
 import MulticallUpdater from '../state/multicall/updater'
 import { PersistGate } from 'redux-persist/integration/react'
-import ReactGA from 'react-ga'
 import { Provider as ReduxProvider } from 'react-redux'
-import { SWRConfig } from 'swr'
 import TransactionUpdater from '../state/transactions/updater'
 import UserUpdater from '../state/user/updater'
 import Web3ReactManager from '../components/Web3ReactManager'
@@ -30,6 +27,8 @@ import { nanoid } from '@reduxjs/toolkit'
 import { remoteLoader } from '@lingui/remote-loader'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { pageview, GOOGLE_ANALYTICS_TRACKING_ID, exception } from '../functions/gtag'
+import Script from 'next/script'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
@@ -42,26 +41,28 @@ if (typeof window !== 'undefined' && !!window.ethereum) {
 }
 
 function MyApp({ Component, pageProps, fallback }) {
-  const { pathname, query, locale } = useRouter()
+  const { pathname, query, locale, events } = useRouter()
 
   useEffect(() => {
-    ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS, { testMode: process.env.NODE_ENV === 'development' })
+    const handleRouteChange = (url) => {
+      pageview(url)
+    }
+    events.on('routeChangeComplete', handleRouteChange)
 
-    const errorHandler = (error) => {
-      ReactGA.exception({
+    const handleError = (error) => {
+      exception({
         description: `${error.message} @ ${error.filename}:${error.lineno}:${error.colno}`,
         fatal: true,
       })
     }
 
-    window.addEventListener('error', errorHandler)
+    window.addEventListener('error', handleError)
 
-    return () => window.removeEventListener('error', errorHandler)
-  }, [])
-
-  useEffect(() => {
-    ReactGA.pageview(`${pathname}${query}`)
-  }, [pathname, query])
+    return () => {
+      events.off('routeChangeComplete', handleRouteChange)
+      window.removeEventListener('error', handleError)
+    }
+  }, [events])
 
   useEffect(() => {
     async function load(locale) {
@@ -97,7 +98,26 @@ function MyApp({ Component, pageProps, fallback }) {
   const Guard = Component.Guard || Fragment
 
   return (
-    <Fragment>
+    <>
+      {/* Global Site Tag (gtag.js) - Google Analytics */}
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_TRACKING_ID}`}
+      />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GOOGLE_ANALYTICS_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
@@ -171,7 +191,7 @@ function MyApp({ Component, pageProps, fallback }) {
           </Web3ProviderNetwork>
         </Web3ReactProvider>
       </I18nProvider>
-    </Fragment>
+    </>
   )
 }
 
