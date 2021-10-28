@@ -15,7 +15,7 @@ import Lottie from 'lottie-react'
 import loadingCircle from '../../../../animation/loading-circle.json'
 import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 
-const WeightedStandardMode = () => {
+const IndexStandardMode = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
   const bentoBox = useBentoBoxContract()
@@ -131,4 +131,4 @@ const WeightedStandardMode = () => {
   )
 }
 
-export default WeightedStandardMode
+export default IndexStandardMode

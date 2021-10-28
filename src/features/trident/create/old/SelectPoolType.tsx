@@ -63,26 +63,26 @@ const SelectPoolType: FC = () => {
       <div className="rounded px-5 bg-dark-900">
         <RadioGroup value={selectedPoolType} onChange={setSelectedPoolType} className="divide-y">
           <RadioOption
-            value={PoolType.ConstantProduct}
+            value={PoolType.Classic}
             title={i18n._(t`Classic`)}
             description={i18n._(t`This type of pool consists of 2 tokens, 50% each.  This is currently most common.`)}
           />
           <RadioOption
-            value={PoolType.ConcentratedLiquidity}
+            value={PoolType.Concentrated}
             title={i18n._(t`Concentrated Price Range`)}
             description={i18n._(
               t`This is like a traditional 50/50 pool but within specified price ranges, to maximize exposure to swap fees.`
             )}
           />
           <RadioOption
-            value={PoolType.Weighted}
-            title={i18n._(t`Weighted`)}
+            value={PoolType.Index}
+            title={i18n._(t`Index`)}
             description={i18n._(
               t`This type of pool consists of 2 tokens, assigned weights for each token by the pool creator.`
             )}
           />
           <RadioOption
-            value={PoolType.Hybrid}
+            value={PoolType.Stable}
             title={i18n._(t`Multi-Asset`)}
             description={i18n._(
               t`This type of pool consists of up to 10 tokens, equal weight each. It is best utilized for swapping likekind assets.`

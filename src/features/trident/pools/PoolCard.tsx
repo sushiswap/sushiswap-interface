@@ -23,7 +23,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const currencies = [pool?.token0, pool?.token1]
 
   // TODO ramin: add other types
-  const poolType = pool instanceof ConstantProductPool ? PoolType.ConstantProduct : null
+  const poolType = pool instanceof ConstantProductPool ? PoolType.Classic : null
 
   // TODO ramin: remove
   const isFarm = true

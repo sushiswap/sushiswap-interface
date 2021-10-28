@@ -6,7 +6,7 @@ import { t } from '@lingui/macro'
 import { useRecoilValue } from 'recoil'
 import { poolAtom } from '../../context/atoms'
 
-const HybridPoolComposition: FC = () => {
+const StablePoolComposition: FC = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
 
@@ -25,4 +25,4 @@ const HybridPoolComposition: FC = () => {
   )
 }
 
-export default HybridPoolComposition
+export default StablePoolComposition
