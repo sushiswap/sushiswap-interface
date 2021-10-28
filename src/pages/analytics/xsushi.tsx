@@ -32,19 +32,19 @@ const chartTimespans = [
 ]
 
 export default function XSushi() {
-  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.MAINNET })
+  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.ETHEREUM })
 
-  const exchange = useFactory({ chainId: ChainId.MAINNET })
-  const exchange1d = useFactory({ block: block1d, chainId: ChainId.MAINNET })
+  const exchange = useFactory({ chainId: ChainId.ETHEREUM })
+  const exchange1d = useFactory({ block: block1d, chainId: ChainId.ETHEREUM })
 
-  const dayData = useDayData({ chainId: ChainId.MAINNET })
+  const dayData = useDayData({ chainId: ChainId.ETHEREUM })
 
-  const ethPrice = useNativePrice({ chainId: ChainId.MAINNET })
-  const ethPrice1d = useNativePrice({ block: block1d, chainId: ChainId.MAINNET, shouldFetch: !!block1d })
+  const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
+  const ethPrice1d = useNativePrice({ block: block1d, chainId: ChainId.ETHEREUM, shouldFetch: !!block1d })
 
-  const xSushi = useTokens({ chainId: ChainId.MAINNET, subset: [XSUSHI.address] })?.[0]
-  const xSushi1d = useTokens({ block: block1d, chainId: ChainId.MAINNET, subset: [XSUSHI.address] })?.[0]
-  const sushiDayData = useTokenDayData({ token: SUSHI_ADDRESS['1'], chainId: ChainId.MAINNET })
+  const xSushi = useTokens({ chainId: ChainId.ETHEREUM, subset: [XSUSHI.address] })?.[0]
+  const xSushi1d = useTokens({ block: block1d, chainId: ChainId.ETHEREUM, subset: [XSUSHI.address] })?.[0]
+  const sushiDayData = useTokenDayData({ token: SUSHI_ADDRESS['1'], chainId: ChainId.ETHEREUM })
 
   const bar = useBar()
   const bar1d = useBar({ block: block1d, shouldFetch: !!block1d })

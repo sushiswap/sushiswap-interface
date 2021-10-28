@@ -247,6 +247,6 @@ function Vesting() {
   )
 }
 
-Vesting.Guard = NetworkGuard([ChainId.MAINNET])
+Vesting.Guard = NetworkGuard([ChainId.ETHEREUM])
 
 export default Vesting

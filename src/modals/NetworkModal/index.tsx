@@ -23,7 +23,7 @@ export const SUPPORTED_NETWORKS: {
     blockExplorerUrls: string[]
   }
 } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     chainId: '0x1',
     chainName: 'Ethereum',
     nativeCurrency: {
@@ -190,7 +190,7 @@ export default function NetworkModal(): JSX.Element | null {
 
       <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
         {[
-          ChainId.MAINNET,
+          ChainId.ETHEREUM,
           ChainId.MATIC,
           ChainId.FANTOM,
           ChainId.ARBITRUM,
@@ -227,7 +227,7 @@ export default function NetworkModal(): JSX.Element | null {
                 toggleNetworkModal()
                 const params = SUPPORTED_NETWORKS[key]
                 cookie.set('chainId', key)
-                if (key === ChainId.MAINNET) {
+                if (key === ChainId.ETHEREUM) {
                   library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
                 } else {
                   library?.send('wallet_addEthereumChain', [params, account])

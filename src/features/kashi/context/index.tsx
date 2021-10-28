@@ -224,7 +224,7 @@ export function KashiProvider({ children }) {
       !account ||
       !chainId ||
       ![
-        ChainId.MAINNET,
+        ChainId.ETHEREUM,
         ChainId.KOVAN,
         ChainId.BSC,
         ChainId.MATIC,

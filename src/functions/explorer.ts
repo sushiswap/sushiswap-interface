@@ -51,7 +51,7 @@ interface ChainObject {
 }
 
 const chains: ChainObject = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     link: 'https://etherscan.io',
     builder: explorers.etherscan,
   },

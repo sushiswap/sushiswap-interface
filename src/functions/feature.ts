@@ -13,7 +13,7 @@ export enum Feature {
 }
 
 const features = {
-  [ChainId.MAINNET]: [
+  [ChainId.ETHEREUM]: [
     Feature.AMM,
     Feature.LIQUIDITY_MINING,
     Feature.BENTOBOX,

@@ -22,7 +22,7 @@ export type ChainlinkPriceFeedMap = {
 export const CHAINLINK_PRICE_FEED_MAP: {
   [chainId in ChainId]?: ChainlinkPriceFeedMap
 } = {
-  [ChainId.MAINNET]: MAINNET,
+  [ChainId.ETHEREUM]: MAINNET,
   [ChainId.KOVAN]: KOVAN,
   [ChainId.BSC]: BSC,
   [ChainId.HECO]: HECO,

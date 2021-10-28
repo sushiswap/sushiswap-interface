@@ -27,13 +27,13 @@ export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
-    chainId: ChainId.MAINNET,
-    address: SUSHI_ADDRESS[ChainId.MAINNET],
+    chainId: ChainId.ETHEREUM,
+    address: SUSHI_ADDRESS[ChainId.ETHEREUM],
     decimals: 18,
     symbol: 'SUSHI',
   },
   outputToken: {
-    chainId: ChainId.MAINNET,
+    chainId: ChainId.ETHEREUM,
     address: '0x228619cca194fbe3ebeb2f835ec1ea5080dafbb2',
     decimals: 8,
     symbol: 'crXSUSHI',
@@ -44,7 +44,7 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const zenkoContract = useZenkoContract()
-  const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET]])
+  const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM]])
   const sushiPerXSushi = useSushiPerXSushi(true)
   const crxSushiBentoBalance = useBentoBalance(CRXSUSHI.address)
 
@@ -63,7 +63,7 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
-      inputTokenBalance: balances[SUSHI[ChainId.MAINNET].address],
+      inputTokenBalance: balances[SUSHI[ChainId.ETHEREUM].address],
       outputTokenBalance: tryParseAmount(crxSushiBentoBalance?.value?.toFixed(8) || '0', CRXSUSHI),
     })
   }, [balances, setBalances, crxSushiBentoBalance?.value])

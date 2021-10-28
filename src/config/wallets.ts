@@ -94,7 +94,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
       const KeystoneConnector = (await import('@keystonehq/keystone-connector')).KeystoneConnector
       return new KeystoneConnector({
         chainId: 1,
-        url: RPC[ChainId.MAINNET],
+        url: RPC[ChainId.ETHEREUM],
       })
     },
     name: 'Keystone',
@@ -109,7 +109,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
       const LatticeConnector = (await import('@web3-react/lattice-connector')).LatticeConnector
       return new LatticeConnector({
         chainId: 1,
-        url: RPC[ChainId.MAINNET],
+        url: RPC[ChainId.ETHEREUM],
         appName: 'SushiSwap',
       })
     },
@@ -124,7 +124,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     connector: async () => {
       const WalletLinkConnector = (await import('@web3-react/walletlink-connector')).WalletLinkConnector
       return new WalletLinkConnector({
-        url: RPC[ChainId.MAINNET],
+        url: RPC[ChainId.ETHEREUM],
         appName: 'SushiSwap',
         appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
       })

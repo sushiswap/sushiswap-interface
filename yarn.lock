@@ -4165,14 +4165,18 @@
     tiny-warning "^1.0.0"
     toformat "^2.0.0"
 
-"@sushiswap/core-sdk@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-0.1.2.tgz#d6ae5d252bb603b2664f119988da50d96d0fff01"
-  integrity sha512-z7ks+cVG8nH5jiHMtZp4HzdDcnSLEm/Pd+aNav1ZjfgKrsVNNSAs6a6tjoEvK7GRj6XhM4RFyV772y4mIAkxjQ==
+"@sushiswap/core-sdk@1.0.0-canary.8":
+  version "1.0.0-canary.8"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.8.tgz#b39acbffa799e931ec5220811c21408c5b786d60"
+  integrity sha512-4E7blUA+qa19x3ASifZ/lrNsYmhwS8pqDn1KjO9Mq0OwRDMOPua0lRhFG6SiZO+tRyCMOX3IBQV6nPB8rMlgug==
   dependencies:
+    "@ethersproject/address" "^5.4.0"
+    "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/providers" "^5.4.0"
+    "@ethersproject/solidity" "^5.4.0"
     big.js "^6.1.0"
     decimal.js-light "^2.5.0"
-    jsbi "^3.1.0"
+    jsbi "^3.2.0"
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.0"
     toformat "^2.0.0"

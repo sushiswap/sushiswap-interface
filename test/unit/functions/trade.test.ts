@@ -6,7 +6,7 @@ import { calculateGasMargin, calculateSlippageAmount } from '../../../src/functi
 
 describe('#calculateSlippageAmount', () => {
   it('bounds are correct', () => {
-    const tokenAmount = CurrencyAmount.fromRawAmount(new Token(ChainId.MAINNET, AddressZero, 0), '100')
+    const tokenAmount = CurrencyAmount.fromRawAmount(new Token(ChainId.ETHEREUM, AddressZero, 0), '100')
     expect(() => calculateSlippageAmount(tokenAmount, new Percent(-1, 1))).toThrow()
     expect(calculateSlippageAmount(tokenAmount, new Percent(0)).map((bound) => bound.toString())).toEqual([
       '100',

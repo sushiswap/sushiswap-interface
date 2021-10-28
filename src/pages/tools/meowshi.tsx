@@ -50,7 +50,7 @@ export default function Meowshi() {
   })
 
   const [currencies, setCurrencies] = useState({
-    [Field.INPUT]: SUSHI[ChainId.MAINNET],
+    [Field.INPUT]: SUSHI[ChainId.ETHEREUM],
     [Field.OUTPUT]: MEOW,
   })
 
@@ -162,8 +162,8 @@ export default function Meowshi() {
           </div>
           <Typography variant="sm" className="text-secondary ml-[26px]">
             {currencies[Field.INPUT]?.symbol} →{' '}
-            {(currencies[Field.INPUT] === SUSHI[ChainId.MAINNET] ||
-              currencies[Field.OUTPUT] === SUSHI[ChainId.MAINNET]) &&
+            {(currencies[Field.INPUT] === SUSHI[ChainId.ETHEREUM] ||
+              currencies[Field.OUTPUT] === SUSHI[ChainId.ETHEREUM]) &&
               ' xSUSHI → '}
             {currencies[Field.OUTPUT]?.symbol}
           </Typography>
@@ -175,4 +175,4 @@ export default function Meowshi() {
   )
 }
 
-Meowshi.Guard = NetworkGuard([ChainId.MAINNET])
+Meowshi.Guard = NetworkGuard([ChainId.ETHEREUM])

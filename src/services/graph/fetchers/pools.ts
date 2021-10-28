@@ -59,7 +59,7 @@ interface TridentPoolQueryResult {
   indexPools: PoolData[]
 }
 
-export const getTridentPools = async (chainId: ChainId = ChainId.MAINNET): Promise<TridentPool[]> => {
+export const getTridentPools = async (chainId: ChainId = ChainId.ETHEREUM): Promise<TridentPool[]> => {
   const result: TridentPoolQueryResult = await pager(
     `${GRAPH_HOST[chainId]}/subgraphs/name/sushiswap/trident`,
     getTridentPoolsQuery

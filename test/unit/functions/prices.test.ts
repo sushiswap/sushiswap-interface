@@ -4,9 +4,9 @@ import { Trade, Route, Pair } from '@sushiswap/core-sdk'
 import { computeRealizedLPFeeAmount } from '../../../src/functions/prices'
 
 describe('prices', () => {
-  const token1 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000001', 18)
-  const token2 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000002', 18)
-  const token3 = new Token(ChainId.MAINNET, '0x0000000000000000000000000000000000000003', 18)
+  const token1 = new Token(ChainId.ETHEREUM, '0x0000000000000000000000000000000000000001', 18)
+  const token2 = new Token(ChainId.ETHEREUM, '0x0000000000000000000000000000000000000002', 18)
+  const token3 = new Token(ChainId.ETHEREUM, '0x0000000000000000000000000000000000000003', 18)
 
   const pair12 = new Pair(
     CurrencyAmount.fromRawAmount(token1, JSBI.BigInt(10000)),

@@ -71,7 +71,7 @@ const Rewards: FC = () => {
             header={<ListPanel.Header title={i18n._(t`Rewards`)} />}
             items={[
               <ListPanel.Item
-                left={<ListPanel.Item.Left amount={tryParseAmount('401.34', SUSHI[ChainId.MAINNET])} />}
+                left={<ListPanel.Item.Left amount={tryParseAmount('401.34', SUSHI[ChainId.ETHEREUM])} />}
                 right={
                   <div className="flex flex-row gap-1 justify-end">
                     <Typography variant="sm" weight={700}>

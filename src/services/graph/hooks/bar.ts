@@ -14,7 +14,7 @@ export function useBar(
   { timestamp, block, shouldFetch = true }: useBarProps = {},
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, chainId: ChainId.MAINNET, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId: ChainId.ETHEREUM, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   const { data } = useSWR(shouldFetch ? ['bar', block] : null, () => getBar(block), swrConfig)

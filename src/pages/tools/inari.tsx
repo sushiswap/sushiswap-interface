@@ -119,6 +119,6 @@ const Inari = () => {
   )
 }
 
-Inari.Guard = NetworkGuard([ChainId.MAINNET])
+Inari.Guard = NetworkGuard([ChainId.ETHEREUM])
 
 export default Inari

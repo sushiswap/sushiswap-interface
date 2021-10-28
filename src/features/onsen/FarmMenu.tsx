@@ -41,7 +41,7 @@ const Menu = ({ positionsLength }) => {
         </a>
       </NavLink>
 
-      {chainId === ChainId.MAINNET && (
+      {chainId === ChainId.ETHEREUM && (
         <>
           <NavLink
             exact
@@ -64,7 +64,7 @@ const Menu = ({ positionsLength }) => {
         </>
       )}
 
-      {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
+      {(chainId === ChainId.ETHEREUM || chainId === ChainId.MATIC) && (
         <NavLink
           exact
           href={`/farm?filter=2x`}

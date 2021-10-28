@@ -96,8 +96,8 @@ const ManageBar = ({ farm }) => {
   const parsedWithdrawValue = tryParseAmount(withdrawValue, liquidityToken)
 
   const APPROVAL_ADDRESSES = {
-    [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },
-    [Chef.MASTERCHEF_V2]: { [ChainId.MAINNET]: MASTERCHEF_V2_ADDRESS[ChainId.MAINNET] },
+    [Chef.MASTERCHEF]: { [ChainId.ETHEREUM]: MASTERCHEF_ADDRESS[ChainId.ETHEREUM] },
+    [Chef.MASTERCHEF_V2]: { [ChainId.ETHEREUM]: MASTERCHEF_V2_ADDRESS[ChainId.ETHEREUM] },
     [Chef.MINICHEF]: {
       [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
       [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],

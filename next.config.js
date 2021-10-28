@@ -124,12 +124,12 @@ const nextConfig = {
     defaultLocale: sourceLocale,
   },
   network: {
-    chainIds: [ChainId.MAINNET, ChainId.ARBITRUM],
-    defaultChainId: ChainId.MAINNET,
+    chainIds: [ChainId.ETHEREUM, ChainId.ARBITRUM],
+    defaultChainId: ChainId.ETHEREUM,
     domains: [
       {
         domain: 'sushi.com',
-        defaultChainId: ChainId.MAINNET,
+        defaultChainId: ChainId.ETHEREUM,
       },
       {
         domain: 'arbitrum.sushi.com',

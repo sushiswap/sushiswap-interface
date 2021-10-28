@@ -24,13 +24,13 @@ export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
-    chainId: ChainId.MAINNET,
-    address: SUSHI_ADDRESS[ChainId.MAINNET],
+    chainId: ChainId.ETHEREUM,
+    address: SUSHI_ADDRESS[ChainId.ETHEREUM],
     decimals: 18,
     symbol: 'SUSHI',
   },
   outputToken: {
-    chainId: ChainId.MAINNET,
+    chainId: ChainId.ETHEREUM,
     address: '0xf256cc7847e919fac9b808cc216cac87ccf2f47a',
     decimals: 18,
     symbol: 'aXSUSHI',
@@ -40,7 +40,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 const useStakeSushiToAaveStrategy = (): StrategyHook => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], AXSUSHI])
+  const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM], AXSUSHI])
   const general = useMemo(() => GENERAL(i18n), [i18n])
   const { setBalances, ...strategy } = useBaseStrategy({
     id: 'stakeSushiToAaveStrategy',
@@ -52,7 +52,7 @@ const useStakeSushiToAaveStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
-      inputTokenBalance: balances[SUSHI[ChainId.MAINNET].address],
+      inputTokenBalance: balances[SUSHI[ChainId.ETHEREUM].address],
       outputTokenBalance: balances[AXSUSHI.address],
     })
   }, [balances, setBalances])

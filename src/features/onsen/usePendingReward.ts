@@ -10,7 +10,7 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../../state/application/hooks'
 
 const REWARDERS = {
-  [ChainId.MAINNET]: 'some',
+  [ChainId.ETHEREUM]: 'some',
   [ChainId.MATIC]: 'some',
 }
 
@@ -38,7 +38,7 @@ const usePending = (farm) => {
 
   const contract = useMemo(
     () => ({
-      [ChainId.MAINNET]: cloneRewarder,
+      [ChainId.ETHEREUM]: cloneRewarder,
       [ChainId.MATIC]: complexRewarder,
       [ChainId.XDAI]: complexRewarder,
       [ChainId.HARMONY]: complexRewarder,

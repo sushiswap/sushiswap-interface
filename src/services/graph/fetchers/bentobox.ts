@@ -14,17 +14,17 @@ import { getTokenSubset } from './exchange'
 import { pager } from '.'
 
 export const BENTOBOX = {
-  [ChainId.MAINNET]: 'lufycz/bentobox',
+  [ChainId.ETHEREUM]: 'lufycz/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
   [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
 }
-export const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) =>
+export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)
 
-export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undefined) => {
+export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)
 
   const tokens = await getTokenSubset(chainId, {
@@ -64,7 +64,7 @@ export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undef
   }))
 }
 
-export const getUserKashiPairs = async (chainId = ChainId.MAINNET, variables) => {
+export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
   const { userKashiPairs } = await fetcher(chainId, kashiUserPairsQuery, variables)
 
   return userKashiPairs.map((userPair) => ({
@@ -89,7 +89,7 @@ export const getUserKashiPairs = async (chainId = ChainId.MAINNET, variables) =>
   }))
 }
 
-export const getBentoUserTokens = async (chainId = ChainId.MAINNET, variables) => {
+export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables) => {
   const { userTokens } = await fetcher(chainId, bentoUserTokensQuery, variables)
 
   return userTokens
@@ -109,19 +109,19 @@ export const getBentoUserTokens = async (chainId = ChainId.MAINNET, variables) =
     }))
 }
 
-export const getBentoBox = async (chainId = ChainId.MAINNET, variables) => {
+export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables) => {
   const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
 
   return bentoBoxes[0]
 }
 
-export const getBentoTokens = async (chainId = ChainId.MAINNET, variables) => {
+export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables) => {
   const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
 
   return tokens
 }
 
-export const getBentoStrategies = async (chainId = ChainId.MAINNET, variables) => {
+export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) => {
   const { strategies } = await fetcher(chainId, bentoStrategiesQuery, variables)
 
   const SECONDS_IN_YEAR = 60 * 60 * 24 * 365
