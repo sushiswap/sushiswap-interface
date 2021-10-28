@@ -10,7 +10,7 @@ export const currentStepAtom = atom<CreatePoolStep>({
 
 export const selectedPoolTypeAtom = atom<PoolType>({
   key: 'selectedPoolTypeAtom',
-  default: PoolType.ConstantProduct,
+  default: PoolType.Classic,
 })
 
 // TODO: Should import Fee enum from @sushiswap/trident-sdk when enums are updated

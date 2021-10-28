@@ -1,5 +1,5 @@
 import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import HybridPoolComposition from '../../../../features/trident/pool/hybrid/HybridPoolComposition'
+import StablePoolComposition from '../../../../features/trident/pool/stable/StablePoolComposition'
 import Header from '../../../../features/trident/pool/Header'
 import { RecoilRoot, useSetRecoilState } from 'recoil'
 import { useActiveWeb3React } from '../../../../hooks'
@@ -48,7 +48,7 @@ const Pool = () => {
         <Header />
       </TridentHeader>
       <TridentBody>
-        <HybridPoolComposition />
+        <StablePoolComposition />
       </TridentBody>
     </>
   )

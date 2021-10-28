@@ -6,11 +6,10 @@ import Typography from '../../../../components/Typography'
 import ListPanel from '../../../../components/ListPanel'
 import AssetInput from '../../../../components/AssetInput'
 import { NATIVE } from '@sushiswap/core-sdk'
-import TransactionDetails from './../TransactionDetails'
+import TransactionDetails from '../TransactionDetails'
 import React from 'react'
 import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-
 import { attemptingTxnAtom, noLiquiditySelector, poolAtom, showReviewAtom } from '../../context/atoms'
 import TridentApproveGate from '../../TridentApproveGate'
 import Lottie from 'lottie-react'
@@ -18,7 +17,7 @@ import loadingCircle from '../../../../animation/loading-circle.json'
 import Dots from '../../../../components/Dots'
 import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
 
-const WeightedZapMode = () => {
+const StableZapMode = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
@@ -37,29 +36,15 @@ const WeightedZapMode = () => {
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (
-    <>
-      {noLiquidity ? (
-        <div className="px-5 pt-5">
-          <Alert
-            dismissable={false}
-            type="error"
-            showIcon
-            message={i18n._(t`Zap mode is unavailable when there is no liquidity in the pool`)}
-          />
-        </div>
-      ) : (
-        <div className="px-5 pt-5">
-          <Alert
-            dismissable={false}
-            type="information"
-            showIcon
-            message={i18n._(t`In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights
+    <div className="flex flex-col gap-6 px-5">
+      <Alert
+        dismissable={false}
+        type="information"
+        showIcon
+        message={i18n._(t`In Zap mode, your selected asset will be split and rebalanced into the corresponding tokens and their weights
           automatically.`)}
-          />
-        </div>
-      )}
-
-      <div className="flex flex-col gap-3 px-5">
+      />
+      <div className="flex flex-col gap-5">
         <AssetInput
           value={zapInputAmount}
           currency={zapCurrency}
@@ -107,8 +92,8 @@ const WeightedZapMode = () => {
           <TransactionDetails />
         </div>
       )}
-    </>
+    </div>
   )
 }
 
-export default WeightedZapMode
+export default StableZapMode

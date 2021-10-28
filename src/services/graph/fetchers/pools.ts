@@ -6,10 +6,10 @@ import { PoolType } from '../../../features/trident/types'
 import { pager } from './index'
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
-  concentratedLiquidityPools: PoolType.ConcentratedLiquidity,
-  constantProductPools: PoolType.ConstantProduct,
-  hybridPools: PoolType.Hybrid,
-  indexPools: PoolType.Weighted,
+  concentratedLiquidityPools: PoolType.Concentrated,
+  constantProductPools: PoolType.Classic,
+  hybridPools: PoolType.Stable,
+  indexPools: PoolType.Index,
 }
 
 export type FeeTier = 1 | 0.3 | 0.05 | 0.01

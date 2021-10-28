@@ -5,8 +5,8 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 import Typography from '../../../../components/Typography'
-import HybridZapMode from '../../../../features/trident/add/hybrid/HybridZapMode'
-import HybridStandardMode from '../../../../features/trident/add/hybrid/HybridStandardMode'
+import StableZapMode from '../../../../features/trident/add/stable/StableZapMode'
+import StableStandardMode from '../../../../features/trident/add/stable/StableStandardMode'
 import React, { useEffect } from 'react'
 import SettingsTab from '../../../../components/Settings'
 import { LiquidityMode } from '../../../../features/trident/types'
@@ -26,10 +26,10 @@ import { NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from '../../../../config/tokens'
 import { useTotalSupply } from '../../../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../../../state/wallet/hooks'
-import { useTridentHybridPool } from '../../../../hooks/useTridentHybridPools'
+import { useTridentStablePool } from '../../../../hooks/useTridentStablePools'
 import AddTransactionReviewModal from '../../../../features/trident/create/old/CreateReviewModal'
 
-const AddHybrid = () => {
+const AddStable = () => {
   const { account, chainId } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
@@ -41,15 +41,15 @@ const AddHybrid = () => {
 
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
-  const hybridPool = useTridentHybridPool(currencyA, currencyB, 50)
-  const totalSupply = useTotalSupply(hybridPool ? hybridPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, hybridPool[1]?.liquidityToken)
+  const stablePool = useTridentStablePool(currencyA, currencyB, 50)
+  const totalSupply = useTotalSupply(stablePool ? stablePool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, stablePool[1]?.liquidityToken)
 
   useEffect(() => {
-    if (!hybridPool[1]) return
+    if (!stablePool[1]) return
     // TODO ramin: remove
-    setPool(hybridPool)
-  }, [chainId, hybridPool, setPool])
+    setPool(stablePool)
+  }, [chainId, stablePool, setPool])
 
   useEffect(() => {
     if (!totalSupply) return
@@ -73,7 +73,7 @@ const AddHybrid = () => {
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             {/*TODO ramin*/}
-            <Link href={`/trident/pool/hybrid/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/stable/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
           {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
@@ -96,8 +96,8 @@ const AddHybrid = () => {
         <ModeToggle onChange={() => {}} />
 
         <div className="flex flex-col mt-6">
-          {liquidityMode === LiquidityMode.ZAP && <HybridZapMode />}
-          {liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}
+          {liquidityMode === LiquidityMode.ZAP && <StableZapMode />}
+          {liquidityMode === LiquidityMode.STANDARD && <StableStandardMode />}
         </div>
       </TridentBody>
 
@@ -108,7 +108,7 @@ const AddHybrid = () => {
   )
 }
 
-AddHybrid.Provider = RecoilRoot
-AddHybrid.Layout = TridentLayout
+AddStable.Provider = RecoilRoot
+AddStable.Layout = TridentLayout
 
-export default AddHybrid
+export default AddStable
