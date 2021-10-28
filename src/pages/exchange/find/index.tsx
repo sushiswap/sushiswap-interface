@@ -133,7 +133,7 @@ export default function PoolFinder() {
             gap={'0 3px'}
           >
             {i18n._(t`Pool Found!`)}
-            <Link href={`/pool`}>
+            <Link prefetch={false} href={`/pool`}>
               <a className="text-center">{i18n._(t`Manage this pool`)}</a>
             </Link>
           </AutoRow>
@@ -147,7 +147,7 @@ export default function PoolFinder() {
               <div className="p-5 rounded bg-dark-800">
                 <AutoColumn gap="sm" justify="center">
                   {i18n._(t`You don’t have liquidity in this pool yet`)}
-                  <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
+                  <Link prefetch={false} href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
                     <a className="text-center text-blue text-opacity-80 hover:text-opacity-100">
                       {i18n._(t`Add liquidity`)}
                     </a>
@@ -159,7 +159,7 @@ export default function PoolFinder() {
             <div className="p-5 rounded bg-dark-800">
               <AutoColumn gap="sm" justify="center">
                 {i18n._(t`No pool found`)}
-                <Link href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
+                <Link prefetch={false} href={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}>
                   <a className="text-center">{i18n._(t`Create pool`)}</a>
                 </Link>
               </AutoColumn>

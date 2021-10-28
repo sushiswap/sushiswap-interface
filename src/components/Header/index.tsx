@@ -267,7 +267,7 @@ function AppBar(): JSX.Element {
 
             <Popover.Panel className="sm:hidden">
               <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
-                <Link href={'/swap'}>
+                <Link prefetch={false} href={'/swap'}>
                   <a
                     id={`swap-nav-link`}
                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -275,7 +275,7 @@ function AppBar(): JSX.Element {
                     {i18n._(t`Swap`)}
                   </a>
                 </Link>
-                <Link href={'/pool'}>
+                <Link prefetch={false} href={'/pool'}>
                   <a
                     id={`pool-nav-link`}
                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -284,7 +284,7 @@ function AppBar(): JSX.Element {
                   </a>
                 </Link>
 
-                <Link href={'/migrate'}>
+                <Link prefetch={false} href={'/migrate'}>
                   <a
                     id={`migrate-nav-link`}
                     className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -294,7 +294,7 @@ function AppBar(): JSX.Element {
                 </Link>
 
                 {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
-                  <Link href={'/farm'}>
+                  <Link prefetch={false} href={'/farm'}>
                     <a
                       id={`farm-nav-link`}
                       className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -307,7 +307,7 @@ function AppBar(): JSX.Element {
 
                 {chainId && featureEnabled(Feature.KASHI, chainId) && (
                   <>
-                    <Link href={'/lend'}>
+                    <Link prefetch={false} href={'/lend'}>
                       <a
                         id={`lend-nav-link`}
                         className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -316,7 +316,7 @@ function AppBar(): JSX.Element {
                       </a>
                     </Link>
 
-                    <Link href={'/borrow'}>
+                    <Link prefetch={false} href={'/borrow'}>
                       <a
                         id={`borrow-nav-link`}
                         className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
@@ -328,7 +328,7 @@ function AppBar(): JSX.Element {
                 )}
 
                 {chainId && featureEnabled(Feature.STAKING, chainId) && (
-                  <Link href={'/stake'}>
+                  <Link prefetch={false} href={'/stake'}>
                     <a
                       id={`stake-nav-link`}
                       className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"

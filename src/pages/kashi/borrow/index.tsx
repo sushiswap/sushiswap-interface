@@ -94,7 +94,7 @@ function Borrow() {
                 {positions.items.map((pair: any) => {
                   return (
                     <div key={pair.address}>
-                      <Link href={'/borrow/' + pair.address}>
+                      <Link prefetch={false} href={'/borrow/' + pair.address}>
                         <a className="block text-high-emphesis">
                           <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                             <div className="hidden space-x-2 md:flex">
@@ -198,7 +198,7 @@ function Borrow() {
             pairs.items.map((pair) => {
               return (
                 <div key={pair.address}>
-                  <Link href={'/borrow/' + String(pair.address).toLowerCase()}>
+                  <Link prefetch={false} href={'/borrow/' + String(pair.address).toLowerCase()}>
                     <a className="block text-high-emphesis">
                       <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                         <div className="flex flex-col items-start sm:flex-row sm:items-center">
