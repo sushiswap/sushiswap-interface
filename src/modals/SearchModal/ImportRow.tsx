@@ -4,39 +4,11 @@ import { useIsTokenActive, useIsUserAddedToken } from '../../hooks/Tokens'
 
 import { AutoColumn } from '../../components/Column'
 import Button from '../../components/Button'
-import { CheckCircle } from 'react-feather'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import ListLogo from '../../components/ListLogo'
 import { Token } from '@sushiswap/core-sdk'
-import styled from 'styled-components'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-
-const TokenSection = styled.div<{ dim?: boolean }>`
-  padding: 4px 20px;
-  height: 56px;
-  display: grid;
-  grid-template-columns: auto minmax(auto, 1fr) auto;
-  grid-gap: 16px;
-  align-items: center;
-
-  opacity: ${({ dim }) => (dim ? '0.4' : '1')};
-`
-
-const CheckIcon = styled(CheckCircle)`
-  height: 16px;
-  width: 16px;
-  margin-right: 6px;
-  // stroke: ${({ theme }) => theme.green1};
-`
-
-const NameOverflow = styled.div`
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 140px;
-  font-size: 12px;
-`
+import { classNames } from '../../functions'
 
 export default function ImportRow({
   token,
@@ -58,13 +30,24 @@ export default function ImportRow({
   const list = token instanceof WrappedTokenInfo ? token.list : undefined
 
   return (
-    <TokenSection style={style}>
+    <div
+      className={classNames(
+        'py-1 px-5 h-[56px] grid gap-4 align-center token-section',
+        dim ? 'opacity-60' : 'opacity-100'
+      )}
+      style={style}
+    >
       <CurrencyLogo currency={token} size={'24px'} style={{ opacity: dim ? '0.6' : '1' }} />
       <AutoColumn gap="4px" style={{ opacity: dim ? '0.6' : '1' }}>
         <AutoRow align="center">
           <div className="font-semibold">{token.symbol}</div>
           <div className="ml-2 font-light">
-            <NameOverflow title={token.name}>{token.name}</NameOverflow>
+            <div
+              title={token.name}
+              className="whitespace-nowrap overflow-ellipsis overflow-hidden max-w-[140px] text-xs"
+            >
+              {token.name}
+            </div>
           </div>
         </AutoRow>
         {list && list.logoURI && (
@@ -91,10 +74,10 @@ export default function ImportRow({
         </Button>
       ) : (
         <RowFixed style={{ minWidth: 'fit-content' }}>
-          <CheckIcon />
+          <div className="mr-1.5 w-4 h-4" />
           <div className="text-green">Active</div>
         </RowFixed>
       )}
-    </TokenSection>
+    </div>
   )
 }

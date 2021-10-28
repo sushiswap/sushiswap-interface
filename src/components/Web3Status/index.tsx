@@ -10,23 +10,11 @@ import { TransactionDetails } from '../../state/transactions/reducer'
 import WalletModal from '../../modals/WalletModal'
 import Web3Connect from '../Web3Connect'
 import { shortenAddress } from '../../functions/format'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import useENSName from '../../hooks/useENSName'
 import { useLingui } from '@lingui/react'
 import { useWalletModalToggle } from '../../state/application/hooks'
 import { useWeb3React } from '@web3-react/core'
-
-const IconWrapper = styled.div<{ size?: number }>`
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-  & > * {
-    height: ${({ size }) => (size ? size + 'px' : '32px')};
-    width: ${({ size }) => (size ? size + 'px' : '32px')};
-  }
-`
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
@@ -46,39 +34,39 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
     // return <Identicon />
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'LatticeConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'PortisConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   }
   return null

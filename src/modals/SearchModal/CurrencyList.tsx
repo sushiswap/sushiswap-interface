@@ -14,7 +14,6 @@ import Typography from '../../components/Typography'
 import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import { i18n } from '@lingui/core'
 import { isTokenOnList } from '../../functions/validate'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCombinedActiveList } from '../../state/lists/hooks'
@@ -22,24 +21,11 @@ import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
 import { classNames } from '../../functions'
+import Image from '../../components/Image'
 
 function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
 }
-
-const Tag = styled.div`
-  background-color: ${({ theme }) => theme.bg3};
-  // color: ${({ theme }) => theme.text2};
-  font-size: 14px;
-  border-radius: 4px;
-  padding: 0.25rem 0.3rem 0.25rem 0.3rem;
-  max-width: 6rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  justify-self: flex-end;
-  margin-right: 4px;
-`
 
 const FixedContentRow = styled.div`
   padding: 4px 20px;
@@ -57,15 +43,6 @@ function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
   )
 }
 
-const TagContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`
-
-const TokenListLogoWrapper = styled.img`
-  height: 20px;
-`
-
 function TokenTags({ currency }: { currency: Currency }) {
   if (!(currency instanceof WrappedTokenInfo)) {
     return <span />
@@ -77,9 +54,14 @@ function TokenTags({ currency }: { currency: Currency }) {
   const tag = tags[0]
 
   return (
-    <TagContainer>
+    <div className="flex justify-end">
       <MouseoverTooltip text={tag.description}>
-        <Tag key={tag.id}>{tag.name}</Tag>
+        <div
+          className="bg-purple text-sm border-4 py-1 px-1.5 max-w-[6rem] overflow-hidden overflow-ellipsis whitespace-nowrap justify-self-end mr-1"
+          key={tag.id}
+        >
+          {tag.name}
+        </div>
       </MouseoverTooltip>
       {tags.length > 1 ? (
         <MouseoverTooltip
@@ -88,10 +70,15 @@ function TokenTags({ currency }: { currency: Currency }) {
             .map(({ name, description }) => `${name}: ${description}`)
             .join('; \n')}
         >
-          <Tag>...</Tag>
+          <div
+            className="bg-purple text-sm border-4 py-1 px-1.5 max-w-[6rem] overflow-hidden overflow-ellipsis whitespace-nowrap justify-self-end mr-1"
+            key={tag.id}
+          >
+            ...
+          </div>
         </MouseoverTooltip>
       ) : null}
-    </TagContainer>
+    </div>
   )
 }
 
@@ -155,10 +142,10 @@ function isBreakLine(x: unknown): x is BreakLine {
 function BreakLineComponent({ style }: { style: CSSProperties }) {
   const { i18n } = useLingui()
   return (
-    <FixedContentRow style={style}>
+    <div className="py-1 px-5 h-[56px] grid gap-4 items-center" style={style}>
       <RowBetween>
         <RowFixed>
-          <TokenListLogoWrapper src="/tokenlist.svg" />
+          <Image src="/tokenlist.svg" alt="Token List" className="h-5" />
           <Typography variant="sm" className="ml-3">
             {i18n._(t`Expanded results from inactive Token Lists`)}
           </Typography>
@@ -168,7 +155,7 @@ function BreakLineComponent({ style }: { style: CSSProperties }) {
             click Manage to activate more lists.`)}
         />
       </RowBetween>
-    </FixedContentRow>
+    </div>
   )
 }
 
