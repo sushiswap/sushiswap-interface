@@ -8,14 +8,20 @@ const { locales, sourceLocale } = linguiConfig
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
-
 // This file sets a custom webpack configuration to use your Next.js app
 // with Sentry.
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-const { withSentryConfig } = require('@sentry/nextjs')
+const noRedirectBlacklistedPaths = ['_next', 'api'] // Paths that mustn't have rewrite applied to them, to avoid the whole app to behave inconsistently
+const publicBasePaths = ['robots', 'static', 'favicon.ico'] // All items (folders, files) under /public directory should be added there, to avoid redirection when an asset isn't found
+const noRedirectBasePaths = [...sourceLocale, ...publicBasePaths, ...noRedirectBlacklistedPaths] // Will disable url rewrite for those items (should contain all supported languages and all public base paths)
 
+const { withSentryConfig } = require('@sentry/nextjs')
+// @ts-check
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
   webpack: (config) => {
     config.module.rules = [
@@ -25,9 +31,11 @@ const nextConfig = {
         type: 'javascript/auto',
       },
     ]
-
     return config
   },
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
+  reactStrictMode: true,
   experimental: { esmExternals: true },
   pwa: {
     dest: 'public',
@@ -35,9 +43,11 @@ const nextConfig = {
     disable: process.env.NODE_ENV === 'development',
   },
   images: {
+    minimumCacheTTL: 1209600,
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
   },
-  reactStrictMode: true,
   async redirects() {
     return [
       // {
@@ -81,6 +91,10 @@ const nextConfig = {
   },
   async rewrites() {
     return [
+      {
+        source: `/:locale((?!${noRedirectBasePaths.join('|')})[^/]+)(.*)`,
+        destination: '/api/autoRedirectToLocalisedPage',
+      },
       {
         source: '/stake',
         destination: '/bar',
@@ -171,7 +185,6 @@ const nextConfig = {
     defaultLocale: sourceLocale,
   },
 }
-
 const SentryWebpackPluginOptions = {
   // Additional config options for the Sentry Webpack plugin. Keep in mind that
   // the following options are set automatically, and overriding them is not
