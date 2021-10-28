@@ -27,14 +27,6 @@ function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
 }
 
-const FixedContentRow = styled.div`
-  padding: 4px 20px;
-  height: 56px;
-  display: grid;
-  grid-gap: 16px;
-  align-items: center;
-`
-
 function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
   return (
     <div className="whitespace-nowrap overflow-hidden max-w-[5rem] overflow-ellipsis" title={balance.toExact()}>
