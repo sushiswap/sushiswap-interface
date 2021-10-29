@@ -31,6 +31,7 @@ export const RPC = {
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
   [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
   [ChainId.FUSE]: 'https://rpc.fuse.io',
+  [ChainId.CELO]: 'https://forno.celo.org',
 }
 
 export const POOL_DENY = ['14', '29', '45', '30']
@@ -85,7 +86,8 @@ export const WEEKLY_MERKLE_ROOT =
   'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/week-27/merkle-10959148-12171394.json'
 
 export const PROTOCOL_MERKLE_ROOT =
-  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/protocol/merkle-10959148-12171394.json'
+  //'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/protocol/merkle-10959148-12171394.json'
+  'https://raw.githubusercontent.com/sushiswap/sushi-vesting/master/merkle/protocol-02/merkle-10959148-12171394.json'
 
 // /**
 //  * Some tokens can only be swapped via certain pairs, so we override the list of bases that are considered for these

@@ -25,7 +25,7 @@ export const EXCHANGE = {
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
   [ChainId.OKEX]: 'sushiswap/okex-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
-  [ChainId.CELO]: 'sushiswap/celo-exchange',
+  [ChainId.CELO]: 'jiro-ono/sushitestsubgraph',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
 }
 
@@ -141,6 +141,12 @@ export const getStakePrice = async () => {
 export const getOnePrice = async () => {
   return getTokenPrice(ChainId.HARMONY, tokenPriceQuery, {
     id: '0xcf664087a5bb0237a0bad6742852ec6c8d69a27a',
+  })
+}
+
+export const getCeloPrice = async () => {
+  return getTokenPrice(ChainId.CELO, tokenPriceQuery, {
+    id: '0x471ece3750da237f93b8e339c536989b8978a438',
   })
 }
 

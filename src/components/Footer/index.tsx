@@ -42,6 +42,11 @@ const Footer = () => {
             {i18n._(t`Matic Bridge`)}
           </ExternalLink>
         )}
+        {chainId && chainId === ChainId.CELO && (
+          <ExternalLink id={`celo-bridge-link`} href="https://app.optics.xyz/" className="text-low-emphesis">
+            {i18n._(t`Celo Bridge`)}
+          </ExternalLink>
+        )}
         {chainId && chainId === ChainId.HARMONY && (
           <ExternalLink
             id={`harmony-bridge-link`}

@@ -24,6 +24,8 @@ const LANG_TO_COUNTRY = {
   pt_BR: 'Português',
   hi: 'हिन्दी',
   es: 'Español',
+  tr: 'Türkçe',
+  el: 'ελληνικά',
 }
 
 export default function LangSwitcher() {

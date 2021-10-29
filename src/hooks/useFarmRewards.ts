@@ -9,6 +9,7 @@ import {
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useOnePrice,
+  useCeloPrice,
   useSpellPrice,
   useStakePrice,
   useSushiPairs,
@@ -27,8 +28,7 @@ export default function useFarmRewards() {
 
   const positions = usePositions(chainId)
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block1w = useBlock({ daysAgo: 7 })
+  const block1d = useBlock({ daysAgo: 1, chainId })
 
   const farms = useFarms()
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
@@ -47,13 +47,14 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice] = [
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
     useStakePrice(),
     useOnePrice(),
     useSpellPrice(),
+    useCeloPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -165,6 +166,13 @@ export default function useFarmRewards() {
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: onePrice,
           },
+          [ChainId.CELO]: {
+            token: 'CELO',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: celoPrice,
+          },
         }
 
         rewards[0] = {
@@ -251,6 +259,8 @@ export default function useFarmRewards() {
       tvl,
     }
   }
+
+  console.log(farms)
 
   return farms
     .filter((farm) => {
