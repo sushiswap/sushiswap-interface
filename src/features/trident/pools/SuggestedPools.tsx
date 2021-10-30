@@ -1,9 +1,9 @@
 import { MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Switch from 'components/Switch'
-import Typography from 'components/Typography'
-import ViewMore from 'components/ViewMore'
+import Switch from 'app/components/Switch'
+import Typography from 'app/components/Typography'
+import ViewMore from 'app/components/ViewMore'
 import { FC, useState } from 'react'
 
 import PoolCard from './PoolCard'

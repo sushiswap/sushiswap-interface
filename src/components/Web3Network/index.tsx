@@ -1,8 +1,8 @@
+import { useActiveWeb3React } from 'app/services/web3'
 import Image from 'next/image'
 import React from 'react'
 
 import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import NetworkModel from '../../modals/NetworkModal'
 import { useNetworkModalToggle } from '../../state/application/hooks'
 

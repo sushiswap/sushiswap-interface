@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import { classNames } from 'functions'
+import { classNames } from 'app/functions/styling'
 import React, { FC, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 

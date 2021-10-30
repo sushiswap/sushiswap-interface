@@ -1,6 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit'
 import { ChainId } from '@sushiswap/core-sdk'
 import { TokenList } from '@uniswap/token-lists'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 
@@ -9,7 +10,6 @@ import { getNetworkLibrary } from '../functions/getNetworkLibrary'
 import { getTokenList } from '../functions/list'
 import { AppDispatch } from '../state'
 import { fetchTokenList } from '../state/lists/actions'
-import { useActiveWeb3React } from './useActiveWeb3React'
 
 export function useFetchListCallback(): (listUrl: string, sendDispatch?: boolean) => Promise<TokenList> {
   const { chainId, library } = useActiveWeb3React()

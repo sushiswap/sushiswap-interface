@@ -2,12 +2,12 @@ import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/con
 import Header from 'features/trident/pool/Header'
 import StablePoolComposition from 'features/trident/pool/stable/StablePoolComposition'
 import { useCurrency } from 'hooks/Tokens'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useTotalSupply } from 'hooks/useTotalSupply'
 import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { RecoilRoot, useSetRecoilState } from 'recoil'
+import { useActiveWeb3React } from 'services/web3'
 import { useTokenBalance } from 'state/wallet/hooks'
 
 import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'

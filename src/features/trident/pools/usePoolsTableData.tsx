@@ -1,12 +1,12 @@
-import Button from 'components/Button'
-import Chip from 'components/Chip'
-import { formatNumber, formatPercent } from 'functions'
+import Button from 'app/components/Button'
+import Chip from 'app/components/Chip'
+import { formatNumber, formatPercent } from 'app/functions/format'
+import { getTridentPools } from 'app/services/graph/fetchers/pools'
 import Link from 'next/link'
 import React, { useMemo } from 'react'
-import { getTridentPools } from 'services/graph/fetchers/pools'
 import useSWR from 'swr'
 
-import { chipPoolColorMapper,PoolType } from '../types'
+import { chipPoolColorMapper, PoolType } from '../types'
 import { PoolCell } from './PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
 

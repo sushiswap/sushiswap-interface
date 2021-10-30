@@ -1,6 +1,6 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { Currency } from '@sushiswap/core-sdk'
-import { ethers } from 'ethers'
-import { useConstantProductPoolFactory, useMasterDeployerContract } from 'hooks'
+import { useConstantProductPoolFactory, useMasterDeployerContract } from 'app/hooks/useContract'
 
 export const useDeployPoolEncodedData = (currencies: Currency[], feeTier, twap) => {
   const masterDeployer = useMasterDeployerContract()
@@ -10,7 +10,7 @@ export const useDeployPoolEncodedData = (currencies: Currency[], feeTier, twap) 
 
   const [a, b] = currencies.map((el) => el.wrapped)
   const [token0, token1] = a.sortsBefore(b) ? [a, b] : [b, a]
-  const deployData = ethers.utils.defaultAbiCoder.encode(
+  const deployData = defaultAbiCoder.encode(
     ['address', 'address', 'uint8', 'bool'],
     [...[token0.address, token1.address].sort(), feeTier, twap]
   )

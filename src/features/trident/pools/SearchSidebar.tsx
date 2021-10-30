@@ -1,8 +1,8 @@
-import Checkbox from 'components/Checkbox'
-import Divider from 'components/Divider'
+import Checkbox from 'app/components/Checkbox'
+import Divider from 'app/components/Divider'
+import { FeeTier } from 'app/services/graph/fetchers/pools'
 import React, { FC } from 'react'
 import { SetterOrUpdater, useRecoilState } from 'recoil'
-import { FeeTier } from 'services/graph/fetchers/pools'
 
 import { feeTiersFilterAtom, showTWAPOnlyAtom } from './context/atoms'
 

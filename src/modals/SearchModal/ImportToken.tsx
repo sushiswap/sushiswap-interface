@@ -12,9 +12,9 @@ import { RowFixed } from 'components/Row'
 import Typography from 'components/Typography'
 import { shortenAddress } from 'functions'
 import { getExplorerLink } from 'functions/explorer'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React from 'react'
 import { AlertTriangle } from 'react-feather'
+import { useActiveWeb3React } from 'services/web3'
 import { useAddUserToken } from 'state/user/hooks'
 
 interface ImportProps {

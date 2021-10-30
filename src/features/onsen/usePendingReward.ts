@@ -1,11 +1,11 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/core-sdk'
+import { Fraction } from 'app/entities/bignumber'
+import { useCloneRewarderContract, useComplexRewarderContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3/hooks/useActiveWeb3React'
+import { useBlockNumber } from 'app/state/application/hooks'
 import { useEffect, useMemo, useState } from 'react'
 
-import Fraction from '../../entities/Fraction'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
-import { useBlockNumber } from '../../state/application/hooks'
 import { Chef } from './enum'
 
 const REWARDERS = {

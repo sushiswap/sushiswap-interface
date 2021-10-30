@@ -2,11 +2,11 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { useCallback, useState } from 'react'
 
 import selectCoinAnimation from '../../animation/select-coin.json'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
 import CurrencyLogo from '../CurrencyLogo'
 

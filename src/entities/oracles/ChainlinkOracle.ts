@@ -1,59 +1,17 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
-import { ChainId, CHAINLINK_ORACLE_ADDRESS, Token } from '@sushiswap/core-sdk'
-import { CHAINLINK_PRICE_FEED_MAP } from 'config/oracles/chainlink'
-import { e10 } from 'functions/math'
+import { ChainId, Token } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
+import { e10 } from 'app/functions/math'
 
-export interface Oracle {
-  address: string
-  name: string
-  data: string
-  warning: string
-  error: string
-  valid: boolean
-}
+import { Oracle } from './Oracle'
 
-export abstract class AbstractOracle implements Oracle {
-  address = ''
-  name = 'None'
-  data = ''
-  warning = ''
-  error = ''
-  chainId = ChainId.ETHEREUM
-  pair: any
-  tokens: Token[]
-  valid = false
-
-  constructor(pair, chainId, tokens?: Token[]) {
-    this.address = pair.oracle
-    this.data = pair.oracleData
-    this.pair = pair
-    this.chainId = chainId
-    this.tokens = tokens
-  }
-}
-
-export class SushiSwapTWAP0Oracle extends AbstractOracle {
-  constructor(pair, chainId: ChainId, tokens?: Token[]) {
-    super(pair, chainId, tokens)
-    this.name = 'SushiSwap'
-  }
-}
-
-export class SushiSwapTWAP1Oracle extends AbstractOracle {
-  constructor(pair, chainId: ChainId, tokens?: Token[]) {
-    super(pair, chainId, tokens)
-    this.name = 'SushiSwap'
-  }
-}
-
-export class ChainlinkOracle extends AbstractOracle {
+export class ChainlinkOracle extends Oracle {
   constructor(pair, chainId: ChainId, tokens?: Token[]) {
     super(pair, chainId, tokens)
     this.name = 'Chainlink'
     this.valid = this.validate()
   }
-
   private validate() {
     const mapping = CHAINLINK_PRICE_FEED_MAP[this.chainId]
     if (!mapping) {
@@ -112,15 +70,5 @@ export class ChainlinkOracle extends AbstractOracle {
       this.error = "The Chainlink oracles configured don't match the pair tokens."
       return false
     }
-  }
-}
-
-function lowerEqual(value1: string, value2: string) {
-  return value1.toLowerCase() === value2.toLowerCase()
-}
-
-export function getOracle(pair, chainId: ChainId, tokens): Oracle {
-  if (lowerEqual(pair.oracle, CHAINLINK_ORACLE_ADDRESS[chainId])) {
-    return new ChainlinkOracle(pair, chainId, tokens)
   }
 }

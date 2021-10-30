@@ -12,15 +12,14 @@ import Typography from 'components/Typography'
 import Web3Connect from 'components/Web3Connect'
 import { MigrationSupported } from 'features/migration'
 import { classNames, currencyId } from 'functions'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useV2Pairs } from 'hooks/useV2Pairs'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useMemo } from 'react'
+import { useActiveWeb3React } from 'services/web3'
 import { toV2LiquidityToken, useTrackedTokenPairs } from 'state/user/hooks'
 import { useETHBalances } from 'state/wallet/hooks'
 import { useTokenBalancesWithLoadingIndicator } from 'state/wallet/hooks'
-
 
 export default function Pool() {
   const { i18n } = useLingui()

@@ -1,16 +1,16 @@
 import { arrayify } from '@ethersproject/bytes'
 import { parseBytes32String } from '@ethersproject/strings'
-import { ChainId, Currency,NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { createTokenFilterFunction } from 'app/functions/filtering'
+import { isAddress } from 'app/functions/validate'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useCombinedActiveList } from 'app/state/lists/hooks'
+import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from 'app/state/lists/hooks'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
+import { NEVER_RELOAD, useSingleCallResult } from 'app/state/multicall/hooks'
+import { useUserAddedTokens } from 'app/state/user/hooks'
 import { useMemo } from 'react'
 
-import { createTokenFilterFunction } from '../functions/filtering'
-import { isAddress } from '../functions/validate'
-import { useCombinedActiveList } from '../state/lists/hooks'
-import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
-import { useUserAddedTokens } from '../state/user/hooks'
-import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
-import { WrappedTokenInfo } from './../state/lists/wrappedTokenInfo'
-import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
 
 // reduce token map into standard address <-> Token mapping, optionally include user added tokens
@@ -192,9 +192,6 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   }
 
   const token = useToken(useNative ? undefined : currencyId)
-
-  // const extendedEther = useMemo(() => (chainId ? ExtendedEther.onChain(chainId) : undefined), [chainId])
-  // const weth = chainId ? WETH9_EXTENDED[chainId] : undefined
 
   const native = useMemo(() => (chainId ? NATIVE[chainId] : undefined), [chainId])
 

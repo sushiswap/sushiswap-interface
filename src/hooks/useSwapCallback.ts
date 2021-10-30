@@ -10,7 +10,7 @@ import {
   Trade as LegacyTrade,
   TradeType,
 } from '@sushiswap/core-sdk'
-import { getBigNumber,MultiRoute } from '@sushiswap/tines'
+import { getBigNumber, MultiRoute } from '@sushiswap/tines'
 import {
   ComplexPathParams,
   ExactInputParams,
@@ -22,6 +22,7 @@ import {
   RouteType,
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import approveAmountCalldata from 'functions/approveAmountCalldata'
 import { shortenAddress } from 'functions/format'
 import { calculateGasMargin } from 'functions/trade'
@@ -31,7 +32,6 @@ import { useBlockNumber } from 'state/application/hooks'
 import { useTransactionAdder } from 'state/transactions/hooks'
 
 import { EIP_1559_ACTIVATION_BLOCK } from '../constants'
-import { useActiveWeb3React } from './useActiveWeb3React'
 import { useArgentWalletContract } from './useArgentWalletContract'
 import { useRouterContract } from './useContract'
 import { useTridentRouterContract } from './useContract'

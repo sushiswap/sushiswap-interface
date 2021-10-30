@@ -1,6 +1,6 @@
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { getAverageBlockTime, getBlock, getMassBlocks } from 'app/services/graph/fetchers'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
-import { getAverageBlockTime, getBlock, getMassBlocks } from 'services/graph/fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
 
 interface useBlockProps {

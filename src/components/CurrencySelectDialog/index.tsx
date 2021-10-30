@@ -3,16 +3,15 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, NATIVE } from '@sushiswap/core-sdk'
 import { isValidAddress } from '@walletconnect/utils'
+import loadingCircle from 'app/animation/loading-circle.json'
+import Button from 'app/components/Button'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import Typography from 'app/components/Typography'
+import { useAllTokens, useToken } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3/hooks'
+import { useAllTokenBalances, useCurrencyBalance, useCurrencyBalances, useTokenBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
 import React, { FC, useCallback, useMemo, useState } from 'react'
-
-import loadingCircle from '../../animation/loading-circle.json'
-import { useActiveWeb3React } from '../../hooks'
-import { useAllTokens, useToken } from '../../hooks/Tokens'
-import { useAllTokenBalances, useCurrencyBalance, useCurrencyBalances, useTokenBalance } from '../../state/wallet/hooks'
-import Button from '../Button'
-import CurrencyLogo from '../CurrencyLogo'
-import Typography from '../Typography'
 
 interface ProvidedCurrenciesProps {
   currencies: Currency[]

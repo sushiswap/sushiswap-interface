@@ -10,21 +10,21 @@ import {
   TradeType,
   WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
+import { tryParseAmount } from 'app/functions/parse'
+import { isAddress } from 'app/functions/validate'
+import { useCurrency } from 'app/hooks/Tokens'
+import useENS from 'app/hooks/useENS'
+import useParsedQueryString from 'app/hooks/useParsedQueryString'
+import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 
-import { tryParseAmount } from '../../functions/parse'
-import { isAddress } from '../../functions/validate'
-import { useCurrency } from '../../hooks/Tokens'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import useENS from '../../hooks/useENS'
-import useParsedQueryString from '../../hooks/useParsedQueryString'
-import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
-import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { AppState } from '../index'
-import { useExpertModeManager, useUserSingleHopOnly } from '../user/hooks'
-import { useCurrencyBalances } from '../wallet/hooks'
 // import {
 //   EstimatedSwapCall,
 //   SuccessfulCall,

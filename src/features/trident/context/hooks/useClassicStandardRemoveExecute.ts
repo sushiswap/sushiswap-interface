@@ -1,12 +1,13 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ethers } from 'ethers'
-import { toShareJSBI } from 'functions'
-import { useActiveWeb3React, useTridentRouterContract } from 'hooks'
+import { toShareJSBI } from 'app/functions/bentobox'
+import { useTridentRouterContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
-import { useTransactionAdder } from 'state/transactions/hooks'
 
 import { LiquidityOutput } from '../../types'
 import {
@@ -64,7 +65,7 @@ export const useClassicStandardRemoveExecute = () => {
           },
         ]
 
-        const encoded = ethers.utils.defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
+        const encoded = defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
 
         try {
           setAttemptingTxn(true)

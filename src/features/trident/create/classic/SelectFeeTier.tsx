@@ -1,5 +1,5 @@
 import { Fee } from '@sushiswap/trident-sdk'
-import Typography from 'components/Typography'
+import Typography from 'app/components/Typography'
 import React, { FC } from 'react'
 import { useRecoilState } from 'recoil'
 

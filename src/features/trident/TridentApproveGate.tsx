@@ -1,11 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import Button from 'components/Button'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useTridentRouterContract } from 'hooks'
-import useBentoMasterApproveCallback, { BentoApprovalState } from 'hooks/useBentoMasterApproveCallback'
+import Button from 'app/components/Button'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useBentoMasterApproveCallback, { BentoApprovalState } from 'app/hooks/useBentoMasterApproveCallback'
+import { useTridentRouterContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useWalletModalToggle } from 'app/state/application/hooks'
 import React, { FC, memo, ReactNode, useEffect, useState } from 'react'
-import { useWalletModalToggle } from 'state/application/hooks'
 
 interface TokenApproveButtonProps {
   inputAmount: CurrencyAmount<Currency> | undefined

@@ -1,4 +1,4 @@
-import { ChainId, SUSHI_ADDRESS, Token, WETH9 } from '@sushiswap/core-sdk'
+import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
 
 export const ARBITRUM: { [key: string]: Token } = {
   USDC: new Token(ChainId.ARBITRUM, '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', 6, 'USDC', 'USD Coin'),
@@ -222,14 +222,14 @@ export const CRV = new Token(ChainId.ETHEREUM, '0xD533a949740bb3306d119CC777fa90
 
 export const CRXSUSHI = new Token(
   ChainId.ETHEREUM,
-  '0x228619cca194fbe3ebeb2f835ec1ea5080dafbb2',
+  '0x228619CCa194Fbe3Ebeb2f835eC1eA5080DaFbb2',
   8,
   'crXSUSHI',
   'Cream SushiBar'
 )
 export const AXSUSHI = new Token(
   ChainId.ETHEREUM,
-  '0xf256cc7847e919fac9b808cc216cac87ccf2f47a',
+  '0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a',
   18,
   'aXSUSHI',
   'Aave interest bearing XSUSHI'
@@ -257,30 +257,4 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.OKEX]: new Token(ChainId.OKEX, SUSHI_ADDRESS[ChainId.OKEX], 18, 'SUSHI', 'SushiToken'),
   [ChainId.HARMONY]: new Token(ChainId.HARMONY, SUSHI_ADDRESS[ChainId.HARMONY], 18, 'SUSHI', 'SushiToken'),
   [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
-}
-
-export const WETH9_EXTENDED: { [chainId: number]: Token } = {
-  ...WETH9,
-  [ChainId.ARBITRUM_TESTNET]: new Token(
-    ChainId.ARBITRUM_TESTNET,
-    '0x4A5e4A42dC430f669086b417AADf2B128beFEfac',
-    18,
-    'WETH9',
-    'Wrapped Ether'
-  ),
-  [ChainId.ARBITRUM]: new Token(
-    ChainId.ARBITRUM,
-    '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
-
-  [ChainId.FANTOM]: new Token(
-    ChainId.FANTOM,
-    '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
-    18,
-    'WFTM',
-    'Wrapped Fantom'
-  ),
 }

@@ -3,7 +3,7 @@ import { ChainId } from '@sushiswap/core-sdk'
 import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { Web3ReactContextInterface } from '@web3-react/core/dist/types'
 
-import { NetworkContextName } from '../constants'
+import { NetworkContextName } from '../../../constants'
 
 export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & {
   chainId?: ChainId
@@ -16,5 +16,3 @@ export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & 
     ? { ...context, account: impersonate || context.account }
     : { ...contextNetwork, account: impersonate || contextNetwork.account }
 }
-
-export default useActiveWeb3React

@@ -1,12 +1,12 @@
-import { computePairAddress,FACTORY_ADDRESS, JSBI, Pair, Percent, Token } from '@sushiswap/core-sdk'
+import { computePairAddress, FACTORY_ADDRESS, JSBI, Pair, Percent, Token } from '@sushiswap/core-sdk'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
+import { useAllTokens } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
 import flatMap from 'lodash/flatMap'
 import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../config/routing'
-import { useAllTokens } from '../../hooks/Tokens'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { AppDispatch, AppState } from '..'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import {

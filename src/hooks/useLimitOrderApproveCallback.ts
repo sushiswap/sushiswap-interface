@@ -1,17 +1,17 @@
 import { getAddress } from '@ethersproject/address'
 import { AddressZero, HashZero } from '@ethersproject/constants'
 import { Token } from '@sushiswap/core-sdk'
-import { getSignatureWithProviderBentobox,STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
+import { getSignatureWithProviderBentobox, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-import { calculateGasMargin,ZERO } from '../functions'
+import { calculateGasMargin, ZERO } from '../functions'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { setLimitOrderApprovalPending } from '../state/limit-order/actions'
 import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
 import { Field } from '../state/swap/actions'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
 import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
 
 export enum BentoApprovalState {

@@ -8,6 +8,7 @@ import KOVAN from './mappings/kovan'
 import MAINNET from './mappings/mainnet'
 import MATIC from './mappings/matic'
 import XDAI from './mappings/xdai'
+
 export type ChainlinkPriceFeedMap = {
   readonly [address: string]: {
     from: string

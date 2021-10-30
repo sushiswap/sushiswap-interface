@@ -1,5 +1,5 @@
-import Container from 'components/Container'
-import Sidebar from 'components/Sidebar'
+import Container from 'app/components/Container'
+import Sidebar from 'app/components/Sidebar'
 import Head from 'next/head'
 
 export default function Analytics() {

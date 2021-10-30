@@ -1,10 +1,10 @@
 import { splitSignature } from '@ethersproject/bytes'
-import { Currency, CurrencyAmount, JSBI, Percent, Token, Trade as V2Trade,TradeType } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Token, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
 import { DAI, SUSHI, USDC } from '../config/tokens'
 import { useSingleCallResult } from '../state/multicall/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'
 import useTransactionDeadline from './useTransactionDeadline'

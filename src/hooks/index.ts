@@ -1,4 +1,3 @@
-export { default as useActiveWeb3React } from './useActiveWeb3React'
 export { ApprovalState,useApproveCallback, useApproveCallbackFromTrade } from './useApproveCallback'
 export { default as useBentoBox } from './useBentoBox'
 export { default as useBentoBoxAllowance } from './useBentoBoxAllowance'

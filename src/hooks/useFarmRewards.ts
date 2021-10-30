@@ -1,10 +1,8 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId } from '@sushiswap/core-sdk'
-import { useMemo } from 'react'
-
-import { Chef, PairType } from '../features/onsen/enum'
-import { usePositions } from '../features/onsen/hooks'
-import { aprToApy } from '../functions/convert/apyApr'
+import { Chef, PairType } from 'app/features/onsen/enum'
+import { usePositions } from 'app/features/onsen/hooks'
+import { aprToApy } from 'app/functions/convert'
 import {
   useAverageBlockTime,
   useBlock,
@@ -18,8 +16,9 @@ import {
   useStakePrice,
   useSushiPairs,
   useSushiPrice,
-} from '../services/graph'
-import useActiveWeb3React from './useActiveWeb3React'
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useMemo } from 'react'
 
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()

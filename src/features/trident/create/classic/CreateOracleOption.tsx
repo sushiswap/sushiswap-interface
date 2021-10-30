@@ -1,5 +1,5 @@
-import Checkbox from 'components/Checkbox'
-import Typography from 'components/Typography'
+import Checkbox from 'app/components/Checkbox'
+import Typography from 'app/components/Typography'
 import React, { FC } from 'react'
 import { useRecoilState } from 'recoil'
 

@@ -1,8 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
+import { useSushiContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback } from 'react'
 
-import { useActiveWeb3React, useSushiContract } from '../../hooks'
 import { Chef } from './enum'
 import { useChefContract } from './hooks'
 

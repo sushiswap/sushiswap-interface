@@ -7,6 +7,7 @@ import {
   bentoStrategiesQuery,
   bentoTokensQuery,
   bentoUserTokensQuery,
+  clonesQuery,
   kashiPairsQuery,
   kashiUserPairsQuery,
 } from 'services/graph/queries/bentobox'
@@ -14,7 +15,7 @@ import {
 import { pager } from './pager'
 
 export const BENTOBOX = {
-  [ChainId.ETHEREUM]: 'lufycz/bentobox',
+  [ChainId.ETHEREUM]: 'sushiswap/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
   [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
@@ -23,6 +24,11 @@ export const BENTOBOX = {
 }
 const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)
+
+export const getClones = async (chainId = ChainId.ETHEREUM) => {
+  const { clones } = await fetcher(chainId, clonesQuery)
+  return clones
+}
 
 export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)

@@ -1,12 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Checkbox from 'components/Checkbox'
-import Typography from 'components/Typography'
-import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
+import Checkbox from 'app/components/Checkbox'
+import Typography from 'app/components/Typography'
+import { fixedRatioAtom, liquidityModeAtom } from 'app/features/trident/context/atoms'
+import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { fixedRatioAtom, liquidityModeAtom } from '../context/atoms'
 import { LiquidityMode } from '../types'
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
 

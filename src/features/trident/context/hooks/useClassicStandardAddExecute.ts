@@ -1,12 +1,13 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ethers } from 'ethers'
-import { toShareJSBI } from 'functions'
-import { useActiveWeb3React, useTridentRouterContract } from 'hooks'
+import { toShareJSBI } from 'app/functions'
+import { useTridentRouterContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
-import { useTransactionAdder } from 'state/transactions/hooks'
 
 import { LiquidityInput } from '../../types'
 import {
@@ -44,7 +45,7 @@ export const useClassicStandardAddExecute = () => {
 
         let value = {}
         const liquidityInput: LiquidityInput[] = []
-        const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
+        const encoded = defaultAbiCoder.encode(['address'], [account])
 
         if (parsedAmountA && rebases[parsedAmountA.wrapped.currency.address]) {
           value = parsedAmountA.currency.isNative ? { value: parsedAmountA.quotient.toString() } : {}

@@ -1,20 +1,20 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
-import { ethers } from 'ethers'
-import { toShareJSBI } from 'functions'
+import { toShareJSBI } from 'app/functions'
+import useBentoRebases from 'app/hooks/useBentoRebases'
 import {
-  useActiveWeb3React,
   useConstantProductPoolFactory,
   useMasterDeployerContract,
   useTridentRouterContract,
-} from 'hooks'
-import useBentoRebases from 'hooks/useBentoRebases'
+} from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { useTransactionAdder } from 'state/transactions/hooks'
 
 import { selectedFeeTierAtom, twapAtom } from '../../create/context/atoms'
 import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
@@ -58,7 +58,7 @@ export const useClassicPoolCreateExecute = () => {
     // Pool creation data
     const [a, b] = selectedPoolCurrencies.map((el: Currency) => el.wrapped)
     const [tokenA, tokenB] = a.sortsBefore(b) ? [a, b] : [b, a]
-    const deployData = ethers.utils.defaultAbiCoder.encode(
+    const deployData = defaultAbiCoder.encode(
       ['address', 'address', 'uint8', 'bool'],
       [...[tokenA.address, tokenB.address].sort(), feeTier, twap]
     )
@@ -84,7 +84,7 @@ export const useClassicPoolCreateExecute = () => {
           twap,
         }),
         1,
-        ethers.utils.defaultAbiCoder.encode(['address'], [account]),
+        defaultAbiCoder.encode(['address'], [account]),
       ]),
     ]
 

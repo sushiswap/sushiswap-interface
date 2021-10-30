@@ -1,6 +1,5 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { Chef } from 'features/onsen/enum'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import concat from 'lodash/concat'
 import { useMemo } from 'react'
 import {
@@ -13,6 +12,7 @@ import {
   getMiniChefFarms,
   getMiniChefPairAddreses,
 } from 'services/graph/fetchers'
+import { useActiveWeb3React } from 'services/web3'
 import useSWR, { SWRConfiguration } from 'swr'
 
 export function useMasterChefV1TotalAllocPoint(swrConfig = undefined) {

@@ -3,12 +3,13 @@ import { AddressZero, HashZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { signMasterContractApproval } from 'app/entities/KashiCooker'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBentoMasterContractAllowed } from 'app/state/bentobox/hooks'
+import { useAllTransactions, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useMemo, useState } from 'react'
 
-import { signMasterContractApproval } from '../entities/KashiCooker'
-import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
-import { useAllTransactions, useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React, useBentoBoxContract } from './index'
+import { useBentoBoxContract } from './useContract'
 
 export enum BentoApprovalState {
   UNKNOWN,

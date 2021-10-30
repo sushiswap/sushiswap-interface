@@ -1,9 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'components/Button'
-import Checkbox from 'components/Checkbox'
-import BottomSlideIn from 'components/Dialog/BottomSlideIn'
-import Typography from 'components/Typography'
+import Button from 'app/components/Button'
+import Checkbox from 'app/components/Checkbox'
+import BottomSlideIn from 'app/components/Dialog/BottomSlideIn'
+import Typography from 'app/components/Typography'
 import { FC, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 

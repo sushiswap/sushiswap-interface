@@ -6,10 +6,10 @@ import NavLink from 'components/NavLink'
 import Typography from 'components/Typography'
 import { NETWORK_ICON, NETWORK_LABEL } from 'config/networks'
 import cookie from 'cookie-cutter'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { SUPPORTED_NETWORKS } from 'modals/NetworkModal'
 import Image from 'next/image'
 import React, { FC, Fragment } from 'react'
+import { useActiveWeb3React } from 'services/web3'
 
 interface NetworkGuardProps {
   networks: ChainId[]

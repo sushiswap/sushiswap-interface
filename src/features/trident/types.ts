@@ -1,7 +1,7 @@
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
-import { ChipColor } from 'components/Chip'
-import { ConstantProductPoolState } from 'hooks/useTridentClassicPools'
-import { StablePoolState } from 'hooks/useTridentStablePools'
+import { ChipColor } from 'app/components/Chip'
+import { ConstantProductPoolState } from 'app/hooks/useTridentClassicPools'
+import { StablePoolState } from 'app/hooks/useTridentStablePools'
 
 // TODO add last two pool types
 export type PoolUnion = ConstantProductPool | HybridPool

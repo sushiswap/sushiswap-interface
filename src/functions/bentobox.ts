@@ -1,12 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { CurrencyAmount, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
-import JSBI from 'jsbi'
+import { CurrencyAmount, JSBI,Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 
 export function toAmount(token, shares: BigNumber): BigNumber {
+  // console.log('toAmount', token, shares)
   return shares.mulDiv(token.bentoAmount, token.bentoShare)
 }
 
 export function toShare(token, amount: BigNumber): BigNumber {
+  // console.log('toShare', token, shares)
   return amount.mulDiv(token.bentoShare, token.bentoAmount)
 }
 
