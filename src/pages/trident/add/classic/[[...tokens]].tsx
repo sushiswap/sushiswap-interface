@@ -14,7 +14,6 @@ import FixedRatioHeader from 'features/trident/add/FixedRatioHeader'
 import { BREADCRUMBS } from 'features/trident/Breadcrumb'
 import { liquidityModeAtom, poolAtom } from 'features/trident/context/atoms'
 import useCurrenciesFromURL from 'features/trident/context/hooks/useCurrenciesFromURL'
-import useInitClassicPoolState from 'features/trident/context/hooks/useInitClassicPoolState'
 import DepositSubmittedModal from 'features/trident/DepositSubmittedModal'
 import { LiquidityMode } from 'features/trident/types'
 import { ConstantProductPoolState, useTridentClassicPool } from 'hooks/useTridentClassicPools'
@@ -22,11 +21,11 @@ import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { RecoilRoot, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
+import TridentRecoilRoot from '../../../../features/trident/TridentRecoilRoot'
+import { PoolType } from '@sushiswap/sdk'
 
 const AddClassic = () => {
-  useInitClassicPoolState()
-
   const { i18n } = useLingui()
   const { query } = useRouter()
   const { currencies, twap, fee } = useCurrenciesFromURL()
@@ -107,7 +106,7 @@ const AddClassic = () => {
   )
 }
 
-AddClassic.Provider = RecoilRoot
+AddClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 AddClassic.Layout = (props) => (
   <TridentLayout
     {...props}

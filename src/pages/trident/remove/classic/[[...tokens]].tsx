@@ -7,7 +7,6 @@ import Typography from 'components/Typography'
 import { BREADCRUMBS } from 'features/trident/Breadcrumb'
 import { liquidityModeAtom, poolAtom } from 'features/trident/context/atoms'
 import useCurrenciesFromURL from 'features/trident/context/hooks/useCurrenciesFromURL'
-import useInitClassicPoolState from 'features/trident/context/hooks/useInitClassicPoolState'
 import ClassicStandardAside from 'features/trident/remove/classic/ClassicStandardAside'
 import ClassicStandardMode from 'features/trident/remove/classic/ClassicStandardMode'
 import ClassicUnzapMode from 'features/trident/remove/classic/ClassicUnzapMode'
@@ -21,11 +20,11 @@ import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { RecoilRoot, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
+import TridentRecoilRoot from '../../../../features/trident/TridentRecoilRoot'
+import { PoolType } from '@sushiswap/sdk'
 
 const RemoveClassic = () => {
-  useInitClassicPoolState()
-
   const { i18n } = useLingui()
   const { query } = useRouter()
   const { currencies, fee, twap } = useCurrenciesFromURL()
@@ -100,7 +99,7 @@ const RemoveClassic = () => {
   )
 }
 
-RemoveClassic.Provider = RecoilRoot
+RemoveClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 RemoveClassic.Layout = (props) => (
   <TridentLayout
     {...props}

@@ -5,7 +5,6 @@ import Button from 'components/Button'
 import { TridentTransactions } from 'features/transactions/Transactions'
 import { BREADCRUMBS } from 'features/trident/Breadcrumb'
 import { poolAtom } from 'features/trident/context/atoms'
-import useInitClassicPoolState from 'features/trident/context/hooks/useInitClassicPoolState'
 import ClassicLinkButtons from 'features/trident/pool/classic/ClassicLinkButtons'
 import ClassicMarket from 'features/trident/pool/classic/ClassicMarket'
 import ClassicMyPosition from 'features/trident/pool/classic/ClassicMyPosition'
@@ -16,10 +15,12 @@ import PoolStatsChart from 'features/trident/pool/PoolStatsChart'
 import Rewards from 'features/trident/pool/Rewards'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
-import { RecoilRoot, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
+import TridentRecoilRoot from '../../../../features/trident/TridentRecoilRoot'
+import { PoolType } from '@sushiswap/sdk'
+import React from 'react'
 
 const Pool = () => {
-  useInitClassicPoolState()
   const { i18n } = useLingui()
   const linkButtons = <ClassicLinkButtons />
   const [, pool] = useRecoilValue(poolAtom)
@@ -80,7 +81,7 @@ const Pool = () => {
   )
 }
 
-Pool.Provider = RecoilRoot
+Pool.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 Pool.Layout = (props) => <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic']]} />
 
 export default Pool
