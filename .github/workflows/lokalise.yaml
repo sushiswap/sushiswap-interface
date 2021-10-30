@@ -9,21 +9,17 @@ jobs:
   lokalise:
     name: Upload english to lokalise
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [ 12.x, 14.x, 16.x ]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-      - uses: sudosubin/setup-lokalise-action@v1
+      - name: Setup Lokalise
+        uses: sudosubin/setup-lokalise-action@v1.0.1
         with:
           lokalise-version: 'latest' # or specify version (ex. '2.6.3')
+      - run: 'lokalise2 --version'
       - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 14.x
           cache: 'npm'
       - run: npm run lingui:extract --if-present
       - run: lokalise2 --token ${{ secrets.lokalise_secret }} --project-id 18927102617d34a34e1467.51119957 file upload --file en.json --lang-iso en
