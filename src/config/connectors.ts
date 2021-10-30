@@ -6,8 +6,8 @@ import { PortisConnector } from '@web3-react/portis-connector'
 import { TorusConnector } from '@web3-react/torus-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
-import { FortmaticConnector } from 'entities/FortmaticConnector'
-import { NetworkConnector } from 'entities/NetworkConnector'
+import { FortmaticConnector } from 'entities/connectors/FortmaticConnector'
+import { NetworkConnector } from 'entities/connectors/NetworkConnector'
 
 const RPC = {
   [ChainId.ETHEREUM]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
