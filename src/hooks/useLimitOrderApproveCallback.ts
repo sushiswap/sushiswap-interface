@@ -11,7 +11,7 @@ import { setLimitOrderApprovalPending } from '../state/limit-order/actions'
 import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
 import { Field } from '../state/swap/actions'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
 
 export enum BentoApprovalState {

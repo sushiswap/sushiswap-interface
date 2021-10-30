@@ -6,7 +6,7 @@ import { isAddress } from 'functions/validate'
 import { useCallback, useEffect, useState } from 'react'
 
 import { useBlockNumber } from '../state/application/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useContract } from './useContract'
 import useTransactionStatus from './useTransactionStatus'
 

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 
 import { SUSHI } from '../../config/tokens'
 import { calculateGasMargin } from '../../functions/trade'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useMerkleDistributorContract } from '../../hooks/useContract'
 import { useSingleCallResult } from '../multicall/hooks'
 import { useTransactionAdder } from '../transactions/hooks'

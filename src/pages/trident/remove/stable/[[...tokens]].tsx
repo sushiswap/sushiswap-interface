@@ -9,7 +9,7 @@ import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'f
 import ModeToggle from 'features/trident/ModeToggle'
 import RemoveTransactionReviewStandardModal from 'features/trident/remove/classic/RemoveTransactionReviewStandardModal'
 import { useCurrency } from 'hooks/Tokens'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import { useTotalSupply } from 'hooks/useTotalSupply'
 import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'

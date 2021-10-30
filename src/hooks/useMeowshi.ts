@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Fraction from '../entities/bignumber/Fraction'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { ApprovalState } from './useApproveCallback'
 import { useMeowshiContract, useSushiBarContract, useSushiContract } from './useContract'
 import { BalanceProps } from './useTokenBalance'

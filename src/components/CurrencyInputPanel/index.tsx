@@ -7,7 +7,7 @@ import React, { ReactNode, useCallback, useState } from 'react'
 
 import selectCoinAnimation from '../../animation/select-coin.json'
 import { classNames, formatCurrencyAmount } from '../../functions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import Button from '../Button'

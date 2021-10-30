@@ -1,7 +1,7 @@
 import { Currency, NATIVE } from '@sushiswap/core-sdk'
 import { SUSHI } from 'config/tokens'
 import { useCurrency } from 'hooks/Tokens'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import { SUPPORTED_NETWORKS } from 'modals/NetworkModal'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'

@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import Dots from 'components/Dots'
 import Image from 'components/Image'
 import { getExplorerLink } from 'functions/explorer'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import React from 'react'
 import { ArrowUpRight, CheckCircle } from 'react-feather'
 

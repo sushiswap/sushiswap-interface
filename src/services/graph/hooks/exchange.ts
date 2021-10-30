@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import {
   getAlcxPrice,
   getAvaxPrice,

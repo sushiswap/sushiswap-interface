@@ -3,7 +3,7 @@ import ExternalLink from 'components/ExternalLink'
 import Loader from 'components/Loader'
 import Typography from 'components/Typography'
 import { classNames, getExplorerLink } from 'functions'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import React, { FC } from 'react'
 import { useAllTransactions } from 'state/transactions/hooks'
 

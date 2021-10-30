@@ -9,7 +9,7 @@ import { AutoRow, RowBetween } from 'components/Row'
 import { classNames } from 'functions'
 import { getExplorerLink } from 'functions/explorer'
 import { useUnsupportedTokens } from 'hooks/Tokens'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import React, { useState } from 'react'
 
 export default function UnsupportedCurrencyFooter({

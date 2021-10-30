@@ -1,7 +1,7 @@
 import React, { ReactNode, useMemo } from 'react'
 
 import { BLOCKED_ADDRESSES } from '../../constants'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 
 export default function Blocklist({ children }: { children: ReactNode }) {
   const { account } = useActiveWeb3React()

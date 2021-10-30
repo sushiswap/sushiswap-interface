@@ -1,4 +1,4 @@
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import useBentoRebases from 'hooks/useBentoRebases'
 import { useTotalSupply } from 'hooks/useTotalSupply'
 import { useTridentClassicPool } from 'hooks/useTridentClassicPools'

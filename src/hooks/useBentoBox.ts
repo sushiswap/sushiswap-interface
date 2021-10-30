@@ -5,7 +5,7 @@ import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { useCallback } from 'react'
 
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useBentoBoxContract } from './useContract'
 
 function useBentoBox() {

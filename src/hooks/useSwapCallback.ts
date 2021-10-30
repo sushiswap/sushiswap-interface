@@ -31,7 +31,7 @@ import { useBlockNumber } from 'state/application/hooks'
 import { useTransactionAdder } from 'state/transactions/hooks'
 
 import { EIP_1559_ACTIVATION_BLOCK } from '../constants'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useArgentWalletContract } from './useArgentWalletContract'
 import { useRouterContract } from './useContract'
 import { useTridentRouterContract } from './useContract'

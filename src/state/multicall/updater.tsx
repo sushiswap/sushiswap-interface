@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from 'react'
 
 import { chunkArray } from '../../functions/array'
 import { retry,RetryableError } from '../../functions/retry'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useMulticall2Contract } from '../../hooks/useContract'
 import useDebounce from '../../hooks/useDebounce'
 import { useBlockNumber } from '../application/hooks'

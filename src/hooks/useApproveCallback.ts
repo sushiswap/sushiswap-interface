@@ -5,7 +5,7 @@ import { useCallback, useMemo } from 'react'
 
 import { calculateGasMargin } from '../functions/trade'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useTokenContract } from './useContract'
 import { useTokenAllowance } from './useTokenAllowance'
 

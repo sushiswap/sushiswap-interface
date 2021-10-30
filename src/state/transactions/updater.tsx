@@ -2,7 +2,7 @@ import { ChainId } from '@sushiswap/core-sdk'
 import { useCallback, useEffect, useMemo } from 'react'
 
 import { retry,RetryableError, RetryOptions } from '../../functions/retry'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { updateBlockNumber } from '../application/actions'
 import { useAddPopup, useBlockNumber } from '../application/hooks'
 import { useAppDispatch, useAppSelector } from '../hooks'

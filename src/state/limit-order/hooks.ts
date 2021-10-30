@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { isAddress, tryParseAmount } from '../../functions'
 import { useCurrency } from '../../hooks/Tokens'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import useENS from '../../hooks/useENS'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'

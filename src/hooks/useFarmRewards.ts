@@ -19,7 +19,7 @@ import {
   useSushiPairs,
   useSushiPrice,
 } from '../services/graph'
-import useActiveWeb3React from './useActiveWeb3React'
+import useActiveWeb3React from '../services/web3/hooks/useActiveWeb3React'
 
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()

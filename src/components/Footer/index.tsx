@@ -2,8 +2,8 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
 
-import { ANALYTICS_URL } from '../../constants'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
+import { ANALYTICS_URL } from 'app/constants'
+import { useActiveWeb3React } from 'app/services/web3'
 import ExternalLink from '../ExternalLink'
 import Polling from '../Polling'
 

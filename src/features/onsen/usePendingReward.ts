@@ -3,7 +3,7 @@ import { ChainId } from '@sushiswap/core-sdk'
 import { useEffect, useMemo, useState } from 'react'
 
 import Fraction from '../../entities/bignumber/Fraction'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
 import { useBlockNumber } from '../../state/application/hooks'
 import { Chef } from './enum'

@@ -1,5 +1,5 @@
-import { Feature, featureEnabled } from 'functions/feature'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { featureEnabled } from 'functions/feature'
+import { useActiveWeb3React } from 'services/web3'
 import {
   getBentoBox,
   getBentoStrategies,
@@ -7,9 +7,12 @@ import {
   getBentoUserTokens,
   getKashiPairs,
   getUserKashiPairs,
+  getClones,
 } from 'services/graph/fetchers'
 import { useBlock } from 'services/graph/hooks'
+import { Feature } from 'enums'
 import useSWR, { SWRConfiguration } from 'swr'
+import stringify from 'fast-json-stable-stringify'
 
 interface useKashiPairsProps {
   timestamp?: number
@@ -18,6 +21,11 @@ interface useKashiPairsProps {
   shouldFetch?: boolean
   user?: string
   subset?: string[]
+}
+
+export function useClones({ chainId, shouldFetch = true }, swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(shouldFetch ? () => ['clones', chainId] : null, (_, chainId) => getClones(chainId), swrConfig)
+  return data
 }
 
 export function useKashiPairs(
@@ -38,7 +46,7 @@ export function useKashiPairs(
   }
 
   const { data } = useSWR(
-    shouldFetch ? () => ['kashiPairs', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? () => ['kashiPairs', chainId, stringify(variables)] : null,
     (_, chainId) => getKashiPairs(chainId, variables),
     swrConfig
   )
@@ -60,7 +68,7 @@ export function useUserKashiPairs(variables = undefined, chainId = undefined, sw
       : ''
 
   const { data } = useSWR(
-    shouldFetch ? ['userKashiPairs', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? ['userKashiPairs', chainId, stringify(variables)] : null,
     () => getUserKashiPairs(chainId, variables),
     swrConfig
   )
@@ -85,7 +93,7 @@ export function useBentoUserTokens(
     : ''
 
   const { data } = useSWR(
-    shouldFetch ? ['bentoUserTokens', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? ['bentoUserTokens', chainId, stringify(variables)] : null,
     () => getBentoUserTokens(chainId, variables),
     swrConfig
   )
@@ -114,7 +122,7 @@ export function useBentoBox(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['bentoBox', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? ['bentoBox', chainId, stringify(variables)] : null,
     () => getBentoBox(chainId, variables),
     swrConfig
   )
@@ -147,7 +155,7 @@ export function useBentoTokens(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['bentoTokens', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? ['bentoTokens', chainId, stringify(variables)] : null,
     () => getBentoTokens(chainId, variables),
     swrConfig
   )
@@ -171,8 +179,6 @@ export function useBentoStrategies(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && chainId ? featureEnabled(Feature.BENTOBOX, chainId) : false
-
   const variables = {
     block: block ? { number: block } : undefined,
     where: {
@@ -181,7 +187,7 @@ export function useBentoStrategies(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['bentoStrategies', chainId, JSON.stringify(variables)] : null,
+    shouldFetch ? ['bentoStrategies', chainId, stringify(variables)] : null,
     () => getBentoStrategies(chainId, variables),
     swrConfig
   )

@@ -1,6 +1,6 @@
 import { Transactions } from 'features/transactions/types'
 import { formatDateAgo, formatNumber } from 'functions'
-import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'services/web3'
 import { useMemo } from 'react'
 import { getTransactions } from 'services/graph/fetchers'
 import useSWR from 'swr'

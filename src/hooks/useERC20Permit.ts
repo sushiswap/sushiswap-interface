@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react'
 
 import { DAI, SUSHI, USDC } from '../config/tokens'
 import { useSingleCallResult } from '../state/multicall/hooks'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'
 import useTransactionDeadline from './useTransactionDeadline'

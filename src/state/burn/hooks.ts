@@ -4,7 +4,7 @@ import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sus
 import { useCallback } from 'react'
 
 import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useTotalSupply } from '../../hooks/useTotalSupply'
 import { useV2Pair } from '../../hooks/useV2Pairs'
 import { useAppDispatch, useAppSelector } from '../hooks'
