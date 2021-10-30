@@ -1,19 +1,16 @@
-import { Deposit, Withdraw } from '../../../features/kashi'
-import Provider, { useKashiInfo, useKashiPair } from '../../../features/kashi/context'
-import React, { useState } from 'react'
-import { formatNumber, formatPercent } from '../../../functions/format'
-
-import Card from '../../../components/Card'
-import Container from '../../../components/Container'
-import Head from 'next/head'
-import Image from '../../../components/Image'
-import Layout from '../../../layouts/Kashi'
-import QuestionHelper from '../../../components/QuestionHelper'
 import { Tab } from '@headlessui/react'
-import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Card from 'components/Card'
+import Image from 'components/Image'
+import QuestionHelper from 'components/QuestionHelper'
+import { Deposit, Withdraw } from 'features/kashi'
+import Provider, { useKashiInfo, useKashiPair } from 'features/kashi/context'
+import { formatNumber, formatPercent } from 'functions/format'
+import Layout from 'layouts/Kashi'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
+import React from 'react'
 
 export default function Pair() {
   const router = useRouter()

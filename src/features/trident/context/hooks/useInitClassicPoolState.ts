@@ -1,12 +1,13 @@
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import useBentoRebases from 'hooks/useBentoRebases'
+import { useTotalSupply } from 'hooks/useTotalSupply'
+import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
+import { useEffect, useMemo } from 'react'
 import { useSetRecoilState } from 'recoil'
+import { useTokenBalance } from 'state/wallet/hooks'
+
 import { bentoboxRebasesAtom, currenciesAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 import useCurrenciesFromURL from './useCurrenciesFromURL'
-import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../../../state/wallet/hooks'
-import useBentoRebases from '../../../../hooks/useBentoRebases'
-import { useEffect, useMemo } from 'react'
-import { useActiveWeb3React } from '../../../../hooks'
 
 const useInitClassicPoolState = () => {
   const { chainId, account } = useActiveWeb3React()

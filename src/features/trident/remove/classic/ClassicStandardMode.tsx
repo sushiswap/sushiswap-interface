@@ -1,11 +1,17 @@
-import React, { FC } from 'react'
-import Typography from '../../../../components/Typography'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import ListPanel from '../../../../components/ListPanel'
-import PercentInput from '../../../../components/Input/Percent'
-import Button from '../../../../components/Button'
-import ToggleButtonGroup from '../../../../components/ToggleButton'
+import { useLingui } from '@lingui/react'
+import { Percent } from '@sushiswap/core-sdk'
+import loadingCircle from 'animation/loading-circle.json'
+import AssetInput from 'components/AssetInput'
+import Button from 'components/Button'
+import Dots from 'components/Dots'
+import PercentInput from 'components/Input/Percent'
+import ListPanel from 'components/ListPanel'
+import ToggleButtonGroup from 'components/ToggleButton'
+import Typography from 'components/Typography'
+import { useTridentRouterContract } from 'hooks'
+import Lottie from 'lottie-react'
+import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import {
@@ -15,15 +21,9 @@ import {
   poolBalanceAtom,
   showReviewAtom,
 } from '../../context/atoms'
-import { Percent } from '@sushiswap/core-sdk'
-import { useTridentRouterContract } from '../../../../hooks'
-import Lottie from 'lottie-react'
-import loadingCircle from '../../../../animation/loading-circle.json'
-import TridentApproveGate from '../../TridentApproveGate'
-import AssetInput from '../../../../components/AssetInput'
-import Dots from '../../../../components/Dots'
 import usePercentageInput from '../../context/hooks/usePercentageInput'
 import SumUSDCValues from '../../SumUSDCValues'
+import TridentApproveGate from '../../TridentApproveGate'
 
 const ClassicUnstandardMode: FC = () => {
   const { i18n } = useLingui()

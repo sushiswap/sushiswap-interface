@@ -1,28 +1,27 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { BAR_ADDRESS, ZERO } from '@sushiswap/core-sdk'
-import React, { useEffect, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../config/tokens'
-
-import Button from '../../components/Button'
 import { ChainId } from '@sushiswap/core-sdk'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
+import Button from 'components/Button'
+import Container from 'components/Container'
+import Dots from 'components/Dots'
+import Input from 'components/Input'
+import { SUSHI, XSUSHI } from 'config/tokens'
+import { classNames } from 'functions'
+import { aprToApy } from 'functions/convert/apyApr'
+import { tryParseAmount } from 'functions/parse'
+import { request } from 'graphql-request'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import useSushiBar from 'hooks/useSushiBar'
+import TransactionFailedModal from 'modals/TransactionFailedModal'
 import Head from 'next/head'
 import Image from 'next/image'
-import Input from '../../components/Input'
-import TransactionFailedModal from '../../modals/TransactionFailedModal'
-import { request } from 'graphql-request'
-import sushiData from '@sushiswap/sushi-data'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions/parse'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import useSWR from 'swr'
-import useSushiBar from '../../hooks/useSushiBar'
-import { useSushiPrice } from '../../services/graph'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { classNames } from '../../functions'
+import React, { useState } from 'react'
+import { useBlock, useFactory, useNativePrice, useTokens } from 'services/graph/hooks'
+import { useBar } from 'services/graph/hooks/bar'
+import { useWalletModalToggle } from 'state/application/hooks'
+import { useTokenBalance } from 'state/wallet/hooks'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -56,16 +55,10 @@ const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matt
 export default function Stake() {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.MAINNET])
+  const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.ETHEREUM])
   const xSushiBalance = useTokenBalance(account ?? undefined, XSUSHI)
 
-  const sushiPrice = useSushiPrice()
-
   const { enter, leave } = useSushiBar()
-
-  const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio, totalSupply}}`, fetcher)
-
-  const xSushiPerSushi = parseFloat(data?.bar?.ratio)
 
   const walletConnected = !!account
   const toggleWalletModal = useWalletModalToggle()
@@ -82,7 +75,7 @@ export default function Stake() {
 
   const parsedAmount = usingBalance ? balance : tryParseAmount(input, balance?.currency)
 
-  const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.MAINNET])
+  const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.ETHEREUM])
 
   const handleInput = (v: string) => {
     if (v.length <= INPUT_CHAR_LIMIT) {
@@ -141,18 +134,22 @@ export default function Stake() {
     }
   }
 
-  const [apr, setApr] = useState<any>()
+  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.ETHEREUM })
 
-  // TODO: DROP AND USE SWR HOOKS INSTEAD
-  useEffect(() => {
-    const fetchData = async () => {
-      const results = await sushiData.exchange.dayData()
-      const apr = (((results[1].volumeUSD * 0.05) / data?.bar?.totalSupply) * 365) / (data?.bar?.ratio * sushiPrice)
+  const exchange = useFactory({ chainId: ChainId.ETHEREUM })
+  const exchange1d = useFactory({ block: block1d, chainId: ChainId.ETHEREUM })
 
-      setApr(apr)
-    }
-    fetchData()
-  }, [data?.bar?.ratio, data?.bar?.totalSupply, sushiPrice])
+  const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
+
+  const xSushi = useTokens({ chainId: ChainId.ETHEREUM, subset: [XSUSHI.address] })?.[0]
+
+  const bar = useBar()
+
+  const [xSushiPrice] = [xSushi?.derivedETH * ethPrice, xSushi?.derivedETH * ethPrice * bar?.totalSupply]
+
+  const APY1d = aprToApy(
+    (((exchange?.volumeUSD - exchange1d?.volumeUSD) * 0.0005 * 365.25) / (bar?.totalSupply * xSushiPrice)) * 100 ?? 0
+  )
 
   return (
     <Container id="bar-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
@@ -242,7 +239,7 @@ export default function Stake() {
                 </div>
                 <div className="flex flex-col">
                   <p className="mb-1 text-lg font-bold text-right text-high-emphesis md:text-3xl">
-                    {`${apr ? apr.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
+                    {`${APY1d ? APY1d.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
                   </p>
                   <p className="w-32 text-sm text-right text-primary md:w-64 md:text-base">
                     {i18n._(t`Yesterday's APR`)}
@@ -282,7 +279,7 @@ export default function Stake() {
                     {activeTab === 0 ? i18n._(t`Stake SUSHI`) : i18n._(t`Unstake`)}
                   </p>
                   <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-base md:font-normal">
-                    {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
+                    {`1 xSUSHI = ${Number(bar?.ratio ?? 0)?.toFixed(4)} SUSHI`}
                   </div>
                 </div>
 

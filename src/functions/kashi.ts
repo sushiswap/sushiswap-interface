@@ -11,9 +11,9 @@ import {
   PROTOCOL_FEE_DIVISOR,
   STARTING_INTEREST_PER_YEAR,
 } from '@sushiswap/sdk'
-import { ZERO, e10 } from './math'
 
 import { getCurrency } from './currency/getCurrency'
+import { e10,ZERO } from './math'
 
 export function accrue(pair: any, amount: BigNumber, includePrincipal = false): BigNumber {
   return amount

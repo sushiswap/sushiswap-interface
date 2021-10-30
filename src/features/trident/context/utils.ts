@@ -1,6 +1,6 @@
 import { Currency } from '@sushiswap/core-sdk'
 import { ethers } from 'ethers'
-import { useConstantProductPoolFactory, useMasterDeployerContract } from '../../../hooks'
+import { useConstantProductPoolFactory, useMasterDeployerContract } from 'hooks'
 
 export const useDeployPoolEncodedData = (currencies: Currency[], feeTier, twap) => {
   const masterDeployer = useMasterDeployerContract()

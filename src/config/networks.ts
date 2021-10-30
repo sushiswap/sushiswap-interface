@@ -21,7 +21,7 @@ const Palm = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/p
 const Moonriver = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonriver.jpg'
 
 export const NETWORK_ICON = {
-  [ChainId.MAINNET]: Mainnet,
+  [ChainId.ETHEREUM]: Mainnet,
   [ChainId.ROPSTEN]: Ropsten,
   [ChainId.RINKEBY]: Rinkeby,
   [ChainId.GÖRLI]: Goerli,
@@ -50,7 +50,7 @@ export const NETWORK_ICON = {
 }
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'Ethereum',
+  [ChainId.ETHEREUM]: 'Ethereum',
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',
   [ChainId.GÖRLI]: 'Görli',

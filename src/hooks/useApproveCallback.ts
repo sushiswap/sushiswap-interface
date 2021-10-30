@@ -1,13 +1,13 @@
-import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
-import { useCallback, useMemo } from 'react'
-import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
-
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
+import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade,TradeType } from '@sushiswap/core-sdk'
+import { useCallback, useMemo } from 'react'
+
 import { calculateGasMargin } from '../functions/trade'
+import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from './useActiveWeb3React'
-import { useTokenAllowance } from './useTokenAllowance'
 import { useTokenContract } from './useContract'
+import { useTokenAllowance } from './useTokenAllowance'
 
 export enum ApprovalState {
   UNKNOWN = 'UNKNOWN',

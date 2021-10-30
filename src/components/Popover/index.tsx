@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react'
-
-import { Placement } from '@popperjs/core'
-import useInterval from '../../hooks/useInterval'
-import { usePopper } from 'react-popper'
-import { classNames } from '../../functions'
 import { Popover as HeadlessuiPopover } from '@headlessui/react'
+import { Placement } from '@popperjs/core'
+import React, { useCallback, useState } from 'react'
+import { usePopper } from 'react-popper'
+
+import { classNames } from '../../functions'
+import useInterval from '../../hooks/useInterval'
 
 export interface PopoverProps {
   content: React.ReactNode

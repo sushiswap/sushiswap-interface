@@ -1,13 +1,13 @@
-import { classNames, formatNumber, formatPercent } from '../../functions'
-
 import { Disclosure } from '@headlessui/react'
-import DoubleLogo from '../../components/DoubleLogo'
-import FarmListItemDetails from './FarmListItemDetails'
-import Image from '../../components/Image'
-import { PairType } from './enum'
 import React from 'react'
-import { useCurrency } from '../../hooks/Tokens'
+
+import DoubleLogo from '../../components/DoubleLogo'
+import Image from '../../components/Image'
 import QuestionHelper from '../../components/QuestionHelper'
+import { classNames, formatNumber, formatPercent } from '../../functions'
+import { useCurrency } from '../../hooks/Tokens'
+import { PairType } from './enum'
+import FarmListItemDetails from './FarmListItemDetails'
 
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)

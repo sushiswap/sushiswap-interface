@@ -1,17 +1,16 @@
-import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import StablePoolComposition from '../../../../features/trident/pool/stable/StablePoolComposition'
-import Header from '../../../../features/trident/pool/Header'
-import { RecoilRoot, useSetRecoilState } from 'recoil'
-import { useActiveWeb3React } from '../../../../hooks'
+import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import Header from 'features/trident/pool/Header'
+import StablePoolComposition from 'features/trident/pool/stable/StablePoolComposition'
+import { useCurrency } from 'hooks/Tokens'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useTotalSupply } from 'hooks/useTotalSupply'
+import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import { useRouter } from 'next/router'
-import { poolAtom, poolBalanceAtom, totalSupplyAtom } from '../../../../features/trident/context/atoms'
-import { useCurrency } from '../../../../hooks/Tokens'
-import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../../../state/wallet/hooks'
 import { useEffect } from 'react'
-import ConcentratedMarket from '../../../../features/trident/pool/concentrated/ConcentratedMarket'
-import PoolStatsChart from '../../../../features/trident/pool/PoolStatsChart'
+import { RecoilRoot, useSetRecoilState } from 'recoil'
+import { useTokenBalance } from 'state/wallet/hooks'
+
+import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 
 const Pool = () => {
   const { account, chainId } = useActiveWeb3React()

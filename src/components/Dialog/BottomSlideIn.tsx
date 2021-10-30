@@ -1,7 +1,8 @@
-import { FC, Fragment, ReactNode } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import Typography from '../Typography'
 import { XIcon } from '@heroicons/react/outline'
+import { FC, Fragment, ReactNode } from 'react'
+
+import Typography from '../Typography'
 
 interface BottomSlideInProps {
   title?: string

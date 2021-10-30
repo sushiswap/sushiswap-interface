@@ -1,8 +1,9 @@
+import Button from 'components/Button'
+import Typography from 'components/Typography'
 import React, { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
+
 import { currentStepAtom } from '../context/atoms'
-import Button from '../../../../components/Button'
-import Typography from '../../../../components/Typography'
 import { SushiWethExample } from './SushiWethExample'
 
 export const ClassicDescription: FC = () => {

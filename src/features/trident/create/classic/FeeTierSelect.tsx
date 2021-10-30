@@ -1,8 +1,8 @@
+import { Fee } from '@sushiswap/trident-sdk'
+import Typography from 'components/Typography'
+import { classNames } from 'functions'
 import React, { FC } from 'react'
 import { SetterOrUpdater } from 'recoil'
-import { classNames } from '../../../../functions'
-import Typography from '../../../../components/Typography'
-import { Fee } from '@sushiswap/trident-sdk'
 
 interface FeeTierSelectProps {
   tier: Fee

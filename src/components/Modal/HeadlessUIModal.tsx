@@ -1,6 +1,7 @@
-import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useRef, useState } from 'react'
-import React, { Fragment } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
+import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react'
+import React, { Fragment } from 'react'
+
 import { classNames } from '../../functions'
 import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 

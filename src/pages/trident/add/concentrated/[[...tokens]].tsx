@@ -1,31 +1,25 @@
-import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import Typography from '../../../../components/Typography'
-import React, { useEffect, useState } from 'react'
-import Chart from '../../../../features/trident/add/concentrated/Chart'
-import PriceRange from '../../../../features/trident/add/concentrated/PriceRange'
-import RangeBlocks from '../../../../features/trident/add/concentrated/RangeBlocks'
-import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  maxPriceAtom,
-  minPriceAtom,
-  poolAtom,
-  poolBalanceAtom,
-  totalSupplyAtom,
-} from '../../../../features/trident/context/atoms'
-import { useCurrency } from '../../../../hooks/Tokens'
-import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../../../state/wallet/hooks'
-import { useActiveWeb3React } from '../../../../hooks'
+import Button from 'components/Button'
+import Typography from 'components/Typography'
+import Chart from 'features/trident/add/concentrated/Chart'
+import ConcentratedStandardMode from 'features/trident/add/concentrated/ConcentratedStandardMode'
+import PriceRange from 'features/trident/add/concentrated/PriceRange'
+import RangeBlocks from 'features/trident/add/concentrated/RangeBlocks'
+import FixedRatioHeader from 'features/trident/add/FixedRatioHeader'
+import { maxPriceAtom, minPriceAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import AddTransactionReviewModal from 'features/trident/create/old/CreateReviewModal'
+import { useActiveWeb3React } from 'hooks'
+import { useCurrency } from 'hooks/Tokens'
+import { useTotalSupply } from 'hooks/useTotalSupply'
+import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
+import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import ConcentratedStandardMode from '../../../../features/trident/add/concentrated/ConcentratedStandardMode'
-import AddTransactionReviewModal from '../../../../features/trident/create/old/CreateReviewModal'
+import React, { useEffect, useState } from 'react'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useTokenBalance } from 'state/wallet/hooks'
 
 const AddConcentrated = () => {
   const { account, chainId } = useActiveWeb3React()

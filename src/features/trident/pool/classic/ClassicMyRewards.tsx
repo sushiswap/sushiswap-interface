@@ -1,11 +1,11 @@
-import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Typography from '../../../../components/Typography'
-import ListPanel from '../../../../components/ListPanel'
-import Button from '../../../../components/Button'
+import Button from 'components/Button'
+import ListPanel from 'components/ListPanel'
+import Typography from 'components/Typography'
+import { currentLiquidityValueSelector } from 'features/trident/context/atoms'
+import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { currentLiquidityValueSelector } from '../../context/atoms'
 
 const ClassicMyRewards: FC = () => {
   const { i18n } = useLingui()

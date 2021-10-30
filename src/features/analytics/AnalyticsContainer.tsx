@@ -1,5 +1,6 @@
-import Container from '../../components/Container'
 import Head from 'next/head'
+
+import Container from '../../components/Container'
 import Sidebar from '../../components/Sidebar'
 
 export default function AnalyticsContainer({ children }): JSX.Element {

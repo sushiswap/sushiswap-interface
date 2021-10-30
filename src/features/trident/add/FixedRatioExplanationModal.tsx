@@ -1,11 +1,11 @@
+import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Typography from '../../../components/Typography'
+import BottomSlideIn from 'components/Dialog/BottomSlideIn'
+import HeadlessUiModal from 'components/Modal/HeadlessUIModal'
+import Typography from 'components/Typography'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
 import { FC, useState } from 'react'
-import BottomSlideIn from '../../../components/Dialog/BottomSlideIn'
-import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
-import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
-import HeadlessUiModal from '../../../components/Modal/HeadlessUIModal'
 
 const FixedRatioExplanationModal: FC = () => {
   const isDesktop = useDesktopMediaQuery()

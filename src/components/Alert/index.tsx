@@ -1,9 +1,9 @@
+import { ExclamationCircleIcon } from '@heroicons/react/outline'
+import { XIcon } from '@heroicons/react/solid'
 import React, { useState } from 'react'
 
-import { XIcon } from '@heroicons/react/solid'
 import { classNames } from '../../functions'
 import Typography from '../Typography'
-import { ExclamationCircleIcon } from '@heroicons/react/outline'
 
 const TYPE = {
   information: {

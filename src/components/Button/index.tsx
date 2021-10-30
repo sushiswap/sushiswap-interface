@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import Dots from '../Dots'
+
 import { classNames } from '../../functions'
+import Dots from '../Dots'
 
 const SIZE = {
   xs: 'px-2 py-1 text-xs',

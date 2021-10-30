@@ -1,18 +1,18 @@
-import { ChainId } from '@sushiswap/core-sdk'
-import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks'
-import { useCallback } from 'react'
 import { useLingui } from '@lingui/react'
+import { RampInstantSDK } from '@ramp-network/ramp-instant-sdk'
+import { ChainId } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'hooks'
+import { useCallback } from 'react'
 
 const DEFAULT_NETWORK = {
-  [ChainId.MAINNET]: 'ethereum',
+  [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.BSC]: 'bsc',
   [ChainId.MATIC]: 'matic',
 }
 
 const DEFAULT_CRYPTO_CURRENCY = {
-  [ChainId.MAINNET]: 'ETH',
+  [ChainId.ETHEREUM]: 'ETH',
   [ChainId.BSC]: 'BNB',
   [ChainId.MATIC]: 'MATIC',
 }

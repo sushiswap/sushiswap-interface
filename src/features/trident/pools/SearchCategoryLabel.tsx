@@ -1,9 +1,10 @@
-import Typography from '../../../components/Typography'
+import Typography from 'components/Typography'
+import Image from 'next/image'
 import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { searchQueryAtom } from './context/atoms'
+
 import rssSVG from '../../../../public/rss.svg'
-import Image from 'next/image'
+import { searchQueryAtom } from './context/atoms'
 
 export const SearchCategoryLabel: FC = () => {
   const searchQuery = useRecoilValue(searchQueryAtom)

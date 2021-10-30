@@ -1,21 +1,23 @@
-import React from 'react'
-import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
-import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
-import SearchResultPools from '../../../features/trident/pools/SearchResultPools'
+import Button from 'components/Button'
+import { DebugObserver } from 'components/DebugObserver'
+import Typography from 'components/Typography'
+import { PoolSearch } from 'features/trident/pools/PoolSearch'
+import { PoolSort } from 'features/trident/pools/PoolSort'
+import SearchResultPools from 'features/trident/pools/SearchResultPools'
+import { SearchSidebar } from 'features/trident/pools/SearchSidebar'
+import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
+import React from 'react'
 import { RecoilRoot } from 'recoil'
-import TridentLayout, { TridentBody, TridentHeader } from '../../../layouts/Trident'
-import { SearchSidebar } from '../../../features/trident/pools/SearchSidebar'
-import { PoolSearch } from '../../../features/trident/pools/PoolSearch'
-import { PoolSort } from '../../../features/trident/pools/PoolSort'
 
 const DiscoverPools = () => {
   const { i18n } = useLingui()
 
   return (
     <div className="flex justify-center">
+      <DebugObserver />
       <div className="flex w-full">
         <SearchSidebar />
         <div className="w-full">

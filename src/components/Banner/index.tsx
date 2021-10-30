@@ -1,5 +1,5 @@
-import { FC } from 'react'
 import { XIcon } from '@heroicons/react/outline'
+import { FC } from 'react'
 
 const Banner: FC = () => (
   <div className="relative w-full bg-purple bg-opacity-20">

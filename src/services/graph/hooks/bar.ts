@@ -1,8 +1,7 @@
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
+import { getBar, getBarHistory } from 'services/graph/fetchers'
+import { useBlock } from 'services/graph/hooks'
 import useSWR, { SWRConfiguration } from 'swr'
-import { useActiveWeb3React } from '../../../hooks'
-import { getBar, getBarHistory } from '../fetchers/bar'
-import { useBlock } from './blocks'
 
 interface useBarProps {
   timestamp?: number
@@ -14,7 +13,7 @@ export function useBar(
   { timestamp, block, shouldFetch = true }: useBarProps = {},
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, chainId: ChainId.MAINNET, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId: ChainId.ETHEREUM, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   const { data } = useSWR(shouldFetch ? ['bar', block] : null, () => getBar(block), swrConfig)

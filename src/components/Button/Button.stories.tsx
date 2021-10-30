@@ -1,6 +1,7 @@
-import React from 'react'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { CheckIcon } from '@heroicons/react/outline'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+import React from 'react'
+
 import Button from './index'
 
 export default {

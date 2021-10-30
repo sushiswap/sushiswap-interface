@@ -1,24 +1,24 @@
-import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
+import { ethers } from 'ethers'
+import { toShareJSBI } from 'functions'
 import {
   useActiveWeb3React,
   useConstantProductPoolFactory,
   useMasterDeployerContract,
   useTridentRouterContract,
-} from '../../../../hooks'
+} from 'hooks'
+import useBentoRebases from 'hooks/useBentoRebases'
 import { useCallback, useMemo } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-
 import ReactGA from 'react-ga'
-import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
-import { ethers } from 'ethers'
-import { t } from '@lingui/macro'
-import { useIndependentAssetInputs } from './useIndependentAssetInputs'
-import { useLingui } from '@lingui/react'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import useBentoRebases from '../../../../hooks/useBentoRebases'
-import { toShareJSBI } from '../../../../functions'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useTransactionAdder } from 'state/transactions/hooks'
+
 import { selectedFeeTierAtom, twapAtom } from '../../create/context/atoms'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
+import { useIndependentAssetInputs } from './useIndependentAssetInputs'
 
 export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()

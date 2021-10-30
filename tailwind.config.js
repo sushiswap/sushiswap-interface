@@ -9,6 +9,9 @@ module.exports = {
   darkMode: false,
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'token-section': 'auto minmax(auto, 1fr) auto',
+      },
       backgroundImage: (theme) => ({
         'bars-pattern': "url('/images/trident/bars-pattern.png')",
         'binary-pattern': "url('/images/trident/binary-pattern.png')",

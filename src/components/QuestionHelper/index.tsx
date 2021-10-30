@@ -1,5 +1,6 @@
-import React, { FC, useCallback, useState } from 'react'
 import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
+import React, { FC, useCallback, useState } from 'react'
+
 import Tooltip from '../Tooltip'
 
 const QuestionHelper: FC<{ text?: any }> = ({ children, text }) => {

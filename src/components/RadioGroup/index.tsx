@@ -1,5 +1,6 @@
-import { ComponentProps } from 'react'
 import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
+import { ComponentProps } from 'react'
+
 import { classNames } from '../../functions'
 import Typography from '../Typography'
 

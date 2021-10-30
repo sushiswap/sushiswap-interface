@@ -1,12 +1,13 @@
-import { FC, useMemo } from 'react'
-import { Pool } from '@sushiswap/trident-sdk'
 import { I18n } from '@lingui/core'
-import { poolEntityMapper } from '../poolEntityMapper'
-import Chip from '../../../components/Chip'
-import { POOL_TYPES } from '../constants'
-import Typography from '../../../components/Typography'
-import { formatPercent } from '../../../functions'
 import { t } from '@lingui/macro'
+import { Pool } from '@sushiswap/trident-sdk'
+import Chip from 'components/Chip'
+import Typography from 'components/Typography'
+import { formatPercent } from 'functions'
+import { FC, useMemo } from 'react'
+
+import { POOL_TYPES } from '../constants'
+import { poolEntityMapper } from '../poolEntityMapper'
 import { chipPoolColorMapper } from '../types'
 
 const _PoolProperties: FC<{ pool: Pool; i18n: I18n }> = ({ pool, i18n }) => {

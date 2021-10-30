@@ -1,28 +1,17 @@
-import { AdvancedLiquidityDetails, AdvancedLiquidityDetailsProps } from './AdvancedLiquidityDetails'
-
+import { classNames } from 'functions'
 import React from 'react'
-import styled from 'styled-components'
 
-const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
-  padding-top: calc(16px + 2rem);
-  padding-bottom: 16px;
-  margin-top: -2rem;
-  width: 100%;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
-  // color: ${({ theme }) => theme.text2};
-  background-color: #202231;
-  // background-color: ${({ theme }) => theme.advancedBG};
-  z-index: -1;
-
-  transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-100%)')};
-  transition: transform 300ms ease-in-out;
-`
+import { AdvancedLiquidityDetails, AdvancedLiquidityDetailsProps } from './AdvancedLiquidityDetails'
 
 export default function AdvancedSwapDetailsDropdown({ show, ...rest }: AdvancedLiquidityDetailsProps) {
   return (
-    <AdvancedDetailsFooter show={Boolean(show)}>
+    <div
+      className={classNames(
+        Boolean(show) ? 'translate-y-0' : '-translate-y-full',
+        'w-full pt-12 pb-8 -mt-8 max-w-[662px] pr-2.5 pl-2.5'
+      )}
+    >
       <AdvancedLiquidityDetails {...rest} />
-    </AdvancedDetailsFooter>
+    </div>
   )
 }

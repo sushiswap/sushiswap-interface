@@ -1,6 +1,6 @@
-import Footer from '../../components/Footer'
-import Header from '../../components/Header'
-import Popups from '../../components/Popups'
+import Footer from 'components/Footer'
+import Header from 'components/Header'
+import Popups from 'components/Popups'
 
 const Layout = ({ children }) => {
   return (

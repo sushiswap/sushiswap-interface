@@ -1,13 +1,14 @@
-import { ChainId, ChainKey, Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { computeConstantProductPoolAddress, ConstantProductPool, Fee } from '@sushiswap/trident-sdk'
 import { Interface } from '@ethersproject/abi'
+import { ChainId, ChainKey, Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
-import { abi } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
-import { useActiveWeb3React } from './index'
+import { computeConstantProductPoolAddress, ConstantProductPool, Fee } from '@sushiswap/trident-sdk'
 import { useMemo } from 'react'
-import { useMultipleContractSingleData } from '../state/multicall/hooks'
+import { useMultipleContractSingleData } from 'state/multicall/hooks'
 
-const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(abi)
+import { useActiveWeb3React } from './useActiveWeb3React'
+
+const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(ConstantProductPoolArtifact.abi)
 
 export enum ConstantProductPoolState {
   LOADING,

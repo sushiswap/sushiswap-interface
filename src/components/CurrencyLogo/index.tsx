@@ -1,12 +1,12 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/core-sdk'
 import React, { FunctionComponent, useMemo } from 'react'
 
-import Logo, { UNKNOWN_ICON } from '../Logo'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import useHttpLocations from '../../hooks/useHttpLocations'
+import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
+import Logo, { UNKNOWN_ICON } from '../Logo'
 
 const BLOCKCHAIN = {
-  [ChainId.MAINNET]: 'ethereum',
+  [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.BSC]: 'binanace',
   [ChainId.CELO]: 'celo',
   [ChainId.FANTOM]: 'fantom',
@@ -62,7 +62,7 @@ const MovrLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token
 const FuseLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
 
 const LOGO: Record<ChainId, string> = {
-  [ChainId.MAINNET]: EthereumLogo,
+  [ChainId.ETHEREUM]: EthereumLogo,
   [ChainId.KOVAN]: EthereumLogo,
   [ChainId.RINKEBY]: EthereumLogo,
   [ChainId.ROPSTEN]: EthereumLogo,

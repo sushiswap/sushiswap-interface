@@ -1,14 +1,11 @@
-import { ChainId, CurrencyAmount, Ether } from '@sushiswap/core-sdk'
 import { CheckCircleIcon, ExclamationIcon, XCircleIcon } from '@heroicons/react/outline'
-import React, { FC, useCallback, useMemo } from 'react'
-
-import ExternalLink from '../ExternalLink'
-import Loader from '../Loader'
-import Typography from '../Typography'
-import { classNames } from '../../functions'
-import { getExplorerLink } from '../../functions/explorer'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTransactions } from '../../state/transactions/hooks'
+import ExternalLink from 'components/ExternalLink'
+import Loader from 'components/Loader'
+import Typography from 'components/Typography'
+import { classNames, getExplorerLink } from 'functions'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import React, { FC } from 'react'
+import { useAllTransactions } from 'state/transactions/hooks'
 
 const Transaction: FC<{ hash: string }> = ({ hash }) => {
   const { chainId } = useActiveWeb3React()

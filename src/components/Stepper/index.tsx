@@ -1,7 +1,8 @@
-import React, { Children, cloneElement, FC, isValidElement, createContext, useMemo, useContext } from 'react'
+import React, { Children, cloneElement, createContext, FC, isValidElement, useContext, useMemo } from 'react'
+
 import { classNames } from '../../functions'
-import Typography from '../Typography'
 import { HorizontalLine } from '../HorizontalLine'
+import Typography from '../Typography'
 
 interface StepperProps {
   onChange: (x: number) => void

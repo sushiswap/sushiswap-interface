@@ -1,6 +1,6 @@
+import { XIcon } from '@heroicons/react/solid'
 import { FC, ReactNode } from 'react'
 
-import { XIcon } from '@heroicons/react/solid'
 import { classNames } from '../../functions'
 
 const SIZE = {

@@ -13,7 +13,7 @@ export function currencyId(currency: Currency): string {
 
 // export function currencyId(
 //   currency: Currency,
-//   chainId = ChainId.MAINNET
+//   chainId = ChainId.ETHEREUM
 // ): string {
 //   if (currency === Currency.getNativeCurrency(chainId))
 //     return Currency.getNativeCurrencySymbol(chainId);

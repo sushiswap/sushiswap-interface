@@ -1,17 +1,17 @@
-import { Field, MeowshiState } from '../../pages/tools/meowshi'
-import React, { FC } from 'react'
-import { SUSHI, XSUSHI } from '../../config/tokens'
-
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
 import Image from 'next/image'
+import React, { FC } from 'react'
+
 import Input from '../../components/Input'
 import Typography from '../../components/Typography'
-import { t } from '@lingui/macro'
+import { SUSHI, XSUSHI } from '../../config/tokens'
 import { tryParseAmount } from '../../functions'
 import { useActiveWeb3React } from '../../hooks'
-import { useLingui } from '@lingui/react'
-import { useTokenBalance } from '../../state/wallet/hooks'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
+import { Field, MeowshiState } from '../../pages/tools/meowshi'
+import { useTokenBalance } from '../../state/wallet/hooks'
 
 interface CurrencyInputPanelProps {
   field: Field
@@ -37,7 +37,7 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
             <div className="flex items-center gap-4">
               <Image
                 src={
-                  currency === SUSHI[ChainId.MAINNET]
+                  currency === SUSHI[ChainId.ETHEREUM]
                     ? '/images/tokens/sushi-square.jpg'
                     : currency === XSUSHI
                     ? '/images/tokens/xsushi-square.jpg'
@@ -53,13 +53,13 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
                 <Typography variant="h3" className="leading-6 text-high-emphesis" weight={700}>
                   {currency?.symbol}
                 </Typography>
-                {(currency === SUSHI[ChainId.MAINNET] || currency === XSUSHI) && (
+                {(currency === SUSHI[ChainId.ETHEREUM] || currency === XSUSHI) && (
                   <Typography
                     variant="xs"
                     className="underline cursor-pointer text-blue"
-                    onClick={() => setCurrency(currency === XSUSHI ? SUSHI[ChainId.MAINNET] : XSUSHI, field)}
+                    onClick={() => setCurrency(currency === XSUSHI ? SUSHI[ChainId.ETHEREUM] : XSUSHI, field)}
                   >
-                    {currencies[field] === SUSHI[ChainId.MAINNET] ? i18n._(t`Use xSUSHI`) : i18n._(t`Use SUSHI`)}
+                    {currencies[field] === SUSHI[ChainId.ETHEREUM] ? i18n._(t`Use xSUSHI`) : i18n._(t`Use SUSHI`)}
                   </Typography>
                 )}
               </div>

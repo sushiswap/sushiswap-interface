@@ -1,12 +1,13 @@
-import React, { useMemo } from 'react'
-import useSWR from 'swr'
-import { getTridentPools } from '../../../services/graph/fetchers/pools'
-import { formatNumber, formatPercent } from '../../../functions'
-import { PoolCell } from './PoolCell'
-import { chipPoolColorMapper, PoolType } from '../types'
-import Chip from '../../../components/Chip'
-import Button from '../../../components/Button'
+import Button from 'components/Button'
+import Chip from 'components/Chip'
+import { formatNumber, formatPercent } from 'functions'
 import Link from 'next/link'
+import React, { useMemo } from 'react'
+import { getTridentPools } from 'services/graph/fetchers/pools'
+import useSWR from 'swr'
+
+import { chipPoolColorMapper,PoolType } from '../types'
+import { PoolCell } from './PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
 
 export const usePoolsTableData = () => {

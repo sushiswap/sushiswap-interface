@@ -1,7 +1,7 @@
 import { AddressZero } from '@ethersproject/constants'
-import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 
-import approveAmountCalldata, { toHex } from '../../../src/functions/approveAmountCalldata'
+import approveAmountCalldata, { toHex } from 'src/functions/approveAmountCalldata'
 
 describe('approveAmountCalldata functions', () => {
   describe('toHex', () => {
@@ -19,7 +19,7 @@ describe('approveAmountCalldata functions', () => {
     })
 
     it('returns data', () => {
-      const tokenAmount = CurrencyAmount.fromRawAmount(new Token(ChainId.MAINNET, AddressZero, 0), '100')
+      const tokenAmount = CurrencyAmount.fromRawAmount(new Token(ChainId.ETHEREUM, AddressZero, 0), '100')
       const spender = AddressZero
 
       const res = approveAmountCalldata(tokenAmount, spender)

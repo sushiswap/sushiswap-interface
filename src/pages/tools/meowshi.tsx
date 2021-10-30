@@ -1,21 +1,20 @@
 import { ArrowDownIcon, InformationCircleIcon } from '@heroicons/react/solid'
-import { ChainId, Currency, Token } from '@sushiswap/core-sdk'
-import { MEOW, SUSHI, XSUSHI } from '../../config/tokens'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-
-import Container from '../../components/Container'
-import CurrencyInputPanel from '../../features/meowshi/CurrencyInputPanel'
-import Head from 'next/head'
-import HeaderToggle from '../../features/meowshi/HeaderToggle'
-import Image from 'next/image'
-import MeowshiButton from '../../features/meowshi/MeowshiButton'
-import NetworkGuard from '../../guards/Network'
-import Typography from '../../components/Typography'
-import { e10 } from '../../functions'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import useMeowshiPerXSushi from '../../hooks/useMeowshiPerXSushi'
-import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
+import { ChainId, Currency, Token } from '@sushiswap/core-sdk'
+import Container from 'components/Container'
+import Typography from 'components/Typography'
+import { MEOW, SUSHI, XSUSHI } from 'config/tokens'
+import CurrencyInputPanel from 'features/meowshi/CurrencyInputPanel'
+import HeaderToggle from 'features/meowshi/HeaderToggle'
+import MeowshiButton from 'features/meowshi/MeowshiButton'
+import { e10 } from 'functions'
+import NetworkGuard from 'guards/Network'
+import useMeowshiPerXSushi from 'hooks/useMeowshiPerXSushi'
+import useSushiPerXSushi from 'hooks/useXSushiPerSushi'
+import Head from 'next/head'
+import Image from 'next/image'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 export enum Field {
   INPUT = 'INPUT',
@@ -50,7 +49,7 @@ export default function Meowshi() {
   })
 
   const [currencies, setCurrencies] = useState({
-    [Field.INPUT]: SUSHI[ChainId.MAINNET],
+    [Field.INPUT]: SUSHI[ChainId.ETHEREUM],
     [Field.OUTPUT]: MEOW,
   })
 
@@ -162,8 +161,8 @@ export default function Meowshi() {
           </div>
           <Typography variant="sm" className="text-secondary ml-[26px]">
             {currencies[Field.INPUT]?.symbol} →{' '}
-            {(currencies[Field.INPUT] === SUSHI[ChainId.MAINNET] ||
-              currencies[Field.OUTPUT] === SUSHI[ChainId.MAINNET]) &&
+            {(currencies[Field.INPUT] === SUSHI[ChainId.ETHEREUM] ||
+              currencies[Field.OUTPUT] === SUSHI[ChainId.ETHEREUM]) &&
               ' xSUSHI → '}
             {currencies[Field.OUTPUT]?.symbol}
           </Typography>
@@ -175,4 +174,4 @@ export default function Meowshi() {
   )
 }
 
-Meowshi.Guard = NetworkGuard([ChainId.MAINNET])
+Meowshi.Guard = NetworkGuard([ChainId.ETHEREUM])

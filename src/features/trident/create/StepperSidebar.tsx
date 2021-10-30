@@ -1,6 +1,7 @@
+import { classNames } from 'functions'
 import React, { FC } from 'react'
-import { classNames } from '../../../functions'
 import { useRecoilState } from 'recoil'
+
 import { currentStepAtom } from './context/atoms'
 import { activeStepColor, completedStepGradient, stepAheadColor, StepProps, stepTitleText } from './StepConstants'
 

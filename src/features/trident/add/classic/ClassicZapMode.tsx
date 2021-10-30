@@ -1,12 +1,19 @@
-import Alert from '../../../../components/Alert'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Typography from '../../../../components/Typography'
-import AssetInput from '../../../../components/AssetInput'
-import TransactionDetails from './../TransactionDetails'
+import { NATIVE } from '@sushiswap/core-sdk'
+import loadingCircle from 'animation/loading-circle.json'
+import Alert from 'components/Alert'
+import AssetInput from 'components/AssetInput'
+import Button from 'components/Button'
+import Dots from 'components/Dots'
+import ListPanel from 'components/ListPanel'
+import Typography from 'components/Typography'
+import { useActiveWeb3React, useBentoBoxContract } from 'hooks'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
+import Lottie from 'lottie-react'
 import React from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
+
 import {
   attemptingTxnAtom,
   noLiquiditySelector,
@@ -14,15 +21,9 @@ import {
   showReviewAtom,
   spendFromWalletSelector,
 } from '../../context/atoms'
-import ListPanel from '../../../../components/ListPanel'
-import TridentApproveGate from '../../TridentApproveGate'
-import Button from '../../../../components/Button'
-import loadingCircle from '../../../../animation/loading-circle.json'
-import Lottie from 'lottie-react'
-import Dots from '../../../../components/Dots'
-import { NATIVE } from '@sushiswap/core-sdk'
 import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
-import useDesktopMediaQuery from '../../../../hooks/useDesktopMediaQuery'
+import TridentApproveGate from '../../TridentApproveGate'
+import TransactionDetails from './../TransactionDetails'
 
 const ClassicZapMode = () => {
   const isDesktop = useDesktopMediaQuery()

@@ -1,17 +1,17 @@
-import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS, currencyEquals } from '@sushiswap/core-sdk'
-import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
-import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
-import { useBytes32TokenContract, useTokenContract } from './useContract'
-
-import { WrappedTokenInfo } from './../state/lists/wrappedTokenInfo'
 import { arrayify } from '@ethersproject/bytes'
+import { parseBytes32String } from '@ethersproject/strings'
+import { ChainId, Currency,NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { useMemo } from 'react'
+
 import { createTokenFilterFunction } from '../functions/filtering'
 import { isAddress } from '../functions/validate'
-import { parseBytes32String } from '@ethersproject/strings'
-import { useActiveWeb3React } from './useActiveWeb3React'
 import { useCombinedActiveList } from '../state/lists/hooks'
-import { useMemo } from 'react'
+import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { useUserAddedTokens } from '../state/user/hooks'
+import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
+import { WrappedTokenInfo } from './../state/lists/wrappedTokenInfo'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { useBytes32TokenContract, useTokenContract } from './useContract'
 
 // reduce token map into standard address <-> Token mapping, optionally include user added tokens
 function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean): { [address: string]: Token } {

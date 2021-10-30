@@ -1,12 +1,12 @@
 import { Menu, Transition } from '@headlessui/react'
-
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import React, { Fragment } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { classNames } from '../../functions'
-import { useRouter } from 'next/router'
 import cookieCutter from 'cookie-cutter'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { Fragment } from 'react'
+
+import { classNames } from '../../functions'
 
 const LANG_TO_COUNTRY = {
   en: 'English',

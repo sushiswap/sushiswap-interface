@@ -1,6 +1,7 @@
+import React from 'react'
+
 import Checkbox from '../../components/Checkbox'
 import QuestionHelper from '../../components/QuestionHelper'
-import React from 'react'
 import Settings from '../../components/Settings'
 import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
 

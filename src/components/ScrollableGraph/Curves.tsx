@@ -1,20 +1,18 @@
 import { AxisBottom, AxisLeft } from '@visx/axis'
-import { GridColumns, GridRows } from '@visx/grid'
-import { MarkerArrow, MarkerCross, MarkerLine, MarkerX } from '@visx/marker'
-import { scaleLinear, scaleOrdinal, scaleTime } from '@visx/scale'
-import { timeFormat, timeParse } from 'd3-time-format'
-import { useMemo, useState } from 'react'
-
 import { Brush } from '@visx/brush'
-import Curve from './Curve'
+import { GridColumns, GridRows } from '@visx/grid'
 import { Group } from '@visx/group'
 import { LegendOrdinal } from '@visx/legend'
-import { LinearGradient } from '@visx/gradient'
+import { MarkerArrow, MarkerCross, MarkerLine, MarkerX } from '@visx/marker'
 import { PatternLines } from '@visx/pattern'
-import React from 'react'
-import { Text } from '@visx/text'
+import { scaleLinear, scaleOrdinal, scaleTime } from '@visx/scale'
 import { extent } from 'd3-array'
+import { timeFormat, timeParse } from 'd3-time-format'
 import millify from 'millify'
+import { useMemo, useState } from 'react'
+import React from 'react'
+
+import Curve from './Curve'
 
 export const getX = (data) => new Date(data.date)
 export const getY = (data) => data.value

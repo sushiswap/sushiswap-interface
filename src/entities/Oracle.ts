@@ -1,9 +1,8 @@
-import { CHAINLINK_ORACLE_ADDRESS, ChainId, Token } from '@sushiswap/core-sdk'
-
-import { AddressZero } from '@ethersproject/constants'
-import { CHAINLINK_PRICE_FEED_MAP } from '../config/oracles/chainlink'
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { e10 } from '../functions/math'
+import { AddressZero } from '@ethersproject/constants'
+import { ChainId, CHAINLINK_ORACLE_ADDRESS, Token } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'config/oracles/chainlink'
+import { e10 } from 'functions/math'
 
 export interface Oracle {
   address: string
@@ -20,7 +19,7 @@ export abstract class AbstractOracle implements Oracle {
   data = ''
   warning = ''
   error = ''
-  chainId = ChainId.MAINNET
+  chainId = ChainId.ETHEREUM
   pair: any
   tokens: Token[]
   valid = false

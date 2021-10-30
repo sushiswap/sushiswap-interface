@@ -1,10 +1,10 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { JSBI, Percent, Token } from '@sushiswap/core-sdk'
 import { LAMBDA_URL, LimitOrder, OrderStatus } from '@sushiswap/limit-order-sdk'
-import { useActiveWeb3React, useLimitOrderContract } from '.'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useSWR, { SWRResponse } from 'swr'
 
-import { BigNumber } from '@ethersproject/bignumber'
+import { useActiveWeb3React, useLimitOrderContract } from '.'
 import { useAllTokens } from './Tokens'
 
 interface State {

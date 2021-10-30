@@ -6,7 +6,7 @@ type Currency = { address: string; decimals: number }
 // Pricing currency
 // TODO: Check decimals and finish table
 export const USD_CURRENCY: { [chainId in ChainId]?: Currency } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     address: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
     decimals: 6,
   },

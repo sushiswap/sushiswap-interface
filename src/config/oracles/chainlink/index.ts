@@ -1,7 +1,8 @@
+import { ChainId } from '@sushiswap/core-sdk'
+
 import ARBITRUM from './mappings/arbitrum'
 import AVALANCHE from './mappings/avalanche'
 import BSC from './mappings/bsc'
-import { ChainId } from '@sushiswap/core-sdk'
 import HECO from './mappings/heco'
 import KOVAN from './mappings/kovan'
 import MAINNET from './mappings/mainnet'
@@ -22,7 +23,7 @@ export type ChainlinkPriceFeedMap = {
 export const CHAINLINK_PRICE_FEED_MAP: {
   [chainId in ChainId]?: ChainlinkPriceFeedMap
 } = {
-  [ChainId.MAINNET]: MAINNET,
+  [ChainId.ETHEREUM]: MAINNET,
   [ChainId.KOVAN]: KOVAN,
   [ChainId.BSC]: BSC,
   [ChainId.HECO]: HECO,

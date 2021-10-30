@@ -1,12 +1,12 @@
-import { Currency, CurrencyAmount, JSBI, Percent, Token, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
-import { DAI, SUSHI, USDC } from '../config/tokens'
+import { splitSignature } from '@ethersproject/bytes'
+import { Currency, CurrencyAmount, JSBI, Percent, Token, Trade as V2Trade,TradeType } from '@sushiswap/core-sdk'
 import { useMemo, useState } from 'react'
 
-import { splitSignature } from '@ethersproject/bytes'
+import { DAI, SUSHI, USDC } from '../config/tokens'
+import { useSingleCallResult } from '../state/multicall/hooks'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'
-import { useSingleCallResult } from '../state/multicall/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
 
 enum PermitType {

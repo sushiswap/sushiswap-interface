@@ -1,12 +1,13 @@
-import React, { useState } from 'react'
 import { Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
+import React, { useState } from 'react'
+
 import Settings from '../../components/Settings'
+import { useCurrency } from '../../hooks/Tokens'
 import PoolAddLiquidity from './PoolAddLiquidity'
 import PoolRemoveLiquidity from './PoolRemoveLiquidity'
-import { useCurrency } from '../../hooks/Tokens'
 
 const ManageSwapPair = ({ farm }) => {
   const [toggle, setToggle] = useState(true)

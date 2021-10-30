@@ -1,8 +1,8 @@
-import useSWR from 'swr'
+import { Transactions } from 'features/transactions/types'
+import { formatDateAgo, formatNumber } from 'functions'
 import { useMemo } from 'react'
-import { getTridentPoolTransactions } from '../../fetchers/pools'
-import { Transactions } from '../../../../features/transactions/types'
-import { formatDateAgo, formatNumber } from '../../../../functions'
+import { getTridentPoolTransactions } from 'services/graph/fetchers/pools'
+import useSWR from 'swr'
 
 export interface TridentTransactionRawData {
   amountIn: string

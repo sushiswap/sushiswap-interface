@@ -1,6 +1,6 @@
-import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { useUSDCValue } from '../../hooks/useUSDCPrice'
+import { useUSDCValue } from 'hooks/useUSDCPrice'
+import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 // Dummy component that fetches usdcValue
 const USDCValue: FC<{ amount?: CurrencyAmount<Currency>; update(address: string, value: CurrencyAmount<Currency>) }> =

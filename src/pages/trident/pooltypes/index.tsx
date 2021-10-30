@@ -1,12 +1,12 @@
-import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
-import PoolTypesList from '../../../features/trident/pooltypes/PoolTypesList'
-import React from 'react'
-import TridentLayout, { TridentBody, TridentHeader } from '../../../layouts/Trident'
-import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import Typography from 'components/Typography'
+import PoolTypesList from 'features/trident/pooltypes/PoolTypesList'
+import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import Link from 'next/link'
+import React from 'react'
 import { RecoilRoot } from 'recoil'
 
 const PoolTypes = () => {

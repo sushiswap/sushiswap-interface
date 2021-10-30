@@ -1,17 +1,18 @@
-import React, { FC } from 'react'
-import { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import Typography from '../../../../components/Typography'
-import { t } from '@lingui/macro'
-import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import Typography from 'components/Typography'
+import { TridentBody, TridentHeader } from 'layouts/Trident'
+import React, { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
+
 import { currentStepAtom } from '../context/atoms'
+import { MobileStepper } from '../MobileStepper'
+import { CreateOracleOption } from './CreateOracleOption'
 import { SelectAssetsWidget } from './SelectAssetsWidget'
 import { SelectFeeTier } from './SelectFeeTier'
-import { CreateOracleOption } from './CreateOracleOption'
 import { StepTwoContinueButton } from './StepTwoContinueButton'
-import { MobileStepper } from '../MobileStepper'
 
 export const StepTwoClassic: FC = () => {
   const { i18n } = useLingui()

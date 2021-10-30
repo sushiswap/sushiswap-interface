@@ -1,6 +1,6 @@
-import Container from '../../components/Container'
+import Container from 'components/Container'
+import Typography from 'components/Typography'
 import Head from 'next/head'
-import Typography from '../../components/Typography'
 
 export default function Saave() {
   return (

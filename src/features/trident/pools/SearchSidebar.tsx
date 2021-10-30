@@ -1,9 +1,10 @@
+import Checkbox from 'components/Checkbox'
+import Divider from 'components/Divider'
 import React, { FC } from 'react'
-import Divider from '../../../components/Divider'
-import Checkbox from '../../../components/Checkbox'
 import { SetterOrUpdater, useRecoilState } from 'recoil'
+import { FeeTier } from 'services/graph/fetchers/pools'
+
 import { feeTiersFilterAtom, showTWAPOnlyAtom } from './context/atoms'
-import { FeeTier } from '../../../services/graph/fetchers/pools'
 
 const Section: FC<{ title: string }> = ({ children, title }) => {
   return (

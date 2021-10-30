@@ -1,11 +1,12 @@
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import React, { FC, ReactNode } from 'react'
-import Typography from '../Typography'
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import CurrencyLogo from '../CurrencyLogo'
+
 import { classNames } from '../../functions'
+import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import Chip from '../Chip'
-import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
+import CurrencyLogo from '../CurrencyLogo'
+import Typography from '../Typography'
 
 interface ListPanelProps {
   header?: ReactNode

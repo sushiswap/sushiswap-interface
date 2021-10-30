@@ -1,7 +1,7 @@
-import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'react-feather'
-import { Direction, TransactionReview } from '../../entities/TransactionReview'
-
 import React from 'react'
+import { ArrowDownRight, ArrowRight, ArrowUpRight } from 'react-feather'
+
+import { Direction, TransactionReview } from '../../entities/TransactionReview'
 
 function TransactionReviewView({ transactionReview }: { transactionReview: TransactionReview }) {
   return (

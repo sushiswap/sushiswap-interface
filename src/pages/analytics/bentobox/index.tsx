@@ -1,13 +1,12 @@
+import Search from 'components/Search'
+import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
+import Background from 'features/analytics/Background'
+import InfoCard from 'features/analytics/Bar/InfoCard'
+import TokenList from 'features/analytics/Tokens/TokenList'
+import { formatNumber } from 'functions'
+import { useActiveWeb3React, useFuse } from 'hooks'
 import { useMemo } from 'react'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import Background from '../../../features/analytics/Background'
-import InfoCard from '../../../features/analytics/Bar/InfoCard'
-import Search from '../../../components/Search'
-import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { formatNumber } from '../../../functions'
-import { useActiveWeb3React, useFuse } from '../../../hooks'
-import { useBentoBox, useBlock, useNativePrice, useTokens } from '../../../services/graph'
+import { useBentoBox, useBlock, useNativePrice, useTokens } from 'services/graph'
 
 export default function BentoBox(): JSX.Element {
   const { chainId } = useActiveWeb3React()

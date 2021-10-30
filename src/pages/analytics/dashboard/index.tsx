@@ -1,24 +1,15 @@
-import {
-  useBlock,
-  useDayData,
-  useEthPrice,
-  useFactory,
-  useNativePrice,
-  useSushiPairs,
-  useTokens,
-} from '../../../services/graph'
+import Search from 'components/Search'
+import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
+import Background from 'features/analytics/Background'
+import ChartCard from 'features/analytics/ChartCard'
+import DashboardTabs from 'features/analytics/Dashboard/DashboardTabs'
+import PoolList from 'features/analytics/Farms/FarmList'
+import PairList from 'features/analytics/Pairs/PairList'
+import TokenList from 'features/analytics/Tokens/TokenList'
+import { useActiveWeb3React, useFuse } from 'hooks'
+import useFarmRewards from 'hooks/useFarmRewards'
 import { useMemo, useState } from 'react'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import Background from '../../../features/analytics/Background'
-import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
-import PairList from '../../../features/analytics/Pairs/PairList'
-import PoolList from '../../../features/analytics/Farms/FarmList'
-import Search from '../../../components/Search'
-import TokenList from '../../../features/analytics/Tokens/TokenList'
-import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useActiveWeb3React, useFuse } from '../../../hooks'
-import ChartCard from '../../../features/analytics/ChartCard'
+import { useBlock, useDayData, useFactory, useNativePrice, useSushiPairs, useTokens } from 'services/graph'
 
 const chartTimespans = [
   {

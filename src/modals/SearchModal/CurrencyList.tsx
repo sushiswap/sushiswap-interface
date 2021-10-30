@@ -1,53 +1,27 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
-import { RowBetween, RowFixed } from '../../components/Row'
-
-import Card from '../../components/Card'
-import Column from '../../components/Column'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import { FixedSizeList } from 'react-window'
-import ImportRow from './ImportRow'
-import Loader from '../../components/Loader'
-import { MouseoverTooltip } from '../../components/Tooltip'
-import QuestionHelper from '../../components/QuestionHelper'
-import Typography from '../../components/Typography'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { i18n } from '@lingui/core'
-import { isTokenOnList } from '../../functions/validate'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCombinedActiveList } from '../../state/lists/hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
-import { classNames } from '../../functions'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import CurrencyLogo from 'components/CurrencyLogo'
+import Image from 'components/Image'
+import Loader from 'components/Loader'
+import QuestionHelper from 'components/QuestionHelper'
+import { RowBetween, RowFixed } from 'components/Row'
+import { MouseoverTooltip } from 'components/Tooltip'
+import Typography from 'components/Typography'
+import { isTokenOnList } from 'functions/validate'
+import { useIsUserAddedToken } from 'hooks/Tokens'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import { FixedSizeList } from 'react-window'
+import { useCombinedActiveList } from 'state/lists/hooks'
+import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+
+import ImportRow from './ImportRow'
 
 function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
 }
-
-const Tag = styled.div`
-  background-color: ${({ theme }) => theme.bg3};
-  // color: ${({ theme }) => theme.text2};
-  font-size: 14px;
-  border-radius: 4px;
-  padding: 0.25rem 0.3rem 0.25rem 0.3rem;
-  max-width: 6rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  justify-self: flex-end;
-  margin-right: 4px;
-`
-
-const FixedContentRow = styled.div`
-  padding: 4px 20px;
-  height: 56px;
-  display: grid;
-  grid-gap: 16px;
-  align-items: center;
-`
 
 function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
   return (
@@ -56,15 +30,6 @@ function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
     </div>
   )
 }
-
-const TagContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`
-
-const TokenListLogoWrapper = styled.img`
-  height: 20px;
-`
 
 function TokenTags({ currency }: { currency: Currency }) {
   if (!(currency instanceof WrappedTokenInfo)) {
@@ -77,9 +42,14 @@ function TokenTags({ currency }: { currency: Currency }) {
   const tag = tags[0]
 
   return (
-    <TagContainer>
+    <div className="flex justify-end">
       <MouseoverTooltip text={tag.description}>
-        <Tag key={tag.id}>{tag.name}</Tag>
+        <div
+          className="bg-purple text-sm border-4 py-1 px-1.5 max-w-[6rem] overflow-hidden overflow-ellipsis whitespace-nowrap justify-self-end mr-1"
+          key={tag.id}
+        >
+          {tag.name}
+        </div>
       </MouseoverTooltip>
       {tags.length > 1 ? (
         <MouseoverTooltip
@@ -88,10 +58,15 @@ function TokenTags({ currency }: { currency: Currency }) {
             .map(({ name, description }) => `${name}: ${description}`)
             .join('; \n')}
         >
-          <Tag>...</Tag>
+          <div
+            className="bg-purple text-sm border-4 py-1 px-1.5 max-w-[6rem] overflow-hidden overflow-ellipsis whitespace-nowrap justify-self-end mr-1"
+            key={tag.id}
+          >
+            ...
+          </div>
         </MouseoverTooltip>
       ) : null}
-    </TagContainer>
+    </div>
   )
 }
 
@@ -122,8 +97,8 @@ function CurrencyRow({
       style={style}
       className="px-5 py-1 rounded cursor-pointer hover:bg-dark-800"
       onClick={() => (isSelected ? null : onSelect())}
-      disabled={isSelected}
-      selected={otherSelected}
+      // disabled={isSelected}
+      // selected={otherSelected}
     >
       <div className="flex flex-row items-center space-x-4">
         <div className="flex items-center">
@@ -155,10 +130,10 @@ function isBreakLine(x: unknown): x is BreakLine {
 function BreakLineComponent({ style }: { style: CSSProperties }) {
   const { i18n } = useLingui()
   return (
-    <FixedContentRow style={style}>
+    <div className="py-1 px-5 h-[56px] grid gap-4 items-center" style={style}>
       <RowBetween>
         <RowFixed>
-          <TokenListLogoWrapper src="/tokenlist.svg" />
+          <Image src="/tokenlist.svg" alt="Token List" className="h-5" />
           <Typography variant="sm" className="ml-3">
             {i18n._(t`Expanded results from inactive Token Lists`)}
           </Typography>
@@ -168,7 +143,7 @@ function BreakLineComponent({ style }: { style: CSSProperties }) {
             click Manage to activate more lists.`)}
         />
       </RowBetween>
-    </FixedContentRow>
+    </div>
   )
 }
 

@@ -1,10 +1,10 @@
-import TridentLayout from '../../../layouts/Trident'
-import Typography from '../../../components/Typography'
-import { t } from '@lingui/macro'
-import Button from '../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import Typography from 'components/Typography'
+import TridentLayout from 'layouts/Trident'
+import Link from 'next/link'
 import { RecoilRoot } from 'recoil'
 
 const PoolType = ({ pool }) => {

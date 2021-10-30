@@ -1,9 +1,10 @@
-import { FC } from 'react'
 import { SearchIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
-import { useSetRecoilState } from 'recoil'
-import { searchQueryAtom } from './context/atoms'
 import { useLingui } from '@lingui/react'
+import { FC } from 'react'
+import { useSetRecoilState } from 'recoil'
+
+import { searchQueryAtom } from './context/atoms'
 import { MobileFilter } from './MobileFilter'
 
 export const PoolSearch: FC = () => {

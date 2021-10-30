@@ -1,14 +1,15 @@
-import { useMemo, useState } from 'react'
-import ToggleButtonGroup from '../../../components/ToggleButton'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { BarGraph } from '../../../components/BarGraph'
-import Button from '../../../components/Button'
+import { BarGraph } from 'components/BarGraph'
+import Button from 'components/Button'
+import LineGraph from 'components/LineGraph'
+import ToggleButtonGroup from 'components/ToggleButton'
+import Typography from 'components/Typography'
+import { formatDate } from 'functions'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
+import { useMemo, useState } from 'react'
+
 import { tvlData, volumeData } from './mockData'
-import Typography from '../../../components/Typography'
-import LineGraph from '../../../components/LineGraph'
-import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
-import { formatDate } from '../../../functions'
 
 enum ChartType {
   Volume = 'Volume',

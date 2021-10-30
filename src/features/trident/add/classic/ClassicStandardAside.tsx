@@ -1,8 +1,9 @@
-import Typography from '../../../../components/Typography'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import TransactionDetails from '../TransactionDetails'
+import { useLingui } from '@lingui/react'
+import Typography from 'components/Typography'
+
 import { useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
+import TransactionDetails from '../TransactionDetails'
 
 const ClassicStandardAside = () => {
   const { i18n } = useLingui()

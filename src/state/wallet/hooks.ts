@@ -1,14 +1,14 @@
-import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@sushiswap/core-sdk'
-import { useMultipleContractSingleData, useSingleContractMultipleData } from '../multicall/hooks'
-
-import ERC20_ABI from '../../constants/abis/erc20.json'
 import { Interface } from '@ethersproject/abi'
-import { TokenBalancesMap } from './types'
-import { isAddress } from '../../functions/validate'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTokens } from '../../hooks/Tokens'
+import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@sushiswap/core-sdk'
+import ERC20_ABI from 'constants/abis/erc20.json'
+import { isAddress } from 'functions/validate'
+import { useAllTokens } from 'hooks/Tokens'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useMulticall2Contract } from 'hooks/useContract'
 import { useMemo } from 'react'
-import { useMulticall2Contract } from '../../hooks/useContract'
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'state/multicall/hooks'
+
+import { TokenBalancesMap } from './types'
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.

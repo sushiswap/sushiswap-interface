@@ -1,7 +1,8 @@
-import { useBentoBoxContract } from './useContract'
 import { Currency, JSBI, Rebase } from '@sushiswap/core-sdk'
-import { useSingleContractMultipleData } from '../state/multicall/hooks'
 import { useMemo } from 'react'
+
+import { useSingleContractMultipleData } from '../state/multicall/hooks'
+import { useBentoBoxContract } from './useContract'
 
 const useBentoRebases = (tokens: (Currency | undefined)[]): [Record<string, Rebase>, boolean] => {
   const bentoboxContract = useBentoBoxContract()

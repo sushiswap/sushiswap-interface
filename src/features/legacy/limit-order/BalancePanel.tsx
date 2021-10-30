@@ -1,14 +1,13 @@
-import React, { FC, useCallback } from 'react'
-import { useDerivedLimitOrderInfo, useLimitOrderActionHandlers } from '../../../state/limit-order/hooks'
-
-import { AppDispatch } from '../../../state'
-import { Field } from '../../../state/swap/actions'
-import Typography from '../../../components/Typography'
-import { maxAmountSpend } from '../../../functions'
-import { setFromBentoBalance } from '../../../state/limit-order/actions'
 import { t } from '@lingui/macro'
-import { useDispatch } from 'react-redux'
 import { useLingui } from '@lingui/react'
+import Typography from 'components/Typography'
+import { maxAmountSpend } from 'functions'
+import React, { FC, useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'state'
+import { setFromBentoBalance } from 'state/limit-order/actions'
+import { useDerivedLimitOrderInfo, useLimitOrderActionHandlers } from 'state/limit-order/hooks'
+import { Field } from 'state/swap/actions'
 
 const BalancePanel: FC = () => {
   const { i18n } = useLingui()

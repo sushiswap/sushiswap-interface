@@ -1,17 +1,15 @@
-import React, { FC, useCallback } from 'react'
-import { formatNumber, shortenAddress } from '../../../functions'
-import { useActiveWeb3React, useUSDCPrice } from '../../../hooks'
-import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../../state/limit-order/hooks'
-
-import Button from '../../../components/Button'
-import { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { Field } from '../../../state/limit-order/actions'
-import Modal from '../../../components/Modal'
-import { Trans } from '@lingui/react'
-import { USDC } from '@sushiswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { USDC } from '@sushiswap/core-sdk'
+import Button from 'components/Button'
+import CurrencyLogo from 'components/CurrencyLogo'
+import Modal from 'components/Modal'
+import { formatNumber, shortenAddress } from 'functions'
+import { useActiveWeb3React, useUSDCPrice } from 'hooks'
+import { ConfirmationModalContent } from 'modals/TransactionConfirmationModal'
+import React, { FC, useCallback } from 'react'
+import { Field } from 'state/limit-order/actions'
+import { useDerivedLimitOrderInfo, useLimitOrderState } from 'state/limit-order/hooks'
 
 interface ConfirmLimitOrderModalProps {
   open: boolean

@@ -1,5 +1,5 @@
-import { FC } from 'react'
 import Image from 'next/image'
+import { FC } from 'react'
 
 const SUSHI_LOGO = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/sushi.jpg'
 const WETH_LOGO = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'

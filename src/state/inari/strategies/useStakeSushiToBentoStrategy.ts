@@ -1,17 +1,17 @@
-import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
-import { SUSHI, XSUSHI } from '../../../config/tokens'
-import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import { useEffect, useMemo } from 'react'
-
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../../functions'
-import { useActiveWeb3React } from '../../../hooks'
-import useBaseStrategy from './useBaseStrategy'
-import { useBentoBalance } from '../../bentobox/hooks'
-import useBentoBoxTrait from '../traits/useBentoBoxTrait'
 import { useLingui } from '@lingui/react'
+import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { SUSHI, XSUSHI } from 'config/tokens'
+import { tryParseAmount } from 'functions'
+import { useActiveWeb3React } from 'hooks'
+import { useEffect, useMemo } from 'react'
+
+import { useBentoBalance } from '../../bentobox/hooks'
 import { useTokenBalances } from '../../wallet/hooks'
+import useBentoBoxTrait from '../traits/useBentoBoxTrait'
+import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import useBaseStrategy from './useBaseStrategy'
 
 export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
   name: i18n._(t`SUSHI → Bento`),
@@ -27,13 +27,13 @@ export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
-    chainId: ChainId.MAINNET,
-    address: SUSHI_ADDRESS[ChainId.MAINNET],
+    chainId: ChainId.ETHEREUM,
+    address: SUSHI_ADDRESS[ChainId.ETHEREUM],
     decimals: 18,
     symbol: 'SUSHI',
   },
   outputToken: {
-    chainId: ChainId.MAINNET,
+    chainId: ChainId.ETHEREUM,
     address: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
     decimals: 18,
     symbol: 'XSUSHI',
@@ -43,7 +43,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 const useStakeSushiToBentoStrategy = (): StrategyHook => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], XSUSHI])
+  const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM], XSUSHI])
   const xSushiBentoBalance = useBentoBalance(XSUSHI.address)
 
   // Strategy ends in BentoBox so use BaseBentoBox strategy
@@ -61,7 +61,7 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
-      inputTokenBalance: balances[SUSHI[ChainId.MAINNET].address],
+      inputTokenBalance: balances[SUSHI[ChainId.ETHEREUM].address],
       outputTokenBalance: tryParseAmount(xSushiBentoBalance?.value?.toFixed(18) || '0', XSUSHI),
     })
   }, [balances, setBalances, xSushiBentoBalance?.value])

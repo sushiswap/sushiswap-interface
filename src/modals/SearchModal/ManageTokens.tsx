@@ -1,18 +1,18 @@
-import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { useRemoveUserAddedToken, useUserAddedTokens } from '../../state/user/hooks'
-
-import CurrencyLogo from '../../components/CurrencyLogo'
-import CurrencyModalView from './CurrencyModalView'
-import ExternalLink from '../../components/ExternalLink'
-import { ExternalLinkIcon } from '../../components/ExternalLinkIcon'
-import ImportRow from './ImportRow'
 import { Token } from '@sushiswap/core-sdk'
+import CurrencyLogo from 'components/CurrencyLogo'
+import ExternalLink from 'components/ExternalLink'
+import { ExternalLinkIcon } from 'components/ExternalLinkIcon'
+import { RowBetween, RowFixed } from 'components/Row'
+import { getExplorerLink } from 'functions/explorer'
+import { isAddress } from 'functions/validate'
+import { useToken } from 'hooks/Tokens'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react'
 import { Trash } from 'react-feather'
-import { getExplorerLink } from '../../functions/explorer'
-import { isAddress } from '../../functions/validate'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useToken } from '../../hooks/Tokens'
+import { useRemoveUserAddedToken, useUserAddedTokens } from 'state/user/hooks'
+
+import CurrencyModalView from './CurrencyModalView'
+import ImportRow from './ImportRow'
 
 function ManageTokens({
   setModalView,

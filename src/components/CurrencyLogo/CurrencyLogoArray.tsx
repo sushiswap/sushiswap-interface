@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
 import { Currency } from '@sushiswap/core-sdk'
-import CurrencyLogo, { CurrencyLogoProps } from './index'
+import React, { FC } from 'react'
+
 import Typography from '../Typography'
+import CurrencyLogo, { CurrencyLogoProps } from './index'
 
 interface CurrencyLogosProps extends Omit<CurrencyLogoProps, 'currency' | 'size'> {
   currencies: Currency[]

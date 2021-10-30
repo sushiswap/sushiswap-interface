@@ -1,11 +1,11 @@
-import ColoredNumber from '../ColoredNumber'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import LineGraph from '../../../components/LineGraph'
+import CurrencyLogo from 'components/CurrencyLogo'
+import LineGraph from 'components/LineGraph'
+import Table, { Column } from 'components/Table'
+import { formatNumber, formatPercent } from 'functions'
+import { useCurrency } from 'hooks/Tokens'
 import React from 'react'
-import Table, { Column } from '../../../components/Table'
-import _ from 'lodash'
-import { formatNumber, formatPercent } from '../../../functions'
-import { useCurrency } from '../../../hooks/Tokens'
+
+import ColoredNumber from '../ColoredNumber'
 
 type TokenListColumnType = 'name' | 'price' | 'liquidity' | 'priceChange' | 'volumeChange' | 'lastWeekGraph'
 

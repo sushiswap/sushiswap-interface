@@ -1,7 +1,7 @@
-import { atom, selector } from 'recoil'
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { tryParseAmount } from '../../../../../functions'
-import { poolAtom } from '../../../context/atoms'
+import { poolAtom } from 'features/trident/context/atoms'
+import { tryParseAmount } from 'functions'
+import { atom, selector } from 'recoil'
 
 export const poolTokensSelector = selector<Record<string, Token>>({
   key: 'poolTokensSelector',

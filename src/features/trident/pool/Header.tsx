@@ -1,13 +1,14 @@
-import Typography from '../../../components/Typography'
-import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
+import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { I18n } from '@lingui/core'
+import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
+import { CurrencyLogoArray } from 'components/CurrencyLogo'
+import Typography from 'components/Typography'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
+
 import { poolAtom } from '../context/atoms'
-import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
 import { PoolProperties } from './PoolProperties'
 
 const HeaderContainer = () => {

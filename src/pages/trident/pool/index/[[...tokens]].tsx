@@ -1,6 +1,6 @@
-import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import Header from '../../../../features/trident/pool/Header'
-import MyDeposits from '../../../../features/trident/pool/MyDeposits'
+import Header from 'features/trident/pool/Header'
+import MyDeposits from 'features/trident/pool/MyDeposits'
+import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import { RecoilRoot } from 'recoil'
 
 const Pool = () => {

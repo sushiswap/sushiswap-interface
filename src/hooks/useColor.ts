@@ -1,9 +1,9 @@
 import { ChainId, Token } from '@sushiswap/core-sdk'
-import { useLayoutEffect, useState } from 'react'
-
 import Vibrant from 'node-vibrant'
-import { hex } from 'wcag-contrast'
 import { shade } from 'polished'
+import { useLayoutEffect, useState } from 'react'
+import { hex } from 'wcag-contrast'
+
 import { uriToHttp } from '../functions/convert'
 
 async function getColorFromToken(token: Token): Promise<string | null> {

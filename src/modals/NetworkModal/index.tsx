@@ -1,14 +1,13 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
-import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
-
-import { ApplicationModal } from '../../state/application/actions'
 import { ChainId } from '@sushiswap/core-sdk'
-import Image from 'next/image'
-import Modal from '../../components/Modal'
-import ModalHeader from '../../components/ModalHeader'
-import React from 'react'
+import Modal from 'components/Modal'
+import ModalHeader from 'components/ModalHeader'
+import { NETWORK_ICON, NETWORK_LABEL } from 'config/networks'
 import cookie from 'cookie-cutter'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import Image from 'next/image'
+import React from 'react'
+import { ApplicationModal } from 'state/application/actions'
+import { useModalOpen, useNetworkModalToggle } from 'state/application/hooks'
 
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
@@ -23,7 +22,7 @@ export const SUPPORTED_NETWORKS: {
     blockExplorerUrls: string[]
   }
 } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     chainId: '0x1',
     chainName: 'Ethereum',
     nativeCurrency: {
@@ -190,7 +189,7 @@ export default function NetworkModal(): JSX.Element | null {
 
       <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
         {[
-          ChainId.MAINNET,
+          ChainId.ETHEREUM,
           ChainId.MATIC,
           ChainId.FANTOM,
           ChainId.ARBITRUM,
@@ -227,7 +226,7 @@ export default function NetworkModal(): JSX.Element | null {
                 toggleNetworkModal()
                 const params = SUPPORTED_NETWORKS[key]
                 cookie.set('chainId', key)
-                if (key === ChainId.MAINNET) {
+                if (key === ChainId.ETHEREUM) {
                   library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
                 } else {
                   library?.send('wallet_addEthereumChain', [params, account])

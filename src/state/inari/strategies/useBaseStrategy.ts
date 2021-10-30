@@ -1,12 +1,13 @@
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useInariContract } from '../../../hooks'
-import { useTransactionAdder } from '../../transactions/hooks'
-import { Strategy, StrategyBalances, StrategyGeneralInfo, StrategyTokenDefinitions } from '../types'
-import { useDerivedInariState } from '../hooks'
-import { useCallback, useMemo, useState } from 'react'
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { e10, tryParseAmount } from '../../../functions'
-import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
-import { BentoPermit } from '../../../hooks/useBentoMasterApproveCallback'
+import { e10 } from 'functions'
+import { ApprovalState, useActiveWeb3React, useApproveCallback, useInariContract } from 'hooks'
+import { BentoPermit } from 'hooks/useBentoMasterApproveCallback'
+import useSushiPerXSushi from 'hooks/useXSushiPerSushi'
+import { useCallback, useMemo, useState } from 'react'
+
+import { useTransactionAdder } from '../../transactions/hooks'
+import { useDerivedInariState } from '../hooks'
+import { Strategy, StrategyBalances, StrategyGeneralInfo, StrategyTokenDefinitions } from '../types'
 
 export interface useBaseStrategyInterface {
   id: string
