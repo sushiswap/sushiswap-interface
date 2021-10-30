@@ -1,31 +1,30 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Alert from 'components/Alert'
-import Button from 'components/Button'
-import Typography from 'components/Typography'
-import { BREADCRUMBS } from 'features/trident/Breadcrumb'
-import { liquidityModeAtom, poolAtom } from 'features/trident/context/atoms'
-import useCurrenciesFromURL from 'features/trident/context/hooks/useCurrenciesFromURL'
-import useInitClassicPoolState from 'features/trident/context/hooks/useInitClassicPoolState'
-import ClassicStandardAside from 'features/trident/remove/classic/ClassicStandardAside'
-import ClassicStandardMode from 'features/trident/remove/classic/ClassicStandardMode'
-import ClassicUnzapMode from 'features/trident/remove/classic/ClassicUnzapMode'
-import ClassicZapAside from 'features/trident/remove/classic/ClassicZapAside'
-import RemoveTransactionReviewStandardModal from 'features/trident/remove/classic/RemoveTransactionReviewStandardModal'
-import RemoveTransactionReviewZapModal from 'features/trident/remove/classic/RemoveTransactionReviewZapModal'
-import { LiquidityMode } from 'features/trident/types'
-import WithdrawalSubmittedModal from 'features/trident/WithdrawalSubmittedModal'
-import { ConstantProductPoolState, useTridentClassicPool } from 'hooks/useTridentClassicPools'
-import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import { PoolType } from '@sushiswap/tines'
+import Alert from 'app/components/Alert'
+import Button from 'app/components/Button'
+import Typography from 'app/components/Typography'
+import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
+import { liquidityModeAtom, poolAtom } from 'app/features/trident/context/atoms'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import ClassicStandardAside from 'app/features/trident/remove/classic/ClassicStandardAside'
+import ClassicStandardMode from 'app/features/trident/remove/classic/ClassicStandardMode'
+import ClassicUnzapMode from 'app/features/trident/remove/classic/ClassicUnzapMode'
+import ClassicZapAside from 'app/features/trident/remove/classic/ClassicZapAside'
+import RemoveTransactionReviewStandardModal from 'app/features/trident/remove/classic/RemoveTransactionReviewStandardModal'
+import RemoveTransactionReviewZapModal from 'app/features/trident/remove/classic/RemoveTransactionReviewZapModal'
+import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
+import { LiquidityMode } from 'app/features/trident/types'
+import WithdrawalSubmittedModal from 'app/features/trident/WithdrawalSubmittedModal'
+import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
+import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-import { RecoilRoot, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 
 const RemoveClassic = () => {
-  useInitClassicPoolState()
-
   const { i18n } = useLingui()
   const { query } = useRouter()
   const { currencies, fee, twap } = useCurrenciesFromURL()
@@ -100,7 +99,7 @@ const RemoveClassic = () => {
   )
 }
 
-RemoveClassic.Provider = RecoilRoot
+RemoveClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 RemoveClassic.Layout = (props) => (
   <TridentLayout
     {...props}

@@ -1,7 +1,7 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { ChainId, KASHI_ADDRESS, NATIVE, USD_ADDRESS,WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, KASHI_ADDRESS, NATIVE, USD_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { Fraction } from 'app/entities/bignumber'
 import { Feature } from 'app/enums'
 import { toAmount, toShare } from 'app/functions/bentobox'
@@ -409,7 +409,18 @@ export function KashiProvider({ children }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, allTokens, wnative, strategies])
+  }, [
+    boringHelperContract,
+    bentoBoxContract,
+    deployedPairs,
+    account,
+    chainId,
+    currency,
+    pairTokenSet,
+    allTokens,
+    strategies,
+    wnative,
+  ])
 
   const previousBlockNumber = usePrevious(blockNumber)
 

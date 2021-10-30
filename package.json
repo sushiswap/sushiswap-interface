@@ -9,7 +9,6 @@
     "build": "yarn lingui && next build",
     "start": "next start",
     "lingui": "lingui extract --clean --overwrite && lingui compile",
-    "lokalise": "lokalise2 --config lokalise.yaml file download --format po --unzip-to . --original-filenames=false",
     "circular": "madge --circular src --extensions ts,tsx,js,jsx",
     "unused": "next-unused",
     "prepare": "husky install",
@@ -20,7 +19,8 @@
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --collectCoverage",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "postinstall": "yarn lingui"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -53,11 +53,11 @@
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.0",
     "@keystonehq/keystone-connector": "^0.9.0",
-    "@lingui/cli": "^3.12.0",
-    "@lingui/core": "^3.12.0",
-    "@lingui/loader": "^3.12.0",
-    "@lingui/macro": "^3.12.0",
-    "@lingui/react": "^3.12.0",
+    "@lingui/cli": "^3.12.1",
+    "@lingui/core": "^3.12.1",
+    "@lingui/loader": "^3.12.1",
+    "@lingui/macro": "^3.12.1",
+    "@lingui/react": "^3.12.1",
     "@lingui/remote-loader": "^3.11.0",
     "@next/bundle-analyzer": "^11.1.0",
     "@popperjs/core": "^2.10.0",
