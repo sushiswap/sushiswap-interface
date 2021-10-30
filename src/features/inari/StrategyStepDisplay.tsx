@@ -1,6 +1,7 @@
-import React, { FC } from 'react'
-import Typography from '../../components/Typography'
 import { ArrowRightIcon } from '@heroicons/react/solid'
+import React, { FC } from 'react'
+
+import Typography from '../../components/Typography'
 import { useDerivedInariState } from '../../state/inari/hooks'
 
 interface StrategyStepDisplayProps {}

@@ -1,16 +1,17 @@
-import React, { FC } from 'react'
-import { useLingui } from '@lingui/react'
-import ListPanel from '../../../components/ListPanel'
-import { SUSHI } from '../../../config/tokens'
-import { ChainId } from '@sushiswap/core-sdk'
-import { tryParseAmount } from '../../../functions'
 import { t } from '@lingui/macro'
-import Typography from '../../../components/Typography'
+import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
+import CurrencyLogo from 'components/CurrencyLogo'
+import ListPanel from 'components/ListPanel'
+import Typography from 'components/Typography'
+import { SUSHI } from 'config/tokens'
+import { tryParseAmount } from 'functions'
+import { useActiveWeb3React } from 'hooks'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
+import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { poolAtom } from '../context/atoms'
-import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { useActiveWeb3React } from '../../../hooks'
 
 const Rewards: FC = () => {
   const { chainId } = useActiveWeb3React()

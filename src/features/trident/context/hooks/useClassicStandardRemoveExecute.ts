@@ -1,7 +1,14 @@
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
+import { ethers } from 'ethers'
+import { toShareJSBI } from 'functions'
+import { useActiveWeb3React, useTridentRouterContract } from 'hooks'
+import { useMemo } from 'react'
+import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useTransactionAdder } from 'state/transactions/hooks'
+
+import { LiquidityOutput } from '../../types'
 import {
   attemptingTxnAtom,
   bentoboxRebasesAtom,
@@ -10,14 +17,7 @@ import {
   showReviewAtom,
   txHashAtom,
 } from '../atoms'
-import { ethers } from 'ethers'
-import { t } from '@lingui/macro'
-import ReactGA from 'react-ga'
-
-import { useMemo } from 'react'
 import usePercentageInput from './usePercentageInput'
-import { toShareJSBI } from '../../../../functions'
-import { LiquidityOutput } from '../../types'
 import { usePoolDetailsBurn } from './usePoolDetails'
 
 export const useClassicStandardRemoveExecute = () => {

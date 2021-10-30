@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react'
-
-import Image from 'next/image'
 import { addMinutes, format } from 'date-fns'
+import Image from 'next/image'
+import React, { useEffect, useState } from 'react'
 
 function MisoInfo({
   name = 'Bad Trip',

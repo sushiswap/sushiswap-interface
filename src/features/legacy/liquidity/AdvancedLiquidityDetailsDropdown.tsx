@@ -1,7 +1,7 @@
-import { AdvancedLiquidityDetails, AdvancedLiquidityDetailsProps } from './AdvancedLiquidityDetails'
-
+import { classNames } from 'functions'
 import React from 'react'
-import { classNames } from '../../../functions'
+
+import { AdvancedLiquidityDetails, AdvancedLiquidityDetailsProps } from './AdvancedLiquidityDetails'
 
 export default function AdvancedSwapDetailsDropdown({ show, ...rest }: AdvancedLiquidityDetailsProps) {
   return (

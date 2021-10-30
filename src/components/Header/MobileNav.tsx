@@ -1,13 +1,14 @@
-import { Feature, featureEnabled } from '../../functions/feature'
-import React, { FC } from 'react'
-import ExternalLink from '../ExternalLink'
 import { Popover } from '@headlessui/react'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
-import { NAV_BASE_CLASS } from './styles'
 import Link from 'next/link'
+import React, { FC } from 'react'
+
 import { ANALYTICS_URL } from '../../constants'
+import { Feature, featureEnabled } from '../../functions/feature'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import ExternalLink from '../ExternalLink'
+import { NAV_BASE_CLASS } from './styles'
 
 export const MobileNav: FC = () => {
   const { i18n } = useLingui()

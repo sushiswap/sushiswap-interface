@@ -32,10 +32,12 @@ const nextConfig = {
 
     return config
   },
-  experimental: {
-    concurrentFeatures: true,
-    serverComponents: true,
-  },
+  // experimental: {
+  //   concurrentFeatures: true,
+  //   serverComponents: true,
+  // },
+  reactStrictMode: true,
+  swcMinify: true,
   pwa: {
     dest: 'public',
     runtimeCaching,
@@ -44,7 +46,6 @@ const nextConfig = {
   images: {
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
   },
-  reactStrictMode: true,
   async redirects() {
     return []
   },

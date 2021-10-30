@@ -1,13 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
-
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/core-sdk'
-import { Chef } from './enum'
+import { useEffect, useMemo, useState } from 'react'
+
 import Fraction from '../../entities/Fraction'
-import { getContract } from '../../functions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
 import { useBlockNumber } from '../../state/application/hooks'
+import { Chef } from './enum'
 
 const REWARDERS = {
   [ChainId.ETHEREUM]: 'some',

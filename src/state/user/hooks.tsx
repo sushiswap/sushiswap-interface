@@ -1,26 +1,26 @@
-import { AppDispatch, AppState } from '..'
+import { computePairAddress,FACTORY_ADDRESS, JSBI, Pair, Percent, Token } from '@sushiswap/core-sdk'
+import flatMap from 'lodash/flatMap'
+import { useCallback, useMemo } from 'react'
+import ReactGA from 'react-ga'
+import { useDispatch, useSelector } from 'react-redux'
+
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../config/routing'
-import { ChainId, FACTORY_ADDRESS, JSBI, Pair, Percent, Token, computePairAddress } from '@sushiswap/core-sdk'
+import { useAllTokens } from '../../hooks/Tokens'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { AppDispatch, AppState } from '..'
+import { useAppDispatch, useAppSelector } from '../hooks'
 import {
-  SerializedPair,
-  SerializedToken,
   addSerializedPair,
   addSerializedToken,
   removeSerializedToken,
+  SerializedPair,
+  SerializedToken,
   toggleURLWarning,
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
 } from './actions'
-import { useDispatch, useSelector } from 'react-redux'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { useCallback, useMemo } from 'react'
-
-import ReactGA from 'react-ga'
-import flatMap from 'lodash/flatMap'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTokens } from '../../hooks/Tokens'
 
 function serializeToken(token: Token): SerializedToken {
   return {

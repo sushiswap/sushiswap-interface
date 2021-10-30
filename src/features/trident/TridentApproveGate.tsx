@@ -1,11 +1,11 @@
-import React, { FC, memo, ReactNode, useEffect, useState } from 'react'
-import Button from '../../components/Button'
-import { useActiveWeb3React, ApprovalState, useApproveCallback, useTridentRouterContract } from '../../hooks'
-import useBentoMasterApproveCallback, { BentoApprovalState } from '../../hooks/useBentoMasterApproveCallback'
 import { t } from '@lingui/macro'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
-import { useWalletModalToggle } from '../../state/application/hooks'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import Button from 'components/Button'
+import { ApprovalState, useActiveWeb3React, useApproveCallback, useTridentRouterContract } from 'hooks'
+import useBentoMasterApproveCallback, { BentoApprovalState } from 'hooks/useBentoMasterApproveCallback'
+import React, { FC, memo, ReactNode, useEffect, useState } from 'react'
+import { useWalletModalToggle } from 'state/application/hooks'
 
 interface TokenApproveButtonProps {
   inputAmount: CurrencyAmount<Currency> | undefined
@@ -26,7 +26,7 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
     }))
   }, [approveState, inputAmount?.currency.wrapped.address, onStateChange])
 
-  if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState))
+  if (!inputAmount?.currency.isNative && [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState))
     return (
       <Button.Dotted pending={approveState === ApprovalState.PENDING} color="blue" onClick={approveCallback}>
         {approveState === ApprovalState.PENDING

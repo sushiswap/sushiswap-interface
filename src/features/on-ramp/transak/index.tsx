@@ -1,9 +1,9 @@
-import { ChainId } from '@sushiswap/core-sdk'
 import { t } from '@lingui/macro'
-import transakSDK from '@transak/transak-sdk'
-import { useActiveWeb3React } from '../../../hooks'
-import { useCallback } from 'react'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
+import transakSDK from '@transak/transak-sdk'
+import { useActiveWeb3React } from 'hooks'
+import { useCallback } from 'react'
 
 const DEFAULT_NETWORK = {
   [ChainId.ETHEREUM]: 'ethereum',

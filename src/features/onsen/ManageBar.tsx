@@ -1,17 +1,9 @@
-import React, { useState } from 'react'
+import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
 import { Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import Button, { ButtonError } from '../../components/Button'
-import { classNames, getUSDValue, tryParseAmount } from '../../functions'
-import CurrencyInputPanel from './CurrencyInputPanel'
-import Web3Connect from '../../components/Web3Connect'
-import { ApprovalState, useActiveWeb3React, useApproveCallback } from '../../hooks'
-import Dots from '../../components/Dots'
-import { BigNumber } from '@ethersproject/bignumber'
-import useMasterChef from './useMasterChef'
-import { useTransactionAdder } from '../../state/transactions/hooks'
 import {
   ChainId,
   CurrencyAmount,
@@ -23,11 +15,20 @@ import {
   USDC,
   ZERO,
 } from '@sushiswap/core-sdk'
-import { getAddress } from '@ethersproject/address'
-import { Chef, PairType } from './enum'
-import { useKashiPair } from '../kashi/context'
+import React, { useState } from 'react'
+
+import Button, { ButtonError } from '../../components/Button'
+import Dots from '../../components/Dots'
+import Web3Connect from '../../components/Web3Connect'
+import { classNames, getUSDValue, tryParseAmount } from '../../functions'
+import { ApprovalState, useActiveWeb3React, useApproveCallback } from '../../hooks'
+import { useTransactionAdder } from '../../state/transactions/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
+import { useKashiPair } from '../kashi/context'
+import CurrencyInputPanel from './CurrencyInputPanel'
+import { Chef, PairType } from './enum'
 import { useUserInfo } from './hooks'
+import useMasterChef from './useMasterChef'
 
 const ManageBar = ({ farm }) => {
   const { account, chainId } = useActiveWeb3React()

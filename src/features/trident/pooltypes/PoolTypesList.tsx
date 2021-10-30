@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
-
+import Typography from 'components/Typography'
 import Image from 'next/image'
 import Link from 'next/link'
+import React, { FC } from 'react'
+
 import { POOL_TYPES } from '../constants'
-import Typography from '../../../components/Typography'
 
 interface PoolTypesListProps {}
 

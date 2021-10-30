@@ -1,13 +1,5 @@
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
+import Container from 'components/Container'
 import Head from 'next/head'
-import { Tab } from '@headlessui/react'
-import Typography from '../../components/Typography'
-import capitalize from 'lodash/capitalize'
-import { classNames } from '../../functions'
-import { getChainsStatus } from '../../services/covalent/fetchers'
-import { useChainsStatus } from '../../services/covalent/hooks'
-import { useState } from 'react'
 
 export default function Status({ initialData }) {
   //   const res = useChainsStatus({ initialData })

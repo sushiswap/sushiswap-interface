@@ -1,6 +1,7 @@
 import React, { FC, useState } from 'react'
-import Image from '../Image'
+
 import { classNames } from '../../functions'
+import Image from '../Image'
 
 export const UNKNOWN_ICON = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/unknown.png'
 

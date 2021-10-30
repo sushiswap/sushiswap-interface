@@ -1,22 +1,22 @@
+import { ChainId } from '@sushiswap/core-sdk'
+import { GRAPH_HOST } from 'services/graph/constants'
 import {
   dayDatasQuery,
   ethPriceQuery,
   factoryQuery,
   liquidityPositionsQuery,
+  pairDayDatasQuery,
   pairsQuery,
   tokenDayDatasQuery,
   tokenPairsQuery,
   tokenPriceQuery,
   tokenQuery,
-  tokenSubsetQuery,
   tokensQuery,
+  tokenSubsetQuery,
   transactionsQuery,
-  pairDayDatasQuery,
-} from '../queries'
+} from 'services/graph/queries'
 
-import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
-import { pager } from './'
+import { pager } from './pager'
 
 export const EXCHANGE = {
   [ChainId.ETHEREUM]: 'sushiswap/exchange',

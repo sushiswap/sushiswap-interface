@@ -1,3 +1,6 @@
+// a list of tokens by chain
+import { ChainId, Token, WNATIVE } from '@sushiswap/core-sdk'
+
 import {
   ALPHA,
   AMPL,
@@ -45,9 +48,7 @@ import {
   WBTC,
   XDAI,
   XSUSHI,
-} from '../config/tokens'
-// a list of tokens by chain
-import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/core-sdk'
+} from './tokens'
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[]

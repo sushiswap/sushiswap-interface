@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
 import { Popover } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import React, { FC } from 'react'
 
 interface MobileMenuToggleProps {
   isOpen: boolean

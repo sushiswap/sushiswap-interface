@@ -1,8 +1,9 @@
-import React, { ReactNode, useState } from 'react'
-import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
-import { classNames } from '../../functions'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
-import { useTable, usePagination, useSortBy } from 'react-table'
+import React, { ReactNode, useState } from 'react'
+import { usePagination, useSortBy, useTable } from 'react-table'
+
+import { classNames } from '../../functions'
 
 export interface Column {
   Cell?: (props: any) => ReactNode

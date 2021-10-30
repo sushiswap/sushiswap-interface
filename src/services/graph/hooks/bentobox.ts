@@ -1,16 +1,15 @@
-import useSWR, { SWRConfiguration } from 'swr'
-
+import { Feature, featureEnabled } from 'functions/feature'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import {
+  getBentoBox,
+  getBentoStrategies,
+  getBentoTokens,
+  getBentoUserTokens,
   getKashiPairs,
   getUserKashiPairs,
-  getBentoUserTokens,
-  getBentoBox,
-  getBentoTokens,
-  getBentoStrategies,
-} from '../fetchers/bentobox'
-import { useActiveWeb3React } from '../../../hooks'
-import { useBlock } from './blocks'
-import { Feature, featureEnabled } from '../../../functions/feature'
+} from 'services/graph/fetchers'
+import { useBlock } from 'services/graph/hooks'
+import useSWR, { SWRConfiguration } from 'swr'
 
 interface useKashiPairsProps {
   timestamp?: number

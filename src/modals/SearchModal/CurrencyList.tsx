@@ -1,27 +1,23 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
-import { RowBetween, RowFixed } from '../../components/Row'
-
-import Card from '../../components/Card'
-import Column from '../../components/Column'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import { FixedSizeList } from 'react-window'
-import ImportRow from './ImportRow'
-import Loader from '../../components/Loader'
-import { MouseoverTooltip } from '../../components/Tooltip'
-import QuestionHelper from '../../components/QuestionHelper'
-import Typography from '../../components/Typography'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { i18n } from '@lingui/core'
-import { isTokenOnList } from '../../functions/validate'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCombinedActiveList } from '../../state/lists/hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
-import { classNames } from '../../functions'
-import Image from '../../components/Image'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import CurrencyLogo from 'components/CurrencyLogo'
+import Image from 'components/Image'
+import Loader from 'components/Loader'
+import QuestionHelper from 'components/QuestionHelper'
+import { RowBetween, RowFixed } from 'components/Row'
+import { MouseoverTooltip } from 'components/Tooltip'
+import Typography from 'components/Typography'
+import { isTokenOnList } from 'functions/validate'
+import { useIsUserAddedToken } from 'hooks/Tokens'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import { FixedSizeList } from 'react-window'
+import { useCombinedActiveList } from 'state/lists/hooks'
+import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
+import { useCurrencyBalance } from 'state/wallet/hooks'
+
+import ImportRow from './ImportRow'
 
 function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
@@ -101,8 +97,8 @@ function CurrencyRow({
       style={style}
       className="px-5 py-1 rounded cursor-pointer hover:bg-dark-800"
       onClick={() => (isSelected ? null : onSelect())}
-      disabled={isSelected}
-      selected={otherSelected}
+      // disabled={isSelected}
+      // selected={otherSelected}
     >
       <div className="flex flex-row items-center space-x-4">
         <div className="flex items-center">

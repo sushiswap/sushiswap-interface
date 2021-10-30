@@ -1,21 +1,22 @@
+import { ChevronLeftIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import Divider from 'components/Divider'
+import ListPanel from 'components/ListPanel'
+import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
+import Typography from 'components/Typography'
 import React, { FC } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
+
 import {
   attemptingTxnAtom,
   DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
   outputToWalletAtom,
   showReviewAtom,
 } from '../../context/atoms'
-import ListPanel from '../../../../components/ListPanel'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import Typography from '../../../../components/Typography'
-import { t } from '@lingui/macro'
-import Divider from '../../../../components/Divider'
-import { useLingui } from '@lingui/react'
-import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
-import Button from '../../../../components/Button'
-import { ChevronLeftIcon } from '@heroicons/react/solid'
-import useZapPercentageInput from '../../context/hooks/useZapPercentageInput'
 import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
+import useZapPercentageInput from '../../context/hooks/useZapPercentageInput'
 
 interface RemoveTransactionReviewZapModal {}
 

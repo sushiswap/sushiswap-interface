@@ -1,9 +1,9 @@
-import { getSwapsForPoolQuery, getTridentPoolsQuery } from '../queries'
-
 import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
-import { PoolType } from '../../../features/trident/types'
-import { pager } from './index'
+import { PoolType } from 'features/trident/types'
+import { GRAPH_HOST } from 'services/graph/constants'
+import { getSwapsForPoolQuery, getTridentPoolsQuery } from 'services/graph/queries'
+
+import { pager } from './pager'
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
   concentratedLiquidityPools: PoolType.ConcentratedLiquidity,

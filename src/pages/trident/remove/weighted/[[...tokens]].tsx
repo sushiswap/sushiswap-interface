@@ -1,28 +1,22 @@
-import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
-import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import SettingsTab from '../../../../components/Settings'
-import Typography from '../../../../components/Typography'
-import React, { useEffect } from 'react'
-import ModeToggle from '../../../../features/trident/ModeToggle'
-import { LiquidityMode } from '../../../../features/trident/types'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { useActiveWeb3React } from '../../../../hooks'
+import Button from 'components/Button'
+import SettingsTab from 'components/Settings'
+import Typography from 'components/Typography'
+import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import ModeToggle from 'features/trident/ModeToggle'
+import RemoveTransactionReviewStandardModal from 'features/trident/remove/classic/RemoveTransactionReviewStandardModal'
+import { useActiveWeb3React } from 'hooks'
+import { useCurrency } from 'hooks/Tokens'
+import { useTotalSupply } from 'hooks/useTotalSupply'
+import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
+import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import {
-  liquidityModeAtom,
-  poolAtom,
-  poolBalanceAtom,
-  totalSupplyAtom,
-} from '../../../../features/trident/context/atoms'
-import { useCurrency } from '../../../../hooks/Tokens'
-import { useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import { useTotalSupply } from '../../../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../../../state/wallet/hooks'
-import RemoveTransactionReviewStandardModal from '../../../../features/trident/remove/classic/RemoveTransactionReviewStandardModal'
+import React, { useEffect } from 'react'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useTokenBalance } from 'state/wallet/hooks'
 
 const RemoveWeighted = () => {
   const { account } = useActiveWeb3React()

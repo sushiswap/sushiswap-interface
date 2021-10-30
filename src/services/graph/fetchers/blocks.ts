@@ -1,9 +1,8 @@
-import { blockQuery, blocksQuery, massBlocksQuery } from '../queries'
-import { getUnixTime, startOfHour, subDays, subHours } from 'date-fns'
-
 import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
+import { getUnixTime, startOfHour, subHours } from 'date-fns'
 import { request } from 'graphql-request'
+import { GRAPH_HOST } from 'services/graph/constants'
+import { blockQuery, blocksQuery, massBlocksQuery } from 'services/graph/queries'
 
 export const BLOCKS = {
   [ChainId.ETHEREUM]: 'blocklytics/ethereum-blocks',
@@ -19,7 +18,7 @@ export const BLOCKS = {
   [ChainId.HECO]: 'hecoblocks/heco',
 }
 
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) => {
+const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) => {
   return request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BLOCKS[chainId]}`, query, variables)
 }
 

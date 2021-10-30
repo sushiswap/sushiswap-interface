@@ -1,14 +1,15 @@
-import React, { FC } from 'react'
-import Chip from '../../../components/Chip'
-import Typography from '../../../components/Typography'
-import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
-import Link from 'next/link'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { PoolAtomType, PoolType } from '../types'
-import { POOL_TYPES } from '../constants'
-import { classNames } from '../../../functions'
+import { useLingui } from '@lingui/react'
 import { ConstantProductPool } from '@sushiswap/trident-sdk'
+import Chip from 'components/Chip'
+import { CurrencyLogoArray } from 'components/CurrencyLogo'
+import Typography from 'components/Typography'
+import { classNames } from 'functions'
+import Link from 'next/link'
+import React, { FC } from 'react'
+
+import { POOL_TYPES } from '../constants'
+import { PoolAtomType, PoolType } from '../types'
 
 interface PoolCardProps {
   pool: PoolAtomType

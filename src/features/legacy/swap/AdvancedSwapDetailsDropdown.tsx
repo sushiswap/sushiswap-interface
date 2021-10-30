@@ -1,8 +1,8 @@
-import { AdvancedSwapDetails, AdvancedSwapDetailsProps } from './AdvancedSwapDetails'
-
+import { classNames } from 'functions'
+import { useLastTruthy } from 'hooks/useLast'
 import React from 'react'
-import { useLastTruthy } from '../../../hooks/useLast'
-import { classNames } from '../../../functions'
+
+import { AdvancedSwapDetails, AdvancedSwapDetailsProps } from './AdvancedSwapDetails'
 
 export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: AdvancedSwapDetailsProps) {
   const lastTrade = useLastTruthy(trade)

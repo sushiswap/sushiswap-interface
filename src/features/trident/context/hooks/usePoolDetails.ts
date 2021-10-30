@@ -1,5 +1,10 @@
-import { useRecoilValue } from 'recoil'
 import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
+import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from 'functions'
+import { useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
+import { useUserSlippageToleranceWithDefault } from 'state/user/hooks'
+
+import { ZERO_PERCENT } from '../../../../constants'
 import {
   bentoboxRebasesAtom,
   currentLiquidityValueSelector,
@@ -11,10 +16,6 @@ import {
   poolBalanceAtom,
   totalSupplyAtom,
 } from '../atoms'
-import { useMemo } from 'react'
-import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from '../../../../functions'
-import { ZERO_PERCENT } from '../../../../constants'
-import { useUserSlippageToleranceWithDefault } from '../../../../state/user/hooks'
 import useCurrenciesFromURL from './useCurrenciesFromURL'
 
 export const usePoolDetailsMint = (

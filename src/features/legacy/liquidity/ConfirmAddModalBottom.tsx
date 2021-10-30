@@ -1,10 +1,9 @@
-import { Currency, CurrencyAmount, Fraction, Percent } from '@sushiswap/core-sdk'
-
-import Button from '../../../components/Button'
-import { Field } from '../../../state/mint/actions'
-import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount, Fraction, Percent } from '@sushiswap/core-sdk'
+import Button from 'components/Button'
+import React from 'react'
+import { Field } from 'state/mint/actions'
 
 export function ConfirmAddModalBottom({
   noLiquidity,

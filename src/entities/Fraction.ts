@@ -1,8 +1,8 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { One, Zero } from '@ethersproject/constants'
-import { formatBalance, parseBalance } from '../functions'
-
 import { Fraction as SDKFraction } from '@sushiswap/core-sdk'
+
+import { formatBalance, parseBalance } from '../functions'
 import { isEmptyValue } from '../functions/validate'
 
 class Fraction {

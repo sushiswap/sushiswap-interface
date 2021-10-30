@@ -1,5 +1,6 @@
-import ARGENT_WALLET_ABI from '../constants/abis/argent-wallet.json'
 import { Contract } from '@ethersproject/contracts'
+
+import ARGENT_WALLET_ABI from '../constants/abis/argent-wallet.json'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useContract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'

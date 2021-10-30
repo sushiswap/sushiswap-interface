@@ -1,11 +1,11 @@
-import React, { FC } from 'react'
-import HeadlessUiModal from '../../components/Modal/HeadlessUIModal'
-import Typography from '../../components/Typography'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
 import { XIcon } from '@heroicons/react/solid'
-import Button from '../../components/Button'
-import Alert from '../../components/Alert'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import Alert from 'components/Alert'
+import Button from 'components/Button'
+import HeadlessUiModal from 'components/Modal/HeadlessUIModal'
+import Typography from 'components/Typography'
+import React, { FC } from 'react'
 
 const TransactionDetailsExplanationModal: FC = ({ children }) => {
   const { i18n } = useLingui()

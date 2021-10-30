@@ -1,16 +1,15 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Token } from '@sushiswap/core-sdk'
+import { TokenList } from '@uniswap/token-lists'
+import ModalHeader from 'components/ModalHeader'
+import { classNames } from 'functions'
 import React, { useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
-import Column from '../../components/Column'
 import CurrencyModalView from './CurrencyModalView'
 import ManageLists from './ManageLists'
 import ManageTokens from './ManageTokens'
-import ModalHeader from '../../components/ModalHeader'
-import { Token } from '@sushiswap/core-sdk'
-import { TokenList } from '@uniswap/token-lists'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { classNames } from '../../functions'
 
 function Manage({
   onDismiss,
@@ -39,6 +38,7 @@ function Manage({
       <div className="flex p-1 rounded bg-dark-800">
         {[i18n._(t`Lists`), i18n._(t`Tokens`)].map((title, i) => (
           <div
+            key={i}
             className={classNames(
               tabIndex === i && 'bg-dark-900 text-high-emphesis',
               'flex items-center justify-center flex-1 px-1 py-2 text-lg rounded cursor-pointer select-none text-secondary hover:text-primary focus:outline-none'

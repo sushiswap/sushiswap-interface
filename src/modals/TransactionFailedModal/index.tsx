@@ -1,9 +1,9 @@
-import CloseIcon from '../../components/CloseIcon'
-import Image from 'next/image'
-import Modal from '../../components/Modal'
-import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import CloseIcon from 'components/CloseIcon'
+import Modal from 'components/Modal'
+import Image from 'next/image'
+import React from 'react'
 
 interface TransactionFailedModalProps {
   isOpen: boolean

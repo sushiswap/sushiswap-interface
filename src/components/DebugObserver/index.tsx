@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRecoilSnapshot } from 'recoil'
 
 export function DebugObserver(): JSX.Element {

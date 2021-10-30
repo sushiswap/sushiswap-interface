@@ -1,4 +1,5 @@
-import { ChipColor } from '../../components/Chip'
+import { ChipColor } from 'components/Chip'
+
 import { PoolType } from './types'
 
 type PoolTypesInterface = Record<

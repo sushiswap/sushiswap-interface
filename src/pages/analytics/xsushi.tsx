@@ -1,16 +1,15 @@
 import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import TimespanGraph from 'components/TimespanGraph'
+import { XSUSHI } from 'config/tokens'
+import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
+import Background from 'features/analytics/Background'
+import InfoCard from 'features/analytics/Bar/InfoCard'
+import ColoredNumber from 'features/analytics/ColoredNumber'
+import { classNames, formatNumber, formatPercent } from 'functions'
+import { aprToApy } from 'functions/convert/apyApr'
 import React, { useMemo } from 'react'
-import { classNames, formatNumber, formatPercent } from '../../functions'
-import { useBar, useBarHistory } from '../../services/graph/hooks/bar'
-import { useBlock, useDayData, useFactory, useNativePrice, useTokenDayData, useTokens } from '../../services/graph'
-
-import AnalyticsContainer from '../../features/analytics/AnalyticsContainer'
-import Background from '../../features/analytics/Background'
-import ColoredNumber from '../../features/analytics/ColoredNumber'
-import InfoCard from '../../features/analytics/Bar/InfoCard'
-import TimespanGraph from '../../components/TimespanGraph'
-import { XSUSHI } from '../../config/tokens'
-import { aprToApy } from '../../functions/convert/apyApr'
+import { useBlock, useDayData, useFactory, useNativePrice, useTokenDayData, useTokens } from 'services/graph'
+import { useBar, useBarHistory } from 'services/graph/hooks/bar'
 
 const chartTimespans = [
   {

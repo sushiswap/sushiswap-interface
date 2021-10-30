@@ -1,16 +1,16 @@
-import { CRXSUSHI, SUSHI, XSUSHI } from '../../../config/tokens'
-import { ChainId, CurrencyAmount, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
-import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import { useActiveWeb3React, useApproveCallback, useInariContract, useZenkoContract } from '../../../hooks'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../../functions'
-import useBaseStrategy from './useBaseStrategy'
-import { useDerivedInariState } from '../hooks'
 import { useLingui } from '@lingui/react'
+import { ChainId, CurrencyAmount, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
+import { CRXSUSHI, SUSHI, XSUSHI } from 'config/tokens'
+import { tryParseAmount } from 'functions'
+import { useActiveWeb3React, useApproveCallback, useInariContract, useZenkoContract } from 'hooks'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+
 import { useTokenBalances } from '../../wallet/hooks'
+import { useDerivedInariState } from '../hooks'
+import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import useBaseStrategy from './useBaseStrategy'
 
 export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
   name: i18n._(t`SUSHI → Cream`),

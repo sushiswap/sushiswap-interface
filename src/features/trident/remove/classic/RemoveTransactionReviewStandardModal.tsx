@@ -1,22 +1,23 @@
+import { ChevronLeftIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import Divider from 'components/Divider'
+import ListPanel from 'components/ListPanel'
+import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
+import Typography from 'components/Typography'
 import React, { FC } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil'
+
 import {
   attemptingTxnAtom,
   DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
   outputToWalletAtom,
   showReviewAtom,
 } from '../../context/atoms'
-import ListPanel from '../../../../components/ListPanel'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import Typography from '../../../../components/Typography'
-import { t } from '@lingui/macro'
-import Divider from '../../../../components/Divider'
-import { useLingui } from '@lingui/react'
-import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
-import Button from '../../../../components/Button'
-import { ChevronLeftIcon } from '@heroicons/react/solid'
+import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
 import usePercentageInput from '../../context/hooks/usePercentageInput'
 import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
-import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
 
 interface RemoveTransactionReviewStandardModal {}
 

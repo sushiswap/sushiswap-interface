@@ -1,6 +1,7 @@
-import React from 'react'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+import React from 'react'
+
 import Chip from './index'
 
 export default {

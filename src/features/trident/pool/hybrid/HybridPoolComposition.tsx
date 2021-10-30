@@ -1,9 +1,10 @@
-import { FC } from 'react'
-import { useLingui } from '@lingui/react'
-import Typography from '../../../../components/Typography'
-import ListPanel from '../../../../components/ListPanel'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import ListPanel from 'components/ListPanel'
+import Typography from 'components/Typography'
+import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { poolAtom } from '../../context/atoms'
 
 const HybridPoolComposition: FC = () => {

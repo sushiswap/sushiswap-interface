@@ -1,10 +1,11 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency } from '@sushiswap/core-sdk'
 import { FC } from 'react'
-import Typography from '../Typography'
+
 import { classNames } from '../../functions'
 import { Input as NumericalInput } from '../Input/Numeric'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
-import { Currency } from '@sushiswap/core-sdk'
+import Typography from '../Typography'
 
 type RangeInputColor = 'blue' | 'purple'
 

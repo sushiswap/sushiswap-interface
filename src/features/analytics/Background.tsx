@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import React from 'react'
+
 import { classNames } from '../../functions'
 
 interface BackgroundProps {

@@ -1,9 +1,10 @@
+import { Fee } from '@sushiswap/trident-sdk'
+import Typography from 'components/Typography'
 import React, { FC } from 'react'
-import Typography from '../../../../components/Typography'
 import { useRecoilState } from 'recoil'
+
 import { selectedFeeTierAtom } from '../context/atoms'
 import { FeeTierSelect } from './FeeTierSelect'
-import { Fee } from '@sushiswap/trident-sdk'
 
 export const SelectFeeTier: FC = () => {
   const [selectedFeeTier, setSelectedFeeTier] = useRecoilState(selectedFeeTierAtom)

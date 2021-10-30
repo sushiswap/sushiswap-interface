@@ -1,7 +1,7 @@
 import { ChainId, Currency, CurrencyAmount, Price, Token, USDC } from '@sushiswap/core-sdk'
-
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useMemo } from 'react'
+
 import { useV2TradeExactOut } from './useV2Trades'
 
 // import { wrappedCurrency } from "../functions/currency/wrappedCurrency";

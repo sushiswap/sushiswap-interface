@@ -1,4 +1,4 @@
-import '../../../src/bootstrap'
+import 'bootstrap'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import {
@@ -9,8 +9,9 @@ import {
   STARTING_INTEREST_PER_YEAR,
 } from '@sushiswap/sdk'
 
-import { e10, ZERO } from '../../../src/functions'
 import {
+  e10,
+  ZERO,
   accrue,
   accrueTotalAssetWithFee,
   addBorrowFee,
@@ -20,7 +21,7 @@ import {
   getUSDValue,
   interestAccrue,
   takeFee,
-} from '../../../src/functions/kashi'
+} from 'functions'
 
 describe('kashi functions', () => {
   const pair = {

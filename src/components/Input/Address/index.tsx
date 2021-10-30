@@ -1,7 +1,6 @@
-import { classNames, escapeRegExp } from '../../../functions'
-
+import { classNames, escapeRegExp } from 'functions'
+import useENS from 'hooks/useENS'
 import React from 'react'
-import useENS from '../../../hooks/useENS'
 
 const inputRegex = RegExp(`^\\d*$`) // match escaped "." characters via in a non-capturing group
 

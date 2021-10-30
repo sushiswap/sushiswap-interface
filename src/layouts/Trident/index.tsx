@@ -1,10 +1,10 @@
+import Container, { MaxWidth } from 'components/Container'
+import Header from 'components/Header'
+import Main from 'components/Main'
+import Popups from 'components/Popups'
+import Breadcrumb, { BreadcrumbItem } from 'features/trident/Breadcrumb'
+import { classNames } from 'functions'
 import React, { FC } from 'react'
-import Main from '../../components/Main'
-import Popups from '../../components/Popups'
-import Breadcrumb, { BreadcrumbItem } from '../../features/trident/Breadcrumb'
-import Container, { MaxWidth } from '../../components/Container'
-import Header from '../../components/Header'
-import { classNames } from '../../functions'
 
 type HeaderBackground =
   | 'bg-bars-pattern'

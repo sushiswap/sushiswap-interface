@@ -1,16 +1,15 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
-import React, { FC, Fragment } from 'react'
-import { Trans, useLingui } from '@lingui/react'
-
-import { ChainId } from '@sushiswap/core-sdk'
-import HeadlessUIModal from '../../components/Modal/HeadlessUIModal'
-import Image from 'next/image'
-import NavLink from '../../components/NavLink'
-import { SUPPORTED_NETWORKS } from '../../modals/NetworkModal'
-import Typography from '../../components/Typography'
-import cookie from 'cookie-cutter'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks'
+import { Trans, useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
+import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
+import NavLink from 'components/NavLink'
+import Typography from 'components/Typography'
+import { NETWORK_ICON, NETWORK_LABEL } from 'config/networks'
+import cookie from 'cookie-cutter'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { SUPPORTED_NETWORKS } from 'modals/NetworkModal'
+import Image from 'next/image'
+import React, { FC, Fragment } from 'react'
 
 interface NetworkGuardProps {
   networks: ChainId[]

@@ -1,11 +1,10 @@
-import { useBlock, useNativePrice, useTokens } from '../../../services/graph'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import Background from '../../../features/analytics/Background'
-import Search from '../../../components/Search'
-import TokenList from '../../../features/analytics/Tokens/TokenList'
-import { useFuse, useActiveWeb3React } from '../../../hooks'
+import Search from 'components/Search'
+import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
+import Background from 'features/analytics/Background'
+import TokenList from 'features/analytics/Tokens/TokenList'
+import { useActiveWeb3React, useFuse } from 'hooks'
 import { useMemo } from 'react'
+import { useBlock, useNativePrice, useTokens } from 'services/graph'
 
 export default function Tokens() {
   const { chainId } = useActiveWeb3React()

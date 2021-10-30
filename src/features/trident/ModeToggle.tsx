@@ -1,10 +1,11 @@
-import { FC, useCallback } from 'react'
-import ToggleButtonGroup from '../../components/ToggleButton'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { LiquidityMode } from './types'
+import ToggleButtonGroup from 'components/ToggleButton'
+import { FC, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
+
 import { liquidityModeAtom } from './context/atoms'
+import { LiquidityMode } from './types'
 
 interface ModeToggleProps {
   onChange?: () => void

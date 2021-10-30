@@ -1,13 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useMeowshiContract, useSushiBarContract, useSushiContract } from './useContract'
-
-import { ApprovalState } from './useApproveCallback'
-import { BalanceProps } from './useTokenBalance'
-import Fraction from '../entities/Fraction'
 import { BigNumber } from '@ethersproject/bignumber'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
+import Fraction from '../entities/Fraction'
 import { useTransactionAdder } from '../state/transactions/hooks'
+import { useActiveWeb3React } from './useActiveWeb3React'
+import { ApprovalState } from './useApproveCallback'
+import { useMeowshiContract, useSushiBarContract, useSushiContract } from './useContract'
+import { BalanceProps } from './useTokenBalance'
 
 const useMeowshi = (sushi: boolean) => {
   const { account } = useActiveWeb3React()

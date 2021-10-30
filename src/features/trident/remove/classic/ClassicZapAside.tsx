@@ -1,9 +1,10 @@
-import Typography from '../../../../components/Typography'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import TransactionDetails from '../TransactionDetails'
+import { useLingui } from '@lingui/react'
+import Typography from 'components/Typography'
 import React from 'react'
+
 import useZapPercentageInput from '../../context/hooks/useZapPercentageInput'
+import TransactionDetails from '../TransactionDetails'
 
 const ClassicZapAside = () => {
   const { i18n } = useLingui()

@@ -1,10 +1,10 @@
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import FarmList from '../../../features/analytics/Farms/FarmList'
-import Search from '../../../components/Search'
-import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useFuse } from '../../../hooks'
+import Search from 'components/Search'
+import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
+import Background from 'features/analytics/Background'
+import FarmList from 'features/analytics/Farms/FarmList'
+import { useFuse } from 'hooks'
+import useFarmRewards from 'hooks/useFarmRewards'
 import { useMemo } from 'react'
-import Background from '../../../features/analytics/Background'
 
 export default function Farms(): JSX.Element {
   const farms = useFarmRewards()

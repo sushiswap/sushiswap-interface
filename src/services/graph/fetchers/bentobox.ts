@@ -1,3 +1,7 @@
+import { ChainId } from '@sushiswap/core-sdk'
+import { getFraction, toAmount } from 'functions'
+import { GRAPH_HOST } from 'services/graph/constants'
+import { getTokenSubset } from 'services/graph/fetchers'
 import {
   bentoBoxQuery,
   bentoStrategiesQuery,
@@ -5,13 +9,9 @@ import {
   bentoUserTokensQuery,
   kashiPairsQuery,
   kashiUserPairsQuery,
-} from '../queries/bentobox'
-import { getFraction, toAmount } from '../../../functions'
+} from 'services/graph/queries/bentobox'
 
-import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
-import { getTokenSubset } from './exchange'
-import { pager } from '.'
+import { pager } from './pager'
 
 export const BENTOBOX = {
   [ChainId.ETHEREUM]: 'lufycz/bentobox',
@@ -21,7 +21,7 @@ export const BENTOBOX = {
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
 }
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)
 
 export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {

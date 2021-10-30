@@ -1,17 +1,16 @@
-import { AutoRow, RowBetween } from '../../../components/Row'
 import { Currency, Token } from '@sushiswap/core-sdk'
+import Button from 'components/Button'
+import CloseIcon from 'components/CloseIcon'
+import { AutoColumn } from 'components/Column'
+import CurrencyLogo from 'components/CurrencyLogo'
+import ExternalLink from 'components/ExternalLink'
+import Modal from 'components/Modal'
+import { AutoRow, RowBetween } from 'components/Row'
+import { classNames } from 'functions'
+import { getExplorerLink } from 'functions/explorer'
+import { useUnsupportedTokens } from 'hooks/Tokens'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import React, { useState } from 'react'
-
-import { AutoColumn } from '../../../components/Column'
-import Button from '../../../components/Button'
-import CloseIcon from '../../../components/CloseIcon'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import ExternalLink from '../../../components/ExternalLink'
-import Modal from '../../../components/Modal'
-import { getExplorerLink } from '../../../functions/explorer'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useUnsupportedTokens } from '../../../hooks/Tokens'
-import { classNames } from '../../../functions'
 
 export default function UnsupportedCurrencyFooter({
   show,

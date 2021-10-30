@@ -1,7 +1,7 @@
 import { AddressZero } from '@ethersproject/constants'
 import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 
-import approveAmountCalldata, { toHex } from '../../../src/functions/approveAmountCalldata'
+import approveAmountCalldata, { toHex } from 'src/functions/approveAmountCalldata'
 
 describe('approveAmountCalldata functions', () => {
   describe('toHex', () => {

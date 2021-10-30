@@ -1,11 +1,11 @@
-import React from 'react'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
-
-import { ChainId, WETH9 } from '@sushiswap/core-sdk'
 import { useLingui } from '@lingui/react'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+import { ChainId, WETH9 } from '@sushiswap/core-sdk'
+import { SUSHI } from 'config/tokens'
+import { tryParseAmount } from 'functions'
+import React from 'react'
+
 import { PoolType } from '../types'
-import { tryParseAmount } from '../../../functions'
-import { SUSHI } from '../../../config/tokens'
 import { Header } from './Header'
 
 export default {

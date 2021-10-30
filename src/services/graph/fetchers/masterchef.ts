@@ -1,3 +1,7 @@
+import { ChainId } from '@sushiswap/core-sdk'
+import { request } from 'graphql-request'
+import { GRAPH_HOST } from 'services/graph/constants'
+import { getTokenSubset } from 'services/graph/fetchers/exchange'
 import {
   masterChefV1PairAddressesQuery,
   masterChefV1SushiPerBlockQuery,
@@ -7,12 +11,7 @@ import {
   miniChefPoolsQuery,
   poolsQuery,
   poolsV2Query,
-} from '../queries'
-
-import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
-import { getTokenSubset } from './exchange'
-import { request } from 'graphql-request'
+} from 'services/graph/queries'
 
 export const MINICHEF = {
   [ChainId.MATIC]: 'sushiswap/matic-minichef',

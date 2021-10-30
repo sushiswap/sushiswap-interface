@@ -1,38 +1,34 @@
 import '../bootstrap'
 import '../styles/index.css'
 
-import * as plurals from 'make-plural/plurals'
-
-import { Fragment } from 'react'
-import store, { persistor } from '../state'
-
-import type { AppProps } from 'next/app'
-import ApplicationUpdater from '../state/application/updater'
-import DefaultLayout from '../layouts/Default'
-import Dots from '../components/Dots'
-import Head from 'next/head'
+import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
+import { remoteLoader } from '@lingui/remote-loader'
+import { nanoid } from '@reduxjs/toolkit'
+import { Web3ReactProvider } from '@web3-react/core'
+import * as plurals from 'make-plural/plurals'
+import dynamic from 'next/dynamic'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import Script from 'next/script'
+import { Fragment } from 'react'
+import { useEffect } from 'react'
+import { Provider as ReduxProvider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+
+import Dots from '../components/Dots'
+import Web3ReactManager from '../components/Web3ReactManager'
+import getLibrary from '../functions/getLibrary'
+import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from '../functions/gtag'
+import DefaultLayout from '../layouts/Default'
+import store, { persistor } from '../state'
+import ApplicationUpdater from '../state/application/updater'
 import ListsUpdater from '../state/lists/updater'
 import MulticallUpdater from '../state/multicall/updater'
-import { PersistGate } from 'redux-persist/integration/react'
-import { Provider as ReduxProvider } from 'react-redux'
 import TransactionUpdater from '../state/transactions/updater'
 import UserUpdater from '../state/user/updater'
-import Web3ReactManager from '../components/Web3ReactManager'
-import { Web3ReactProvider } from '@web3-react/core'
-import dynamic from 'next/dynamic'
-import getLibrary from '../functions/getLibrary'
-import { i18n } from '@lingui/core'
-import { nanoid } from '@reduxjs/toolkit'
-import { remoteLoader } from '@lingui/remote-loader'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { pageview, GOOGLE_ANALYTICS_TRACKING_ID, exception } from '../functions/gtag'
-import Script from 'next/script'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
-
-// const Web3ReactManager = dynamic(() => import('../components/Web3ReactManager'), { ssr: false })
 
 const sessionId = nanoid()
 
@@ -99,7 +95,7 @@ function MyApp({ Component, pageProps, fallback }) {
 
   return (
     <>
-      <Head>s</Head>
+      <Head>Sushi</Head>
       {/* Global Site Tag (gtag.js) - Google Analytics */}
       <Script
         strategy="afterInteractive"

@@ -1,9 +1,9 @@
-import { useActiveWeb3React } from '../../../../hooks'
-import useSWR from 'swr'
-import { getTransactions } from '../../fetchers'
+import { Transactions } from 'features/transactions/types'
+import { formatDateAgo, formatNumber } from 'functions'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import { useMemo } from 'react'
-import { Transactions } from '../../../../features/transactions/types'
-import { formatDateAgo, formatNumber } from '../../../../functions'
+import { getTransactions } from 'services/graph/fetchers'
+import useSWR from 'swr'
 
 export interface LegacyTransactions {
   amount0In: string

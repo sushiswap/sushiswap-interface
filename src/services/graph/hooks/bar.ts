@@ -1,8 +1,7 @@
 import { ChainId } from '@sushiswap/core-sdk'
+import { getBar, getBarHistory } from 'services/graph/fetchers'
+import { useBlock } from 'services/graph/hooks'
 import useSWR, { SWRConfiguration } from 'swr'
-import { useActiveWeb3React } from '../../../hooks'
-import { getBar, getBarHistory } from '../fetchers/bar'
-import { useBlock } from './blocks'
 
 interface useBarProps {
   timestamp?: number

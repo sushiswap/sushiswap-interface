@@ -1,10 +1,10 @@
+import { ExternalLinkIcon } from '@heroicons/react/outline'
+import React from 'react'
 import { AlertCircle, CheckCircle } from 'react-feather'
 
 import ExternalLink from '../../components/ExternalLink'
 import { getExplorerLink } from '../../functions/explorer'
 import { useActiveWeb3React } from '../../hooks'
-import { ExternalLinkIcon } from '@heroicons/react/outline'
-import React from 'react'
 
 export default function TransactionPopup({
   hash,

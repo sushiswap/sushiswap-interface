@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
-import { shortenAddress } from './table-utils'
+
 import ExternalLink from '../../components/ExternalLink'
+import { shortenAddress } from './table-utils'
 import { Transactions } from './types'
 
 export const useTableConfig = (transactions?: Transactions[]) => {

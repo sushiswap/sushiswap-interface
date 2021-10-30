@@ -1,41 +1,27 @@
-import {
-  ChainId,
-  Currency,
-  KASHI_ADDRESS,
-  NATIVE,
-  Token,
-  USDC_ADDRESS,
-  WNATIVE,
-  WNATIVE_ADDRESS,
-} from '@sushiswap/core-sdk'
-import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
-import { ZERO, e10, maximum, minimum } from '../../../functions/math'
-import {
-  accrue,
-  accrueTotalAssetWithFee,
-  easyAmount,
-  getUSDValue,
-  interestAccrue,
-  takeFee,
-} from '../../../functions/kashi'
-import { toAmount, toShare } from '../../../functions/bentobox'
-import { useBentoBoxContract, useBoringHelperContract } from '../../../hooks/useContract'
-
-import { BigNumber } from '@ethersproject/bignumber'
-import Fraction from '../../../entities/Fraction'
-import { bentobox } from '@sushiswap/sushi-data'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
-import { getCurrency } from '../../../functions/currency'
-import { getOracle } from '../../../entities/Oracle'
-import { toElastic } from '../../../functions/rebase'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useAllTokens } from '../../../hooks/Tokens'
-import { useBlockNumber } from '../../../state/application/hooks'
-import usePrevious from '../../../hooks/usePrevious'
-import { useSingleCallResult } from '../../../state/multicall/hooks'
-import { useBentoStrategies } from '../../../services/graph/hooks'
-import { formatPercent } from '../../../functions'
+import { BigNumber } from '@ethersproject/bignumber'
+import {
+  ChainId,
+  KASHI_ADDRESS,
+  NATIVE,
+  WNATIVE_ADDRESS,
+} from '@sushiswap/core-sdk'
+import { bentobox } from '@sushiswap/sushi-data'
+import Fraction from 'entities/Fraction'
+import { getOracle } from 'entities/Oracle'
+import { toAmount, toShare } from 'functions/bentobox'
+import { getCurrency } from 'functions/currency'
+import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue, takeFee } from 'functions/kashi'
+import { e10, maximum, minimum,ZERO } from 'functions/math'
+import { toElastic } from 'functions/rebase'
+import { useAllTokens } from 'hooks/Tokens'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
+import { useBentoBoxContract, useBoringHelperContract } from 'hooks/useContract'
+import usePrevious from 'hooks/usePrevious'
+import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
+import { useBentoStrategies } from 'services/graph/hooks'
+import { useBlockNumber } from 'state/application/hooks'
 
 enum ActionType {
   UPDATE = 'UPDATE',

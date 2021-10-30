@@ -1,13 +1,14 @@
-import React, { FC } from 'react'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import Typography from '../../components/Typography'
+import { useLingui } from '@lingui/react'
+import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useTable } from 'react-table'
-import { TableInstance, TransactionFetcherState } from './types'
-import { TablePageToggler } from './TablePageToggler'
-import { useTableConfig } from './useTableConfig'
-import { useTridentTransactions } from '../../services/graph/hooks/transactions/trident'
+
+import Typography from '../../components/Typography'
 import { useLegacyTransactions } from '../../services/graph/hooks/transactions/legacy'
+import { useTridentTransactions } from '../../services/graph/hooks/transactions/trident'
+import { TablePageToggler } from './TablePageToggler'
+import { TableInstance, TransactionFetcherState } from './types'
+import { useTableConfig } from './useTableConfig'
 
 export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
   const { transactions, error, loading } = useLegacyTransactions(pairs)

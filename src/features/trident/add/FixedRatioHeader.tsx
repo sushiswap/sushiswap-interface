@@ -1,13 +1,14 @@
-import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import FixedRatioExplanationModal from './FixedRatioExplanationModal'
-import Typography from '../../../components/Typography'
+import Checkbox from 'components/Checkbox'
+import Typography from 'components/Typography'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
+import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+
 import { fixedRatioAtom, liquidityModeAtom } from '../context/atoms'
 import { LiquidityMode } from '../types'
-import Checkbox from '../../../components/Checkbox'
-import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
+import FixedRatioExplanationModal from './FixedRatioExplanationModal'
 
 interface FixedRatioHeaderProps {
   margin?: boolean

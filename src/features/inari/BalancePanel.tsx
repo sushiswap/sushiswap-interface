@@ -1,15 +1,15 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import React, { FC, useCallback } from 'react'
-import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
 
 import CurrencyLogo from '../../components/CurrencyLogo'
-import { Field } from '../../state/inari/types'
 import Input from '../../components/Input'
 import Typography from '../../components/Typography'
-import { setValues } from '../../state/inari/actions'
-import { t } from '@lingui/macro'
 import { useAppDispatch } from '../../state/hooks'
-import { useLingui } from '@lingui/react'
+import { setValues } from '../../state/inari/actions'
+import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
+import { Field } from '../../state/inari/types'
 
 interface BalancePanelProps {
   label: string

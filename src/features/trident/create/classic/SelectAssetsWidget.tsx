@@ -1,7 +1,8 @@
-import React, { FC, useCallback } from 'react'
-import Typography from '../../../../components/Typography'
-import AssetSelect from '../../../../components/AssetSelect'
 import { PlusIcon } from '@heroicons/react/solid'
+import AssetSelect from 'components/AssetSelect'
+import Typography from 'components/Typography'
+import React, { FC, useCallback } from 'react'
+
 import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
 
 export const SelectAssetsWidget: FC = () => {

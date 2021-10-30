@@ -1,6 +1,14 @@
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
-import { useDependentAssetInputs } from './useDependentAssetInputs'
+import { ethers } from 'ethers'
+import { toShareJSBI } from 'functions'
+import { useActiveWeb3React, useTridentRouterContract } from 'hooks'
+import { useMemo } from 'react'
+import ReactGA from 'react-ga'
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useTransactionAdder } from 'state/transactions/hooks'
+
+import { LiquidityInput } from '../../types'
 import {
   attemptingTxnAtom,
   bentoboxRebasesAtom,
@@ -9,15 +17,8 @@ import {
   spendFromWalletSelector,
   txHashAtom,
 } from '../atoms'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
-import { ethers } from 'ethers'
-import { t } from '@lingui/macro'
-import ReactGA from 'react-ga'
-import { useMemo } from 'react'
+import { useDependentAssetInputs } from './useDependentAssetInputs'
 import { usePoolDetailsMint } from './usePoolDetails'
-import { toShareJSBI } from '../../../../functions'
-import { LiquidityInput } from '../../types'
 
 export const useClassicStandardAddExecute = () => {
   const { i18n } = useLingui()

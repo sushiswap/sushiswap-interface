@@ -1,6 +1,6 @@
+import Typography from 'components/Typography'
+import { classNames } from 'functions'
 import React, { FC } from 'react'
-import Typography from '../../../components/Typography'
-import { classNames } from '../../../functions'
 
 interface PoolSelectorProps {
   title: string

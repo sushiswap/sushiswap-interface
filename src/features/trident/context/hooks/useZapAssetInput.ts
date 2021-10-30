@@ -1,12 +1,13 @@
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from '../../../../functions'
 import { t } from '@lingui/macro'
-import { bentoboxRebasesAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
-import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
-import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from 'functions'
+import { useActiveWeb3React } from 'hooks'
+import { useBentoOrWalletBalances } from 'hooks/useBentoOrWalletBalance'
 import { useMemo } from 'react'
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+
+import { bentoboxRebasesAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 
 export const selectedZapCurrencyAtom = atom<Currency | undefined>({
   key: 'selectedZapCurrencyAtom',

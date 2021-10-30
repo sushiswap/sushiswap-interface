@@ -1,9 +1,9 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import React, { FC, useCallback } from 'react'
 
-import Input from '../Input'
-import { t } from '@lingui/macro'
 import useENS from '../../hooks/useENS'
-import { useLingui } from '@lingui/react'
+import Input from '../Input'
 
 interface AddressInputPanelProps {
   id?: string

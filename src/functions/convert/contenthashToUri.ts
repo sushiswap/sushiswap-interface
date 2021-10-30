@@ -1,7 +1,6 @@
-import { decode, toB58String } from 'multihashes'
-import { getCodec, rmPrefix } from 'multicodec'
-
 import CID from 'cids'
+import { getCodec, rmPrefix } from 'multicodec'
+import { decode, toB58String } from 'multihashes'
 
 export function hexToUint8Array(hex: string): Uint8Array {
   hex = hex.startsWith('0x') ? hex.substr(2) : hex

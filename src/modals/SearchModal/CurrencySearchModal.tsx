@@ -1,16 +1,16 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
+import { TokenList } from '@uniswap/token-lists'
+import Modal from 'components/Modal'
+import useLast from 'hooks/useLast'
+import usePrevious from 'hooks/usePrevious'
 import React, { useCallback, useEffect, useState } from 'react'
+import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
 
 import CurrencyModalView from './CurrencyModalView'
 import { CurrencySearch } from './CurrencySearch'
 import ImportList from './ImportList'
 import { ImportToken } from './ImportToken'
 import Manage from './Manage'
-import Modal from '../../components/Modal'
-import { TokenList } from '@uniswap/token-lists'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import useLast from '../../hooks/useLast'
-import usePrevious from '../../hooks/usePrevious'
 
 interface CurrencySearchModalProps {
   isOpen: boolean

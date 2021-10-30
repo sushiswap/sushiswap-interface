@@ -1,15 +1,15 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId, Currency, Percent } from '@sushiswap/core-sdk'
+import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
 
 import Gas from '../../components/Gas'
-import MyOrders from '../legacy/limit-order/MyOrders'
 import NavLink from '../../components/NavLink'
 import Settings from '../../components/Settings'
 import { currencyId } from '../../functions'
-import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks'
-import { useLingui } from '@lingui/react'
-import { useRouter } from 'next/router'
+import MyOrders from '../legacy/limit-order/MyOrders'
 
 const getQuery = (input, output) => {
   if (!input && !output) return

@@ -1,19 +1,20 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
-import { Feature, featureEnabled } from '../../functions/feature'
-import React, { FC } from 'react'
 import Image from 'next/image'
+import React, { FC } from 'react'
+
+import { Feature, featureEnabled } from '../../functions/feature'
+import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useETHBalances } from '../../state/wallet/hooks'
 import LanguageSwitch from '../LanguageSwitch'
-import More from './More'
 import NavLink from '../NavLink'
 import QuestionHelper from '../QuestionHelper'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useETHBalances } from '../../state/wallet/hooks'
-import { useLingui } from '@lingui/react'
-import { ACTIVE_NAV_LINK_CLASS, NAV_BASE_CLASS } from './styles'
 import MobileMenuToggle from './MobileMenuToggle'
+import More from './More'
+import { ACTIVE_NAV_LINK_CLASS, NAV_BASE_CLASS } from './styles'
 
 interface DesktopNavProps {
   mobileMenuOpen: boolean

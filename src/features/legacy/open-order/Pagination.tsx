@@ -1,7 +1,6 @@
 import { ArrowNarrowLeftIcon, ArrowNarrowRightIcon } from '@heroicons/react/outline'
-
+import { classNames } from 'functions'
 import { FC } from 'react'
-import { classNames } from '../../../functions'
 
 interface PaginationProps {
   currentPage: number

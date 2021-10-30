@@ -1,4 +1,4 @@
-import { ChipColor } from '../../../../components/Chip'
+import { ChipColor } from 'components/Chip'
 
 export interface PoolFilterType {
   label: string

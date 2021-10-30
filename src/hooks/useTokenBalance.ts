@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
-
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import ERC20_ABI from '../constants/abis/erc20.json'
 import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { isAddress } from '../functions/validate'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import ERC20_ABI from 'constants/abis/erc20.json'
+import { isAddress } from 'functions/validate'
+import { useCallback, useEffect, useState } from 'react'
+
 import { useBlockNumber } from '../state/application/hooks'
+import { useActiveWeb3React } from './useActiveWeb3React'
 import { useContract } from './useContract'
 import useTransactionStatus from './useTransactionStatus'
 

@@ -1,10 +1,10 @@
 // NOTE: Try not to add anything to thie file, it's almost entirely refactored out.
 
-import { ChainId, ROUTER_ADDRESS } from '@sushiswap/core-sdk'
-import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
-
 import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
+import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
+import { ChainId, ROUTER_ADDRESS } from '@sushiswap/core-sdk'
+
 import IUniswapV2Router02ABI from '../constants/abis/uniswap-v2-router-02.json'
 import IUniswapV2Router02NoETHABI from '../constants/abis/uniswap-v2-router-02-no-eth.json'
 import { isAddress } from '../functions/validate'

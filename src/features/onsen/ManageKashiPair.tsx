@@ -1,11 +1,12 @@
 import { Popover, Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import React, { useState } from 'react'
+
 import { useKashiPair } from '../kashi/context'
 import KashiDeposit from './KashiDeposit'
-import { ChevronDownIcon } from '@heroicons/react/solid'
 import KashiWithdraw from './KashiWithdraw'
 
 const ManageKashiPair = ({ farm }) => {

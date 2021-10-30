@@ -1,7 +1,7 @@
-import { FC } from 'react'
-import Typography from '../../../../components/Typography'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import Typography from 'components/Typography'
+import { FC } from 'react'
 
 const PriceRange: FC = () => {
   const { i18n } = useLingui()

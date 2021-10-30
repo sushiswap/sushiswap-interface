@@ -1,9 +1,9 @@
-import { FC } from 'react'
-import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { formatPercent } from '../../../functions'
-import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
+import Typography from 'components/Typography'
+import { formatPercent } from 'functions'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
+import { FC } from 'react'
 
 interface PoolStatsProps {}
 

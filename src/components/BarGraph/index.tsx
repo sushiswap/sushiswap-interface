@@ -1,7 +1,7 @@
-import React, { FC, useMemo } from 'react'
-import { Bar } from '@visx/shape'
 import { Group } from '@visx/group'
 import { scaleBand, scaleLinear } from '@visx/scale'
+import { Bar } from '@visx/shape'
+import React, { FC, useMemo } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 const verticalMargin = 40

@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
-import Alert from '../../../../components/Alert'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Alert from 'components/Alert'
+import React, { FC } from 'react'
 
 export const SetAssetPrice: FC = () => {
   const { i18n } = useLingui()

@@ -1,6 +1,6 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { useEffect, useState } from 'react'
 
-import { BigNumber } from '@ethersproject/bignumber'
 import { XSUSHI } from '../config/tokens'
 import { useBentoBoxContract } from './useContract'
 

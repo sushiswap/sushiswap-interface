@@ -1,8 +1,7 @@
-import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
-import React, { Fragment, memo } from 'react'
-
 import { ChevronRightIcon } from '@heroicons/react/outline'
-import { unwrappedToken } from '../../../functions/currency/wrappedCurrency'
+import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
+import { unwrappedToken } from 'functions/currency/wrappedCurrency'
+import React, { Fragment, memo } from 'react'
 
 const SwapRoute = memo(({ trade }: { trade: Trade<Currency, Currency, TradeType> }) => {
   return (

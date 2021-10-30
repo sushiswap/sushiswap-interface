@@ -1,12 +1,12 @@
-import React, { FC, useState } from 'react'
-import { useLingui } from '@lingui/react'
-import Typography from '../../../components/Typography'
-import { t } from '@lingui/macro'
 import { QuestionMarkCircleIcon, XIcon } from '@heroicons/react/solid'
-import HeadlessUiModal from '../../../components/Modal/HeadlessUIModal'
-import Button from '../../../components/Button'
-import Switch from '../../../components/Switch'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import HeadlessUiModal from 'components/Modal/HeadlessUIModal'
+import Switch from 'components/Switch'
+import Typography from 'components/Typography'
 import Image from 'next/image'
+import React, { FC, useState } from 'react'
 
 const BentoBoxFundingSourceModal: FC = () => {
   const { i18n } = useLingui()
@@ -16,7 +16,7 @@ const BentoBoxFundingSourceModal: FC = () => {
     <HeadlessUiModal
       trigger={
         <div className="flex items-center justify-center lg:w-4 lg:h-4 rounded cursor-pointer">
-          <QuestionMarkCircleIcon className="lg:w-4 lg:h-4 w-6 h-6 text-high-emphesis" />
+          <QuestionMarkCircleIcon className="w-4 h-4 text-high-emphesis" />
         </div>
       }
     >

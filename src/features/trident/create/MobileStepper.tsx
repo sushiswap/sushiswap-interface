@@ -1,8 +1,9 @@
+import { classNames } from 'functions'
 import React, { FC } from 'react'
 import { useRecoilState } from 'recoil'
+
 import { currentStepAtom } from './context/atoms'
 import { activeStepColor, completedStepGradient, stepAheadColor, StepProps, stepTitleText } from './StepConstants'
-import { classNames } from '../../../functions'
 
 const Step: FC<StepProps> = ({ stepNum, title, currentStep, stepSetter }) => {
   const isActive = stepNum === currentStep

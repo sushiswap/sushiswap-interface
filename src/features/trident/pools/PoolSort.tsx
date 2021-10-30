@@ -1,9 +1,10 @@
-import React, { FC, useState } from 'react'
-import { ChevronDownIcon } from '@heroicons/react/solid'
 import { Menu, Transition } from '@headlessui/react'
-import { classNames } from '../../../functions'
-import { sortTableFuncAtom } from './context/atoms'
+import { ChevronDownIcon } from '@heroicons/react/solid'
+import { classNames } from 'functions'
+import React, { FC, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+
+import { sortTableFuncAtom } from './context/atoms'
 
 enum PoolSortOption {
   TVL = 'TVL Highest to Lowest',

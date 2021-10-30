@@ -1,4 +1,5 @@
 import { atom } from 'recoil'
+
 import { PoolType } from '../../types'
 
 export type CreatePoolStep = 1 | 2 | 3

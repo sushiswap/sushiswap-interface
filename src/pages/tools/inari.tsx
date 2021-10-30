@@ -1,31 +1,25 @@
-import React, { useEffect } from 'react'
-import {
-  useDerivedInariState,
-  useInariState,
-  useInariStrategies,
-  useSelectedInariStrategy,
-} from '../../state/inari/hooks'
-
 import { ArrowRightIcon } from '@heroicons/react/outline'
-import BalancePanel from '../../features/inari/BalancePanel'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
-import Container from '../../components/Container'
-import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import { Field } from '../../state/inari/types'
+import Container from 'components/Container'
+import DoubleGlowShadow from 'components/DoubleGlowShadow'
+import Typography from 'components/Typography'
+import BalancePanel from 'features/inari/BalancePanel'
+import InariButton from 'features/inari/Button'
+import InariDescription from 'features/inari/InariDescription'
+import SideSwitch from 'features/inari/SideSwitch'
+import StrategySelector from 'features/inari/StrategySelector'
+import StrategyStepDisplay from 'features/inari/StrategyStepDisplay'
+import NetworkGuard from 'guards/Network'
 import Head from 'next/head'
 import Image from 'next/image'
-import InariButton from '../../features/inari/Button'
-import InariDescription from '../../features/inari/InariDescription'
-import NetworkGuard from '../../guards/Network'
-import SideSwitch from '../../features/inari/SideSwitch'
-import StrategySelector from '../../features/inari/StrategySelector'
-import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
-import Typography from '../../components/Typography'
-import { setStrategy } from '../../state/inari/actions'
-import { t } from '@lingui/macro'
-import { useAppDispatch } from '../../state/hooks'
-import { useLingui } from '@lingui/react'
-import useStakeSushiToBentoStrategy from '../../state/inari/strategies/useStakeSushiToBentoStrategy'
+import React, { useEffect } from 'react'
+import { useAppDispatch } from 'state/hooks'
+import { setStrategy } from 'state/inari/actions'
+import { useDerivedInariState, useInariState, useSelectedInariStrategy } from 'state/inari/hooks'
+import useStakeSushiToBentoStrategy from 'state/inari/strategies/useStakeSushiToBentoStrategy'
+import { Field } from 'state/inari/types'
 
 const Inari = () => {
   const { i18n } = useLingui()

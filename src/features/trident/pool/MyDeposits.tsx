@@ -1,9 +1,10 @@
-import { FC } from 'react'
-import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
-import ListPanel from '../../../components/ListPanel'
 import { useLingui } from '@lingui/react'
+import ListPanel from 'components/ListPanel'
+import Typography from 'components/Typography'
+import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { poolAtom } from '../context/atoms'
 
 const MyDeposits: FC = () => {

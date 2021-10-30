@@ -1,5 +1,6 @@
-import Input from '../Input'
 import React from 'react'
+
+import Input from '../Input'
 
 interface PercentInputPanelProps {
   value: string

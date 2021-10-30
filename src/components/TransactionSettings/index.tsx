@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react'
-import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks'
-
-import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
-import { Percent } from '@sushiswap/core-sdk'
-import QuestionHelper from '../QuestionHelper'
-import Typography from '../Typography'
-import { classNames } from '../../functions'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Percent } from '@sushiswap/core-sdk'
+import React, { useRef, useState } from 'react'
+
+import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
+import { classNames } from '../../functions'
+import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks'
 import Button from '../Button'
+import QuestionHelper from '../QuestionHelper'
+import Typography from '../Typography'
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',

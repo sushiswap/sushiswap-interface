@@ -1,9 +1,9 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/core-sdk'
 import React, { FunctionComponent, useMemo } from 'react'
 
-import Logo, { UNKNOWN_ICON } from '../Logo'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import useHttpLocations from '../../hooks/useHttpLocations'
+import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
+import Logo, { UNKNOWN_ICON } from '../Logo'
 
 const BLOCKCHAIN = {
   [ChainId.ETHEREUM]: 'ethereum',

@@ -1,5 +1,6 @@
-import Popover, { PopoverProps } from '../Popover'
 import React, { ReactNode, useCallback, useState } from 'react'
+
+import Popover, { PopoverProps } from '../Popover'
 
 interface TooltipProps extends Omit<PopoverProps, 'content'> {
   text: ReactNode

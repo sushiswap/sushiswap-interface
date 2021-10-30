@@ -1,11 +1,10 @@
 // CONVENTION formatFoo -> string
 
-import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/core-sdk'
-
+import { getAddress } from '@ethersproject/address'
 import { BigNumberish } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
+import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/core-sdk'
 import Numeral from 'numeral'
-import { getAddress } from '@ethersproject/address'
 
 export const capitalize = (s) => {
   if (typeof s !== 'string') return ''

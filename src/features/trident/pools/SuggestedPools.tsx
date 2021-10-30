@@ -1,11 +1,12 @@
-import { FC, useState } from 'react'
-import PoolCard from './PoolCard'
-import Typography from '../../../components/Typography'
-import ViewMore from '../../../components/ViewMore'
-import { useLingui } from '@lingui/react'
+import { MinusSmIcon, PlusSmIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
-import Switch from '../../../components/Switch'
-import { PlusSmIcon, MinusSmIcon } from '@heroicons/react/solid'
+import { useLingui } from '@lingui/react'
+import Switch from 'components/Switch'
+import Typography from 'components/Typography'
+import ViewMore from 'components/ViewMore'
+import { FC, useState } from 'react'
+
+import PoolCard from './PoolCard'
 
 interface SuggestedPools {}
 

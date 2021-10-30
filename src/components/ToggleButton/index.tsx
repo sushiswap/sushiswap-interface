@@ -1,5 +1,6 @@
-import { Children, ComponentProps, FC, cloneElement, isValidElement } from 'react'
 import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
+import { Children, cloneElement, ComponentProps, FC, isValidElement } from 'react'
+
 import { classNames } from '../../functions'
 import Typography from '../Typography'
 

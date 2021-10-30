@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, XIcon } from '@heroicons/react/outline'
-
 import React, { FC } from 'react'
+
 import Typography from '../Typography'
 
 interface ModalHeaderProps {

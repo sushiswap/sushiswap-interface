@@ -1,7 +1,8 @@
 import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
-import { LiquidityMode, PoolAtomType } from '../types'
+import { toAmountCurrencyAmount } from 'functions'
 import { atom, selector, selectorFamily } from 'recoil'
-import { toAmountCurrencyAmount } from '../../../functions'
+
+import { LiquidityMode, PoolAtomType } from '../types'
 
 export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 export const DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)

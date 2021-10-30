@@ -1,13 +1,14 @@
-import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { TableInstance } from '../../transactions/types'
+import { classNames } from 'functions'
+import React, { FC } from 'react'
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
-import { usePoolsTableData } from './usePoolsTableData'
-import { classNames } from '../../../functions'
+
 import { TablePageToggler } from '../../transactions/TablePageToggler'
-import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
+import { TableInstance } from '../../transactions/types'
 import { SearchCategoryLabel } from './SearchCategoryLabel'
+import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
+import { usePoolsTableData } from './usePoolsTableData'
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()

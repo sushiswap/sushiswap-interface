@@ -1,9 +1,9 @@
-import { ChainId, Currency, CurrencyAmount, Ether, Percent, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
-import React, { useCallback, useMemo } from 'react'
+import { Currency, Percent, Trade as V2Trade,TradeType } from '@sushiswap/core-sdk'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
   TransactionErrorContent,
-} from '../../../modals/TransactionConfirmationModal'
+} from 'modals/TransactionConfirmationModal'
+import React, { useCallback, useMemo } from 'react'
 
 import SwapModalFooter from './SwapModalFooter'
 import SwapModalHeader from './SwapModalHeader'

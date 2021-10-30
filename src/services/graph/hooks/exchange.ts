@@ -1,3 +1,5 @@
+import { ChainId } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
 import {
   getAlcxPrice,
   getAvaxPrice,
@@ -22,13 +24,10 @@ import {
   getTokens,
   getTruPrice,
   getYggPrice,
-} from '../fetchers'
+} from 'services/graph/fetchers'
+import { useBlock } from 'services/graph/hooks/blocks'
+import { ethPriceQuery } from 'services/graph/queries'
 import useSWR, { SWRConfiguration } from 'swr'
-
-import { ChainId } from '@sushiswap/core-sdk'
-import { ethPriceQuery } from '../queries'
-import { useActiveWeb3React } from '../../../hooks'
-import { useBlock } from './blocks'
 
 interface useFactoryProps {
   timestamp?: number

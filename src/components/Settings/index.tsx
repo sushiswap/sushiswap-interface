@@ -1,10 +1,14 @@
+import { AdjustmentsIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Percent } from '@sushiswap/core-sdk'
 import React, { useRef, useState } from 'react'
-import { useExpertModeManager, useUserSingleHopOnly, useUserTransactionTTL } from '../../state/user/hooks'
-import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
-import { AdjustmentsIcon } from '@heroicons/react/solid'
+import { useActiveWeb3React } from '../../hooks'
+import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import { ApplicationModal } from '../../state/application/actions'
+import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from '../../state/user/hooks'
 import Button from '../Button'
 import Modal from '../Modal'
 import ModalHeader from '../ModalHeader'
@@ -12,10 +16,6 @@ import QuestionHelper from '../QuestionHelper'
 import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
 import Typography from '../Typography'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks'
-import { useLingui } from '@lingui/react'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
@@ -44,7 +44,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
         <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90" />
       </div>
       {open && (
-        <div className="absolute top-14 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 border-2 border-dark-800 rounded w-80 shadow-lg">
+        <div className="absolute top-14 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 border border-dark-700 rounded w-80 shadow-lg">
           <div className="p-4 space-y-4">
             <Typography weight={700} className="text-high-emphesis">
               {i18n._(t`Transaction Settings`)}

@@ -1,6 +1,7 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import NavLink from '../../components/NavLink'
 import React from 'react'
+
+import NavLink from '../../components/NavLink'
 import { useActiveWeb3React } from '../../hooks'
 import { useWalletModalToggle } from '../../state/application/hooks'
 

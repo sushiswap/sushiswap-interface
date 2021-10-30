@@ -1,15 +1,16 @@
-import React, { FC } from 'react'
-import { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import Typography from '../../../../components/Typography'
-import { t } from '@lingui/macro'
-import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import Typography from 'components/Typography'
+import { TridentBody, TridentHeader } from 'layouts/Trident'
+import React, { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
+
 import { currentStepAtom } from '../context/atoms'
-import { SetAssetPrice } from './SetAssetPrice'
-import { DepositAssets } from './DepositAssets'
 import { MobileStepper } from '../MobileStepper'
+import { DepositAssets } from './DepositAssets'
+import { SetAssetPrice } from './SetAssetPrice'
 
 export const StepThreeClassic: FC = () => {
   const { i18n } = useLingui()
