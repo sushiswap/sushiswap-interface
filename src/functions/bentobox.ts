@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { CurrencyAmount, Rebase, Token, ZERO, JSBI } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI,Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 
 export function toAmount(token, shares: BigNumber): BigNumber {
   // console.log('toAmount', token, shares)

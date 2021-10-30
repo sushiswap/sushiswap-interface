@@ -4,8 +4,8 @@ import { parseUnits } from '@ethersproject/units'
 import { useCallback, useEffect, useState } from 'react'
 
 import Fraction from '../entities/bignumber/Fraction'
-import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
+import { useTransactionAdder } from '../state/transactions/hooks'
 import { useSushiBarContract, useSushiContract } from './useContract'
 
 const useSushiBar = () => {

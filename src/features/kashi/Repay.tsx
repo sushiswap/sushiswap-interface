@@ -18,8 +18,8 @@ import { e10, maximum, minimum,ZERO } from '../../functions/math'
 import { tryParseAmount } from '../../functions/parse'
 import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
 import { useCurrency } from '../../hooks/Tokens'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useV2TradeExactOut } from '../../hooks/useV2Trades'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import {
   useExpertModeManager,
   useUserSlippageToleranceWithDefault,

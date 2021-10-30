@@ -1,13 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { Feature } from 'enums'
+import { featureEnabled } from 'functions/feature'
 import Image from 'next/image'
 import React, { FC } from 'react'
-
-import { featureEnabled } from 'functions/feature'
-import { Feature } from 'enums'
 import { useActiveWeb3React } from 'services/web3'
 import { useETHBalances } from 'state/wallet/hooks'
+
 import LanguageSwitch from '../LanguageSwitch'
 import NavLink from '../NavLink'
 import QuestionHelper from '../QuestionHelper'

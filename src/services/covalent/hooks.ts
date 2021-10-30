@@ -1,4 +1,3 @@
-import { useActiveWeb3React } from 'services/web3'
 import {
   getBlock,
   getBlockHeights,
@@ -17,6 +16,7 @@ import {
   getTransaction,
   getTransfers,
 } from 'services/covalent/fetchers'
+import { useActiveWeb3React } from 'services/web3'
 import useSWR from 'swr'
 
 // CLASS A

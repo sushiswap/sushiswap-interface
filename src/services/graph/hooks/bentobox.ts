@@ -1,18 +1,18 @@
+import { Feature } from 'enums'
+import stringify from 'fast-json-stable-stringify'
 import { featureEnabled } from 'functions/feature'
-import { useActiveWeb3React } from 'services/web3'
 import {
   getBentoBox,
   getBentoStrategies,
   getBentoTokens,
   getBentoUserTokens,
+  getClones,
   getKashiPairs,
   getUserKashiPairs,
-  getClones,
 } from 'services/graph/fetchers'
 import { useBlock } from 'services/graph/hooks'
-import { Feature } from 'enums'
+import { useActiveWeb3React } from 'services/web3'
 import useSWR, { SWRConfiguration } from 'swr'
-import stringify from 'fast-json-stable-stringify'
 
 interface useKashiPairsProps {
   timestamp?: number

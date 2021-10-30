@@ -10,11 +10,11 @@ import Modal from 'components/Modal'
 import ModalHeader from 'components/ModalHeader'
 import { RowFixed } from 'components/Row'
 import { getExplorerLink } from 'functions/explorer'
-import { useActiveWeb3React } from 'services/web3'
 import useAddTokenToMetaMask from 'hooks/useAddTokenToMetaMask'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 import { AlertTriangle, ArrowUpCircle } from 'react-feather'
+import { useActiveWeb3React } from 'services/web3'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void

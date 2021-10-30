@@ -1,11 +1,10 @@
 import { Currency, CurrencyAmount, JSBI, Rebase, Token } from '@sushiswap/core-sdk'
-import { useMemo } from 'react'
-
 import { toAmountCurrencyAmount } from 'app/functions'
+import { useBoringHelperContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useSingleCallResult } from 'app/state/multicall/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
-import { useActiveWeb3React } from 'app/services/web3'
-import { useBoringHelperContract } from 'app/hooks/useContract'
+import { useMemo } from 'react'
 
 export const useBentoBalances = (tokens?: Token[]) => {
   const { account } = useActiveWeb3React()

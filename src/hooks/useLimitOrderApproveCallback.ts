@@ -6,12 +6,12 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { calculateGasMargin,ZERO } from '../functions'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { setLimitOrderApprovalPending } from '../state/limit-order/actions'
 import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from '../state/limit-order/hooks'
 import { Field } from '../state/swap/actions'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
 
 export enum BentoApprovalState {

@@ -1,13 +1,13 @@
 import { Popover } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ANALYTICS_URL } from 'app/constants'
+import { Feature } from 'enums'
+import { featureEnabled } from 'functions/feature'
 import Link from 'next/link'
 import React, { FC } from 'react'
-
-import { ANALYTICS_URL } from 'app/constants'
-import { featureEnabled } from 'functions/feature'
-import { Feature } from 'enums'
 import { useActiveWeb3React } from 'services/web3'
+
 import ExternalLink from '../ExternalLink'
 import { NAV_BASE_CLASS } from './styles'
 

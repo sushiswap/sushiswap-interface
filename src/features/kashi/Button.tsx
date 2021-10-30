@@ -7,9 +7,9 @@ import Alert from '../../components/Alert'
 import Button from '../../components/Button'
 import Dots from '../../components/Dots'
 import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
 import useKashiApproveCallback, { BentoApprovalState } from '../../hooks/useKashiApproveCallback'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 
 export function KashiApproveButton({ content, color }: any): any {
   const { i18n } = useLingui()

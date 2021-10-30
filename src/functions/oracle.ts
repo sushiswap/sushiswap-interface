@@ -1,4 +1,4 @@
-import { CHAINLINK_ORACLE_ADDRESS, ChainId } from '@sushiswap/core-sdk'
+import { ChainId,CHAINLINK_ORACLE_ADDRESS } from '@sushiswap/core-sdk'
 import { ChainlinkOracle } from 'entities/oracles'
 import { IOracle } from 'interfaces'
 

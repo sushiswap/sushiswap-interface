@@ -6,8 +6,8 @@ import Lottie from 'lottie-react'
 import React, { useCallback, useState } from 'react'
 
 import selectCoinAnimation from '../../animation/select-coin.json'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import CurrencyLogo from '../CurrencyLogo'
 
 interface CurrencySelectPanelProps {

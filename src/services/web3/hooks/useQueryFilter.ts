@@ -1,7 +1,7 @@
-import { ChainId } from '@sushiswap/core-sdk'
 import { Contract } from '@ethersproject/contracts'
-import useSWR from 'swr'
+import { ChainId } from '@sushiswap/core-sdk'
 import stringify from 'fast-json-stable-stringify'
+import useSWR from 'swr'
 
 async function queryFilter(contract: Contract, event, fromBlockOrBlockHash, toBlock) {
   return await contract.queryFilter(event, fromBlockOrBlockHash, toBlock)

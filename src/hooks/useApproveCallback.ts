@@ -4,8 +4,8 @@ import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade,Tra
 import { useCallback, useMemo } from 'react'
 
 import { calculateGasMargin } from '../functions/trade'
-import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
+import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { useTokenContract } from './useContract'
 import { useTokenAllowance } from './useTokenAllowance'
 

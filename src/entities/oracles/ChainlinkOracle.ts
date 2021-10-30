@@ -1,9 +1,10 @@
-import { ChainId, Token } from '@sushiswap/core-sdk'
-import { CHAINLINK_PRICE_FEED_MAP } from 'config/oracles/chainlink'
-import { Oracle } from './Oracle'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
+import { ChainId, Token } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'config/oracles/chainlink'
 import { e10 } from 'functions/math'
+
+import { Oracle } from './Oracle'
 
 export class ChainlinkOracle extends Oracle {
   constructor(pair, chainId: ChainId, tokens?: Token[]) {

@@ -1,15 +1,15 @@
 import { splitSignature } from '@ethersproject/bytes'
 import { AddressZero, HashZero } from '@ethersproject/constants'
 import { KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import KashiCooker, { signMasterContractApproval } from 'entities/KashiCooker'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
-
-import KashiCooker, { signMasterContractApproval } from 'entities/KashiCooker'
 import { useActiveWeb3React } from 'services/web3'
 import { setKashiApprovalPending } from 'state/application/actions'
 import { useKashiApprovalPending } from 'state/application/hooks'
 import { useBentoMasterContractAllowed } from 'state/bentobox/hooks'
 import { useTransactionAdder } from 'state/transactions/hooks'
+
 import { useBentoBoxContract } from './useContract'
 
 export enum BentoApprovalState {

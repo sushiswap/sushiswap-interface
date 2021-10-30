@@ -2,10 +2,10 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from 'functions'
-import { useActiveWeb3React } from 'services/web3'
 import { useBentoOrWalletBalances } from 'hooks/useBentoOrWalletBalance'
 import { useCallback, useMemo } from 'react'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+import { useActiveWeb3React } from 'services/web3'
 
 import {
   bentoboxRebasesAtom,

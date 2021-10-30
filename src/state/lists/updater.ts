@@ -2,10 +2,10 @@ import { getVersionUpgrade, minVersionBump,VersionUpgrade } from '@uniswap/token
 import { useCallback, useEffect } from 'react'
 
 import { UNSUPPORTED_LIST_URLS } from '../../config/token-lists'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useFetchListCallback } from '../../hooks/useFetchListCallback'
 import useInterval from '../../hooks/useInterval'
 import useIsWindowVisible from '../../hooks/useIsWindowVisible'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useAppDispatch } from '../hooks'
 import { acceptListUpdate } from './actions'
 import { useActiveListUrls } from './hooks'

@@ -1,9 +1,9 @@
-import { useActiveWeb3React } from 'services/web3'
 import useBentoRebases from 'hooks/useBentoRebases'
 import { useTotalSupply } from 'hooks/useTotalSupply'
 import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import { useEffect, useMemo } from 'react'
 import { useSetRecoilState } from 'recoil'
+import { useActiveWeb3React } from 'services/web3'
 import { useTokenBalance } from 'state/wallet/hooks'
 
 import { bentoboxRebasesAtom, currenciesAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'

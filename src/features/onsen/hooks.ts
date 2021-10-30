@@ -13,8 +13,8 @@ import zip from 'lodash/zip'
 import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { SUSHI } from '../../config/tokens'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks/useContract'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
 import { Chef } from './enum'
 

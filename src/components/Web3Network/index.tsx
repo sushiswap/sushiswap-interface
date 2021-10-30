@@ -2,8 +2,8 @@ import Image from 'next/image'
 import React from 'react'
 
 import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import NetworkModel from '../../modals/NetworkModal'
+import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useNetworkModalToggle } from '../../state/application/hooks'
 
 function Web3Network(): JSX.Element | null {

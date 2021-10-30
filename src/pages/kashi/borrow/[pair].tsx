@@ -12,12 +12,12 @@ import Provider, { useKashiInfo, useKashiPair } from 'features/kashi/context'
 import { formatNumber, formatPercent } from 'functions/format'
 import { useUSDCPrice } from 'hooks'
 import { useToken } from 'hooks/Tokens'
-import { useActiveWeb3React } from 'services/web3'
 import { useV2Pair } from 'hooks/useV2Pairs'
 import Layout from 'layouts/Kashi'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback } from 'react'
+import { useActiveWeb3React } from 'services/web3'
 import { useTransactionAdder } from 'state/transactions/hooks'
 
 function Pair() {
