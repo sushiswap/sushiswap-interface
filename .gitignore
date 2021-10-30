@@ -18,8 +18,7 @@ public/sw.js.map
 public/workbox*.js
 public/workbox*.js.map
 
-/locale/_build/
-/locale/*.*
+locale/
 
 .env
 

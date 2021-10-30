@@ -9,7 +9,6 @@
     "build": "yarn lingui && next build",
     "start": "next start",
     "lingui": "lingui extract --clean --overwrite && lingui compile",
-    "lokalise": "lokalise2 --config lokalise.yaml file download --format po --unzip-to . --original-filenames=false",
     "circular": "madge --circular src --extensions ts,tsx,js,jsx",
     "unused": "next-unused",
     "prepare": "husky install",
@@ -20,7 +19,8 @@
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --collectCoverage",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "postinstall": "yarn lingui"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
