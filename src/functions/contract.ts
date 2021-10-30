@@ -5,9 +5,9 @@ import { Contract } from '@ethersproject/contracts'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { ChainId, ROUTER_ADDRESS } from '@sushiswap/core-sdk'
 
-import IUniswapV2Router02ABI from '../constants/abis/uniswap-v2-router-02.json'
-import IUniswapV2Router02NoETHABI from '../constants/abis/uniswap-v2-router-02-no-eth.json'
-import { isAddress } from '../functions/validate'
+import IUniswapV2Router02ABI from 'constants/abis/uniswap-v2-router-02.json'
+import IUniswapV2Router02NoETHABI from 'constants/abis/uniswap-v2-router-02-no-eth.json'
+import { isAddress } from 'functions/validate'
 
 // account is not optional
 export function getSigner(library: Web3Provider, account: string): JsonRpcSigner {

@@ -11,7 +11,6 @@ export class ChainlinkOracle extends Oracle {
     this.name = 'Chainlink'
     this.valid = this.validate()
   }
-
   private validate() {
     const mapping = CHAINLINK_PRICE_FEED_MAP[this.chainId]
     if (!mapping) {

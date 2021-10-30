@@ -3,7 +3,7 @@ import { MaxUint256 } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
 import { useCallback, useEffect, useState } from 'react'
 
-import Fraction from '../entities/Fraction'
+import Fraction from '../entities/bignumber/Fraction'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useSushiBarContract, useSushiContract } from './useContract'

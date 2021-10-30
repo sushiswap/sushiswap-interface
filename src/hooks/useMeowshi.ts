@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { MaxUint256 } from '@ethersproject/constants'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import Fraction from '../entities/Fraction'
+import Fraction from '../entities/bignumber/Fraction'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { ApprovalState } from './useApproveCallback'

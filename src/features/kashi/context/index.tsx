@@ -1,19 +1,14 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import {
-  ChainId,
-  KASHI_ADDRESS,
-  NATIVE,
-  WNATIVE_ADDRESS,
-} from '@sushiswap/core-sdk'
+import { ChainId, KASHI_ADDRESS, NATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { bentobox } from '@sushiswap/sushi-data'
-import Fraction from 'entities/Fraction'
-import { getOracle } from 'entities/Oracle'
+import { Fraction } from 'entities/bignumber'
+import { getOracle } from 'functions/oracle'
 import { toAmount, toShare } from 'functions/bentobox'
 import { getCurrency } from 'functions/currency'
 import { accrue, accrueTotalAssetWithFee, easyAmount, getUSDValue, interestAccrue, takeFee } from 'functions/kashi'
-import { e10, maximum, minimum,ZERO } from 'functions/math'
+import { e10, maximum, minimum, ZERO } from 'functions/math'
 import { toElastic } from 'functions/rebase'
 import { useAllTokens } from 'hooks/Tokens'
 import { useActiveWeb3React } from 'hooks/useActiveWeb3React'
