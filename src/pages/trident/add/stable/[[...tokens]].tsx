@@ -1,12 +1,13 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { NATIVE } from '@sushiswap/core-sdk'
 import Button from 'components/Button'
 import SettingsTab from 'components/Settings'
 import Typography from 'components/Typography'
-import FixedRatioHeader from 'features/trident/add/FixedRatioHeader'
-import WeightedStandardMode from 'features/trident/add/weighted/WeightedStandardMode'
-import WeightedZapMode from 'features/trident/add/weighted/WeightedZapMode'
+import { SUSHI } from 'config/tokens'
+import StableStandardMode from 'features/trident/add/stable/StableStandardMode'
+import StableZapMode from 'features/trident/add/stable/StableZapMode'
 import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
 import AddTransactionReviewModal from 'features/trident/create/old/CreateReviewModal'
 import DepositSubmittedModal from 'features/trident/DepositSubmittedModal'
@@ -15,7 +16,7 @@ import { LiquidityMode } from 'features/trident/types'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrency } from 'hooks/Tokens'
 import { useTotalSupply } from 'hooks/useTotalSupply'
-import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
+import { useTridentStablePool } from 'hooks/useTridentStablePools'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -23,7 +24,7 @@ import React, { useEffect } from 'react'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useTokenBalance } from 'state/wallet/hooks'
 
-const AddWeighted = () => {
+const AddStable = () => {
   const { account, chainId } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
@@ -33,16 +34,17 @@ const AddWeighted = () => {
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
-  const currencyA = useCurrency(query.tokens?.[0])
-  const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+  const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
+  const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
+  const stablePool = useTridentStablePool(currencyA, currencyB, 50)
+  const totalSupply = useTotalSupply(stablePool ? stablePool[1]?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, stablePool[1]?.liquidityToken)
 
   useEffect(() => {
-    if (!classicPool[1]) return
-    setPool(classicPool)
-  }, [chainId, classicPool, setPool])
+    if (!stablePool[1]) return
+    // TODO ramin: remove
+    setPool(stablePool)
+  }, [chainId, stablePool, setPool])
 
   useEffect(() => {
     if (!totalSupply) return
@@ -62,10 +64,11 @@ const AddWeighted = () => {
             color="blue"
             variant="outlined"
             size="sm"
-            className="rounded-full py-1 pl-2"
+            className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/weighted/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
+            {/*TODO ramin*/}
+            <Link href={`/trident/pool/stable/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
           {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
@@ -83,23 +86,24 @@ const AddWeighted = () => {
         {/*spacer*/}
         <div className="h-2" />
       </TridentHeader>
-
       <TridentBody>
         {/*TODO ramin*/}
         <ModeToggle onChange={() => {}} />
-        <FixedRatioHeader />
 
-        {liquidityMode === LiquidityMode.ZAP && <WeightedZapMode />}
-        {liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}
-
-        <AddTransactionReviewModal />
-        <DepositSubmittedModal />
+        <div className="flex flex-col mt-6">
+          {liquidityMode === LiquidityMode.ZAP && <StableZapMode />}
+          {liquidityMode === LiquidityMode.STANDARD && <StableStandardMode />}
+        </div>
       </TridentBody>
+
+      {/*TODO*/}
+      <AddTransactionReviewModal />
+      <DepositSubmittedModal />
     </>
   )
 }
 
-AddWeighted.Provider = RecoilRoot
-AddWeighted.Layout = TridentLayout
+AddStable.Provider = RecoilRoot
+AddStable.Layout = TridentLayout
 
-export default AddWeighted
+export default AddStable

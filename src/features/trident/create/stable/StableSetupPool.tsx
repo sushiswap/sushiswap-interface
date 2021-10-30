@@ -5,16 +5,16 @@ import AssetSelect from 'components/AssetSelect'
 import Button from 'components/Button'
 import ToggleButtonGroup from 'components/ToggleButton'
 import Typography from 'components/Typography'
+import { useIndependentAssetInputs } from 'features/trident/context/hooks/useIndependentAssetInputs'
 import { useActiveWeb3React } from 'hooks'
-import { HybridPoolState, useTridentHybridPool } from 'hooks/useTridentHybridPools'
+import { StablePoolState, useTridentStablePool } from 'hooks/useTridentStablePools'
 import React, { FC, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 
 import { poolCreationPageAtom } from '../../context/atoms'
-import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
 import { selectedFeeTierAtom } from '../context/atoms'
 
-const HybridSetupPool: FC = () => {
+const StableSetupPool: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [page, setPage] = useRecoilState(poolCreationPageAtom)
@@ -26,7 +26,7 @@ const HybridSetupPool: FC = () => {
   } = useIndependentAssetInputs()
 
   // TODO ramin a = null
-  const [poolState] = useTridentHybridPool(currencies[0], currencies[1], feeTier, null)
+  const [poolState] = useTridentStablePool(currencies[0], currencies[1], feeTier, null)
 
   const handleSelectedPoolTokens = useCallback(
     (currency, index) => {
@@ -43,7 +43,7 @@ const HybridSetupPool: FC = () => {
     ? i18n._(t`Select tokens`)
     : !feeTier
     ? i18n._(t`Select fee tier`)
-    : poolState === HybridPoolState.EXISTS
+    : poolState === StablePoolState.EXISTS
     ? i18n._(t`Pool already exists`)
     : ''
 
@@ -106,4 +106,4 @@ const HybridSetupPool: FC = () => {
   )
 }
 
-export default HybridSetupPool
+export default StableSetupPool

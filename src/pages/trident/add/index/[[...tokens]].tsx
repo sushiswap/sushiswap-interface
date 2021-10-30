@@ -4,9 +4,14 @@ import { useLingui } from '@lingui/react'
 import Button from 'components/Button'
 import SettingsTab from 'components/Settings'
 import Typography from 'components/Typography'
+import FixedRatioHeader from 'features/trident/add/FixedRatioHeader'
+import IndexStandardMode from 'features/trident/add/index/IndexStandardMode'
+import IndexZapMode from 'features/trident/add/index/IndexZapMode'
 import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import AddTransactionReviewModal from 'features/trident/create/old/CreateReviewModal'
+import DepositSubmittedModal from 'features/trident/DepositSubmittedModal'
 import ModeToggle from 'features/trident/ModeToggle'
-import RemoveTransactionReviewStandardModal from 'features/trident/remove/classic/RemoveTransactionReviewStandardModal'
+import { LiquidityMode } from 'features/trident/types'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrency } from 'hooks/Tokens'
 import { useTotalSupply } from 'hooks/useTotalSupply'
@@ -18,8 +23,8 @@ import React, { useEffect } from 'react'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { useTokenBalance } from 'state/wallet/hooks'
 
-const RemoveWeighted = () => {
-  const { account } = useActiveWeb3React()
+const AddIndex = () => {
+  const { account, chainId } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
 
@@ -37,7 +42,7 @@ const RemoveWeighted = () => {
   useEffect(() => {
     if (!classicPool[1]) return
     setPool(classicPool)
-  }, [classicPool, setPool])
+  }, [chainId, classicPool, setPool])
 
   useEffect(() => {
     if (!totalSupply) return
@@ -51,26 +56,26 @@ const RemoveWeighted = () => {
 
   return (
     <>
-      <TridentHeader pattern="bg-bars-pattern">
+      <TridentHeader>
         <div className="flex flex-row justify-between">
           <Button
             color="blue"
             variant="outlined"
             size="sm"
-            className="py-1 pl-2 rounded-full"
+            className="rounded-full py-1 pl-2"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
-            <Link href={`/trident/pool/weighted/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/index/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
-          <SettingsTab />
+          {liquidityMode === LiquidityMode.ZAP && <SettingsTab />}
         </div>
         <div className="flex flex-col gap-2">
           <Typography variant="h2" weight={700} className="text-high-emphesis">
-            {i18n._(t`Remove Liquidity`)}
+            {i18n._(t`Add Liquidity`)}
           </Typography>
           <Typography variant="sm">
             {i18n._(
-              t`Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode.`
+              t`Deposit all pool tokens directly with Standard mode, or invest & rebalance with any asset in Zap mode.`
             )}
           </Typography>
         </div>
@@ -78,22 +83,23 @@ const RemoveWeighted = () => {
         {/*spacer*/}
         <div className="h-2" />
       </TridentHeader>
+
       <TridentBody>
         {/*TODO ramin*/}
-        <ModeToggle />
+        <ModeToggle onChange={() => {}} />
+        <FixedRatioHeader />
 
-        <>
-          {/*{liquidityMode === LiquidityMode.ZAP && <WeightedUnzapMode />}*/}
-          {/*{liquidityMode === LiquidityMode.STANDARD && <WeightedStandardMode />}*/}
-        </>
+        {liquidityMode === LiquidityMode.ZAP && <IndexZapMode />}
+        {liquidityMode === LiquidityMode.STANDARD && <IndexStandardMode />}
 
-        <RemoveTransactionReviewStandardModal />
+        <AddTransactionReviewModal />
+        <DepositSubmittedModal />
       </TridentBody>
     </>
   )
 }
 
-RemoveWeighted.Provider = RecoilRoot
-RemoveWeighted.Layout = TridentLayout
+AddIndex.Provider = RecoilRoot
+AddIndex.Layout = TridentLayout
 
-export default RemoveWeighted
+export default AddIndex

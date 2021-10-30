@@ -18,7 +18,7 @@ import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
 import TridentApproveGate from '../../TridentApproveGate'
 import TransactionDetails from './../TransactionDetails'
 
-const WeightedZapMode = () => {
+const IndexZapMode = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
@@ -111,4 +111,4 @@ const WeightedZapMode = () => {
   )
 }
 
-export default WeightedZapMode
+export default IndexZapMode

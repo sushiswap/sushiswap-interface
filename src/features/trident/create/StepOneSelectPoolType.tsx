@@ -42,13 +42,13 @@ export const StepOneSelectPoolType: FC = () => {
       </TridentHeader>
       <TridentBody maxWidth="full">
         <div className="grid lg:grid-cols-4 grid-cols-2 gap-3 select-none">
-          <PoolSelector title="Classic" active={poolSelected === PoolType.ConstantProduct} />
-          <PoolSelector title="Concentrated" active={poolSelected === PoolType.ConcentratedLiquidity} comingSoon />
-          <PoolSelector title="Index" active={poolSelected === PoolType.Weighted} comingSoon />
-          <PoolSelector title="Stable" active={poolSelected === PoolType.Hybrid} comingSoon />
+          <PoolSelector title="Classic" active={poolSelected === PoolType.Classic} />
+          <PoolSelector title="Concentrated" active={poolSelected === PoolType.Concentrated} comingSoon />
+          <PoolSelector title="Index" active={poolSelected === PoolType.Index} comingSoon />
+          <PoolSelector title="Stable" active={poolSelected === PoolType.Stable} comingSoon />
         </div>
 
-        {poolSelected === PoolType.ConstantProduct && <ClassicDescription />}
+        {poolSelected === PoolType.Classic && <ClassicDescription />}
       </TridentBody>
     </div>
   )

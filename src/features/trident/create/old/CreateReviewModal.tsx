@@ -62,10 +62,10 @@ const AddTransactionReviewModal: FC = () => {
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3 px-5">
             <Typography weight={700} variant="lg">
-              {selectedPoolType === PoolType.ConstantProduct && i18n._(t`You are creating a classic pool with:`)}
-              {selectedPoolType === PoolType.Weighted && i18n._(t`You are creating a weighted pool with:`)}
-              {selectedPoolType === PoolType.Hybrid && i18n._(t`You are creating a multi-asset pool with:`)}
-              {selectedPoolType === PoolType.ConcentratedLiquidity &&
+              {selectedPoolType === PoolType.Classic && i18n._(t`You are creating a classic pool with:`)}
+              {selectedPoolType === PoolType.Index && i18n._(t`You are creating a index pool with:`)}
+              {selectedPoolType === PoolType.Stable && i18n._(t`You are creating a multi-asset pool with:`)}
+              {selectedPoolType === PoolType.Concentrated &&
                 i18n._(t`You are creating a concentrated liquidity pool with:`)}
             </Typography>
             <ListPanel

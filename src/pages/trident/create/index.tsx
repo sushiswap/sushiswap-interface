@@ -17,8 +17,8 @@ const CreateNewPool = () => {
       <div className="flex w-full lg:mb-0 mb-10">
         <StepperSidebar />
         {currentStep === 1 && <StepOneSelectPoolType />}
-        {currentStep === 2 && selectedPool === PoolType.ConstantProduct && <StepTwoClassic />}
-        {currentStep === 3 && selectedPool === PoolType.ConstantProduct && <StepThreeClassic />}
+        {currentStep === 2 && selectedPool === PoolType.Classic && <StepTwoClassic />}
+        {currentStep === 3 && selectedPool === PoolType.Classic && <StepThreeClassic />}
       </div>
     </div>
   )

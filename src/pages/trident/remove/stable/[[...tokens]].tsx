@@ -21,7 +21,7 @@ import { useTokenBalance } from 'state/wallet/hooks'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
-const RemoveHybrid = () => {
+const RemoveStable = () => {
   const { account } = useActiveWeb3React()
   const { query } = useRouter()
   const { i18n } = useLingui()
@@ -64,7 +64,7 @@ const RemoveHybrid = () => {
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             {/*TODO ramin*/}
-            <Link href={`/trident/pool/hybrid/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
+            <Link href={`/trident/pool/stable/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>
           </Button>
           <SettingsTab />
         </div>
@@ -88,8 +88,8 @@ const RemoveHybrid = () => {
         <ModeToggle onChange={() => {}} />
 
         <>
-          {/*{liquidityMode === LiquidityMode.ZAP && <HybridUnzapMode />}*/}
-          {/*{liquidityMode === LiquidityMode.STANDARD && <HybridStandardMode />}*/}
+          {/*{liquidityMode === LiquidityMode.ZAP && <StableUnzapMode />}*/}
+          {/*{liquidityMode === LiquidityMode.STANDARD && <StableStandardMode />}*/}
         </>
 
         <RemoveTransactionReviewStandardModal />
@@ -98,7 +98,7 @@ const RemoveHybrid = () => {
   )
 }
 
-RemoveHybrid.Provider = RecoilRoot
-RemoveHybrid.Layout = TridentLayout
+RemoveStable.Provider = RecoilRoot
+RemoveStable.Layout = TridentLayout
 
-export default RemoveHybrid
+export default RemoveStable

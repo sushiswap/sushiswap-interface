@@ -18,7 +18,7 @@ import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
 import TridentApproveGate from '../../TridentApproveGate'
 import TransactionDetails from '../TransactionDetails'
 
-const HybridZapMode = () => {
+const StableZapMode = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
@@ -97,4 +97,4 @@ const HybridZapMode = () => {
   )
 }
 
-export default HybridZapMode
+export default StableZapMode

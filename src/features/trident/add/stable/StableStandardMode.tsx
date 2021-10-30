@@ -79,7 +79,7 @@ const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active =
   )
 }
 
-const HybridStandardMode: FC = () => {
+const StableStandardMode: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
@@ -287,4 +287,4 @@ const HybridStandardMode: FC = () => {
   )
 }
 
-export default HybridStandardMode
+export default StableStandardMode
