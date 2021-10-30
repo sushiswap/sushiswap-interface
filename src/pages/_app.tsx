@@ -72,8 +72,8 @@ function MyApp({ Component, pageProps, fallback }) {
         const messages = remoteLoader({ messages: remoteMessages, format: 'minimal' })
         i18n.load(locale, messages)
       } catch {
-        // Load fallback messages
-        const { messages } = await import(`@lingui/loader!./../../locale/${locale}.json?raw-lingui`)
+        // Load empty object
+        const messages = remoteLoader({ messages: {}, format: 'minimal' })
         i18n.load(locale, messages)
       }
 
