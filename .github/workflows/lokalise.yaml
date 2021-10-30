@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: 14.x
           cache: 'npm'
-      - run: npx run lingui --if-present
+      - run: npm install lingui
+      - run: npm run lingui
       - run: 'lokalise2 --token ${{ secrets.lokalise_secret }} --project-id 18927102617d34a34e1467.51119957 file upload --file locale/en.json --lang-iso en'
 
