@@ -32,7 +32,7 @@
       "app/state": ["./state"],
       "app/state/*": ["./state/*"],
       "app/types": ["./types"],
-      "app/types/*": ["./types/*"],
+      "app/types/*": ["./types/*"]
     },
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],

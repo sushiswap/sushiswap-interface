@@ -1,6 +1,6 @@
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from 'app/constants'
+import { updateVersion } from 'app/state/global/actions'
 import { createStore, Store } from 'redux'
-import { updateVersion } from 'state/global/actions'
 
 import reducer, { initialState, UserState } from './reducer'
 

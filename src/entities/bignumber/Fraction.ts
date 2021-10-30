@@ -1,9 +1,9 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { One, Zero } from '@ethersproject/constants'
 import { Fraction as SDKFraction } from '@sushiswap/core-sdk'
-import { formatBalance } from 'functions/format'
-import { parseBalance } from 'functions/parse'
-import { isEmptyValue } from 'functions/validate'
+import { formatBalance } from 'app/functions/format'
+import { parseBalance } from 'app/functions/parse'
+import { isEmptyValue } from 'app/functions/validate'
 
 export class Fraction {
   static BASE = BigNumber.from(10).pow(18)

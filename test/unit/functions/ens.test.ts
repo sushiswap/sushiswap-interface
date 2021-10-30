@@ -1,4 +1,4 @@
-import { parseENSAddress } from 'functions/ens'
+import { parseENSAddress } from 'app/functions/ens'
 
 describe('parseENSAddress', () => {
   it('test cases', () => {

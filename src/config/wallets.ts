@@ -1,16 +1,16 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { NetworkConnector } from 'entities/connectors/NetworkConnector'
+import { NetworkConnector } from 'app/entities/connectors'
 
 import RPC from './rpc'
+
+const supportedChainIds = Object.values(ChainId) as number[]
 
 export const network = new NetworkConnector({
   defaultChainId: 1,
   urls: RPC,
 })
-
-const supportedChainIds = Object.values(ChainId) as number[]
 
 export const injected = new InjectedConnector({
   supportedChainIds,
@@ -53,34 +53,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         rpc: RPC,
         bridge: 'https://bridge.walletconnect.org',
         qrcode: true,
-        supportedChainIds: [
-          1, // mainnet
-          3, // ropsten
-          4, // rinkeby
-          5, // goreli
-          42, // kovan
-          250, // fantom
-          4002, // fantom testnet
-          137, // matic
-          80001, // matic testnet
-          100, // xdaiW
-          56, // binance smart chain
-          97, // binance smart chain testnet
-          1287, // moonbase
-          43114, // avalanche
-          43113, // fuji
-          128, // heco
-          256, // heco testnet
-          1666600000, // harmony
-          1666700000, // harmony testnet
-          66, // okex testnet
-          65, // okex testnet
-          42161, // arbitrum
-          42220, // celo
-          11297108109, // palm
-          1285, // moonriver
-        ],
-        // pollingInterval: 15000,
+        supportedChainIds,
       })
     },
     name: 'WalletConnect',
@@ -128,6 +101,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         url: RPC[ChainId.ETHEREUM],
         appName: 'SushiSwap',
         appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
+        darkMode: true,
       })
     },
     name: 'Coinbase Wallet',

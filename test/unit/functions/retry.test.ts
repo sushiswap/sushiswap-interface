@@ -1,4 +1,4 @@
-import { retry, RetryableError } from 'functions/retry'
+import { retry, RetryableError } from 'app/functions/retry'
 
 describe('retry', () => {
   function makeFn<T>(fails: number, result: T, retryable = true): () => Promise<T> {

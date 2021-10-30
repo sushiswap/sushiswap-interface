@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { AddressZero } from '@ethersproject/constants'
 import { ChainId, CurrencyAmount, Percent, Token } from '@sushiswap/core-sdk'
-import { calculateGasMargin, calculateSlippageAmount } from 'functions/trade'
+import { calculateGasMargin, calculateSlippageAmount } from 'app/functions/trade'
 
 describe('#calculateSlippageAmount', () => {
   it('bounds are correct', () => {

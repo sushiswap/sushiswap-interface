@@ -1,4 +1,4 @@
-import 'bootstrap'
+import 'app/bootstrap'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import {
@@ -8,20 +8,19 @@ import {
   MINIMUM_TARGET_UTILIZATION,
   STARTING_INTEREST_PER_YEAR,
 } from '@sushiswap/sdk'
-
 import {
-  e10,
-  ZERO,
   accrue,
   accrueTotalAssetWithFee,
   addBorrowFee,
+  e10,
   easyAmount,
   getFraction,
   getUSDString,
   getUSDValue,
   interestAccrue,
   takeFee,
-} from 'functions'
+  ZERO,
+} from 'app/functions'
 
 describe('kashi functions', () => {
   const pair = {
