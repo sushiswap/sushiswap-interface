@@ -23,7 +23,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 import TridentRecoilRoot from '../../../../features/trident/TridentRecoilRoot'
-import { PoolType } from '@sushiswap/sdk'
+import { PoolType } from '@sushiswap/tines'
 
 const AddClassic = () => {
   const { i18n } = useLingui()

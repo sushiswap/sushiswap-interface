@@ -7,7 +7,7 @@ import { useTotalSupply } from '../../hooks/useTotalSupply'
 import { useTokenBalance } from '../../state/wallet/hooks'
 import useBentoRebases from '../../hooks/useBentoRebases'
 import { useActiveWeb3React } from '../../hooks'
-import { PoolType } from '@sushiswap/sdk'
+import { PoolType } from '@sushiswap/tines'
 
 const TridentClassicRecoilRoot: FC = (props) => {
   const { account } = useActiveWeb3React()

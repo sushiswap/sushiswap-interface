@@ -17,7 +17,7 @@ import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import { useRecoilValue } from 'recoil'
 import TridentRecoilRoot from '../../../../features/trident/TridentRecoilRoot'
-import { PoolType } from '@sushiswap/sdk'
+import { PoolType } from '@sushiswap/tines'
 import React from 'react'
 
 const Pool = () => {
