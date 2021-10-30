@@ -1,4 +1,4 @@
-import Typography from 'components/Typography'
+import Typography from 'app/components/Typography'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { FC } from 'react'

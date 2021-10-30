@@ -1,10 +1,10 @@
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade,TradeType } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useMemo } from 'react'
 
 import { calculateGasMargin } from '../functions/trade'
-import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 import { useTokenContract } from './useContract'
 import { useTokenAllowance } from './useTokenAllowance'

@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
-import { toAmountCurrencyAmount } from 'functions'
+import { toAmountCurrencyAmount } from 'app/functions'
 import { atom, selector, selectorFamily } from 'recoil'
 
 import { LiquidityMode, PoolAtomType } from '../types'

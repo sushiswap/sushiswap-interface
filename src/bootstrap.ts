@@ -3,7 +3,7 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
-import { Fraction } from 'entities/bignumber'
+import { Fraction } from 'app/entities/bignumber'
 import React from 'react'
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {

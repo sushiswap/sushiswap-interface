@@ -1,7 +1,7 @@
+import { TableInstance } from 'app/features/transactions/types'
 import { useMemo } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { TableInstance } from '../../transactions/types'
 import { feeTiersFilterAtom, searchQueryAtom, showTWAPOnlyAtom, sortTableFuncAtom } from './context/atoms'
 
 const useInstantiateFilters = (setFilter: TableInstance['setFilter']) => {

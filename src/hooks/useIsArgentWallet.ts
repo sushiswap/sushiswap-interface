@@ -1,6 +1,6 @@
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
-import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { useArgentWalletDetectorContract } from './useContract'
 

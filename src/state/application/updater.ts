@@ -1,9 +1,9 @@
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import useDebounce from '../../hooks/useDebounce'
 import useIsWindowVisible from '../../hooks/useIsWindowVisible'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { updateBlockNumber } from './actions'
 
 export default function Updater(): null {

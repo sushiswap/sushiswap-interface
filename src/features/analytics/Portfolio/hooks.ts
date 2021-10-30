@@ -1,10 +1,8 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { usePositions } from 'features/onsen/hooks'
-import { getFraction } from 'functions'
-import { chainsWithFeature,Feature } from 'functions/feature'
-import { useActiveWeb3React } from 'hooks'
-import { uniq } from 'lodash'
-import { useMemo } from 'react'
+import { Feature } from 'app/enums'
+import { usePositions } from 'app/features/onsen/hooks'
+import { getFraction } from 'app/functions'
+import { chainsWithFeature } from 'app/functions/feature'
 import {
   useBentoUserTokens as useGetBentoUserTokens,
   useFarms,
@@ -14,8 +12,11 @@ import {
   useSushiPairs,
   useTokens,
   useUserKashiPairs as useGetUserKashiPairs,
-} from 'services/graph'
-import { useAssets } from 'services/zerion/hooks'
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAssets } from 'app/services/zerion/hooks'
+import { uniq } from 'lodash'
+import { useMemo } from 'react'
 
 export function useAllUserPairs() {
   let pairs = []

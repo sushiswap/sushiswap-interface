@@ -1,9 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback } from 'react'
 
-import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { AppState } from '../index'

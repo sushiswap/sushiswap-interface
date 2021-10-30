@@ -1,11 +1,11 @@
 import { Contract } from '@ethersproject/contracts'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useEffect, useMemo, useRef } from 'react'
 
 import { chunkArray } from '../../functions/array'
-import { retry,RetryableError } from '../../functions/retry'
+import { retry, RetryableError } from '../../functions/retry'
 import { useMulticall2Contract } from '../../hooks/useContract'
 import useDebounce from '../../hooks/useDebounce'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useBlockNumber } from '../application/hooks'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { AppState } from '../index'

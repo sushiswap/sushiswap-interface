@@ -1,12 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'components/Button'
-import { useActiveWeb3React } from 'hooks'
-import { ConstantProductPoolState, useTridentClassicPool } from 'hooks/useTridentClassicPools'
+import Button from 'app/components/Button'
+import { useIndependentAssetInputs } from 'app/features/trident/context/hooks/useIndependentAssetInputs'
+import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
 import { currentStepAtom, selectedFeeTierAtom } from '../context/atoms'
 
 export const StepTwoContinueButton: FC = () => {

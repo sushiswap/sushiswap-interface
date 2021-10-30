@@ -1,7 +1,7 @@
 import { Token } from '@sushiswap/core-sdk'
+import { tryParseAmount } from 'app/functions/parse'
 import { useMemo } from 'react'
 
-import { tryParseAmount } from '../../functions'
 import { useAppSelector } from '../hooks'
 import useStakeSushiToAaveStrategy from './strategies/useStakeSushiToAaveStrategy'
 import useStakeSushiToBentoStrategy from './strategies/useStakeSushiToBentoStrategy'

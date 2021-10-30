@@ -1,16 +1,16 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { NETWORK_LABEL } from 'config/networks'
-import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
-import AllocationTable from 'features/analytics/Portfolio/AllocationTable'
+import { NETWORK_LABEL } from 'app/config/networks'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import AllocationTable from 'app/features/analytics/Portfolio/AllocationTable'
 import {
   useAllUserFarms,
   useAllUserKashiPairs,
   useAllUserPairs,
   useBentoUserTokens,
   useUserAssets,
-} from 'features/analytics/Portfolio/hooks'
-import { formatNumber, shortenAddress } from 'functions'
-import { useActiveWeb3React } from 'hooks'
+} from 'app/features/analytics/Portfolio/hooks'
+import { formatNumber, shortenAddress } from 'app/functions/format'
+import { useActiveWeb3React } from 'app/services/web3'
 import { uniq } from 'lodash'
 import React, { useMemo, useState } from 'react'
 

@@ -1,11 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Dots from 'components/Dots'
-import Image from 'components/Image'
-import { getExplorerLink } from 'functions/explorer'
+import Dots from 'app/components/Dots'
+import Image from 'app/components/Image'
+import { getExplorerLink } from 'app/functions/explorer'
+import { useActiveWeb3React } from 'app/services/web3'
 import React from 'react'
 import { ArrowUpRight, CheckCircle } from 'react-feather'
-import { useActiveWeb3React } from 'services/web3'
 
 export default function TransactionList({ transactions }) {
   const { i18n } = useLingui()

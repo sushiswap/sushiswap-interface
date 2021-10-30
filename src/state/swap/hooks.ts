@@ -10,6 +10,7 @@ import {
   TradeType,
   WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -20,7 +21,6 @@ import useENS from '../../hooks/useENS'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { AppState } from '../index'
 import { useExpertModeManager, useUserSingleHopOnly } from '../user/hooks'

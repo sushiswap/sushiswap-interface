@@ -1,11 +1,13 @@
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { e10 } from 'functions'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useInariContract } from 'hooks'
-import { BentoPermit } from 'hooks/useBentoMasterApproveCallback'
-import useSushiPerXSushi from 'hooks/useXSushiPerSushi'
+import { e10 } from 'app/functions/math'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import { BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
+import { useInariContract } from 'app/hooks/useContract'
+import useSushiPerXSushi from 'app/hooks/useXSushiPerSushi'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useMemo, useState } from 'react'
 
-import { useTransactionAdder } from '../../transactions/hooks'
 import { useDerivedInariState } from '../hooks'
 import { Strategy, StrategyBalances, StrategyGeneralInfo, StrategyTokenDefinitions } from '../types'
 

@@ -8,14 +8,14 @@ import {
   MASTERCHEF_V2_ADDRESS,
   MINICHEF_ADDRESS,
 } from '@sushiswap/core-sdk'
+import { SUSHI } from 'app/config/tokens'
+import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
 import concat from 'lodash/concat'
 import zip from 'lodash/zip'
 import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
 
-import { SUSHI } from '../../config/tokens'
-import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks/useContract'
-import { useActiveWeb3React } from '../../services/web3/hooks/useActiveWeb3React'
-import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
 import { Chef } from './enum'
 
 export function useChefContract(chef: Chef) {

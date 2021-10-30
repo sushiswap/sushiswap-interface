@@ -21,6 +21,7 @@ import {
 } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
 import {
@@ -57,7 +58,6 @@ import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZENKO_ABI from '../constants/abis/zenko.json'
 import { getContract } from '../functions'
-import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 
 const UNI_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 

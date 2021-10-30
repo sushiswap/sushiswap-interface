@@ -1,13 +1,13 @@
 import { nanoid } from '@reduxjs/toolkit'
 import { ChainId } from '@sushiswap/core-sdk'
 import { TokenList } from '@uniswap/token-lists'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { resolveENSContentHash } from '../functions/ens'
 import { getNetworkLibrary } from '../functions/getNetworkLibrary'
 import { getTokenList } from '../functions/list'
-import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { AppDispatch } from '../state'
 import { fetchTokenList } from '../state/lists/actions'
 

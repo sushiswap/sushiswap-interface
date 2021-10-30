@@ -1,6 +1,6 @@
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { poolAtom } from 'features/trident/context/atoms'
-import { tryParseAmount } from 'functions'
+import { poolAtom } from 'app/features/trident/context/atoms'
+import { tryParseAmount } from 'app/functions/parse'
 import { atom, selector } from 'recoil'
 
 export const poolTokensSelector = selector<Record<string, Token>>({

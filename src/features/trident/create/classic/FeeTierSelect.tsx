@@ -1,6 +1,6 @@
 import { Fee } from '@sushiswap/trident-sdk'
-import Typography from 'components/Typography'
-import { classNames } from 'functions'
+import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions/styling'
 import React, { FC } from 'react'
 import { SetterOrUpdater } from 'recoil'
 
