@@ -34,7 +34,7 @@ export const StepTwoContinueButton: FC = () => {
 
   return (
     <Button disabled={Boolean(error)} className="w-72" color="gradient" variant="filled" onClick={() => setStep(3)}>
-      {error ? error : 'Continue'}
+      {error ? error : i18n._(t`Continue`)}
     </Button>
   )
 }

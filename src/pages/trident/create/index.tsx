@@ -1,9 +1,9 @@
+import { PoolType } from '@sushiswap/tines'
 import { StepThreeClassic } from 'features/trident/create/classic/StepThreeClassic'
 import { StepTwoClassic } from 'features/trident/create/classic/StepTwoClassic'
 import { currentStepAtom, selectedPoolTypeAtom } from 'features/trident/create/context/atoms'
 import { StepOneSelectPoolType } from 'features/trident/create/StepOneSelectPoolType'
 import { StepperSidebar } from 'features/trident/create/StepperSidebar'
-import { PoolType } from 'features/trident/types'
 import TridentLayout from 'layouts/Trident'
 import React from 'react'
 import { RecoilRoot, useRecoilValue } from 'recoil'
@@ -17,8 +17,8 @@ const CreateNewPool = () => {
       <div className="flex w-full lg:mb-0 mb-10">
         <StepperSidebar />
         {currentStep === 1 && <StepOneSelectPoolType />}
-        {currentStep === 2 && selectedPool === PoolType.Classic && <StepTwoClassic />}
-        {currentStep === 3 && selectedPool === PoolType.Classic && <StepThreeClassic />}
+        {currentStep === 2 && selectedPool === PoolType.ConstantProduct && <StepTwoClassic />}
+        {currentStep === 3 && selectedPool === PoolType.ConstantProduct && <StepThreeClassic />}
       </div>
     </div>
   )

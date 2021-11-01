@@ -2,22 +2,23 @@ import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { ChipColor } from 'app/components/Chip'
 import { ConstantProductPoolState } from 'app/hooks/useTridentClassicPools'
 import { StablePoolState } from 'app/hooks/useTridentStablePools'
+import { PoolType } from '@sushiswap/tines'
 
 // TODO add last two pool types
 export type PoolUnion = ConstantProductPool | HybridPool
 
-export enum PoolType {
-  Classic = 'Classic',
-  Concentrated = 'Concentrated',
-  Index = 'Index',
-  Stable = 'Stable',
+export const poolTypeNameMapper: Record<PoolType, string> = {
+  ConstantProduct: 'Classic',
+  ConcentratedLiquidity: 'Concentrated',
+  Hybrid: 'Stable',
+  Weighted: 'Index',
 }
 
 export const chipPoolColorMapper: Record<PoolType, ChipColor> = {
-  [PoolType.Classic]: 'purple',
-  [PoolType.Concentrated]: 'green',
-  [PoolType.Index]: 'blue',
-  [PoolType.Stable]: 'yellow',
+  ConstantProduct: 'purple',
+  ConcentratedLiquidity: 'green',
+  Hybrid: 'yellow',
+  Weighted: 'blue',
 }
 
 export enum LiquidityMode {

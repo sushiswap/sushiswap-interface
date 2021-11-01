@@ -9,7 +9,8 @@ import Link from 'next/link'
 import React, { FC } from 'react'
 
 import { POOL_TYPES } from '../constants'
-import { PoolAtomType, PoolType } from '../types'
+import { PoolAtomType } from '../types'
+import { PoolType } from '@sushiswap/tines'
 
 interface PoolCardProps {
   pool: PoolAtomType
@@ -24,7 +25,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const currencies = [pool?.token0, pool?.token1]
 
   // TODO ramin: add other types
-  const poolType = pool instanceof ConstantProductPool ? PoolType.Classic : null
+  const poolType = pool instanceof ConstantProductPool ? PoolType.ConstantProduct : null
 
   // TODO ramin: remove
   const isFarm = true

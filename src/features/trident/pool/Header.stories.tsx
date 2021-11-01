@@ -5,8 +5,8 @@ import { SUSHI } from 'config/tokens'
 import { tryParseAmount } from 'functions'
 import React from 'react'
 
-import { PoolType } from '../types'
 import { Header } from './Header'
+import { PoolType } from '@sushiswap/tines'
 
 export default {
   title: 'SushiSwap/PoolLandingHeader',
@@ -33,7 +33,7 @@ const Template: ComponentStory<typeof Header> = (args) => {
 export const Pool = Template.bind({})
 Pool.args = {
   pool: {
-    type: PoolType.Classic,
+    type: PoolType.ConstantProduct,
     amounts: [tryParseAmount('1000', SUSHI[ChainId.ETHEREUM]), tryParseAmount('3.66', WETH9[ChainId.ETHEREUM])],
     tokens: [SUSHI[ChainId.ETHEREUM], WETH9[ChainId.ETHEREUM]],
     apy: '37.8',
@@ -46,7 +46,7 @@ Pool.args = {
 export const Farm = Template.bind({})
 Farm.args = {
   pool: {
-    type: PoolType.Classic,
+    type: PoolType.ConstantProduct,
     amounts: [tryParseAmount('1000', SUSHI[ChainId.ETHEREUM]), tryParseAmount('3.66', WETH9[ChainId.ETHEREUM])],
     tokens: [SUSHI[ChainId.ETHEREUM], WETH9[ChainId.ETHEREUM]],
     apy: '37.8',

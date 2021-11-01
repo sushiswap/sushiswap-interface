@@ -1,6 +1,5 @@
 import { atom } from 'recoil'
-
-import { PoolType } from '../../types'
+import { PoolType } from '@sushiswap/tines'
 
 export type CreatePoolStep = 1 | 2 | 3
 
@@ -11,7 +10,7 @@ export const currentStepAtom = atom<CreatePoolStep>({
 
 export const selectedPoolTypeAtom = atom<PoolType>({
   key: 'selectedPoolTypeAtom',
-  default: PoolType.Classic,
+  default: PoolType.ConstantProduct,
 })
 
 // TODO: Should import Fee enum from @sushiswap/trident-sdk when enums are updated

@@ -52,7 +52,7 @@ interface TridentBodyProps {
 export const TridentBody: FC<TridentBodyProps> = ({ children, className, maxWidth = '7xl' }) => {
   return (
     <Main>
-      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-5 p-10 z-[1]', className)}>
+      <Container maxWidth={maxWidth} className={classNames('flex flex-col gap-10 p-10 z-[1]', className)}>
         {children}
       </Container>
     </Main>
@@ -66,7 +66,7 @@ interface TridentLayoutProps {
 const TridentLayout: FC<TridentLayoutProps> = ({ children = [], breadcrumbs = [] }) => {
   return (
     <div className="flex flex-col items-center w-full h-screen">
-      <div className="bg-dark-1000 w-full">
+      <div className="bg-dark-1000 w-full flex-grow flex flex-col">
         <Header />
         <Breadcrumb breadcrumbs={breadcrumbs} />
         {children}

@@ -1,0 +1,38 @@
+import Typography from '../../../components/Typography'
+import { t } from '@lingui/macro'
+import Button from '../../../components/Button'
+import Link from 'next/link'
+import { TridentHeader } from '../../../layouts/Trident'
+import React, { FC } from 'react'
+import { useLingui } from '@lingui/react'
+
+const HeaderButton: FC<{ title: string; linkTo: string }> = ({ title, linkTo }) => (
+  <Button
+    color="gradient"
+    variant="outlined"
+    className="flex-1 sm:flex-none md:flex-1 text-sm font-bold text-white h-9"
+  >
+    <Link href={linkTo}>{title}</Link>
+  </Button>
+)
+
+export const DiscoverHeader: FC = () => {
+  const { i18n } = useLingui()
+
+  return (
+    <TridentHeader maxWidth="full" pattern="bg-binary-pattern" className="sm:!flex-row justify-between items-center">
+      <div>
+        <Typography variant="h2" className="text-high-emphesis" weight={700}>
+          {i18n._(t`Provide liquidity & earn.`)}
+        </Typography>
+        <Typography variant="sm" weight={400}>
+          {i18n._(t`Earn LP fees by depositing tokens to the platform.`)}
+        </Typography>
+      </div>
+      <div className="flex gap-3 w-80 sm:flex-col md:flex-row">
+        <HeaderButton title={i18n._(t`Create New Pool`)} linkTo="/trident/create" />
+        <HeaderButton title={i18n._(t`My Positions`)} linkTo="/farm" />
+      </div>
+    </TridentHeader>
+  )
+}

@@ -6,9 +6,10 @@ import Link from 'next/link'
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
 
-import { chipPoolColorMapper, PoolType } from '../types'
+import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
+import { PoolType } from '@sushiswap/tines'
 
 export const usePoolsTableData = () => {
   const { data, error, isValidating } = useSWR('getAllTridentPools', () => getTridentPools())
@@ -27,7 +28,9 @@ export const usePoolsTableData = () => {
         Header: 'Pool Type',
         accessor: 'type',
         maxWidth: 100,
-        Cell: (props: { value: PoolType }) => <Chip label={props.value} color={chipPoolColorMapper[props.value]} />,
+        Cell: (props: { value: PoolType }) => (
+          <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
+        ),
         filter: (rows, id, filterValue) =>
           rows.filter((row) => !filterValue.length || filterValue.includes(row.values.type)),
       },
