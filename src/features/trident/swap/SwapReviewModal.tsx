@@ -111,14 +111,15 @@ const SwapReviewModal: FC = () => {
         </div>
         <div className="px-5 flex flex-col gap-3">
           <Divider className="border-dark-800" />
-          <div className="flex justify-between">
-            <Typography variant="sm" className="text-secondary">
-              {i18n._(t`Route`)}
-            </Typography>
-            <Typography variant="sm" className="text-high-emphesis" weight={700}>
-              {/*TODO ramin*/}
-            </Typography>
-          </div>
+
+          {/*TODO ramin*/}
+          {/*<div className="flex justify-between">*/}
+          {/*  <Typography variant="sm" className="text-secondary">*/}
+          {/*    {i18n._(t`Route`)}*/}
+          {/*  </Typography>*/}
+          {/*  <Typography variant="sm" className="text-high-emphesis" weight={700}>*/}
+          {/*  </Typography>*/}
+          {/*</div>*/}
           <div className="flex justify-between">
             <Typography variant="sm" className="text-secondary">
               {i18n._(t`Minimum received`)}
@@ -144,17 +145,17 @@ const SwapReviewModal: FC = () => {
               {allowedSlippage?.toSignificant(2)}%
             </Typography>
           </div>
+          <SwapRate className="text-secondary" />
           {address && isValidAddress(address) && (
             <div className="flex justify-between">
-              <Typography variant="sm" className="text-secondary">
+              <Typography variant="sm" className="text-yellow">
                 {i18n._(t`Recipient`)}
               </Typography>
-              <Typography variant="sm" className="text-high-emphesis" weight={700}>
+              <Typography variant="sm" className="text-yellow" weight={700}>
                 {shortenAddress(address)}
               </Typography>
             </div>
           )}
-          <SwapRate />
           <Button
             disabled={!!tx || state === SwapCallbackState.INVALID}
             color="gradient"

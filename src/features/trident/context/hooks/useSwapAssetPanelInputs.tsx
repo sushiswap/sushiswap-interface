@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { maxAmountSpend } from 'app/functions'
 import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
@@ -108,7 +109,7 @@ const useSwapAssetPanelInputs = () => {
     ? i18n._(t`Connect Wallet`)
     : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
-    : balance && trade && balance.lessThan(trade.inputAmount)
+    : balance && trade && maxAmountSpend(balance).lessThan(trade.inputAmount)
     ? i18n._(t`Insufficient ${trade?.inputAmount.currency.symbol} balance`)
     : ''
 
