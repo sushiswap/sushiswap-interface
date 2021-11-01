@@ -14,9 +14,14 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { ApplicationModal } from 'app/state/application/actions'
 import { useModalOpen, useToggleSettingsMenu } from 'app/state/application/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
-import React, { useRef, useState } from 'react'
+import React, { FC, useRef, useState } from 'react'
 
-export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
+interface SettingsTabProps {
+  placeholderSlippage?: Percent
+  tines?: boolean
+}
+
+const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, tines = false }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
@@ -49,7 +54,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               {i18n._(t`Transaction Settings`)}
             </Typography>
 
-            <TransactionSettings placeholderSlippage={placeholderSlippage} />
+            <TransactionSettings placeholderSlippage={placeholderSlippage} tines={tines} />
 
             <Typography className="text-high-emphesis" weight={700}>
               {i18n._(t`Interface Settings`)}
@@ -80,19 +85,21 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 }
               />
             </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Typography variant="sm" className="text-primary">
-                  {i18n._(t`Disable Multihops`)}
-                </Typography>
-                <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
+            {!tines && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`Disable Multihops`)}
+                  </Typography>
+                  <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
+                </div>
+                <Toggle
+                  id="toggle-disable-multihop-button"
+                  isActive={singleHopOnly}
+                  toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
+                />
               </div>
-              <Toggle
-                id="toggle-disable-multihop-button"
-                isActive={singleHopOnly}
-                toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
-              />
-            </div>
+            )}
           </div>
         </div>
       )}
@@ -128,3 +135,5 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
     </div>
   )
 }
+
+export default SettingsTab
