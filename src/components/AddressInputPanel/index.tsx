@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 
 import useENS from '../../hooks/useENS'
 import Input from '../Input'
@@ -14,15 +14,6 @@ interface AddressInputPanelProps {
 const AddressInputPanel: FC<AddressInputPanelProps> = ({ id, value, onChange }) => {
   const { i18n } = useLingui()
   const { address, loading } = useENS(value)
-
-  const handleInput = useCallback(
-    (event) => {
-      const input = event.target.value
-      const withoutSpaces = input.replace(/\s+/g, '')
-      onChange(withoutSpaces)
-    },
-    [onChange]
-  )
 
   const error = Boolean(value.length > 0 && !loading && !address)
 
@@ -40,7 +31,7 @@ const AddressInputPanel: FC<AddressInputPanelProps> = ({ id, value, onChange }) 
         </span>
       </div>
       <div className="flex w-full h-full border-2 rounded-r sm:w-3/5 border-dark-800">
-        <Input.Address onUserInput={handleInput} value={value} />
+        <Input.Address onUserInput={onChange} value={value} />
       </div>
     </div>
   )
