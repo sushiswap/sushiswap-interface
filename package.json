@@ -167,7 +167,7 @@
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "react-window-infinite-loader": "^1.0.7",
-    "recoil": "^0.4.0",
+    "recoil": "^0.4.1",
     "redux": "^4.1.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",

@@ -25,6 +25,7 @@ import Script from 'next/script'
 import { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import { RecoilRoot } from 'recoil'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
@@ -126,13 +127,15 @@ function MyApp({ Component, pageProps, fallback }) {
                     <TransactionUpdater />
                     <MulticallUpdater />
                   </>
-                  <Provider>
-                    <Layout>
-                      <Guard>
-                        <Component {...pageProps} />
-                      </Guard>
-                    </Layout>
-                  </Provider>
+                  <RecoilRoot>
+                    <Provider>
+                      <Layout>
+                        <Guard>
+                          <Component {...pageProps} />
+                        </Guard>
+                      </Layout>
+                    </Provider>
+                  </RecoilRoot>
                 </PersistGate>
               </ReduxProvider>
             </Web3ReactManager>
