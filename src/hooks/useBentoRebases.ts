@@ -5,12 +5,9 @@ import { useSingleContractMultipleData } from '../state/multicall/hooks'
 import { useBentoBoxContract } from './useContract'
 
 const useBentoRebases = (tokens: (Currency | undefined)[]): [Record<string, Rebase>, boolean] => {
+  const addresses = useMemo(() => tokens.map((token) => [token?.wrapped.address]), [tokens])
   const bentoboxContract = useBentoBoxContract()
-  const results = useSingleContractMultipleData(
-    bentoboxContract,
-    'totals',
-    tokens.map((token) => [token?.wrapped.address])
-  )
+  const results = useSingleContractMultipleData(bentoboxContract, 'totals', addresses)
 
   const anyLoading: boolean = useMemo(() => results.some((callState) => callState.loading), [results])
   return [

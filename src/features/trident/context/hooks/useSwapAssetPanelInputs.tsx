@@ -1,9 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, TradeType, ZERO } from '@sushiswap/core-sdk'
-import { maxAmountSpend } from 'app/functions'
+import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount } from 'app/functions'
 import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
+import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
@@ -63,10 +64,7 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
 const useSwapAssetPanelInputs = () => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const {
-    currencies: [currencyA, currencyB],
-    switchCurrencies: switchURLCurrencies,
-  } = useCurrenciesFromURL()
+  const { currencies, switchCurrencies: switchURLCurrencies } = useCurrenciesFromURL()
   const typedField = useRecoilState(typedFieldAtom)
   const mainInput = useRecoilState(mainInputAtom)
   const secondaryInput = useRecoilState(secondaryInputAtom)
@@ -74,25 +72,50 @@ const useSwapAssetPanelInputs = () => {
   const receiveToWallet = useRecoilState(receiveToWalletAtom)
   const mainInputCurrencyAmount = useRecoilValue(mainInputCurrencyAmountSelector)
   const secondaryInputCurrencyAmount = useRecoilValue(secondaryInputCurrencyAmountSelector)
+  const [rebases, rebasesLoading] = useBentoRebases(currencies)
+
+  const mainInputShare = useMemo(() => {
+    return mainInputCurrencyAmount && rebases[mainInputCurrencyAmount.currency.wrapped.address]
+      ? toShareCurrencyAmount(rebases[mainInputCurrencyAmount.currency.wrapped.address], mainInputCurrencyAmount)
+      : undefined
+  }, [mainInputCurrencyAmount, rebases])
+
+  const secondaryInputShare = useMemo(() => {
+    return secondaryInputCurrencyAmount && rebases[secondaryInputCurrencyAmount.currency.wrapped.address]
+      ? toShareCurrencyAmount(
+          rebases[secondaryInputCurrencyAmount.currency.wrapped.address],
+          secondaryInputCurrencyAmount
+        )
+      : undefined
+  }, [secondaryInputCurrencyAmount, rebases])
 
   const trade = useBestTridentTrade(
     typedField[0] === TypedField.A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
-    typedField[0] === TypedField.A ? mainInputCurrencyAmount : secondaryInputCurrencyAmount,
-    typedField[0] === TypedField.A ? currencyB : currencyA
+    typedField[0] === TypedField.A ? mainInputShare : secondaryInputShare,
+    typedField[0] === TypedField.A ? currencies[1] : currencies[0]
   )
+
+  // trade.output but in normal amounts instead of shares
+  const tradeOutputAmount =
+    !rebasesLoading &&
+    trade &&
+    trade.outputAmount?.currency.wrapped.address &&
+    rebases[trade?.outputAmount?.currency.wrapped.address]
+      ? toAmountCurrencyAmount(rebases[trade.outputAmount?.currency.wrapped.address], trade.outputAmount)
+      : undefined
 
   const balance = useBentoOrWalletBalance(account ?? undefined, trade?.inputAmount.currency, spendFromWallet[0])
 
   const formattedAmounts = useMemo(() => {
     return [
-      (typedField[0] === TypedField.A ? mainInput[0] : trade?.outputAmount?.toSignificant(6)) ?? '',
-      (typedField[0] === TypedField.B ? secondaryInput[0] : trade?.outputAmount?.toSignificant(6)) ?? '',
+      typedField[0] === TypedField.A ? mainInput[0] : tradeOutputAmount?.toSignificant(6) ?? '',
+      typedField[0] === TypedField.B ? secondaryInput[0] : tradeOutputAmount?.toSignificant(6) ?? '',
     ]
-  }, [mainInput, secondaryInput, trade?.outputAmount, typedField])
+  }, [mainInput, secondaryInput, tradeOutputAmount, typedField])
 
   const parsedAmounts = useMemo(() => {
-    return [trade?.inputAmount, trade?.outputAmount]
-  }, [trade?.inputAmount, trade?.outputAmount])
+    return [mainInputCurrencyAmount, tradeOutputAmount]
+  }, [mainInputCurrencyAmount, tradeOutputAmount])
 
   const switchCurrencies = useRecoilCallback(
     ({ set }) =>

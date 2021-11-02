@@ -123,7 +123,7 @@ function getExactInputSingleParams(
     pool: multiRoute.legs[0].poolAddress,
     data: defaultAbiCoder.encode(
       ['address', 'address', 'bool'],
-      [multiRoute.legs[0].tokenFrom.address, senderAddress, tridentTradeContext?.receiveToWallet || true]
+      [multiRoute.legs[0].tokenFrom.address, senderAddress, tridentTradeContext?.receiveToWallet ?? true]
     ),
     routeType: RouteType.SinglePool,
   }
@@ -146,7 +146,7 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext?.receiveToWallet || true]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext?.receiveToWallet ?? true]
         ),
       }
       paths.push(path)
@@ -155,7 +155,7 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext?.receiveToWallet || true]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext?.receiveToWallet ?? true]
         ),
       }
       paths.push(path)
@@ -209,7 +209,7 @@ function getComplexPathParams(
           [
             multiRoute.legs[legIndex].tokenFrom.address,
             tridentRouterAddress,
-            tridentTradeContext?.receiveToWallet || true,
+            tridentTradeContext?.receiveToWallet ?? true,
           ]
         ),
       }
@@ -224,7 +224,7 @@ function getComplexPathParams(
           [
             multiRoute.legs[legIndex].tokenFrom.address,
             tridentRouterAddress,
-            tridentTradeContext?.receiveToWallet || true,
+            tridentTradeContext?.receiveToWallet ?? true,
           ]
         ),
       }

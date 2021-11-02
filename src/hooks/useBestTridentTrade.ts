@@ -54,15 +54,20 @@ export function useBestTridentTrade(
   )
 
   const gasPrice = useMemo(async () => {
+    if (!library) return
+
     const gas = await library.getGasPrice()
     return gas.toNumber()
-  }, [blockNumber])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [library, blockNumber])
 
   const allowedPools = useAllCommonPools(currencyIn, currencyOut)
 
   useEffect(() => {
     const bestTrade = async () => {
-      if (amountSpecified && amountSpecified && otherCurrency && allowedPools.length > 0) {
+      const price = await gasPrice
+      if (price && amountSpecified && amountSpecified && otherCurrency && allowedPools.length > 0) {
         const route = findMultiRouteExactIn(
           amountSpecified.currency.wrapped as RToken,
           otherCurrency.wrapped as RToken,
@@ -78,7 +83,7 @@ export function useBestTridentTrade(
             )
           }) as RPool[],
           WNATIVE[amountSpecified.currency.chainId] as RToken,
-          await gasPrice
+          750 * 1e9 // TODO ramin: set to price variable
         )
 
         if (route.status === RouteStatus.Success) {
@@ -92,7 +97,7 @@ export function useBestTridentTrade(
     }
 
     bestTrade().then((trade) => setTrade(trade))
-  }, [amountSpecified, otherCurrency, allowedPools, tradeType])
+  }, [amountSpecified, otherCurrency, allowedPools, tradeType, gasPrice])
 
   return trade
 }

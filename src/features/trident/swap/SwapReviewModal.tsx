@@ -2,13 +2,15 @@ import { ArrowDownIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { isValidAddress } from '@walletconnect/utils'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
+import useBentoRebases from 'app/hooks/useBentoRebases'
 import Button from 'components/Button'
 import CurrencyLogo from 'components/CurrencyLogo'
 import Divider from 'components/Divider'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
-import { shortenAddress } from 'functions'
+import { shortenAddress, toAmountCurrencyAmount } from 'functions'
 import useENS from 'hooks/useENS'
 import { SwapCallbackState, useSwapCallback } from 'hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'hooks/useSwapSlippageTollerence'
@@ -23,6 +25,7 @@ import SwapRate from './SwapRate'
 
 const SwapReviewModal: FC = () => {
   const { i18n } = useLingui()
+  const { currencies } = useCurrenciesFromURL()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const { trade, reset } = useSwapAssetPanelInputs()
   const recipient = useRecoilValue(RecipientPanel.atom)
@@ -32,8 +35,10 @@ const SwapReviewModal: FC = () => {
   const tx = useTransactionStatus()
   const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
   const [cbError, setCbError] = useState<string>()
+  const [rebases] = useBentoRebases(currencies)
 
   const {
+    parsedAmounts: [inputAmount, outputAmount],
     spendFromWallet: [fromWallet],
     receiveToWallet: [receiveToWallet],
   } = useSwapAssetPanelInputs()
@@ -68,6 +73,12 @@ const SwapReviewModal: FC = () => {
     }
   }, [callback, closeModal, reset, setTxHash])
 
+  const minimumAmountOutShares = trade ? trade.minimumAmountOut(allowedSlippage) : undefined
+  const minimumAmountOut =
+    rebases && minimumAmountOutShares && rebases[minimumAmountOutShares.currency.wrapped.address]
+      ? toAmountCurrencyAmount(rebases[minimumAmountOutShares.currency.wrapped.address], minimumAmountOutShares)
+      : undefined
+
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
@@ -94,9 +105,9 @@ const SwapReviewModal: FC = () => {
               </Typography>
               <Typography variant="sm" weight={700}>
                 {i18n._(
-                  t`Output is estimated. You will receive at least ${trade
-                    ?.minimumAmountOut(allowedSlippage)
-                    .toSignificant(4)} ${trade?.outputAmount.wrapped.currency.symbol} or the transaction will revert`
+                  t`Output is estimated. You will receive at least ${minimumAmountOut?.toSignificant(4)} ${
+                    minimumAmountOut?.wrapped.currency.symbol
+                  } or the transaction will revert`
                 )}
               </Typography>
             </div>
@@ -104,24 +115,24 @@ const SwapReviewModal: FC = () => {
         </div>
         <div className="flex flex-col gap-3 px-5">
           <div className="flex gap-3 items-center">
-            <CurrencyLogo currency={trade?.inputAmount.currency} size={48} className="rounded-full" />
+            <CurrencyLogo currency={inputAmount?.currency} size={48} className="rounded-full" />
             <Typography variant="h3" weight={700} className="text-white">
-              {trade?.inputAmount.toSignificant(6)}
+              {inputAmount?.toSignificant(6)}
             </Typography>
             <Typography variant="h3" weight={700} className="text-secondary">
-              {trade?.inputAmount.currency.symbol}
+              {inputAmount?.currency.symbol}
             </Typography>
           </div>
           <div className="w-12 flex justify-center text-secondary">
             <ArrowDownIcon width={20} />
           </div>
           <div className="flex gap-3 items-center">
-            <CurrencyLogo currency={trade?.outputAmount.currency} size={48} className="rounded-full" />
+            <CurrencyLogo currency={outputAmount?.currency} size={48} className="rounded-full" />
             <Typography variant="h3" weight={700} className="text-white">
-              {trade?.outputAmount.toSignificant(4)}
+              {outputAmount?.toSignificant(6)}
             </Typography>
             <Typography variant="h3" weight={700} className="text-secondary">
-              {trade?.outputAmount.currency.symbol}
+              {outputAmount?.currency.symbol}
             </Typography>
           </div>
         </div>
