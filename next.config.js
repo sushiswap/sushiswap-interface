@@ -36,7 +36,7 @@ const nextConfig = {
   //   concurrentFeatures: true,
   //   serverComponents: true,
   // },
-  swcMinify: true,
+  swcMinify: false,
   reactStrictMode: true,
   pwa: {
     dest: 'public',
