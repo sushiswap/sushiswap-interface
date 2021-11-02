@@ -11,6 +11,7 @@ import {
   CRV,
   CVXCRV,
   DAI,
+  DOLA,
   DOUGH,
   DPI,
   DUCK,
@@ -24,6 +25,7 @@ import {
   HBTC,
   HECO,
   IBETH,
+  INV,
   LFBTC,
   LIFT,
   MATIC,
@@ -218,6 +220,7 @@ export const ADDITIONAL_BASES: {
     [CRV.address]: [CVXCRV],
     [WOOFY.address]: [YFI],
     [SPANK.address]: [RAI],
+    [INV.address]: [DOLA],
   },
   [ChainId.MATIC]: {
     [MATIC.FRAX.address]: [MATIC.FXS],
