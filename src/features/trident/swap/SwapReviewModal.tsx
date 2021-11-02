@@ -2,6 +2,7 @@ import { ArrowDownIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { isValidAddress } from '@walletconnect/utils'
+import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
 import Button from 'components/Button'
 import CurrencyLogo from 'components/CurrencyLogo'
 import Divider from 'components/Divider'
@@ -12,7 +13,7 @@ import useENS from 'hooks/useENS'
 import { SwapCallbackState, useSwapCallback } from 'hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'hooks/useSwapSlippageTollerence'
 import useTransactionStatus from 'hooks/useTransactionStatus'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useState } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { showReviewAtom, txHashAtom } from '../context/atoms'
@@ -29,9 +30,24 @@ const SwapReviewModal: FC = () => {
   const setTxHash = useSetRecoilState(txHashAtom)
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const tx = useTransactionStatus()
+  const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
+  const [cbError, setCbError] = useState<string>()
 
-  // TODO allow with Permit
-  const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null)
+  const {
+    spendFromWallet: [fromWallet],
+    receiveToWallet: [receiveToWallet],
+  } = useSwapAssetPanelInputs()
+
+  const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
+    bentoPermit,
+    receiveToWallet,
+    fromWallet,
+  })
+
+  const closeModal = useCallback(() => {
+    setShowReview(false)
+    setCbError(undefined)
+  }, [setShowReview])
 
   const execute = useCallback(async () => {
     if (!callback) return
@@ -46,16 +62,16 @@ const SwapReviewModal: FC = () => {
       setTxHash(txHash)
 
       // Close this modal
-      setShowReview(false)
+      closeModal()
     } catch (e) {
-      console.log(e)
+      setCbError(e.message)
     }
-  }, [callback, reset, setShowReview, setTxHash])
+  }, [callback, closeModal, reset, setTxHash])
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
+    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={closeModal}>
       <div className="flex flex-col gap-5 h-full pb-4 lg:max-w-md">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
@@ -111,15 +127,6 @@ const SwapReviewModal: FC = () => {
         </div>
         <div className="px-5 flex flex-col gap-3">
           <Divider className="border-dark-800" />
-
-          {/*TODO ramin*/}
-          {/*<div className="flex justify-between">*/}
-          {/*  <Typography variant="sm" className="text-secondary">*/}
-          {/*    {i18n._(t`Route`)}*/}
-          {/*  </Typography>*/}
-          {/*  <Typography variant="sm" className="text-high-emphesis" weight={700}>*/}
-          {/*  </Typography>*/}
-          {/*</div>*/}
           <div className="flex justify-between">
             <Typography variant="sm" className="text-secondary">
               {i18n._(t`Minimum received`)}
@@ -167,6 +174,11 @@ const SwapReviewModal: FC = () => {
               {error ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
             </Typography>
           </Button>
+          {(error || cbError) && (
+            <Typography variant="xs" weight={700} className="text-red text-center">
+              {error || cbError}
+            </Typography>
+          )}
         </div>
       </div>
     </HeadlessUIModal.Controlled>

@@ -54,9 +54,9 @@ export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>
 export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
   key: 'useSwapAssetPanelInputs:secondaryInputCurrencyAmountSelector',
   get: ({ get }) => {
-    const value = get(mainInputAtom)
-    const [currencyA] = get(currenciesAtom)
-    return tryParseAmount(value, currencyA)
+    const value = get(secondaryInputAtom)
+    const [, currencyB] = get(currenciesAtom)
+    return tryParseAmount(value, currencyB)
   },
 })
 
@@ -74,11 +74,13 @@ const useSwapAssetPanelInputs = () => {
   const receiveToWallet = useRecoilState(receiveToWalletAtom)
   const mainInputCurrencyAmount = useRecoilValue(mainInputCurrencyAmountSelector)
   const secondaryInputCurrencyAmount = useRecoilValue(secondaryInputCurrencyAmountSelector)
+
   const trade = useBestTridentTrade(
     typedField[0] === TypedField.A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
     typedField[0] === TypedField.A ? mainInputCurrencyAmount : secondaryInputCurrencyAmount,
     typedField[0] === TypedField.A ? currencyB : currencyA
   )
+
   const balance = useBentoOrWalletBalance(account ?? undefined, trade?.inputAmount.currency, spendFromWallet[0])
 
   const formattedAmounts = useMemo(() => {
@@ -109,7 +111,7 @@ const useSwapAssetPanelInputs = () => {
     ? i18n._(t`Connect Wallet`)
     : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
-    : balance && trade && maxAmountSpend(balance).lessThan(trade.inputAmount)
+    : balance && trade && maxAmountSpend(balance)?.lessThan(trade.inputAmount)
     ? i18n._(t`Insufficient ${trade?.inputAmount.currency.symbol} balance`)
     : ''
 

@@ -30,7 +30,7 @@ const SwapRate: FC<SwapRateProps> = ({ className = 'text-low-emphesis' }) => {
             </>
           ) : (
             <>
-              1 {inputSymbol} = {trade?.executionPrice.invert().toSignificant(6)} {outputSymbol}
+              1 {inputSymbol} = {trade?.executionPrice.toSignificant(6)} {outputSymbol}
             </>
           )}
         </Typography>

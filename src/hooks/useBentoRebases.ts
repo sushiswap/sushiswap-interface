@@ -32,4 +32,13 @@ const useBentoRebases = (tokens: (Currency | undefined)[]): [Record<string, Reba
   ]
 }
 
+export const useBentoRebase = (token: Currency | undefined): [Rebase | undefined, boolean] => {
+  const [res, loading] = useBentoRebases([token])
+  if (token && !loading) {
+    return [res[token?.wrapped.address], loading]
+  }
+
+  return [undefined, loading]
+}
+
 export default useBentoRebases

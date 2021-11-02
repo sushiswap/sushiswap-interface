@@ -24,8 +24,8 @@ import { useRouter } from 'next/router'
 import Script from 'next/script'
 import { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
-import { PersistGate } from 'redux-persist/integration/react'
 import { RecoilRoot } from 'recoil'
+import { PersistGate } from 'redux-persist/integration/react'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 

@@ -22,6 +22,7 @@ import {
   RouteType,
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
+import { BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'
 import approveAmountCalldata from 'functions/approveAmountCalldata'
 import { shortenAddress } from 'functions/format'
@@ -68,6 +69,7 @@ interface FailedCall extends SwapCallEstimate {
 interface TridentTradeContext {
   fromWallet: boolean
   receiveToWallet: boolean
+  bentoPermit?: BentoPermit
 }
 
 export type EstimatedSwapCall = SuccessfulCall | FailedCall
@@ -153,7 +155,7 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext.receiveToWallet]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext?.receiveToWallet || true]
         ),
       }
       paths.push(path)
@@ -370,9 +372,9 @@ export function useSwapCallArguments(
 
       const method = {
         [RouteType.SinglePool]: tridentTradeContext?.fromWallet
-          ? 'exactInputSingle'
-          : 'exactInputSingleWithNativeToken',
-        [RouteType.SinglePath]: tridentTradeContext?.fromWallet ? 'exactInput' : 'exactInputWithNativeToken',
+          ? 'exactInputSingleWithNativeToken'
+          : 'exactInputSingle',
+        [RouteType.SinglePath]: tridentTradeContext?.fromWallet ? 'exactInputWithNativeToken' : 'exactInput',
         [RouteType.ComplexPath]: 'complexPath',
       }
 
@@ -576,6 +578,7 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
+        console.log(calldata)
         console.log('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {})
         return library
           .getSigner()

@@ -117,7 +117,7 @@ const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, startAdornment 
   return (
     <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
       {startAdornment && startAdornment}
-      <CurrencyLogo currency={amount?.currency} size={isDesktop ? 30 : 20} />
+      <CurrencyLogo currency={amount?.currency} size={isDesktop ? 30 : 20} className="rounded-full" />
       <Typography variant="sm" className="text-high-emphesis" weight={700}>
         {amount?.toSignificant(6)} {amount?.currency.symbol}
       </Typography>
