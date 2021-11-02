@@ -10,6 +10,7 @@ import {
   useMaticPrice,
   useOnePrice,
   useCeloPrice,
+  useMovrPrice,
   useSpellPrice,
   useStakePrice,
   useSushiPairs,
@@ -48,7 +49,7 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice] = [
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice, movrPrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -56,6 +57,7 @@ export default function useFarmRewards() {
     useOnePrice(),
     useSpellPrice(),
     useCeloPrice(),
+    useMovrPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -173,6 +175,13 @@ export default function useFarmRewards() {
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: celoPrice,
+          },
+          [ChainId.MOONRIVER]: {
+            token: 'MOVR',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/movr.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: movrPrice,
           },
         }
 

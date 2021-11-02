@@ -77,7 +77,7 @@ const Footer = () => {
         {chainId && chainId === ChainId.MOONRIVER && (
           <ExternalLink
             id={`moonriver-bridge-link`}
-            href="https://movr.anyswap.exchange/#/bridge "
+            href="https://movr.anyswap.exchange/#/bridge"
             className="text-low-emphesis"
           >
             {i18n._(t`Moonriver Bridge`)}

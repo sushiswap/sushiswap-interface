@@ -86,6 +86,13 @@ export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.MOONRIVER
+  const { data } = useSWR(shouldFetch ? 'movrPrice' : null, () => getMovrPrice(), swrConfig)
+  return data
+}
+
 export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'yggPrice' : null, () => getYggPrice(), swrConfig)

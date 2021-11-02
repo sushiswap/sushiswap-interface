@@ -105,6 +105,7 @@ const ManageBar = ({ farm }) => {
       [ChainId.HARMONY]: MINICHEF_ADDRESS[ChainId.HARMONY],
       [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
       [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
+      [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
     },
   }
 

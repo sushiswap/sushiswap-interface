@@ -33,6 +33,16 @@ export const CELO: { [key: string]: Token } = {
   WBTC: new Token(ChainId.CELO, '0xBe50a3013A1c94768A1ABb78c3cB79AB28fc1aCE', 8, 'WBTC', 'WBTC'),
 }
 
+export const MOONRIVER: { [key: string]: Token } = {
+  USDC: new Token(ChainID.MOONRIVER, '0xE3F5a90F9cb311505cd691a46596599aA1A0AD7D', 6, 'USDC', 'USD Coin'),
+  USDT: new Token(ChainID.MOONRIVER, '0xB44a9B6905aF7c801311e8F4E76932ee959c663C', 6, 'USDT', 'Tether USD'),
+  WETH: new Token(ChainID.MOONRIVER, '0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C', 18, 'WETH', 'Wrapped Ether'),
+  FRAX: new Token(ChainID.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax'),
+  MIM: new Token(ChainID.MOONRIVER, '0x0caE51e1032e8461f4806e26332c030E34De3aDb', 18, 'MIM', 'Magic Internet Money'),
+  //BNB: new Token(),
+  //BTC: new Token(),
+}
+
 export const BSC: { [key: string]: Token } = {
   DAI: new Token(ChainId.BSC, '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3', 18, 'DAI', 'Dai Stablecoin'),
   USD: new Token(ChainId.BSC, '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', 18, 'BUSD', 'Binance USD'),
@@ -284,6 +294,7 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.HARMONY]: new Token(ChainId.HARMONY, SUSHI_ADDRESS[ChainId.HARMONY], 18, 'SUSHI', 'SushiToken'),
   [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
   [ChainId.CELO]: new Token(ChainId.CELO, SUSHI_ADDRESS[ChainId.CELO], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.MOONRIVER]: new Token(ChainId.MOONRIVER, SUSHI_ADDRESS[ChainId.MOONRIVER], 18, 'SUSHI', 'SushiToken'),
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {

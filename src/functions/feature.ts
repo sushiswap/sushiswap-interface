@@ -47,8 +47,8 @@ const features = {
   [ChainId.OKEX]: [Feature.AMM],
   [ChainId.OKEX_TESTNET]: [Feature.AMM],
   [ChainId.XDAI]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.CELO]: [Feature.AMM],
-  [ChainId.MOONRIVER]: [Feature.AMM],
+  [ChainId.CELO]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
+  [ChainId.MOONRIVER]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
   [ChainId.ARBITRUM]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
 }
 
