@@ -263,6 +263,14 @@ export const YFI = new Token(ChainId.MAINNET, '0x0bc529c00C6401aEF6D220BE8C6Ea16
 export const WOOFY = new Token(ChainId.MAINNET, '0xD0660cD418a64a1d44E9214ad8e459324D8157f1', 12, 'Woofy', 'WOOFY')
 export const SPANK = new Token(ChainId.MAINNET, '0x42d6622deCe394b54999Fbd73D108123806f6a18', 18, 'Spank', 'SPANK')
 export const OHM = new Token(ChainId.MAINNET, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus', 'OHM')
+export const INV = new Token(ChainId.MAINNET, '0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68', 18, 'Inverse Dao', 'INV')
+export const DOLA = new Token(
+  ChainId.MAINNET,
+  '0x865377367054516e17014CcdED1e7d814EDC9ce4',
+  18,
+  'Dola USD Stablecoin',
+  'DOLA'
+)
 
 type ChainTokenMap = {
   readonly [chainId in ChainId]?: Token
