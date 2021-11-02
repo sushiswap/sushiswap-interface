@@ -4,7 +4,7 @@ Currently there is two types of oracles which the sushi interface supports, Chai
 
 ## Chainlink
 
-- Requires a mapping entry added (src/constants/chainlink/mapping.ts).
+- Requires a mapping entry added (src/config/oracles/chainlink/mappings/{chain}.ts).
 - Requires one exchange rate update to start.
 
 ## Adding Chainlink Oracles
@@ -35,7 +35,7 @@ Chainlink mappings can be found in src/constants/chainlink/mappings, they are se
 
 Any price feed which is not currently in the Chainlink mappings need to be added.
 
-Each mapping is keyed by the price feed proxy address, and contains and object with these properties
+Each mapping is keyed by the price feed proxy address, an contains and object with these properties
 
 - from (token0 address)
 - to (token1 address)
