@@ -220,7 +220,7 @@ export const ADDITIONAL_BASES: {
     [CRV.address]: [CVXCRV],
     [WOOFY.address]: [YFI],
     [SPANK.address]: [RAI],
-    [INV.address]: [DOLA],
+    [DOLA.address]: [INV],
   },
   [ChainId.MATIC]: {
     [MATIC.FRAX.address]: [MATIC.FXS],
