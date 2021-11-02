@@ -3,11 +3,17 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
-import useBentoMasterApproveCallback, { BentoApprovalState } from 'app/hooks/useBentoMasterApproveCallback'
+import useBentoMasterApproveCallback, { BentoApprovalState, BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
 import { useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
-import React, { FC, memo, ReactNode, useEffect, useState } from 'react'
+import React, { FC, memo, ReactNode, useCallback, useEffect, useState } from 'react'
+import { atom, RecoilRoot, useSetRecoilState } from 'recoil'
+
+export const TridentApproveGateBentoPermitAtom = atom<BentoPermit | undefined>({
+  key: 'TridentApproveGateBentoPermit',
+  default: undefined,
+})
 
 interface TokenApproveButtonProps {
   inputAmount: CurrencyAmount<Currency> | undefined
@@ -42,52 +48,74 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 
 interface TridentApproveGateProps {
   inputAmounts: (CurrencyAmount<Currency> | undefined)[]
-  children: ({ approved, loading }: { approved: boolean; loading: boolean }) => ReactNode
+  children: ({ approved, loading }: { approved: boolean; loading: boolean; permit }) => ReactNode
   tokenApproveOn: string | undefined
+  withPermit?: boolean
 }
 
-const TridentApproveGate: FC<TridentApproveGateProps> = ({ inputAmounts, tokenApproveOn, children }) => {
+const TridentApproveGate: FC<TridentApproveGateProps> = ({
+  inputAmounts,
+  tokenApproveOn,
+  children,
+  withPermit = false,
+}) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [status, setStatus] = useState({})
   const router = useTridentRouterContract()
   const toggleWalletModal = useWalletModalToggle()
+  const setBentoPermit = useSetRecoilState(TridentApproveGateBentoPermitAtom)
 
-  const { approve: bApproveCallback, approvalState: bApprove } = useBentoMasterApproveCallback(
-    router ? router.address : undefined,
-    {}
-  )
+  const {
+    approve: bApproveCallback,
+    approvalState: bApprove,
+    getPermit,
+    permit,
+  } = useBentoMasterApproveCallback(router ? router.address : undefined, {})
 
   const loading =
     Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || bApprove === BentoApprovalState.UNKNOWN
   const approved =
     Object.values(status).every((el) => el === ApprovalState.APPROVED) && bApprove === BentoApprovalState.APPROVED
 
+  const onClick = useCallback(async () => {
+    if (withPermit) {
+      const permit = await getPermit()
+      if (permit) {
+        setBentoPermit(permit)
+      }
+    } else {
+      await bApproveCallback()
+    }
+  }, [])
+
   return (
-    <div className="flex flex-col gap-3">
-      {[BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(bApprove) && (
-        <Button.Dotted pending={bApprove === BentoApprovalState.PENDING} color="blue" onClick={bApproveCallback}>
-          {bApprove === BentoApprovalState.PENDING
-            ? i18n._(t`Approving BentoBox to spend tokens`)
-            : i18n._(t`Approve BentoBox to spend tokens`)}
-        </Button.Dotted>
-      )}
-      {inputAmounts.map((amount, index) => (
-        <TokenApproveButton
-          inputAmount={amount}
-          key={index}
-          onStateChange={setStatus}
-          tokenApproveOn={tokenApproveOn}
-        />
-      ))}
-      {!account ? (
-        <Button color="gradient" onClick={toggleWalletModal}>
-          {i18n._(t`Connect Wallet`)}
-        </Button>
-      ) : (
-        children({ approved, loading })
-      )}
-    </div>
+    <RecoilRoot>
+      <div className="flex flex-col gap-3">
+        {[BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(bApprove) && (
+          <Button.Dotted pending={bApprove === BentoApprovalState.PENDING} color="blue" onClick={onClick}>
+            {bApprove === BentoApprovalState.PENDING
+              ? i18n._(t`Approving BentoBox to spend tokens`)
+              : i18n._(t`Approve BentoBox to spend tokens`)}
+          </Button.Dotted>
+        )}
+        {inputAmounts.map((amount, index) => (
+          <TokenApproveButton
+            inputAmount={amount}
+            key={index}
+            onStateChange={setStatus}
+            tokenApproveOn={tokenApproveOn}
+          />
+        ))}
+        {!account ? (
+          <Button color="gradient" onClick={toggleWalletModal}>
+            {i18n._(t`Connect Wallet`)}
+          </Button>
+        ) : (
+          children({ approved, loading, permit })
+        )}
+      </div>
+    </RecoilRoot>
   )
 }
 
