@@ -282,7 +282,7 @@ export const DOLA = new Token(
 )
 
 type ChainTokenMap = {
-  readonly [ChainId in ChainId]?: Token
+  readonly [chainId in ChainId]?: Token
 }
 
 // SUSHI
@@ -305,7 +305,7 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.MOONRIVER]: new Token(ChainId.MOONRIVER, SUSHI_ADDRESS[ChainId.MOONRIVER], 18, 'SUSHI', 'SushiToken'),
 }
 
-export const WETH9_EXTENDED: { [ChainId: number]: Token } = {
+export const WETH9_EXTENDED: { [chainId: number]: Token } = {
   ...WETH9,
   [SupportedChainId.ARBITRUM_TESTNET]: new Token(
     ChainId.ARBITRUM_TESTNET,
@@ -326,12 +326,12 @@ export const WETH9_EXTENDED: { [ChainId: number]: Token } = {
 export class ExtendedEther extends Ether {
   public get wrapped(): Token {
     // if (this.ChainId in WNATIVE) return WNATIVE[this.ChainId]
-    if (this.ChainId in WETH9_EXTENDED) return WETH9_EXTENDED[this.ChainId]
+    if (this.chainId in WETH9_EXTENDED) return WETH9_EXTENDED[this.chainId]
 
     throw new Error('Unsupported chain ID')
   }
 
-  public static onChain(ChainId: number): ExtendedEther {
-    return new ExtendedEther(ChainId)
+  public static onChain(chainId: number): ExtendedEther {
+    return new ExtendedEther(chainId)
   }
 }
