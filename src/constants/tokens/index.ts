@@ -40,8 +40,7 @@ export const MOONRIVER: { [key: string]: Token } = {
   WETH: new Token(ChainID.MOONRIVER, '0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C', 18, 'WETH', 'Wrapped Ether'),
   FRAX: new Token(ChainID.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax'),
   MIM: new Token(ChainID.MOONRIVER, '0x0caE51e1032e8461f4806e26332c030E34De3aDb', 18, 'MIM', 'Magic Internet Money'),
-  //BNB: new Token(),
-  //BTC: new Token(),
+  BTC: new Token(ChainID.MOONRIVER, '0xE6a991Ffa8CfE62B0bf6BF72959A3d4f11B2E0f5', 8, 'WBTC', 'Wrapped Bitcoin'),
 }
 
 export const BSC: { [key: string]: Token } = {
