@@ -8,6 +8,7 @@ import {
   getFactory,
   getLiquidityPositions,
   getMaticPrice,
+  getMovrPrice,
   getMphPrice,
   getOnePrice,
   getPicklePrice,
