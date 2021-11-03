@@ -35,12 +35,12 @@ export const CELO: { [key: string]: Token } = {
 }
 
 export const MOONRIVER: { [key: string]: Token } = {
-  USDC: new Token(ChainID.MOONRIVER, '0xE3F5a90F9cb311505cd691a46596599aA1A0AD7D', 6, 'USDC', 'USD Coin'),
-  USDT: new Token(ChainID.MOONRIVER, '0xB44a9B6905aF7c801311e8F4E76932ee959c663C', 6, 'USDT', 'Tether USD'),
-  WETH: new Token(ChainID.MOONRIVER, '0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C', 18, 'WETH', 'Wrapped Ether'),
-  FRAX: new Token(ChainID.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax'),
-  MIM: new Token(ChainID.MOONRIVER, '0x0caE51e1032e8461f4806e26332c030E34De3aDb', 18, 'MIM', 'Magic Internet Money'),
-  BTC: new Token(ChainID.MOONRIVER, '0xE6a991Ffa8CfE62B0bf6BF72959A3d4f11B2E0f5', 8, 'WBTC', 'Wrapped Bitcoin'),
+  USDC: new Token(ChainId.MOONRIVER, '0xE3F5a90F9cb311505cd691a46596599aA1A0AD7D', 6, 'USDC', 'USD Coin'),
+  USDT: new Token(ChainId.MOONRIVER, '0xB44a9B6905aF7c801311e8F4E76932ee959c663C', 6, 'USDT', 'Tether USD'),
+  WETH: new Token(ChainId.MOONRIVER, '0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C', 18, 'WETH', 'Wrapped Ether'),
+  FRAX: new Token(ChainId.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax'),
+  MIM: new Token(ChainId.MOONRIVER, '0x0caE51e1032e8461f4806e26332c030E34De3aDb', 18, 'MIM', 'Magic Internet Money'),
+  BTC: new Token(ChainId.MOONRIVER, '0xE6a991Ffa8CfE62B0bf6BF72959A3d4f11B2E0f5', 8, 'WBTC', 'Wrapped Bitcoin'),
 }
 
 export const BSC: { [key: string]: Token } = {
@@ -282,7 +282,7 @@ export const DOLA = new Token(
 )
 
 type ChainTokenMap = {
-  readonly [chainId in ChainId]?: Token
+  readonly [ChainId in ChainId]?: Token
 }
 
 // SUSHI
@@ -305,7 +305,7 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.MOONRIVER]: new Token(ChainId.MOONRIVER, SUSHI_ADDRESS[ChainId.MOONRIVER], 18, 'SUSHI', 'SushiToken'),
 }
 
-export const WETH9_EXTENDED: { [chainId: number]: Token } = {
+export const WETH9_EXTENDED: { [ChainId: number]: Token } = {
   ...WETH9,
   [SupportedChainId.ARBITRUM_TESTNET]: new Token(
     ChainId.ARBITRUM_TESTNET,
@@ -325,13 +325,13 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
 
 export class ExtendedEther extends Ether {
   public get wrapped(): Token {
-    // if (this.chainId in WNATIVE) return WNATIVE[this.chainId]
-    if (this.chainId in WETH9_EXTENDED) return WETH9_EXTENDED[this.chainId]
+    // if (this.ChainId in WNATIVE) return WNATIVE[this.ChainId]
+    if (this.ChainId in WETH9_EXTENDED) return WETH9_EXTENDED[this.ChainId]
 
     throw new Error('Unsupported chain ID')
   }
 
-  public static onChain(chainId: number): ExtendedEther {
-    return new ExtendedEther(chainId)
+  public static onChain(ChainId: number): ExtendedEther {
+    return new ExtendedEther(ChainId)
   }
 }
