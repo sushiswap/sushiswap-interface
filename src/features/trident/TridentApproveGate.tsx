@@ -34,7 +34,7 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
     }))
   }, [approveState, inputAmount?.currency.wrapped.address, onStateChange])
 
-  if (!inputAmount?.currency.isNative && [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState))
+  if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState))
     return (
       <Button.Dotted pending={approveState === ApprovalState.PENDING} color="blue" onClick={approveCallback}>
         {approveState === ApprovalState.PENDING
@@ -99,14 +99,19 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
               : i18n._(t`Approve BentoBox to spend tokens`)}
           </Button.Dotted>
         )}
-        {inputAmounts.map((amount, index) => (
-          <TokenApproveButton
-            inputAmount={amount}
-            key={index}
-            onStateChange={setStatus}
-            tokenApproveOn={tokenApproveOn}
-          />
-        ))}
+        {inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
+          if (!amount?.currency.isNative) {
+            acc.push(
+              <TokenApproveButton
+                inputAmount={amount}
+                key={index}
+                onStateChange={setStatus}
+                tokenApproveOn={tokenApproveOn}
+              />
+            )
+          }
+          return acc
+        }, [])}
         {!account ? (
           <Button color="gradient" onClick={toggleWalletModal}>
             {i18n._(t`Connect Wallet`)}
