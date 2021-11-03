@@ -38,7 +38,7 @@ const SwapReviewModal: FC = () => {
   const [rebases] = useBentoRebases(currencies)
 
   const {
-    parsedAmounts: [inputAmount, outputAmount],
+    parsedAmounts: [inputAmount, _, outputAmount],
     spendFromWallet: [fromWallet],
     receiveToWallet: [receiveToWallet],
   } = useSwapAssetPanelInputs()
@@ -46,6 +46,8 @@ const SwapReviewModal: FC = () => {
   const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
     bentoPermit,
     receiveToWallet,
+    inputAmount,
+    outputAmount,
     fromWallet,
   })
 
@@ -76,7 +78,7 @@ const SwapReviewModal: FC = () => {
   const minimumAmountOutShares = trade ? trade.minimumAmountOut(allowedSlippage) : undefined
   const minimumAmountOut =
     rebases && minimumAmountOutShares && rebases[minimumAmountOutShares.currency.wrapped.address]
-      ? toAmountCurrencyAmount(rebases[minimumAmountOutShares.currency.wrapped.address], minimumAmountOutShares)
+      ? toAmountCurrencyAmount(rebases[minimumAmountOutShares.currency.wrapped.address], minimumAmountOutShares.wrapped)
       : undefined
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.

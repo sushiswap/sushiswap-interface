@@ -67,7 +67,7 @@ export function useBestTridentTrade(
   useEffect(() => {
     const bestTrade = async () => {
       const price = await gasPrice
-      if (price && amountSpecified && amountSpecified && otherCurrency && allowedPools.length > 0) {
+      if (price && amountSpecified && otherCurrency && allowedPools.length > 0) {
         const route = findMultiRouteExactIn(
           amountSpecified.currency.wrapped as RToken,
           otherCurrency.wrapped as RToken,

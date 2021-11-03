@@ -6,6 +6,7 @@ import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
+import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 import { atom, selector, useRecoilCallback, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
@@ -76,7 +77,10 @@ const useSwapAssetPanelInputs = () => {
 
   const mainInputShare = useMemo(() => {
     return mainInputCurrencyAmount && rebases[mainInputCurrencyAmount.currency.wrapped.address]
-      ? toShareCurrencyAmount(rebases[mainInputCurrencyAmount.currency.wrapped.address], mainInputCurrencyAmount)
+      ? toShareCurrencyAmount(
+          rebases[mainInputCurrencyAmount.currency.wrapped.address],
+          mainInputCurrencyAmount.wrapped
+        )
       : undefined
   }, [mainInputCurrencyAmount, rebases])
 
@@ -84,7 +88,7 @@ const useSwapAssetPanelInputs = () => {
     return secondaryInputCurrencyAmount && rebases[secondaryInputCurrencyAmount.currency.wrapped.address]
       ? toShareCurrencyAmount(
           rebases[secondaryInputCurrencyAmount.currency.wrapped.address],
-          secondaryInputCurrencyAmount
+          secondaryInputCurrencyAmount.wrapped
         )
       : undefined
   }, [secondaryInputCurrencyAmount, rebases])
@@ -95,14 +99,33 @@ const useSwapAssetPanelInputs = () => {
     typedField[0] === TypedField.A ? currencies[1] : currencies[0]
   )
 
+  const allowedSlippage = useSwapSlippageTolerance(trade)
+
   // trade.output but in normal amounts instead of shares
-  const tradeOutputAmount =
-    !rebasesLoading &&
-    trade &&
-    trade.outputAmount?.currency.wrapped.address &&
-    rebases[trade?.outputAmount?.currency.wrapped.address]
-      ? toAmountCurrencyAmount(rebases[trade.outputAmount?.currency.wrapped.address], trade.outputAmount)
-      : undefined
+  const tradeOutputAmount = useMemo(
+    () =>
+      !rebasesLoading &&
+      trade &&
+      trade.outputAmount?.currency.wrapped.address &&
+      rebases[trade?.outputAmount?.currency.wrapped.address]
+        ? toAmountCurrencyAmount(rebases[trade.outputAmount?.currency.wrapped.address], trade.outputAmount.wrapped)
+        : undefined,
+    [rebases, rebasesLoading, trade]
+  )
+
+  const tradeMinimumOutputAmount = useMemo(
+    () =>
+      !rebasesLoading &&
+      trade &&
+      trade.outputAmount?.currency.wrapped.address &&
+      rebases[trade?.minimumAmountOut(allowedSlippage)?.currency.wrapped.address]
+        ? toAmountCurrencyAmount(
+            rebases[trade?.minimumAmountOut(allowedSlippage)?.currency.wrapped.address],
+            trade?.minimumAmountOut(allowedSlippage).wrapped
+          )
+        : undefined,
+    [allowedSlippage, rebases, rebasesLoading, trade]
+  )
 
   const balance = useBentoOrWalletBalance(account ?? undefined, trade?.inputAmount.currency, spendFromWallet[0])
 
@@ -114,8 +137,8 @@ const useSwapAssetPanelInputs = () => {
   }, [mainInput, secondaryInput, tradeOutputAmount, typedField])
 
   const parsedAmounts = useMemo(() => {
-    return [mainInputCurrencyAmount, tradeOutputAmount]
-  }, [mainInputCurrencyAmount, tradeOutputAmount])
+    return [mainInputCurrencyAmount, tradeOutputAmount, tradeMinimumOutputAmount]
+  }, [mainInputCurrencyAmount, tradeOutputAmount, tradeMinimumOutputAmount])
 
   const switchCurrencies = useRecoilCallback(
     ({ set }) =>

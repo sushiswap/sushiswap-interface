@@ -87,7 +87,7 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
     } else {
       await bApproveCallback()
     }
-  }, [])
+  }, [bApproveCallback, getPermit, setBentoPermit, withPermit])
 
   return (
     <RecoilRoot>

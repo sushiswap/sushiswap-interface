@@ -4,9 +4,11 @@ import { t } from '@lingui/macro'
 import {
   ChainId,
   Currency,
+  CurrencyAmount,
   Percent,
   Router as LegacyRouter,
   SwapParameters,
+  toHex,
   Trade as LegacyTrade,
   TradeType,
 } from '@sushiswap/core-sdk'
@@ -23,6 +25,7 @@ import {
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
 import { BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
+import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import approveAmountCalldata from 'functions/approveAmountCalldata'
 import { shortenAddress } from 'functions/format'
@@ -69,6 +72,8 @@ interface FailedCall extends SwapCallEstimate {
 interface TridentTradeContext {
   fromWallet: boolean
   receiveToWallet: boolean
+  inputAmount?: CurrencyAmount<Currency>
+  outputAmount?: CurrencyAmount<Currency>
   bentoPermit?: BentoPermit
 }
 
@@ -79,7 +84,10 @@ export function getTridentRouterParams(
   senderAddress: string,
   tridentRouterAddress: string = '',
   slippagePercentage: number = 0.5,
-  tridentTradeContext?: TridentTradeContext
+  inputAmount: CurrencyAmount<Currency>,
+  outputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
 ): ExactInputParams | ExactInputSingleParams | ComplexPathParams {
   const routeType = getRouteType(multiRoute)
   let routerParams
@@ -88,11 +96,27 @@ export function getTridentRouterParams(
 
   switch (routeType) {
     case RouteType.SinglePool:
-      routerParams = getExactInputSingleParams(multiRoute, senderAddress, slippage, tridentTradeContext)
+      routerParams = getExactInputSingleParams(
+        multiRoute,
+        senderAddress,
+        slippage,
+        inputAmount,
+        outputAmount,
+        fromWallet,
+        receiveToWallet
+      )
       break
 
     case RouteType.SinglePath:
-      routerParams = getExactInputParams(multiRoute, senderAddress, slippage, tridentTradeContext)
+      routerParams = getExactInputParams(
+        multiRoute,
+        senderAddress,
+        slippage,
+        inputAmount,
+        outputAmount,
+        fromWallet,
+        receiveToWallet
+      )
       break
 
     case RouteType.ComplexPath:
@@ -102,7 +126,10 @@ export function getTridentRouterParams(
         senderAddress,
         tridentRouterAddress,
         slippage,
-        tridentTradeContext
+        inputAmount,
+        outputAmount,
+        fromWallet,
+        receiveToWallet
       )
       break
   }
@@ -114,16 +141,23 @@ function getExactInputSingleParams(
   multiRoute: MultiRoute,
   senderAddress: string,
   slippage: number,
-  tridentTradeContext?: TridentTradeContext
+  inputAmount: CurrencyAmount<Currency>,
+  outputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
 ): ExactInputSingleParams {
   return {
-    amountIn: getBigNumber(multiRoute.amountIn * multiRoute.legs[0].absolutePortion),
-    amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
+    amountIn: fromWallet
+      ? inputAmount.quotient.toString().toBigNumber(0)
+      : getBigNumber(multiRoute.amountIn * multiRoute.legs[0].absolutePortion),
+    amountOutMinimum: receiveToWallet
+      ? outputAmount.quotient.toString().toBigNumber(0)
+      : getBigNumber(multiRoute.amountOut * slippage),
     tokenIn: multiRoute.legs[0].tokenFrom.address,
     pool: multiRoute.legs[0].poolAddress,
     data: defaultAbiCoder.encode(
       ['address', 'address', 'bool'],
-      [multiRoute.legs[0].tokenFrom.address, senderAddress, tridentTradeContext?.receiveToWallet ?? true]
+      [multiRoute.legs[0].tokenFrom.address, senderAddress, receiveToWallet]
     ),
     routeType: RouteType.SinglePool,
   }
@@ -133,7 +167,10 @@ function getExactInputParams(
   multiRoute: MultiRoute,
   senderAddress: string,
   slippage: number,
-  tridentTradeContext?: TridentTradeContext
+  inputAmount: CurrencyAmount<Currency>,
+  outputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
 ): ExactInputParams {
   const routeLegs = multiRoute.legs.length
   let paths: Path[] = []
@@ -146,7 +183,7 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext?.receiveToWallet ?? true]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
         ),
       }
       paths.push(path)
@@ -155,7 +192,7 @@ function getExactInputParams(
         pool: multiRoute.legs[legIndex].poolAddress,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, tridentTradeContext?.receiveToWallet ?? true]
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
         ),
       }
       paths.push(path)
@@ -164,8 +201,10 @@ function getExactInputParams(
 
   let inputParams: ExactInputParams = {
     tokenIn: multiRoute.legs[0].tokenFrom.address,
-    amountIn: getBigNumber(multiRoute.amountIn),
-    amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
+    amountIn: fromWallet ? inputAmount.quotient.toString().toBigNumber(0) : getBigNumber(multiRoute.amountIn),
+    amountOutMinimum: receiveToWallet
+      ? outputAmount.quotient.toString().toBigNumber(0)
+      : getBigNumber(multiRoute.amountOut * slippage),
     path: paths,
     routeType: RouteType.SinglePath,
   }
@@ -178,7 +217,10 @@ function getComplexPathParams(
   senderAddress: string,
   tridentRouterAddress: string,
   slippage: number,
-  tridentTradeContext?: TridentTradeContext
+  inputAmount: CurrencyAmount<Currency>,
+  outputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
 ): ComplexPathParams {
   let initialPaths: InitialPath[] = []
   let percentagePaths: PercentagePath[] = []
@@ -192,7 +234,7 @@ function getComplexPathParams(
   const output: Output = {
     token: multiRoute.toToken.address,
     to: senderAddress,
-    unwrapBento: false,
+    unwrapBento: receiveToWallet,
     minAmount: getBigNumber(multiRoute.amountOut * slippage),
   }
   outputs.push(output)
@@ -206,11 +248,7 @@ function getComplexPathParams(
         native: false,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [
-            multiRoute.legs[legIndex].tokenFrom.address,
-            tridentRouterAddress,
-            tridentTradeContext?.receiveToWallet ?? true,
-          ]
+          [multiRoute.legs[legIndex].tokenFrom.address, tridentRouterAddress, true]
         ),
       }
       initialPaths.push(initialPath)
@@ -221,11 +259,7 @@ function getComplexPathParams(
         balancePercentage: getBigNumber(multiRoute.legs[legIndex].swapPortion * 10 ** 8),
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [
-            multiRoute.legs[legIndex].tokenFrom.address,
-            tridentRouterAddress,
-            tridentTradeContext?.receiveToWallet ?? true,
-          ]
+          [multiRoute.legs[legIndex].tokenFrom.address, tridentRouterAddress, false]
         ),
       }
       percentagePaths.push(percentagePath)
@@ -304,10 +338,11 @@ export function useSwapCallArguments(
   const tridentRouterContract = useTridentRouterContract()
 
   const argentWalletContract = useArgentWalletContract()
+  const [rebase] = useBentoRebase(trade?.inputAmount.currency)
 
   return useMemo<SwapCall[]>(() => {
     let result: SwapCall[] = []
-    if (!trade || !recipient || !library || !account || !chainId) return result
+    if (!rebase || !trade || !recipient || !library || !account || !chainId) return result
 
     if (trade instanceof LegacyTrade) {
       if (!legacyRouterContract || !deadline) return result
@@ -360,14 +395,23 @@ export function useSwapCallArguments(
 
       return result
     } else if (trade instanceof TridentTrade) {
-      if (!tridentRouterContract || !trade.route) return result
+      if (
+        !tridentRouterContract ||
+        !trade.route ||
+        !tridentTradeContext?.inputAmount ||
+        !tridentTradeContext?.outputAmount
+      )
+        return result
 
       const { routeType, ...rest } = getTridentRouterParams(
         trade.route,
         account,
         tridentRouterContract?.address,
-        Number(allowedSlippage.asFraction.toSignificant(1)),
-        tridentTradeContext
+        Number(allowedSlippage.asFraction.multiply(100).toSignificant(2)),
+        tridentTradeContext?.inputAmount,
+        tridentTradeContext?.outputAmount,
+        tridentTradeContext?.fromWallet,
+        tridentTradeContext?.receiveToWallet
       )
 
       const method = {
@@ -378,11 +422,22 @@ export function useSwapCallArguments(
         [RouteType.ComplexPath]: 'complexPath',
       }
 
+      // if you spend from wallet send as amount instead of share
+      let value = '0x0'
+      if (
+        tridentTradeContext &&
+        tridentTradeContext.inputAmount &&
+        tridentTradeContext.fromWallet &&
+        tridentTradeContext.inputAmount.currency.isNative
+      ) {
+        value = toHex(tridentTradeContext.inputAmount)
+      }
+
       result = [
         {
           address: tridentRouterContract.address,
           calldata: tridentRouterContract.interface.encodeFunctionData(method[routeType], [rest]),
-          value: trade.inputAmount.currency.isNative ? trade.inputAmount.quotient.toString() : '0x0',
+          value,
         },
       ] as SwapCall[]
 
@@ -398,6 +453,7 @@ export function useSwapCallArguments(
     deadline,
     legacyRouterContract,
     library,
+    rebase,
     recipient,
     trade,
     tridentRouterContract,
@@ -523,7 +579,7 @@ export function useSwapCallback(
                     value,
                   }
 
-            console.log({ tx })
+            console.log({ tx, value })
 
             return library
               .estimateGas(tx)
@@ -578,7 +634,6 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
-        console.log(calldata)
         console.log('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {})
         return library
           .getSigner()
