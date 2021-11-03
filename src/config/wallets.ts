@@ -202,4 +202,12 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     color: '#F0B90B',
     mobile: true,
   },
+  imToken: {
+    connector: injected,
+    name: 'imToken',
+    iconName: 'imtoken.png',
+    description: 'Login using imToken wallet',
+    href: 'https://token.im',
+    color: '#098DE6',
+  },
 }
