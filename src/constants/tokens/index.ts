@@ -14,6 +14,7 @@ export const ARBITRUM: { [key: string]: Token } = {
   USDC: new Token(ChainId.ARBITRUM, '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', 6, 'USDC', 'USD Coin'),
   WBTC: new Token(ChainId.ARBITRUM, '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', 8, 'WBTC', 'Wrapped Bitcoin'),
   USDT: new Token(ChainId.ARBITRUM, '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', 8, 'USDT', 'Tether USD'),
+  MIM: new Token(ChainId.ARBITRUM, '0xFEa7a6a0B346362BF88A9e4A88416B77a57D6c2A', 18, 'MIM', 'Magic Internet Money'),
 }
 
 export const PALM: { [key: string]: Token } = {
@@ -272,6 +273,14 @@ export const YFI = new Token(ChainId.MAINNET, '0x0bc529c00C6401aEF6D220BE8C6Ea16
 export const WOOFY = new Token(ChainId.MAINNET, '0xD0660cD418a64a1d44E9214ad8e459324D8157f1', 12, 'Woofy', 'WOOFY')
 export const SPANK = new Token(ChainId.MAINNET, '0x42d6622deCe394b54999Fbd73D108123806f6a18', 18, 'Spank', 'SPANK')
 export const OHM = new Token(ChainId.MAINNET, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus', 'OHM')
+export const INV = new Token(ChainId.MAINNET, '0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68', 18, 'Inverse Dao', 'INV')
+export const DOLA = new Token(
+  ChainId.MAINNET,
+  '0x865377367054516e17014CcdED1e7d814EDC9ce4',
+  18,
+  'Dola USD Stablecoin',
+  'DOLA'
+)
 
 type ChainTokenMap = {
   readonly [chainId in ChainId]?: Token

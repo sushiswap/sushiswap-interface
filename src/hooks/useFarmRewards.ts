@@ -29,8 +29,7 @@ export default function useFarmRewards() {
 
   const positions = usePositions(chainId)
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block1w = useBlock({ daysAgo: 7 })
+  const block1d = useBlock({ daysAgo: 1, chainId })
 
   const farms = useFarms()
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])

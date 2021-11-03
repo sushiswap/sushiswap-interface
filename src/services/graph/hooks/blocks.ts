@@ -3,6 +3,7 @@ import useSWR, { SWRConfiguration } from 'swr'
 
 import { useActiveWeb3React } from '../../../hooks'
 import { useMemo } from 'react'
+import { ChainId } from '@sushiswap/sdk'
 
 interface useBlockProps {
   timestamp?: number
@@ -12,7 +13,7 @@ interface useBlockProps {
 }
 
 export function useBlock(
-  { timestamp, daysAgo, chainId = useActiveWeb3React().chainId, shouldFetch = true }: useBlockProps = {},
+  { timestamp, daysAgo, chainId = ChainId.MAINNET, shouldFetch = true }: useBlockProps = {},
   swrConfig: SWRConfiguration = undefined
 ) {
   shouldFetch = shouldFetch && !!chainId
