@@ -97,6 +97,14 @@ export default function useFarmRewards() {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
+        // vestedQUARTZ to QUARTZ adjustments
+        if (pool.rewarder.rewardToken === '0x5dd8905aec612529361a35372efd5b127bb182b3') {
+          pool.rewarder.rewardToken = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
+          pool.rewardToken.symbol = 'vestedQUARTZ'
+          pool.rewardToken.derivedETH = pair.token1.derivedETH
+          pool.rewardToken.decimals = 18
+        }
+
         const icon = `https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/${getAddress(
           pool.rewarder.rewardToken
         )}.jpg`
@@ -259,8 +267,6 @@ export default function useFarmRewards() {
       tvl,
     }
   }
-
-  console.log(farms)
 
   return farms
     .filter((farm) => {
