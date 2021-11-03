@@ -177,7 +177,7 @@ const builders = {
     }
   },
   moonriver: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
-    const prefix = 'https://blockscout.moonriver.moonbeam.network'
+    const prefix = 'https://moonriver.moonscan.io'
     switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
