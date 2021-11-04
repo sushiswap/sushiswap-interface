@@ -16,7 +16,7 @@ import { SwapCallbackState, useSwapCallback } from 'hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'hooks/useSwapSlippageTollerence'
 import useTransactionStatus from 'hooks/useTransactionStatus'
 import { FC, useCallback, useState } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { showReviewAtom, txHashAtom } from '../context/atoms'
 import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
@@ -30,7 +30,7 @@ const SwapReviewModal: FC = () => {
   const { trade, reset } = useSwapAssetPanelInputs()
   const recipient = useRecoilValue(RecipientPanel.atom)
   const { address } = useENS(recipient)
-  const setTxHash = useSetRecoilState(txHashAtom)
+  const [txHash, setTxHash] = useRecoilState(txHashAtom)
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const tx = useTransactionStatus()
   const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
@@ -185,10 +185,10 @@ const SwapReviewModal: FC = () => {
             className="mb-2 mt-4"
           >
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {error ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
+              {error && !txHash ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
             </Typography>
           </Button>
-          {(error || cbError) && (
+          {!txHash && (error || cbError) && (
             <Typography variant="xs" weight={700} className="text-red text-center">
               {error || cbError}
             </Typography>
