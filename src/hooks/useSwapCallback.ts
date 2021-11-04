@@ -282,6 +282,10 @@ function getRouteType(multiRoute: MultiRoute): RouteType {
   return RouteType.Unknown
 }
 
+function multFraction(bn: BigNumber, fr: number, precision = 1e6) {
+  return bn.mulDiv(Math.round(fr*precision), precision)
+}
+
 function getInitialPathAmount(
   legIndex: number,
   multiRoute: MultiRoute,
@@ -297,7 +301,7 @@ function getInitialPathAmount(
       : getBigNumber(multiRoute.amountIn).sub(sumIntialPathAmounts)
   } else {
     return fromWallet
-      ? inputAmount.quotient.toString().toBigNumber(0)
+      ? multFraction(inputAmount.quotient.toString().toBigNumber(0), multiRoute.legs[legIndex].absolutePortion)
       : getBigNumber(multiRoute.amountIn * multiRoute.legs[legIndex].absolutePortion)
   }
 }
