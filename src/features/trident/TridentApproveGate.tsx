@@ -34,7 +34,7 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
     }))
   }, [approveState, inputAmount?.currency.wrapped.address, onStateChange])
 
-  if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState))
+  if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
     return (
       <Button.Dotted pending={approveState === ApprovalState.PENDING} color="blue" onClick={approveCallback}>
         {approveState === ApprovalState.PENDING
@@ -42,13 +42,14 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
           : i18n._(t`Approve ${inputAmount?.currency.symbol}`)}
       </Button.Dotted>
     )
+  }
 
   return <></>
 })
 
 interface TridentApproveGateProps {
   inputAmounts: (CurrencyAmount<Currency> | undefined)[]
-  children: ({ approved, loading }: { approved: boolean; loading: boolean; permit }) => ReactNode
+  children: ({ approved, loading }: { approved: boolean; loading: boolean; permit: BentoPermit }) => ReactNode
   tokenApproveOn: string | undefined
   withPermit?: boolean
 }
@@ -61,7 +62,7 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
 }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [status, setStatus] = useState({})
+  const [status, setStatus] = useState<Record<string, ApprovalState>>({})
   const router = useTridentRouterContract()
   const toggleWalletModal = useWalletModalToggle()
   const setBentoPermit = useSetRecoilState(TridentApproveGateBentoPermitAtom)
