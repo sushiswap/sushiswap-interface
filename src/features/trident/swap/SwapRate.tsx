@@ -1,5 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Price } from '@sushiswap/core-sdk'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import Typography from 'components/Typography'
 import React, { FC, useState } from 'react'
 
@@ -11,11 +13,18 @@ interface SwapRateProps {
 
 const SwapRate: FC<SwapRateProps> = ({ className = 'text-low-emphesis' }) => {
   const { i18n } = useLingui()
+  const { currencies } = useCurrenciesFromURL()
   const [invert, setInvert] = useState(false)
-  const { trade } = useSwapAssetPanelInputs()
+  const {
+    parsedAmounts: [inputAmount, outputAmount],
+  } = useSwapAssetPanelInputs()
 
-  const outputSymbol = <span className="text-secondary">{trade?.outputAmount.currency.symbol}</span>
-  const inputSymbol = <span className="text-secondary">{trade?.inputAmount.currency.symbol}</span>
+  const outputSymbol = <span className="text-secondary">{currencies[1].symbol}</span>
+  const inputSymbol = <span className="text-secondary">{inputAmount?.currency.symbol}</span>
+  const price =
+    inputAmount &&
+    outputAmount &&
+    new Price(inputAmount.currency, outputAmount.currency, inputAmount.quotient, outputAmount.quotient)
 
   return (
     <div className="flex justify-between">
@@ -26,11 +35,11 @@ const SwapRate: FC<SwapRateProps> = ({ className = 'text-low-emphesis' }) => {
         <Typography variant="sm" className="text-high-emphesis" weight={700}>
           {invert ? (
             <>
-              1 {outputSymbol} = {trade?.executionPrice.invert().toSignificant(6)} {inputSymbol}
+              1 {outputSymbol} = {price?.invert().toSignificant(6)} {inputSymbol}
             </>
           ) : (
             <>
-              1 {inputSymbol} = {trade?.executionPrice.invert().toSignificant(6)} {outputSymbol}
+              1 {inputSymbol} = {price?.toSignificant(6)} {outputSymbol}
             </>
           )}
         </Typography>

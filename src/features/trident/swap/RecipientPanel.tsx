@@ -21,6 +21,7 @@ const RecipientPanel = () => {
   const { address, loading } = useENS(recipient)
 
   const error = Boolean(recipient && recipient.length > 0 && !loading && !address)
+  const valid = Boolean(recipient && recipient.length > 0 && address && !loading)
 
   if (recipient === undefined) {
     return (
@@ -59,6 +60,7 @@ const RecipientPanel = () => {
           value={recipient}
           className={classNames(
             error ? 'border-red/50' : 'border-transparent',
+            valid ? 'border-green/40' : 'border-transparent',
             'border text-inherit w-full lg:bg-dark-1000 lg:rounded-full px-4 lg:py-2 py-5 font-bold'
           )}
           fontSize="14px"

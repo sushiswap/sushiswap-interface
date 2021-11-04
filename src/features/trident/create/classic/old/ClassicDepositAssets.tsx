@@ -9,7 +9,7 @@ import Typography from 'components/Typography'
 import { attemptingTxnAtom, showReviewAtom, spendFromWalletSelector } from 'features/trident/context/atoms'
 import { useIndependentAssetInputs } from 'features/trident/context/hooks/useIndependentAssetInputs'
 import { classNames } from 'functions'
-import { useBentoBoxContract } from 'hooks'
+import { useBentoBoxContract, useTridentRouterContract } from 'hooks'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
@@ -19,6 +19,8 @@ import TridentApproveGate from '../../../TridentApproveGate'
 const ClassicDepositAssets: FC = () => {
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
+  const router = useTridentRouterContract()
+
   const {
     currencies: [currencies],
     isMax,
@@ -79,7 +81,11 @@ const ClassicDepositAssets: FC = () => {
             spendFromWallet={spendFromWalletB}
           />
           <div className="flex flex-col gap-3">
-            <TridentApproveGate inputAmounts={parsedAmounts} tokenApproveOn={bentoBox?.address}>
+            <TridentApproveGate
+              inputAmounts={parsedAmounts}
+              tokenApproveOn={bentoBox?.address}
+              masterContractAddress={router?.address}
+            >
               {({ approved, loading }) => {
                 const disabled = !!error || !approved || loading || attemptingTxn
                 const buttonText = attemptingTxn ? (

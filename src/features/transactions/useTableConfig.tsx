@@ -52,6 +52,9 @@ export const useTableConfig = (transactions?: Transactions[]) => {
         columns: TransactionColumns,
         data: transactions,
         defaultColumn,
+        initialState: {
+          sortBy: [{ id: 'time', desc: false }],
+        },
       },
     }),
     [TransactionColumns, defaultColumn, transactions]

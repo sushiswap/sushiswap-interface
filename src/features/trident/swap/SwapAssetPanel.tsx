@@ -11,7 +11,7 @@ import NumericalInput from 'app/components/Input/Numeric'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
-import { classNames, tryParseAmount, warningSeverity } from 'app/functions'
+import { classNames, maxAmountSpend, tryParseAmount, warningSeverity } from 'app/functions'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
@@ -308,7 +308,7 @@ const BalancePanel: FC = () => {
           variant={isDesktop ? 'sm' : 'xs'}
           weight={700}
           className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
-          onClick={() => !disabled && balance && onChange && onChange(balance.toExact())}
+          onClick={() => !disabled && balance && onChange && onChange(maxAmountSpend(balance).toExact())}
         >
           {balance ? balance.toSignificant(6) : '0.0000'}
         </Typography>
@@ -321,7 +321,7 @@ const BalancePanel: FC = () => {
           className="text-blue hidden lg:block"
           weight={700}
           variant="sm"
-          onClick={() => balance && onChange && onChange(balance.toExact())}
+          onClick={() => balance && onChange && onChange(maxAmountSpend(balance).toExact())}
         >
           {i18n._(t`Use Max`)}
         </Typography>
@@ -374,7 +374,7 @@ const MaxButton: FC = () => {
   return (
     <div
       className="flex items-center justify-center h-9 w-[96px] rounded-full border border-blue/50 bg-blue/30 cursor-pointer"
-      onClick={() => balance && onChange && onChange(balance.toExact())}
+      onClick={() => balance && onChange && onChange(maxAmountSpend(balance).toExact())}
     >
       <Typography variant="sm" className="text-blue" weight={700}>
         {i18n._(t`USE MAX`)}

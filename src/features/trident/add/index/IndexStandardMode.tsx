@@ -8,7 +8,7 @@ import Typography from 'components/Typography'
 import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from 'features/trident/context/atoms'
 import { TypedField, useDependentAssetInputs } from 'features/trident/context/hooks/useDependentAssetInputs'
 import { classNames } from 'functions'
-import { useBentoBoxContract } from 'hooks'
+import { useBentoBoxContract, useTridentRouterContract } from 'hooks'
 import Lottie from 'lottie-react'
 import React from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
@@ -20,6 +20,8 @@ const IndexStandardMode = () => {
   const { i18n } = useLingui()
   const [, pool] = useRecoilValue(poolAtom)
   const bentoBox = useBentoBoxContract()
+  const router = useTridentRouterContract()
+
   const {
     mainInput: [, setMainInput],
     secondaryInput: [, setSecondaryInput],
@@ -71,7 +73,11 @@ const IndexStandardMode = () => {
         />
 
         <div className="flex flex-col gap-3">
-          <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
+          <TridentApproveGate
+            inputAmounts={[parsedAmountA, parsedAmountB]}
+            tokenApproveOn={bentoBox?.address}
+            masterContractAddress={router?.address}
+          >
             {({ approved, loading }) => {
               const disabled = !!error || !approved || loading || attemptingTxn
               const buttonText = attemptingTxn ? (

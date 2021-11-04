@@ -38,7 +38,7 @@ export const useClassicPoolCreateExecute = () => {
     parsedAmounts,
   } = useIndependentAssetInputs()
 
-  const [rebases, rebasesLoading] = useBentoRebases(selectedPoolCurrencies)
+  const { rebases, loading: rebasesLoading } = useBentoRebases(selectedPoolCurrencies)
 
   const execute = useCallback(async () => {
     if (

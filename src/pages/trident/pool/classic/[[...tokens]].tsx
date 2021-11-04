@@ -9,11 +9,9 @@ import { poolAtom } from 'app/features/trident/context/atoms'
 import ClassicLinkButtons from 'app/features/trident/pool/classic/ClassicLinkButtons'
 import ClassicMarket from 'app/features/trident/pool/classic/ClassicMarket'
 import ClassicMyPosition from 'app/features/trident/pool/classic/ClassicMyPosition'
-import ClassicMyRewards from 'app/features/trident/pool/classic/ClassicMyRewards'
 import Header from 'app/features/trident/pool/Header'
 import PoolStats from 'app/features/trident/pool/PoolStats'
 import PoolStatsChart from 'app/features/trident/pool/PoolStatsChart'
-import Rewards from 'app/features/trident/pool/Rewards'
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
@@ -59,18 +57,18 @@ const Pool = () => {
             <div className="order-2 lg:order-3">
               <ClassicMarket />
             </div>
-            <div className="order-2 lg:order-4">
-              <Rewards />
-            </div>
+            {/*<div className="order-2 lg:order-4">*/}
+            {/*  <Rewards />*/}
+            {/*</div>*/}
           </div>
           <div className="lg:w-4/12">
             <div className="flex flex-col gap-5 sticky top-5 lg:-mt-52">
               <div className="order-0">
                 <ClassicMyPosition />
               </div>
-              <div className="order-1">
-                <ClassicMyRewards />
-              </div>
+              {/*<div className="order-1">*/}
+              {/*  <ClassicMyRewards />*/}
+              {/*</div>*/}
               <div className="order-2 lg:block hidden">{linkButtons}</div>
             </div>
           </div>

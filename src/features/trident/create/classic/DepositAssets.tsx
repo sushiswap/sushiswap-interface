@@ -9,7 +9,7 @@ import { attemptingTxnAtom, showReviewAtom, spendFromWalletSelector } from 'app/
 import { useIndependentAssetInputs } from 'app/features/trident/context/hooks/useIndependentAssetInputs'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { classNames } from 'app/functions/styling'
-import { useBentoBoxContract } from 'app/hooks/useContract'
+import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks/useContract'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
@@ -17,6 +17,8 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 export const DepositAssets: FC = () => {
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
+  const router = useTridentRouterContract()
+
   const {
     currencies: [currencies],
     isMax,
@@ -71,7 +73,11 @@ export const DepositAssets: FC = () => {
           spendFromWallet={spendFromWalletB}
         />
         <div className="flex flex-col gap-3">
-          <TridentApproveGate inputAmounts={parsedAmounts} tokenApproveOn={bentoBox?.address}>
+          <TridentApproveGate
+            inputAmounts={parsedAmounts}
+            tokenApproveOn={bentoBox?.address}
+            masterContractAddress={router?.address}
+          >
             {({ approved, loading }) => {
               const disabled = !!error || !approved || loading || attemptingTxn
               const buttonText = attemptingTxn ? (
