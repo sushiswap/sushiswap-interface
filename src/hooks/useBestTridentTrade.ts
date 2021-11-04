@@ -53,7 +53,7 @@ export function useBestTridentTrade(
     [tradeType, amountSpecified, otherCurrency]
   )
 
-  const gasPrice = useMemo(async () => {
+  const gasPricePromise = useMemo(async () => {
     if (!library) return
 
     const gas = await library.getGasPrice()
@@ -66,7 +66,7 @@ export function useBestTridentTrade(
 
   useEffect(() => {
     const bestTrade = async () => {
-      const price = await gasPrice
+      const price = await gasPricePromise
       if (price && amountSpecified && otherCurrency && allowedPools.length > 0) {
         const route = findMultiRouteExactIn(
           amountSpecified.currency.wrapped as RToken,
@@ -97,7 +97,7 @@ export function useBestTridentTrade(
     }
 
     bestTrade().then((trade) => setTrade(trade))
-  }, [amountSpecified, otherCurrency, allowedPools, tradeType, gasPrice])
+  }, [amountSpecified, otherCurrency, allowedPools, tradeType, gasPricePromise])
 
   return trade
 }
