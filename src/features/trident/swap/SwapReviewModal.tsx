@@ -46,8 +46,9 @@ const SwapReviewModal: FC = () => {
   const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
     bentoPermit,
     receiveToWallet,
-    inputAmount,
-    outputAmount: outputMinAmount,
+    inputAmount: inputAmount?.wrapped,
+    outputAmount: outputMinAmount?.wrapped,
+    inputCurrency: currencies[0],
     outputCurrency: currencies[1],
     fromWallet,
   })
