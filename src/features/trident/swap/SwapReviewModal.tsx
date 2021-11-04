@@ -38,7 +38,7 @@ const SwapReviewModal: FC = () => {
   const [rebases] = useBentoRebases(currencies)
 
   const {
-    parsedAmounts: [inputAmount, _, outputAmount],
+    parsedAmounts: [inputAmount, outputAmount, outputMinAmount],
     spendFromWallet: [fromWallet],
     receiveToWallet: [receiveToWallet],
   } = useSwapAssetPanelInputs()
@@ -47,7 +47,8 @@ const SwapReviewModal: FC = () => {
     bentoPermit,
     receiveToWallet,
     inputAmount,
-    outputAmount,
+    outputAmount: outputMinAmount,
+    outputCurrency: currencies[1],
     fromWallet,
   })
 
@@ -108,7 +109,7 @@ const SwapReviewModal: FC = () => {
               <Typography variant="sm" weight={700}>
                 {i18n._(
                   t`Output is estimated. You will receive at least ${minimumAmountOut?.toSignificant(4)} ${
-                    minimumAmountOut?.wrapped.currency.symbol
+                    currencies[1]?.symbol
                   } or the transaction will revert`
                 )}
               </Typography>
@@ -134,7 +135,7 @@ const SwapReviewModal: FC = () => {
               {outputAmount?.toSignificant(6)}
             </Typography>
             <Typography variant="h3" weight={700} className="text-secondary">
-              {outputAmount?.currency.symbol}
+              {currencies[1]?.symbol}
             </Typography>
           </div>
         </div>
@@ -145,8 +146,7 @@ const SwapReviewModal: FC = () => {
               {i18n._(t`Minimum received`)}
             </Typography>
             <Typography variant="sm" className="text-high-emphesis" weight={700}>
-              {trade?.minimumAmountOut(allowedSlippage).toSignificant(4)}{' '}
-              <span className="text-low-emphesis">{trade?.outputAmount.wrapped.currency.symbol}</span>
+              {minimumAmountOut?.toSignificant(4)} <span className="text-low-emphesis">{currencies[1]?.symbol}</span>
             </Typography>
           </div>
           <div className="flex justify-between">

@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Price } from '@sushiswap/core-sdk'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import Typography from 'components/Typography'
 import React, { FC, useState } from 'react'
 
@@ -12,12 +13,13 @@ interface SwapRateProps {
 
 const SwapRate: FC<SwapRateProps> = ({ className = 'text-low-emphesis' }) => {
   const { i18n } = useLingui()
+  const { currencies } = useCurrenciesFromURL()
   const [invert, setInvert] = useState(false)
   const {
     parsedAmounts: [inputAmount, outputAmount],
   } = useSwapAssetPanelInputs()
 
-  const outputSymbol = <span className="text-secondary">{outputAmount?.currency.symbol}</span>
+  const outputSymbol = <span className="text-secondary">{currencies[1].symbol}</span>
   const inputSymbol = <span className="text-secondary">{inputAmount?.currency.symbol}</span>
   const price =
     inputAmount &&

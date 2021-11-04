@@ -37,8 +37,7 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 
 import { EIP_1559_ACTIVATION_BLOCK } from '../constants'
 import { useArgentWalletContract } from './useArgentWalletContract'
-import { useRouterContract } from './useContract'
-import { useTridentRouterContract } from './useContract'
+import { useRouterContract, useTridentRouterContract } from './useContract'
 import useENS from './useENS'
 import { SignatureData } from './useERC20Permit'
 import useTransactionDeadline from './useTransactionDeadline'
@@ -74,6 +73,7 @@ interface TridentTradeContext {
   receiveToWallet: boolean
   inputAmount?: CurrencyAmount<Currency>
   outputAmount?: CurrencyAmount<Currency>
+  outputCurrency?: Currency
   bentoPermit?: BentoPermit
 }
 
@@ -85,7 +85,6 @@ export function getTridentRouterParams(
   tridentRouterAddress: string = '',
   slippagePercentage: number = 0.5,
   inputAmount: CurrencyAmount<Currency>,
-  outputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ExactInputParams | ExactInputSingleParams | ComplexPathParams {
@@ -101,22 +100,13 @@ export function getTridentRouterParams(
         senderAddress,
         slippage,
         inputAmount,
-        outputAmount,
         fromWallet,
         receiveToWallet
       )
       break
 
     case RouteType.SinglePath:
-      routerParams = getExactInputParams(
-        multiRoute,
-        senderAddress,
-        slippage,
-        inputAmount,
-        outputAmount,
-        fromWallet,
-        receiveToWallet
-      )
+      routerParams = getExactInputParams(multiRoute, senderAddress, slippage, inputAmount, fromWallet, receiveToWallet)
       break
 
     case RouteType.ComplexPath:
@@ -127,7 +117,6 @@ export function getTridentRouterParams(
         tridentRouterAddress,
         slippage,
         inputAmount,
-        outputAmount,
         fromWallet,
         receiveToWallet
       )
@@ -142,7 +131,6 @@ function getExactInputSingleParams(
   senderAddress: string,
   slippage: number,
   inputAmount: CurrencyAmount<Currency>,
-  outputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ExactInputSingleParams {
@@ -150,9 +138,7 @@ function getExactInputSingleParams(
     amountIn: fromWallet
       ? inputAmount.quotient.toString().toBigNumber(0)
       : getBigNumber(multiRoute.amountIn * multiRoute.legs[0].absolutePortion),
-    amountOutMinimum: receiveToWallet
-      ? outputAmount.quotient.toString().toBigNumber(0)
-      : getBigNumber(multiRoute.amountOut * slippage),
+    amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
     tokenIn: multiRoute.legs[0].tokenFrom.address,
     pool: multiRoute.legs[0].poolAddress,
     data: defaultAbiCoder.encode(
@@ -168,7 +154,6 @@ function getExactInputParams(
   senderAddress: string,
   slippage: number,
   inputAmount: CurrencyAmount<Currency>,
-  outputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ExactInputParams {
@@ -202,9 +187,7 @@ function getExactInputParams(
   let inputParams: ExactInputParams = {
     tokenIn: multiRoute.legs[0].tokenFrom.address,
     amountIn: fromWallet ? inputAmount.quotient.toString().toBigNumber(0) : getBigNumber(multiRoute.amountIn),
-    amountOutMinimum: receiveToWallet
-      ? outputAmount.quotient.toString().toBigNumber(0)
-      : getBigNumber(multiRoute.amountOut * slippage),
+    amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
     path: paths,
     routeType: RouteType.SinglePath,
   }
@@ -218,7 +201,6 @@ function getComplexPathParams(
   tridentRouterAddress: string,
   slippage: number,
   inputAmount: CurrencyAmount<Currency>,
-  outputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ComplexPathParams {
@@ -395,52 +377,53 @@ export function useSwapCallArguments(
 
       return result
     } else if (trade instanceof TridentTrade) {
-      if (
-        !tridentRouterContract ||
-        !trade.route ||
-        !tridentTradeContext?.inputAmount ||
-        !tridentTradeContext?.outputAmount
-      )
-        return result
+      const { inputAmount, outputAmount, outputCurrency, receiveToWallet, fromWallet } = tridentTradeContext
+      if (!tridentRouterContract || !trade.route || !inputAmount || !outputAmount) return result
 
       const { routeType, ...rest } = getTridentRouterParams(
         trade.route,
-        account,
+        outputCurrency.isNative && receiveToWallet ? tridentRouterContract?.address : recipient,
         tridentRouterContract?.address,
         Number(allowedSlippage.asFraction.multiply(100).toSignificant(2)),
-        tridentTradeContext?.inputAmount,
-        tridentTradeContext?.outputAmount,
-        tridentTradeContext?.fromWallet,
-        tridentTradeContext?.receiveToWallet
+        inputAmount,
+        fromWallet,
+        receiveToWallet
       )
 
       const method = {
-        [RouteType.SinglePool]: tridentTradeContext?.fromWallet
-          ? 'exactInputSingleWithNativeToken'
-          : 'exactInputSingle',
-        [RouteType.SinglePath]: tridentTradeContext?.fromWallet ? 'exactInputWithNativeToken' : 'exactInput',
+        [RouteType.SinglePool]: fromWallet ? 'exactInputSingleWithNativeToken' : 'exactInputSingle',
+        [RouteType.SinglePath]: fromWallet ? 'exactInputWithNativeToken' : 'exactInput',
         [RouteType.ComplexPath]: 'complexPath',
       }
 
       // if you spend from wallet send as amount instead of share
       let value = '0x0'
-      if (
-        tridentTradeContext &&
-        tridentTradeContext.inputAmount &&
-        tridentTradeContext.fromWallet &&
-        tridentTradeContext.inputAmount.currency.isNative
-      ) {
-        value = toHex(tridentTradeContext.inputAmount)
+      if (inputAmount && fromWallet && inputAmount.currency.isNative) {
+        value = toHex(inputAmount)
       }
 
-      result = [
-        {
-          address: tridentRouterContract.address,
-          calldata: tridentRouterContract.interface.encodeFunctionData(method[routeType], [rest]),
-          value,
-        },
-      ] as SwapCall[]
+      const swapCall = tridentRouterContract.interface.encodeFunctionData(method[routeType], [rest])
+      let callData: SwapCall = {
+        address: tridentRouterContract.address,
+        calldata: swapCall,
+        value,
+      }
 
+      // Unwrap WETH to ETH
+      if (outputCurrency.isNative && receiveToWallet) {
+        const unwrapCall = tridentRouterContract.interface.encodeFunctionData('unwrapWETH', [
+          trade?.minimumAmountOut(allowedSlippage).quotient.toString(),
+          recipient,
+        ])
+
+        callData = {
+          address: tridentRouterContract.address,
+          calldata: tridentRouterContract.interface.encodeFunctionData('batch', [[swapCall, unwrapCall]]),
+          value,
+        }
+      }
+
+      result.push(callData)
       return result
     }
 
