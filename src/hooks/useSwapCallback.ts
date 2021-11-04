@@ -228,7 +228,7 @@ function getComplexPathParams(
       const initialPath: InitialPath = {
         tokenIn: multiRoute.legs[legIndex].tokenFrom.address,
         pool: multiRoute.legs[legIndex].poolAddress,
-        amount: getInitialPathAmount(legIndex, multiRoute, initialPaths, initialPathCount),
+        amount: getInitialPathAmount(legIndex, multiRoute, initialPaths, initialPathCount, inputAmount, fromWallet),
         native: false,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
@@ -286,13 +286,19 @@ function getInitialPathAmount(
   legIndex: number,
   multiRoute: MultiRoute,
   initialPaths: InitialPath[],
-  initialPathCount: number
+  initialPathCount: number,
+  inputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true
 ): BigNumber {
   if (initialPathCount > 1 && legIndex === initialPathCount - 1) {
     const sumIntialPathAmounts = initialPaths.map((p) => p.amount).reduce((a, b) => a.add(b))
-    return getBigNumber(multiRoute.amountIn).sub(sumIntialPathAmounts)
+    return fromWallet
+      ? inputAmount.quotient.toString().toBigNumber(0).sub(sumIntialPathAmounts)
+      : getBigNumber(multiRoute.amountIn).sub(sumIntialPathAmounts)
   } else {
-    return getBigNumber(multiRoute.amountIn * multiRoute.legs[legIndex].absolutePortion)
+    return fromWallet
+      ? inputAmount.quotient.toString().toBigNumber(0)
+      : getBigNumber(multiRoute.amountIn * multiRoute.legs[legIndex].absolutePortion)
   }
 }
 
@@ -322,7 +328,7 @@ export function useSwapCallArguments(
   const tridentRouterContract = useTridentRouterContract()
 
   const argentWalletContract = useArgentWalletContract()
-  const [rebase] = useBentoRebase(trade?.inputAmount.currency)
+  const { rebase } = useBentoRebase(trade?.inputAmount.currency)
 
   return useMemo<SwapCall[]>(() => {
     let result: SwapCall[] = []
@@ -413,7 +419,7 @@ export function useSwapCallArguments(
         value,
       }
 
-      // Unwrap WETH to ETH
+      // Unwrap WETH to ETH by batch calling Swap and unwrapWETH
       if (outputCurrency?.isNative && receiveToWallet) {
         const unwrapCall = tridentRouterContract.interface.encodeFunctionData('unwrapWETH', [
           trade?.minimumAmountOut(allowedSlippage).quotient.toString(),
@@ -566,7 +572,7 @@ export function useSwapCallback(
                     value,
                   }
 
-            console.log({ tx, value })
+            console.log('SWAP TRANSACTION', { tx, value })
 
             return library
               .estimateGas(tx)
@@ -667,5 +673,19 @@ export function useSwapCallback(
       },
       error: null,
     }
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, eip1559, addTransaction])
+  }, [
+    trade,
+    library,
+    account,
+    chainId,
+    recipient,
+    recipientAddressOrName,
+    swapCalls,
+    eip1559,
+    tridentTradeContext?.inputAmount,
+    tridentTradeContext?.inputCurrency?.symbol,
+    tridentTradeContext?.outputAmount,
+    tridentTradeContext?.outputCurrency?.symbol,
+    addTransaction,
+  ])
 }

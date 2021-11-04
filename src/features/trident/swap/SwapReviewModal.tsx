@@ -35,7 +35,7 @@ const SwapReviewModal: FC = () => {
   const tx = useTransactionStatus()
   const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
   const [cbError, setCbError] = useState<string>()
-  const [rebases] = useBentoRebases(currencies)
+  const { rebases } = useBentoRebases(currencies)
 
   const {
     parsedAmounts: [inputAmount, outputAmount, outputMinAmount],

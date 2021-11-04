@@ -17,7 +17,7 @@ const TridentClassicRecoilRoot: FC = (props) => {
   const classicPool = useTridentClassicPool(currencies?.[0], currencies?.[1], fee, twap)
   const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
-  const [rebases] = useBentoRebases(currencies)
+  const { rebases } = useBentoRebases(currencies)
 
   const setState = useRecoilCallback(
     ({ set }) =>
@@ -36,12 +36,14 @@ const TridentClassicRecoilRoot: FC = (props) => {
       classicPool[1] &&
       totalSupply &&
       poolBalance &&
+      currencies[0]?.wrapped.address &&
+      currencies[1]?.wrapped.address &&
       rebases[currencies[0]?.wrapped.address] &&
       rebases[currencies[1]?.wrapped.address]
     ) {
       setState(classicPool, totalSupply, poolBalance, currencies, rebases)
     }
-  }, [classicPool, totalSupply, poolBalance, currencies, rebases])
+  }, [classicPool, totalSupply, poolBalance, currencies, rebases, setState])
 
   // Render children if pool is loaded
   return <React.Fragment {...props} />
@@ -52,8 +54,9 @@ interface TridentRecoilRootProps {
 }
 
 const TridentRecoilRoot: FC<TridentRecoilRootProps> = ({ poolType, ...props }) => {
-  if (poolType !== PoolType.ConstantProduct) throw new Error('PoolType does not exist')
   if (poolType === PoolType.ConstantProduct) return <TridentClassicRecoilRoot {...props} />
+
+  throw new Error('PoolType does not exist')
 }
 
 export default TridentRecoilRoot

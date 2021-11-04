@@ -73,7 +73,7 @@ const useSwapAssetPanelInputs = () => {
   const receiveToWallet = useRecoilState(receiveToWalletAtom)
   const mainInputCurrencyAmount = useRecoilValue(mainInputCurrencyAmountSelector)
   const secondaryInputCurrencyAmount = useRecoilValue(secondaryInputCurrencyAmountSelector)
-  const [rebases, rebasesLoading] = useBentoRebases(currencies)
+  const { rebases, loading: rebasesLoading } = useBentoRebases(currencies)
 
   const mainInputShare = useMemo(() => {
     return mainInputCurrencyAmount && rebases[mainInputCurrencyAmount.currency.wrapped.address]
