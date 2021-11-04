@@ -25,4 +25,5 @@ export enum SupportedChainId {
   CELO = 42220,
   PALM = 11297108109,
   FUSE = 122,
+  MOONRIVER = 1285,
 }

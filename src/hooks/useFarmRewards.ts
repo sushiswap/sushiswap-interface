@@ -269,8 +269,6 @@ export default function useFarmRewards() {
     }
   }
 
-  console.log(farms)
-
   return farms
     .filter((farm) => {
       return (
