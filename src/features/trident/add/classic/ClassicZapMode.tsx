@@ -17,7 +17,7 @@ import {
 } from 'app/features/trident/context/atoms'
 import { useZapAssetInput } from 'app/features/trident/context/hooks/useZapAssetInput'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
-import { useBentoBoxContract } from 'app/hooks/useContract'
+import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks/useContract'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
@@ -31,7 +31,7 @@ const ClassicZapMode = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
-
+  const router = useTridentRouterContract()
   const [, pool] = useRecoilValue(poolAtom)
   const {
     zapInputAmount: [zapInputAmount, setZapInputAmount],
@@ -82,7 +82,11 @@ const ClassicZapMode = () => {
           spendFromWallet={spendFromWallet}
         />
         <div className="flex flex-col gap-3">
-          <TridentApproveGate inputAmounts={[parsedAmount]} tokenApproveOn={bentoBox?.address}>
+          <TridentApproveGate
+            inputAmounts={[parsedAmount]}
+            tokenApproveOn={bentoBox?.address}
+            masterContractAddress={router?.address}
+          >
             {({ loading, approved }) => (
               <Button
                 {...(loading && {

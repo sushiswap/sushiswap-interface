@@ -4,7 +4,6 @@ import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useBentoMasterApproveCallback, { BentoApprovalState, BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
-import { useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React, { FC, memo, ReactNode, useCallback, useEffect, useState } from 'react'
@@ -49,9 +48,10 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 
 interface TridentApproveGateProps {
   inputAmounts: (CurrencyAmount<Currency> | undefined)[]
-  children: ({ approved, loading }: { approved: boolean; loading: boolean; permit: BentoPermit }) => ReactNode
-  tokenApproveOn: string | undefined
+  children: ({ approved, loading }: { approved: boolean; loading: boolean; permit?: BentoPermit }) => ReactNode
+  tokenApproveOn?: string
   withPermit?: boolean
+  masterContractAddress?: string
 }
 
 const TridentApproveGate: FC<TridentApproveGateProps> = ({
@@ -59,11 +59,11 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
   tokenApproveOn,
   children,
   withPermit = false,
+  masterContractAddress,
 }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [status, setStatus] = useState<Record<string, ApprovalState>>({})
-  const router = useTridentRouterContract()
   const toggleWalletModal = useWalletModalToggle()
   const setBentoPermit = useSetRecoilState(TridentApproveGateBentoPermitAtom)
 
@@ -72,7 +72,7 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
     approvalState: bApprove,
     getPermit,
     permit,
-  } = useBentoMasterApproveCallback(router ? router.address : undefined, {})
+  } = useBentoMasterApproveCallback(masterContractAddress ? masterContractAddress : undefined, {})
 
   const loading =
     Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || bApprove === BentoApprovalState.UNKNOWN

@@ -6,7 +6,7 @@ import Button from 'components/Button'
 import Dots from 'components/Dots'
 import Typography from 'components/Typography'
 import { classNames } from 'functions'
-import { useBentoBoxContract } from 'hooks'
+import { useBentoBoxContract, useTridentRouterContract } from 'hooks'
 import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
 import Lottie from 'lottie-react'
 import React from 'react'
@@ -22,6 +22,7 @@ const ClassicStandardMode = () => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
+  const router = useTridentRouterContract()
   const {
     mainInput: [, setMainInput],
     secondaryInput: [, setSecondaryInput],
@@ -78,7 +79,11 @@ const ClassicStandardMode = () => {
             spendFromWallet={spendFromWalletB}
           />
           <div className="flex flex-col gap-3">
-            <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
+            <TridentApproveGate
+              inputAmounts={[parsedAmountA, parsedAmountB]}
+              tokenApproveOn={bentoBox?.address}
+              masterContractAddress={router?.address}
+            >
               {({ approved, loading }) => {
                 const disabled = !!error || !approved || loading || attemptingTxn
                 const buttonText = attemptingTxn ? (

@@ -4,7 +4,7 @@ import loadingCircle from 'animation/loading-circle.json'
 import Button from 'components/Button'
 import Dots from 'components/Dots'
 import Typography from 'components/Typography'
-import { useTridentRouterContract } from 'hooks'
+import { useBentoBoxContract, useTridentRouterContract } from 'hooks'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
@@ -17,7 +17,9 @@ const SwapButton: FC = () => {
   const { i18n } = useLingui()
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const tridentRouterContract = useTridentRouterContract()
+  const router = useTridentRouterContract()
+  const bentoBox = useBentoBoxContract()
+
   const {
     typedField: [typedField],
     parsedAmounts,
@@ -27,7 +29,8 @@ const SwapButton: FC = () => {
   return (
     <TridentApproveGate
       inputAmounts={[typedField === TypedField.A ? parsedAmounts[0] : parsedAmounts[1]]}
-      tokenApproveOn={tridentRouterContract?.address}
+      tokenApproveOn={bentoBox?.address}
+      masterContractAddress={router?.address}
     >
       {({ approved, loading }) => {
         const disabled = !!error || !approved || loading || attemptingTxn

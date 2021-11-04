@@ -9,7 +9,7 @@ import PercentInput from 'components/Input/Percent'
 import ListPanel from 'components/ListPanel'
 import ToggleButtonGroup from 'components/ToggleButton'
 import Typography from 'components/Typography'
-import { useTridentRouterContract } from 'hooks'
+import { useBentoBoxContract, useTridentRouterContract } from 'hooks'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
@@ -28,6 +28,8 @@ import TridentApproveGate from '../../TridentApproveGate'
 const ClassicUnstandardMode: FC = () => {
   const { i18n } = useLingui()
   const router = useTridentRouterContract()
+  const bentoBox = useBentoBoxContract()
+
   const {
     percentageInput: [percentageInput, setPercentageInput],
     parsedAmounts,
@@ -93,7 +95,8 @@ const ClassicUnstandardMode: FC = () => {
               <div className="block lg:hidden">{toggleButtonGroup}</div>
               <TridentApproveGate
                 inputAmounts={[poolBalance?.multiply(new Percent(percentageInput, '100'))]}
-                tokenApproveOn={router?.address}
+                tokenApproveOn={bentoBox?.address}
+                masterContractAddress={router?.address}
               >
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn

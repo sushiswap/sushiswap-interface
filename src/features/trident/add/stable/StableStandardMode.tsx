@@ -13,7 +13,7 @@ import Typography from 'app/components/Typography'
 import { attemptingTxnAtom, poolAtom, showReviewAtom } from 'app/features/trident/context/atoms'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { classNames } from 'app/functions/styling'
-import { useBentoBoxContract } from 'app/hooks/useContract'
+import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTokenBalances } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
@@ -92,6 +92,7 @@ const StableStandardMode: FC = () => {
   const balances = useTokenBalances(account ? account : undefined, tokens)
   const bentoBox = useBentoBoxContract()
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const router = useTridentRouterContract()
 
   const availableAssets = useMemo(
     () =>
@@ -224,7 +225,11 @@ const StableStandardMode: FC = () => {
             ))}
 
             <div className="flex flex-col gap-3">
-              <TridentApproveGate inputAmounts={Object.values(parsedAmounts)} tokenApproveOn={bentoBox?.address}>
+              <TridentApproveGate
+                inputAmounts={Object.values(parsedAmounts)}
+                tokenApproveOn={bentoBox?.address}
+                masterContractAddress={router?.address}
+              >
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn
                   const buttonText = attemptingTxn ? (

@@ -11,7 +11,7 @@ import Typography from 'app/components/Typography'
 import { attemptingTxnAtom, noLiquiditySelector, poolAtom, showReviewAtom } from 'app/features/trident/context/atoms'
 import { useZapAssetInput } from 'app/features/trident/context/hooks/useZapAssetInput'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
-import { useBentoBoxContract } from 'app/hooks/useContract'
+import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React from 'react'
@@ -23,6 +23,7 @@ const StableZapMode = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
+  const router = useTridentRouterContract()
 
   const [, pool] = useRecoilValue(poolAtom)
   const {
@@ -56,7 +57,11 @@ const StableZapMode = () => {
           currencies={[NATIVE[chainId], pool?.token0, pool?.token1]}
         />
         <div className="flex flex-col gap-3">
-          <TridentApproveGate inputAmounts={[parsedAmount]} tokenApproveOn={bentoBox?.address}>
+          <TridentApproveGate
+            inputAmounts={[parsedAmount]}
+            tokenApproveOn={bentoBox?.address}
+            masterContractAddress={router?.address}
+          >
             {({ loading, approved }) => (
               <Button
                 {...(loading && {
