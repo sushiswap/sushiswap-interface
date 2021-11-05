@@ -12,4 +12,5 @@ export const GRAPH_HOST = {
   [ChainId.HARMONY]: 'https://sushi.graph.t.hmny.io',
   [ChainId.OKEX]: 'https://graph.kkt.one/node',
   [ChainId.ARBITRUM]: THE_GRAPH,
+  [ChainId.MOONRIVER]: THE_GRAPH,
 }

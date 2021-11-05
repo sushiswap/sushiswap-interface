@@ -35,6 +35,7 @@ const RPC = {
   [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
   [ChainId.FUSE]: 'https://rpc.fuse.io',
   [ChainId.CELO]: 'https://forno.celo.org',
+  [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
 }
 
 export function getNetwork(defaultChainId, urls = RPC) {

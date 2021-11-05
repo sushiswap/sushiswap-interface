@@ -8,6 +8,7 @@ import {
   getFactory,
   getLiquidityPositions,
   getMaticPrice,
+  getMovrPrice,
   getMphPrice,
   getOnePrice,
   getPicklePrice,
@@ -84,6 +85,13 @@ export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.CELO
   const { data } = useSWR(shouldFetch ? 'celoPrice' : null, () => getCeloPrice(), swrConfig)
+  return data
+}
+
+export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.MOONRIVER
+  const { data } = useSWR(shouldFetch ? 'movrPrice' : null, () => getMovrPrice(), swrConfig)
   return data
 }
 

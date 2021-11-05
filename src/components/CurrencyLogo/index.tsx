@@ -27,7 +27,7 @@ const BLOCKCHAIN = {
   [ChainId.MATIC]: 'polygon',
   [ChainId.XDAI]: 'xdai',
   // [ChainId.OKEX]: 'okex',
-  // [ChainId.MOONRIVER]: 'moonriver'
+  [ChainId.MOONRIVER]: 'moonriver',
 }
 
 function getCurrencySymbol(currency) {

@@ -74,6 +74,7 @@ function AppBar(): JSX.Element {
                           ChainId.HARMONY,
                           ChainId.ARBITRUM,
                           ChainId.CELO,
+                          ChainId.MOONRIVER,
                         ].includes(chainId) && (
                           <NavLink href={'/farm'}>
                             <a
