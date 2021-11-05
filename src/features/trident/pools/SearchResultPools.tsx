@@ -50,7 +50,7 @@ const SearchResultPools: FC = () => {
                             loading ? 'opacity-100' : 'opacity-0'
                           }`}
                         />
-                        {error && <span className="text-sm italic text-red ml-2">{i18n._(t`⚠️ Loading Error`)}</span>}
+                        {error && <span className="ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
                       </>
                     )}
                   </th>

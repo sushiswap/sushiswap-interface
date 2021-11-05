@@ -4,11 +4,14 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { BarGraph } from '../../../components/BarGraph'
 import Button from '../../../components/Button'
-import { tvlData, volumeData } from './mockData'
 import Typography from '../../../components/Typography'
 import LineGraph from '../../../components/LineGraph'
 import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
 import { formatDate } from '../../../functions'
+import { usePoolBuckets } from '../../../services/graph/hooks/pools'
+import { useActiveWeb3React } from '../../../hooks'
+import { useRecoilValue } from 'recoil'
+import { poolAtom } from '../context/atoms'
 
 enum ChartType {
   Volume = 'Volume',
@@ -33,27 +36,36 @@ const chartTimespans: Record<ChartRange, number> = {
 
 const PoolStatsChart = () => {
   const isDesktop = useDesktopMediaQuery()
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Volume)
   const [chartRange, setChartRange] = useState<ChartRange>(ChartRange.ALL)
-  const allData = useMemo(() => ({ [ChartType.Volume]: volumeData, [ChartType.TVL]: tvlData }), [])
+  const { address } = useRecoilValue(poolAtom)
+  const data = usePoolBuckets({
+    chainId,
+    fine: chartTimespans[chartRange] <= chartTimespans['1W'],
+    variables: {
+      first: chartTimespans[chartRange] <= chartTimespans['1W'] ? 168 : undefined,
+      where: { pool: address?.toLowerCase() },
+    },
+    shouldFetch: !!address,
+  })
   const graphData = useMemo(() => {
-    const data = allData[chartType]
     const currentDate = Math.round(Date.now() / 1000)
     return data
       ?.reduce((acc, cur) => {
-        const x = new Date(cur.time).getTime()
+        const x = cur.date.getTime()
         if (Math.round(x / 1000) >= currentDate - chartTimespans[chartRange]) {
           acc.push({
             x,
-            y: Number(cur.price),
+            y: Number(chartType === ChartType.Volume ? cur.volumeUSD : cur.totalValueLockedUSD),
           })
         }
 
         return acc
       }, [])
       .sort((a, b) => a.x - b.x)
-  }, [allData, chartRange, chartType])
+  }, [data, chartRange, chartType])
   const [selectedIndex, setSelectedIndex] = useState(graphData?.length - 1)
 
   const chartButtons = (
@@ -79,7 +91,7 @@ const PoolStatsChart = () => {
 
   return (
     <div className="flex flex-col gap-5 h-[280px]">
-      <div className="lg:order-0 flex lg:justify-between lg:items-center flex-col lg:flex-row">
+      <div className="flex flex-col lg:order-0 lg:justify-between lg:items-center lg:flex-row">
         <ToggleButtonGroup value={chartType} onChange={setChartType}>
           <ToggleButtonGroup.Button value={ChartType.Volume} className="h-12 w-full lg:h-10 lg:w-[106px]">
             {i18n._(t`Volume`)}
@@ -91,7 +103,7 @@ const PoolStatsChart = () => {
         <div className="hidden lg:block">{chartButtons}</div>
       </div>
       {graphData && graphData.length > 0 && (
-        <div className="lg:order-2 w-full h-40">
+        <div className="w-full h-40 lg:order-2">
           <Typography variant="h3" className="text-high-emphesis" weight={700}>
             ${graphData[selectedIndex]?.y}
           </Typography>

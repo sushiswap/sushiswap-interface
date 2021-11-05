@@ -8,7 +8,7 @@ export const filterForSearchQueryAndTWAP: FilterSymbolsFunc<{ searchQuery: strin
   filterValue
 ) => {
   return rows.filter(({ original }) => {
-    if (original.twapEnabled !== filterValue.twapEnabled) return false
+    if (filterValue.twapEnabled && !original.twapEnabled) return false
 
     // Allow searching for symbol (LINK) or name (chainlink)
     const searchableText = original.assets

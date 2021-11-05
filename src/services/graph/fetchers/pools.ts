@@ -1,4 +1,4 @@
-import { getTridentPoolsQuery } from '../queries'
+import { getPoolDayBuckets, getPoolHourBuckets, getTridentPoolsQuery } from '../queries'
 
 import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST, TRIDENT } from '../constants'
@@ -36,16 +36,16 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
   Object.entries(pools)
     .filter(([, assets]) => assets.length)
     .flatMap(([poolType, poolList]: [string, TridentPoolData[]]) =>
-      poolList.map(({ volumeUSD, totalValueLockedUSD, transactionCount, assets, swapFee, twapEnabled }) => ({
+      poolList.map(({ kpi, assets, swapFee, twapEnabled }) => ({
         type: gqlPoolTypeMap[poolType],
-        volumeUSD: Number(volumeUSD),
-        totalValueLockedUSD: Number(totalValueLockedUSD),
-        transactionCount: Number(transactionCount),
+        volumeUSD: Number(kpi.volumeUSD),
+        totalValueLockedUSD: Number(kpi.totalValueLockedUSD),
+        transactionCount: Number(kpi.transactionCount),
         assets: assets.map((asset) => ({
-          id: asset.id,
-          symbol: asset.metaData.symbol,
-          name: asset.metaData.name,
-          decimals: Number(asset.metaData.decimals),
+          id: asset.token.id,
+          symbol: asset.token.symbol,
+          name: asset.token.name,
+          decimals: Number(asset.token.decimals),
         })),
         swapFeePercent: (parseInt(swapFee) / 100) as FeeTier,
         twapEnabled,
@@ -53,14 +53,16 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
     )
 
 interface TridentPoolData {
-  volumeUSD: string
-  totalValueLockedUSD: string
-  transactionCount: string
+  kpi: {
+    volumeUSD: string
+    totalValueLockedUSD: string
+    transactionCount: string
+  }
   twapEnabled: boolean
   swapFee: string
   assets: {
-    id: string
-    metaData: {
+    token: {
+      id: string
       symbol: string
       name: string
       decimals: string
@@ -81,4 +83,41 @@ export const getTridentPools = async (
 ): Promise<TridentPool[]> => {
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
   return formatPools(result)
+}
+
+interface PoolBucketQueryResult {
+  id: string
+  date: string
+  totalValueLockedUSD: string
+  volumeUSD: string
+  feesUSD: string
+  transactionCount: string
+}
+
+export interface PoolBucket {
+  date: Date
+  totalValueLockedUSD: number
+  volumeUSD: number
+  feesUSD: number
+  transactionCount: number
+}
+
+const formatBuckets = (buckets: PoolBucketQueryResult[]): PoolBucket[] =>
+  buckets.map((bucket) => ({
+    date: new Date(Number(bucket.date) * 1000),
+    totalValueLockedUSD: Number(bucket.totalValueLockedUSD),
+    volumeUSD: Number(bucket.volumeUSD),
+    feesUSD: Number(bucket.feesUSD),
+    transactionCount: Number(bucket.transactionCount),
+  }))
+
+export const getPoolBuckets = async (
+  chainId: ChainId = ChainId.MAINNET,
+  variables: {} = undefined,
+  fine: boolean = false
+): Promise<PoolBucket[]> => {
+  const result: PoolBucketQueryResult[] = Object.values(
+    await fetcher(chainId, fine ? getPoolHourBuckets : getPoolDayBuckets, variables)
+  )?.[0] as PoolBucketQueryResult[]
+  return formatBuckets(result)
 }

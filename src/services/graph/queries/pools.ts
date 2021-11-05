@@ -2,14 +2,17 @@ import gql from 'graphql-tag'
 
 const tridentPoolsSubQuery = `
   id
-  volumeUSD
-  totalValueLockedUSD
+  kpi {
+    volumeUSD
+    totalValueLockedUSD
+    feesUSD
+    transactionCount
+  }
   twapEnabled
   swapFee
-  transactionCount
   assets {
-    id
-    metaData {
+    token {
+      id
       name
       symbol
       decimals
@@ -30,10 +33,36 @@ export const getTridentPoolsQuery = gql`
   {
     ${allPools.map(
       (pool) =>
-        `${pool}(first: $first, skip: $skip, block: $block, where: $where, orderBy:totalValueLockedUSD, orderDirection:desc) {
+        `${pool}(first: $first, skip: $skip, block: $block, where: $where) {
           ${tridentPoolsSubQuery}
          }
         `
     )}
+  }
+`
+
+export const getPoolHourBuckets = gql`
+  query getPoolHourBuckets($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolHourBucket_filter) {
+    poolHourBuckets(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+      id
+      date
+      totalValueLockedUSD
+      volumeUSD
+      feesUSD
+      transactionCount
+    }
+  }
+`
+
+export const getPoolDayBuckets = gql`
+  query getPoolDayBuckets($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolDayBucket_filter) {
+    poolDayBuckets(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+      id
+      date
+      totalValueLockedUSD
+      volumeUSD
+      feesUSD
+      transactionCount
+    }
   }
 `

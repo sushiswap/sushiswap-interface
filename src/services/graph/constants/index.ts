@@ -18,5 +18,5 @@ export const GRAPH_HOST = {
 }
 
 export const TRIDENT = {
-  [ChainId.KOVAN]: 'sushiswap/trident',
+  [ChainId.KOVAN]: 'matthewlilley/trident',
 }

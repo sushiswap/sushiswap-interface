@@ -12,7 +12,7 @@ import { useActiveWeb3React } from '../../../hooks'
 
 export const usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
-  const { data, error, isValidating } = useSWR('getAllTridentPools', () => getTridentPools(chainId))
+  const { data, error, isValidating } = useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
 
   const columns = useMemo(() => {
     return [
