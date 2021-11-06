@@ -27,6 +27,7 @@ export const EXCHANGE = {
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
   [ChainId.CELO]: 'jiro-ono/sushitestsubgraph',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
+  [ChainId.MOONRIVER]: 'sushiswap/moonriver-exchange',
 }
 
 export const exchange = async (chainId = ChainId.MAINNET, query, variables) =>
@@ -147,6 +148,12 @@ export const getOnePrice = async () => {
 export const getCeloPrice = async () => {
   return getTokenPrice(ChainId.CELO, tokenPriceQuery, {
     id: '0x471ece3750da237f93b8e339c536989b8978a438',
+  })
+}
+
+export const getMovrPrice = async () => {
+  return getTokenPrice(ChainId.MOONRIVER, tokenPriceQuery, {
+    id: '0xf50225a84382c74cbdea10b0c176f71fc3de0c4d',
   })
 }
 

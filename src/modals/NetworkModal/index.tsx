@@ -169,7 +169,7 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
     },
     rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
-    blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
+    blockExplorerUrls: ['https://moonriver.moonscan.io'],
   },
   [ChainId.FUSE]: {
     chainId: '0x7A',
