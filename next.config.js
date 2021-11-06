@@ -1,8 +1,4 @@
-// @ts-check
 
-/**
- * @type {import('next').NextConfig}
- **/
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
 
@@ -14,6 +10,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+// @ts-check
+/**
+ * @type {import('next').NextConfig}
+ **/
 module.exports = withBundleAnalyzer(
   withPWA({
     webpack: (config) => {
@@ -35,7 +35,9 @@ module.exports = withBundleAnalyzer(
     images: {
       domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
     },
-    reactStrictMode: true,
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
+  reactStrictMode: true,
     async redirects() {
       return [
         {
