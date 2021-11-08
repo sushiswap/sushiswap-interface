@@ -69,6 +69,7 @@ export const useClassicStandardRemoveExecute = () => {
 
         try {
           setAttemptingTxn(true)
+
           const tx = await router.burnLiquidity(
             pool.liquidityToken.address,
             parsedSLPAmount.quotient.toString(),

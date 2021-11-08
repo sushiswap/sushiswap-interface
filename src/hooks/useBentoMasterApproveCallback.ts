@@ -146,7 +146,14 @@ const useBentoMasterApproveCallback = (
 
   const approve = useCallback(async () => {
     try {
-      const tx = await bentoBoxContract?.setMasterContractApproval(account, masterContract, true, 0, HashZero, HashZero)
+      const tx = await (otherBentoBoxContract || bentoBoxContract)?.setMasterContractApproval(
+        account,
+        masterContract,
+        true,
+        0,
+        HashZero,
+        HashZero
+      )
 
       return addTransaction(tx, {
         summary: contractName

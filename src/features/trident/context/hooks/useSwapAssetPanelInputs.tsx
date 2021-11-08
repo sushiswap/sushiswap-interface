@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, TradeType, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount } from 'app/functions'
 import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
@@ -64,7 +64,7 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
 
 const useSwapAssetPanelInputs = () => {
   const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { currencies, switchCurrencies: switchURLCurrencies } = useCurrenciesFromURL()
   const typedField = useRecoilState(typedFieldAtom)
   const mainInput = useRecoilState(mainInputAtom)
@@ -74,6 +74,13 @@ const useSwapAssetPanelInputs = () => {
   const mainInputCurrencyAmount = useRecoilValue(mainInputCurrencyAmountSelector)
   const secondaryInputCurrencyAmount = useRecoilValue(secondaryInputCurrencyAmountSelector)
   const { rebases, loading: rebasesLoading } = useBentoRebases(currencies)
+
+  const isWrap =
+    currencies[1] &&
+    currencies[1] &&
+    chainId &&
+    ((currencies[0]?.isNative && WNATIVE[chainId].address === currencies[1]?.wrapped.address) ||
+      (currencies[1]?.isNative && WNATIVE[chainId].address === currencies[0]?.wrapped.address))
 
   const mainInputShare = useMemo(() => {
     return mainInputCurrencyAmount && rebases[mainInputCurrencyAmount.currency.wrapped.address]
@@ -130,15 +137,19 @@ const useSwapAssetPanelInputs = () => {
   const balance = useBentoOrWalletBalance(account ?? undefined, trade?.inputAmount.currency, spendFromWallet[0])
 
   const formattedAmounts = useMemo(() => {
+    if (isWrap) return [mainInput[0], mainInput[0]]
+
     return [
       typedField[0] === TypedField.A ? mainInput[0] : tradeOutputAmount?.toSignificant(6) ?? '',
       typedField[0] === TypedField.B ? secondaryInput[0] : tradeOutputAmount?.toSignificant(6) ?? '',
     ]
-  }, [mainInput, secondaryInput, tradeOutputAmount, typedField])
+  }, [isWrap, mainInput, secondaryInput, tradeOutputAmount, typedField])
 
   const parsedAmounts = useMemo(() => {
+    if (isWrap) return [mainInputCurrencyAmount, mainInputCurrencyAmount]
+
     return [mainInputCurrencyAmount, tradeOutputAmount, tradeMinimumOutputAmount]
-  }, [mainInputCurrencyAmount, tradeOutputAmount, tradeMinimumOutputAmount])
+  }, [isWrap, mainInputCurrencyAmount, tradeOutputAmount, tradeMinimumOutputAmount])
 
   const switchCurrencies = useRecoilCallback(
     ({ set }) =>
@@ -163,6 +174,7 @@ const useSwapAssetPanelInputs = () => {
 
   return useMemo(
     () => ({
+      isWrap,
       reset,
       error,
       typedField,
@@ -176,6 +188,7 @@ const useSwapAssetPanelInputs = () => {
       switchCurrencies,
     }),
     [
+      isWrap,
       reset,
       error,
       typedField,
