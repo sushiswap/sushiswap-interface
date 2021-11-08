@@ -1,6 +1,6 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
 import { TokenList } from '@uniswap/token-lists'
-import Modal from 'components/Modal'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import useLast from 'hooks/useLast'
 import usePrevious from 'hooks/usePrevious'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -66,46 +66,48 @@ function CurrencySearchModal({
   const minHeight = modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 75
 
   return (
-    <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={75} minHeight={minHeight} padding={1}>
-      {modalView === CurrencyModalView.search ? (
-        <CurrencySearch
-          isOpen={isOpen}
-          onDismiss={onDismiss}
-          onCurrencySelect={handleCurrencySelect}
-          selectedCurrency={selectedCurrency}
-          otherSelectedCurrency={otherSelectedCurrency}
-          showCommonBases={showCommonBases}
-          showImportView={() => setModalView(CurrencyModalView.importToken)}
-          setImportToken={setImportToken}
-          showManageView={() => setModalView(CurrencyModalView.manage)}
-          currencyList={currencyList}
-          includeNativeCurrency={includeNativeCurrency}
-          allowManageTokenList={allowManageTokenList}
-        />
-      ) : modalView === CurrencyModalView.importToken && importToken ? (
-        <ImportToken
-          tokens={[importToken]}
-          onDismiss={onDismiss}
-          list={importToken instanceof WrappedTokenInfo ? importToken.list : undefined}
-          onBack={() =>
-            setModalView(prevView && prevView !== CurrencyModalView.importToken ? prevView : CurrencyModalView.search)
-          }
-          handleCurrencySelect={handleCurrencySelect}
-        />
-      ) : modalView === CurrencyModalView.importList && importList && listURL ? (
-        <ImportList list={importList} listURL={listURL} onDismiss={onDismiss} setModalView={setModalView} />
-      ) : modalView === CurrencyModalView.manage ? (
-        <Manage
-          onDismiss={onDismiss}
-          setModalView={setModalView}
-          setImportToken={setImportToken}
-          setImportList={setImportList}
-          setListUrl={setListUrl}
-        />
-      ) : (
-        ''
-      )}
-    </Modal>
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
+      <div className="p-6">
+        {modalView === CurrencyModalView.search ? (
+          <CurrencySearch
+            isOpen={isOpen}
+            onDismiss={onDismiss}
+            onCurrencySelect={handleCurrencySelect}
+            selectedCurrency={selectedCurrency}
+            otherSelectedCurrency={otherSelectedCurrency}
+            showCommonBases={showCommonBases}
+            showImportView={() => setModalView(CurrencyModalView.importToken)}
+            setImportToken={setImportToken}
+            showManageView={() => setModalView(CurrencyModalView.manage)}
+            currencyList={currencyList}
+            includeNativeCurrency={includeNativeCurrency}
+            allowManageTokenList={allowManageTokenList}
+          />
+        ) : modalView === CurrencyModalView.importToken && importToken ? (
+          <ImportToken
+            tokens={[importToken]}
+            onDismiss={onDismiss}
+            list={importToken instanceof WrappedTokenInfo ? importToken.list : undefined}
+            onBack={() =>
+              setModalView(prevView && prevView !== CurrencyModalView.importToken ? prevView : CurrencyModalView.search)
+            }
+            handleCurrencySelect={handleCurrencySelect}
+          />
+        ) : modalView === CurrencyModalView.importList && importList && listURL ? (
+          <ImportList list={importList} listURL={listURL} onDismiss={onDismiss} setModalView={setModalView} />
+        ) : modalView === CurrencyModalView.manage ? (
+          <Manage
+            onDismiss={onDismiss}
+            setModalView={setModalView}
+            setImportToken={setImportToken}
+            setImportList={setImportList}
+            setListUrl={setListUrl}
+          />
+        ) : (
+          ''
+        )}
+      </div>
+    </HeadlessUiModal.Controlled>
   )
 }
 
