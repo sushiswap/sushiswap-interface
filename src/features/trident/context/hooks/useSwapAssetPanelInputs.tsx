@@ -76,7 +76,7 @@ const useSwapAssetPanelInputs = () => {
   const { rebases, loading: rebasesLoading } = useBentoRebases(currencies)
 
   const isWrap =
-    currencies[1] &&
+    currencies[0] &&
     currencies[1] &&
     chainId &&
     ((currencies[0]?.isNative && WNATIVE[chainId].address === currencies[1]?.wrapped.address) ||
