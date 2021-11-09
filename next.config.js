@@ -1,4 +1,4 @@
-/** @type {import('next').NextConfig} */
+
 const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
 
@@ -17,6 +17,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 const { withSentryConfig } = require('@sentry/nextjs')
 
+// @ts-check
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
   webpack: (config) => {
     config.module.rules = [
@@ -29,6 +33,9 @@ const nextConfig = {
 
     return config
   },
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
+  reactStrictMode: true,
   experimental: { esmExternals: true },
   pwa: {
     dest: 'public',
@@ -38,7 +45,6 @@ const nextConfig = {
   images: {
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
   },
-  reactStrictMode: true,
   async redirects() {
     return [
       // {
