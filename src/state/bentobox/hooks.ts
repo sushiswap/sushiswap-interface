@@ -1,4 +1,4 @@
-import { KASHI_ADDRESS, Token, USDC, USDC_ADDRESS, WNATIVE } from '@sushiswap/sdk'
+import { KASHI_ADDRESS, Token, USDC, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/sdk'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -33,9 +33,11 @@ export function useBentoBalances(): BentoBalance[] {
 
   const tokens = useAllTokens()
 
-  const weth = WNATIVE[chainId].address
+  const weth = WNATIVE_ADDRESS[chainId]
 
-  const tokenAddresses = Object.keys(tokens)
+  const tokenAddresses = Object.keys(tokens).filter(
+    (token) => !['0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72'].includes(token)
+  )
 
   const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
 
