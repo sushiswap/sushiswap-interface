@@ -196,7 +196,7 @@ export default function Stake() {
                                 proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive
                                 xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
                                 Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
-                                SUSHI and any additional from fees.`)}
+                                SUSHI and any additional from fees.`).split("\n").join(" ")}
             </div>
             {/* <div className="flex">
                             <div className="mr-14 md:mr-9">
