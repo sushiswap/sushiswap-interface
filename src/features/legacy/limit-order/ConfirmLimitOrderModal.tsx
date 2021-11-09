@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { USDC } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import CurrencyLogo from 'app/components/CurrencyLogo'
-import Modal from 'app/components/Modal'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import { formatNumber, shortenAddress } from 'app/functions'
 import useUSDCPrice from 'app/hooks/useUSDCPrice'
 import { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
@@ -22,14 +22,14 @@ const ConfirmLimitOrderModal: FC<ConfirmLimitOrderModalProps> = ({ open, onDismi
   const bottomContent = useCallback(() => <ConfirmLimitOrderBottomContent onClick={onConfirm} />, [onConfirm])
 
   return (
-    <Modal isOpen={open} onDismiss={onDismiss} maxHeight={90}>
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onDismiss}>
       <ConfirmationModalContent
         title="Confirm Limit Order"
         onDismiss={onDismiss}
         topContent={topContent}
         bottomContent={bottomContent}
       />
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }
 

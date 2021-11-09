@@ -95,8 +95,7 @@ const ClassicUnstandardMode: FC = () => {
               <div className="block lg:hidden">{toggleButtonGroup}</div>
               <TridentApproveGate
                 inputAmounts={[poolBalance?.multiply(new Percent(percentageInput, '100'))]}
-                tokenApproveOn={bentoBox?.address}
-                masterContractAddress={router?.address}
+                tokenApproveOn={router?.address}
               >
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn

@@ -10,7 +10,7 @@ import React, { FC } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { attemptingTxnAtom, showReviewAtom } from '../context/atoms'
-import useSwapAssetPanelInputs, { TypedField } from '../context/hooks/useSwapAssetPanelInputs'
+import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
 import TridentApproveGate from '../TridentApproveGate'
 
 const SwapButton: FC = () => {
@@ -20,15 +20,11 @@ const SwapButton: FC = () => {
   const router = useTridentRouterContract()
   const bentoBox = useBentoBoxContract()
 
-  const {
-    typedField: [typedField],
-    parsedAmounts,
-    error,
-  } = useSwapAssetPanelInputs()
+  const { parsedAmounts, error } = useSwapAssetPanelInputs()
 
   return (
     <TridentApproveGate
-      inputAmounts={[typedField === TypedField.A ? parsedAmounts[0] : parsedAmounts[1]]}
+      inputAmounts={[parsedAmounts[0]]}
       tokenApproveOn={bentoBox?.address}
       masterContractAddress={router?.address}
     >

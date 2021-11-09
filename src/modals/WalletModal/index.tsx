@@ -3,12 +3,12 @@ import { useLingui } from '@lingui/react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import AccountDetails from 'components/AccountDetails'
 import { ButtonError } from 'components/Button'
 import ExternalLink from 'components/ExternalLink'
-import Modal from 'components/Modal'
 import ModalHeader from 'components/ModalHeader'
-import { injected,SUPPORTED_WALLETS } from 'config/wallets'
+import { injected, SUPPORTED_WALLETS } from 'config/wallets'
 import { OVERLAY_READY } from 'entities/connectors/FortmaticConnector'
 import usePrevious from 'hooks/usePrevious'
 import React, { useEffect, useState } from 'react'
@@ -211,7 +211,7 @@ export default function WalletModal({
   function getModalContent() {
     if (error) {
       return (
-        <div>
+        <div className="p-6">
           <ModalHeader
             title={error instanceof UnsupportedChainIdError ? i18n._(t`Wrong Network`) : i18n._(t`Error connecting`)}
             onClose={toggleWalletModal}
@@ -242,7 +242,7 @@ export default function WalletModal({
       )
     }
     return (
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-4 p-6">
         <ModalHeader title="Select a Wallet" onClose={toggleWalletModal} />
         <div className="flex flex-col space-y-6">
           {walletView === WALLET_VIEWS.PENDING ? (
@@ -269,8 +269,8 @@ export default function WalletModal({
   }
 
   return (
-    <Modal isOpen={walletModalOpen} onDismiss={toggleWalletModal} minHeight={0} maxHeight={90}>
+    <HeadlessUiModal.Controlled isOpen={walletModalOpen} onDismiss={toggleWalletModal}>
       {getModalContent()}
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }

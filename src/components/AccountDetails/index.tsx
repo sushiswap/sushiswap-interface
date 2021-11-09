@@ -102,7 +102,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
   }, [dispatch, chainId])
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 p-6">
       <div className="space-y-3">
         <ModalHeader title="Account" onClose={toggleWalletModal} />
         <div className="space-y-3">

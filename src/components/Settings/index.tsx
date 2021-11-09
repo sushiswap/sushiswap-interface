@@ -3,7 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Percent } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import Modal from 'app/components/Modal'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import ModalHeader from 'app/components/ModalHeader'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Toggle from 'app/components/Toggle'
@@ -104,8 +104,8 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, tines = false 
         </div>
       )}
 
-      <Modal isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)}>
-        <div className="space-y-4">
+      <HeadlessUiModal.Controlled isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)}>
+        <div className="space-y-4 p-6">
           <ModalHeader title={i18n._(t`Are you sure?`)} onClose={() => setShowConfirmation(false)} />
           <Typography variant="lg">
             {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
@@ -131,7 +131,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, tines = false 
             </Typography>
           </Button>
         </div>
-      </Modal>
+      </HeadlessUiModal.Controlled>
     </div>
   )
 }

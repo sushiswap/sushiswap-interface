@@ -31,7 +31,7 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
 
   const addToken = useAddUserToken()
   return (
-    <div className="relative w-full space-y-3 overflow-auto">
+    <div className="relative w-full space-y-3 overflow-auto p-6">
       <ModalHeader
         onBack={onBack}
         onClose={onDismiss}

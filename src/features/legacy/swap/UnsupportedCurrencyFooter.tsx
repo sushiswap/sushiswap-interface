@@ -1,10 +1,10 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Button from 'components/Button'
 import CloseIcon from 'components/CloseIcon'
 import { AutoColumn } from 'components/Column'
 import CurrencyLogo from 'components/CurrencyLogo'
 import ExternalLink from 'components/ExternalLink'
-import Modal from 'components/Modal'
 import { AutoRow, RowBetween } from 'components/Row'
 import { classNames } from 'functions'
 import { getExplorerLink } from 'functions/explorer'
@@ -38,8 +38,8 @@ export default function UnsupportedCurrencyFooter({
         'text-center transition-transform z-[-1] w-full -mt-8 pb-5 pt-12'
       )}
     >
-      <Modal isOpen={showDetails} onDismiss={() => setShowDetails(false)}>
-        <div style={{ padding: '2rem' }}>
+      <HeadlessUiModal.Controlled isOpen={showDetails} onDismiss={() => setShowDetails(false)}>
+        <div className="p-6">
           <AutoColumn gap="lg">
             <RowBetween>
               <div>Unsupported Assets</div>
@@ -75,7 +75,7 @@ export default function UnsupportedCurrencyFooter({
             </AutoColumn>
           </AutoColumn>
         </div>
-      </Modal>
+      </HeadlessUiModal.Controlled>
       <Button variant="empty" style={{ padding: '0px' }} onClick={() => setShowDetails(true)}>
         <div>Read more about unsupported assets</div>
       </Button>

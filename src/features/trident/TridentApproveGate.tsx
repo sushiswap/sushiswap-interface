@@ -29,7 +29,7 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 
     onStateChange((prevState) => ({
       ...prevState,
-      [inputAmount?.currency.wrapped.address]: approveState,
+      [inputAmount.currency.wrapped.address]: approveState,
     }))
   }, [approveState, inputAmount?.currency.wrapped.address, onStateChange])
 
@@ -75,9 +75,14 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
   } = useBentoMasterApproveCallback(masterContractAddress ? masterContractAddress : undefined, {})
 
   const loading =
-    Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || bApprove === BentoApprovalState.UNKNOWN
+    Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || masterContractAddress
+      ? bApprove === BentoApprovalState.UNKNOWN
+      : false
+
   const approved =
-    Object.values(status).every((el) => el === ApprovalState.APPROVED) && bApprove === BentoApprovalState.APPROVED
+    Object.values(status).every((el) => el === ApprovalState.APPROVED) && masterContractAddress
+      ? bApprove === BentoApprovalState.APPROVED
+      : true
 
   const onClick = useCallback(async () => {
     if (withPermit) {

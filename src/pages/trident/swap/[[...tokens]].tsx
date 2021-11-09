@@ -2,6 +2,7 @@ import { SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
+import WrapButton from 'app/features/trident/swap/WrapButton'
 import { useActiveWeb3React } from 'app/services/web3'
 import DoubleGlowShadow from 'components/DoubleGlowShadow'
 import Gas from 'components/Gas'
@@ -26,6 +27,7 @@ const Swap = () => {
   const { chainId } = useActiveWeb3React()
   const { currencies, setURLCurrency } = useCurrenciesFromURL()
   const setCurrencies = useSetRecoilState(currenciesAtom)
+  const [expertMode] = useExpertModeManager()
   const {
     typedField: [typedField, setTypedField],
     mainInput: [, setMainInput],
@@ -36,8 +38,8 @@ const Swap = () => {
     trade,
     switchCurrencies,
     error,
+    isWrap,
   } = useSwapAssetPanelInputs()
-  const [expertMode] = useExpertModeManager()
 
   useEffect(() => {
     if (!chainId || !currencies?.[0] || !currencies?.[1]) return
@@ -119,7 +121,7 @@ const Swap = () => {
                 <SwapRate className="text-primary font-bold" />
               </div>
             )}
-            <SwapButton />
+            {isWrap ? <WrapButton /> : <SwapButton />}
           </div>
         </div>
         <SwapReviewModal />

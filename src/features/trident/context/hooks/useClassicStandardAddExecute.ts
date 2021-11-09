@@ -1,4 +1,5 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { toShareJSBI } from 'app/functions'
@@ -50,7 +51,7 @@ export const useClassicStandardAddExecute = () => {
         if (parsedAmountA && rebases[parsedAmountA.wrapped.currency.address]) {
           value = parsedAmountA.currency.isNative ? { value: parsedAmountA.quotient.toString() } : {}
           liquidityInput.push({
-            token: parsedAmountA.currency.wrapped.address,
+            token: parsedAmountA.currency.isNative ? AddressZero : parsedAmountA.currency.wrapped.address,
             native: nativeA,
             amount: nativeA
               ? parsedAmountA.quotient.toString()
@@ -61,7 +62,7 @@ export const useClassicStandardAddExecute = () => {
         if (parsedAmountB && rebases[parsedAmountB.wrapped.currency.address]) {
           value = parsedAmountB.currency.isNative ? { value: parsedAmountB.quotient.toString() } : {}
           liquidityInput.push({
-            token: parsedAmountB.currency.wrapped.address,
+            token: parsedAmountB.currency.isNative ? AddressZero : parsedAmountB.currency.wrapped.address,
             native: nativeB,
             amount: nativeB
               ? parsedAmountB.quotient.toString()
