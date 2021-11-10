@@ -7,6 +7,7 @@ import { remoteLoader } from '@lingui/remote-loader'
 import { nanoid } from '@reduxjs/toolkit'
 import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
+import Portals from 'app/components/Portals'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
@@ -133,6 +134,7 @@ function MyApp({ Component, pageProps, fallback }) {
                         <Guard>
                           <Component {...pageProps} />
                         </Guard>
+                        <Portals />
                       </Layout>
                     </Provider>
                   </RecoilRoot>
