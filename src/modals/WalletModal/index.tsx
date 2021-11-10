@@ -170,18 +170,6 @@ export default function WalletModal({
                 icon="/images/wallets/metamask.png"
               />
             )
-          } else if (option.name === 'imToken') {
-            return (
-              <Option
-                id={`connect-${key}`}
-                key={key}
-                color={option.color}
-                header={option.name}
-                subheader={null}
-                link={option.href}
-                icon={'/images/wallets/' + option.iconName}
-              />
-            )
           } else {
             return null // dont want to return install twice
           }

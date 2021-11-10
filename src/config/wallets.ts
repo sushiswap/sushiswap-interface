@@ -203,11 +203,43 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     mobile: true,
   },
   imToken: {
-    connector: injected,
+    connector: async () => {
+      const WalletConnectConnector = (await import('@web3-react/walletconnect-connector')).WalletConnectConnector
+      return new WalletConnectConnector({
+        rpc: RPC,
+        bridge: 'https://bridge.walletconnect.org',
+        qrcode: true,
+        supportedChainIds: [
+          1, // mainnet
+          3, // ropsten
+          4, // rinkeby
+          5, // goreli
+          42, // kovan
+          250, // fantom
+          4002, // fantom testnet
+          137, // matic
+          80001, // matic testnet
+          100, // xdaiW
+          56, // binance smart chain
+          97, // binance smart chain testnet
+          1287, // moonbase
+          43114, // avalanche
+          43113, // fuji
+          1666600000, // harmony
+          1666700000, // harmony testnet
+          42161, // arbitrum
+          42220, // celo
+          11297108109, // palm
+          1285, // moonriver
+        ],
+        // pollingInterval: 15000,
+      })
+    },
     name: 'imToken',
     iconName: 'imtoken.png',
     description: 'Login using imToken wallet',
-    href: 'https://token.im',
+    href: null,
     color: '#098DE6',
+    mobile: true,
   },
 }
