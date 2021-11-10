@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 export const Portals: FC = () => {
   return (
     <>
-      <div id="popover-portal" style={{ zIndex: 1000 }} />
+      <span id="popover-portal" style={{ zIndex: 1000 }} />
     </>
   )
 }

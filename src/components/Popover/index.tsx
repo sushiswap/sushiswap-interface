@@ -1,7 +1,8 @@
 import { Popover as HeadlessuiPopover } from '@headlessui/react'
 import { Placement } from '@popperjs/core'
 import { classNames } from 'app/functions'
-import React, { useState } from 'react'
+import useInterval from 'app/hooks/useInterval'
+import React, { useCallback, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 
@@ -9,13 +10,14 @@ export interface PopoverProps {
   content: React.ReactNode
   children: React.ReactNode
   placement?: Placement
+  show?: boolean
 }
 
-export default function Popover({ content, children, placement = 'auto' }: PopoverProps) {
+export default function Popover({ content, children, placement = 'auto', show }: PopoverProps) {
   const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null)
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null)
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+  const { styles, update, attributes } = usePopper(referenceElement, popperElement, {
     placement,
     strategy: 'fixed',
     modifiers: [
@@ -24,14 +26,23 @@ export default function Popover({ content, children, placement = 'auto' }: Popov
     ],
   })
 
+  const updateCallback = useCallback(() => {
+    update && update()
+  }, [update])
+
+  useInterval(updateCallback, show ? 100 : null)
+
   return (
     <HeadlessuiPopover>
       {({ open }) => (
         <>
-          <HeadlessuiPopover.Button ref={setReferenceElement as any}>{children}</HeadlessuiPopover.Button>
-          {open &&
+          <HeadlessuiPopover.Button ref={setReferenceElement as any} className="flex">
+            {children}
+          </HeadlessuiPopover.Button>
+          {(show ?? open) &&
             ReactDOM.createPortal(
               <HeadlessuiPopover.Panel
+                static
                 className="z-1000"
                 ref={setPopperElement as any}
                 style={styles.popper}
