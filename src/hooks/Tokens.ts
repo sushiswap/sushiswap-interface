@@ -126,9 +126,9 @@ function parseStringOrBytes32(str: string | undefined, bytes32: string | undefin
 }
 
 // undefined if invalid or does not exist
-// null if loading
+// null if loading or null was passed
 // otherwise returns the token
-export function useToken(tokenAddress?: string): Token | undefined | null {
+export function useToken(tokenAddress?: string | null): Token | undefined | null {
   const { chainId } = useActiveWeb3React()
   const tokens = useAllTokens()
 
@@ -151,6 +151,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 
   return useMemo(() => {
     if (token) return token
+    if (tokenAddress === null) return null
     if (!chainId || !address) return undefined
     if (decimals.loading || symbol.loading || tokenName.loading) return null
     if (decimals.result) {
@@ -172,6 +173,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
     symbol.result,
     symbolBytes32.result,
     token,
+    tokenAddress,
     tokenName.loading,
     tokenName.result,
     tokenNameBytes32.result,
@@ -193,9 +195,13 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
 
   const token = useToken(useNative ? undefined : currencyId)
 
-  const native = useMemo(() => (chainId ? NATIVE[chainId] : undefined), [chainId])
-
-  const wnative = chainId ? WNATIVE[chainId] : undefined
+  const { native, wnative } = useMemo(
+    () => ({
+      native: chainId && chainId in NATIVE ? NATIVE[chainId] : undefined,
+      wnative: chainId && chainId in WNATIVE ? WNATIVE[chainId] : undefined,
+    }),
+    [chainId]
+  )
 
   if (wnative?.address?.toLowerCase() === currencyId?.toLowerCase()) return wnative
 
