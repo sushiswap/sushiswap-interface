@@ -66,7 +66,7 @@ const Swap = () => {
               </div>
             )}
             <div className="hover:bg-dark-800 rounded border border-transparent hover:border-dark-700">
-              <SettingsTab tines={true} />
+              <SettingsTab trident={true} />
             </div>
           </div>
           <div className="block lg:hidden border-b border-dark-800 w-full" />

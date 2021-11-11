@@ -22,10 +22,10 @@ enum DeadlineError {
 
 export interface TransactionSettingsProps {
   placeholderSlippage?: Percent // varies according to the context in which the settings dialog is placed
-  tines?: boolean
+  trident?: boolean
 }
 
-const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage, tines = false }) => {
+const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage, trident = false }) => {
   const { i18n } = useLingui()
 
   const inputRef = useRef<HTMLInputElement>()
@@ -171,7 +171,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
         ) : null}
       </div>
 
-      {!tines && (
+      {!trident && (
         <div className="grid gap-2">
           <div className="flex items-center">
             <Typography variant="sm" className="text-high-emphesis">

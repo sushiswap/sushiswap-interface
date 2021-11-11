@@ -20,13 +20,11 @@ import WithdrawalSubmittedModal from 'app/features/trident/WithdrawalSubmittedMo
 import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 
 const RemoveClassic = () => {
   const { i18n } = useLingui()
-  const { query } = useRouter()
   const { currencies, fee, twap } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [, pool] = useRecoilValue(poolAtom)
@@ -44,7 +42,13 @@ const RemoveClassic = () => {
               className="!pl-2 !py-1 rounded-full"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
-              <Link href={`/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`}>
+              <Link
+                href={
+                  currencies?.[0] && currencies?.[1]
+                    ? `/trident/pool/classic/${currencies?.[0]?.symbol}/${currencies?.[1]?.symbol}`
+                    : '/trident/pools'
+                }
+              >
                 {pool ? `${currencies?.[0]?.symbol}-${currencies?.[1]?.symbol}` : i18n._(t`Back`)}
               </Link>
             </Button>
@@ -57,21 +61,21 @@ const RemoveClassic = () => {
               t`Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode.`
             )}
           </Typography>
+          {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+            <Alert
+              className="bg-transparent px-0"
+              dismissable={false}
+              type="error"
+              showIcon
+              message={i18n._(t`A Pool could not be found for provided currencies`)}
+            />
+          )}
         </div>
       </TridentHeader>
 
       <TridentBody>
         <div className="flex flex-row justify-between">
           <div className="lg:w-7/12 w-full flex flex-col gap-5">
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
-              <Alert
-                dismissable={false}
-                type="error"
-                showIcon
-                message={i18n._(t`A Pool could not be found for provided currencies`)}
-              />
-            )}
-
             <>
               {liquidityMode === LiquidityMode.ZAP && (
                 <>

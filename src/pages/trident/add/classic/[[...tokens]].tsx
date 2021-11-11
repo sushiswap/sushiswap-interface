@@ -4,6 +4,7 @@ import { useLingui } from '@lingui/react'
 import { PoolType } from '@sushiswap/tines'
 import Alert from 'app/components/Alert'
 import Button from 'app/components/Button'
+import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import ClassicStandardAside from 'app/features/trident/add/classic/ClassicStandardAside'
 import ClassicStandardMode from 'app/features/trident/add/classic/ClassicStandardMode'
@@ -21,13 +22,11 @@ import { LiquidityMode } from 'app/features/trident/types'
 import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 
 const AddClassic = () => {
   const { i18n } = useLingui()
-  const { query } = useRouter()
   const { currencies, twap, fee } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const [, pool] = useRecoilValue(poolAtom)
@@ -37,7 +36,7 @@ const AddClassic = () => {
     <>
       <TridentHeader pattern="bg-bubble-pattern">
         <div className="relative flex flex-col w-full gap-5 mt-px lg:justify-between lg:w-7/12">
-          <div>
+          <div className="flex justify-between">
             <Button
               color="blue"
               variant="outlined"
@@ -47,14 +46,15 @@ const AddClassic = () => {
             >
               <Link
                 href={
-                  query.tokens[0] && query.tokens[1]
-                    ? `/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`
+                  currencies?.[0] && currencies?.[1]
+                    ? `/trident/pool/classic/${currencies?.[0]?.symbol}/${currencies?.[1]?.symbol}`
                     : '/trident/pools'
                 }
               >
                 {pool ? `${currencies?.[0]?.symbol}-${currencies?.[1]?.symbol}` : i18n._(t`Back`)}
               </Link>
             </Button>
+            <SettingsTab trident />
           </div>
           <div>
             <Typography variant="h2" weight={700} className="text-high-emphesis">
@@ -65,6 +65,15 @@ const AddClassic = () => {
                 t`Deposit any or all pool tokens directly with Standard mode,  or invest with any asset in Zap mode.`
               )}
             </Typography>
+            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+              <Alert
+                className="bg-transparent px-0"
+                dismissable={false}
+                type="error"
+                showIcon
+                message={i18n._(t`A Pool could not be found for provided currencies`)}
+              />
+            )}
           </div>
         </div>
       </TridentHeader>
@@ -73,14 +82,6 @@ const AddClassic = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-col w-full lg:w-7/12">
             <FixedRatioHeader />
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
-              <Alert
-                dismissable={false}
-                type="error"
-                showIcon
-                message={i18n._(t`A Pool could not be found for provided currencies`)}
-              />
-            )}
             <>
               {liquidityMode === LiquidityMode.ZAP && (
                 <>

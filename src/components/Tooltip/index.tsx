@@ -13,8 +13,9 @@ interface TooltipContentProps extends Omit<PopoverProps, 'content'> {
 export default function Tooltip({ text, ...rest }: TooltipProps) {
   return (
     <Popover
+      placement="bottom"
       content={
-        <div className="w-full max-w-[228px] px-2 py-1 font-medium bg-dark-700 border border-gray-600 rounded text-sm">
+        <div className="w-full max-w-[228px] px-3 py-2 font-bold bg-dark-900 border border-dark-700 rounded text-sm shadow-lg">
           {text}
         </div>
       }
