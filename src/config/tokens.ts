@@ -1,8 +1,21 @@
-import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/core-sdk'
+
+// TODO: This needs a good rethink... we should probably extract into a package @sushiswap/tokens.
+
+export const FUSE: { [key: string]: Token } = {
+  WETH: new Token(ChainId.FUSE, '0xa722c13135930332Eb3d749B2F0906559D2C5b99', 18, 'WETH', 'Wrapped Ether'),
+  WBTC: new Token(ChainId.FUSE, '0x33284f95ccb7B948d9D352e1439561CF83d8d00d', 8, 'WBTC', 'Wrapped Bitcoin'),
+  USDC: new Token(ChainId.FUSE, '0x620fd5fa44BE6af63715Ef4E65DDFA0387aD13F5', 6, 'USDC', 'USD Coin'),
+  USDT: new Token(ChainId.FUSE, '0x33284f95ccb7B948d9D352e1439561CF83d8d00d', 8, 'USDT', 'Tether USD'),
+  DAI: new Token(ChainId.FUSE, '0x94Ba7A27c7A95863d1bdC7645AC2951E0cca06bA', 18, 'DAI', 'Dai Stablecoin'),
+}
 
 export const ARBITRUM: { [key: string]: Token } = {
   USDC: new Token(ChainId.ARBITRUM, '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', 6, 'USDC', 'USD Coin'),
   WBTC: new Token(ChainId.ARBITRUM, '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', 8, 'WBTC', 'Wrapped Bitcoin'),
+  USDT: new Token(ChainId.ARBITRUM, '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', 8, 'USDT', 'Tether USD'),
+  MIM: new Token(ChainId.ARBITRUM, '0xFEa7a6a0B346362BF88A9e4A88416B77a57D6c2A', 18, 'MIM', 'Magic Internet Money'),
+  SPELL: new Token(ChainId.ARBITRUM, '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF', 18, 'SPELL', 'Spell Token'),
 }
 
 export const PALM: { [key: string]: Token } = {
@@ -18,6 +31,17 @@ export const CELO: { [key: string]: Token } = {
   cEURO: new Token(ChainId.CELO, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
   cBTC: new Token(ChainId.CELO, '0xD629eb00dEced2a080B7EC630eF6aC117e614f1b', 18, 'cBTC', 'Wrapped Bitcoin'),
   cETH: new Token(ChainId.CELO, '0x2DEf4285787d58a2f811AF24755A8150622f4361', 18, 'cETH', 'Wrapped Ether'),
+  WETH: new Token(ChainId.CELO, '0xE919F65739c26a42616b7b8eedC6b5524d1e3aC4', 18, 'WETH', 'WETH'),
+  WBTC: new Token(ChainId.CELO, '0xBe50a3013A1c94768A1ABb78c3cB79AB28fc1aCE', 8, 'WBTC', 'WBTC'),
+}
+
+export const MOONRIVER: { [key: string]: Token } = {
+  USDC: new Token(ChainId.MOONRIVER, '0xE3F5a90F9cb311505cd691a46596599aA1A0AD7D', 6, 'USDC', 'USD Coin'),
+  USDT: new Token(ChainId.MOONRIVER, '0xB44a9B6905aF7c801311e8F4E76932ee959c663C', 6, 'USDT', 'Tether USD'),
+  WETH: new Token(ChainId.MOONRIVER, '0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C', 18, 'WETH', 'Wrapped Ether'),
+  FRAX: new Token(ChainId.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax'),
+  MIM: new Token(ChainId.MOONRIVER, '0x0caE51e1032e8461f4806e26332c030E34De3aDb', 18, 'MIM', 'Magic Internet Money'),
+  BTC: new Token(ChainId.MOONRIVER, '0xE6a991Ffa8CfE62B0bf6BF72959A3d4f11B2E0f5', 8, 'WBTC', 'Wrapped Bitcoin'),
 }
 
 export const BSC: { [key: string]: Token } = {
@@ -50,6 +74,14 @@ export const MATIC: { [key: string]: Token } = {
   DMAGIC: new Token(ChainId.MATIC, '0x61dAECaB65EE2A1D5b6032df030f3fAA3d116Aa7', 18, 'DMAGIC', 'Dark Magic'),
   DRAX: new Token(ChainId.MATIC, '0x1Ba3510A9ceEb72E5CdBa8bcdDe9647E1f20fB4b', 18, 'DRAX', 'Drax'),
   AXMATIC: new Token(ChainId.MATIC, '0x1221591c1d77A9c334aBb0fe530ae6EE3aF51Af9', 18, 'AXMATIC', 'axMATIC'),
+  KLIMA: new Token(ChainId.MATIC, '0x4e78011Ce80ee02d2c3e649Fb657E45898257815', 9, 'Klima DAO', 'KLIMA'),
+  BCT: new Token(
+    ChainId.MATIC,
+    '0x2F800Db0fdb5223b3C3f354886d907A671414A7F',
+    18,
+    'Toucan Protocol: Base Carbon Tonne',
+    'BCT'
+  ),
 }
 
 export const OKEX: { [key: string]: Token } = {
@@ -84,21 +116,33 @@ export const XDAI: { [key: string]: Token } = {
 }
 
 export const AVALANCHE: { [key: string]: Token } = {
-  DAI_OLD: new Token(ChainId.AVALANCHE, '0xbA7dEebBFC5fA1100Fb055a87773e1E99Cd3507a', 18, 'DAI', 'Dai Stablecoin Old'),
-  USDT_OLD: new Token(ChainId.AVALANCHE, '0xde3A24028580884448a5397872046a019649b084', 6, 'USDT', 'Tether USD Old'),
+  DAI_OLD: new Token(
+    ChainId.AVALANCHE,
+    '0xbA7dEebBFC5fA1100Fb055a87773e1E99Cd3507a',
+    18,
+    'oldDAI',
+    'Old Dai Stablecoin'
+  ),
+  USDT_OLD: new Token(ChainId.AVALANCHE, '0xde3A24028580884448a5397872046a019649b084', 6, 'oldUSDT', 'Old Tether USD'),
   WBTC_OLD: new Token(
     ChainId.AVALANCHE,
     '0x408D4cD0ADb7ceBd1F1A1C33A0Ba2098E1295bAB',
     8,
-    'WBTC',
-    'Wrapped Bitcoin Old'
+    'oldWBTC',
+    'Old Wrapped Bitcoin'
   ),
-  WETH_OLD: new Token(ChainId.AVALANCHE, '0xf20d962a6c8f70c731bd838a3a388D7d48fA6e15', 18, 'WETH', 'Wrapped Ether Old'),
-  USDC: new Token(ChainId.AVALANCHE, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC/e', 'USD Coin'),
-  DAI: new Token(ChainId.AVALANCHE, '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70', 18, 'DAI/e', 'Dai Stablecoin'),
-  USDT: new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT/e', 'Tether USD'),
-  WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC/e', 'Wrapped Bitcoin'),
-  WETH: new Token(ChainId.AVALANCHE, '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB', 18, 'WETH/e', 'Wrapped Ether'),
+  WETH_OLD: new Token(
+    ChainId.AVALANCHE,
+    '0xf20d962a6c8f70c731bd838a3a388D7d48fA6e15',
+    18,
+    'oldWETH',
+    'Old Wrapped Ether'
+  ),
+  USDC: new Token(ChainId.AVALANCHE, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC', 'USD Coin'),
+  DAI: new Token(ChainId.AVALANCHE, '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70', 18, 'DAI', 'Dai Stablecoin'),
+  USDT: new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT', 'Tether USD'),
+  WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC', 'Wrapped Bitcoin'),
+  WETH: new Token(ChainId.AVALANCHE, '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB', 18, 'WETH', 'Wrapped Ether'),
 }
 
 // Default Ethereum chain tokens
@@ -236,25 +280,3 @@ export const AXSUSHI = new Token(
 )
 
 export const DPI = new Token(ChainId.ETHEREUM, '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', 18, 'DefiPulse', 'DPI')
-
-type ChainTokenMap = {
-  readonly [chainId in ChainId]?: Token
-}
-
-// SUSHI
-export const SUSHI: ChainTokenMap = {
-  [ChainId.ETHEREUM]: new Token(ChainId.ETHEREUM, SUSHI_ADDRESS[ChainId.ETHEREUM], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, SUSHI_ADDRESS[ChainId.ROPSTEN], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, SUSHI_ADDRESS[ChainId.RINKEBY], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, SUSHI_ADDRESS[ChainId.GÖRLI], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.KOVAN]: new Token(ChainId.KOVAN, SUSHI_ADDRESS[ChainId.KOVAN], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.MATIC]: new Token(ChainId.MATIC, SUSHI_ADDRESS[ChainId.MATIC], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.FANTOM]: new Token(ChainId.FANTOM, SUSHI_ADDRESS[ChainId.FANTOM], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.XDAI]: new Token(ChainId.XDAI, SUSHI_ADDRESS[ChainId.XDAI], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.BSC]: new Token(ChainId.BSC, SUSHI_ADDRESS[ChainId.BSC], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, SUSHI_ADDRESS[ChainId.ARBITRUM], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.AVALANCHE]: new Token(ChainId.AVALANCHE, SUSHI_ADDRESS[ChainId.AVALANCHE], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.OKEX]: new Token(ChainId.OKEX, SUSHI_ADDRESS[ChainId.OKEX], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.HARMONY]: new Token(ChainId.HARMONY, SUSHI_ADDRESS[ChainId.HARMONY], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
-}

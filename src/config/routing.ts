@@ -1,5 +1,5 @@
 // a list of tokens by chain
-import { ChainId, Token, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, SUSHI, Token, WNATIVE } from '@sushiswap/core-sdk'
 
 import {
   ALPHA,
@@ -21,6 +21,7 @@ import {
   FANTOM,
   FEI,
   FRAX,
+  FUSE,
   FXS,
   HARMONY,
   HBTC,
@@ -30,6 +31,7 @@ import {
   LIFT,
   MATIC,
   MIR,
+  MOONRIVER,
   NFTX,
   OKEX,
   PALM,
@@ -39,7 +41,6 @@ import {
   RENBTC,
   RUNE,
   STETH,
-  SUSHI,
   UMA,
   USDC,
   USDP,
@@ -103,6 +104,8 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.CELO]: [WNATIVE[ChainId.CELO]],
   [ChainId.PALM]: [WNATIVE[ChainId.PALM]],
   [ChainId.MOONRIVER]: [WNATIVE[ChainId.MOONRIVER]],
+  [ChainId.PALM]: [WNATIVE[ChainId.PALM]],
+  [ChainId.FUSE]: [WNATIVE[ChainId.FUSE]],
 }
 
 // used to construct intermediary pairs for trading
@@ -185,6 +188,8 @@ export const ADDITIONAL_BASES: {
     [MATIC.FXS.address]: [MATIC.FRAX],
     [MATIC.DRAX.address]: [MATIC.DMAGIC],
     [MATIC.AXMATIC.address]: [MATIC.DMAGIC],
+    [MATIC.BCT.address]: [MATIC.KLIMA],
+    [MATIC.KLIMA.address]: [MATIC.BCT],
     //[MATIC.DMAGIC.address]: [MATIC.DRAX, MATIC.AXMATIC],
   },
 }
@@ -236,7 +241,15 @@ export const COMMON_BASES: ChainTokenList = {
     BSC.WETH,
     SUSHI[ChainId.BSC],
   ],
-  [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM], ARBITRUM.WBTC, ARBITRUM.USDC],
+  [ChainId.ARBITRUM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
+    ARBITRUM.WBTC,
+    ARBITRUM.USDC,
+    ARBITRUM.USDT,
+    SUSHI[ChainId.ARBITRUM],
+    ARBITRUM.SPELL,
+    ARBITRUM.MIM,
+  ],
   [ChainId.XDAI]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.XDAI],
     XDAI.USDC,
@@ -281,9 +294,26 @@ export const COMMON_BASES: ChainTokenList = {
     OKEX.WETH,
     SUSHI[ChainId.OKEX],
   ],
-  [ChainId.CELO]: [...WRAPPED_NATIVE_ONLY[ChainId.CELO], CELO.cETH, CELO.cUSD, CELO.cEURO, CELO.cBTC],
-  [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
+  [ChainId.CELO]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    CELO.WETH,
+    CELO.cUSD,
+    CELO.cEURO,
+    CELO.WBTC,
+    SUSHI[ChainId.CELO],
+  ],
+  [ChainId.MOONRIVER]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER],
+    MOONRIVER.USDC,
+    MOONRIVER.USDT,
+    MOONRIVER.WETH,
+    MOONRIVER.FRAX,
+    MOONRIVER.MIM,
+    MOONRIVER.BTC,
+    SUSHI[ChainId.MOONRIVER],
+  ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -327,8 +357,17 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     CELO.cEURO,
     CELO.cBTC,
   ],
-  [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
+  [ChainId.MOONRIVER]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER],
+    MOONRIVER.USDC,
+    MOONRIVER.USDT,
+    MOONRIVER.WETH,
+    MOONRIVER.FRAX,
+    MOONRIVER.MIM,
+    MOONRIVER.BTC,
+  ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
 }
 
 export const PINNED_PAIRS: {
