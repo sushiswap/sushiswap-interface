@@ -99,9 +99,7 @@ export const serializeBalancesMap = (mapping: Record<string, CurrencyAmount<Toke
 }
 
 export function useTokenBalances(address?: string, tokens?: (Token | undefined)[]): TokenBalancesMap {
-  const balances = useTokenBalancesWithLoadingIndicator(address, tokens)[0]
-  const memoizedBalances = useMemo(() => serializeBalancesMap(balances), [balances])
-  return useMemo(() => balances, [memoizedBalances])
+  return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
 }
 
 // get the balance for a single token/account combo
