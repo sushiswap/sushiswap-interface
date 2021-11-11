@@ -7,8 +7,8 @@ import {
   MASTERCHEF_ADDRESS,
   MASTERCHEF_V2_ADDRESS,
   MINICHEF_ADDRESS,
+  SUSHI,
 } from '@sushiswap/core-sdk'
-import { SUSHI } from 'app/config/tokens'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'

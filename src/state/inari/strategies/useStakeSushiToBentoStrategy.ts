@@ -1,9 +1,9 @@
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, SUSHI, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
-import { SUSHI, XSUSHI } from 'config/tokens'
+import { XSUSHI } from 'config/tokens'
 import { tryParseAmount } from 'functions'
 import { useEffect, useMemo } from 'react'
 

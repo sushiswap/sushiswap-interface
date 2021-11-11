@@ -1,5 +1,4 @@
-import { Currency, NATIVE } from '@sushiswap/core-sdk'
-import { SUSHI } from 'app/config/tokens'
+import { Currency, NATIVE, SUSHI } from '@sushiswap/core-sdk'
 import { useCurrency } from 'app/hooks/Tokens'
 import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'

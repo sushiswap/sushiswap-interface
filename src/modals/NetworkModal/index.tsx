@@ -170,6 +170,17 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
     blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
   },
+  [ChainId.TELOS]: {
+    chainId: '0x28',
+    chainName: 'Telos',
+    nativeCurrency: {
+      name: 'Telos',
+      symbol: 'TLOS',
+      decimals: 18,
+    },
+    rpcUrls: ['https://mainnet.telos.net/evm'],
+    blockExplorerUrls: ['https://rpc1.us.telos.net/v2/explore'],
+  },
 }
 
 export default function NetworkModal(): JSX.Element | null {
@@ -203,6 +214,7 @@ export default function NetworkModal(): JSX.Element | null {
             ChainId.CELO,
             ChainId.PALM,
             ChainId.MOONRIVER,
+            ChainId.TELOS,
           ].map((key: ChainId, i: number) => {
             if (chainId === key) {
               return (

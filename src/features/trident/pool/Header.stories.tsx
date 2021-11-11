@@ -1,12 +1,11 @@
 import { useLingui } from '@lingui/react'
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import { ChainId, WETH9 } from '@sushiswap/core-sdk'
-import { SUSHI } from 'config/tokens'
-import { tryParseAmount } from 'functions'
+import { ChainId, SUSHI, WETH9 } from '@sushiswap/core-sdk'
+import { PoolType } from '@sushiswap/tines'
+import { tryParseAmount } from 'app/functions'
 import React from 'react'
 
 import { Header } from './Header'
-import { PoolType } from '@sushiswap/tines'
 
 export default {
   title: 'SushiSwap/PoolLandingHeader',
