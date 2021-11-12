@@ -48,7 +48,7 @@ export const useClassicStandardAddExecute = () => {
         const liquidityInput: LiquidityInput[] = []
         const encoded = defaultAbiCoder.encode(['address'], [account])
 
-        if (parsedAmountA && rebases[parsedAmountA.wrapped.currency.address]) {
+        if (parsedAmountA) {
           value = parsedAmountA.currency.isNative ? { value: parsedAmountA.quotient.toString() } : {}
           liquidityInput.push({
             token: parsedAmountA.currency.isNative ? AddressZero : parsedAmountA.currency.wrapped.address,
@@ -59,7 +59,7 @@ export const useClassicStandardAddExecute = () => {
           })
         }
 
-        if (parsedAmountB && rebases[parsedAmountB.wrapped.currency.address]) {
+        if (parsedAmountB) {
           value = parsedAmountB.currency.isNative ? { value: parsedAmountB.quotient.toString() } : {}
           liquidityInput.push({
             token: parsedAmountB.currency.isNative ? AddressZero : parsedAmountB.currency.wrapped.address,
@@ -74,6 +74,14 @@ export const useClassicStandardAddExecute = () => {
 
         try {
           setAttemptingTxn(true)
+          console.log(
+            router.interface.encodeFunctionData('addLiquidity', [
+              liquidityInput,
+              pool.liquidityToken.address,
+              liquidityMinted.quotient.toString(),
+              encoded,
+            ])
+          )
           const tx = await router.addLiquidity(
             liquidityInput,
             pool.liquidityToken.address,
