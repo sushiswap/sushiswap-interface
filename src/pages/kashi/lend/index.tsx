@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import Card from 'components/Card'
 import Image from 'components/Image'
 import QuestionHelper from 'components/QuestionHelper'
-import Provider, { useKashiPairs } from 'features/kashi/context'
+import { useKashiPairAddresses, useKashiPairs } from 'features/kashi/hooks'
 import ListHeaderWithSort from 'features/kashi/ListHeaderWithSort'
 import MarketHeader from 'features/kashi/MarketHeader'
 import { formatNumber, formatPercent } from 'functions/format'
@@ -12,10 +12,13 @@ import Layout from 'layouts/Kashi'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
+import { RecoilRoot } from 'recoil'
 
 function Lend() {
   const { i18n } = useLingui()
-  const fullPairs = useKashiPairs()
+  const addresses = useKashiPairAddresses()
+  const fullPairs = useKashiPairs(addresses)
+
   const positions = useSearchAndSort(
     fullPairs.filter((pair) => pair.userAssetFraction.gt(0)),
     { keys: ['search'], threshold: 0.1 },
@@ -207,7 +210,7 @@ const LendEntry = ({ pair, userPosition = false }) => {
   )
 }
 
-Lend.Provider = Provider
+Lend.Provider = RecoilRoot
 
 const LendLayout = ({ children }) => {
   const { i18n } = useLingui()

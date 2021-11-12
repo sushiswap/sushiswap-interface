@@ -55,15 +55,15 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = unde
     assetAmount: Math.floor(pair.totalAssetBase / getFraction({ ...pair, token0: pair.asset })).toString(),
     borrowedAmount: toAmount(
       {
-        bentoAmount: pair.totalBorrowElastic.toBigNumber(0),
-        bentoShare: pair.totalBorrowBase.toBigNumber(0),
+        elastic: pair.totalBorrowElastic.toBigNumber(0),
+        base: pair.totalBorrowBase.toBigNumber(0),
       },
       pair.totalBorrowElastic.toBigNumber(0)
     ).toString(),
     collateralAmount: toAmount(
       {
-        bentoAmount: pair.collateral.totalSupplyElastic.toBigNumber(0),
-        bentoShare: pair.collateral.totalSupplyBase.toBigNumber(0),
+        elastic: pair.collateral.totalSupplyElastic.toBigNumber(0),
+        base: pair.collateral.totalSupplyBase.toBigNumber(0),
       },
       pair.totalCollateralShare.toBigNumber(0)
     ).toString(),
@@ -80,15 +80,15 @@ export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) =
     ).toString(),
     borrowedAmount: toAmount(
       {
-        bentoAmount: userPair.pair.totalBorrowElastic.toBigNumber(0),
-        bentoShare: userPair.pair.totalBorrowBase.toBigNumber(0),
+        elastic: userPair.pair.totalBorrowElastic.toBigNumber(0),
+        base: userPair.pair.totalBorrowBase.toBigNumber(0),
       },
       userPair.borrowPart.toBigNumber(0)
     ).toString(),
     collateralAmount: toAmount(
       {
-        bentoAmount: userPair.pair.collateral.totalSupplyElastic.toBigNumber(0),
-        bentoShare: userPair.pair.collateral.totalSupplyBase.toBigNumber(0),
+        elastic: userPair.pair.collateral.totalSupplyElastic.toBigNumber(0),
+        base: userPair.pair.collateral.totalSupplyBase.toBigNumber(0),
       },
       userPair.collateralShare.toBigNumber(0)
     ).toString(),
@@ -107,8 +107,8 @@ export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables) 
       ...token,
       amount: toAmount(
         {
-          bentoAmount: token.totalSupplyElastic.toBigNumber(0),
-          bentoShare: token.totalSupplyBase.toBigNumber(0),
+          elastic: token.totalSupplyElastic.toBigNumber(0),
+          base: token.totalSupplyBase.toBigNumber(0),
         },
         token.shares.toBigNumber(0)
       ).toString(),

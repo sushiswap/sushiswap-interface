@@ -1,6 +1,5 @@
 import Container from 'app/components/Container'
 import Search from 'app/components/Search'
-import Provider from 'app/features/kashi/context'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import FarmList from 'app/features/onsen/FarmList'
 import Menu from 'app/features/onsen/FarmMenu'
@@ -80,5 +79,3 @@ export default function Farm(): JSX.Element {
     </Container>
   )
 }
-
-Farm.Provider = Provider

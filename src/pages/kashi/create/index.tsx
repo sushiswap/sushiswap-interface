@@ -35,7 +35,6 @@ function Create() {
 
   const router = useRouter()
 
-  // swap state
   const { independentField, typedValue } = useCreateState()
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useCreateActionHandlers()
 
@@ -106,12 +105,6 @@ function Create() {
           }
         }
       }
-
-      console.log({
-        multiply,
-        divide,
-        decimals: e10(decimals),
-      })
 
       return defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
     },

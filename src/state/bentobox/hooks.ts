@@ -73,6 +73,8 @@ export function useBentoBalances(): BentoBalance[] {
         const full = {
           ...token,
           ...balanceData.result[0][i],
+          elastic: balanceData.result[0][i].bentoAmount,
+          base: balanceData.result[0][i].bentoShare,
           usd,
         }
         return {

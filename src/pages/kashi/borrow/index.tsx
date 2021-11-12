@@ -1,9 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import Card from 'components/Card'
 import GradientDot from 'components/GradientDot'
 import Image from 'components/Image'
-import Provider, { useKashiPairs } from 'features/kashi/context'
 import ListHeaderWithSort from 'features/kashi/ListHeaderWithSort'
 import MarketHeader from 'features/kashi/MarketHeader'
 import { formatNumber, formatPercent } from 'functions/format'
@@ -12,10 +12,13 @@ import Layout from 'layouts/Kashi'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
+import { RecoilRoot } from 'recoil'
 
 function Borrow() {
   const { i18n } = useLingui()
-  const fullPairs = useKashiPairs()
+
+  const addresses = useKashiPairAddresses()
+  const fullPairs = useKashiPairs(addresses)
 
   const positions = useSearchAndSort(
     fullPairs.filter((pair: any) => pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)),
@@ -268,7 +271,7 @@ function Borrow() {
   )
 }
 
-Borrow.Provider = Provider
+Borrow.Provider = RecoilRoot
 
 const BorrowLayout = ({ children }) => {
   const { i18n } = useLingui()

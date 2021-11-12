@@ -1,6 +1,7 @@
 import { Tab } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useBlockTimestamp } from 'app/state/application/hooks'
 import Card from 'components/Card'
 import Dots from 'components/Dots'
 import GradientDot from 'components/GradientDot'
@@ -8,7 +9,7 @@ import Image from 'components/Image'
 import QuestionHelper from 'components/QuestionHelper'
 import { KashiCooker } from 'entities'
 import { Borrow, Repay } from 'features/kashi'
-import Provider, { useKashiInfo, useKashiPair } from 'features/kashi/context'
+import { useKashiPair } from 'features/kashi/hooks'
 import { formatNumber, formatPercent } from 'functions/format'
 import { useUSDCPrice } from 'hooks'
 import { useToken } from 'hooks/Tokens'
@@ -17,6 +18,7 @@ import Layout from 'layouts/Kashi'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback } from 'react'
+import { RecoilRoot } from 'recoil'
 import { useActiveWeb3React } from 'services/web3'
 import { useTransactionAdder } from 'state/transactions/hooks'
 
@@ -27,11 +29,12 @@ function Pair() {
   const { account, library, chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(router.query.pair as string)
+  console.log({ pair })
   const asset = useToken(pair?.asset.address)
   const collateral = useToken(pair?.collateral.address)
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
 
-  const info = useKashiInfo()
+  const blockTimestamp = useBlockTimestamp()
 
   const addTransaction = useTransactionAdder()
   const onUpdateExchangeRate = useCallback(async () => {
@@ -42,7 +45,7 @@ function Pair() {
     })
   }, [account, addTransaction, chainId, library, pair])
 
-  if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/borrow')
+  if (!pair) return Number.isInteger(blockTimestamp) && blockTimestamp === 0 ? null : router.push('/borrow')
 
   return (
     <>
@@ -153,12 +156,13 @@ function Pair() {
   )
 }
 
-Pair.Provider = Provider
+Pair.Provider = RecoilRoot
 
 const PairLayout = ({ children }) => {
   const { i18n } = useLingui()
   const router = useRouter()
   const pair = useKashiPair(router.query.pair as string)
+  console.log({ pair })
   const asset = useToken(pair?.asset.address)
   const collateral = useToken(pair?.collateral.address)
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)

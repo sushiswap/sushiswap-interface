@@ -76,6 +76,7 @@ export const kashiPairFieldsQuery = gql`
 export const cloneFieldsQuery = gql`
   fragment cloneFields on Clone {
     id
+    address: id
     data
     block
     timestamp

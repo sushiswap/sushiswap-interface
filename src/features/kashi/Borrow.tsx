@@ -4,6 +4,7 @@ import { hexConcat, hexlify } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { Percent, SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
 import Button from '../../components/Button'
@@ -19,7 +20,6 @@ import { useV2TradeExactIn } from '../../hooks/useV2Trades'
 import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
 import { KashiApproveButton, TokenApproveButton } from './Button'
 import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
-import { useKashiInfo } from './context'
 import SmartNumberInput from './SmartNumberInput'
 import TradeReview from './TradeReview'
 import TransactionReviewView from './TransactionReview'
@@ -33,7 +33,6 @@ const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 export default function Borrow({ pair }: BorrowProps) {
   const { account, chainId } = useActiveWeb3React()
-  const info = useKashiInfo()
 
   // State
   const [useBentoCollateral, setUseBentoCollateral] = useState<boolean>(pair.collateral.bentoBalance.gt(0))
@@ -48,12 +47,14 @@ export default function Borrow({ pair }: BorrowProps) {
   const collateralToken = useCurrency(pair.collateral.address) || undefined
 
   // Calculated
-  const assetNative = WNATIVE[chainId || 1].address === pair.collateral.address
+  const assetNative = WNATIVE[chainId].address === pair.collateral.address
+
+  const ethBalance = useETHBalances(assetNative ? [account] : [])
 
   const collateralBalance = useBentoCollateral
     ? pair.collateral.bentoBalance
     : assetNative
-    ? info?.ethBalance
+    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.collateral.balance
 
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true

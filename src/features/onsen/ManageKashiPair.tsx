@@ -5,7 +5,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import React, { useState } from 'react'
 
-import { useKashiPair } from '../kashi/context'
+import { useKashiPair } from '../kashi/hooks'
 import KashiDeposit from './KashiDeposit'
 import KashiWithdraw from './KashiWithdraw'
 

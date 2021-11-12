@@ -37,7 +37,8 @@ if (typeof window !== 'undefined' && !!window.ethereum) {
 }
 
 function MyApp({ Component, pageProps, fallback }) {
-  const { pathname, query, locale, events } = useRouter()
+  const router = useRouter()
+  const { locale, events } = router
 
   useEffect(() => {
     const handleRouteChange = (url) => {

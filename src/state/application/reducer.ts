@@ -5,13 +5,13 @@ import {
   ApplicationModal,
   PopupContent,
   removePopup,
+  setChainConnectivityWarning,
+  setImplements3085,
   setKashiApprovalPending,
   setOpenModal,
   updateBlockNumber,
   updateBlockTimestamp,
   updateChainId,
-  setChainConnectivityWarning,
-  setImplements3085,
 } from './actions'
 
 type PopupList = Array<{
@@ -29,7 +29,7 @@ export interface ApplicationState {
   readonly implements3085: boolean
   readonly popupList: PopupList
   readonly openModal: ApplicationModal | null
-  kashiApprovalPending: string
+  readonly kashiApprovalPending: string
 }
 
 const initialState: ApplicationState = {

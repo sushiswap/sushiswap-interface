@@ -26,7 +26,6 @@ export default function Updater(): null {
 
   const blockCallback = useCallback(
     (block: Block) => {
-      console.log('on block', block)
       setState((state) => {
         if (chainId === state.chainId) {
           if (typeof state.blockNumber !== 'number' && typeof state.blockTimestamp !== 'number')

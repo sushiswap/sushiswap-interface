@@ -58,6 +58,8 @@ describe('kashi functions', () => {
       nonce: BigNumber.from('115792089237316195423570985008687907853269984665640564039457584007913129639935'),
       bentoAmount: BigNumber.from('825093595989'),
       bentoShare: BigNumber.from('825093595989'),
+      elastic: BigNumber.from('825093595989'),
+      share: BigNumber.from('825093595989'),
       rate: BigNumber.from('3424289984'),
       symbol: 'USDT',
       usd: BigNumber.from('1000000'),

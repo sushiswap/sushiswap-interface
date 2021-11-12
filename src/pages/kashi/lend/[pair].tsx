@@ -1,25 +1,27 @@
 import { Tab } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useBlockTimestamp } from 'app/state/application/hooks'
 import Card from 'components/Card'
 import Image from 'components/Image'
 import QuestionHelper from 'components/QuestionHelper'
 import { Deposit, Withdraw } from 'features/kashi'
-import Provider, { useKashiInfo, useKashiPair } from 'features/kashi/context'
+import { useKashiPair } from 'features/kashi/hooks'
 import { formatNumber, formatPercent } from 'functions/format'
 import Layout from 'layouts/Kashi'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
+import { RecoilRoot } from 'recoil'
 
 export default function Pair() {
   const router = useRouter()
   const { i18n } = useLingui()
 
+  const blockTimestamp = useBlockTimestamp()
   const pair = useKashiPair(router.query.pair as string)
-  const info = useKashiInfo()
 
-  if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/lend')
+  if (!pair) return Number.isInteger(blockTimestamp) && blockTimestamp === 0 ? null : router.push('/lend')
 
   return (
     <div id={`lend-${router.query.pair}-page`}>
@@ -122,12 +124,13 @@ export default function Pair() {
   )
 }
 
-Pair.Provider = Provider
+Pair.Provider = RecoilRoot
 
 const PairLayout = ({ children }) => {
   const router = useRouter()
   const { i18n } = useLingui()
   const pair = useKashiPair(router.query.pair as string)
+  console.log({ pair })
   return pair ? (
     <Layout
       left={

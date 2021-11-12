@@ -18,7 +18,7 @@ import {
 import Button, { ButtonError } from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Web3Connect from 'app/components/Web3Connect'
-import { useKashiPair } from 'app/features/kashi/context'
+import { useKashiPair } from 'app/features/kashi/hooks'
 import { classNames, getUSDValue, tryParseAmount } from 'app/functions'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'

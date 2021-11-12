@@ -1,7 +1,9 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { WNATIVE } from '@sushiswap/core-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useState } from 'react'
 
 import Button from '../../components/Button'
@@ -12,13 +14,12 @@ import { formatNumber } from '../../functions/format'
 import { e10, ZERO } from '../../functions/math'
 import { useCurrency } from '../../hooks/Tokens'
 import { KashiApproveButton, TokenApproveButton } from './Button'
-import { useKashiInfo } from './context'
 import SmartNumberInput from './SmartNumberInput'
 import TransactionReviewList from './TransactionReview'
 import WarningsList from './WarningsList'
 
 export default function Deposit({ pair }: any): JSX.Element {
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const assetToken = useCurrency(pair.asset.address) || undefined
 
   const { i18n } = useLingui()
@@ -27,13 +28,24 @@ export default function Deposit({ pair }: any): JSX.Element {
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')
 
-  const info = useKashiInfo()
-
   // Calculated
-  const assetNative = WNATIVE[chainId || 1].address === pair.asset.address
-  const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
+  const assetNative = WNATIVE[chainId].address === pair.asset.address
 
-  const max = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
+  const ethBalance = useETHBalances(assetNative ? [account] : [])
+
+  const balance = useBento
+    ? pair.asset.bentoBalance
+    : assetNative
+    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    : pair.asset.balance
+
+  console.log({ balance })
+
+  const max = useBento
+    ? pair.asset.bentoBalance
+    : assetNative
+    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    : pair.asset.balance
 
   const warnings = new Warnings()
 
