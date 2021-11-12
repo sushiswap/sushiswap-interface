@@ -76,7 +76,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
                     </a>
                   </NavLink>
 
-                  <NavLink href="/lend" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <NavLink href="/borrow" activeClassName={ACTIVE_NAV_LINK_CLASS}>
                     <a id="borrow-nav-link" className={NAV_BASE_CLASS}>
                       {i18n._(t`Borrow`)}
                     </a>
