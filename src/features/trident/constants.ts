@@ -1,5 +1,6 @@
-import { ChipColor } from 'components/Chip'
+import { ChainId } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
+import { ChipColor } from 'components/Chip'
 
 type PoolTypesInterface = Record<
   PoolType,
@@ -67,3 +68,5 @@ export const POOL_TYPES: PoolTypesInterface = {
     },
   },
 }
+
+export const TRIDENT_NETWORKS = [ChainId.KOVAN]
