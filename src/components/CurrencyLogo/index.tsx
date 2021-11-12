@@ -28,6 +28,7 @@ const BLOCKCHAIN = {
   [ChainId.XDAI]: 'xdai',
   // [ChainId.OKEX]: 'okex',
   [ChainId.MOONRIVER]: 'moonriver',
+  [ChainId.TELOS]: 'telos',
 }
 
 function getCurrencySymbol(currency) {
@@ -88,6 +89,8 @@ const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token
 const PalmLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/palm.jpg'
 const MovrLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/movr.jpg'
 const FuseLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
+const TelosLogo =
+  'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
 
 const LOGO: { readonly [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]: EthereumLogo,
@@ -114,6 +117,7 @@ const LOGO: { readonly [chainId in ChainId]?: string } = {
   [ChainId.PALM_TESTNET]: PalmLogo,
   [ChainId.MOONRIVER]: MovrLogo,
   [ChainId.FUSE]: FuseLogo,
+  [ChainId.TELOS]: TelosLogo,
 }
 
 interface CurrencyLogoProps {

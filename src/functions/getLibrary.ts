@@ -3,7 +3,7 @@ import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from '@ethersproject
 import { SupportedChainId } from '../constants/chains'
 
 const NETWORK_POLLING_INTERVALS: { [chainId: number]: number } = {
-  [SupportedChainId.ARBITRUM]: 1_000,
+  [SupportedChainId.ARBITRUM]: 10_000,
   [SupportedChainId.ARBITRUM_TESTNET]: 1_000,
   [SupportedChainId.HARMONY]: 15_000,
 }

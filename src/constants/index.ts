@@ -13,8 +13,6 @@ export const RPC = {
   [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
   [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
   [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
-  // [ChainId.MATIC]:
-  //     'https://apis.ankr.com/e22bfa5f5a124b9aa1f911b742f6adfe/c06bb163c3c2a10a4028959f4d82836d/polygon/full/main',
   [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
   [ChainId.XDAI]: 'https://rpc.xdaichain.com',
   [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
@@ -33,6 +31,7 @@ export const RPC = {
   [ChainId.FUSE]: 'https://rpc.fuse.io',
   [ChainId.CELO]: 'https://forno.celo.org',
   [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
+  [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
 }
 
 export const POOL_DENY = ['14', '29', '45', '30']

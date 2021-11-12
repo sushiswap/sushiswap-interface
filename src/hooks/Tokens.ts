@@ -1,5 +1,4 @@
 import { ChainId, Currency, NATIVE, Token, WNATIVE, currencyEquals } from '@sushiswap/sdk'
-import { ExtendedEther, WETH9_EXTENDED } from '../constants'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
 import { createTokenFilterFunction, filterTokens } from '../functions/filtering'
@@ -193,9 +192,6 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   }
 
   const token = useToken(useNative ? undefined : currencyId)
-
-  // const extendedEther = useMemo(() => (chainId ? ExtendedEther.onChain(chainId) : undefined), [chainId])
-  // const weth = chainId ? WETH9_EXTENDED[chainId] : undefined
 
   const native = useMemo(() => (chainId ? NATIVE[chainId] : undefined), [chainId])
 

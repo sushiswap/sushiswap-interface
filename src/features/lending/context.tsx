@@ -196,7 +196,10 @@ export function KashiProvider({ children }) {
   const bentoBoxContract = useBentoBoxContract()
 
   const tokens = useAllTokens()
-  const strategies = useBentoStrategies({ chainId })
+  const strategies = useBentoStrategies({
+    chainId,
+    shouldFetch: chainId && (chainId === ChainId.MAINNET || chainId === ChainId.MATIC),
+  })
 
   // const info = useSingleCallResult(boringHelperContract, 'getUIInfo', [
   //   account,

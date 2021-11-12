@@ -12,7 +12,6 @@ import Column from '../../components/Column'
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
 import { Edit } from 'react-feather'
-import { ExtendedEther } from '../../constants'
 import { FixedSizeList } from 'react-window'
 import IconWrapper from '../../components/IconWrapper'
 import ImportRow from './ImportRow'
@@ -128,8 +127,6 @@ export function CurrencySearch({
   }, [filteredTokens, tokenComparator])
 
   const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
-
-  // const ether = useMemo(() => chainId && ExtendedEther.onChain(chainId), [chainId])
 
   const ether = useMemo(() => chainId && ![ChainId.CELO].includes(chainId) && NATIVE[chainId], [chainId])
 

@@ -322,16 +322,3 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
     'Wrapped Ether'
   ),
 }
-
-export class ExtendedEther extends Ether {
-  public get wrapped(): Token {
-    // if (this.ChainId in WNATIVE) return WNATIVE[this.ChainId]
-    if (this.chainId in WETH9_EXTENDED) return WETH9_EXTENDED[this.chainId]
-
-    throw new Error('Unsupported chain ID')
-  }
-
-  public static onChain(chainId: number): ExtendedEther {
-    return new ExtendedEther(chainId)
-  }
-}
