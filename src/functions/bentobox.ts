@@ -18,7 +18,7 @@ export function toAmount(rebase: Rebase, shares: BigNumber): BigNumber {
 
 export function toShare(rebase: Rebase, amount: BigNumber): BigNumber {
   // console.log('toShare', token, shares)
-  return amount.mulDiv(BigNumber.from(rebase.elastic.toString()), BigNumber.from(rebase.base.toString()))
+  return amount.mulDiv(BigNumber.from(rebase.base.toString()), BigNumber.from(rebase.elastic.toString()))
 }
 
 export function toAmountJSBI(token: Rebase, shares: JSBI): JSBI {
