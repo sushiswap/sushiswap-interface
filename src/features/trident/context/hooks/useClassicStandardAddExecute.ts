@@ -74,14 +74,6 @@ export const useClassicStandardAddExecute = () => {
 
         try {
           setAttemptingTxn(true)
-          console.log(
-            router.interface.encodeFunctionData('addLiquidity', [
-              liquidityInput,
-              pool.liquidityToken.address,
-              liquidityMinted.quotient.toString(),
-              encoded,
-            ])
-          )
           const tx = await router.addLiquidity(
             liquidityInput,
             pool.liquidityToken.address,
