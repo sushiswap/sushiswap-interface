@@ -8,18 +8,16 @@ import { useBlock } from '../../../services/graph'
 import { useTridentPools } from '../../../services/graph/hooks/pools'
 import { poolAtom } from '../context/atoms'
 
-export function usePoolStats() {
+export function usePoolStats({ pair }) {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
-
-  const { address: poolAddress } = useRecoilValue(poolAtom)
 
   const block1d = useBlock({ chainId, daysAgo: 1 })
   const block2d = useBlock({ chainId, daysAgo: 2 })
 
-  const pool = useTridentPools({ chainId, subset: [poolAddress] })?.[0]
-  const pool1d = useTridentPools({ chainId, subset: [poolAddress], block: block1d })?.[0]
-  const pool2d = useTridentPools({ chainId, subset: [poolAddress], block: block2d })?.[0]
+  const pool = useTridentPools({ chainId, subset: [pair] })?.[0]
+  const pool1d = useTridentPools({ chainId, subset: [pair], block: block1d })?.[0]
+  const pool2d = useTridentPools({ chainId, subset: [pair], block: block2d })?.[0]
 
   return useMemo(
     () => [

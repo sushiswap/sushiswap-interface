@@ -5,13 +5,17 @@ import { useLingui } from '@lingui/react'
 import { formatNumber, formatPercent } from '../../../functions'
 import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
 import { usePoolStats } from './usePoolStats'
+import { useRecoilValue } from 'recoil'
+import { poolAtom } from '../context/atoms'
 
 interface PoolStatsProps {}
 
 const PoolStats: FC<PoolStatsProps> = () => {
   const isDesktop = useDesktopMediaQuery()
 
-  const stats = usePoolStats()
+  const { address: poolAddress } = useRecoilValue(poolAtom)
+
+  const stats = usePoolStats({ pair: poolAddress })
 
   return (
     <div className="flex flex-col gap-3 lg:grid lg:grid-cols-4">
