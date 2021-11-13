@@ -73,10 +73,9 @@ export function useTridentHybridPools(
           fee,
           a
         ),
-        address: poolAddresses[i],
       }
     })
-  }, [results, pools, poolAddresses])
+  }, [results, pools])
 }
 
 export function useTridentHybridPool(tokenA?: Currency, tokenB?: Currency, fee?: Fee, a?: JSBI): PoolAtomType {

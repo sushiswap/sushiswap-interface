@@ -35,12 +35,10 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   // TODO: add rewards APR to fee APY
   const isFarm = false
 
-  const poolAddress = useRecoilValue(poolAtom)?.[2]
-
   const block1d = useBlock({ chainId, daysAgo: 1 })
 
-  const poolData = useTridentPools({ chainId, subset: [poolAddress] })?.[0]
-  const poolData1d = useTridentPools({ chainId, subset: [poolAddress], block: block1d })?.[0]
+  const poolData = useTridentPools({ chainId, subset: [pool?.liquidityToken?.address] })?.[0]
+  const poolData1d = useTridentPools({ chainId, subset: [pool?.liquidityToken?.address], block: block1d })?.[0]
 
   // TODO: Double-check if correct on real(-ish) data
   const feeApyPerYear = useMemo(

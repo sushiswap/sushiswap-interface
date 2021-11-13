@@ -13,9 +13,9 @@ interface PoolStatsProps {}
 const PoolStats: FC<PoolStatsProps> = () => {
   const isDesktop = useDesktopMediaQuery()
 
-  const { address: poolAddress } = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
 
-  const stats = usePoolStats({ pair: poolAddress })
+  const stats = usePoolStats({ pair: pool?.liquidityToken?.address })
 
   return (
     <div className="flex flex-col gap-3 lg:grid lg:grid-cols-4">

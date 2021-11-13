@@ -40,15 +40,15 @@ const PoolStatsChart = () => {
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Volume)
   const [chartRange, setChartRange] = useState<ChartRange>(ChartRange.ALL)
-  const { address } = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const data = usePoolBuckets({
     chainId,
     fine: chartTimespans[chartRange] <= chartTimespans['1W'],
     variables: {
       first: chartTimespans[chartRange] <= chartTimespans['1W'] ? 168 : undefined,
-      where: { pool: address?.toLowerCase() },
+      where: { pool: pool?.liquidityToken?.address?.toLowerCase() },
     },
-    shouldFetch: !!address,
+    shouldFetch: !!pool,
   })
   const graphData = useMemo(() => {
     const currentDate = Math.round(Date.now() / 1000)

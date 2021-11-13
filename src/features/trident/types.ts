@@ -30,7 +30,6 @@ export enum LiquidityMode {
 export type PoolAtomType = {
   state?: ConstantProductPoolState | HybridPoolState
   pool?: PoolUnion
-  address?: string
 }
 
 export type LiquidityInput = {

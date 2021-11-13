@@ -71,10 +71,9 @@ export function useTridentClassicPools(
           fee,
           twap
         ),
-        address: poolAddresses[i],
       }
     })
-  }, [results, pools, poolAddresses])
+  }, [results, pools])
 }
 
 export function useTridentClassicPool(tokenA?: Currency, tokenB?: Currency, fee?: Fee, twap?: boolean): PoolAtomType {
