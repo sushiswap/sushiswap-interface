@@ -65,8 +65,6 @@ const SearchResultPools: FC = () => {
             {page.map((row, i) => {
               prepareRow(row)
 
-              console.log(row.original)
-
               const poolPath = `/trident/pool/${poolTypeNameMapper[
                 row.original.type
               ].toLowerCase()}/${row.original.assets.map((asset) => asset.id).join('/')}`

@@ -11,7 +11,7 @@ const HeaderButton: FC<{ title: string; linkTo: string }> = ({ title, linkTo }) 
   <Button
     color="gradient"
     variant="outlined"
-    className="flex-1 sm:flex-none md:flex-1 text-sm font-bold text-white h-9"
+    className="flex-1 text-sm font-bold text-white sm:flex-none md:flex-1 h-9"
   >
     <Link href={linkTo}>{title}</Link>
   </Button>

@@ -13,7 +13,7 @@ export const ClassicDescription: FC = () => {
   const setCurrentStep = useSetRecoilState(currentStepAtom)
 
   return (
-    <div className="grid lg:grid-cols-2 grid-cols-1 gap-8">
+    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
       <div className="flex flex-col gap-4">
         <Typography variant="h3" weight={700} className="text-high-emphesis">
           {i18n._(t`Classic`)}

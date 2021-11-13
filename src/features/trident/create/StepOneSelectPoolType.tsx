@@ -32,7 +32,7 @@ export const StepOneSelectPoolType: FC = () => {
           <div className="text-secondary">{i18n._(t`Please select the pool type you would like to create.`)}</div>
         </div>
 
-        <div className="grid lg:grid-cols-4 grid-cols-2 gap-3 select-none">
+        <div className="grid grid-cols-2 gap-3 select-none lg:grid-cols-4">
           <PoolSelector type={PoolType.ConstantProduct} selectedPool={poolSelected} />
           <PoolSelector type={PoolType.ConcentratedLiquidity} selectedPool={poolSelected} comingSoon />
           <PoolSelector type={PoolType.Weighted} selectedPool={poolSelected} comingSoon />

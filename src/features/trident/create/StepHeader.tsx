@@ -28,7 +28,7 @@ export const StepHeader: FC<StepHeaderProps> = ({ title, subtitle, backOnClick, 
           variant="outlined"
           size="xs"
           onClick={backOnClick}
-          className="pl-0 pr-3 rounded-full inline flex-shrink-0 h-6"
+          className="flex-shrink-0 inline h-6 pl-0 pr-3 rounded-full"
           startIcon={<ChevronLeftIcon width={24} height={24} />}
         >
           {backHref ? <Link href={backHref}>{i18n._(t`Go Back`)}</Link> : i18n._(t`Go Back`)}

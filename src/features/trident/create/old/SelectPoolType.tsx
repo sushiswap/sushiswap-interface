@@ -57,11 +57,11 @@ const SelectPoolType: FC = () => {
   const [selectedPoolType, setSelectedPoolType] = useRecoilState(selectedPoolTypeAtom)
 
   return (
-    <div className="flex flex-col p-5 pt-8 gap-5">
+    <div className="flex flex-col gap-5 p-5 pt-8">
       <Typography variant="h3" weight={700} className="text-high-emphesis">
         {i18n._(t`Select Pool Type`)}
       </Typography>
-      <div className="rounded px-5 bg-dark-900">
+      <div className="px-5 rounded bg-dark-900">
         <RadioGroup value={selectedPoolType} onChange={setSelectedPoolType} className="divide-y">
           <RadioOption
             value={PoolType.ConstantProduct}

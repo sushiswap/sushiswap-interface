@@ -145,8 +145,6 @@ export function useBentoTokens(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && chainId ? featureEnabled(Feature.BENTOBOX, chainId) : false
-
   const variables = {
     block: block ? { number: block } : undefined,
     where: {
@@ -155,7 +153,9 @@ export function useBentoTokens(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['bentoTokens', chainId, stringify(variables)] : null,
+    shouldFetch && chainId && featureEnabled(Feature.BENTOBOX, chainId)
+      ? ['bentoTokens', chainId, stringify(variables)]
+      : null,
     () => getBentoTokens(chainId, variables),
     swrConfig
   )
