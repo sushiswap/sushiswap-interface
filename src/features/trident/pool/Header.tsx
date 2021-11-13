@@ -3,7 +3,7 @@ import { CurrencyLogoArray } from '../../../components/CurrencyLogo'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { I18n } from '@lingui/core'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { poolAtom } from '../context/atoms'
@@ -43,13 +43,16 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const poolData1d = useTridentPools({ chainId, subset: [poolAddress], block: block1d })?.[0]
 
   // TODO: Double-check if correct on real(-ish) data
-  const feeApyPerYear =
-    aprToApy(
-      ((((poolData?.volumeUSD - poolData1d?.volumeUSD) / 100) * poolData?.swapFeePercent * 365) /
-        poolData?.totalValueLockedUSD) *
-        100,
-      3650
-    ) || 0
+  const feeApyPerYear = useMemo(
+    () =>
+      aprToApy(
+        ((((poolData?.volumeUSD - poolData1d?.volumeUSD) / 100) * poolData?.swapFeePercent * 365) /
+          poolData?.totalValueLockedUSD) *
+          100,
+        3650
+      ) || 0,
+    [poolData, poolData1d]
+  )
 
   return (
     <div className="flex justify-between">
