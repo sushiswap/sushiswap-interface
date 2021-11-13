@@ -1,35 +1,32 @@
-import { ConstantProductPoolState, useTridentClassicPool } from '../../../../hooks/useTridentClassicPools'
-import React from 'react'
-import { RecoilRoot, useRecoilValue } from 'recoil'
-import { liquidityModeAtom, poolAtom } from '../../../../features/trident/context/atoms'
-
-import Alert from '../../../../components/Alert'
-import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
-import ClassicStandardMode from '../../../../features/trident/add/classic/ClassicStandardMode'
-import ClassicZapMode from '../../../../features/trident/add/classic/ClassicZapMode'
-import DepositSubmittedModal from '../../../../features/trident/DepositSubmittedModal'
-import FixedRatioHeader from '../../../../features/trident/add/FixedRatioHeader'
-import Link from 'next/link'
-import { LiquidityMode } from '../../../../features/trident/types'
-import TransactionReviewStandardModal from '../../../../features/trident/add/classic/TransactionReviewStandardModal'
-import TransactionReviewZapModal from '../../../../features/trident/add/classic/TransactionReviewZapModal'
-import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
-import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import useCurrenciesFromURL from '../../../../features/trident/context/hooks/useCurrenciesFromURL'
-import { BREADCRUMBS } from '../../../../features/trident/Breadcrumb'
-import ClassicStandardAside from '../../../../features/trident/add/classic/ClassicStandardAside'
-import ClassicZapAside from '../../../../features/trident/add/classic/ClassicZapAside'
-import useInitClassicPoolState from '../../../../features/trident/context/hooks/useInitClassicPoolState'
-import { useRouter } from 'next/router'
+import { PoolType } from '@sushiswap/tines'
+import Alert from 'app/components/Alert'
+import Button from 'app/components/Button'
+import SettingsTab from 'app/components/Settings'
+import Typography from 'app/components/Typography'
+import ClassicStandardAside from 'app/features/trident/add/classic/ClassicStandardAside'
+import ClassicStandardMode from 'app/features/trident/add/classic/ClassicStandardMode'
+import ClassicZapAside from 'app/features/trident/add/classic/ClassicZapAside'
+import ClassicZapMode from 'app/features/trident/add/classic/ClassicZapMode'
+import TransactionReviewStandardModal from 'app/features/trident/add/classic/TransactionReviewStandardModal'
+import TransactionReviewZapModal from 'app/features/trident/add/classic/TransactionReviewZapModal'
+import FixedRatioHeader from 'app/features/trident/add/FixedRatioHeader'
+import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
+import { liquidityModeAtom, poolAtom } from 'app/features/trident/context/atoms'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import DepositSubmittedModal from 'app/features/trident/DepositSubmittedModal'
+import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
+import { LiquidityMode } from 'app/features/trident/types'
+import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
+import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import Link from 'next/link'
+import React from 'react'
+import { useRecoilValue } from 'recoil'
 
 const AddClassic = () => {
-  useInitClassicPoolState()
-
   const { i18n } = useLingui()
-  const { query } = useRouter()
   const { currencies, twap, fee } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const { pool } = useRecoilValue(poolAtom)
@@ -39,7 +36,7 @@ const AddClassic = () => {
     <>
       <TridentHeader pattern="bg-bubble-pattern">
         <div className="relative flex flex-col w-full gap-5 mt-px lg:justify-between lg:w-7/12">
-          <div>
+          <div className="flex justify-between">
             <Button
               color="blue"
               variant="outlined"
@@ -49,14 +46,15 @@ const AddClassic = () => {
             >
               <Link
                 href={
-                  query.tokens[0] && query.tokens[1]
-                    ? `/trident/pool/classic/${query.tokens[0]}/${query.tokens[1]}`
+                  currencies?.[0] && currencies?.[1]
+                    ? `/trident/pool/classic/${currencies?.[0]?.symbol}/${currencies?.[1]?.symbol}`
                     : '/trident/pools'
                 }
               >
                 {pool ? `${currencies?.[0]?.symbol}-${currencies?.[1]?.symbol}` : i18n._(t`Back`)}
               </Link>
             </Button>
+            <SettingsTab trident />
           </div>
           <div>
             <Typography variant="h2" weight={700} className="text-high-emphesis">
@@ -67,6 +65,17 @@ const AddClassic = () => {
                 t`Deposit any or all pool tokens directly with Standard mode,  or invest with any asset in Zap mode.`
               )}
             </Typography>
+            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
+              classicPool.state as any
+            ) && (
+              <Alert
+                className="px-0 bg-transparent"
+                dismissable={false}
+                type="error"
+                showIcon
+                message={i18n._(t`A Pool could not be found for provided currencies`)}
+              />
+            )}
           </div>
         </div>
       </TridentHeader>
@@ -75,16 +84,6 @@ const AddClassic = () => {
         <div className="flex flex-row justify-between">
           <div className="flex flex-col w-full lg:w-7/12">
             <FixedRatioHeader />
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
-              classicPool.state as ConstantProductPoolState
-            ) && (
-              <Alert
-                dismissable={false}
-                type="error"
-                showIcon
-                message={i18n._(t`A Pool could not be found for provided currencies`)}
-              />
-            )}
             <>
               {liquidityMode === LiquidityMode.ZAP && (
                 <>
@@ -110,7 +109,7 @@ const AddClassic = () => {
   )
 }
 
-AddClassic.Provider = RecoilRoot
+AddClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 AddClassic.Layout = (props) => (
   <TridentLayout
     {...props}

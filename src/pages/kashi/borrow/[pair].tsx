@@ -1,26 +1,26 @@
-import { Borrow, Repay } from '../../../features/kashi'
-import Provider, { useKashiInfo, useKashiPair } from '../../../features/kashi/context'
-import React, { useCallback, useState } from 'react'
-import { formatNumber, formatPercent } from '../../../functions/format'
-
-import Card from '../../../components/Card'
-import Dots from '../../../components/Dots'
-import GradientDot from '../../../components/GradientDot'
-import Head from 'next/head'
-import Image from '../../../components/Image'
-import { KashiCooker } from '../../../entities'
-import Layout from '../../../layouts/Kashi'
-import QuestionHelper from '../../../components/QuestionHelper'
 import { Tab } from '@headlessui/react'
-import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
+import { useBlockTimestamp } from 'app/state/application/hooks'
+import Card from 'components/Card'
+import Dots from 'components/Dots'
+import GradientDot from 'components/GradientDot'
+import Image from 'components/Image'
+import QuestionHelper from 'components/QuestionHelper'
+import { KashiCooker } from 'entities'
+import { Borrow, Repay } from 'features/kashi'
+import { useKashiPair } from 'features/kashi/hooks'
+import { formatNumber, formatPercent } from 'functions/format'
+import { useUSDCPrice } from 'hooks'
+import { useToken } from 'hooks/Tokens'
+import { useV2Pair } from 'hooks/useV2Pairs'
+import Layout from 'layouts/Kashi'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useToken } from '../../../hooks/Tokens'
-import { useTransactionAdder } from '../../../state/transactions/hooks'
-import { useUSDCPrice } from '../../../hooks'
-import { useV2Pair } from '../../../hooks/useV2Pairs'
+import React, { useCallback } from 'react'
+import { RecoilRoot } from 'recoil'
+import { useActiveWeb3React } from 'services/web3'
+import { useTransactionAdder } from 'state/transactions/hooks'
 
 function Pair() {
   const router = useRouter()
@@ -29,11 +29,12 @@ function Pair() {
   const { account, library, chainId } = useActiveWeb3React()
 
   const pair = useKashiPair(router.query.pair as string)
+  console.log({ pair })
   const asset = useToken(pair?.asset.address)
   const collateral = useToken(pair?.collateral.address)
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
 
-  const info = useKashiInfo()
+  const blockTimestamp = useBlockTimestamp()
 
   const addTransaction = useTransactionAdder()
   const onUpdateExchangeRate = useCallback(async () => {
@@ -44,7 +45,7 @@ function Pair() {
     })
   }, [account, addTransaction, chainId, library, pair])
 
-  if (!pair) return info && info.blockTimeStamp.isZero() ? null : router.push('/borrow')
+  if (!pair) return Number.isInteger(blockTimestamp) && blockTimestamp === 0 ? null : router.push('/borrow')
 
   return (
     <>
@@ -65,7 +66,6 @@ function Pair() {
                 {pair && (
                   <>
                     <Image
-                      loader={cloudinaryLoader}
                       height={48}
                       width={48}
                       src={pair.asset.tokenInfo.logoURI}
@@ -74,7 +74,6 @@ function Pair() {
                     />
 
                     <Image
-                      loader={cloudinaryLoader}
                       height={48}
                       width={48}
                       src={pair.collateral.tokenInfo.logoURI}
@@ -157,18 +156,18 @@ function Pair() {
   )
 }
 
-Pair.Provider = Provider
+Pair.Provider = RecoilRoot
 
 const PairLayout = ({ children }) => {
   const { i18n } = useLingui()
   const router = useRouter()
   const pair = useKashiPair(router.query.pair as string)
+  console.log({ pair })
   const asset = useToken(pair?.asset.address)
   const collateral = useToken(pair?.collateral.address)
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
   const assetPrice = useUSDCPrice(asset)
   const collateralPrice = useUSDCPrice(collateral)
-  // console.log('render borrow pair layout', { pair })
 
   return pair ? (
     <Layout
@@ -234,14 +233,39 @@ const PairLayout = ({ children }) => {
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`${pair?.collateral.tokenInfo.symbol} Strategy`)}</div>
               <div className="flex flex-row text-lg text-high-emphesis">
-                {i18n._(t`None`)}
-                <QuestionHelper
-                  text={i18n._(
-                    t`BentoBox strategies can create yield for your collateral tokens. This token does not yet have a strategy in the BentoBox.`
-                  )}
-                />
+                {pair.collateral.strategy ? (
+                  i18n._(t`Active`)
+                ) : (
+                  <>
+                    {i18n._(t`None`)}
+                    <QuestionHelper
+                      text={i18n._(
+                        t`BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox.`
+                      )}
+                    />{' '}
+                  </>
+                )}
               </div>
             </div>
+            {pair.collateral.strategy && (
+              <>
+                <div className="flex justify-between">
+                  <div className="text-lg text-secondary">{i18n._(t`APY`)}</div>
+                  <div className="flex items-center">
+                    <div className="text-lg text-high-emphesis">{formatPercent(pair.collateral.strategy.apy)}</div>
+                  </div>
+                </div>
+
+                <div className="flex justify-between">
+                  <div className="text-lg text-secondary">{i18n._(t`Target Percentage`)}</div>
+                  <div className="flex items-center">
+                    <div className="text-lg text-high-emphesis">
+                      {formatPercent(pair.collateral.strategy.targetPercentage)}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
             {pair && pair.oracle.name === 'SushiSwap' && (
               <>
                 <div className="flex justify-between pt-3">

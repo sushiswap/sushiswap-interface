@@ -1,6 +1,7 @@
+import { classNames } from 'functions'
 import React, { FC } from 'react'
-import { classNames } from '../../../functions'
 import { useRecoilState } from 'recoil'
+
 import { currentStepAtom } from './context/atoms'
 import { activeStepColor, completedStepGradient, stepAheadColor, StepProps, stepTitleText } from './StepConstants'
 
@@ -35,7 +36,7 @@ export const StepperSidebar: FC = () => {
   const [currentStep, setCurrentStep] = useRecoilState(currentStepAtom)
 
   return (
-    <div className="flex-none w-52 border-r border-gray-800 mt-6 hidden lg:block">
+    <div className="flex-none w-52 border-r border-gray-800 mt-6 hidden lg:block pr-2">
       <Step stepNum={1} title={stepTitleText[1]} currentStep={currentStep} stepSetter={setCurrentStep} />
       <Step stepNum={2} title={stepTitleText[2]} currentStep={currentStep} stepSetter={setCurrentStep} />
       <Step stepNum={3} title={stepTitleText[3]} currentStep={currentStep} stepSetter={setCurrentStep} />

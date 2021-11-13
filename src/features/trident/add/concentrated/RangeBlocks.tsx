@@ -1,7 +1,8 @@
+import RangeInput from 'components/RangeInput'
 import { FC } from 'react'
-import RangeInput from '../../../../components/RangeInput'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { poolAtom, maxPriceAtom, minPriceAtom } from '../../context/atoms'
+
+import { maxPriceAtom, minPriceAtom, poolAtom } from '../../context/atoms'
 
 const RangeBlocks: FC = () => {
   const { pool } = useRecoilValue(poolAtom)

@@ -1,4 +1,4 @@
-import { FeeTier, TridentPool } from '../../../services/graph/fetchers/pools'
+import { FeeTier, TridentPool } from 'app/services/graph/fetchers/pools'
 
 type FilterSymbolsFunc<T> = (arg0: { original: TridentPool }[], arg1: string[], arg2: T) => any[]
 

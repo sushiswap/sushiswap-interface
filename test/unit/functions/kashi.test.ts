@@ -1,4 +1,4 @@
-import '../../../src/bootstrap'
+import 'app/bootstrap'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import {
@@ -8,19 +8,19 @@ import {
   MINIMUM_TARGET_UTILIZATION,
   STARTING_INTEREST_PER_YEAR,
 } from '@sushiswap/sdk'
-
-import { e10, ZERO } from '../../../src/functions'
 import {
   accrue,
   accrueTotalAssetWithFee,
   addBorrowFee,
+  e10,
   easyAmount,
   getFraction,
   getUSDString,
   getUSDValue,
   interestAccrue,
   takeFee,
-} from '../../../src/functions/kashi'
+  ZERO,
+} from 'app/functions'
 
 describe('kashi functions', () => {
   const pair = {
@@ -58,6 +58,8 @@ describe('kashi functions', () => {
       nonce: BigNumber.from('115792089237316195423570985008687907853269984665640564039457584007913129639935'),
       bentoAmount: BigNumber.from('825093595989'),
       bentoShare: BigNumber.from('825093595989'),
+      elastic: BigNumber.from('825093595989'),
+      share: BigNumber.from('825093595989'),
       rate: BigNumber.from('3424289984'),
       symbol: 'USDT',
       usd: BigNumber.from('1000000'),

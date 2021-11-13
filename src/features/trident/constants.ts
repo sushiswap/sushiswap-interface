@@ -1,5 +1,5 @@
-import { ChipColor } from '../../components/Chip'
-import { PoolType } from './types'
+import { PoolType } from '@sushiswap/tines'
+import { ChipColor } from 'components/Chip'
 
 type PoolTypesInterface = Record<
   PoolType,
@@ -14,7 +14,7 @@ type PoolTypesInterface = Record<
 >
 
 export const POOL_TYPES: PoolTypesInterface = {
-  [PoolType.ConstantProduct]: {
+  ConstantProduct: {
     label: 'Classic',
     label_long: 'Classic Pool',
     color: 'default',
@@ -27,20 +27,20 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.Weighted]: {
-    label: 'Weighted',
-    label_long: 'Weighted Pool',
+  Weighted: {
+    label: 'Index',
+    label_long: 'Index Pool',
     color: 'yellow',
     description: 'Two asset pools, with the value split skewed higher towards one.',
     long_description:
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim bibendum in ut amet, sit fames. Iaculis ultrices sit fermentum commodo nisl eget etiam fusce ac. Risus enim sollicitudin phasellus nibh. Neque turpis amet at scelerisque vitae nibh magna. Aliquet ut natoque quisque eget pellentesque id. Convallis enim.',
     image: {
-      url: '/images/trident/weighted-pool-scale.png',
+      url: '/images/trident/index-pool-scale.png',
       width: 151,
       height: 95,
     },
   },
-  [PoolType.ConcentratedLiquidity]: {
+  ConcentratedLiquidity: {
     label: 'Concentrated',
     label_long: 'Concentrated Range',
     color: 'purple',
@@ -53,9 +53,9 @@ export const POOL_TYPES: PoolTypesInterface = {
       height: 95,
     },
   },
-  [PoolType.Hybrid]: {
-    label: 'Hybrid',
-    label_long: 'Hybrid Pool',
+  Hybrid: {
+    label: 'Stable',
+    label_long: 'Stable Pool',
     color: 'blue',
     description: '3 to 32 assets, with tokens deposited in equal values',
     long_description:

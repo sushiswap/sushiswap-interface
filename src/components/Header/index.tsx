@@ -1,5 +1,6 @@
-import React, { FC } from 'react'
 import { Popover } from '@headlessui/react'
+import React, { FC } from 'react'
+
 import { DesktopNav } from './DesktopNav'
 import { MobileNav } from './MobileNav'
 

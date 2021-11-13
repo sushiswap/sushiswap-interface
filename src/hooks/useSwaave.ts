@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useSushiBarContract, useSushiContract } from './useContract'
-
-import Fraction from '../entities/Fraction'
 import { BigNumber } from '@ethersproject/bignumber'
 import { MaxUint256 } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
-import { useActiveWeb3React } from './useActiveWeb3React'
-import { useTransactionAdder } from '../state/transactions/hooks'
+import { Fraction } from 'app/entities/bignumber'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useCallback, useEffect, useState } from 'react'
+
+import { useSushiBarContract, useSushiContract } from './useContract'
 
 const useSushiBar = () => {
   const { account } = useActiveWeb3React()

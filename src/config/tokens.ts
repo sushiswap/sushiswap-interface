@@ -1,8 +1,21 @@
-import { ChainId, Ether, SUSHI_ADDRESS, Token, WETH9, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/core-sdk'
+
+// TODO: This needs a good rethink... we should probably extract into a package @sushiswap/tokens.
+
+export const FUSE: { [key: string]: Token } = {
+  WETH: new Token(ChainId.FUSE, '0xa722c13135930332Eb3d749B2F0906559D2C5b99', 18, 'WETH', 'Wrapped Ether'),
+  WBTC: new Token(ChainId.FUSE, '0x33284f95ccb7B948d9D352e1439561CF83d8d00d', 8, 'WBTC', 'Wrapped Bitcoin'),
+  USDC: new Token(ChainId.FUSE, '0x620fd5fa44BE6af63715Ef4E65DDFA0387aD13F5', 6, 'USDC', 'USD Coin'),
+  USDT: new Token(ChainId.FUSE, '0x33284f95ccb7B948d9D352e1439561CF83d8d00d', 8, 'USDT', 'Tether USD'),
+  DAI: new Token(ChainId.FUSE, '0x94Ba7A27c7A95863d1bdC7645AC2951E0cca06bA', 18, 'DAI', 'Dai Stablecoin'),
+}
 
 export const ARBITRUM: { [key: string]: Token } = {
   USDC: new Token(ChainId.ARBITRUM, '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', 6, 'USDC', 'USD Coin'),
   WBTC: new Token(ChainId.ARBITRUM, '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', 8, 'WBTC', 'Wrapped Bitcoin'),
+  USDT: new Token(ChainId.ARBITRUM, '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', 8, 'USDT', 'Tether USD'),
+  MIM: new Token(ChainId.ARBITRUM, '0xFEa7a6a0B346362BF88A9e4A88416B77a57D6c2A', 18, 'MIM', 'Magic Internet Money'),
+  SPELL: new Token(ChainId.ARBITRUM, '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF', 18, 'SPELL', 'Spell Token'),
 }
 
 export const PALM: { [key: string]: Token } = {
@@ -18,6 +31,17 @@ export const CELO: { [key: string]: Token } = {
   cEURO: new Token(ChainId.CELO, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
   cBTC: new Token(ChainId.CELO, '0xD629eb00dEced2a080B7EC630eF6aC117e614f1b', 18, 'cBTC', 'Wrapped Bitcoin'),
   cETH: new Token(ChainId.CELO, '0x2DEf4285787d58a2f811AF24755A8150622f4361', 18, 'cETH', 'Wrapped Ether'),
+  WETH: new Token(ChainId.CELO, '0xE919F65739c26a42616b7b8eedC6b5524d1e3aC4', 18, 'WETH', 'WETH'),
+  WBTC: new Token(ChainId.CELO, '0xBe50a3013A1c94768A1ABb78c3cB79AB28fc1aCE', 8, 'WBTC', 'WBTC'),
+}
+
+export const MOONRIVER: { [key: string]: Token } = {
+  USDC: new Token(ChainId.MOONRIVER, '0xE3F5a90F9cb311505cd691a46596599aA1A0AD7D', 6, 'USDC', 'USD Coin'),
+  USDT: new Token(ChainId.MOONRIVER, '0xB44a9B6905aF7c801311e8F4E76932ee959c663C', 6, 'USDT', 'Tether USD'),
+  WETH: new Token(ChainId.MOONRIVER, '0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C', 18, 'WETH', 'Wrapped Ether'),
+  FRAX: new Token(ChainId.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax'),
+  MIM: new Token(ChainId.MOONRIVER, '0x0caE51e1032e8461f4806e26332c030E34De3aDb', 18, 'MIM', 'Magic Internet Money'),
+  BTC: new Token(ChainId.MOONRIVER, '0xE6a991Ffa8CfE62B0bf6BF72959A3d4f11B2E0f5', 8, 'WBTC', 'Wrapped Bitcoin'),
 }
 
 export const BSC: { [key: string]: Token } = {
@@ -50,6 +74,14 @@ export const MATIC: { [key: string]: Token } = {
   DMAGIC: new Token(ChainId.MATIC, '0x61dAECaB65EE2A1D5b6032df030f3fAA3d116Aa7', 18, 'DMAGIC', 'Dark Magic'),
   DRAX: new Token(ChainId.MATIC, '0x1Ba3510A9ceEb72E5CdBa8bcdDe9647E1f20fB4b', 18, 'DRAX', 'Drax'),
   AXMATIC: new Token(ChainId.MATIC, '0x1221591c1d77A9c334aBb0fe530ae6EE3aF51Af9', 18, 'AXMATIC', 'axMATIC'),
+  KLIMA: new Token(ChainId.MATIC, '0x4e78011Ce80ee02d2c3e649Fb657E45898257815', 9, 'Klima DAO', 'KLIMA'),
+  BCT: new Token(
+    ChainId.MATIC,
+    '0x2F800Db0fdb5223b3C3f354886d907A671414A7F',
+    18,
+    'Toucan Protocol: Base Carbon Tonne',
+    'BCT'
+  ),
 }
 
 export const OKEX: { [key: string]: Token } = {
@@ -84,185 +116,167 @@ export const XDAI: { [key: string]: Token } = {
 }
 
 export const AVALANCHE: { [key: string]: Token } = {
-  DAI_OLD: new Token(ChainId.AVALANCHE, '0xbA7dEebBFC5fA1100Fb055a87773e1E99Cd3507a', 18, 'DAI', 'Dai Stablecoin Old'),
-  USDT_OLD: new Token(ChainId.AVALANCHE, '0xde3A24028580884448a5397872046a019649b084', 6, 'USDT', 'Tether USD Old'),
+  DAI_OLD: new Token(
+    ChainId.AVALANCHE,
+    '0xbA7dEebBFC5fA1100Fb055a87773e1E99Cd3507a',
+    18,
+    'oldDAI',
+    'Old Dai Stablecoin'
+  ),
+  USDT_OLD: new Token(ChainId.AVALANCHE, '0xde3A24028580884448a5397872046a019649b084', 6, 'oldUSDT', 'Old Tether USD'),
   WBTC_OLD: new Token(
     ChainId.AVALANCHE,
     '0x408D4cD0ADb7ceBd1F1A1C33A0Ba2098E1295bAB',
     8,
-    'WBTC',
-    'Wrapped Bitcoin Old'
+    'oldWBTC',
+    'Old Wrapped Bitcoin'
   ),
-  WETH_OLD: new Token(ChainId.AVALANCHE, '0xf20d962a6c8f70c731bd838a3a388D7d48fA6e15', 18, 'WETH', 'Wrapped Ether Old'),
-  USDC: new Token(ChainId.AVALANCHE, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC/e', 'USD Coin'),
-  DAI: new Token(ChainId.AVALANCHE, '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70', 18, 'DAI/e', 'Dai Stablecoin'),
-  USDT: new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT/e', 'Tether USD'),
-  WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC/e', 'Wrapped Bitcoin'),
-  WETH: new Token(ChainId.AVALANCHE, '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB', 18, 'WETH/e', 'Wrapped Ether'),
+  WETH_OLD: new Token(
+    ChainId.AVALANCHE,
+    '0xf20d962a6c8f70c731bd838a3a388D7d48fA6e15',
+    18,
+    'oldWETH',
+    'Old Wrapped Ether'
+  ),
+  USDC: new Token(ChainId.AVALANCHE, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC', 'USD Coin'),
+  DAI: new Token(ChainId.AVALANCHE, '0xd586E7F844cEa2F87f50152665BCbc2C279D8d70', 18, 'DAI', 'Dai Stablecoin'),
+  USDT: new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT', 'Tether USD'),
+  WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC', 'Wrapped Bitcoin'),
+  WETH: new Token(ChainId.AVALANCHE, '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB', 18, 'WETH', 'Wrapped Ether'),
 }
 
 // Default Ethereum chain tokens
-export const ALPHA = new Token(ChainId.MAINNET, '0xa1faa113cbE53436Df28FF0aEe54275c13B40975', 18, 'ALPHA', 'AlphaToken')
-export const AMPL = new Token(ChainId.MAINNET, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
-export const BAB = new Token(ChainId.MAINNET, '0xC36824905dfF2eAAEE7EcC09fCC63abc0af5Abc5', 18, 'BAB', 'BAB')
-export const BAC = new Token(ChainId.MAINNET, '0x3449FC1Cd036255BA1EB19d65fF4BA2b8903A69a', 18, 'BAC', 'Basis Cash')
-export const CREAM = new Token(ChainId.MAINNET, '0x2ba592F78dB6436527729929AAf6c908497cB200', 18, 'CREAM', 'Cream')
-export const DAI = new Token(ChainId.MAINNET, '0x6B175474E89094C44Da98b954EedeAC495271d0F', 18, 'DAI', 'Dai Stablecoin')
+export const ALPHA = new Token(
+  ChainId.ETHEREUM,
+  '0xa1faa113cbE53436Df28FF0aEe54275c13B40975',
+  18,
+  'ALPHA',
+  'AlphaToken'
+)
+export const AMPL = new Token(ChainId.ETHEREUM, '0xD46bA6D942050d489DBd938a2C909A5d5039A161', 9, 'AMPL', 'Ampleforth')
+export const BAB = new Token(ChainId.ETHEREUM, '0xC36824905dfF2eAAEE7EcC09fCC63abc0af5Abc5', 18, 'BAB', 'BAB')
+export const BAC = new Token(ChainId.ETHEREUM, '0x3449FC1Cd036255BA1EB19d65fF4BA2b8903A69a', 18, 'BAC', 'Basis Cash')
+export const CREAM = new Token(ChainId.ETHEREUM, '0x2ba592F78dB6436527729929AAf6c908497cB200', 18, 'CREAM', 'Cream')
+export const DAI = new Token(
+  ChainId.ETHEREUM,
+  '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+  18,
+  'DAI',
+  'Dai Stablecoin'
+)
 export const DOUGH = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
   18,
   'DOUGH',
   'PieDAO Dough v2'
 )
-export const DUCK = new Token(ChainId.MAINNET, '0x92E187a03B6CD19CB6AF293ba17F2745Fd2357D5', 18, 'DUCK', 'DUCK')
+export const DUCK = new Token(ChainId.ETHEREUM, '0x92E187a03B6CD19CB6AF293ba17F2745Fd2357D5', 18, 'DUCK', 'DUCK')
 export const ETH2X_FLI = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0xAa6E8127831c9DE45ae56bB1b0d4D4Da6e5665BD',
   18,
   'ETH2x-FLI',
   'ETH 2x Flexible Leverage Index'
 )
-export const FEI = new Token(ChainId.MAINNET, '0x956F47F50A910163D8BF957Cf5846D573E7f87CA', 18, 'FEI', 'Fei USD')
-export const FRAX = new Token(ChainId.MAINNET, '0x853d955aCEf822Db058eb8505911ED77F175b99e', 18, 'FRAX', 'FRAX')
-export const FXS = new Token(ChainId.MAINNET, '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', 18, 'FXS', 'Frax Share')
-export const HBTC = new Token(ChainId.MAINNET, '0x0316EB71485b0Ab14103307bf65a021042c6d380', 18, 'HBTC', 'Huobi BTC')
+export const FEI = new Token(ChainId.ETHEREUM, '0x956F47F50A910163D8BF957Cf5846D573E7f87CA', 18, 'FEI', 'Fei USD')
+export const FRAX = new Token(ChainId.ETHEREUM, '0x853d955aCEf822Db058eb8505911ED77F175b99e', 18, 'FRAX', 'FRAX')
+export const FXS = new Token(ChainId.ETHEREUM, '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0', 18, 'FXS', 'Frax Share')
+export const HBTC = new Token(ChainId.ETHEREUM, '0x0316EB71485b0Ab14103307bf65a021042c6d380', 18, 'HBTC', 'Huobi BTC')
 export const IBETH = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0xeEa3311250FE4c3268F8E684f7C87A82fF183Ec1',
   8,
   'ibETHv2',
   'Interest Bearing Ether v2'
 )
-export const MEOW = new Token(ChainId.MAINNET, '0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D', 18, 'MEOW', 'Meowshi')
-export const MIR = new Token(ChainId.MAINNET, '0x09a3EcAFa817268f77BE1283176B946C4ff2E608', 18, 'MIR', 'Wrapped MIR')
-export const NFTX = new Token(ChainId.MAINNET, '0x87d73E916D7057945c9BcD8cdd94e42A6F47f776', 18, 'NFTX', 'NFTX')
+export const MEOW = new Token(ChainId.ETHEREUM, '0x650F44eD6F1FE0E1417cb4b3115d52494B4D9b6D', 18, 'MEOW', 'Meowshi')
+export const MIR = new Token(ChainId.ETHEREUM, '0x09a3EcAFa817268f77BE1283176B946C4ff2E608', 18, 'MIR', 'Wrapped MIR')
+export const NFTX = new Token(ChainId.ETHEREUM, '0x87d73E916D7057945c9BcD8cdd94e42A6F47f776', 18, 'NFTX', 'NFTX')
 export const PLAY = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0x33e18a092a93ff21aD04746c7Da12e35D34DC7C4',
   18,
   'PLAY',
   'Metaverse NFT Index'
 )
 export const PONT = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0xcb46C550539ac3DB72dc7aF7c89B11c306C727c2',
   9,
   'pONT',
   'Poly Ontology Token'
 )
 export const PWING = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0xDb0f18081b505A7DE20B18ac41856BCB4Ba86A1a',
   9,
   'pWING',
   'Poly Ontology Wing Token'
 )
-export const RENBTC = new Token(ChainId.MAINNET, '0xEB4C2781e4ebA804CE9a9803C67d0893436bB27D', 8, 'renBTC', 'renBTC')
-export const RUNE = new Token(ChainId.MAINNET, '0x3155BA85D5F96b2d030a4966AF206230e46849cb', 18, 'RUNE', 'RUNE.ETH')
-export const STETH = new Token(ChainId.MAINNET, '0xDFe66B14D37C77F4E9b180cEb433d1b164f0281D', 18, 'stETH', 'stakedETH')
-export const TRIBE = new Token(ChainId.MAINNET, '0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B', 18, 'TRIBE', 'Tribe')
-export const UMA = new Token(ChainId.MAINNET, '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828', 18, 'UMA', 'UMA')
+export const RENBTC = new Token(ChainId.ETHEREUM, '0xEB4C2781e4ebA804CE9a9803C67d0893436bB27D', 8, 'renBTC', 'renBTC')
+export const RUNE = new Token(ChainId.ETHEREUM, '0x3155BA85D5F96b2d030a4966AF206230e46849cb', 18, 'RUNE', 'RUNE.ETH')
+export const STETH = new Token(ChainId.ETHEREUM, '0xDFe66B14D37C77F4E9b180cEb433d1b164f0281D', 18, 'stETH', 'stakedETH')
+export const TRIBE = new Token(ChainId.ETHEREUM, '0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B', 18, 'TRIBE', 'Tribe')
+export const UMA = new Token(ChainId.ETHEREUM, '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828', 18, 'UMA', 'UMA')
 export const UMA_CALL = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0x1062aD0E59fa67fa0b27369113098cC941Dd0D5F',
   18,
   'UMA',
   'UMA 35 Call [30 Apr 2021]'
 )
-export const USDC = new Token(ChainId.MAINNET, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC', 'USD Coin')
+export const USDC = new Token(ChainId.ETHEREUM, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', 6, 'USDC', 'USD Coin')
 export const USDP = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0x1456688345527bE1f37E9e627DA0837D6f08C925',
   18,
   'USDP',
   'USDP Stablecoin'
 )
-export const USDT = new Token(ChainId.MAINNET, '0xdAC17F958D2ee523a2206206994597C13D831ec7', 6, 'USDT', 'Tether USD')
-export const UST = new Token(ChainId.MAINNET, '0xa47c8bf37f92aBed4A126BDA807A7b7498661acD', 18, 'UST', 'Wrapped UST')
+export const USDT = new Token(ChainId.ETHEREUM, '0xdAC17F958D2ee523a2206206994597C13D831ec7', 6, 'USDT', 'Tether USD')
+export const UST = new Token(ChainId.ETHEREUM, '0xa47c8bf37f92aBed4A126BDA807A7b7498661acD', 18, 'UST', 'Wrapped UST')
 export const XSUSHI_CALL = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0xada279f9301C01A4eF914127a6C2a493Ad733924',
   18,
   'XSUc25-0531',
   'XSUSHI 25 Call [31 May 2021]'
 )
-export const WBTC = new Token(ChainId.MAINNET, '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', 8, 'WBTC', 'Wrapped BTC')
+export const WBTC = new Token(ChainId.ETHEREUM, '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', 8, 'WBTC', 'Wrapped BTC')
 
-export const XSUSHI = new Token(ChainId.MAINNET, '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272', 18, 'xSUSHI', 'SushiBar')
+export const XSUSHI = new Token(
+  ChainId.ETHEREUM,
+  '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
+  18,
+  'xSUSHI',
+  'SushiBar'
+)
 
-export const LIFT = new Token(ChainId.MAINNET, '0xf9209d900f7ad1DC45376a2caA61c78f6dEA53B6', 18, 'LIFT', 'LiftKitchen')
+export const LIFT = new Token(ChainId.ETHEREUM, '0xf9209d900f7ad1DC45376a2caA61c78f6dEA53B6', 18, 'LIFT', 'LiftKitchen')
 export const LFBTC = new Token(
-  ChainId.MAINNET,
+  ChainId.ETHEREUM,
   '0xafcE9B78D409bF74980CACF610AFB851BF02F257',
   18,
   'LFBTC',
   'LiftKitchen BTC'
 )
-export const CVXCRV = new Token(ChainId.MAINNET, '0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7', 18, 'cvxCRV', 'cvxCRV')
-export const CRV = new Token(ChainId.MAINNET, '0xD533a949740bb3306d119CC777fa900bA034cd52', 18, 'CRV', 'Curve')
+export const CVXCRV = new Token(ChainId.ETHEREUM, '0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7', 18, 'cvxCRV', 'cvxCRV')
+export const CRV = new Token(ChainId.ETHEREUM, '0xD533a949740bb3306d119CC777fa900bA034cd52', 18, 'CRV', 'Curve')
 
 export const CRXSUSHI = new Token(
-  ChainId.MAINNET,
-  '0x228619cca194fbe3ebeb2f835ec1ea5080dafbb2',
+  ChainId.ETHEREUM,
+  '0x228619CCa194Fbe3Ebeb2f835eC1eA5080DaFbb2',
   8,
   'crXSUSHI',
   'Cream SushiBar'
 )
 export const AXSUSHI = new Token(
-  ChainId.MAINNET,
-  '0xf256cc7847e919fac9b808cc216cac87ccf2f47a',
+  ChainId.ETHEREUM,
+  '0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a',
   18,
   'aXSUSHI',
   'Aave interest bearing XSUSHI'
 )
 
-export const DPI = new Token(ChainId.MAINNET, '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', 18, 'DefiPulse', 'DPI')
-
-type ChainTokenMap = {
-  readonly [chainId in ChainId]?: Token
-}
-
-// SUSHI
-export const SUSHI: ChainTokenMap = {
-  [ChainId.MAINNET]: new Token(ChainId.MAINNET, SUSHI_ADDRESS[ChainId.MAINNET], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.ROPSTEN]: new Token(ChainId.ROPSTEN, SUSHI_ADDRESS[ChainId.ROPSTEN], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.RINKEBY]: new Token(ChainId.RINKEBY, SUSHI_ADDRESS[ChainId.RINKEBY], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.GÖRLI]: new Token(ChainId.GÖRLI, SUSHI_ADDRESS[ChainId.GÖRLI], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.KOVAN]: new Token(ChainId.KOVAN, SUSHI_ADDRESS[ChainId.KOVAN], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.MATIC]: new Token(ChainId.MATIC, SUSHI_ADDRESS[ChainId.MATIC], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.FANTOM]: new Token(ChainId.FANTOM, SUSHI_ADDRESS[ChainId.FANTOM], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.XDAI]: new Token(ChainId.XDAI, SUSHI_ADDRESS[ChainId.XDAI], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.BSC]: new Token(ChainId.BSC, SUSHI_ADDRESS[ChainId.BSC], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.ARBITRUM]: new Token(ChainId.ARBITRUM, SUSHI_ADDRESS[ChainId.ARBITRUM], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.AVALANCHE]: new Token(ChainId.AVALANCHE, SUSHI_ADDRESS[ChainId.AVALANCHE], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.OKEX]: new Token(ChainId.OKEX, SUSHI_ADDRESS[ChainId.OKEX], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.HARMONY]: new Token(ChainId.HARMONY, SUSHI_ADDRESS[ChainId.HARMONY], 18, 'SUSHI', 'SushiToken'),
-  [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
-}
-
-export const WETH9_EXTENDED: { [chainId: number]: Token } = {
-  ...WETH9,
-  [ChainId.ARBITRUM_TESTNET]: new Token(
-    ChainId.ARBITRUM_TESTNET,
-    '0x4A5e4A42dC430f669086b417AADf2B128beFEfac',
-    18,
-    'WETH9',
-    'Wrapped Ether'
-  ),
-  [ChainId.ARBITRUM]: new Token(
-    ChainId.ARBITRUM,
-    '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
-    18,
-    'WETH',
-    'Wrapped Ether'
-  ),
-
-  [ChainId.FANTOM]: new Token(
-    ChainId.FANTOM,
-    '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
-    18,
-    'WFTM',
-    'Wrapped Fantom'
-  ),
-}
+export const DPI = new Token(ChainId.ETHEREUM, '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', 18, 'DefiPulse', 'DPI')

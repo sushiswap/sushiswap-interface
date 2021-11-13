@@ -1,21 +1,20 @@
-import { AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather'
-import { ChainId, Currency } from '@sushiswap/core-sdk'
-import React, { FC } from 'react'
-import { Trans, t } from '@lingui/macro'
-
-import Button from '../../components/Button'
-import CloseIcon from '../../components/CloseIcon'
-import ExternalLink from '../../components/ExternalLink'
-import Image from '../../components/Image'
-import Lottie from 'lottie-react'
-import Modal from '../../components/Modal'
-import ModalHeader from '../../components/ModalHeader'
-import { RowFixed } from '../../components/Row'
-import { getExplorerLink } from '../../functions/explorer'
-import loadingRollingCircle from '../../animation/loading-rolling-circle.json'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import useAddTokenToMetaMask from '../../hooks/useAddTokenToMetaMask'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ChainId, Currency } from '@sushiswap/core-sdk'
+import loadingRollingCircle from 'animation/loading-rolling-circle.json'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import Button from 'components/Button'
+import CloseIcon from 'components/CloseIcon'
+import ExternalLink from 'components/ExternalLink'
+import Image from 'components/Image'
+import ModalHeader from 'components/ModalHeader'
+import { RowFixed } from 'components/Row'
+import { getExplorerLink } from 'functions/explorer'
+import useAddTokenToMetaMask from 'hooks/useAddTokenToMetaMask'
+import Lottie from 'lottie-react'
+import React, { FC } from 'react'
+import { AlertTriangle, ArrowUpCircle } from 'react-feather'
+import { useActiveWeb3React } from 'services/web3'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void
@@ -25,7 +24,7 @@ interface ConfirmationPendingContentProps {
 export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText }) => {
   const { i18n } = useLingui()
   return (
-    <div>
+    <div className="p-6">
       <div className="flex justify-end">
         <CloseIcon onClick={onDismiss} />
       </div>
@@ -59,7 +58,7 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
   const { library } = useActiveWeb3React()
   const { addToken, success } = useAddTokenToMetaMask(currencyToAdd)
   return (
-    <div>
+    <div className="p-6">
       <div className="flex justify-end">
         <CloseIcon onClick={onDismiss} />
       </div>
@@ -116,7 +115,7 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   topContent,
 }) => {
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 p-6">
       <ModalHeader title={title} onClose={onDismiss} />
       {topContent()}
       {bottomContent()}
@@ -178,7 +177,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
 
   // confirmation screen
   return (
-    <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={90}>
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
       {attemptingTxn ? (
         <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} />
       ) : hash ? (
@@ -191,7 +190,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
       ) : (
         content()
       )}
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }
 

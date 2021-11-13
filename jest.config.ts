@@ -5,6 +5,7 @@ const config: Config.InitialOptions = {
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   moduleNameMapper: {
+    '^app/(.*)$': '<rootDir>/src/$1',
     /* Handle CSS imports (with CSS modules)
     https://jestjs.io/docs/webpack#mocking-css-modules */
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',

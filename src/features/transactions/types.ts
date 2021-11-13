@@ -22,3 +22,14 @@ export interface TableInstance {
   setFilter: (columnId: string, filterValue: any) => void
   toggleSortBy: (columnId: string, descending: boolean, isMulti?: boolean) => void
 }
+
+export interface Transactions {
+  address: string
+  incomingAmt: string
+  outgoingAmt: string
+  time: string
+  value: string
+  type: string
+}
+
+export type TransactionFetcherState = { transactions?: Transactions[]; error: Error; loading: boolean }

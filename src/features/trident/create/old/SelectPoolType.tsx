@@ -1,14 +1,15 @@
-import { FC } from 'react'
-import { useLingui } from '@lingui/react'
-import Typography from '../../../../components/Typography'
-import { t } from '@lingui/macro'
-import RadioGroup from '../../../../components/RadioGroup'
 import { RadioGroup as HeadlessRadioGroup } from '@headlessui/react'
-import { classNames } from '../../../../functions'
-import Button from '../../../../components/Button'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { PoolType } from '@sushiswap/tines'
+import Button from 'components/Button'
+import RadioGroup from 'components/RadioGroup'
+import Typography from 'components/Typography'
+import { classNames } from 'functions'
+import { FC } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
+
 import { poolCreationPageAtom } from '../../context/atoms'
-import { PoolType } from '../../types'
 import { selectedPoolTypeAtom } from '../context/atoms'
 
 const RadioOption = ({ value, title, description }) => {
@@ -76,7 +77,7 @@ const SelectPoolType: FC = () => {
           />
           <RadioOption
             value={PoolType.Weighted}
-            title={i18n._(t`Weighted`)}
+            title={i18n._(t`Index`)}
             description={i18n._(
               t`This type of pool consists of 2 tokens, assigned weights for each token by the pool creator.`
             )}

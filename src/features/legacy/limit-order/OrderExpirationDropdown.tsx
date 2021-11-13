@@ -1,14 +1,13 @@
-import { FC, useCallback } from 'react'
-import NeonSelect, { NeonSelectItem } from '../../../components/Select'
-
-import { AppDispatch } from '../../../state'
-import { OrderExpiration } from '../../../state/limit-order/reducer'
-import QuestionHelper from '../../../components/QuestionHelper'
-import { setOrderExpiration } from '../../../state/limit-order/actions'
 import { t } from '@lingui/macro'
-import { useDispatch } from 'react-redux'
-import { useLimitOrderState } from '../../../state/limit-order/hooks'
 import { useLingui } from '@lingui/react'
+import QuestionHelper from 'components/QuestionHelper'
+import NeonSelect, { NeonSelectItem } from 'components/Select'
+import { FC, useCallback } from 'react'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'state'
+import { setOrderExpiration } from 'state/limit-order/actions'
+import { useLimitOrderState } from 'state/limit-order/hooks'
+import { OrderExpiration } from 'state/limit-order/reducer'
 
 const OrderExpirationDropdown: FC = () => {
   const { i18n } = useLingui()

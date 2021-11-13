@@ -1,9 +1,9 @@
-import CloseIcon from '../../components/CloseIcon'
-import Image from 'next/image'
-import Modal from '../../components/Modal'
-import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import CloseIcon from 'components/CloseIcon'
+import Image from 'next/image'
+import React from 'react'
 
 interface TransactionFailedModalProps {
   isOpen: boolean
@@ -14,8 +14,8 @@ export default function TransactionFailedModal({ isOpen, onDismiss }: Transactio
   const { i18n } = useLingui()
 
   return (
-    <Modal isOpen={isOpen} onDismiss={onDismiss} padding={28}>
-      <div className=" h-60">
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
+      <div className="h-60 p-[28px]">
         <div className="flex justify-end">
           <CloseIcon onClick={onDismiss} />
         </div>
@@ -35,6 +35,6 @@ export default function TransactionFailedModal({ isOpen, onDismiss }: Transactio
           </button>
         </div>
       </div>
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }

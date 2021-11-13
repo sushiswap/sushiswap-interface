@@ -1,5 +1,6 @@
-import { CreatePoolStep } from './context/atoms'
 import { SetterOrUpdater } from 'recoil'
+
+import { CreatePoolStep } from './context/atoms'
 
 export const completedStepGradient = 'from-opaque-blue to-opaque-pink'
 export const activeStepColor = 'bg-blue'

@@ -1,5 +1,5 @@
+import { formatPercent } from 'functions'
 import React from 'react'
-import { formatPercent } from '../../../functions'
 
 interface AllocationTableProps {
   allocations: {

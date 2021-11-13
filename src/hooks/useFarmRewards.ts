@@ -1,4 +1,8 @@
-import { Chef, PairType } from '../features/onsen/enum'
+import { getAddress } from '@ethersproject/address'
+import { ChainId } from '@sushiswap/core-sdk'
+import { Chef, PairType } from 'app/features/onsen/enum'
+import { usePositions } from 'app/features/onsen/hooks'
+import { aprToApy } from 'app/functions/convert'
 import {
   useAverageBlockTime,
   useBlock,
@@ -8,19 +12,13 @@ import {
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
-  useNativePrice,
   useOnePrice,
   useStakePrice,
   useSushiPairs,
   useSushiPrice,
-} from '../services/graph'
-
-import { ChainId } from '@sushiswap/core-sdk'
-import { getAddress } from '@ethersproject/address'
-import useActiveWeb3React from './useActiveWeb3React'
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
-import { usePositions } from '../features/onsen/hooks'
-import { aprToApy } from '../functions/convert/apyApr'
 
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()

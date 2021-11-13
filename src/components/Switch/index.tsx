@@ -1,5 +1,6 @@
 import { Switch as HeadlessUiSwitch } from '@headlessui/react'
 import { ComponentProps, ReactNode } from 'react'
+
 import { classNames } from '../../functions'
 
 type SwitchColor = 'default' | 'gradient'

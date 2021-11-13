@@ -1,10 +1,11 @@
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import { currentLiquidityValueSelector, poolAtom, poolBalanceAtom } from '../atoms'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+
+import { currentLiquidityValueSelector, poolAtom, poolBalanceAtom } from '../atoms'
 
 export const percentageZapCurrencyAtom = atom<Currency | undefined>({
   key: 'percentageZapCurrencyAtom',

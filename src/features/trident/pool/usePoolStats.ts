@@ -1,12 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
+import { useActiveWeb3React } from 'services/web3'
+
 import { formatNumber, formatPercent } from '../../../functions'
-import { useActiveWeb3React } from '../../../hooks'
 import { useBlock } from '../../../services/graph'
 import { useTridentPools } from '../../../services/graph/hooks/pools'
-import { poolAtom } from '../context/atoms'
 
 export function usePoolStats({ pair }) {
   const { i18n } = useLingui()

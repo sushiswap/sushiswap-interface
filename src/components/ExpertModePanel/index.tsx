@@ -1,7 +1,7 @@
-import { FC } from 'react'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
 import { XCircleIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { FC } from 'react'
 
 interface ExpertModePanelProps {
   active: boolean

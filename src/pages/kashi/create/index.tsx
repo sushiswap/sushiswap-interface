@@ -1,24 +1,23 @@
-import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/core-sdk'
-import React, { useCallback } from 'react'
-import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '../../../state/create/hook'
-
-import { AddressZero } from '@ethersproject/constants'
-import Button from '../../../components/Button'
-import { CHAINLINK_PRICE_FEED_MAP } from '../../../config/oracles/chainlink'
-import Card from '../../../components/Card'
-import Container from '../../../components/Container'
-import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
-import { Field } from '../../../state/create/actions'
-import Head from 'next/head'
-import Layout from '../../../layouts/Kashi'
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { e10 } from '../../../functions/math'
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
-import { useBentoBoxContract } from '../../../hooks/useContract'
 import { useLingui } from '@lingui/react'
+import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import Button from 'components/Button'
+import Card from 'components/Card'
+import Container from 'components/Container'
+import CurrencyInputPanel from 'components/CurrencyInputPanel'
+import { CHAINLINK_PRICE_FEED_MAP } from 'config/oracles/chainlink'
+import { e10 } from 'functions/math'
+import { useBentoBoxContract } from 'hooks/useContract'
+import Layout from 'layouts/Kashi'
+import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useTransactionAdder } from '../../../state/transactions/hooks'
+import React, { useCallback } from 'react'
+import { useActiveWeb3React } from 'services/web3'
+import { Field } from 'state/create/actions'
+import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from 'state/create/hook'
+import { useTransactionAdder } from 'state/transactions/hooks'
 
 export type ChainlinkToken = {
   symbol: string
@@ -36,7 +35,6 @@ function Create() {
 
   const router = useRouter()
 
-  // swap state
   const { independentField, typedValue } = useCreateState()
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useCreateActionHandlers()
 
@@ -107,12 +105,6 @@ function Create() {
           }
         }
       }
-
-      console.log({
-        multiply,
-        divide,
-        decimals: e10(decimals),
-      })
 
       return defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
     },

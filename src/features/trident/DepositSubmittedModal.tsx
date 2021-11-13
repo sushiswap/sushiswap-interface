@@ -1,20 +1,21 @@
-import Typography from '../../components/Typography'
-import { useLingui } from '@lingui/react'
+import { CheckCircleIcon } from '@heroicons/react/outline'
+import { XCircleIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
-import { getExplorerLink } from '../../functions/explorer'
-import { useActiveWeb3React } from '../../hooks'
-import Button from '../../components/Button'
+import { useLingui } from '@lingui/react'
+import loadingCircle from 'app/animation/loading-circle.json'
+import suppySubmitted from 'app/animation/supply-submitted.json'
+import Button from 'app/components/Button'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import Typography from 'app/components/Typography'
+import { getExplorerLink } from 'app/functions/explorer'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAllTransactions } from 'app/state/transactions/hooks'
+import Lottie from 'lottie-react'
 import Link from 'next/link'
-import HeadlessUiModal from '../../components/Modal/HeadlessUIModal'
 import React, { FC } from 'react'
 import { useRecoilState } from 'recoil'
+
 import { txHashAtom } from './context/atoms'
-import suppySubmitted from '../../animation/supply-submitted.json'
-import Lottie from 'lottie-react'
-import { useAllTransactions } from '../../state/transactions/hooks'
-import { XCircleIcon } from '@heroicons/react/outline'
-import { CheckCircleIcon } from '@heroicons/react/outline'
-import loadingCircle from '../../animation/loading-circle.json'
 
 const DepositSubmittedModal: FC = () => {
   const { chainId } = useActiveWeb3React()
@@ -28,7 +29,7 @@ const DepositSubmittedModal: FC = () => {
   const cancelled = tx?.receipt && tx.receipt.status === 1337
 
   return (
-    <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash(null)}>
+    <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash('')}>
       <div className="flex flex-col items-center justify-center px-8 lg:p-12 bg-dark-800/90 h-full gap-3">
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
           <Lottie animationData={suppySubmitted} autoplay loop />

@@ -1,12 +1,12 @@
-import { useBlock, useSushiPairs } from '../../../services/graph'
+import Search from 'app/components/Search'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import PairList from 'app/features/analytics/Pairs/PairList'
+import PairTabs from 'app/features/analytics/Pairs/PairTabs'
+import useFuse from 'app/hooks/useFuse'
+import { useBlock, useSushiPairs } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import PairList from '../../../features/analytics/Pairs/PairList'
-import PairTabs from '../../../features/analytics/Pairs/PairTabs'
-import Search from '../../../components/Search'
-import { useActiveWeb3React, useFuse } from '../../../hooks'
-import Background from '../../../features/analytics/Background'
 
 export default function Pairs() {
   const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')

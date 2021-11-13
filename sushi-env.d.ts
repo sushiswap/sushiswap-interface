@@ -1,5 +1,6 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import Fraction from './src/entities/Fraction'
+
+import Fraction from './src/entities/bignumber/Fraction'
 
 declare module 'fortmatic'
 
@@ -44,5 +45,7 @@ declare module '@ethersproject/bignumber' {
     mulDiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
     toFixed(decimals: BigNumberish): string
     toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
+    min(...values: BigNumberish[]): BigNumber
+    max(...values: BigNumberish[]): BigNumber
   }
 }

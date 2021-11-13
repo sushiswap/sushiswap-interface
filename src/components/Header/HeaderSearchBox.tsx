@@ -1,7 +1,7 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import React, { FC } from 'react'
 import { Search } from 'react-feather'
-import { useLingui } from '@lingui/react'
-import { t } from '@lingui/macro'
 
 // NOT FINALIZED WITH DESIGN YET
 const HeaderSearchBox: FC = () => {

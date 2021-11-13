@@ -1,13 +1,14 @@
-import { FC } from 'react'
-import Typography from '../../../components/Typography'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import Typography from 'components/Typography'
+import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, liquidityModeAtom, poolBalanceAtom } from '../context/atoms'
-import { usePoolDetailsBurn } from '../context/hooks/usePoolDetails'
-import { LiquidityMode } from '../types'
 import usePercentageInput from '../context/hooks/usePercentageInput'
+import { usePoolDetailsBurn } from '../context/hooks/usePoolDetails'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
+import { LiquidityMode } from '../types'
 
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()

@@ -1,29 +1,28 @@
-import { ChainId, Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import React, { useEffect, useState } from 'react'
-import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/hooks'
-import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
-
-import { ApplicationModal } from '../../state/application/actions'
+import { isAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import Button from '../../components/Button'
-import { ChevronRight } from 'react-feather'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import ExternalLink from '../../components/ExternalLink'
-import Fraction from '../../entities/Fraction'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { ChainId, Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Container from 'app/components/Container'
+import Dots from 'app/components/Dots'
+import ExternalLink from 'app/components/ExternalLink'
+import Loader from 'app/components/Loader'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { Fraction } from 'app/entities/bignumber'
+import { cloudinaryLoader } from 'app/functions/cloudinary'
+import { formatNumber } from 'app/functions/format'
+import NetworkGuard from 'app/guards/Network'
+import { useActiveWeb3React } from 'app/services/web3/hooks/useActiveWeb3React'
+import { ApplicationModal } from 'app/state/application/actions'
+import { useModalOpen, useToggleSelfClaimModal } from 'app/state/application/hooks'
+import { useClaimCallback, useUserUnclaimedAmount } from 'app/state/claim/hooks'
+import { useUserHasSubmittedClaim } from 'app/state/transactions/hooks'
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
-import Loader from '../../components/Loader'
-import NetworkGuard from '../../guards/Network'
-import QuestionHelper from '../../components/QuestionHelper'
-import { cloudinaryLoader } from '../../functions/cloudinary'
-import { formatNumber } from '../../functions/format'
-import { isAddress } from '@ethersproject/address'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
+import React, { useEffect, useState } from 'react'
+import { ChevronRight } from 'react-feather'
 
 function Vesting() {
   const { i18n } = useLingui()
@@ -247,6 +246,6 @@ function Vesting() {
   )
 }
 
-Vesting.Guard = NetworkGuard([ChainId.MAINNET])
+Vesting.Guard = NetworkGuard([ChainId.ETHEREUM])
 
 export default Vesting

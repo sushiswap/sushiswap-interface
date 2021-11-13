@@ -1,7 +1,15 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
+import { toShareJSBI } from 'app/functions/bentobox'
+import { useTridentRouterContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useMemo } from 'react'
+import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
+
+import { LiquidityOutput } from '../../types'
 import {
   attemptingTxnAtom,
   bentoboxRebasesAtom,
@@ -10,14 +18,7 @@ import {
   showReviewAtom,
   txHashAtom,
 } from '../atoms'
-import { ethers } from 'ethers'
-import { t } from '@lingui/macro'
-import ReactGA from 'react-ga'
-
-import { useMemo } from 'react'
 import usePercentageInput from './usePercentageInput'
-import { toShareJSBI } from '../../../../functions'
-import { LiquidityOutput } from '../../types'
 import { usePoolDetailsBurn } from './usePoolDetails'
 
 export const useClassicStandardRemoveExecute = () => {
@@ -64,10 +65,11 @@ export const useClassicStandardRemoveExecute = () => {
           },
         ]
 
-        const encoded = ethers.utils.defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
+        const encoded = defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
 
         try {
           setAttemptingTxn(true)
+
           const tx = await router.burnLiquidity(
             pool.liquidityToken.address,
             parsedSLPAmount.quotient.toString(),

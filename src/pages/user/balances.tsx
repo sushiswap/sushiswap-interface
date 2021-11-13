@@ -1,28 +1,25 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BENTOBOX_ADDRESS, CurrencyAmount, Token, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { BentoBalance, useBentoBalances } from '../../state/bentobox/hooks'
-import React, { useState } from 'react'
-import { useFuse, useSortableData } from '../../hooks'
-
-import Back from '../../components/Back'
-import Button from '../../components/Button'
-import Card from '../../components/Card'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import Head from 'next/head'
-import Image from '../../components/Image'
-import Input from '../../components/Input'
-import Layout from '../../layouts/Kashi'
-import Paper from '../../components/Paper'
-import Search from '../../components/Search'
 import { Transition } from '@headlessui/react'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { cloudinaryLoader } from '../../functions/cloudinary'
-import { formatNumber } from '../../functions/format'
 import { t } from '@lingui/macro'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import useBentoBox from '../../hooks/useBentoBox'
 import { useLingui } from '@lingui/react'
+import { BENTOBOX_ADDRESS, CurrencyAmount, Token, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Card from 'app/components/Card'
+import Dots from 'app/components/Dots'
+import Image from 'app/components/Image'
+import Input from 'app/components/Input'
+import Paper from 'app/components/Paper'
+import Search from 'app/components/Search'
+import { formatNumber } from 'app/functions/format'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useBentoBox from 'app/hooks/useBentoBox'
+import useFuse from 'app/hooks/useFuse'
+import useSortableData from 'app/hooks/useSortableData'
+import Layout from 'app/layouts/Kashi'
+import { useActiveWeb3React } from 'app/services/web3'
+import { BentoBalance, useBentoBalances } from 'app/state/bentobox/hooks'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
+import Head from 'next/head'
+import React, { useState } from 'react'
 
 function Balances() {
   const { i18n } = useLingui()
@@ -108,10 +105,9 @@ const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => 
       >
         <div className="flex items-center space-x-3">
           <Image
-            loader={cloudinaryLoader}
             height={56}
             width={56}
-            src={token?.tokenInfo ? token.tokenInfo.logoURI : '/images/tokens/unknown.png'}
+            src={token?.tokenInfo?.logoURI ? token.tokenInfo.logoURI : '/images/tokens/unknown.png'}
             className="w-10 mr-4 rounded-lg sm:w-14"
             alt={token?.tokenInfo ? token.tokenInfo.symbol : token?.symbol}
           />

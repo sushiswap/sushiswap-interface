@@ -1,11 +1,10 @@
-import React, { FC } from 'react'
-
-import Badge from '../../../components/Badge'
 import { ClipboardListIcon } from '@heroicons/react/outline'
-import NavLink from '../../../components/NavLink'
 import { t } from '@lingui/macro'
-import useLimitOrders from '../../../hooks/useLimitOrders'
 import { useLingui } from '@lingui/react'
+import Badge from 'components/Badge'
+import NavLink from 'components/NavLink'
+import useLimitOrders from 'hooks/useLimitOrders'
+import React, { FC } from 'react'
 
 const MyOrders: FC = () => {
   const { i18n } = useLingui()

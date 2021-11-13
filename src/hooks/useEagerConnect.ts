@@ -1,8 +1,8 @@
+import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
 
 import { injected } from '../config/wallets'
-import { isMobile } from 'react-device-detect'
-import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 
 function useEagerConnect() {
   const { activate, active } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does

@@ -1,6 +1,7 @@
-import React from 'react'
-import { ComponentStory, ComponentMeta } from '@storybook/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
+import { ComponentMeta, ComponentStory } from '@storybook/react'
+import React from 'react'
+
 import Chip from './index'
 
 export default {
@@ -41,11 +42,11 @@ export default {
         link: 'zpl://components?coids=611ff995f6040c15a315a2d2&pid=611a9a71ba055432b5f4d870',
       },
       {
-        name: 'Weighted, Header Tutorial',
+        name: 'Index, Header Tutorial',
         link: 'zpl://components?pid=611a9a71ba055432b5f4d870&coids=611ff9940d904456d2fce07b',
       },
       {
-        name: 'Weighted, Descriptor',
+        name: 'Index, Descriptor',
         link: 'zpl://components?pid=611a9a71ba055432b5f4d870&coids=611ff994953fc55bfd16ccd0',
       },
     ],
@@ -83,7 +84,7 @@ Green.args = {
 export const Blue = Template.bind({})
 Blue.args = {
   color: 'blue',
-  label: 'Weighted Pool',
+  label: 'Index Pool',
 }
 
 export const White = Template.bind({})

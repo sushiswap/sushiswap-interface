@@ -1,14 +1,14 @@
+import { ChevronDownIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
+import Lottie from 'lottie-react'
 import React, { useCallback, useState } from 'react'
 
-import { ChevronDownIcon } from '@heroicons/react/outline'
-import { Currency } from '@sushiswap/core-sdk'
-import CurrencyLogo from '../CurrencyLogo'
-import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
-import Lottie from 'lottie-react'
 import selectCoinAnimation from '../../animation/select-coin.json'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
+import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
+import CurrencyLogo from '../CurrencyLogo'
 
 interface CurrencySelectPanelProps {
   onClick?: () => void

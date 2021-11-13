@@ -1,19 +1,29 @@
-import React, { FC } from 'react'
-import { useLingui } from '@lingui/react'
+import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
-import Typography from '../../components/Typography'
-import { usePagination, useTable, useFlexLayout } from 'react-table'
-import { TableInstance } from './types'
-import { TablePageToggler } from './TablePageToggler'
-import { useTransactionsData } from './useTransactionsData'
+import { useLingui } from '@lingui/react'
+import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
+import { useTridentTransactions } from 'app/services/graph/hooks/transactions/trident'
+import React, { FC } from 'react'
+import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
-interface TransactionsProps {
-  pairs: string[]
+import Typography from '../../components/Typography'
+import { TablePageToggler } from './TablePageToggler'
+import { TableInstance, TransactionFetcherState } from './types'
+import { useTableConfig } from './useTableConfig'
+
+export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
+  const { transactions, error, loading } = useLegacyTransactions(pairs)
+  return <_Transactions transactions={transactions} error={error} loading={loading} />
 }
 
-export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
+export const TridentTransactions: FC<{ poolAddress?: string }> = ({ poolAddress }) => {
+  const { transactions, error, loading } = useTridentTransactions(poolAddress)
+  return <_Transactions transactions={transactions} error={error} loading={loading} />
+}
+
+const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loading }) => {
   const { i18n } = useLingui()
-  const { config, loading, error, totalTransactions } = useTransactionsData(pairs)
+  const { config } = useTableConfig(transactions)
 
   const {
     getTableProps,
@@ -25,7 +35,7 @@ export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
     canNextPage,
     prepareRow,
     state: { pageIndex, pageSize },
-  }: TableInstance = useTable(config, usePagination, useFlexLayout)
+  }: TableInstance = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
     <div className="flex flex-col gap-3">
@@ -47,10 +57,21 @@ export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
                 {headerGroup.headers.map((column, i) => (
                   <th
                     key={i}
-                    {...column.getHeaderProps()}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     className={`text-secondary text-sm pt-1 pb-3 ${i === 0 ? 'text-left' : 'text-right'}`}
                   >
                     {column.render('Header')}
+                    <span className="inline-block ml-1 align-middle">
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <ArrowDownIcon width={12} />
+                        ) : (
+                          <ArrowUpIcon width={12} />
+                        )
+                      ) : (
+                        ''
+                      )}
+                    </span>
                   </th>
                 ))}
               </tr>
@@ -81,7 +102,7 @@ export const Transactions: FC<TransactionsProps> = ({ pairs }) => {
       <TablePageToggler
         pageIndex={pageIndex}
         pageSize={pageSize}
-        totalItems={totalTransactions}
+        totalItems={transactions ? transactions.length : 0}
         gotoPage={gotoPage}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}

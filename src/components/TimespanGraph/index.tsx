@@ -1,4 +1,5 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
+
 import Curves from './Curves'
 
 export interface TimespanGraphProps {

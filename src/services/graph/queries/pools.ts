@@ -66,3 +66,27 @@ export const getPoolDayBuckets = gql`
     }
   }
 `
+
+/* Need support for amountUSD */
+export const getSwapsForPoolQuery = gql`
+  query poolSwapQuery($poolAddress: String!) {
+    swaps(where: { pool: $poolAddress }) {
+      amountIn
+      amountOut
+      transaction {
+        timestamp
+      }
+      recipient
+      tokenIn {
+        metaData {
+          symbol
+        }
+      }
+      tokenOut {
+        metaData {
+          symbol
+        }
+      }
+    }
+  }
+`

@@ -1,28 +1,30 @@
-import Alert from '../../../../components/Alert'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Typography from '../../../../components/Typography'
-import AssetInput from '../../../../components/AssetInput'
-import TransactionDetails from './../TransactionDetails'
-import React from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { useActiveWeb3React, useBentoBoxContract } from '../../../../hooks'
+import { NATIVE } from '@sushiswap/core-sdk'
+import loadingCircle from 'app/animation/loading-circle.json'
+import Alert from 'app/components/Alert'
+import AssetInput from 'app/components/AssetInput'
+import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import ListPanel from 'app/components/ListPanel'
+import Typography from 'app/components/Typography'
 import {
   attemptingTxnAtom,
   noLiquiditySelector,
   poolAtom,
   showReviewAtom,
   spendFromWalletSelector,
-} from '../../context/atoms'
-import ListPanel from '../../../../components/ListPanel'
-import TridentApproveGate from '../../TridentApproveGate'
-import Button from '../../../../components/Button'
-import loadingCircle from '../../../../animation/loading-circle.json'
+} from 'app/features/trident/context/atoms'
+import { useZapAssetInput } from 'app/features/trident/context/hooks/useZapAssetInput'
+import TridentApproveGate from 'app/features/trident/TridentApproveGate'
+import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks/useContract'
+import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
-import Dots from '../../../../components/Dots'
-import { NATIVE } from '@sushiswap/core-sdk'
-import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
-import useDesktopMediaQuery from '../../../../hooks/useDesktopMediaQuery'
+import React from 'react'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+
+import TransactionDetails from '../TransactionDetails'
 
 const ClassicZapMode = () => {
   const isDesktop = useDesktopMediaQuery()
@@ -30,6 +32,7 @@ const ClassicZapMode = () => {
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
 
+  const router = useTridentRouterContract()
   const { pool } = useRecoilValue(poolAtom)
   const {
     zapInputAmount: [zapInputAmount, setZapInputAmount],
@@ -80,7 +83,11 @@ const ClassicZapMode = () => {
           spendFromWallet={spendFromWallet}
         />
         <div className="flex flex-col gap-3">
-          <TridentApproveGate inputAmounts={[parsedAmount]} tokenApproveOn={bentoBox?.address}>
+          <TridentApproveGate
+            inputAmounts={[parsedAmount]}
+            tokenApproveOn={bentoBox?.address}
+            masterContractAddress={router?.address}
+          >
             {({ loading, approved }) => (
               <Button
                 {...(loading && {

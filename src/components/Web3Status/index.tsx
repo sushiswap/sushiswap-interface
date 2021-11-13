@@ -1,32 +1,20 @@
-import React, { useMemo } from 'react'
-import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
-import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
-
-import { AbstractConnector } from '@web3-react/abstract-connector'
-import Image from 'next/image'
-import Loader from '../Loader'
-import { NetworkContextName } from '../../constants'
-import { TransactionDetails } from '../../state/transactions/reducer'
-import WalletModal from '../../modals/WalletModal'
-import Web3Connect from '../Web3Connect'
-import { shortenAddress } from '../../functions/format'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
-import useENSName from '../../hooks/useENSName'
 import { useLingui } from '@lingui/react'
-import { useWalletModalToggle } from '../../state/application/hooks'
+import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
+import Image from 'next/image'
+import React, { useMemo } from 'react'
 
-const IconWrapper = styled.div<{ size?: number }>`
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-  & > * {
-    height: ${({ size }) => (size ? size + 'px' : '32px')};
-    width: ${({ size }) => (size ? size + 'px' : '32px')};
-  }
-`
+import { injected } from '../../config/wallets'
+import { NetworkContextName } from '../../constants'
+import { shortenAddress } from '../../functions/format'
+import useENSName from '../../hooks/useENSName'
+import WalletModal from '../../modals/WalletModal'
+import { useWalletModalToggle } from '../../state/application/hooks'
+import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
+import { TransactionDetails } from '../../state/transactions/reducer'
+import Loader from '../Loader'
+import Web3Connect from '../Web3Connect'
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
@@ -46,39 +34,39 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
     // return <Identicon />
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'LatticeConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'PortisConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
         <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   }
   return null

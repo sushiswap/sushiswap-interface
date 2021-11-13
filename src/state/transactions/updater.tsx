@@ -1,13 +1,12 @@
-import { AppDispatch, AppState } from '../index'
-import { RetryOptions, RetryableError, retry } from '../../functions/retry'
-import { checkedTransaction, finalizeTransaction } from './actions'
-import { useAddPopup, useBlockNumber } from '../application/hooks'
-import { useAppDispatch, useAppSelector } from '../hooks'
+import { ChainId } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useEffect, useMemo } from 'react'
 
-import { ChainId } from '@sushiswap/core-sdk'
+import { retry, RetryableError, RetryOptions } from '../../functions/retry'
 import { updateBlockNumber } from '../application/actions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useAddPopup, useBlockNumber } from '../application/hooks'
+import { useAppDispatch, useAppSelector } from '../hooks'
+import { checkedTransaction, finalizeTransaction } from './actions'
 
 interface TxInterface {
   addedTime: number

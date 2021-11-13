@@ -1,5 +1,6 @@
-import { Call } from './utils'
 import { createAction } from '@reduxjs/toolkit'
+
+import { Call } from './utils'
 
 export interface ListenerOptions {
   // how often this data should be fetched, by default 1

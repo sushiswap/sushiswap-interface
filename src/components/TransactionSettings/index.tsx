@@ -1,14 +1,14 @@
-import React, { useRef, useState } from 'react'
-import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks'
-
-import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
-import { Percent } from '@sushiswap/core-sdk'
-import QuestionHelper from '../QuestionHelper'
-import Typography from '../Typography'
-import { classNames } from '../../functions'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Percent } from '@sushiswap/core-sdk'
+import React, { FC, useRef, useState } from 'react'
+
+import { DEFAULT_DEADLINE_FROM_NOW } from '../../constants'
+import { classNames } from '../../functions'
+import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from '../../state/user/hooks'
 import Button from '../Button'
+import QuestionHelper from '../QuestionHelper'
+import Typography from '../Typography'
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',
@@ -22,9 +22,10 @@ enum DeadlineError {
 
 export interface TransactionSettingsProps {
   placeholderSlippage?: Percent // varies according to the context in which the settings dialog is placed
+  trident?: boolean
 }
 
-export default function TransactionSettings({ placeholderSlippage }: TransactionSettingsProps) {
+const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage, trident = false }) => {
   const { i18n } = useLingui()
 
   const inputRef = useRef<HTMLInputElement>()
@@ -170,41 +171,45 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
         ) : null}
       </div>
 
-      <div className="grid gap-2">
-        <div className="flex items-center">
-          <Typography variant="sm" className="text-high-emphesis">
-            {i18n._(t`Transaction deadline`)}
-          </Typography>
+      {!trident && (
+        <div className="grid gap-2">
+          <div className="flex items-center">
+            <Typography variant="sm" className="text-high-emphesis">
+              {i18n._(t`Transaction deadline`)}
+            </Typography>
 
-          <QuestionHelper text={i18n._(t`Your transaction will revert if it is pending for more than this long.`)} />
-        </div>
-        <div className="flex items-center">
-          <div
-            className="p-2 rounded bg-dark-800 min-w-[82px] max-w-[102px]"
-            style={{ maxWidth: '40px', marginRight: '8px' }}
-            tabIndex={-1}
-          >
-            <input
-              className={classNames(deadlineError ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis')}
-              placeholder={(DEFAULT_DEADLINE_FROM_NOW / 60).toString()}
-              value={
-                deadlineInput.length > 0
-                  ? deadlineInput
-                  : deadline === DEFAULT_DEADLINE_FROM_NOW
-                  ? ''
-                  : (deadline / 60).toString()
-              }
-              onChange={(e) => parseCustomDeadline(e.target.value)}
-              onBlur={() => {
-                setDeadlineInput('')
-                setDeadlineError(false)
-              }}
-              color={deadlineError ? 'red' : ''}
-            />
+            <QuestionHelper text={i18n._(t`Your transaction will revert if it is pending for more than this long.`)} />
           </div>
-          <Typography variant="sm">{i18n._(t`minutes`)}</Typography>
+          <div className="flex items-center">
+            <div
+              className="p-2 rounded bg-dark-800 min-w-[82px] max-w-[102px]"
+              style={{ maxWidth: '40px', marginRight: '8px' }}
+              tabIndex={-1}
+            >
+              <input
+                className={classNames(deadlineError ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis')}
+                placeholder={(DEFAULT_DEADLINE_FROM_NOW / 60).toString()}
+                value={
+                  deadlineInput.length > 0
+                    ? deadlineInput
+                    : deadline === DEFAULT_DEADLINE_FROM_NOW
+                    ? ''
+                    : (deadline / 60).toString()
+                }
+                onChange={(e) => parseCustomDeadline(e.target.value)}
+                onBlur={() => {
+                  setDeadlineInput('')
+                  setDeadlineError(false)
+                }}
+                color={deadlineError ? 'red' : ''}
+              />
+            </div>
+            <Typography variant="sm">{i18n._(t`minutes`)}</Typography>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
+
+export default TransactionSettings

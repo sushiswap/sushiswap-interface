@@ -1,19 +1,16 @@
-import { Chef, PairType } from '../../features/onsen/enum'
-import { useActiveWeb3React, useFuse } from '../../hooks'
-
-import { BigNumber } from '@ethersproject/bignumber'
-import { ChainId } from '@sushiswap/core-sdk'
-import Container from '../../components/Container'
-import FarmList from '../../features/onsen/FarmList'
+import Container from 'app/components/Container'
+import Search from 'app/components/Search'
+import { Chef, PairType } from 'app/features/onsen/enum'
+import FarmList from 'app/features/onsen/FarmList'
+import Menu from 'app/features/onsen/FarmMenu'
+import { usePositions } from 'app/features/onsen/hooks'
+import { classNames } from 'app/functions/styling'
+import useFarmRewards from 'app/hooks/useFarmRewards'
+import useFuse from 'app/hooks/useFuse'
+import { useActiveWeb3React } from 'app/services/web3'
 import Head from 'next/head'
-import Menu from '../../features/onsen/FarmMenu'
-import React from 'react'
-import Search from '../../components/Search'
-import { classNames } from '../../functions'
-import useFarmRewards from '../../hooks/useFarmRewards'
-import { usePositions } from '../../features/onsen/hooks'
 import { useRouter } from 'next/router'
-import Provider from '../../features/kashi/context'
+import React from 'react'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
@@ -82,5 +79,3 @@ export default function Farm(): JSX.Element {
     </Container>
   )
 }
-
-Farm.Provider = Provider

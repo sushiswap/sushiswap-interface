@@ -1,25 +1,26 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import loadingCircle from 'animation/loading-circle.json'
+import AssetInput from 'components/AssetInput'
+import Button from 'components/Button'
+import Dots from 'components/Dots'
+import Typography from 'components/Typography'
+import { classNames } from 'functions'
+import { useBentoBoxContract, useTridentRouterContract } from 'hooks/useContract'
+import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-import AssetInput from '../../../../components/AssetInput'
-import TransactionDetails from '../TransactionDetails'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import TridentApproveGate from '../../TridentApproveGate'
-import Dots from '../../../../components/Dots'
-import { t } from '@lingui/macro'
-import { classNames } from '../../../../functions'
-import Button from '../../../../components/Button'
-import Typography from '../../../../components/Typography'
-import Lottie from 'lottie-react'
-import loadingCircle from '../../../../animation/loading-circle.json'
-import { useBentoBoxContract } from '../../../../hooks'
-import { useLingui } from '@lingui/react'
+import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
+import TridentApproveGate from '../../TridentApproveGate'
+import TransactionDetails from '../TransactionDetails'
 
 const ConcentratedStandardMode: FC = () => {
   const { i18n } = useLingui()
   const { pool } = useRecoilValue(poolAtom)
   const bentoBox = useBentoBoxContract()
+  const router = useTridentRouterContract()
 
   const {
     mainInput: [, setMainInput],
@@ -72,7 +73,11 @@ const ConcentratedStandardMode: FC = () => {
         />
 
         <div className="flex flex-col gap-3">
-          <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
+          <TridentApproveGate
+            inputAmounts={[parsedAmountA, parsedAmountB]}
+            tokenApproveOn={bentoBox?.address}
+            masterContractAddress={router?.address}
+          >
             {({ approved, loading }) => {
               const disabled = !!error || !approved || loading || attemptingTxn
               const buttonText = attemptingTxn ? (

@@ -1,14 +1,15 @@
+import { Currency } from '@sushiswap/core-sdk'
+import classNames from 'classnames'
+import Typography from 'components/Typography'
+import { formatPercent } from 'functions'
+import Link from 'next/link'
 import { FC, useMemo } from 'react'
 import { ChevronRight } from 'react-feather'
-import Link from 'next/link'
-import Typography from '../../components/Typography'
 import { useRecoilValue } from 'recoil'
+
 import { poolAtom } from './context/atoms'
-import classNames from 'classnames'
-import { PoolUnion } from './types'
-import { formatPercent } from '../../functions'
-import { Currency } from '@sushiswap/core-sdk'
 import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
+import { PoolUnion } from './types'
 
 export type BreadcrumbTuple = { link?: string; label: string }
 export type BreadcrumbItem =

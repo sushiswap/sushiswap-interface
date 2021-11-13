@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+
 import { classNames } from '../../functions/styling'
 
 function Header({ className, children }) {

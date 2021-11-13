@@ -1,7 +1,7 @@
-import NavLink from '../../../components/NavLink'
+import NavLink from 'app/components/NavLink'
+import { currencyId } from 'app/functions/currency'
+import { useActiveWeb3React } from 'app/services/web3'
 import React from 'react'
-import { currencyId } from '../../../functions/currency'
-import { useActiveWeb3React } from '../../../hooks'
 
 export default function LiquidityHeader({ input = undefined, output = undefined }: any): JSX.Element {
   const { chainId } = useActiveWeb3React()

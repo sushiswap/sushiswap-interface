@@ -1,8 +1,9 @@
-import React, { ReactNode, useState } from 'react'
-import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline'
-import { classNames } from '../../functions'
+import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
-import { useTable, usePagination, useSortBy } from 'react-table'
+import React, { ReactNode, useState } from 'react'
+import { usePagination, useSortBy, useTable } from 'react-table'
+
+import { classNames } from '../../functions'
 
 export interface Column {
   Cell?: (props: any) => ReactNode
@@ -81,6 +82,10 @@ export default function Table<T>({
 
   const getProperty = (obj, prop) => {
     var parts = prop.split('.')
+
+    if (parts.length === 1) {
+      return obj[prop]
+    }
 
     if (Array.isArray(parts)) {
       var last = parts.pop(),
@@ -175,7 +180,7 @@ export default function Table<T>({
                       <td key={cI} className="pb-3 pl-0 pr-0" {...cell.getCellProps()}>
                         <div
                           onClick={
-                            link ? () => router.push(link.href + getProperty(cell.row.values, link.id)) : () => {}
+                            link ? () => router.push(link.href + getProperty(cell.row.original, link.id)) : () => {}
                           }
                         >
                           <div

@@ -1,7 +1,8 @@
-import { FC, HTMLAttributes, ReactHTML, ReactNode } from 'react'
 import { PlusSmIcon } from '@heroicons/react/solid'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { FC, HTMLAttributes, ReactHTML, ReactNode } from 'react'
+
 import Typography from '../Typography'
 
 interface ViewMoreProps extends HTMLAttributes<ReactHTML> {

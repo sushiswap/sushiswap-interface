@@ -1,8 +1,7 @@
-import React, { FC } from 'react'
-import { useCurrency } from '../../../hooks/Tokens'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import rssSVG from '../../../../public/rss.svg'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import { useCurrency } from 'app/hooks/Tokens'
 import Image from 'next/image'
+import React, { FC } from 'react'
 
 const CurrencyLogoWrapper: FC<{ currencyId: string }> = ({ currencyId }) => {
   const currency = useCurrency(currencyId)
@@ -34,7 +33,7 @@ export const PoolCell: FC<PoolCellProps> = ({ assets, twapEnabled }) => {
         <div className="font-bold text-high-emphesis">{assets.map((asset) => asset.symbol).join('-')}</div>
         {twapEnabled && (
           <div className="w-3.5">
-            <Image src={rssSVG} alt="rss icon" layout="responsive" />
+            <Image src="/rss.svg" alt="rss icon" layout="responsive" />
           </div>
         )}
       </div>

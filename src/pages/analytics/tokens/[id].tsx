@@ -1,23 +1,23 @@
 import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
-import React, { useEffect, useMemo, useState } from 'react'
-import { formatNumber, shortenAddress } from '../../../functions'
-import { useBlock, useNativePrice, useTokenDayData, useTokenPairs, useTokens } from '../../../services/graph'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import Background from '../../../features/analytics/Background'
-import ColoredNumber from '../../../features/analytics/ColoredNumber'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import InfoCard from '../../../features/analytics/InfoCard'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import ChartCard from 'app/features/analytics/ChartCard'
+import ColoredNumber from 'app/features/analytics/ColoredNumber'
+import InfoCard from 'app/features/analytics/InfoCard'
+import PairList from 'app/features/analytics/Pairs/PairList'
+import { getExplorerLink } from 'app/functions/explorer'
+import { formatNumber, shortenAddress } from 'app/functions/format'
+import { useCurrency } from 'app/hooks/Tokens'
+import { useTokenContract } from 'app/hooks/useContract'
+import useCopyClipboard from 'app/hooks/useCopyClipboard'
+import { useBlock, useNativePrice, useTokenDayData, useTokenPairs, useTokens } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
+import { LegacyTransactions } from 'features/transactions/Transactions'
 import Link from 'next/link'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import PairList from '../../../features/analytics/Pairs/PairList'
-import useCopyClipboard from '../../../hooks/useCopyClipboard'
-import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
-import { useActiveWeb3React, useTokenContract } from '../../../hooks'
-import ChartCard from '../../../features/analytics/ChartCard'
-import { getExplorerLink } from '../../../functions/explorer'
-import { Transactions } from '../../../features/transactions/Transactions'
+import React, { useEffect, useMemo, useState } from 'react'
+import { ExternalLink as LinkIcon } from 'react-feather'
 
 const chartTimespans = [
   {
@@ -241,7 +241,7 @@ export default function Token() {
           <div className="text-2xl font-bold text-high-emphesis">Top Pairs</div>
           <PairList pairs={tokenPairsFormatted} type="all" />
         </div>
-        <Transactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
+        <LegacyTransactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
       </div>
     </AnalyticsContainer>
   )

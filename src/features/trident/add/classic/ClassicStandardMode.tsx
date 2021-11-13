@@ -1,27 +1,28 @@
-import { useBentoBoxContract } from '../../../../hooks'
-import React from 'react'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-
-import AssetInput from '../../../../components/AssetInput'
-import TransactionDetails from './../TransactionDetails'
-import { classNames } from '../../../../functions'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import TridentApproveGate from '../../TridentApproveGate'
-import Button from '../../../../components/Button'
-import Typography from '../../../../components/Typography'
+import loadingCircle from 'animation/loading-circle.json'
+import AssetInput from 'components/AssetInput'
+import Button from 'components/Button'
+import Dots from 'components/Dots'
+import Typography from 'components/Typography'
+import { classNames } from 'functions'
+import { useBentoBoxContract, useTridentRouterContract } from 'hooks'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
 import Lottie from 'lottie-react'
-import loadingCircle from '../../../../animation/loading-circle.json'
-import Dots from '../../../../components/Dots'
-import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
+import React from 'react'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+
+import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import useCurrenciesFromURL from '../../context/hooks/useCurrenciesFromURL'
-import useDesktopMediaQuery from '../../../../hooks/useDesktopMediaQuery'
+import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
+import TridentApproveGate from '../../TridentApproveGate'
+import TransactionDetails from './../TransactionDetails'
 
 const ClassicStandardMode = () => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
+  const router = useTridentRouterContract()
   const {
     mainInput: [, setMainInput],
     secondaryInput: [, setSecondaryInput],
@@ -79,7 +80,11 @@ const ClassicStandardMode = () => {
             spendFromWallet={spendFromWalletB}
           />
           <div className="flex flex-col gap-3">
-            <TridentApproveGate inputAmounts={[parsedAmountA, parsedAmountB]} tokenApproveOn={bentoBox?.address}>
+            <TridentApproveGate
+              inputAmounts={[parsedAmountA, parsedAmountB]}
+              tokenApproveOn={bentoBox?.address}
+              masterContractAddress={router?.address}
+            >
               {({ approved, loading }) => {
                 const disabled = !!error || !approved || loading || attemptingTxn
                 const buttonText = attemptingTxn ? (

@@ -1,5 +1,6 @@
-import NavLink from '../../components/NavLink'
 import React from 'react'
+
+import NavLink from '../../components/NavLink'
 
 const Sidebar = ({ items }) => {
   return (

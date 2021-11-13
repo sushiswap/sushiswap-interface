@@ -1,7 +1,6 @@
-import React, { FC } from 'react'
+import React, { Children, cloneElement, FC, ReactElement } from 'react'
 
 import { classNames } from '../../functions'
-import styled from 'styled-components'
 
 interface RowProps {
   width?: string
@@ -21,7 +20,7 @@ export const Row: FC<React.HTMLAttributes<HTMLDivElement> & RowProps> = ({
   padding,
   border,
   borderRadius,
-  ...rest
+  style,
 }) => (
   <div
     className={classNames('w-full flex p-0', className)}
@@ -32,35 +31,69 @@ export const Row: FC<React.HTMLAttributes<HTMLDivElement> & RowProps> = ({
       padding,
       border,
       borderRadius,
+      ...style,
     }}
-    {...rest}
   >
     {children}
   </div>
 )
 
-export const RowBetween = styled(Row)`
-  justify-content: space-between;
-`
+export const RowBetween: FC<React.HTMLAttributes<HTMLDivElement> & RowProps> = ({ children, ...rest }) => (
+  <Row className="justify-between" {...rest}>
+    {children}
+  </Row>
+)
 
-export const RowFlat = styled.div`
-  display: flex;
-  align-items: flex-end;
-`
+export const RowFlat: FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, ...rest }) => (
+  <div className="flex items-end" {...rest}>
+    {children}
+  </div>
+)
 
-export const AutoRow = styled(Row)<{ gap?: string; justify?: string }>`
-  flex-wrap: wrap;
-  margin: ${({ gap }) => gap && `-${gap}`};
-  justify-content: ${({ justify }) => justify && justify};
+interface AutoRowProps extends RowProps {
+  gap?: string
+}
 
-  & > * {
-    margin: ${({ gap }) => gap} !important;
-  }
-`
+export const AutoRow: FC<React.HTMLAttributes<HTMLDivElement> & AutoRowProps> = ({
+  children,
+  gap,
+  justify,
+  style,
+  ...rest
+}) => (
+  <Row
+    className="flex-wrap"
+    style={{
+      justifyContent: justify && justify,
+      margin: gap && `-${gap}`,
+      ...style,
+    }}
+    {...rest}
+  >
+    {Children.map(children, (child) => cloneElement(child as ReactElement, { style: { margin: gap } }))}
+  </Row>
+)
 
-export const RowFixed = styled(Row)<{ gap?: string; justify?: string }>`
-  width: fit-content;
-  margin: ${({ gap }) => gap && `-${gap}`};
-`
+interface RowFixedProps extends RowProps {
+  gap?: string
+}
+
+export const RowFixed: FC<React.HTMLAttributes<HTMLDivElement> & RowFixedProps> = ({
+  children,
+  gap,
+  style,
+  ...rest
+}) => (
+  <Row
+    style={{
+      width: 'fit-content',
+      margin: gap && `-${gap}`,
+      ...style,
+    }}
+    {...rest}
+  >
+    {children}
+  </Row>
+)
 
 export default Row

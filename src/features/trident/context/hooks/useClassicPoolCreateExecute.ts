@@ -1,24 +1,24 @@
-import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
+import { toShareJSBI } from 'app/functions'
+import useBentoRebases from 'app/hooks/useBentoRebases'
 import {
-  useActiveWeb3React,
   useConstantProductPoolFactory,
   useMasterDeployerContract,
   useTridentRouterContract,
-} from '../../../../hooks'
+} from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useMemo } from 'react'
+import ReactGA from 'react-ga'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import ReactGA from 'react-ga'
-import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
-import { ethers } from 'ethers'
-import { t } from '@lingui/macro'
-import { useIndependentAssetInputs } from './useIndependentAssetInputs'
-import { useLingui } from '@lingui/react'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import useBentoRebases from '../../../../hooks/useBentoRebases'
-import { toShareJSBI } from '../../../../functions'
 import { selectedFeeTierAtom, twapAtom } from '../../create/context/atoms'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
+import { useIndependentAssetInputs } from './useIndependentAssetInputs'
 
 export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()
@@ -38,7 +38,7 @@ export const useClassicPoolCreateExecute = () => {
     parsedAmounts,
   } = useIndependentAssetInputs()
 
-  const [rebases, rebasesLoading] = useBentoRebases(selectedPoolCurrencies)
+  const { rebases, loading: rebasesLoading } = useBentoRebases(selectedPoolCurrencies)
 
   const execute = useCallback(async () => {
     if (
@@ -58,7 +58,7 @@ export const useClassicPoolCreateExecute = () => {
     // Pool creation data
     const [a, b] = selectedPoolCurrencies.map((el: Currency) => el.wrapped)
     const [tokenA, tokenB] = a.sortsBefore(b) ? [a, b] : [b, a]
-    const deployData = ethers.utils.defaultAbiCoder.encode(
+    const deployData = defaultAbiCoder.encode(
       ['address', 'address', 'uint8', 'bool'],
       [...[tokenA.address, tokenB.address].sort(), feeTier, twap]
     )
@@ -84,7 +84,7 @@ export const useClassicPoolCreateExecute = () => {
           twap,
         }),
         1,
-        ethers.utils.defaultAbiCoder.encode(['address'], [account]),
+        defaultAbiCoder.encode(['address'], [account]),
       ]),
     ]
 

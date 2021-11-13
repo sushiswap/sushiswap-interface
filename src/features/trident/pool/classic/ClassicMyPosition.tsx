@@ -1,11 +1,15 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import ListPanel from 'components/ListPanel'
+import {
+  currentLiquidityValueSelector,
+  currentPoolShareSelector,
+  poolBalanceAtom,
+} from 'features/trident/context/atoms'
+import SumUSDCValues from 'features/trident/SumUSDCValues'
+import { formatPercent } from 'functions'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { currentLiquidityValueSelector, currentPoolShareSelector, poolBalanceAtom } from '../../context/atoms'
-import { t } from '@lingui/macro'
-import ListPanel from '../../../../components/ListPanel'
-import SumUSDCValues from '../../SumUSDCValues'
-import { useLingui } from '@lingui/react'
-import { formatPercent } from '../../../../functions'
 
 const ClassicMyPosition: FC = () => {
   const { i18n } = useLingui()

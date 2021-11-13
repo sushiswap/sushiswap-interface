@@ -1,6 +1,6 @@
-import Container from '../../components/Container'
+import Container from 'components/Container'
+import Typography from 'components/Typography'
 import Head from 'next/head'
-import Typography from '../../components/Typography'
 import useSWR from 'swr'
 
 const getChains = (url = 'https://chainid.network/chains.json') => fetch(url).then((res) => res.json())

@@ -19,9 +19,11 @@ const xDai = '/images/networks/xdai-network.jpg'
 const Celo = '/images/networks/celo-network.jpg'
 const Palm = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/palm.jpg'
 const Moonriver = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonriver.jpg'
+const Telos =
+  'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
 
 export const NETWORK_ICON = {
-  [ChainId.MAINNET]: Mainnet,
+  [ChainId.ETHEREUM]: Mainnet,
   [ChainId.ROPSTEN]: Ropsten,
   [ChainId.RINKEBY]: Rinkeby,
   [ChainId.GÖRLI]: Goerli,
@@ -47,10 +49,11 @@ export const NETWORK_ICON = {
   [ChainId.CELO]: Celo,
   [ChainId.PALM]: Palm,
   [ChainId.MOONRIVER]: Moonriver,
+  [ChainId.TELOS]: Telos,
 }
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'Ethereum',
+  [ChainId.ETHEREUM]: 'Ethereum',
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',
   [ChainId.GÖRLI]: 'Görli',
@@ -76,4 +79,5 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.CELO]: 'Celo',
   [ChainId.PALM]: 'Palm',
   [ChainId.MOONRIVER]: 'Moonriver',
+  [ChainId.TELOS]: 'Telos',
 }

@@ -1,12 +1,13 @@
-import { FC } from 'react'
-import Typography from '../../../../components/Typography'
 import { t } from '@lingui/macro'
-import ListPanel from '../../../../components/ListPanel'
 import { useLingui } from '@lingui/react'
+import ListPanel from 'components/ListPanel'
+import Typography from 'components/Typography'
+import { bentoboxRebasesAtom, poolAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import { toAmountCurrencyAmount } from 'functions'
+import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { bentoboxRebasesAtom, poolAtom, totalSupplyAtom } from '../../context/atoms'
+
 import SumUSDCValues from '../../SumUSDCValues'
-import { toAmountCurrencyAmount } from '../../../../functions'
 
 const ClassicMarket: FC = () => {
   const { i18n } = useLingui()

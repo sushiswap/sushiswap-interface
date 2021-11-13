@@ -1,12 +1,9 @@
-import { AppDispatch, AppState } from '../index'
-import { useAppDispatch, useAppSelector } from '../hooks'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 
-import { TransactionDetails } from './reducer'
-import { TransactionResponse } from '@ethersproject/providers'
+import { useAppDispatch, useAppSelector } from '../hooks'
 import { addTransaction } from './actions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { TransactionDetails } from './reducer'
 
 export interface TransactionResponseLight {
   hash: string

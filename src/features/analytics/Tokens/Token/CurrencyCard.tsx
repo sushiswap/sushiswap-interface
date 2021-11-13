@@ -1,5 +1,5 @@
-import CurrencyLogo from '../../../../components/CurrencyLogo'
-import { useCurrency } from '../../../../hooks/Tokens'
+import CurrencyLogo from 'components/CurrencyLogo'
+import { useCurrency } from 'hooks/Tokens'
 
 interface CurrencyCardProps {
   token: string

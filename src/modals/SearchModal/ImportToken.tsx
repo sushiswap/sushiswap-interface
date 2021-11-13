@@ -1,24 +1,21 @@
-import { AutoRow, RowFixed } from '../../components/Row'
-import { Currency, Token } from '@sushiswap/core-sdk'
-
-import { AlertTriangle } from 'react-feather'
-import { AutoColumn } from '../../components/Column'
-import Button from '../../components/Button'
-import Card from '../../components/Card'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import ExternalLink from '../../components/ExternalLink'
-import ListLogo from '../../components/ListLogo'
-import ModalHeader from '../../components/ModalHeader'
-import React from 'react'
-import { TokenList } from '@uniswap/token-lists/dist/types'
-import Typography from '../../components/Typography'
-import { getExplorerLink } from '../../functions/explorer'
-import { shortenAddress } from '../../functions'
-import { t, plural } from '@lingui/macro'
-import { transparentize } from 'polished'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAddUserToken } from '../../state/user/hooks'
+import { plural, t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Currency, Token } from '@sushiswap/core-sdk'
+import { TokenList } from '@uniswap/token-lists/dist/types'
+import Button from 'components/Button'
+import { AutoColumn } from 'components/Column'
+import CurrencyLogo from 'components/CurrencyLogo'
+import ExternalLink from 'components/ExternalLink'
+import ListLogo from 'components/ListLogo'
+import ModalHeader from 'components/ModalHeader'
+import { RowFixed } from 'components/Row'
+import Typography from 'components/Typography'
+import { shortenAddress } from 'functions'
+import { getExplorerLink } from 'functions/explorer'
+import React from 'react'
+import { AlertTriangle } from 'react-feather'
+import { useActiveWeb3React } from 'services/web3'
+import { useAddUserToken } from 'state/user/hooks'
 
 interface ImportProps {
   tokens: Token[]
@@ -34,7 +31,7 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
 
   const addToken = useAddUserToken()
   return (
-    <div className="relative w-full space-y-3 overflow-auto">
+    <div className="relative w-full space-y-3 overflow-auto p-6">
       <ModalHeader
         onBack={onBack}
         onClose={onDismiss}

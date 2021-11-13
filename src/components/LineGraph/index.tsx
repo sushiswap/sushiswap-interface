@@ -1,11 +1,11 @@
-import { TouchEvent, MouseEvent, FC, useRef } from 'react'
-import AutoSizer from 'react-virtualized-auto-sizer'
-import { LinePath, Bar } from '@visx/shape'
+import { localPoint } from '@visx/event'
 import { LinearGradient } from '@visx/gradient'
 import { scaleLinear } from '@visx/scale'
-import { useCallback, useMemo } from 'react'
-import { localPoint } from '@visx/event'
+import { Bar, LinePath } from '@visx/shape'
 import { bisector } from 'd3-array'
+import { FC, MouseEvent, TouchEvent, useRef } from 'react'
+import { useCallback, useMemo } from 'react'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 interface LineGraphProps {
   data: {
@@ -98,7 +98,7 @@ const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSe
         )}
         {setSelectedIndex && (
           <g>
-            <circle ref={circleRef} r={4} fill="#FFFFFF" />
+            <circle ref={circleRef} r={4} fill="#FFFFFF" display="none" />
           </g>
         )}
         <LinePath

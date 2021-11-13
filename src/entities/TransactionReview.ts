@@ -1,7 +1,6 @@
-import { formatNumber, formatPercent } from '../functions/format'
-
 import { BigNumber } from '@ethersproject/bignumber'
-import { getUSDString } from '../functions/kashi'
+import { formatNumber, formatPercent } from 'functions/format'
+import { getUSDString } from 'functions/kashi'
 
 export enum Direction {
   DOWN = -1,

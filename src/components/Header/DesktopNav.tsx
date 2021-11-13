@@ -1,19 +1,21 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
-import { Feature, featureEnabled } from '../../functions/feature'
-import React, { FC } from 'react'
+import { Feature } from 'enums'
+import { featureEnabled } from 'functions/feature'
 import Image from 'next/image'
+import React, { FC } from 'react'
+import { useActiveWeb3React } from 'services/web3'
+import { useETHBalances } from 'state/wallet/hooks'
+
 import LanguageSwitch from '../LanguageSwitch'
-import More from './More'
 import NavLink from '../NavLink'
 import QuestionHelper from '../QuestionHelper'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useETHBalances } from '../../state/wallet/hooks'
-import { useLingui } from '@lingui/react'
-import { ACTIVE_NAV_LINK_CLASS, NAV_BASE_CLASS } from './styles'
 import MobileMenuToggle from './MobileMenuToggle'
+import More from './More'
+import { ACTIVE_NAV_LINK_CLASS, NAV_BASE_CLASS } from './styles'
 
 interface DesktopNavProps {
   mobileMenuOpen: boolean
@@ -74,7 +76,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
                     </a>
                   </NavLink>
 
-                  <NavLink href="/lend" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <NavLink href="/borrow" activeClassName={ACTIVE_NAV_LINK_CLASS}>
                     <a id="borrow-nav-link" className={NAV_BASE_CLASS}>
                       {i18n._(t`Borrow`)}
                     </a>
@@ -98,7 +100,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
 
         <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent flex-shrink-0">
           <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
-            {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
+            {chainId && [ChainId.ETHEREUM].includes(chainId) && library && library.provider.isMetaMask && (
               <>
                 <QuestionHelper text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}>
                   <div

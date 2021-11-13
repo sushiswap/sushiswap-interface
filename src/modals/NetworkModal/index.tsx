@@ -1,14 +1,13 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
-import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
-
-import { ApplicationModal } from '../../state/application/actions'
 import { ChainId } from '@sushiswap/core-sdk'
-import Image from 'next/image'
-import Modal from '../../components/Modal'
-import ModalHeader from '../../components/ModalHeader'
-import React from 'react'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import ModalHeader from 'components/ModalHeader'
+import { NETWORK_ICON, NETWORK_LABEL } from 'config/networks'
 import cookie from 'cookie-cutter'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import Image from 'next/image'
+import React from 'react'
+import { useActiveWeb3React } from 'services/web3'
+import { ApplicationModal } from 'state/application/actions'
+import { useModalOpen, useNetworkModalToggle } from 'state/application/hooks'
 
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
@@ -23,7 +22,7 @@ export const SUPPORTED_NETWORKS: {
     blockExplorerUrls: string[]
   }
 } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     chainId: '0x1',
     chainName: 'Ethereum',
     nativeCurrency: {
@@ -171,6 +170,17 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
     blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
   },
+  [ChainId.TELOS]: {
+    chainId: '0x28',
+    chainName: 'Telos',
+    nativeCurrency: {
+      name: 'Telos',
+      symbol: 'TLOS',
+      decimals: 18,
+    },
+    rpcUrls: ['https://mainnet.telos.net/evm'],
+    blockExplorerUrls: ['https://rpc1.us.telos.net/v2/explore'],
+  },
 }
 
 export default function NetworkModal(): JSX.Element | null {
@@ -181,66 +191,68 @@ export default function NetworkModal(): JSX.Element | null {
   if (!chainId) return null
 
   return (
-    <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal} maxWidth={672}>
-      <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
-      <div className="mb-6 text-lg text-primary">
-        You are currently browsing <span className="font-bold text-pink">SUSHI</span>
-        <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
-      </div>
+    <HeadlessUiModal.Controlled isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
+      <div className="p-6">
+        <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
+        <div className="mb-6 text-lg text-primary">
+          You are currently browsing <span className="font-bold text-pink">SUSHI</span>
+          <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
+        </div>
 
-      <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
-        {[
-          ChainId.MAINNET,
-          ChainId.MATIC,
-          ChainId.FANTOM,
-          ChainId.ARBITRUM,
-          ChainId.OKEX,
-          ChainId.HECO,
-          ChainId.BSC,
-          ChainId.XDAI,
-          ChainId.HARMONY,
-          ChainId.AVALANCHE,
-          ChainId.CELO,
-          ChainId.PALM,
-          ChainId.MOONRIVER,
-        ].map((key: ChainId, i: number) => {
-          if (chainId === key) {
+        <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
+          {[
+            ChainId.ETHEREUM,
+            ChainId.MATIC,
+            ChainId.FANTOM,
+            ChainId.ARBITRUM,
+            ChainId.OKEX,
+            ChainId.HECO,
+            ChainId.BSC,
+            ChainId.XDAI,
+            ChainId.HARMONY,
+            ChainId.AVALANCHE,
+            ChainId.CELO,
+            ChainId.PALM,
+            ChainId.MOONRIVER,
+            ChainId.TELOS,
+          ].map((key: ChainId, i: number) => {
+            if (chainId === key) {
+              return (
+                <button key={i} className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink">
+                  <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
+                    <Image
+                      src={NETWORK_ICON[key]}
+                      alt={`Switch to ${NETWORK_LABEL[key]} Network`}
+                      className="rounded-md"
+                      width="32px"
+                      height="32px"
+                    />
+                    <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
+                  </div>
+                </button>
+              )
+            }
             return (
-              <button key={i} className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink">
-                <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
-                  <Image
-                    src={NETWORK_ICON[key]}
-                    alt={`Switch to ${NETWORK_LABEL[key]} Network`}
-                    className="rounded-md"
-                    width="32px"
-                    height="32px"
-                  />
-                  <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
-                </div>
+              <button
+                key={i}
+                onClick={() => {
+                  toggleNetworkModal()
+                  const params = SUPPORTED_NETWORKS[key]
+                  cookie.set('chainId', key)
+                  if (key === ChainId.ETHEREUM) {
+                    library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
+                  } else {
+                    library?.send('wallet_addEthereumChain', [params, account])
+                  }
+                }}
+                className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+              >
+                <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
+                <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
               </button>
             )
-          }
-          return (
-            <button
-              key={i}
-              onClick={() => {
-                toggleNetworkModal()
-                const params = SUPPORTED_NETWORKS[key]
-                cookie.set('chainId', key)
-                if (key === ChainId.MAINNET) {
-                  library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
-                } else {
-                  library?.send('wallet_addEthereumChain', [params, account])
-                }
-              }}
-              className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
-            >
-              <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
-              <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
-            </button>
-          )
-        })}
-        {/* {['Clover', 'Telos', 'Optimism'].map((network, i) => (
+          })}
+          {/* {['Clover', 'Telos', 'Optimism'].map((network, i) => (
           <button
             key={i}
             className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
@@ -255,7 +267,8 @@ export default function NetworkModal(): JSX.Element | null {
             <div className="font-bold text-primary">{network} (Coming Soon)</div>
           </button>
         ))} */}
+        </div>
       </div>
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }

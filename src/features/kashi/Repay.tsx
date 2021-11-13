@@ -1,39 +1,29 @@
-import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
-import { KashiApproveButton, TokenApproveButton } from './Button'
-import {
-  Percent,
-  SUSHISWAP_MULTISWAPPER_ADDRESS,
-  SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS,
-  WNATIVE,
-} from '@sushiswap/core-sdk'
-import React, { useContext, useMemo, useState } from 'react'
-import { Warning, Warnings } from '../../entities/Warnings'
-import { ZERO, e10, maximum, minimum } from '../../functions/math'
-import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
-import { hexConcat, hexlify } from '@ethersproject/bytes'
-import { toAmount, toShare } from '../../functions/bentobox'
-import {
-  useExpertModeManager,
-  useUserSlippageTolerance,
-  useUserSlippageToleranceWithDefault,
-} from '../../state/user/hooks'
-import { useV2TradeExactIn, useV2TradeExactOut } from '../../hooks/useV2Trades'
-
-import { AddressZero } from '@ethersproject/constants'
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { hexConcat, hexlify } from '@ethersproject/bytes'
+import { AddressZero } from '@ethersproject/constants'
+import { Percent, SUSHISWAP_MULTI_EXACT_SWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useETHBalances } from 'app/state/wallet/hooks'
+import React, { useMemo, useState } from 'react'
+
 import Button from '../../components/Button'
-import { Field } from '../../state/swap/actions'
 import { KashiCooker } from '../../entities'
+import { TransactionReview } from '../../entities/TransactionReview'
+import { Warning, Warnings } from '../../entities/Warnings'
+import { toAmount, toShare } from '../../functions/bentobox'
+import { e10, maximum, minimum, ZERO } from '../../functions/math'
+import { tryParseAmount } from '../../functions/parse'
+import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
+import { useCurrency } from '../../hooks/Tokens'
+import { useV2TradeExactOut } from '../../hooks/useV2Trades'
+import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
+import { KashiApproveButton, TokenApproveButton } from './Button'
+import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
 import SmartNumberInput from './SmartNumberInput'
 import TradeReview from './TradeReview'
-import { TransactionReview } from '../../entities/TransactionReview'
 import TransactionReviewView from './TransactionReview'
 import WarningsView from './WarningsList'
-import { defaultAbiCoder } from '@ethersproject/abi'
-import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrency } from '../../hooks/Tokens'
-import { useKashiInfo } from './context'
 
 interface RepayProps {
   pair: any
@@ -43,7 +33,6 @@ const DEFAULT_KASHI_REPAY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 export default function Repay({ pair }: RepayProps) {
   const { account, chainId } = useActiveWeb3React()
-  const info = useKashiInfo()
 
   // State
   const [useBentoRepay, setUseBentoRepay] = useState<boolean>(pair.asset.bentoBalance.gt(0))
@@ -61,11 +50,14 @@ export default function Repay({ pair }: RepayProps) {
 
   // Calculated
   const assetNative = WNATIVE[chainId || 1].address === pair.asset.address
+  const ethBalance = useETHBalances(assetNative ? [account] : [])
+
+  console.log({ pair })
 
   const balance = useBentoRepay
     ? toAmount(pair.asset, pair.asset.bentoBalance)
     : assetNative
-    ? info?.ethBalance
+    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.asset.balance
 
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true

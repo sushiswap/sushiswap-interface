@@ -1,18 +1,19 @@
-import { ApprovalState, useActiveWeb3React } from '../../hooks'
-import { Field, MeowshiState } from '../../pages/tools/meowshi'
-import React, { FC, useMemo, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../config/tokens'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
-
-import Button from '../../components/Button'
-import { ChainId } from '@sushiswap/core-sdk'
-import Dots from '../../components/Dots'
 import { parseUnits } from '@ethersproject/units'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions'
 import { useLingui } from '@lingui/react'
-import useMeowshi from '../../hooks/useMeowshi'
-import { useTokenBalance } from '../../state/wallet/hooks'
+import { ChainId, SUSHI } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import { XSUSHI } from 'app/config/tokens'
+import { tryParseAmount } from 'app/functions/parse'
+import { ApprovalState } from 'app/hooks/useApproveCallback'
+import useMeowshi from 'app/hooks/useMeowshi'
+import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTokenBalance } from 'app/state/wallet/hooks'
+import React, { FC, useMemo, useState } from 'react'
+
+import { Field, MeowshiState } from '../../pages/tools/meowshi'
 
 interface MeowshiButtonProps {
   meowshiState: MeowshiState
@@ -27,10 +28,10 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
     open: false,
   })
   const { account, chainId } = useActiveWeb3React()
-  const sushiBalance = useTokenBalance(account, SUSHI[ChainId.MAINNET])
+  const sushiBalance = useTokenBalance(account, SUSHI[ChainId.ETHEREUM])
   const xSushiBalance = useTokenBalance(account, XSUSHI)
   const { approvalState, approve, meow, unmeow, meowSushi, unmeowSushi } = useMeowshi(
-    currencies[Field.INPUT] === SUSHI[ChainId.MAINNET]
+    currencies[Field.INPUT] === SUSHI[ChainId.ETHEREUM]
   )
   const balance = useTokenBalance(account, currencies[Field.INPUT])
   const parsedInputAmount = tryParseAmount(fields[Field.INPUT], currencies[Field.INPUT])
@@ -104,7 +105,7 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
       </Button>
     )
 
-  if (chainId !== ChainId.MAINNET)
+  if (chainId !== ChainId.ETHEREUM)
     return (
       <Button onClick={approve} color="gradient" disabled={true}>
         {i18n._(t`Network not supported yet`)}

@@ -1,41 +1,24 @@
-import React from 'react'
-import Typography from '../../../components/Typography'
-import { t } from '@lingui/macro'
-import Button from '../../../components/Button'
 import { useLingui } from '@lingui/react'
-import SearchResultPools from '../../../features/trident/pools/SearchResultPools'
-import Link from 'next/link'
+import { DebugObserver } from 'components/DebugObserver'
+import { DiscoverHeader } from 'features/trident/pools/DiscoverHeader'
+import { PoolSearch } from 'features/trident/pools/PoolSearch'
+import { PoolSort } from 'features/trident/pools/PoolSort'
+import SearchResultPools from 'features/trident/pools/SearchResultPools'
+import { SearchSidebar } from 'features/trident/pools/SearchSidebar'
+import TridentLayout, { TridentBody } from 'layouts/Trident'
+import React from 'react'
 import { RecoilRoot } from 'recoil'
-import TridentLayout, { TridentBody, TridentHeader } from '../../../layouts/Trident'
-import { SearchSidebar } from '../../../features/trident/pools/SearchSidebar'
-import { PoolSearch } from '../../../features/trident/pools/PoolSearch'
-import { PoolSort } from '../../../features/trident/pools/PoolSort'
 
 const DiscoverPools = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center flex-grow">
+      <DebugObserver />
       <div className="flex w-full">
         <SearchSidebar />
         <div className="w-full">
-          <TridentHeader
-            maxWidth="full"
-            pattern="bg-binary-pattern"
-            className="sm:!flex-row justify-between items-center"
-          >
-            <div>
-              <Typography variant="h2" className="text-high-emphesis" weight={700}>
-                {i18n._(t`Provide liquidity & earn.`)}
-              </Typography>
-              <Typography variant="sm" weight={400}>
-                {i18n._(t`Earn LP fees by depositing tokens to the platform.`)}
-              </Typography>
-            </div>
-            <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8 px-12">
-              <Link href={'/trident/create'}>{i18n._(t`Create New Pool`)}</Link>
-            </Button>
-          </TridentHeader>
+          <DiscoverHeader />
           <TridentBody maxWidth="full" className="!p-7">
             <div className="flex flex-col sm:flex-row justify-between md:gap-24 gap-4 items-center">
               <PoolSearch />

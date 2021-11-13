@@ -1,6 +1,5 @@
-import { ChainId } from '@sushiswap/sdk'
-
-import { getExplorerLink } from '../../../src/functions/explorer'
+import { ChainId } from '@sushiswap/core-sdk'
+import { getExplorerLink } from 'app/functions/explorer'
 
 describe('utils', () => {
   describe('#getExplorerLink', () => {

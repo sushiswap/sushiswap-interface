@@ -1,11 +1,12 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
 import { AddressZero } from '@ethersproject/constants'
 import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { useActiveWeb3React } from './useActiveWeb3React'
-import { useBentoBoxContract } from './useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
-import { useTransactionAdder } from '../state/transactions/hooks'
+
+import { useBentoBoxContract } from './useContract'
 
 function useBentoBox() {
   const { account, chainId } = useActiveWeb3React()

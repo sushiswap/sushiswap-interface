@@ -1,16 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
-
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/core-sdk'
+import { Fraction } from 'app/entities/bignumber'
+import { useCloneRewarderContract, useComplexRewarderContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3/hooks/useActiveWeb3React'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useEffect, useMemo, useState } from 'react'
+
 import { Chef } from './enum'
-import Fraction from '../../entities/Fraction'
-import { getContract } from '../../functions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useBlockNumber } from '../../state/application/hooks'
 
 const REWARDERS = {
-  [ChainId.MAINNET]: 'some',
+  [ChainId.ETHEREUM]: 'some',
   [ChainId.MATIC]: 'some',
 }
 
@@ -38,7 +37,7 @@ const usePending = (farm) => {
 
   const contract = useMemo(
     () => ({
-      [ChainId.MAINNET]: cloneRewarder,
+      [ChainId.ETHEREUM]: cloneRewarder,
       [ChainId.MATIC]: complexRewarder,
       [ChainId.XDAI]: complexRewarder,
       [ChainId.HARMONY]: complexRewarder,

@@ -1,12 +1,13 @@
-import { useActiveWeb3React } from '../../../../hooks'
-import { useLingui } from '@lingui/react'
-import { atom, atomFamily, selectorFamily, useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
-import { spendFromWalletAtom } from '../atoms'
-import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
-import { maxAmountSpend, tryParseAmount } from '../../../../functions'
-import { useCallback, useMemo } from 'react'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { maxAmountSpend, tryParseAmount } from 'app/functions'
+import { useBentoOrWalletBalances } from 'app/hooks/useBentoOrWalletBalance'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useCallback, useMemo } from 'react'
+import { atom, atomFamily, selectorFamily, useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil'
+
+import { spendFromWalletAtom } from '../atoms'
 
 export const selectedPoolCurrenciesAtom = atomFamily<(Currency | undefined)[], number>({
   key: 'selectedPoolCurrenciesAtom',

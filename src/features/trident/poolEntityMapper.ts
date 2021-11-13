@@ -1,5 +1,5 @@
+import { PoolType } from '@sushiswap/tines'
 import { ConstantProductPool, HybridPool, Pool } from '@sushiswap/trident-sdk'
-import { PoolType } from './types'
 
 export const poolEntityMapper = (poolClass: Pool): PoolType => {
   if (poolClass instanceof ConstantProductPool) return PoolType.ConstantProduct

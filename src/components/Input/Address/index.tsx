@@ -1,9 +1,5 @@
-import { classNames, escapeRegExp } from '../../../functions'
-
+import { classNames } from 'functions'
 import React from 'react'
-import useENS from '../../../hooks/useENS'
-
-const inputRegex = RegExp(`^\\d*$`) // match escaped "." characters via in a non-capturing group
 
 export const AddressInput = React.memo(
   ({
@@ -21,22 +17,12 @@ export const AddressInput = React.memo(
     fontSize?: string
     align?: 'right' | 'left'
   } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
-    const { address, loading } = useENS(value)
-
-    const enforcer = (nextUserInput: string) => {
-      if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
-        if (Number(nextUserInput) <= 100) {
-          onUserInput(nextUserInput)
-        }
-      }
-    }
-
     return (
       <>
         <input
           value={value}
           onChange={(event) => {
-            enforcer(event.target.value.replace(/\s+/g, ''))
+            onUserInput(event.target.value.replace(/\s+/g, ''))
           }}
           // universal input options
           inputMode="text"

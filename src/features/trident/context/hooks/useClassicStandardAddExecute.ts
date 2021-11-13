@@ -1,6 +1,16 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { AddressZero } from '@ethersproject/constants'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useActiveWeb3React, useTridentRouterContract } from '../../../../hooks'
-import { useDependentAssetInputs } from './useDependentAssetInputs'
+import { toShareJSBI } from 'app/functions'
+import { useTridentRouterContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useMemo } from 'react'
+import ReactGA from 'react-ga'
+import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
+
+import { LiquidityInput } from '../../types'
 import {
   attemptingTxnAtom,
   bentoboxRebasesAtom,
@@ -9,15 +19,8 @@ import {
   spendFromWalletSelector,
   txHashAtom,
 } from '../atoms'
-import { useTransactionAdder } from '../../../../state/transactions/hooks'
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
-import { ethers } from 'ethers'
-import { t } from '@lingui/macro'
-import ReactGA from 'react-ga'
-import { useMemo } from 'react'
+import { useDependentAssetInputs } from './useDependentAssetInputs'
 import { usePoolDetailsMint } from './usePoolDetails'
-import { toShareJSBI } from '../../../../functions'
-import { LiquidityInput } from '../../types'
 
 export const useClassicStandardAddExecute = () => {
   const { i18n } = useLingui()
@@ -43,12 +46,12 @@ export const useClassicStandardAddExecute = () => {
 
         let value = {}
         const liquidityInput: LiquidityInput[] = []
-        const encoded = ethers.utils.defaultAbiCoder.encode(['address'], [account])
+        const encoded = defaultAbiCoder.encode(['address'], [account])
 
         if (parsedAmountA && rebases[parsedAmountA.wrapped.currency.address]) {
           value = parsedAmountA.currency.isNative ? { value: parsedAmountA.quotient.toString() } : {}
           liquidityInput.push({
-            token: parsedAmountA.currency.wrapped.address,
+            token: parsedAmountA.currency.isNative ? AddressZero : parsedAmountA.currency.wrapped.address,
             native: nativeA,
             amount: nativeA
               ? parsedAmountA.quotient.toString()
@@ -59,7 +62,7 @@ export const useClassicStandardAddExecute = () => {
         if (parsedAmountB && rebases[parsedAmountB.wrapped.currency.address]) {
           value = parsedAmountB.currency.isNative ? { value: parsedAmountB.quotient.toString() } : {}
           liquidityInput.push({
-            token: parsedAmountB.currency.wrapped.address,
+            token: parsedAmountB.currency.isNative ? AddressZero : parsedAmountB.currency.wrapped.address,
             native: nativeB,
             amount: nativeB
               ? parsedAmountB.quotient.toString()

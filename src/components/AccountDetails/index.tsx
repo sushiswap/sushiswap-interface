@@ -1,22 +1,22 @@
-import React, { FC, useCallback } from 'react'
-import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
-
-import { AppDispatch } from '../../state'
-import Button from '../Button'
-import Copy from './Copy'
-import ExternalLink from '../ExternalLink'
-import Image from 'next/image'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import ModalHeader from '../ModalHeader'
-import Transaction from './Transaction'
-import Typography from '../Typography'
-import { clearAllTransactions } from '../../state/transactions/actions'
-import { getExplorerLink } from '../../functions/explorer'
-import { shortenAddress } from '../../functions'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useDispatch } from 'react-redux'
 import { useLingui } from '@lingui/react'
+import { injected, SUPPORTED_WALLETS } from 'config/wallets'
+import { getExplorerLink } from 'functions/explorer'
+import { shortenAddress } from 'functions/format'
+import Image from 'next/image'
+import React, { FC, useCallback } from 'react'
+import { ExternalLink as LinkIcon } from 'react-feather'
+import { useDispatch } from 'react-redux'
+import { useActiveWeb3React } from 'services/web3'
+import { AppDispatch } from 'state'
+import { clearAllTransactions } from 'state/transactions/actions'
+
+import Button from '../Button'
+import ExternalLink from '../ExternalLink'
+import ModalHeader from '../ModalHeader'
+import Typography from '../Typography'
+import Copy from './Copy'
+import Transaction from './Transaction'
 
 const WalletIcon: FC<{ size?: number; src: string; alt: string }> = ({ size, src, alt, children }) => {
   return (
@@ -102,7 +102,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
   }, [dispatch, chainId])
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 p-6">
       <div className="space-y-3">
         <ModalHeader title="Account" onClose={toggleWalletModal} />
         <div className="space-y-3">

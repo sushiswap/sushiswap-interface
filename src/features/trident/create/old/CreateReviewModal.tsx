@@ -1,18 +1,19 @@
-import React, { FC } from 'react'
-import HeadlessUIModal from '../../../../components/Modal/HeadlessUIModal'
-import Button from '../../../../components/Button'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
-import Typography from '../../../../components/Typography'
 import { useLingui } from '@lingui/react'
+import { PoolType } from '@sushiswap/tines'
+import Button from 'components/Button'
+import Divider from 'components/Divider'
+import ListPanel from 'components/ListPanel'
+import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
+import Typography from 'components/Typography'
+import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
+
 import { showReviewAtom } from '../../context/atoms'
-import ListPanel from '../../../../components/ListPanel'
-import Divider from '../../../../components/Divider'
+import { useClassicPoolCreateExecute } from '../../context/hooks/useClassicPoolCreateExecute'
 import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
 import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
-import { useClassicPoolCreateExecute } from '../../context/hooks/useClassicPoolCreateExecute'
-import { PoolType } from '../../types'
 import { selectedPoolTypeAtom } from '../context/atoms'
 
 const AddTransactionReviewModal: FC = () => {
@@ -62,7 +63,7 @@ const AddTransactionReviewModal: FC = () => {
           <div className="flex flex-col gap-3 px-5">
             <Typography weight={700} variant="lg">
               {selectedPoolType === PoolType.ConstantProduct && i18n._(t`You are creating a classic pool with:`)}
-              {selectedPoolType === PoolType.Weighted && i18n._(t`You are creating a weighted pool with:`)}
+              {selectedPoolType === PoolType.Weighted && i18n._(t`You are creating a index pool with:`)}
               {selectedPoolType === PoolType.Hybrid && i18n._(t`You are creating a multi-asset pool with:`)}
               {selectedPoolType === PoolType.ConcentratedLiquidity &&
                 i18n._(t`You are creating a concentrated liquidity pool with:`)}

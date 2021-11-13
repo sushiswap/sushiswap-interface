@@ -1,4 +1,12 @@
-import { classNames, formatNumber } from '../../../functions'
+import Container from 'app/components/Container'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import LineGraph from 'app/components/LineGraph'
+import ColoredNumber from 'app/features/analytics/ColoredNumber'
+import InfoCard from 'app/features/analytics/InfoCard'
+import CurrencyCard from 'app/features/analytics/Tokens/Token/CurrencyCard'
+import TopFarmsList from 'app/features/analytics/Tokens/Token/TopFarmsList'
+import { classNames, formatNumber } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
 import {
   useBlock,
   useFarms,
@@ -7,20 +15,11 @@ import {
   useTokenDayData,
   useTokenPairs,
   useTokens,
-} from '../../../services/graph'
-import { useMemo, useState } from 'react'
-
-import ColoredNumber from '../../../features/analytics/ColoredNumber'
-import Container from '../../../components/Container'
-import CurrencyCard from '../../../features/analytics/Tokens/Token/CurrencyCard'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import InfoCard from '../../../features/analytics/InfoCard'
-import LineGraph from '../../../components/LineGraph'
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
-import TopFarmsList from '../../../features/analytics/Tokens/Token/TopFarmsList'
-import { useCurrency } from '../../../hooks/Tokens'
 import { useRouter } from 'next/router'
-import { useActiveWeb3React } from '../../../hooks'
+import { useMemo, useState } from 'react'
 
 const socialsPlaceholder = [
   {

@@ -1,4 +1,12 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from 'app/functions'
+import { useBentoOrWalletBalances } from 'app/hooks/useBentoOrWalletBalance'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useCallback, useMemo } from 'react'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+
 import {
   bentoboxRebasesAtom,
   currenciesAtom,
@@ -7,13 +15,6 @@ import {
   poolAtom,
   spendFromWalletAtom,
 } from '../atoms'
-import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import { useCallback, useMemo } from 'react'
-import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from '../../../../functions'
-import { useActiveWeb3React } from '../../../../hooks'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { useBentoOrWalletBalances } from '../../../../hooks/useBentoOrWalletBalance'
 
 export enum TypedField {
   A,
@@ -137,7 +138,6 @@ export const formattedAmountsSelector = selector<[string, string]>({
   },
 })
 
-// Derive parsedAmounts from formattedAmounts
 export const parsedAmountsSelector = selector<
   [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
 >({

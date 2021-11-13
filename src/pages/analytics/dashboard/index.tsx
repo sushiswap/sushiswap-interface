@@ -1,24 +1,16 @@
-import {
-  useBlock,
-  useDayData,
-  useEthPrice,
-  useFactory,
-  useNativePrice,
-  useSushiPairs,
-  useTokens,
-} from '../../../services/graph'
+import Search from 'app/components/Search'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import ChartCard from 'app/features/analytics/ChartCard'
+import DashboardTabs from 'app/features/analytics/Dashboard/DashboardTabs'
+import PoolList from 'app/features/analytics/Farms/FarmList'
+import PairList from 'app/features/analytics/Pairs/PairList'
+import TokenList from 'app/features/analytics/Tokens/TokenList'
+import useFarmRewards from 'app/hooks/useFarmRewards'
+import useFuse from 'app/hooks/useFuse'
+import { useBlock, useDayData, useFactory, useNativePrice, useSushiPairs, useTokens } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import Background from '../../../features/analytics/Background'
-import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
-import PairList from '../../../features/analytics/Pairs/PairList'
-import PoolList from '../../../features/analytics/Farms/FarmList'
-import Search from '../../../components/Search'
-import TokenList from '../../../features/analytics/Tokens/TokenList'
-import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useActiveWeb3React, useFuse } from '../../../hooks'
-import ChartCard from '../../../features/analytics/ChartCard'
 
 const chartTimespans = [
   {

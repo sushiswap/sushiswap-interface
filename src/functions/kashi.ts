@@ -1,4 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { USD } from '@sushiswap/core-sdk'
 import {
   FACTOR_PRECISION,
   FULL_UTILIZATION_MINUS_MAX,
@@ -11,9 +12,8 @@ import {
   PROTOCOL_FEE_DIVISOR,
   STARTING_INTEREST_PER_YEAR,
 } from '@sushiswap/sdk'
-import { ZERO, e10 } from './math'
 
-import { getCurrency } from './currency/getCurrency'
+import { e10, ZERO } from './math'
 
 export function accrue(pair: any, amount: BigNumber, includePrincipal = false): BigNumber {
   return amount
@@ -81,13 +81,14 @@ export function getUSDString(amount: BigNumberish, token: any): string {
   return BigNumber.from(amount)
     .mul(token.usd)
     .div(e10(token?.decimals ? token.decimals : token.tokenInfo.decimals))
-    .toFixed(getCurrency(token?.chainId ? token.chainId : token.tokenInfo.chainId).decimals)
+    .toFixed(USD[token?.chainId ? token.chainId : token.tokenInfo.chainId].decimals)
 }
 
 export function easyAmount(
   amount: BigNumber,
   token: any
 ): { value: BigNumber; string: string; usdValue: BigNumber; usd: string } {
+  // console.log('easyAmount', token)
   return {
     value: amount,
     string: amount.toFixed(token?.decimals ? token.decimals : token.tokenInfo.decimals),

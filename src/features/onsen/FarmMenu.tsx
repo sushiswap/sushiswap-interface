@@ -1,8 +1,8 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import NavLink from '../../components/NavLink'
+import NavLink from 'app/components/NavLink'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useWalletModalToggle } from 'app/state/application/hooks'
 import React from 'react'
-import { useActiveWeb3React } from '../../hooks'
-import { useWalletModalToggle } from '../../state/application/hooks'
 
 const Menu = ({ positionsLength }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -41,7 +41,7 @@ const Menu = ({ positionsLength }) => {
         </a>
       </NavLink>
 
-      {chainId === ChainId.MAINNET && (
+      {chainId === ChainId.ETHEREUM && (
         <>
           <NavLink
             exact
@@ -64,7 +64,7 @@ const Menu = ({ positionsLength }) => {
         </>
       )}
 
-      {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
+      {(chainId === ChainId.ETHEREUM || chainId === ChainId.MATIC) && (
         <NavLink
           exact
           href={`/farm?filter=2x`}

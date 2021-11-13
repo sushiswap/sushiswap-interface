@@ -1,19 +1,19 @@
-import React, { FC, useState } from 'react'
-
-import Badge from '../../../components/Badge'
-import Button from '../../../components/Button'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { LimitOrder } from '@sushiswap/limit-order-sdk'
-import Lottie from 'lottie-react'
-import NavLink from '../../../components/NavLink'
-import Pagination from './Pagination'
-import TransactionConfirmationModal from '../../../modals/TransactionConfirmationModal'
-import loadingCircle from '../../../animation/loading-circle.json'
 import { t } from '@lingui/macro'
-import { useLimitOrderContract } from '../../../hooks'
-import useLimitOrders from '../../../hooks/useLimitOrders'
 import { useLingui } from '@lingui/react'
-import { useTransactionAdder } from '../../../state/transactions/hooks'
+import { LimitOrder } from '@sushiswap/limit-order-sdk'
+import loadingCircle from 'animation/loading-circle.json'
+import Badge from 'components/Badge'
+import Button from 'components/Button'
+import CurrencyLogo from 'components/CurrencyLogo'
+import NavLink from 'components/NavLink'
+import { useLimitOrderContract } from 'hooks'
+import useLimitOrders from 'hooks/useLimitOrders'
+import Lottie from 'lottie-react'
+import TransactionConfirmationModal from 'modals/TransactionConfirmationModal'
+import React, { FC, useState } from 'react'
+import { useTransactionAdder } from 'state/transactions/hooks'
+
+import Pagination from './Pagination'
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()

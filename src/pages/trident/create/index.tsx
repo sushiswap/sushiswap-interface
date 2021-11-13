@@ -1,12 +1,12 @@
-import TridentLayout from '../../../layouts/Trident'
-import { RecoilRoot, useRecoilValue } from 'recoil'
+import { PoolType } from '@sushiswap/tines'
+import { StepThreeClassic } from 'features/trident/create/classic/StepThreeClassic'
+import { StepTwoClassic } from 'features/trident/create/classic/StepTwoClassic'
+import { currentStepAtom, selectedPoolTypeAtom } from 'features/trident/create/context/atoms'
+import { StepOneSelectPoolType } from 'features/trident/create/StepOneSelectPoolType'
+import { StepperSidebar } from 'features/trident/create/StepperSidebar'
+import TridentLayout from 'layouts/Trident'
 import React from 'react'
-import { StepperSidebar } from '../../../features/trident/create/StepperSidebar'
-import { currentStepAtom, selectedPoolTypeAtom } from '../../../features/trident/create/context/atoms'
-import { StepOneSelectPoolType } from '../../../features/trident/create/StepOneSelectPoolType'
-import { StepTwoClassic } from '../../../features/trident/create/classic/StepTwoClassic'
-import { StepThreeClassic } from '../../../features/trident/create/classic/StepThreeClassic'
-import { PoolType } from '../../../features/trident/types'
+import { RecoilRoot, useRecoilValue } from 'recoil'
 
 const CreateNewPool = () => {
   const currentStep = useRecoilValue(currentStepAtom)

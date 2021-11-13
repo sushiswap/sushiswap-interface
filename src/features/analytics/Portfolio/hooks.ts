@@ -1,25 +1,29 @@
-import { Feature, chainsWithFeature } from '../../../functions/feature'
+import { ChainId } from '@sushiswap/core-sdk'
+import { Feature } from 'app/enums'
+import { usePositions } from 'app/features/onsen/hooks'
+import { getFraction } from 'app/functions'
+import { chainsWithFeature } from 'app/functions/feature'
 import {
-  useFarms,
   useBentoUserTokens as useGetBentoUserTokens,
-  useUserKashiPairs as useGetUserKashiPairs,
+  useFarms,
   useKashiPairs,
   useLiquidityPositions,
   useNativePrice,
   useSushiPairs,
   useTokens,
-} from '../../../services/graph'
-
-import { ChainId } from '@sushiswap/core-sdk'
-import { getFraction } from '../../../functions'
+  useUserKashiPairs as useGetUserKashiPairs,
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAssets } from 'app/services/zerion/hooks'
 import { uniq } from 'lodash'
-import { useActiveWeb3React } from '../../../hooks'
-import { useAssets } from './../../../services/zerion/hooks'
 import { useMemo } from 'react'
-import { usePositions } from '../../onsen/hooks'
+
+// Will need to redo this whole thing, disabling eslint because it's unused
+/* eslint-disable */
 
 export function useAllUserPairs() {
   let pairs = []
+
   for (const chainId of chainsWithFeature(Feature.AMM)) {
     pairs = [...pairs, ...useUserPairs(ChainId[chainId])]
   }

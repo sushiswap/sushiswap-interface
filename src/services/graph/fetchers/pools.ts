@@ -1,11 +1,16 @@
-import { getPoolDayBuckets, getPoolHourBuckets, getTridentPoolsQuery } from '../queries'
-
 import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST, TRIDENT } from '../constants'
-import { PoolType } from '../../../features/trident/types'
-import { pager } from './index'
+import { PoolType } from '@sushiswap/tines'
+import { GRAPH_HOST, TRIDENT } from 'services/graph/constants'
+import {
+  getPoolDayBuckets,
+  getPoolHourBuckets,
+  getSwapsForPoolQuery,
+  getTridentPoolsQuery,
+} from 'services/graph/queries'
 
-export const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) =>
+import { pager } from './pager'
+
+export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${TRIDENT[chainId]}`, query, variables)
 
 const gqlPoolTypeMap: Record<string, PoolType> = {
@@ -78,7 +83,7 @@ interface TridentPoolQueryResult {
 }
 
 export const getTridentPools = async (
-  chainId: ChainId = ChainId.MAINNET,
+  chainId: ChainId = ChainId.ETHEREUM,
   variables: {} = undefined
 ): Promise<TridentPool[]> => {
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
@@ -112,7 +117,7 @@ const formatBuckets = (buckets: PoolBucketQueryResult[]): PoolBucket[] =>
   }))
 
 export const getPoolBuckets = async (
-  chainId: ChainId = ChainId.MAINNET,
+  chainId: ChainId = ChainId.ETHEREUM,
   variables: {} = undefined,
   fine: boolean = false
 ): Promise<PoolBucket[]> => {
@@ -120,4 +125,10 @@ export const getPoolBuckets = async (
     await fetcher(chainId, fine ? getPoolHourBuckets : getPoolDayBuckets, variables)
   )?.[0] as PoolBucketQueryResult[]
   return formatBuckets(result)
+}
+
+export const getTridentPoolTransactions = async (poolAddress) => {
+  return await pager('https://api.thegraph.com/subgraphs/name/sushiswap/trident', getSwapsForPoolQuery, {
+    poolAddress: poolAddress.toLowerCase(),
+  })
 }

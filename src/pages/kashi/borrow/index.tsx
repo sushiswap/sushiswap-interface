@@ -1,23 +1,24 @@
-import Provider, { useKashiPairs } from '../../../features/kashi/context'
-import { formatNumber, formatPercent } from '../../../functions/format'
-
-import Card from '../../../components/Card'
-import GradientDot from '../../../components/GradientDot'
-import Head from 'next/head'
-import Image from '../../../components/Image'
-import Layout from '../../../layouts/Kashi'
-import Link from 'next/link'
-import ListHeaderWithSort from '../../../features/kashi/ListHeaderWithSort'
-import MarketHeader from '../../../features/kashi/MarketHeader'
-import React from 'react'
-import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import useSearchAndSort from '../../../hooks/useSearchAndSort'
+import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
+import Card from 'components/Card'
+import GradientDot from 'components/GradientDot'
+import Image from 'components/Image'
+import ListHeaderWithSort from 'features/kashi/ListHeaderWithSort'
+import MarketHeader from 'features/kashi/MarketHeader'
+import { formatNumber, formatPercent } from 'functions/format'
+import useSearchAndSort from 'hooks/useSearchAndSort'
+import Layout from 'layouts/Kashi'
+import Head from 'next/head'
+import Link from 'next/link'
+import React from 'react'
+import { RecoilRoot } from 'recoil'
 
 function Borrow() {
   const { i18n } = useLingui()
-  const fullPairs = useKashiPairs()
+
+  const addresses = useKashiPairAddresses()
+  const fullPairs = useKashiPairs(addresses)
 
   const positions = useSearchAndSort(
     fullPairs.filter((pair: any) => pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)),
@@ -99,7 +100,6 @@ function Borrow() {
                           <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
                             <div className="hidden space-x-2 md:flex">
                               <Image
-                                loader={cloudinaryLoader}
                                 height={48}
                                 width={48}
                                 src={pair.asset.tokenInfo.logoURI}
@@ -108,7 +108,6 @@ function Borrow() {
                               />
 
                               <Image
-                                loader={cloudinaryLoader}
                                 height={48}
                                 width={48}
                                 src={pair.collateral.tokenInfo.logoURI}
@@ -204,7 +203,6 @@ function Borrow() {
                         <div className="flex flex-col items-start sm:flex-row sm:items-center">
                           <div className="hidden space-x-2 md:flex">
                             <Image
-                              loader={cloudinaryLoader}
                               height={48}
                               width={48}
                               src={pair.asset.tokenInfo.logoURI}
@@ -212,7 +210,6 @@ function Borrow() {
                               alt={pair.asset.tokenInfo.symbol}
                             />
                             <Image
-                              loader={cloudinaryLoader}
                               height={48}
                               width={48}
                               src={pair.collateral.tokenInfo.logoURI}
@@ -274,7 +271,7 @@ function Borrow() {
   )
 }
 
-Borrow.Provider = Provider
+Borrow.Provider = RecoilRoot
 
 const BorrowLayout = ({ children }) => {
   const { i18n } = useLingui()

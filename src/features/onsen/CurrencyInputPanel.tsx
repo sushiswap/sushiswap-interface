@@ -1,21 +1,15 @@
-import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/core-sdk'
-import React, { ReactNode, useCallback, useState } from 'react'
-import { classNames, formatCurrencyAmount } from '../../functions'
-
-import Button from '../../components/Button'
-import { ChevronDownIcon } from '@heroicons/react/outline'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
-import DoubleCurrencyLogo from '../../components/DoubleLogo'
-import { FiatValue } from '../../components/CurrencyInputPanel/FiatValue'
-import Input from '../../components/Input'
-import Lottie from 'lottie-react'
-import selectCoinAnimation from '../../animation/select-coin.json'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
-import { useUSDCValue } from '../../hooks/useUSDCPrice'
+import { Currency, CurrencyAmount, Percent, Token } from '@sushiswap/core-sdk'
+import Lottie from 'lottie-react'
+import React, { ReactNode } from 'react'
+
+import selectCoinAnimation from '../../animation/select-coin.json'
+import Button from '../../components/Button'
+import { FiatValue } from '../../components/CurrencyInputPanel/FiatValue'
+import CurrencyLogo from '../../components/CurrencyLogo'
+import Input from '../../components/Input'
+import { classNames, formatCurrencyAmount } from '../../functions'
 
 interface CurrencyInputPanelProps {
   value?: string

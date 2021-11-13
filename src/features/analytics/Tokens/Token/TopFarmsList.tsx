@@ -1,8 +1,8 @@
+import DoubleCurrencyLogo from 'components/DoubleLogo'
+import Table from 'components/Table'
+import { formatPercent } from 'functions'
+import { useCurrency } from 'hooks/Tokens'
 import { useMemo } from 'react'
-import DoubleCurrencyLogo from '../../../../components/DoubleLogo'
-import { formatPercent } from '../../../../functions'
-import { useCurrency } from '../../../../hooks/Tokens'
-import Table from '../../../../components/Table'
 
 interface TopFarmsListProps {
   farms: {

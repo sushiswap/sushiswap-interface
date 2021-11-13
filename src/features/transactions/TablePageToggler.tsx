@@ -1,8 +1,9 @@
-import React, { FC, useMemo } from 'react'
-import { generateSummaryString } from './table-utils'
-import { t } from '@lingui/macro'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import React, { FC, useMemo } from 'react'
+
+import { generateSummaryString } from './table-utils'
 
 interface PageTogglerProps {
   pageIndex: number

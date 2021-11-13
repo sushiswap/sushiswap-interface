@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react'
-import Dots from '../Dots'
+
 import { classNames } from '../../functions'
+import Dots from '../Dots'
 
 const SIZE = {
   xs: 'px-2 py-1 text-xs',
@@ -82,7 +83,6 @@ function Button({
         rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
         variant !== 'empty' && SIZE[size],
         'hover:text-white font-bold rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
-        // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
         className
       )}
       {...rest}

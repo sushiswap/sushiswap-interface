@@ -1,18 +1,18 @@
 import { AxisBottom, AxisLeft } from '@visx/axis'
-import { GridColumns, GridRows } from '@visx/grid'
-import { scaleLinear, scaleTime } from '@visx/scale'
-import { useEffect, useMemo, useRef, useState } from 'react'
-
 import { Brush } from '@visx/brush'
+import BaseBrush, { BaseBrushState, UpdateBrush } from '@visx/brush/lib/BaseBrush'
+import { GridColumns, GridRows } from '@visx/grid'
 import { Group } from '@visx/group'
 import { PatternLines } from '@visx/pattern'
-import React from 'react'
+import { scaleLinear, scaleTime } from '@visx/scale'
+import { LinePath } from '@visx/shape'
 import { extent } from 'd3-array'
 import millify from 'millify'
-import { LinePath } from '@visx/shape'
-import { TimespanGraphProps } from '.'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import React from 'react'
+
 import { classNames } from '../../functions'
-import BaseBrush, { BaseBrushState, UpdateBrush } from '@visx/brush/lib/BaseBrush'
+import { TimespanGraphProps } from '.'
 
 export const getX = (data) => new Date(data.date)
 export const getY = (data) => data.value

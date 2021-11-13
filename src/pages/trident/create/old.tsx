@@ -1,31 +1,26 @@
-import TridentLayout, { TridentBody, TridentHeader } from '../../../layouts/Trident'
-import Typography from '../../../components/Typography'
-import { t } from '@lingui/macro'
-import Button from '../../../components/Button'
-import { useLingui } from '@lingui/react'
-import Link from 'next/link'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
-import Stepper from '../../../components/Stepper'
-import SelectPoolType from '../../../features/trident/create/old/SelectPoolType'
-import CreateReviewModal from '../../../features/trident/create/old/CreateReviewModal'
-import ClassicSetupPool from '../../../features/trident/create/classic/ClassicSetupPool'
-import ClassicDepositAssets from '../../../features/trident/create/classic/old/ClassicDepositAssets'
-import HybridSetupPool from '../../../features/trident/create/hybrid/HybridSetupPool'
-import {
-  poolAtom,
-  poolBalanceAtom,
-  poolCreationPageAtom,
-  totalSupplyAtom,
-} from '../../../features/trident/context/atoms'
-import { PoolType } from '../../../features/trident/types'
-import PoolCreationSubmittedModal from '../../../features/trident/PoolCreationSubmittedModal'
-import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
-import React, { useEffect } from 'react'
-import { useIndependentAssetInputs } from '../../../features/trident/context/hooks/useIndependentAssetInputs'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import HybridStandardMode from '../../../features/trident/add/hybrid/HybridStandardMode'
-import { selectedFeeTierAtom, selectedPoolTypeAtom } from '../../../features/trident/create/context/atoms'
+import { PoolType } from '@sushiswap/tines'
+import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
+import Button from 'components/Button'
+import Stepper from 'components/Stepper'
+import Typography from 'components/Typography'
+import StableStandardMode from 'features/trident/add/stable/StableStandardMode'
+import { poolAtom, poolBalanceAtom, poolCreationPageAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import { useIndependentAssetInputs } from 'features/trident/context/hooks/useIndependentAssetInputs'
+import ClassicSetupPool from 'features/trident/create/classic/ClassicSetupPool'
+import ClassicDepositAssets from 'features/trident/create/classic/old/ClassicDepositAssets'
+import { selectedFeeTierAtom, selectedPoolTypeAtom } from 'features/trident/create/context/atoms'
+import CreateReviewModal from 'features/trident/create/old/CreateReviewModal'
+import SelectPoolType from 'features/trident/create/old/SelectPoolType'
+import StableSetupPool from 'features/trident/create/stable/StableSetupPool'
+import PoolCreationSubmittedModal from 'features/trident/PoolCreationSubmittedModal'
+import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import Link from 'next/link'
+import React, { useEffect } from 'react'
+import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -99,12 +94,12 @@ const Pool = () => {
             </Stepper.Panel>
             <Stepper.Panel>
               {poolType === PoolType.ConstantProduct && <ClassicSetupPool />}
-              {poolType === PoolType.Hybrid && <HybridSetupPool />}
+              {poolType === PoolType.Hybrid && <StableSetupPool />}
             </Stepper.Panel>
             <Stepper.Panel>
               {poolType === PoolType.ConstantProduct && <ClassicDepositAssets />}
-              {poolType === PoolType.Hybrid && <HybridStandardMode />}
-              {/*{selectedPoolType === PoolType.Weighted && <WeightedStandardMode />}*/}
+              {poolType === PoolType.Hybrid && <StableStandardMode />}
+              {/*{selectedPoolType === PoolType.Weighted && <IndexStandardMode />}*/}
               {/*{selectedPoolType === PoolType.ConcentratedLiquidity && <ConcentratedStandardMode />}*/}
             </Stepper.Panel>
           </Stepper.Panels>

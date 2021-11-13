@@ -1,9 +1,10 @@
-import { useActiveWeb3React, useSushiContract } from '../../hooks'
-
 import { BigNumber } from '@ethersproject/bignumber'
-import { Chef } from './enum'
 import { Zero } from '@ethersproject/constants'
+import { useSushiContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback } from 'react'
+
+import { Chef } from './enum'
 import { useChefContract } from './hooks'
 
 export default function useMasterChef(chef: Chef) {

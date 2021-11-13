@@ -1,19 +1,19 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { useState } from 'react'
-import { e10, minimum } from '../../functions/math'
 
 import Button from '../../components/Button'
-import { KashiApproveButton } from './Button'
 import KashiCooker from '../../entities/KashiCooker'
-import SmartNumberInput from './SmartNumberInput'
 import { TransactionReview } from '../../entities/TransactionReview'
-import TransactionReviewView from './TransactionReview'
 import { Warnings } from '../../entities/Warnings'
-import WarningsView from './WarningsList'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useKashiApprovalPending } from '../../state/application/hooks'
+import { e10, minimum } from '../../functions/math'
 import useKashiApproveCallback from '../../hooks/useKashiApproveCallback'
-import { useLingui } from '@lingui/react'
+import { useKashiApprovalPending } from '../../state/application/hooks'
+import { KashiApproveButton } from './Button'
+import SmartNumberInput from './SmartNumberInput'
+import TransactionReviewView from './TransactionReview'
+import WarningsView from './WarningsList'
 
 export default function LendWithdrawAction({ pair }: any): JSX.Element {
   const { account } = useActiveWeb3React()

@@ -1,12 +1,11 @@
-import React, { useMemo } from 'react'
-import { formatNumber, formatNumberScale, formatPercent } from '../../../functions'
+import DoubleCurrencyLogo from 'components/DoubleLogo'
+import Table from 'components/Table'
+import { formatNumber, formatPercent } from 'functions'
+import { useCurrency } from 'hooks/Tokens'
+import Image from 'next/image'
+import React from 'react'
 
 import ColoredNumber from '../ColoredNumber'
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
-import Image from 'next/image'
-import Table from '../../../components/Table'
-import _ from 'lodash'
-import { useCurrency } from '../../../hooks/Tokens'
 
 interface FarmListProps {
   pools: {

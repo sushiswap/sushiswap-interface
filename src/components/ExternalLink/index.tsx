@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, useCallback } from 'react'
-
 import ReactGA from 'react-ga'
+
 import { classNames } from '../../functions'
 
 const COLOR = {

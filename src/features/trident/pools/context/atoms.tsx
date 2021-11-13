@@ -1,6 +1,6 @@
+import { TableInstance } from 'features/transactions/types'
 import { atom, selector } from 'recoil'
-import { FeeTier } from '../../../../services/graph/fetchers/pools'
-import { TableInstance } from '../../../transactions/types'
+import { FeeTier } from 'services/graph/fetchers/pools'
 
 export const searchQueryAtom = atom<string>({
   key: 'searchQueryAtom',

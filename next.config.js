@@ -32,7 +32,12 @@ const nextConfig = {
 
     return config
   },
-  experimental: { esmExternals: true },
+  // experimental: {
+  //   concurrentFeatures: true,
+  //   serverComponents: true,
+  // },
+  swcMinify: false,
+  reactStrictMode: true,
   pwa: {
     dest: 'public',
     runtimeCaching,
@@ -40,10 +45,6 @@ const nextConfig = {
   },
   images: {
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
-  },
-  reactStrictMode: true,
-  async redirects() {
-    return []
   },
   async rewrites() {
     return [
@@ -124,12 +125,12 @@ const nextConfig = {
     defaultLocale: sourceLocale,
   },
   network: {
-    chainIds: [ChainId.MAINNET, ChainId.ARBITRUM],
-    defaultChainId: ChainId.MAINNET,
+    chainIds: [ChainId.ETHEREUM, ChainId.ARBITRUM],
+    defaultChainId: ChainId.ETHEREUM,
     domains: [
       {
         domain: 'sushi.com',
-        defaultChainId: ChainId.MAINNET,
+        defaultChainId: ChainId.ETHEREUM,
       },
       {
         domain: 'arbitrum.sushi.com',

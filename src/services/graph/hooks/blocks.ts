@@ -1,8 +1,7 @@
-import { getAverageBlockTime, getBlock, getMassBlocks } from '../fetchers'
-import useSWR, { SWRConfiguration } from 'swr'
-
-import { useActiveWeb3React } from '../../../hooks'
+import { getAverageBlockTime, getBlock, getMassBlocks } from 'app/services/graph/fetchers'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
+import useSWR, { SWRConfiguration } from 'swr'
 
 interface useBlockProps {
   timestamp?: number

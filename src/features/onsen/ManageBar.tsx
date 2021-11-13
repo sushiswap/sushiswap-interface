@@ -1,17 +1,9 @@
-import React, { useState } from 'react'
+import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
 import { Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import Button, { ButtonError } from '../../components/Button'
-import { classNames, getUSDValue, tryParseAmount } from '../../functions'
-import CurrencyInputPanel from './CurrencyInputPanel'
-import Web3Connect from '../../components/Web3Connect'
-import { ApprovalState, useActiveWeb3React, useApproveCallback } from '../../hooks'
-import Dots from '../../components/Dots'
-import { BigNumber } from '@ethersproject/bignumber'
-import useMasterChef from './useMasterChef'
-import { useTransactionAdder } from '../../state/transactions/hooks'
 import {
   ChainId,
   CurrencyAmount,
@@ -22,12 +14,22 @@ import {
   Token,
   USDC,
   ZERO,
-} from '@sushiswap/sdk'
-import { getAddress } from '@ethersproject/address'
+} from '@sushiswap/core-sdk'
+import Button, { ButtonError } from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import Web3Connect from 'app/components/Web3Connect'
+import { useKashiPair } from 'app/features/kashi/hooks'
+import { classNames, getUSDValue, tryParseAmount } from 'app/functions'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useCurrencyBalance } from 'app/state/wallet/hooks'
+import React, { useState } from 'react'
+
+import CurrencyInputPanel from './CurrencyInputPanel'
 import { Chef, PairType } from './enum'
-import { useKashiPair } from '../kashi/context'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useUserInfo } from './hooks'
+import useMasterChef from './useMasterChef'
 
 const ManageBar = ({ farm }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -96,8 +98,8 @@ const ManageBar = ({ farm }) => {
   const parsedWithdrawValue = tryParseAmount(withdrawValue, liquidityToken)
 
   const APPROVAL_ADDRESSES = {
-    [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },
-    [Chef.MASTERCHEF_V2]: { [ChainId.MAINNET]: MASTERCHEF_V2_ADDRESS[ChainId.MAINNET] },
+    [Chef.MASTERCHEF]: { [ChainId.ETHEREUM]: MASTERCHEF_ADDRESS[ChainId.ETHEREUM] },
+    [Chef.MASTERCHEF_V2]: { [ChainId.ETHEREUM]: MASTERCHEF_V2_ADDRESS[ChainId.ETHEREUM] },
     [Chef.MINICHEF]: {
       [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
       [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],

@@ -1,9 +1,9 @@
-import { SUPPORTED_WALLETS, injected } from '../../config/wallets'
-
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import Dots from '../../components/Dots'
-import Option from './Option'
+import Dots from 'components/Dots'
+import { injected, SUPPORTED_WALLETS } from 'config/wallets'
 import React from 'react'
+
+import Option from './Option'
 
 export default function PendingView({
   connector,

@@ -1,14 +1,14 @@
-import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@sushiswap/core-sdk'
-import { useMultipleContractSingleData, useSingleContractMultipleData } from '../multicall/hooks'
-
-import ERC20_ABI from '../../constants/abis/erc20.json'
 import { Interface } from '@ethersproject/abi'
-import { TokenBalancesMap } from './types'
-import { isAddress } from '../../functions/validate'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTokens } from '../../hooks/Tokens'
+import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@sushiswap/core-sdk'
+import ERC20_ABI from 'app/constants/abis/erc20.json'
+import { isAddress } from 'app/functions/validate'
+import { useAllTokens } from 'app/hooks/Tokens'
+import { useMulticall2Contract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useMultipleContractSingleData, useSingleContractMultipleData } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
-import { useMulticall2Contract } from '../../hooks/useContract'
+
+import { TokenBalancesMap } from './types'
 
 /**
  * Returns a map of the given addresses to their eventually consistent ETH balances.
@@ -99,9 +99,7 @@ export const serializeBalancesMap = (mapping: Record<string, CurrencyAmount<Toke
 }
 
 export function useTokenBalances(address?: string, tokens?: (Token | undefined)[]): TokenBalancesMap {
-  const balances = useTokenBalancesWithLoadingIndicator(address, tokens)[0]
-  const memoizedBalances = useMemo(() => serializeBalancesMap(balances), [balances])
-  return useMemo(() => balances, [memoizedBalances])
+  return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
 }
 
 // get the balance for a single token/account combo

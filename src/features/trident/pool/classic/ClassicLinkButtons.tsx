@@ -1,10 +1,10 @@
-import { FC } from 'react'
-import Button from '../../../../components/Button'
-import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'components/Button'
+import { poolAtom, poolBalanceAtom } from 'features/trident/context/atoms'
+import Link from 'next/link'
+import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { poolAtom, poolBalanceAtom } from '../../context/atoms'
 
 const ClassicLinkButtons: FC = () => {
   const { i18n } = useLingui()

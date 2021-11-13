@@ -1,11 +1,12 @@
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
-import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
-import { bentoboxRebasesAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../../hooks'
 import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
+import { toAmountCurrencyAmount } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
-import { toAmountCurrencyAmount } from '../../../../functions'
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+
+import { bentoboxRebasesAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 
 export const percentageAmountAtom = atom<string>({
   key: 'percentageAmountAtom',

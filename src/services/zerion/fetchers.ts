@@ -1,6 +1,6 @@
-import { ZERION_API, ZERION_API_KEY } from './constants'
 import { uniq } from 'lodash'
-import { t } from '@lingui/macro'
+
+import { ZERION_API, ZERION_API_KEY } from './constants'
 
 const fetcher: any = (queries: string[]) => {
   return new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
-import Container from '../../components/Container'
+import Container from 'app/components/Container'
+import Sidebar from 'app/components/Sidebar'
 import Head from 'next/head'
-import Sidebar from '../../components/Sidebar'
 
 export default function Analytics() {
   return (

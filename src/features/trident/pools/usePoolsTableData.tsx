@@ -1,14 +1,16 @@
+import { PoolType } from '@sushiswap/tines'
+import Button from 'app/components/Button'
+import Chip from 'app/components/Chip'
+import { formatNumber, formatPercent } from 'app/functions/format'
+import { getTridentPools } from 'app/services/graph/fetchers/pools'
+import { useActiveWeb3React } from 'app/services/web3'
+import Link from 'next/link'
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
-import { getTridentPools } from '../../../services/graph/fetchers/pools'
-import { formatNumber, formatPercent } from '../../../functions'
+
+import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
-import { chipPoolColorMapper, PoolType } from '../types'
-import Chip from '../../../components/Chip'
-import Button from '../../../components/Button'
-import Link from 'next/link'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
-import { useActiveWeb3React } from '../../../hooks'
 
 export const usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
@@ -28,7 +30,9 @@ export const usePoolsTableData = () => {
         Header: 'Pool Type',
         accessor: 'type',
         maxWidth: 100,
-        Cell: (props: { value: PoolType }) => <Chip label={props.value} color={chipPoolColorMapper[props.value]} />,
+        Cell: (props: { value: PoolType }) => (
+          <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
+        ),
         filter: (rows, id, filterValue) =>
           rows.filter((row) => !filterValue.length || filterValue.includes(row.values.type)),
       },

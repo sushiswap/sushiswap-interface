@@ -1,12 +1,11 @@
-import { FC, useMemo } from 'react'
-import Typography from '../../../components/Typography'
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { formatNumber, formatPercent } from '../../../functions'
-import useDesktopMediaQuery from '../../../hooks/useDesktopMediaQuery'
-import { usePoolStats } from './usePoolStats'
+import Typography from 'components/Typography'
+import { formatPercent } from 'functions'
+import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
+import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { poolAtom } from '../context/atoms'
+import { usePoolStats } from './usePoolStats'
 
 interface PoolStatsProps {}
 

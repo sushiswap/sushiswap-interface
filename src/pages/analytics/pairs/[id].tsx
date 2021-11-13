@@ -1,24 +1,23 @@
-import React, { useMemo } from 'react'
-import { formatNumber, shortenAddress } from '../../../functions'
-import { useBlock, useDayData, useNativePrice, usePairDayData, useSushiPairs } from '../../../services/graph'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import Background from '../../../features/analytics/Background'
-import { CheckIcon } from '@heroicons/react/solid'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
 import { DuplicateIcon } from '@heroicons/react/outline'
-import InfoCard from '../../../features/analytics/InfoCard'
-import Link from 'next/link'
-import { ExternalLink as LinkIcon } from 'react-feather'
+import { CheckIcon } from '@heroicons/react/solid'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import DoubleCurrencyLogo from 'app/components/DoubleLogo'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import ChartCard from 'app/features/analytics/ChartCard'
+import InfoCard from 'app/features/analytics/InfoCard'
+import { LegacyTransactions } from 'app/features/transactions/Transactions'
+import { getExplorerLink } from 'app/functions/explorer'
+import { formatNumber, shortenAddress } from 'app/functions/format'
+import { useCurrency } from 'app/hooks/Tokens'
+import useCopyClipboard from 'app/hooks/useCopyClipboard'
+import { useBlock, useNativePrice, usePairDayData, useSushiPairs } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import { times } from 'lodash'
-import useCopyClipboard from '../../../hooks/useCopyClipboard'
-import { useCurrency } from '../../../hooks/Tokens'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useActiveWeb3React } from '../../../hooks'
-import ChartCard from '../../../features/analytics/ChartCard'
-import { getExplorerLink } from '../../../functions/explorer'
-import { Transactions } from '../../../features/transactions/Transactions'
+import React, { useMemo } from 'react'
+import { ExternalLink as LinkIcon } from 'react-feather'
 
 const chartTimespans = [
   {
@@ -258,7 +257,7 @@ export default function Pair() {
             </table>
           </div>
         </div>
-        <Transactions pairs={[id]} />
+        <LegacyTransactions pairs={[id]} />
       </div>
     </AnalyticsContainer>
   )
