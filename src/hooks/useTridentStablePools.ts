@@ -3,11 +3,10 @@ import { ChainId, ChainKey, Currency, CurrencyAmount, JSBI } from '@sushiswap/co
 import HybridPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/HybridPool.sol/HybridPool.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 import { computeHybridPoolAddress, Fee, HybridPool } from '@sushiswap/trident-sdk'
+import { PoolAtomType } from 'app/features/trident/types'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
-import { useActiveWeb3React } from 'services/web3'
-
-import { PoolAtomType } from '../features/trident/types'
 
 const STABLE_POOL_INTERFACE = new Interface(HybridPoolArtifact.abi)
 
