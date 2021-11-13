@@ -18,8 +18,6 @@ export function useTridentPools(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     block: block ? { number: block } : undefined,
     where: {
@@ -28,7 +26,7 @@ export function useTridentPools(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['factory', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['factory', chainId, JSON.stringify(variables)] : null,
     () => getTridentPools(chainId, variables),
     swrConfig
   )

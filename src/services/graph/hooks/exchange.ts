@@ -48,14 +48,12 @@ export function useFactory(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     block: block ? { number: block } : undefined,
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['factory', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['factory', chainId, JSON.stringify(variables)] : null,
     () => getFactory(chainId, variables),
     swrConfig
   )
@@ -76,14 +74,12 @@ export function useNativePrice(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     block: block ? { number: block } : undefined,
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['nativePrice', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['nativePrice', chainId, JSON.stringify(variables)] : null,
     () => getNativePrice(chainId, variables),
     swrConfig
   )
@@ -218,8 +214,6 @@ export function useLiquidityPositions(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     block: block ? { number: block } : undefined,
     where: {
@@ -229,7 +223,7 @@ export function useLiquidityPositions(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['liquidityPositions', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['liquidityPositions', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getLiquidityPositions(chainId, variables),
     swrConfig
   )
@@ -252,8 +246,6 @@ export function useSushiPairs(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     block: block ? { number: block } : undefined,
     where: {
@@ -263,7 +255,7 @@ export function useSushiPairs(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['sushiPairs', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['sushiPairs', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getPairs(chainId, variables),
     swrConfig
   )
@@ -285,8 +277,6 @@ export function useTokens(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     block: block ? { number: block } : undefined,
     where: {
@@ -295,7 +285,7 @@ export function useTokens(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['tokens', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['tokens', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getTokens(chainId, variables),
     swrConfig
   )
@@ -318,8 +308,6 @@ export function usePairDayData(
   const blockFetched = useBlock({ chainId, timestamp, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     first: first,
     block: block ? { number: block } : undefined,
@@ -329,7 +317,7 @@ export function usePairDayData(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['pairDayData', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['pairDayData', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getPairDayData(chainId, variables),
     swrConfig
   )
@@ -352,8 +340,6 @@ export function useTokenDayData(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     first: first,
     block: block ? { number: block } : undefined,
@@ -363,7 +349,7 @@ export function useTokenDayData(
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['tokenDayData', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['tokenDayData', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getTokenDayData(chainId, variables),
     swrConfig
   )
@@ -385,15 +371,13 @@ export function useDayData(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     first: first,
     block: block ? { number: block } : undefined,
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['dayData', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['dayData', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getDayData(chainId, variables),
     swrConfig
   )
@@ -445,15 +429,13 @@ export function useTokenPairs(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && !!chainId
-
   const variables = {
     id: token?.toLowerCase(),
     block: block ? { number: block } : undefined,
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['tokenPairs', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['tokenPairs', chainId, JSON.stringify(variables)] : null,
     (_, chainId) => getTokenPairs(chainId, variables),
     swrConfig
   )

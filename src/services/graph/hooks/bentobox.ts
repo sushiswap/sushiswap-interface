@@ -21,8 +21,6 @@ export function useKashiPairs(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch ? featureEnabled(Feature['KASHI'], chainId) : false
-
   const variables = {
     block: block ? { number: block } : undefined,
     where: {
@@ -32,7 +30,9 @@ export function useKashiPairs(
   }
 
   const { data } = useSWR(
-    shouldFetch ? () => ['kashiPairs', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && featureEnabled(Feature['KASHI'], chainId)
+      ? () => ['kashiPairs', chainId, JSON.stringify(variables)]
+      : null,
     (_, chainId) => getKashiPairs(chainId, variables),
     swrConfig
   )
@@ -101,14 +101,14 @@ export function useBentoBox(
   const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
-  shouldFetch = shouldFetch && chainId ? featureEnabled(Feature.BENTOBOX, chainId) : false
-
   const variables = {
     block: block ? { number: block } : undefined,
   }
 
   const { data } = useSWR(
-    shouldFetch ? ['bentoBox', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && chainId && featureEnabled(Feature.BENTOBOX, chainId)
+      ? ['bentoBox', chainId, JSON.stringify(variables)]
+      : null,
     () => getBentoBox(chainId, variables),
     swrConfig
   )
