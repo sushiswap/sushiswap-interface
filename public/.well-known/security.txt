@@ -1,0 +1,5 @@
+Contact: ops@sushi.com
+Expires: Sat, 31 Dec 2022 12:01 -0700
+Preferred-Languages: en
+Canonical: https://sushi.com/.well-known/security.txt
+Policy: https://sushi.com/policies/security.html

@@ -260,9 +260,7 @@ export function useDefaultsFromURLSearch():
   const dispatch = useDispatch<AppDispatch>()
   const parsedQs = useParsedQueryString()
   // const parsedQs = {}
-  const [result, setResult] = useState<
-    { poolAddress: string | undefined; currencyId: string | undefined } | undefined
-  >()
+  const [result, setResult] = useState<{ poolAddress: any | undefined; currencyId: any | undefined } | undefined>()
 
   // console.log(result)
   // console.log(parsedQs)
