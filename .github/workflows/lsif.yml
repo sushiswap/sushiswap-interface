@@ -1,0 +1,29 @@
+name: lisf
+on:
+  push:
+    branches: ['master', 'build/*']
+    paths:
+      - 'src/**'
+      - '.github/workflows/lsif.yaml'
+      - "**.tsx"
+  pull_request:
+    branches: ['canary', 'releasae']
+    paths:
+      - 'src/**'
+      - '.github/workflows/lsif.yaml'
+      - "**.tsx"
+
+jobs:
+  lsif-ts:
+    runs-on: ubuntu-latest
+    container: sourcegraph/lsif-node
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: yarn install --pure-lockfile
+      - name: Generate LSIF data
+        run: |
+         lsif-tsc -p .
+         echo "::set-output name=lsif:nodejs"
+      - name: Upload LSIF data
+        run: src lsif upload -github-token=${{ secrets.GITHUB_TOKEN }}
