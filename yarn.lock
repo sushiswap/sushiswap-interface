@@ -2661,10 +2661,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.107":
-  version "5.0.0-canary.107"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.107.tgz#0248989dd76ad5879ccb33e3400b8ed9497f1602"
-  integrity sha512-45YM3oaoePvrEAaIJI02S0n8oUQgfG05Lv9YKZ1Dc6ogI9D1jp5tTKiT0EqGkQreFLepSylDyuL6yPRQAomgxg==
+"@sushiswap/sdk@5.0.0-canary.108":
+  version "5.0.0-canary.108"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.108.tgz#24808dad15a28ec3b8edaa8c0e113f25e0d8e68e"
+  integrity sha512-9Ubs40Ny2mRrEYVTioweiSuylpDAllj+Od3HcOJ5Vr4qXvHPBU0hJAUDuoUIUxrDvORuscPjeUwRET4lvlORGA==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/abstract-signer" "^5.4.0"
@@ -2683,7 +2683,7 @@
     decimal.js-light "^2.5.0"
     eip-712 "^0.4.3"
     isomorphic-unfetch "^3.1.0"
-    jsbi "^3.1.0"
+    jsbi "^4.1.0"
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
@@ -9697,10 +9697,15 @@ js-yaml@^3.13.0, js-yaml@^3.13.1, js-yaml@^3.6.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jsbi@^3.1.0, jsbi@^3.1.4, jsbi@^3.1.5:
+jsbi@^3.1.4, jsbi@^3.1.5:
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.2.5.tgz#b37bb90e0e5c2814c1c2a1bcd8c729888a2e37d6"
   integrity sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ==
+
+jsbi@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.1.0.tgz#f0c25ed8881bc09891334b03a3952efaa7add337"
+  integrity sha512-384Z4keIsJtYpnVggsxaB255MZctILbxv+ihtwoWPF7KNOlYHn1LFpRnUw5qsAspUAA2+I7qzjVJxVYtHVjxNw==
 
 jsbn@~0.1.0:
   version "0.1.1"
