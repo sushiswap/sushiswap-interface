@@ -32,7 +32,8 @@ const useBentoRebases = (tokens: (Currency | undefined)[]) => {
 }
 
 export const useBentoRebase = (token: Currency | undefined) => {
-  const { rebases, loading } = useBentoRebases([token])
+  const tokens = useMemo(() => [token], [token])
+  const { rebases, loading } = useBentoRebases(tokens)
   if (token && !loading) {
     return { rebase: rebases[token?.wrapped.address], loading }
   }
