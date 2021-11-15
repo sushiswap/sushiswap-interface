@@ -49,7 +49,11 @@ export function useBestTridentTrade(
   const { rebase } = useBentoRebase(amountSpecified?.currency)
 
   const shareSpecified = useMemo(() => {
-    return amountSpecified && rebase ? toShareCurrencyAmount(rebase, amountSpecified) : undefined
+    if (!amountSpecified || !rebase) return
+    return CurrencyAmount.fromRawAmount(
+      amountSpecified.currency,
+      toShareCurrencyAmount(rebase, amountSpecified.wrapped).quotient.toString()
+    )
   }, [amountSpecified, rebase])
 
   const [currencyIn, currencyOut] = useMemo(

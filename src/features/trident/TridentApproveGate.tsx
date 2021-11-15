@@ -75,14 +75,12 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
   } = useBentoMasterApproveCallback(masterContractAddress ? masterContractAddress : undefined, {})
 
   const loading =
-    Object.values(status).some((el) => el === ApprovalState.UNKNOWN) || masterContractAddress
-      ? bApprove === BentoApprovalState.UNKNOWN
-      : false
+    Object.values(status).some((el) => el === ApprovalState.UNKNOWN) ||
+    (masterContractAddress ? bApprove === BentoApprovalState.UNKNOWN : false)
 
   const approved =
-    Object.values(status).every((el) => el === ApprovalState.APPROVED) && masterContractAddress
-      ? bApprove === BentoApprovalState.APPROVED
-      : true
+    Object.values(status).every((el) => el === ApprovalState.APPROVED) &&
+    (masterContractAddress ? bApprove === BentoApprovalState.APPROVED : true)
 
   const onClick = useCallback(async () => {
     if (withPermit) {
