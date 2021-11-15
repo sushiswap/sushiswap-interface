@@ -24,7 +24,8 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "sushi-env.d.ts"
   ],
   "exclude": [
     "node_modules"
