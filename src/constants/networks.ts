@@ -20,6 +20,8 @@ const Celo = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/c
 const Palm = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/palm.jpg'
 const Moonriver = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonriver.jpg'
 const Fuse = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
+const Telos =
+  'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
 
 export const NETWORK_ICON = {
   [ChainId.MAINNET]: Mainnet,
@@ -49,6 +51,7 @@ export const NETWORK_ICON = {
   [ChainId.PALM]: Palm,
   [ChainId.MOONRIVER]: Moonriver,
   [ChainId.FUSE]: Fuse,
+  [ChainId.TELOS]: Telos,
 }
 
 export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
@@ -79,4 +82,5 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.PALM]: 'Palm',
   [ChainId.MOONRIVER]: 'Moonriver',
   [ChainId.FUSE]: 'Fuse',
+  [ChainId.TELOS]: 'Telos',
 }

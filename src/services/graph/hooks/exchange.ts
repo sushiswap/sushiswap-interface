@@ -8,6 +8,7 @@ import {
   getFactory,
   getLiquidityPositions,
   getMaticPrice,
+  getMovrPrice,
   getMphPrice,
   getOnePrice,
   getPicklePrice,
@@ -21,14 +22,15 @@ import {
   getTransactions,
   getTruPrice,
   getYggPrice,
+  getEthPrice,
+  getPairs,
 } from '../fetchers'
-import { getEthPrice, getPairs } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import { ChainId } from '@sushiswap/sdk'
 import { ethPriceQuery } from '../queries'
-import { useActiveWeb3React } from '../../../hooks'
-import { useBlock } from '../../graph'
+import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { useBlock } from './blocks'
 
 export function useExchange(variables = undefined, query = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
@@ -83,6 +85,13 @@ export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.CELO
   const { data } = useSWR(shouldFetch ? 'celoPrice' : null, () => getCeloPrice(), swrConfig)
+  return data
+}
+
+export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.MOONRIVER
+  const { data } = useSWR(shouldFetch ? 'movrPrice' : null, () => getMovrPrice(), swrConfig)
   return data
 }
 
@@ -181,7 +190,7 @@ export function useSushiPairs(
   { timestamp, block, chainId, shouldFetch = true, user, subset }: useSushiPairsProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId
@@ -214,7 +223,7 @@ export function useTokens(
   { timestamp, block, chainId, shouldFetch = true, subset }: useTokensProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, shouldFetch: shouldFetch && !!timestamp })
+  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
   block = block ?? (timestamp ? blockFetched : undefined)
 
   shouldFetch = shouldFetch && !!chainId

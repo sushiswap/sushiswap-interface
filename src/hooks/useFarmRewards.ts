@@ -10,6 +10,7 @@ import {
   useMaticPrice,
   useOnePrice,
   useCeloPrice,
+  useMovrPrice,
   useSpellPrice,
   useStakePrice,
   useSushiPairs,
@@ -28,8 +29,7 @@ export default function useFarmRewards() {
 
   const positions = usePositions(chainId)
 
-  const block1d = useBlock({ daysAgo: 1 })
-  const block1w = useBlock({ daysAgo: 7 })
+  const block1d = useBlock({ daysAgo: 1, chainId })
 
   const farms = useFarms()
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
@@ -48,7 +48,7 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice] = [
+  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice, movrPrice] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -56,6 +56,7 @@ export default function useFarmRewards() {
     useOnePrice(),
     useSpellPrice(),
     useCeloPrice(),
+    useMovrPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -97,6 +98,14 @@ export default function useFarmRewards() {
       if (pool.chef === Chef.MASTERCHEF_V2) {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
+
+        // vestedQUARTZ to QUARTZ adjustments
+        if (pool.rewarder.rewardToken === '0x5dd8905aec612529361a35372efd5b127bb182b3') {
+          pool.rewarder.rewardToken = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
+          pool.rewardToken.symbol = 'vestedQUARTZ'
+          pool.rewardToken.derivedETH = pair.token1.derivedETH
+          pool.rewardToken.decimals = 18
+        }
 
         const icon = `https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/${getAddress(
           pool.rewarder.rewardToken
@@ -173,6 +182,13 @@ export default function useFarmRewards() {
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: celoPrice,
+          },
+          [ChainId.MOONRIVER]: {
+            token: 'MOVR',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/movr.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: movrPrice,
           },
         }
 
@@ -260,8 +276,6 @@ export default function useFarmRewards() {
       tvl,
     }
   }
-
-  console.log(farms)
 
   return farms
     .filter((farm) => {

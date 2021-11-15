@@ -35,6 +35,8 @@ const RPC = {
   [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
   [ChainId.FUSE]: 'https://rpc.fuse.io',
   [ChainId.CELO]: 'https://forno.celo.org',
+  [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
+  [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
 }
 
 export function getNetwork(defaultChainId, urls = RPC) {
@@ -83,6 +85,7 @@ export const injected = new InjectedConnector({
     11297108109, // palm
     1285, // moonriver
     122, // fuse
+    40, // telos
   ],
 })
 
@@ -91,7 +94,6 @@ export const walletconnect = new WalletConnectConnector({
   rpc: RPC,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
-  pollingInterval: 15000,
 })
 
 // mainnet only

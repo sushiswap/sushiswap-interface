@@ -203,15 +203,40 @@ const PairLayout = ({ children }) => {
             </div>
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`${pair?.asset.tokenInfo.symbol} Strategy`)}</div>
-              <div className="text-lg text-high-emphesis">
-                {i18n._(t`None`)}
-                <QuestionHelper
-                  text={i18n._(
-                    t`BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox.`
-                  )}
-                />
+              <div className="flex flex-row text-lg text-high-emphesis">
+                {pair.asset.strategy ? (
+                  i18n._(t`Active`)
+                ) : (
+                  <>
+                    {i18n._(t`None`)}
+                    <QuestionHelper
+                      text={i18n._(
+                        t`BentoBox strategies can create yield for your liquidity while it is not lent out. This token does not yet have a strategy in the BentoBox.`
+                      )}
+                    />{' '}
+                  </>
+                )}
               </div>
             </div>
+            {pair.asset.strategy && (
+              <>
+                <div className="flex justify-between">
+                  <div className="text-lg text-secondary">{i18n._(t`APY`)}</div>
+                  <div className="flex items-center">
+                    <div className="text-lg text-high-emphesis">{formatPercent(pair.asset.strategy.apy)}</div>
+                  </div>
+                </div>
+
+                <div className="flex justify-between">
+                  <div className="text-lg text-secondary">{i18n._(t`Target Percentage`)}</div>
+                  <div className="flex items-center">
+                    <div className="text-lg text-high-emphesis">
+                      {formatPercent(pair.asset.strategy.targetPercentage)}
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </Card>
       }

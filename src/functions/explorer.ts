@@ -177,7 +177,7 @@ const builders = {
     }
   },
   moonriver: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
-    const prefix = 'https://blockscout.moonriver.moonbeam.network'
+    const prefix = 'https://moonriver.moonscan.io'
     switch (type) {
       case 'transaction':
         return `${prefix}/tx/${data}`
@@ -194,6 +194,19 @@ const builders = {
         return `${prefix}/tx/${data}`
       case 'token':
         return `${prefix}/tokens/${data}`
+      default:
+        return `${prefix}/${type}/${data}`
+    }
+  },
+  telos: (chainName: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    const prefix = 'https://rpc1.us.telos.net/v2/explore/evm/'
+    switch (type) {
+      case 'transaction':
+        return `${prefix}/transaction/${data}`
+      case 'token':
+        return `${prefix}/address/${data}`
+      case 'address':
+        return `${prefix}/address/${data}`
       default:
         return `${prefix}/${type}/${data}`
     }
@@ -315,6 +328,10 @@ const chains: ChainObject = {
   [ChainId.FUSE]: {
     chainName: '',
     builder: builders.fuse,
+  },
+  [ChainId.TELOS]: {
+    chainName: '',
+    builder: builders.telos,
   },
 }
 
