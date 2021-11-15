@@ -100,7 +100,12 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({ className, isOpen
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="bg-dark-900 shadow-lg inline-block align-bottom rounded-lg text-left overflow-hidden transform">
+              <div
+                className={classNames(
+                  className ? '' : 'bg-dark-900 shadow-lg',
+                  'inline-block align-bottom rounded-lg text-left overflow-hidden transform'
+                )}
+              >
                 {children}
               </div>
             </Transition.Child>

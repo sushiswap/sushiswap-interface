@@ -14,11 +14,13 @@ import TransactionReviewStandardModal from 'app/features/trident/add/classic/Tra
 import TransactionReviewZapModal from 'app/features/trident/add/classic/TransactionReviewZapModal'
 import FixedRatioHeader from 'app/features/trident/add/FixedRatioHeader'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
+import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import { liquidityModeAtom, poolAtom } from 'app/features/trident/context/atoms'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import DepositSubmittedModal from 'app/features/trident/DepositSubmittedModal'
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
 import { LiquidityMode } from 'app/features/trident/types'
+import NetworkGuard from 'app/guards/Network'
 import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
@@ -107,6 +109,7 @@ const AddClassic = () => {
   )
 }
 
+AddClassic.Guard = NetworkGuard(TRIDENT_NETWORKS)
 AddClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 AddClassic.Layout = (props) => (
   <TridentLayout

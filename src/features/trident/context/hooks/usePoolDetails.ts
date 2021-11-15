@@ -50,8 +50,7 @@ export const usePoolDetailsMint = (
         rebases[currencies[0].wrapped.address],
         parsedAmounts && parsedAmounts[0]
           ? parsedAmounts[0].wrapped
-          : // TODO ramin, pool tokens are sorted, parsed amounts aren't
-            CurrencyAmount.fromRawAmount(currencies[0], '0').wrapped
+          : CurrencyAmount.fromRawAmount(currencies[0], '0').wrapped
       )
 
       const amountB = toShareCurrencyAmount(

@@ -6,6 +6,7 @@ import Alert from 'app/components/Alert'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
+import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import { liquidityModeAtom, poolAtom } from 'app/features/trident/context/atoms'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import ClassicStandardAside from 'app/features/trident/remove/classic/ClassicStandardAside'
@@ -17,6 +18,7 @@ import RemoveTransactionReviewZapModal from 'app/features/trident/remove/classic
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
 import { LiquidityMode } from 'app/features/trident/types'
 import WithdrawalSubmittedModal from 'app/features/trident/WithdrawalSubmittedModal'
+import NetworkGuard from 'app/guards/Network'
 import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
@@ -103,6 +105,7 @@ const RemoveClassic = () => {
   )
 }
 
+RemoveClassic.Guard = NetworkGuard(TRIDENT_NETWORKS)
 RemoveClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 RemoveClassic.Layout = (props) => (
   <TridentLayout

@@ -1,4 +1,6 @@
 import { PoolType } from '@sushiswap/tines'
+import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
+import NetworkGuard from 'app/guards/Network'
 import { StepThreeClassic } from 'features/trident/create/classic/StepThreeClassic'
 import { StepTwoClassic } from 'features/trident/create/classic/StepTwoClassic'
 import { currentStepAtom, selectedPoolTypeAtom } from 'features/trident/create/context/atoms'
@@ -24,6 +26,7 @@ const CreateNewPool = () => {
   )
 }
 
+CreateNewPool.Guard = NetworkGuard(TRIDENT_NETWORKS)
 CreateNewPool.Provider = RecoilRoot
 CreateNewPool.Layout = (props) => (
   <TridentLayout {...props} breadcrumbs={[{ link: '/trident/pools', label: 'Pools' }, { label: 'Create Pool' }]} />
