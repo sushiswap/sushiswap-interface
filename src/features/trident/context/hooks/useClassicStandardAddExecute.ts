@@ -39,8 +39,8 @@ export const useClassicStandardAddExecute = () => {
       async () => {
         const [, pool] = await snapshot.getPromise(poolAtom)
         const [parsedAmountA, parsedAmountB] = parsedAmounts
-        const nativeA = await snapshot.getPromise(spendFromWalletSelector(pool?.token0.address))
-        const nativeB = await snapshot.getPromise(spendFromWalletSelector(pool?.token1.address))
+        const nativeA = await snapshot.getPromise(spendFromWalletSelector(0))
+        const nativeB = await snapshot.getPromise(spendFromWalletSelector(1))
 
         if (!pool || !chainId || !library || !account || !router || !liquidityMinted) return
 

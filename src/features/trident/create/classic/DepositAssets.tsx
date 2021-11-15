@@ -30,12 +30,8 @@ export const DepositAssets: FC = () => {
   } = useIndependentAssetInputs()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(
-    spendFromWalletSelector(currencies[0]?.wrapped.address)
-  )
-  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(
-    spendFromWalletSelector(currencies[1]?.wrapped.address)
-  )
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(0))
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(1))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (

@@ -43,7 +43,7 @@ const ClassicZapMode = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-  const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletSelector(zapCurrency?.wrapped.address))
+  const [spendFromWallet, setSpendFromWallet] = useRecoilState(spendFromWalletSelector(0))
 
   return (
     <>

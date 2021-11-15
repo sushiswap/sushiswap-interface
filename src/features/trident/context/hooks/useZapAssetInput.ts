@@ -78,7 +78,7 @@ export const useZapAssetInput = () => {
     ? i18n._(t`Invalid pool`)
     : !zapInputAmount
     ? i18n._(t`Enter an amount`)
-    : parsedAmount && balance[0]?.lessThan(parsedAmount)
+    : parsedAmount && balance[parsedAmount.wrapped.currency.address]?.lessThan(parsedAmount)
     ? i18n._(t`Insufficient ${parsedAmount?.currency.symbol} balance`)
     : noLiquidity
     ? i18n._(t`No liquidity`)

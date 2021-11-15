@@ -34,8 +34,8 @@ const IndexStandardMode = () => {
   } = useDependentAssetInputs()
 
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(pool?.token0.address))
-  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(pool?.token1.address))
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(0))
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(1))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (
