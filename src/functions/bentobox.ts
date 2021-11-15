@@ -1,5 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { CurrencyAmount, JSBI, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 
 // export function toAmount(token, shares: BigNumber): BigNumber {
 //   // console.log('toAmount', token, shares)
@@ -29,12 +29,12 @@ export function toShareJSBI(token: Rebase, amount: JSBI): JSBI {
   return JSBI.GT(token.elastic, 0) ? JSBI.divide(JSBI.multiply(amount, token.base), token.elastic) : ZERO
 }
 
-export function toAmountCurrencyAmount(token: Rebase, shares: CurrencyAmount<Token>) {
+export function toAmountCurrencyAmount(token: Rebase, shares: CurrencyAmount<Token> | CurrencyAmount<Currency>) {
   const amount = toAmountJSBI(token, shares.quotient)
   return CurrencyAmount.fromRawAmount(shares.currency, amount)
 }
 
-export function toShareCurrencyAmount(token: Rebase, amount: CurrencyAmount<Token>) {
+export function toShareCurrencyAmount(token: Rebase, amount: CurrencyAmount<Token> | CurrencyAmount<Currency>) {
   const share = toShareJSBI(token, amount.quotient)
   return CurrencyAmount.fromRawAmount(amount.currency, share)
 }

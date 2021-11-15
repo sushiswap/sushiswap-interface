@@ -1,7 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { Currency, CurrencyAmount, TradeType, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, Currency, CurrencyAmount, TradeType, WNATIVE } from '@sushiswap/core-sdk'
 import { ConstantProductRPool, findMultiRouteExactIn, RouteStatus, RPool, RToken } from '@sushiswap/tines'
 import { Pool, PoolState, Trade } from '@sushiswap/trident-sdk'
+import { toShareCurrencyAmount } from 'app/functions'
+import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
 import { useEffect, useMemo, useState } from 'react'
@@ -41,9 +43,14 @@ export function useBestTridentTrade(
   amountSpecified?: CurrencyAmount<Currency>,
   otherCurrency?: Currency
 ): UseBestTridentTradeOutput {
-  const { library } = useActiveWeb3React()
+  const { chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
   const [trade, setTrade] = useState<UseBestTridentTradeOutput>(undefined)
+  const { rebase } = useBentoRebase(amountSpecified?.currency)
+
+  const shareSpecified = useMemo(() => {
+    return amountSpecified && rebase ? toShareCurrencyAmount(rebase, amountSpecified) : undefined
+  }, [amountSpecified, rebase])
 
   const [currencyIn, currencyOut] = useMemo(
     () =>
@@ -67,11 +74,11 @@ export function useBestTridentTrade(
   useEffect(() => {
     const bestTrade = async () => {
       const price = await gasPricePromise
-      if (price && amountSpecified && otherCurrency && allowedPools.length > 0) {
+      if (chainId && price && shareSpecified && otherCurrency && allowedPools.length > 0) {
         const route = findMultiRouteExactIn(
-          amountSpecified.currency.wrapped as RToken,
+          shareSpecified.currency.wrapped as RToken,
           otherCurrency.wrapped as RToken,
-          BigNumber.from(amountSpecified.quotient.toString()),
+          BigNumber.from(shareSpecified.quotient.toString()),
           allowedPools.map((pool) => {
             return new ConstantProductRPool(
               pool.liquidityToken.address,
@@ -82,14 +89,13 @@ export function useBestTridentTrade(
               BigNumber.from(pool.reserves[1].quotient.toString())
             )
           }) as RPool[],
-          WNATIVE[amountSpecified.currency.chainId] as RToken,
-          750 * 1e9 // TODO ramin: set to price variable
+          WNATIVE[shareSpecified.currency.chainId] as RToken,
+          chainId === ChainId.KOVAN ? 750 * 1e9 : price
         )
 
         if (route.status === RouteStatus.Success) {
-          if (tradeType === TradeType.EXACT_INPUT) return Trade.bestTradeExactIn(route, amountSpecified, otherCurrency)
-          if (tradeType === TradeType.EXACT_OUTPUT)
-            return Trade.bestTradeExactOut(route, otherCurrency, amountSpecified)
+          if (tradeType === TradeType.EXACT_INPUT) return Trade.bestTradeExactIn(route, shareSpecified, otherCurrency)
+          if (tradeType === TradeType.EXACT_OUTPUT) return Trade.bestTradeExactOut(route, otherCurrency, shareSpecified)
         }
       }
 
@@ -97,7 +103,7 @@ export function useBestTridentTrade(
     }
 
     bestTrade().then((trade) => setTrade(trade))
-  }, [amountSpecified, otherCurrency, allowedPools, tradeType, gasPricePromise])
+  }, [allowedPools, chainId, gasPricePromise, otherCurrency, shareSpecified, tradeType])
 
   return trade
 }
