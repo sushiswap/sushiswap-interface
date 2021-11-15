@@ -93,7 +93,7 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
             </Typography>
           </div>
         )}
-        {chainId && (
+        {chainId && !search && (
           <div
             className="flex justify-between items-center px-5 py-3 cursor-pointer"
             onClick={() => handleSelect(NATIVE[chainId])}
