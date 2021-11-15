@@ -6,8 +6,9 @@ import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions/styling'
 import useENS from 'app/hooks/useENS'
 import { useActiveWeb3React } from 'app/services/web3'
-import React from 'react'
-import { atom, useRecoilState } from 'recoil'
+import { useIsExpertMode } from 'app/state/user/hooks'
+import React, { useEffect } from 'react'
+import { atom, useRecoilState, useResetRecoilState } from 'recoil'
 
 const recipientAtom = atom<string | undefined>({
   key: 'RecipientPanel:recipientAtom',
@@ -18,10 +19,24 @@ const RecipientPanel = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [recipient, setRecipient] = useRecoilState(recipientAtom)
+  const resetRecipient = useResetRecoilState(recipientAtom)
+
   const { address, loading } = useENS(recipient)
+  const expertMode = useIsExpertMode()
 
   const error = Boolean(recipient && recipient.length > 0 && !loading && !address)
   const valid = Boolean(recipient && recipient.length > 0 && address && !loading)
+
+  // Reset recipient when expert mode is turned off
+  useEffect(() => {
+    if (!expertMode) {
+      resetRecipient()
+    }
+
+    return () => {
+      resetRecipient()
+    }
+  }, [expertMode, resetRecipient])
 
   if (recipient === undefined) {
     return (

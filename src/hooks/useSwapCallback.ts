@@ -283,7 +283,7 @@ function getRouteType(multiRoute: MultiRoute): RouteType {
 }
 
 function multFraction(bn: BigNumber, fr: number, precision = 1e6) {
-  return bn.mulDiv(Math.round(fr*precision), precision)
+  return bn.mulDiv(Math.round(fr * precision), precision)
 }
 
 function getInitialPathAmount(
@@ -391,8 +391,9 @@ export function useSwapCallArguments(
     } else if (trade instanceof TridentTrade) {
       if (!tridentTradeContext) return result
 
-      const { inputAmount, outputAmount, outputCurrency, receiveToWallet, fromWallet } = tridentTradeContext
-      if (!tridentRouterContract || !trade.route || !inputAmount || !outputAmount) return result
+      const { inputAmount, outputAmount, inputCurrency, outputCurrency, receiveToWallet, fromWallet } =
+        tridentTradeContext
+      if (!tridentRouterContract || !trade.route || !inputAmount || !outputAmount || !outputCurrency) return result
 
       const { routeType, ...rest } = getTridentRouterParams(
         trade.route,
@@ -412,7 +413,7 @@ export function useSwapCallArguments(
 
       // if you spend from wallet send as amount instead of share
       let value = '0x0'
-      if (inputAmount && fromWallet && inputAmount.currency.isNative) {
+      if (inputAmount && fromWallet && inputCurrency?.isNative) {
         value = toHex(inputAmount)
       }
 

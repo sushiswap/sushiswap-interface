@@ -1,6 +1,5 @@
 import { Currency, NATIVE, SUSHI } from '@sushiswap/core-sdk'
 import { useCurrency } from 'app/hooks/Tokens'
-import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
@@ -21,9 +20,17 @@ const useCurrenciesFromURL = (): {
   const twap = router.query.twap !== 'false'
 
   const switchCurrencies = useCallback(async () => {
+    if (!chainId) return
+
+    const nativeSymbol = NATIVE[chainId].symbol
     let tokens: string[] = []
     if (router.query && router.query.tokens) {
       tokens = [router.query.tokens?.[1], router.query.tokens?.[0]]
+    } else {
+      tokens = [
+        currencyB?.isNative ? nativeSymbol : currencyB?.wrapped.address,
+        currencyA?.isNative ? nativeSymbol : currencyA?.wrapped.address,
+      ]
     }
 
     await router.push({
@@ -32,18 +39,30 @@ const useCurrenciesFromURL = (): {
         tokens,
       },
     })
-  }, [router])
+  }, [
+    chainId,
+    currencyA?.isNative,
+    currencyA?.wrapped.address,
+    currencyB?.isNative,
+    currencyB?.wrapped.address,
+    router,
+  ])
 
   const setURLCurrency = useCallback(
     async (cur: Currency, index: number) => {
       if (!chainId) return
 
-      let tokens: string[] = []
+      const nativeSymbol = NATIVE[chainId].symbol
+      let tokens: string[] = [
+        currencyA?.isNative ? nativeSymbol : currencyA?.wrapped.address,
+        currencyB?.isNative ? nativeSymbol : currencyB?.wrapped.address,
+      ]
+
       if (chainId && router.query?.tokens && router.query?.tokens.length > 0) {
         tokens = [...router.query.tokens]
 
         // If selected currency is already in URL, switch currencies
-        if (tokens[(index + 1) % 2] === (cur.isNative ? 'ETH' : cur.wrapped.address)) {
+        if (tokens[(index + 1) % 2] === (cur.isNative ? nativeSymbol : cur.wrapped.address)) {
           return switchCurrencies()
         }
 
@@ -55,12 +74,12 @@ const useCurrenciesFromURL = (): {
       if (!router.query?.tokens) {
         tokens[index] =
           index === 1
-            ? currencyA?.isNative
-              ? SUPPORTED_NETWORKS[chainId]?.nativeCurrency.symbol
-              : currencyA?.wrapped.address
-            : currencyB?.isNative
-            ? SUPPORTED_NETWORKS[chainId]?.nativeCurrency.symbol
-            : currencyB?.wrapped.address
+            ? cur.isNative
+              ? nativeSymbol
+              : cur?.wrapped.address
+            : cur.isNative
+            ? nativeSymbol
+            : cur?.wrapped.address
       }
 
       await router.push({
@@ -70,15 +89,7 @@ const useCurrenciesFromURL = (): {
         },
       })
     },
-    [
-      chainId,
-      currencyA?.isNative,
-      currencyA?.wrapped.address,
-      currencyB?.isNative,
-      currencyB?.wrapped.address,
-      router,
-      switchCurrencies,
-    ]
+    [chainId, currencyA, currencyB, router, switchCurrencies]
   )
 
   return useMemo(

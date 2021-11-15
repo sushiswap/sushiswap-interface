@@ -166,6 +166,8 @@ const useSwapAssetPanelInputs = () => {
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
+    : trade === undefined
+    ? i18n._(t`No route found`)
     : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : balance && trade && maxAmountSpend(balance)?.lessThan(trade.inputAmount)
