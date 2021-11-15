@@ -18,7 +18,7 @@ export const MobileNav: FC = () => {
   return (
     <Popover.Panel className="sm:hidden">
       <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
-        <Link href="/swap">
+        <Link href="/trident/swap">
           <a id="swap-nav-link" className={NAV_BASE_CLASS}>
             {i18n._(t`Swap`)}
           </a>

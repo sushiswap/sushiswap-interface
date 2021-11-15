@@ -1,55 +1,51 @@
-import { PlusIcon } from '@heroicons/react/solid'
-import AssetSelect from 'app/components/AssetSelect'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
-import { useIndependentAssetInputs } from 'app/features/trident/context/hooks/useIndependentAssetInputs'
-import React, { FC, useCallback } from 'react'
+import { SpendSource } from 'app/features/trident/context/hooks/poolAssets/SelectedAsset'
+import { usePoolAssetInput } from 'app/features/trident/context/hooks/poolAssets/usePoolAssetInput'
+import { SetAssetPrice } from 'app/features/trident/create/classic/SetAssetPrice'
+import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
+import React, { FC } from 'react'
+
+const SelectPanel: FC<{ index: number }> = ({ index }) => {
+  const { i18n } = useLingui()
+  const { asset, setCurrency, setAmount, setWalletSource } = usePoolAssetInput(index)
+
+  return (
+    <SwapAssetPanel
+      error={asset.error !== undefined}
+      header={<SwapAssetPanel.Header label={i18n._(t`Withdraw from`)} />}
+      walletToggle={
+        <SwapAssetPanel.Switch
+          label={i18n._(t`Withdraw from`)}
+          onChange={() => setWalletSource(asset.oppositeToggle())}
+        />
+      }
+      darkBackground={true}
+      spendFromWallet={asset.spendFromSource !== SpendSource.BENTO_BOX}
+      currency={asset.currency}
+      value={asset.amount}
+      onChange={(amount) => setAmount(amount)}
+      onSelect={(currency) => setCurrency(currency)}
+    />
+  )
+}
 
 export const SelectAssetsWidget: FC = () => {
-  const {
-    currencies: [currencies, setCurrencies],
-  } = useIndependentAssetInputs()
-
-  const handleSelectedPoolTokens = useCallback(
-    (currency, index) => {
-      const copy = [...currencies]
-      copy[index] = currency
-      setCurrencies(copy)
-    },
-    [currencies, setCurrencies]
-  )
+  const { i18n } = useLingui()
 
   return (
     <div>
       <Typography variant="h3" weight={700} className="text-high-emphesis">
-        Select Two Assets
+        {i18n._(t`Select Two Assets`)}
       </Typography>
-      <div className="text-secondary mt-2">Please select the two assets that this pool will consist of.</div>
-      <div className="flex flex-col gap-2 max-w-2xl">
-        <div className="relative">
-          <AssetSelect
-            value={currencies[0]}
-            onSelect={(cur) => handleSelectedPoolTokens(cur, 0)}
-            header={
-              <Typography variant="xs" className="text-secondary tracking-[2.04px] mb-2 ml-4" weight={700}>
-                POOL TOKEN A
-              </Typography>
-            }
-          />
-          <div className="absolute top-24 right-2 z-0">
-            <div className="border-[3px] border-dark-900 bg-dark-800 rounded-full w-[64px] h-[64px] flex items-center justify-center text-high-emphesis">
-              <PlusIcon width={46} height={46} />
-            </div>
-          </div>
-        </div>
-        <AssetSelect
-          value={currencies[1]}
-          onSelect={(cur) => handleSelectedPoolTokens(cur, 1)}
-          header={
-            <Typography variant="xs" className="text-secondary tracking-[2.04px] mb-2 ml-4" weight={700}>
-              POOL TOKEN B
-            </Typography>
-          }
-        />
+      <div className="text-secondary mt-2">
+        {i18n._(t`Please select the two assets that this pool will consist of.`)}
+      </div>
+      <div className="flex flex-col gap-6 max-w-2xl mt-6">
+        <SetAssetPrice />
+        <SelectPanel index={0} />
+        <SelectPanel index={1} />
       </div>
     </div>
   )

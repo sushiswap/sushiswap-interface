@@ -18,7 +18,10 @@ import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { selectedFeeTierAtom, twapAtom } from '../../create/context/atoms'
 import { attemptingTxnAtom, showReviewAtom, spendFromWalletAtom, txHashAtom } from '../atoms'
+// @ts-ignore
 import { useIndependentAssetInputs } from './useIndependentAssetInputs'
+
+// TODO: NEXT PR TO ADJUST TO NEW STORES
 
 export const useClassicPoolCreateExecute = () => {
   const { account } = useActiveWeb3React()

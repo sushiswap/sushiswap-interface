@@ -1,20 +1,23 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'components/Button'
-import Divider from 'components/Divider'
-import ListPanel from 'components/ListPanel'
-import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
-import Typography from 'components/Typography'
+import { PoolType } from '@sushiswap/tines'
+import Button from 'app/components/Button'
+import Divider from 'app/components/Divider'
+import ListPanel from 'app/components/ListPanel'
+import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
+import Typography from 'app/components/Typography'
 import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { showReviewAtom } from '../../context/atoms'
-import { useClassicPoolCreateExecute } from '../../context/hooks/useClassicPoolCreateExecute'
+// @ts-ignore
 import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
-import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
-import { selectedPoolTypeAtom } from '../context/atoms'
-import { PoolType } from '@sushiswap/tines'
+import { showReviewAtom } from '../context/atoms'
+import { useClassicPoolCreateExecute } from '../context/hooks/useClassicPoolCreateExecute'
+import { usePoolDetailsMint } from '../context/hooks/usePoolDetails'
+import { selectedPoolTypeAtom } from './context/atoms'
+
+// TODO: NEXT PR TO ADJUST TO NEW STORES
 
 const AddTransactionReviewModal: FC = () => {
   const { i18n } = useLingui()

@@ -9,7 +9,6 @@ import { useSetRecoilState } from 'recoil'
 
 import { currentStepAtom } from '../context/atoms'
 import { MobileStepper } from '../MobileStepper'
-import { DepositAssets } from './DepositAssets'
 import { SetAssetPrice } from './SetAssetPrice'
 
 export const StepThreeClassic: FC = () => {
@@ -41,7 +40,6 @@ export const StepThreeClassic: FC = () => {
       </TridentHeader>
       <TridentBody maxWidth="full" className="gap-8">
         <SetAssetPrice />
-        <DepositAssets />
       </TridentBody>
     </div>
   )

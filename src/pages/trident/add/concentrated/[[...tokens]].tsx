@@ -10,7 +10,6 @@ import PriceRange from 'features/trident/add/concentrated/PriceRange'
 import RangeBlocks from 'features/trident/add/concentrated/RangeBlocks'
 import FixedRatioHeader from 'features/trident/add/FixedRatioHeader'
 import { maxPriceAtom, minPriceAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
-import AddTransactionReviewModal from 'features/trident/create/old/CreateReviewModal'
 import { useCurrency } from 'hooks/Tokens'
 import { useTotalSupply } from 'hooks/useTotalSupply'
 import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
@@ -97,7 +96,6 @@ const AddConcentrated = () => {
             <FixedRatioHeader margin={false} />
             <RangeBlocks />
             <ConcentratedStandardMode />
-            <AddTransactionReviewModal />
 
             {/*TODO ramin*/}
             {/*<DepositSubmittedModal />*/}

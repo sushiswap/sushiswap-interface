@@ -75,7 +75,7 @@ const Swap = () => {
               error={typedField === TypedField.A && !!error && !!formattedAmounts[0]}
               header={<SwapAssetPanel.Header label={i18n._(t`Swap from`)} />}
               walletToggle={<SwapAssetPanel.Switch label={i18n._(t`Pay from`)} onChange={setSpendFromWallet} />}
-              typedField={typedField === TypedField.A}
+              darkBackground={typedField === TypedField.A}
               spendFromWallet={spendFromWallet}
               currency={currencies[0]}
               value={formattedAmounts[0]}
@@ -97,7 +97,7 @@ const Swap = () => {
               error={typedField === TypedField.B && !!error && !!formattedAmounts[0]}
               header={<SwapAssetPanel.Header label={i18n._(t`Swap to (estimated)`)} />}
               walletToggle={<SwapAssetPanel.Switch label={i18n._(t`Receive to`)} onChange={setReceiveToWallet} />}
-              typedField={typedField === TypedField.B}
+              darkBackground={typedField === TypedField.B}
               spendFromWallet={receiveToWallet}
               currency={currencies[1]}
               value={formattedAmounts[1]}

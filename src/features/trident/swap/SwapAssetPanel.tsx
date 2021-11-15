@@ -31,7 +31,7 @@ const defaultContext: Context = {
   currency: undefined,
   walletToggle: undefined,
   value: undefined,
-  typedField: undefined,
+  darkBackground: undefined,
   slippage: undefined,
   disabled: false,
 }
@@ -48,7 +48,7 @@ interface SwapAssetPanel {
   onChange?(x: string): void
   onSelect?(x: Currency): void
   spendFromWallet: boolean
-  typedField?: boolean
+  darkBackground?: boolean
   slippage?: Percent
   disabled?: boolean
 }
@@ -60,7 +60,7 @@ const SwapAssetPanel = ({
   currency,
   value,
   onChange,
-  typedField,
+  darkBackground,
   onSelect,
   spendFromWallet,
   slippage,
@@ -79,17 +79,17 @@ const SwapAssetPanel = ({
           currency,
           walletToggle,
           value,
-          typedField,
+          darkBackground: darkBackground,
           slippage,
           disabled,
         }),
-        [error, currency, onChange, onSelect, spendFromWallet, typedField, value, walletToggle, slippage, disabled]
+        [error, currency, onChange, onSelect, spendFromWallet, darkBackground, value, walletToggle, slippage, disabled]
       )}
     >
       <div
         className={classNames(
           !disabled ? 'lg:shadow-lg' : '',
-          typedField ? 'bg-dark-900 lg:bg-dark-1000' : 'bg-dark-900 lg:bg-dark-900',
+          darkBackground ? 'bg-dark-900 lg:bg-dark-1000' : 'bg-dark-900 lg:bg-dark-900',
           'lg:border lg:rounded-[14px] lg:border-dark-700 flex flex-col lg:p-5 py-3 lg:pb-3 gap-3 overflow-hidden'
         )}
       >
@@ -97,7 +97,7 @@ const SwapAssetPanel = ({
         <div className="flex flex-col">
           <div
             className={classNames(
-              typedField ? 'bg-dark-1000' : 'bg-dark-900',
+              darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
               'block lg:hidden flex justify-between border border-dark-700 lg:border-none py-2 px-4 rounded-t lg:bg-transparent'
             )}
           >
@@ -110,7 +110,7 @@ const SwapAssetPanel = ({
           </div>
           <div
             className={classNames(
-              typedField ? 'bg-dark-1000' : 'bg-dark-900',
+              darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
               'border-l border-r border-dark-700 lg:border-none lg:bg-transparent'
             )}
           >
