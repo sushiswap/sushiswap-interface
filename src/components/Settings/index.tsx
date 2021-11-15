@@ -5,7 +5,8 @@ import {
   useUserArcherUseRelay,
   useUserSingleHopOnly,
   useUserTransactionTTL,
-  useUserOpenMevRelay,
+  //  useUserOpenMevRelay,
+  useUserOpenMevUseRelay,
 } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
@@ -23,11 +24,11 @@ import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 
-import { OPENMEV_SUPPORTED_NETWORKS } from '../../constants'
+import { OPENMEV_RELAY_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, library } = useActiveWeb3React()
 
   const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.SETTINGS)
@@ -46,7 +47,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
 
   const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
 
-  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMevRelay()
+  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMevUseRelay()
 
   return (
     <div className="relative flex" ref={node}>
@@ -135,9 +136,11 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               <div className="flex justify-between items-center">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
-                    {i18n._(t`OpenMEV Gas Refunder`)}
+                    {i18n._(t`Sushi Relay Gas Refunder`)}
                   </Typography>
-                  <QuestionHelper text={i18n._(t`OpenMEV refunds up to 95% of transaction costs in 35 blocks`)} />
+                  <QuestionHelper
+                    text={i18n._(t`Sushi Relay can provide refunds of up to 90% of trading fees in xSushi`)}
+                  />
                 </div>
                 <Toggle
                   id="toggle-use-openmev"

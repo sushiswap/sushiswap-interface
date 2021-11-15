@@ -1,6 +1,6 @@
 import { ChainId, JSBI } from '@sushiswap/sdk'
 import { BigNumber } from '@ethersproject/bignumber'
-import RPC from './rpc'
+import RPC from '../config/rpc'
 
 export const OPENMEV_RELAY_ENABLED = false
 

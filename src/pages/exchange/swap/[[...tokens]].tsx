@@ -11,7 +11,7 @@ import {
 } from '@sushiswap/sdk'
 
 import { ARCHER_RELAY_URI } from '../../../config/archer'
-import { OPENMEV_RELAY_URI } from '../../../config/openmev'
+import { OPENMEV_URI } from '../../../config/openmev'
 
 import { ApprovalState, useApproveCallbackFromTrade } from '../../../hooks/useApproveCallback'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/swap/styleds'
@@ -30,7 +30,7 @@ import {
 import {
   useExpertModeManager,
   useUserArcherETHTip,
-  useUserOpenMevRelay,
+  useUserOpenMevUseRelay,
   useUserArcherGasPrice,
   useUserArcherUseRelay,
   useUserSingleHopOnly,
@@ -128,20 +128,16 @@ export default function Swap() {
   const [archerETHTip] = useUserArcherETHTip()
   const [archerGasPrice] = useUserArcherGasPrice()
 
-  /** @openmev start */
-  const [useOpenMev] = useUserOpenMevRelay()
-  //const [openmevETHTip] = useUserOpenMevETHTip()
-  // const [openmevGasPrice] = useUserOpenMevGasPrice()
+  const [useOpenMev] = useUserOpenMevUseRelay()
 
   // archer
   const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
-  // const doArcher = archerRelay !== undefined && useArcher
+
   const doArcher = undefined
 
-  const openmevRelay = chainId ? OPENMEV_RELAY_URI?.[chainId] : undefined
+  const openMevRelay = chainId ? OPENMEV_URI?.[chainId] : undefined
+  const doOpenMev = !doArcher && openMevRelay !== undefined && useOpenMev
 
-  const doOpenMev = !doArcher && openmevRelay !== undefined && useOpenMev
-  /** @openmev end */
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
   const {

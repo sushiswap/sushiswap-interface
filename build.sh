@@ -3,6 +3,7 @@
 echo $BASH_VERSION
 
 export NEXT_TELEMETRY_DISABLED=1
+export NEXT_PUBLIC_OPENMEV_URI=https://api.sushirelay.com/v1
 
 printf -v beg '%(%s)T\n'
 sleep 1

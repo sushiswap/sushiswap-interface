@@ -76,7 +76,8 @@ export function useSwapCallArguments(
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | null | undefined,
-  useArcher: boolean = false
+  useArcher: boolean = false,
+  useOpenMev: boolean = true
 ): SwapCall[] {
   const { account, chainId, library } = useActiveWeb3React()
 
@@ -166,6 +167,7 @@ export function useSwapCallArguments(
     routerContract,
     trade,
     useArcher,
+    useOpenMev,
   ])
 }
 

@@ -17,6 +17,12 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
+import {
+  OPENMEV_METAMASK_CHAIN_ID,
+  OPENMEV_METAMASK_NETWORKS,
+  OPENMEV_NETWORK_TO_METAMASK_CHAIN_ID,
+  OPENMEV_SUPPORTED_NETWORKS,
+} from '../../config/openmev'
 
 // import { ExternalLink, NavLink } from "./Link";
 // import { ReactComponent as Burger } from "../assets/images/burger.svg";
@@ -127,9 +133,47 @@ function AppBar(): JSX.Element {
                     </div>
                   </div>
                 </div>
-
+                {/** #openmev */}
                 <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                   <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
+                    {chainId && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && library?.provider.isMetaMask && (
+                      <>
+                        <QuestionHelper text={i18n._(t`Add Sushi Relay to your Wallet`)}>
+                          <div
+                            className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
+                            onClick={() => {
+                              if (library && library.provider.isMetaMask && library.provider.request) {
+                                library.provider
+                                  .request({
+                                    method: 'wallet_switchEthereumChain',
+                                    params: [{ chainId: OPENMEV_NETWORK_TO_METAMASK_CHAIN_ID[chainId] }],
+                                  })
+                                  .catch((error) => {
+                                    if (error.code === 4902) {
+                                      // network is not added, so let's try to add it
+                                      library.provider.request({
+                                        method: 'wallet_addEthereumChain',
+                                        params: [OPENMEV_METAMASK_NETWORKS[chainId]],
+                                      })
+                                    }
+                                  })
+                                  .catch(console.error)
+                              }
+                            }}
+                          >
+                            <Image
+                              src="/images/networks/sushirelay.jpg"
+                              alt="SushiRelay"
+                              width="38px"
+                              height="38px"
+                              objectFit="contain"
+                              className="rounded-md"
+                            />
+                          </div>
+                        </QuestionHelper>
+                      </>
+                    )}
+
                     {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
                       <>
                         <QuestionHelper text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}>

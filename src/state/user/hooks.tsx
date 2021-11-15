@@ -390,7 +390,7 @@ export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: 
   return [userTipManualOverride, setUserTipManualOverride]
 }
 
-export function useUserOpenMevRelay(): [boolean, (newUseRelay: boolean) => void] {
+export function useUserOpenMevUseRelay(): [boolean, (newUseRelay: boolean) => void] {
   const dispatch = useAppDispatch()
 
   const useRelay = useSelector<AppState, AppState['user']['userOpenMevUseRelay']>(
