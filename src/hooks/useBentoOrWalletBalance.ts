@@ -33,7 +33,7 @@ export const useBentoBalances = (tokens?: Token[]) => {
 export const useBentoOrWalletBalances = (
   account: string | undefined,
   currencies: (Currency | Token | undefined)[],
-  walletOrBento?: Record<string, boolean>
+  walletOrBento?: (boolean | undefined)[]
 ) => {
   const tokens = useMemo(
     () => (currencies.every((el) => el) ? currencies.map((el: Currency) => el.wrapped) : undefined),
@@ -48,14 +48,13 @@ export const useBentoOrWalletBalances = (
       return []
     }
 
-    return currencies.reduce<(CurrencyAmount<Currency> | undefined)[]>((acc, cur) => {
+    return currencies.map((cur, index) => {
       if (!cur) {
-        acc.push(undefined)
-        return acc
+        return undefined
       }
 
       let element: CurrencyAmount<Currency> | undefined
-      const tokenBalanceFromWallet = walletOrBento?.[cur.wrapped.address]
+      const tokenBalanceFromWallet = walletOrBento?.[index]
       if (tokenBalanceFromWallet === false) {
         element = bentoBalance.find((el) => el?.currency.wrapped.address === cur.wrapped.address)
       } else {
@@ -66,23 +65,12 @@ export const useBentoOrWalletBalances = (
         element = CurrencyAmount.fromRawAmount(cur.wrapped, '0')
       }
 
-      acc.push(element)
-      return acc
+      return element
     }, [])
   }, [currencies, bentoBalance, walletOrBento, balance])
 }
 
 export const useBentoOrWalletBalance = (account?: string, currency?: Currency, walletOrBento?: boolean) => {
-  const walletOrBentoObj = useMemo<Record<string, boolean> | undefined>(() => {
-    if (currency && typeof walletOrBento === 'boolean') {
-      return {
-        [currency?.wrapped.address]: walletOrBento,
-      }
-    }
-
-    return undefined
-  }, [currency, walletOrBento])
-
-  const balances = useBentoOrWalletBalances(account, [currency], walletOrBentoObj)
+  const balances = useBentoOrWalletBalances(account, [currency], [walletOrBento])
   return useMemo(() => (balances && currency ? balances[0] : undefined), [balances, currency])
 }
