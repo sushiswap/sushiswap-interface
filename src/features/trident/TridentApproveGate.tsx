@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useBentoMasterApproveCallback, { BentoApprovalState, BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
@@ -31,6 +31,17 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
       ...prevState,
       [inputAmount.currency.wrapped.address]: approveState,
     }))
+
+    return () => {
+      onStateChange((prevState) => {
+        const state = { ...prevState }
+        if (state[inputAmount.currency.wrapped.address]) {
+          delete state[inputAmount.currency.wrapped.address]
+        }
+
+        return state
+      })
+    }
   }, [approveState, inputAmount?.currency.wrapped.address, onStateChange])
 
   if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
@@ -104,7 +115,7 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
           </Button.Dotted>
         )}
         {inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
-          if (!amount?.currency.isNative) {
+          if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
             acc.push(
               <TokenApproveButton
                 inputAmount={amount}

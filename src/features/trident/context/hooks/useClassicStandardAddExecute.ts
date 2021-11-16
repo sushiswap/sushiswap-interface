@@ -49,9 +49,9 @@ export const useClassicStandardAddExecute = () => {
         const encoded = defaultAbiCoder.encode(['address'], [account])
 
         if (parsedAmountA) {
-          value = parsedAmountA.currency.isNative && !nativeA ? { value: parsedAmountA.quotient.toString() } : {}
+          value = parsedAmountA.currency.isNative && nativeA ? { value: parsedAmountA.quotient.toString() } : {}
           liquidityInput.push({
-            token: parsedAmountA.currency.isNative && !nativeA ? AddressZero : parsedAmountA.currency.wrapped.address,
+            token: parsedAmountA.currency.isNative && nativeA ? AddressZero : parsedAmountA.currency.wrapped.address,
             native: nativeA,
             amount: nativeA
               ? parsedAmountA.quotient.toString()
@@ -60,9 +60,9 @@ export const useClassicStandardAddExecute = () => {
         }
 
         if (parsedAmountB) {
-          value = parsedAmountB.currency.isNative && !nativeB ? { value: parsedAmountB.quotient.toString() } : {}
+          value = parsedAmountB.currency.isNative && nativeB ? { value: parsedAmountB.quotient.toString() } : {}
           liquidityInput.push({
-            token: parsedAmountB.currency.isNative && !nativeB ? AddressZero : parsedAmountB.currency.wrapped.address,
+            token: parsedAmountB.currency.isNative && nativeB ? AddressZero : parsedAmountB.currency.wrapped.address,
             native: nativeB,
             amount: nativeB
               ? parsedAmountB.quotient.toString()
@@ -74,6 +74,7 @@ export const useClassicStandardAddExecute = () => {
 
         try {
           setAttemptingTxn(true)
+          console.log(liquidityInput)
           const tx = await router.addLiquidity(
             liquidityInput,
             pool.liquidityToken.address,
