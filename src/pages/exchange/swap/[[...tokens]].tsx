@@ -713,7 +713,7 @@ export default function Swap() {
         </div>
         {chainId && chainId === ChainId.MAINNET && (
           <a
-            href="https://miso.sushi.com"
+            href="https://miso.sushi.com/auctions/0xA017E4Cf380c5FDc372463f3330853500b4B3Cb9"
             className="hidden w-full py-12 mt-2 rounded cursor-pointer sm:block"
             style={{
               backgroundImage: `url('/images/miso/banner-gene.png')`,
