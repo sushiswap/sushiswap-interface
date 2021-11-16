@@ -1,7 +1,7 @@
 import { SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
 import WrapButton from 'app/features/trident/swap/WrapButton'
 import { useActiveWeb3React } from 'app/services/web3'
 import DoubleGlowShadow from 'components/DoubleGlowShadow'
@@ -107,7 +107,14 @@ const Swap = () => {
                 setSecondaryInput(value)
               }}
               onSelect={(currency) => setURLCurrency(currency, 1)}
-              slippage={trade?.priceImpact}
+              priceImpact={
+                trade
+                  ? new Percent(
+                      trade.route.priceImpact.toString().toBigNumber(18).toString(),
+                      JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
+                    )
+                  : undefined
+              }
               // Remove when exactOut works
               disabled={true}
             />
