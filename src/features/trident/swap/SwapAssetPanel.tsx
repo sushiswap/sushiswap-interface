@@ -17,7 +17,7 @@ import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
-import React, { createContext, FC, useContext, useMemo, useState } from 'react'
+import React, { createContext, FC, useCallback, useContext, useMemo, useState } from 'react'
 
 import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
 
@@ -280,11 +280,19 @@ const InputPanel: FC = () => {
 }
 
 const BalancePanel: FC = () => {
-  const { disabled, currency, onChange, spendFromWallet } = useSwapAssetPanelContext()
+  const { disabled, currency, onChange, spendFromWallet, value } = useSwapAssetPanelContext()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const balance = useBentoOrWalletBalance(account ? account : undefined, currency, spendFromWallet)
+
+  const handleClick = useCallback(() => {
+    if (disabled || !balance || !onChange) return
+    onChange(maxAmountSpend(balance).toExact())
+  }, [balance, disabled, onChange])
+
+  const valueAsCurrencyAmount = tryParseAmount(value, currency)
+  const isMax = balance && valueAsCurrencyAmount && maxAmountSpend(balance)?.equalTo(valueAsCurrencyAmount)
 
   let icon = <WalletIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
   if (!spendFromWallet) {
@@ -308,7 +316,7 @@ const BalancePanel: FC = () => {
           variant={isDesktop ? 'sm' : 'xs'}
           weight={700}
           className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
-          onClick={() => !disabled && balance && onChange && onChange(maxAmountSpend(balance).toExact())}
+          onClick={handleClick}
         >
           {balance ? balance.toSignificant(6) : '0.0000'}
         </Typography>
@@ -316,13 +324,8 @@ const BalancePanel: FC = () => {
           {balance?.currency.symbol}
         </Typography>
       </div>
-      {!disabled && (
-        <Typography
-          className="text-blue hidden lg:block"
-          weight={700}
-          variant="sm"
-          onClick={() => balance && onChange && onChange(maxAmountSpend(balance).toExact())}
-        >
+      {!disabled && !isMax && (
+        <Typography className="text-blue hidden lg:block" weight={700} variant="sm" onClick={handleClick}>
           {i18n._(t`Use Max`)}
         </Typography>
       )}

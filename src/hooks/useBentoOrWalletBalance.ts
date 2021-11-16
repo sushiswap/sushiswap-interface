@@ -9,31 +9,31 @@ import { useMemo } from 'react'
 export const useBentoBalances = (tokens?: Token[]) => {
   const { account } = useActiveWeb3React()
   const boringHelperContract = useBoringHelperContract()
-  const tokenAddresses = tokens ? tokens.map((el) => el.address) : undefined
-  const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
+  const tokenAddresses = useMemo(() => (tokens ? tokens.map((el) => el.address) : undefined), [tokens])
+  const inputs = useMemo(() => [account, tokenAddresses], [account, tokenAddresses])
+  const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', inputs)
 
   return useMemo(() => {
     if (!tokens || !tokenAddresses || !balanceData.result) return []
 
-    return tokenAddresses.reduce<CurrencyAmount<Token>[]>((acc, cur, index) => {
-      acc.push(
-        toAmountCurrencyAmount(
-          {
-            elastic: JSBI.BigInt(balanceData.result[0][index].bentoAmount.toString()),
-            base: JSBI.BigInt(balanceData.result[0][index].bentoShare.toString()),
-          } as Rebase,
-          CurrencyAmount.fromRawAmount(tokens[index], balanceData.result[0][index].bentoBalance)
-        )
+    return tokenAddresses.map((cur, index) => {
+      return toAmountCurrencyAmount(
+        {
+          elastic: JSBI.BigInt(balanceData.result[0][index].bentoAmount.toString()),
+          base: JSBI.BigInt(balanceData.result[0][index].bentoShare.toString()),
+        } as Rebase,
+        CurrencyAmount.fromRawAmount(tokens[index], balanceData.result[0][index].bentoBalance)
       )
-      return acc
     }, [])
-  }, [balanceData.result, tokenAddresses, tokens])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [balanceData, tokenAddresses])
 }
 
 export const useBentoOrWalletBalances = (
   account: string | undefined,
   currencies: (Currency | Token | undefined)[],
-  walletOrBento?: (boolean | undefined)[]
+  fromWallet?: (boolean | undefined)[]
 ) => {
   const tokens = useMemo(
     () => (currencies.every((el) => el) ? currencies.map((el: Currency) => el.wrapped) : undefined),
@@ -54,7 +54,7 @@ export const useBentoOrWalletBalances = (
       }
 
       let element: CurrencyAmount<Currency> | undefined
-      const tokenBalanceFromWallet = walletOrBento?.[index]
+      const tokenBalanceFromWallet = fromWallet?.[index]
       if (tokenBalanceFromWallet === false) {
         element = bentoBalance.find((el) => el?.currency.wrapped.address === cur.wrapped.address)
       } else {
@@ -67,10 +67,12 @@ export const useBentoOrWalletBalances = (
 
       return element
     }, [])
-  }, [currencies, bentoBalance, walletOrBento, balance])
+  }, [currencies, bentoBalance, fromWallet, balance])
 }
 
-export const useBentoOrWalletBalance = (account?: string, currency?: Currency, walletOrBento?: boolean) => {
-  const balances = useBentoOrWalletBalances(account, [currency], [walletOrBento])
-  return useMemo(() => (balances && currency ? balances[0] : undefined), [balances, currency])
+export const useBentoOrWalletBalance = (account?: string, currency?: Currency, fromWallet?: boolean) => {
+  const currencies = useMemo(() => [currency], [currency])
+  const flags = useMemo(() => [fromWallet], [fromWallet])
+  const balances = useBentoOrWalletBalances(account, currencies, flags)
+  return useMemo(() => (balances ? balances[0] : undefined), [balances])
 }
