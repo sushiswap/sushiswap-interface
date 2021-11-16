@@ -49,7 +49,10 @@ export const useClassicStandardAddExecute = () => {
         const encoded = defaultAbiCoder.encode(['address'], [account])
 
         if (parsedAmountA) {
-          value = parsedAmountA.currency.isNative && nativeA ? { value: parsedAmountA.quotient.toString() } : {}
+          if (parsedAmountA.currency.isNative && nativeA) {
+            value = { value: parsedAmountA.quotient.toString() }
+          }
+
           liquidityInput.push({
             token: parsedAmountA.currency.isNative && nativeA ? AddressZero : parsedAmountA.currency.wrapped.address,
             native: nativeA,
@@ -60,7 +63,10 @@ export const useClassicStandardAddExecute = () => {
         }
 
         if (parsedAmountB) {
-          value = parsedAmountB.currency.isNative && nativeB ? { value: parsedAmountB.quotient.toString() } : {}
+          if (parsedAmountB.currency.isNative && nativeB) {
+            value = { value: parsedAmountB.quotient.toString() }
+          }
+
           liquidityInput.push({
             token: parsedAmountB.currency.isNative && nativeB ? AddressZero : parsedAmountB.currency.wrapped.address,
             native: nativeB,
