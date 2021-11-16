@@ -116,7 +116,7 @@ const useSwapAssetPanelInputs = () => {
     [allowedSlippage, rebases, rebasesLoading, trade]
   )
 
-  const balance = useBentoOrWalletBalance(account ?? undefined, mainInputCurrencyAmount?.currency, spendFromWallet[0])
+  const balance = useBentoOrWalletBalance(account ?? undefined, currencies?.[0], spendFromWallet[0])
 
   const formattedAmounts = useMemo(() => {
     if (isWrap) return [mainInput[0], mainInput[0]]
@@ -148,10 +148,12 @@ const useSwapAssetPanelInputs = () => {
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
-    : trade === undefined && !isWrap
-    ? i18n._(t`No route found`)
+    : maxAmountSpend(balance)?.equalTo(ZERO)
+    ? i18n._(t`Insufficient balance to cover for fees`)
     : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
+    : trade === undefined && !isWrap
+    ? i18n._(t`No route found`)
     : balance && trade && maxAmountSpend(balance)?.lessThan(mainInputCurrencyAmount)
     ? i18n._(t`Insufficient ${mainInputCurrencyAmount?.currency.symbol} balance`)
     : ''

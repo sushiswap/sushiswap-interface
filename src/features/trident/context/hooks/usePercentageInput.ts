@@ -9,12 +9,12 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { bentoboxRebasesAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 
 export const percentageAmountAtom = atom<string>({
-  key: 'percentageAmountAtom',
+  key: 'usePercentageInput:percentageAmountAtom',
   default: '',
 })
 
 export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefined>({
-  key: 'parsedInputAmount',
+  key: 'usePercentageInput:parsedInputAmount',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
     const percentageAmount = get(percentageAmountAtom)
@@ -24,7 +24,7 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefine
 })
 
 export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
-  key: 'percentageInputParsedAmountsSelector',
+  key: 'usePercentageInput:percentageInputParsedAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
