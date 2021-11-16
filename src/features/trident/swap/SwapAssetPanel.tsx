@@ -45,7 +45,7 @@ interface SwapAssetPanel {
   walletToggle: React.ReactNode
   currency?: Currency
   value?: string
-  onChange?(x: string): void
+  onChange?(x?: string): void
   onSelect?(x: Currency): void
   spendFromWallet: boolean
   darkBackground?: boolean
@@ -299,7 +299,7 @@ const BalancePanel: FC = () => {
 
   const handleClick = useCallback(() => {
     if (disabled || !balance || !onChange) return
-    onChange(maxAmountSpend(balance).toExact())
+    onChange(maxAmountSpend(balance)?.toExact())
   }, [balance, disabled, onChange])
 
   const valueAsCurrencyAmount = tryParseAmount(value, currency)
@@ -388,7 +388,7 @@ const MaxButton: FC = () => {
   return (
     <div
       className="flex items-center justify-center h-9 w-[96px] rounded-full border border-blue/50 bg-blue/30 cursor-pointer"
-      onClick={() => balance && onChange && onChange(maxAmountSpend(balance).toExact())}
+      onClick={() => balance && onChange && onChange(maxAmountSpend(balance)?.toExact())}
     >
       <Typography variant="sm" className="text-blue" weight={700}>
         {i18n._(t`USE MAX`)}

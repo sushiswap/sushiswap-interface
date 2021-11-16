@@ -22,7 +22,7 @@ interface AssetSelectProps {
   value?: Currency
   onSelect: (x: Currency) => void
   header?: ReactNode
-  currencies?: Currency[]
+  currencies?: (Currency | undefined)[]
 }
 
 const AssetSelect = (props: AssetSelectProps) => {
