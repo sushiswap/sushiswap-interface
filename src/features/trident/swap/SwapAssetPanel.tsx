@@ -32,7 +32,7 @@ const defaultContext: Context = {
   walletToggle: undefined,
   value: undefined,
   darkBackground: undefined,
-  slippage: undefined,
+  priceImpact: undefined,
   disabled: false,
 }
 
@@ -49,7 +49,7 @@ interface SwapAssetPanel {
   onSelect?(x: Currency): void
   spendFromWallet: boolean
   darkBackground?: boolean
-  slippage?: Percent
+  priceImpact?: Percent
   disabled?: boolean
 }
 
@@ -63,7 +63,7 @@ const SwapAssetPanel = ({
   darkBackground,
   onSelect,
   spendFromWallet,
-  slippage,
+  priceImpact,
   disabled,
 }: SwapAssetPanel) => {
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
@@ -80,10 +80,21 @@ const SwapAssetPanel = ({
           walletToggle,
           value,
           darkBackground: darkBackground,
-          slippage,
+          priceImpact,
           disabled,
         }),
-        [error, currency, onChange, onSelect, spendFromWallet, darkBackground, value, walletToggle, slippage, disabled]
+        [
+          error,
+          currency,
+          onChange,
+          onSelect,
+          spendFromWallet,
+          darkBackground,
+          value,
+          walletToggle,
+          priceImpact,
+          disabled,
+        ]
       )}
     >
       <div
@@ -174,18 +185,18 @@ const InputPanel: FC = () => {
   const { i18n } = useLingui()
   const isDesktop = useDesktopMediaQuery()
   const [open, setOpen] = useState<boolean>(false)
-  const { error, currency, value, onChange, disabled, onSelect, slippage } = useSwapAssetPanelContext()
+  const { error, currency, value, onChange, disabled, onSelect, priceImpact } = useSwapAssetPanelContext()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
 
-  const slippageClassName = useMemo(() => {
-    if (!slippage) return undefined
-    if (slippage.lessThan('0')) return 'text-green'
-    const severity = warningSeverity(slippage)
+  const priceImpactClassName = useMemo(() => {
+    if (!priceImpact) return undefined
+    if (priceImpact.lessThan('0')) return 'text-green'
+    const severity = warningSeverity(priceImpact)
     if (severity < 1) return 'text-green'
-    if (severity < 2) return 'text-secondary'
-    if (severity < 3) return 'text-yellow'
+    if (severity < 2) return 'text-yellow'
+    if (severity < 3) return 'text-red'
     return 'text-red'
-  }, [slippage])
+  }, [priceImpact])
 
   return (
     <div
@@ -268,9 +279,9 @@ const InputPanel: FC = () => {
         </div>
         <div className="flex flex-col hidden lg:block">
           <Typography className="text-low-emphesis">≈${usdcValue?.toSignificant(3)}</Typography>
-          {slippage && (
-            <Typography variant="xs" weight={700} className={classNames(slippageClassName, 'text-right')}>
-              {slippage.toSignificant(2)}%
+          {priceImpact && (
+            <Typography variant="xs" weight={700} className={classNames(priceImpactClassName, 'text-right')}>
+              {priceImpact.toSignificant(3)}%
             </Typography>
           )}
         </div>
