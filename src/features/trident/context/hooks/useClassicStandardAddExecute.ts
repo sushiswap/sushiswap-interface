@@ -80,7 +80,6 @@ export const useClassicStandardAddExecute = () => {
 
         try {
           setAttemptingTxn(true)
-          console.log(liquidityInput)
           const tx = await router.addLiquidity(
             liquidityInput,
             pool.liquidityToken.address,
