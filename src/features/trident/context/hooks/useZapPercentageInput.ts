@@ -8,17 +8,17 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { currentLiquidityValueSelector, poolAtom, poolBalanceAtom } from '../atoms'
 
 export const percentageZapCurrencyAtom = atom<Currency | undefined>({
-  key: 'percentageZapCurrencyAtom',
+  key: 'useZapPercentageInput:percentageZapCurrencyAtom',
   default: undefined,
 })
 
 export const percentageAmountAtom = atom<string>({
-  key: 'percentageAmountAtom',
+  key: 'useZapPercentageInput:percentageAmountAtom',
   default: '',
 })
 
 export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefined>({
-  key: 'parsedInputAmount',
+  key: 'useZapPercentageInput:parsedInputAmount',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
     const percentageAmount = get(percentageAmountAtom)
@@ -28,7 +28,7 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefine
 })
 
 export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
-  key: 'parsedAmountsSelector',
+  key: 'useZapPercentageInput:parsedAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
     const percentageAmount = get(percentageAmountAtom)

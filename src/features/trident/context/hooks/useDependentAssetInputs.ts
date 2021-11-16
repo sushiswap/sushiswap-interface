@@ -22,23 +22,23 @@ export enum TypedField {
 }
 
 export const mainInputAtom = atom<string>({
-  key: 'mainInputAtom',
+  key: 'useDependentAssetInputs:mainInputAtom',
   default: '',
 })
 
 // Just an atom that acts as a copy state to hold a previous value
 export const secondaryInputAtom = atom<string>({
-  key: 'secondaryInputAtom',
+  key: 'useDependentAssetInputs:secondaryInputAtom',
   default: '',
 })
 
 export const typedFieldAtom = atom<TypedField>({
-  key: 'typedFieldAtom',
+  key: 'useDependentAssetInputs:typedFieldAtom',
   default: TypedField.A,
 })
 
 export const secondaryInputSelector = selector<string>({
-  key: 'secondaryInputSelector',
+  key: 'useDependentAssetInputs:secondaryInputSelector',
   get: ({ get }) => {
     const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
     const noLiquidity = get(noLiquiditySelector)
@@ -109,7 +109,7 @@ export const secondaryInputSelector = selector<string>({
 })
 
 export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'mainInputCurrencyAmountSelector',
+  key: 'useDependentAssetInputs:mainInputCurrencyAmountSelector',
   get: ({ get }) => {
     const value = get(mainInputAtom)
     const [currencyA] = get(currenciesAtom)
@@ -118,7 +118,7 @@ export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency>
 })
 
 export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'secondaryInputCurrencyAmountSelector',
+  key: 'useDependentAssetInputs:secondaryInputCurrencyAmountSelector',
   get: ({ get }) => {
     const value = get(secondaryInputSelector)
     const [, currencyB] = get(currenciesAtom)
@@ -127,7 +127,7 @@ export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Curr
 })
 
 export const formattedAmountsSelector = selector<[string, string]>({
-  key: 'formattedAmountsSelector',
+  key: 'useDependentAssetInputs:formattedAmountsSelector',
   get: ({ get }) => {
     const inputField = get(typedFieldAtom)
     const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
@@ -141,7 +141,7 @@ export const formattedAmountsSelector = selector<[string, string]>({
 export const parsedAmountsSelector = selector<
   [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
 >({
-  key: 'parsedAmountsSelector',
+  key: 'useDependentAssetInputs:parsedAmountsSelector',
   get: ({ get }) => {
     return [get(mainInputCurrencyAmountSelector), get(secondaryInputCurrencyAmountSelector)]
   },
