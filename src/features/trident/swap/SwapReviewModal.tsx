@@ -11,7 +11,7 @@ import CurrencyLogo from 'components/CurrencyLogo'
 import Divider from 'components/Divider'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
-import { classNames, shortenAddress, toAmountCurrencyAmount, warningSeverity } from 'functions'
+import { shortenAddress, toAmountCurrencyAmount, warningSeverity } from 'functions'
 import useENS from 'hooks/useENS'
 import { SwapCallbackState, useSwapCallback } from 'hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'hooks/useSwapSlippageTollerence'
@@ -173,7 +173,7 @@ const SwapReviewModal: FC = () => {
             <Typography variant="sm" className="text-secondary">
               {i18n._(t`Price impact`)}
             </Typography>
-            <Typography variant="sm" className={classNames(priceImpactClassName)} weight={700}>
+            <Typography variant="sm" className={priceImpactClassName} weight={700}>
               {priceImpact?.toSignificant(3)}%
             </Typography>
           </div>

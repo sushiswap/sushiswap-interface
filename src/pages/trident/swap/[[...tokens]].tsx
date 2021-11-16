@@ -46,7 +46,6 @@ const Swap = () => {
     setCurrencies([currencies?.[0], currencies?.[1]])
   }, [chainId, currencies, setCurrencies])
 
-  console.log()
   return (
     <Container className="py-4 md:py-8 lg:py-12 px-2" maxWidth="2xl">
       <DoubleGlowShadow>
