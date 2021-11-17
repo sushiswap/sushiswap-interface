@@ -36,7 +36,7 @@ export function useTridentClassicPools(
         tokenA.chainId === tokenB.chainId &&
         !tokenA.equals(tokenB) &&
         fee &&
-        twap &&
+        twap !== undefined &&
         TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address
         ? computeConstantProductPoolAddress({
             factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
@@ -58,7 +58,7 @@ export function useTridentClassicPools(
       const fee = pools[i]?.[2]
       const twap = pools[i]?.[3]
       if (loading) return { state: ConstantProductPoolState.LOADING }
-      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !twap)
+      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || twap === undefined)
         return { state: ConstantProductPoolState.INVALID }
       if (!reserves) return { state: ConstantProductPoolState.NOT_EXISTS }
       const [reserve0, reserve1] = reserves

@@ -39,7 +39,6 @@ export const StepperSidebar: FC = () => {
     <div className="flex-none w-52 border-r border-gray-800 mt-6 hidden lg:block pr-2">
       <Step stepNum={1} title={stepTitleText[1]} currentStep={currentStep} stepSetter={setCurrentStep} />
       <Step stepNum={2} title={stepTitleText[2]} currentStep={currentStep} stepSetter={setCurrentStep} />
-      <Step stepNum={3} title={stepTitleText[3]} currentStep={currentStep} stepSetter={setCurrentStep} />
     </div>
   )
 }

@@ -1,19 +1,11 @@
-import { defaultAbiCoder } from '@ethersproject/abi'
-import { Currency } from '@sushiswap/core-sdk'
-import { useConstantProductPoolFactory, useMasterDeployerContract } from 'app/hooks/useContract'
+import { Currency, CurrencyAmount, Price } from '@sushiswap/core-sdk'
 
-export const useDeployPoolEncodedData = (currencies: Currency[], feeTier, twap) => {
-  const masterDeployer = useMasterDeployerContract()
-  const constantProductPoolFactory = useConstantProductPoolFactory()
-
-  if (!masterDeployer || !constantProductPoolFactory || !currencies || !feeTier) return
-
-  const [a, b] = currencies.map((el) => el.wrapped)
-  const [token0, token1] = a.sortsBefore(b) ? [a, b] : [b, a]
-  const deployData = defaultAbiCoder.encode(
-    ['address', 'address', 'uint8', 'bool'],
-    [...[token0.address, token1.address].sort(), feeTier, twap]
-  )
-
-  return masterDeployer?.interface?.encodeFunctionData('deployPool', [constantProductPoolFactory.address, deployData])
+export const getPriceOfNewPool = (
+  amounts: (CurrencyAmount<Currency> | undefined)[]
+): Price<Currency, Currency> | undefined => {
+  if (!amounts[0]?.greaterThan(0) || !amounts[1]?.greaterThan(0)) {
+    return undefined
+  }
+  const value = amounts[1].divide(amounts[0])
+  return new Price(amounts[0].currency, amounts[1].currency, value.denominator, value.numerator)
 }

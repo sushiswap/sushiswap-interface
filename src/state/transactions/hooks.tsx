@@ -3,7 +3,7 @@ import { useCallback, useMemo } from 'react'
 
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { addTransaction } from './actions'
-import { TransactionDetails } from './reducer'
+import { TransactionDetails, TransactionState } from './reducer'
 
 export interface TransactionResponseLight {
   hash: string
@@ -60,7 +60,7 @@ export function useTransactionAdder(): (
 export function useAllTransactions(): { [txHash: string]: TransactionDetails } {
   const { chainId } = useActiveWeb3React()
 
-  const state = useAppSelector((state) => state.transactions)
+  const state: TransactionState = useAppSelector((state) => state.transactions)
 
   return chainId ? state[chainId] ?? {} : {}
 }
