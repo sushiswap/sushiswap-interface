@@ -75,6 +75,7 @@ import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { warningSeverity } from '../../../functions/prices'
 
 import Image from 'next/image'
+import Banner from '../../../components/Banner'
 
 export default function Swap() {
   const { i18n } = useLingui()
@@ -711,29 +712,7 @@ export default function Swap() {
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
           )}
         </div>
-        {chainId && chainId === ChainId.MAINNET && (
-          <a
-            href="https://miso.sushi.com/auctions/0xA017E4Cf380c5FDc372463f3330853500b4B3Cb9"
-            className="hidden w-full py-12 mt-2 rounded cursor-pointer sm:block"
-            style={{
-              backgroundImage: `url('/images/miso/banner-gene.png')`,
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-            }}
-          >
-            <div className="flex items-center justify-between gap-6 pl-5 pr-8">
-              {/*  <span className="font-normal text-high-emphesis" style={{ lineHeight: 1.3, maxWidth: 250 }}>*/}
-              {/*    You need a &apos;Dona! Learn More*/}
-              {/*    <br />*/}
-              {/*    <span className="font-bold">End of Summer NFT Fair Launch</span>*/}
-              {/*  </span>*/}
-              {/*  /!* <div style={{ maxWidth: 195 }}>*/}
-              {/*    <img src="/images/miso/logo.png" style={{ maxWidth: '100%' }} alt="" />*/}
-              {/*  </div> *!/*/}
-            </div>
-          </a>
-        )}
+        <Banner />
       </DoubleGlowShadow>
     </Container>
   )
