@@ -50,7 +50,9 @@ const Banner: FC = () => {
         leaveTo="opacity-0 scale-95 "
       >
         <a
+          rel="noreferrer"
           href={url}
+          target="_blank"
           className="hidden w-full py-12 rounded cursor-pointer sm:block"
           style={{
             backgroundImage: image,
