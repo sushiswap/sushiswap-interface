@@ -14,7 +14,7 @@ import { request } from 'graphql-request'
 import { getTokenSubset } from '.'
 
 export const BENTOBOX = {
-  [ChainId.MAINNET]: 'sushiswap/bentobox',
+  [ChainId.MAINNET]: 'lufycz/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
   [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
