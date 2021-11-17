@@ -10,17 +10,17 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 import { bentoboxRebasesAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 
 export const selectedZapCurrencyAtom = atom<Currency | undefined>({
-  key: 'selectedZapCurrencyAtom',
+  key: 'useZapAssetInput:selectedZapCurrencyAtom',
   default: undefined,
 })
 
 export const zapInputAmountAtom = atom<string>({
-  key: 'zapInputAmountAtom',
+  key: 'useZapAssetInput:zapInputAmountAtom',
   default: '',
 })
 
 export const parsedZapAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'parsedZapAmountSelector',
+  key: 'useZapAssetInput:parsedZapAmountSelector',
   get: ({ get }) => {
     const value = get(zapInputAmountAtom)
     const currency = get(selectedZapCurrencyAtom)
@@ -35,7 +35,7 @@ export const parsedZapAmountSelector = selector<CurrencyAmount<Currency> | undef
 export const parsedZapSplitAmountsSelector = selector<
   [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
 >({
-  key: 'parsedZapSplitAmountsSelector',
+  key: 'useZapAssetInput:parsedZapSplitAmountsSelector',
   get: ({ get }) => {
     const { pool } = get(poolAtom)
     const parsedAmount = get(parsedZapAmountSelector)
@@ -78,7 +78,7 @@ export const useZapAssetInput = () => {
     ? i18n._(t`Invalid pool`)
     : !zapInputAmount
     ? i18n._(t`Enter an amount`)
-    : parsedAmount && balance[0]?.lessThan(parsedAmount)
+    : parsedAmount && balance[parsedAmount.wrapped.currency.address]?.lessThan(parsedAmount)
     ? i18n._(t`Insufficient ${parsedAmount?.currency.symbol} balance`)
     : noLiquidity
     ? i18n._(t`No liquidity`)

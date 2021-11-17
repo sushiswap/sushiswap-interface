@@ -4,6 +4,9 @@ on:
     branches:
       - master
   pull_request:
+    branches:
+      - master
+    types: [closed]
 
 jobs:
   lokalise:
@@ -25,4 +28,3 @@ jobs:
       - run: npm install @babel/core @lingui/cli @lingui/macro @lingui/core @lingui/react @lingui/remote-loader @lingui/loader next
       - run: npm run lingui
       - run: 'lokalise2 --token ${{ secrets.LOKALISE_TOKEN }} --project-id 18927102617d34a34e1467.51119957 file upload --file locale/en.json --lang-iso en'
-

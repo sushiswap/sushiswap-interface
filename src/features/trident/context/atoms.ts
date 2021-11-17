@@ -57,34 +57,30 @@ export const liquidityModeAtom = atom<LiquidityMode>({
   default: LiquidityMode.STANDARD,
 })
 
-export const spendFromWalletAtom = atom<Record<string, boolean> | undefined>({
+export const spendFromWalletAtom = atom<boolean[]>({
   key: 'spendFromWalletAtom',
-  default: {},
+  default: [true, true],
 })
 
-export const spendFromWalletSelector = selectorFamily<boolean, string | undefined>({
+export const spendFromWalletSelector = selectorFamily<boolean, number>({
   key: 'spendFromWalletSelector',
   get:
-    (address) =>
+    (index) =>
     ({ get }) => {
-      if (address) {
-        const spendFromWallet = get(spendFromWalletAtom)?.[address]
-        if (typeof spendFromWallet !== 'undefined') {
-          return spendFromWallet
-        }
+      const spendFromWallet = get(spendFromWalletAtom)?.[index]
+      if (typeof spendFromWallet !== 'undefined') {
+        return spendFromWallet
       }
 
       // true by default
       return true
     },
   set:
-    (address) =>
+    (index) =>
     ({ get, set }, newValue: boolean) => {
-      const spendFromWallet = { ...get(spendFromWalletAtom) }
-      if (address) {
-        spendFromWallet[address] = newValue
-        set(spendFromWalletAtom, spendFromWallet)
-      }
+      const spendFromWallet = [...get(spendFromWalletAtom)]
+      spendFromWallet[index] = newValue
+      set(spendFromWalletAtom, spendFromWallet)
     },
 })
 

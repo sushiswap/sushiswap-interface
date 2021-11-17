@@ -12,7 +12,7 @@ import Lottie from 'lottie-react'
 import React from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
+import { attemptingTxnAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
 import useCurrenciesFromURL from '../../context/hooks/useCurrenciesFromURL'
 import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 import TridentApproveGate from '../../TridentApproveGate'
@@ -35,10 +35,9 @@ const ClassicStandardMode = () => {
   } = useDependentAssetInputs()
   const { currencies, setURLCurrency } = useCurrenciesFromURL()
 
-  const { pool } = useRecoilValue(poolAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(pool?.token0.address))
-  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(pool?.token1.address))
+  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(0))
+  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(1))
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   return (

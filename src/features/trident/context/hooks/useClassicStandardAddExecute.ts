@@ -39,8 +39,8 @@ export const useClassicStandardAddExecute = () => {
       async () => {
         const { pool } = await snapshot.getPromise(poolAtom)
         const [parsedAmountA, parsedAmountB] = parsedAmounts
-        const nativeA = await snapshot.getPromise(spendFromWalletSelector(pool?.token0.address))
-        const nativeB = await snapshot.getPromise(spendFromWalletSelector(pool?.token1.address))
+        const nativeA = await snapshot.getPromise(spendFromWalletSelector(0))
+        const nativeB = await snapshot.getPromise(spendFromWalletSelector(1))
 
         if (!pool || !chainId || !library || !account || !router || !liquidityMinted) return
 
@@ -48,10 +48,13 @@ export const useClassicStandardAddExecute = () => {
         const liquidityInput: LiquidityInput[] = []
         const encoded = defaultAbiCoder.encode(['address'], [account])
 
-        if (parsedAmountA && rebases[parsedAmountA.wrapped.currency.address]) {
-          value = parsedAmountA.currency.isNative ? { value: parsedAmountA.quotient.toString() } : {}
+        if (parsedAmountA) {
+          if (parsedAmountA.currency.isNative && nativeA) {
+            value = { value: parsedAmountA.quotient.toString() }
+          }
+
           liquidityInput.push({
-            token: parsedAmountA.currency.isNative ? AddressZero : parsedAmountA.currency.wrapped.address,
+            token: parsedAmountA.currency.isNative && nativeA ? AddressZero : parsedAmountA.currency.wrapped.address,
             native: nativeA,
             amount: nativeA
               ? parsedAmountA.quotient.toString()
@@ -59,10 +62,13 @@ export const useClassicStandardAddExecute = () => {
           })
         }
 
-        if (parsedAmountB && rebases[parsedAmountB.wrapped.currency.address]) {
-          value = parsedAmountB.currency.isNative ? { value: parsedAmountB.quotient.toString() } : {}
+        if (parsedAmountB) {
+          if (parsedAmountB.currency.isNative && nativeB) {
+            value = { value: parsedAmountB.quotient.toString() }
+          }
+
           liquidityInput.push({
-            token: parsedAmountB.currency.isNative ? AddressZero : parsedAmountB.currency.wrapped.address,
+            token: parsedAmountB.currency.isNative && nativeB ? AddressZero : parsedAmountB.currency.wrapped.address,
             native: nativeB,
             amount: nativeB
               ? parsedAmountB.quotient.toString()

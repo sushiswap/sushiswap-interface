@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, TradeType, WNATIVE, ZERO } from '@sushiswap/core-sdk'
-import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount } from 'app/functions'
+import { maxAmountSpend, toAmountCurrencyAmount } from 'app/functions'
 import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useBentoRebases from 'app/hooks/useBentoRebases'
@@ -82,27 +82,9 @@ const useSwapAssetPanelInputs = () => {
     ((currencies[0]?.isNative && WNATIVE[chainId].address === currencies[1]?.wrapped.address) ||
       (currencies[1]?.isNative && WNATIVE[chainId].address === currencies[0]?.wrapped.address))
 
-  const mainInputShare = useMemo(() => {
-    return mainInputCurrencyAmount && rebases[mainInputCurrencyAmount.currency.wrapped.address]
-      ? toShareCurrencyAmount(
-          rebases[mainInputCurrencyAmount.currency.wrapped.address],
-          mainInputCurrencyAmount.wrapped
-        )
-      : undefined
-  }, [mainInputCurrencyAmount, rebases])
-
-  const secondaryInputShare = useMemo(() => {
-    return secondaryInputCurrencyAmount && rebases[secondaryInputCurrencyAmount.currency.wrapped.address]
-      ? toShareCurrencyAmount(
-          rebases[secondaryInputCurrencyAmount.currency.wrapped.address],
-          secondaryInputCurrencyAmount.wrapped
-        )
-      : undefined
-  }, [secondaryInputCurrencyAmount, rebases])
-
   const trade = useBestTridentTrade(
     typedField[0] === TypedField.A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
-    typedField[0] === TypedField.A ? mainInputShare : secondaryInputShare,
+    typedField[0] === TypedField.A ? mainInputCurrencyAmount : secondaryInputCurrencyAmount,
     typedField[0] === TypedField.A ? currencies[1] : currencies[0]
   )
 
@@ -134,7 +116,7 @@ const useSwapAssetPanelInputs = () => {
     [allowedSlippage, rebases, rebasesLoading, trade]
   )
 
-  const balance = useBentoOrWalletBalance(account ?? undefined, trade?.inputAmount.currency, spendFromWallet[0])
+  const balance = useBentoOrWalletBalance(account ?? undefined, currencies?.[0], spendFromWallet[0])
 
   const formattedAmounts = useMemo(() => {
     if (isWrap) return [mainInput[0], mainInput[0]]
@@ -166,10 +148,14 @@ const useSwapAssetPanelInputs = () => {
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
+    : maxAmountSpend(balance)?.equalTo(ZERO)
+    ? i18n._(t`Insufficient balance to cover for fees`)
     : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
-    : balance && trade && maxAmountSpend(balance)?.lessThan(trade.inputAmount)
-    ? i18n._(t`Insufficient ${trade?.inputAmount.currency.symbol} balance`)
+    : trade === undefined && !isWrap
+    ? i18n._(t`No route found`)
+    : balance && trade && mainInputCurrencyAmount && maxAmountSpend(balance).lessThan(mainInputCurrencyAmount)
+    ? i18n._(t`Insufficient ${mainInputCurrencyAmount?.currency.symbol} balance`)
     : ''
 
   return useMemo(

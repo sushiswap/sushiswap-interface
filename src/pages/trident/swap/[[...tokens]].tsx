@@ -1,7 +1,7 @@
 import { SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
 import WrapButton from 'app/features/trident/swap/WrapButton'
 import { useActiveWeb3React } from 'app/services/web3'
 import DoubleGlowShadow from 'components/DoubleGlowShadow'
@@ -75,7 +75,7 @@ const Swap = () => {
               error={typedField === TypedField.A && !!error && !!formattedAmounts[0]}
               header={<SwapAssetPanel.Header label={i18n._(t`Swap from`)} />}
               walletToggle={<SwapAssetPanel.Switch label={i18n._(t`Pay from`)} onChange={setSpendFromWallet} />}
-              typedField={typedField === TypedField.A}
+              darkBackground={typedField === TypedField.A}
               spendFromWallet={spendFromWallet}
               currency={currencies[0]}
               value={formattedAmounts[0]}
@@ -97,7 +97,7 @@ const Swap = () => {
               error={typedField === TypedField.B && !!error && !!formattedAmounts[0]}
               header={<SwapAssetPanel.Header label={i18n._(t`Swap to (estimated)`)} />}
               walletToggle={<SwapAssetPanel.Switch label={i18n._(t`Receive to`)} onChange={setReceiveToWallet} />}
-              typedField={typedField === TypedField.B}
+              darkBackground={typedField === TypedField.B}
               spendFromWallet={receiveToWallet}
               currency={currencies[1]}
               value={formattedAmounts[1]}
@@ -107,7 +107,14 @@ const Swap = () => {
                 setSecondaryInput(value)
               }}
               onSelect={(currency) => setURLCurrency(currency, 1)}
-              slippage={trade?.priceImpact}
+              priceImpact={
+                trade
+                  ? new Percent(
+                      trade.route.priceImpact.toString().toBigNumber(18).toString(),
+                      JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
+                    )
+                  : undefined
+              }
               // Remove when exactOut works
               disabled={true}
             />

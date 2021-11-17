@@ -9,7 +9,6 @@ import Typography from 'components/Typography'
 import StableStandardMode from 'features/trident/add/stable/StableStandardMode'
 import StableZapMode from 'features/trident/add/stable/StableZapMode'
 import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
-import AddTransactionReviewModal from 'features/trident/create/old/CreateReviewModal'
 import DepositSubmittedModal from 'features/trident/DepositSubmittedModal'
 import ModeToggle from 'features/trident/ModeToggle'
 import { LiquidityMode } from 'features/trident/types'
@@ -95,8 +94,6 @@ const AddStable = () => {
         </div>
       </TridentBody>
 
-      {/*TODO*/}
-      <AddTransactionReviewModal />
       <DepositSubmittedModal />
     </>
   )

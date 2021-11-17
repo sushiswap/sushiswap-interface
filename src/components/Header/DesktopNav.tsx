@@ -34,7 +34,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
           <Image src="/logo.svg" alt="Sushi logo" width="32px" height="32px" />
           <div className="hidden sm:block sm:ml-8">
             <div className="flex space-x-1.5">
-              <NavLink href="/swap" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+              <NavLink href="/trident/swap" activeClassName={ACTIVE_NAV_LINK_CLASS}>
                 <a id="swap-nav-link" className={NAV_BASE_CLASS}>
                   {i18n._(t`Swap`)}
                 </a>

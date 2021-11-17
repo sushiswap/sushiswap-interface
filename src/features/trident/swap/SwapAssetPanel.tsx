@@ -17,7 +17,7 @@ import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
-import React, { createContext, FC, useContext, useMemo, useState } from 'react'
+import React, { createContext, FC, useCallback, useContext, useMemo, useState } from 'react'
 
 import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
 
@@ -31,8 +31,8 @@ const defaultContext: Context = {
   currency: undefined,
   walletToggle: undefined,
   value: undefined,
-  typedField: undefined,
-  slippage: undefined,
+  darkBackground: undefined,
+  priceImpact: undefined,
   disabled: false,
 }
 
@@ -48,8 +48,8 @@ interface SwapAssetPanel {
   onChange?(x: string): void
   onSelect?(x: Currency): void
   spendFromWallet: boolean
-  typedField?: boolean
-  slippage?: Percent
+  darkBackground?: boolean
+  priceImpact?: Percent
   disabled?: boolean
 }
 
@@ -60,10 +60,10 @@ const SwapAssetPanel = ({
   currency,
   value,
   onChange,
-  typedField,
+  darkBackground,
   onSelect,
   spendFromWallet,
-  slippage,
+  priceImpact,
   disabled,
 }: SwapAssetPanel) => {
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
@@ -79,17 +79,28 @@ const SwapAssetPanel = ({
           currency,
           walletToggle,
           value,
-          typedField,
-          slippage,
+          darkBackground: darkBackground,
+          priceImpact,
           disabled,
         }),
-        [error, currency, onChange, onSelect, spendFromWallet, typedField, value, walletToggle, slippage, disabled]
+        [
+          error,
+          currency,
+          onChange,
+          onSelect,
+          spendFromWallet,
+          darkBackground,
+          value,
+          walletToggle,
+          priceImpact,
+          disabled,
+        ]
       )}
     >
       <div
         className={classNames(
           !disabled ? 'lg:shadow-lg' : '',
-          typedField ? 'bg-dark-900 lg:bg-dark-1000' : 'bg-dark-900 lg:bg-dark-900',
+          darkBackground ? 'bg-dark-900 lg:bg-dark-1000' : 'bg-dark-900 lg:bg-dark-900',
           'lg:border lg:rounded-[14px] lg:border-dark-700 flex flex-col lg:p-5 py-3 lg:pb-3 gap-3 overflow-hidden'
         )}
       >
@@ -97,7 +108,7 @@ const SwapAssetPanel = ({
         <div className="flex flex-col">
           <div
             className={classNames(
-              typedField ? 'bg-dark-1000' : 'bg-dark-900',
+              darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
               'block lg:hidden flex justify-between border border-dark-700 lg:border-none py-2 px-4 rounded-t lg:bg-transparent'
             )}
           >
@@ -110,7 +121,7 @@ const SwapAssetPanel = ({
           </div>
           <div
             className={classNames(
-              typedField ? 'bg-dark-1000' : 'bg-dark-900',
+              darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
               'border-l border-r border-dark-700 lg:border-none lg:bg-transparent'
             )}
           >
@@ -174,18 +185,18 @@ const InputPanel: FC = () => {
   const { i18n } = useLingui()
   const isDesktop = useDesktopMediaQuery()
   const [open, setOpen] = useState<boolean>(false)
-  const { error, currency, value, onChange, disabled, onSelect, slippage } = useSwapAssetPanelContext()
+  const { error, currency, value, onChange, disabled, onSelect, priceImpact } = useSwapAssetPanelContext()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
 
-  const slippageClassName = useMemo(() => {
-    if (!slippage) return undefined
-    if (slippage.lessThan('0')) return 'text-green'
-    const severity = warningSeverity(slippage)
+  const priceImpactClassName = useMemo(() => {
+    if (!priceImpact) return undefined
+    if (priceImpact.lessThan('0')) return 'text-green'
+    const severity = warningSeverity(priceImpact)
     if (severity < 1) return 'text-green'
-    if (severity < 2) return 'text-secondary'
-    if (severity < 3) return 'text-yellow'
+    if (severity < 2) return 'text-yellow'
+    if (severity < 3) return 'text-red'
     return 'text-red'
-  }, [slippage])
+  }, [priceImpact])
 
   return (
     <div
@@ -268,9 +279,9 @@ const InputPanel: FC = () => {
         </div>
         <div className="flex flex-col hidden lg:block">
           <Typography className="text-low-emphesis">≈${usdcValue?.toSignificant(3)}</Typography>
-          {slippage && (
-            <Typography variant="xs" weight={700} className={classNames(slippageClassName, 'text-right')}>
-              {slippage.toSignificant(2)}%
+          {priceImpact && (
+            <Typography variant="xs" weight={700} className={classNames(priceImpactClassName, 'text-right')}>
+              {priceImpact.toSignificant(3)}%
             </Typography>
           )}
         </div>
@@ -280,11 +291,19 @@ const InputPanel: FC = () => {
 }
 
 const BalancePanel: FC = () => {
-  const { disabled, currency, onChange, spendFromWallet } = useSwapAssetPanelContext()
+  const { disabled, currency, onChange, spendFromWallet, value } = useSwapAssetPanelContext()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const balance = useBentoOrWalletBalance(account ? account : undefined, currency, spendFromWallet)
+
+  const handleClick = useCallback(() => {
+    if (disabled || !balance || !onChange) return
+    onChange(maxAmountSpend(balance).toExact())
+  }, [balance, disabled, onChange])
+
+  const valueAsCurrencyAmount = tryParseAmount(value, currency)
+  const isMax = balance && valueAsCurrencyAmount && maxAmountSpend(balance)?.equalTo(valueAsCurrencyAmount)
 
   let icon = <WalletIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
   if (!spendFromWallet) {
@@ -308,7 +327,7 @@ const BalancePanel: FC = () => {
           variant={isDesktop ? 'sm' : 'xs'}
           weight={700}
           className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
-          onClick={() => !disabled && balance && onChange && onChange(maxAmountSpend(balance).toExact())}
+          onClick={handleClick}
         >
           {balance ? balance.toSignificant(6) : '0.0000'}
         </Typography>
@@ -316,13 +335,8 @@ const BalancePanel: FC = () => {
           {balance?.currency.symbol}
         </Typography>
       </div>
-      {!disabled && (
-        <Typography
-          className="text-blue hidden lg:block"
-          weight={700}
-          variant="sm"
-          onClick={() => balance && onChange && onChange(maxAmountSpend(balance).toExact())}
-        >
+      {!disabled && !isMax && (
+        <Typography className="text-blue hidden lg:block" weight={700} variant="sm" onClick={handleClick}>
           {i18n._(t`Use Max`)}
         </Typography>
       )}

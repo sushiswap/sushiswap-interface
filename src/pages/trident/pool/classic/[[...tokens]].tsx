@@ -5,6 +5,7 @@ import { PoolType } from '@sushiswap/tines'
 import Button from 'app/components/Button'
 import { TridentTransactions } from 'app/features/transactions/Transactions'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
+import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import { poolAtom } from 'app/features/trident/context/atoms'
 import ClassicLinkButtons from 'app/features/trident/pool/classic/ClassicLinkButtons'
 import ClassicMarket from 'app/features/trident/pool/classic/ClassicMarket'
@@ -13,6 +14,7 @@ import Header from 'app/features/trident/pool/Header'
 import PoolStats from 'app/features/trident/pool/PoolStats'
 import PoolStatsChart from 'app/features/trident/pool/PoolStatsChart'
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
+import NetworkGuard from 'app/guards/Network'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import React from 'react'
@@ -79,6 +81,7 @@ const Pool = () => {
   )
 }
 
+Pool.Guard = NetworkGuard(TRIDENT_NETWORKS)
 Pool.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 Pool.Layout = (props) => <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic']]} />
 

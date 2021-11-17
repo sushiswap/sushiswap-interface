@@ -27,8 +27,12 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
 
   return (
     <>
-      <HeadlessUIModal.Controlled isOpen={!!account && !networks.includes(chainId)} onDismiss={() => null}>
-        <div className="flex flex-col gap-7 justify-center">
+      <HeadlessUIModal.Controlled
+        isOpen={!!account && !networks.includes(chainId)}
+        onDismiss={() => null}
+        className="transparent"
+      >
+        <div className="flex flex-col gap-7 justify-center p-4">
           <Typography variant="h1" className="max-w-2xl text-white text-center" weight={700}>
             {i18n._(t`Roll it back - this feature is not yet supported on ${NETWORK_LABEL[chainId]}.`)}
           </Typography>

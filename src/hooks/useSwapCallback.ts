@@ -1,5 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
   ChainId,
@@ -9,7 +10,6 @@ import {
   Router as LegacyRouter,
   SwapParameters,
   toHex,
-  Token,
   Trade as LegacyTrade,
   TradeType,
 } from '@sushiswap/core-sdk'
@@ -72,10 +72,8 @@ interface FailedCall extends SwapCallEstimate {
 interface TridentTradeContext {
   fromWallet: boolean
   receiveToWallet: boolean
-  inputAmount?: CurrencyAmount<Token>
-  outputAmount?: CurrencyAmount<Token>
-  inputCurrency?: Currency
-  outputCurrency?: Currency
+  inputAmount?: CurrencyAmount<Currency>
+  outputAmount?: CurrencyAmount<Currency>
   bentoPermit?: BentoPermit
 }
 
@@ -86,7 +84,7 @@ export function getTridentRouterParams(
   senderAddress: string,
   tridentRouterAddress: string = '',
   slippagePercentage: number = 0.5,
-  inputAmount: CurrencyAmount<Token>,
+  inputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ExactInputParams | ExactInputSingleParams | ComplexPathParams {
@@ -132,7 +130,7 @@ function getExactInputSingleParams(
   multiRoute: MultiRoute,
   senderAddress: string,
   slippage: number,
-  inputAmount: CurrencyAmount<Token>,
+  inputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ExactInputSingleParams {
@@ -141,7 +139,7 @@ function getExactInputSingleParams(
       ? inputAmount.quotient.toString().toBigNumber(0)
       : getBigNumber(multiRoute.amountIn * multiRoute.legs[0].absolutePortion),
     amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
-    tokenIn: multiRoute.legs[0].tokenFrom.address,
+    tokenIn: inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[0].tokenFrom.address,
     pool: multiRoute.legs[0].poolAddress,
     data: defaultAbiCoder.encode(
       ['address', 'address', 'bool'],
@@ -155,7 +153,7 @@ function getExactInputParams(
   multiRoute: MultiRoute,
   senderAddress: string,
   slippage: number,
-  inputAmount: CurrencyAmount<Token>,
+  inputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ExactInputParams {
@@ -187,7 +185,7 @@ function getExactInputParams(
   }
 
   let inputParams: ExactInputParams = {
-    tokenIn: multiRoute.legs[0].tokenFrom.address,
+    tokenIn: inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[0].tokenFrom.address,
     amountIn: fromWallet ? inputAmount.quotient.toString().toBigNumber(0) : getBigNumber(multiRoute.amountIn),
     amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
     path: paths,
@@ -202,7 +200,7 @@ function getComplexPathParams(
   senderAddress: string,
   tridentRouterAddress: string,
   slippage: number,
-  inputAmount: CurrencyAmount<Token>,
+  inputAmount: CurrencyAmount<Currency>,
   fromWallet: boolean = true,
   receiveToWallet: boolean = true
 ): ComplexPathParams {
@@ -226,7 +224,8 @@ function getComplexPathParams(
   for (let legIndex = 0; legIndex < routeLegs; ++legIndex) {
     if (multiRoute.legs[legIndex].tokenFrom.address === multiRoute.fromToken.address) {
       const initialPath: InitialPath = {
-        tokenIn: multiRoute.legs[legIndex].tokenFrom.address,
+        tokenIn:
+          inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
         pool: multiRoute.legs[legIndex].poolAddress,
         amount: getInitialPathAmount(legIndex, multiRoute, initialPaths, initialPathCount, inputAmount, fromWallet),
         native: false,
@@ -238,7 +237,8 @@ function getComplexPathParams(
       initialPaths.push(initialPath)
     } else {
       const percentagePath: PercentagePath = {
-        tokenIn: multiRoute.legs[legIndex].tokenFrom.address,
+        tokenIn:
+          inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
         pool: multiRoute.legs[legIndex].poolAddress,
         balancePercentage: getBigNumber(multiRoute.legs[legIndex].swapPortion * 10 ** 8),
         data: defaultAbiCoder.encode(
@@ -391,12 +391,12 @@ export function useSwapCallArguments(
     } else if (trade instanceof TridentTrade) {
       if (!tridentTradeContext) return result
 
-      const { inputAmount, outputAmount, outputCurrency, receiveToWallet, fromWallet } = tridentTradeContext
+      const { inputAmount, outputAmount, receiveToWallet, fromWallet } = tridentTradeContext
       if (!tridentRouterContract || !trade.route || !inputAmount || !outputAmount) return result
 
       const { routeType, ...rest } = getTridentRouterParams(
         trade.route,
-        outputCurrency?.isNative && receiveToWallet ? tridentRouterContract?.address : recipient,
+        trade?.outputAmount?.currency.isNative && receiveToWallet ? tridentRouterContract?.address : recipient,
         tridentRouterContract?.address,
         Number(allowedSlippage.asFraction.multiply(100).toSignificant(2)),
         inputAmount,
@@ -412,7 +412,7 @@ export function useSwapCallArguments(
 
       // if you spend from wallet send as amount instead of share
       let value = '0x0'
-      if (inputAmount && fromWallet && inputAmount.currency.isNative) {
+      if (inputAmount && fromWallet && trade?.inputAmount.currency?.isNative) {
         value = toHex(inputAmount)
       }
 
@@ -424,7 +424,7 @@ export function useSwapCallArguments(
       }
 
       // Unwrap WETH to ETH by batch calling Swap and unwrapWETH
-      if (outputCurrency?.isNative && receiveToWallet) {
+      if (trade?.outputAmount?.currency.isNative && receiveToWallet) {
         const unwrapCall = tridentRouterContract.interface.encodeFunctionData('unwrapWETH', [
           trade?.minimumAmountOut(allowedSlippage).quotient.toString(),
           recipient,
@@ -645,9 +645,9 @@ export function useSwapCallback(
           })
 
           .then((response) => {
-            const base = `Swap ${tridentTradeContext?.inputAmount?.toSignificant(4)} ${
-              tridentTradeContext?.inputCurrency?.symbol
-            } for ${tridentTradeContext?.outputAmount?.toSignificant(4)} ${tridentTradeContext?.outputCurrency?.symbol}`
+            const base = `Swap ${trade?.inputAmount?.toSignificant(4)} ${
+              trade?.inputAmount.currency?.symbol
+            } for ${trade?.outputAmount?.toSignificant(4)} ${trade?.outputAmount.currency?.symbol}`
             const withRecipient =
               recipient === account
                 ? base
@@ -677,19 +677,5 @@ export function useSwapCallback(
       },
       error: null,
     }
-  }, [
-    trade,
-    library,
-    account,
-    chainId,
-    recipient,
-    recipientAddressOrName,
-    swapCalls,
-    eip1559,
-    tridentTradeContext?.inputAmount,
-    tridentTradeContext?.inputCurrency?.symbol,
-    tridentTradeContext?.outputAmount,
-    tridentTradeContext?.outputCurrency?.symbol,
-    addTransaction,
-  ])
+  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, eip1559, addTransaction])
 }

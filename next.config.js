@@ -66,7 +66,7 @@ const nextConfig = {
       },
       {
         source: '/swap',
-        destination: '/exchange/swap',
+        destination: '/trident/swap',
       },
       {
         source: '/swap/:token*',

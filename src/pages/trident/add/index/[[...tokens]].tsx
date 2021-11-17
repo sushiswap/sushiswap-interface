@@ -9,7 +9,6 @@ import FixedRatioHeader from 'features/trident/add/FixedRatioHeader'
 import IndexStandardMode from 'features/trident/add/index/IndexStandardMode'
 import IndexZapMode from 'features/trident/add/index/IndexZapMode'
 import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
-import AddTransactionReviewModal from 'features/trident/create/old/CreateReviewModal'
 import DepositSubmittedModal from 'features/trident/DepositSubmittedModal'
 import ModeToggle from 'features/trident/ModeToggle'
 import { LiquidityMode } from 'features/trident/types'
@@ -92,7 +91,6 @@ const AddIndex = () => {
         {liquidityMode === LiquidityMode.ZAP && <IndexZapMode />}
         {liquidityMode === LiquidityMode.STANDARD && <IndexStandardMode />}
 
-        <AddTransactionReviewModal />
         <DepositSubmittedModal />
       </TridentBody>
     </>
