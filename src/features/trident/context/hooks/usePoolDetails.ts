@@ -207,7 +207,7 @@ export const usePoolDetailsBurn = (
         rebases[currency.wrapped.address]
       ) {
         const amount = calculateSlippageAmount(
-          pool.getLiquidityValueSingleToken(currency, totalSupply, slpAmount),
+          pool.getLiquidityValueSingleToken(currency.wrapped, totalSupply, slpAmount),
           slippage
         )[0]
 
