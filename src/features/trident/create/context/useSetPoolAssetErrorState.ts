@@ -1,4 +1,4 @@
-import { ZERO } from '@sushiswap/sdk'
+import { ZERO } from '@sushiswap/core-sdk'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useEffect, useMemo } from 'react'

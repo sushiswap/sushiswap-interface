@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { usePoolDetailsMint } from 'app/features/trident/context/hooks/usePoolDetails'
 import {
   PoolCreationActionProps,
   poolCreationActions,
@@ -39,14 +38,13 @@ export const useClassicPoolCreateExecute = () => {
   const twap = useRecoilValue(createAnOracleSelectionAtom)
 
   const { rebases, loading: rebasesLoading } = useBentoRebases(assets.map((asset) => asset.currency))
-  const { liquidityMinted } = usePoolDetailsMint(parsedAmounts)
 
   const error = useCreatePoolDependencyError(rebasesLoading)
 
   return useCallback(async () => {
     /* Should consider site-wide error messaging & handling strategy */
     if (error) {
-      alert(`Error with pool creation: ${error}`)
+      alert(`Dependency error: ${error}`)
       return
     }
 
@@ -63,7 +61,6 @@ export const useClassicPoolCreateExecute = () => {
             twap,
             parsedAmounts,
             rebases,
-            liquidityMinted,
           } as PoolCreationActionProps /* Can cast given the error guard above */
         ),
         valueIfNative(parsedAmounts)
@@ -105,7 +102,6 @@ export const useClassicPoolCreateExecute = () => {
     error,
     feeTier,
     i18n,
-    liquidityMinted,
     parsedAmounts,
     rebases,
     router,

@@ -19,7 +19,6 @@ const addLiquidityAction = ({
   feeTier,
   twap,
   account,
-  liquidityMinted,
 }: PoolCreationActionProps) => {
   const liquidityInput = assets.map((asset, index) => {
     const spendFromWallet = asset.spendFromSource === SpendSource.WALLET
@@ -41,7 +40,7 @@ const addLiquidityAction = ({
       fee: feeTier,
       twap,
     }),
-    liquidityMinted.quotient.toString(),
+    1,
     defaultAbiCoder.encode(['address'], [account]),
   ])
 }
@@ -66,7 +65,7 @@ type NativeIdentifier = { value?: string }
 /* Native Eth must be passed with a value object */
 export const valueIfNative = (parsedAmounts: CurrencyAmount<Currency>[]): NativeIdentifier => {
   const indexOfNative = parsedAmounts.findIndex((el: CurrencyAmount<Currency>) => el.currency.isNative)
-  return indexOfNative > 0 ? { value: parsedAmounts[indexOfNative]!!.quotient.toString() } : {}
+  return indexOfNative >= 0 ? { value: parsedAmounts[indexOfNative]!!.quotient.toString() } : {}
 }
 
 export interface PoolCreationActionProps {
@@ -78,7 +77,6 @@ export interface PoolCreationActionProps {
   constantProductPoolFactory: Contract
   rebases: Record<string, Rebase>
   parsedAmounts: CurrencyAmount<Currency>[]
-  liquidityMinted: CurrencyAmount<Currency>
 }
 
 type BatchAction = string
