@@ -1,4 +1,4 @@
-import { createStore,Store } from 'redux'
+import { createStore, Store } from 'redux'
 
 import { Field, selectCurrency } from './actions'
 import reducer, { SwapState } from './reducer'

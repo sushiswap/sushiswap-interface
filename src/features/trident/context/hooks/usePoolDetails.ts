@@ -1,6 +1,7 @@
-import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
 import { ConstantProductPool } from '@sushiswap/trident-sdk'
 import { ZERO_PERCENT } from 'app/constants'
+import { getPriceOfNewPool } from 'app/features/trident/context/utils'
 import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from 'app/functions'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useCallback, useMemo } from 'react'
@@ -23,7 +24,7 @@ export const usePoolDetailsMint = (
   parsedAmounts?: (CurrencyAmount<Currency> | undefined)[],
   defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
 ) => {
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const poolBalance = useRecoilValue(poolBalanceAtom)
@@ -86,11 +87,8 @@ export const usePoolDetailsMint = (
   }, [liquidityMinted, poolBalance, totalSupply])
 
   const price = useMemo(() => {
-    if (noLiquidity) {
-      if (parsedAmounts?.[0]?.greaterThan(0) && parsedAmounts?.[1]?.greaterThan(0)) {
-        const value = parsedAmounts[1].divide(parsedAmounts[0])
-        return new Price(parsedAmounts[0].currency, parsedAmounts[1].currency, value.denominator, value.numerator)
-      }
+    if (noLiquidity && parsedAmounts) {
+      return getPriceOfNewPool(parsedAmounts)
     } else if (parsedAmounts?.[1]) {
       return pool && parsedAmounts[0]?.wrapped ? pool.priceOf(parsedAmounts[1]?.currency.wrapped) : undefined
     }
@@ -113,7 +111,7 @@ export const usePoolDetailsBurn = (
   slpAmount?: CurrencyAmount<Token>,
   defaultSlippage: Percent = DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
 ) => {
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const totalSupply = useRecoilValue(totalSupplyAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)

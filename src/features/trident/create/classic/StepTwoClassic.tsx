@@ -1,14 +1,17 @@
-import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { CreatePoolReviewModal } from 'app/features/trident/create/CreatePoolReviewModal'
+import { PoolCreationSubmittedModal } from 'app/features/trident/create/PoolCreationSubmittedModal'
 import { TridentBody, TridentHeader } from 'layouts/Trident'
+import React, { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
+
 import { currentStepAtom } from '../context/atoms'
+import { StepHeader } from '../StepHeader'
 import { CreateOracleOption } from './CreateOracleOption'
 import { SelectAssetsWidget } from './SelectAssetsWidget'
 import { SelectFeeTier } from './SelectFeeTier'
-import { StepTwoContinueButton } from './StepTwoContinueButton'
-import { StepHeader } from '../StepHeader'
+import { SelectionContinueButton } from './SelectionContinueButton'
 
 export const StepTwoClassic: FC = () => {
   const { i18n } = useLingui()
@@ -27,7 +30,9 @@ export const StepTwoClassic: FC = () => {
         <SelectAssetsWidget />
         <SelectFeeTier />
         <CreateOracleOption />
-        <StepTwoContinueButton />
+        <SelectionContinueButton />
+        <CreatePoolReviewModal />
+        <PoolCreationSubmittedModal />
       </TridentBody>
     </div>
   )

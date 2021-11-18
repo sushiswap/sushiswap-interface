@@ -18,6 +18,9 @@ import { useAssets } from 'app/services/zerion/hooks'
 import { uniq } from 'lodash'
 import { useMemo } from 'react'
 
+// Will need to redo this whole thing, disabling eslint because it's unused
+/* eslint-disable */
+
 export function useAllUserPairs() {
   let pairs = []
 

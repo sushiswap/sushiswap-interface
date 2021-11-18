@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { PoolType } from '@sushiswap/tines'
 import { ConstantProductPool } from '@sushiswap/trident-sdk'
 import Chip from 'app/components/Chip'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
@@ -10,7 +11,6 @@ import React, { FC } from 'react'
 
 import { POOL_TYPES } from '../constants'
 import { PoolAtomType } from '../types'
-import { PoolType } from '@sushiswap/tines'
 
 interface PoolCardProps {
   pool: PoolAtomType
@@ -19,7 +19,7 @@ interface PoolCardProps {
 
 const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const { i18n } = useLingui()
-  const [, pool] = poolProp
+  const { pool } = poolProp
 
   // TODO ramin: use getAssets when available
   const currencies = [pool?.token0, pool?.token1]
@@ -32,9 +32,9 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const apy = '3.6'
 
   const content = (
-    <div className="rounded border border-dark-700 bg-dark-900 overflow-hidden">
-      <div className="flex justify-between p-3 items-center">
-        <div className="flex gap-2 items-center">
+    <div className="overflow-hidden border rounded border-dark-700 bg-dark-900">
+      <div className="flex items-center justify-between p-3">
+        <div className="flex items-center gap-2">
           <CurrencyLogoArray currencies={currencies} size={30} dense maxLogos={4} />
           <Chip label={POOL_TYPES[poolType].label} color={POOL_TYPES[poolType].color} />
         </div>
@@ -73,14 +73,14 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
       </div>
       <div className="flex justify-between items-center bg-dark-800 px-3 pt-2.5 pb-1.5">
         <div className="flex flex-col gap-0.5">
-          <Typography className="text-high-emphesis leading-5" variant="lg" weight={400}>
+          <Typography className="leading-5 text-high-emphesis" variant="lg" weight={400}>
             {currencies.map((token) => token.symbol).join('-')}
           </Typography>
           <Typography className="text-high-emphesis" variant="xxs">
             $1,504,320
           </Typography>
         </div>
-        <Typography className="text-blue leading-5" variant="xs" weight={700}>
+        <Typography className="leading-5 text-blue" variant="xs" weight={700}>
           {pool.fee} {i18n._(t`Fees`)}
         </Typography>
       </div>

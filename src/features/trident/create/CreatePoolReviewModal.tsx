@@ -7,43 +7,39 @@ import Divider from 'app/components/Divider'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import React, { FC } from 'react'
+import { getPriceOfNewPool } from 'app/features/trident/context/utils'
+import { useClassicPoolCreateExecute } from 'app/features/trident/create/context/useClassicPoolCreateExecute'
+import React, { FC, useMemo } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-// @ts-ignore
-import { useIndependentAssetInputs } from '../../context/hooks/useIndependentAssetInputs'
-import { showReviewAtom } from '../context/atoms'
-import { useClassicPoolCreateExecute } from '../context/hooks/useClassicPoolCreateExecute'
-import { usePoolDetailsMint } from '../context/hooks/usePoolDetails'
-import { selectedPoolTypeAtom } from './context/atoms'
+import { attemptingTxnAtom, showReviewAtom } from '../context/atoms'
+import { getAllParsedAmountsSelector, getAllSelectedAssetsSelector, selectedPoolTypeAtom } from './context/atoms'
 
-// TODO: NEXT PR TO ADJUST TO NEW STORES
-
-const AddTransactionReviewModal: FC = () => {
+export const CreatePoolReviewModal: FC = () => {
   const { i18n } = useLingui()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const {
-    parsedAmounts,
-    currencies: [selectedPoolCurrencies],
-  } = useIndependentAssetInputs()
   const selectedPoolType = useRecoilValue(selectedPoolTypeAtom)
-  const { execute } = useClassicPoolCreateExecute()
-  const { price } = usePoolDetailsMint(parsedAmounts)
+  const assets = useRecoilValue(getAllSelectedAssetsSelector)
+  const parsedAmounts = useRecoilValue(getAllParsedAmountsSelector)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const price = useMemo(() => getPriceOfNewPool(parsedAmounts), [parsedAmounts])
+
+  const execute = useClassicPoolCreateExecute()
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
-      <div className="flex flex-col gap-8 h-full pb-4 lg:max-w-lg">
+      <div className="flex flex-col h-full gap-8 pb-4 lg:max-w-lg">
         <div className="relative">
-          <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
-          <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
+          <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
+          <div className="flex flex-col gap-4 px-5 pt-5 pb-8">
             <div className="flex flex-row justify-between">
               <Button
                 color="blue"
                 variant="outlined"
                 size="sm"
-                className="rounded-full py-1 pl-2 cursor-pointer"
+                className="py-1 pl-2 rounded-full cursor-pointer"
                 startIcon={<ChevronLeftIcon width={24} height={24} />}
                 onClick={() => setShowReview(false)}
               >
@@ -72,57 +68,52 @@ const AddTransactionReviewModal: FC = () => {
                 i18n._(t`You are creating a concentrated liquidity pool with:`)}
             </Typography>
             <ListPanel
-              items={parsedAmounts.map((amount, index) => (
-                <ListPanel.CurrencyAmountItem amount={amount} key={index} />
+              items={assets.map((asset, index) => (
+                <ListPanel.CurrencyAmountItem amount={asset.parsedAmount} key={index} />
               ))}
             />
           </div>
         </div>
-        <div className="flex flex-col px-5 gap-5">
+        <div className="flex flex-col gap-5 px-5">
           <div className="flex flex-col gap-1">
             <div className="flex justify-between">
               <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
               <Typography variant="sm" className="text-right">
-                1 {selectedPoolCurrencies[0]?.symbol} = {price?.toSignificant(6)} {selectedPoolCurrencies[1]?.symbol}
+                1 {assets[0].currency?.symbol} = {price?.toSignificant(6)} {assets[1].currency?.symbol}
               </Typography>
             </div>
             <div className="flex justify-end">
               <Typography variant="sm" className="text-right">
-                1 {selectedPoolCurrencies[1]?.symbol} = {price?.invert().toSignificant(6)}{' '}
-                {selectedPoolCurrencies[0]?.symbol}
+                1 {assets[1].currency?.symbol} = {price?.invert().toSignificant(6)} {assets[0].currency?.symbol}
               </Typography>
             </div>
           </div>
+
           <Divider />
+
           <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <Typography variant="sm" className="text-secondary">
-                {i18n._(t`${selectedPoolCurrencies[0]?.symbol} Deposited:`)}
-              </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                0.00 → {parsedAmounts[0]?.toSignificant(6)} {parsedAmounts[0]?.currency.symbol}
-              </Typography>
-            </div>
-            <div className="flex justify-between">
-              <Typography variant="sm" className="text-secondary">
-                {i18n._(t`${selectedPoolCurrencies[1]?.symbol} Deposited:`)}
-              </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
-                0.00 → {parsedAmounts[1]?.toSignificant(6)} {parsedAmounts[1]?.currency.symbol}
-              </Typography>
-            </div>
+            {assets.map((asset, i) => (
+              <div className="flex justify-between" key={i}>
+                <Typography variant="sm" className="text-secondary">
+                  {i18n._(t`${asset.currency?.symbol} Deposited:`)}
+                </Typography>
+                <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
+                  0.00 → {asset.parsedAmount?.toSignificant(6)} {asset.currency?.symbol}
+                </Typography>
+              </div>
+            ))}
             <div className="flex justify-between">
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`Share of Pool`)}
               </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+              <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
                 0.00% → <span className="text-green">100%</span>
               </Typography>
             </div>
           </div>
-          <Button color="gradient" size="lg" onClick={execute}>
+          <Button color="gradient" size="lg" onClick={execute} disabled={attemptingTxn}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {i18n._(t`Confirm Pool Creation`)}
+              {attemptingTxn ? i18n._(t`Transaction pending`) : i18n._(t`Confirm Pool Creation`)}
             </Typography>
           </Button>
         </div>
@@ -130,5 +121,3 @@ const AddTransactionReviewModal: FC = () => {
     </HeadlessUIModal.Controlled>
   )
 }
-
-export default AddTransactionReviewModal

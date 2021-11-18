@@ -1,14 +1,15 @@
-import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { PoolType } from '@sushiswap/tines'
 import Typography from 'components/Typography'
 import { TridentBody, TridentHeader } from 'layouts/Trident'
+import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
+
 import { ClassicDescription } from './classic/ClassicDescription'
 import { selectedPoolTypeAtom } from './context/atoms'
 import { PoolSelector } from './PoolSelector'
 import { StepHeader } from './StepHeader'
-import { PoolType } from '@sushiswap/tines'
 
 export const StepOneSelectPoolType: FC = () => {
   const { i18n } = useLingui()
@@ -31,7 +32,7 @@ export const StepOneSelectPoolType: FC = () => {
           <div className="text-secondary">{i18n._(t`Please select the pool type you would like to create.`)}</div>
         </div>
 
-        <div className="grid lg:grid-cols-4 grid-cols-2 gap-3 select-none">
+        <div className="grid grid-cols-2 gap-3 select-none lg:grid-cols-4">
           <PoolSelector type={PoolType.ConstantProduct} selectedPool={poolSelected} />
           <PoolSelector type={PoolType.ConcentratedLiquidity} selectedPool={poolSelected} comingSoon />
           <PoolSelector type={PoolType.Weighted} selectedPool={poolSelected} comingSoon />

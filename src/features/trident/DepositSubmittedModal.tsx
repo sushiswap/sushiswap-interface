@@ -1,5 +1,4 @@
-import { CheckCircleIcon } from '@heroicons/react/outline'
-import { XCircleIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import loadingCircle from 'app/animation/loading-circle.json'
@@ -9,11 +8,11 @@ import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions/explorer'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useAllTransactions } from 'app/state/transactions/hooks'
+import { transactionStateSelector } from 'app/state/global/transactions'
 import Lottie from 'lottie-react'
 import Link from 'next/link'
 import React, { FC } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 import { txHashAtom } from './context/atoms'
 
@@ -21,12 +20,7 @@ const DepositSubmittedModal: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useRecoilState(txHashAtom)
-  const allTransactions = useAllTransactions()
-
-  const tx = txHash && allTransactions ? allTransactions[txHash] : undefined
-  const pending = !tx?.receipt
-  const success = !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
-  const cancelled = tx?.receipt && tx.receipt.status === 1337
+  const { pending, success, cancelled } = useRecoilValue(transactionStateSelector(txHash))
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash('')}>

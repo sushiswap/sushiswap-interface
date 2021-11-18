@@ -1,26 +1,27 @@
+import { PoolType } from '@sushiswap/tines'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import { getTridentPools } from 'app/services/graph/fetchers/pools'
-import Link from 'next/link'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
 
 import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
-import { PoolType } from '@sushiswap/tines'
 
 export const usePoolsTableData = () => {
-  const { data, error, isValidating } = useSWR('getAllTridentPools', () => getTridentPools())
+  const { chainId } = useActiveWeb3React()
+  const { data, error, isValidating } = useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
 
   const columns = useMemo(() => {
     return [
       {
         Header: 'Assets',
-        accessor: 'symbols',
+        accessor: 'assets',
         Cell: ({ value, row: { original } }) => {
-          return <PoolCell symbols={value} currencyIds={original.currencyIds} twapEnabled={original.twapEnabled} />
+          return <PoolCell assets={value} twapEnabled={original.twapEnabled} />
         },
         filter: filterForSearchQueryAndTWAP,
       },
@@ -43,7 +44,7 @@ export const usePoolsTableData = () => {
       },
       {
         Header: 'TVL',
-        accessor: 'totalValueLocked',
+        accessor: 'totalValueLockedUSD',
         maxWidth: 100,
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
       },
@@ -57,20 +58,12 @@ export const usePoolsTableData = () => {
         Header: 'Actions',
         accessor: 'actions',
         maxWidth: 100,
-        Cell: ({ row: { original } }) => {
-          const poolPath = `/trident/pool/${original.type.toLowerCase()}/${original.currencyIds.join('/')}`
-
-          return (
-            <Link href={poolPath} passHref>
-              {/* DIV needed for forwardRef issue */}
-              <div>
-                <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
-                  Invest
-                </Button>
-              </div>
-            </Link>
-          )
-        },
+        Cell: () => (
+          /* Entire row is clickable, hence button does not need link */
+          <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
+            Invest
+          </Button>
+        ),
       },
     ]
   }, [])

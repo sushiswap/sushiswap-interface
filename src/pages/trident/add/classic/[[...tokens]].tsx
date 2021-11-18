@@ -31,7 +31,7 @@ const AddClassic = () => {
   const { i18n } = useLingui()
   const { currencies, twap, fee } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
 
   return (
@@ -100,7 +100,7 @@ const AddClassic = () => {
               <DepositSubmittedModal />
             </>
           </div>
-          <div className="flex flex-col hidden lg:block lg:w-4/12 -mt-40">
+          <div className="flex flex-col hidden -mt-40 lg:block lg:w-4/12">
             {liquidityMode === LiquidityMode.STANDARD ? <ClassicStandardAside /> : <ClassicZapAside />}
           </div>
         </div>

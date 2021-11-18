@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Trade as V2Trade,TradeType } from '@sushiswap/core-sdk'
+import { Currency, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
 import { ButtonError } from 'components/Button'
 import React, { ReactNode } from 'react'
 

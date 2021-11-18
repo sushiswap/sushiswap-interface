@@ -1,4 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+
 import Fraction from './src/entities/bignumber/Fraction'
 
 declare module 'fortmatic'

@@ -25,7 +25,7 @@ const IndexZapMode = () => {
   const bentoBox = useBentoBoxContract()
   const router = useTridentRouterContract()
 
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const {
     zapInputAmount: [zapInputAmount, setZapInputAmount],
     zapCurrency: [zapCurrency, setZapCurrency],

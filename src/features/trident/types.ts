@@ -1,8 +1,8 @@
+import { PoolType } from '@sushiswap/tines'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { ChipColor } from 'app/components/Chip'
 import { ConstantProductPoolState } from 'app/hooks/useTridentClassicPools'
 import { StablePoolState } from 'app/hooks/useTridentStablePools'
-import { PoolType } from '@sushiswap/tines'
 
 // TODO add last two pool types
 export type PoolUnion = ConstantProductPool | HybridPool
@@ -27,7 +27,11 @@ export enum LiquidityMode {
 }
 
 // TODO should be all
-export type PoolAtomType = [ConstantProductPoolState | StablePoolState, PoolUnion | null]
+// TODO figure out if we need separate states for every pool type
+export type PoolAtomType = {
+  state?: ConstantProductPoolState | StablePoolState
+  pool?: PoolUnion
+}
 
 export type LiquidityInput = {
   token: string

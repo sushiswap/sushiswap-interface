@@ -15,8 +15,8 @@ const TridentClassicRecoilRoot: FC = (props) => {
   const { account } = useActiveWeb3React()
   const { currencies, twap, fee } = useCurrenciesFromURL()
   const classicPool = useTridentClassicPool(currencies?.[0], currencies?.[1], fee, twap)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+  const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
   const { rebases } = useBentoRebases(currencies)
 
   const setState = useRecoilCallback(
@@ -33,7 +33,7 @@ const TridentClassicRecoilRoot: FC = (props) => {
 
   useEffect(() => {
     if (
-      classicPool[1] &&
+      classicPool.pool &&
       totalSupply &&
       poolBalance &&
       currencies[0]?.wrapped.address &&

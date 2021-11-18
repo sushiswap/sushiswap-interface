@@ -1,4 +1,4 @@
-import { createStore,Store } from 'redux'
+import { createStore, Store } from 'redux'
 
 import { DEFAULT_ACTIVE_LIST_URLS, DEFAULT_LIST_OF_LISTS } from '../../config/token-lists'
 import { updateVersion } from '../global/actions'

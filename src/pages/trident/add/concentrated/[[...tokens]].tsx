@@ -26,7 +26,7 @@ const AddConcentrated = () => {
   const { i18n } = useLingui()
   const [next, setNext] = useState(false)
 
-  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const [{ pool }, setPool] = useRecoilState(poolAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
   const minPrice = useRecoilValue(minPriceAtom)
@@ -34,11 +34,11 @@ const AddConcentrated = () => {
   const currencyA = useCurrency(query.tokens?.[0])
   const currencyB = useCurrency(query.tokens?.[1])
   const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
-  const totalSupply = useTotalSupply(classicPool ? classicPool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, classicPool[1]?.liquidityToken)
+  const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
 
   useEffect(() => {
-    if (!classicPool[1]) return
+    if (!classicPool.pool) return
     setPool(classicPool)
   }, [chainId, classicPool, setPool])
 
@@ -60,7 +60,7 @@ const AddConcentrated = () => {
             color="blue"
             variant="outlined"
             size="sm"
-            className="rounded-full py-1 pl-2"
+            className="py-1 pl-2 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >
             <Link href={`/trident/pool/classic/${pool?.token0}/${pool?.token1}`}>{i18n._(t`Back`)}</Link>

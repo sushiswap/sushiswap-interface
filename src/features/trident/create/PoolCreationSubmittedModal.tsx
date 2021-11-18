@@ -1,5 +1,4 @@
-import { CheckCircleIcon } from '@heroicons/react/outline'
-import { XCircleIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import loadingCircle from 'app/animation/loading-circle.json'
@@ -9,27 +8,22 @@ import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions/explorer'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useAllTransactions } from 'app/state/transactions/hooks'
+import { transactionStateSelector } from 'app/state/global/transactions'
 import Lottie from 'lottie-react'
 import Link from 'next/link'
 import React, { FC } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { txHashAtom } from './context/atoms'
+import { txHashAtom } from '../context/atoms'
 
-const PoolCreationSubmittedModal: FC = () => {
+export const PoolCreationSubmittedModal: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useRecoilState(txHashAtom)
-  const allTransactions = useAllTransactions()
-
-  const tx = txHash && allTransactions ? allTransactions[txHash] : undefined
-  const pending = !tx?.receipt
-  const success = !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
-  const cancelled = tx?.receipt && tx.receipt.status === 1337
+  const { pending, success, cancelled } = useRecoilValue(transactionStateSelector(txHash))
 
   return (
-    <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash(null)}>
+    <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash('')}>
       <div className="flex flex-col items-center justify-center px-8 lg:p-12 bg-dark-800/90 h-full gap-3">
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
           <Lottie animationData={receiptPrinting} autoplay loop />
@@ -62,12 +56,10 @@ const PoolCreationSubmittedModal: FC = () => {
             </Typography>
           </div>
         </div>
-        <Button variant="filled" color="blue">
+        <Button variant="filled" color="blue" onClick={() => setTxHash('')}>
           <Link href="/trident/pools">{i18n._(t`Back to Pools`)}</Link>
         </Button>
       </div>
     </HeadlessUiModal.Controlled>
   )
 }
-
-export default PoolCreationSubmittedModal

@@ -13,24 +13,27 @@ const CurrencyLogoWrapper: FC<{ currencyId: string }> = ({ currencyId }) => {
 }
 
 interface PoolCellProps {
-  currencyIds: string[]
-  symbols: string[]
+  assets: {
+    id: string
+    name: string
+    symbol: string
+  }[]
   twapEnabled: boolean
 }
 
-export const PoolCell: FC<PoolCellProps> = ({ symbols, currencyIds, twapEnabled }) => {
+export const PoolCell: FC<PoolCellProps> = ({ assets, twapEnabled }) => {
   return (
     <>
       <div className="flex items-center gap-2">
         <div className="flex ml-2">
-          {currencyIds.map((id, i) => (
-            <CurrencyLogoWrapper key={i} currencyId={id} />
+          {assets.map((asset, i) => (
+            <CurrencyLogoWrapper key={i} currencyId={asset.id} />
           ))}
         </div>
-        <div className="text-high-emphesis font-bold">{symbols.join('-')}</div>
+        <div className="font-bold text-high-emphesis">{assets.map((asset) => asset.symbol).join('-')}</div>
         {twapEnabled && (
           <div className="w-3.5">
-            <Image src="/rss.svg" alt="rss icon" layout="responsive" />
+            <Image src="/rss.svg" alt="rss icon" layout="responsive" width="14" height="14" />
           </div>
         )}
       </div>

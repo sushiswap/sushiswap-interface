@@ -1,4 +1,4 @@
-import { parse,ParsedQs } from 'qs'
+import { parse, ParsedQs } from 'qs'
 import { useMemo } from 'react'
 
 export default function useParsedQueryString(): ParsedQs {

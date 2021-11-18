@@ -1,9 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
-import { SpendSource } from 'app/features/trident/context/hooks/poolAssets/SelectedAsset'
-import { usePoolAssetInput } from 'app/features/trident/context/hooks/poolAssets/usePoolAssetInput'
 import { SetAssetPrice } from 'app/features/trident/create/classic/SetAssetPrice'
+import { SpendSource } from 'app/features/trident/create/context/SelectedAsset'
+import { usePoolAssetInput } from 'app/features/trident/create/context/usePoolAssetInput'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import React, { FC } from 'react'
 

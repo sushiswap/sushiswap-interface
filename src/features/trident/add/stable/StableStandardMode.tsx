@@ -83,7 +83,7 @@ const TokenTile: FC<TokenTileProps> = ({ amount, token, onClick = null, active =
 const StableStandardMode: FC = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const amounts = useRecoilValue(amountsSelector)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const setShowReview = useSetRecoilState(showReviewAtom)

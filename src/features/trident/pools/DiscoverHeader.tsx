@@ -1,16 +1,17 @@
-import Typography from '../../../components/Typography'
 import { t } from '@lingui/macro'
-import Button from '../../../components/Button'
-import Link from 'next/link'
-import { TridentHeader } from '../../../layouts/Trident'
-import React, { FC } from 'react'
 import { useLingui } from '@lingui/react'
+import Link from 'next/link'
+import React, { FC } from 'react'
+
+import Button from '../../../components/Button'
+import Typography from '../../../components/Typography'
+import { TridentHeader } from '../../../layouts/Trident'
 
 const HeaderButton: FC<{ title: string; linkTo: string }> = ({ title, linkTo }) => (
   <Button
     color="gradient"
     variant="outlined"
-    className="flex-1 sm:flex-none md:flex-1 text-sm font-bold text-white h-9"
+    className="flex-1 text-sm font-bold text-white sm:flex-none md:flex-1 h-9"
   >
     <Link href={linkTo}>{title}</Link>
   </Button>

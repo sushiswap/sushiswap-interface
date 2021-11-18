@@ -29,7 +29,7 @@ import { useRecoilValue } from 'recoil'
 const RemoveClassic = () => {
   const { i18n } = useLingui()
   const { currencies, fee, twap } = useCurrenciesFromURL()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
   const fixedRatio = useRecoilValue(FixedRatioHeader.atom)
 
@@ -64,7 +64,9 @@ const RemoveClassic = () => {
             <Typography variant="sm">
               {i18n._(t`Receive both pool tokens in equal amounts or receive one of the two pool tokens.`)}
             </Typography>
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
+              classicPool.state as any
+            ) && (
               <Alert
                 className="bg-transparent px-0 pb-0"
                 dismissable={false}
@@ -79,7 +81,7 @@ const RemoveClassic = () => {
 
       <TridentBody>
         <div className="flex flex-row justify-between">
-          <div className="lg:w-7/12 w-full flex flex-col gap-5">
+          <div className="flex flex-col w-full gap-5 lg:w-7/12">
             <FixedRatioHeader />
             <>
               {fixedRatio ? (

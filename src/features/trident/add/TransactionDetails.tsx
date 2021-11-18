@@ -13,7 +13,7 @@ import { LiquidityMode } from '../types'
 
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const { parsedAmounts } = useDependentAssetInputs()
 

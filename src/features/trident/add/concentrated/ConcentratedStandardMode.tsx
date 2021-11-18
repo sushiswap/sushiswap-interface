@@ -18,7 +18,7 @@ import TransactionDetails from '../TransactionDetails'
 
 const ConcentratedStandardMode: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const bentoBox = useBentoBoxContract()
   const router = useTridentRouterContract()
 
