@@ -20,57 +20,60 @@ const images = [
 
 const Banner: FC = () => {
   const { chainId } = useActiveWeb3React()
-  const [slide, setSlide] = useState<number>(Math.floor(Math.random() * images.length))
+  const [slideIndex, setSlideIndex] = useState<number>(Math.floor(Math.random() * images.length))
 
   const nextSlide = useCallback(() => {
-    setSlide((prevState) => (prevState + 1) % images.length)
+    setSlideIndex((prevState) => (prevState + 1) % images.length)
   }, [])
 
   const prevSlide = useCallback(() => {
-    setSlide((prevState) => (prevState - 1 + images.length) % images.length)
+    setSlideIndex((prevState) => (prevState - 1 + images.length) % images.length)
   }, [])
 
   if (chainId !== ChainId.MAINNET) return <></>
 
-  const slides = images.map(({ image, url }, index) => (
-    <div
-      key={index}
-      className={classNames(
-        'h-[96px] absolute inset-0 flex items-center justify-center text-5xl transition-all ease-in-out duration-1000 transform slide'
-      )}
-    >
-      <Transition
-        as={React.Fragment}
-        show={index === slide}
-        enter="transform transition duration-[200ms]"
-        enterFrom="opacity-0 scale-90"
-        enterTo="opacity-100 scale-100"
-        leave="transform duration-200 transition ease-in-out"
-        leaveFrom="opacity-100 rotate-0 scale-100 "
-        leaveTo="opacity-0 scale-95 "
+  const slides = images.map(({ image, url }, index) => {
+    return (
+      <div
+        key={index}
+        className={classNames(
+          index === slideIndex ? 'block' : 'hidden',
+          'h-[96px] absolute inset-0 flex items-center justify-center text-5xl transition-all ease-in-out duration-1000 transform slide'
+        )}
       >
-        <a
-          rel="noreferrer"
-          href={url}
-          target="_blank"
-          className="hidden w-full py-12 rounded cursor-pointer sm:block"
-          style={{
-            backgroundImage: image,
-            backgroundPosition: 'center',
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-          }}
+        <Transition
+          as={React.Fragment}
+          show={index === slideIndex}
+          enter="transform transition duration-[200ms]"
+          enterFrom="opacity-0 scale-90"
+          enterTo="opacity-100 scale-100"
+          leave="transform duration-200 transition ease-in-out"
+          leaveFrom="opacity-100 rotate-0 scale-100 "
+          leaveTo="opacity-0 scale-95 "
         >
-          <div className="flex items-center justify-between gap-6 pl-5 pr-8" />
-        </a>
-      </Transition>
-    </div>
-  ))
+          <a
+            rel="noreferrer"
+            href={url}
+            target="_blank"
+            className="hidden w-full py-12 rounded cursor-pointer sm:block"
+            style={{
+              backgroundImage: image,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            <div className="flex items-center justify-between gap-6 pl-5 pr-8" />
+          </a>
+        </Transition>
+      </div>
+    )
+  })
 
   return (
     <div className="flex justify-center flex-col">
       <div className="relative h-[96px] mt-4">
-        {slides}
+        <Transition.Root show={true}>{slides}</Transition.Root>
         <div className="flex justify-between w-full h-full items-center">
           <Button onClick={prevSlide} className="flex items-center -ml-12">
             <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
