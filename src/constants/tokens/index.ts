@@ -303,6 +303,7 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
   [ChainId.CELO]: new Token(ChainId.CELO, SUSHI_ADDRESS[ChainId.CELO], 18, 'SUSHI', 'SushiToken'),
   [ChainId.MOONRIVER]: new Token(ChainId.MOONRIVER, SUSHI_ADDRESS[ChainId.MOONRIVER], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.TELOS]: new Token(ChainId.TELOS, SUSHI_ADDRESS[ChainId.TELOS], 18, 'SUSHI', 'SushiToken'),
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {
@@ -321,17 +322,4 @@ export const WETH9_EXTENDED: { [chainId: number]: Token } = {
     'WETH',
     'Wrapped Ether'
   ),
-}
-
-export class ExtendedEther extends Ether {
-  public get wrapped(): Token {
-    // if (this.ChainId in WNATIVE) return WNATIVE[this.ChainId]
-    if (this.chainId in WETH9_EXTENDED) return WETH9_EXTENDED[this.chainId]
-
-    throw new Error('Unsupported chain ID')
-  }
-
-  public static onChain(chainId: number): ExtendedEther {
-    return new ExtendedEther(chainId)
-  }
 }

@@ -36,6 +36,7 @@ const RPC = {
   [ChainId.FUSE]: 'https://rpc.fuse.io',
   [ChainId.CELO]: 'https://forno.celo.org',
   [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
+  [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
 }
 
 export function getNetwork(defaultChainId, urls = RPC) {
@@ -84,6 +85,7 @@ export const injected = new InjectedConnector({
     11297108109, // palm
     1285, // moonriver
     122, // fuse
+    40, // telos
   ],
 })
 

@@ -229,12 +229,6 @@ export function useDerivedSwapInfo(
     inputError = i18n._(t`Insufficient ${amountIn.currency.symbol} balance`)
   }
 
-  console.log({
-    v2Trade,
-    v2TradeExecutionPrice: v2Trade?.executionPrice.toSignificant(6),
-    // v2TradeWorstExecutionPrice: v2Trade?.worstExecutionPrice(allowedSlippage),
-  })
-
   const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, to, undefined, doArcher)
 
   const [, setUserETHTip] = useUserArcherETHTip()
