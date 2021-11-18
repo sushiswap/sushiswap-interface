@@ -138,28 +138,9 @@ function AppBar(): JSX.Element {
                   <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
                     {chainId && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && library?.provider.isMetaMask && (
                       <>
-                        <QuestionHelper text={i18n._(t`Add Sushi Relay to your Wallet`)}>
+                        <QuestionHelper text={i18n._(t`Sushi Relay is Connected`)}>
                           <div
                             className="hidden p-0.5 rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800"
-                            onClick={() => {
-                              if (library && library.provider.isMetaMask && library.provider.request) {
-                                library.provider
-                                  .request({
-                                    method: 'wallet_switchEthereumChain',
-                                    params: [{ chainId: OPENMEV_NETWORK_TO_METAMASK_CHAIN_ID[chainId] }],
-                                  })
-                                  .catch((error) => {
-                                    if (error.code === 4902) {
-                                      // network is not added, so let's try to add it
-                                      library.provider.request({
-                                        method: 'wallet_addEthereumChain',
-                                        params: [OPENMEV_METAMASK_NETWORKS[chainId]],
-                                      })
-                                    }
-                                  })
-                                  .catch(console.error)
-                              }
-                            }}
                           >
                             <Image
                               src="/images/networks/sushirelay.jpg"
