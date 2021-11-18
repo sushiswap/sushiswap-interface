@@ -51,7 +51,8 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
     } else {
       const parsed = Math.floor(Number.parseFloat(value) * 100)
 
-      if (!Number.isInteger(parsed) || parsed < 0 || parsed > 5000) {
+      console.log(parsed)
+      if (!Number.isInteger(parsed) || parsed < 1 || parsed > 5000) {
         setUserSlippageTolerance('auto')
         if (value !== '.') {
           setSlippageError(SlippageError.InvalidInput)
