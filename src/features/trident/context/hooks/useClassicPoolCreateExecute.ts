@@ -1,4 +1,5 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
@@ -70,7 +71,7 @@ export const useClassicPoolCreateExecute = () => {
     const indexOfNative = parsedAmounts.findIndex((el: CurrencyAmount<Currency>) => el.currency.isNative)
     const value = indexOfNative > 0 ? { value: parsedAmounts[indexOfNative]?.quotient.toString() } : {}
     const liquidityInput = parsedAmounts.map((el: CurrencyAmount<Currency>, index) => ({
-      token: el.currency.wrapped.address,
+      token: indexOfNative === index && spendFromWallet ? AddressZero : el.currency.wrapped.address,
       native: spendFromWallet,
       amount: spendFromWallet ? el.quotient.toString() : toShareJSBI(rebases[index], el.quotient).toString(),
     }))
