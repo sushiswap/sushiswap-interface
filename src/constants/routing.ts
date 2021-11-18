@@ -55,6 +55,9 @@ import {
   XSUSHI,
   YFI,
 } from './tokens'
+
+import * as TELOS from './tokens/telos'
+
 // a list of tokens by chain
 import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/sdk'
 
@@ -199,7 +202,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
-  [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS]],
+  [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS], TELOS.USDC, TELOS.USDT, TELOS.WETH, TELOS.WBTC],
 }
 
 export const ADDITIONAL_BASES: {
@@ -344,7 +347,14 @@ export const COMMON_BASES: ChainTokenList = {
     OKEX.WETH,
     SUSHI[ChainId.OKEX],
   ],
-  [ChainId.CELO]: [...WRAPPED_NATIVE_ONLY[ChainId.CELO], CELO.WETH, CELO.cUSD, CELO.cEURO, CELO.WBTC],
+  [ChainId.CELO]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    CELO.WETH,
+    CELO.cUSD,
+    CELO.cEURO,
+    CELO.WBTC,
+    SUSHI[ChainId.CELO],
+  ],
   [ChainId.MOONRIVER]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER],
     MOONRIVER.USDC,
@@ -353,10 +363,18 @@ export const COMMON_BASES: ChainTokenList = {
     MOONRIVER.FRAX,
     MOONRIVER.MIM,
     MOONRIVER.BTC,
+    SUSHI[ChainId.MOONRIVER],
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
-  [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS]],
+  [ChainId.TELOS]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.TELOS],
+    TELOS.USDC,
+    TELOS.USDT,
+    TELOS.WETH,
+    TELOS.WBTC,
+    SUSHI[ChainId.TELOS],
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -420,7 +438,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
-  [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS]],
+  [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS], TELOS.USDC, TELOS.USDT, TELOS.WETH, TELOS.WBTC],
 }
 
 export const PINNED_PAIRS: {

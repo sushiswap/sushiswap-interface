@@ -2644,10 +2644,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@18.1.2":
-  version "18.1.2"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-18.1.2.tgz#d0c81935a658f038a21cfc74ee2307996aa0c488"
-  integrity sha512-IogcwdiZXssRhlz72UH0Dhv+ev71r+ihCuhyiq7TM8aPTdq9x6VC9v/3GWY5pgvOsNx5LHOEKfahgv8XvFpEEg==
+"@sushiswap/default-token-list@18.6.0":
+  version "18.6.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-18.6.0.tgz#ed3f232fdc7ed1efa30628298d4c3033ffcaf3b3"
+  integrity sha512-X0gv/PLlhQ0PyVAsMbFqBbjmpFcJDGdEwJ4gAHHMiH5LGDy3dkROLOHuJE6VkS7NwL74AsR6hJNAAG4XzDge2g==
 
 "@sushiswap/default-token-list@^11.3.0":
   version "11.5.0"
@@ -2661,10 +2661,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.107":
-  version "5.0.0-canary.107"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.107.tgz#0248989dd76ad5879ccb33e3400b8ed9497f1602"
-  integrity sha512-45YM3oaoePvrEAaIJI02S0n8oUQgfG05Lv9YKZ1Dc6ogI9D1jp5tTKiT0EqGkQreFLepSylDyuL6yPRQAomgxg==
+"@sushiswap/sdk@5.0.0-canary.109":
+  version "5.0.0-canary.109"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.109.tgz#f2a779650288d9ef3614d28b855d3031ce594549"
+  integrity sha512-qSxYW9qRgc1KTlXP6fZrYyqd+2r4yaUrG1ZqsealiXogxC35hhcAkCUq3hKgy43s70HakKwizqC0r8TI/YDbKQ==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/abstract-signer" "^5.4.0"
@@ -2683,7 +2683,7 @@
     decimal.js-light "^2.5.0"
     eip-712 "^0.4.3"
     isomorphic-unfetch "^3.1.0"
-    jsbi "^3.1.0"
+    jsbi "^4.1.0"
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
@@ -9697,10 +9697,15 @@ js-yaml@^3.13.0, js-yaml@^3.13.1, js-yaml@^3.6.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jsbi@^3.1.0, jsbi@^3.1.4, jsbi@^3.1.5:
+jsbi@^3.1.4, jsbi@^3.1.5:
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.2.5.tgz#b37bb90e0e5c2814c1c2a1bcd8c729888a2e37d6"
   integrity sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ==
+
+jsbi@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.1.0.tgz#f0c25ed8881bc09891334b03a3952efaa7add337"
+  integrity sha512-384Z4keIsJtYpnVggsxaB255MZctILbxv+ihtwoWPF7KNOlYHn1LFpRnUw5qsAspUAA2+I7qzjVJxVYtHVjxNw==
 
 jsbn@~0.1.0:
   version "0.1.1"
