@@ -57,7 +57,7 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
 export const parsedAmountSingleTokenSelector = selector<CurrencyAmount<Currency> | undefined>({
   key: 'useRemovePercentageInput:parsedAmountSingleTokenSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
+    const { pool } = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const parsedSLPAmount = get(parsedSLPAmountSelector)
     const rebases = get(bentoboxRebasesAtom)

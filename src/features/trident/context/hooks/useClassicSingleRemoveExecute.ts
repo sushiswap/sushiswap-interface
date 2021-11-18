@@ -37,7 +37,7 @@ export const useClassicSingleRemoveExecute = () => {
   const execute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
-        const [, pool] = await snapshot.getPromise(poolAtom)
+        const { pool } = await snapshot.getPromise(poolAtom)
 
         if (!pool || !chainId || !library || !account || !router || !minOutputAmount || !rebase || !parsedSLPAmount)
           throw new Error('missing dependencies')

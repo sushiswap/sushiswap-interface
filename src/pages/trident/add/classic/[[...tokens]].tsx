@@ -66,7 +66,9 @@ const AddClassic = () => {
               <Typography variant="sm">
                 {i18n._(t`Deposit tokens in equal amounts or deposit either one of the two tokens or in any ratio.`)}
               </Typography>
-              {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+              {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
+                classicPool.state as any
+              ) && (
                 <Alert
                   className="bg-transparent px-0 pb-0"
                   dismissable={false}

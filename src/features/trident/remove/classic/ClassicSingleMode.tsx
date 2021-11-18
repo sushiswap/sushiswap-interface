@@ -30,7 +30,7 @@ import TridentApproveGate from '../../TridentApproveGate'
 
 const ClassicSingleMode: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const router = useTridentRouterContract()
 
   const {
