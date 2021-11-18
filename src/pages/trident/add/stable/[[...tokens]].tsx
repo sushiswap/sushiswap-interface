@@ -27,7 +27,7 @@ const AddStable = () => {
   const { query } = useRouter()
   const { i18n } = useLingui()
 
-  const [[, pool], setPool] = useRecoilState(poolAtom)
+  const [{ pool }, setPool] = useRecoilState(poolAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
@@ -35,11 +35,11 @@ const AddStable = () => {
   const currencyA = useCurrency(query.tokens?.[0]) || NATIVE[chainId]
   const currencyB = useCurrency(query.tokens?.[1]) || SUSHI[chainId]
   const stablePool = useTridentStablePool(currencyA, currencyB, 50)
-  const totalSupply = useTotalSupply(stablePool ? stablePool[1]?.liquidityToken : undefined)
-  const poolBalance = useTokenBalance(account ?? undefined, stablePool[1]?.liquidityToken)
+  const totalSupply = useTotalSupply(stablePool ? stablePool.pool?.liquidityToken : undefined)
+  const poolBalance = useTokenBalance(account ?? undefined, stablePool.pool?.liquidityToken)
 
   useEffect(() => {
-    if (!stablePool[1]) return
+    if (!stablePool.pool) return
     // TODO ramin: remove
     setPool(stablePool)
   }, [chainId, stablePool, setPool])

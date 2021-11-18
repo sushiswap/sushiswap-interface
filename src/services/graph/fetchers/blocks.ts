@@ -16,6 +16,8 @@ export const BLOCKS = {
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-blocks',
   [ChainId.OKEX]: 'okexchain-blocks/oec',
   [ChainId.HECO]: 'hecoblocks/heco',
+
+  [ChainId.KOVAN]: 'blocklytics/kovan-blocks',
 }
 
 const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) => {

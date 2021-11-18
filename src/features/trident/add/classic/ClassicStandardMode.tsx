@@ -34,6 +34,7 @@ const ClassicStandardMode = () => {
     error,
   } = useDependentAssetInputs()
   const { currencies, setURLCurrency } = useCurrenciesFromURL()
+
   const setShowReview = useSetRecoilState(showReviewAtom)
   const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(0))
   const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(1))

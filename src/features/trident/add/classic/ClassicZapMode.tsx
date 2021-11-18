@@ -31,8 +31,9 @@ const ClassicZapMode = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const bentoBox = useBentoBoxContract()
+
   const router = useTridentRouterContract()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const {
     zapInputAmount: [zapInputAmount, setZapInputAmount],
     parsedAmount,
@@ -98,7 +99,7 @@ const ClassicZapMode = () => {
                 })}
                 color={zapInputAmount ? 'gradient' : 'gray'}
                 disabled={!!error || !approved || attemptingTxn}
-                className="font-bold text-sm"
+                className="text-sm font-bold"
                 onClick={() => setShowReview(true)}
               >
                 {attemptingTxn ? <Dots>Depositing</Dots> : loading ? '' : !error ? i18n._(t`Confirm Deposit`) : error}
@@ -120,7 +121,7 @@ const ClassicZapMode = () => {
         />
       </div>
       {!error && !isDesktop && (
-        <div className="mt-6 px-5">
+        <div className="px-5 mt-6">
           <TransactionDetails />
         </div>
       )}

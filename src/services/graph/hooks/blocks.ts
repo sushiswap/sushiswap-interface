@@ -14,16 +14,17 @@ export function useBlock(
   { timestamp, daysAgo, chainId, shouldFetch = true }: useBlockProps,
   swrConfig: SWRConfiguration = undefined
 ): number | undefined {
-  shouldFetch = shouldFetch && !!chainId
   timestamp = timestamp
     ? String(timestamp).length !== 13
       ? Number(timestamp)
       : Math.floor(Number(timestamp) / 1000)
     : undefined
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   timestamp = useMemo(() => (daysAgo ? Math.floor(Date.now() / 1000) - daysAgo * 86400 : timestamp), [daysAgo])
 
-  const { data, error } = useSWR(
-    shouldFetch ? ['block', chainId, timestamp] : null,
+  const { data } = useSWR(
+    shouldFetch && !!chainId ? ['block', chainId, timestamp] : null,
     (_, chainId, timestamp) => getBlock(chainId, timestamp),
     swrConfig
   )

@@ -29,13 +29,13 @@ const RemoveClassic = () => {
   const { i18n } = useLingui()
   const { currencies, fee, twap } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
   const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
 
   return (
     <>
       <TridentHeader pattern="bg-bars-pattern" className="pb-10">
-        <div className="flex flex-col w-full mt-px gap-5 lg:justify-between relative lg:w-7/12">
+        <div className="relative flex flex-col w-full gap-5 mt-px lg:justify-between lg:w-7/12">
           <div>
             <Button
               color="blue"
@@ -63,9 +63,11 @@ const RemoveClassic = () => {
               t`Receive both pool tokens directly with Standard mode, or receive total investment as any asset in Zap mode.`
             )}
           </Typography>
-          {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+          {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
+            classicPool.state as any
+          ) && (
             <Alert
-              className="bg-transparent px-0"
+              className="px-0 bg-transparent"
               dismissable={false}
               type="error"
               showIcon
@@ -77,7 +79,7 @@ const RemoveClassic = () => {
 
       <TridentBody>
         <div className="flex flex-row justify-between">
-          <div className="lg:w-7/12 w-full flex flex-col gap-5">
+          <div className="flex flex-col w-full gap-5 lg:w-7/12">
             <>
               {liquidityMode === LiquidityMode.ZAP && (
                 <>

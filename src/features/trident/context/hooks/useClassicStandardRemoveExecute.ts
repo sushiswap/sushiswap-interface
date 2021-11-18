@@ -36,7 +36,7 @@ export const useClassicStandardRemoveExecute = () => {
   const execute = useRecoilCallback(
     ({ snapshot }) =>
       async () => {
-        const [, pool] = await snapshot.getPromise(poolAtom)
+        const { pool } = await snapshot.getPromise(poolAtom)
         const [minOutputA, minOutputB] = minLiquidityOutput
         const outputToWallet = await snapshot.getPromise(outputToWalletAtom)
 

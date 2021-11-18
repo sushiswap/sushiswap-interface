@@ -1,4 +1,4 @@
-import { Currency, Percent, Trade as V2Trade,TradeType } from '@sushiswap/core-sdk'
+import { Currency, Percent, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
   TransactionErrorContent,

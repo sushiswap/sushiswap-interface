@@ -1,11 +1,12 @@
-import React, { FC } from 'react'
-import { Fee } from '@sushiswap/trident-sdk'
-import Typography from 'app/components/Typography'
-import { useRecoilState } from 'recoil'
-import { selectedFeeTierAtom } from '../context/atoms'
-import { FeeTierSelect } from './FeeTierSelect'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Fee } from '@sushiswap/trident-sdk'
+import Typography from 'app/components/Typography'
+import React, { FC } from 'react'
+import { useRecoilState } from 'recoil'
+
+import { selectedFeeTierAtom } from '../context/atoms'
+import { FeeTierSelect } from './FeeTierSelect'
 
 export const SelectFeeTier: FC = () => {
   const { i18n } = useLingui()
@@ -16,11 +17,11 @@ export const SelectFeeTier: FC = () => {
       <Typography variant="h3" weight={700} className="text-high-emphesis">
         Select Fee Tier
       </Typography>
-      <div className="text-secondary mt-2">
+      <div className="mt-2 text-secondary">
         Select the percentage of fee that this pool will take from a swap order. Higher fee tiers suit pairs with more
         volatility and less volume.
       </div>
-      <div className="grid lg:grid-cols-4 md:grid-cols-2 gap-3 select-none mt-4">
+      <div className="grid gap-3 mt-4 select-none lg:grid-cols-4 md:grid-cols-2">
         <FeeTierSelect
           tier={1}
           subtitle={i18n._(t`Best for stable pairs`)}

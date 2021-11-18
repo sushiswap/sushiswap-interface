@@ -1,14 +1,15 @@
+import { PoolType } from '@sushiswap/tines'
+import { poolTypeNameMapper } from 'app/features/trident/types'
 import Typography from 'components/Typography'
 import { classNames } from 'functions'
 import React, { FC } from 'react'
-import Image from '../../../components/Image'
 
 import ClassicIcon from '/public/images/trident/pools/classic.svg'
 import ConcentratedIcon from '/public/images/trident/pools/concentrated.svg'
-import StableIcon from '/public/images/trident/pools/stable.svg'
 import IndexIcon from '/public/images/trident/pools/index.svg'
-import { PoolType } from '@sushiswap/tines'
-import { poolTypeNameMapper } from 'app/features/trident/types'
+import StableIcon from '/public/images/trident/pools/stable.svg'
+
+import Image from '../../../components/Image'
 
 const PoolTypeToIconMapper: Record<PoolType, StaticImageData> = {
   ConstantProduct: ClassicIcon,

@@ -1,16 +1,16 @@
-import React, { FC } from 'react'
-import Link from 'next/link'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import { TableInstance } from 'app/features/transactions/types'
+import { poolTypeNameMapper } from 'app/features/trident/types'
 import { classNames } from 'app/functions/styling'
+import Link from 'next/link'
+import React, { FC } from 'react'
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { SearchCategoryLabel } from './SearchCategoryLabel'
 import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
 import { usePoolsTableData } from './usePoolsTableData'
-import { poolTypeNameMapper } from 'app/features/trident/types'
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()
@@ -53,7 +53,7 @@ const SearchResultPools: FC = () => {
                             loading ? 'opacity-100' : 'opacity-0'
                           }`}
                         />
-                        {error && <span className="text-sm italic text-red ml-2">{i18n._(t`⚠️ Loading Error`)}</span>}
+                        {error && <span className="ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
                       </>
                     )}
                   </th>
@@ -67,7 +67,7 @@ const SearchResultPools: FC = () => {
 
               const poolPath = `/trident/pool/${poolTypeNameMapper[
                 row.original.type
-              ].toLowerCase()}/${row.original.currencyIds.join('/')}`
+              ].toLowerCase()}/${row.original.assets.map((asset) => asset.id).join('/')}`
 
               return (
                 <Link href={poolPath} key={i} passHref>

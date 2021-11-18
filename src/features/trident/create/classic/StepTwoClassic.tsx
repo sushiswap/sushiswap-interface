@@ -1,14 +1,15 @@
-import React, { FC } from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TridentBody, TridentHeader } from 'layouts/Trident'
+import React, { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
+
 import { currentStepAtom } from '../context/atoms'
+import { StepHeader } from '../StepHeader'
 import { CreateOracleOption } from './CreateOracleOption'
 import { SelectAssetsWidget } from './SelectAssetsWidget'
 import { SelectFeeTier } from './SelectFeeTier'
 import { StepTwoContinueButton } from './StepTwoContinueButton'
-import { StepHeader } from '../StepHeader'
 
 export const StepTwoClassic: FC = () => {
   const { i18n } = useLingui()

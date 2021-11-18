@@ -2,10 +2,14 @@ import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
+import { aprToApy, formatPercent } from 'app/functions'
+import { useBlock } from 'app/services/graph'
+import { useTridentPools } from 'app/services/graph/hooks/pools'
+import { useActiveWeb3React } from 'app/services/web3'
 import { CurrencyLogoArray } from 'components/CurrencyLogo'
 import Typography from 'components/Typography'
 import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { poolAtom } from '../context/atoms'
@@ -13,7 +17,7 @@ import { PoolProperties } from './PoolProperties'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
+  const { pool } = useRecoilValue(poolAtom)
 
   return <Header i18n={i18n} pool={pool} />
 }
@@ -25,9 +29,28 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const isDesktop = useDesktopMediaQuery()
+  const { chainId } = useActiveWeb3React()
 
   // TODO ramin: remove this make dynamic
+  // TODO: add rewards APR to fee APY
   const isFarm = false
+
+  const block1d = useBlock({ chainId, daysAgo: 1 })
+
+  const poolData = useTridentPools({ chainId, subset: [pool?.liquidityToken?.address] })?.[0]
+  const poolData1d = useTridentPools({ chainId, subset: [pool?.liquidityToken?.address], block: block1d })?.[0]
+
+  // TODO: Double-check if correct on real(-ish) data
+  const feeApyPerYear = useMemo(
+    () =>
+      aprToApy(
+        ((((poolData?.volumeUSD - poolData1d?.volumeUSD) / 100) * poolData?.swapFeePercent * 365) /
+          poolData?.totalValueLockedUSD) *
+          100,
+        3650
+      ) || 0,
+    [poolData, poolData1d]
+  )
 
   return (
     <div className="flex justify-between">
@@ -38,7 +61,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
             <PoolProperties pool={pool} i18n={i18n} />
           </div>
         </div>
-        <div className="lg:order-2 flex flex-row gap-2 items-center">
+        <div className="flex flex-row items-center gap-2 lg:order-2">
           <Typography variant={isDesktop ? 'h3' : 'h2'} className="text-high-emphesis" weight={700}>
             {pool?.token0.symbol}-{pool?.token1.symbol}
           </Typography>
@@ -58,28 +81,24 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
             </>
           )}
         </div>
-        <div className="lg:order-1 flex flex-row gap-2 items-center lg:hidden">
+        <div className="flex flex-row items-center gap-2 lg:order-1 lg:hidden">
           <PoolProperties pool={pool} i18n={i18n} />
         </div>
       </div>
-      <div className="flex flex-col text-right gap-3">
+      <div className="flex flex-col gap-3 text-right">
         <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
         <div className="flex flex-col gap-2">
           <Typography variant="h1" className="text-high-emphesis" weight={700}>
-            XX%
+            {formatPercent(feeApyPerYear)}
           </Typography>
           <div className="flex flex-row justify-end gap-2.5">
-            {isFarm ? (
+            {isFarm && (
               <>
                 <Typography variant="xxs">{i18n._(t`Rewards:`)} XX%</Typography>
                 <Typography variant="xxs">
                   {i18n._(t`Fees:`)} {pool?.fee / 100}%
                 </Typography>
               </>
-            ) : (
-              <Typography variant="xxs" className="text-secondary">
-                {i18n._(t`Including fees`)}
-              </Typography>
             )}
           </div>
         </div>

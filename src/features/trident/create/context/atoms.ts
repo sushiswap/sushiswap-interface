@@ -1,5 +1,5 @@
-import { atom } from 'recoil'
 import { PoolType } from '@sushiswap/tines'
+import { atom } from 'recoil'
 
 export type CreatePoolStep = 1 | 2 | 3
 

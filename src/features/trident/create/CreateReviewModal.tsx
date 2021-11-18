@@ -34,16 +34,16 @@ const AddTransactionReviewModal: FC = () => {
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
-      <div className="flex flex-col gap-8 h-full pb-4 lg:max-w-lg">
+      <div className="flex flex-col h-full gap-8 pb-4 lg:max-w-lg">
         <div className="relative">
-          <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
-          <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
+          <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
+          <div className="flex flex-col gap-4 px-5 pt-5 pb-8">
             <div className="flex flex-row justify-between">
               <Button
                 color="blue"
                 variant="outlined"
                 size="sm"
-                className="rounded-full py-1 pl-2 cursor-pointer"
+                className="py-1 pl-2 rounded-full cursor-pointer"
                 startIcon={<ChevronLeftIcon width={24} height={24} />}
                 onClick={() => setShowReview(false)}
               >
@@ -78,7 +78,7 @@ const AddTransactionReviewModal: FC = () => {
             />
           </div>
         </div>
-        <div className="flex flex-col px-5 gap-5">
+        <div className="flex flex-col gap-5 px-5">
           <div className="flex flex-col gap-1">
             <div className="flex justify-between">
               <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
@@ -99,7 +99,7 @@ const AddTransactionReviewModal: FC = () => {
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`${selectedPoolCurrencies[0]?.symbol} Deposited:`)}
               </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+              <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
                 0.00 → {parsedAmounts[0]?.toSignificant(6)} {parsedAmounts[0]?.currency.symbol}
               </Typography>
             </div>
@@ -107,7 +107,7 @@ const AddTransactionReviewModal: FC = () => {
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`${selectedPoolCurrencies[1]?.symbol} Deposited:`)}
               </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+              <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
                 0.00 → {parsedAmounts[1]?.toSignificant(6)} {parsedAmounts[1]?.currency.symbol}
               </Typography>
             </div>
@@ -115,7 +115,7 @@ const AddTransactionReviewModal: FC = () => {
               <Typography variant="sm" className="text-secondary">
                 {i18n._(t`Share of Pool`)}
               </Typography>
-              <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+              <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
                 0.00% → <span className="text-green">100%</span>
               </Typography>
             </div>

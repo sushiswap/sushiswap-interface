@@ -26,7 +26,7 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefine
 export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
   key: 'usePercentageInput:percentageInputParsedAmountsSelector',
   get: ({ get }) => {
-    const [, pool] = get(poolAtom)
+    const { pool } = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
     const parsedSLPAmount = get(parsedSLPAmountSelector)
     const rebases = get(bentoboxRebasesAtom)
@@ -51,7 +51,7 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
 const usePercentageInput = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [poolState] = useRecoilValue(poolAtom)
+  const { state: poolState } = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)

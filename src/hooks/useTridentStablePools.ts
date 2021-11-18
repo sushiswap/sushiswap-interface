@@ -3,6 +3,7 @@ import { ChainId, ChainKey, Currency, CurrencyAmount, JSBI } from '@sushiswap/co
 import HybridPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/HybridPool.sol/HybridPool.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 import { computeHybridPoolAddress, Fee, HybridPool } from '@sushiswap/trident-sdk'
+import { PoolAtomType } from 'app/features/trident/types'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
@@ -18,7 +19,7 @@ export enum StablePoolState {
 
 export function useTridentStablePools(
   pools: [Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined][]
-): [StablePoolState, HybridPool | null][] {
+): PoolAtomType[] {
   const { chainId } = useActiveWeb3React()
 
   const poolAddresses = useMemo(() => {
@@ -58,30 +59,25 @@ export function useTridentStablePools(
       const tokenB = pools[i][1]?.wrapped
       const fee = pools[i]?.[2]
       const a = pools[i]?.[3]
-      if (loading) return [StablePoolState.LOADING, null]
-      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !a) return [StablePoolState.INVALID, null]
-      if (!reserves) return [StablePoolState.NOT_EXISTS, null]
+      if (loading) return { state: StablePoolState.LOADING }
+      if (!tokenA || !tokenB || tokenA.equals(tokenB) || !fee || !a) return { state: StablePoolState.INVALID }
+      if (!reserves) return { state: StablePoolState.NOT_EXISTS }
       const [reserve0, reserve1] = reserves
       const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
-      return [
-        StablePoolState.EXISTS,
-        new HybridPool(
+      return {
+        state: StablePoolState.EXISTS,
+        pool: new HybridPool(
           CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
           CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
           fee,
           a
         ),
-      ]
+      }
     })
   }, [results, pools])
 }
 
-export function useTridentStablePool(
-  tokenA?: Currency,
-  tokenB?: Currency,
-  fee?: Fee,
-  a?: JSBI
-): [StablePoolState, HybridPool | null] {
+export function useTridentStablePool(tokenA?: Currency, tokenB?: Currency, fee?: Fee, a?: JSBI): PoolAtomType {
   const inputs: [[Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined]] = useMemo(
     () => [[tokenA, tokenB, fee, a]],
     [tokenA, tokenB, fee, a]

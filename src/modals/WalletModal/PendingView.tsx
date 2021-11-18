@@ -1,6 +1,6 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import Dots from 'components/Dots'
-import { injected,SUPPORTED_WALLETS } from 'config/wallets'
+import { injected, SUPPORTED_WALLETS } from 'config/wallets'
 import React from 'react'
 
 import Option from './Option'

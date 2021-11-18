@@ -3,6 +3,7 @@ import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import { getTridentPools } from 'app/services/graph/fetchers/pools'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
 
@@ -11,15 +12,16 @@ import { PoolCell } from './PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
 
 export const usePoolsTableData = () => {
-  const { data, error, isValidating } = useSWR('getAllTridentPools', () => getTridentPools())
+  const { chainId } = useActiveWeb3React()
+  const { data, error, isValidating } = useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
 
   const columns = useMemo(() => {
     return [
       {
         Header: 'Assets',
-        accessor: 'symbols',
+        accessor: 'assets',
         Cell: ({ value, row: { original } }) => {
-          return <PoolCell symbols={value} currencyIds={original.currencyIds} twapEnabled={original.twapEnabled} />
+          return <PoolCell assets={value} twapEnabled={original.twapEnabled} />
         },
         filter: filterForSearchQueryAndTWAP,
       },
@@ -42,7 +44,7 @@ export const usePoolsTableData = () => {
       },
       {
         Header: 'TVL',
-        accessor: 'totalValueLocked',
+        accessor: 'totalValueLockedUSD',
         maxWidth: 100,
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
       },
