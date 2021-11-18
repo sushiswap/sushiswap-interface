@@ -73,7 +73,7 @@ const Banner: FC = () => {
   return (
     <div className="flex justify-center flex-col">
       <div className="relative h-[96px] mt-4">
-        <Transition.Root show={true}>{slides}</Transition.Root>
+        {slides}
         <div className="flex justify-between w-full h-full items-center">
           <Button onClick={prevSlide} className="flex items-center -ml-12">
             <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
