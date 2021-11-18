@@ -1,4 +1,5 @@
 import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
+import { ConstantProductPool } from '@sushiswap/trident-sdk'
 import { ZERO_PERCENT } from 'app/constants'
 import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from 'app/functions'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
@@ -196,7 +197,15 @@ export const usePoolDetailsBurn = (
 
   const minLiquidityOutputSingleToken = useCallback(
     (currency?: Currency) => {
-      if (pool && totalSupply && slpAmount && currency && rebases[currency.wrapped.address]) {
+      if (
+        pool &&
+        // TODO ramin: hack until other sdk entities have getLiquidityValueSingleToken
+        pool instanceof ConstantProductPool &&
+        totalSupply &&
+        slpAmount &&
+        currency &&
+        rebases[currency.wrapped.address]
+      ) {
         const amount = calculateSlippageAmount(
           pool.getLiquidityValueSingleToken(currency, totalSupply, slpAmount),
           slippage

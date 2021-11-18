@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
+import { ConstantProductPool } from '@sushiswap/trident-sdk'
 import { toAmountCurrencyAmount } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
@@ -62,7 +63,13 @@ export const parsedAmountSingleTokenSelector = selector<CurrencyAmount<Currency>
     const rebases = get(bentoboxRebasesAtom)
     const currency = get(percentageZapCurrencyAtom)
 
-    return pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO) && currency
+    return pool &&
+      // TODO ramin: hack until other sdk entities have getLiquidityValueSingleToken
+      pool instanceof ConstantProductPool &&
+      parsedSLPAmount &&
+      totalSupply &&
+      totalSupply?.greaterThan(ZERO) &&
+      currency
       ? toAmountCurrencyAmount(
           rebases[currency?.wrapped.address],
           pool.getLiquidityValueSingleToken(

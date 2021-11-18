@@ -4180,6 +4180,22 @@
     tiny-warning "^1.0.0"
     toformat "^2.0.0"
 
+"@sushiswap/core-sdk@1.0.0-canary.14", "@sushiswap/core-sdk@^1.0.0-canary.14":
+  version "1.0.0-canary.14"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.14.tgz#1f26c25907277a63c857bcc0945623d366e9cc37"
+  integrity sha512-QSfE5eMYx69NuJ87vPXf5n/yNAl5NqSe9GGq5aofHDBmUm346ROLWMLLqWkgttFL5u2aPR5PeP0j2gH9Eq6zgg==
+  dependencies:
+    "@ethersproject/address" "^5.4.0"
+    "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/providers" "^5.4.0"
+    "@ethersproject/solidity" "^5.4.0"
+    big.js "^6.1.1"
+    decimal.js-light "^2.5.0"
+    jsbi "^4.1.0"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.0"
+    toformat "^2.0.0"
+
 "@sushiswap/core-sdk@1.0.0-canary.5":
   version "1.0.0-canary.5"
   resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.5.tgz#06e36124725d5e1bc91577cc200241f24a3e68d7"
@@ -4269,14 +4285,6 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@sushiswap/tines@0.1.16":
-  version "0.1.16"
-  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-0.1.16.tgz#cde9056edbd135a783f8a1176343c65c924a9976"
-  integrity sha512-9oZPo/Wwtr/Zh+GWgpzIkN+tbijnJj7y41SFO0SIZ3ezPNsx1d3OomJA0dvp4yOYrZMGHYkkAL79/z8DdaLHxA==
-  dependencies:
-    "@ethersproject/bignumber" "^5.4.0"
-    "@sushiswap/core-sdk" "1.0.0-canary.5"
-
 "@sushiswap/tines@0.1.18":
   version "0.1.18"
   resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-0.1.18.tgz#aefc267827a4205826f6e3b48069523f8c3ebb79"
@@ -4285,22 +4293,30 @@
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.5"
 
-"@sushiswap/trident-sdk@1.0.0-canary.11":
-  version "1.0.0-canary.11"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.11.tgz#9ef7afeb52713b0c4c40770e6660e7c856bb0e54"
-  integrity sha512-1EpOFm9VlVDfrMmj+FggsyrPm965COiScSdGPbtUiU0ksySqaQU9AWBHY0Y08p6LV+Vs/E0bBp2V2spXwaER7w==
+"@sushiswap/tines@^1.0.0-canary.0":
+  version "1.0.0-canary.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.0.tgz#61f29fc5229a05d64e4b73d64352629c4d1663e8"
+  integrity sha512-Z/6QuqRejYjRl2IZMAdzZ1JW9pEeF0aXlEeJWsyycml9Bk5ujpx+6xywo9sfTGWnZPL+mosYVPxiC+zKcOvGlg==
+  dependencies:
+    "@ethersproject/bignumber" "^5.4.0"
+    "@sushiswap/core-sdk" "1.0.0-canary.14"
+
+"@sushiswap/trident-sdk@^1.0.0-canary.14":
+  version "1.0.0-canary.14"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.14.tgz#86c7c5f685eed3b7fc3a12cb0be3669cdf11ec94"
+  integrity sha512-AoBQKK+jjreC20fg3d5SZkGsZetZjGL6YHkCE6ah7vNtUOsATUA3HdBt80q5RFsfkXlxLqYEsy5DfuWUNYjhVQ==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
-    "@sushiswap/core-sdk" "1.0.0-canary.5"
-    "@sushiswap/tines" "0.1.16"
-    "@sushiswap/trident" "1.0.0-canary.23"
+    "@sushiswap/core-sdk" "1.0.0-canary.14"
+    "@sushiswap/tines" "0.1.18"
+    "@sushiswap/trident" "1.0.0-canary.24"
     tiny-invariant "^1.1.0"
 
-"@sushiswap/trident@1.0.0-canary.23":
-  version "1.0.0-canary.23"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.23.tgz#7e3a927cb8b5643bb47e08fb72f84ab18c9a46da"
-  integrity sha512-wW7U4u7D7TkgKah4Zxcjl8xEXGIIgQP+NflWt0fw7Sdw7kh/44oG9JvsQr+LWGfMqTfQY5t01qCWomwBI1733w==
+"@sushiswap/trident@1.0.0-canary.24", "@sushiswap/trident@^1.0.0-canary.24":
+  version "1.0.0-canary.24"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.24.tgz#2a4a1689290f7d0dea49e735dd47d7a784a3253b"
+  integrity sha512-jpVaCNChSUDUCgM5S5tZZmHrK9UsgaKajHWRq8mROeE+1vx7HvSvxSnlYSOiQN9ryKYkAmJP9/wdjEXd30fZnQ==
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
@@ -14179,6 +14195,11 @@ jsbi@^3.1.0, jsbi@^3.1.5, jsbi@^3.2.0:
   version "3.2.5"
   resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-3.2.5.tgz#b37bb90e0e5c2814c1c2a1bcd8c729888a2e37d6"
   integrity sha512-aBE4n43IPvjaddScbvWRA2YlTzKEynHzu7MqOyTipdHucf/VxS63ViCjxYRg86M8Rxwbt/GfzHl1kKERkt45fQ==
+
+jsbi@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/jsbi/-/jsbi-4.1.0.tgz#f0c25ed8881bc09891334b03a3952efaa7add337"
+  integrity sha512-384Z4keIsJtYpnVggsxaB255MZctILbxv+ihtwoWPF7KNOlYHn1LFpRnUw5qsAspUAA2+I7qzjVJxVYtHVjxNw==
 
 jsbn@~0.1.0:
   version "0.1.1"
