@@ -4,7 +4,6 @@ import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import { getTridentPools } from 'app/services/graph/fetchers/pools'
 import { useActiveWeb3React } from 'app/services/web3'
-import Link from 'next/link'
 import React, { useMemo } from 'react'
 import useSWR from 'swr'
 
@@ -59,22 +58,12 @@ export const usePoolsTableData = () => {
         Header: 'Actions',
         accessor: 'actions',
         maxWidth: 100,
-        Cell: ({ row: { original } }) => {
-          const poolPath = `/trident/pool/${original.type.toLowerCase()}/${original.assets
-            .map((asset) => asset.id)
-            .join('/')}`
-
-          return (
-            <Link href={poolPath} passHref>
-              {/* DIV needed for forwardRef issue */}
-              <div>
-                <Button color="gradient" variant="outlined" className="h-8 text-sm font-bold text-white">
-                  Invest
-                </Button>
-              </div>
-            </Link>
-          )
-        },
+        Cell: () => (
+          /* Entire row is clickable, hence button does not need link */
+          <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
+            Invest
+          </Button>
+        ),
       },
     ]
   }, [])
