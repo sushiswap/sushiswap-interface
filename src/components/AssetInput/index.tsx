@@ -296,9 +296,10 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
 interface AssetInputWalletSwitchProps {
   checked: boolean
   onChange: (x: boolean) => void
+  label?: string
 }
 
-const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onChange }) => {
+const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onChange, label }) => {
   const error = useAssetInputContextError()
 
   const isDesktop = useDesktopMediaQuery()
@@ -316,7 +317,7 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
       <div className="flex gap-3 items-center lg:flex-col">
         <div className="flex flex-col order-1 lg:order-2">
           <Typography variant="xxs" weight={700} className="text-secondary text-right lg:text-center">
-            {i18n._(t`Funding source:`)}
+            {label || i18n._(t`Funding source:`)}
           </Typography>
           <Typography
             variant="sm"

@@ -10,21 +10,14 @@ import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { LiquidityOutput } from '../../types'
-import {
-  attemptingTxnAtom,
-  bentoboxRebasesAtom,
-  outputToWalletAtom,
-  poolAtom,
-  showReviewAtom,
-  txHashAtom,
-} from '../atoms'
-import usePercentageInput from './usePercentageInput'
+import { attemptingTxnAtom, bentoboxRebasesAtom, poolAtom, showReviewAtom, txHashAtom } from '../atoms'
 import { usePoolDetailsBurn } from './usePoolDetails'
+import useRemovePercentageInput from './useRemovePercentageInput'
 
 export const useClassicStandardRemoveExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const { parsedSLPAmount } = usePercentageInput()
+  const { parsedSLPAmount, outputToWallet } = useRemovePercentageInput()
   const router = useTridentRouterContract()
   const addTransaction = useTransactionAdder()
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
@@ -38,7 +31,6 @@ export const useClassicStandardRemoveExecute = () => {
       async () => {
         const [, pool] = await snapshot.getPromise(poolAtom)
         const [minOutputA, minOutputB] = minLiquidityOutput
-        const outputToWallet = await snapshot.getPromise(outputToWalletAtom)
 
         if (
           !pool ||
@@ -69,7 +61,14 @@ export const useClassicStandardRemoveExecute = () => {
 
         try {
           setAttemptingTxn(true)
-
+          console.log(
+            router.interface.encodeFunctionData('burnLiquidity', [
+              pool.liquidityToken.address,
+              parsedSLPAmount.quotient.toString(),
+              encoded,
+              liquidityOutput,
+            ])
+          )
           const tx = await router.burnLiquidity(
             pool.liquidityToken.address,
             parsedSLPAmount.quotient.toString(),
@@ -108,6 +107,7 @@ export const useClassicStandardRemoveExecute = () => {
       router,
       parsedSLPAmount,
       rebases,
+      outputToWallet,
       setAttemptingTxn,
       setTxHash,
       setShowReview,

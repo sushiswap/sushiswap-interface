@@ -2,7 +2,7 @@ import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from '@sushiswa
 import { ZERO_PERCENT } from 'app/constants'
 import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from 'app/functions'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import {
@@ -19,7 +19,7 @@ import {
 import useCurrenciesFromURL from './useCurrenciesFromURL'
 
 export const usePoolDetailsMint = (
-  parsedAmounts: (CurrencyAmount<Currency> | undefined)[] | undefined,
+  parsedAmounts?: (CurrencyAmount<Currency> | undefined)[],
   defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
 ) => {
   const [, pool] = useRecoilValue(poolAtom)
@@ -109,7 +109,7 @@ export const usePoolDetailsMint = (
 }
 
 export const usePoolDetailsBurn = (
-  slpAmount: CurrencyAmount<Token> | undefined,
+  slpAmount?: CurrencyAmount<Token>,
   defaultSlippage: Percent = DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
 ) => {
   const [, pool] = useRecoilValue(poolAtom)
@@ -194,14 +194,41 @@ export const usePoolDetailsBurn = (
     return [undefined, undefined]
   }, [currencies, pool, rebases, slippage, slpAmount, totalSupply])
 
+  const minLiquidityOutputSingleToken = useCallback(
+    (currency?: Currency) => {
+      if (pool && totalSupply && slpAmount && currency && rebases[currency.wrapped.address]) {
+        const amount = calculateSlippageAmount(
+          pool.getLiquidityValueSingleToken(currency, totalSupply, slpAmount),
+          slippage
+        )[0]
+
+        return toAmountCurrencyAmount(
+          rebases[currency.wrapped.address],
+          CurrencyAmount.fromRawAmount(currency.wrapped, amount.toString())
+        )
+      }
+
+      return undefined
+    },
+    [pool, rebases, slippage, slpAmount, totalSupply]
+  )
+
   return useMemo(
     () => ({
       poolShareBefore,
       poolShareAfter,
       liquidityValueAfter,
       minLiquidityOutput,
+      minLiquidityOutputSingleToken,
       liquidityValueBefore,
     }),
-    [poolShareBefore, poolShareAfter, liquidityValueAfter, minLiquidityOutput, liquidityValueBefore]
+    [
+      poolShareBefore,
+      poolShareAfter,
+      liquidityValueAfter,
+      minLiquidityOutput,
+      minLiquidityOutputSingleToken,
+      liquidityValueBefore,
+    ]
   )
 }

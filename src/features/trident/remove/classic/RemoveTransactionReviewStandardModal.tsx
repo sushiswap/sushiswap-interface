@@ -16,15 +16,15 @@ import {
   showReviewAtom,
 } from '../../context/atoms'
 import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
-import usePercentageInput from '../../context/hooks/usePercentageInput'
 import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
+import useRemovePercentageInput from '../../context/hooks/useRemovePercentageInput'
 
 interface RemoveTransactionReviewStandardModal {}
 
 const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardModal> = () => {
   const { i18n } = useLingui()
 
-  const { parsedAmounts, parsedSLPAmount } = usePercentageInput()
+  const { parsedAmounts, parsedSLPAmount } = useRemovePercentageInput()
   const { poolShareBefore, poolShareAfter, minLiquidityOutput } = usePoolDetailsBurn(
     parsedSLPAmount,
     DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
@@ -37,7 +37,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
 
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
-      <div className="flex flex-col gap-8 h-full">
+      <div className="flex flex-col gap-8 h-full lg:max-w-md">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
           <div className="px-5 pt-5 pb-8 flex flex-col gap-4">

@@ -107,13 +107,15 @@ const TridentApproveGate: FC<TridentApproveGateProps> = ({
   return (
     <RecoilRoot>
       <div className="flex flex-col gap-3">
-        {[BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(bApprove) && (
-          <Button.Dotted pending={bApprove === BentoApprovalState.PENDING} color="blue" onClick={onClick}>
-            {bApprove === BentoApprovalState.PENDING
-              ? i18n._(t`Approving BentoBox to spend tokens`)
-              : i18n._(t`Approve BentoBox to spend tokens`)}
-          </Button.Dotted>
-        )}
+        {/*hide bentobox approval if not every inputAmount is greater than than zero*/}
+        {inputAmounts.every((el) => el?.greaterThan(ZERO)) &&
+          [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(bApprove) && (
+            <Button.Dotted pending={bApprove === BentoApprovalState.PENDING} color="blue" onClick={onClick}>
+              {bApprove === BentoApprovalState.PENDING
+                ? i18n._(t`Approving BentoBox to spend tokens`)
+                : i18n._(t`Approve BentoBox to spend tokens`)}
+            </Button.Dotted>
+          )}
         {inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
           if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
             acc.push(

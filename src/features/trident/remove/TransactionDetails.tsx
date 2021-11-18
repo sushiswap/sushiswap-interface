@@ -5,8 +5,8 @@ import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, liquidityModeAtom, poolBalanceAtom } from '../context/atoms'
-import usePercentageInput from '../context/hooks/usePercentageInput'
 import { usePoolDetailsBurn } from '../context/hooks/usePoolDetails'
+import useRemovePercentageInput from '../context/hooks/useRemovePercentageInput'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
 import { LiquidityMode } from '../types'
 
@@ -15,7 +15,7 @@ const TransactionDetails: FC = () => {
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
 
-  const { parsedSLPAmount } = usePercentageInput()
+  const { parsedSLPAmount } = useRemovePercentageInput()
 
   // TODO ramin: fix for zap mode
   const input = liquidityMode === LiquidityMode.STANDARD ? parsedSLPAmount : undefined

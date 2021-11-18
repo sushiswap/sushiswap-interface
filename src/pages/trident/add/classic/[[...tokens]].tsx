@@ -59,14 +59,14 @@ const AddClassic = () => {
             <SettingsTab trident />
           </div>
           <div>
-            <Typography variant="h2" weight={700} className="text-high-emphesis">
-              {i18n._(t`Add Liquidity`)}
-            </Typography>
-            <Typography variant="sm">
-              {i18n._(
-                t`Deposit any or all pool tokens directly with Standard mode,  or invest with any asset in Zap mode.`
-              )}
-            </Typography>
+            <div className="flex flex-col gap-1">
+              <Typography variant="h2" weight={700} className="text-high-emphesis">
+                {i18n._(t`Add Liquidity`)}
+              </Typography>
+              <Typography variant="sm">
+                {i18n._(t`Deposit tokens in equal amounts or deposit either one of the two tokens or in any ratio.`)}
+              </Typography>
+            </div>
             {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
               <Alert
                 className="bg-transparent px-0"

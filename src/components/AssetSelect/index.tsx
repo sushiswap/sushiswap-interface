@@ -30,7 +30,7 @@ const AssetSelect = (props: AssetSelectProps) => {
 
   let header = props.header || (
     <Typography variant="h3" weight={700} className="text-high-emphesis mb-4">
-      {props.title ? props.title : i18n._(t`Choose an Asset to Receive:`)}
+      {props.title ? props.title : i18n._(t`Choose an asset to Receive:`)}
     </Typography>
   )
 

@@ -10,14 +10,13 @@ import Typography from 'components/Typography'
 import { FC, ReactNode } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, poolAtom, showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
 import { useClassicStandardAddExecute } from '../../context/hooks/useClassicStandardAddExecute'
 import { useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
 
 const TransactionReviewStandardModal: FC = () => {
   const { i18n } = useLingui()
-  const [, pool] = useRecoilValue(poolAtom)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 

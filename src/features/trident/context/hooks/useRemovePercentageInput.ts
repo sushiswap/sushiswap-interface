@@ -6,15 +6,20 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 
-import { bentoboxRebasesAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
+import { bentoboxRebasesAtom, outputToWalletAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
+
+export const percentageZapCurrencyAtom = atom<Currency | undefined>({
+  key: 'useRemovePercentageInput:percentageZapCurrencyAtom',
+  default: undefined,
+})
 
 export const percentageAmountAtom = atom<string>({
-  key: 'usePercentageInput:percentageAmountAtom',
+  key: 'useRemovePercentageInput:percentageAmountAtom',
   default: '',
 })
 
 export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefined>({
-  key: 'usePercentageInput:parsedInputAmount',
+  key: 'useRemovePercentageInput:parsedInputAmount',
   get: ({ get }) => {
     const poolBalance = get(poolBalanceAtom)
     const percentageAmount = get(percentageAmountAtom)
@@ -24,7 +29,7 @@ export const parsedSLPAmountSelector = selector<CurrencyAmount<Token> | undefine
 })
 
 export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefined)[]>({
-  key: 'usePercentageInput:percentageInputParsedAmountsSelector',
+  key: 'useRemovePercentageInput:percentageInputParsedAmountsSelector',
   get: ({ get }) => {
     const [, pool] = get(poolAtom)
     const totalSupply = get(totalSupplyAtom)
@@ -48,20 +53,45 @@ export const parsedAmountsSelector = selector<(CurrencyAmount<Currency> | undefi
   },
 })
 
-const usePercentageInput = () => {
+export const parsedAmountSingleTokenSelector = selector<CurrencyAmount<Currency> | undefined>({
+  key: 'useRemovePercentageInput:parsedAmountSingleTokenSelector',
+  get: ({ get }) => {
+    const [, pool] = get(poolAtom)
+    const totalSupply = get(totalSupplyAtom)
+    const parsedSLPAmount = get(parsedSLPAmountSelector)
+    const rebases = get(bentoboxRebasesAtom)
+    const currency = get(percentageZapCurrencyAtom)
+
+    return pool && parsedSLPAmount && totalSupply && totalSupply?.greaterThan(ZERO) && currency
+      ? toAmountCurrencyAmount(
+          rebases[currency?.wrapped.address],
+          pool.getLiquidityValueSingleToken(
+            currency?.wrapped,
+            totalSupply.add(parsedSLPAmount),
+            parsedSLPAmount.add(parsedSLPAmount)
+          )
+        )
+      : undefined
+  },
+})
+
+const useRemovePercentageInput = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [poolState] = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
+  const parsedAmountSingleToken = useRecoilValue(parsedAmountSingleTokenSelector)
   const percentageInput = useRecoilState(percentageAmountAtom)
   const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
+  const outputToWallet = useRecoilValue(outputToWalletAtom)
+  const zapCurrency = useRecoilState(percentageZapCurrencyAtom)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
     : poolState === 3
     ? i18n._(t`Invalid pool`)
-    : !parsedSLPAmount
+    : !parsedSLPAmount?.greaterThan(ZERO)
     ? i18n._(t`Enter a percentage`)
     : poolBalance?.lessThan(parsedSLPAmount)
     ? i18n._(t`Insufficient Balance`)
@@ -72,12 +102,15 @@ const usePercentageInput = () => {
   return useMemo(
     () => ({
       parsedAmounts,
+      parsedAmountSingleToken,
       parsedSLPAmount,
       percentageInput,
+      outputToWallet,
+      zapCurrency,
       error,
     }),
-    [error, parsedAmounts, parsedSLPAmount, percentageInput]
+    [error, outputToWallet, parsedAmountSingleToken, parsedAmounts, parsedSLPAmount, percentageInput, zapCurrency]
   )
 }
 
-export default usePercentageInput
+export default useRemovePercentageInput
