@@ -1,5 +1,5 @@
 import { Currency } from '@sushiswap/core-sdk'
-import { useSetPoolAssetErrorState } from 'app/features/trident/context/hooks/poolAssets/useSetPoolAssetErrorState'
+import { useSetPoolAssetErrorState } from 'app/features/trident/create/context/useSetPoolAssetErrorState'
 import { useMemo } from 'react'
 import { atomFamily, useRecoilCallback, useRecoilState } from 'recoil'
 

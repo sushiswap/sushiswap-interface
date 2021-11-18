@@ -15,6 +15,5 @@ export interface StepProps {
 
 export const stepTitleText: Record<CreatePoolStep, string> = {
   1: 'Select pool type',
-  2: 'Select assets & fees',
-  3: 'Deposit & confirm',
+  2: 'Select assets & deposit',
 }

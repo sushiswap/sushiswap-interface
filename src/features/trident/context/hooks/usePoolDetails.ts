@@ -1,5 +1,6 @@
-import { Currency, CurrencyAmount, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, Token, ZERO } from '@sushiswap/core-sdk'
 import { ZERO_PERCENT } from 'app/constants'
+import { getPriceOfNewPool } from 'app/features/trident/context/utils'
 import { calculateSlippageAmount, toAmountCurrencyAmount, toShareCurrencyAmount } from 'app/functions'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useMemo } from 'react'
@@ -85,11 +86,8 @@ export const usePoolDetailsMint = (
   }, [liquidityMinted, poolBalance, totalSupply])
 
   const price = useMemo(() => {
-    if (noLiquidity) {
-      if (parsedAmounts?.[0]?.greaterThan(0) && parsedAmounts?.[1]?.greaterThan(0)) {
-        const value = parsedAmounts[1].divide(parsedAmounts[0])
-        return new Price(parsedAmounts[0].currency, parsedAmounts[1].currency, value.denominator, value.numerator)
-      }
+    if (noLiquidity && parsedAmounts) {
+      return getPriceOfNewPool(parsedAmounts)
     } else if (parsedAmounts?.[1]) {
       return pool && parsedAmounts[0]?.wrapped ? pool.priceOf(parsedAmounts[1]?.currency.wrapped) : undefined
     }

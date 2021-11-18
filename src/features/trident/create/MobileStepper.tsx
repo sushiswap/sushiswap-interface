@@ -35,7 +35,6 @@ export const MobileStepper: FC = () => {
     <div className="lg:hidden grid grid-cols-3 gap-6 -mb-10">
       <Step stepNum={1} title={stepTitleText[1]} currentStep={currentStep} stepSetter={setCurrentStep} />
       <Step stepNum={2} title={stepTitleText[2]} currentStep={currentStep} stepSetter={setCurrentStep} />
-      <Step stepNum={3} title={stepTitleText[3]} currentStep={currentStep} stepSetter={setCurrentStep} />
     </div>
   )
 }
