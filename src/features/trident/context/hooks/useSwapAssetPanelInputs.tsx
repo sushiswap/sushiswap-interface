@@ -6,7 +6,6 @@ import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
-import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 import { atom, selector, useRecoilCallback, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
@@ -88,8 +87,6 @@ const useSwapAssetPanelInputs = () => {
     typedField[0] === TypedField.A ? currencies[1] : currencies[0]
   )
 
-  const allowedSlippage = useSwapSlippageTolerance(trade)
-
   // trade.output but in normal amounts instead of shares
   const tradeOutputAmount = useMemo(
     () =>
@@ -100,20 +97,6 @@ const useSwapAssetPanelInputs = () => {
         ? toAmountCurrencyAmount(rebases[trade.outputAmount?.currency.wrapped.address], trade.outputAmount.wrapped)
         : undefined,
     [rebases, rebasesLoading, trade]
-  )
-
-  const tradeMinimumOutputAmount = useMemo(
-    () =>
-      !rebasesLoading &&
-      trade &&
-      trade.outputAmount?.currency.wrapped.address &&
-      rebases[trade?.minimumAmountOut(allowedSlippage)?.currency.wrapped.address]
-        ? toAmountCurrencyAmount(
-            rebases[trade?.minimumAmountOut(allowedSlippage)?.currency.wrapped.address],
-            trade?.minimumAmountOut(allowedSlippage).wrapped
-          )
-        : undefined,
-    [allowedSlippage, rebases, rebasesLoading, trade]
   )
 
   const balance = useBentoOrWalletBalance(account ?? undefined, currencies?.[0], spendFromWallet[0])
@@ -130,8 +113,8 @@ const useSwapAssetPanelInputs = () => {
   const parsedAmounts = useMemo(() => {
     if (isWrap) return [mainInputCurrencyAmount, mainInputCurrencyAmount]
 
-    return [mainInputCurrencyAmount, tradeOutputAmount, tradeMinimumOutputAmount]
-  }, [isWrap, mainInputCurrencyAmount, tradeOutputAmount, tradeMinimumOutputAmount])
+    return [mainInputCurrencyAmount, tradeOutputAmount]
+  }, [isWrap, mainInputCurrencyAmount, tradeOutputAmount])
 
   const switchCurrencies = useRecoilCallback(
     ({ set }) =>

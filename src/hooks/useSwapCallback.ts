@@ -73,7 +73,6 @@ interface TridentTradeContext {
   fromWallet: boolean
   receiveToWallet: boolean
   inputAmount?: CurrencyAmount<Currency>
-  outputAmount?: CurrencyAmount<Currency>
   bentoPermit?: BentoPermit
 }
 
@@ -391,8 +390,8 @@ export function useSwapCallArguments(
     } else if (trade instanceof TridentTrade) {
       if (!tridentTradeContext) return result
 
-      const { inputAmount, outputAmount, receiveToWallet, fromWallet } = tridentTradeContext
-      if (!tridentRouterContract || !trade.route || !inputAmount || !outputAmount) return result
+      const { inputAmount, receiveToWallet, fromWallet } = tridentTradeContext
+      if (!tridentRouterContract || !trade.route || !inputAmount) return result
 
       const { routeType, ...rest } = getTridentRouterParams(
         trade.route,
