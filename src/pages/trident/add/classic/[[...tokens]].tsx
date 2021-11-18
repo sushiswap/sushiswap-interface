@@ -66,16 +66,16 @@ const AddClassic = () => {
               <Typography variant="sm">
                 {i18n._(t`Deposit tokens in equal amounts or deposit either one of the two tokens or in any ratio.`)}
               </Typography>
+              {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
+                <Alert
+                  className="bg-transparent px-0 pb-0"
+                  dismissable={false}
+                  type="error"
+                  showIcon
+                  message={i18n._(t`A Pool could not be found for provided currencies`)}
+                />
+              )}
             </div>
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(classicPool[0]) && (
-              <Alert
-                className="bg-transparent px-0"
-                dismissable={false}
-                type="error"
-                showIcon
-                message={i18n._(t`A Pool could not be found for provided currencies`)}
-              />
-            )}
           </div>
         </div>
       </TridentHeader>
