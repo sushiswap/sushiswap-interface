@@ -30,7 +30,8 @@
     "*.{md,css}": "prettier --write"
   },
   "resolutions": {
-    "@walletconnect/web3-provider": "1.6.0"
+    "@walletconnect/web3-provider": "1.6.0",
+    "cli-table": "0.3.6"
   },
   "devDependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
