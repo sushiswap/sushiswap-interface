@@ -55,7 +55,7 @@ const deployNewPoolAction = ({
   const [tokenA, tokenB] = sortTokens(assets)
   const deployData = defaultAbiCoder.encode(
     ['address', 'address', 'uint8', 'bool'],
-    [...[tokenA.address, tokenB.address].sort(), feeTier, twap]
+    [tokenA.wrapped.address, tokenB.wrapped.address, feeTier, twap]
   )
   return router.interface.encodeFunctionData('deployPool', [constantProductPoolFactory.address, deployData])
 }
