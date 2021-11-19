@@ -12,10 +12,6 @@ const images = [
     image: `url('/images/miso/banner-gene.png')`,
     url: 'https://miso.sushi.com/auctions/0xA017E4Cf380c5FDc372463f3330853500b4B3Cb9',
   },
-  {
-    image: `url('/images/miso/banner-xdefi.jpg')`,
-    url: 'https://miso.sushi.com/auctions/0xE7E8A485945339079ec5Ae72917369FE6661f15E',
-  },
 ]
 
 const Banner: FC = () => {
@@ -74,14 +70,16 @@ const Banner: FC = () => {
     <div className="flex justify-center flex-col">
       <div className="relative h-[96px] mt-4">
         {slides}
-        <div className="flex justify-between w-full h-full items-center">
-          <Button onClick={prevSlide} className="flex items-center -ml-12">
-            <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
-          </Button>
-          <Button onClick={nextSlide} className="flex items-center -mr-12">
-            <ChevronRightIcon width={24} className="hover:text-white text-low-emphesis" />
-          </Button>
-        </div>
+        {images.length > 1 && (
+          <div className="flex justify-between w-full h-full items-center">
+            <Button onClick={prevSlide} className="flex items-center -ml-12">
+              <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
+            </Button>
+            <Button onClick={nextSlide} className="flex items-center -mr-12">
+              <ChevronRightIcon width={24} className="hover:text-white text-low-emphesis" />
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )
