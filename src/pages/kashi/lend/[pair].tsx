@@ -223,7 +223,7 @@ const PairLayout = ({ children }) => {
             {pair.asset.strategy && (
               <>
                 <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`APY`)}</div>
+                  <div className="text-lg text-secondary">{i18n._(t`Avg. APY`)}</div>
                   <div className="flex items-center">
                     <div className="text-lg text-high-emphesis">{formatPercent(pair.asset.strategy.apy)}</div>
                   </div>

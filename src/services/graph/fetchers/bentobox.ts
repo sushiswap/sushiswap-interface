@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { getFraction, toAmount } from 'functions'
+import { aprToApy, getFraction, toAmount } from 'functions'
 import { GRAPH_HOST } from 'services/graph/constants'
 import { getTokenSubset } from 'services/graph/fetchers'
 import {
@@ -15,7 +15,7 @@ import {
 import { pager } from './pager'
 
 export const BENTOBOX = {
-  [ChainId.ETHEREUM]: 'sushiswap/bentobox',
+  [ChainId.ETHEREUM]: 'lufycz/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
   [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
@@ -133,22 +133,28 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
   const SECONDS_IN_YEAR = 60 * 60 * 24 * 365
 
   return strategies?.map((strategy) => {
-    const [lastHarvest, previousHarvest] = [strategy.harvests?.[0], strategy.harvests?.[1]]
+    const apys = strategy.harvests?.reduce((apys, _, i) => {
+      const [lastHarvest, previousHarvest] = [strategy.harvests?.[i], strategy.harvests?.[i + 1]]
 
-    const profitPerYear =
-      ((SECONDS_IN_YEAR / (lastHarvest.timestamp - previousHarvest.timestamp)) * lastHarvest.profit) /
-      10 ** strategy.token.decimals
+      if (!previousHarvest) return apys
 
-    const [tvl, tvlPrevious] = [
-      lastHarvest?.tokenElastic / 10 ** strategy.token.decimals,
-      previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
-    ]
+      const profitPerYear =
+        ((SECONDS_IN_YEAR / (lastHarvest.timestamp - previousHarvest.timestamp)) * lastHarvest.profit) /
+        10 ** strategy.token.decimals
 
-    const apy = (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100
+      const [tvl, tvlPrevious] = [
+        lastHarvest?.tokenElastic / 10 ** strategy.token.decimals,
+        previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
+      ]
+
+      return [...apys, ((profitPerYear / ((tvl + tvlPrevious) / 2)) * 100) / 2]
+    }, [])
+
+    const apy = apys.reduce((apyAcc, apy) => apyAcc + apy, 0) / apys.length
 
     return {
       token: strategy.token.id,
-      apy: !isNaN(apy) ? apy : 0,
+      apy: !isNaN(apy) ? aprToApy(apy, 365) : 0,
       targetPercentage: Number(strategy.token.strategyTargetPercentage ?? 0),
     }
   })
