@@ -113,7 +113,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
-                    {i18n._(t`ArcherDAO`)}
+                    {i18n._(t`OpenMEV Eden`)}
                   </Typography>
                   <QuestionHelper
                     text={i18n._(
@@ -140,6 +140,7 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                   </Typography>
                   <QuestionHelper
                     text={i18n._(t`Sushi Relay can provide refunds of up to 90% of trading fees in xSushi`)}
+                    href={'https://docs.openmev.org'}
                   />
                 </div>
                 <Toggle

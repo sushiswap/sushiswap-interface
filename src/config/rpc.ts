@@ -1,7 +1,15 @@
 import { ChainId } from '@sushiswap/sdk'
 
+// @note in case of RPC failure, fallback to alchemy
+// [ChainId.MAINNET]: 'https://api.sushirelay.com/v1'
+// RPC Configuration is defined in the following files
+// src/connectors/index.ts
+// src/constants/index.ts
+// src/config/rpc.ts
+
 const rpc = {
-  [ChainId.MAINNET]: process.env.NEXT_PUBLIC_OPENMEV_URI ?? 'https://api.staging.sushirelay.com/v1',
+  [ChainId.MAINNET]:
+    process.env.NEXT_PUBLIC_OPENMEV_URI ?? 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
   [ChainId.ROPSTEN]: 'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
   [ChainId.RINKEBY]: 'https://eth-rinkeby.alchemyapi.io/v2/XVLwDlhGP6ApBXFz_lfv0aZ6VmurWhYD',
   [ChainId.GÖRLI]: 'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
