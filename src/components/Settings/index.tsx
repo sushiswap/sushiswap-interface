@@ -140,7 +140,6 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                   </Typography>
                   <QuestionHelper
                     text={i18n._(t`Sushi Relay can provide refunds of up to 90% of trading fees in xSushi`)}
-                    href={'https://docs.openmev.org'}
                   />
                 </div>
                 <Toggle
