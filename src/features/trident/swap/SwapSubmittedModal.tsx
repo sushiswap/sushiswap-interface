@@ -18,7 +18,7 @@ const SwapSubmittedModal: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useRecoilState(txHashAtom)
-  const { pending, success, cancelled } = useRecoilValue(transactionStateSelector(txHash))
+  const { pending, success, cancelled, failed } = useRecoilValue(transactionStateSelector(txHash))
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash('')}>
@@ -27,7 +27,7 @@ const SwapSubmittedModal: FC = () => {
           <Lottie animationData={swapArrows} autoplay loop />
         </div>
         <Typography variant="h3" weight={700} className="text-high-emphesis">
-          {i18n._(t`Success! Swap Submitted`)}
+          {i18n._(t`Swap Submitted!`)}
         </Typography>
         <div className="flex flex-col gap-1 rounded py-2 px-3">
           <div className="flex gap-2 items-center justify-center">
@@ -44,13 +44,21 @@ const SwapSubmittedModal: FC = () => {
               </div>
             ) : success ? (
               <CheckCircleIcon className="w-4 h-4 text-green" />
-            ) : cancelled ? (
+            ) : cancelled || failed ? (
               <XCircleIcon className="w-4 h-4 text-high-emphesis" />
             ) : (
               ''
             )}
             <Typography variant="sm" weight={700} className="italic">
-              {pending ? i18n._(t`Processing`) : success ? i18n._(t`Success`) : cancelled ? i18n._(t`Cancelled`) : ''}
+              {pending
+                ? i18n._(t`Processing`)
+                : success
+                ? i18n._(t`Success`)
+                : cancelled
+                ? i18n._(t`Cancelled`)
+                : failed
+                ? i18n._(t`Failed`)
+                : ''}
             </Typography>
           </div>
         </div>

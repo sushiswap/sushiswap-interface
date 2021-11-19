@@ -10,6 +10,7 @@ interface TransactionState {
   pending: boolean
   success: boolean
   cancelled: boolean
+  failed: boolean
 }
 
 type TxHash = string
@@ -24,6 +25,8 @@ export const transactionStateSelector = selectorFamily<TransactionState, TxHash>
       const pending = !tx?.receipt
       const success = !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
       const cancelled = (tx?.receipt && tx.receipt.status === 1337) ?? false
-      return { pending, success, cancelled }
+      const failed = !pending && !success && !cancelled
+
+      return { pending, success, cancelled, failed }
     },
 })

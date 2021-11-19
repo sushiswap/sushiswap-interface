@@ -20,7 +20,7 @@ const DepositSubmittedModal: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useRecoilState(txHashAtom)
-  const { pending, success, cancelled } = useRecoilValue(transactionStateSelector(txHash))
+  const { pending, success, cancelled, failed } = useRecoilValue(transactionStateSelector(txHash))
 
   return (
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash('')}>
@@ -46,13 +46,21 @@ const DepositSubmittedModal: FC = () => {
               </div>
             ) : success ? (
               <CheckCircleIcon className="w-4 h-4 text-green" />
-            ) : cancelled ? (
+            ) : cancelled || failed ? (
               <XCircleIcon className="w-4 h-4 text-high-emphesis" />
             ) : (
               ''
             )}
             <Typography variant="sm" weight={700} className="italic">
-              {pending ? i18n._(t`Processing`) : success ? i18n._(t`Success`) : cancelled ? i18n._(t`Cancelled`) : ''}
+              {pending
+                ? i18n._(t`Processing`)
+                : success
+                ? i18n._(t`Success`)
+                : cancelled
+                ? i18n._(t`Cancelled`)
+                : failed
+                ? i18n._(t`Failed`)
+                : ''}
             </Typography>
           </div>
         </div>
