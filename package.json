@@ -24,7 +24,7 @@
     "*.{md,css}": "prettier --write"
   },
   "resolutions": {
-    "@walletconnect/web3-provider": "1.6.0",
+    "@walletconnect/web3-provider": "1.6.6",
     "bn.js": "^4.1.0",
     "ua-parser-js": "0.7.28"
   },
@@ -75,7 +75,7 @@
     "@web3-react/lattice-connector": "^6.1.9",
     "@web3-react/portis-connector": "^6.1.9",
     "@web3-react/torus-connector": "^6.1.9",
-    "@web3-react/walletconnect-connector": "^6.2.0",
+    "@web3-react/walletconnect-connector": "^6.2.8",
     "@web3-react/walletlink-connector": "^6.2.3",
     "@welldone-software/why-did-you-render": "^6.2.0",
     "babel-plugin-macros": "^3.1.0",
@@ -141,5 +141,8 @@
     "entrypoints": [
       "src/pages"
     ]
+  },
+  "dependencies": {
+    "@walletconnect/web3-provider": "1.6.0"
   }
 }
