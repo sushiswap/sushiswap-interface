@@ -141,8 +141,5 @@
     "entrypoints": [
       "src/pages"
     ]
-  },
-  "dependencies": {
-    "@walletconnect/web3-provider": "1.6.0"
   }
 }
