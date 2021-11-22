@@ -20,14 +20,14 @@ const addLiquidityAction = ({
   twap,
   account,
 }: PoolCreationActionProps) => {
-  const liquidityInput = assets.map((asset, index) => {
+  const liquidityInput = assets.map((asset) => {
     const spendFromWallet = asset.spendFromSource === SpendSource.WALLET
     return {
       token: asset.currency?.isNative && spendFromWallet ? AddressZero : asset.parsedAmount!!.currency.wrapped.address,
       native: spendFromWallet,
       amount: spendFromWallet
         ? asset.parsedAmount!!.quotient.toString()
-        : toShareJSBI(rebases[index], asset.parsedAmount!!.quotient).toString(),
+        : toShareJSBI(rebases[asset.currency!!.wrapped.address], asset.parsedAmount!!.quotient).toString(),
     }
   })
   const [tokenA, tokenB] = sortTokens(assets)
@@ -57,6 +57,7 @@ const deployNewPoolAction = ({
     ['address', 'address', 'uint8', 'bool'],
     [tokenA.wrapped.address, tokenB.wrapped.address, feeTier, twap]
   )
+
   return router.interface.encodeFunctionData('deployPool', [constantProductPoolFactory.address, deployData])
 }
 

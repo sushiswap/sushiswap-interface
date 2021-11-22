@@ -93,7 +93,7 @@ const ClassicStandardMode: FC = () => {
                 }
               />
               <div className="block lg:hidden">{toggleButtonGroup}</div>
-              <TridentApproveGate inputAmounts={[parsedSLPAmount]} tokenApproveOn={router?.address}>
+              <TridentApproveGate inputAmounts={[parsedSLPAmount]} tokenApproveOn={router?.address} withPermit={true}>
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn
                   const buttonText = attemptingTxn ? (

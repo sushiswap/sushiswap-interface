@@ -48,4 +48,15 @@ export class SelectedAsset {
   oppositeToggle(): SpendSource {
     return this.spendFromSource === SpendSource.WALLET ? SpendSource.BENTO_BOX : SpendSource.WALLET
   }
+
+  static sort(assets: SelectedAsset[]) {
+    return [...assets].sort((a, b) => {
+      if (!a?.currency || !b?.currency) return 0
+      return a.currency.wrapped.sortsBefore(b.currency.wrapped) ? -1 : 1
+    })
+  }
+
+  static tokens(assets: SelectedAsset[]) {
+    return assets.map((el) => el?.currency?.wrapped)
+  }
 }

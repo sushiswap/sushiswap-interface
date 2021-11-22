@@ -1,4 +1,4 @@
-import { splitSignature } from '@ethersproject/bytes'
+import { Signature, splitSignature } from '@ethersproject/bytes'
 import { AddressZero, HashZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { t } from '@lingui/macro'
@@ -49,7 +49,7 @@ const useBentoHasPendingApproval = (masterContract?: string, account?: string, c
 
 export interface BentoPermit {
   outcome: BentoApproveOutcome
-  signature?: { v: number; r: string; s: string }
+  signature?: Signature
   data?: string
 }
 
@@ -107,7 +107,7 @@ const useBentoMasterApproveCallback = (
     }
 
     try {
-      const signature = await signMasterContractApproval(
+      const signatureString = await signMasterContractApproval(
         bentoBoxContract,
         masterContract,
         account,
@@ -116,13 +116,13 @@ const useBentoMasterApproveCallback = (
         chainId
       )
 
-      const { v, r, s } = splitSignature(signature)
+      const signature = splitSignature(signatureString)
       const permit = {
         outcome: BentoApproveOutcome.SUCCESS,
-        signature: { v, r, s },
+        signature: splitSignature(signature),
         data: (otherBentoBoxContract || bentoBoxContract)?.interface?.encodeFunctionData(
           functionFragment || 'setMasterContractApproval',
-          [account, masterContract, true, v, r, s]
+          [account, masterContract, true, signature.v, signature.r, signature.s]
         ),
       }
 

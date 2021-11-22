@@ -2,13 +2,17 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { toHex } from '@sushiswap/core-sdk'
+import { approveMasterContractAction } from 'app/features/trident/context/actions'
+import { batchAction, getAsEncodedAction } from 'app/features/trident/context/hooks/actions'
+import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { toShareJSBI } from 'app/functions'
 import { useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
 import ReactGA from 'react-ga'
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { LiquidityInput } from '../../types'
 import {
@@ -33,6 +37,8 @@ export const useClassicStandardAddExecute = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
   const { liquidityMinted } = usePoolDetailsMint(parsedAmounts)
+  const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
+  const resetBentoPermit = useResetRecoilState(TridentApproveGate.bentoPermit)
 
   const execute = useRecoilCallback(
     ({ snapshot }) =>
@@ -44,13 +50,13 @@ export const useClassicStandardAddExecute = () => {
 
         if (!pool || !chainId || !library || !account || !router || !liquidityMinted) return
 
-        let value = {}
+        let value = '0x0'
         const liquidityInput: LiquidityInput[] = []
         const encoded = defaultAbiCoder.encode(['address'], [account])
 
         if (parsedAmountA) {
           if (parsedAmountA.currency.isNative && nativeA) {
-            value = { value: parsedAmountA.quotient.toString() }
+            value = toHex(parsedAmountA)
           }
 
           liquidityInput.push({
@@ -64,7 +70,7 @@ export const useClassicStandardAddExecute = () => {
 
         if (parsedAmountB) {
           if (parsedAmountB.currency.isNative && nativeB) {
-            value = { value: parsedAmountB.quotient.toString() }
+            value = toHex(parsedAmountB)
           }
 
           liquidityInput.push({
@@ -80,13 +86,22 @@ export const useClassicStandardAddExecute = () => {
 
         try {
           setAttemptingTxn(true)
-          const tx = await router.addLiquidity(
-            liquidityInput,
-            pool.liquidityToken.address,
-            liquidityMinted.quotient.toString(),
-            encoded,
-            value
-          )
+          const tx = await library.getSigner().sendTransaction({
+            from: account,
+            to: router.address,
+            data: batchAction({
+              contract: router,
+              actions: [
+                approveMasterContractAction({ router, signature: bentoPermit }),
+                getAsEncodedAction({
+                  contract: router,
+                  fn: 'addLiquidity',
+                  args: [liquidityInput, pool.liquidityToken.address, liquidityMinted.quotient.toString(), encoded],
+                }),
+              ],
+            }),
+            value,
+          })
 
           setTxHash(tx.hash)
           setShowReview(false)
@@ -109,6 +124,8 @@ export const useClassicStandardAddExecute = () => {
             action: 'Add',
             label: [pool.token0.symbol, pool.token1.symbol].join('/'),
           })
+
+          resetBentoPermit()
         } catch (error) {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
@@ -123,13 +140,15 @@ export const useClassicStandardAddExecute = () => {
       library,
       account,
       router,
-      rebases,
       liquidityMinted,
+      rebases,
       setAttemptingTxn,
+      bentoPermit,
       setTxHash,
       setShowReview,
       addTransaction,
       i18n,
+      resetBentoPermit,
     ]
   )
 

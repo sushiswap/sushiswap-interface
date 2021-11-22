@@ -103,6 +103,7 @@ const ClassicSingleMode: FC = () => {
               <TridentApproveGate
                 inputAmounts={[poolBalance?.multiply(new Percent(percentageInput, '100'))]}
                 tokenApproveOn={router?.address}
+                withPermit={true}
               >
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn

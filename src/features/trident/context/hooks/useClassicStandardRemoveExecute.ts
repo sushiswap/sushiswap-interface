@@ -1,13 +1,16 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { approveMasterContractAction, approveSLPAction } from 'app/features/trident/context/actions'
+import { batchAction, getAsEncodedAction } from 'app/features/trident/context/hooks/actions'
+import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { toShareJSBI } from 'app/functions/bentobox'
 import { useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
 import ReactGA from 'react-ga'
-import { useRecoilCallback, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { LiquidityOutput } from '../../types'
 import { attemptingTxnAtom, bentoboxRebasesAtom, poolAtom, showReviewAtom, txHashAtom } from '../atoms'
@@ -25,6 +28,10 @@ export const useClassicStandardRemoveExecute = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
   const { minLiquidityOutput } = usePoolDetailsBurn(parsedSLPAmount)
+  const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
+  const resetBentoPermit = useResetRecoilState(TridentApproveGate.bentoPermit)
+  const slpPermit = useRecoilValue(TridentApproveGate.slpPermit)
+  const resetSLPPermit = useResetRecoilState(TridentApproveGate.slpPermit)
 
   const execute = useRecoilCallback(
     ({ snapshot }) =>
@@ -61,20 +68,23 @@ export const useClassicStandardRemoveExecute = () => {
 
         try {
           setAttemptingTxn(true)
-          console.log(
-            router.interface.encodeFunctionData('burnLiquidity', [
-              pool.liquidityToken.address,
-              parsedSLPAmount.quotient.toString(),
-              encoded,
-              liquidityOutput,
-            ])
-          )
-          const tx = await router.burnLiquidity(
-            pool.liquidityToken.address,
-            parsedSLPAmount.quotient.toString(),
-            encoded,
-            liquidityOutput
-          )
+          const tx = await library.getSigner().sendTransaction({
+            from: account,
+            to: router.address,
+            data: batchAction({
+              contract: router,
+              actions: [
+                approveMasterContractAction({ router, signature: bentoPermit }),
+                approveSLPAction({ router, signatureData: slpPermit }),
+                getAsEncodedAction({
+                  contract: router,
+                  fn: 'burnLiquidity',
+                  args: [pool.liquidityToken.address, parsedSLPAmount.quotient.toString(), encoded, liquidityOutput],
+                }),
+              ],
+            }),
+            value: '0x0',
+          })
 
           setTxHash(tx.hash)
           setShowReview(false)
@@ -91,6 +101,9 @@ export const useClassicStandardRemoveExecute = () => {
             action: 'Burn',
             label: [pool.token0.symbol, pool.token1.symbol].join('/'),
           })
+
+          resetBentoPermit()
+          resetSLPPermit()
         } catch (error) {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
@@ -109,10 +122,14 @@ export const useClassicStandardRemoveExecute = () => {
       rebases,
       outputToWallet,
       setAttemptingTxn,
+      bentoPermit,
+      slpPermit,
       setTxHash,
       setShowReview,
       addTransaction,
       i18n,
+      resetBentoPermit,
+      resetSLPPermit,
     ]
   )
 
