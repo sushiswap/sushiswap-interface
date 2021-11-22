@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { PoolType } from '@sushiswap/tines'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import { TableInstance } from 'app/features/transactions/types'
 import { poolTypeNameMapper } from 'app/features/trident/types'
@@ -65,12 +66,19 @@ const SearchResultPools: FC = () => {
             {page.map((row, i) => {
               prepareRow(row)
 
-              const poolPath = `/trident/pool/${poolTypeNameMapper[
-                row.original.type
-              ].toLowerCase()}/${row.original.assets.map((asset) => asset.id).join('/')}`
-
               return (
-                <Link href={poolPath} key={i} passHref>
+                <Link
+                  href={{
+                    pathname: `/trident/pool/${poolTypeNameMapper[row.original.type as PoolType].toLowerCase()}`,
+                    query: {
+                      tokens: row.original.assets.map((asset) => asset.id),
+                      fee: row.original.swapFeePercent * 100,
+                      twap: row.original.twapEnabled,
+                    },
+                  }}
+                  key={i}
+                  passHref
+                >
                   <tr {...row.getRowProps()} className="hover:bg-gray-900 hover:cursor-pointer">
                     {row.cells.map((cell, i) => {
                       return (

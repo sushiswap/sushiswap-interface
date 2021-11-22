@@ -14,7 +14,7 @@ enum PoolSortOption {
 type ColumnIdAccessor = string
 
 const sortTitleMapper: Record<PoolSortOption, ColumnIdAccessor> = {
-  [PoolSortOption.TVL]: 'totalValueLocked',
+  [PoolSortOption.TVL]: 'totalValueLockedUSD',
   [PoolSortOption.APY]: 'apy',
 }
 
