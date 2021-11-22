@@ -122,3 +122,10 @@ export const torus = new TorusConnector({
 
 // binance only
 export const binance = new BscConnector({ supportedChainIds: [56] })
+
+// mainnet only
+export const imtoken = new WalletConnectConnector({
+  rpc: RPC,
+  bridge: 'https://bridge.walletconnect.org',
+  qrcode: true,
+})

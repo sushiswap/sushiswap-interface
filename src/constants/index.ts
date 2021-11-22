@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent } from '@sushiswap/sdk'
-import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../connectors'
+import { binance, fortmatic, imtoken, injected, portis, torus, walletconnect, walletlink } from '../connectors'
 
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BigNumber } from 'ethers'
@@ -218,6 +218,15 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     description: 'Login using Binance hosted wallet',
     href: null,
     color: '#F0B90B',
+    mobile: true,
+  },
+  imToken: {
+    connector: imtoken,
+    name: 'imToken',
+    iconName: 'imtoken.png',
+    description: 'Connect to imToken wallet',
+    href: null,
+    color: '#098DE6',
     mobile: true,
   },
 }
