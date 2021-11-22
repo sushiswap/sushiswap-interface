@@ -58,27 +58,6 @@ export const useClassicPoolCreateExecute = () => {
 
     try {
       setAttemptingTxn(true)
-      console.log(
-        router.address,
-        batchAction({
-          contract: router,
-          actions: [
-            approveMasterContractAction({ router, signature: bentoPermit }),
-            ...poolCreationActions(
-              {
-                account,
-                assets,
-                constantProductPoolFactory,
-                router,
-                feeTier,
-                twap,
-                parsedAmounts,
-                rebases,
-              } as PoolCreationActionProps /* Can cast given the error guard above */
-            ),
-          ],
-        })
-      )
       const tx = await library.getSigner().sendTransaction({
         from: account,
         to: router.address,
