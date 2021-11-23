@@ -2,7 +2,6 @@ import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import React, { FC, ReactNode } from 'react'
 
 import { classNames } from '../../functions'
-import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import Chip from '../Chip'
 import CurrencyLogo from '../CurrencyLogo'
@@ -112,12 +111,10 @@ interface ListPanelItemLeftProps {
 }
 
 const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, startAdornment }) => {
-  const isDesktop = useDesktopMediaQuery()
-
   return (
     <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
       {startAdornment && startAdornment}
-      <CurrencyLogo currency={amount?.currency} size={isDesktop ? 30 : 20} className="rounded-full" />
+      <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />
       <Typography variant="sm" className="text-high-emphesis" weight={700}>
         {amount?.toSignificant(6)} {amount?.currency.symbol}
       </Typography>

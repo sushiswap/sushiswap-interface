@@ -32,7 +32,7 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
         onDismiss={() => null}
         className="transparent"
       >
-        <div className="flex flex-col gap-7 justify-center p-4">
+        <div className="flex flex-col gap-7 justify-center p-4 mt-10 lg:mt-0">
           <Typography variant="h1" className="max-w-2xl text-white text-center" weight={700}>
             {i18n._(t`Roll it back - this feature is not yet supported on ${NETWORK_LABEL[chainId]}.`)}
           </Typography>
@@ -46,12 +46,7 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
           <Typography className="uppercase text-white text-center text-lg tracking-[.2rem]" weight={700}>
             {i18n._(t`Available Networks`)}
           </Typography>
-          <div
-            className={`grid gap-5 md:gap-10 md:grid-cols-[${Math.min(6, networks.length)}] grid-cols-[${Math.min(
-              3,
-              networks.length
-            )}]`}
-          >
+          <div className="flex gap-5 md:gap-10 justify-center">
             {networks.map((key: ChainId, idx: number) => (
               <button
                 className="text-primary hover:text-white flex items-center flex-col gap-2 justify-start"
@@ -61,6 +56,8 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
                   cookie.set('chainId', key)
                   if (key === ChainId.ETHEREUM) {
                     library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
+                  } else if (key === ChainId.KOVAN) {
+                    library?.send('wallet_switchEthereumChain', [{ chainId: '0x2A' }, account])
                   } else {
                     library?.send('wallet_addEthereumChain', [params, account])
                   }

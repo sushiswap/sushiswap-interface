@@ -87,6 +87,7 @@ const ClassicZapMode = () => {
             inputAmounts={[parsedAmount]}
             tokenApproveOn={bentoBox?.address}
             masterContractAddress={router?.address}
+            withPermit={true}
           >
             {({ loading, approved }) => (
               <Button

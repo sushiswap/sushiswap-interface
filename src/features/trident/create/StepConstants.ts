@@ -11,6 +11,7 @@ export interface StepProps {
   title: string
   currentStep: CreatePoolStep
   stepSetter: SetterOrUpdater<CreatePoolStep>
+  isLastStep?: boolean
 }
 
 export const stepTitleText: Record<CreatePoolStep, string> = {

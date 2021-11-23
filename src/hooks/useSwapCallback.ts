@@ -1,5 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { Signature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
@@ -25,7 +26,8 @@ import {
   RouteType,
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
-import { BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
+import { approveMasterContractAction } from 'app/features/trident/context/actions'
+import { batchAction, unwrapWETHAction } from 'app/features/trident/context/hooks/actions'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import approveAmountCalldata from 'functions/approveAmountCalldata'
@@ -72,9 +74,9 @@ interface FailedCall extends SwapCallEstimate {
 interface TridentTradeContext {
   fromWallet: boolean
   receiveToWallet: boolean
-  inputAmount?: CurrencyAmount<Currency>
-  outputAmount?: CurrencyAmount<Currency>
-  bentoPermit?: BentoPermit
+  bentoPermit?: Signature
+  resetBentoPermit?: () => void
+  parsedAmounts?: (CurrencyAmount<Currency> | undefined)[]
 }
 
 export type EstimatedSwapCall = SuccessfulCall | FailedCall
@@ -391,15 +393,15 @@ export function useSwapCallArguments(
     } else if (trade instanceof TridentTrade) {
       if (!tridentTradeContext) return result
 
-      const { inputAmount, outputAmount, receiveToWallet, fromWallet } = tridentTradeContext
-      if (!tridentRouterContract || !trade.route || !inputAmount || !outputAmount) return result
+      const { parsedAmounts, receiveToWallet, fromWallet, bentoPermit } = tridentTradeContext
+      if (!tridentRouterContract || !trade.route || !parsedAmounts?.[0]) return result
 
       const { routeType, ...rest } = getTridentRouterParams(
         trade.route,
         trade?.outputAmount?.currency.isNative && receiveToWallet ? tridentRouterContract?.address : recipient,
         tridentRouterContract?.address,
         Number(allowedSlippage.asFraction.multiply(100).toSignificant(2)),
-        inputAmount,
+        parsedAmounts[0],
         fromWallet,
         receiveToWallet
       )
@@ -412,32 +414,33 @@ export function useSwapCallArguments(
 
       // if you spend from wallet send as amount instead of share
       let value = '0x0'
-      if (inputAmount && fromWallet && trade?.inputAmount.currency?.isNative) {
-        value = toHex(inputAmount)
+      if (parsedAmounts[0] && fromWallet && trade?.inputAmount.currency?.isNative) {
+        value = toHex(parsedAmounts[0])
       }
 
-      const swapCall = tridentRouterContract.interface.encodeFunctionData(method[routeType], [rest])
-      let callData: SwapCall = {
+      const actions = [
+        approveMasterContractAction({ router: tridentRouterContract, signature: bentoPermit }),
+        tridentRouterContract.interface.encodeFunctionData(method[routeType], [rest]),
+      ]
+
+      if (trade?.outputAmount?.currency.isNative && receiveToWallet)
+        actions.push(
+          unwrapWETHAction({
+            router: tridentRouterContract,
+            recipient,
+            amountMinimum: trade?.minimumAmountOut(allowedSlippage).quotient.toString(),
+          })
+        )
+
+      result.push({
         address: tridentRouterContract.address,
-        calldata: swapCall,
+        calldata: batchAction({
+          contract: tridentRouterContract,
+          actions,
+        }),
         value,
-      }
+      } as SwapCall)
 
-      // Unwrap WETH to ETH by batch calling Swap and unwrapWETH
-      if (trade?.outputAmount?.currency.isNative && receiveToWallet) {
-        const unwrapCall = tridentRouterContract.interface.encodeFunctionData('unwrapWETH', [
-          trade?.minimumAmountOut(allowedSlippage).quotient.toString(),
-          recipient,
-        ])
-
-        callData = {
-          address: tridentRouterContract.address,
-          calldata: tridentRouterContract.interface.encodeFunctionData('batch', [[swapCall, unwrapCall]]),
-          value,
-        }
-      }
-
-      result.push(callData)
       return result
     }
 
@@ -514,7 +517,6 @@ export function useSwapCallback(
   error: string | null
 } {
   const { account, chainId, library } = useActiveWeb3React()
-
   const blockNumber = useBlockNumber()
 
   const eip1559 =
@@ -645,9 +647,21 @@ export function useSwapCallback(
           })
 
           .then((response) => {
-            const base = `Swap ${trade?.inputAmount?.toSignificant(4)} ${
+            let base = `Swap ${trade?.inputAmount?.toSignificant(4)} ${
               trade?.inputAmount.currency?.symbol
             } for ${trade?.outputAmount?.toSignificant(4)} ${trade?.outputAmount.currency?.symbol}`
+            if (tridentTradeContext?.parsedAmounts) {
+              base = `Swap ${tridentTradeContext?.parsedAmounts[0]?.toSignificant(4)} ${
+                tridentTradeContext?.parsedAmounts[0].currency?.symbol
+              } for ${tridentTradeContext?.parsedAmounts[1]?.toSignificant(4)} ${
+                tridentTradeContext?.parsedAmounts[1].currency?.symbol
+              }`
+            }
+
+            if (tridentTradeContext?.bentoPermit && tridentTradeContext?.resetBentoPermit) {
+              tridentTradeContext.resetBentoPermit()
+            }
+
             const withRecipient =
               recipient === account
                 ? base

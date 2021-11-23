@@ -8,6 +8,7 @@ import Button from 'app/components/Button'
 import CurrencyLogo from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { useAllTokens, useToken } from 'app/hooks/Tokens'
+import { useTokenComparator } from 'app/modals/SearchModal/sorting'
 import { useActiveWeb3React } from 'app/services/web3/hooks'
 import { useAllTokenBalances, useCurrencyBalance, useCurrencyBalances, useTokenBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
@@ -26,7 +27,7 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
     <div className="overflow-y-auto h-full">
       {balances.map((balance, index) => (
         <div
-          className="flex justify-between items-center px-5 py-3 cursor-pointer"
+          className="flex justify-between items-center px-5 py-3 cursor-pointer hover:bg-dark-800 hover:border-dark-1000"
           onClick={() => balance && handleSelect(balance.currency)}
           key={index}
         >
@@ -61,12 +62,16 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
   const customBalance = useTokenBalance(account ? account : undefined, token ? token : undefined)
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
 
+  const tokenComparator = useTokenComparator()
+
   // Create a lightweight arr for searching
   const tokensArr = useMemo(() => {
     if (!chainId) return []
 
-    return Object.entries(tokens).map(([k, v]) => `${k}-${v.symbol}`)
-  }, [chainId, tokens])
+    return Object.values(tokens)
+      .sort(tokenComparator)
+      .map((token) => `${token.address}-${token.symbol}`)
+  }, [chainId, tokenComparator, tokens])
 
   const items = useMemo(() => {
     return tokensArr.filter((el) => (search ? el.toLowerCase().includes(search) : el))
@@ -77,7 +82,7 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
       <div className="flex-1 flex flex-col flex-grow">
         {token && (
           <div
-            className="flex justify-between items-center px-5 py-3 cursor-pointer"
+            className="flex justify-between items-center px-5 py-3 cursor-pointer hover:bg-dark-800"
             onClick={() => handleSelect(token)}
           >
             <div className="flex items-center gap-1.5">
@@ -95,7 +100,7 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
         )}
         {chainId && !search && (
           <div
-            className="flex justify-between items-center px-5 py-3 cursor-pointer"
+            className="flex justify-between items-center px-5 py-3 cursor-pointer  hover:bg-dark-800"
             onClick={() => handleSelect(NATIVE[chainId])}
           >
             <div className="flex items-center gap-1.5">
@@ -168,7 +173,7 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currenc
 
   return (
     <div className="bg-dark-900 h-full lg:max-w-lg lg:w-[32rem] lg:max-h-[92vh] lg:h-[40rem]">
-      <div className="relative shadow-lg">
+      <div className="relative shadow-lg border-b border-dark-1000">
         <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
         <div className="p-5 flex flex-col gap-4">
           <div className="flex flex-row justify-between">

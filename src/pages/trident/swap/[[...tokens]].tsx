@@ -2,7 +2,9 @@ import { SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
+import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import WrapButton from 'app/features/trident/swap/WrapButton'
+import NetworkGuard from 'app/guards/Network'
 import { useActiveWeb3React } from 'app/services/web3'
 import DoubleGlowShadow from 'components/DoubleGlowShadow'
 import Gas from 'components/Gas'
@@ -17,7 +19,7 @@ import SwapRate from 'features/trident/swap/SwapRate'
 import SwapReviewModal from 'features/trident/swap/SwapReviewModal'
 import SwapSubmittedModal from 'features/trident/swap/SwapSubmittedModal'
 import React, { useEffect } from 'react'
-import { RecoilRoot, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { useExpertModeManager } from 'state/user/hooks'
 
 import Container from '../../../components/Container'
@@ -138,6 +140,6 @@ const Swap = () => {
   )
 }
 
-Swap.Provider = RecoilRoot
+Swap.Guard = NetworkGuard(TRIDENT_NETWORKS)
 
 export default Swap

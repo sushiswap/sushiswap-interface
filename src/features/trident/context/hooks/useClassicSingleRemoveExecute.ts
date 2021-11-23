@@ -1,37 +1,40 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { WNATIVE } from '@sushiswap/core-sdk'
 import { approveMasterContractAction, approveSLPAction } from 'app/features/trident/context/actions'
-import {
-  batchAction,
-  burnLiquidityAction,
-  sweepNativeTokenAction,
-  unwrapWETHAction,
-} from 'app/features/trident/context/hooks/actions'
+import { batchAction, burnLiquiditySingleAction, unwrapWETHAction } from 'app/features/trident/context/hooks/actions'
+import { usePoolDetailsBurn } from 'app/features/trident/context/hooks/usePoolDetails'
+import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
-import { toShareJSBI } from 'app/functions/bentobox'
-import { useTridentRouterContract } from 'app/hooks/useContract'
+import { toShareJSBI } from 'app/functions'
+import { useTridentRouterContract } from 'app/hooks'
+import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
-import { LiquidityOutput } from '../../types'
-import { attemptingTxnAtom, bentoboxRebasesAtom, poolAtom, showReviewAtom, txHashAtom } from '../atoms'
-import { usePoolDetailsBurn } from './usePoolDetails'
-import useRemovePercentageInput from './useRemovePercentageInput'
+import { attemptingTxnAtom, poolAtom, showReviewAtom, txHashAtom } from '../atoms'
 
-export const useClassicStandardRemoveExecute = () => {
+export const useClassicSingleRemoveExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const { parsedSLPAmount, outputToWallet, receiveNative } = useRemovePercentageInput()
   const router = useTridentRouterContract()
   const addTransaction = useTransactionAdder()
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
   const setTxHash = useSetRecoilState(txHashAtom)
   const setShowReview = useSetRecoilState(showReviewAtom)
-  const rebases = useRecoilValue(bentoboxRebasesAtom)
-  const { minLiquidityOutput } = usePoolDetailsBurn(parsedSLPAmount)
+  const {
+    parsedSLPAmount,
+    zapCurrency: [zapCurrency],
+    outputToWallet,
+  } = useRemovePercentageInput()
+  const { minLiquidityOutputSingleToken } = usePoolDetailsBurn(parsedSLPAmount)
+  const { rebase } = useBentoRebase(zapCurrency?.wrapped)
+  const minOutputAmount = useMemo(
+    () => minLiquidityOutputSingleToken(zapCurrency?.wrapped),
+    [minLiquidityOutputSingleToken, zapCurrency?.wrapped]
+  )
   const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
   const resetBentoPermit = useResetRecoilState(TridentApproveGate.bentoPermit)
   const slpPermit = useRecoilValue(TridentApproveGate.slpPermit)
@@ -41,63 +44,33 @@ export const useClassicStandardRemoveExecute = () => {
     ({ snapshot }) =>
       async () => {
         const { pool } = await snapshot.getPromise(poolAtom)
-        const [minOutputA, minOutputB] = minLiquidityOutput
 
-        if (
-          !pool ||
-          !chainId ||
-          !library ||
-          !account ||
-          !router ||
-          !parsedSLPAmount ||
-          !minOutputA ||
-          !minOutputB ||
-          !rebases[minOutputA.currency.wrapped.address] ||
-          !rebases[minOutputB.currency.wrapped.address]
-        )
+        if (!pool || !chainId || !library || !account || !router || !minOutputAmount || !rebase || !parsedSLPAmount)
           throw new Error('missing dependencies')
 
-        const liquidityOutput: LiquidityOutput[] = [
-          {
-            token: minOutputA.wrapped.currency.address,
-            amount: toShareJSBI(rebases[minOutputA.wrapped.currency.address], minOutputA.quotient).toString(),
-          },
-          {
-            token: minOutputB.wrapped.currency.address,
-            amount: toShareJSBI(rebases[minOutputB.wrapped.currency.address], minOutputB.quotient).toString(),
-          },
-        ]
-
-        const indexOfWETH = minOutputA.wrapped.currency.address === WNATIVE[chainId].address ? 0 : 1
-        const receiveETH = receiveNative[0] && outputToWallet
+        const receiveETH = zapCurrency.isNative && outputToWallet
         const actions = [
           approveMasterContractAction({ router, signature: bentoPermit }),
           approveSLPAction({ router, signatureData: slpPermit }),
-          burnLiquidityAction({
+          burnLiquiditySingleAction({
             router,
             address: pool.liquidityToken.address,
+            token: minOutputAmount.currency.wrapped.address,
             amount: parsedSLPAmount.quotient.toString(),
             recipient: receiveETH ? router.address : account,
-            liquidityOutput,
+            minWithdrawal: toShareJSBI(rebase, minOutputAmount.quotient).toString(),
             receiveToWallet: outputToWallet,
           }),
         ]
 
-        if (receiveETH) {
+        if (receiveETH)
           actions.push(
             unwrapWETHAction({
               router,
-              amountMinimum: liquidityOutput[indexOfWETH].amount,
+              amountMinimum: toShareJSBI(rebase, minOutputAmount.quotient).toString(),
               recipient: account,
-            }),
-            sweepNativeTokenAction({
-              router,
-              token: liquidityOutput[indexOfWETH === 0 ? 1 : 0].token,
-              recipient: account,
-              amount: liquidityOutput[indexOfWETH === 0 ? 1 : 0].amount,
             })
           )
-        }
 
         try {
           setAttemptingTxn(true)
@@ -116,7 +89,7 @@ export const useClassicStandardRemoveExecute = () => {
           await tx.wait()
 
           addTransaction(tx, {
-            summary: i18n._(t`Remove ${parsedSLPAmount?.toSignificant(3)} ${parsedSLPAmount?.wrapped.currency.symbol}`),
+            summary: i18n._(t`Remove ${parsedSLPAmount?.toSignificant(3)} ${parsedSLPAmount?.currency.symbol}`),
           })
 
           setAttemptingTxn(false)
@@ -138,24 +111,24 @@ export const useClassicStandardRemoveExecute = () => {
         }
       },
     [
-      minLiquidityOutput,
-      chainId,
-      library,
       account,
-      router,
-      parsedSLPAmount,
-      rebases,
-      receiveNative,
-      outputToWallet,
-      bentoPermit,
-      slpPermit,
-      setAttemptingTxn,
-      setTxHash,
-      setShowReview,
       addTransaction,
+      bentoPermit,
+      chainId,
       i18n,
+      library,
+      minOutputAmount,
+      outputToWallet,
+      parsedSLPAmount,
+      rebase,
       resetBentoPermit,
       resetSLPPermit,
+      router,
+      setAttemptingTxn,
+      setShowReview,
+      setTxHash,
+      slpPermit,
+      zapCurrency.isNative,
     ]
   )
 }

@@ -53,6 +53,7 @@ export const SelectionContinueButton: FC = () => {
         inputAmounts={parsedAmounts}
         tokenApproveOn={bentoBox?.address}
         masterContractAddress={router?.address}
+        withPermit={true}
       >
         {({ loading, approved }) => (
           <Button

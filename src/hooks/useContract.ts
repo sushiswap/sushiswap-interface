@@ -3,8 +3,8 @@ import {
   BAR_ADDRESS,
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
+  CHAIN_KEY,
   ChainId,
-  ChainKey,
   CHAINLINK_ORACLE_ADDRESS,
   ENS_REGISTRAR_ADDRESS,
   FACTORY_ADDRESS,
@@ -225,20 +225,26 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
   return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
 }
 
-// TODO Ramin: kovan hardcoded
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
-  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.TridentRouter
-  return useContract(address, abi, withSignerIfPossible)
+  const { chainId } = useActiveWeb3React()
+  const router = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.TridentRouter
+  return useContract(router?.address, router?.abi, withSignerIfPossible)
 }
 
-// TODO Ramin: kovan hardcoded
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
-  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.MasterDeployer
-  return useContract(address, abi, withSignerIfPossible)
+  const { chainId } = useActiveWeb3React()
+  const masterDeployer = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MasterDeployer
+  return useContract(masterDeployer?.address, masterDeployer?.abi, withSignerIfPossible)
 }
 
-// TODO Ramin: kovan hardcoded
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
-  const { address, abi } = TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory
-  return useContract(address, abi, withSignerIfPossible)
+  const { chainId } = useActiveWeb3React()
+  const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ConstantProductPoolFactory
+  return useContract(factory?.address, factory?.abi, withSignerIfPossible)
+}
+
+export function useStablePoolFactory(withSignerIfPossible?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HybridPoolFactory
+  return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }

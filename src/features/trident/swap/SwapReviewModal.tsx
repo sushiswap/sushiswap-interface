@@ -17,7 +17,7 @@ import { SwapCallbackState, useSwapCallback } from 'hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'hooks/useSwapSlippageTollerence'
 import useTransactionStatus from 'hooks/useTransactionStatus'
 import { FC, useCallback, useMemo, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
 import { showReviewAtom, txHashAtom } from '../context/atoms'
 import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
@@ -35,21 +35,21 @@ const SwapReviewModal: FC = () => {
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const tx = useTransactionStatus()
   const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
+  const resetBentoPermit = useResetRecoilState(TridentApproveGateBentoPermitAtom)
   const [cbError, setCbError] = useState<string>()
   const { rebases } = useBentoRebases(currencies)
-
   const {
-    parsedAmounts: [inputAmount, outputAmount, outputMinAmount],
+    parsedAmounts: [inputAmount, outputAmount],
     spendFromWallet: [fromWallet],
     receiveToWallet: [receiveToWallet],
   } = useSwapAssetPanelInputs()
 
   const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
     bentoPermit,
+    resetBentoPermit,
     receiveToWallet,
-    inputAmount,
-    outputAmount: outputMinAmount,
     fromWallet,
+    parsedAmounts: [inputAmount, outputAmount],
   })
 
   const closeModal = useCallback(() => {
@@ -87,7 +87,7 @@ const SwapReviewModal: FC = () => {
 
   const priceImpact = trade
     ? new Percent(
-        trade.route.priceImpact.toString().toBigNumber(18).toString(),
+        (trade.route.priceImpact || 0).toString().toBigNumber(18).toString(),
         JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
       )
     : undefined

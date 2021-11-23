@@ -1,19 +1,19 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { usePoolDetailsMint } from 'app/features/trident/context/hooks/usePoolDetails'
-import {
-  PoolCreationActionProps,
-  poolCreationActions,
-  valueIfNative,
-} from 'app/features/trident/create/context/actions'
+import { toHex } from '@sushiswap/core-sdk'
+import { approveMasterContractAction } from 'app/features/trident/context/actions'
+import { batchAction } from 'app/features/trident/context/hooks/actions'
+import { PoolCreationActionProps, poolCreationActions } from 'app/features/trident/create/context/actions'
+import { SpendSource } from 'app/features/trident/create/context/SelectedAsset'
 import { useCreatePoolDependencyError } from 'app/features/trident/create/context/useCreatePoolDependencyError'
+import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useConstantProductPoolFactory, useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 import ReactGA from 'react-ga'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { attemptingTxnAtom, showReviewAtom, txHashAtom } from '../../context/atoms'
 import {
@@ -25,7 +25,7 @@ import {
 
 export const useClassicPoolCreateExecute = () => {
   const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
+  const { account, library } = useActiveWeb3React()
   const constantProductPoolFactory = useConstantProductPoolFactory()
   const addTransaction = useTransactionAdder()
   const router = useTridentRouterContract()
@@ -37,37 +37,50 @@ export const useClassicPoolCreateExecute = () => {
   const setShowReview = useSetRecoilState(showReviewAtom)
   const feeTier = useRecoilValue(selectedFeeTierAtom)
   const twap = useRecoilValue(createAnOracleSelectionAtom)
-
+  const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
+  const resetBentoPermit = useResetRecoilState(TridentApproveGate.bentoPermit)
   const { rebases, loading: rebasesLoading } = useBentoRebases(assets.map((asset) => asset.currency))
-  const { liquidityMinted } = usePoolDetailsMint(parsedAmounts)
 
-  const error = useCreatePoolDependencyError(rebasesLoading)
+  const error = useCreatePoolDependencyError(rebasesLoading, bentoPermit)
 
   return useCallback(async () => {
     /* Should consider site-wide error messaging & handling strategy */
-    if (error) {
-      alert(`Error with pool creation: ${error}`)
+    if (error || !router || !library || !account) {
+      alert(`Dependency error: ${error}`)
       return
     }
 
+    let value = '0x0'
+    if (parsedAmounts?.[0]?.currency.isNative && assets[0].spendFromSource === SpendSource.WALLET)
+      value = toHex(parsedAmounts[0])
+    if (parsedAmounts?.[1]?.currency.isNative && assets[1].spendFromSource === SpendSource.WALLET)
+      value = toHex(parsedAmounts[1])
+
     try {
       setAttemptingTxn(true)
-      const tx = await router?.batch(
-        poolCreationActions(
-          {
-            account,
-            assets,
-            constantProductPoolFactory,
-            router,
-            feeTier,
-            twap,
-            parsedAmounts,
-            rebases,
-            liquidityMinted,
-          } as PoolCreationActionProps /* Can cast given the error guard above */
-        ),
-        valueIfNative(parsedAmounts)
-      )
+      const tx = await library.getSigner().sendTransaction({
+        from: account,
+        to: router.address,
+        data: batchAction({
+          contract: router,
+          actions: [
+            approveMasterContractAction({ router, signature: bentoPermit }),
+            ...poolCreationActions(
+              {
+                account,
+                assets,
+                constantProductPoolFactory,
+                router,
+                feeTier,
+                twap,
+                parsedAmounts,
+                rebases,
+              } as PoolCreationActionProps /* Can cast given the error guard above */
+            ),
+          ],
+        }),
+        value,
+      })
 
       setTxHash(tx.hash)
       setShowReview(false)
@@ -86,6 +99,8 @@ export const useClassicPoolCreateExecute = () => {
         action: 'Create',
         label: [assets[0].currency!!.symbol, assets[1].currency!!.symbol].join('/'),
       })
+
+      resetBentoPermit()
     } catch (error) {
       setAttemptingTxn(false)
       if (error instanceof String) {
@@ -101,13 +116,15 @@ export const useClassicPoolCreateExecute = () => {
     account,
     addTransaction,
     assets,
+    bentoPermit,
     constantProductPoolFactory,
     error,
     feeTier,
     i18n,
-    liquidityMinted,
+    library,
     parsedAmounts,
     rebases,
+    resetBentoPermit,
     router,
     setAttemptingTxn,
     setShowReview,

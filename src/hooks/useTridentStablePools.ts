@@ -1,9 +1,9 @@
 import { Interface } from '@ethersproject/abi'
-import { ChainId, ChainKey, Currency, CurrencyAmount, JSBI } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI } from '@sushiswap/core-sdk'
 import HybridPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/HybridPool.sol/HybridPool.json'
-import TRIDENT from '@sushiswap/trident/exports/all.json'
 import { computeHybridPoolAddress, Fee, HybridPool } from '@sushiswap/trident-sdk'
 import { PoolAtomType } from 'app/features/trident/types'
+import { useStablePoolFactory } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
@@ -21,6 +21,7 @@ export function useTridentStablePools(
   pools: [Currency | undefined, Currency | undefined, Fee | undefined, JSBI | undefined][]
 ): PoolAtomType[] {
   const { chainId } = useActiveWeb3React()
+  const hybridPoolFactory = useStablePoolFactory()
 
   const poolAddresses = useMemo(() => {
     if (!chainId) return []
@@ -38,9 +39,9 @@ export function useTridentStablePools(
         !tokenA.equals(tokenB) &&
         fee &&
         a &&
-        TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.HybridPoolFactory.address
+        hybridPoolFactory?.address
         ? computeHybridPoolAddress({
-            factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.HybridPoolFactory.address,
+            factoryAddress: hybridPoolFactory.address,
             tokenA,
             tokenB,
             fee,

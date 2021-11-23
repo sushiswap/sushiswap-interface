@@ -1,9 +1,9 @@
 import { Interface } from '@ethersproject/abi'
-import { ChainId, ChainKey, Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import ConstantProductPoolArtifact from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
-import TRIDENT from '@sushiswap/trident/exports/all.json'
 import { computeConstantProductPoolAddress, ConstantProductPool, Fee } from '@sushiswap/trident-sdk'
 import { PoolAtomType } from 'app/features/trident/types'
+import { useConstantProductPoolFactory } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 import { useMultipleContractSingleData } from 'state/multicall/hooks'
@@ -21,6 +21,8 @@ export function useTridentClassicPools(
   pools: [Currency | undefined, Currency | undefined, Fee | undefined, boolean | undefined][]
 ): PoolAtomType[] {
   const { chainId } = useActiveWeb3React()
+  const constantProductPoolFactory = useConstantProductPoolFactory()
+
   const poolAddresses = useMemo(() => {
     if (!chainId) return []
 
@@ -37,9 +39,9 @@ export function useTridentClassicPools(
         !tokenA.equals(tokenB) &&
         fee &&
         twap !== undefined &&
-        TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address
+        constantProductPoolFactory?.address
         ? computeConstantProductPoolAddress({
-            factoryAddress: TRIDENT[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+            factoryAddress: constantProductPoolFactory.address,
             tokenA,
             tokenB,
             fee,
@@ -47,7 +49,7 @@ export function useTridentClassicPools(
           })
         : undefined
     })
-  }, [chainId, pools])
+  }, [chainId, constantProductPoolFactory, pools])
 
   const results = useMultipleContractSingleData(poolAddresses, CONSTANT_PRODUCT_POOL_INTERFACE, 'getReserves')
   return useMemo(() => {
