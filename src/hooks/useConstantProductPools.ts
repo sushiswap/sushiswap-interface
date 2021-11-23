@@ -31,7 +31,7 @@ export function useConstantProductPools(
           tokenB &&
           tokenA.chainId === tokenB.chainId &&
           !tokenA.equals(tokenB) &&
-          constantProductPoolFactory.address
+          constantProductPoolFactory?.address
             ? computeConstantProductPoolAddress({
                 factoryAddress: constantProductPoolFactory.address,
                 tokenA,
@@ -47,7 +47,7 @@ export function useConstantProductPools(
 
         return acc
       }, []),
-    [constantProductPoolFactory.address, permutations]
+    [constantProductPoolFactory?.address, permutations]
   )
 
   const results = useMultipleContractSingleData(pools, POOL_INTERFACE, 'getReserves')

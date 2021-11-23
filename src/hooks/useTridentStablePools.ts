@@ -24,7 +24,7 @@ export function useTridentStablePools(
   const hybridPoolFactory = useStablePoolFactory()
 
   const poolAddresses = useMemo(() => {
-    if (!chainId || !hybridPoolFactory) return []
+    if (!chainId) return []
 
     return pools.map(([currencyA, currencyB, fee, a]) => {
       if (!currencyA || !currencyB || currencyA === currencyB) return undefined
@@ -39,7 +39,7 @@ export function useTridentStablePools(
         !tokenA.equals(tokenB) &&
         fee &&
         a &&
-        hybridPoolFactory.address
+        hybridPoolFactory?.address
         ? computeHybridPoolAddress({
             factoryAddress: hybridPoolFactory.address,
             tokenA,

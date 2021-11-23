@@ -227,24 +227,24 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
 
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { address, abi } = TRIDENT[chainId][CHAIN_KEY[chainId]].contracts.TridentRouter
-  return useContract(address, abi, withSignerIfPossible)
+  const router = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.TridentRouter
+  return useContract(router?.address, router?.abi, withSignerIfPossible)
 }
 
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { address, abi } = TRIDENT[chainId][CHAIN_KEY[chainId]].contracts.MasterDeployer
-  return useContract(address, abi, withSignerIfPossible)
+  const masterDeployer = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MasterDeployer
+  return useContract(masterDeployer?.address, masterDeployer?.abi, withSignerIfPossible)
 }
 
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { address, abi } = TRIDENT[chainId][CHAIN_KEY[chainId]].contracts.ConstantProductPoolFactory
-  return useContract(address, abi, withSignerIfPossible)
+  const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ConstantProductPoolFactory
+  return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }
 
 export function useStablePoolFactory(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const { address, abi } = TRIDENT[chainId][CHAIN_KEY[chainId]].contracts.HybridPoolFactory
-  return useContract(address, abi, withSignerIfPossible)
+  const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HybridPoolFactory
+  return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }

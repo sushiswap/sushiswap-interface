@@ -24,7 +24,7 @@ export function useTridentClassicPools(
   const constantProductPoolFactory = useConstantProductPoolFactory()
 
   const poolAddresses = useMemo(() => {
-    if (!chainId || !constantProductPoolFactory) return []
+    if (!chainId) return []
 
     return pools.map(([currencyA, currencyB, fee, twap]) => {
       if (!currencyA || !currencyB || currencyA === currencyB) return undefined
@@ -39,7 +39,7 @@ export function useTridentClassicPools(
         !tokenA.equals(tokenB) &&
         fee &&
         twap !== undefined &&
-        constantProductPoolFactory.address
+        constantProductPoolFactory?.address
         ? computeConstantProductPoolAddress({
             factoryAddress: constantProductPoolFactory.address,
             tokenA,
