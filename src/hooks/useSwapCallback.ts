@@ -1,5 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { Signature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
@@ -25,7 +26,6 @@ import {
   RouteType,
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
-import { BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import approveAmountCalldata from 'functions/approveAmountCalldata'
@@ -73,7 +73,7 @@ interface TridentTradeContext {
   fromWallet: boolean
   receiveToWallet: boolean
   inputAmount?: CurrencyAmount<Currency>
-  bentoPermit?: BentoPermit
+  bentoPermit?: Signature
 }
 
 export type EstimatedSwapCall = SuccessfulCall | FailedCall
