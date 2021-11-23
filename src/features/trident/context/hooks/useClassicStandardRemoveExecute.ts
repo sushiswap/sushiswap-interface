@@ -1,8 +1,13 @@
-import { defaultAbiCoder } from '@ethersproject/abi'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { WNATIVE } from '@sushiswap/core-sdk'
 import { approveMasterContractAction, approveSLPAction } from 'app/features/trident/context/actions'
-import { batchAction, getAsEncodedAction } from 'app/features/trident/context/hooks/actions'
+import {
+  batchAction,
+  burnLiquidityAction,
+  sweepNativeTokenAction,
+  unwrapWETHAction,
+} from 'app/features/trident/context/hooks/actions'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { toShareJSBI } from 'app/functions/bentobox'
 import { useTridentRouterContract } from 'app/hooks/useContract'
@@ -20,7 +25,7 @@ import useRemovePercentageInput from './useRemovePercentageInput'
 export const useClassicStandardRemoveExecute = () => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
-  const { parsedSLPAmount, outputToWallet } = useRemovePercentageInput()
+  const { parsedSLPAmount, outputToWallet, receiveNative } = useRemovePercentageInput()
   const router = useTridentRouterContract()
   const addTransaction = useTransactionAdder()
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
@@ -64,7 +69,36 @@ export const useClassicStandardRemoveExecute = () => {
           },
         ]
 
-        const encoded = defaultAbiCoder.encode(['address', 'bool'], [account, outputToWallet])
+        const indexOfWETH = minOutputA.wrapped.currency.address === WNATIVE[chainId].address ? 0 : 1
+        const receiveETH = receiveNative[0] && outputToWallet
+        const actions = [
+          approveMasterContractAction({ router, signature: bentoPermit }),
+          approveSLPAction({ router, signatureData: slpPermit }),
+          burnLiquidityAction({
+            router,
+            address: pool.liquidityToken.address,
+            amount: parsedSLPAmount.quotient.toString(),
+            recipient: receiveETH ? router.address : account,
+            liquidityOutput,
+            receiveToWallet: outputToWallet,
+          }),
+        ]
+
+        if (receiveETH) {
+          actions.push(
+            unwrapWETHAction({
+              router,
+              amountMinimum: liquidityOutput[indexOfWETH].amount,
+              recipient: account,
+            }),
+            sweepNativeTokenAction({
+              router,
+              token: liquidityOutput[indexOfWETH === 0 ? 1 : 0].token,
+              recipient: account,
+              amount: liquidityOutput[indexOfWETH === 0 ? 1 : 0].amount,
+            })
+          )
+        }
 
         try {
           setAttemptingTxn(true)
@@ -73,15 +107,7 @@ export const useClassicStandardRemoveExecute = () => {
             to: router.address,
             data: batchAction({
               contract: router,
-              actions: [
-                approveMasterContractAction({ router, signature: bentoPermit }),
-                approveSLPAction({ router, signatureData: slpPermit }),
-                getAsEncodedAction({
-                  contract: router,
-                  fn: 'burnLiquidity',
-                  args: [pool.liquidityToken.address, parsedSLPAmount.quotient.toString(), encoded, liquidityOutput],
-                }),
-              ],
+              actions,
             }),
             value: '0x0',
           })
@@ -120,10 +146,11 @@ export const useClassicStandardRemoveExecute = () => {
       router,
       parsedSLPAmount,
       rebases,
+      receiveNative,
       outputToWallet,
-      setAttemptingTxn,
       bentoPermit,
       slpPermit,
+      setAttemptingTxn,
       setTxHash,
       setShowReview,
       addTransaction,

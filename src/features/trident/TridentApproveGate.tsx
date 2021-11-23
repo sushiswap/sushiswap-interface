@@ -5,7 +5,7 @@ import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useBentoMasterApproveCallback, { BentoApprovalState, BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
-import { StandardSignatureData, useV2LiquidityTokenPermit } from 'app/hooks/useERC20Permit'
+import { StandardSignatureData, useTridentLiquidityTokenPermit } from 'app/hooks/useERC20Permit'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React, { FC, memo, ReactNode, useCallback, useEffect, useState } from 'react'
@@ -31,8 +31,8 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
   const { i18n } = useLingui()
   const [approveState, approveCallback] = useApproveCallback(inputAmount?.wrapped, tokenApproveOn)
   const setSLPPermit = useSetRecoilState(TridentApproveGateSLPPermitAtom)
-  const { gatherPermitSignature, signatureData } = useV2LiquidityTokenPermit(
-    inputAmount?.currency.name === 'SLP' ? inputAmount?.wrapped : undefined,
+  const { gatherPermitSignature, signatureData } = useTridentLiquidityTokenPermit(
+    inputAmount?.currency.name === 'Sushi LP Token' ? inputAmount?.wrapped : undefined,
     tokenApproveOn
   )
 
@@ -49,44 +49,34 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
     }
   }, [approveCallback, gatherPermitSignature])
 
-  const resetState = useCallback(
-    (prevState) => {
-      const state = { ...prevState }
-      if (state[inputAmount!!.currency.wrapped.address]) {
-        delete state[inputAmount!!.currency.wrapped.address]
-      }
-
-      return state
-    },
-    [inputAmount]
-  )
-
   // If we have signatureData, sync to recoil
   useEffect(() => {
     if (signatureData && inputAmount && approveState === ApprovalState.NOT_APPROVED) {
       // Can safely cast because signatureData is always StandardSignatureData if PermitType === PermitType.amount
       setSLPPermit(signatureData as StandardSignatureData)
-      onStateChange((prevState) => ({
-        ...prevState,
-        [inputAmount.currency.wrapped.address]: ApprovalState.APPROVED,
-      }))
-
-      return () => onStateChange(resetState)
     }
-  }, [approveState, inputAmount, onStateChange, resetState, setSLPPermit, signatureData])
+  }, [approveState, inputAmount, onStateChange, setSLPPermit, signatureData])
 
   useEffect(() => {
     if (!inputAmount?.currency.wrapped.address) return
 
     onStateChange((prevState) => ({
       ...prevState,
-      [inputAmount.currency.wrapped.address]: approveState,
+      [inputAmount.currency.wrapped.address]: signatureData ? ApprovalState.APPROVED : approveState,
     }))
 
-    return () => onStateChange(resetState)
-  }, [approveState, inputAmount?.currency.wrapped.address, onStateChange, resetState])
+    return () =>
+      onStateChange((prevState) => {
+        const state = { ...prevState }
+        if (state[inputAmount!!.currency.wrapped.address]) {
+          delete state[inputAmount!!.currency.wrapped.address]
+        }
 
-  if ([ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
+        return state
+      })
+  }, [approveState, inputAmount, inputAmount.currency.wrapped.address, onStateChange, signatureData])
+
+  if (!signatureData && [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
     return (
       <Button.Dotted pending={approveState === ApprovalState.PENDING} color="blue" onClick={handleApprove}>
         {approveState === ApprovalState.PENDING

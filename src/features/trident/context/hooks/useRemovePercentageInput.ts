@@ -9,6 +9,11 @@ import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 
 import { bentoboxRebasesAtom, outputToWalletAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from '../atoms'
 
+export const receiveNativeAtom = atom<boolean>({
+  key: 'useRemovePercentageInput:receiveNativeAtom',
+  default: false,
+})
+
 export const percentageZapCurrencyAtom = atom<Currency | undefined>({
   key: 'useRemovePercentageInput:percentageZapCurrencyAtom',
   default: undefined,
@@ -93,6 +98,7 @@ const useRemovePercentageInput = () => {
   const parsedSLPAmount = useRecoilValue(parsedSLPAmountSelector)
   const outputToWallet = useRecoilValue(outputToWalletAtom)
   const zapCurrency = useRecoilState(percentageZapCurrencyAtom)
+  const receiveNative = useRecoilState(receiveNativeAtom)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -113,10 +119,20 @@ const useRemovePercentageInput = () => {
       parsedSLPAmount,
       percentageInput,
       outputToWallet,
+      receiveNative,
       zapCurrency,
       error,
     }),
-    [error, outputToWallet, parsedAmountSingleToken, parsedAmounts, parsedSLPAmount, percentageInput, zapCurrency]
+    [
+      error,
+      outputToWallet,
+      parsedAmountSingleToken,
+      parsedAmounts,
+      parsedSLPAmount,
+      percentageInput,
+      receiveNative,
+      zapCurrency,
+    ]
   )
 }
 

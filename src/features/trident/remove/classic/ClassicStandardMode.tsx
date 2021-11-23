@@ -1,7 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import loadingCircle from 'animation/loading-circle.json'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { useActiveWeb3React } from 'app/services/web3'
 import AssetInput from 'components/AssetInput'
 import Button from 'components/Button'
 import Dots from 'components/Dots'
@@ -21,9 +24,45 @@ import {
   poolBalanceAtom,
   showReviewAtom,
 } from '../../context/atoms'
-import useRemovePercentageInput from '../../context/hooks/useRemovePercentageInput'
+import useRemovePercentageInput, { receiveNativeAtom } from '../../context/hooks/useRemovePercentageInput'
 import SumUSDCValues from '../../SumUSDCValues'
 import TridentApproveGate from '../../TridentApproveGate'
+
+const CurrencyAmountItemWithEthSelector: FC<{
+  amount?: CurrencyAmount<Currency>
+}> = ({ amount }) => {
+  const { chainId } = useActiveWeb3React()
+  const usdcValue = useUSDCValue(amount)
+  const { i18n } = useLingui()
+  const [receiveNative, setReceiveNative] = useRecoilState(receiveNativeAtom)
+
+  if (amount?.currency.wrapped.address !== WNATIVE[chainId].address) {
+    return <ListPanel.CurrencyAmountItem amount={amount} />
+  }
+
+  return (
+    <ListPanel.Item
+      left={
+        <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
+          <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />
+          <Typography variant="sm" className="text-high-emphesis" weight={700}>
+            {amount?.toSignificant(6)} {amount?.currency.symbol}
+          </Typography>
+          <Typography
+            variant="sm"
+            weight={700}
+            className="text-blue cursor-pointer"
+            onClick={() => setReceiveNative(!receiveNative)}
+          >
+            {receiveNative ? i18n._(t`Receive WETH instead`) : i18n._(t`Receive ETH instead`)}
+          </Typography>
+        </div>
+      }
+      right={<ListPanel.Item.Right>≈${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>}
+      key={0}
+    />
+  )
+}
 
 const ClassicStandardMode: FC = () => {
   const { i18n } = useLingui()
@@ -73,7 +112,9 @@ const ClassicStandardMode: FC = () => {
                   />
                 }
                 items={[
-                  currentLiquidityValue.map((el, index) => <ListPanel.CurrencyAmountItem amount={el} key={index} />),
+                  currentLiquidityValue.map((el, index) => (
+                    <CurrencyAmountItemWithEthSelector amount={el} key={index} />
+                  )),
                 ]}
                 footer={
                   <div className="flex justify-between items-center px-4 py-6 gap-3">

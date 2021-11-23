@@ -279,6 +279,16 @@ export function useV2LiquidityTokenPermit(
   return useERC20Permit(liquidityAmount, spender, REMOVE_V2_LIQUIDITY_PERMIT_INFO)
 }
 
+const REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO: PermitInfo = {
+  version: '1',
+  name: 'Sushi LP Token',
+  type: PermitType.AMOUNT,
+}
+
+export function useTridentLiquidityTokenPermit(liquidityAmount?: CurrencyAmount<Token>, spender?: string) {
+  return useERC20Permit(liquidityAmount, spender, REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO)
+}
+
 export function useERC20PermitFromTrade(
   trade: V2Trade<Currency, Currency, TradeType> | undefined,
   allowedSlippage: Percent

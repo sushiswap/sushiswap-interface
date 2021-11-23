@@ -1,7 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { NATIVE, WNATIVE } from '@sushiswap/core-sdk'
+import Alert from 'app/components/Alert'
 import { usePoolDetailsBurn } from 'app/features/trident/context/hooks/usePoolDetails'
 import { classNames } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import React from 'react'
 import { useRecoilState } from 'recoil'
 
@@ -18,8 +21,13 @@ import SumUSDCValues from '../../SumUSDCValues'
 import TransactionDetails from '../TransactionDetails'
 
 const ClassicStandardAside = () => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { parsedSLPAmount, error } = useRemovePercentageInput()
+  const {
+    parsedSLPAmount,
+    error,
+    receiveNative: [receiveNative],
+  } = useRemovePercentageInput()
   const { minLiquidityOutput } = usePoolDetailsBurn(parsedSLPAmount)
   const usdcValues = [useUSDCValue(minLiquidityOutput?.[0]), useUSDCValue(minLiquidityOutput?.[1])]
   const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
@@ -59,6 +67,16 @@ const ClassicStandardAside = () => {
           }
         />
       </div>
+      {!outputToWallet && receiveNative && (
+        <Alert
+          className="bg-transparent px-0 pb-0 pt-0"
+          dismissable={false}
+          type="error"
+          message={i18n._(
+            t`Native ${NATIVE[chainId].symbol} can't be withdrawn to BentoBox, ${WNATIVE[chainId].symbol} will be received instead`
+          )}
+        />
+      )}
       <div className="flex flex-col gap-5">
         <Typography variant="lg" weight={700} className="text-high-emphesis">
           {i18n._(t`You'll Receive (at least):`)}
@@ -71,7 +89,9 @@ const ClassicStandardAside = () => {
                 {el?.greaterThan(0) ? el.toSignificant(6) : '0.00'}
               </Typography>
               <Typography variant="sm" weight={700} className="text-high-emphesis">
-                {el?.currency.symbol}
+                {el?.currency.wrapped.address === WNATIVE[chainId].address && receiveNative && outputToWallet
+                  ? NATIVE[chainId].symbol
+                  : el?.currency.symbol}
               </Typography>
             </div>
             <Typography variant="sm" weight={700} className="text-secondary">

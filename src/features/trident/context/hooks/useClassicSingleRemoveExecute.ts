@@ -49,15 +49,6 @@ export const useClassicSingleRemoveExecute = () => {
 
         try {
           setAttemptingTxn(true)
-          console.log(parsedSLPAmount.quotient.toString())
-          console.log(
-            router.interface?.encodeFunctionData('burnLiquiditySingle', [
-              pool.liquidityToken.address,
-              parsedSLPAmount.quotient.toString(),
-              encoded,
-              '10728547',
-            ])
-          )
           const tx = await router.burnLiquiditySingle(
             pool.liquidityToken.address,
             parsedSLPAmount.quotient.toString(),
