@@ -140,7 +140,7 @@
     "lottie-react": "^2.1.0",
     "madge": "^5.0.1",
     "millify": "^4.0.0",
-    "next": "^12.0.1",
+    "next": "^12.0.3",
     "next-pwa": "^5.4.0",
     "next-unused": "^0.0.6",
     "node-vibrant": "3.1.6",

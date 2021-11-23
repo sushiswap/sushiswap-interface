@@ -19,6 +19,8 @@ function Lend() {
   const addresses = useKashiPairAddresses()
   const fullPairs = useKashiPairs(addresses)
 
+  console.log({ fullPairs })
+
   const positions = useSearchAndSort(
     fullPairs.filter((pair) => pair.userAssetFraction.gt(0)),
     { keys: ['search'], threshold: 0.1 },
