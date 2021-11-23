@@ -1,5 +1,4 @@
 import {
-  ARCHER_ROUTER_ADDRESS,
   BAR_ADDRESS,
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
@@ -15,17 +14,16 @@ import {
   MINICHEF_ADDRESS,
   MULTICALL2_ADDRESS,
   ROUTER_ADDRESS,
-  STOP_LIMIT_ORDER_ADDRESS,
   SUSHI_ADDRESS,
   TIMELOCK_ADDRESS,
   WNATIVE_ADDRESS,
-} from '@sushiswap/sdk'
+} from '@sushiswap/core-sdk'
+import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
 } from '../constants/abis/argent-wallet-detector'
-
-import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
+import { AddressZero } from '@ethersproject/constants'
 import BAR_ABI from '../constants/abis/bar.json'
 import BENTOBOX_ABI from '../constants/abis/bentobox.json'
 import BORING_HELPER_ABI from '../constants/abis/boring-helper.json'
@@ -57,7 +55,7 @@ import UNI_FACTORY_ABI from '../constants/abis/uniswap-v2-factory.json'
 import WETH9_ABI from '../constants/abis/weth.json'
 import ZENKO_ABI from '../constants/abis/zenko.json'
 import { getContract } from '../functions/contract'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3'
 import { useMemo } from 'react'
 
 const UNI_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
@@ -69,9 +67,8 @@ export function useEIP2612Contract(tokenAddress?: string): Contract | null {
 // returns null on errors
 export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
   const { library, account } = useActiveWeb3React()
-
   return useMemo(() => {
-    if (!address || !ABI || !library) return null
+    if (!address || address === AddressZero || !ABI || !library) return null
     try {
       return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
@@ -93,7 +90,7 @@ export function useWETH9Contract(withSignerIfPossible?: boolean): Contract | nul
 export function useArgentWalletDetectorContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(
-    chainId === ChainId.MAINNET ? ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS : undefined,
+    chainId === ChainId.ETHEREUM ? ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS : undefined,
     ARGENT_WALLET_DETECTOR_ABI,
     false
   )
@@ -119,6 +116,11 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 export function useMerkleDistributorContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? MERKLE_DISTRIBUTOR_ADDRESS[chainId] : undefined, MERKLE_DISTRIBUTOR_ABI, true)
+}
+
+export function useProtocolMerkleDistributorContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? '0x1026cbed7b7E851426b959BC69dcC1bf5876512d' : undefined, MERKLE_DISTRIBUTOR_ABI, true)
 }
 
 export function useBoringHelperContract(): Contract | null {
@@ -155,13 +157,9 @@ export function useFactoryContract(): Contract | null {
   return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false)
 }
 
-export function useRouterContract(useArcher = false, withSignerIfPossible?: boolean): Contract | null {
+export function useRouterContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-
-  const address = useArcher ? ARCHER_ROUTER_ADDRESS[chainId] : ROUTER_ADDRESS[chainId]
-  const abi = useArcher ? ARCHER_ROUTER_ABI : ROUTER_ABI
-
-  return useContract(address, abi, withSignerIfPossible)
+  return useContract(ROUTER_ADDRESS[chainId], ROUTER_ABI, true)
 }
 
 export function useSushiBarContract(withSignerIfPossible?: boolean): Contract | null {

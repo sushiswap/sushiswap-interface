@@ -1,7 +1,7 @@
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 
 const config = {
-  [ChainId.MAINNET]: {},
+  [ChainId.ETHEREUM]: {},
 }
 
 export default config

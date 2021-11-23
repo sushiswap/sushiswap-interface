@@ -1,4 +1,4 @@
-import { CHAINLINK_ORACLE_ADDRESS, ChainId, Token } from '@sushiswap/sdk'
+import { CHAINLINK_ORACLE_ADDRESS, ChainId, Token } from '@sushiswap/core-sdk'
 
 import { AddressZero } from '@ethersproject/constants'
 import { CHAINLINK_PRICE_FEED_MAP } from '../config/oracles/chainlink'
@@ -20,7 +20,7 @@ export abstract class AbstractOracle implements Oracle {
   data = ''
   warning = ''
   error = ''
-  chainId = ChainId.MAINNET
+  chainId = ChainId.ETHEREUM
   pair: any
   tokens: Token[]
   valid = false

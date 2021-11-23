@@ -1,5 +1,5 @@
 import { AlertTriangle, ArrowUpCircle, CheckCircle } from 'react-feather'
-import { ChainId, Currency } from '@sushiswap/sdk'
+import { ChainId, Currency } from '@sushiswap/core-sdk'
 import React, { FC } from 'react'
 import { Trans, t } from '@lingui/macro'
 
@@ -13,21 +13,16 @@ import ModalHeader from '../../components/ModalHeader'
 import { RowFixed } from '../../components/Row'
 import { getExplorerLink } from '../../functions/explorer'
 import loadingRollingCircle from '../../animation/loading-rolling-circle.json'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import useAddTokenToMetaMask from '../../hooks/useAddTokenToMetaMask'
 import { useLingui } from '@lingui/react'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void
   pendingText: string
-  pendingText2: string
 }
 
-export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({
-  onDismiss,
-  pendingText,
-  pendingText2,
-}) => {
+export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText }) => {
   const { i18n } = useLingui()
   return (
     <div>
@@ -40,7 +35,6 @@ export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = (
       <div className="flex flex-col items-center justify-center gap-3">
         <div className="text-xl font-bold text-high-emphesis">{i18n._(t`Waiting for Confirmation`)}</div>
         <div className="font-bold">{pendingText}</div>
-        <div className="font-bold">{pendingText2}</div>
         <div className="text-sm font-bold text-secondary">{i18n._(t`Confirm this transaction in your wallet`)}</div>
       </div>
     </div>
@@ -166,7 +160,6 @@ interface ConfirmationModalProps {
   content: () => React.ReactNode
   attemptingTxn: boolean
   pendingText: string
-  pendingText2?: string
   currencyToAdd?: Currency | undefined
 }
 
@@ -176,7 +169,6 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   attemptingTxn,
   hash,
   pendingText,
-  pendingText2,
   content,
   currencyToAdd,
 }) => {
@@ -188,7 +180,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   return (
     <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={90}>
       {attemptingTxn ? (
-        <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} pendingText2={pendingText2} />
+        <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} />
       ) : hash ? (
         <TransactionSubmittedContent
           chainId={chainId}

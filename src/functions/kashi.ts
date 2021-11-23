@@ -12,8 +12,51 @@ import {
   STARTING_INTEREST_PER_YEAR,
 } from '@sushiswap/sdk'
 import { ZERO, e10 } from './math'
-
 import { getCurrency } from './currency/getCurrency'
+import { ChainId } from '@sushiswap/core-sdk'
+import { getSigner } from '../functions/contract'
+import { Contract } from '@ethersproject/contracts'
+import { Web3Provider } from '@ethersproject/providers'
+
+export async function signMasterContractApproval(
+  bentoBoxContract: Contract | null,
+  masterContract: string | undefined,
+  user: string,
+  library: Web3Provider,
+  approved: boolean,
+  chainId: ChainId | undefined
+): Promise<string> {
+  const warning = approved ? 'Give FULL access to funds in (and approved to) BentoBox?' : 'Revoke access to BentoBox?'
+  const nonce = await bentoBoxContract?.nonces(user)
+  const message = {
+    warning,
+    user,
+    masterContract,
+    approved,
+    nonce,
+  }
+
+  const typedData = {
+    types: {
+      SetMasterContractApproval: [
+        { name: 'warning', type: 'string' },
+        { name: 'user', type: 'address' },
+        { name: 'masterContract', type: 'address' },
+        { name: 'approved', type: 'bool' },
+        { name: 'nonce', type: 'uint256' },
+      ],
+    },
+    primaryType: 'SetMasterContractApproval',
+    domain: {
+      name: 'BentoBox V1',
+      chainId: chainId,
+      verifyingContract: bentoBoxContract?.address,
+    },
+    message: message,
+  }
+  const signer = getSigner(library, user)
+  return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
+}
 
 export function accrue(pair: any, amount: BigNumber, includePrincipal = false): BigNumber {
   return amount

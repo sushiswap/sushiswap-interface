@@ -1,4 +1,3 @@
-import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE, DEFAULT_ARCHER_GAS_PRICES } from '../../config/archer'
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
 import {
   SerializedPair,
@@ -9,11 +8,6 @@ import {
   removeSerializedToken,
   toggleURLWarning,
   updateMatchesDarkMode,
-  updateUserArcherETHTip,
-  updateUserArcherGasEstimate,
-  updateUserArcherGasPrice,
-  updateUserArcherTipManualOverride,
-  updateUserArcherUseRelay,
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
@@ -58,12 +52,6 @@ export interface UserState {
 
   timestamp: number
   URLWarningVisible: boolean
-
-  userArcherUseRelay: boolean // use relay or go directly to router
-  userArcherGasPrice: string // Current gas price
-  userArcherETHTip: string // ETH tip for relay, as full BigInt string
-  userArcherGasEstimate: string // Gas estimate for trade
-  userArcherTipManualOverride: boolean // is user manually entering tip
 }
 
 function pairKey(token0Address: string, token1Address: string) {
@@ -81,11 +69,6 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
-  userArcherUseRelay: false,
-  userArcherGasPrice: DEFAULT_ARCHER_GAS_PRICES[4].toString(),
-  userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
-  userArcherGasEstimate: DEFAULT_ARCHER_GAS_ESTIMATE.toString(),
-  userArcherTipManualOverride: false,
 }
 
 export default createReducer(initialState, (builder) =>
@@ -159,20 +142,5 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
-    })
-    .addCase(updateUserArcherUseRelay, (state, action) => {
-      state.userArcherUseRelay = action.payload.userArcherUseRelay
-    })
-    .addCase(updateUserArcherGasPrice, (state, action) => {
-      state.userArcherGasPrice = action.payload.userArcherGasPrice
-    })
-    .addCase(updateUserArcherETHTip, (state, action) => {
-      state.userArcherETHTip = action.payload.userArcherETHTip
-    })
-    .addCase(updateUserArcherGasEstimate, (state, action) => {
-      state.userArcherGasEstimate = action.payload.userArcherGasEstimate
-    })
-    .addCase(updateUserArcherTipManualOverride, (state, action) => {
-      state.userArcherTipManualOverride = action.payload.userArcherTipManualOverride
     })
 )

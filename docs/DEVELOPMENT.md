@@ -11,7 +11,7 @@ git clone https://github.com/sushiswap/sushiswap-sdk.git && cd sushiswap-sdk && 
 In the Sushi Interface repository you'd link this package by running this command.
 
 ```sh
-yarn link @sushiswap/sdk
+yarn link @sushiswap/core-sdk
 ```
 
 If actively developing the SDK, you might like to run the watcher. You can do this by running this command in the root of the sdk repository once linked, and changes will be picked up by the interface in real-time.

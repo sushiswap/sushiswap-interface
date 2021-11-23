@@ -1,9 +1,9 @@
+import { useMemo } from 'react'
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import FarmList from '../../../features/analytics/Farms/FarmList'
 import Search from '../../../components/Search'
 import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useFuse } from '../../../hooks'
-import { useMemo } from 'react'
+import useFuse from '../../../hooks/useFuse'
 import Background from '../../../features/analytics/Background'
 
 export default function Farms(): JSX.Element {

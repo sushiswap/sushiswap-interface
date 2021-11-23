@@ -1,5 +1,6 @@
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import { useActiveWeb3React, useInariContract } from '../../../hooks'
+import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { useInariContract } from '../../../hooks/useContract'
+import { useActiveWeb3React } from '../../../services/web3'
 import useTrait, { BaseTrait } from './useTrait'
 
 import { BaseStrategyHook } from '../strategies/useBaseStrategy'

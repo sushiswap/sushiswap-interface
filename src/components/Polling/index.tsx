@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import ExternalLink from './../ExternalLink'
 import { getExplorerLink } from '../../functions/explorer'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useBlockNumber } from '../../state/application/hooks'
 
 export default function Polling() {

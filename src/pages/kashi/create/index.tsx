@@ -1,4 +1,4 @@
-import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/sdk'
+import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/core-sdk'
 import React, { useCallback } from 'react'
 import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from '../../../state/create/hook'
 
@@ -14,7 +14,7 @@ import Layout from '../../../layouts/Kashi'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { e10 } from '../../../functions/math'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../../services/web3'
 import { useBentoBoxContract } from '../../../hooks/useContract'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
@@ -195,7 +195,9 @@ function Create() {
               currency={currencies[Field.COLLATERAL]}
               onCurrencySelect={handleCollateralSelect}
               otherCurrency={currencies[Field.ASSET]}
-              showCommonBases={true}
+              showCommonBases={false}
+              allowManageTokenList={false}
+              showSearch={false}
               id="kashi-currency-collateral"
             />
 
@@ -207,7 +209,9 @@ function Create() {
               currency={currencies[Field.ASSET]}
               onCurrencySelect={handleAssetSelect}
               otherCurrency={currencies[Field.COLLATERAL]}
-              showCommonBases={true}
+              showCommonBases={false}
+              allowManageTokenList={false}
+              showSearch={false}
               id="kashi-currency-asset"
             />
           </div>

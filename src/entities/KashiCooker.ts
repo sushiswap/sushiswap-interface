@@ -1,6 +1,6 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { ChainId, WNATIVE } from '@sushiswap/sdk'
-import { getProviderOrSigner, getSigner } from '../functions/contract'
+import { ChainId, WNATIVE } from '@sushiswap/core-sdk'
+import { getProviderOrSigner } from '../functions/contract'
 
 import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
@@ -11,46 +11,6 @@ import { ZERO } from '../functions/math'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { toElastic } from '../functions/rebase'
 import { toShare } from '../functions/bentobox'
-
-export async function signMasterContractApproval(
-  bentoBoxContract: Contract | null,
-  masterContract: string | undefined,
-  user: string,
-  library: Web3Provider,
-  approved: boolean,
-  chainId: ChainId | undefined
-): Promise<string> {
-  const warning = approved ? 'Give FULL access to funds in (and approved to) BentoBox?' : 'Revoke access to BentoBox?'
-  const nonce = await bentoBoxContract?.nonces(user)
-  const message = {
-    warning,
-    user,
-    masterContract,
-    approved,
-    nonce,
-  }
-
-  const typedData = {
-    types: {
-      SetMasterContractApproval: [
-        { name: 'warning', type: 'string' },
-        { name: 'user', type: 'address' },
-        { name: 'masterContract', type: 'address' },
-        { name: 'approved', type: 'bool' },
-        { name: 'nonce', type: 'uint256' },
-      ],
-    },
-    primaryType: 'SetMasterContractApproval',
-    domain: {
-      name: 'BentoBox V1',
-      chainId: chainId,
-      verifyingContract: bentoBoxContract?.address,
-    },
-    message: message,
-  }
-  const signer = getSigner(library, user)
-  return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
-}
 
 enum Action {
   ADD_ASSET = 1,

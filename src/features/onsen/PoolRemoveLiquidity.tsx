@@ -4,10 +4,12 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/sdk'
+import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import React, { useCallback, useMemo, useState } from 'react'
 import { calculateSlippageAmount, calculateGasMargin, classNames } from '../../functions'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, usePairContract, useRouterContract } from '../../hooks'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { usePairContract, useRouterContract } from '../../hooks/useContract'
+import { useActiveWeb3React } from '../../services/web3'
 import { useV2LiquidityTokenPermit } from '../../hooks/useERC20Permit'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { Field } from '../../state/burn/actions'
@@ -18,7 +20,6 @@ import useDebouncedChangeHandler from '../../hooks/useDebouncedChangeHandler'
 import Button, { ButtonError } from '../../components/Button'
 import CurrencyLogo from '../../components/CurrencyLogo'
 import { Plus } from 'react-feather'
-import Input from '../../components/Input'
 import Web3Connect from '../../components/Web3Connect'
 import Dots from '../../components/Dots'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
@@ -26,6 +27,7 @@ import { FiatValue } from '../../components/CurrencyInputPanel/FiatValue'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import Alert from '../../components/Alert'
 import Typography from '../../components/Typography'
+import Input from '../../components/Input'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
@@ -411,9 +413,9 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-between w-full">
                 <div className="whitespace-nowrap">{i18n._(t`Amount to Remove`)}</div>
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center w-full space-x-1">
                   <Input.Percent
-                    className="w-1/4 token-amount-input"
+                    className="token-amount-input"
                     value={innerLiquidityPercentage}
                     onUserInput={(val) => {
                       setInnerLiquidityPercentage(val)

@@ -1,11 +1,11 @@
-import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sushiswap/core-sdk'
 import { Field, typeInput } from './actions'
 import { useAppDispatch, useAppSelector } from '../hooks'
 
 import { AppState } from '../index'
 import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useCallback } from 'react'
 import { useLingui } from '@lingui/react'
 import { useTokenBalances } from '../wallet/hooks'

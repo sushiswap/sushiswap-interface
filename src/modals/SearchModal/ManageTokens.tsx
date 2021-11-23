@@ -7,11 +7,11 @@ import CurrencyModalView from './CurrencyModalView'
 import ExternalLink from '../../components/ExternalLink'
 import { ExternalLinkIcon } from '../../components/ExternalLinkIcon'
 import ImportRow from './ImportRow'
-import { Token } from '@sushiswap/sdk'
+import { Token } from '@sushiswap/core-sdk'
 import { Trash } from 'react-feather'
 import { getExplorerLink } from '../../functions/explorer'
 import { isAddress } from '../../functions/validate'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useToken } from '../../hooks/Tokens'
 
 function ManageTokens({

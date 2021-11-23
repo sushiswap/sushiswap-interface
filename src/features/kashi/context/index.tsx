@@ -1,4 +1,13 @@
-import { ChainId, Currency, KASHI_ADDRESS, NATIVE, Token, USDC_ADDRESS, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/sdk'
+import {
+  ChainId,
+  Currency,
+  KASHI_ADDRESS,
+  NATIVE,
+  Token,
+  USDC_ADDRESS,
+  WNATIVE,
+  WNATIVE_ADDRESS,
+} from '@sushiswap/core-sdk'
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { ZERO, e10, maximum, minimum } from '../../../functions/math'
 import {
@@ -20,7 +29,7 @@ import { getAddress } from '@ethersproject/address'
 import { getCurrency } from '../../../functions/currency'
 import { getOracle } from '../../../entities/Oracle'
 import { toElastic } from '../../../functions/rebase'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../../services/web3'
 import { useAllTokens } from '../../../hooks/Tokens'
 import { useBlockNumber } from '../../../state/application/hooks'
 import usePrevious from '../../../hooks/usePrevious'
@@ -197,7 +206,10 @@ export function KashiProvider({ children }) {
   const bentoBoxContract = useBentoBoxContract()
 
   const tokens = useAllTokens()
-  const strategies = useBentoStrategies({ chainId })
+  const strategies = useBentoStrategies({
+    chainId,
+    shouldFetch: chainId && (chainId === ChainId.ETHEREUM || chainId === ChainId.MATIC),
+  })
 
   // const info = useSingleCallResult(boringHelperContract, 'getUIInfo', [
   //   account,
@@ -206,15 +218,12 @@ export function KashiProvider({ children }) {
   //   [KASHI_ADDRESS[chainId]],
   // ])?.result?.[0]
 
-  // console.log({ info })
-
   const updatePairs = useCallback(async () => {
-    console.log('update pairs')
     if (
       !account ||
       !chainId ||
       ![
-        ChainId.MAINNET,
+        ChainId.ETHEREUM,
         ChainId.KOVAN,
         ChainId.BSC,
         ChainId.MATIC,
@@ -227,7 +236,6 @@ export function KashiProvider({ children }) {
     }
 
     if (boringHelperContract && bentoBoxContract) {
-      // // console.log('READY TO RUMBLE')
       const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], currency, [KASHI_ADDRESS[chainId]]))
 
       // Get the deployed pairs from the logs and decode

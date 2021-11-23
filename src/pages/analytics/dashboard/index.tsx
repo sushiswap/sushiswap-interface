@@ -1,6 +1,4 @@
-import { useBlock, useEthPrice, useNativePrice, useSushiPairs, useTokens } from '../../../services/graph'
 import { useMemo, useState } from 'react'
-
 import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
 import DashboardChartCard from '../../../features/analytics/Dashboard/DashboardChartCard'
 import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
@@ -9,7 +7,9 @@ import PoolList from '../../../features/analytics/Farms/FarmList'
 import Search from '../../../components/Search'
 import TokenList from '../../../features/analytics/Tokens/TokenList'
 import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useActiveWeb3React, useFuse } from '../../../hooks'
+import { useActiveWeb3React } from '../../../services/web3'
+import { useBlock, useNativePrice, useSushiPairs, useTokens } from '../../../services/graph'
+import useFuse from '../../../hooks/useFuse'
 import Background from '../../../features/analytics/Background'
 
 export default function Dashboard(): JSX.Element {
@@ -22,8 +22,8 @@ export default function Dashboard(): JSX.Element {
 
   // For Top Pairs
   const pairs = useSushiPairs({ chainId })
-  const pairs1d = useSushiPairs({ block: block1d, chainId })
-  const pairs1w = useSushiPairs({ block: block1w, chainId })
+  const pairs1d = useSushiPairs({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const pairs1w = useSushiPairs({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   const pairsFormatted = useMemo(
     () =>
@@ -72,12 +72,12 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Tokens
-  const nativePrice1d = useNativePrice({ block: block1d, chainId })
-  const nativePrice1w = useNativePrice({ block: block1w, chainId })
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d } })
+  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w } })
 
   const tokens = useTokens({ chainId })
-  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d, chainId })
-  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w, chainId })
+  const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   const tokensFormatted = useMemo(
     () =>

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { RowBetween, RowFixed } from '../../components/Row'
 
@@ -16,7 +16,7 @@ import { i18n } from '@lingui/core'
 import { isTokenOnList } from '../../functions/validate'
 import styled from 'styled-components'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useCombinedActiveList } from '../../state/lists/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
@@ -101,11 +101,13 @@ function CurrencyRow({
   isSelected,
   otherSelected,
   style,
+  hideBalance = false,
 }: {
   currency: Currency
   onSelect: () => void
   isSelected: boolean
   otherSelected: boolean
+  hideBalance: boolean
   style: CSSProperties
 }) {
   const { account, chainId } = useActiveWeb3React()
@@ -114,7 +116,6 @@ function CurrencyRow({
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency.isToken ? currency : undefined)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
-
   // only show add or remove buttons if not on selected list
   return (
     <RowBetween
@@ -182,6 +183,7 @@ export default function CurrencyList({
   fixedListRef,
   showImportView,
   setImportToken,
+  hideBalance = false,
 }: {
   height: number
   currencies: Currency[]
@@ -192,6 +194,7 @@ export default function CurrencyList({
   fixedListRef?: MutableRefObject<FixedSizeList | undefined>
   showImportView: () => void
   setImportToken: (token: Token) => void
+  hideBalance: boolean
 }) {
   const itemData: (Currency | BreakLine)[] = useMemo(() => {
     if (otherListTokens && otherListTokens?.length > 0) {
@@ -230,13 +233,14 @@ export default function CurrencyList({
             isSelected={isSelected}
             onSelect={handleSelect}
             otherSelected={otherSelected}
+            hideBalance={hideBalance}
           />
         )
       } else {
         return null
       }
     },
-    [currencies.length, onCurrencySelect, otherCurrency, selectedCurrency, setImportToken, showImportView]
+    [currencies.length, hideBalance, onCurrencySelect, otherCurrency, selectedCurrency, setImportToken, showImportView]
   )
 
   const itemKey = useCallback((index: number, data: typeof itemData) => {

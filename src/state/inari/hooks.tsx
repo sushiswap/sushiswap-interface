@@ -1,5 +1,5 @@
 import { useAppSelector } from '../hooks'
-import { Token } from '@sushiswap/sdk'
+import { Token } from '@sushiswap/core-sdk'
 import { tryParseAmount } from '../../functions'
 import useStakeSushiToBentoStrategy from './strategies/useStakeSushiToBentoStrategy'
 import { DerivedInariState, InariState } from './types'
@@ -65,15 +65,17 @@ export function useSelectedInariStrategy() {
 // Use this hook to register all strategies
 export function useInariStrategies() {
   const stakeSushiToBentoStrategy = useStakeSushiToBentoStrategy()
-  const stakeSushiToCreamStrategy = useStakeSushiToCreamStrategy()
+  // const stakeSushiToCreamStrategy = useStakeSushiToCreamStrategy()
+  // const stakeSushiToCreamToBentoStrategy = useStakeSushiToCreamToBentoStrategy()
   const stakeSushiToAaveStrategy = useStakeSushiToAaveStrategy()
 
   return useMemo(
     () => ({
       [stakeSushiToBentoStrategy.id]: stakeSushiToBentoStrategy,
-      [stakeSushiToCreamStrategy.id]: stakeSushiToCreamStrategy,
+      // [stakeSushiToCreamStrategy.id]: stakeSushiToCreamStrategy,
+      // [stakeSushiToCreamToBentoStrategy.id]: stakeSushiToCreamToBentoStrategy,
       [stakeSushiToAaveStrategy.id]: stakeSushiToAaveStrategy,
     }),
-    [stakeSushiToAaveStrategy, stakeSushiToBentoStrategy, stakeSushiToCreamStrategy]
+    [stakeSushiToAaveStrategy, stakeSushiToBentoStrategy]
   )
 }

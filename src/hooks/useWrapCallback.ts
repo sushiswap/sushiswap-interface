@@ -1,7 +1,7 @@
-import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
 
 import { tryParseAmount } from '../functions/parse'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import { useMemo } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'

@@ -348,6 +348,7 @@ export const transactionsQuery = gql`
       id
       timestamp
       pair {
+        id
         token0 {
           symbol
         }
@@ -367,6 +368,7 @@ export const transactionsQuery = gql`
       id
       timestamp
       pair {
+        id
         token0 {
           symbol
         }
@@ -384,6 +386,7 @@ export const transactionsQuery = gql`
       id
       timestamp
       pair {
+        id
         token0 {
           symbol
         }

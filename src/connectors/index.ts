@@ -1,5 +1,5 @@
 import { BscConnector } from '@binance-chain/bsc-connector'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { FortmaticConnector } from '../entities/FortmaticConnector'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from '../entities/NetworkConnector'
@@ -10,16 +10,14 @@ import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { Web3Provider } from '@ethersproject/providers'
 
 const RPC = {
-  [ChainId.MAINNET]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
+  [ChainId.ETHEREUM]: 'https://eth-mainnet.alchemyapi.io/v2/q1gSNoSMEzJms47Qn93f9-9Xg5clkmEC',
   [ChainId.ROPSTEN]: 'https://eth-ropsten.alchemyapi.io/v2/cidKix2Xr-snU3f6f6Zjq_rYdalKKHmW',
   [ChainId.RINKEBY]: 'https://eth-rinkeby.alchemyapi.io/v2/XVLwDlhGP6ApBXFz_lfv0aZ6VmurWhYD',
   [ChainId.GÖRLI]: 'https://eth-goerli.alchemyapi.io/v2/Dkk5d02QjttYEoGmhZnJG37rKt8Yl3Im',
   [ChainId.KOVAN]: 'https://eth-kovan.alchemyapi.io/v2/6OVAa_B_rypWWl9HqtiYK26IRxXiYqER',
   [ChainId.FANTOM]: 'https://rpcapi.fantom.network',
   [ChainId.FANTOM_TESTNET]: 'https://rpc.testnet.fantom.network',
-  [ChainId.MATIC]: 'https://rpc-mainnet.maticvigil.com',
-  // [ChainId.MATIC]:
-  //     'https://apis.ankr.com/e22bfa5f5a124b9aa1f911b742f6adfe/c06bb163c3c2a10a4028959f4d82836d/polygon/full/main',
+  [ChainId.MATIC]: 'https://polygon-rpc.com/',
   [ChainId.MATIC_TESTNET]: 'https://rpc-mumbai.matic.today',
   [ChainId.XDAI]: 'https://rpc.xdaichain.com',
   [ChainId.BSC]: 'https://bsc-dataseed.binance.org/',
@@ -35,6 +33,10 @@ const RPC = {
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
   [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
+  [ChainId.FUSE]: 'https://rpc.fuse.io',
+  [ChainId.CELO]: 'https://forno.celo.org',
+  [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
+  [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
 }
 
 export function getNetwork(defaultChainId, urls = RPC) {
@@ -110,7 +112,7 @@ export const portis = new PortisConnector({
 
 // mainnet only
 export const walletlink = new WalletLinkConnector({
-  url: RPC[ChainId.MAINNET],
+  url: RPC[ChainId.ETHEREUM],
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
 })

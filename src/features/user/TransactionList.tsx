@@ -4,7 +4,7 @@ import Image from '../../components/Image'
 import React from 'react'
 import { getExplorerLink } from '../../functions/explorer'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useLingui } from '@lingui/react'
 
 export default function TransactionList({ transactions }) {

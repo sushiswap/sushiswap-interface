@@ -2,7 +2,7 @@ import { AlertCircle, CheckCircle } from 'react-feather'
 
 import ExternalLink from '../../components/ExternalLink'
 import { getExplorerLink } from '../../functions/explorer'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../services/web3'
 import { ExternalLinkIcon } from '@heroicons/react/outline'
 import React from 'react'
 

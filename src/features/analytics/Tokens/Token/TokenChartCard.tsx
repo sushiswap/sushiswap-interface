@@ -1,7 +1,7 @@
 import { useBlock, useDayData, useNativePrice, useTokens } from '../../../../services/graph'
 import { useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
-import { useActiveWeb3React } from '../../../../hooks'
+import { useActiveWeb3React } from '../../../../services/web3'
 
 interface DashboardChartCardProps {
   type: 'liquidity' | 'volume'
@@ -41,14 +41,26 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
   const type = types[props.type]
 
   const block1d = useBlock({ daysAgo: 1, chainId })
+
   const block2d = useBlock({ daysAgo: 2, chainId })
 
-  const token = useTokens({ subset: [props.token], chainId })?.[0]
-  const token1d = useTokens({ subset: [props.token], block: block1d, shouldFetch: !!block1d, chainId })?.[0]
-  const token2d = useTokens({ subset: [props.token], block: block2d, shouldFetch: !!block2d, chainId })?.[0]
+  const token = useTokens({ chainId, variables: { where: { id: props.token } } })?.[0]
+
+  const token1d = useTokens({
+    chainId,
+    variables: { block: block1d, where: { id: props.token } },
+    shouldFetch: !!block1d,
+  })?.[0]
+
+  const token2d = useTokens({
+    chainId,
+    variables: { block: block2d, where: { id: props.token } },
+    shouldFetch: !!block2d,
+  })?.[0]
 
   const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ block: block1d, chainId })
+
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d } })
 
   const dayData = useDayData({
     first: chartTimespan === '1W' ? 7 : chartTimespan === '1M' ? 30 : undefined,
@@ -57,7 +69,7 @@ export default function TokenChartCard(props: DashboardChartCardProps): JSX.Elem
 
   const data = useMemo(
     () => type.getData(token, token1d, token2d, dayData, nativePrice, nativePrice1d),
-    [token, token1d, token2d, dayData, nativePrice, nativePrice1d]
+    [type, token, token1d, token2d, dayData, nativePrice, nativePrice1d]
   )
 
   return (

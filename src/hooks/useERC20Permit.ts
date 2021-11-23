@@ -1,9 +1,9 @@
-import { Currency, CurrencyAmount, JSBI, Percent, Token, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Token, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import { DAI, SUSHI, USDC } from '../config/tokens'
 import { useMemo, useState } from 'react'
 
 import { splitSignature } from '@ethersproject/bytes'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'
 import { useSingleCallResult } from '../state/multicall/hooks'

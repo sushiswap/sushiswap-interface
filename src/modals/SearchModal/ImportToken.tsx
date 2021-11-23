@@ -1,5 +1,5 @@
 import { AutoRow, RowFixed } from '../../components/Row'
-import { Currency, Token } from '@sushiswap/sdk'
+import { Currency, Token } from '@sushiswap/core-sdk'
 
 import { AlertTriangle } from 'react-feather'
 import { AutoColumn } from '../../components/Column'
@@ -16,7 +16,7 @@ import { getExplorerLink } from '../../functions/explorer'
 import { shortenAddress } from '../../functions'
 import { t, plural } from '@lingui/macro'
 import { transparentize } from 'polished'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useAddUserToken } from '../../state/user/hooks'
 import { useLingui } from '@lingui/react'
 

@@ -1,4 +1,4 @@
-import { ChainId, Currency, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, WNATIVE } from '@sushiswap/core-sdk'
 import React, { FunctionComponent, useMemo } from 'react'
 
 import Logo from '../Logo'
@@ -6,7 +6,7 @@ import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import useHttpLocations from '../../hooks/useHttpLocations'
 
 const BLOCKCHAIN = {
-  [ChainId.MAINNET]: 'ethereum',
+  [ChainId.ETHEREUM]: 'ethereum',
   [ChainId.BSC]: 'binanace',
   [ChainId.CELO]: 'celo',
   [ChainId.FANTOM]: 'fantom',
@@ -14,23 +14,38 @@ const BLOCKCHAIN = {
   [ChainId.MATIC]: 'polygon',
   [ChainId.XDAI]: 'xdai',
   // [ChainId.OKEX]: 'okex',
+  [ChainId.MOONRIVER]: 'moonriver',
+  [ChainId.TELOS]: 'telos',
 }
 
 function getCurrencySymbol(currency) {
-  if (currency.symbol === 'WBTC') {
+  if (currency.symbol.replace('/e', '') === 'WBTC') {
     return 'btc'
   }
-  if (currency.symbol === 'WETH') {
+  if (currency.symbol.replace('/e', '') === 'WETH') {
     return 'eth'
   }
+
+  if (currency.symbol === 'WMOVR') {
+    return 'movr'
+  }
+
+  if (currency.chainId === ChainId.AVALANCHE) {
+    return currency.symbol.replace('/e', '').toLowerCase()
+  }
+
   return currency.symbol.toLowerCase()
 }
 
 export function getCurrencyLogoUrls(currency) {
   const urls = []
 
-  urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
   if (currency.chainId in BLOCKCHAIN) {
+    urls.push(
+      `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
+        currency.address
+      }.jpg`
+    )
     urls.push(
       `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address
@@ -60,9 +75,12 @@ const xDaiLogo =
 const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
 const PalmLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/palm.jpg'
 const MovrLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/movr.jpg'
+const FuseLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
+const TelosLogo =
+  'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
 
 const LOGO: { readonly [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: EthereumLogo,
+  [ChainId.ETHEREUM]: EthereumLogo,
   [ChainId.FANTOM]: FantomLogo,
   [ChainId.FANTOM_TESTNET]: FantomLogo,
   [ChainId.MATIC]: MaticLogo,
@@ -85,6 +103,8 @@ const LOGO: { readonly [chainId in ChainId]?: string } = {
   [ChainId.PALM]: PalmLogo,
   [ChainId.PALM_TESTNET]: PalmLogo,
   [ChainId.MOONRIVER]: MovrLogo,
+  [ChainId.FUSE]: FuseLogo,
+  [ChainId.TELOS]: TelosLogo,
 }
 
 interface CurrencyLogoProps {
@@ -120,7 +140,7 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
     if (currency.isToken) {
       const defaultUrls = [...getCurrencyLogoUrls(currency)]
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, ...defaultUrls, unknown]
+        return [...defaultUrls, ...uriLocations, unknown]
       }
       return defaultUrls
     }

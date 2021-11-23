@@ -1,8 +1,7 @@
 import { Deposit, Withdraw } from '../../../features/kashi'
 import Provider, { useKashiInfo, useKashiPair } from '../../../features/kashi/context'
-import React, { useState } from 'react'
+import React from 'react'
 import { formatNumber, formatPercent } from '../../../functions/format'
-
 import Card from '../../../components/Card'
 import Container from '../../../components/Container'
 import Head from 'next/head'

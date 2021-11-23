@@ -1,5 +1,5 @@
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { NetworkConnector } from '../entities/NetworkConnector'
 import RPC from './rpc'
@@ -52,33 +52,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         rpc: RPC,
         bridge: 'https://bridge.walletconnect.org',
         qrcode: true,
-        supportedChainIds: [
-          1, // mainnet
-          3, // ropsten
-          4, // rinkeby
-          5, // goreli
-          42, // kovan
-          250, // fantom
-          4002, // fantom testnet
-          137, // matic
-          80001, // matic testnet
-          100, // xdaiW
-          56, // binance smart chain
-          97, // binance smart chain testnet
-          1287, // moonbase
-          43114, // avalanche
-          43113, // fuji
-          128, // heco
-          256, // heco testnet
-          1666600000, // harmony
-          1666700000, // harmony testnet
-          66, // okex testnet
-          65, // okex testnet
-          42161, // arbitrum
-          42220, // celo
-          11297108109, // palm
-          1285, // moonriver
-        ],
+        supportedChainIds,
         // pollingInterval: 15000,
       })
     },
@@ -94,7 +68,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
       const KeystoneConnector = (await import('@keystonehq/keystone-connector')).KeystoneConnector
       return new KeystoneConnector({
         chainId: 1,
-        url: RPC[ChainId.MAINNET],
+        url: RPC[ChainId.ETHEREUM],
       })
     },
     name: 'Keystone',
@@ -109,7 +83,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
       const LatticeConnector = (await import('@web3-react/lattice-connector')).LatticeConnector
       return new LatticeConnector({
         chainId: 1,
-        url: RPC[ChainId.MAINNET],
+        url: RPC[ChainId.ETHEREUM],
         appName: 'SushiSwap',
       })
     },
@@ -124,7 +98,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
     connector: async () => {
       const WalletLinkConnector = (await import('@web3-react/walletlink-connector')).WalletLinkConnector
       return new WalletLinkConnector({
-        url: RPC[ChainId.MAINNET],
+        url: RPC[ChainId.ETHEREUM],
         appName: 'SushiSwap',
         appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
       })

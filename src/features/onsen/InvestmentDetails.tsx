@@ -2,9 +2,8 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Image from '../../components/Image'
 import React, { useState } from 'react'
-import { useKashiPair } from '../kashi/context'
-import { useActiveWeb3React } from '../../hooks'
-import { CurrencyAmount, JSBI, Token, USDC, ZERO } from '@sushiswap/sdk'
+import { useActiveWeb3React } from '../../services/web3'
+import { CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
 import { getAddress } from '@ethersproject/address'
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
@@ -18,6 +17,7 @@ import { useRouter } from 'next/router'
 import Button from '../../components/Button'
 import { useCurrency } from '../../hooks/Tokens'
 import Typography from '../../components/Typography'
+import { useKashiPair } from '../kashi/context'
 
 const InvestmentDetails = ({ farm }) => {
   const { i18n } = useLingui()
@@ -62,13 +62,13 @@ const InvestmentDetails = ({ farm }) => {
   const pendingSushi = usePendingSushi(farm)
 
   const positionFiatValue = CurrencyAmount.fromRawAmount(
-    USDC[chainId],
+    USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiAssetAmount?.usdValue.toString() ?? ZERO
       : JSBI.BigInt(
           ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            .toFixed(USDC[chainId].decimals)
-            .toBigNumber(USDC[chainId].decimals)
+            .toFixed(USD[chainId].decimals)
+            .toBigNumber(USD[chainId].decimals)
         )
   )
 

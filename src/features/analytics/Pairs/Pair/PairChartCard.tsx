@@ -1,7 +1,7 @@
 import { useBlock, useDayData, useSushiPairs } from '../../../../services/graph'
 import { useMemo, useState } from 'react'
 import ChartCard from '../../ChartCard'
-import { useActiveWeb3React } from '../../../../hooks'
+import { useActiveWeb3React } from '../../../../services/web3'
 
 interface PairChartCardProps {
   type: 'liquidity' | 'volume'
@@ -39,16 +39,16 @@ export default function PairChartCard(props: PairChartCardProps): JSX.Element {
   const block1d = useBlock({ daysAgo: 1, chainId })
   const block2d = useBlock({ daysAgo: 2, chainId })
 
-  const pair = useSushiPairs({ subset: [props.pair], shouldFetch: !!props.pair, chainId })?.[0]
+  const pair = useSushiPairs({ variables: { where: { id: props.pair } }, shouldFetch: !!props.pair, chainId })?.[0]
+
   const pair1d = useSushiPairs({
-    subset: [props.pair],
-    block: block1d,
-    shouldFetch: !!props.pair && !!block1d,
     chainId,
+    variables: { block: block1d, where: { id: props.pair } },
+    shouldFetch: !!props.pair && !!block1d,
   })?.[0]
+
   const pair2d = useSushiPairs({
-    subset: [props.pair],
-    block: block2d,
+    variables: { block: block2d, where: { id: props.pair } },
     shouldFetch: !!props.pair && !!block2d,
     chainId,
   })?.[0]

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { TransactionDetails } from './reducer'
 import { TransactionResponse } from '@ethersproject/providers'
 import { addTransaction } from './actions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 
 export interface TransactionResponseLight {
   hash: string

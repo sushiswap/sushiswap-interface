@@ -2,13 +2,13 @@ import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
 import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
 
 import { ApplicationModal } from '../../state/application/actions'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import Image from 'next/image'
 import Modal from '../../components/Modal'
 import ModalHeader from '../../components/ModalHeader'
 import React from 'react'
 import cookie from 'cookie-cutter'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
@@ -23,7 +23,7 @@ export const SUPPORTED_NETWORKS: {
     blockExplorerUrls: string[]
   }
 } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     chainId: '0x1',
     chainName: 'Ethereum',
     nativeCurrency: {
@@ -64,8 +64,8 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'MATIC',
       decimals: 18,
     },
-    rpcUrls: ['https://rpc-mainnet.maticvigil.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
-    blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com'],
+    rpcUrls: ['https://polygon-rpc.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
+    blockExplorerUrls: ['https://polygonscan.com'],
   },
   [ChainId.HECO]: {
     chainId: '0x80',
@@ -136,7 +136,7 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
     },
     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-    blockExplorerUrls: ['https://mainnet-arb-explorer.netlify.app'],
+    blockExplorerUrls: ['https://arbiscan.io'],
   },
   [ChainId.CELO]: {
     chainId: '0xA4EC',
@@ -169,7 +169,29 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
     },
     rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
-    blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
+    blockExplorerUrls: ['https://moonriver.moonscan.io'],
+  },
+  [ChainId.FUSE]: {
+    chainId: '0x7A',
+    chainName: 'Fuse',
+    nativeCurrency: {
+      name: 'Fuse',
+      symbol: 'FUSE',
+      decimals: 18,
+    },
+    rpcUrls: ['https://rpc.fuse.io'],
+    blockExplorerUrls: ['https://explorer.fuse.io'],
+  },
+  [ChainId.TELOS]: {
+    chainId: '0x28',
+    chainName: 'Telos',
+    nativeCurrency: {
+      name: 'Telos',
+      symbol: 'TLOS',
+      decimals: 18,
+    },
+    rpcUrls: ['https://mainnet.telos.net/evm'],
+    blockExplorerUrls: ['https://rpc1.us.telos.net/v2/explore'],
   },
 }
 
@@ -190,7 +212,7 @@ export default function NetworkModal(): JSX.Element | null {
 
       <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
         {[
-          ChainId.MAINNET,
+          ChainId.ETHEREUM,
           ChainId.MATIC,
           ChainId.FANTOM,
           ChainId.ARBITRUM,
@@ -203,6 +225,8 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.CELO,
           ChainId.PALM,
           ChainId.MOONRIVER,
+          // ChainId.FUSE,
+          ChainId.TELOS,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (
@@ -227,7 +251,7 @@ export default function NetworkModal(): JSX.Element | null {
                 toggleNetworkModal()
                 const params = SUPPORTED_NETWORKS[key]
                 cookie.set('chainId', key)
-                if (key === ChainId.MAINNET) {
+                if (key === ChainId.ETHEREUM) {
                   library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
                 } else {
                   library?.send('wallet_addEthereumChain', [params, account])

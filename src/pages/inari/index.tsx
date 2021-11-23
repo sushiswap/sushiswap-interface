@@ -8,7 +8,7 @@ import {
 
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import BalancePanel from '../../features/inari/BalancePanel'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import Container from '../../components/Container'
 import DoubleGlowShadow from '../../components/DoubleGlowShadow'
 import { Field } from '../../state/inari/types'
@@ -119,6 +119,6 @@ const Inari = () => {
   )
 }
 
-Inari.Guard = NetworkGuard([ChainId.MAINNET])
+Inari.Guard = NetworkGuard([ChainId.ETHEREUM])
 
 export default Inari

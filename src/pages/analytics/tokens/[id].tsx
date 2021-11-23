@@ -15,7 +15,8 @@ import Background from '../../../features/analytics/Background'
 import Link from 'next/link'
 import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
 import useCopyClipboard from '../../../hooks/useCopyClipboard'
-import { useActiveWeb3React, useTokenContract } from '../../../hooks'
+import { useActiveWeb3React } from '../../../services/web3'
+import { useTokenContract } from '../../../hooks/useContract'
 import { getExplorerLink } from '../../../functions/explorer'
 
 export default function Token() {
@@ -37,21 +38,37 @@ export default function Token() {
   }, [tokenContract])
 
   const block1d = useBlock({ daysAgo: 1, chainId })
+
   const block2d = useBlock({ daysAgo: 2, chainId })
+
   const block1w = useBlock({ daysAgo: 7, chainId })
 
   // General data (volume, liquidity)
   const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ block: block1d, chainId })
 
-  const token = useTokens({ subset: [id], chainId })?.[0]
-  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d, chainId })?.[0]
-  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d, chainId })?.[0]
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+
+  const token = useTokens({ chainId, variables: { where: { id } } })?.[0]
+
+  const token1d = useTokens({ chainId, variables: { block: block1d, where: { id } }, shouldFetch: !!block1d })?.[0]
+
+  const token2d = useTokens({ chainId, variables: { block: block2d, where: { id } }, shouldFetch: !!block2d })?.[0]
 
   // Token Pairs
-  const tokenPairs = useTokenPairs({ token: id, chainId })
-  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d, chainId })
-  const tokenPairs1w = useTokenPairs({ token: id, block: block1w, shouldFetch: !!block1w, chainId })
+  const tokenPairs = useTokenPairs({ chainId, variables: { id } })
+
+  const tokenPairs1d = useTokenPairs({
+    chainId,
+    variables: { id, block: block1d },
+    shouldFetch: !!block1d,
+  })
+
+  const tokenPairs1w = useTokenPairs({
+    chainId,
+    variables: { id, block: block1w },
+    shouldFetch: !!block1w,
+  })
+
   const tokenPairsFormatted = useMemo(
     () =>
       tokenPairs?.map((pair) => {
@@ -74,10 +91,15 @@ export default function Token() {
 
   // For Transactions
   const transactions = useTransactions({
-    pairs: tokenPairs?.map((pair) => pair.id),
-    shouldFetch: !!tokenPairs,
     chainId,
+    variables: {
+      where: {
+        pair_in: tokenPairs?.map((pair) => pair.id),
+      },
+    },
+    shouldFetch: !!tokenPairs,
   })
+
   const transactionsFormatted = useMemo(
     () =>
       transactions?.map((tx) => {

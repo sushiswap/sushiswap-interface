@@ -6,7 +6,7 @@ import { useEffect, useMemo } from 'react'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useBlockNumber } from '../application/hooks'
 
 export interface Result extends ReadonlyArray<any> {

@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
 import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { filterTokens, useSortedTokensByQuery } from '../../functions/filtering'
 import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from '../../hooks/Tokens'
@@ -15,7 +15,7 @@ import ModalHeader from '../../components/ModalHeader'
 import ReactGA from 'react-ga'
 import { isAddress } from '../../functions/validate'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import useDebounce from '../../hooks/useDebounce'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
@@ -36,6 +36,8 @@ interface CurrencySearchProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
+  hideBalance: boolean
+  showSearch: boolean
 }
 
 export function CurrencySearch({
@@ -51,6 +53,8 @@ export function CurrencySearch({
   currencyList,
   includeNativeCurrency = true,
   allowManageTokenList = true,
+  hideBalance = false,
+  showSearch = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -110,8 +114,6 @@ export function CurrencySearch({
   }, [filteredTokens, tokenComparator])
 
   const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
-
-  // const ether = useMemo(() => chainId && ExtendedEther.onChain(chainId), [chainId])
 
   const ether = useMemo(() => chainId && ![ChainId.CELO].includes(chainId) && NATIVE[chainId], [chainId])
 
@@ -177,7 +179,7 @@ export function CurrencySearch({
   return (
     <div className="flex flex-col max-h-[inherit]">
       <ModalHeader className="h-full" onClose={onDismiss} title="Select a token" />
-      {!currencyList && (
+      {!currencyList && showSearch && (
         <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
           <input
             type="text"
@@ -216,6 +218,7 @@ export function CurrencySearch({
                 fixedListRef={fixedList}
                 showImportView={showImportView}
                 setImportToken={setImportToken}
+                hideBalance={hideBalance}
               />
             )}
           </AutoSizer>

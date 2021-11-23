@@ -1,11 +1,12 @@
-import { ApprovalState, useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../services/web3'
+import { ApprovalState } from '../../hooks/useApproveCallback'
 import { Field, MeowshiState } from '../../pages/tools/meowshi'
 import React, { FC, useMemo, useState } from 'react'
 import { SUSHI, XSUSHI } from '../../config/tokens'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
 
 import Button from '../../components/Button'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import Dots from '../../components/Dots'
 import { parseUnits } from '@ethersproject/units'
 import { t } from '@lingui/macro'
@@ -27,10 +28,10 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
     open: false,
   })
   const { account, chainId } = useActiveWeb3React()
-  const sushiBalance = useTokenBalance(account, SUSHI[ChainId.MAINNET])
+  const sushiBalance = useTokenBalance(account, SUSHI[ChainId.ETHEREUM])
   const xSushiBalance = useTokenBalance(account, XSUSHI)
   const { approvalState, approve, meow, unmeow, meowSushi, unmeowSushi } = useMeowshi(
-    currencies[Field.INPUT] === SUSHI[ChainId.MAINNET]
+    currencies[Field.INPUT] === SUSHI[ChainId.ETHEREUM]
   )
   const balance = useTokenBalance(account, currencies[Field.INPUT])
   const parsedInputAmount = tryParseAmount(fields[Field.INPUT], currencies[Field.INPUT])
@@ -104,7 +105,7 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
       </Button>
     )
 
-  if (chainId !== ChainId.MAINNET)
+  if (chainId !== ChainId.ETHEREUM)
     return (
       <Button onClick={approve} color="gradient" disabled={true}>
         {i18n._(t`Network not supported yet`)}

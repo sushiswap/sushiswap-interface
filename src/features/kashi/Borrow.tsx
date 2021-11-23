@@ -1,6 +1,6 @@
 import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
 import { KashiApproveButton, TokenApproveButton } from './Button'
-import { Percent, SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/sdk'
+import { Percent, SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
 import React, { useMemo, useState } from 'react'
 import { Warning, Warnings } from '../../entities/Warnings'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
@@ -21,7 +21,7 @@ import WarningsView from './WarningsList'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { toShare } from '../../functions/bentobox'
 import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useCurrency } from '../../hooks/Tokens'
 import { useKashiInfo } from './context'
 import { useV2TradeExactIn } from '../../hooks/useV2Trades'
@@ -259,6 +259,7 @@ export default function Borrow({ pair }: BorrowProps) {
     }
     if (borrowValueSet && trade) {
       const path = trade.route.path.map((token) => token.address) || []
+
       if (path.length > 4) {
         throw 'Path too long'
       }

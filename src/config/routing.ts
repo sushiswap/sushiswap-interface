@@ -11,6 +11,7 @@ import {
   CRV,
   CVXCRV,
   DAI,
+  DOLA,
   DOUGH,
   DPI,
   DUCK,
@@ -18,23 +19,28 @@ import {
   FANTOM,
   FEI,
   FRAX,
+  FUSE,
   FXS,
   HARMONY,
   HBTC,
   HECO,
   IBETH,
+  INV,
   LFBTC,
   LIFT,
   MATIC,
   MIR,
   NFTX,
   OKEX,
+  OHM,
   PALM,
   PLAY,
   PONT,
   PWING,
+  RAI,
   RENBTC,
   RUNE,
+  SPANK,
   STETH,
   SUSHI,
   UMA,
@@ -43,11 +49,17 @@ import {
   USDT,
   UST,
   WBTC,
+  WOOFY,
   XDAI,
   XSUSHI,
-} from '../config/tokens'
+  YFI,
+} from './tokens'
+
+import * as MOONRIVER from './moonriver'
+import * as TELOS from './telos'
+
 // a list of tokens by chain
-import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/core-sdk'
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
@@ -76,7 +88,7 @@ const MIRROR_ADDITIONAL_BASES: { [tokenAddress: string]: Token[] } = {
 
 // TODO: SDK should have two maps, WETH map and WNATIVE map.
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
-  [ChainId.MAINNET]: [WNATIVE[ChainId.MAINNET]],
+  [ChainId.ETHEREUM]: [WNATIVE[ChainId.ETHEREUM]],
   [ChainId.ROPSTEN]: [WNATIVE[ChainId.ROPSTEN]],
   [ChainId.RINKEBY]: [WNATIVE[ChainId.RINKEBY]],
   [ChainId.GÖRLI]: [WNATIVE[ChainId.GÖRLI]],
@@ -100,18 +112,37 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
   [ChainId.OKEX]: [WNATIVE[ChainId.OKEX]],
   [ChainId.OKEX_TESTNET]: [WNATIVE[ChainId.OKEX_TESTNET]],
   [ChainId.CELO]: [WNATIVE[ChainId.CELO]],
-  [ChainId.PALM]: [WNATIVE[ChainId.PALM]],
   [ChainId.MOONRIVER]: [WNATIVE[ChainId.MOONRIVER]],
+  [ChainId.PALM]: [WNATIVE[ChainId.PALM]],
+  [ChainId.FUSE]: [WNATIVE[ChainId.FUSE]],
+  [ChainId.TELOS]: [WNATIVE[ChainId.TELOS]],
 }
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, RUNE, NFTX, STETH],
+  [ChainId.ETHEREUM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM],
+    DAI,
+    USDC,
+    USDT,
+    WBTC,
+    RUNE,
+    NFTX,
+    STETH,
+    OHM,
+    SUSHI[ChainId.ETHEREUM],
+  ],
   [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
   [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
   [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB, BSC.WETH],
-  [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM], ARBITRUM.WBTC, ARBITRUM.USDC],
+  [ChainId.ARBITRUM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
+    ARBITRUM.WBTC,
+    ARBITRUM.USDC,
+    ARBITRUM.USDT,
+    ARBITRUM.MIM,
+  ],
   [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
   [ChainId.AVALANCHE]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE],
@@ -124,6 +155,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     AVALANCHE.USDT_OLD,
     AVALANCHE.WBTC_OLD,
     AVALANCHE.WETH_OLD,
+    SUSHI[ChainId.AVALANCHE],
   ],
   [ChainId.HARMONY]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],
@@ -144,19 +176,30 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     CELO.cUSD,
     CELO.cEURO,
     CELO.cBTC,
+    CELO.WETH,
+    CELO.WBTC,
+  ],
+  [ChainId.MOONRIVER]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER],
+    MOONRIVER.USDC,
+    MOONRIVER.USDT,
+    MOONRIVER.WETH,
+    MOONRIVER.FRAX,
+    MOONRIVER.MIM,
+    MOONRIVER.BTC,
+    MOONRIVER.aROME,
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
-  [ChainId.MOONRIVER]: [WNATIVE[ChainId.MOONRIVER]],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
+  [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS], TELOS.USDC, TELOS.USDT, TELOS.WETH, TELOS.WBTC],
 }
 
 export const ADDITIONAL_BASES: {
   [chainId: number]: { [tokenAddress: string]: Token[] }
 } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     ...MIRROR_ADDITIONAL_BASES,
     '0xF16E4d813f4DcfDe4c5b44f305c908742De84eF0': [ETH2X_FLI],
-    '0xe379a60A8FC7C9DD161887fFADF3054790576c8D': [XSUSHI], // XSUSHI 25 Call [30 June 2021]
-    '0xB46F57e7Ce3a284d74b70447Ef9352B5E5Df8963': [UMA], // UMA 25 Call [30 June 2021]
     [FEI.address]: [DPI],
     [FRAX.address]: [FXS],
     [FXS.address]: [FRAX],
@@ -178,12 +221,17 @@ export const ADDITIONAL_BASES: {
     [LFBTC.address]: [LIFT],
     [CVXCRV.address]: [CRV],
     [CRV.address]: [CVXCRV],
+    [WOOFY.address]: [YFI],
+    [SPANK.address]: [RAI],
+    [DOLA.address]: [INV],
   },
   [ChainId.MATIC]: {
     [MATIC.FRAX.address]: [MATIC.FXS],
     [MATIC.FXS.address]: [MATIC.FRAX],
     [MATIC.DRAX.address]: [MATIC.DMAGIC],
     [MATIC.AXMATIC.address]: [MATIC.DMAGIC],
+    [MATIC.BCT.address]: [MATIC.KLIMA],
+    [MATIC.KLIMA.address]: [MATIC.BCT],
     //[MATIC.DMAGIC.address]: [MATIC.DRAX, MATIC.AXMATIC],
   },
 }
@@ -195,8 +243,8 @@ export const ADDITIONAL_BASES: {
 export const CUSTOM_BASES: {
   [chainId: number]: { [tokenAddress: string]: Token[] }
 } = {
-  [ChainId.MAINNET]: {
-    [AMPL.address]: [DAI, WNATIVE[ChainId.MAINNET]],
+  [ChainId.ETHEREUM]: {
+    [AMPL.address]: [DAI, WNATIVE[ChainId.ETHEREUM]],
   },
   [ChainId.MATIC]: {
     [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE],
@@ -207,7 +255,7 @@ export const CUSTOM_BASES: {
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainTokenList = {
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, SUSHI[ChainId.MAINNET]],
+  [ChainId.ETHEREUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM], DAI, USDC, USDT, WBTC, OHM, SUSHI[ChainId.ETHEREUM]],
   [ChainId.MATIC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
     MATIC.USDC,
@@ -235,7 +283,15 @@ export const COMMON_BASES: ChainTokenList = {
     BSC.WETH,
     SUSHI[ChainId.BSC],
   ],
-  [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM], ARBITRUM.WBTC, ARBITRUM.USDC],
+  [ChainId.ARBITRUM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
+    ARBITRUM.WBTC,
+    ARBITRUM.USDC,
+    ARBITRUM.USDT,
+    SUSHI[ChainId.ARBITRUM],
+    new Token(ChainId.ARBITRUM, '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF', 18, 'SPELL', 'Spell Token'),
+    ARBITRUM.MIM,
+  ],
   [ChainId.XDAI]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.XDAI],
     XDAI.USDC,
@@ -280,22 +336,55 @@ export const COMMON_BASES: ChainTokenList = {
     OKEX.WETH,
     SUSHI[ChainId.OKEX],
   ],
-  [ChainId.CELO]: [...WRAPPED_NATIVE_ONLY[ChainId.CELO], CELO.cETH, CELO.cUSD, CELO.cEURO, CELO.cBTC],
-  [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
+  [ChainId.CELO]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    CELO.WETH,
+    CELO.cUSD,
+    CELO.cEURO,
+    CELO.WBTC,
+    SUSHI[ChainId.CELO],
+  ],
+  [ChainId.MOONRIVER]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER],
+    MOONRIVER.USDC,
+    MOONRIVER.USDT,
+    MOONRIVER.WETH,
+    MOONRIVER.FRAX,
+    MOONRIVER.MIM,
+    MOONRIVER.BTC,
+    MOONRIVER.aROME,
+    SUSHI[ChainId.MOONRIVER],
+  ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
+  [ChainId.TELOS]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.TELOS],
+    TELOS.USDC,
+    TELOS.USDT,
+    TELOS.WETH,
+    TELOS.WBTC,
+    SUSHI[ChainId.TELOS],
+  ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC],
+  [ChainId.ETHEREUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM], DAI, USDC, USDT, WBTC, OHM],
   [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
   [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
   [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB, BSC.WETH],
-  [ChainId.ARBITRUM]: [...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM], ARBITRUM.WBTC, ARBITRUM.USDC],
+  [ChainId.ARBITRUM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
+    ARBITRUM.WBTC,
+    ARBITRUM.USDC,
+    ARBITRUM.USDT,
+    ARBITRUM.MIM,
+  ],
   [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
   [ChainId.AVALANCHE]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE],
+
     AVALANCHE.DAI,
     AVALANCHE.USDT,
     AVALANCHE.WBTC,
@@ -305,6 +394,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     AVALANCHE.USDT_OLD,
     AVALANCHE.WBTC_OLD,
     AVALANCHE.WETH_OLD,
+    SUSHI[ChainId.AVALANCHE],
   ],
   [ChainId.HARMONY]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],
@@ -326,18 +416,29 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     CELO.cEURO,
     CELO.cBTC,
   ],
-  [ChainId.MOONRIVER]: [...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER]],
+  [ChainId.MOONRIVER]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER],
+    MOONRIVER.USDC,
+    MOONRIVER.USDT,
+    MOONRIVER.WETH,
+    MOONRIVER.FRAX,
+    MOONRIVER.MIM,
+    MOONRIVER.BTC,
+    MOONRIVER.aROME,
+  ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
+  [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
+  [ChainId.TELOS]: [...WRAPPED_NATIVE_ONLY[ChainId.TELOS], TELOS.USDC, TELOS.USDT, TELOS.WETH, TELOS.WBTC],
 }
 
 export const PINNED_PAIRS: {
   readonly [chainId in ChainId]?: [Token, Token][]
 } = {
-  [ChainId.MAINNET]: [
-    [SUSHI[ChainId.MAINNET], WNATIVE[ChainId.MAINNET]],
+  [ChainId.ETHEREUM]: [
+    [SUSHI[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM]],
     [
-      new Token(ChainId.MAINNET, '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643', 8, 'cDAI', 'Compound Dai'),
-      new Token(ChainId.MAINNET, '0x39AA39c021dfbaE8faC545936693aC917d5E7563', 8, 'cUSDC', 'Compound USD Coin'),
+      new Token(ChainId.ETHEREUM, '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643', 8, 'cDAI', 'Compound Dai'),
+      new Token(ChainId.ETHEREUM, '0x39AA39c021dfbaE8faC545936693aC917d5E7563', 8, 'cUSDC', 'Compound USD Coin'),
     ],
     [USDC, USDT],
     [DAI, USDT],

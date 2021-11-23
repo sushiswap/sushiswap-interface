@@ -5,17 +5,17 @@ import {
   MASTERCHEF_ADDRESS,
   MASTERCHEF_V2_ADDRESS,
   MINICHEF_ADDRESS,
-} from '@sushiswap/sdk'
-import { Chef } from './enum'
-import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
+  SUSHI,
+} from '@sushiswap/core-sdk'
+import { Chef, PairType } from './enum'
 import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
+import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from '../../state/multicall/hooks'
 import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from '../../hooks/useContract'
 
 import { Contract } from '@ethersproject/contracts'
-import { SUSHI } from '../../config/tokens'
 import { Zero } from '@ethersproject/constants'
 import concat from 'lodash/concat'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import zip from 'lodash/zip'
 
 export function useChefContract(chef: Chef) {
@@ -36,7 +36,7 @@ export function useChefContract(chef: Chef) {
 }
 
 const CHEFS = {
-  [ChainId.MAINNET]: [Chef.MASTERCHEF, Chef.MASTERCHEF_V2],
+  [ChainId.ETHEREUM]: [Chef.MASTERCHEF, Chef.MASTERCHEF_V2],
   [ChainId.MATIC]: [Chef.MINICHEF],
 }
 
@@ -181,7 +181,7 @@ export function usePositions(chainId = undefined) {
   to minimize this impact. This hook pairs with it, keeping track of visible
   items and passes this to <InfiniteScroll> component.
 */
-export function useInfiniteScroll(items: any[]): [number, Dispatch<number>] {
+export function useInfiniteScroll(items): [number, Dispatch<number>] {
   const [itemsDisplayed, setItemsDisplayed] = useState(10)
   useEffect(() => setItemsDisplayed(10), [items.length])
   return [itemsDisplayed, setItemsDisplayed]

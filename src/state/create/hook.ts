@@ -1,11 +1,11 @@
-import { Currency, Trade as V2Trade } from '@sushiswap/sdk'
+import { Currency, Trade as V2Trade } from '@sushiswap/core-sdk'
 import { Field, replaceCreateState, selectCurrency, switchCurrencies, typeInput } from './actions'
 import { useAppDispatch, useAppSelector } from '../hooks'
 
 import { AppState } from '../index'
 import { CreateState } from './reducer'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../services/web3'
 import { useCallback } from 'react'
 import { useCurrency } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'

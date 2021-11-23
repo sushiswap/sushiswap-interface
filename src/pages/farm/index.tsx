@@ -1,6 +1,6 @@
 import { Chef, PairType } from '../../features/onsen/enum'
-import { useActiveWeb3React, useFuse } from '../../hooks'
-
+import { useActiveWeb3React } from '../../services/web3'
+import useFuse from '../../hooks/useFuse'
 import Container from '../../components/Container'
 import FarmList from '../../features/onsen/FarmList'
 import Head from 'next/head'
@@ -17,7 +17,7 @@ export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
 
   const router = useRouter()
-  const type = router.query.filter == null ? 'all' : (router.query.filter as string)
+  const type = router.query.filter === null ? 'all' : (router.query.filter as string)
 
   const positions = usePositions(chainId)
 
@@ -26,10 +26,15 @@ export default function Farm(): JSX.Element {
     portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
     sushi: (farm) => farm.pair.type === PairType.SWAP && farm.allocPoint !== '0',
     kashi: (farm) => farm.pair.type === PairType.KASHI && farm.allocPoint !== '0',
-    '2x': (farm) => (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) && farm.allocPoint !== '0',
+    '2x': (farm) =>
+      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) &&
+      farm.rewards.length > 1 &&
+      farm.allocPoint !== '0',
   }
 
-  const data = useFarmRewards().filter((farm) => {
+  const rewards = useFarmRewards()
+
+  const data = rewards.filter((farm) => {
     return type in FILTER ? FILTER[type](farm) : true
   })
 
@@ -61,13 +66,11 @@ export default function Farm(): JSX.Element {
               'relative w-full bg-transparent border border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5',
           }}
         />
-
         {/* <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
             Ready to Stake{' '}
             <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
           </div>
           <FarmList farms={filtered} term={term} /> */}
-
         <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
           Farms{' '}
           <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>

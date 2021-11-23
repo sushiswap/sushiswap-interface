@@ -7,7 +7,8 @@ import Button, { ButtonError } from '../../components/Button'
 import { classNames, getUSDValue, tryParseAmount } from '../../functions'
 import CurrencyInputPanel from './CurrencyInputPanel'
 import Web3Connect from '../../components/Web3Connect'
-import { ApprovalState, useActiveWeb3React, useApproveCallback } from '../../hooks'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { useActiveWeb3React } from '../../services/web3'
 import Dots from '../../components/Dots'
 import { BigNumber } from '@ethersproject/bignumber'
 import useMasterChef from './useMasterChef'
@@ -21,8 +22,9 @@ import {
   MINICHEF_ADDRESS,
   Token,
   USDC,
+  USD,
   ZERO,
-} from '@sushiswap/sdk'
+} from '@sushiswap/core-sdk'
 import { getAddress } from '@ethersproject/address'
 import { Chef, PairType } from './enum'
 import { useKashiPair } from '../kashi/context'
@@ -55,7 +57,7 @@ const ManageBar = ({ farm }) => {
   const stakedAmount = useUserInfo(farm, liquidityToken)
 
   const balanceFiatValue = CurrencyAmount.fromRawAmount(
-    USDC[chainId],
+    USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiPair && balance
         ? getUSDValue(
@@ -68,13 +70,13 @@ const ManageBar = ({ farm }) => {
         : ZERO
       : JSBI.BigInt(
           ((Number(balance?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            .toFixed(USDC[chainId].decimals)
-            .toBigNumber(USDC[chainId].decimals)
+            .toFixed(USD[chainId].decimals)
+            .toBigNumber(USD[chainId].decimals)
         )
   )
 
   const stakedAmountFiatValue = CurrencyAmount.fromRawAmount(
-    USDC[chainId],
+    USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiPair && stakedAmount
         ? getUSDValue(
@@ -87,8 +89,8 @@ const ManageBar = ({ farm }) => {
         : ZERO
       : JSBI.BigInt(
           ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            .toFixed(USDC[chainId].decimals)
-            .toBigNumber(USDC[chainId].decimals)
+            .toFixed(USD[chainId].decimals)
+            .toBigNumber(USD[chainId].decimals)
         )
   )
 
@@ -96,13 +98,15 @@ const ManageBar = ({ farm }) => {
   const parsedWithdrawValue = tryParseAmount(withdrawValue, liquidityToken)
 
   const APPROVAL_ADDRESSES = {
-    [Chef.MASTERCHEF]: { [ChainId.MAINNET]: MASTERCHEF_ADDRESS[ChainId.MAINNET] },
-    [Chef.MASTERCHEF_V2]: { [ChainId.MAINNET]: MASTERCHEF_V2_ADDRESS[ChainId.MAINNET] },
+    [Chef.MASTERCHEF]: { [ChainId.ETHEREUM]: MASTERCHEF_ADDRESS[ChainId.ETHEREUM] },
+    [Chef.MASTERCHEF_V2]: { [ChainId.ETHEREUM]: MASTERCHEF_V2_ADDRESS[ChainId.ETHEREUM] },
     [Chef.MINICHEF]: {
       [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
       [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
       [ChainId.HARMONY]: MINICHEF_ADDRESS[ChainId.HARMONY],
       [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
+      [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
+      [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
     },
   }
 

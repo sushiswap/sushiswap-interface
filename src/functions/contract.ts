@@ -1,6 +1,6 @@
 // NOTE: Try not to add anything to thie file, it's almost entirely refactored out.
 
-import { ARCHER_ROUTER_ADDRESS, ChainId, ROUTER_ADDRESS } from '@sushiswap/sdk'
+import { ChainId, ROUTER_ADDRESS } from '@sushiswap/core-sdk'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 
 import { AddressZero } from '@ethersproject/constants'
@@ -44,8 +44,4 @@ export function getRouterContract(chainId: number, library: Web3Provider, accoun
     library,
     account
   )
-}
-
-export function getArcherRouterContract(chainId: number, library: Web3Provider, account?: string): Contract {
-  return getContract(ARCHER_ROUTER_ADDRESS[chainId as ChainId] ?? '', ArcherSwapRouterABI, library, account)
 }

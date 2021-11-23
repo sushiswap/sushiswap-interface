@@ -1,4 +1,4 @@
-import { Currency, Token } from '@sushiswap/sdk'
+import { Currency, Token } from '@sushiswap/core-sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import CurrencyModalView from './CurrencyModalView'
@@ -22,6 +22,8 @@ interface CurrencySearchModalProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
+  hideBalance?: boolean
+  showSearch?: boolean
 }
 
 function CurrencySearchModal({
@@ -32,8 +34,10 @@ function CurrencySearchModal({
   otherSelectedCurrency,
   currencyList,
   showCommonBases = false,
+  showSearch = true,
   includeNativeCurrency = true,
   allowManageTokenList = true,
+  hideBalance = false,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
   const lastOpen = useLast(isOpen)
@@ -81,6 +85,8 @@ function CurrencySearchModal({
           currencyList={currencyList}
           includeNativeCurrency={includeNativeCurrency}
           allowManageTokenList={allowManageTokenList}
+          hideBalance={hideBalance}
+          showSearch={showSearch}
         />
       ) : modalView === CurrencyModalView.importToken && importToken ? (
         <ImportToken
@@ -108,7 +114,5 @@ function CurrencySearchModal({
     </Modal>
   )
 }
-
-CurrencySearchModal.whyDidYouRender = true
 
 export default CurrencySearchModal

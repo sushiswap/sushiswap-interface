@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useState } from 'react'
-import { ApprovalState, useActiveWeb3React } from '../../hooks'
-import { ZERO } from '@sushiswap/sdk'
+import { useActiveWeb3React } from '../../services/web3'
+import { ApprovalState } from '../../hooks/useApproveCallback'
+import { ZERO } from '@sushiswap/core-sdk'
 import Button, { ButtonProps } from '../../components/Button'
 import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
@@ -52,7 +53,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
   if (!inputValue || inputValue.equalTo(ZERO))
     return (
       <Button {...rest} disabled color="gray">
-        {i18n._(t`Enter an mount`)}
+        {i18n._(t`Enter an amount`)}
       </Button>
     )
 

@@ -1,4 +1,4 @@
-import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS, currencyEquals } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS, currencyEquals } from '@sushiswap/core-sdk'
 import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
 import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
 import { useBytes32TokenContract, useTokenContract } from './useContract'
@@ -8,7 +8,7 @@ import { arrayify } from '@ethersproject/bytes'
 import { createTokenFilterFunction } from '../functions/filtering'
 import { isAddress } from '../functions/validate'
 import { parseBytes32String } from '@ethersproject/strings'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3'
 import { useCombinedActiveList } from '../state/lists/hooks'
 import { useMemo } from 'react'
 import { useUserAddedTokens } from '../state/user/hooks'
@@ -192,9 +192,6 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   }
 
   const token = useToken(useNative ? undefined : currencyId)
-
-  // const extendedEther = useMemo(() => (chainId ? ExtendedEther.onChain(chainId) : undefined), [chainId])
-  // const weth = chainId ? WETH9_EXTENDED[chainId] : undefined
 
   const native = useMemo(() => (chainId ? NATIVE[chainId] : undefined), [chainId])
 

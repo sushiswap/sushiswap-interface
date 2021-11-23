@@ -27,7 +27,8 @@
     "*.{md,css}": "prettier --write"
   },
   "resolutions": {
-    "@walletconnect/web3-provider": "1.6.0"
+    "@walletconnect/web3-provider": "1.6.0",
+    "cli-table": "0.3.6"
   },
   "devDependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
@@ -51,7 +52,7 @@
     "@gnosis.pm/safe-apps-web3-react": "^0.6.0",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.4",
-    "@keystonehq/keystone-connector": "^0.8.0",
+    "@keystonehq/keystone-connector": "^0.9.0",
     "@lingui/cli": "^3.10.2",
     "@lingui/core": "^3.10.4",
     "@lingui/loader": "^3.10.2",
@@ -66,10 +67,11 @@
     "@sentry/nextjs": "^6.11.0",
     "@sushiswap/chainlink-whitelist": "0.2.5",
     "@sushiswap/core": "^2.0.0-canary.1",
-    "@sushiswap/core-sdk": "1.0.0-canary.1",
-    "@sushiswap/default-token-list": "16.18.0",
+    "@sushiswap/core-sdk": "1.0.0-canary.16",
+    "@sushiswap/default-token-list": "18.10.0",
     "@sushiswap/limit-order-pair-list": "0.2.2",
-    "@sushiswap/sdk": "5.0.0-canary.96",
+    "@sushiswap/limit-order-sdk": "1.0.0-canary.8",
+    "@sushiswap/sdk": "5.0.0-canary.109",
     "@sushiswap/sushi-data": "^1.0.24",
     "@tailwindcss/jit": "^0.1.18",
     "@testing-library/jest-dom": "^5.14.1",
@@ -109,6 +111,7 @@
     "eslint": "^7.30.0",
     "eslint-config-next": "^11.1.0",
     "eth-permit": "^0.1.10",
+    "fast-json-stable-stringify": "^2.1.0",
     "fuse.js": "^6.4.6",
     "graphql-tag": "^2.12.5",
     "husky": "^7.0.0",
@@ -120,8 +123,8 @@
     "lottie-react": "^2.1.0",
     "madge": "^5.0.1",
     "millify": "^4.0.0",
-    "next": "^11.1.0",
-    "next-pwa": "^5.2.22",
+    "next": "^12.0.1",
+    "next-pwa": "^5.4.0",
     "next-unused": "^0.0.6",
     "node-vibrant": "3.1.6",
     "numeral": "^2.0.6",
@@ -156,7 +159,7 @@
     "swr": "^1.0.0",
     "tailwindcss": "^2.2.9",
     "tailwindcss-border-gradient-radius": "^2.0.0",
-    "typescript": "^4.3.5",
+    "typescript": "^4.4.0",
     "wcag-contrast": "^3.0.0"
   },
   "next-unused": {

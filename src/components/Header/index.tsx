@@ -1,6 +1,6 @@
-import { ChainId, Currency, NATIVE, SUSHI_ADDRESS } from '@sushiswap/sdk'
+import { ChainId, Currency, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { Feature, featureEnabled } from '../../functions/feature'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { ANALYTICS_URL } from '../../constants'
 import Buy from '../../features/on-ramp/ramp'
@@ -15,7 +15,7 @@ import QuestionHelper from '../QuestionHelper'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 
@@ -29,7 +29,6 @@ function AppBar(): JSX.Element {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
   return (
-    //     // <header className="flex flex-row justify-between w-screen flex-nowrap">
     <header className="flex-shrink-0 w-full">
       <Popover as="nav" className="z-10 w-full bg-transparent header-border-b">
         {({ open }) => (
@@ -57,16 +56,6 @@ function AppBar(): JSX.Element {
                           {i18n._(t`Pool`)}
                         </a>
                       </NavLink>
-                      {chainId && featureEnabled(Feature.MIGRATE, chainId) && (
-                        <NavLink href={'/migrate'}>
-                          <a
-                            id={`migrate-nav-link`}
-                            className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                          >
-                            {i18n._(t`Migrate`)}
-                          </a>
-                        </NavLink>
-                      )}
                       {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
                         <NavLink href={'/farm'}>
                           <a
@@ -113,7 +102,7 @@ function AppBar(): JSX.Element {
 
                 <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                   <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
-                    {chainId && [ChainId.MAINNET].includes(chainId) && library && library.provider.isMetaMask && (
+                    {chainId && [ChainId.ETHEREUM].includes(chainId) && library && library.provider.isMetaMask && (
                       <>
                         <QuestionHelper text={i18n._(t`Add xSUSHI to your MetaMask wallet`)}>
                           <div
@@ -127,7 +116,7 @@ function AppBar(): JSX.Element {
                                     symbol: 'XSUSHI',
                                     decimals: 18,
                                     image:
-                                      'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272/logo.png',
+                                      'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272.jpg',
                                   },
                                 }
                                 library.provider
@@ -172,7 +161,7 @@ function AppBar(): JSX.Element {
                                   symbol: 'SUSHI',
                                   decimals: 18,
                                   image:
-                                    'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
+                                    'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2.jpg',
                                 },
                               }
                               if (library && library.provider.isMetaMask && library.provider.request) {
@@ -229,6 +218,9 @@ function AppBar(): JSX.Element {
                 </div>
                 <div className="flex -mr-2 sm:hidden">
                   {/* Mobile menu button */}
+                  <div className="block mr-2 md:hidden">
+                    <LanguageSwitch />
+                  </div>
                   <Popover.Button className="inline-flex items-center justify-center p-2 rounded-md text-primary hover:text-high-emphesis focus:outline-none">
                     <span className="sr-only">{i18n._(t`Open main menu`)}</span>
                     {open ? (
@@ -284,15 +276,6 @@ function AppBar(): JSX.Element {
                   </a>
                 </Link>
 
-                <Link href={'/migrate'}>
-                  <a
-                    id={`migrate-nav-link`}
-                    className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
-                  >
-                    {i18n._(t`Migrate`)}
-                  </a>
-                </Link>
-
                 {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
                   <Link href={'/farm'}>
                     <a
@@ -309,13 +292,13 @@ function AppBar(): JSX.Element {
                   <>
                     <Link href={'/lend'}>
                       <a
-                        id={`lend-nav-link`}
+                        id={`farm-nav-link`}
                         className="p-2 text-baseline text-primary hover:text-high-emphesis focus:text-high-emphesis md:p-3 whitespace-nowrap"
                       >
-                        {i18n._(t`Lend`)}
+                        {' '}
+                        {i18n._(t`Farm`)}
                       </a>
                     </Link>
-
                     <Link href={'/borrow'}>
                       <a
                         id={`borrow-nav-link`}

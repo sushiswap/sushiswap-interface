@@ -1,6 +1,6 @@
 // CONVENTION isFoo -> boolean
 
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
+import { ChainId, Currency, Token } from '@sushiswap/core-sdk'
 
 import { BigNumber } from '@ethersproject/bignumber'
 import { TokenAddressMap } from '../state/lists/hooks'

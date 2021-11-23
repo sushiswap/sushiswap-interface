@@ -1,13 +1,12 @@
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import NavLink from '../../components/NavLink'
 import React from 'react'
-import { useActiveWeb3React } from '../../hooks'
+import { useActiveWeb3React } from '../../services/web3'
 import { useWalletModalToggle } from '../../state/application/hooks'
 
 const Menu = ({ positionsLength }) => {
   const { account, chainId } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
-
   return (
     <div className="space-y-4">
       {account ? (
@@ -22,7 +21,7 @@ const Menu = ({ positionsLength }) => {
         </NavLink>
       ) : (
         <a
-          className="striped-background text-secondary flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800"
+          className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer striped-background text-secondary bg-dark-900 hover:bg-dark-800"
           onClick={toggleWalletModal}
         >
           Your Farms
@@ -41,7 +40,7 @@ const Menu = ({ positionsLength }) => {
         </a>
       </NavLink>
 
-      {chainId === ChainId.MAINNET && (
+      {[ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) && (
         <>
           <NavLink
             exact
@@ -64,7 +63,7 @@ const Menu = ({ positionsLength }) => {
         </>
       )}
 
-      {(chainId === ChainId.MAINNET || chainId === ChainId.MATIC) && (
+      {(chainId === ChainId.ETHEREUM || chainId === ChainId.MATIC) && (
         <NavLink
           exact
           href={`/farm?filter=2x`}

@@ -1,8 +1,7 @@
 import { Borrow, Repay } from '../../../features/kashi'
 import Provider, { useKashiInfo, useKashiPair } from '../../../features/kashi/context'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { formatNumber, formatPercent } from '../../../functions/format'
-
 import Card from '../../../components/Card'
 import Dots from '../../../components/Dots'
 import GradientDot from '../../../components/GradientDot'
@@ -14,13 +13,13 @@ import QuestionHelper from '../../../components/QuestionHelper'
 import { Tab } from '@headlessui/react'
 import { cloudinaryLoader } from '../../../functions/cloudinary'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../../services/web3'
 import { useLingui } from '@lingui/react'
 import { useRouter } from 'next/router'
 import { useToken } from '../../../hooks/Tokens'
 import { useTransactionAdder } from '../../../state/transactions/hooks'
-import { useUSDCPrice } from '../../../hooks'
 import { useV2Pair } from '../../../hooks/useV2Pairs'
+import useUSDCPrice from '../../../hooks/useUSDCPrice'
 
 function Pair() {
   const router = useRouter()

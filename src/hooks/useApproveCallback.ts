@@ -1,19 +1,11 @@
-import {
-  ARCHER_ROUTER_ADDRESS,
-  Currency,
-  CurrencyAmount,
-  Percent,
-  ROUTER_ADDRESS,
-  TradeType,
-  Trade as V2Trade,
-} from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Percent, ROUTER_ADDRESS, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import { useCallback, useMemo } from 'react'
 import { useHasPendingApproval, useTransactionAdder } from '../state/transactions/hooks'
 
 import { MaxUint256 } from '@ethersproject/constants'
 import { TransactionResponse } from '@ethersproject/providers'
 import { calculateGasMargin } from '../functions/trade'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3'
 import { useTokenAllowance } from './useTokenAllowance'
 import { useTokenContract } from './useContract'
 
@@ -106,8 +98,7 @@ export function useApproveCallback(
 // wraps useApproveCallback in the context of a swap
 export function useApproveCallbackFromTrade(
   trade: V2Trade<Currency, Currency, TradeType> | undefined,
-  allowedSlippage: Percent,
-  doArcher: boolean = false
+  allowedSlippage: Percent
 ) {
   const { chainId } = useActiveWeb3React()
   const amountToApprove = useMemo(
@@ -116,12 +107,6 @@ export function useApproveCallbackFromTrade(
   )
   return useApproveCallback(
     amountToApprove,
-    chainId
-      ? trade instanceof V2Trade
-        ? !doArcher
-          ? ROUTER_ADDRESS[chainId]
-          : ARCHER_ROUTER_ADDRESS[chainId]
-        : undefined
-      : undefined
+    chainId ? (trade instanceof V2Trade ? ROUTER_ADDRESS[chainId] : undefined) : undefined
   )
 }

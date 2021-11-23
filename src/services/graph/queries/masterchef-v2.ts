@@ -6,17 +6,8 @@ export const poolsV2Query = gql`
     $skip: Int! = 0
     $orderBy: String! = "id"
     $orderDirection: String! = "desc"
-    $block: Block_height
-    $where: Pool_filter! = { allocPoint_gt: 0 }
   ) {
-    pools(
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
-      block: $block
-      where: $where
-    ) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       pair
       allocPoint
@@ -40,9 +31,8 @@ export const masterChefV2PairAddressesQuery = gql`
     $skip: Int! = 0
     $orderBy: String! = "id"
     $orderDirection: String! = "desc"
-    $where: Pool_filter! = { allocPoint_gt: 0 }
   ) {
-    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
+    pools(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection) {
       id
       allocPoint
       accSushiPerShare

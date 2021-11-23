@@ -1,21 +1,17 @@
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { GRAPH_HOST } from '../constants'
 import { request } from 'graphql-request'
 import { barHistoriesQuery, barQuery } from '../queries/bar'
 
-const BAR = {
-  [ChainId.MAINNET]: 'matthewlilley/bar',
+const fetcher = async (query, variables = undefined) =>
+  request(`${GRAPH_HOST[ChainId.ETHEREUM]}/subgraphs/name/matthewlilley/bar`, query, variables)
+
+export const getBar = async (variables = undefined) => {
+  const { bar } = await fetcher(barQuery, variables)
+  return bar
 }
 
-export const bar = async (query, variables = undefined) =>
-  request(`https://api.thegraph.com/subgraphs/name/${BAR['1']}`, query, variables)
-
-export const getBar = async (block: number) => {
-  const { bar: barData } = await bar(barQuery, { block: block ? { number: block } : undefined })
-  return barData
-}
-
-export const getBarHistory = async () => {
-  const { histories } = await bar(barHistoriesQuery)
+export const getBarHistory = async (variables = undefined) => {
+  const { histories } = await fetcher(barHistoriesQuery, variables)
   return histories
 }

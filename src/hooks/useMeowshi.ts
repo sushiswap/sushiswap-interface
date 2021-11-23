@@ -6,7 +6,7 @@ import { BalanceProps } from './useTokenBalance'
 import Fraction from '../entities/Fraction'
 import { BigNumber } from '@ethersproject/bignumber'
 import { MaxUint256 } from '@ethersproject/constants'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3'
 import { useTransactionAdder } from '../state/transactions/hooks'
 
 const useMeowshi = (sushi: boolean) => {

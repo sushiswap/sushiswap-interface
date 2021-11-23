@@ -5,9 +5,9 @@ import DoubleLogo from '../../components/DoubleLogo'
 import FarmListItemDetails from './FarmListItemDetails'
 import Image from '../../components/Image'
 import { PairType } from './enum'
+import QuestionHelper from '../../components/QuestionHelper'
 import React from 'react'
 import { useCurrency } from '../../hooks/Tokens'
-import QuestionHelper from '../../components/QuestionHelper'
 
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
@@ -85,7 +85,7 @@ const FarmListItem = ({ farm, ...rest }) => {
                               : 'Infinite'}
                           </div>
                           <div>
-                            Fee APY:{' '}
+                            Fee APR:{' '}
                             {farm?.feeApyPerYear < 10000 ? formatPercent(farm?.feeApyPerYear * 100) : '>10,000%'}
                           </div>
                         </div>
@@ -97,7 +97,6 @@ const FarmListItem = ({ farm, ...rest }) => {
               </div>
             </div>
           </Disclosure.Button>
-
           {open && <FarmListItemDetails farm={farm} />}
         </div>
       )}

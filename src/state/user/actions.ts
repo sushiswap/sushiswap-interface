@@ -39,18 +39,3 @@ export const removeSerializedPair = createAction<{
   tokenBAddress: string
 }>('user/removeSerializedPair')
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
-export const updateUserArcherUseRelay = createAction<{
-  userArcherUseRelay: boolean
-}>('user/updateUserArcherUseRelay')
-export const updateUserArcherGasPrice = createAction<{
-  userArcherGasPrice: string
-}>('user/updateUserArcherGasPrice')
-export const updateUserArcherETHTip = createAction<{
-  userArcherETHTip: string
-}>('user/updateUserArcherETHTip')
-export const updateUserArcherGasEstimate = createAction<{
-  userArcherGasEstimate: string
-}>('user/updateUserArcherGasEstimate')
-export const updateUserArcherTipManualOverride = createAction<{
-  userArcherTipManualOverride: boolean
-}>('user/updateUserArcherTipManualOverride')

@@ -1,11 +1,12 @@
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
-import { useActiveWeb3React, useBentoBoxContract } from './index'
+import { useBentoBoxContract } from './useContract'
+import { useActiveWeb3React } from '../services/web3'
 import { useAllTransactions, useTransactionAdder } from '../state/transactions/hooks'
 import { useCallback, useMemo, useState } from 'react'
-import { signMasterContractApproval } from '../entities/KashiCooker'
 import { Contract } from '@ethersproject/contracts'
 import { AddressZero, HashZero } from '@ethersproject/constants'
 import { splitSignature } from '@ethersproject/bytes'
+import { signMasterContractApproval } from '../functions'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -39,7 +40,7 @@ const useBentoHasPendingApproval = (masterContract: string, account: string, con
           return summary === `Approving ${contractName} Master Contract`
         }
       }),
-    [allTransactions, account, masterContract]
+    [masterContract, account, allTransactions, contractName]
   )
 }
 

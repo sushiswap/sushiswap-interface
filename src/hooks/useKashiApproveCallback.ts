@@ -1,9 +1,9 @@
-import KashiCooker, { signMasterContractApproval } from '../entities/KashiCooker'
+import { KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import KashiCooker from '../entities/KashiCooker'
+import { signMasterContractApproval } from '../functions'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
-import { KASHI_ADDRESS } from '@sushiswap/sdk'
 import { setKashiApprovalPending } from '../state/application/actions'
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3'
 import { useBentoBoxContract } from './useContract'
 import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
 import { useDispatch } from 'react-redux'

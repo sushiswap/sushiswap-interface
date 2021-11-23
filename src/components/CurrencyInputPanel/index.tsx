@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk'
+import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/core-sdk'
 import React, { ReactNode, useCallback, useState } from 'react'
 import { classNames, formatCurrencyAmount } from '../../functions'
 
@@ -12,7 +12,7 @@ import Input from '../Input'
 import Lottie from 'lottie-react'
 import selectCoinAnimation from '../../animation/select-coin.json'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
 
@@ -33,9 +33,11 @@ interface CurrencyInputPanelProps {
   priceImpact?: Percent
   id: string
   showCommonBases?: boolean
+  allowManageTokenList?: boolean
   renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode
   locked?: boolean
   customBalanceText?: string
+  showSearch?: boolean
 }
 
 export default function CurrencyInputPanel({
@@ -58,6 +60,8 @@ export default function CurrencyInputPanel({
   hideInput = false,
   locked = false,
   customBalanceText,
+  allowManageTokenList = true,
+  showSearch = true,
 }: CurrencyInputPanelProps) {
   const { i18n } = useLingui()
   const [modalOpen, setModalOpen] = useState(false)
@@ -182,6 +186,9 @@ export default function CurrencyInputPanel({
           selectedCurrency={currency}
           otherSelectedCurrency={otherCurrency}
           showCommonBases={showCommonBases}
+          allowManageTokenList={allowManageTokenList}
+          hideBalance={hideBalance}
+          showSearch={showSearch}
         />
       )}
     </div>

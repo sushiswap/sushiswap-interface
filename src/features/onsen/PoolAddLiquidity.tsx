@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import React, { useCallback, useState } from 'react'
 import ReactGA from 'react-ga'
 import Button, { ButtonError } from '../../components/Button'
@@ -11,7 +11,9 @@ import DoubleCurrencyLogo from '../../components/DoubleLogo'
 import Web3Connect from '../../components/Web3Connect'
 import { ZERO_PERCENT } from '../../constants'
 import { calculateGasMargin, calculateSlippageAmount, maxAmountSpend } from '../../functions'
-import { ApprovalState, useActiveWeb3React, useApproveCallback, useRouterContract } from '../../hooks'
+import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
+import { useRouterContract } from '../../hooks/useContract'
+import { useActiveWeb3React } from '../../services/web3'
 import useTransactionDeadline from '../../hooks/useTransactionDeadline'
 import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
@@ -19,7 +21,7 @@ import { Field } from '../../state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from '../../state/mint/hooks'
 import { useTransactionAdder } from '../../state/transactions/hooks'
 import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
-import { ConfirmAddModalBottom } from '../exchange-v1/liquidity/ConfirmAddModalBottom'
+import { ConfirmAddModalBottom } from '../legacy/liquidity/ConfirmAddModalBottom'
 import CurrencyInputPanel from './CurrencyInputPanel'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
@@ -28,7 +30,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
 
-  const [useETH, setUseETH] = useState(true)
+  const [useETH, setUseETH] = useState(chainId !== ChainId.CELO)
 
   chainId && useETH && currencyA && currencyEquals(currencyA, WNATIVE[chainId]) && (currencyA = NATIVE[chainId])
   chainId && useETH && currencyB && currencyEquals(currencyB, WNATIVE[chainId]) && (currencyB = NATIVE[chainId])
@@ -298,7 +300,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
             currencyBalance={currencyBalances[Field.CURRENCY_B]}
             fiatValue={currencyBFiatValue}
           />
-          {(oneCurrencyIsETH || oneCurrencyIsWETH) && (
+          {(oneCurrencyIsETH || oneCurrencyIsWETH) && chainId != ChainId.CELO && (
             <a
               className="cursor-pointer text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap"
               onClick={() => setUseETH(!useETH)}

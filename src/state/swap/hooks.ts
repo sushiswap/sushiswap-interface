@@ -9,8 +9,7 @@ import {
   TradeType,
   Trade as V2Trade,
   WNATIVE_ADDRESS,
-} from '@sushiswap/sdk'
-import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../config/archer'
+} from '@sushiswap/core-sdk'
 import {
   EstimatedSwapCall,
   SuccessfulCall,
@@ -27,22 +26,13 @@ import { isAddress, isZero } from '../../functions/validate'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  useExpertModeManager,
-  useUserArcherETHTip,
-  useUserArcherGasEstimate,
-  useUserArcherGasPrice,
-  useUserArcherTipManualOverride,
-  useUserSingleHopOnly,
-  useUserSlippageTolerance,
-} from '../user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } from '../user/hooks'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
-
 import { ParsedQs } from 'qs'
 import { SwapState } from './reducer'
 import { t } from '@lingui/macro'
 import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { useActiveWeb3React } from '../../services/web3'
 import { useCurrency } from '../../hooks/Tokens'
 import { useCurrencyBalances } from '../wallet/hooks'
 import useENS from '../../hooks/useENS'
@@ -105,7 +95,7 @@ export function useSwapActionHandlers(): {
 
 // TODO: Swtich for ours...
 const BAD_RECIPIENT_ADDRESSES: { [chainId: string]: { [address: string]: true } } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac': true, // v2 factory
     '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': true, // v2 router 02
   },
@@ -220,89 +210,6 @@ export function useDerivedSwapInfo(doArcher = false): {
     inputError = i18n._(t`Insufficient ${amountIn.currency.symbol} balance`)
   }
 
-  const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, to, undefined, doArcher)
-
-  const [, setUserETHTip] = useUserArcherETHTip()
-  const [userGasEstimate, setUserGasEstimate] = useUserArcherGasEstimate()
-  const [userGasPrice] = useUserArcherGasPrice()
-  const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
-
-  useEffect(() => {
-    if (doArcher) {
-      setUserTipManualOverride(false)
-      setUserETHTip(DEFAULT_ARCHER_ETH_TIP.toString())
-      setUserGasEstimate(DEFAULT_ARCHER_GAS_ESTIMATE.toString())
-    }
-  }, [doArcher, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
-
-  useEffect(() => {
-    if (doArcher && !userTipManualOverride) {
-      setUserETHTip(JSBI.multiply(JSBI.BigInt(userGasEstimate), JSBI.BigInt(userGasPrice)).toString())
-    }
-  }, [doArcher, userGasEstimate, userGasPrice, userTipManualOverride, setUserETHTip])
-
-  useEffect(() => {
-    async function estimateGas() {
-      const estimatedCalls: EstimatedSwapCall[] = await Promise.all(
-        swapCalls.map((call) => {
-          const { address, calldata, value } = call
-
-          const tx =
-            !value || isZero(value)
-              ? { from: account, to: address, data: calldata }
-              : {
-                  from: account,
-                  to: address,
-                  data: calldata,
-                  value,
-                }
-
-          return library
-            .estimateGas(tx)
-            .then((gasEstimate) => {
-              return {
-                call,
-                gasEstimate,
-              }
-            })
-            .catch((gasError) => {
-              console.debug('Gas estimate failed, trying eth_call to extract error', call)
-
-              return library
-                .call(tx)
-                .then((result) => {
-                  console.debug('Unexpected successful call after failed estimate gas', call, gasError, result)
-                  return {
-                    call,
-                    error: new Error('Unexpected issue with estimating the gas. Please try again.'),
-                  }
-                })
-                .catch((callError) => {
-                  console.debug('Call threw error', call, callError)
-                  return {
-                    call,
-                    error: new Error(swapErrorToUserReadableMessage(callError)),
-                  }
-                })
-            })
-        })
-      )
-
-      // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
-      const successfulEstimation = estimatedCalls.find(
-        (el, ix, list): el is SuccessfulCall =>
-          'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1])
-      )
-
-      if (successfulEstimation) {
-        setUserGasEstimate(successfulEstimation.gasEstimate.toString())
-      }
-    }
-    if (doArcher && v2Trade && swapCalls && !userTipManualOverride) {
-      estimateGas()
-    }
-  }, [doArcher, v2Trade, swapCalls, userTipManualOverride, library, setUserGasEstimate])
-
   return {
     currencies,
     currencyBalances,
@@ -340,7 +247,7 @@ function validatedRecipient(recipient: any): string | null {
   if (ADDRESS_REGEX.test(recipient)) return recipient
   return null
 }
-export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.MAINNET): SwapState {
+export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.ETHEREUM): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
   const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'

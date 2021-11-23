@@ -1,5 +1,5 @@
-import { useActiveWeb3React, useSushiContract } from '../../hooks'
-
+import { useSushiContract } from '../../hooks/useContract'
+import { useActiveWeb3React } from '../../services/web3'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Chef } from './enum'
 import { Zero } from '@ethersproject/constants'
@@ -42,6 +42,8 @@ export default function useMasterChef(chef: Chef) {
 
         if (chef === Chef.MASTERCHEF) {
           tx = await contract?.withdraw(pid, amount)
+        } else if (chef === Chef.MINICHEF) {
+          tx = await contract?.withdrawAndHarvest(pid, amount, account)
         } else {
           tx = await contract?.withdraw(pid, amount, account)
         }
