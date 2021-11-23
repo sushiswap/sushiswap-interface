@@ -8,6 +8,7 @@ import Button from 'app/components/Button'
 import CurrencyLogo from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { useAllTokens, useToken } from 'app/hooks/Tokens'
+import { useTokenComparator } from 'app/modals/SearchModal/sorting'
 import { useActiveWeb3React } from 'app/services/web3/hooks'
 import { useAllTokenBalances, useCurrencyBalance, useCurrencyBalances, useTokenBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
@@ -61,12 +62,16 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
   const customBalance = useTokenBalance(account ? account : undefined, token ? token : undefined)
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
 
+  const tokenComparator = useTokenComparator()
+
   // Create a lightweight arr for searching
   const tokensArr = useMemo(() => {
     if (!chainId) return []
 
-    return Object.entries(tokens).map(([k, v]) => `${k}-${v.symbol}`)
-  }, [chainId, tokens])
+    return Object.values(tokens)
+      .sort(tokenComparator)
+      .map((token) => `${token.address}-${token.symbol}`)
+  }, [chainId, tokenComparator, tokens])
 
   const items = useMemo(() => {
     return tokensArr.filter((el) => (search ? el.toLowerCase().includes(search) : el))
