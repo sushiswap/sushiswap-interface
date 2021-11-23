@@ -13,7 +13,6 @@ import { toShareJSBI } from 'app/functions/bentobox'
 import { useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
@@ -38,7 +37,7 @@ export const useClassicStandardRemoveExecute = () => {
   const slpPermit = useRecoilValue(TridentApproveGate.slpPermit)
   const resetSLPPermit = useResetRecoilState(TridentApproveGate.slpPermit)
 
-  const execute = useRecoilCallback(
+  return useRecoilCallback(
     ({ snapshot }) =>
       async () => {
         const { pool } = await snapshot.getPromise(poolAtom)
@@ -159,6 +158,4 @@ export const useClassicStandardRemoveExecute = () => {
       resetSLPPermit,
     ]
   )
-
-  return useMemo(() => ({ execute }), [execute])
 }

@@ -40,7 +40,7 @@ export const useClassicSingleRemoveExecute = () => {
   const slpPermit = useRecoilValue(TridentApproveGate.slpPermit)
   const resetSLPPermit = useResetRecoilState(TridentApproveGate.slpPermit)
 
-  const execute = useRecoilCallback(
+  return useRecoilCallback(
     ({ snapshot }) =>
       async () => {
         const { pool } = await snapshot.getPromise(poolAtom)
@@ -72,14 +72,6 @@ export const useClassicSingleRemoveExecute = () => {
             })
           )
 
-        console.log(
-          router.address,
-          batchAction({
-            contract: router,
-            actions,
-          }),
-          toShareJSBI(rebase, minOutputAmount.quotient).toString()
-        )
         try {
           setAttemptingTxn(true)
           const tx = await library.getSigner().sendTransaction({
@@ -136,8 +128,7 @@ export const useClassicSingleRemoveExecute = () => {
       setShowReview,
       setTxHash,
       slpPermit,
+      zapCurrency.isNative,
     ]
   )
-
-  return useMemo(() => ({ execute }), [execute])
 }

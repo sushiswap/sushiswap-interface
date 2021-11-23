@@ -10,7 +10,6 @@ import { toShareJSBI } from 'app/functions'
 import { useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
@@ -40,7 +39,7 @@ export const useClassicStandardAddExecute = () => {
   const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
   const resetBentoPermit = useResetRecoilState(TridentApproveGate.bentoPermit)
 
-  const execute = useRecoilCallback(
+  return useRecoilCallback(
     ({ snapshot }) =>
       async () => {
         const { pool } = await snapshot.getPromise(poolAtom)
@@ -151,6 +150,4 @@ export const useClassicStandardAddExecute = () => {
       resetBentoPermit,
     ]
   )
-
-  return useMemo(() => ({ execute }), [execute])
 }
