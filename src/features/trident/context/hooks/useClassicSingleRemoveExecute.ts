@@ -1,16 +1,18 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { approveMasterContractAction, approveSLPAction } from 'app/features/trident/context/actions'
+import { batchAction, burnLiquiditySingleAction, unwrapWETHAction } from 'app/features/trident/context/hooks/actions'
 import { usePoolDetailsBurn } from 'app/features/trident/context/hooks/usePoolDetails'
 import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
+import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { toShareJSBI } from 'app/functions'
 import { useTridentRouterContract } from 'app/hooks'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { ethers } from 'ethers'
 import { useMemo } from 'react'
 import ReactGA from 'react-ga'
-import { useRecoilCallback, useSetRecoilState } from 'recoil'
+import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { attemptingTxnAtom, poolAtom, showReviewAtom, txHashAtom } from '../atoms'
 
@@ -33,6 +35,10 @@ export const useClassicSingleRemoveExecute = () => {
     () => minLiquidityOutputSingleToken(zapCurrency?.wrapped),
     [minLiquidityOutputSingleToken, zapCurrency?.wrapped]
   )
+  const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
+  const resetBentoPermit = useResetRecoilState(TridentApproveGate.bentoPermit)
+  const slpPermit = useRecoilValue(TridentApproveGate.slpPermit)
+  const resetSLPPermit = useResetRecoilState(TridentApproveGate.slpPermit)
 
   const execute = useRecoilCallback(
     ({ snapshot }) =>
@@ -42,19 +48,49 @@ export const useClassicSingleRemoveExecute = () => {
         if (!pool || !chainId || !library || !account || !router || !minOutputAmount || !rebase || !parsedSLPAmount)
           throw new Error('missing dependencies')
 
-        const encoded = ethers.utils.defaultAbiCoder.encode(
-          ['address', 'address', 'bool'],
-          [minOutputAmount?.currency.wrapped.address, account, outputToWallet]
-        )
+        const receiveETH = zapCurrency.isNative && outputToWallet
+        const actions = [
+          approveMasterContractAction({ router, signature: bentoPermit }),
+          approveSLPAction({ router, signatureData: slpPermit }),
+          burnLiquiditySingleAction({
+            router,
+            address: pool.liquidityToken.address,
+            token: minOutputAmount.currency.wrapped.address,
+            amount: parsedSLPAmount.quotient.toString(),
+            recipient: receiveETH ? router.address : account,
+            minWithdrawal: toShareJSBI(rebase, minOutputAmount.quotient).toString(),
+            receiveToWallet: outputToWallet,
+          }),
+        ]
 
+        if (receiveETH)
+          actions.push(
+            unwrapWETHAction({
+              router,
+              amountMinimum: toShareJSBI(rebase, minOutputAmount.quotient).toString(),
+              recipient: account,
+            })
+          )
+
+        console.log(
+          router.address,
+          batchAction({
+            contract: router,
+            actions,
+          }),
+          toShareJSBI(rebase, minOutputAmount.quotient).toString()
+        )
         try {
           setAttemptingTxn(true)
-          const tx = await router.burnLiquiditySingle(
-            pool.liquidityToken.address,
-            parsedSLPAmount.quotient.toString(),
-            encoded,
-            toShareJSBI(rebase, minOutputAmount.quotient).toString()
-          )
+          const tx = await library.getSigner().sendTransaction({
+            from: account,
+            to: router.address,
+            data: batchAction({
+              contract: router,
+              actions,
+            }),
+            value: '0x0',
+          })
 
           setTxHash(tx.hash)
           setShowReview(false)
@@ -71,6 +107,9 @@ export const useClassicSingleRemoveExecute = () => {
             action: 'Burn',
             label: [pool.token0.symbol, pool.token1.symbol].join('/'),
           })
+
+          resetBentoPermit()
+          resetSLPPermit()
         } catch (error) {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
@@ -82,6 +121,7 @@ export const useClassicSingleRemoveExecute = () => {
     [
       account,
       addTransaction,
+      bentoPermit,
       chainId,
       i18n,
       library,
@@ -89,10 +129,13 @@ export const useClassicSingleRemoveExecute = () => {
       outputToWallet,
       parsedSLPAmount,
       rebase,
+      resetBentoPermit,
+      resetSLPPermit,
       router,
       setAttemptingTxn,
       setShowReview,
       setTxHash,
+      slpPermit,
     ]
   )
 

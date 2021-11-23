@@ -79,6 +79,33 @@ export const burnLiquidityAction = ({
   ])
 }
 
+interface BurnLiquiditySingleAction {
+  router: Contract
+  token: string
+  address: string
+  amount: string
+  recipient: string
+  receiveToWallet: boolean
+  minWithdrawal: string
+}
+
+export const burnLiquiditySingleAction = ({
+  router,
+  token,
+  address,
+  amount,
+  recipient,
+  receiveToWallet,
+  minWithdrawal,
+}: BurnLiquiditySingleAction) => {
+  return router.interface.encodeFunctionData('burnLiquiditySingle', [
+    address,
+    amount,
+    defaultAbiCoder.encode(['address', 'address', 'bool'], [token, recipient, receiveToWallet]),
+    minWithdrawal,
+  ])
+}
+
 interface UnwrapETHAction {
   router: Contract
   recipient: string

@@ -1,6 +1,7 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { CurrencyAmount } from '@sushiswap/sdk'
 import { useClassicSingleRemoveExecute } from 'app/features/trident/context/hooks/useClassicSingleRemoveExecute'
 import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
 import Button from 'components/Button'
@@ -11,12 +12,7 @@ import Typography from 'components/Typography'
 import React, { FC, useMemo } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import {
-  attemptingTxnAtom,
-  DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
-  outputToWalletAtom,
-  showReviewAtom,
-} from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
 import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
 
 interface RemoveTransactionReviewSingleModal {}
@@ -25,22 +21,26 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = 
   const { i18n } = useLingui()
   const { execute } = useClassicSingleRemoveExecute()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const outputToWallet = useRecoilValue(outputToWalletAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const {
     parsedAmounts,
     parsedSLPAmount,
     zapCurrency: [zapCurrency],
+    outputToWallet,
   } = useRemovePercentageInput()
   const { poolShareAfter, poolShareBefore, minLiquidityOutputSingleToken } = usePoolDetailsBurn(
     parsedSLPAmount,
     DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
   )
-  const minOutputAmount = useMemo(
-    () => minLiquidityOutputSingleToken(zapCurrency),
-    [minLiquidityOutputSingleToken, zapCurrency]
-  )
+  const minOutputAmount = useMemo(() => {
+    const amount = minLiquidityOutputSingleToken(zapCurrency)
+    if (zapCurrency?.isNative && outputToWallet) {
+      return CurrencyAmount.fromRawAmount(zapCurrency, amount.quotient.toString())
+    }
+
+    return amount
+  }, [minLiquidityOutputSingleToken, outputToWallet, zapCurrency])
 
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>

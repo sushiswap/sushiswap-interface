@@ -1,9 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent } from '@sushiswap/core-sdk'
+import { NATIVE, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import loadingCircle from 'animation/loading-circle.json'
 import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
 import { classNames } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import AssetInput from 'components/AssetInput'
 import AssetSelect from 'components/AssetSelect'
 import Button from 'components/Button'
@@ -29,6 +30,7 @@ import SumUSDCValues from '../../SumUSDCValues'
 import TridentApproveGate from '../../TridentApproveGate'
 
 const ClassicSingleMode: FC = () => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { pool } = useRecoilValue(poolAtom)
   const router = useTridentRouterContract()
@@ -55,13 +57,18 @@ const ClassicSingleMode: FC = () => {
     </ToggleButtonGroup>
   )
 
+  const oneTokenIsWETH =
+    pool?.token0.address === WNATIVE[chainId].address || pool?.token1.address === WNATIVE[chainId].address
+  const assetSelectCurrencies = [pool?.token0, pool?.token1]
+  if (oneTokenIsWETH) assetSelectCurrencies.push(NATIVE[chainId])
+
   return (
     <SumUSDCValues amounts={currentLiquidityValue}>
       {({ amount }) => {
         const selectedLiquidityValueInUsdc = amount?.multiply(new Percent(percentageInput, '100'))
         return (
           <div className="flex flex-col gap-8">
-            <AssetSelect value={zapCurrency} onSelect={setZapCurrency} currencies={[pool?.token0, pool?.token1]} />
+            <AssetSelect value={zapCurrency} onSelect={setZapCurrency} currencies={assetSelectCurrencies} />
             <div className={classNames(zapCurrency ? '' : 'pointer-events-none opacity-50', 'flex flex-col gap-3')}>
               <div className="flex items-center justify-between gap-10 lg:mb-2">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
@@ -100,6 +107,7 @@ const ClassicSingleMode: FC = () => {
                 }
               />
               <div className="block lg:hidden">{toggleButtonGroup}</div>
+              <div className="hidden lg:block" />
               <TridentApproveGate
                 inputAmounts={[poolBalance?.multiply(new Percent(percentageInput, '100'))]}
                 tokenApproveOn={router?.address}

@@ -1,5 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { NATIVE, WNATIVE } from '@sushiswap/core-sdk'
+import Alert from 'app/components/Alert'
 import { BentoBoxIcon, WalletIcon } from 'app/components/AssetInput/icons'
 import CurrencyLogo from 'app/components/CurrencyLogo'
 import Divider from 'app/components/Divider'
@@ -10,12 +12,14 @@ import { outputToWalletAtom } from 'app/features/trident/context/atoms'
 import { usePoolDetailsBurn } from 'app/features/trident/context/hooks/usePoolDetails'
 import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 
 import TransactionDetails from '../TransactionDetails'
 
 const ClassicSingleAside = () => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const {
     parsedSLPAmount,
@@ -65,6 +69,16 @@ const ClassicSingleAside = () => {
           }
         />
       </div>
+      {!outputToWallet && zapCurrency.isNative && (
+        <Alert
+          className="bg-transparent p-0"
+          dismissable={false}
+          type="error"
+          message={i18n._(
+            t`Native ${NATIVE[chainId].symbol} can't be withdrawn to BentoBox, ${WNATIVE[chainId].symbol} will be received instead`
+          )}
+        />
+      )}
       <div className="flex flex-col gap-5">
         <Typography variant="lg" weight={700} className="text-high-emphesis">
           {i18n._(t`You'll Receive (at least):`)}
@@ -76,7 +90,7 @@ const ClassicSingleAside = () => {
               {minOutputAmount?.greaterThan(0) ? minOutputAmount.toSignificant(6) : '0.00'}
             </Typography>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {minOutputAmount?.currency.symbol}
+              {!outputToWallet && zapCurrency.isNative ? zapCurrency.wrapped.symbol : zapCurrency?.symbol}
             </Typography>
           </div>
           <Typography variant="sm" weight={700} className="text-secondary">
