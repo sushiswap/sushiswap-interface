@@ -19,6 +19,11 @@ export interface ApproveSLPActionProps {
   signatureData?: StandardSignatureData
 }
 
+/**
+ *
+ * @param router router contract
+ * @param signatureData SLP approval signature data
+ */
 export const approveSLPAction = ({ router, signatureData }: ApproveSLPActionProps) => {
   if (!signatureData) return undefined
 
