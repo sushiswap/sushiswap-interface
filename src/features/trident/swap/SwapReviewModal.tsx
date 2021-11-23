@@ -39,7 +39,7 @@ const SwapReviewModal: FC = () => {
   const { rebases } = useBentoRebases(currencies)
 
   const {
-    parsedAmounts: [inputAmount, outputAmount, outputMinAmount],
+    parsedAmounts: [inputAmount, outputAmount],
     spendFromWallet: [fromWallet],
     receiveToWallet: [receiveToWallet],
   } = useSwapAssetPanelInputs()
@@ -48,7 +48,6 @@ const SwapReviewModal: FC = () => {
     bentoPermit,
     receiveToWallet,
     inputAmount,
-    outputAmount: outputMinAmount,
     fromWallet,
   })
 

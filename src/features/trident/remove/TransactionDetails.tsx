@@ -5,8 +5,8 @@ import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, liquidityModeAtom, poolBalanceAtom } from '../context/atoms'
-import usePercentageInput from '../context/hooks/usePercentageInput'
 import { usePoolDetailsBurn } from '../context/hooks/usePoolDetails'
+import useRemovePercentageInput from '../context/hooks/useRemovePercentageInput'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
 import { LiquidityMode } from '../types'
 
@@ -15,7 +15,7 @@ const TransactionDetails: FC = () => {
   const poolBalance = useRecoilValue(poolBalanceAtom)
   const liquidityMode = useRecoilValue(liquidityModeAtom)
 
-  const { parsedSLPAmount } = usePercentageInput()
+  const { parsedSLPAmount } = useRemovePercentageInput()
 
   // TODO ramin: fix for zap mode
   const input = liquidityMode === LiquidityMode.STANDARD ? parsedSLPAmount : undefined
@@ -37,6 +37,20 @@ const TransactionDetails: FC = () => {
       </div>
       <div className="flex flex-col gap-1">
         <div className="flex flex-row justify-between gap-2">
+          <Typography variant="sm" className="text-secondary">
+            {i18n._(t`Your Pool Share`)}
+          </Typography>
+          <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
+            {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'}%
+            {parsedSLPAmount?.greaterThan(0) && (
+              <>
+                {' '}
+                → <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
+              </>
+            )}
+          </Typography>
+        </div>
+        <div className="flex flex-row justify-between gap-2">
           <Typography variant="sm" className="text-secondary whitespace-nowrap">
             {i18n._(t`Your Pool Tokens`)}
           </Typography>
@@ -44,26 +58,11 @@ const TransactionDetails: FC = () => {
             {poolBalance?.greaterThan(0) ? poolBalance?.toSignificant(6) : '0.000'}
             {parsedSLPAmount?.greaterThan(0) && (
               <>
-                {' '}
-                →{' '}
+                {' SLP '}→{' '}
                 <span className="text-green">
                   {poolBalance && parsedSLPAmount ? poolBalance.subtract(parsedSLPAmount)?.toSignificant(6) : '0.000'}{' '}
                   SLP
                 </span>
-              </>
-            )}
-          </Typography>
-        </div>
-        <div className="flex flex-row justify-between gap-2">
-          <Typography variant="sm" className="text-secondary">
-            {i18n._(t`Your Pool Share`)}
-          </Typography>
-          <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-            {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'}
-            {parsedSLPAmount?.greaterThan(0) && (
-              <>
-                {' '}
-                → <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
               </>
             )}
           </Typography>

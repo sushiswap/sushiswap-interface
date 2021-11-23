@@ -9,18 +9,17 @@ import Typography from 'components/Typography'
 import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, poolAtom, showReviewAtom } from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
 import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
 import { useZapAssetInput } from '../../context/hooks/useZapAssetInput'
 
 const TransactionReviewZapModal: FC = () => {
   const { i18n } = useLingui()
-  const { pool } = useRecoilValue(poolAtom)
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { parsedAmount, parsedSplitAmounts } = useZapAssetInput()
-  const { liquidityValueBefore, poolShareBefore, poolShareAfter, liquidityMinted } = usePoolDetailsMint(
+  const { poolShareBefore, poolShareAfter, liquidityMinted } = usePoolDetailsMint(
     parsedSplitAmounts,
     DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
   )

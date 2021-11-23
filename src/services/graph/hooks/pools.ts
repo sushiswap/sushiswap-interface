@@ -1,7 +1,8 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import useSWR, { SWRConfiguration } from 'swr'
-import { useBlock } from '.'
+
 import { getPoolBuckets, getTridentPools, PoolBucket, TridentPool } from '../fetchers/pools'
+import { useBlock } from '.'
 
 interface useTridentPoolsProps {
   timestamp?: number

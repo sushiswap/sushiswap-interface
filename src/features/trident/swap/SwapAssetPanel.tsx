@@ -45,7 +45,7 @@ interface SwapAssetPanel {
   walletToggle: React.ReactNode
   currency?: Currency
   value?: string
-  onChange?(x: string): void
+  onChange?(x?: string): void
   onSelect?(x: Currency): void
   spendFromWallet: boolean
   darkBackground?: boolean
@@ -185,7 +185,8 @@ const InputPanel: FC = () => {
   const { i18n } = useLingui()
   const isDesktop = useDesktopMediaQuery()
   const [open, setOpen] = useState<boolean>(false)
-  const { error, currency, value, onChange, disabled, onSelect, priceImpact } = useSwapAssetPanelContext()
+  const { error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet } =
+    useSwapAssetPanelContext()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
 
   const priceImpactClassName = useMemo(() => {
@@ -223,7 +224,7 @@ const InputPanel: FC = () => {
                 onClick={() => setOpen(true)}
               >
                 <Typography variant={isDesktop ? 'h3' : 'base'} weight={700}>
-                  {currency.symbol}
+                  {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
                 </Typography>
                 <ChevronDownIcon width={24} className="text-low-emphesis" />
               </div>
@@ -299,7 +300,7 @@ const BalancePanel: FC = () => {
 
   const handleClick = useCallback(() => {
     if (disabled || !balance || !onChange) return
-    onChange(maxAmountSpend(balance).toExact())
+    onChange(maxAmountSpend(balance)?.toExact())
   }, [balance, disabled, onChange])
 
   const valueAsCurrencyAmount = tryParseAmount(value, currency)
@@ -346,7 +347,7 @@ const BalancePanel: FC = () => {
 
 const SwapAssetPanelHeader: FC<{ label: string }> = ({ label }) => {
   const isDesktop = useDesktopMediaQuery()
-  const { currency, onSelect, walletToggle } = useSwapAssetPanelContext()
+  const { currency, onSelect, walletToggle, spendFromWallet } = useSwapAssetPanelContext()
 
   return (
     <div className="flex justify-between items-center px-4 lg:px-0">
@@ -359,7 +360,7 @@ const SwapAssetPanelHeader: FC<{ label: string }> = ({ label }) => {
             trigger={
               <div className="flex gap-0.5 cursor-pointer hover:text-high-emphesis">
                 <Typography variant="h3" weight={700}>
-                  {currency.symbol}
+                  {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
                 </Typography>
                 <ChevronDownIcon width={24} className="text-low-emphesis" />
               </div>
@@ -388,7 +389,7 @@ const MaxButton: FC = () => {
   return (
     <div
       className="flex items-center justify-center h-9 w-[96px] rounded-full border border-blue/50 bg-blue/30 cursor-pointer"
-      onClick={() => balance && onChange && onChange(maxAmountSpend(balance).toExact())}
+      onClick={() => balance && onChange && onChange(maxAmountSpend(balance)?.toExact())}
     >
       <Typography variant="sm" className="text-blue" weight={700}>
         {i18n._(t`USE MAX`)}

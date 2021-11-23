@@ -2,36 +2,32 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Checkbox from 'app/components/Checkbox'
 import Typography from 'app/components/Typography'
-import { fixedRatioAtom, liquidityModeAtom } from 'app/features/trident/context/atoms'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import React, { FC } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { atom, RecoilState, useRecoilState } from 'recoil'
 
-import { LiquidityMode } from '../types'
-import FixedRatioExplanationModal from './FixedRatioExplanationModal'
-
-interface FixedRatioHeaderProps {
-  margin?: boolean
+type FixedRatio<P> = FC<P> & {
+  atom: RecoilState<boolean>
 }
 
-const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
+const fixedRatioAtom = atom<boolean>({
+  key: 'remove:fixedRatioHeaderAtom',
+  default: true,
+})
+
+const FixedRatioHeader: FixedRatio<{ margin?: boolean }> = ({ margin = true }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const [fixedRatio, setFixedRatio] = useRecoilState(fixedRatioAtom)
-  const liquidityMode = useRecoilValue(liquidityModeAtom)
-
-  if (liquidityMode !== LiquidityMode.STANDARD) return <></>
 
   const content = (
     <div className="flex justify-between lg:justify-start gap-1">
       <div className="flex flex-row gap-3 items-center cursor-pointer" onClick={() => setFixedRatio(!fixedRatio)}>
         <Checkbox className="w-6 h-6" checked={fixedRatio} />
         <Typography variant="sm" weight={700} className={fixedRatio ? 'text-white' : ''}>
-          {i18n._(t`Deposit assets in equal amounts`)}
+          {i18n._(t`Withdraw assets in equal amounts`)}
         </Typography>
       </div>
-
-      <FixedRatioExplanationModal />
     </div>
   )
 
@@ -49,4 +45,5 @@ const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   )
 }
 
+FixedRatioHeader.atom = fixedRatioAtom
 export default FixedRatioHeader

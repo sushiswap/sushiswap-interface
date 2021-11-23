@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import Typography from 'components/Typography'
 import { formatPercent } from 'functions'
 import Link from 'next/link'
-import { FC, useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { ChevronRight } from 'react-feather'
 import { useRecoilValue } from 'recoil'
 
@@ -53,36 +53,41 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ breadcrumbs }) => {
   }, [breadcrumbs, currencies, pool])
 
   return (
-    <div className="flex w-full px-6 py-2 border-b border-dark-900 bg-gradient-to-r from-transparent-blue to-transparent-pink">
-      {formatted
-        .map(({ label, link }, index) => (
-          <Typography
-            variant="xs"
-            weight={400}
-            key={label}
-            className={classNames(
-              'capitalize',
-              index === breadcrumbs.length - 1 ? 'text-high-emphesis' : 'text-secondary'
-            )}
-          >
-            {link ? <Link href={link}>{label}</Link> : label}
-          </Typography>
-        ))
-        .reduce(
-          (acc, x) =>
-            acc === null ? (
-              x
-            ) : (
-              <>
-                {acc}{' '}
-                <div className="px-1 text-secondary flex flex-col justify-center">
-                  <ChevronRight width={12} height={12} strokeWidth={4} />
-                </div>{' '}
-                {x}
-              </>
-            ),
-          null
-        )}
+    <div className="flex w-full px-6 py-2 relative">
+      <div className="z-0 inset-0 pointer-events-none absolute w-full h-full border-b border-gradient-r-blue-pink-dark-1000 border-transparent opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-r from-opaque-blue to-opaque-pink" />
+      </div>
+      <div className="flex w-full z-[1]">
+        {formatted
+          .map(({ label, link }, index) => (
+            <Typography
+              variant="xs"
+              weight={400}
+              key={label}
+              className={classNames(
+                'capitalize',
+                index === breadcrumbs.length - 1 ? 'text-high-emphesis' : 'text-secondary'
+              )}
+            >
+              {link ? <Link href={link}>{label}</Link> : label}
+            </Typography>
+          ))
+          .reduce(
+            (acc, x) =>
+              acc === null ? (
+                x
+              ) : (
+                <>
+                  {acc}{' '}
+                  <div className="px-1 text-secondary flex flex-col justify-center">
+                    <ChevronRight width={12} height={12} strokeWidth={4} />
+                  </div>{' '}
+                  {x}
+                </>
+              ),
+            null
+          )}
+      </div>
     </div>
   )
 }

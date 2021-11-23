@@ -59,25 +59,25 @@ const AddClassic = () => {
             <SettingsTab trident />
           </div>
           <div>
-            <Typography variant="h2" weight={700} className="text-high-emphesis">
-              {i18n._(t`Add Liquidity`)}
-            </Typography>
-            <Typography variant="sm">
-              {i18n._(
-                t`Deposit any or all pool tokens directly with Standard mode,  or invest with any asset in Zap mode.`
+            <div className="flex flex-col gap-1">
+              <Typography variant="h2" weight={700} className="text-high-emphesis">
+                {i18n._(t`Add Liquidity`)}
+              </Typography>
+              <Typography variant="sm">
+                {i18n._(t`Deposit tokens in equal amounts or deposit either one of the two tokens or in any ratio.`)}
+              </Typography>
+              {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
+                classicPool.state as any
+              ) && (
+                <Alert
+                  className="bg-transparent px-0 pb-0"
+                  dismissable={false}
+                  type="error"
+                  showIcon
+                  message={i18n._(t`A Pool could not be found for provided currencies`)}
+                />
               )}
-            </Typography>
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
-              classicPool.state as any
-            ) && (
-              <Alert
-                className="px-0 bg-transparent"
-                dismissable={false}
-                type="error"
-                showIcon
-                message={i18n._(t`A Pool could not be found for provided currencies`)}
-              />
-            )}
+            </div>
           </div>
         </div>
       </TridentHeader>

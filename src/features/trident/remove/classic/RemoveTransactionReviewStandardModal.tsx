@@ -1,6 +1,9 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { CurrencyAmount, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
+import TransactionDetails from 'app/features/trident/remove/TransactionDetails'
+import { useActiveWeb3React } from 'app/services/web3'
 import Button from 'components/Button'
 import Divider from 'components/Divider'
 import ListPanel from 'components/ListPanel'
@@ -9,35 +12,42 @@ import Typography from 'components/Typography'
 import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import {
-  attemptingTxnAtom,
-  DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
-  outputToWalletAtom,
-  showReviewAtom,
-} from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
 import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
-import usePercentageInput from '../../context/hooks/usePercentageInput'
 import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
+import useRemovePercentageInput from '../../context/hooks/useRemovePercentageInput'
 
 interface RemoveTransactionReviewStandardModal {}
 
 const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardModal> = () => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
 
-  const { parsedAmounts, parsedSLPAmount } = usePercentageInput()
-  const { poolShareBefore, poolShareAfter, minLiquidityOutput } = usePoolDetailsBurn(
+  const {
     parsedSLPAmount,
-    DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
-  )
-  const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const outputToWallet = useRecoilValue(outputToWalletAtom)
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+    receiveNative: [receiveNative],
+    outputToWallet,
+  } = useRemovePercentageInput()
 
-  const { execute } = useClassicStandardRemoveExecute()
+  const { minLiquidityOutput } = usePoolDetailsBurn(parsedSLPAmount, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE)
+
+  const [showReview, setShowReview] = useRecoilState(showReviewAtom)
+  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const receiveETH = receiveNative && outputToWallet
+
+  const execute = useClassicStandardRemoveExecute()
+
+  const liquidityOutput = minLiquidityOutput.map((el) => {
+    if (el?.currency.wrapped.address === WNATIVE[chainId].address && receiveETH) {
+      return CurrencyAmount.fromRawAmount(NATIVE[chainId], el.quotient.toString())
+    }
+
+    return el
+  })
 
   return (
     <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={() => setShowReview(false)}>
-      <div className="flex flex-col gap-8 h-full">
+      <div className="flex flex-col gap-8 h-full lg:max-w-md">
         <div className="relative">
           <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
           <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
@@ -66,27 +76,17 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-3 px-5">
             <Typography weight={700} variant="lg">
-              {i18n._(t`You are removing:`)}
+              {i18n._(t`You'll receive (at least):`)}
             </Typography>
             <ListPanel
-              items={parsedAmounts.map((parsedInputAmount, index) => (
+              items={liquidityOutput.map((parsedInputAmount, index) => (
                 <ListPanel.CurrencyAmountItem amount={parsedInputAmount} key={index} />
-              ))}
-            />
-          </div>
-          <div className="flex flex-col gap-3 px-5">
-            <Typography weight={700} variant="lg">
-              {i18n._(t`And you'll receive (at least):`)}
-            </Typography>
-            <ListPanel
-              items={minLiquidityOutput?.map((el, index) => (
-                <ListPanel.CurrencyAmountItem amount={el} key={index} />
               ))}
             />
           </div>
           <div className="flex flex-row justify-between px-5">
             <Typography weight={700} variant="lg">
-              {i18n._(t`...deposited to your:`)}
+              {i18n._(t`and deposited to your:`)}
             </Typography>
             <Typography weight={700} variant="lg" className="text-high-emphesis">
               {outputToWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
@@ -95,17 +95,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
         </div>
         <div className="flex flex-col px-5 gap-5">
           <Divider />
-          <div className="flex flex-col gap-1">
-            <div className="flex justify-between">
-              <Typography variant="sm" className="text-secondary">
-                {i18n._(t`Share of Pool`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-                {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'} →{' '}
-                <span className="text-green">{poolShareAfter?.toSignificant(6) || '0.000'}%</span>
-              </Typography>
-            </div>
-          </div>
+          <TransactionDetails />
           <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={execute}>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`Confirm Withdrawal`)}

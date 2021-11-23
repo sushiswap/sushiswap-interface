@@ -83,6 +83,7 @@ const ClassicStandardMode = () => {
               inputAmounts={[parsedAmountA, parsedAmountB]}
               tokenApproveOn={bentoBox?.address}
               masterContractAddress={router?.address}
+              withPermit={true}
             >
               {({ approved, loading }) => {
                 const disabled = !!error || !approved || loading || attemptingTxn

@@ -19,16 +19,15 @@ const addLiquidityAction = ({
   feeTier,
   twap,
   account,
-  liquidityMinted,
 }: PoolCreationActionProps) => {
-  const liquidityInput = assets.map((asset, index) => {
+  const liquidityInput = assets.map((asset) => {
     const spendFromWallet = asset.spendFromSource === SpendSource.WALLET
     return {
       token: asset.currency?.isNative && spendFromWallet ? AddressZero : asset.parsedAmount!!.currency.wrapped.address,
       native: spendFromWallet,
       amount: spendFromWallet
         ? asset.parsedAmount!!.quotient.toString()
-        : toShareJSBI(rebases[index], asset.parsedAmount!!.quotient).toString(),
+        : toShareJSBI(rebases[asset.currency!!.wrapped.address], asset.parsedAmount!!.quotient).toString(),
     }
   })
   const [tokenA, tokenB] = sortTokens(assets)
@@ -41,7 +40,7 @@ const addLiquidityAction = ({
       fee: feeTier,
       twap,
     }),
-    liquidityMinted.quotient.toString(),
+    1,
     defaultAbiCoder.encode(['address'], [account]),
   ])
 }
@@ -56,8 +55,9 @@ const deployNewPoolAction = ({
   const [tokenA, tokenB] = sortTokens(assets)
   const deployData = defaultAbiCoder.encode(
     ['address', 'address', 'uint8', 'bool'],
-    [...[tokenA.address, tokenB.address].sort(), feeTier, twap]
+    [tokenA.wrapped.address, tokenB.wrapped.address, feeTier, twap]
   )
+
   return router.interface.encodeFunctionData('deployPool', [constantProductPoolFactory.address, deployData])
 }
 
@@ -66,7 +66,7 @@ type NativeIdentifier = { value?: string }
 /* Native Eth must be passed with a value object */
 export const valueIfNative = (parsedAmounts: CurrencyAmount<Currency>[]): NativeIdentifier => {
   const indexOfNative = parsedAmounts.findIndex((el: CurrencyAmount<Currency>) => el.currency.isNative)
-  return indexOfNative > 0 ? { value: parsedAmounts[indexOfNative]!!.quotient.toString() } : {}
+  return indexOfNative >= 0 ? { value: parsedAmounts[indexOfNative]!!.quotient.toString() } : {}
 }
 
 export interface PoolCreationActionProps {
@@ -78,7 +78,6 @@ export interface PoolCreationActionProps {
   constantProductPoolFactory: Contract
   rebases: Record<string, Rebase>
   parsedAmounts: CurrencyAmount<Currency>[]
-  liquidityMinted: CurrencyAmount<Currency>
 }
 
 type BatchAction = string
