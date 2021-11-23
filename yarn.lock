@@ -4224,14 +4224,6 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-17.11.0.tgz#279f43661035263d25fe6d583249b80c60b1bc9d"
   integrity sha512-IBOxWRhhoJBdgRgd/IgHs6fg+ApcKaEmSQHLerR2aAndCAjTtElUqpgBZix4qs1nfAD9qROsPU25qCNMm4MccA==
 
-"@sushiswap/kashi-sdk@^1.0.0-canary.0":
-  version "1.0.0-canary.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/kashi-sdk/-/kashi-sdk-1.0.0-canary.0.tgz#169503d4996390e2896b11f3fc7c0396280cb3b9"
-  integrity sha512-wWjdO/IYRJcc3AICLagyauPv96FvK6yCgcQEZ1nMT5KCv+pNYDyWaiUJ65CUuKzvpg45Zzvmo1xS9oCImUf+CA==
-  dependencies:
-    "@ethersproject/abi" "^5.4.0"
-    "@ethersproject/contracts" "^5.4.0"
-
 "@sushiswap/limit-order-pair-list@0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-pair-list/-/limit-order-pair-list-0.2.2.tgz#49b6ec5008627e1fb2d7dc43e88b6249308383ab"
