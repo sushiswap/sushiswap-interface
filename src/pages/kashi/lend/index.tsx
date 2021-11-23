@@ -78,7 +78,7 @@ function Lend() {
                 <ListHeaderWithSort
                   className="justify-end"
                   sort={positions}
-                  sortKey="supplyAPR.value"
+                  sortKey="supplyAPR.valueWithStrategy"
                   direction="descending"
                 >
                   {i18n._(t`APR`)}
@@ -110,7 +110,7 @@ function Lend() {
             <ListHeaderWithSort
               className="justify-end"
               sort={pairs}
-              sortKey="currentSupplyAPR.value"
+              sortKey="currentSupplyAPR.valueWithStrategy"
               direction="descending"
             >
               {i18n._(t`APR`)}
