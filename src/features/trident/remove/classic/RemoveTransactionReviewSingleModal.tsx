@@ -1,7 +1,7 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/sdk'
+import { CurrencyAmount } from '@sushiswap/core-sdk'
 import { useClassicSingleRemoveExecute } from 'app/features/trident/context/hooks/useClassicSingleRemoveExecute'
 import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
 import Button from 'components/Button'
