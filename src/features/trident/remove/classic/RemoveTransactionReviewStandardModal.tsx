@@ -35,7 +35,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
   const receiveETH = receiveNative && outputToWallet
 
-  const { execute } = useClassicStandardRemoveExecute()
+  const execute = useClassicStandardRemoveExecute()
 
   const liquidityOutput = minLiquidityOutput.map((el) => {
     if (el?.currency.wrapped.address === WNATIVE[chainId].address && receiveETH) {

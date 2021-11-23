@@ -21,7 +21,7 @@ const TransactionReviewStandardModal: FC = () => {
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const { parsedAmounts } = useDependentAssetInputs()
-  const { execute } = useClassicStandardAddExecute()
+  const execute = useClassicStandardAddExecute()
   const { liquidityMinted, poolShareAfter, poolShareBefore } = usePoolDetailsMint(
     parsedAmounts,
     DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE

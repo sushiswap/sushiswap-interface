@@ -19,7 +19,7 @@ interface RemoveTransactionReviewSingleModal {}
 
 const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = () => {
   const { i18n } = useLingui()
-  const { execute } = useClassicSingleRemoveExecute()
+  const execute = useClassicSingleRemoveExecute()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 

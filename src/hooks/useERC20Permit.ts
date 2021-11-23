@@ -1,5 +1,15 @@
 import { splitSignature } from '@ethersproject/bytes'
-import { Currency, CurrencyAmount, JSBI, Percent, SUSHI, Token, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  MaxUint256,
+  Percent,
+  SUSHI,
+  Token,
+  Trade as V2Trade,
+  TradeType,
+} from '@sushiswap/core-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
@@ -286,7 +296,11 @@ const REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO: PermitInfo = {
 }
 
 export function useTridentLiquidityTokenPermit(liquidityAmount?: CurrencyAmount<Token>, spender?: string) {
-  return useERC20Permit(liquidityAmount, spender, REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO)
+  return useERC20Permit(
+    CurrencyAmount.fromRawAmount(liquidityAmount.currency, MaxUint256),
+    spender,
+    REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO
+  )
 }
 
 export function useERC20PermitFromTrade(
