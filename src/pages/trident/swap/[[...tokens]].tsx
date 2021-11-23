@@ -19,7 +19,7 @@ import SwapRate from 'features/trident/swap/SwapRate'
 import SwapReviewModal from 'features/trident/swap/SwapReviewModal'
 import SwapSubmittedModal from 'features/trident/swap/SwapSubmittedModal'
 import React, { useEffect } from 'react'
-import { RecoilRoot, useSetRecoilState } from 'recoil'
+import { useSetRecoilState } from 'recoil'
 import { useExpertModeManager } from 'state/user/hooks'
 
 import Container from '../../../components/Container'
@@ -141,6 +141,5 @@ const Swap = () => {
 }
 
 Swap.Guard = NetworkGuard(TRIDENT_NETWORKS)
-Swap.Provider = RecoilRoot
 
 export default Swap
