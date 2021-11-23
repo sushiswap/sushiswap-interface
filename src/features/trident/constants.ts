@@ -69,4 +69,4 @@ export const POOL_TYPES: PoolTypesInterface = {
   },
 }
 
-export const TRIDENT_NETWORKS = [ChainId.KOVAN]
+export const TRIDENT_NETWORKS = [ChainId.KOVAN, ChainId.MATIC]

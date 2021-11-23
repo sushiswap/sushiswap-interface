@@ -26,7 +26,7 @@ const WithdrawSubmittedModal: FC = () => {
     <HeadlessUiModal.Controlled isOpen={!!txHash} onDismiss={() => setTxHash('')}>
       <div className="flex flex-col items-center justify-center px-8 lg:p-12 bg-dark-800/90 h-full gap-3">
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
-          <Lottie animationData={withdrawSubmitted} autoplay loop />
+          <Lottie animationData={withdrawSubmitted} autoplay loop={false} />
         </div>
         <Typography variant="h3" weight={700} className="text-high-emphesis">
           {i18n._(t`Success! Withdraw Submitted`)}

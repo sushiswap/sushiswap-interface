@@ -297,7 +297,7 @@ const REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO: PermitInfo = {
 
 export function useTridentLiquidityTokenPermit(liquidityAmount?: CurrencyAmount<Token>, spender?: string) {
   return useERC20Permit(
-    CurrencyAmount.fromRawAmount(liquidityAmount.currency, MaxUint256),
+    liquidityAmount ? CurrencyAmount.fromRawAmount(liquidityAmount.currency, MaxUint256) : undefined,
     spender,
     REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO
   )

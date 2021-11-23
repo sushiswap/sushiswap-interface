@@ -1,8 +1,8 @@
 import { Interface } from '@ethersproject/abi'
-import { ChainId, ChainKey, Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { default as constantProductPoolArtifact } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
-import all from '@sushiswap/trident/exports/all.json'
 import { computeConstantProductPoolAddress, ConstantProductPool, Pool, PoolState } from '@sushiswap/trident-sdk'
+import { useConstantProductPoolFactory } from 'app/hooks/useContract'
 import combinate from 'combinate'
 import { useMemo } from 'react'
 
@@ -13,6 +13,7 @@ const POOL_INTERFACE = new Interface(constantProductPoolArtifact.abi)
 export function useConstantProductPools(
   currencies: [Currency | undefined, Currency | undefined][]
 ): [PoolState, Pool | null][] {
+  const constantProductPoolFactory = useConstantProductPoolFactory()
   const permutations = useMemo(() => {
     if (!currencies.length) return []
     return combinate({
@@ -30,9 +31,9 @@ export function useConstantProductPools(
           tokenB &&
           tokenA.chainId === tokenB.chainId &&
           !tokenA.equals(tokenB) &&
-          all[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address
+          constantProductPoolFactory?.address
             ? computeConstantProductPoolAddress({
-                factoryAddress: all[ChainId.KOVAN][ChainKey.KOVAN].contracts.ConstantProductPoolFactory.address,
+                factoryAddress: constantProductPoolFactory.address,
                 tokenA,
                 tokenB,
                 fee,
@@ -46,7 +47,7 @@ export function useConstantProductPools(
 
         return acc
       }, []),
-    [permutations]
+    [constantProductPoolFactory?.address, permutations]
   )
 
   const results = useMultipleContractSingleData(pools, POOL_INTERFACE, 'getReserves')
