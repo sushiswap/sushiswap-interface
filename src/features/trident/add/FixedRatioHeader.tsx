@@ -2,10 +2,11 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Checkbox from 'app/components/Checkbox'
 import Typography from 'app/components/Typography'
-import { fixedRatioAtom, liquidityModeAtom } from 'app/features/trident/context/atoms'
+import { liquidityModeAtom } from 'app/features/trident/context/atoms'
+import { useDependentAssetInputs } from 'app/features/trident/context/hooks/useDependentAssetInputs'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import React, { FC } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 
 import { LiquidityMode } from '../types'
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
@@ -17,7 +18,9 @@ interface FixedRatioHeaderProps {
 const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const [fixedRatio, setFixedRatio] = useRecoilState(fixedRatioAtom)
+  const {
+    fixedRatio: [fixedRatio, setFixedRatio],
+  } = useDependentAssetInputs()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
 
   if (liquidityMode !== LiquidityMode.STANDARD) return <></>

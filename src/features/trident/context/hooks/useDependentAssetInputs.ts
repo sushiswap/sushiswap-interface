@@ -7,19 +7,23 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useMemo } from 'react'
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
 
-import {
-  bentoboxRebasesAtom,
-  currenciesAtom,
-  fixedRatioAtom,
-  noLiquiditySelector,
-  poolAtom,
-  spendFromWalletAtom,
-} from '../atoms'
+import { bentoboxRebasesAtom, currenciesAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
 
 export enum TypedField {
   A,
   B,
 }
+
+const fixedRatioAtom = atom<boolean>({
+  key: 'useDependentAssetInputs:fixedRatioAtom',
+  default: selector({
+    key: 'useDependentAssetInputs:fixedRatioAtom/Default',
+    get: () => true,
+    set: ({ set }) => {
+      set(typedFieldAtom, TypedField.A)
+    },
+  }),
+})
 
 export const mainInputAtom = atom<string>({
   key: 'useDependentAssetInputs:mainInputAtom',
@@ -158,7 +162,7 @@ export const useDependentAssetInputs = () => {
   const parsedAmounts = useRecoilValue(parsedAmountsSelector)
   const noLiquidity = useRecoilValue(noLiquiditySelector)
   const typedField = useRecoilState(typedFieldAtom)
-  const fixedRatio = useRecoilValue(fixedRatioAtom)
+  const fixedRatio = useRecoilState(fixedRatioAtom)
   const spendFromWallet = useRecoilValue(spendFromWalletAtom)
   const currencies = useMemo(
     () => parsedAmounts.reduce<Currency[]>((acc, cur) => [...acc, ...(cur ? [cur.currency] : [])], []),
@@ -168,7 +172,7 @@ export const useDependentAssetInputs = () => {
 
   const onMax = useCallback(async () => {
     if (!balances || !pool || !balances[0] || !balances[1]) return
-    if (!noLiquidity && fixedRatio) {
+    if (!noLiquidity && fixedRatio[0]) {
       if (pool.priceOf(currencies[0]?.wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)) {
         typedField[1](TypedField.A)
         mainInput[1](maxAmountSpend(balances[0])?.toExact() || '')
@@ -185,7 +189,7 @@ export const useDependentAssetInputs = () => {
   const isMax = useMemo(() => {
     if (!balances || !pool || !balances[0] || !balances[1]) return false
 
-    if (!noLiquidity && fixedRatio) {
+    if (!noLiquidity && fixedRatio[0]) {
       return pool.priceOf(currencies[0]?.wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)
         ? parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]) || '')
         : parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]) || '')
@@ -224,7 +228,8 @@ export const useDependentAssetInputs = () => {
       onMax,
       isMax,
       error,
+      fixedRatio,
     }),
-    [error, formattedAmounts, isMax, mainInput, onMax, parsedAmounts, secondaryInput, typedField]
+    [error, fixedRatio, formattedAmounts, isMax, mainInput, onMax, parsedAmounts, secondaryInput, typedField]
   )
 }
