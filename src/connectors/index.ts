@@ -9,7 +9,6 @@ import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { Web3Provider } from '@ethersproject/providers'
 
-
 const RPC = {
   [ChainId.MAINNET]: 'https://api.sushirelay.com/v1',
   [ChainId.ETHEREUM]: 'https://api.sushirelay.com/v1',
