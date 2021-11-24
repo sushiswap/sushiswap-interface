@@ -30,7 +30,6 @@ import {
   LIFT,
   MATIC,
   MIR,
-  MOONRIVER,
   NFTX,
   OKEX,
   OHM,
@@ -56,6 +55,7 @@ import {
   YFI,
 } from './tokens'
 
+import * as MOONRIVER from './tokens/moonriver'
 import * as TELOS from './tokens/telos'
 
 // a list of tokens by chain
@@ -199,6 +199,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     MOONRIVER.FRAX,
     MOONRIVER.MIM,
     MOONRIVER.BTC,
+    MOONRIVER.aROME,
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],
@@ -363,6 +364,7 @@ export const COMMON_BASES: ChainTokenList = {
     MOONRIVER.FRAX,
     MOONRIVER.MIM,
     MOONRIVER.BTC,
+    MOONRIVER.aROME,
     SUSHI[ChainId.MOONRIVER],
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
@@ -435,6 +437,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     MOONRIVER.FRAX,
     MOONRIVER.MIM,
     MOONRIVER.BTC,
+    MOONRIVER.aROME,
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [...WRAPPED_NATIVE_ONLY[ChainId.FUSE], FUSE.USDC, FUSE.USDT, FUSE.WBTC, FUSE.WETH, FUSE.DAI],

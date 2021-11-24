@@ -57,7 +57,7 @@ export const OPENMEV_SUPPORTED_NETWORKS = [ChainId.MAINNET]
  * @param process.env.NEXT_PUBLIC_OPENMEV_URI
  */
 export const OPENMEV_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: process.env.NEXT_PUBLIC_OPENMEV_URI ?? 'https://api.staging.sushirelay.com/v1',
+  [ChainId.MAINNET]: process.env.NEXT_PUBLIC_OPENMEV_URI ?? 'https://api.sushirelay.com/v1',
 }
 
 // export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
