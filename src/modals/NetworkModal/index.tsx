@@ -64,7 +64,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'MATIC',
       decimals: 18,
     },
-    rpcUrls: ['https://polygon-rpc.com'], // ['https://matic-ETHEREUM.chainstacklabs.com/'],
+    rpcUrls: ['https://polygon-rpc.com'], // ['https://maticmainnetchainstacklabs.com/'],
     blockExplorerUrls: ['https://polygonscan.com'],
   },
   [ChainId.HECO]: {
@@ -75,7 +75,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'HT',
       decimals: 18,
     },
-    rpcUrls: ['https://http-ETHEREUM.hecochain.com'],
+    rpcUrls: ['https://httpmainnethecochain.com'],
     blockExplorerUrls: ['https://hecoinfo.com'],
   },
   [ChainId.XDAI]: {
@@ -157,7 +157,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'PALM',
       decimals: 18,
     },
-    rpcUrls: ['https://palm-ETHEREUM.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
+    rpcUrls: ['https://palmmainnetinfura.io/v3/da5fbfafcca14b109e2665290681e267'],
     blockExplorerUrls: ['https://explorer.palm.io'],
   },
   [ChainId.MOONRIVER]: {
