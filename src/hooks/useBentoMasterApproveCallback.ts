@@ -3,6 +3,7 @@ import { useBentoBoxContract } from './useContract'
 import { useActiveWeb3React } from '../services/web3'
 import { useAllTransactions, useTransactionAdder } from '../state/transactions/hooks'
 import { useCallback, useMemo, useState } from 'react'
+import { signMasterContractApproval } from '../entities/KashiCooker'
 import { Contract } from '@ethersproject/contracts'
 import { AddressZero, HashZero } from '@ethersproject/constants'
 import { splitSignature } from '@ethersproject/bytes'
@@ -40,7 +41,7 @@ const useBentoHasPendingApproval = (masterContract: string, account: string, con
           return summary === `Approving ${contractName} Master Contract`
         }
       }),
-    [masterContract, account, allTransactions, contractName]
+    [allTransactions, account, masterContract]
   )
 }
 

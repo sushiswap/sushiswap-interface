@@ -2,7 +2,7 @@ import Checkbox from '../../components/Checkbox'
 import QuestionHelper from '../../components/QuestionHelper'
 import React from 'react'
 import Settings from '../../components/Settings'
-import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
+import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTolerance'
 
 export function ExchangeRateCheckBox({ color, pair, updateOracle, setUpdateOracle, desiredDirection }: any) {
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true

@@ -1,0 +1,4 @@
+security.txt ident
+*.txt ident
+*.sh text eol=lf
+NEXT_PUBLIC_COMMIT export-subst

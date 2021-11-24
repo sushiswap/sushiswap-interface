@@ -18,6 +18,12 @@ import { t } from '@lingui/macro'
 import { useActiveWeb3React } from '../../services/web3'
 import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
+import {
+  OPENMEV_METAMASK_CHAIN_ID,
+  OPENMEV_METAMASK_NETWORKS,
+  OPENMEV_NETWORK_TO_METAMASK_CHAIN_ID,
+  OPENMEV_SUPPORTED_NETWORKS,
+} from '../../config/openmev'
 
 // import { ExternalLink, NavLink } from "./Link";
 // import { ReactComponent as Burger } from "../assets/images/burger.svg";
@@ -99,7 +105,7 @@ function AppBar(): JSX.Element {
                     </div>
                   </div>
                 </div>
-
+                {/** #openmev */}
                 <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent">
                   <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
                     {chainId && [ChainId.ETHEREUM].includes(chainId) && library && library.provider.isMetaMask && (

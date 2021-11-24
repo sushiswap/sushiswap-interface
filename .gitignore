@@ -10,6 +10,7 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea/
+.vscode/
 .vercel
 .next
 
@@ -26,3 +27,8 @@ public/workbox*.js.map
 lokalise.yaml
 
 coverage
+
+.env.local
+.env.staging
+.env.testing
+.sentryclirc

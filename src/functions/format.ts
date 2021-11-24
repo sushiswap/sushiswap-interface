@@ -2,9 +2,9 @@
 
 import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/core-sdk'
 
-import { BigNumberish } from '@ethersproject/bignumber'
-import { formatUnits } from '@ethersproject/units'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import Numeral from 'numeral'
+import { formatUnits } from '@ethersproject/units'
 import { getAddress } from '@ethersproject/address'
 
 export const capitalize = (s) => {

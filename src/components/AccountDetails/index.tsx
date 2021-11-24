@@ -58,7 +58,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
 
   function formatConnectorName() {
     const { ethereum } = window
-    const isMetaMask = !!(ethereum && ethereum.isMetaMask)
+    const isMetaMask = !!(ethereum && (ethereum as any).isMetaMask)
     const name = Object.keys(SUPPORTED_WALLETS)
       .filter(
         (k) =>
