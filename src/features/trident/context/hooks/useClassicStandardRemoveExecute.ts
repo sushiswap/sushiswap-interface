@@ -112,7 +112,6 @@ export const useClassicStandardRemoveExecute = () => {
           })
 
           setTxHash(tx.hash)
-          setShowReview(false)
           await tx.wait()
 
           addTransaction(tx, {
@@ -129,6 +128,7 @@ export const useClassicStandardRemoveExecute = () => {
 
           resetBentoPermit()
           resetSLPPermit()
+          setShowReview(false)
         } catch (error) {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx

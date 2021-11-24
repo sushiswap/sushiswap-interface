@@ -83,7 +83,6 @@ export const useClassicPoolCreateExecute = () => {
       })
 
       setTxHash(tx.hash)
-      setShowReview(false)
       await tx.wait()
 
       addTransaction(tx, {
@@ -101,6 +100,7 @@ export const useClassicPoolCreateExecute = () => {
       })
 
       resetBentoPermit()
+      setShowReview(false)
     } catch (error) {
       setAttemptingTxn(false)
       if (error instanceof String) {
