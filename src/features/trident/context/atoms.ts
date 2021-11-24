@@ -47,11 +47,6 @@ export const bentoboxRebasesAtom = atom<Record<string, Rebase>>({
   default: {},
 })
 
-export const fixedRatioAtom = atom<boolean>({
-  key: 'fixedRatioAtom',
-  default: false,
-})
-
 export const liquidityModeAtom = atom<LiquidityMode>({
   key: 'liquidityMode',
   default: LiquidityMode.STANDARD,

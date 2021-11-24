@@ -48,7 +48,7 @@ export const useClassicSingleRemoveExecute = () => {
         if (!pool || !chainId || !library || !account || !router || !minOutputAmount || !rebase || !parsedSLPAmount)
           throw new Error('missing dependencies')
 
-        const receiveETH = zapCurrency.isNative && outputToWallet
+        const receiveETH = zapCurrency?.isNative && outputToWallet
         const actions = [
           approveMasterContractAction({ router, signature: bentoPermit }),
           approveSLPAction({ router, signatureData: slpPermit }),
@@ -128,7 +128,7 @@ export const useClassicSingleRemoveExecute = () => {
       setShowReview,
       setTxHash,
       slpPermit,
-      zapCurrency.isNative,
+      zapCurrency?.isNative,
     ]
   )
 }
