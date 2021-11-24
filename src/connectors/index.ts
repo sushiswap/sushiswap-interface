@@ -25,18 +25,18 @@ const RPC = {
   [ChainId.MOONBEAM_TESTNET]: 'https://rpc.testnet.moonbeam.network',
   [ChainId.AVALANCHE]: 'https://api.avax.network/ext/bc/C/rpc',
   [ChainId.AVALANCHE_TESTNET]: 'https://api.avax-test.network/ext/bc/C/rpc',
-  [ChainId.HECO]: 'https://http-mainnet.hecochain.com',
+  [ChainId.HECO]: 'https://http-ETHEREUM.hecochain.com',
   [ChainId.HECO_TESTNET]: 'https://http-testnet.hecochain.com',
   [ChainId.HARMONY]: 'https://api.harmony.one',
   [ChainId.HARMONY_TESTNET]: 'https://api.s0.b.hmny.io',
   [ChainId.OKEX]: 'https://exchainrpc.okex.org',
   [ChainId.OKEX_TESTNET]: 'https://exchaintestrpc.okex.org',
   [ChainId.ARBITRUM]: 'https://arb1.arbitrum.io/rpc',
-  [ChainId.PALM]: 'https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267',
+  [ChainId.PALM]: 'https://palm-ETHEREUM.infura.io/v3/da5fbfafcca14b109e2665290681e267',
   [ChainId.FUSE]: 'https://rpc.fuse.io',
   [ChainId.CELO]: 'https://forno.celo.org',
   [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
-  [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
+  [ChainId.TELOS]: 'https://ETHEREUM.telos.net/evm',
 }
 
 export function getNetwork(defaultChainId, urls = RPC) {
@@ -59,7 +59,7 @@ export function getNetworkLibrary(): Web3Provider {
 
 export const injected = new InjectedConnector({
   supportedChainIds: [
-    1, // mainnet
+    1, // ETHEREUM
     3, // ropsten
     4, // rinkeby
     5, // goreli
@@ -89,33 +89,33 @@ export const injected = new InjectedConnector({
   ],
 })
 
-// mainnet only
+// ETHEREUM only
 export const walletconnect = new WalletConnectConnector({
   rpc: RPC,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
 })
 
-// mainnet only
+// ETHEREUM only
 export const fortmatic = new FortmaticConnector({
   apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
   chainId: 1,
 })
 
-// mainnet only
+// ETHEREUM only
 export const portis = new PortisConnector({
   dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
   networks: [1],
 })
 
-// mainnet only
+// ETHEREUM only
 export const walletlink = new WalletLinkConnector({
-  url: RPC[ChainId.MAINNET],
+  url: RPC[ChainId.ETHEREUM],
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
 })
 
-// mainnet only
+// ETHEREUM only
 export const torus = new TorusConnector({
   chainId: 1,
 })

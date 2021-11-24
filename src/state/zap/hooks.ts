@@ -125,10 +125,10 @@ export function useDerivedZapInfo(
   // Two trades if providing neither
   const isTradingCurrency0 =
     currency?.symbol === currency0?.symbol ||
-    (currency0?.symbol === WNATIVE[ChainId.MAINNET].symbol && currency === Ether.onChain(ChainId.MAINNET))
+    (currency0?.symbol === WNATIVE[ChainId.ETHEREUM].symbol && currency === Ether.onChain(ChainId.ETHEREUM))
   const isTradingCurrency1 =
     currency?.symbol === currency1?.symbol ||
-    (currency1?.symbol === WNATIVE[ChainId.MAINNET].symbol && currency === Ether.onChain(ChainId.MAINNET))
+    (currency1?.symbol === WNATIVE[ChainId.ETHEREUM].symbol && currency === Ether.onChain(ChainId.ETHEREUM))
 
   const currencyZeroTrade = useV2TradeExactIn(tradeAmount, currency0 ?? undefined)
   const currencyOneTrade = useV2TradeExactIn(tradeAmount, currency1 ?? undefined)

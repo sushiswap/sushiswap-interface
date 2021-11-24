@@ -8,7 +8,7 @@ const Goerli = 'https://raw.githubusercontent.com/sushiswap/icons/master/network
 const Harmony = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/harmonyone.jpg'
 const Heco = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/heco.jpg'
 const Kovan = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/kovan.jpg'
-const Mainnet = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/mainnet.jpg'
+const ETHEREUM = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/ETHEREUM.jpg'
 const Matic = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/polygon.jpg'
 const Moonbeam = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonbeam.jpg'
 const OKEx = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/okex.jpg'
@@ -24,7 +24,7 @@ const Telos =
   'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
 
 export const NETWORK_ICON = {
-  [ChainId.ETHEREUM]: Mainnet,
+  [ChainId.ETHEREUM]: ETHEREUM,
   [ChainId.ROPSTEN]: Ropsten,
   [ChainId.RINKEBY]: Rinkeby,
   [ChainId.GÖRLI]: Goerli,

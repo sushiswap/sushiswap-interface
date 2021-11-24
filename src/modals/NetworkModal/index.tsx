@@ -31,7 +31,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'ETH',
       decimals: 18,
     },
-    rpcUrls: ['https://mainnet.infura.io/v3'],
+    rpcUrls: ['https://ETHEREUM.infura.io/v3'],
     blockExplorerUrls: ['https://etherscan.com'],
   },
   [ChainId.FANTOM]: {
@@ -64,7 +64,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'MATIC',
       decimals: 18,
     },
-    rpcUrls: ['https://polygon-rpc.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
+    rpcUrls: ['https://polygon-rpc.com'], // ['https://matic-ETHEREUM.chainstacklabs.com/'],
     blockExplorerUrls: ['https://polygonscan.com'],
   },
   [ChainId.HECO]: {
@@ -75,7 +75,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'HT',
       decimals: 18,
     },
-    rpcUrls: ['https://http-mainnet.hecochain.com'],
+    rpcUrls: ['https://http-ETHEREUM.hecochain.com'],
     blockExplorerUrls: ['https://hecoinfo.com'],
   },
   [ChainId.XDAI]: {
@@ -157,7 +157,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'PALM',
       decimals: 18,
     },
-    rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
+    rpcUrls: ['https://palm-ETHEREUM.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
     blockExplorerUrls: ['https://explorer.palm.io'],
   },
   [ChainId.MOONRIVER]: {
@@ -190,7 +190,7 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'TLOS',
       decimals: 18,
     },
-    rpcUrls: ['https://mainnet.telos.net/evm'],
+    rpcUrls: ['https://ETHEREUM.telos.net/evm'],
     blockExplorerUrls: ['https://rpc1.us.telos.net/v2/explore'],
   },
 }

@@ -23,7 +23,7 @@ export function useFetchListCallback(): (listUrl: string, sendDispatch?: boolean
             return resolveENSContentHash(ensName, networkLibrary)
           }
         }
-        throw new Error('Could not construct mainnet ENS resolver')
+        throw new Error('Could not construct ETHEREUM ENS resolver')
       }
       return resolveENSContentHash(ensName, library)
     },

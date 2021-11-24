@@ -49,7 +49,7 @@ export const getAssets = async (account: string) => {
   ]
 
   enum Networks {
-    assets = 'Mainnet',
+    assets = 'ETHEREUM',
     'polygon-assets' = 'Matic',
     'bsc-assets' = 'BSC',
   }

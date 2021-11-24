@@ -4,28 +4,28 @@ import RPC from '../config/rpc'
 
 export const OPENMEV_RELAY_ENABLED = false
 
-export const OPENMEV_SUPPORTED_NETWORKS = [ChainId.MAINNET]
+export const OPENMEV_SUPPORTED_NETWORKS = [ChainId.ETHEREUM]
 
 export const OPENMEV_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: RPC[ChainId.MAINNET],
+  [ChainId.ETHEREUM]: RPC[ChainId.ETHEREUM],
 }
 
 export const OPENMEV_GAS_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: `${RPC[ChainId.MAINNET]}/gas-price`,
+  [ChainId.ETHEREUM]: `${RPC[ChainId.ETHEREUM]}/gas-price`,
 }
 
 export enum OPENMEV_METAMASK_CHAIN_ID {
-  MAINNET = '0x1111100000',
+  ETHEREUM = '0x1111100000',
 }
 
-export const OPENMEV_METAMASK_SUPPORTED_NETWORKS = [OPENMEV_METAMASK_CHAIN_ID.MAINNET]
+export const OPENMEV_METAMASK_SUPPORTED_NETWORKS = [OPENMEV_METAMASK_CHAIN_ID.ETHEREUM]
 
 export const OPENMEV_NETWORK_TO_METAMASK_CHAIN_ID: { [chainId in ChainId]?: OPENMEV_METAMASK_CHAIN_ID } = {
-  [ChainId.MAINNET]: OPENMEV_METAMASK_CHAIN_ID.MAINNET,
+  [ChainId.ETHEREUM]: OPENMEV_METAMASK_CHAIN_ID.ETHEREUM,
 }
 
 export const OPENMEV_METAMASK_CHAIN_ID_TO_NETWORK: { [id in OPENMEV_METAMASK_CHAIN_ID]?: ChainId } = {
-  [OPENMEV_METAMASK_CHAIN_ID.MAINNET]: ChainId.MAINNET,
+  [OPENMEV_METAMASK_CHAIN_ID.ETHEREUM]: ChainId.ETHEREUM,
 }
 
 export const OPENMEV_METAMASK_NETWORKS: {
@@ -42,10 +42,10 @@ export const OPENMEV_METAMASK_NETWORKS: {
     iconUrls?: string[]
   }
 } = {
-  [ChainId.MAINNET]: {
-    chainName: 'OpenMEV / Ethereum Mainnet',
-    chainId: OPENMEV_METAMASK_CHAIN_ID.MAINNET,
-    rpcUrls: [OPENMEV_URI[ChainId.MAINNET]],
+  [ChainId.ETHEREUM]: {
+    chainName: 'OpenMEV / Ethereum ETHEREUM',
+    chainId: OPENMEV_METAMASK_CHAIN_ID.ETHEREUM,
+    rpcUrls: [OPENMEV_URI[ChainId.ETHEREUM]],
     nativeCurrency: {
       name: 'Ethereum',
       symbol: 'ETH',

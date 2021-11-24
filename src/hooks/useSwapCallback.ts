@@ -125,7 +125,7 @@ export function useSwapCallArguments(
             allowedSlippage,
             recipient,
             ttl: deadline.toNumber(),
-            ethTip: CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), archerETHTip),
+            ethTip: CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.ETHEREUM), archerETHTip),
           })
         )
       }
@@ -502,7 +502,7 @@ export function useSwapCallback(
               const chainNames: {
                 [chainId in ChainId]?: string
               } = {
-                [ChainId.MAINNET]: 'mainnet',
+                [ChainId.ETHEREUM]: 'ETHEREUM',
               }
               const chain = chainNames[chainId]
               if (!chain) throw new Error(`Unknown chain ID ${chainId} when building transaction`)

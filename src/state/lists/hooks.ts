@@ -50,7 +50,7 @@ export function useAllLists(): AppState['lists']['byUrl'] {
 
 function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddressMap {
   return {
-    1: { ...map1[1], ...map2[1] }, // mainnet
+    1: { ...map1[1], ...map2[1] }, // ETHEREUM
     3: { ...map1[3], ...map2[3] }, // ropsten
     4: { ...map1[4], ...map2[4] }, // rinkeby
     5: { ...map1[5], ...map2[5] }, // goerli
@@ -67,7 +67,7 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     1287: { ...map1[1287], ...map2[1287] }, // moonbase
     128: { ...map1[128], ...map2[128] }, // heco
     256: { ...map1[256], ...map2[256] }, // heco testnet
-    43114: { ...map1[43114], ...map2[43114] }, // avax mainnet
+    43114: { ...map1[43114], ...map2[43114] }, // avax ETHEREUM
     43113: { ...map1[43113], ...map2[43113] }, // avax testnet fuji
     1666600000: { ...map1[1666600000], ...map2[1666600000] }, // harmony
     1666700000: { ...map1[1666700000], ...map2[1666700000] }, // harmony testnet
