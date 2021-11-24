@@ -1,16 +1,16 @@
-import { ChainId, JSBI } from '@sushiswap/sdk'
+import { ChainId, JSBI } from '@sushiswap/core-sdk'
 
 import { BigNumber } from '@ethersproject/bignumber'
 
 export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'https://api.archerdao.io/v1/transaction',
+  [ChainId.ETHEREUM]: 'https://api.archerdao.io/v1/transaction',
 }
 
 // @param ARCHER_GAS_URI
 // @returns {Object<GAS_ESTIMATE>}
 // @example "code":200,"data":{"immediate":"542799267303","rapid":"45685429104","fast":"24016140413","standard":"1163903657","slow":"0","slower":"0","slowest":"0"}
 export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
+  [ChainId.ETHEREUM]: 'https://api.archerdao.io/v1/gas',
 }
 
 // default archer gas estimate, 250k wei
@@ -34,22 +34,22 @@ export const DEFAULT_ARCHER_ETH_TIP: JSBI = JSBI.BigInt(
  * @const OPENMEV_SUPPORTED_NETWORKS
  * @returns {ChainId.?}
  */
-export const OPENMEV_SUPPORTED_NETWORKS = [ChainId.MAINNET]
+export const OPENMEV_SUPPORTED_NETWORKS = [ChainId.ETHEREUM]
 /**
  * @const OPENMEV_URI
  * @param process.env.NEXT_PUBLIC_OPENMEV_URI
  */
 export const OPENMEV_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: process.env.NEXT_PUBLIC_OPENMEV_URI ?? 'https://api.staging.sushirelay.com/v1',
+  [ChainId.ETHEREUM]: process.env.NEXT_PUBLIC_OPENMEV_URI ?? 'https://api.sushirelay.com/v1',
 }
 
 export const OPENMEV_RELAY_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'https://api.sushirelay.com/v1',
+  [ChainId.ETHEREUM]: 'https://api.sushirelay.com/v1',
 }
 
 // @TODO change to our endpoint
 export const OPENMEV_GAS_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
+  [ChainId.ETHEREUM]: 'https://api.archerdao.io/v1/gas',
 }
 
 export const DEFAULT_OPENMEV_GAS_ESTIMATE: BigNumber = BigNumber.from(250000)

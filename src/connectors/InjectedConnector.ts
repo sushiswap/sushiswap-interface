@@ -1,4 +1,4 @@
-import { ChainId, JSBI } from '@sushiswap/sdk'
+import { ChainId, JSBI } from '@sushiswap/core-sdk'
 import { BigNumber } from '@ethersproject/bignumber'
 import RPC from '../config/rpc'
 
