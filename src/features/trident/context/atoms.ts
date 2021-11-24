@@ -22,11 +22,6 @@ export const attemptingTxnAtom = atom<boolean>({
   default: false,
 })
 
-export const txHashAtom = atom<string>({
-  key: 'txHashAtom',
-  default: '',
-})
-
 export const totalSupplyAtom = atom<CurrencyAmount<Token> | undefined>({
   key: 'totalSupplyAtom',
   default: undefined,

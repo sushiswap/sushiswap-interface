@@ -17,7 +17,7 @@ import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
 import { LiquidityOutput } from '../../types'
-import { attemptingTxnAtom, bentoboxRebasesAtom, poolAtom, showReviewAtom, txHashAtom } from '../atoms'
+import { attemptingTxnAtom, bentoboxRebasesAtom, poolAtom } from '../atoms'
 import { usePoolDetailsBurn } from './usePoolDetails'
 import useRemovePercentageInput from './useRemovePercentageInput'
 
@@ -28,8 +28,6 @@ export const useClassicStandardRemoveExecute = () => {
   const router = useTridentRouterContract()
   const addTransaction = useTransactionAdder()
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
-  const setTxHash = useSetRecoilState(txHashAtom)
-  const setShowReview = useSetRecoilState(showReviewAtom)
   const rebases = useRecoilValue(bentoboxRebasesAtom)
   const { minLiquidityOutput } = usePoolDetailsBurn(parsedSLPAmount)
   const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
@@ -111,7 +109,6 @@ export const useClassicStandardRemoveExecute = () => {
             value: '0x0',
           })
 
-          setTxHash(tx.hash)
           await tx.wait()
 
           addTransaction(tx, {
@@ -128,7 +125,7 @@ export const useClassicStandardRemoveExecute = () => {
 
           resetBentoPermit()
           resetSLPPermit()
-          setShowReview(false)
+          return tx
         } catch (error) {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
@@ -150,8 +147,6 @@ export const useClassicStandardRemoveExecute = () => {
       bentoPermit,
       slpPermit,
       setAttemptingTxn,
-      setTxHash,
-      setShowReview,
       addTransaction,
       i18n,
       resetBentoPermit,

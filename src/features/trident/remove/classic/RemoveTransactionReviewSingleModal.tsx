@@ -10,25 +10,20 @@ import Divider from 'components/Divider'
 import ListPanel from 'components/ListPanel'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import {
-  attemptingTxnAtom,
-  DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
-  showReviewAtom,
-  txHashAtom,
-} from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
 import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
 
 interface RemoveTransactionReviewSingleModal {}
 
 const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = () => {
   const { i18n } = useLingui()
-  const execute = useClassicSingleRemoveExecute()
+  const _execute = useClassicSingleRemoveExecute()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-  const [txHash, setTxHash] = useRecoilState(txHashAtom)
+  const [txHash, setTxHash] = useState<string>()
 
   const {
     parsedAmounts,
@@ -49,13 +44,19 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = 
     return amount
   }, [minLiquidityOutputSingleToken, outputToWallet, zapCurrency])
 
-  const onDismiss = useCallback(() => {
-    setShowReview(false)
-    setTimeout(() => setTxHash(''), 500)
-  }, [setShowReview, setTxHash])
+  const execute = useCallback(async () => {
+    const tx = await _execute()
+    if (tx && tx.hash) {
+      setTxHash(tx.hash)
+    }
+  }, [_execute])
 
   return (
-    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={onDismiss}>
+    <HeadlessUIModal.Controlled
+      isOpen={showReview}
+      onDismiss={() => setShowReview(false)}
+      afterLeave={() => setTxHash(undefined)}
+    >
       {!txHash ? (
         <div className="flex flex-col gap-8 h-full lg:max-w-md">
           <div className="relative">

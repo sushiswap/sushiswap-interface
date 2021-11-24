@@ -8,38 +8,42 @@ import Divider from 'components/Divider'
 import ListPanel from 'components/ListPanel'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
-import { FC, ReactNode, useCallback } from 'react'
+import { FC, ReactNode, useCallback, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, showReviewAtom, txHashAtom } from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
 import { useClassicStandardAddExecute } from '../../context/hooks/useClassicStandardAddExecute'
 import { useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
 
 const TransactionReviewStandardModal: FC = () => {
   const { i18n } = useLingui()
+  const [txHash, setTxHash] = useState<string>()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-  const [txHash, setTxHash] = useRecoilState(txHashAtom)
 
   const { parsedAmounts } = useDependentAssetInputs()
-  const execute = useClassicStandardAddExecute()
+  const _execute = useClassicStandardAddExecute()
   const { liquidityMinted, poolShareAfter, poolShareBefore } = usePoolDetailsMint(
     parsedAmounts,
     DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
   )
 
-  const onDismiss = useCallback(() => {
-    setShowReview(false)
-    setTimeout(() => {
-      setTxHash('')
-    }, 500)
-  }, [setShowReview, setTxHash])
+  const execute = useCallback(async () => {
+    const tx = await _execute()
+    if (tx.hash) {
+      setTxHash(tx.hash)
+    }
+  }, [_execute])
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={onDismiss}>
+    <HeadlessUIModal.Controlled
+      isOpen={showReview}
+      onDismiss={() => setShowReview(false)}
+      afterLeave={() => setTxHash(undefined)}
+    >
       {!txHash ? (
         <div className="flex flex-col gap-8 h-full pb-4 lg:max-w-lg">
           <div className="relative">

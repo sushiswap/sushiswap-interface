@@ -10,10 +10,10 @@ import Typography from 'app/components/Typography'
 import { getPriceOfNewPool } from 'app/features/trident/context/utils'
 import { useClassicPoolCreateExecute } from 'app/features/trident/create/context/useClassicPoolCreateExecute'
 import { PoolCreationSubmittedModalContent } from 'app/features/trident/create/PoolCreationSubmittedModalContent'
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { attemptingTxnAtom, showReviewAtom, txHashAtom } from '../context/atoms'
+import { attemptingTxnAtom, showReviewAtom } from '../context/atoms'
 import { getAllParsedAmountsSelector, getAllSelectedAssetsSelector, selectedPoolTypeAtom } from './context/atoms'
 
 export const CreatePoolReviewModal: FC = () => {
@@ -24,21 +24,24 @@ export const CreatePoolReviewModal: FC = () => {
   const parsedAmounts = useRecoilValue(getAllParsedAmountsSelector)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
   const price = useMemo(() => getPriceOfNewPool(parsedAmounts), [parsedAmounts])
-  const [txHash, setTxHash] = useRecoilState(txHashAtom)
+  const [txHash, setTxHash] = useState<string>()
 
-  const execute = useClassicPoolCreateExecute()
-
-  const onDismiss = useCallback(() => {
-    setShowReview(false)
-    setTimeout(() => {
-      setTxHash('')
-    }, 500)
-  }, [setShowReview, setTxHash])
+  const _execute = useClassicPoolCreateExecute()
+  const execute = useCallback(async () => {
+    const tx = await _execute()
+    if (tx && tx.hash) {
+      setTxHash(tx.hash)
+    }
+  }, [_execute])
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={onDismiss}>
+    <HeadlessUIModal.Controlled
+      isOpen={showReview}
+      onDismiss={() => setShowReview(false)}
+      afterLeave={() => setTxHash(undefined)}
+    >
       {!txHash ? (
         <div className="flex flex-col h-full gap-8 pb-4 lg:max-w-lg">
           <div className="relative">

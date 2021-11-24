@@ -15,7 +15,7 @@ import { useCallback } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
-import { attemptingTxnAtom, showReviewAtom, txHashAtom } from '../../context/atoms'
+import { attemptingTxnAtom } from '../../context/atoms'
 import {
   createAnOracleSelectionAtom,
   getAllParsedAmountsSelector,
@@ -33,8 +33,6 @@ export const useClassicPoolCreateExecute = () => {
   const assets = useRecoilValue(getAllSelectedAssetsSelector)
   const parsedAmounts = useRecoilValue(getAllParsedAmountsSelector)
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
-  const setTxHash = useSetRecoilState(txHashAtom)
-  const setShowReview = useSetRecoilState(showReviewAtom)
   const feeTier = useRecoilValue(selectedFeeTierAtom)
   const twap = useRecoilValue(createAnOracleSelectionAtom)
   const bentoPermit = useRecoilValue(TridentApproveGate.bentoPermit)
@@ -82,7 +80,6 @@ export const useClassicPoolCreateExecute = () => {
         value,
       })
 
-      setTxHash(tx.hash)
       await tx.wait()
 
       addTransaction(tx, {
@@ -100,7 +97,7 @@ export const useClassicPoolCreateExecute = () => {
       })
 
       resetBentoPermit()
-      setShowReview(false)
+      return tx
     } catch (error) {
       setAttemptingTxn(false)
       if (error instanceof String) {
@@ -127,8 +124,6 @@ export const useClassicPoolCreateExecute = () => {
     resetBentoPermit,
     router,
     setAttemptingTxn,
-    setShowReview,
-    setTxHash,
     twap,
   ])
 }

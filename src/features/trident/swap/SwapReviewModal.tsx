@@ -20,7 +20,7 @@ import useTransactionStatus from 'hooks/useTransactionStatus'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
-import { showReviewAtom, txHashAtom } from '../context/atoms'
+import { showReviewAtom } from '../context/atoms'
 import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
 import RecipientPanel from './RecipientPanel'
 import SwapRate from './SwapRate'
@@ -32,7 +32,7 @@ const SwapReviewModal: FC = () => {
   const { trade, reset } = useSwapAssetPanelInputs()
   const recipient = useRecoilValue(RecipientPanel.atom)
   const { address } = useENS(recipient)
-  const [txHash, setTxHash] = useRecoilState(txHashAtom)
+  const [txHash, setTxHash] = useState<string>()
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const tx = useTransactionStatus()
   const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
@@ -58,12 +58,10 @@ const SwapReviewModal: FC = () => {
 
     try {
       const txHash = await callback()
+      setTxHash(txHash)
 
       // Reset inputs
       reset()
-
-      // Set txHash (this opens SwapSubmittedModal)
-      setTxHash(txHash)
     } catch (e) {
       setCbError(e.message)
     }
@@ -95,18 +93,14 @@ const SwapReviewModal: FC = () => {
     return 'text-red'
   }, [priceImpact])
 
-  const onDismiss = useCallback(() => {
-    setShowReview(false)
-    setTimeout(() => {
-      setCbError(undefined)
-      setTxHash('')
-    }, 500)
-  }, [setShowReview, setTxHash])
-
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={onDismiss}>
+    <HeadlessUIModal.Controlled
+      isOpen={showReview}
+      onDismiss={() => setShowReview(false)}
+      afterLeave={() => setTxHash(undefined)}
+    >
       {!txHash ? (
         <div className="flex flex-col gap-5 h-full pb-4 lg:max-w-md">
           <div className="relative">

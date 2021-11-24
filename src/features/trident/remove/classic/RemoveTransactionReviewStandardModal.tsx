@@ -10,15 +10,10 @@ import Divider from 'components/Divider'
 import ListPanel from 'components/ListPanel'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
-import {
-  attemptingTxnAtom,
-  DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE,
-  showReviewAtom,
-  txHashAtom,
-} from '../../context/atoms'
+import { attemptingTxnAtom, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
 import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
 import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
 import useRemovePercentageInput from '../../context/hooks/useRemovePercentageInput'
@@ -28,7 +23,7 @@ interface RemoveTransactionReviewStandardModal {}
 const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardModal> = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [txHash, setTxHash] = useRecoilState(txHashAtom)
+  const [txHash, setTxHash] = useState<string>()
 
   const {
     parsedSLPAmount,
@@ -42,7 +37,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
   const receiveETH = receiveNative && outputToWallet
 
-  const execute = useClassicStandardRemoveExecute()
+  const _execute = useClassicStandardRemoveExecute()
 
   const liquidityOutput = minLiquidityOutput.map((el) => {
     if (el?.currency.wrapped.address === WNATIVE[chainId].address && receiveETH) {
@@ -52,13 +47,19 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
     return el
   })
 
-  const onDismiss = useCallback(() => {
-    setShowReview(false)
-    setTimeout(() => setTxHash(''), 500)
-  }, [setShowReview, setTxHash])
+  const execute = useCallback(async () => {
+    const tx = await _execute()
+    if (tx && tx.hash) {
+      setTxHash(tx.hash)
+    }
+  }, [_execute, setTxHash])
 
   return (
-    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={onDismiss}>
+    <HeadlessUIModal.Controlled
+      isOpen={showReview}
+      onDismiss={() => setShowReview(false)}
+      afterLeave={() => setTxHash(undefined)}
+    >
       {!txHash ? (
         <div className="flex flex-col gap-8 h-full lg:max-w-md">
           <div className="relative">
