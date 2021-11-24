@@ -4,6 +4,7 @@ import { useLingui } from '@lingui/react'
 import { JSBI, Percent } from '@sushiswap/core-sdk'
 import { isValidAddress } from '@walletconnect/utils'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import SwapSubmittedModalContent from 'app/features/trident/swap/SwapSubmittedModalContent'
 import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import Button from 'components/Button'
@@ -19,7 +20,7 @@ import useTransactionStatus from 'hooks/useTransactionStatus'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
-import { showReviewAtom, txHashAtom } from '../context/atoms'
+import { showReviewAtom } from '../context/atoms'
 import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
 import RecipientPanel from './RecipientPanel'
 import SwapRate from './SwapRate'
@@ -31,7 +32,7 @@ const SwapReviewModal: FC = () => {
   const { trade, reset } = useSwapAssetPanelInputs()
   const recipient = useRecoilValue(RecipientPanel.atom)
   const { address } = useENS(recipient)
-  const [txHash, setTxHash] = useRecoilState(txHashAtom)
+  const [txHash, setTxHash] = useState<string>()
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const tx = useTransactionStatus()
   const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
@@ -52,29 +53,19 @@ const SwapReviewModal: FC = () => {
     parsedAmounts: [inputAmount, outputAmount],
   })
 
-  const closeModal = useCallback(() => {
-    setShowReview(false)
-    setCbError(undefined)
-  }, [setShowReview])
-
   const execute = useCallback(async () => {
     if (!callback) return
 
     try {
       const txHash = await callback()
+      setTxHash(txHash)
 
       // Reset inputs
       reset()
-
-      // Set txHash (this opens SwapSubmittedModal)
-      setTxHash(txHash)
-
-      // Close this modal
-      closeModal()
     } catch (e) {
       setCbError(e.message)
     }
-  }, [callback, closeModal, reset, setTxHash])
+  }, [callback, reset, setTxHash])
 
   const minimumAmountOutShares = trade ? trade.minimumAmountOut(allowedSlippage) : undefined
   const minimumAmountOut =
@@ -105,115 +96,123 @@ const SwapReviewModal: FC = () => {
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal.Controlled isOpen={showReview} onDismiss={closeModal}>
-      <div className="flex flex-col gap-5 h-full pb-4 lg:max-w-md">
-        <div className="relative">
-          <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
-          <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
-            <div className="flex flex-row justify-between">
-              <Button
-                color="blue"
-                variant="outlined"
-                size="sm"
-                className="rounded-full py-1 pl-2 cursor-pointer"
-                startIcon={<ChevronLeftIcon width={24} height={24} />}
-                onClick={() => setShowReview(false)}
-              >
-                {i18n._(t`Back`)}
-              </Button>
+    <HeadlessUIModal.Controlled
+      isOpen={showReview}
+      onDismiss={() => setShowReview(false)}
+      afterLeave={() => setTxHash(undefined)}
+    >
+      {!txHash ? (
+        <div className="flex flex-col gap-5 h-full pb-4 lg:max-w-md">
+          <div className="relative">
+            <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
+            <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
+              <div className="flex flex-row justify-between">
+                <Button
+                  color="blue"
+                  variant="outlined"
+                  size="sm"
+                  className="rounded-full py-1 pl-2 cursor-pointer"
+                  startIcon={<ChevronLeftIcon width={24} height={24} />}
+                  onClick={() => setShowReview(false)}
+                >
+                  {i18n._(t`Back`)}
+                </Button>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Typography variant="h2" weight={700} className="text-high-emphesis">
+                  {i18n._(t`Confirm Swap`)}
+                </Typography>
+                <Typography variant="sm" weight={700}>
+                  {i18n._(
+                    t`Output is estimated. You will receive at least ${minimumAmountOut?.toSignificant(4)} ${
+                      currencies[1]?.symbol
+                    } or the transaction will revert`
+                  )}
+                </Typography>
+              </div>
             </div>
-            <div className="flex flex-col gap-2">
-              <Typography variant="h2" weight={700} className="text-high-emphesis">
-                {i18n._(t`Confirm Swap`)}
+          </div>
+          <div className="flex flex-col gap-3 px-5">
+            <div className="flex gap-3 items-center">
+              <CurrencyLogo currency={inputAmount?.currency} size={48} className="rounded-full" />
+              <Typography variant="h3" weight={700} className="text-white">
+                {inputAmount?.toSignificant(6)}
               </Typography>
-              <Typography variant="sm" weight={700}>
-                {i18n._(
-                  t`Output is estimated. You will receive at least ${minimumAmountOut?.toSignificant(4)} ${
-                    currencies[1]?.symbol
-                  } or the transaction will revert`
-                )}
+              <Typography variant="h3" weight={700} className="text-secondary">
+                {inputAmount?.currency.symbol}
+              </Typography>
+            </div>
+            <div className="w-12 flex justify-center text-secondary">
+              <ArrowDownIcon width={20} />
+            </div>
+            <div className="flex gap-3 items-center">
+              <CurrencyLogo currency={outputAmount?.currency} size={48} className="rounded-full" />
+              <Typography variant="h3" weight={700} className="text-white">
+                {outputAmount?.toSignificant(6)}
+              </Typography>
+              <Typography variant="h3" weight={700} className="text-secondary">
+                {currencies[1]?.symbol}
               </Typography>
             </div>
           </div>
-        </div>
-        <div className="flex flex-col gap-3 px-5">
-          <div className="flex gap-3 items-center">
-            <CurrencyLogo currency={inputAmount?.currency} size={48} className="rounded-full" />
-            <Typography variant="h3" weight={700} className="text-white">
-              {inputAmount?.toSignificant(6)}
-            </Typography>
-            <Typography variant="h3" weight={700} className="text-secondary">
-              {inputAmount?.currency.symbol}
-            </Typography>
-          </div>
-          <div className="w-12 flex justify-center text-secondary">
-            <ArrowDownIcon width={20} />
-          </div>
-          <div className="flex gap-3 items-center">
-            <CurrencyLogo currency={outputAmount?.currency} size={48} className="rounded-full" />
-            <Typography variant="h3" weight={700} className="text-white">
-              {outputAmount?.toSignificant(6)}
-            </Typography>
-            <Typography variant="h3" weight={700} className="text-secondary">
-              {currencies[1]?.symbol}
-            </Typography>
-          </div>
-        </div>
-        <div className="px-5 flex flex-col gap-3">
-          <Divider className="border-dark-800" />
-          <div className="flex justify-between">
-            <Typography variant="sm" className="text-secondary">
-              {i18n._(t`Minimum received`)}
-            </Typography>
-            <Typography variant="sm" className="text-high-emphesis" weight={700}>
-              {minimumAmountOut?.toSignificant(4)} <span className="text-low-emphesis">{currencies[1]?.symbol}</span>
-            </Typography>
-          </div>
-          <div className="flex justify-between">
-            <Typography variant="sm" className="text-secondary">
-              {i18n._(t`Price impact`)}
-            </Typography>
-            <Typography variant="sm" className={priceImpactClassName} weight={700}>
-              {priceImpact?.toSignificant(3)}%
-            </Typography>
-          </div>
-          <div className="flex justify-between">
-            <Typography variant="sm" className="text-secondary">
-              {i18n._(t`Slippage tolerance`)}
-            </Typography>
-            <Typography variant="sm" className="text-high-emphesis" weight={700}>
-              {allowedSlippage?.toSignificant(3)}%
-            </Typography>
-          </div>
-          <SwapRate className="text-secondary" />
-          {address && isValidAddress(address) && (
+          <div className="px-5 flex flex-col gap-3">
+            <Divider className="border-dark-800" />
             <div className="flex justify-between">
-              <Typography variant="sm" className="text-yellow">
-                {i18n._(t`Recipient`)}
+              <Typography variant="sm" className="text-secondary">
+                {i18n._(t`Minimum received`)}
               </Typography>
-              <Typography variant="sm" className="text-yellow" weight={700}>
-                {shortenAddress(address)}
+              <Typography variant="sm" className="text-high-emphesis" weight={700}>
+                {minimumAmountOut?.toSignificant(4)} <span className="text-low-emphesis">{currencies[1]?.symbol}</span>
               </Typography>
             </div>
-          )}
-          <Button
-            disabled={!!tx || state === SwapCallbackState.INVALID}
-            color="gradient"
-            size="lg"
-            onClick={execute}
-            className="mb-2 mt-4"
-          >
-            <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {error && !txHash ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
-            </Typography>
-          </Button>
-          {!txHash && (error || cbError) && (
-            <Typography variant="xs" weight={700} className="text-red text-center">
-              {error || cbError}
-            </Typography>
-          )}
+            <div className="flex justify-between">
+              <Typography variant="sm" className="text-secondary">
+                {i18n._(t`Price impact`)}
+              </Typography>
+              <Typography variant="sm" className={priceImpactClassName} weight={700}>
+                {priceImpact?.toSignificant(3)}%
+              </Typography>
+            </div>
+            <div className="flex justify-between">
+              <Typography variant="sm" className="text-secondary">
+                {i18n._(t`Slippage tolerance`)}
+              </Typography>
+              <Typography variant="sm" className="text-high-emphesis" weight={700}>
+                {allowedSlippage?.toSignificant(3)}%
+              </Typography>
+            </div>
+            <SwapRate className="text-secondary" />
+            {address && isValidAddress(address) && (
+              <div className="flex justify-between">
+                <Typography variant="sm" className="text-yellow">
+                  {i18n._(t`Recipient`)}
+                </Typography>
+                <Typography variant="sm" className="text-yellow" weight={700}>
+                  {shortenAddress(address)}
+                </Typography>
+              </div>
+            )}
+            <Button
+              disabled={!!tx || state === SwapCallbackState.INVALID}
+              color="gradient"
+              size="lg"
+              onClick={execute}
+              className="mb-2 mt-4"
+            >
+              <Typography variant="sm" weight={700} className="text-high-emphesis">
+                {error && !txHash ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
+              </Typography>
+            </Button>
+            {!txHash && (error || cbError) && (
+              <Typography variant="xs" weight={700} className="text-red text-center">
+                {error || cbError}
+              </Typography>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <SwapSubmittedModalContent txHash={txHash} />
+      )}
     </HeadlessUIModal.Controlled>
   )
 }
