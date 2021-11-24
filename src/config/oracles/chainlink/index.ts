@@ -4,7 +4,7 @@ import BSC from './mappings/bsc'
 import { ChainId } from '@sushiswap/core-sdk'
 import HECO from './mappings/heco'
 import KOVAN from './mappings/kovan'
-import ETHEREUM from './mappings/ETHEREUM'
+import MAINNET from './mappings/mainnet'
 import MATIC from './mappings/matic'
 import XDAI from './mappings/xdai'
 
@@ -23,7 +23,7 @@ export type ChainlinkPriceFeedMap = {
 export const CHAINLINK_PRICE_FEED_MAP: {
   [chainId in ChainId]?: ChainlinkPriceFeedMap
 } = {
-  [ChainId.ETHEREUM]: ETHEREUM,
+  [ChainId.ETHEREUM]: MAINNET,
   [ChainId.KOVAN]: KOVAN,
   [ChainId.BSC]: BSC,
   [ChainId.HECO]: HECO,
