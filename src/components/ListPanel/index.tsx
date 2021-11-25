@@ -133,7 +133,7 @@ const ListPanelItemRight: FC = ({ children }) => {
 interface CurrencyAmountItemProps {
   amount?: CurrencyAmount<Currency>
   weight?: string
-  displayTokenAmount: boolean
+  displayTokenAmount?: boolean
 }
 
 // ListPanelItem for displaying a CurrencyAmount
