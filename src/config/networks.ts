@@ -1,24 +1,25 @@
 import { ChainId } from '@sushiswap/core-sdk'
 
 const Arbitrum = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/arbitrum.jpg'
-const Avalanche = '/images/networks/avalanche-network.jpg'
-const Bsc = '/images/networks/bsc-network.jpg'
-const Fantom = '/images/networks/fantom-network.jpg'
-const Goerli = '/images/networks/goerli-network.jpg'
-const Harmony = '/images/networks/harmonyone-network.jpg'
-const Heco = '/images/networks/heco-network.jpg'
-const Kovan = '/images/networks/kovan-network.jpg'
-const Mainnet = '/images/networks/mainnet-network.jpg'
-const Matic = '/images/networks/matic-network.jpg'
-const Moonbeam = '/images/networks/moonbeam-network.jpg'
-const OKEx = '/images/networks/okex-network.jpg'
-const Polygon = '/images/networks/polygon-network.jpg'
-const Rinkeby = '/images/networks/rinkeby-network.jpg'
-const Ropsten = '/images/networks/ropsten-network.jpg'
-const xDai = '/images/networks/xdai-network.jpg'
-const Celo = '/images/networks/celo-network.jpg'
+const Avalanche = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/avalanche.jpg'
+const Bsc = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/bsc.jpg'
+const Fantom = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/fantom.jpg'
+const Goerli = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/goerli.jpg'
+const Harmony = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/harmonyone.jpg'
+const Heco = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/heco.jpg'
+const Kovan = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/kovan.jpg'
+const Mainnet = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/mainnet.jpg'
+const Matic = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/polygon.jpg'
+const Moonbeam = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonbeam.jpg'
+const OKEx = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/okex.jpg'
+const Polygon = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/polygon.jpg'
+const Rinkeby = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/rinkeby.jpg'
+const Ropsten = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/ropsten.jpg'
+const xDai = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/xdai.jpg'
+const Celo = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/celo.jpg'
 const Palm = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/palm.jpg'
 const Moonriver = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonriver.jpg'
+const Fuse = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
 const Telos =
   'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
 
@@ -49,6 +50,7 @@ export const NETWORK_ICON = {
   [ChainId.CELO]: Celo,
   [ChainId.PALM]: Palm,
   [ChainId.MOONRIVER]: Moonriver,
+  [ChainId.FUSE]: Fuse,
   [ChainId.TELOS]: Telos,
 }
 
@@ -79,5 +81,6 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.CELO]: 'Celo',
   [ChainId.PALM]: 'Palm',
   [ChainId.MOONRIVER]: 'Moonriver',
-  [ChainId.TELOS]: 'Telos',
+  [ChainId.FUSE]: 'Fuse',
+  [ChainId.TELOS]: 'Telos EVM',
 }

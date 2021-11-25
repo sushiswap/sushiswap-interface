@@ -1,4 +1,4 @@
-import { useActiveWeb3React } from 'services/web3'
+import { useActiveWeb3React } from 'app/services/web3'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import { getAssets } from './fetchers'

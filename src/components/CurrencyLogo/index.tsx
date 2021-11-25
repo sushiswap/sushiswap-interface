@@ -1,8 +1,8 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/core-sdk'
+import useHttpLocations from 'app/hooks/useHttpLocations'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import React, { FunctionComponent, useMemo } from 'react'
 
-import useHttpLocations from '../../hooks/useHttpLocations'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
 import Logo, { UNKNOWN_ICON } from '../Logo'
 
 const BLOCKCHAIN = {
@@ -14,24 +14,38 @@ const BLOCKCHAIN = {
   [ChainId.MATIC]: 'polygon',
   [ChainId.XDAI]: 'xdai',
   // [ChainId.OKEX]: 'okex',
+  [ChainId.MOONRIVER]: 'moonriver',
   [ChainId.TELOS]: 'telos',
 }
 
 function getCurrencySymbol(currency) {
-  if (currency.symbol === 'WBTC') {
+  if (currency.symbol.replace('/e', '') === 'WBTC') {
     return 'btc'
   }
-  if (currency.symbol === 'WETH') {
+  if (currency.symbol.replace('/e', '') === 'WETH') {
     return 'eth'
   }
+
+  if (currency.symbol === 'WMOVR') {
+    return 'movr'
+  }
+
+  if (currency.chainId === ChainId.AVALANCHE) {
+    return currency.symbol.replace('/e', '').toLowerCase()
+  }
+
   return currency.symbol.toLowerCase()
 }
 
 export const getCurrencyLogoUrls = (currency): string[] => {
   const urls: string[] = []
 
-  urls.push(`https://raw.githubusercontent.com/sushiswap/icons/master/token/${getCurrencySymbol(currency)}.jpg`)
   if (currency.chainId in BLOCKCHAIN) {
+    urls.push(
+      `https://raw.githubusercontent.com/sushiswap/logos/main/network/${BLOCKCHAIN[currency.chainId]}/${
+        currency.address
+      }.jpg`
+    )
     urls.push(
       `https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/${BLOCKCHAIN[currency.chainId]}/assets/${
         currency.address

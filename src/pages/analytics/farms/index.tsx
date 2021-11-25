@@ -1,8 +1,8 @@
-import Search from 'components/Search'
-import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
-import Background from 'features/analytics/Background'
-import FarmList from 'features/analytics/Farms/FarmList'
-import { useFuse } from 'hooks'
+import Search from 'app/components/Search'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import FarmList from 'app/features/analytics/Farms/FarmList'
+import useFuse from 'app/hooks/useFuse'
 import useFarmRewards from 'hooks/useFarmRewards'
 import { useMemo } from 'react'
 

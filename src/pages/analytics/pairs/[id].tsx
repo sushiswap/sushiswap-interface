@@ -49,9 +49,11 @@ export default function Pair() {
   const block1d = useBlock({ daysAgo: 1, chainId })
   const block2d = useBlock({ daysAgo: 2, chainId })
 
-  const pair = useSushiPairs({ subset: [id], chainId })?.[0]
-  const pair1d = useSushiPairs({ subset: [id], block: block1d, shouldFetch: !!block1d, chainId })?.[0]
-  const pair2d = useSushiPairs({ subset: [id], block: block2d, shouldFetch: !!block2d, chainId })?.[0]
+  const pair = useSushiPairs({ chainId, variables: { where: { id } } })?.[0]
+
+  const pair1d = useSushiPairs({ chainId, variables: { block: block1d, where: { id } }, shouldFetch: !!block1d })?.[0]
+
+  const pair2d = useSushiPairs({ chainId, variables: { block: block2d, where: { id } }, shouldFetch: !!block2d })?.[0]
 
   const pairDayData = usePairDayData({ pair: id, chainId, shouldFetch: !!id })
 

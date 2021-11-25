@@ -1,13 +1,13 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import ModalHeader from 'components/ModalHeader'
-import { NETWORK_ICON, NETWORK_LABEL } from 'config/networks'
+import ModalHeader from 'app/components/ModalHeader'
+import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
+import { useActiveWeb3React } from 'app/services/web3'
+import { ApplicationModal } from 'app/state/application/actions'
+import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
 import cookie from 'cookie-cutter'
 import Image from 'next/image'
 import React from 'react'
-import { useActiveWeb3React } from 'services/web3'
-import { ApplicationModal } from 'state/application/actions'
-import { useModalOpen, useNetworkModalToggle } from 'state/application/hooks'
 
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
@@ -63,8 +63,8 @@ export const SUPPORTED_NETWORKS: {
       symbol: 'MATIC',
       decimals: 18,
     },
-    rpcUrls: ['https://rpc-mainnet.maticvigil.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
-    blockExplorerUrls: ['https://explorer-mainnet.maticvigil.com'],
+    rpcUrls: ['https://polygon-rpc.com'], // ['https://matic-mainnet.chainstacklabs.com/'],
+    blockExplorerUrls: ['https://polygonscan.com'],
   },
   [ChainId.HECO]: {
     chainId: '0x80',
@@ -135,7 +135,7 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
     },
     rpcUrls: ['https://arb1.arbitrum.io/rpc'],
-    blockExplorerUrls: ['https://mainnet-arb-explorer.netlify.app'],
+    blockExplorerUrls: ['https://arbiscan.io'],
   },
   [ChainId.CELO]: {
     chainId: '0xA4EC',
@@ -168,7 +168,29 @@ export const SUPPORTED_NETWORKS: {
       decimals: 18,
     },
     rpcUrls: ['https://rpc.moonriver.moonbeam.network'],
-    blockExplorerUrls: ['https://blockscout.moonriver.moonbeam.network'],
+    blockExplorerUrls: ['https://moonriver.moonscan.io'],
+  },
+  [ChainId.FUSE]: {
+    chainId: '0x7A',
+    chainName: 'Fuse',
+    nativeCurrency: {
+      name: 'Fuse',
+      symbol: 'FUSE',
+      decimals: 18,
+    },
+    rpcUrls: ['https://rpc.fuse.io'],
+    blockExplorerUrls: ['https://explorer.fuse.io'],
+  },
+  [ChainId.TELOS]: {
+    chainId: '0x28',
+    chainName: 'Telos',
+    nativeCurrency: {
+      name: 'Telos',
+      symbol: 'TLOS',
+      decimals: 18,
+    },
+    rpcUrls: ['https://mainnet.telos.net/evm'],
+    blockExplorerUrls: ['https://rpc1.us.telos.net/v2/explore'],
   },
   [ChainId.TELOS]: {
     chainId: '0x28',

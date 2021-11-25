@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { useEffect, useState } from 'react'
 
-import { XSUSHI } from '../config/tokens'
+import { XSUSHI } from '../config/tokens/ethereum'
 import { useBentoBoxContract } from './useContract'
 
 export default function useMeowshiPerXSushi() {

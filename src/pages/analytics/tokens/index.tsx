@@ -14,12 +14,16 @@ export default function Tokens() {
   const block1w = useBlock({ daysAgo: 7, chainId })
 
   const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ block: block1d, chainId })
-  const nativePrice1w = useNativePrice({ block: block1w, chainId })
+
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d } })
+
+  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w } })
 
   const tokens = useTokens({ chainId })
-  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d, chainId })
-  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w, chainId })
+
+  const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+
+  const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   const tokensFormatted = useMemo(
     () =>

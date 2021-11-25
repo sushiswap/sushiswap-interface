@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { useAllTokenBalances } from 'state/wallet/hooks'
+import { useAllTokenBalances } from 'app/state/wallet/hooks'
 
 // compare two token amounts with highest one coming first
 function balanceComparator(balanceA?: CurrencyAmount<Currency>, balanceB?: CurrencyAmount<Currency>) {

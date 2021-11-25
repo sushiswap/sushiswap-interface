@@ -1,13 +1,13 @@
 import { Token } from '@sushiswap/core-sdk'
-import Button from 'components/Button'
-import { AutoColumn } from 'components/Column'
-import CurrencyLogo from 'components/CurrencyLogo'
-import ListLogo from 'components/ListLogo'
-import { AutoRow, RowFixed } from 'components/Row'
-import { classNames } from 'functions'
-import { useIsTokenActive, useIsUserAddedToken } from 'hooks/Tokens'
+import Button from 'app/components/Button'
+import { AutoColumn } from 'app/components/Column'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import ListLogo from 'app/components/ListLogo'
+import { AutoRow, RowFixed } from 'app/components/Row'
+import { classNames } from 'app/functions'
+import { useIsTokenActive, useIsUserAddedToken } from 'app/hooks/Tokens'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import React, { CSSProperties } from 'react'
-import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
 
 export default function ImportRow({
   token,

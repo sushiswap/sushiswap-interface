@@ -1,7 +1,7 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { aprToApy, getFraction, toAmount } from 'functions'
-import { GRAPH_HOST } from 'services/graph/constants'
-import { getTokenSubset } from 'services/graph/fetchers'
+import { aprToApy, getFraction, toAmount } from 'app/functions'
+import { GRAPH_HOST } from 'app/services/graph/constants'
+import { getTokenSubset } from 'app/services/graph/fetchers'
 import {
   bentoBoxQuery,
   bentoStrategiesQuery,
@@ -10,7 +10,7 @@ import {
   clonesQuery,
   kashiPairsQuery,
   kashiUserPairsQuery,
-} from 'services/graph/queries/bentobox'
+} from 'app/services/graph/queries/bentobox'
 
 import { pager } from './pager'
 
@@ -121,12 +121,6 @@ export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables) => {
   return bentoBoxes[0]
 }
 
-export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables) => {
-  const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
-
-  return tokens
-}
-
 export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) => {
   const { strategies } = await fetcher(chainId, bentoStrategiesQuery, variables)
 
@@ -158,4 +152,10 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
       targetPercentage: Number(strategy.token.strategyTargetPercentage ?? 0),
     }
   })
+}
+
+export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables) => {
+  const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
+
+  return tokens
 }

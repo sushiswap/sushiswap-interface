@@ -1,10 +1,10 @@
 import { Currency } from '@sushiswap/core-sdk'
-import Button from 'components/Button'
-import CurrencyLogo from 'components/CurrencyLogo'
-import QuestionHelper from 'components/QuestionHelper'
-import Typography from 'components/Typography'
-import { COMMON_BASES } from 'config/routing'
-import { currencyId } from 'functions'
+import Button from 'app/components/Button'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import QuestionHelper from 'app/components/QuestionHelper'
+import Typography from 'app/components/Typography'
+import { COMMON_BASES } from 'app/config/routing'
+import { currencyId } from 'app/functions'
 import React from 'react'
 
 export default function CommonBases({

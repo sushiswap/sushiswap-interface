@@ -19,10 +19,10 @@ export default function Pairs() {
   const block2w = useBlock({ daysAgo: 14, chainId })
 
   const pairs = useSushiPairs({ chainId })
-  const pairs1d = useSushiPairs({ block: block1d, shouldFetch: !!block1d, chainId })
-  const pairs2d = useSushiPairs({ block: block2d, shouldFetch: !!block2d && type !== 'all', chainId }) // No need to fetch if we don't need the data
-  const pairs1w = useSushiPairs({ block: block1w, shouldFetch: !!block1w, chainId })
-  const pairs2w = useSushiPairs({ block: block2w, shouldFetch: !!block2w && type !== 'all', chainId })
+  const pairs1d = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
+  const pairs2d = useSushiPairs({ variables: { block: block2d }, shouldFetch: !!block2d && type !== 'all', chainId }) // No need to fetch if we don't need the data
+  const pairs1w = useSushiPairs({ variables: { block: block1w }, shouldFetch: !!block1w, chainId })
+  const pairs2w = useSushiPairs({ variables: { block: block2w }, shouldFetch: !!block2w && type !== 'all', chainId })
 
   const pairsFormatted = useMemo(() => {
     return type === 'all'

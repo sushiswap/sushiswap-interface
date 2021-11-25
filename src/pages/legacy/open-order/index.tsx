@@ -2,15 +2,15 @@ import { ArrowLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
-import Alert from 'components/Alert'
-import Container from 'components/Container'
-import DoubleGlowShadow from 'components/DoubleGlowShadow'
-import NavLink from 'components/NavLink'
-import CompletedOrders from 'features/legacy/open-order/CompletedOrders'
-import OpenOrders from 'features/legacy/open-order/OpenOrders'
-import NetworkGuard from 'guards/Network'
-import useLimitOrderApproveCallback, { BentoApprovalState } from 'hooks/useLimitOrderApproveCallback'
-import useLimitOrders from 'hooks/useLimitOrders'
+import Alert from 'app/components/Alert'
+import Container from 'app/components/Container'
+import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
+import NavLink from 'app/components/NavLink'
+import CompletedOrders from 'app/features/legacy/open-order/CompletedOrders'
+import OpenOrders from 'app/features/legacy/open-order/OpenOrders'
+import NetworkGuard from 'app/guards/Network'
+import useLimitOrderApproveCallback, { BentoApprovalState } from 'app/hooks/useLimitOrderApproveCallback'
+import useLimitOrders from 'app/hooks/useLimitOrders'
 import Head from 'next/head'
 import React from 'react'
 
@@ -18,7 +18,6 @@ function OpenOrdersPage() {
   const { i18n } = useLingui()
   const [approvalState] = useLimitOrderApproveCallback()
   const { pending } = useLimitOrders()
-
   return (
     <Container id="open-order-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
