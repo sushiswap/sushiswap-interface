@@ -1,11 +1,10 @@
-import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Tabs from 'app/components/Tabs'
 import { usePoolBuckets } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { BarGraph } from 'components/BarGraph'
 import Button from 'components/Button'
 import LineGraph from 'components/LineGraph'
-import ToggleButtonGroup from 'components/ToggleButton'
 import Typography from 'components/Typography'
 import { formatDate } from 'functions'
 import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
@@ -91,18 +90,12 @@ const PoolStatsChart = () => {
   )
 
   return (
-    <div className="flex flex-col gap-5 h-[280px]">
+    <div className="flex flex-col h-[280px]">
       <div className="flex flex-col lg:order-0 lg:justify-between lg:items-center lg:flex-row">
-        <ToggleButtonGroup value={chartType} onChange={setChartType}>
-          <ToggleButtonGroup.Button value={ChartType.Volume} className="h-12 w-full lg:h-10 lg:w-[106px]">
-            {i18n._(t`Volume`)}
-          </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value={ChartType.TVL} className="h-12 w-full lg:h-10 lg:w-[106px]">
-            {i18n._(t`TVL`)}
-          </ToggleButtonGroup.Button>
-        </ToggleButtonGroup>
-        <div className="hidden lg:block">{chartButtons}</div>
+        <Tabs tabs={[ChartType.Volume, ChartType.TVL]} currentTab={chartType} setTab={setChartType} />
+        <div className="hidden mb-2 lg:block">{chartButtons}</div>
       </div>
+      <div className="w-full h-px bg-gray-700" />
       {graphData && graphData.length > 0 && (
         <div className="w-full h-40 lg:order-2">
           <Typography variant="h3" className="text-high-emphesis" weight={700}>

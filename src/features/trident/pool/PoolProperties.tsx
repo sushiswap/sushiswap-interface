@@ -14,7 +14,7 @@ const _PoolProperties: FC<{ pool: Pool; i18n: I18n }> = ({ pool, i18n }) => {
   const type = useMemo(() => poolEntityMapper(pool), [pool])
   return (
     <>
-      <Chip label={POOL_TYPES[type].label} color={chipPoolColorMapper[type]} />
+      <Chip label={POOL_TYPES[type].label_long} color={chipPoolColorMapper[type]} />
       <Typography weight={700} variant="sm">
         {formatPercent(pool?.fee?.valueOf() / 100)} {i18n._(t`Fees`)}
       </Typography>

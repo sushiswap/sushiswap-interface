@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import React, { FC, ReactNode } from 'react'
 
 import { classNames } from '../../functions'
@@ -17,7 +17,7 @@ interface ListPanelProps {
 const ListPanel = ({ header, items, footer, className = '' }: ListPanelProps) => {
   return (
     <div className={classNames(className, 'flex flex-col')}>
-      {header && <div className="rounded-t overflow-hidden border border-dark-700">{header}</div>}
+      {header && <div className="overflow-hidden border rounded-t border-dark-700">{header}</div>}
       {items && (
         <div
           className={classNames(
@@ -29,7 +29,7 @@ const ListPanel = ({ header, items, footer, className = '' }: ListPanelProps) =>
           {items}
         </div>
       )}
-      {footer && <div className="rounded-b overflow-hidden border bg-dark-900 border-dark-700">{footer}</div>}
+      {footer && <div className="overflow-hidden border rounded-b bg-dark-900 border-dark-700">{footer}</div>}
     </div>
   )
 }
@@ -43,7 +43,7 @@ interface ListPanelFooterProps {
 // If you need different styling, please create another component and leave this one as is.
 const ListPanelFooter: FC<ListPanelFooterProps> = ({ title, value }) => {
   return (
-    <div className="flex flex-row justify-between px-4 py-2 items-center">
+    <div className="flex flex-row items-center justify-between px-4 py-2">
       <Typography variant="xs" weight={400} className="text-high-emphesis">
         {title}
       </Typography>
@@ -98,7 +98,7 @@ interface ListPanelItemProps {
 // If you need different styling, please create another component and leave this one as is.
 const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
   return (
-    <div className="grid grid-cols-2 gap-2 px-4 py-3 flex items-center border-dark-700">
+    <div className="flex grid items-center grid-cols-2 gap-2 px-4 py-3 border-dark-700">
       {left}
       {right}
     </div>
@@ -116,7 +116,7 @@ const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, startAdornment 
       {startAdornment && startAdornment}
       <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />
       <Typography variant="sm" className="text-high-emphesis" weight={700}>
-        {amount?.toSignificant(6)} {amount?.currency.symbol}
+        {amount?.greaterThan(ZERO) ? amount?.toSignificant(6) : '0.00'} {amount?.currency.symbol}
       </Typography>
     </div>
   )
@@ -147,7 +147,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount, weight }) => 
           {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
         />
       }
-      right={<ListPanel.Item.Right>≈${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>}
+      right={<ListPanel.Item.Right>${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>}
       key={0}
     />
   )

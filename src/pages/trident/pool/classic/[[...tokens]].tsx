@@ -10,6 +10,7 @@ import { poolAtom } from 'app/features/trident/context/atoms'
 import ClassicLinkButtons from 'app/features/trident/pool/classic/ClassicLinkButtons'
 import ClassicMarket from 'app/features/trident/pool/classic/ClassicMarket'
 import ClassicMyPosition from 'app/features/trident/pool/classic/ClassicMyPosition'
+import ClassicTokenPrices from 'app/features/trident/pool/classic/ClassicTokenPrices'
 import Header from 'app/features/trident/pool/Header'
 import PoolStats from 'app/features/trident/pool/PoolStats'
 import PoolStatsChart from 'app/features/trident/pool/PoolStatsChart'
@@ -50,13 +51,16 @@ const Pool = () => {
       <TridentBody>
         <div className="flex flex-col w-full gap-10 mt-px mb-5 lg:flex-row">
           <div className="flex flex-col gap-5 lg:w-8/12 lg:gap-10">
-            <div className="order-5 lg:order-1">
+            <div className="hidden lg:order-1 lg:block">
+              <ClassicTokenPrices />
+            </div>
+            <div className="order-5 lg:order-2">
               <PoolStatsChart />
             </div>
-            <div className="order-6 lg:order-2">
+            <div className="order-6 lg:order-3">
               <PoolStats />
             </div>
-            <div className="order-2 lg:order-3">
+            <div className="order-2 lg:order-4">
               <ClassicMarket />
             </div>
             {/*<div className="order-2 lg:order-4">*/}

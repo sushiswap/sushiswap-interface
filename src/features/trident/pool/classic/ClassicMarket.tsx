@@ -8,6 +8,7 @@ import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import SumUSDCValues from '../../SumUSDCValues'
+import ClassicTokenPrices from './ClassicTokenPrices'
 
 const ClassicMarket: FC = () => {
   const { i18n } = useLingui()
@@ -38,16 +39,20 @@ const ClassicMarket: FC = () => {
                 Total Assets
               </Typography>
               <Typography weight={700} className="text-right text-high-emphesis">
-                {amount ? `${amount.toSignificant(6)}` : '$0.000'}
+                {`$${amount ? `${amount.toSignificant(6)}` : '0.000'}`}
               </Typography>
             </div>
+          </div>
+
+          <div className="block lg:hidden">
+            <ClassicTokenPrices />
           </div>
 
           <ListPanel
             header={
               <ListPanel.Header
                 title={i18n._(t`Assets`)}
-                value={amount ? `${amount.toSignificant(6)}` : '$0.000'}
+                value={`$${amount ? `${amount.toSignificant(6)}` : '0.00'}`}
                 subValue={`${totalSupply?.toSignificant(6)} ${pool?.liquidityToken.symbol}`}
               />
             }

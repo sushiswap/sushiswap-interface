@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ZERO } from '@sushiswap/core-sdk'
 import ListPanel from 'components/ListPanel'
 import {
   currentLiquidityValueSelector,
@@ -25,8 +26,10 @@ const ClassicMyPosition: FC = () => {
             <ListPanel.Header
               className="bg-dark-1000"
               title={i18n._(t`My Position`)}
-              value={amount ? `${amount.toSignificant(6)}` : '$0.000'}
-              subValue={`${poolBalance?.toSignificant(6)} ${poolBalance?.currency?.symbol}`}
+              value={`$${amount?.greaterThan(ZERO) ? `${amount.toSignificant(6)}` : '0.00'}`}
+              subValue={`${amount?.greaterThan(ZERO) ? poolBalance?.toSignificant(6) : '0.00'} ${
+                poolBalance?.currency?.symbol
+              }`}
             />
           )}
         </SumUSDCValues>

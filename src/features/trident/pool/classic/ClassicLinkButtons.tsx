@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { classNames } from 'app/functions'
 import Button from 'components/Button'
 import { poolAtom, poolBalanceAtom } from 'features/trident/context/atoms'
 import Link from 'next/link'
@@ -30,15 +31,19 @@ const ClassicLinkButtons: FC = () => {
           </Button>
         </>
       ) : (
-        <Button color="gradient" className="text-high-emphesis col-span-2">
+        <Button color="gradient" className="text-high-emphesis">
           <Link href={`/trident/add/classic/${pool?.token0.address}/${pool?.token1.address}`}>
             {i18n._(t`Deposit`)}
           </Link>
         </Button>
       )}
 
-      <Button variant="outlined" color="gray" className="w-full col-span-2 text-high-emphesis py-3" size="xs">
-        {i18n._(t`View Analytics`)}
+      <Button
+        color="gradient"
+        variant="outlined"
+        className={classNames(poolBalance?.greaterThan(0) && 'col-span-2', 'text-high-emphesis')}
+      >
+        <Link href={`/trident/swap/${pool?.token0.address}/${pool?.token1.address}`}>{i18n._(t`Trade`)}</Link>
       </Button>
     </div>
   )
