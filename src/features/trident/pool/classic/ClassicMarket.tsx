@@ -52,11 +52,19 @@ const ClassicMarket: FC = () => {
 
           <ListPanel
             header={
-              <div className="grid grid-cols-3 h-14 items-center pl-5 pr-4">
-                <Typography className="text-high-emphesis">{i18n._(t`Token`)}</Typography>
-                <Typography className="text-high-emphesis text-right">{i18n._(t`Amount`)}</Typography>
-                <Typography className="text-high-emphesis text-right">{i18n._(t`Value`)}</Typography>
-              </div>
+              isDesktop ? (
+                <div className="grid grid-cols-3 h-14 items-center pl-5 pr-4">
+                  <Typography className="text-high-emphesis">{i18n._(t`Token`)}</Typography>
+                  <Typography className="text-high-emphesis text-right">{i18n._(t`Amount`)}</Typography>
+                  <Typography className="text-high-emphesis text-right">{i18n._(t`Value`)}</Typography>
+                </div>
+              ) : (
+                <ListPanel.Header
+                  title={i18n._(t`Assets`)}
+                  value={`$${amount ? `${amount.toSignificant(6)}` : '0.00'}`}
+                  subValue={`${totalSupply?.toSignificant(6)} ${pool?.liquidityToken.symbol}`}
+                />
+              )
             }
             items={reserves.map((amount, index) => (
               <ListPanel.CurrencyAmountItem amount={amount} key={index} displayTokenAmount={isDesktop} />
