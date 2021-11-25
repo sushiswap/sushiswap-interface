@@ -79,8 +79,8 @@ const PoolStatsChart = () => {
           color={text === chartRange ? 'blue' : 'gray'}
           className={
             text === chartRange
-              ? 'w-10 py-1 text-sm bg-blue-400 border-blue border rounded-full'
-              : 'w-10 py-1 text-sm text-secondary'
+              ? 'min-w-12 px-2 py-1 text-sm bg-blue-400 border-1 border-blue/50 border rounded-full font-bold hover:text-blue'
+              : 'min-w-12 px-2 py-1 text-sm text-secondary font-bold hover:text-blue'
           }
         >
           {text}
@@ -91,7 +91,7 @@ const PoolStatsChart = () => {
 
   return (
     <div className="flex flex-col h-[280px]">
-      <div className="flex flex-col lg:order-0 lg:justify-between lg:items-center lg:flex-row">
+      <div className="flex flex-col lg:order-0 lg:justify-between lg:items-end lg:flex-row">
         <Tabs tabs={[ChartType.Volume, ChartType.TVL]} currentTab={chartType} setTab={setChartType} />
         <div className="hidden mb-2 lg:block">{chartButtons}</div>
       </div>

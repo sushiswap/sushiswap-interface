@@ -23,38 +23,44 @@ import { useRecoilValue } from 'recoil'
 
 const Pool = () => {
   const { i18n } = useLingui()
-  const linkButtons = <ClassicLinkButtons />
-  const { pool } = useRecoilValue(poolAtom)
+  const _linkButtons = <ClassicLinkButtons />
+  const _header = (
+    <>
+      <div className="mb-5 order-0">
+        <Header />
+      </div>
+      <div className="order-1 lg:order-3 lg:hidden">{_linkButtons}</div>
+    </>
+  )
 
+  const { pool } = useRecoilValue(poolAtom)
   return (
     <>
-      <TridentHeader pattern="bg-chevron-pattern" condensed>
-        <div className="flex flex-col gap-3 lg:w-8/12 lg:gap-5 lg:pr-6">
+      <TridentHeader pattern="bg-dots-pattern" condensed className="lg:py-[22px]">
+        <div className="flex flex-col gap-3 lg:w-8/12 lg:gap-5 lg:pr-6 h-[68px] lg:h-auto">
           <div>
             <Button
               color="blue"
               variant="outlined"
               size="sm"
-              className="rounded-full !pl-2 !py-1"
+              className="rounded-full !pl-2 !py-1.5"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
               <Link href={'/trident/pools'}>{i18n._(t`Pools`)}</Link>
             </Button>
           </div>
-          <div className="mb-5 order-0">
-            <Header />
-          </div>
-          <div className="order-1 lg:order-3 lg:hidden">{linkButtons}</div>
+          <div className="hidden lg:block">{_header}</div>
         </div>
       </TridentHeader>
 
-      <TridentBody>
+      <TridentBody className="lg:pt-[26px]">
+        <div className="block lg:hidden mt-[-54px] lg:mt-0">{_header}</div>
         <div className="flex flex-col w-full gap-10 mt-px mb-5 lg:flex-row">
-          <div className="flex flex-col gap-5 lg:w-8/12 lg:gap-10">
-            <div className="hidden lg:order-1 lg:block">
-              <ClassicTokenPrices />
-            </div>
+          <div className="flex flex-col gap-8 lg:w-8/12 lg:gap-10">
             <div className="order-5 lg:order-2">
+              <div className="hidden lg:block lg:mb-7">
+                <ClassicTokenPrices />
+              </div>
               <PoolStatsChart />
             </div>
             <div className="order-6 lg:order-3">
@@ -63,19 +69,13 @@ const Pool = () => {
             <div className="order-2 lg:order-4">
               <ClassicMarket />
             </div>
-            {/*<div className="order-2 lg:order-4">*/}
-            {/*  <Rewards />*/}
-            {/*</div>*/}
           </div>
           <div className="lg:w-4/12">
-            <div className="sticky flex flex-col gap-5 top-5 lg:-mt-52">
+            <div className="sticky flex flex-col gap-5 top-5 lg:-mt-52 lg:pt-3">
               <div className="order-0">
                 <ClassicMyPosition />
               </div>
-              {/*<div className="order-1">*/}
-              {/*  <ClassicMyRewards />*/}
-              {/*</div>*/}
-              <div className="order-2 hidden lg:block">{linkButtons}</div>
+              <div className="order-2 hidden lg:block">{_linkButtons}</div>
             </div>
           </div>
         </div>
