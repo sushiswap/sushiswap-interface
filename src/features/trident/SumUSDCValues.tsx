@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { useUSDCValue } from 'hooks/useUSDCPrice'
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
@@ -6,15 +7,16 @@ import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 const USDCValue: FC<{ amount?: CurrencyAmount<Currency>; update(address: string, value?: CurrencyAmount<Currency>) }> =
   ({ amount, update }) => {
     const usdcValue = useUSDCValue(amount)
+    const address = amount ? (amount.currency.isNative ? AddressZero : amount.currency.wrapped.address) : undefined
 
     useEffect(() => {
-      if (!amount?.currency.wrapped.address) return
-      update(amount?.currency.wrapped.address, usdcValue)
+      if (!address) return
 
+      update(address, usdcValue)
       return () => {
-        update(amount?.currency.wrapped.address, undefined)
+        update(address, undefined)
       }
-    }, [amount?.currency.wrapped.address, update, usdcValue])
+    }, [address, update, usdcValue])
 
     return <></>
   }
@@ -39,7 +41,7 @@ const SumUSDCValues: FC<SumUSDCValuesProps> = ({ amounts, children }) => {
       values.length > 0
         ? values.reduce((acc, cur) => {
             if (acc && cur) {
-              acc.add(cur)
+              return acc.add(cur)
             }
 
             return acc
