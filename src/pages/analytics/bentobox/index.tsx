@@ -18,8 +18,8 @@ export default function BentoBox(): JSX.Element {
   const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d } })
-  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w } })
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   // Get exchange data
   const tokens = useTokens({ chainId })
