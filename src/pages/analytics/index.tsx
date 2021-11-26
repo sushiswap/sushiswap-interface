@@ -8,7 +8,16 @@ import PairList from 'app/features/analytics/Pairs/PairList'
 import TokenList from 'app/features/analytics/Tokens/TokenList'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
-import { useBlock, useDayData, useFactory, useNativePrice, useSushiPairs, useTokens } from 'app/services/graph'
+import {
+  useDayData,
+  useFactory,
+  useNativePrice,
+  useOneDayBlock,
+  useOneWeekBlock,
+  useSushiPairs,
+  useTokens,
+  useTwoDayBlock,
+} from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
@@ -36,9 +45,9 @@ export default function Dashboard(): JSX.Element {
 
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   // For the charts
   const exchange = useFactory({ chainId })

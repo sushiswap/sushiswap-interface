@@ -30,22 +30,15 @@ import {
   getTruPrice,
   getYggPrice,
 } from '../fetchers'
+import { GraphProps } from '../interfaces'
 import { ethPriceQuery } from '../queries'
-import { useBlock } from './blocks'
-
-interface useFactoryProps {
-  chainId: number
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
-}
 
 export function useFactory({
   chainId = ChainId.ETHEREUM,
   variables,
   shouldFetch = true,
   swrConfig = undefined,
-}: useFactoryProps) {
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['factory', chainId, stringify(variables)] : null,
     () => getFactory(chainId, variables),
@@ -54,19 +47,12 @@ export function useFactory({
   return data
 }
 
-interface useNativePriceProps {
-  chainId: number
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
-}
-
 export function useNativePrice({
   chainId = ChainId.ETHEREUM,
   variables,
   shouldFetch = true,
   swrConfig = undefined,
-}: useNativePriceProps) {
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['nativePrice', chainId, stringify(variables)] : null,
     () => getNativePrice(chainId, variables),
@@ -203,29 +189,12 @@ export function useBundle(variables = undefined, swrConfig: SWRConfiguration = u
   return data
 }
 
-interface useLiquidityPositionsProps {
-  timestamp?: number
-  block?: number
-  chainId: number
-  shouldFetch?: boolean
-  user?: string
-}
-
-export function useLiquidityPositions(
-  { timestamp, block, chainId = ChainId.ETHEREUM, shouldFetch = true, user }: useLiquidityPositionsProps,
-  swrConfig: SWRConfiguration = undefined
-) {
-  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  const variables = {
-    block: block ? { number: block } : undefined,
-    where: {
-      user: user?.toLowerCase(),
-      liquidityTokenBalance_gt: '0',
-    },
-  }
-
+export function useLiquidityPositions({
+  chainId = ChainId.ETHEREUM,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['liquidityPositions', chainId, stringify(variables)] : null,
     (_, chainId) => getLiquidityPositions(chainId, variables),
@@ -234,19 +203,12 @@ export function useLiquidityPositions(
   return data
 }
 
-interface useSushiPairsProps {
-  chainId: ChainId
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
-}
-
 export function useSushiPairs({
   chainId = ChainId.ETHEREUM,
   variables,
   shouldFetch = true,
   swrConfig = undefined,
-}: useSushiPairsProps) {
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['sushiPairs', chainId, stringify(variables)] : null,
     (_, chainId) => getPairs(chainId, variables),
@@ -255,17 +217,12 @@ export function useSushiPairs({
   return data
 }
 
-interface useTokensProps {
-  chainId: number
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
-}
-
-export function useTokens(
-  { chainId = ChainId.ETHEREUM, variables, shouldFetch = true }: useTokensProps,
-  swrConfig: SWRConfiguration = undefined
-) {
+export function useTokens({
+  chainId = ChainId.ETHEREUM,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['tokens', chainId, stringify(variables)] : null,
     (_, chainId) => getTokens(chainId, variables),
@@ -274,30 +231,12 @@ export function useTokens(
   return data ?? []
 }
 
-interface usePairDayDataProps {
-  timestamp?: number
-  block?: number
-  chainId: number
-  shouldFetch?: boolean
-  pair: string
-  first?: number
-}
-
-export function usePairDayData(
-  { timestamp, block, chainId, shouldFetch = true, pair, first }: usePairDayDataProps,
-  swrConfig: SWRConfiguration = undefined
-) {
-  const blockFetched = useBlock({ chainId, timestamp, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  const variables = {
-    first: first,
-    block: block ? { number: block } : undefined,
-    where: {
-      pair: pair?.toLowerCase(),
-    },
-  }
-
+export function usePairDayData({
+  chainId = ChainId.ETHEREUM,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch && !!chainId ? ['pairDayData', chainId, stringify(variables)] : null,
     (_, chainId) => getPairDayData(chainId, variables),
@@ -306,72 +245,25 @@ export function usePairDayData(
   return data
 }
 
-interface useTokenDayDataProps {
-  timestamp?: number
-  block?: number
-  chainId: number
-  shouldFetch?: boolean
-  token: string
-  first?: number
-}
-
 export function useTokenDayData(
-  { timestamp, block, chainId, shouldFetch = true, token, first }: useTokenDayDataProps,
+  { chainId, variables, shouldFetch = true }: GraphProps,
   swrConfig: SWRConfiguration = undefined
 ) {
-  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  const variables = {
-    first: first,
-    block: block ? { number: block } : undefined,
-    where: {
-      token: token?.toLowerCase(),
-    },
-  }
-
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['tokenDayData', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['tokenDayData', chainId, stringify(variables)] : null,
     (_, chainId) => getTokenDayData(chainId, variables),
     swrConfig
   )
   return data
 }
 
-interface useDayDataProps {
-  timestamp?: number
-  block?: number
-  chainId: number
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  first?: number
-}
-
-export function useDayData(
-  { timestamp, block, chainId, shouldFetch = true, first }: useDayDataProps,
-  swrConfig: SWRConfiguration = undefined
-) {
-  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  const variables = {
-    first: first,
-    block: block ? { number: block } : undefined,
-  }
-
+export function useDayData({ chainId, variables, shouldFetch = true, swrConfig = undefined }: GraphProps) {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['dayData', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['dayData', chainId, stringify(variables)] : null,
     (_, chainId) => getDayData(chainId, variables),
     swrConfig
   )
   return data
-}
-
-interface useTokenPairsProps {
-  chainId: number
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
 }
 
 export function useTokenPairs({
@@ -379,7 +271,7 @@ export function useTokenPairs({
   variables,
   shouldFetch = true,
   swrConfig = undefined,
-}: useTokenPairsProps) {
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['tokenPairs', chainId, stringify(variables)] : null,
     (_, chainId) => getTokenPairs(chainId, variables),

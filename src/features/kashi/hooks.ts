@@ -95,10 +95,7 @@ export function useKashiPairs(addresses: string[]) {
     )
   }, [allTokens, currency, pollKashiPairs])
 
-  const strategies = useBentoStrategies({
-    chainId,
-    shouldFetch: chainId && (chainId === ChainId.ETHEREUM || chainId === ChainId.MATIC),
-  })
+  const strategies = useBentoStrategies({ chainId })
 
   const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token.address)], [account, tokens])
 

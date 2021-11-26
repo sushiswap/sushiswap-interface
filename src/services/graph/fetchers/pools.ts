@@ -2,10 +2,10 @@ import { ChainId } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
 import { GRAPH_HOST, TRIDENT } from 'services/graph/constants'
 import {
-  getPoolDayBuckets,
-  getPoolHourBuckets,
   getSwapsForPoolQuery,
   getTridentPoolsQuery,
+  poolDayBucketsQuery,
+  poolHourBucketsQuery,
 } from 'services/graph/queries'
 
 import { pager } from './pager'
@@ -116,13 +116,16 @@ const formatBuckets = (buckets: PoolBucketQueryResult[]): PoolBucket[] =>
     transactionCount: Number(bucket.transactionCount),
   }))
 
-export const getPoolBuckets = async (
-  chainId: ChainId = ChainId.ETHEREUM,
-  variables: {} = undefined,
-  fine: boolean = false
-): Promise<PoolBucket[]> => {
+export const getPoolHourBuckets = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolBucket[]> => {
   const result: PoolBucketQueryResult[] = Object.values(
-    await fetcher(chainId, fine ? getPoolHourBuckets : getPoolDayBuckets, variables)
+    await fetcher(chainId, poolHourBucketsQuery, variables)
+  )?.[0] as PoolBucketQueryResult[]
+  return formatBuckets(result)
+}
+
+export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolBucket[]> => {
+  const result: PoolBucketQueryResult[] = Object.values(
+    await fetcher(chainId, poolDayBucketsQuery, variables)
   )?.[0] as PoolBucketQueryResult[]
   return formatBuckets(result)
 }

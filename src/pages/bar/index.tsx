@@ -12,7 +12,7 @@ import { tryParseAmount } from 'app/functions/parse'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useSushiBar from 'app/hooks/useSushiBar'
 import TransactionFailedModal from 'app/modals/TransactionFailedModal'
-import { useBlock, useFactory, useNativePrice, useTokens } from 'app/services/graph/hooks'
+import { useFactory, useNativePrice, useOneDayBlock, useTokens } from 'app/services/graph/hooks'
 import { useBar } from 'app/services/graph/hooks/bar'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
@@ -133,7 +133,7 @@ export default function Stake() {
     }
   }
 
-  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.ETHEREUM })
+  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
 

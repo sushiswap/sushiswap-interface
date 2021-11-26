@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { usePoolBuckets } from 'app/services/graph/hooks/pools'
+import { usePoolDayBuckets, usePoolHourBuckets } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { BarGraph } from 'components/BarGraph'
 import Button from 'components/Button'
@@ -42,15 +42,26 @@ const PoolStatsChart = () => {
   const [chartType, setChartType] = useState<ChartType>(ChartType.Volume)
   const [chartRange, setChartRange] = useState<ChartRange>(ChartRange.ALL)
   const { pool } = useRecoilValue(poolAtom)
-  const data = usePoolBuckets({
+
+  const hourBuckets = usePoolHourBuckets({
     chainId,
-    fine: chartTimespans[chartRange] <= chartTimespans['1W'],
     variables: {
-      first: chartTimespans[chartRange] <= chartTimespans['1W'] ? 168 : undefined,
+      first: 168,
       where: { pool: pool?.liquidityToken?.address?.toLowerCase() },
     },
-    shouldFetch: !!pool,
+    shouldFetch: !!pool && chartTimespans[chartRange] <= chartTimespans['1W'],
   })
+
+  const dayBuckets = usePoolDayBuckets({
+    chainId,
+    variables: {
+      where: { pool: pool?.liquidityToken?.address?.toLowerCase() },
+    },
+    shouldFetch: !!pool && chartTimespans[chartRange] >= chartTimespans['1W'],
+  })
+
+  const data = chartTimespans[chartRange] <= chartTimespans['1W'] ? hourBuckets : dayBuckets
+
   const graphData = useMemo(() => {
     const currentDate = Math.round(Date.now() / 1000)
     return data
@@ -67,6 +78,7 @@ const PoolStatsChart = () => {
       }, [])
       .sort((a, b) => a.x - b.x)
   }, [data, chartRange, chartType])
+
   const [selectedIndex, setSelectedIndex] = useState(graphData?.length - 1)
 
   const chartButtons = (

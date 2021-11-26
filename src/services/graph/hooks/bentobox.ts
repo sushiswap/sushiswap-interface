@@ -2,18 +2,12 @@ import { ChainId } from '@sushiswap/core-sdk'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions/feature'
 import { getBentoBox, getBentoStrategies, getBentoTokens, getClones, getKashiPairs } from 'app/services/graph/fetchers'
-import { useBlock } from 'app/services/graph/hooks'
 import stringify from 'fast-json-stable-stringify'
-import useSWR, { SWRConfiguration } from 'swr'
+import useSWR from 'swr'
 
-interface useKashiPairsProps {
-  chainId: ChainId
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
-}
+import { GraphProps } from '../interfaces'
 
-export function useClones({ chainId, shouldFetch = true }, swrConfig: SWRConfiguration = undefined) {
+export function useClones({ chainId, shouldFetch = true, swrConfig = undefined }) {
   const { data } = useSWR(shouldFetch ? () => ['clones', chainId] : null, (_, chainId) => getClones(chainId), swrConfig)
   return data
 }
@@ -23,7 +17,7 @@ export function useKashiPairs({
   variables,
   shouldFetch = true,
   swrConfig = undefined,
-}: useKashiPairsProps) {
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? () => ['kashiPairs', chainId, stringify(variables)] : null,
     (_, chainId) => getKashiPairs(chainId, variables),
@@ -32,19 +26,7 @@ export function useKashiPairs({
   return data
 }
 
-interface useBentoBoxProps {
-  chainId: ChainId
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
-}
-
-export function useBentoBox({
-  chainId = ChainId.ETHEREUM,
-  variables,
-  shouldFetch = true,
-  swrConfig,
-}: useBentoBoxProps) {
+export function useBentoBox({ chainId = ChainId.ETHEREUM, variables, shouldFetch = true, swrConfig }: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['bentoBox', chainId, stringify(variables)] : null,
     () => getBentoBox(chainId, variables),
@@ -54,20 +36,13 @@ export function useBentoBox({
   return data
 }
 
-interface useBentoStrategiesProps {
-  chainId: ChainId
-  variables?: { [key: string]: any }
-  shouldFetch?: boolean
-  swrConfig?: SWRConfiguration
-}
-
 // subset of tokens, not strategies
 export function useBentoStrategies({
   chainId = ChainId.ETHEREUM,
   variables,
-  shouldFetch = true,
+  shouldFetch = featureEnabled(Feature.BENTOBOX, chainId),
   swrConfig = undefined,
-}: useBentoStrategiesProps) {
+}: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? ['bentoStrategies', chainId, stringify(variables)] : null,
     () => getBentoStrategies(chainId, variables),
@@ -77,35 +52,16 @@ export function useBentoStrategies({
   return data as { token: string; apy: number; targetPercentage: number }[]
 }
 
-interface useBentoTokensProps {
-  timestamp?: number
-  block?: number
-  subset?: string[]
-  chainId: number
-  shouldFetch?: boolean
-}
-
-export function useBentoTokens(
-  { timestamp, block, subset, chainId, shouldFetch = true }: useBentoTokensProps,
-  swrConfig?: SWRConfiguration
-) {
-  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  const variables = {
-    block: block ? { number: block } : undefined,
-    where: {
-      id_in: subset?.map((id) => id?.toLowerCase()),
-    },
-  }
-
+export function useBentoTokens({
+  chainId,
+  variables,
+  shouldFetch = featureEnabled(Feature.BENTOBOX, chainId),
+  swrConfig = undefined,
+}: GraphProps) {
   const { data } = useSWR(
-    shouldFetch && chainId && featureEnabled(Feature.BENTOBOX, chainId)
-      ? ['bentoTokens', chainId, stringify(variables)]
-      : null,
+    shouldFetch ? ['bentoTokens', chainId, stringify(variables)] : null,
     () => getBentoTokens(chainId, variables),
     swrConfig
   )
-
   return data
 }

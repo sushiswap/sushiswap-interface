@@ -11,7 +11,7 @@ import { getExplorerLink } from 'app/functions/explorer'
 import { formatNumber, shortenAddress } from 'app/functions/format'
 import { useCurrency } from 'app/hooks/Tokens'
 import useCopyClipboard from 'app/hooks/useCopyClipboard'
-import { useBlock, useNativePrice, usePairDayData, useSushiPairs } from 'app/services/graph'
+import { useNativePrice, useOneDayBlock, usePairDayData, useSushiPairs, useTwoDayBlock } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { times } from 'lodash'
 import Link from 'next/link'
@@ -46,18 +46,31 @@ export default function Pair() {
 
   const [isCopied, setCopied] = useCopyClipboard()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
-  const pair = useSushiPairs({ chainId, variables: { where: { id } } })?.[0]
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
-  const pair1d = useSushiPairs({ chainId, variables: { block: block1d, where: { id } }, shouldFetch: !!block1d })?.[0]
+  const pair = useSushiPairs({ chainId, variables: { where: { id } }, shouldFetch: !!chainId })?.[0]
 
-  const pair2d = useSushiPairs({ chainId, variables: { block: block2d, where: { id } }, shouldFetch: !!block2d })?.[0]
+  const pair1d = useSushiPairs({
+    chainId,
+    variables: { block: block1d, where: { id } },
+    shouldFetch: !!chainId && !!block1d,
+  })?.[0]
 
-  const pairDayData = usePairDayData({ pair: id, chainId, shouldFetch: !!id })
+  const pair2d = useSushiPairs({
+    chainId,
+    variables: { block: block2d, where: { id } },
+    shouldFetch: !!chainId && !!block2d,
+  })?.[0]
 
-  const nativePrice = useNativePrice({ chainId })
+  const pairDayData = usePairDayData({
+    chainId,
+    variables: { where: { pair: id?.toLowerCase() } },
+    shouldFetch: !!chainId && !!id,
+  })
+
+  const nativePrice = useNativePrice({ chainId, shouldFetch: !!chainId })
 
   // For the charts
   const chartData = useMemo(

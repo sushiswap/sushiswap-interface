@@ -7,15 +7,15 @@ import TokenList from 'app/features/analytics/Tokens/TokenList'
 import { featureEnabled } from 'app/functions/feature'
 import { formatNumber } from 'app/functions/format'
 import useFuse from 'app/hooks/useFuse'
-import { useBentoBox, useBlock, useNativePrice, useTokens } from 'app/services/graph'
+import { useBentoBox, useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
 export default function BentoBox(): JSX.Element {
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ chainId, daysAgo: 1 })
-  const block1w = useBlock({ chainId, daysAgo: 7 })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const nativePrice = useNativePrice({ chainId })
   const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d } })

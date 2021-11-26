@@ -14,6 +14,7 @@ import {
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useMovrPrice,
+  useOneDayBlock,
   useOnePrice,
   useSpellPrice,
   useStakePrice,
@@ -29,7 +30,7 @@ export default function useFarmRewards() {
 
   const positions = usePositions(chainId)
 
-  const block1d = useBlock({ chainId, daysAgo: 1 })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
   const farms = useFarms({ chainId })
 

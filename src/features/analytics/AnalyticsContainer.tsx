@@ -21,7 +21,7 @@ export default function AnalyticsContainer({ children }): JSX.Element {
             items={[
               {
                 text: 'Dashboard',
-                href: '/analytics/dashboard',
+                href: '/analytics',
               },
               {
                 text: 'xSushi',

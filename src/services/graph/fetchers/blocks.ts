@@ -23,19 +23,8 @@ const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined)
   return request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BLOCKS[chainId]}`, query, variables)
 }
 
-export const getBlock = async (chainId = ChainId.ETHEREUM, timestamp: number) => {
-  const { blocks } = await fetcher(
-    chainId,
-    blockQuery,
-    timestamp
-      ? {
-          where: {
-            timestamp_gt: timestamp - 600,
-            timestamp_lt: timestamp,
-          },
-        }
-      : {}
-  )
+export const getBlock = async (chainId = ChainId.ETHEREUM, variables) => {
+  const { blocks } = await fetcher(chainId, blockQuery, variables)
 
   return { number: Number(blocks?.[0]?.number) }
 }

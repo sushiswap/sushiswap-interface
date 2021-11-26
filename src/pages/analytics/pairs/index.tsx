@@ -4,7 +4,7 @@ import Background from 'app/features/analytics/Background'
 import PairList from 'app/features/analytics/Pairs/PairList'
 import PairTabs from 'app/features/analytics/Pairs/PairTabs'
 import useFuse from 'app/hooks/useFuse'
-import { useBlock, useSushiPairs } from 'app/services/graph'
+import { useOneDayBlock, useOneWeekBlock, useSushiPairs, useTwoDayBlock, useTwoWeekBlock } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
@@ -13,10 +13,10 @@ export default function Pairs() {
 
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
-  const block2w = useBlock({ daysAgo: 14, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
+  const block2w = useTwoWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const pairs = useSushiPairs({ chainId })
   const pairs1d = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })

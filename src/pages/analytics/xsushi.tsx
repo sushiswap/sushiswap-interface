@@ -7,7 +7,7 @@ import InfoCard from 'app/features/analytics/Bar/InfoCard'
 import ColoredNumber from 'app/features/analytics/ColoredNumber'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { aprToApy } from 'app/functions/convert/apyApr'
-import { useBlock, useDayData, useFactory, useNativePrice, useTokenDayData, useTokens } from 'app/services/graph'
+import { useDayData, useFactory, useNativePrice, useOneDayBlock, useTokenDayData, useTokens } from 'app/services/graph'
 import { useBar, useBarHistory } from 'app/services/graph/hooks/bar'
 import React, { useMemo } from 'react'
 
@@ -31,7 +31,7 @@ const chartTimespans = [
 ]
 
 export default function XSushi() {
-  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.ETHEREUM })
+  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
 
@@ -62,7 +62,10 @@ export default function XSushi() {
     variables: { block: block1d, where: { id: XSUSHI.address.toLowerCase() } },
   })?.[0]
 
-  const sushiDayData = useTokenDayData({ token: SUSHI_ADDRESS['1'], chainId: ChainId.ETHEREUM })
+  const sushiDayData = useTokenDayData({
+    chainId: ChainId.ETHEREUM,
+    variables: { where: { token: SUSHI_ADDRESS[ChainId.ETHEREUM].toLowerCase() } },
+  })
 
   const bar = useBar()
 
