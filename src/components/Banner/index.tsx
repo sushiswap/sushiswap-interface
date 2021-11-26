@@ -8,10 +8,10 @@ import { Transition } from '@headlessui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
 const images = [
-  {
-    image: `url('/images/miso/banner-gene.png')`,
-    url: 'https://miso.sushi.com/auctions/0xA017E4Cf380c5FDc372463f3330853500b4B3Cb9',
-  },
+  // {
+  //   image: `url('/images/miso/banner-gene.png')`,
+  //   url: 'https://miso.sushi.com/auctions/0xA017E4Cf380c5FDc372463f3330853500b4B3Cb9',
+  // },
 ]
 
 const Banner: FC = () => {
@@ -26,7 +26,7 @@ const Banner: FC = () => {
     setSlideIndex((prevState) => (prevState - 1 + images.length) % images.length)
   }, [])
 
-  if (chainId !== ChainId.MAINNET) return <></>
+  if (chainId !== ChainId.MAINNET || images.length === 0) return <></>
 
   const slides = images.map(({ image, url }, index) => {
     return (
