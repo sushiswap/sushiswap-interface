@@ -36,7 +36,7 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
   const bentoboxContract = useBentoBoxContract()
 
   let _value = currency ? tryParseAmount(value, currency) : undefined
-  let valuePlusBalance = _value
+  let valuePlusBalance = _value?.wrapped
   if (valuePlusBalance && walletBalance) valuePlusBalance = valuePlusBalance.add(walletBalance)
 
   const execute = useCallback(async () => {

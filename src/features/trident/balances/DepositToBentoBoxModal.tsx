@@ -36,7 +36,7 @@ const DepositToBentoBoxModal: FC<DepositToBentoBoxModalProps> = ({ open, onClose
   const bentoboxContract = useBentoBoxContract()
 
   let _value = currency ? tryParseAmount(value, currency) : undefined
-  let valuePlusBalance = _value
+  let valuePlusBalance = _value?.wrapped
   if (valuePlusBalance && bentoBalance) valuePlusBalance = valuePlusBalance.add(bentoBalance)
 
   const execute = useCallback(async () => {
