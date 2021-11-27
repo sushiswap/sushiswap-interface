@@ -16,7 +16,7 @@ export default function Farms(): JSX.Element {
           pair: {
             token0: farm.pair.token0,
             token1: farm.pair.token1,
-            address: farm.pair.id,
+            id: farm.pair.id,
             name: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
             type: farm.pair.symbol ? 'Kashi Farm' : 'Sushi Farm',
           },

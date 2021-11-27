@@ -19,7 +19,7 @@ export async function pager(endpoint, query, variables = {}) {
       if (entry.length === 1000) flag = true
     })
 
-    if (Object.keys(variables).includes('first')) break
+    if (Object.keys(variables).includes('first') && variables['first'] !== undefined) break
 
     skip += 1000
     variables = { ...variables, skip }
