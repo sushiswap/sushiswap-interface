@@ -74,7 +74,7 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 
         return state
       })
-  }, [approveState, inputAmount, inputAmount.currency.wrapped.address, onStateChange, signatureData])
+  }, [approveState, inputAmount, inputAmount?.currency.wrapped.address, onStateChange, signatureData])
 
   if (!signatureData && [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
     return (

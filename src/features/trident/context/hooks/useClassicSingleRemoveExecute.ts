@@ -14,7 +14,7 @@ import { useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useRecoilCallback, useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil'
 
-import { attemptingTxnAtom, poolAtom, showReviewAtom, txHashAtom } from '../atoms'
+import { attemptingTxnAtom, poolAtom } from '../atoms'
 
 export const useClassicSingleRemoveExecute = () => {
   const { i18n } = useLingui()
@@ -22,8 +22,6 @@ export const useClassicSingleRemoveExecute = () => {
   const router = useTridentRouterContract()
   const addTransaction = useTransactionAdder()
   const setAttemptingTxn = useSetRecoilState(attemptingTxnAtom)
-  const setTxHash = useSetRecoilState(txHashAtom)
-  const setShowReview = useSetRecoilState(showReviewAtom)
   const {
     parsedSLPAmount,
     zapCurrency: [zapCurrency],
@@ -84,8 +82,6 @@ export const useClassicSingleRemoveExecute = () => {
             value: '0x0',
           })
 
-          setTxHash(tx.hash)
-          setShowReview(false)
           await tx.wait()
 
           addTransaction(tx, {
@@ -102,6 +98,7 @@ export const useClassicSingleRemoveExecute = () => {
 
           resetBentoPermit()
           resetSLPPermit()
+          return tx
         } catch (error) {
           setAttemptingTxn(false)
           // we only care if the error is something _other_ than the user rejected the tx
@@ -125,8 +122,6 @@ export const useClassicSingleRemoveExecute = () => {
       resetSLPPermit,
       router,
       setAttemptingTxn,
-      setShowReview,
-      setTxHash,
       slpPermit,
       zapCurrency?.isNative,
     ]
