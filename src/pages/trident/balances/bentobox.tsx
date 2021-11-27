@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { BentoActionsModal } from 'app/features/trident/balances/ActionsModal'
 import { BentoBalances } from 'app/features/trident/balances/AssetBalances'
 import { BentoBalancesSum } from 'app/features/trident/balances/BalancesSum'
 import HeaderDropdown from 'app/features/trident/balances/HeaderDropdown'
@@ -32,6 +33,7 @@ const BentoBox = () => {
         </div>
         <div className="px-2">
           <BentoBalances />
+          <BentoActionsModal />
         </div>
       </TridentBody>
     </>

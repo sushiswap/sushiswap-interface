@@ -1,15 +1,17 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { Currency, CurrencyAmount, NATIVE, Token, ZERO } from '@sushiswap/core-sdk'
-import { BentoActionsModal, WalletActionsModal } from 'app/features/trident/balances/ActionsModal'
 import { Assets, TableInstance } from 'app/features/trident/balances/AssetBalances/types'
 import { useLPTableConfig } from 'app/features/trident/balances/AssetBalances/useLPTableConfig'
+import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
+import { ActiveModal } from 'app/features/trident/balances/context/types'
 import { classNames } from 'app/functions'
 import { useLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalances } from 'app/state/bentobox/hooks'
 import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
+import { useSetRecoilState } from 'recoil'
 
 import { useTableConfig } from './useTableConfig'
 
@@ -21,11 +23,10 @@ export const LiquidityPositionsBalances = () => {
   const userPairs = useLiquidityPositions({ user: account ?? undefined, chainId: Number(chainId) })
   const { config } = useLPTableConfig([])
 
-  return <_AssetBalances config={config} onSelect={(currency) => setSelected(currency)} />
+  return <_AssetBalances config={config} />
 }
 
 export const BentoBalances = () => {
-  const [selected, setSelected] = useState<Currency>()
   const { chainId } = useActiveWeb3React()
   const bentoBalances = useBentoBalances()
   const balances = useMemo(
@@ -43,16 +44,10 @@ export const BentoBalances = () => {
   )
   const { config } = useTableConfig(balances)
 
-  return (
-    <>
-      <_AssetBalances config={config} onSelect={(currency) => setSelected(currency)} />
-      <BentoActionsModal currency={selected} onClose={() => setSelected(undefined)} />
-    </>
-  )
+  return <_AssetBalances config={config} />
 }
 
 export const WalletBalances = () => {
-  const [selected, setSelected] = useState<Currency>()
   const { chainId, account } = useActiveWeb3React()
   const _balances = useAllTokenBalances()
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
@@ -70,20 +65,26 @@ export const WalletBalances = () => {
   }, [_balances, ethBalance])
   const { config } = useTableConfig(balances)
 
-  return (
-    <>
-      <_AssetBalances config={config} onSelect={(currency) => setSelected(currency)} />
-      <WalletActionsModal currency={selected} onClose={() => setSelected(undefined)} />
-    </>
-  )
+  return <_AssetBalances config={config} />
 }
 
-const _AssetBalances = ({ config, onSelect }) => {
+const _AssetBalances = ({ config }) => {
+  const setSelected = useSetRecoilState(SelectedCurrencyAtom)
+  const setActiveModal = useSetRecoilState(ActiveModalAtom)
+
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page }: TableInstance = useTable(
     config,
     useSortBy,
     usePagination,
     useFlexLayout
+  )
+
+  const handleRowClick = useCallback(
+    (currency: Currency) => {
+      setSelected(currency)
+      setActiveModal(ActiveModal.MENU)
+    },
+    [setActiveModal, setSelected]
   )
 
   return (
@@ -122,7 +123,7 @@ const _AssetBalances = ({ config, onSelect }) => {
               <tr
                 {...row.getRowProps()}
                 key={i}
-                onClick={() => onSelect(row.values.asset.currency)}
+                onClick={() => handleRowClick(row.values.asset.currency)}
                 className="cursor-pointer"
               >
                 {row.cells.map((cell, i) => {

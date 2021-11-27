@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { WalletActionsModal } from 'app/features/trident/balances/ActionsModal'
 import { WalletBalances } from 'app/features/trident/balances/AssetBalances'
 import { WalletBalancesSum } from 'app/features/trident/balances/BalancesSum'
 import HeaderDropdown from 'app/features/trident/balances/HeaderDropdown'
@@ -32,6 +33,7 @@ const Wallet = () => {
         </div>
         <div className="px-2">
           <WalletBalances />
+          <WalletActionsModal />
         </div>
       </TridentBody>
     </>
