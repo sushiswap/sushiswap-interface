@@ -17,7 +17,6 @@ import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
 import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import { liquidityModeAtom, poolAtom } from 'app/features/trident/context/atoms'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
-import DepositSubmittedModal from 'app/features/trident/DepositSubmittedModal'
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
 import { LiquidityMode } from 'app/features/trident/types'
 import NetworkGuard from 'app/guards/Network'
@@ -99,7 +98,6 @@ const AddClassic = () => {
                   <TransactionReviewStandardModal />
                 </>
               )}
-              <DepositSubmittedModal />
             </>
           </div>
           <div className="flex flex-col hidden -mt-40 lg:block lg:w-4/12">

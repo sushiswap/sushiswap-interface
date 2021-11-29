@@ -17,7 +17,6 @@ import SwapAssetPanel from 'features/trident/swap/SwapAssetPanel'
 import SwapButton from 'features/trident/swap/SwapButton'
 import SwapRate from 'features/trident/swap/SwapRate'
 import SwapReviewModal from 'features/trident/swap/SwapReviewModal'
-import SwapSubmittedModal from 'features/trident/swap/SwapSubmittedModal'
 import React, { useEffect } from 'react'
 import { useSetRecoilState } from 'recoil'
 import { useExpertModeManager } from 'state/user/hooks'
@@ -134,7 +133,6 @@ const Swap = () => {
           </div>
         </div>
         <SwapReviewModal />
-        <SwapSubmittedModal />
       </DoubleGlowShadow>
     </Container>
   )

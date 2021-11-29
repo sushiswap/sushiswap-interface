@@ -85,22 +85,22 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
           <PoolProperties pool={pool} i18n={i18n} />
         </div>
       </div>
-      <div className="flex flex-col gap-3 text-right">
+      <div className="flex flex-col gap-1 text-right mt-[-54px] lg:mt-0">
         <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
         <div className="flex flex-col gap-2">
-          <Typography variant="h1" className="text-high-emphesis" weight={700}>
+          <Typography variant="h3" className="text-high-emphesis" weight={700}>
             {formatPercent(feeApyPerYear)}
           </Typography>
-          <div className="flex flex-row justify-end gap-2.5">
-            {isFarm && (
-              <>
-                <Typography variant="xxs">{i18n._(t`Rewards:`)} XX%</Typography>
-                <Typography variant="xxs">
-                  {i18n._(t`Fees:`)} {pool?.fee / 100}%
-                </Typography>
-              </>
-            )}
-          </div>
+          {isFarm ? (
+            <div className="flex flex-row justify-end gap-2.5">
+              <Typography variant="xxs">{i18n._(t`Rewards:`)} XX%</Typography>
+              <Typography variant="xxs">
+                {i18n._(t`Fees:`)} {pool?.fee / 100}%
+              </Typography>
+            </div>
+          ) : (
+            <Typography variant="xxs">{i18n._(t`Including fees`)}</Typography>
+          )}
         </div>
       </div>
     </div>

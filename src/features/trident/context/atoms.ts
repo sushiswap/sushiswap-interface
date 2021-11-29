@@ -22,11 +22,6 @@ export const attemptingTxnAtom = atom<boolean>({
   default: false,
 })
 
-export const txHashAtom = atom<string>({
-  key: 'txHashAtom',
-  default: '',
-})
-
 export const totalSupplyAtom = atom<CurrencyAmount<Token> | undefined>({
   key: 'totalSupplyAtom',
   default: undefined,
@@ -45,11 +40,6 @@ export const currenciesAtom = atom<Currency[]>({
 export const bentoboxRebasesAtom = atom<Record<string, Rebase>>({
   key: 'bentoboxRebasesAtom',
   default: {},
-})
-
-export const fixedRatioAtom = atom<boolean>({
-  key: 'fixedRatioAtom',
-  default: false,
 })
 
 export const liquidityModeAtom = atom<LiquidityMode>({

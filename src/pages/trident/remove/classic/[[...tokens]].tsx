@@ -18,7 +18,6 @@ import RemoveTransactionReviewSingleModal from 'app/features/trident/remove/clas
 import RemoveTransactionReviewStandardModal from 'app/features/trident/remove/classic/RemoveTransactionReviewStandardModal'
 import FixedRatioHeader from 'app/features/trident/remove/FixedRatioHeader'
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
-import WithdrawalSubmittedModal from 'app/features/trident/WithdrawalSubmittedModal'
 import NetworkGuard from 'app/guards/Network'
 import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
@@ -96,8 +95,6 @@ const RemoveClassic = () => {
                 </>
               )}
             </>
-
-            <WithdrawalSubmittedModal />
           </div>
 
           <div className="flex flex-col hidden lg:block lg:w-4/12 -mt-36">

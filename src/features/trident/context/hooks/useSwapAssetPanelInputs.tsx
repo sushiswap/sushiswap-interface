@@ -137,7 +137,7 @@ const useSwapAssetPanelInputs = () => {
     ? i18n._(t`Enter an amount`)
     : trade === undefined && !isWrap
     ? i18n._(t`No route found`)
-    : balance && trade && mainInputCurrencyAmount && maxAmountSpend(balance).lessThan(mainInputCurrencyAmount)
+    : balance && trade && mainInputCurrencyAmount && maxAmountSpend(balance)?.lessThan(mainInputCurrencyAmount)
     ? i18n._(t`Insufficient ${mainInputCurrencyAmount?.currency.symbol} balance`)
     : ''
 
