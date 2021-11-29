@@ -4,7 +4,7 @@ const tridentPoolsSubQuery = `
   id
   kpi {
     volumeUSD
-    totalValueLockedUSD
+    liquidityUSD
     feesUSD
     transactionCount
   }
