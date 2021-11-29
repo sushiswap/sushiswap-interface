@@ -17,7 +17,7 @@ interface PairListProps {
         id: string
         symbol: string
       }
-      address: string
+      id: string
     }
     liquidity: number
     volume1d: number
@@ -86,6 +86,7 @@ const allColumns = [
     Header: 'Annual APY',
     accessor: (row) => <div className="text-high-emphesis">{getApy(row.volume1w, row.liquidity)}</div>,
     align: 'right',
+    sortType: (a, b) => a.original.volume1w / a.original.liquidity - b.original.volume1w / b.original.liquidity,
   },
   {
     Header: 'Daily / Weekly Volume',
@@ -202,7 +203,7 @@ export default function PairList({ pairs, type }: PairListProps): JSX.Element {
           columns={columns}
           data={pairs}
           defaultSortBy={defaultSortBy}
-          link={{ href: '/analytics/pairs/', id: 'pair.address' }}
+          link={{ href: '/analytics/pairs/', id: 'pair.id' }}
         />
       )}
     </>

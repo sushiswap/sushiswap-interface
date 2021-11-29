@@ -1,63 +1,46 @@
-import { ChainId } from '@sushiswap/core-sdk'
-import useSWR, { SWRConfiguration } from 'swr'
+import stringify from 'fast-json-stable-stringify'
+import useSWR from 'swr'
 
-import { getPoolBuckets, getTridentPools, PoolBucket, TridentPool } from '../fetchers/pools'
-import { useBlock } from '.'
+import { getPoolDayBuckets, getPoolHourBuckets, getTridentPools, PoolBucket, TridentPool } from '../fetchers/pools'
+import { GraphProps } from '../interfaces'
 
-interface useTridentPoolsProps {
-  timestamp?: number
-  block?: number
-  chainId: ChainId
-  shouldFetch?: boolean
-  subset: string[]
-}
-
-export function useTridentPools(
-  { timestamp, block, chainId, shouldFetch = true, subset }: useTridentPoolsProps,
-  swrConfig: SWRConfiguration = undefined
-): TridentPool[] {
-  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  const variables = {
-    block: block ? { number: block } : undefined,
-    where: {
-      id_in: subset?.map((id) => id?.toLowerCase()),
-    },
-  }
-
+export function useTridentPools({
+  chainId,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps): TridentPool[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['factory', chainId, JSON.stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['trident-pools', chainId, stringify(variables)] : null,
     () => getTridentPools(chainId, variables),
     swrConfig
   )
   return data
 }
 
-interface usePoolBucketProps {
-  timestamp?: number
-  block?: number
-  chainId: ChainId
-  shouldFetch?: boolean
-  fine?: boolean
-  variables?: {}
+export function usePoolHourBuckets({
+  chainId,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps): PoolBucket[] {
+  const { data } = useSWR(
+    shouldFetch && !!chainId ? ['trident-pool-hour-buckets', chainId, stringify(variables)] : null,
+    () => getPoolHourBuckets(chainId, variables),
+    swrConfig
+  )
+  return data
 }
 
-export function usePoolBuckets(
-  { timestamp, block, chainId, shouldFetch = true, fine = false, variables = {} }: usePoolBucketProps,
-  swrConfig: SWRConfiguration = undefined
-): PoolBucket[] {
-  const blockFetched = useBlock({ timestamp, chainId, shouldFetch: shouldFetch && !!timestamp })
-  block = block ?? (timestamp ? blockFetched : undefined)
-
-  const localVariables = {
-    block: block ? { number: block } : undefined,
-    ...variables,
-  }
-
+export function usePoolDayBuckets({
+  chainId,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps): PoolBucket[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['poolBuckets', chainId, JSON.stringify(localVariables), fine] : null,
-    () => getPoolBuckets(chainId, localVariables, fine),
+    shouldFetch && !!chainId ? ['trident-pool-day-buckets', chainId, stringify(variables)] : null,
+    () => getPoolDayBuckets(chainId, variables),
     swrConfig
   )
   return data

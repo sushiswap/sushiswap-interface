@@ -43,6 +43,11 @@ const Footer = () => {
             {i18n._(t`Matic Bridge`)}
           </ExternalLink>
         )}
+        {chainId && chainId === ChainId.CELO && (
+          <ExternalLink id={`celo-bridge-link`} href="https://app.optics.xyz/" className="text-low-emphesis">
+            {i18n._(t`Celo Bridge`)}
+          </ExternalLink>
+        )}
         {chainId && chainId === ChainId.HARMONY && (
           <ExternalLink
             id={`harmony-bridge-link`}
@@ -64,6 +69,21 @@ const Footer = () => {
           </ExternalLink>
         )}
 
+        {chainId && chainId === ChainId.ARBITRUM && (
+          <ExternalLink id={`arbitrum-bridge-link`} href=" https://bridge.arbitrum.io/" className="text-low-emphesis">
+            {i18n._(t`Arbitrum Bridge`)}
+          </ExternalLink>
+        )}
+
+        {chainId && chainId === ChainId.MOONRIVER && (
+          <ExternalLink
+            id={`moonriver-bridge-link`}
+            href="https://movr.anyswap.exchange/#/bridge"
+            className="text-low-emphesis"
+          >
+            {i18n._(t`Moonriver Bridge`)}
+          </ExternalLink>
+        )}
         <Polling />
       </div>
     </footer>

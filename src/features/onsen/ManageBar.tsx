@@ -12,7 +12,7 @@ import {
   MASTERCHEF_V2_ADDRESS,
   MINICHEF_ADDRESS,
   Token,
-  USDC,
+  USD,
   ZERO,
 } from '@sushiswap/core-sdk'
 import Button, { ButtonError } from 'app/components/Button'
@@ -57,7 +57,7 @@ const ManageBar = ({ farm }) => {
   const stakedAmount = useUserInfo(farm, liquidityToken)
 
   const balanceFiatValue = CurrencyAmount.fromRawAmount(
-    USDC[chainId],
+    USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiPair && balance
         ? getUSDValue(
@@ -70,13 +70,13 @@ const ManageBar = ({ farm }) => {
         : ZERO
       : JSBI.BigInt(
           ((Number(balance?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            .toFixed(USDC[chainId].decimals)
-            .toBigNumber(USDC[chainId].decimals)
+            .toFixed(USD[chainId].decimals)
+            .toBigNumber(USD[chainId].decimals)
         )
   )
 
   const stakedAmountFiatValue = CurrencyAmount.fromRawAmount(
-    USDC[chainId],
+    USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiPair && stakedAmount
         ? getUSDValue(
@@ -89,8 +89,8 @@ const ManageBar = ({ farm }) => {
         : ZERO
       : JSBI.BigInt(
           ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            .toFixed(USDC[chainId].decimals)
-            .toBigNumber(USDC[chainId].decimals)
+            .toFixed(USD[chainId].decimals)
+            .toBigNumber(USD[chainId].decimals)
         )
   )
 
@@ -105,6 +105,8 @@ const ManageBar = ({ farm }) => {
       [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
       [ChainId.HARMONY]: MINICHEF_ADDRESS[ChainId.HARMONY],
       [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
+      [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
+      [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
     },
   }
 

@@ -1,15 +1,15 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sushiswap/core-sdk'
+import { tryParseAmount } from 'app/functions/parse'
+import { useTotalSupply } from 'app/hooks/useTotalSupply'
+import { useV2Pair } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { useTokenBalances } from 'app/state/wallet/hooks'
 import { useCallback } from 'react'
 
-import { tryParseAmount } from '../../functions/parse'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useV2Pair } from '../../hooks/useV2Pairs'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { AppState } from '../index'
-import { useTokenBalances } from '../wallet/hooks'
 import { Field, typeInput } from './actions'
 
 export function useBurnState(): AppState['burn'] {

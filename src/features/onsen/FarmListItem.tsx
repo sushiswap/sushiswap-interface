@@ -1,11 +1,11 @@
 import { Disclosure } from '@headlessui/react'
+import DoubleLogo from 'app/components/DoubleLogo'
+import Image from 'app/components/Image'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { classNames, formatNumber, formatPercent } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
 import React from 'react'
 
-import DoubleLogo from '../../components/DoubleLogo'
-import Image from '../../components/Image'
-import QuestionHelper from '../../components/QuestionHelper'
-import { classNames, formatNumber, formatPercent } from '../../functions'
-import { useCurrency } from '../../hooks/Tokens'
 import { PairType } from './enum'
 import FarmListItemDetails from './FarmListItemDetails'
 
@@ -85,7 +85,7 @@ const FarmListItem = ({ farm, ...rest }) => {
                               : 'Infinite'}
                           </div>
                           <div>
-                            Fee APY:{' '}
+                            Fee APR:{' '}
                             {farm?.feeApyPerYear < 10000 ? formatPercent(farm?.feeApyPerYear * 100) : '>10,000%'}
                           </div>
                         </div>
@@ -97,7 +97,6 @@ const FarmListItem = ({ farm, ...rest }) => {
               </div>
             </div>
           </Disclosure.Button>
-
           {open && <FarmListItemDetails farm={farm} />}
         </div>
       )}

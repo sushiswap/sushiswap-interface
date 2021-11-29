@@ -1,7 +1,6 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { request } from 'graphql-request'
-import { GRAPH_HOST } from 'services/graph/constants'
-import { getTokenSubset } from 'services/graph/fetchers/exchange'
+import { GRAPH_HOST } from 'app/services/graph/constants'
+import { getTokenSubset } from 'app/services/graph/fetchers/exchange'
 import {
   masterChefV1PairAddressesQuery,
   masterChefV1SushiPerBlockQuery,
@@ -11,13 +10,16 @@ import {
   miniChefPoolsQuery,
   poolsQuery,
   poolsV2Query,
-} from 'services/graph/queries'
+} from 'app/services/graph/queries'
+import { request } from 'graphql-request'
 
 export const MINICHEF = {
   [ChainId.MATIC]: 'sushiswap/matic-minichef',
   [ChainId.XDAI]: 'matthewlilley/xdai-minichef',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
-  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-minichef',
+  [ChainId.ARBITRUM]: 'matthewlilley/arbitrum-minichef',
+  [ChainId.CELO]: 'sushiswap/celo-minichef',
+  [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
 }
 
 export const miniChef = async (query, chainId = ChainId.ETHEREUM, variables = undefined) =>

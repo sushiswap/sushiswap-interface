@@ -1,11 +1,11 @@
 import { Currency, currencyEquals, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
-import { AutoColumn } from 'components/Column'
-import CurrencyLogo from 'components/CurrencyLogo'
-import { RowBetween } from 'components/Row'
-import { currencyId } from 'functions/currency'
+import { AutoColumn } from 'app/components/Column'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import { RowBetween } from 'app/components/Row'
+import { currencyId } from 'app/functions/currency'
+import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React from 'react'
-import { useActiveWeb3React } from 'services/web3'
 
 interface RemoveLiquidityReceiveDetailsProps {
   currencyA?: Currency

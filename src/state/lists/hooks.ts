@@ -1,12 +1,12 @@
 import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
 import { TokenList } from '@uniswap/token-lists'
+import { UNSUPPORTED_LIST_URLS } from 'app/config/token-lists'
+import UNSUPPORTED_TOKEN_LIST from 'app/constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
+import { sortByListPriority } from 'app/functions/list'
+import { AppState } from 'app/state'
+import { useAppSelector } from 'app/state/hooks'
 import { useMemo } from 'react'
 
-import { UNSUPPORTED_LIST_URLS } from '../../config/token-lists'
-import UNSUPPORTED_TOKEN_LIST from '../../constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
-import { sortByListPriority } from '../../functions/list'
-import { AppState } from '..'
-import { useAppSelector } from '../hooks'
 import { WrappedTokenInfo } from './wrappedTokenInfo'
 
 export type TokenAddressMap = Readonly<{
@@ -78,6 +78,7 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     11297108109: { ...map1[11297108109], ...map2[11297108109] }, // palm
     11297108099: { ...map1[11297108099], ...map2[11297108099] }, // palm testnet
     1285: { ...map1[1285], ...map2[1285] }, // moonriver
+    122: { ...map1[122], ...map2[122] }, // fuse
     40: { ...map1[40], ...map2[40] }, // telos
   }
 }

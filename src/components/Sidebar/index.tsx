@@ -2,7 +2,14 @@ import React from 'react'
 
 import NavLink from '../../components/NavLink'
 
-const Sidebar = ({ items }) => {
+interface SidebarProps {
+  items: {
+    text: string
+    href: string
+  }[]
+}
+
+const Sidebar = ({ items }: SidebarProps) => {
   return (
     <div className="mt-4 space-y-4">
       {items.map((item, i) => (

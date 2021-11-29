@@ -42,6 +42,38 @@ const explorers = {
         return `${link}/${type}/${data}`
     }
   },
+  moonriver: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokens/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+  fuse: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/tx/${data}`
+      case 'token':
+        return `${link}/tokens/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
+  telos: (link: string, data: string, type: 'transaction' | 'token' | 'address' | 'block') => {
+    switch (type) {
+      case 'transaction':
+        return `${link}/transaction/${data}`
+      case 'token':
+        return `${link}/address/${data}`
+      case 'address':
+        return `${link}/address/${data}`
+      default:
+        return `${link}/${type}/${data}`
+    }
+  },
 }
 interface ChainObject {
   [chainId: number]: {
@@ -148,8 +180,16 @@ const chains: ChainObject = {
     builder: explorers.blockscout,
   },
   [ChainId.MOONRIVER]: {
-    link: 'https://blockscout.moonriver.moonbeam.network',
-    builder: explorers.blockscout,
+    link: 'https://moonriver.moonscan.io',
+    builder: explorers.moonriver,
+  },
+  [ChainId.FUSE]: {
+    link: 'https://explorer.fuse.io',
+    builder: explorers.fuse,
+  },
+  [ChainId.TELOS]: {
+    link: 'https://rpc1.us.telos.net/v2/explore/evm',
+    builder: explorers.telos,
   },
 }
 

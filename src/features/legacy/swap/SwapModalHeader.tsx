@@ -1,10 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Percent, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
-import CurrencyLogo from 'components/CurrencyLogo'
-import { isAddress, shortenAddress } from 'functions'
-import { warningSeverity } from 'functions'
-import { useUSDCValue } from 'hooks/useUSDCPrice'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import { isAddress, shortenAddress, warningSeverity } from 'app/functions'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import React, { useState } from 'react'
 import { AlertTriangle, ArrowDown } from 'react-feather'
 
@@ -23,7 +22,6 @@ export default function SwapModalHeader({
   recipient: string | null
   showAcceptChanges: boolean
   onAcceptChanges: () => void
-  minerBribe?: string
 }) {
   const { i18n } = useLingui()
 

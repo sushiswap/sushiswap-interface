@@ -413,9 +413,9 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center justify-between w-full">
                 <div className="whitespace-nowrap">{i18n._(t`Amount to Remove`)}</div>
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center w-full space-x-1">
                   <Input.Percent
-                    className="w-1/4 token-amount-input"
+                    className="token-amount-input"
                     value={innerLiquidityPercentage}
                     onUserInput={(val) => {
                       setInnerLiquidityPercentage(val)

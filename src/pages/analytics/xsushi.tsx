@@ -7,7 +7,7 @@ import InfoCard from 'app/features/analytics/Bar/InfoCard'
 import ColoredNumber from 'app/features/analytics/ColoredNumber'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { aprToApy } from 'app/functions/convert/apyApr'
-import { useBlock, useDayData, useFactory, useNativePrice, useTokenDayData, useTokens } from 'app/services/graph'
+import { useDayData, useFactory, useNativePrice, useOneDayBlock, useTokenDayData, useTokens } from 'app/services/graph'
 import { useBar, useBarHistory } from 'app/services/graph/hooks/bar'
 import React, { useMemo } from 'react'
 
@@ -31,22 +31,46 @@ const chartTimespans = [
 ]
 
 export default function XSushi() {
-  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.ETHEREUM })
+  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
-  const exchange1d = useFactory({ block: block1d, chainId: ChainId.ETHEREUM })
+
+  const exchange1d = useFactory({
+    chainId: ChainId.ETHEREUM,
+    variables: {
+      block: block1d,
+    },
+  })
 
   const dayData = useDayData({ chainId: ChainId.ETHEREUM })
 
   const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
-  const ethPrice1d = useNativePrice({ block: block1d, chainId: ChainId.ETHEREUM, shouldFetch: !!block1d })
 
-  const xSushi = useTokens({ chainId: ChainId.ETHEREUM, subset: [XSUSHI.address] })?.[0]
-  const xSushi1d = useTokens({ block: block1d, chainId: ChainId.ETHEREUM, subset: [XSUSHI.address] })?.[0]
-  const sushiDayData = useTokenDayData({ token: SUSHI_ADDRESS['1'], chainId: ChainId.ETHEREUM })
+  const ethPrice1d = useNativePrice({
+    chainId: ChainId.ETHEREUM,
+    variables: { block: block1d },
+    shouldFetch: !!block1d,
+  })
+
+  const xSushi = useTokens({
+    chainId: ChainId.ETHEREUM,
+    variables: { where: { id: XSUSHI.address.toLowerCase() } },
+  })?.[0]
+
+  const xSushi1d = useTokens({
+    chainId: ChainId.ETHEREUM,
+    variables: { block: block1d, where: { id: XSUSHI.address.toLowerCase() } },
+  })?.[0]
+
+  const sushiDayData = useTokenDayData({
+    chainId: ChainId.ETHEREUM,
+    variables: { where: { token: SUSHI_ADDRESS[ChainId.ETHEREUM].toLowerCase() } },
+  })
 
   const bar = useBar()
-  const bar1d = useBar({ block: block1d, shouldFetch: !!block1d })
+
+  const bar1d = useBar({ variables: { block: block1d }, shouldFetch: !!block1d })
+
   const barHistory = useBarHistory()
 
   const [xSushiPrice, xSushiMarketcap] = [

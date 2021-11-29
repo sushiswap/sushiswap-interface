@@ -19,13 +19,13 @@ import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
 import { e10 } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
+import { AppDispatch, AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import flatMap from 'lodash/flatMap'
 import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { AppDispatch, AppState } from '..'
-import { useAppDispatch, useAppSelector } from '../hooks'
 import {
   addSerializedPair,
   addSerializedToken,

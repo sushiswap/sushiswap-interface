@@ -1,26 +1,26 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { BAR_ADDRESS, ChainId, SUSHI, ZERO } from '@sushiswap/core-sdk'
-import Button from 'components/Button'
-import Container from 'components/Container'
-import Dots from 'components/Dots'
-import Input from 'components/Input'
-import { XSUSHI } from 'config/tokens'
-import { classNames } from 'functions'
-import { aprToApy } from 'functions/convert/apyApr'
-import { tryParseAmount } from 'functions/parse'
+import Button from 'app/components/Button'
+import Container from 'app/components/Container'
+import Dots from 'app/components/Dots'
+import Input from 'app/components/Input'
+import { XSUSHI } from 'app/config/tokens'
+import { classNames } from 'app/functions'
+import { aprToApy } from 'app/functions/convert/apyApr'
+import { tryParseAmount } from 'app/functions/parse'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useSushiBar from 'app/hooks/useSushiBar'
+import TransactionFailedModal from 'app/modals/TransactionFailedModal'
+import { useFactory, useNativePrice, useOneDayBlock, useTokens } from 'app/services/graph/hooks'
+import { useBar } from 'app/services/graph/hooks/bar'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useWalletModalToggle } from 'app/state/application/hooks'
+import { useTokenBalance } from 'app/state/wallet/hooks'
 import { request } from 'graphql-request'
-import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import useSushiBar from 'hooks/useSushiBar'
-import TransactionFailedModal from 'modals/TransactionFailedModal'
 import Head from 'next/head'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import { useBlock, useFactory, useNativePrice, useTokens } from 'services/graph/hooks'
-import { useBar } from 'services/graph/hooks/bar'
-import { useActiveWeb3React } from 'services/web3'
-import { useWalletModalToggle } from 'state/application/hooks'
-import { useTokenBalance } from 'state/wallet/hooks'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -133,14 +133,24 @@ export default function Stake() {
     }
   }
 
-  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.ETHEREUM })
+  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
-  const exchange1d = useFactory({ block: block1d, chainId: ChainId.ETHEREUM })
+
+  const exchange1d = useFactory({
+    chainId: ChainId.ETHEREUM,
+    variables: {
+      block: block1d,
+    },
+    shouldFetch: !!block1d,
+  })
 
   const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
 
-  const xSushi = useTokens({ chainId: ChainId.ETHEREUM, subset: [XSUSHI.address] })?.[0]
+  const xSushi = useTokens({
+    chainId: ChainId.ETHEREUM,
+    variables: { where: { id: XSUSHI.address.toLowerCase() } },
+  })?.[0]
 
   const bar = useBar()
 

@@ -27,6 +27,7 @@ const RPC = {
   [ChainId.FUSE]: 'https://rpc.fuse.io',
   [ChainId.CELO]: 'https://forno.celo.org',
   [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
+  [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
 }
 
 export default RPC

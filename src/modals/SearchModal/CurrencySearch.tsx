@@ -2,16 +2,16 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
 import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Column from 'app/components/Column'
+import ModalHeader from 'app/components/ModalHeader'
+import { filterTokens, useSortedTokensByQuery } from 'app/functions/filtering'
+import { isAddress } from 'app/functions/validate'
+import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from 'app/hooks/Tokens'
+import useDebounce from 'app/hooks/useDebounce'
+import { useOnClickOutside } from 'app/hooks/useOnClickOutside'
+import useToggle from 'app/hooks/useToggle'
 import { useActiveWeb3React } from 'app/services/web3'
-import Button from 'components/Button'
-import Column from 'components/Column'
-import ModalHeader from 'components/ModalHeader'
-import { filterTokens, useSortedTokensByQuery } from 'functions/filtering'
-import { isAddress } from 'functions/validate'
-import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from 'hooks/Tokens'
-import useDebounce from 'hooks/useDebounce'
-import { useOnClickOutside } from 'hooks/useOnClickOutside'
-import useToggle from 'hooks/useToggle'
 import { useRouter } from 'next/router'
 import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ReactGA from 'react-ga'
@@ -36,6 +36,8 @@ interface CurrencySearchProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
+  hideBalance?: boolean
+  showSearch?: boolean
 }
 
 export function CurrencySearch({
@@ -51,6 +53,8 @@ export function CurrencySearch({
   currencyList,
   includeNativeCurrency = true,
   allowManageTokenList = true,
+  hideBalance = false,
+  showSearch = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
 
@@ -108,8 +112,6 @@ export function CurrencySearch({
   }, [filteredTokens, tokenComparator])
 
   const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
-
-  // const ether = useMemo(() => chainId && ExtendedEther.onChain(chainId), [chainId])
 
   const ether = useMemo(() => chainId && ![ChainId.CELO].includes(chainId) && NATIVE[chainId], [chainId])
 
@@ -175,7 +177,7 @@ export function CurrencySearch({
   return (
     <div className="flex flex-col max-h-[inherit]">
       <ModalHeader className="h-full" onClose={onDismiss} title="Select a token" />
-      {!currencyList && (
+      {!currencyList && showSearch && (
         <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
           <input
             type="text"
@@ -214,6 +216,7 @@ export function CurrencySearch({
                 fixedListRef={fixedList}
                 showImportView={showImportView}
                 setImportToken={setImportToken}
+                hideBalance={hideBalance}
               />
             )}
           </AutoSizer>

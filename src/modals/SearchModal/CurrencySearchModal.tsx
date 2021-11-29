@@ -1,10 +1,10 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
 import { TokenList } from '@uniswap/token-lists'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import useLast from 'hooks/useLast'
-import usePrevious from 'hooks/usePrevious'
+import useLast from 'app/hooks/useLast'
+import usePrevious from 'app/hooks/usePrevious'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import React, { useCallback, useEffect, useState } from 'react'
-import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
 
 import CurrencyModalView from './CurrencyModalView'
 import { CurrencySearch } from './CurrencySearch'
@@ -22,6 +22,8 @@ interface CurrencySearchModalProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
+  hideBalance?: boolean
+  showSearch?: boolean
 }
 
 function CurrencySearchModal({
@@ -32,8 +34,10 @@ function CurrencySearchModal({
   otherSelectedCurrency,
   currencyList,
   showCommonBases = false,
+  showSearch = true,
   includeNativeCurrency = true,
   allowManageTokenList = true,
+  hideBalance = false,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
   const lastOpen = useLast(isOpen)
@@ -110,7 +114,5 @@ function CurrencySearchModal({
     </HeadlessUiModal.Controlled>
   )
 }
-
-CurrencySearchModal.whyDidYouRender = true
 
 export default CurrencySearchModal

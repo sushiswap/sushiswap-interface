@@ -40,11 +40,17 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
 })
 
-export function formatPercent(percentString: any) {
+export function formatPercent(percentString) {
   const percent = parseFloat(percentString)
-  if (!percent || percent === Infinity || percent === 0) {
+
+  if (!percent) {
+    return '-'
+  }
+
+  if (percent === Infinity || percent === 0) {
     return '0%'
   }
+
   if (percent < 0.0001 && percent > 0) {
     return '< 0.0001%'
   }

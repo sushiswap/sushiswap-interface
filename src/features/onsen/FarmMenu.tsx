@@ -7,7 +7,6 @@ import React from 'react'
 const Menu = ({ positionsLength }) => {
   const { account, chainId } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
-
   return (
     <div className="space-y-4">
       {account ? (
@@ -22,7 +21,7 @@ const Menu = ({ positionsLength }) => {
         </NavLink>
       ) : (
         <a
-          className="striped-background text-secondary flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800"
+          className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer striped-background text-secondary bg-dark-900 hover:bg-dark-800"
           onClick={toggleWalletModal}
         >
           Your Farms

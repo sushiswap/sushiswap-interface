@@ -1,7 +1,5 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { Chef } from 'features/onsen/enum'
-import concat from 'lodash/concat'
-import { useMemo } from 'react'
+import { Chef } from 'app/features/onsen/enum'
 import {
   getMasterChefV1Farms,
   getMasterChefV1PairAddreses,
@@ -11,8 +9,10 @@ import {
   getMasterChefV2PairAddreses,
   getMiniChefFarms,
   getMiniChefPairAddreses,
-} from 'services/graph/fetchers'
-import { useActiveWeb3React } from 'services/web3'
+} from 'app/services/graph/fetchers'
+import { useActiveWeb3React } from 'app/services/web3'
+import concat from 'lodash/concat'
+import { useMemo } from 'react'
 import useSWR, { SWRConfiguration } from 'swr'
 
 export function useMasterChefV1TotalAllocPoint(swrConfig = undefined) {
@@ -39,9 +39,10 @@ export function useMasterChefV1SushiPerBlock(swrConfig = undefined) {
 
 interface useFarmsProps {
   chainId: number
+  swrConfig?: SWRConfiguration
 }
 
-export function useMasterChefV1Farms({ chainId }: useFarmsProps, swrConfig = undefined) {
+export function useMasterChefV1Farms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
   const { data } = useSWR(shouldFetch ? ['masterChefV1Farms'] : null, () => getMasterChefV1Farms(undefined), swrConfig)
   return useMemo(() => {
@@ -50,7 +51,7 @@ export function useMasterChefV1Farms({ chainId }: useFarmsProps, swrConfig = und
   }, [data])
 }
 
-export function useMasterChefV2Farms({ chainId }: useFarmsProps, swrConfig: SWRConfiguration = undefined) {
+export function useMasterChefV2Farms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
   const { data } = useSWR(shouldFetch ? 'masterChefV2Farms' : null, () => getMasterChefV2Farms(), swrConfig)
   return useMemo(() => {
@@ -59,8 +60,10 @@ export function useMasterChefV2Farms({ chainId }: useFarmsProps, swrConfig: SWRC
   }, [data])
 }
 
-export function useMiniChefFarms({ chainId }: useFarmsProps, swrConfig: SWRConfiguration = undefined) {
-  const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM].includes(chainId)
+export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
+  const shouldFetch =
+    chainId &&
+    [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM, ChainId.CELO, ChainId.MOONRIVER].includes(chainId)
   const { data } = useSWR(
     shouldFetch ? ['miniChefFarms', chainId] : null,
     (_, chainId) => getMiniChefFarms(chainId),
@@ -72,13 +75,10 @@ export function useMiniChefFarms({ chainId }: useFarmsProps, swrConfig: SWRConfi
   }, [data])
 }
 
-export function useFarms({ chainId }: useFarmsProps, swrConfig: SWRConfiguration = undefined) {
+export function useFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const masterChefV1Farms = useMasterChefV1Farms({ chainId })
   const masterChefV2Farms = useMasterChefV2Farms({ chainId })
   const miniChefFarms = useMiniChefFarms({ chainId })
-  // useEffect(() => {
-  //   console.log('debug', { masterChefV1Farms, masterChefV2Farms, miniChefFarms })
-  // }, [masterChefV1Farms, masterChefV2Farms, miniChefFarms])
   return useMemo(
     () => concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms).filter((pool) => pool && pool.pair),
     [masterChefV1Farms, masterChefV2Farms, miniChefFarms]

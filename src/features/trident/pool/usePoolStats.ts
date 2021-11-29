@@ -1,22 +1,49 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { pairsQuery } from 'app/services/graph/queries'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'services/web3'
 
 import { formatNumber, formatPercent } from '../../../functions'
-import { useBlock } from '../../../services/graph'
+import { useOneDayBlock, useTwoDayBlock } from '../../../services/graph'
 import { useTridentPools } from '../../../services/graph/hooks/pools'
 
 export function usePoolStats({ pair }) {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ chainId, daysAgo: 1 })
-  const block2d = useBlock({ chainId, daysAgo: 2 })
+  const block1d = useOneDayBlock({ chainId })
+  const block2d = useTwoDayBlock({ chainId })
 
-  const pool = useTridentPools({ chainId, subset: [pair] })?.[0]
-  const pool1d = useTridentPools({ chainId, subset: [pair], block: block1d })?.[0]
-  const pool2d = useTridentPools({ chainId, subset: [pair], block: block2d })?.[0]
+  const pool = useTridentPools({
+    chainId,
+    variables: {
+      where: {
+        id: pair?.toLowerCase(),
+      },
+    },
+    shouldFetch: !!pairsQuery,
+  })?.[0]
+  const pool1d = useTridentPools({
+    chainId,
+    variables: {
+      block: block1d,
+      where: {
+        id: pair?.toLowerCase(),
+      },
+    },
+    shouldFetch: !!pair && !!block1d,
+  })?.[0]
+  const pool2d = useTridentPools({
+    chainId,
+    variables: {
+      block: block2d,
+      where: {
+        id: pair?.toLowerCase(),
+      },
+    },
+    shouldFetch: !!pair && !!block2d,
+  })?.[0]
 
   return useMemo(
     () => [
@@ -32,11 +59,11 @@ export function usePoolStats({ pair }) {
       },
       {
         label: i18n._(t`Utilization (24H)`),
-        value: formatPercent(((pool?.volumeUSD - pool1d?.volumeUSD) / pool?.totalValueLockedUSD) * 100),
+        value: formatPercent(((pool?.volumeUSD - pool1d?.volumeUSD) / pool?.liquidityUSD) * 100),
         change:
           ((pool?.volumeUSD - pool1d?.volumeUSD) /
-            pool?.totalValueLockedUSD /
-            ((pool1d?.volumeUSD - pool2d?.volumeUSD) / pool1d?.totalValueLockedUSD)) *
+            pool?.liquidityUSD /
+            ((pool1d?.volumeUSD - pool2d?.volumeUSD) / pool1d?.liquidityUSD)) *
             100 -
           100,
       },

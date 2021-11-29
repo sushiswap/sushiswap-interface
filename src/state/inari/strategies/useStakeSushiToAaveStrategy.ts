@@ -2,11 +2,11 @@ import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, SUSHI, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { AXSUSHI } from 'app/config/tokens'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AXSUSHI } from 'config/tokens'
+import { useTokenBalances } from 'app/state/wallet/hooks'
 import { useEffect, useMemo } from 'react'
 
-import { useTokenBalances } from '../../wallet/hooks'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseStrategy from './useBaseStrategy'
 
@@ -31,7 +31,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
   },
   outputToken: {
     chainId: ChainId.ETHEREUM,
-    address: '0xf256cc7847e919fac9b808cc216cac87ccf2f47a',
+    address: '0xF256CC7847E919FAc9B808cC216cAc87CCF2f47a',
     decimals: 18,
     symbol: 'aXSUSHI',
   },

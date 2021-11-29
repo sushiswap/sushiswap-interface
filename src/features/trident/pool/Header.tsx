@@ -3,7 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { aprToApy, formatPercent } from 'app/functions'
-import { useBlock } from 'app/services/graph'
+import { useOneDayBlock } from 'app/services/graph'
 import { useTridentPools } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { CurrencyLogoArray } from 'components/CurrencyLogo'
@@ -35,17 +35,34 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   // TODO: add rewards APR to fee APY
   const isFarm = false
 
-  const block1d = useBlock({ chainId, daysAgo: 1 })
+  const block1d = useOneDayBlock({ chainId })
 
-  const poolData = useTridentPools({ chainId, subset: [pool?.liquidityToken?.address] })?.[0]
-  const poolData1d = useTridentPools({ chainId, subset: [pool?.liquidityToken?.address], block: block1d })?.[0]
+  const poolData = useTridentPools({
+    chainId,
+    variables: {
+      where: {
+        id: pool?.liquidityToken?.address?.toLowerCase(),
+      },
+    },
+    shouldFetch: !!pool?.liquidityToken?.address,
+  })?.[0]
+  const poolData1d = useTridentPools({
+    chainId,
+    variables: {
+      block: block1d,
+      where: {
+        id: pool?.liquidityToken?.address?.toLowerCase(),
+      },
+    },
+    shouldFetch: !!pool?.liquidityToken?.address,
+  })?.[0]
 
   // TODO: Double-check if correct on real(-ish) data
   const feeApyPerYear = useMemo(
     () =>
       aprToApy(
         ((((poolData?.volumeUSD - poolData1d?.volumeUSD) / 100) * poolData?.swapFeePercent * 365) /
-          poolData?.totalValueLockedUSD) *
+          poolData?.liquidityUSD) *
           100,
         3650
       ) || 0,

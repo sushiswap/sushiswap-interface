@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from 'services/graph/constants'
+import { GRAPH_HOST } from 'app/services/graph/constants'
 import {
   dayDatasQuery,
   ethPriceQuery,
@@ -14,7 +14,7 @@ import {
   tokensQuery,
   tokenSubsetQuery,
   transactionsQuery,
-} from 'services/graph/queries'
+} from 'app/services/graph/queries'
 
 import { pager } from './pager'
 
@@ -25,10 +25,10 @@ export const EXCHANGE = {
   [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
-  [ChainId.OKEX]: 'sushiswap/okex-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-exchange',
-  [ChainId.CELO]: 'sushiswap/celo-exchange',
+  [ChainId.CELO]: 'jiro-ono/sushitestsubgraph',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
+  [ChainId.MOONRIVER]: 'sushiswap/moonriver-exchange',
   [ChainId.OKEX]: 'okex-exchange/oec',
   [ChainId.HECO]: 'heco-exchange/heco',
 }
@@ -176,6 +176,24 @@ export const getAvaxPrice = async (variables = undefined) => {
   return getNativePrice(ChainId.AVALANCHE, variables)
 }
 
+export const getCeloPrice = async () => {
+  return getTokenPrice(ChainId.CELO, tokenPriceQuery, {
+    id: '0x471ece3750da237f93b8e339c536989b8978a438',
+  })
+}
+
+export const getMovrPrice = async () => {
+  return getTokenPrice(ChainId.MOONRIVER, tokenPriceQuery, {
+    id: '0xf50225a84382c74cbdea10b0c176f71fc3de0c4d',
+  })
+}
+
+export const getSpellPrice = async () => {
+  return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
+    id: '0x090185f2135308bad17527004364ebcc2d37e5f6',
+  })
+}
+
 export const getBundle = async (
   chainId = ChainId.ETHEREUM,
   query = ethPriceQuery,
@@ -201,7 +219,7 @@ export const getFactory = async (chainId = ChainId.ETHEREUM, variables = undefin
   return factories[0]
 }
 
-export const getTransactions = async (chainId = ChainId.ETHEREUM, variables?: object) => {
+export const getTransactions = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { swaps } = await exchange(chainId, transactionsQuery, variables)
   return swaps
 }
