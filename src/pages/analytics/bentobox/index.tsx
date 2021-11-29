@@ -26,19 +26,21 @@ export default function BentoBox(): JSX.Element {
   const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
   const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
+  console.log({ tokens1d, tokens1w })
+
   // Creating map to easily reference TokenId -> Token
   const tokenIdToPrice = useMemo<
     Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>
   >(() => {
-    return new Map(tokens.map((token) => [token.id, token]))
+    return new Map(tokens?.map((token) => [token.id, token]))
   }, [tokens])
 
   const token1dIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
-    return new Map(tokens1d.map((token) => [token.id, token]))
+    return new Map(tokens1d?.map((token) => [token.id, token]))
   }, [tokens1d])
 
   const token1wIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
-    return new Map(tokens1w.map((token) => [token.id, token]))
+    return new Map(tokens1w?.map((token) => [token.id, token]))
   }, [tokens1w])
 
   const bentoBox = useBentoBox({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
@@ -62,7 +64,7 @@ export default function BentoBox(): JSX.Element {
 
           return {
             token: {
-              address: id,
+              id,
               symbol,
               name,
             },
