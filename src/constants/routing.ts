@@ -53,6 +53,7 @@ import {
   XDAI,
   XSUSHI,
   YFI,
+  MIM,
 } from './tokens'
 
 import * as MOONRIVER from './tokens/moonriver'
@@ -142,11 +143,28 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     NFTX,
     STETH,
     OHM,
+    MIM,
     SUSHI[ChainId.MAINNET],
   ],
   [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
-  [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
-  [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB, BSC.WETH],
+  [ChainId.FANTOM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
+    FANTOM.DAI,
+    FANTOM.USDC,
+    FANTOM.WBTC,
+    FANTOM.WETH,
+    FANTOM.MIM,
+  ],
+  [ChainId.BSC]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.BSC],
+    BSC.DAI,
+    BSC.USD,
+    BSC.USDC,
+    BSC.USDT,
+    BSC.BTCB,
+    BSC.WETH,
+    BSC.MIM,
+  ],
   [ChainId.ARBITRUM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
     ARBITRUM.WBTC,
@@ -167,6 +185,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     AVALANCHE.USDT_OLD,
     AVALANCHE.WBTC_OLD,
     AVALANCHE.WETH_OLD,
+    AVALANCHE.MIM,
     SUSHI[ChainId.AVALANCHE],
   ],
   [ChainId.HARMONY]: [
@@ -267,7 +286,7 @@ export const CUSTOM_BASES: {
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainTokenList = {
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM, SUSHI[ChainId.MAINNET]],
+  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM, SUSHI[ChainId.MAINNET], MIM],
   [ChainId.MATIC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
     MATIC.USDC,
@@ -283,6 +302,7 @@ export const COMMON_BASES: ChainTokenList = {
     FANTOM.USDC,
     FANTOM.WBTC,
     FANTOM.WETH,
+    FANTOM.MIM,
     SUSHI[ChainId.FANTOM],
   ],
   [ChainId.BSC]: [
@@ -293,6 +313,7 @@ export const COMMON_BASES: ChainTokenList = {
     BSC.USDT,
     BSC.BTCB,
     BSC.WETH,
+    BSC.MIM,
     SUSHI[ChainId.BSC],
   ],
   [ChainId.ARBITRUM]: [
@@ -319,6 +340,7 @@ export const COMMON_BASES: ChainTokenList = {
     AVALANCHE.WBTC,
     AVALANCHE.WETH,
     AVALANCHE.USDC,
+    AVALANCHE.MIM,
     SUSHI[ChainId.ARBITRUM],
   ],
   [ChainId.HARMONY]: [
@@ -382,10 +404,26 @@ export const COMMON_BASES: ChainTokenList = {
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM],
+  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM, MIM],
   [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
-  [ChainId.FANTOM]: [...WRAPPED_NATIVE_ONLY[ChainId.FANTOM], FANTOM.DAI, FANTOM.USDC, FANTOM.WBTC, FANTOM.WETH],
-  [ChainId.BSC]: [...WRAPPED_NATIVE_ONLY[ChainId.BSC], BSC.DAI, BSC.USD, BSC.USDC, BSC.USDT, BSC.BTCB, BSC.WETH],
+  [ChainId.FANTOM]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
+    FANTOM.DAI,
+    FANTOM.USDC,
+    FANTOM.WBTC,
+    FANTOM.WETH,
+    FANTOM.MIM,
+  ],
+  [ChainId.BSC]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.BSC],
+    BSC.DAI,
+    BSC.USD,
+    BSC.USDC,
+    BSC.USDT,
+    BSC.BTCB,
+    BSC.WETH,
+    BSC.MIM,
+  ],
   [ChainId.ARBITRUM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
     ARBITRUM.WBTC,
@@ -402,6 +440,7 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     AVALANCHE.WBTC,
     AVALANCHE.WETH,
     AVALANCHE.USDC,
+    AVALANCHE.MIM,
 
     AVALANCHE.DAI_OLD,
     AVALANCHE.USDT_OLD,

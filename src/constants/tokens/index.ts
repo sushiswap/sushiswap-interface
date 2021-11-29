@@ -41,6 +41,7 @@ export const BSC: { [key: string]: Token } = {
   USDT: new Token(ChainId.BSC, '0x55d398326f99059fF775485246999027B3197955', 18, 'USDT', 'Tether USD'),
   BTCB: new Token(ChainId.BSC, '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', 18, 'BTCB', 'Bitcoin'),
   WETH: new Token(ChainId.BSC, '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', 18, 'WETH', 'Wrapped Ether'),
+  MIM: new Token(ChainId.BSC, '0xfE19F0B51438fd612f6FD59C1dbB3eA319f433Ba', 18, 'MIM', 'Magic Internet Money'),
 }
 
 export const FANTOM: { [key: string]: Token } = {
@@ -48,6 +49,7 @@ export const FANTOM: { [key: string]: Token } = {
   WBTC: new Token(ChainId.FANTOM, '0x321162Cd933E2Be498Cd2267a90534A804051b11', 8, 'WBTC', 'Wrapped Bitcoin'),
   DAI: new Token(ChainId.FANTOM, '0x8D11eC38a3EB5E956B052f67Da8Bdc9bef8Abf3E', 18, 'DAI', 'Dai Stablecoin'),
   WETH: new Token(ChainId.FANTOM, '0x74b23882a30290451A17c44f4F05243b6b58C76d', 18, 'WETH', 'Wrapped Ether'),
+  MIM: new Token(ChainId.FANTOM, '0x82f0B8B456c1A451378467398982d4834b6829c1', 18, 'MIM', 'Magic Internet Money'),
 }
 
 export const MATIC: { [key: string]: Token } = {
@@ -133,6 +135,7 @@ export const AVALANCHE: { [key: string]: Token } = {
   USDT: new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT', 'Tether USD'),
   WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC', 'Wrapped Bitcoin'),
   WETH: new Token(ChainId.AVALANCHE, '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB', 18, 'WETH', 'Wrapped Ether'),
+  MIM: new Token(ChainId.AVALANCHE, '0x130966628846BFd36ff31a822705796e8cb8C18D', 18, 'MIM', 'Magic Internet Money'),
 }
 
 // Default Ethereum chain tokens
@@ -270,6 +273,14 @@ export const DOLA = new Token(
   18,
   'Dola USD Stablecoin',
   'DOLA'
+)
+
+export const MIM = new Token(
+  ChainId.MAINNET,
+  '0x99D8a9C45b2ecA8864373A26D1459e3Dff1e17F3',
+  18,
+  'MIM',
+  'Magic Internet Money'
 )
 
 type ChainTokenMap = {
