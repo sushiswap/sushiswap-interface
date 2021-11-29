@@ -58,15 +58,22 @@ const HeadlessUiModal: HeadlessUiModalType<Props> = ({ children: childrenProp, t
 interface ControlledModalProps {
   isOpen: boolean
   onDismiss: () => void
+  afterLeave?: () => void
   children?: React.ReactNode
   className?: string
 }
 
-const HeadlessUiModalControlled: FC<ControlledModalProps> = ({ className, isOpen, onDismiss, children }) => {
+const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
+  className,
+  isOpen,
+  onDismiss,
+  afterLeave,
+  children,
+}) => {
   const isDesktop = useDesktopMediaQuery()
 
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave}>
       <Dialog
         as="div"
         className={classNames('fixed z-10 inset-0 overflow-y-auto', isDesktop ? '' : 'bg-dark-900', className)}

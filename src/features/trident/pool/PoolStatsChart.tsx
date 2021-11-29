@@ -1,11 +1,10 @@
-import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Tabs from 'app/components/Tabs'
 import { usePoolDayBuckets, usePoolHourBuckets } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { BarGraph } from 'components/BarGraph'
 import Button from 'components/Button'
 import LineGraph from 'components/LineGraph'
-import ToggleButtonGroup from 'components/ToggleButton'
 import Typography from 'components/Typography'
 import { formatDate } from 'functions'
 import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
@@ -70,7 +69,7 @@ const PoolStatsChart = () => {
         if (Math.round(x / 1000) >= currentDate - chartTimespans[chartRange]) {
           acc.push({
             x,
-            y: Number(chartType === ChartType.Volume ? cur.volumeUSD : cur.totalValueLockedUSD),
+            y: Number(chartType === ChartType.Volume ? cur.volumeUSD : cur.liquidityUSD),
           })
         }
 
@@ -92,8 +91,8 @@ const PoolStatsChart = () => {
           color={text === chartRange ? 'blue' : 'gray'}
           className={
             text === chartRange
-              ? 'w-10 py-1 text-sm bg-blue-400 border-blue border rounded-full'
-              : 'w-10 py-1 text-sm text-secondary'
+              ? 'min-w-12 px-2 py-1 text-sm bg-blue-400 border-1 border-blue/50 border rounded-full font-bold hover:text-blue'
+              : 'min-w-12 px-2 py-1 text-sm text-secondary font-bold hover:text-blue'
           }
         >
           {text}
@@ -103,18 +102,12 @@ const PoolStatsChart = () => {
   )
 
   return (
-    <div className="flex flex-col gap-5 h-[280px]">
-      <div className="flex flex-col lg:order-0 lg:justify-between lg:items-center lg:flex-row">
-        <ToggleButtonGroup value={chartType} onChange={setChartType}>
-          <ToggleButtonGroup.Button value={ChartType.Volume} className="h-12 w-full lg:h-10 lg:w-[106px]">
-            {i18n._(t`Volume`)}
-          </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value={ChartType.TVL} className="h-12 w-full lg:h-10 lg:w-[106px]">
-            {i18n._(t`TVL`)}
-          </ToggleButtonGroup.Button>
-        </ToggleButtonGroup>
-        <div className="hidden lg:block">{chartButtons}</div>
+    <div className="flex flex-col h-[280px]">
+      <div className="flex flex-col lg:order-0 lg:justify-between lg:items-end lg:flex-row">
+        <Tabs tabs={[ChartType.Volume, ChartType.TVL]} currentTab={chartType} setTab={setChartType} />
+        <div className="hidden mb-2 lg:block">{chartButtons}</div>
       </div>
+      <div className="w-full h-px bg-gray-700" />
       {graphData && graphData.length > 0 && (
         <div className="w-full h-40 lg:order-2">
           <Typography variant="h3" className="text-high-emphesis" weight={700}>

@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { pairsQuery } from 'app/services/graph/queries'
 import { useMemo } from 'react'
 import { useActiveWeb3React } from 'services/web3'
 
@@ -21,7 +22,7 @@ export function usePoolStats({ pair }) {
         id: pair?.toLowerCase(),
       },
     },
-    shouldFetch: !!pair,
+    shouldFetch: !!pairsQuery,
   })?.[0]
   const pool1d = useTridentPools({
     chainId,
@@ -31,7 +32,7 @@ export function usePoolStats({ pair }) {
         id: pair?.toLowerCase(),
       },
     },
-    shouldFetch: !!pair,
+    shouldFetch: !!pair && !!block1d,
   })?.[0]
   const pool2d = useTridentPools({
     chainId,
@@ -41,7 +42,7 @@ export function usePoolStats({ pair }) {
         id: pair?.toLowerCase(),
       },
     },
-    shouldFetch: !!pair,
+    shouldFetch: !!pair && !!block2d,
   })?.[0]
 
   return useMemo(
@@ -58,11 +59,11 @@ export function usePoolStats({ pair }) {
       },
       {
         label: i18n._(t`Utilization (24H)`),
-        value: formatPercent(((pool?.volumeUSD - pool1d?.volumeUSD) / pool?.totalValueLockedUSD) * 100),
+        value: formatPercent(((pool?.volumeUSD - pool1d?.volumeUSD) / pool?.liquidityUSD) * 100),
         change:
           ((pool?.volumeUSD - pool1d?.volumeUSD) /
-            pool?.totalValueLockedUSD /
-            ((pool1d?.volumeUSD - pool2d?.volumeUSD) / pool1d?.totalValueLockedUSD)) *
+            pool?.liquidityUSD /
+            ((pool1d?.volumeUSD - pool2d?.volumeUSD) / pool1d?.liquidityUSD)) *
             100 -
           100,
       },
