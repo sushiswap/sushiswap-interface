@@ -11,7 +11,7 @@ import { useBentoBalances } from 'app/state/bentobox/hooks'
 import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { useTableConfig } from './useTableConfig'
 
@@ -32,9 +32,9 @@ export const BentoBalances = () => {
   const balances = useMemo(
     () =>
       chainId
-        ? bentoBalances.reduce<Assets[]>((acc, { address, decimals, name, symbol, balance }) => {
+        ? bentoBalances.reduce<Assets[]>((acc, { address, decimals, name, symbol, bentoBalance }) => {
             const token = new Token(chainId, address, decimals, symbol, name)
-            const cur = CurrencyAmount.fromRawAmount(token, balance)
+            const cur = CurrencyAmount.fromRawAmount(token, bentoBalance)
             if (cur.greaterThan(ZERO)) acc.push({ asset: cur })
 
             return acc
@@ -42,6 +42,7 @@ export const BentoBalances = () => {
         : [],
     [bentoBalances, chainId]
   )
+
   const { config } = useTableConfig(balances)
 
   return <_AssetBalances config={config} />
@@ -69,7 +70,7 @@ export const WalletBalances = () => {
 }
 
 const _AssetBalances = ({ config }) => {
-  const setSelected = useSetRecoilState(SelectedCurrencyAtom)
+  const [selected, setSelected] = useRecoilState(SelectedCurrencyAtom)
   const setActiveModal = useSetRecoilState(ActiveModalAtom)
 
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page }: TableInstance = useTable(
@@ -89,10 +90,10 @@ const _AssetBalances = ({ config }) => {
 
   return (
     <>
-      <table {...getTableProps()} className="w-full">
-        <thead>
+      <div {...getTableProps()} className="w-full">
+        <div>
           {headerGroups.map((headerGroup, i) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={i}>
+            <tr {...headerGroup.getHeaderGroupProps()} key={i} className="lg:pl-[18px] lg:pr-[18px] lg:mb-3">
               {headerGroup.headers.map((column, i) => (
                 <th
                   key={i}
@@ -115,8 +116,8 @@ const _AssetBalances = ({ config }) => {
               ))}
             </tr>
           ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
+        </div>
+        <div {...getTableBodyProps()} className="lg:border lg:border-dark-700 lg:rounded lg:overflow-hidden">
           {page.map((row, i) => {
             prepareRow(row)
             return (
@@ -124,7 +125,12 @@ const _AssetBalances = ({ config }) => {
                 {...row.getRowProps()}
                 key={i}
                 onClick={() => handleRowClick(row.values.asset.currency)}
-                className="cursor-pointer"
+                className={classNames(
+                  i % 2 === 0 ? 'lg:bg-[rgb(255,255,255,0.03)]' : '',
+                  row.values.asset.currency === selected ? 'lg:!bg-dark-800' : '',
+                  i < page.length - 1 ? 'border-b lg:border-dark-700 border-dark-900' : '',
+                  'lg:hover:bg-dark-900 lg:pl-3.5 lg:pr-5 cursor-pointer'
+                )}
               >
                 {row.cells.map((cell, i) => {
                   return (
@@ -136,8 +142,8 @@ const _AssetBalances = ({ config }) => {
               </tr>
             )
           })}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </>
   )
 }

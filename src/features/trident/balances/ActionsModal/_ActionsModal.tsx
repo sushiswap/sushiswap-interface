@@ -4,12 +4,16 @@ import BottomSlideIn from 'app/components/Dialog/BottomSlideIn'
 import Typography from 'app/components/Typography'
 import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
 import { ActiveModal } from 'app/features/trident/balances/context/types'
+import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import React, { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 
 const _ActionsModal: FC = ({ children }) => {
+  const isDesktop = useDesktopMediaQuery()
   const currency = useRecoilValue(SelectedCurrencyAtom)
   const [activeModal, setActiveModal] = useRecoilState(ActiveModalAtom)
+
+  if (isDesktop) return <></>
 
   return (
     <BottomSlideIn open={activeModal === ActiveModal.MENU} onClose={() => setActiveModal(undefined)}>

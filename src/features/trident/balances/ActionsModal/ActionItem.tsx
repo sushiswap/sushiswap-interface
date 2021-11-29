@@ -4,7 +4,7 @@ import React, { FC, ReactNode } from 'react'
 const ActionItem: FC<{ svg: ReactNode; label: string; onClick?(): void }> = ({ svg, onClick, label }) => {
   return (
     <div
-      className="border border-dark-700 bg-dark-900 hover:bg-dark-800 rounded p-3 w-full cursor-pointer"
+      className="border border-dark-700 bg-dark-900 hover:bg-dark-800 rounded px-3 py-2.5 w-full cursor-pointer"
       onClick={onClick}
     >
       <div className="flex gap-3 items-center">
