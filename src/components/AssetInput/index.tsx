@@ -94,7 +94,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
     <AssetInputContext.Provider value={useMemo(() => (error ? error : false), [error])}>
       <div className="mt-4 lg:mt-0 flex flex-col gap-4">
         <div className="px-2 flex justify-between">
-          {header}
+          {props.title !== '' && header}
           {!isDesktop && props.headerRight && props.headerRight}
         </div>
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
@@ -139,6 +139,7 @@ const AssetInputPanel = ({
   disabled,
   showMax = true,
   currencies = [],
+  headerRight,
 }: AssetInputPanelProps) => {
   const error = useAssetInputContextError()
   const isDesktop = useDesktopMediaQuery()
@@ -241,7 +242,8 @@ const AssetInputPanel = ({
       className={classNames(
         'border',
         error ? 'border-red border-opacity-40' : 'border-dark-700',
-        'flex-1 rounded lg:rounded-l lg:rounded-r-[0px] bg-dark-900 flex flex-col overflow-hidden'
+        headerRight ? 'lg:rounded-l lg:rounded-r-[0px]' : 'lg:rounded',
+        'flex-1 rounded bg-dark-900 flex flex-col overflow-hidden'
       )}
     >
       {/*This acts as a reference to get input width*/}
