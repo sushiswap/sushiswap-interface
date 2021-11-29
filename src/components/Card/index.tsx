@@ -8,11 +8,16 @@ function Header({ className, children }) {
   )
 }
 
-const Gradient: FC = ({ children }) => {
+const Gradient: FC<{ className?: string }> = ({ children, className }) => {
   return (
     <div className="relative">
-      <div className="rounded pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-40" />
-      <div className="flex flex-col p-4 gap-4 rounded bg-opacity-90">{children}</div>
+      <div
+        className={classNames(
+          'rounded pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-40',
+          className
+        )}
+      />
+      {children}
     </div>
   )
 }
