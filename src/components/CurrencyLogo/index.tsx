@@ -19,16 +19,22 @@ export const getTokenLogoURL = (address: string, chainId: ChainId) => {
 }
 
 const BLOCKCHAIN = {
+  [ChainId.ARBITRUM]: 'arbitrum',
+  [ChainId.AVALANCHE]: 'avalanche',
   [ChainId.MAINNET]: 'ethereum',
   [ChainId.BSC]: 'binanace',
   [ChainId.CELO]: 'celo',
   [ChainId.FANTOM]: 'fantom',
+  [ChainId.AVALANCHE_TESTNET]: 'fuji',
+  [ChainId.FUSE]: 'fuse',
   [ChainId.HARMONY]: 'harmony',
-  [ChainId.MATIC]: 'polygon',
-  [ChainId.XDAI]: 'xdai',
-  // [ChainId.OKEX]: 'okex',
+  [ChainId.HECO]: 'heco',
+  [ChainId.MATIC]: 'matic',
   [ChainId.MOONRIVER]: 'moonriver',
+  [ChainId.OKEX]: 'okex',
+  [ChainId.PALM]: 'palm',
   [ChainId.TELOS]: 'telos',
+  [ChainId.XDAI]: 'xdai',
 }
 
 function getCurrencySymbol(currency) {
