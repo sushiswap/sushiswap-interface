@@ -48,7 +48,7 @@ const chartTimespans = [
 
 export default function Token() {
   const router = useRouter()
-  const id = (router.query.id as string).toLowerCase()
+  const id = (router.query.id as string)?.toLowerCase()
 
   const { chainId } = useActiveWeb3React()
 
@@ -64,38 +64,33 @@ export default function Token() {
     fetch()
   }, [tokenContract])
 
-  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
-  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
+  const block1d = useOneDayBlock({ chainId })
+  const block2d = useTwoDayBlock({ chainId })
+  const block1w = useOneWeekBlock({ chainId })
 
   // General data (volume, liquidity)
-  const nativePrice = useNativePrice({ chainId, shouldFetch: !!chainId })
+  const nativePrice = useNativePrice({ chainId })
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
 
-  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d && !!chainId })
-
-  const token = useTokens({ chainId, variables: { where: { id } }, shouldFetch: !!id && !!chainId })?.[0]
-
+  const token = useTokens({ chainId, variables: { where: { id } }, shouldFetch: !!id })?.[0]
   const token1d = useTokens({
     chainId,
     variables: { block: block1d, where: { id } },
-    shouldFetch: !!id && !!block1d && !!chainId,
+    shouldFetch: !!id && !!block1d,
   })?.[0]
-
   const token2d = useTokens({
     chainId,
     variables: { block: block2d, where: { id } },
-    shouldFetch: !!id && !!block2d && !!chainId,
+    shouldFetch: !!id && !!block2d,
   })?.[0]
 
   // Token Pairs
   const tokenPairs = useTokenPairs({ chainId, variables: { id } })
-
   const tokenPairs1d = useTokenPairs({
     chainId,
     variables: { id, block: block1d },
-    shouldFetch: !!id && !!block1d && !!chainId,
+    shouldFetch: !!id && !!block1d,
   })
-
   const tokenPairs1w = useTokenPairs({
     chainId,
     variables: { id, block: block1w },
@@ -112,7 +107,7 @@ export default function Token() {
           pair: {
             token0: pair.token0,
             token1: pair.token1,
-            address: pair.id,
+            id: pair.id,
           },
           liquidity: pair.reserveUSD,
           volume1d: pair.volumeUSD - pair1d.volumeUSD,

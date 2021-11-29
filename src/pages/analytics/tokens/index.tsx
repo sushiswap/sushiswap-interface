@@ -1,69 +1,23 @@
 import Search from 'app/components/Search'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
+import useTokensAnalytics from 'app/features/analytics/hooks/useTokensAnalytics'
 import TokenList from 'app/features/analytics/Tokens/TokenList'
 import useFuse from 'app/hooks/useFuse'
-import { useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from 'app/services/graph'
-import { useActiveWeb3React } from 'app/services/web3'
-import { useMemo } from 'react'
 
 export default function Tokens() {
-  const { chainId } = useActiveWeb3React()
-
-  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
-
-  const nativePrice = useNativePrice({ chainId, shouldFetch: !!chainId })
-
-  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!chainId && !!block1d })
-
-  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w }, shouldFetch: !!chainId && !!block1w })
-
-  const tokens = useTokens({ chainId, shouldFetch: !!chainId })
-
-  const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!chainId && !!block1d })
-
-  const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!chainId && !!block1w })
-
-  const tokensFormatted = useMemo(
-    () =>
-      tokens?.map((token) => {
-        const token1d = tokens1d?.find((p) => token.id === p.id) ?? token
-        const token1w = tokens1w?.find((p) => token.id === p.id) ?? token
-
-        return {
-          token: {
-            address: token.id,
-            symbol: token.symbol,
-            name: token.name,
-          },
-          liquidity: token.liquidity * token.derivedETH * nativePrice,
-          volume1d: token.volumeUSD - token1d.volumeUSD,
-          volume1w: token.volumeUSD - token1w.volumeUSD,
-          price: token.derivedETH * nativePrice,
-          change1d: ((token.derivedETH * nativePrice) / (token1d.derivedETH * nativePrice1d)) * 100 - 100,
-          change1w: ((token.derivedETH * nativePrice) / (token1w.derivedETH * nativePrice1w)) * 100 - 100,
-          graph: token.dayData
-            .slice(0)
-            .reverse()
-            .map((day, i) => ({ x: i, y: Number(day.priceUSD) })),
-        }
-      }),
-    [tokens, tokens1d, tokens1w, nativePrice, nativePrice1d, nativePrice1w]
-  )
-
-  const options = {
-    keys: ['token.address', 'token.symbol', 'token.name'],
-    threshold: 0.4,
-  }
+  const tokens = useTokensAnalytics()
 
   const {
     result: tokensSearched,
     term,
     search,
   } = useFuse({
-    data: tokensFormatted,
-    options,
+    data: tokens,
+    options: {
+      keys: ['token.id', 'token.symbol', 'token.name'],
+      threshold: 0.4,
+    },
   })
 
   return (

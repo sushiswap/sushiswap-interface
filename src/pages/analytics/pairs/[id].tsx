@@ -47,17 +47,14 @@ export default function Pair() {
   const [isCopied, setCopied] = useCopyClipboard()
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
-
   const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
   const pair = useSushiPairs({ chainId, variables: { where: { id } }, shouldFetch: !!chainId })?.[0]
-
   const pair1d = useSushiPairs({
     chainId,
     variables: { block: block1d, where: { id } },
     shouldFetch: !!chainId && !!block1d,
   })?.[0]
-
   const pair2d = useSushiPairs({
     chainId,
     variables: { block: block2d, where: { id } },
@@ -233,11 +230,7 @@ export default function Pair() {
                 <tr>
                   <td>
                     <div className="flex items-center justify-center w-11/12 space-x-1">
-                      <Link href={`/analytics/tokens/${pair?.id}`} passHref>
-                        <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap">
-                          {pair?.id}
-                        </div>
-                      </Link>
+                      <div className="overflow-hidden overflow-ellipsis whitespace-nowrap">{pair?.id}</div>
                       <a href={getExplorerLink(chainId, pair?.id, 'token')} target="_blank" rel="noreferrer">
                         <LinkIcon size={16} />
                       </a>

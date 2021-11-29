@@ -11,7 +11,7 @@ type TokenListColumnType = 'name' | 'price' | 'liquidity' | 'priceChange' | 'vol
 
 interface Token {
   token: {
-    address: string
+    id: string
     symbol: string
   }
   liquidity: number
@@ -29,13 +29,13 @@ interface TokenListProps {
 
 interface TokenListNameProps {
   token: {
-    address: string
+    id: string
     symbol: string
   }
 }
 
 function TokenListName({ token }: TokenListNameProps): JSX.Element {
-  const currency = useCurrency(token.address)
+  const currency = useCurrency(token.id)
 
   return (
     <>
@@ -60,7 +60,7 @@ export default function TokenList({
           columns={columns}
           data={tokens}
           defaultSortBy={{ id: 'liquidity', desc: true }}
-          link={{ href: '/analytics/tokens/', id: 'token.address' }}
+          link={{ href: '/analytics/tokens/', id: 'token.id' }}
         />
       )}
     </>

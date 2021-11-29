@@ -34,7 +34,7 @@ export default function Pairs() {
             pair: {
               token0: pair.token0,
               token1: pair.token1,
-              address: pair.id,
+              id: pair.id,
             },
             liquidity: pair.reserveUSD,
             volume1d: pair.volumeUSD - pair1d.volumeUSD,
@@ -52,7 +52,7 @@ export default function Pairs() {
               pair: {
                 token0: pair.token0,
                 token1: pair.token1,
-                address: pair.id,
+                id: pair.id,
               },
               liquidityChangeNumber1d: pair.reserveUSD - pair1d.reserveUSD,
               liquidityChangePercent1d: (pair.reserveUSD / pair1d.reserveUSD) * 100 - 100,
