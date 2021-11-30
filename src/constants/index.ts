@@ -1,9 +1,6 @@
 import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
 
-export const POOL_DENY = ['14', '29', '45', '30']
-
-// Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
-export const AVERAGE_BLOCK_TIME_IN_SECS = 13
+// TODO: Move some of this to config level...
 
 // TODO: update weekly with new constant
 export const WEEKLY_MERKLE_ROOT =
@@ -33,6 +30,7 @@ export const NetworkContextName = 'NETWORK'
 
 // default allowed slippage, in bips
 export const INITIAL_ALLOWED_SLIPPAGE = 50
+
 // 30 minutes, denominated in seconds
 export const DEFAULT_DEADLINE_FROM_NOW = 60 * 30
 
@@ -62,15 +60,8 @@ export const MIN_ETH: JSBI = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(16))
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(JSBI.BigInt(50), JSBI.BigInt(10000))
 
 export const ZERO_PERCENT = new Percent('0')
-export const ONE_HUNDRED_PERCENT = new Percent('1')
 
-// SDN OFAC addresses
-export const BLOCKED_ADDRESSES: string[] = [
-  '0x7F367cC41522cE07553e823bf3be79A889DEbe1B',
-  '0xd882cFc20F52f2599D84b8e8D58C7FB62cfE344b',
-  '0x901bb9583b24D97e995513C6778dc6888AB6870e',
-  '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
-]
+export const ONE_HUNDRED_PERCENT = new Percent('1')
 
 export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
   [ChainId.ETHEREUM]: 'https://analytics.sushi.com',
