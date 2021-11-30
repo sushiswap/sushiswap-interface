@@ -17,7 +17,6 @@ import { useBar } from 'app/services/graph/hooks/bar'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
-import { request } from 'graphql-request'
 import Head from 'next/head'
 import Image from 'next/image'
 import React, { useState } from 'react'
@@ -48,8 +47,6 @@ const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r f
 const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
 const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
-
-const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
 
 export default function Stake() {
   const { i18n } = useLingui()
