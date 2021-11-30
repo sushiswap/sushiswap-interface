@@ -3,16 +3,16 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, JSBI, Pair, Percent, Token } from '@sushiswap/core-sdk'
+import { BIG_INT_ZERO } from 'app/constants'
+import { classNames } from 'app/functions'
+import { currencyId, unwrappedToken } from 'app/functions/currency'
+import { useColor } from 'app/hooks/useColor'
+import { useTotalSupply } from 'app/hooks/useTotalSupply'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useTokenBalance } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
-import { BIG_INT_ZERO } from '../../constants'
-import { classNames } from '../../functions'
-import { currencyId, unwrappedToken } from '../../functions/currency'
-import { useColor } from '../../hooks'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useTokenBalance } from '../../state/wallet/hooks'
 import Button from '../Button'
 import { AutoColumn } from '../Column'
 import CurrencyLogo from '../CurrencyLogo'
@@ -193,12 +193,12 @@ export default function FullPositionCard({ pair, border, stakedBalance }: Positi
               <div>{i18n._(t`Your total pool tokens`)}:</div>
               <div className="font-semibold">{userPoolBalance ? userPoolBalance.toSignificant(4) : '-'}</div>
             </div>
-            {stakedBalance && (
+            {/* {stakedBalance && (
               <div className="flex items-center justify-between">
                 <div>{i18n._(t`Pool tokens in rewards pool`)}:</div>
                 <div className="font-semibold">{stakedBalance.toSignificant(4)}</div>
               </div>
-            )}
+            )} */}
             <div className="flex items-center justify-between">
               <div>{i18n._(t`Pooled ${currency0?.symbol}`)}:</div>
               {token0Deposited ? (

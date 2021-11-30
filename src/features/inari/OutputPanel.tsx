@@ -1,7 +1,6 @@
+import Typography from 'app/components/Typography'
+import CurrencyInputPanel from 'app/features/legacy/limit-order/CurrencyInputPanel'
 import React, { FC } from 'react'
-
-import Typography from '../../components/Typography'
-import CurrencyInputPanel from '../legacy/limit-order/CurrencyInputPanel'
 
 interface OutputPanelProps {
   label: string

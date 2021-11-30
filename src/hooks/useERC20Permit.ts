@@ -10,10 +10,10 @@ import {
   Trade as V2Trade,
   TradeType,
 } from '@sushiswap/core-sdk'
+import { DAI, USDC } from 'app/config/tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
-import { DAI, USDC } from '../config/tokens'
 import { useSingleCallResult } from '../state/multicall/hooks'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'

@@ -1,21 +1,21 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import CurrencyLogo from 'components/CurrencyLogo'
-import Image from 'components/Image'
-import Loader from 'components/Loader'
-import QuestionHelper from 'components/QuestionHelper'
-import { RowBetween, RowFixed } from 'components/Row'
-import { MouseoverTooltip } from 'components/Tooltip'
-import Typography from 'components/Typography'
-import { isTokenOnList } from 'functions/validate'
-import { useIsUserAddedToken } from 'hooks/Tokens'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import Image from 'app/components/Image'
+import Loader from 'app/components/Loader'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { RowBetween, RowFixed } from 'app/components/Row'
+import { MouseoverTooltip } from 'app/components/Tooltip'
+import Typography from 'app/components/Typography'
+import { isTokenOnList } from 'app/functions/validate'
+import { useIsUserAddedToken } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useCombinedActiveList } from 'app/state/lists/hooks'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
+import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
-import { useActiveWeb3React } from 'services/web3'
-import { useCombinedActiveList } from 'state/lists/hooks'
-import { WrappedTokenInfo } from 'state/lists/wrappedTokenInfo'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 
 import ImportRow from './ImportRow'
 
@@ -76,11 +76,13 @@ function CurrencyRow({
   isSelected,
   otherSelected,
   style,
+  hideBalance = false,
 }: {
   currency: Currency
   onSelect: () => void
   isSelected: boolean
   otherSelected: boolean
+  hideBalance: boolean
   style: CSSProperties
 }) {
   const { account, chainId } = useActiveWeb3React()
@@ -89,7 +91,6 @@ function CurrencyRow({
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency.isToken ? currency : undefined)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
-
   // only show add or remove buttons if not on selected list
   return (
     <RowBetween
@@ -157,6 +158,7 @@ export default function CurrencyList({
   fixedListRef,
   showImportView,
   setImportToken,
+  hideBalance = false,
 }: {
   height: number
   currencies: Currency[]
@@ -167,6 +169,7 @@ export default function CurrencyList({
   fixedListRef?: MutableRefObject<FixedSizeList | undefined>
   showImportView: () => void
   setImportToken: (token: Token) => void
+  hideBalance: boolean
 }) {
   const itemData: (Currency | BreakLine)[] = useMemo(() => {
     if (otherListTokens && otherListTokens?.length > 0) {
@@ -205,13 +208,14 @@ export default function CurrencyList({
             isSelected={isSelected}
             onSelect={handleSelect}
             otherSelected={otherSelected}
+            hideBalance={hideBalance}
           />
         )
       } else {
         return null
       }
     },
-    [currencies.length, onCurrencySelect, otherCurrency, selectedCurrency, setImportToken, showImportView]
+    [currencies.length, hideBalance, onCurrencySelect, otherCurrency, selectedCurrency, setImportToken, showImportView]
   )
 
   const itemKey = useCallback((index: number, data: typeof itemData) => {

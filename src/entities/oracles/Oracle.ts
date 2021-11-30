@@ -1,20 +1,16 @@
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 
 export abstract class Oracle {
+  chainId = ChainId.ETHEREUM
   address = ''
-  name = 'None'
   data = ''
+  name = ''
   warning = ''
   error = ''
-  chainId = ChainId.ETHEREUM
-  pair: any
-  tokens: Token[]
-  valid = false
-  constructor(pair, chainId, tokens?: Token[]) {
-    this.address = pair.oracle
-    this.data = pair.oracleData
-    this.pair = pair
+  constructor(chainId, address, name, data) {
     this.chainId = chainId
-    this.tokens = tokens
+    this.address = address
+    this.data = data
+    this.name = name
   }
 }

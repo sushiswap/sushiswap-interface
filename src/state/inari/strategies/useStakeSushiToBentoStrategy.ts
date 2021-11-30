@@ -2,13 +2,13 @@ import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, SUSHI, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { XSUSHI } from 'app/config/tokens'
+import { tryParseAmount } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import { XSUSHI } from 'config/tokens'
-import { tryParseAmount } from 'functions'
+import { useBentoBalance } from 'app/state/bentobox/hooks'
+import { useTokenBalances } from 'app/state/wallet/hooks'
 import { useEffect, useMemo } from 'react'
 
-import { useBentoBalance } from '../../bentobox/hooks'
-import { useTokenBalances } from '../../wallet/hooks'
 import useBentoBoxTrait from '../traits/useBentoBoxTrait'
 import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
 import useBaseStrategy from './useBaseStrategy'
@@ -61,7 +61,7 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
-      inputTokenBalance: balances[SUSHI[ChainId.ETHEREUM].address],
+      inputTokenBalance: balances[SUSHI_ADDRESS[ChainId.ETHEREUM]],
       outputTokenBalance: tryParseAmount(xSushiBentoBalance?.value?.toFixed(18) || '0', XSUSHI),
     })
   }, [balances, setBalances, xSushiBentoBalance?.value])

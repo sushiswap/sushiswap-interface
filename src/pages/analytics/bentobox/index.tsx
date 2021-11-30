@@ -1,43 +1,49 @@
 import Search from 'app/components/Search'
+import { Feature } from 'app/enums'
 import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import Background from 'app/features/analytics/Background'
 import InfoCard from 'app/features/analytics/Bar/InfoCard'
 import TokenList from 'app/features/analytics/Tokens/TokenList'
+import { featureEnabled } from 'app/functions/feature'
 import { formatNumber } from 'app/functions/format'
 import useFuse from 'app/hooks/useFuse'
-import { useBentoBox, useBlock, useNativePrice, useTokens } from 'app/services/graph'
+import { useBentoBox, useNativePrice, useOneDayBlock, useOneWeekBlock, useTokens } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
 export default function BentoBox(): JSX.Element {
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ block: block1d, chainId })
-  const nativePrice1w = useNativePrice({ block: block1w, chainId })
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   // Get exchange data
   const tokens = useTokens({ chainId })
-  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d, chainId })
-  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w, chainId })
+  const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
+
+  console.log({ tokens1d, tokens1w })
 
   // Creating map to easily reference TokenId -> Token
   const tokenIdToPrice = useMemo<
     Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>
   >(() => {
-    return new Map(tokens.map((token) => [token.id, token]))
+    return new Map(tokens?.map((token) => [token.id, token]))
   }, [tokens])
+
   const token1dIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
-    return new Map(tokens1d.map((token) => [token.id, token]))
+    return new Map(tokens1d?.map((token) => [token.id, token]))
   }, [tokens1d])
+
   const token1wIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
-    return new Map(tokens1w.map((token) => [token.id, token]))
+    return new Map(tokens1w?.map((token) => [token.id, token]))
   }, [tokens1w])
 
-  const bentoBox = useBentoBox({ chainId })
+  const bentoBox = useBentoBox({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
 
   // Combine Bento Box Tokens with Token data from exchange
   const bentoBoxTokensFormatted = useMemo<Array<any>>(
@@ -58,7 +64,7 @@ export default function BentoBox(): JSX.Element {
 
           return {
             token: {
-              address: id,
+              id,
               symbol,
               name,
             },

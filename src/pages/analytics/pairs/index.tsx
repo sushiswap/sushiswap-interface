@@ -4,7 +4,7 @@ import Background from 'app/features/analytics/Background'
 import PairList from 'app/features/analytics/Pairs/PairList'
 import PairTabs from 'app/features/analytics/Pairs/PairTabs'
 import useFuse from 'app/hooks/useFuse'
-import { useBlock, useSushiPairs } from 'app/services/graph'
+import { useOneDayBlock, useOneWeekBlock, useSushiPairs, useTwoDayBlock, useTwoWeekBlock } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
@@ -13,16 +13,16 @@ export default function Pairs() {
 
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
-  const block2w = useBlock({ daysAgo: 14, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
+  const block2w = useTwoWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const pairs = useSushiPairs({ chainId })
-  const pairs1d = useSushiPairs({ block: block1d, shouldFetch: !!block1d, chainId })
-  const pairs2d = useSushiPairs({ block: block2d, shouldFetch: !!block2d && type !== 'all', chainId }) // No need to fetch if we don't need the data
-  const pairs1w = useSushiPairs({ block: block1w, shouldFetch: !!block1w, chainId })
-  const pairs2w = useSushiPairs({ block: block2w, shouldFetch: !!block2w && type !== 'all', chainId })
+  const pairs1d = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
+  const pairs2d = useSushiPairs({ variables: { block: block2d }, shouldFetch: !!block2d && type !== 'all', chainId }) // No need to fetch if we don't need the data
+  const pairs1w = useSushiPairs({ variables: { block: block1w }, shouldFetch: !!block1w, chainId })
+  const pairs2w = useSushiPairs({ variables: { block: block2w }, shouldFetch: !!block2w && type !== 'all', chainId })
 
   const pairsFormatted = useMemo(() => {
     return type === 'all'
@@ -34,7 +34,7 @@ export default function Pairs() {
             pair: {
               token0: pair.token0,
               token1: pair.token1,
-              address: pair.id,
+              id: pair.id,
             },
             liquidity: pair.reserveUSD,
             volume1d: pair.volumeUSD - pair1d.volumeUSD,
@@ -52,7 +52,7 @@ export default function Pairs() {
               pair: {
                 token0: pair.token0,
                 token1: pair.token1,
-                address: pair.id,
+                id: pair.id,
               },
               liquidityChangeNumber1d: pair.reserveUSD - pair1d.reserveUSD,
               liquidityChangePercent1d: (pair.reserveUSD / pair1d.reserveUSD) * 100 - 100,

@@ -1,10 +1,9 @@
+import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
+import NetworkModel from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useNetworkModalToggle } from 'app/state/application/hooks'
 import Image from 'next/image'
 import React from 'react'
-
-import { NETWORK_ICON, NETWORK_LABEL } from '../../config/networks'
-import NetworkModel from '../../modals/NetworkModal'
-import { useNetworkModalToggle } from '../../state/application/hooks'
 
 function Web3Network(): JSX.Element | null {
   const { chainId } = useActiveWeb3React()

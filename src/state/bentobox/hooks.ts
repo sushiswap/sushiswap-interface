@@ -1,17 +1,16 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { KASHI_ADDRESS, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import ERC20_ABI from 'app/constants/abis/erc20.json'
+import { toAmount } from 'app/functions/bentobox'
+import { easyAmount } from 'app/functions/kashi'
+import { e10 } from 'app/functions/math'
+import { useAllTokens } from 'app/hooks/Tokens'
+import { useBentoBoxContract, useBoringHelperContract, useContract } from 'app/hooks/useContract'
+import useTransactionStatus from 'app/hooks/useTransactionStatus'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useSingleCallResult } from 'app/state/multicall/hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
-import ERC20_ABI from '../../constants/abis/erc20.json'
-import { toAmount } from '../../functions/bentobox'
-import { easyAmount } from '../../functions/kashi'
-import { e10 } from '../../functions/math'
-import { useAllTokens } from '../../hooks/Tokens'
-import { useBentoBoxContract, useBoringHelperContract, useContract } from '../../hooks/useContract'
-import useTransactionStatus from '../../hooks/useTransactionStatus'
-import { useSingleCallResult } from '../multicall/hooks'
 
 export interface BentoBalance {
   address: string
@@ -33,7 +32,14 @@ export function useBentoBalances(): BentoBalance[] {
 
   const weth = WNATIVE_ADDRESS[chainId]
 
-  const tokenAddresses = Object.keys(tokens)
+  const tokenAddresses = Object.keys(tokens).filter(
+    (token) =>
+      ![
+        '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
+        '0x72B886d09C117654aB7dA13A14d603001dE0B777',
+        '0x21413c119b0C11C5d96aE1bD328917bC5C8ED67E',
+      ].includes(token)
+  )
 
   const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
 

@@ -2,10 +2,10 @@ import { ChainId } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
 import { GRAPH_HOST, TRIDENT } from 'services/graph/constants'
 import {
-  getPoolDayBuckets,
-  getPoolHourBuckets,
   getSwapsForPoolQuery,
   getTridentPoolsQuery,
+  poolDayBucketsQuery,
+  poolHourBucketsQuery,
 } from 'services/graph/queries'
 
 import { pager } from './pager'
@@ -25,7 +25,7 @@ export type FeeTier = 1 | 0.3 | 0.05 | 0.01
 export interface TridentPool {
   type: PoolType
   volumeUSD: number
-  totalValueLockedUSD: number
+  liquidityUSD: number
   transactionCount: number
   assets: {
     id: string
@@ -44,7 +44,7 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
       poolList.map(({ kpi, assets, swapFee, twapEnabled }) => ({
         type: gqlPoolTypeMap[poolType],
         volumeUSD: Number(kpi.volumeUSD),
-        totalValueLockedUSD: Number(kpi.totalValueLockedUSD),
+        liquidityUSD: Number(kpi.liquidityUSD),
         transactionCount: Number(kpi.transactionCount),
         assets: assets.map((asset) => ({
           id: asset.token.id,
@@ -60,7 +60,7 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
 interface TridentPoolData {
   kpi: {
     volumeUSD: string
-    totalValueLockedUSD: string
+    liquidityUSD: string
     transactionCount: string
   }
   twapEnabled: boolean
@@ -93,7 +93,7 @@ export const getTridentPools = async (
 interface PoolBucketQueryResult {
   id: string
   date: string
-  totalValueLockedUSD: string
+  liquidityUSD: string
   volumeUSD: string
   feesUSD: string
   transactionCount: string
@@ -101,7 +101,7 @@ interface PoolBucketQueryResult {
 
 export interface PoolBucket {
   date: Date
-  totalValueLockedUSD: number
+  liquidityUSD: number
   volumeUSD: number
   feesUSD: number
   transactionCount: number
@@ -110,19 +110,22 @@ export interface PoolBucket {
 const formatBuckets = (buckets: PoolBucketQueryResult[]): PoolBucket[] =>
   buckets.map((bucket) => ({
     date: new Date(Number(bucket.date) * 1000),
-    totalValueLockedUSD: Number(bucket.totalValueLockedUSD),
+    liquidityUSD: Number(bucket.liquidityUSD),
     volumeUSD: Number(bucket.volumeUSD),
     feesUSD: Number(bucket.feesUSD),
     transactionCount: Number(bucket.transactionCount),
   }))
 
-export const getPoolBuckets = async (
-  chainId: ChainId = ChainId.ETHEREUM,
-  variables: {} = undefined,
-  fine: boolean = false
-): Promise<PoolBucket[]> => {
+export const getPoolHourBuckets = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolBucket[]> => {
   const result: PoolBucketQueryResult[] = Object.values(
-    await fetcher(chainId, fine ? getPoolHourBuckets : getPoolDayBuckets, variables)
+    await fetcher(chainId, poolHourBucketsQuery, variables)
+  )?.[0] as PoolBucketQueryResult[]
+  return formatBuckets(result)
+}
+
+export const getPoolDayBuckets = async (chainId: ChainId = ChainId.ETHEREUM, variables): Promise<PoolBucket[]> => {
+  const result: PoolBucketQueryResult[] = Object.values(
+    await fetcher(chainId, poolDayBucketsQuery, variables)
   )?.[0] as PoolBucketQueryResult[]
   return formatBuckets(result)
 }

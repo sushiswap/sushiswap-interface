@@ -4,11 +4,11 @@ import { retry, RetryableError } from 'app/functions/retry'
 import { useMulticall2Contract } from 'app/hooks/useContract'
 import useDebounce from 'app/hooks/useDebounce'
 import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
 import { useBlockNumber } from 'app/state/application/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useEffect, useMemo, useRef } from 'react'
 
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { AppState } from '../index'
 import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from './actions'
 import { Call, parseCallKey } from './utils'
 

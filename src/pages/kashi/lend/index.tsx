@@ -1,14 +1,14 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Card from 'components/Card'
-import Image from 'components/Image'
-import QuestionHelper from 'components/QuestionHelper'
-import { useKashiPairAddresses, useKashiPairs } from 'features/kashi/hooks'
-import ListHeaderWithSort from 'features/kashi/ListHeaderWithSort'
-import MarketHeader from 'features/kashi/MarketHeader'
-import { formatNumber, formatPercent } from 'functions/format'
-import useSearchAndSort from 'hooks/useSearchAndSort'
-import Layout from 'layouts/Kashi'
+import Card from 'app/components/Card'
+import Image from 'app/components/Image'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
+import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
+import MarketHeader from 'app/features/kashi/MarketHeader'
+import { formatNumber, formatPercent } from 'app/functions/format'
+import useSearchAndSort from 'app/hooks/useSearchAndSort'
+import Layout from 'app/layouts/Kashi'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
@@ -18,6 +18,8 @@ function Lend() {
   const { i18n } = useLingui()
   const addresses = useKashiPairAddresses()
   const fullPairs = useKashiPairs(addresses)
+
+  console.log({ fullPairs })
 
   const positions = useSearchAndSort(
     fullPairs.filter((pair) => pair.userAssetFraction.gt(0)),

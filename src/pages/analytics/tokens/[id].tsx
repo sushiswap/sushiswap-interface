@@ -11,7 +11,15 @@ import { formatNumber, shortenAddress } from 'app/functions/format'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useTokenContract } from 'app/hooks/useContract'
 import useCopyClipboard from 'app/hooks/useCopyClipboard'
-import { useBlock, useNativePrice, useTokenDayData, useTokenPairs, useTokens } from 'app/services/graph'
+import {
+  useNativePrice,
+  useOneDayBlock,
+  useOneWeekBlock,
+  useTokenDayData,
+  useTokenPairs,
+  useTokens,
+  useTwoDayBlock,
+} from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { LegacyTransactions } from 'features/transactions/Transactions'
 import Link from 'next/link'
@@ -40,7 +48,7 @@ const chartTimespans = [
 
 export default function Token() {
   const router = useRouter()
-  const id = (router.query.id as string).toLowerCase()
+  const id = (router.query.id as string)?.toLowerCase()
 
   const { chainId } = useActiveWeb3React()
 
@@ -56,22 +64,39 @@ export default function Token() {
     fetch()
   }, [tokenContract])
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
+  const block1d = useOneDayBlock({ chainId })
+  const block2d = useTwoDayBlock({ chainId })
+  const block1w = useOneWeekBlock({ chainId })
 
   // General data (volume, liquidity)
   const nativePrice = useNativePrice({ chainId })
-  const nativePrice1d = useNativePrice({ block: block1d, chainId })
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
 
-  const token = useTokens({ subset: [id], chainId })?.[0]
-  const token1d = useTokens({ subset: [id], block: block1d, shouldFetch: !!block1d, chainId })?.[0]
-  const token2d = useTokens({ subset: [id], block: block2d, shouldFetch: !!block2d, chainId })?.[0]
+  const token = useTokens({ chainId, variables: { where: { id } }, shouldFetch: !!id })?.[0]
+  const token1d = useTokens({
+    chainId,
+    variables: { block: block1d, where: { id } },
+    shouldFetch: !!id && !!block1d,
+  })?.[0]
+  const token2d = useTokens({
+    chainId,
+    variables: { block: block2d, where: { id } },
+    shouldFetch: !!id && !!block2d,
+  })?.[0]
 
   // Token Pairs
-  const tokenPairs = useTokenPairs({ token: id, chainId })
-  const tokenPairs1d = useTokenPairs({ token: id, block: block1d, shouldFetch: !!block1d, chainId })
-  const tokenPairs1w = useTokenPairs({ token: id, block: block1w, shouldFetch: !!block1w, chainId })
+  const tokenPairs = useTokenPairs({ chainId, variables: { id } })
+  const tokenPairs1d = useTokenPairs({
+    chainId,
+    variables: { id, block: block1d },
+    shouldFetch: !!id && !!block1d,
+  })
+  const tokenPairs1w = useTokenPairs({
+    chainId,
+    variables: { id, block: block1w },
+    shouldFetch: !!id && !!block1w,
+  })
+
   const tokenPairsFormatted = useMemo(
     () =>
       tokenPairs?.map((pair) => {
@@ -82,7 +107,7 @@ export default function Token() {
           pair: {
             token0: pair.token0,
             token1: pair.token1,
-            address: pair.id,
+            id: pair.id,
           },
           liquidity: pair.reserveUSD,
           volume1d: pair.volumeUSD - pair1d.volumeUSD,
@@ -108,7 +133,11 @@ export default function Token() {
   const volumeUSD1dChange = (volumeUSD1d / volumeUSD2d) * 100 - 100
 
   // The Chart
-  const tokenDayData = useTokenDayData({ token: id, chainId, shouldFetch: !!id })
+  const tokenDayData = useTokenDayData({
+    chainId,
+    variables: { where: { token: id.toLowerCase() } },
+    shouldFetch: !!id && !!chainId,
+  })
 
   const chartData = useMemo(
     () => ({

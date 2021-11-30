@@ -44,7 +44,7 @@ export const usePoolsTableData = () => {
       },
       {
         Header: 'TVL',
-        accessor: 'totalValueLockedUSD',
+        accessor: 'liquidityUSD',
         maxWidth: 100,
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
       },

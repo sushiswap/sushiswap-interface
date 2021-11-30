@@ -3,21 +3,21 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { hexConcat, hexlify } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { Percent, SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import KashiCooker from 'app/entities/KashiCooker'
+import { TransactionReview } from 'app/entities/TransactionReview'
+import { Warning, Warnings } from 'app/entities/Warnings'
+import { toShare } from 'app/functions/bentobox'
+import { e10, maximum, minimum, ZERO } from 'app/functions/math'
+import { tryParseAmount } from 'app/functions/parse'
+import { computeRealizedLPFeePercent, warningSeverity } from 'app/functions/prices'
+import { useCurrency } from 'app/hooks/Tokens'
+import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
-import Button from '../../components/Button'
-import KashiCooker from '../../entities/KashiCooker'
-import { TransactionReview } from '../../entities/TransactionReview'
-import { Warning, Warnings } from '../../entities/Warnings'
-import { toShare } from '../../functions/bentobox'
-import { e10, maximum, minimum, ZERO } from '../../functions/math'
-import { tryParseAmount } from '../../functions/parse'
-import { computeRealizedLPFeePercent, warningSeverity } from '../../functions/prices'
-import { useCurrency } from '../../hooks/Tokens'
-import { useV2TradeExactIn } from '../../hooks/useV2Trades'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from '../../state/user/hooks'
 import { KashiApproveButton, TokenApproveButton } from './Button'
 import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
 import SmartNumberInput from './SmartNumberInput'
@@ -259,6 +259,7 @@ export default function Borrow({ pair }: BorrowProps) {
     }
     if (borrowValueSet && trade) {
       const path = trade.route.path.map((token) => token.address) || []
+
       if (path.length > 4) {
         throw 'Path too long'
       }

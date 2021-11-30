@@ -1,26 +1,26 @@
 import { Tab } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Card from 'app/components/Card'
+import Dots from 'app/components/Dots'
+import GradientDot from 'app/components/GradientDot'
+import Image from 'app/components/Image'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { KashiCooker } from 'app/entities'
+import { Borrow, Repay } from 'app/features/kashi'
+import { useKashiPair } from 'app/features/kashi/hooks'
+import { formatNumber, formatPercent } from 'app/functions/format'
+import { useUSDCPrice } from 'app/hooks'
+import { useToken } from 'app/hooks/Tokens'
+import { useV2Pair } from 'app/hooks/useV2Pairs'
+import Layout from 'app/layouts/Kashi'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockTimestamp } from 'app/state/application/hooks'
-import Card from 'components/Card'
-import Dots from 'components/Dots'
-import GradientDot from 'components/GradientDot'
-import Image from 'components/Image'
-import QuestionHelper from 'components/QuestionHelper'
-import { KashiCooker } from 'entities'
-import { Borrow, Repay } from 'features/kashi'
-import { useKashiPair } from 'features/kashi/hooks'
-import { formatNumber, formatPercent } from 'functions/format'
-import { useUSDCPrice } from 'hooks'
-import { useToken } from 'hooks/Tokens'
-import { useV2Pair } from 'hooks/useV2Pairs'
-import Layout from 'layouts/Kashi'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback } from 'react'
 import { RecoilRoot } from 'recoil'
-import { useActiveWeb3React } from 'services/web3'
-import { useTransactionAdder } from 'state/transactions/hooks'
 
 function Pair() {
   const router = useRouter()
@@ -37,6 +37,7 @@ function Pair() {
   const blockTimestamp = useBlockTimestamp()
 
   const addTransaction = useTransactionAdder()
+
   const onUpdateExchangeRate = useCallback(async () => {
     const cooker = new KashiCooker(pair, account, library, chainId)
     const result = await cooker.updateExchangeRate().cook()
@@ -162,7 +163,6 @@ const PairLayout = ({ children }) => {
   const { i18n } = useLingui()
   const router = useRouter()
   const pair = useKashiPair(router.query.pair as string)
-  console.log({ pair })
   const asset = useToken(pair?.asset.address)
   const collateral = useToken(pair?.collateral.address)
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)

@@ -1,16 +1,16 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Dots from 'app/components/Dots'
+import useSortableData from 'app/hooks/useSortableData'
 import React from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-import Dots from '../../components/Dots'
-import useSortableData from '../../hooks/useSortableData'
 import FarmListItem from './FarmListItem'
 import { useInfiniteScroll } from './hooks'
 
 const FarmList = ({ farms, term }) => {
-  const { items, requestSort, sortConfig } = useSortableData(farms)
+  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'roiPerYear' })
   const { i18n } = useLingui()
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
 

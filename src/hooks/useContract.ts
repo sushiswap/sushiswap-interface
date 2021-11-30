@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import {
   BAR_ADDRESS,
@@ -67,9 +68,8 @@ export function useEIP2612Contract(tokenAddress?: string): Contract | null {
 // returns null on errors
 export function useContract(address: string | undefined, ABI: any, withSignerIfPossible = true): Contract | null {
   const { library, account } = useActiveWeb3React()
-
   return useMemo(() => {
-    if (!address || !ABI || !library) return null
+    if (!address || address === AddressZero || !ABI || !library) return null
     try {
       return getContract(address, ABI, library, withSignerIfPossible && account ? account : undefined)
     } catch (error) {
@@ -119,6 +119,11 @@ export function useMerkleDistributorContract(): Contract | null {
   return useContract(chainId ? MERKLE_DISTRIBUTOR_ADDRESS[chainId] : undefined, MERKLE_DISTRIBUTOR_ABI, true)
 }
 
+export function useProtocolMerkleDistributorContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId ? '0x1026cbed7b7E851426b959BC69dcC1bf5876512d' : undefined, MERKLE_DISTRIBUTOR_ABI, true)
+}
+
 export function useBoringHelperContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   // TODO ramin update in sdk
@@ -162,7 +167,7 @@ export function useFactoryContract(): Contract | null {
   return useContract(chainId && FACTORY_ADDRESS[chainId], FACTORY_ABI, false)
 }
 
-export function useRouterContract(useArcher = false, withSignerIfPossible?: boolean): Contract | null {
+export function useRouterContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(ROUTER_ADDRESS[chainId], ROUTER_ABI, withSignerIfPossible)
 }

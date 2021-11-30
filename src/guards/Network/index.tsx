@@ -1,15 +1,15 @@
 import { t } from '@lingui/macro'
 import { Trans, useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
-import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
-import NavLink from 'components/NavLink'
-import Typography from 'components/Typography'
-import { NETWORK_ICON, NETWORK_LABEL } from 'config/networks'
+import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
+import NavLink from 'app/components/NavLink'
+import Typography from 'app/components/Typography'
+import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
+import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
+import { useActiveWeb3React } from 'app/services/web3'
 import cookie from 'cookie-cutter'
-import { SUPPORTED_NETWORKS } from 'modals/NetworkModal'
 import Image from 'next/image'
 import React, { FC, Fragment } from 'react'
-import { useActiveWeb3React } from 'services/web3'
 
 interface NetworkGuardProps {
   networks: ChainId[]

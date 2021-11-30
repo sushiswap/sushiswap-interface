@@ -8,7 +8,16 @@ import PairList from 'app/features/analytics/Pairs/PairList'
 import TokenList from 'app/features/analytics/Tokens/TokenList'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
-import { useBlock, useDayData, useFactory, useNativePrice, useSushiPairs, useTokens } from 'app/services/graph'
+import {
+  useDayData,
+  useFactory,
+  useNativePrice,
+  useOneDayBlock,
+  useOneWeekBlock,
+  useSushiPairs,
+  useTokens,
+  useTwoDayBlock,
+} from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
@@ -36,14 +45,14 @@ export default function Dashboard(): JSX.Element {
 
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
 
   // For the charts
   const exchange = useFactory({ chainId })
-  const exchange1d = useFactory({ block: block1d, chainId })
-  const exchange2d = useFactory({ block: block2d, chainId })
+  const exchange1d = useFactory({ chainId, variables: { block: block1d } })
+  const exchange2d = useFactory({ chainId, variables: { block: block2d } })
 
   const dayData = useDayData({ chainId })
 
@@ -67,8 +76,8 @@ export default function Dashboard(): JSX.Element {
 
   // For Top Pairs
   const pairs = useSushiPairs({ chainId })
-  const pairs1d = useSushiPairs({ block: block1d, chainId })
-  const pairs1w = useSushiPairs({ block: block1w, chainId })
+  const pairs1d = useSushiPairs({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const pairs1w = useSushiPairs({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   const pairsFormatted = useMemo(
     () =>
@@ -80,7 +89,7 @@ export default function Dashboard(): JSX.Element {
           pair: {
             token0: pair.token0,
             token1: pair.token1,
-            address: pair.id,
+            id: pair.id,
           },
           liquidity: pair.reserveUSD,
           volume1d: pair.volumeUSD - pair1d?.volumeUSD,
@@ -100,7 +109,7 @@ export default function Dashboard(): JSX.Element {
           pair: {
             token0: farm.pair.token0,
             token1: farm.pair.token1,
-            address: farm.pair.id,
+            id: farm.pair.id,
             name: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
             type: farm.pair.symbol ? 'Kashi Farm' : 'Sushi Farm',
           },
@@ -117,12 +126,12 @@ export default function Dashboard(): JSX.Element {
   )
 
   // For Top Tokens
-  const nativePrice1d = useNativePrice({ block: block1d, chainId })
-  const nativePrice1w = useNativePrice({ block: block1w, chainId })
+  const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d } })
+  const nativePrice1w = useNativePrice({ chainId, variables: { block: block1w } })
 
   const tokens = useTokens({ chainId })
-  const tokens1d = useTokens({ block: block1d, shouldFetch: !!block1d, chainId })
-  const tokens1w = useTokens({ block: block1w, shouldFetch: !!block1w, chainId })
+  const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
+  const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
   const tokensFormatted = useMemo(
     () =>
@@ -133,7 +142,7 @@ export default function Dashboard(): JSX.Element {
 
             return {
               token: {
-                address: token.id,
+                id: token.id,
                 symbol: token.symbol,
                 name: token.name,
               },
@@ -153,12 +162,21 @@ export default function Dashboard(): JSX.Element {
     [nativePrice, nativePrice1d, nativePrice1w, tokens, tokens1d, tokens1w]
   )
 
+  console.log(tokensFormatted[0])
+
   const { options, data } = useMemo(() => {
     switch (type) {
       case 'pools':
         return {
           options: {
-            keys: ['pair.address0', 'pair.address1', 'pair.symbol', 'pair.symbol'],
+            keys: [
+              'pair.token0.id',
+              'pair.token0.symbol',
+              'pair.token0.name',
+              'pair.token1.id',
+              'pair.token1.symbol',
+              'pair.token1.name',
+            ],
             threshold: 0.4,
           },
           data: farmsFormatted,
@@ -167,7 +185,14 @@ export default function Dashboard(): JSX.Element {
       case 'pairs':
         return {
           options: {
-            keys: ['pair.address0', 'pair.address1', 'pair.symbol0', 'pair.symbol1', 'pair.name0', 'pair.name1'],
+            keys: [
+              'pair.token0.id',
+              'pair.token0.symbol',
+              'pair.token0.name',
+              'pair.token1.id',
+              'pair.token1.symbol',
+              'pair.token1.name',
+            ],
             threshold: 0.4,
           },
           data: pairsFormatted,
@@ -176,7 +201,7 @@ export default function Dashboard(): JSX.Element {
       case 'tokens':
         return {
           options: {
-            keys: ['token.address', 'token.symbol', 'token.name'],
+            keys: ['token.id', 'token.symbol', 'token.name'],
             threshold: 0.4,
           },
           data: tokensFormatted,

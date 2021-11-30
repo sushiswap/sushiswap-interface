@@ -2,19 +2,19 @@ import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, JSBI, Token, USDC, ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import CurrencyLogo from 'app/components/CurrencyLogo'
+import Image from 'app/components/Image'
+import Typography from 'app/components/Typography'
+import { useKashiPair } from 'app/features/kashi/hooks'
+import { easyAmount, formatNumber } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 
-import Button from '../../components/Button'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import Image from '../../components/Image'
-import Typography from '../../components/Typography'
-import { easyAmount, formatNumber } from '../../functions'
-import { useCurrency } from '../../hooks/Tokens'
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import { useKashiPair } from '../kashi/hooks'
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
@@ -63,13 +63,13 @@ const InvestmentDetails = ({ farm }) => {
   const pendingSushi = usePendingSushi(farm)
 
   const positionFiatValue = CurrencyAmount.fromRawAmount(
-    USDC[chainId],
+    USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiAssetAmount?.usdValue.toString() ?? ZERO
       : JSBI.BigInt(
           ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            .toFixed(USDC[chainId].decimals)
-            .toBigNumber(USDC[chainId].decimals)
+            .toFixed(USD[chainId].decimals)
+            .toBigNumber(USD[chainId].decimals)
         )
   )
 

@@ -18,13 +18,13 @@ import useParsedQueryString from 'app/hooks/useParsedQueryString'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { AppState } from '../index'
 // import {
 //   EstimatedSwapCall,
 //   SuccessfulCall,

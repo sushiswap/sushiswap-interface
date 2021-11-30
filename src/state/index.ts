@@ -8,7 +8,7 @@ let store
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
 
-const persistConfig = {
+const persistConfig: any = {
   key: 'root',
   whitelist: PERSISTED_KEYS,
   storage,

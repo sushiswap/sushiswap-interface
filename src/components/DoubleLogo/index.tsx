@@ -1,7 +1,7 @@
 import { Currency } from '@sushiswap/core-sdk'
+import { classNames } from 'app/functions'
 import React from 'react'
 
-import { classNames } from '../../functions'
 import CurrencyLogo from '../CurrencyLogo'
 
 interface DoubleCurrencyLogoProps {
@@ -16,9 +16,9 @@ interface DoubleCurrencyLogoProps {
 export default function DoubleCurrencyLogo({
   currency0,
   currency1,
+  className = '',
+  logoClassName = '',
   size = 16,
-  className,
-  logoClassName,
 }: DoubleCurrencyLogoProps) {
   return (
     <div className={classNames('flex items-center space-x-2', className)}>

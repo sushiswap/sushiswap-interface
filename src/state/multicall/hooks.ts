@@ -2,10 +2,10 @@ import { FunctionFragment, Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useEffect, useMemo } from 'react'
 
-import { useBlockNumber } from '../application/hooks'
-import { useAppDispatch, useAppSelector } from '../hooks'
 import { addMulticallListeners, ListenerOptions, removeMulticallListeners } from './actions'
 import { Call, parseCallKey, toCallKey } from './utils'
 

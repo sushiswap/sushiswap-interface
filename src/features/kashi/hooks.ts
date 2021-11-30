@@ -95,10 +95,7 @@ export function useKashiPairs(addresses: string[]) {
     )
   }, [allTokens, currency, pollKashiPairs])
 
-  const strategies = useBentoStrategies({
-    chainId,
-    shouldFetch: chainId && (chainId === ChainId.ETHEREUM || chainId === ChainId.MATIC),
-  })
+  const strategies = useBentoStrategies({ chainId })
 
   const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token.address)], [account, tokens])
 
@@ -143,7 +140,7 @@ export function useKashiPairs(addresses: string[]) {
         const pair = Object.assign({}, pollKashiPairs?.[i])
 
         pair.address = currentValue
-        pair.oracle = getOracle(pair, chainId, tokens)
+        pair.oracle = getOracle(chainId, pair.oracle, pair.oracle.data)
         pair.asset = pairTokens[pair.asset]
         pair.collateral = pairTokens[pair.collateral]
 
@@ -324,39 +321,3 @@ export function useKashiPairs(addresses: string[]) {
 export function useKashiPair(address: string) {
   return useKashiPairs([getAddress(address)])[0]
 }
-
-//   const useEvents = chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC
-
-//   const events = useQueryFilter({
-//     chainId,
-//     contract: bentoBoxContract,
-//     event: bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
-//     shouldFetch: useEvents,
-//   })
-
-//   const clones = useClones({ chainId, shouldFetch: !useEvents })
-
-//   const deployedPairs = (
-//     useEvents ? events?.map((event) => ({ address: event.args.cloneAddress, data: event.args.data })) : clones
-//   )
-//     ?.map((clone) => {
-//       const deployParams = defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], clone.data)
-//       const pair = {
-//         address: clone.address,
-//         masterContract: KASHI_ADDRESS[chainId],
-//         collateral: allTokens[deployParams[0]],
-//         asset: allTokens[deployParams[1]],
-//         oracle: deployParams[2],
-//         oracleData: deployParams[3],
-//       }
-//       return {
-//         ...pair,
-//         oracle: getOracle(pair, chainId, allTokens),
-//       }
-//     })
-//     ?.filter((pair) => {
-//       if (pair.oracle && !pair.oracle.valid) {
-//         console.warn(`Invalid Oracle: ${pair.oracle.error}`, { pair })
-//       }
-//       return pair.oracle && !BLACKLISTED_ORACLES.includes(pair.oracle) && pair.oracle.valid
-//     })

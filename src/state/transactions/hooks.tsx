@@ -1,7 +1,7 @@
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useCallback, useMemo } from 'react'
 
-import { useAppDispatch, useAppSelector } from '../hooks'
 import { addTransaction } from './actions'
 import { TransactionDetails, TransactionState } from './reducer'
 

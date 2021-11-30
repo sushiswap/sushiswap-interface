@@ -2,14 +2,14 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/core-sdk'
+import selectCoinAnimation from 'app/animation/select-coin.json'
+import { classNames, formatCurrencyAmount } from 'app/functions'
+import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
 import React, { ReactNode, useCallback, useState } from 'react'
 
-import selectCoinAnimation from '../../animation/select-coin.json'
-import { classNames, formatCurrencyAmount } from '../../functions'
-import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
 import Button from '../Button'
 import CurrencyLogo from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
@@ -33,9 +33,11 @@ interface CurrencyInputPanelProps {
   priceImpact?: Percent
   id: string
   showCommonBases?: boolean
+  allowManageTokenList?: boolean
   renderBalance?: (amount: CurrencyAmount<Currency>) => ReactNode
   locked?: boolean
   customBalanceText?: string
+  showSearch?: boolean
 }
 
 export default function CurrencyInputPanel({
@@ -58,6 +60,8 @@ export default function CurrencyInputPanel({
   hideInput = false,
   locked = false,
   customBalanceText,
+  allowManageTokenList = true,
+  showSearch = true,
 }: CurrencyInputPanelProps) {
   const { i18n } = useLingui()
   const [modalOpen, setModalOpen] = useState(false)
@@ -182,6 +186,9 @@ export default function CurrencyInputPanel({
           selectedCurrency={currency}
           otherSelectedCurrency={otherCurrency}
           showCommonBases={showCommonBases}
+          allowManageTokenList={allowManageTokenList}
+          hideBalance={hideBalance}
+          showSearch={showSearch}
         />
       )}
     </div>

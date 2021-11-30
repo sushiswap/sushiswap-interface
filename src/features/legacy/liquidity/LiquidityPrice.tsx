@@ -1,12 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Percent, Price } from '@sushiswap/core-sdk'
-import Typography from 'components/Typography'
-import { classNames } from 'functions'
+import Typography from 'app/components/Typography'
+import { ONE_BIPS } from 'app/constants'
+import { classNames } from 'app/functions'
+import { Field } from 'app/state/mint/actions'
 import React from 'react'
-import { Field } from 'state/mint/actions'
-
-import { ONE_BIPS } from '../../../constants'
 
 export default function LiquidityPrice({
   currencies,

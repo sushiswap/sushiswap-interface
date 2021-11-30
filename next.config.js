@@ -46,6 +46,15 @@ const nextConfig = {
   images: {
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/analytics',
+        destination: '/analytics/dashboard',
+        permanent: true,
+      },
+    ]
+  },
   async rewrites() {
     return [
       {
