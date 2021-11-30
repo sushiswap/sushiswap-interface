@@ -1,4 +1,4 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
 import { GRAPH_HOST, TRIDENT } from 'services/graph/constants'
 import {
@@ -27,17 +27,12 @@ export interface TridentPool {
   volumeUSD: number
   liquidityUSD: number
   transactionCount: number
-  assets: {
-    id: string
-    symbol: string
-    name: string
-    decimals: number
-  }[]
+  assets: Token[]
   swapFeePercent: FeeTier
   twapEnabled: boolean
 }
 
-const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
+const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult): TridentPool[] =>
   Object.entries(pools)
     .filter(([, assets]) => assets.length)
     .flatMap(([poolType, poolList]: [string, TridentPoolData[]]) =>
@@ -46,18 +41,15 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
         volumeUSD: Number(kpi.volumeUSD),
         liquidityUSD: Number(kpi.liquidityUSD),
         transactionCount: Number(kpi.transactionCount),
-        assets: assets.map((asset) => ({
-          id: asset.token.id,
-          symbol: asset.token.symbol,
-          name: asset.token.name,
-          decimals: Number(asset.token.decimals),
-        })),
+        assets: assets.map(
+          ({ token }) => new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)
+        ),
         swapFeePercent: (parseInt(swapFee) / 100) as FeeTier,
         twapEnabled,
       }))
     )
 
-interface TridentPoolData {
+export interface TridentPoolData {
   kpi: {
     volumeUSD: string
     liquidityUSD: string
@@ -84,10 +76,10 @@ interface TridentPoolQueryResult {
 
 export const getTridentPools = async (
   chainId: ChainId = ChainId.ETHEREUM,
-  variables: {} = undefined
+  variables: undefined
 ): Promise<TridentPool[]> => {
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
-  return formatPools(result)
+  return formatPools(chainId, result)
 }
 
 interface PoolBucketQueryResult {
