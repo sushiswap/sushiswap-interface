@@ -5,8 +5,10 @@ import Card from 'app/components/Card'
 import Image from 'app/components/Image'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { Deposit, Withdraw } from 'app/features/kashi'
+import { KASHI_NETWORKS } from 'app/features/kashi/constants'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
+import NetworkGuard from 'app/guards/Network'
 import Layout from 'app/layouts/Kashi'
 import { useBlockTimestamp } from 'app/state/application/hooks'
 import Head from 'next/head'
@@ -249,3 +251,5 @@ const PairLayout = ({ children }) => {
 }
 
 Pair.Layout = PairLayout
+
+Pair.Guard = NetworkGuard(KASHI_NETWORKS)

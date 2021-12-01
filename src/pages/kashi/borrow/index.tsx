@@ -4,10 +4,12 @@ import Card from 'app/components/Card'
 import Dots from 'app/components/Dots'
 import GradientDot from 'app/components/GradientDot'
 import Image from 'app/components/Image'
+import { KASHI_NETWORKS } from 'app/features/kashi/constants'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
 import { formatNumber, formatPercent } from 'app/functions/format'
+import NetworkGuard from 'app/guards/Network'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import useSearchAndSort from 'app/hooks/useSearchAndSort'
 import Layout from 'app/layouts/Kashi'
@@ -308,5 +310,7 @@ const BorrowLayout = ({ children }) => {
 }
 
 Borrow.Layout = BorrowLayout
+
+Borrow.Guard = NetworkGuard(KASHI_NETWORKS)
 
 export default Borrow

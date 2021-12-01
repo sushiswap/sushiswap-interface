@@ -8,8 +8,10 @@ import Image from 'app/components/Image'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { KashiCooker } from 'app/entities'
 import { Borrow, Repay } from 'app/features/kashi'
+import { KASHI_NETWORKS } from 'app/features/kashi/constants'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
+import NetworkGuard from 'app/guards/Network'
 import { useUSDCPrice } from 'app/hooks'
 import { useToken } from 'app/hooks/Tokens'
 import { useV2Pair } from 'app/hooks/useV2Pairs'
@@ -311,5 +313,7 @@ const PairLayout = ({ children }) => {
 }
 
 Pair.Layout = PairLayout
+
+Pair.Guard = NetworkGuard(KASHI_NETWORKS)
 
 export default Pair
