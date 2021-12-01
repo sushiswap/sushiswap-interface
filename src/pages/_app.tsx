@@ -33,6 +33,7 @@ import { persistStore } from 'redux-persist'
 import { remoteLoader } from '@lingui/remote-loader'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { featureEnabled } from '../functions/feature'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 const sessionId = nanoid()
@@ -78,7 +79,7 @@ function MyApp({
 
       try {
         // Load messages from AWS, use q session param to get latest version from cache
-        const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json?q=${sessionId}`)
+        const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/sushi-${locale}.json?q=${sessionId}`)
         const remoteMessages = await resp.json()
 
         const messages = remoteLoader({ messages: remoteMessages, format: 'minimal' })
