@@ -8,7 +8,7 @@ import { ArcherRouter } from '../functions/archerRouter'
 import { BigNumber } from '@ethersproject/bignumber'
 import Common from '@ethereumjs/common'
 import { EIP_1559_ACTIVATION_BLOCK } from '../constants'
-import { Ether } from '@sushiswap/sdk/dist/entities/Native/Ether';
+import { Ether } from '@sushiswap/sdk/dist/entities/Native/Ether'
 import { OPENMEV_URI } from '../config/openmev'
 import { SignatureData } from './useERC20Permit'
 import { TransactionFactory } from '@ethereumjs/tx'

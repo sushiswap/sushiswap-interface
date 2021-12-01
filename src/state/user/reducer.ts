@@ -98,7 +98,7 @@ export const initialState: UserState = {
   userOpenMevUseRelay: true,
   userArcherGasPrice: '',
   userArcherETHTip: '',
-  userArcherGasEstimate: ''
+  userArcherGasEstimate: '',
 }
 
 export default createReducer(initialState, (builder) =>
