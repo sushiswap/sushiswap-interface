@@ -1,4 +1,4 @@
-import { ChainId, JSBI, Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/sdk'
 import { fetcher, TridentPoolData } from 'app/services/graph'
 import { getTridentPositionsQuery } from 'app/services/graph/queries'
@@ -19,7 +19,7 @@ export interface TridentPositionRow {
   type: PoolType
   swapFeePercent: number
   twapEnabled: boolean
-  value: string
+  value: number
   apy: string
 }
 
@@ -28,10 +28,6 @@ const formatPositions = (chainId: ChainId, { liquidityPositions }: TridentPositi
     const tokens = pool.assets.map(
       ({ token: { id, name, symbol, decimals } }) => new Token(chainId, id, Number(decimals), symbol, name)
     )
-
-    const _balance = JSBI.BigInt(balance.toBigNumber(18))
-    const liquidity = JSBI.BigInt(pool.kpi.liquidity.toBigNumber(18))
-    const liquidityUSD = JSBI.BigInt(pool.kpi.liquidityUSD.toBigNumber(18))
 
     const type =
       pool.__typename === 'ConstantProductPool'
@@ -54,7 +50,7 @@ const formatPositions = (chainId: ChainId, { liquidityPositions }: TridentPositi
       type,
       swapFeePercent: Number(pool.swapFee) / 100,
       twapEnabled: Boolean(pool.twapEnabled),
-      value: JSBI.divide(JSBI.multiply(_balance, liquidityUSD), liquidity).toString(),
+      value: (Number(balance) / Number(pool.kpi.liquidity)) * Number(pool.kpi.liquidityUSD),
       apy: '',
     }
   })

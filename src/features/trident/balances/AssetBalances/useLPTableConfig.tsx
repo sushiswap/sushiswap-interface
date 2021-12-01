@@ -68,7 +68,7 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               Cell: (props) => {
                 return (
                   <Typography weight={700} className="text-high-emphesis text-right w-full">
-                    ${props.value}
+                    ${props.value.toFixed(2)}
                   </Typography>
                 )
               },
