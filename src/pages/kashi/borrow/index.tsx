@@ -4,7 +4,7 @@ import Card from 'app/components/Card'
 import Dots from 'app/components/Dots'
 import GradientDot from 'app/components/GradientDot'
 import Image from 'app/components/Image'
-import { KASHI_NETWORKS } from 'app/features/kashi/constants'
+import { Feature } from 'app/enums/Feature'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
@@ -311,6 +311,6 @@ const BorrowLayout = ({ children }) => {
 
 Borrow.Layout = BorrowLayout
 
-Borrow.Guard = NetworkGuard(KASHI_NETWORKS)
+Borrow.Guard = NetworkGuard(Feature.KASHI)
 
 export default Borrow

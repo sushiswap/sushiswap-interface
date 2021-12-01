@@ -5,6 +5,7 @@ import { ChainId, Currency, SUSHI, Token } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import Typography from 'app/components/Typography'
 import { MEOW, XSUSHI } from 'app/config/tokens'
+import { Feature } from 'app/enums'
 import CurrencyInputPanel from 'app/features/meowshi/CurrencyInputPanel'
 import HeaderToggle from 'app/features/meowshi/HeaderToggle'
 import MeowshiButton from 'app/features/meowshi/MeowshiButton'
@@ -174,4 +175,4 @@ export default function Meowshi() {
   )
 }
 
-Meowshi.Guard = NetworkGuard([ChainId.ETHEREUM])
+Meowshi.Guard = NetworkGuard(Feature.MEOWSHI)

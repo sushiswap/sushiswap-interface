@@ -4,7 +4,6 @@ import { ArrowRightIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { ChainId } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Container from 'app/components/Container'
 import Dots from 'app/components/Dots'
@@ -13,6 +12,7 @@ import ExternalLink from 'app/components/ExternalLink'
 import Loader from 'app/components/Loader'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { Fraction } from 'app/entities'
+import { Feature } from 'app/enums/Feature'
 import BalancePanel from 'app/features/inari/BalancePanel'
 import InariButton from 'app/features/inari/Button'
 import InariDescription from 'app/features/inari/InariDescription'
@@ -421,6 +421,6 @@ const WeeklyVesting = () => {
   )
 }
 
-Vesting.Guard = NetworkGuard([ChainId.ETHEREUM])
+Vesting.Guard = NetworkGuard(Feature.VESTING)
 
 export default Vesting

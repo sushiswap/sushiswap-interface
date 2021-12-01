@@ -4,7 +4,9 @@ import { ChainId } from '@sushiswap/core-sdk'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import NavLink from 'app/components/NavLink'
 import Typography from 'app/components/Typography'
+import features from 'app/config/features'
 import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
+import { Feature } from 'app/enums'
 import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import cookie from 'cookie-cutter'
@@ -12,10 +14,10 @@ import Image from 'next/image'
 import React, { FC, Fragment } from 'react'
 
 interface NetworkGuardProps {
-  networks: ChainId[]
+  feature: Feature
 }
 
-const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
+const Component: FC<NetworkGuardProps> = ({ children, feature }) => {
   const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
 
@@ -25,10 +27,18 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
     </NavLink>
   )
 
+  const supported_networks = Object.entries(features).reduce<string[]>((acc, [k, v]) => {
+    if (v.includes(feature)) {
+      acc.push(k)
+    }
+
+    return acc
+  }, [])
+
   return (
     <>
       <HeadlessUIModal.Controlled
-        isOpen={!!account && !networks.includes(chainId)}
+        isOpen={!!account && !features[chainId].includes(feature)}
         onDismiss={() => null}
         className="transparent"
       >
@@ -47,16 +57,16 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
             {i18n._(t`Available Networks`)}
           </Typography>
           <div className="flex gap-5 md:gap-10 justify-center">
-            {networks.map((key: ChainId, idx: number) => (
+            {supported_networks.map((key: string, idx: number) => (
               <button
                 className="text-primary hover:text-white flex items-center flex-col gap-2 justify-start"
                 key={idx}
                 onClick={() => {
                   const params = SUPPORTED_NETWORKS[key]
                   cookie.set('chainId', key)
-                  if (key === ChainId.ETHEREUM) {
+                  if (key === ChainId.ETHEREUM.toString()) {
                     library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
-                  } else if (key === ChainId.KOVAN) {
+                  } else if (key === ChainId.KOVAN.toString()) {
                     library?.send('wallet_switchEthereumChain', [{ chainId: '0x2A' }, account])
                   } else {
                     library?.send('wallet_addEthereumChain', [params, account])
@@ -83,8 +93,8 @@ const Component: FC<NetworkGuardProps> = ({ children, networks = [] }) => {
   )
 }
 
-const NetworkGuard = (networks: ChainId[]) => {
-  return ({ children }) => <Component networks={networks}>{children}</Component>
+const NetworkGuard = (feature: Feature) => {
+  return ({ children }) => <Component feature={feature}>{children}</Component>
 }
 
 export default NetworkGuard

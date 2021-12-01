@@ -2,7 +2,7 @@ import { SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, JSBI, Percent } from '@sushiswap/core-sdk'
-import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
+import { Feature } from 'app/enums'
 import WrapButton from 'app/features/trident/swap/WrapButton'
 import NetworkGuard from 'app/guards/Network'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -138,6 +138,6 @@ const Swap = () => {
   )
 }
 
-Swap.Guard = NetworkGuard(TRIDENT_NETWORKS)
+Swap.Guard = NetworkGuard(Feature.TRIDENT)
 
 export default Swap

@@ -1,10 +1,10 @@
 import { ArrowRightIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import Typography from 'app/components/Typography'
+import { Feature } from 'app/enums/Feature'
 import BalancePanel from 'app/features/inari/BalancePanel'
 import InariButton from 'app/features/inari/Button'
 import InariDescription from 'app/features/inari/InariDescription'
@@ -113,6 +113,6 @@ const Inari = () => {
   )
 }
 
-Inari.Guard = NetworkGuard([ChainId.ETHEREUM])
+Inari.Guard = NetworkGuard(Feature.INARI)
 
 export default Inari

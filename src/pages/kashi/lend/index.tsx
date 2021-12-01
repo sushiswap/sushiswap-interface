@@ -4,7 +4,7 @@ import Card from 'app/components/Card'
 import Dots from 'app/components/Dots'
 import Image from 'app/components/Image'
 import QuestionHelper from 'app/components/QuestionHelper'
-import { KASHI_NETWORKS } from 'app/features/kashi/constants'
+import { Feature } from 'app/enums'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
@@ -253,6 +253,6 @@ const LendLayout = ({ children }) => {
 
 Lend.Layout = LendLayout
 
-Lend.Guard = NetworkGuard(KASHI_NETWORKS)
+Lend.Guard = NetworkGuard(Feature.KASHI)
 
 export default Lend

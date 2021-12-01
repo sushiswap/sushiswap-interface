@@ -3,9 +3,9 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { PoolType } from '@sushiswap/tines'
 import Button from 'app/components/Button'
+import { Feature } from 'app/enums'
 import { TridentTransactions } from 'app/features/transactions/Transactions'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
-import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import { poolAtom } from 'app/features/trident/context/atoms'
 import ClassicLinkButtons from 'app/features/trident/pool/classic/ClassicLinkButtons'
 import ClassicMarket from 'app/features/trident/pool/classic/ClassicMarket'
@@ -85,7 +85,7 @@ const Pool = () => {
   )
 }
 
-Pool.Guard = NetworkGuard(TRIDENT_NETWORKS)
+Pool.Guard = NetworkGuard(Feature.TRIDENT)
 Pool.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 Pool.Layout = (props) => <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic']]} />
 

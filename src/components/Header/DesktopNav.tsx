@@ -34,17 +34,30 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
           <Image src="/logo.svg" alt="Sushi logo" width="32px" height="32px" />
           <div className="hidden sm:block sm:ml-8">
             <div className="flex space-x-1.5">
-              <NavLink href="/trident/swap" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+              <NavLink
+                href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/legacy/swap'}
+                activeClassName={ACTIVE_NAV_LINK_CLASS}
+              >
                 <a id="swap-nav-link" className={NAV_BASE_CLASS}>
                   {i18n._(t`Swap`)}
                 </a>
               </NavLink>
 
-              <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                <a id="trident-nav-link" className={NAV_BASE_CLASS}>
-                  {i18n._(t`Trident`)}
-                </a>
-              </NavLink>
+              {chainId && featureEnabled(Feature.TRIDENT, chainId) && (
+                <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <a id="trident-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Trident`)}
+                  </a>
+                </NavLink>
+              )}
+
+              {chainId && featureEnabled(Feature.TRIDENT, chainId) && (
+                <NavLink href="/trident/balances/wallet" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <a id="trident-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Balances`)}
+                  </a>
+                </NavLink>
+              )}
 
               <NavLink href="/pool" activeClassName={ACTIVE_NAV_LINK_CLASS}>
                 <a id="pool-nav-link" className={NAV_BASE_CLASS}>

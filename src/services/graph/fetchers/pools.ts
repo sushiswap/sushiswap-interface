@@ -84,7 +84,7 @@ interface TridentPoolQueryResult {
 
 export const getTridentPools = async (
   chainId: ChainId = ChainId.ETHEREUM,
-  variables: undefined
+  variables: {} = undefined
 ): Promise<TridentPool[]> => {
   const result: TridentPoolQueryResult = await fetcher(chainId, getTridentPoolsQuery, variables)
   return formatPools(chainId, result)

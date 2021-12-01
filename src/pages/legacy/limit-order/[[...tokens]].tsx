@@ -2,7 +2,7 @@ import { ArrowDownIcon } from '@heroicons/react/outline'
 import { ExclamationIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { Token } from '@sushiswap/core-sdk'
 import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
 import swapArrowsAnimationData from 'app/animation/swap-arrows.json'
 import AddressInputPanel from 'app/components/AddressInputPanel'
@@ -12,6 +12,7 @@ import Container from 'app/components/Container'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import ExpertModePanel from 'app/components/ExpertModePanel'
 import Typography from 'app/components/Typography'
+import { Feature } from 'app/enums'
 import BalancePanel from 'app/features/legacy/limit-order/BalancePanel'
 import CurrencyInput from 'app/features/legacy/limit-order/CurrencyInput'
 import CurrencyInputPanel from 'app/features/legacy/limit-order/CurrencyInputPanel'
@@ -399,6 +400,6 @@ function LimitOrder() {
   )
 }
 
-LimitOrder.Guard = NetworkGuard([ChainId.MATIC])
+LimitOrder.Guard = NetworkGuard(Feature.LIMIT_ORDERS)
 
 export default LimitOrder
