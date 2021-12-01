@@ -94,11 +94,11 @@ export const initialState: UserState = {
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
   userArcherUseRelay: false,
-  userArcherGasPrice: DEFAULT_ARCHER_GAS_PRICES[4].toString(),
-  userArcherETHTip: DEFAULT_ARCHER_ETH_TIP.toString(),
-  userArcherGasEstimate: DEFAULT_ARCHER_GAS_ESTIMATE.toString(),
   userArcherTipManualOverride: false,
   userOpenMevUseRelay: true,
+  userArcherGasPrice: '',
+  userArcherETHTip: '',
+  userArcherGasEstimate: ''
 }
 
 export default createReducer(initialState, (builder) =>

@@ -10,7 +10,7 @@ import {
   Trade as V2Trade,
   WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
-//import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+import { DEFAULT_OPENMEV_ETH_TIP, DEFAULT_OPENMEV_GAS_ESTIMATE } from '../../config/openmev'
 import {
   EstimatedSwapCall,
   SuccessfulCall,
@@ -258,8 +258,8 @@ export function useDerivedSwapInfo(
   useEffect(() => {
     if (doArcher) {
       setUserTipManualOverride(false)
-      setUserETHTip(DEFAULT_ARCHER_ETH_TIP.toString())
-      setUserGasEstimate(DEFAULT_ARCHER_GAS_ESTIMATE.toString())
+      setUserETHTip(DEFAULT_OPENMEV_ETH_TIP.toString())
+      setUserGasEstimate(DEFAULT_OPENMEV_GAS_ESTIMATE.toString())
     }
   }, [doArcher, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
 
