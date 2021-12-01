@@ -8,10 +8,10 @@ import { Transition } from '@headlessui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
 
 const images = [
-  // {
-  //   image: `url('/images/miso/banner-gene.png')`,
-  //   url: 'https://miso.sushi.com/auctions/0xA017E4Cf380c5FDc372463f3330853500b4B3Cb9',
-  // },
+  {
+    image: `url('/images/miso/cre8-banner.png')`,
+    url: 'https://miso.sushi.com/auctions/0x413AcA312A91Ab61e9522a2B7C0Dd4BcFd7c8Db7',
+  },
 ]
 
 const Banner: FC = () => {
