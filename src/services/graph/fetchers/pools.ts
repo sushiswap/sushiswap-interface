@@ -27,6 +27,7 @@ export interface TridentPool {
   volumeUSD: number
   liquidityUSD: number
   transactionCount: number
+  apy: string
   assets: {
     id: string
     symbol: string
@@ -45,6 +46,7 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
         type: gqlPoolTypeMap[poolType],
         volumeUSD: Number(kpi.volumeUSD),
         liquidityUSD: Number(kpi.liquidityUSD),
+        apy: '12.34', // TODO: Needs subgraph support
         transactionCount: Number(kpi.transactionCount),
         assets: assets.map((asset) => ({
           id: asset.token.id,
