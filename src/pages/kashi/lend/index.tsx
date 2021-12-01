@@ -1,38 +1,41 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Card from 'app/components/Card'
+import Dots from 'app/components/Dots'
 import Image from 'app/components/Image'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
 import { formatNumber, formatPercent } from 'app/functions/format'
+import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import useSearchAndSort from 'app/hooks/useSearchAndSort'
 import Layout from 'app/layouts/Kashi'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { RecoilRoot } from 'recoil'
 
 function Lend() {
   const { i18n } = useLingui()
   const addresses = useKashiPairAddresses()
-  const fullPairs = useKashiPairs(addresses)
-
-  console.log({ fullPairs })
+  const pairs = useKashiPairs(addresses)
 
   const positions = useSearchAndSort(
-    fullPairs.filter((pair) => pair.userAssetFraction.gt(0)),
+    pairs.filter((pair) => pair.userAssetFraction.gt(0)),
     { keys: ['search'], threshold: 0.1 },
     { key: 'currentUserAssetAmount.usdValue', direction: 'descending' }
   )
-  const pairs = useSearchAndSort(
-    fullPairs,
+  const data = useSearchAndSort(
+    pairs,
     { keys: ['search'], threshold: 0.1 },
     { key: 'currentSupplyAPR.value', direction: 'descending' }
   )
 
-  return fullPairs ? (
+  const [numDisplayed, setNumDisplayed] = useInfiniteScroll(data.items)
+
+  return (
     <>
       <Head>
         <title>Lend | Sushi</title>
@@ -96,22 +99,22 @@ function Lend() {
         )}
         <div>
           <div className="grid grid-flow-col grid-cols-3 gap-4 px-4 pb-4 text-sm sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 text-secondary">
-            <ListHeaderWithSort sort={pairs} sortKey="search">
+            <ListHeaderWithSort sort={data} sortKey="search">
               {i18n._(t`Markets`)}
             </ListHeaderWithSort>
-            <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="asset.tokenInfo.symbol">
+            <ListHeaderWithSort className="hidden md:flex" sort={data} sortKey="asset.tokenInfo.symbol">
               {i18n._(t`Lending`)}
             </ListHeaderWithSort>
-            <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="collateral.tokenInfo.symbol">
+            <ListHeaderWithSort className="hidden md:flex" sort={data} sortKey="collateral.tokenInfo.symbol">
               {i18n._(t`Collateral`)}
             </ListHeaderWithSort>
-            <ListHeaderWithSort className="hidden lg:flex" sort={pairs} sortKey="oracle.name">
+            <ListHeaderWithSort className="hidden lg:flex" sort={data} sortKey="oracle.name">
               {i18n._(t`Oracle`)}
               <QuestionHelper text={i18n._(t`The onchain oracle that tracks the pricing for this pair `)} />
             </ListHeaderWithSort>
             <ListHeaderWithSort
               className="justify-end"
-              sort={pairs}
+              sort={data}
               sortKey="currentSupplyAPR.valueWithStrategy"
               direction="descending"
             >
@@ -119,7 +122,7 @@ function Lend() {
             </ListHeaderWithSort>
             <ListHeaderWithSort
               className="justify-end hidden sm:flex"
-              sort={pairs}
+              sort={data}
               sortKey="utilization.value"
               direction="descending"
             >
@@ -127,22 +130,34 @@ function Lend() {
             </ListHeaderWithSort>
             <ListHeaderWithSort
               className="justify-end"
-              sort={pairs}
+              sort={data}
               sortKey="currentAllAssets.usdValue"
               direction="descending"
             >
               {i18n._(t`Total`)}
             </ListHeaderWithSort>
           </div>
-          <div className="flex-col space-y-2">
-            {pairs?.items?.map((pair) => (
-              <LendEntry key={pair.address} pair={pair} userPosition={false} />
-            ))}
-          </div>
+
+          <InfiniteScroll
+            dataLength={numDisplayed}
+            next={() => setNumDisplayed(numDisplayed + 5)}
+            hasMore={true}
+            loader={
+              <div className="text-center mt-8">
+                <Dots>Loading</Dots>
+              </div>
+            }
+          >
+            <div className="flex-col space-y-2">
+              {data.items.slice(0, numDisplayed).map((pair) => (
+                <LendEntry key={pair.address} pair={pair} userPosition={false} />
+              ))}
+            </div>
+          </InfiniteScroll>
         </div>
       </Card>
     </>
-  ) : null
+  )
 }
 
 const LendEntry = ({ pair, userPosition = false }) => {
