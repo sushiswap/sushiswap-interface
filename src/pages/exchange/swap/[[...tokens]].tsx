@@ -1,4 +1,4 @@
-import { ARCHER_RELAY_URI, INITIAL_ALLOWED_SLIPPAGE } from '../../../constants'
+import { ChainId, Currency, CurrencyAmount, JSBI, Token, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import {
   ARCHER_ROUTER_ADDRESS,
   ChainId,

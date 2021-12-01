@@ -1,6 +1,7 @@
 import { ZERION_API, ZERION_API_KEY } from './constants'
-import { uniq } from 'lodash'
+
 import { t } from '@lingui/macro'
+import { uniq } from 'lodash'
 
 const fetcher: any = (queries: string[]) => {
   return new Promise((resolve, reject) => {
@@ -49,7 +50,7 @@ export const getAssets = async (account: string) => {
   ]
 
   enum Networks {
-    assets = 'ETHEREUM',
+    assets = 'Mainnet',
     'polygon-assets' = 'Matic',
     'bsc-assets' = 'BSC',
   }

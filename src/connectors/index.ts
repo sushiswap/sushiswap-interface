@@ -36,7 +36,7 @@ const RPC = {
   [ChainId.FUSE]: 'https://rpc.fuse.io',
   [ChainId.CELO]: 'https://forno.celo.org',
   [ChainId.MOONRIVER]: 'https://rpc.moonriver.moonbeam.network',
-  [ChainId.TELOS]: 'https://ETHEREUM.telos.net/evm',
+  [ChainId.TELOS]: 'https://mainnet.telos.net/evm',
 }
 
 export function getNetwork(defaultChainId, urls = RPC) {
@@ -89,33 +89,33 @@ export const injected = new InjectedConnector({
   ],
 })
 
-// ETHEREUM only
+// @note mainnet ethereum only
 export const walletconnect = new WalletConnectConnector({
   rpc: RPC,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true,
 })
 
-// ETHEREUM only
+// @note mainnet ethereum only
 export const fortmatic = new FortmaticConnector({
   apiKey: process.env.NEXT_PUBLIC_FORTMATIC_API_KEY ?? '',
   chainId: 1,
 })
 
-// ETHEREUM only
+// @note mainnet ethereum only
 export const portis = new PortisConnector({
   dAppId: process.env.NEXT_PUBLIC_PORTIS_ID ?? '',
   networks: [1],
 })
 
-// ETHEREUM only
+// @note mainnet ethereum only
 export const walletlink = new WalletLinkConnector({
   url: RPC[ChainId.ETHEREUM],
   appName: 'SushiSwap',
   appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
 })
 
-// ETHEREUM only
+// @note mainnet ethereum only
 export const torus = new TorusConnector({
   chainId: 1,
 })

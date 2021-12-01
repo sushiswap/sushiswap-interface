@@ -120,7 +120,7 @@ const chains: ChainObject = {
     builder: explorers.etherscan,
   },
   [ChainId.XDAI]: {
-    link: 'https://blockscout.com/xdai/ETHEREUM',
+    link: 'https://blockscout.com/xdai/mainnet',
     builder: explorers.blockscout,
   },
   [ChainId.BSC]: {

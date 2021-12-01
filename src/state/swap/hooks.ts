@@ -5,11 +5,18 @@ import {
   CurrencyAmount,
   JSBI,
   Percent,
+  SUSHI_ADDRESS,
   TradeType,
   Trade as V2Trade,
-  WNATIVE,
+  WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
-import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+//import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+import {
+  EstimatedSwapCall,
+  SuccessfulCall,
+  swapErrorToUserReadableMessage,
+  useSwapCallArguments,
+} from '../../hooks/useSwapCallback'
 // import {
 //   EstimatedSwapCall,
 //   SuccessfulCall,
@@ -20,7 +27,6 @@ import { isAddress, isZero } from '../../functions/validate'
 import { useAppDispatch, useAppSelector } from '../hooks'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
 import {
   useExpertModeManager,
   useUserArcherETHTip,
@@ -30,6 +36,7 @@ import {
   useUserSingleHopOnly,
   useUserSlippageTolerance,
 } from '../user/hooks'
+import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
 
 import { ParsedQs } from 'qs'
 import { SwapState } from './reducer'
@@ -42,12 +49,6 @@ import useENS from '../../hooks/useENS'
 import { useLingui } from '@lingui/react'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
-import {
-  EstimatedSwapCall,
-  SuccessfulCall,
-  swapErrorToUserReadableMessage,
-  useSwapCallArguments,
-} from '../../hooks/useSwapCallback'
 
 export function useSwapState(): AppState['swap'] {
   return useAppSelector((state) => state.swap)
