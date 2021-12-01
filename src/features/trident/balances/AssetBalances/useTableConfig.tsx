@@ -6,6 +6,7 @@ import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import React, { useMemo } from 'react'
 
 export const useTableConfig = (assets?: Assets[]) => {
+  const isDesktop = useDesktopMediaQuery()
   const AssetColumns = useMemo(
     () => [
       {
@@ -15,8 +16,6 @@ export const useTableConfig = (assets?: Assets[]) => {
         minWidth: 100,
         className: 'text-left',
         Cell: (props) => {
-          const isDesktop = useDesktopMediaQuery()
-
           return (
             <div className="flex gap-2.5 items-center">
               <CurrencyLogo currency={props.cell.value.currency} className="rounded-full" size={28} />
@@ -38,8 +37,6 @@ export const useTableConfig = (assets?: Assets[]) => {
         maxWidth: 200,
         className: 'text-left',
         Cell: (props) => {
-          const isDesktop = useDesktopMediaQuery()
-
           return (
             <Typography
               weight={isDesktop ? 400 : 700}
@@ -59,7 +56,6 @@ export const useTableConfig = (assets?: Assets[]) => {
         maxWidth: 200,
         className: 'text-right',
         Cell: (props) => {
-          const isDesktop = useDesktopMediaQuery()
           const usdcValue = useUSDCValue(props.cell.value)
           return (
             <Typography
@@ -67,13 +63,13 @@ export const useTableConfig = (assets?: Assets[]) => {
               variant={isDesktop ? 'sm' : 'base'}
               className="text-high-emphesis text-right w-full"
             >
-              ${usdcValue?.toExact()}
+              ${usdcValue?.toExact({})}
             </Typography>
           )
         },
       },
     ],
-    []
+    [isDesktop]
   )
 
   const defaultColumn = React.useMemo(() => ({ minWidth: 0 }), [])

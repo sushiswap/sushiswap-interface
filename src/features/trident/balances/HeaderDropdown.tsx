@@ -10,9 +10,10 @@ import React, { FC, useState } from 'react'
 
 interface HeaderDropdownProps {
   label: string
+  hideAccount?: boolean
 }
 
-const HeaderDropdown: FC<HeaderDropdownProps> = ({ label }) => {
+const HeaderDropdown: FC<HeaderDropdownProps> = ({ label, hideAccount = false }) => {
   const isDesktop = useDesktopMediaQuery()
   const { account } = useActiveWeb3React()
   const [show, setShow] = useState<boolean>(false)
@@ -29,7 +30,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ label }) => {
           className={classNames(show ? 'transform rotate-180' : '', 'text-high-emphesis', 'block lg:hidden')}
         />
       </div>
-      {account && (
+      {account && !hideAccount && (
         <Typography variant="sm" className="text-secondary z-[2]">
           {shortenAddress(account)}
         </Typography>

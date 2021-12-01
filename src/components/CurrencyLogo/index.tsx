@@ -124,10 +124,10 @@ const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
   className,
   style,
 }) => {
-  const currency = useCurrency(currencyProp instanceof WrappedTokenInfo ? undefined : currencyProp?.wrapped.address)
-  const uriLocations = useHttpLocations(
-    currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
-  )
+  const uri =
+    currencyProp instanceof WrappedTokenInfo ? currencyProp.logoURI || currencyProp.tokenInfo.logoURI : undefined
+  const uriLocations = useHttpLocations(uri)
+  const currency = useCurrency(uriLocations.length > 0 ? undefined : currencyProp?.wrapped.address) || currencyProp
 
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative || currency?.equals(WNATIVE[currency.chainId])) {

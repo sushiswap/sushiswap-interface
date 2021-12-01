@@ -37,6 +37,8 @@ const useCurrenciesFromURL = (): {
       pathname: router.pathname,
       query: {
         tokens,
+        fee,
+        twap,
       },
     })
   }, [
@@ -45,7 +47,9 @@ const useCurrenciesFromURL = (): {
     currencyA?.wrapped.address,
     currencyB?.isNative,
     currencyB?.wrapped.address,
+    fee,
     router,
+    twap,
   ])
 
   const setURLCurrency = useCallback(
@@ -86,10 +90,22 @@ const useCurrenciesFromURL = (): {
         pathname: router.pathname,
         query: {
           tokens,
+          fee,
+          twap,
         },
       })
     },
-    [chainId, currencyA, currencyB, router, switchCurrencies]
+    [
+      chainId,
+      currencyA?.isNative,
+      currencyA?.wrapped.address,
+      currencyB?.isNative,
+      currencyB?.wrapped.address,
+      fee,
+      router,
+      switchCurrencies,
+      twap,
+    ]
   )
 
   return useMemo(

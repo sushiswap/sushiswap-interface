@@ -1,9 +1,11 @@
 import gql from 'graphql-tag'
 
 const tridentPoolsSubQuery = `
+  __typename
   id
   kpi {
     volumeUSD
+    liquidity
     liquidityUSD
     feesUSD
     transactionCount
@@ -86,6 +88,30 @@ export const getSwapsForPoolQuery = gql`
         metaData {
           symbol
         }
+      }
+    }
+  }
+`
+
+export const getTridentPositionsQuery = gql`
+  query getTridentPositionsQuery(
+    $first: Int = 1000
+    $skip: Int = 0
+    $block: Block_height
+    $where: LiquidityPosition_filter
+  ) {
+    liquidityPositions(
+      first: $first
+      skip: $skip
+      block: $block
+      where: $where
+      orderBy: balance
+      orderDirection: desc
+    ) {
+      id
+      balance
+      pool {
+        ${tridentPoolsSubQuery}
       }
     }
   }

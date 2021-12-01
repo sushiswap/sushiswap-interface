@@ -1,34 +1,45 @@
-import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
-import { Currency, CurrencyAmount, NATIVE, Token, ZERO } from '@sushiswap/core-sdk'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { CurrencyAmount, NATIVE, Token, ZERO } from '@sushiswap/core-sdk'
+import Typography from 'app/components/Typography'
 import { Assets, TableInstance } from 'app/features/trident/balances/AssetBalances/types'
 import { useLPTableConfig } from 'app/features/trident/balances/AssetBalances/useLPTableConfig'
 import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
 import { ActiveModal } from 'app/features/trident/balances/context/types'
 import { classNames } from 'app/functions'
-import { useLiquidityPositions } from 'app/services/graph'
+import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalances } from 'app/state/bentobox/hooks'
 import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { useTableConfig } from './useTableConfig'
 
 export const LiquidityPositionsBalances = () => {
-  const [selected, setSelected] = useState<Currency>()
   const { account, chainId } = useActiveWeb3React()
 
-  // TODO ramin: wait for new agnostic subgraph hooks
-  const userPairs = useLiquidityPositions({ user: account ?? undefined, chainId: Number(chainId) })
-  const { config } = useLPTableConfig([])
+  const {
+    data: positions,
+    isValidating,
+    error,
+  } = useTridentLiquidityPositions({
+    chainId,
+    variables: { where: { user: account?.toLowerCase(), balance_gt: 0 } },
+    shouldFetch: !!chainId && !!account,
+  })
 
-  return <_AssetBalances config={config} />
+  const { config } = useLPTableConfig(positions)
+  return <_AssetBalances config={config} loading={isValidating} error={error} />
 }
 
 export const BentoBalances = () => {
   const { chainId } = useActiveWeb3React()
+  const [selected, setSelected] = useRecoilState(SelectedCurrencyAtom)
   const bentoBalances = useBentoBalances()
+  const setActiveModal = useSetRecoilState(ActiveModalAtom)
+
   const balances = useMemo(
     () =>
       chainId
@@ -43,15 +54,32 @@ export const BentoBalances = () => {
     [bentoBalances, chainId]
   )
 
+  const handleRowClick = useCallback(
+    (row) => {
+      setSelected(row.values.asset.currency)
+      setActiveModal(ActiveModal.MENU)
+    },
+    [setActiveModal, setSelected]
+  )
+
   const { config } = useTableConfig(balances)
 
-  return <_AssetBalances config={config} />
+  return (
+    <_AssetBalances
+      config={config}
+      selected={(row) => row.values.asset.currency === selected}
+      onSelect={handleRowClick}
+    />
+  )
 }
 
 export const WalletBalances = () => {
   const { chainId, account } = useActiveWeb3React()
+  const [selected, setSelected] = useRecoilState(SelectedCurrencyAtom)
   const _balances = useAllTokenBalances()
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
+  const setActiveModal = useSetRecoilState(ActiveModalAtom)
+
   const balances = useMemo(() => {
     const res = Object.values(_balances).reduce<Assets[]>((acc, cur) => {
       if (cur.greaterThan(ZERO)) acc.push({ asset: cur })
@@ -66,12 +94,33 @@ export const WalletBalances = () => {
   }, [_balances, ethBalance])
   const { config } = useTableConfig(balances)
 
-  return <_AssetBalances config={config} />
+  const handleRowClick = useCallback(
+    (row) => {
+      setSelected(row.values.asset.currency)
+      setActiveModal(ActiveModal.MENU)
+    },
+    [setActiveModal, setSelected]
+  )
+
+  return (
+    <_AssetBalances
+      config={config}
+      selected={(row) => row.values.asset.currency === selected}
+      onSelect={handleRowClick}
+    />
+  )
 }
 
-const _AssetBalances = ({ config }) => {
-  const [selected, setSelected] = useRecoilState(SelectedCurrencyAtom)
-  const setActiveModal = useSetRecoilState(ActiveModalAtom)
+interface _AssetBalancesProps {
+  config: any
+  loading?: boolean
+  error?: boolean
+  selected?(row: any): boolean
+  onSelect?(row: any): void
+}
+
+const _AssetBalances: FC<_AssetBalancesProps> = ({ config, loading, error, onSelect, selected }) => {
+  const { i18n } = useLingui()
 
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page }: TableInstance = useTable(
     config,
@@ -80,70 +129,70 @@ const _AssetBalances = ({ config }) => {
     useFlexLayout
   )
 
-  const handleRowClick = useCallback(
-    (currency: Currency) => {
-      setSelected(currency)
-      setActiveModal(ActiveModal.MENU)
-    },
-    [setActiveModal, setSelected]
-  )
-
   return (
-    <>
-      <div {...getTableProps()} className="w-full">
-        <div>
-          {headerGroups.map((headerGroup, i) => (
-            <tr {...headerGroup.getHeaderGroupProps()} key={i} className="lg:pl-[18px] lg:pr-[18px] lg:mb-3">
-              {headerGroup.headers.map((column, i) => (
-                <th
-                  key={i}
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className={classNames(column.className, `font-normal`)}
-                >
-                  {column.render('Header')}
-                  <span className="inline-block ml-1 align-middle">
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <ArrowDownIcon width={12} />
-                      ) : (
-                        <ArrowUpIcon width={12} />
-                      )
-                    ) : (
-                      ''
-                    )}
-                  </span>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </div>
-        <div {...getTableBodyProps()} className="lg:border lg:border-dark-700 lg:rounded lg:overflow-hidden">
-          {page.map((row, i) => {
+    <div {...getTableProps()} className="w-full">
+      <div>
+        {headerGroups.map((headerGroup, i) => (
+          <div {...headerGroup.getHeaderGroupProps()} key={i} className="lg:pl-[18px] lg:pr-[18px] lg:mb-3">
+            {headerGroup.headers.map((column, i) => (
+              <div
+                key={i}
+                {...column.getHeaderProps(column.getSortByToggleProps())}
+                className={classNames(column.className, `font-normal`, 'flex items-center lg:gap-2 gap-1')}
+              >
+                {column.render('Header')}
+                {i === 0 && (
+                  <div className="inline-flex items-center">
+                    <div
+                      className={`animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue inline-block ml-3 transition ${
+                        loading ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    />
+                    {error && <span className="ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div {...getTableBodyProps()} className="lg:border lg:border-dark-700 lg:rounded lg:overflow-hidden">
+        {page.length > 0 ? (
+          page.map((row, i) => {
             prepareRow(row)
             return (
-              <tr
+              <div
                 {...row.getRowProps()}
                 key={i}
-                onClick={() => handleRowClick(row.values.asset.currency)}
+                onClick={() => onSelect && onSelect(row)}
                 className={classNames(
                   i % 2 === 0 ? 'lg:bg-[rgb(255,255,255,0.03)]' : '',
-                  row.values.asset.currency === selected ? 'lg:!bg-dark-800' : '',
+                  selected && selected(row) ? 'lg:!bg-dark-800' : '',
                   i < page.length - 1 ? 'border-b lg:border-dark-700 border-dark-900' : '',
-                  'lg:hover:bg-dark-900 lg:pl-3.5 lg:pr-5 cursor-pointer'
+                  'lg:hover:bg-dark-900 lg:pl-3.5 lg:pr-5 lg:gap-2 gap-1',
+                  onSelect ? 'cursor-pointer' : ''
                 )}
               >
                 {row.cells.map((cell, i) => {
                   return (
-                    <td key={i} {...cell.getCellProps()} className="py-4 flex items-center">
+                    <div
+                      key={i}
+                      {...cell.getCellProps()}
+                      className={classNames('h-[64px] flex items-center', headerGroups[0].headers[i].className)}
+                    >
                       {cell.render('Cell')}
-                    </td>
+                    </div>
                   )
                 })}
-              </tr>
+              </div>
             )
-          })}
-        </div>
+          })
+        ) : (
+          <Typography variant="xs" className="text-center text-low-emphesis h-[60px] flex items-center justify-center">
+            {i18n._(t`No balances`)}
+          </Typography>
+        )}
       </div>
-    </>
+    </div>
   )
 }

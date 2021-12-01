@@ -20,7 +20,7 @@ const BentoActions: FC = () => {
 
   const swapActionHandler = useCallback(async () => {
     if (currency?.isNative) return router.push('/trident/swap')
-    return router.push(`/trident/swap?tokens=ETH&tokens=${currency?.wrapped.address}`)
+    return router.push(`/trident/swap?type=classic&tokens=ETH&tokens=${currency?.wrapped.address}`)
   }, [currency?.isNative, currency?.wrapped.address, router])
 
   return (
