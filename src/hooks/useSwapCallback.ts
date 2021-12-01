@@ -1,33 +1,25 @@
-import { BIPS_BASE, EIP_1559_ACTIVATION_BLOCK } from '../constants'
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  Ether,
-  JSBI,
-  Percent,
-  Router,
-  TradeType,
-  Trade as V2Trade,
-} from '@sushiswap/sdk'
-import { isAddress, isZero } from '../functions/validate'
+import { ChainId, Currency, Percent, Router, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
 import { arrayify, hexlify, splitSignature } from '@ethersproject/bytes'
+import { isAddress, isZero } from '../functions/validate'
 import { useFactoryContract, useRouterContract } from './useContract'
+
 import { ARCHER_RELAY_URI } from '../config/archer'
-import { OPENMEV_URI } from '../config/openmev'
 import { ArcherRouter } from '../functions/archerRouter'
 import { BigNumber } from '@ethersproject/bignumber'
 import Common from '@ethereumjs/common'
+import { EIP_1559_ACTIVATION_BLOCK } from '../constants'
+import { OPENMEV_URI } from '../config/openmev'
 import { SignatureData } from './useERC20Permit'
 import { TransactionFactory } from '@ethereumjs/tx'
 import { TransactionRequest } from '@ethersproject/abstract-provider'
-import { keccak256 } from '@ethersproject/keccak256'
 import approveAmountCalldata from '../functions/approveAmountCalldata'
 import { calculateGasMargin } from '../functions/trade'
 import { ethers } from 'ethers'
+import { id } from '@ethersproject/hash'
+import { keccak256 } from '@ethersproject/keccak256'
 import { shortenAddress } from '../functions/format'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useActiveWeb3React } from '../services/web3/hooks/useActiveWeb3React'
 import { useArgentWalletContract } from './useArgentWalletContract'
 import { useBlockNumber } from '../state/application/hooks'
 import useENS from './useENS'
@@ -35,7 +27,6 @@ import { useMemo } from 'react'
 import { useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
 import { useUserArcherETHTip } from '../state/user/hooks'
-import { id } from '@ethersproject/hash'
 
 export enum SwapCallbackState {
   INVALID,
