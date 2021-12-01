@@ -43,9 +43,9 @@ export const getTridentPoolsQuery = gql`
   }
 `
 
-export const poolHourBucketsQuery = gql`
+export const poolHourSnapshotsQuery = gql`
   query PoolHourBuckets($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolHourBucket_filter) {
-    poolHourBuckets(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+    poolHourSnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
       id
       date
       totalValueLockedUSD
@@ -56,9 +56,9 @@ export const poolHourBucketsQuery = gql`
   }
 `
 
-export const poolDayBucketsQuery = gql`
+export const poolDaySnapshotsQuery = gql`
   query PoolDayBuckets($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolDayBucket_filter) {
-    poolDayBuckets(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
+    poolDaySnapshots(first: $first, skip: $skip, block: $block, where: $where, orderBy: date, orderDirection: desc) {
       id
       date
       totalValueLockedUSD
@@ -113,6 +113,20 @@ export const getTridentPositionsQuery = gql`
       pool {
         ${tridentPoolsSubQuery}
       }
+    }
+  }
+`
+
+export const poolKpisQuery = gql`
+  query poolKpisQuery($first: Int = 1000, $skip: Int = 0, $block: Block_height, $where: PoolKpi_filter) {
+    poolKpis(first: $first, skip: $skip, block: $block, where: $where) {
+      fees
+      feesUSD
+      volume
+      volumeUSD
+      liquidity
+      liquidityUSD
+      transactionCount
     }
   }
 `

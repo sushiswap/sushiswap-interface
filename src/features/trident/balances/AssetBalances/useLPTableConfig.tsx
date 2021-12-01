@@ -7,6 +7,7 @@ import { feeTiersFilter, filterForSearchQueryAndTWAP } from 'app/features/triden
 import { chipPoolColorMapper, poolTypeNameMapper } from 'app/features/trident/types'
 import { formatPercent } from 'app/functions'
 import { TridentPositionRow } from 'app/services/graph'
+import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { useCallback, useMemo } from 'react'
@@ -78,11 +79,19 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               accessor: 'apy',
               maxWidth: 100,
               className: 'text-right flex justify-end',
-              Cell: (props) => (
-                <Typography weight={700} className="text-high-emphesis text-right w-full">
-                  {formatPercent(props.value)}
-                </Typography>
-              ),
+              Cell: ({ row }) => {
+                const stats = useRollingPoolStats({
+                  chainId,
+                  variables: { where: { id_in: positions?.map((el) => el.id.toLowerCase()) } },
+                  shouldFetch: !!chainId && !!positions,
+                })
+
+                return (
+                  <Typography weight={700} className="text-high-emphesis text-right w-full">
+                    {formatPercent(stats?.[row.id]?.apy)}
+                  </Typography>
+                )
+              },
             },
             {
               id: 'actions',

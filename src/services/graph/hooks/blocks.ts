@@ -80,13 +80,12 @@ export function useBlock({
   variables,
   shouldFetch = true,
   swrConfig = undefined,
-}: GraphProps): number | undefined {
+}: GraphProps): { number?: number } {
   const { data } = useSWR(
     shouldFetch ? ['block', chainId, stringify(variables)] : null,
     (_, chainId) => getBlock(chainId, variables),
     swrConfig
   )
-
   return data
 }
 
