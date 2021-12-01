@@ -3,7 +3,7 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumberish } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, Fraction, JSBI, Price, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/core-sdk'
 import Numeral from 'numeral'
 
 export const capitalize = (s) => {
@@ -194,15 +194,3 @@ export const formatDate = (date: Date) =>
     '20',
     ''
   )}`
-
-export const formatPoolLink = (tokens: (Token | string)[], fee: number, twap: boolean) => {
-  const _tokens = tokens.map((token) => {
-    if (token instanceof Token) {
-      return `tokens=${token.address}`
-    }
-
-    return `tokens=${token}`
-  })
-
-  return `${[..._tokens, `fee=${fee}`, `twap=${twap}`].filter((el) => !!el).join('&')}`
-}

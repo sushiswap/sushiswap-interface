@@ -21,11 +21,10 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
   const { i18n } = useLingui()
   const { pool } = poolProp
 
-  // TODO ramin: use getAssets when available
   const currencies = [pool?.token0, pool?.token1]
 
   // TODO ramin: add other types
-  const poolType = pool instanceof ConstantProductPool ? PoolType.ConstantProduct : null
+  const poolType = pool instanceof ConstantProductPool ? PoolType.ConstantProduct : undefined
 
   // TODO ramin: remove
   const isFarm = true
@@ -87,9 +86,21 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
     </div>
   )
 
-  // TODO ramin: dynamic
   if (link)
-    return <Link href={`${link}/${poolType}/${currencies.map((el) => el?.wrapped.address).join('/')}`}>{content}</Link>
+    return (
+      <Link
+        href={{
+          pathname: `/trident/pool/classic`,
+          query: {
+            tokens: pool.assets.map((el) => el.address),
+            fee: pool.fee,
+            twap: pool instanceof ConstantProductPool ? pool.twap : undefined,
+          },
+        }}
+      >
+        {content}
+      </Link>
+    )
 
   return content
 }

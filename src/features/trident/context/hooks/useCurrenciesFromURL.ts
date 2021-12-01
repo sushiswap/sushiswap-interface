@@ -33,12 +33,16 @@ const useCurrenciesFromURL = (): {
       ]
     }
 
+    console.log(router.pathname)
+
     await router.push({
       pathname: router.pathname,
       query: {
         tokens,
-        fee,
-        twap,
+        ...(router.pathname !== '/trident/swap' && {
+          fee,
+          twap,
+        }),
       },
     })
   }, [
@@ -90,8 +94,10 @@ const useCurrenciesFromURL = (): {
         pathname: router.pathname,
         query: {
           tokens,
-          fee,
-          twap,
+          ...(router.pathname !== '/trident/swap' && {
+            fee,
+            twap,
+          }),
         },
       })
     },

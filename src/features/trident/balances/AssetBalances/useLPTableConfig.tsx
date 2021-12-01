@@ -5,7 +5,7 @@ import Typography from 'app/components/Typography'
 import { PoolCell } from 'app/features/trident/pools/PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from 'app/features/trident/pools/poolTableFilters'
 import { chipPoolColorMapper, poolTypeNameMapper } from 'app/features/trident/types'
-import { formatPercent, formatPoolLink } from 'app/functions'
+import { formatPercent } from 'app/functions'
 import { TridentPositionRow } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
@@ -94,11 +94,14 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               Cell: ({ value, row: { original } }) => {
                 return (
                   <Link
-                    href={`/trident/pool/${poolSlug(value)}?${formatPoolLink(
-                      original.assets,
-                      original.swapFeePercent * 100,
-                      original.twapEnabled
-                    )}`}
+                    href={{
+                      pathname: `/trident/pool/${poolSlug(value)}`,
+                      query: {
+                        tokens: original.assets.map((el) => el.address),
+                        fee: original.swapFeePercent * 100,
+                        twap: original.twapEnabled,
+                      },
+                    }}
                     passHref={true}
                   >
                     <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
