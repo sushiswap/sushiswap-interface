@@ -29,6 +29,7 @@ export interface TridentPool {
   volumeUSD: number
   liquidityUSD: number
   transactionCount: number
+  apy: string
   assets: Token[]
   swapFeePercent: FeeTier
   twapEnabled: boolean
@@ -43,6 +44,7 @@ const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult): TridentPo
         type: gqlPoolTypeMap[poolType],
         volumeUSD: Number(kpi.volumeUSD),
         liquidityUSD: Number(kpi.liquidityUSD),
+        apy: '12.34', // TODO: Needs subgraph support
         transactionCount: Number(kpi.transactionCount),
         assets: assets.map(
           ({ token }) => new Token(chainId, token.id, Number(token.decimals), token.symbol, token.name)

@@ -1,36 +1,43 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Card from 'app/components/Card'
+import Dots from 'app/components/Dots'
 import GradientDot from 'app/components/GradientDot'
 import Image from 'app/components/Image'
+import { KASHI_NETWORKS } from 'app/features/kashi/constants'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
 import { formatNumber, formatPercent } from 'app/functions/format'
+import NetworkGuard from 'app/guards/Network'
+import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import useSearchAndSort from 'app/hooks/useSearchAndSort'
 import Layout from 'app/layouts/Kashi'
 import Head from 'next/head'
 import Link from 'next/link'
 import React from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
 import { RecoilRoot } from 'recoil'
 
 function Borrow() {
   const { i18n } = useLingui()
 
   const addresses = useKashiPairAddresses()
-  const fullPairs = useKashiPairs(addresses)
+  const pairs = useKashiPairs(addresses)
 
   const positions = useSearchAndSort(
-    fullPairs.filter((pair: any) => pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)),
+    pairs.filter((pair: any) => pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)),
     { keys: ['search'], threshold: 0.1 },
     { key: 'health.value', direction: 'descending' }
   )
 
-  const pairs = useSearchAndSort(
-    fullPairs,
+  const data = useSearchAndSort(
+    pairs,
     { keys: ['search'], threshold: 0.1 },
     { key: 'totalAssetAmount.usdValue', direction: 'descending' }
   )
+
+  const [numDisplayed, setNumDisplayed] = useInfiniteScroll(data.items)
 
   return (
     <>
@@ -155,21 +162,21 @@ function Borrow() {
         )}
 
         <div className="grid grid-flow-col grid-cols-4 gap-4 px-4 pb-4 text-sm md:grid-cols-6 lg:grid-cols-7 text-secondary">
-          <ListHeaderWithSort sort={pairs} sortKey="search">
+          <ListHeaderWithSort sort={data} sortKey="search">
             {i18n._(t`Markets`)}
           </ListHeaderWithSort>
-          <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="asset.tokenInfo.symbol">
+          <ListHeaderWithSort className="hidden md:flex" sort={data} sortKey="asset.tokenInfo.symbol">
             {i18n._(t`Borrow`)}
           </ListHeaderWithSort>
-          <ListHeaderWithSort className="hidden md:flex" sort={pairs} sortKey="collateral.tokenInfo.symbol">
+          <ListHeaderWithSort className="hidden md:flex" sort={data} sortKey="collateral.tokenInfo.symbol">
             {i18n._(t`Collateral`)}
           </ListHeaderWithSort>
-          <ListHeaderWithSort className="hidden lg:flex" sort={pairs} sortKey="oracle.name">
+          <ListHeaderWithSort className="hidden lg:flex" sort={data} sortKey="oracle.name">
             {i18n._(t`Oracle`)}
           </ListHeaderWithSort>
           <ListHeaderWithSort
             className="justify-end"
-            sort={pairs}
+            sort={data}
             sortKey="currentBorrowAmount.usdValue"
             direction="descending"
           >
@@ -177,7 +184,7 @@ function Borrow() {
           </ListHeaderWithSort>
           <ListHeaderWithSort
             className="justify-end"
-            sort={pairs}
+            sort={data}
             sortKey="totalAssetAmount.usdValue"
             direction="descending"
           >
@@ -185,87 +192,96 @@ function Borrow() {
           </ListHeaderWithSort>
           <ListHeaderWithSort
             className="justify-end"
-            sort={pairs}
+            sort={data}
             sortKey="currentInterestPerYear.value"
             direction="descending"
           >
             {i18n._(t`APR`)}
           </ListHeaderWithSort>
         </div>
-        <div className="flex-col space-y-2">
-          {pairs.items &&
-            pairs.items.map((pair) => {
-              return (
-                <div key={pair.address}>
-                  <Link href={'/borrow/' + String(pair.address).toLowerCase()}>
-                    <a className="block text-high-emphesis">
-                      <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
-                        <div className="flex flex-col items-start sm:flex-row sm:items-center">
-                          <div className="hidden space-x-2 md:flex">
-                            <Image
-                              height={48}
-                              width={48}
-                              src={pair.asset.tokenInfo.logoURI}
-                              className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
-                              alt={pair.asset.tokenInfo.symbol}
-                            />
-                            <Image
-                              height={48}
-                              width={48}
-                              src={pair.collateral.tokenInfo.logoURI}
-                              className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
-                              alt={pair.collateral.tokenInfo.symbol}
-                            />
+
+        <InfiniteScroll
+          dataLength={numDisplayed}
+          next={() => setNumDisplayed(numDisplayed + 5)}
+          hasMore={true}
+          loader={
+            <div className="text-center mt-8">
+              <Dots>Loading</Dots>
+            </div>
+          }
+        >
+          <div className="flex-col space-y-2">
+            {data.items.slice(0, numDisplayed).map((pair) => (
+              <div key={pair.address}>
+                <Link href={'/borrow/' + String(pair.address).toLowerCase()}>
+                  <a className="block text-high-emphesis">
+                    <div className="grid items-center grid-cols-4 gap-4 px-4 py-4 text-sm rounded md:grid-cols-6 lg:grid-cols-7 align-center bg-dark-800 hover:bg-dark-pink">
+                      <div className="flex flex-col items-start sm:flex-row sm:items-center">
+                        <div className="hidden space-x-2 md:flex">
+                          <Image
+                            height={48}
+                            width={48}
+                            src={pair.asset.tokenInfo.logoURI}
+                            className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                            alt={pair.asset.tokenInfo.symbol}
+                          />
+                          <Image
+                            height={48}
+                            width={48}
+                            src={pair.collateral.tokenInfo.logoURI}
+                            className="w-5 h-5 rounded-lg md:w-10 md:h-10 lg:w-12 lg:h-12"
+                            alt={pair.collateral.tokenInfo.symbol}
+                          />
+                        </div>
+                        <div className="sm:items-end md:hidden">
+                          <div className="flex flex-col md:flex-row">
+                            <div className="font-semibold">{pair.asset.tokenInfo.symbol} / </div>
+                            <div>{pair.collateral.tokenInfo.symbol}</div>
                           </div>
-                          <div className="sm:items-end md:hidden">
-                            <div className="flex flex-col md:flex-row">
-                              <div className="font-semibold">{pair.asset.tokenInfo.symbol} / </div>
-                              <div>{pair.collateral.tokenInfo.symbol}</div>
-                            </div>
-                            <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">
-                              {pair.oracle.name}
-                            </div>
+                          <div className="block mt-0 text-xs text-left text-white-500 lg:hidden">
+                            {pair.oracle.name}
                           </div>
                         </div>
-                        <div className="hidden text-white md:block">
-                          <strong>{pair.asset.tokenInfo.symbol}</strong>
-                        </div>
-                        <div className="hidden md:block">{pair.collateral.tokenInfo.symbol}</div>
-                        <div className="hidden lg:block">{pair.oracle.name}</div>
-                        <div className="text-left md:text-right">
-                          <div className="md:hidden">
-                            <div className="flex flex-col">
-                              <div>{formatNumber(pair.currentBorrowAmount.string)}</div>
-                              <div>{pair.asset.tokenInfo.symbol}</div>
-                            </div>
-                            <div className="text-secondary">{formatNumber(pair.currentBorrowAmount.usd, true)}</div>
-                          </div>
-                          <div className="hidden md:block">
-                            {formatNumber(pair.currentBorrowAmount.string)} {pair.asset.tokenInfo.symbol}
-                            <div className="text-secondary">{formatNumber(pair.currentBorrowAmount.usd, true)}</div>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="md:hidden">
-                            <div className="flex flex-col">
-                              <div>{formatNumber(pair.totalAssetAmount.string)}</div>
-                              <div>{pair.asset.tokenInfo.symbol}</div>
-                            </div>
-                            <div className="text-secondary">{formatNumber(pair.totalAssetAmount.usd, true)}</div>
-                          </div>
-                          <div className="hidden md:block">
-                            {formatNumber(pair.totalAssetAmount.string)} {pair.asset.tokenInfo.symbol}
-                            <div className="text-secondary">{formatNumber(pair.totalAssetAmount.usd, true)}</div>
-                          </div>
-                        </div>
-                        <div className="text-right">{formatPercent(pair.currentInterestPerYear.string)}</div>
                       </div>
-                    </a>
-                  </Link>
-                </div>
-              )
-            })}
-        </div>
+                      <div className="hidden text-white md:block">
+                        <strong>{pair.asset.tokenInfo.symbol}</strong>
+                      </div>
+                      <div className="hidden md:block">{pair.collateral.tokenInfo.symbol}</div>
+                      <div className="hidden lg:block">{pair.oracle.name}</div>
+                      <div className="text-left md:text-right">
+                        <div className="md:hidden">
+                          <div className="flex flex-col">
+                            <div>{formatNumber(pair.currentBorrowAmount.string)}</div>
+                            <div>{pair.asset.tokenInfo.symbol}</div>
+                          </div>
+                          <div className="text-secondary">{formatNumber(pair.currentBorrowAmount.usd, true)}</div>
+                        </div>
+                        <div className="hidden md:block">
+                          {formatNumber(pair.currentBorrowAmount.string)} {pair.asset.tokenInfo.symbol}
+                          <div className="text-secondary">{formatNumber(pair.currentBorrowAmount.usd, true)}</div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="md:hidden">
+                          <div className="flex flex-col">
+                            <div>{formatNumber(pair.totalAssetAmount.string)}</div>
+                            <div>{pair.asset.tokenInfo.symbol}</div>
+                          </div>
+                          <div className="text-secondary">{formatNumber(pair.totalAssetAmount.usd, true)}</div>
+                        </div>
+                        <div className="hidden md:block">
+                          {formatNumber(pair.totalAssetAmount.string)} {pair.asset.tokenInfo.symbol}
+                          <div className="text-secondary">{formatNumber(pair.totalAssetAmount.usd, true)}</div>
+                        </div>
+                      </div>
+                      <div className="text-right">{formatPercent(pair.currentInterestPerYear.string)}</div>
+                    </div>
+                  </a>
+                </Link>
+              </div>
+            ))}
+          </div>
+        </InfiniteScroll>
       </Card>
     </>
   )
@@ -294,5 +310,7 @@ const BorrowLayout = ({ children }) => {
 }
 
 Borrow.Layout = BorrowLayout
+
+Borrow.Guard = NetworkGuard(KASHI_NETWORKS)
 
 export default Borrow

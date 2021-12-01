@@ -1,5 +1,6 @@
 import { Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+import { DiscoverPoolsTableColumn } from 'app/features/trident/pools/usePoolsTableData'
 import { classNames } from 'app/functions/styling'
 import React, { FC, useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -11,10 +12,8 @@ enum PoolSortOption {
   APY = 'APY Highest to Lowest',
 }
 
-type ColumnIdAccessor = string
-
-const sortTitleMapper: Record<PoolSortOption, ColumnIdAccessor> = {
-  [PoolSortOption.TVL]: 'totalValueLockedUSD',
+const sortTitleMapper: Record<PoolSortOption, DiscoverPoolsTableColumn['accessor']> = {
+  [PoolSortOption.TVL]: 'liquidityUSD',
   [PoolSortOption.APY]: 'apy',
 }
 

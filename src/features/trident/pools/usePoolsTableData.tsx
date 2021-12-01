@@ -2,21 +2,29 @@ import { PoolType } from '@sushiswap/tines'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
-import { getTridentPools } from 'app/services/graph/fetchers/pools'
+import { getTridentPools, TridentPool } from 'app/services/graph/fetchers/pools'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { useMemo } from 'react'
+import React, { ReactNode, useMemo } from 'react'
 import useSWR from 'swr'
 
 import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
 import { feeTiersFilter, filterForSearchQueryAndTWAP } from './poolTableFilters'
 
+export interface DiscoverPoolsTableColumn {
+  Header: string
+  accessor: keyof TridentPool | 'actions'
+  Cell: ReactNode
+  filter?: any
+  maxWidth?: number
+}
+
 export const usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
   const { data, error, isValidating } = useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
 
-  const columns = useMemo(() => {
+  const columns: DiscoverPoolsTableColumn[] = useMemo(() => {
     return [
       {
         Header: 'Assets',
@@ -82,7 +90,10 @@ export const usePoolsTableData = () => {
       config: {
         columns: columns,
         data: data ?? [],
-        initialState: { pageSize: 15 },
+        initialState: {
+          pageSize: 15,
+          sortBy: [{ id: 'liquidityUSD' as DiscoverPoolsTableColumn['accessor'], desc: true }],
+        },
         autoResetFilters: false,
       },
       loading: isValidating,

@@ -14,7 +14,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
 import concat from 'lodash/concat'
 import zip from 'lodash/zip'
-import { Dispatch, useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 
 import { Chef } from './enum'
 
@@ -174,15 +174,4 @@ export function usePositions(chainId = undefined) {
     useChefPositions(useMiniChefContract(), undefined, chainId),
   ]
   return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
-}
-
-/*
-  Currently expensive to render farm list item. The infinite scroll is used to
-  to minimize this impact. This hook pairs with it, keeping track of visible
-  items and passes this to <InfiniteScroll> component.
-*/
-export function useInfiniteScroll(items): [number, Dispatch<number>] {
-  const [itemsDisplayed, setItemsDisplayed] = useState(10)
-  useEffect(() => setItemsDisplayed(10), [items.length])
-  return [itemsDisplayed, setItemsDisplayed]
 }

@@ -3,7 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "app/animation/*": ["./animation/*"],
-      "app/components": ["./components"],
+      "app/components": ["./components/index.ts"],
       "app/components/*": ["./components/*"],
       "app/config": ["./config"],
       "app/config/*": ["./config/*"],

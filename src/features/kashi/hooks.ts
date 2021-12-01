@@ -4,11 +4,13 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
 import { ChainId, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { Fraction } from 'app/entities'
+import { Feature } from 'app/enums'
 import {
   accrue,
   accrueTotalAssetWithFee,
   e10,
   easyAmount,
+  featureEnabled,
   getOracle,
   getUSDValue,
   interestAccrue,
@@ -39,8 +41,8 @@ export function useKashiPairAddresses(): string[] {
   const events = useQueryFilter({
     chainId,
     contract: bentoBoxContract,
-    event: bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
-    shouldFetch: useEvents,
+    event: bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
+    shouldFetch: useEvents && featureEnabled(Feature.KASHI, chainId),
   })
   const clones = useClones({ chainId, shouldFetch: !useEvents })
   return (

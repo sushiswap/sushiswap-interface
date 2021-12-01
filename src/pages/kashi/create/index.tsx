@@ -3,6 +3,8 @@ import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import { KASHI_NETWORKS } from 'app/features/kashi/constants'
+import NetworkGuard from 'app/guards/Network'
 import Button from 'components/Button'
 import Card from 'components/Card'
 import Container from 'components/Container'
@@ -243,5 +245,7 @@ const CreateLayout = ({ children }) => {
 }
 
 Create.Layout = CreateLayout
+
+Create.Guard = NetworkGuard(KASHI_NETWORKS)
 
 export default Create
