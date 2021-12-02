@@ -8,9 +8,15 @@ import {
   removeSerializedToken,
   toggleURLWarning,
   updateMatchesDarkMode,
+  updateUserArcherETHTip,
+  updateUserArcherGasEstimate,
+  updateUserArcherGasPrice,
+  updateUserArcherTipManualOverride,
+  updateUserArcherUseRelay,
   updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
+  updateUserOpenMevUseRelay,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
 } from './actions'
@@ -52,12 +58,30 @@ export interface UserState {
 
   timestamp: number
   URLWarningVisible: boolean
+
+  /**
+   * @interface OpenMev
+   * @param userOpenMevUseRelay
+   * @param userArcherUseRelay
+   * @summary use relay or go directly to router
+   */
+  userOpenMevUseRelay: boolean
+  userArcherUseRelay: boolean // use relay or go directly to router
+  userArcherGasPrice: string // Current gas price
+  userArcherETHTip: string // ETH tip for relay, as full BigInt string
+  userArcherGasEstimate: string // Gas estimate for trade
+  userArcherTipManualOverride: boolean // is user manually entering tip
 }
 
 function pairKey(token0Address: string, token1Address: string) {
   return `${token0Address};${token1Address}`
 }
 
+/**
+ * @const initialState
+ * @param UserState
+ * @implements {OpenMev}
+ */
 export const initialState: UserState = {
   userDarkMode: null,
   matchesDarkMode: false,
@@ -69,6 +93,12 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
+  userArcherUseRelay: false,
+  userArcherTipManualOverride: false,
+  userOpenMevUseRelay: true,
+  userArcherGasPrice: '',
+  userArcherETHTip: '',
+  userArcherGasEstimate: '',
 }
 
 export default createReducer(initialState, (builder) =>
@@ -142,5 +172,23 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
+    })
+    .addCase(updateUserOpenMevUseRelay, (state, action) => {
+      state.userOpenMevUseRelay = action.payload.userOpenMevUseRelay
+    })
+    .addCase(updateUserArcherUseRelay, (state, action) => {
+      state.userArcherUseRelay = action.payload.userArcherUseRelay
+    })
+    .addCase(updateUserArcherGasPrice, (state, action) => {
+      state.userArcherGasPrice = action.payload.userArcherGasPrice
+    })
+    .addCase(updateUserArcherETHTip, (state, action) => {
+      state.userArcherETHTip = action.payload.userArcherETHTip
+    })
+    .addCase(updateUserArcherGasEstimate, (state, action) => {
+      state.userArcherGasEstimate = action.payload.userArcherGasEstimate
+    })
+    .addCase(updateUserArcherTipManualOverride, (state, action) => {
+      state.userArcherTipManualOverride = action.payload.userArcherTipManualOverride
     })
 )

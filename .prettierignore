@@ -1,2 +1,11 @@
-# Ignore all CSS files:
+# Ignore all compiled files:
 *.css
+*.json
+*.min.js
+*.js
+*.scss
+*.html
+.next/
+dist/
+build/
+*.svg

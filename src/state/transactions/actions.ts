@@ -12,6 +12,10 @@ export interface SerializableTransactionReceipt {
   status?: number
 }
 
+/**
+ * @const addTransaction
+ * @@implements {OpenMev, ArcherDAO}
+ */
 export const addTransaction = createAction<{
   chainId: ChainId
   hash: string
@@ -24,6 +28,10 @@ export const addTransaction = createAction<{
     deadline: number
     nonce: number
     ethTip: string
+  }
+  openmev?: {
+    signedTx: string
+    deadline: number
   }
 }>('transactions/addTransaction')
 export const clearAllTransactions = createAction<{ chainId: ChainId }>('transactions/clearAllTransactions')

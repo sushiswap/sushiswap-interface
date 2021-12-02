@@ -1,6 +1,13 @@
 import { ChainId, Percent } from '@sushiswap/core-sdk'
 import React, { useRef, useState } from 'react'
-import { useExpertModeManager, useUserSingleHopOnly, useUserTransactionTTL } from '../../state/user/hooks'
+import {
+  useExpertModeManager,
+  useUserArcherUseRelay,
+  useUserSingleHopOnly,
+  useUserTransactionTTL,
+  //  useUserOpenMevRelay,
+  useUserOpenMevUseRelay,
+} from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
 
 import { AdjustmentsIcon } from '@heroicons/react/outline'
@@ -17,8 +24,11 @@ import { useActiveWeb3React } from '../../services/web3'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 
+import { OPENMEV_RELAY_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
+
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
+  const { chainId, library } = useActiveWeb3React()
 
   const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.SETTINGS)
@@ -32,6 +42,10 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   useOnClickOutside(node, open ? toggle : undefined)
+
+  const [ttl, setTtl] = useUserTransactionTTL()
+
+  const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
 
   return (
     <div className="relative flex" ref={node}>
@@ -93,6 +107,25 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </div>
+            {/* {chainId == ChainId.ETHEREUM && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`MEV Shield by Archer DAO`)}
+                  </Typography>
+                  <QuestionHelper
+                    text={i18n._(
+                      t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
+                    )}
+                  />
+                </div>
+                <Toggle
+                  id="toggle-use-archer"
+                  isActive={userUseArcher}
+                  toggle={() => setUserUseArcher(!userUseArcher)}
+                />
+              </div>
+            )} */}
           </div>
         </div>
       )}

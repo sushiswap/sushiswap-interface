@@ -6,8 +6,9 @@
     "analyze": "ANALYZE=true yarn build && serve .next -n",
     "dev": "next dev",
     "inspect": "NODE_OPTIONS='--inspect' next dev",
-    "build": "yarn lingui && next build",
-    "start": "next start",
+    "build": "yarn lingui && NODE_ENV=production next build",
+    "start": "NEXT_TELEMETRY_DISABLED=1 next start",
+    "prod": "yarn lingui && NEXT_TELEMETRY_DISABLED=1 NODE_ENV=production npx next build",
     "lingui": "lingui extract --clean --overwrite && lingui compile",
     "lokalise": "lokalise2 --config lokalise.yaml file download --format po --unzip-to . --original-filenames=false",
     "circular": "madge --circular src --extensions ts,tsx,js,jsx",
@@ -28,7 +29,8 @@
   },
   "resolutions": {
     "@walletconnect/web3-provider": "1.6.0",
-    "cli-table": "0.3.6"
+    "bn.js": "^4.1.0",
+    "ua-parser-js": "0.7.28"
   },
   "devDependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
@@ -68,7 +70,7 @@
     "@sushiswap/chainlink-whitelist": "0.2.5",
     "@sushiswap/core": "^2.0.0-canary.1",
     "@sushiswap/core-sdk": "1.0.0-canary.16",
-    "@sushiswap/default-token-list": "18.10.0",
+    "@sushiswap/default-token-list": "18.12.0",
     "@sushiswap/limit-order-pair-list": "0.2.2",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.8",
     "@sushiswap/sdk": "5.0.0-canary.109",
@@ -159,7 +161,8 @@
     "swr": "^1.0.0",
     "tailwindcss": "^2.2.9",
     "tailwindcss-border-gradient-radius": "^2.0.0",
-    "typescript": "^4.4.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.3.5",
     "wcag-contrast": "^3.0.0"
   },
   "next-unused": {
@@ -174,8 +177,10 @@
   },
   "browserslist": [
     ">0.3%",
-    "not ie 11",
     "not dead",
-    "not op_mini all"
+    "not op_mini all",
+    "not IE > 0",
+    "not samsung 4",
+    "not and_uc 12.12"
   ]
 }

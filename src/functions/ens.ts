@@ -55,7 +55,7 @@ function resolverContract(resolverAddress: string, provider: Provider): Contract
 }
 
 /**
- * Fetches and decodes the result of an ENS contenthash lookup on mainnet to a URI
+ * Fetches and decodes the result of an ENS contenthash lookup on mainnet ethereum to a URI
  * @param ensName to resolve
  * @param provider provider to use to fetch the data
  */
