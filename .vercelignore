@@ -1,5 +1,3 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
-
 /node_modules
 .DS_Store
 npm-debug.log*
@@ -27,4 +25,3 @@ cache/
 .env.local
 .env.staging
 .env.testing
-.sentryclirc

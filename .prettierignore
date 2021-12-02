@@ -1,4 +1,4 @@
-# Ignore all CSS files:
+# Ignore all compiled files:
 *.css
 *.json
 *.min.js
@@ -6,7 +6,6 @@
 *.scss
 *.html
 .next/
-public/
 dist/
 build/
 *.svg

@@ -3,7 +3,10 @@ const runtimeCaching = require('next-pwa/cache')
 
 const linguiConfig = require('./lingui.config.js')
 
-const { locales, sourceLocale } = linguiConfig
+const {
+  locales,
+  sourceLocale
+} = linguiConfig
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -14,8 +17,13 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-const { withSentryConfig } = require('@sentry/nextjs')
-
+const {
+  withSentryConfig
+} = require('@sentry/nextjs')
+// @ts-check
+/**
+ * @type {import('next').NextConfig}
+ **/
 const nextConfig = {
   webpack: (config) => {
     config.module.rules = [
@@ -28,7 +36,9 @@ const nextConfig = {
 
     return config
   },
-  experimental: { esmExternals: true },
+  experimental: {
+    esmExternals: true
+  },
   pwa: {
     dest: 'public',
     runtimeCaching,
@@ -37,6 +47,8 @@ const nextConfig = {
   images: {
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
   },
+  productionBrowserSourceMaps: false,
+  poweredByHeader: false,
   reactStrictMode: true,
   async redirects() {
     return [
@@ -80,8 +92,7 @@ const nextConfig = {
     ]
   },
   async rewrites() {
-    return [
-      {
+    return [{
         source: '/stake',
         destination: '/bar',
       },
