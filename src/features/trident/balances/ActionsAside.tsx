@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil'
 
 import WalletActions from './WalletActions'
 
-export const _ActionsHeader = () => {
+const _ActionsHeader = () => {
   const currency = useRecoilValue(SelectedCurrencyAtom)
 
   return (

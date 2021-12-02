@@ -1,5 +1,4 @@
 import { ChainId, Currency, WNATIVE } from '@sushiswap/core-sdk'
-import { useCurrency } from 'app/hooks/Tokens'
 import useHttpLocations from 'app/hooks/useHttpLocations'
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import React, { FunctionComponent, useMemo } from 'react'
@@ -118,16 +117,10 @@ export interface CurrencyLogoProps {
   className?: string
 }
 
-const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({
-  currency: currencyProp,
-  size = '24px',
-  className,
-  style,
-}) => {
-  const uri =
-    currencyProp instanceof WrappedTokenInfo ? currencyProp.logoURI || currencyProp.tokenInfo.logoURI : undefined
-  const uriLocations = useHttpLocations(uri)
-  const currency = useCurrency(uriLocations.length > 0 ? undefined : currencyProp?.wrapped.address) || currencyProp
+const CurrencyLogo: FunctionComponent<CurrencyLogoProps> = ({ currency, size = '24px', className, style }) => {
+  const uriLocations = useHttpLocations(
+    currency instanceof WrappedTokenInfo ? currency.logoURI || currency.tokenInfo.logoURI : undefined
+  )
 
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative || currency?.equals(WNATIVE[currency.chainId])) {
