@@ -10,6 +10,7 @@ import Typography from '../../components/Typography'
 import { TablePageToggler } from './TablePageToggler'
 import { TableInstance, TransactionFetcherState } from './types'
 import { useTableConfig } from './useTableConfig'
+import { LoadingSpinner } from 'app/components/LoadingSpinner'
 
 export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
   const { transactions, error, loading } = useLegacyTransactions(pairs)
@@ -39,15 +40,13 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
 
   return (
     <div className="flex flex-col gap-3">
-      <Typography variant="h3" className="text-high-emphesis" weight={700}>
-        {i18n._(t`Transactions`)}
-        <div
-          className={`animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue inline-block ml-3 transition ${
-            loading ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+      <div className="flex gap-3 items-center">
+        <Typography variant="h3" className="text-high-emphesis" weight={700}>
+          {i18n._(t`Transactions`)}
+        </Typography>
+        <LoadingSpinner active={loading} />
         {error && <span className="-ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
-      </Typography>
+      </div>
 
       <div className="overflow-x-auto">
         <table {...getTableProps()} className="w-full">

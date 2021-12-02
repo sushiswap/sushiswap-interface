@@ -3,21 +3,23 @@ import { useUSDCValue } from 'hooks/useUSDCPrice'
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 // Dummy component that fetches usdcValue
-const USDCValue: FC<{ amount?: CurrencyAmount<Currency>; update(address: string, value?: CurrencyAmount<Currency>) }> =
-  ({ amount, update }) => {
-    const usdcValue = useUSDCValue(amount)
+const USDCValue: FC<{
+  amount?: CurrencyAmount<Currency>
+  update(address: string, value?: CurrencyAmount<Currency>)
+}> = ({ amount, update }) => {
+  const usdcValue = useUSDCValue(amount)
 
-    useEffect(() => {
-      if (!amount?.currency.wrapped.address) return
-      update(amount?.currency.wrapped.address, usdcValue)
+  useEffect(() => {
+    if (!amount?.currency.wrapped.address) return
+    update(amount?.currency.wrapped.address, usdcValue)
 
-      return () => {
-        update(amount?.currency.wrapped.address, undefined)
-      }
-    }, [amount?.currency.wrapped.address, update, usdcValue])
+    return () => {
+      update(amount?.currency.wrapped.address, undefined)
+    }
+  }, [amount?.currency.wrapped.address, update, usdcValue])
 
-    return <></>
-  }
+  return <></>
+}
 
 interface SumUSDCValuesProps {
   amounts?: (CurrencyAmount<Currency> | undefined)[]
@@ -33,20 +35,8 @@ const SumUSDCValues: FC<SumUSDCValuesProps> = ({ amounts, children }) => {
     }))
   }, [])
 
-  const values = useMemo(() => Object.values(state), [state])
-  const amount = useMemo(
-    () =>
-      values.length > 0
-        ? values.reduce((acc, cur) => {
-            if (acc && cur) {
-              acc.add(cur)
-            }
-
-            return acc
-          })
-        : undefined,
-    [values]
-  )
+  const values = useMemo(() => Object.values(state).filter(Boolean) as CurrencyAmount<Currency>[], [state])
+  const amount = useMemo(() => (values.length > 0 ? values.reduce((acc, cur) => acc.add(cur)) : undefined), [values])
 
   return (
     <>

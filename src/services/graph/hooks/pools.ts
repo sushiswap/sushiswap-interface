@@ -1,3 +1,4 @@
+import { useActiveWeb3React } from 'app/services/web3'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
 
@@ -44,4 +45,9 @@ export function usePoolDayBuckets({
     swrConfig
   )
   return data
+}
+
+export const useGetAllTridentPools = () => {
+  const { chainId } = useActiveWeb3React()
+  return useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
 }

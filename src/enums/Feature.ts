@@ -8,4 +8,5 @@ export enum Feature {
   ANALYTICS = 'Analytics',
   MIGRATE = 'Migrate',
   STAKING = 'Staking',
+  TRIDENT = 'Trident',
 }

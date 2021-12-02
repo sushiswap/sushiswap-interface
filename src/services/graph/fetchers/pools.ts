@@ -23,6 +23,7 @@ const gqlPoolTypeMap: Record<string, PoolType> = {
 export type FeeTier = 1 | 0.3 | 0.05 | 0.01
 
 export interface TridentPool {
+  address: string
   type: PoolType
   volumeUSD: number
   liquidityUSD: number
@@ -42,7 +43,8 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
   Object.entries(pools)
     .filter(([, assets]) => assets.length)
     .flatMap(([poolType, poolList]: [string, TridentPoolData[]]) =>
-      poolList.map(({ kpi, assets, swapFee, twapEnabled }) => ({
+      poolList.map(({ kpi, assets, swapFee, twapEnabled, id }) => ({
+        address: id,
         type: gqlPoolTypeMap[poolType],
         volumeUSD: Number(kpi.volumeUSD),
         liquidityUSD: Number(kpi.liquidityUSD),
@@ -60,6 +62,7 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
     )
 
 interface TridentPoolData {
+  id: string
   kpi: {
     volumeUSD: string
     liquidityUSD: string
