@@ -1,0 +1,66 @@
+name: Lint
+
+on:
+  push:
+
+  pull_request_target:
+    branches:
+      - canary
+
+permissions:
+  checks: write
+  contents: read
+
+# CI false so we don't treat warnings as failures
+env:
+  CI: false
+  FORCE_COLOR: 2
+  HUSKY_SKIP_INSTALL: 1
+  NEXT_TELEMETRY_DISABLED: 1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Run action
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ['ubuntu-latest']
+
+    steps:
+      - name: Check out repository (push)
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@v2
+
+      - name: Check out repository (pull_request_target)
+        if: ${{ github.event_name == 'pull_request_target' }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          always-auth: true
+          registry-url: https://registry.npmjs.org
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn --version && yarn install --frozen-lockfile
+        id: install
+
+      - name: Run linters
+        uses: wearerequired/lint-action@a25b25ac232deed2e3d2f802b111da885f8aa617
+        id: lint
+        with:
+          continue_on_error: false
+          eslint: true
+          eslint_extensions: "js,jsx,ts,tsx"
+          auto_fix: true
+          prettier: true
+          prettier_extensions: "js,jsx,ts,tsx"
