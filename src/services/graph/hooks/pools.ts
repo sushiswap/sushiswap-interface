@@ -1,5 +1,6 @@
 import { aprToApy, formatNumber, formatPercent } from 'app/functions'
 import { useOneDayBlock, useTwoDayBlock } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
 
@@ -150,4 +151,9 @@ export function useRollingPoolStats({ chainId, variables, shouldFetch = true, sw
       ),
     }
   })
+}
+
+export const useGetAllTridentPools = () => {
+  const { chainId } = useActiveWeb3React()
+  return useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
 }

@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, NATIVE, Pair } from '@sushiswap/core-sdk'
+import { CurrencyAmount, NATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
 import Back from 'app/components/Back'
 import Button from 'app/components/Button'
@@ -11,56 +11,18 @@ import FullPositionCard from 'app/components/PositionCard'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { MigrationSupported } from 'app/features/migration'
+import { useV2PairsWithLiquidity } from 'app/features/trident/migrate/context/useV2PairsWithLiquidity'
 import { classNames, currencyId } from 'app/functions'
-import { useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
-import { toV2LiquidityToken, useTrackedTokenPairs } from 'app/state/user/hooks'
-import { useETHBalances } from 'app/state/wallet/hooks'
-import { useTokenBalancesWithLoadingIndicator } from 'app/state/wallet/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 export default function Pool() {
   const { i18n } = useLingui()
   const router = useRouter()
   const { account, chainId } = useActiveWeb3React()
-
-  const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
-
-  // fetch the user's balances of all tracked V2 LP tokens
-  const trackedTokenPairs = useTrackedTokenPairs()
-  const tokenPairsWithLiquidityTokens = useMemo(
-    () =>
-      trackedTokenPairs.map((tokens) => ({
-        liquidityToken: toV2LiquidityToken(tokens),
-        tokens,
-      })),
-    [trackedTokenPairs]
-  )
-  const liquidityTokens = useMemo(
-    () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
-    [tokenPairsWithLiquidityTokens]
-  )
-  const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
-    account ?? undefined,
-    liquidityTokens
-  )
-
-  // fetch the reserves for all V2 pools in which the user has a balance
-  const liquidityTokensWithBalances = useMemo(
-    () =>
-      tokenPairsWithLiquidityTokens.filter(({ liquidityToken }) =>
-        v2PairsBalances[liquidityToken.address]?.greaterThan('0')
-      ),
-    [tokenPairsWithLiquidityTokens, v2PairsBalances]
-  )
-
-  const v2Pairs = useV2Pairs(liquidityTokensWithBalances.map(({ tokens }) => tokens))
-  const v2IsLoading =
-    fetchingV2PairBalances || v2Pairs?.length < liquidityTokensWithBalances.length || v2Pairs?.some((V2Pair) => !V2Pair)
-
-  const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
+  const { loading, pairs } = useV2PairsWithLiquidity()
 
   // TODO: Replicate this!
   // show liquidity even if its deposited in rewards contract
@@ -110,11 +72,11 @@ export default function Pool() {
         <div className="grid grid-flow-row gap-3">
           {!account ? (
             <Web3Connect size="lg" color="blue" className="w-full" />
-          ) : v2IsLoading ? (
+          ) : loading ? (
             <Empty>
               <Dots>{i18n._(t`Loading`)}</Dots>
             </Empty>
-          ) : allV2PairsWithLiquidity?.length > 0 ? (
+          ) : pairs?.length > 0 ? (
             <>
               {/* <div className="flex items-center justify-center">
                   <ExternalLink
@@ -123,7 +85,7 @@ export default function Pool() {
                     Account analytics and accrued fees <span> ↗</span>
                   </ExternalLink>
                 </div> */}
-              {allV2PairsWithLiquidity.map((v2Pair) => (
+              {pairs.map((v2Pair) => (
                 <FullPositionCard
                   key={v2Pair.liquidityToken.address}
                   pair={v2Pair}

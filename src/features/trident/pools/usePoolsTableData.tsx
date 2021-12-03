@@ -2,11 +2,11 @@ import { PoolType } from '@sushiswap/tines'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
-import { getTridentPools, TridentPool } from 'app/services/graph/fetchers/pools'
+import { TridentPool } from 'app/services/graph/fetchers/pools'
+import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { ReactNode, useMemo } from 'react'
-import useSWR from 'swr'
 
 import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
 import { PoolCell } from './PoolCell'
@@ -22,7 +22,7 @@ export interface DiscoverPoolsTableColumn {
 
 export const usePoolsTableData = () => {
   const { chainId } = useActiveWeb3React()
-  const { data, error, isValidating } = useSWR(['getAllTridentPools', chainId], () => getTridentPools(chainId))
+  const { data, error, isValidating } = useGetAllTridentPools()
 
   const columns: DiscoverPoolsTableColumn[] = useMemo(() => {
     return [

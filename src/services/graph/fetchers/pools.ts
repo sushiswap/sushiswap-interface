@@ -56,7 +56,7 @@ const formatPools = (chainId: ChainId, pools: TridentPoolQueryResult): TridentPo
 
 export interface TridentPoolData {
   __typename: string
-  id
+  id: string
   kpi: {
     volumeUSD: string
     liquidity: string

@@ -1,6 +1,7 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { LoadingSpinner } from 'app/components/LoadingSpinner'
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
 import { useTridentTransactions } from 'app/services/graph/hooks/transactions/trident'
 import React, { FC } from 'react'
@@ -39,15 +40,13 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
 
   return (
     <div className="flex flex-col gap-3">
-      <Typography variant="h3" className="text-high-emphesis" weight={700}>
-        {i18n._(t`Transactions`)}
-        <div
-          className={`animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue inline-block ml-3 transition ${
-            loading ? 'opacity-100' : 'opacity-0'
-          }`}
-        />
+      <div className="flex gap-3 items-center">
+        <Typography variant="h3" className="text-high-emphesis" weight={700}>
+          {i18n._(t`Transactions`)}
+        </Typography>
+        <LoadingSpinner active={loading} />
         {error && <span className="-ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
-      </Typography>
+      </div>
 
       <div className="overflow-x-auto">
         <table {...getTableProps()} className="w-full">

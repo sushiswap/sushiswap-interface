@@ -65,13 +65,22 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
                 </a>
               </NavLink>
 
-              {chainId && featureEnabled(Feature.MIGRATE, chainId) && (
-                <NavLink href={'/migrate'} activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                  <a id="migrate-nav-link" className={NAV_BASE_CLASS}>
-                    {i18n._(t`Migrate`)}
-                  </a>
-                </NavLink>
-              )}
+              {chainId &&
+                (featureEnabled(Feature.TRIDENT, chainId) ? (
+                  <NavLink href="/trident/migrate" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                    <a id="trident-migrate-nav-link" className={NAV_BASE_CLASS}>
+                      {i18n._(t`Migrate`)}
+                    </a>
+                  </NavLink>
+                ) : (
+                  featureEnabled(Feature.MIGRATE, chainId) && (
+                    <NavLink href={'/migrate'} activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                      <a id="migrate-nav-link" className={NAV_BASE_CLASS}>
+                        {i18n._(t`Migrate`)}
+                      </a>
+                    </NavLink>
+                  )
+                ))}
 
               {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
                 <NavLink href="/farm" activeClassName={ACTIVE_NAV_LINK_CLASS}>
