@@ -1,4 +1,5 @@
-import { FeeTier, TridentPool } from 'app/services/graph/fetchers/pools'
+import { Fee } from '@sushiswap/trident-sdk'
+import { TridentPool } from 'app/services/graph/fetchers/pools'
 
 type FilterSymbolsFunc<T> = (arg0: { original: TridentPool }[], arg1: string[], arg2: T) => any[]
 
@@ -20,7 +21,7 @@ export const filterForSearchQueryAndTWAP: FilterSymbolsFunc<{ searchQuery: strin
   })
 }
 
-export const feeTiersFilter: FilterSymbolsFunc<{ feeTiersSelected: FeeTier[] }> = (rows, id, filterValue) => {
+export const feeTiersFilter: FilterSymbolsFunc<{ feeTiersSelected: Fee[] }> = (rows, id, filterValue) => {
   return rows.filter(({ original }) => {
     return !filterValue.feeTiersSelected.length || filterValue.feeTiersSelected.includes(original.swapFeePercent)
   })

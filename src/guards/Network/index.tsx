@@ -27,7 +27,7 @@ const Component: FC<NetworkGuardProps> = ({ children, feature }) => {
     </NavLink>
   )
 
-  const supported_networks = Object.entries(features).reduce<string[]>((acc, [k, v]) => {
+  const supportedNetworks = Object.entries(features).reduce<string[]>((acc, [k, v]) => {
     if (v.includes(feature)) {
       acc.push(k)
     }
@@ -57,7 +57,7 @@ const Component: FC<NetworkGuardProps> = ({ children, feature }) => {
             {i18n._(t`Available Networks`)}
           </Typography>
           <div className="flex gap-5 md:gap-10 justify-center">
-            {supported_networks.map((key: string, idx: number) => (
+            {supportedNetworks.map((key: string, idx: number) => (
               <button
                 className="text-primary hover:text-white flex items-center flex-col gap-2 justify-start"
                 key={idx}

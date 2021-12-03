@@ -30,7 +30,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const isDesktop = useDesktopMediaQuery()
   const { chainId } = useActiveWeb3React()
 
-  const stats = useRollingPoolStats({
+  const { data: stats } = useRollingPoolStats({
     chainId,
     variables: { where: { id: pool?.liquidityToken?.address.toLowerCase() } },
     shouldFetch: !!chainId && !!pool && !!pool.liquidityToken.address.toLowerCase(),

@@ -21,7 +21,7 @@ export function useTridentPools({
   swrConfig = undefined,
 }: GraphProps): TridentPool[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['trident-pools', chainId, stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['trident-pools', chainId, variables] : null,
     () => getTridentPools(chainId, variables),
     swrConfig
   )
@@ -35,7 +35,7 @@ export function usePoolHourBuckets({
   swrConfig = undefined,
 }: GraphProps): PoolBucket[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-hour-buckets', chainId, stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['trident-pool-hour-buckets', chainId, variables] : null,
     () => getPoolHourBuckets(chainId, variables),
     swrConfig
   )
@@ -49,7 +49,7 @@ export function usePoolDayBuckets({
   swrConfig = undefined,
 }: GraphProps): PoolBucket[] {
   const { data } = useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-day-buckets', chainId, stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['trident-pool-day-buckets', chainId, variables] : null,
     () => getPoolDayBuckets(chainId, variables),
     swrConfig
   )
@@ -58,7 +58,7 @@ export function usePoolDayBuckets({
 
 export function usePoolKpis({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
   return useSWR(
-    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, stringify(variables)] : null,
+    shouldFetch && !!chainId ? ['trident-pool-kpis', chainId, variables] : null,
     () => getPoolKpis(chainId, variables),
     swrConfig
   )
@@ -93,64 +93,80 @@ export function useTwoDayPoolKpis({ chainId, variables, shouldFetch = true, swrC
 }
 
 export function useRollingPoolStats({ chainId, variables, shouldFetch = true, swrConfig = undefined }) {
-  const { data: poolKpis } = usePoolKpis({
+  const {
+    data: poolKpis,
+    isValidating: poolKpisIsValidating,
+    error: poolKpisError,
+  } = usePoolKpis({
     chainId,
     shouldFetch,
     variables,
     swrConfig,
   })
-  const { data: oneDayPoolKpis } = useOneDayPoolKpis({
+  const {
+    data: oneDayPoolKpis,
+    isValidating: oneDayPoolKpisIsValidating,
+    error: oneDayPoolKpisError,
+  } = useOneDayPoolKpis({
     chainId,
     shouldFetch,
     variables,
     swrConfig,
   })
-  const { data: twoDayPoolKpis } = useTwoDayPoolKpis({
+  const {
+    data: twoDayPoolKpis,
+    isValidating: twoDayPoolKpisIsValidating,
+    error: twoDayPoolKpisError,
+  } = useTwoDayPoolKpis({
     chainId,
     shouldFetch,
     variables,
     swrConfig,
   })
 
-  if (!poolKpis || !oneDayPoolKpis || !twoDayPoolKpis) {
-    return []
+  return {
+    isValidating: poolKpisIsValidating || oneDayPoolKpisIsValidating || twoDayPoolKpisIsValidating,
+    error: poolKpisError || oneDayPoolKpisError || twoDayPoolKpisError,
+    data:
+      !poolKpis || !oneDayPoolKpis || !twoDayPoolKpis
+        ? []
+        : oneDayPoolKpis.map((el, i) => {
+            return {
+              volume: formatNumber(poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD, true, false),
+              volume24hChange:
+                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
+                  (oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD)) *
+                  100 -
+                100,
+              fees: formatNumber(poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD, true, false),
+              fees24hChange:
+                ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) /
+                  (oneDayPoolKpis?.[i]?.feesUSD - twoDayPoolKpis?.[i]?.feesUSD)) *
+                  100 -
+                100,
+              liquidity: formatPercent(
+                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) / poolKpis?.[i]?.liquidityUSD) * 100
+              ),
+              liquidity24hChange:
+                ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
+                  poolKpis?.[i]?.liquidityUSD /
+                  ((oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD) /
+                    oneDayPoolKpis?.[i]?.liquidityUSD)) *
+                  100 -
+                100,
+              transactions: poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount,
+              transactions24hChange:
+                ((poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount) /
+                  (oneDayPoolKpis?.[i]?.transactionCount - twoDayPoolKpis?.[i]?.transactionCount)) *
+                  100 -
+                100,
+              apy: aprToApy(
+                ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) / poolKpis?.[i]?.liquidityUSD) * 100,
+                3650
+              ),
+            }
+          }),
   }
-
-  return oneDayPoolKpis.map((el, i) => {
-    return {
-      volume: formatNumber(poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD, true, false),
-      volume24hChange:
-        ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
-          (oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD)) *
-          100 -
-        100,
-      fees: formatNumber(poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD, true, false),
-      fees24hChange:
-        ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) /
-          (oneDayPoolKpis?.[i]?.feesUSD - twoDayPoolKpis?.[i]?.feesUSD)) *
-          100 -
-        100,
-      liquidity: formatPercent(
-        ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) / poolKpis?.[i]?.liquidityUSD) * 100
-      ),
-      liquidity24hChange:
-        ((poolKpis?.[i]?.volumeUSD - oneDayPoolKpis?.[i]?.volumeUSD) /
-          poolKpis?.[i]?.liquidityUSD /
-          ((oneDayPoolKpis?.[i]?.volumeUSD - twoDayPoolKpis?.[i]?.volumeUSD) / oneDayPoolKpis?.[i]?.liquidityUSD)) *
-          100 -
-        100,
-      transactions: poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount,
-      transactions24hChange:
-        ((poolKpis?.[i]?.transactionCount - oneDayPoolKpis?.[i]?.transactionCount) /
-          (oneDayPoolKpis?.[i]?.transactionCount - twoDayPoolKpis?.[i]?.transactionCount)) *
-          100 -
-        100,
-      apy: aprToApy(
-        ((poolKpis?.[i]?.feesUSD - oneDayPoolKpis?.[i]?.feesUSD) / poolKpis?.[i]?.liquidityUSD) * 100,
-        3650
-      ),
-    }
-  })
 }
 
 export const useGetAllTridentPools = () => {

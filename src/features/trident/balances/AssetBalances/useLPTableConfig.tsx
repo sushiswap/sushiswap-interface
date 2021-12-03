@@ -20,11 +20,11 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
       case PoolType.ConstantProduct:
         return 'classic'
       case PoolType.Hybrid:
-        return 'hybrid'
+        return 'stable'
       case PoolType.ConcentratedLiquidity:
         return 'concentrated'
       case PoolType.Weighted:
-        return 'weighted'
+        return 'index'
     }
   }, [])
 
@@ -80,7 +80,7 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               maxWidth: 100,
               className: 'text-right flex justify-end',
               Cell: ({ row }) => {
-                const stats = useRollingPoolStats({
+                const { data: stats } = useRollingPoolStats({
                   chainId,
                   variables: { where: { id_in: positions?.map((el) => el.id.toLowerCase()) } },
                   shouldFetch: !!chainId && !!positions,

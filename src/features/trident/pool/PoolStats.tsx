@@ -17,7 +17,7 @@ const PoolStats: FC<PoolStatsProps> = () => {
   const { chainId } = useActiveWeb3React()
   const isDesktop = useDesktopMediaQuery()
   const { pool } = useRecoilValue(poolAtom)
-  const stats = useRollingPoolStats({
+  const { data: stats } = useRollingPoolStats({
     chainId,
     variables: { where: { id: pool?.liquidityToken?.address.toLowerCase() } },
     shouldFetch: !!chainId && !!pool && !!pool.liquidityToken.address.toLowerCase(),

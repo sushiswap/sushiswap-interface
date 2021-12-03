@@ -33,8 +33,6 @@ const useCurrenciesFromURL = (): {
       ]
     }
 
-    console.log(router.pathname)
-
     await router.push({
       pathname: router.pathname,
       query: {

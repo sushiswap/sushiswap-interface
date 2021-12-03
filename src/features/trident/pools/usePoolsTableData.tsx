@@ -62,7 +62,7 @@ export const usePoolsTableData = () => {
         accessor: 'apy',
         maxWidth: 100,
         Cell: ({ row }) => {
-          const stats = useRollingPoolStats({
+          const { data: stats } = useRollingPoolStats({
             chainId,
             variables: { where: { id_in: data?.map((el) => el.address.toLowerCase()) } },
             shouldFetch: !!chainId && !!data,
@@ -83,7 +83,7 @@ export const usePoolsTableData = () => {
         ),
       },
     ]
-  }, [])
+  }, [chainId, data])
 
   return useMemo(
     () => ({

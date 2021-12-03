@@ -6,7 +6,6 @@ import BentoActions from 'app/features/trident/balances/BentoActions'
 import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
 import { ActiveModal } from 'app/features/trident/balances/context/types'
 import DepositToBentoBoxModal from 'app/features/trident/balances/DepositToBentoBoxModal'
-import LiquidityPositionActions from 'app/features/trident/balances/LiquidityPositionActions'
 import WalletActions from 'app/features/trident/balances/WalletActions'
 import WithdrawToWalletModal from 'app/features/trident/balances/WithdrawToWalletModal'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
@@ -63,23 +62,6 @@ export const WalletActionsModal: FC = () => {
     <>
       <_ActionsModal>
         <WalletActions />
-      </_ActionsModal>
-      <DepositToBentoBoxModal
-        open={activeModal === ActiveModal.DEPOSIT}
-        onClose={() => (isDesktop ? setActiveModal(ActiveModal.MENU) : setActiveModal(undefined))}
-      />
-    </>
-  )
-}
-
-export const LiquidityPositionActionsModal: FC = () => {
-  const isDesktop = useDesktopMediaQuery()
-  const [activeModal, setActiveModal] = useRecoilState(ActiveModalAtom)
-
-  return (
-    <>
-      <_ActionsModal>
-        <LiquidityPositionActions />
       </_ActionsModal>
       <DepositToBentoBoxModal
         open={activeModal === ActiveModal.DEPOSIT}

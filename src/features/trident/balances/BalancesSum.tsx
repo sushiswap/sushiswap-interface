@@ -61,11 +61,7 @@ export const WalletBalancesSum = () => {
   const tokenBalances = useAllTokenBalances()
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
   const amounts = useMemo(() => {
-    const res = Object.values(tokenBalances).reduce<CurrencyAmount<Currency>[]>((acc, cur) => {
-      if (cur.greaterThan(ZERO)) acc.push(cur)
-
-      return acc
-    }, [])
+    const res: CurrencyAmount<Currency>[] = Object.values(tokenBalances).filter((cur) => cur.greaterThan(ZERO))
 
     if (ethBalance) {
       res.push(ethBalance)
