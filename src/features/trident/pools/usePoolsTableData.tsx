@@ -4,6 +4,8 @@ import Chip from 'app/components/Chip'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import { TridentPool } from 'app/services/graph/fetchers/pools'
 import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
+import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { ReactNode, useMemo } from 'react'
 
 import { chipPoolColorMapper, poolTypeNameMapper } from '../types'
@@ -19,6 +21,7 @@ export interface DiscoverPoolsTableColumn {
 }
 
 export const usePoolsTableData = () => {
+  const { chainId } = useActiveWeb3React()
   const { data, error, isValidating } = useGetAllTridentPools()
 
   const columns: DiscoverPoolsTableColumn[] = useMemo(() => {
@@ -58,7 +61,15 @@ export const usePoolsTableData = () => {
         Header: 'APY',
         accessor: 'apy',
         maxWidth: 100,
-        Cell: (props) => <span>{formatPercent(props.value)}</span>,
+        Cell: ({ row }) => {
+          const { data: stats } = useRollingPoolStats({
+            chainId,
+            variables: { where: { id_in: data?.map((el) => el.address.toLowerCase()) } },
+            shouldFetch: !!chainId && !!data,
+          })
+
+          return <span>{formatPercent(stats?.[row.id]?.apy)}</span>
+        },
       },
       {
         Header: 'Actions',
@@ -72,7 +83,7 @@ export const usePoolsTableData = () => {
         ),
       },
     ]
-  }, [])
+  }, [chainId, data])
 
   return useMemo(
     () => ({

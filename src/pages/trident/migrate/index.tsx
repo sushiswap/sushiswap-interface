@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { DebugObserver } from 'app/components/DebugObserver'
 import Typography from 'app/components/Typography'
-import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
+import { Feature } from 'app/enums'
 import { AvailableToMigrate } from 'app/features/trident/migrate/AvailableToMigrate'
 import NetworkGuard from 'app/guards/Network'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
@@ -40,7 +40,7 @@ const MigrateLiquidity = () => {
   )
 }
 
-MigrateLiquidity.Guard = NetworkGuard(TRIDENT_NETWORKS)
+MigrateLiquidity.Guard = NetworkGuard(Feature.TRIDENT)
 MigrateLiquidity.Layout = (props) => (
   <TridentLayout {...props} breadcrumbs={[{ label: 'Pools' }, { label: 'Migrate Liquidity' }]} />
 )

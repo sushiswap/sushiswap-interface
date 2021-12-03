@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import { DebugObserver } from 'app/components/DebugObserver'
 import Typography from 'app/components/Typography'
-import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
+import { Feature } from 'app/enums'
 import { SelectPoolsAndConfirm } from 'app/features/trident/migrate/SelectPoolsAndConfirm'
 import NetworkGuard from 'app/guards/Network'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
@@ -51,7 +51,7 @@ const ConfirmMigration = () => {
   )
 }
 
-ConfirmMigration.Guard = NetworkGuard(TRIDENT_NETWORKS)
+ConfirmMigration.Guard = NetworkGuard(Feature.TRIDENT)
 ConfirmMigration.Layout = (props) => (
   <TridentLayout
     {...props}

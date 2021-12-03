@@ -1,6 +1,7 @@
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { LoadingSpinner } from 'app/components/LoadingSpinner'
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
 import { useTridentTransactions } from 'app/services/graph/hooks/transactions/trident'
 import React, { FC } from 'react'
@@ -10,7 +11,6 @@ import Typography from '../../components/Typography'
 import { TablePageToggler } from './TablePageToggler'
 import { TableInstance, TransactionFetcherState } from './types'
 import { useTableConfig } from './useTableConfig'
-import { LoadingSpinner } from 'app/components/LoadingSpinner'
 
 export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
   const { transactions, error, loading } = useLegacyTransactions(pairs)

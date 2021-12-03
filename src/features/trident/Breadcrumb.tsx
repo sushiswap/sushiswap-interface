@@ -32,6 +32,22 @@ export const BREADCRUMBS: Record<string, BreadcrumbItem> = {
       ? `${pool.token0.symbol}-${pool.token1.symbol} - Classic - ${formatPercent(pool.fee.valueOf() / 100)}`
       : 'Pool not found',
   }),
+  liquidity: {
+    link: `/trident/balances/liquidity`,
+    label: 'Liquidity Positions',
+  },
+  wallet: {
+    link: `/trident/balances/wallet`,
+    label: 'Wallet',
+  },
+  bentobox: {
+    link: `/trident/balances/bentobox`,
+    label: 'Wallet',
+  },
+  my_portfolio: {
+    link: `/trident/balances`,
+    label: 'My Portfolio',
+  },
 }
 
 interface BreadcrumbProps {

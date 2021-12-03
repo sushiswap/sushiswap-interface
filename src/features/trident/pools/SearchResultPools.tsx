@@ -71,7 +71,7 @@ const SearchResultPools: FC = () => {
                   href={{
                     pathname: `/trident/pool/${poolTypeNameMapper[row.original.type as PoolType].toLowerCase()}`,
                     query: {
-                      tokens: row.original.assets.map((asset) => asset.id),
+                      tokens: row.original.assets.map((asset) => asset.address),
                       fee: row.original.swapFee,
                       twap: row.original.twapEnabled,
                     },

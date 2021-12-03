@@ -176,7 +176,7 @@
     "start-server-and-test": "1.14.0",
     "storybook-addon-linguijs": "^1.0.10",
     "storybook-zeplin": "^1.6.0",
-    "swr": "^1.0.0",
+    "swr": "^1.1.0",
     "tailwindcss": "^2.2.17",
     "tailwindcss-border-gradient-radius": "^2.0.0",
     "typescript": "^4.4.4",

@@ -2,14 +2,13 @@ import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
-import { aprToApy, formatPercent } from 'app/functions'
-import { useOneDayBlock } from 'app/services/graph'
-import { useTridentPools } from 'app/services/graph/hooks/pools'
+import { formatPercent } from 'app/functions'
+import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { CurrencyLogoArray } from 'components/CurrencyLogo'
 import Typography from 'components/Typography'
 import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { poolAtom } from '../context/atoms'
@@ -31,54 +30,27 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const isDesktop = useDesktopMediaQuery()
   const { chainId } = useActiveWeb3React()
 
+  const { data: stats } = useRollingPoolStats({
+    chainId,
+    variables: { where: { id: pool?.liquidityToken?.address.toLowerCase() } },
+    shouldFetch: !!chainId && !!pool && !!pool.liquidityToken.address.toLowerCase(),
+  })
+
   // TODO ramin: remove this make dynamic
-  // TODO: add rewards APR to fee APY
   const isFarm = false
-
-  const block1d = useOneDayBlock({ chainId })
-
-  const poolData = useTridentPools({
-    chainId,
-    variables: {
-      where: {
-        id: pool?.liquidityToken?.address?.toLowerCase(),
-      },
-    },
-    shouldFetch: !!pool?.liquidityToken?.address,
-  })?.[0]
-  const poolData1d = useTridentPools({
-    chainId,
-    variables: {
-      block: block1d,
-      where: {
-        id: pool?.liquidityToken?.address?.toLowerCase(),
-      },
-    },
-    shouldFetch: !!pool?.liquidityToken?.address,
-  })?.[0]
-
-  // TODO: Double-check if correct on real(-ish) data
-  const feeApyPerYear = useMemo(
-    () =>
-      aprToApy(
-        (((poolData?.volumeUSD - poolData1d?.volumeUSD) / 100) * poolData?.swapFee * 365) / poolData?.liquidityUSD,
-        3650
-      ) || 0,
-    [poolData, poolData1d]
-  )
 
   return (
     <div className="flex justify-between">
       <div className="flex flex-col gap-2 lg:gap-5">
         <div className="lg:flex lg:flex-row lg:gap-3 lg:order-0 lg:items-center">
-          <CurrencyLogoArray currencies={[pool?.token0, pool?.token1]} size={64} dense />
+          <CurrencyLogoArray currencies={pool?.assets || []} size={64} dense />
           <div className="hidden lg:flex lg:flex-col lg:gap-2">
             <PoolProperties pool={pool} i18n={i18n} />
           </div>
         </div>
         <div className="flex flex-row items-center gap-2 lg:order-2">
           <Typography variant={isDesktop ? 'h3' : 'h2'} className="text-high-emphesis" weight={700}>
-            {pool?.token0.symbol}-{pool?.token1.symbol}
+            {pool?.assets.map((el) => el.symbol).join('-')}
           </Typography>
           {isFarm && (
             <>
@@ -104,14 +76,16 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
         <Typography variant="sm">{i18n._(t`APY (Annualized)`)}</Typography>
         <div className="flex flex-col gap-2">
           <Typography variant="h3" className="text-high-emphesis" weight={700}>
-            {formatPercent(feeApyPerYear)}
+            {formatPercent(stats?.[0]?.apy)}
           </Typography>
           {isFarm ? (
             <div className="flex flex-row justify-end gap-2.5">
               <Typography variant="xxs">{i18n._(t`Rewards:`)} XX%</Typography>
-              <Typography variant="xxs">
-                {i18n._(t`Fees:`)} {pool?.fee / 100}%
-              </Typography>
+              {pool && (
+                <Typography variant="xxs">
+                  {i18n._(t`Fees:`)} {pool.fee / 100}%
+                </Typography>
+              )}
             </div>
           ) : (
             <Typography variant="xxs">{i18n._(t`Including fees`)}</Typography>

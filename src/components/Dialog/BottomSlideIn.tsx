@@ -11,7 +11,6 @@ interface BottomSlideInProps {
   closeTrigger?: ReactNode
 }
 
-// TODO ramin outside click
 const BottomSlideIn: FC<BottomSlideInProps> = ({ title, open, onClose, children, closeTrigger }) => {
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -29,7 +28,7 @@ const BottomSlideIn: FC<BottomSlideInProps> = ({ title, open, onClose, children,
             <Dialog.Overlay className="absolute inset-0 bg-black bg-opacity-75 transition-opacity" />
           </Transition.Child>
 
-          <div className="fixed inset-y-0 right-0 left-0 w-full flex">
+          <div className="max-h-[fit-content] absolute bottom-0 fixed right-0 left-0 w-full flex">
             <Transition.Child
               as={Fragment}
               enter="transform transition ease-in-out duration-200 sm:duration-700"
@@ -39,7 +38,7 @@ const BottomSlideIn: FC<BottomSlideInProps> = ({ title, open, onClose, children,
               leaveFrom="translate-y-0"
               leaveTo="translate-y-full"
             >
-              <div className="w-full max-h-[fit-content] absolute bottom-0 rounded-t-[20px] overflow-hidden">
+              <div className="w-full rounded-t overflow-hidden">
                 {title ? (
                   <div className="flex flex-col shadow-xl overflow-y-auto h-full bg-gradient-to-r from-blue to-pink">
                     <div className="p-5">

@@ -6,8 +6,8 @@ import Alert from 'app/components/Alert'
 import Button from 'app/components/Button'
 import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
+import { Feature } from 'app/enums'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
-import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import { poolAtom } from 'app/features/trident/context/atoms'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import ClassicSingleAside from 'app/features/trident/remove/classic/ClassicSingleAside'
@@ -106,7 +106,7 @@ const RemoveClassic = () => {
   )
 }
 
-RemoveClassic.Guard = NetworkGuard(TRIDENT_NETWORKS)
+RemoveClassic.Guard = NetworkGuard(Feature.TRIDENT)
 RemoveClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 RemoveClassic.Layout = (props) => (
   <TridentLayout

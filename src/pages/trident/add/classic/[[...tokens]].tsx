@@ -6,6 +6,7 @@ import Alert from 'app/components/Alert'
 import Button from 'app/components/Button'
 import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
+import { Feature } from 'app/enums/Feature'
 import ClassicStandardAside from 'app/features/trident/add/classic/ClassicStandardAside'
 import ClassicStandardMode from 'app/features/trident/add/classic/ClassicStandardMode'
 import ClassicZapAside from 'app/features/trident/add/classic/ClassicZapAside'
@@ -14,7 +15,6 @@ import TransactionReviewStandardModal from 'app/features/trident/add/classic/Tra
 import TransactionReviewZapModal from 'app/features/trident/add/classic/TransactionReviewZapModal'
 import FixedRatioHeader from 'app/features/trident/add/FixedRatioHeader'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
-import { TRIDENT_NETWORKS } from 'app/features/trident/constants'
 import { liquidityModeAtom, poolAtom } from 'app/features/trident/context/atoms'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
@@ -109,7 +109,7 @@ const AddClassic = () => {
   )
 }
 
-AddClassic.Guard = NetworkGuard(TRIDENT_NETWORKS)
+AddClassic.Guard = NetworkGuard(Feature.TRIDENT)
 AddClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
 AddClassic.Layout = (props) => (
   <TridentLayout

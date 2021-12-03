@@ -1,11 +1,11 @@
 import { ArrowLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
 import Container from 'app/components/Container'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import NavLink from 'app/components/NavLink'
+import { Feature } from 'app/enums'
 import CompletedOrders from 'app/features/legacy/open-order/CompletedOrders'
 import OpenOrders from 'app/features/legacy/open-order/OpenOrders'
 import NetworkGuard from 'app/guards/Network'
@@ -55,6 +55,6 @@ function OpenOrdersPage() {
   )
 }
 
-OpenOrdersPage.Guard = NetworkGuard([ChainId.MATIC])
+OpenOrdersPage.Guard = NetworkGuard(Feature.LIMIT_ORDERS)
 
 export default OpenOrdersPage

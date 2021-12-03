@@ -9,4 +9,8 @@ export enum Feature {
   MIGRATE = 'Migrate',
   STAKING = 'Staking',
   TRIDENT = 'Trident',
+  LIMIT_ORDERS = 'LimitOrders',
+  INARI = 'Inari',
+  MEOWSHI = 'MEOWSHI',
+  VESTING = 'Vesting',
 }

@@ -9,8 +9,8 @@ const tridentPoolMatches = (pair: Pair, tridentPools: TridentPool[]) => {
     /* Cannot transfer to pools with more than two assets */
     if (pool.assets.length !== 2) return false
 
-    const tridentAddress0 = pool.assets[0].id.toLowerCase()
-    const tridentAddress1 = pool.assets[1].id.toLowerCase()
+    const tridentAddress0 = pool.assets[0].address.toLowerCase()
+    const tridentAddress1 = pool.assets[1].address.toLowerCase()
     const v2Address0 = pair.token0.address.toLowerCase()
     const v2Address1 = pair.token1.address.toLowerCase()
     return (
