@@ -4276,10 +4276,10 @@
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.21"
 
-"@sushiswap/trident-sdk@^1.0.0-canary.21":
-  version "1.0.0-canary.21"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.21.tgz#5178bafe8a05e64ea425f42db354693441c9fb66"
-  integrity sha512-AMFPeEsxCrfuHCwpAS5kdgo7uFafexl6+PXwrR5tRsZFF4OIUSBeeRiPQaviZ8QXskOhjQT4OBg1d6so5iMdjg==
+"@sushiswap/trident-sdk@^1.0.0-canary.22":
+  version "1.0.0-canary.22"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.22.tgz#3369253391764576605ed0c02eaa42aefbec4d24"
+  integrity sha512-WkM4UlutCO/UnYBisf/559ThWQW5KfUHgxqixvHvoxXURAlpk5RiIiXPDrd3n3wEaYS28vMNR2RCybJPC4nv2w==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
