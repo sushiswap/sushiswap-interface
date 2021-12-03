@@ -1,5 +1,6 @@
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
+import { Fee } from '@sushiswap/trident-sdk'
 import { SelectedAsset } from 'app/features/trident/create/context/SelectedAsset'
 import { atom, atomFamily, selector } from 'recoil'
 
@@ -15,8 +16,7 @@ export const selectedPoolTypeAtom = atom<PoolType>({
   default: PoolType.ConstantProduct,
 })
 
-// TODO: Should import Fee enum from @sushiswap/trident-sdk when enums are updated
-export const selectedFeeTierAtom = atom<10 | 30 | 50 | 100 | undefined>({
+export const selectedFeeTierAtom = atom<Fee | undefined>({
   key: 'selectedFeeTierAtom',
   default: undefined,
 })

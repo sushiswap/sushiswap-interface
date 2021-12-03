@@ -1,5 +1,6 @@
 import { Pair } from '@sushiswap/core-sdk'
-import { FeeTier, TridentPool } from 'app/services/graph'
+import { Fee } from '@sushiswap/trident-sdk'
+import { TridentPool } from 'app/services/graph'
 
 export const deDupe = (value: any, i: number, arr: any[]) => arr.indexOf(value) === i
 
@@ -19,18 +20,15 @@ const tridentPoolMatches = (pair: Pair, tridentPools: TridentPool[]) => {
   })
 }
 
-export type AvailablePoolConfig = { fee: FeeTier; twap: boolean }
-
-/* This feels clumsy, but used to ensure ALL FeeTiers are represented and type enforced */
-const rec: Record<FeeTier, undefined> = { [0.01]: undefined, [0.05]: undefined, [0.3]: undefined, [1]: undefined }
-const feeTiers: (keyof typeof rec)[] = [0.01, 0.05, 0.3, 1]
+export type AvailablePoolConfig = { fee: Fee; twap: boolean }
 
 const getAvailablePoolOptions = (matches: TridentPool[]): AvailablePoolConfig[] => {
   const configs: AvailablePoolConfig[] = []
 
-  for (const fee of feeTiers) {
+  /* Loop through Fee enum, excluding keys */
+  for (const fee of Object.values(Fee).filter(Number) as Fee[]) {
     const twapMatches = matches
-      .filter((pool) => pool.swapFeePercent === fee)
+      .filter((pool) => pool.swapFee === fee)
       .map((pool) => pool.twapEnabled)
       .filter(deDupe)
 

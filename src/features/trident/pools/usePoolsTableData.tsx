@@ -46,9 +46,9 @@ export const usePoolsTableData = () => {
       },
       {
         Header: 'Fee Tier',
-        accessor: 'swapFeePercent',
+        accessor: 'swapFee',
         maxWidth: 100,
-        Cell: (props) => <span>{props.value}%</span>,
+        Cell: (props) => <span>{props.value / 100}%</span>,
         filter: feeTiersFilter,
       },
       {

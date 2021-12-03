@@ -21,8 +21,7 @@ export const filterForSearchQueryAndTWAP: FilterSymbolsFunc<{ searchQuery: strin
   })
 }
 
-export const feeTiersFilter: FilterSymbolsFunc<{ feeTiersSelected: Fee[] }> = (rows, id, filterValue) => {
-  return rows.filter(({ original }) => {
-    return !filterValue.feeTiersSelected.length || filterValue.feeTiersSelected.includes(original.swapFeePercent)
-  })
-}
+export const feeTiersFilter: FilterSymbolsFunc<{ feeTiersSelected: Fee[] }> = (rows, id, filterValue) =>
+  rows.filter(
+    ({ original }) => !filterValue.feeTiersSelected.length || filterValue.feeTiersSelected.includes(original.swapFee)
+  )

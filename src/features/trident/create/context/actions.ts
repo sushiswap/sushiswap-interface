@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { Currency, CurrencyAmount, Rebase, Token } from '@sushiswap/core-sdk'
-import { computeConstantProductPoolAddress } from '@sushiswap/trident-sdk'
+import { computeConstantProductPoolAddress, Fee } from '@sushiswap/trident-sdk'
 import { SelectedAsset, SpendSource } from 'app/features/trident/create/context/SelectedAsset'
 import { toShareJSBI } from 'app/functions'
 
@@ -72,7 +72,7 @@ export const valueIfNative = (parsedAmounts: CurrencyAmount<Currency>[]): Native
 export interface PoolCreationActionProps {
   account: string
   assets: SelectedAsset[]
-  feeTier: 10 | 30 | 50 | 100
+  feeTier: Fee
   twap: boolean
   router: Contract
   constantProductPoolFactory: Contract

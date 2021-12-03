@@ -1,6 +1,6 @@
+import { Fee } from '@sushiswap/trident-sdk'
 import Checkbox from 'app/components/Checkbox'
 import Divider from 'app/components/Divider'
-import { FeeTier } from 'app/services/graph/fetchers/pools'
 import React, { FC } from 'react'
 import { SetterOrUpdater, useRecoilState } from 'recoil'
 
@@ -33,7 +33,7 @@ const Selection: FC<SelectionProps> = ({ title, checked, setter }) => {
   )
 }
 
-export const removeOrAddFeeTier = (tier: FeeTier, currentSelection: FeeTier[], setter: SetterOrUpdater<FeeTier[]>) => {
+export const removeOrAddFeeTier = (tier: Fee, currentSelection: Fee[], setter: SetterOrUpdater<Fee[]>) => {
   if (currentSelection.includes(tier)) {
     setter(currentSelection.filter((t) => t !== tier))
   } else {
@@ -42,30 +42,20 @@ export const removeOrAddFeeTier = (tier: FeeTier, currentSelection: FeeTier[], s
 }
 
 const FeeTiers: FC = () => {
-  const [feeTiers, setFeeTiers] = useRecoilState(feeTiersFilterAtom)
+  const [selectedFeeTiers, setSelectedFeeTiers] = useRecoilState(feeTiersFilterAtom)
 
   return (
     <Section title="Fee Tiers">
-      <Selection
-        title="1%"
-        checked={feeTiers.includes(1)}
-        setter={() => removeOrAddFeeTier(1, feeTiers, setFeeTiers)}
-      />
-      <Selection
-        title="0.3%"
-        checked={feeTiers.includes(0.3)}
-        setter={() => removeOrAddFeeTier(0.3, feeTiers, setFeeTiers)}
-      />
-      <Selection
-        title="0.05%"
-        checked={feeTiers.includes(0.05)}
-        setter={() => removeOrAddFeeTier(0.05, feeTiers, setFeeTiers)}
-      />
-      <Selection
-        title="0.01%"
-        checked={feeTiers.includes(0.01)}
-        setter={() => removeOrAddFeeTier(0.01, feeTiers, setFeeTiers)}
-      />
+      {[Fee.HIGH, Fee.DEFAULT, Fee.MEDIUM, Fee.LOW].map((fee) => {
+        return (
+          <Selection
+            key={fee}
+            title={`${fee / 100}%`}
+            checked={selectedFeeTiers.includes(fee)}
+            setter={() => removeOrAddFeeTier(fee, selectedFeeTiers, setSelectedFeeTiers)}
+          />
+        )
+      })}
     </Section>
   )
 }
