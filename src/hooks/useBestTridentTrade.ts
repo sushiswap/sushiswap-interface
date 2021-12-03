@@ -93,7 +93,7 @@ export function useBestTridentTrade(
           shareSpecified.currency.wrapped,
           otherCurrency.wrapped,
           BigNumber.from(shareSpecified.quotient.toString()),
-          allowedPools.filter((pool) => pool instanceof ConstantProductPool),
+          allowedPools.filter((pool) => pool instanceof ConstantProductPool) as ConstantProductPool[],
           WNATIVE[shareSpecified.currency.chainId],
           chainId === ChainId.KOVAN ? 750 * 1e9 : price
         )
@@ -102,7 +102,7 @@ export function useBestTridentTrade(
           amountSpecified.currency.wrapped,
           otherCurrency.wrapped,
           BigNumber.from(amountSpecified.quotient.toString()),
-          allowedPools.filter((pair) => pair instanceof Pair),
+          allowedPools.filter((pair) => pair instanceof Pair) as Pair[],
           WNATIVE[amountSpecified.currency.chainId],
           chainId === ChainId.KOVAN ? 750 * 1e9 : price
         )
