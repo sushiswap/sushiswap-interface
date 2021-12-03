@@ -1,4 +1,5 @@
 import { Currency, NATIVE, SUSHI } from '@sushiswap/core-sdk'
+import { Fee } from '@sushiswap/trident-sdk'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
@@ -16,7 +17,7 @@ const useCurrenciesFromURL = (): {
   const currencyA = useCurrency(router.query.tokens?.[0]) || (chainId && NATIVE[chainId]) || undefined
   const currencyB = useCurrency(router.query.tokens?.[1]) || (chainId && SUSHI[chainId]) || undefined
 
-  const fee = Number(router.query.fee ?? 30)
+  const fee = Number(router.query.fee ?? Fee.DEFAULT)
   const twap = router.query.twap !== 'false'
 
   const switchCurrencies = useCallback(async () => {

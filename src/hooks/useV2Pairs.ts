@@ -21,19 +21,23 @@ export function useV2Pairs(currencies: [Currency | undefined, Currency | undefin
 
   const pairAddresses = useMemo(
     () =>
-      tokens.map(([tokenA, tokenB]) => {
-        return tokenA &&
+      tokens.reduce<(string | undefined)[]>((acc, [tokenA, tokenB]) => {
+        const address =
+          tokenA &&
           tokenB &&
           tokenA.chainId === tokenB.chainId &&
           !tokenA.equals(tokenB) &&
           FACTORY_ADDRESS[tokenA.chainId]
-          ? computePairAddress({
-              factoryAddress: FACTORY_ADDRESS[tokenA.chainId],
-              tokenA,
-              tokenB,
-            })
-          : undefined
-      }),
+            ? computePairAddress({
+                factoryAddress: FACTORY_ADDRESS[tokenA.chainId],
+                tokenA,
+                tokenB,
+              })
+            : undefined
+
+        acc.push(address && !acc.includes(address) ? address : undefined)
+        return acc
+      }, []),
     [tokens]
   )
 
