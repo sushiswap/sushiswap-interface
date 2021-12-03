@@ -25,6 +25,7 @@ const config: Config.InitialOptions = {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
   },
   transformIgnorePatterns: ['/node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
+  testTimeout: 600000,
 }
 
 export default config

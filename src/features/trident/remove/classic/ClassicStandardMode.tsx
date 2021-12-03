@@ -51,7 +51,7 @@ const CurrencyAmountItemWithEthSelector: FC<{
           <Typography
             variant="sm"
             weight={700}
-            className="text-blue cursor-pointer"
+            className="cursor-pointer text-blue"
             onClick={() => setReceiveNative(!receiveNative)}
           >
             {receiveNative ? i18n._(t`Receive WETH instead`) : i18n._(t`Receive ETH instead`)}
@@ -82,7 +82,7 @@ const ClassicStandardMode: FC = () => {
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
   const toggleButtonGroup = (
-    <ToggleButtonGroup value={percentageInput} onChange={setPercentageInput} variant="outlined">
+    <ToggleButtonGroup value={percentageInput} onChange={setPercentageInput} variant="outlined" id={`blamanam`}>
       <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
       <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
       <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
@@ -97,8 +97,8 @@ const ClassicStandardMode: FC = () => {
         return (
           <div className="flex flex-col gap-10">
             <div className="flex flex-col gap-3 lg:gap-6">
-              <div className="flex justify-between gap-10 items-center">
-                <Typography variant="h3" weight={700} className="text-high-emphesis mb-2 lg:mb-0">
+              <div className="flex items-center justify-between gap-10">
+                <Typography variant="h3" weight={700} className="mb-2 text-high-emphesis lg:mb-0">
                   Amount to Remove:
                 </Typography>
                 <div className="flex-1 hidden lg:block">{toggleButtonGroup}</div>
@@ -117,7 +117,7 @@ const ClassicStandardMode: FC = () => {
                   )),
                 ]}
                 footer={
-                  <div className="flex justify-between items-center px-4 py-6 gap-3">
+                  <div className="flex items-center justify-between gap-3 px-4 py-6">
                     <PercentInput
                       value={percentageInput}
                       onUserInput={setPercentageInput}
@@ -149,6 +149,7 @@ const ClassicStandardMode: FC = () => {
 
                   return (
                     <Button
+                      id="btn-confirm-remove-liquidity"
                       size="lg"
                       {...(loading && {
                         startIcon: (
@@ -173,7 +174,7 @@ const ClassicStandardMode: FC = () => {
                 }}
               </TridentApproveGate>
             </div>
-            <div className="flex flex-col gap-4 block lg:hidden">
+            <div className="flex flex-col block gap-4 lg:hidden">
               <div className="flex justify-between gap-3">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
                   {i18n._(t`Receive:`)}
@@ -193,7 +194,7 @@ const ClassicStandardMode: FC = () => {
                       <Typography weight={700} className="text-high-emphesis">
                         {i18n._(t`Total Amount`)}
                       </Typography>
-                      <Typography weight={700} className="text-high-emphesis text-right">
+                      <Typography weight={700} className="text-right text-high-emphesis">
                         ≈$
                         {selectedLiquidityValueInUsdc?.greaterThan('0')
                           ? selectedLiquidityValueInUsdc?.toSignificant(6)

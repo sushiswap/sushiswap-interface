@@ -33,7 +33,7 @@ const ClassicStandardAside = () => {
   const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
 
   return (
-    <div className="flex flex-col p-10 rounded bg-dark-1000 shadow-lg gap-8">
+    <div className="flex flex-col gap-8 p-10 rounded shadow-lg bg-dark-1000">
       <div className="flex flex-col gap-3">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
           {i18n._(t`Standard Mode`)}
@@ -44,24 +44,25 @@ const ClassicStandardAside = () => {
           )}
         </Typography>
       </div>
-      <div className="bg-dark-900 rounded p-5 flex justify-between mb-2">
+      <div className="flex justify-between p-5 mb-2 rounded bg-dark-900">
         <div className="flex items-center gap-2">
           <Typography variant="sm">{i18n._(t`Withdraw to:`)}</Typography>
-          <Typography variant="sm" className="text-high-emphesis" weight={700}>
+          <Typography id="txt-withdraw-to" variant="sm" className="text-high-emphesis" weight={700}>
             {outputToWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
           </Typography>
           <BentoBoxFundingSourceModal />
         </div>
         <Switch
+          id={`chk-output-to-wallet`}
           checked={outputToWallet}
           onChange={() => setOutputToWallet(!outputToWallet)}
           checkedIcon={
-            <div className="text-dark-700 flex justify-center items-center h-full w-full">
+            <div className="flex items-center justify-center w-full h-full text-dark-700">
               <WalletIcon />
             </div>
           }
           uncheckedIcon={
-            <div className="text-dark-700 flex justify-center items-center h-full w-full">
+            <div className="flex items-center justify-center w-full h-full text-dark-700">
               <BentoBoxIcon />
             </div>
           }
@@ -69,7 +70,7 @@ const ClassicStandardAside = () => {
       </div>
       {!outputToWallet && receiveNative && (
         <Alert
-          className="bg-transparent p-0"
+          className="p-0 bg-transparent"
           dismissable={false}
           type="error"
           message={i18n._(
@@ -82,7 +83,7 @@ const ClassicStandardAside = () => {
           {i18n._(t`You'll Receive (at least):`)}
         </Typography>
         {minLiquidityOutput.map((el, index) => (
-          <div className="flex justify-between items-center" key={index}>
+          <div className="flex items-center justify-between" key={index}>
             <div className="flex gap-1.5 items-center">
               <CurrencyLogo currency={el?.currency} size={20} />
               <Typography variant="sm" weight={700} className="text-high-emphesis">

@@ -32,7 +32,7 @@ export default function Option({
       }`}
     >
       <div>
-        <div className="flex items-center">
+        <div id={`wallet-option-${header}`} className="flex items-center">
           {active && <div className="w-4 h-4 mr-4 rounded-full" style={{ background: color }} />}
           {header}
         </div>

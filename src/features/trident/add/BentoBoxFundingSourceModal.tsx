@@ -15,25 +15,25 @@ const BentoBoxFundingSourceModal: FC = () => {
   return (
     <HeadlessUiModal
       trigger={
-        <div className="flex items-center justify-center lg:w-4 lg:h-4 rounded cursor-pointer">
+        <div className="flex items-center justify-center rounded cursor-pointer lg:w-4 lg:h-4">
           <QuestionMarkCircleIcon className="w-4 h-4 text-high-emphesis" />
         </div>
       }
     >
       {({ setOpen }) => (
-        <div className="flex flex-col h-full pt-5 gap-5 lg:max-w-lg">
-          <div className="absolute right-5 top-5 w-6 h-6" onClick={() => setOpen(false)}>
-            <XIcon className="w-6 h-6 text-high-emphesis cursor-pointer" />
+        <div className="flex flex-col h-full gap-5 pt-5 lg:max-w-lg">
+          <div className="absolute w-6 h-6 right-5 top-5" onClick={() => setOpen(false)}>
+            <XIcon className="w-6 h-6 cursor-pointer text-high-emphesis" />
           </div>
           <div className="flex justify-center">
             <div className="relative shadow-pink-glow">
               <Image src="/bentobox-logo.png" width={130} height={90} alt="BentoBox Logo" />
             </div>
           </div>
-          <Typography variant="lg" weight={400} className="text-high-emphesis px-5">
+          <Typography variant="lg" weight={400} className="px-5 text-high-emphesis">
             {i18n._(t`SUSHI utilizes a token vault called BentoBox that has balances separate from your wallet.`)}
           </Typography>
-          <div className="rounded p-5 bg-purple bg-opacity-20 mx-5">
+          <div className="p-5 mx-5 rounded bg-purple bg-opacity-20">
             <Typography variant="sm" weight={700} className="text-high-emphesis">
               {i18n._(t`You can think of this like having "account balances" for each asset within sushi.com`)}
             </Typography>
@@ -80,7 +80,7 @@ const BentoBoxFundingSourceModal: FC = () => {
                 </Typography>
               </div>
               <div
-                className="h-full bg-contain bg-no-repeat bg-right"
+                className="h-full bg-right bg-no-repeat bg-contain"
                 style={{ backgroundImage: `url('/images/trident/AssetInputScreenshot.png')` }}
               />
             </div>
@@ -95,9 +95,9 @@ const BentoBoxFundingSourceModal: FC = () => {
             </Typography>
           </div>
           <div className="flex flex-col flex-grow min-h-[160px]">
-            <div className="grid grid-cols-2 flex-grow">
+            <div className="grid flex-grow grid-cols-2">
               <div
-                className="h-full bg-contain bg-no-repeat"
+                className="h-full bg-no-repeat bg-contain"
                 style={{ backgroundImage: `url('/images/trident/AssetInputScreenshot2.png')` }}
               />
               <div className="flex flex-col gap-4 p-3 px-8">

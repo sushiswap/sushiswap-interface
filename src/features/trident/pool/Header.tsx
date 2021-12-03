@@ -29,6 +29,7 @@ interface HeaderProps {
 export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const isDesktop = useDesktopMediaQuery()
   const { chainId } = useActiveWeb3React()
+  const poolId = `${pool?.assets.map((el) => el.symbol).join('-')}`
 
   const { data: stats } = useRollingPoolStats({
     chainId,
@@ -49,8 +50,13 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
           </div>
         </div>
         <div className="flex flex-row items-center gap-2 lg:order-2">
-          <Typography variant={isDesktop ? 'h3' : 'h2'} className="text-high-emphesis" weight={700}>
-            {pool?.assets.map((el) => el.symbol).join('-')}
+          <Typography
+            id={`pool-title-${poolId}`}
+            variant={isDesktop ? 'h3' : 'h2'}
+            className="text-high-emphesis"
+            weight={700}
+          >
+            {poolId}
           </Typography>
           {isFarm && (
             <>

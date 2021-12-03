@@ -21,9 +21,9 @@ const FixedRatioHeader: FixedRatio<{ margin?: boolean }> = ({ margin = true }) =
   const [fixedRatio, setFixedRatio] = useRecoilState(fixedRatioAtom)
 
   const content = (
-    <div className="flex justify-between lg:justify-start gap-1">
-      <div className="flex flex-row gap-3 items-center cursor-pointer" onClick={() => setFixedRatio(!fixedRatio)}>
-        <Checkbox className="w-6 h-6" checked={fixedRatio} />
+    <div className="flex justify-between gap-1 lg:justify-start">
+      <div className="flex flex-row items-center gap-3 cursor-pointer" onClick={() => setFixedRatio(!fixedRatio)}>
+        <Checkbox id={`chk-fixed-ratio-withdraw`} className="w-6 h-6" checked={fixedRatio} />
         <Typography variant="sm" weight={700} className={fixedRatio ? 'text-white' : ''}>
           {i18n._(t`Withdraw assets in equal amounts`)}
         </Typography>

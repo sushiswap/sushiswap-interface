@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-document-import-in-page */
 // pages/_document.js
 import { Head, Html, Main, NextScript } from 'next/document'
 

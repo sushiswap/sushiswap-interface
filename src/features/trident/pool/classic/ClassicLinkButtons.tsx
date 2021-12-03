@@ -19,10 +19,11 @@ const ClassicLinkButtons: FC = () => {
   if (!pool) return <></>
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+    <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
       {poolBalance?.greaterThan(0) ? (
         <>
-          <Button variant="outlined" color="gradient" className="text-high-emphesis">
+          <Button id={`btn-add-stake-liquidity`} variant="outlined" color="gradient" className="text-high-emphesis">
+
             <Link
               href={{
                 pathname: `/trident/add/classic`,
@@ -37,7 +38,7 @@ const ClassicLinkButtons: FC = () => {
               {isFarm ? i18n._(t`Add Liquidity / Stake`) : i18n._(t`Add Liquidity`)}
             </Link>
           </Button>
-          <Button variant="outlined" color="gradient" className="text-high-emphesis">
+          <Button id={`btn-remove-liquidity`} variant="outlined" color="gradient" className="text-high-emphesis">
             <Link
               href={{
                 pathname: `/trident/remove/classic`,
@@ -54,7 +55,7 @@ const ClassicLinkButtons: FC = () => {
           </Button>
         </>
       ) : (
-        <Button color="gradient" className="text-high-emphesis">
+        <Button id={`btn-deposit`} color="gradient" className="text-high-emphesis">
           <Link
             href={{
               pathname: `/trident/add/classic`,

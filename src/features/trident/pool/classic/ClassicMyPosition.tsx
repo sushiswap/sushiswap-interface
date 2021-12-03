@@ -35,7 +35,7 @@ const ClassicMyPosition: FC = () => {
         </SumUSDCValues>
       }
       items={currentLiquidityValue.map((amount, index) => (
-        <ListPanel.CurrencyAmountItem amount={amount} key={index} />
+        <ListPanel.CurrencyAmountItem id={`my-position-${index}`} amount={amount} key={index} />
       ))}
       footer={
         <ListPanel.Footer

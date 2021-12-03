@@ -61,16 +61,16 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
       afterLeave={() => setTxHash(undefined)}
     >
       {!txHash ? (
-        <div className="flex flex-col gap-8 h-full lg:max-w-md">
+        <div className="flex flex-col h-full gap-8 lg:max-w-md">
           <div className="relative">
-            <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
-            <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
+            <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
+            <div className="flex flex-col gap-4 px-5 pt-5 pb-8">
               <div className="flex flex-row justify-between">
                 <Button
                   color="blue"
                   variant="outlined"
                   size="sm"
-                  className="rounded-full py-1 pl-2 cursor-pointer"
+                  className="py-1 pl-2 rounded-full cursor-pointer"
                   startIcon={<ChevronLeftIcon width={24} height={24} />}
                   onClick={() => setShowReview(false)}
                 >
@@ -107,10 +107,16 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
               </Typography>
             </div>
           </div>
-          <div className="flex flex-col px-5 gap-5">
+          <div className="flex flex-col gap-5 px-5">
             <Divider />
             <TransactionDetails />
-            <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={execute}>
+            <Button
+              id="btn-modal-confirm-withdrawal"
+              disabled={attemptingTxn}
+              color="gradient"
+              size="lg"
+              onClick={execute}
+            >
               <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {i18n._(t`Confirm Withdrawal`)}
               </Typography>

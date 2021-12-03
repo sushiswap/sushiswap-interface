@@ -71,6 +71,7 @@ ToggleButtonGroup.Button = ({
           )}
         >
           <Typography
+            id={`radio-option-${value}`}
             className={classNames('text-center', checked ? 'text-high-emphesis' : 'text-secondary')}
             variant="sm"
             weight={700}

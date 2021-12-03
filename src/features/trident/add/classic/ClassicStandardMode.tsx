@@ -123,6 +123,7 @@ const ClassicStandardMode = () => {
                       onClick={() => setShowReview(true)}
                     >
                       <Typography
+                        id={`btn-${buttonText.toString().replace(/\s/g, '')}`}
                         variant="sm"
                         weight={700}
                         className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}

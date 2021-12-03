@@ -98,7 +98,7 @@ interface ListPanelItemProps {
 // If you need different styling, please create another component and leave this one as is.
 const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
   return (
-    <div className="flex grid items-center grid-cols-2 gap-2 px-3 lg:px-4 py-3 border-dark-700">
+    <div className="flex grid items-center grid-cols-2 gap-2 px-3 py-3 lg:px-4 border-dark-700">
       {left}
       {right}
     </div>
@@ -134,35 +134,38 @@ interface CurrencyAmountItemProps {
   amount?: CurrencyAmount<Currency>
   weight?: string
   displayTokenAmount?: boolean
+  id?: string
 }
 
 // ListPanelItem for displaying a CurrencyAmount
-const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount, weight, displayTokenAmount = false }) => {
+const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount, weight, displayTokenAmount = false, id = '' }) => {
   const usdcValue = useUSDCValue(amount)
 
   if (!displayTokenAmount)
     return (
-      <ListPanel.Item
-        left={
-          <ListPanel.Item.Left
-            amount={amount}
-            {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
-          />
-        }
-        right={<ListPanel.Item.Right>${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>}
-        key={0}
-      />
+      <div id={`${id}`}>
+        <ListPanel.Item
+          left={
+            <ListPanel.Item.Left
+              amount={amount}
+              {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
+            />
+          }
+          right={<ListPanel.Item.Right>${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>}
+          key={0}
+        />
+      </div>
     )
 
   return (
-    <div className="flex grid items-center grid-cols-3 gap-2 px-3 lg:px-4 py-3 border-dark-700">
-      <div className="flex gap-3 items-center -ml-1">
+    <div id={id} className="flex grid items-center grid-cols-3 gap-2 px-3 py-3 lg:px-4 border-dark-700">
+      <div className="flex items-center gap-3 -ml-1">
         <CurrencyLogo currency={amount?.currency} size={30} className="rounded-full" />
         <Typography className="text-high-emphesis" weight={700}>
           {amount?.currency.symbol}
         </Typography>
       </div>
-      <Typography className="text-high-emphesis text-right" weight={700}>
+      <Typography className="text-right text-high-emphesis" weight={700}>
         {amount?.toSignificant(6)}
       </Typography>
       <Typography className="text-right" variant="sm">

@@ -9,6 +9,7 @@ type SwitchProps = ComponentProps<typeof HeadlessUiSwitch> & {
   checkedIcon?: ReactNode
   uncheckedIcon?: ReactNode
   color?: SwitchColor
+  id?: string
 }
 
 const COLOR = {
@@ -16,7 +17,14 @@ const COLOR = {
   gradient: (checked) => (checked ? 'bg-gradient-to-r from-blue to-pink' : 'bg-dark-700'),
 }
 
-const Switch = ({ checked, onChange, checkedIcon = '', uncheckedIcon = '', color = 'default' }: SwitchProps) => {
+const Switch = ({
+  checked,
+  onChange,
+  checkedIcon = '',
+  uncheckedIcon = '',
+  color = 'default',
+  id = '',
+}: SwitchProps) => {
   return (
     <HeadlessUiSwitch
       checked={checked}
@@ -27,6 +35,7 @@ const Switch = ({ checked, onChange, checkedIcon = '', uncheckedIcon = '', color
       )}
     >
       <span
+        id={id}
         className={classNames(
           checked ? 'translate-x-[30px]' : 'translate-x-[2px]',
           COLOR[color](checked),

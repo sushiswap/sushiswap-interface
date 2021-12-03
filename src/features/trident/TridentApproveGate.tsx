@@ -25,9 +25,10 @@ interface TokenApproveButtonProps {
   inputAmount: CurrencyAmount<Currency> | undefined
   onStateChange: React.Dispatch<React.SetStateAction<any>>
   tokenApproveOn: string | undefined
+  id: string
 }
 
-const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onStateChange, tokenApproveOn }) => {
+const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onStateChange, tokenApproveOn, id }) => {
   const { i18n } = useLingui()
   const [approveState, approveCallback] = useApproveCallback(inputAmount?.wrapped, tokenApproveOn)
   const setSLPPermit = useSetRecoilState(TridentApproveGateSLPPermitAtom)
@@ -78,7 +79,7 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 
   if (!signatureData && [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
     return (
-      <Button.Dotted pending={approveState === ApprovalState.PENDING} color="blue" onClick={handleApprove}>
+      <Button.Dotted id={id} pending={approveState === ApprovalState.PENDING} color="blue" onClick={handleApprove}>
         {approveState === ApprovalState.PENDING
           ? i18n._(t`Approving ${inputAmount?.currency.symbol}`)
           : i18n._(t`Approve ${inputAmount?.currency.symbol}`)}
@@ -146,7 +147,12 @@ const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
       {/*hide bentobox approval if not every inputAmount is greater than than zero*/}
       {inputAmounts.every((el) => el?.greaterThan(ZERO)) &&
         [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(bApprove) && (
-          <Button.Dotted pending={bApprove === BentoApprovalState.PENDING} color="blue" onClick={onClick}>
+          <Button.Dotted
+            id={`btn-approve`}
+            pending={bApprove === BentoApprovalState.PENDING}
+            color="blue"
+            onClick={onClick}
+          >
             {bApprove === BentoApprovalState.PENDING
               ? i18n._(t`Approving BentoBox to spend tokens`)
               : i18n._(t`Approve BentoBox to spend tokens`)}
@@ -156,6 +162,7 @@ const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
         if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
           acc.push(
             <TokenApproveButton
+              id={`btn-approve`}
               inputAmount={amount}
               key={index}
               onStateChange={setStatus}

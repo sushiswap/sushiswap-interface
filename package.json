@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
+    "@chainsafe/dappeteer": "^2.2.0",
     "@commitlint/cli": "^13.0.0",
     "@commitlint/config-conventional": "^13.0.0",
     "@ethersproject/abi": "^5.4.0",
@@ -150,6 +151,7 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.4.0",
+    "puppeteer": "^11.0.0",
     "qs": "^6.10.1",
     "rc-slider": "^9.7.2",
     "react": "^17.0.2",
@@ -197,5 +199,6 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {}
 }
