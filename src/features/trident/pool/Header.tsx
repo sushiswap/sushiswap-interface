@@ -61,9 +61,7 @@ export const Header: FC<HeaderProps> = ({ pool, i18n }) => {
   const feeApyPerYear = useMemo(
     () =>
       aprToApy(
-        ((((poolData?.volumeUSD - poolData1d?.volumeUSD) / 100) * poolData?.swapFeePercent * 365) /
-          poolData?.liquidityUSD) *
-          100,
+        (((poolData?.volumeUSD - poolData1d?.volumeUSD) / 100) * poolData?.swapFee * 365) / poolData?.liquidityUSD,
         3650
       ) || 0,
     [poolData, poolData1d]

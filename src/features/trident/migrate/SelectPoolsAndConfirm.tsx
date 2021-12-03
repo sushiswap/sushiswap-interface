@@ -33,13 +33,16 @@ export const SelectPoolsAndConfirm: FC = () => {
 
   const { data, error, isValidating } = useGetAllTridentPools()
 
+  if (selectedMigrations.length === 0) {
+    /* Need to select pools on previous page */
+    router.push('/trident/migrate')
+  }
+
   return (
     <div>
       <div className="flex gap-3 items-center">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          {selectedMigrations.length === 0
-            ? i18n._(t`Please select pools on previous page`)
-            : leftToSelect === 0
+          {leftToSelect === 0
             ? i18n._(t`All set ✅`)
             : leftToSelect === 1
             ? i18n._(t`One pool left to select`)
@@ -65,13 +68,11 @@ export const SelectPoolsAndConfirm: FC = () => {
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center mt-10">
-        {Boolean(selectedMigrations.length) && (
-          <div>
-            <Button color="gradient" disabled={leftToSelect !== 0} onClick={mockExecute(selectedMigrations)}>
-              {leftToSelect === 0 ? i18n._(t`Confirm Migration`) : i18n._(t`Select Pools`)}
-            </Button>
-          </div>
-        )}
+        <div>
+          <Button color="gradient" disabled={leftToSelect !== 0} onClick={mockExecute(selectedMigrations)}>
+            {leftToSelect === 0 ? i18n._(t`Confirm Migration`) : i18n._(t`Select Pools`)}
+          </Button>
+        </div>
         <div
           className="cursor-pointer text-blue text-center md:text-left"
           onClick={() => router.push('/trident/migrate')}

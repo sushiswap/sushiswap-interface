@@ -1,6 +1,6 @@
+import { Fee } from '@sushiswap/trident-sdk'
 import { TableInstance } from 'features/transactions/types'
 import { atom, selector } from 'recoil'
-import { FeeTier } from 'services/graph/fetchers/pools'
 
 export const searchQueryAtom = atom<string>({
   key: 'searchQueryAtom',
@@ -17,7 +17,7 @@ export const showTWAPOnlyAtom = atom<boolean>({
   default: false,
 })
 
-export const feeTiersFilterAtom = atom<FeeTier[]>({
+export const feeTiersFilterAtom = atom<Fee[]>({
   key: 'feeTiersFilterAtom',
   default: [],
 })

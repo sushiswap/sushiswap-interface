@@ -10,7 +10,7 @@ const useInstantiateFilters = (setFilter: TableInstance['setFilter']) => {
   useMemo(() => setFilter('assets', { searchQuery, twapEnabled }), [searchQuery, setFilter, twapEnabled])
 
   const feeTiersSelected = useRecoilValue(feeTiersFilterAtom)
-  useMemo(() => setFilter('swapFeePercent', { feeTiersSelected }), [feeTiersSelected, setFilter])
+  useMemo(() => setFilter('swapFee', { feeTiersSelected }), [feeTiersSelected, setFilter])
 }
 
 export const useInstantiateSorting = (toggleSortBy: TableInstance['toggleSortBy']) => {

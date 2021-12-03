@@ -1,5 +1,6 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
+import { Fee } from '@sushiswap/trident-sdk'
 import { GRAPH_HOST, TRIDENT } from 'services/graph/constants'
 import {
   getSwapsForPoolQuery,
@@ -20,8 +21,6 @@ const gqlPoolTypeMap: Record<string, PoolType> = {
   indexPools: PoolType.Weighted,
 }
 
-export type FeeTier = 1 | 0.3 | 0.05 | 0.01
-
 export interface TridentPool {
   address: string
   type: PoolType
@@ -35,7 +34,7 @@ export interface TridentPool {
     name: string
     decimals: number
   }[]
-  swapFeePercent: FeeTier
+  swapFee: Fee
   twapEnabled: boolean
 }
 
@@ -56,7 +55,7 @@ const formatPools = (pools: TridentPoolQueryResult): TridentPool[] =>
           name: asset.token.name,
           decimals: Number(asset.token.decimals),
         })),
-        swapFeePercent: (parseInt(swapFee) / 100) as FeeTier,
+        swapFee: Number(swapFee),
         twapEnabled,
       }))
     )

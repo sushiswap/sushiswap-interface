@@ -23,13 +23,13 @@ export const SelectFeeTier: FC = () => {
       </div>
       <div className="grid gap-3 mt-4 select-none lg:grid-cols-4 md:grid-cols-2">
         <FeeTierSelect
-          tier={1}
+          tier={Fee.LOW}
           subtitle={i18n._(t`Best for stable pairs`)}
           selectedFeeTier={selectedFeeTier}
           setter={setSelectedFeeTier}
         />
         <FeeTierSelect
-          tier={5}
+          tier={Fee.MEDIUM}
           subtitle={i18n._(t`Best for mainstream pairs`)}
           selectedFeeTier={selectedFeeTier}
           setter={setSelectedFeeTier}
@@ -41,7 +41,7 @@ export const SelectFeeTier: FC = () => {
           setter={setSelectedFeeTier}
         />
         <FeeTierSelect
-          tier={100}
+          tier={Fee.HIGH}
           subtitle={i18n._(t`Best for exotic pairs`)}
           selectedFeeTier={selectedFeeTier}
           setter={setSelectedFeeTier}

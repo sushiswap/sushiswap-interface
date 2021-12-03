@@ -8,13 +8,15 @@ import Typography from '../../../components/Typography'
 import { TridentHeader } from '../../../layouts/Trident'
 
 const HeaderButton: FC<{ title: string; linkTo: string }> = ({ title, linkTo }) => (
-  <Button
-    color="gradient"
-    variant="outlined"
-    className="flex-1 text-sm font-bold text-white sm:flex-none md:flex-1 h-9"
-  >
-    <Link href={linkTo}>{title}</Link>
-  </Button>
+  <Link href={linkTo}>
+    <Button
+      color="gradient"
+      variant="outlined"
+      className="flex-1 text-sm font-bold text-white sm:flex-none md:flex-1 h-9"
+    >
+      {title}
+    </Button>
+  </Link>
 )
 
 export const DiscoverHeader: FC = () => {

@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Fee } from '@sushiswap/trident-sdk'
 import Button from 'app/components/Button'
 import Checkbox from 'app/components/Checkbox'
 import BottomSlideIn from 'app/components/Dialog/BottomSlideIn'
@@ -55,22 +56,16 @@ const FeeTierFilter: FC = () => {
           By Fee Tier:
         </Typography>
       </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(1, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(1)} />
-        <Typography className="text-secondary">1%</Typography>
-      </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.3, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(0.3)} />
-        <Typography className="text-secondary">0.3%</Typography>
-      </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.05, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(0.05)} />
-        <Typography className="text-secondary">0.05%</Typography>
-      </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => removeOrAddFeeTier(0.01, feeTiers, setFeeTiers)}>
-        <Checkbox checked={feeTiers.includes(0.01)} />
-        <Typography className="text-secondary">0.1%</Typography>
-      </div>
+      {[Fee.HIGH, Fee.DEFAULT, Fee.MEDIUM, Fee.LOW].map((fee) => (
+        <div
+          key={fee}
+          className="flex flex-row gap-3 items-center"
+          onClick={() => removeOrAddFeeTier(fee, feeTiers, setFeeTiers)}
+        >
+          <Checkbox checked={feeTiers.includes(fee)} />
+          <Typography className="text-secondary">{fee / 100}%</Typography>
+        </div>
+      ))}
     </div>
   )
 }

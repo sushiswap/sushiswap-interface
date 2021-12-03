@@ -8,7 +8,7 @@ interface FeeTierSelectProps {
   tier: Fee
   subtitle: string
   selectedFeeTier: Fee | undefined
-  setter: SetterOrUpdater<Fee>
+  setter: SetterOrUpdater<Fee | undefined>
 }
 
 export const FeeTierSelect: FC<FeeTierSelectProps> = ({ tier, subtitle, selectedFeeTier, setter }) => {

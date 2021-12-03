@@ -54,7 +54,7 @@ export function usePoolStats({ pair }) {
       },
       {
         label: i18n._(t`Fees (24H)`),
-        value: formatNumber(((pool?.volumeUSD - pool1d?.volumeUSD) / 100) * pool?.swapFeePercent, true, false),
+        value: formatNumber(((pool?.volumeUSD - pool1d?.volumeUSD) / 100) * pool?.swapFee, true, false),
         change: ((pool?.volumeUSD - pool1d?.volumeUSD) / (pool1d?.volumeUSD - pool2d?.volumeUSD)) * 100 - 100,
       },
       {

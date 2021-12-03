@@ -25,7 +25,7 @@ export const ExistingPoolOption: FC<OptionProps> = ({ pool, onClick, active }) =
     >
       <div className="flex-grow">
         <div className="text-md">
-          {pool.swapFeePercent}
+          {pool.swapFee / 100}
           {i18n._(t`% Fee`)}
         </div>
         {pool.twapEnabled ? (
