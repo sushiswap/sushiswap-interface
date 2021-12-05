@@ -76,8 +76,22 @@ import { warningSeverity } from '../../../functions/prices'
 
 import Image from 'next/image'
 import Banner from '../../../components/Banner'
+import { fetchAPI } from '../../../lib/api'
 
-export default function Swap() {
+export async function getServerSideProps() {
+  try {
+    const { data } = await fetchAPI('/banners?populate=image')
+    return {
+      props: { banners: data },
+    }
+  } catch (e) {
+    return {
+      props: { banners: [] },
+    }
+  }
+}
+
+export default function Swap({ banners }) {
   const { i18n } = useLingui()
 
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -712,7 +726,7 @@ export default function Swap() {
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
           )}
         </div>
-        <Banner />
+        <Banner banners={banners} />
       </DoubleGlowShadow>
     </Container>
   )
