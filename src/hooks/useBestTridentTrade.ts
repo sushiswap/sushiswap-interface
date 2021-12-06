@@ -1,7 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { ChainId, Currency, CurrencyAmount, Pair, TradeType, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, Currency, CurrencyAmount, Pair, Trade as LegacyTrade, TradeType, WNATIVE } from '@sushiswap/core-sdk'
 import { RouteStatus } from '@sushiswap/tines'
-import { ConstantProductPool, findMultiRouteExactIn, findSingleRouteExactIn, Trade } from '@sushiswap/trident-sdk'
+import {
+  ConstantProductPool,
+  convertTinesSingleRouteToLegacyRoute,
+  findMultiRouteExactIn,
+  findSingleRouteExactIn,
+  Trade,
+} from '@sushiswap/trident-sdk'
 import { toShareCurrencyAmount } from 'app/functions'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { ConstantProductPoolState } from 'app/hooks/useTridentClassicPools'
@@ -98,11 +104,12 @@ export function useBestTridentTrade(
           chainId === ChainId.KOVAN ? 750 * 1e9 : price
         )
 
+        const allPairs = allowedPools.filter((pair) => pair instanceof Pair) as Pair[]
         const legacyRoute = findSingleRouteExactIn(
           amountSpecified.currency.wrapped,
           otherCurrency.wrapped,
           BigNumber.from(amountSpecified.quotient.toString()),
-          allowedPools.filter((pair) => pair instanceof Pair) as Pair[],
+          allPairs,
           WNATIVE[amountSpecified.currency.chainId],
           chainId === ChainId.KOVAN ? 750 * 1e9 : price
         )
@@ -117,9 +124,15 @@ export function useBestTridentTrade(
         } else {
           if (legacyRoute.status === RouteStatus.Success) {
             if (tradeType === TradeType.EXACT_INPUT)
-              return Trade.bestTradeExactIn(legacyRoute, amountSpecified, otherCurrency)
+              return LegacyTrade.exactIn(
+                convertTinesSingleRouteToLegacyRoute(legacyRoute, allPairs, amountSpecified.currency, otherCurrency),
+                amountSpecified
+              )
             if (tradeType === TradeType.EXACT_OUTPUT)
-              return Trade.bestTradeExactOut(legacyRoute, otherCurrency, amountSpecified)
+              return LegacyTrade.exactOut(
+                convertTinesSingleRouteToLegacyRoute(legacyRoute, allPairs, otherCurrency, amountSpecified.currency),
+                amountSpecified
+              )
           }
         }
       }
