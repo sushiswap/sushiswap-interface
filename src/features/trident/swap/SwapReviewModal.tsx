@@ -1,7 +1,6 @@
 import { ArrowDownIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { JSBI, Percent } from '@sushiswap/core-sdk'
 import { isValidAddress } from '@walletconnect/utils'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import SwapSubmittedModalContent from 'app/features/trident/swap/SwapSubmittedModalContent'
@@ -43,6 +42,7 @@ const SwapReviewModal: FC = () => {
     parsedAmounts: [inputAmount, outputAmount],
     spendFromWallet: [fromWallet],
     receiveToWallet: [receiveToWallet],
+    priceImpact,
   } = useSwapAssetPanelInputs()
 
   const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
@@ -75,13 +75,6 @@ const SwapReviewModal: FC = () => {
           minimumAmountOutShares?.wrapped
         )
       : undefined
-
-  const priceImpact = trade
-    ? new Percent(
-        (trade.route.priceImpact || 0).toString().toBigNumber(18).toString(),
-        JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
-      )
-    : undefined
 
   const priceImpactClassName = useMemo(() => {
     if (!priceImpact) return undefined
