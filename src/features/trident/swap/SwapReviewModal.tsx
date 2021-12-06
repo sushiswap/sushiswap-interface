@@ -1,10 +1,12 @@
 import { ArrowDownIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { TradeVersion } from '@sushiswap/core-sdk'
 import { isValidAddress } from '@walletconnect/utils'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import SwapSubmittedModalContent from 'app/features/trident/swap/SwapSubmittedModalContent'
 import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
+import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import Button from 'components/Button'
 import CurrencyLogo from 'components/CurrencyLogo'
@@ -67,14 +69,16 @@ const SwapReviewModal: FC = () => {
     }
   }, [callback, reset, setTxHash])
 
-  const minimumAmountOutShares = trade ? trade.minimumAmountOut(allowedSlippage) : undefined
-  const minimumAmountOut =
-    rebases && minimumAmountOutShares && rebases[minimumAmountOutShares.currency.wrapped.address]
+  const minimumAmountOutLegacy = trade ? trade.minimumAmountOut(allowedSlippage) : undefined
+  const minimumAmountOutTrident =
+    rebases && minimumAmountOutLegacy && rebases[minimumAmountOutLegacy.currency.wrapped.address]
       ? toAmountCurrencyAmount(
-          rebases[minimumAmountOutShares.currency.wrapped.address],
-          minimumAmountOutShares?.wrapped
+          rebases[minimumAmountOutLegacy.currency.wrapped.address],
+          minimumAmountOutLegacy?.wrapped
         )
       : undefined
+  const minimumAmountOut =
+    getTradeVersion(trade) === TradeVersion.V3TRADE ? minimumAmountOutTrident : minimumAmountOutLegacy
 
   const priceImpactClassName = useMemo(() => {
     if (!priceImpact) return undefined

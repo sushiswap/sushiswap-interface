@@ -1,7 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, JSBI, Percent, TradeType, WNATIVE, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, TradeType, TradeVersion, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import { maxAmountSpend, toAmountCurrencyAmount } from 'app/functions'
+import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useBentoRebases from 'app/hooks/useBentoRebases'
@@ -89,26 +90,29 @@ const useSwapAssetPanelInputs = () => {
 
   const priceImpact = useMemo(
     () =>
-      trade
+      _priceImpact
         ? new Percent(
             _priceImpact.toString().toBigNumber(18).toString(),
             JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
           )
         : undefined,
-    [_priceImpact, trade]
+    [_priceImpact]
   )
 
   // trade.output but in normal amounts instead of shares
-  const tradeOutputAmount = useMemo(
-    () =>
+  const tradeOutputAmount = useMemo(() => {
+    if (!trade) return undefined
+    if (getTradeVersion(trade) === TradeVersion.V2TRADE) return trade.outputAmount
+    if (
+      getTradeVersion(trade) === TradeVersion.V3TRADE &&
       !rebasesLoading &&
-      trade &&
       trade.outputAmount?.currency.wrapped.address &&
       rebases[trade?.outputAmount?.currency.wrapped.address]
-        ? toAmountCurrencyAmount(rebases[trade.outputAmount?.currency.wrapped.address], trade.outputAmount.wrapped)
-        : undefined,
-    [rebases, rebasesLoading, trade]
-  )
+    )
+      return toAmountCurrencyAmount(rebases[trade.outputAmount?.currency.wrapped.address], trade.outputAmount.wrapped)
+
+    return undefined
+  }, [rebases, rebasesLoading, trade])
 
   const balance = useBentoOrWalletBalance(account ?? undefined, currencies?.[0], spendFromWallet[0])
 
