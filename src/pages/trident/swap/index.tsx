@@ -20,6 +20,8 @@ import { useSetRecoilState } from 'recoil'
 import { useExpertModeManager } from 'state/user/hooks'
 
 import Container from '../../../components/Container'
+import NetworkGuard from 'app/guards/Network'
+import { Feature } from 'app/enums'
 
 const Swap = () => {
   const { i18n } = useLingui()
@@ -130,6 +132,6 @@ const Swap = () => {
   )
 }
 
-// Swap.Guard = NetworkGuard(Feature.TRIDENT)
+Swap.Guard = NetworkGuard(Feature.TRIDENT)
 
 export default Swap
