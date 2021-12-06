@@ -47,10 +47,12 @@ function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (Constan
   )
 }
 
-type UseBestTridentTradeOutput =
-  | Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
-  | LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
-  | undefined
+type UseBestTridentTradeOutput = {
+  trade?:
+    | Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+    | LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+  priceImpact?: number
+}
 
 /**
  * Returns best trident trade for a desired swap.
@@ -64,7 +66,7 @@ export function useBestTridentTrade(
 ): UseBestTridentTradeOutput {
   const { chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
-  const [trade, setTrade] = useState<UseBestTridentTradeOutput>(undefined)
+  const [trade, setTrade] = useState<UseBestTridentTradeOutput>({ trade: undefined, priceImpact: undefined })
   const { rebase } = useBentoRebase(amountSpecified?.currency)
 
   const shareSpecified = useMemo(() => {
@@ -119,28 +121,39 @@ export function useBestTridentTrade(
 
         if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
           if (tridentRoute.status === RouteStatus.Success) {
+            const priceImpact = tridentRoute.priceImpact
             if (tradeType === TradeType.EXACT_INPUT)
-              return Trade.bestTradeExactIn(tridentRoute, shareSpecified, otherCurrency)
+              return { trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, otherCurrency), priceImpact }
             if (tradeType === TradeType.EXACT_OUTPUT)
-              return Trade.bestTradeExactOut(tridentRoute, otherCurrency, shareSpecified)
+              return { trade: Trade.bestTradeExactOut(tridentRoute, otherCurrency, shareSpecified), priceImpact }
           }
         } else {
           if (legacyRoute.status === RouteStatus.Success) {
+            const priceImpact = legacyRoute.priceImpact
             if (tradeType === TradeType.EXACT_INPUT)
-              return LegacyTrade.exactIn(
-                convertTinesSingleRouteToLegacyRoute(legacyRoute, allPairs, amountSpecified.currency, otherCurrency),
-                amountSpecified
-              )
+              return {
+                trade: LegacyTrade.exactIn(
+                  convertTinesSingleRouteToLegacyRoute(legacyRoute, allPairs, amountSpecified.currency, otherCurrency),
+                  amountSpecified
+                ),
+                priceImpact,
+              }
             if (tradeType === TradeType.EXACT_OUTPUT)
-              return LegacyTrade.exactOut(
-                convertTinesSingleRouteToLegacyRoute(legacyRoute, allPairs, otherCurrency, amountSpecified.currency),
-                amountSpecified
-              )
+              return {
+                trade: LegacyTrade.exactOut(
+                  convertTinesSingleRouteToLegacyRoute(legacyRoute, allPairs, otherCurrency, amountSpecified.currency),
+                  amountSpecified
+                ),
+                priceImpact,
+              }
           }
         }
       }
 
-      return undefined
+      return {
+        trade: undefined,
+        priceImpact: undefined,
+      }
     }
 
     bestTrade().then((trade) => setTrade(trade))

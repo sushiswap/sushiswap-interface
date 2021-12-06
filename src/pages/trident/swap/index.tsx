@@ -1,10 +1,9 @@
 import { SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, JSBI, Percent, TradeVersion } from '@sushiswap/core-sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import { Feature } from 'app/enums'
 import WrapButton from 'app/features/trident/swap/WrapButton'
-import { getTradeVersion } from 'app/functions/getTradeVersion'
 import NetworkGuard from 'app/guards/Network'
 import { useActiveWeb3React } from 'app/services/web3'
 import DoubleGlowShadow from 'components/DoubleGlowShadow'
@@ -38,6 +37,7 @@ const Swap = () => {
     receiveToWallet: [receiveToWallet, setReceiveToWallet],
     formattedAmounts,
     trade,
+    priceImpact,
     switchCurrencies,
     error,
     isWrap,
@@ -47,18 +47,6 @@ const Swap = () => {
     if (!chainId || !currencies?.[0] || !currencies?.[1]) return
     setCurrencies([currencies?.[0], currencies?.[1]])
   }, [chainId, currencies, setCurrencies])
-
-  const priceImpact = trade
-    ? getTradeVersion(trade) === TradeVersion.V3TRADE
-      ? new Percent(
-          trade.route.priceImpact.toString().toBigNumber(18).toString(),
-          JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
-        )
-      : new Percent(
-          trade.priceImpact.toString().toBigNumber(18).toString(),
-          JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
-        )
-    : undefined
 
   return (
     <Container className="py-4 md:py-8 lg:py-12 px-2" maxWidth="2xl">

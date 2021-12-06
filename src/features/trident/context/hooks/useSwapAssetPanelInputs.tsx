@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, TradeType, WNATIVE, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, TradeType, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import { maxAmountSpend, toAmountCurrencyAmount } from 'app/functions'
 import { tryParseAmount } from 'app/functions/parse'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
@@ -81,10 +81,21 @@ const useSwapAssetPanelInputs = () => {
     ((currencies[0]?.isNative && WNATIVE[chainId].address === currencies[1]?.wrapped.address) ||
       (currencies[1]?.isNative && WNATIVE[chainId].address === currencies[0]?.wrapped.address))
 
-  const trade = useBestTridentTrade(
+  const { trade, priceImpact: _priceImpact } = useBestTridentTrade(
     typedField[0] === TypedField.A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
     typedField[0] === TypedField.A ? mainInputCurrencyAmount : secondaryInputCurrencyAmount,
     typedField[0] === TypedField.A ? currencies[1] : currencies[0]
+  )
+
+  const priceImpact = useMemo(
+    () =>
+      trade
+        ? new Percent(
+            _priceImpact.toString().toBigNumber(18).toString(),
+            JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))
+          )
+        : undefined,
+    [_priceImpact, trade]
   )
 
   // trade.output but in normal amounts instead of shares
@@ -150,6 +161,7 @@ const useSwapAssetPanelInputs = () => {
       mainInput,
       secondaryInput,
       trade,
+      priceImpact,
       spendFromWallet,
       receiveToWallet,
       formattedAmounts,
@@ -157,6 +169,7 @@ const useSwapAssetPanelInputs = () => {
       switchCurrencies,
     }),
     [
+      priceImpact,
       isWrap,
       reset,
       error,
