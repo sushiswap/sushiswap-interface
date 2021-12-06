@@ -47,7 +47,10 @@ function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (Constan
   )
 }
 
-type UseBestTridentTradeOutput = Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT> | undefined
+type UseBestTridentTradeOutput =
+  | Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+  | LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+  | undefined
 
 /**
  * Returns best trident trade for a desired swap.
