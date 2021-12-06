@@ -157,7 +157,9 @@ export function useBestTridentTrade(
     }
 
     bestTrade().then((trade) => setTrade(trade))
-  }, [allowedPools, amountSpecified, chainId, gasPricePromise, otherCurrency, shareSpecified, tradeType])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allowedPools, amountSpecified, chainId, gasPricePromise, otherCurrency, shareSpecified, tradeType, blockNumber])
 
   return trade
 }
