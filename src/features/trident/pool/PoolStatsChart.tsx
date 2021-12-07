@@ -6,7 +6,7 @@ import { BarGraph } from 'components/BarGraph'
 import Button from 'components/Button'
 import LineGraph from 'components/LineGraph'
 import Typography from 'components/Typography'
-import { formatDate } from 'functions'
+import { formatDate, formatNumber } from 'functions'
 import useDesktopMediaQuery from 'hooks/useDesktopMediaQuery'
 import { useMemo, useState } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -59,6 +59,8 @@ const PoolStatsChart = () => {
     shouldFetch: !!pool && chartTimespans[chartRange] >= chartTimespans['1W'],
   })
 
+  console.log(hourBuckets, dayBuckets, pool?.liquidityToken.address)
+
   const data = chartTimespans[chartRange] <= chartTimespans['1W'] ? hourBuckets : dayBuckets
 
   const graphData = useMemo(() => {
@@ -110,12 +112,14 @@ const PoolStatsChart = () => {
       <div className="w-full h-px bg-gray-700" />
       {graphData && graphData.length > 0 && (
         <div className="w-full h-40 lg:order-2">
-          <Typography variant="h3" className="text-high-emphesis" weight={700}>
-            ${graphData[selectedIndex]?.y}
-          </Typography>
-          <Typography variant="sm" className="text-gray-500 text-high-emphesis" weight={700}>
-            {formatDate(new Date(graphData[selectedIndex]?.x))}
-          </Typography>
+          <div className="mt-6">
+            <Typography variant="h3" className="text-high-emphesis" weight={700}>
+              {formatNumber(graphData[selectedIndex]?.y, true, false, 2)}
+            </Typography>
+            <Typography variant="sm" className="text-gray-500 text-high-emphesis" weight={700}>
+              {formatDate(new Date(graphData[selectedIndex]?.x))}
+            </Typography>
+          </div>
           {isDesktop ? (
             <LineGraph
               data={graphData}

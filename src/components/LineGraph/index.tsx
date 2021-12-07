@@ -36,30 +36,22 @@ const bisect = bisector((d) => d.x).center
 const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSelectedIndex }) => {
   const dRef = useRef<number>()
   const circleRef = useRef<SVGCircleElement>()
-  const serializedData = useMemo(() => data.toString(), [data])
   const xScale = useMemo(
     () =>
       scaleLinear<number>({
         domain: [Math.min(data[0].x, data[data.length - 1].x), Math.max(data[0].x, data[data.length - 1].x)],
         range: [10, width - 10],
       }),
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [serializedData, width]
+    [data, width]
   )
 
-  const yScale = useMemo(
-    () => {
-      const y = data.map((el) => el.y)
-      return scaleLinear<number>({
-        domain: [Math.max.apply(Math, y), Math.min.apply(Math, y)],
-        range: [10, height - 10],
-      })
-    },
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [serializedData, height]
-  )
+  const yScale = useMemo(() => {
+    const y = data.map((el) => el.y)
+    return scaleLinear<number>({
+      domain: [Math.max.apply(Math, y), Math.min.apply(Math, y)],
+      range: [10, height - 10],
+    })
+  }, [data, height])
 
   const handleTooltip = useCallback(
     (event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>) => {
@@ -86,9 +78,7 @@ const Graph: FC<GraphProps> = ({ data, stroke, strokeWidth, width, height, setSe
   const hideTooltip = useCallback(() => {
     setSelectedIndex(data.length - 1)
     circleRef.current.setAttribute('display', 'none')
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [serializedData, setSelectedIndex])
+  }, [data, setSelectedIndex])
 
   return (
     <div className="w-full h-full">
