@@ -127,7 +127,7 @@ export const getBentoStrategies = async (chainId = ChainId.MAINNET, variables) =
         previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
       ]
 
-      return [...apys, ((profitPerYear / ((tvl + tvlPrevious) / 2)) * 100) / 2]
+      return [...apys, (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100]
     }, [])
 
     const apy = apys.reduce((apyAcc, apy) => apyAcc + apy, 0) / apys.length
