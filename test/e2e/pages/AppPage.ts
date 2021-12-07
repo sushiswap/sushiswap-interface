@@ -37,10 +37,10 @@ export abstract class AppPage {
   }
 
   public async connectMetamaskWallet(): Promise<void> {
-    const btnConnectWallet = await this.Page.$(this.WalletConnectSelector)
+    const btnConnectWallet = await this.Page.waitForSelector(this.WalletConnectSelector)
     await btnConnectWallet.click()
 
-    const metamaskButton = await this.Page.$(this.WalletOptionMetamaskSelector)
+    const metamaskButton = await this.Page.waitForSelector(this.WalletOptionMetamaskSelector)
     await metamaskButton.click()
     await this.Metamask.approve()
     await this.bringToFront()
@@ -101,5 +101,20 @@ export abstract class AppPage {
     if (closeWhatsNewButton) {
       await closeWhatsNewButton.click()
     }
+  }
+
+  public async confirmMetamaskTransaction(): Promise<void> {
+    await this.Metamask.confirmTransaction()
+    await this.Metamask.page.waitForTimeout(1000)
+
+    //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
+    const mmFooterButtons = await this.Metamask.page.$$('footer > button')
+    if (mmFooterButtons && mmFooterButtons[1]) {
+      const confirmButton = mmFooterButtons[1]
+      await confirmButton.click()
+    }
+
+    await this.Metamask.page.waitForTimeout(1000)
+    await this.bringToFront()
   }
 }

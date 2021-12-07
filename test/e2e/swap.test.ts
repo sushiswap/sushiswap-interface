@@ -21,7 +21,12 @@ async function initPages() {
 
 describe('Trident Swap:', () => {
   beforeAll(async () => {
-    browser = await launch(puppeteer, { metamaskVersion: 'v10.1.1', headless: false, defaultViewport: null })
+    browser = await launch(puppeteer, {
+      metamaskVersion: 'v10.1.1',
+      headless: false,
+      defaultViewport: null,
+      slowMo: 5,
+    })
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
       await metamask.switchNetwork('kovan')
@@ -37,9 +42,15 @@ describe('Trident Swap:', () => {
     browser.close()
   })
 
-  test('Swap from ETH wallet to USDC wallet', async () => {
+  test('Should swap from ETH wallet to USDC wallet', async () => {
     const ethWalletBalance = await metamask.getTokenBalance('ETH')
     const swapEthAmount = ethWalletBalance * 0.1
+
+    await page.goto(baseUrl)
+    await page.bringToFront()
+
+    await swapPage.connectMetamaskWallet()
+    await swapPage.navigateTo()
 
     await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toString(), true, true)
   })

@@ -79,7 +79,7 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
 
   return (
     <div className="overflow-y-auto" style={{ height: 'calc(100% - 204px)' }}>
-      <div className="flex flex-col flex-1 flex-grow">
+      <div className="flex flex-col flex-1 flex-grow" id="all-currencies-list">
         {token && (
           <div
             className="flex items-center justify-between px-5 py-3 cursor-pointer hover:bg-dark-800"
@@ -107,7 +107,12 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
               <div className="overflow-hidden rounded-full">
                 <CurrencyLogo currency={NATIVE[chainId]} size={24} />
               </div>
-              <Typography variant="sm" className="text-high-emphesis" weight={700}>
+              <Typography
+                id={`all-currencies-${NATIVE[chainId].symbol}`}
+                variant="sm"
+                className="text-high-emphesis"
+                weight={700}
+              >
                 {NATIVE[chainId].symbol}
               </Typography>
             </div>
@@ -128,7 +133,7 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
                 <div className="overflow-hidden rounded-full">
                   <CurrencyLogo currency={tokens[address]} size={24} />
                 </div>
-                <Typography variant="sm" className="text-high-emphesis" weight={700}>
+                <Typography id={`all-currencies-${symbol}`} variant="sm" className="text-high-emphesis" weight={700}>
                   {symbol}
                 </Typography>
               </div>

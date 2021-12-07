@@ -102,16 +102,16 @@ const SwapReviewModal: FC = () => {
       afterLeave={() => setTxHash(undefined)}
     >
       {!txHash ? (
-        <div className="flex flex-col gap-5 h-full pb-4 lg:max-w-md">
+        <div className="flex flex-col h-full gap-5 pb-4 lg:max-w-md">
           <div className="relative">
-            <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
-            <div className="px-5 pt-5 pb-8 flex flex-col gap-4">
+            <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
+            <div className="flex flex-col gap-4 px-5 pt-5 pb-8">
               <div className="flex flex-row justify-between">
                 <Button
                   color="blue"
                   variant="outlined"
                   size="sm"
-                  className="rounded-full py-1 pl-2 cursor-pointer"
+                  className="py-1 pl-2 rounded-full cursor-pointer"
                   startIcon={<ChevronLeftIcon width={24} height={24} />}
                   onClick={() => setShowReview(false)}
                 >
@@ -133,7 +133,7 @@ const SwapReviewModal: FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-3 px-5">
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
               <CurrencyLogo currency={inputAmount?.currency} size={48} className="rounded-full" />
               <Typography variant="h3" weight={700} className="text-white">
                 {inputAmount?.toSignificant(6)}
@@ -142,10 +142,10 @@ const SwapReviewModal: FC = () => {
                 {inputAmount?.currency.symbol}
               </Typography>
             </div>
-            <div className="w-12 flex justify-center text-secondary">
+            <div className="flex justify-center w-12 text-secondary">
               <ArrowDownIcon width={20} />
             </div>
-            <div className="flex gap-3 items-center">
+            <div className="flex items-center gap-3">
               <CurrencyLogo currency={outputAmount?.currency} size={48} className="rounded-full" />
               <Typography variant="h3" weight={700} className="text-white">
                 {outputAmount?.toSignificant(6)}
@@ -155,7 +155,7 @@ const SwapReviewModal: FC = () => {
               </Typography>
             </div>
           </div>
-          <div className="px-5 flex flex-col gap-3">
+          <div className="flex flex-col gap-3 px-5">
             <Divider className="border-dark-800" />
             <div className="flex justify-between">
               <Typography variant="sm" className="text-secondary">
@@ -193,18 +193,19 @@ const SwapReviewModal: FC = () => {
               </div>
             )}
             <Button
+              id="review-swap-button"
               disabled={!!tx || state === SwapCallbackState.INVALID}
               color="gradient"
               size="lg"
               onClick={execute}
-              className="mb-2 mt-4"
+              className="mt-4 mb-2"
             >
               <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {error && !txHash ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
               </Typography>
             </Button>
             {!txHash && (error || cbError) && (
-              <Typography variant="xs" weight={700} className="text-red text-center">
+              <Typography variant="xs" weight={700} className="text-center text-red">
                 {error || cbError}
               </Typography>
             )}
