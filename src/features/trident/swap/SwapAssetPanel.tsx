@@ -127,10 +127,10 @@ const SwapAssetPanel = ({
           >
             <InputPanel />
           </div>
-          <div className="hidden lg:block py-2 lg:pb-0 mt-3">
+          <div className="hidden py-2 mt-3 lg:block lg:pb-0">
             <BalancePanel />
           </div>
-          <div className="flex lg:hidden border border-dark-700 lg:border-none rounded-b overflow-hidden justify-between items-center">
+          <div className="flex items-center justify-between overflow-hidden border rounded-b lg:hidden border-dark-700 lg:border-none">
             {walletToggle}
             {!disabled && (
               <div className="pr-5">
@@ -144,34 +144,35 @@ const SwapAssetPanel = ({
   )
 }
 
-const WalletSwitch: FC<{ label: string; onChange(x: boolean): void }> = ({ label, onChange }) => {
+const WalletSwitch: FC<{ label: string; onChange(x: boolean): void; id?: string }> = ({ label, onChange, id }) => {
   const { spendFromWallet } = useSwapAssetPanelContext()
   const { i18n } = useLingui()
 
   return (
     <div className="flex gap-2.5 items-center lg:px-0 px-4 py-3 lg:py-0 lg:bg-transparent bg-dark-900">
       <div className="flex flex-col order-2 lg:order-1">
-        <Typography variant="xs" weight={700} className="text-secondary text-left lg:text-right">
+        <Typography variant="xs" weight={700} className="text-left text-secondary lg:text-right">
           {label}
         </Typography>
         <Typography
           weight={700}
-          className="text-high-emphesis text-right text-center flex gap-1 items-center justify-center"
+          className="flex items-center justify-center gap-1 text-center text-right text-high-emphesis"
         >
           {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)} <BentoBoxFundingSourceModal />
         </Typography>
       </div>
       <div className="order-1 lg:order-2">
         <Switch
+          id={id}
           checked={spendFromWallet}
           onChange={onChange}
           checkedIcon={
-            <div className="text-dark-700 flex justify-center items-center h-full w-full">
+            <div className="flex items-center justify-center w-full h-full text-dark-700">
               <WalletIcon />
             </div>
           }
           uncheckedIcon={
-            <div className="text-dark-700 flex justify-center items-center h-full w-full">
+            <div className="flex items-center justify-center w-full h-full text-dark-700">
               <BentoBoxIcon />
             </div>
           }
@@ -215,7 +216,7 @@ const InputPanel: FC = () => {
           </div>
         )}
       </div>
-      <div className="flex p-4 items-center flex-grow">
+      <div className="flex items-center flex-grow p-4">
         <div className={classNames('flex lg:flex-col flex-grow')}>
           {currency && (
             <div className="block lg:hidden">
@@ -238,7 +239,7 @@ const InputPanel: FC = () => {
             variant={isDesktop ? 'h3' : 'lg'}
             className={classNames(
               !currency ? 'justify-start' : 'justify-between lg:justify-start',
-              'w-full text-right lg:text-left items-center',
+              'w-full text-right lg:text-left items-center swap-panel-input',
               value ? 'text-high-emphesis' : onChange ? 'text-primary' : 'text-secondary'
             )}
           >
@@ -267,14 +268,14 @@ const InputPanel: FC = () => {
                 value={value || ''}
                 onUserInput={onChange}
                 placeholder="0.00"
-                className="bg-transparent text-inherit w-full flex-grow text-right lg:text-left disabled:cursor-not-allowed"
+                className="flex-grow w-full text-right bg-transparent text-inherit lg:text-left disabled:cursor-not-allowed"
                 autoFocus
               />
             ) : (
               value || '0.00'
             )}
           </Typography>
-          <Typography variant="xs" className="text-secondary hidden lg:block text-left" weight={400}>
+          <Typography variant="xs" className="hidden text-left text-secondary lg:block" weight={400}>
             {currency?.name}
           </Typography>
         </div>
@@ -313,7 +314,7 @@ const BalancePanel: FC = () => {
 
   return (
     <div className="flex justify-between">
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <div className="flex justify-between pr-1 flex items-center gap-1.5">
           <div className="hidden lg:block">{icon}</div>
           <Typography
@@ -332,12 +333,12 @@ const BalancePanel: FC = () => {
         >
           {balance ? balance.toSignificant(6) : '0.0000'}
         </Typography>
-        <Typography variant="sm" weight={700} className="text-secondary hidden lg:block">
+        <Typography variant="sm" weight={700} className="hidden text-secondary lg:block">
           {balance?.currency.symbol}
         </Typography>
       </div>
       {!disabled && !isMax && (
-        <Typography className="text-blue hidden lg:block" weight={700} variant="sm" onClick={handleClick}>
+        <Typography className="hidden text-blue lg:block" weight={700} variant="sm" onClick={handleClick}>
           {i18n._(t`Use Max`)}
         </Typography>
       )}
@@ -345,12 +346,12 @@ const BalancePanel: FC = () => {
   )
 }
 
-const SwapAssetPanelHeader: FC<{ label: string }> = ({ label }) => {
+const SwapAssetPanelHeader: FC<{ label: string; id?: string }> = ({ label, id }) => {
   const isDesktop = useDesktopMediaQuery()
   const { currency, onSelect, walletToggle, spendFromWallet } = useSwapAssetPanelContext()
 
   return (
-    <div className="flex justify-between items-center px-4 lg:px-0">
+    <div className="flex items-center justify-between px-4 lg:px-0">
       <div className="flex flex-col gap-1">
         <Typography variant="xs" className="text-secondary" weight={700}>
           {label}
@@ -358,7 +359,7 @@ const SwapAssetPanelHeader: FC<{ label: string }> = ({ label }) => {
         {currency && isDesktop && (
           <HeadlessUIModal
             trigger={
-              <div className="flex gap-0.5 cursor-pointer hover:text-high-emphesis">
+              <div id={id} className="flex gap-0.5 cursor-pointer hover:text-high-emphesis">
                 <Typography variant="h3" weight={700}>
                   {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
                 </Typography>

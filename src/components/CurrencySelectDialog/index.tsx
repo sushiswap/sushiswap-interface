@@ -24,15 +24,15 @@ const ProvidedCurrencies: FC<ProvidedCurrenciesProps> = ({ currencies, handleSel
   const balances = useCurrencyBalances(account ? account : undefined, currencies)
 
   return (
-    <div className="overflow-y-auto h-full">
+    <div className="h-full overflow-y-auto">
       {balances.map((balance, index) => (
         <div
-          className="flex justify-between items-center px-5 py-3 cursor-pointer hover:bg-dark-800 hover:border-dark-1000"
+          className="flex items-center justify-between px-5 py-3 cursor-pointer hover:bg-dark-800 hover:border-dark-1000"
           onClick={() => balance && handleSelect(balance.currency)}
           key={index}
         >
           <div className="flex items-center gap-1.5">
-            <div className="rounded-full overflow-hidden">
+            <div className="overflow-hidden rounded-full">
               <CurrencyLogo currency={balance?.currency} size={24} />
             </div>
             <Typography variant="sm" className="text-high-emphesis" weight={700}>
@@ -79,14 +79,14 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
 
   return (
     <div className="overflow-y-auto" style={{ height: 'calc(100% - 204px)' }}>
-      <div className="flex-1 flex flex-col flex-grow">
+      <div className="flex flex-col flex-1 flex-grow" id="all-currencies-list">
         {token && (
           <div
-            className="flex justify-between items-center px-5 py-3 cursor-pointer hover:bg-dark-800"
+            className="flex items-center justify-between px-5 py-3 cursor-pointer hover:bg-dark-800"
             onClick={() => handleSelect(token)}
           >
             <div className="flex items-center gap-1.5">
-              <div className="rounded-full overflow-hidden">
+              <div className="overflow-hidden rounded-full">
                 <CurrencyLogo currency={token} size={24} />
               </div>
               <Typography variant="sm" className="text-high-emphesis" weight={700}>
@@ -100,14 +100,19 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
         )}
         {chainId && !search && (
           <div
-            className="flex justify-between items-center px-5 py-3 cursor-pointer  hover:bg-dark-800"
+            className="flex items-center justify-between px-5 py-3 cursor-pointer hover:bg-dark-800"
             onClick={() => handleSelect(NATIVE[chainId])}
           >
             <div className="flex items-center gap-1.5">
-              <div className="rounded-full overflow-hidden">
+              <div className="overflow-hidden rounded-full">
                 <CurrencyLogo currency={NATIVE[chainId]} size={24} />
               </div>
-              <Typography variant="sm" className="text-high-emphesis" weight={700}>
+              <Typography
+                id={`all-currencies-${NATIVE[chainId].symbol}`}
+                variant="sm"
+                className="text-high-emphesis"
+                weight={700}
+              >
                 {NATIVE[chainId].symbol}
               </Typography>
             </div>
@@ -120,15 +125,15 @@ const AllCurrencies: FC<AllCurrenciesProps> = ({ handleSelect, search }) => {
           const [address, symbol] = tokenString.split('-')
           return (
             <div
-              className="flex justify-between items-center px-5 py-3 cursor-pointer"
+              className="flex items-center justify-between px-5 py-3 cursor-pointer"
               onClick={() => handleSelect(tokens[address])}
               key={index}
             >
               <div className="flex items-center gap-1.5">
-                <div className="rounded-full overflow-hidden">
+                <div className="overflow-hidden rounded-full">
                   <CurrencyLogo currency={tokens[address]} size={24} />
                 </div>
-                <Typography variant="sm" className="text-high-emphesis" weight={700}>
+                <Typography id={`all-currencies-${symbol}`} variant="sm" className="text-high-emphesis" weight={700}>
                   {symbol}
                 </Typography>
               </div>
@@ -173,15 +178,15 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currenc
 
   return (
     <div className="bg-dark-900 h-full lg:max-w-lg lg:w-[32rem] lg:max-h-[92vh] lg:h-[40rem]">
-      <div className="relative shadow-lg border-b border-dark-1000">
-        <div className="pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
-        <div className="p-5 flex flex-col gap-4">
+      <div className="relative border-b shadow-lg border-dark-1000">
+        <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
+        <div className="flex flex-col gap-4 p-5">
           <div className="flex flex-row justify-between">
             <Button
               color="blue"
               variant="outlined"
               size="sm"
-              className="rounded-full py-1 pl-2 cursor-pointer"
+              className="py-1 pl-2 rounded-full cursor-pointer"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
               onClick={onDismiss}
             >
@@ -192,8 +197,9 @@ const CurrencySelectDialog: FC<CurrencySelectDialogProps> = ({ currency, currenc
             {i18n._(t`Select a Token`)}
           </Typography>
           {currencies.length === 0 && (
-            <div className="rounded border border-gradient-r-blue-pink-dark-1000 border-transparent">
+            <div className="border border-transparent rounded border-gradient-r-blue-pink-dark-1000">
               <input
+                id="txt-select-token"
                 value={search || ''}
                 onChange={(e) => setSearch(e.target.value.toLowerCase())}
                 className="bg-transparent font-bold h-[54px] w-full px-5"

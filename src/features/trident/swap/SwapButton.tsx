@@ -44,6 +44,7 @@ const SwapButton: FC = () => {
         return (
           <div className="flex">
             <Button
+              id="swap-button"
               className="h-[48px]"
               {...(loading && {
                 startIcon: (
