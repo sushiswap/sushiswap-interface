@@ -1,7 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ConstantProductPool } from '@sushiswap/trident-sdk'
-import { classNames } from 'app/functions'
+import { classNames, isWrappedReturnNativeSymbol } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import Button from 'components/Button'
 import { poolAtom, poolBalanceAtom } from 'features/trident/context/atoms'
 import Link from 'next/link'
@@ -9,6 +10,7 @@ import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 
 const ClassicLinkButtons: FC = () => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { pool } = useRecoilValue(poolAtom)
   const poolBalance = useRecoilValue(poolBalanceAtom)
@@ -28,7 +30,11 @@ const ClassicLinkButtons: FC = () => {
               href={{
                 pathname: `/trident/add/classic`,
                 query: {
-                  tokens: [pool.token0.address, pool.token1.address],
+                  tokens: [
+                    // It makes more sense to add liquidity with ETH instead of WETH
+                    isWrappedReturnNativeSymbol(chainId, pool.token0.address),
+                    isWrappedReturnNativeSymbol(chainId, pool.token1.address),
+                  ],
                   fee: pool.fee,
                   twap: (pool as ConstantProductPool).twap,
                 },
@@ -60,7 +66,11 @@ const ClassicLinkButtons: FC = () => {
             href={{
               pathname: `/trident/add/classic`,
               query: {
-                tokens: [pool.token0.address, pool.token1.address],
+                tokens: [
+                  // It makes more sense to add liquidity with ETH instead of WETH
+                  isWrappedReturnNativeSymbol(chainId, pool.token0.address),
+                  isWrappedReturnNativeSymbol(chainId, pool.token1.address),
+                ],
                 fee: pool.fee,
                 twap: (pool as ConstantProductPool).twap,
               },
@@ -81,7 +91,11 @@ const ClassicLinkButtons: FC = () => {
           href={{
             pathname: `/trident/swap`,
             query: {
-              tokens: [pool.token0.address, pool.token1.address],
+              // It makes more sense to swap with ETH instead of WETH
+              tokens: [
+                isWrappedReturnNativeSymbol(chainId, pool.token0.address),
+                isWrappedReturnNativeSymbol(chainId, pool.token1.address),
+              ],
             },
           }}
           passHref={true}
