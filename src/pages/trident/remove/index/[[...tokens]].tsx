@@ -1,21 +1,21 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
 import { useActiveWeb3React } from 'app/services/web3'
 import Button from 'components/Button'
 import SettingsTab from 'components/Settings'
 import Typography from 'components/Typography'
-import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
 import ModeToggle from 'features/trident/ModeToggle'
 import RemoveTransactionReviewStandardModal from 'features/trident/remove/classic/RemoveTransactionReviewStandardModal'
 import { useCurrency } from 'hooks/Tokens'
 import { useTotalSupply } from 'hooks/useTotalSupply'
-import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
 import { useTokenBalance } from 'state/wallet/hooks'
 
 const RemoveIndex = () => {
@@ -24,13 +24,12 @@ const RemoveIndex = () => {
   const { i18n } = useLingui()
 
   const [{ pool }, setPool] = useRecoilState(poolAtom)
-  const liquidityMode = useRecoilValue(liquidityModeAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
 
   const currencyA = useCurrency(query.tokens?.[0])
   const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const classicPool = useConstantProductPool(currencyA, currencyB)
   const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
 

@@ -8,20 +8,21 @@ import {
   findSingleRouteExactIn,
   Trade,
 } from '@sushiswap/trident-sdk'
+import { PoolUnion } from 'app/features/trident/types'
 import { toShareCurrencyAmount } from 'app/functions'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
-import { ConstantProductPoolState } from 'app/hooks/useTridentClassicPools'
+import { ConstantProductPoolState } from 'app/hooks/useConstantProductPools'
 import { PairState, useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
 import { useEffect, useMemo, useState } from 'react'
 
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
-import { useConstantProductPools } from './useConstantProductPools'
+import { useConstantProductPoolsPermutations } from './useConstantProductPools'
 
-function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (ConstantProductPool | Pair | null)[] {
+function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (PoolUnion | Pair)[] {
   const currencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
-  const constantProductPools = useConstantProductPools(currencyCombinations)
+  const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
   const allPairs = useV2Pairs(currencyCombinations)
 
   // concentratedPools
@@ -32,15 +33,17 @@ function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (Constan
   return useMemo(
     () => [
       ...Object.values(
-        pools
-          // filter out invalid pool
-          .filter((result) => {
-            return (
-              Boolean(result[0] === ConstantProductPoolState.EXISTS && result[1]) ||
-              Boolean(result[0] === PairState.EXISTS && result[1])
-            )
-          })
-          .map(([, pool]) => pool)
+        pools.reduce<(PoolUnion | Pair)[]>((acc, result) => {
+          if (!Array.isArray(result) && result.state === ConstantProductPoolState.EXISTS && result.pool) {
+            acc.push(result.pool)
+          }
+
+          if (Array.isArray(result) && result[0] === PairState.EXISTS && result[1]) {
+            acc.push(result[1])
+          }
+
+          return acc
+        }, [])
       ),
     ],
     [pools]

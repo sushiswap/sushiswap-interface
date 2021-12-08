@@ -1,12 +1,13 @@
 import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
-import { useActiveWeb3React } from 'app/services/web3'
+import { useTridentTokenPrice } from 'app/services/graph'
 import { useMemo } from 'react'
 
+import { useActiveWeb3React } from '../services/web3'
 import { useV2TradeExactOut } from './useV2Trades'
 
-// Stablecoin amounts used when calculating spot price for a given currency.
+// StableCoin amounts used when calculating spot price for a given currency.
 // The amount is large enough to filter low liquidity pairs.
-const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
+export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
   [ChainId.ETHEREUM]: CurrencyAmount.fromRawAmount(USD[ChainId.ETHEREUM], 100_000e6),
   [ChainId.ROPSTEN]: CurrencyAmount.fromRawAmount(USD[ChainId.ROPSTEN], 100_000e6),
   [ChainId.KOVAN]: CurrencyAmount.fromRawAmount(USD[ChainId.KOVAN], 100_000e6),
@@ -30,41 +31,52 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
   const { chainId } = useActiveWeb3React()
 
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
-  const stablecoin = amountOut?.currency
+  const stableCoin = amountOut?.currency
+
+  const { data: price } = useTridentTokenPrice({
+    chainId,
+    variables: { id: currency?.wrapped.address.toLowerCase() },
+    shouldFetch: !!chainId && !!currency?.wrapped.address.toLowerCase(),
+  })
 
   const v2USDCTrade = useV2TradeExactOut(currency, amountOut, {
     maxHops: 3,
   })
 
   return useMemo(() => {
-    if (!currency || !stablecoin) {
+    if (!currency || !stableCoin) {
       return undefined
     }
 
     // handle usdc
-    if (currency?.wrapped.equals(stablecoin)) {
-      return new Price(stablecoin, stablecoin, '1', '1')
+    if (currency?.wrapped.equals(stableCoin)) {
+      return new Price(stableCoin, stableCoin, '1', '1')
+    }
+
+    if (price) {
+      const { numerator, denominator } = price
+      return new Price(currency, stableCoin, denominator, '1')
     }
 
     // use v2 price if available
     if (v2USDCTrade) {
       const { numerator, denominator } = v2USDCTrade.route.midPrice
-      return new Price(currency, stablecoin, denominator, numerator)
+      return new Price(currency, stableCoin, denominator, numerator)
     }
 
     return undefined
-  }, [currency, stablecoin, v2USDCTrade])
+  }, [currency, price, stableCoin, v2USDCTrade])
 }
 
-export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined) {
+export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {
   const price = useUSDCPrice(currencyAmount?.currency)
 
   return useMemo(() => {
-    if (!price || !currencyAmount) return undefined
+    if (!price || !currencyAmount) return null
     try {
       return price.quote(currencyAmount)
     } catch (error) {
-      return undefined
+      return null
     }
   }, [currencyAmount, price])
 }

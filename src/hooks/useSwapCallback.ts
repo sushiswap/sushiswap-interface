@@ -406,6 +406,8 @@ export function useSwapCallArguments(
         receiveToWallet
       )
 
+      console.log(trade.route, rest)
+
       const method = {
         [RouteType.SinglePool]: fromWallet ? 'exactInputSingleWithNativeToken' : 'exactInputSingle',
         [RouteType.SinglePath]: fromWallet ? 'exactInputWithNativeToken' : 'exactInput',

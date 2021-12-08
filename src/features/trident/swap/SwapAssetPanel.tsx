@@ -280,7 +280,7 @@ const InputPanel: FC = () => {
           </Typography>
         </div>
         <div className="flex flex-col hidden lg:block">
-          <Typography className="text-low-emphesis">≈${usdcValue?.toSignificant(3)}</Typography>
+          <Typography className="text-low-emphesis">≈${usdcValue?.toFixed(2)}</Typography>
           {priceImpact && (
             <Typography variant="xs" weight={700} className={classNames(priceImpactClassName, 'text-right')}>
               {priceImpact.toSignificant(3)}%
