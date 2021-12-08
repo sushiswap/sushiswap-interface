@@ -23,6 +23,7 @@ import {
   getTruPrice,
   getYggPrice,
   getEthPrice,
+  getOhmPrice,
   getPairs,
 } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
