@@ -76,9 +76,10 @@ export default function Deposit({ pair }: any): JSX.Element {
 
   // Handlers
   async function onExecute(cooker: KashiCooker): Promise<string> {
-    if (pair.currentExchangeRate.isZero()) {
-      cooker.updateExchangeRate(false, ZERO, ZERO)
-    }
+    // if (pair.currentExchangeRate.isZero()) {
+    //   cooker.updateExchangeRate(false, ZERO, ZERO)
+    // }
+    cooker.updateExchangeRate(false, ZERO, ZERO)
     cooker.addAsset(value.toBigNumber(pair.asset.tokenInfo.decimals), useBento)
     return `${i18n._(t`Deposit`)} ${pair.asset.tokenInfo.symbol}`
   }
