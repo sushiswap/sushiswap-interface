@@ -151,6 +151,18 @@ export const getCeloPrice = async () => {
   })
 }
 
+export const getOhmPrice = async (chainId) => {
+  if (chainId === ChainId.ARBITRUM) {
+    return getTokenPrice(ChainId.ARBITRUM, tokenPriceQuery, {
+      id: '0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1',
+    })
+  } else {
+    return getTokenPrice(ChainId.MATIC, tokenPriceQuery, {
+      id: '0xd8ca34fd379d9ca3c6ee3b3905678320f5b45195',
+    })
+  }
+}
+
 export const getMovrPrice = async () => {
   return getTokenPrice(ChainId.MOONRIVER, tokenPriceQuery, {
     id: '0xf50225a84382c74cbdea10b0c176f71fc3de0c4d',
