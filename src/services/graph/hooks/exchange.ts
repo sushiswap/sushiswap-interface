@@ -99,7 +99,7 @@ export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
 export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId
-  const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(), swrConfig)
+  const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
   return data
 }
 
