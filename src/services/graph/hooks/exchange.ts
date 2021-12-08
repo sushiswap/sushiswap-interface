@@ -95,6 +95,13 @@ export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(), swrConfig)
+  return data
+}
+
 export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'yggPrice' : null, () => getYggPrice(), swrConfig)
