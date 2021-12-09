@@ -213,6 +213,15 @@ export default function useFarmRewards() {
             rewardPrice: spellPrice,
           }
         }
+        if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
+          rewards[1] = {
+            token: 'gOHM',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/arbitrum/0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1.jpg',
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: ohmPrice,
+          }
+        }
         if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
           const rewardTokenPerSecond = 0
           const rewardPerBlock = rewardPerSecond * averageBlockTime
