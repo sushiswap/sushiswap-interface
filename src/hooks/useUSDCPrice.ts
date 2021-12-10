@@ -1,5 +1,6 @@
-import { ChainId, Currency, CurrencyAmount, Price, Token, TradeType, USD } from '@sushiswap/core-sdk'
-import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
+import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
+import { calcTokenPrices } from '@sushiswap/trident-sdk'
+import { useAllCommonPools } from 'app/hooks/useBestTridentTrade'
 import { useMemo } from 'react'
 
 import { useActiveWeb3React } from '../services/web3'
@@ -30,26 +31,19 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
   const { chainId } = useActiveWeb3React()
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
   const stableCoin = amountOut?.currency
-
-  const { trade } = useBestTridentTrade(TradeType.EXACT_OUTPUT, amountOut, currency)
+  const pools = useAllCommonPools(currency, amountOut?.currency)
 
   return useMemo(() => {
     if (!currency || !stableCoin) {
       return undefined
     }
 
-    // handle usdc
-    if (currency?.wrapped.equals(stableCoin)) {
+    if (currency.wrapped.equals(stableCoin)) {
       return new Price(stableCoin, stableCoin, '1', '1')
     }
 
-    if (trade) {
-      const { numerator, denominator } = trade.executionPrice
-      return new Price(currency, stableCoin, denominator, numerator)
-    }
-
-    return undefined
-  }, [currency, stableCoin, trade])
+    return calcTokenPrices(pools, stableCoin)?.[currency.wrapped.address]
+  }, [currency, pools, stableCoin])
 }
 
 export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {
