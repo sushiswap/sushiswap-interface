@@ -8,7 +8,7 @@ import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/con
 import ModeToggle from 'features/trident/ModeToggle'
 import RemoveTransactionReviewStandardModal from 'features/trident/remove/classic/RemoveTransactionReviewStandardModal'
 import { useCurrency } from 'hooks/Tokens'
-import { useConstantProductPools } from 'hooks/useConstantProductPools'
+import { useConstantProductPool } from 'hooks/useConstantProductPools'
 import { useTotalSupply } from 'hooks/useTotalSupply'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
@@ -29,7 +29,7 @@ const RemoveStable = () => {
 
   const currencyA = useCurrency(query.tokens?.[0])
   const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useConstantProductPools(currencyA, currencyB)
+  const classicPool = useConstantProductPool(currencyA, currencyB)
   const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
 
