@@ -5,7 +5,7 @@ import Card from 'app/components/Card'
 import Image from 'app/components/Image'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { Feature } from 'app/enums'
-import { Deposit, Withdraw } from 'app/features/kashi'
+import { Deposit, PairTools, Strategy, Withdraw } from 'app/features/kashi'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
@@ -132,7 +132,7 @@ const PairLayout = ({ children }) => {
   const router = useRouter()
   const { i18n } = useLingui()
   const pair = useKashiPair(router.query.pair as string)
-  console.log({ pair })
+
   return pair ? (
     <Layout
       left={
@@ -193,6 +193,8 @@ const PairLayout = ({ children }) => {
               </div>
             )}
 
+            <PairTools pair={pair} />
+
             <div className="flex justify-between pt-3">
               <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
             </div>
@@ -222,25 +224,8 @@ const PairLayout = ({ children }) => {
                 )}
               </div>
             </div>
-            {pair.asset.strategy && (
-              <>
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Avg. APY`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">{formatPercent(pair.asset.strategy.apy)}</div>
-                  </div>
-                </div>
 
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Target Percentage`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">
-                      {formatPercent(pair.asset.strategy.targetPercentage)}
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+            <Strategy token={pair.asset} />
           </div>
         </Card>
       }
