@@ -3,7 +3,7 @@ import React, { FC, useCallback, useState } from 'react'
 
 import Tooltip from '../Tooltip'
 
-const QuestionHelper: FC<{ text?: any; width?: string }> = ({ children, text, width }) => {
+const QuestionHelper: FC<{ text?: any; fullWidth?: boolean }> = ({ children, text, fullWidth = false }) => {
   const [show, setShow] = useState<boolean>(false)
 
   const open = useCallback(() => setShow(true), [setShow])
@@ -11,7 +11,7 @@ const QuestionHelper: FC<{ text?: any; width?: string }> = ({ children, text, wi
 
   if (children) {
     return (
-      <Tooltip text={text} show={show} width={width}>
+      <Tooltip text={text} show={show} fullWidth={fullWidth}>
         <div
           className="flex items-center justify-center w-full outline-none"
           onClick={open}

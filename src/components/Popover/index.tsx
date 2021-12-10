@@ -34,7 +34,7 @@ export default function Popover({ content, children, placement = 'auto', show, f
   useInterval(updateCallback, show ? 100 : null)
 
   return (
-    <HeadlessuiPopover>
+    <HeadlessuiPopover className={classNames(fullWidth && 'w-full')}>
       {({ open }) => (
         <>
           <HeadlessuiPopover.Button

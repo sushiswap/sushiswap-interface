@@ -1,6 +1,4 @@
 import Container from 'components/Container'
-import Footer from 'components/Footer'
-import Header from 'components/Header'
 import Image from 'components/Image'
 import Main from 'components/Main'
 import NavLink from 'components/NavLink'
@@ -22,8 +20,7 @@ export default function Layout({
 }: LayoutProps): JSX.Element {
   const router = useRouter()
   return (
-    <div className="z-0 flex flex-col items-start w-full h-screen">
-      <Header />
+    <div className="z-0 flex flex-col items-start w-full">
       <Main>
         <Container className="px-4 py-4 md:py-8 lg:py-12" maxWidth="7xl">
           <div className={`mb-2 grid grid-cols-12 gap-4`}>
@@ -119,7 +116,6 @@ export default function Layout({
         </Container>
       </Main>
       <Popups />
-      <Footer />
     </div>
   )
 }

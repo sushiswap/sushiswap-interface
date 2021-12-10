@@ -13,29 +13,26 @@ import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
 import { useUSDCPrice } from 'app/hooks'
 import { useToken } from 'app/hooks/Tokens'
+import useBackOnChainChange from 'app/hooks/useBackOnChainChange'
 import { useV2Pair } from 'app/hooks/useV2Pairs'
 import Layout from 'app/layouts/Kashi'
-import { useBlockTimestamp } from 'app/state/application/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { RecoilRoot } from 'recoil'
 
-function Pair() {
+export default function Pair() {
+  useBackOnChainChange()
+
   const router = useRouter()
   const { i18n } = useLingui()
 
   const pair = useKashiPair(router.query.pair as string)
-  const asset = useToken(pair?.asset.address)
-  const collateral = useToken(pair?.collateral.address)
-  const [pairState, liquidityPair] = useV2Pair(asset, collateral)
 
-  const blockTimestamp = useBlockTimestamp()
-
-  if (!pair) return Number.isInteger(blockTimestamp) && blockTimestamp === 0 ? null : router.push('/borrow')
+  if (!pair) return <div />
 
   return (
-    <>
+    <PairLayout>
       <Head>
         <title>{i18n._(t`Borrow ${pair?.asset?.symbol}-${pair?.collateral?.symbol}`)} | Sushi</title>
         <meta
@@ -85,7 +82,7 @@ function Pair() {
           </Card.Header>
         }
       >
-        <div className="flex justify-between mb-8">
+        <div className="flex justify-between p-4 mb-8 xl:p-0">
           <div>
             <div className="text-lg text-secondary">{i18n._(t`Collateral`)}</div>
             <div className="text-2xl text-blue">
@@ -139,7 +136,7 @@ function Pair() {
           </Tab.Panel>
         </Tab.Group>
       </Card>
-    </>
+    </PairLayout>
   )
 }
 
@@ -168,7 +165,7 @@ const PairLayout = ({ children }) => {
         />
       }
       right={
-        <Card className="h-full bg-dark-900">
+        <Card className="h-full p-4 bg-dark-900 xl:p-0">
           <div className="flex-col space-y-2">
             <div className="flex justify-between">
               <div className="text-xl text-high-emphesis">{i18n._(t`Market`)}</div>
@@ -282,8 +279,4 @@ const PairLayout = ({ children }) => {
   ) : null
 }
 
-Pair.Layout = PairLayout
-
 Pair.Guard = NetworkGuard(Feature.KASHI)
-
-export default Pair
