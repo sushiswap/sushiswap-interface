@@ -40,56 +40,56 @@ const Banner: FC<BannerProps> = ({ banners }) => {
 
   if (chainId !== ChainId.MAINNET || banners.length === 0) return <></>
 
-  const slides = banners
-    .filter(({ attributes: { startDate, endDate } }) => {
-      const now = new Date().getTime()
-      const startEpoch = new Date(startDate).getTime()
-      const endEpoch = new Date(endDate).getTime()
-      return now > startEpoch && now < endEpoch
-    })
-    .map(({ attributes: { image, url } }, index) => {
-      return (
-        <div
-          key={index}
-          className={classNames(
-            index === slideIndex ? 'block' : 'hidden',
-            'h-[96px] absolute inset-0 flex items-center justify-center text-5xl transition-all ease-in-out duration-1000 transform slide'
-          )}
+  const filteredSlides = banners.filter(({ attributes: { startDate, endDate } }) => {
+    const now = new Date().getTime()
+    const startEpoch = new Date(startDate).getTime()
+    const endEpoch = new Date(endDate).getTime()
+    return now > startEpoch && now < endEpoch
+  })
+
+  const slides = filteredSlides.map(({ attributes: { image, url } }, index) => {
+    return (
+      <div
+        key={index}
+        className={classNames(
+          index === slideIndex ? 'block' : 'hidden',
+          'h-[96px] absolute inset-0 flex items-center justify-center text-5xl transition-all ease-in-out duration-1000 transform slide'
+        )}
+      >
+        <Transition
+          as={React.Fragment}
+          show={index === slideIndex}
+          enter="transform transition duration-[200ms]"
+          enterFrom="opacity-0 scale-90"
+          enterTo="opacity-100 scale-100"
+          leave="transform duration-200 transition ease-in-out"
+          leaveFrom="opacity-100 rotate-0 scale-100 "
+          leaveTo="opacity-0 scale-95 "
         >
-          <Transition
-            as={React.Fragment}
-            show={index === slideIndex}
-            enter="transform transition duration-[200ms]"
-            enterFrom="opacity-0 scale-90"
-            enterTo="opacity-100 scale-100"
-            leave="transform duration-200 transition ease-in-out"
-            leaveFrom="opacity-100 rotate-0 scale-100 "
-            leaveTo="opacity-0 scale-95 "
+          <a
+            rel="noreferrer"
+            href={url}
+            target="_blank"
+            className="hidden w-full py-12 rounded cursor-pointer sm:block"
+            style={{
+              backgroundImage: `url(${getStrapiMedia(image.data.attributes.url)})`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+            }}
           >
-            <a
-              rel="noreferrer"
-              href={url}
-              target="_blank"
-              className="hidden w-full py-12 rounded cursor-pointer sm:block"
-              style={{
-                backgroundImage: `url(${getStrapiMedia(image.data.attributes.url)})`,
-                backgroundPosition: 'center',
-                backgroundSize: 'cover',
-                backgroundRepeat: 'no-repeat',
-              }}
-            >
-              <div className="flex items-center justify-between gap-6 pl-5 pr-8" />
-            </a>
-          </Transition>
-        </div>
-      )
-    })
+            <div className="flex items-center justify-between gap-6 pl-5 pr-8" />
+          </a>
+        </Transition>
+      </div>
+    )
+  })
 
   return (
     <div className="flex justify-center flex-col">
       <div className="relative h-[96px] mt-4">
         {slides}
-        {banners.length > 1 && (
+        {slides.length > 1 && (
           <div className="flex justify-between w-full h-full items-center">
             <Button onClick={prevSlide} className="flex items-center -ml-12">
               <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
