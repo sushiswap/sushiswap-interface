@@ -1,4 +1,4 @@
-import { Deposit, Withdraw } from '../../../features/lending'
+import { Deposit, PairTools, Strategy, Withdraw } from '../../../features/lending'
 import Provider, { useKashiInfo, useKashiPair } from '../../../features/lending/context'
 import React, { useState } from 'react'
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs'
@@ -189,6 +189,8 @@ const PairLayout = ({ children }) => {
               </div>
             )}
 
+            <PairTools pair={pair} />
+
             <div className="flex justify-between pt-3">
               <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
             </div>
@@ -218,25 +220,8 @@ const PairLayout = ({ children }) => {
                 )}
               </div>
             </div>
-            {pair.asset.strategy && (
-              <>
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Avg. APY`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">{formatPercent(pair.asset.strategy.apy)}</div>
-                  </div>
-                </div>
 
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Target Percentage`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">
-                      {formatPercent(pair.asset.strategy.targetPercentage)}
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+            <Strategy token={pair.asset} />
           </div>
         </Card>
       }
