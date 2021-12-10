@@ -82,7 +82,7 @@ export async function getServerSideProps() {
   try {
     const { data } = await fetchAPI('/banners?populate=image')
     return {
-      props: { banners: data },
+      props: { banners: data || [] },
     }
   } catch (e) {
     return {
