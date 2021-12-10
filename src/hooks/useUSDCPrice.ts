@@ -1,9 +1,8 @@
-import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
-import { useTridentTokenPrice } from 'app/services/graph'
+import { ChainId, Currency, CurrencyAmount, Price, Token, TradeType, USD } from '@sushiswap/core-sdk'
+import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
 import { useMemo } from 'react'
 
 import { useActiveWeb3React } from '../services/web3'
-import { useV2TradeExactOut } from './useV2Trades'
 
 // StableCoin amounts used when calculating spot price for a given currency.
 // The amount is large enough to filter low liquidity pairs.
@@ -29,19 +28,14 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
  */
 export default function useUSDCPrice(currency?: Currency): Price<Currency, Token> | undefined {
   const { chainId } = useActiveWeb3React()
-
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
+  const tridentAmountOut = useMemo(
+    () => (chainId ? CurrencyAmount.fromRawAmount(USD[chainId], '1000000') : undefined),
+    [chainId]
+  )
   const stableCoin = amountOut?.currency
 
-  const { data: price } = useTridentTokenPrice({
-    chainId,
-    variables: { id: currency?.wrapped.address.toLowerCase() },
-    shouldFetch: !!chainId && !!currency?.wrapped.address.toLowerCase(),
-  })
-
-  const v2USDCTrade = useV2TradeExactOut(currency, amountOut, {
-    maxHops: 3,
-  })
+  const { trade } = useBestTridentTrade(TradeType.EXACT_OUTPUT, tridentAmountOut, currency)
 
   return useMemo(() => {
     if (!currency || !stableCoin) {
@@ -53,19 +47,13 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
       return new Price(stableCoin, stableCoin, '1', '1')
     }
 
-    if (price) {
-      const { numerator, denominator } = price
-      return new Price(currency, stableCoin, denominator, '1')
-    }
-
-    // use v2 price if available
-    if (v2USDCTrade) {
-      const { numerator, denominator } = v2USDCTrade.route.midPrice
+    if (trade) {
+      const { numerator, denominator } = trade.executionPrice
       return new Price(currency, stableCoin, denominator, numerator)
     }
 
     return undefined
-  }, [currency, price, stableCoin, v2USDCTrade])
+  }, [currency, stableCoin, trade])
 }
 
 export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {

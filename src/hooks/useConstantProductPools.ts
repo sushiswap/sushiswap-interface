@@ -42,6 +42,8 @@ export function useConstantProductPools(pools: PoolInput[]): PoolAtomType[] {
         const address =
           tokenA &&
           tokenB &&
+          fee &&
+          twap !== undefined &&
           tokenA.chainId === tokenB.chainId &&
           !tokenA.equals(tokenB) &&
           constantProductPoolFactory?.address
@@ -57,7 +59,7 @@ export function useConstantProductPools(pools: PoolInput[]): PoolAtomType[] {
         acc.push(address && !acc.includes(address) ? address : undefined)
         return acc
       }, []),
-    [constantProductPoolFactory.address, pools]
+    [constantProductPoolFactory?.address, pools]
   )
 
   const results = useMultipleContractSingleData(poolsAddresses, POOL_INTERFACE, 'getReserves')
