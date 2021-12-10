@@ -9,7 +9,7 @@ import { useActiveWeb3React } from '../services/web3'
 export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
   [ChainId.ETHEREUM]: CurrencyAmount.fromRawAmount(USD[ChainId.ETHEREUM], 100_000e6),
   [ChainId.ROPSTEN]: CurrencyAmount.fromRawAmount(USD[ChainId.ROPSTEN], 100_000e6),
-  [ChainId.KOVAN]: CurrencyAmount.fromRawAmount(USD[ChainId.KOVAN], 100_000e6),
+  [ChainId.KOVAN]: CurrencyAmount.fromRawAmount(USD[ChainId.KOVAN], 100_000e1),
   [ChainId.MATIC]: CurrencyAmount.fromRawAmount(USD[ChainId.MATIC], 100_000e6),
   [ChainId.FANTOM]: CurrencyAmount.fromRawAmount(USD[ChainId.FANTOM], 100_000e6),
   [ChainId.BSC]: CurrencyAmount.fromRawAmount(USD[ChainId.BSC], 100_000e18),
@@ -29,13 +29,9 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
 export default function useUSDCPrice(currency?: Currency): Price<Currency, Token> | undefined {
   const { chainId } = useActiveWeb3React()
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
-  const tridentAmountOut = useMemo(
-    () => (chainId ? CurrencyAmount.fromRawAmount(USD[chainId], '1000000') : undefined),
-    [chainId]
-  )
   const stableCoin = amountOut?.currency
 
-  const { trade } = useBestTridentTrade(TradeType.EXACT_OUTPUT, tridentAmountOut, currency)
+  const { trade } = useBestTridentTrade(TradeType.EXACT_OUTPUT, amountOut, currency)
 
   return useMemo(() => {
     if (!currency || !stableCoin) {
