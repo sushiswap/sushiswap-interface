@@ -52,7 +52,7 @@ function MyApp({
     Provider: FunctionComponent
   }
 }) {
-  const { pathname, query, locale } = useRouter()
+  const { pathname, query, locale, events } = useRouter()
 
   useEffect(() => {
     ReactGA.initialize(process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS, { testMode: process.env.NODE_ENV === 'development' })
@@ -70,8 +70,14 @@ function MyApp({
   }, [])
 
   useEffect(() => {
-    ReactGA.pageview(`${pathname}${query}`)
-  }, [pathname, query])
+    const handleRouteChange = (url) => {
+      ReactGA.pageview(url)
+    }
+    events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [events])
 
   useEffect(() => {
     async function load(locale) {
