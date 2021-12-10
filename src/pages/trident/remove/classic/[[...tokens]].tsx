@@ -19,7 +19,8 @@ import RemoveTransactionReviewStandardModal from 'app/features/trident/remove/cl
 import FixedRatioHeader from 'app/features/trident/remove/FixedRatioHeader'
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
 import NetworkGuard from 'app/guards/Network'
-import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
+import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
+import { ConstantProductPoolState } from 'app/hooks/useConstantProductPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import React from 'react'
@@ -29,7 +30,7 @@ const RemoveClassic = () => {
   const { i18n } = useLingui()
   const { currencies, fee, twap } = useCurrenciesFromURL()
   const { pool } = useRecoilValue(poolAtom)
-  const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
+  const classicPool = useConstantProductPool(currencies[0], currencies[1], fee, twap)
   const fixedRatio = useRecoilValue(FixedRatioHeader.atom)
 
   return (

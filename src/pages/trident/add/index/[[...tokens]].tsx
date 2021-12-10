@@ -1,6 +1,7 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
 import { useActiveWeb3React } from 'app/services/web3'
 import Button from 'components/Button'
 import SettingsTab from 'components/Settings'
@@ -13,7 +14,6 @@ import ModeToggle from 'features/trident/ModeToggle'
 import { LiquidityMode } from 'features/trident/types'
 import { useCurrency } from 'hooks/Tokens'
 import { useTotalSupply } from 'hooks/useTotalSupply'
-import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -33,7 +33,7 @@ const AddIndex = () => {
 
   const currencyA = useCurrency(query.tokens?.[0])
   const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const classicPool = useConstantProductPool(currencyA, currencyB)
   const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
 

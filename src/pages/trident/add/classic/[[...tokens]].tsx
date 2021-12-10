@@ -20,7 +20,8 @@ import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenci
 import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
 import { LiquidityMode } from 'app/features/trident/types'
 import NetworkGuard from 'app/guards/Network'
-import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
+import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
+import { ConstantProductPoolState } from 'app/hooks/useConstantProductPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import React from 'react'
@@ -31,7 +32,7 @@ const AddClassic = () => {
   const { currencies, twap, fee } = useCurrenciesFromURL()
   const liquidityMode = useRecoilValue(liquidityModeAtom)
   const { pool } = useRecoilValue(poolAtom)
-  const classicPool = useTridentClassicPool(currencies[0], currencies[1], fee, twap)
+  const classicPool = useConstantProductPool(currencies[0], currencies[1], fee, twap)
 
   return (
     <>

@@ -4,7 +4,8 @@ import Button from 'app/components/Button'
 import { attemptingTxnAtom, showReviewAtom } from 'app/features/trident/context/atoms'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
-import { ConstantProductPoolState, useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
+import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
+import { ConstantProductPoolState } from 'app/hooks/useConstantProductPools'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
@@ -31,7 +32,7 @@ export const SelectionContinueButton: FC = () => {
   const [, setShowReview] = useRecoilState(showReviewAtom)
   const attemptingTxn = useRecoilValue(attemptingTxnAtom)
 
-  const { state } = useTridentClassicPool(assets[0]?.currency, assets[1]?.currency, selectedFeeTier, createOracle)
+  const { state } = useConstantProductPool(assets[0]?.currency, assets[1]?.currency, selectedFeeTier, createOracle)
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
