@@ -1,0 +1,22 @@
+name: CI
+
+on: push
+
+jobs:
+  installDependencies:
+    name: Install Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Dependencies
+        uses: actions/setup-node@v2
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+        with:
+          args: install
+      - name: Run E2E tests
+        uses: mujo-code/puppeteer-headful@v2
+        env:
+          CI: 'true'
+        with:
+          args: npm run e2e
