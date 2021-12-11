@@ -21,4 +21,4 @@ jobs:
         env:
           CI: 'true'
         with:
-          args: npm run dev npm run e2e:safe
+          args: npm i npm run dev npm run e2e:safe
