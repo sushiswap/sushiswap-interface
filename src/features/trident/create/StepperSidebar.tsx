@@ -36,7 +36,7 @@ export const StepperSidebar: FC = () => {
   const [currentStep, setCurrentStep] = useRecoilState(currentStepAtom)
 
   return (
-    <div className="flex-none w-52 border-r border-gray-800 mt-6 hidden lg:block pr-2">
+    <div className="flex-none w-52 border-r border-dark-800 mt-6 hidden lg:block pr-2">
       <Step stepNum={1} title={stepTitleText[1]} currentStep={currentStep} stepSetter={setCurrentStep} />
       <Step stepNum={2} title={stepTitleText[2]} currentStep={currentStep} stepSetter={setCurrentStep} />
     </div>

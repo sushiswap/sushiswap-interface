@@ -27,7 +27,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
   return (
-    <div className="px-6 py-4 flex flex-col gap-3">
+    <div className="px-6 py-3 flex flex-col gap-3">
       <div className="grid grid-cols-2 items-center justify-between">
         <div className="flex items-center">
           <div className="flex items-center justify-center">
