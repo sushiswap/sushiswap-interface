@@ -1,13 +1,20 @@
 name: CI
 
-on: push
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ '**' ]
+
+  workflow_dispatch:
 
 jobs:
-  installDependencies:
-    name: Install Dependencies
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Install Dependencies
         uses: actions/setup-node@v2
@@ -15,10 +22,19 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
         with:
           args: install
+          node-version: '14.x'
+      
+      - name: Install Yarn
+        run: npm install yarn --global 
+      
+      - name: Install packages
+        run: yarn
 
       - name: Run E2E tests
         uses: mujo-code/puppeteer-headful@v2
         env:
           CI: 'true'
+          TEST_PASS: ${{ secrets.TEST_PASS }}
+          TEST_SEED: ${{ secrets.TEST_SEED }}
         with:
-          args: npm i npm run e2e
+          args: yarn e2e
