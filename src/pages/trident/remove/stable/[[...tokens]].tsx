@@ -1,25 +1,22 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent } from '@sushiswap/core-sdk'
 import Button from 'components/Button'
 import SettingsTab from 'components/Settings'
 import Typography from 'components/Typography'
-import { liquidityModeAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
+import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
 import ModeToggle from 'features/trident/ModeToggle'
 import RemoveTransactionReviewStandardModal from 'features/trident/remove/classic/RemoveTransactionReviewStandardModal'
 import { useCurrency } from 'hooks/Tokens'
+import { useConstantProductPool } from 'hooks/useConstantProductPools'
 import { useTotalSupply } from 'hooks/useTotalSupply'
-import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
-import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { RecoilRoot, useRecoilState, useSetRecoilState } from 'recoil'
 import { useActiveWeb3React } from 'services/web3'
 import { useTokenBalance } from 'state/wallet/hooks'
-
-const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
 const RemoveStable = () => {
   const { account } = useActiveWeb3React()
@@ -29,11 +26,10 @@ const RemoveStable = () => {
   const [{ pool }, setPool] = useRecoilState(poolAtom)
   const setTotalSupply = useSetRecoilState(totalSupplyAtom)
   const setPoolBalance = useSetRecoilState(poolBalanceAtom)
-  const liquidityMode = useRecoilValue(liquidityModeAtom)
 
   const currencyA = useCurrency(query.tokens?.[0])
   const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 50, true)
+  const classicPool = useConstantProductPool(currencyA, currencyB)
   const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
 

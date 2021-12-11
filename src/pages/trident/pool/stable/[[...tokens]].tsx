@@ -1,9 +1,9 @@
+import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
 import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
 import Header from 'features/trident/pool/Header'
 import StablePoolComposition from 'features/trident/pool/stable/StablePoolComposition'
 import { useCurrency } from 'hooks/Tokens'
 import { useTotalSupply } from 'hooks/useTotalSupply'
-import { useTridentClassicPool } from 'hooks/useTridentClassicPools'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { RecoilRoot, useSetRecoilState } from 'recoil'
@@ -22,7 +22,7 @@ const Pool = () => {
 
   const currencyA = useCurrency(query.tokens?.[0])
   const currencyB = useCurrency(query.tokens?.[1])
-  const classicPool = useTridentClassicPool(currencyA, currencyB, 30, true)
+  const classicPool = useConstantProductPool(currencyA, currencyB)
   const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
 

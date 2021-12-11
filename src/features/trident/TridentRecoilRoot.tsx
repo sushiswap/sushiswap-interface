@@ -1,7 +1,7 @@
 import { PoolType } from '@sushiswap/tines'
 import useBentoRebases from 'app/hooks/useBentoRebases'
+import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
 import { useTotalSupply } from 'app/hooks/useTotalSupply'
-import { useTridentClassicPool } from 'app/hooks/useTridentClassicPools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTokenBalance } from 'app/state/wallet/hooks'
 import React from 'react'
@@ -14,7 +14,7 @@ import useCurrenciesFromURL from './context/hooks/useCurrenciesFromURL'
 const TridentClassicRecoilRoot: FC = (props) => {
   const { account } = useActiveWeb3React()
   const { currencies, twap, fee } = useCurrenciesFromURL()
-  const classicPool = useTridentClassicPool(currencies?.[0], currencies?.[1], fee, twap)
+  const classicPool = useConstantProductPool(currencies?.[0], currencies?.[1], fee, twap)
   const totalSupply = useTotalSupply(classicPool ? classicPool.pool?.liquidityToken : undefined)
   const poolBalance = useTokenBalance(account ?? undefined, classicPool.pool?.liquidityToken)
   const { rebases } = useBentoRebases(currencies)
