@@ -229,8 +229,8 @@ export default function useFarmRewards() {
           rewards[1] = {
             token: 'gOHM',
             icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/arbitrum/0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1.jpg',
-            rewardTokenPerBlock,
-            rewardTokenPerDay,
+            rewardPerBlock: rewardTokenPerBlock,
+            rewardPerDay: rewardTokenPerDay,
             rewardPrice: ohmPrice,
           }
         }
