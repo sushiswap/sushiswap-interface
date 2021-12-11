@@ -223,13 +223,14 @@ export default function useFarmRewards() {
           }
         }
         if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
-          const rewardTokenPerSecond = 0
-          const rewardPerBlock = rewardPerSecond * averageBlockTime
+          const rewardTokenPerSecond = 0.00000462962963
+          const rewardTokenPerBlock = rewardPerSecond * averageBlockTime
+          const rewardTokenPerDay = 0.4
           rewards[1] = {
             token: 'gOHM',
             icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/arbitrum/0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1.jpg',
-            rewardPerBlock,
-            rewardPerDay,
+            rewardPerBlock: rewardTokenPerBlock,
+            rewardPerDay: rewardTokenPerDay,
             rewardPrice: ohmPrice,
           }
         }
