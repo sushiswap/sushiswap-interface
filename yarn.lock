@@ -2644,10 +2644,10 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@20.3.0":
-  version "20.3.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-20.3.0.tgz#03edc98f45f4391e7d5cfdce3487b28967bc2f8a"
-  integrity sha512-08E86/2huWoZuWi2+mLoSWJFs+KALagJzwPkZNcHgp5h7LrudNBJF7XG9pzTNwSUSz+oSL5micYUW6mzGgLxaA==
+"@sushiswap/default-token-list@20.5.0":
+  version "20.5.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-20.5.0.tgz#7fcefe02d11356331077bb6769279d4bf0d0bfc3"
+  integrity sha512-NvcD7mF12Q/w7Tc91bnKsWLKMi9ZOF2lFbp+ycLuFQngfRfoRvuf9Ln8za0CcoevSQJZcI1R2KkCR77ECSH4cA==
 
 "@sushiswap/default-token-list@^11.3.0":
   version "11.5.0"
@@ -2661,10 +2661,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.109":
-  version "5.0.0-canary.109"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.109.tgz#f2a779650288d9ef3614d28b855d3031ce594549"
-  integrity sha512-qSxYW9qRgc1KTlXP6fZrYyqd+2r4yaUrG1ZqsealiXogxC35hhcAkCUq3hKgy43s70HakKwizqC0r8TI/YDbKQ==
+"@sushiswap/sdk@5.0.0-canary.110":
+  version "5.0.0-canary.110"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.110.tgz#d72721621652e27b24e70235818eb70fece177f4"
+  integrity sha512-qlIEIVjX1FyS3uXj5LfrGUaEna1kmrFQsl4BHPXsY/1NYYmVc+XzQqRforG94eHBwDCQtfckqh3bQtuJJRSY+A==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/abstract-signer" "^5.4.0"
