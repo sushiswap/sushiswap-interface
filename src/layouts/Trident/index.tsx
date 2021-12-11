@@ -67,23 +67,12 @@ const TridentLayout: FC<TridentLayoutProps> = ({ children = [], breadcrumbs = []
     <>
       <Header height={HEADER_HEIGHT} />
       {/*<Breadcrumb breadcrumbs={breadcrumbs} />*/}
-      <TridentFixedHeaderSpacer>
-        <Container maxWidth="7xl" className="mx-auto">
-          <div className="flex flex-col items-center w-full h-screen">
-            <div className="bg-dark-1000 w-full flex-grow flex flex-col">{children}</div>
-            <Popups />
-          </div>
-        </Container>
-      </TridentFixedHeaderSpacer>
-    </>
-  )
-}
-
-export const TridentFixedHeaderSpacer: FC = ({ children }) => {
-  return (
-    <>
-      <div style={{ paddingTop: HEADER_HEIGHT }} />
-      {children}
+      <Container maxWidth="7xl" className="mx-auto">
+        <div className="flex flex-col items-center w-full h-screen">
+          <div className="bg-dark-1000 w-full flex-grow flex flex-col">{children}</div>
+          <Popups />
+        </div>
+      </Container>
     </>
   )
 }
