@@ -4,7 +4,8 @@ import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { Feature } from 'enums'
 import { featureEnabled } from 'functions/feature'
 import Image from 'next/image'
-import React, { FC } from 'react'
+import React, { FC, Fragment, useState } from 'react'
+import { useTimeoutFn } from 'react-use'
 import { useActiveWeb3React } from 'services/web3'
 import { useETHBalances } from 'state/wallet/hooks'
 
@@ -24,102 +25,101 @@ interface DesktopNavProps {
 export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
+  let [isShowing, setIsShowing] = useState(true)
+  let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 150)
 
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
   return (
-    <div className="px-4 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center flex-shrink-0">
-          <Image src="/logo.svg" alt="Sushi logo" width="32px" height="32px" />
-          <div className="hidden sm:block sm:ml-8">
-            <div className="flex space-x-1.5">
-              <NavLink
-                href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/legacy/swap'}
-                activeClassName={ACTIVE_NAV_LINK_CLASS}
-              >
-                <a id="swap-nav-link" className={NAV_BASE_CLASS}>
-                  {i18n._(t`Swap`)}
+    <div className="px-4 py-4 flex flex-col gap-3">
+      <div className="grid xl:grid-cols-3 grid-cols-2 items-center justify-between">
+        <div className="xl:block hidden" />
+        <div className="flex items-center lg:justify-center">
+          <div className="px-3.5 mr-4 flex">
+            <Image src="/logo.svg" alt="Sushi logo" width="24px" height="24px" />
+          </div>
+          <div className="flex space-x-1.5 hidden sm:block">
+            <NavLink
+              href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/legacy/swap'}
+              activeClassName={ACTIVE_NAV_LINK_CLASS}
+            >
+              <a id="swap-nav-link" className={NAV_BASE_CLASS}>
+                {i18n._(t`Swap`)}
+              </a>
+            </NavLink>
+
+            {chainId && featureEnabled(Feature.TRIDENT, chainId) && (
+              <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                <a id="trident-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Trident`)}
                 </a>
               </NavLink>
+            )}
 
-              {chainId && featureEnabled(Feature.TRIDENT, chainId) && (
-                <NavLink href="/trident/pools" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                  <a id="trident-nav-link" className={NAV_BASE_CLASS}>
-                    {i18n._(t`Trident`)}
-                  </a>
-                </NavLink>
-              )}
-
-              {chainId && featureEnabled(Feature.TRIDENT, chainId) && (
-                <NavLink href="/trident/balances/wallet" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                  <a id="trident-nav-link" className={NAV_BASE_CLASS}>
-                    {i18n._(t`Balances`)}
-                  </a>
-                </NavLink>
-              )}
-
-              <NavLink href="/pool" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                <a id="pool-nav-link" className={NAV_BASE_CLASS}>
-                  {i18n._(t`Pool`)}
+            {chainId && featureEnabled(Feature.TRIDENT, chainId) && (
+              <NavLink href="/trident/balances/wallet" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                <a id="trident-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Balances`)}
                 </a>
               </NavLink>
+            )}
 
-              {chainId &&
-                (featureEnabled(Feature.TRIDENT, chainId) ? (
-                  <NavLink href="/trident/migrate" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                    <a id="trident-migrate-nav-link" className={NAV_BASE_CLASS}>
+            <NavLink href="/pool" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+              <a id="pool-nav-link" className={NAV_BASE_CLASS}>
+                {i18n._(t`Pool`)}
+              </a>
+            </NavLink>
+
+            {chainId &&
+              (featureEnabled(Feature.TRIDENT, chainId) ? (
+                <NavLink href="/trident/migrate" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <a id="trident-migrate-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Migrate`)}
+                  </a>
+                </NavLink>
+              ) : (
+                featureEnabled(Feature.MIGRATE, chainId) && (
+                  <NavLink href={'/migrate'} activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                    <a id="migrate-nav-link" className={NAV_BASE_CLASS}>
                       {i18n._(t`Migrate`)}
                     </a>
                   </NavLink>
-                ) : (
-                  featureEnabled(Feature.MIGRATE, chainId) && (
-                    <NavLink href={'/migrate'} activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                      <a id="migrate-nav-link" className={NAV_BASE_CLASS}>
-                        {i18n._(t`Migrate`)}
-                      </a>
-                    </NavLink>
-                  )
-                ))}
+                )
+              ))}
 
-              {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
-                <NavLink href="/farm" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                  <a id="farm-nav-link" className={NAV_BASE_CLASS}>
-                    {i18n._(t`Farm`)}
+            {chainId && featureEnabled(Feature.LIQUIDITY_MINING, chainId) && (
+              <NavLink href="/farm" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                <a id="farm-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Farm`)}
+                </a>
+              </NavLink>
+            )}
+
+            {chainId && featureEnabled(Feature.KASHI, chainId) && (
+              <>
+                <NavLink href="/lend" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <a id="lend-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Lend`)}
                   </a>
                 </NavLink>
-              )}
 
-              {chainId && featureEnabled(Feature.KASHI, chainId) && (
-                <>
-                  <NavLink href="/lend" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                    <a id="lend-nav-link" className={NAV_BASE_CLASS}>
-                      {i18n._(t`Lend`)}
-                    </a>
-                  </NavLink>
-
-                  <NavLink href="/borrow" activeClassName={ACTIVE_NAV_LINK_CLASS}>
-                    <a id="borrow-nav-link" className={NAV_BASE_CLASS}>
-                      {i18n._(t`Borrow`)}
-                    </a>
-                  </NavLink>
-                </>
-              )}
-
-              {chainId && featureEnabled(Feature.STAKING, chainId) && (
-                <NavLink href="/stake">
-                  <a id="stake-nav-link" className={NAV_BASE_CLASS}>
-                    {i18n._(t`Stake`)}
+                <NavLink href="/borrow" activeClassName={ACTIVE_NAV_LINK_CLASS}>
+                  <a id="borrow-nav-link" className={NAV_BASE_CLASS}>
+                    {i18n._(t`Borrow`)}
                   </a>
                 </NavLink>
-              )}
-            </div>
+              </>
+            )}
+
+            {chainId && featureEnabled(Feature.STAKING, chainId) && (
+              <NavLink href="/stake">
+                <a id="stake-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Stake`)}
+                </a>
+              </NavLink>
+            )}
           </div>
         </div>
-
-        {/* Not ready for prod */}
-        {/*<HeaderSearchBox />*/}
-
         <div className="fixed bottom-0 left-0 z-10 flex flex-row items-center justify-center w-full p-4 lg:w-auto bg-dark-1000 lg:relative lg:p-0 lg:bg-transparent flex-shrink-0">
           <div className="flex items-center justify-between w-full space-x-2 sm:justify-end">
             {chainId && [ChainId.ETHEREUM].includes(chainId) && library && library.provider.isMetaMask && (
@@ -220,10 +220,10 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
               </div>
             )}
 
-            <div className="w-auto flex items-center rounded bg-dark-900 hover:bg-dark-800 p-0.5 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
+            <div className="w-auto flex items-center rounded border border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
               {account && chainId && userEthBalance && (
                 <>
-                  <div className="px-3 py-2 text-primary text-bold">
+                  <div className="px-3 py-2 text-high-emphesis text-bold">
                     {userEthBalance?.toSignificant(4)} {NATIVE[chainId].symbol}
                   </div>
                 </>
