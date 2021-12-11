@@ -1,11 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, NATIVE, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, NATIVE } from '@sushiswap/core-sdk'
 import { Feature } from 'enums'
 import { featureEnabled } from 'functions/feature'
 import Image from 'next/image'
-import React, { FC, Fragment, useState } from 'react'
-import { useTimeoutFn } from 'react-use'
+import React, { FC } from 'react'
 import { useActiveWeb3React } from 'services/web3'
 import { useETHBalances } from 'state/wallet/hooks'
 
@@ -25,18 +24,16 @@ interface DesktopNavProps {
 export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
-  let [isShowing, setIsShowing] = useState(true)
-  let [, , resetIsShowing] = useTimeoutFn(() => setIsShowing(true), 150)
-
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
   return (
-    <div className="px-4 py-4 flex flex-col gap-3">
-      <div className="grid xl:grid-cols-3 grid-cols-2 items-center justify-between">
-        <div className="xl:block hidden" />
-        <div className="flex items-center lg:justify-center">
-          <div className="px-3.5 mr-4 flex">
-            <Image src="/logo.svg" alt="Sushi logo" width="24px" height="24px" />
+    <div className="px-6 py-4 flex flex-col gap-3">
+      <div className="grid grid-cols-2 items-center justify-between">
+        <div className="flex items-center">
+          <div className="flex items-center justify-center">
+            <div className="w-12 h-6">
+              <Image src="/logo.svg" alt="Sushi logo" width="24px" height="24px" />
+            </div>
           </div>
           <div className="flex space-x-1.5 hidden sm:block">
             <NavLink
@@ -168,51 +165,51 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
               </>
             )}
 
-            {chainId && chainId in SUSHI_ADDRESS && library && library.provider.isMetaMask && (
-              <>
-                <QuestionHelper text={i18n._(t`Add SUSHI to your MetaMask wallet`)}>
-                  <div
-                    className="hidden rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800 p-0.5"
-                    onClick={() => {
-                      const params: any = {
-                        type: 'ERC20',
-                        options: {
-                          address: SUSHI_ADDRESS[chainId],
-                          symbol: 'SUSHI',
-                          decimals: 18,
-                          image:
-                            'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',
-                        },
-                      }
-                      if (library && library.provider.isMetaMask && library.provider.request) {
-                        library.provider
-                          .request({
-                            method: 'wallet_watchAsset',
-                            params,
-                          })
-                          .then((success) => {
-                            if (success) {
-                              console.log('Successfully added SUSHI to MetaMask')
-                            } else {
-                              throw new Error('Something went wrong.')
-                            }
-                          })
-                          .catch(console.error)
-                      }
-                    }}
-                  >
-                    <Image
-                      src="/images/tokens/sushi-square.jpg"
-                      alt="SUSHI"
-                      width="38px"
-                      height="38px"
-                      objectFit="contain"
-                      className="rounded-md"
-                    />
-                  </div>
-                </QuestionHelper>
-              </>
-            )}
+            {/*{chainId && chainId in SUSHI_ADDRESS && library && library.provider.isMetaMask && (*/}
+            {/*  <>*/}
+            {/*    <QuestionHelper text={i18n._(t`Add SUSHI to your MetaMask wallet`)}>*/}
+            {/*      <div*/}
+            {/*        className="hidden rounded-md cursor-pointer sm:inline-flex bg-dark-900 hover:bg-dark-800 p-0.5"*/}
+            {/*        onClick={() => {*/}
+            {/*          const params: any = {*/}
+            {/*            type: 'ERC20',*/}
+            {/*            options: {*/}
+            {/*              address: SUSHI_ADDRESS[chainId],*/}
+            {/*              symbol: 'SUSHI',*/}
+            {/*              decimals: 18,*/}
+            {/*              image:*/}
+            {/*                'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2/logo.png',*/}
+            {/*            },*/}
+            {/*          }*/}
+            {/*          if (library && library.provider.isMetaMask && library.provider.request) {*/}
+            {/*            library.provider*/}
+            {/*              .request({*/}
+            {/*                method: 'wallet_watchAsset',*/}
+            {/*                params,*/}
+            {/*              })*/}
+            {/*              .then((success) => {*/}
+            {/*                if (success) {*/}
+            {/*                  console.log('Successfully added SUSHI to MetaMask')*/}
+            {/*                } else {*/}
+            {/*                  throw new Error('Something went wrong.')*/}
+            {/*                }*/}
+            {/*              })*/}
+            {/*              .catch(console.error)*/}
+            {/*          }*/}
+            {/*        }}*/}
+            {/*      >*/}
+            {/*        <Image*/}
+            {/*          src="/images/tokens/sushi-square.jpg"*/}
+            {/*          alt="SUSHI"*/}
+            {/*          width="38px"*/}
+            {/*          height="38px"*/}
+            {/*          objectFit="contain"*/}
+            {/*          className="rounded-md"*/}
+            {/*        />*/}
+            {/*      </div>*/}
+            {/*    </QuestionHelper>*/}
+            {/*  </>*/}
+            {/*)}*/}
 
             {library && library.provider.isMetaMask && (
               <div className="hidden sm:inline-block">
@@ -230,7 +227,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
               )}
               <Web3Status />
             </div>
-            <div className="hidden md:block">
+            <div className="hidden lg:flex">
               <LanguageSwitch />
             </div>
             <More />
