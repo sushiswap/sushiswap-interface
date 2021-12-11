@@ -26,6 +26,8 @@ describe('Trident Swap:', () => {
       headless: false,
       defaultViewport: null,
       slowMo: 5,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath: process.env.PUPPETEER_EXEC_PATH,
     })
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
