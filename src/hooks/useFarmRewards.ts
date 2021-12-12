@@ -224,7 +224,7 @@ export default function useFarmRewards() {
         }
         if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
           const rewardTokenPerSecond = 0.00000462962963
-          const rewardTokenPerBlock = rewardPerSecond * averageBlockTime
+          const rewardTokenPerBlock = rewardTokenPerSecond * averageBlockTime
           const rewardTokenPerDay = 0.4
           rewards[1] = {
             token: 'gOHM',
