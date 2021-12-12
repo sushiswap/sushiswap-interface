@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ master ]
   pull_request:
-    branches: [ '**' ]
+    branches: [ master ]
 
   workflow_dispatch:
 
@@ -29,6 +29,9 @@ jobs:
       
       - name: Install packages
         run: yarn
+
+      - name: Run Unit tests
+        run: yarn test:ci
 
       - name: Run E2E tests
         uses: mujo-code/puppeteer-headful@v2
