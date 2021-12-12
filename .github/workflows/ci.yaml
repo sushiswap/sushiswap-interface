@@ -16,13 +16,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Dependencies
+      - name: Setup NodeJs
         uses: actions/setup-node@v2
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
         with:
-          args: install
-          node-version: '14.x'
+          node-version: 14
       
       - name: Install Yarn
         run: npm install yarn --global 
