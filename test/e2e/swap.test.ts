@@ -48,7 +48,7 @@ describe('Trident Swap:', () => {
 
   test('Should swap from ETH wallet to USDC wallet', async () => {
     const ethWalletBalance = await metamask.getTokenBalance('ETH')
-    const swapEthAmount = ethWalletBalance * 0.1
+    const swapEthAmount = ethWalletBalance * 0.01
 
     await page.goto(baseUrl)
     await page.bringToFront()
@@ -56,6 +56,6 @@ describe('Trident Swap:', () => {
     await swapPage.connectMetamaskWallet()
     await swapPage.navigateTo()
 
-    await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toFixed(3), true, true)
+    await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toFixed(5), true, true)
   })
 })

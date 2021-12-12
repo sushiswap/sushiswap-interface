@@ -107,6 +107,12 @@ export abstract class AppPage {
     await this.Metamask.confirmTransaction()
     await this.Metamask.page.waitForTimeout(1000)
 
+    // Try to confirm transaction again
+    try {
+      await this.Metamask.confirmTransaction()
+      await this.Metamask.page.waitForTimeout(1000)
+    } catch (error) {}
+
     //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
     const mmFooterButtons = await this.Metamask.page.$$('footer > button')
     if (mmFooterButtons && mmFooterButtons[1]) {
@@ -114,7 +120,7 @@ export abstract class AppPage {
       await confirmButton.click()
     }
 
-    await this.Metamask.page.waitForTimeout(1000)
+    await this.Metamask.page.waitForTimeout(500)
     await this.bringToFront()
   }
 }
