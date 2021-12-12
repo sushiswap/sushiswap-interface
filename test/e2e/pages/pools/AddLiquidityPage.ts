@@ -38,7 +38,7 @@ export class AddLiquidityPage extends AppPage {
 
     const modalConfirmDepositButton = await this.Page.waitForSelector(this.ModalConfirmDepositButtonSelector)
     await modalConfirmDepositButton.click()
-    await this.Metamask.page.waitForTimeout(500)
+    await this.Metamask.page.waitForTimeout(1000)
 
     await this.Metamask.confirmTransaction()
     await this.Metamask.page.waitForTimeout(1000)

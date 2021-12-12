@@ -1,5 +1,4 @@
-import * as dappeteer from '@chainsafe/dappeteer'
-import { Dappeteer } from '@chainsafe/dappeteer'
+import { Dappeteer, launch, setupMetamask } from '@chainsafe/dappeteer'
 import puppeteer, { Browser, Page } from 'puppeteer'
 
 import { TOKEN_ADDRESSES } from './constants/TokenAddresses'
@@ -32,17 +31,26 @@ async function importTokens() {
   await liquidityPoolsPage.addTokenToMetamask(TOKEN_ADDRESSES.USDC)
 }
 
-describe.skip('Add Liquidity:', () => {
+describe('Add Liquidity:', () => {
   beforeAll(async () => {
-    browser = await dappeteer.launch(puppeteer, { metamaskVersion: 'v10.1.1', headless: false, defaultViewport: null })
+    browser = await launch(puppeteer, {
+      metamaskVersion: 'v10.1.1',
+      headless: false,
+      defaultViewport: null,
+      slowMo: 6,
+      args: ['--no-sandbox'],
+      executablePath: process.env.PUPPETEER_EXEC_PATH,
+    })
     try {
-      metamask = await dappeteer.setupMetamask(browser, { seed: seed, password: pass })
+      metamask = await setupMetamask(browser, { seed: seed, password: pass })
       await metamask.switchNetwork('kovan')
+      await metamask.page.setDefaultTimeout(60000)
     } catch (error) {
       console.log('Unknown error occurred setting up metamask')
       throw error
     }
     page = await browser.newPage()
+    await page.setDefaultTimeout(60000)
     await initPages()
     await importTokens()
   })
@@ -66,7 +74,7 @@ describe.skip('Add Liquidity:', () => {
     const poolLink = page.url()
 
     await poolPage.clickAddLiquidityButton()
-    await addLiquidityPage.addLiquidity(t0DepositAmount.toFixed(3))
+    await addLiquidityPage.addLiquidity(t0DepositAmount.toFixed(5))
 
     await page.goto(poolLink)
     await page.waitForSelector(`#pool-title-${targetPoolName}`)

@@ -61,7 +61,7 @@ export class SwapPage extends AppPage {
 
     const confirmSwapButton = await this.Page.waitForSelector(this.ConfirmSwapButtonSelector)
     await confirmSwapButton.click()
-    await this.Metamask.page.waitForTimeout(500)
+    await this.Metamask.page.waitForTimeout(1000)
 
     await this.confirmMetamaskTransaction()
 

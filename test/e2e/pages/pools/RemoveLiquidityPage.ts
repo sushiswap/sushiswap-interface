@@ -52,7 +52,7 @@ export class RemoveLiquidityPage extends AppPage {
 
     const modalConfirmWithdrawButton = await this.Page.waitForSelector(this.ModalConfirmWithdrawButtonSelector)
     await modalConfirmWithdrawButton.click()
-    await this.Metamask.page.waitForTimeout(500)
+    await this.Metamask.page.waitForTimeout(1000)
 
     await this.Metamask.confirmTransaction()
     await this.Metamask.page.waitForTimeout(1000)

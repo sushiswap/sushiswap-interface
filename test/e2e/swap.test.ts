@@ -25,18 +25,20 @@ describe('Trident Swap:', () => {
       metamaskVersion: 'v10.1.1',
       headless: false,
       defaultViewport: null,
-      slowMo: 5,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      slowMo: 6,
+      args: ['--no-sandbox'],
       executablePath: process.env.PUPPETEER_EXEC_PATH,
     })
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
       await metamask.switchNetwork('kovan')
+      await metamask.page.setDefaultTimeout(60000)
     } catch (error) {
       console.log('Unknown error occurred setting up metamask')
       throw error
     }
     page = await browser.newPage()
+    await page.setDefaultTimeout(60000)
     await initPages()
   })
 
@@ -54,6 +56,6 @@ describe('Trident Swap:', () => {
     await swapPage.connectMetamaskWallet()
     await swapPage.navigateTo()
 
-    await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toString(), true, true)
+    await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toFixed(3), true, true)
   })
 })
