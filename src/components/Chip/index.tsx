@@ -15,15 +15,16 @@ const FILLED = {
   purple: 'bg-purple bg-opacity-25 text-purple',
   yellow: 'bg-yellow bg-opacity-[0.35] text-yellow',
   blue: 'bg-blue bg-opacity-[0.35] text-blue',
-  green: 'bg-green bg-opacity-50 text-green',
+  green: 'bg-green bg-opacity-25 text-green',
   pink: 'bg-pink bg-opacity-25 text-pink',
+  red: 'bg-red bg-opacity-25 text-red',
 }
 
 const VARIANT = {
   filled: FILLED,
 }
 
-export type ChipColor = 'default' | 'purple' | 'yellow' | 'blue' | 'green' | 'white' | 'pink'
+export type ChipColor = 'default' | 'purple' | 'yellow' | 'blue' | 'green' | 'white' | 'pink' | 'red'
 export type ChipSize = 'default' | 'sm'
 export type ChipVariant = 'filled'
 
