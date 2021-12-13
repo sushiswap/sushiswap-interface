@@ -104,23 +104,29 @@ export abstract class AppPage {
   }
 
   public async confirmMetamaskTransaction(): Promise<void> {
+    await this.blockingWait(4)
+
     await this.Metamask.confirmTransaction()
-    await this.Metamask.page.waitForTimeout(1000)
 
     // Try to confirm transaction again
     try {
       await this.Metamask.confirmTransaction()
-      await this.Metamask.page.waitForTimeout(1000)
+      await this.Metamask.page.waitForTimeout(500)
+
+      //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
+      const mmFooterButtons = await this.Metamask.page.$$('footer > button')
+      if (mmFooterButtons && mmFooterButtons[1]) {
+        const confirmButton = mmFooterButtons[1]
+        await confirmButton.click()
+      }
     } catch (error) {}
 
-    //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
-    const mmFooterButtons = await this.Metamask.page.$$('footer > button')
-    if (mmFooterButtons && mmFooterButtons[1]) {
-      const confirmButton = mmFooterButtons[1]
-      await confirmButton.click()
-    }
-
-    await this.Metamask.page.waitForTimeout(500)
+    await this.blockingWait(1)
     await this.bringToFront()
+  }
+
+  public async blockingWait(seconds) {
+    var waitTill = new Date(new Date().getTime() + seconds * 1000)
+    while (waitTill > new Date()) {}
   }
 }

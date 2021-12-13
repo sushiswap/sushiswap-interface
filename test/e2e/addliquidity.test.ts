@@ -37,7 +37,7 @@ describe('Add Liquidity:', () => {
       metamaskVersion: 'v10.1.1',
       headless: false,
       defaultViewport: null,
-      slowMo: 6,
+      slowMo: 5,
       args: ['--no-sandbox'],
       executablePath: process.env.PUPPETEER_EXEC_PATH,
     })

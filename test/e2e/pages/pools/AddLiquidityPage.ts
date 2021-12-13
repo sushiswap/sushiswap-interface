@@ -38,25 +38,13 @@ export class AddLiquidityPage extends AppPage {
 
     const modalConfirmDepositButton = await this.Page.waitForSelector(this.ModalConfirmDepositButtonSelector)
     await modalConfirmDepositButton.click()
-    await this.Metamask.page.waitForTimeout(1000)
 
-    await this.Metamask.confirmTransaction()
-    await this.Metamask.page.waitForTimeout(1000)
-
-    //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
-    const mmFooterButtons = await this.Metamask.page.$$('footer > button')
-    if (mmFooterButtons && mmFooterButtons[1]) {
-      const confirmButton = mmFooterButtons[1]
-      await confirmButton.click()
-    }
-
-    await this.Metamask.page.waitForTimeout(1000)
-    await this.bringToFront()
+    await this.confirmMetamaskTransaction()
 
     const backToPoolsButton = await this.Page.waitForSelector(this.BackToPoolsButtonSelector)
     await backToPoolsButton.click()
 
-    await this.Metamask.page.waitForTimeout(40000)
+    await this.blockingWait(1)
   }
 
   private async getFixedRatioCheckbox(): Promise<ElementHandle<Element>> {

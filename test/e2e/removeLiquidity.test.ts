@@ -31,14 +31,14 @@ describe('Remove Liquidity:', () => {
       metamaskVersion: 'v10.1.1',
       headless: false,
       defaultViewport: null,
-      slowMo: 6,
+      slowMo: 5,
       args: ['--no-sandbox'],
       executablePath: process.env.PUPPETEER_EXEC_PATH,
     })
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
       await metamask.switchNetwork('kovan')
-      await metamask.page.setDefaultTimeout(600000)
+      await metamask.page.setDefaultTimeout(60000)
     } catch (error) {
       console.log('Unknown error occurred setting up metamask')
       throw error
