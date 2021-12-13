@@ -122,7 +122,8 @@ export abstract class AppPage {
     } catch (error) {}
 
     await this.blockingWait(1)
-    await this.bringToFront()
+    await this.Page.bringToFront()
+    await this.blockingWait(1)
   }
 
   public async blockingWait(seconds) {
