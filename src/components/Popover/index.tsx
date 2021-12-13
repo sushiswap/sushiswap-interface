@@ -11,9 +11,10 @@ export interface PopoverProps {
   children: React.ReactNode
   placement?: Placement
   show?: boolean
+  fullWidth?: boolean
 }
 
-export default function Popover({ content, children, placement = 'auto', show }: PopoverProps) {
+export default function Popover({ content, children, placement = 'auto', show, fullWidth = false }: PopoverProps) {
   const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null)
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null)
@@ -36,7 +37,10 @@ export default function Popover({ content, children, placement = 'auto', show }:
     <HeadlessuiPopover>
       {({ open }) => (
         <>
-          <HeadlessuiPopover.Button ref={setReferenceElement as any} className="flex">
+          <HeadlessuiPopover.Button
+            ref={setReferenceElement as any}
+            className={classNames('flex', fullWidth && 'w-full')}
+          >
             {children}
           </HeadlessuiPopover.Button>
           {(show ?? open) &&
