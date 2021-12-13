@@ -124,7 +124,7 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
             {i18n._(t`Participants`)}
           </Typography>
           <Typography variant="lg" weight={700} className="text-white">
-            {commitments.length}
+            {[...new Set(commitments.map((el) => el.address))].length}
           </Typography>
         </div>
         <Switch.Group>

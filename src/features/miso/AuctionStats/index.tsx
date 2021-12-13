@@ -66,7 +66,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
           label={i18n._(t`Remaining`)}
           value={
             <div className="flex justify-end items-baseline gap-1">
-              25
+              {auction.remainingPercentage?.toSignificant(3)}
               <Typography variant="sm" weight={700} className="text-low-emphesis">
                 %
               </Typography>

@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Fraction, JSBI, Price, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token } from '@sushiswap/core-sdk'
 import { AuctionStatus, AuctionTemplate, RawAuctionInfo } from 'app/features/miso/context/types'
 
 export class Auction<TBase extends Token, TQuote extends Token> {
@@ -20,8 +20,8 @@ export class Auction<TBase extends Token, TQuote extends Token> {
   }) {
     this.template = template
     this.auctionToken = auctionToken
-    this.paymentToken = paymentToken
     this.auctionInfo = auctionInfo
+    this.paymentToken = paymentToken
   }
 
   public get status(): AuctionStatus {
@@ -57,6 +57,12 @@ export class Auction<TBase extends Token, TQuote extends Token> {
   public get totalTokens(): CurrencyAmount<Currency> | undefined {
     if (this.auctionInfo.totalTokens) {
       return CurrencyAmount.fromRawAmount(this.auctionToken, JSBI.BigInt(this.auctionInfo.totalTokens))
+    }
+  }
+
+  public get totalTokensCommitted(): CurrencyAmount<Currency> | undefined {
+    if (this.auctionInfo.totalTokensCommitted) {
+      return CurrencyAmount.fromRawAmount(this.auctionToken, JSBI.BigInt(this.auctionInfo.totalTokensCommitted))
     }
   }
 
@@ -187,6 +193,24 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     if (this.startPrice && this.totalTokens) {
       const { numerator, denominator } = this.startPrice.asFraction.multiply(this.totalTokens)
       return CurrencyAmount.fromFractionalAmount(this.paymentToken, numerator, denominator)
+    }
+  }
+
+  public get remainingPercentage(): Percent | undefined {
+    if (this.template === AuctionTemplate.BATCH_AUCTION) {
+      return this.status === AuctionStatus.LIVE ? new Percent('100', '1') : undefined
+    }
+
+    if (this.template === AuctionTemplate.DUTCH_AUCTION && this.totalTokens && this.totalTokensCommitted) {
+      const percent = new Percent(
+        this.totalTokens.subtract(this.totalTokensCommitted).quotient,
+        this.totalTokens.quotient
+      )
+      return percent.lessThan(percent) ? undefined : percent
+    }
+
+    if (this.template === AuctionTemplate.CROWDSALE && this.totalTokens && this.totalTokensCommitted) {
+      return new Percent(this.totalTokens.subtract(this.totalTokensCommitted).quotient, this.totalTokens.quotient)
     }
   }
 }

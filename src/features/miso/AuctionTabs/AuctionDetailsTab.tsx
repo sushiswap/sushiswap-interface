@@ -132,7 +132,7 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
           label={i18n._(t`Auction Starts On`)}
           value={
             <>
-              {new Date(auction.auctionInfo.endTime.mul('1000').toNumber()).toLocaleString('en-uS', {
+              {new Date(auction.auctionInfo.startTime.mul('1000').toNumber()).toLocaleString('en-uS', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',

@@ -1,4 +1,5 @@
-import { Token } from '@sushiswap/core-sdk'
+import { AddressZero } from '@ethersproject/constants'
+import { NATIVE, Token } from '@sushiswap/core-sdk'
 import { BAD_AUCTIONS } from 'app/features/miso/context/constants'
 import useAuctionsInfo from 'app/features/miso/context/hooks/useAuctionsInfo'
 import useAuctionsMarketTemplateId from 'app/features/miso/context/hooks/useAuctionsMarketTemplateId'
@@ -95,6 +96,17 @@ export const useMisoAuctions = (type: AuctionStatus, owner?: string): Auction<To
       return filteredRawAuctions?.map((el, index) => {
         const template: AuctionTemplate = auctionTemplateIds[index].result[0].toNumber()
         const auctionInfo: RawAuctionInfo = auctionInfoInputResult[index].result[0]
+        const paymentToken =
+          auctionInfo.paymentCurrency === AddressZero
+            ? NATIVE[chainId]
+            : new Token(
+                chainId,
+                auctionInfo.paymentCurrencyInfo.addr,
+                auctionInfo.paymentCurrencyInfo.decimals.toNumber(),
+                auctionInfo.paymentCurrencyInfo.symbol,
+                auctionInfo.paymentCurrencyInfo.name
+              )
+
         return new Auction({
           template,
           auctionToken: new Token(
@@ -104,13 +116,7 @@ export const useMisoAuctions = (type: AuctionStatus, owner?: string): Auction<To
             el.tokenInfo.symbol,
             el.tokenInfo.name
           ),
-          paymentToken: new Token(
-            chainId,
-            auctionInfo.paymentCurrencyInfo.addr,
-            auctionInfo.paymentCurrencyInfo.decimals.toNumber(),
-            auctionInfo.paymentCurrencyInfo.symbol,
-            auctionInfo.paymentCurrencyInfo.name
-          ),
+          paymentToken,
           auctionInfo,
         })
       })
@@ -133,6 +139,17 @@ export const useMisoAuction = (address: string) => {
     if (!chainId || !auctionTemplateId.result || !auctionInfoInputResult.result) return
     const template: AuctionTemplate = auctionTemplateId.result?.[0].toNumber()
     const auctionInfo: RawAuctionInfo = auctionInfoInputResult.result?.[0]
+    const paymentToken =
+      auctionInfo.paymentCurrency === AddressZero
+        ? NATIVE[chainId]
+        : new Token(
+            chainId,
+            auctionInfo.paymentCurrencyInfo.addr,
+            auctionInfo.paymentCurrencyInfo.decimals.toNumber(),
+            auctionInfo.paymentCurrencyInfo.symbol,
+            auctionInfo.paymentCurrencyInfo.name
+          )
+
     return new Auction({
       template,
       auctionToken: new Token(
@@ -142,13 +159,7 @@ export const useMisoAuction = (address: string) => {
         auctionInfo.tokenInfo.symbol,
         auctionInfo.tokenInfo.name
       ),
-      paymentToken: new Token(
-        chainId,
-        auctionInfo.paymentCurrencyInfo.addr,
-        auctionInfo.paymentCurrencyInfo.decimals.toNumber(),
-        auctionInfo.paymentCurrencyInfo.symbol,
-        auctionInfo.paymentCurrencyInfo.name
-      ),
+      paymentToken,
       auctionInfo,
     })
   }, [auctionInfoInputResult, auctionTemplateId, chainId])

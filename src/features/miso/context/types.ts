@@ -61,6 +61,7 @@ export interface RawAuctionInfo {
   startTime: BigNumber
   tokenInfo: AuctionTokenInfo
   totalTokens: BigNumber
+  totalTokensCommitted?: BigNumber
   usePointList: boolean
   minimumPrice?: BigNumber
   startPrice?: BigNumber

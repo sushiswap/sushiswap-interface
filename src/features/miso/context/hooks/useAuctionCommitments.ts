@@ -35,7 +35,7 @@ const useAuctionCommitments = (auction: Auction<Token, Token>) => {
         topics: [TOPIC_ADDED_COMMITMENT],
       })
 
-      return logs.map(({ data, transactionHash, blockNumber, ...rest }) => {
+      return logs.map(({ data, transactionHash, blockNumber }) => {
         const [address, amount] = defaultAbiCoder.decode(['address', 'uint256'], data)
         return {
           txHash: transactionHash,
@@ -62,15 +62,22 @@ const useAuctionCommitments = (auction: Auction<Token, Token>) => {
     if (!contract) return
 
     // Subscribe
-    contract.on({ address: auction.auctionToken.address, topics: [TOPIC_ADDED_COMMITMENT] }, (error, result) => {
-      if (error) {
+    contract.on({ address: auction.auctionToken.address, topics: [TOPIC_ADDED_COMMITMENT] }, (_, __, result) => {
+      if (result) {
         const [address, amount] = defaultAbiCoder.decode(['address', 'uint256'], result.data)
-        return {
-          txHash: result.transactionHash,
-          timestamp: result.blockNumber,
-          address,
-          amount: CurrencyAmount.fromRawAmount(auction.paymentToken, amount),
-        }
+        setCommitments((prevState) => {
+          if (!prevState.find((el) => el.txHash === result.transactionHash)) {
+            return [
+              {
+                txHash: result.transactionHash,
+                blockNumber: result.blockNumber,
+                address,
+                amount: CurrencyAmount.fromRawAmount(auction.paymentToken, amount),
+              },
+              ...prevState,
+            ]
+          } else return prevState
+        })
       }
     })
 
@@ -80,7 +87,7 @@ const useAuctionCommitments = (auction: Auction<Token, Token>) => {
         console.log('unsubscribed')
       })
     }
-  }, [auction.auctionToken.address, auction.paymentToken, contract])
+  }, [auction.auctionToken.address, auction.paymentToken, contract, setCommitments])
 
   return commitments
 }

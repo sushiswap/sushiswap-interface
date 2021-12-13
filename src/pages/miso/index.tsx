@@ -1,10 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { Feature } from 'app/enums'
 import AuctionCard from 'app/features/miso/AuctionCard'
 import useMisoAuctions from 'app/features/miso/context/hooks/useMisoAuctions'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
+import NetworkGuard from 'app/guards/Network'
 import MisoLayout from 'app/layouts/Miso'
 import React, { useState } from 'react'
 
@@ -52,5 +54,6 @@ const Miso = () => {
 }
 
 Miso.Layout = MisoLayout
+Miso.Guard = NetworkGuard(Feature.MISO)
 
 export default Miso

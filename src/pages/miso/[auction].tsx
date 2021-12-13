@@ -1,9 +1,11 @@
+import { Feature } from 'app/enums'
 import AuctionCommitter from 'app/features/miso/AuctionCommitter'
 import AuctionDocuments from 'app/features/miso/AuctionDocuments'
 import AuctionHeader from 'app/features/miso/AuctionHeader'
 import AuctionStats from 'app/features/miso/AuctionStats'
 import AuctionTabs from 'app/features/miso/AuctionTabs'
 import { useMisoAuction } from 'app/features/miso/context/hooks/useMisoAuctions'
+import NetworkGuard from 'app/guards/Network'
 import MisoLayout from 'app/layouts/Miso'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -20,7 +22,7 @@ const MisoAuction = () => {
       </section>
       <div className="flex border-b border-dark-900" />
       <section>
-        <div className="flex gap-[60px]">
+        <div className="flex flex-col lg:flex-row gap-[60px]">
           <div className="flex flex-col gap-6">
             <AuctionDocuments auction={auction} />
             <AuctionCommitter auction={auction} />
@@ -36,5 +38,6 @@ const MisoAuction = () => {
 }
 
 MisoAuction.Layout = MisoLayout
+MisoAuction.Guard = NetworkGuard(Feature.MISO)
 
 export default MisoAuction

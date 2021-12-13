@@ -24,7 +24,7 @@ const AuctionTabs: FC<AuctionTabsProps> = ({ auction }) => {
   return (
     <div className="flex flex-col gap-4">
       <div
-        className="flex space-x-8 overflow-x-auto overflow-y-hidden whitespace-nowrap border-b border-dark-800 "
+        className="flex space-x-8 overflow-x-auto overflow-y-hidden whitespace-nowrap border-b border-dark-800 mb-4"
         aria-label="Tabs"
       >
         {tabs.map((_tab, index) => (
