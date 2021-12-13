@@ -38,13 +38,13 @@ describe('Remove Liquidity:', () => {
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
       await metamask.switchNetwork('kovan')
-      await metamask.page.setDefaultTimeout(60000)
+      await metamask.page.setDefaultTimeout(180000)
     } catch (error) {
       console.log('Unknown error occurred setting up metamask')
       throw error
     }
     page = await browser.newPage()
-    await page.setDefaultTimeout(60000)
+    await page.setDefaultTimeout(180000)
     await page.setUserAgent(
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
     )
