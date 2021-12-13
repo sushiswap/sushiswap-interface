@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react'
 import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
 import Tooltip from '../Tooltip'
 
-const QuestionHelper: FC<{ text?: any }> = ({ children, text }) => {
+const QuestionHelper: FC<{ text?: any; width?: string }> = ({ children, text, width }) => {
   const [show, setShow] = useState<boolean>(false)
 
   const open = useCallback(() => setShow(true), [setShow])
@@ -10,9 +10,9 @@ const QuestionHelper: FC<{ text?: any }> = ({ children, text }) => {
 
   if (children) {
     return (
-      <Tooltip text={text} show={show}>
+      <Tooltip text={text} show={show} width={width}>
         <div
-          className="flex items-center justify-center outline-none"
+          className="flex items-center justify-center w-full outline-none"
           onClick={open}
           onMouseEnter={open}
           onMouseLeave={close}
