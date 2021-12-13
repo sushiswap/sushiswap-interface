@@ -4,9 +4,9 @@ import { Token } from '@sushiswap/core-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import AuctionCardPrice from 'app/features/miso/AuctionCard/AuctionCardPrice'
-import AuctionCardTimer from 'app/features/miso/AuctionCard/AuctionCardTimer'
 import AuctionChart from 'app/features/miso/AuctionChart'
 import AuctionIcon from 'app/features/miso/AuctionIcon'
+import AuctionTimer from 'app/features/miso/AuctionTimer'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { AuctionStatusById, AuctionTitleByTemplateId } from 'app/features/miso/context/utils'
 import Link from 'next/link'
@@ -103,7 +103,7 @@ const AuctionCard: FC<{ auction?: Auction<Token, Token> }> = ({ auction }) => {
                 {i18n._(t`Time Remaining`)}
               </Typography>
               <Typography variant="sm" weight={700}>
-                <AuctionCardTimer auction={auction} />
+                <AuctionTimer auction={auction} />
               </Typography>
             </div>
             <div className="flex flex-col gap-0.5">

@@ -81,7 +81,7 @@ export interface Auction {
 
 export interface AuctionCommitment {
   txHash: string
-  timestamp: number
+  blockNumber: number
   address: string
   amount: CurrencyAmount<Currency>
 }

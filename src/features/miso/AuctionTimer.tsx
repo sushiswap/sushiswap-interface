@@ -1,17 +1,40 @@
 import { Token } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
+import { Auction } from 'app/features/miso/context/Auction'
 import useInterval from 'app/hooks/useInterval'
-import { FC, useState } from 'react'
+import { FC, ReactNode, useState } from 'react'
 
-import { Auction } from '../context/Auction'
+interface AuctionTimerState {
+  days: string
+  hours: string
+  minutes: string
+  seconds: string
+}
 
-const AuctionCardTimer: FC<{ auction: Auction<Token, Token> }> = ({ auction }) => {
-  const [remaining, setRemaining] = useState<{ days: number; hours: number; minutes: number; seconds: number }>()
+interface AuctionTimerProps {
+  auction?: Auction<Token, Token>
+  children?: ((state: AuctionTimerState) => ReactNode) | ReactNode
+}
+
+const AuctionTimer: FC<AuctionTimerProps> = ({ auction, children }) => {
+  const [remaining, setRemaining] = useState<AuctionTimerState>()
 
   useInterval(() => {
-    setRemaining(auction.remainingTime)
+    if (!auction?.remainingTime) return
+
+    const { days, hours, minutes, seconds } = auction.remainingTime
+    setRemaining({
+      days: String(Math.max(days, 0)).padStart(2, '0'),
+      hours: String(Math.max(hours, 0)).padStart(2, '0'),
+      minutes: String(Math.max(minutes, 0)).padStart(2, '0'),
+      seconds: String(Math.max(seconds, 0)).padStart(2, '0'),
+    })
   }, 1000)
 
+  // Render props
+  if (remaining && typeof children === 'function') return children(remaining)
+
+  // Render normally
   if (remaining) {
     return (
       <div className="flex gap-2">
@@ -48,7 +71,8 @@ const AuctionCardTimer: FC<{ auction: Auction<Token, Token> }> = ({ auction }) =
     )
   }
 
+  // No data available
   return <></>
 }
 
-export default AuctionCardTimer
+export default AuctionTimer

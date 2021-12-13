@@ -18,10 +18,10 @@ const commitmentsAtomFamily = atomFamily<AuctionCommitment[], string>({
 const useAuctionCommitments = (auction: Auction<Token, Token>) => {
   const { library, chainId } = useActiveWeb3React()
   const contract = useContract(
-    auction.auctionToken.address,
+    auction?.auctionInfo.addr,
     chainId ? MisoAbiByTemplateId(chainId, auction.template) : undefined
   )
-  const [commitments, setCommitments] = useRecoilState(commitmentsAtomFamily(auction.auctionToken.address))
+  const [commitments, setCommitments] = useRecoilState(commitmentsAtomFamily(auction?.auctionInfo.addr))
 
   // Get history commitments
   useEffect(() => {
@@ -35,11 +35,11 @@ const useAuctionCommitments = (auction: Auction<Token, Token>) => {
         topics: [TOPIC_ADDED_COMMITMENT],
       })
 
-      return logs.map(({ data, transactionHash, blockNumber }) => {
+      return logs.map(({ data, transactionHash, blockNumber, ...rest }) => {
         const [address, amount] = defaultAbiCoder.decode(['address', 'uint256'], data)
         return {
           txHash: transactionHash,
-          timestamp: blockNumber,
+          blockNumber: blockNumber,
           address,
           amount: CurrencyAmount.fromRawAmount(auction.paymentToken, amount),
         }
