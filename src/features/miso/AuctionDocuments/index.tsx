@@ -5,6 +5,7 @@ import { Token } from '@sushiswap/core-sdk'
 import Chip from 'app/components/Chip'
 import { DiscordIcon, GithubIcon, MediumIcon, RestrictedIcon, TokenomicsIcon, TwitterIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
+import AuctionDocumentsSkeleton from 'app/features/miso/AuctionDocuments/AuctionDocumentsSkeleton'
 import AuctionIcon from 'app/features/miso/AuctionIcon'
 import { Auction } from 'app/features/miso/context/Auction'
 import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
@@ -12,12 +13,14 @@ import { AuctionTitleByTemplateId } from 'app/features/miso/context/utils'
 import React, { FC } from 'react'
 
 interface AuctionDocumentsProps {
-  auction: Auction<Token, Token>
+  auction?: Auction<Token, Token>
 }
 
 const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
   const { i18n } = useLingui()
   const [documents, setDocuments] = useAuctionDocuments(auction)
+
+  if (!auction) return <AuctionDocumentsSkeleton />
 
   return (
     <>

@@ -143,16 +143,29 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     }
   }
 
-  public minimumCommitment(): CurrencyAmount<Currency> | undefined {
+  public get minimumPrice(): Price<TBase, TQuote> | undefined {
+    if (this.auctionInfo.minimumPrice) {
+      return new Price(
+        this.auctionToken,
+        this.paymentToken,
+        JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(this.paymentToken.decimals))),
+        JSBI.BigInt(this.auctionInfo.minimumPrice)
+      )
+    }
+  }
+
+  public get minimumCommitment(): CurrencyAmount<Currency> | undefined {
     if (this.template === AuctionTemplate.CROWDSALE) {
       if (this.totalTokens && this.rate) {
-        return this.totalTokens.divide(this.rate)
+        const { denominator, numerator } = this.totalTokens.divide(this.rate)
+        return CurrencyAmount.fromFractionalAmount(this.paymentToken, numerator, denominator)
       }
     }
 
     if (this.template === AuctionTemplate.DUTCH_AUCTION) {
       if (this.totalTokens && this.reservePrice) {
-        return this.totalTokens.multiply(this.reservePrice)
+        const { denominator, numerator } = this.totalTokens.multiply(this.reservePrice)
+        return CurrencyAmount.fromFractionalAmount(this.paymentToken, numerator, denominator)
       }
     }
 
@@ -160,6 +173,20 @@ export class Auction<TBase extends Token, TQuote extends Token> {
       if (this.auctionInfo.minimumCommitmentAmount) {
         return CurrencyAmount.fromRawAmount(this.paymentToken, JSBI.BigInt(this.auctionInfo.minimumCommitmentAmount))
       }
+    }
+  }
+
+  public get minimumTargetRaised(): CurrencyAmount<Currency> | undefined {
+    if (this.minimumPrice && this.totalTokens) {
+      const { numerator, denominator } = this.minimumPrice.asFraction.multiply(this.totalTokens)
+      return CurrencyAmount.fromFractionalAmount(this.paymentToken, numerator, denominator)
+    }
+  }
+
+  public get maximumTargetRaised(): CurrencyAmount<Currency> | undefined {
+    if (this.startPrice && this.totalTokens) {
+      const { numerator, denominator } = this.startPrice.asFraction.multiply(this.totalTokens)
+      return CurrencyAmount.fromFractionalAmount(this.paymentToken, numerator, denominator)
     }
   }
 }

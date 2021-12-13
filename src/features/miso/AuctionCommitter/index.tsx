@@ -11,15 +11,19 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useState } from 'react'
 
+import AuctionCommitterSkeleton from './AuctionCommitterSkeleton'
+
 interface AuctionCommitterProps {
-  auction: Auction<Token, Token>
+  auction?: Auction<Token, Token>
 }
 
 const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const balance = useCurrencyBalance(account ?? undefined, auction.paymentToken)
+  const balance = useCurrencyBalance(account ?? undefined, auction?.paymentToken)
   const [value, setValue] = useState<string>()
+
+  if (!auction) return <AuctionCommitterSkeleton />
 
   return (
     <div className="mt-6 relative">
@@ -33,7 +37,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
           </Typography>
         </div>
         <div className="flex rounded bg-dark-900 px-4 py-2.5 gap-4 items-center">
-          <CurrencyLogo currency={auction?.paymentToken} size={42} className="rounded-full" />
+          <CurrencyLogo currency={auction.paymentToken} size={42} className="rounded-full" />
           <div className="flex items-baseline gap-2 flex-grow">
             <Typography variant="lg" weight={700} className="text-high-emphesis">
               {auction.paymentToken.symbol}

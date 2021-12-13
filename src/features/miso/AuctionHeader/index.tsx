@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
+import AuctionHeaderSkeleton from 'app/features/miso/AuctionHeader/AuctionHeaderSkeleton'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
 import { Auction } from 'app/features/miso/context/Auction'
 import { AuctionStatus } from 'app/features/miso/context/types'
@@ -11,10 +12,12 @@ import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
 interface AuctionHeaderProps {
-  auction: Auction<Token, Token>
+  auction?: Auction<Token, Token>
 }
 const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
   const { i18n } = useLingui()
+
+  if (!auction) return <AuctionHeaderSkeleton />
 
   return (
     <div className="grid grid-cols-3 items-end">

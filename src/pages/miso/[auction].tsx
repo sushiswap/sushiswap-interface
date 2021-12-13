@@ -13,8 +13,6 @@ const MisoAuction = () => {
   const { auction: address } = router.query
   const auction = useMisoAuction(address as string)
 
-  if (!auction) return <></>
-
   return (
     <div className="my-12 flex flex-col gap-10 px-6">
       <section className="flex flex-col gap-6 w-full">

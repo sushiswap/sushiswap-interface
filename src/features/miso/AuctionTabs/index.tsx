@@ -8,14 +8,18 @@ import { Auction } from 'app/features/miso/context/Auction'
 import { classNames } from 'app/functions'
 import React, { FC, useState } from 'react'
 
+import AuctionTabsSkeleton from './AuctionTabsSkeleton'
+
 interface AuctionTabsProps {
-  auction: Auction<Token, Token>
+  auction?: Auction<Token, Token>
 }
 
 const AuctionTabs: FC<AuctionTabsProps> = ({ auction }) => {
   const { i18n } = useLingui()
-  const tabs = [i18n._(t`Auction Details`), i18n._(t`About Project`), i18n._(t`Commitments`)]
+  const tabs = [i18n._(t`Auction Details`), i18n._(t`Commitments`), i18n._(t`About Project`)]
   const [tab, setTab] = useState(0)
+
+  if (!auction) return <AuctionTabsSkeleton />
 
   return (
     <div className="flex flex-col gap-4">
@@ -41,9 +45,9 @@ const AuctionTabs: FC<AuctionTabsProps> = ({ auction }) => {
           </div>
         ))}
       </div>
-      <AuctionAboutTab auction={auction} active={tab === 0} />
-      <AuctionDetailsTab auction={auction} active={tab === 1} />
-      <AuctionBidsTab auction={auction} active={tab === 2} />
+      <AuctionDetailsTab auction={auction} active={tab === 0} />
+      <AuctionBidsTab auction={auction} active={tab === 1} />
+      <AuctionAboutTab auction={auction} active={tab === 2} />
     </div>
   )
 }

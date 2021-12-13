@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import AuctionChart from 'app/features/miso/AuctionChart'
+import AuctionStatsSkeleton from 'app/features/miso/AuctionStats/AuctionStatsSkeleton'
 import { Auction } from 'app/features/miso/context/Auction'
 import { classNames } from 'app/functions'
 import { FC, useState } from 'react'
@@ -13,7 +14,7 @@ enum ChartType {
 }
 
 interface AuctionStatsProps {
-  auction: Auction<Token, Token>
+  auction?: Auction<Token, Token>
 }
 
 const AuctionStat: FC<{ label: string; value?: any }> = ({ label, value }) => {
@@ -32,6 +33,8 @@ const AuctionStat: FC<{ label: string; value?: any }> = ({ label, value }) => {
 const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Price)
+
+  if (!auction) return <AuctionStatsSkeleton />
 
   return (
     <div className="flex flex-col gap-6 w-full">

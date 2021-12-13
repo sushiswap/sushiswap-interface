@@ -76,7 +76,7 @@ export const useCommitmentTableConfig = (commitments?: AuctionCommitment[]) => {
         data: commitments || [],
         defaultColumn,
         initialState: {
-          pageSize: 15,
+          pageSize: 10,
           sortBy: [{ id: 'blockNumber', desc: true }],
         },
         autoResetFilters: false,

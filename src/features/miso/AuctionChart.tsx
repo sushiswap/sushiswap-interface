@@ -19,7 +19,7 @@ const AuctionChart: FC<AuctionChartProps> = ({ auction }) => {
         x: auction.auctionInfo.startTime.mul('1000').toNumber(),
         y: auction?.startPrice ? Number(auction.startPrice.toFixed()) : 0,
       },
-      ...commitments.map((el) => ({ x: el.timestamp, y: Number(el.amount.toFixed()) })),
+      ...commitments.map((el) => ({ x: el.blockNumber, y: Number(el.amount.toFixed()) })),
       {
         x: !auctionEnded && auctionStarted ? Date.now() : auction.auctionInfo.endTime.mul('1000').toNumber(),
         y: auction?.currentPrice ? Number(auction.currentPrice.toFixed()) : 0,
