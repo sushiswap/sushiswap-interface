@@ -30,8 +30,8 @@ export const CELO: { [key: string]: Token } = {
   cEURO: new Token(ChainId.CELO, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
   cBTC: new Token(ChainId.CELO, '0xD629eb00dEced2a080B7EC630eF6aC117e614f1b', 18, 'cBTC', 'Wrapped Bitcoin'),
   cETH: new Token(ChainId.CELO, '0x2DEf4285787d58a2f811AF24755A8150622f4361', 18, 'cETH', 'Wrapped Ether'),
-  WETH: new Token(ChainId.CELO, '0xE919F65739c26a42616b7b8eedC6b5524d1e3aC4', 18, 'WETH', 'WETH'),
-  WBTC: new Token(ChainId.CELO, '0xBe50a3013A1c94768A1ABb78c3cB79AB28fc1aCE', 8, 'WBTC', 'WBTC'),
+  WETH: new Token(ChainId.CELO, '0x122013fd7dF1C6F636a5bb8f03108E876548b455', 18, 'WETH', 'WETH'),
+  WBTC: new Token(ChainId.CELO, '0xBAAB46E28388d2779e6E31Fd00cF0e5Ad95E327B', 8, 'WBTC', 'WBTC'),
 }
 
 export const BSC: { [key: string]: Token } = {
