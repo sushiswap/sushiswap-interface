@@ -46,15 +46,16 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
   }, [currency, pools, stableCoin])
 }
 
-export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {
-  const price = useUSDCPrice(currencyAmount?.currency)
+export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined) {
+  const price = useUSDCPrice(currencyAmount?.wrapped.currency)
 
   return useMemo(() => {
-    if (!price || !currencyAmount) return null
+    if (!price || !currencyAmount) return undefined
+    
     try {
-      return price.quote(currencyAmount)
+      return price.quote(currencyAmount.wrapped)
     } catch (error) {
-      return null
+      return undefined
     }
   }, [currencyAmount, price])
 }
