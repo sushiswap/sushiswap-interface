@@ -44,7 +44,7 @@ export class AddLiquidityPage extends AppPage {
     const backToPoolsButton = await this.Page.waitForSelector(this.BackToPoolsButtonSelector)
     await backToPoolsButton.click()
 
-    await this.blockingWait(1)
+    await this.blockingWait(5)
   }
 
   private async getFixedRatioCheckbox(): Promise<ElementHandle<Element>> {
