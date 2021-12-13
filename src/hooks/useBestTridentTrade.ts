@@ -22,7 +22,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
 import { useConstantProductPoolsPermutations } from './useConstantProductPools'
 
-function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (PoolUnion | Pair)[] {
+export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (PoolUnion | Pair)[] {
   const currencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
   const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
   const allPairs = useV2Pairs(currencyCombinations)
