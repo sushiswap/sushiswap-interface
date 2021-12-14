@@ -189,26 +189,30 @@ export function useSingleContractMultipleData(
 
 export function useSingleContractMultipleMethods(
   contract: Contract | null | undefined,
-  callsData: {
-    methodName: string
-    callInputs: OptionalMethodInputs
-  }[],
+  callsData?: (
+    | {
+        methodName: string
+        callInputs: OptionalMethodInputs
+      }
+    | undefined
+  )[],
   options?: ListenerOptions,
   gasRequired?: number
 ): CallState[] {
   const fragments = useMemo(
-    () => callsData.map((el) => contract?.interface?.getFunction(el.methodName)),
+    () => callsData?.map((el) => (el ? contract?.interface?.getFunction(el.methodName) : undefined)),
     [callsData, contract?.interface]
   )
 
   const calls = useMemo(
     () =>
       contract &&
-      callsData?.length > 0 &&
-      fragments?.length > 0 &&
-      callsData.every((inputs) => isValidMethodArgs(inputs.callInputs)) &&
+      callsData &&
+      fragments &&
+      callsData.every((inputs) => isValidMethodArgs(inputs?.callInputs)) &&
       fragments.every((el) => !!el)
-        ? callsData.map<Call>((inputs, index) => {
+        ? callsData.map<Call | undefined>((inputs, index) => {
+            if (!inputs) return undefined
             return {
               address: contract.address,
               callData: contract.interface.encodeFunctionData(fragments[index] as FunctionFragment, inputs.callInputs),
@@ -224,7 +228,9 @@ export function useSingleContractMultipleMethods(
   const latestBlockNumber = useBlockNumber()
 
   return useMemo(() => {
-    return results.map((result, index) => toCallState(result, contract?.interface, fragments[index], latestBlockNumber))
+    return results.map((result, index) =>
+      toCallState(result, contract?.interface, fragments?.[index], latestBlockNumber)
+    )
   }, [results, contract?.interface, fragments, latestBlockNumber])
 }
 

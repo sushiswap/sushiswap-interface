@@ -6,7 +6,7 @@ import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import CommitReviewModal from 'app/features/miso/CommitReviewModal'
 import { Auction } from 'app/features/miso/context/Auction'
-import { useAuctionsPointList } from 'app/features/miso/context/hooks/useAuctionsPointList'
+import { useAuctionPointList } from 'app/features/miso/context/hooks/useAuctionPointList'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { ApprovalState, useApproveCallback } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -23,7 +23,7 @@ const MisoButton: FC<MisoButtonProps> = ({ auction, amount }) => {
   const { i18n } = useLingui()
   const [approvalState, approve] = useApproveCallback(amount, auction.auctionInfo.addr)
   const [review, setReview] = useState(false)
-  const whitelisted = useAuctionsPointList(auction.auctionInfo.usePointList ? auction : undefined)
+  const whitelisted = useAuctionPointList(auction.auctionInfo.usePointList ? auction : undefined)
 
   if (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) {
     return (

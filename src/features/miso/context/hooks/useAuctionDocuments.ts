@@ -56,3 +56,5 @@ export const useAuctionDocuments = (auction?: Auction) => {
 
   return [undefined, setDocuments]
 }
+
+export default useAuctionDocuments

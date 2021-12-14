@@ -1,27 +1,35 @@
 import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
-import { AuctionStatus, AuctionTemplate, RawAuctionInfo } from 'app/features/miso/context/types'
+import { AuctionStatus, AuctionTemplate, RawAuctionInfo, RawClaimInfo } from 'app/features/miso/context/types'
 
 export class Auction {
   public readonly template: AuctionTemplate
   public readonly auctionToken: Token
   public readonly paymentToken: Currency
   public readonly auctionInfo: RawAuctionInfo
+  public readonly claimInfo: RawClaimInfo
+  public readonly isOwner: boolean
 
   public constructor({
     template,
     auctionToken,
     paymentToken,
     auctionInfo,
+    isOwner,
+    claimInfo,
   }: {
     template: AuctionTemplate
     auctionToken: Token
     paymentToken: Currency
     auctionInfo: RawAuctionInfo
+    claimInfo: RawClaimInfo
+    isOwner: boolean
   }) {
     this.template = template
     this.auctionToken = auctionToken
     this.auctionInfo = auctionInfo
     this.paymentToken = paymentToken
+    this.isOwner = isOwner
+    this.claimInfo = claimInfo
   }
 
   public get status(): AuctionStatus {

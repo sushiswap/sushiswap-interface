@@ -15,7 +15,7 @@ const commitmentsAtomFamily = atomFamily<AuctionCommitment[], string>({
   default: [],
 })
 
-const useAuctionCommitments = (auction: Auction) => {
+export const useAuctionCommitments = (auction: Auction) => {
   const { library, chainId } = useActiveWeb3React()
   const contract = useContract(
     auction?.auctionInfo.addr,

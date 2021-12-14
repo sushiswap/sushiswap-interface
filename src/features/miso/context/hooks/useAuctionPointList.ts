@@ -4,7 +4,7 @@ import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useSingleCallResult } from 'app/state/multicall/hooks'
 
-export const useAuctionsPointList = (auction?: Auction): string[] => {
+export const useAuctionPointList = (auction?: Auction): string[] => {
   const { chainId } = useActiveWeb3React()
   const contract = useContract(
     auction ? auction.auctionInfo.addr : undefined,

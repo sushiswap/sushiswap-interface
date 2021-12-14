@@ -1,7 +1,8 @@
 import { t } from '@lingui/macro'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId, NATIVE, Token } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
-import { AuctionTemplate } from 'app/features/miso/context/types'
+import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
+import { AuctionPaymentCurrencyInfo, AuctionTemplate } from 'app/features/miso/context/types'
 
 export const AuctionStatusById = (i18n) => ({
   1: i18n._(t`LIVE`),
@@ -278,4 +279,16 @@ export function getCountryName(countryCode) {
   } else {
     return countryCode
   }
+}
+
+export const getNativeOrToken = (chainId: ChainId, paymentCurrencyInfo: AuctionPaymentCurrencyInfo) => {
+  return paymentCurrencyInfo.addr === NATIVE_PAYMENT_TOKEN
+    ? NATIVE[chainId]
+    : new Token(
+        chainId,
+        paymentCurrencyInfo.addr,
+        paymentCurrencyInfo.decimals.toNumber(),
+        paymentCurrencyInfo.symbol,
+        paymentCurrencyInfo.name
+      )
 }

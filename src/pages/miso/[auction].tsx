@@ -4,7 +4,7 @@ import AuctionDocuments from 'app/features/miso/AuctionDocuments'
 import AuctionHeader from 'app/features/miso/AuctionHeader'
 import AuctionStats from 'app/features/miso/AuctionStats'
 import AuctionTabs from 'app/features/miso/AuctionTabs'
-import { useMisoAuction } from 'app/features/miso/context/hooks/useMisoAuctions'
+import useAuction from 'app/features/miso/context/hooks/useAuction'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout from 'app/layouts/Miso'
 import { useRouter } from 'next/router'
@@ -13,7 +13,7 @@ import React from 'react'
 const MisoAuction = () => {
   const router = useRouter()
   const { auction: address } = router.query
-  const auction = useMisoAuction(address as string)
+  const auction = useAuction(address as string)
 
   return (
     <div className="my-12 flex flex-col gap-10 px-6">

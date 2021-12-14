@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import AuctionCard from 'app/features/miso/AuctionCard'
-import useMisoAuctions from 'app/features/miso/context/hooks/useMisoAuctions'
+import { useAuctions } from 'app/features/miso/context/hooks/useAuction'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
@@ -13,7 +13,7 @@ import React, { useState } from 'react'
 const Miso = () => {
   const { i18n } = useLingui()
   const [tab, setTab] = useState(AuctionStatus.LIVE)
-  const auctions = useMisoAuctions(tab, undefined)
+  const auctions = useAuctions(tab)
 
   return (
     <section className="flex my-12 flex-col gap-10 px-6">

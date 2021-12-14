@@ -68,6 +68,18 @@ export interface RawAuctionInfo {
   minimumCommitmentAmount?: BigNumber
 }
 
+export interface RawAuctionUserInfo {
+  claimed: BigNumber
+  commitments: BigNumber
+  tokensClaimable: BigNumber
+  isAdmin: boolean
+}
+
+export interface RawClaimInfo {
+  claimed: BigNumber
+  tokensClaimable: BigNumber
+}
+
 export interface Auction {
   addr: string
   endTime: BigNumber
