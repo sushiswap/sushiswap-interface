@@ -1,4 +1,3 @@
-import { Token } from '@sushiswap/core-sdk'
 import { Auction } from 'app/features/miso/context/Auction'
 import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
 import { useContract, useMisoHelperContract } from 'app/hooks'
@@ -12,7 +11,7 @@ interface Document {
   data: string
 }
 
-export const useAuctionDocuments = (auction?: Auction<Token, Token>) => {
+export const useAuctionDocuments = (auction?: Auction) => {
   const { chainId } = useActiveWeb3React()
   const helper = useMisoHelperContract()
   const contract = useContract(

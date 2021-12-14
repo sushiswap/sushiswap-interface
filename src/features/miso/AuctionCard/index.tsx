@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/core-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import AuctionCardPrice from 'app/features/miso/AuctionCard/AuctionCardPrice'
@@ -15,7 +14,7 @@ import { FC } from 'react'
 import { Auction } from '../context/Auction'
 import AuctionSkeleton from './AuctionSkeleton'
 
-const AuctionCard: FC<{ auction?: Auction<Token, Token> }> = ({ auction }) => {
+const AuctionCard: FC<{ auction?: Auction }> = ({ auction }) => {
   const { i18n } = useLingui()
 
   if (!auction) {

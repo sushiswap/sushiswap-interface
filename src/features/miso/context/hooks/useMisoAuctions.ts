@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Auction } from '../Auction'
 
-export const useMisoAuctions = (type: AuctionStatus, owner?: string): Auction<Token, Token>[] | undefined => {
+export const useMisoAuctions = (type: AuctionStatus, owner?: string): Auction[] | undefined => {
   const { chainId } = useActiveWeb3React()
   const contract = useMisoHelperContract()
   const blockNumber = useBlockNumber()

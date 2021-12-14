@@ -12,7 +12,7 @@ import Lottie from 'lottie-react'
 import React, { FC, useState } from 'react'
 
 interface MisoButtonProps {
-  auction: Auction<Token, Token>
+  auction: Auction
   amount?: CurrencyAmount<Token>
 }
 

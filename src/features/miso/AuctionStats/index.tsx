@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import AuctionChart from 'app/features/miso/AuctionChart'
 import AuctionStatsSkeleton from 'app/features/miso/AuctionStats/AuctionStatsSkeleton'
@@ -14,7 +13,7 @@ enum ChartType {
 }
 
 interface AuctionStatsProps {
-  auction?: Auction<Token, Token>
+  auction?: Auction
 }
 
 const AuctionStat: FC<{ label: string; value?: any }> = ({ label, value }) => {

@@ -1,11 +1,10 @@
-import { Token } from '@sushiswap/core-sdk'
 import LineGraph from 'app/components/LineGraph'
 import { Auction } from 'app/features/miso/context/Auction'
 import useAuctionCommitments from 'app/features/miso/context/hooks/useAuctionCommitments'
 import { FC, useMemo, useState } from 'react'
 
 interface AuctionChartProps {
-  auction: Auction<Token, Token>
+  auction: Auction
 }
 
 const AuctionChart: FC<AuctionChartProps> = ({ auction }) => {

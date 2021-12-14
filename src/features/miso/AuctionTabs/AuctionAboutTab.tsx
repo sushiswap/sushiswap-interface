@@ -1,9 +1,8 @@
-import { Token } from '@sushiswap/core-sdk'
 import { Auction } from 'app/features/miso/context/Auction'
 import { FC } from 'react'
 
 interface AuctionAboutTabProps {
-  auction: Auction<Token, Token>
+  auction: Auction
   active: boolean
 }
 

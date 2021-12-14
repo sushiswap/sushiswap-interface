@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/core-sdk'
 import CurrencyLogo from 'app/components/CurrencyLogo'
 import NumericalInput from 'app/components/Input/Numeric'
 import Typography from 'app/components/Typography'
@@ -14,7 +13,7 @@ import React, { FC, useState } from 'react'
 import AuctionCommitterSkeleton from './AuctionCommitterSkeleton'
 
 interface AuctionCommitterProps {
-  auction?: Auction<Token, Token>
+  auction?: Auction
 }
 
 const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {

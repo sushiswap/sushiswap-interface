@@ -1,7 +1,7 @@
 import { Switch } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import ExternalLink from 'app/components/ExternalLink'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
@@ -87,7 +87,7 @@ export const useCommitmentTableConfig = (commitments?: AuctionCommitment[]) => {
 }
 
 interface AuctionBidsTabProps {
-  auction: Auction<Token, Token>
+  auction: Auction
   active: boolean
 }
 

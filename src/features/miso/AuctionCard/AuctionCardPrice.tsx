@@ -4,7 +4,7 @@ import { FC, useState } from 'react'
 
 import { Auction } from '../context/Auction'
 
-const AuctionCardPrice: FC<{ auction: Auction<Token, Token> }> = ({ auction }) => {
+const AuctionCardPrice: FC<{ auction: Auction }> = ({ auction }) => {
   const [price, setPrice] = useState<Price<Token, Token> | undefined>()
 
   useInterval(() => {

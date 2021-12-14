@@ -1,7 +1,6 @@
 import { DocumentTextIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/core-sdk'
 import Chip from 'app/components/Chip'
 import { DiscordIcon, GithubIcon, MediumIcon, RestrictedIcon, TokenomicsIcon, TwitterIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
@@ -13,7 +12,7 @@ import { AuctionTitleByTemplateId } from 'app/features/miso/context/utils'
 import React, { FC } from 'react'
 
 interface AuctionDocumentsProps {
-  auction?: Auction<Token, Token>
+  auction?: Auction
 }
 
 const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {

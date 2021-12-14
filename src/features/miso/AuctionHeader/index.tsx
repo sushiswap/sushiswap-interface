@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/core-sdk'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
 import AuctionHeaderSkeleton from 'app/features/miso/AuctionHeader/AuctionHeaderSkeleton'
@@ -12,7 +11,7 @@ import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
 interface AuctionHeaderProps {
-  auction?: Auction<Token, Token>
+  auction?: Auction
 }
 const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
   const { i18n } = useLingui()

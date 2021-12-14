@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/core-sdk'
 import AuctionAboutTab from 'app/features/miso/AuctionTabs/AuctionAboutTab'
 import AuctionBidsTab from 'app/features/miso/AuctionTabs/AuctionBidsTab'
 import AuctionDetailsTab from 'app/features/miso/AuctionTabs/AuctionDetailsTab'
@@ -11,7 +10,7 @@ import React, { FC, useState } from 'react'
 import AuctionTabsSkeleton from './AuctionTabsSkeleton'
 
 interface AuctionTabsProps {
-  auction?: Auction<Token, Token>
+  auction?: Auction
 }
 
 const AuctionTabs: FC<AuctionTabsProps> = ({ auction }) => {

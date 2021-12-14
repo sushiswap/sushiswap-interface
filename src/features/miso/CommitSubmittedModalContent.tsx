@@ -19,8 +19,8 @@ const CommitSubmittedModalContent: FC<{ txHash: string }> = ({ txHash }) => {
   const { pending, success, cancelled, failed } = useRecoilValue(transactionStateSelector(txHash))
 
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-3 px-8 lg:p-12 bg-dark-800/90">
-      <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
+    <div className="flex flex-col items-center justify-center h-full gap-3 px-8 lg:p-8 bg-gradient-to-r from-pink/20 to-red/20">
+      <div className="w-[102px] h-[102px] rounded-full">
         <Lottie animationData={suppySubmitted} autoplay loop={false} />
       </div>
       <Typography variant="h3" weight={700} className="text-high-emphesis">
@@ -59,7 +59,12 @@ const CommitSubmittedModalContent: FC<{ txHash: string }> = ({ txHash }) => {
           </Typography>
         </div>
       </div>
-      <Button id={`btn-backToAuctions`} variant="filled" color="blue">
+      <Button
+        id={`btn-backToAuctions`}
+        variant="filled"
+        color="blue"
+        className="bg-gradient-to-r from-red via-pink to-red"
+      >
         <Link href="/miso">{i18n._(t`Back to Auctions`)}</Link>
       </Button>
     </div>

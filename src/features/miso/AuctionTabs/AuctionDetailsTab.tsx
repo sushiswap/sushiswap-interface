@@ -1,7 +1,6 @@
 import { DocumentDuplicateIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
 import { classNames, shortenAddress } from 'app/functions'
@@ -25,7 +24,7 @@ const AuctionDetailsTabStat: FC<AuctionDetailsTabStatProps> = ({ label, value })
 }
 
 interface AuctionDetailsTabProps {
-  auction: Auction<Token, Token>
+  auction: Auction
   active: boolean
 }
 

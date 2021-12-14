@@ -1,5 +1,5 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { CurrencyAmount } from '@sushiswap/core-sdk'
 import { Auction } from 'app/features/miso/context/Auction'
 import { TOPIC_ADDED_COMMITMENT } from 'app/features/miso/context/constants'
 import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
@@ -15,7 +15,7 @@ const commitmentsAtomFamily = atomFamily<AuctionCommitment[], string>({
   default: [],
 })
 
-const useAuctionCommitments = (auction: Auction<Token, Token>) => {
+const useAuctionCommitments = (auction: Auction) => {
   const { library, chainId } = useActiveWeb3React()
   const contract = useContract(
     auction?.auctionInfo.addr,

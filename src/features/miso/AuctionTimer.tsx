@@ -1,4 +1,3 @@
-import { Token } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
 import useInterval from 'app/hooks/useInterval'
@@ -12,7 +11,7 @@ interface AuctionTimerState {
 }
 
 interface AuctionTimerProps {
-  auction?: Auction<Token, Token>
+  auction?: Auction
   children?: ((state: AuctionTimerState) => ReactNode) | ReactNode
 }
 

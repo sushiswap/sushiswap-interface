@@ -1,10 +1,10 @@
-import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, ZERO } from '@sushiswap/core-sdk'
 import { AuctionStatus, AuctionTemplate, RawAuctionInfo } from 'app/features/miso/context/types'
 
-export class Auction<TBase extends Token, TQuote extends Token> {
+export class Auction {
   public readonly template: AuctionTemplate
-  public readonly auctionToken: TBase
-  public readonly paymentToken: TQuote
+  public readonly auctionToken: Currency
+  public readonly paymentToken: Currency
   public readonly auctionInfo: RawAuctionInfo
 
   public constructor({
@@ -14,8 +14,8 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     auctionInfo,
   }: {
     template: AuctionTemplate
-    auctionToken: TBase
-    paymentToken: TQuote
+    auctionToken: Currency
+    paymentToken: Currency
     auctionInfo: RawAuctionInfo
   }) {
     this.template = template
@@ -72,7 +72,7 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     }
   }
 
-  public get currentPrice(): Price<TBase, TQuote> | undefined {
+  public get currentPrice(): Price<Currency, Currency> | undefined {
     if (this.template === AuctionTemplate.CROWDSALE) {
       if (this.auctionInfo.rate) {
         return new Price(
@@ -110,7 +110,7 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     }
   }
 
-  public get reservePrice(): Price<TBase, TQuote> | undefined {
+  public get reservePrice(): Price<Currency, Currency> | undefined {
     if (this.auctionInfo.minimumPrice) {
       return new Price(
         this.auctionToken,
@@ -121,7 +121,7 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     }
   }
 
-  public get tokenPrice(): Price<TBase, TQuote> | undefined {
+  public get tokenPrice(): Price<Currency, Currency> | undefined {
     if (this.commitmentsTotal && this.totalTokens) {
       return new Price(
         this.auctionToken,
@@ -138,7 +138,7 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     }
   }
 
-  public get startPrice(): Price<TBase, TQuote> | undefined {
+  public get startPrice(): Price<Currency, Currency> | undefined {
     if (this.auctionInfo.startPrice) {
       return new Price(
         this.auctionToken,
@@ -149,7 +149,7 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     }
   }
 
-  public get minimumPrice(): Price<TBase, TQuote> | undefined {
+  public get minimumPrice(): Price<Currency, Currency> | undefined {
     if (this.auctionInfo.minimumPrice) {
       return new Price(
         this.auctionToken,
@@ -212,5 +212,15 @@ export class Auction<TBase extends Token, TQuote extends Token> {
     if (this.template === AuctionTemplate.CROWDSALE && this.totalTokens && this.totalTokensCommitted) {
       return new Percent(this.totalTokens.subtract(this.totalTokensCommitted).quotient, this.totalTokens.quotient)
     }
+  }
+
+  public tokenAmount(amount: CurrencyAmount<Currency>): CurrencyAmount<Currency> | undefined {
+    if (!this.currentPrice) return
+
+    if (this.template === AuctionTemplate.BATCH_AUCTION) {
+      if (this.currentPrice.equalTo(ZERO)) return this.totalTokens
+    }
+
+    return this.currentPrice.invert().quote(amount)
   }
 }
