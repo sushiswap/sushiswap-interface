@@ -86,7 +86,7 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
                       <td
                         key={i}
                         {...cell.getCellProps()}
-                        className={`py-3 border-t border-gray-800 ${i !== 0 && 'text-right'}`}
+                        className={`py-3 border-t border-dark-800 ${i !== 0 && 'text-right'}`}
                       >
                         {cell.render('Cell')}
                       </td>

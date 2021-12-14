@@ -71,7 +71,7 @@ const Pool = () => {
             </div>
           </div>
           <div className="lg:w-4/12">
-            <div className="sticky flex flex-col gap-5 top-5 lg:-mt-52 lg:pt-3">
+            <div className="sticky flex flex-col gap-5 top-[64px] lg:-mt-52 lg:pt-3">
               <div className="order-0">
                 <ClassicMyPosition />
               </div>
