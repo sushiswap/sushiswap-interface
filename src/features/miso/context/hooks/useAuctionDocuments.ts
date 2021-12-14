@@ -44,5 +44,15 @@ export const useAuctionDocuments = (auction?: Auction) => {
     [addTransaction, contract]
   )
 
-  return [result, setDocuments]
+  if (Array.isArray(result) && result.length > 0) {
+    return [
+      result[0].reduce((acc, cur) => {
+        acc[cur.name] = cur.data
+        return acc
+      }, {}),
+      setDocuments,
+    ]
+  }
+
+  return [undefined, setDocuments]
 }

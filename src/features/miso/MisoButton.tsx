@@ -6,8 +6,10 @@ import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import CommitReviewModal from 'app/features/miso/CommitReviewModal'
 import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionsPointList } from 'app/features/miso/context/hooks/useAuctionsPointList'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { ApprovalState, useApproveCallback } from 'app/hooks'
+import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { FC, useState } from 'react'
 
@@ -17,9 +19,11 @@ interface MisoButtonProps {
 }
 
 const MisoButton: FC<MisoButtonProps> = ({ auction, amount }) => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [approvalState, approve] = useApproveCallback(amount, auction.auctionInfo.addr)
   const [review, setReview] = useState(false)
+  const whitelisted = useAuctionsPointList(auction.auctionInfo.usePointList ? auction : undefined)
 
   if (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) {
     return (
@@ -41,11 +45,14 @@ const MisoButton: FC<MisoButtonProps> = ({ auction, amount }) => {
     )
   }
 
-  const error = !amount?.greaterThan(ZERO)
-    ? i18n._(t`Input amount`)
-    : auction.status === AuctionStatus.FINISHED
-    ? i18n._(t`Sale Finished`)
-    : ''
+  const error =
+    auction.auctionInfo.usePointList && account && !whitelisted.includes(account)
+      ? i18n._(t`Not whitelisted`)
+      : !amount?.greaterThan(ZERO)
+      ? i18n._(t`Input amount`)
+      : auction.status === AuctionStatus.FINISHED
+      ? i18n._(t`Sale Finished`)
+      : ''
 
   return (
     <>

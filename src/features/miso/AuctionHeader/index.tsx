@@ -5,6 +5,7 @@ import Typography from 'app/components/Typography'
 import AuctionHeaderSkeleton from 'app/features/miso/AuctionHeader/AuctionHeaderSkeleton'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
 import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { AuctionStatusById } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
@@ -15,34 +16,37 @@ interface AuctionHeaderProps {
 }
 const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
   const { i18n } = useLingui()
+  const [documents] = useAuctionDocuments(auction)
 
   if (!auction) return <AuctionHeaderSkeleton />
 
   return (
     <div className="grid md:grid-cols-3 grid-cols-2 items-end gap-8 md:gap-0">
-      <div className="flex flex-col gap-1 order-1 md:order-1">
-        <div className="flex items-center gap-2">
-          <Typography weight={700} className="text-secondary">
-            {auction.auctionToken.symbol}
+      <div className="flex gap-3 order-1 md:order-1">
+        {documents && documents.icon && <img alt="logo" src={documents.icon} width={60} height="auto" />}
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <Typography weight={700} className="text-secondary">
+              {auction.auctionToken.symbol}
+            </Typography>
+            {auction && (
+              <Chip
+                size="sm"
+                color={
+                  auction.status === AuctionStatus.LIVE
+                    ? 'green'
+                    : auction.status === AuctionStatus.UPCOMING
+                    ? 'blue'
+                    : 'pink'
+                }
+                label={AuctionStatusById(i18n)[auction.status]}
+              />
+            )}
+          </div>
+          <Typography variant="h2" weight={700} className="text-high-emphesis">
+            {auction.auctionToken.name}
           </Typography>
-          {auction && (
-            <Chip
-              size="sm"
-              color={
-                auction.status === AuctionStatus.LIVE
-                  ? 'green'
-                  : auction.status === AuctionStatus.UPCOMING
-                  ? 'blue'
-                  : 'pink'
-              }
-              label={AuctionStatusById(i18n)[auction.status]}
-            />
-          )}
         </div>
-
-        <Typography variant="h2" weight={700} className="text-high-emphesis">
-          {auction.auctionToken.name}
-        </Typography>
       </div>
       <div className="flex col-span-2 md:col-span-1 order-3 md:order-3 justify-center">
         <AuctionTimer auction={auction}>
