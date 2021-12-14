@@ -19,12 +19,19 @@ export const MINICHEF = {
   [ChainId.XDAI]: 'matthewlilley/xdai-minichef',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
   [ChainId.ARBITRUM]: 'matthewlilley/arbitrum-minichef',
-  [ChainId.CELO]: 'sushiswap/celo-minichef',
+  [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
+}
+
+export const OLD_MINICHEF = {
+  [ChainId.CELO]: 'sushiswap/celo-minichef',
 }
 
 export const miniChef = async (query, chainId = ChainId.MAINNET) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query)
+
+export const oldMiniChef = async (query, chainId = ChainId.MAINNET) =>
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
 export const MASTERCHEF_V2 = {
   [ChainId.MAINNET]: 'sushiswap/master-chefv2',
@@ -81,6 +88,11 @@ export const getMasterChefV2Farms = async () => {
 
 export const getMasterChefV2PairAddreses = async () => {
   const { pools } = await masterChefV2(masterChefV2PairAddressesQuery)
+  return pools
+}
+
+export const getOldMiniChefFarms = async (chainId = ChainId.MAINNET) => {
+  const { pools } = await oldMiniChef(miniChefPoolsQuery, chainId)
   return pools
 }
 
