@@ -111,10 +111,10 @@ export abstract class AppPage {
   public async confirmMetamaskTransaction(): Promise<void> {
     await this.blockingWait(4)
 
-    await this.Metamask.confirmTransaction()
-
-    // Try to confirm transaction again
     try {
+      await this.Metamask.confirmTransaction()
+
+      // Try to confirm transaction again
       await this.Metamask.confirmTransaction()
       await this.Metamask.page.waitForTimeout(500)
 
