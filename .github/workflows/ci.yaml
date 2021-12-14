@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup NodeJs
+        uses: actions/setup-node@v2
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+        with:
+          node-version: 14
+      
+      - name: Install Yarn
+        run: npm install yarn --global 
+      
+      - name: Install packages
+        run: yarn
+
+      - name: Run Unit tests
+        run: yarn test:ci
+
+      - name: Run E2E tests
+        uses: mujo-code/puppeteer-headful@v2
+        env:
+          CI: 'true'
+          TEST_PASS: ${{ secrets.TEST_PASS }}
+          TEST_SEED: ${{ secrets.TEST_SEED }}
+        with:
+          args: yarn e2e

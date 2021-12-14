@@ -26,15 +26,22 @@ describe('Trident Swap:', () => {
       headless: false,
       defaultViewport: null,
       slowMo: 5,
+      args: ['--no-sandbox'],
+      executablePath: process.env.PUPPETEER_EXEC_PATH,
     })
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
       await metamask.switchNetwork('kovan')
+      await metamask.page.setDefaultTimeout(180000)
     } catch (error) {
       console.log('Unknown error occurred setting up metamask')
       throw error
     }
     page = await browser.newPage()
+    await page.setDefaultTimeout(180000)
+    await page.setUserAgent(
+      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
+    )
     await initPages()
   })
 
@@ -44,7 +51,7 @@ describe('Trident Swap:', () => {
 
   test('Should swap from ETH wallet to USDC wallet', async () => {
     const ethWalletBalance = await metamask.getTokenBalance('ETH')
-    const swapEthAmount = ethWalletBalance * 0.1
+    const swapEthAmount = ethWalletBalance * 0.01
 
     await page.goto(baseUrl)
     await page.bringToFront()
@@ -52,6 +59,6 @@ describe('Trident Swap:', () => {
     await swapPage.connectMetamaskWallet()
     await swapPage.navigateTo()
 
-    await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toString(), true, true)
+    await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toFixed(5), true, true)
   })
 })

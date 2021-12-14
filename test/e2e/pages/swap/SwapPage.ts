@@ -56,12 +56,13 @@ export class SwapPage extends AppPage {
       await receiveToWalletSwitch.click()
     }
 
+    await this.blockingWait(1)
     const swapButon = await this.Page.waitForSelector(this.SwapButtonSelector)
     await swapButon.click()
 
+    await this.blockingWait(1)
     const confirmSwapButton = await this.Page.waitForSelector(this.ConfirmSwapButtonSelector)
     await confirmSwapButton.click()
-    await this.Metamask.page.waitForTimeout(500)
 
     await this.confirmMetamaskTransaction()
 
