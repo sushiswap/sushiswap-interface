@@ -1,8 +1,7 @@
-import { ChainId, Percent } from '@sushiswap/core-sdk'
+import { Percent } from '@sushiswap/core-sdk'
 import React, { useRef, useState } from 'react'
-import { useExpertModeManager, useUserSingleHopOnly, useUserTransactionTTL } from '../../state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly, useUserOpenMev } from '../../state/user/hooks'
 import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
-
 import { AdjustmentsIcon } from '@heroicons/react/outline'
 import { ApplicationModal } from '../../state/application/actions'
 import Button from '../Button'
@@ -13,12 +12,15 @@ import Toggle from '../Toggle'
 import TransactionSettings from '../TransactionSettings'
 import Typography from '../Typography'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../services/web3'
 import { useLingui } from '@lingui/react'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
+import { useActiveWeb3React } from 'src/services/web3'
 
 export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
   const { i18n } = useLingui()
+
+  const { chainId } = useActiveWeb3React()
 
   const node = useRef<HTMLDivElement>(null)
   const open = useModalOpen(ApplicationModal.SETTINGS)
@@ -30,6 +32,8 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
 
   // show confirmation view before turning on
   const [showConfirmation, setShowConfirmation] = useState(false)
+
+  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMev()
 
   useOnClickOutside(node, open ? toggle : undefined)
 
@@ -93,10 +97,24 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
                 toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
               />
             </div>
+            {OPENMEV_ENABLED && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`OpenMEV Gas Refunder`)}
+                  </Typography>
+                  <QuestionHelper text={i18n._(t`OpenMEV refunds up to 95% of transaction costs in 35 blocks.`)} />
+                </div>
+                <Toggle
+                  id="toggle-use-openmev"
+                  isActive={userUseOpenMev}
+                  toggle={() => (userUseOpenMev ? setUserUseOpenMev(false) : setUserUseOpenMev(true))}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
-
       <Modal isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)}>
         <div className="space-y-4">
           <ModalHeader title={i18n._(t`Are you sure?`)} onClose={() => setShowConfirmation(false)} />

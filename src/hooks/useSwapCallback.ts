@@ -13,8 +13,11 @@ import { useArgentWalletContract } from './useArgentWalletContract'
 import { useBlockNumber } from '../state/application/hooks'
 import useENS from './useENS'
 import { useMemo } from 'react'
-import { useTransactionAdder } from '../state/transactions/hooks'
+import { TransactionResponseLight, useTransactionAdder } from '../state/transactions/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
+import { arrayify, DataOptions, hexlify, splitSignature } from '@ethersproject/bytes'
+import { TransactionFactory, TypedTransaction } from '@ethereumjs/tx'
+import { OPENMEV_SUPPORTED_NETWORKS, OPENMEV_URI } from 'src/config/openmev'
 
 export enum SwapCallbackState {
   INVALID,
@@ -169,7 +172,8 @@ export function useSwapCallback(
   trade: V2Trade<Currency, Currency, TradeType> | undefined, // trade to execute, required
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
-  signatureData: SignatureData | undefined | null
+  signatureData: SignatureData | undefined | null,
+  useOpenMev: boolean = false
 ): {
   state: SwapCallbackState
   callback: null | (() => Promise<string>)
@@ -183,8 +187,6 @@ export function useSwapCallback(
     EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
 
   const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData)
-
-  // console.log({ swapCalls, trade })
 
   const addTransaction = useTransactionAdder()
 
@@ -289,11 +291,9 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
-        // console.log({ bestCallOption })
-
-        return library
-          .getSigner()
-          .sendTransaction({
+        let txResponse: Promise<TransactionResponseLight>
+        if (!useOpenMev) {
+          txResponse = library.getSigner().sendTransaction({
             from: account,
             to: address,
             data: calldata,
@@ -302,14 +302,89 @@ export function useSwapCallback(
             gasPrice: !eip1559 && chainId === ChainId.HARMONY ? BigNumber.from('2000000000') : undefined,
             ...(value && !isZero(value) ? { value } : {}),
           })
-          .then((response) => {
+        } else {
+          const supportedNetwork = OPENMEV_SUPPORTED_NETWORKS.includes(chainId)
+          if (!supportedNetwork) throw new Error(`Unsupported OpenMEV network id ${chainId} when building transaction`)
+
+          txResponse = library
+            .getSigner()
+            .populateTransaction({
+              type: 2, // EIP1559
+              from: account,
+              to: address,
+              data: calldata,
+              // let the wallet try if we can't estimate the gas
+              ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
+              ...(value && !isZero(value) ? { value } : {}),
+            })
+            .then((fullTx) => {
+              const { type, chainId, nonce, gasLimit, maxFeePerGas, maxPriorityFeePerGas, to, value, data } = fullTx
+
+              const hOpts: DataOptions = { hexPad: 'left' }
+
+              const txToSign = TransactionFactory.fromTxData({
+                type: type ? hexlify(type) : undefined,
+                chainId: chainId ? hexlify(chainId) : undefined,
+                nonce: nonce ? hexlify(nonce, hOpts) : undefined,
+                gasLimit: gasLimit ? hexlify(gasLimit, hOpts) : undefined,
+                maxFeePerGas: maxFeePerGas ? hexlify(maxFeePerGas, hOpts) : undefined,
+                maxPriorityFeePerGas: maxPriorityFeePerGas ? hexlify(maxPriorityFeePerGas, hOpts) : undefined,
+                to,
+                value: value ? hexlify(value, hOpts) : undefined,
+                data: data?.toString(),
+              })
+
+              return library.provider
+                .request({ method: 'eth_sign', params: [account, hexlify(txToSign.getMessageToSign())] })
+                .then((signature) => {
+                  const { v, r, s } = splitSignature(signature)
+                  // eslint-disable-next-line
+                  // @ts-ignore
+                  const txWithSignature: TypedTransaction = txToSign._processSignature(v, arrayify(r), arrayify(s))
+                  return { signedTx: hexlify(txWithSignature.serialize()), fullTx }
+                })
+            })
+            .then(({ signedTx }) => {
+              const body = JSON.stringify({
+                jsonrpc: '2.0',
+                id: new Date().getTime(),
+                method: 'eth_sendRawTransaction',
+                params: [signedTx],
+              })
+
+              return fetch(OPENMEV_URI[chainId], {
+                method: 'POST',
+                body,
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }).then((res: Response) => {
+                // Handle success
+                if (res.status === 200) {
+                  return res.json().then((json) => {
+                    // But first check if there are some errors first and throw accordingly
+                    if (json.error) throw json.error
+
+                    // Otherwise return a TransactionResponseLight object
+                    return { hash: json.result } as TransactionResponseLight
+                  })
+                }
+
+                // Generic error
+                if (res.status !== 200) throw Error(res.statusText)
+              })
+            })
+        }
+
+        return txResponse
+          .then((response: TransactionResponseLight) => {
             const inputSymbol = trade.inputAmount.currency.symbol
             const outputSymbol = trade.outputAmount.currency.symbol
             const inputAmount = trade.inputAmount.toSignificant(4)
             const outputAmount = trade.outputAmount.toSignificant(4)
 
             const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
-            const withRecipient =
+            const summary =
               recipient === account
                 ? base
                 : `${base} to ${
@@ -318,9 +393,7 @@ export function useSwapCallback(
                       : recipientAddressOrName
                   }`
 
-            addTransaction(response, {
-              summary: withRecipient,
-            })
+            addTransaction(response, { summary })
 
             return response.hash
           })

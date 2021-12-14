@@ -17,6 +17,7 @@ import {
   useUserSingleHopOnly,
   useUserSlippageTolerance,
   useUserTransactionTTL,
+  useUserOpenMev,
 } from '../../../state/user/hooks'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from '../../../state/application/hooks'
 import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
@@ -103,6 +104,9 @@ export default function Swap() {
 
   // get custom setting values for user
   const [ttl] = useUserTransactionTTL()
+
+  // OpenMEV
+  const [useOpenMev] = useUserOpenMev()
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -243,7 +247,8 @@ export default function Swap() {
     trade,
     allowedSlippage,
     recipient,
-    signatureData
+    signatureData,
+    useOpenMev
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
