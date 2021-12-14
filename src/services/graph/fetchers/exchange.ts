@@ -163,6 +163,12 @@ export const getOhmPrice = async (chainId) => {
   }
 }
 
+export const getMagicPrice = async () => {
+  return getTokenPrice(ChainId.ARBITRUM, tokenPriceQuery, {
+    id: '0x539bde0d7dbd336b79148aa742883198bbf60342',
+  })
+}
+
 export const getMovrPrice = async () => {
   return getTokenPrice(ChainId.MOONRIVER, tokenPriceQuery, {
     id: '0xf50225a84382c74cbdea10b0c176f71fc3de0c4d',

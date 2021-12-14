@@ -14,6 +14,7 @@ import {
   useSpellPrice,
   useStakePrice,
   useOhmPrice,
+  useMagicPrice,
   useSushiPairs,
   useSushiPrice,
 } from '../services/graph'
@@ -49,7 +50,18 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice, movrPrice, ohmPrice] = [
+  const [
+    sushiPrice,
+    ethPrice,
+    maticPrice,
+    stakePrice,
+    onePrice,
+    spellPrice,
+    celoPrice,
+    movrPrice,
+    ohmPrice,
+    magicPrice,
+  ] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -59,6 +71,7 @@ export default function useFarmRewards() {
     useCeloPrice(),
     useMovrPrice(),
     useOhmPrice(),
+    useMagicPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -220,6 +233,15 @@ export default function useFarmRewards() {
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: ohmPrice,
+          }
+        }
+        if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
+          rewards[1] = {
+            token: 'MAGIC',
+            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/arbitrum/assets/0x539bdE0d7Dbd336b79148AA742883198BBF60342/logo.png',
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: magicPrice,
           }
         }
         if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {

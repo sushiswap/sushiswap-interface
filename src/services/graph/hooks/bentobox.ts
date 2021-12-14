@@ -172,5 +172,5 @@ export function useBentoStrategies(
     swrConfig
   )
 
-  return data as { token: string; apy: number; targetPercentage: number }[]
+  return data as { token: string; apy: number; targetPercentage: number; utilization: number }[]
 }
