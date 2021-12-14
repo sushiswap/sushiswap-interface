@@ -31,7 +31,7 @@ async function importTokens() {
   await liquidityPoolsPage.addTokenToMetamask(TOKEN_ADDRESSES.USDC)
 }
 
-describe.skip('Add Liquidity:', () => {
+describe('Add Liquidity:', () => {
   beforeAll(async () => {
     browser = await launch(puppeteer, {
       metamaskVersion: 'v10.1.1',

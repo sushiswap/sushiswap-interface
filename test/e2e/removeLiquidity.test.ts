@@ -25,7 +25,7 @@ async function initPages() {
   removeLiquidityPage = new RemoveLiquidityPage(page, metamask)
 }
 
-describe.skip('Remove Liquidity:', () => {
+describe('Remove Liquidity:', () => {
   beforeAll(async () => {
     browser = await launch(puppeteer, {
       metamaskVersion: 'v10.1.1',
