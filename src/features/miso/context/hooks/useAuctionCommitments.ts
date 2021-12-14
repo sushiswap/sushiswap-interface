@@ -49,7 +49,7 @@ const useAuctionCommitments = (auction: Auction) => {
     init().then((commitments) => setCommitments(commitments))
   }, [
     auction.auctionInfo.addr,
-    auction.auctionToken.address,
+    auction.auctionToken,
     auction.paymentToken,
     commitments.length,
     contract,
@@ -87,7 +87,7 @@ const useAuctionCommitments = (auction: Auction) => {
         console.log('unsubscribed')
       })
     }
-  }, [auction.auctionToken.address, auction.paymentToken, contract, setCommitments])
+  }, [auction.auctionToken, auction.paymentToken, contract, setCommitments])
 
   return commitments
 }

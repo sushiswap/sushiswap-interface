@@ -1,9 +1,9 @@
-import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent, Price, Token, ZERO } from '@sushiswap/core-sdk'
 import { AuctionStatus, AuctionTemplate, RawAuctionInfo } from 'app/features/miso/context/types'
 
 export class Auction {
   public readonly template: AuctionTemplate
-  public readonly auctionToken: Currency
+  public readonly auctionToken: Token
   public readonly paymentToken: Currency
   public readonly auctionInfo: RawAuctionInfo
 
@@ -14,7 +14,7 @@ export class Auction {
     auctionInfo,
   }: {
     template: AuctionTemplate
-    auctionToken: Currency
+    auctionToken: Token
     paymentToken: Currency
     auctionInfo: RawAuctionInfo
   }) {
@@ -54,13 +54,13 @@ export class Auction {
     }
   }
 
-  public get totalTokens(): CurrencyAmount<Currency> | undefined {
+  public get totalTokens(): CurrencyAmount<Token> | undefined {
     if (this.auctionInfo.totalTokens) {
       return CurrencyAmount.fromRawAmount(this.auctionToken, JSBI.BigInt(this.auctionInfo.totalTokens))
     }
   }
 
-  public get totalTokensCommitted(): CurrencyAmount<Currency> | undefined {
+  public get totalTokensCommitted(): CurrencyAmount<Token> | undefined {
     if (this.auctionInfo.totalTokensCommitted) {
       return CurrencyAmount.fromRawAmount(this.auctionToken, JSBI.BigInt(this.auctionInfo.totalTokensCommitted))
     }
@@ -72,7 +72,7 @@ export class Auction {
     }
   }
 
-  public get currentPrice(): Price<Currency, Currency> | undefined {
+  public get currentPrice(): Price<Token, Currency> | undefined {
     if (this.template === AuctionTemplate.CROWDSALE) {
       if (this.auctionInfo.rate) {
         return new Price(
@@ -110,18 +110,18 @@ export class Auction {
     }
   }
 
-  public get reservePrice(): Price<Currency, Currency> | undefined {
+  public get reservePrice(): Price<Token, Currency> | undefined {
     if (this.auctionInfo.minimumPrice) {
       return new Price(
         this.auctionToken,
         this.paymentToken,
-        JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(this.paymentToken.decimals))),
+        JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(this.auctionToken.decimals))),
         JSBI.BigInt(this.auctionInfo.minimumPrice)
       )
     }
   }
 
-  public get tokenPrice(): Price<Currency, Currency> | undefined {
+  public get tokenPrice(): Price<Token, Currency> | undefined {
     if (this.commitmentsTotal && this.totalTokens) {
       return new Price(
         this.auctionToken,
@@ -138,23 +138,23 @@ export class Auction {
     }
   }
 
-  public get startPrice(): Price<Currency, Currency> | undefined {
+  public get startPrice(): Price<Token, Currency> | undefined {
     if (this.auctionInfo.startPrice) {
       return new Price(
         this.auctionToken,
         this.paymentToken,
-        JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(this.paymentToken.decimals))),
+        JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(this.auctionToken.decimals))),
         JSBI.BigInt(this.auctionInfo.startPrice)
       )
     }
   }
 
-  public get minimumPrice(): Price<Currency, Currency> | undefined {
+  public get minimumPrice(): Price<Token, Currency> | undefined {
     if (this.auctionInfo.minimumPrice) {
       return new Price(
         this.auctionToken,
         this.paymentToken,
-        JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(this.paymentToken.decimals))),
+        JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(this.auctionToken.decimals))),
         JSBI.BigInt(this.auctionInfo.minimumPrice)
       )
     }

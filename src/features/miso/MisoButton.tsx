@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Token, ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount, NativeCurrency, Token, ZERO } from '@sushiswap/core-sdk'
 import LoadingCircle from 'app/animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
@@ -13,7 +13,7 @@ import React, { FC, useState } from 'react'
 
 interface MisoButtonProps {
   auction: Auction
-  amount?: CurrencyAmount<Token>
+  amount?: CurrencyAmount<Token | NativeCurrency>
 }
 
 const MisoButton: FC<MisoButtonProps> = ({ auction, amount }) => {

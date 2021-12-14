@@ -1,6 +1,5 @@
-import { AddressZero } from '@ethersproject/constants'
 import { NATIVE, Token } from '@sushiswap/core-sdk'
-import { BAD_AUCTIONS } from 'app/features/miso/context/constants'
+import { BAD_AUCTIONS, NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
 import useAuctionsInfo from 'app/features/miso/context/hooks/useAuctionsInfo'
 import useAuctionsMarketTemplateId from 'app/features/miso/context/hooks/useAuctionsMarketTemplateId'
 import { AuctionStatus, AuctionTemplate, RawAuction, RawAuctionInfo } from 'app/features/miso/context/types'
@@ -97,7 +96,7 @@ export const useMisoAuctions = (type: AuctionStatus, owner?: string): Auction[] 
         const template: AuctionTemplate = auctionTemplateIds[index].result[0].toNumber()
         const auctionInfo: RawAuctionInfo = auctionInfoInputResult[index].result[0]
         const paymentToken =
-          auctionInfo.paymentCurrency === AddressZero
+          auctionInfo.paymentCurrencyInfo.addr === NATIVE_PAYMENT_TOKEN
             ? NATIVE[chainId]
             : new Token(
                 chainId,
@@ -139,8 +138,9 @@ export const useMisoAuction = (address: string) => {
     if (!chainId || !auctionTemplateId.result || !auctionInfoInputResult.result) return
     const template: AuctionTemplate = auctionTemplateId.result?.[0].toNumber()
     const auctionInfo: RawAuctionInfo = auctionInfoInputResult.result?.[0]
+
     const paymentToken =
-      auctionInfo.paymentCurrency === AddressZero
+      auctionInfo.paymentCurrencyInfo.addr === NATIVE_PAYMENT_TOKEN
         ? NATIVE[chainId]
         : new Token(
             chainId,

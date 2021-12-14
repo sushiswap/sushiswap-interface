@@ -1,4 +1,3 @@
-import { AddressZero } from '@ethersproject/constants'
 import { ChevronRightIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -50,7 +49,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
 
     try {
       let tx
-      if (auction.auctionInfo.paymentCurrency === AddressZero) {
+      if (auction.paymentToken.isNative) {
         tx = await contract.commitEth(account, true, { value: amount.quotient.toString() })
       } else {
         tx = await contract.commitTokens(amount.quotient.toString(), true)
