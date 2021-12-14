@@ -183,7 +183,7 @@
     "storybook-addon-linguijs": "^1.0.10",
     "storybook-zeplin": "^1.6.0",
     "swr": "^1.1.0",
-    "tailwindcss": "^2.2.17",
+    "tailwindcss": "^3.0.1",
     "tailwindcss-border-gradient-radius": "^2.0.0",
     "typescript": "^4.4.4",
     "wcag-contrast": "^3.0.0"

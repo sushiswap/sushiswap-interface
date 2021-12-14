@@ -86,7 +86,7 @@ const SearchResultPools: FC = () => {
                           key={i}
                           {...cell.getCellProps()}
                           className={classNames(
-                            'py-3 border-t border-gray-800 flex items-center',
+                            'py-3 border-t border-dark-800 flex items-center',
                             i === 0 ? 'justify-start' : 'justify-end'
                           )}
                         >
