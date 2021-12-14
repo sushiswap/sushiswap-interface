@@ -1,3 +1,4 @@
+import { ChevronLeftIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Chip from 'app/components/Chip'
@@ -9,6 +10,7 @@ import { Auction } from 'app/features/miso/context/Auction'
 import { AuctionStatus, AuctionTemplate } from 'app/features/miso/context/types'
 import { AuctionStatusById } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
+import Link from 'next/link'
 import React, { FC } from 'react'
 
 interface AuctionHeaderProps {
@@ -23,7 +25,10 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
 
   return (
     <div className="grid md:grid-cols-3 grid-cols-2 items-end gap-8 md:gap-0">
-      <div className="flex gap-3 order-1 md:order-1">
+      <div className="flex gap-3 order-1 md:order-1 items-center">
+        <Link href="/miso">
+          <ChevronLeftIcon width={36} className="cursor-pointer" />
+        </Link>
         {documents && documents.icon && <img alt="logo" src={documents.icon} width={60} height="auto" />}
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2">

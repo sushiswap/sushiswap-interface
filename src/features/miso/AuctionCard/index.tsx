@@ -9,6 +9,7 @@ import AuctionIcon from 'app/features/miso/AuctionIcon'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { AuctionStatusById, AuctionTitleByTemplateId } from 'app/features/miso/context/utils'
+import { classNames } from 'app/functions'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
@@ -26,8 +27,11 @@ const AuctionCard: FC<{ auction?: Auction }> = ({ auction }) => {
 
   return (
     <Link href={`/miso/${auction.auctionInfo.addr}`} passHref={true}>
-      <div className="cursor-pointer rounded bg-dark-900 border border-dark-800 pt-5 overflow-hidden transition-all shadow-md hover:translate-y-[-3px] hover:shadow-xl hover:shadow-pink/5">
-        <div className="flex flex-col gap-3.5">
+      <div
+        style={{ backgroundImage: `url("${auction.auctionDocuments.desktopBanner}")` }}
+        className="bg-cover cursor-pointer rounded bg-dark-900 border border-dark-800 overflow-hidden transition-all shadow-md hover:translate-y-[-3px] hover:shadow-xl hover:shadow-pink/5"
+      >
+        <div className="flex flex-col gap-3.5 bg-dark-900/90 backdrop-blur-[8px] pt-5">
           <div className="flex justify-between px-5 h-[14px]">
             <div className="flex gap-4">
               {auction.whitelist.length > 0 && (
@@ -48,15 +52,33 @@ const AuctionCard: FC<{ auction?: Auction }> = ({ auction }) => {
               )}
             </div>
           </div>
-          <div className="flex flex-col px-5">
-            <Typography variant="sm" weight={700} className="text-secondary">
-              {auction.auctionToken.symbol}
-            </Typography>
-            <Typography variant="h3" weight={700} className="text-high-emphesis">
-              {auction.auctionToken.name}
-            </Typography>
+          <div className="flex gap-3 px-5">
+            {auction.auctionDocuments.icon && (
+              <div className="relative">
+                <div
+                  className={classNames(
+                    auction.status === AuctionStatus.LIVE
+                      ? 'bg-green'
+                      : auction.status === AuctionStatus.FINISHED
+                      ? 'bg-pink'
+                      : 'bg-blue',
+                    'absolute top-[-2px] right-[-2px] rounded-full w-3.5 h-3.5 shadow-md shadow-dark-800'
+                  )}
+                />
+                <img alt="logo" src={auction.auctionDocuments.icon} width={48} height="auto" />
+              </div>
+            )}
+            <div className="flex flex-col">
+              <Typography variant="sm" weight={700} className="text-secondary">
+                {auction.auctionToken.symbol}
+              </Typography>
+              <Typography variant="h3" weight={700} className="text-high-emphesis">
+                {auction.auctionToken.name}
+              </Typography>
+            </div>
           </div>
-          <div className="flex justify-between bg-dark-800 px-5 py-3 items-center ">
+
+          <div className="flex justify-between bg-dark-700/40 px-5 py-3 items-center ">
             <div className="flex gap-3">
               <AuctionIcon auctionTemplate={auction.template} width={18} height={14} />
               <Typography variant="xs" weight={700}>
@@ -100,7 +122,7 @@ const AuctionCard: FC<{ auction?: Auction }> = ({ auction }) => {
           <div>
             <AuctionChart auction={auction} />
           </div>
-          <div className="grid grid-cols-2 gap-3 px-5 py-4 bg-dark-800 flex-grow">
+          <div className="grid grid-cols-2 gap-3 px-5 py-4 bg-dark-700/40 flex-grow">
             <div className="flex flex-col gap-0.5">
               <Typography variant="xs" weight={700} className="text-secondary">
                 {i18n._(t`Auction Price`)}

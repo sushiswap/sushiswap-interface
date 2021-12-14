@@ -59,6 +59,8 @@ export const useAuctions = (type: AuctionStatus, owner?: string): Auction[] | un
               whitelist,
             })
           )
+        } else {
+          acc.push(undefined)
         }
 
         return acc
