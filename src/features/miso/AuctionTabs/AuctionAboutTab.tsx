@@ -35,7 +35,7 @@ const AuctionAboutTab: FC<AuctionAboutTabProps> = ({ auction, active }) => {
             </div>
           ))}
         </div>
-        {documents.bannedWarning && (
+        {documents?.bannedWarning && (
           <Typography variant="xs" className="italic">
             {documents.bannedWarning}
           </Typography>

@@ -44,12 +44,14 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           </div>
         )}
 
-        <div className="flex gap-1.5">
-          <RestrictedIcon width={18} />
-          <Typography variant="sm" weight={700} className="text-secondary">
-            {i18n._(t`Restricted`)}
-          </Typography>
-        </div>
+        {documents?.bannedCountries && (
+          <div className="flex gap-1.5">
+            <RestrictedIcon width={18} />
+            <Typography variant="sm" weight={700} className="text-secondary">
+              {i18n._(t`Restricted`)}
+            </Typography>
+          </div>
+        )}
       </div>
       <div className="flex flex-col gap-2">
         <Typography variant="sm" weight={700} className="text-low-emphesis">
