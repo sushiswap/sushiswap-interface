@@ -25,16 +25,6 @@ const cases = [
   ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
 ]
 
-async function wait() {
-  const isCi: boolean = ci === 'true'
-  if (!swapPage) return
-  if (isCi) {
-    await swapPage.blockingWait(10)
-  } else {
-    await swapPage.blockingWait(2)
-  }
-}
-
 jest.retryTimes(2)
 
 describe('Trident Swap:', () => {
@@ -49,13 +39,15 @@ describe('Trident Swap:', () => {
     await swapPage.addTokenToMetamask(TOKEN_ADDRESSES.WETH)
   })
 
+  beforeEach(async () => {
+    await swapPage.blockingWait(2, true)
+  })
+
   afterAll(async () => {
     browser.close()
   })
 
   test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
-    await wait()
-
     const ethWalletBalance = await swapPage.getTokenBalance(inToken as string)
     if (!(ethWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
 

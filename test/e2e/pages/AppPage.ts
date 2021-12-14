@@ -9,6 +9,8 @@ export abstract class AppPage {
   protected WalletConnectSelector: string = '#connect-wallet'
   protected WalletOptionMetamaskSelector: string = '#wallet-option-MetaMask'
 
+  private ci: string = process.env.CI || 'false'
+
   constructor(page: Page, metamask: Dappeteer, url: string = '') {
     this.Page = page
     this.URL = url
@@ -72,11 +74,11 @@ export abstract class AppPage {
 
   public async getTokenBalance(tokenSymbol: string): Promise<number> {
     await this.Metamask.page.bringToFront()
-    await this.Metamask.page.waitForTimeout(1000)
+    await this.blockingWait(1, true)
 
     const assetMenutButton = await this.Metamask.page.waitForSelector(`li[data-testid="home__asset-tab"]`)
     await assetMenutButton.click()
-    await this.blockingWait(1)
+    await this.blockingWait(1, true)
 
     const assetListItems = await this.Metamask.page.$$('.asset-list-item__token-button')
 
@@ -131,8 +133,14 @@ export abstract class AppPage {
     await this.blockingWait(1)
   }
 
-  public async blockingWait(seconds) {
-    var waitTill = new Date(new Date().getTime() + seconds * 1000)
+  public async blockingWait(seconds, checkCi: boolean = false): Promise<void> {
+    let waitSeconds = seconds
+
+    if (checkCi && this.ci === 'true') {
+      waitSeconds = seconds * 5
+    }
+
+    var waitTill = new Date(new Date().getTime() + waitSeconds * 1000)
     while (waitTill > new Date()) {}
   }
 }
