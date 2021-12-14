@@ -54,7 +54,15 @@ Do not waste your gas.`)}
     </div>
   )
 
-  console.log(auction?.isOwner)
+  if (!account || !auction) {
+    return (
+      <div className="flex flex-col my-12 gap-12 px-6">
+        {header}
+        <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
+      </div>
+    )
+  }
+
   if (!auction?.isOwner) {
     return (
       <div className="flex flex-col my-12 gap-12 px-6">
