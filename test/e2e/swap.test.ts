@@ -24,6 +24,8 @@ const cases = [
   ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
 ]
 
+jest.retryTimes(2)
+
 describe('Trident Swap:', () => {
   beforeAll(async () => {
     ;[metamask, browser, page] = await TestHelper.initDappeteer()

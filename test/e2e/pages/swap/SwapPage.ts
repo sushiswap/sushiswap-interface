@@ -71,7 +71,7 @@ export class SwapPage extends AppPage {
 
   private async selectToken(tokenSymbol: string): Promise<void> {
     await this.Page.waitForSelector(this.AllCurrenciesListSelector)
-    await this.blockingWait(2)
+    await this.blockingWait(3)
 
     const nativeTokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
     if (nativeTokenButton) {
