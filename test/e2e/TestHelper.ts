@@ -8,9 +8,7 @@ export class TestHelper {
 
     const browser = await this.getBrowser()
     const metamask = await this.getMetamask(browser, seed, pass)
-
-    const page = await browser.newPage()
-    await page.setDefaultTimeout(60000)
+    const page = await this.getPage(browser)
 
     return [metamask, browser, page]
   }
@@ -48,5 +46,22 @@ export class TestHelper {
     }
 
     return browser
+  }
+
+  private static async getPage(browser: Browser): Promise<Page> {
+    let page: Page
+
+    try {
+      page = await browser.newPage()
+      await page.setDefaultTimeout(180000)
+      await page.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
+      )
+    } catch (error) {
+      console.log('Error occurred creating new page')
+      throw error
+    }
+
+    return page
   }
 }

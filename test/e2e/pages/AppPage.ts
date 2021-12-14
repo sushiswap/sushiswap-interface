@@ -47,6 +47,7 @@ export abstract class AppPage {
   }
 
   public async addTokenToMetamask(tokenAddress: string): Promise<void> {
+    await await this.blockingWait(2)
     await this.Metamask.page.bringToFront()
 
     await this.closeMetamaskWhatsNew()
@@ -72,6 +73,10 @@ export abstract class AppPage {
   public async getTokenBalance(tokenSymbol: string): Promise<number> {
     await this.Metamask.page.bringToFront()
     await this.Metamask.page.waitForTimeout(1000)
+
+    const assetMenutButton = await this.Metamask.page.waitForSelector(`li[data-testid="home__asset-tab"]`)
+    await assetMenutButton.click()
+    await this.blockingWait(1)
 
     const assetListItems = await this.Metamask.page.$$('.asset-list-item__token-button')
 
