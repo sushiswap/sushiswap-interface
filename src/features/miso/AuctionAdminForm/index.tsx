@@ -13,7 +13,8 @@ import {
 import Typography from 'app/components/Typography'
 import AuctionCard from 'app/features/miso/AuctionCard'
 import { Auction } from 'app/features/miso/context/Auction'
-import React, { FC, useState } from 'react'
+import { DocumentInput, useSetAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
+import React, { FC, useCallback, useState } from 'react'
 
 interface AuctionAdminFormProps {
   auction: Auction
@@ -21,6 +22,7 @@ interface AuctionAdminFormProps {
 
 const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   const { i18n } = useLingui()
+  const setDocuments = useSetAuctionDocuments(auction.auctionInfo.addr, auction.template)
   const [website, setWebsite] = useState<string>(auction.auctionDocuments.website)
   const [icon, setIcon] = useState<string>(auction.auctionDocuments.icon)
   const [description, setDescription] = useState<string>(auction.auctionDocuments.description)
@@ -34,7 +36,6 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   const [bannedCountries, setBannedCountries] = useState<string>(auction.auctionDocuments.bannedCountries)
   const [bannedWarning, setBannedWarning] = useState<string>(auction.auctionDocuments.bannedWarning)
   const [desktopBanner, setDesktopBanner] = useState<string>(auction.auctionDocuments.desktopBanner)
-  const [mobileBanner, setMobileBanner] = useState<string>(auction.auctionDocuments.mobileBanner)
 
   const exampleAuction = new Auction({
     template: auction.template,
@@ -54,15 +55,29 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
       medium,
       bannedCountries,
       bannedWarning,
-      mobileBanner,
       desktopBanner,
     },
     whitelist: auction.whitelist,
   })
 
+  const save = useCallback(() => {
+    const currentDocs = { ...auction.auctionDocuments }
+    const newDocs = { ...exampleAuction.auctionDocuments }
+    const diff = Object.entries(newDocs).reduce<DocumentInput[]>((acc, [k, v]) => {
+      console.log(currentDocs[k], newDocs[k])
+      if (currentDocs[k] !== newDocs[k]) {
+        acc.push({ name: k, data: v })
+      }
+
+      return acc
+    }, [])
+
+    setDocuments(diff)
+  }, [auction.auctionDocuments, exampleAuction.auctionDocuments, setDocuments])
+
   return (
-    <div className="flex bg-dark-900 p-10 rounded shadow-xl shadow-red/5 gap-10">
-      <form className="space-y-8 divide-y divide-dark-700">
+    <div className="flex flex-col lg:flex-row bg-dark-900 p-10 rounded shadow-xl shadow-red/5 gap-10">
+      <div className="space-y-8 divide-y divide-dark-700">
         <div className="space-y-8 divide-y divide-dark-700">
           <div>
             <div className="flex flex-col gap-1">
@@ -409,6 +424,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
           <div className="flex justify-end">
             <div>
               <Button
+                onClick={save}
                 color="gradient"
                 className="!shadow-md inline-flex justify-center py-2 !px-10 !opacity-100 !text-high-emphesis hover:scale-[1.05] transform-all"
               >
@@ -417,14 +433,14 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
             </div>
           </div>
         </div>
-      </form>
+      </div>
       <div>
         <div className="flex flex-col gap-1">
           <Typography variant="lg" className="text-high-emphesis" weight={700}>
             {i18n._(t`Example Card`)}
           </Typography>
         </div>
-        <div className="mt-3 sticky top-[104px] w-[400px] h-[580px]">
+        <div className="mt-3 sticky top-[104px] w-[400px] h-[580px] pointer-events-none">
           <AuctionCard auction={exampleAuction} />
         </div>
       </div>

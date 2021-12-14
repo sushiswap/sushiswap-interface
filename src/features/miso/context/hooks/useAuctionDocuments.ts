@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { AuctionDocument } from 'app/features/miso/context/types'
 import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
 import { useContract, useMisoHelperContract } from 'app/hooks'
@@ -7,7 +6,7 @@ import { useSingleCallResult, useSingleContractMultipleData } from 'app/state/mu
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
-interface Document {
+export interface DocumentInput {
   name: string
   data: string
 }
@@ -49,16 +48,13 @@ export const useAuctionDocument = (address: string): AuctionDocument | undefined
   return undefined
 }
 
-export const useSetAuctionDocuments = (address: string, templateId?: BigNumber) => {
+export const useSetAuctionDocuments = (address: string, templateId?: number) => {
   const { chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
-  const contract = useContract(
-    address,
-    chainId && templateId ? MisoAbiByTemplateId(chainId, templateId.toNumber()) : undefined
-  )
+  const contract = useContract(address, chainId && templateId ? MisoAbiByTemplateId(chainId, templateId) : undefined)
 
   return useCallback(
-    async (documents: Document[]) => {
+    async (documents: DocumentInput[]) => {
       try {
         const [names, data] = documents.reduce<[string[], string[]]>(
           (acc, cur) => {
