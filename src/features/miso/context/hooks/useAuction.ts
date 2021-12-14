@@ -74,17 +74,20 @@ export const useAuctions = (type: AuctionStatus, owner?: string): Auction[] | un
   }, [auctionDocuments, auctionInfos, auctionTemplateIds, auctions, chainId, owner, type, userMarketInfos, whitelists])
 }
 
-export const useAuction = (address: string) => {
-  const { chainId, account } = useActiveWeb3React()
+export const useAuction = (address: string, owner?: string) => {
+  const { chainId } = useActiveWeb3React()
   const marketTemplateId = useAuctionMarketTemplateId(address)
   const auctionInfo = useAuctionRawInfo(address, marketTemplateId)
-  const userMarketInfo = useAuctionUserMarketInfo(address, account ?? undefined)
+  const userMarketInfo = useAuctionUserMarketInfo(address, owner ?? undefined)
   const auctionDocuments = useAuctionDocument(address)
   const whitelist = useAuctionPointList(address)
 
   return useMemo(() => {
     if (!chainId || !marketTemplateId || !auctionInfo || !userMarketInfo || !auctionDocuments) return
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
+
+    console.log(userMarketInfo.isAdmin)
+    if (owner && !userMarketInfo.isAdmin) return undefined
 
     return new Auction({
       template: marketTemplateId.toNumber(),

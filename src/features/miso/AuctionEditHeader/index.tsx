@@ -1,8 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { FC } from 'react'
 
 interface AuctionEditHeaderProps {
@@ -11,11 +12,15 @@ interface AuctionEditHeaderProps {
 
 const AuctionEditHeader: FC<AuctionEditHeaderProps> = ({ auction }) => {
   const { i18n } = useLingui()
+  const router = useRouter()
+  const { auction: address } = router.query
+
+  if (!auction?.isOwner) return <></>
 
   return (
     <div className="flex justify-start rounded">
-      <HeadlessUiModal
-        trigger={
+      <Link href={`/miso/${address as string}/admin`} passHref={true}>
+        <div>
           <Typography
             role="button"
             variant="lg"
@@ -24,12 +29,8 @@ const AuctionEditHeader: FC<AuctionEditHeaderProps> = ({ auction }) => {
           >
             {i18n._(t`Edit Auction`)}
           </Typography>
-        }
-      >
-        {() => {
-          return <h1>Test</h1>
-        }}
-      </HeadlessUiModal>
+        </div>
+      </Link>
     </div>
   )
 }

@@ -18,6 +18,5 @@ export const useAuctionPointLists = (addresses: string[]) => {
 export const useAuctionPointList = (address?: string): string[] => {
   const contract = useContract(address, new Interface(BASE_AUCTION_ABI))
   const { result } = useSingleCallResult(contract, 'pointList', [])
-  console.log(result)
   return (result as string[])?.filter((el) => el !== AddressZero) || []
 }

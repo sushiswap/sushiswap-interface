@@ -26,8 +26,9 @@ export const useAuctionUserMarketInfos = (addresses: string[], owner?: string): 
 }
 
 export const useAuctionUserMarketInfo = (address: string, owner?: string): RawMarketInfo | undefined => {
+  const { account } = useActiveWeb3React()
   const contract = useMisoHelperContract()
-  const { result } = useSingleCallResult(contract, 'getUserMarketInfo', [address, owner])
+  const { result } = useSingleCallResult(contract, 'getUserMarketInfo', [address, owner ?? account ?? undefined])
   if (result && Array.isArray(result) && result.length > 0) {
     return result[0]
   }

@@ -52,10 +52,6 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
       if (auction.paymentToken.isNative) {
         tx = await contract.commitEth(account, true, { value: amount.quotient.toString() })
       } else {
-        console.log(
-          contract.address,
-          contract.interface.encodeFunctionData('commitTokens', [amount.quotient.toString(), true])
-        )
         tx = await contract.commitTokens(amount.quotient.toString(), true)
       }
 
