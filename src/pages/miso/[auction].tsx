@@ -1,6 +1,7 @@
 import { Feature } from 'app/enums'
 import AuctionCommitter from 'app/features/miso/AuctionCommitter'
 import AuctionDocuments from 'app/features/miso/AuctionDocuments'
+import AuctionEditHeader from 'app/features/miso/AuctionEditHeader'
 import AuctionHeader from 'app/features/miso/AuctionHeader'
 import AuctionStats from 'app/features/miso/AuctionStats'
 import AuctionTabs from 'app/features/miso/AuctionTabs'
@@ -17,6 +18,9 @@ const MisoAuction = () => {
 
   return (
     <div className="my-12 flex flex-col gap-10 px-6">
+      <section>
+        <AuctionEditHeader auction={auction} />
+      </section>
       <section className="flex flex-col gap-6 w-full">
         <AuctionHeader auction={auction} />
       </section>

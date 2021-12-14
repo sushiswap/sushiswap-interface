@@ -16,13 +16,13 @@ interface AuctionStatsProps {
   auction?: Auction
 }
 
-const AuctionStat: FC<{ label: string; value?: any }> = ({ label, value }) => {
+const AuctionStat: FC<{ label: string; value?: any; className?: string }> = ({ label, value, className }) => {
   return (
     <div className="flex flex-col rounded gap-1">
-      <Typography variant="sm" className="text-secondary text-right">
+      <Typography variant="sm" className={classNames('text-secondary', className)}>
         {label}
       </Typography>
-      <Typography weight={700} variant="lg" className="text-white text-right">
+      <Typography weight={700} variant="lg" className={classNames('text-white', className)}>
         {value}
       </Typography>
     </div>
@@ -37,22 +37,36 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
 
   return (
     <div className="flex flex-col gap-6 w-full">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-2">
         <AuctionStat
+          className="text-left"
           label={i18n._(t`Current Token Price`)}
           value={
-            <div className="flex justify-end items-baseline gap-1">
-              {auction.currentPrice?.toSignificant(6)}
+            <div className="flex justify-start items-baseline gap-1">
+              {auction.tokenPrice?.toSignificant(6)}
               <Typography variant="sm" weight={700} className="text-low-emphesis">
-                {auction.currentPrice?.quoteCurrency.symbol}
+                {auction.tokenPrice?.quoteCurrency.symbol}
               </Typography>
             </div>
           }
         />
         <AuctionStat
-          label={i18n._(t`Amount For Sale`)}
+          className="text-right"
+          label={i18n._(t`Amount Raised`)}
           value={
             <div className="flex justify-end items-baseline gap-1">
+              {auction.totalTokensCommitted?.toSignificant(6)}
+              <Typography variant="sm" weight={700} className="text-low-emphesis">
+                {auction.totalTokensCommitted?.currency.symbol}
+              </Typography>
+            </div>
+          }
+        />
+        <AuctionStat
+          className="text-left lg:text-right"
+          label={i18n._(t`Amount For Sale`)}
+          value={
+            <div className="flex justify-start items-baseline gap-1 lg:justify-end">
               {auction.totalTokens?.toSignificant(6)}
               <Typography variant="sm" weight={700} className="text-low-emphesis">
                 {auction.totalTokens?.currency.symbol}
@@ -60,12 +74,12 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
             </div>
           }
         />
-        {/*TODO RAMIN*/}
         <AuctionStat
+          className="text-right"
           label={i18n._(t`Remaining`)}
           value={
             <div className="flex justify-end items-baseline gap-1">
-              {auction.remainingPercentage?.toSignificant(3)}
+              {auction.remainingPercentage?.toSignificant(6)}
               <Typography variant="sm" weight={700} className="text-low-emphesis">
                 %
               </Typography>
@@ -100,10 +114,10 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
                   : 'text-secondary'
               )}
             >
-              Fund Raised
+              {i18n._(t`Fund Raised`)}
             </Typography>
           </div>
-          <AuctionChart auction={auction} />{' '}
+          <AuctionChart auction={auction} />
         </div>
       )}
     </div>

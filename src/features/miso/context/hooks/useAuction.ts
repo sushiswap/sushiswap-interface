@@ -1,7 +1,9 @@
 import { Token } from '@sushiswap/core-sdk'
+import { useAuctionDocument, useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import useAuctionMarketTemplateId, {
   useAuctionMarketTemplateIds,
 } from 'app/features/miso/context/hooks/useAuctionMarketTemplateId'
+import { useAuctionPointList, useAuctionPointLists } from 'app/features/miso/context/hooks/useAuctionPointList'
 import useAuctionRawInfo, { useAuctionRawInfos } from 'app/features/miso/context/hooks/useAuctionRawInfo'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { getNativeOrToken } from 'app/features/miso/context/utils'
@@ -19,47 +21,57 @@ export const useAuctions = (type: AuctionStatus, owner?: string): Auction[] | un
   const userMarketInfos = useAuctionUserMarketInfos(addresses, owner)
   const auctionTemplateIds = useAuctionMarketTemplateIds(addresses)
   const auctionInfos = useAuctionRawInfos(addresses, auctionTemplateIds)
+  const auctionDocuments = useAuctionDocuments(addresses)
+  const whitelists = useAuctionPointLists(addresses)
 
   return useMemo(() => {
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
 
-    return auctions.reduce<Auction[]>((acc, el, index) => {
-      const template = auctionTemplateIds[index]?.toNumber()
-      const auctionInfo = auctionInfos[index]
-      const userMarketInfo = userMarketInfos[index]
-      const paymentToken = auctionInfo ? getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo) : undefined
+    return auctions
+      .reduce<Auction[]>((acc, el, index) => {
+        const template = auctionTemplateIds[index]?.toNumber()
+        const auctionInfo = auctionInfos[index]
+        const marketInfo = userMarketInfos[index]
+        const auctionDocs = auctionDocuments[index]
+        const whitelist = whitelists[index]
+        const paymentToken = auctionInfo ? getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo) : undefined
 
-      console.log(owner)
-      // If owner is set and we're not owner of this auction, filter out
-      if (owner && !userMarketInfo?.isAdmin) {
+        // If owner is set and we're not owner of this auction, filter out
+        if (owner && !marketInfo?.isAdmin) {
+          return acc
+        }
+
+        if (marketInfo && template && auctionInfo && paymentToken && auctionDocs && whitelist) {
+          acc.push(
+            new Auction({
+              template,
+              auctionToken: new Token(
+                chainId,
+                el.tokenInfo.addr,
+                el.tokenInfo.decimals.toNumber(),
+                el.tokenInfo.symbol,
+                el.tokenInfo.name
+              ),
+              paymentToken,
+              auctionInfo,
+              marketInfo,
+              auctionDocuments: auctionDocs,
+              whitelist,
+            })
+          )
+        }
+
         return acc
-      }
+      }, [])
+      .sort((a, b) => {
+        // Sort first expiring auction first
+        if (type === AuctionStatus.LIVE || type === AuctionStatus.UPCOMING)
+          return a.auctionInfo.endTime.toNumber() <= b.auctionInfo.endTime.toNumber() ? -1 : 1
 
-      if (userMarketInfo && template && auctionInfo && paymentToken) {
-        acc.push(
-          new Auction({
-            isOwner: userMarketInfo.isAdmin,
-            template,
-            auctionToken: new Token(
-              chainId,
-              el.tokenInfo.addr,
-              el.tokenInfo.decimals.toNumber(),
-              el.tokenInfo.symbol,
-              el.tokenInfo.name
-            ),
-            paymentToken,
-            auctionInfo,
-            claimInfo: {
-              tokensClaimable: userMarketInfo.tokensClaimable,
-              claimed: userMarketInfo.claimed,
-            },
-          })
-        )
-      }
-
-      return acc
-    }, [])
-  }, [auctionInfos, auctionTemplateIds, auctions, chainId, owner, userMarketInfos])
+        // Show latest expired first
+        return a.auctionInfo.endTime.toNumber() <= b.auctionInfo.endTime.toNumber() ? 1 : -1
+      })
+  }, [auctionDocuments, auctionInfos, auctionTemplateIds, auctions, chainId, owner, type, userMarketInfos, whitelists])
 }
 
 export const useAuction = (address: string) => {
@@ -67,11 +79,12 @@ export const useAuction = (address: string) => {
   const marketTemplateId = useAuctionMarketTemplateId(address)
   const auctionInfo = useAuctionRawInfo(address, marketTemplateId)
   const userMarketInfo = useAuctionUserMarketInfo(address, account ?? undefined)
+  const auctionDocuments = useAuctionDocument(address)
+  const whitelist = useAuctionPointList(address)
 
   return useMemo(() => {
-    if (!chainId || !marketTemplateId || !auctionInfo || !userMarketInfo) return
+    if (!chainId || !marketTemplateId || !auctionInfo || !userMarketInfo || !auctionDocuments) return
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
-    const { isAdmin, claimed, tokensClaimable } = userMarketInfo
 
     return new Auction({
       template: marketTemplateId.toNumber(),
@@ -84,10 +97,11 @@ export const useAuction = (address: string) => {
       ),
       paymentToken,
       auctionInfo,
-      isOwner: isAdmin,
-      claimInfo: { claimed, tokensClaimable },
+      marketInfo: userMarketInfo,
+      auctionDocuments,
+      whitelist,
     })
-  }, [auctionInfo, chainId, marketTemplateId, userMarketInfo])
+  }, [auctionDocuments, auctionInfo, chainId, marketTemplateId, userMarketInfo, whitelist])
 }
 
 export default useAuction

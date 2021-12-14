@@ -1,7 +1,6 @@
-import { DocumentTextIcon, GlobeIcon } from '@heroicons/react/outline'
+import { DocumentTextIcon, GlobeIcon, LockClosedIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Chip from 'app/components/Chip'
 import {
   DiscordIcon,
   GithubIcon,
@@ -17,7 +16,6 @@ import Typography from 'app/components/Typography'
 import AuctionDocumentsSkeleton from 'app/features/miso/AuctionDocuments/AuctionDocumentsSkeleton'
 import AuctionIcon from 'app/features/miso/AuctionIcon'
 import { Auction } from 'app/features/miso/context/Auction'
-import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import { AuctionTitleByTemplateId } from 'app/features/miso/context/utils'
 import React, { FC } from 'react'
 
@@ -27,14 +25,15 @@ interface AuctionDocumentsProps {
 
 const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
   const { i18n } = useLingui()
-  const [documents, setDocuments] = useAuctionDocuments(auction)
 
   if (!auction) return <AuctionDocumentsSkeleton />
+
+  const info = ['website', 'whitepaper', 'docs']
+  const documents = auction.auctionDocuments
 
   return (
     <>
       <div className="flex gap-4 items-center">
-        <Chip label="DeFi" color="blue" />
         {auction && (
           <div className="flex gap-1.5">
             <AuctionIcon auctionTemplate={auction.template} width={18} />
@@ -44,9 +43,18 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           </div>
         )}
 
+        {auction.whitelist?.length > 0 && (
+          <div className="flex gap-1.5">
+            <LockClosedIcon width={18} />
+            <Typography variant="sm" weight={700} className="text-secondary">
+              {i18n._(t`Private`)}
+            </Typography>
+          </div>
+        )}
+
         {documents?.bannedCountries && (
           <div className="flex gap-1.5">
-            <RestrictedIcon width={18} />
+            <RestrictedIcon width={18} className="text-yellow" />
             <Typography variant="sm" weight={700} className="text-secondary">
               {i18n._(t`Restricted`)}
             </Typography>
@@ -58,6 +66,11 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           {i18n._(t`Technical Information`)}
         </Typography>
         <div className="flex gap-4">
+          {info.filter((el) => !!documents?.[el]).length === 0 && (
+            <Typography variant="sm" className="italic">
+              {i18n._(t`No documents provided`)}
+            </Typography>
+          )}
           {documents?.website && (
             <a href={documents.website} target="_blank" rel="noreferrer">
               <div className="flex gap-2">
@@ -95,6 +108,11 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           {i18n._(t`Socials`)}
         </Typography>
         <div className="flex gap-5 items-center">
+          {info.filter((el) => !!documents?.[el]).length === 0 && (
+            <Typography variant="sm" className="italic">
+              {i18n._(t`No socials provided`)}
+            </Typography>
+          )}
           {documents?.github && (
             <a href={documents.github} target="_blank" rel="noreferrer" className="cursor-pointer">
               <GithubIcon width={20} height={20} />

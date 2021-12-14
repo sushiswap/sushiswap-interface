@@ -1,6 +1,6 @@
-import { DocumentDuplicateIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import CopyHelper from 'app/components/AccountDetails/Copy'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
 import { classNames, shortenAddress } from 'app/functions'
@@ -37,19 +37,17 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
       <AuctionDetailsTabStat
         label={i18n._(t`Token Address`)}
         value={
-          <div className="flex gap-2 items-center">
+          <CopyHelper toCopy={shortenAddress(auction.auctionToken.address)} className="text-high-emphesis opacity-100">
             {shortenAddress(auction.auctionToken.address)}
-            <DocumentDuplicateIcon width={20} />
-          </div>
+          </CopyHelper>
         }
       />
       <AuctionDetailsTabStat
         label={i18n._(t`Auction Address`)}
         value={
-          <div className="flex gap-2 items-center">
+          <CopyHelper toCopy={shortenAddress(auction.auctionInfo.addr)} className="text-high-emphesis opacity-100">
             {shortenAddress(auction.auctionInfo.addr)}
-            <DocumentDuplicateIcon width={20} />
-          </div>
+          </CopyHelper>
         }
       />
       <AuctionDetailsTabStat

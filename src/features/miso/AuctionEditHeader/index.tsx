@@ -1,0 +1,37 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { HeadlessUiModal } from 'app/components/Modal'
+import Typography from 'app/components/Typography'
+import { Auction } from 'app/features/miso/context/Auction'
+import { FC } from 'react'
+
+interface AuctionEditHeaderProps {
+  auction?: Auction
+}
+
+const AuctionEditHeader: FC<AuctionEditHeaderProps> = ({ auction }) => {
+  const { i18n } = useLingui()
+
+  return (
+    <div className="flex justify-start rounded">
+      <HeadlessUiModal
+        trigger={
+          <Typography
+            role="button"
+            variant="lg"
+            className="border-dark-900 border px-4 py-2 shadow shadow-pink-red/5 text-transparent bg-clip-text bg-gradient-to-r rounded from-blue via-pink to-red transition-all disabled:scale-[1] hover:scale-[1.05]"
+            weight={700}
+          >
+            {i18n._(t`Edit Auction`)}
+          </Typography>
+        }
+      >
+        {() => {
+          return <h1>Test</h1>
+        }}
+      </HeadlessUiModal>
+    </div>
+  )
+}
+
+export default AuctionEditHeader

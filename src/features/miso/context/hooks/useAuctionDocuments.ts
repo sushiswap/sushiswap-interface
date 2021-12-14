@@ -1,8 +1,9 @@
-import { Auction } from 'app/features/miso/context/Auction'
+import { BigNumber } from '@ethersproject/bignumber'
+import { AuctionDocument } from 'app/features/miso/context/types'
 import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
 import { useContract, useMisoHelperContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
+import { useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
@@ -11,18 +12,52 @@ interface Document {
   data: string
 }
 
-export const useAuctionDocuments = (auction?: Auction) => {
-  const { chainId } = useActiveWeb3React()
-  const helper = useMisoHelperContract()
-  const contract = useContract(
-    auction?.auctionInfo.addr,
-    chainId && auction ? MisoAbiByTemplateId(chainId, auction.template) : undefined
+const arrayToMap = (result) =>
+  result.reduce((acc, cur) => {
+    acc[cur.name] = cur.data
+    return acc
+  }, {})
+
+export const useAuctionDocuments = (addresses: string[]): (AuctionDocument | undefined)[] => {
+  const contract = useMisoHelperContract()
+  const results = useSingleContractMultipleData(
+    contract,
+    'getDocuments',
+    addresses.map((el) => [el])
   )
+
+  if (results && Array.isArray(results) && results.length === addresses.length) {
+    return results.map<AuctionDocument | undefined>((el) => {
+      if (el.result && Array.isArray(el.result) && el.result.length > 0) {
+        return arrayToMap(el.result[0])
+      }
+
+      return undefined
+    })
+  }
+
+  return Array(addresses.length).fill(undefined)
+}
+
+export const useAuctionDocument = (address: string): AuctionDocument | undefined => {
+  const contract = useMisoHelperContract()
+  const { result } = useSingleCallResult(contract, 'getDocuments', [address])
+  if (result && Array.isArray(result) && result.length > 0) {
+    return arrayToMap(result[0])
+  }
+
+  return undefined
+}
+
+export const useSetAuctionDocuments = (address: string, templateId?: BigNumber) => {
+  const { chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
+  const contract = useContract(
+    address,
+    chainId && templateId ? MisoAbiByTemplateId(chainId, templateId.toNumber()) : undefined
+  )
 
-  const { result } = useSingleCallResult(helper, 'getDocuments', [auction?.auctionInfo.addr])
-
-  const setDocuments = useCallback(
+  return useCallback(
     async (documents: Document[]) => {
       try {
         const [names, data] = documents.reduce<[string[], string[]]>(
@@ -35,7 +70,9 @@ export const useAuctionDocuments = (auction?: Auction) => {
           [[], []]
         )
         const tx = await contract?.setDocuments(names, data)
-        return addTransaction(tx, { summary: 'Set Auction Documents' })
+        addTransaction(tx, { summary: 'Set Auction Documents' })
+
+        return tx
       } catch (e) {
         console.error('set document error:', e)
         return e
@@ -43,18 +80,6 @@ export const useAuctionDocuments = (auction?: Auction) => {
     },
     [addTransaction, contract]
   )
-
-  if (Array.isArray(result) && result.length > 0) {
-    return [
-      result[0].reduce((acc, cur) => {
-        acc[cur.name] = cur.data
-        return acc
-      }, {}),
-      setDocuments,
-    ]
-  }
-
-  return [undefined, setDocuments]
 }
 
 export default useAuctionDocuments

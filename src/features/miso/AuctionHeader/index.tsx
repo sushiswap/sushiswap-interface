@@ -2,11 +2,11 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Chip from 'app/components/Chip'
 import Typography from 'app/components/Typography'
+import AuctionCardPrice from 'app/features/miso/AuctionCard/AuctionCardPrice'
 import AuctionHeaderSkeleton from 'app/features/miso/AuctionHeader/AuctionHeaderSkeleton'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
 import { Auction } from 'app/features/miso/context/Auction'
-import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
-import { AuctionStatus } from 'app/features/miso/context/types'
+import { AuctionStatus, AuctionTemplate } from 'app/features/miso/context/types'
 import { AuctionStatusById } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
 import React, { FC } from 'react'
@@ -16,9 +16,10 @@ interface AuctionHeaderProps {
 }
 const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
   const { i18n } = useLingui()
-  const [documents] = useAuctionDocuments(auction)
 
   if (!auction) return <AuctionHeaderSkeleton />
+
+  const documents = auction.auctionDocuments
 
   return (
     <div className="grid md:grid-cols-3 grid-cols-2 items-end gap-8 md:gap-0">
@@ -115,16 +116,37 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
       </div>
       <div className="flex gap-5 justify-end order-2 md:order-3">
         <div className="flex flex-col gap-1">
-          <Typography weight={700} variant="sm" className="text-secondary">
-            {i18n._(t`Current Token Price`)}
+          <Typography weight={700} variant="sm" className="text-secondary text-right">
+            {auction.template === AuctionTemplate.DUTCH_AUCTION
+              ? i18n._(t`Auction Price`)
+              : i18n._(t`Current Token Price`)}
           </Typography>
           <div className="flex justify-end items-baseline w-full gap-1">
-            <Typography variant="h2" weight={700} className="text-high-emphesis text-right">
-              {auction.currentPrice?.toSignificant(6)}
-            </Typography>
-            <Typography variant="lg" weight={700} className="text-right">
-              {auction.currentPrice?.quoteCurrency.symbol}
-            </Typography>
+            {auction.template === AuctionTemplate.DUTCH_AUCTION ? (
+              <AuctionCardPrice auction={auction}>
+                {({ price }) => {
+                  return (
+                    <>
+                      <Typography variant="h2" weight={700} className="text-high-emphesis text-right">
+                        {price?.toFixed(6)}
+                      </Typography>
+                      <Typography variant="lg" weight={700} className="text-right">
+                        {price?.quoteCurrency.symbol}
+                      </Typography>
+                    </>
+                  )
+                }}
+              </AuctionCardPrice>
+            ) : (
+              <>
+                <Typography variant="h2" weight={700} className="text-high-emphesis text-right">
+                  {auction.tokenPrice?.toSignificant(6)}
+                </Typography>
+                <Typography variant="lg" weight={700} className="text-right">
+                  {auction.tokenPrice?.quoteCurrency.symbol}
+                </Typography>
+              </>
+            )}
           </div>
         </div>
       </div>

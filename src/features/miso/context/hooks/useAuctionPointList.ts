@@ -1,15 +1,23 @@
-import { Auction } from 'app/features/miso/context/Auction'
-import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
+import { Interface } from '@ethersproject/abi'
+import { AddressZero } from '@ethersproject/constants'
+import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { useContract } from 'app/hooks'
-import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
+import { useMultipleContractSingleData, useSingleCallResult } from 'app/state/multicall/hooks'
 
-export const useAuctionPointList = (auction?: Auction): string[] => {
-  const { chainId } = useActiveWeb3React()
-  const contract = useContract(
-    auction ? auction.auctionInfo.addr : undefined,
-    chainId && auction ? MisoAbiByTemplateId(chainId, auction.template) : undefined
-  )
+export const useAuctionPointLists = (addresses: string[]) => {
+  const results = useMultipleContractSingleData(addresses, new Interface(BASE_AUCTION_ABI), 'pointList')
+  if (results && Array.isArray(results) && results.length === addresses.length) {
+    return results.map<string[]>((el) => {
+      return (el.result as string[])?.filter((el) => el !== AddressZero) || []
+    })
+  }
+
+  return Array(addresses.length).fill([])
+}
+
+export const useAuctionPointList = (address?: string): string[] => {
+  const contract = useContract(address, new Interface(BASE_AUCTION_ABI))
   const { result } = useSingleCallResult(contract, 'pointList', [])
-  return (result as string[]) || []
+  console.log(result)
+  return (result as string[])?.filter((el) => el !== AddressZero) || []
 }

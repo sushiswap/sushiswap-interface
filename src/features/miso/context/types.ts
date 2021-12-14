@@ -21,9 +21,22 @@ export interface AuctionTokenInfo {
 }
 
 export interface AuctionDocument {
-  name: string
-  data: string
-  lastModified: BigNumber
+  icon: string
+  description: string
+  website: string
+  whitepaper: string
+  github: string
+  telegram: string
+  wechat: string
+  discord: string
+  medium: string
+  reddit: string
+  twitter: string
+  docs: string
+  desktopBanner: string
+  mobileBanner: string
+  bannedCountries: string
+  bannedWarning: string
 }
 
 export interface AuctionPaymentCurrencyInfo {
@@ -68,16 +81,11 @@ export interface RawAuctionInfo {
   minimumCommitmentAmount?: BigNumber
 }
 
-export interface RawAuctionUserInfo {
+export interface RawMarketInfo {
   claimed: BigNumber
   commitments: BigNumber
   tokensClaimable: BigNumber
   isAdmin: boolean
-}
-
-export interface RawClaimInfo {
-  claimed: BigNumber
-  tokensClaimable: BigNumber
 }
 
 export interface Auction {

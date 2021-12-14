@@ -52,6 +52,10 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
       if (auction.paymentToken.isNative) {
         tx = await contract.commitEth(account, true, { value: amount.quotient.toString() })
       } else {
+        console.log(
+          contract.address,
+          contract.interface.encodeFunctionData('commitTokens', [amount.quotient.toString(), true])
+        )
         tx = await contract.commitTokens(amount.quotient.toString(), true)
       }
 
@@ -67,7 +71,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
       console.error(e)
       setAttemptingTxn(false)
     }
-  }, [account, addTransaction, amount, auction.auctionInfo.paymentCurrency, contract, i18n, onDismiss])
+  }, [account, addTransaction, amount, auction.paymentToken.isNative, contract, i18n])
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
