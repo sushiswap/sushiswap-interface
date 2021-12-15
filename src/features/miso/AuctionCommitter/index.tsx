@@ -5,7 +5,7 @@ import NumericalInput from 'app/components/Input/Numeric'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
 import MisoButton from 'app/features/miso/MisoButton'
-import { tryParseAmount } from 'app/functions'
+import { maxAmountSpend, tryParseAmount } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useState } from 'react'
@@ -36,7 +36,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
             variant="sm"
             weight={700}
             className="text-low-emphesis"
-            onClick={() => setValue(balance?.toExact())}
+            onClick={() => setValue(maxAmountSpend(balance)?.toExact())}
           >
             Balance: {balance?.toSignificant(6)} {balance?.currency.symbol}
           </Typography>
@@ -60,7 +60,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
           </div>
           <div
             role="button"
-            onClick={() => setValue(balance?.toExact())}
+            onClick={() => setValue(maxAmountSpend(balance)?.toExact())}
             className="cursor-pointer flex flex-col items-center justify-center rounded-full overflow-hidden bg-gradient-to-r from-red/30 via-pink/30 to-red/30 bg-opacity-20 border border-red text-pink px-3 h-9"
           >
             <Typography>{i18n._(t`MAX`)}</Typography>

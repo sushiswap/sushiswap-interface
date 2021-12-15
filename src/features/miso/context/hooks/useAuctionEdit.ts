@@ -14,11 +14,10 @@ export const useAuctionEdit = (address?: string, templateId?: number, liquidityT
     chainId ? MISO[chainId]?.['ropsten']?.contracts.PostAuctionLauncher.abi : undefined
   )
 
-  console.log(chainId && templateId ? MisoAbiByTemplateId(chainId, templateId) : undefined)
   const auctionContract = useContract(
     address,
     chainId && templateId ? MisoAbiByTemplateId(chainId, templateId) : undefined,
-    true
+    false
   )
 
   const editDocuments = useCallback(
@@ -63,6 +62,7 @@ export const useAuctionEdit = (address?: string, templateId?: number, liquidityT
     if (!auctionContract || !account) return
 
     try {
+      console.log(auctionContract.interface.encodeFunctionData('withdrawTokens', [account]))
       const tx = await auctionContract.withdrawTokens(account)
       addTransaction(tx, { summary: 'Claim tokens' })
 
