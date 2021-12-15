@@ -137,7 +137,7 @@ export abstract class AppPage {
 
     await this.blockingWait(1)
     await this.Page.bringToFront()
-    await this.blockingWait(1)
+    await this.blockingWait(1, true)
   }
 
   public async blockingWait(seconds, checkCi: boolean = false): Promise<void> {
