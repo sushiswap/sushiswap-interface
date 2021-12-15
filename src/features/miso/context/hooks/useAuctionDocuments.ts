@@ -1,10 +1,6 @@
 import { AuctionDocument } from 'app/features/miso/context/types'
-import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
-import { useContract, useMisoHelperContract } from 'app/hooks'
-import { useActiveWeb3React } from 'app/services/web3'
+import { useMisoHelperContract } from 'app/hooks'
 import { useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
-import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { useCallback } from 'react'
 
 export interface DocumentInput {
   name: string
@@ -46,36 +42,6 @@ export const useAuctionDocument = (address: string): AuctionDocument | undefined
   }
 
   return undefined
-}
-
-export const useSetAuctionDocuments = (address: string, templateId?: number) => {
-  const { chainId } = useActiveWeb3React()
-  const addTransaction = useTransactionAdder()
-  const contract = useContract(address, chainId && templateId ? MisoAbiByTemplateId(chainId, templateId) : undefined)
-
-  return useCallback(
-    async (documents: DocumentInput[]) => {
-      try {
-        const [names, data] = documents.reduce<[string[], string[]]>(
-          (acc, cur) => {
-            acc[0].push(cur.name)
-            acc[1].push(cur.data)
-
-            return acc
-          },
-          [[], []]
-        )
-        const tx = await contract?.setDocuments(names, data)
-        addTransaction(tx, { summary: 'Set Auction Documents' })
-
-        return tx
-      } catch (e) {
-        console.error('set document error:', e)
-        return e
-      }
-    },
-    [addTransaction, contract]
-  )
 }
 
 export default useAuctionDocuments
