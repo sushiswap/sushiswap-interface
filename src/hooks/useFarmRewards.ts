@@ -14,6 +14,7 @@ import {
   useSpellPrice,
   useStakePrice,
   useOhmPrice,
+  useMagicPrice,
   useSushiPairs,
   useSushiPrice,
   useFusePrice,
@@ -61,6 +62,7 @@ export default function useFarmRewards() {
     movrPrice,
     ohmPrice,
     fusePrice,
+    magicPrice,
   ] = [
     useSushiPrice(),
     useEthPrice(),
@@ -72,6 +74,7 @@ export default function useFarmRewards() {
     useMovrPrice(),
     useOhmPrice(),
     useFusePrice(),
+    useMagicPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -214,7 +217,10 @@ export default function useFarmRewards() {
           },
         }
 
-        if (chainId !== ChainId.FUSE) {
+        if (chainId === ChainId.FUSE) {
+          // Secondary reward only
+          rewards[0] = reward[chainId]
+        } else {
           rewards[0] = {
             ...defaultReward,
             rewardPerBlock: sushiPerBlock,
@@ -223,8 +229,6 @@ export default function useFarmRewards() {
           if (chainId in reward) {
             rewards[1] = reward[chainId]
           }
-        } else {
-          rewards[0] = reward[chainId]
         }
 
         if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
@@ -243,6 +247,15 @@ export default function useFarmRewards() {
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: ohmPrice,
+          }
+        }
+        if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
+          rewards[1] = {
+            token: 'MAGIC',
+            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/arbitrum/assets/0x539bdE0d7Dbd336b79148AA742883198BBF60342/logo.png',
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: magicPrice,
           }
         }
         if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {

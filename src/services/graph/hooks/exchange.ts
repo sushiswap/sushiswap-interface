@@ -25,6 +25,7 @@ import {
   getEthPrice,
   getOhmPrice,
   getFusePrice,
+  getMagicPrice,
   getPairs,
 } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -164,6 +165,16 @@ export function useMphPrice(swrConfig: SWRConfiguration = undefined) {
 export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.MATIC ? 'maticPrice' : null, () => getMaticPrice(), swrConfig)
+  return data
+}
+
+export function useMagicPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.ARBITRUM ? 'magicPrice' : null,
+    () => getMagicPrice(),
+    swrConfig
+  )
   return data
 }
 
