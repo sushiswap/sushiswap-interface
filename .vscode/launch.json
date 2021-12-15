@@ -34,6 +34,7 @@
         "${workspaceRoot}/node_modules/jest/bin/jest.js",
         "--runInBand"
       ],
+      "args": ["--testPathPattern", "${fileBasename}"],
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "port": 9229, 

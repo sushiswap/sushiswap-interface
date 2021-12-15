@@ -1,7 +1,10 @@
-import { Dappeteer, launch, setupMetamask } from '@chainsafe/dappeteer'
-import puppeteer, { Browser, Page } from 'puppeteer'
+import { Dappeteer } from '@chainsafe/dappeteer'
+import { Browser, Page } from 'puppeteer'
 
+import { FUNDING_SOURCE } from './constants/FundingSource'
+import { TOKEN_ADDRESSES } from './constants/TokenAddresses'
 import { SwapPage } from './pages/swap/SwapPage'
+import { TestHelper } from './TestHelper'
 
 let browser: Browser
 let page: Page
@@ -11,54 +14,55 @@ let swapPage: SwapPage
 
 require('dotenv').config()
 
-let seed: string = process.env.TEST_SEED || 'seed seed seed'
-let pass: string = process.env.TEST_PASS || 'password'
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
 
-async function initPages() {
-  swapPage = new SwapPage(page, metamask, `${baseUrl}/trident/swap`)
-}
+const cases = [
+  ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
+  ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
+  ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
+  ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
+  ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
+]
+
+jest.retryTimes(1)
 
 describe('Trident Swap:', () => {
   beforeAll(async () => {
-    browser = await launch(puppeteer, {
-      metamaskVersion: 'v10.1.1',
-      headless: false,
-      defaultViewport: null,
-      slowMo: 5,
-      args: ['--no-sandbox'],
-      executablePath: process.env.PUPPETEER_EXEC_PATH,
-    })
-    try {
-      metamask = await setupMetamask(browser, { seed: seed, password: pass })
-      await metamask.switchNetwork('kovan')
-      await metamask.page.setDefaultTimeout(180000)
-    } catch (error) {
-      console.log('Unknown error occurred setting up metamask')
-      throw error
-    }
-    page = await browser.newPage()
-    await page.setDefaultTimeout(180000)
-    await page.setUserAgent(
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
-    )
-    await initPages()
+    ;[metamask, browser, page] = await TestHelper.initDappeteer()
+    swapPage = new SwapPage(page, metamask, `${baseUrl}/trident/swap`)
+
+    await page.goto(baseUrl)
+    await page.bringToFront()
+
+    await swapPage.connectMetamaskWallet()
+    await swapPage.addTokenToMetamask(TOKEN_ADDRESSES.WETH)
+  })
+
+  beforeEach(async () => {
+    await swapPage.blockingWait(2, true)
   })
 
   afterAll(async () => {
     browser.close()
   })
 
-  test('Should swap from ETH wallet to USDC wallet', async () => {
-    const ethWalletBalance = await metamask.getTokenBalance('ETH')
+  test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+    const ethWalletBalance = await swapPage.getTokenBalance(inToken as string)
+    if (!(ethWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
     const swapEthAmount = ethWalletBalance * 0.01
+    if (!(swapEthAmount > 0)) throw new Error(`${inToken} wallet balance is too low`)
 
-    await page.goto(baseUrl)
-    await page.bringToFront()
+    const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
+    const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
 
-    await swapPage.connectMetamaskWallet()
     await swapPage.navigateTo()
-
-    await swapPage.swapTokens('ETH', 'USDC', swapEthAmount.toFixed(5), true, true)
+    await swapPage.swapTokens(
+      inToken as string,
+      outToken as string,
+      swapEthAmount.toFixed(5),
+      payFromWallet,
+      receiveToWallet
+    )
   })
 })

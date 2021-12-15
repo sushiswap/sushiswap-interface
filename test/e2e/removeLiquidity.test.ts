@@ -25,6 +25,8 @@ async function initPages() {
   removeLiquidityPage = new RemoveLiquidityPage(page, metamask)
 }
 
+jest.retryTimes(1)
+
 describe('Remove Liquidity:', () => {
   beforeAll(async () => {
     browser = await launch(puppeteer, {

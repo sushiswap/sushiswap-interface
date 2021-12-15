@@ -31,6 +31,8 @@ async function importTokens() {
   await liquidityPoolsPage.addTokenToMetamask(TOKEN_ADDRESSES.USDC)
 }
 
+jest.retryTimes(1)
+
 describe('Add Liquidity:', () => {
   beforeAll(async () => {
     browser = await launch(puppeteer, {
