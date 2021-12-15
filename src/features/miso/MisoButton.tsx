@@ -4,6 +4,7 @@ import { CurrencyAmount, NativeCurrency, Token, ZERO } from '@sushiswap/core-sdk
 import LoadingCircle from 'app/animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
+import AuctionTimer from 'app/features/miso/AuctionTimer'
 import CommitReviewModal from 'app/features/miso/CommitReviewModal'
 import { Auction } from 'app/features/miso/context/Auction'
 import { AuctionStatus } from 'app/features/miso/context/types'
@@ -54,17 +55,21 @@ const MisoButton: FC<MisoButtonProps> = ({ auction, amount }) => {
 
   return (
     <>
-      <Button
-        onClick={() => setReview(true)}
-        disabled={!!error || auction.status !== AuctionStatus.LIVE}
-        className="outline-none h-[74px] bg-gradient-to-r from-red via-pink to-red transition-all disabled:scale-[1] hover:scale-[1.02] !opacity-100 disabled:!opacity-40"
-      >
-        <div className="flex flex-col">
-          <Typography className="text-white" weight={700}>
-            {error ? error : i18n._(t`Commit`)}
-          </Typography>
-        </div>
-      </Button>
+      <AuctionTimer auction={auction}>
+        {() => (
+          <Button
+            onClick={() => setReview(true)}
+            disabled={!!error || auction.status !== AuctionStatus.LIVE}
+            className="outline-none h-[74px] bg-gradient-to-r from-red via-pink to-red transition-all disabled:scale-[1] hover:scale-[1.02] !opacity-100 disabled:!opacity-40"
+          >
+            <div className="flex flex-col">
+              <Typography className="text-white" weight={700}>
+                {error ? error : i18n._(t`Commit`)}
+              </Typography>
+            </div>
+          </Button>
+        )}
+      </AuctionTimer>
       <CommitReviewModal amount={amount} auction={auction} open={review} onDismiss={() => setReview(false)} />
     </>
   )

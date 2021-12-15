@@ -26,8 +26,10 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
   return (
     <div className="grid md:grid-cols-3 grid-cols-2 items-end gap-8 md:gap-0">
       <div className="flex gap-3 order-1 md:order-1 items-center">
-        <Link href="/miso">
-          <ChevronLeftIcon width={36} className="cursor-pointer" />
+        <Link href="/miso" passHref={true}>
+          <div>
+            <ChevronLeftIcon width={36} className="cursor-pointer" />
+          </div>
         </Link>
         {documents && documents.icon && <img alt="logo" src={documents.icon} width={60} height="auto" />}
         <div className="flex flex-col gap-1">
@@ -35,19 +37,23 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
             <Typography weight={700} className="text-secondary">
               {auction.auctionToken.symbol}
             </Typography>
-            {auction && (
-              <Chip
-                size="sm"
-                color={
-                  auction.status === AuctionStatus.LIVE
-                    ? 'green'
-                    : auction.status === AuctionStatus.UPCOMING
-                    ? 'blue'
-                    : 'pink'
-                }
-                label={AuctionStatusById(i18n)[auction.status]}
-              />
-            )}
+            <AuctionTimer auction={auction}>
+              {() => {
+                return (
+                  <Chip
+                    size="sm"
+                    color={
+                      auction.status === AuctionStatus.LIVE
+                        ? 'green'
+                        : auction.status === AuctionStatus.UPCOMING
+                        ? 'blue'
+                        : 'pink'
+                    }
+                    label={AuctionStatusById(i18n)[auction.status]}
+                  />
+                )
+              }}
+            </AuctionTimer>
           </div>
           <Typography variant="h2" weight={700} className="text-high-emphesis">
             {auction.auctionToken.name}

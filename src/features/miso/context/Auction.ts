@@ -242,4 +242,24 @@ export class Auction {
 
     return this.currentPrice.invert().quote(amount)
   }
+
+  public get canFinalize(): boolean {
+    if (this.auctionInfo.finalized) return false
+    if (this.status !== AuctionStatus.FINISHED) return false
+    if (this.isOwner) return true
+    if (!this.marketInfo.liquidityTemplate) return false
+    return this.marketInfo.liquidityTemplate > 0
+  }
+
+  public get canClaim(): boolean {
+    if (!this.auctionInfo.finalized) return false
+    const tokensClaimable = JSBI.BigInt(this.marketInfo.tokensClaimable)
+    return JSBI.greaterThan(tokensClaimable, JSBI.BigInt(0))
+  }
+
+  public get canWithdraw(): boolean {
+    if (!this.auctionInfo.finalized) return false
+    if (this.auctionInfo.auctionSuccessful) return false
+    return JSBI.greaterThan(JSBI.BigInt(this.marketInfo.commitments), JSBI.BigInt(0))
+  }
 }

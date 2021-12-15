@@ -14,7 +14,7 @@ import React, { FC } from 'react'
 import { Auction } from '../context/Auction'
 import AuctionSkeleton from './AuctionSkeleton'
 
-const AuctionCard: FC<{ auction?: Auction; link: boolean }> = ({ auction, link = true }) => {
+const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link = true }) => {
   const { i18n } = useLingui()
 
   if (!auction) {

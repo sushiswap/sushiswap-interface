@@ -1,11 +1,14 @@
 import { Feature } from 'app/enums'
+import AuctionClaimer from 'app/features/miso/AuctionClaimer'
 import AuctionCommitter from 'app/features/miso/AuctionCommitter'
 import AuctionDocuments from 'app/features/miso/AuctionDocuments'
 import AuctionEditHeader from 'app/features/miso/AuctionEditHeader'
+import AuctionFinalizeModal from 'app/features/miso/AuctionFinalizeModal'
 import AuctionHeader from 'app/features/miso/AuctionHeader'
 import AuctionStats from 'app/features/miso/AuctionStats'
 import AuctionTabs from 'app/features/miso/AuctionTabs'
 import useAuction from 'app/features/miso/context/hooks/useAuction'
+import { AuctionStatus } from 'app/features/miso/context/types'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout from 'app/layouts/Miso'
 import { useRouter } from 'next/router'
@@ -27,9 +30,14 @@ const MisoAuction = () => {
       <div className="flex border-b border-dark-900" />
       <section>
         <div className="flex flex-col lg:flex-row gap-[60px]">
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 lg:max-w-[396px]">
             <AuctionDocuments auction={auction} />
-            <AuctionCommitter auction={auction} />
+            <div className="flex flex-grow" />
+            {auction?.status === AuctionStatus.FINISHED ? (
+              <AuctionClaimer auction={auction} />
+            ) : (
+              <AuctionCommitter auction={auction} />
+            )}
           </div>
           <AuctionStats auction={auction} />
         </div>
@@ -37,6 +45,7 @@ const MisoAuction = () => {
       <section className="mt-4">
         <AuctionTabs auction={auction} />
       </section>
+      <AuctionFinalizeModal auction={auction} />
     </div>
   )
 }

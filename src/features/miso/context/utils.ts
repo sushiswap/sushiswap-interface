@@ -16,7 +16,6 @@ export const AuctionTitleByTemplateId = (i18n) => ({
   3: i18n._(t`Batch Auction`),
 })
 
-// TODO ramin: remove ropsten
 export const MisoAbiByTemplateId = (chainId: ChainId, templateId: AuctionTemplate) => {
   return {
     1: MISO[chainId]?.['ropsten']?.contracts.Crowdsale.abi,
