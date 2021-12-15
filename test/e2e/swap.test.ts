@@ -15,7 +15,6 @@ let swapPage: SwapPage
 require('dotenv').config()
 
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
-let ci: string = process.env.CI || 'false'
 
 const cases = [
   ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
@@ -25,7 +24,7 @@ const cases = [
   ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
 ]
 
-jest.retryTimes(2)
+jest.retryTimes(1)
 
 describe('Trident Swap:', () => {
   beforeAll(async () => {
