@@ -19,7 +19,12 @@ export class TestHelper {
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
       await metamask.switchNetwork('kovan')
-      await metamask.page.setDefaultTimeout(60000)
+
+      if (process.env.CI === 'true') {
+        await metamask.page.setDefaultTimeout(60000)
+      } else {
+        await metamask.page.setDefaultTimeout(10000)
+      }
     } catch (error) {
       console.log('Error occurred setting up metamask')
       throw error
@@ -36,7 +41,7 @@ export class TestHelper {
         metamaskVersion: 'v10.1.1',
         headless: false,
         defaultViewport: null,
-        slowMo: 5,
+        slowMo: process.env.CI === 'true' ? 5 : 0,
         args: ['--no-sandbox'],
         executablePath: process.env.PUPPETEER_EXEC_PATH,
       })
@@ -53,7 +58,13 @@ export class TestHelper {
 
     try {
       page = await browser.newPage()
-      await page.setDefaultTimeout(180000)
+
+      if (process.env.CI === 'true') {
+        await page.setDefaultTimeout(180000)
+      } else {
+        await page.setDefaultTimeout(10000)
+      }
+
       await page.setUserAgent(
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
       )
