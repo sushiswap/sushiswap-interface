@@ -16,6 +16,7 @@ import {
   useOhmPrice,
   useSushiPairs,
   useSushiPrice,
+  useFusePrice,
 } from '../services/graph'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -49,7 +50,18 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice, movrPrice, ohmPrice] = [
+  const [
+    sushiPrice,
+    ethPrice,
+    maticPrice,
+    stakePrice,
+    onePrice,
+    spellPrice,
+    celoPrice,
+    movrPrice,
+    ohmPrice,
+    fusePrice,
+  ] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -59,6 +71,7 @@ export default function useFarmRewards() {
     useCeloPrice(),
     useMovrPrice(),
     useOhmPrice(),
+    useFusePrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -148,7 +161,7 @@ export default function useFarmRewards() {
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
             ? pool.rewarder.rewardPerSecond / 1e18
             : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
@@ -192,16 +205,26 @@ export default function useFarmRewards() {
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: movrPrice,
           },
+          [ChainId.FUSE]: {
+            token: 'FUSE',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: fusePrice,
+          },
         }
 
-        rewards[0] = {
-          ...defaultReward,
-          rewardPerBlock: sushiPerBlock,
-          rewardPerDay: sushiPerDay,
-        }
-
-        if (chainId in reward) {
-          rewards[1] = reward[chainId]
+        if (chainId !== ChainId.FUSE) {
+          rewards[0] = {
+            ...defaultReward,
+            rewardPerBlock: sushiPerBlock,
+            rewardPerDay: sushiPerDay,
+          }
+          if (chainId in reward) {
+            rewards[1] = reward[chainId]
+          }
+        } else {
+          rewards[0] = reward[chainId]
         }
 
         if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {

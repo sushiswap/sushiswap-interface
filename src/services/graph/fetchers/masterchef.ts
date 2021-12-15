@@ -21,6 +21,7 @@ export const MINICHEF = {
   [ChainId.ARBITRUM]: 'matthewlilley/arbitrum-minichef',
   [ChainId.CELO]: 'sushiswap/celo-minichef',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
+  [ChainId.FUSE]: 'sushiswap/fuse-minichef',
 }
 
 export const miniChef = async (query, chainId = ChainId.MAINNET) =>
@@ -90,7 +91,6 @@ export const getMiniChefFarms = async (chainId = ChainId.MAINNET) => {
 }
 
 export const getMiniChefPairAddreses = async (chainId = ChainId.MAINNET) => {
-  console.debug('getMiniChefPairAddreses')
   const { pools } = await miniChef(miniChefPairAddressesQuery, chainId)
   return pools
 }
