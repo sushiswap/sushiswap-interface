@@ -76,6 +76,8 @@ export abstract class AppPage {
     await this.Metamask.page.bringToFront()
     await this.blockingWait(1, true)
 
+    await this.closeMetamaskWhatsNew()
+
     const assetMenutButton = await this.Metamask.page.waitForSelector(`li[data-testid="home__asset-tab"]`)
     await assetMenutButton.click()
     await this.blockingWait(1, true)
@@ -101,7 +103,7 @@ export abstract class AppPage {
   }
 
   public async closeMetamaskWhatsNew(): Promise<void> {
-    await this.Metamask.page.waitForTimeout(1000)
+    await this.blockingWait(1, true)
     const closeWhatsNewButton = await this.Metamask.page.$(
       '#popover-content > div > div > section > header > div > button'
     )
