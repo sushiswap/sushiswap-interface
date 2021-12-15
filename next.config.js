@@ -34,8 +34,11 @@ const nextConfig = {
     runtimeCaching,
     disable: process.env.NODE_ENV === 'development',
   },
+  productionBrowserSourceMaps: false,
   images: {
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
+    loader: 'imgix',
+    path: 'https://aufz7-4qaaa-aaaaf-qae3a-cai.raw.ic0.app/',
   },
   reactStrictMode: true,
   async redirects() {
@@ -164,11 +167,6 @@ const nextConfig = {
         destination: '/user/balances',
       },
     ]
-  },
-  i18n: {
-    localeDetection: true,
-    locales,
-    defaultLocale: sourceLocale,
   },
 }
 

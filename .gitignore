@@ -26,3 +26,6 @@ public/workbox*.js.map
 lokalise.yaml
 
 coverage
+
+out/
+.dfx/

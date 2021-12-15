@@ -73,27 +73,28 @@ function MyApp({
 
   useEffect(() => {
     async function load(locale) {
-      i18n.loadLocaleData(locale, { plurals: plurals[locale.split('_')[0]] })
+      i18n.loadLocaleData('en', { plurals: plurals['en'] })
 
-      try {
-        // Load messages from AWS, use q session param to get latest version from cache
-        const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json?q=${sessionId}`)
-        const remoteMessages = await resp.json()
+      //try {
+      // Load messages from AWS, use q session param to get latest version from cache
+      const resp = await fetch(`https://d3l928w2mi7nub.cloudfront.net/${locale}.json?q=${sessionId}`)
+      const remoteMessages = await resp.json()
 
-        const messages = remoteLoader({ messages: remoteMessages, format: 'minimal' })
-        i18n.load(locale, messages)
-      } catch {
-        // Load fallback messages
-        const { messages } = await import(`@lingui/loader!./../../locale/${locale}.json?raw-lingui`)
-        i18n.load(locale, messages)
-      }
+      const messages = remoteLoader({ messages: remoteMessages, format: 'minimal' })
+      i18n.load(locale, messages)
+      //}
+      // catch {
+      //   // Load fallback messages
+      //   const { messages } = await import(`@lingui/loader!./../../locale/${locale}.json?raw-lingui`)
+      //   i18n.load(locale, messages)
+      // }
 
       i18n.activate(locale)
     }
 
     load(locale)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [locale])
+  }, ['en'])
 
   // Allows for conditionally setting a provider to be hoisted per page
   const Provider = Component.Provider || Fragment

@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "sushiswap_assets": {
+      "frontend": {
+        "entrypoint": "out/index.html"
+      },
+      "source": [
+        "out"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
+

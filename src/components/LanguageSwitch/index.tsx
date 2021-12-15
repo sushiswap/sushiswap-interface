@@ -62,7 +62,7 @@ export default function LangSwitcher() {
           >
             <Menu.Items className="absolute right-0 w-[max-content] mt-2 origin-top-right divide-y divide-dark-600 rounded shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="p-2">
-                {locales.map((locale) => {
+                {['en'].map((locale) => {
                   return (
                     <Menu.Item key={locale}>
                       {({ active }) => (
