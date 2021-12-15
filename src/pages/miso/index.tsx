@@ -44,7 +44,7 @@ const Miso = () => {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         {auctions?.map((auction, index) => {
           return <AuctionCard auction={auction} key={index} />
         })}

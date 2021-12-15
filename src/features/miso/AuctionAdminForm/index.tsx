@@ -11,9 +11,16 @@ import {
   WechatIcon,
 } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
+import {
+  imageSizeValidator,
+  maxCharactersValidator,
+  pipeline,
+  urlValidator,
+} from 'app/features/miso/AuctionAdminForm/validators'
 import AuctionCard from 'app/features/miso/AuctionCard'
 import { Auction } from 'app/features/miso/context/Auction'
 import { DocumentInput, useSetAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
+import { classNames } from 'app/functions'
 import React, { FC, useCallback, useState } from 'react'
 
 interface AuctionAdminFormProps {
@@ -36,6 +43,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   const [bannedCountries, setBannedCountries] = useState<string>(auction.auctionDocuments.bannedCountries)
   const [bannedWarning, setBannedWarning] = useState<string>(auction.auctionDocuments.bannedWarning)
   const [desktopBanner, setDesktopBanner] = useState<string>(auction.auctionDocuments.desktopBanner)
+  const [errors, setErrors] = useState<{}>({})
 
   const exampleAuction = new Auction({
     template: auction.template,
@@ -60,11 +68,38 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
     whitelist: auction.whitelist,
   })
 
+  const hasErrors = Object.values(errors).filter((el) => !!el).length > 0
+  const inputClassNames = (error: boolean) =>
+    classNames(
+      error ? '!border-red' : '',
+      'placeholder:text-low-emphesis bg-dark-1000 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800'
+    )
+
+  const getError = useCallback((val) => !!errors[val], [errors])
+
+  const getErrorOrElement = useCallback(
+    (val, fallback) => {
+      if (errors[val]) return <p className="mt-2 text-sm text-red">{errors[val]}</p>
+      return fallback
+    },
+    [errors]
+  )
+
+  const setError = useCallback((val) => {
+    setErrors((prevState) => ({
+      ...prevState,
+      ...val,
+    }))
+  }, [])
+
   const save = useCallback(() => {
+    if (hasErrors) {
+      return console.error('Invalid form inputs')
+    }
+
     const currentDocs = { ...auction.auctionDocuments }
     const newDocs = { ...exampleAuction.auctionDocuments }
     const diff = Object.entries(newDocs).reduce<DocumentInput[]>((acc, [k, v]) => {
-      console.log(currentDocs[k], newDocs[k])
       if (currentDocs[k] !== newDocs[k]) {
         acc.push({ name: k, data: v })
       }
@@ -73,11 +108,11 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
     }, [])
 
     setDocuments(diff)
-  }, [auction.auctionDocuments, exampleAuction.auctionDocuments, setDocuments])
+  }, [auction.auctionDocuments, exampleAuction.auctionDocuments, hasErrors, setDocuments])
 
   return (
-    <div className="flex flex-col lg:flex-row bg-dark-900 p-10 rounded shadow-xl shadow-red/5 gap-10">
-      <div className="space-y-8 divide-y divide-dark-700">
+    <div className="flex flex-col lg:flex-row gap-10">
+      <div className="bg-dark-900 p-10 rounded space-y-8 divide-y divide-dark-700 shadow-xl shadow-red/5">
         <div className="space-y-8 divide-y divide-dark-700">
           <div>
             <div className="flex flex-col gap-1">
@@ -92,15 +127,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                 <div className="mt-2 flex rounded-md shadow-sm">
                   <input
                     value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
+                    placeholder="https://example.com"
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setWebsite(e.target.value),
+                        (e) => setError({ website: e })
+                      )
+                    }
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Please note that the URL must use https.`)}</p>
+                {getErrorOrElement(
+                  'website',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Please note that the URL must use https.`)}</p>
+                )}
               </div>
 
               <div className="col-span-3">
@@ -108,35 +154,29 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                 <div className="mt-2 flex rounded-md shadow-sm">
                   <input
                     value={icon}
-                    onChange={(e) => setIcon(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300, imageSizeThreshold: 150000 },
+                        [urlValidator, imageSizeValidator, maxCharactersValidator],
+                        () => setIcon(e.target.value),
+                        (e) => setError({ icon: e })
+                      )
+                    }
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="bg-dark-1000 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  {i18n._(t`Link to your icon, preferably 256x256 and .png format`)}
-                </p>
-              </div>
-
-              <div className="col-span-3">
-                <Typography weight={700}>{i18n._(t`Card Banner`)}</Typography>
-                <div className="mt-2 flex rounded-md shadow-sm">
-                  <input
-                    value={desktopBanner}
-                    onChange={(e) => setDesktopBanner(e.target.value)}
-                    type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
-                    className="bg-dark-1000 rounded px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
-                  />
-                </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  {i18n._(t`Link to your card banner, preferably be of 400x580 dimensions`)}
-                </p>
+                {getErrorOrElement(
+                  'icon',
+                  <p className="mt-2 text-sm text-gray-500">
+                    {i18n._(
+                      t`Icon image must be smaller than 75kB, this is to keep site speed optimized. Icon dimensions preferably 128x128 or smaller`
+                    )}
+                  </p>
+                )}
               </div>
 
               <div className="col-span-3">
@@ -144,7 +184,14 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                 <div className="mt-2">
                   <textarea
                     value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [maxCharactersValidator],
+                        () => setDescription(e.target.value),
+                        (e) => setError({ description: e })
+                      )
+                    }
                     rows={6}
                     name="description"
                     id="description"
@@ -152,9 +199,14 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                     className="bg-dark-1000 rounded px-3 outline-none py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  {i18n._(t`Summary of your project in at most 300 characters`)}.
-                </p>
+                {getErrorOrElement(
+                  'description',
+                  <p className="mt-2 text-sm text-gray-500">
+                    {description
+                      ? `${description.length} / 300 Characters`
+                      : i18n._(t`Summary of your project in at most 300 characters`)}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -178,15 +230,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   </span>
                   <input
                     value={twitter}
-                    onChange={(e) => setTwitter(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setTwitter(e.target.value),
+                        (e) => setError({ twitter: e })
+                      )
+                    }
+                    placeholder="https://twitter.com"
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded-none rounded-r-md px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded-none rounded-r-md px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Twitter profile`)}</p>
+                {getErrorOrElement(
+                  'twitter',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Twitter profile`)}</p>
+                )}
               </div>
 
               <div className="sm:col-span-6">
@@ -197,15 +260,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   </span>
                   <input
                     value={github}
-                    onChange={(e) => setGithub(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setGithub(e.target.value),
+                        (e) => setError({ github: e })
+                      )
+                    }
+                    placeholder="https://github.com"
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Github repository`)}</p>
+                {getErrorOrElement(
+                  'github',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Github repository`)}</p>
+                )}
               </div>
 
               <div className="sm:col-span-6">
@@ -216,15 +290,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   </span>
                   <input
                     value={telegram}
-                    onChange={(e) => setTelegram(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setTelegram(e.target.value),
+                        (e) => setError({ telegram: e })
+                      )
+                    }
+                    placeholder="https://telegram.com"
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Telegram group chat`)}</p>
+                {getErrorOrElement(
+                  'telegram',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Telegram group chat`)}</p>
+                )}
               </div>
 
               <div className="sm:col-span-6">
@@ -235,15 +320,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   </span>
                   <input
                     value={wechat}
-                    onChange={(e) => setWechat(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setWechat(e.target.value),
+                        (e) => setError({ wechat: e })
+                      )
+                    }
+                    placeholder="https://wechat.com"
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your WeChat group chat`)}</p>
+                {getErrorOrElement(
+                  'wechat',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your WeChat group chat`)}</p>
+                )}
               </div>
 
               <div className="sm:col-span-6">
@@ -254,15 +350,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   </span>
                   <input
                     value={discord}
-                    onChange={(e) => setDiscord(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setDiscord(e.target.value),
+                        (e) => setError({ discord: e })
+                      )
+                    }
+                    placeholder="https://discord.gg"
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Your Discord invite link`)}</p>
+                {getErrorOrElement(
+                  'discord',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Your Discord invite link`)}</p>
+                )}
               </div>
 
               <div className="sm:col-span-6">
@@ -273,15 +380,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   </span>
                   <input
                     value={reddit}
-                    onChange={(e) => setReddit(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setReddit(e.target.value),
+                        (e) => setError({ reddit: e })
+                      )
+                    }
+                    placeholder="https://reddit.com"
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Reddit board`)}</p>
+                {getErrorOrElement(
+                  'reddit',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Reddit board`)}</p>
+                )}
               </div>
 
               <div className="sm:col-span-6">
@@ -292,15 +410,26 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   </span>
                   <input
                     value={medium}
-                    onChange={(e) => setMedium(e.target.value)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setMedium(e.target.value),
+                        (e) => setError({ medium: e })
+                      )
+                    }
+                    placeholder="https://medium.com"
                     type="text"
                     name="username"
                     id="username"
                     autoComplete="username"
-                    className="bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="placeholder:text-low-emphesis bg-dark-1000 rounded-none rounded-r-md  px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Medium account`)}</p>
+                {getErrorOrElement(
+                  'medium',
+                  <p className="mt-2 text-sm text-gray-500">{i18n._(t`Link to your Medium account`)}</p>
+                )}
               </div>
             </div>
           </div>
@@ -369,7 +498,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                     id="country"
                     name="country"
                     autoComplete="country-name"
-                    className="after:pr-2 bg-dark-1000 pr-10 rounded pl-3 py-2 outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-1/2 min-w-0 border border-dark-800"
+                    className="after:pr-2 bg-dark-1000 pr-10 rounded pl-3 py-2 outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   >
                     <option>United States</option>
                     <option>Canada</option>
@@ -383,8 +512,15 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                 <div className="mt-2">
                   <textarea
                     value={bannedWarning}
-                    onChange={(e) => setBannedWarning(e.target.value)}
-                    rows={6}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300 },
+                        [maxCharactersValidator],
+                        () => setBannedWarning(e.target.value),
+                        (e) => setError({ bannedWarning: e })
+                      )
+                    }
+                    rows={7}
                     name="description"
                     id="description"
                     autoComplete="description"
@@ -392,9 +528,14 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                     className="placeholder:text-low-emphesis bg-dark-1000 rounded px-3 outline-none py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
                   />
                 </div>
-                <p className="mt-2 text-sm text-gray-500">
-                  {i18n._(t`Legal warning for your project in at most 300 characters`)}
-                </p>
+                {getErrorOrElement(
+                  'bannedWarning',
+                  <p className="mt-2 text-sm text-gray-500">
+                    {bannedWarning
+                      ? `${bannedWarning.length} / 300 Characters`
+                      : i18n._(t`Legal warning for your project in at most 300 characters`)}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -424,11 +565,12 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
           <div className="flex justify-end">
             <div>
               <Button
+                disabled={hasErrors}
                 onClick={save}
-                color="gradient"
+                color="blue"
                 className="!shadow-md inline-flex justify-center py-2 !px-10 !opacity-100 !text-high-emphesis hover:scale-[1.05] transform-all"
               >
-                {i18n._(t`Save`)}
+                {hasErrors ? i18n._(t`Invalid inputs`) : i18n._(t`Save`)}
               </Button>
             </div>
           </div>
@@ -440,8 +582,8 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
             {i18n._(t`Example Card`)}
           </Typography>
         </div>
-        <div className="mt-3 sticky top-[104px] w-[400px] h-[580px] pointer-events-none">
-          <AuctionCard auction={exampleAuction} />
+        <div className="mt-3 sticky top-[104px] w-[296px] h-[430px]" role="button">
+          <AuctionCard auction={exampleAuction} link={false} />
         </div>
       </div>
     </div>

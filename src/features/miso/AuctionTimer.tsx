@@ -38,7 +38,7 @@ const AuctionTimer: FC<AuctionTimerProps> = ({ auction, children }) => {
     return (
       <div className="flex gap-2">
         <div className="flex items-baseline gap-2">
-          <Typography variant="sm" weight={700} className="text-mono">
+          <Typography variant="xs" weight={700} className="text-mono">
             {remaining.days}D
           </Typography>
           <Typography variant="xxs" weight={700} className="text-mono text-secondary">
@@ -46,7 +46,7 @@ const AuctionTimer: FC<AuctionTimerProps> = ({ auction, children }) => {
           </Typography>
         </div>
         <div className="flex items-baseline gap-2">
-          <Typography variant="sm" weight={700} className="text-mono">
+          <Typography variant="xs" weight={700} className="text-mono">
             {remaining.hours}H
           </Typography>
           <Typography variant="xxs" weight={700} className="text-mono text-secondary">
@@ -54,7 +54,7 @@ const AuctionTimer: FC<AuctionTimerProps> = ({ auction, children }) => {
           </Typography>
         </div>
         <div className="flex items-baseline gap-2">
-          <Typography variant="sm" weight={700} className="text-mono">
+          <Typography variant="xs" weight={700} className="text-mono">
             {remaining.minutes}M
           </Typography>
           <Typography variant="xxs" weight={700} className="text-mono text-secondary">
@@ -62,7 +62,7 @@ const AuctionTimer: FC<AuctionTimerProps> = ({ auction, children }) => {
           </Typography>
         </div>
         <div className="flex items-baseline gap-2">
-          <Typography variant="sm" weight={700} className="text-mono">
+          <Typography variant="xs" weight={700} className="text-mono">
             {remaining.seconds}S
           </Typography>
         </div>

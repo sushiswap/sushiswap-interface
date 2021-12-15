@@ -6,13 +6,14 @@ import { FC } from 'react'
 
 interface AuctionChartProps {
   auction: Auction
+  prices: boolean
 }
-const AuctionChart: FC<AuctionChartProps> = ({ auction }) => {
+const AuctionChart: FC<AuctionChartProps> = ({ auction, prices = true }) => {
   if (auction.template === AuctionTemplate.DUTCH_AUCTION) {
-    return <AuctionChartDutch auction={auction} />
+    return <AuctionChartDutch auction={auction} prices={prices} />
   }
 
-  return <AuctionChartCrowdsale auction={auction} />
+  return <AuctionChartCrowdsale auction={auction} prices={prices} />
 }
 
 export default AuctionChart

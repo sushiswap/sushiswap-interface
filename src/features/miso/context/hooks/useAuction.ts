@@ -14,7 +14,7 @@ import { Auction } from '../Auction'
 import { useAuctionList } from './useAuctionList'
 import { useAuctionUserMarketInfo, useAuctionUserMarketInfos } from './useAuctionUserMarketInfo'
 
-export const useAuctions = (type: AuctionStatus, owner?: string): Auction[] | undefined => {
+export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | undefined)[] | undefined => {
   const { chainId } = useActiveWeb3React()
   const auctions = useAuctionList(type)
   const addresses = useMemo(() => auctions.map((el) => el.addr), [auctions])
@@ -28,7 +28,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): Auction[] | un
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
 
     return auctions
-      .reduce<Auction[]>((acc, el, index) => {
+      .reduce<(Auction | undefined)[]>((acc, el, index) => {
         const template = auctionTemplateIds[index]?.toNumber()
         const auctionInfo = auctionInfos[index]
         const marketInfo = userMarketInfos[index]
@@ -66,6 +66,8 @@ export const useAuctions = (type: AuctionStatus, owner?: string): Auction[] | un
         return acc
       }, [])
       .sort((a, b) => {
+        if (!a || !b) return 0
+
         // Sort first expiring auction first
         if (type === AuctionStatus.LIVE || type === AuctionStatus.UPCOMING)
           return a.auctionInfo.endTime.toNumber() <= b.auctionInfo.endTime.toNumber() ? -1 : 1
@@ -88,7 +90,6 @@ export const useAuction = (address: string, owner?: string) => {
     if (!chainId || !marketTemplateId || !auctionInfo || !userMarketInfo || !auctionDocuments) return
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    console.log(userMarketInfo.isAdmin)
     if (owner && !userMarketInfo.isAdmin) return undefined
 
     return new Auction({
@@ -106,7 +107,7 @@ export const useAuction = (address: string, owner?: string) => {
       auctionDocuments,
       whitelist,
     })
-  }, [auctionDocuments, auctionInfo, chainId, marketTemplateId, userMarketInfo, whitelist])
+  }, [auctionDocuments, auctionInfo, chainId, marketTemplateId, owner, userMarketInfo, whitelist])
 }
 
 export default useAuction
