@@ -70,7 +70,7 @@ const PointListDragAndDrop: FC<PointListDragAndDropProps> = ({ auction }) => {
           acc[0].push(cur.account)
           acc[1].push(
             new Fraction(
-              toWei('1.341034343'),
+              toWei(cur.amount),
               JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18 - auction.paymentToken.decimals))
             ).quotient.toString()
           )

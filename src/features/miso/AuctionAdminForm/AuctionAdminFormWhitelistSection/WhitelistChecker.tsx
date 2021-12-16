@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ZERO } from '@sushiswap/core-sdk'
 import AuctionAdminFormTextField from 'app/features/miso/AuctionAdminForm/AuctionAdminFormTextField'
 import { isAddressValidator, pipeline } from 'app/features/miso/AuctionAdminForm/validators'
 import { Auction } from 'app/features/miso/context/Auction'
@@ -18,7 +19,7 @@ const WhitelistChecker: FC<WhitelistCheckerProps> = ({ auction }) => {
   const valid = isAddress(address)
   const points = useAuctionPointListPoints(auction.whitelist?.[0], !error && valid ? valid : undefined)
 
-  const whitelisted = address && !error && points && points > 0
+  const whitelisted = address && !error && points && points.greaterThan(ZERO)
   const nonWhitelisted = address && !error && !points
 
   return (
