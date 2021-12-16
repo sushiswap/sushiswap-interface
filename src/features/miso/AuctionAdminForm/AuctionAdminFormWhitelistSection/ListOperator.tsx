@@ -27,7 +27,13 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
       rel="noreferrer"
       className="text-purple"
     >
-      {i18n._(t`docs`)}
+      {i18n._(t`here`)}
+    </a>
+  )
+
+  const link = (
+    <a href="https://miso.sushi.com/factory/points-list" target="_blank" rel="noreferrer" className="text-purple">
+      {i18n._(t`here`)}
     </a>
   )
 
@@ -67,13 +73,22 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
             placeholder="0x..."
             value={operator}
             helperText={
-              <p className="mt-2 text-sm text-gray-500">
-                <Trans
-                  id="An address or contract that contains and controls the list. Please refer to the {docs} fore more info"
-                  values={{ docs }}
-                  components={Fragment}
-                />
-              </p>
+              <>
+                <p className="mt-2 text-sm text-gray-500">
+                  <Trans
+                    id="An address or contract that contains and controls the list. You can create a point list {link}"
+                    values={{ link }}
+                    components={Fragment}
+                  />
+                </p>
+                <p className="text-sm text-gray-500">
+                  <Trans
+                    id="More documentation on point lists can be found {docs}"
+                    values={{ docs }}
+                    components={Fragment}
+                  />
+                </p>
+              </>
             }
           />
         </div>
