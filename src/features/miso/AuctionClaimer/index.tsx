@@ -20,7 +20,7 @@ const AuctionClaimer: FC<AuctionClaimerProps> = ({ auction }) => {
   const { claimTokens } = useAuctionEdit(
     auction?.auctionInfo.addr,
     auction?.template,
-    auction?.marketInfo.liquidityTemplate
+    auction?.auctionInfo.liquidityTemplate
   )
 
   const handleClick = useCallback(async () => {

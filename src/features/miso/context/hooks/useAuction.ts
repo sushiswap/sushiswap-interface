@@ -24,7 +24,6 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
   const auctionInfos = useAuctionRawInfos(addresses, auctionTemplateIds)
   const auctionDocuments = useAuctionDocuments(addresses)
   const whitelists = useAuctionPointLists(addresses)
-
   return useMemo(() => {
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
 
@@ -42,7 +41,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
           return acc
         }
 
-        if (marketInfo && template && auctionInfo && paymentToken && auctionDocs && whitelist) {
+        if (template && auctionInfo && paymentToken && auctionDocs && whitelist) {
           acc.push(
             new Auction({
               template,
@@ -83,16 +82,16 @@ export const useAuction = (address: string, owner?: string) => {
   const { chainId } = useActiveWeb3React()
   const marketTemplateId = useAuctionMarketTemplateId(address)
   const auctionInfo = useAuctionRawInfo(address, marketTemplateId)
-  const userMarketInfo = useAuctionUserMarketInfo(address, owner ?? undefined)
+  const marketInfo = useAuctionUserMarketInfo(address, owner ?? undefined)
   const auctionDocuments = useAuctionDocument(address)
   const whitelist = useAuctionPointList(address)
   const { liquidityTemplate, lpTokenAddress } = useAuctionLiquidityTemplate(address)
 
   return useMemo(() => {
-    if (!chainId || !marketTemplateId || !auctionInfo || !userMarketInfo || !auctionDocuments) return
+    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments) return
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    if (owner && !userMarketInfo.isAdmin) return undefined
+    if (owner && !marketInfo?.isAdmin) return undefined
 
     return new Auction({
       template: marketTemplateId.toNumber(),
@@ -104,12 +103,12 @@ export const useAuction = (address: string, owner?: string) => {
         auctionInfo.tokenInfo.name
       ),
       paymentToken,
-      auctionInfo,
-      marketInfo: {
-        ...userMarketInfo,
+      auctionInfo: {
+        ...auctionInfo,
         liquidityTemplate: liquidityTemplate?.toNumber(),
         lpTokenAddress,
       },
+      marketInfo,
       auctionDocuments,
       whitelist,
     })
@@ -119,9 +118,9 @@ export const useAuction = (address: string, owner?: string) => {
     chainId,
     liquidityTemplate,
     lpTokenAddress,
+    marketInfo,
     marketTemplateId,
     owner,
-    userMarketInfo,
     whitelist,
   ])
 }

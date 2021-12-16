@@ -80,6 +80,8 @@ export interface RawAuctionInfo {
   minimumPrice?: BigNumber
   startPrice?: BigNumber
   minimumCommitmentAmount?: BigNumber
+  liquidityTemplate?: number
+  lpTokenAddress?: string
 }
 
 export interface RawMarketInfo {
@@ -87,8 +89,6 @@ export interface RawMarketInfo {
   commitments: BigNumber
   tokensClaimable: BigNumber
   isAdmin: boolean
-  liquidityTemplate?: number
-  lpTokenAddress?: string
 }
 
 export interface Auction {

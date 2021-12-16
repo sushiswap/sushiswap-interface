@@ -79,7 +79,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
           label={i18n._(t`Amount Raised`)}
           value={
             <div className="flex justify-start items-baseline gap-1 lg:justify-end">
-              {auction.totalTokensCommitted?.toSignificant(6)}
+              {auction.auctionInfo.commitmentsTotal.toNumber()}
               <Typography variant="sm" weight={700} className="text-low-emphesis">
                 {auction.totalTokensCommitted?.currency.symbol}
               </Typography>

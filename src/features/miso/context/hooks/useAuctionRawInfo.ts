@@ -48,6 +48,7 @@ export const useAuctionRawInfos = (
 }
 
 export const useAuctionRawInfo = (auction: string, templateId?: BigNumber): RawAuctionInfo | undefined => {
+  console.log(templateId)
   const data = useAuctionRawInfos([auction], templateId ? [templateId] : undefined)
 
   if (data && Array.isArray(data) && data.length > 0) {
