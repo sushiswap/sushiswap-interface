@@ -21,6 +21,7 @@ import {
   WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
+import MISO from '@sushiswap/miso/exports/all.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
@@ -47,6 +48,7 @@ import MASTERCHEF_V2_ABI from 'app/constants/abis/masterchef-v2.json'
 import MEOWSHI_ABI from 'app/constants/abis/meowshi.json'
 import MERKLE_DISTRIBUTOR_ABI from 'app/constants/abis/merkle-distributor.json'
 import MINICHEF_ABI from 'app/constants/abis/minichef-v2.json'
+import MISO_HELPER_ABI from 'app/constants/abis/miso-helper.json'
 import MULTICALL2_ABI from 'app/constants/abis/multicall2.json'
 import ROUTER_ABI from 'app/constants/abis/router.json'
 import SUSHI_ABI from 'app/constants/abis/sushi.json'
@@ -252,4 +254,10 @@ export function useStablePoolFactory(withSignerIfPossible?: boolean): Contract |
   const { chainId } = useActiveWeb3React()
   const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HybridPoolFactory
   return useContract(factory?.address, factory?.abi, withSignerIfPossible)
+}
+
+export function useMisoHelperContract(withSignerIfPossible = true): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  const factory = MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOHelper
+  return useContract(factory?.address, MISO_HELPER_ABI, withSignerIfPossible)
 }

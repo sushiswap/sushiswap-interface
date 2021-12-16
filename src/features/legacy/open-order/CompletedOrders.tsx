@@ -4,11 +4,10 @@ import { OrderStatus } from '@sushiswap/limit-order-sdk'
 import loadingCircle from 'app/animation/loading-circle.json'
 import Badge from 'app/components/Badge'
 import CurrencyLogo from 'app/components/CurrencyLogo'
+import Pagination from 'app/components/Pagination'
 import useLimitOrders from 'app/hooks/useLimitOrders'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-
-import Pagination from './Pagination'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
@@ -97,6 +96,8 @@ const CompletedOrders: FC = () => {
               totalPages={completed.maxPages}
               currentPage={completed.page}
               pageNeighbours={2}
+              canNextPage={false}
+              canPreviousPage={false}
             />
           </>
         ) : (
