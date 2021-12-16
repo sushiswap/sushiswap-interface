@@ -17,7 +17,11 @@ const WhitelistChecker: FC<WhitelistCheckerProps> = ({ auction }) => {
   const [error, setError] = useState<string>()
   const [address, setAddress] = useState<string>()
   const valid = isAddress(address)
-  const points = useAuctionPointListPoints(auction.whitelist?.[0], !error && valid ? valid : undefined)
+  const points = useAuctionPointListPoints(
+    auction.whitelist?.[0],
+    !error && valid ? valid : undefined,
+    auction.paymentToken
+  )
 
   const whitelisted = address && !error && points && points.greaterThan(ZERO)
   const nonWhitelisted = address && !error && !points
