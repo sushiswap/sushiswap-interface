@@ -108,3 +108,8 @@ export interface AuctionCommitment {
   address: string
   amount: CurrencyAmount<Currency>
 }
+
+export type WhitelistEntry = {
+  account: string
+  amount: string
+}

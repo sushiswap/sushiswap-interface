@@ -40,7 +40,7 @@ const AuctionAdminFormTextArea: FC<AuctionAdminFormTextAreaProps> = ({
           className={classNames(
             error ? '!border-red' : '',
             icon ? 'rounded-none rounded-r-md' : 'rounded',
-            'placeholder:text-low-emphesis bg-dark-1000 rounded px-3 outline-none py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800'
+            'placeholder:text-low-emphesis bg-dark-1000/40 rounded px-3 outline-none py-2 focus:ring-purple focus:border-purple block w-full min-w-0 border border-dark-800'
           )}
         />
       </div>

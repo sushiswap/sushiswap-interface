@@ -6,7 +6,12 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
-export const useAuctionEdit = (address?: string, templateId?: number, liquidityTemplate?: number) => {
+export const useAuctionEdit = (
+  address?: string,
+  templateId?: number,
+  liquidityTemplate?: number,
+  listAddress?: string
+) => {
   const { chainId, account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const liquidityLauncherContract = useContract(
@@ -14,10 +19,15 @@ export const useAuctionEdit = (address?: string, templateId?: number, liquidityT
     chainId ? MISO[chainId]?.['ropsten']?.contracts.PostAuctionLauncher.abi : undefined
   )
 
+  const pointListContract = useContract(
+    listAddress,
+    chainId ? MISO[chainId]?.['ropsten']?.contracts.PointList.abi : undefined
+  )
+
   const auctionContract = useContract(
     address,
     chainId && templateId ? MisoAbiByTemplateId(chainId, templateId) : undefined,
-    false
+    true
   )
 
   const editDocuments = useCallback(
@@ -62,7 +72,6 @@ export const useAuctionEdit = (address?: string, templateId?: number, liquidityT
     if (!auctionContract || !account) return
 
     try {
-      console.log(auctionContract.interface.encodeFunctionData('withdrawTokens', [account]))
       const tx = await auctionContract.withdrawTokens(account)
       addTransaction(tx, { summary: 'Claim tokens' })
 
@@ -86,15 +95,62 @@ export const useAuctionEdit = (address?: string, templateId?: number, liquidityT
       return tx
     } catch (e) {
       console.error('finalize auction error: ', e)
-      return e
     }
   }, [addTransaction, auctionContract, liquidityLauncherContract, liquidityTemplate])
 
+  const updatePermissionList = useCallback(
+    async (address: string) => {
+      if (!auctionContract) return
+
+      try {
+        const tx = await auctionContract.setList(address)
+        addTransaction(tx, { summary: 'Set permission list' })
+        return tx
+      } catch (e) {
+        console.error('set permission list error: ', e.message)
+      }
+    },
+    [addTransaction, auctionContract]
+  )
+
+  const updatePermissionListStatus = useCallback(
+    async (status: boolean) => {
+      if (!auctionContract) return
+
+      try {
+        const tx = await auctionContract.enableList(status)
+        addTransaction(tx, { summary: status ? 'Enable permission list' : 'Disable permission list' })
+        return tx
+      } catch (e) {
+        console.error('set permission list status error:', e.message)
+      }
+    },
+    [addTransaction, auctionContract]
+  )
+
+  const updatePointList = useCallback(
+    async (accounts: string[], amounts: string[]) => {
+      if (!pointListContract) return
+
+      try {
+        const tx = await pointListContract.setPoints(accounts, amounts)
+        addTransaction(tx, { summary: 'Set point list' })
+        return tx
+      } catch (e) {
+        console.error('set point list error:', e.message)
+      }
+    },
+    [addTransaction, pointListContract]
+  )
+
   return {
+    updatePointList,
     editDocuments,
     cancelAuction,
     claimTokens,
     finalizeAuction,
+    updatePermissionList,
+    updatePermissionListStatus,
   }
 }
 

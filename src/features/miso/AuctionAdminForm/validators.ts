@@ -1,3 +1,5 @@
+import { getAddress } from '@ethersproject/address'
+
 const regex = new RegExp(
   '^(https:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?'
 )
@@ -32,6 +34,17 @@ export const imageSizeValidator: Validator = async (data) => {
     }
   } catch (e) {
     return 'Fetching size failed, probably due to CORS policy'
+  }
+
+  return true
+}
+
+export const isAddressValidator: Validator = async (data) => {
+  if (!data.value) return 'Invalid input'
+  try {
+    getAddress(data.value)
+  } catch {
+    return 'Invalid address'
   }
 
   return true

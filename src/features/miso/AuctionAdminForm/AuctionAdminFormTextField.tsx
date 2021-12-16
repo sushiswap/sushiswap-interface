@@ -3,7 +3,7 @@ import { classNames } from 'app/functions'
 import React, { ChangeEvent, FC, ReactNode } from 'react'
 
 interface AuctionAdminFormTextFieldProps {
-  value: string
+  value?: string
   label: string
   placeholder?: string
   onChange(e: ChangeEvent<HTMLInputElement>): void
@@ -38,7 +38,7 @@ const AuctionAdminFormTextField: FC<AuctionAdminFormTextFieldProps> = ({
           className={classNames(
             error ? '!border-red' : '',
             icon ? 'rounded-none rounded-r-md' : 'rounded',
-            'placeholder:text-low-emphesis bg-dark-1000 px-3 py-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800'
+            'placeholder:text-low-emphesis bg-dark-1000/40 px-3 py-2 focus:ring-purple focus:border-purple block w-full min-w-0 border border-dark-800'
           )}
         />
       </div>
