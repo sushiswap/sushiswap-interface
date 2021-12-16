@@ -225,7 +225,7 @@ export default function NetworkModal(): JSX.Element | null {
           ChainId.CELO,
           ChainId.PALM,
           ChainId.MOONRIVER,
-          // ChainId.FUSE,
+          ChainId.FUSE,
           ChainId.TELOS,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {

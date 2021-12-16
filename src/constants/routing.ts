@@ -32,7 +32,8 @@ import {
   MIR,
   NFTX,
   OKEX,
-  OHM,
+  OHM_V1,
+  OHM_V2,
   PALM,
   PLAY,
   PONT,
@@ -142,7 +143,8 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     RUNE,
     NFTX,
     STETH,
-    OHM,
+    OHM_V1,
+    OHM_V2,
     MIM,
     SUSHI[ChainId.MAINNET],
   ],
@@ -286,7 +288,17 @@ export const CUSTOM_BASES: {
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainTokenList = {
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM, SUSHI[ChainId.MAINNET], MIM],
+  [ChainId.MAINNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MAINNET],
+    DAI,
+    USDC,
+    USDT,
+    WBTC,
+    OHM_V1,
+    OHM_V2,
+    SUSHI[ChainId.MAINNET],
+    MIM,
+  ],
   [ChainId.MATIC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
     MATIC.USDC,
@@ -404,7 +416,7 @@ export const COMMON_BASES: ChainTokenList = {
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM, MIM],
+  [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM_V1, OHM_V2, MIM],
   [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],

@@ -43,7 +43,9 @@ export default function Farm(): JSX.Element {
     old: (farm) => farm.chef === Chef.OLD_FARMS,
   }
 
-  const data = useFarmRewards().filter((farm) => {
+  const rewards = useFarmRewards()
+
+  const data = rewards.filter((farm) => {
     return type in FILTER ? FILTER[type](farm) : true
   })
 

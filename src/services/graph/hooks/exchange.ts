@@ -24,6 +24,7 @@ import {
   getYggPrice,
   getEthPrice,
   getOhmPrice,
+  getFusePrice,
   getMagicPrice,
   getPairs,
 } from '../fetchers'
@@ -101,6 +102,13 @@ export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId
   const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
+  return data
+}
+
+export function useFusePrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const { data } = useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
   return data
 }
 

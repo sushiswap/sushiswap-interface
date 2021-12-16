@@ -45,6 +45,7 @@ const usePending = (farm) => {
       [ChainId.ARBITRUM]: cloneRewarder,
       [ChainId.CELO]: complexRewarder,
       [ChainId.MOONRIVER]: complexRewarder,
+      [ChainId.FUSE]: complexRewarder,
     }),
     [complexRewarder, cloneRewarder]
   )

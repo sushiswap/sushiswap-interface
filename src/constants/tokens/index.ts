@@ -265,7 +265,10 @@ export const RAI = new Token(
 export const YFI = new Token(ChainId.MAINNET, '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e', 18, 'YFI', 'YFI')
 export const WOOFY = new Token(ChainId.MAINNET, '0xD0660cD418a64a1d44E9214ad8e459324D8157f1', 12, 'Woofy', 'WOOFY')
 export const SPANK = new Token(ChainId.MAINNET, '0x42d6622deCe394b54999Fbd73D108123806f6a18', 18, 'Spank', 'SPANK')
-export const OHM = new Token(ChainId.MAINNET, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus', 'OHM')
+
+export const OHM_V1 = new Token(ChainId.MAINNET, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus V1', 'OHM')
+export const OHM_V2 = new Token(ChainId.MAINNET, '0x64aa3364F17a4D01c6f1751Fd97C2BD3D7e7f1D5', 9, 'Olympus V2', 'OHM')
+
 export const INV = new Token(ChainId.MAINNET, '0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68', 18, 'Inverse Dao', 'INV')
 export const DOLA = new Token(
   ChainId.MAINNET,
@@ -306,6 +309,7 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.CELO]: new Token(ChainId.CELO, SUSHI_ADDRESS[ChainId.CELO], 18, 'SUSHI', 'SushiToken'),
   [ChainId.MOONRIVER]: new Token(ChainId.MOONRIVER, SUSHI_ADDRESS[ChainId.MOONRIVER], 18, 'SUSHI', 'SushiToken'),
   [ChainId.TELOS]: new Token(ChainId.TELOS, SUSHI_ADDRESS[ChainId.TELOS], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.FUSE]: new Token(ChainId.FUSE, SUSHI_ADDRESS[ChainId.FUSE], 18, 'SUSHI', 'SushiToken'),
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {

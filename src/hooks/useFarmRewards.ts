@@ -17,6 +17,7 @@ import {
   useMagicPrice,
   useSushiPairs,
   useSushiPrice,
+  useFusePrice,
 } from '../services/graph'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -60,6 +61,7 @@ export default function useFarmRewards() {
     celoPrice,
     movrPrice,
     ohmPrice,
+    fusePrice,
     magicPrice,
   ] = [
     useSushiPrice(),
@@ -71,6 +73,7 @@ export default function useFarmRewards() {
     useCeloPrice(),
     useMovrPrice(),
     useOhmPrice(),
+    useFusePrice(),
     useMagicPrice(),
   ]
 
@@ -161,7 +164,7 @@ export default function useFarmRewards() {
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
             ? pool.rewarder.rewardPerSecond / 1e18
             : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
@@ -205,16 +208,27 @@ export default function useFarmRewards() {
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: movrPrice,
           },
+          [ChainId.FUSE]: {
+            token: 'FUSE',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: fusePrice,
+          },
         }
 
-        rewards[0] = {
-          ...defaultReward,
-          rewardPerBlock: sushiPerBlock,
-          rewardPerDay: sushiPerDay,
-        }
-
-        if (chainId in reward) {
-          rewards[1] = reward[chainId]
+        if (chainId === ChainId.FUSE) {
+          // Secondary reward only
+          rewards[0] = reward[chainId]
+        } else {
+          rewards[0] = {
+            ...defaultReward,
+            rewardPerBlock: sushiPerBlock,
+            rewardPerDay: sushiPerDay,
+          }
+          if (chainId in reward) {
+            rewards[1] = reward[chainId]
+          }
         }
 
         if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {

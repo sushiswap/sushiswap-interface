@@ -13,4 +13,5 @@ export const GRAPH_HOST = {
   [ChainId.OKEX]: 'https://graph.kkt.one/node',
   [ChainId.ARBITRUM]: THE_GRAPH,
   [ChainId.MOONRIVER]: THE_GRAPH,
+  [ChainId.FUSE]: THE_GRAPH,
 }
