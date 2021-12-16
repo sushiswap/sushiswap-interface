@@ -6,6 +6,7 @@ import AuctionChart from 'app/features/miso/AuctionChart'
 import AuctionStatsSkeleton from 'app/features/miso/AuctionStats/AuctionStatsSkeleton'
 import { Auction } from 'app/features/miso/context/Auction'
 import { classNames } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
 import { FC, useState } from 'react'
 
 enum ChartType {
@@ -32,6 +33,7 @@ const AuctionStat: FC<{ label: string; value?: any; className?: string }> = ({ l
 
 const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
   const { i18n } = useLingui()
+  const { account } = useActiveWeb3React()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Price)
 
   if (!auction) return <AuctionStatsSkeleton />
@@ -39,29 +41,31 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
   return (
     <div className="flex flex-col gap-6 w-full">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-2">
-        <AuctionStat
-          className="text-left lg:text-left"
-          label={i18n._(t`You Committed`)}
-          value={
-            <div
-              className={classNames(
-                auction.totalTokensCommitted?.greaterThan(ZERO) ? 'text-green' : 'text-high-emphesis',
-                'flex justify-start items-baseline gap-1 lg:justify-start'
-              )}
-            >
-              {auction.totalTokensCommitted?.toSignificant(6)}
-              <Typography
-                variant="sm"
-                weight={700}
+        {account && (
+          <AuctionStat
+            className="text-left lg:text-left"
+            label={i18n._(t`You Committed`)}
+            value={
+              <div
                 className={classNames(
-                  auction.totalTokensCommitted?.greaterThan(ZERO) ? 'text-green/70' : 'text-low-emphesis'
+                  auction.totalTokensCommitted?.greaterThan(ZERO) ? 'text-green' : 'text-high-emphesis',
+                  'flex justify-start items-baseline gap-1 lg:justify-start'
                 )}
               >
-                {auction.totalTokensCommitted?.currency.symbol}
-              </Typography>
-            </div>
-          }
-        />
+                {auction.totalTokensCommitted?.toSignificant(6)}
+                <Typography
+                  variant="sm"
+                  weight={700}
+                  className={classNames(
+                    auction.totalTokensCommitted?.greaterThan(ZERO) ? 'text-green/70' : 'text-low-emphesis'
+                  )}
+                >
+                  {auction.totalTokensCommitted?.currency.symbol}
+                </Typography>
+              </div>
+            }
+          />
+        )}
         <AuctionStat
           className="text-right"
           label={i18n._(t`Current Token Price`)}
@@ -79,7 +83,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
           label={i18n._(t`Amount Raised`)}
           value={
             <div className="flex justify-start items-baseline gap-1 lg:justify-end">
-              {auction.auctionInfo.commitmentsTotal.toNumber()}
+              {auction.commitmentsTotal?.toSignificant(6)}
               <Typography variant="sm" weight={700} className="text-low-emphesis">
                 {auction.totalTokensCommitted?.currency.symbol}
               </Typography>
