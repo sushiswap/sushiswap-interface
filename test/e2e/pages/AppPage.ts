@@ -9,6 +9,8 @@ export abstract class AppPage {
   protected WalletConnectSelector: string = '#connect-wallet'
   protected WalletOptionMetamaskSelector: string = '#wallet-option-MetaMask'
 
+  private ci: string = process.env.CI || 'false'
+
   constructor(page: Page, metamask: Dappeteer, url: string = '') {
     this.Page = page
     this.URL = url
@@ -37,6 +39,11 @@ export abstract class AppPage {
   }
 
   public async connectMetamaskWallet(): Promise<void> {
+    await await this.blockingWait(1, true)
+
+    const web3Connected = await this.Page.$('#web3-status-connected')
+    if (web3Connected) return
+
     const btnConnectWallet = await this.Page.waitForSelector(this.WalletConnectSelector)
     await btnConnectWallet.click()
 
@@ -47,6 +54,7 @@ export abstract class AppPage {
   }
 
   public async addTokenToMetamask(tokenAddress: string): Promise<void> {
+    await await this.blockingWait(2)
     await this.Metamask.page.bringToFront()
 
     await this.closeMetamaskWhatsNew()
@@ -71,7 +79,13 @@ export abstract class AppPage {
 
   public async getTokenBalance(tokenSymbol: string): Promise<number> {
     await this.Metamask.page.bringToFront()
-    await this.Metamask.page.waitForTimeout(1000)
+    await this.blockingWait(1, true)
+
+    await this.closeMetamaskWhatsNew()
+
+    const assetMenutButton = await this.Metamask.page.waitForSelector(`li[data-testid="home__asset-tab"]`)
+    await assetMenutButton.click()
+    await this.blockingWait(1, true)
 
     const assetListItems = await this.Metamask.page.$$('.asset-list-item__token-button')
 
@@ -94,7 +108,7 @@ export abstract class AppPage {
   }
 
   public async closeMetamaskWhatsNew(): Promise<void> {
-    await this.Metamask.page.waitForTimeout(1000)
+    await this.blockingWait(1, true)
     const closeWhatsNewButton = await this.Metamask.page.$(
       '#popover-content > div > div > section > header > div > button'
     )
@@ -104,17 +118,36 @@ export abstract class AppPage {
   }
 
   public async confirmMetamaskTransaction(): Promise<void> {
-    await this.Metamask.confirmTransaction()
-    await this.Metamask.page.waitForTimeout(1000)
+    await this.blockingWait(4)
 
-    //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
-    const mmFooterButtons = await this.Metamask.page.$$('footer > button')
-    if (mmFooterButtons && mmFooterButtons[1]) {
-      const confirmButton = mmFooterButtons[1]
-      await confirmButton.click()
+    try {
+      await this.Metamask.confirmTransaction()
+
+      // Try to confirm transaction again
+      await this.Metamask.confirmTransaction()
+      await this.Metamask.page.waitForTimeout(500)
+
+      //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
+      const mmFooterButtons = await this.Metamask.page.$$('footer > button')
+      if (mmFooterButtons && mmFooterButtons[1]) {
+        const confirmButton = mmFooterButtons[1]
+        await confirmButton.click()
+      }
+    } catch (error) {}
+
+    await this.blockingWait(1)
+    await this.Page.bringToFront()
+    await this.blockingWait(1, true)
+  }
+
+  public async blockingWait(seconds, checkCi: boolean = false): Promise<void> {
+    let waitSeconds = seconds
+
+    if (checkCi && this.ci === 'true') {
+      waitSeconds = seconds * 5
     }
 
-    await this.Metamask.page.waitForTimeout(1000)
-    await this.bringToFront()
+    var waitTill = new Date(new Date().getTime() + waitSeconds * 1000)
+    while (waitTill > new Date()) {}
   }
 }

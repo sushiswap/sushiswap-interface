@@ -1,5 +1,6 @@
 import { ElementHandle } from 'puppeteer'
 
+import { SwapType } from '../../enums/SwapType'
 import { AppPage } from '../AppPage'
 
 export class SwapPage extends AppPage {
@@ -8,6 +9,7 @@ export class SwapPage extends AppPage {
   protected PayFromWalletSelector: string = '.chk-pay-from-wallet'
   protected ReceiveToWalletSelector: string = '.chk-receive-to-wallet'
   protected SwapButtonSelector: string = '#swap-button'
+  protected WrapButtonSelector: string = '#wrap-button'
 
   // Swap review modal selectors
   protected ConfirmSwapButtonSelector: string = '#review-swap-button'
@@ -27,6 +29,8 @@ export class SwapPage extends AppPage {
     payFromWallet: boolean,
     receiveToWallet: boolean
   ): Promise<void> {
+    const swapType: SwapType = this.getSwapType(inTokenSymbol, outTokenSymbol)
+
     const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
     await inputTokenButton.click()
     await this.selectToken(inTokenSymbol)
@@ -56,29 +60,47 @@ export class SwapPage extends AppPage {
       await receiveToWalletSwitch.click()
     }
 
-    const swapButon = await this.Page.waitForSelector(this.SwapButtonSelector)
-    await swapButon.click()
+    await this.blockingWait(1)
 
-    const confirmSwapButton = await this.Page.waitForSelector(this.ConfirmSwapButtonSelector)
-    await confirmSwapButton.click()
-    await this.Metamask.page.waitForTimeout(500)
+    switch (swapType) {
+      case SwapType.Wrap:
+      case SwapType.Unwrap:
+        const wrapButon = await this.Page.waitForSelector(this.WrapButtonSelector)
+        await wrapButon.click()
+
+        await this.blockingWait(1)
+        break
+
+      case SwapType.Normal:
+      default:
+        const swapButon = await this.Page.waitForSelector(this.SwapButtonSelector)
+        await swapButon.click()
+
+        await this.blockingWait(1)
+        const confirmSwapButton = await this.Page.waitForSelector(this.ConfirmSwapButtonSelector)
+        await confirmSwapButton.click()
+        break
+    }
 
     await this.confirmMetamaskTransaction()
 
-    await this.Page.waitForSelector(this.SwapSuccessIconSelector)
+    if (swapType === SwapType.Normal) {
+      await this.Page.waitForSelector(this.SwapSuccessIconSelector)
+    }
   }
 
   private async selectToken(tokenSymbol: string): Promise<void> {
     await this.Page.waitForSelector(this.AllCurrenciesListSelector)
+    await this.blockingWait(3)
 
     const nativeTokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
     if (nativeTokenButton) {
-      await this.Page.waitForTimeout(2000)
+      await this.blockingWait(2)
       await nativeTokenButton.click()
     } else {
       const selectTokenInput = await this.Page.waitForSelector(this.SelectTokenInputSelector)
       selectTokenInput.type(tokenSymbol)
-      await this.Page.waitForTimeout(1000)
+      await this.blockingWait(2)
 
       const tokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
       await tokenButton.click()
@@ -104,5 +126,15 @@ export class SwapPage extends AppPage {
     checked = checkedValue === 'true'
 
     return checked
+  }
+
+  private getSwapType(inTokenSymbol: string, outTokenSymbol: string): SwapType {
+    if (inTokenSymbol === 'ETH' && outTokenSymbol === 'WETH') {
+      return SwapType.Wrap
+    } else if (inTokenSymbol === 'WETH' && outTokenSymbol === 'ETH') {
+      return SwapType.Unwrap
+    } else {
+      return SwapType.Normal
+    }
   }
 }
