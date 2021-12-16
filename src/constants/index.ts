@@ -40,12 +40,12 @@ export const POOL_DENY = ['14', '29', '45', '30']
 // Block time here is slightly higher (~1s) than average in order to avoid ongoing proposals past the displayed time
 export const AVERAGE_BLOCK_TIME_IN_SECS = 13
 
-export const ARCHER_RELAY_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'https://api.archerdao.io/v1/transaction',
-}
+export const OPENMEV_ENABLED = true
 
-export const ARCHER_GAS_URI: { [chainId in ChainId]?: string } = {
-  [ChainId.MAINNET]: 'https://api.archerdao.io/v1/gas',
+export const OPENMEV_SUPPORTED_NETWORKS = [ChainId.MAINNET]
+
+export const OPENMEV_URI: { [chainId in ChainId]?: string } = {
+  [ChainId.MAINNET]: 'https://api.sushirelay.com/v1',
 }
 
 // export const COMMON_CONTRACT_NAMES: { [address: string]: string } = {
@@ -229,23 +229,6 @@ export const NetworkContextName = 'NETWORK'
 export const INITIAL_ALLOWED_SLIPPAGE = 50
 // 30 minutes, denominated in seconds
 export const DEFAULT_DEADLINE_FROM_NOW = 60 * 30
-
-// default archer gas estimate, 250k wei
-export const DEFAULT_ARCHER_GAS_ESTIMATE: BigNumber = BigNumber.from(250000)
-// default gas prices to use if all other sources unavailable
-export const DEFAULT_ARCHER_GAS_PRICES: BigNumber[] = [
-  BigNumber.from(60000000000),
-  BigNumber.from(70000000000),
-  BigNumber.from(100000000000),
-  BigNumber.from(140000000000),
-  BigNumber.from(300000000000),
-  BigNumber.from(800000000000),
-  BigNumber.from(2000000000000),
-]
-// default miner tip, equal to median gas price * default gas estimate
-export const DEFAULT_ARCHER_ETH_TIP: JSBI = JSBI.BigInt(
-  DEFAULT_ARCHER_GAS_ESTIMATE.mul(DEFAULT_ARCHER_GAS_PRICES[4]).toString()
-)
 
 // used for rewards deadlines
 export const BIG_INT_SECONDS_IN_WEEK = JSBI.BigInt(60 * 60 * 24 * 7)

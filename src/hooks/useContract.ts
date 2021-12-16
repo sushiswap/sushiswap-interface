@@ -1,5 +1,4 @@
 import {
-  ARCHER_ROUTER_ADDRESS,
   BAR_ADDRESS,
   BENTOBOX_ADDRESS,
   BORING_HELPER_ADDRESS,
@@ -25,7 +24,6 @@ import {
 } from '../constants/abis/argent-wallet-detector'
 
 import ALCX_REWARDER_ABI from '../constants/abis/alcx-rewarder.json'
-import ARCHER_ROUTER_ABI from '../constants/abis/archer-router.json'
 import { AddressZero } from '@ethersproject/constants'
 import BAR_ABI from '../constants/abis/bar.json'
 import BASE_SWAPPER_ABI from '../constants/abis/swapper.json'

@@ -101,8 +101,6 @@ function Web3StatusInner() {
     .filter((tx) => {
       if (tx.receipt) {
         return false
-      } else if (tx.archer && tx.archer.deadline * 1000 - Date.now() < 0) {
-        return false
       } else {
         return true
       }

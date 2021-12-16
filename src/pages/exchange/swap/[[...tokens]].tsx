@@ -1,17 +1,7 @@
-import { ARCHER_RELAY_URI, INITIAL_ALLOWED_SLIPPAGE } from '../../../constants'
-import {
-  ARCHER_ROUTER_ADDRESS,
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  JSBI,
-  Token,
-  TradeType,
-  Trade as V2Trade,
-} from '@sushiswap/sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI, Token, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
 import { ApprovalState, useApproveCallbackFromTrade } from '../../../hooks/useApproveCallback'
-import { ArrowWrapper, BottomGrouping, SwapCallbackError } from '../../../features/swap/styleds'
-import { AutoRow, RowBetween, RowFixed } from '../../../components/Row'
+import { BottomGrouping, SwapCallbackError } from '../../../features/swap/styleds'
+import { AutoRow, RowBetween } from '../../../components/Row'
 import { ButtonConfirmed, ButtonError } from '../../../components/Button'
 import Column, { AutoColumn } from '../../../components/Column'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -25,12 +15,10 @@ import {
 } from '../../../state/swap/hooks'
 import {
   useExpertModeManager,
-  useUserArcherETHTip,
-  useUserArcherGasPrice,
-  useUserArcherUseRelay,
   useUserSingleHopOnly,
   useUserSlippageTolerance,
   useUserTransactionTTL,
+  useUserOpenMev,
 } from '../../../state/user/hooks'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from '../../../state/application/hooks'
 import useWrapCallback, { WrapType } from '../../../hooks/useWrapCallback'
@@ -49,7 +37,6 @@ import { Field } from '../../../state/swap/actions'
 import Head from 'next/head'
 import Loader from '../../../components/Loader'
 import Lottie from 'lottie-react'
-import MinerTip from '../../../components/MinerTip'
 import ProgressSteps from '../../../components/ProgressSteps'
 import ReactGA from 'react-ga'
 import SwapHeader from '../../../components/ExchangeHeader'
@@ -134,14 +121,9 @@ export default function Swap({ banners }) {
 
   // get custom setting values for user
   const [ttl] = useUserTransactionTTL()
-  const [useArcher] = useUserArcherUseRelay()
-  const [archerETHTip] = useUserArcherETHTip()
-  const [archerGasPrice] = useUserArcherGasPrice()
 
-  // archer
-  const archerRelay = chainId ? ARCHER_RELAY_URI?.[chainId] : undefined
-  // const doArcher = archerRelay !== undefined && useArcher
-  const doArcher = undefined
+  // OpenMEV
+  const [useOpenMev] = useUserOpenMev()
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -152,7 +134,7 @@ export default function Swap({ banners }) {
     currencies,
     inputError: swapInputError,
     allowedSlippage,
-  } = useDerivedSwapInfo(doArcher)
+  } = useDerivedSwapInfo()
 
   const {
     wrapType,
@@ -237,7 +219,7 @@ export default function Swap({ banners }) {
   const routeNotFound = !trade?.route
 
   // check whether the user has approved the router on the input token
-  const [approvalState, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage, doArcher)
+  const [approvalState, approveCallback] = useApproveCallbackFromTrade(trade, allowedSlippage)
 
   const signatureData = undefined
 
@@ -283,7 +265,7 @@ export default function Swap({ banners }) {
     allowedSlippage,
     recipient,
     signatureData,
-    doArcher ? ttl : undefined
+    useOpenMev
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -423,17 +405,6 @@ export default function Swap({ banners }) {
     [onCurrencySelection]
   )
 
-  // useEffect(() => {
-  //   if (
-  //     doArcher &&
-  //     parsedAmounts[Field.INPUT] &&
-  //     maxAmountInput &&
-  //     parsedAmounts[Field.INPUT]?.greaterThan(maxAmountInput)
-  //   ) {
-  //     handleMaxInput();
-  //   }
-  // }, [handleMaxInput, parsedAmounts, maxAmountInput, doArcher]);
-
   const swapIsUnsupported = useIsSwapUnsupported(currencies?.INPUT, currencies?.OUTPUT)
 
   const priceImpactTooHigh = priceImpactSeverity > 3 && !isExpertMode
@@ -487,7 +458,6 @@ export default function Swap({ banners }) {
             onConfirm={handleSwap}
             swapErrorMessage={swapErrorMessage}
             onDismiss={handleConfirmDismiss}
-            minerBribe={doArcher ? archerETHTip : undefined}
           />
           <div>
             <CurrencyInputPanel
