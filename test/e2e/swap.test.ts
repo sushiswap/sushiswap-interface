@@ -17,14 +17,15 @@ require('dotenv').config()
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
 
 const cases = [
-  ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
-  ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
-  ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
-  ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
-  ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
-  ['ETH', FUNDING_SOURCE.WALLET, 'WETH', FUNDING_SOURCE.WALLET],
-  ['WETH', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
-  ['WETH', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.WALLET],
+  // ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
+  // ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
+  // ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
+  // ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
+  // ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
+  // ['ETH', FUNDING_SOURCE.WALLET, 'WETH', FUNDING_SOURCE.WALLET],
+  // ['WETH', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
+  // ['WETH', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.WALLET],
+  ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.BENTO],
 ]
 
 jest.retryTimes(1)
@@ -39,6 +40,7 @@ describe('Trident Swap:', () => {
 
     await swapPage.connectMetamaskWallet()
     await swapPage.addTokenToMetamask(TOKEN_ADDRESSES.WETH)
+    await swapPage.addTokenToMetamask(TOKEN_ADDRESSES.USDC)
   })
 
   beforeEach(async () => {
@@ -49,13 +51,11 @@ describe('Trident Swap:', () => {
     browser.close()
   })
 
-  test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+  test.skip.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
     const ethWalletBalance = await swapPage.getTokenBalance(inToken as string)
     if (!(ethWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
 
     const swapEthAmount = ethWalletBalance * 0.01
-    if (!(swapEthAmount > 0)) throw new Error(`${inToken} wallet balance is too low`)
-
     const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
     const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
 
@@ -67,5 +67,19 @@ describe('Trident Swap:', () => {
       payFromWallet,
       receiveToWallet
     )
+  })
+
+  test('Click max button for wallet', async () => {
+    await swapPage.navigateTo()
+
+    await swapPage.selectToken('USDC')
+
+    const usdcWalletBalance = await swapPage.getTokenBalance('USDC' as string)
+    if (!(usdcWalletBalance > 0)) throw new Error(`USDC wallet balance is 0 or could not be read from Metamask`)
+
+    await swapPage.clickMaxButton()
+    const inputTokenAmount = await swapPage.getInputTokenAmount()
+
+    expect(inputTokenAmount).toBe(usdcWalletBalance)
   })
 })

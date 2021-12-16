@@ -338,7 +338,7 @@ const BalancePanel: FC = () => {
         </Typography>
       </div>
       {!disabled && !isMax && (
-        <Typography className="hidden text-blue lg:block" weight={700} variant="sm" onClick={handleClick}>
+        <Typography className="hidden text-blue btn-max lg:block" weight={700} variant="sm" onClick={handleClick}>
           {i18n._(t`Use Max`)}
         </Typography>
       )}
@@ -389,7 +389,7 @@ const MaxButton: FC = () => {
 
   return (
     <div
-      className="flex items-center justify-center h-9 w-[96px] rounded-full border border-blue/50 bg-blue/30 cursor-pointer"
+      className="flex btn-max items-center justify-center h-9 w-[96px] rounded-full border border-blue/50 bg-blue/30 cursor-pointer"
       onClick={() => balance && onChange && onChange(maxAmountSpend(balance)?.toExact())}
     >
       <Typography variant="sm" className="text-blue" weight={700}>

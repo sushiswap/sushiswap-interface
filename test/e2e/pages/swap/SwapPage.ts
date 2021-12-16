@@ -10,6 +10,7 @@ export class SwapPage extends AppPage {
   protected ReceiveToWalletSelector: string = '.chk-receive-to-wallet'
   protected SwapButtonSelector: string = '#swap-button'
   protected WrapButtonSelector: string = '#wrap-button'
+  protected UseMaxButtonSelector: string = '.btn-max'
 
   // Swap review modal selectors
   protected ConfirmSwapButtonSelector: string = '#review-swap-button'
@@ -89,7 +90,24 @@ export class SwapPage extends AppPage {
     }
   }
 
-  private async selectToken(tokenSymbol: string): Promise<void> {
+  public async clickMaxButton(): Promise<void> {
+    await this.blockingWait(3, true)
+    await this.Page.waitForSelector(this.UseMaxButtonSelector)
+    const useMaxButton = await this.Page.$$(this.UseMaxButtonSelector)
+    await useMaxButton[1].click()
+    await this.blockingWait(1, true)
+  }
+
+  public async getInputTokenAmount(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.TokenInputSelector)
+    const tokenInput = await this.Page.$(this.TokenInputSelector)
+
+    const inTokenAmount = (await (await tokenInput.getProperty('value')).jsonValue()) as string
+    return inTokenAmount
+  }
+
+  public async selectToken(tokenSymbol: string): Promise<void> {
     await this.Page.waitForSelector(this.AllCurrenciesListSelector)
     await this.blockingWait(3)
 
