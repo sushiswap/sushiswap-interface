@@ -1,5 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { CHAIN_KEY } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { useContract } from 'app/hooks'
@@ -16,7 +17,7 @@ export const useAuctionLiquidityTemplate: useAuctionLiquidityTemplate = (auction
   const { result } = useSingleCallResult(contract, 'wallet')
   const palContract = useContract(
     result?.[0],
-    chainId ? MISO[chainId]?.['ropsten']?.contracts.PostAuctionLauncher.abi : undefined
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.abi : undefined
   )
 
   const results = useSingleContractMultipleMethods(palContract, [

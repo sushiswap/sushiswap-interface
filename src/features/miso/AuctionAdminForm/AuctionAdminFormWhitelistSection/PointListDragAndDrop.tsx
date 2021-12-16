@@ -81,7 +81,7 @@ const PointListDragAndDrop: FC<PointListDragAndDropProps> = ({ auction }) => {
 
       const tx = await updatePointList(accounts, amounts)
 
-      if (tx.hash) {
+      if (tx?.hash) {
         await tx.wait()
       }
     } catch (e) {

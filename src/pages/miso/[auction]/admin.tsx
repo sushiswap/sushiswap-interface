@@ -8,7 +8,7 @@ import { Feature } from 'app/enums'
 import AuctionAdminForm from 'app/features/miso/AuctionAdminForm'
 import useAuction from 'app/features/miso/context/hooks/useAuction'
 import NetworkGuard from 'app/guards/Network'
-import MisoLayout from 'app/layouts/Miso'
+import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -46,37 +46,43 @@ Do not waste your gas.`)}
     </div>
   )
 
-  if (!account || !auction) {
+  if (auction && !auction.isOwner) {
     return (
-      <div className="flex flex-col my-12 gap-12 px-6">
-        {header}
-        <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
-      </div>
+      <>
+        <MisoHeader className="bg-dark-900">{header}</MisoHeader>
+        <MisoBody>
+          <div className="flex gap-4 items-center">
+            <EmojiSadIcon width={40} />
+            <Typography weight={700}>
+              {i18n._(t`Oops! You're not allowed to edit this page.`)}{' '}
+              <span className="text-blue">
+                <Link href={`/miso/${address}`}>{i18n._(t`Go back to auction`)}</Link>
+              </span>
+            </Typography>
+          </div>
+        </MisoBody>
+      </>
     )
   }
 
-  if (!auction?.isOwner) {
+  if (!account || !auction) {
     return (
-      <div className="flex flex-col my-12 gap-12 px-6">
-        {header}
-        <div className="flex gap-4 items-center">
-          <EmojiSadIcon width={40} />
-          <Typography weight={700}>
-            {i18n._(t`Oops! You're not allowed to edit this page.`)}{' '}
-            <span className="text-blue">
-              <Link href={`/miso/${address}`}>{i18n._(t`Go back to auction`)}</Link>
-            </span>
-          </Typography>
-        </div>
-      </div>
+      <>
+        <MisoHeader className="bg-dark-900">{header}</MisoHeader>
+        <MisoBody>
+          <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
+        </MisoBody>
+      </>
     )
   }
 
   return (
-    <div className="flex flex-col my-12 gap-12 px-6">
-      {header}
-      <AuctionAdminForm auction={auction} />
-    </div>
+    <>
+      <MisoHeader className="bg-dark-900">{header}</MisoHeader>
+      <MisoBody>
+        <AuctionAdminForm auction={auction} />
+      </MisoBody>
+    </>
   )
 }
 

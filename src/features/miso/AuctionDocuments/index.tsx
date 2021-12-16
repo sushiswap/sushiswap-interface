@@ -1,6 +1,7 @@
 import { DocumentTextIcon, GlobeIcon, LockClosedIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Chip from 'app/components/Chip'
 import {
   DiscordIcon,
   GithubIcon,
@@ -34,14 +35,17 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
   return (
     <>
       <div className="flex gap-4 items-center">
-        {auction && (
-          <div className="flex gap-1.5">
-            <AuctionIcon auctionTemplate={auction.template} width={18} />
-            <Typography variant="sm" weight={700} className="text-secondary">
-              {AuctionTitleByTemplateId(i18n)[auction.template]}
-            </Typography>
-          </div>
+        {auction.auctionDocuments.category ? (
+          <Chip label={auction.auctionDocuments.category} color="blue" />
+        ) : (
+          <Chip label={i18n._(t`Uncategorized`)} className="opacity-40" />
         )}
+        <div className="flex gap-1.5">
+          <AuctionIcon auctionTemplate={auction.template} width={18} />
+          <Typography variant="sm" weight={700} className="text-secondary">
+            {AuctionTitleByTemplateId(i18n)[auction.template]}
+          </Typography>
+        </div>
 
         {auction.whitelist?.length > 0 && (
           <div className="flex gap-1.5">

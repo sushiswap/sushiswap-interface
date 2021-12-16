@@ -23,7 +23,7 @@ const PermissionListStatusSwitch: FC<PermissionListStatusSwitchProps> = ({ aucti
         setPending(true)
         const tx = await updatePermissionListStatus(status)
 
-        if (tx.hash) {
+        if (tx?.hash) {
           await tx.wait()
         }
       } catch (e) {

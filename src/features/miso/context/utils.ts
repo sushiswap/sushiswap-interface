@@ -1,5 +1,5 @@
 import { t } from '@lingui/macro'
-import { ChainId, NATIVE, Token } from '@sushiswap/core-sdk'
+import { CHAIN_KEY, ChainId, NATIVE, Token } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
 import { AuctionPaymentCurrencyInfo, AuctionTemplate } from 'app/features/miso/context/types'
@@ -16,15 +16,29 @@ export const AuctionTitleByTemplateId = (i18n) => ({
   3: i18n._(t`Batch Auction`),
 })
 
+export const AuctionHelperTextByTemplateId = (i18n) => ({
+  1: i18n._(t`Fixed price with fixed amount`),
+  2: i18n._(t`Price discovery that linearly declines from ceiling to floor price`),
+  3: i18n._(t`Valuation discovery with a minimum threshold and uncapped raise`),
+})
+
+export const AuctionPriceHelperTextByTemplateId = (i18n) => ({
+  1: i18n._(t`Fixed price, doesn't change over time`),
+  2: i18n._(
+    t`This is the current price per token. It is calculated from the total commitments divided by the number of tokens on sale`
+  ),
+  3: i18n._(t``),
+})
+
 export const MisoAbiByTemplateId = (chainId: ChainId, templateId: AuctionTemplate) => {
   return {
-    1: MISO[chainId]?.['ropsten']?.contracts.Crowdsale.abi,
-    2: MISO[chainId]?.['ropsten']?.contracts.DutchAuction.abi,
-    3: MISO[chainId]?.['ropsten']?.contracts.BatchAuction.abi,
+    1: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.Crowdsale.abi,
+    2: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.DutchAuction.abi,
+    3: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.BatchAuction.abi,
   }[templateId]
 }
 
-const isoCountries = {
+export const ISO_COUNTRIES = {
   AF: 'Afghanistan',
   AX: 'Aland Islands',
   AL: 'Albania',
@@ -273,8 +287,8 @@ const isoCountries = {
 }
 
 export function getCountryName(countryCode) {
-  if (isoCountries.hasOwnProperty(countryCode)) {
-    return isoCountries[countryCode]
+  if (ISO_COUNTRIES.hasOwnProperty(countryCode)) {
+    return ISO_COUNTRIES[countryCode]
   } else {
     return countryCode
   }

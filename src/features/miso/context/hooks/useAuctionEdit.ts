@@ -1,3 +1,4 @@
+import { CHAIN_KEY } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { DocumentInput } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
@@ -14,14 +15,15 @@ export const useAuctionEdit = (
 ) => {
   const { chainId, account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
+
   const liquidityLauncherContract = useContract(
     address,
-    chainId ? MISO[chainId]?.['ropsten']?.contracts.PostAuctionLauncher.abi : undefined
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.abi : undefined
   )
 
   const pointListContract = useContract(
     listAddress,
-    chainId ? MISO[chainId]?.['ropsten']?.contracts.PointList.abi : undefined
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PointList.abi : undefined
   )
 
   const auctionContract = useContract(
@@ -72,7 +74,7 @@ export const useAuctionEdit = (
     if (!auctionContract || !account) return
 
     try {
-      const tx = await auctionContract.withdrawTokens(account)
+      const tx = await auctionContract['withdrawTokens(address)'](account.toLowerCase())
       addTransaction(tx, { summary: 'Claim tokens' })
 
       return tx

@@ -1,10 +1,15 @@
 const AuctionSkeleton = () => {
   return (
-    <div className="h-[428px] animate-pulse rounded bg-dark-900 pt-7 overflow-hidden transition-all shadow-md hover:translate-y-[-3px] hover:shadow-xl hover:shadow-pink/5">
-      <div className="h-full flex flex-col gap-3.5">
-        <div className="flex flex-col px-5 gap-2">
+    <div className="h-[443px] animate-pulse rounded bg-dark-900 pt-4 overflow-hidden transition-all shadow-md hover:translate-y-[-3px] hover:shadow-xl hover:shadow-pink/5">
+      <div className="h-full flex flex-col gap-3">
+        <div className="justify-between grid grid-cols-3 px-5 gap-2">
           <div className="w-20 h-2 bg-dark-800 rounded" />
-          <div className="w-[120px] h-6 bg-dark-700 rounded" />
+          <div />
+          <div className="w-20 h-5 bg-dark-800 rounded" />
+        </div>
+        <div className="flex flex-col px-5 pt-2 gap-2">
+          <div className="w-20 h-2 bg-dark-800 rounded" />
+          <div className="w-[124px] h-6 bg-dark-700 rounded" />
         </div>
         <div className="flex justify-between bg-dark-800 px-5 py-3 items-center ">
           <div className="grid grid-cols-4 gap-3 items-center">

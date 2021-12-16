@@ -24,22 +24,30 @@ const AuctionEditHeader: FC<AuctionEditHeaderProps> = ({ auction }) => {
   if (!auction?.isOwner) return <></>
 
   return (
-    <div className="flex justify-start rounded gap-4">
+    <div className="flex justify-end rounded gap-4">
       <Link href={`/miso/${address as string}/admin`} passHref={true}>
         <div>
-          <Button className="border-dark-900 border px-4 py-2 shadow shadow-pink-red/5 !text-transparent bg-clip-text bg-gradient-to-r rounded from-blue via-pink to-red transition-all disabled:scale-[1] hover:scale-[1.05]">
+          <Button
+            color="blue"
+            variant="outlined"
+            className="!opacity-100 rounded transition-all disabled:scale-[1] hover:scale-[1.05]"
+          >
             {i18n._(t`Edit Auction`)}
           </Button>
         </div>
       </Link>
-      {auction.canFinalize && (
-        <Button
-          onClick={() => finalizeAuction()}
-          className="border-dark-900 border px-4 py-2 shadow shadow-pink-red/5 !text-transparent bg-clip-text bg-gradient-to-r rounded from-blue via-pink to-red transition-all disabled:scale-[1] hover:scale-[1.05]"
-        >
-          {i18n._(t`Finalize Auction`)}
-        </Button>
-      )}
+      <div>
+        {auction.canFinalize && (
+          <Button
+            color="blue"
+            onClick={() => finalizeAuction()}
+            variant="outlined"
+            className="!opacity-100 rounded transition-all disabled:scale-[1] hover:scale-[1.05]"
+          >
+            {i18n._(t`Finalize Auction`)}
+          </Button>
+        )}
+      </div>
     </div>
   )
 }

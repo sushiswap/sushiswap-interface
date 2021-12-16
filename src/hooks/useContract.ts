@@ -256,9 +256,8 @@ export function useStablePoolFactory(withSignerIfPossible?: boolean): Contract |
   return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }
 
-// TODO ramin
 export function useMisoHelperContract(withSignerIfPossible = true): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const factory = MISO[chainId]?.['ropsten']?.contracts.MISOHelper
+  const factory = MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOHelper
   return useContract(factory?.address, MISO_HELPER_ABI, withSignerIfPossible)
 }

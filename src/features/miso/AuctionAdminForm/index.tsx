@@ -11,6 +11,8 @@ import {
   WechatIcon,
 } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
+import AuctionAdminFormBannedCountries from 'app/features/miso/AuctionAdminForm/AuctionAdminFormBannedCountries'
+import AuctionAdminFormSelect from 'app/features/miso/AuctionAdminForm/AuctionAdminFormSelect'
 import AuctionAdminFormTextArea from 'app/features/miso/AuctionAdminForm/AuctionAdminFormTextArea'
 import AuctionAdminFormTextField from 'app/features/miso/AuctionAdminForm/AuctionAdminFormTextField'
 import AuctionAdminFormWhitelistSection from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection'
@@ -24,8 +26,9 @@ import AuctionCard from 'app/features/miso/AuctionCard'
 import { Auction } from 'app/features/miso/context/Auction'
 import { DocumentInput } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import useAuctionEdit from 'app/features/miso/context/hooks/useAuctionEdit'
-import { AuctionStatus } from 'app/features/miso/context/types'
+import { AuctionCategory, AuctionStatus } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
+import { enumToArray } from 'app/functions/array/enumToArray'
 import React, { FC, useCallback, useState } from 'react'
 
 interface AuctionAdminFormProps {
@@ -46,6 +49,9 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   const [discord, setDiscord] = useState<string>(auction.auctionDocuments.discord)
   const [reddit, setReddit] = useState<string>(auction.auctionDocuments.reddit)
   const [medium, setMedium] = useState<string>(auction.auctionDocuments.medium)
+  const [desktopBanner, setDesktopBanner] = useState<string>(auction.auctionDocuments.desktopBanner)
+  const [mobileBanner, setMobileBanner] = useState<string>(auction.auctionDocuments.mobileBanner)
+  const [category, setCategory] = useState<string>(auction.auctionDocuments.category)
   const [bannedCountries, setBannedCountries] = useState<string>(auction.auctionDocuments.bannedCountries)
   const [bannedWarning, setBannedWarning] = useState<string>(auction.auctionDocuments.bannedWarning)
   const [errors, setErrors] = useState<{}>({})
@@ -58,6 +64,8 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
     marketInfo: auction.marketInfo,
     auctionDocuments: {
       ...auction.auctionDocuments,
+      description,
+      website,
       icon,
       twitter,
       github,
@@ -68,6 +76,9 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
       medium,
       bannedCountries,
       bannedWarning,
+      desktopBanner,
+      mobileBanner,
+      category,
     },
     whitelist: auction.whitelist,
   })
@@ -138,12 +149,35 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   />
                 </div>
                 <div className="col-span-3">
+                  <AuctionAdminFormSelect
+                    error={errors['category']}
+                    label={i18n._(t`Category`)}
+                    options={enumToArray(AuctionCategory)}
+                    onChange={(value) =>
+                      pipeline(
+                        { value, maxCharactersThreshold: 300, imageSizeThreshold: 250000 },
+                        [],
+                        () => setCategory(value),
+                        (e) => setError({ category: e })
+                      )
+                    }
+                    value={category}
+                    helperText={
+                      <p className="mt-2 text-sm text-gray-500">
+                        {i18n._(
+                          t`Setting a category will increase your project's findability. Please message us if you feel like your project doesn't fit in any of the categories.`
+                        )}
+                      </p>
+                    }
+                  />
+                </div>
+                <div className="col-span-3">
                   <AuctionAdminFormTextField
                     error={errors['icon']}
                     label={i18n._(t`Icon`)}
                     onChange={(e) =>
                       pipeline(
-                        { value: e.target.value, maxCharactersThreshold: 300, imageSizeThreshold: 150000 },
+                        { value: e.target.value, maxCharactersThreshold: 300, imageSizeThreshold: 250000 },
                         [urlValidator, imageSizeValidator, maxCharactersValidator],
                         () => setIcon(e.target.value),
                         (e) => setError({ icon: e })
@@ -154,7 +188,53 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                     helperText={
                       <p className="mt-2 text-sm text-gray-500">
                         {i18n._(
-                          t`Icon image must be smaller than 75kB, this is to keep site speed optimized. Icon dimensions preferably 128x128 or smaller`
+                          t`Icon image must be smaller than 250kB, this is to keep page load optimized. Icon dimensions preferably 128x128 or smaller`
+                        )}
+                      </p>
+                    }
+                  />
+                </div>
+                <div className="col-span-3">
+                  <AuctionAdminFormTextField
+                    error={errors['desktopBanner']}
+                    label={i18n._(t`Desktop Banner`)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300, imageSizeThreshold: 250000 },
+                        [urlValidator, imageSizeValidator, maxCharactersValidator],
+                        () => setDesktopBanner(e.target.value),
+                        (e) => setError({ desktopBanner: e })
+                      )
+                    }
+                    placeholder="https://example.com/icon.png"
+                    value={desktopBanner}
+                    helperText={
+                      <p className="mt-2 text-sm text-gray-500">
+                        {i18n._(
+                          t`Desktop banner must be smaller than 250kB, this is to keep page load optimized. Desktop banner dimensions preferably 1280x196 or a similar ratio`
+                        )}
+                      </p>
+                    }
+                  />
+                </div>
+                <div className="col-span-3">
+                  <AuctionAdminFormTextField
+                    error={errors['mobileBanner']}
+                    label={i18n._(t`Mobile Banner`)}
+                    onChange={(e) =>
+                      pipeline(
+                        { value: e.target.value, maxCharactersThreshold: 300, imageSizeThreshold: 250000 },
+                        [urlValidator, maxCharactersValidator],
+                        () => setMobileBanner(e.target.value),
+                        (e) => setError({ mobileBanner: e })
+                      )
+                    }
+                    placeholder="https://example.com/icon.png"
+                    value={mobileBanner}
+                    helperText={
+                      <p className="mt-2 text-sm text-gray-500">
+                        {i18n._(
+                          t`Mobile banner must be smaller than 250kB, this is to keep page load optimized. Desktop banner dimensions preferably 768x196 or a similar ratio`
                         )}
                       </p>
                     }
@@ -346,19 +426,24 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
               </div>
               <div className="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
                 <div className="sm:col-span-6">
-                  <Typography weight={700}>{i18n._(t`Country Ban`)}</Typography>
-                  <div className="mt-2">
-                    <select
-                      id="country"
-                      name="country"
-                      autoComplete="country-name"
-                      className="after:pr-2 bg-dark-1000 pr-10 rounded pl-3 py-2 outline-none focus:ring-indigo-500 focus:border-indigo-500 block w-full min-w-0 border border-dark-800"
-                    >
-                      <option>United States</option>
-                      <option>Canada</option>
-                      <option>Mexico</option>
-                    </select>
-                  </div>
+                  <AuctionAdminFormBannedCountries
+                    helperText={
+                      <p className="mt-2 text-sm text-gray-500">
+                        {i18n._(t`Select countries who are not allowed to participate in this auction. Please note that this does
+                        not prevent users from actually committing but merely serves as a disclaimer.`)}
+                      </p>
+                    }
+                    label={i18n._(t`Country Ban`)}
+                    onChange={(value) =>
+                      pipeline(
+                        { value, maxCharactersThreshold: 300 },
+                        [maxCharactersValidator],
+                        () => setBannedCountries(value),
+                        (e) => setError({ bannedCountries: e })
+                      )
+                    }
+                    value={bannedCountries}
+                  />
                 </div>
 
                 <div className="sm:col-span-6">

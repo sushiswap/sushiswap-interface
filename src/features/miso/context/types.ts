@@ -37,6 +37,7 @@ export interface AuctionDocument {
   mobileBanner: string
   bannedCountries: string
   bannedWarning: string
+  category: string
 }
 
 export interface AuctionPaymentCurrencyInfo {
@@ -112,4 +113,13 @@ export interface AuctionCommitment {
 export type WhitelistEntry = {
   account: string
   amount: string
+}
+
+export enum AuctionCategory {
+  DEFI = 'DeFi',
+  GAMING = 'Gaming',
+  UTILITY = 'Utility',
+  SOCIAL = 'Social',
+  GOVERNANCE = 'Governance',
+  NFTS = 'NFTs',
 }

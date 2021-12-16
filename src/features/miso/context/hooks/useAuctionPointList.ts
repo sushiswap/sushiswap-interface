@@ -1,6 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 import { AddressZero } from '@ethersproject/constants'
-import { Currency, CurrencyAmount, Fraction, JSBI } from '@sushiswap/core-sdk'
+import { CHAIN_KEY, Currency, CurrencyAmount, Fraction, JSBI } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { useContract } from 'app/hooks'
@@ -30,7 +30,10 @@ export const useAuctionPointListPoints = (
   paymentToken?: Currency
 ): CurrencyAmount<Currency> | undefined => {
   const { account, chainId } = useActiveWeb3React()
-  const contract = useContract(listAddress, chainId ? MISO[chainId]?.['ropsten']?.contracts.PointList.abi : undefined)
+  const contract = useContract(
+    listAddress,
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PointList.abi : undefined
+  )
   const { result } = useSingleCallResult(contract, 'points', address ? [address] : account ? [account] : undefined)
   if (Array.isArray(result) && result.length > 0 && paymentToken) {
     const { denominator, numerator } = new Fraction(JSBI.BigInt(result[0]), 1)

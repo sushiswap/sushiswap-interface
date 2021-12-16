@@ -43,7 +43,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
         setPending(true)
         const tx = await updatePermissionList(address)
 
-        if (tx.hash) {
+        if (tx?.hash) {
           await tx.wait()
         }
       } catch (e) {
@@ -96,7 +96,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
       <div className="flex col-span-6 justify-end">
         <div>
           <Button
-            disabled={pending || auction.whitelist?.[0].toLowerCase() === operator.toLowerCase()}
+            disabled={pending || auction.whitelist?.[0]?.toLowerCase() === operator?.toLowerCase()}
             {...(pending && {
               startIcon: (
                 <div className="w-5 h-5 mr-1">

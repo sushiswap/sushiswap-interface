@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ZERO } from '@sushiswap/core-sdk'
 import loadingCircle from 'app/animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
@@ -28,9 +27,7 @@ const AuctionClaimer: FC<AuctionClaimerProps> = ({ auction }) => {
     try {
       setPending(true)
       const tx = await claimTokens()
-
-      console.log(tx)
-      if (tx) {
+      if (tx?.hash) {
         await tx.wait()
       }
     } finally {
@@ -73,11 +70,7 @@ const AuctionClaimer: FC<AuctionClaimerProps> = ({ auction }) => {
                 ? i18n._(t`Withdraw`)
                 : auction.canClaim
                 ? i18n._(t`Claim`)
-                : auction.totalTokensCommitted?.equalTo(ZERO)
-                ? i18n._(t`Auction Finished`)
-                : auction.auctionInfo.auctionSuccessful
-                ? i18n._(t`Already Claimed`)
-                : i18n._(t`Already Withdrawn`)}
+                : i18n._(t`Auction Finished`)}
             </Typography>
           </div>
         </Button>
