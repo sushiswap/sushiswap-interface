@@ -26,6 +26,7 @@ import {
 } from '@sushiswap/sdk'
 import { getAddress } from '@ethersproject/address'
 import { Chef, PairType } from './enum'
+import { OLD_FARMS } from '../../constants/onsen'
 import { useKashiPair } from '../lending/context'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useUserInfo } from './hooks'
@@ -106,6 +107,9 @@ const ManageBar = ({ farm }) => {
       [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
       [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
       [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
+    },
+    [Chef.OLD_FARMS]: {
+      [ChainId.CELO]: OLD_FARMS[ChainId.CELO],
     },
   }
 

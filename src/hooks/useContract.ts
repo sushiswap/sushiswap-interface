@@ -47,6 +47,7 @@ import IUniswapV2PairABI from '../constants/abis/uniswap-v2-pair.json'
 import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
 import LIMIT_ORDER_ABI from '../constants/abis/limit-order.json'
 import LIMIT_ORDER_HELPER_ABI from '../constants/abis/limit-order-helper.json'
+import { OLD_FARMS } from '../constants/onsen'
 import MAKER_ABI from '../constants/abis/maker.json'
 import MASTERCHEF_ABI from '../constants/abis/masterchef.json'
 import MASTERCHEF_V2_ABI from '../constants/abis/masterchef-v2.json'
@@ -177,6 +178,11 @@ export function useMasterChefV2Contract(withSignerIfPossible?: boolean): Contrac
 export function useMiniChefContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId && MINICHEF_ADDRESS[chainId], MINICHEF_ABI, withSignerIfPossible)
+}
+
+export function useOldFarmsContract(withSignerIfPossibe?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && OLD_FARMS[chainId], MINICHEF_ABI, withSignerIfPossibe)
 }
 
 export function useFactoryContract(): Contract | null {

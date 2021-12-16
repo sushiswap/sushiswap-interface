@@ -34,7 +34,6 @@ export default function useFarmRewards() {
   const block1d = useBlock({ daysAgo: 1, chainId })
 
   const farms = useFarms()
-  console.log(farms)
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
   const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
 
