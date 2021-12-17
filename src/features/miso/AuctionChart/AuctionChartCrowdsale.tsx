@@ -16,10 +16,10 @@ const AuctionChartCrowdsale: FC<AuctionChartCrowdsaleProps> = ({ auction, prices
   const startTime = auction.auctionInfo.startTime.mul('1000').toNumber()
   const endTime = auction.auctionInfo.endTime.mul('1000').toNumber()
   const now = Date.now()
-  const [progression, setState] = useState<number>((now - startTime) / (endTime - startTime))
+  const [progression, setState] = useState<number>(Math.min(1, Math.max((now - startTime) / (endTime - startTime), 0)))
 
   useInterval(() => {
-    setState((now - startTime) / (endTime - startTime))
+    setState(Math.min(1, Math.max((now - startTime) / (endTime - startTime), 0)))
   }, 1000)
 
   const bottomHeight = 60

@@ -27,6 +27,7 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
   const endTime = auction.auctionInfo.endTime.mul('1000').toNumber()
   const now = Date.now()
   const [progression, setState] = useState<number>(Math.min(1, Math.max((now - startTime) / (endTime - startTime), 0)))
+
   useInterval(() => {
     setState(Math.min(1, Math.max((now - startTime) / (endTime - startTime), 0)))
   }, 1000)
