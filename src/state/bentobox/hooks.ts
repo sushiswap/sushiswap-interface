@@ -41,6 +41,9 @@ export function useBentoBalances(): BentoBalance[] {
         '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
         '0x72B886d09C117654aB7dA13A14d603001dE0B777',
         '0x21413c119b0C11C5d96aE1bD328917bC5C8ED67E',
+        '0x85D7bdfc9c3426b33A684241eEEE70385Bc42820', // mainnet #583
+        '0x53c4871322Bb47e7A24136fce291a6dcC832a294', // mainnet #584
+        '0x39fBBABf11738317a448031930706cd3e612e1B9', // mainnet #595
       ].includes(token)
   )
 
