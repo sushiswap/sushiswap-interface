@@ -65,7 +65,9 @@ const CommitSubmittedModalContent: FC<{ txHash: string }> = ({ txHash }) => {
         color="blue"
         className="bg-gradient-to-r from-red via-pink to-red"
       >
-        <Link href="/miso">{i18n._(t`Back to Auctions`)}</Link>
+        <Link href="/miso" passHref={true}>
+          <a>{i18n._(t`Back to Auctions`)}</a>
+        </Link>
       </Button>
     </div>
   )
