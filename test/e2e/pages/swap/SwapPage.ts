@@ -26,6 +26,10 @@ export class SwapPage extends AppPage {
   protected AllCurrenciesListSelector: string = '#all-currencies-list'
   protected SelectTokenResultsSelector: string = '#all-currencies-'
 
+  // Tx settings
+  protected TxSettingsButtonSelector: string = '#btn-transaction-settings'
+  protected SlippageInputSelector: string = '#text-slippage'
+
   public async swapTokens(
     inTokenSymbol: string,
     outTokenSymbol: string,

@@ -67,7 +67,10 @@ const Swap = () => {
                 </div>
               </div>
             )}
-            <div className="border border-transparent rounded hover:bg-dark-800 hover:border-dark-700">
+            <div
+              id="btn-transaction-settings"
+              className="border border-transparent rounded hover:bg-dark-800 hover:border-dark-700"
+            >
               <SettingsTab trident={true} />
             </div>
           </div>
