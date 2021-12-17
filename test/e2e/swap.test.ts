@@ -29,6 +29,15 @@ const cases = [
   ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.BENTO],
 ]
 
+const currencySelectCases = [
+  ['ETH', 'DAI'],
+  ['WETH', 'USDC'],
+  ['BAT', 'SUSHI'],
+  ['SUSHI', 'COMP'],
+  ['USDC', 'ZRX'],
+  ['ZRX', 'SAI'],
+]
+
 jest.retryTimes(1)
 
 describe('Trident Swap:', () => {
@@ -98,7 +107,7 @@ describe('Trident Swap:', () => {
     expect(closeValues(parseFloat(inputTokenBalance), parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 
-  test('Should switch currencies', async () => {
+  test.skip('Should switch currencies', async () => {
     await swapPage.navigateTo()
 
     await swapPage.selectInputToken('USDC')
@@ -117,5 +126,18 @@ describe('Trident Swap:', () => {
 
     expect(selectedInputTokenAfter).toBe('WETH')
     expect(selectedOutputTokenAfter).toBe('USDC')
+  })
+
+  test.each(currencySelectCases)(`Should select %p as input and %p as output`, async (inToken, outToken) => {
+    await swapPage.navigateTo()
+
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+
+    const selectedInputTokenBefore = await swapPage.getSelectedInputToken()
+    const selectedOutputTokenBefore = await swapPage.getSelectedOutputToken()
+
+    expect(selectedInputTokenBefore).toBe(inToken)
+    expect(selectedOutputTokenBefore).toBe(outToken)
   })
 })
