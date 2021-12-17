@@ -15,6 +15,7 @@ import useAuction from 'app/features/miso/context/hooks/useAuction'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 
@@ -34,16 +35,19 @@ const MisoAuction = () => {
         )}
         <section className="flex flex-col w-full">
           <div>
-            <Button
-              onClick={() => router.back()}
-              color="blue"
-              variant="outlined"
-              size="sm"
-              className="rounded-full !pl-2 !py-1.5"
-              startIcon={<ChevronLeftIcon width={24} height={24} />}
-            >
-              {i18n._(t`Back`)}
-            </Button>
+            <Link passHref={true} href="/miso">
+              <a>
+                <Button
+                  color="blue"
+                  variant="outlined"
+                  size="sm"
+                  className="rounded-full !pl-2 !py-1.5"
+                  startIcon={<ChevronLeftIcon width={24} height={24} />}
+                >
+                  {i18n._(t`Back`)}
+                </Button>
+              </a>
+            </Link>
           </div>
           <AuctionHeader auction={auction} />
         </section>

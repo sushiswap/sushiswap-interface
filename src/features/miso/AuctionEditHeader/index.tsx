@@ -26,7 +26,7 @@ const AuctionEditHeader: FC<AuctionEditHeaderProps> = ({ auction }) => {
   return (
     <div className="flex justify-end rounded gap-4">
       <Link href={`/miso/${address as string}/admin`} passHref={true}>
-        <div>
+        <a>
           <Button
             color="blue"
             variant="outlined"
@@ -34,7 +34,7 @@ const AuctionEditHeader: FC<AuctionEditHeaderProps> = ({ auction }) => {
           >
             {i18n._(t`Edit Auction`)}
           </Button>
-        </div>
+        </a>
       </Link>
       <div>
         {auction.canFinalize && (
