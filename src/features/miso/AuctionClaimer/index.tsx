@@ -44,10 +44,25 @@ const AuctionClaimer: FC<AuctionClaimerProps> = ({ auction }) => {
           <Typography weight={700} className="text-high-emphesis">
             {auction.canWithdraw ? i18n._(t`Withdraw Tokens`) : i18n._(t`Claim Tokens`)}
           </Typography>
-          <Typography variant="sm" weight={700} className="text-secondary">
-            The auction has failed to reach its minimum target. You can withdraw a total committed amount of{' '}
-            {auction?.totalTokensCommitted?.toSignificant(6)} {auction?.totalTokensCommitted?.currency.symbol}
-          </Typography>
+          {auction.minimumTargetRaised && auction.commitmentsTotal?.lessThan(auction.minimumTargetRaised) ? (
+            <Typography variant="sm" weight={700} className="text-secondary">
+              {i18n._(
+                t`The auction has failed to reach its minimum target. You can withdraw a total committed amount of`
+              )}{' '}
+              {auction.commitmentsTotal?.toSignificant(6)} {auction.commitmentsTotal?.currency.symbol}
+            </Typography>
+          ) : !auction.auctionInfo.finalized ? (
+            <Typography variant="sm" weight={700} className="text-secondary">
+              {i18n._(t`This auction has finished successfully! The owner of the auction has to finalize the auction before you can
+              claim a total amount of`)}{' '}
+              {auction.tokensClaimable?.toSignificant(6)} {auction.tokensClaimable?.currency.symbol}
+            </Typography>
+          ) : (
+            <Typography variant="sm" weight={700} className="text-secondary">
+              {i18n._(t`This auction has finished successfully! You can claim a total amount of`)}{' '}
+              {auction.tokensClaimable?.toSignificant(6)} {auction.tokensClaimable?.currency.symbol}
+            </Typography>
+          )}
         </div>
         <Button
           {...(pending && {

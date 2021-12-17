@@ -11,7 +11,6 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
 import { Auction } from '../Auction'
-import { useAuctionLiquidityTemplate } from './useAuctionLiquidityTemplate'
 import { useAuctionList } from './useAuctionList'
 import { useAuctionUserMarketInfo, useAuctionUserMarketInfos } from './useAuctionUserMarketInfo'
 
@@ -85,7 +84,6 @@ export const useAuction = (address: string, owner?: string) => {
   const marketInfo = useAuctionUserMarketInfo(address, owner ?? undefined)
   const auctionDocuments = useAuctionDocument(address)
   const whitelist = useAuctionPointList(address)
-  const { liquidityTemplate, lpTokenAddress } = useAuctionLiquidityTemplate(address)
 
   return useMemo(() => {
     if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments) return
@@ -103,26 +101,12 @@ export const useAuction = (address: string, owner?: string) => {
         auctionInfo.tokenInfo.name
       ),
       paymentToken,
-      auctionInfo: {
-        ...auctionInfo,
-        liquidityTemplate: liquidityTemplate?.toNumber(),
-        lpTokenAddress,
-      },
+      auctionInfo,
       marketInfo,
       auctionDocuments,
       whitelist,
     })
-  }, [
-    auctionDocuments,
-    auctionInfo,
-    chainId,
-    liquidityTemplate,
-    lpTokenAddress,
-    marketInfo,
-    marketTemplateId,
-    owner,
-    whitelist,
-  ])
+  }, [auctionDocuments, auctionInfo, chainId, marketInfo, marketTemplateId, owner, whitelist])
 }
 
 export default useAuction

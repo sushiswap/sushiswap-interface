@@ -5,6 +5,7 @@ import { TOPIC_ADDED_COMMITMENT } from 'app/features/miso/context/constants'
 import { MisoAbiByTemplateId } from 'app/features/miso/context/utils'
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockNumber } from 'app/state/application/hooks'
 import { useEffect } from 'react'
 import { atomFamily, useRecoilState } from 'recoil'
 
@@ -17,6 +18,7 @@ const commitmentsAtomFamily = atomFamily<AuctionCommitment[], string>({
 
 export const useAuctionCommitments = (auction: Auction) => {
   const { library, chainId } = useActiveWeb3React()
+  const blockNumber = useBlockNumber()
   const contract = useContract(
     auction?.auctionInfo.addr,
     chainId ? MisoAbiByTemplateId(chainId, auction.template) : undefined
@@ -29,8 +31,8 @@ export const useAuctionCommitments = (auction: Auction) => {
 
     const init = async () => {
       const logs = await library.getLogs({
-        fromBlock: 0,
-        toBlock: 'latest',
+        fromBlock: blockNumber - 100000,
+        toBlock: blockNumber,
         address: auction.auctionInfo.addr,
         topics: [TOPIC_ADDED_COMMITMENT],
       })

@@ -243,6 +243,12 @@ export class Auction {
     return this.currentPrice.invert().quote(amount)
   }
 
+  public get tokensClaimable(): CurrencyAmount<Currency> | undefined {
+    if (this.marketInfo?.tokensClaimable) {
+      return CurrencyAmount.fromRawAmount(this.auctionToken, JSBI.BigInt(this.marketInfo.tokensClaimable))
+    }
+  }
+
   public get canFinalize(): boolean {
     if (this.auctionInfo.finalized) return false
     if (this.status !== AuctionStatus.FINISHED) return false

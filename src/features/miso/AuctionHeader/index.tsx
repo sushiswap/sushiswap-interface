@@ -1,12 +1,15 @@
 import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import AuctionCardPrice from 'app/features/miso/AuctionCard/AuctionCardPrice'
 import AuctionHeaderSkeleton from 'app/features/miso/AuctionHeader/AuctionHeaderSkeleton'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
 import { Auction } from 'app/features/miso/context/Auction'
 import { AuctionStatus, AuctionTemplate } from 'app/features/miso/context/types'
+import { AuctionHelperTextByTemplateId, AuctionPriceHelperTextByTemplateId } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
 // import { cloudinaryLoader } from 'app/functions/cloudinary'
 // import Image from 'next/image'
@@ -129,11 +132,22 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
       </div>
       <div className="flex gap-5 justify-end order-2 md:order-3">
         <div className="flex flex-col gap-1">
-          <Typography weight={700} variant="sm" className="text-secondary text-right">
-            {auction.template === AuctionTemplate.DUTCH_AUCTION
-              ? i18n._(t`Auction Price`)
-              : i18n._(t`Current Token Price`)}
-          </Typography>
+          <div className="flex items-center">
+            <Typography weight={700} variant="sm" className="text-secondary text-right">
+              {auction.template === AuctionTemplate.DUTCH_AUCTION
+                ? i18n._(t`Auction Price`)
+                : i18n._(t`Current Token Price`)}
+            </Typography>
+            <QuestionHelper
+              text={
+                auction.template === AuctionTemplate.DUTCH_AUCTION
+                  ? AuctionHelperTextByTemplateId(i18n)[auction.template]
+                  : AuctionPriceHelperTextByTemplateId(i18n)[auction.template]
+              }
+              icon={<SolidQuestionMarkCircleIcon width={12} height={12} className="text-secondary" />}
+            />
+          </div>
+
           <div className="flex justify-end items-baseline w-full gap-1">
             {auction.template === AuctionTemplate.DUTCH_AUCTION ? (
               <AuctionCardPrice auction={auction}>

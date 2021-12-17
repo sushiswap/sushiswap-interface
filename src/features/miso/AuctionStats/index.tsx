@@ -1,13 +1,16 @@
+import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
+import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import AuctionChart from 'app/features/miso/AuctionChart'
 import AuctionStatsSkeleton from 'app/features/miso/AuctionStats/AuctionStatsSkeleton'
 import { Auction } from 'app/features/miso/context/Auction'
+import { AuctionPriceHelperTextByTemplateId } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import { FC, useState } from 'react'
+import React, { FC, useState } from 'react'
 
 enum ChartType {
   Price,
@@ -18,7 +21,7 @@ interface AuctionStatsProps {
   auction?: Auction
 }
 
-const AuctionStat: FC<{ label: string; value?: any; className?: string }> = ({ label, value, className }) => {
+const AuctionStat: FC<{ label: any; value?: any; className?: string }> = ({ label, value, className }) => {
   return (
     <div className="flex flex-col rounded gap-1">
       <Typography variant="sm" className={classNames('text-secondary', className)}>
@@ -68,7 +71,15 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
         )}
         <AuctionStat
           className="text-right"
-          label={i18n._(t`Current Token Price`)}
+          label={
+            <div className="flex items-center justify-end">
+              {i18n._(t`Current Token Price`)}
+              <QuestionHelper
+                text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}
+                icon={<SolidQuestionMarkCircleIcon width={12} height={12} className="text-secondary" />}
+              />
+            </div>
+          }
           value={
             <div className="flex justify-end items-baseline gap-1">
               {auction.tokenPrice?.toSignificant(6)}
