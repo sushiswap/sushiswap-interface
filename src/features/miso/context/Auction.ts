@@ -217,12 +217,22 @@ export class Auction {
       return this.status === AuctionStatus.LIVE ? new Percent('100', '1') : ZERO_PERCENT
     }
 
-    if (this.template === AuctionTemplate.DUTCH_AUCTION && this.maximumTargetRaised && this.commitmentsTotal) {
-      const percent = new Percent(
-        this.maximumTargetRaised.subtract(this.commitmentsTotal).quotient,
-        this.maximumTargetRaised.quotient
-      )
-      return percent.lessThan(ZERO_PERCENT) ? ZERO_PERCENT : percent
+    if (
+      this.template === AuctionTemplate.DUTCH_AUCTION &&
+      this.totalTokens &&
+      this.tokenPrice &&
+      this.commitmentsTotal
+    ) {
+      if (this.totalTokens.multiply(this.tokenPrice.quotient).greaterThan(ZERO)) {
+        const percentageRaise = new Percent(
+          this.commitmentsTotal.quotient,
+          this.tokenPrice.quote(this.totalTokens).quotient.toString()
+        )
+
+        return new Percent('100', '1').subtract(percentageRaise)
+      }
+
+      return ZERO_PERCENT
     }
 
     if (this.template === AuctionTemplate.CROWDSALE && this.maximumTargetRaised && this.commitmentsTotal) {

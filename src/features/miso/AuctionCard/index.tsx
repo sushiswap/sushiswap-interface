@@ -215,7 +215,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
 
   return (
     <Link href={`/miso/${auction.auctionInfo.addr}`} passHref={true}>
-      {content}
+      <a>{content}</a>
     </Link>
   )
 }
