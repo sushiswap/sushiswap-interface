@@ -13,7 +13,7 @@ export class Auction {
   public readonly auctionToken: Token
   public readonly paymentToken: Currency
   public readonly auctionInfo: RawAuctionInfo
-  public readonly marketInfo: RawMarketInfo
+  public readonly marketInfo?: RawMarketInfo
   public readonly auctionDocuments: AuctionDocument
   public readonly whitelist: string[]
 
@@ -30,7 +30,7 @@ export class Auction {
     auctionToken: Token
     paymentToken: Currency
     auctionInfo: RawAuctionInfo
-    marketInfo: RawMarketInfo
+    marketInfo?: RawMarketInfo
     auctionDocuments: AuctionDocument
     whitelist: string[]
   }) {
@@ -43,12 +43,12 @@ export class Auction {
     this.whitelist = whitelist
   }
 
-  public get isOwner(): boolean {
-    return this.marketInfo.isAdmin
+  public get isOwner(): boolean | undefined {
+    return this.marketInfo?.isAdmin
   }
 
   public get totalTokensCommitted(): CurrencyAmount<Currency> | undefined {
-    if (this.marketInfo.commitments) {
+    if (this.marketInfo?.commitments) {
       return CurrencyAmount.fromRawAmount(this.paymentToken, JSBI.BigInt(this.marketInfo.commitments))
     }
   }
@@ -217,17 +217,17 @@ export class Auction {
       return this.status === AuctionStatus.LIVE ? new Percent('100', '1') : ZERO_PERCENT
     }
 
-    if (this.template === AuctionTemplate.DUTCH_AUCTION && this.maximumTargetRaised && this.totalTokensCommitted) {
+    if (this.template === AuctionTemplate.DUTCH_AUCTION && this.maximumTargetRaised && this.commitmentsTotal) {
       const percent = new Percent(
-        this.maximumTargetRaised.subtract(this.totalTokensCommitted).quotient,
+        this.maximumTargetRaised.subtract(this.commitmentsTotal).quotient,
         this.maximumTargetRaised.quotient
       )
       return percent.lessThan(ZERO_PERCENT) ? ZERO_PERCENT : percent
     }
 
-    if (this.template === AuctionTemplate.CROWDSALE && this.maximumTargetRaised && this.totalTokensCommitted) {
+    if (this.template === AuctionTemplate.CROWDSALE && this.maximumTargetRaised && this.commitmentsTotal) {
       return new Percent(
-        this.maximumTargetRaised.subtract(this.totalTokensCommitted).quotient,
+        this.maximumTargetRaised.subtract(this.commitmentsTotal).quotient,
         this.maximumTargetRaised.quotient
       )
     }
@@ -243,22 +243,31 @@ export class Auction {
     return this.currentPrice.invert().quote(amount)
   }
 
+  public get tokensClaimable(): CurrencyAmount<Currency> | undefined {
+    if (this.marketInfo?.tokensClaimable) {
+      return CurrencyAmount.fromRawAmount(this.auctionToken, JSBI.BigInt(this.marketInfo.tokensClaimable))
+    }
+  }
+
   public get canFinalize(): boolean {
     if (this.auctionInfo.finalized) return false
     if (this.status !== AuctionStatus.FINISHED) return false
     if (this.isOwner) return true
-    if (!this.marketInfo.liquidityTemplate) return false
-    return this.marketInfo.liquidityTemplate > 0
+    if (!this.auctionInfo?.liquidityTemplate) return false
+    return this.auctionInfo?.liquidityTemplate > 0
   }
 
   public get canClaim(): boolean {
     if (!this.auctionInfo.finalized) return false
+    if (!this.marketInfo) return false
+
     const tokensClaimable = JSBI.BigInt(this.marketInfo.tokensClaimable)
     return JSBI.greaterThan(tokensClaimable, JSBI.BigInt(0))
   }
 
   public get canWithdraw(): boolean {
     if (!this.auctionInfo.finalized) return false
+    if (!this.marketInfo) return false
     if (this.auctionInfo.auctionSuccessful) return false
     return JSBI.greaterThan(JSBI.BigInt(this.marketInfo.commitments), JSBI.BigInt(0))
   }

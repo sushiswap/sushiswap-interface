@@ -121,14 +121,16 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
             </div>
           )}
 
-          {account && chainId && userEthBalance && (
-            <div className="w-auto flex items-center rounded border border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
-              <div className="px-3 text-high-emphesis text-bold">
-                {userEthBalance?.toSignificant(4)} {NATIVE[chainId].symbol}
-              </div>
-              <Web3Status />
-            </div>
-          )}
+          <div className="w-auto flex items-center rounded border border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
+            {account && chainId && userEthBalance && (
+              <>
+                <div className="px-3 text-high-emphesis text-bold">
+                  {userEthBalance?.toSignificant(4)} {NATIVE[chainId].symbol}
+                </div>
+              </>
+            )}
+            <Web3Status />
+          </div>
           <div className="hidden lg:flex">
             <LanguageSwitch />
           </div>

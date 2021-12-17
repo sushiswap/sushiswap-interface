@@ -96,13 +96,13 @@ const Pagination: FC<PaginationProps> = ({
   const pages = getPageNumbers().reduce<ReactNode[]>((acc, page, index) => {
     if (page === LEFT_PAGE)
       acc.push(
-        <div className="flex justify-center items-center w-10 h-10">
+        <div className="flex justify-center items-center w-10 h-10" key={index}>
           <DotsHorizontalIcon width={12} className="text-low-emphesis w" />
         </div>
       )
     else if (page === RIGHT_PAGE)
       acc.push(
-        <div className="flex justify-center items-center w-10 h-10">
+        <div className="flex justify-center items-center w-10 h-10" key={index}>
           <DotsHorizontalIcon width={12} className="text-low-emphesis" />
         </div>
       )

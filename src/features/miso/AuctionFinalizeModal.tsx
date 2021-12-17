@@ -16,7 +16,7 @@ const AuctionFinalizeModal: FC<AuctionFinalizeModalProps> = ({ auction }) => {
   const { finalizeAuction } = useAuctionEdit(
     auction?.auctionInfo.addr,
     auction?.template,
-    auction?.marketInfo.liquidityTemplate
+    auction?.auctionInfo.liquidityTemplate
   )
 
   return (

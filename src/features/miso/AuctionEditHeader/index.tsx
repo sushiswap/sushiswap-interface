@@ -17,7 +17,7 @@ const AuctionEditHeader: FC<AuctionEditHeaderProps> = ({ auction }) => {
   const { finalizeAuction } = useAuctionEdit(
     auction?.auctionInfo.addr,
     auction?.template,
-    auction?.marketInfo.liquidityTemplate
+    auction?.auctionInfo.liquidityTemplate
   )
   const { auction: address } = router.query
 

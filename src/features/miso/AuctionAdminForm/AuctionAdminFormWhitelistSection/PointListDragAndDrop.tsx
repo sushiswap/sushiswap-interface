@@ -25,7 +25,7 @@ const PointListDragAndDrop: FC<PointListDragAndDropProps> = ({ auction }) => {
   const { updatePointList } = useAuctionEdit(
     auction.auctionInfo.addr,
     auction.template,
-    auction.marketInfo.liquidityTemplate,
+    auction.auctionInfo.liquidityTemplate,
     auction.whitelist?.[0]
   )
   const [wlAddresses, setWlAddresses] = useState<WhitelistEntry[]>([])

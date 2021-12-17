@@ -10,6 +10,7 @@ import useAuctionCommitments from 'app/features/miso/context/hooks/useAuctionCom
 import { AuctionCommitment } from 'app/features/miso/context/types'
 import { classNames, getExplorerLink, shortenAddress, shortenString } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockNumber } from 'app/state/application/hooks'
 import React, { FC, useMemo, useState } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
@@ -94,6 +95,7 @@ interface AuctionBidsTabProps {
 const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
   const { account } = useActiveWeb3React()
   const commitments = useAuctionCommitments(auction)
+  const blockNumber = useBlockNumber()
   const [ownBidsOnly, setOwnBidsOnly] = useState(false)
   const data = useMemo(() => {
     if (ownBidsOnly) {
@@ -148,26 +150,26 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
           </div>
         </Switch.Group>
       </div>
-      <div {...getTableProps()} className="w-full">
-        <div className="mb-3">
-          {headerGroups.map((headerGroup, i) => (
-            <div {...headerGroup.getHeaderGroupProps()} key={i}>
-              {headerGroup.headers.map((column, i) => (
-                <Typography
-                  weight={700}
-                  key={i}
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  className={classNames(column.className)}
-                >
-                  {column.render('Header')}
-                </Typography>
-              ))}
-            </div>
-          ))}
-        </div>
-        <div {...getTableBodyProps()}>
-          {page.length > 0 ? (
-            page.map((row, i) => {
+      <div className="flex flex-col gap-2">
+        <div {...getTableProps()} className="w-full">
+          <div className="mb-3">
+            {headerGroups.map((headerGroup, i) => (
+              <div {...headerGroup.getHeaderGroupProps()} key={i}>
+                {headerGroup.headers.map((column, i) => (
+                  <Typography
+                    weight={700}
+                    key={i}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className={classNames(column.className)}
+                  >
+                    {column.render('Header')}
+                  </Typography>
+                ))}
+              </div>
+            ))}
+          </div>
+          <div {...getTableBodyProps()}>
+            {page.map((row, i) => {
               prepareRow(row)
               return (
                 <div {...row.getRowProps()} key={i} className="space-y-4">
@@ -188,25 +190,26 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
                   })}
                 </div>
               )
-            })
-          ) : (
-            <Typography
-              variant="xs"
-              className="text-center text-low-emphesis h-[60px] flex items-center justify-center"
-            >
-              {i18n._(t`No commitments`)}
-            </Typography>
-          )}
+            })}
+            {blockNumber && (
+              <Typography
+                variant="xs"
+                className="text-center text-low-emphesis h-[60px] flex items-center justify-center italic"
+              >
+                {i18n._(t`Commitments in blocks before block ${blockNumber - 100000} wont be displayed here`)}
+              </Typography>
+            )}
+          </div>
         </div>
+        <Pagination
+          canPreviousPage={canPreviousPage}
+          canNextPage={canNextPage}
+          onChange={gotoPage}
+          totalPages={Math.ceil(data.length / pageSize)}
+          currentPage={pageIndex}
+          pageNeighbours={1}
+        />
       </div>
-      <Pagination
-        canPreviousPage={canPreviousPage}
-        canNextPage={canNextPage}
-        onChange={gotoPage}
-        totalPages={Math.ceil(data.length / pageSize)}
-        currentPage={pageIndex}
-        pageNeighbours={1}
-      />
     </div>
   )
 }

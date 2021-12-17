@@ -120,7 +120,7 @@ function Web3StatusInner() {
       </div>
     )
   } else {
-    return <Web3Connect style={{ paddingTop: '6px', paddingBottom: '6px' }} />
+    return <Web3Connect className="!bg-dark-1000 border border-dark-900 h-[38px]" />
   }
 }
 
