@@ -1,4 +1,5 @@
 import { Dappeteer } from '@chainsafe/dappeteer'
+import { closeValues } from '@sushiswap/tines'
 import { Browser, Page } from 'puppeteer'
 
 import { FUNDING_SOURCE } from './constants/FundingSource'
@@ -17,14 +18,14 @@ require('dotenv').config()
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
 
 const cases = [
-  // ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
-  // ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
-  // ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
-  // ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
-  // ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
-  // ['ETH', FUNDING_SOURCE.WALLET, 'WETH', FUNDING_SOURCE.WALLET],
-  // ['WETH', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
-  // ['WETH', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.WALLET],
+  ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
+  ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
+  ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
+  ['WETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.BENTO],
+  ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.WALLET],
+  ['ETH', FUNDING_SOURCE.WALLET, 'WETH', FUNDING_SOURCE.WALLET],
+  ['WETH', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
+  ['WETH', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.WALLET],
   ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.BENTO],
 ]
 
@@ -72,7 +73,7 @@ describe('Trident Swap:', () => {
   test('Click max button for wallet', async () => {
     await swapPage.navigateTo()
 
-    await swapPage.selectToken('USDC')
+    await swapPage.selectInputToken('USDC')
 
     const usdcWalletBalance = await swapPage.getTokenBalance('USDC' as string)
     if (!(usdcWalletBalance > 0)) throw new Error(`USDC wallet balance is 0 or could not be read from Metamask`)
@@ -80,6 +81,6 @@ describe('Trident Swap:', () => {
     await swapPage.clickMaxButton()
     const inputTokenAmount = await swapPage.getInputTokenAmount()
 
-    expect(inputTokenAmount).toBe(usdcWalletBalance)
+    expect(closeValues(usdcWalletBalance, parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 })

@@ -107,7 +107,13 @@ export class SwapPage extends AppPage {
     return inTokenAmount
   }
 
-  public async selectToken(tokenSymbol: string): Promise<void> {
+  public async selectInputToken(tokenSymbol: string): Promise<void> {
+    const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
+    await inputTokenButton.click()
+    await this.selectToken(tokenSymbol)
+  }
+
+  private async selectToken(tokenSymbol: string): Promise<void> {
     await this.Page.waitForSelector(this.AllCurrenciesListSelector)
     await this.blockingWait(3)
 
