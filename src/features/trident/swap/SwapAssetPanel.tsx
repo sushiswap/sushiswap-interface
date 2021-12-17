@@ -328,7 +328,7 @@ const BalancePanel: FC = () => {
         <Typography
           variant={isDesktop ? 'sm' : 'xs'}
           weight={700}
-          className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
+          className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'text-balance')}
           onClick={handleClick}
         >
           {balance ? balance.toSignificant(6) : '0.0000'}

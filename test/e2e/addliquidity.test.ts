@@ -66,7 +66,7 @@ describe('Add Liquidity:', () => {
 
   test('Spend USDC from wallet unequal amounts', async () => {
     const targetPoolName = 'USDC-WETH'
-    const usdcWalletBalance = await liquidityPoolsPage.getTokenBalance('USDC')
+    const usdcWalletBalance = await liquidityPoolsPage.getMetamaskTokenBalance('USDC')
     const t0DepositAmount: number = usdcWalletBalance * 0.1
 
     await liquidityPoolsPage.navigateTo()

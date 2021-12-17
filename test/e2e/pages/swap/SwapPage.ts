@@ -11,6 +11,7 @@ export class SwapPage extends AppPage {
   protected SwapButtonSelector: string = '#swap-button'
   protected WrapButtonSelector: string = '#wrap-button'
   protected UseMaxButtonSelector: string = '.btn-max'
+  protected BalanceLabelSelector: string = '.text-balance'
 
   // Swap review modal selectors
   protected ConfirmSwapButtonSelector: string = '#review-swap-button'
@@ -45,13 +46,7 @@ export class SwapPage extends AppPage {
     const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
     await tokenAmountInput.type(inTokenAmount)
 
-    const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
-    const payFromWalletSwitch = await this.getSwitchElement(this.PayFromWalletSelector)
-    if (payFromWallet && !isPayFromWalletChecked) {
-      await payFromWalletSwitch.click()
-    } else if (!payFromWallet && isPayFromWalletChecked) {
-      await payFromWalletSwitch.click()
-    }
+    await this.setPayFromWallet(payFromWallet)
 
     const isReceiveToWalletChecked = await this.isSwitchChecked(this.ReceiveToWalletSelector)
     const receiveToWalletSwitch = await this.getSwitchElement(this.ReceiveToWalletSelector)
@@ -90,12 +85,32 @@ export class SwapPage extends AppPage {
     }
   }
 
+  public async setPayFromWallet(payFromWallet: boolean): Promise<void> {
+    await this.blockingWait(3, true)
+    const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
+    const payFromWalletSwitch = await this.getSwitchElement(this.PayFromWalletSelector)
+    if (payFromWallet && !isPayFromWalletChecked) {
+      await payFromWalletSwitch.click()
+    } else if (!payFromWallet && isPayFromWalletChecked) {
+      await payFromWalletSwitch.click()
+    }
+  }
+
   public async clickMaxButton(): Promise<void> {
     await this.blockingWait(3, true)
     await this.Page.waitForSelector(this.UseMaxButtonSelector)
     const useMaxButton = await this.Page.$$(this.UseMaxButtonSelector)
     await useMaxButton[1].click()
     await this.blockingWait(1, true)
+  }
+
+  public async getInputTokenBalance(): Promise<string> {
+    await this.blockingWait(1, true)
+    const balanceLabels = await this.Page.$$(this.BalanceLabelSelector)
+    const inputTokenBalanceLabel = balanceLabels[1]
+
+    const inTokenAmount = (await (await inputTokenBalanceLabel.getProperty('textContent')).jsonValue()) as string
+    return inTokenAmount
   }
 
   public async getInputTokenAmount(): Promise<string> {

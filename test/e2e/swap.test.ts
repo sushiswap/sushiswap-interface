@@ -53,7 +53,7 @@ describe('Trident Swap:', () => {
   })
 
   test.skip.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
-    const ethWalletBalance = await swapPage.getTokenBalance(inToken as string)
+    const ethWalletBalance = await swapPage.getMetamaskTokenBalance(inToken as string)
     if (!(ethWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
 
     const swapEthAmount = ethWalletBalance * 0.01
@@ -75,12 +75,26 @@ describe('Trident Swap:', () => {
 
     await swapPage.selectInputToken('USDC')
 
-    const usdcWalletBalance = await swapPage.getTokenBalance('USDC' as string)
+    const usdcWalletBalance = await swapPage.getMetamaskTokenBalance('USDC' as string)
     if (!(usdcWalletBalance > 0)) throw new Error(`USDC wallet balance is 0 or could not be read from Metamask`)
 
     await swapPage.clickMaxButton()
     const inputTokenAmount = await swapPage.getInputTokenAmount()
 
     expect(closeValues(usdcWalletBalance, parseFloat(inputTokenAmount), 1e-3)).toBe(true)
+  })
+
+  test('Click max button for bento', async () => {
+    await swapPage.navigateTo()
+    await swapPage.setPayFromWallet(false)
+
+    await swapPage.selectInputToken('USDC')
+
+    const inputTokenBalance = await swapPage.getInputTokenBalance()
+
+    await swapPage.clickMaxButton()
+    const inputTokenAmount = await swapPage.getInputTokenAmount()
+
+    expect(closeValues(parseFloat(inputTokenBalance), parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 })

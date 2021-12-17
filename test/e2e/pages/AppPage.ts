@@ -77,7 +77,7 @@ export abstract class AppPage {
     await this.Metamask.page.reload()
   }
 
-  public async getTokenBalance(tokenSymbol: string): Promise<number> {
+  public async getMetamaskTokenBalance(tokenSymbol: string): Promise<number> {
     await this.Metamask.page.bringToFront()
     await this.blockingWait(1, true)
 
