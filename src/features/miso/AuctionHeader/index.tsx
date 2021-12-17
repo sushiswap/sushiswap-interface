@@ -132,7 +132,7 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
       </div>
       <div className="flex gap-5 justify-end order-2 md:order-3">
         <div className="flex flex-col gap-1">
-          <div className="flex items-center">
+          <div className="flex items-center justify-end">
             <Typography weight={700} variant="sm" className="text-secondary text-right">
               {auction.template === AuctionTemplate.DUTCH_AUCTION
                 ? i18n._(t`Auction Price`)

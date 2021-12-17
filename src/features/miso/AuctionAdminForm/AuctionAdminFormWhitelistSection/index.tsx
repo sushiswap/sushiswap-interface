@@ -18,7 +18,7 @@ const AuctionAdminFormWhitelistSection: FC<AuctionAdminFormWhitelistSectionProps
 
   return (
     <Form.Section
-      columns={1}
+      columns={6}
       header={
         <Form.Section.Header
           header={i18n._(t`Whitelisting`)}
