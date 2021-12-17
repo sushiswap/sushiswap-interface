@@ -1,5 +1,5 @@
 import { classNames } from 'functions'
-import React from 'react'
+import React, { FC } from 'react'
 
 export type TypographyWeight = 400 | 500 | 700
 
@@ -22,7 +22,7 @@ const VARIANTS = {
   xxs: 'text-[0.625rem] leading-[1.2]',
 }
 
-export interface TypographyProps {
+export interface TypographyProps extends React.AllHTMLAttributes<React.ReactHTML> {
   variant?: TypographyVariant
   weight?: TypographyWeight
   component?: keyof React.ReactHTML
@@ -30,7 +30,7 @@ export interface TypographyProps {
   clickable?: boolean
 }
 
-function Typography({
+const Typography: FC<TypographyProps> = ({
   variant = 'base',
   weight = 400,
   component = 'div',
@@ -39,7 +39,7 @@ function Typography({
   children = [],
   onClick = undefined,
   ...rest
-}: React.HTMLAttributes<React.ReactHTML> & TypographyProps): JSX.Element {
+}) => {
   return React.createElement(
     component,
     {

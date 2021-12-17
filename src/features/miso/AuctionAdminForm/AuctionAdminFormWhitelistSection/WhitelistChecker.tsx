@@ -1,12 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
-import AuctionAdminFormTextField from 'app/features/miso/AuctionAdminForm/AuctionAdminFormTextField'
+import Form, { DEFAULT_FORM_FIELD_CLASSNAMES } from 'app/components/Form'
+import Typography from 'app/components/Typography'
 import { isAddressValidator, pipeline } from 'app/features/miso/AuctionAdminForm/validators'
 import { Auction } from 'app/features/miso/context/Auction'
 import { useAuctionPointListPoints } from 'app/features/miso/context/hooks/useAuctionPointList'
 import { classNames, isAddress } from 'app/functions'
-import React, { FC, Fragment, useState } from 'react'
+import React, { FC, useState } from 'react'
 
 interface WhitelistCheckerProps {
   auction: Auction
@@ -28,17 +29,23 @@ const WhitelistChecker: FC<WhitelistCheckerProps> = ({ auction }) => {
 
   return (
     <>
-      <div className={classNames('flex col-span-6 gap-4')}>
-        <div className="flex flex-col flex-grow">
-          <AuctionAdminFormTextField
-            error={error}
-            label={i18n._(t`Whitelist Checker`)}
+      <div className="flex flex-col flex-grow">
+        <Typography weight={700}>{i18n._(t`Whitelist Checker`)}</Typography>
+        <div className="mt-2 flex rounded-md shadow-sm">
+          <input
+            value={address}
             onChange={(e) =>
               pipeline({ value: e.target.value }, [isAddressValidator], () => setAddress(e.target.value), setError)
             }
             placeholder="0x..."
-            value={address}
-            helperText={
+            className={classNames(DEFAULT_FORM_FIELD_CLASSNAMES, !!error ? '!border-red' : '')}
+          />
+        </div>
+        {!!error ? (
+          <Form.HelperText className="!text-red">{error}</Form.HelperText>
+        ) : (
+          <Form.HelperText>
+            {
               <p
                 className={classNames(
                   'mt-2 text-sm',
@@ -52,8 +59,8 @@ const WhitelistChecker: FC<WhitelistCheckerProps> = ({ auction }) => {
                   : i18n._(t`Check if an address is whitelisted`)}
               </p>
             }
-          />
-        </div>
+          </Form.HelperText>
+        )}
       </div>
     </>
   )

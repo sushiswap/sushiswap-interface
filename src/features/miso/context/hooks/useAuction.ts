@@ -23,6 +23,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
   const auctionInfos = useAuctionRawInfos(addresses, auctionTemplateIds)
   const auctionDocuments = useAuctionDocuments(addresses)
   const whitelists = useAuctionPointLists(addresses)
+
   return useMemo(() => {
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
 
