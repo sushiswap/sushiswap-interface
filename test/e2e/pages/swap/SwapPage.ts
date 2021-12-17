@@ -12,6 +12,7 @@ export class SwapPage extends AppPage {
   protected WrapButtonSelector: string = '#wrap-button'
   protected UseMaxButtonSelector: string = '.btn-max'
   protected BalanceLabelSelector: string = '.text-balance'
+  protected SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
 
   // Swap review modal selectors
   protected ConfirmSwapButtonSelector: string = '#review-swap-button'
@@ -33,14 +34,8 @@ export class SwapPage extends AppPage {
   ): Promise<void> {
     const swapType: SwapType = this.getSwapType(inTokenSymbol, outTokenSymbol)
 
-    const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
-    await inputTokenButton.click()
-    await this.selectToken(inTokenSymbol)
-
-    await this.Page.waitForTimeout(500)
-    const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
-    await outputTokenButton.click()
-    await this.selectToken(outTokenSymbol)
+    await this.selectInputToken(inTokenSymbol)
+    await this.selectOutputToken(inTokenSymbol)
 
     await this.Page.waitForTimeout(500)
     const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
@@ -85,6 +80,22 @@ export class SwapPage extends AppPage {
     }
   }
 
+  public async getSelectedInputToken(): Promise<string> {
+    return await this.getSelectedToken(this.InTokenButtonSelector)
+  }
+
+  public async getSelectedOutputToken(): Promise<string> {
+    return await this.getSelectedToken(this.OutTokenButtonSelector)
+  }
+
+  private async getSelectedToken(selector: string): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(selector)
+    const tokenButton = await this.Page.$(selector)
+    const selectedToken = (await (await tokenButton.getProperty('textContent')).jsonValue()) as string
+    return selectedToken
+  }
+
   public async setPayFromWallet(payFromWallet: boolean): Promise<void> {
     await this.blockingWait(3, true)
     const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
@@ -94,6 +105,13 @@ export class SwapPage extends AppPage {
     } else if (!payFromWallet && isPayFromWalletChecked) {
       await payFromWalletSwitch.click()
     }
+  }
+
+  public async clickSwitchCurrenciesButton(): Promise<void> {
+    await this.blockingWait(1, true)
+    const switchCurrenciesButton = await this.Page.waitForSelector(this.SwitchCurrenciesButtonSelector)
+    await switchCurrenciesButton.click()
+    await this.blockingWait(1, true)
   }
 
   public async clickMaxButton(): Promise<void> {
@@ -123,8 +141,16 @@ export class SwapPage extends AppPage {
   }
 
   public async selectInputToken(tokenSymbol: string): Promise<void> {
+    await this.blockingWait(1, true)
     const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
     await inputTokenButton.click()
+    await this.selectToken(tokenSymbol)
+  }
+
+  public async selectOutputToken(tokenSymbol: string): Promise<void> {
+    await this.blockingWait(1, true)
+    const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
+    await outputTokenButton.click()
     await this.selectToken(tokenSymbol)
   }
 

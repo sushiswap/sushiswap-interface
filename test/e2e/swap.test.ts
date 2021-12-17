@@ -70,7 +70,7 @@ describe('Trident Swap:', () => {
     )
   })
 
-  test('Click max button for wallet', async () => {
+  test.skip('Should click max button for wallet', async () => {
     await swapPage.navigateTo()
 
     await swapPage.selectInputToken('USDC')
@@ -84,7 +84,7 @@ describe('Trident Swap:', () => {
     expect(closeValues(usdcWalletBalance, parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 
-  test('Click max button for bento', async () => {
+  test.skip('Should click max button for bento', async () => {
     await swapPage.navigateTo()
     await swapPage.setPayFromWallet(false)
 
@@ -96,5 +96,26 @@ describe('Trident Swap:', () => {
     const inputTokenAmount = await swapPage.getInputTokenAmount()
 
     expect(closeValues(parseFloat(inputTokenBalance), parseFloat(inputTokenAmount), 1e-3)).toBe(true)
+  })
+
+  test('Should switch currencies', async () => {
+    await swapPage.navigateTo()
+
+    await swapPage.selectInputToken('USDC')
+    await swapPage.selectOutputToken('WETH')
+
+    const selectedInputTokenBefore = await swapPage.getSelectedInputToken()
+    const selectedOutputTokenBefore = await swapPage.getSelectedOutputToken()
+
+    expect(selectedInputTokenBefore).toBe('USDC')
+    expect(selectedOutputTokenBefore).toBe('WETH')
+
+    await swapPage.clickSwitchCurrenciesButton()
+
+    const selectedInputTokenAfter = await swapPage.getSelectedInputToken()
+    const selectedOutputTokenAfter = await swapPage.getSelectedOutputToken()
+
+    expect(selectedInputTokenAfter).toBe('WETH')
+    expect(selectedOutputTokenAfter).toBe('USDC')
   })
 })
