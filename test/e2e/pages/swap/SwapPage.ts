@@ -13,6 +13,7 @@ export class SwapPage extends AppPage {
   protected UseMaxButtonSelector: string = '.btn-max'
   protected BalanceLabelSelector: string = '.text-balance'
   protected SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
+  protected InvertRateButtonSelector: string = '#btn-invert-rate'
 
   // Swap review modal selectors
   protected ConfirmSwapButtonSelector: string = '#review-swap-button'
@@ -37,9 +38,7 @@ export class SwapPage extends AppPage {
     await this.selectInputToken(inTokenSymbol)
     await this.selectOutputToken(inTokenSymbol)
 
-    await this.Page.waitForTimeout(500)
-    const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
-    await tokenAmountInput.type(inTokenAmount)
+    await this.setAmountIn(inTokenAmount)
 
     await this.setPayFromWallet(payFromWallet)
 
@@ -78,6 +77,12 @@ export class SwapPage extends AppPage {
     if (swapType === SwapType.Normal) {
       await this.Page.waitForSelector(this.SwapSuccessIconSelector)
     }
+  }
+
+  public async setAmountIn(inTokenAmount: string): Promise<void> {
+    await this.Page.waitForTimeout(500)
+    const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
+    await tokenAmountInput.type(inTokenAmount)
   }
 
   public async getSelectedInputToken(): Promise<string> {
@@ -140,6 +145,15 @@ export class SwapPage extends AppPage {
     return inTokenAmount
   }
 
+  public async getOutputTokenAmount(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.TokenInputSelector)
+    const tokenOutput = await this.Page.$$(this.TokenInputSelector)
+
+    const outTokenAmount = (await (await tokenOutput[1].getProperty('value')).jsonValue()) as string
+    return outTokenAmount
+  }
+
   public async selectInputToken(tokenSymbol: string): Promise<void> {
     await this.blockingWait(1, true)
     const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
@@ -152,6 +166,20 @@ export class SwapPage extends AppPage {
     const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
     await outputTokenButton.click()
     await this.selectToken(tokenSymbol)
+  }
+
+  public async clickInvertRateButton(): Promise<void> {
+    await this.blockingWait(1, true)
+    const invertRateButton = await this.Page.waitForSelector(this.InvertRateButtonSelector)
+    await invertRateButton.click()
+  }
+
+  public async getRate(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.InvertRateButtonSelector)
+    const rate = await this.Page.$(this.InvertRateButtonSelector)
+    const rateText = (await (await rate.getProperty('textContent')).jsonValue()) as string
+    return rateText
   }
 
   private async selectToken(tokenSymbol: string): Promise<void> {

@@ -128,7 +128,7 @@ describe('Trident Swap:', () => {
     expect(selectedOutputTokenAfter).toBe('USDC')
   })
 
-  test.each(currencySelectCases)(`Should select %p as input and %p as output`, async (inToken, outToken) => {
+  test.skip.each(currencySelectCases)(`Should select %p as input and %p as output`, async (inToken, outToken) => {
     await swapPage.navigateTo()
 
     await swapPage.selectInputToken(inToken)
@@ -139,5 +139,31 @@ describe('Trident Swap:', () => {
 
     expect(selectedInputTokenBefore).toBe(inToken)
     expect(selectedOutputTokenBefore).toBe(outToken)
+  })
+
+  test('Should invert rate', async () => {
+    const inputAmount = 500
+
+    await swapPage.navigateTo()
+
+    await swapPage.selectInputToken('USDC')
+    await swapPage.selectOutputToken('WETH')
+
+    await swapPage.setAmountIn(inputAmount.toString())
+
+    const outputAmount = await swapPage.getOutputTokenAmount()
+
+    const usdcWethRateDisplayed = await swapPage.getRate()
+    const usdcWethRateExpected = parseFloat(outputAmount) / inputAmount
+    const usdcWethRate = usdcWethRateDisplayed.split('=')[1].trim().split(' ')[0]
+
+    expect(closeValues(usdcWethRateExpected, parseFloat(usdcWethRate), 1e-3)).toBe(true)
+
+    await swapPage.clickInvertRateButton()
+    const wethUsdcRateDispayed = await swapPage.getRate()
+    const wethUsdcRateExpected = inputAmount / parseFloat(outputAmount)
+    const wethUsdcRate = wethUsdcRateDispayed.split('=')[1].trim().split(' ')[0]
+
+    expect(closeValues(wethUsdcRateExpected, parseFloat(wethUsdcRate), 1e-3)).toBe(true)
   })
 })
