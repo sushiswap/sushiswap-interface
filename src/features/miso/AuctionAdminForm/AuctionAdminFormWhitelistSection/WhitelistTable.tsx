@@ -22,10 +22,10 @@ const WhitelistTable: FC<WhitelistTableProps> = ({ entries }) => {
             #
           </Typography>
           <Typography variant="sm" weight={700} className="text-secondary">
-            Account
+            {i18n._(t`Account`)}
           </Typography>
           <Typography variant="sm" weight={700} className="text-right text-secondary">
-            Amount
+            {i18n._(t`Amount`)}
           </Typography>
         </div>
         <div className="max-h-[200px] overflow-auto bg-dark-1000/40">

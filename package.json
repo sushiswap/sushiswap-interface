@@ -57,6 +57,7 @@
     "@gnosis.pm/safe-apps-web3-react": "^0.6.0",
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.0",
+    "@hookform/resolvers": "^2.8.5",
     "@keystonehq/keystone-connector": "^0.9.0",
     "@lingui/cli": "^3.12.1",
     "@lingui/core": "^3.12.1",
@@ -165,6 +166,7 @@
     "react-dropzone": "^11.4.2",
     "react-feather": "^2.0.9",
     "react-ga": "^3.3.0",
+    "react-hook-form": "^7.22.1",
     "react-infinite-scroll-component": "^6.1.0",
     "react-popper": "^2.2.5",
     "react-redux": "^7.2.4",
@@ -188,7 +190,8 @@
     "tailwindcss": "^3.0.1",
     "tailwindcss-border-gradient-radius": "^2.0.0",
     "typescript": "^4.4.4",
-    "wcag-contrast": "^3.0.0"
+    "wcag-contrast": "^3.0.0",
+    "yup": "^0.32.11"
   },
   "next-unused": {
     "debug": true,

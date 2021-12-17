@@ -2,7 +2,8 @@ import { t } from '@lingui/macro'
 import { Trans, useLingui } from '@lingui/react'
 import loadingCircle from 'app/animation/loading-circle.json'
 import Button from 'app/components/Button'
-import AuctionAdminFormTextField from 'app/features/miso/AuctionAdminForm/AuctionAdminFormTextField'
+import Form, { DEFAULT_FORM_FIELD_CLASSNAMES } from 'app/components/Form'
+import Typography from 'app/components/Typography'
 import { isAddressValidator, pipeline } from 'app/features/miso/AuctionAdminForm/validators'
 import { Auction } from 'app/features/miso/context/Auction'
 import useAuctionEdit from 'app/features/miso/context/hooks/useAuctionEdit'
@@ -59,39 +60,40 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
     <>
       <div
         className={classNames(
-          'flex col-span-6 gap-4',
           auction.auctionInfo.usePointList ? '' : 'pointer-events-none opacity-40 filter saturate-[0.1]'
         )}
       >
-        <div className="flex flex-col flex-grow">
-          <AuctionAdminFormTextField
-            error={error}
-            label={i18n._(t`Point List Address`)}
+        <Typography weight={700}>{i18n._(t`Point List Address`)}</Typography>
+        <div className="mt-2 flex rounded-md shadow-sm">
+          <input
+            value={operator}
             onChange={(e) =>
               pipeline({ value: e.target.value }, [isAddressValidator], () => setOperator(e.target.value), setError)
             }
             placeholder="0x..."
-            value={operator}
-            helperText={
-              <>
-                <p className="mt-2 text-sm text-gray-500">
-                  <Trans
-                    id="An address or contract that contains and controls the list. You can create a point list {link}"
-                    values={{ link }}
-                    components={Fragment}
-                  />
-                </p>
-                <p className="text-sm text-gray-500">
-                  <Trans
-                    id="More documentation on point lists can be found {docs}"
-                    values={{ docs }}
-                    components={Fragment}
-                  />
-                </p>
-              </>
-            }
+            className={classNames(DEFAULT_FORM_FIELD_CLASSNAMES, !!error ? '!border-red' : '')}
           />
         </div>
+        {!!error ? (
+          <Form.HelperText className="!text-red">{error}</Form.HelperText>
+        ) : (
+          <Form.HelperText>
+            <p className="mt-2 text-sm text-gray-500">
+              <Trans
+                id="An address or contract that contains and controls the list. You can create a point list {link}"
+                values={{ link }}
+                components={Fragment}
+              />
+            </p>
+            <p className="text-sm text-gray-500">
+              <Trans
+                id="More documentation on point lists can be found {docs}"
+                values={{ docs }}
+                components={Fragment}
+              />
+            </p>
+          </Form.HelperText>
+        )}
       </div>
       <div className="flex col-span-6 justify-end">
         <div>
