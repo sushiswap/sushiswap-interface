@@ -79,7 +79,7 @@ describe('Trident Swap:', () => {
     )
   })
 
-  test.skip('Should click max button for wallet', async () => {
+  test('Should click max button for wallet', async () => {
     await swapPage.navigateTo()
 
     await swapPage.selectInputToken('USDC')
@@ -93,7 +93,7 @@ describe('Trident Swap:', () => {
     expect(closeValues(usdcWalletBalance, parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 
-  test.skip('Should click max button for bento', async () => {
+  test('Should click max button for bento', async () => {
     await swapPage.navigateTo()
     await swapPage.setPayFromWallet(false)
 
@@ -107,7 +107,7 @@ describe('Trident Swap:', () => {
     expect(closeValues(parseFloat(inputTokenBalance), parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 
-  test.skip('Should switch currencies', async () => {
+  test('Should switch currencies', async () => {
     await swapPage.navigateTo()
 
     await swapPage.selectInputToken('USDC')
@@ -128,7 +128,7 @@ describe('Trident Swap:', () => {
     expect(selectedOutputTokenAfter).toBe('USDC')
   })
 
-  test.skip.each(currencySelectCases)(`Should select %p as input and %p as output`, async (inToken, outToken) => {
+  test.each(currencySelectCases)(`Should select %p as input and %p as output`, async (inToken, outToken) => {
     await swapPage.navigateTo()
 
     await swapPage.selectInputToken(inToken)
