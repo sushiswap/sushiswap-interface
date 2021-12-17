@@ -1,4 +1,4 @@
-import { Dappeteer, launch, setupMetamask } from '@chainsafe/dappeteer'
+import { Dappeteer, launch, LaunchOptions, setupMetamask } from '@chainsafe/dappeteer'
 import puppeteer, { Browser, Page } from 'puppeteer'
 
 export class TestHelper {
@@ -35,16 +35,20 @@ export class TestHelper {
 
   private static async getBrowser(): Promise<Browser> {
     let browser: Browser
+    let options: LaunchOptions = {
+      metamaskVersion: 'v10.1.1',
+      headless: false,
+      defaultViewport: null,
+      args: ['--no-sandbox'],
+    }
+
+    if (process.env.CI === 'true') {
+      options.slowMo = 5
+      options.executablePath = process.env.TEST_PUPPETEER_EXEC_PATH
+    }
 
     try {
-      browser = await launch(puppeteer, {
-        metamaskVersion: 'v10.1.1',
-        headless: false,
-        defaultViewport: null,
-        slowMo: process.env.CI === 'true' ? 5 : 0,
-        args: ['--no-sandbox'],
-        executablePath: process.env.PUPPETEER_EXEC_PATH,
-      })
+      browser = await launch(puppeteer, options)
     } catch (error) {
       console.log('Error occurred launching Puppeteer')
       throw error

@@ -122,6 +122,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
                 </span>
               ) : null}
               <input
+                id="text-slippage"
                 className={classNames(slippageError ? 'text-red' : '', 'bg-transparent placeholder-low-emphesis')}
                 placeholder={placeholderSlippage?.toFixed(2)}
                 value={

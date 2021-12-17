@@ -67,7 +67,10 @@ const Swap = () => {
                 </div>
               </div>
             )}
-            <div className="border border-transparent rounded hover:bg-dark-800 hover:border-dark-700">
+            <div
+              id="btn-transaction-settings"
+              className="border border-transparent rounded hover:bg-dark-800 hover:border-dark-700"
+            >
               <SettingsTab trident={true} />
             </div>
           </div>
@@ -97,6 +100,7 @@ const Swap = () => {
             />
             <div className="flex justify-center relative lg:mt-[-20px] lg:mb-[-20px]">
               <div
+                id="btn-switch-currencies"
                 className="rounded-full border-2 border-dark-700 lg:border-dark-800 hover:lg:border-dark-700 hover:text-white bg-dark-900 p-1.5 cursor-pointer"
                 onClick={switchCurrencies}
               >

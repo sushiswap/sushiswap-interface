@@ -41,7 +41,7 @@ describe('Add Liquidity:', () => {
       defaultViewport: null,
       slowMo: 5,
       args: ['--no-sandbox'],
-      executablePath: process.env.PUPPETEER_EXEC_PATH,
+      executablePath: process.env.TEST_PUPPETEER_EXEC_PATH,
     })
     try {
       metamask = await setupMetamask(browser, { seed: seed, password: pass })
@@ -66,7 +66,7 @@ describe('Add Liquidity:', () => {
 
   test('Spend USDC from wallet unequal amounts', async () => {
     const targetPoolName = 'USDC-WETH'
-    const usdcWalletBalance = await liquidityPoolsPage.getTokenBalance('USDC')
+    const usdcWalletBalance = await liquidityPoolsPage.getMetamaskTokenBalance('USDC')
     const t0DepositAmount: number = usdcWalletBalance * 0.1
 
     await liquidityPoolsPage.navigateTo()
