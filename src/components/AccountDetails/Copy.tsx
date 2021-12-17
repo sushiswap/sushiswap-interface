@@ -1,4 +1,4 @@
-import { CheckCircleIcon, ClipboardCopyIcon } from '@heroicons/react/outline'
+import { CheckCircleIcon, DocumentDuplicateIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { classNames } from 'functions'
@@ -27,16 +27,16 @@ const CopyHelper: FC<CopyHelperProps> = ({ className, toCopy, children }) => {
     >
       {isCopied && (
         <div className="flex items-center space-x-1 whitespace-nowrap">
-          <Typography variant="sm">{i18n._(t`Copied`)}</Typography>
+          <Typography className="font-size-inherit weight-inherit">{i18n._(t`Copied`)}</Typography>
           <CheckCircleIcon width={16} height={16} />
         </div>
       )}
 
       {!isCopied && (
-        <>
+        <div className="flex gap-1 items-center">
           {children}
-          <ClipboardCopyIcon width={16} height={16} />
-        </>
+          <DocumentDuplicateIcon width={20} />
+        </div>
       )}
     </div>
   )

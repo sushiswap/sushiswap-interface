@@ -20,6 +20,7 @@ module.exports = {
         'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
         'wavy-pattern': "url('/images/trident/wavy-pattern.png')",
         'chevron-pattern': "url('/images/trident/chevron-pattern.png')",
+        'miso-bowl': "url('/images/miso/banner.jpg')",
       }),
       linearBorderGradients: {
         directions: {
@@ -69,6 +70,7 @@ module.exports = {
         'dark-700': '#2E3348',
         'dark-600': '#1C2D49',
         'dark-500': '#223D5E',
+        'dark-400': '#545f7b',
         'low-emphesis': '#575757',
         primary: '#BFBFBF',
         secondary: '#7F7F7F',

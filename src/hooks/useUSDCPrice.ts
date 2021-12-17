@@ -51,7 +51,7 @@ export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefine
 
   return useMemo(() => {
     if (!price || !currencyAmount) return undefined
-    
+
     try {
       return price.quote(currencyAmount.wrapped)
     } catch (error) {

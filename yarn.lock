@@ -4210,10 +4210,10 @@
     tiny-warning "^1.0.0"
     toformat "^2.0.0"
 
-"@sushiswap/core-sdk@1.0.0-canary.22":
-  version "1.0.0-canary.22"
-  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.22.tgz#d5e2d249413aaeb67e9d15f2d7949d1c8210cb61"
-  integrity sha512-xfp0cy2UDGzq4TvES1nW9BUKdeoRGWHmJ71ZNdarbcsxacUR+28NGn7u3VRjPlGUzeLo9HVx+/QoAHJIM4ZOFA==
+"@sushiswap/core-sdk@1.0.0-canary.29":
+  version "1.0.0-canary.29"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.29.tgz#87b7627022771cb6abf26688cf05dd11d3b7e4fb"
+  integrity sha512-H7kXwwc5eyRtyjtnJWaAbG66fBfz/8fY4X3bbnh4VDH7dfA+aMt4NfoPmTAxsvHNtBXhw+RRl2RXFKNFAhI/dw==
   dependencies:
     "@ethersproject/address" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
@@ -4248,10 +4248,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/limit-order-sdk@1.0.0-canary.12":
-  version "1.0.0-canary.12"
-  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-sdk/-/limit-order-sdk-1.0.0-canary.12.tgz#24404a88717ce74cb3dbde08460a175839719316"
-  integrity sha512-9+kXH3oFsSfR0AHTXHHhy6GymclNWoJCn3iH+HIJJ1tdYAqBdB81MSyN7UD1ah3V41tqiFqlw32ABFv18lKMaw==
+"@sushiswap/limit-order-sdk@1.0.0-canary.18":
+  version "1.0.0-canary.18"
+  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-sdk/-/limit-order-sdk-1.0.0-canary.18.tgz#6536335ed5267296f9eac762f629484996cd7732"
+  integrity sha512-eJIRRqqXlNeDWRXVW2AIiK0Uz2v+66aFISRCJmDNskOQqLkxwPAgB6TcTMPm/gBx14ZD6Rm9KEdSK3wI9lAEZg==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/abstract-signer" "^5.4.0"
@@ -4263,6 +4263,11 @@
     "@sushiswap/core-sdk" "1.0.0-canary.21"
     eip-712 "^0.4.0"
     isomorphic-unfetch "^3.0.0"
+
+"@sushiswap/miso@^1.0.0-canary.4":
+  version "1.0.0-canary.4"
+  resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.4.tgz#8852dc1bc13fe1e3b41768be2f34bc7b49bc15ba"
+  integrity sha512-bYcuOi6YepLvoY0Vi4Izol2eLXSF1UpNo82P0ZVG5YT97LtJ993yBr3si4Y+kbfWO1KHLgpaoe0iOCeK8Ga5oQ==
 
 "@sushiswap/sdk@5.0.0-canary.109":
   version "5.0.0-canary.109"
@@ -4291,30 +4296,35 @@
     tiny-warning "^1.0.3"
     toformat "^2.0.0"
 
-"@sushiswap/tines@1.0.0-canary.5", "@sushiswap/tines@^1.0.0-canary.5":
-  version "1.0.0-canary.5"
-  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.5.tgz#bf7d209d2ad1584cade12364a4cd79db0b45ef0d"
-  integrity sha512-/DCqj3OELFc3DA96z5RA0+FRDgD7p2NtEPhNw5jj9sl0Hkrn3payUzRmlX0uuziNdOr0YU0ufez0k4j0+NxbRw==
+"@sushiswap/tines@1.0.0-canary.11", "@sushiswap/tines@^1.0.0-canary.11":
+  version "1.0.0-canary.11"
+  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.11.tgz#9f031726e9302260bbe5bfc890c7e04dd3b45988"
+  integrity sha512-YYFkEa1D1Tk1gVtpVgqyeRf2wZSSQWM0v2tXeScIu2z8FRceTkdjBZDJy6gcgpdqvZqBNyiwUZpdOOceR7Uvug==
   dependencies:
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.21"
 
-"@sushiswap/trident-sdk@^1.0.0-canary.30":
-  version "1.0.0-canary.30"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.30.tgz#935a0394b28e23e577dda754e3e64207fe192bb8"
-  integrity sha512-EuMDlge083lTKEfwb2Ze9nvbj/Pry0Qc36pbgv2Db4MZWoecl1Lwk0jdSG1X3LBm9PzsFie5+Koa407Lf5cB/w==
+"@sushiswap/trident-sdk@^1.0.0-canary.37":
+  version "1.0.0-canary.37"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.37.tgz#c346fd90742cf201179084a2b713df1470fbb845"
+  integrity sha512-1iaKNJ/wUpcKZ9BD92nJuT/YcIrHdnSOHHMKQ8gvIcI4+l8DDcM3Gb+I8TdRnJngXZGH9jTJv4ou7habYDDlLA==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
-    "@sushiswap/core-sdk" "1.0.0-canary.22"
-    "@sushiswap/tines" "1.0.0-canary.5"
+    "@sushiswap/core-sdk" "1.0.0-canary.29"
+    "@sushiswap/tines" "1.0.0-canary.11"
     "@sushiswap/trident" "1.0.0-canary.27"
     tiny-invariant "^1.1.0"
 
-"@sushiswap/trident@1.0.0-canary.27", "@sushiswap/trident@^1.0.0-canary.27":
+"@sushiswap/trident@1.0.0-canary.27":
   version "1.0.0-canary.27"
   resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.27.tgz#1459aee64ba0a5a8a37ee44905fc7be88f2fe413"
   integrity sha512-p4E/FQKK7ewYq0PJjGLOh017WsrWPgok3039iT3OKRmJaZAQpJF2xQsogoukc1o0ZuSwdUTVwAarOTk5xsP0Xg==
+
+"@sushiswap/trident@^1.0.0-canary.28":
+  version "1.0.0-canary.28"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident/-/trident-1.0.0-canary.28.tgz#65588d1523698091c9e89c0577b4f703681e2336"
+  integrity sha512-ERkTBwbZFR/MaYyGhbGmcVh0B7KYw9HVSgTK0yStLgcxgJ9TICgRJOeOmk3C0Xwkg7KTFXUNoTbRea7EpFP7tQ==
 
 "@szmarczak/http-timer@^1.1.2":
   version "1.1.2"
@@ -6337,6 +6347,11 @@ atob@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
+
+attr-accept@^2.2.1:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/attr-accept/-/attr-accept-2.2.2.tgz#646613809660110749e92f2c10833b70968d929b"
+  integrity sha512-7prDjvt9HmqiZ0cl5CRjtS84sEyhsHP2coDkaZKRKVfCDo9s7iw7ChVmar78Gu9pC4SoR/28wFu/G5JJhTnqEg==
 
 autoprefixer@^10.3.1:
   version "10.4.0"
@@ -11316,6 +11331,13 @@ file-loader@^6.2.0:
   dependencies:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
+
+file-selector@^0.2.2:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/file-selector/-/file-selector-0.2.4.tgz#7b98286f9dbb9925f420130ea5ed0a69238d4d80"
+  integrity sha512-ZDsQNbrv6qRi1YTDOEWzf5J2KjZ9KMI1Q2SGeTkCJmNNW25Jg4TW4UMcmoqcg4WrAyKRcpBXdbWRxkfrOzVRbA==
+  dependencies:
+    tslib "^2.0.3"
 
 file-system-cache@^1.0.5:
   version "1.0.5"
@@ -18259,6 +18281,15 @@ react-draggable@^4.4.3:
   dependencies:
     clsx "^1.1.1"
     prop-types "^15.6.0"
+
+react-dropzone@^11.4.2:
+  version "11.4.2"
+  resolved "https://registry.yarnpkg.com/react-dropzone/-/react-dropzone-11.4.2.tgz#1eb99e9def4cc7520f4f58e85c853ce52c483d56"
+  integrity sha512-ocYzYn7Qgp0tFc1gQtUTOaHHSzVTwhWHxxY+r7cj2jJTPfMTZB5GWSJHdIVoxsl+EQENpjJ/6Zvcw0BqKZQ+Eg==
+  dependencies:
+    attr-accept "^2.2.1"
+    file-selector "^0.2.2"
+    prop-types "^15.7.2"
 
 react-element-to-jsx-string@^14.3.2:
   version "14.3.4"

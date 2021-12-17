@@ -6,14 +6,13 @@ import Badge from 'app/components/Badge'
 import Button from 'app/components/Button'
 import CurrencyLogo from 'app/components/CurrencyLogo'
 import NavLink from 'app/components/NavLink'
+import Pagination from 'app/components/Pagination'
 import { useLimitOrderContract } from 'app/hooks/useContract'
 import useLimitOrders from 'app/hooks/useLimitOrders'
 import TransactionConfirmationModal from 'app/modals/TransactionConfirmationModal'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Lottie from 'lottie-react'
 import React, { FC, useState } from 'react'
-
-import Pagination from './Pagination'
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()
@@ -118,6 +117,8 @@ const OpenOrders: FC = () => {
               totalPages={pending.maxPages}
               currentPage={pending.page}
               pageNeighbours={2}
+              canNextPage={false}
+              canPreviousPage={false}
             />
           </>
         ) : (
