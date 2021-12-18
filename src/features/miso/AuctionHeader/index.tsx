@@ -11,8 +11,8 @@ import { Auction } from 'app/features/miso/context/Auction'
 import { AuctionStatus, AuctionTemplate } from 'app/features/miso/context/types'
 import { AuctionHelperTextByTemplateId, AuctionPriceHelperTextByTemplateId } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
-// import { cloudinaryLoader } from 'app/functions/cloudinary'
-// import Image from 'next/image'
+import { cloudinaryLoader } from 'app/functions/cloudinary'
+import Image from 'next/image'
 import React, { FC } from 'react'
 
 interface AuctionHeaderProps {
@@ -27,37 +27,38 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
     <div
       className={classNames(
         auction.auctionDocuments.website ? 'cursor-pointer' : '',
-        'flex gap-3 order-1 md:order-1 items-center'
+        'flex gap-3 order-1 md:order-1 items-center lg:justify-start justify-center'
       )}
     >
-      {/*{auction.auctionDocuments && auction.auctionDocuments.icon && (*/}
-      {/*  <Image*/}
-      {/*    alt="logo"*/}
-      {/*    src={cloudinaryLoader({ src: auction.auctionDocuments.icon, width: 60 })}*/}
-      {/*    width={60}*/}
-      {/*    layout="fill"*/}
-      {/*  />*/}
-      {/*)}*/}
-      <div className="flex flex-col gap-1">
+      {auction.auctionDocuments && auction.auctionDocuments.icon && (
+        <div className="min-w-[60px]">
+          <Image
+            alt="logo"
+            src={cloudinaryLoader({ src: auction.auctionDocuments.icon, width: 60 })}
+            width={60}
+            height={60}
+            layout="responsive"
+          />
+        </div>
+      )}
+      <div className="flex flex-col gap-1 overflow-hidden">
         <div className="flex items-center gap-2">
           <Typography weight={700} className="text-secondary">
             {auction.auctionToken.symbol}
           </Typography>
         </div>
-        <div className="flex gap-1 items-baseline">
-          <Typography variant="h2" weight={700} className="text-high-emphesis">
-            {auction.auctionToken.name}
-          </Typography>
+        <Typography variant="h2" weight={700} className="text-high-emphesis truncate">
+          {auction.auctionToken.name}
           {auction.auctionDocuments.website && (
-            <ExternalLinkIcon width={20} className="text-high-emphesis top-[3px] relative" />
+            <ExternalLinkIcon width={20} className="inline-flex text-high-emphesis ml-1 relative" />
           )}
-        </div>
+        </Typography>
       </div>
     </div>
   )
 
   return (
-    <div className="grid md:grid-cols-3 grid-cols-2 items-end gap-8 md:gap-0">
+    <div className="grid lg:grid-cols-3 grid-cols-1 items-end gap-8 lg:gap-0">
       {auction.auctionDocuments.website ? (
         <a href={auction.auctionDocuments.website} target="_blank" rel="noreferrer">
           {link}
@@ -65,7 +66,7 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
       ) : (
         link
       )}
-      <div className="flex col-span-2 md:col-span-1 order-3 md:order-3 justify-center">
+      <div className="flex col-span-1 lg:col-span-1 order-3 lg:order-3 justify-center">
         <AuctionTimer auction={auction}>
           {({ days, hours, minutes, seconds }) => {
             return (
@@ -130,9 +131,9 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
           }}
         </AuctionTimer>
       </div>
-      <div className="flex gap-5 justify-end order-2 md:order-3">
+      <div className="flex gap-5 justify-center lg:justify-end order-2 lg:order-3">
         <div className="flex flex-col gap-1">
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-center lg:justify-end">
             <Typography weight={700} variant="sm" className="text-secondary text-right">
               {auction.template === AuctionTemplate.DUTCH_AUCTION
                 ? i18n._(t`Auction Price`)
