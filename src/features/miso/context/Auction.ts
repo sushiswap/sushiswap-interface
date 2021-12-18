@@ -214,7 +214,7 @@ export class Auction {
 
   public get remainingPercentage(): Percent | undefined {
     if (this.template === AuctionTemplate.BATCH_AUCTION) {
-      return this.status === AuctionStatus.LIVE ? new Percent('100', '1') : ZERO_PERCENT
+      return this.status === AuctionStatus.LIVE ? new Percent('1', '1') : ZERO_PERCENT
     }
 
     if (
@@ -223,16 +223,16 @@ export class Auction {
       this.tokenPrice &&
       this.commitmentsTotal
     ) {
-      if (this.totalTokens.multiply(this.tokenPrice.quotient).greaterThan(ZERO)) {
+      const hundred = new Percent('1', '1')
+      if (this.tokenPrice.quote(this.totalTokens).greaterThan(ZERO)) {
         const percentageRaise = new Percent(
           this.commitmentsTotal.quotient,
           this.tokenPrice.quote(this.totalTokens).quotient.toString()
         )
 
-        return new Percent('100', '1').subtract(percentageRaise)
+        return hundred.subtract(percentageRaise)
       }
-
-      return ZERO_PERCENT
+      return hundred
     }
 
     if (this.template === AuctionTemplate.CROWDSALE && this.maximumTargetRaised && this.commitmentsTotal) {

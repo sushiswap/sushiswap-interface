@@ -2,58 +2,48 @@ import { getAddress } from '@ethersproject/address'
 import { DocumentAddIcon, DocumentDownloadIcon, ExclamationIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Fraction, JSBI } from '@sushiswap/core-sdk'
-import loadingCircle from 'app/animation/loading-circle.json'
-import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import WhitelistTable from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection/WhitelistTable'
-import { Auction } from 'app/features/miso/context/Auction'
-import useAuctionEdit from 'app/features/miso/context/hooks/useAuctionEdit'
 import { WhitelistEntry } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
-import Lottie from 'lottie-react'
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { toWei } from 'web3-utils'
 
-interface PointListDragAndDropProps {
-  auction: Auction
+interface WhitelistUploadProps {
+  value: WhitelistEntry[]
+  disabled: boolean
+  onChange: React.Dispatch<React.SetStateAction<WhitelistEntry[]>>
 }
 
-const PointListDragAndDrop: FC<PointListDragAndDropProps> = ({ auction }) => {
+const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }) => {
   const { i18n } = useLingui()
-  const { updatePointList } = useAuctionEdit(
-    auction.auctionInfo.addr,
-    auction.template,
-    auction.auctionInfo.liquidityTemplate,
-    auction.whitelist?.[0]
-  )
-  const [wlAddresses, setWlAddresses] = useState<WhitelistEntry[]>([])
-  const [pending, setPending] = useState<boolean>(false)
 
-  const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.forEach((file) => {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const { result } = reader
-        if (typeof result === 'string') {
-          const arr = result.split('\r\n')
-          const points = arr.reduce<WhitelistEntry[]>((acc, cur) => {
-            if (cur !== '') {
-              const [account, amount] = cur.split(',')
-              acc.push({ account: getAddress(account), amount })
-            }
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      acceptedFiles.forEach((file) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+          const { result } = reader
+          if (typeof result === 'string') {
+            const arr = result.split('\r\n')
+            const points = arr.reduce<WhitelistEntry[]>((acc, cur) => {
+              if (cur !== '') {
+                const [account, amount] = cur.split(',')
+                acc.push({ account: getAddress(account), amount })
+              }
 
-            return acc
-          }, [])
+              return acc
+            }, [])
 
-          setWlAddresses((prevState) => [...prevState, ...points])
+            onChange((prevState) => [...prevState, ...points])
+          }
         }
-      }
 
-      reader.readAsText(file)
-    })
-  }, [])
+        reader.readAsText(file)
+      })
+    },
+    [onChange]
+  )
 
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
     onDrop,
@@ -61,44 +51,12 @@ const PointListDragAndDrop: FC<PointListDragAndDropProps> = ({ auction }) => {
       '.csv, text/csv, application/vnd.ms-excel, application/csv, text/x-csv, application/x-csv, text/comma-separated-values, text/x-comma-separated-values',
   })
 
-  const handleUpdatePointList = useCallback(async () => {
-    try {
-      setPending(true)
-
-      const [accounts, amounts] = wlAddresses.reduce<[string[], string[]]>(
-        (acc, cur) => {
-          acc[0].push(cur.account)
-          acc[1].push(
-            new Fraction(
-              toWei(cur.amount),
-              JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18 - auction.paymentToken.decimals))
-            ).quotient.toString()
-          )
-          return acc
-        },
-        [[], []]
-      )
-
-      const tx = await updatePointList(accounts, amounts)
-
-      if (tx?.hash) {
-        await tx.wait()
-      }
-    } catch (e) {
-      console.error('Updating point list failed: ', e.message)
-    } finally {
-      setPending(false)
-    }
-  }, [auction.paymentToken.decimals, updatePointList, wlAddresses])
-
   return (
     <>
       <div
         className={classNames(
-          wlAddresses.length > 0 ? 'sm:col-span-3' : 'sm:col-span-6',
-          auction.auctionInfo.usePointList && auction.whitelist?.[0]
-            ? ''
-            : 'pointer-events-none opacity-40 filter saturate-[0.1]'
+          value.length > 0 ? 'sm:col-span-3' : 'sm:col-span-6',
+          !disabled ? '' : 'pointer-events-none opacity-40 filter saturate-[0.1]'
         )}
       >
         <Typography variant="lg" className="text-high-emphesis" weight={700}>
@@ -156,27 +114,9 @@ const PointListDragAndDrop: FC<PointListDragAndDropProps> = ({ auction }) => {
           {i18n._(t`CSV's must use a comma delimiter. Amounts should NOT contain comma's`)}
         </p>
       </div>
-      {wlAddresses.length > 0 && <WhitelistTable entries={wlAddresses} />}
-      <div className="flex justify-end col-span-6">
-        <div>
-          <Button
-            disabled={pending || wlAddresses.length === 0}
-            {...(pending && {
-              startIcon: (
-                <div className="w-5 h-5 mr-1">
-                  <Lottie animationData={loadingCircle} autoplay loop />
-                </div>
-              ),
-            })}
-            color="blue"
-            onClick={handleUpdatePointList}
-          >
-            {i18n._(t`Update Point List`)}
-          </Button>
-        </div>
-      </div>
+      {value.length > 0 && <WhitelistTable entries={value} />}
     </>
   )
 }
 
-export default PointListDragAndDrop
+export default WhitelistUpload

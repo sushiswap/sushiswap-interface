@@ -109,7 +109,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
             color="blue"
             onClick={() => handlePermissionListOperator(operator)}
           >
-            {i18n._(t`Update List Operator`)}
+            {i18n._(t`Update List Address`)}
           </Button>
         </div>
       </div>
