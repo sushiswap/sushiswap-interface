@@ -1,11 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Fraction, JSBI } from '@sushiswap/core-sdk'
+import { Fraction, JSBI, NATIVE } from '@sushiswap/core-sdk'
 import LoadingCircle from 'app/animation/loading-circle.json'
 import { useAuctionPointListFunctions } from 'app/features/miso/context/hooks/useAuctionPointList'
 import { PointListFormInputs } from 'app/features/miso/PointlistCreationForm/index'
 import { shortenString } from 'app/functions'
 import { useToken } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
 import Lottie from 'lottie-react'
@@ -21,13 +22,14 @@ interface PointlistCreationModalProps {
 }
 
 const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismiss, data }) => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { init, unsubscribe, subscribe } = useAuctionPointListFunctions()
 
   const [listAddress, setListAddress] = useState<string>()
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState(false)
-  const token = useToken(data.paymentTokenAddress)
+  const token = useToken(data.paymentTokenAddress) ?? NATIVE[chainId || 1]
 
   const execute = useCallback(
     async (data: PointListFormInputs) => {
@@ -40,7 +42,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
           acc[0].push(cur.account)
           acc[1].push(
             new Fraction(
-              toWei(cur.amount).toString(),
+              toWei(cur.amount),
               JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18 - token.decimals))
             ).quotient.toString()
           )
