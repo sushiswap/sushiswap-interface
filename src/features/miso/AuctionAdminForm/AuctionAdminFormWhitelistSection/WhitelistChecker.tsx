@@ -62,7 +62,7 @@ const WhitelistChecker: FC<WhitelistCheckerProps> = ({ listAddress: listAddressP
             )}
           >
             {whitelisted
-              ? i18n._(t`Address is whitelisted!`)
+              ? i18n._(t`Address is whitelisted for ${points?.toSignificant(6)} ${points?.currency.symbol}!`)
               : nonWhitelisted
               ? i18n._(t`Address is not whitelisted!`)
               : i18n._(t`Check if an address is whitelisted`)}
