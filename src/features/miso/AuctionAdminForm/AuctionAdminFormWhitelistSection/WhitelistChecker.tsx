@@ -38,7 +38,7 @@ const WhitelistChecker: FC<WhitelistCheckerProps> = ({ listAddress: listAddressP
             onChange={(e) =>
               pipeline({ value: e.target.value }, [isAddressValidator], () => setListAddress(e.target.value), setError)
             }
-            placeholder="Point List Address"
+            placeholder="Permission list address"
             className={classNames(DEFAULT_FORM_FIELD_CLASSNAMES, !!error ? '!border-red' : '')}
           />
         </div>
@@ -48,7 +48,7 @@ const WhitelistChecker: FC<WhitelistCheckerProps> = ({ listAddress: listAddressP
             onChange={(e) =>
               pipeline({ value: e.target.value }, [isAddressValidator], () => setAddress(e.target.value), setError)
             }
-            placeholder="User Address"
+            placeholder="User address"
             className={classNames(DEFAULT_FORM_FIELD_CLASSNAMES, !!error ? '!border-red' : '')}
           />
         </div>
