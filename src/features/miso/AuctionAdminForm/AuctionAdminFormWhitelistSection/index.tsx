@@ -2,8 +2,8 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Form from 'app/components/Form'
 import ListOperator from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection/ListOperator'
-import PointListDragAndDrop from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection/PointListDragAndDrop'
 import WhitelistChecker from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection/WhitelistChecker'
+import WhitelistUploadField from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection/WhitelistUploadField'
 import { Auction } from 'app/features/miso/context/Auction'
 import React, { FC } from 'react'
 
@@ -34,9 +34,9 @@ const AuctionAdminFormWhitelistSection: FC<AuctionAdminFormWhitelistSectionProps
       <div className="sm:col-span-6">
         <ListOperator auction={auction} />
       </div>
-      <PointListDragAndDrop auction={auction} />
+      <WhitelistUploadField auction={auction} />
       <div className="sm:col-span-6">
-        <WhitelistChecker auction={auction} />
+        <WhitelistChecker listAddress={auction.whitelist?.[0]} paymentToken={auction.paymentToken} />
       </div>
     </Form.Section>
   )

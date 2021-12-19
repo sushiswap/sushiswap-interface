@@ -7,8 +7,9 @@ import { useFormContext } from 'react-hook-form'
 import FormFieldHelperText from '../FormFieldHelperText'
 
 export interface FormTextFieldProps extends React.HTMLProps<HTMLInputElement> {
+  name: string
   error?: string
-  helperText?: string
+  helperText?: any
   icon?: ReactNode
   children?: ReactElement<HTMLInputElement>
 }
@@ -38,10 +39,12 @@ const FormTextField: FC<FormTextFieldProps> = ({ name, label, children, helperTe
           )}
         />
       </div>
-      {errors[name] ? (
+      {!!errors[name] ? (
         <FormFieldHelperText className="!text-red">{errors[name].message}</FormFieldHelperText>
-      ) : (
+      ) : typeof helperText === 'string' ? (
         <FormFieldHelperText>{helperText}</FormFieldHelperText>
+      ) : (
+        helperText
       )}
     </>
   )

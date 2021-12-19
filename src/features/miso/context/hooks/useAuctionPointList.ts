@@ -6,6 +6,8 @@ import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMultipleContractSingleData, useSingleCallResult } from 'app/state/multicall/hooks'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useCallback } from 'react'
 
 export const useAuctionPointLists = (addresses: string[]) => {
   const results = useMultipleContractSingleData(addresses, new Interface(BASE_AUCTION_ABI), 'pointList')
@@ -38,5 +40,54 @@ export const useAuctionPointListPoints = (
   if (Array.isArray(result) && result.length > 0 && paymentToken) {
     const { denominator, numerator } = new Fraction(JSBI.BigInt(result[0]), 1)
     return CurrencyAmount.fromFractionalAmount(paymentToken, numerator, denominator)
+  }
+}
+
+export const useAuctionPointListFunctions = () => {
+  const { chainId } = useActiveWeb3React()
+  const addTransaction = useTransactionAdder()
+  const contract = useContract(
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ListFactory.address : undefined,
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ListFactory.abi : undefined
+  )
+
+  const subscribe = useCallback(
+    (event: string, cb) => {
+      if (!contract) return
+
+      contract.on(event, cb)
+    },
+    [contract]
+  )
+
+  const unsubscribe = useCallback(
+    (event: string, cb) => {
+      if (!contract) return
+
+      contract.off(event, cb)
+    },
+    [contract]
+  )
+
+  const init = useCallback(
+    async (owner: string, accounts: string[], amounts: string[]) => {
+      if (!contract) return
+
+      try {
+        const tx = await contract.deployPointList(owner, accounts, amounts)
+        addTransaction(tx, { summary: 'Initialize permission list' })
+
+        return tx
+      } catch (e) {
+        console.error('Initialize permission list error: ', e)
+      }
+    },
+    [addTransaction, contract]
+  )
+
+  return {
+    subscribe,
+    unsubscribe,
+    init,
   }
 }

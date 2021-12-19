@@ -1,4 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
+import ModalAction, { ModalActionProps } from 'app/components/Modal/Action'
+import ModalActions, { ModalActionsProps } from 'app/components/Modal/Actions'
+import ModalBody, { ModalBodyProps } from 'app/components/Modal/Body'
+import ModalContent, { ModalContentProps } from 'app/components/Modal/Content'
+import ModalHeader, { ModalHeaderProps } from 'app/components/Modal/Header'
+import SubmittedModalContent, { SubmittedModalContentProps } from 'app/components/Modal/SubmittedModalContent'
 import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react'
 import React, { Fragment } from 'react'
 
@@ -17,6 +23,12 @@ interface Props {
 
 type HeadlessUiModalType<P> = FC<P> & {
   Controlled: FC<ControlledModalProps>
+  Body: FC<ModalBodyProps>
+  Actions: FC<ModalActionsProps>
+  Content: FC<ModalContentProps>
+  Header: FC<ModalHeaderProps>
+  Action: FC<ModalActionProps>
+  SubmittedModalContent: FC<SubmittedModalContentProps>
 }
 
 const HeadlessUiModal: HeadlessUiModalType<Props> = ({ children: childrenProp, trigger: triggerProp }) => {
@@ -130,4 +142,11 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
 }
 
 HeadlessUiModal.Controlled = HeadlessUiModalControlled
+HeadlessUiModal.Header = ModalHeader
+HeadlessUiModal.Body = ModalBody
+HeadlessUiModal.Content = ModalContent
+HeadlessUiModal.Actions = ModalActions
+HeadlessUiModal.Action = ModalAction
+HeadlessUiModal.SubmittedModalContent = SubmittedModalContent
+
 export default HeadlessUiModal

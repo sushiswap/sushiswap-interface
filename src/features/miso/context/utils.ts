@@ -27,7 +27,7 @@ export const AuctionPriceHelperTextByTemplateId = (i18n) => ({
   2: i18n._(
     t`This is the current price per token. It is calculated from the total commitments divided by the number of tokens on sale`
   ),
-  3: i18n._(t``),
+  3: i18n._(t`The estimated final price per token. It is calculated on a pro rata basis of the final total commitment`),
 })
 
 export const MisoAbiByTemplateId = (chainId: ChainId, templateId: AuctionTemplate) => {

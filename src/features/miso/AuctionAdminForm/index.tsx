@@ -25,7 +25,7 @@ interface IFormInputs extends AuctionDocument {}
 
 const schema = yup.object({
   icon: yup.string().url(),
-  description: yup.string(),
+  description: yup.string().max(300),
   website: yup.string().url(),
   whitepaper: yup.string().url(),
   github: yup.string().url(),
@@ -39,7 +39,7 @@ const schema = yup.object({
   desktopBanner: yup.string().url(),
   mobileBanner: yup.string().url(),
   bannedCountries: yup.string(),
-  bannedWarning: yup.string(),
+  bannedWarning: yup.string().max(300),
   category: yup.string(),
 })
 

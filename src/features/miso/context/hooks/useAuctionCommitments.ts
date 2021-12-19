@@ -27,7 +27,7 @@ export const useAuctionCommitments = (auction: Auction) => {
 
   // Get history commitments
   useEffect(() => {
-    if (!library || !contract || commitments.length > 0) return
+    if (!library || !contract || commitments.length > 0 || !blockNumber) return
 
     const init = async () => {
       const logs = await library.getLogs({
@@ -53,6 +53,7 @@ export const useAuctionCommitments = (auction: Auction) => {
     auction.auctionInfo.addr,
     auction.auctionToken,
     auction.paymentToken,
+    blockNumber,
     commitments.length,
     contract,
     library,
