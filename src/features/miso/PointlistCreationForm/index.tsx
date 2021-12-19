@@ -29,7 +29,7 @@ const schema = yup.object({
   owner: addressValidator.required(),
 })
 
-const PointlistCreationFormSetup: FC<{ onAddress(x: string): void }> = () => {
+const PointlistCreationFormSetup: FC = () => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
   const [open, setOpen] = useState<boolean>(false)
@@ -61,7 +61,7 @@ const PointlistCreationFormSetup: FC<{ onAddress(x: string): void }> = () => {
     <>
       <Form {...methods} onSubmit={methods.handleSubmit(onSubmit)}>
         <Form.Card>
-          <Form.Section columns={6} header={<Form.Section.Header header={i18n._(t`1. Setup`)} />}>
+          <Form.Section columns={6} header={<Form.Section.Header header={i18n._(t`General Details`)} />}>
             <div className="col-span-6">
               <Form.TextField
                 name="owner"

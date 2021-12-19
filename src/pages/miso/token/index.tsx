@@ -22,7 +22,7 @@ const MisoAuction = () => {
 
   return (
     <>
-      <MisoHeader className="bg-dark-900">
+      <MisoHeader className="bg-miso-bowl bg-cover">
         <div className="flex flex-col gap-4">
           <div>
             <Button
