@@ -166,4 +166,14 @@ describe('Trident Swap:', () => {
 
     expect(closeValues(wethUsdcRateExpected, parseFloat(wethUsdcRate), 1e-3)).toBe(true)
   })
+
+  test.only('Should change slippage', async () => {
+    await swapPage.navigateTo()
+
+    await swapPage.setSlippage('25.00')
+
+    const slippage = await swapPage.getSlippage()
+
+    expect(slippage).toBe('25.00')
+  })
 })

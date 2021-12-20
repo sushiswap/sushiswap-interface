@@ -88,6 +88,33 @@ export class SwapPage extends AppPage {
     }
   }
 
+  public async setSlippage(slippage: string): Promise<void> {
+    await this.blockingWait(1, true)
+
+    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    await TxSettingsButtonSelector.click()
+
+    const slippageInput = await this.Page.waitForSelector(this.SlippageInputSelector)
+
+    await slippageInput.click({ clickCount: 3 })
+    await slippageInput.type(slippage)
+
+    await TxSettingsButtonSelector.click()
+  }
+
+  public async getSlippage(): Promise<string> {
+    await this.blockingWait(1, true)
+
+    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    await TxSettingsButtonSelector.click()
+
+    await this.Page.waitForSelector(this.SlippageInputSelector)
+
+    const slippageInputTextBox = await this.Page.$(this.SlippageInputSelector)
+    const slippage = (await (await slippageInputTextBox.getProperty('value')).jsonValue()) as string
+    return slippage
+  }
+
   public async setAmountIn(inTokenAmount: string): Promise<void> {
     await this.Page.waitForTimeout(500)
     const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
