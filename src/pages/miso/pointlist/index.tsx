@@ -10,7 +10,7 @@ import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import Link from 'next/link'
 import React from 'react'
 
-const MisoAuction = () => {
+const Pointlist = () => {
   const { i18n } = useLingui()
 
   return (
@@ -45,7 +45,7 @@ const MisoAuction = () => {
   )
 }
 
-MisoAuction.Layout = MisoLayout
-MisoAuction.Guard = NetworkGuard(Feature.MISO)
+Pointlist.Layout = MisoLayout
+Pointlist.Guard = NetworkGuard(Feature.MISO)
 
-export default MisoAuction
+export default Pointlist

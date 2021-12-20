@@ -11,10 +11,20 @@ export interface FormTextFieldProps extends React.HTMLProps<HTMLInputElement> {
   error?: string
   helperText?: any
   icon?: ReactNode
+  endIcon?: ReactNode
   children?: ReactElement<HTMLInputElement>
 }
 
-const FormTextField: FC<FormTextFieldProps> = ({ name, label, children, helperText, icon, error, ...rest }) => {
+const FormTextField: FC<FormTextFieldProps> = ({
+  name,
+  label,
+  children,
+  helperText,
+  icon,
+  endIcon,
+  error,
+  ...rest
+}) => {
   const {
     register,
     formState: { errors },
@@ -23,7 +33,14 @@ const FormTextField: FC<FormTextFieldProps> = ({ name, label, children, helperTe
   return (
     <>
       <Typography weight={700}>{label}</Typography>
-      <div className="mt-2 flex rounded-md shadow-sm">
+      <div
+        className={classNames(
+          'mt-2 flex rounded-md shadow-sm border',
+          errors[name]
+            ? 'border-red/40 hover:border-red focus:border-red active:focus:border-red'
+            : 'border-transparent'
+        )}
+      >
         {icon && (
           <span className="inline-flex items-center px-3 rounded-l-md border border-r-0 border-dark-800 sm:text-sm">
             {icon}
@@ -33,14 +50,27 @@ const FormTextField: FC<FormTextFieldProps> = ({ name, label, children, helperTe
           {...register(name)}
           {...rest}
           className={classNames(
-            icon ? 'rounded-none rounded-r-md' : 'rounded',
+            icon && !endIcon ? 'rounded-none rounded-r-md' : 'rounded',
+            endIcon && !icon ? 'rounded-none rounded-l-md' : 'rounded',
+            icon && endIcon ? 'rounded-none' : 'rounded',
             DEFAULT_FORM_FIELD_CLASSNAMES,
-            errors[name] ? '!border-red' : ''
+            errors[name] ? '!border-transparent' : '',
+            rest.className
           )}
+          // autoComplete="off"
+          // autoCorrect="off"
+          // autoCapitalize="off"
         />
+        {endIcon && (
+          <span className="inline-flex items-center px-3 rounded-r-md border border-l-0 border-dark-800 sm:text-sm">
+            {endIcon}
+          </span>
+        )}
       </div>
       {!!errors[name] ? (
         <FormFieldHelperText className="!text-red">{errors[name].message}</FormFieldHelperText>
+      ) : error ? (
+        <FormFieldHelperText className="!text-red">{error}</FormFieldHelperText>
       ) : typeof helperText === 'string' ? (
         <FormFieldHelperText>{helperText}</FormFieldHelperText>
       ) : (

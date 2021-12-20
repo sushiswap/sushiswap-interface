@@ -5,18 +5,18 @@ import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
-import TokenCreationForm from 'app/features/miso/TokenCreationForm'
+import AuctionCreationForm from 'app/features/miso/AuctionCreationForm'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import Link from 'next/link'
 import React, { Fragment } from 'react'
 
-const Token = () => {
+const Auction = () => {
   const { i18n } = useLingui()
 
   const link = (
-    <a href="https://instantmiso.gitbook.io/miso/tokens" target="_blank" rel="noreferrer" className="text-blue">
-      documentation
+    <a href="https://instantmiso.gitbook.io/miso/" target="_blank" rel="noreferrer" className="text-blue">
+      here
     </a>
   )
 
@@ -37,11 +37,11 @@ const Token = () => {
           </div>
           <div className="flex flex-col gap-2">
             <Typography variant="h2" className="text-high-emphesis" weight={700}>
-              {i18n._(t`New Token`)}
+              {i18n._(t`New Auction`)}
             </Typography>
             <Typography variant="sm" weight={400}>
               <Trans
-                id="Create your own Token at the Token Factory. For details on all current Token types, please visit our {link}"
+                id="Choose which type of auction you’d like to hold.  Each of the three types has their own unique characteristics, so choose the one you think is most appropriate for your project.  Need more information on what these mean, and which is best for you? Read our documentation {link}."
                 values={{ link }}
                 components={Fragment}
               />
@@ -50,13 +50,13 @@ const Token = () => {
         </div>
       </MisoHeader>
       <MisoBody>
-        <TokenCreationForm />
+        <AuctionCreationForm />
       </MisoBody>
     </>
   )
 }
 
-Token.Layout = MisoLayout
-Token.Guard = NetworkGuard(Feature.MISO)
+Auction.Layout = MisoLayout
+Auction.Guard = NetworkGuard(Feature.MISO)
 
-export default Token
+export default Auction

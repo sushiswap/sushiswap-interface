@@ -10,7 +10,7 @@ import { FormProvider } from 'react-hook-form'
 import { UseFormReturn } from 'react-hook-form/dist/types'
 
 export const DEFAULT_FORM_FIELD_CLASSNAMES =
-  'outline-none rounded placeholder:text-low-emphesis bg-dark-1000/40 px-3 py-2 focus:ring-purple focus:border-purple block w-full min-w-0 border border-dark-800'
+  'appearance-none outline-none rounded placeholder:text-low-emphesis bg-dark-1000/40 px-3 py-2 focus:ring-purple focus:border-purple block w-full min-w-0 border border-dark-800'
 
 export interface FormProps extends UseFormReturn<any> {
   onSubmit(x): void

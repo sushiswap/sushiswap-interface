@@ -5,6 +5,7 @@ export enum AuctionTemplate {
   CROWDSALE = 1,
   DUTCH_AUCTION = 2,
   BATCH_AUCTION = 3,
+  HYPERBOLIC_AUCTION = 4,
 }
 
 export enum AuctionStatus {
