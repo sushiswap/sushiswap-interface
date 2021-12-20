@@ -20,6 +20,8 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ auction }) => {
     auction?.auctionInfo.liquidityTemplate
   )
 
+  if (!auction) return <div className="animate-pulse h-2 mb-2 mt-1 bg-dark-800" />
+
   return (
     <div className="flex justify-between">
       <Typography variant="sm" weight={700} className="flex gap-2">
@@ -30,12 +32,12 @@ const Breadcrumb: FC<BreadcrumbProps> = ({ auction }) => {
         {auction && <span>{auction.auctionToken.name}</span>}
       </Typography>
       <Typography variant="sm" weight={700} className="flex gap-4">
-        {auction?.isOwner && (
+        {auction.isOwner && (
           <Link passHref={true} href={`/miso/${query.auction as string}/admin`}>
             <a className="text-blue">Edit Auction</a>
           </Link>
         )}
-        {auction?.canFinalize && (
+        {auction.canFinalize && (
           <span
             role="button"
             onClick={() => finalizeAuction()}

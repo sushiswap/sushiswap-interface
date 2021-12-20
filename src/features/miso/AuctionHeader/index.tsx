@@ -38,6 +38,7 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
             width={60}
             height={60}
             layout="responsive"
+            className="rounded-full shadow-md"
           />
         </div>
       )}
@@ -111,19 +112,19 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
                 <Typography variant="h3" weight={700} className="text-mono text-white text-center">
                   {seconds}
                 </Typography>
-                <Typography variant="xs" weight={700} className="text-low-emphesis text-mono text-center mt-1">
+                <Typography variant="xs" weight={700} className="text-mono text-center mt-1">
                   {i18n._(t`Days`)}
                 </Typography>
                 <div />
-                <Typography variant="xs" weight={700} className="text-low-emphesis text-mono text-center mt-1">
+                <Typography variant="xs" weight={700} className="text-mono text-center mt-1">
                   {i18n._(t`Hours`)}
                 </Typography>
                 <div />
-                <Typography variant="xs" weight={700} className="text-low-emphesis text-mono text-center mt-1">
+                <Typography variant="xs" weight={700} className="text-mono text-center mt-1">
                   {i18n._(t`Minutes`)}
                 </Typography>
                 <div />
-                <Typography variant="xs" weight={700} className="text-low-emphesis text-mono text-center mt-1">
+                <Typography variant="xs" weight={700} className="text-mono text-center mt-1">
                   {i18n._(t`Seconds`)}
                 </Typography>
               </div>

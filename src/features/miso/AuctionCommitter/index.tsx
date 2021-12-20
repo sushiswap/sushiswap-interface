@@ -93,7 +93,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
           <div
             role="button"
             onClick={() => setValue(maxSpend?.toExact())}
-            className="cursor-pointer flex flex-col items-center justify-center rounded-full overflow-hidden bg-gradient-to-r from-red/30 via-pink/30 to-red/30 bg-opacity-20 border border-red text-pink px-3 h-9"
+            className="min-w-[60px] cursor-pointer flex flex-col items-center justify-center rounded-full overflow-hidden bg-gradient-to-r from-red/30 via-pink/30 to-red/30 bg-opacity-20 border border-red text-pink px-3 h-9"
           >
             <Typography>{i18n._(t`MAX`)}</Typography>
           </div>

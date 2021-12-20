@@ -57,6 +57,7 @@ ToggleButtonGroup.Button = ({
   value,
   children,
   variant = 'filled',
+  activeClassName,
   className,
 }: ComponentProps<typeof HeadlessRadioGroup.Option>) => {
   return (
@@ -64,7 +65,7 @@ ToggleButtonGroup.Button = ({
       {({ checked }) => (
         <div
           className={classNames(
-            className,
+            checked ? classNames(activeClassName, className) : className,
             'h-full flex items-center justify-center cursor-pointer focus:none',
             VARIANTS[variant].option.checked(checked),
             VARIANTS[variant].option.default

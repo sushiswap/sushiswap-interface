@@ -7,6 +7,7 @@ import { useFormContext } from 'react-hook-form'
 import FormFieldHelperText from '../FormFieldHelperText'
 
 export interface FormSelectFieldProps extends React.HTMLProps<HTMLSelectElement> {
+  name: string
   error?: string
   helperText?: string
   children?: ReactElement<HTMLInputElement>
@@ -35,8 +36,8 @@ const FormSelectField: FC<FormSelectFieldProps> = ({ name, label, children, help
           ))}
         </select>
       </div>
-      {errors[error] ? (
-        <FormFieldHelperText className="!text-red">{errors[error].name}</FormFieldHelperText>
+      {!!errors[name] ? (
+        <FormFieldHelperText className="!text-red">{errors[name].message}</FormFieldHelperText>
       ) : (
         <FormFieldHelperText>{helperText}</FormFieldHelperText>
       )}

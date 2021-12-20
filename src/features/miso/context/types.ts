@@ -123,3 +123,9 @@ export enum AuctionCategory {
   GOVERNANCE = 'Governance',
   NFTS = 'NFTs',
 }
+
+export enum TokenType {
+  FIXED,
+  MINTABLE,
+  SUSHI,
+}
