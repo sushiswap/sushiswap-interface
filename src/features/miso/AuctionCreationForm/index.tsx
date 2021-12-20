@@ -12,7 +12,7 @@ import { AuctionTemplate } from 'app/features/miso/context/types'
 import { addressValidator } from 'app/functions/yupValidators'
 import { useToken } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useMemo, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
@@ -23,7 +23,9 @@ export interface AuctionCreationFormInput {
   paymentCurrencyAddress?: string
   fundWallet?: string
   fixedPrice?: number
+  minimumTarget?: number
   minimumPrice?: number
+  minimumRaised?: number
   startPrice?: number
   endPrice?: number
   startDate?: string
@@ -39,7 +41,9 @@ export interface AuctionCreationFormInputValidated {
   paymentCurrencyAddress: string
   fundWallet: string
   fixedPrice?: number
+  minimumTarget?: number
   minimumPrice?: number
+  minimumRaised?: number
   startPrice?: number
   endPrice?: number
   startDate: string
@@ -55,7 +59,9 @@ export interface AuctionCreationFormInputFormatted {
   paymentCurrency: Currency
   fundWallet: string
   fixedPrice?: Price<Token, Currency>
+  minimumTarget?: CurrencyAmount<Currency>
   minimumPrice?: Price<Token, Currency>
+  minimumRaised?: CurrencyAmount<Currency>
   startPrice?: Price<Token, Currency>
   endPrice?: Price<Token, Currency>
   startDate: Date
@@ -64,27 +70,47 @@ export interface AuctionCreationFormInputFormatted {
   pointListAddress: string
 }
 
-const schema = yup.object({
+const schema = yup.object().shape({
   auctionType: yup.number().required('Must select an auction type'),
   token: addressValidator.required('Must enter a valid ERC-20 address'),
-  tokenAmount: yup.number().moreThan(0, 'Token amount must be greater than zero').required('Must enter a valid number'),
+  tokenAmount: yup
+    .number()
+    .typeError('Amount must be a number')
+    .moreThan(0, 'Token amount must be greater than zero')
+    .required('Must enter a valid number'),
   paymentCurrencyAddress: addressValidator.required('Must enter a valid address'),
   fundWallet: addressValidator.required('Must enter a valid address'),
   fixedPrice: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.CROWDSALE,
-    then: yup.number().required('Must enter a fixed price'),
+    then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
+  }),
+  minimumTarget: yup.number().when('auctionType', {
+    is: (value) => value === AuctionTemplate.CROWDSALE,
+    then: yup
+      .number()
+      .typeError('Target must be a number')
+      .min(0, 'Must be greater than zero')
+      .max(100, 'Can be at most 100%'),
+  }),
+  minimumRaised: yup.number().when('auctionType', {
+    is: (value) => value === AuctionTemplate.BATCH_AUCTION,
+    then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
   }),
   minimumPrice: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.BATCH_AUCTION,
-    then: yup.number().required('Must enter a minimum price'),
+    then: yup.number().typeError('Price must be a number').required('Must enter a minimum price'),
   }),
   startPrice: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
-    then: yup.number().required('Must enter a start price'),
+    then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
   }),
   endPrice: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
-    then: yup.number().required('Must enter a start price'),
+    then: yup
+      .number()
+      .typeError('Price must be a number')
+      .lessThan(yup.ref('startPrice'), 'End price must be less than start price')
+      .required('Must enter a start price'),
   }),
   startDate: yup.date().min(new Date(), 'Start date may not be due already').required('Must enter a valid date'),
   endDate: yup
@@ -111,20 +137,15 @@ const AuctionCreationForm: FC = () => {
     formState: { errors, isValid, isValidating },
   } = methods
 
-  // Validate form on every input
   const data = watch()
 
   // Format data
   const auctionToken = useToken(data.token) ?? undefined
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
-
-  const formattedData = useMemo(
-    () =>
-      auctionToken && paymentToken && !isValidating && isValid && account
-        ? formatCreationFormData(data as AuctionCreationFormInputValidated, auctionToken, paymentToken, account)
-        : undefined,
-    [account, auctionToken, data, isValid, isValidating, paymentToken]
-  )
+  const formattedData =
+    auctionToken && paymentToken && !isValidating && isValid && account
+      ? formatCreationFormData(data as AuctionCreationFormInputValidated, auctionToken, paymentToken, account)
+      : undefined
 
   const handleSubmit = () => setOpen(true)
 

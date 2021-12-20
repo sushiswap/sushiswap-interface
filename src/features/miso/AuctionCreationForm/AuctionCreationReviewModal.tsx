@@ -1,6 +1,7 @@
+import { parseUnits } from '@ethersproject/units'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { CurrencyAmount, JSBI } from '@sushiswap/core-sdk'
 import LoadingCircle from 'app/animation/loading-circle.json'
 import AuctionCreationSubmittedModalContent from 'app/features/miso/AuctionCreationForm/AuctionCreationSubmittedModalContent'
 import { AuctionCreationFormInputFormatted } from 'app/features/miso/AuctionCreationForm/index'
@@ -12,7 +13,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
 import Lottie from 'lottie-react'
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
 interface AuctionCreationModalProps {
   open: boolean
@@ -46,26 +47,27 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
     [init]
   )
 
+  // Subscribe to creation event to get created token ID
+  useEffect(() => {
+    subscribe('MarketCreated', (owner, address, marketTemplate, { transactionHash }) => {
+      if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
+        setAuctionAddress(address)
+      }
+    })
+
+    return () => {
+      unsubscribe('MarketCreated', () => console.log('unsubscribed'))
+    }
+  }, [subscribe, txHash, unsubscribe])
+
   if (!data) return <></>
 
-  // Subscribe to creation event to get created token ID
-  // useEffect(() => {
-  //   subscribe('AuctionCreated', (owner, tokenAddress, tokenTemplate, { transactionHash }) => {
-  //     if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
-  //       setAuctionAddress(tokenAddress)
-  //     }
-  //   })
-  //
-  //   return () => {
-  //     unsubscribe('AuctionCreated', () => console.log('unsubscribed'))
-  //   }
-  // }, [subscribe, txHash, unsubscribe])
   const paymentCurrencyLink = !data.paymentCurrency.isNative ? (
     <a
       className="text-purple font-normal text-xs"
       target="_blank"
       rel="noreferrer"
-      href={data.paymentCurrency ? getExplorerLink(chainId, data.paymentCurrency.address, 'address') : ''}
+      href={data.paymentCurrency ? getExplorerLink(chainId, data.paymentCurrency.wrapped.address, 'address') : ''}
     >
       {data.paymentCurrency.symbol}
     </a>
@@ -104,10 +106,14 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
                 {i18n._(t`Token Amount`)}
               </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+              <Typography
+                weight={700}
+                variant="sm"
+                className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
+              >
                 {data.tokenAmount.toSignificant(6)}{' '}
                 <a
-                  className="text-purple font-normal"
+                  className="text-purple font-normal text-xs"
                   target="_blank"
                   rel="noreferrer"
                   href={getExplorerLink(chainId, data.tokenAmount.currency.address, 'address')}
@@ -152,7 +158,14 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
                     variant="sm"
                     className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
                   >
-                    {data.minimumPrice?.quote(CurrencyAmount.fromRawAmount(data.auctionToken, '1')).toSignificant(6)}{' '}
+                    {data.minimumPrice
+                      ?.quote(
+                        CurrencyAmount.fromRawAmount(
+                          data.auctionToken,
+                          JSBI.BigInt(parseUnits('1', data.auctionToken.decimals))
+                        )
+                      )
+                      .toSignificant(6)}{' '}
                     {paymentCurrencyLink}
                   </Typography>
                 </>
@@ -167,7 +180,14 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
                     variant="sm"
                     className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
                   >
-                    {data.fixedPrice?.quote(CurrencyAmount.fromRawAmount(data.auctionToken, '1')).toSignificant(6)}{' '}
+                    {data.fixedPrice
+                      ?.quote(
+                        CurrencyAmount.fromRawAmount(
+                          data.auctionToken,
+                          JSBI.BigInt(parseUnits('1', data.auctionToken.decimals))
+                        )
+                      )
+                      .toSignificant(6)}{' '}
                     {paymentCurrencyLink}
                   </Typography>
                 </>

@@ -41,7 +41,7 @@ const AuctionCreationFormBatchAuction: FC<AuctionCreationFormBatchAuctionProps> 
       className="pt-8"
       header={<Form.Section.Header header={i18n._(t`Batch Auction Details`)} />}
     >
-      <div className="col-span-4 md:col-span-2 xl:col-span-1">
+      <div className="col-span-4 md:col-span-2">
         <Form.TextField
           {...(paymentToken && {
             endIcon: (
@@ -54,6 +54,21 @@ const AuctionCreationFormBatchAuction: FC<AuctionCreationFormBatchAuctionProps> 
           label={i18n._(t`Minimum Price*`)}
           placeholder={`0.00`}
           helperText={i18n._(t`Token price needs to reach this amount in order to have a successful auction`)}
+        />
+      </div>
+      <div className="col-span-4 md:col-span-2">
+        <Form.TextField
+          {...(paymentToken && {
+            endIcon: (
+              <Typography variant="sm" weight={700} className="text-secondary">
+                {paymentToken.symbol}
+              </Typography>
+            ),
+          })}
+          name="minimumRaised"
+          label={i18n._(t`Minimum Raised Amount*`)}
+          placeholder="0.00"
+          helperText={i18n._(t`Minimum amount to raise in order to have a successful auction`)}
         />
       </div>
       <div className="col-span-4">

@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants'
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, JSBI, Price, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Price, Token } from '@sushiswap/core-sdk'
 import {
   AuctionCreationFormInputFormatted,
   AuctionCreationFormInputValidated,
@@ -11,7 +11,10 @@ export const getPriceEntity = (price: string, auctionToken: Token, paymentToken:
     paymentToken,
     JSBI.BigInt(parseUnits(price, paymentToken.decimals).toString())
   )
-  const quote = CurrencyAmount.fromRawAmount(auctionToken, '1')
+  const quote = CurrencyAmount.fromRawAmount(
+    auctionToken,
+    JSBI.BigInt(parseUnits('1', auctionToken.decimals).toString())
+  )
   return new Price({ baseAmount: quote, quoteAmount: base })
 }
 
@@ -22,6 +25,28 @@ export const formatCreationFormData = (
   account: string
 ): AuctionCreationFormInputFormatted => {
   const { token, paymentCurrencyAddress, startDate, endDate, operator, pointListAddress, ...rest } = data
+  const startPrice = data.startPrice
+    ? getPriceEntity(data.startPrice.toString(), auctionToken, paymentCurrency)
+    : undefined
+  const endPrice = data.endPrice ? getPriceEntity(data.endPrice.toString(), auctionToken, paymentCurrency) : undefined
+  const minimumPrice = data.minimumPrice
+    ? getPriceEntity(data.minimumPrice.toString(), auctionToken, paymentCurrency)
+    : undefined
+  const fixedPrice = data.fixedPrice
+    ? getPriceEntity(data.fixedPrice.toString(), auctionToken, paymentCurrency)
+    : undefined
+  const tokenAmount = CurrencyAmount.fromRawAmount(
+    auctionToken,
+    JSBI.BigInt(parseUnits(data.tokenAmount.toString(), auctionToken.decimals).toString())
+  )
+  const minimumTarget =
+    fixedPrice && tokenAmount && data.minimumTarget
+      ? fixedPrice.quote(tokenAmount).multiply(new Percent(data.minimumTarget, '100'))
+      : undefined
+  const minimumRaised = CurrencyAmount.fromRawAmount(
+    paymentCurrency,
+    JSBI.BigInt(parseUnits(data.minimumRaised.toString(), paymentCurrency.decimals).toString())
+  )
 
   return {
     ...rest,
@@ -31,15 +56,12 @@ export const formatCreationFormData = (
     endDate: new Date(endDate),
     auctionToken,
     paymentCurrency,
-    tokenAmount: CurrencyAmount.fromRawAmount(
-      auctionToken,
-      JSBI.BigInt(parseUnits(data.tokenAmount.toString(), auctionToken.decimals).toString())
-    ),
-    startPrice: data.startPrice ? getPriceEntity(data.startPrice.toString(), auctionToken, paymentCurrency) : undefined,
-    endPrice: data.endPrice ? getPriceEntity(data.endPrice.toString(), auctionToken, paymentCurrency) : undefined,
-    minimumPrice: data.minimumPrice
-      ? getPriceEntity(data.minimumPrice.toString(), auctionToken, paymentCurrency)
-      : undefined,
-    fixedPrice: data.fixedPrice ? getPriceEntity(data.fixedPrice.toString(), auctionToken, paymentCurrency) : undefined,
+    tokenAmount,
+    startPrice,
+    endPrice,
+    minimumPrice,
+    fixedPrice,
+    minimumTarget,
+    minimumRaised,
   }
 }

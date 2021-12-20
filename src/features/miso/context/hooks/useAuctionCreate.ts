@@ -12,7 +12,7 @@ import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
 const useAuctionCreate = () => {
-  const { account, chainId } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const { map: auctionTemplateMap } = useAuctionTemplateMap()
   const contract = useContract(
@@ -41,19 +41,6 @@ const useAuctionCreate = () => {
   const _dutchAuctionData = useCallback((data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
     if (!data.startPrice || !data.endPrice) throw new Error('Invalid inputs')
 
-    console.log(
-      marketFactoryAddress,
-      data.auctionToken.address,
-      data.tokenAmount.quotient.toString(),
-      data.startDate.getTime() / 1000,
-      data.endDate.getTime() / 1000,
-      data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
-      data.startPrice.quotient.toString(),
-      data.endPrice.quotient.toString(),
-      data.operator,
-      data.pointListAddress,
-      data.fundWallet
-    )
     return defaultAbiCoder.encode(
       [
         'address',
@@ -86,6 +73,20 @@ const useAuctionCreate = () => {
 
   const _batchAuctionData = useCallback((data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
     if (!data.minimumPrice) throw new Error('Invalid inputs')
+    //
+    // console.log(
+    //   `funder: ${marketFactoryAddress}`,
+    //   `token: ${data.auctionToken.address}`,
+    //   `paymentCurrency: ${data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address}`,
+    //   `totalTokens: ${data.tokenAmount.quotient.toString()}`,
+    //   `startTime: ${data.startDate.getTime() / 1000}`,
+    //   `endTime: ${data.endDate.getTime() / 1000}`,
+    //   `rate ${data.fixedPrice.numerator.toString()}`,
+    //   `goal ${data.minimumTarget.quotient.toString()}`,
+    //   `admin ${data.operator}`,
+    //   `pointList ${data.pointListAddress}`,
+    //   `wallet ${data.fundWallet}`
+    // )
 
     return defaultAbiCoder.encode(
       ['address', 'address', 'uint256', 'uint256', 'uint256', 'address', 'uint256', 'address', 'address', 'address'],
@@ -96,7 +97,7 @@ const useAuctionCreate = () => {
         data.startDate.getTime() / 1000,
         data.endDate.getTime() / 1000,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
-        data.minimumPrice.quote(data.tokenAmount).quotient.toString(),
+        data.minimumRaised.quotient.toString(),
         data.operator,
         data.pointListAddress,
         data.fundWallet,
@@ -105,7 +106,7 @@ const useAuctionCreate = () => {
   }, [])
 
   const _crowdsaleAuctionData = useCallback((data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
-    if (!data.fixedPrice) throw new Error('Invalid inputs')
+    if (!data.fixedPrice || !data.minimumTarget) throw new Error('Invalid inputs')
 
     return defaultAbiCoder.encode(
       [
@@ -128,8 +129,8 @@ const useAuctionCreate = () => {
         data.tokenAmount.quotient.toString(),
         data.startDate.getTime() / 1000,
         data.endDate.getTime() / 1000,
-        data.fixedPrice.invert().quotient.toString(),
-        data.fixedPrice.quote(data.tokenAmount).quotient.toString(),
+        data.fixedPrice.numerator.toString(),
+        data.minimumTarget.quotient.toString(),
         data.operator,
         data.pointListAddress,
         data.fundWallet,
@@ -156,24 +157,12 @@ const useAuctionCreate = () => {
       try {
         // Get auction type template ID first
         const templateId = await contract.getTemplateId(marketFactoryAddress)
-        console.log(
-          templateId.toString(),
-          contract.address,
-          contract.interface.encodeFunctionData('createMarket', [
-            templateId,
-            data.auctionToken.address,
-            data.tokenAmount.quotient.toString(),
-            '0x2a3070d384f2871c4fddf05f4c5dd9b6272fb54c',
-            getAuctionData(data, marketFactoryAddress),
-          ])
-        )
         const tx = await contract.createMarket(
           templateId,
           data.auctionToken.address,
           data.tokenAmount.quotient.toString(),
-          // TODO ramin: what's this integratorFeeAccount
           AddressZero,
-          getAuctionData(data, marketFactoryAddress)
+          getAuctionData(data, contract.address)
         )
 
         addTransaction(tx, { summary: 'Create Auction' })
@@ -183,7 +172,7 @@ const useAuctionCreate = () => {
         console.error('Initialize fixed token error: ', e)
       }
     },
-    [account, addTransaction, auctionTemplateMap, contract, getAuctionData]
+    [addTransaction, auctionTemplateMap, contract, getAuctionData]
   )
 
   return {

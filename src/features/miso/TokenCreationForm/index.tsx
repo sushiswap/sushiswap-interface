@@ -27,8 +27,9 @@ const schema = yup.object({
   tokenSymbol: yup.string().required('Must enter a valid symbol'),
   tokenSupply: yup
     .number()
+    .typeError('Supply must be a number')
     .required('Must enter a valid number')
-    .positive('Token supply must be positive')
+    .moreThan(0, 'Token supply must be larger than zero')
     .max(2e256 - 1, 'Token supply can be at most 2^256 - 1 due to network limitations'),
 })
 
