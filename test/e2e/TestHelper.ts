@@ -43,7 +43,7 @@ export class TestHelper {
     }
 
     if (process.env.CI === 'true') {
-      options.slowMo = 5
+      options.slowMo = 3
       options.executablePath = process.env.TEST_PUPPETEER_EXEC_PATH
     }
 

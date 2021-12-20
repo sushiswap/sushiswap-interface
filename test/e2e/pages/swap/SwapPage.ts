@@ -40,11 +40,16 @@ export class SwapPage extends AppPage {
     const swapType: SwapType = this.getSwapType(inTokenSymbol, outTokenSymbol)
 
     await this.selectInputToken(inTokenSymbol)
-    await this.selectOutputToken(inTokenSymbol)
-
+    await this.selectOutputToken(outTokenSymbol)
     await this.setAmountIn(inTokenAmount)
 
-    await this.setPayFromWallet(payFromWallet)
+    const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
+    const payFromWalletSwitch = await this.getSwitchElement(this.PayFromWalletSelector)
+    if (payFromWallet && !isPayFromWalletChecked) {
+      await payFromWalletSwitch.click()
+    } else if (!payFromWallet && isPayFromWalletChecked) {
+      await payFromWalletSwitch.click()
+    }
 
     const isReceiveToWalletChecked = await this.isSwitchChecked(this.ReceiveToWalletSelector)
     const receiveToWalletSwitch = await this.getSwitchElement(this.ReceiveToWalletSelector)

@@ -144,7 +144,7 @@ export abstract class AppPage {
     let waitSeconds = seconds
 
     if (checkCi && this.ci === 'true') {
-      waitSeconds = seconds * 5
+      waitSeconds = seconds * 2
     }
 
     var waitTill = new Date(new Date().getTime() + waitSeconds * 1000)

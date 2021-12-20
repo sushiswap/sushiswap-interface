@@ -61,7 +61,7 @@ describe('Trident Swap:', () => {
     browser.close()
   })
 
-  test.skip.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+  test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
     const ethWalletBalance = await swapPage.getMetamaskTokenBalance(inToken as string)
     if (!(ethWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
 
