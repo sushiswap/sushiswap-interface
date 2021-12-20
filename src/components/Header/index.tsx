@@ -3,6 +3,7 @@ import { Feature, featureEnabled } from '../../functions/feature'
 import React from 'react'
 
 import { ANALYTICS_URL } from '../../constants'
+import BuyBanxaButton from '../../features/on-ramp/banxa'
 import Buy from '../../features/on-ramp/ramp'
 import ExternalLink from '../ExternalLink'
 import Image from 'next/image'
@@ -40,6 +41,7 @@ function AppBar(): JSX.Element {
                   <div className="hidden sm:block sm:ml-4">
                     <div className="flex space-x-2">
                       {/* <Buy /> */}
+                      <BuyBanxaButton />
                       <NavLink href="/swap">
                         <a
                           id={`swap-nav-link`}
