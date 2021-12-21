@@ -62,8 +62,8 @@ const useAuctionCreate = () => {
         data.startDate.getTime() / 1000,
         data.endDate.getTime() / 1000,
         data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
-        data.startPrice.quotient.toString(),
-        data.endPrice.quotient.toString(),
+        data.startPrice.numerator.toString(),
+        data.endPrice.numerator.toString(),
         data.operator,
         data.pointListAddress,
         data.fundWallet,
@@ -140,9 +140,10 @@ const useAuctionCreate = () => {
       const marketFactoryAddress = auctionTemplateMap?.[data.auctionType]
       if (!contract || !marketFactoryAddress) return
 
+      let templateId
       try {
         // Get auction type template ID first
-        const templateId = await contract.getTemplateId(marketFactoryAddress)
+        templateId = await contract.getTemplateId(marketFactoryAddress)
         const tx = await contract.createMarket(
           templateId,
           data.auctionToken.address,
@@ -156,6 +157,16 @@ const useAuctionCreate = () => {
         return tx
       } catch (e) {
         console.error('Initialize fixed token error: ', e)
+        console.log(
+          contract.address,
+          contract.interface.encodeFunctionData('createMarket', [
+            templateId,
+            data.auctionToken.address,
+            data.tokenAmount.quotient.toString(),
+            AddressZero,
+            getAuctionData(data, contract.address),
+          ])
+        )
       }
     },
     [addTransaction, auctionTemplateMap, contract, getAuctionData]
