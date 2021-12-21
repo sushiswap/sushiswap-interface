@@ -12,6 +12,7 @@ import { AuctionStatus } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
 import { cloudinaryLoader } from 'app/functions/cloudinary'
 import NetworkGuard from 'app/guards/Network'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -20,6 +21,9 @@ const MisoAuction = () => {
   const router = useRouter()
   const { auction: address } = router.query
   const { auction } = useAuction(address as string)
+
+  // Redirect to overview on chainId change
+  useRedirectOnChainId('/miso')
 
   return (
     <>

@@ -8,6 +8,7 @@ import { Feature } from 'app/enums'
 import AuctionAdminForm from 'app/features/miso/AuctionAdminForm'
 import useAuction from 'app/features/miso/context/hooks/useAuction'
 import NetworkGuard from 'app/guards/Network'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
@@ -20,6 +21,9 @@ const MisoAuction = () => {
   const router = useRouter()
   const { auction: address } = router.query
   const { loading, auction } = useAuction(address as string, account ?? undefined)
+
+  // Redirect to overview on chainId change
+  useRedirectOnChainId('/miso')
 
   const header = (
     <div className="flex flex-col gap-4">
