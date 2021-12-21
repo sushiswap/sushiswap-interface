@@ -16,6 +16,7 @@ export class Auction {
   public readonly marketInfo?: RawMarketInfo
   public readonly auctionDocuments: AuctionDocument
   public readonly whitelist: string[]
+  public readonly ended?: boolean
 
   public constructor({
     template,
@@ -25,6 +26,7 @@ export class Auction {
     marketInfo,
     auctionDocuments,
     whitelist,
+    ended,
   }: {
     template: AuctionTemplate
     auctionToken: Token
@@ -33,6 +35,7 @@ export class Auction {
     marketInfo?: RawMarketInfo
     auctionDocuments: AuctionDocument
     whitelist: string[]
+    ended?: boolean
   }) {
     this.template = template
     this.auctionToken = auctionToken
@@ -41,6 +44,7 @@ export class Auction {
     this.marketInfo = marketInfo
     this.auctionDocuments = auctionDocuments
     this.whitelist = whitelist
+    this.ended = ended
   }
 
   public get isOwner(): boolean | undefined {
@@ -113,7 +117,6 @@ export class Auction {
       const now = Date.now()
 
       if (now <= startTime) return this.startPrice
-      if (now >= endTime) return this.reservePrice
       if (this.startPrice && this.reservePrice) {
         const { numerator, denominator } = this.startPrice.subtract(
           this.startPrice.subtract(this.reservePrice).multiply(new Fraction(now - startTime, endTime - startTime))

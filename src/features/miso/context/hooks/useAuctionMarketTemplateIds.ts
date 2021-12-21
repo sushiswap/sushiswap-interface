@@ -1,8 +1,7 @@
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
-import { useContract } from 'app/hooks'
-import { useMultipleContractSingleData, useSingleCallResult } from 'app/state/multicall/hooks'
+import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
 
 const AUCTION_INTERFACE = new Interface(BASE_AUCTION_ABI)
 
@@ -21,12 +20,4 @@ export const useAuctionMarketTemplateIds = (auctions: string[]): (BigNumber | un
   return Array(auctions.length).fill(undefined)
 }
 
-export const useAuctionMarketTemplateId = (auction: string): BigNumber | undefined => {
-  const contract = useContract(auction, AUCTION_INTERFACE)
-  const { result } = useSingleCallResult(contract, 'marketTemplate')
-  if (result && Array.isArray(result) && result.length > 0) {
-    return result[0]
-  }
-}
-
-export default useAuctionMarketTemplateId
+export default useAuctionMarketTemplateIds
