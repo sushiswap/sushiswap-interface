@@ -2,9 +2,20 @@ import { Dappeteer, launch, LaunchOptions, setupMetamask } from '@chainsafe/dapp
 import puppeteer, { Browser, Page } from 'puppeteer'
 
 export class TestHelper {
-  public static async initDappeteer(): Promise<[Dappeteer, Browser, Page]> {
-    let seed: string = process.env.TEST_SEED || 'seed seed seed'
-    let pass: string = process.env.TEST_PASS || 'password'
+  public static async initDappeteer(
+    seedPhrase: string = '',
+    password: string = ''
+  ): Promise<[Dappeteer, Browser, Page]> {
+    let seed: string
+    let pass: string
+
+    if (seedPhrase !== '' && password !== '') {
+      seed = seedPhrase
+      pass = password
+    } else {
+      seed = process.env.TEST_SEED || 'seed seed seed'
+      pass = process.env.TEST_PASS || 'password'
+    }
 
     const browser = await this.getBrowser()
     const metamask = await this.getMetamask(browser, seed, pass)

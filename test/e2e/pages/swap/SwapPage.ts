@@ -268,6 +268,30 @@ export class SwapPage extends AppPage {
     return rateText
   }
 
+  public async getBentoBalance(tokenSymbol: string): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.bringToFront()
+    await this.selectInputToken(tokenSymbol)
+
+    await this.setPayFromWallet(false)
+
+    const balance = await this.getInputTokenBalance()
+
+    return balance
+  }
+
+  public async getWalletBalance(tokenSymbol: string): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.bringToFront()
+    await this.selectInputToken(tokenSymbol)
+
+    await this.setPayFromWallet(true)
+
+    const balance = await this.getInputTokenBalance()
+
+    return balance
+  }
+
   private async selectToken(tokenSymbol: string): Promise<void> {
     await this.Page.waitForSelector(this.AllCurrenciesListSelector)
     await this.blockingWait(3)

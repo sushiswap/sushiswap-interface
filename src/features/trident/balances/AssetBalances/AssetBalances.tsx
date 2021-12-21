@@ -73,7 +73,10 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
                     <div
                       key={i}
                       {...cell.getCellProps()}
-                      className={classNames('h-[64px] flex items-center', headerGroups[0].headers[i].className)}
+                      className={classNames(
+                        'h-[64px] balance-cell flex items-center',
+                        headerGroups[0].headers[i].className
+                      )}
                     >
                       {cell.render('Cell')}
                     </div>
