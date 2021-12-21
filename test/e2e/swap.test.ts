@@ -204,7 +204,7 @@ describe('Trident Swap:', () => {
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
     await swapPage.navigateTo()
-    await swapPage.turnOnExpertMode()
+    await swapPage.toggleExpertMode()
     await swapPage.addRecipient(account2PubKey)
     await swapPage.selectInputToken(inToken)
     await swapPage.selectOutputToken(outToken)
@@ -223,7 +223,7 @@ describe('Trident Swap:', () => {
     expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
   })
 
-  test.only('Should swap ETH from wallet to USDC wallet with other recipient', async () => {
+  test('Should swap ETH from wallet to USDC wallet with other recipient', async () => {
     const inToken = 'ETH'
     const outToken = 'USDC'
 
@@ -249,7 +249,7 @@ describe('Trident Swap:', () => {
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
     await swapPage.navigateTo()
-    await swapPage.turnOnExpertMode()
+    await swapPage.toggleExpertMode()
     await swapPage.addRecipient(account2PubKey)
     await swapPage.selectInputToken(inToken)
     await swapPage.selectOutputToken(outToken)
@@ -266,5 +266,21 @@ describe('Trident Swap:', () => {
     await recipientBrowser.close()
 
     expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
+  })
+
+  test.only('Should reset recipient address when expert mode is disabled', async () => {
+    await swapPage.navigateTo()
+    await swapPage.toggleExpertMode() // enable expert mode
+    await swapPage.addRecipient('potato')
+
+    const recipientAddressBefore = await swapPage.getRecipient()
+    expect(recipientAddressBefore).toBe('potato')
+    await swapPage.toggleExpertMode() // disable expert mode
+
+    await swapPage.navigateTo()
+
+    await swapPage.toggleExpertMode() // enable expert mode
+    const recipientAddressAfter = await swapPage.getRecipient()
+    expect(recipientAddressAfter).toBe('')
   })
 })

@@ -110,7 +110,21 @@ export class SwapPage extends AppPage {
     await recipientInput.type(recipient)
   }
 
-  public async turnOnExpertMode(): Promise<void> {
+  public async getRecipient(): Promise<string> {
+    await this.blockingWait(1, true)
+
+    let recipientInputBox: ElementHandle<Element>
+    recipientInputBox = await this.Page.$(this.RecipientInputSelector)
+
+    if (!recipientInputBox) {
+      return ''
+    }
+
+    const recipient = (await (await recipientInputBox.getProperty('value')).jsonValue()) as string
+    return recipient
+  }
+
+  public async toggleExpertMode(): Promise<void> {
     await this.blockingWait(1, true)
 
     const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
@@ -119,8 +133,10 @@ export class SwapPage extends AppPage {
     const expertModeToggle = await this.Page.waitForSelector(this.ExpertModeToggleSelector)
     await expertModeToggle.click()
 
-    const confirmExpertModeButton = await this.Page.waitForSelector(this.ConfirmExpertModeSelector)
-    await confirmExpertModeButton.click()
+    const confirmExpertModeButton = await this.Page.$(this.ConfirmExpertModeSelector)
+    if (confirmExpertModeButton) {
+      await confirmExpertModeButton.click()
+    }
   }
 
   public async setSlippage(slippage: string): Promise<void> {
