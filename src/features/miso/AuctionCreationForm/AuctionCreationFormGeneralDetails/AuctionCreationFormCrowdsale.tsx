@@ -69,9 +69,9 @@ const AuctionCreationFormCrowdsale: FC<AuctionCreationFormCrowdsaleProps> = ({})
         />
       </div>
       <div className="col-span-4 md:col-span-2">
-        <Typography weight={700}>{i18n._(t`Maximum Raised`)}</Typography>
+        <Typography weight={700}>{i18n._(t`Minimum Raised`)}</Typography>
         <Typography className="mt-2">
-          {maximumRaised ? maximumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}{' '}
+          {minimumRaised ? minimumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}{' '}
         </Typography>
         <FormFieldHelperText>
           {i18n._(
@@ -80,9 +80,9 @@ const AuctionCreationFormCrowdsale: FC<AuctionCreationFormCrowdsaleProps> = ({})
         </FormFieldHelperText>
       </div>
       <div className="col-span-4 md:col-span-2">
-        <Typography weight={700}>{i18n._(t`Minimum Raised`)}</Typography>
+        <Typography weight={700}>{i18n._(t`Maximum Raised`)}</Typography>
         <Typography className="mt-2">
-          {minimumRaised ? minimumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}{' '}
+          {maximumRaised ? maximumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}{' '}
         </Typography>
         <FormFieldHelperText>
           {i18n._(

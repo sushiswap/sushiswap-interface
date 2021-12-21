@@ -83,15 +83,6 @@ const AuctionCreationFormDutchAuction: FC<AuctionCreationFormDutchAuctionProps> 
         />
       </div>
       <div className="col-span-4 md:col-span-2">
-        <Typography weight={700}>{i18n._(t`Maximum Raised`)}</Typography>
-        <Typography className="mt-2">
-          {maximumRaised ? maximumRaised?.toExact({}) : '0.00'} {paymentToken?.symbol}
-        </Typography>
-        <FormFieldHelperText>
-          {i18n._(t`Maximum possible raised amount if all tokens were to be sold instantly at the starting price`)}
-        </FormFieldHelperText>
-      </div>
-      <div className="col-span-4 md:col-span-2">
         <Typography weight={700}>{i18n._(t`Minimum Raised`)}</Typography>
         <Typography className="mt-2">
           {minimumRaised ? minimumRaised.toSignificant(6) : '0.00'} {paymentToken?.symbol}
@@ -100,6 +91,15 @@ const AuctionCreationFormDutchAuction: FC<AuctionCreationFormDutchAuctionProps> 
           {i18n._(
             t`Minimum amount in order to have a successful auction. If this value is not met, users can withdraw their committed payment token and no tokens will be sold`
           )}
+        </FormFieldHelperText>
+      </div>
+      <div className="col-span-4 md:col-span-2">
+        <Typography weight={700}>{i18n._(t`Maximum Raised`)}</Typography>
+        <Typography className="mt-2">
+          {maximumRaised ? maximumRaised?.toExact({}) : '0.00'} {paymentToken?.symbol}
+        </Typography>
+        <FormFieldHelperText>
+          {i18n._(t`Maximum possible raised amount if all tokens were to be sold instantly at the starting price`)}
         </FormFieldHelperText>
       </div>
     </Form.Section>
