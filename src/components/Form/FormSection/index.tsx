@@ -16,7 +16,7 @@ const FormSection: FormSection<FormSectionProps> = ({ children, className, colum
   return (
     <div className={className}>
       {header}
-      <div className={`mt-6 grid grid-cols-${columns} gap-y-6 gap-x-4`}>{children}</div>
+      <div className={`mt-6 grid grid-cols-${columns} gap-y-8 gap-x-4`}>{children}</div>
     </div>
   )
 }

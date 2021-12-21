@@ -1,14 +1,12 @@
-import { AddressZero } from '@ethersproject/constants'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { DAI_ADDRESS, NATIVE, USDC_ADDRESS, USDT_ADDRESS } from '@sushiswap/core-sdk'
+import { NATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Form from 'app/components/Form'
 import FormFieldHelperText from 'app/components/Form/FormFieldHelperText'
-import ToggleButtonGroup from 'app/components/ToggleButton'
-import Typography from 'app/components/Typography'
 import WhitelistChecker from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection/WhitelistChecker'
+import AuctionPaymentCurrencyField from 'app/features/miso/AuctionAdminForm/AuctionPaymentCurrencyField'
 import { WhitelistEntry } from 'app/features/miso/context/types'
 import PointlistCreationReviewModal from 'app/features/miso/PointlistCreationForm/PointlistCreationReviewModal'
 import WhitelistUpload from 'app/features/miso/WhitelistUpload'
@@ -26,7 +24,10 @@ export interface PointListFormInputs {
 }
 
 const schema = yup.object({
-  owner: addressValidator.required(),
+  owner: addressValidator.required('Permission list must have an owner address'),
+  paymentTokenAddress: addressValidator.required(
+    'Permission list must have a payment token address for decimals calculation'
+  ),
 })
 
 const PointlistCreationFormSetup: FC = () => {
@@ -55,7 +56,7 @@ const PointlistCreationFormSetup: FC = () => {
 
   const onSubmit = () => setOpen(true)
 
-  if (!chainId || !account) return <></>
+  if (!account) return <></>
 
   return (
     <>
@@ -65,7 +66,7 @@ const PointlistCreationFormSetup: FC = () => {
             <div className="col-span-6">
               <Form.TextField
                 name="owner"
-                label={i18n._(t`List Owner Address`)}
+                label={i18n._(t`List Owner Address*`)}
                 helperText={
                   <FormFieldHelperText className="underline cursor-pointer" onClick={() => setValue('owner', account)}>
                     {i18n._(t`Use my address`)}
@@ -74,60 +75,8 @@ const PointlistCreationFormSetup: FC = () => {
                 placeholder="0x..."
               />
             </div>
-            <div className="col-span-6 flex flex-col">
-              <div>
-                <Typography weight={700}>{i18n._(t`Auction Payment Token`)}</Typography>
-                <ToggleButtonGroup
-                  variant="outlined"
-                  value={getValues('paymentTokenAddress')}
-                  onChange={(val: string) => setValue('paymentTokenAddress', val, { shouldValidate: true })}
-                  className="mt-2 !flex"
-                >
-                  <ToggleButtonGroup.Button
-                    value={AddressZero}
-                    activeClassName="border-purple"
-                    className="!bg-none px-5 !py-2.5"
-                  >
-                    {NATIVE[chainId].symbol}
-                  </ToggleButtonGroup.Button>
-                  <ToggleButtonGroup.Button
-                    value={DAI_ADDRESS[chainId]}
-                    activeClassName="border-purple"
-                    className="!bg-none px-5 !py-2.5"
-                  >
-                    DAI
-                  </ToggleButtonGroup.Button>
-                  <ToggleButtonGroup.Button
-                    value={USDC_ADDRESS[chainId]}
-                    activeClassName="border-purple"
-                    className="!bg-none px-5 !py-2.5"
-                  >
-                    USDC
-                  </ToggleButtonGroup.Button>
-                  <ToggleButtonGroup.Button
-                    value={USDT_ADDRESS[chainId]}
-                    activeClassName="border-purple"
-                    className="!bg-none px-5 !py-2.5"
-                  >
-                    USDT
-                  </ToggleButtonGroup.Button>
-                </ToggleButtonGroup>
-              </div>
-              <div className="flex flex-col flex-grow">
-                <Form.TextField
-                  name="paymentTokenAddress"
-                  helperText={
-                    <FormFieldHelperText className={token?.symbol ? '!text-green' : ''}>
-                      {token?.symbol
-                        ? i18n._(t`Selected currency: ${token?.symbol}`)
-                        : i18n._(
-                            t`Select the currency you accept as payment during the auction. If you don’t see the ERC-20 token you are looking for, input by pasting the address in the custom field.`
-                          )}
-                    </FormFieldHelperText>
-                  }
-                  placeholder="0x..."
-                />
-              </div>
+            <div className="col-span-6">
+              <AuctionPaymentCurrencyField name="paymentTokenAddress" label={i18n._(t`Auction Payment Currency*`)} />
             </div>
             <WhitelistUpload
               value={getValues('wlAddresses')}

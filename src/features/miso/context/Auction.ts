@@ -144,7 +144,11 @@ export class Auction {
   }
 
   public get tokenPrice(): Price<Token, Currency> | undefined {
-    if (this.template === AuctionTemplate.DUTCH_AUCTION && this.commitmentsTotal && this.totalTokens) {
+    if (
+      [AuctionTemplate.DUTCH_AUCTION, AuctionTemplate.BATCH_AUCTION].includes(this.template) &&
+      this.commitmentsTotal &&
+      this.totalTokens
+    ) {
       const { denominator, numerator } = this.commitmentsTotal.divide(this.totalTokens)
       return new Price(this.totalTokens.currency, this.commitmentsTotal.currency, denominator, numerator)
     }
@@ -199,6 +203,10 @@ export class Auction {
   }
 
   public get minimumTargetRaised(): CurrencyAmount<Currency> | undefined {
+    if (this.template === AuctionTemplate.BATCH_AUCTION) {
+      return this.minimumCommitment
+    }
+
     if (this.minimumPrice && this.totalTokens) {
       const { numerator, denominator } = this.minimumPrice.asFraction.multiply(this.totalTokens)
       return CurrencyAmount.fromFractionalAmount(this.paymentToken, numerator, denominator)
@@ -220,14 +228,14 @@ export class Auction {
     if (
       this.template === AuctionTemplate.DUTCH_AUCTION &&
       this.totalTokens &&
-      this.tokenPrice &&
+      this.currentPrice &&
       this.commitmentsTotal
     ) {
       const hundred = new Percent('1', '1')
-      if (this.tokenPrice.quote(this.totalTokens).greaterThan(ZERO)) {
+      if (this.currentPrice.quote(this.totalTokens).greaterThan(ZERO)) {
         const percentageRaise = new Percent(
           this.commitmentsTotal.quotient,
-          this.tokenPrice.quote(this.totalTokens).quotient.toString()
+          this.currentPrice.quote(this.totalTokens).quotient.toString()
         )
 
         return hundred.subtract(percentageRaise)

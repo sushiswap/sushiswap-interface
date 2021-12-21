@@ -7,7 +7,7 @@ const AuctionCommitterSkeleton: FC = () => {
         <div className="flex justify-between items-baseline">
           <div className="h-[20px] w-full bg-dark-900 rounded" />
         </div>
-        <div className="h-[62px] w-[407px] bg-dark-900 rounded" />
+        <div className="h-[62px] w-[396px] bg-dark-900 rounded" />
         <div className="h-[74px] bg-dark-800 rounded" />
       </div>
     </div>
