@@ -28,6 +28,8 @@ const cases = [
   ['WETH', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
   ['WETH', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.WALLET],
   ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.BENTO],
+  ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
+  ['USDC', FUNDING_SOURCE.WALLET, 'WETH', FUNDING_SOURCE.WALLET],
 ]
 
 const currencySelectCases = [
@@ -268,7 +270,7 @@ describe('Trident Swap:', () => {
     expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
   })
 
-  test.only('Should reset recipient address when expert mode is disabled', async () => {
+  test('Should reset recipient address when expert mode is disabled', async () => {
     await swapPage.navigateTo()
     await swapPage.toggleExpertMode() // enable expert mode
     await swapPage.addRecipient('potato')
