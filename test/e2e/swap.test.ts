@@ -16,6 +16,8 @@ let swapPage: SwapPage
 require('dotenv').config()
 
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
+let account2PrivKey: string = process.env.TEST_ACCOUNT2_PRIV_KEY || ''
+let account2PubKey: string = process.env.TEST_ACCOUNT2_PUB_KEY || ''
 
 const cases = [
   ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
@@ -62,10 +64,10 @@ describe('Trident Swap:', () => {
   })
 
   test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
-    const ethWalletBalance = await swapPage.getMetamaskTokenBalance(inToken as string)
-    if (!(ethWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken as string)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
 
-    const swapEthAmount = ethWalletBalance * 0.01
+    const swapAmount = tokenWalletBalance * 0.01
     const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
     const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
 
@@ -73,7 +75,7 @@ describe('Trident Swap:', () => {
     await swapPage.swapTokens(
       inToken as string,
       outToken as string,
-      swapEthAmount.toFixed(5),
+      swapAmount.toFixed(5),
       payFromWallet,
       receiveToWallet
     )
@@ -167,7 +169,7 @@ describe('Trident Swap:', () => {
     expect(closeValues(wethUsdcRateExpected, parseFloat(wethUsdcRate), 1e-3)).toBe(true)
   })
 
-  test.only('Should change slippage', async () => {
+  test('Should change slippage', async () => {
     await swapPage.navigateTo()
 
     await swapPage.setSlippage('25.00')
@@ -175,5 +177,44 @@ describe('Trident Swap:', () => {
     const slippage = await swapPage.getSlippage()
 
     expect(slippage).toBe('25.00')
+  })
+
+  test.only('Should swap ETH from wallet to USDC bento with other recipient', async () => {
+    const inToken = 'ETH'
+    const outToken = 'USDC'
+
+    await swapPage.Metamask.importPK(account2PrivKey)
+    await swapPage.addTokenToMetamask(TOKEN_ADDRESSES.USDC)
+
+    const account2BalanceBefore = await swapPage.getMetamaskTokenBalance(inToken)
+
+    await swapPage.Metamask.switchAccount(1)
+
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
+
+    await swapPage.navigateTo()
+
+    await swapPage.turnOnExpertMode()
+    await swapPage.addRecipient(account2PubKey)
+
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(true)
+    await swapPage.setReceiveToWallet(false)
+
+    const expectedOutputAmount = await swapPage.getOutputTokenAmount()
+
+    await swapPage.confirmSwap(inToken, outToken)
+
+    await swapPage.Metamask.switchAccount(2)
+
+    const account2BalanceAfter = await swapPage.getMetamaskTokenBalance(inToken)
+    const account2BalanceDifference = account2BalanceAfter - account2BalanceBefore
+
+    expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
   })
 })

@@ -29,6 +29,14 @@ export class SwapPage extends AppPage {
   // Tx settings
   protected TxSettingsButtonSelector: string = '#btn-transaction-settings'
   protected SlippageInputSelector: string = '#text-slippage'
+  protected ExpertModeToggleSelector: string = '#toggle-expert-mode-button'
+
+  //Confirm expert Mode Modal
+  protected ConfirmExpertModeSelector: string = '#confirm-expert-mode'
+
+  // Add recipient
+  protected AddRecipientButtonSelector: string = '#btn-add-recipient'
+  protected RecipientInputSelector: string = '#recipient-input'
 
   public async swapTokens(
     inTokenSymbol: string,
@@ -37,8 +45,6 @@ export class SwapPage extends AppPage {
     payFromWallet: boolean,
     receiveToWallet: boolean
   ): Promise<void> {
-    const swapType: SwapType = this.getSwapType(inTokenSymbol, outTokenSymbol)
-
     await this.selectInputToken(inTokenSymbol)
     await this.selectOutputToken(outTokenSymbol)
     await this.setAmountIn(inTokenAmount)
@@ -59,7 +65,13 @@ export class SwapPage extends AppPage {
       await receiveToWalletSwitch.click()
     }
 
+    await this.confirmSwap(inTokenSymbol, outTokenSymbol)
+  }
+
+  public async confirmSwap(inTokenSymbol: string, outTokenSymbol: string): Promise<void> {
     await this.blockingWait(1)
+
+    const swapType: SwapType = this.getSwapType(inTokenSymbol, outTokenSymbol)
 
     switch (swapType) {
       case SwapType.Wrap:
@@ -86,6 +98,29 @@ export class SwapPage extends AppPage {
     if (swapType === SwapType.Normal) {
       await this.Page.waitForSelector(this.SwapSuccessIconSelector)
     }
+  }
+
+  public async addRecipient(recipient: string): Promise<void> {
+    await this.blockingWait(1, true)
+
+    const addRecipientButton = await this.Page.waitForSelector(this.AddRecipientButtonSelector)
+    addRecipientButton.click()
+
+    const recipientInput = await this.Page.waitForSelector(this.RecipientInputSelector)
+    await recipientInput.type(recipient)
+  }
+
+  public async turnOnExpertMode(): Promise<void> {
+    await this.blockingWait(1, true)
+
+    const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    await TxSettingsButtonSelector.click()
+
+    const expertModeToggle = await this.Page.waitForSelector(this.ExpertModeToggleSelector)
+    await expertModeToggle.click()
+
+    const confirmExpertModeButton = await this.Page.waitForSelector(this.ConfirmExpertModeSelector)
+    await confirmExpertModeButton.click()
   }
 
   public async setSlippage(slippage: string): Promise<void> {
@@ -145,6 +180,21 @@ export class SwapPage extends AppPage {
       await payFromWalletSwitch.click()
     } else if (!payFromWallet && isPayFromWalletChecked) {
       await payFromWalletSwitch.click()
+    }
+  }
+
+  public async setReceiveToWallet(receiveToWallet: boolean): Promise<void> {
+    await this.setFunding(receiveToWallet, this.ReceiveToWalletSelector)
+  }
+
+  private async setFunding(useFundingMethod: boolean, selector: string): Promise<void> {
+    await this.blockingWait(3, true)
+    const isSelectorChecked = await this.isSwitchChecked(selector)
+    const switchElement = await this.getSwitchElement(selector)
+    if (useFundingMethod && !isSelectorChecked) {
+      await switchElement.click()
+    } else if (!useFundingMethod && isSelectorChecked) {
+      await switchElement.click()
     }
   }
 

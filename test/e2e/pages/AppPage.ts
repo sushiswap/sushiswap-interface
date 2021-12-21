@@ -2,9 +2,10 @@ import { Dappeteer } from '@chainsafe/dappeteer'
 import { Page } from 'puppeteer'
 
 export abstract class AppPage {
+  public Metamask: Dappeteer
+
   protected URL: string
   protected Page: Page
-  protected Metamask: Dappeteer
 
   protected WalletConnectSelector: string = '#connect-wallet'
   protected WalletOptionMetamaskSelector: string = '#wallet-option-MetaMask'
