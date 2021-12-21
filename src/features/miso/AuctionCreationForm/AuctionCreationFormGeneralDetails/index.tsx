@@ -38,7 +38,7 @@ const AuctionCreationFormGeneralDetails: FC<AuctionCreationFormGeneralDetailsPro
   if (!formSection) throw new Error('Template unknown')
 
   const link = (
-    <a href={'/miso/token'} target="_blank" className="text-blue underline" rel="noreferrer">
+    <a href={'/miso/token'} className="text-blue underline">
       {i18n._(t`Create it now`)}
     </a>
   )

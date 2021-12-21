@@ -85,7 +85,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
                 value={value || ''}
                 onUserInput={(val) => setValue(val)}
                 placeholder="0.00"
-                className="bg-transparent text-inherit"
+                className="bg-transparent text-inherit w-full"
                 autoFocus
               />
             </Typography>

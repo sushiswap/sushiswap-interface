@@ -20,7 +20,10 @@ interface AuctionCreationFormTokenProps {}
 const AuctionCreationFormTokenAmount: FC<AuctionCreationFormTokenProps> = ({}) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { watch } = useFormContext<AuctionCreationFormInput>()
+  const {
+    watch,
+    formState: { errors },
+  } = useFormContext<AuctionCreationFormInput>()
   const data = watch()
   const auctionToken = useToken(data.token)
 
@@ -60,7 +63,9 @@ const AuctionCreationFormTokenAmount: FC<AuctionCreationFormTokenProps> = ({}) =
               ),
             })}
             error={
-              approvalState === ApprovalState.NOT_APPROVED
+              auctionToken === undefined && !errors['token']
+                ? i18n._(t`Token does not exist`)
+                : approvalState === ApprovalState.NOT_APPROVED
                 ? i18n._(t`Not enough allowance, please approve to increase your allowance`)
                 : undefined
             }

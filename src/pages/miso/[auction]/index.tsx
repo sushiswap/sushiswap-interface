@@ -43,7 +43,7 @@ const MisoAuction = () => {
       <MisoBody>
         <section>
           <div className="flex flex-col lg:flex-row gap-[60px]">
-            <div className="flex flex-col gap-6 lg:max-w-[396px]">
+            <div className="flex flex-col gap-6 lg:min-w-[396px] lg:max-w-[396px]">
               <AuctionDocuments auction={auction} />
               <div className="flex flex-grow" />
               {auction?.status === AuctionStatus.FINISHED ? (

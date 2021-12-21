@@ -12,6 +12,7 @@ import { AuctionTemplate } from 'app/features/miso/context/types'
 import { addressValidator } from 'app/functions/yupValidators'
 import { useToken } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
@@ -115,6 +116,7 @@ const schema = yup.object().shape({
 })
 
 const AuctionCreationForm: FC = () => {
+  const { query } = useRouter()
   const { chainId, account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [open, setOpen] = useState<boolean>(false)
@@ -122,6 +124,14 @@ const AuctionCreationForm: FC = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       auctionType: AuctionTemplate.DUTCH_AUCTION,
+      ...(query.token &&
+        typeof query.token === 'string' && {
+          token: query.token,
+        }),
+      ...(query.pointListAddress &&
+        typeof query.pointListAddress === 'string' && {
+          pointListAddress: query.pointListAddress,
+        }),
     },
     reValidateMode: 'onChange',
     mode: 'onChange',
