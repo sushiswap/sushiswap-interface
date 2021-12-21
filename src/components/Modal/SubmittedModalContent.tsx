@@ -2,13 +2,14 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import loadingCircle from 'app/animation/loading-circle.json'
+import { ModalActionProps } from 'app/components/Modal/Action'
 import { HeadlessUiModal } from 'app/components/Modal/index'
 import Typography from 'app/components/Typography'
 import { getExplorerLink, shortenString } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { transactionStateSelector } from 'app/state/global/transactions'
 import Lottie from 'lottie-react'
-import React, { FC } from 'react'
+import React, { FC, ReactElement } from 'react'
 import { useRecoilValue } from 'recoil'
 
 import { ModalHeaderProps } from './Header'
@@ -17,6 +18,7 @@ export interface SubmittedModalContentProps extends ModalHeaderProps {
   animationData?: Object
   txHash?: string
   onDismiss(): void
+  actions?: ReactElement<ModalActionProps> | ReactElement<ModalActionProps>[]
 }
 
 const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
@@ -26,6 +28,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
   animationData,
   txHash = '',
   onDismiss,
+  actions,
 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
@@ -85,9 +88,10 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
         {children}
       </HeadlessUiModal.Content>
       <HeadlessUiModal.Actions>
-        <HeadlessUiModal.Action main={true} onClick={onDismiss}>
+        <HeadlessUiModal.Action main={!actions} onClick={onDismiss}>
           {i18n._(t`Close`)}
         </HeadlessUiModal.Action>
+        {actions}
       </HeadlessUiModal.Actions>
     </HeadlessUiModal.Body>
   )

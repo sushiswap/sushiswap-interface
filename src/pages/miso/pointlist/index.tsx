@@ -10,7 +10,7 @@ import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import Link from 'next/link'
 import React from 'react'
 
-const MisoAuction = () => {
+const Pointlist = () => {
   const { i18n } = useLingui()
 
   return (
@@ -25,7 +25,7 @@ const MisoAuction = () => {
               className="rounded-full !pl-2 !py-1.5"
               startIcon={<ChevronLeftIcon width={24} height={24} />}
             >
-              <Link href={`/miso`}>{i18n._(t`Auction`)}</Link>
+              <Link href={`/miso`}>{i18n._(t`All Auctions`)}</Link>
             </Button>
           </div>
           <div className="flex flex-col gap-2">
@@ -45,7 +45,7 @@ const MisoAuction = () => {
   )
 }
 
-MisoAuction.Layout = MisoLayout
-MisoAuction.Guard = NetworkGuard(Feature.MISO)
+Pointlist.Layout = MisoLayout
+Pointlist.Guard = NetworkGuard(Feature.MISO)
 
-export default MisoAuction
+export default Pointlist

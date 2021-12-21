@@ -6,16 +6,19 @@ export interface ModalActionProps extends ButtonProps {
   main?: boolean
 }
 
-const ModalAction: FC<ModalActionProps> = ({ children, main = false, ...props }) => {
+const ModalAction: FC<ModalActionProps> = ({ children, disabled, main = false, ...props }) => {
   return (
     <Button
       {...props}
+      disabled={disabled}
       variant="empty"
       className={classNames(
-        main
-          ? '!text-blue border border-blue/20 hover:border-blue/80'
-          : 'border border-dark-700/80 hover:border-gray-700',
-        'p-3 text-sm h-[38px]'
+        disabled
+          ? 'border-dark-700 opacity-40'
+          : main
+          ? '!text-blue border-blue/20 hover:border-blue/80'
+          : 'border-dark-700/80 hover:border-gray-700',
+        'border p-3 text-sm h-[38px]'
       )}
     >
       {children}

@@ -224,7 +224,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
               }
             >
               {socials.map((el, index) => (
-                <div className="sm:col-span-6" key={index}>
+                <div className="col-span-6" key={index}>
                   <Form.TextField
                     name={el.key}
                     label={el.label}
@@ -235,10 +235,10 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
               ))}
             </Form.Section>
             <Form.Section className="pt-8" header={<Form.Section.Header header={i18n._(t`Settings`)} />}>
-              <div className="sm:col-span-6">
+              <div className="col-span-6">
                 <BannedCountries />
               </div>
-              <div className="sm:col-span-6">
+              <div className="col-span-6">
                 <Form.TextAreaField
                   rows={6}
                   name="bannedWarning"
@@ -253,16 +253,16 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
               </div>
             </Form.Section>
             <Form.Section className="pt-8" header={<Form.Section.Header header={i18n._(t`Danger Zone`)} />}>
-              <div className="sm:col-span-6">
+              <div className="col-span-6">
                 <div
                   className={classNames(
                     auction.status !== AuctionStatus.UPCOMING
                       ? 'border-dark-800'
                       : 'border-red/50 hover:border-red/100',
-                    'w-1/3 border rounded p-5'
+                    'w-full md:w-1/3 border rounded p-5'
                   )}
                 >
-                  <div className="sm:col-span-2">
+                  <div className="col-span-6">
                     <Button
                       onClick={cancelAuction}
                       variant="empty"

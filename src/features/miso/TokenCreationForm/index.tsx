@@ -22,14 +22,15 @@ export interface TokenCreationFormInput {
 }
 
 const schema = yup.object({
-  tokenTypeAddress: addressValidator.required(),
-  tokenName: yup.string().required(),
-  tokenSymbol: yup.string().required(),
+  tokenTypeAddress: addressValidator.required('Must be a valid ERC-20 token address'),
+  tokenName: yup.string().required('Must enter a valid name'),
+  tokenSymbol: yup.string().required('Must enter a valid symbol'),
   tokenSupply: yup
     .number()
-    .required()
-    .min(1)
-    .max(2e256 - 1),
+    .typeError('Supply must be a number')
+    .required('Must enter a valid number')
+    .moreThan(0, 'Token supply must be larger than zero')
+    .max(2e256 - 1, 'Token supply can be at most 2^256 - 1 due to network limitations'),
 })
 
 const TokenCreationForm: FC = ({}) => {

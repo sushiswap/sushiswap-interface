@@ -1,6 +1,6 @@
 import { AuctionDocument } from 'app/features/miso/context/types'
 import { useMisoHelperContract } from 'app/hooks'
-import { useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
+import { useSingleContractMultipleData } from 'app/state/multicall/hooks'
 
 export interface DocumentInput {
   name: string
@@ -32,16 +32,6 @@ export const useAuctionDocuments = (addresses: string[]): (AuctionDocument | und
   }
 
   return Array(addresses.length).fill(undefined)
-}
-
-export const useAuctionDocument = (address: string): AuctionDocument | undefined => {
-  const contract = useMisoHelperContract()
-  const { result } = useSingleCallResult(contract, 'getDocuments', [address])
-  if (result && Array.isArray(result) && result.length > 0) {
-    return arrayToMap(result[0])
-  }
-
-  return undefined
 }
 
 export default useAuctionDocuments

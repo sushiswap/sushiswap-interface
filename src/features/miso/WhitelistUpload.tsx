@@ -55,7 +55,8 @@ const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }
     <>
       <div
         className={classNames(
-          value.length > 0 ? 'sm:col-span-3' : 'sm:col-span-6',
+          'col-span-6',
+          value.length > 0 ? 'md:col-span-3' : 'md:col-span-6',
           !disabled ? '' : 'pointer-events-none opacity-40 filter saturate-[0.1]'
         )}
       >

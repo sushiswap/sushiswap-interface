@@ -1,7 +1,7 @@
 import { DEFAULT_FORM_FIELD_CLASSNAMES } from 'app/components/Form'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
-import React, { FC, ReactElement } from 'react'
+import React, { FC, ReactElement, useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
 import FormFieldHelperText from '../FormFieldHelperText'
@@ -17,8 +17,16 @@ export interface FormSelectFieldProps extends React.HTMLProps<HTMLSelectElement>
 const FormSelectField: FC<FormSelectFieldProps> = ({ name, label, children, helperText, error, options, ...rest }) => {
   const {
     register,
+    unregister,
     formState: { errors },
   } = useFormContext()
+
+  // Unregister on unmount
+  useEffect(() => {
+    return () => {
+      unregister(name)
+    }
+  }, [name, unregister])
 
   return (
     <>

@@ -82,7 +82,7 @@
     "@sushiswap/default-token-list": "18.10.0",
     "@sushiswap/limit-order-pair-list": "0.2.2",
     "@sushiswap/limit-order-sdk": "1.0.0-canary.18",
-    "@sushiswap/miso": "^1.0.0-canary.4",
+    "@sushiswap/miso": "^1.0.0-canary.5",
     "@sushiswap/sdk": "5.0.0-canary.109",
     "@sushiswap/tines": "^1.0.0-canary.11",
     "@sushiswap/trident": "^1.0.0-canary.28",
