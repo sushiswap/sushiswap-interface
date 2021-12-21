@@ -69,13 +69,14 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
         <Form.TextField
           name={name}
           helperText={
-            <FormFieldHelperText>
-              {token?.symbol
-                ? i18n._(t`Selected currency: ${token?.symbol}`)
-                : i18n._(
-                    t`Select the currency you accept as payment during the auction. If you don’t see the ERC-20 token you are looking for, input by pasting the address in the custom field.`
-                  )}
-            </FormFieldHelperText>
+            <>
+              <FormFieldHelperText>
+                {i18n._(
+                  t`Select the currency you accept as payment during the auction. If you don’t see the ERC-20 token you are looking for, input by pasting the address in the custom field.`
+                )}
+              </FormFieldHelperText>
+              <FormFieldHelperText>{i18n._(t`Current selected currency: ${token?.symbol}`)}</FormFieldHelperText>
+            </>
           }
           placeholder="0x..."
         />

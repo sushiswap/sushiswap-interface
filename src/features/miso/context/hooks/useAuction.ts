@@ -87,26 +87,29 @@ export const useAuction = (address: string, owner?: string) => {
   const whitelist = useAuctionPointList(address)
 
   return useMemo(() => {
-    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments) return
+    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments) return { loading: true, auction: undefined }
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    if (owner && !marketInfo?.isAdmin) return undefined
+    if (owner && !marketInfo?.isAdmin) return { loading: false, auction: undefined }
 
-    return new Auction({
-      template: marketTemplateId.toNumber(),
-      auctionToken: new Token(
-        chainId,
-        auctionInfo.tokenInfo.addr,
-        auctionInfo.tokenInfo.decimals.toNumber(),
-        auctionInfo.tokenInfo.symbol,
-        auctionInfo.tokenInfo.name
-      ),
-      paymentToken,
-      auctionInfo,
-      marketInfo,
-      auctionDocuments,
-      whitelist,
-    })
+    return {
+      loading: false,
+      auction: new Auction({
+        template: marketTemplateId.toNumber(),
+        auctionToken: new Token(
+          chainId,
+          auctionInfo.tokenInfo.addr,
+          auctionInfo.tokenInfo.decimals.toNumber(),
+          auctionInfo.tokenInfo.symbol,
+          auctionInfo.tokenInfo.name
+        ),
+        paymentToken,
+        auctionInfo,
+        marketInfo,
+        auctionDocuments,
+        whitelist,
+      }),
+    }
   }, [auctionDocuments, auctionInfo, chainId, marketInfo, marketTemplateId, owner, whitelist])
 }
 

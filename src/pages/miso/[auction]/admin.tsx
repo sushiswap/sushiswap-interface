@@ -19,7 +19,7 @@ const MisoAuction = () => {
   const { account } = useActiveWeb3React()
   const router = useRouter()
   const { auction: address } = router.query
-  const auction = useAuction(address as string, account ?? undefined)
+  const { loading, auction } = useAuction(address as string, account ?? undefined)
 
   const header = (
     <div className="flex flex-col gap-4">
@@ -46,7 +46,18 @@ Do not waste your gas.`)}
     </div>
   )
 
-  if (auction && !auction.isOwner) {
+  if (auction && auction.isOwner) {
+    return (
+      <>
+        <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
+        <MisoBody>
+          <AuctionAdminForm auction={auction} />
+        </MisoBody>
+      </>
+    )
+  }
+
+  if ((!loading && !auction?.isOwner) || !account) {
     return (
       <>
         <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
@@ -65,22 +76,11 @@ Do not waste your gas.`)}
     )
   }
 
-  if (!account || !auction) {
-    return (
-      <>
-        <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
-        <MisoBody>
-          <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
-        </MisoBody>
-      </>
-    )
-  }
-
   return (
     <>
       <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
       <MisoBody>
-        <AuctionAdminForm auction={auction} />
+        <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
       </MisoBody>
     </>
   )

@@ -19,7 +19,7 @@ import React from 'react'
 const MisoAuction = () => {
   const router = useRouter()
   const { auction: address } = router.query
-  const auction = useAuction(address as string)
+  const { auction } = useAuction(address as string)
 
   return (
     <>

@@ -87,29 +87,27 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
               }
             />
             <HeadlessUIModal.Content>
-              <div className="flex gap-4 items-center mt-2">
-                <Chip label={auction.auctionDocuments.category} color="blue" />
-                {auction && (
+              <div className="flex flex-col gap-6 mb-6">
+                <div className="flex gap-4 items-center mt-2">
+                  {auction.auctionDocuments.category && <Chip label={auction.auctionDocuments.category} color="blue" />}
+                  {auction && (
+                    <div className="flex gap-1.5">
+                      <AuctionIcon auctionTemplate={auction.template} width={18} />
+                      <Typography variant="sm" className="text-secondary">
+                        {AuctionTitleByTemplateId(i18n)[auction.template]}
+                      </Typography>
+                    </div>
+                  )}
+
                   <div className="flex gap-1.5">
-                    <AuctionIcon auctionTemplate={auction.template} width={18} />
-                    <Typography variant="sm" weight={700} className="text-secondary">
-                      {AuctionTitleByTemplateId(i18n)[auction.template]}
+                    <RestrictedIcon width={18} />
+                    <Typography variant="sm" className="text-secondary">
+                      {i18n._(t`Restricted`)}
                     </Typography>
                   </div>
-                )}
-
-                <div className="flex gap-1.5">
-                  <RestrictedIcon width={18} />
-                  <Typography variant="sm" weight={700} className="text-secondary">
-                    {i18n._(t`Restricted`)}
-                  </Typography>
                 </div>
-              </div>
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-4 px-8">
-                  <Typography weight={700} variant="lg">
-                    {i18n._(t`You are committing`)}
-                  </Typography>
+                <div className="flex flex-col gap-3 bg-dark-900 border border-dark-700 rounded p-5">
+                  <Typography className="text-low-emphesis">{i18n._(t`You are committing`)}</Typography>
                   <div className="flex items-center gap-3 border-dark-700">
                     <CurrencyLogo currency={amount?.currency} size={32} className="rounded-full" />
                     <div className="flex gap-2 items-baseline">
@@ -144,7 +142,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
           </HeadlessUIModal.Body>
         </>
       ) : (
-        <CommitSubmittedModalContent txHash={txHash} />
+        <CommitSubmittedModalContent txHash={txHash} onDismiss={onDismiss} />
       )}
     </HeadlessUIModal.Controlled>
   )

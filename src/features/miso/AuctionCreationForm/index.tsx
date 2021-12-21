@@ -24,7 +24,6 @@ export interface AuctionCreationFormInput {
   fundWallet?: string
   fixedPrice?: number
   minimumTarget?: number
-  minimumPrice?: number
   minimumRaised?: number
   startPrice?: number
   endPrice?: number
@@ -42,7 +41,6 @@ export interface AuctionCreationFormInputValidated {
   fundWallet: string
   fixedPrice?: number
   minimumTarget?: number
-  minimumPrice?: number
   minimumRaised?: number
   startPrice?: number
   endPrice?: number
@@ -60,7 +58,6 @@ export interface AuctionCreationFormInputFormatted {
   fundWallet: string
   fixedPrice?: Price<Token, Currency>
   minimumTarget?: CurrencyAmount<Currency>
-  minimumPrice?: Price<Token, Currency>
   minimumRaised?: CurrencyAmount<Currency>
   startPrice?: Price<Token, Currency>
   endPrice?: Price<Token, Currency>
@@ -73,6 +70,8 @@ export interface AuctionCreationFormInputFormatted {
 const schema = yup.object().shape({
   auctionType: yup.number().required('Must select an auction type'),
   token: addressValidator.required('Must enter a valid ERC-20 address'),
+  operator: addressValidator.nullable().notRequired(),
+  pointListAddress: addressValidator.nullable().notRequired(),
   tokenAmount: yup
     .number()
     .typeError('Amount must be a number')
@@ -95,10 +94,6 @@ const schema = yup.object().shape({
   minimumRaised: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.BATCH_AUCTION,
     then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
-  }),
-  minimumPrice: yup.number().when('auctionType', {
-    is: (value) => value === AuctionTemplate.BATCH_AUCTION,
-    then: yup.number().typeError('Price must be a number').required('Must enter a minimum price'),
   }),
   startPrice: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
@@ -134,7 +129,7 @@ const AuctionCreationForm: FC = () => {
 
   const {
     watch,
-    formState: { errors, isValid, isValidating },
+    formState: { isValid, isValidating },
   } = methods
 
   const data = watch()

@@ -34,28 +34,13 @@ const AuctionCreationFormBatchAuction: FC<AuctionCreationFormBatchAuctionProps> 
               </Typography>
             ),
           })}
-          name="minimumPrice"
-          label={i18n._(t`Minimum Price*`)}
-          placeholder={`0.00`}
-          helperText={i18n._(t`Token price needs to reach this amount in order to have a successful auction`)}
-        />
-      </div>
-      <div className="col-span-4 md:col-span-2">
-        <Form.TextField
-          {...(paymentToken && {
-            endIcon: (
-              <Typography variant="sm" weight={700} className="text-secondary">
-                {paymentToken.symbol}
-              </Typography>
-            ),
-          })}
           name="minimumRaised"
           label={i18n._(t`Minimum Raised Amount*`)}
           placeholder="0.00"
           helperText={i18n._(t`Minimum amount to raise in order to have a successful auction`)}
         />
       </div>
-      <div className="col-span-4 md:col-span-2">
+      <div className="col-span-4">
         <Typography weight={700}>{i18n._(t`Minimum Raised`)}</Typography>
         <Typography className="mt-2">
           {data.minimumRaised ? data.minimumRaised : '0.00'} {paymentToken?.symbol}{' '}
@@ -65,11 +50,6 @@ const AuctionCreationFormBatchAuction: FC<AuctionCreationFormBatchAuctionProps> 
             t`Minimum amount in order to have a successful auction. If this value is not met, users can withdraw their committed payment token and no tokens will be sold`
           )}
         </FormFieldHelperText>
-      </div>
-      <div className="col-span-4 md:col-span-2">
-        <Typography weight={700}>{i18n._(t`Maximum Raised`)}</Typography>
-        <Typography className="mt-2">-</Typography>
-        <FormFieldHelperText>{i18n._(t`Maximum raised amount not available for a batch auction`)}</FormFieldHelperText>
       </div>
     </Form.Section>
   )

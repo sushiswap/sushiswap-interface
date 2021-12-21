@@ -9,26 +9,26 @@ import { useMultipleContractSingleData, useSingleCallResult } from 'app/state/mu
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
-export const useAuctionPointLists = (addresses: string[]) => {
-  const results = useMultipleContractSingleData(addresses, new Interface(BASE_AUCTION_ABI), 'pointList')
-  if (results && Array.isArray(results) && results.length === addresses.length) {
+export const useAuctionPointLists = (auctionAddresses: string[]) => {
+  const results = useMultipleContractSingleData(auctionAddresses, new Interface(BASE_AUCTION_ABI), 'pointList')
+  if (results && Array.isArray(results) && results.length === auctionAddresses.length) {
     return results.map<string[]>((el) => {
       return (el.result as string[])?.filter((el) => el !== AddressZero) || []
     })
   }
 
-  return Array(addresses.length).fill([])
+  return Array(auctionAddresses.length).fill([])
 }
 
-export const useAuctionPointList = (address?: string): string[] => {
-  const contract = useContract(address, new Interface(BASE_AUCTION_ABI))
+export const useAuctionPointList = (auctionAddress?: string): string[] => {
+  const contract = useContract(auctionAddress, new Interface(BASE_AUCTION_ABI))
   const { result } = useSingleCallResult(contract, 'pointList', [])
   return (result as string[])?.filter((el) => el !== AddressZero) || []
 }
 
 export const useAuctionPointListPoints = (
   listAddress?: string,
-  address?: string,
+  accountAddress?: string,
   paymentToken?: Currency
 ): CurrencyAmount<Currency> | undefined => {
   const { account, chainId } = useActiveWeb3React()
@@ -36,7 +36,11 @@ export const useAuctionPointListPoints = (
     listAddress,
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PointList.abi : undefined
   )
-  const { result } = useSingleCallResult(contract, 'points', address ? [address] : account ? [account] : undefined)
+  const { result } = useSingleCallResult(
+    contract,
+    'points',
+    accountAddress ? [accountAddress] : account ? [account] : undefined
+  )
   if (Array.isArray(result) && result.length > 0 && paymentToken) {
     const { denominator, numerator } = new Fraction(JSBI.BigInt(result[0]), 1)
     return CurrencyAmount.fromFractionalAmount(paymentToken, numerator, denominator)

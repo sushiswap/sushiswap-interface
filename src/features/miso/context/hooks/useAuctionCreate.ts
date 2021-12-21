@@ -72,21 +72,7 @@ const useAuctionCreate = () => {
   }, [])
 
   const _batchAuctionData = useCallback((data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
-    if (!data.minimumPrice) throw new Error('Invalid inputs')
-    //
-    // console.log(
-    //   `funder: ${marketFactoryAddress}`,
-    //   `token: ${data.auctionToken.address}`,
-    //   `paymentCurrency: ${data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address}`,
-    //   `totalTokens: ${data.tokenAmount.quotient.toString()}`,
-    //   `startTime: ${data.startDate.getTime() / 1000}`,
-    //   `endTime: ${data.endDate.getTime() / 1000}`,
-    //   `rate ${data.fixedPrice.numerator.toString()}`,
-    //   `goal ${data.minimumTarget.quotient.toString()}`,
-    //   `admin ${data.operator}`,
-    //   `pointList ${data.pointListAddress}`,
-    //   `wallet ${data.fundWallet}`
-    // )
+    if (!data.minimumRaised) throw new Error('Invalid inputs')
 
     return defaultAbiCoder.encode(
       ['address', 'address', 'uint256', 'uint256', 'uint256', 'address', 'uint256', 'address', 'address', 'address'],

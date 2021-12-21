@@ -29,9 +29,6 @@ export const formatCreationFormData = (
     ? getPriceEntity(data.startPrice.toString(), auctionToken, paymentCurrency)
     : undefined
   const endPrice = data.endPrice ? getPriceEntity(data.endPrice.toString(), auctionToken, paymentCurrency) : undefined
-  const minimumPrice = data.minimumPrice
-    ? getPriceEntity(data.minimumPrice.toString(), auctionToken, paymentCurrency)
-    : undefined
   const fixedPrice = data.fixedPrice
     ? getPriceEntity(data.fixedPrice.toString(), auctionToken, paymentCurrency)
     : undefined
@@ -43,10 +40,12 @@ export const formatCreationFormData = (
     fixedPrice && tokenAmount && data.minimumTarget
       ? fixedPrice.quote(tokenAmount).multiply(new Percent(data.minimumTarget, '100'))
       : undefined
-  const minimumRaised = CurrencyAmount.fromRawAmount(
-    paymentCurrency,
-    JSBI.BigInt(parseUnits(data.minimumRaised.toString(), paymentCurrency.decimals).toString())
-  )
+  const minimumRaised = data.minimumRaised
+    ? CurrencyAmount.fromRawAmount(
+        paymentCurrency,
+        JSBI.BigInt(parseUnits(data.minimumRaised.toString(), paymentCurrency.decimals).toString())
+      )
+    : undefined
 
   return {
     ...rest,
@@ -59,7 +58,6 @@ export const formatCreationFormData = (
     tokenAmount,
     startPrice,
     endPrice,
-    minimumPrice,
     fixedPrice,
     minimumTarget,
     minimumRaised,

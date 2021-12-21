@@ -43,6 +43,12 @@ const AuctionCreationFormGeneralDetails: FC<AuctionCreationFormGeneralDetailsPro
     </a>
   )
 
+  const link2 = (
+    <a href={'/miso/pointlist'} target="_blank" className="text-blue underline" rel="noreferrer">
+      {i18n._(t`Create it now`)}
+    </a>
+  )
+
   return (
     <>
       <Form.Section
@@ -75,7 +81,7 @@ const AuctionCreationFormGeneralDetails: FC<AuctionCreationFormGeneralDetailsPro
           <Form.TextField
             name="fundWallet"
             label={i18n._(t`Fund Wallet*`)}
-            placeholder={i18n._(t`Enter the wallet address where raised funds will be sent to`)}
+            placeholder={i18n._(t`Address where collected funds will be forwarded to`)}
             helperText={
               <FormFieldHelperText
                 className="underline cursor-pointer"
@@ -104,6 +110,39 @@ const AuctionCreationFormGeneralDetails: FC<AuctionCreationFormGeneralDetailsPro
             label={i18n._(t`End Date*`)}
             placeholder={i18n._(t`Selected an end date for your auction`)}
             helperText={i18n._(t`Please enter your auction end date`)}
+          />
+        </div>
+        <div className="col-span-4">
+          <Form.TextField
+            className="inline-flex"
+            name="operator"
+            label={i18n._(t`Admin`)}
+            placeholder={i18n._(t`Address that can finalize auction`)}
+            helperText={
+              <FormFieldHelperText
+                className="underline cursor-pointer"
+                onClick={() => setValue('operator', account || '')}
+              >
+                {i18n._(t`Use my address`)}
+              </FormFieldHelperText>
+            }
+          />
+        </div>
+        <div className="col-span-4">
+          <Form.TextField
+            className="inline-flex"
+            name="pointListAddress"
+            label={i18n._(t`Permission List`)}
+            placeholder={i18n._(t`Address of permission list`)}
+            helperText={
+              <FormFieldHelperText>
+                <Trans
+                  id="Permission lists are used to whitelist addresses. Don't have a permission list? {link2}"
+                  values={{ link2 }}
+                  components={Fragment}
+                />
+              </FormFieldHelperText>
+            }
           />
         </div>
       </Form.Section>

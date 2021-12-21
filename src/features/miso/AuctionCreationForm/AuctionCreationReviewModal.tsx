@@ -103,6 +103,34 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
                   </Typography>
                 </>
               )}
+              {data.operator && (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Admin`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-purple py-2 border-b border-dark-700">
+                    <a target="_blank" rel="noreferrer" href={getExplorerLink(chainId, data.operator, 'address')}>
+                      {shortenString(data.operator, 12)}
+                    </a>
+                  </Typography>
+                </>
+              )}
+              {data.pointListAddress && (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Permission list`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-purple py-2 border-b border-dark-700">
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={getExplorerLink(chainId, data.pointListAddress, 'address')}
+                    >
+                      {shortenString(data.pointListAddress, 12)}
+                    </a>
+                  </Typography>
+                </>
+              )}
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
                 {i18n._(t`Token Amount`)}
               </Typography>
@@ -132,7 +160,14 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
                     variant="sm"
                     className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
                   >
-                    {data.startPrice?.quote(CurrencyAmount.fromRawAmount(data.auctionToken, '1')).toSignificant(6)}{' '}
+                    {data.startPrice
+                      ?.quote(
+                        CurrencyAmount.fromRawAmount(
+                          data.auctionToken,
+                          JSBI.BigInt(parseUnits('1', data.auctionToken.decimals))
+                        )
+                      )
+                      .toSignificant(6)}{' '}
                     {paymentCurrencyLink}
                   </Typography>
                   <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
@@ -143,22 +178,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
                     variant="sm"
                     className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
                   >
-                    {data.endPrice?.quote(CurrencyAmount.fromRawAmount(data.auctionToken, '1')).toSignificant(6)}{' '}
-                    {paymentCurrencyLink}
-                  </Typography>
-                </>
-              )}
-              {data.auctionType === AuctionTemplate.BATCH_AUCTION && (
-                <>
-                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                    {i18n._(t`Minimum Price`)}
-                  </Typography>
-                  <Typography
-                    weight={700}
-                    variant="sm"
-                    className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
-                  >
-                    {data.minimumPrice
+                    {data.endPrice
                       ?.quote(
                         CurrencyAmount.fromRawAmount(
                           data.auctionToken,
@@ -167,6 +187,20 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
                       )
                       .toSignificant(6)}{' '}
                     {paymentCurrencyLink}
+                  </Typography>
+                </>
+              )}
+              {data.auctionType === AuctionTemplate.BATCH_AUCTION && (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Minimum Raised`)}
+                  </Typography>
+                  <Typography
+                    weight={700}
+                    variant="sm"
+                    className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
+                  >
+                    {data.minimumRaised?.toSignificant(6)} {paymentCurrencyLink}
                   </Typography>
                 </>
               )}
