@@ -8,6 +8,7 @@ import AuctionStats from 'app/features/miso/AuctionStats'
 import AuctionTabs from 'app/features/miso/AuctionTabs'
 import Breadcrumb from 'app/features/miso/Breadcrumb'
 import useAuction from 'app/features/miso/context/hooks/useAuction'
+import { useAuctionEnded } from 'app/features/miso/context/hooks/useAuctionEnded'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
 import { cloudinaryLoader } from 'app/functions/cloudinary'
@@ -21,6 +22,7 @@ const MisoAuction = () => {
   const router = useRouter()
   const { auction: address } = router.query
   const { auction } = useAuction(address as string)
+  const ended = useAuctionEnded(address as string, auction?.template)
 
   // Redirect to overview on chainId change
   useRedirectOnChainId('/miso')
@@ -50,7 +52,7 @@ const MisoAuction = () => {
             <div className="flex flex-col gap-6 lg:min-w-[396px] lg:max-w-[396px]">
               <AuctionDocuments auction={auction} />
               <div className="flex flex-grow" />
-              {auction?.status === AuctionStatus.FINISHED ? (
+              {auction?.status === AuctionStatus.FINISHED || ended ? (
                 <AuctionClaimer auction={auction} />
               ) : (
                 <AuctionCommitter auction={auction} />

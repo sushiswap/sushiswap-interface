@@ -137,7 +137,7 @@ const useAuctionCreate = () => {
 
   const init = useCallback(
     async (data: AuctionCreationFormInputFormatted) => {
-      const marketFactoryAddress = auctionTemplateMap?.[data.auctionType]
+      const marketFactoryAddress = auctionTemplateMap?.[data.auctionType]?.address
       if (!contract || !marketFactoryAddress) return
 
       let templateId

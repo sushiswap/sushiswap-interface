@@ -29,10 +29,10 @@ const useAuctionTemplateMap = () => {
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.DutchAuction.address]: AuctionTemplate.DUTCH_AUCTION,
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.BatchAuction.address]: AuctionTemplate.BATCH_AUCTION,
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HyperbolicAuction.address]: AuctionTemplate.HYPERBOLIC_AUCTION,
-      [AuctionTemplate.CROWDSALE]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.Crowdsale.address,
-      [AuctionTemplate.DUTCH_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.DutchAuction.address,
-      [AuctionTemplate.BATCH_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.BatchAuction.address,
-      [AuctionTemplate.HYPERBOLIC_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HyperbolicAuction.address,
+      [AuctionTemplate.CROWDSALE]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.Crowdsale,
+      [AuctionTemplate.DUTCH_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.DutchAuction,
+      [AuctionTemplate.BATCH_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.BatchAuction,
+      [AuctionTemplate.HYPERBOLIC_AUCTION]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HyperbolicAuction,
     }
   }, [chainId])
 
