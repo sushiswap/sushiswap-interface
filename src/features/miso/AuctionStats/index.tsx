@@ -41,6 +41,8 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
 
   if (!auction) return <AuctionStatsSkeleton />
 
+  console.log({ auction })
+
   return (
     <div className="flex flex-col gap-6 w-full">
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-2">
@@ -144,7 +146,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
               {i18n._(t`Fund Raised`)}
             </Typography>
           </div>
-          <AuctionChart auction={auction} />
+          <AuctionChart auction={auction} showPriceIndicator={true} />
         </div>
       )}
     </div>

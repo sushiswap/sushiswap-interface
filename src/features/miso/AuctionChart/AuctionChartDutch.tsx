@@ -12,9 +12,10 @@ import { PriceIndicator } from './PriceIndicator'
 interface AuctionChartDutchProps {
   auction: Auction
   prices: boolean
+  showPriceIndicator: boolean
 }
 
-const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
+const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices, showPriceIndicator }) => {
   const { i18n } = useLingui()
   const endPriceLabelWidth = useTextWidth({
     text: `Ending Price`,
@@ -72,7 +73,9 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
                 />
                 <line x1={paddingX} y1={paddingY} x2={currentX} y2={currentY} stroke="currentColor" strokeWidth="2" />
                 <circle r="4" cx={width - paddingX} cy={remainingHeight - paddingY} fill="currentColor" />
-                <PriceIndicator x={currentX} y={currentY} auction={auction} orientation={orientation} />
+                {showPriceIndicator && (
+                  <PriceIndicator x={currentX} y={currentY} auction={auction} orientation={orientation} />
+                )}
               </svg>
               {prices && (
                 <svg

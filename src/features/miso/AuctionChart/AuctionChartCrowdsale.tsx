@@ -12,9 +12,10 @@ import { PriceIndicator } from './PriceIndicator'
 interface AuctionChartCrowdsaleProps {
   auction: Auction
   prices: boolean
+  showPriceIndicator: boolean
 }
 
-const AuctionChartCrowdsale: FC<AuctionChartCrowdsaleProps> = ({ auction, prices }) => {
+const AuctionChartCrowdsale: FC<AuctionChartCrowdsaleProps> = ({ auction, prices, showPriceIndicator }) => {
   const { i18n } = useLingui()
   const priceInfoWidth = useTextWidth({
     text: `Current Token Value`,
@@ -65,7 +66,9 @@ const AuctionChartCrowdsale: FC<AuctionChartCrowdsaleProps> = ({ auction, prices
                 />
                 <line x1={padding} y1={currentY} x2={currentX} y2={currentY} stroke="currentColor" strokeWidth="2" />
                 <circle r="4" cx={width - padding} cy={currentY} fill="currentColor" />
-                <PriceIndicator x={currentX} y={currentY} auction={auction} orientation={orientation} />
+                {showPriceIndicator && (
+                  <PriceIndicator x={currentX} y={currentY} auction={auction} orientation={orientation} />
+                )}
               </svg>
               {prices && (
                 <svg

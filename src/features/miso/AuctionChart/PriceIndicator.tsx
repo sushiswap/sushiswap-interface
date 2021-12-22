@@ -3,7 +3,6 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { Auction } from 'app/features/miso/context/Auction'
-import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import useTextWidth from 'app/hooks/useTextWidth'
 import { FC } from 'react'
 
@@ -20,7 +19,6 @@ export const PriceIndicator: FC<{
     text: `Current Token Value`,
     font: '14px DM Sans',
   })
-  const isDesktop = useDesktopMediaQuery()
   const currentPriceWidth = useTextWidth({
     text: `${auction?.currentPrice?.toSignificant(6)} ${auction?.minimumPrice?.quoteCurrency.symbol}`,
     font: '14px DM Sans',
@@ -43,44 +41,40 @@ export const PriceIndicator: FC<{
 
   return (
     <>
-      {isDesktop && (
-        <>
-          <line
-            x1={x + priceLineXOffset}
-            x2={x + priceLineXOffset}
-            y1={orientation === 'bottom' ? y + priceLineLength : y}
-            y2={orientation === 'bottom' ? y : y - priceLineLength}
-            stroke="currentColor"
-            strokeWidth="2"
-            opacity={0.2}
-          />
-          <text
-            x={orientation === 'bottom' ? infoTextBottomPositionX : infoTextTopPositionX}
-            y={orientation === 'bottom' ? infoTextBottomPositionY : infoTextTopPositionY}
-            fill="#7f7f7f"
-            fontSize="14px"
-          >
-            {i18n._(t`Current Token Value`)}
-          </text>
-          <foreignObject
-            width="30"
-            height="30"
-            x={orientation === 'bottom' ? tooltipBottomPositionX : tooltipTopPositionX}
-            y={orientation === 'bottom' ? tooltipBottomPositionY : tooltipTopPositionY}
-          >
-            <QuestionHelper text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}>
-              <QuestionMarkCircleIcon width={10} height={10} className="ml-0 text-secondary mb-[2px] text-dark-400" />
-            </QuestionHelper>
-          </foreignObject>
-          <text
-            x={orientation === 'bottom' ? priceTextBottomPositionX : priceTextTopPositionX}
-            y={orientation === 'bottom' ? priceTextBottomPositionY : priceTextTopPositionY}
-            fill="#ffffff"
-          >
-            {auction.currentPrice.toSignificant(6)} {auction?.minimumPrice?.quoteCurrency.symbol}
-          </text>
-        </>
-      )}
+      <line
+        x1={x + priceLineXOffset}
+        x2={x + priceLineXOffset}
+        y1={orientation === 'bottom' ? y + priceLineLength : y}
+        y2={orientation === 'bottom' ? y : y - priceLineLength}
+        stroke="currentColor"
+        strokeWidth="2"
+        opacity={0.2}
+      />
+      <text
+        x={orientation === 'bottom' ? infoTextBottomPositionX : infoTextTopPositionX}
+        y={orientation === 'bottom' ? infoTextBottomPositionY : infoTextTopPositionY}
+        fill="#7f7f7f"
+        fontSize="14px"
+      >
+        {i18n._(t`Current Token Value`)}
+      </text>
+      <foreignObject
+        width="30"
+        height="30"
+        x={orientation === 'bottom' ? tooltipBottomPositionX : tooltipTopPositionX}
+        y={orientation === 'bottom' ? tooltipBottomPositionY : tooltipTopPositionY}
+      >
+        <QuestionHelper text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}>
+          <QuestionMarkCircleIcon width={10} height={10} className="ml-0 text-secondary mb-[2px] text-dark-400" />
+        </QuestionHelper>
+      </foreignObject>
+      <text
+        x={orientation === 'bottom' ? priceTextBottomPositionX : priceTextTopPositionX}
+        y={orientation === 'bottom' ? priceTextBottomPositionY : priceTextTopPositionY}
+        fill="#ffffff"
+      >
+        {auction.currentPrice.toSignificant(6)} {auction?.minimumPrice?.quoteCurrency.symbol}
+      </text>
     </>
   )
 }
