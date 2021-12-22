@@ -2,17 +2,20 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Auction } from 'app/features/miso/context/Auction'
 import { classNames } from 'app/functions'
-import useInterval from 'app/hooks/useInterval'
+import useInterval from 'app/hooks/useIntervalTransaction'
 import useTextWidth from 'app/hooks/useTextWidth'
 import { FC, useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 
+import { PriceIndicator } from './PriceIndicator'
+
 interface AuctionChartDutchProps {
   auction: Auction
   prices: boolean
+  showPriceIndicator: boolean
 }
 
-const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
+const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices, showPriceIndicator }) => {
   const { i18n } = useLingui()
   const endPriceLabelWidth = useTextWidth({
     text: `Ending Price`,
@@ -22,7 +25,10 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
     text: `${auction?.minimumPrice?.toSignificant(6)} ${auction?.minimumPrice?.quoteCurrency.symbol}`,
     font: '18px DM Sans',
   })
-
+  const priceInfoWidth = useTextWidth({
+    text: `Current Token Value`,
+    font: '14px DM Sans',
+  })
   const startTime = auction.auctionInfo.startTime.mul('1000').toNumber()
   const endTime = auction.auctionInfo.endTime.mul('1000').toNumber()
   const now = Date.now()
@@ -33,7 +39,8 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
   }, 1000)
 
   const bottomHeight = 60
-  const padding = 28
+  const paddingX = 28
+  const paddingY = 60
   const topPadding = 20
   const minHeight = prices ? 'min-h-[234px]' : 'min-h-[94px]'
 
@@ -42,6 +49,10 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
       <AutoSizer>
         {({ width, height }) => {
           const remainingHeight = prices ? height - bottomHeight : height
+          const currentX = paddingX + (width - 2 * paddingX) * progression
+          const currentY = paddingY + (remainingHeight - 2 * paddingY) * progression
+          const orientation = currentX + priceInfoWidth + 15 < width ? 'top' : 'bottom'
+
           return (
             <div className="relative">
               <svg
@@ -50,25 +61,21 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
                 height={remainingHeight}
                 viewBox={`0 0 ${width} ${remainingHeight}`}
               >
-                <circle r="4" cx={padding} cy={padding} fill="currentColor" />
+                <circle r="4" cx={paddingX} cy={paddingY} fill="currentColor" />
                 <line
-                  x1={padding}
-                  y1={padding}
-                  x2={width - padding}
-                  y2={remainingHeight - padding}
+                  x1={paddingX}
+                  y1={paddingY}
+                  x2={width - paddingX}
+                  y2={remainingHeight - paddingY}
                   stroke="currentColor"
                   strokeWidth="2"
                   opacity={0.2}
                 />
-                <line
-                  x1={padding}
-                  y1={padding}
-                  x2={padding + (width - 2 * padding) * progression}
-                  y2={padding + (remainingHeight - 2 * padding) * progression}
-                  stroke="currentColor"
-                  strokeWidth="2"
-                />
-                <circle r="4" cx={width - padding} cy={remainingHeight - padding} fill="currentColor" />
+                <line x1={paddingX} y1={paddingY} x2={currentX} y2={currentY} stroke="currentColor" strokeWidth="2" />
+                <circle r="4" cx={width - paddingX} cy={remainingHeight - paddingY} fill="currentColor" />
+                {showPriceIndicator && (
+                  <PriceIndicator x={currentX} y={currentY} auction={auction} orientation={orientation} />
+                )}
               </svg>
               {prices && (
                 <svg
