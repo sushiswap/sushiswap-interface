@@ -73,7 +73,11 @@ export default function Farm(): JSX.Element {
           <div className="bg-[rgba(255,255,255,0.04)] p-4 py-2 rounded flex flex-row items-center gap-4">
             <InformationCircleIcon width={28} height={28} color="pink" />
             <Typography variant="xs" weight={700}>
-              <ExternalLink id={`celo-optics-info-link`} href="https://app.optics.xyz/" className="text-high-emphesis">
+              <ExternalLink
+                id={`celo-optics-info-link`}
+                href="https://medium.com/@0xJiro/celo-farms-update-migrating-to-the-optics-v2-bridge-e8075d1c9ea"
+                className="text-high-emphesis"
+              >
                 {`Click for more info on Optics V1 Migration.`}
               </ExternalLink>
             </Typography>
