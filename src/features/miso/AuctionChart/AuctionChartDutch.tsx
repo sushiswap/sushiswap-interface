@@ -31,7 +31,7 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
   const startTime = auction.auctionInfo.startTime.mul('1000').toNumber()
   const endTime = auction.auctionInfo.endTime.mul('1000').toNumber()
   const now = Date.now()
-  const [progression, setState] = useState(0)
+  const [progression, setState] = useState<number>(Math.min(1, Math.max((now - startTime) / (endTime - startTime), 0)))
 
   useInterval(() => {
     setState(Math.min(1, Math.max((now - startTime) / (endTime - startTime), 0)))
@@ -81,7 +81,7 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
                   height={bottomHeight}
                   viewBox={`0 0 ${width} ${bottomHeight}`}
                 >
-                  <text x={topPadding} y={bottomHeight - 40} fill="#7f7f7f" fontSize="14px">
+                  <text x={topPadding} y={bottomHeight - 46} fill="#7f7f7f" fontSize="14px">
                     {i18n._(t`Starting price`)}
                   </text>
                   <text x={topPadding} y={bottomHeight - topPadding} fill="#FFFFFF" fontSize="18px" fontWeight={700}>
@@ -89,7 +89,7 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices }) => {
                   </text>
                   <text
                     x={width - topPadding - endPriceLabelWidth}
-                    y={bottomHeight - 40}
+                    y={bottomHeight - 46}
                     fill="#7f7f7f"
                     fontSize="14px"
                     textAnchor="right"

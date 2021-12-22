@@ -3,6 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { Auction } from 'app/features/miso/context/Auction'
+import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import useTextWidth from 'app/hooks/useTextWidth'
 import { FC } from 'react'
 
@@ -19,6 +20,7 @@ export const PriceIndicator: FC<{
     text: `Current Token Value`,
     font: '14px DM Sans',
   })
+  const isDesktop = useDesktopMediaQuery()
   const currentPriceWidth = useTextWidth({
     text: `${auction?.currentPrice?.toSignificant(6)} ${auction?.minimumPrice?.quoteCurrency.symbol}`,
     font: '14px DM Sans',
@@ -41,7 +43,7 @@ export const PriceIndicator: FC<{
 
   return (
     <>
-      {true && (
+      {isDesktop && (
         <>
           <line
             x1={x + priceLineXOffset}
