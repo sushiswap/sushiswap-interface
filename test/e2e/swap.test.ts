@@ -222,6 +222,8 @@ describe('Trident Swap:', () => {
     await swapPage.confirmSwap(inToken, outToken)
 
     const account2BentoBalanceAfter = await recipientSwapPage.getBentoBalance(outToken)
+    expect(account2BentoBalanceAfter !== account2BentoBalanceBefore).toBe(true)
+
     const account2BalanceDifference = parseFloat(account2BentoBalanceAfter) - parseFloat(account2BentoBalanceBefore)
 
     await recipientBrowser.close()
@@ -267,8 +269,9 @@ describe('Trident Swap:', () => {
     await swapPage.confirmSwap(inToken, outToken)
 
     const account2BentoBalanceAfter = await recipientSwapPage.getWalletBalance(outToken)
-    const account2BalanceDifference = parseFloat(account2BentoBalanceAfter) - parseFloat(account2BentoBalanceBefore)
+    expect(account2BentoBalanceAfter !== account2BentoBalanceBefore).toBe(true)
 
+    const account2BalanceDifference = parseFloat(account2BentoBalanceAfter) - parseFloat(account2BentoBalanceBefore)
     await recipientBrowser.close()
 
     expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
@@ -288,5 +291,37 @@ describe('Trident Swap:', () => {
     await swapPage.toggleExpertMode() // enable expert mode
     const recipientAddressAfter = await swapPage.getRecipient()
     expect(recipientAddressAfter).toBe('')
+  })
+
+  test.only.each([
+    ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.BENTO],
+    ['USDC', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.BENTO],
+  ])(`Should add WETH to Bento when swapping from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
+    const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
+    const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
+
+    await swapPage.navigateTo()
+
+    const wethBentoBalanceBefore = await swapPage.getBentoBalance('WETH')
+
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(payFromWallet)
+    await swapPage.setReceiveToWallet(receiveToWallet)
+
+    const expectedOutputAmount = await swapPage.getOutputTokenAmount()
+    await swapPage.confirmSwap(inToken, outToken)
+
+    await swapPage.navigateTo()
+    const wethBentoBalanceAfter = await swapPage.getBentoBalance('WETH')
+    expect(wethBentoBalanceAfter !== wethBentoBalanceBefore).toBe(true)
+
+    const wethBalanceDiff = parseFloat(wethBentoBalanceAfter) - parseFloat(wethBentoBalanceBefore)
+    expect(closeValues(parseFloat(expectedOutputAmount), wethBalanceDiff, 1e-3)).toBe(true)
   })
 })
