@@ -20,6 +20,8 @@ const MisoAuction = () => {
   const { auction: address } = router.query
   const auction = useAuction(address as string)
 
+  console.log({ auction })
+
   return (
     <>
       <div

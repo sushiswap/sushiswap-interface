@@ -6,6 +6,7 @@ import { useMemo } from 'react'
 
 export const useAuctionList = (type?: AuctionStatus): RawAuction[] => {
   const contract = useMisoHelperContract()
+  console.log({ contract })
   const { result } = useSingleCallResult(contract, 'getMarkets')
 
   return useMemo(() => {
