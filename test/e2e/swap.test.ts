@@ -2,10 +2,11 @@ import { Dappeteer } from '@chainsafe/dappeteer'
 import { closeValues } from '@sushiswap/tines'
 import { Browser, Page } from 'puppeteer'
 
+import { ADDRESSES } from './constants/Addresses'
 import { FUNDING_SOURCE } from './constants/FundingSource'
-import { TOKEN_ADDRESSES } from './constants/TokenAddresses'
+import { ApprovalHelper } from './helpers/ApprovalHelper'
+import { TestHelper } from './helpers/TestHelper'
 import { SwapPage } from './pages/swap/SwapPage'
-import { TestHelper } from './TestHelper'
 
 let browser: Browser
 let page: Page
@@ -17,6 +18,8 @@ require('dotenv').config()
 
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
 let account2PubKey: string = process.env.TEST_ACCOUNT2_PUB_KEY || ''
+
+let approvalHelper: ApprovalHelper
 
 const cases = [
   ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
@@ -51,13 +54,15 @@ describe('Trident Swap:', () => {
   beforeAll(async () => {
     ;[metamask, browser, page] = await TestHelper.initDappeteer()
     swapPage = new SwapPage(page, metamask, `${baseUrl}/trident/swap`)
+    approvalHelper = new ApprovalHelper()
 
     await page.goto(baseUrl)
     await page.bringToFront()
 
     await swapPage.connectMetamaskWallet()
-    await swapPage.addTokenToMetamask(TOKEN_ADDRESSES.WETH)
-    await swapPage.addTokenToMetamask(TOKEN_ADDRESSES.USDC)
+    await swapPage.addTokenToMetamask(ADDRESSES.WETH)
+    await swapPage.addTokenToMetamask(ADDRESSES.USDC)
+    await swapPage.addTokenToMetamask(ADDRESSES.BAT)
   })
 
   beforeEach(async () => {
@@ -66,6 +71,8 @@ describe('Trident Swap:', () => {
 
   afterAll(async () => {
     browser.close()
+
+    await approvalHelper.approveRouter(ADDRESSES.BAT, 0)
   })
 
   test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
@@ -293,7 +300,7 @@ describe('Trident Swap:', () => {
     expect(recipientAddressAfter).toBe('')
   })
 
-  test.only.each([
+  test.each([
     ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.BENTO],
     ['USDC', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.BENTO],
   ])(`Should add WETH to Bento when swapping from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
@@ -323,5 +330,28 @@ describe('Trident Swap:', () => {
 
     const wethBalanceDiff = parseFloat(wethBentoBalanceAfter) - parseFloat(wethBentoBalanceBefore)
     expect(closeValues(parseFloat(expectedOutputAmount), wethBalanceDiff, 1e-3)).toBe(true)
+  })
+
+  test('Should require approval of token when swapping from wallet', async () => {
+    const inToken = 'BAT'
+    const outToken = 'ETH'
+
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
+
+    await swapPage.navigateTo()
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(true)
+    await swapPage.setReceiveToWallet(true)
+
+    const requiresApproval = await swapPage.requiresApproval()
+    expect(requiresApproval).toBe(true)
+
+    await swapPage.approveToken()
+    await swapPage.confirmSwap(inToken, outToken)
   })
 })
