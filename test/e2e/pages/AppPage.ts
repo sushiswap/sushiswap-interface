@@ -2,9 +2,10 @@ import { Dappeteer } from '@chainsafe/dappeteer'
 import { Page } from 'puppeteer'
 
 export abstract class AppPage {
+  public Metamask: Dappeteer
+
   protected URL: string
   protected Page: Page
-  protected Metamask: Dappeteer
 
   protected WalletConnectSelector: string = '#connect-wallet'
   protected WalletOptionMetamaskSelector: string = '#wallet-option-MetaMask'
@@ -144,7 +145,7 @@ export abstract class AppPage {
     let waitSeconds = seconds
 
     if (checkCi && this.ci === 'true') {
-      waitSeconds = seconds * 5
+      waitSeconds = seconds * 2
     }
 
     var waitTill = new Date(new Date().getTime() + waitSeconds * 1000)

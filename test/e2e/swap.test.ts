@@ -16,6 +16,7 @@ let swapPage: SwapPage
 require('dotenv').config()
 
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
+let account2PubKey: string = process.env.TEST_ACCOUNT2_PUB_KEY || ''
 
 const cases = [
   ['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET],
@@ -27,6 +28,12 @@ const cases = [
   ['WETH', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
   ['WETH', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.WALLET],
   ['ETH', FUNDING_SOURCE.BENTO, 'USDC', FUNDING_SOURCE.BENTO],
+  ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.WALLET],
+  ['USDC', FUNDING_SOURCE.WALLET, 'WETH', FUNDING_SOURCE.WALLET],
+  ['USDC', FUNDING_SOURCE.WALLET, 'WETH', FUNDING_SOURCE.BENTO],
+  ['USDC', FUNDING_SOURCE.BENTO, 'WETH', FUNDING_SOURCE.BENTO],
+  ['USDC', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.WALLET],
+  ['USDC', FUNDING_SOURCE.BENTO, 'WETH', FUNDING_SOURCE.WALLET],
 ]
 
 const currencySelectCases = [
@@ -61,11 +68,11 @@ describe('Trident Swap:', () => {
     browser.close()
   })
 
-  test.skip.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
-    const ethWalletBalance = await swapPage.getMetamaskTokenBalance(inToken as string)
-    if (!(ethWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+  test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken as string)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
 
-    const swapEthAmount = ethWalletBalance * 0.01
+    const swapAmount = tokenWalletBalance * 0.01
     const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
     const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
 
@@ -73,7 +80,7 @@ describe('Trident Swap:', () => {
     await swapPage.swapTokens(
       inToken as string,
       outToken as string,
-      swapEthAmount.toFixed(5),
+      swapAmount.toFixed(5),
       payFromWallet,
       receiveToWallet
     )
@@ -165,5 +172,121 @@ describe('Trident Swap:', () => {
     const wethUsdcRate = wethUsdcRateDispayed.split('=')[1].trim().split(' ')[0]
 
     expect(closeValues(wethUsdcRateExpected, parseFloat(wethUsdcRate), 1e-3)).toBe(true)
+  })
+
+  test('Should change slippage', async () => {
+    await swapPage.navigateTo()
+
+    await swapPage.setSlippage('25.00')
+
+    const slippage = await swapPage.getSlippage()
+
+    expect(slippage).toBe('25.00')
+  })
+
+  test('Should swap ETH from wallet to USDC bento with other recipient', async () => {
+    const inToken = 'ETH'
+    const outToken = 'USDC'
+
+    let recipientBrowser: Browser
+    let recipientPage: Page
+    let recipientMetamask: Dappeteer
+    ;[recipientMetamask, recipientBrowser, recipientPage] = await TestHelper.initDappeteer(
+      process.env.TEST_SEED2,
+      process.env.TEST_PASS
+    )
+
+    const recipientSwapPage = new SwapPage(recipientPage, recipientMetamask, `${baseUrl}/trident/swap`)
+    await recipientPage.goto(baseUrl)
+    await recipientPage.bringToFront()
+    await recipientSwapPage.connectMetamaskWallet()
+
+    await recipientSwapPage.navigateTo()
+    const account2BentoBalanceBefore = await recipientSwapPage.getBentoBalance(outToken)
+
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
+
+    await swapPage.navigateTo()
+    await swapPage.toggleExpertMode()
+    await swapPage.addRecipient(account2PubKey)
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(true)
+    await swapPage.setReceiveToWallet(false)
+
+    const expectedOutputAmount = await swapPage.getOutputTokenAmount()
+    await swapPage.confirmSwap(inToken, outToken)
+
+    const account2BentoBalanceAfter = await recipientSwapPage.getBentoBalance(outToken)
+    const account2BalanceDifference = parseFloat(account2BentoBalanceAfter) - parseFloat(account2BentoBalanceBefore)
+
+    await recipientBrowser.close()
+
+    expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
+  })
+
+  test('Should swap ETH from wallet to USDC wallet with other recipient', async () => {
+    const inToken = 'ETH'
+    const outToken = 'USDC'
+
+    let recipientBrowser: Browser
+    let recipientPage: Page
+    let recipientMetamask: Dappeteer
+    ;[recipientMetamask, recipientBrowser, recipientPage] = await TestHelper.initDappeteer(
+      process.env.TEST_SEED2,
+      process.env.TEST_PASS
+    )
+
+    const recipientSwapPage = new SwapPage(recipientPage, recipientMetamask, `${baseUrl}/trident/swap`)
+    await recipientPage.goto(baseUrl)
+    await recipientPage.bringToFront()
+    await recipientSwapPage.connectMetamaskWallet()
+
+    await recipientSwapPage.navigateTo()
+    const account2BentoBalanceBefore = await recipientSwapPage.getWalletBalance(outToken)
+
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
+
+    await swapPage.navigateTo()
+    await swapPage.toggleExpertMode()
+    await swapPage.addRecipient(account2PubKey)
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(true)
+    await swapPage.setReceiveToWallet(true)
+
+    const expectedOutputAmount = await swapPage.getOutputTokenAmount()
+    await swapPage.confirmSwap(inToken, outToken)
+
+    const account2BentoBalanceAfter = await recipientSwapPage.getWalletBalance(outToken)
+    const account2BalanceDifference = parseFloat(account2BentoBalanceAfter) - parseFloat(account2BentoBalanceBefore)
+
+    await recipientBrowser.close()
+
+    expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
+  })
+
+  test('Should reset recipient address when expert mode is disabled', async () => {
+    await swapPage.navigateTo()
+    await swapPage.toggleExpertMode() // enable expert mode
+    await swapPage.addRecipient('potato')
+
+    const recipientAddressBefore = await swapPage.getRecipient()
+    expect(recipientAddressBefore).toBe('potato')
+    await swapPage.toggleExpertMode() // disable expert mode
+
+    await swapPage.navigateTo()
+
+    await swapPage.toggleExpertMode() // enable expert mode
+    const recipientAddressAfter = await swapPage.getRecipient()
+    expect(recipientAddressAfter).toBe('')
   })
 })
