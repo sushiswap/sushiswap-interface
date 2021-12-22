@@ -71,8 +71,6 @@ describe('Trident Swap:', () => {
 
   afterAll(async () => {
     browser.close()
-
-    await approvalHelper.approveRouter(ADDRESSES.BAT, 0)
   })
 
   test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
@@ -333,6 +331,8 @@ describe('Trident Swap:', () => {
   })
 
   test('Should require approval of token when swapping from wallet', async () => {
+    await approvalHelper.approveRouter(ADDRESSES.BAT, 0)
+
     const inToken = 'BAT'
     const outToken = 'ETH'
 
@@ -348,10 +348,57 @@ describe('Trident Swap:', () => {
     await swapPage.setPayFromWallet(true)
     await swapPage.setReceiveToWallet(true)
 
-    const requiresApproval = await swapPage.requiresApproval()
-    expect(requiresApproval).toBe(true)
+    const requiresApprovalBefore = await swapPage.requiresApproval()
+    expect(requiresApprovalBefore).toBe(true)
 
     await swapPage.approveToken()
     await swapPage.confirmSwap(inToken, outToken)
+
+    await swapPage.navigateTo()
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(true)
+    await swapPage.setReceiveToWallet(true)
+
+    const requiresApprovalAfter = await swapPage.requiresApproval()
+    expect(requiresApprovalAfter).toBe(false)
+  })
+
+  test('Should require approval once when swapping from BentoBox', async () => {
+    await approvalHelper.approveRouter(ADDRESSES.USDC, 0)
+
+    const inToken = 'USDC'
+    const outToken = 'ETH'
+
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
+
+    await swapPage.navigateTo()
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(false)
+    await swapPage.setReceiveToWallet(true)
+
+    const requiresApprovalBefore = await swapPage.requiresApproval()
+    expect(requiresApprovalBefore).toBe(true)
+
+    await swapPage.approveToken()
+    await swapPage.confirmSwap(inToken, outToken)
+
+    await swapPage.navigateTo()
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(true)
+    await swapPage.setReceiveToWallet(true)
+
+    const requiresApprovalAfter = await swapPage.requiresApproval()
+    expect(requiresApprovalAfter).toBe(false)
+
+    await approvalHelper.approveRouter(ADDRESSES.USDC, 2 ^ (256 - 1))
   })
 })
