@@ -44,6 +44,7 @@ const TokenCreationForm: FC = ({}) => {
       tokenTypeAddress: chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken.address : undefined,
     },
     reValidateMode: 'onChange',
+    mode: 'onChange',
   })
 
   const {

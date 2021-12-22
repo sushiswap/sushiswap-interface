@@ -77,23 +77,25 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
   }, [auctionDocuments, auctionInfos, auctionTemplateIds, auctions, chainId, owner, type, userMarketInfos, whitelists])
 }
 
-export const useAuction = (address: string, owner?: string) => {
+export const useAuction = (address?: string, owner?: string) => {
   const { chainId } = useActiveWeb3React()
-  const { marketTemplateId, whitelist } = useAuctionDetails(address)
-  const { auctionDocuments, marketInfo, auctionInfo } = useAuctionHelperInfo(
-    address,
-    marketTemplateId,
-    owner ?? undefined
-  )
+  const { marketTemplateId, whitelist, loading: loadingDetails } = useAuctionDetails(address)
+  const {
+    auctionDocuments,
+    marketInfo,
+    auctionInfo,
+    loading: loadingInfo,
+  } = useAuctionHelperInfo(address, marketTemplateId, owner ?? undefined)
 
   return useMemo(() => {
-    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments) return { loading: true, auction: undefined }
+    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
+      return { loading: loadingDetails || loadingInfo, auction: undefined }
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    if (owner && !marketInfo?.isAdmin) return { loading: false, auction: undefined }
+    if (owner && !marketInfo?.isAdmin) return { loading: loadingDetails || loadingInfo, auction: undefined }
 
     return {
-      loading: false,
+      loading: loadingDetails || loadingInfo,
       auction: new Auction({
         template: marketTemplateId.toNumber(),
         auctionToken: new Token(
@@ -110,7 +112,17 @@ export const useAuction = (address: string, owner?: string) => {
         whitelist,
       }),
     }
-  }, [auctionDocuments, auctionInfo, chainId, marketInfo, marketTemplateId, owner, whitelist])
+  }, [
+    auctionDocuments,
+    auctionInfo,
+    chainId,
+    loadingDetails,
+    loadingInfo,
+    marketInfo,
+    marketTemplateId,
+    owner,
+    whitelist,
+  ])
 }
 
 export default useAuction
