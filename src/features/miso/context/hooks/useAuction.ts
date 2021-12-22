@@ -1,10 +1,9 @@
 import { Token } from '@sushiswap/core-sdk'
-import { useAuctionDocument, useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
-import useAuctionMarketTemplateId, {
-  useAuctionMarketTemplateIds,
-} from 'app/features/miso/context/hooks/useAuctionMarketTemplateId'
-import { useAuctionPointList, useAuctionPointLists } from 'app/features/miso/context/hooks/useAuctionPointList'
-import useAuctionRawInfo, { useAuctionRawInfos } from 'app/features/miso/context/hooks/useAuctionRawInfo'
+import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
+import { useAuctionDetails, useAuctionHelperInfo } from 'app/features/miso/context/hooks/useAuctionInfo'
+import { useAuctionMarketTemplateIds } from 'app/features/miso/context/hooks/useAuctionMarketTemplateIds'
+import { useAuctionPointLists } from 'app/features/miso/context/hooks/useAuctionPointList'
+import { useAuctionRawInfos } from 'app/features/miso/context/hooks/useAuctionRawInfo'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { getNativeOrToken } from 'app/features/miso/context/utils'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -12,7 +11,7 @@ import { useMemo } from 'react'
 
 import { Auction } from '../Auction'
 import { useAuctionList } from './useAuctionList'
-import { useAuctionUserMarketInfo, useAuctionUserMarketInfos } from './useAuctionUserMarketInfo'
+import { useAuctionUserMarketInfos } from './useAuctionUserMarketInfos'
 
 export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | undefined)[] | undefined => {
   const { chainId } = useActiveWeb3React()
@@ -80,33 +79,37 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
 
 export const useAuction = (address: string, owner?: string) => {
   const { chainId } = useActiveWeb3React()
-  const marketTemplateId = useAuctionMarketTemplateId(address)
-  const auctionInfo = useAuctionRawInfo(address, marketTemplateId)
-  const marketInfo = useAuctionUserMarketInfo(address, owner ?? undefined)
-  const auctionDocuments = useAuctionDocument(address)
-  const whitelist = useAuctionPointList(address)
+  const { marketTemplateId, whitelist } = useAuctionDetails(address)
+  const { auctionDocuments, marketInfo, auctionInfo } = useAuctionHelperInfo(
+    address,
+    marketTemplateId,
+    owner ?? undefined
+  )
 
   return useMemo(() => {
-    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments) return
+    if (!chainId || !marketTemplateId || !auctionInfo || !auctionDocuments) return { loading: true, auction: undefined }
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    if (owner && !marketInfo?.isAdmin) return undefined
+    if (owner && !marketInfo?.isAdmin) return { loading: false, auction: undefined }
 
-    return new Auction({
-      template: marketTemplateId.toNumber(),
-      auctionToken: new Token(
-        chainId,
-        auctionInfo.tokenInfo.addr,
-        auctionInfo.tokenInfo.decimals.toNumber(),
-        auctionInfo.tokenInfo.symbol,
-        auctionInfo.tokenInfo.name
-      ),
-      paymentToken,
-      auctionInfo,
-      marketInfo,
-      auctionDocuments,
-      whitelist,
-    })
+    return {
+      loading: false,
+      auction: new Auction({
+        template: marketTemplateId.toNumber(),
+        auctionToken: new Token(
+          chainId,
+          auctionInfo.tokenInfo.addr,
+          auctionInfo.tokenInfo.decimals.toNumber(),
+          auctionInfo.tokenInfo.symbol,
+          auctionInfo.tokenInfo.name
+        ),
+        paymentToken,
+        auctionInfo,
+        marketInfo,
+        auctionDocuments,
+        whitelist,
+      }),
+    }
   }, [auctionDocuments, auctionInfo, chainId, marketInfo, marketTemplateId, owner, whitelist])
 }
 

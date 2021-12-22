@@ -8,6 +8,7 @@ import { Feature } from 'app/enums'
 import AuctionAdminForm from 'app/features/miso/AuctionAdminForm'
 import useAuction from 'app/features/miso/context/hooks/useAuction'
 import NetworkGuard from 'app/guards/Network'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
@@ -19,7 +20,10 @@ const MisoAuction = () => {
   const { account } = useActiveWeb3React()
   const router = useRouter()
   const { auction: address } = router.query
-  const auction = useAuction(address as string, account ?? undefined)
+  const { loading, auction } = useAuction(address as string, account ?? undefined)
+
+  // Redirect to overview on chainId change
+  useRedirectOnChainId('/miso')
 
   const header = (
     <div className="flex flex-col gap-4">
@@ -46,10 +50,21 @@ Do not waste your gas.`)}
     </div>
   )
 
-  if (auction && !auction.isOwner) {
+  if (auction && auction.isOwner) {
     return (
       <>
-        <MisoHeader className="bg-dark-900">{header}</MisoHeader>
+        <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
+        <MisoBody>
+          <AuctionAdminForm auction={auction} />
+        </MisoBody>
+      </>
+    )
+  }
+
+  if ((!loading && !auction?.isOwner) || !account) {
+    return (
+      <>
+        <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
         <MisoBody>
           <div className="flex gap-4 items-center">
             <EmojiSadIcon width={40} />
@@ -65,22 +80,11 @@ Do not waste your gas.`)}
     )
   }
 
-  if (!account || !auction) {
-    return (
-      <>
-        <MisoHeader className="bg-dark-900">{header}</MisoHeader>
-        <MisoBody>
-          <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
-        </MisoBody>
-      </>
-    )
-  }
-
   return (
     <>
-      <MisoHeader className="bg-dark-900">{header}</MisoHeader>
+      <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
       <MisoBody>
-        <AuctionAdminForm auction={auction} />
+        <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
       </MisoBody>
     </>
   )

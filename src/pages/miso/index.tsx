@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import AuctionCard from 'app/features/miso/AuctionCard'
@@ -32,13 +33,27 @@ const Miso = () => {
   return (
     <>
       <MisoHeader className="bg-miso-bowl bg-cover">
-        <div className="flex flex-col">
-          <Typography variant="hero" weight={700} className="text-white">
-            {i18n._(t`Chef's Edition`)}
-          </Typography>
-          <Typography weight={700}>
-            {i18n._(t`These auctions are meticulously chosen by the Sushi Samurais, serving the best MISO for you.`)}
-          </Typography>
+        <div className="flex justify-between lg:flex-row flex-col gap-8">
+          <div className="flex flex-col">
+            <Typography variant="hero" weight={700} className="text-white">
+              {i18n._(t`Chef's Edition`)}
+            </Typography>
+            <Typography weight={700}>
+              {i18n._(t`These auctions are meticulously chosen by the Sushi Samurais, serving the best MISO for you.`)}
+            </Typography>
+          </div>
+          <div className="flex gap-4 items-center">
+            <div>
+              <Link href="/miso/auction" passHref={true}>
+                <Button
+                  color="blue"
+                  className="rounded-full bg-gradient-to-r from-pink-red via-pink to-red text-white transition hover:scale-[1.05]"
+                >
+                  {i18n._(t`Create Auction`)}
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </MisoHeader>
       <MisoBody>

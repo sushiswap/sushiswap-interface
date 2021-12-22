@@ -12,7 +12,6 @@ import { AuctionTitleByTemplateId, MisoAbiByTemplateId } from 'app/features/miso
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import Button from 'components/Button'
 import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
 import Typography from 'components/Typography'
 import React, { FC, useCallback, useState } from 'react'
@@ -74,28 +73,27 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
   return (
     <HeadlessUIModal.Controlled isOpen={open} onDismiss={_onDismiss} afterLeave={() => setTxHash(undefined)}>
       {!txHash ? (
-        <div className="flex flex-col h-full gap-8 pb-8 lg:max-w-lg lg:min-w-lg">
-          <div className="relative">
-            <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-pink-red/20 via-pink/20 to-pink-red/20" />
-            <div className="flex flex-col gap-4 p-8">
-              <div className="flex flex-col gap-2">
-                <Typography variant="h2" weight={700} className="text-high-emphesis">
-                  {i18n._(t`Participate`)}
-                </Typography>
-                {auction.template === AuctionTemplate.DUTCH_AUCTION && (
-                  <Typography variant="sm">
-                    {i18n._(t`Your commitment is for the minimum amount of tokens. As the auction price drops, your commitment
+        <>
+          <HeadlessUIModal.Body>
+            <HeadlessUIModal.Header
+              header={i18n._(t`Participate`)}
+              subheader={
+                auction.template === AuctionTemplate.DUTCH_AUCTION
+                  ? i18n._(t`Your commitment is for the minimum amount of tokens. As the auction price drops, your commitment
                     will entitle you to claim even more tokens at the end. Final price per token is determined at the end
                     of the auction. Everyone who commits before the end of a successful auction, claims tokens at same
-                    final price.`)}
-                  </Typography>
-                )}
+                    final price.`)
+                  : undefined
+              }
+            />
+            <HeadlessUIModal.Content>
+              <div className="flex flex-col gap-6 mb-6">
                 <div className="flex gap-4 items-center mt-2">
-                  <Chip label="DeFi" color="blue" />
+                  {auction.auctionDocuments.category && <Chip label={auction.auctionDocuments.category} color="blue" />}
                   {auction && (
                     <div className="flex gap-1.5">
                       <AuctionIcon auctionTemplate={auction.template} width={18} />
-                      <Typography variant="sm" weight={700} className="text-secondary">
+                      <Typography variant="sm" className="text-secondary">
                         {AuctionTitleByTemplateId(i18n)[auction.template]}
                       </Typography>
                     </div>
@@ -103,60 +101,48 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
 
                   <div className="flex gap-1.5">
                     <RestrictedIcon width={18} />
-                    <Typography variant="sm" weight={700} className="text-secondary">
+                    <Typography variant="sm" className="text-secondary">
                       {i18n._(t`Restricted`)}
                     </Typography>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-4 px-8">
-              <Typography weight={700} variant="lg">
-                {i18n._(t`You are committing`)}
-              </Typography>
-              <div className="flex items-center gap-3 border-dark-700">
-                <CurrencyLogo currency={amount?.currency} size={32} className="rounded-full" />
-                <div className="flex gap-2 items-baseline">
-                  <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
-                    {amount?.toSignificant(6)}
-                  </Typography>
-                  <Typography className="text-secondary" weight={700}>
-                    {amount?.currency.symbol}
-                  </Typography>
-                </div>
-                <ChevronRightIcon width={20} className="text-secondary" />
-                {amount?.greaterThan(ZERO) && (
-                  <div className="flex gap-2 items-baseline">
-                    <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
-                      {auction.tokenAmount(amount)?.toSignificant(6)}
-                    </Typography>
-                    <Typography className="text-secondary" weight={700}>
-                      {auction.tokenAmount(amount)?.currency.symbol}
-                    </Typography>
+                <div className="flex flex-col gap-3 bg-dark-900 border border-dark-700 rounded p-5">
+                  <Typography className="text-low-emphesis">{i18n._(t`You are committing`)}</Typography>
+                  <div className="flex items-center gap-3 border-dark-700">
+                    <CurrencyLogo currency={amount?.currency} size={32} className="rounded-full" />
+                    <div className="flex gap-2 items-baseline">
+                      <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
+                        {amount?.toSignificant(6)}
+                      </Typography>
+                      <Typography className="text-secondary" weight={700}>
+                        {amount?.currency.symbol}
+                      </Typography>
+                    </div>
+                    <ChevronRightIcon width={20} className="text-secondary" />
+                    {amount?.greaterThan(ZERO) && (
+                      <div className="flex gap-2 items-baseline">
+                        <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
+                          {auction.tokenAmount(amount)?.toSignificant(6)}
+                        </Typography>
+                        <Typography className="text-secondary" weight={700}>
+                          {auction.tokenAmount(amount)?.currency.symbol}
+                        </Typography>
+                      </div>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-5 px-8">
-            <Button
-              id={`btn-modal-confirm-deposit`}
-              disabled={attemptingTxn}
-              color="gradient"
-              size="lg"
-              className="!text-white not(disabled):bg-gradient-to-r from-red via-pink to-red"
-              onClick={execute}
-            >
-              <Typography variant="sm" weight={700} className="text-high-emphesis">
-                {i18n._(t`Confirm Commit`)}
-              </Typography>
-            </Button>
-          </div>
-        </div>
+              <HeadlessUIModal.Actions>
+                <HeadlessUIModal.Action onClick={onDismiss}>{i18n._(t`Cancel`)}</HeadlessUIModal.Action>
+                <HeadlessUIModal.Action main={true} disabled={attemptingTxn} onClick={execute}>
+                  {i18n._(t`Confirm Commit`)}
+                </HeadlessUIModal.Action>
+              </HeadlessUIModal.Actions>
+            </HeadlessUIModal.Content>
+          </HeadlessUIModal.Body>
+        </>
       ) : (
-        <CommitSubmittedModalContent txHash={txHash} />
+        <CommitSubmittedModalContent txHash={txHash} onDismiss={onDismiss} />
       )}
     </HeadlessUIModal.Controlled>
   )

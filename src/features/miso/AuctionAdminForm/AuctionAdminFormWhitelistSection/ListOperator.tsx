@@ -95,7 +95,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
           </Form.HelperText>
         )}
       </div>
-      <div className="flex col-span-6 justify-end">
+      <div className="flex col-span-6 justify-end pt-8">
         <div>
           <Button
             disabled={pending || auction.whitelist?.[0]?.toLowerCase() === operator?.toLowerCase()}
@@ -109,7 +109,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
             color="blue"
             onClick={() => handlePermissionListOperator(operator)}
           >
-            {i18n._(t`Update List Operator`)}
+            {i18n._(t`Update List Address`)}
           </Button>
         </div>
       </div>
