@@ -2661,10 +2661,10 @@
   dependencies:
     "@sushiswap/default-token-list" "^11.3.0"
 
-"@sushiswap/sdk@5.0.0-canary.112":
-  version "5.0.0-canary.112"
-  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.112.tgz#64202bb52846f3c5465d42fcdcdcdfa65cd7d841"
-  integrity sha512-fPUqxp+4jFoSW3LldR74dB988zmUFQqOQjPc+aAMKfNZFdAFLvA38vuFqYnWqd9zJEr3ATo+QBc2DXdmnJOTZg==
+"@sushiswap/sdk@5.0.0-canary.117":
+  version "5.0.0-canary.117"
+  resolved "https://registry.yarnpkg.com/@sushiswap/sdk/-/sdk-5.0.0-canary.117.tgz#cb171ed04076c82d9722d45b5b0cc4946e35abb3"
+  integrity sha512-ZjfhXeL132j7EKOsQSXOKG5sRTHdsnwkvlhcGL2nwf8Td4AmA+8138w/x7V9TAq8HuSyMlzdUP9/3BODtkF6tw==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/abstract-signer" "^5.4.0"

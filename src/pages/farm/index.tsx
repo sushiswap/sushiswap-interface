@@ -1,15 +1,22 @@
+import { InformationCircleIcon } from '@heroicons/react/solid'
+import { ChainId, SUSHI_ADDRESS, MINICHEF_ADDRESS } from '@sushiswap/sdk'
+import { BigNumber } from '@ethersproject/bignumber'
 import { Chef, PairType } from '../../features/farm/enum'
 import { useActiveWeb3React, useFuse } from '../../hooks'
 
+import Alert from '../../components/Alert'
 import Container from '../../components/Container'
+import ExternalLink from '../../components/ExternalLink'
 import FarmList from '../../features/farm/FarmList'
 import Head from 'next/head'
 import Menu from '../../features/farm/FarmMenu'
 import React from 'react'
 import Search from '../../components/Search'
+import Typography from '../../components/Typography'
 import { classNames } from '../../functions'
 import useFarmRewards from '../../hooks/useFarmRewards'
 import { usePositions } from '../../features/farm/hooks'
+import useContractTokenBalance from '../../hooks/useContractTokenBalance'
 import { useRouter } from 'next/router'
 import Provider from '../../features/lending/context'
 
@@ -22,7 +29,7 @@ export default function Farm(): JSX.Element {
   const positions = usePositions(chainId)
 
   const FILTER = {
-    all: (farm) => farm.allocPoint !== '0',
+    all: (farm) => farm.allocPoint !== '0' && farm.chef !== Chef.OLD_FARMS,
     portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
     sushi: (farm) => farm.pair.type === PairType.SWAP && farm.allocPoint !== '0',
     kashi: (farm) => farm.pair.type === PairType.KASHI && farm.allocPoint !== '0',
@@ -30,6 +37,7 @@ export default function Farm(): JSX.Element {
       (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF) &&
       farm.rewards.length > 1 &&
       farm.allocPoint !== '0',
+    old: (farm) => farm.chef === Chef.OLD_FARMS,
   }
 
   const rewards = useFarmRewards()
@@ -58,6 +66,20 @@ export default function Farm(): JSX.Element {
         <Menu positionsLength={positions.length} />
       </div>
       <div className={classNames('space-y-6 col-span-4 lg:col-span-3')}>
+        {chainId && chainId === ChainId.CELO && (
+          <div className="bg-[rgba(255,255,255,0.04)] p-4 py-2 rounded flex flex-row items-center gap-4">
+            <InformationCircleIcon width={28} height={28} color="pink" />
+            <Typography variant="xs" weight={700}>
+              <ExternalLink
+                id={`celo-optics-info-link`}
+                href="https://medium.com/@0xJiro/celo-farms-update-migrating-to-the-optics-v2-bridge-e8075d1c9ea"
+                className="text-high-emphesis"
+              >
+                {`Click for more info on Optics V1 Migration.`}
+              </ExternalLink>
+            </Typography>
+          </div>
+        )}
         <Search
           search={search}
           term={term}

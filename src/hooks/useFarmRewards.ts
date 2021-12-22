@@ -270,6 +270,39 @@ export default function useFarmRewards() {
             rewardPrice: ohmPrice,
           }
         }
+      } else if (pool.chef === Chef.OLD_FARMS) {
+        const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
+        const sushiPerBlock = sushiPerSecond * averageBlockTime
+        const sushiPerDay = sushiPerBlock * blocksPerDay
+
+        const rewardPerSecond =
+          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+            ? pool.rewarder.rewardPerSecond / 1e18
+            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+
+        const rewardPerBlock = rewardPerSecond * averageBlockTime
+
+        const rewardPerDay = rewardPerBlock * blocksPerDay
+
+        const reward = {
+          [ChainId.CELO]: {
+            token: 'CELO',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: celoPrice,
+          },
+        }
+
+        rewards[0] = {
+          ...defaultReward,
+          rewardPerBlock: sushiPerBlock,
+          rewardPerDay: sushiPerDay,
+        }
+
+        if (chainId in reward) {
+          rewards[1] = reward[chainId]
+        }
       }
 
       return rewards

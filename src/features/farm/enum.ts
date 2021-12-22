@@ -2,6 +2,7 @@ export enum Chef {
   MASTERCHEF,
   MASTERCHEF_V2,
   MINICHEF,
+  OLD_FARMS,
 }
 
 export enum Rewarder {
