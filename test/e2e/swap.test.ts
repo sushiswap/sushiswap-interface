@@ -401,4 +401,48 @@ describe('Trident Swap:', () => {
 
     await approvalHelper.approveRouter(ADDRESSES.USDC, 2 ^ (256 - 1))
   })
+
+  test('Should display insufficient balance when not enough wallet assets', async () => {
+    const inToken = 'ETH'
+    const outToken = 'USDC'
+
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 100).toFixed(5)
+
+    await swapPage.navigateTo()
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(true)
+    await swapPage.setReceiveToWallet(true)
+
+    const swapButtonText = await swapPage.getSwapButtonText()
+
+    expect(swapButtonText).toBe('Insufficient ETH balance')
+  })
+
+  test.only.each([
+    ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.BENTO],
+    ['USDC', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.BENTO],
+  ])(`Should display insufficient balance when not enough %p in %p`, async (inToken, payFrom, outToken, receiveTo) => {
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    const swapAmount = (tokenWalletBalance * 100).toFixed(5)
+    const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
+    const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
+
+    await swapPage.navigateTo()
+    await swapPage.selectInputToken(inToken)
+    await swapPage.selectOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(payFromWallet)
+    await swapPage.setReceiveToWallet(receiveToWallet)
+
+    const swapButtonText = await swapPage.getSwapButtonText()
+
+    expect(swapButtonText).toBe(`Insufficient ${inToken} balance`)
+  })
 })

@@ -223,6 +223,16 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
   }
 
+  public async getSwapButtonText(): Promise<string> {
+    await this.blockingWait(1, true)
+
+    await this.Page.waitForSelector(this.SwapButtonSelector)
+    const swapButton = await this.Page.$(this.SwapButtonSelector)
+
+    const swapButtonText = (await (await swapButton.getProperty('textContent')).jsonValue()) as string
+    return swapButtonText
+  }
+
   public async clickMaxButton(): Promise<void> {
     await this.blockingWait(3, true)
     await this.Page.waitForSelector(this.UseMaxButtonSelector)
