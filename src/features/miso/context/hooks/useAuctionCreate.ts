@@ -148,7 +148,7 @@ const useAuctionCreate = () => {
           templateId,
           data.auctionToken.address,
           data.tokenAmount.quotient.toString(),
-          AddressZero,
+          AddressZero, // feeIntegrator
           getAuctionData(data, contract.address)
         )
 

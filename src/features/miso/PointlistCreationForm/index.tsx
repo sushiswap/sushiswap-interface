@@ -42,6 +42,8 @@ const PointlistCreationFormSetup: FC = () => {
       paymentTokenAddress: '',
       wlAddresses: [],
     },
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   })
 
   const {
