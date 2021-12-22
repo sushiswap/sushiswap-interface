@@ -28,9 +28,6 @@ export default function Farm(): JSX.Element {
 
   const positions = usePositions(chainId)
 
-  const miniChefBalances = useContractTokenBalance(SUSHI_ADDRESS[chainId], MINICHEF_ADDRESS[chainId])
-  const miniOutOfRewards = miniChefBalances.value > BigNumber.from('0x3635C9ADC5DEA00000') ? false : true
-
   const FILTER = {
     all: (farm) => farm.allocPoint !== '0' && farm.chef !== Chef.OLD_FARMS,
     portfolio: (farm) => farm?.amount && !farm.amount.isZero(),
@@ -80,14 +77,6 @@ export default function Farm(): JSX.Element {
               >
                 {`Click for more info on Optics V1 Migration.`}
               </ExternalLink>
-            </Typography>
-          </div>
-        )}
-        {[chainId && chainId !== ChainId.MAINNET && miniOutOfRewards] && (
-          <div className="bg-[rgba(255,255,255,0.04)] p-4 py-2 rounded flex flex-row items-center gap-4">
-            <InformationCircleIcon width={28} height={28} color="pink" />
-            <Typography variant="xs" weight={700}>
-              {`MiniChef is low or out of Sushi Rewards. Withdraw & Harvests may temporarily revert until MiniChef is refilled.`}
             </Typography>
           </div>
         )}
