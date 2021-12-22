@@ -144,7 +144,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
               {i18n._(t`Fund Raised`)}
             </Typography>
           </div>
-          <AuctionChart auction={auction} />
+          <AuctionChart auction={auction} showPriceIndicator={true} />
         </div>
       )}
     </div>

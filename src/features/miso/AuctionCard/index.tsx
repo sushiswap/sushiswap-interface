@@ -162,7 +162,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
           </div>
         </div>
         <div className="flex flex-col">
-          <AuctionChart auction={auction} prices={false} />
+          <AuctionChart auction={auction} prices={false} showPriceIndicator={false} />
           <div className="flex flex-col px-3 py-2 px-4 bg-dark-800 flex-grow divide-y divide-dark-700">
             <div className="flex justify-between gap-0.5 py-2">
               <div className="flex items-center">
