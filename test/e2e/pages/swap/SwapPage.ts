@@ -38,6 +38,8 @@ export class SwapPage extends AppPage {
   protected AddRecipientButtonSelector: string = '#btn-add-recipient'
   protected RecipientInputSelector: string = '#recipient-input'
 
+  protected ApproveButtonSelector: string = '#btn-approve'
+
   public async swapTokens(
     inTokenSymbol: string,
     outTokenSymbol: string,
@@ -221,6 +223,16 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
   }
 
+  public async getSwapButtonText(): Promise<string> {
+    await this.blockingWait(1, true)
+
+    await this.Page.waitForSelector(this.SwapButtonSelector)
+    const swapButton = await this.Page.$(this.SwapButtonSelector)
+
+    const swapButtonText = (await (await swapButton.getProperty('textContent')).jsonValue()) as string
+    return swapButtonText
+  }
+
   public async clickMaxButton(): Promise<void> {
     await this.blockingWait(3, true)
     await this.Page.waitForSelector(this.UseMaxButtonSelector)
@@ -306,6 +318,22 @@ export class SwapPage extends AppPage {
     const balance = await this.getInputTokenBalance()
 
     return balance
+  }
+
+  public async requiresApproval(): Promise<boolean> {
+    await this.blockingWait(1, true)
+    const approveButton = await this.Page.$(this.ApproveButtonSelector)
+    return approveButton !== null
+  }
+
+  public async approveToken(): Promise<void> {
+    await this.blockingWait(1, true)
+    const approveButton = await this.Page.waitForSelector(this.ApproveButtonSelector)
+    await approveButton.click()
+    await this.Metamask.confirmTransaction()
+    await this.Metamask.page.waitForTimeout(1000)
+    await this.bringToFront()
+    await this.blockingWait(5, true)
   }
 
   private async selectToken(tokenSymbol: string): Promise<void> {

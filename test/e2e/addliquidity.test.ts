@@ -1,7 +1,7 @@
 import { Dappeteer, launch, setupMetamask } from '@chainsafe/dappeteer'
 import puppeteer, { Browser, Page } from 'puppeteer'
 
-import { TOKEN_ADDRESSES } from './constants/TokenAddresses'
+import { ADDRESSES } from './constants/Addresses'
 import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
 import { PoolPage } from './pages/pools/PoolPage'
@@ -27,8 +27,8 @@ async function initPages() {
 }
 
 async function importTokens() {
-  await liquidityPoolsPage.addTokenToMetamask(TOKEN_ADDRESSES.DAI)
-  await liquidityPoolsPage.addTokenToMetamask(TOKEN_ADDRESSES.USDC)
+  await liquidityPoolsPage.addTokenToMetamask(ADDRESSES.DAI)
+  await liquidityPoolsPage.addTokenToMetamask(ADDRESSES.USDC)
 }
 
 jest.retryTimes(1)
