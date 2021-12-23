@@ -58,7 +58,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: 
           await tx.wait()
         }
       } catch (e) {
-        setError(e.error.message)
+        setError(e.error?.message)
       } finally {
         setPending(false)
       }

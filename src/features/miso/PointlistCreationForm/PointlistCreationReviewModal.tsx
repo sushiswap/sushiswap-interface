@@ -73,7 +73,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
           await tx.wait()
         }
       } catch (e) {
-        setError(e.error.message)
+        setError(e.error?.message)
       } finally {
         setPending(false)
       }

@@ -51,7 +51,7 @@ const TokenCreationModal: FC<TokenCreationModalProps> = ({ open, onDismiss: _onD
           await tx.wait()
         }
       } catch (e) {
-        setError(e.error.message)
+        setError(e.error?.message)
       } finally {
         setPending(false)
       }

@@ -74,7 +74,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
         summary: i18n._(t`Committed ${amount?.toSignificant(6)} ${amount.currency.symbol}`),
       })
     } catch (e) {
-      setError(e.error.message)
+      setError(e.error?.message)
     } finally {
       setAttemptingTxn(false)
     }

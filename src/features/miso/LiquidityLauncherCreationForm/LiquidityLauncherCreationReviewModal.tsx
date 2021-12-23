@@ -60,7 +60,7 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
           await tx.wait()
         }
       } catch (e) {
-        setError(e.error.message)
+        setError(e.error?.message)
       } finally {
         setPending(false)
       }
