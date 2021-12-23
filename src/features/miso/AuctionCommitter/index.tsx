@@ -29,7 +29,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
   const balance = useCurrencyBalance(account ?? undefined, auction?.paymentToken)
   const [value, setValue] = useState<string>()
   const whitelistedAmount = useAuctionPointListPoints(
-    auction?.whitelist?.[0],
+    auction?.pointListAddress,
     account ?? undefined,
     auction?.paymentToken
   )
@@ -55,6 +55,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
   if (inputAmount.equalTo(ZERO)) error = i18n._(t`Enter amount`)
   if (overSpend) error = i18n._(`Amount exceeds whitelist amount`)
   if (notEnoughBalance) error = i18n._(t`Not enough balance`)
+  if (auction.status === AuctionStatus.UPCOMING) error = i18n._(i18n._(t`Not started`))
   if (notWhitelisted) error = i18n._(t`Not whitelisted`)
 
   return (
@@ -107,7 +108,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
                 className={classNames(
                   error ? 'pointer-events-none' : '',
                   inputAmount.equalTo(ZERO) ? '!opacity-60' : '',
-                  '!border-none outline-none h-[74px] disabled:from-dark-900 disabled:via-dark-900 disabled:to-dark-900 bg-gradient-to-r from-red via-pink to-red transition-all disabled:scale-[1] hover:scale-[1.02] !opacity-100 disabled:!opacity-40'
+                  '!border-none outline-none h-[74px] bg-gradient-to-r from-blue to-pink transition-all disabled:scale-[1] hover:scale-[1.02] !opacity-100 disabled:!opacity-40'
                 )}
               >
                 <div className="flex flex-col items-center gap-1">

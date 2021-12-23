@@ -20,7 +20,11 @@ interface LiquidityLauncherCreationModalProps {
   data?: LiquidityLauncherFormInputFormatted
 }
 
-const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = ({ open, onDismiss, data }) => {
+const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = ({
+  open,
+  onDismiss: _onDismiss,
+  data,
+}) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { init, unsubscribe, subscribe } = useAuctionLiquidityLauncher()
@@ -29,19 +33,37 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
   const [liqLauncherAddress, setLiqLauncherAddress] = useState<string>()
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string>()
+
+  const reset = useCallback(() => {
+    if (!pending) {
+      setLiqLauncherAddress(undefined)
+      setTxHash(undefined)
+      setError(undefined)
+    }
+  }, [pending])
+
+  const onDismiss = useCallback(() => {
+    reset()
+    _onDismiss()
+  }, [_onDismiss, reset])
 
   const execute = useCallback(
     async (data: LiquidityLauncherFormInputFormatted) => {
       setPending(true)
 
-      const tx = await init(data)
+      try {
+        const tx = await init(data)
 
-      if (tx?.hash) {
-        setTxHash(tx.hash)
-        await tx.wait()
+        if (tx?.hash) {
+          setTxHash(tx.hash)
+          await tx.wait()
+        }
+      } catch (e) {
+        setError(e.error?.message)
+      } finally {
+        setPending(false)
       }
-
-      setPending(false)
     },
     [init]
   )
@@ -71,14 +93,6 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
           />
           <HeadlessUIModal.Content>
             <div className="grid grid-cols-2 items-center">
-              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`LP owner address`)}
-              </Typography>
-              <Typography weight={700} variant="sm" className="text-purple py-2 border-b border-dark-700">
-                <a target="_blank" rel="noreferrer" href={getExplorerLink(chainId, data.lpOwnerAddress, 'address')}>
-                  {shortenString(data.lpOwnerAddress, 12)}
-                </a>
-              </Typography>
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
                 {i18n._(t`Auction Address`)}
               </Typography>
@@ -127,6 +141,7 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
               {i18n._(t`Create Liquidity Launcher`)}
             </HeadlessUIModal.Action>
           </HeadlessUIModal.Actions>
+          <HeadlessUIModal.Error>{error}</HeadlessUIModal.Error>
         </HeadlessUIModal.Body>
       ) : (
         <LiquidityLauncherCreationSubmittedModalContent

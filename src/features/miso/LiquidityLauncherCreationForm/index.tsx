@@ -17,7 +17,6 @@ import * as yup from 'yup'
 export interface LiquidityLauncherFormInput {
   auctionAddress?: string
   adminAddress?: string
-  lpOwnerAddress?: string
   liqPercentage?: number
   liqLockTime?: number
 }
@@ -25,7 +24,6 @@ export interface LiquidityLauncherFormInput {
 export interface LiquidityLauncherFormInputValidated {
   auctionAddress: string
   adminAddress: string
-  lpOwnerAddress: string
   liqPercentage: number
   liqLockTime: number
 }
@@ -33,7 +31,6 @@ export interface LiquidityLauncherFormInputValidated {
 export interface LiquidityLauncherFormInputFormatted {
   auctionAddress: string
   adminAddress: string
-  lpOwnerAddress: string
   liqPercentage: number
   liqLockTime: number
   tokenAddress: string
@@ -43,7 +40,6 @@ export interface LiquidityLauncherFormInputFormatted {
 const schema = yup.object({
   auctionAddress: addressValidator.required('Target must be a valid address'),
   adminAddress: addressValidator.required('Target must be a valid address'),
-  lpOwnerAddress: addressValidator.required('Target must be a valid address'),
   liqPercentage: yup
     .number()
     .typeError('Target must be a percentage')

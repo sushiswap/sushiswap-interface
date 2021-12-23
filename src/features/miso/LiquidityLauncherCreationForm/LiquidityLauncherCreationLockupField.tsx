@@ -5,7 +5,7 @@ import ToggleButtonGroup from 'app/components/ToggleButton'
 import Typography from 'app/components/Typography'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 interface LiquidityLauncherCreationLockupFieldProps {}
 
@@ -13,7 +13,6 @@ const LiquidityLauncherCreationLockupField: FC<LiquidityLauncherCreationLockupFi
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { getValues, setValue } = useFormContext()
-  const liqLockTime = useWatch({ name: 'liqLockTime' })
 
   if (!chainId) return <></>
 

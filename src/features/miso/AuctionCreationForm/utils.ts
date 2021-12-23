@@ -21,10 +21,9 @@ export const getPriceEntity = (price: string, auctionToken: Token, paymentToken:
 export const formatCreationFormData = (
   data: AuctionCreationFormInputValidated,
   auctionToken: Token,
-  paymentCurrency: Currency,
-  account: string
+  paymentCurrency: Currency
 ): AuctionCreationFormInputFormatted => {
-  const { token, paymentCurrencyAddress, startDate, endDate, operator, pointListAddress, ...rest } = data
+  const { token, paymentCurrencyAddress, startDate, endDate, pointListAddress, ...rest } = data
   const startPrice = data.startPrice
     ? getPriceEntity(data.startPrice.toString(), auctionToken, paymentCurrency)
     : undefined
@@ -49,7 +48,6 @@ export const formatCreationFormData = (
 
   return {
     ...rest,
-    operator: operator || account,
     pointListAddress: pointListAddress || AddressZero,
     startDate: new Date(startDate),
     endDate: new Date(endDate),

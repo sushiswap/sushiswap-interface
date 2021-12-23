@@ -3,12 +3,10 @@ import { Trans, useLingui } from '@lingui/react'
 import Form from 'app/components/Form'
 import FormFieldHelperText from 'app/components/Form/FormFieldHelperText'
 import AuctionPaymentCurrencyField from 'app/features/miso/AuctionAdminForm/AuctionPaymentCurrencyField'
-import { AuctionCreationFormInput } from 'app/features/miso/AuctionCreationForm'
 import AuctionCreationFormTokenAmount from 'app/features/miso/AuctionCreationForm/AuctionCreationFormGeneralDetails/AuctionCreationFormTokenAmount'
 import { AuctionTemplate } from 'app/features/miso/context/types'
-import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, Fragment } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useWatch } from 'react-hook-form'
 
 import AuctionCreationFormBatchAuction from './AuctionCreationFormBatchAuction'
 import AuctionCreationFormCrowdsale from './AuctionCreationFormCrowdsale'
@@ -17,10 +15,8 @@ import AuctionCreationFormDutchAuction from './AuctionCreationFormDutchAuction'
 interface AuctionCreationFormGeneralDetailsProps {}
 
 const AuctionCreationFormGeneralDetails: FC<AuctionCreationFormGeneralDetailsProps> = () => {
-  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const auctionType = useWatch({ name: 'auctionType' })
-  const { setValue } = useFormContext<AuctionCreationFormInput>()
 
   let formSection
   if (auctionType === AuctionTemplate.DUTCH_AUCTION) {
@@ -77,21 +73,6 @@ const AuctionCreationFormGeneralDetails: FC<AuctionCreationFormGeneralDetailsPro
         <div className="col-span-4">
           <AuctionPaymentCurrencyField name="paymentCurrencyAddress" label={i18n._(t`Auction Payment Currency*`)} />
         </div>
-        <div className="col-span-4">
-          <Form.TextField
-            name="fundWallet"
-            label={i18n._(t`Fund Wallet*`)}
-            placeholder={i18n._(t`Address where collected funds will be forwarded to`)}
-            helperText={
-              <FormFieldHelperText
-                className="underline cursor-pointer"
-                onClick={() => setValue('fundWallet', account || '')}
-              >
-                {i18n._(t`Use my address`)}
-              </FormFieldHelperText>
-            }
-          />
-        </div>
         <div className="col-span-4 md:col-span-2 xl:col-span-1">
           <Form.TextField
             className="inline-flex"
@@ -110,22 +91,6 @@ const AuctionCreationFormGeneralDetails: FC<AuctionCreationFormGeneralDetailsPro
             label={i18n._(t`End Date*`)}
             placeholder={i18n._(t`Selected an end date for your auction`)}
             helperText={i18n._(t`Please enter your auction end date`)}
-          />
-        </div>
-        <div className="col-span-4">
-          <Form.TextField
-            className="inline-flex"
-            name="operator"
-            label={i18n._(t`Admin`)}
-            placeholder={i18n._(t`Address that can finalize auction`)}
-            helperText={
-              <FormFieldHelperText
-                className="underline cursor-pointer"
-                onClick={() => setValue('operator', account || '')}
-              >
-                {i18n._(t`Use my address`)}
-              </FormFieldHelperText>
-            }
           />
         </div>
         <div className="col-span-4">

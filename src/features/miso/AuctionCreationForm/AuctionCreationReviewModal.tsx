@@ -21,28 +21,47 @@ interface AuctionCreationModalProps {
   data?: AuctionCreationFormInputFormatted
 }
 
-const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, data }) => {
+const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: _onDismiss, data }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState<boolean>(false)
   const [auctionAddress, setAuctionAddress] = useState<string>()
+  const [error, setError] = useState<string>()
   const { templateIdToLabel } = useAuctionTemplateMap()
   const { init, subscribe, unsubscribe } = useAuctionCreate()
+
+  const reset = useCallback(() => {
+    if (!pending) {
+      setAuctionAddress(undefined)
+      setTxHash(undefined)
+      setError(undefined)
+    }
+  }, [pending])
+
+  const onDismiss = useCallback(() => {
+    reset()
+    _onDismiss()
+  }, [_onDismiss, reset])
 
   const execute = useCallback(
     async (data: AuctionCreationFormInputFormatted) => {
       if (!data) return
 
       setPending(true)
-      const tx = await init(data)
 
-      if (tx?.hash) {
-        setTxHash(tx.hash)
-        await tx.wait()
+      try {
+        const tx = await init(data)
+
+        if (tx?.hash) {
+          setTxHash(tx.hash)
+          await tx.wait()
+        }
+      } catch (e) {
+        setError(e.error?.message)
+      } finally {
+        setPending(false)
       }
-
-      setPending(false)
     },
     [init]
   )
@@ -91,30 +110,6 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
               <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
                 {templateIdToLabel(data.auctionType)}
               </Typography>
-              {data.fundWallet && (
-                <>
-                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                    {i18n._(t`Fund Wallet`)}
-                  </Typography>
-                  <Typography weight={700} variant="sm" className="text-purple py-2 border-b border-dark-700">
-                    <a target="_blank" rel="noreferrer" href={getExplorerLink(chainId, data.fundWallet, 'address')}>
-                      {shortenString(data.fundWallet, 12)}
-                    </a>
-                  </Typography>
-                </>
-              )}
-              {data.operator && (
-                <>
-                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                    {i18n._(t`Admin`)}
-                  </Typography>
-                  <Typography weight={700} variant="sm" className="text-purple py-2 border-b border-dark-700">
-                    <a target="_blank" rel="noreferrer" href={getExplorerLink(chainId, data.operator, 'address')}>
-                      {shortenString(data.operator, 12)}
-                    </a>
-                  </Typography>
-                </>
-              )}
               {data.pointListAddress && (
                 <>
                   <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
@@ -273,6 +268,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss, 
               {i18n._(t`Create Auction`)}
             </HeadlessUIModal.Action>
           </HeadlessUIModal.Actions>
+          <HeadlessUIModal.Error>{error}</HeadlessUIModal.Error>
         </HeadlessUIModal.Body>
       ) : (
         <AuctionCreationSubmittedModalContent txHash={txHash} auctionAddress={auctionAddress} onDismiss={onDismiss} />

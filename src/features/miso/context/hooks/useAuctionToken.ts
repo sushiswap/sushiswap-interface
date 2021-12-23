@@ -35,25 +35,22 @@ const useAuctionToken = () => {
 
   const init = useCallback(
     async (name: string, symbol: string, totalSupply: number, tokenTemplateAddress: string) => {
-      if (!contract) return
+      if (!contract) throw new Error('Contract not initialized')
+      if (!account) throw new Error('Wallet not connected')
 
-      try {
-        const templateId = await contract.getTemplateId(tokenTemplateAddress)
-        const tx = await contract.createToken(
-          templateId,
-          account,
-          defaultAbiCoder.encode(
-            ['string', 'string', 'address', 'uint256'],
-            [name, symbol, account, toWei(totalSupply.toString())]
-          )
+      const templateId = await contract.getTemplateId(tokenTemplateAddress)
+      const tx = await contract.createToken(
+        templateId,
+        account,
+        defaultAbiCoder.encode(
+          ['string', 'string', 'address', 'uint256'],
+          [name, symbol, account, toWei(totalSupply.toString())]
         )
+      )
 
-        addTransaction(tx, { summary: 'Initialize Fixed Token' })
+      addTransaction(tx, { summary: 'Initialize Fixed Token' })
 
-        return tx
-      } catch (e) {
-        console.error('Initialize fixed token error: ', e)
-      }
+      return tx
     },
     [account, addTransaction, contract]
   )

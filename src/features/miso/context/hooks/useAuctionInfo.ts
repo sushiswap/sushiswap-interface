@@ -87,14 +87,14 @@ export const useAuctionDetails = (auctionAddress?: string) => {
     const [{ result: marketTemplate }, { result: pointList }] = results
     return {
       marketTemplateId: marketTemplate?.[0],
-      whitelist: pointList?.[0],
+      pointListAddress: pointList?.[0],
       loading: false,
     }
   }
 
   return {
     marketTemplateId: undefined,
-    whitelist: undefined,
+    pointListAddress: undefined,
     loading: results.some((el) => el.loading),
   }
 }

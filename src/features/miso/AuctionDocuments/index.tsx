@@ -47,7 +47,7 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           </Typography>
         </div>
 
-        {auction.whitelist?.length > 0 && (
+        {auction.pointListAddress?.length > 0 && (
           <div className="flex gap-1.5">
             <LockClosedIcon width={18} />
             <Typography variant="sm" weight={700} className="text-secondary">

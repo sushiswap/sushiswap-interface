@@ -15,8 +15,8 @@ export class Auction {
   public readonly auctionInfo: RawAuctionInfo
   public readonly marketInfo?: RawMarketInfo
   public readonly auctionDocuments: AuctionDocument
-  public readonly whitelist: string[]
-  public readonly ended?: boolean
+  public readonly pointListAddress: string
+  public readonly status: AuctionStatus
 
   public constructor({
     template,
@@ -25,8 +25,8 @@ export class Auction {
     auctionInfo,
     marketInfo,
     auctionDocuments,
-    whitelist,
-    ended,
+    pointListAddress,
+    status,
   }: {
     template: AuctionTemplate
     auctionToken: Token
@@ -34,8 +34,8 @@ export class Auction {
     auctionInfo: RawAuctionInfo
     marketInfo?: RawMarketInfo
     auctionDocuments: AuctionDocument
-    whitelist: string[]
-    ended?: boolean
+    pointListAddress: string
+    status: AuctionStatus
   }) {
     this.template = template
     this.auctionToken = auctionToken
@@ -43,8 +43,8 @@ export class Auction {
     this.paymentToken = paymentToken
     this.marketInfo = marketInfo
     this.auctionDocuments = auctionDocuments
-    this.whitelist = whitelist
-    this.ended = ended
+    this.pointListAddress = pointListAddress
+    this.status = status
   }
 
   public get isOwner(): boolean | undefined {
@@ -57,19 +57,20 @@ export class Auction {
     }
   }
 
-  public get status(): AuctionStatus {
-    const startTime = this.auctionInfo.startTime.mul('1000').toNumber()
-    const endTime = this.auctionInfo.endTime.mul('1000').toNumber()
-    const now = Date.now()
-
-    if (now >= startTime && now < endTime && !this.auctionInfo.finalized) return AuctionStatus.LIVE
-    if (now < startTime && !this.auctionInfo.finalized) return AuctionStatus.UPCOMING
-    return AuctionStatus.FINISHED
-  }
-
   public get remainingTime(): { days: number; hours: number; minutes: number; seconds: number } | undefined {
-    if (this.auctionInfo.finalized) return { days: 0, hours: 0, minutes: 0, seconds: 0 }
-    if (this.auctionInfo.endTime) {
+    if (this.status === AuctionStatus.UPCOMING) {
+      const now = Date.now()
+      const interval = this.auctionInfo.startTime.mul('1000').toNumber() - now
+
+      let days = Math.floor(interval / (1000 * 60 * 60 * 24))
+      let hours = Math.floor((interval % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      let minutes = Math.floor((interval % (1000 * 60 * 60)) / (1000 * 60))
+      let seconds = Math.floor((interval % (1000 * 60)) / 1000)
+
+      return { days, hours, minutes, seconds }
+    }
+
+    if (this.status === AuctionStatus.LIVE) {
       const now = Date.now()
       const interval = this.auctionInfo.endTime.mul('1000').toNumber() - now
 
@@ -80,6 +81,8 @@ export class Auction {
 
       return { days, hours, minutes, seconds }
     }
+
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 }
   }
 
   public get rate(): Price<Token, Currency> | undefined {
@@ -255,7 +258,7 @@ export class Auction {
   }
 
   public tokenAmount(amount: CurrencyAmount<Currency>): CurrencyAmount<Currency> | undefined {
-    if (!this.currentPrice) return
+    if (!this.currentPrice || !amount.greaterThan(0)) return
 
     if (this.template === AuctionTemplate.BATCH_AUCTION) {
       if (this.currentPrice.equalTo(ZERO)) return this.totalTokens
