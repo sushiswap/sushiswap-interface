@@ -3,7 +3,7 @@ import { AuctionTemplate } from 'app/features/miso/context/types'
 import { useContract } from 'app/hooks'
 import { useSingleCallResult } from 'app/state/multicall/hooks'
 
-export const useAuctionEnded = (address: string, auctionTemplate?: AuctionTemplate) => {
+export const useAuctionEnded = (address?: string, auctionTemplate?: AuctionTemplate) => {
   const { map } = useAuctionTemplateMap()
   const { abi } = auctionTemplate && map ? map[auctionTemplate] : { abi: undefined }
   const contract = useContract(address, abi)

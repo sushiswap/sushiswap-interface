@@ -36,7 +36,7 @@ const AuctionAdminFormWhitelistSection: FC<AuctionAdminFormWhitelistSectionProps
       </div>
       <WhitelistUploadField auction={auction} />
       <div className="col-span-6">
-        <WhitelistChecker listAddress={auction.whitelist?.[0]} paymentToken={auction.paymentToken} />
+        <WhitelistChecker listAddress={auction.pointListAddress} paymentToken={auction.paymentToken} />
       </div>
     </Form.Section>
   )

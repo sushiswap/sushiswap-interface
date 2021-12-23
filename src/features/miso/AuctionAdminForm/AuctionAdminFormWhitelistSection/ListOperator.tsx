@@ -18,7 +18,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
   const { i18n } = useLingui()
   const [pending, setPending] = useState<boolean>(false)
   const { updatePermissionList } = useAuctionEdit(auction.auctionInfo.addr, auction.template)
-  const [operator, setOperator] = useState<string>(auction.whitelist?.[0])
+  const [pointListAddress, setPointListAddress] = useState<string>(auction.pointListAddress)
   const [error, setError] = useState<string>()
 
   const docs = (
@@ -48,7 +48,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
           await tx.wait()
         }
       } catch (e) {
-        console.error('Changing permission status failed: ', e.message)
+        setError(e.error.message)
       } finally {
         setPending(false)
       }
@@ -66,9 +66,14 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
         <Typography weight={700}>{i18n._(t`Point List Address`)}</Typography>
         <div className="mt-2 flex rounded-md shadow-sm">
           <input
-            value={operator}
+            value={pointListAddress}
             onChange={(e) =>
-              pipeline({ value: e.target.value }, [isAddressValidator], () => setOperator(e.target.value), setError)
+              pipeline(
+                { value: e.target.value },
+                [isAddressValidator],
+                () => setPointListAddress(e.target.value),
+                setError
+              )
             }
             placeholder="0x..."
             className={classNames(DEFAULT_FORM_FIELD_CLASSNAMES, !!error ? '!border-red' : '')}
@@ -98,7 +103,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
       <div className="flex col-span-6 justify-end pt-8">
         <div>
           <Button
-            disabled={pending || auction.whitelist?.[0]?.toLowerCase() === operator?.toLowerCase()}
+            disabled={pending || auction.pointListAddress?.toLowerCase() === pointListAddress?.toLowerCase()}
             {...(pending && {
               startIcon: (
                 <div className="w-5 h-5 mr-1">
@@ -107,7 +112,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
               ),
             })}
             color="blue"
-            onClick={() => handlePermissionListOperator(operator)}
+            onClick={() => handlePermissionListOperator(pointListAddress)}
           >
             {i18n._(t`Update List Address`)}
           </Button>

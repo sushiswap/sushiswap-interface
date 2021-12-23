@@ -39,7 +39,6 @@ export interface AuctionCreationFormInputValidated {
   token: string
   tokenAmount: number
   paymentCurrencyAddress: string
-  fundWallet: string
   fixedPrice?: number
   minimumTarget?: number
   minimumRaised?: number
@@ -47,7 +46,6 @@ export interface AuctionCreationFormInputValidated {
   endPrice?: number
   startDate: string
   endDate: string
-  operator: string
   pointListAddress: string
 }
 
@@ -56,7 +54,6 @@ export interface AuctionCreationFormInputFormatted {
   auctionToken: Token
   tokenAmount: CurrencyAmount<Token>
   paymentCurrency: Currency
-  fundWallet: string
   fixedPrice?: Price<Token, Currency>
   minimumTarget?: CurrencyAmount<Currency>
   minimumRaised?: CurrencyAmount<Currency>
@@ -64,14 +61,12 @@ export interface AuctionCreationFormInputFormatted {
   endPrice?: Price<Token, Currency>
   startDate: Date
   endDate: Date
-  operator: string
   pointListAddress: string
 }
 
 const schema = yup.object().shape({
   auctionType: yup.number().required('Must select an auction type'),
   token: addressValidator.required('Must enter a valid ERC-20 address'),
-  operator: addressValidator.nullable().notRequired(),
   pointListAddress: addressValidator.nullable().notRequired(),
   tokenAmount: yup
     .number()
@@ -79,7 +74,6 @@ const schema = yup.object().shape({
     .moreThan(0, 'Token amount must be greater than zero')
     .required('Must enter a valid number'),
   paymentCurrencyAddress: addressValidator.required('Must enter a valid address'),
-  fundWallet: addressValidator.required('Must enter a valid address'),
   fixedPrice: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.CROWDSALE,
     then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
@@ -117,7 +111,7 @@ const schema = yup.object().shape({
 
 const AuctionCreationForm: FC = () => {
   const { query } = useRouter()
-  const { chainId, account } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [open, setOpen] = useState<boolean>(false)
   const methods = useForm<AuctionCreationFormInput>({
@@ -148,8 +142,8 @@ const AuctionCreationForm: FC = () => {
   const auctionToken = useToken(data.token) ?? undefined
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
   const formattedData =
-    auctionToken && paymentToken && !isValidating && isValid && account
-      ? formatCreationFormData(data as AuctionCreationFormInputValidated, auctionToken, paymentToken, account)
+    auctionToken && paymentToken && !isValidating && isValid
+      ? formatCreationFormData(data as AuctionCreationFormInputValidated, auctionToken, paymentToken)
       : undefined
 
   const handleSubmit = () => setOpen(true)

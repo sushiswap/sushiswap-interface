@@ -25,10 +25,16 @@ interface CommitReviewStandardModalProps {
   amount?: CurrencyAmount<Currency>
 }
 
-const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction, open, onDismiss, amount }) => {
+const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
+  auction,
+  open,
+  onDismiss: _onDismiss,
+  amount,
+}) => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
   const [txHash, setTxHash] = useState<string>()
+  const [error, setError] = useState<string>()
   const [attemptingTxn, setAttemptingTxn] = useState(false)
   const addTransaction = useTransactionAdder()
   const contract = useContract(
@@ -36,10 +42,17 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
     chainId && auction ? MisoAbiByTemplateId(chainId, auction.template) : undefined
   )
 
-  const _onDismiss = useCallback(() => {
-    setAttemptingTxn(false)
-    onDismiss()
-  }, [onDismiss])
+  const reset = useCallback(() => {
+    if (!attemptingTxn) {
+      setTxHash(undefined)
+      setError(undefined)
+    }
+  }, [attemptingTxn])
+
+  const onDismiss = useCallback(() => {
+    reset()
+    _onDismiss()
+  }, [_onDismiss, reset])
 
   const execute = useCallback(async () => {
     if (!contract || !amount || !amount.greaterThan(ZERO)) return
@@ -60,10 +73,9 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
       addTransaction(tx, {
         summary: i18n._(t`Committed ${amount?.toSignificant(6)} ${amount.currency.symbol}`),
       })
-
-      setAttemptingTxn(false)
     } catch (e) {
-      console.error(e)
+      setError(e.error.message)
+    } finally {
       setAttemptingTxn(false)
     }
   }, [account, addTransaction, amount, auction.paymentToken.isNative, contract, i18n])
@@ -71,7 +83,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
-    <HeadlessUIModal.Controlled isOpen={open} onDismiss={_onDismiss} afterLeave={() => setTxHash(undefined)}>
+    <HeadlessUIModal.Controlled isOpen={open} onDismiss={onDismiss} afterLeave={() => setTxHash(undefined)}>
       {!txHash ? (
         <>
           <HeadlessUIModal.Body>
@@ -132,13 +144,14 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({ auction
                   </div>
                 </div>
               </div>
-              <HeadlessUIModal.Actions>
-                <HeadlessUIModal.Action onClick={onDismiss}>{i18n._(t`Cancel`)}</HeadlessUIModal.Action>
-                <HeadlessUIModal.Action main={true} disabled={attemptingTxn} onClick={execute}>
-                  {i18n._(t`Confirm Commit`)}
-                </HeadlessUIModal.Action>
-              </HeadlessUIModal.Actions>
             </HeadlessUIModal.Content>
+            <HeadlessUIModal.Actions>
+              <HeadlessUIModal.Action onClick={onDismiss}>{i18n._(t`Cancel`)}</HeadlessUIModal.Action>
+              <HeadlessUIModal.Action main={true} disabled={attemptingTxn} onClick={execute}>
+                {i18n._(t`Confirm Commit`)}
+              </HeadlessUIModal.Action>
+            </HeadlessUIModal.Actions>
+            <HeadlessUIModal.Error>{error}</HeadlessUIModal.Error>
           </HeadlessUIModal.Body>
         </>
       ) : (

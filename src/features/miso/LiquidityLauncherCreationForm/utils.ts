@@ -11,7 +11,6 @@ export const formatData = (
   return {
     auctionAddress: auction.auctionInfo.addr,
     adminAddress: data.adminAddress,
-    lpOwnerAddress: data.lpOwnerAddress,
     liqPercentage: data.liqPercentage,
     liqLockTime: data.liqLockTime * 3600 * 24,
     tokenAddress: auction.auctionToken.address,

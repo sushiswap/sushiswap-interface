@@ -46,7 +46,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
       <div className="flex flex-col gap-3 bg-dark-900/95 backdrop-blur-[10px] filter">
         <div className="flex justify-between items-center pl-3 pr-3 pt-3">
           <div className="flex gap-2">
-            {auction.whitelist.length > 0 && (
+            {auction.pointListAddress.length > 0 && (
               <div className="flex gap-1.5 items-center">
                 <LockClosedIcon width={14} />
                 <Typography variant="xxs" weight={700} className="text-secondary">

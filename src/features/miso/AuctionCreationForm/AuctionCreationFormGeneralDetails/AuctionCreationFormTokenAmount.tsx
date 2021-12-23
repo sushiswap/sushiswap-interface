@@ -63,7 +63,7 @@ const AuctionCreationFormTokenAmount: FC<AuctionCreationFormTokenProps> = ({}) =
               ),
             })}
             error={
-              auctionToken === undefined && !errors['token']
+              auctionToken === undefined && !errors['token'] && data.token && data.token.length > 0
                 ? i18n._(t`Token does not exist`)
                 : approvalState === ApprovalState.NOT_APPROVED
                 ? i18n._(t`Not enough allowance, please approve to increase your allowance`)

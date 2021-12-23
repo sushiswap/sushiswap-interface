@@ -42,7 +42,7 @@ export const useAuctionPointListPoints = (
 }
 
 export const useAuctionPointListFunctions = () => {
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const contract = useContract(
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ListFactory.address : undefined,
@@ -68,19 +68,16 @@ export const useAuctionPointListFunctions = () => {
   )
 
   const init = useCallback(
-    async (owner: string, accounts: string[], amounts: string[]) => {
-      if (!contract) return
+    async (accounts: string[], amounts: string[]) => {
+      if (!contract) throw new Error('Contract not initialized')
+      if (!account) throw new Error('Wallet not connected')
 
-      try {
-        const tx = await contract.deployPointList(owner, accounts, amounts)
-        addTransaction(tx, { summary: 'Initialize permission list' })
+      const tx = await contract.deployPointList(account, accounts, amounts)
+      addTransaction(tx, { summary: 'Initialize permission list' })
 
-        return tx
-      } catch (e) {
-        console.error('Initialize permission list error: ', e)
-      }
+      return tx
     },
-    [addTransaction, contract]
+    [account, addTransaction, contract]
   )
 
   return {

@@ -12,7 +12,7 @@ import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
 const useAuctionCreate = () => {
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const { map: auctionTemplateMap } = useAuctionTemplateMap()
   const contract = useContract(
@@ -38,91 +38,100 @@ const useAuctionCreate = () => {
     [contract]
   )
 
-  const _dutchAuctionData = useCallback((data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
-    if (!data.startPrice || !data.endPrice) throw new Error('Invalid inputs')
+  const _dutchAuctionData = useCallback(
+    (data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
+      if (!data.startPrice || !data.endPrice) throw new Error('Invalid inputs')
 
-    return defaultAbiCoder.encode(
-      [
-        'address',
-        'address',
-        'uint256',
-        'uint256',
-        'uint256',
-        'address',
-        'uint256',
-        'uint256',
-        'address',
-        'address',
-        'address',
-      ],
-      [
-        marketFactoryAddress,
-        data.auctionToken.address,
-        data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
-        data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
-        data.startPrice.numerator.toString(),
-        data.endPrice.numerator.toString(),
-        data.operator,
-        data.pointListAddress,
-        data.fundWallet,
-      ]
-    )
-  }, [])
+      return defaultAbiCoder.encode(
+        [
+          'address',
+          'address',
+          'uint256',
+          'uint256',
+          'uint256',
+          'address',
+          'uint256',
+          'uint256',
+          'address',
+          'address',
+          'address',
+        ],
+        [
+          marketFactoryAddress,
+          data.auctionToken.address,
+          data.tokenAmount.quotient.toString(),
+          data.startDate.getTime() / 1000,
+          data.endDate.getTime() / 1000,
+          data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
+          data.startPrice.numerator.toString(),
+          data.endPrice.numerator.toString(),
+          account,
+          data.pointListAddress,
+          account,
+        ]
+      )
+    },
+    [account]
+  )
 
-  const _batchAuctionData = useCallback((data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
-    if (!data.minimumRaised) throw new Error('Invalid inputs')
+  const _batchAuctionData = useCallback(
+    (data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
+      if (!data.minimumRaised) throw new Error('Invalid inputs')
 
-    return defaultAbiCoder.encode(
-      ['address', 'address', 'uint256', 'uint256', 'uint256', 'address', 'uint256', 'address', 'address', 'address'],
-      [
-        marketFactoryAddress,
-        data.auctionToken.address,
-        data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
-        data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
-        data.minimumRaised.quotient.toString(),
-        data.operator,
-        data.pointListAddress,
-        data.fundWallet,
-      ]
-    )
-  }, [])
+      return defaultAbiCoder.encode(
+        ['address', 'address', 'uint256', 'uint256', 'uint256', 'address', 'uint256', 'address', 'address', 'address'],
+        [
+          marketFactoryAddress,
+          data.auctionToken.address,
+          data.tokenAmount.quotient.toString(),
+          data.startDate.getTime() / 1000,
+          data.endDate.getTime() / 1000,
+          data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
+          data.minimumRaised.quotient.toString(),
+          account,
+          data.pointListAddress,
+          account,
+        ]
+      )
+    },
+    [account]
+  )
 
-  const _crowdsaleAuctionData = useCallback((data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
-    if (!data.fixedPrice || !data.minimumTarget) throw new Error('Invalid inputs')
+  const _crowdsaleAuctionData = useCallback(
+    (data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
+      if (!data.fixedPrice || !data.minimumTarget) throw new Error('Invalid inputs')
 
-    return defaultAbiCoder.encode(
-      [
-        'address',
-        'address',
-        'address',
-        'uint256',
-        'uint256',
-        'uint256',
-        'uint256',
-        'uint256',
-        'address',
-        'address',
-        'address',
-      ],
-      [
-        marketFactoryAddress,
-        data.auctionToken.address,
-        data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
-        data.tokenAmount.quotient.toString(),
-        data.startDate.getTime() / 1000,
-        data.endDate.getTime() / 1000,
-        data.fixedPrice.numerator.toString(),
-        data.minimumTarget.quotient.toString(),
-        data.operator,
-        data.pointListAddress,
-        data.fundWallet,
-      ]
-    )
-  }, [])
+      return defaultAbiCoder.encode(
+        [
+          'address',
+          'address',
+          'address',
+          'uint256',
+          'uint256',
+          'uint256',
+          'uint256',
+          'uint256',
+          'address',
+          'address',
+          'address',
+        ],
+        [
+          marketFactoryAddress,
+          data.auctionToken.address,
+          data.paymentCurrency.isNative ? NATIVE_PAYMENT_TOKEN : data.paymentCurrency.wrapped.address,
+          data.tokenAmount.quotient.toString(),
+          data.startDate.getTime() / 1000,
+          data.endDate.getTime() / 1000,
+          data.fixedPrice.numerator.toString(),
+          data.minimumTarget.quotient.toString(),
+          account,
+          data.pointListAddress,
+          account,
+        ]
+      )
+    },
+    [account]
+  )
 
   const getAuctionData = useCallback(
     (data: AuctionCreationFormInputFormatted, marketFactoryAddress: string) => {
@@ -138,38 +147,25 @@ const useAuctionCreate = () => {
   const init = useCallback(
     async (data: AuctionCreationFormInputFormatted) => {
       const marketFactoryAddress = auctionTemplateMap?.[data.auctionType]?.address
-      if (!contract || !marketFactoryAddress) return
+      if (!contract) throw new Error('Contract not initialized')
+      if (!marketFactoryAddress) throw new Error('Market factory address not found')
+      if (!account) throw new Error('Wallet not connected')
 
-      let templateId
-      try {
-        // Get auction type template ID first
-        templateId = await contract.getTemplateId(marketFactoryAddress)
-        const tx = await contract.createMarket(
-          templateId,
-          data.auctionToken.address,
-          data.tokenAmount.quotient.toString(),
-          AddressZero, // feeIntegrator
-          getAuctionData(data, contract.address)
-        )
+      // Get auction type template ID first
+      const templateId = await contract.getTemplateId(marketFactoryAddress)
+      const tx = await contract.createMarket(
+        templateId,
+        data.auctionToken.address,
+        data.tokenAmount.quotient.toString(),
+        AddressZero, // feeIntegrator
+        getAuctionData(data, contract.address)
+      )
 
-        addTransaction(tx, { summary: 'Create Auction' })
+      addTransaction(tx, { summary: 'Create Auction' })
 
-        return tx
-      } catch (e) {
-        console.error('Initialize fixed token error: ', e)
-        console.log(
-          contract.address,
-          contract.interface.encodeFunctionData('createMarket', [
-            templateId,
-            data.auctionToken.address,
-            data.tokenAmount.quotient.toString(),
-            AddressZero,
-            getAuctionData(data, contract.address),
-          ])
-        )
-      }
+      return tx
     },
-    [addTransaction, auctionTemplateMap, contract, getAuctionData]
+    [account, addTransaction, auctionTemplateMap, contract, getAuctionData]
   )
 
   return {
