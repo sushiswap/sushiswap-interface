@@ -24,7 +24,7 @@ const WhitelistUploadField: FC<WhitelistUploadFieldProps> = ({ auction }) => {
     auction.auctionInfo.addr,
     auction.template,
     auction.auctionInfo.liquidityTemplate,
-    auction.whitelist?.[0]
+    auction.pointListAddress
   )
 
   const handleUpdatePointList = useCallback(async () => {
@@ -61,7 +61,7 @@ const WhitelistUploadField: FC<WhitelistUploadFieldProps> = ({ auction }) => {
     <>
       <WhitelistUpload
         value={wlAddresses}
-        disabled={!!(auction?.auctionInfo.usePointList && !auction.whitelist?.[0])}
+        disabled={!!(auction?.auctionInfo.usePointList && !auction.pointListAddress)}
         onChange={setWlAddresses}
       />
       <div className="flex justify-end col-span-6">

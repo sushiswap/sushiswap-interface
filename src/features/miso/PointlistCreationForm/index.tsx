@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react'
 import { NATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Form from 'app/components/Form'
-import FormFieldHelperText from 'app/components/Form/FormFieldHelperText'
 import WhitelistChecker from 'app/features/miso/AuctionAdminForm/AuctionAdminFormWhitelistSection/WhitelistChecker'
 import AuctionPaymentCurrencyField from 'app/features/miso/AuctionAdminForm/AuctionPaymentCurrencyField'
 import { WhitelistEntry } from 'app/features/miso/context/types'
@@ -18,13 +17,11 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
 export interface PointListFormInputs {
-  owner: string
   paymentTokenAddress: string
   wlAddresses: WhitelistEntry[]
 }
 
 const schema = yup.object({
-  owner: addressValidator.required('Permission list must have an owner address'),
   paymentTokenAddress: addressValidator.required(
     'Permission list must have a payment token address for decimals calculation'
   ),
@@ -38,7 +35,6 @@ const PointlistCreationFormSetup: FC = () => {
   const methods = useForm<PointListFormInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
-      owner: '',
       paymentTokenAddress: '',
       wlAddresses: [],
     },
@@ -65,18 +61,6 @@ const PointlistCreationFormSetup: FC = () => {
       <Form {...methods} onSubmit={methods.handleSubmit(onSubmit)}>
         <Form.Card>
           <Form.Section columns={6} header={<Form.Section.Header header={i18n._(t`General Details`)} />}>
-            <div className="col-span-6">
-              <Form.TextField
-                name="owner"
-                label={i18n._(t`List Owner Address*`)}
-                helperText={
-                  <FormFieldHelperText className="underline cursor-pointer" onClick={() => setValue('owner', account)}>
-                    {i18n._(t`Use my address`)}
-                  </FormFieldHelperText>
-                }
-                placeholder="0x..."
-              />
-            </div>
             <div className="col-span-6">
               <AuctionPaymentCurrencyField name="paymentTokenAddress" label={i18n._(t`Auction Payment Currency*`)} />
             </div>

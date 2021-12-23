@@ -2,7 +2,12 @@ import { t } from '@lingui/macro'
 import { CHAIN_KEY, ChainId, NATIVE, Token } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import { NATIVE_PAYMENT_TOKEN } from 'app/features/miso/context/constants'
-import { AuctionPaymentCurrencyInfo, AuctionTemplate } from 'app/features/miso/context/types'
+import {
+  AuctionPaymentCurrencyInfo,
+  AuctionStatus,
+  AuctionTemplate,
+  RawAuctionInfo,
+} from 'app/features/miso/context/types'
 
 export const AuctionStatusById = (i18n) => ({
   1: i18n._(t`LIVE`),
@@ -304,4 +309,15 @@ export const getNativeOrToken = (chainId: ChainId, paymentCurrencyInfo: AuctionP
         paymentCurrencyInfo.symbol,
         paymentCurrencyInfo.name
       )
+}
+
+export const getStatusByTimestamp = (auctionInfo: RawAuctionInfo, auctionEnded?: boolean) => {
+  const startTime = auctionInfo.startTime.toNumber()
+  const endTime = auctionInfo.endTime.toNumber()
+  const now = Date.now() / 1000
+
+  if (typeof auctionEnded !== 'undefined' && auctionEnded) return AuctionStatus.FINISHED
+  if (now >= startTime && now < endTime && !auctionInfo.finalized) return AuctionStatus.LIVE
+  if (now < startTime && !auctionInfo.finalized) return AuctionStatus.UPCOMING
+  return AuctionStatus.FINISHED
 }

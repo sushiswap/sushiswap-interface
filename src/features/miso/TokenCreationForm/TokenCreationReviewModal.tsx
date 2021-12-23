@@ -16,25 +16,45 @@ interface TokenCreationModalProps {
   data: TokenCreationFormInput
 }
 
-const TokenCreationModal: FC<TokenCreationModalProps> = ({ open, onDismiss, data }) => {
+const TokenCreationModal: FC<TokenCreationModalProps> = ({ open, onDismiss: _onDismiss, data }) => {
   const { i18n } = useLingui()
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState<boolean>(false)
   const { init, subscribe, unsubscribe } = useAuctionToken()
   const [tokenAddress, setTokenAddress] = useState<string>()
+  const [error, setError] = useState<string>()
+
   const { map: tokenTemplateMap, templateIdToLabel } = useTokenTemplateMap()
+
+  const reset = useCallback(() => {
+    if (!pending) {
+      setTokenAddress(undefined)
+      setTxHash(undefined)
+      setError(undefined)
+    }
+  }, [pending])
+
+  const onDismiss = useCallback(() => {
+    reset()
+    _onDismiss()
+  }, [_onDismiss, reset])
 
   const execute = useCallback(
     async (data: TokenCreationFormInput) => {
       setPending(true)
-      const tx = await init(data.tokenName, data.tokenSymbol, data.tokenSupply, data.tokenTypeAddress)
 
-      if (tx?.hash) {
-        setTxHash(tx.hash)
-        await tx.wait()
+      try {
+        const tx = await init(data.tokenName, data.tokenSymbol, data.tokenSupply, data.tokenTypeAddress)
+
+        if (tx?.hash) {
+          setTxHash(tx.hash)
+          await tx.wait()
+        }
+      } catch (e) {
+        setError(e.error?.message)
+      } finally {
+        setPending(false)
       }
-
-      setPending(false)
     },
     [init]
   )
@@ -115,6 +135,7 @@ const TokenCreationModal: FC<TokenCreationModalProps> = ({ open, onDismiss, data
               {i18n._(t`Create Token`)}
             </HeadlessUIModal.Action>
           </HeadlessUIModal.Actions>
+          <HeadlessUIModal.Error>{error}</HeadlessUIModal.Error>
         </HeadlessUIModal.Body>
       ) : (
         <TokenCreationSubmittedModalContent txHash={txHash} tokenAddress={tokenAddress} onDismiss={onDismiss} />

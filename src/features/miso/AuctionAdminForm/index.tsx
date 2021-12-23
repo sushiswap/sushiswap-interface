@@ -68,7 +68,8 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
               ...prevAuction.auctionDocuments,
               ...data,
             },
-            whitelist: prevAuction.whitelist,
+            pointListAddress: prevAuction.pointListAddress,
+            status: prevAuction.status,
           })
       )
     })

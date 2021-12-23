@@ -21,7 +21,7 @@ interface PointlistCreationModalProps {
   data: PointListFormInputs
 }
 
-const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismiss, data }) => {
+const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismiss: _onDismiss, data }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { init, unsubscribe, subscribe } = useAuctionPointListFunctions()
@@ -30,6 +30,20 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
   const [txHash, setTxHash] = useState<string>()
   const [pending, setPending] = useState(false)
   const token = useToken(data.paymentTokenAddress) ?? NATIVE[chainId || 1]
+  const [error, setError] = useState<string>()
+
+  const reset = useCallback(() => {
+    if (!pending) {
+      setListAddress(undefined)
+      setTxHash(undefined)
+      setError(undefined)
+    }
+  }, [pending])
+
+  const onDismiss = useCallback(() => {
+    reset()
+    _onDismiss()
+  }, [_onDismiss, reset])
 
   const execute = useCallback(
     async (data: PointListFormInputs) => {
@@ -51,14 +65,18 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
         [[], []]
       )
 
-      const tx = await init(data.owner, accounts, amounts)
+      try {
+        const tx = await init(accounts, amounts)
 
-      if (tx?.hash) {
-        setTxHash(tx.hash)
-        await tx.wait()
+        if (tx?.hash) {
+          setTxHash(tx.hash)
+          await tx.wait()
+        }
+      } catch (e) {
+        setError(e.error?.message)
+      } finally {
+        setPending(false)
       }
-
-      setPending(false)
     },
     [init, token]
   )
@@ -87,14 +105,6 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
           <HeadlessUIModal.Content>
             <div className="flex flex-col gap-4">
               <div className="flex flex-col divide-y divide-dark-700">
-                <div className="flex justify-between gap-2 py-3">
-                  <Typography variant="sm" className="text-secondary">
-                    {i18n._(t`List Owner`)}
-                  </Typography>
-                  <Typography weight={700} variant="sm" className="text-high-emphesis">
-                    {shortenString(data.owner, 12)}
-                  </Typography>
-                </div>
                 <div className="flex justify-between gap-2 py-3">
                   <Typography variant="sm" className="text-secondary">
                     {i18n._(t`Auction Payment Token`)}
@@ -131,6 +141,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
               {i18n._(t`Create Permission List`)}
             </HeadlessUIModal.Action>
           </HeadlessUIModal.Actions>
+          <HeadlessUIModal.Error>{error}</HeadlessUIModal.Error>
         </HeadlessUIModal.Body>
       ) : (
         <PointlistCreationSubmittedModalContent txHash={txHash} listAddress={listAddress} onDismiss={onDismiss} />

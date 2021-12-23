@@ -1,11 +1,12 @@
 import { Token } from '@sushiswap/core-sdk'
 import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
+import { useAuctionEnded } from 'app/features/miso/context/hooks/useAuctionEnded'
 import { useAuctionDetails, useAuctionHelperInfo } from 'app/features/miso/context/hooks/useAuctionInfo'
 import { useAuctionMarketTemplateIds } from 'app/features/miso/context/hooks/useAuctionMarketTemplateIds'
 import { useAuctionPointLists } from 'app/features/miso/context/hooks/useAuctionPointList'
 import { useAuctionRawInfos } from 'app/features/miso/context/hooks/useAuctionRawInfo'
 import { AuctionStatus } from 'app/features/miso/context/types'
-import { getNativeOrToken } from 'app/features/miso/context/utils'
+import { getNativeOrToken, getStatusByTimestamp } from 'app/features/miso/context/utils'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
 
@@ -21,7 +22,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
   const auctionTemplateIds = useAuctionMarketTemplateIds(addresses)
   const auctionInfos = useAuctionRawInfos(addresses, auctionTemplateIds)
   const auctionDocuments = useAuctionDocuments(addresses)
-  const whitelists = useAuctionPointLists(addresses)
+  const pointListAddresses = useAuctionPointLists(addresses)
 
   return useMemo(() => {
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
@@ -32,7 +33,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
         const auctionInfo = auctionInfos[index]
         const marketInfo = userMarketInfos[index]
         const auctionDocs = auctionDocuments[index]
-        const whitelist = whitelists[index]
+        const pointListAddress = pointListAddresses[index]
         const paymentToken = auctionInfo ? getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo) : undefined
 
         // If owner is set and we're not owner of this auction, filter out
@@ -40,7 +41,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
           return acc
         }
 
-        if (template && auctionInfo && paymentToken && auctionDocs && whitelist) {
+        if (template && auctionInfo && paymentToken && auctionDocs && pointListAddress) {
           acc.push(
             new Auction({
               template,
@@ -55,7 +56,8 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
               auctionInfo,
               marketInfo,
               auctionDocuments: auctionDocs,
-              whitelist,
+              pointListAddress,
+              status: getStatusByTimestamp(auctionInfo),
             })
           )
         } else {
@@ -74,12 +76,24 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
         // Show latest expired first
         return a.auctionInfo.endTime.toNumber() <= b.auctionInfo.endTime.toNumber() ? 1 : -1
       })
-  }, [auctionDocuments, auctionInfos, auctionTemplateIds, auctions, chainId, owner, type, userMarketInfos, whitelists])
+  }, [
+    auctionDocuments,
+    auctionInfos,
+    auctionTemplateIds,
+    auctions,
+    chainId,
+    owner,
+    pointListAddresses,
+    type,
+    userMarketInfos,
+  ])
 }
 
 export const useAuction = (address?: string, owner?: string) => {
   const { chainId } = useActiveWeb3React()
-  const { marketTemplateId, whitelist, loading: loadingDetails } = useAuctionDetails(address)
+  const { marketTemplateId, pointListAddress, loading: loadingDetails } = useAuctionDetails(address)
+  const auctionEnded = useAuctionEnded(address, marketTemplateId)
+
   const {
     auctionDocuments,
     marketInfo,
@@ -109,11 +123,13 @@ export const useAuction = (address?: string, owner?: string) => {
         auctionInfo,
         marketInfo,
         auctionDocuments,
-        whitelist,
+        pointListAddress,
+        status: getStatusByTimestamp(auctionInfo, auctionEnded),
       }),
     }
   }, [
     auctionDocuments,
+    auctionEnded,
     auctionInfo,
     chainId,
     loadingDetails,
@@ -121,7 +137,7 @@ export const useAuction = (address?: string, owner?: string) => {
     marketInfo,
     marketTemplateId,
     owner,
-    whitelist,
+    pointListAddress,
   ])
 }
 

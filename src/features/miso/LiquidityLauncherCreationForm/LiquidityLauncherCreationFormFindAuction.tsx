@@ -54,28 +54,6 @@ const LiquidityLauncherCreationFormFindAuction: FC<LiquidityLauncherCreationForm
       </div>
       <div className="col-span-4">
         <Form.TextField
-          name="lpOwnerAddress"
-          label={i18n._(t`LP Token Owner Address*`)}
-          placeholder="0x..."
-          helperText={
-            <>
-              <FormFieldHelperText>
-                {i18n._(
-                  t`Wallet address that will hold the created LP tokens as well as any remaining base pair tokens. Can be the token creator address, or any other wallet address you have access to.`
-                )}
-              </FormFieldHelperText>
-              <FormFieldHelperText
-                className="underline cursor-pointer"
-                onClick={() => setValue('lpOwnerAddress', account || '')}
-              >
-                {i18n._(t`Use my address`)}
-              </FormFieldHelperText>
-            </>
-          }
-        />
-      </div>
-      <div className="col-span-4">
-        <Form.TextField
           name="auctionAddress"
           label={i18n._(t`Auction Address*`)}
           placeholder="0x..."
