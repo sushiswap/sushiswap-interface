@@ -1,5 +1,5 @@
-import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ACTION_ACCRUE } from '@sushiswap/sdk'
 import React, { useMemo } from 'react'
 
@@ -11,6 +11,7 @@ import { ZERO } from '../../functions/math'
 import useKashiApproveCallback from '../../hooks/useKashiApproveCallback'
 
 export default function PairTools({ pair }) {
+  const { i18n } = useLingui()
   const [, , , , onCook] = useKashiApproveCallback()
 
   async function onUpdatePrice(cooker: KashiCooker): Promise<string> {
@@ -34,17 +35,16 @@ export default function PairTools({ pair }) {
 
   return (
     <div className="flex flex-row flex-shrink space-x-2">
-      <QuestionHelper fullWidth text={'Sync Market APR to Supply APR'}>
+      <QuestionHelper text={'Sync Market APR to Supply APR'}>
         <Button color="gradient" variant="outlined" size="xs" className="w-full" onClick={() => onCook(pair, onAccrue)}>
-          Accrue
+          {i18n._(t`Accrue`)}
         </Button>
       </QuestionHelper>
       <QuestionHelper
-        fullWidth={true}
         text={
           <div>
-            <div>Update the exchange rate</div>
-            <div>Current deviation: {formatPercent(priceChange)}</div>
+            <div>{i18n._(t`Update the exchange rate`)}</div>
+            <div>{i18n._(t`Current deviation: ${formatPercent(priceChange)}`)}</div>
           </div>
         }
       >
@@ -55,7 +55,7 @@ export default function PairTools({ pair }) {
           className="w-full"
           onClick={() => onCook(pair, onUpdatePrice)}
         >
-          Update Price
+          {i18n._(t`Update Price`)}
         </Button>
       </QuestionHelper>
     </div>

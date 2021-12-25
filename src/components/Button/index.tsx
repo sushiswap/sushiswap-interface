@@ -67,32 +67,38 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   ref?: React.Ref<HTMLButtonElement>
 }
 
-function Button({
-  children,
-  className = '',
-  color = 'default',
-  size = 'default',
-  variant = 'filled',
-  startIcon = undefined,
-  endIcon = undefined,
-  ...rest
-}: ButtonProps): JSX.Element {
-  return (
-    <button
-      className={classNames(
-        rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
-        variant !== 'empty' && SIZE[size],
-        'hover:text-white font-bold rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
-        className
-      )}
-      {...rest}
-    >
-      {startIcon && startIcon}
-      {children}
-      {endIcon && endIcon}
-    </button>
-  )
-}
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      children,
+      className = '',
+      color = 'default',
+      size = 'default',
+      variant = 'filled',
+      startIcon = undefined,
+      endIcon = undefined,
+      ...rest
+    },
+    ref
+  ) => {
+    return (
+      <button
+        ref={ref}
+        className={classNames(
+          rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
+          variant !== 'empty' && SIZE[size],
+          'hover:text-white font-bold rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
+          className
+        )}
+        {...rest}
+      >
+        {startIcon && startIcon}
+        {children}
+        {endIcon && endIcon}
+      </button>
+    )
+  }
+)
 
 export function ButtonConfirmed({
   confirmed,
