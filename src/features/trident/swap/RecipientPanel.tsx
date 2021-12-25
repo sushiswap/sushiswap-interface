@@ -42,9 +42,10 @@ const RecipientPanel = () => {
     return (
       <div className="flex justify-center">
         <Typography
+          id="btn-add-recipient"
           variant="sm"
           weight={700}
-          className="text-blue cursor-pointer py-1"
+          className="py-1 cursor-pointer text-blue"
           onClick={() => setRecipient('')}
         >
           {i18n._(t`+ Add Recipient (optional)`)}
@@ -60,7 +61,7 @@ const RecipientPanel = () => {
         'border border-dark-700 flex flex-col lg:p-5 rounded lg:gap-3'
       )}
     >
-      <div className="flex justify-between border-b border-dark-700 lg:border-transparent lg:p-0 px-4 py-2">
+      <div className="flex justify-between px-4 py-2 border-b border-dark-700 lg:border-transparent lg:p-0">
         <Typography variant="xs" className="text-secondary" weight={700}>
           {i18n._(t`Send to:`)}
         </Typography>
@@ -70,6 +71,7 @@ const RecipientPanel = () => {
       </div>
       <div className="flex flex-col">
         <Input.Address
+          id="recipient-input"
           placeholder={i18n._(t`Wallet address or ENS name`)}
           onUserInput={setRecipient}
           value={recipient}

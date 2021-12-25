@@ -11,17 +11,25 @@ export interface PopoverProps {
   children: React.ReactNode
   placement?: Placement
   show?: boolean
+  modifiers?: any[]
   fullWidth?: boolean
 }
 
-export default function Popover({ content, children, placement = 'auto', show, fullWidth = false }: PopoverProps) {
+export default function Popover({
+  content,
+  children,
+  placement = 'auto',
+  show,
+  modifiers,
+  fullWidth = false,
+}: PopoverProps) {
   const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null)
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null)
   const { styles, update, attributes } = usePopper(referenceElement, popperElement, {
     placement,
     strategy: 'fixed',
-    modifiers: [
+    modifiers: modifiers || [
       { name: 'offset', options: { offset: [0, 8] } },
       { name: 'arrow', options: { element: arrowElement } },
     ],

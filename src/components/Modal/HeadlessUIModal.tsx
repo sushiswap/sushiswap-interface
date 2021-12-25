@@ -1,4 +1,11 @@
 import { Dialog, Transition } from '@headlessui/react'
+import ModalAction, { ModalActionProps } from 'app/components/Modal/Action'
+import ModalActions, { ModalActionsProps } from 'app/components/Modal/Actions'
+import ModalBody, { ModalBodyProps } from 'app/components/Modal/Body'
+import ModalContent, { ModalContentProps } from 'app/components/Modal/Content'
+import ModalError, { ModalActionErrorProps } from 'app/components/Modal/Error'
+import ModalHeader, { ModalHeaderProps } from 'app/components/Modal/Header'
+import SubmittedModalContent, { SubmittedModalContentProps } from 'app/components/Modal/SubmittedModalContent'
 import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react'
 import React, { Fragment } from 'react'
 
@@ -17,6 +24,13 @@ interface Props {
 
 type HeadlessUiModalType<P> = FC<P> & {
   Controlled: FC<ControlledModalProps>
+  Body: FC<ModalBodyProps>
+  Actions: FC<ModalActionsProps>
+  Content: FC<ModalContentProps>
+  Header: FC<ModalHeaderProps>
+  Action: FC<ModalActionProps>
+  SubmittedModalContent: FC<SubmittedModalContentProps>
+  Error: FC<ModalActionErrorProps>
 }
 
 const HeadlessUiModal: HeadlessUiModalType<Props> = ({ children: childrenProp, trigger: triggerProp }) => {
@@ -76,7 +90,11 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
     <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave}>
       <Dialog
         as="div"
-        className={classNames('fixed z-10 inset-0 overflow-y-auto', isDesktop ? '' : 'bg-dark-900', className)}
+        className={classNames(
+          'fixed z-10 inset-0 overflow-y-auto',
+          isDesktop ? '' : 'bg-dark-900 pt-[64px]',
+          className
+        )}
         onClose={onDismiss}
       >
         {isDesktop ? (
@@ -126,4 +144,12 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
 }
 
 HeadlessUiModal.Controlled = HeadlessUiModalControlled
+HeadlessUiModal.Header = ModalHeader
+HeadlessUiModal.Body = ModalBody
+HeadlessUiModal.Content = ModalContent
+HeadlessUiModal.Actions = ModalActions
+HeadlessUiModal.Action = ModalAction
+HeadlessUiModal.Error = ModalError
+HeadlessUiModal.SubmittedModalContent = SubmittedModalContent
+
 export default HeadlessUiModal

@@ -1,9 +1,14 @@
 import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, ReactNode, useCallback, useState } from 'react'
 
 import Tooltip from '../Tooltip'
 
-const QuestionHelper: FC<{ text?: any; fullWidth?: boolean }> = ({ children, text, fullWidth = false }) => {
+const QuestionHelper: FC<{ text?: any; icon?: ReactNode; fullWidth?: boolean }> = ({
+  children,
+  text,
+  icon = <SolidQuestionMarkCircleIcon width={16} height={16} />,
+  fullWidth = false,
+}) => {
   const [show, setShow] = useState<boolean>(false)
 
   const open = useCallback(() => setShow(true), [setShow])
@@ -33,7 +38,7 @@ const QuestionHelper: FC<{ text?: any; fullWidth?: boolean }> = ({ children, tex
           onMouseEnter={open}
           onMouseLeave={close}
         >
-          <SolidQuestionMarkCircleIcon width={16} height={16} />
+          {icon}
         </div>
       </Tooltip>
     </span>

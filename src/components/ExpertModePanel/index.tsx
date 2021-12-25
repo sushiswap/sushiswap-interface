@@ -22,7 +22,7 @@ const ExpertModePanel: FC<ExpertModePanelProps> = ({ active, children, onClose }
           </div>
         </div>
       </div>
-      <div className="border border-[2px] border-gray-800 rounded bg-dark-900">{children}</div>
+      <div className="border border-[2px] border-dark-800 rounded bg-dark-900">{children}</div>
     </div>
   )
 }

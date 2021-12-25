@@ -88,6 +88,7 @@ const WrapButton: FC = () => {
         return (
           <div className="flex">
             <Button
+              id="wrap-button"
               className="h-[48px]"
               {...(loading && {
                 startIcon: (

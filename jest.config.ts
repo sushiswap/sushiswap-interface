@@ -6,6 +6,11 @@ const config: Config.InitialOptions = {
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   moduleNameMapper: {
     '^app/(.*)$': '<rootDir>/src/$1',
+    '^functions/(.*)$': '<rootDir>/src/functions/$1',
+    '^config/(.*)$': '<rootDir>/src/config/$1',
+    '^features/(.*)$': '<rootDir>/src/features/$1',
+    '^enums/(.*)$': '<rootDir>/src/enums/$1',
+    '^enums': '<rootDir>/src/enums',
     /* Handle CSS imports (with CSS modules)
     https://jestjs.io/docs/webpack#mocking-css-modules */
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',

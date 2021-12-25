@@ -22,7 +22,7 @@ const TailwindMapper: Record<MaxWidth, string> = {
 interface ContainerProps {
   children: ReactNode
   maxWidth?: MaxWidth
-  className: string
+  className?: string
   id?: string
 }
 
