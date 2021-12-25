@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react'
+import { classNames } from 'app/functions'
+import React, { FC, ReactNode } from 'react'
 
-import { classNames } from '../../functions'
 import Dots from '../Dots'
 
 const SIZE = {
@@ -58,13 +58,16 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 
 export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
+type Button = React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>> & {
+  Dotted: FC<DottedButtonProps>
+}
+
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   startIcon?: ReactNode
   endIcon?: ReactNode
   color?: ButtonColor
   size?: ButtonSize
   variant?: ButtonVariant
-  ref?: React.Ref<HTMLButtonElement>
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -136,7 +139,11 @@ export function ButtonError({
   }
 }
 
-function DottedButton({ pending, children, ...rest }: { pending: boolean } & ButtonProps) {
+interface DottedButtonProps extends ButtonProps {
+  pending: boolean
+}
+
+export const ButtonDotted: FC<DottedButtonProps> = ({ pending, children, ...rest }) => {
   const buttonText = pending ? <Dots>{children}</Dots> : children
   return (
     <Button {...rest} {...(pending && { disabled: true })}>
@@ -145,5 +152,4 @@ function DottedButton({ pending, children, ...rest }: { pending: boolean } & But
   )
 }
 
-Button.Dotted = DottedButton
 export default Button

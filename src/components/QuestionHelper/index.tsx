@@ -3,7 +3,7 @@ import React, { FC, ReactElement, ReactNode, useCallback, useState } from 'react
 
 import Tooltip from '../Tooltip'
 
-const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children: ReactElement }> = ({
+const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement }> = ({
   children,
   text,
   icon = <SolidQuestionMarkCircleIcon width={16} height={16} />,
