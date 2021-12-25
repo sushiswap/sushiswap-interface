@@ -74,7 +74,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
     } else {
       try {
         const parsed: number = Math.floor(Number.parseFloat(value) * 60)
-        if (!Number.isInteger(parsed) || parsed < 60 || parsed > 180 * 60) {
+        if (!Number.isInteger(parsed) || parsed < 60) {
           setDeadlineError(DeadlineError.InvalidInput)
         } else {
           setDeadline(parsed)
@@ -114,7 +114,7 @@ export default function TransactionSettings({ placeholderSlippage }: Transaction
             )}
             tabIndex={-1}
           >
-            <div className="flex justify-between items-center gap-1">
+            <div className="flex items-center justify-between gap-1">
               {tooLow || tooHigh ? (
                 <span className="hidden sm:inline text-yellow" role="img" aria-label="warning">
                   ⚠️
