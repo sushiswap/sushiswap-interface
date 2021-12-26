@@ -44,7 +44,9 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
             chartType === ChartType.FundRaised && parsedAuctionCommitments.length ? 'visible' : 'invisible'
           )}
         >
-          <Typography className="text-transparent bg-clip-text bg-gray-400 text-xs">Funds Raised</Typography>
+          <Typography className="text-transparent bg-clip-text bg-gray-400 text-xs">
+            {i18n._(t`Fund Raised`)}
+          </Typography>
           {parsedAuctionCommitments[selectedBlock] && (
             <Typography className="text-transparent bg-clip-text text-gray-200 text-lg">
               {formatBalance(parsedAuctionCommitments[selectedBlock]?.y.toString(), auctionToken?.decimals)}{' '}
@@ -98,7 +100,7 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
             </div>
           ) : (
             <div className="w-full h-full relative min-h-[234px] flex items-center justify-center text-gray-200">
-              <p className="mb-16">No commitments yet</p>
+              <p className="mb-16">{i18n._(t`No commitments yet`)}</p>
             </div>
           )}
         </>
