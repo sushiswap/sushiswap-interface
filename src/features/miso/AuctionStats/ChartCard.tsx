@@ -36,12 +36,6 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
 
   useEffect(() => setSelectedBlock(auctionCommitments.length - 1), [auctionCommitments])
 
-  console.log({
-    auctionCommitments,
-    parsedAuctionCommitments,
-    selectedBlock,
-  })
-
   return (
     <div className="flex flex-col bg-[rgba(255,255,255,0.04)] border border-dark-900 rounded gap-5 shadow-2xl shadow-pink-red/5 h-full">
       <div className="flex justify-between gap-6 p-5">
