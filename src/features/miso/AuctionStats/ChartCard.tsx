@@ -5,7 +5,7 @@ import LineGraph from 'app/components/LineGraph'
 import Typography from 'app/components/Typography'
 import AuctionChart from 'app/features/miso/AuctionChart'
 import { classNames } from 'app/functions'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import useAuctionCommitments from '../context/hooks/useAuctionCommitments'
 
@@ -18,15 +18,25 @@ export const ChartCard = ({ auction }) => {
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Price)
   const auctionCommitments = useAuctionCommitments(auction)
-  const [selectedBlock, setSelectedBlock] = useState(auctionCommitments.length - 1)
+  const [selectedBlock, setSelectedBlock] = useState(auctionCommitments.length ? auctionCommitments.length - 1 : 0)
   let cumulativeSum = JSBI.BigInt(0)
-  const parsedAuctionCommitments = auctionCommitments.map((e) => {
-    cumulativeSum = JSBI.add(cumulativeSum, e.amount.quotient)
+  const parsedAuctionCommitments = [...auctionCommitments]
+    .sort((a, b) => a.blockNumber - b.blockNumber)
+    .map((e) => {
+      cumulativeSum = JSBI.add(cumulativeSum, e.amount.quotient)
 
-    return {
-      x: e.blockNumber,
-      y: +cumulativeSum.toString(),
-    }
+      return {
+        x: e.blockNumber,
+        y: +cumulativeSum.toString(),
+      }
+    })
+
+  useEffect(() => setSelectedBlock(auctionCommitments.length - 1), [auctionCommitments])
+
+  console.log({
+    auctionCommitments,
+    parsedAuctionCommitments,
+    selectedBlock,
   })
 
   return (
@@ -37,14 +47,12 @@ export const ChartCard = ({ auction }) => {
             chartType === ChartType.FundRaised && parsedAuctionCommitments.length ? 'visible' : 'invisible'
           )}
         >
-          <Typography className="text-transparent bg-clip-text bg-gray-400 text-xs">
-            {i18n._(t`Funds Raised`)}
-          </Typography>
+          <Typography className="text-transparent bg-clip-text bg-gray-400 text-xs">Funds Raised</Typography>
           <Typography className="text-transparent bg-clip-text text-gray-200 text-lg">
             {parsedAuctionCommitments[selectedBlock]?.y} {auction?.commitmentsTotal?.currency.symbol}
           </Typography>
           <Typography className="text-transparent bg-clip-text text-xs bg-gray-400">
-            {i18n._(t`Block`)} #{parsedAuctionCommitments[selectedBlock]?.x}
+            Block #{parsedAuctionCommitments[selectedBlock]?.x}
           </Typography>
         </div>
         <div className="flex gap-6">
