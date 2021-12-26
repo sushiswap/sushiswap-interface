@@ -4,9 +4,11 @@ import { JSBI } from '@sushiswap/core-sdk'
 import LineGraph from 'app/components/LineGraph'
 import Typography from 'app/components/Typography'
 import AuctionChart from 'app/features/miso/AuctionChart'
-import { classNames } from 'app/functions'
+import { classNames, formatBalance } from 'app/functions'
+import { useToken } from 'app/hooks/Tokens'
 import React, { useEffect, useState } from 'react'
 
+import { Auction } from '../context/Auction'
 import useAuctionCommitments from '../context/hooks/useAuctionCommitments'
 
 enum ChartType {
@@ -14,10 +16,11 @@ enum ChartType {
   FundRaised,
 }
 
-export const ChartCard = ({ auction }) => {
+export const ChartCard = ({ auction }: { auction: Auction }) => {
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Price)
   const auctionCommitments = useAuctionCommitments(auction)
+  const auctionToken = useToken(auction.auctionInfo.addr)
   const [selectedBlock, setSelectedBlock] = useState(auctionCommitments.length ? auctionCommitments.length - 1 : 0)
   let cumulativeSum = JSBI.BigInt(0)
   const parsedAuctionCommitments = [...auctionCommitments]
@@ -48,9 +51,12 @@ export const ChartCard = ({ auction }) => {
           )}
         >
           <Typography className="text-transparent bg-clip-text bg-gray-400 text-xs">Funds Raised</Typography>
-          <Typography className="text-transparent bg-clip-text text-gray-200 text-lg">
-            {parsedAuctionCommitments[selectedBlock]?.y} {auction?.commitmentsTotal?.currency.symbol}
-          </Typography>
+          {parsedAuctionCommitments[selectedBlock] && (
+            <Typography className="text-transparent bg-clip-text text-gray-200 text-lg">
+              {formatBalance(parsedAuctionCommitments[selectedBlock]?.y.toString(), auctionToken?.decimals)}{' '}
+              {auction?.commitmentsTotal?.currency.symbol}
+            </Typography>
+          )}
           <Typography className="text-transparent bg-clip-text text-xs bg-gray-400">
             Block #{parsedAuctionCommitments[selectedBlock]?.x}
           </Typography>
