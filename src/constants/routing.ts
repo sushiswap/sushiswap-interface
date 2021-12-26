@@ -1,3 +1,6 @@
+import * as MOONRIVER from './tokens/moonriver'
+import * as TELOS from './tokens/telos'
+
 import {
   ALPHA,
   AMPL,
@@ -29,11 +32,12 @@ import {
   LFBTC,
   LIFT,
   MATIC,
+  MIM,
   MIR,
   NFTX,
-  OKEX,
   OHM_V1,
   OHM_V2,
+  OKEX,
   PALM,
   PLAY,
   PONT,
@@ -54,12 +58,7 @@ import {
   XDAI,
   XSUSHI,
   YFI,
-  MIM,
 } from './tokens'
-
-import * as MOONRIVER from './tokens/moonriver'
-import * as TELOS from './tokens/telos'
-
 // a list of tokens by chain
 import { ChainId, Currency, Token, WNATIVE } from '@sushiswap/sdk'
 
@@ -148,7 +147,16 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     MIM,
     SUSHI[ChainId.MAINNET],
   ],
-  [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT, MATIC.SUSHI],
+  [ChainId.MATIC]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
+    MATIC.USDC,
+    MATIC.WBTC,
+    MATIC.DAI,
+    MATIC.WETH,
+    MATIC.USDT,
+    MATIC.MIM,
+    MATIC.SUSHI,
+  ],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
     FANTOM.DAI,
@@ -306,6 +314,8 @@ export const COMMON_BASES: ChainTokenList = {
     MATIC.DAI,
     MATIC.WETH,
     MATIC.USDT,
+    MATIC.MIM,
+    MATIC.ICE,
     SUSHI[ChainId.MATIC],
   ],
   [ChainId.FANTOM]: [
@@ -334,7 +344,7 @@ export const COMMON_BASES: ChainTokenList = {
     ARBITRUM.USDC,
     ARBITRUM.USDT,
     SUSHI[ChainId.ARBITRUM],
-    new Token(ChainId.ARBITRUM, '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF', 18, 'SPELL', 'Spell Token'),
+    ARBITRUM.SPELL,
     ARBITRUM.MIM,
   ],
   [ChainId.XDAI]: [
@@ -388,6 +398,7 @@ export const COMMON_BASES: ChainTokenList = {
     CELO.cUSD,
     CELO.cEURO,
     CELO.WBTC,
+    CELO.USDC,
     SUSHI[ChainId.CELO],
   ],
   [ChainId.MOONRIVER]: [
@@ -417,7 +428,15 @@ export const COMMON_BASES: ChainTokenList = {
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
   [ChainId.MAINNET]: [...WRAPPED_NATIVE_ONLY[ChainId.MAINNET], DAI, USDC, USDT, WBTC, OHM_V1, OHM_V2, MIM],
-  [ChainId.MATIC]: [...WRAPPED_NATIVE_ONLY[ChainId.MATIC], MATIC.USDC, MATIC.WBTC, MATIC.DAI, MATIC.WETH, MATIC.USDT],
+  [ChainId.MATIC]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
+    MATIC.USDC,
+    MATIC.WBTC,
+    MATIC.DAI,
+    MATIC.WETH,
+    MATIC.USDT,
+    MATIC.MIM,
+  ],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
     FANTOM.DAI,
