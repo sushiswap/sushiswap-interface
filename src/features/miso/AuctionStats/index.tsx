@@ -4,18 +4,14 @@ import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
-import AuctionChart from 'app/features/miso/AuctionChart'
 import AuctionStatsSkeleton from 'app/features/miso/AuctionStats/AuctionStatsSkeleton'
 import { Auction } from 'app/features/miso/context/Auction'
 import { AuctionPriceHelperTextByTemplateId } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 
-enum ChartType {
-  Price,
-  FundRaised,
-}
+import { ChartCard } from './ChartCard'
 
 interface AuctionStatsProps {
   auction?: Auction
@@ -37,7 +33,6 @@ const AuctionStat: FC<{ label: any; value?: any; className?: string }> = ({ labe
 const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const [chartType, setChartType] = useState<ChartType>(ChartType.Price)
 
   if (!auction) return <AuctionStatsSkeleton />
 
@@ -114,39 +109,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
           }
         />
       </div>
-      {auction && (
-        <div className="flex flex-col bg-[rgba(255,255,255,0.04)] border border-dark-900 rounded gap-5 shadow-2xl shadow-pink-red/5 h-full">
-          <div className="flex justify-end gap-6 p-5">
-            <Typography
-              weight={chartType === ChartType.Price ? 700 : 400}
-              variant="lg"
-              role="button"
-              onClick={() => setChartType(ChartType.Price)}
-              className={classNames(
-                chartType === ChartType.Price
-                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-pink-red to-pink'
-                  : 'text-secondary'
-              )}
-            >
-              {i18n._(t`Price`)}
-            </Typography>
-            <Typography
-              weight={chartType === ChartType.FundRaised ? 700 : 400}
-              variant="lg"
-              role="button"
-              onClick={() => setChartType(ChartType.FundRaised)}
-              className={classNames(
-                chartType === ChartType.FundRaised
-                  ? 'text-transparent bg-clip-text bg-gradient-to-r from-pink-red to-pink'
-                  : 'text-secondary'
-              )}
-            >
-              {i18n._(t`Fund Raised`)}
-            </Typography>
-          </div>
-          <AuctionChart auction={auction} showPriceIndicator={true} />
-        </div>
-      )}
+      {auction && <ChartCard auction={auction} />}
     </div>
   )
 }
