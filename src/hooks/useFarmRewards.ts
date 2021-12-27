@@ -117,6 +117,11 @@ export default function useFarmRewards() {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
+        // CVX-WETH hardcode 0 rewards since ended, can remove after swapping out rewarder
+        if (pool.id === '1') {
+          pool.rewarder.rewardPerSecond = 0
+        }
+
         // vestedQUARTZ to QUARTZ adjustments
         if (pool.rewarder.rewardToken === '0x5dd8905aec612529361a35372efd5b127bb182b3') {
           pool.rewarder.rewardToken = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
