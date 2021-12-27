@@ -580,7 +580,7 @@ export function useSwapCallback(
 
             console.log('SWAP TRANSACTION', { tx, value })
 
-            /*return library
+            return library
               .estimateGas(tx)
               .then((gasEstimate) => {
                 console.log('returning gas estimate')
@@ -608,11 +608,7 @@ export function useSwapCallback(
                       error: new Error(swapErrorToUserReadableMessage(callError)),
                     }
                   })
-              })*/
-            return Promise.resolve({
-              call,
-              gasEstimate: BigNumber.from('0x025de6'),
-            })
+              })
           })
         )
 
