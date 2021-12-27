@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, Currency, CurrencyAmount, Pair, Trade as LegacyTrade, TradeType, WNATIVE } from '@sushiswap/core-sdk'
-import { RouteStatus } from '@sushiswap/tines'
+import { MultiRoute, RouteStatus } from '@sushiswap/tines'
 import {
   ConstantProductPool,
   convertTinesSingleRouteToLegacyRoute,
@@ -58,11 +58,17 @@ export type UseBestTridentTradeOutput = {
     | Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
     | LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
   priceImpact?: number
-  allowedPools?: (PoolUnion | Pair)[]
 }
 
-export const currentTradeAtom = atom<UseBestTridentTradeOutput>({
-  key: 'currentTradeAtom',
+export type RoutingInfo = {
+  chainId?: ChainId
+  allowedPools?: (PoolUnion | Pair)[]
+  mode?: 'single' | 'multiple'
+  route?: MultiRoute
+}
+
+export const routingInfo = atom<RoutingInfo>({
+  key: 'routingInfo',
   default: undefined,
 })
 
@@ -79,7 +85,7 @@ export function useBestTridentTrade(
 ): UseBestTridentTradeOutput {
   const { chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
-  const setGlobalState = useSetRecoilState(currentTradeAtom)
+  const setRoutingInfo = useSetRecoilState(routingInfo)
   const [trade, setTrade] = useState<UseBestTridentTradeOutput>({ trade: undefined, priceImpact: undefined })
   const { rebase } = useBentoRebase(amountSpecified?.currency)
 
@@ -149,22 +155,22 @@ export function useBestTridentTrade(
           if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
             if (tridentRoute.status === RouteStatus.Success) {
               const priceImpact = tridentRoute.priceImpact
+              setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
               return {
                 trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, currencyOut),
                 priceImpact,
-                allowedPools: tridentPools,
               }
             }
           } else {
             if (legacyRoute.status === RouteStatus.Success) {
               const priceImpact = legacyRoute.priceImpact
+              setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
               return {
                 trade: LegacyTrade.exactIn(
                   convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
                   amountSpecified
                 ),
                 priceImpact,
-                allowedPools: legacyPools,
               }
             }
           }
@@ -190,22 +196,22 @@ export function useBestTridentTrade(
           if (tridentRoute.amountInBN.lt(legacyRoute.amountInBN)) {
             if (tridentRoute.status === RouteStatus.Success) {
               const priceImpact = tridentRoute.priceImpact
+              setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
               return {
                 trade: Trade.bestTradeExactOut(tridentRoute, currencyIn, shareSpecified),
                 priceImpact,
-                allowedPools: tridentPools,
               }
             }
           } else {
             if (legacyRoute.status === RouteStatus.Success) {
               const priceImpact = legacyRoute.priceImpact
+              setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
               return {
                 trade: LegacyTrade.exactOut(
                   convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
                   amountSpecified
                 ),
                 priceImpact,
-                allowedPools: legacyPools,
               }
             }
           }
@@ -220,7 +226,6 @@ export function useBestTridentTrade(
 
     bestTrade().then((trade) => {
       setTrade(trade)
-      setGlobalState(trade)
     })
   }, [
     currencyIn,
@@ -233,7 +238,7 @@ export function useBestTridentTrade(
     shareSpecified,
     tradeType,
     blockNumber,
-    setGlobalState,
+    setRoutingInfo,
   ])
 
   return trade

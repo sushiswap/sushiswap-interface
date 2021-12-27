@@ -1,18 +1,13 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { ArrowDownIcon, ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Pair, Token, TradeVersion } from '@sushiswap/core-sdk'
-import { Fee } from '@sushiswap/sdk'
-import { ConstantProductPool } from '@sushiswap/trident-sdk'
+import { TradeVersion } from '@sushiswap/core-sdk'
 import { isValidAddress } from '@walletconnect/utils'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import SwapSubmittedModalContent from 'app/features/trident/swap/SwapSubmittedModalContent'
 import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useBentoRebases from 'app/hooks/useBentoRebases'
-import { currentTradeAtom } from 'app/hooks/useBestTridentTrade'
-import { useActiveWeb3React } from 'app/services/web3'
 import Button from 'components/Button'
 import CurrencyLogo from 'components/CurrencyLogo'
 import Divider from 'components/Divider'
@@ -28,70 +23,8 @@ import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
 import { showReviewAtom } from '../context/atoms'
 import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
-import { PoolUnion } from '../types'
 import RecipientPanel from './RecipientPanel'
 import SwapRate from './SwapRate'
-
-function serialize(obj: any) {
-  return JSON.stringify(
-    obj,
-    (key, value) => {
-      switch (key) {
-        case 'fromToken':
-        case 'tokenFrom':
-        case 'toToken':
-        case 'tokenTo':
-        case 'tokenInfo':
-          return {
-            name: value.name,
-            address: value.address,
-            decimals: value.decimals,
-          }
-        case 'amountInBN':
-        case 'amountOutBN':
-        case 'totalAmountOutBN':
-          return BigNumber.from(value.hex).toString()
-        default:
-          return value
-      }
-    },
-    '  '
-  )
-}
-
-function getTokenInfo(t: Token) {
-  return {
-    name: t.name,
-    address: t.address,
-    decimals: t.decimals,
-  }
-}
-
-function getPoolInfo(pool: PoolUnion | Pair) {
-  if (pool instanceof ConstantProductPool) {
-    return {
-      type: 'ConstantProduct',
-      address: pool.liquidityToken.address,
-      token0: getTokenInfo(pool.assets[0]),
-      token1: getTokenInfo(pool.assets[1]),
-      fee: pool.fee / 10000,
-      reserve0: pool.reserves[0].quotient.toString(),
-      reserve1: pool.reserves[1].quotient.toString(),
-    }
-  } else if (pool instanceof Pair) {
-    return {
-      type: 'Legacy',
-      address: pool.liquidityToken.address,
-      token0: getTokenInfo(pool.token0),
-      token1: getTokenInfo(pool.token1),
-      fee: Fee.DEFAULT / 10000,
-      reserve0: pool.reserve0.quotient.toString(),
-      reserve1: pool.reserve1.quotient.toString(),
-    }
-  } else {
-    return 'Unsupported type of pool !!!'
-  }
-}
 
 const SwapReviewModal: FC = () => {
   const { i18n } = useLingui()
@@ -122,23 +55,11 @@ const SwapReviewModal: FC = () => {
     parsedAmounts: [inputAmount, outputAmount],
   })
 
-  const { chainId } = useActiveWeb3React()
-  const currentTradeInfo = useRecoilValue(currentTradeAtom)
-  const allowedPools = currentTradeInfo?.allowedPools
-  const currentTrade = currentTradeInfo?.trade
-
   const execute = useCallback(async () => {
     if (!callback) return
 
     try {
-      // console.log(chainId)
-      // console.log(allowedPools)
-      // console.log(serialize(allowedPools.map(getPoolInfo)))
-      // console.log('trade', currentTrade, serialize(currentTrade.route))
-
       const txHash = await callback()
-      //console.log('tr', txHash)
-
       setTxHash(txHash)
 
       // Reset inputs

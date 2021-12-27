@@ -1,21 +1,15 @@
-import * as Sentry from '@sentry/browser'
 import { ChainId } from '@sushiswap/core-sdk'
 import { retry, RetryableError, RetryOptions } from 'app/functions/retry'
-import { UseBestTridentTradeOutput } from 'app/hooks/useBestTridentTrade'
+import { routingInfo } from 'app/hooks/useBestTridentTrade'
 import { useActiveWeb3React } from 'app/services/web3'
 import { updateBlockNumber } from 'app/state/application/actions'
 import { useAddPopup, useBlockNumber } from 'app/state/application/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useCallback, useEffect, useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
 
 import { checkedTransaction, finalizeTransaction } from './actions'
-
-async function sendRevertTransactionLog(txHash: string, trade: UseBestTridentTradeOutput) {
-  //return Promise.(() => {
-
-  Sentry.captureException({ message: 'Reverted Transaction', txHash, trade: trade /*.route*/ })
-  //})
-}
+import { sendRevertTransactionLog } from './sentryLogger'
 
 interface TxInterface {
   addedTime: number
@@ -79,7 +73,7 @@ export default function Updater(): null {
     [chainId, library]
   )
 
-  //const currentTrade = useRecoilValue(currentTradeAtom)
+  const routeInfo = useRecoilValue(routingInfo)
 
   useEffect(() => {
     if (!chainId || !library || !lastBlockNumber) return
@@ -125,7 +119,7 @@ export default function Updater(): null {
               }
 
               if (receipt.status === 0) {
-                //sendRevertTransactionLog(hash, currentTrade)
+                sendRevertTransactionLog(hash, routeInfo)
               }
             } else {
               dispatch(checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber }))
@@ -142,7 +136,7 @@ export default function Updater(): null {
     return () => {
       cancels.forEach((cancel) => cancel())
     }
-  }, [chainId, library, transactions, lastBlockNumber, dispatch, addPopup, getReceipt])
+  }, [chainId, library, transactions, lastBlockNumber, dispatch, addPopup, getReceipt, routeInfo])
 
   return null
 }
