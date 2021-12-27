@@ -5,7 +5,6 @@ import { usePositions } from 'app/features/onsen/hooks'
 import { aprToApy } from 'app/functions/convert'
 import {
   useAverageBlockTime,
-  useBlock,
   useCeloPrice,
   useEthPrice,
   useFarms,

@@ -209,5 +209,9 @@
     "not dead",
     "not op_mini all"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "@sentry/browser": "^6.15.0",
+    "@sentry/tracing": "^6.15.0",
+    "eth-revert-reason": "^1.0.3"
+  }
 }

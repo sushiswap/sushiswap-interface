@@ -1,6 +1,14 @@
 import { createReducer } from '@reduxjs/toolkit'
 
-import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
+import {
+  Field,
+  replaceSwapState,
+  selectCurrency,
+  setRecipient,
+  setRouting,
+  switchCurrencies,
+  typeInput,
+} from './actions'
 
 export interface SwapState {
   readonly independentField: Field
@@ -13,6 +21,7 @@ export interface SwapState {
   }
   // the typed recipient address or ENS name, or null if swap should go to sender
   readonly recipient: string | null
+  readonly routing?: string
 }
 
 const initialState: SwapState = {
@@ -25,6 +34,7 @@ const initialState: SwapState = {
     currencyId: '',
   },
   recipient: null,
+  routing: null,
 }
 
 export default createReducer<SwapState>(initialState, (builder) =>
@@ -81,5 +91,8 @@ export default createReducer<SwapState>(initialState, (builder) =>
     })
     .addCase(setRecipient, (state, { payload: { recipient } }) => {
       state.recipient = recipient
+    })
+    .addCase(setRouting, (state, { payload: routing }) => {
+      state.routing = routing
     })
 )

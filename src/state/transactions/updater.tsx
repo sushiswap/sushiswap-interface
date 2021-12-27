@@ -1,5 +1,7 @@
+import * as Sentry from '@sentry/browser'
 import { ChainId } from '@sushiswap/core-sdk'
 import { retry, RetryableError, RetryOptions } from 'app/functions/retry'
+import { UseBestTridentTradeOutput } from 'app/hooks/useBestTridentTrade'
 import { useActiveWeb3React } from 'app/services/web3'
 import { updateBlockNumber } from 'app/state/application/actions'
 import { useAddPopup, useBlockNumber } from 'app/state/application/hooks'
@@ -7,6 +9,13 @@ import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useCallback, useEffect, useMemo } from 'react'
 
 import { checkedTransaction, finalizeTransaction } from './actions'
+
+async function sendRevertTransactionLog(txHash: string, trade: UseBestTridentTradeOutput) {
+  //return Promise.(() => {
+
+  Sentry.captureException({ message: 'Reverted Transaction', txHash, trade: trade /*.route*/ })
+  //})
+}
 
 interface TxInterface {
   addedTime: number
@@ -70,6 +79,8 @@ export default function Updater(): null {
     [chainId, library]
   )
 
+  //const currentTrade = useRecoilValue(currentTradeAtom)
+
   useEffect(() => {
     if (!chainId || !library || !lastBlockNumber) return
 
@@ -111,6 +122,10 @@ export default function Updater(): null {
               // the receipt was fetched before the block, fast forward to that block to trigger balance updates
               if (receipt.blockNumber > lastBlockNumber) {
                 dispatch(updateBlockNumber({ chainId, blockNumber: receipt.blockNumber }))
+              }
+
+              if (receipt.status === 0) {
+                //sendRevertTransactionLog(hash, currentTrade)
               }
             } else {
               dispatch(checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber }))
