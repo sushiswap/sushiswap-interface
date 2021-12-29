@@ -25,7 +25,7 @@ const Header: FC<HeaderProps> = ({ height = 64 }) => {
           )}
         </Popover>
       </header>
-      <div style={{ height }} />
+      <div style={{ height, minHeight: height }} />
     </>
   )
 }

@@ -13,7 +13,7 @@ import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
 import { useUSDCPrice } from 'app/hooks'
 import { useToken } from 'app/hooks/Tokens'
-import useBackOnChainChange from 'app/hooks/useBackOnChainChange'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import { useV2Pair } from 'app/hooks/useV2Pairs'
 import Layout from 'app/layouts/Kashi'
 import Head from 'next/head'
@@ -22,7 +22,7 @@ import React from 'react'
 import { RecoilRoot } from 'recoil'
 
 export default function Pair() {
-  useBackOnChainChange()
+  useRedirectOnChainId('/borrow')
 
   const router = useRouter()
   const { i18n } = useLingui()

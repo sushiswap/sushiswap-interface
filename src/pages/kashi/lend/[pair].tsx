@@ -9,7 +9,7 @@ import { Deposit, PairTools, Strategy, Withdraw } from 'app/features/kashi'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
-import useBackOnChainChange from 'app/hooks/useBackOnChainChange'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import Layout from 'app/layouts/Kashi'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -17,7 +17,7 @@ import React from 'react'
 import { RecoilRoot } from 'recoil'
 
 export default function Pair() {
-  useBackOnChainChange()
+  useRedirectOnChainId('/lend')
 
   const router = useRouter()
   const { i18n } = useLingui()
