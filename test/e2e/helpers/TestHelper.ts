@@ -34,7 +34,7 @@ export class TestHelper {
       if (process.env.CI === 'true') {
         await metamask.page.setDefaultTimeout(60000)
       } else {
-        await metamask.page.setDefaultTimeout(10000)
+        await metamask.page.setDefaultTimeout(20000)
       }
     } catch (error) {
       console.log('Error occurred setting up metamask')

@@ -354,27 +354,6 @@ export class SwapPage extends AppPage {
     }
   }
 
-  private async getSwitchElement(switchId: string): Promise<ElementHandle<Element>> {
-    await this.Page.waitForSelector(switchId)
-    const switchElement = await this.Page.$(switchId)
-
-    const buttonElement = (await switchElement.$x('..'))[0]
-    if (!buttonElement) {
-      throw new Error(`Switch with id ${switchId} not found on the swap page. Check selector is valid.`)
-    }
-
-    return buttonElement
-  }
-
-  private async isSwitchChecked(switchId: string): Promise<boolean> {
-    let checked: boolean
-
-    const checkedValue = await this.Page.$eval(switchId, (button) => button.getAttribute('aria-checked'))
-    checked = checkedValue === 'true'
-
-    return checked
-  }
-
   private getSwapType(inTokenSymbol: string, outTokenSymbol: string): SwapType {
     if (inTokenSymbol === 'ETH' && outTokenSymbol === 'WETH') {
       return SwapType.Wrap

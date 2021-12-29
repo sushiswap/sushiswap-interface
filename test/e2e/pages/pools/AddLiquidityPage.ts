@@ -10,7 +10,16 @@ export class AddLiquidityPage extends AppPage {
   protected ApproveButtonSelector: string = '#btn-approve'
   protected FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-deposit'
 
-  public async addLiquidity(t0Amount: string, t1Amount: string = '', fixedRatio: boolean = false): Promise<void> {
+  protected SpendFromWalletASelector: string = '.switch-spend-from-wallet-a'
+  protected SpendFromWalletBSelector: string = '.switch-spend-from-wallet-b'
+
+  public async addLiquidity(
+    t0Amount: string,
+    spendFromWalletA: boolean = true,
+    spendFromWalletB: boolean = true,
+    t1Amount: string = '',
+    fixedRatio: boolean = false
+  ): Promise<void> {
     const inputs = await this.Page.$$('input[type=text]')
     if (inputs.length !== 2) throw new Error('Expected 2 text inputs on add liquidity page')
 
@@ -24,6 +33,24 @@ export class AddLiquidityPage extends AppPage {
 
     if (t0Amount) await inputs[0].type(t0Amount)
     if (t1Amount) await inputs[1].type(t1Amount)
+
+    // Set funding source for T0
+    const isSpendFromWalletAChecked = await this.isSwitchChecked(this.SpendFromWalletASelector)
+    const spendFromWalletASwitch = await this.getSwitchElement(this.SpendFromWalletASelector)
+    if (spendFromWalletA && !isSpendFromWalletAChecked) {
+      await spendFromWalletASwitch.click()
+    } else if (!spendFromWalletA && isSpendFromWalletAChecked) {
+      await spendFromWalletASwitch.click()
+    }
+
+    // Set funding source for T1
+    const isSpendFromWalletBChecked = await this.isSwitchChecked(this.SpendFromWalletBSelector)
+    const spendFromWalletBSwitch = await this.getSwitchElement(this.SpendFromWalletBSelector)
+    if (spendFromWalletB && !isSpendFromWalletBChecked) {
+      await spendFromWalletBSwitch.click()
+    } else if (!spendFromWalletB && isSpendFromWalletBChecked) {
+      await spendFromWalletBSwitch.click()
+    }
 
     const approveButton = await this.Page.$(this.ApproveButtonSelector)
     if (approveButton) {

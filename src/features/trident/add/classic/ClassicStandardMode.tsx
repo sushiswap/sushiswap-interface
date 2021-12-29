@@ -57,6 +57,7 @@ const ClassicStandardMode = () => {
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWalletA(!spendFromWalletA)}
                 checked={spendFromWalletA}
+                id="switch-spend-from-wallet-a"
               />
             }
             spendFromWallet={spendFromWalletA}
@@ -74,6 +75,7 @@ const ClassicStandardMode = () => {
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWalletB(!spendFromWalletB)}
                 checked={spendFromWalletB}
+                id="switch-spend-from-wallet-b"
               />
             }
             spendFromWallet={spendFromWalletB}
