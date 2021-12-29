@@ -117,6 +117,11 @@ export default function useFarmRewards() {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
 
+        // CVX-WETH hardcode 0 rewards since ended, can remove after swapping out rewarder
+        if (pool.id === '1') {
+          pool.rewarder.rewardPerSecond = 0
+        }
+
         // vestedQUARTZ to QUARTZ adjustments
         if (pool.rewarder.rewardToken === '0x5dd8905aec612529361a35372efd5b127bb182b3') {
           pool.rewarder.rewardToken = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
@@ -269,6 +274,39 @@ export default function useFarmRewards() {
             rewardPerDay: rewardTokenPerDay,
             rewardPrice: ohmPrice,
           }
+        }
+      } else if (pool.chef === Chef.OLD_FARMS) {
+        const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
+        const sushiPerBlock = sushiPerSecond * averageBlockTime
+        const sushiPerDay = sushiPerBlock * blocksPerDay
+
+        const rewardPerSecond =
+          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+            ? pool.rewarder.rewardPerSecond / 1e18
+            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+
+        const rewardPerBlock = rewardPerSecond * averageBlockTime
+
+        const rewardPerDay = rewardPerBlock * blocksPerDay
+
+        const reward = {
+          [ChainId.CELO]: {
+            token: 'CELO',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: celoPrice,
+          },
+        }
+
+        rewards[0] = {
+          ...defaultReward,
+          rewardPerBlock: sushiPerBlock,
+          rewardPerDay: sushiPerDay,
+        }
+
+        if (chainId in reward) {
+          rewards[1] = reward[chainId]
         }
       }
 

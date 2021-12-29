@@ -6,6 +6,7 @@ import {
   getMasterChefV2Farms,
   getMasterChefV2PairAddreses,
   getMiniChefFarms,
+  getOldMiniChefFarms,
   getMiniChefPairAddreses,
 } from '../fetchers'
 import { useMemo } from 'react'
@@ -58,6 +59,21 @@ export function useMasterChefV2Farms(swrConfig: SWRConfiguration = undefined) {
   }, [data])
 }
 
+export function useOldMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.CELO
+  const { data } = useSWR(
+    shouldFetch ? ['oldMiniChefFarms', chainId] : null,
+    (_, chainId) => getOldMiniChefFarms(chainId),
+    swrConfig
+  )
+
+  return useMemo(() => {
+    if (!data) return []
+    return data.map((data) => ({ ...data, chef: Chef.OLD_FARMS }))
+  }, [data])
+}
+
 export function useMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch =
@@ -86,12 +102,14 @@ export function useFarms(swrConfig: SWRConfiguration = undefined) {
   const masterChefV1Farms = useMasterChefV1Farms()
   const masterChefV2Farms = useMasterChefV2Farms()
   const miniChefFarms = useMiniChefFarms()
+  const oldMiniChefFarms = useOldMiniChefFarms()
   // useEffect(() => {
   //   console.log('debug', { masterChefV1Farms, masterChefV2Farms, miniChefFarms })
   // }, [masterChefV1Farms, masterChefV2Farms, miniChefFarms])
   return useMemo(
-    () => concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms).filter((pool) => pool && pool.pair),
-    [masterChefV1Farms, masterChefV2Farms, miniChefFarms]
+    () =>
+      concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms).filter((pool) => pool && pool.pair),
+    [masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms]
   )
 }
 
