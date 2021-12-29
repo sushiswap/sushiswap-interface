@@ -173,6 +173,7 @@ export const bentoStrategiesQuery = gql`
         id
         decimals
         strategyTargetPercentage
+        totalSupplyElastic
       }
       balance
       totalProfit

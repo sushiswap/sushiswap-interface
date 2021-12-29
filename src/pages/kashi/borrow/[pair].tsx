@@ -6,52 +6,33 @@ import Dots from 'app/components/Dots'
 import GradientDot from 'app/components/GradientDot'
 import Image from 'app/components/Image'
 import QuestionHelper from 'app/components/QuestionHelper'
-import { KashiCooker } from 'app/entities'
 import { Feature } from 'app/enums'
-import { Borrow, Repay } from 'app/features/kashi'
+import { Borrow, PairTools, Repay, Strategy } from 'app/features/kashi'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
 import { useUSDCPrice } from 'app/hooks'
 import { useToken } from 'app/hooks/Tokens'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import { useV2Pair } from 'app/hooks/useV2Pairs'
 import Layout from 'app/layouts/Kashi'
-import { useActiveWeb3React } from 'app/services/web3'
-import { useBlockTimestamp } from 'app/state/application/hooks'
-import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { RecoilRoot } from 'recoil'
 
-function Pair() {
+export default function Pair() {
+  useRedirectOnChainId('/borrow')
+
   const router = useRouter()
   const { i18n } = useLingui()
 
-  const { account, library, chainId } = useActiveWeb3React()
-
   const pair = useKashiPair(router.query.pair as string)
-  console.log({ pair })
-  const asset = useToken(pair?.asset.address)
-  const collateral = useToken(pair?.collateral.address)
-  const [pairState, liquidityPair] = useV2Pair(asset, collateral)
 
-  const blockTimestamp = useBlockTimestamp()
-
-  const addTransaction = useTransactionAdder()
-
-  const onUpdateExchangeRate = useCallback(async () => {
-    const cooker = new KashiCooker(pair, account, library, chainId)
-    const result = await cooker.updateExchangeRate().cook()
-    addTransaction(result.tx, {
-      summary: `Update ${pair.collateral.tokenInfo.symbol}/${pair.asset.tokenInfo.symbol} exchange rate`,
-    })
-  }, [account, addTransaction, chainId, library, pair])
-
-  if (!pair) return Number.isInteger(blockTimestamp) && blockTimestamp === 0 ? null : router.push('/borrow')
+  if (!pair) return <div />
 
   return (
-    <>
+    <PairLayout>
       <Head>
         <title>{i18n._(t`Borrow ${pair?.asset?.symbol}-${pair?.collateral?.symbol}`)} | Sushi</title>
         <meta
@@ -101,7 +82,7 @@ function Pair() {
           </Card.Header>
         }
       >
-        <div className="flex justify-between mb-8">
+        <div className="flex justify-between p-4 mb-8 xl:p-0">
           <div>
             <div className="text-lg text-secondary">{i18n._(t`Collateral`)}</div>
             <div className="text-2xl text-blue">
@@ -155,7 +136,7 @@ function Pair() {
           </Tab.Panel>
         </Tab.Group>
       </Card>
-    </>
+    </PairLayout>
   )
 }
 
@@ -184,7 +165,7 @@ const PairLayout = ({ children }) => {
         />
       }
       right={
-        <Card className="h-full bg-dark-900">
+        <Card className="h-full p-4 bg-dark-900 xl:p-0">
           <div className="flex-col space-y-2">
             <div className="flex justify-between">
               <div className="text-xl text-high-emphesis">{i18n._(t`Market`)}</div>
@@ -220,6 +201,8 @@ const PairLayout = ({ children }) => {
               </div>
             </div>
 
+            <PairTools pair={pair} />
+
             <div className="flex justify-between pt-3">
               <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
             </div>
@@ -249,25 +232,9 @@ const PairLayout = ({ children }) => {
                 )}
               </div>
             </div>
-            {pair.collateral.strategy && (
-              <>
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Avg. APY`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">{formatPercent(pair.collateral.strategy.apy)}</div>
-                  </div>
-                </div>
 
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Target Percentage`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">
-                      {formatPercent(pair.collateral.strategy.targetPercentage)}
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+            <Strategy token={pair.collateral} />
+
             {pair && pair.oracle.name === 'SushiSwap' && (
               <>
                 <div className="flex justify-between pt-3">
@@ -312,8 +279,4 @@ const PairLayout = ({ children }) => {
   ) : null
 }
 
-Pair.Layout = PairLayout
-
 Pair.Guard = NetworkGuard(Feature.KASHI)
-
-export default Pair

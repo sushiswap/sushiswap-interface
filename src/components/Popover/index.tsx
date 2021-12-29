@@ -2,7 +2,7 @@ import { Popover as HeadlessuiPopover } from '@headlessui/react'
 import { Placement } from '@popperjs/core'
 import { classNames } from 'app/functions'
 import useInterval from 'app/hooks/useInterval'
-import React, { useCallback, useState } from 'react'
+import React, { Fragment, ReactElement, useCallback, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 
@@ -12,6 +12,7 @@ export interface PopoverProps {
   placement?: Placement
   show?: boolean
   modifiers?: any[]
+  fullWidth?: boolean
 }
 
 export default function Popover({ content, children, placement = 'auto', show, modifiers }: PopoverProps) {
@@ -34,12 +35,12 @@ export default function Popover({ content, children, placement = 'auto', show, m
   useInterval(updateCallback, show ? 100 : null)
 
   return (
-    <HeadlessuiPopover>
+    <HeadlessuiPopover as={Fragment}>
       {({ open }) => (
         <>
-          <HeadlessuiPopover.Button ref={setReferenceElement as any} className="flex">
-            {children}
-          </HeadlessuiPopover.Button>
+          {React.Children.map(children, (child) => {
+            return React.cloneElement(child as ReactElement, { ref: setReferenceElement })
+          })}
           {(show ?? open) &&
             ReactDOM.createPortal(
               <HeadlessuiPopover.Panel

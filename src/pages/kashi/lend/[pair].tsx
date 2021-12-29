@@ -5,34 +5,35 @@ import Card from 'app/components/Card'
 import Image from 'app/components/Image'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { Feature } from 'app/enums'
-import { Deposit, Withdraw } from 'app/features/kashi'
+import { Deposit, PairTools, Strategy, Withdraw } from 'app/features/kashi'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import Layout from 'app/layouts/Kashi'
-import { useBlockTimestamp } from 'app/state/application/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
 import { RecoilRoot } from 'recoil'
 
 export default function Pair() {
+  useRedirectOnChainId('/lend')
+
   const router = useRouter()
   const { i18n } = useLingui()
 
-  const blockTimestamp = useBlockTimestamp()
   const pair = useKashiPair(router.query.pair as string)
 
-  if (!pair) return Number.isInteger(blockTimestamp) && blockTimestamp === 0 ? null : router.push('/lend')
+  if (!pair) return <div />
 
   return (
-    <div id={`lend-${router.query.pair}-page`}>
+    <PairLayout>
       <Head>
         <title>Lend {pair.asset.tokenInfo.symbol} | Sushi</title>
         <meta key="description" name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
       </Head>
       <Card
-        className="h-full bg-dark-900"
+        className="bg-dark-900"
         header={
           <Card.Header className="border-b-8 bg-dark-blue border-blue">
             <div className="flex items-center">
@@ -73,7 +74,7 @@ export default function Pair() {
           </Card.Header>
         }
       >
-        <div className="flex justify-between mb-8">
+        <div className="flex justify-between p-4 mb-8 xl:p-0">
           <div>
             <div className="text-lg text-secondary">Lent</div>
             <div className="text-2xl text-blue">
@@ -122,7 +123,7 @@ export default function Pair() {
           </Tab.Panel>
         </Tab.Group>
       </Card>
-    </div>
+    </PairLayout>
   )
 }
 
@@ -132,7 +133,7 @@ const PairLayout = ({ children }) => {
   const router = useRouter()
   const { i18n } = useLingui()
   const pair = useKashiPair(router.query.pair as string)
-  console.log({ pair })
+
   return pair ? (
     <Layout
       left={
@@ -146,7 +147,7 @@ const PairLayout = ({ children }) => {
         />
       }
       right={
-        <Card className="h-full bg-dark-900">
+        <Card className="h-full p-4 bg-dark-900 xl:p-0">
           <div className="flex-col space-y-2">
             <div className="flex justify-between">
               <div className="text-xl text-high-emphesis">{i18n._(t`Market`)}</div>
@@ -193,6 +194,8 @@ const PairLayout = ({ children }) => {
               </div>
             )}
 
+            <PairTools pair={pair} />
+
             <div className="flex justify-between pt-3">
               <div className="text-xl text-high-emphesis">{i18n._(t`Oracle`)}</div>
             </div>
@@ -222,25 +225,8 @@ const PairLayout = ({ children }) => {
                 )}
               </div>
             </div>
-            {pair.asset.strategy && (
-              <>
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Avg. APY`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">{formatPercent(pair.asset.strategy.apy)}</div>
-                  </div>
-                </div>
 
-                <div className="flex justify-between">
-                  <div className="text-lg text-secondary">{i18n._(t`Target Percentage`)}</div>
-                  <div className="flex items-center">
-                    <div className="text-lg text-high-emphesis">
-                      {formatPercent(pair.asset.strategy.targetPercentage)}
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
+            <Strategy token={pair.asset} />
           </div>
         </Card>
       }
@@ -250,6 +236,6 @@ const PairLayout = ({ children }) => {
   ) : null
 }
 
-Pair.Layout = PairLayout
+//Pair.Layout = PairLayout
 
 Pair.Guard = NetworkGuard(Feature.KASHI)
