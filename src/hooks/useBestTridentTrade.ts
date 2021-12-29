@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId, Currency, CurrencyAmount, Pair, Trade as LegacyTrade, TradeType, WNATIVE } from '@sushiswap/core-sdk'
-import { RouteStatus } from '@sushiswap/tines'
+import { MultiRoute, RouteStatus } from '@sushiswap/tines'
 import {
   ConstantProductPool,
   convertTinesSingleRouteToLegacyRoute,
@@ -18,6 +18,7 @@ import { PairState, useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
 import { useEffect, useMemo, useState } from 'react'
+import { atom, useSetRecoilState } from 'recoil'
 
 import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
 import { useConstantProductPoolsPermutations } from './useConstantProductPools'
@@ -52,12 +53,24 @@ export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (
   )
 }
 
-type UseBestTridentTradeOutput = {
+export type UseBestTridentTradeOutput = {
   trade?:
     | Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
     | LegacyTrade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
   priceImpact?: number
 }
+
+export type RoutingInfo = {
+  chainId?: ChainId
+  allowedPools?: (PoolUnion | Pair)[]
+  mode?: 'single' | 'multiple'
+  route?: MultiRoute
+}
+
+export const routingInfo = atom<RoutingInfo>({
+  key: 'routingInfo',
+  default: undefined,
+})
 
 /**
  * Returns best trident trade for a desired swap.
@@ -72,6 +85,7 @@ export function useBestTridentTrade(
 ): UseBestTridentTradeOutput {
   const { chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
+  const setRoutingInfo = useSetRecoilState(routingInfo)
   const [trade, setTrade] = useState<UseBestTridentTradeOutput>({ trade: undefined, priceImpact: undefined })
   const { rebase } = useBentoRebase(amountSpecified?.currency)
 
@@ -141,11 +155,16 @@ export function useBestTridentTrade(
           if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
             if (tridentRoute.status === RouteStatus.Success) {
               const priceImpact = tridentRoute.priceImpact
-              return { trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, currencyOut), priceImpact }
+              setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
+              return {
+                trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, currencyOut),
+                priceImpact,
+              }
             }
           } else {
             if (legacyRoute.status === RouteStatus.Success) {
               const priceImpact = legacyRoute.priceImpact
+              setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
               return {
                 trade: LegacyTrade.exactIn(
                   convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
@@ -177,11 +196,16 @@ export function useBestTridentTrade(
           if (tridentRoute.amountInBN.lt(legacyRoute.amountInBN)) {
             if (tridentRoute.status === RouteStatus.Success) {
               const priceImpact = tridentRoute.priceImpact
-              return { trade: Trade.bestTradeExactOut(tridentRoute, currencyIn, shareSpecified), priceImpact }
+              setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
+              return {
+                trade: Trade.bestTradeExactOut(tridentRoute, currencyIn, shareSpecified),
+                priceImpact,
+              }
             }
           } else {
             if (legacyRoute.status === RouteStatus.Success) {
               const priceImpact = legacyRoute.priceImpact
+              setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
               return {
                 trade: LegacyTrade.exactOut(
                   convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
@@ -200,7 +224,9 @@ export function useBestTridentTrade(
       }
     }
 
-    bestTrade().then((trade) => setTrade(trade))
+    bestTrade().then((trade) => {
+      setTrade(trade)
+    })
   }, [
     currencyIn,
     currencyOut,
@@ -212,6 +238,7 @@ export function useBestTridentTrade(
     shareSpecified,
     tradeType,
     blockNumber,
+    setRoutingInfo,
   ])
 
   return trade
