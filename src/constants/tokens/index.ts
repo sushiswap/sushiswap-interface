@@ -15,6 +15,7 @@ export const ARBITRUM: { [key: string]: Token } = {
   WBTC: new Token(ChainId.ARBITRUM, '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', 8, 'WBTC', 'Wrapped Bitcoin'),
   USDT: new Token(ChainId.ARBITRUM, '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', 8, 'USDT', 'Tether USD'),
   MIM: new Token(ChainId.ARBITRUM, '0xFEa7a6a0B346362BF88A9e4A88416B77a57D6c2A', 18, 'MIM', 'Magic Internet Money'),
+  SPELL: new Token(ChainId.ARBITRUM, '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF', 18, 'SPELL', 'Spell Token'),
 }
 
 export const PALM: { [key: string]: Token } = {
@@ -30,8 +31,9 @@ export const CELO: { [key: string]: Token } = {
   cEURO: new Token(ChainId.CELO, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
   cBTC: new Token(ChainId.CELO, '0xD629eb00dEced2a080B7EC630eF6aC117e614f1b', 18, 'cBTC', 'Wrapped Bitcoin'),
   cETH: new Token(ChainId.CELO, '0x2DEf4285787d58a2f811AF24755A8150622f4361', 18, 'cETH', 'Wrapped Ether'),
-  WETH: new Token(ChainId.CELO, '0xE919F65739c26a42616b7b8eedC6b5524d1e3aC4', 18, 'WETH', 'WETH'),
-  WBTC: new Token(ChainId.CELO, '0xBe50a3013A1c94768A1ABb78c3cB79AB28fc1aCE', 8, 'WBTC', 'WBTC'),
+  WETH: new Token(ChainId.CELO, '0x122013fd7dF1C6F636a5bb8f03108E876548b455', 18, 'WETH', 'WETH'),
+  WBTC: new Token(ChainId.CELO, '0xBAAB46E28388d2779e6E31Fd00cF0e5Ad95E327B', 8, 'WBTC', 'WBTC'),
+  USDC: new Token(ChainId.CELO, '0xef4229c8c3250C675F21BCefa42f58EfbfF6002a', 6, 'USDC', 'USD Coin'),
 }
 
 export const BSC: { [key: string]: Token } = {
@@ -74,6 +76,8 @@ export const MATIC: { [key: string]: Token } = {
     'Toucan Protocol: Base Carbon Tonne',
     'BCT'
   ),
+  MIM: new Token(ChainId.MATIC, '0x49a0400587A7F65072c87c4910449fDcC5c47242', 18, 'MIM', 'Magic Internet Money'),
+  ICE: new Token(ChainId.MATIC, '0x4e1581f01046eFDd7a1a2CDB0F82cdd7F71F2E59', 18, 'ICE', 'IceToken'),
 }
 
 export const OKEX: { [key: string]: Token } = {
