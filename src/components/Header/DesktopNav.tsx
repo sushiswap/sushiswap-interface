@@ -26,8 +26,8 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
   return (
-    <div className="px-6 py-3 flex flex-col gap-3">
-      <div className="grid grid-cols-2 items-center justify-between">
+    <div className="flex flex-col gap-3 px-6 py-3">
+      <div className="grid items-center justify-between grid-cols-2">
         <div className="flex items-center">
           <div className="w-12 h-6">
             <Image src="/logo.svg" alt="Sushi logo" width="24px" height="24px" />
@@ -121,7 +121,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
             </div>
           )}
 
-          <div className="w-auto flex items-center rounded border border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto">
+          <div className="flex items-center w-auto text-sm font-bold border rounded cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
             {account && chainId && userEthBalance && (
               <>
                 <div className="px-3 text-high-emphesis text-bold">
