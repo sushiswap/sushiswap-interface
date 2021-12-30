@@ -61,6 +61,7 @@ const ClassicStandardMode = () => {
               />
             }
             spendFromWallet={spendFromWalletA}
+            id="asset-input-a"
           />
           <div />
           <AssetInput
@@ -79,6 +80,7 @@ const ClassicStandardMode = () => {
               />
             }
             spendFromWallet={spendFromWalletB}
+            id="asset-input-b"
           />
           <div className="flex flex-col gap-3">
             <TridentApproveGate

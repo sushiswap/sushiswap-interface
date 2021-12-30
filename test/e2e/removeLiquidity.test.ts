@@ -65,8 +65,8 @@ describe('Remove Liquidity:', () => {
     await liquidityPoolsPage.goToPool(targetPoolName)
 
     const positionBeforeWithdraw = await poolPage.getPoolPosition()
-    expect(positionBeforeWithdraw.token0).toEqual('USDC')
-    expect(positionBeforeWithdraw.token1).toEqual('WETH')
+    expect(positionBeforeWithdraw.assetA).toEqual('USDC')
+    expect(positionBeforeWithdraw.assetB).toEqual('WETH')
     const poolLink = page.url()
 
     await poolPage.clickRemoveLiquidityButton()
@@ -76,10 +76,10 @@ describe('Remove Liquidity:', () => {
     await page.waitForSelector(`#pool-title-${targetPoolName}`)
 
     const positionAfterDeposit = await poolPage.getPoolPosition()
-    expect(positionAfterDeposit.token0).toEqual('USDC')
-    expect(positionAfterDeposit.token1).toEqual('WETH')
+    expect(positionAfterDeposit.assetA).toEqual('USDC')
+    expect(positionAfterDeposit.assetB).toEqual('WETH')
 
-    expect(positionAfterDeposit.amount0).toBeLessThanOrEqual(positionBeforeWithdraw.amount0)
-    expect(positionAfterDeposit.amount1).toBeLessThanOrEqual(positionBeforeWithdraw.amount1)
+    expect(positionAfterDeposit.amountA).toBeLessThanOrEqual(positionBeforeWithdraw.amountA)
+    expect(positionAfterDeposit.amountB).toBeLessThanOrEqual(positionBeforeWithdraw.amountB)
   })
 })
