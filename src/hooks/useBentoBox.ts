@@ -62,7 +62,19 @@ function useBentoBox() {
     [account, addTransaction, bentoBoxContract, chainId]
   )
 
-  return { deposit, withdraw }
+  const harvest = useCallback(async (tokenAddress: string, rebalance: boolean = false) => {
+    if (chainId) {
+      try {
+        const tx = await bentoBoxContract?.harvest(tokenAddress, rebalance, 0)
+        return addTransaction(tx, { summary: rebalance ? 'Harvest & Rebalance' : 'Harvest' })
+      } catch (e) {
+        console.error('bentobox harvest error:', e)
+        return e
+      }
+    }
+  }, [])
+
+  return { deposit, withdraw, harvest }
 }
 
 export default useBentoBox

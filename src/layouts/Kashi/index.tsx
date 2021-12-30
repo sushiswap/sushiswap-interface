@@ -1,29 +1,23 @@
 import Container from 'components/Container'
-import Footer from 'components/Footer'
-import Header from 'components/Header'
 import Image from 'components/Image'
 import Main from 'components/Main'
 import NavLink from 'components/NavLink'
 import Popups from 'components/Popups'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { FC } from 'react'
+
+const HEADER_HEIGHT = 64
 
 interface LayoutProps {
   left?: JSX.Element
-  children?: React.ReactChild | React.ReactChild[]
   right?: JSX.Element
 }
 
-export default function Layout({
-  left = undefined,
-  children = undefined,
-  right = undefined,
-}: LayoutProps): JSX.Element {
+const Layout: FC<LayoutProps> = ({ left, children, right }) => {
   const router = useRouter()
   return (
-    <div className="z-0 flex flex-col items-start w-full h-screen">
-      <Header />
+    <>
       <Main>
         <Container className="px-4 py-4 md:py-8 lg:py-12" maxWidth="7xl">
           <div className={`mb-2 grid grid-cols-12 gap-4`}>
@@ -119,7 +113,8 @@ export default function Layout({
         </Container>
       </Main>
       <Popups />
-      <Footer />
-    </div>
+    </>
   )
 }
+
+export default Layout

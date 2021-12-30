@@ -19,7 +19,7 @@ import React from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { RecoilRoot } from 'recoil'
 
-function Borrow() {
+export default function Borrow() {
   const { i18n } = useLingui()
 
   const addresses = useKashiPairAddresses()
@@ -40,7 +40,7 @@ function Borrow() {
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(data.items)
 
   return (
-    <>
+    <BorrowLayout>
       <Head>
         <title>{i18n._(t`Borrow`)} | Sushi</title>
         <meta
@@ -205,7 +205,7 @@ function Borrow() {
           next={() => setNumDisplayed(numDisplayed + 5)}
           hasMore={true}
           loader={
-            <div className="text-center mt-8">
+            <div className="mt-8 text-center">
               <Dots>Loading</Dots>
             </div>
           }
@@ -283,7 +283,7 @@ function Borrow() {
           </div>
         </InfiniteScroll>
       </Card>
-    </>
+    </BorrowLayout>
   )
 }
 
@@ -309,8 +309,4 @@ const BorrowLayout = ({ children }) => {
   )
 }
 
-Borrow.Layout = BorrowLayout
-
 Borrow.Guard = NetworkGuard(Feature.KASHI)
-
-export default Borrow

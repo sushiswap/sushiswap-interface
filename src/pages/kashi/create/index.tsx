@@ -28,7 +28,7 @@ export type ChainlinkToken = {
   decimals: number
 }
 
-function Create() {
+export default function Create() {
   const { chainId } = useActiveWeb3React()
 
   const bentoBoxContract = useBentoBoxContract()
@@ -166,7 +166,7 @@ function Create() {
   }
 
   return (
-    <>
+    <CreateLayout>
       <Head>
         <title>Create Lending Pair | Kashi by Sushi</title>
         <meta key="description" name="description" content="Create Lending Pair on Kashi by Sushi" />
@@ -220,7 +220,7 @@ function Create() {
           </Button>
         </Container>
       </Card>
-    </>
+    </CreateLayout>
   )
 }
 
@@ -244,8 +244,4 @@ const CreateLayout = ({ children }) => {
   )
 }
 
-Create.Layout = CreateLayout
-
 Create.Guard = NetworkGuard(Feature.KASHI)
-
-export default Create
