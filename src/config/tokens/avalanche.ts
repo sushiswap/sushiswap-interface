@@ -1,33 +1,5 @@
 import { ChainId, Token } from '@sushiswap/core-sdk'
 
-export const DAI_OLD = new Token(
-  ChainId.AVALANCHE,
-  '0xbA7dEebBFC5fA1100Fb055a87773e1E99Cd3507a',
-  18,
-  'oldDAI',
-  'Old Dai Stablecoin'
-)
-export const USDT_OLD = new Token(
-  ChainId.AVALANCHE,
-  '0xde3A24028580884448a5397872046a019649b084',
-  6,
-  'oldUSDT',
-  'Old Tether USD'
-)
-export const WBTC_OLD = new Token(
-  ChainId.AVALANCHE,
-  '0x408D4cD0ADb7ceBd1F1A1C33A0Ba2098E1295bAB',
-  8,
-  'oldWBTC',
-  'Old Wrapped Bitcoin'
-)
-export const WETH_OLD = new Token(
-  ChainId.AVALANCHE,
-  '0xf20d962a6c8f70c731bd838a3a388D7d48fA6e15',
-  18,
-  'oldWETH',
-  'Old Wrapped Ether'
-)
 export const USDC = new Token(ChainId.AVALANCHE, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC', 'USD Coin')
 export const DAI = new Token(
   ChainId.AVALANCHE,
@@ -50,4 +22,20 @@ export const WETH = new Token(
   18,
   'WETH',
   'Wrapped Ether'
+)
+export const MIM = new Token(
+  ChainId.AVALANCHE,
+  '0x130966628846BFd36ff31a822705796e8cb8C18D',
+  18,
+  'MIM',
+  'Magic Internet Money'
+)
+
+export const TIME = new Token(ChainId.AVALANCHE, '0xb54f16fB19478766A268F172C9480f8da1a7c9C3', 9, 'TIME', 'Time')
+export const SPELL = new Token(
+  ChainId.AVALANCHE,
+  '0xCE1bFFBD5374Dac86a2893119683F4911a2F7814',
+  18,
+  'SPELL',
+  'Spell Token'
 )

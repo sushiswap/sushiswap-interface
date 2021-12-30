@@ -21,3 +21,11 @@ export const BCT = new Token(
   'Toucan Protocol: Base Carbon Tonne',
   'BCT'
 )
+export const MIM = new Token(
+  ChainId.MATIC,
+  '0x49a0400587A7F65072c87c4910449fDcC5c47242',
+  18,
+  'MIM',
+  'Magic Internet Money'
+)
+export const ICE = new Token(ChainId.MATIC, '0x4e1581f01046eFDd7a1a2CDB0F82cdd7F71F2E59', 18, 'ICE', 'IceToken')

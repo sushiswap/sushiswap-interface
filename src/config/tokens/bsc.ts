@@ -6,3 +6,11 @@ export const USDC = new Token(ChainId.BSC, '0x8AC76a51cc950d9822D68b83fE1Ad97B32
 export const USDT = new Token(ChainId.BSC, '0x55d398326f99059fF775485246999027B3197955', 18, 'USDT', 'Tether USD')
 export const BTCB = new Token(ChainId.BSC, '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', 18, 'BTCB', 'Bitcoin')
 export const WETH = new Token(ChainId.BSC, '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', 18, 'WETH', 'Wrapped Ether')
+export const MIM = new Token(
+  ChainId.BSC,
+  '0xfE19F0B51438fd612f6FD59C1dbB3eA319f433Ba',
+  18,
+  'MIM',
+  'Magic Internet Money'
+)
+export const ICE = new Token(ChainId.BSC, '0xf16e81dce15B08F326220742020379B855B87DF9', 18, 'ICE', 'IceToken')

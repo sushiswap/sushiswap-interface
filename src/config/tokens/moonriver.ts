@@ -24,10 +24,4 @@ export const BTC = new Token(
   'WBTC',
   'Wrapped Bitcoin'
 )
-export const aROME = new Token(
-  ChainId.MOONRIVER,
-  '0x3D2D044E8C6dAd46b4F7896418d3d4DFaAD902bE',
-  9,
-  'aROME',
-  'Alpha Rome'
-)
+export const ROME = new Token(ChainId.MOONRIVER, '0x4a436073552044D5f2f49B176853ad3Ad473d9d6', 9, 'ROME', 'Rome')
