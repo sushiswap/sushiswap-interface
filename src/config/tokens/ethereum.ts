@@ -99,7 +99,6 @@ export const XSUSHI_CALL = new Token(
   'XSUSHI 25 Call [31 May 2021]'
 )
 export const WBTC = new Token(ChainId.ETHEREUM, '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599', 8, 'WBTC', 'Wrapped BTC')
-
 export const XSUSHI = new Token(
   ChainId.ETHEREUM,
   '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
@@ -107,7 +106,6 @@ export const XSUSHI = new Token(
   'xSUSHI',
   'SushiBar'
 )
-
 export const LIFT = new Token(ChainId.ETHEREUM, '0xf9209d900f7ad1DC45376a2caA61c78f6dEA53B6', 18, 'LIFT', 'LiftKitchen')
 export const LFBTC = new Token(
   ChainId.ETHEREUM,
@@ -118,7 +116,6 @@ export const LFBTC = new Token(
 )
 export const CVXCRV = new Token(ChainId.ETHEREUM, '0x62B9c7356A2Dc64a1969e19C23e4f579F9810Aa7', 18, 'cvxCRV', 'cvxCRV')
 export const CRV = new Token(ChainId.ETHEREUM, '0xD533a949740bb3306d119CC777fa900bA034cd52', 18, 'CRV', 'Curve')
-
 export const CRXSUSHI = new Token(
   ChainId.ETHEREUM,
   '0x228619CCa194Fbe3Ebeb2f835eC1eA5080DaFbb2',
@@ -133,7 +130,6 @@ export const AXSUSHI = new Token(
   'aXSUSHI',
   'Aave interest bearing XSUSHI'
 )
-
 export const DPI = new Token(ChainId.ETHEREUM, '0x1494CA1F11D487c2bBe4543E90080AeBa4BA3C2b', 18, 'DefiPulse', 'DPI')
 export const RAI = new Token(
   ChainId.ETHEREUM,
@@ -145,7 +141,8 @@ export const RAI = new Token(
 export const YFI = new Token(ChainId.ETHEREUM, '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e', 18, 'YFI', 'YFI')
 export const WOOFY = new Token(ChainId.ETHEREUM, '0xD0660cD418a64a1d44E9214ad8e459324D8157f1', 12, 'Woofy', 'WOOFY')
 export const SPANK = new Token(ChainId.ETHEREUM, '0x42d6622deCe394b54999Fbd73D108123806f6a18', 18, 'Spank', 'SPANK')
-export const OHM = new Token(ChainId.ETHEREUM, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus', 'OHM')
+export const OHM_V1 = new Token(ChainId.ETHEREUM, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus V1', 'OHM')
+export const OHM_V2 = new Token(ChainId.ETHEREUM, '0x64aa3364F17a4D01c6f1751Fd97C2BD3D7e7f1D5', 9, 'Olympus V2', 'OHM')
 export const INV = new Token(ChainId.ETHEREUM, '0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68', 18, 'Inverse Dao', 'INV')
 export const DOLA = new Token(
   ChainId.ETHEREUM,
@@ -154,3 +151,18 @@ export const DOLA = new Token(
   'Dola USD Stablecoin',
   'DOLA'
 )
+export const MIM = new Token(
+  ChainId.ETHEREUM,
+  '0x99D8a9C45b2ecA8864373A26D1459e3Dff1e17F3',
+  18,
+  'MIM',
+  'Magic Internet Money'
+)
+export const SPELL = new Token(
+  ChainId.ETHEREUM,
+  '0x090185f2135308BaD17527004364eBcC2D37e5F6',
+  18,
+  'SPELL',
+  'Spell Token'
+)
+export const ICE = new Token(ChainId.ETHEREUM, '0xf16e81dce15B08F326220742020379B855B87DF9', 18, 'ICE', 'IceToken')
