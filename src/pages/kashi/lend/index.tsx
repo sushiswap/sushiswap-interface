@@ -19,7 +19,7 @@ import React from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { RecoilRoot } from 'recoil'
 
-function Lend() {
+export default function Lend() {
   const { i18n } = useLingui()
   const addresses = useKashiPairAddresses()
   const pairs = useKashiPairs(addresses)
@@ -38,7 +38,7 @@ function Lend() {
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(data.items)
 
   return (
-    <>
+    <LendLayout>
       <Head>
         <title>Lend | Sushi</title>
         <meta
@@ -145,7 +145,7 @@ function Lend() {
             next={() => setNumDisplayed(numDisplayed + 5)}
             hasMore={true}
             loader={
-              <div className="text-center mt-8">
+              <div className="mt-8 text-center">
                 <Dots>Loading</Dots>
               </div>
             }
@@ -158,7 +158,7 @@ function Lend() {
           </InfiniteScroll>
         </div>
       </Card>
-    </>
+    </LendLayout>
   )
 }
 
@@ -251,8 +251,4 @@ const LendLayout = ({ children }) => {
   )
 }
 
-Lend.Layout = LendLayout
-
 Lend.Guard = NetworkGuard(Feature.KASHI)
-
-export default Lend

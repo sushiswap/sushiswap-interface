@@ -2,7 +2,7 @@ import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import Button from 'app/components/Button'
+import Button, { ButtonDotted } from 'app/components/Button'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useBentoMasterApproveCallback, { BentoApprovalState, BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
 import { StandardSignatureData, useTridentLiquidityTokenPermit } from 'app/hooks/useERC20Permit'
@@ -79,11 +79,11 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
 
   if (!signatureData && [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
     return (
-      <Button.Dotted id={id} pending={approveState === ApprovalState.PENDING} color="blue" onClick={handleApprove}>
+      <ButtonDotted id={id} pending={approveState === ApprovalState.PENDING} color="blue" onClick={handleApprove}>
         {approveState === ApprovalState.PENDING
           ? i18n._(t`Approving ${inputAmount?.currency.symbol}`)
           : i18n._(t`Approve ${inputAmount?.currency.symbol}`)}
-      </Button.Dotted>
+      </ButtonDotted>
     )
   }
 
@@ -147,7 +147,7 @@ const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
       {/*hide bentobox approval if not every inputAmount is greater than than zero*/}
       {inputAmounts.every((el) => el?.greaterThan(ZERO)) &&
         [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(bApprove) && (
-          <Button.Dotted
+          <ButtonDotted
             id={`btn-approve`}
             pending={bApprove === BentoApprovalState.PENDING}
             color="blue"
@@ -156,7 +156,7 @@ const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
             {bApprove === BentoApprovalState.PENDING
               ? i18n._(t`Approving BentoBox to spend tokens`)
               : i18n._(t`Approve BentoBox to spend tokens`)}
-          </Button.Dotted>
+          </ButtonDotted>
         )}
       {inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
         if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {

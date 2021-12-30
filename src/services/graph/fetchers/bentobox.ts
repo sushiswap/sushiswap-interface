@@ -150,6 +150,7 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
       token: strategy.token.id,
       apy: !isNaN(apy) ? aprToApy(apy, 365) : 0,
       targetPercentage: Number(strategy.token.strategyTargetPercentage ?? 0),
+      utilization: (Number(strategy.balance) / Number(strategy.token.totalSupplyElastic)) * 100,
     }
   })
 }

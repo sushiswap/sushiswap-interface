@@ -127,7 +127,6 @@ function MyApp({ Component, pageProps, fallback }) {
                     <ListsUpdater />
                     <UserUpdater />
                     <ApplicationUpdater />
-                    <TransactionUpdater />
                     <MulticallUpdater />
                   </>
                   <RecoilRoot>
@@ -140,6 +139,7 @@ function MyApp({ Component, pageProps, fallback }) {
                         <Portals />
                       </Layout>
                     </Provider>
+                    <TransactionUpdater />
                   </RecoilRoot>
                 </PersistGate>
               </ReduxProvider>
