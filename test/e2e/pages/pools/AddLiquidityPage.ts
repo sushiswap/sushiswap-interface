@@ -83,7 +83,7 @@ export class AddLiquidityPage extends AppPage {
     const inputs = await this.Page.$$('input[type=text]')
     if (inputs.length !== 2) throw new Error('Expected 2 text inputs on add liquidity page')
 
-    inputs[0].type(depositAmount.toFixed(5))
+    await inputs[0].type(depositAmount.toString())
   }
 
   public async setAssetBDepositAmount(depositAmount: number): Promise<void> {
@@ -91,7 +91,7 @@ export class AddLiquidityPage extends AppPage {
     const inputs = await this.Page.$$('input[type=text]')
     if (inputs.length !== 2) throw new Error('Expected 2 text inputs on add liquidity page')
 
-    inputs[1].type(depositAmount.toFixed(5))
+    await inputs[1].type(depositAmount.toString())
   }
 
   public async setAssetAFundFromWallet(fromWallet: boolean = true): Promise<void> {
