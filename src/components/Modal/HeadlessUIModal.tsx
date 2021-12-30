@@ -91,14 +91,14 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
       <Dialog
         as="div"
         className={classNames(
-          'fixed z-10 inset-0 overflow-y-auto',
+          'fixed z-50 inset-0 overflow-y-auto',
           isDesktop ? '' : 'bg-dark-900 pt-[64px]',
           className
         )}
         onClose={onDismiss}
       >
         {isDesktop ? (
-          <div className="relative flex items-center justify-center min-h-screen text-center block">
+          <div className="relative flex items-center justify-center block min-h-screen text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
