@@ -1,6 +1,7 @@
-import { Dappeteer, launch, setupMetamask } from '@chainsafe/dappeteer'
-import puppeteer, { Browser, Page } from 'puppeteer'
+import { Dappeteer } from '@chainsafe/dappeteer'
+import { Browser, Page } from 'puppeteer'
 
+import { TestHelper } from './helpers/TestHelper'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
 import { PoolPage } from './pages/pools/PoolPage'
 import { RemoveLiquidityPage } from './pages/pools/RemoveLiquidityPage'
@@ -29,27 +30,7 @@ jest.retryTimes(1)
 
 describe('Remove Liquidity:', () => {
   beforeAll(async () => {
-    browser = await launch(puppeteer, {
-      metamaskVersion: 'v10.1.1',
-      headless: false,
-      defaultViewport: null,
-      slowMo: 5,
-      args: ['--no-sandbox'],
-      executablePath: process.env.TEST_PUPPETEER_EXEC_PATH,
-    })
-    try {
-      metamask = await setupMetamask(browser, { seed: seed, password: pass })
-      await metamask.switchNetwork('kovan')
-      await metamask.page.setDefaultTimeout(180000)
-    } catch (error) {
-      console.log('Unknown error occurred setting up metamask')
-      throw error
-    }
-    page = await browser.newPage()
-    await page.setDefaultTimeout(180000)
-    await page.setUserAgent(
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
-    )
+    ;[metamask, browser, page] = await TestHelper.initDappeteer()
     await initPages()
   })
 
@@ -57,7 +38,7 @@ describe('Remove Liquidity:', () => {
     browser.close()
   })
 
-  test('Remove 25% in equal amounts and withdraw to BentoBox', async () => {
+  test.only('Remove 25% in equal amounts and withdraw to BentoBox', async () => {
     const targetPoolName = 'USDC-WETH'
 
     await liquidityPoolsPage.navigateTo()
@@ -67,10 +48,18 @@ describe('Remove Liquidity:', () => {
     const positionBeforeWithdraw = await poolPage.getPoolPosition()
     expect(positionBeforeWithdraw.assetA).toEqual('USDC')
     expect(positionBeforeWithdraw.assetB).toEqual('WETH')
-    const poolLink = page.url()
 
+    // TODO: Go to add liquidity page and get bento balances before withdraw
+
+    const poolLink = page.url()
     await poolPage.clickRemoveLiquidityButton()
+
+    // TODO: Break down to individual steps
     await removeLiquidityPage.removeLiquidity(25, false, true)
+
+    // TODO: Before withdraw, check that estimated output
+
+    // TODO: After withfraw check balance has increased by close to estimated output
 
     await page.goto(poolLink)
     await page.waitForSelector(`#pool-title-${targetPoolName}`)

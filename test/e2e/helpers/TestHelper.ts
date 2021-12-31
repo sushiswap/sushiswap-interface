@@ -77,7 +77,7 @@ export class TestHelper {
       if (process.env.CI === 'true') {
         await page.setDefaultTimeout(180000)
       } else {
-        await page.setDefaultTimeout(10000)
+        await page.setDefaultTimeout(30000)
       }
 
       await page.setUserAgent(
