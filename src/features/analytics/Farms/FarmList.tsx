@@ -65,14 +65,16 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
         <div className="flex flex-col items-center space-y-2">
           {rewards?.map((reward, i) => (
             <div key={i} className="flex items-center">
-              <Image
-                src={reward.icon}
-                width="30px"
-                height="30px"
-                className="rounded-full"
-                layout="fixed"
-                alt={reward.token}
-              />
+              {reward.icon && (
+                <Image
+                  src={reward.icon}
+                  width="30px"
+                  height="30px"
+                  className="rounded-full"
+                  layout="fixed"
+                  alt={reward.token}
+                />
+              )}
             </div>
           ))}
         </div>

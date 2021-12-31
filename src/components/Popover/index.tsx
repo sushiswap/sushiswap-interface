@@ -2,7 +2,7 @@ import { Popover as HeadlessuiPopover } from '@headlessui/react'
 import { Placement } from '@popperjs/core'
 import { classNames } from 'app/functions'
 import useInterval from 'app/hooks/useInterval'
-import React, { Fragment, ReactElement, useCallback, useState } from 'react'
+import React, { Fragment, useCallback, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 
@@ -39,7 +39,11 @@ export default function Popover({ content, children, placement = 'auto', show, m
       {({ open }) => (
         <>
           {React.Children.map(children, (child) => {
-            return React.cloneElement(child as ReactElement, { ref: setReferenceElement })
+            return (
+              <HeadlessuiPopover.Button as={Fragment} {...{ ref: setReferenceElement as any }}>
+                {child}
+              </HeadlessuiPopover.Button>
+            )
           })}
           {(show ?? open) &&
             ReactDOM.createPortal(

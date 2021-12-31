@@ -162,8 +162,6 @@ export default function Dashboard(): JSX.Element {
     [nativePrice, nativePrice1d, nativePrice1w, tokens, tokens1d, tokens1w]
   )
 
-  console.log(tokensFormatted[0])
-
   const { options, data } = useMemo(() => {
     switch (type) {
       case 'pools':
