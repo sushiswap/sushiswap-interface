@@ -2,6 +2,8 @@ import { Dappeteer } from '@chainsafe/dappeteer'
 import { closeValues } from '@sushiswap/tines'
 import { Browser, Page } from 'puppeteer'
 
+import { FUNDING_SOURCE } from './constants/FundingSource'
+import { RATIO } from './constants/Ratio'
 import { TestHelper } from './helpers/TestHelper'
 import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
@@ -10,8 +12,6 @@ import { RemoveLiquidityPage } from './pages/pools/RemoveLiquidityPage'
 
 require('dotenv').config()
 
-let seed: string = process.env.TEST_SEED || 'seed seed seed'
-let pass: string = process.env.TEST_PASS || 'password'
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
 
 let browser: Browser
@@ -42,8 +42,14 @@ describe('Remove Liquidity:', () => {
     browser.close()
   })
 
-  test.only('Remove 25% in equal amounts and withdraw to BentoBox', async () => {
+  test.only.each([
+    [25, RATIO.EQUAL, FUNDING_SOURCE.BENTO],
+    [25, RATIO.EQUAL, FUNDING_SOURCE.WALLET],
+    [5, RATIO.EQUAL, FUNDING_SOURCE.BENTO],
+  ])(`Remove %p percent in %p amounts and withdraw to %p`, async (removePercent, ratio, receiveTo) => {
     const targetPoolName = 'USDC-WETH'
+    const fixedRatio = ratio === RATIO.EQUAL
+    const withdrawToWallet = receiveTo === FUNDING_SOURCE.WALLET
     // USDC: Asset A
     // WETH: Asset B
 
@@ -60,17 +66,17 @@ describe('Remove Liquidity:', () => {
 
     await poolPage.clickAddLiquidityButton()
 
-    const usdcBentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
-    const ethBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
+    const usdcBalanceBefore = await addLiquidityPage.getAssetABalance(withdrawToWallet)
+    const ethBalanceBefore = await addLiquidityPage.getAssetBBalance(withdrawToWallet)
 
     // Set up page before confirm
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.goToPool(targetPoolName)
     await poolPage.clickRemoveLiquidityButton()
 
-    await removeLiquidityPage.setRemovePercent(25)
-    await removeLiquidityPage.setFixedRatio(true)
-    await removeLiquidityPage.setWithdrawToWallet(false)
+    await removeLiquidityPage.setRemovePercent(removePercent)
+    await removeLiquidityPage.setFixedRatio(fixedRatio)
+    await removeLiquidityPage.setWithdrawToWallet(withdrawToWallet)
 
     const minLiquidityOutput = await removeLiquidityPage.getMinLiquidityOutput(targetPoolName)
 
@@ -86,11 +92,11 @@ describe('Remove Liquidity:', () => {
 
     await poolPage.clickAddLiquidityButton()
 
-    const usdcBentoBalanceAfter = await addLiquidityPage.getAssetABalance(false)
-    const ethBentoBalanceAfter = await addLiquidityPage.getAssetBBalance(false)
+    const usdcBalanceAfter = await addLiquidityPage.getAssetABalance(withdrawToWallet)
+    const ethBalanceAfter = await addLiquidityPage.getAssetBBalance(withdrawToWallet)
 
-    const usdcBalanceDiff = usdcBentoBalanceAfter - usdcBentoBalanceBefore
-    const ethBalanceDiff = ethBentoBalanceAfter - ethBentoBalanceBefore
+    const usdcBalanceDiff = usdcBalanceAfter - usdcBalanceBefore
+    const ethBalanceDiff = ethBalanceAfter - ethBalanceBefore
 
     expect(closeValues(usdcBalanceDiff, minLiquidityOutput.amountA, 1e-9)).toBe(true)
     expect(closeValues(ethBalanceDiff, minLiquidityOutput.amountB, 1e-9)).toBe(true)
