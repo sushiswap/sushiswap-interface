@@ -1,4 +1,4 @@
-export interface PoolPosition {
+export interface ILiquidityInfo {
   assetA: string
   assetB: string
   amountA: number

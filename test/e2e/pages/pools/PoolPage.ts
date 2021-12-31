@@ -1,4 +1,4 @@
-import { PoolPosition } from '../../interfaces/PoolPosition'
+import { ILiquidityInfo } from '../../interfaces/ILiquidityInfo'
 import { AppPage } from '../AppPage'
 export class PoolPage extends AppPage {
   protected DepositButtonSelector: string = '#btn-deposit > a'
@@ -34,8 +34,8 @@ export class PoolPage extends AppPage {
     await this.Page.waitForNavigation()
   }
 
-  public async getPoolPosition(): Promise<PoolPosition> {
-    let poolPosition: PoolPosition = {
+  public async getPoolPosition(): Promise<ILiquidityInfo> {
+    let poolPosition: ILiquidityInfo = {
       assetA: '',
       assetB: '',
       amountA: 0,

@@ -1,5 +1,6 @@
 import { ElementHandle } from 'puppeteer'
 
+import { ILiquidityInfo } from '../../interfaces/ILiquidityInfo'
 import { AppPage } from '../AppPage'
 
 export class RemoveLiquidityPage extends AppPage {
@@ -14,10 +15,46 @@ export class RemoveLiquidityPage extends AppPage {
   protected WithdrawToSelector: string = '#txt-withdraw-to'
   protected CheckOutputToWalletSelector: string = '#chk-output-to-wallet'
 
-  public async removeLiquidity(percent: number, outputToWallet: boolean, fixedRatio: boolean = false): Promise<void> {
-    const percentSelectionButton = await this.Page.waitForSelector(this.RemovePercentSelector + percent.toString())
-    await percentSelectionButton.click()
+  protected EstimatedOutputTextSelector: string = '-min-liquidity-output'
 
+  public async removeLiquidity(percent: number, outputToWallet: boolean, fixedRatio: boolean = false): Promise<void> {
+    await this.setRemovePercent(percent)
+    await this.setFixedRatio(fixedRatio)
+    await this.setWithdrawToWallet(outputToWallet)
+    await this.confirmWithdrawal()
+  }
+
+  public async getMinLiquidityOutput(poolName: string): Promise<ILiquidityInfo> {
+    await this.blockingWait(1, true)
+
+    const assets = poolName.toLowerCase().split('-')
+    const assetA = assets[0]
+    const assetB = assets[1]
+
+    const estimatedOutput: ILiquidityInfo = {
+      assetA: assetA,
+      assetB: assetB,
+      amountA: await this.getEstimatedOutputForAsset(assetA),
+      amountB: await this.getEstimatedOutputForAsset(assetB),
+    }
+
+    return estimatedOutput
+  }
+
+  private async getEstimatedOutputForAsset(asset: string): Promise<number> {
+    const selector = `#` + asset + this.EstimatedOutputTextSelector
+    await this.Page.waitForSelector(selector)
+
+    const assetAEstimatedOutputDiv = await this.Page.$(selector)
+    const estimatedOutputString = (await (
+      await assetAEstimatedOutputDiv.getProperty('textContent')
+    ).jsonValue()) as string
+
+    return parseFloat(estimatedOutputString)
+  }
+
+  public async setFixedRatio(fixedRatio: boolean): Promise<void> {
+    await this.blockingWait(1, true)
     const fixedRatioCheckbox = await this.getFixedRatioCheckbox()
 
     if (fixedRatio && !(await this.isFixedRatioChecked())) {
@@ -25,19 +62,10 @@ export class RemoveLiquidityPage extends AppPage {
     } else if (!fixedRatio && (await this.isFixedRatioChecked())) {
       await fixedRatioCheckbox.click()
     }
+  }
 
-    const withdrawToElement = await this.Page.waitForSelector(this.WithdrawToSelector)
-    const withdrawTo = await this.Page.evaluate((el) => el.textContent, withdrawToElement)
-
-    const outputSelector = await this.Page.waitForSelector(this.CheckOutputToWalletSelector)
-    const outputSelectorButton = (await outputSelector.$x('..'))[0]
-
-    if (outputToWallet && withdrawTo.toLowerCase() !== 'wallet') {
-      await outputSelectorButton.click()
-    } else if (!outputToWallet && withdrawTo.toLowerCase() !== 'bentobox') {
-      await outputSelectorButton.click()
-    }
-
+  public async confirmWithdrawal(): Promise<void> {
+    await this.blockingWait(1, true)
     const approveButton = await this.Page.$(this.ApproveButtonSelector)
     if (approveButton) {
       await approveButton.click()
@@ -59,6 +87,27 @@ export class RemoveLiquidityPage extends AppPage {
     await backToPoolsButton.click()
 
     await this.blockingWait(5)
+  }
+
+  public async setWithdrawToWallet(withdrawToWallet: boolean): Promise<void> {
+    await this.blockingWait(1, true)
+    const withdrawToElement = await this.Page.waitForSelector(this.WithdrawToSelector)
+    const withdrawTo = await this.Page.evaluate((el) => el.textContent, withdrawToElement)
+
+    const outputSelector = await this.Page.waitForSelector(this.CheckOutputToWalletSelector)
+    const outputSelectorButton = (await outputSelector.$x('..'))[0]
+
+    if (withdrawToWallet && withdrawTo.toLowerCase() !== 'wallet') {
+      await outputSelectorButton.click()
+    } else if (!withdrawToWallet && withdrawTo.toLowerCase() !== 'bentobox') {
+      await outputSelectorButton.click()
+    }
+  }
+
+  public async setRemovePercent(percent: number): Promise<void> {
+    await this.blockingWait(1, true)
+    const percentSelectionButton = await this.Page.waitForSelector(this.RemovePercentSelector + percent.toString())
+    await percentSelectionButton.click()
   }
 
   private async getFixedRatioCheckbox(): Promise<ElementHandle<Element>> {
