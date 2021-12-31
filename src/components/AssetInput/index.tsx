@@ -219,7 +219,11 @@ const AssetInputPanel = ({
               </span>
             )}
           </Typography>
-          <Typography variant="sm" className={error ? 'text-red' : usdcValue ? 'text-green' : 'text-low-emphesis'}>
+          <Typography
+            id={currency.symbol + '-usdc-value'}
+            variant="sm"
+            className={error ? 'text-red' : usdcValue ? 'text-green' : 'text-low-emphesis'}
+          >
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
         </div>

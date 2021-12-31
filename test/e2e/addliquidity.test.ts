@@ -36,6 +36,10 @@ async function importTokens() {
   await liquidityPoolsPage.addTokenToMetamask(ADDRESSES.USDC)
 }
 
+function round(input: number): number {
+  return parseFloat(input.toFixed(5))
+}
+
 jest.retryTimes(1)
 
 describe('Add Liquidity:', () => {
@@ -48,8 +52,6 @@ describe('Add Liquidity:', () => {
   afterAll(async () => {
     browser.close()
   })
-
-  // TODO: Position check after deposit should account for pool fee
 
   test('Should deposit USDC from wallet in unequal amounts', async () => {
     const targetPoolName = 'USDC-WETH'
@@ -67,7 +69,7 @@ describe('Add Liquidity:', () => {
     await poolPage.clickAddLiquidityButton()
 
     const usdcWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
-    const usdcDepositAmount: number = usdcWalletBalanceBefore * 0.1
+    const usdcDepositAmount = round(usdcWalletBalanceBefore * 0.1)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetAFundFromWallet(true)
@@ -107,11 +109,11 @@ describe('Add Liquidity:', () => {
     await poolPage.clickAddLiquidityButton()
 
     const ethWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
-    const ethDepositAmount: number = ethWalletBalanceBefore * 0.1
+    const ethDepositAmount = round(ethWalletBalanceBefore * 0.1)
 
     await addLiquidityPage.setFixedRatio(false)
-    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
     await addLiquidityPage.setAssetBFundFromWallet(true)
+    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
 
     await addLiquidityPage.confirmDeposit()
 
@@ -145,11 +147,11 @@ describe('Add Liquidity:', () => {
     await poolPage.clickAddLiquidityButton()
 
     const ethBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
-    const ethDepositAmount: number = ethBalanceBefore * 0.1
+    const ethDepositAmount = round(ethBalanceBefore * 0.1)
 
     await addLiquidityPage.setFixedRatio(false)
-    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
     await addLiquidityPage.setAssetBFundFromWallet(false)
+    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
 
     await addLiquidityPage.confirmDeposit()
 
@@ -166,6 +168,195 @@ describe('Add Liquidity:', () => {
     const ethBalanceDiff = ethBalanceBefore - ethBalanceAfter
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
     expect(closeValues(positionAfterDeposit.amountB, positionBeforeDeposit.amountB + ethDepositAmount, 1e-9)).toBe(true)
+  })
+
+  test('Should deposit ETH from wallet & USDC from wallet in unequal amounts', async () => {
+    const targetPoolName = 'USDC-WETH'
+
+    await liquidityPoolsPage.navigateTo()
+    await liquidityPoolsPage.connectMetamaskWallet()
+    await liquidityPoolsPage.goToPool(targetPoolName)
+
+    const positionBeforeDeposit = await poolPage.getPoolPosition()
+    expect(positionBeforeDeposit.assetA).toEqual('USDC')
+    expect(positionBeforeDeposit.assetB).toEqual('WETH')
+    const poolLink = page.url()
+
+    await poolPage.clickAddLiquidityButton()
+
+    const assetAWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
+    const assetBWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
+
+    const assetADepositAmount = round(assetAWalletBalanceBefore * 0.1)
+    const assetBDepositAmount = round(assetBWalletBalanceBefore * 0.1)
+
+    await addLiquidityPage.setFixedRatio(false)
+    await addLiquidityPage.setAssetAFundFromWallet(true)
+    await addLiquidityPage.setAssetBFundFromWallet(true)
+
+    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
+    await addLiquidityPage.setAssetBDepositAmount(assetBDepositAmount)
+
+    await addLiquidityPage.confirmDeposit()
+
+    await page.goto(poolLink)
+    await page.waitForSelector(`#pool-title-${targetPoolName}`)
+
+    const positionAfterDeposit = await poolPage.getPoolPosition()
+    expect(positionAfterDeposit.assetA).toEqual('USDC')
+    expect(positionAfterDeposit.assetB).toEqual('WETH')
+
+    await poolPage.clickAddLiquidityButton()
+    const assetAWalletBalanceAfter = await addLiquidityPage.getAssetABalance(true)
+    const assetBWalletBalanceAfter = await addLiquidityPage.getAssetBBalance(true)
+
+    const assetABalanceDiff = assetAWalletBalanceBefore - assetAWalletBalanceAfter
+    const assetBBalanceDiff = assetBWalletBalanceBefore - assetBWalletBalanceAfter
+    expect(closeValues(assetABalanceDiff, assetADepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(assetBBalanceDiff, assetBDepositAmount, 1e-9)).toBe(true)
+  })
+
+  test('Should deposit ETH from wallet & USDC from bento in unequal amounts', async () => {
+    const targetPoolName = 'USDC-WETH'
+    // AssetA = USDC, AssetB = WETH
+
+    await liquidityPoolsPage.navigateTo()
+    await liquidityPoolsPage.connectMetamaskWallet()
+    await liquidityPoolsPage.goToPool(targetPoolName)
+
+    const positionBeforeDeposit = await poolPage.getPoolPosition()
+    expect(positionBeforeDeposit.assetA).toEqual('USDC')
+    expect(positionBeforeDeposit.assetB).toEqual('WETH')
+    const poolLink = page.url()
+
+    await poolPage.clickAddLiquidityButton()
+
+    const usdcBentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
+    const ethWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
+
+    const usdcDepositAmount = round(usdcBentoBalanceBefore * 0.1)
+    const ethDepositAmount = round(ethWalletBalanceBefore * 0.1)
+
+    await addLiquidityPage.setFixedRatio(false)
+    await addLiquidityPage.setAssetAFundFromWallet(false)
+    await addLiquidityPage.setAssetBFundFromWallet(true)
+
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
+    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+
+    await addLiquidityPage.confirmDeposit()
+
+    await page.goto(poolLink)
+    await page.waitForSelector(`#pool-title-${targetPoolName}`)
+
+    const positionAfterDeposit = await poolPage.getPoolPosition()
+    expect(positionAfterDeposit.assetA).toEqual('USDC')
+    expect(positionAfterDeposit.assetB).toEqual('WETH')
+
+    await poolPage.clickAddLiquidityButton()
+    const usdcBentoBalanceAfter = await addLiquidityPage.getAssetABalance(false)
+    const ethWalletBalanceAfter = await addLiquidityPage.getAssetBBalance(true)
+
+    const assetABalanceDiff = usdcBentoBalanceBefore - usdcBentoBalanceAfter
+    const assetBBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
+    expect(closeValues(assetABalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(assetBBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
+  })
+
+  test('Should deposit ETH from bento & USDC from wallet in unequal amounts', async () => {
+    const targetPoolName = 'USDC-WETH'
+    // AssetA = USDC, AssetB = WETH
+
+    await liquidityPoolsPage.navigateTo()
+    await liquidityPoolsPage.connectMetamaskWallet()
+    await liquidityPoolsPage.goToPool(targetPoolName)
+
+    const positionBeforeDeposit = await poolPage.getPoolPosition()
+    expect(positionBeforeDeposit.assetA).toEqual('USDC')
+    expect(positionBeforeDeposit.assetB).toEqual('WETH')
+    const poolLink = page.url()
+
+    await poolPage.clickAddLiquidityButton()
+
+    const usdcWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
+    const ethBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
+
+    const usdcDepositAmount = round(usdcWalletBalanceBefore * 0.1)
+    const ethDepositAmount = round(ethBentoBalanceBefore * 0.1)
+
+    await addLiquidityPage.setFixedRatio(false)
+    await addLiquidityPage.setAssetAFundFromWallet(true)
+    await addLiquidityPage.setAssetBFundFromWallet(false)
+
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
+    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+
+    await addLiquidityPage.confirmDeposit()
+
+    await page.goto(poolLink)
+    await page.waitForSelector(`#pool-title-${targetPoolName}`)
+
+    const positionAfterDeposit = await poolPage.getPoolPosition()
+    expect(positionAfterDeposit.assetA).toEqual('USDC')
+    expect(positionAfterDeposit.assetB).toEqual('WETH')
+
+    await poolPage.clickAddLiquidityButton()
+    const usdcWalletBalanceAfter = await addLiquidityPage.getAssetABalance(true)
+    const ethBentoBalanceAfter = await addLiquidityPage.getAssetBBalance(false)
+
+    const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
+    const ethBalanceDiff = ethBentoBalanceBefore - ethBentoBalanceAfter
+    expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
+  })
+
+  test('Should deposit ETH from bento & USDC from bento in unequal amounts', async () => {
+    const targetPoolName = 'USDC-WETH'
+    // AssetA: USDC
+    // AssetB: WETH
+
+    await liquidityPoolsPage.navigateTo()
+    await liquidityPoolsPage.connectMetamaskWallet()
+    await liquidityPoolsPage.goToPool(targetPoolName)
+
+    const positionBeforeDeposit = await poolPage.getPoolPosition()
+    expect(positionBeforeDeposit.assetA).toEqual('USDC')
+    expect(positionBeforeDeposit.assetB).toEqual('WETH')
+
+    const poolLink = page.url()
+
+    await poolPage.clickAddLiquidityButton()
+
+    const usdcBentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
+    const ethBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
+
+    const usdcDepositAmount = round(usdcBentoBalanceBefore * 0.1)
+    const ethDepositAmount = round(ethBentoBalanceBefore * 0.1)
+
+    await addLiquidityPage.setFixedRatio(false)
+    await addLiquidityPage.setAssetAFundFromWallet(false)
+    await addLiquidityPage.setAssetBFundFromWallet(false)
+
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
+    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+
+    await addLiquidityPage.confirmDeposit()
+
+    await page.goto(poolLink)
+    await page.waitForSelector(`#pool-title-${targetPoolName}`)
+
+    const positionAfterDeposit = await poolPage.getPoolPosition()
+    expect(positionAfterDeposit.assetA).toEqual('USDC')
+    expect(positionAfterDeposit.assetB).toEqual('WETH')
+
+    await poolPage.clickAddLiquidityButton()
+    const usdcBentoBalanceAfter = await addLiquidityPage.getAssetABalance(false)
+    const ethBentoBalanceAfter = await addLiquidityPage.getAssetBBalance(false)
+
+    const usdcBalanceDiff = usdcBentoBalanceBefore - usdcBentoBalanceAfter
+    const ethBalanceDiff = ethBentoBalanceBefore - ethBentoBalanceAfter
+    expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from bento & USDC from bento in equal amounts', async () => {
@@ -185,12 +376,13 @@ describe('Add Liquidity:', () => {
     const assetABentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
     const assetBBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
 
-    const assetADepositAmount: number = assetABentoBalanceBefore * 0.1
+    const assetADepositAmount = round(assetABentoBalanceBefore * 0.1)
 
     await addLiquidityPage.setFixedRatio(true)
-    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
     await addLiquidityPage.setAssetAFundFromWallet(false)
     await addLiquidityPage.setAssetBFundFromWallet(false)
+
+    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
 
     const assetBDepositAmount = await addLiquidityPage.getAssetBDepositAmount()
 
@@ -220,8 +412,10 @@ describe('Add Liquidity:', () => {
     )
   })
 
-  test('Should deposit ETH from wallet & USDC from wallet in unequal amounts', async () => {
+  test('Should deposit ETH from wallet & USDC from wallet in equal amounts', async () => {
     const targetPoolName = 'USDC-WETH'
+    // AssetA: USDC
+    // AssetB: WETH
 
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.connectMetamaskWallet()
@@ -230,131 +424,23 @@ describe('Add Liquidity:', () => {
     const positionBeforeDeposit = await poolPage.getPoolPosition()
     expect(positionBeforeDeposit.assetA).toEqual('USDC')
     expect(positionBeforeDeposit.assetB).toEqual('WETH')
-    const poolLink = page.url()
 
-    await poolPage.clickAddLiquidityButton()
-
-    const assetAWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
-    const assetBWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
-
-    const assetADepositAmount = assetAWalletBalanceBefore * 0.1
-    const assetBDepositAmount = assetBWalletBalanceBefore * 0.1
-
-    await addLiquidityPage.setFixedRatio(false)
-    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
-    await addLiquidityPage.setAssetBDepositAmount(assetBDepositAmount)
-
-    await addLiquidityPage.setAssetAFundFromWallet(true)
-    await addLiquidityPage.setAssetBFundFromWallet(true)
-
-    await addLiquidityPage.confirmDeposit()
-
-    await page.goto(poolLink)
-    await page.waitForSelector(`#pool-title-${targetPoolName}`)
-
-    const positionAfterDeposit = await poolPage.getPoolPosition()
-    expect(positionAfterDeposit.assetA).toEqual('USDC')
-    expect(positionAfterDeposit.assetB).toEqual('WETH')
-
-    await poolPage.clickAddLiquidityButton()
-    const assetAWalletBalanceAfter = await addLiquidityPage.getAssetABalance(true)
-    const assetBWalletBalanceAfter = await addLiquidityPage.getAssetBBalance(true)
-
-    const assetABalanceDiff = assetAWalletBalanceBefore - assetAWalletBalanceAfter
-    const assetBBalanceDiff = assetBWalletBalanceBefore - assetBWalletBalanceAfter
-    expect(closeValues(assetABalanceDiff, assetADepositAmount, 1e-9)).toBe(true)
-    expect(closeValues(assetBBalanceDiff, assetBDepositAmount, 1e-9)).toBe(true)
-
-    // expect(closeValues(positionAfterDeposit.amountA, positionBeforeDeposit.amountA + assetABalanceDiff, 1e-9)).toBe(
-    //   true
-    // )
-    // expect(closeValues(positionAfterDeposit.amountB, positionBeforeDeposit.amountB + assetBBalanceDiff, 1e-9)).toBe(
-    //   true
-    // )
-  })
-
-  test('Should deposit ETH from wallet & USDC from bento in unequal amounts', async () => {
-    const targetPoolName = 'USDC-WETH'
-    // AssetA = USDC, AssetB = WETH
-
-    await liquidityPoolsPage.navigateTo()
-    await liquidityPoolsPage.connectMetamaskWallet()
-    await liquidityPoolsPage.goToPool(targetPoolName)
-
-    const positionBeforeDeposit = await poolPage.getPoolPosition()
-    expect(positionBeforeDeposit.assetA).toEqual('USDC')
-    expect(positionBeforeDeposit.assetB).toEqual('WETH')
-    const poolLink = page.url()
-
-    await poolPage.clickAddLiquidityButton()
-
-    const usdcBentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
-    const ethWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
-
-    const usdcDepositAmount = usdcBentoBalanceBefore * 0.1
-    const ethDepositAmount = ethWalletBalanceBefore * 0.1
-
-    await addLiquidityPage.setFixedRatio(false)
-    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
-    await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
-
-    await addLiquidityPage.setAssetAFundFromWallet(false)
-    await addLiquidityPage.setAssetBFundFromWallet(true)
-
-    await addLiquidityPage.confirmDeposit()
-
-    await page.goto(poolLink)
-    await page.waitForSelector(`#pool-title-${targetPoolName}`)
-
-    const positionAfterDeposit = await poolPage.getPoolPosition()
-    expect(positionAfterDeposit.assetA).toEqual('USDC')
-    expect(positionAfterDeposit.assetB).toEqual('WETH')
-
-    await poolPage.clickAddLiquidityButton()
-    const usdcBentoBalanceAfter = await addLiquidityPage.getAssetABalance(false)
-    const ethWalletBalanceAfter = await addLiquidityPage.getAssetBBalance(true)
-
-    const assetABalanceDiff = usdcBentoBalanceBefore - usdcBentoBalanceAfter
-    const assetBBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
-    expect(closeValues(assetABalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
-    expect(closeValues(assetBBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
-
-    // TODO: Check pool position inc fee
-    // expect(closeValues(positionAfterDeposit.amountA, positionBeforeDeposit.amountA + assetABalanceDiff, 1e-9)).toBe(
-    //   true
-    // )
-    // expect(closeValues(positionAfterDeposit.amountB, positionBeforeDeposit.amountB + assetBBalanceDiff, 1e-9)).toBe(
-    //   true
-    // )
-  })
-
-  test('Should deposit ETH from bento & USDC from wallet in unequal amounts', async () => {
-    const targetPoolName = 'USDC-WETH'
-    // AssetA = USDC, AssetB = WETH
-
-    await liquidityPoolsPage.navigateTo()
-    await liquidityPoolsPage.connectMetamaskWallet()
-    await liquidityPoolsPage.goToPool(targetPoolName)
-
-    const positionBeforeDeposit = await poolPage.getPoolPosition()
-    expect(positionBeforeDeposit.assetA).toEqual('USDC')
-    expect(positionBeforeDeposit.assetB).toEqual('WETH')
     const poolLink = page.url()
 
     await poolPage.clickAddLiquidityButton()
 
     const usdcWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
-    const ethBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
+    const ethWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
 
-    const usdcDepositAmount = usdcWalletBalanceBefore * 0.1
-    const ethDepositAmount = ethBentoBalanceBefore * 0.1
+    const ethDepositAmount = round(ethWalletBalanceBefore * 0.1)
 
-    await addLiquidityPage.setFixedRatio(false)
-    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
+    await addLiquidityPage.setFixedRatio(true)
+    await addLiquidityPage.setAssetAFundFromWallet(true)
+    await addLiquidityPage.setAssetBFundFromWallet(true)
+
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
 
-    await addLiquidityPage.setAssetAFundFromWallet(true)
-    await addLiquidityPage.setAssetBFundFromWallet(false)
+    const usdcDepositAmount = await addLiquidityPage.getAssetADepositAmount()
 
     await addLiquidityPage.confirmDeposit()
 
@@ -367,19 +453,11 @@ describe('Add Liquidity:', () => {
 
     await poolPage.clickAddLiquidityButton()
     const usdcWalletBalanceAfter = await addLiquidityPage.getAssetABalance(true)
-    const ethBentoBalanceAfter = await addLiquidityPage.getAssetBBalance(false)
+    const ethWalletBalanceAfter = await addLiquidityPage.getAssetBBalance(true)
 
     const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
-    const ethBalanceDiff = ethBentoBalanceBefore - ethBentoBalanceAfter
+    const ethBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
-
-    // TODO: Check pool position inc fee
-    // expect(closeValues(positionAfterDeposit.amountA, positionBeforeDeposit.amountA + assetABalanceDiff, 1e-9)).toBe(
-    //   true
-    // )
-    // expect(closeValues(positionAfterDeposit.amountB, positionBeforeDeposit.amountB + assetBBalanceDiff, 1e-9)).toBe(
-    //   true
-    // )
   })
 })
