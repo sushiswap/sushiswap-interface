@@ -132,7 +132,7 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ mess
   const { i18n } = useLingui()
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 p-6">
       <div>
         <div className="flex justify-between">
           <div className="text-lg font-medium text-high-emphesis">{i18n._(t`Error`)}</div>
