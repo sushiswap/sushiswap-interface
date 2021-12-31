@@ -1,3 +1,5 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Currency } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import CurrencyLogo from 'app/components/CurrencyLogo'
@@ -16,15 +18,18 @@ export default function CommonBases({
   selectedCurrency?: Currency | null
   onSelect: (currency: Currency) => void
 }) {
+  const { i18n } = useLingui()
   const bases = typeof chainId !== 'undefined' ? COMMON_BASES[chainId] ?? [] : []
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col gap-3">
       <div className="flex flex-row">
-        Common bases
-        <QuestionHelper text="These tokens are commonly paired with other tokens." />
+        <Typography variant="sm" weight={700} className="text-low-emphesis flex items-center">
+          {i18n._(t`Common bases`)}
+          <QuestionHelper text="These tokens are commonly paired with other tokens." />
+        </Typography>
       </div>
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap gap-2">
         {bases.map((currency: Currency) => {
           const isSelected = selectedCurrency?.equals(currency)
           return (
@@ -34,7 +39,7 @@ export default function CommonBases({
               onClick={() => !isSelected && onSelect(currency)}
               disabled={isSelected}
               key={currencyId(currency)}
-              className="flex items-center p-2 m-1 space-x-2 rounded bg-dark-800 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+              className="disabled:bg-dark-700 flex items-center p-2 space-x-2 rounded bg-dark-700/20 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
             >
               <CurrencyLogo currency={currency} />
               <Typography variant="sm" className="font-semibold">

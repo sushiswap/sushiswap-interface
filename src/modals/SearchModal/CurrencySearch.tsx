@@ -3,8 +3,8 @@ import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
 import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import Column from 'app/components/Column'
 import ModalHeader from 'app/components/ModalHeader'
+import Typography from 'app/components/Typography'
 import { filterTokens, useSortedTokensByQuery } from 'app/functions/filtering'
 import { isAddress } from 'app/functions/validate'
 import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from 'app/hooks/Tokens'
@@ -175,10 +175,10 @@ export function CurrencySearch({
   )
 
   return (
-    <div className="flex flex-col max-h-[inherit]">
-      <ModalHeader className="h-full" onClose={onDismiss} title="Select a token" />
+    <div className="flex flex-col h-full">
+      <ModalHeader className="py-2" onClose={onDismiss} title="Select a token" />
       {!currencyList && showSearch && (
-        <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
+        <div className="mt-0 mb-3 sm:mb-8">
           <input
             type="text"
             id="token-search-input"
@@ -188,7 +188,7 @@ export function CurrencySearch({
             ref={inputRef as RefObject<HTMLInputElement>}
             onChange={handleInput}
             onKeyDown={handleEnter}
-            className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
+            className="w-full bg-dark-1000/20 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
           />
         </div>
       )}
@@ -198,12 +198,10 @@ export function CurrencySearch({
         </div>
       )}
 
-      {searchToken && !searchTokenIsAdded ? (
-        <Column style={{ padding: '20px 0', height: '100%' }}>
+      <div className="h-screen border-t border-b border-dark-800 -mx-6">
+        {searchToken && !searchTokenIsAdded ? (
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
-        </Column>
-      ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
-        <div className="h-screen">
+        ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
           <AutoSizer disableWidth>
             {({ height }) => (
               <CurrencyList
@@ -220,15 +218,15 @@ export function CurrencySearch({
               />
             )}
           </AutoSizer>
-        </div>
-      ) : (
-        <Column style={{ padding: '20px', height: '100%' }}>
-          <div className="mb-8 text-center">{i18n._(t`No results found`)}</div>
-        </Column>
-      )}
+        ) : (
+          <Typography weight={700} variant="xs" className="text-secondary flex h-full justify-center items-center">
+            {i18n._(t`No results found`)}
+          </Typography>
+        )}
+      </div>
       {allowManageTokenList && (
-        <div className="mt-3">
-          <Button id="list-token-manage-button" onClick={showManageView} color="gray">
+        <div className="mt-5 flex justify-center">
+          <Button id="list-token-manage-button" onClick={showManageView} color="blue" variant="empty">
             {i18n._(t`Manage Token Lists`)}
           </Button>
         </div>
