@@ -3,7 +3,6 @@ import { closeValues } from '@sushiswap/tines'
 import { Browser, Page } from 'puppeteer'
 
 import { ADDRESSES } from './constants/Addresses'
-import { FUNDING_SOURCE } from './constants/FundingSource'
 import { TestHelper } from './helpers/TestHelper'
 import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
@@ -22,8 +21,6 @@ let liquidityPoolsPage: LiquidityPoolsPage
 let poolPage: PoolPage
 let addLiquidityPage: AddLiquidityPage
 let swapPage: SwapPage
-
-const unequalDepositCases = [['ETH', FUNDING_SOURCE.BENTO]]
 
 async function initPages() {
   liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}/trident/pools`)
