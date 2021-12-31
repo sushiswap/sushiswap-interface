@@ -29,7 +29,7 @@ function Manage({
   const [tabIndex, setTabIndex] = useState(0)
 
   return (
-    <div className="flex flex-col max-h-[inherit]">
+    <div className="flex flex-col h-full">
       <ModalHeader
         onClose={onDismiss}
         title={i18n._(t`Manage`)}

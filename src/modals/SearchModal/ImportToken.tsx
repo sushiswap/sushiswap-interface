@@ -30,7 +30,7 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
 
   const addToken = useAddUserToken()
   return (
-    <div className="relative w-full space-y-3 overflow-auto p-6">
+    <div className="flex flex-col h-full">
       <ModalHeader
         onBack={onBack}
         onClose={onDismiss}
@@ -72,6 +72,7 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
           </div>
         )
       })}
+      <div className="flex flex-grow" />
       <Button
         color="gradient"
         onClick={() => {
