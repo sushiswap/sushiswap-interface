@@ -2634,20 +2634,20 @@
     ejs "^2.6.1"
     magic-string "^0.25.0"
 
-"@sushiswap/chainlink-whitelist@0.2.5":
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.5.tgz#fcf3f36fee62bcfbe2389587d5dd3657ecb00bfb"
-  integrity sha512-XJ7D1zOITrLjKYpweHafroxu1xsQ1mJiDsvhjBVs6snT5zNPyfRXNxhB6sD3VXseDkQmqNWtgkSe4UJ8t8TrcQ==
+"@sushiswap/chainlink-whitelist@0.2.7":
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.7.tgz#11eaba51231bafac89dcac10c93e8e5b51cd3bc5"
+  integrity sha512-NgjOCnrBI3PUFOB17RJqZmj12syLLmD9UytJbD5PwSdcdGYM2VSxEOpHs5G8gDBGnldU+1YM0rJlDiTq3j8t1w==
 
 "@sushiswap/core@^2.0.0-canary.1":
   version "2.0.0-canary.1"
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@20.18.0":
-  version "20.18.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-20.18.0.tgz#c3998674ee222753cf64305a8e9eed7603b50462"
-  integrity sha512-Aa6CpRALuMal0F121Er0ccqQHaNcdJ8nWhFaD8w8J8W3ujzEuyNnU7XWppXE3q4sfDuXACX8FKfXY1Hdzn8uzw==
+"@sushiswap/default-token-list@21.0.0":
+  version "21.0.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-21.0.0.tgz#0e188c7d2e6ad919c238e3a8947f8af7db7cc65f"
+  integrity sha512-hG0LOrHa0Donc85WWfiUVMdkeYGG4n7uiBPPRXSelslhGGKWyzkq/zxRRJK0Gpok2t76OBPILIYokuMN0DgtGw==
 
 "@sushiswap/default-token-list@^11.3.0":
   version "11.5.0"
