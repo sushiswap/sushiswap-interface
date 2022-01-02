@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
+    "@clover-network/clover-connector": "^1.0.0",
     "@commitlint/cli": "^12.1.4",
     "@commitlint/config-conventional": "^12.1.4",
     "@ethereumjs/common": "^2.3.0",

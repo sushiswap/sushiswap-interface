@@ -1237,6 +1237,15 @@
     human-id "^1.0.2"
     prettier "^1.19.1"
 
+"@clover-network/clover-connector@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@clover-network/clover-connector/-/clover-connector-1.0.0.tgz#e56a91e9192831f6036b21799a92734fd2a604e7"
+  integrity sha512-r30ymrPAXCxSrhKZZ+PmlQDjBi+wxYo5E+fbh4UvhAeviS+/5QxT0SLNNjPwQpVi5ouP0ZOCvwcwa2vLr/gSwA==
+  dependencies:
+    "@web3-react/abstract-connector" "^6.0.7"
+    "@web3-react/types" "^6.0.7"
+    tiny-warning "^1.0.3"
+
 "@commitlint/cli@^12.1.4":
   version "12.1.4"
   resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-12.1.4.tgz#af4d9dd3c0122c7b39a61fa1cd2abbad0422dbe0"
