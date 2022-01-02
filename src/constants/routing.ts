@@ -302,7 +302,6 @@ export const COMMON_BASES: ChainTokenList = {
     USDC,
     USDT,
     WBTC,
-    OHM_V1,
     OHM_V2,
     SUSHI[ChainId.MAINNET],
     MIM,
