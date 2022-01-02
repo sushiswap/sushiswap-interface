@@ -11,16 +11,18 @@ function useEagerConnect() {
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
       if (isAuthorized) {
-        activate(injected, undefined, true).catch(() => {
-          setTried(true)
-        })
-        window.ethereum.removeAllListeners(['networkChanged'])
-      } else {
-        if (isMobile && window.ethereum) {
-          activate(injected, undefined, true).catch(() => {
+        activate(injected, undefined, true)
+          .then(() => window.ethereum.removeAllListeners(['networkChanged']))
+          .catch(() => {
             setTried(true)
           })
-          window.ethereum.removeAllListeners(['networkChanged'])
+      } else {
+        if (isMobile && window.ethereum) {
+          activate(injected, undefined, true)
+            .then(() => window.ethereum.removeAllListeners(['networkChanged']))
+            .catch(() => {
+              setTried(true)
+            })
         } else {
           setTried(true)
         }
