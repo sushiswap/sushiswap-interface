@@ -107,7 +107,7 @@ export const SUPPORTED_NETWORKS: {
   },
   [ChainId.AVALANCHE]: {
     chainId: '0xA86A',
-    chainName: 'Avalanche',
+    chainName: 'Avalanche Mainnet C-Chain',
     nativeCurrency: {
       name: 'Avalanche Token',
       symbol: 'AVAX',

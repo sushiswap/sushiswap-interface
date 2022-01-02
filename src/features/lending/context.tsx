@@ -1,4 +1,14 @@
-import { ChainId, Currency, KASHI_ADDRESS, NATIVE, Token, USDC, WNATIVE } from '@sushiswap/sdk'
+import {
+  ChainId,
+  Currency,
+  KASHI_ADDRESS,
+  NATIVE,
+  Token,
+  USDC,
+  WNATIVE,
+  USD_ADDRESS,
+  WNATIVE_ADDRESS,
+} from '@sushiswap/sdk'
 import React, { createContext, useCallback, useContext, useEffect, useReducer } from 'react'
 import { ZERO, e10, maximum, minimum } from '../../functions/math'
 import {
@@ -14,7 +24,6 @@ import { useBentoBoxContract, useBoringHelperContract } from '../../hooks/useCon
 
 import { BigNumber } from '@ethersproject/bignumber'
 import Fraction from '../../entities/Fraction'
-import { bentobox } from '@sushiswap/sushi-data'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
 import { getCurrency } from '../../functions/currency'
@@ -24,7 +33,10 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useAllTokens } from '../../hooks/Tokens'
 import { useBlockNumber } from '../../state/application/hooks'
 import usePrevious from '../../hooks/usePrevious'
-import { useBentoStrategies } from '../../services/graph/hooks'
+import { useBentoStrategies, useClones } from '../../services/graph/hooks'
+import { useQueryFilter } from '../../services/web3/hooks/useQueryFilter'
+import { Feature, featureEnabled } from '../../functions/feature'
+import { validateChainlinkOracleData } from '../../functions/oracle'
 
 enum ActionType {
   UPDATE = 'UPDATE',
@@ -81,11 +93,6 @@ export interface KashiContextProps {
   dispatch: React.Dispatch<any>
 }
 
-type KashiProviderProps = {
-  state: State
-  dispatch: React.Dispatch<any>
-}
-
 export const KashiContext = createContext<{
   state: State
   dispatch: React.Dispatch<any>
@@ -110,44 +117,6 @@ const reducer: React.Reducer<State, Reducer> = (state: any, action: any) => {
     default:
       return state
   }
-}
-
-async function getPairs(bentoBoxContract, chainId: ChainId) {
-  let logs = []
-  let success = false
-  const masterAddress = KASHI_ADDRESS[chainId]
-  if (chainId !== ChainId.BSC && chainId !== ChainId.MATIC) {
-    logs = await bentoBoxContract.queryFilter(bentoBoxContract.filters.LogDeploy(masterAddress))
-    success = true
-  }
-  if (!success) {
-    logs = (
-      (await bentobox.clones({
-        masterAddress,
-        chainId,
-      })) as any
-    ).map((clone: any) => {
-      return {
-        args: {
-          masterContract: masterAddress,
-          cloneAddress: clone.address,
-          data: clone.data,
-        },
-      }
-    })
-  }
-
-  return logs.map((log) => {
-    const deployParams = defaultAbiCoder.decode(['address', 'address', 'address', 'bytes'], log.args?.data)
-    return {
-      masterContract: log.args?.masterContract,
-      address: log.args?.cloneAddress,
-      collateralAddress: deployParams[0],
-      assetAddress: deployParams[1],
-      oracle: deployParams[2],
-      oracleData: deployParams[3],
-    }
-  })
 }
 
 class Tokens extends Array {
@@ -180,17 +149,55 @@ export function rpcToObj(rpc_obj: any, obj?: any) {
   return rpc_obj
 }
 
+const BLACKLISTED_TOKENS = ['0xC6d54D2f624bc83815b49d9c2203b1330B841cA0']
+
 const BLACKLISTED_ORACLES = ['0x8f2CC3376078568a04eBC600ae5F0a036DBfd812']
+
+export function useKashiPairAddresses(): string[] {
+  const bentoBoxContract = useBentoBoxContract()
+  const { chainId } = useActiveWeb3React()
+  const useEvents = chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM
+  const allTokens = useAllTokens()
+  const events = useQueryFilter({
+    chainId,
+    contract: bentoBoxContract,
+    event: bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
+    shouldFetch: useEvents && featureEnabled(Feature.KASHI, chainId),
+  })
+  const clones = useClones({ chainId, shouldFetch: !useEvents })
+  return (
+    useEvents ? events?.map((event) => ({ address: event.args.cloneAddress, data: event.args.data })) : clones
+  )?.reduce((previousValue, currentValue) => {
+    try {
+      const [collateral, asset, oracle, oracleData] = defaultAbiCoder.decode(
+        ['address', 'address', 'address', 'bytes'],
+        currentValue.data
+      )
+      if (
+        BLACKLISTED_TOKENS.includes(collateral) ||
+        BLACKLISTED_TOKENS.includes(asset) ||
+        BLACKLISTED_ORACLES.includes(oracle) ||
+        !validateChainlinkOracleData(chainId, allTokens[collateral], allTokens[asset], oracleData)
+      ) {
+        return previousValue
+      }
+      return [...previousValue, currentValue.address]
+    } catch (error) {
+      return previousValue
+    }
+  }, [])
+}
 
 export function KashiProvider({ children }) {
   const [state, dispatch] = useReducer<React.Reducer<State, Reducer>>(reducer, initialState)
+
   const blockNumber = useBlockNumber()
 
   const { account, chainId } = useActiveWeb3React()
 
-  const weth = WNATIVE[chainId]
+  const wnativeAddress = WNATIVE_ADDRESS[chainId]
 
-  const currency = getCurrency(chainId).address
+  const currency = USD_ADDRESS[chainId]
 
   const boringHelperContract = useBoringHelperContract()
   const bentoBoxContract = useBentoBoxContract()
@@ -208,10 +215,14 @@ export function KashiProvider({ children }) {
   //   [KASHI_ADDRESS[chainId]],
   // ])?.result?.[0]
 
+  const addresses = useKashiPairAddresses()
+
   const updatePairs = useCallback(async () => {
     if (
       !account ||
       !chainId ||
+      !addresses ||
+      !addresses.length ||
       ![
         ChainId.MAINNET,
         ChainId.KOVAN,
@@ -228,31 +239,12 @@ export function KashiProvider({ children }) {
     if (boringHelperContract && bentoBoxContract) {
       const info = rpcToObj(await boringHelperContract.getUIInfo(account, [], currency, [KASHI_ADDRESS[chainId]]))
 
-      // Get the deployed pairs from the logs and decode
-      const logPairs = (await getPairs(bentoBoxContract, chainId)).filter(
-        (pair) => !BLACKLISTED_ORACLES.includes(pair.oracle)
-      )
-
-      // Filter all pairs by supported oracles and verify the oracle setup
-
       const invalidOracles = []
 
-      const allPairAddresses = logPairs
-        .filter((pair) => {
-          const oracle = getOracle(pair, chainId, tokens)
-          if (!oracle) return false
-          if (!oracle.valid) {
-            // console.log(pair, oracle.valid, oracle.error)
-            invalidOracles.push({ pair, error: oracle.error })
-          }
-          return oracle.valid
-        })
-        .map((pair) => pair.address)
-
-      console.log('invalidOracles', invalidOracles)
+      console.debug('invalidOracles', invalidOracles)
 
       // Get full info on all the verified pairs
-      const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, allPairAddresses))
+      const pairs = rpcToObj(await boringHelperContract.pollKashiPairs(account, addresses))
 
       // Get a list of all tokens in the pairs
       const pairTokens = new Tokens()
@@ -260,7 +252,7 @@ export function KashiProvider({ children }) {
       pairTokens.add(currency)
 
       pairs.forEach((pair, i: number) => {
-        pair.address = allPairAddresses[i]
+        pair.address = addresses[i]
         pair.collateral = pairTokens.add(pair.collateral)
         pair.asset = pairTokens.add(pair.asset)
       })
@@ -282,13 +274,13 @@ export function KashiProvider({ children }) {
 
       // For any tokens that are not on the defaultTokenList, retrieve name, symbol, decimals, etc.
       if (missingTokens.length) {
-        console.log('missing tokens length', missingTokens.length)
+        console.debug('missing tokens length', missingTokens.length)
         // TODO
       }
 
       // Calculate the USD price for each token
       Object.values(pairTokens).forEach((token) => {
-        token.symbol = token.address === weth.address ? NATIVE[chainId].symbol : token.tokenInfo.symbol
+        token.symbol = token.address === wnativeAddress ? NATIVE[chainId].symbol : token.tokenInfo.symbol
         token.usd = e10(token.tokenInfo.decimals).mulDiv(pairTokens[currency].rate, token.rate)
         token.strategy = strategies?.find((strategy) => strategy.token === token.address.toLowerCase())
       })
@@ -474,15 +466,25 @@ export function KashiProvider({ children }) {
         },
       })
     }
-  }, [account, chainId, boringHelperContract, bentoBoxContract, currency, tokens, strategies])
+  }, [
+    account,
+    chainId,
+    addresses,
+    boringHelperContract,
+    bentoBoxContract,
+    currency,
+    tokens,
+    wnativeAddress,
+    strategies,
+  ])
 
   const previousBlockNumber = usePrevious(blockNumber)
-  const previousStrategies = usePrevious(strategies)
-
+  const previousChainId = usePrevious(chainId)
   useEffect(() => {
-    blockNumber !== previousBlockNumber && updatePairs()
-    strategies !== previousStrategies && updatePairs()
-  }, [blockNumber, previousBlockNumber, strategies, previousStrategies, updatePairs])
+    if (blockNumber !== previousBlockNumber || chainId !== previousChainId) {
+      updatePairs()
+    }
+  }, [blockNumber, chainId, previousBlockNumber, previousChainId, updatePairs])
 
   return (
     <KashiContext.Provider
