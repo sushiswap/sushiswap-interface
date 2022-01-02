@@ -2634,10 +2634,10 @@
     ejs "^2.6.1"
     magic-string "^0.25.0"
 
-"@sushiswap/chainlink-whitelist@0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.7.tgz#11eaba51231bafac89dcac10c93e8e5b51cd3bc5"
-  integrity sha512-NgjOCnrBI3PUFOB17RJqZmj12syLLmD9UytJbD5PwSdcdGYM2VSxEOpHs5G8gDBGnldU+1YM0rJlDiTq3j8t1w==
+"@sushiswap/chainlink-whitelist@0.2.8":
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/@sushiswap/chainlink-whitelist/-/chainlink-whitelist-0.2.8.tgz#832dc80963b890a2eb02aaaf11ea8b57b2b7dde0"
+  integrity sha512-YhhGfF/smND4jUdVWuTr3e9Np08zLyxrOfbQ6GkAhmrld4lWBs2sk4TV6oWSBWPbuUb3A2mw203uCnbMHpSoXw==
 
 "@sushiswap/core@^2.0.0-canary.1":
   version "2.0.0-canary.1"
