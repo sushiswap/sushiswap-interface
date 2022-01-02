@@ -258,7 +258,6 @@ export default function NetworkModal(): JSX.Element | null {
                 } catch (switchError) {
                   // This error code indicates that the chain has not been added to MetaMask.
                   if (switchError.code === 4902) {
-                    4
                     try {
                       await library?.send('wallet_addEthereumChain', [params, account])
                     } catch (addError) {
