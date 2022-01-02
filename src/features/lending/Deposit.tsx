@@ -93,10 +93,6 @@ export default function Deposit({ pair }: any): JSX.Element {
       '0x000000000000000000000000000000000000dead'
     )
 
-    console.log({ deadBalance: deadBalance.toString() })
-
-    // this.bentoTransfer(BigNumber.from(1), '0x000000000000000000000000000000000000dead')
-
     cooker.addAsset(amount, useBento, deadBalance.isZero())
 
     return `${i18n._(t`Deposit`)} ${pair.asset.tokenInfo.symbol}`
