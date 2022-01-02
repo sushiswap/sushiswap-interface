@@ -14,11 +14,13 @@ function useEagerConnect() {
         activate(injected, undefined, true).catch(() => {
           setTried(true)
         })
+        window.ethereum.removeAllListeners(['networkChanged'])
       } else {
         if (isMobile && window.ethereum) {
           activate(injected, undefined, true).catch(() => {
             setTried(true)
           })
+          window.ethereum.removeAllListeners(['networkChanged'])
         } else {
           setTried(true)
         }
