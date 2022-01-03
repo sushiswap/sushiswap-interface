@@ -16,10 +16,15 @@ import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useCurrency } from '../../hooks/Tokens'
 import { useKashiInfo } from './context'
 import { useLingui } from '@lingui/react'
+import { toAmount, toShare } from '../../functions'
+import { useBentoBoxContract, useTokenContract } from '../../hooks'
+import { BigNumber } from 'ethers'
 
 export default function Deposit({ pair }: any): JSX.Element {
   const { chainId } = useActiveWeb3React()
   const assetToken = useCurrency(pair.asset.address) || undefined
+
+  const bentoBoxContract = useBentoBoxContract()
 
   const { i18n } = useLingui()
 
@@ -76,10 +81,20 @@ export default function Deposit({ pair }: any): JSX.Element {
 
   // Handlers
   async function onExecute(cooker: KashiCooker): Promise<string> {
-    if (pair.currentExchangeRate.isZero()) {
-      cooker.updateExchangeRate(false, ZERO, ZERO)
-    }
-    cooker.addAsset(value.toBigNumber(pair.asset.tokenInfo.decimals), useBento)
+    // if (pair.currentExchangeRate.isZero()) {
+    //   cooker.updateExchangeRate(false, ZERO, ZERO)
+    // }
+    // cooker.updateExchangeRate(false, ZERO, ZERO)
+
+    const amount = value.toBigNumber(pair.asset.tokenInfo.decimals)
+
+    const deadBalance = await bentoBoxContract.balanceOf(
+      pair.asset.address,
+      '0x000000000000000000000000000000000000dead'
+    )
+
+    cooker.addAsset(amount, useBento, deadBalance.isZero())
+
     return `${i18n._(t`Deposit`)} ${pair.asset.tokenInfo.symbol}`
   }
 

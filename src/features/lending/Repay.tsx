@@ -35,6 +35,8 @@ interface RepayProps {
 
 const DEFAULT_KASHI_REPAY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
+const DEFAULT_UPDATE_ORACLE = true
+
 export default function Repay({ pair }: RepayProps) {
   const { account, chainId } = useActiveWeb3React()
   const info = useKashiInfo()
@@ -47,7 +49,7 @@ export default function Repay({ pair }: RepayProps) {
   const [removeValue, setRemoveCollateralValue] = useState('')
   const [pinRemoveMax, setPinRemoveMax] = useState(false)
   const [pinRepayMax, setPinRepayMax] = useState(false)
-  const [updateOracle, setUpdateOracle] = useState(false)
+  const [updateOracle, setUpdateOracle] = useState(DEFAULT_UPDATE_ORACLE)
   const [swap, setSwap] = useState(false)
 
   const assetToken = useCurrency(pair.asset.address) || undefined
@@ -364,7 +366,7 @@ export default function Repay({ pair }: RepayProps) {
         />
       )}
 
-      {removeValueSet && (
+      {/* {removeValueSet && (
         <ExchangeRateCheckBox
           color="pink"
           pair={pair}
@@ -372,7 +374,7 @@ export default function Repay({ pair }: RepayProps) {
           setUpdateOracle={setUpdateOracle}
           desiredDirection="up"
         />
-      )}
+      )} */}
 
       <WarningsView warnings={warnings} />
 

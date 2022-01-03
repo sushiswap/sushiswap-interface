@@ -46,6 +46,12 @@ const items = (i18n: I18n) => [
     href: '/vesting',
     external: false,
   },
+  {
+    name: i18n._(t`Sushi Relay`),
+    description: i18n._(t`MEV Protection & Gas Refund Solution`),
+    href: 'https://docs.openmev.org',
+    external: true,
+  },
 ]
 
 export default function Menu() {

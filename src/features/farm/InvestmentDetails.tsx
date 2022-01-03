@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import Image from '../../components/Image'
 import React, { useState } from 'react'
 import { useActiveWeb3React } from '../../hooks'
-import { CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/sdk'
 import { getAddress } from '@ethersproject/address'
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
@@ -58,8 +58,8 @@ const InvestmentDetails = ({ farm }) => {
       kashiPair.asset
     )
 
-  const pendingReward = usePendingReward(farm)
   const pendingSushi = usePendingSushi(farm)
+  const pendingReward = usePendingReward(farm)
 
   const positionFiatValue = CurrencyAmount.fromRawAmount(
     USD[chainId],
@@ -88,6 +88,8 @@ const InvestmentDetails = ({ farm }) => {
     }
     setPendingTx(false)
   }
+
+  const secondaryRewardOnly = [ChainId.FUSE].includes(chainId)
 
   return (
     <div className="flex flex-col w-full space-y-8">
@@ -155,8 +157,10 @@ const InvestmentDetails = ({ farm }) => {
                   layout="fixed"
                   alt={reward.token}
                 />
-                {i === 0 && <Typography>{formatNumber(pendingSushi?.toSignificant(6) ?? 0)}</Typography>}
-                {i === 1 && <Typography>{formatNumber(pendingReward)}</Typography>}
+                {i === 0 && !secondaryRewardOnly && (
+                  <Typography>{formatNumber(pendingSushi?.toSignificant(6) ?? 0)}</Typography>
+                )}
+                {(i === 1 || secondaryRewardOnly) && <Typography>{formatNumber(pendingReward)}</Typography>}
                 <Typography>{reward.token}</Typography>
               </div>
             ))}

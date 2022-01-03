@@ -8,11 +8,17 @@ import {
   getBentoBox,
   getBentoTokens,
   getBentoStrategies,
+  getClones,
 } from '../fetchers/bentobox'
 import { useActiveWeb3React } from '../../../hooks'
 import { ChainId } from '@sushiswap/sdk'
 import { Feature, featureEnabled } from '../../../functions/feature'
 import { useBlock } from './blocks'
+
+export function useClones({ chainId, shouldFetch = true, swrConfig = undefined }) {
+  const { data } = useSWR(shouldFetch ? () => ['clones', chainId] : null, (_, chainId) => getClones(chainId), swrConfig)
+  return data
+}
 
 export function useKashiPairs(variables = undefined, swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
@@ -172,5 +178,5 @@ export function useBentoStrategies(
     swrConfig
   )
 
-  return data as { token: string; apy: number; targetPercentage: number }[]
+  return data as { token: string; apy: number; targetPercentage: number; utilization: number }[]
 }

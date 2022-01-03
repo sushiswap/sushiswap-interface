@@ -36,7 +36,7 @@ function AppBar(): JSX.Element {
             <div className="px-4 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Image src="/logo.png" alt="Sushi" width="32px" height="32px" />
+                  <Image src="/logo-santa.png" alt="Sushi" width="32px" height="32px" unoptimized />
                   <div className="hidden sm:block sm:ml-4">
                     <div className="flex space-x-2">
                       {/* <Buy /> */}
@@ -75,6 +75,7 @@ function AppBar(): JSX.Element {
                           ChainId.ARBITRUM,
                           ChainId.CELO,
                           ChainId.MOONRIVER,
+                          ChainId.FUSE,
                         ].includes(chainId) && (
                           <NavLink href={'/farm'}>
                             <a
@@ -314,9 +315,14 @@ function AppBar(): JSX.Element {
                 </Link>
 
                 {chainId &&
-                  [ChainId.MAINNET, ChainId.MATIC, ChainId.HARMONY, ChainId.XDAI, ChainId.ARBITRUM].includes(
-                    chainId
-                  ) && (
+                  [
+                    ChainId.MAINNET,
+                    ChainId.MATIC,
+                    ChainId.HARMONY,
+                    ChainId.XDAI,
+                    ChainId.ARBITRUM,
+                    ChainId.FUSE,
+                  ].includes(chainId) && (
                     <Link href={'/farm'}>
                       <a
                         id={`farm-nav-link`}

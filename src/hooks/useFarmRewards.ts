@@ -13,8 +13,11 @@ import {
   useMovrPrice,
   useSpellPrice,
   useStakePrice,
+  useOhmPrice,
+  useMagicPrice,
   useSushiPairs,
   useSushiPrice,
+  useFusePrice,
 } from '../services/graph'
 
 import { ChainId } from '@sushiswap/sdk'
@@ -48,7 +51,19 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice, movrPrice] = [
+  const [
+    sushiPrice,
+    ethPrice,
+    maticPrice,
+    stakePrice,
+    onePrice,
+    spellPrice,
+    celoPrice,
+    movrPrice,
+    ohmPrice,
+    fusePrice,
+    magicPrice,
+  ] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -57,6 +72,9 @@ export default function useFarmRewards() {
     useSpellPrice(),
     useCeloPrice(),
     useMovrPrice(),
+    useOhmPrice(),
+    useFusePrice(),
+    useMagicPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -98,6 +116,11 @@ export default function useFarmRewards() {
       if (pool.chef === Chef.MASTERCHEF_V2) {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
+
+        // CVX-WETH hardcode 0 rewards since ended, can remove after swapping out rewarder
+        if (pool.id === '1') {
+          pool.rewarder.rewardPerSecond = 0
+        }
 
         // vestedQUARTZ to QUARTZ adjustments
         if (pool.rewarder.rewardToken === '0x5dd8905aec612529361a35372efd5b127bb182b3') {
@@ -146,7 +169,7 @@ export default function useFarmRewards() {
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
             ? pool.rewarder.rewardPerSecond / 1e18
             : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
@@ -190,16 +213,27 @@ export default function useFarmRewards() {
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: movrPrice,
           },
+          [ChainId.FUSE]: {
+            token: 'FUSE',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: fusePrice,
+          },
         }
 
-        rewards[0] = {
-          ...defaultReward,
-          rewardPerBlock: sushiPerBlock,
-          rewardPerDay: sushiPerDay,
-        }
-
-        if (chainId in reward) {
-          rewards[1] = reward[chainId]
+        if (chainId === ChainId.FUSE) {
+          // Secondary reward only
+          rewards[0] = reward[chainId]
+        } else {
+          rewards[0] = {
+            ...defaultReward,
+            rewardPerBlock: sushiPerBlock,
+            rewardPerDay: sushiPerDay,
+          }
+          if (chainId in reward) {
+            rewards[1] = reward[chainId]
+          }
         }
 
         if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
@@ -210,6 +244,69 @@ export default function useFarmRewards() {
             rewardPerDay,
             rewardPrice: spellPrice,
           }
+        }
+        if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
+          rewards[1] = {
+            token: 'gOHM',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/arbitrum/0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1.jpg',
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: ohmPrice,
+          }
+        }
+        if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
+          rewards[1] = {
+            token: 'MAGIC',
+            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/arbitrum/assets/0x539bdE0d7Dbd336b79148AA742883198BBF60342/logo.png',
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: magicPrice,
+          }
+        }
+        if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
+          const rewardTokenPerSecond = 0.00000462962963
+          const rewardTokenPerBlock = rewardTokenPerSecond * averageBlockTime
+          const rewardTokenPerDay = 0.4
+          rewards[1] = {
+            token: 'gOHM',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/arbitrum/0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1.jpg',
+            rewardPerBlock: rewardTokenPerBlock,
+            rewardPerDay: rewardTokenPerDay,
+            rewardPrice: ohmPrice,
+          }
+        }
+      } else if (pool.chef === Chef.OLD_FARMS) {
+        const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
+        const sushiPerBlock = sushiPerSecond * averageBlockTime
+        const sushiPerDay = sushiPerBlock * blocksPerDay
+
+        const rewardPerSecond =
+          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+            ? pool.rewarder.rewardPerSecond / 1e18
+            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+
+        const rewardPerBlock = rewardPerSecond * averageBlockTime
+
+        const rewardPerDay = rewardPerBlock * blocksPerDay
+
+        const reward = {
+          [ChainId.CELO]: {
+            token: 'CELO',
+            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg',
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: celoPrice,
+          },
+        }
+
+        rewards[0] = {
+          ...defaultReward,
+          rewardPerBlock: sushiPerBlock,
+          rewardPerDay: sushiPerDay,
+        }
+
+        if (chainId in reward) {
+          rewards[1] = reward[chainId]
         }
       }
 

@@ -21,6 +21,7 @@ const PopoverContainer = styled.div<{ show: boolean }>`
 
 const ReferenceElement = styled.div`
   display: inline-block;
+  width: ${({ width }) => width};
 `
 
 const Arrow = styled.div`
@@ -79,9 +80,10 @@ export interface PopoverProps {
   show: boolean
   children: React.ReactNode
   placement?: Placement
+  width?: string
 }
 
-export default function Popover({ content, show, children, placement = 'auto' }: PopoverProps) {
+export default function Popover({ content, show, children, placement = 'auto', width = 'auto' }: PopoverProps) {
   const [referenceElement, setReferenceElement] = useState<HTMLDivElement | null>(null)
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null)
   const [arrowElement, setArrowElement] = useState<HTMLDivElement | null>(null)
@@ -100,7 +102,9 @@ export default function Popover({ content, show, children, placement = 'auto' }:
 
   return (
     <>
-      <ReferenceElement ref={setReferenceElement as any}>{children}</ReferenceElement>
+      <ReferenceElement width={width} ref={setReferenceElement as any}>
+        {children}
+      </ReferenceElement>
       <Portal>
         <PopoverContainer show={show} ref={setPopperElement as any} style={styles.popper} {...attributes.popper}>
           {content}

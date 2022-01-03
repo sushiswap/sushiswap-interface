@@ -15,6 +15,7 @@ export const ARBITRUM: { [key: string]: Token } = {
   WBTC: new Token(ChainId.ARBITRUM, '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', 8, 'WBTC', 'Wrapped Bitcoin'),
   USDT: new Token(ChainId.ARBITRUM, '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9', 8, 'USDT', 'Tether USD'),
   MIM: new Token(ChainId.ARBITRUM, '0xFEa7a6a0B346362BF88A9e4A88416B77a57D6c2A', 18, 'MIM', 'Magic Internet Money'),
+  SPELL: new Token(ChainId.ARBITRUM, '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF', 18, 'SPELL', 'Spell Token'),
 }
 
 export const PALM: { [key: string]: Token } = {
@@ -30,17 +31,9 @@ export const CELO: { [key: string]: Token } = {
   cEURO: new Token(ChainId.CELO, '0xD8763CBa276a3738E6DE85b4b3bF5FDed6D6cA73', 18, 'cEUR', 'Celo Euro'),
   cBTC: new Token(ChainId.CELO, '0xD629eb00dEced2a080B7EC630eF6aC117e614f1b', 18, 'cBTC', 'Wrapped Bitcoin'),
   cETH: new Token(ChainId.CELO, '0x2DEf4285787d58a2f811AF24755A8150622f4361', 18, 'cETH', 'Wrapped Ether'),
-  WETH: new Token(ChainId.CELO, '0xE919F65739c26a42616b7b8eedC6b5524d1e3aC4', 18, 'WETH', 'WETH'),
-  WBTC: new Token(ChainId.CELO, '0xBe50a3013A1c94768A1ABb78c3cB79AB28fc1aCE', 8, 'WBTC', 'WBTC'),
-}
-
-export const MOONRIVER: { [key: string]: Token } = {
-  USDC: new Token(ChainId.MOONRIVER, '0xE3F5a90F9cb311505cd691a46596599aA1A0AD7D', 6, 'USDC', 'USD Coin'),
-  USDT: new Token(ChainId.MOONRIVER, '0xB44a9B6905aF7c801311e8F4E76932ee959c663C', 6, 'USDT', 'Tether USD'),
-  WETH: new Token(ChainId.MOONRIVER, '0x639A647fbe20b6c8ac19E48E2de44ea792c62c5C', 18, 'WETH', 'Wrapped Ether'),
-  FRAX: new Token(ChainId.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax'),
-  MIM: new Token(ChainId.MOONRIVER, '0x0caE51e1032e8461f4806e26332c030E34De3aDb', 18, 'MIM', 'Magic Internet Money'),
-  BTC: new Token(ChainId.MOONRIVER, '0xE6a991Ffa8CfE62B0bf6BF72959A3d4f11B2E0f5', 8, 'WBTC', 'Wrapped Bitcoin'),
+  WETH: new Token(ChainId.CELO, '0x122013fd7dF1C6F636a5bb8f03108E876548b455', 18, 'WETH', 'WETH'),
+  WBTC: new Token(ChainId.CELO, '0xBAAB46E28388d2779e6E31Fd00cF0e5Ad95E327B', 8, 'WBTC', 'WBTC'),
+  USDC: new Token(ChainId.CELO, '0xef4229c8c3250C675F21BCefa42f58EfbfF6002a', 6, 'USDC', 'USD Coin'),
 }
 
 export const BSC: { [key: string]: Token } = {
@@ -50,6 +43,7 @@ export const BSC: { [key: string]: Token } = {
   USDT: new Token(ChainId.BSC, '0x55d398326f99059fF775485246999027B3197955', 18, 'USDT', 'Tether USD'),
   BTCB: new Token(ChainId.BSC, '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c', 18, 'BTCB', 'Bitcoin'),
   WETH: new Token(ChainId.BSC, '0x2170Ed0880ac9A755fd29B2688956BD959F933F8', 18, 'WETH', 'Wrapped Ether'),
+  MIM: new Token(ChainId.BSC, '0xfE19F0B51438fd612f6FD59C1dbB3eA319f433Ba', 18, 'MIM', 'Magic Internet Money'),
 }
 
 export const FANTOM: { [key: string]: Token } = {
@@ -57,6 +51,7 @@ export const FANTOM: { [key: string]: Token } = {
   WBTC: new Token(ChainId.FANTOM, '0x321162Cd933E2Be498Cd2267a90534A804051b11', 8, 'WBTC', 'Wrapped Bitcoin'),
   DAI: new Token(ChainId.FANTOM, '0x8D11eC38a3EB5E956B052f67Da8Bdc9bef8Abf3E', 18, 'DAI', 'Dai Stablecoin'),
   WETH: new Token(ChainId.FANTOM, '0x74b23882a30290451A17c44f4F05243b6b58C76d', 18, 'WETH', 'Wrapped Ether'),
+  MIM: new Token(ChainId.FANTOM, '0x82f0B8B456c1A451378467398982d4834b6829c1', 18, 'MIM', 'Magic Internet Money'),
 }
 
 export const MATIC: { [key: string]: Token } = {
@@ -81,6 +76,8 @@ export const MATIC: { [key: string]: Token } = {
     'Toucan Protocol: Base Carbon Tonne',
     'BCT'
   ),
+  MIM: new Token(ChainId.MATIC, '0x49a0400587A7F65072c87c4910449fDcC5c47242', 18, 'MIM', 'Magic Internet Money'),
+  ICE: new Token(ChainId.MATIC, '0x4e1581f01046eFDd7a1a2CDB0F82cdd7F71F2E59', 18, 'ICE', 'IceToken'),
 }
 
 export const OKEX: { [key: string]: Token } = {
@@ -142,6 +139,7 @@ export const AVALANCHE: { [key: string]: Token } = {
   USDT: new Token(ChainId.AVALANCHE, '0xc7198437980c041c805A1EDcbA50c1Ce5db95118', 6, 'USDT', 'Tether USD'),
   WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC', 'Wrapped Bitcoin'),
   WETH: new Token(ChainId.AVALANCHE, '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB', 18, 'WETH', 'Wrapped Ether'),
+  MIM: new Token(ChainId.AVALANCHE, '0x130966628846BFd36ff31a822705796e8cb8C18D', 18, 'MIM', 'Magic Internet Money'),
 }
 
 // Default Ethereum chain tokens
@@ -271,7 +269,10 @@ export const RAI = new Token(
 export const YFI = new Token(ChainId.MAINNET, '0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e', 18, 'YFI', 'YFI')
 export const WOOFY = new Token(ChainId.MAINNET, '0xD0660cD418a64a1d44E9214ad8e459324D8157f1', 12, 'Woofy', 'WOOFY')
 export const SPANK = new Token(ChainId.MAINNET, '0x42d6622deCe394b54999Fbd73D108123806f6a18', 18, 'Spank', 'SPANK')
-export const OHM = new Token(ChainId.MAINNET, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus', 'OHM')
+
+export const OHM_V1 = new Token(ChainId.MAINNET, '0x383518188C0C6d7730D91b2c03a03C837814a899', 9, 'Olympus V1', 'OHM')
+export const OHM_V2 = new Token(ChainId.MAINNET, '0x64aa3364F17a4D01c6f1751Fd97C2BD3D7e7f1D5', 9, 'Olympus V2', 'OHM')
+
 export const INV = new Token(ChainId.MAINNET, '0x41D5D79431A913C4aE7d69a668ecdfE5fF9DFB68', 18, 'Inverse Dao', 'INV')
 export const DOLA = new Token(
   ChainId.MAINNET,
@@ -279,6 +280,14 @@ export const DOLA = new Token(
   18,
   'Dola USD Stablecoin',
   'DOLA'
+)
+
+export const MIM = new Token(
+  ChainId.MAINNET,
+  '0x99D8a9C45b2ecA8864373A26D1459e3Dff1e17F3',
+  18,
+  'MIM',
+  'Magic Internet Money'
 )
 
 type ChainTokenMap = {
@@ -303,6 +312,8 @@ export const SUSHI: ChainTokenMap = {
   [ChainId.HECO]: new Token(ChainId.HECO, SUSHI_ADDRESS[ChainId.HECO], 18, 'SUSHI', 'SushiToken'),
   [ChainId.CELO]: new Token(ChainId.CELO, SUSHI_ADDRESS[ChainId.CELO], 18, 'SUSHI', 'SushiToken'),
   [ChainId.MOONRIVER]: new Token(ChainId.MOONRIVER, SUSHI_ADDRESS[ChainId.MOONRIVER], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.TELOS]: new Token(ChainId.TELOS, SUSHI_ADDRESS[ChainId.TELOS], 18, 'SUSHI', 'SushiToken'),
+  [ChainId.FUSE]: new Token(ChainId.FUSE, SUSHI_ADDRESS[ChainId.FUSE], 18, 'SUSHI', 'SushiToken'),
 }
 
 export const WETH9_EXTENDED: { [chainId: number]: Token } = {

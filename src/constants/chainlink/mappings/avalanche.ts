@@ -63,6 +63,46 @@ const AVALANCHE_CHAINLINK_MAPPING = {
     fromDecimals: 6,
     toDecimals: 8,
   },
+  // JOE / USD
+  '0x02D35d3a8aC3e1626d3eE09A78Dd87286F5E8e3a': {
+    from: '0x6e84a6216eA6dACC71eE8E6b0a5B7322EEbC0fDd',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // xJOE / USD
+  '0x64e1E895866B3126f8f2E2912B475FDB35b2F315': {
+    from: '0x57319d41F71E81F3c65F2a47CA4e001EbAFd4F33',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // MIM / USD
+  '0x54EdAB30a7134A16a54218AE64C73e1DAf48a8Fb': {
+    from: '0x130966628846BFd36ff31a822705796e8cb8C18D',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // SPELL / USD
+  '0x4F3ddF9378a4865cf4f28BE51E10AECb83B7daeE': {
+    from: '0xCE1bFFBD5374Dac86a2893119683F4911a2F7814',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // SUSHI / USD
+  '0x449A373A090d8A1e5F74c63Ef831Ceff39E94563': {
+    from: '0x37B608519F91f70F2EeB0e5Ed9AF4061722e4F76',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
 }
 
 export default AVALANCHE_CHAINLINK_MAPPING
