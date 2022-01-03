@@ -36,12 +36,12 @@ const BentoActions: FC = () => {
         </Typography>
         <div className="flex justify-between">
           {/*TODO Ramin*/}
-          <Typography variant={isDesktop ? 'sm' : 'h3'} className="text-green" weight={700}>
-            Active
+          <Typography variant={isDesktop ? 'sm' : 'h3'} className="text-green italic" weight={700}>
+            coming soon
           </Typography>
           {/*TODO Ramin*/}
-          <Typography variant={isDesktop ? 'sm' : 'h3'} className="text-high-emphesis" weight={700}>
-            12.85% APY
+          <Typography variant={isDesktop ? 'sm' : 'h3'} className="text-high-emphesis italic" weight={700}>
+            coming soon
           </Typography>
         </div>
       </div>

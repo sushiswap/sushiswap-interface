@@ -8,11 +8,11 @@ import useParsedQueryString from 'app/hooks/useParsedQueryString'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
 import { AppDispatch, AppState } from 'app/state'
-import { useBentoBalances } from 'app/state/bentobox/hooks'
+import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { ParsedQs } from 'qs'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Field, replaceLimitOrderState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
@@ -125,11 +125,7 @@ export function useDerivedLimitOrderInfo(): {
   const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
   const rate = trade?.executionPrice
 
-  const bentoBoxBalances = useBentoBalances()
-  const balance = useMemo(
-    () => bentoBoxBalances?.find((el) => el.address === inputCurrency?.wrapped.address),
-    [bentoBoxBalances, inputCurrency?.wrapped.address]
-  )
+  const bentoBoxBalances = useBentoBalancesV2([inputCurrencyId, outputCurrencyId])
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
@@ -142,12 +138,8 @@ export function useDerivedLimitOrderInfo(): {
   }
 
   const bentoboxBalances = {
-    [Field.INPUT]: inputCurrency
-      ? CurrencyAmount.fromRawAmount(inputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
-      : undefined,
-    [Field.OUTPUT]: outputCurrency
-      ? CurrencyAmount.fromRawAmount(outputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
-      : undefined,
+    [Field.INPUT]: inputCurrency ? bentoBoxBalances?.[0] : undefined,
+    [Field.OUTPUT]: outputCurrency ? bentoBoxBalances?.[1] : undefined,
   }
 
   const parsedAmounts = {
