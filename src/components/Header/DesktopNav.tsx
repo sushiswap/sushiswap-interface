@@ -34,7 +34,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
           </div>
           <div className="flex space-x-1.5 hidden sm:block">
             <NavLink
-              href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/legacy/swap'}
+              href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/swap'}
               activeClassName={ACTIVE_NAV_LINK_CLASS}
             >
               <a id="swap-nav-link" className={NAV_BASE_CLASS}>
