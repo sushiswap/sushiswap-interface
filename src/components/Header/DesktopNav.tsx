@@ -4,6 +4,7 @@ import { NATIVE } from '@sushiswap/core-sdk'
 import { Feature } from 'enums'
 import { featureEnabled } from 'functions/feature'
 import Image from 'next/image'
+import Link from 'next/link'
 import React, { FC } from 'react'
 import { useActiveWeb3React } from 'services/web3'
 import { useETHBalances } from 'state/wallet/hooks'
@@ -123,11 +124,11 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
 
           <div className="flex items-center w-auto text-sm font-bold border rounded cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
             {account && chainId && userEthBalance && (
-              <>
-                <div className="px-3 text-high-emphesis text-bold">
+              <Link href="/balances" passHref={true}>
+                <a className="px-3 text-high-emphesis text-bold">
                   {userEthBalance?.toSignificant(4)} {NATIVE[chainId].symbol}
-                </div>
-              </>
+                </a>
+              </Link>
             )}
             <Web3Status />
           </div>
