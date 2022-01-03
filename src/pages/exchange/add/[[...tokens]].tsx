@@ -322,6 +322,16 @@ export default function Add() {
           name="description"
           content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
         />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="Add liquidity to the SushiSwap AMM to enable gas optimised and low slippage trades across countless networks"
+        />
       </Head>
 
       <Container id="add-liquidity-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">

@@ -45,6 +45,8 @@ function Balances() {
       <Head>
         <title>Balances | Sushi</title>
         <meta key="description" name="description" content="" />
+        <meta key="twitter:description" name="twitter:description" content="" />
+        <meta key="og:description" property="og:description" content="" />
       </Head>
       <Card
         className="h-full bg-dark-900"
