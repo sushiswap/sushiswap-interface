@@ -7,7 +7,6 @@ import { TestHelper } from './helpers/TestHelper'
 import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
 import { PoolPage } from './pages/pools/PoolPage'
-import { SwapPage } from './pages/swap/SwapPage'
 
 require('dotenv').config()
 
@@ -20,13 +19,13 @@ let metamask: Dappeteer
 let liquidityPoolsPage: LiquidityPoolsPage
 let poolPage: PoolPage
 let addLiquidityPage: AddLiquidityPage
-let swapPage: SwapPage
+
+let depositPercentage = 0.01
 
 async function initPages() {
   liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}/trident/pools`)
   poolPage = new PoolPage(page, metamask)
   addLiquidityPage = new AddLiquidityPage(page, metamask)
-  swapPage = new SwapPage(page, metamask, `${baseUrl}/trident/swap`)
 }
 
 async function importTokens() {
@@ -66,7 +65,7 @@ describe('Add Liquidity:', () => {
     await poolPage.clickAddLiquidityButton()
 
     const usdcWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
-    const usdcDepositAmount = round(usdcWalletBalanceBefore * 0.1)
+    const usdcDepositAmount = round(usdcWalletBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetAFundFromWallet(true)
@@ -106,7 +105,7 @@ describe('Add Liquidity:', () => {
     await poolPage.clickAddLiquidityButton()
 
     const ethWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
-    const ethDepositAmount = round(ethWalletBalanceBefore * 0.1)
+    const ethDepositAmount = round(ethWalletBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetBFundFromWallet(true)
@@ -144,7 +143,7 @@ describe('Add Liquidity:', () => {
     await poolPage.clickAddLiquidityButton()
 
     const ethBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
-    const ethDepositAmount = round(ethBalanceBefore * 0.1)
+    const ethDepositAmount = round(ethBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetBFundFromWallet(false)
@@ -184,8 +183,8 @@ describe('Add Liquidity:', () => {
     const assetAWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
     const assetBWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
 
-    const assetADepositAmount = round(assetAWalletBalanceBefore * 0.1)
-    const assetBDepositAmount = round(assetBWalletBalanceBefore * 0.1)
+    const assetADepositAmount = round(assetAWalletBalanceBefore * depositPercentage)
+    const assetBDepositAmount = round(assetBWalletBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetAFundFromWallet(true)
@@ -231,8 +230,8 @@ describe('Add Liquidity:', () => {
     const usdcBentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
     const ethWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
 
-    const usdcDepositAmount = round(usdcBentoBalanceBefore * 0.1)
-    const ethDepositAmount = round(ethWalletBalanceBefore * 0.1)
+    const usdcDepositAmount = round(usdcBentoBalanceBefore * depositPercentage)
+    const ethDepositAmount = round(ethWalletBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetAFundFromWallet(false)
@@ -278,8 +277,8 @@ describe('Add Liquidity:', () => {
     const usdcWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
     const ethBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
 
-    const usdcDepositAmount = round(usdcWalletBalanceBefore * 0.1)
-    const ethDepositAmount = round(ethBentoBalanceBefore * 0.1)
+    const usdcDepositAmount = round(usdcWalletBalanceBefore * depositPercentage)
+    const ethDepositAmount = round(ethBentoBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetAFundFromWallet(true)
@@ -327,8 +326,8 @@ describe('Add Liquidity:', () => {
     const usdcBentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
     const ethBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
 
-    const usdcDepositAmount = round(usdcBentoBalanceBefore * 0.1)
-    const ethDepositAmount = round(ethBentoBalanceBefore * 0.1)
+    const usdcDepositAmount = round(usdcBentoBalanceBefore * depositPercentage)
+    const ethDepositAmount = round(ethBentoBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(false)
     await addLiquidityPage.setAssetAFundFromWallet(false)
@@ -373,7 +372,7 @@ describe('Add Liquidity:', () => {
     const assetABentoBalanceBefore = await addLiquidityPage.getAssetABalance(false)
     const assetBBentoBalanceBefore = await addLiquidityPage.getAssetBBalance(false)
 
-    const assetADepositAmount = round(assetABentoBalanceBefore * 0.1)
+    const assetADepositAmount = round(assetABentoBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(true)
     await addLiquidityPage.setAssetAFundFromWallet(false)
@@ -429,7 +428,7 @@ describe('Add Liquidity:', () => {
     const usdcWalletBalanceBefore = await addLiquidityPage.getAssetABalance(true)
     const ethWalletBalanceBefore = await addLiquidityPage.getAssetBBalance(true)
 
-    const ethDepositAmount = round(ethWalletBalanceBefore * 0.1)
+    const ethDepositAmount = round(ethWalletBalanceBefore * depositPercentage)
 
     await addLiquidityPage.setFixedRatio(true)
     await addLiquidityPage.setAssetAFundFromWallet(true)
