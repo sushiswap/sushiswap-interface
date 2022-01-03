@@ -112,6 +112,14 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
                 </a>
               </NavLink>
             )}
+
+            {chainId && featureEnabled(Feature.MISO, chainId) && (
+              <NavLink href="/miso">
+                <a id="launch-nav-link" className={NAV_BASE_CLASS}>
+                  {i18n._(t`Launch`)}
+                </a>
+              </NavLink>
+            )}
           </div>
         </div>
         <div className="flex items-center justify-end gap-2">

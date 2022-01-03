@@ -167,6 +167,15 @@ export default class KashiCooker {
     return this
   }
 
+  bentoTransferAsset(share: BigNumber, toAddress: string): KashiCooker {
+    this.add(
+      Action.BENTO_TRANSFER,
+      defaultAbiCoder.encode(['address', 'address', 'int256'], [this.pair.asset.address, toAddress, share])
+    )
+
+    return this
+  }
+
   repayShare(part: BigNumber): KashiCooker {
     this.add(Action.GET_REPAY_SHARE, defaultAbiCoder.encode(['int256'], [part]))
 
@@ -195,7 +204,7 @@ export default class KashiCooker {
     return this
   }
 
-  addAsset(amount: BigNumber, fromBento: boolean): KashiCooker {
+  addAsset(amount: BigNumber, fromBento: boolean, burnShare: boolean = false): KashiCooker {
     let share: BigNumber
     if (fromBento) {
       share = toShare(this.pair.asset, amount)
@@ -214,6 +223,12 @@ export default class KashiCooker {
     }
 
     this.add(Action.ADD_ASSET, defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false]))
+
+    if (burnShare) {
+      this.removeAsset(BigNumber.from(1), true)
+      this.bentoTransferAsset(BigNumber.from(1), '0x000000000000000000000000000000000000dead')
+    }
+
     return this
   }
 

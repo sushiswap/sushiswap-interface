@@ -1,6 +1,6 @@
 import { getAddress } from '@ethersproject/address'
-import { Celo, ChainId, Matic, Movr, SUSHI, Token } from '@sushiswap/core-sdk'
-import { ARBITRUM_TOKENS } from 'app/config/tokens'
+import { ChainId, Currency, NATIVE, SUSHI, Token } from '@sushiswap/core-sdk'
+import { ARBITRUM_TOKENS, MATIC_TOKENS } from 'app/config/tokens'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import { usePositions } from 'app/features/onsen/hooks'
 import { aprToApy } from 'app/functions/convert'
@@ -9,11 +9,14 @@ import {
   useCeloPrice,
   useEthPrice,
   useFarms,
+  useFusePrice,
   useKashiPairs,
+  useMagicPrice,
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useMovrPrice,
+  useOhmPrice,
   useOneDayBlock,
   useOnePrice,
   useSpellPrice,
@@ -68,7 +71,19 @@ export default function useFarmRewards() {
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
-  const [sushiPrice, ethPrice, maticPrice, stakePrice, onePrice, spellPrice, celoPrice, movrPrice] = [
+  const [
+    sushiPrice,
+    ethPrice,
+    maticPrice,
+    stakePrice,
+    onePrice,
+    spellPrice,
+    celoPrice,
+    movrPrice,
+    ohmPrice,
+    fusePrice,
+    magicPrice,
+  ] = [
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
@@ -77,6 +92,9 @@ export default function useFarmRewards() {
     useSpellPrice(),
     useCeloPrice(),
     useMovrPrice(),
+    useOhmPrice(),
+    useFusePrice(),
+    useMagicPrice(),
   ]
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
@@ -112,11 +130,18 @@ export default function useFarmRewards() {
         rewardPrice: sushiPrice,
       }
 
-      let rewards = [defaultReward]
+      let rewards: { currency: Currency; rewardPerBlock: number; rewardPerDay: number; rewardPrice: number }[] = [
+        defaultReward,
+      ]
 
       if (pool.chef === Chef.MASTERCHEF_V2) {
         // override for mcv2...
         pool.owner.totalAllocPoint = masterChefV1TotalAllocPoint
+
+        // CVX-WETH hardcode 0 rewards since ended, can remove after swapping out rewarder
+        if (pool.id === '1') {
+          pool.rewarder.rewardPerSecond = 0
+        }
 
         // vestedQUARTZ to QUARTZ adjustments
         if (pool.rewarder.rewardToken === '0x5dd8905aec612529361a35372efd5b127bb182b3') {
@@ -126,10 +151,6 @@ export default function useFarmRewards() {
           pool.rewardToken.derivedETH = pair.token1.derivedETH
           pool.rewardToken.decimals = 18
         }
-
-        const icon = `https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/${getAddress(
-          pool.rewarder.rewardToken
-        )}.jpg`
 
         const decimals = 10 ** pool.rewardToken.decimals
 
@@ -150,12 +171,10 @@ export default function useFarmRewards() {
 
           const rewardPrice = pool.rewardToken.derivedETH * ethPrice
 
-          console.log({ pool })
-
           const reward = {
             currency: new Token(
               ChainId.ETHEREUM,
-              pool.rewardToken.id,
+              getAddress(pool.rewardToken.id),
               Number(pool.rewardToken.decimals),
               pool.rewardToken.symbol,
               pool.rewardToken.name
@@ -164,7 +183,6 @@ export default function useFarmRewards() {
             rewardPerDay,
             rewardPrice,
           }
-
           rewards[1] = reward
         }
       } else if (pool.chef === Chef.MINICHEF) {
@@ -183,7 +201,7 @@ export default function useFarmRewards() {
 
         const reward = {
           [ChainId.MATIC]: {
-            currency: Matic,
+            currency: NATIVE[ChainId.MATIC],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: maticPrice,
@@ -195,22 +213,100 @@ export default function useFarmRewards() {
             rewardPrice: stakePrice,
           },
           [ChainId.HARMONY]: {
-            currency: new Token(ChainId.HARMONY, '0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a', 18, 'ONE', 'One'),
+            currency: NATIVE[ChainId.HARMONY],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: onePrice,
           },
           [ChainId.CELO]: {
-            currency: Celo,
+            currency: NATIVE[ChainId.CELO],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: celoPrice,
           },
           [ChainId.MOONRIVER]: {
-            currency: Movr,
+            currency: NATIVE[ChainId.MOONRIVER],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: movrPrice,
+          },
+          [ChainId.FUSE]: {
+            currency: NATIVE[ChainId.FUSE],
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: fusePrice,
+          },
+        }
+
+        if (chainId === ChainId.FUSE) {
+          // Secondary reward only
+          rewards[0] = reward[ChainId.FUSE]
+        } else {
+          rewards[0] = {
+            ...defaultReward,
+            rewardPerBlock: sushiPerBlock,
+            rewardPerDay: sushiPerDay,
+          }
+          if (chainId in reward) {
+            rewards[1] = reward[chainId]
+          }
+        }
+
+        if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
+          rewards[1] = {
+            currency: ARBITRUM_TOKENS.SPELL,
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: spellPrice,
+          }
+        }
+        if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
+          rewards[1] = {
+            currency: ARBITRUM_TOKENS.gOHM,
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: ohmPrice,
+          }
+        }
+        if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
+          rewards[1] = {
+            currency: ARBITRUM_TOKENS.MAGIC,
+            rewardPerBlock,
+            rewardPerDay,
+            rewardPrice: magicPrice,
+          }
+        }
+        if (chainId === ChainId.MATIC && ['47'].includes(pool.id)) {
+          const rewardTokenPerSecond = 0.00000462962963
+          const rewardTokenPerBlock = rewardTokenPerSecond * averageBlockTime
+          const rewardTokenPerDay = 0.4
+          rewards[1] = {
+            currency: MATIC_TOKENS.gOHM,
+            rewardPerBlock: rewardTokenPerBlock,
+            rewardPerDay: rewardTokenPerDay,
+            rewardPrice: ohmPrice,
+          }
+        }
+      } else if (pool.chef === Chef.OLD_FARMS) {
+        const sushiPerSecond = ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.miniChef.sushiPerSecond) / 1e18
+        const sushiPerBlock = sushiPerSecond * averageBlockTime
+        const sushiPerDay = sushiPerBlock * blocksPerDay
+
+        const rewardPerSecond =
+          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
+            ? pool.rewarder.rewardPerSecond / 1e18
+            : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
+
+        const rewardPerBlock = rewardPerSecond * averageBlockTime
+
+        const rewardPerDay = rewardPerBlock * blocksPerDay
+
+        const reward = {
+          [ChainId.CELO]: {
+            currency: NATIVE[ChainId.CELO],
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: celoPrice,
           },
         }
 
@@ -222,15 +318,6 @@ export default function useFarmRewards() {
 
         if (chainId in reward) {
           rewards[1] = reward[chainId]
-        }
-
-        if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
-          rewards[1] = {
-            currency: ARBITRUM_TOKENS.SPELL,
-            rewardPerBlock,
-            rewardPerDay,
-            rewardPrice: spellPrice,
-          }
         }
       }
 
@@ -272,6 +359,10 @@ export default function useFarmRewards() {
     const roiPerYear = rewardAprPerYear + feeApyPerYear
 
     const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
+
+    if (positions.length) {
+      console.log({ positions })
+    }
 
     return {
       ...pool,
