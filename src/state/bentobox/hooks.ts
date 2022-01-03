@@ -35,6 +35,8 @@ export function useBentoBalances(): BentoBalance[] {
 
   const weth = WNATIVE_ADDRESS[chainId]
 
+  console.log('tokens length', Object.keys(tokens).slice(100, 140))
+
   const tokenAddresses = Object.keys(tokens).filter(
     (token) =>
       ![
@@ -44,6 +46,11 @@ export function useBentoBalances(): BentoBalance[] {
         '0x85D7bdfc9c3426b33A684241eEEE70385Bc42820', // mainnet #583
         '0x53c4871322Bb47e7A24136fce291a6dcC832a294', // mainnet #584
         '0x39fBBABf11738317a448031930706cd3e612e1B9', // mainnet #595
+
+        '0x2DDbFb13677E8Df85F37Aa8E578424E99AF7Cb62', // WRAP?
+
+        // Polygon
+        '0x2e1AD108fF1D8C782fcBbB89AAd783aC49586756', // truUSD
       ].includes(token)
   )
 
