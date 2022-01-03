@@ -1,7 +1,17 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { KASHI_ADDRESS, USDC_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import {
+  CurrencyAmount,
+  JSBI,
+  KASHI_ADDRESS,
+  Rebase,
+  Token,
+  USDC_ADDRESS,
+  WNATIVE_ADDRESS,
+  ZERO,
+} from '@sushiswap/core-sdk'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
+import { isAddress, toAmountCurrencyAmount } from 'app/functions'
 import { toAmount } from 'app/functions/bentobox'
 import { easyAmount } from 'app/functions/kashi'
 import { e10 } from 'app/functions/math'
@@ -9,7 +19,7 @@ import { useAllTokens } from 'app/hooks/Tokens'
 import { useBentoBoxContract, useBoringHelperContract, useContract } from 'app/hooks/useContract'
 import useTransactionStatus from 'app/hooks/useTransactionStatus'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
+import { OptionalMethodInputs, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export interface BentoBalance {
@@ -23,6 +33,12 @@ export interface BentoBalance {
   bento: any
 }
 
+const BLACKLISTED = [
+  '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
+  '0x72B886d09C117654aB7dA13A14d603001dE0B777',
+  '0x21413c119b0C11C5d96aE1bD328917bC5C8ED67E',
+]
+
 export function useBentoBalances(): BentoBalance[] {
   const { chainId, account } = useActiveWeb3React()
 
@@ -32,14 +48,7 @@ export function useBentoBalances(): BentoBalance[] {
 
   const weth = WNATIVE_ADDRESS[chainId]
 
-  const tokenAddresses = Object.keys(tokens).filter(
-    (token) =>
-      ![
-        '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
-        '0x72B886d09C117654aB7dA13A14d603001dE0B777',
-        '0x21413c119b0C11C5d96aE1bD328917bC5C8ED67E',
-      ].includes(token)
-  )
+  const tokenAddresses = Object.keys(tokens).filter((token) => !BLACKLISTED.includes(token))
 
   const balanceData = useSingleCallResult(boringHelperContract, 'getBalances', [account, tokenAddresses])
 
@@ -163,4 +172,58 @@ export function useBentoMasterContractAllowed(masterContract?: string, user?: st
   const allowed = useSingleCallResult(contract, 'masterContractApproved', inputs).result
 
   return useMemo(() => (allowed ? allowed[0] : undefined), [allowed])
+}
+
+export const useBentoBalancesV2 = () => {
+  const { account } = useActiveWeb3React()
+  const contract = useBentoBoxContract()
+  const allTokens = useAllTokens()
+  const addresses = useMemo(
+    () =>
+      Object.keys(allTokens).reduce((acc, token) => {
+        if (!BLACKLISTED.includes(token) && isAddress(token) !== false) acc.push([token])
+        return acc
+      }, []),
+    [allTokens]
+  )
+
+  const totals = useSingleContractMultipleData(contract, 'totals', addresses)
+  const anyLoading = totals.some((callState) => callState.loading)
+  const [tokens, baseTotals, balanceInput] = useMemo(
+    () =>
+      !anyLoading
+        ? totals.reduce<[Token[], Rebase[], OptionalMethodInputs[]]>(
+            (acc, el, i) => {
+              if (account && el?.result && JSBI.greaterThan(JSBI.BigInt(el.result[0]), JSBI.BigInt(0))) {
+                const { base, elastic } = el.result
+                acc[0].push(allTokens[addresses[i]])
+                acc[1].push({ base: JSBI.BigInt(base), elastic: JSBI.BigInt(elastic) })
+                acc[2].push([addresses[i][0], account])
+              }
+
+              return acc
+            },
+            [[], [], []]
+          )
+        : [[], [], []],
+    [account, addresses, allTokens, anyLoading, totals]
+  )
+
+  const balances = useSingleContractMultipleData(contract, 'balanceOf', balanceInput)
+  return useMemo(() => {
+    return balances.reduce<CurrencyAmount<Token>[]>((acc, el, i) => {
+      if (baseTotals[i] && tokens[i] && el.result?.[0]) {
+        const amount = toAmountCurrencyAmount(
+          baseTotals[i],
+          CurrencyAmount.fromRawAmount(tokens[i], JSBI.BigInt(el.result[0]))
+        )
+
+        if (amount.greaterThan(ZERO)) {
+          acc.push(amount)
+        }
+      }
+
+      return acc
+    }, [])
+  }, [balances, baseTotals, tokens])
 }

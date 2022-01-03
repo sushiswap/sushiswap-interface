@@ -1,11 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, NATIVE, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, NATIVE, ZERO } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalances } from 'app/state/bentobox/hooks'
+import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
 import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useMemo } from 'react'
 
@@ -40,19 +40,7 @@ export const LiquidityPositionsBalancesSum = () => {
 }
 
 export const BentoBalancesSum = () => {
-  const { chainId } = useActiveWeb3React()
-  const bentoBalances = useBentoBalances()
-  const balances = useMemo(
-    () =>
-      chainId
-        ? bentoBalances.map(({ address, decimals, name, symbol, balance }) => {
-            const token = new Token(chainId, address, decimals, symbol, name)
-            return CurrencyAmount.fromRawAmount(token, balance)
-          })
-        : [],
-    [bentoBalances, chainId]
-  )
-
+  const balances = useBentoBalancesV2()
   return <_BalancesSum amounts={balances} />
 }
 
