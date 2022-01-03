@@ -3929,6 +3929,28 @@
     unfetch "^4.2.0"
     util-deprecate "^1.0.2"
 
+"@storybook/preview-web@6.4.9":
+  version "6.4.9"
+  resolved "https://registry.yarnpkg.com/@storybook/preview-web/-/preview-web-6.4.9.tgz#21f7d251af0de64ae796834ead08ae4ed67e6456"
+  integrity sha512-fMB/akK14oc+4FBkeVJBtZQdxikOraXQSVn6zoVR93WVDR7JVeV+oz8rxjuK3n6ZEWN87iKH946k4jLoZ95tdw==
+  dependencies:
+    "@storybook/addons" "6.4.9"
+    "@storybook/channel-postmessage" "6.4.9"
+    "@storybook/client-logger" "6.4.9"
+    "@storybook/core-events" "6.4.9"
+    "@storybook/csf" "0.0.2--canary.87bc651.0"
+    "@storybook/store" "6.4.9"
+    ansi-to-html "^0.6.11"
+    core-js "^3.8.2"
+    global "^4.4.0"
+    lodash "^4.17.21"
+    qs "^6.10.0"
+    regenerator-runtime "^0.13.7"
+    synchronous-promise "^2.0.15"
+    ts-dedent "^2.0.0"
+    unfetch "^4.2.0"
+    util-deprecate "^1.0.2"
+
 "@storybook/react-docgen-typescript-plugin@1.0.2-canary.253f8c1.0":
   version "1.0.2-canary.253f8c1.0"
   resolved "https://registry.yarnpkg.com/@storybook/react-docgen-typescript-plugin/-/react-docgen-typescript-plugin-1.0.2-canary.253f8c1.0.tgz#f2da40e6aae4aa586c2fb284a4a1744602c3c7fa"
