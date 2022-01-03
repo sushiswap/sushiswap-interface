@@ -42,10 +42,9 @@ describe('Remove Liquidity:', () => {
     browser.close()
   })
 
-  test.only.each([
+  test.each([
     [25, RATIO.EQUAL, FUNDING_SOURCE.BENTO],
     [25, RATIO.EQUAL, FUNDING_SOURCE.WALLET],
-    [5, RATIO.EQUAL, FUNDING_SOURCE.BENTO],
   ])(`Remove %p percent in %p amounts and withdraw to %p`, async (removePercent, ratio, receiveTo) => {
     const targetPoolName = 'USDC-WETH'
     const fixedRatio = ratio === RATIO.EQUAL
