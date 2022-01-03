@@ -11,11 +11,14 @@ import {
   getCvxPrice,
   getDayData,
   getFactory,
+  getFusePrice,
   getLiquidityPositions,
+  getMagicPrice,
   getMaticPrice,
   getMovrPrice,
   getMphPrice,
   getNativePrice,
+  getOhmPrice,
   getOnePrice,
   getPairDayData,
   getPairs,
@@ -63,12 +66,12 @@ export function useNativePrice({
 }
 
 export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['ethPrice', stringify(variables)], () => getNativePrice(variables), swrConfig)
+  const { data } = useSWR(['ethPrice'], () => getNativePrice(variables), swrConfig)
   return data
 }
 
-export function useStakePrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['stakePrice', stringify(variables)], () => getStakePrice(variables), swrConfig)
+export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['stakePrice'], () => getStakePrice(), swrConfig)
   return data
 }
 
@@ -77,8 +80,8 @@ export function useSpellPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
-export function useOnePrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['onePrice', stringify(variables)], () => getOnePrice(variables), swrConfig)
+export function useOnePrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['onePrice'], () => getOnePrice(), swrConfig)
   return data
 }
 
@@ -96,90 +99,87 @@ export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
-export function useYggPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(
-    chainId && chainId === ChainId.ETHEREUM ? ['yggPrice', stringify(variables)] : null,
-    () => getYggPrice(),
-    swrConfig
-  )
-  return data
-}
-
-export function useRulerPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(
-    chainId && chainId === ChainId.ETHEREUM ? ['rulerPrice', stringify(variables)] : null,
-    () => getRulerPrice(variables),
-    swrConfig
-  )
-  return data
-}
-
-export function useTruPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(
-    chainId && chainId === ChainId.ETHEREUM ? ['truPrice', stringify(variables)] : null,
-    () => getTruPrice(),
-    swrConfig
-  )
-  return data
-}
-
-export function useAlcxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(
-    shouldFetch ? ['aclxPrice', stringify(variables)] : null,
-    () => getAlcxPrice(variables),
-    swrConfig
-  )
+  const { data } = useSWR(shouldFetch ? ['yggPrice'] : null, () => getYggPrice(), swrConfig)
   return data
 }
 
-export function useCvxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+export function useRulerPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.ETHEREUM
-  const { data } = useSWR(
-    shouldFetch ? ['cvxPrice', stringify(variables)] : null,
-    () => getCvxPrice(variables),
-    swrConfig
-  )
+  const { data } = useSWR(shouldFetch ? ['rulerPrice'] : null, () => getRulerPrice(), swrConfig)
   return data
 }
 
-export function usePicklePrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+export function useTruPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(
-    chainId && chainId === ChainId.ETHEREUM ? ['picklePrice', stringify(variables)] : null,
-    () => getPicklePrice(),
-    swrConfig
-  )
+  const { data } = useSWR(chainId && chainId === ChainId.ETHEREUM ? ['truPrice'] : null, () => getTruPrice(), swrConfig)
   return data
 }
 
-export function useMphPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
+export function useAlcxPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const { data } = useSWR(
-    chainId && chainId === ChainId.ETHEREUM ? ['mphPrice', stringify(variables)] : null,
-    () => getMphPrice(),
-    swrConfig
-  )
+  const shouldFetch = chainId && chainId === ChainId.ETHEREUM
+  const { data } = useSWR(shouldFetch ? ['aclxPrice'] : null, () => getAlcxPrice(), swrConfig)
   return data
 }
 
-export function useAvaxPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['avaxPrice', stringify(variables)], () => getAvaxPrice(variables), swrConfig)
+export function useCvxPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.ETHEREUM
+  const { data } = useSWR(shouldFetch ? ['cvxPrice'] : null, () => getCvxPrice(), swrConfig)
   return data
 }
 
-export function useMaticPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['maticPrice', stringify(variables)], () => getMaticPrice(variables), swrConfig)
+export function usePicklePrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.ETHEREUM
+  const { data } = useSWR(shouldFetch ? ['picklePrice'] : null, () => getPicklePrice(), swrConfig)
   return data
 }
 
-export function useSushiPrice(variables = undefined, swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['sushiPrice', stringify(variables)], () => getSushiPrice(variables), swrConfig)
+export function useMphPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.ETHEREUM
+  const { data } = useSWR(shouldFetch ? ['mphPrice'] : null, () => getMphPrice(), swrConfig)
+  return data
+}
+
+export function useAvaxPrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['avaxPrice'], () => getAvaxPrice(), swrConfig)
+  return data
+}
+
+export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['maticPrice'], () => getMaticPrice(), swrConfig)
+  return data
+}
+
+export function useSushiPrice(swrConfig: SWRConfiguration = undefined) {
+  const { data } = useSWR(['sushiPrice'], () => getSushiPrice(), swrConfig)
+  return data
+}
+
+export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
+  return data
+}
+
+export function useFusePrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const { data } = useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
+  return data
+}
+
+export function useMagicPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.ARBITRUM
+  const { data } = useSWR(shouldFetch ? 'magicPrice' : null, () => getMagicPrice(), swrConfig)
   return data
 }
 

@@ -161,6 +161,30 @@ export const getSushiPrice = async (variables = {}) => {
   })
 }
 
+export const getOhmPrice = async (chainId) => {
+  if (chainId === ChainId.ARBITRUM) {
+    return getTokenPrice(ChainId.ARBITRUM, tokenPriceQuery, {
+      id: '0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1',
+    })
+  } else {
+    return getTokenPrice(ChainId.MATIC, tokenPriceQuery, {
+      id: '0xd8ca34fd379d9ca3c6ee3b3905678320f5b45195',
+    })
+  }
+}
+
+export const getFusePrice = async () => {
+  return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
+    id: '0x970b9bb2c0444f5e81e9d0efb84c8ccdcdcaf84d',
+  })
+}
+
+export const getMagicPrice = async () => {
+  return getTokenPrice(ChainId.ARBITRUM, tokenPriceQuery, {
+    id: '0x539bde0d7dbd336b79148aa742883198bbf60342',
+  })
+}
+
 export const getStakePrice = async (variables = {}) => {
   return getTokenPrice(ChainId.XDAI, tokenPriceQuery, {
     id: '0xb7d311e2eb55f2f68a9440da38e7989210b9a05e',

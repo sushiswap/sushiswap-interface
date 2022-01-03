@@ -36,7 +36,7 @@ const BLACKLISTED_ORACLES = ['0x8f2CC3376078568a04eBC600ae5F0a036DBfd812']
 export function useKashiPairAddresses(): string[] {
   const bentoBoxContract = useBentoBoxContract()
   const { chainId } = useActiveWeb3React()
-  const useEvents = chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC
+  const useEvents = chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM
   const allTokens = useAllTokens()
   const events = useQueryFilter({
     chainId,

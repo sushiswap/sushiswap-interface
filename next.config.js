@@ -49,8 +49,8 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/analytics',
-        destination: '/analytics/dashboard',
+        source: '/',
+        destination: '/swap',
         permanent: true,
       },
     ]
@@ -63,61 +63,49 @@ const nextConfig = {
       },
       {
         source: '/add/:token*',
-        destination: '/exchange/add/:token*',
+        destination: '/legacy/add/:token*',
       },
       {
         source: '/remove/:token*',
-        destination: '/exchange/remove/:token*',
+        destination: '/legacy/remove/:token*',
       },
       {
         source: '/create/:token*',
-        destination: '/exchange/add/:token*',
+        destination: '/legacy/add/:token*',
       },
       {
         source: '/swap',
-        destination: '/trident/swap',
+        destination: '/legacy/swap',
       },
       {
         source: '/swap/:token*',
-        destination: '/exchange/swap/:token*',
+        destination: '/legacy/swap/:token*',
       },
       {
         source: '/limit-order',
-        destination: '/exchange/limit-order',
+        destination: '/legacy/limit-order',
       },
       {
         source: '/limit-order/:token*',
-        destination: '/exchange/limit-order/:token*',
+        destination: '/legacy/limit-order/:token*',
       },
       {
         source: '/open-order',
-        destination: '/exchange/open-order',
+        destination: '/legacy/open-order',
       },
       {
         source: '/pool',
-        destination: '/exchange/pool',
+        destination: '/legacy/pool',
       },
       {
         source: '/find',
-        destination: '/exchange/find',
+        destination: '/legacy/find',
+      },
+      {
+        source: '/migrate',
+        destination: '/legacy/migrate',
       },
       // Kashi
-      {
-        source: '/borrow',
-        destination: '/kashi/borrow',
-      },
-      {
-        source: '/borrow/:token*',
-        destination: '/kashi/borrow/:token*',
-      },
-      {
-        source: '/lend',
-        destination: '/kashi/lend',
-      },
-      {
-        source: '/lend/:token*',
-        destination: '/kashi/lend/:token*',
-      },
       {
         source: '/me',
         destination: '/user',

@@ -14,8 +14,6 @@ const FarmList = ({ farms, term }) => {
   const { i18n } = useLingui()
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
 
-  console.log({ items })
-
   return items ? (
     <>
       <div className="grid grid-cols-4 text-base font-bold text-primary">

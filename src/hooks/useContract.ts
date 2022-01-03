@@ -23,6 +23,7 @@ import {
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
+import { OLD_FARMS } from 'app/config/farms'
 import {
   ARGENT_WALLET_DETECTOR_ABI,
   ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS,
@@ -33,6 +34,7 @@ import BORING_HELPER_ABI from 'app/constants/abis/boring-helper.json'
 import CHAINLINK_ORACLE_ABI from 'app/constants/abis/chainlink-oracle.json'
 import CLONE_REWARDER_ABI from 'app/constants/abis/clone-rewarder.json'
 import COMPLEX_REWARDER_ABI from 'app/constants/abis/complex-rewarder.json'
+import DASHBOARD_ABI from 'app/constants/abis/dashboard.json'
 import EIP_2612_ABI from 'app/constants/abis/eip-2612.json'
 import ENS_PUBLIC_RESOLVER_ABI from 'app/constants/abis/ens-public-resolver.json'
 import ENS_ABI from 'app/constants/abis/ens-registrar.json'
@@ -52,6 +54,7 @@ import MISO_HELPER_ABI from 'app/constants/abis/miso-helper.json'
 import MULTICALL2_ABI from 'app/constants/abis/multicall2.json'
 import ROUTER_ABI from 'app/constants/abis/router.json'
 import SUSHI_ABI from 'app/constants/abis/sushi.json'
+import SUSHIROLL_ABI from 'app/constants/abis/sushi-roll.json'
 import TIMELOCK_ABI from 'app/constants/abis/timelock.json'
 import UNI_FACTORY_ABI from 'app/constants/abis/uniswap-v2-factory.json'
 import IUniswapV2PairABI from 'app/constants/abis/uniswap-v2-pair.json'
@@ -260,4 +263,204 @@ export function useMisoHelperContract(withSignerIfPossible = true): Contract | n
   const { chainId } = useActiveWeb3React()
   const factory = MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOHelper
   return useContract(factory?.address, MISO_HELPER_ABI, withSignerIfPossible)
+}
+
+export function useSushiRollContract(version: 'v1' | 'v2' = 'v2'): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.ETHEREUM:
+        address = '0x16E58463eb9792Bc236d8860F5BC69A81E26E32B'
+        break
+      case ChainId.ROPSTEN:
+        address = '0xCaAbdD9Cf4b61813D4a52f980d6BC1B713FE66F5'
+        break
+      case ChainId.BSC:
+        if (version === 'v1') {
+          address = '0x677978dE066b3f5414eeA56644d9fCa3c75482a1'
+        } else if (version === 'v2') {
+          address = '0x2DD1aB1956BeD7C2d938d0d7378C22Fd01135a5e'
+        }
+        break
+      case ChainId.MATIC:
+        address = '0x0053957E18A0994D3526Cf879A4cA7Be88e8936A'
+        break
+    }
+  }
+  return useContract(address, SUSHIROLL_ABI, true)
+}
+
+export function useDashboardContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  let address: string | undefined
+  if (chainId) {
+    switch (chainId) {
+      case ChainId.ETHEREUM:
+        address = '0xD132Ce8eA8865348Ac25E416d95ab1Ba84D216AF'
+        break
+      case ChainId.ROPSTEN:
+        address = '0xC95678C10CB8b3305b694FF4bfC14CDB8aD3AB35'
+        break
+      case ChainId.BSC:
+        address = '0xCFbc963f223e39727e7d4075b759E97035457b48'
+        break
+    }
+  }
+  return useContract(address, DASHBOARD_ABI, false)
+}
+
+export function useQuickSwapFactoryContract(): Contract | null {
+  return useContract(
+    '0x5757371414417b8C6CAad45bAeF941aBc7d3Ab32',
+    [
+      {
+        type: 'constructor',
+        stateMutability: 'nonpayable',
+        payable: false,
+        inputs: [
+          {
+            type: 'address',
+            name: '_feeToSetter',
+            internalType: 'address',
+          },
+        ],
+      },
+      {
+        type: 'event',
+        name: 'PairCreated',
+        inputs: [
+          {
+            type: 'address',
+            name: 'token0',
+            internalType: 'address',
+            indexed: true,
+          },
+          {
+            type: 'address',
+            name: 'token1',
+            internalType: 'address',
+            indexed: true,
+          },
+          {
+            type: 'address',
+            name: 'pair',
+            internalType: 'address',
+            indexed: false,
+          },
+          {
+            type: 'uint256',
+            name: '',
+            internalType: 'uint256',
+            indexed: false,
+          },
+        ],
+        anonymous: false,
+      },
+      {
+        type: 'function',
+        stateMutability: 'view',
+        payable: false,
+        outputs: [{ type: 'address', name: '', internalType: 'address' }],
+        name: 'allPairs',
+        inputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+        constant: true,
+      },
+      {
+        type: 'function',
+        stateMutability: 'view',
+        payable: false,
+        outputs: [{ type: 'uint256', name: '', internalType: 'uint256' }],
+        name: 'allPairsLength',
+        inputs: [],
+        constant: true,
+      },
+      {
+        type: 'function',
+        stateMutability: 'nonpayable',
+        payable: false,
+        outputs: [{ type: 'address', name: 'pair', internalType: 'address' }],
+        name: 'createPair',
+        inputs: [
+          {
+            type: 'address',
+            name: 'tokenA',
+            internalType: 'address',
+          },
+          {
+            type: 'address',
+            name: 'tokenB',
+            internalType: 'address',
+          },
+        ],
+        constant: false,
+      },
+      {
+        type: 'function',
+        stateMutability: 'view',
+        payable: false,
+        outputs: [{ type: 'address', name: '', internalType: 'address' }],
+        name: 'feeTo',
+        inputs: [],
+        constant: true,
+      },
+      {
+        type: 'function',
+        stateMutability: 'view',
+        payable: false,
+        outputs: [{ type: 'address', name: '', internalType: 'address' }],
+        name: 'feeToSetter',
+        inputs: [],
+        constant: true,
+      },
+      {
+        type: 'function',
+        stateMutability: 'view',
+        payable: false,
+        outputs: [{ type: 'address', name: '', internalType: 'address' }],
+        name: 'getPair',
+        inputs: [
+          { type: 'address', name: '', internalType: 'address' },
+          { type: 'address', name: '', internalType: 'address' },
+        ],
+        constant: true,
+      },
+      {
+        type: 'function',
+        stateMutability: 'nonpayable',
+        payable: false,
+        outputs: [],
+        name: 'setFeeTo',
+        inputs: [
+          {
+            type: 'address',
+            name: '_feeTo',
+            internalType: 'address',
+          },
+        ],
+        constant: false,
+      },
+      {
+        type: 'function',
+        stateMutability: 'nonpayable',
+        payable: false,
+        outputs: [],
+        name: 'setFeeToSetter',
+        inputs: [
+          {
+            type: 'address',
+            name: '_feeToSetter',
+            internalType: 'address',
+          },
+        ],
+        constant: false,
+      },
+    ],
+    false
+  )
+}
+
+export function useOldFarmsContract(withSignerIfPossibe?: boolean): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && OLD_FARMS[chainId], MINICHEF_ABI, withSignerIfPossibe)
 }

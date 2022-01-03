@@ -5,7 +5,6 @@ import { useLingui } from '@lingui/react'
 import { CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import CurrencyLogo from 'app/components/CurrencyLogo'
-import Image from 'app/components/Image'
 import Typography from 'app/components/Typography'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { easyAmount, formatNumber } from 'app/functions'
@@ -148,14 +147,7 @@ const InvestmentDetails = ({ farm }) => {
           <div className="flex flex-col space-y-2">
             {farm?.rewards?.map((reward, i) => (
               <div key={i} className="flex items-center space-x-2">
-                <Image
-                  src={reward.icon}
-                  width="30px"
-                  height="30px"
-                  className="rounded-md"
-                  layout="fixed"
-                  alt={reward.token}
-                />
+                <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />
                 {i === 0 && <Typography>{formatNumber(pendingSushi?.toSignificant(6) ?? 0)}</Typography>}
                 {i === 1 && <Typography>{formatNumber(pendingReward)}</Typography>}
                 <Typography>{reward.token}</Typography>

@@ -29,3 +29,5 @@ export const MIM = new Token(
   'Magic Internet Money'
 )
 export const ICE = new Token(ChainId.MATIC, '0x4e1581f01046eFDd7a1a2CDB0F82cdd7F71F2E59', 18, 'ICE', 'IceToken')
+
+export const gOHM = new Token(ChainId.MATIC, '0xd8cA34fd379d9ca3C6Ee3b3905678320F5b45195', 18, 'gOHM', 'Governance OHM')
