@@ -57,9 +57,11 @@ const ClassicStandardMode = () => {
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWalletA(!spendFromWalletA)}
                 checked={spendFromWalletA}
+                id="switch-spend-from-wallet-a"
               />
             }
             spendFromWallet={spendFromWalletA}
+            id="asset-input-a"
           />
           <div />
           <AssetInput
@@ -74,9 +76,11 @@ const ClassicStandardMode = () => {
               <AssetInput.WalletSwitch
                 onChange={() => setSpendFromWalletB(!spendFromWalletB)}
                 checked={spendFromWalletB}
+                id="switch-spend-from-wallet-b"
               />
             }
             spendFromWallet={spendFromWalletB}
+            id="asset-input-b"
           />
           <div className="flex flex-col gap-3">
             <TridentApproveGate

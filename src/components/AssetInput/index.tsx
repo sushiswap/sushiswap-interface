@@ -34,6 +34,7 @@ interface AssetInputProps {
   chip?: string
   disabled?: boolean
   currencies?: Currency[]
+  id?: string
 }
 
 type AssetInput<P> = FC<P> & {
@@ -68,7 +69,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
     header = (
       <div className="flex gap-2.5 cursor-pointer items-center" onClick={() => setOpen(true)}>
         <div className="flex gap-0.5 items-center">
-          <Typography variant="h3" weight={700} className="text-high-emphesis">
+          <Typography id={props.id} variant="h3" weight={700} className="text-high-emphesis">
             {props.currency.symbol}
           </Typography>
           {props.onSelect && (
@@ -112,6 +113,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
                 balance={balance}
                 onClick={() => props.onChange(maxSpend)}
                 spendFromWallet={spendFromWallet}
+                id={props.id + '-balance'}
               />
             }
           />
@@ -217,7 +219,11 @@ const AssetInputPanel = ({
               </span>
             )}
           </Typography>
-          <Typography variant="sm" className={error ? 'text-red' : usdcValue ? 'text-green' : 'text-low-emphesis'}>
+          <Typography
+            id={currency.symbol + '-usdc-value'}
+            variant="sm"
+            className={error ? 'text-red' : usdcValue ? 'text-green' : 'text-low-emphesis'}
+          >
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
         </div>
@@ -262,11 +268,12 @@ interface AssetInputPanelBalanceProps {
   balance?: CurrencyAmount<Currency>
   onClick: (x: CurrencyAmount<Currency> | undefined) => void
   spendFromWallet?: boolean
+  id?: string
 }
 
 // This component seems to occur quite frequently which is why I gave it it's own component.
 // It's a child of AssetInputPanel so only use together with an AssetInputPanel
-const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onClick, spendFromWallet = true }) => {
+const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onClick, spendFromWallet = true, id }) => {
   const { i18n } = useLingui()
   const error = useAssetInputContextError()
 
@@ -288,6 +295,7 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
         weight={700}
         className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
         onClick={() => onClick(balance)}
+        id={id}
       >
         {balance ? `${balance.toSignificant(6)} ${balance.currency.symbol}` : '0.0000'}
       </Typography>
@@ -299,9 +307,10 @@ interface AssetInputWalletSwitchProps {
   checked: boolean
   onChange: (x: boolean) => void
   label?: string
+  id?: string
 }
 
-const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onChange, label }) => {
+const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onChange, label, id }) => {
   const error = useAssetInputContextError()
 
   const isDesktop = useDesktopMediaQuery()
@@ -331,6 +340,7 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
         </div>
         <div className="order-2 lg:order-1">
           <Switch
+            id={id}
             checked={checked}
             onChange={onChange}
             checkedIcon={

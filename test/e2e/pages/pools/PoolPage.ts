@@ -36,10 +36,10 @@ export class PoolPage extends AppPage {
 
   public async getPoolPosition(): Promise<PoolPosition> {
     let poolPosition: PoolPosition = {
-      token0: '',
-      token1: '',
-      amount0: 0,
-      amount1: 0,
+      assetA: '',
+      assetB: '',
+      amountA: 0,
+      amountB: 0,
     }
 
     const position0Element = await this.Page.waitForSelector(this.Position0Selector)
@@ -47,10 +47,10 @@ export class PoolPage extends AppPage {
     const position1Element = await this.Page.waitForSelector(this.Position1Selector)
     const position1Text = await this.Page.evaluate((element) => element.textContent, position1Element)
 
-    poolPosition.token0 = position0Text.split(' ')[1].split('$')[0]
-    poolPosition.amount0 = parseFloat(position0Text.split(' ')[0])
-    poolPosition.token1 = position1Text.split(' ')[1].split('$')[0]
-    poolPosition.amount1 = parseFloat(position1Text.split(' ')[0])
+    poolPosition.assetA = position0Text.split(' ')[1].split('$')[0]
+    poolPosition.amountA = parseFloat(position0Text.split(' ')[0])
+    poolPosition.assetB = position1Text.split(' ')[1].split('$')[0]
+    poolPosition.amountB = parseFloat(position1Text.split(' ')[0])
 
     return poolPosition
   }

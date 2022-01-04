@@ -1,5 +1,5 @@
 import { Dappeteer } from '@chainsafe/dappeteer'
-import { Page } from 'puppeteer'
+import { ElementHandle, Page } from 'puppeteer'
 
 export abstract class AppPage {
   public Metamask: Dappeteer
@@ -150,5 +150,26 @@ export abstract class AppPage {
 
     var waitTill = new Date(new Date().getTime() + waitSeconds * 1000)
     while (waitTill > new Date()) {}
+  }
+
+  protected async getSwitchElement(switchId: string): Promise<ElementHandle<Element>> {
+    await this.Page.waitForSelector(switchId)
+    const switchElement = await this.Page.$(switchId)
+
+    const buttonElement = (await switchElement.$x('..'))[0]
+    if (!buttonElement) {
+      throw new Error(`Switch with id ${switchId} not found on the page. Check selector is valid.`)
+    }
+
+    return buttonElement
+  }
+
+  protected async isSwitchChecked(switchId: string): Promise<boolean> {
+    let checked: boolean
+
+    const checkedValue = await this.Page.$eval(switchId, (button) => button.getAttribute('aria-checked'))
+    checked = checkedValue === 'true'
+
+    return checked
   }
 }
