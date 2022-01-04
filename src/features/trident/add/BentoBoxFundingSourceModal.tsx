@@ -27,7 +27,7 @@ const BentoBoxFundingSourceModal: FC = () => {
           </div>
           <div className="flex justify-center">
             <div className="relative shadow-pink-glow">
-              <Image src="/bentobox-logo.png" width={130} height={90} alt="BentoBox Logo" />
+              <Image src="/bentobox/logo.png" width={130} height={90} alt="BentoBox Logo" />
             </div>
           </div>
           <Typography variant="lg" weight={400} className="px-5 text-high-emphesis">

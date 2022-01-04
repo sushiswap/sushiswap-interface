@@ -2,9 +2,9 @@ import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
+import { ChainId, CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { easyAmount, formatNumber } from 'app/functions'
@@ -13,7 +13,6 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
@@ -58,8 +57,8 @@ const InvestmentDetails = ({ farm }) => {
       kashiPair.asset
     )
 
-  const pendingReward = usePendingReward(farm)
   const pendingSushi = usePendingSushi(farm)
+  const pendingReward = usePendingReward(farm)
 
   const positionFiatValue = CurrencyAmount.fromRawAmount(
     USD[chainId],
@@ -88,6 +87,8 @@ const InvestmentDetails = ({ farm }) => {
     }
     setPendingTx(false)
   }
+
+  const secondaryRewardOnly = [ChainId.FUSE].includes(chainId)
 
   return (
     <div className="flex flex-col w-full space-y-8">

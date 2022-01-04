@@ -6,7 +6,7 @@ import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import selectCoinAnimation from 'app/animation/select-coin.json'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
 import NumericalInput from 'app/components/Input/Numeric'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
@@ -92,8 +92,8 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
 
   return (
     <AssetInputContext.Provider value={useMemo(() => (error ? error : false), [error])}>
-      <div className="mt-4 lg:mt-0 flex flex-col gap-4">
-        <div className="px-2 flex justify-between">
+      <div className="flex flex-col gap-4 mt-4 lg:mt-0">
+        <div className="flex justify-between px-2">
           {props.title !== '' && header}
           {!isDesktop && props.headerRight && props.headerRight}
         </div>
@@ -212,7 +212,7 @@ const AssetInputPanel = ({
             />
 
             {isDesktop && (
-              <span className="absolute pointer-events-none leading-7 text-low-emphesis" style={{ left: width }}>
+              <span className="absolute leading-7 pointer-events-none text-low-emphesis" style={{ left: width }}>
                 {currency?.symbol}
               </span>
             )}
@@ -222,12 +222,12 @@ const AssetInputPanel = ({
           </Typography>
         </div>
         {error ? (
-          <ExclamationCircleIcon className="text-red h-8 w-8 mr-2" />
+          <ExclamationCircleIcon className="w-8 h-8 mr-2 text-red" />
         ) : (
           showMax && (
             <div
               onClick={() => onMax()}
-              className="cursor-pointer flex flex-col items-center justify-center rounded-full overflow-hidden bg-blue bg-opacity-20 border border-blue text-blue px-3 h-9"
+              className="flex flex-col items-center justify-center px-3 overflow-hidden border rounded-full cursor-pointer bg-blue bg-opacity-20 border-blue text-blue h-9"
             >
               <Typography>MAX</Typography>
             </div>
@@ -316,15 +316,15 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
         'lg:p-4 flex gap-1.5 items-center lg:border-r lg:border-t lg:border-b lg:bg-dark-900 lg:rounded-r lg:justify-center lg:min-w-[120px]'
       )}
     >
-      <div className="flex gap-3 items-center lg:flex-col">
+      <div className="flex items-center gap-3 lg:flex-col">
         <div className="flex flex-col order-1 lg:order-2">
-          <Typography variant="xxs" weight={700} className="text-secondary text-right lg:text-center">
+          <Typography variant="xxs" weight={700} className="text-right text-secondary lg:text-center">
             {label || i18n._(t`Funding source:`)}
           </Typography>
           <Typography
             variant="sm"
             weight={700}
-            className="text-high-emphesis text-right lg:text-center lg:flex lg:gap-1 lg:items-center lg:justify-center"
+            className="text-right text-high-emphesis lg:text-center lg:flex lg:gap-1 lg:items-center lg:justify-center"
           >
             {checked ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)} {isDesktop && helper}
           </Typography>
@@ -334,12 +334,12 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
             checked={checked}
             onChange={onChange}
             checkedIcon={
-              <div className="text-dark-700 flex justify-center items-center h-full w-full">
+              <div className="flex items-center justify-center w-full h-full text-dark-700">
                 <WalletIcon />
               </div>
             }
             uncheckedIcon={
-              <div className="text-dark-700 flex justify-center items-center h-full w-full">
+              <div className="flex items-center justify-center w-full h-full text-dark-700">
                 <BentoBoxIcon />
               </div>
             }

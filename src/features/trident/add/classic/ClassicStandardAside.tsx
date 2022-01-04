@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Typography from 'components/Typography'
+import Typography from 'app/components/Typography'
 
 import { useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
 import TransactionDetails from '../TransactionDetails'

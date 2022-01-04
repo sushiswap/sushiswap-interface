@@ -1,8 +1,8 @@
 import { CheckCircleIcon, DocumentDuplicateIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { classNames } from 'functions'
-import useCopyClipboard from 'hooks/useCopyClipboard'
+import { classNames } from 'app/functions'
+import useCopyClipboard from 'app/hooks/useCopyClipboard'
 import React, { FC } from 'react'
 
 import Typography from '../Typography'

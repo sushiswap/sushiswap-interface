@@ -1,11 +1,11 @@
 import { PoolType } from '@sushiswap/tines'
 import { Feature } from 'app/enums'
+import { StepTwoClassic } from 'app/features/trident/create/classic/StepTwoClassic'
+import { currentStepAtom, selectedPoolTypeAtom } from 'app/features/trident/create/context/atoms'
+import { StepOneSelectPoolType } from 'app/features/trident/create/StepOneSelectPoolType'
+import { StepperSidebar } from 'app/features/trident/create/StepperSidebar'
 import NetworkGuard from 'app/guards/Network'
-import { StepTwoClassic } from 'features/trident/create/classic/StepTwoClassic'
-import { currentStepAtom, selectedPoolTypeAtom } from 'features/trident/create/context/atoms'
-import { StepOneSelectPoolType } from 'features/trident/create/StepOneSelectPoolType'
-import { StepperSidebar } from 'features/trident/create/StepperSidebar'
-import TridentLayout from 'layouts/Trident'
+import TridentLayout from 'app/layouts/Trident'
 import React from 'react'
 import { useRecoilValue } from 'recoil'
 
@@ -15,7 +15,7 @@ const CreateNewPool = () => {
 
   return (
     <div className="flex justify-center">
-      <div className="flex w-full lg:mb-0 mb-10">
+      <div className="flex w-full mb-10 lg:mb-0">
         <StepperSidebar />
         {currentStep === 1 && <StepOneSelectPoolType />}
         {currentStep === 2 && selectedPool === PoolType.ConstantProduct && <StepTwoClassic />}

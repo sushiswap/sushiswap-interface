@@ -1,7 +1,7 @@
 import { ArrowNarrowLeftIcon, ArrowNarrowRightIcon, DotsHorizontalIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { classNames } from 'functions'
+import { classNames } from 'app/functions'
 import { FC, ReactNode, useCallback } from 'react'
 
 interface PaginationProps {

@@ -15,7 +15,7 @@ import React, { useState } from 'react'
 
 import Button from '../Button'
 import { AutoColumn } from '../Column'
-import CurrencyLogo from '../CurrencyLogo'
+import { CurrencyLogo } from '../CurrencyLogo'
 import Dots from '../Dots'
 import DoubleCurrencyLogo from '../DoubleLogo'
 

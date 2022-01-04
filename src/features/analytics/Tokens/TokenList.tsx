@@ -1,8 +1,8 @@
-import CurrencyLogo from 'components/CurrencyLogo'
-import LineGraph from 'components/LineGraph'
-import Table, { Column } from 'components/Table'
-import { formatNumber, formatPercent } from 'functions'
-import { useCurrency } from 'hooks/Tokens'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import LineGraph from 'app/components/LineGraph'
+import Table, { Column } from 'app/components/Table'
+import { formatNumber, formatPercent } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
 import React from 'react'
 
 import ColoredNumber from '../ColoredNumber'

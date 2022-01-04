@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
-import { useUSDCValue } from 'hooks/useUSDCPrice'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { FC, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 // Dummy component that fetches usdcValue

@@ -1,11 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Input from 'components/Input'
+import Input from 'app/components/Input'
+import { AppDispatch } from 'app/state'
+import { Field, setLimitPrice } from 'app/state/limit-order/actions'
+import { useDerivedLimitOrderInfo, useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'state'
-import { Field, setLimitPrice } from 'state/limit-order/actions'
-import { useDerivedLimitOrderInfo, useLimitOrderState } from 'state/limit-order/hooks'
 
 interface LimitPriceInputPanelProps {
   onBlur: (value: string) => void

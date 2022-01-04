@@ -70,7 +70,7 @@ const AddClassic = () => {
                 classicPool.state as any
               ) && (
                 <Alert
-                  className="bg-transparent px-0 pb-0"
+                  className="px-0 pb-0 bg-transparent"
                   dismissable={false}
                   type="error"
                   showIcon

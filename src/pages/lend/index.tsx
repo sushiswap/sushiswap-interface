@@ -21,6 +21,7 @@ import { RecoilRoot } from 'recoil'
 
 export default function Lend() {
   const { i18n } = useLingui()
+
   const addresses = useKashiPairAddresses()
   const pairs = useKashiPairs(addresses)
 
@@ -238,7 +239,7 @@ const LendLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="/deposit-graphic.png"
+          backgroundImage="/images/kashi/deposit.png"
           title={i18n._(t`Lend your assets, earn yield with no impermanent loss`)}
           description={i18n._(
             t`Isolated lending markets mitigate your risks as an asset lender. Know exactly what collateral is available to you in the event of counter party insolvency.`

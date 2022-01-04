@@ -1,6 +1,7 @@
 export * from './array'
 export * from './bentobox'
 export * from './block'
+export * from './cloudinary'
 export * from './contract'
 export * from './convert'
 export * from './currency'

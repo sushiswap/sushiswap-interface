@@ -12,7 +12,7 @@ interface HeaderProps {
 const Header: FC<HeaderProps> = ({ height = 64 }) => {
   return (
     <>
-      <header className="flex-shrink-0 w-full fixed z-20 filter" style={{ height }}>
+      <header className="fixed z-20 flex-shrink-0 w-full filter" style={{ height }}>
         <Popover
           as="nav"
           className="z-10 w-full backdrop-blur-[20px] bg-[rgba(255,255,255,0.03)] border-b border-[rgba(255,255,255,0.12)]"

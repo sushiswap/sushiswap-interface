@@ -1,13 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import QuestionHelper from 'components/QuestionHelper'
-import NeonSelect, { NeonSelectItem } from 'components/Select'
+import QuestionHelper from 'app/components/QuestionHelper'
+import NeonSelect, { NeonSelectItem } from 'app/components/Select'
+import { AppDispatch } from 'app/state'
+import { setOrderExpiration } from 'app/state/limit-order/actions'
+import { useLimitOrderState } from 'app/state/limit-order/hooks'
+import { OrderExpiration } from 'app/state/limit-order/reducer'
 import { FC, useCallback } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'state'
-import { setOrderExpiration } from 'state/limit-order/actions'
-import { useLimitOrderState } from 'state/limit-order/hooks'
-import { OrderExpiration } from 'state/limit-order/reducer'
 
 const OrderExpirationDropdown: FC = () => {
   const { i18n } = useLingui()
@@ -35,7 +35,7 @@ const OrderExpirationDropdown: FC = () => {
 
   return (
     <>
-      <div className="flex items-center text-secondary gap-3 cursor-pointer">
+      <div className="flex items-center gap-3 cursor-pointer text-secondary">
         <div className="flex flex-row items-center">
           <span className="text-sm">{i18n._(t`Order Expiration`)}:</span>
           <QuestionHelper text={i18n._(t`Expiration is the time at which the order will become invalid`)} />

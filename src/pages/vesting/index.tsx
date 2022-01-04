@@ -58,11 +58,11 @@ const Vesting = () => {
             <div className="flex flex-col gap-5">
               <StrategySelector />
               <Link href={'/tools/meowshi'}>
-                <div
+                <a
                   className={`bg-dark-900 cursor-pointer border border-transparent pl-5 py-2 rounded whitespace-nowrap w-full font-bold h-[48px] flex items-center text-sm`}
                 >
                   {'SUSHI → MEOW'}
-                </div>
+                </a>
               </Link>
             </div>
           </div>

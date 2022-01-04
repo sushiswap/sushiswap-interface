@@ -31,6 +31,8 @@ interface BorrowProps {
 
 const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
+const DEFAULT_UPDATE_ORACLE = true
+
 export default function Borrow({ pair }: BorrowProps) {
   const { account, chainId } = useActiveWeb3React()
 
@@ -40,7 +42,7 @@ export default function Borrow({ pair }: BorrowProps) {
   const [collateralValue, setCollateralValue] = useState('')
   const [borrowValue, setBorrowValue] = useState('')
   const [swapBorrowValue, setSwapBorrowValue] = useState('')
-  const [updateOracle, setUpdateOracle] = useState(false)
+  const [updateOracle, setUpdateOracle] = useState(DEFAULT_UPDATE_ORACLE)
   const [swap, setSwap] = useState(false)
 
   const assetToken = useCurrency(pair.asset.address) || undefined
@@ -387,14 +389,14 @@ export default function Borrow({ pair }: BorrowProps) {
         />
       )}
 
-      {borrowValueSet && (
+      {/* {borrowValueSet && (
         <ExchangeRateCheckBox
           pair={pair}
           updateOracle={updateOracle}
           setUpdateOracle={setUpdateOracle}
           desiredDirection="up"
         />
-      )}
+      )} */}
 
       {collateralValueSet && (
         <>

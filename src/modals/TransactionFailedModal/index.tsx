@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import CloseIcon from 'components/CloseIcon'
+import CloseIcon from 'app/components/CloseIcon'
 import Image from 'next/image'
 import React from 'react'
 

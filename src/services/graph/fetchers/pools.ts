@@ -1,14 +1,14 @@
 import { ChainId, Token } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
 import { Fee } from '@sushiswap/trident-sdk'
-import { GRAPH_HOST, TRIDENT } from 'services/graph/constants'
+import { GRAPH_HOST, TRIDENT } from 'app/services/graph/constants'
 import {
   getSwapsForPoolQuery,
   getTridentPoolsQuery,
   poolDaySnapshotsQuery,
   poolHourSnapshotsQuery,
   poolKpisQuery,
-} from 'services/graph/queries'
+} from 'app/services/graph/queries'
 
 import { pager } from './pager'
 

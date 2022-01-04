@@ -5,9 +5,9 @@ import { useLingui } from '@lingui/react'
 import React, { FC } from 'react'
 
 import Typography from '../../components/Typography'
-import { useAppDispatch } from '../../state/hooks'
-import { setZapIn } from '../../state/inari/actions'
-import { useInariState } from '../../state/inari/hooks'
+import { useAppDispatch } from 'app/state/hooks'
+import { setZapIn } from 'app/state/inari/actions'
+import { useInariState } from 'app/state/inari/hooks'
 
 interface SideSwitchProps {}
 

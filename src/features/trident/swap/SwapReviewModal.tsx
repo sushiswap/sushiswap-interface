@@ -3,21 +3,21 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TradeVersion } from '@sushiswap/core-sdk'
 import { isValidAddress } from '@walletconnect/utils'
+import Button from 'app/components/Button'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import Divider from 'app/components/Divider'
+import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
+import Typography from 'app/components/Typography'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import SwapSubmittedModalContent from 'app/features/trident/swap/SwapSubmittedModalContent'
 import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
+import { shortenAddress, toAmountCurrencyAmount, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useBentoRebases from 'app/hooks/useBentoRebases'
-import Button from 'components/Button'
-import CurrencyLogo from 'components/CurrencyLogo'
-import Divider from 'components/Divider'
-import HeadlessUIModal from 'components/Modal/HeadlessUIModal'
-import Typography from 'components/Typography'
-import { shortenAddress, toAmountCurrencyAmount, warningSeverity } from 'functions'
-import useENS from 'hooks/useENS'
-import { SwapCallbackState, useSwapCallback } from 'hooks/useSwapCallback'
-import useSwapSlippageTolerance from 'hooks/useSwapSlippageTollerence'
-import useTransactionStatus from 'hooks/useTransactionStatus'
+import useENS from 'app/hooks/useENS'
+import { SwapCallbackState, useSwapCallback } from 'app/hooks/useSwapCallback'
+import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import useTransactionStatus from 'app/hooks/useTransactionStatus'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
@@ -99,7 +99,7 @@ const SwapReviewModal: FC = () => {
       afterLeave={() => setTxHash(undefined)}
     >
       {!txHash ? (
-        <div className="flex flex-col h-full gap-5 pb-4 lg:max-w-md">
+        <div className="flex flex-col h-full gap-5 pb-4 lg:w-full">
           <div className="relative">
             <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
             <div className="flex flex-col gap-4 px-5 pt-5 pb-8">

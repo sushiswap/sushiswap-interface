@@ -1,7 +1,7 @@
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
-import { poolAtom } from 'features/trident/context/atoms'
+import { poolAtom } from 'app/features/trident/context/atoms'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

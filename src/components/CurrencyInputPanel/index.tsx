@@ -11,7 +11,7 @@ import Lottie from 'lottie-react'
 import React, { ReactNode, useCallback, useState } from 'react'
 
 import Button from '../Button'
-import CurrencyLogo from '../CurrencyLogo'
+import { CurrencyLogo } from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
 import Input from '../Input'
 import { FiatValue } from './FiatValue'

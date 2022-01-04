@@ -7,7 +7,7 @@ import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import Lottie from 'lottie-react'
 import React, { useCallback, useState } from 'react'
 
-import CurrencyLogo from '../CurrencyLogo'
+import { CurrencyLogo } from '../CurrencyLogo'
 
 interface CurrencySelectPanelProps {
   onClick?: () => void

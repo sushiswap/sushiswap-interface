@@ -38,9 +38,9 @@ const AuctionClaimer: FC<AuctionClaimerProps> = ({ auction }) => {
   if (!auction) return <AuctionCommitterSkeleton />
 
   return (
-    <div className="mt-6 relative">
+    <div className="relative mt-6">
       <div className="flex flex-col gap-3">
-        <div className="flex flex-col gap-2 justify-between items-baseline">
+        <div className="flex flex-col items-baseline justify-between gap-2">
           <Typography weight={700} className="text-high-emphesis">
             {auction.canWithdraw ? i18n._(t`Withdraw Tokens`) : i18n._(t`Claim Tokens`)}
           </Typography>

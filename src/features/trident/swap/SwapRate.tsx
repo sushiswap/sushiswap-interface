@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Price } from '@sushiswap/core-sdk'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
-import Typography from 'components/Typography'
+import Typography from 'app/components/Typography'
 import React, { FC, useState } from 'react'
 
 import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'

@@ -1,6 +1,6 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import features from 'config/features'
-import { Feature } from 'enums'
+import features from 'app/config/features'
+import { Feature } from 'app/enums'
 
 export function featureEnabled(feature: Feature, chainId: ChainId): boolean {
   return chainId && chainId in features && features[chainId].includes(feature)

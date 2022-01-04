@@ -2,17 +2,17 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
+import { injected } from 'app/config/wallets'
+import { NetworkContextName } from 'app/constants'
+import { shortenAddress } from 'app/functions'
+import useENSName from 'app/hooks/useENSName'
+import WalletModal from 'app/modals/WalletModal'
+import { useWalletModalToggle } from 'app/state/application/hooks'
+import { isTransactionRecent, useAllTransactions } from 'app/state/transactions/hooks'
+import { TransactionDetails } from 'app/state/transactions/reducer'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
 
-import { injected } from '../../config/wallets'
-import { NetworkContextName } from '../../constants'
-import { shortenAddress } from '../../functions/format'
-import useENSName from '../../hooks/useENSName'
-import WalletModal from '../../modals/WalletModal'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
-import { TransactionDetails } from '../../state/transactions/reducer'
 import Loader from '../Loader'
 import Web3Connect from '../Web3Connect'
 
@@ -34,38 +34,44 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
     // return <Identicon />
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
-      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'LatticeConnector') {
     return (
-      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
-      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
-      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'PortisConnector') {
     return (
-      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
-      <div className="flex flex-col flex-nowrap items-center justify-center h-4 w-4">
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
+      </div>
+    )
+  } else if (connector.constructor.name === 'CloverConnector') {
+    return (
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+        <Image src="/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
       </div>
     )
   }

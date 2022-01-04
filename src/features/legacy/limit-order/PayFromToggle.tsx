@@ -1,12 +1,12 @@
 import { Switch } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Typography from 'components/Typography'
+import Typography from 'app/components/Typography'
+import { AppDispatch } from 'app/state'
+import { setFromBentoBalance } from 'app/state/limit-order/actions'
+import { useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC } from 'react'
 import { useDispatch } from 'react-redux'
-import { AppDispatch } from 'state'
-import { setFromBentoBalance } from 'state/limit-order/actions'
-import { useLimitOrderState } from 'state/limit-order/hooks'
 
 const PayFromToggle: FC = () => {
   const { i18n } = useLingui()

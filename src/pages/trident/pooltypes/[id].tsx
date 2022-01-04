@@ -1,9 +1,9 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'components/Button'
-import Typography from 'components/Typography'
-import TridentLayout from 'layouts/Trident'
+import Button from 'app/components/Button'
+import Typography from 'app/components/Typography'
+import TridentLayout from 'app/layouts/Trident'
 import Link from 'next/link'
 import { RecoilRoot } from 'recoil'
 

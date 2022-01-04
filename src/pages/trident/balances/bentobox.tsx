@@ -33,8 +33,8 @@ const BentoBox = () => {
               <div className="flex flex-col gap-10 w-full lg:max-w-[calc(100%-360px)] overflow-auto">
                 <div className="block lg:hidden">
                   <Card.Gradient>
-                    <div className="flex flex-col p-4 border border-dark-900 rounded">
-                      <Typography variant="sm" className="text-high-emphesis text-center">
+                    <div className="flex flex-col p-4 border rounded border-dark-900">
+                      <Typography variant="sm" className="text-center text-high-emphesis">
                         {i18n._(t`Tap any asset row to view available actions.`)}
                       </Typography>
                     </div>

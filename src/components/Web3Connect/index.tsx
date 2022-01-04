@@ -1,10 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
+import { useWalletModalToggle } from 'app/state/application/hooks'
 import React from 'react'
 import { Activity } from 'react-feather'
 
-import { useWalletModalToggle } from '../../state/application/hooks'
 import Button, { ButtonProps } from '../Button'
 
 export default function Web3Connect({ color = 'gray', size = 'sm', className = '', ...rest }: ButtonProps) {

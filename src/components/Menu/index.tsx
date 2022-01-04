@@ -2,10 +2,10 @@ import { Popover, Transition } from '@headlessui/react'
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { classNames } from 'app/functions'
 import Image from 'next/image'
 import React, { Fragment } from 'react'
 
-import { classNames } from '../../functions/styling'
 import ExternalLink from '../ExternalLink'
 
 const items = (i18n: I18n) => [

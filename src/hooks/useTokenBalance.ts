@@ -16,7 +16,7 @@ export interface BalanceProps {
 }
 
 // Do NOT use this hook, use the generic wallet hook for useTokenBalance
-// Prefer import { useTokenBalance } from 'state/wallet/hooks' and use appropriately.
+// Prefer import { useTokenBalance } from 'app/state/wallet/hooks' and use appropriately.
 
 function useTokenBalance(tokenAddress: string): BalanceProps {
   const [balance, setBalance] = useState<BalanceProps>({

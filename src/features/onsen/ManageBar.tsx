@@ -30,6 +30,7 @@ import CurrencyInputPanel from './CurrencyInputPanel'
 import { Chef, PairType } from './enum'
 import { useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
+import { OLD_FARMS } from 'app/config/farms'
 
 const ManageBar = ({ farm }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -107,6 +108,10 @@ const ManageBar = ({ farm }) => {
       [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
       [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
       [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
+      [ChainId.FUSE]: MINICHEF_ADDRESS[ChainId.FUSE],
+    },
+    [Chef.OLD_FARMS]: {
+      [ChainId.CELO]: OLD_FARMS[ChainId.CELO],
     },
   }
 

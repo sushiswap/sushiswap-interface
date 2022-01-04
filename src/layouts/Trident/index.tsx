@@ -1,9 +1,9 @@
-import Container, { MaxWidth } from 'components/Container'
-import Header from 'components/Header'
-import Main from 'components/Main'
-import Popups from 'components/Popups'
-import { BreadcrumbItem } from 'features/trident/Breadcrumb'
-import { classNames } from 'functions'
+import Container, { MaxWidth } from 'app/components/Container'
+import Header from 'app/components/Header'
+import Main from 'app/components/Main'
+import Popups from 'app/components/Popups'
+import { BreadcrumbItem } from 'app/features/trident/Breadcrumb'
+import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
 const HEADER_HEIGHT = 64

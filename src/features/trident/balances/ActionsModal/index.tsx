@@ -1,5 +1,5 @@
 import { XIcon } from '@heroicons/react/solid'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import BottomSlideIn from 'app/components/Dialog/BottomSlideIn'
 import Typography from 'app/components/Typography'
 import BentoActions from 'app/features/trident/balances/BentoActions'

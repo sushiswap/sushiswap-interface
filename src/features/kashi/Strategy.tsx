@@ -1,7 +1,6 @@
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import React from 'react'
-
 import Button from '../../components/Button'
 import { formatPercent } from '../../functions'
 import { useBentoBox } from '../../hooks'

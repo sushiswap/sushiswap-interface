@@ -27,6 +27,7 @@ const usePending = (farm) => {
       [ChainId.ARBITRUM]: cloneRewarder,
       [ChainId.CELO]: complexRewarder,
       [ChainId.MOONRIVER]: complexRewarder,
+      [ChainId.FUSE]: complexRewarder,
     }),
     [complexRewarder, cloneRewarder]
   )
@@ -54,7 +55,7 @@ const usePending = (farm) => {
       cloneRewarder &&
       farm &&
       library &&
-      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF)
+      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF || farm.chef === Chef.OLD_FARMS)
     ) {
       fetchPendingReward()
     }

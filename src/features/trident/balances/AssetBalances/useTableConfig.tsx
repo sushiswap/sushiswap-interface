@@ -1,4 +1,4 @@
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { Assets } from 'app/features/trident/balances/AssetBalances/types'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'

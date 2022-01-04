@@ -1,5 +1,5 @@
 import { CheckIcon } from '@heroicons/react/outline'
-import { classNames } from 'functions'
+import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 import { useRecoilState } from 'recoil'
 

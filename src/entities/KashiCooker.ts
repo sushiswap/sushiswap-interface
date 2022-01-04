@@ -3,13 +3,13 @@ import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { Web3Provider } from '@ethersproject/providers'
-import { ChainId, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, WNATIVE, BENTOBOX_ADDRESS } from '@sushiswap/core-sdk'
 import KASHIPAIR_ABI from 'app/constants/abis/kashipair.json'
 import { toShare } from 'app/functions/bentobox'
 import { getProviderOrSigner, getSigner } from 'app/functions/contract'
-import { ZERO } from 'functions/math'
-import { toElastic } from 'functions/rebase'
-import { KashiPermit } from 'hooks/useKashiApproveCallback'
+import { ZERO } from 'app/functions/math'
+import { toElastic } from 'app/functions/rebase'
+import { KashiPermit } from 'app/hooks/useKashiApproveCallback'
 
 export async function signMasterContractApproval(
   bentoBoxContract: Contract | null,
@@ -128,6 +128,21 @@ export default class KashiCooker {
     return this
   }
 
+  bentoDepositAssetShare(share: BigNumber): KashiCooker {
+    const useNative = this.pair.asset.address === WNATIVE[this.chainId].address
+
+    this.add(
+      Action.BENTO_DEPOSIT,
+      defaultAbiCoder.encode(
+        ['address', 'address', 'int256', 'int256'],
+        [useNative ? AddressZero : this.pair.asset.address, this.account, 0, share]
+      ),
+      useNative ? share : ZERO
+    )
+
+    return this
+  }
+
   bentoDepositCollateral(amount: BigNumber): KashiCooker {
     const useNative = this.pair.collateral.address === WNATIVE[this.chainId].address
 
@@ -153,6 +168,15 @@ export default class KashiCooker {
         [useNative ? AddressZero : this.pair.collateral.address, this.account, amount, share]
       ),
       useNative ? amount : ZERO
+    )
+
+    return this
+  }
+
+  bentoTransfer(share: BigNumber, toAddress: string): KashiCooker {
+    this.add(
+      Action.BENTO_TRANSFER,
+      defaultAbiCoder.encode(['address', 'address', 'int256'], [BENTOBOX_ADDRESS[this.chainId], toAddress, share])
     )
 
     return this

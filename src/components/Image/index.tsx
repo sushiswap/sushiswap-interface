@@ -1,7 +1,7 @@
+import { cloudinaryLoader } from 'app/functions'
 import NextImage, { ImageProps } from 'next/image'
 import { FC } from 'react'
 
-import { cloudinaryLoader } from '../../functions/cloudinary'
 import { shimmer } from './shimmer'
 
 const toBase64 = (str) => (typeof window === 'undefined' ? Buffer.from(str).toString('base64') : window.btoa(str))

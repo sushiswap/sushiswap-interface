@@ -6,7 +6,7 @@ import { PoolAtomType } from 'app/features/trident/types'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
-import { useMultipleContractSingleData } from 'state/multicall/hooks'
+import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
 
 const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(ConstantProductPoolArtifact.abi)
 

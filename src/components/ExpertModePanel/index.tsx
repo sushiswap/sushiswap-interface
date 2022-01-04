@@ -15,9 +15,9 @@ const ExpertModePanel: FC<ExpertModePanelProps> = ({ active, children, onClose }
   return (
     <div className="">
       <div className="h-[34px] flex justify-end">
-        <div className="bg-dark-800 rounded-tr rounded-tl-full gap-6 flex items-center -mb-2 relative justify-between pr-3 pl-8">
-          <span className="font-bold uppercase tracking-widest text-sm mb-1">{i18n._(t`Expert Mode`)}</span>
-          <div onClick={onClose} className="cursor-pointer mb-1">
+        <div className="relative flex items-center justify-between gap-6 pl-8 pr-3 -mb-2 rounded-tl-full rounded-tr bg-dark-800">
+          <span className="mb-1 text-sm font-bold tracking-widest uppercase">{i18n._(t`Expert Mode`)}</span>
+          <div onClick={onClose} className="mb-1 cursor-pointer">
             <XCircleIcon width={20} height={20} className="hover:text-high-emphesis" />
           </div>
         </div>

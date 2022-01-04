@@ -43,7 +43,7 @@ export default function useMasterChef(chef: Chef) {
 
         if (chef === Chef.MASTERCHEF) {
           tx = await contract?.withdraw(pid, amount)
-        } else if (chef === Chef.MINICHEF) {
+        } else if (chef === Chef.MINICHEF || chef === Chef.OLD_FARMS) {
           tx = await contract?.withdrawAndHarvest(pid, amount, account)
         } else {
           tx = await contract?.withdraw(pid, amount, account)
@@ -82,7 +82,7 @@ export default function useMasterChef(chef: Chef) {
           } else {
             tx = await contract?.harvest(pid, account)
           }
-        } else if (chef === Chef.MINICHEF) {
+        } else if (chef === Chef.MINICHEF || chef === Chef.OLD_FARMS) {
           tx = await contract?.harvest(pid, account)
         }
 

@@ -1,7 +1,7 @@
-import ConcentratedMarket from 'features/trident/pool/concentrated/ConcentratedMarket'
-import Header from 'features/trident/pool/Header'
-import PoolStatsChart from 'features/trident/pool/PoolStatsChart'
-import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import ConcentratedMarket from 'app/features/trident/pool/concentrated/ConcentratedMarket'
+import Header from 'app/features/trident/pool/Header'
+import PoolStatsChart from 'app/features/trident/pool/PoolStatsChart'
+import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { RecoilRoot } from 'recoil'
 
 const Pool = () => {

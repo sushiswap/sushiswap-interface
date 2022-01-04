@@ -1,10 +1,10 @@
 import { XIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Alert from 'components/Alert'
-import Button from 'components/Button'
-import HeadlessUiModal from 'components/Modal/HeadlessUIModal'
-import Typography from 'components/Typography'
+import Alert from 'app/components/Alert'
+import Button from 'app/components/Button'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import Typography from 'app/components/Typography'
 import React, { FC } from 'react'
 
 const TransactionDetailsExplanationModal: FC = ({ children }) => {

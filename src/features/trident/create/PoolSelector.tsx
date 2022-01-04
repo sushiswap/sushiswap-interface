@@ -1,7 +1,7 @@
 import { PoolType } from '@sushiswap/tines'
 import { poolTypeNameMapper } from 'app/features/trident/types'
-import Typography from 'components/Typography'
-import { classNames } from 'functions'
+import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
 import ClassicIcon from '/public/images/trident/pools/classic.svg'

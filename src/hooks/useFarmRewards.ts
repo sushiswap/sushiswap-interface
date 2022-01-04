@@ -11,16 +11,16 @@ import {
   useFarms,
   useFusePrice,
   useKashiPairs,
-  useMagicPrice,
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
   useMovrPrice,
-  useOhmPrice,
   useOneDayBlock,
   useOnePrice,
   useSpellPrice,
   useStakePrice,
+  useOhmPrice,
+  useMagicPrice,
   useSushiPairs,
   useSushiPrice,
 } from 'app/services/graph'
@@ -191,7 +191,7 @@ export default function useFarmRewards() {
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
             ? pool.rewarder.rewardPerSecond / 1e18
             : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 

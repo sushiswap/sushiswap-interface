@@ -1,8 +1,8 @@
 import Container, { MaxWidth } from 'app/components/Container'
 import Main from 'app/components/Main'
 import { classNames } from 'app/functions'
-import Header from 'components/Header'
-import Popups from 'components/Popups'
+import Header from 'app/components/Header'
+import Popups from 'app/components/Popups'
 import React, { FC, ReactNode } from 'react'
 
 interface MisoHeaderProps extends React.HTMLProps<HTMLHeadElement> {

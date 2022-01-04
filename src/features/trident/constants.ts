@@ -1,5 +1,5 @@
 import { PoolType } from '@sushiswap/tines'
-import { ChipColor } from 'components/Chip'
+import { ChipColor } from 'app/components/Chip'
 
 type PoolTypesInterface = Record<
   PoolType,

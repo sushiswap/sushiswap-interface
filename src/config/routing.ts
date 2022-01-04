@@ -98,6 +98,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     MATIC.WETH,
     MATIC.USDT,
     MATIC.MIM,
+    MATIC.SUSHI,
   ],
   [ChainId.FANTOM]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
@@ -341,6 +342,7 @@ export const COMMON_BASES: ChainTokenList = {
     CELO.cUSD,
     CELO.cEURO,
     CELO.WBTC,
+    CELO.USDC,
     SUSHI[ChainId.CELO],
   ],
   [ChainId.MOONRIVER]: [

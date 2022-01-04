@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import ListPanel from 'components/ListPanel'
-import Typography from 'components/Typography'
+import ListPanel from 'app/components/ListPanel'
+import Typography from 'app/components/Typography'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

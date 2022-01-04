@@ -1,6 +1,5 @@
+import Container from 'app/components/Container'
 import Head from 'next/head'
-
-import Container from '../../components/Container'
 
 export default function Vaults() {
   return (

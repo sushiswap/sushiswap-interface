@@ -1,5 +1,5 @@
 import { Fee } from '@sushiswap/trident-sdk'
-import { TableInstance } from 'features/transactions/types'
+import { TableInstance } from 'app/features/transactions/types'
 import { atom, selector } from 'recoil'
 
 export const searchQueryAtom = atom<string>({

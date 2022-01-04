@@ -1,9 +1,9 @@
-import DoubleCurrencyLogo from 'components/DoubleLogo'
-import Table from 'components/Table'
-import ColoredNumber from 'features/analytics/ColoredNumber'
-import { formatNumber, formatNumberScale, formatPercent } from 'functions'
-import { aprToApy } from 'functions/convert/apyApr'
-import { useCurrency } from 'hooks/Tokens'
+import DoubleCurrencyLogo from 'app/components/DoubleLogo'
+import Table from 'app/components/Table'
+import ColoredNumber from 'app/features/analytics/ColoredNumber'
+import { formatNumber, formatNumberScale, formatPercent } from 'app/functions'
+import { aprToApy } from 'app/functions/convert/apyApr'
+import { useCurrency } from 'app/hooks/Tokens'
 import React from 'react'
 
 interface PairListProps {

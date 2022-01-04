@@ -1,5 +1,5 @@
 import { Pair } from '@sushiswap/core-sdk'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import React, { FC } from 'react'
 
 export const PoolPanelAssetsLabel: FC<{ pair: Pair }> = ({ pair }) => (

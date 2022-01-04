@@ -247,14 +247,26 @@ export default function NetworkModal(): JSX.Element | null {
             return (
               <button
                 key={i}
-                onClick={() => {
+                onClick={async () => {
+                  console.log(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
                   toggleNetworkModal()
                   const params = SUPPORTED_NETWORKS[key]
-                  cookie.set('chainId', key)
-                  if (key === ChainId.ETHEREUM) {
-                    library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
-                  } else {
-                    library?.send('wallet_addEthereumChain', [params, account])
+                  cookie.set('chainId', key, params)
+
+                  try {
+                    await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
+                  } catch (switchError) {
+                    // This error code indicates that the chain has not been added to MetaMask.
+                    if (switchError.code === 4902) {
+                      try {
+                        await library?.send('wallet_addEthereumChain', [params, account])
+                      } catch (addError) {
+                        // handle "add" error
+                        console.error(`Add chain error ${addError}`)
+                      }
+                    }
+                    console.error(`Switch chain error ${switchError}`)
+                    // handle other "switch" errors
                   }
                 }}
                 className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"

@@ -3,8 +3,8 @@ import { useLingui } from '@lingui/react'
 import { ConstantProductPool } from '@sushiswap/trident-sdk'
 import { classNames, isWrappedReturnNativeSymbol } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import Button from 'components/Button'
-import { poolAtom, poolBalanceAtom } from 'features/trident/context/atoms'
+import Button from 'app/components/Button'
+import { poolAtom, poolBalanceAtom } from 'app/features/trident/context/atoms'
 import Link from 'next/link'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
@@ -25,7 +25,6 @@ const ClassicLinkButtons: FC = () => {
       {poolBalance?.greaterThan(0) ? (
         <>
           <Button id={`btn-add-stake-liquidity`} variant="outlined" color="gradient" className="text-high-emphesis">
-
             <Link
               href={{
                 pathname: `/trident/add/classic`,

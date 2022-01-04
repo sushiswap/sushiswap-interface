@@ -139,7 +139,7 @@ const PairLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="/deposit-graphic.png"
+          backgroundImage="/bentobox/deposit.png"
           title={i18n._(t`Lend assets for interest from borrowers.`)}
           description={i18n._(
             t`Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers.`

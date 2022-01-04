@@ -3,7 +3,7 @@ import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicon
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Chip from 'app/components/Chip'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { RestrictedIcon } from 'app/components/Icon'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'

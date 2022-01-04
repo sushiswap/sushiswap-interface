@@ -9,7 +9,7 @@ export const WETH = new Token(
   'WETH',
   'Wrapped Ether'
 )
-export const FRAX = new Token(ChainId.MOONRIVER, '0x965f84D915a9eFa2dD81b653e3AE736555d945f4', 18, 'FRAX', 'Frax')
+export const FRAX = new Token(ChainId.MOONRIVER, '0x1A93B23281CC1CDE4C4741353F3064709A16197d', 18, 'FRAX', 'Frax')
 export const MIM = new Token(
   ChainId.MOONRIVER,
   '0x0caE51e1032e8461f4806e26332c030E34De3aDb',

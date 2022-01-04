@@ -2,7 +2,7 @@ import { Currency } from '@sushiswap/core-sdk'
 import React, { FC } from 'react'
 
 import Typography from '../Typography'
-import CurrencyLogo, { CurrencyLogoProps } from './index'
+import CurrencyLogo, { CurrencyLogoProps } from './CurrencyLogo'
 
 interface CurrencyLogosProps extends Omit<CurrencyLogoProps, 'currency' | 'size'> {
   currencies: Currency[]
@@ -23,7 +23,7 @@ const CurrencyLogoArray: FC<CurrencyLogosProps> = ({ currencies, dense = false, 
       {logos.map((currency, index) => {
         return (
           <div
-            className="rounded-full overflow-hidden"
+            className="overflow-hidden rounded-full"
             key={index}
             style={{
               marginLeft: maxLogos > 1 ? (index === 0 ? '' : dense ? -Math.floor(size / 2 - 4) : -6) : 0,

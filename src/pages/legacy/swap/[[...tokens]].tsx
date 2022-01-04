@@ -44,7 +44,22 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
 
-export default function Swap() {
+import { fetchAPI } from '../../../lib/api'
+
+export async function getServerSideProps() {
+  try {
+    const { data } = await fetchAPI('/banners?populate=image')
+    return {
+      props: { banners: data || [] },
+    }
+  } catch (e) {
+    return {
+      props: { banners: [] },
+    }
+  }
+}
+
+export default function Swap({ banners }) {
   const { i18n } = useLingui()
 
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -126,7 +141,7 @@ export default function Swap() {
   const fiatValueInput = useUSDCValue(parsedAmounts[Field.INPUT])
   const fiatValueOutput = useUSDCValue(parsedAmounts[Field.OUTPUT])
   const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
-
+  console.log({ fiatValueInput, fiatValueOutput })
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
 
   const isValid = !swapInputError
@@ -373,6 +388,8 @@ export default function Swap() {
 
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
 
+  console.log(priceImpactSeverity, priceImpactSeverity > 3, !isExpertMode, trade?.priceImpact, priceImpact)
+
   return (
     <Container id="swap-page" className="py-4 md:py-8 lg:py-12">
       <Head>
@@ -530,7 +547,7 @@ export default function Swap() {
                     ? i18n._(t`Unwrap`)
                     : null)}
               </Button>
-            ) : routeNotFound && userHasSpecifiedInputOutput ? (
+            ) : trade && routeNotFound && userHasSpecifiedInputOutput ? (
               <div style={{ textAlign: 'center' }}>
                 <div className="mb-1">{i18n._(t`Insufficient liquidity for this trade`)}</div>
                 {singleHopOnly && <div className="mb-1">{i18n._(t`Try enabling multi-hop trades`)}</div>}
@@ -620,11 +637,11 @@ export default function Swap() {
             )}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
           </div>
-          {!swapIsUnsupported ? null : (
+          {swapIsUnsupported ? (
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
-          )}
+          ) : null}
         </div>
-        <Banner />
+        <Banner banners={banners} />
       </DoubleGlowShadow>
     </Container>
   )

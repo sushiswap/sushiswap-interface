@@ -2,7 +2,7 @@ import { Disclosure } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Typography from 'components/Typography'
+import Typography from 'app/components/Typography'
 import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

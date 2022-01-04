@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CreatePoolReviewModal } from 'app/features/trident/create/CreatePoolReviewModal'
-import { TridentBody, TridentHeader } from 'layouts/Trident'
+import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React, { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
 

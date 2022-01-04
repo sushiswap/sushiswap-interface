@@ -1,6 +1,6 @@
-import Header from 'features/trident/pool/Header'
-import MyDeposits from 'features/trident/pool/MyDeposits'
-import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import Header from 'app/features/trident/pool/Header'
+import MyDeposits from 'app/features/trident/pool/MyDeposits'
+import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { RecoilRoot } from 'recoil'
 
 const Pool = () => {

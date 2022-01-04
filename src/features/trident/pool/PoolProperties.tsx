@@ -1,9 +1,9 @@
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
 import { Pool } from '@sushiswap/trident-sdk'
-import Chip from 'components/Chip'
-import Typography from 'components/Typography'
-import { formatPercent } from 'functions'
+import Chip from 'app/components/Chip'
+import Typography from 'app/components/Typography'
+import { formatPercent } from 'app/functions'
 import { FC, useMemo } from 'react'
 
 import { POOL_TYPES } from '../constants'

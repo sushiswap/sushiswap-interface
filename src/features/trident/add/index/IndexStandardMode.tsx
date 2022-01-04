@@ -1,14 +1,19 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import loadingCircle from 'animation/loading-circle.json'
-import AssetInput from 'components/AssetInput'
-import Button from 'components/Button'
-import Dots from 'components/Dots'
-import Typography from 'components/Typography'
-import { attemptingTxnAtom, poolAtom, showReviewAtom, spendFromWalletSelector } from 'features/trident/context/atoms'
-import { TypedField, useDependentAssetInputs } from 'features/trident/context/hooks/useDependentAssetInputs'
-import { classNames } from 'functions'
-import { useBentoBoxContract, useTridentRouterContract } from 'hooks'
+import AssetInput from 'app/components/AssetInput'
+import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import Typography from 'app/components/Typography'
+import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
+import {
+  attemptingTxnAtom,
+  poolAtom,
+  showReviewAtom,
+  spendFromWalletSelector,
+} from 'app/features/trident/context/atoms'
+import { TypedField, useDependentAssetInputs } from 'app/features/trident/context/hooks/useDependentAssetInputs'
+import { classNames } from 'app/functions'
 import Lottie from 'lottie-react'
 import React from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'

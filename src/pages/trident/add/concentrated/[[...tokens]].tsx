@@ -1,24 +1,30 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'app/components/Button'
+import Typography from 'app/components/Typography'
+import Chart from 'app/features/trident/add/concentrated/Chart'
+import ConcentratedStandardMode from 'app/features/trident/add/concentrated/ConcentratedStandardMode'
+import PriceRange from 'app/features/trident/add/concentrated/PriceRange'
+import RangeBlocks from 'app/features/trident/add/concentrated/RangeBlocks'
+import FixedRatioHeader from 'app/features/trident/add/FixedRatioHeader'
+import {
+  maxPriceAtom,
+  minPriceAtom,
+  poolAtom,
+  poolBalanceAtom,
+  totalSupplyAtom,
+} from 'app/features/trident/context/atoms'
+import { useCurrency } from 'app/hooks/Tokens'
 import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
+import { useTotalSupply } from 'app/hooks/useTotalSupply'
+import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useActiveWeb3React } from 'app/services/web3'
-import Button from 'components/Button'
-import Typography from 'components/Typography'
-import Chart from 'features/trident/add/concentrated/Chart'
-import ConcentratedStandardMode from 'features/trident/add/concentrated/ConcentratedStandardMode'
-import PriceRange from 'features/trident/add/concentrated/PriceRange'
-import RangeBlocks from 'features/trident/add/concentrated/RangeBlocks'
-import FixedRatioHeader from 'features/trident/add/FixedRatioHeader'
-import { maxPriceAtom, minPriceAtom, poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
-import { useCurrency } from 'hooks/Tokens'
-import { useTotalSupply } from 'hooks/useTotalSupply'
-import TridentLayout, { TridentBody, TridentHeader } from 'layouts/Trident'
+import { useTokenBalance } from 'app/state/wallet/hooks'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import { RecoilRoot, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { useTokenBalance } from 'state/wallet/hooks'
 
 const AddConcentrated = () => {
   const { account, chainId } = useActiveWeb3React()

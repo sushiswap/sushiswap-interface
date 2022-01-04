@@ -1,5 +1,5 @@
 import { Token } from '@sushiswap/core-sdk'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import ExternalLink from 'app/components/ExternalLink'
 import { ExternalLinkIcon } from 'app/components/ExternalLinkIcon'
 import { RowBetween, RowFixed } from 'app/components/Row'

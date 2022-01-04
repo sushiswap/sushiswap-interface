@@ -2,7 +2,7 @@ import { Currency, Percent, Trade as V2Trade, TradeType } from '@sushiswap/core-
 import TransactionConfirmationModal, {
   ConfirmationModalContent,
   TransactionErrorContent,
-} from 'modals/TransactionConfirmationModal'
+} from 'app/modals/TransactionConfirmationModal'
 import React, { useCallback, useMemo } from 'react'
 
 import SwapModalFooter from './SwapModalFooter'

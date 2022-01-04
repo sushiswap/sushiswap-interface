@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'
 import { useAppDispatch } from 'app/state/hooks'

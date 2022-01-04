@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Alert from 'components/Alert'
+import Alert from 'app/components/Alert'
 import React, { FC } from 'react'
 
 export const SetAssetPrice: FC = () => {

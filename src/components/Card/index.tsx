@@ -1,6 +1,5 @@
+import { classNames } from 'app/functions/styling'
 import React, { FC } from 'react'
-
-import { classNames } from '../../functions/styling'
 
 function Header({ className, children }) {
   return (

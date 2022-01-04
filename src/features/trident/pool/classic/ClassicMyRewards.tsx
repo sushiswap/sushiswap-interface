@@ -1,9 +1,9 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'components/Button'
-import ListPanel from 'components/ListPanel'
-import Typography from 'components/Typography'
-import { currentLiquidityValueSelector } from 'features/trident/context/atoms'
+import Button from 'app/components/Button'
+import ListPanel from 'app/components/ListPanel'
+import Typography from 'app/components/Typography'
+import { currentLiquidityValueSelector } from 'app/features/trident/context/atoms'
 import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

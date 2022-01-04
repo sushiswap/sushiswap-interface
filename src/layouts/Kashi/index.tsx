@@ -1,8 +1,8 @@
-import Container from 'components/Container'
-import Image from 'components/Image'
-import Main from 'components/Main'
-import NavLink from 'components/NavLink'
-import Popups from 'components/Popups'
+import Container from 'app/components/Container'
+import Image from 'app/components/Image'
+import Main from 'app/components/Main'
+import NavLink from 'app/components/NavLink'
+import Popups from 'app/components/Popups'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
@@ -24,7 +24,7 @@ const Layout: FC<LayoutProps> = ({ left, children, right }) => {
             <div className="flex justify-center col-span-12 xl:col-span-3 lg:justify-start">
               <Link href="/borrow">
                 <a className="flex justify-center xl:justify-start xl:mx-8">
-                  <Image src="/kashi-logo.png" alt="Kashi" height={64} width={250} placeholder="empty" />
+                  <Image src="/images/kashi/logo.png" alt="Kashi" height={64} width={250} placeholder="empty" />
                 </a>
               </Link>
             </div>

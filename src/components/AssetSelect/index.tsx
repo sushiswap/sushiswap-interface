@@ -4,7 +4,7 @@ import { useLingui } from '@lingui/react'
 import { Currency } from '@sushiswap/core-sdk'
 import selectCoinAnimation from 'app/animation/select-coin.json'
 import Button from 'app/components/Button'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
@@ -29,13 +29,13 @@ const AssetSelect = (props: AssetSelectProps) => {
   const { i18n } = useLingui()
 
   let header = props.header || (
-    <Typography variant="h3" weight={700} className="text-high-emphesis mb-4">
+    <Typography variant="h3" weight={700} className="mb-4 text-high-emphesis">
       {props.title ? props.title : i18n._(t`Choose an asset to Receive:`)}
     </Typography>
   )
 
   return (
-    <div className="mt-4 flex flex-col relative z-10">
+    <div className="relative z-10 flex flex-col mt-4">
       {header}
       <AssetSelectPanel value={props.value} onSelect={props.onSelect} currencies={props.currencies} />
     </div>
@@ -50,7 +50,7 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
   const [balances, setBalances] = useState(false)
 
   let content = (
-    <div className="flex flex-row gap-1 items-center" onClick={() => setOpen(true)}>
+    <div className="flex flex-row items-center gap-1" onClick={() => setOpen(true)}>
       <div className="flex items-center w-12 h-12 rounded-full">
         <Lottie animationData={selectCoinAnimation} autoplay loop />
       </div>
@@ -81,7 +81,7 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
         </div>
         <Typography
           variant="xs"
-          className="text-blue cursor-pointer"
+          className="cursor-pointer text-blue"
           onClick={() => setBalances((prevState) => !prevState)}
         >
           {balances ? i18n._(t`Hide Balances`) : i18n._(t`Show Balances`)}
@@ -127,7 +127,7 @@ const BalancePanel = ({ currency }: { currency: Currency }) => {
   return (
     <ListPanel
       items={[
-        <div className="grid grid-cols-2 gap-2 px-4 h-11 flex items-center border-dark-700" key={0}>
+        <div className="flex grid items-center grid-cols-2 gap-2 px-4 h-11 border-dark-700" key={0}>
           <div className="flex flex-row items-center gap-1.5">
             <div className="flex items-center justify-center rounded-full overflow-hidden border border-dark-700 bg-dark-900 p-1.5 shadow-md">
               <svg width="11" height="9" viewBox="0 0 11 9" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -146,11 +146,11 @@ const BalancePanel = ({ currency }: { currency: Currency }) => {
               {wallet?.greaterThan('0') ? wallet?.toSignificant(6) : '0.0000'}
             </Typography>
           </div>
-          <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+          <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
             ≈${walletUSDC?.greaterThan('0') ? walletUSDC.toSignificant(6) : '0.0000'}
           </Typography>
         </div>,
-        <div className="grid grid-cols-2 gap-2 px-4 h-11 flex items-center border-dark-700" key={1}>
+        <div className="flex grid items-center grid-cols-2 gap-2 px-4 h-11 border-dark-700" key={1}>
           <div className="flex flex-row items-center gap-1.5">
             <div className="flex items-center justify-center rounded-full overflow-hidden border border-dark-700 bg-dark-900 p-1.5 shadow-md">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -169,7 +169,7 @@ const BalancePanel = ({ currency }: { currency: Currency }) => {
               {balance?.greaterThan('0') ? balance?.toSignificant(6) : '0.0000'}
             </Typography>
           </div>
-          <Typography variant="sm" weight={700} className="text-high-emphesis text-right">
+          <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
             ≈${bentoUSDC?.greaterThan('0') ? bentoUSDC.toSignificant(6) : '0.0000'}
           </Typography>
         </div>,

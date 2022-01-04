@@ -1,6 +1,5 @@
+import { classNames } from 'app/functions'
 import React from 'react'
-
-import { classNames } from '../../functions'
 
 interface ProgressCirclesProps {
   steps: boolean[]

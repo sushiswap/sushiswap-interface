@@ -1,8 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { PoolType } from '@sushiswap/tines'
-import Typography from 'components/Typography'
-import { TridentBody, TridentHeader } from 'layouts/Trident'
+import Typography from 'app/components/Typography'
+import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

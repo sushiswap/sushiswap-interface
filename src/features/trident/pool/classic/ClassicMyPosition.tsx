@@ -1,14 +1,14 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
-import ListPanel from 'components/ListPanel'
+import ListPanel from 'app/components/ListPanel'
 import {
   currentLiquidityValueSelector,
   currentPoolShareSelector,
   poolBalanceAtom,
-} from 'features/trident/context/atoms'
-import SumUSDCValues from 'features/trident/SumUSDCValues'
-import { formatPercent } from 'functions'
+} from 'app/features/trident/context/atoms'
+import SumUSDCValues from 'app/features/trident/SumUSDCValues'
+import { formatPercent } from 'app/functions'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

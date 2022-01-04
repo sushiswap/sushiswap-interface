@@ -27,7 +27,7 @@ const ViewMore: FC<ViewMoreProps> = ({ text, onClick, icon = <PlusSmIcon /> }) =
           <Typography variant="xs" className="text-high-emphesis">
             {text || i18n._(t`View More`)}
           </Typography>
-          <div className="h-5 w-5 text-high-emphesis" aria-hidden="true">
+          <div className="w-5 h-5 text-high-emphesis" aria-hidden="true">
             {icon}
           </div>
         </button>

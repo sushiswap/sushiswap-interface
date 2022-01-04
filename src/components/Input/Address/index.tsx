@@ -1,4 +1,4 @@
-import { classNames } from 'functions'
+import { classNames } from 'app/functions'
 import React from 'react'
 
 export const AddressInput = React.memo(

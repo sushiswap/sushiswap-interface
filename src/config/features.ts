@@ -1,5 +1,5 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import { Feature } from 'enums'
+import { Feature } from 'app/enums'
 
 type FeatureMap = { readonly [chainId in ChainId]?: Feature[] }
 

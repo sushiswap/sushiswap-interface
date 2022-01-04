@@ -47,6 +47,12 @@ const items = (i18n: I18n) => [
     href: '/vesting',
     external: false,
   },
+  {
+    name: i18n._(t`Sushi Relay`),
+    description: i18n._(t`MEV Protection & Gas Refund Solution`),
+    href: 'https://docs.openmev.org',
+    external: true,
+  },
 ]
 
 export default function Menu() {
@@ -59,7 +65,7 @@ export default function Menu() {
       modifiers={[{ name: 'offset', options: { offset: [8, 0] } }]}
       content={
         <div className="px-2 mt-3 cursor-pointer">
-          <div className="shadow-lg overflow-hidden bg-dark-900 rounded border border-dark-700">
+          <div className="overflow-hidden border rounded shadow-lg bg-dark-900 border-dark-700">
             {solutions.map((item) =>
               item.external ? (
                 <ExternalLink
@@ -90,7 +96,7 @@ export default function Menu() {
       <svg
         width="16px"
         height="16px"
-        className="cursor-pointer inline-flex items-center w-9 h-9 border border-dark-700 hover:bg-dark-800 p-2 rounded bg-dark-1000"
+        className="inline-flex items-center p-2 border rounded cursor-pointer w-9 h-9 border-dark-700 hover:bg-dark-800 bg-dark-1000"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

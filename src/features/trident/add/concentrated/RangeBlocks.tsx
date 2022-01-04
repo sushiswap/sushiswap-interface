@@ -1,4 +1,4 @@
-import RangeInput from 'components/RangeInput'
+import RangeInput from 'app/components/RangeInput'
 import { FC } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil'
 

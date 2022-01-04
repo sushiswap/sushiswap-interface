@@ -1,4 +1,4 @@
-import { classNames } from 'functions'
+import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
 export type TypographyWeight = 400 | 500 | 700

@@ -1,6 +1,6 @@
 import { Currency, currencyEquals, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
 import { AutoColumn } from 'app/components/Column'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { RowBetween } from 'app/components/Row'
 import { currencyId } from 'app/functions/currency'
 import { useActiveWeb3React } from 'app/services/web3'

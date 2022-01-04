@@ -7,7 +7,7 @@ import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushis
 import Alert from 'app/components/Alert'
 import Button, { ButtonError } from 'app/components/Button'
 import { FiatValue } from 'app/components/CurrencyInputPanel/FiatValue'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Dots from 'app/components/Dots'
 import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'

@@ -1,5 +1,5 @@
 import { Disclosure } from '@headlessui/react'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import DoubleLogo from 'app/components/DoubleLogo'
 import QuestionHelper from 'app/components/QuestionHelper'
 import { classNames, formatNumber, formatPercent } from 'app/functions'

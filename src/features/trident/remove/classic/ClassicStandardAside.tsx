@@ -9,7 +9,7 @@ import React from 'react'
 import { useRecoilState } from 'recoil'
 
 import { BentoBoxIcon, WalletIcon } from '../../../../components/AssetInput/icons'
-import CurrencyLogo from '../../../../components/CurrencyLogo'
+import { CurrencyLogo } from '../../../../components/CurrencyLogo'
 import Divider from '../../../../components/Divider'
 import Switch from '../../../../components/Switch'
 import Typography from '../../../../components/Typography'

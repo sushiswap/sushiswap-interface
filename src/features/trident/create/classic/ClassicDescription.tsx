@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'components/Button'
-import Typography from 'components/Typography'
+import Button from 'app/components/Button'
+import Typography from 'app/components/Typography'
 import React, { FC } from 'react'
 import { useSetRecoilState } from 'recoil'
 

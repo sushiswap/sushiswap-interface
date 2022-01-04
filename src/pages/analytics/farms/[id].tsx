@@ -1,4 +1,4 @@
-import AnalyticsContainer from 'features/analytics/AnalyticsContainer'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import { useRouter } from 'next/router'
 import React from 'react'
 

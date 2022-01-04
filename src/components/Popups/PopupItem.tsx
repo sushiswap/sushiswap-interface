@@ -1,8 +1,8 @@
 import { XIcon } from '@heroicons/react/outline'
+import { PopupContent } from 'app/state/application/actions'
+import { useRemovePopup } from 'app/state/application/hooks'
 import { useCallback, useEffect } from 'react'
 
-import { PopupContent } from '../../state/application/actions'
-import { useRemovePopup } from '../../state/application/hooks'
 import TransactionPopup from './TransactionPopup'
 
 const AnimatedFader = ({ duration }) => (

@@ -3,7 +3,7 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Token } from '@sushiswap/core-sdk'
-import { TokenAddressMap } from 'state/lists/hooks'
+import { TokenAddressMap } from 'app/state/lists/hooks'
 
 /**
  * Returns true if the string value is zero in hex

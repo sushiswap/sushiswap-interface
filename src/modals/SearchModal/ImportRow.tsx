@@ -1,6 +1,6 @@
 import { Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import ListLogo from 'app/components/ListLogo'
 import { RowFixed } from 'app/components/Row'
 import Typography from 'app/components/Typography'

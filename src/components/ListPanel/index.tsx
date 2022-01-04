@@ -1,10 +1,10 @@
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { classNames } from 'app/functions'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import React, { FC, ReactNode } from 'react'
 
-import { classNames } from '../../functions'
-import { useUSDCValue } from '../../hooks/useUSDCPrice'
 import Chip from '../Chip'
-import CurrencyLogo from '../CurrencyLogo'
+import { CurrencyLogo } from '../CurrencyLogo'
 import Typography from '../Typography'
 
 interface ListPanelProps {

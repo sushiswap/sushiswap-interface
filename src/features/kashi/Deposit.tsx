@@ -21,8 +21,10 @@ import WarningsList from './WarningsList'
 
 export default function Deposit({ pair }: any): JSX.Element {
   const { account, chainId } = useActiveWeb3React()
-  const bentoBoxContract = useBentoBoxContract()
+
   const assetToken = useCurrency(pair.asset.address) || undefined
+
+  const bentoBoxContract = useBentoBoxContract()
 
   const { i18n } = useLingui()
 

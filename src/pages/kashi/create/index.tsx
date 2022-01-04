@@ -3,23 +3,23 @@ import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CHAINLINK_ORACLE_ADDRESS, Currency, KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Card from 'app/components/Card'
+import Container from 'app/components/Container'
+import CurrencyInputPanel from 'app/components/CurrencyInputPanel'
+import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
 import { Feature } from 'app/enums'
+import { e10 } from 'app/functions/math'
 import NetworkGuard from 'app/guards/Network'
-import Button from 'components/Button'
-import Card from 'components/Card'
-import Container from 'components/Container'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
-import { CHAINLINK_PRICE_FEED_MAP } from 'config/oracles/chainlink'
-import { e10 } from 'functions/math'
-import { useBentoBoxContract } from 'hooks/useContract'
-import Layout from 'layouts/Kashi'
+import { useBentoBoxContract } from 'app/hooks/useContract'
+import Layout from 'app/layouts/Kashi'
+import { useActiveWeb3React } from 'app/services/web3'
+import { Field } from 'app/state/create/actions'
+import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from 'app/state/create/hook'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback } from 'react'
-import { useActiveWeb3React } from 'services/web3'
-import { Field } from 'state/create/actions'
-import { useCreateActionHandlers, useCreateState, useDerivedCreateInfo } from 'state/create/hook'
-import { useTransactionAdder } from 'state/transactions/hooks'
 
 export type ChainlinkToken = {
   symbol: string
@@ -231,7 +231,7 @@ const CreateLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="/deposit-graphic.png"
+          backgroundImage="/images/kashi/deposit.png"
           title={i18n._(t`Create a new Kashi Market`)}
           description={i18n._(
             t`If you want to supply to a market that is not listed yet, you can use this tool to create a new pair.`

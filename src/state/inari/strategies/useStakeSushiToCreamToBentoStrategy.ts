@@ -64,10 +64,10 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
-      inputTokenBalance: balances[SUSHI[ChainId.ETHEREUM].address],
+      inputTokenBalance: balances[SUSHI_ADDRESS[ChainId.ETHEREUM]],
       outputTokenBalance: crxSushiBentoBalance,
     })
-  }, [balances, setBalances, crxSushiBentoBalance.value, crxSushiBentoBalance])
+  }, [balances, setBalances, crxSushiBentoBalance])
 
   const calculateOutputFromInput = useCallback(
     async (zapIn: boolean, inputValue: string, inputToken: Token, outputToken: Token) => {

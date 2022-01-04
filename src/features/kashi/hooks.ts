@@ -68,7 +68,7 @@ export function useKashiPairAddresses(): string[] {
   }, [])
 }
 
-export function useKashiPairs(addresses: string[]) {
+export function useKashiPairs(addresses = []) {
   const { chainId, account } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
@@ -99,7 +99,9 @@ export function useKashiPairs(addresses: string[]) {
 
   const strategies = useBentoStrategies({ chainId })
 
-  const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token.address)], [account, tokens])
+  console.log({ USD, chainId, account, tokens })
+
+  const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token?.address)], [account, tokens])
 
   // TODO: Replace
   const balances = useSingleCallResult(boringHelperContract, 'getBalances', getBalancesArgs)?.result?.[0]?.reduce(

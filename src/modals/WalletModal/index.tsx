@@ -3,19 +3,19 @@ import { useLingui } from '@lingui/react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+import AccountDetails from 'app/components/AccountDetails'
+import { ButtonError } from 'app/components/Button'
+import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import AccountDetails from 'components/AccountDetails'
-import { ButtonError } from 'components/Button'
-import ExternalLink from 'components/ExternalLink'
-import ModalHeader from 'components/ModalHeader'
-import { injected, SUPPORTED_WALLETS } from 'config/wallets'
-import { OVERLAY_READY } from 'entities/connectors/FortmaticConnector'
-import usePrevious from 'hooks/usePrevious'
+import ModalHeader from 'app/components/ModalHeader'
+import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
+import { OVERLAY_READY } from 'app/entities/connectors/FortmaticConnector'
+import usePrevious from 'app/hooks/usePrevious'
+import { ApplicationModal } from 'app/state/application/actions'
+import { useModalOpen, useWalletModalToggle } from 'app/state/application/hooks'
 import React, { useEffect, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import ReactGA from 'react-ga'
-import { ApplicationModal } from 'state/application/actions'
-import { useModalOpen, useWalletModalToggle } from 'state/application/hooks'
 
 import Option from './Option'
 import PendingView from './PendingView'
@@ -242,7 +242,7 @@ export default function WalletModal({
       )
     }
     return (
-      <div className="flex flex-col space-y-4 p-6 lg:max-w-lg w-full">
+      <div className="flex flex-col w-full p-6 space-y-4 lg:max-w-lg">
         <ModalHeader title="Select a Wallet" onClose={toggleWalletModal} />
         <div className="flex flex-col space-y-6">
           {walletView === WALLET_VIEWS.PENDING ? (

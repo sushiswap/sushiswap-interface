@@ -8,8 +8,8 @@ import {
   getMasterChefV2Farms,
   getMasterChefV2PairAddreses,
   getMiniChefFarms,
-  getMiniChefPairAddreses,
   getOldMiniChefFarms,
+  getMiniChefPairAddreses,
 } from 'app/services/graph/fetchers'
 import { useActiveWeb3React } from 'app/services/web3'
 import concat from 'lodash/concat'
@@ -79,7 +79,15 @@ export function useOldMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
 export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const shouldFetch =
     chainId &&
-    [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM, ChainId.CELO, ChainId.MOONRIVER].includes(chainId)
+    [
+      ChainId.MATIC,
+      ChainId.XDAI,
+      ChainId.HARMONY,
+      ChainId.ARBITRUM,
+      ChainId.CELO,
+      ChainId.MOONRIVER,
+      ChainId.FUSE,
+    ].includes(chainId)
   const { data } = useSWR(
     shouldFetch ? ['miniChefFarms', chainId] : null,
     (_, chainId) => getMiniChefFarms(chainId),

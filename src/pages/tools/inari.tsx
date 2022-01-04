@@ -45,7 +45,7 @@ const Inari = () => {
       <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8">
         <div className="flex items-center gap-8">
           <div className="min-w-[140px] min-h-[105px]">
-            <Image src="/inari-sign.png" alt="inari-sign" width={140} height={105} />
+            <Image src="/inari/neon-sign.png" alt="inari-sign" width={140} height={105} />
           </div>
           <div className="flex flex-col">
             <Typography variant="h3" className="mb-2 text-high-emphesis" weight={700}>

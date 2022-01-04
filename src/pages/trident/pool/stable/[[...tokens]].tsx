@@ -1,16 +1,15 @@
+import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'app/features/trident/context/atoms'
+import Header from 'app/features/trident/pool/Header'
+import StablePoolComposition from 'app/features/trident/pool/stable/StablePoolComposition'
+import { useCurrency } from 'app/hooks/Tokens'
 import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
-import { poolAtom, poolBalanceAtom, totalSupplyAtom } from 'features/trident/context/atoms'
-import Header from 'features/trident/pool/Header'
-import StablePoolComposition from 'features/trident/pool/stable/StablePoolComposition'
-import { useCurrency } from 'hooks/Tokens'
-import { useTotalSupply } from 'hooks/useTotalSupply'
+import { useTotalSupply } from 'app/hooks/useTotalSupply'
+import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTokenBalance } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { RecoilRoot, useSetRecoilState } from 'recoil'
-import { useActiveWeb3React } from 'services/web3'
-import { useTokenBalance } from 'state/wallet/hooks'
-
-import TridentLayout, { TridentBody, TridentHeader } from '../../../../layouts/Trident'
 
 const Pool = () => {
   const { account, chainId } = useActiveWeb3React()

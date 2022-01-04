@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Percent, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
-import CurrencyLogo from 'app/components/CurrencyLogo'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { isAddress, shortenAddress, warningSeverity } from 'app/functions'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import React, { useState } from 'react'

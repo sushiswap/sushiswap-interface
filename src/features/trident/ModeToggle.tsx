@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import ToggleButtonGroup from 'components/ToggleButton'
+import ToggleButtonGroup from 'app/components/ToggleButton'
 import { FC, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
 
