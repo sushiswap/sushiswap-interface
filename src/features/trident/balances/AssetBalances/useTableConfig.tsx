@@ -54,7 +54,7 @@ export const useTableConfig = (assets?: Assets[]) => {
         Header: 'Value',
         accessor: 'asset',
         maxWidth: 200,
-        className: 'text-right',
+        className: 'text-right flex justify-end',
         Cell: (props) => {
           const usdcValue = useUSDCValue(props.cell.value)
           return (

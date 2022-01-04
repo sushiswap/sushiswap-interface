@@ -11,13 +11,13 @@ import Typography from 'app/components/Typography'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import SwapSubmittedModalContent from 'app/features/trident/swap/SwapSubmittedModalContent'
 import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
+import { shortenAddress, toAmountCurrencyAmount, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import useENS from 'app/hooks/useENS'
 import { SwapCallbackState, useSwapCallback } from 'app/hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import useTransactionStatus from 'app/hooks/useTransactionStatus'
-import { shortenAddress, toAmountCurrencyAmount, warningSeverity } from 'app/functions'
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
@@ -99,7 +99,7 @@ const SwapReviewModal: FC = () => {
       afterLeave={() => setTxHash(undefined)}
     >
       {!txHash ? (
-        <div className="flex flex-col h-full gap-5 pb-4 lg:max-w-md">
+        <div className="flex flex-col h-full gap-5 pb-4 lg:w-full">
           <div className="relative">
             <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
             <div className="flex flex-col gap-4 px-5 pt-5 pb-8">

@@ -1,4 +1,4 @@
-import { CurrencyAmount, NATIVE, Token, ZERO } from '@sushiswap/core-sdk'
+import { NATIVE, ZERO } from '@sushiswap/core-sdk'
 import AssetBalances from 'app/features/trident/balances/AssetBalances/AssetBalances'
 import { Assets } from 'app/features/trident/balances/AssetBalances/types'
 import { useLPTableConfig } from 'app/features/trident/balances/AssetBalances/useLPTableConfig'
@@ -6,7 +6,7 @@ import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/bala
 import { ActiveModal } from 'app/features/trident/balances/context/types'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalances } from 'app/state/bentobox/hooks'
+import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
 import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { useCallback, useMemo } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil'
@@ -31,24 +31,13 @@ export const LiquidityPositionsBalances = () => {
 }
 
 export const BentoBalances = () => {
-  const { chainId } = useActiveWeb3React()
   const [selected, setSelected] = useRecoilState(SelectedCurrencyAtom)
-  const bentoBalances = useBentoBalances()
   const setActiveModal = useSetRecoilState(ActiveModalAtom)
-
-  const balances = useMemo(
-    () =>
-      chainId
-        ? bentoBalances.reduce<Assets[]>((acc, { address, decimals, name, symbol, bentoBalance }) => {
-            const token = new Token(chainId, address, decimals, symbol, name)
-            const cur = CurrencyAmount.fromRawAmount(token, bentoBalance)
-            if (cur.greaterThan(ZERO)) acc.push({ asset: cur })
-
-            return acc
-          }, [])
-        : [],
-    [bentoBalances, chainId]
-  )
+  const balances = useBentoBalancesV2()
+  const assets = balances.reduce<Assets[]>((acc, el) => {
+    if (el) acc.push({ asset: el })
+    return acc
+  }, [])
 
   const handleRowClick = useCallback(
     (row) => {
@@ -58,7 +47,7 @@ export const BentoBalances = () => {
     [setActiveModal, setSelected]
   )
 
-  const { config } = useTableConfig(balances)
+  const { config } = useTableConfig(assets)
 
   return (
     <AssetBalances

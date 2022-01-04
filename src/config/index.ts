@@ -13,7 +13,11 @@ const config = {
   // Network specific configuration
   [ChainId.ETHEREUM]: {
     averageBlockTimeInSeconds: 13,
-    kashi: { blacklistedTokens: [], blacklistedOracles: [] },
+    kashi: { blacklistedTokens: [], blacklistedOracles: ['0x8f2CC3376078568a04eBC600ae5F0a036DBfd812'] },
+  },
+  [ChainId.MATIC]: {
+    averageBlockTimeInSeconds: 13,
+    kashi: { blacklistedTokens: ['0xC6d54D2f624bc83815b49d9c2203b1330B841cA0'], blacklistedOracles: [] },
   },
 }
 

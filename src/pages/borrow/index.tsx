@@ -21,7 +21,6 @@ import { RecoilRoot } from 'recoil'
 
 export default function Borrow() {
   const { i18n } = useLingui()
-
   const addresses = useKashiPairAddresses()
   const pairs = useKashiPairs(addresses)
 
@@ -296,7 +295,7 @@ const BorrowLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="/borrow-graphic.png"
+          backgroundImage="/images/kashi/borrow.png"
           title={i18n._(t`Borrow assets and leverage up`)}
           description={i18n._(
             t`Borrowing allows you to obtain liquidity without selling. Your borrow limit depends on the amount of deposited collateral. You will be able to borrow up to 75% of your collateral and repay at any time with accrued interest.`

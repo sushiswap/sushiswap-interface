@@ -9,10 +9,10 @@ import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { classNames, tryParseAmount } from 'app/functions'
+import { classNames } from 'app/functions'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalance } from 'app/state/bentobox/hooks'
+import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
 import React, { FC, ReactNode, useState } from 'react'
@@ -119,9 +119,8 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
 const BalancePanel = ({ currency }: { currency: Currency }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const bento = useBentoBalance(currency?.wrapped.address)
-  const bentoAmount = tryParseAmount(bento?.value.toFraction.toString(), currency)
-  const bentoUSDC = useUSDCValue(bentoAmount)
+  const balance = useBentoBalanceV2(currency?.wrapped.address)
+  const bentoUSDC = useUSDCValue(balance)
   const wallet = useTokenBalance(account ?? undefined, currency?.wrapped)
   const walletUSDC = useUSDCValue(wallet)
 
@@ -167,7 +166,7 @@ const BalancePanel = ({ currency }: { currency: Currency }) => {
               {i18n._(t`In Bento:`)}
             </Typography>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {bentoAmount?.greaterThan('0') ? bentoAmount?.toSignificant(6) : '0.0000'}
+              {balance?.greaterThan('0') ? balance?.toSignificant(6) : '0.0000'}
             </Typography>
           </div>
           <Typography variant="sm" weight={700} className="text-right text-high-emphesis">

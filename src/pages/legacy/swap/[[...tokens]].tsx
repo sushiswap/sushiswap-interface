@@ -141,7 +141,7 @@ export default function Swap({ banners }) {
   const fiatValueInput = useUSDCValue(parsedAmounts[Field.INPUT])
   const fiatValueOutput = useUSDCValue(parsedAmounts[Field.OUTPUT])
   const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
-
+  console.log({ fiatValueInput, fiatValueOutput })
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
 
   const isValid = !swapInputError
@@ -388,6 +388,8 @@ export default function Swap({ banners }) {
 
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
 
+  console.log(priceImpactSeverity, priceImpactSeverity > 3, !isExpertMode, trade?.priceImpact, priceImpact)
+
   return (
     <Container id="swap-page" className="py-4 md:py-8 lg:py-12">
       <Head>
@@ -545,7 +547,7 @@ export default function Swap({ banners }) {
                     ? i18n._(t`Unwrap`)
                     : null)}
               </Button>
-            ) : routeNotFound && userHasSpecifiedInputOutput ? (
+            ) : trade && routeNotFound && userHasSpecifiedInputOutput ? (
               <div style={{ textAlign: 'center' }}>
                 <div className="mb-1">{i18n._(t`Insufficient liquidity for this trade`)}</div>
                 {singleHopOnly && <div className="mb-1">{i18n._(t`Try enabling multi-hop trades`)}</div>}
@@ -635,9 +637,9 @@ export default function Swap({ banners }) {
             )}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
           </div>
-          {!swapIsUnsupported ? null : (
+          {swapIsUnsupported ? (
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
-          )}
+          ) : null}
         </div>
         <Banner banners={banners} />
       </DoubleGlowShadow>

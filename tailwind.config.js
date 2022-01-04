@@ -5,9 +5,8 @@ module.exports = {
   // important: '#__next',
   // darkMode: true,
   mode: 'jit',
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
-  // purge: ['./src/**/*.{js,ts,jsx,tsx}'],
-  // darkMode: false,
+  purge: ['./src/**/*.{js,ts,jsx,tsx}'],
+  darkMode: false,
   theme: {
     extend: {
       gridTemplateColumns: {
@@ -161,5 +160,16 @@ module.exports = {
       ringColor: ['disabled'],
     },
   },
-  plugins: [require('tailwindcss-border-gradient-radius')],
+  plugins: [
+    require('tailwindcss-border-gradient-radius'),
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        '.header-border-b': {
+          background:
+            'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left bottom no-repeat',
+          backgroundSize: '100% 1px',
+        },
+      })
+    }),
+  ],
 }

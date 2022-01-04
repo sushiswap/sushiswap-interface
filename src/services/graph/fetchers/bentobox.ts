@@ -1,5 +1,5 @@
-import { ChainId } from '@sushiswap/core-sdk'
-import { aprToApy, getFraction, toAmount } from 'app/functions'
+import { ChainId, CurrencyAmount, JSBI, Token } from '@sushiswap/core-sdk'
+import { aprToApy, getFraction, toAmount, toAmountCurrencyAmount } from 'app/functions'
 import { GRAPH_HOST } from 'app/services/graph/constants'
 import { getTokenSubset } from 'app/services/graph/fetchers'
 import {
@@ -95,24 +95,17 @@ export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) =
   }))
 }
 
-export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables): Promise<CurrencyAmount<Token>[]> => {
   const { userTokens } = await fetcher(chainId, bentoUserTokensQuery, variables)
-
-  return userTokens
-    .map((token) => ({
-      ...(token.token as any),
-      shares: token.share as string,
-    }))
-    .map((token) => ({
-      ...token,
-      amount: toAmount(
-        {
-          elastic: token.totalSupplyElastic.toBigNumber(0),
-          base: token.totalSupplyBase.toBigNumber(0),
-        },
-        token.shares.toBigNumber(0)
-      ).toString(),
-    }))
+  return userTokens.map(({ share, token: { decimals, id, name, symbol, totalSupplyElastic, totalSupplyBase } }) => {
+    return toAmountCurrencyAmount(
+      {
+        elastic: JSBI.BigInt(totalSupplyElastic),
+        base: JSBI.BigInt(totalSupplyBase),
+      },
+      CurrencyAmount.fromRawAmount(new Token(chainId, id, Number(decimals), symbol, name), JSBI.BigInt(share))
+    )
+  })
 }
 
 export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables) => {
