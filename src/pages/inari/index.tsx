@@ -29,6 +29,8 @@ const Inari = () => {
       <Head>
         <title>Inari | Sushi</title>
         <meta name="description" content="Inari..." />
+        <meta key="twitter:description" name="twitter:description" content="Inari..." />
+        <meta key="og:description" property="og:description" content="Inari..." />
       </Head>
       <Container maxWidth="5xl" className="flex flex-col gap-8 py-8 px-4">
         <div className="flex gap-8 items-center">
