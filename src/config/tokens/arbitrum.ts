@@ -27,3 +27,13 @@ export const SPELL = new Token(
   'SPELL',
   'Spell Token'
 )
+
+export const gOHM = new Token(
+  ChainId.ARBITRUM,
+  '0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1',
+  18,
+  'gOHM',
+  'Governance OHM'
+)
+
+export const MAGIC = new Token(ChainId.ARBITRUM, '0x539bdE0d7Dbd336b79148AA742883198BBF60342', 18, 'MAGIC', 'MAGIC')

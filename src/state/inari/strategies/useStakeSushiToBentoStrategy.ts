@@ -3,9 +3,8 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, SUSHI, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { XSUSHI } from 'app/config/tokens'
-import { tryParseAmount } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalance } from 'app/state/bentobox/hooks'
+import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useTokenBalances } from 'app/state/wallet/hooks'
 import { useEffect, useMemo } from 'react'
 
@@ -44,7 +43,7 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM], XSUSHI])
-  const xSushiBentoBalance = useBentoBalance(XSUSHI.address)
+  const xSushiBentoBalance = useBentoBalanceV2(XSUSHI.address)
 
   // Strategy ends in BentoBox so use BaseBentoBox strategy
   const general = useMemo(() => GENERAL(i18n), [i18n])
@@ -62,9 +61,9 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
 
     setBalances({
       inputTokenBalance: balances[SUSHI_ADDRESS[ChainId.ETHEREUM]],
-      outputTokenBalance: tryParseAmount(xSushiBentoBalance?.value?.toFixed(18) || '0', XSUSHI),
+      outputTokenBalance: xSushiBentoBalance,
     })
-  }, [balances, setBalances, xSushiBentoBalance?.value])
+  }, [balances, setBalances, xSushiBentoBalance])
 
   return useMemo(
     () => ({

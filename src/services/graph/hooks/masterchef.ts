@@ -9,6 +9,7 @@ import {
   getMasterChefV2PairAddreses,
   getMiniChefFarms,
   getMiniChefPairAddreses,
+  getOldMiniChefFarms,
 } from 'app/services/graph/fetchers'
 import { useActiveWeb3React } from 'app/services/web3'
 import concat from 'lodash/concat'
@@ -60,6 +61,21 @@ export function useMasterChefV2Farms({ chainId, swrConfig = undefined }: useFarm
   }, [data])
 }
 
+export function useOldMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.CELO
+  const { data } = useSWR(
+    shouldFetch ? ['oldMiniChefFarms', chainId] : null,
+    (_, chainId) => getOldMiniChefFarms(chainId),
+    swrConfig
+  )
+
+  return useMemo(() => {
+    if (!data) return []
+    return data.map((data) => ({ ...data, chef: Chef.OLD_FARMS }))
+  }, [data])
+}
+
 export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const shouldFetch =
     chainId &&
@@ -79,9 +95,11 @@ export function useFarms({ chainId, swrConfig = undefined }: useFarmsProps) {
   const masterChefV1Farms = useMasterChefV1Farms({ chainId })
   const masterChefV2Farms = useMasterChefV2Farms({ chainId })
   const miniChefFarms = useMiniChefFarms({ chainId })
+  const oldMiniChefFarms = useOldMiniChefFarms()
   return useMemo(
-    () => concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms).filter((pool) => pool && pool.pair),
-    [masterChefV1Farms, masterChefV2Farms, miniChefFarms]
+    () =>
+      concat(masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms).filter((pool) => pool && pool.pair),
+    [masterChefV1Farms, masterChefV2Farms, miniChefFarms, oldMiniChefFarms]
   )
 }
 
@@ -111,7 +129,17 @@ export function useMasterChefV2PairAddresses() {
 
 export function useMiniChefPairAddresses() {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId && [ChainId.MATIC, ChainId.XDAI, ChainId.HARMONY, ChainId.ARBITRUM].includes(chainId)
+  const shouldFetch =
+    chainId &&
+    [
+      ChainId.MATIC,
+      ChainId.XDAI,
+      ChainId.HARMONY,
+      ChainId.ARBITRUM,
+      ChainId.CELO,
+      ChainId.MOONRIVER,
+      ChainId.FUSE,
+    ].includes(chainId)
   const { data } = useSWR(shouldFetch ? ['miniChefPairAddresses', chainId] : null, (_, chainId) =>
     getMiniChefPairAddreses(chainId)
   )
