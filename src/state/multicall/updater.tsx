@@ -5,8 +5,9 @@ import { useAppDispatch, useAppSelector } from '../hooks'
 import { useEffect, useMemo, useRef } from 'react'
 
 import { AppState } from '../index'
+import { CHUNK_GAS_LIMIT } from '../../functions/calls/constants';
 import { Contract } from 'ethers'
-import { chunkArray } from '../../functions/array'
+import chunkCalls from '../../functions/calls';
 import { updateBlockNumber } from '../application/actions'
 import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
 import { useBlockNumber } from '../application/hooks'
@@ -155,7 +156,7 @@ export default function Updater(): null {
     if (outdatedCallKeys.length === 0) return
     const calls = outdatedCallKeys.map((key) => parseCallKey(key))
 
-    const chunkedCalls = chunkArray(calls)
+    const chunkedCalls = chunkCalls(calls, CHUNK_GAS_LIMIT)
 
     if (cancellations.current && cancellations.current.blockNumber !== latestBlockNumber) {
       cancellations.current.cancellations.forEach((c) => c())
