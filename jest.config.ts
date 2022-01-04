@@ -5,6 +5,12 @@ const config: Config.InitialOptions = {
   collectCoverageFrom: ['**/*.{ts,tsx}', '!**/*.d.ts', '!**/node_modules/**'],
   coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   moduleNameMapper: {
+    '^app/(.*)$': '<rootDir>/src/$1',
+    '^functions/(.*)$': '<rootDir>/src/functions/$1',
+    '^config/(.*)$': '<rootDir>/src/config/$1',
+    '^features/(.*)$': '<rootDir>/src/features/$1',
+    '^enums/(.*)$': '<rootDir>/src/enums/$1',
+    '^enums': '<rootDir>/src/enums',
     /* Handle CSS imports (with CSS modules)
     https://jestjs.io/docs/webpack#mocking-css-modules */
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
@@ -24,6 +30,7 @@ const config: Config.InitialOptions = {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
   },
   transformIgnorePatterns: ['/node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
+  testTimeout: 600000,
 }
 
 export default config

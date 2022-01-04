@@ -1,12 +1,13 @@
-import React, { Fragment } from 'react'
 import { Disclosure, Transition } from '@headlessui/react'
 import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
-import { XCircle } from 'react-feather'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import React, { Fragment } from 'react'
+import { XCircle } from 'react-feather'
+
+import NavLink from '../../components/NavLink'
 import Typography from '../../components/Typography'
 import { PairType } from './enum'
-import NavLink from '../../components/NavLink'
 
 const InformationDisclosure = ({ farm }) => {
   const { i18n } = useLingui()

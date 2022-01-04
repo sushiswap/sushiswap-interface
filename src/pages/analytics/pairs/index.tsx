@@ -1,23 +1,22 @@
-import { useBlock, useSushiPairs } from '../../../services/graph'
+import Search from 'app/components/Search'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import PairList from 'app/features/analytics/Pairs/PairList'
+import PairTabs from 'app/features/analytics/Pairs/PairTabs'
+import useFuse from 'app/hooks/useFuse'
+import { useOneDayBlock, useOneWeekBlock, useSushiPairs, useTwoDayBlock, useTwoWeekBlock } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
-
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import PairList from '../../../features/analytics/Pairs/PairList'
-import PairTabs from '../../../features/analytics/Pairs/PairTabs'
-import Search from '../../../components/Search'
-import { useActiveWeb3React } from '../../../services/web3'
-import useFuse from '../../../hooks/useFuse'
-import Background from '../../../features/analytics/Background'
 
 export default function Pairs() {
   const [type, setType] = useState<'all' | 'gainers' | 'losers'>('all')
 
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
-  const block2w = useBlock({ daysAgo: 14, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
+  const block2w = useTwoWeekBlock({ chainId, shouldFetch: !!chainId })
 
   const pairs = useSushiPairs({ chainId })
   const pairs1d = useSushiPairs({ variables: { block: block1d }, shouldFetch: !!block1d, chainId })
@@ -35,7 +34,7 @@ export default function Pairs() {
             pair: {
               token0: pair.token0,
               token1: pair.token1,
-              address: pair.id,
+              id: pair.id,
             },
             liquidity: pair.reserveUSD,
             volume1d: pair.volumeUSD - pair1d.volumeUSD,
@@ -53,7 +52,7 @@ export default function Pairs() {
               pair: {
                 token0: pair.token0,
                 token1: pair.token1,
-                address: pair.id,
+                id: pair.id,
               },
               liquidityChangeNumber1d: pair.reserveUSD - pair1d.reserveUSD,
               liquidityChangePercent1d: (pair.reserveUSD / pair1d.reserveUSD) * 100 - 100,
@@ -91,12 +90,10 @@ export default function Pairs() {
   return (
     <AnalyticsContainer>
       <Background background="pools">
-        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
           <div>
             <div className="text-3xl font-bold text-high-emphesis">Pairs</div>
-            <div className="">
-              Click on the column name to sort pairs by its TVL, <br /> volume or fees gained.
-            </div>
+            <div className="">Click on the column name to sort pairs by its TVL, volume or fees gained.</div>
           </div>
           <Search
             term={term}
@@ -107,7 +104,7 @@ export default function Pairs() {
         </div>
       </Background>
       <PairTabs currentType={type} setType={setType} />
-      <div className="pt-4 lg:px-14">
+      <div className="px-4 pt-4 lg:px-14">
         <PairList pairs={pairsSearched} type={type} />
       </div>
     </AnalyticsContainer>

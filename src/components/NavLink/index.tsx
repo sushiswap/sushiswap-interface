@@ -1,7 +1,6 @@
-import Link, { LinkProps } from 'next/link'
-import React, { Children } from 'react'
-
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import React, { Children } from 'react'
 
 const NavLink = ({ children, exact = false, activeClassName = 'text-high-emphesis', ...props }) => {
   const { asPath, pathname, route, query, basePath } = useRouter()

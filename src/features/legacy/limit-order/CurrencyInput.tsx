@@ -1,10 +1,9 @@
-import React, { FC, ReactNode } from 'react'
-
-import Button from '../../../components/Button'
-import Input from '../../../components/Input'
-import { classNames } from '../../../functions'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import Button from 'app/components/Button'
+import Input from 'app/components/Input'
+import { classNames } from 'app/functions'
+import React, { FC, ReactNode } from 'react'
 
 interface CurrencyInputProps {
   id: string

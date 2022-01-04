@@ -1,11 +1,10 @@
-import _ from 'lodash'
+import DoubleCurrencyLogo from 'app/components/DoubleLogo'
+import Table from 'app/components/Table'
+import ColoredNumber from 'app/features/analytics/ColoredNumber'
+import { formatNumber, formatNumberScale, formatPercent } from 'app/functions'
+import { aprToApy } from 'app/functions/convert/apyApr'
+import { useCurrency } from 'app/hooks/Tokens'
 import React from 'react'
-import { formatNumber, formatNumberScale, formatPercent } from '../../../functions'
-import Table from '../../../components/Table'
-import ColoredNumber from '../../../features/analytics/ColoredNumber'
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
-import { useCurrency } from '../../../hooks/Tokens'
-import { aprToApy } from '../../../functions/convert/apyApr'
 
 interface PairListProps {
   pairs: {
@@ -18,7 +17,7 @@ interface PairListProps {
         id: string
         symbol: string
       }
-      address: string
+      id: string
     }
     liquidity: number
     volume1d: number
@@ -87,6 +86,7 @@ const allColumns = [
     Header: 'Annual APY',
     accessor: (row) => <div className="text-high-emphesis">{getApy(row.volume1w, row.liquidity)}</div>,
     align: 'right',
+    sortType: (a, b) => a.original.volume1w / a.original.liquidity - b.original.volume1w / b.original.liquidity,
   },
   {
     Header: 'Daily / Weekly Volume',
@@ -203,7 +203,7 @@ export default function PairList({ pairs, type }: PairListProps): JSX.Element {
           columns={columns}
           data={pairs}
           defaultSortBy={defaultSortBy}
-          link={{ href: '/analytics/pairs/', id: 'pair.address' }}
+          link={{ href: '/analytics/pairs/', id: 'pair.id' }}
         />
       )}
     </>

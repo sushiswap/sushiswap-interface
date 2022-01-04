@@ -1,16 +1,55 @@
+import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { ChainId, WNATIVE } from '@sushiswap/core-sdk'
-import { getProviderOrSigner } from '../functions/contract'
-
 import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
-import KASHIPAIR_ABI from '../constants/abis/kashipair.json'
-import { KashiPermit } from '../hooks/useKashiApproveCallback'
 import { Web3Provider } from '@ethersproject/providers'
-import { ZERO } from '../functions/math'
-import { defaultAbiCoder } from '@ethersproject/abi'
-import { toElastic } from '../functions/rebase'
-import { toShare } from '../functions/bentobox'
+import { ChainId, WNATIVE, BENTOBOX_ADDRESS } from '@sushiswap/core-sdk'
+import KASHIPAIR_ABI from 'app/constants/abis/kashipair.json'
+import { toShare } from 'app/functions/bentobox'
+import { getProviderOrSigner, getSigner } from 'app/functions/contract'
+import { ZERO } from 'app/functions/math'
+import { toElastic } from 'app/functions/rebase'
+import { KashiPermit } from 'app/hooks/useKashiApproveCallback'
+
+export async function signMasterContractApproval(
+  bentoBoxContract: Contract | null,
+  masterContract: string | undefined,
+  user: string,
+  library: Web3Provider | undefined,
+  approved: boolean,
+  chainId: ChainId | undefined
+): Promise<string> {
+  const warning = approved ? 'Give FULL access to funds in (and approved to) BentoBox?' : 'Revoke access to BentoBox?'
+  const nonce = await bentoBoxContract?.nonces(user)
+  const message = {
+    warning,
+    user,
+    masterContract,
+    approved,
+    nonce,
+  }
+
+  const typedData = {
+    types: {
+      SetMasterContractApproval: [
+        { name: 'warning', type: 'string' },
+        { name: 'user', type: 'address' },
+        { name: 'masterContract', type: 'address' },
+        { name: 'approved', type: 'bool' },
+        { name: 'nonce', type: 'uint256' },
+      ],
+    },
+    primaryType: 'SetMasterContractApproval',
+    domain: {
+      name: 'BentoBox V1',
+      chainId: chainId,
+      verifyingContract: bentoBoxContract?.address,
+    },
+    message: message,
+  }
+  const signer = getSigner(library, user)
+  return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
+}
 
 enum Action {
   ADD_ASSET = 1,
@@ -89,6 +128,21 @@ export default class KashiCooker {
     return this
   }
 
+  bentoDepositAssetShare(share: BigNumber): KashiCooker {
+    const useNative = this.pair.asset.address === WNATIVE[this.chainId].address
+
+    this.add(
+      Action.BENTO_DEPOSIT,
+      defaultAbiCoder.encode(
+        ['address', 'address', 'int256', 'int256'],
+        [useNative ? AddressZero : this.pair.asset.address, this.account, 0, share]
+      ),
+      useNative ? share : ZERO
+    )
+
+    return this
+  }
+
   bentoDepositCollateral(amount: BigNumber): KashiCooker {
     const useNative = this.pair.collateral.address === WNATIVE[this.chainId].address
 
@@ -119,10 +173,28 @@ export default class KashiCooker {
     return this
   }
 
+  bentoTransfer(share: BigNumber, toAddress: string): KashiCooker {
+    this.add(
+      Action.BENTO_TRANSFER,
+      defaultAbiCoder.encode(['address', 'address', 'int256'], [BENTOBOX_ADDRESS[this.chainId], toAddress, share])
+    )
+
+    return this
+  }
+
   bentoTransferCollateral(share: BigNumber, toAddress: string): KashiCooker {
     this.add(
       Action.BENTO_TRANSFER,
       defaultAbiCoder.encode(['address', 'address', 'int256'], [this.pair.collateral.address, toAddress, share])
+    )
+
+    return this
+  }
+
+  bentoTransferAsset(share: BigNumber, toAddress: string): KashiCooker {
+    this.add(
+      Action.BENTO_TRANSFER,
+      defaultAbiCoder.encode(['address', 'address', 'int256'], [this.pair.asset.address, toAddress, share])
     )
 
     return this
@@ -156,7 +228,7 @@ export default class KashiCooker {
     return this
   }
 
-  addAsset(amount: BigNumber, fromBento: boolean): KashiCooker {
+  addAsset(amount: BigNumber, fromBento: boolean, burnShare: boolean = false): KashiCooker {
     let share: BigNumber
     if (fromBento) {
       share = toShare(this.pair.asset, amount)
@@ -175,6 +247,12 @@ export default class KashiCooker {
     }
 
     this.add(Action.ADD_ASSET, defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false]))
+
+    if (burnShare) {
+      this.removeAsset(BigNumber.from(1), true)
+      this.bentoTransferAsset(BigNumber.from(1), '0x000000000000000000000000000000000000dead')
+    }
+
     return this
   }
 

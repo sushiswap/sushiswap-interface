@@ -1,18 +1,9 @@
-import React, { useState } from 'react'
+import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
 import { Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import Button, { ButtonError } from '../../components/Button'
-import { classNames, getUSDValue, tryParseAmount } from '../../functions'
-import CurrencyInputPanel from './CurrencyInputPanel'
-import Web3Connect from '../../components/Web3Connect'
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { useActiveWeb3React } from '../../services/web3'
-import Dots from '../../components/Dots'
-import { BigNumber } from '@ethersproject/bignumber'
-import useMasterChef from './useMasterChef'
-import { useTransactionAdder } from '../../state/transactions/hooks'
 import {
   ChainId,
   CurrencyAmount,
@@ -21,15 +12,25 @@ import {
   MASTERCHEF_V2_ADDRESS,
   MINICHEF_ADDRESS,
   Token,
-  USDC,
   USD,
   ZERO,
 } from '@sushiswap/core-sdk'
-import { getAddress } from '@ethersproject/address'
+import Button, { ButtonError } from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import Web3Connect from 'app/components/Web3Connect'
+import { useKashiPair } from 'app/features/kashi/hooks'
+import { classNames, getUSDValue, tryParseAmount } from 'app/functions'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useCurrencyBalance } from 'app/state/wallet/hooks'
+import React, { useState } from 'react'
+
+import CurrencyInputPanel from './CurrencyInputPanel'
 import { Chef, PairType } from './enum'
-import { useKashiPair } from '../kashi/context'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
 import { useUserInfo } from './hooks'
+import useMasterChef from './useMasterChef'
+import { OLD_FARMS } from 'app/config/farms'
 
 const ManageBar = ({ farm }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -107,6 +108,10 @@ const ManageBar = ({ farm }) => {
       [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
       [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
       [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
+      [ChainId.FUSE]: MINICHEF_ADDRESS[ChainId.FUSE],
+    },
+    [Chef.OLD_FARMS]: {
+      [ChainId.CELO]: OLD_FARMS[ChainId.CELO],
     },
   }
 

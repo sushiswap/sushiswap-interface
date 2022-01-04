@@ -1,4 +1,9 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
+import { TokenList } from '@uniswap/token-lists'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import useLast from 'app/hooks/useLast'
+import usePrevious from 'app/hooks/usePrevious'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import CurrencyModalView from './CurrencyModalView'
@@ -6,11 +11,6 @@ import { CurrencySearch } from './CurrencySearch'
 import ImportList from './ImportList'
 import { ImportToken } from './ImportToken'
 import Manage from './Manage'
-import Modal from '../../components/Modal'
-import { TokenList } from '@uniswap/token-lists'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import useLast from '../../hooks/useLast'
-import usePrevious from '../../hooks/usePrevious'
 
 interface CurrencySearchModalProps {
   isOpen: boolean
@@ -70,48 +70,48 @@ function CurrencySearchModal({
   const minHeight = modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 75
 
   return (
-    <Modal isOpen={isOpen} onDismiss={onDismiss} maxHeight={75} minHeight={minHeight} padding={1}>
-      {modalView === CurrencyModalView.search ? (
-        <CurrencySearch
-          isOpen={isOpen}
-          onDismiss={onDismiss}
-          onCurrencySelect={handleCurrencySelect}
-          selectedCurrency={selectedCurrency}
-          otherSelectedCurrency={otherSelectedCurrency}
-          showCommonBases={showCommonBases}
-          showImportView={() => setModalView(CurrencyModalView.importToken)}
-          setImportToken={setImportToken}
-          showManageView={() => setModalView(CurrencyModalView.manage)}
-          currencyList={currencyList}
-          includeNativeCurrency={includeNativeCurrency}
-          allowManageTokenList={allowManageTokenList}
-          hideBalance={hideBalance}
-          showSearch={showSearch}
-        />
-      ) : modalView === CurrencyModalView.importToken && importToken ? (
-        <ImportToken
-          tokens={[importToken]}
-          onDismiss={onDismiss}
-          list={importToken instanceof WrappedTokenInfo ? importToken.list : undefined}
-          onBack={() =>
-            setModalView(prevView && prevView !== CurrencyModalView.importToken ? prevView : CurrencyModalView.search)
-          }
-          handleCurrencySelect={handleCurrencySelect}
-        />
-      ) : modalView === CurrencyModalView.importList && importList && listURL ? (
-        <ImportList list={importList} listURL={listURL} onDismiss={onDismiss} setModalView={setModalView} />
-      ) : modalView === CurrencyModalView.manage ? (
-        <Manage
-          onDismiss={onDismiss}
-          setModalView={setModalView}
-          setImportToken={setImportToken}
-          setImportList={setImportList}
-          setListUrl={setListUrl}
-        />
-      ) : (
-        ''
-      )}
-    </Modal>
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
+      <div className="p-6 lg:max-h-[92vh] lg:h-[40rem]">
+        {modalView === CurrencyModalView.search ? (
+          <CurrencySearch
+            isOpen={isOpen}
+            onDismiss={onDismiss}
+            onCurrencySelect={handleCurrencySelect}
+            selectedCurrency={selectedCurrency}
+            otherSelectedCurrency={otherSelectedCurrency}
+            showCommonBases={showCommonBases}
+            showImportView={() => setModalView(CurrencyModalView.importToken)}
+            setImportToken={setImportToken}
+            showManageView={() => setModalView(CurrencyModalView.manage)}
+            currencyList={currencyList}
+            includeNativeCurrency={includeNativeCurrency}
+            allowManageTokenList={allowManageTokenList}
+          />
+        ) : modalView === CurrencyModalView.importToken && importToken ? (
+          <ImportToken
+            tokens={[importToken]}
+            onDismiss={onDismiss}
+            list={importToken instanceof WrappedTokenInfo ? importToken.list : undefined}
+            onBack={() =>
+              setModalView(prevView && prevView !== CurrencyModalView.importToken ? prevView : CurrencyModalView.search)
+            }
+            handleCurrencySelect={handleCurrencySelect}
+          />
+        ) : modalView === CurrencyModalView.importList && importList && listURL ? (
+          <ImportList list={importList} listURL={listURL} onDismiss={onDismiss} setModalView={setModalView} />
+        ) : modalView === CurrencyModalView.manage ? (
+          <Manage
+            onDismiss={onDismiss}
+            setModalView={setModalView}
+            setImportToken={setImportToken}
+            setImportList={setImportList}
+            setListUrl={setListUrl}
+          />
+        ) : (
+          ''
+        )}
+      </div>
+    </HeadlessUiModal.Controlled>
   )
 }
 

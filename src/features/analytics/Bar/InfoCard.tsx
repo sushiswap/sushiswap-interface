@@ -1,5 +1,4 @@
 import React from 'react'
-import { formatNumber } from '../../../functions'
 
 interface InfoCardProps {
   text: string

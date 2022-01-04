@@ -1,11 +1,12 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
 import { AddressZero } from '@ethersproject/constants'
 import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { useActiveWeb3React } from '../services/web3'
-import { useBentoBoxContract } from './useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
-import { useTransactionAdder } from '../state/transactions/hooks'
+
+import { useBentoBoxContract } from './useContract'
 
 function useBentoBox() {
   const { account, chainId } = useActiveWeb3React()
@@ -61,7 +62,19 @@ function useBentoBox() {
     [account, addTransaction, bentoBoxContract, chainId]
   )
 
-  return { deposit, withdraw }
+  const harvest = useCallback(async (tokenAddress: string, rebalance: boolean = false) => {
+    if (chainId) {
+      try {
+        const tx = await bentoBoxContract?.harvest(tokenAddress, rebalance, 0)
+        return addTransaction(tx, { summary: rebalance ? 'Harvest & Rebalance' : 'Harvest' })
+      } catch (e) {
+        console.error('bentobox harvest error:', e)
+        return e
+      }
+    }
+  }, [])
+
+  return { deposit, withdraw, harvest }
 }
 
 export default useBentoBox

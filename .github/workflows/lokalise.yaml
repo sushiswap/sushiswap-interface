@@ -1,0 +1,30 @@
+name: Lokalise
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    types: [closed]
+
+jobs:
+  lokalise:
+    if: github.event.pull_request.merged == true
+    name: Upload english to lokalise
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Lokalise
+        uses: sudosubin/setup-lokalise-action@v1.0.1
+        with:
+          lokalise-version: 'latest' # or specify version (ex. '2.6.3')
+      - run: 'lokalise2 --version'
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          cache: 'npm'
+      - run: npm install @babel/core @lingui/cli @lingui/macro @lingui/core @lingui/react @lingui/remote-loader @lingui/loader next
+      - run: npm run lingui
+      - run: 'lokalise2 --token ${{ secrets.LOKALISE_TOKEN }} --project-id 18927102617d34a34e1467.51119957 file upload --file locale/en.json --lang-iso en'

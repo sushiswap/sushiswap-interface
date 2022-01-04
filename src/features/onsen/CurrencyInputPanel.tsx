@@ -1,14 +1,14 @@
-import { Currency, CurrencyAmount, Percent, Token } from '@sushiswap/core-sdk'
-import React, { ReactNode } from 'react'
-import { classNames, formatCurrencyAmount } from '../../functions'
-import Lottie from 'lottie-react'
-import selectCoinAnimation from '../../animation/select-coin.json'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import Button from '../../components/Button'
-import { FiatValue } from '../../components/CurrencyInputPanel/FiatValue'
-import Input from '../../components/Input'
+import { Currency, CurrencyAmount, Percent, Token } from '@sushiswap/core-sdk'
+import selectCoinAnimation from 'app/animation/select-coin.json'
+import Button from 'app/components/Button'
+import { FiatValue } from 'app/components/CurrencyInputPanel/FiatValue'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import Input from 'app/components/Input'
+import { classNames, formatCurrencyAmount } from 'app/functions'
+import Lottie from 'lottie-react'
+import React, { ReactNode } from 'react'
 
 interface CurrencyInputPanelProps {
   value?: string

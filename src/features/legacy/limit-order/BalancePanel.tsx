@@ -1,14 +1,13 @@
-import React, { FC, useCallback } from 'react'
-import { useDerivedLimitOrderInfo, useLimitOrderActionHandlers } from '../../../state/limit-order/hooks'
-
-import { AppDispatch } from '../../../state'
-import { Field } from '../../../state/swap/actions'
-import Typography from '../../../components/Typography'
-import { maxAmountSpend } from '../../../functions'
-import { setFromBentoBalance } from '../../../state/limit-order/actions'
 import { t } from '@lingui/macro'
-import { useDispatch } from 'react-redux'
 import { useLingui } from '@lingui/react'
+import Typography from 'app/components/Typography'
+import { maxAmountSpend } from 'app/functions'
+import { AppDispatch } from 'app/state'
+import { setFromBentoBalance } from 'app/state/limit-order/actions'
+import { useDerivedLimitOrderInfo, useLimitOrderActionHandlers } from 'app/state/limit-order/hooks'
+import { Field } from 'app/state/swap/actions'
+import React, { FC, useCallback } from 'react'
+import { useDispatch } from 'react-redux'
 
 const BalancePanel: FC = () => {
   const { i18n } = useLingui()
@@ -31,7 +30,7 @@ const BalancePanel: FC = () => {
   )
 
   return (
-    <div className="grid grid-cols-2 bg-dark-700 rounded-b px-5 py-1">
+    <div className="grid grid-cols-2 px-5 py-1 rounded-b bg-dark-700">
       <div className="flex gap-2">
         <Typography variant="sm" weight={700}>
           {i18n._(t`In Bento:`)}

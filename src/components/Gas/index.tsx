@@ -1,8 +1,7 @@
-import useSWR, { SWRResponse } from 'swr'
-
-import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import React from 'react'
+import useSWR, { SWRResponse } from 'swr'
 
 function Gas() {
   const { i18n } = useLingui()

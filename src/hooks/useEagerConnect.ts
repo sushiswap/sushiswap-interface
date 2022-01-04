@@ -1,8 +1,8 @@
+import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 import { useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
 
 import { injected } from '../config/wallets'
-import { isMobile } from 'react-device-detect'
-import { useWeb3React as useWeb3ReactCore } from '@web3-react/core'
 
 function useEagerConnect() {
   const { activate, active } = useWeb3ReactCore() // specifically using useWeb3ReactCore because of what this hook does
@@ -11,14 +11,20 @@ function useEagerConnect() {
   useEffect(() => {
     injected.isAuthorized().then((isAuthorized) => {
       if (isAuthorized) {
-        activate(injected, undefined, true).catch(() => {
-          setTried(true)
-        })
-      } else {
-        if (isMobile && window.ethereum) {
-          activate(injected, undefined, true).catch(() => {
+        activate(injected, undefined, true)
+          // .then(() => window.ethereum.removeAllListeners(['networkChanged']))
+          .catch(() => {
             setTried(true)
           })
+        window.ethereum.removeAllListeners(['networkChanged'])
+      } else {
+        if (isMobile && window.ethereum) {
+          activate(injected, undefined, true)
+            // .then(() => window.ethereum.removeAllListeners(['networkChanged']))
+            .catch(() => {
+              setTried(true)
+            })
+          window.ethereum.removeAllListeners(['networkChanged'])
         } else {
           setTried(true)
         }

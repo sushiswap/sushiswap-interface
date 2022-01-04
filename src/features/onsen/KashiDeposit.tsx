@@ -1,39 +1,45 @@
+import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { BENTOBOX_ADDRESS, CurrencyAmount, WNATIVE } from '@sushiswap/core-sdk'
+import Alert from 'app/components/Alert'
+import Button, { ButtonError } from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import Web3Connect from 'app/components/Web3Connect'
+import { KashiCooker } from 'app/entities'
+import { ZERO } from 'app/functions/math'
+import { tryParseAmount } from 'app/functions/parse'
+import { useCurrency } from 'app/hooks/Tokens'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useKashiApproveCallback, { BentoApprovalState } from 'app/hooks/useKashiApproveCallback'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useState } from 'react'
-import Button, { ButtonError } from '../../components/Button'
-import Dots from '../../components/Dots'
-import Web3Connect from '../../components/Web3Connect'
-import { KashiCooker } from '../../entities'
-import { ZERO } from '../../functions/math'
-import { useActiveWeb3React } from '../../services/web3'
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { useCurrency } from '../../hooks/Tokens'
-import useKashiApproveCallback, { BentoApprovalState } from '../../hooks/useKashiApproveCallback'
+
 import CurrencyInputPanel from './CurrencyInputPanel'
-import Provider, { useKashiInfo } from '../kashi/context'
-import { tryParseAmount } from '../../functions'
-import Alert from '../../components/Alert'
-import { useUSDCValue } from '../../hooks/useUSDCPrice'
-import { BigNumber } from '@ethersproject/bignumber'
 
 const KashiDeposit = ({ pair, useBento }) => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
 
   const assetToken = useCurrency(pair?.asset.address) || undefined
-  const info = useKashiInfo()
 
   const [depositValue, setDepositValue] = useState('')
 
   const assetNative = WNATIVE[chainId || 1].address === pair?.asset.address
+  const ethBalance = useETHBalances(assetNative ? [account] : [])
 
-  const balanceAmount = useBento ? pair?.asset.bentoBalance : assetNative ? info?.ethBalance : pair?.asset.balance
+  const balanceAmount = useBento
+    ? pair?.asset.bentoBalance
+    : assetNative
+    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    : pair?.asset.balance
+
   const balance =
     assetToken &&
     balanceAmount &&
-    CurrencyAmount.fromRawAmount(assetNative ? WNATIVE[chainId || 1] : assetToken, balanceAmount)
+    CurrencyAmount.fromRawAmount(assetNative ? WNATIVE[chainId] : assetToken, balanceAmount)
 
   const maxAmount = balance
 
@@ -133,7 +139,5 @@ const KashiDeposit = ({ pair, useBento }) => {
     </div>
   )
 }
-
-KashiDeposit.Provider = Provider
 
 export default KashiDeposit

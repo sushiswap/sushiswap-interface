@@ -1303,6 +1303,14 @@ const MAINNET_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 8,
   },
+  // wOHM / ETH (Not Chainlink)
+  '0x95655B72D76370e3daE5f60768F2B96AC62ec568': {
+    from: '0xCa76543Cf381ebBB277bE79574059e32108e3E65',
+    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+    decimals: 18,
+    fromDecimals: 18,
+    toDecimals: 18,
+  },
 }
 
 export default MAINNET_CHAINLINK_MAPPING

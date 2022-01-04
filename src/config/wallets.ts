@@ -1,15 +1,16 @@
-import { AbstractConnector } from '@web3-react/abstract-connector'
 import { ChainId } from '@sushiswap/core-sdk'
+import { AbstractConnector } from '@web3-react/abstract-connector'
 import { InjectedConnector } from '@web3-react/injected-connector'
-import { NetworkConnector } from '../entities/NetworkConnector'
+import { NetworkConnector } from 'app/entities/connectors'
+
 import RPC from './rpc'
+
+const supportedChainIds = Object.values(ChainId) as number[]
 
 export const network = new NetworkConnector({
   defaultChainId: 1,
   urls: RPC,
 })
-
-const supportedChainIds = Object.values(ChainId) as number[]
 
 export const injected = new InjectedConnector({
   supportedChainIds,
@@ -53,7 +54,6 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         bridge: 'https://bridge.walletconnect.org',
         qrcode: true,
         supportedChainIds,
-        // pollingInterval: 15000,
       })
     },
     name: 'WalletConnect',
@@ -101,6 +101,7 @@ export const SUPPORTED_WALLETS: { [key: string]: WalletInfo } = {
         url: RPC[ChainId.ETHEREUM],
         appName: 'SushiSwap',
         appLogoUrl: 'https://raw.githubusercontent.com/sushiswap/art/master/sushi/logo-256x256.png',
+        darkMode: true,
       })
     },
     name: 'Coinbase Wallet',

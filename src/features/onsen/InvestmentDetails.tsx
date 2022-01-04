@@ -1,23 +1,22 @@
+import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Image from '../../components/Image'
+import { ChainId, CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import Typography from 'app/components/Typography'
+import { useKashiPair } from 'app/features/kashi/hooks'
+import { easyAmount, formatNumber } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
-import { useActiveWeb3React } from '../../services/web3'
-import { CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
-import { getAddress } from '@ethersproject/address'
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
-import { easyAmount, formatNumber } from '../../functions'
-import { BigNumber } from '@ethersproject/bignumber'
-import usePendingReward from './usePendingReward'
-import CurrencyLogo from '../../components/CurrencyLogo'
 import useMasterChef from './useMasterChef'
-import { useTransactionAdder } from '../../state/transactions/hooks'
-import { useRouter } from 'next/router'
-import Button from '../../components/Button'
-import { useCurrency } from '../../hooks/Tokens'
-import Typography from '../../components/Typography'
-import { useKashiPair } from '../kashi/context'
+import usePendingReward from './usePendingReward'
 
 const InvestmentDetails = ({ farm }) => {
   const { i18n } = useLingui()
@@ -58,8 +57,8 @@ const InvestmentDetails = ({ farm }) => {
       kashiPair.asset
     )
 
-  const pendingReward = usePendingReward(farm)
   const pendingSushi = usePendingSushi(farm)
+  const pendingReward = usePendingReward(farm)
 
   const positionFiatValue = CurrencyAmount.fromRawAmount(
     USD[chainId],
@@ -88,6 +87,8 @@ const InvestmentDetails = ({ farm }) => {
     }
     setPendingTx(false)
   }
+
+  const secondaryRewardOnly = [ChainId.FUSE].includes(chainId)
 
   return (
     <div className="flex flex-col w-full space-y-8">
@@ -147,14 +148,7 @@ const InvestmentDetails = ({ farm }) => {
           <div className="flex flex-col space-y-2">
             {farm?.rewards?.map((reward, i) => (
               <div key={i} className="flex items-center space-x-2">
-                <Image
-                  src={reward.icon}
-                  width="30px"
-                  height="30px"
-                  className="rounded-md"
-                  layout="fixed"
-                  alt={reward.token}
-                />
+                <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />
                 {i === 0 && <Typography>{formatNumber(pendingSushi?.toSignificant(6) ?? 0)}</Typography>}
                 {i === 1 && <Typography>{formatNumber(pendingReward)}</Typography>}
                 <Typography>{reward.token}</Typography>

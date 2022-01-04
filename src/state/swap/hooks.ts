@@ -1,44 +1,37 @@
-import { AppDispatch, AppState } from '../index'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import {
   ChainId,
   Currency,
   CurrencyAmount,
-  JSBI,
   Percent,
   SUSHI_ADDRESS,
-  TradeType,
   Trade as V2Trade,
+  TradeType,
   WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
-import {
-  EstimatedSwapCall,
-  SuccessfulCall,
-  swapErrorToUserReadableMessage,
-  useSwapCallArguments,
-} from '../../hooks/useSwapCallback'
+import { tryParseAmount } from 'app/functions/parse'
+import { isAddress } from 'app/functions/validate'
+import { useCurrency } from 'app/hooks/Tokens'
+import useENS from 'app/hooks/useENS'
+import useParsedQueryString from 'app/hooks/useParsedQueryString'
+import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useCurrencyBalances } from 'app/state/wallet/hooks'
+import { ParsedQs } from 'qs'
+import { useCallback, useEffect, useState } from 'react'
+
 // import {
 //   EstimatedSwapCall,
 //   SuccessfulCall,
 //   useSwapCallArguments,
 // } from "../../hooks/useSwapCallback";
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
-import { isAddress, isZero } from '../../functions/validate'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useExpertModeManager, useUserSingleHopOnly, useUserSlippageTolerance } from '../user/hooks'
-import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
-import { ParsedQs } from 'qs'
 import { SwapState } from './reducer'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../services/web3'
-import { useCurrency } from '../../hooks/Tokens'
-import { useCurrencyBalances } from '../wallet/hooks'
-import useENS from '../../hooks/useENS'
-import { useLingui } from '@lingui/react'
-import useParsedQueryString from '../../hooks/useParsedQueryString'
-import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
 
 export function useSwapState(): AppState['swap'] {
   return useAppSelector((state) => state.swap)
@@ -117,7 +110,7 @@ function involvesAddress(trade: V2Trade<Currency, Currency, TradeType>, checksum
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedSwapInfo(doArcher = false): {
+export function useDerivedSwapInfo(): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount<Currency> }
   parsedAmount: CurrencyAmount<Currency> | undefined
@@ -153,6 +146,7 @@ export function useDerivedSwapInfo(doArcher = false): {
   ])
 
   const isExactIn: boolean = independentField === Field.INPUT
+
   const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
   const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined, {
@@ -176,6 +170,7 @@ export function useDerivedSwapInfo(doArcher = false): {
   }
 
   let inputError: string | undefined
+
   if (!account) {
     inputError = 'Connect Wallet'
   }

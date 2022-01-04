@@ -5,21 +5,31 @@ module.exports = {
   // important: '#__next',
   // darkMode: true,
   mode: 'jit',
-  // future: {
-  //   purgeLayersByDefault: true,
-  //   applyComplexClasses: true,
-  // },
   purge: ['./src/**/*.{js,ts,jsx,tsx}'],
   darkMode: false,
   theme: {
     extend: {
+      gridTemplateColumns: {
+        'token-section': 'auto minmax(auto, 1fr) auto',
+      },
+      backgroundImage: (theme) => ({
+        'bars-pattern': "url('/images/trident/bars-pattern.png')",
+        'binary-pattern': "url('/images/trident/binary-pattern.png')",
+        'bubble-pattern': "url('/images/trident/bubble-pattern.png')",
+        'dots-pattern': "url('/images/trident/dots-pattern.png')",
+        'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
+        'wavy-pattern': "url('/images/trident/wavy-pattern.png')",
+        'chevron-pattern': "url('/images/trident/chevron-pattern.png')",
+        'miso-bowl': "url('/images/miso/banner.jpg')",
+      }),
       linearBorderGradients: {
         directions: {
+          t: 'to top',
           tr: 'to top right',
           r: 'to right',
         },
         colors: {
-          'blue-pink': ['#27B0E6', '#FA52A0'],
+          'blue-pink': ['#0993ec', '#f338c3'],
           'pink-red-light-brown': ['#FE5A75', '#FEC464'],
         },
         background: {
@@ -44,6 +54,8 @@ module.exports = {
         yellow: '#ffd166',
 
         'opaque-blue': '#0993ec80',
+        'transparent-blue': '#0993EC2A',
+        'transparent-pink': '#FE5A752A',
         'opaque-pink': '#f338c380',
         'pink-red': '#FE5A75',
         'light-brown': '#FEC464',
@@ -58,6 +70,7 @@ module.exports = {
         'dark-700': '#2E3348',
         'dark-600': '#1C2D49',
         'dark-500': '#223D5E',
+        'dark-400': '#545f7b',
         'low-emphesis': '#575757',
         primary: '#BFBFBF',
         secondary: '#7F7F7F',

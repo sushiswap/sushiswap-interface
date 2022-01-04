@@ -1,19 +1,18 @@
-import React, { FC, useState } from 'react'
-
-import Badge from '../../../components/Badge'
-import Button from '../../../components/Button'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { LimitOrder } from '@sushiswap/limit-order-sdk'
-import Lottie from 'lottie-react'
-import NavLink from '../../../components/NavLink'
-import Pagination from './Pagination'
-import TransactionConfirmationModal from '../../../modals/TransactionConfirmationModal'
-import loadingCircle from '../../../animation/loading-circle.json'
 import { t } from '@lingui/macro'
-import { useLimitOrderContract } from '../../../hooks/useContract'
-import useLimitOrders from '../../../hooks/useLimitOrders'
 import { useLingui } from '@lingui/react'
-import { useTransactionAdder } from '../../../state/transactions/hooks'
+import { LimitOrder } from '@sushiswap/limit-order-sdk'
+import loadingCircle from 'app/animation/loading-circle.json'
+import Badge from 'app/components/Badge'
+import Button from 'app/components/Button'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import NavLink from 'app/components/NavLink'
+import Pagination from 'app/components/Pagination'
+import { useLimitOrderContract } from 'app/hooks/useContract'
+import useLimitOrders from 'app/hooks/useLimitOrders'
+import TransactionConfirmationModal from 'app/modals/TransactionConfirmationModal'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import Lottie from 'lottie-react'
+import React, { FC, useState } from 'react'
 
 const OpenOrders: FC = () => {
   const { i18n } = useLingui()
@@ -118,6 +117,8 @@ const OpenOrders: FC = () => {
               totalPages={pending.maxPages}
               currentPage={pending.page}
               pageNeighbours={2}
+              canNextPage={false}
+              canPreviousPage={false}
             />
           </>
         ) : (

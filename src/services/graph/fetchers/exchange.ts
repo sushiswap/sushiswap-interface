@@ -1,21 +1,22 @@
+import { ChainId } from '@sushiswap/core-sdk'
+import { GRAPH_HOST } from 'app/services/graph/constants'
 import {
   dayDatasQuery,
   ethPriceQuery,
   factoryQuery,
   liquidityPositionsQuery,
+  pairDayDatasQuery,
   pairsQuery,
   tokenDayDatasQuery,
   tokenPairsQuery,
   tokenPriceQuery,
   tokenQuery,
-  tokenSubsetQuery,
   tokensQuery,
+  tokenSubsetQuery,
   transactionsQuery,
-} from '../queries'
+} from 'app/services/graph/queries'
 
-import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
-import { pager } from '../functions'
+import { pager } from './pager'
 
 export const EXCHANGE = {
   [ChainId.ETHEREUM]: 'sushiswap/exchange',
@@ -30,14 +31,21 @@ export const EXCHANGE = {
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-exchange',
   [ChainId.OKEX]: 'okex-exchange/oec',
   [ChainId.HECO]: 'heco-exchange/heco',
+  [ChainId.FUSE]: 'sushiswap/fuse-exchange',
 }
 
 export const exchange = async (chainId = ChainId.ETHEREUM, query, variables = {}) =>
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
-export const getPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
-  const { pairs } = await exchange(chainId, pairsQuery, variables)
+export const getPairs = async (chainId = ChainId.ETHEREUM, variables = undefined, query = pairsQuery) => {
+  const { pairs } = await exchange(chainId, query, variables)
   return pairs
+}
+
+export const getPairDayData = async (chainId = ChainId.ETHEREUM, variables) => {
+  // console.log('getTokens')
+  const { pairDayDatas } = await exchange(chainId, pairDayDatasQuery, variables)
+  return pairDayDatas
 }
 
 export const getTokenSubset = async (chainId = ChainId.ETHEREUM, variables) => {
@@ -175,6 +183,24 @@ export const getCeloPrice = async () => {
   })
 }
 
+export const getOhmPrice = async (chainId) => {
+  if (chainId === ChainId.ARBITRUM) {
+    return getTokenPrice(ChainId.ARBITRUM, tokenPriceQuery, {
+      id: '0x8d9ba570d6cb60c7e3e0f31343efe75ab8e65fb1',
+    })
+  } else {
+    return getTokenPrice(ChainId.MATIC, tokenPriceQuery, {
+      id: '0xd8ca34fd379d9ca3c6ee3b3905678320f5b45195',
+    })
+  }
+}
+
+export const getMagicPrice = async () => {
+  return getTokenPrice(ChainId.ARBITRUM, tokenPriceQuery, {
+    id: '0x539bde0d7dbd336b79148aa742883198bbf60342',
+  })
+}
+
 export const getMovrPrice = async () => {
   return getTokenPrice(ChainId.MOONRIVER, tokenPriceQuery, {
     id: '0xf50225a84382c74cbdea10b0c176f71fc3de0c4d',
@@ -184,6 +210,12 @@ export const getMovrPrice = async () => {
 export const getSpellPrice = async () => {
   return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
     id: '0x090185f2135308bad17527004364ebcc2d37e5f6',
+  })
+}
+
+export const getFusePrice = async () => {
+  return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
+    id: '0x970b9bb2c0444f5e81e9d0efb84c8ccdcdcaf84d',
   })
 }
 

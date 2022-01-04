@@ -1,26 +1,26 @@
-import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
-import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { filterTokens, useSortedTokensByQuery } from '../../functions/filtering'
-import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from '../../hooks/Tokens'
-
-import AutoSizer from 'react-virtualized-auto-sizer'
-import Button from '../../components/Button'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
-import Column from '../../components/Column'
+import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import ModalHeader from 'app/components/ModalHeader'
+import Typography from 'app/components/Typography'
+import { filterTokens, useSortedTokensByQuery } from 'app/functions/filtering'
+import { isAddress } from 'app/functions/validate'
+import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from 'app/hooks/Tokens'
+import useDebounce from 'app/hooks/useDebounce'
+import { useOnClickOutside } from 'app/hooks/useOnClickOutside'
+import useToggle from 'app/hooks/useToggle'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
+import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import ReactGA from 'react-ga'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { FixedSizeList } from 'react-window'
+
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
-import { FixedSizeList } from 'react-window'
 import ImportRow from './ImportRow'
-import ModalHeader from '../../components/ModalHeader'
-import ReactGA from 'react-ga'
-import { isAddress } from '../../functions/validate'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../services/web3'
-import useDebounce from '../../hooks/useDebounce'
-import { useLingui } from '@lingui/react'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { useRouter } from 'next/router'
-import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
 
 interface CurrencySearchProps {
@@ -36,8 +36,8 @@ interface CurrencySearchProps {
   currencyList?: string[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
-  hideBalance: boolean
-  showSearch: boolean
+  hideBalance?: boolean
+  showSearch?: boolean
 }
 
 export function CurrencySearch({
@@ -65,8 +65,6 @@ export function CurrencySearch({
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const debouncedQuery = useDebounce(searchQuery, 200)
-
-  const [invertSearchOrder] = useState<boolean>(false)
 
   let allTokens = useAllTokens()
 
@@ -103,7 +101,7 @@ export function CurrencySearch({
     }
   }, [isAddressSearch])
 
-  const tokenComparator = useTokenComparator(invertSearchOrder)
+  const tokenComparator = useTokenComparator()
 
   const filteredTokens: Token[] = useMemo(() => {
     return filterTokens(Object.values(allTokens), debouncedQuery)
@@ -177,10 +175,10 @@ export function CurrencySearch({
   )
 
   return (
-    <div className="flex flex-col max-h-[inherit]">
-      <ModalHeader className="h-full" onClose={onDismiss} title="Select a token" />
+    <div className="flex flex-col h-full">
+      <ModalHeader className="py-2" onClose={onDismiss} title="Select a token" />
       {!currencyList && showSearch && (
-        <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
+        <div className="mt-0 mb-3 sm:mb-8">
           <input
             type="text"
             id="token-search-input"
@@ -190,7 +188,7 @@ export function CurrencySearch({
             ref={inputRef as RefObject<HTMLInputElement>}
             onChange={handleInput}
             onKeyDown={handleEnter}
-            className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
+            className="w-full bg-dark-1000/20 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
           />
         </div>
       )}
@@ -200,12 +198,10 @@ export function CurrencySearch({
         </div>
       )}
 
-      {searchToken && !searchTokenIsAdded ? (
-        <Column style={{ padding: '20px 0', height: '100%' }}>
+      <div className="h-screen border-t border-b border-dark-800 -mx-6">
+        {searchToken && !searchTokenIsAdded ? (
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
-        </Column>
-      ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
-        <div className="h-screen">
+        ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
           <AutoSizer disableWidth>
             {({ height }) => (
               <CurrencyList
@@ -222,15 +218,15 @@ export function CurrencySearch({
               />
             )}
           </AutoSizer>
-        </div>
-      ) : (
-        <Column style={{ padding: '20px', height: '100%' }}>
-          <div className="mb-8 text-center">{i18n._(t`No results found`)}</div>
-        </Column>
-      )}
+        ) : (
+          <Typography weight={700} variant="xs" className="text-secondary flex h-full justify-center items-center">
+            {i18n._(t`No results found`)}
+          </Typography>
+        )}
+      </div>
       {allowManageTokenList && (
-        <div className="mt-3">
-          <Button id="list-token-manage-button" onClick={showManageView} color="gray">
+        <div className="mt-5 flex justify-center">
+          <Button id="list-token-manage-button" onClick={showManageView} color="blue" variant="empty">
             {i18n._(t`Manage Token Lists`)}
           </Button>
         </div>

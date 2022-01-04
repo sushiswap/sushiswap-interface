@@ -1,3 +1,6 @@
+import { ChainId } from '@sushiswap/core-sdk'
+import { GRAPH_HOST } from 'app/services/graph/constants'
+import { getTokenSubset } from 'app/services/graph/fetchers/exchange'
 import {
   masterChefV1PairAddressesQuery,
   masterChefV1SushiPerBlockQuery,
@@ -7,11 +10,7 @@ import {
   miniChefPoolsQuery,
   poolsQuery,
   poolsV2Query,
-} from '../queries'
-
-import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
-import { getTokenSubset } from './exchange'
+} from 'app/services/graph/queries'
 import { request } from 'graphql-request'
 
 export const MINICHEF = {
@@ -19,12 +18,20 @@ export const MINICHEF = {
   [ChainId.XDAI]: 'matthewlilley/xdai-minichef',
   [ChainId.HARMONY]: 'sushiswap/harmony-minichef',
   [ChainId.ARBITRUM]: 'matthewlilley/arbitrum-minichef',
-  [ChainId.CELO]: 'sushiswap/celo-minichef',
+  [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
+  [ChainId.FUSE]: 'sushiswap/fuse-minichef',
+}
+
+export const OLD_MINICHEF = {
+  [ChainId.CELO]: 'sushiswap/celo-minichef',
 }
 
 export const miniChef = async (query, chainId = ChainId.ETHEREUM, variables = undefined) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${MINICHEF[chainId]}`, query, variables)
+
+export const oldMiniChef = async (query, chainId = ChainId.ETHEREUM) =>
+  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${OLD_MINICHEF[chainId]}`, query)
 
 export const MASTERCHEF_V2 = {
   [ChainId.ETHEREUM]: 'sushiswap/master-chefv2',
@@ -81,6 +88,11 @@ export const getMasterChefV2Farms = async (variables = undefined) => {
 
 export const getMasterChefV2PairAddreses = async () => {
   const { pools } = await masterChefV2(masterChefV2PairAddressesQuery)
+  return pools
+}
+
+export const getOldMiniChefFarms = async (chainId = ChainId.ETHEREUM) => {
+  const { pools } = await oldMiniChef(miniChefPoolsQuery, chainId)
   return pools
 }
 

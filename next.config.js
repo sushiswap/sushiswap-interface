@@ -2,8 +2,12 @@ const withPWA = require('next-pwa')
 const runtimeCaching = require('next-pwa/cache')
 
 const linguiConfig = require('./lingui.config.js')
+const defaultTheme = require('tailwindcss/defaultTheme')
+
+const { ChainId } = require('@sushiswap/core-sdk')
 
 const { locales, sourceLocale } = linguiConfig
+const { screens } = defaultTheme
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -28,7 +32,12 @@ const nextConfig = {
 
     return config
   },
-  experimental: { esmExternals: true },
+  // experimental: {
+  //   concurrentFeatures: true,
+  //   serverComponents: true,
+  // },
+  swcMinify: false,
+  reactStrictMode: true,
   pwa: {
     dest: 'public',
     runtimeCaching,
@@ -37,44 +46,11 @@ const nextConfig = {
   images: {
     domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
   },
-  reactStrictMode: true,
   async redirects() {
     return [
-      // {
-      //   source: '/',
-      //   destination: '/swap',
-      //   permanent: true,
-      // },
-
       {
-        source: '/zap',
-        destination: '/',
-        permanent: true,
-      },
-      {
-        source: '/yield',
-        destination: '/farm',
-        permanent: true,
-      },
-      {
-        source: '/bento',
-        destination: '/bentobox',
-        permanent: true,
-      },
-      {
-        source: '/bento/kashi',
-        destination: '/lend',
-        permanent: true,
-      },
-      // Analytics
-      {
-        source: '/analytics',
-        destination: '/analytics/dashboard',
-        permanent: true,
-      },
-      {
-        source: '/portfolio',
-        destination: '/analytics/portfolio',
+        source: '/',
+        destination: '/swap',
         permanent: true,
       },
     ]
@@ -87,81 +63,60 @@ const nextConfig = {
       },
       {
         source: '/add/:token*',
-        destination: '/exchange/add/:token*',
+        destination: '/legacy/add/:token*',
       },
       {
         source: '/remove/:token*',
-        destination: '/exchange/remove/:token*',
+        destination: '/legacy/remove/:token*',
       },
       {
         source: '/create/:token*',
-        destination: '/exchange/add/:token*',
+        destination: '/legacy/add/:token*',
       },
       {
         source: '/swap',
-        destination: '/exchange/swap',
+        destination: '/legacy/swap',
       },
       {
         source: '/swap/:token*',
-        destination: '/exchange/swap/:token*',
+        destination: '/legacy/swap/:token*',
       },
       {
         source: '/limit-order',
-        destination: '/exchange/limit-order',
+        destination: '/legacy/limit-order',
       },
       {
         source: '/limit-order/:token*',
-        destination: '/exchange/limit-order/:token*',
+        destination: '/legacy/limit-order/:token*',
       },
       {
         source: '/open-order',
-        destination: '/exchange/open-order',
-      },
-      {
-        source: '/migrate',
-        destination: '/exchange/migrate',
+        destination: '/legacy/open-order',
       },
       {
         source: '/pool',
-        destination: '/exchange/pool',
+        destination: '/legacy/pool',
       },
       {
         source: '/find',
-        destination: '/exchange/find',
+        destination: '/legacy/find',
+      },
+      {
+        source: '/migrate',
+        destination: '/legacy/migrate',
       },
       // Kashi
-      {
-        source: '/borrow',
-        destination: '/kashi/borrow',
-      },
-      {
-        source: '/borrow/:token*',
-        destination: '/kashi/borrow/:token*',
-      },
-      {
-        source: '/lend',
-        destination: '/kashi/lend',
-      },
-      {
-        source: '/lend/:token*',
-        destination: '/kashi/lend/:token*',
-      },
-      // Onsen
-      // {
-      //   source: '/farm',
-      //   destination: '/onsen',
-      // },
-      // {
-      //   source: '/farm/:type*',
-      //   destination: '/onsen/:type*',
-      // },
       {
         source: '/me',
         destination: '/user',
       },
       {
         source: '/balances',
-        destination: '/user/balances',
+        destination: '/trident/balances/wallet',
+      },
+      {
+        source: '/trident/balances',
+        destination: '/trident/balances/wallet',
       },
     ]
   },
@@ -169,6 +124,23 @@ const nextConfig = {
     localeDetection: true,
     locales,
     defaultLocale: sourceLocale,
+  },
+  network: {
+    chainIds: [ChainId.ETHEREUM, ChainId.ARBITRUM],
+    defaultChainId: ChainId.ETHEREUM,
+    domains: [
+      {
+        domain: 'sushi.com',
+        defaultChainId: ChainId.ETHEREUM,
+      },
+      {
+        domain: 'arbitrum.sushi.com',
+        defaultChainId: ChainId.ARBITRUM,
+      },
+    ],
+  },
+  publicRuntimeConfig: {
+    breakpoints: screens,
   },
 }
 

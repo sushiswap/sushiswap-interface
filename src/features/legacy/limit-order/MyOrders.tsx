@@ -1,11 +1,10 @@
-import React, { FC } from 'react'
-
-import Badge from '../../../components/Badge'
 import { ClipboardListIcon } from '@heroicons/react/outline'
-import NavLink from '../../../components/NavLink'
 import { t } from '@lingui/macro'
-import useLimitOrders from '../../../hooks/useLimitOrders'
 import { useLingui } from '@lingui/react'
+import Badge from 'app/components/Badge'
+import NavLink from 'app/components/NavLink'
+import useLimitOrders from 'app/hooks/useLimitOrders'
+import React, { FC } from 'react'
 
 const MyOrders: FC = () => {
   const { i18n } = useLingui()
@@ -14,7 +13,7 @@ const MyOrders: FC = () => {
   return (
     <NavLink href="/open-order">
       <a className="text-secondary hover:text-high-emphesis">
-        <div className="md:flex hidden gap-3 items-center">
+        <div className="items-center hidden gap-3 md:flex">
           <div>{i18n._(t`My Orders`)}</div>
           <Badge color="blue">{pending.totalOrders}</Badge>
         </div>

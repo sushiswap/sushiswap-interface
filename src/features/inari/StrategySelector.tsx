@@ -1,8 +1,9 @@
+import { useAppDispatch } from 'app/state/hooks'
+import { setStrategy } from 'app/state/inari/actions'
+import { useInariState, useInariStrategies } from 'app/state/inari/hooks'
 import React, { FC } from 'react'
+
 import { classNames } from '../../functions'
-import { useAppDispatch } from '../../state/hooks'
-import { setStrategy } from '../../state/inari/actions'
-import { useInariState, useInariStrategies } from '../../state/inari/hooks'
 
 interface StrategySelectorProps {}
 
