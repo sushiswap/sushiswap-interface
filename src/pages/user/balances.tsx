@@ -1,30 +1,25 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BENTOBOX_ADDRESS, CurrencyAmount, Token, WNATIVE } from '@sushiswap/sdk'
-import { BentoBalance, useBentoBalances } from '../../state/bentobox/hooks'
-import React, { useState } from 'react'
-import { useFuse, useSortableData } from '../../hooks'
-
-import Back from '../../components/Back'
-import Button from '../../components/Button'
-import Card from '../../components/Card'
-import CardHeader from '../../components/CardHeader'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import Head from 'next/head'
-import Image from '../../components/Image'
-import Layout from '../../layouts/Kashi'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import Paper from '../../components/Paper'
-import Search from '../../components/Search'
 import { Transition } from '@headlessui/react'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { cloudinaryLoader } from '../../functions/cloudinary'
-import { formatNumber } from '../../functions/format'
 import { t } from '@lingui/macro'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import useBentoBox from '../../hooks/useBentoBox'
 import { useLingui } from '@lingui/react'
-import useTokenBalance from '../../hooks/useTokenBalance'
+import { BENTOBOX_ADDRESS, CurrencyAmount, Token, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Card from 'app/components/Card'
+import Dots from 'app/components/Dots'
+import Image from 'app/components/Image'
+import Input from 'app/components/Input'
+import Paper from 'app/components/Paper'
+import Search from 'app/components/Search'
+import { formatNumber } from 'app/functions/format'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useBentoBox from 'app/hooks/useBentoBox'
+import useFuse from 'app/hooks/useFuse'
+import useSortableData from 'app/hooks/useSortableData'
+import Layout from 'app/layouts/Kashi'
+import { useActiveWeb3React } from 'app/services/web3'
+import { BentoBalance, useBentoBalances } from 'app/state/bentobox/hooks'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
+import Head from 'next/head'
+import React, { useState } from 'react'
 
 function Balances() {
   const { i18n } = useLingui()
@@ -49,7 +44,7 @@ function Balances() {
       <Card
         className="h-full bg-dark-900"
         header={
-          <CardHeader className="flex items-center justify-between bg-dark-800">
+          <Card.Header className="flex items-center justify-between bg-dark-800">
             <div className="flex flex-col items-center justify-between w-full md:flex-row">
               <div className="flex items-baseline">
                 <div className="mr-4 text-3xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
@@ -58,7 +53,7 @@ function Balances() {
                 <Search search={search} term={term} />
               </div>
             </div>
-          </CardHeader>
+          </Card.Header>
         }
       >
         <div className="grid grid-flow-row gap-4 auto-rows-max">
@@ -83,7 +78,7 @@ const BalancesLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="bento-illustration.png"
+          backgroundImage="bentobox/illustration.png"
           title={i18n._(t`Deposit tokens into BentoBox for all the yields`)}
           description={i18n._(
             t`BentoBox provides extra yield on deposits with flash lending, strategies, and fixed, low-gas transfers among integrated dapps, like Kashi markets`
@@ -110,10 +105,9 @@ const TokenBalance = ({ token }: { token: BentoBalance & WrappedTokenInfo }) => 
       >
         <div className="flex items-center space-x-3">
           <Image
-            loader={cloudinaryLoader}
             height={56}
             width={56}
-            src={token?.tokenInfo ? token.tokenInfo.logoURI : '/images/tokens/unknown.png'}
+            src={token?.tokenInfo?.logoURI ? token.tokenInfo.logoURI : '/images/tokens/unknown.png'}
             className="w-10 mr-4 rounded-lg sm:w-14"
             alt={token?.tokenInfo ? token.tokenInfo.symbol : token?.symbol}
           />
@@ -180,7 +174,7 @@ export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): 
 
   const showApprove =
     chainId &&
-    token.address !== WNATIVE[chainId].address &&
+    token.address !== WNATIVE_ADDRESS[chainId] &&
     (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   return (
@@ -192,7 +186,7 @@ export function Deposit({ token }: { token: BentoBalance & WrappedTokenInfo }): 
         </div>
       )}
       <div className="relative flex items-center w-full mb-4">
-        <NumericalInput
+        <Input.Numeric
           className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-blue"
           value={value}
           onUserInput={(value) => {
@@ -263,7 +257,7 @@ function Withdraw({ token }: { token: BentoBalance & WrappedTokenInfo }): JSX.El
         </div>
       )}
       <div className="relative flex items-center w-full mb-4">
-        <NumericalInput
+        <Input.Numeric
           className="w-full p-3 rounded bg-dark-700 focus:ring focus:ring-pink"
           value={value}
           onUserInput={(value) => {

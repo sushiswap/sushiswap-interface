@@ -1,17 +1,16 @@
-import { Call, parseCallKey } from './utils'
-import { RetryableError, retry } from '../../functions/retry'
-import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from './actions'
-import { useAppDispatch, useAppSelector } from '../hooks'
+import { Contract } from '@ethersproject/contracts'
+import { chunkArray } from 'app/functions/array'
+import { retry, RetryableError } from 'app/functions/retry'
+import { useMulticall2Contract } from 'app/hooks/useContract'
+import useDebounce from 'app/hooks/useDebounce'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useEffect, useMemo, useRef } from 'react'
 
-import { AppState } from '../index'
-import { Contract } from 'ethers'
-import { chunkArray } from '../../functions/array'
-import { updateBlockNumber } from '../application/actions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useBlockNumber } from '../application/hooks'
-import useDebounce from '../../hooks/useDebounce'
-import { useMulticall2Contract } from '../../hooks/useContract'
+import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from './actions'
+import { Call, parseCallKey } from './utils'
 
 const DEFAULT_GAS_REQUIRED = 1_000_000
 

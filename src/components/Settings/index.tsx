@@ -1,133 +1,105 @@
-import { ChainId, Percent } from '@sushiswap/sdk'
-import React, { useRef, useState } from 'react'
-import {
-  useExpertModeManager,
-  useUserArcherUseRelay,
-  useUserSingleHopOnly,
-  useUserTransactionTTL,
-} from '../../state/user/hooks'
-import { useModalOpen, useToggleSettingsMenu } from '../../state/application/hooks'
-
-import { AdjustmentsIcon } from '@heroicons/react/outline'
-import { ApplicationModal } from '../../state/application/actions'
-import Button from '../Button'
-import Modal from '../Modal'
-import ModalHeader from '../ModalHeader'
-import QuestionHelper from '../QuestionHelper'
-import Toggle from '../Toggle'
-import TransactionSettings from '../TransactionSettings'
-import Typography from '../Typography'
+import { AdjustmentsIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import { Percent } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import ModalHeader from 'app/components/ModalHeader'
+import Popover from 'app/components/Popover'
+import QuestionHelper from 'app/components/QuestionHelper'
+import Toggle from 'app/components/Toggle'
+import TransactionSettings from 'app/components/TransactionSettings'
+import Typography from 'app/components/Typography'
+import { useToggleSettingsMenu } from 'app/state/application/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
+import React, { FC, useState } from 'react'
 
-export default function SettingsTab({ placeholderSlippage }: { placeholderSlippage?: Percent }) {
+interface SettingsTabProps {
+  placeholderSlippage?: Percent
+  trident?: boolean
+}
+
+const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = false }) => {
   const { i18n } = useLingui()
-  const { chainId } = useActiveWeb3React()
 
-  const node = useRef<HTMLDivElement>(null)
-  const open = useModalOpen(ApplicationModal.SETTINGS)
   const toggle = useToggleSettingsMenu()
-
   const [expertMode, toggleExpertMode] = useExpertModeManager()
-
   const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
-
-  // show confirmation view before turning on
   const [showConfirmation, setShowConfirmation] = useState(false)
 
-  useOnClickOutside(node, open ? toggle : undefined)
-
-  const [ttl, setTtl] = useUserTransactionTTL()
-
-  const [userUseArcher, setUserUseArcher] = useUserArcherUseRelay()
-
   return (
-    <div className="relative flex" ref={node}>
-      <div
-        className="flex items-center justify-center w-8 h-8 rounded cursor-pointer"
-        onClick={toggle}
-        id="open-settings-dialog-button"
-      >
-        <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90" />
-      </div>
-      {open && (
-        <div className="absolute top-14 right-0 z-50 -mr-2.5 min-w-20 md:m-w-22 md:-mr-5 bg-dark-900 border-2 border-dark-800 rounded w-80 shadow-lg">
-          <div className="p-4 space-y-4">
-            <Typography weight={700} className="text-high-emphesis">
-              {i18n._(t`Transaction Settings`)}
-            </Typography>
+    <>
+      <Popover
+        placement="bottom-end"
+        content={
+          <div className="bg-dark-900 border border-dark-700 rounded w-80 shadow-lg">
+            <div className="p-4 space-y-4">
+              <Typography weight={700} className="text-high-emphesis">
+                {i18n._(t`Transaction Settings`)}
+              </Typography>
 
-            <TransactionSettings placeholderSlippage={placeholderSlippage} />
+              <TransactionSettings placeholderSlippage={placeholderSlippage} trident={trident} />
 
-            <Typography className="text-high-emphesis" weight={700}>
-              {i18n._(t`Interface Settings`)}
-            </Typography>
+              <Typography className="text-high-emphesis" weight={700}>
+                {i18n._(t`Interface Settings`)}
+              </Typography>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Typography variant="sm" className="text-primary">
-                  {i18n._(t`Toggle Expert Mode`)}
-                </Typography>
-                <QuestionHelper
-                  text={i18n._(t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`)}
-                />
-              </div>
-              <Toggle
-                id="toggle-expert-mode-button"
-                isActive={expertMode}
-                toggle={
-                  expertMode
-                    ? () => {
-                        toggleExpertMode()
-                        setShowConfirmation(false)
-                      }
-                    : () => {
-                        toggle()
-                        setShowConfirmation(true)
-                      }
-                }
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <Typography variant="sm" className="text-primary">
-                  {i18n._(t`Disable Multihops`)}
-                </Typography>
-                <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
-              </div>
-              <Toggle
-                id="toggle-disable-multihop-button"
-                isActive={singleHopOnly}
-                toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
-              />
-            </div>
-            {/* {chainId == ChainId.MAINNET && (
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <Typography variant="sm" className="text-primary">
-                    {i18n._(t`MEV Shield by Archer DAO`)}
+                    {i18n._(t`Toggle Expert Mode`)}
                   </Typography>
                   <QuestionHelper
                     text={i18n._(
-                      t`Send transaction privately to avoid front-running and sandwich attacks. Requires a miner tip to incentivize miners`
+                      t`Bypasses confirmation modals and allows high slippage trades. Use at your own risk.`
                     )}
                   />
                 </div>
                 <Toggle
-                  id="toggle-use-archer"
-                  isActive={userUseArcher}
-                  toggle={() => setUserUseArcher(!userUseArcher)}
+                  id="toggle-expert-mode-button"
+                  isActive={expertMode}
+                  toggle={
+                    expertMode
+                      ? () => {
+                          toggleExpertMode()
+                          setShowConfirmation(false)
+                        }
+                      : () => {
+                          toggle()
+                          setShowConfirmation(true)
+                        }
+                  }
                 />
               </div>
-            )} */}
+              {!trident && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Typography variant="sm" className="text-primary">
+                      {i18n._(t`Disable Multihops`)}
+                    </Typography>
+                    <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
+                  </div>
+                  <Toggle
+                    id="toggle-disable-multihop-button"
+                    isActive={singleHopOnly}
+                    toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
+                  />
+                </div>
+              )}
+            </div>
           </div>
+        }
+      >
+        <div
+          className={
+            'lg:bg-dark-900 lg:border-dark-700 border border-transparent flex items-center justify-center w-10 h-10 rounded cursor-pointer'
+          }
+        >
+          <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90 hover:text-white" />
         </div>
-      )}
-
-      <Modal isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)}>
-        <div className="space-y-4">
+      </Popover>
+      <HeadlessUiModal.Controlled isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)}>
+        <div className="space-y-4 p-6">
           <ModalHeader title={i18n._(t`Are you sure?`)} onClose={() => setShowConfirmation(false)} />
           <Typography variant="lg">
             {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
@@ -140,10 +112,6 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
             color="red"
             size="lg"
             onClick={() => {
-              // if (window.prompt(i18n._(t`Please type the word "confirm" to enable expert mode.`)) === 'confirm') {
-              //   toggleExpertMode()
-              //   setShowConfirmation(false)
-              // }
               toggleExpertMode()
               setShowConfirmation(false)
             }}
@@ -153,7 +121,9 @@ export default function SettingsTab({ placeholderSlippage }: { placeholderSlippa
             </Typography>
           </Button>
         </div>
-      </Modal>
-    </div>
+      </HeadlessUiModal.Controlled>
+    </>
   )
 }
+
+export default SettingsTab

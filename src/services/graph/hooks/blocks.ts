@@ -1,47 +1,104 @@
-import { getAverageBlockTime, getBlock, getMassBlocks } from '../fetchers'
+import { ChainId } from '@sushiswap/core-sdk'
+import { getAverageBlockTime, getBlock, getMassBlocks } from 'app/services/graph/fetchers'
+import { useActiveWeb3React } from 'app/services/web3'
+import { addSeconds, getUnixTime, startOfMinute, subDays, subWeeks } from 'date-fns'
+import stringify from 'fast-json-stable-stringify'
 import useSWR, { SWRConfiguration } from 'swr'
 
-import { useActiveWeb3React } from '../../../hooks'
-import { useMemo } from 'react'
-import { ChainId } from '@sushiswap/sdk'
+import { GraphProps } from '../interfaces'
 
-interface useBlockProps {
-  timestamp?: number
-  daysAgo?: number
-  chainId?: number
-  shouldFetch?: boolean
+export function useOneDayBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfMinute(subDays(Date.now(), 1))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
 }
 
-export function useBlock(
-  { timestamp, daysAgo, chainId = ChainId.MAINNET, shouldFetch = true }: useBlockProps = {},
-  swrConfig: SWRConfiguration = undefined
-) {
-  shouldFetch = shouldFetch && !!chainId
-  timestamp = timestamp
-    ? String(timestamp).length !== 13
-      ? Number(timestamp)
-      : Math.floor(Number(timestamp) / 1000)
-    : undefined
+export function useTwoDayBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfMinute(subDays(Date.now(), 2))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
+}
 
-  timestamp = useMemo(
-    () => (daysAgo ? Math.floor(Date.now() / 1000) - daysAgo * 86400 : timestamp),
-    [daysAgo, timestamp]
-  )
+export function useOneWeekBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfMinute(subWeeks(Date.now(), 1))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
+}
 
+export function useTwoWeekBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
+  const date = startOfMinute(subWeeks(Date.now(), 2))
+  const start = getUnixTime(date)
+  const end = getUnixTime(addSeconds(date, 600))
+  return useBlock({
+    chainId,
+    variables: {
+      where: {
+        timestamp_gt: start,
+        timestamp_lt: end,
+      },
+    },
+    shouldFetch,
+    swrConfig,
+  })
+}
+
+export function useBlock({
+  chainId = ChainId.ETHEREUM,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps): { number?: number } {
   const { data } = useSWR(
-    shouldFetch ? ['block', chainId, timestamp] : null,
-    (_, chainId, timestamp) => getBlock(chainId, timestamp),
+    shouldFetch ? ['block', chainId, stringify(variables)] : null,
+    (_, chainId) => getBlock(chainId, variables),
     swrConfig
   )
-
   return data
 }
 
-export function useMassBlocks(timestamps: number[] | string[], swrConfig = undefined) {
+interface useMassBlocksProps {
+  timestamps: number[] | string[]
+  swrConfig?: SWRConfiguration
+}
+
+export function useMassBlocks({ timestamps, swrConfig = undefined }: useMassBlocksProps) {
   const { chainId } = useActiveWeb3React()
 
   const { data } = useSWR(
-    chainId ? ['massBlocks', chainId] : null,
+    chainId ? ['massBlocks', chainId, stringify(timestamps)] : null,
     (_, chainId) => getMassBlocks(chainId, timestamps),
     swrConfig
   )
@@ -49,14 +106,11 @@ export function useMassBlocks(timestamps: number[] | string[], swrConfig = undef
   return data
 }
 
-export function useAverageBlockTime(swrConfig = undefined) {
-  const { chainId } = useActiveWeb3React()
-
+export function useAverageBlockTime({ chainId = ChainId.ETHEREUM, swrConfig = undefined }) {
   const { data } = useSWR(
     chainId ? ['averageBlockTime', chainId] : null,
     (_, chainId) => getAverageBlockTime(chainId),
     swrConfig
   )
-
   return data
 }

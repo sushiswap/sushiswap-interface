@@ -1,78 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
-import { fortmatic, injected, portis } from '../../connectors'
-import { useModalOpen, useWalletModalToggle } from '../../state/application/hooks'
-
-import { AbstractConnector } from '@web3-react/abstract-connector'
-import AccountDetails from '../../components/AccountDetails'
-import { ApplicationModal } from '../../state/application/actions'
-import { ButtonError } from '../../components/Button'
-import ExternalLink from '../../components/ExternalLink'
-import Image from 'next/image'
-import Modal from '../../components/Modal'
-import ModalHeader from '../../components/ModalHeader'
-import { OVERLAY_READY } from '../../connectors/Fortmatic'
-import Option from './Option'
-import PendingView from './PendingView'
-import ReactGA from 'react-ga'
-import { SUPPORTED_WALLETS } from '../../constants'
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
-import { XIcon } from '@heroicons/react/outline'
-import { isMobile } from 'react-device-detect'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import usePrevious from '../../hooks/usePrevious'
+import { AbstractConnector } from '@web3-react/abstract-connector'
+import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
+import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
+import AccountDetails from 'app/components/AccountDetails'
+import { ButtonError } from 'app/components/Button'
+import ExternalLink from 'app/components/ExternalLink'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import ModalHeader from 'app/components/ModalHeader'
+import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
+import { OVERLAY_READY } from 'app/entities/connectors/FortmaticConnector'
+import usePrevious from 'app/hooks/usePrevious'
+import { ApplicationModal } from 'app/state/application/actions'
+import { useModalOpen, useWalletModalToggle } from 'app/state/application/hooks'
+import React, { useEffect, useState } from 'react'
+import { isMobile } from 'react-device-detect'
+import ReactGA from 'react-ga'
 
-const CloseIcon = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-  &:hover {
-    cursor: pointer;
-    opacity: 0.6;
-  }
-`
-
-const HeaderRow = styled.div`
-  margin-bottom: 1rem;
-`
-
-const UpperSection = styled.div`
-  position: relative;
-
-  h5 {
-    margin: 0;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-    font-weight: 400;
-  }
-
-  h5:last-child {
-    margin-bottom: 0px;
-  }
-
-  h4 {
-    margin-top: 0;
-    font-weight: 500;
-  }
-`
-
-const OptionGrid = styled.div`
-  display: grid;
-  grid-gap: 10px;
-  grid-template-columns: 1fr;
-  // ${({ theme }) => theme.mediaWidth.upToMedium`
-    grid-template-columns: 1fr;
-    grid-gap: 10px;
-  `};
-`
-
-const HoverText = styled.div`
-  :hover {
-    cursor: pointer;
-  }
-`
+import Option from './Option'
+import PendingView from './PendingView'
 
 const WALLET_VIEWS = {
   OPTIONS: 'options',
@@ -168,10 +114,12 @@ export default function WalletModal({
 
   // close wallet modal if fortmatic modal is active
   useEffect(() => {
-    fortmatic.on(OVERLAY_READY, () => {
-      toggleWalletModal()
-    })
-  }, [toggleWalletModal])
+    if (connector?.constructor?.name === 'FormaticConnector') {
+      connector.on(OVERLAY_READY, () => {
+        toggleWalletModal()
+      })
+    }
+  }, [toggleWalletModal, connector])
 
   // get wallets user can switch too, depending on device/browser
   function getOptions() {
@@ -182,7 +130,7 @@ export default function WalletModal({
       // check for mobile options
       if (isMobile) {
         // disable portis on mobile for now
-        if (option.connector === portis) {
+        if (option.name === 'Portis') {
           return null
         }
 
@@ -190,7 +138,7 @@ export default function WalletModal({
           return (
             <Option
               onClick={() => {
-                option.connector !== connector && !option.href && tryActivation(option.connector)
+                tryActivation(option.connector)
               }}
               id={`connect-${key}`}
               key={key}
@@ -263,13 +211,11 @@ export default function WalletModal({
   function getModalContent() {
     if (error) {
       return (
-        <UpperSection>
-          <CloseIcon onClick={toggleWalletModal}>
-            <XIcon width="24px" height="24px" />
-          </CloseIcon>
-          <HeaderRow style={{ paddingLeft: 0, paddingRight: 0 }}>
-            {error instanceof UnsupportedChainIdError ? i18n._(t`Wrong Network`) : i18n._(t`Error connecting`)}
-          </HeaderRow>
+        <div className="p-6">
+          <ModalHeader
+            title={error instanceof UnsupportedChainIdError ? i18n._(t`Wrong Network`) : i18n._(t`Error connecting`)}
+            onClose={toggleWalletModal}
+          />
           <div>
             {error instanceof UnsupportedChainIdError ? (
               <h5>{i18n._(t`Please connect to the appropriate Ethereum network.`)}</h5>
@@ -281,7 +227,7 @@ export default function WalletModal({
               {i18n._(t`Disconnect`)}
             </ButtonError>
           </div>
-        </UpperSection>
+        </div>
       )
     }
     if (account && walletView === WALLET_VIEWS.ACCOUNT) {
@@ -296,7 +242,7 @@ export default function WalletModal({
       )
     }
     return (
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col w-full p-6 space-y-4 lg:max-w-lg">
         <ModalHeader title="Select a Wallet" onClose={toggleWalletModal} />
         <div className="flex flex-col space-y-6">
           {walletView === WALLET_VIEWS.PENDING ? (
@@ -307,7 +253,7 @@ export default function WalletModal({
               tryActivation={tryActivation}
             />
           ) : (
-            <div className="flex flex-col space-y-5 overflow-y-auto">{getOptions()}</div>
+            <div className="grid grid-cols-2 gap-5 overflow-y-auto">{getOptions()}</div>
           )}
           {walletView !== WALLET_VIEWS.PENDING && (
             <div className="flex flex-col text-center">
@@ -323,8 +269,8 @@ export default function WalletModal({
   }
 
   return (
-    <Modal isOpen={walletModalOpen} onDismiss={toggleWalletModal} minHeight={false} maxHeight={90}>
+    <HeadlessUiModal.Controlled isOpen={walletModalOpen} onDismiss={toggleWalletModal}>
       {getModalContent()}
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }

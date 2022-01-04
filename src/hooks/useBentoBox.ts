@@ -1,10 +1,12 @@
+import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { WNATIVE } from '@sushiswap/sdk'
-import { ethers } from 'ethers'
-import { useActiveWeb3React } from './useActiveWeb3React'
-import { useBentoBoxContract } from './useContract'
+import { AddressZero } from '@ethersproject/constants'
+import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
-import { useTransactionAdder } from '../state/transactions/hooks'
+
+import { useBentoBoxContract } from './useContract'
 
 function useBentoBox() {
   const { account, chainId } = useActiveWeb3React()
@@ -16,9 +18,9 @@ function useBentoBox() {
     async (tokenAddress: string, value: BigNumber) => {
       if (value && chainId) {
         try {
-          const tokenAddressChecksum = ethers.utils.getAddress(tokenAddress)
-          if (tokenAddressChecksum === WNATIVE[chainId].address) {
-            const tx = await bentoBoxContract?.deposit(ethers.constants.AddressZero, account, account, value, 0, {
+          const tokenAddressChecksum = getAddress(tokenAddress)
+          if (tokenAddressChecksum === WNATIVE_ADDRESS[chainId]) {
+            const tx = await bentoBoxContract?.deposit(AddressZero, account, account, value, 0, {
               value,
             })
             return addTransaction(tx, { summary: 'Deposit to Bentobox' })
@@ -40,9 +42,9 @@ function useBentoBox() {
     async (tokenAddress: string, value: BigNumber) => {
       if (value && chainId) {
         try {
-          const tokenAddressChecksum = ethers.utils.getAddress(tokenAddress)
+          const tokenAddressChecksum = getAddress(tokenAddress)
           const tx = await bentoBoxContract?.withdraw(
-            tokenAddressChecksum === WNATIVE[chainId].address
+            tokenAddressChecksum === WNATIVE_ADDRESS[chainId]
               ? '0x0000000000000000000000000000000000000000'
               : tokenAddressChecksum,
             account,

@@ -1,57 +1,13 @@
-import { ChainId } from '@sushiswap/sdk'
-
-export enum Feature {
-  AMM = 'AMM',
-  AMM_V2 = 'AMM V2',
-  LIQUIDITY_MINING = 'Liquidity Mining',
-  BENTOBOX = 'BentoBox',
-  KASHI = 'Kashi',
-  MISO = 'MISO',
-  ANALYTICS = 'Analytics',
-  MIGRATE = 'Migrate',
-  STAKING = 'Staking',
-}
-
-const features = {
-  [ChainId.MAINNET]: [
-    Feature.AMM,
-    Feature.LIQUIDITY_MINING,
-    Feature.BENTOBOX,
-    Feature.KASHI,
-    Feature.MIGRATE,
-    Feature.ANALYTICS,
-    Feature.STAKING,
-    Feature.MISO,
-  ],
-  [ChainId.ROPSTEN]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.RINKEBY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.GÖRLI]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.KOVAN]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.BSC]: [Feature.AMM, Feature.BENTOBOX, Feature.KASHI, Feature.MIGRATE, Feature.ANALYTICS],
-  [ChainId.BSC_TESTNET]: [Feature.AMM],
-  [ChainId.FANTOM]: [Feature.AMM, Feature.ANALYTICS],
-  [ChainId.FANTOM_TESTNET]: [Feature.AMM],
-  [ChainId.MATIC]: [
-    Feature.AMM,
-    Feature.LIQUIDITY_MINING,
-    Feature.BENTOBOX,
-    Feature.KASHI,
-    Feature.MIGRATE,
-    Feature.ANALYTICS,
-  ],
-  [ChainId.MATIC_TESTNET]: [Feature.AMM],
-  [ChainId.HARMONY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
-  [ChainId.HARMONY_TESTNET]: [Feature.AMM],
-  [ChainId.AVALANCHE]: [Feature.AMM, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.AVALANCHE_TESTNET]: [Feature.AMM],
-  [ChainId.OKEX]: [Feature.AMM],
-  [ChainId.OKEX_TESTNET]: [Feature.AMM],
-  [ChainId.XDAI]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.CELO]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
-  [ChainId.MOONRIVER]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
-  [ChainId.ARBITRUM]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
-}
+import { ChainId } from '@sushiswap/core-sdk'
+import features from 'app/config/features'
+import { Feature } from 'app/enums'
 
 export function featureEnabled(feature: Feature, chainId: ChainId): boolean {
-  return features[chainId].includes(feature)
+  return chainId && chainId in features && features[chainId].includes(feature)
+}
+
+export function chainsWithFeature(feature: Feature): ChainId[] {
+  return Object.keys(features)
+    .filter((chainKey) => featureEnabled(feature, ChainId[chainKey]))
+    .map((chain) => ChainId[chain])
 }

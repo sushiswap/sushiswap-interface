@@ -1,5 +1,5 @@
 import { Contract } from '@ethersproject/contracts'
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
 
@@ -8,7 +8,7 @@ async function queryFilter(contract: Contract, event, fromBlockOrBlockHash, toBl
 }
 
 export function useQueryFilter({
-  chainId = ChainId.MAINNET,
+  chainId = ChainId.ETHEREUM,
   shouldFetch = true,
   contract,
   event,

@@ -1,11 +1,20 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { e10 } from './math'
 import { AddressZero } from '@ethersproject/constants'
-import { ChainId } from '@sushiswap/sdk'
-import { CHAINLINK_MAPPING } from '../constants/chainlink/mappings'
+import { ChainId, CHAINLINK_ORACLE_ADDRESS } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
+import { ChainlinkOracle } from 'app/entities/oracles'
+import { IOracle } from 'app/interfaces'
 
-export function validateChainlinkOracleData(chainId = ChainId.MAINNET, collateral, asset, data) {
-  const mapping = CHAINLINK_MAPPING[chainId]
+import { e10 } from './math'
+
+export function getOracle(chainId: ChainId, address: string, data: string): IOracle {
+  if (address.toLowerCase() === CHAINLINK_ORACLE_ADDRESS[chainId].toLowerCase()) {
+    return new ChainlinkOracle(chainId, address, data)
+  }
+}
+
+export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collateral, asset, data) {
+  const mapping = CHAINLINK_PRICE_FEED_MAP[chainId]
   if (!mapping) {
     return false
   }

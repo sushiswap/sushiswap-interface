@@ -1,9 +1,9 @@
-import { ADDITIONAL_BASES, BASES_TO_CHECK_TRADES_AGAINST, CUSTOM_BASES } from '../constants/routing'
-import { Currency, Token } from '@sushiswap/sdk'
-
+import { Currency, Token } from '@sushiswap/core-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import flatMap from 'lodash/flatMap'
-import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
+
+import { ADDITIONAL_BASES, BASES_TO_CHECK_TRADES_AGAINST, CUSTOM_BASES } from '../config/routing'
 
 export function useAllCurrencyCombinations(currencyA?: Currency, currencyB?: Currency): [Token, Token][] {
   const { chainId } = useActiveWeb3React()

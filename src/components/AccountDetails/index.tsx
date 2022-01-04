@@ -1,27 +1,26 @@
-import React, { FC, useCallback } from 'react'
-import { binance, fortmatic, injected, portis, torus, walletconnect, walletlink } from '../../connectors'
-
-import { AppDispatch } from '../../state'
-import Button from '../Button'
-import Copy from './Copy'
-import ExternalLink from '../ExternalLink'
-import Image from 'next/image'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import ModalHeader from '../ModalHeader'
-import { SUPPORTED_WALLETS } from '../../constants'
-import Transaction from './Transaction'
-import { clearAllTransactions } from '../../state/transactions/actions'
-import { getExplorerLink } from '../../functions/explorer'
-import { shortenAddress } from '../../functions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useDispatch } from 'react-redux'
-import Typography from '../Typography'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
+import { getExplorerLink } from 'app/functions/explorer'
+import { shortenAddress } from 'app/functions/format'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppDispatch } from 'app/state'
+import { clearAllTransactions } from 'app/state/transactions/actions'
+import Image from 'next/image'
+import React, { FC, useCallback } from 'react'
+import { ExternalLink as LinkIcon } from 'react-feather'
+import { useDispatch } from 'react-redux'
+
+import Button from '../Button'
+import ExternalLink from '../ExternalLink'
+import ModalHeader from '../ModalHeader'
+import Typography from '../Typography'
+import Copy from './Copy'
+import Transaction from './Transaction'
 
 const WalletIcon: FC<{ size?: number; src: string; alt: string }> = ({ size, src, alt, children }) => {
   return (
-    <div className="flex flex-row flex-nowrap items-end md:items-center justify-center mr-2">
+    <div className="flex flex-row items-end justify-center mr-2 flex-nowrap md:items-center">
       <Image src={src} alt={alt} width={size} height={size} />
       {children}
     </div>
@@ -30,7 +29,7 @@ const WalletIcon: FC<{ size?: number; src: string; alt: string }> = ({ size, src
 
 function renderTransactions(transactions: string[]) {
   return (
-    <div className="flex flex-col flex-nowrap gap-2">
+    <div className="flex flex-col gap-2 flex-nowrap">
       {transactions.map((hash, i) => {
         return <Transaction key={i} hash={hash} />
       })}
@@ -73,25 +72,26 @@ const AccountDetails: FC<AccountDetailsProps> = ({
     if (connector === injected) {
       return null
       // return <IconWrapper size={16}>{/* <Identicon /> */}</IconWrapper>
-    } else if (connector === walletconnect) {
+    } else if (connector.constructor.name === 'WalletConnectConnector') {
       return <WalletIcon src="/wallet-connect.png" alt="Wallet Connect" size={16} />
-    } else if (connector === walletlink) {
+    } else if (connector.constructor.name === 'WalletLinkConnector') {
       return <WalletIcon src="/coinbase.svg" alt="Coinbase" size={16} />
-    } else if (connector === fortmatic) {
+    } else if (connector.constructor.name === 'FortmaticConnector') {
       return <WalletIcon src="/formatic.png" alt="Fortmatic" size={16} />
-    } else if (connector === portis) {
+    } else if (connector.constructor.name === 'PortisConnector') {
       return (
         <WalletIcon src="/portnis.png" alt="Portis" size={16}>
           <Button
-            onClick={() => {
-              portis.portis.showPortis()
+            onClick={async () => {
+              // casting as PortisConnector here defeats the lazyload purpose
+              ;(connector as any).portis.showPortis()
             }}
           >
             Show Portis
           </Button>
         </WalletIcon>
       )
-    } else if (connector === torus) {
+    } else if (connector.constructor.name === 'TorusConnector') {
       return <WalletIcon src="/torus.png" alt="Torus" size={16} />
     }
     return null
@@ -102,16 +102,16 @@ const AccountDetails: FC<AccountDetailsProps> = ({
   }, [dispatch, chainId])
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 p-6">
       <div className="space-y-3">
         <ModalHeader title="Account" onClose={toggleWalletModal} />
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             {formatConnectorName()}
             <div className="flex space-x-3">
-              {connector !== injected &&
-                connector !== walletlink &&
-                connector !== binance &&
+              {connector === injected &&
+                connector.constructor.name !== 'WalletLinkConnector' &&
+                connector.constructor.name !== 'BscConnector' &&
                 connector.constructor.name !== 'KeystoneConnector' && (
                   <Button
                     variant="outlined"
@@ -143,12 +143,12 @@ const AccountDetails: FC<AccountDetailsProps> = ({
                 <Typography>{ENSName}</Typography>
               </div>
             ) : (
-              <div className="bg-dark-800 py-2 px-3 rounded">
+              <div className="px-3 py-2 rounded bg-dark-800">
                 {getStatusIcon()}
                 <Typography>{account && shortenAddress(account)}</Typography>
               </div>
             )}
-            <div className="flex items-center space-x-3 gap-2">
+            <div className="flex items-center gap-2 space-x-3">
               {chainId && account && (
                 <ExternalLink
                   color="blue"

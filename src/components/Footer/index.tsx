@@ -1,10 +1,11 @@
-import { ANALYTICS_URL } from '../../constants'
-import { ChainId } from '@sushiswap/sdk'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
+import ANALYTICS_URL from 'app/config/analytics'
+import { useActiveWeb3React } from 'app/services/web3'
+
 import ExternalLink from '../ExternalLink'
 import Polling from '../Polling'
-import { t } from '@lingui/macro'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
 
 const Footer = () => {
   const { chainId } = useActiveWeb3React()

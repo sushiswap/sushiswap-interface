@@ -1,7 +1,7 @@
-import { Currency, Token } from '@sushiswap/sdk'
+import { Currency, Token } from '@sushiswap/core-sdk'
 import { Tags, TokenInfo } from '@uniswap/token-lists'
-
 import { TokenList } from '@uniswap/token-lists/dist/types'
+
 import { isAddress } from '../../functions/validate'
 
 type TagDetails = Tags[keyof Tags]

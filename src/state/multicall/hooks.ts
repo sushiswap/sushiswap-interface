@@ -1,13 +1,13 @@
-import { Call, parseCallKey, toCallKey } from './utils'
 import { FunctionFragment, Interface } from '@ethersproject/abi'
-import { ListenerOptions, addMulticallListeners, removeMulticallListeners } from './actions'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { useEffect, useMemo } from 'react'
-
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useBlockNumber } from '../application/hooks'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { useEffect, useMemo } from 'react'
+
+import { addMulticallListeners, ListenerOptions, removeMulticallListeners } from './actions'
+import { Call, parseCallKey, toCallKey } from './utils'
 
 export interface Result extends ReadonlyArray<any> {
   readonly [key: string]: any
@@ -185,6 +185,53 @@ export function useSingleContractMultipleData(
   return useMemo(() => {
     return results.map((result) => toCallState(result, contract?.interface, fragment, latestBlockNumber))
   }, [fragment, contract, results, latestBlockNumber])
+}
+
+export function useSingleContractMultipleMethods(
+  contract: Contract | null | undefined,
+  callsData?: (
+    | {
+        methodName: string
+        callInputs: OptionalMethodInputs
+      }
+    | undefined
+  )[],
+  options?: ListenerOptions,
+  gasRequired?: number
+): CallState[] {
+  const fragments = useMemo(
+    () => callsData?.map((el) => (el ? contract?.interface?.getFunction(el.methodName) : undefined)),
+    [callsData, contract?.interface]
+  )
+
+  const calls = useMemo(
+    () =>
+      contract &&
+      callsData &&
+      fragments &&
+      callsData.every((inputs) => isValidMethodArgs(inputs?.callInputs)) &&
+      fragments.every((el) => !!el)
+        ? callsData.map<Call | undefined>((inputs, index) => {
+            if (!inputs) return undefined
+            return {
+              address: contract.address,
+              callData: contract.interface.encodeFunctionData(fragments[index] as FunctionFragment, inputs.callInputs),
+              ...(gasRequired ? { gasRequired } : {}),
+            }
+          })
+        : [],
+    [contract, callsData, fragments, gasRequired]
+  )
+
+  const results = useCallsData(calls, options)
+
+  const latestBlockNumber = useBlockNumber()
+
+  return useMemo(() => {
+    return results.map((result, index) =>
+      toCallState(result, contract?.interface, fragments?.[index], latestBlockNumber)
+    )
+  }, [results, contract?.interface, fragments, latestBlockNumber])
 }
 
 export function useMultipleContractSingleData(

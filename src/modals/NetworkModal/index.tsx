@@ -1,14 +1,13 @@
-import { NETWORK_ICON, NETWORK_LABEL } from '../../constants/networks'
-import { useModalOpen, useNetworkModalToggle } from '../../state/application/hooks'
-
-import { ApplicationModal } from '../../state/application/actions'
-import { ChainId } from '@sushiswap/sdk'
-import Image from 'next/image'
-import Modal from '../../components/Modal'
-import ModalHeader from '../../components/ModalHeader'
-import React from 'react'
+import { ChainId } from '@sushiswap/core-sdk'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import ModalHeader from 'app/components/ModalHeader'
+import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
+import { useActiveWeb3React } from 'app/services/web3'
+import { ApplicationModal } from 'app/state/application/actions'
+import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
 import cookie from 'cookie-cutter'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import Image from 'next/image'
+import React from 'react'
 
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
@@ -23,7 +22,7 @@ export const SUPPORTED_NETWORKS: {
     blockExplorerUrls: string[]
   }
 } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     chainId: '0x1',
     chainName: 'Ethereum',
     nativeCurrency: {
@@ -203,80 +202,81 @@ export default function NetworkModal(): JSX.Element | null {
   if (!chainId) return null
 
   return (
-    <Modal isOpen={networkModalOpen} onDismiss={toggleNetworkModal} maxWidth={672}>
-      <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
-      <div className="mb-6 text-lg text-primary">
-        You are currently browsing <span className="font-bold text-pink">SUSHI</span>
-        <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
-      </div>
+    <HeadlessUiModal.Controlled isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
+      <div className="p-6">
+        <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
+        <div className="mb-6 text-lg text-primary">
+          You are currently browsing <span className="font-bold text-pink">SUSHI</span>
+          <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
+        </div>
 
-      <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
-        {[
-          ChainId.MAINNET,
-          ChainId.MATIC,
-          ChainId.ARBITRUM,
-          ChainId.AVALANCHE,
-          ChainId.MOONRIVER,
-          ChainId.FANTOM,
-          ChainId.BSC,
-          ChainId.XDAI,
-          ChainId.HARMONY,
-          ChainId.TELOS,
-          ChainId.CELO,
-          ChainId.FUSE,
-          ChainId.OKEX,
-          ChainId.HECO,
-          ChainId.PALM,
-        ].map((key: ChainId, i: number) => {
-          if (chainId === key) {
+        <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
+          {[
+            ChainId.ETHEREUM,
+            ChainId.MATIC,
+            ChainId.ARBITRUM,
+            ChainId.AVALANCHE,
+            ChainId.MOONRIVER,
+            ChainId.FANTOM,
+            ChainId.BSC,
+            ChainId.XDAI,
+            ChainId.HARMONY,
+            ChainId.TELOS,
+            ChainId.CELO,
+            ChainId.FUSE,
+            ChainId.OKEX,
+            ChainId.HECO,
+            ChainId.PALM,
+          ].map((key: ChainId, i: number) => {
+            if (chainId === key) {
+              return (
+                <button key={i} className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink">
+                  <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
+                    <Image
+                      src={NETWORK_ICON[key]}
+                      alt={`Switch to ${NETWORK_LABEL[key]} Network`}
+                      className="rounded-md"
+                      width="32px"
+                      height="32px"
+                    />
+                    <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
+                  </div>
+                </button>
+              )
+            }
             return (
-              <button key={i} className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink">
-                <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
-                  <Image
-                    src={NETWORK_ICON[key]}
-                    alt={`Switch to ${NETWORK_LABEL[key]} Network`}
-                    className="rounded-md"
-                    width="32px"
-                    height="32px"
-                  />
-                  <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
-                </div>
+              <button
+                key={i}
+                onClick={async () => {
+                  console.log(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
+                  toggleNetworkModal()
+                  const params = SUPPORTED_NETWORKS[key]
+                  cookie.set('chainId', key, params)
+
+                  try {
+                    await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
+                  } catch (switchError) {
+                    // This error code indicates that the chain has not been added to MetaMask.
+                    if (switchError.code === 4902) {
+                      try {
+                        await library?.send('wallet_addEthereumChain', [params, account])
+                      } catch (addError) {
+                        // handle "add" error
+                        console.error(`Add chain error ${addError}`)
+                      }
+                    }
+                    console.error(`Switch chain error ${switchError}`)
+                    // handle other "switch" errors
+                  }
+                }}
+                className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+              >
+                <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
+                <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
               </button>
             )
-          }
-          return (
-            <button
-              key={i}
-              onClick={async () => {
-                console.log(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
-                toggleNetworkModal()
-                const params = SUPPORTED_NETWORKS[key]
-                cookie.set('chainId', key, params)
-
-                try {
-                  await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
-                } catch (switchError) {
-                  // This error code indicates that the chain has not been added to MetaMask.
-                  if (switchError.code === 4902) {
-                    try {
-                      await library?.send('wallet_addEthereumChain', [params, account])
-                    } catch (addError) {
-                      // handle "add" error
-                      console.error(`Add chain error ${addError}`)
-                    }
-                  }
-                  console.error(`Switch chain error ${switchError}`)
-                  // handle other "switch" errors
-                }
-              }}
-              className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
-            >
-              <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
-              <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
-            </button>
-          )
-        })}
-        {/* {['Clover', 'Telos', 'Optimism'].map((network, i) => (
+          })}
+          {/* {['Clover', 'Telos', 'Optimism'].map((network, i) => (
           <button
             key={i}
             className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
@@ -291,7 +291,8 @@ export default function NetworkModal(): JSX.Element | null {
             <div className="font-bold text-primary">{network} (Coming Soon)</div>
           </button>
         ))} */}
+        </div>
       </div>
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }

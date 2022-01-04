@@ -1,16 +1,16 @@
-import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sushiswap/sdk'
-import { Field, typeInput } from './actions'
-import { useAppDispatch, useAppSelector } from '../hooks'
-
-import { AppState } from '../index'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCallback } from 'react'
 import { useLingui } from '@lingui/react'
-import { useTokenBalances } from '../wallet/hooks'
-import { useTotalSupply } from '../../hooks/useTotalSupply'
-import { useV2Pair } from '../../hooks/useV2Pairs'
+import { Currency, CurrencyAmount, JSBI, Pair, Percent, Token, ZERO } from '@sushiswap/core-sdk'
+import { tryParseAmount } from 'app/functions/parse'
+import { useTotalSupply } from 'app/hooks/useTotalSupply'
+import { useV2Pair } from 'app/hooks/useV2Pairs'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { useTokenBalances } from 'app/state/wallet/hooks'
+import { useCallback } from 'react'
+
+import { Field, typeInput } from './actions'
 
 export function useBurnState(): AppState['burn'] {
   return useAppSelector((state) => state.burn)

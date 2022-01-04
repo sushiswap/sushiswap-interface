@@ -1,10 +1,10 @@
-import { Currency, CurrencyAmount, Pair, Trade, TradeType } from '@sushiswap/sdk'
-import { PairState, useV2Pairs } from './useV2Pairs'
-
-import { BETTER_TRADE_LESS_HOPS_THRESHOLD } from '../constants'
-import { isTradeBetter } from '../functions/trade'
-import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
+import { Currency, CurrencyAmount, Pair, Trade, TradeType } from '@sushiswap/core-sdk'
+import { BETTER_TRADE_LESS_HOPS_THRESHOLD } from 'app/constants'
+import { isTradeBetter } from 'app/functions/trade'
 import { useMemo } from 'react'
+
+import { useAllCurrencyCombinations } from './useAllCurrencyCombinations'
+import { PairState, useV2Pairs } from './useV2Pairs'
 
 function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
   const allCurrencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)

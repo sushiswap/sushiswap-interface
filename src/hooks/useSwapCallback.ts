@@ -1,37 +1,49 @@
-import { ARCHER_RELAY_URI, BIPS_BASE, EIP_1559_ACTIVATION_BLOCK } from '../constants'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Signature } from '@ethersproject/bytes'
+import { AddressZero } from '@ethersproject/constants'
+import { t } from '@lingui/macro'
 import {
   ChainId,
   Currency,
   CurrencyAmount,
-  Ether,
-  JSBI,
   Percent,
-  Router,
+  Router as LegacyRouter,
+  SwapParameters,
+  toHex,
+  Trade as LegacyTrade,
   TradeType,
-  Trade as V2Trade,
-} from '@sushiswap/sdk'
-import { isAddress, isZero } from '../functions/validate'
-import { useFactoryContract, useRouterContract } from './useContract'
-
-import { ArcherRouter } from '../functions/archerRouter'
-import { BigNumber } from '@ethersproject/bignumber'
-import Common from '@ethereumjs/common'
-import { SignatureData } from './useERC20Permit'
-import { TransactionFactory } from '@ethereumjs/tx'
-import { TransactionRequest } from '@ethersproject/abstract-provider'
-import approveAmountCalldata from '../functions/approveAmountCalldata'
-import { calculateGasMargin } from '../functions/trade'
-import { ethers } from 'ethers'
-import { shortenAddress } from '../functions/format'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from './useActiveWeb3React'
-import { useArgentWalletContract } from './useArgentWalletContract'
-import { useBlockNumber } from '../state/application/hooks'
-import useENS from './useENS'
+} from '@sushiswap/core-sdk'
+import { getBigNumber, MultiRoute } from '@sushiswap/tines'
+import {
+  ComplexPathParams,
+  ExactInputParams,
+  ExactInputSingleParams,
+  InitialPath,
+  Output,
+  Path,
+  PercentagePath,
+  RouteType,
+  Trade as TridentTrade,
+} from '@sushiswap/trident-sdk'
+import { EIP_1559_ACTIVATION_BLOCK } from 'app/constants'
+import { approveMasterContractAction } from 'app/features/trident/context/actions'
+import { batchAction, unwrapWETHAction } from 'app/features/trident/context/hooks/actions'
+import approveAmountCalldata from 'app/functions/approveAmountCalldata'
+import { shortenAddress } from 'app/functions/format'
+import { calculateGasMargin } from 'app/functions/trade'
+import { isAddress, isZero } from 'app/functions/validate'
+import { useBentoRebase } from 'app/hooks/useBentoRebases'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
-import { useTransactionAdder } from '../state/transactions/hooks'
+
+import { useArgentWalletContract } from './useArgentWalletContract'
+import { useRouterContract, useTridentRouterContract } from './useContract'
+import useENS from './useENS'
+import { SignatureData } from './useERC20Permit'
 import useTransactionDeadline from './useTransactionDeadline'
-import { useUserArcherETHTip } from '../state/user/hooks'
 
 export enum SwapCallbackState {
   INVALID,
@@ -59,7 +71,242 @@ interface FailedCall extends SwapCallEstimate {
   error: Error
 }
 
+interface TridentTradeContext {
+  fromWallet: boolean
+  receiveToWallet: boolean
+  bentoPermit?: Signature
+  resetBentoPermit?: () => void
+  parsedAmounts?: (CurrencyAmount<Currency> | undefined)[]
+}
+
 export type EstimatedSwapCall = SuccessfulCall | FailedCall
+
+export function getTridentRouterParams(
+  multiRoute: MultiRoute,
+  senderAddress: string,
+  tridentRouterAddress: string = '',
+  slippagePercentage: number = 0.5,
+  inputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
+): ExactInputParams | ExactInputSingleParams | ComplexPathParams {
+  const routeType = getRouteType(multiRoute)
+  let routerParams
+
+  const slippage = 1 - slippagePercentage / 100
+
+  switch (routeType) {
+    case RouteType.SinglePool:
+      routerParams = getExactInputSingleParams(
+        multiRoute,
+        senderAddress,
+        slippage,
+        inputAmount,
+        fromWallet,
+        receiveToWallet
+      )
+      break
+
+    case RouteType.SinglePath:
+      routerParams = getExactInputParams(multiRoute, senderAddress, slippage, inputAmount, fromWallet, receiveToWallet)
+      break
+
+    case RouteType.ComplexPath:
+    default:
+      routerParams = getComplexPathParams(
+        multiRoute,
+        senderAddress,
+        tridentRouterAddress,
+        slippage,
+        inputAmount,
+        fromWallet,
+        receiveToWallet
+      )
+      break
+  }
+
+  return routerParams
+}
+
+function getExactInputSingleParams(
+  multiRoute: MultiRoute,
+  senderAddress: string,
+  slippage: number,
+  inputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
+): ExactInputSingleParams {
+  return {
+    amountIn: fromWallet
+      ? inputAmount.quotient.toString().toBigNumber(0)
+      : getBigNumber(multiRoute.amountIn * multiRoute.legs[0].absolutePortion),
+    amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
+    tokenIn: inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[0].tokenFrom.address,
+    pool: multiRoute.legs[0].poolAddress,
+    data: defaultAbiCoder.encode(
+      ['address', 'address', 'bool'],
+      [multiRoute.legs[0].tokenFrom.address, senderAddress, receiveToWallet]
+    ),
+    routeType: RouteType.SinglePool,
+  }
+}
+
+function getExactInputParams(
+  multiRoute: MultiRoute,
+  senderAddress: string,
+  slippage: number,
+  inputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
+): ExactInputParams {
+  const routeLegs = multiRoute.legs.length
+  let paths: Path[] = []
+
+  for (let legIndex = 0; legIndex < routeLegs; ++legIndex) {
+    const recipentAddress = isLastLeg(legIndex, multiRoute) ? senderAddress : multiRoute.legs[legIndex + 1].poolAddress
+
+    if (multiRoute.legs[legIndex].tokenFrom.address === multiRoute.fromToken.address) {
+      const path: Path = {
+        pool: multiRoute.legs[legIndex].poolAddress,
+        data: defaultAbiCoder.encode(
+          ['address', 'address', 'bool'],
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
+        ),
+      }
+      paths.push(path)
+    } else {
+      const path: Path = {
+        pool: multiRoute.legs[legIndex].poolAddress,
+        data: defaultAbiCoder.encode(
+          ['address', 'address', 'bool'],
+          [multiRoute.legs[legIndex].tokenFrom.address, recipentAddress, receiveToWallet]
+        ),
+      }
+      paths.push(path)
+    }
+  }
+
+  let inputParams: ExactInputParams = {
+    tokenIn: inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[0].tokenFrom.address,
+    amountIn: fromWallet ? inputAmount.quotient.toString().toBigNumber(0) : getBigNumber(multiRoute.amountIn),
+    amountOutMinimum: getBigNumber(multiRoute.amountOut * slippage),
+    path: paths,
+    routeType: RouteType.SinglePath,
+  }
+
+  return inputParams
+}
+
+function getComplexPathParams(
+  multiRoute: MultiRoute,
+  senderAddress: string,
+  tridentRouterAddress: string,
+  slippage: number,
+  inputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true,
+  receiveToWallet: boolean = true
+): ComplexPathParams {
+  let initialPaths: InitialPath[] = []
+  let percentagePaths: PercentagePath[] = []
+  let outputs: Output[] = []
+
+  const routeLegs = multiRoute.legs.length
+  const initialPathCount = multiRoute.legs.filter(
+    (leg) => leg.tokenFrom.address === multiRoute.fromToken.address
+  ).length
+
+  const output: Output = {
+    token: multiRoute.toToken.address,
+    to: senderAddress,
+    unwrapBento: receiveToWallet,
+    minAmount: getBigNumber(multiRoute.amountOut * slippage),
+  }
+  outputs.push(output)
+
+  for (let legIndex = 0; legIndex < routeLegs; ++legIndex) {
+    if (multiRoute.legs[legIndex].tokenFrom.address === multiRoute.fromToken.address) {
+      const initialPath: InitialPath = {
+        tokenIn:
+          inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
+        pool: multiRoute.legs[legIndex].poolAddress,
+        amount: getInitialPathAmount(legIndex, multiRoute, initialPaths, initialPathCount, inputAmount, fromWallet),
+        native: false,
+        data: defaultAbiCoder.encode(
+          ['address', 'address', 'bool'],
+          [multiRoute.legs[legIndex].tokenFrom.address, tridentRouterAddress, true]
+        ),
+      }
+      initialPaths.push(initialPath)
+    } else {
+      const percentagePath: PercentagePath = {
+        tokenIn:
+          inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
+        pool: multiRoute.legs[legIndex].poolAddress,
+        balancePercentage: getBigNumber(multiRoute.legs[legIndex].swapPortion * 10 ** 8),
+        data: defaultAbiCoder.encode(
+          ['address', 'address', 'bool'],
+          [multiRoute.legs[legIndex].tokenFrom.address, tridentRouterAddress, false]
+        ),
+      }
+      percentagePaths.push(percentagePath)
+    }
+  }
+
+  const complexParams: ComplexPathParams = {
+    initialPath: initialPaths,
+    percentagePath: percentagePaths,
+    output: outputs,
+    routeType: RouteType.ComplexPath,
+  }
+
+  return complexParams
+}
+
+function isLastLeg(legIndex: number, multiRoute: MultiRoute): boolean {
+  return legIndex === multiRoute.legs.length - 1
+}
+
+function getRouteType(multiRoute: MultiRoute): RouteType {
+  if (multiRoute.legs.length === 1) {
+    return RouteType.SinglePool
+  }
+
+  const routeInputTokens = multiRoute.legs.map((leg) => leg.tokenFrom.address)
+
+  if (new Set(routeInputTokens).size === routeInputTokens.length) {
+    return RouteType.SinglePath
+  }
+
+  if (new Set(routeInputTokens).size !== routeInputTokens.length) {
+    return RouteType.ComplexPath
+  }
+
+  return RouteType.Unknown
+}
+
+function multFraction(bn: BigNumber, fr: number, precision = 1e6) {
+  return bn.mulDiv(Math.round(fr * precision), precision)
+}
+
+function getInitialPathAmount(
+  legIndex: number,
+  multiRoute: MultiRoute,
+  initialPaths: InitialPath[],
+  initialPathCount: number,
+  inputAmount: CurrencyAmount<Currency>,
+  fromWallet: boolean = true
+): BigNumber {
+  if (initialPathCount > 1 && legIndex === initialPathCount - 1) {
+    const sumIntialPathAmounts = initialPaths.map((p) => p.amount).reduce((a, b) => a.add(b))
+    return fromWallet
+      ? inputAmount.quotient.toString().toBigNumber(0).sub(sumIntialPathAmounts)
+      : getBigNumber(multiRoute.amountIn).sub(sumIntialPathAmounts)
+  } else {
+    return fromWallet
+      ? multFraction(inputAmount.quotient.toString().toBigNumber(0), multiRoute.legs[legIndex].absolutePortion)
+      : getBigNumber(multiRoute.amountIn * multiRoute.legs[legIndex].absolutePortion)
+  }
+}
 
 /**
  * Returns the swap calls that can be used to make the trade
@@ -67,13 +314,14 @@ export type EstimatedSwapCall = SuccessfulCall | FailedCall
  * @param allowedSlippage user allowed slippage
  * @param recipientAddressOrName the ENS name or address of the recipient of the swap output
  * @param signatureData the signature data of the permit of the input token amount, if available
+ * @param tridentTradeContext context for a trident trade that contains boolean flags on whether to spend from wallet and/or receive to wallet
  */
 export function useSwapCallArguments(
-  trade: V2Trade<Currency, Currency, TradeType> | undefined, // trade to execute, required
+  trade: LegacyTrade<Currency, Currency, TradeType> | TridentTrade<Currency, Currency, TradeType> | undefined, // trade to execute, required
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | null | undefined,
-  useArcher: boolean = false
+  tridentTradeContext?: TridentTradeContext
 ): SwapCall[] {
   const { account, chainId, library } = useActiveWeb3React()
 
@@ -81,88 +329,135 @@ export function useSwapCallArguments(
   const recipient = recipientAddressOrName === null ? account : recipientAddress
   const deadline = useTransactionDeadline()
 
-  const routerContract = useRouterContract()
-  const factoryContract = useFactoryContract()
+  const legacyRouterContract = useRouterContract()
+
+  const tridentRouterContract = useTridentRouterContract()
 
   const argentWalletContract = useArgentWalletContract()
+  const { rebase } = useBentoRebase(trade?.inputAmount.currency)
 
-  const [archerETHTip] = useUserArcherETHTip()
+  return useMemo<SwapCall[]>(() => {
+    let result: SwapCall[] = []
+    if (!rebase || !trade || !recipient || !library || !account || !chainId) return result
 
-  return useMemo(() => {
-    if (!trade || !recipient || !library || !account || !chainId || !deadline) return []
+    if (trade instanceof LegacyTrade) {
+      if (!legacyRouterContract || !deadline) return result
 
-    if (trade instanceof V2Trade) {
-      if (!routerContract) return []
-      const swapMethods = []
-      if (!useArcher) {
+      const swapMethods: SwapParameters[] = []
+      swapMethods.push(
+        LegacyRouter.swapCallParameters(trade, {
+          feeOnTransfer: false,
+          allowedSlippage,
+          recipient,
+          deadline: deadline.toNumber(),
+        })
+      )
+
+      if (trade.tradeType === TradeType.EXACT_INPUT) {
         swapMethods.push(
-          Router.swapCallParameters(trade, {
-            feeOnTransfer: false,
+          LegacyRouter.swapCallParameters(trade, {
+            feeOnTransfer: true,
             allowedSlippage,
             recipient,
             deadline: deadline.toNumber(),
           })
         )
-
-        if (trade.tradeType === TradeType.EXACT_INPUT) {
-          swapMethods.push(
-            Router.swapCallParameters(trade, {
-              feeOnTransfer: true,
-              allowedSlippage,
-              recipient,
-              deadline: deadline.toNumber(),
-            })
-          )
-        }
-      } else {
-        swapMethods.push(
-          ArcherRouter.swapCallParameters(factoryContract.address, trade, {
-            allowedSlippage,
-            recipient,
-            ttl: deadline.toNumber(),
-            ethTip: CurrencyAmount.fromRawAmount(Ether.onChain(ChainId.MAINNET), archerETHTip),
-          })
-        )
       }
-      return swapMethods.map(({ methodName, args, value }) => {
+
+      result = swapMethods.map(({ methodName, args, value }) => {
         if (argentWalletContract && trade.inputAmount.currency.isToken) {
           return {
             address: argentWalletContract.address,
             calldata: argentWalletContract.interface.encodeFunctionData('wc_multiCall', [
               [
-                approveAmountCalldata(trade.maximumAmountIn(allowedSlippage), routerContract.address),
+                approveAmountCalldata(trade.maximumAmountIn(allowedSlippage), legacyRouterContract.address),
                 {
-                  to: routerContract.address,
+                  to: legacyRouterContract.address,
                   value: value,
-                  data: routerContract.interface.encodeFunctionData(methodName, args),
+                  data: legacyRouterContract.interface.encodeFunctionData(methodName, args),
                 },
               ],
             ]),
             value: '0x0',
           }
         } else {
-          // console.log({ methodName, args })
           return {
-            address: routerContract.address,
-            calldata: routerContract.interface.encodeFunctionData(methodName, args),
+            address: legacyRouterContract.address,
+            calldata: legacyRouterContract.interface.encodeFunctionData(methodName, args),
             value,
           }
         }
       })
+
+      return result
+    } else if (trade instanceof TridentTrade) {
+      if (!tridentTradeContext) return result
+
+      const { parsedAmounts, receiveToWallet, fromWallet, bentoPermit } = tridentTradeContext
+      if (!tridentRouterContract || !trade.route || !parsedAmounts?.[0]) return result
+
+      const { routeType, ...rest } = getTridentRouterParams(
+        trade.route,
+        trade?.outputAmount?.currency.isNative && receiveToWallet ? tridentRouterContract?.address : recipient,
+        tridentRouterContract?.address,
+        Number(allowedSlippage.asFraction.multiply(100).toSignificant(2)),
+        parsedAmounts[0],
+        fromWallet,
+        receiveToWallet
+      )
+
+      const method = {
+        [RouteType.SinglePool]: fromWallet ? 'exactInputSingleWithNativeToken' : 'exactInputSingle',
+        [RouteType.SinglePath]: fromWallet ? 'exactInputWithNativeToken' : 'exactInput',
+        [RouteType.ComplexPath]: 'complexPath',
+      }
+
+      // if you spend from wallet send as amount instead of share
+      let value = '0x0'
+      if (parsedAmounts[0] && fromWallet && trade?.inputAmount.currency?.isNative) {
+        value = toHex(parsedAmounts[0])
+      }
+
+      const actions = [
+        approveMasterContractAction({ router: tridentRouterContract, signature: bentoPermit }),
+        tridentRouterContract.interface.encodeFunctionData(method[routeType], [rest]),
+      ]
+
+      if (trade?.outputAmount?.currency.isNative && receiveToWallet)
+        actions.push(
+          unwrapWETHAction({
+            router: tridentRouterContract,
+            recipient,
+            amountMinimum: trade?.minimumAmountOut(allowedSlippage).quotient.toString(),
+          })
+        )
+
+      result.push({
+        address: tridentRouterContract.address,
+        calldata: batchAction({
+          contract: tridentRouterContract,
+          actions,
+        }),
+        value,
+      } as SwapCall)
+
+      return result
     }
+
+    return result
   }, [
     account,
     allowedSlippage,
-    archerETHTip,
     argentWalletContract,
     chainId,
     deadline,
+    legacyRouterContract,
     library,
-    factoryContract,
+    rebase,
     recipient,
-    routerContract,
     trade,
-    useArcher,
+    tridentRouterContract,
+    tridentTradeContext,
   ])
 }
 
@@ -211,36 +506,35 @@ export function swapErrorToUserReadableMessage(error: any): string {
 // returns a function that will execute a swap, if the parameters are all valid
 // and the user has approved the slippage adjusted input amount for the trade
 export function useSwapCallback(
-  trade: V2Trade<Currency, Currency, TradeType> | undefined, // trade to execute, required
+  trade: LegacyTrade<Currency, Currency, TradeType> | TridentTrade<Currency, Currency, TradeType> | undefined, // trade to execute, required
   allowedSlippage: Percent, // in bips
   recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | undefined | null,
-  archerRelayDeadline?: number // deadline to use for archer relay -- set to undefined for no relay
+  tridentTradeContext?: TridentTradeContext
 ): {
   state: SwapCallbackState
   callback: null | (() => Promise<string>)
   error: string | null
 } {
   const { account, chainId, library } = useActiveWeb3React()
-
   const blockNumber = useBlockNumber()
 
   const eip1559 =
     EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
 
-  const useArcher = archerRelayDeadline !== undefined
-
-  const swapCalls = useSwapCallArguments(trade, allowedSlippage, recipientAddressOrName, signatureData, useArcher)
-
-  // console.log({ swapCalls, trade })
+  const swapCalls = useSwapCallArguments(
+    trade,
+    allowedSlippage,
+    recipientAddressOrName,
+    signatureData,
+    tridentTradeContext
+  )
 
   const addTransaction = useTransactionAdder()
 
   const { address: recipientAddress } = useENS(recipientAddressOrName)
 
   const recipient = recipientAddressOrName === null ? account : recipientAddress
-
-  const [archerETHTip] = useUserArcherETHTip()
 
   return useMemo(() => {
     if (!trade || !library || !account || !chainId) {
@@ -269,6 +563,7 @@ export function useSwapCallback(
     return {
       state: SwapCallbackState.VALID,
       callback: async function onSwap(): Promise<string> {
+        console.log('onSwap callback')
         const estimatedCalls: SwapCallEstimate[] = await Promise.all(
           swapCalls.map((call) => {
             const { address, calldata, value } = call
@@ -283,13 +578,12 @@ export function useSwapCallback(
                     value,
                   }
 
-            // console.log('Estimate gas for valid swap')
-
-            // library.getGasPrice().then((gasPrice) => console.log({ gasPrice }))
+            console.log('SWAP TRANSACTION', { tx, value })
 
             return library
               .estimateGas(tx)
               .then((gasEstimate) => {
+                console.log('returning gas estimate')
                 return {
                   call,
                   gasEstimate,
@@ -339,224 +633,63 @@ export function useSwapCallback(
           call: { address, calldata, value },
         } = bestCallOption
 
-        // console.log({ bestCallOption })
-
-        if (!useArcher) {
-          // console.log('SWAP WITHOUT ARCHER')
-          // console.log(
-          //   'gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}
-          // )
-          return library
-            .getSigner()
-            .sendTransaction({
-              from: account,
-              to: address,
-              data: calldata,
-              // let the wallet try if we can't estimate the gas
-              ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
-              gasPrice: !eip1559 && chainId === ChainId.HARMONY ? BigNumber.from('2000000000') : undefined,
-              ...(value && !isZero(value) ? { value } : {}),
-            })
-            .then((response) => {
-              const inputSymbol = trade.inputAmount.currency.symbol
-              const outputSymbol = trade.outputAmount.currency.symbol
-              const inputAmount = trade.inputAmount.toSignificant(4)
-              const outputAmount = trade.outputAmount.toSignificant(4)
-
-              const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
-              const withRecipient =
-                recipient === account
-                  ? base
-                  : `${base} to ${
-                      recipientAddressOrName && isAddress(recipientAddressOrName)
-                        ? shortenAddress(recipientAddressOrName)
-                        : recipientAddressOrName
-                    }`
-
-              addTransaction(response, {
-                summary: withRecipient,
-              })
-
-              return response.hash
-            })
-            .catch((error) => {
-              // if the user rejected the tx, pass this along
-              if (error?.code === 4001) {
-                throw new Error('Transaction rejected.')
-              } else {
-                // otherwise, the error was unexpected and we need to convey that
-                console.error(`Swap failed`, error, address, calldata, value)
-
-                throw new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`)
-              }
-            })
-        } else {
-          const postToRelay = (rawTransaction: string, deadline: number) => {
-            // as a wise man on the critically acclaimed hit TV series "MTV's Cribs" once said:
-            // "this is where the magic happens"
-            const relayURI = chainId ? ARCHER_RELAY_URI[chainId] : undefined
-            if (!relayURI) throw new Error('Could not determine relay URI for this network')
-            const body = JSON.stringify({
-              method: 'archer_submitTx',
-              tx: rawTransaction,
-              deadline: deadline.toString(),
-            })
-            return fetch(relayURI, {
-              method: 'POST',
-              body,
-              headers: {
-                Authorization: process.env.NEXT_PUBLIC_ARCHER_API_KEY ?? '',
-                'Content-Type': 'application/json',
-              },
-            }).then((res) => {
-              if (res.status !== 200) throw Error(res.statusText)
-            })
-          }
-
-          const isMetamask = library.provider.isMetaMask
-
-          if (isMetamask) {
-            // ethers will change eth_sign to personal_sign if it detects metamask
-            // https://github.com/ethers-io/ethers.js/blob/2a7dbf05718e29e550f7a208d35a095547b9ccc2/packages/providers/src.ts/web3-provider.ts#L33
-
-            library.provider.isMetaMask = false
-          }
-
-          const fullTxPromise = library.getBlockNumber().then((blockNumber) => {
-            return library.getSigner().populateTransaction({
-              from: account,
-              to: address,
-              data: calldata,
-              // let the wallet try if we can't estimate the gas
-              ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
-              ...(value && !isZero(value) ? { value } : {}),
-              ...(archerRelayDeadline && !eip1559 ? { gasPrice: 0 } : {}),
-            })
+        console.log('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {})
+        return library
+          .getSigner()
+          .sendTransaction({
+            from: account,
+            to: address,
+            data: calldata,
+            // let the wallet try if we can't estimate the gas
+            ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
+            gasPrice: !eip1559 && chainId === ChainId.HARMONY ? BigNumber.from('2000000000') : undefined,
+            ...(value && !isZero(value) ? { value } : {}),
           })
 
-          let signedTxPromise: Promise<{ signedTx: string; fullTx: TransactionRequest }>
-          if (isMetamask) {
-            signedTxPromise = fullTxPromise.then((fullTx) => {
-              // metamask doesn't support Signer.signTransaction, so we have to do all this manually
-              const chainNames: {
-                [chainId in ChainId]?: string
-              } = {
-                [ChainId.MAINNET]: 'mainnet',
-              }
-              const chain = chainNames[chainId]
-              if (!chain) throw new Error(`Unknown chain ID ${chainId} when building transaction`)
-              const common = new Common({
-                chain,
-                hardfork: 'berlin',
-              })
-              const txParams = {
-                nonce:
-                  fullTx.nonce !== undefined
-                    ? ethers.utils.hexlify(fullTx.nonce, {
-                        hexPad: 'left',
-                      })
-                    : undefined,
-                gasPrice:
-                  fullTx.gasPrice !== undefined ? ethers.utils.hexlify(fullTx.gasPrice, { hexPad: 'left' }) : undefined,
-                gasLimit:
-                  fullTx.gasLimit !== undefined ? ethers.utils.hexlify(fullTx.gasLimit, { hexPad: 'left' }) : undefined,
-                to: fullTx.to,
-                value:
-                  fullTx.value !== undefined
-                    ? ethers.utils.hexlify(fullTx.value, {
-                        hexPad: 'left',
-                      })
-                    : undefined,
-                data: fullTx.data?.toString(),
-                chainId: fullTx.chainId !== undefined ? ethers.utils.hexlify(fullTx.chainId) : undefined,
-                type: fullTx.type !== undefined ? ethers.utils.hexlify(fullTx.type) : undefined,
-              }
-              const tx: any = TransactionFactory.fromTxData(txParams, {
-                common,
-              })
-              const unsignedTx = tx.getMessageToSign()
-              // console.log('unsignedTx', unsignedTx)
+          .then((response) => {
+            let base = `Swap ${trade?.inputAmount?.toSignificant(4)} ${
+              trade?.inputAmount.currency?.symbol
+            } for ${trade?.outputAmount?.toSignificant(4)} ${trade?.outputAmount.currency?.symbol}`
+            if (tridentTradeContext?.parsedAmounts) {
+              base = `Swap ${tridentTradeContext?.parsedAmounts[0]?.toSignificant(4)} ${
+                tridentTradeContext?.parsedAmounts[0].currency?.symbol
+              } for ${tridentTradeContext?.parsedAmounts[1]?.toSignificant(4)} ${
+                tridentTradeContext?.parsedAmounts[1].currency?.symbol
+              }`
+            }
 
-              return library.provider
-                .request({ method: 'eth_sign', params: [account, ethers.utils.hexlify(unsignedTx)] })
-                .then((signature) => {
-                  const signatureParts = ethers.utils.splitSignature(signature)
-                  // really crossing the streams here
-                  // eslint-disable-next-line
-                  // @ts-ignore
-                  const txWithSignature = tx._processSignature(
-                    signatureParts.v,
-                    ethers.utils.arrayify(signatureParts.r),
-                    ethers.utils.arrayify(signatureParts.s)
-                  )
-                  return {
-                    signedTx: ethers.utils.hexlify(txWithSignature.serialize()),
-                    fullTx,
-                  }
-                })
-            })
-          } else {
-            signedTxPromise = fullTxPromise.then((fullTx) => {
-              return library
-                .getSigner()
-                .signTransaction(fullTx)
-                .then((signedTx) => {
-                  return { signedTx, fullTx }
-                })
-            })
-          }
+            if (tridentTradeContext?.bentoPermit && tridentTradeContext?.resetBentoPermit) {
+              tridentTradeContext.resetBentoPermit()
+            }
 
-          return signedTxPromise
-            .then(({ signedTx, fullTx }) => {
-              const hash = ethers.utils.keccak256(signedTx)
-              const inputSymbol = trade.inputAmount.currency.symbol
-              const outputSymbol = trade.outputAmount.currency.symbol
-              const inputAmount = trade.inputAmount.toSignificant(3)
-              const outputAmount = trade.outputAmount.toSignificant(3)
-              const base = `Swap ${inputAmount} ${inputSymbol} for ${outputAmount} ${outputSymbol}`
-              const withRecipient =
-                (recipient === account
-                  ? base
-                  : `${base} to ${
-                      recipientAddressOrName && isAddress(recipientAddressOrName)
-                        ? shortenAddress(recipientAddressOrName)
-                        : recipientAddressOrName
-                    }`) + (archerRelayDeadline ? ' 🏹' : '')
-              const archer =
-                useArcher && archerRelayDeadline
-                  ? {
-                      rawTransaction: signedTx,
-                      deadline: Math.floor(archerRelayDeadline + new Date().getTime() / 1000),
-                      nonce: ethers.BigNumber.from(fullTx.nonce).toNumber(),
-                      ethTip: archerETHTip,
-                    }
-                  : undefined
-              // console.log('archer', archer)
-              addTransaction(
-                { hash },
-                {
-                  summary: withRecipient,
-                  archer,
-                }
-              )
-              return archer ? postToRelay(archer.rawTransaction, archer.deadline).then(() => hash) : hash
+            const withRecipient =
+              recipient === account
+                ? base
+                : `${base} to ${
+                    recipientAddressOrName && isAddress(recipientAddressOrName)
+                      ? shortenAddress(recipientAddressOrName)
+                      : recipientAddressOrName
+                  }`
+
+            addTransaction(response, {
+              summary: withRecipient,
             })
-            .catch((error: any) => {
-              // if the user rejected the tx, pass this along
-              if (error?.code === 4001) {
-                throw new Error('Transaction rejected.')
-              } else {
-                // otherwise, the error was unexpected and we need to convey that
-                console.error(`Swap failed`, error)
-                throw new Error(`Swap failed: ${error.message}`)
-              }
-            })
-            .finally(() => {
-              if (isMetamask) library.provider.isMetaMask = true
-            })
-        }
+
+            return response.hash
+          })
+          .catch((error) => {
+            // if the user rejected the tx, pass this along
+            if (error?.code === 4001) {
+              throw new Error('Transaction rejected.')
+            } else {
+              // otherwise, the error was unexpected and we need to convey that
+              console.error(`Swap failed`, error, address, calldata, value)
+
+              throw new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`)
+            }
+          })
       },
       error: null,
     }
-  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, useArcher, addTransaction])
+  }, [trade, library, account, chainId, recipient, recipientAddressOrName, swapCalls, eip1559, addTransaction])
 }
