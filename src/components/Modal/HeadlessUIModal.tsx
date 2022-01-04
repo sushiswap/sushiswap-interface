@@ -127,8 +127,8 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
             >
               <div
                 className={classNames(
-                  className ? '' : 'bg-dark-900 shadow-lg',
-                  'inline-block align-bottom rounded-lg text-left overflow-hidden transform'
+                  className ? className : 'bg-dark-900 shadow-lg',
+                  'lg:max-w-lg lg:w-[32rem] inline-block align-bottom rounded-lg text-left overflow-hidden transform'
                 )}
               >
                 {children}

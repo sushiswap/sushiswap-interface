@@ -58,7 +58,7 @@ export default function Menu() {
       placement="bottom-end"
       modifiers={[{ name: 'offset', options: { offset: [8, 0] } }]}
       content={
-        <div className="px-2 mt-3">
+        <div className="px-2 mt-3 cursor-pointer">
           <div className="shadow-lg overflow-hidden bg-dark-900 rounded border border-dark-700">
             {solutions.map((item) =>
               item.external ? (
@@ -90,7 +90,7 @@ export default function Menu() {
       <svg
         width="16px"
         height="16px"
-        className="inline-flex items-center w-9 h-9 border border-dark-700 hover:bg-dark-800 p-2 rounded bg-dark-1000"
+        className="cursor-pointer inline-flex items-center w-9 h-9 border border-dark-700 hover:bg-dark-800 p-2 rounded bg-dark-1000"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

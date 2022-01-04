@@ -1,13 +1,14 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Token, ZERO } from '@sushiswap/core-sdk'
+import Chip from 'app/components/Chip'
 import CurrencyLogo from 'app/components/CurrencyLogo'
 import Image from 'app/components/Image'
 import Loader from 'app/components/Loader'
 import QuestionHelper from 'app/components/QuestionHelper'
-import { RowBetween, RowFixed } from 'app/components/Row'
 import { MouseoverTooltip } from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
 import { isTokenOnList } from 'app/functions/validate'
 import { useIsUserAddedToken } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -25,9 +26,16 @@ function currencyKey(currency: Currency): string {
 
 function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
   return (
-    <div className="whitespace-nowrap overflow-hidden max-w-[5rem] overflow-ellipsis" title={balance.toExact()}>
-      {balance.toSignificant(4)}
-    </div>
+    <Typography
+      weight={balance.greaterThan(ZERO) ? 700 : 400}
+      className={classNames(
+        balance.greaterThan(ZERO) ? 'text-high-emphesis' : 'text-low-emphesis',
+        'whitespace-nowrap overflow-hidden max-w-[5rem] overflow-ellipsis'
+      )}
+      title={balance.toExact()}
+    >
+      {balance.greaterThan(ZERO) ? balance.toSignificant(4) : '0.00'}
+    </Typography>
   )
 }
 
@@ -44,12 +52,7 @@ function TokenTags({ currency }: { currency: Currency }) {
   return (
     <div className="flex justify-end">
       <MouseoverTooltip text={tag.description}>
-        <div
-          className="bg-purple text-sm border-4 py-1 px-1.5 max-w-[6rem] overflow-hidden overflow-ellipsis whitespace-nowrap justify-self-end mr-1"
-          key={tag.id}
-        >
-          {tag.name}
-        </div>
+        <Chip color="purple" key={tag.id} label={tag.name} />
       </MouseoverTooltip>
       {tags.length > 1 ? (
         <MouseoverTooltip
@@ -58,12 +61,7 @@ function TokenTags({ currency }: { currency: Currency }) {
             .map(({ name, description }) => `${name}: ${description}`)
             .join('; \n')}
         >
-          <div
-            className="bg-purple text-sm border-4 py-1 px-1.5 max-w-[6rem] overflow-hidden overflow-ellipsis whitespace-nowrap justify-self-end mr-1"
-            key={tag.id}
-          >
-            ...
-          </div>
+          <Chip color="purple" key={tag.id} label="..." />
         </MouseoverTooltip>
       ) : null}
     </div>
@@ -85,7 +83,7 @@ function CurrencyRow({
   hideBalance: boolean
   style: CSSProperties
 }) {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const key = currencyKey(currency)
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency.isToken ? currency : undefined)
@@ -93,32 +91,32 @@ function CurrencyRow({
   const balance = useCurrencyBalance(account ?? undefined, currency)
   // only show add or remove buttons if not on selected list
   return (
-    <RowBetween
+    <div
+      className="flex items-center w-full hover:bg-dark-800 px-6"
       id={`token-item-${key}`}
       style={style}
-      className="px-5 py-1 rounded cursor-pointer hover:bg-dark-800"
       onClick={() => (isSelected ? null : onSelect())}
       // disabled={isSelected}
       // selected={otherSelected}
     >
-      <div className="flex flex-row items-center space-x-4">
-        <div className="flex items-center">
-          <CurrencyLogo currency={currency} size={32} />
+      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
+        <div className="flex flex-row items-center gap-3 flex-grow">
+          <CurrencyLogo currency={currency} size={32} className="rounded-full" />
+          <div className="flex flex-col">
+            <Typography variant="xs" className="text-secondary">
+              {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
+            </Typography>
+            <Typography variant="sm" weight={700} className="text-high-emphesis">
+              {currency.symbol}
+            </Typography>
+          </div>
+          <TokenTags currency={currency} />
         </div>
-        <div>
-          <div title={currency.name} className="text-sm font-medium">
-            {currency.symbol}
-          </div>
-          <div className="text-sm font-thin truncate">
-            {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
-          </div>
+        <div className="flex items-center pr-3">
+          {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
         </div>
       </div>
-      <TokenTags currency={currency} />
-      <div className="flex items-center justify-end">
-        {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
-      </div>
-    </RowBetween>
+    </div>
   )
 }
 
@@ -130,20 +128,23 @@ function isBreakLine(x: unknown): x is BreakLine {
 
 function BreakLineComponent({ style }: { style: CSSProperties }) {
   const { i18n } = useLingui()
+
   return (
-    <div className="py-1 px-5 h-[56px] grid gap-4 items-center" style={style}>
-      <RowBetween>
-        <RowFixed>
-          <Image src="/tokenlist.svg" alt="Token List" className="h-5" />
-          <Typography variant="sm" className="ml-3">
-            {i18n._(t`Expanded results from inactive Token Lists`)}
-          </Typography>
-        </RowFixed>
-        <QuestionHelper
-          text={i18n._(t`Tokens from inactive lists. Import specific tokens below or
+    <div className="flex items-center w-full hover:bg-dark-800 px-6" style={style}>
+      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
+        <div className="flex flex-row items-center gap-3 flex-grow">
+          <Image src="/tokenlist.svg" alt="Token List" width={32} height={32} />
+          <div className="flex flex-col">
+            <Typography variant="sm" className="ml-3">
+              {i18n._(t`Expanded results from inactive Token Lists`)}
+              <QuestionHelper
+                text={i18n._(t`Tokens from inactive lists. Import specific tokens below or
             click Manage to activate more lists.`)}
-        />
-      </RowBetween>
+              />
+            </Typography>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
@@ -181,7 +182,6 @@ export default function CurrencyList({
   const Row = useCallback(
     function TokenRow({ data, index, style }) {
       const row: Currency | BreakLine = data[index]
-
       if (isBreakLine(row)) {
         return <BreakLineComponent style={style} />
       }

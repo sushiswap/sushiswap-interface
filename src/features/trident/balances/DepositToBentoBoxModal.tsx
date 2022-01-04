@@ -13,8 +13,8 @@ import { SelectedCurrencyAtom } from 'app/features/trident/balances/context/atom
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { tryParseAmount } from 'app/functions'
 import { useBentoBox, useBentoBoxContract } from 'app/hooks'
-import { useBentoBalances } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
 import React, { FC, useCallback, useState } from 'react'
@@ -30,7 +30,7 @@ const DepositToBentoBoxModal: FC<DepositToBentoBoxModalProps> = ({ open, onClose
   const currency = useRecoilValue(SelectedCurrencyAtom)
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
-  const [bentoBalance] = useBentoBalances(currency ? [currency.wrapped] : undefined)
+  const bentoBalance = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
   const { deposit } = useBentoBox()
   const [value, setValue] = useState<string>()
   const { i18n } = useLingui()

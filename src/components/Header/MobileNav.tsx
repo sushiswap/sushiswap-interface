@@ -18,7 +18,7 @@ export const MobileNav: FC = () => {
   return (
     <Popover.Panel className="sm:hidden ">
       <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
-        <Link href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/legacy/swap'}>
+        <Link href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/swap'}>
           <a id="swap-nav-link" className={NAV_BASE_CLASS}>
             {i18n._(t`Swap`)}
           </a>
@@ -81,6 +81,14 @@ export const MobileNav: FC = () => {
           <Link href="/stake">
             <a id="stake-nav-link" className={NAV_BASE_CLASS}>
               {i18n._(t`Stake`)}
+            </a>
+          </Link>
+        )}
+
+        {chainId && featureEnabled(Feature.MISO, chainId) && (
+          <Link href="/miso">
+            <a id="launch-nav-link" className={NAV_BASE_CLASS}>
+              {i18n._(t`Launch`)}
             </a>
           </Link>
         )}

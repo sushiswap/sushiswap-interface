@@ -38,6 +38,7 @@ const OUTLINED = {
 const EMPTY = {
   default:
     'flex bg-transparent justify-center items-center disabled:opacity-50 disabled:cursor-auto bg-opacity-80 hover:bg-opacity-100',
+  blue: 'flex bg-transparent justify-center items-center text-blue/90 hover:text-blue disabled:opacity-50 disabled:cursor-auto bg-opacity-80 hover:bg-opacity-100',
 }
 
 const LINK = {

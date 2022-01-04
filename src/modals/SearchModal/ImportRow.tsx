@@ -1,9 +1,9 @@
 import { Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import { AutoColumn } from 'app/components/Column'
 import CurrencyLogo from 'app/components/CurrencyLogo'
 import ListLogo from 'app/components/ListLogo'
-import { AutoRow, RowFixed } from 'app/components/Row'
+import { RowFixed } from 'app/components/Row'
+import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
 import { useIsTokenActive, useIsUserAddedToken } from 'app/hooks/Tokens'
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
@@ -31,52 +31,55 @@ export default function ImportRow({
   return (
     <div
       className={classNames(
-        'py-1 px-5 h-[56px] grid gap-4 align-center token-section',
+        'flex items-center w-full hover:bg-dark-800 px-6 h-[56px]',
         dim ? 'opacity-60' : 'opacity-100'
       )}
       style={style}
+      // disabled={isSelected}
+      // selected={otherSelected}
     >
-      <CurrencyLogo currency={token} size={'24px'} style={{ opacity: dim ? '0.6' : '1' }} />
-      <AutoColumn gap="4px" style={{ opacity: dim ? '0.6' : '1' }}>
-        <AutoRow align="center">
-          <div className="font-semibold">{token.symbol}</div>
-          <div className="ml-2 font-light">
-            <div
-              title={token.name}
-              className="whitespace-nowrap overflow-ellipsis overflow-hidden max-w-[140px] text-xs"
-            >
+      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
+        <div className="flex flex-row items-center gap-3 flex-grow">
+          <CurrencyLogo currency={token} size={32} className="rounded-full" />
+          <div className="flex flex-col">
+            <Typography variant="xs" className="text-secondary">
               {token.name}
-            </div>
+            </Typography>
+            <Typography variant="sm" weight={700} className="text-high-emphesis">
+              {token.symbol}
+            </Typography>
           </div>
-        </AutoRow>
-        {list && list.logoURI && (
-          <RowFixed align="center">
-            <div className="mr-1 text-sm">via {list.name}</div>
-            <ListLogo logoURI={list.logoURI} size="12px" />
-          </RowFixed>
-        )}
-      </AutoColumn>
-      {!isActive && !isAdded ? (
-        <Button
-          color="gradient"
-          size="xs"
-          style={{
-            width: 'fit-content',
-            padding: '6px 12px',
-          }}
-          onClick={() => {
-            setImportToken && setImportToken(token)
-            showImportView()
-          }}
-        >
-          Import
-        </Button>
-      ) : (
-        <RowFixed style={{ minWidth: 'fit-content' }}>
-          <div className="mr-1.5 w-4 h-4" />
-          <div className="text-green">Active</div>
-        </RowFixed>
-      )}
+          {list && list.logoURI && (
+            <RowFixed align="center">
+              <div className="mr-1 text-sm">via {list?.name}</div>
+              <ListLogo logoURI={list?.logoURI} size="12px" />
+            </RowFixed>
+          )}
+        </div>
+        <div className="flex items-center">
+          {!isActive && !isAdded ? (
+            <Button
+              color="gradient"
+              size="xs"
+              style={{
+                width: 'fit-content',
+                padding: '6px 12px',
+              }}
+              onClick={() => {
+                setImportToken && setImportToken(token)
+                showImportView()
+              }}
+            >
+              Import
+            </Button>
+          ) : (
+            <RowFixed style={{ minWidth: 'fit-content' }}>
+              <div className="mr-1.5 w-4 h-4" />
+              <div className="text-green">Active</div>
+            </RowFixed>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

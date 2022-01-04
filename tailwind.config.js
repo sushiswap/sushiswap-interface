@@ -6,7 +6,7 @@ module.exports = {
   // darkMode: true,
   mode: 'jit',
   purge: ['./src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false,
+  // darkMode: false,
   theme: {
     extend: {
       gridTemplateColumns: {
@@ -160,16 +160,5 @@ module.exports = {
       ringColor: ['disabled'],
     },
   },
-  plugins: [
-    require('tailwindcss-border-gradient-radius'),
-    plugin(function ({ addUtilities }) {
-      addUtilities({
-        '.header-border-b': {
-          background:
-            'linear-gradient(to right, rgba(39, 176, 230, 0.2) 0%, rgba(250, 82, 160, 0.2) 100%) left bottom no-repeat',
-          backgroundSize: '100% 1px',
-        },
-      })
-    }),
-  ],
+  plugins: [require('tailwindcss-border-gradient-radius')],
 }

@@ -1,7 +1,6 @@
 import { Zero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import {
-  ChainId,
   CurrencyAmount,
   JSBI,
   MASTERCHEF_ADDRESS,
@@ -9,7 +8,13 @@ import {
   MINICHEF_ADDRESS,
   SUSHI,
 } from '@sushiswap/core-sdk'
-import { useMasterChefContract, useMasterChefV2Contract, useMiniChefContract } from 'app/hooks/useContract'
+import { OLD_FARMS } from 'app/config/farms'
+import {
+  useMasterChefContract,
+  useMasterChefV2Contract,
+  useMiniChefContract,
+  useOldFarmsContract,
+} from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
 import { NEVER_RELOAD, useSingleCallResult, useSingleContractMultipleData } from 'app/state/multicall/hooks'
 import concat from 'lodash/concat'
@@ -22,35 +27,34 @@ export function useChefContract(chef: Chef) {
   const masterChefContract = useMasterChefContract()
   const masterChefV2Contract = useMasterChefV2Contract()
   const miniChefContract = useMiniChefContract()
+  const oldFarmsContract = useOldFarmsContract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,
       [Chef.MASTERCHEF_V2]: masterChefV2Contract,
       [Chef.MINICHEF]: miniChefContract,
+      [Chef.OLD_FARMS]: oldFarmsContract,
     }),
-    [masterChefContract, masterChefV2Contract, miniChefContract]
+    [masterChefContract, masterChefV2Contract, miniChefContract, oldFarmsContract]
   )
   return useMemo(() => {
     return contracts[chef]
   }, [contracts, chef])
 }
 
-const CHEFS = {
-  [ChainId.ETHEREUM]: [Chef.MASTERCHEF, Chef.MASTERCHEF_V2],
-  [ChainId.MATIC]: [Chef.MINICHEF],
-}
-
 export function useChefContracts(chefs: Chef[]) {
   const masterChefContract = useMasterChefContract()
   const masterChefV2Contract = useMasterChefV2Contract()
   const miniChefContract = useMiniChefContract()
+  const oldFarmsContract = useOldFarmsContract()
   const contracts = useMemo(
     () => ({
       [Chef.MASTERCHEF]: masterChefContract,
       [Chef.MASTERCHEF_V2]: masterChefV2Contract,
       [Chef.MINICHEF]: miniChefContract,
+      [Chef.OLD_FARMS]: oldFarmsContract,
     }),
-    [masterChefContract, masterChefV2Contract, miniChefContract]
+    [masterChefContract, masterChefV2Contract, miniChefContract, oldFarmsContract]
   )
   return chefs.map((chef) => contracts[chef])
 }
@@ -146,6 +150,8 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
       return Chef.MASTERCHEF_V2
     } else if (MINICHEF_ADDRESS[chainId] === contract.address) {
       return Chef.MINICHEF
+    } else if (OLD_FARMS[chainId] === contract.address) {
+      return Chef.OLD_FARMS
     }
   }, [chainId, contract])
 
@@ -168,10 +174,11 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
 }
 
 export function usePositions(chainId = undefined) {
-  const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
+  const [masterChefV1Positions, masterChefV2Positions, miniChefPositions, oldFarmsPositions] = [
     useChefPositions(useMasterChefContract(), undefined, chainId),
     useChefPositions(useMasterChefV2Contract(), undefined, chainId),
     useChefPositions(useMiniChefContract(), undefined, chainId),
+    useChefPositions(useOldFarmsContract(), undefined, chainId),
   ]
-  return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
+  return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions, oldFarmsPositions)
 }

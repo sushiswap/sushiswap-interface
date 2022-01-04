@@ -8,6 +8,7 @@ import { Direction, TransactionReview } from 'app/entities/TransactionReview'
 import { Warnings } from 'app/entities/Warnings'
 import { formatNumber } from 'app/functions/format'
 import { e10, ZERO } from 'app/functions/math'
+import { useBentoBoxContract } from 'app/hooks'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useETHBalances } from 'app/state/wallet/hooks'
@@ -20,6 +21,7 @@ import WarningsList from './WarningsList'
 
 export default function Deposit({ pair }: any): JSX.Element {
   const { account, chainId } = useActiveWeb3React()
+  const bentoBoxContract = useBentoBoxContract()
   const assetToken = useCurrency(pair.asset.address) || undefined
 
   const { i18n } = useLingui()
@@ -91,7 +93,15 @@ export default function Deposit({ pair }: any): JSX.Element {
     if (pair.currentExchangeRate.isZero()) {
       cooker.updateExchangeRate(false, ZERO, ZERO)
     }
-    cooker.addAsset(value.toBigNumber(pair.asset.tokenInfo.decimals), useBento)
+    const amount = value.toBigNumber(pair.asset.tokenInfo.decimals)
+
+    const deadBalance = await bentoBoxContract.balanceOf(
+      pair.asset.address,
+      '0x000000000000000000000000000000000000dead'
+    )
+
+    cooker.addAsset(amount, useBento, deadBalance.isZero())
+
     return `${i18n._(t`Deposit`)} ${pair.asset.tokenInfo.symbol}`
   }
 
