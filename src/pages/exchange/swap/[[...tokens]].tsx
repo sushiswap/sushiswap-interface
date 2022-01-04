@@ -75,8 +75,23 @@ import { useUSDCValue } from '../../../hooks/useUSDCPrice'
 import { warningSeverity } from '../../../functions/prices'
 
 import Image from 'next/image'
+import Banner from '../../../components/Banner'
+import { fetchAPI } from '../../../lib/api'
 
-export default function Swap() {
+export async function getServerSideProps() {
+  try {
+    const { data } = await fetchAPI('/banners?populate=image')
+    return {
+      props: { banners: data || [] },
+    }
+  } catch (e) {
+    return {
+      props: { banners: [] },
+    }
+  }
+}
+
+export default function Swap({ banners }) {
   const { i18n } = useLingui()
 
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -711,29 +726,7 @@ export default function Swap() {
             <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
           )}
         </div>
-        {/*{chainId && chainId === ChainId.MAINNET && (*/}
-        {/*  <a*/}
-        {/*    href="https://miso.sushi.com"*/}
-        {/*    className="hidden w-full py-6 mt-2 rounded cursor-pointer sm:block"*/}
-        {/*    style={{*/}
-        {/*      backgroundImage: `url('/images/miso/banner-jaypegs2.jpg')`,*/}
-        {/*      backgroundPosition: 'center',*/}
-        {/*      backgroundSize: 'cover',*/}
-        {/*      backgroundRepeat: 'no-repeat',*/}
-        {/*    }}*/}
-        {/*  >*/}
-        {/*    <div className="flex items-center justify-between gap-6 pl-5 pr-8">*/}
-        {/*      <span className="font-normal text-high-emphesis" style={{ lineHeight: 1.3, maxWidth: 250 }}>*/}
-        {/*        You need a &apos;Dona! Learn More*/}
-        {/*        <br />*/}
-        {/*        <span className="font-bold">End of Summer NFT Fair Launch</span>*/}
-        {/*      </span>*/}
-        {/*      /!* <div style={{ maxWidth: 195 }}>*/}
-        {/*        <img src="/images/miso/logo.png" style={{ maxWidth: '100%' }} alt="" />*/}
-        {/*      </div> *!/*/}
-        {/*    </div>*/}
-        {/*  </a>*/}
-        {/*)}*/}
+        <Banner banners={banners} />
       </DoubleGlowShadow>
     </Container>
   )

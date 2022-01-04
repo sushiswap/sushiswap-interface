@@ -107,14 +107,14 @@ export const SUPPORTED_NETWORKS: {
   },
   [ChainId.AVALANCHE]: {
     chainId: '0xA86A',
-    chainName: 'Avalanche',
+    chainName: 'Avalanche Mainnet C-Chain',
     nativeCurrency: {
       name: 'Avalanche Token',
       symbol: 'AVAX',
       decimals: 18,
     },
     rpcUrls: ['https://api.avax.network/ext/bc/C/rpc'],
-    blockExplorerUrls: ['https://cchain.explorer.avax.network'],
+    blockExplorerUrls: ['https://snowtrace.io'],
   },
   [ChainId.OKEX]: {
     chainId: '0x42',
@@ -149,17 +149,6 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://forno.celo.org'],
     blockExplorerUrls: ['https://explorer.celo.org'],
   },
-  [ChainId.PALM]: {
-    chainId: '0x2A15C308D',
-    chainName: 'Palm',
-    nativeCurrency: {
-      name: 'Palm',
-      symbol: 'PALM',
-      decimals: 18,
-    },
-    rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
-    blockExplorerUrls: ['https://explorer.palm.io'],
-  },
   [ChainId.MOONRIVER]: {
     chainId: '0x505',
     chainName: 'Moonriver',
@@ -193,6 +182,17 @@ export const SUPPORTED_NETWORKS: {
     rpcUrls: ['https://mainnet.telos.net/evm'],
     blockExplorerUrls: ['https://rpc1.us.telos.net/v2/explore'],
   },
+  [ChainId.PALM]: {
+    chainId: '0x2A15C308D',
+    chainName: 'Palm',
+    nativeCurrency: {
+      name: 'Palm',
+      symbol: 'PALM',
+      decimals: 18,
+    },
+    rpcUrls: ['https://palm-mainnet.infura.io/v3/da5fbfafcca14b109e2665290681e267'],
+    blockExplorerUrls: ['https://explorer.palm.io'],
+  },
 }
 
 export default function NetworkModal(): JSX.Element | null {
@@ -214,19 +214,19 @@ export default function NetworkModal(): JSX.Element | null {
         {[
           ChainId.MAINNET,
           ChainId.MATIC,
-          ChainId.FANTOM,
           ChainId.ARBITRUM,
-          ChainId.OKEX,
-          ChainId.HECO,
+          ChainId.AVALANCHE,
+          ChainId.MOONRIVER,
+          ChainId.FANTOM,
           ChainId.BSC,
           ChainId.XDAI,
           ChainId.HARMONY,
-          ChainId.AVALANCHE,
+          ChainId.TELOS,
           ChainId.CELO,
+          ChainId.FUSE,
+          ChainId.OKEX,
+          ChainId.HECO,
           ChainId.PALM,
-          ChainId.MOONRIVER,
-          // ChainId.FUSE,
-          // ChainId.TELOS,
         ].map((key: ChainId, i: number) => {
           if (chainId === key) {
             return (
@@ -247,14 +247,26 @@ export default function NetworkModal(): JSX.Element | null {
           return (
             <button
               key={i}
-              onClick={() => {
+              onClick={async () => {
+                console.log(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
                 toggleNetworkModal()
                 const params = SUPPORTED_NETWORKS[key]
-                cookie.set('chainId', key)
-                if (key === ChainId.MAINNET) {
-                  library?.send('wallet_switchEthereumChain', [{ chainId: '0x1' }, account])
-                } else {
-                  library?.send('wallet_addEthereumChain', [params, account])
+                cookie.set('chainId', key, params)
+
+                try {
+                  await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
+                } catch (switchError) {
+                  // This error code indicates that the chain has not been added to MetaMask.
+                  if (switchError.code === 4902) {
+                    try {
+                      await library?.send('wallet_addEthereumChain', [params, account])
+                    } catch (addError) {
+                      // handle "add" error
+                      console.error(`Add chain error ${addError}`)
+                    }
+                  }
+                  console.error(`Switch chain error ${switchError}`)
+                  // handle other "switch" errors
                 }
               }}
               className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"

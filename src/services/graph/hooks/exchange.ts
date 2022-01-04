@@ -23,6 +23,9 @@ import {
   getTruPrice,
   getYggPrice,
   getEthPrice,
+  getOhmPrice,
+  getFusePrice,
+  getMagicPrice,
   getPairs,
 } from '../fetchers'
 import useSWR, { SWRConfiguration } from 'swr'
@@ -95,6 +98,20 @@ export function useMovrPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const { data } = useSWR(shouldFetch ? 'ohmPrice' : null, () => getOhmPrice(chainId), swrConfig)
+  return data
+}
+
+export function useFusePrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId
+  const { data } = useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
+  return data
+}
+
 export function useYggPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.MAINNET ? 'yggPrice' : null, () => getYggPrice(), swrConfig)
@@ -148,6 +165,16 @@ export function useMphPrice(swrConfig: SWRConfiguration = undefined) {
 export function useMaticPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const { data } = useSWR(chainId && chainId === ChainId.MATIC ? 'maticPrice' : null, () => getMaticPrice(), swrConfig)
+  return data
+}
+
+export function useMagicPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const { data } = useSWR(
+    chainId && chainId === ChainId.ARBITRUM ? 'magicPrice' : null,
+    () => getMagicPrice(),
+    swrConfig
+  )
   return data
 }
 

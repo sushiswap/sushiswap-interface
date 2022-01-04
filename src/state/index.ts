@@ -14,7 +14,7 @@ const persistConfig: any = {
   key: 'root',
   whitelist: PERSISTED_KEYS,
   storage,
-  stateReconciler: false,
+  // stateReconciler: false,
 }
 
 const persistedReducer = persistReducer(persistConfig, reducer)

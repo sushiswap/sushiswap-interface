@@ -1,5 +1,5 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import { ChainId, WNATIVE } from '@sushiswap/sdk'
+import { ChainId, WNATIVE, BENTOBOX_ADDRESS } from '@sushiswap/sdk'
 import { Contract, ethers } from 'ethers'
 import { ZERO, e10, maximum, minimum } from '../functions/math'
 import { getProviderOrSigner, getSigner } from '../functions/contract'
@@ -127,6 +127,21 @@ export default class KashiCooker {
     return this
   }
 
+  bentoDepositAssetShare(share: BigNumber): KashiCooker {
+    const useNative = this.pair.asset.address === WNATIVE[this.chainId].address
+
+    this.add(
+      Action.BENTO_DEPOSIT,
+      defaultAbiCoder.encode(
+        ['address', 'address', 'int256', 'int256'],
+        [useNative ? ethers.constants.AddressZero : this.pair.asset.address, this.account, 0, share]
+      ),
+      useNative ? share : ZERO
+    )
+
+    return this
+  }
+
   bentoDepositCollateral(amount: BigNumber): KashiCooker {
     const useNative = this.pair.collateral.address === WNATIVE[this.chainId].address
 
@@ -152,6 +167,24 @@ export default class KashiCooker {
         [useNative ? ethers.constants.AddressZero : this.pair.collateral.address, this.account, amount, share]
       ),
       useNative ? amount : ZERO
+    )
+
+    return this
+  }
+
+  bentoTransfer(share: BigNumber, toAddress: string): KashiCooker {
+    this.add(
+      Action.BENTO_TRANSFER,
+      defaultAbiCoder.encode(['address', 'address', 'int256'], [BENTOBOX_ADDRESS[this.chainId], toAddress, share])
+    )
+
+    return this
+  }
+
+  bentoTransferAsset(share: BigNumber, toAddress: string): KashiCooker {
+    this.add(
+      Action.BENTO_TRANSFER,
+      defaultAbiCoder.encode(['address', 'address', 'int256'], [this.pair.asset.address, toAddress, share])
     )
 
     return this
@@ -194,7 +227,7 @@ export default class KashiCooker {
     return this
   }
 
-  addAsset(amount: BigNumber, fromBento: boolean): KashiCooker {
+  addAsset(amount: BigNumber, fromBento: boolean, burnShare: boolean = false): KashiCooker {
     let share: BigNumber
     if (fromBento) {
       share = toShare(this.pair.asset, amount)
@@ -213,6 +246,12 @@ export default class KashiCooker {
     }
 
     this.add(Action.ADD_ASSET, defaultAbiCoder.encode(['int256', 'address', 'bool'], [share, this.account, false]))
+
+    if (burnShare) {
+      this.removeAsset(BigNumber.from(1), true)
+      this.bentoTransferAsset(BigNumber.from(1), '0x000000000000000000000000000000000000dead')
+    }
+
     return this
   }
 

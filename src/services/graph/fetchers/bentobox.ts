@@ -5,24 +5,31 @@ import {
   bentoUserTokensQuery,
   kashiPairsQuery,
   kashiUserPairsQuery,
+  clonesQuery,
 } from '../queries/bentobox'
 import { getFraction, toAmount } from '../../../functions'
 
 import { ChainId } from '@sushiswap/sdk'
 import { GRAPH_HOST } from '../constants'
 import { request } from 'graphql-request'
-import { getTokenSubset } from '.'
+import { getTokenSubset } from './exchange'
+import { aprToApy } from '../../../functions/convert/apyApr'
 
 export const BENTOBOX = {
-  [ChainId.MAINNET]: 'sushiswap/bentobox',
+  [ChainId.MAINNET]: 'lufycz/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
   [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
 }
-const fetcher = async (chainId = ChainId.MAINNET, query, variables) =>
+const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query)
+
+export const getClones = async (chainId = ChainId.MAINNET) => {
+  const { clones } = await fetcher(chainId, clonesQuery)
+  return clones
+}
 
 export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undefined) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)
@@ -112,23 +119,30 @@ export const getBentoStrategies = async (chainId = ChainId.MAINNET, variables) =
   const SECONDS_IN_YEAR = 60 * 60 * 24 * 365
 
   return strategies?.map((strategy) => {
-    const [lastHarvest, previousHarvest] = [strategy.harvests?.[0], strategy.harvests?.[1]]
+    const apys = strategy.harvests?.reduce((apys, _, i) => {
+      const [lastHarvest, previousHarvest] = [strategy.harvests?.[i], strategy.harvests?.[i + 1]]
 
-    const profitPerYear =
-      ((SECONDS_IN_YEAR / (lastHarvest.timestamp - previousHarvest.timestamp)) * lastHarvest.profit) /
-      10 ** strategy.token.decimals
+      if (!previousHarvest) return apys
 
-    const [tvl, tvlPrevious] = [
-      lastHarvest?.tokenElastic / 10 ** strategy.token.decimals,
-      previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
-    ]
+      const profitPerYear =
+        ((SECONDS_IN_YEAR / (lastHarvest.timestamp - previousHarvest.timestamp)) * lastHarvest.profit) /
+        10 ** strategy.token.decimals
 
-    const apy = (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100
+      const [tvl, tvlPrevious] = [
+        lastHarvest?.tokenElastic / 10 ** strategy.token.decimals,
+        previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
+      ]
+
+      return [...apys, (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100]
+    }, [])
+
+    const apy = apys.reduce((apyAcc, apy) => apyAcc + apy, 0) / apys.length
 
     return {
       token: strategy.token.id,
-      apy: !isNaN(apy) ? apy : 0,
+      apy: !isNaN(apy) ? aprToApy(apy, 365) : 0,
       targetPercentage: Number(strategy.token.strategyTargetPercentage ?? 0),
+      utilization: (Number(strategy.balance) / Number(strategy.token.totalSupplyElastic)) * 100,
     }
   })
 }

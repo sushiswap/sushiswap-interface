@@ -1,41 +1,106 @@
-import { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { FC } from 'react'
-import { XIcon } from '@heroicons/react/outline'
+import { useActiveWeb3React } from '../../hooks'
+import { ChainId } from '@sushiswap/sdk'
+import Button from '../Button'
+import { classNames } from '../../functions'
+import { Transition } from '@headlessui/react'
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { getStrapiMedia } from '../../lib/media'
 
-const Banner: FC = () => {
-  const [enabled, setEnabled] = useState(true)
+interface BannerProps {
+  banners: {
+    attributes: {
+      name: string
+      url: string
+      image: {
+        data: {
+          attributes: {
+            url: string
+          }
+        }
+      }
+      startDate: string
+      endDate: string
+    }
+  }[]
+}
+
+const Banner: FC<BannerProps> = ({ banners }) => {
+  const { chainId } = useActiveWeb3React()
+  const [slideIndex, setSlideIndex] = useState<number>(Math.floor(Math.random() * banners.length))
+
+  const nextSlide = useCallback(() => {
+    setSlideIndex((prevState) => (prevState + 1) % banners.length)
+  }, [banners.length])
+
+  const prevSlide = useCallback(() => {
+    setSlideIndex((prevState) => (prevState - 1 + banners.length) % banners.length)
+  }, [banners.length])
+
+  if (chainId !== ChainId.MAINNET || banners.length === 0) return <></>
+
+  const filteredSlides = banners.filter(({ attributes: { startDate, endDate } }) => {
+    const now = new Date().getTime()
+    const startEpoch = new Date(startDate).getTime()
+    const endEpoch = new Date(endDate).getTime()
+    return now > startEpoch && now < endEpoch
+  })
+
+  const slides = filteredSlides.map(({ attributes: { image, url } }, index) => {
+    return (
+      <div
+        key={index}
+        className={classNames(
+          index === slideIndex ? 'block' : 'hidden',
+          'h-[96px] absolute inset-0 flex items-center justify-center text-5xl transition-all ease-in-out duration-1000 transform slide'
+        )}
+      >
+        <Transition
+          as={React.Fragment}
+          show={index === slideIndex}
+          enter="transform transition duration-[200ms]"
+          enterFrom="opacity-0 scale-90"
+          enterTo="opacity-100 scale-100"
+          leave="transform duration-200 transition ease-in-out"
+          leaveFrom="opacity-100 rotate-0 scale-100 "
+          leaveTo="opacity-0 scale-95 "
+        >
+          <a
+            rel="noreferrer"
+            href={url}
+            target="_blank"
+            className="hidden w-full py-12 rounded cursor-pointer sm:block"
+            style={{
+              backgroundImage: `url(${getStrapiMedia(image.data.attributes.url)})`,
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            <div className="flex items-center justify-between gap-6 pl-5 pr-8" />
+          </a>
+        </Transition>
+      </div>
+    )
+  })
+
   return (
-    <>
-      {enabled ? (
-        <div className="relative w-full bg-purple bg-opacity-20">
-          <div className="px-3 py-3 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div className="pr-16 sm:text-center sm:px-16">
-              <p className="font-medium text-white">
-                <span className="md:hidden">You need a &apos;Dona</span>
-                <span className="hidden md:inline">You need a &apos;Dona - End of Summer Sellathon</span>
-                <span className="block sm:ml-2 sm:inline-block">
-                  <a
-                    href="https://miso.sushi.com/auctions/0xC2704dEc22e552164Dee240B20b840Ea379B878E"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-bold text-white underline"
-                  >
-                    {' '}
-                    Learn more on Miso<span aria-hidden="true">&rarr;</span>
-                  </a>
-                </span>
-              </p>
-            </div>
-            <div className="absolute inset-y-0 right-0 flex items-start pt-1 pr-1 sm:pt-1 sm:pr-2 sm:items-start">
-              <button type="button" className="flex p-2 focus:outline-none" onClick={() => setEnabled(false)}>
-                <span className="sr-only">Dismiss</span>
-                <XIcon className="w-6 h-6 text-white" aria-hidden="true" />
-              </button>
-            </div>
+    <div className="flex justify-center flex-col">
+      <div className="relative h-[96px] mt-4">
+        {slides}
+        {slides.length > 1 && (
+          <div className="flex justify-between w-full h-full items-center">
+            <Button onClick={prevSlide} className="flex items-center -ml-12">
+              <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
+            </Button>
+            <Button onClick={nextSlide} className="flex items-center -mr-12">
+              <ChevronRightIcon width={24} className="hover:text-white text-low-emphesis" />
+            </Button>
           </div>
-        </div>
-      ) : null}
-    </>
+        )}
+      </div>
+    </div>
   )
 }
 

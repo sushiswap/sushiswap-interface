@@ -82,5 +82,5 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.PALM]: 'Palm',
   [ChainId.MOONRIVER]: 'Moonriver',
   [ChainId.FUSE]: 'Fuse',
-  [ChainId.TELOS]: 'Telos',
+  [ChainId.TELOS]: 'Telos EVM',
 }
