@@ -1,14 +1,17 @@
-import { Dappeteer, launch, setupMetamask } from '@chainsafe/dappeteer'
-import puppeteer, { Browser, Page } from 'puppeteer'
+import { Dappeteer } from '@chainsafe/dappeteer'
+import { closeValues } from '@sushiswap/tines'
+import { Browser, Page } from 'puppeteer'
 
+import { FUNDING_SOURCE } from './constants/FundingSource'
+import { RATIO } from './constants/Ratio'
+import { TestHelper } from './helpers/TestHelper'
+import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
 import { PoolPage } from './pages/pools/PoolPage'
 import { RemoveLiquidityPage } from './pages/pools/RemoveLiquidityPage'
 
 require('dotenv').config()
 
-let seed: string = process.env.TEST_SEED || 'seed seed seed'
-let pass: string = process.env.TEST_PASS || 'password'
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
 
 let browser: Browser
@@ -17,11 +20,13 @@ let metamask: Dappeteer
 
 let liquidityPoolsPage: LiquidityPoolsPage
 let removeLiquidityPage: RemoveLiquidityPage
+let addLiquidityPage: AddLiquidityPage
 let poolPage: PoolPage
 
 async function initPages() {
   liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}/trident/pools`)
   poolPage = new PoolPage(page, metamask)
+  addLiquidityPage = new AddLiquidityPage(page, metamask)
   removeLiquidityPage = new RemoveLiquidityPage(page, metamask)
 }
 
@@ -29,27 +34,7 @@ jest.retryTimes(1)
 
 describe('Remove Liquidity:', () => {
   beforeAll(async () => {
-    browser = await launch(puppeteer, {
-      metamaskVersion: 'v10.1.1',
-      headless: false,
-      defaultViewport: null,
-      slowMo: 5,
-      args: ['--no-sandbox'],
-      executablePath: process.env.TEST_PUPPETEER_EXEC_PATH,
-    })
-    try {
-      metamask = await setupMetamask(browser, { seed: seed, password: pass })
-      await metamask.switchNetwork('kovan')
-      await metamask.page.setDefaultTimeout(180000)
-    } catch (error) {
-      console.log('Unknown error occurred setting up metamask')
-      throw error
-    }
-    page = await browser.newPage()
-    await page.setDefaultTimeout(180000)
-    await page.setUserAgent(
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
-    )
+    ;[metamask, browser, page] = await TestHelper.initDappeteer()
     await initPages()
   })
 
@@ -57,29 +42,62 @@ describe('Remove Liquidity:', () => {
     browser.close()
   })
 
-  test('Remove 25% in equal amounts and withdraw to BentoBox', async () => {
+  test.each([
+    [25, RATIO.EQUAL, FUNDING_SOURCE.BENTO],
+    [25, RATIO.EQUAL, FUNDING_SOURCE.WALLET],
+  ])(`Remove %p percent in %p amounts and withdraw to %p`, async (removePercent, ratio, receiveTo) => {
     const targetPoolName = 'USDC-WETH'
+    const fixedRatio = ratio === RATIO.EQUAL
+    const withdrawToWallet = receiveTo === FUNDING_SOURCE.WALLET
+    // USDC: Asset A
+    // WETH: Asset B
 
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.connectMetamaskWallet()
     await liquidityPoolsPage.goToPool(targetPoolName)
 
+    const poolLink = page.url()
+
+    // Get position & balances before
     const positionBeforeWithdraw = await poolPage.getPoolPosition()
     expect(positionBeforeWithdraw.assetA).toEqual('USDC')
     expect(positionBeforeWithdraw.assetB).toEqual('WETH')
-    const poolLink = page.url()
 
+    await poolPage.clickAddLiquidityButton()
+
+    const usdcBalanceBefore = await addLiquidityPage.getAssetABalance(withdrawToWallet)
+    const ethBalanceBefore = await addLiquidityPage.getAssetBBalance(withdrawToWallet)
+
+    // Set up page before confirm
+    await liquidityPoolsPage.navigateTo()
+    await liquidityPoolsPage.goToPool(targetPoolName)
     await poolPage.clickRemoveLiquidityButton()
-    await removeLiquidityPage.removeLiquidity(25, false, true)
+
+    await removeLiquidityPage.setRemovePercent(removePercent)
+    await removeLiquidityPage.setFixedRatio(fixedRatio)
+    await removeLiquidityPage.setWithdrawToWallet(withdrawToWallet)
+
+    const minLiquidityOutput = await removeLiquidityPage.getMinLiquidityOutput(targetPoolName)
+
+    await removeLiquidityPage.confirmWithdrawal()
 
     await page.goto(poolLink)
     await page.waitForSelector(`#pool-title-${targetPoolName}`)
 
+    // Get position & balances after
     const positionAfterDeposit = await poolPage.getPoolPosition()
     expect(positionAfterDeposit.assetA).toEqual('USDC')
     expect(positionAfterDeposit.assetB).toEqual('WETH')
 
-    expect(positionAfterDeposit.amountA).toBeLessThanOrEqual(positionBeforeWithdraw.amountA)
-    expect(positionAfterDeposit.amountB).toBeLessThanOrEqual(positionBeforeWithdraw.amountB)
+    await poolPage.clickAddLiquidityButton()
+
+    const usdcBalanceAfter = await addLiquidityPage.getAssetABalance(withdrawToWallet)
+    const ethBalanceAfter = await addLiquidityPage.getAssetBBalance(withdrawToWallet)
+
+    const usdcBalanceDiff = usdcBalanceAfter - usdcBalanceBefore
+    const ethBalanceDiff = ethBalanceAfter - ethBalanceBefore
+
+    expect(closeValues(usdcBalanceDiff, minLiquidityOutput.amountA, 1e-9)).toBe(true)
+    expect(closeValues(ethBalanceDiff, minLiquidityOutput.amountB, 1e-9)).toBe(true)
   })
 })

@@ -1,7 +1,15 @@
 import { Dappeteer, launch, LaunchOptions, setupMetamask } from '@chainsafe/dappeteer'
 import puppeteer, { Browser, Page } from 'puppeteer'
 
+import { App } from '../pages/App'
+
 export class TestHelper {
+  public static async init(): Promise<App> {
+    const [metamask, browser, page] = await this.initDappeteer()
+    const app = new App(page, metamask, process.env.TEST_BASE_URL || 'http://localhost:3000')
+    return app
+  }
+
   public static async initDappeteer(
     seedPhrase: string = '',
     password: string = ''
@@ -77,7 +85,7 @@ export class TestHelper {
       if (process.env.CI === 'true') {
         await page.setDefaultTimeout(180000)
       } else {
-        await page.setDefaultTimeout(10000)
+        await page.setDefaultTimeout(30000)
       }
 
       await page.setUserAgent(

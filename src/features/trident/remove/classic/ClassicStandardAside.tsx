@@ -86,7 +86,12 @@ const ClassicStandardAside = () => {
           <div className="flex items-center justify-between" key={index}>
             <div className="flex gap-1.5 items-center">
               <CurrencyLogo currency={el?.currency} size={20} />
-              <Typography variant="sm" weight={700} className="text-high-emphesis">
+              <Typography
+                id={el?.currency.symbol.toLowerCase() + `-min-liquidity-output`}
+                variant="sm"
+                weight={700}
+                className="text-high-emphesis"
+              >
                 {el?.greaterThan(0) ? el.toSignificant(6) : '0.00'}
               </Typography>
               <Typography variant="sm" weight={700} className="text-high-emphesis">

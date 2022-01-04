@@ -53,6 +53,7 @@ const CurrencyAmountItemWithEthSelector: FC<{
             weight={700}
             className="cursor-pointer text-blue"
             onClick={() => setReceiveNative(!receiveNative)}
+            id="btn-receive-native"
           >
             {receiveNative ? i18n._(t`Receive WETH instead`) : i18n._(t`Receive ETH instead`)}
           </Typography>
