@@ -83,6 +83,13 @@ const Footer = () => {
             {i18n._(t`Moonriver Bridge`)}
           </ExternalLink>
         )}
+
+        {chainId && chainId === ChainId.AVALANCHE && (
+          <ExternalLink id={`avalanche-bridge-link`} href=" https://bridge.avax.network" className="text-low-emphesis">
+            {i18n._(t`Avalanche Bridge`)}
+          </ExternalLink>
+        )}
+
         <Polling />
       </div>
     </footer>
