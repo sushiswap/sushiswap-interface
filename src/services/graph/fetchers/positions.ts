@@ -4,7 +4,7 @@ import { fetcher, TridentPoolData } from 'app/services/graph'
 import { getTridentPositionsQuery } from 'app/services/graph/queries'
 
 interface TridentPositionQueryResult {
-  liquidityPositions: TridentPosition[]
+  liquidityPositions?: TridentPosition[]
 }
 
 interface TridentPosition {
@@ -24,7 +24,7 @@ export interface TridentPositionRow {
 }
 
 const formatPositions = (chainId: ChainId, { liquidityPositions }: TridentPositionQueryResult) => {
-  return liquidityPositions.map(({ balance, pool }) => {
+  return (liquidityPositions || []).map(({ balance, pool }) => {
     const tokens = pool.assets.map(
       ({ token: { id, name, symbol, decimals } }) => new Token(chainId, id, Number(decimals), symbol, name)
     )
