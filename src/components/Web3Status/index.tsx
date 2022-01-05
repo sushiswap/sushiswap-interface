@@ -1,4 +1,3 @@
-import Davatar from '@davatar/react'
 import { Web3Provider } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -23,12 +22,6 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
   return b.addedTime - a.addedTime
 }
 
-const SOCK = (
-  <span role="img" aria-label="has socks emoji" style={{ marginTop: -4, marginBottom: -4 }}>
-    🧦
-  </span>
-)
-
 // eslint-disable-next-line react/prop-types
 function StatusIcon({
   connector,
@@ -41,13 +34,9 @@ function StatusIcon({
 }) {
   if (connector === injected) {
     return (
-      <Davatar
-        size={20}
-        address={account}
-        defaultComponent={<Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />}
-        style={{ borderRadius: 5 }}
-        provider={provider}
-      />
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+        <Image src="/images/wallets/metamask.png" alt="Injected (MetaMask etc...)" width={16} height={16} />
+      </div>
     )
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
@@ -108,15 +97,7 @@ function Web3StatusInner() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions
-    .filter((tx) => {
-      if (tx.receipt) {
-        return false
-      } else {
-        return true
-      }
-    })
-    .map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
 
   const hasPendingTransactions = !!pending.length
 
@@ -126,18 +107,18 @@ function Web3StatusInner() {
     return (
       <div
         id="web3-status-connected"
-        className="flex items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
+        className="flex gap-2 items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
         onClick={toggleWalletModal}
       >
         {hasPendingTransactions ? (
-          <div className="flex items-center justify-between">
-            <div className="pr-2">
+          <div className="flex gap-2 items-center justify-between">
+            <div>
               {pending?.length} {i18n._(t`Pending`)}
             </div>{' '}
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="mr-2">{ENSName || shortenAddress(account)}</div>
+          <div>{ENSName || shortenAddress(account)}</div>
         )}
         {!hasPendingTransactions && connector && (
           <StatusIcon connector={connector} account={account} provider={library} />
