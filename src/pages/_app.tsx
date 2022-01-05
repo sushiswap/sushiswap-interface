@@ -143,6 +143,7 @@ function MyApp({
 
         <meta key="twitter:card" name="twitter:card" content="app" />
         <meta key="twitter:title" name="twitter:title" content="SUSHI App" />
+        <meta key="twitter:text:title" name="twitter:text:title" content="SUSHI App" />
         <meta key="twitter:url" name="twitter:url" content="https://app.sushi.com" />
         <meta
           key="twitter:description"
