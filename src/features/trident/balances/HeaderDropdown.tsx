@@ -31,7 +31,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ label, hideAccount = false })
         />
       </div>
       {account && !hideAccount && (
-        <Typography variant="sm" className="text-secondary z-[2]">
+        <Typography variant="sm" className="hidden lg:block text-secondary z-[2]">
           {shortenAddress(account)}
         </Typography>
       )}

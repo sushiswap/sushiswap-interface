@@ -90,11 +90,7 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
     <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave}>
       <Dialog
         as="div"
-        className={classNames(
-          'fixed z-50 inset-0 overflow-y-auto',
-          isDesktop ? '' : 'bg-dark-900 pt-[64px]',
-          className
-        )}
+        className={classNames('fixed z-50 inset-0 overflow-y-auto', isDesktop ? '' : 'bg-dark-900', className)}
         onClose={onDismiss}
       >
         {isDesktop ? (

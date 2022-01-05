@@ -64,7 +64,7 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               id: 'value',
               Header: 'Value',
               accessor: 'value',
-              maxWidth: 200,
+              maxWidth: 100,
               className: 'text-right flex justify-end',
               Cell: (props) => {
                 return (
