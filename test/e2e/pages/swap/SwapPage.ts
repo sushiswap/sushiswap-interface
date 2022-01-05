@@ -13,7 +13,9 @@ export class SwapPage extends AppPage {
   protected UseMaxButtonSelector: string = '.btn-max'
   protected BalanceLabelSelector: string = '.text-balance'
   protected SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
-  protected InvertRateButtonSelector: string = '#btn-invert-rate'
+
+  // Swap rate selectors
+  protected ExchangeRateButtonSelector: string = '#btn-exchange-rate'
 
   // Swap review modal selectors
   protected ConfirmSwapButtonSelector: string = '#review-swap-button'
@@ -47,8 +49,8 @@ export class SwapPage extends AppPage {
     payFromWallet: boolean,
     receiveToWallet: boolean
   ): Promise<void> {
-    await this.selectInputToken(inTokenSymbol)
-    await this.selectOutputToken(outTokenSymbol)
+    await this.setInputToken(inTokenSymbol)
+    await this.setOutputToken(outTokenSymbol)
     await this.setAmountIn(inTokenAmount)
 
     const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
@@ -70,6 +72,128 @@ export class SwapPage extends AppPage {
     await this.confirmSwap(inTokenSymbol, outTokenSymbol)
   }
 
+  // Swap Rate Component
+  public async getExchangeRate(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.ExchangeRateButtonSelector)
+    const rate = await this.Page.$(this.ExchangeRateButtonSelector)
+    const rateText = (await (await rate.getProperty('textContent')).jsonValue()) as string
+    return rateText
+  }
+
+  // Swap Asset Panel
+  public async setInputToken(tokenSymbol: string): Promise<void> {
+    await this.blockingWait(1, true)
+    const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
+    await inputTokenButton.click()
+    await this.selectToken(tokenSymbol)
+  }
+
+  public async setOutputToken(tokenSymbol: string): Promise<void> {
+    await this.blockingWait(1, true)
+    const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
+    await outputTokenButton.click()
+    await this.selectToken(tokenSymbol)
+  }
+
+  private async selectToken(tokenSymbol: string): Promise<void> {
+    await this.Page.waitForSelector(this.AllCurrenciesListSelector)
+    await this.blockingWait(3)
+
+    const nativeTokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
+    if (nativeTokenButton) {
+      await this.blockingWait(2)
+      await nativeTokenButton.click()
+    } else {
+      const selectTokenInput = await this.Page.waitForSelector(this.SelectTokenInputSelector)
+      selectTokenInput.type(tokenSymbol)
+      await this.blockingWait(2)
+
+      const tokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
+      await tokenButton.click()
+    }
+  }
+
+  public async setAmountIn(inTokenAmount: string): Promise<void> {
+    await this.Page.waitForTimeout(500)
+    const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
+    await tokenAmountInput.type(inTokenAmount)
+  }
+
+  public async getInputTokenAmount(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.TokenInputSelector)
+    const tokenInput = await this.Page.$(this.TokenInputSelector)
+
+    const inTokenAmount = (await (await tokenInput.getProperty('value')).jsonValue()) as string
+    return inTokenAmount
+  }
+
+  public async getMinOutputAmount(): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(this.TokenInputSelector)
+    const tokenOutput = await this.Page.$$(this.TokenInputSelector)
+
+    const outTokenAmount = (await (await tokenOutput[1].getProperty('value')).jsonValue()) as string
+    return outTokenAmount
+  }
+
+  public async setPayFromWallet(payFromWallet: boolean): Promise<void> {
+    await this.setFunding(payFromWallet, this.PayFromWalletSelector)
+  }
+
+  public async setReceiveToWallet(receiveToWallet: boolean): Promise<void> {
+    await this.setFunding(receiveToWallet, this.ReceiveToWalletSelector)
+  }
+
+  private async setFunding(useFundingMethod: boolean, selector: string): Promise<void> {
+    await this.blockingWait(3, true)
+    const isSelectorChecked = await this.isSwitchChecked(selector)
+    const switchElement = await this.getSwitchElement(selector)
+    if (useFundingMethod && !isSelectorChecked) {
+      await switchElement.click()
+    } else if (!useFundingMethod && isSelectorChecked) {
+      await switchElement.click()
+    }
+  }
+
+  public async getSelectedInputToken(): Promise<string> {
+    return await this.getSelectedToken(this.InTokenButtonSelector)
+  }
+
+  public async getSelectedOutputToken(): Promise<string> {
+    return await this.getSelectedToken(this.OutTokenButtonSelector)
+  }
+
+  private async getSelectedToken(selector: string): Promise<string> {
+    await this.blockingWait(1, true)
+    await this.Page.waitForSelector(selector)
+    const tokenButton = await this.Page.$(selector)
+    const selectedToken = (await (await tokenButton.getProperty('textContent')).jsonValue()) as string
+    return selectedToken
+  }
+
+  public async getInputTokenBalance(): Promise<string> {
+    await this.blockingWait(1, true)
+    const balanceLabels = await this.Page.$$(this.BalanceLabelSelector)
+    const inputTokenBalanceLabel = balanceLabels[1]
+
+    const inTokenAmount = (await (await inputTokenBalanceLabel.getProperty('textContent')).jsonValue()) as string
+    return inTokenAmount
+  }
+
+  public async getTokenBalance(tokenSymbol: string, fromWallet: boolean = true): Promise<number> {
+    await this.blockingWait(1, true)
+
+    await this.setInputToken(tokenSymbol)
+    await this.setPayFromWallet(fromWallet)
+
+    const balance = await this.getInputTokenBalance()
+
+    return parseFloat(balance)
+  }
+
+  // Swap Review Component
   public async confirmSwap(inTokenSymbol: string, outTokenSymbol: string): Promise<void> {
     await this.blockingWait(1)
 
@@ -102,30 +226,7 @@ export class SwapPage extends AppPage {
     }
   }
 
-  public async addRecipient(recipient: string): Promise<void> {
-    await this.blockingWait(1, true)
-
-    const addRecipientButton = await this.Page.waitForSelector(this.AddRecipientButtonSelector)
-    addRecipientButton.click()
-
-    const recipientInput = await this.Page.waitForSelector(this.RecipientInputSelector)
-    await recipientInput.type(recipient)
-  }
-
-  public async getRecipient(): Promise<string> {
-    await this.blockingWait(1, true)
-
-    let recipientInputBox: ElementHandle<Element>
-    recipientInputBox = await this.Page.$(this.RecipientInputSelector)
-
-    if (!recipientInputBox) {
-      return ''
-    }
-
-    const recipient = (await (await recipientInputBox.getProperty('value')).jsonValue()) as string
-    return recipient
-  }
-
+  // Settings Tab
   public async toggleExpertMode(): Promise<void> {
     await this.blockingWait(1, true)
 
@@ -168,52 +269,29 @@ export class SwapPage extends AppPage {
     return slippage
   }
 
-  public async setAmountIn(inTokenAmount: string): Promise<void> {
-    await this.Page.waitForTimeout(500)
-    const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
-    await tokenAmountInput.type(inTokenAmount)
-  }
-
-  public async getSelectedInputToken(): Promise<string> {
-    return await this.getSelectedToken(this.InTokenButtonSelector)
-  }
-
-  public async getSelectedOutputToken(): Promise<string> {
-    return await this.getSelectedToken(this.OutTokenButtonSelector)
-  }
-
-  private async getSelectedToken(selector: string): Promise<string> {
+  // Recipient Panel
+  public async setRecipient(recipient: string): Promise<void> {
     await this.blockingWait(1, true)
-    await this.Page.waitForSelector(selector)
-    const tokenButton = await this.Page.$(selector)
-    const selectedToken = (await (await tokenButton.getProperty('textContent')).jsonValue()) as string
-    return selectedToken
+
+    const addRecipientButton = await this.Page.waitForSelector(this.AddRecipientButtonSelector)
+    addRecipientButton.click()
+
+    const recipientInput = await this.Page.waitForSelector(this.RecipientInputSelector)
+    await recipientInput.type(recipient)
   }
 
-  public async setPayFromWallet(payFromWallet: boolean): Promise<void> {
-    await this.blockingWait(3, true)
-    const isPayFromWalletChecked = await this.isSwitchChecked(this.PayFromWalletSelector)
-    const payFromWalletSwitch = await this.getSwitchElement(this.PayFromWalletSelector)
-    if (payFromWallet && !isPayFromWalletChecked) {
-      await payFromWalletSwitch.click()
-    } else if (!payFromWallet && isPayFromWalletChecked) {
-      await payFromWalletSwitch.click()
+  public async getRecipient(): Promise<string> {
+    await this.blockingWait(1, true)
+
+    let recipientInputBox: ElementHandle<Element>
+    recipientInputBox = await this.Page.$(this.RecipientInputSelector)
+
+    if (!recipientInputBox) {
+      return ''
     }
-  }
 
-  public async setReceiveToWallet(receiveToWallet: boolean): Promise<void> {
-    await this.setFunding(receiveToWallet, this.ReceiveToWalletSelector)
-  }
-
-  private async setFunding(useFundingMethod: boolean, selector: string): Promise<void> {
-    await this.blockingWait(3, true)
-    const isSelectorChecked = await this.isSwitchChecked(selector)
-    const switchElement = await this.getSwitchElement(selector)
-    if (useFundingMethod && !isSelectorChecked) {
-      await switchElement.click()
-    } else if (!useFundingMethod && isSelectorChecked) {
-      await switchElement.click()
-    }
+    const recipient = (await (await recipientInputBox.getProperty('value')).jsonValue()) as string
+    return recipient
   }
 
   public async clickSwitchCurrenciesButton(): Promise<void> {
@@ -241,65 +319,16 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
   }
 
-  public async getInputTokenBalance(): Promise<string> {
-    await this.blockingWait(1, true)
-    const balanceLabels = await this.Page.$$(this.BalanceLabelSelector)
-    const inputTokenBalanceLabel = balanceLabels[1]
-
-    const inTokenAmount = (await (await inputTokenBalanceLabel.getProperty('textContent')).jsonValue()) as string
-    return inTokenAmount
-  }
-
-  public async getInputTokenAmount(): Promise<string> {
-    await this.blockingWait(1, true)
-    await this.Page.waitForSelector(this.TokenInputSelector)
-    const tokenInput = await this.Page.$(this.TokenInputSelector)
-
-    const inTokenAmount = (await (await tokenInput.getProperty('value')).jsonValue()) as string
-    return inTokenAmount
-  }
-
-  public async getOutputTokenAmount(): Promise<string> {
-    await this.blockingWait(1, true)
-    await this.Page.waitForSelector(this.TokenInputSelector)
-    const tokenOutput = await this.Page.$$(this.TokenInputSelector)
-
-    const outTokenAmount = (await (await tokenOutput[1].getProperty('value')).jsonValue()) as string
-    return outTokenAmount
-  }
-
-  public async selectInputToken(tokenSymbol: string): Promise<void> {
-    await this.blockingWait(1, true)
-    const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
-    await inputTokenButton.click()
-    await this.selectToken(tokenSymbol)
-  }
-
-  public async selectOutputToken(tokenSymbol: string): Promise<void> {
-    await this.blockingWait(1, true)
-    const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
-    await outputTokenButton.click()
-    await this.selectToken(tokenSymbol)
-  }
-
   public async clickInvertRateButton(): Promise<void> {
     await this.blockingWait(1, true)
-    const invertRateButton = await this.Page.waitForSelector(this.InvertRateButtonSelector)
+    const invertRateButton = await this.Page.waitForSelector(this.ExchangeRateButtonSelector)
     await invertRateButton.click()
-  }
-
-  public async getRate(): Promise<string> {
-    await this.blockingWait(1, true)
-    await this.Page.waitForSelector(this.InvertRateButtonSelector)
-    const rate = await this.Page.$(this.InvertRateButtonSelector)
-    const rateText = (await (await rate.getProperty('textContent')).jsonValue()) as string
-    return rateText
   }
 
   public async getBentoBalance(tokenSymbol: string): Promise<string> {
     await this.blockingWait(1, true)
     await this.Page.bringToFront()
-    await this.selectInputToken(tokenSymbol)
+    await this.setInputToken(tokenSymbol)
 
     await this.setPayFromWallet(false)
 
@@ -311,7 +340,7 @@ export class SwapPage extends AppPage {
   public async getWalletBalance(tokenSymbol: string): Promise<string> {
     await this.blockingWait(1, true)
     await this.Page.bringToFront()
-    await this.selectInputToken(tokenSymbol)
+    await this.setInputToken(tokenSymbol)
 
     await this.setPayFromWallet(true)
 
@@ -334,24 +363,6 @@ export class SwapPage extends AppPage {
     await this.Metamask.page.waitForTimeout(1000)
     await this.bringToFront()
     await this.blockingWait(5, true)
-  }
-
-  private async selectToken(tokenSymbol: string): Promise<void> {
-    await this.Page.waitForSelector(this.AllCurrenciesListSelector)
-    await this.blockingWait(3)
-
-    const nativeTokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
-    if (nativeTokenButton) {
-      await this.blockingWait(2)
-      await nativeTokenButton.click()
-    } else {
-      const selectTokenInput = await this.Page.waitForSelector(this.SelectTokenInputSelector)
-      selectTokenInput.type(tokenSymbol)
-      await this.blockingWait(2)
-
-      const tokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
-      await tokenButton.click()
-    }
   }
 
   private getSwapType(inTokenSymbol: string, outTokenSymbol: string): SwapType {

@@ -1,8 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Price } from '@sushiswap/core-sdk'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import Typography from 'app/components/Typography'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import React, { FC, useState } from 'react'
 
 import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
@@ -31,7 +31,7 @@ const SwapRate: FC<SwapRateProps> = ({ className = 'text-low-emphesis' }) => {
       <Typography variant="sm" className={className}>
         {i18n._(t`Exchange Rate`)}
       </Typography>
-      <div id="btn-invert-rate" className="flex items-center gap-2 cursor-pointer" onClick={() => setInvert(!invert)}>
+      <div id="btn-exchange-rate" className="flex items-center gap-2 cursor-pointer" onClick={() => setInvert(!invert)}>
         <Typography variant="sm" className="text-high-emphesis" weight={700}>
           {invert ? (
             <>
