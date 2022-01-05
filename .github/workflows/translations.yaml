@@ -18,16 +18,7 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v2
 
-      - name: Checkout sushiswap/translations repository
-        uses: actions/checkout@v2
-        with:
-          repository: sushiswap/translations
-          path: translations
-
-      - run: rm -rf locale
-      - run: mv translations/sushiswap locale
-
-      - name: Setup NodeJs
+      - name: Setup node
         uses: actions/setup-node@v2
         with:
           node-version: 14
@@ -38,8 +29,20 @@ jobs:
       - name: Install packages
         run: yarn
 
+      - name: Checkout sushiswap/translations repository
+        uses: actions/checkout@v2
+        with:
+          repository: sushiswap/translations
+          path: translations
+
+      - run: rm -rf locale
+      - run: mv translations/sushiswap locale
+
       - name: Run LinguiJS
         run: npm run lingui
+
+      - name: Remove compiled files
+        run: rm -rf locale/*.js
 
       - name: Push translation files to translation repo
         uses: cpina/github-action-push-to-another-repository@main
