@@ -12,6 +12,7 @@ on:
 
 jobs:
   translations:
+    if: github.event.pull_request.merged == true
     name: Sync translations with sushiswap/translations
     runs-on: ubuntu-latest
     steps:

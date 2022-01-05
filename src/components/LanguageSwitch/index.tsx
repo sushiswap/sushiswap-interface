@@ -4,7 +4,7 @@ import { classNames } from 'app/functions'
 import cookieCutter from 'cookie-cutter'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useState } from 'react'
 
 import Typography from '../Typography'
 
@@ -30,14 +30,19 @@ const LANG_TO_COUNTRY = {
 
 export default function LangSwitcher() {
   const { locale } = useRouter()
+  const [show, setShow] = useState(false)
 
   return (
     <Popover
       placement="bottom-end"
       modifiers={[{ name: 'offset', options: { offset: [8, 0] } }]}
-      content={<LanguageSwitcherContent />}
+      show={show}
+      content={<LanguageSwitcherContent onClick={() => setShow(false)} />}
     >
-      <div className="cursor-pointer bg-dark-1000 inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800">
+      <div
+        onClick={() => setShow(!show)}
+        className="cursor-pointer bg-dark-1000 inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800"
+      >
         {LANG_TO_COUNTRY[locale]}
         <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
       </div>
@@ -45,18 +50,16 @@ export default function LangSwitcher() {
   )
 }
 
-export const LanguageSwitcherContent = () => {
-  const { locale, locales, asPath } = useRouter()
-
+export const LanguageSwitcherContent = ({ onClick }: { onClick?(): void }) => {
+  const { locales, asPath } = useRouter()
   return (
     <div className="px-2 mt-3">
       <div className="shadow-lg overflow-hidden bg-dark-900 rounded border border-dark-700">
         {locales.map((l) => {
           return (
-            <div key={locale}>
-              <Link href={asPath} locale={locale}>
+            <div key={l} onClick={onClick}>
+              <Link href={asPath} locale={l} passHref={true}>
                 <a
-                  href="#"
                   className={classNames('flex gap-3 p-3 transition duration-150 ease-in-out hover:bg-dark-800')}
                   onClick={() => cookieCutter.set('NEXT_LOCALE', l)}
                 >
