@@ -12,8 +12,6 @@ function Web3Network(): JSX.Element | null {
 
   if (!chainId) return null
 
-  console.log('Web3Network', { chainId, icon: NETWORK_ICON[chainId] })
-
   return (
     <div
       className="flex items-center rounded border border-dark-800 hover:border-dark-700 bg-dark-1000 hover:bg-dark-900 whitespace-nowrap text-sm font-bold cursor-pointer select-none pointer-events-auto"

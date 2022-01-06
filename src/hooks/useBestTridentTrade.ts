@@ -27,11 +27,6 @@ export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (
   const currencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
   const constantProductPools = useConstantProductPoolsPermutations(currencyCombinations)
   const allPairs = useV2Pairs(currencyCombinations)
-
-  // concentratedPools
-  // hybridPools
-  // indexPools
-
   const pools = useMemo(() => [...constantProductPools, ...allPairs], [allPairs, constantProductPools])
   return useMemo(
     () => [
@@ -67,7 +62,7 @@ export type RoutingInfo = {
   route?: MultiRoute
 }
 
-export const routingInfo = atom<RoutingInfo>({
+export const routingInfo = atom<RoutingInfo | undefined>({
   key: 'routingInfo',
   default: undefined,
 })
@@ -76,170 +71,157 @@ export const routingInfo = atom<RoutingInfo>({
  * Returns best trident trade for a desired swap.
  * @param tradeType whether we request an exact output amount or we provide an exact input amount
  * @param amountSpecified the exact amount to swap in/out
+ * @param mainCurrency the desired input/payment currency
  * @param otherCurrency the desired output/payment currency
  */
 export function useBestTridentTrade(
   tradeType: TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT,
   amountSpecified?: CurrencyAmount<Currency>,
+  mainCurrency?: Currency,
   otherCurrency?: Currency
 ): UseBestTridentTradeOutput {
   const { chainId, library } = useActiveWeb3React()
   const blockNumber = useBlockNumber()
   const setRoutingInfo = useSetRecoilState(routingInfo)
-  const [trade, setTrade] = useState<UseBestTridentTradeOutput>({ trade: undefined, priceImpact: undefined })
   const { rebase } = useBentoRebase(amountSpecified?.currency)
-
-  const shareSpecified = useMemo(() => {
-    if (!amountSpecified || !rebase) return
-    return CurrencyAmount.fromRawAmount(
-      amountSpecified.currency,
-      toShareCurrencyAmount(rebase, amountSpecified.wrapped).quotient.toString()
-    )
-  }, [amountSpecified, rebase])
-
+  const [gasPrice, setGasPrice] = useState<number>()
   const [currencyIn, currencyOut] = useMemo(
-    () =>
-      tradeType === TradeType.EXACT_INPUT
-        ? [amountSpecified?.currency, otherCurrency]
-        : [otherCurrency, amountSpecified?.currency],
-    [tradeType, amountSpecified, otherCurrency]
+    () => (tradeType === TradeType.EXACT_INPUT ? [mainCurrency, otherCurrency] : [otherCurrency, mainCurrency]),
+    [tradeType, mainCurrency, otherCurrency]
   )
-
-  const gasPricePromise = useMemo(async () => {
-    if (!library) return
-
-    const gas = await library.getGasPrice()
-    return gas.toNumber()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [library, blockNumber])
-
   const allowedPools = useAllCommonPools(currencyIn, currencyOut)
 
   useEffect(() => {
-    const bestTrade = async () => {
-      const price = await gasPricePromise
-      if (
-        currencyIn &&
-        currencyOut &&
-        currencyIn.wrapped.address !== currencyOut.wrapped.address &&
-        chainId &&
-        price &&
-        shareSpecified &&
-        amountSpecified &&
-        otherCurrency &&
-        allowedPools.length > 0
-      ) {
-        const tridentPools = allowedPools.filter((pool) => pool instanceof ConstantProductPool) as ConstantProductPool[]
-        const legacyPools = allowedPools.filter((pair) => pair instanceof Pair) as Pair[]
+    if (!library) return
 
-        if (tradeType === TradeType.EXACT_INPUT) {
-          const tridentRoute = findMultiRouteExactIn(
-            currencyIn.wrapped,
-            currencyOut.wrapped,
-            BigNumber.from(shareSpecified.quotient.toString()),
-            tridentPools,
-            WNATIVE[shareSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
-          )
+    const main = async () => {
+      const gas = await library.getGasPrice()
+      return gas.toNumber()
+    }
 
-          const legacyRoute = findSingleRouteExactIn(
-            currencyIn.wrapped,
-            currencyOut.wrapped,
-            BigNumber.from(amountSpecified.quotient.toString()),
-            legacyPools,
-            WNATIVE[amountSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
-          )
+    main().then((gasPrice) => setGasPrice(gasPrice))
 
-          if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
-            if (tridentRoute.status === RouteStatus.Success) {
-              const priceImpact = tridentRoute.priceImpact
-              setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
-              return {
-                trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, currencyOut),
-                priceImpact,
-              }
-            }
-          } else {
-            if (legacyRoute.status === RouteStatus.Success) {
-              const priceImpact = legacyRoute.priceImpact
-              setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
-              return {
-                trade: LegacyTrade.exactIn(
-                  convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
-                  amountSpecified
-                ),
-                priceImpact,
-              }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [blockNumber, library])
+
+  return useMemo(() => {
+    if (
+      gasPrice &&
+      currencyIn &&
+      currencyOut &&
+      currencyIn.wrapped.address !== currencyOut.wrapped.address &&
+      chainId &&
+      amountSpecified &&
+      otherCurrency &&
+      rebase &&
+      allowedPools.length > 0
+    ) {
+      const shareSpecified = CurrencyAmount.fromRawAmount(
+        amountSpecified.currency,
+        toShareCurrencyAmount(rebase, amountSpecified.wrapped).quotient.toString()
+      )
+      const tridentPools = allowedPools.filter((pool) => pool instanceof ConstantProductPool) as ConstantProductPool[]
+      const legacyPools = allowedPools.filter((pair) => pair instanceof Pair) as Pair[]
+
+      if (tradeType === TradeType.EXACT_INPUT) {
+        const tridentRoute = findMultiRouteExactIn(
+          currencyIn.wrapped,
+          currencyOut.wrapped,
+          BigNumber.from(shareSpecified.quotient.toString()),
+          tridentPools,
+          WNATIVE[shareSpecified.currency.chainId],
+          gasPrice
+        )
+
+        const legacyRoute = findSingleRouteExactIn(
+          currencyIn.wrapped,
+          currencyOut.wrapped,
+          BigNumber.from(amountSpecified.quotient.toString()),
+          legacyPools,
+          WNATIVE[amountSpecified.currency.chainId],
+          gasPrice
+        )
+
+        if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
+          if (tridentRoute.status === RouteStatus.Success) {
+            const priceImpact = tridentRoute.priceImpact
+            setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
+            return {
+              trade: Trade.bestTradeExactIn(tridentRoute, shareSpecified, currencyOut),
+              priceImpact,
             }
           }
         } else {
-          const tridentRoute = findMultiRouteExactOut(
-            currencyIn.wrapped,
-            currencyOut.wrapped,
-            BigNumber.from(shareSpecified.quotient.toString()),
-            tridentPools,
-            WNATIVE[shareSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
-          )
-
-          const legacyRoute = findSingleRouteExactOut(
-            currencyIn.wrapped,
-            currencyOut.wrapped,
-            BigNumber.from(amountSpecified.quotient.toString()),
-            legacyPools,
-            WNATIVE[amountSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
-          )
-
-          if (tridentRoute.amountInBN.lt(legacyRoute.amountInBN)) {
-            if (tridentRoute.status === RouteStatus.Success) {
-              const priceImpact = tridentRoute.priceImpact
-              setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
-              return {
-                trade: Trade.bestTradeExactOut(tridentRoute, currencyIn, shareSpecified),
-                priceImpact,
-              }
+          if (legacyRoute.status === RouteStatus.Success) {
+            const priceImpact = legacyRoute.priceImpact
+            setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
+            return {
+              trade: LegacyTrade.exactIn(
+                convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
+                amountSpecified
+              ),
+              priceImpact,
             }
-          } else {
-            if (legacyRoute.status === RouteStatus.Success) {
-              const priceImpact = legacyRoute.priceImpact
-              setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
-              return {
-                trade: LegacyTrade.exactOut(
-                  convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
-                  amountSpecified
-                ),
-                priceImpact,
-              }
+          }
+        }
+      } else {
+        const tridentRoute = findMultiRouteExactOut(
+          currencyIn.wrapped,
+          currencyOut.wrapped,
+          BigNumber.from(shareSpecified.quotient.toString()),
+          tridentPools,
+          WNATIVE[shareSpecified.currency.chainId],
+          gasPrice
+        )
+
+        const legacyRoute = findSingleRouteExactOut(
+          currencyIn.wrapped,
+          currencyOut.wrapped,
+          BigNumber.from(amountSpecified.quotient.toString()),
+          legacyPools,
+          WNATIVE[amountSpecified.currency.chainId],
+          gasPrice
+        )
+
+        if (tridentRoute.amountInBN.lt(legacyRoute.amountInBN)) {
+          if (tridentRoute.status === RouteStatus.Success) {
+            const priceImpact = tridentRoute.priceImpact
+            setRoutingInfo({ chainId, allowedPools: tridentPools, route: tridentRoute, mode: 'multiple' })
+            return {
+              trade: Trade.bestTradeExactOut(tridentRoute, currencyIn, shareSpecified),
+              priceImpact,
+            }
+          }
+        } else {
+          if (legacyRoute.status === RouteStatus.Success) {
+            const priceImpact = legacyRoute.priceImpact
+            setRoutingInfo({ chainId, allowedPools: legacyPools, route: legacyRoute, mode: 'single' })
+            return {
+              trade: LegacyTrade.exactOut(
+                convertTinesSingleRouteToLegacyRoute(legacyRoute, legacyPools, currencyIn, currencyOut),
+                amountSpecified
+              ),
+              priceImpact,
             }
           }
         }
       }
-
-      return {
-        trade: undefined,
-        priceImpact: undefined,
-      }
     }
 
-    bestTrade().then((trade) => {
-      setTrade(trade)
-    })
+    return {
+      trade: undefined,
+      priceImpact: undefined,
+    }
   }, [
-    currencyIn,
-    currencyOut,
     allowedPools,
     amountSpecified,
     chainId,
-    gasPricePromise,
+    currencyIn,
+    currencyOut,
+    gasPrice,
     otherCurrency,
-    shareSpecified,
-    tradeType,
-    blockNumber,
+    rebase,
     setRoutingInfo,
+    tradeType,
   ])
-
-  return trade
 }

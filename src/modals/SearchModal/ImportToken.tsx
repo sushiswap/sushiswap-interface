@@ -1,4 +1,4 @@
-import { plural, t } from '@lingui/macro'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Token } from '@sushiswap/core-sdk'
 import { TokenList } from '@uniswap/token-lists/dist/types'
@@ -30,12 +30,8 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
 
   const addToken = useAddUserToken()
   return (
-    <div className="flex flex-col h-full">
-      <ModalHeader
-        onBack={onBack}
-        onClose={onDismiss}
-        title={`Import ${plural(tokens.length, { one: 'Token', many: 'Tokens' })}`}
-      />
+    <div className="flex flex-col h-full p-6">
+      <ModalHeader onBack={onBack} onClose={onDismiss} title="Import Tokens" />
       <Typography className="text-center">
         {i18n._(
           t`This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade.`

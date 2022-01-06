@@ -9,8 +9,9 @@ import Divider from 'app/components/Divider'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
+import { selectTridentSwap, setShowReview, setTridentSwapState, TypedField } from 'app/features/trident/swap/swapSlice'
 import SwapSubmittedModalContent from 'app/features/trident/swap/SwapSubmittedModalContent'
-import { TridentApproveGateBentoPermitAtom } from 'app/features/trident/TridentApproveGate'
 import { shortenAddress, toAmountCurrencyAmount, warningSeverity } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useBentoRebases from 'app/hooks/useBentoRebases'
@@ -18,41 +19,29 @@ import useENS from 'app/hooks/useENS'
 import { SwapCallbackState, useSwapCallback } from 'app/hooks/useSwapCallback'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import useTransactionStatus from 'app/hooks/useTransactionStatus'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { FC, useCallback, useMemo, useState } from 'react'
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 
-import { showReviewAtom } from '../context/atoms'
-import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
-import RecipientPanel from './RecipientPanel'
 import SwapRate from './SwapRate'
 
 const SwapReviewModal: FC = () => {
   const { i18n } = useLingui()
+  const dispatch = useAppDispatch()
   const { currencies } = useCurrenciesFromURL()
-  const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const { trade, reset } = useSwapAssetPanelInputs()
-  const recipient = useRecoilValue(RecipientPanel.atom)
+  const { recipient, showReview, spendFromWallet, receiveToWallet } = useAppSelector(selectTridentSwap)
   const { address } = useENS(recipient)
-  const [txHash, setTxHash] = useState<string>()
-  const allowedSlippage = useSwapSlippageTolerance(trade)
-  const tx = useTransactionStatus()
-  const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
-  const resetBentoPermit = useResetRecoilState(TridentApproveGateBentoPermitAtom)
-  const [cbError, setCbError] = useState<string>()
   const { rebases } = useBentoRebases(currencies)
-  const {
-    parsedAmounts: [inputAmount, outputAmount],
-    spendFromWallet: [fromWallet],
-    receiveToWallet: [receiveToWallet],
-    priceImpact,
-  } = useSwapAssetPanelInputs()
+  const tx = useTransactionStatus()
+  const [cbError, setCbError] = useState<string>()
+  const [txHash, setTxHash] = useState<string>()
+  const { trade, parsedAmounts, priceImpact } = useDerivedTridentSwapContext()
+
+  const allowedSlippage = useSwapSlippageTolerance(trade)
 
   const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
-    bentoPermit,
-    resetBentoPermit,
     receiveToWallet,
-    fromWallet,
-    parsedAmounts: [inputAmount, outputAmount],
+    fromWallet: spendFromWallet,
+    parsedAmounts,
   })
 
   const execute = useCallback(async () => {
@@ -63,11 +52,11 @@ const SwapReviewModal: FC = () => {
       setTxHash(txHash)
 
       // Reset inputs
-      reset()
+      dispatch(setTridentSwapState({ value: '', typedField: TypedField.A }))
     } catch (e) {
       setCbError(e.message)
     }
-  }, [callback, reset, setTxHash])
+  }, [callback, dispatch])
 
   const minimumAmountOutLegacy = trade ? trade.minimumAmountOut(allowedSlippage) : undefined
   const minimumAmountOutTrident =
@@ -95,7 +84,7 @@ const SwapReviewModal: FC = () => {
   return (
     <HeadlessUIModal.Controlled
       isOpen={showReview}
-      onDismiss={() => setShowReview(false)}
+      onDismiss={() => dispatch(setShowReview(false))}
       afterLeave={() => setTxHash(undefined)}
     >
       {!txHash ? (
@@ -131,21 +120,21 @@ const SwapReviewModal: FC = () => {
           </div>
           <div className="flex flex-col gap-3 px-5">
             <div className="flex items-center gap-3">
-              <CurrencyLogo currency={inputAmount?.currency} size={48} className="rounded-full" />
+              <CurrencyLogo currency={parsedAmounts?.[0]?.currency} size={48} className="rounded-full" />
               <Typography variant="h3" weight={700} className="text-white">
-                {inputAmount?.toSignificant(6)}
+                {parsedAmounts?.[0]?.toSignificant(6)}
               </Typography>
               <Typography variant="h3" weight={700} className="text-secondary">
-                {inputAmount?.currency.symbol}
+                {parsedAmounts?.[0]?.currency.symbol}
               </Typography>
             </div>
             <div className="flex justify-center w-12 text-secondary">
               <ArrowDownIcon width={20} />
             </div>
             <div className="flex items-center gap-3">
-              <CurrencyLogo currency={outputAmount?.currency} size={48} className="rounded-full" />
+              <CurrencyLogo currency={parsedAmounts?.[1]?.currency} size={48} className="rounded-full" />
               <Typography variant="h3" weight={700} className="text-white">
-                {outputAmount?.toSignificant(6)}
+                {parsedAmounts?.[1]?.toSignificant(6)}
               </Typography>
               <Typography variant="h3" weight={700} className="text-secondary">
                 {currencies[1]?.symbol}
