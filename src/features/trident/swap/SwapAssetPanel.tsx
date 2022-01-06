@@ -17,35 +17,17 @@ import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
-import React, { createContext, FC, useCallback, useContext, useMemo, useState } from 'react'
+import React, { FC, useCallback, useMemo, useState } from 'react'
 
 import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
-
-type Context = Omit<SwapAssetPanel, 'header'>
-
-const defaultContext: Context = {
-  error: false,
-  onChange: () => undefined,
-  onSelect: () => undefined,
-  spendFromWallet: true,
-  currency: undefined,
-  walletToggle: undefined,
-  value: undefined,
-  darkBackground: undefined,
-  priceImpact: undefined,
-  disabled: false,
-}
-
-const SwapAssetPanelContext = createContext<Context>(defaultContext)
-const useSwapAssetPanelContext = () => useContext(SwapAssetPanelContext)
 
 interface SwapAssetPanel {
   error: boolean
   header: (x) => React.ReactNode
-  walletToggle: React.ReactNode
+  walletToggle: (x) => React.ReactNode
   currency?: Currency
   value?: string
-  onChange?(x?: string): void
+  onChange(x?: string): void
   onSelect?(x: Currency): void
   spendFromWallet: boolean
   darkBackground?: boolean
@@ -66,7 +48,7 @@ const SwapAssetPanel = ({
   priceImpact,
   disabled,
 }: SwapAssetPanel) => {
-  const usdcValue = useUSDCValue(tryParseAmount(value, currency))
+  const usdcValue = useUSDCValue(tryParseAmount(value || '1', currency))
 
   return (
     <div
@@ -111,7 +93,7 @@ const SwapAssetPanel = ({
           <BalancePanel {...{ disabled, currency, onChange, spendFromWallet, value }} />
         </div>
         <div className="flex items-center justify-between overflow-hidden border rounded-b lg:hidden border-dark-700 lg:border-none">
-          {walletToggle}
+          {walletToggle({ spendFromWallet })}
           {!disabled && (
             <div className="pr-5">
               <MaxButton {...{ currency, onChange, spendFromWallet }} />
@@ -123,8 +105,9 @@ const SwapAssetPanel = ({
   )
 }
 
-const WalletSwitch: FC<{ label: string; onChange(x: boolean): void; id?: string }> = ({ label, onChange, id }) => {
-  const { spendFromWallet } = useSwapAssetPanelContext()
+const WalletSwitch: FC<
+  Pick<SwapAssetPanel, 'spendFromWallet'> & { label: string; onChange(x: boolean): void; id?: string }
+> = ({ label, onChange, id, spendFromWallet }) => {
   const { i18n } = useLingui()
 
   return (
@@ -170,7 +153,7 @@ const InputPanel: FC<
   const { i18n } = useLingui()
   const isDesktop = useDesktopMediaQuery()
   const [open, setOpen] = useState<boolean>(false)
-  const usdcValue = useUSDCValue(tryParseAmount(value, currency))
+  const usdcValue = useUSDCValue(tryParseAmount(value || '1', currency))
 
   const priceImpactClassName = useMemo(() => {
     if (!priceImpact) return undefined
@@ -222,7 +205,7 @@ const InputPanel: FC<
             className={classNames(
               !currency ? 'justify-start' : 'justify-between lg:justify-start',
               'w-full text-right lg:text-left items-center swap-panel-input',
-              value ? 'text-high-emphesis' : onChange ? 'text-primary' : 'text-secondary'
+              value ? 'text-high-emphesis' : 'text-primary'
             )}
           >
             {!currency ? (
@@ -244,7 +227,7 @@ const InputPanel: FC<
                   <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
                 )}
               </HeadlessUIModal>
-            ) : onChange ? (
+            ) : (
               <NumericalInput
                 disabled={disabled}
                 value={value || ''}
@@ -253,8 +236,6 @@ const InputPanel: FC<
                 className="flex-grow w-full text-right bg-transparent text-inherit lg:text-left disabled:cursor-not-allowed"
                 autoFocus
               />
-            ) : (
-              value || '0.00'
             )}
           </Typography>
           <Typography variant="xs" className="hidden text-left text-secondary lg:block" weight={400}>
@@ -364,7 +345,7 @@ const SwapAssetPanelHeader: FC<
           </HeadlessUIModal>
         )}
       </div>
-      <div className="hidden lg:block">{walletToggle}</div>
+      <div className="hidden lg:block">{walletToggle({ spendFromWallet })}</div>
       <div className="block lg:hidden">
         <BalancePanel {...{ disabled, currency, onChange, spendFromWallet, value }} />
       </div>

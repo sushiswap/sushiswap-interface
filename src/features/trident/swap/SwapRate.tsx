@@ -3,9 +3,8 @@ import { useLingui } from '@lingui/react'
 import { Price } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
 import React, { FC, useState } from 'react'
-
-import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
 
 interface SwapRateProps {
   className?: string
@@ -15,16 +14,18 @@ const SwapRate: FC<SwapRateProps> = ({ className = 'text-low-emphesis' }) => {
   const { i18n } = useLingui()
   const { currencies } = useCurrenciesFromURL()
   const [invert, setInvert] = useState(false)
-  const {
-    parsedAmounts: [inputAmount, outputAmount],
-  } = useSwapAssetPanelInputs()
-
+  const { parsedAmounts } = useDerivedTridentSwapContext()
   const outputSymbol = <span className="text-secondary">{currencies[1]?.symbol}</span>
-  const inputSymbol = <span className="text-secondary">{inputAmount?.currency.symbol}</span>
+  const inputSymbol = <span className="text-secondary">{parsedAmounts?.[0]?.currency.symbol}</span>
   const price =
-    inputAmount &&
-    outputAmount &&
-    new Price(inputAmount.currency, outputAmount.currency, inputAmount.quotient, outputAmount.quotient)
+    parsedAmounts?.[0] &&
+    parsedAmounts?.[1] &&
+    new Price(
+      parsedAmounts?.[0].currency,
+      parsedAmounts?.[1].currency,
+      parsedAmounts?.[0].quotient,
+      parsedAmounts?.[1].quotient
+    )
 
   return (
     <div className="flex justify-between">

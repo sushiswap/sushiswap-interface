@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
+import tridentSwap from '../features/trident/swap/swapSlice'
 import application from './application/reducer'
 import burn from './burn/reducer'
 import create from './create/reducer'
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   limitOrder,
   create,
   inari,
+  tridentSwap,
 })
 
 export default reducer

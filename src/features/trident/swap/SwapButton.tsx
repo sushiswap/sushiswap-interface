@@ -4,27 +4,26 @@ import loadingCircle from 'animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Typography from 'app/components/Typography'
+import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
+import { selectTridentSwap, setShowReview } from 'app/features/trident/swap/swapSlice'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { attemptingTxnAtom, showReviewAtom } from '../context/atoms'
-import useSwapAssetPanelInputs from '../context/hooks/useSwapAssetPanelInputs'
 import TridentApproveGate from '../TridentApproveGate'
 
 const SwapButton: FC = () => {
   const { i18n } = useLingui()
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-  const setShowReview = useSetRecoilState(showReviewAtom)
+  const dispatch = useAppDispatch()
+  const { attemptingTxn } = useAppSelector(selectTridentSwap)
   const router = useTridentRouterContract()
   const bentoBox = useBentoBoxContract()
-
-  const { parsedAmounts, error } = useSwapAssetPanelInputs()
+  const { parsedAmounts, error } = useDerivedTridentSwapContext()
 
   return (
     <TridentApproveGate
-      inputAmounts={[parsedAmounts[0]]}
+      inputAmounts={[parsedAmounts?.[0]]}
       tokenApproveOn={bentoBox?.address}
       masterContractAddress={router?.address}
       withPermit={true}
@@ -55,7 +54,7 @@ const SwapButton: FC = () => {
               })}
               color="gradient"
               disabled={disabled}
-              onClick={() => setShowReview(true)}
+              onClick={() => dispatch(setShowReview(true))}
             >
               <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
                 {buttonText}

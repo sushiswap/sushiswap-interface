@@ -1,6 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { JSBI, Percent, TradeType, TradeVersion, WNATIVE, ZERO } from '@sushiswap/core-sdk'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import { selectTridentSwap, TypedField } from 'app/features/trident/swap/swapSlice'
 import { maxAmountSpend, toAmountCurrencyAmount } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { tryParseAmount } from 'app/functions/parse'
@@ -8,39 +10,35 @@ import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useCallback, useMemo, useState } from 'react'
+import { useAppSelector } from 'app/state/hooks'
+import { useMemo } from 'react'
 
-import useCurrenciesFromURL from './useCurrenciesFromURL'
-
-export enum TypedField {
-  A,
-  B,
-}
-
-const useSwapAssetPanelInputs = () => {
+/*
+  Private hook, specific for the Swap page component, do not use anywhere else for performance reasons.
+  If you need anything from this hook, use useDerivedTridentSwapContext() instead
+ */
+export const _useSwapPage = () => {
   const { i18n } = useLingui()
+  const { value, typedField, spendFromWallet } = useAppSelector(selectTridentSwap)
   const { account, chainId } = useActiveWeb3React()
   const {
     currencies: [currencyA, currencyB],
-    switchCurrencies: switchURLCurrencies,
   } = useCurrenciesFromURL()
-  const input = useState({ value: '', typedField: TypedField.A })
-  const { value, typedField } = input[0]
-  const spendFromWallet = useState(true)
-  const receiveToWallet = useState(true)
+  const { rebases, loading: rebasesLoading } = useBentoRebases([currencyA, currencyB])
 
   const inputCurrencyAmount = useMemo(() => {
     return tryParseAmount(value, typedField === TypedField.A ? currencyA : currencyB)
   }, [currencyA, currencyB, typedField, value])
 
-  const { rebases, loading: rebasesLoading } = useBentoRebases([currencyA, currencyB])
-
-  const isWrap =
-    currencyA &&
-    currencyB &&
-    chainId &&
-    ((currencyA?.isNative && WNATIVE[chainId].address === currencyB?.wrapped.address) ||
-      (currencyB?.isNative && WNATIVE[chainId].address === currencyA?.wrapped.address))
+  const isWrap = useMemo(
+    () =>
+      currencyA &&
+      currencyB &&
+      chainId &&
+      ((currencyA?.isNative && WNATIVE[chainId].address === currencyB?.wrapped.address) ||
+        (currencyB?.isNative && WNATIVE[chainId].address === currencyA?.wrapped.address)),
+    [chainId, currencyA, currencyB]
+  )
 
   const { trade, priceImpact: _priceImpact } = useBestTridentTrade(
     typedField === TypedField.A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
@@ -75,7 +73,7 @@ const useSwapAssetPanelInputs = () => {
     return undefined
   }, [rebases, rebasesLoading, trade])
 
-  const balance = useBentoOrWalletBalance(account ?? undefined, currencyA, spendFromWallet[0])
+  const balance = useBentoOrWalletBalance(account ?? undefined, currencyA, spendFromWallet)
 
   const formattedAmounts = useMemo(() => {
     if (isWrap) return [value, value]
@@ -92,53 +90,33 @@ const useSwapAssetPanelInputs = () => {
     return [inputCurrencyAmount, tradeOutputAmount]
   }, [isWrap, inputCurrencyAmount, tradeOutputAmount])
 
-  const switchCurrencies = useCallback(async () => {
-    input[1]({ value: '', typedField: TypedField.A })
-    await switchURLCurrencies()
-  }, [input, switchURLCurrencies])
-
-  const reset = useCallback(() => input[1]({ value: '', typedField: TypedField.A }), [input])
-
-  let error = !account
-    ? i18n._(t`Connect Wallet`)
-    : maxAmountSpend(balance)?.equalTo(ZERO)
-    ? i18n._(t`Insufficient balance to cover for fees`)
-    : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
-    ? i18n._(t`Enter an amount`)
-    : trade === undefined && !isWrap
-    ? i18n._(t`No route found`)
-    : balance && trade && inputCurrencyAmount && maxAmountSpend(balance)?.lessThan(inputCurrencyAmount)
-    ? i18n._(t`Insufficient ${inputCurrencyAmount?.currency.symbol} balance`)
-    : ''
+  let error = useMemo(
+    () =>
+      !account
+        ? i18n._(t`Connect Wallet`)
+        : maxAmountSpend(balance)?.equalTo(ZERO)
+        ? i18n._(t`Insufficient balance to cover for fees`)
+        : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
+        ? i18n._(t`Enter an amount`)
+        : trade === undefined && !isWrap
+        ? i18n._(t`No route found`)
+        : balance && trade && inputCurrencyAmount && maxAmountSpend(balance)?.lessThan(inputCurrencyAmount)
+        ? i18n._(t`Insufficient ${inputCurrencyAmount?.currency.symbol} balance`)
+        : '',
+    [account, balance, i18n, inputCurrencyAmount, isWrap, parsedAmounts, trade]
+  )
 
   return useMemo(
     () => ({
-      input,
       isWrap,
-      reset,
       error,
       trade,
       priceImpact,
-      spendFromWallet,
-      receiveToWallet,
       formattedAmounts,
       parsedAmounts,
-      switchCurrencies,
     }),
-    [
-      input,
-      priceImpact,
-      isWrap,
-      reset,
-      error,
-      trade,
-      spendFromWallet,
-      receiveToWallet,
-      formattedAmounts,
-      parsedAmounts,
-      switchCurrencies,
-    ]
+    [priceImpact, isWrap, error, trade, formattedAmounts, parsedAmounts]
   )
 }
 
-export default useSwapAssetPanelInputs
+export default _useSwapPage
