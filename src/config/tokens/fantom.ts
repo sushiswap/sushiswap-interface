@@ -18,3 +18,4 @@ export const MIM = new Token(
   'Magic Internet Money'
 )
 export const ICE = new Token(ChainId.FANTOM, '0xf16e81dce15B08F326220742020379B855B87DF9', 18, 'ICE', 'IceToken')
+export const SPELL = new Token(ChainId.FANTOM, '0x468003B688943977e6130F4F68F23aad939a1040', 18, 'SPELL', 'SpellToken')

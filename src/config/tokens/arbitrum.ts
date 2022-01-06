@@ -28,6 +28,8 @@ export const SPELL = new Token(
   'Spell Token'
 )
 
+export const ICE = new Token(ChainId.ARBITRUM, '0xCB58418Aa51Ba525aEF0FE474109C0354d844b7c', 18, 'ICE', 'ICEToken')
+
 export const gOHM = new Token(
   ChainId.ARBITRUM,
   '0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1',
