@@ -32,13 +32,11 @@ export const MobileNav: FC = () => {
           </Link>
         )}
 
-        {chainId && featureEnabled(Feature.TRIDENT, chainId) && (
-          <Link href="/trident/balances/wallet">
-            <a id="swap-nav-link" className={NAV_BASE_CLASS}>
-              {i18n._(t`Balances`)}
-            </a>
-          </Link>
-        )}
+        <Link href="/trident/balances/wallet">
+          <a id="swap-nav-link" className={NAV_BASE_CLASS}>
+            {i18n._(t`Balances`)}
+          </a>
+        </Link>
 
         <Link href="/pool">
           <a id="pool-nav-link" className={NAV_BASE_CLASS}>

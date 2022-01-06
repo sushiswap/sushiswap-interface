@@ -198,25 +198,27 @@ export function CurrencySearch({
         </div>
       )}
 
-      <div className="h-screen border-t border-b border-dark-800 -mx-6">
+      <div className="lg:h-screen h-full border-t border-b border-dark-800 -mx-6">
         {searchToken && !searchTokenIsAdded ? (
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
         ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
           <AutoSizer disableWidth>
-            {({ height }) => (
-              <CurrencyList
-                height={height}
-                currencies={includeNativeCurrency ? filteredSortedTokensWithETH : filteredSortedTokens}
-                otherListTokens={filteredInactiveTokens}
-                onCurrencySelect={handleCurrencySelect}
-                otherCurrency={otherSelectedCurrency}
-                selectedCurrency={selectedCurrency}
-                fixedListRef={fixedList}
-                showImportView={showImportView}
-                setImportToken={setImportToken}
-                hideBalance={hideBalance}
-              />
-            )}
+            {({ height }) => {
+              return (
+                <CurrencyList
+                  height={height}
+                  currencies={includeNativeCurrency ? filteredSortedTokensWithETH : filteredSortedTokens}
+                  otherListTokens={filteredInactiveTokens}
+                  onCurrencySelect={handleCurrencySelect}
+                  otherCurrency={otherSelectedCurrency}
+                  selectedCurrency={selectedCurrency}
+                  fixedListRef={fixedList}
+                  showImportView={showImportView}
+                  setImportToken={setImportToken}
+                  hideBalance={hideBalance}
+                />
+              )
+            }}
           </AutoSizer>
         ) : (
           <Typography weight={700} variant="xs" className="text-secondary flex h-full justify-center items-center">

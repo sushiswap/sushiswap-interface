@@ -1,3 +1,4 @@
+import { Web3Provider } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
@@ -21,17 +22,22 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
   return b.addedTime - a.addedTime
 }
 
-const SOCK = (
-  <span role="img" aria-label="has socks emoji" style={{ marginTop: -4, marginBottom: -4 }}>
-    🧦
-  </span>
-)
-
 // eslint-disable-next-line react/prop-types
-function StatusIcon({ connector }: { connector: AbstractConnector }) {
+function StatusIcon({
+  connector,
+  account,
+  provider,
+}: {
+  connector: AbstractConnector
+  account: string
+  provider: Web3Provider
+}) {
   if (connector === injected) {
-    return <Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />
-    // return <Identicon />
+    return (
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+        <Image src="/images/wallets/metamask.png" alt="Injected (MetaMask etc...)" width={16} height={16} />
+      </div>
+    )
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
@@ -80,7 +86,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
 
 function Web3StatusInner() {
   const { i18n } = useLingui()
-  const { account, connector } = useWeb3React()
+  const { account, connector, library } = useWeb3React()
 
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -91,15 +97,7 @@ function Web3StatusInner() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions
-    .filter((tx) => {
-      if (tx.receipt) {
-        return false
-      } else {
-        return true
-      }
-    })
-    .map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
 
   const hasPendingTransactions = !!pending.length
 
@@ -109,20 +107,22 @@ function Web3StatusInner() {
     return (
       <div
         id="web3-status-connected"
-        className="flex items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
+        className="flex gap-2 items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
         onClick={toggleWalletModal}
       >
         {hasPendingTransactions ? (
-          <div className="flex items-center justify-between">
-            <div className="pr-2">
+          <div className="flex gap-2 items-center justify-between">
+            <div>
               {pending?.length} {i18n._(t`Pending`)}
             </div>{' '}
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="mr-2">{ENSName || shortenAddress(account)}</div>
+          <div>{ENSName || shortenAddress(account)}</div>
         )}
-        {!hasPendingTransactions && connector && <StatusIcon connector={connector} />}
+        {!hasPendingTransactions && connector && (
+          <StatusIcon connector={connector} account={account} provider={library} />
+        )}
       </div>
     )
   } else {

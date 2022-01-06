@@ -4,7 +4,6 @@ import '../styles/index.css'
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 import { remoteLoader } from '@lingui/remote-loader'
-import { nanoid } from '@reduxjs/toolkit'
 import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
@@ -30,8 +29,6 @@ import { RecoilRoot } from 'recoil'
 import { PersistGate } from 'redux-persist/integration/react'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
-
-const sessionId = nanoid()
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
@@ -68,7 +65,9 @@ function MyApp({ Component, pageProps, fallback }) {
 
       try {
         // Load messages from AWS, use q session param to get latest version from cache
-        const res = await fetch(`https://d3l928w2mi7nub.cloudfront.net/trident-${locale}.json?q=${sessionId}`)
+        const res = await fetch(
+          `https://raw.githubusercontent.com/sushiswap/translations/master/sushiswap/${locale}.json`
+        )
         const remoteMessages = await res.json()
 
         const messages = remoteLoader({ messages: remoteMessages, format: 'minimal' })

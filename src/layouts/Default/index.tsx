@@ -4,7 +4,7 @@ import Main from 'app/components/Main'
 import Popups from 'app/components/Popups'
 const Layout = ({ children }) => {
   return (
-    <div className="z-0 flex flex-col items-center w-full h-screen pb-16 lg:pb-0">
+    <div className="z-0 flex flex-col items-center w-full h-screen">
       <Header />
       <Main>{children}</Main>
       <Popups />

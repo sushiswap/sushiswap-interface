@@ -133,7 +133,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
           <div className="flex items-center w-auto text-sm font-bold border rounded cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
             {account && chainId && userEthBalance && (
               <Link href="/balances" passHref={true}>
-                <a className="px-3 text-high-emphesis text-bold">
+                <a className="px-3 text-high-emphesis text-bold hidden md:block">
                   {userEthBalance?.toSignificant(4)} {NATIVE[chainId].symbol}
                 </a>
               </Link>
