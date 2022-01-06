@@ -1,6 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE } from '@sushiswap/core-sdk'
+import { InjectedConnector } from '@web3-react/injected-connector'
+import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions/feature'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -23,8 +25,13 @@ interface DesktopNavProps {
 
 export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
   const { i18n } = useLingui()
-  const { account, chainId, library } = useActiveWeb3React()
+  const { account, chainId, library, connector } = useActiveWeb3React()
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
+
+  const isCbWallet =
+    connector instanceof WalletLinkConnector ||
+    (connector instanceof InjectedConnector && window.walletLinkExtension) ||
+    window?.ethereum?.isCoinbaseWallet
 
   return (
     <div className="flex flex-col gap-3 px-6 py-3">
@@ -124,7 +131,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
           </div>
         </div>
         <div className="flex items-center justify-end gap-2">
-          {library && library.provider.isMetaMask && (
+          {library && (library.provider.isMetaMask || isCbWallet) && (
             <div className="hidden sm:inline-block">
               <Web3Network />
             </div>
