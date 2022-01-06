@@ -14,3 +14,4 @@ export const MIM = new Token(
   'Magic Internet Money'
 )
 export const ICE = new Token(ChainId.BSC, '0xf16e81dce15B08F326220742020379B855B87DF9', 18, 'ICE', 'IceToken')
+export const SPELL = new Token(ChainId.BSC, '0x9Fe28D11ce29E340B7124C493F59607cbAB9ce48', 18, 'SPELL', 'SpellToken')

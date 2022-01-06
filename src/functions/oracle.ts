@@ -25,7 +25,7 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
   if (params[0] !== AddressZero) {
     if (!mapping![params[0]]) {
       // 'One of the Chainlink oracles used is not configured in this UI.'
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
+      console.log('One of the Chainlink oracles used is not configured in this UI.', { collateral, asset })
       return false
     } else {
       decimals -= 18 - mapping![params[0]].decimals
@@ -47,7 +47,9 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
       } else {
         // "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link."
         console.log(
-          "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link."
+          "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.",
+          collateral,
+          asset
         )
         return false
       }
@@ -60,7 +62,9 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
     if (!divider.eq(params[2])) {
       // 'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.'
       console.log(
-        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.'
+        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.',
+        collateral,
+        asset
       )
       return false
     } else {
@@ -68,7 +72,7 @@ export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collater
     }
   } else {
     // "The Chainlink oracles configured don't match the pair tokens."
-    console.log("The Chainlink oracles configured don't match the pair tokens.")
+    console.log("The Chainlink oracles configured don't match the pair tokens.", collateral, asset)
     return false
   }
 }
