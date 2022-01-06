@@ -250,7 +250,7 @@ const InputPanel: FC = () => {
                     <Button
                       color="blue"
                       variant="filled"
-                      className="rounded-full px-3 py-0 h-[32px] shadow-md"
+                      className="rounded-full px-3 py-0 h-[32px] shadow-md token-select-trigger"
                       endIcon={<ChevronDownIcon width={20} height={20} />}
                     >
                       <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>

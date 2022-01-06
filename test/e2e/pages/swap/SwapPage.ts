@@ -5,42 +5,44 @@ import { AppPage } from '../AppPage'
 
 export class SwapPage extends AppPage {
   // Main swap panel selectors
-  protected TokenInputSelector: string = '.swap-panel-input input'
-  protected PayFromWalletSelector: string = '.chk-pay-from-wallet'
-  protected ReceiveToWalletSelector: string = '.chk-receive-to-wallet'
-  protected SwapButtonSelector: string = '#swap-button'
-  protected WrapButtonSelector: string = '#wrap-button'
-  protected UseMaxButtonSelector: string = '.btn-max'
-  protected BalanceLabelSelector: string = '.text-balance'
-  protected SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
+  private TokenInputSelector: string = '.swap-panel-input input'
+  private PayFromWalletSelector: string = '.chk-pay-from-wallet'
+  private ReceiveToWalletSelector: string = '.chk-receive-to-wallet'
+  private SwapButtonSelector: string = '#swap-button'
+  private WrapButtonSelector: string = '#wrap-button'
+  private UseMaxButtonSelector: string = '.btn-max'
+  private BalanceLabelSelector: string = '.text-balance'
+  private SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
 
   // Swap rate selectors
-  protected ExchangeRateButtonSelector: string = '#btn-exchange-rate'
+  private ExchangeRateButtonSelector: string = '#btn-exchange-rate'
 
   // Swap review modal selectors
-  protected ConfirmSwapButtonSelector: string = '#review-swap-button'
-  protected SwapSuccessIconSelector: string = '#swap-success-icon'
+  private ConfirmSwapButtonSelector: string = '#review-swap-button'
+  private SwapSuccessIconSelector: string = '#swap-success-icon'
 
-  // Token selector & currency select dialog selectors
-  protected InTokenButtonSelector: string = '#asset-select-trigger-0'
-  protected OutTokenButtonSelector: string = '#asset-select-trigger-1'
-  protected SelectTokenInputSelector: string = '#txt-select-token'
-  protected AllCurrenciesListSelector: string = '#all-currencies-list'
-  protected SelectTokenResultsSelector: string = '#all-currencies-'
+  // Token selector &
+  private InTokenButtonSelector: string = '#asset-select-trigger-0'
+  private OutTokenButtonSelector: string = '#asset-select-trigger-1'
+
+  //Currency select dialog selectors
+  private SelectTokenInputSelector: string = '#txt-select-token'
+  private AllCurrenciesListSelector: string = '#all-currencies-list'
+  private SelectTokenResultsSelector: string = '#all-currencies-'
 
   // Tx settings
-  protected TxSettingsButtonSelector: string = '#btn-transaction-settings'
-  protected SlippageInputSelector: string = '#text-slippage'
-  protected ExpertModeToggleSelector: string = '#toggle-expert-mode-button'
+  private TxSettingsButtonSelector: string = '#btn-transaction-settings'
+  private SlippageInputSelector: string = '#text-slippage'
+  private ExpertModeToggleSelector: string = '#toggle-expert-mode-button'
 
   //Confirm expert Mode Modal
-  protected ConfirmExpertModeSelector: string = '#confirm-expert-mode'
+  private ConfirmExpertModeSelector: string = '#confirm-expert-mode'
 
   // Add recipient
-  protected AddRecipientButtonSelector: string = '#btn-add-recipient'
-  protected RecipientInputSelector: string = '#recipient-input'
+  private AddRecipientButtonSelector: string = '#btn-add-recipient'
+  private RecipientInputSelector: string = '#recipient-input'
 
-  protected ApproveButtonSelector: string = '#btn-approve'
+  private ApproveButtonSelector: string = '#btn-approve'
 
   public async swapTokens(
     inTokenSymbol: string,

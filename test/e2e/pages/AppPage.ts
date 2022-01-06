@@ -4,24 +4,25 @@ import { ElementHandle, Page } from 'puppeteer'
 export abstract class AppPage {
   public Metamask: Dappeteer
 
-  protected URL: string
+  protected BaseUrl: string
   protected Page: Page
+  protected Route: string = ''
 
   protected WalletConnectSelector: string = '#connect-wallet'
   protected WalletOptionMetamaskSelector: string = '#wallet-option-MetaMask'
 
   private ci: string = process.env.CI || 'false'
 
-  constructor(page: Page, metamask: Dappeteer, url: string = '') {
+  constructor(page: Page, metamask: Dappeteer, baseUrl: string = '') {
     this.Page = page
-    this.URL = url
+    this.BaseUrl = baseUrl
     this.Metamask = metamask
   }
 
   public async navigateTo(): Promise<Page> {
     await this.bringToFront()
-    if (this.URL) {
-      await this.Page.goto(this.URL)
+    if (this.BaseUrl && this.Route) {
+      await this.Page.goto(this.BaseUrl + this.Route)
     } else {
       console.warn('Page has no URL and cannot be navigated to')
     }

@@ -28,7 +28,13 @@ export const ClassicDescription: FC = () => {
         <div>{i18n._(t`Example`)}</div>
         <SushiWethExample />
       </div>
-      <Button className="w-72" color="gradient" variant="filled" onClick={() => setCurrentStep(2)}>
+      <Button
+        id="btn-classic-continue"
+        className="w-72"
+        color="gradient"
+        variant="filled"
+        onClick={() => setCurrentStep(2)}
+      >
         {i18n._(t`Continue`)}
       </Button>
     </div>

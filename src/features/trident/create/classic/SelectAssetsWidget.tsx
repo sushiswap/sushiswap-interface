@@ -17,6 +17,7 @@ const SelectPanel: FC<{ index: number }> = ({ index }) => {
       header={<SwapAssetPanel.Header label={i18n._(t`Withdraw from`)} />}
       walletToggle={
         <SwapAssetPanel.Switch
+          id={'switch-classic-withdraw-from-' + index}
           label={i18n._(t`Withdraw from`)}
           onChange={() => setWalletSource(asset.oppositeToggle())}
         />
@@ -39,10 +40,10 @@ export const SelectAssetsWidget: FC = () => {
       <Typography variant="h3" weight={700} className="text-high-emphesis">
         {i18n._(t`Select Two Assets`)}
       </Typography>
-      <div className="text-secondary mt-2">
+      <div className="mt-2 text-secondary">
         {i18n._(t`Please select the two assets that this pool will consist of.`)}
       </div>
-      <div className="flex flex-col gap-6 max-w-2xl mt-6">
+      <div className="flex flex-col max-w-2xl gap-6 mt-6">
         <SetAssetPrice />
         <SelectPanel index={0} />
         <SelectPanel index={1} />

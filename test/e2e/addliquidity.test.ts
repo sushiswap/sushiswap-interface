@@ -23,7 +23,7 @@ let addLiquidityPage: AddLiquidityPage
 let depositPercentage = 0.01
 
 async function initPages() {
-  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}/trident/pools`)
+  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}`)
   poolPage = new PoolPage(page, metamask)
   addLiquidityPage = new AddLiquidityPage(page, metamask)
 }
