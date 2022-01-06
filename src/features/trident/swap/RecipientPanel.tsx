@@ -10,12 +10,6 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useIsExpertMode } from 'app/state/user/hooks'
 import React, { useEffect } from 'react'
-import { atom } from 'recoil'
-
-const recipientAtom = atom<string | undefined>({
-  key: 'RecipientPanel:recipientAtom',
-  default: undefined,
-})
 
 const RecipientPanel = () => {
   const { account } = useActiveWeb3React()
@@ -98,5 +92,4 @@ const RecipientPanel = () => {
   )
 }
 
-RecipientPanel.atom = recipientAtom
 export default RecipientPanel
