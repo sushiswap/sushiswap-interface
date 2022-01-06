@@ -7,7 +7,7 @@ import Logo, { UNKNOWN_ICON } from '../Logo'
 
 const BLOCKCHAIN = {
   [ChainId.ETHEREUM]: 'ethereum',
-  [ChainId.BSC]: 'binanace',
+  [ChainId.BSC]: 'binance',
   [ChainId.CELO]: 'celo',
   [ChainId.FANTOM]: 'fantom',
   [ChainId.AVALANCHE_TESTNET]: 'fuji',
@@ -22,25 +22,6 @@ const BLOCKCHAIN = {
   [ChainId.XDAI]: 'xdai',
   [ChainId.ARBITRUM]: 'arbitrum',
   [ChainId.AVALANCHE]: 'avalanche',
-}
-
-function getCurrencySymbol(currency) {
-  if (currency.symbol.replace('/e', '') === 'WBTC') {
-    return 'btc'
-  }
-  if (currency.symbol.replace('/e', '') === 'WETH') {
-    return 'eth'
-  }
-
-  if (currency.symbol === 'WMOVR') {
-    return 'movr'
-  }
-
-  if (currency.chainId === ChainId.AVALANCHE) {
-    return currency.symbol.replace('/e', '').toLowerCase()
-  }
-
-  return currency.symbol.toLowerCase()
 }
 
 export const getCurrencyLogoUrls = (currency): string[] => {
@@ -66,23 +47,21 @@ export const getCurrencyLogoUrls = (currency): string[] => {
   return urls
 }
 
-const AvalancheLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/avax.jpg'
-const BinanceCoinLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/bnb.jpg'
-const EthereumLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
-const FantomLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/ftm.jpg'
-const HarmonyLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/one.jpg'
-const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/heco.jpg'
-const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/polygon.jpg'
-const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/eth.jpg'
-const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/okt.jpg'
-const xDaiLogo =
-  'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/xdai/assets/0xe91D153E0b41518A2Ce8Dd3D7944Fa863463a97d/logo.png'
-const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg'
-const PalmLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/palm.jpg'
-const MovrLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/movr.jpg'
-const FuseLogo = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
-const TelosLogo =
-  'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
+const AvalancheLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/avax.jpg'
+const BinanceCoinLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/bnb.jpg'
+const EthereumLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/eth.jpg'
+const FantomLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/ftm.jpg'
+const HarmonyLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/one.jpg'
+const HecoLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/heco.jpg'
+const MaticLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/polygon.jpg'
+const MoonbeamLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/eth.jpg'
+const OKExLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/okt.jpg'
+const xDaiLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/xdai.jpg'
+const CeloLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/celo.jpg'
+const PalmLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/palm.jpg'
+const MovrLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/movr.jpg'
+const FuseLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/fuse.jpg'
+const TelosLogo = 'https://raw.githubusercontent.com/sushiswap/logos/main/token/telos.jpg'
 
 const LOGO: Record<ChainId, string> = {
   [ChainId.ETHEREUM]: EthereumLogo,

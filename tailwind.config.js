@@ -5,13 +5,14 @@ module.exports = {
   // important: '#__next',
   // darkMode: true,
   mode: 'jit',
-  purge: ['./src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false,
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  // darkMode: false,
   theme: {
     extend: {
       gridTemplateColumns: {
         'token-section': 'auto minmax(auto, 1fr) auto',
       },
+      // TODO: #129 Refactor to use with next-image @chillichelli
       backgroundImage: (theme) => ({
         'bars-pattern': "url('/images/trident/bars-pattern.png')",
         'binary-pattern': "url('/images/trident/binary-pattern.png')",
