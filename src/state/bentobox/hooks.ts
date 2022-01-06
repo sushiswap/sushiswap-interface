@@ -35,6 +35,9 @@ export function useBentoBalances(): BentoBalance[] {
 
   const weth = WNATIVE_ADDRESS[chainId]
 
+  console.log(Object.keys(tokens).length)
+  console.log(Object.keys(tokens))
+
   const tokenAddresses = Object.keys(tokens).filter(
     (token) =>
       ![
