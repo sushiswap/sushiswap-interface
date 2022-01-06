@@ -30,22 +30,23 @@ const SwapReviewModal: FC = () => {
   const { i18n } = useLingui()
   const { currencies } = useCurrenciesFromURL()
   const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const { trade, reset } = useSwapAssetPanelInputs()
   const recipient = useRecoilValue(RecipientPanel.atom)
   const { address } = useENS(recipient)
   const [txHash, setTxHash] = useState<string>()
-  const allowedSlippage = useSwapSlippageTolerance(trade)
   const tx = useTransactionStatus()
   const bentoPermit = useRecoilValue(TridentApproveGateBentoPermitAtom)
   const resetBentoPermit = useResetRecoilState(TridentApproveGateBentoPermitAtom)
   const [cbError, setCbError] = useState<string>()
   const { rebases } = useBentoRebases(currencies)
   const {
+    trade,
+    reset,
     parsedAmounts: [inputAmount, outputAmount],
     spendFromWallet: [fromWallet],
     receiveToWallet: [receiveToWallet],
     priceImpact,
   } = useSwapAssetPanelInputs()
+  const allowedSlippage = useSwapSlippageTolerance(trade)
 
   const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
     bentoPermit,

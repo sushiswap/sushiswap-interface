@@ -14,7 +14,7 @@ const SelectPanel: FC<{ index: number }> = ({ index }) => {
   return (
     <SwapAssetPanel
       error={asset.error !== undefined}
-      header={<SwapAssetPanel.Header label={i18n._(t`Withdraw from`)} />}
+      header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw from`)} />}
       walletToggle={
         <SwapAssetPanel.Switch
           label={i18n._(t`Withdraw from`)}

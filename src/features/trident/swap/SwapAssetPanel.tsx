@@ -41,7 +41,7 @@ const useSwapAssetPanelContext = () => useContext(SwapAssetPanelContext)
 
 interface SwapAssetPanel {
   error: boolean
-  header: React.ReactNode
+  header: (x) => React.ReactNode
   walletToggle: React.ReactNode
   currency?: Currency
   value?: string
@@ -69,78 +69,57 @@ const SwapAssetPanel = ({
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
 
   return (
-    <SwapAssetPanelContext.Provider
-      value={useMemo(
-        () => ({
-          error,
-          onChange,
-          onSelect,
-          spendFromWallet,
-          currency,
-          walletToggle,
-          value,
-          darkBackground: darkBackground,
-          priceImpact,
-          disabled,
-        }),
-        [
-          error,
-          currency,
-          onChange,
-          onSelect,
-          spendFromWallet,
-          darkBackground,
-          value,
-          walletToggle,
-          priceImpact,
-          disabled,
-        ]
+    <div
+      className={classNames(
+        !disabled ? 'lg:shadow-lg' : '',
+        darkBackground ? 'bg-dark-900 lg:bg-dark-1000' : 'bg-dark-900 lg:bg-dark-900',
+        'lg:border lg:rounded-[14px] lg:border-dark-700 flex flex-col lg:p-5 py-3 lg:pb-3 gap-3 overflow-hidden'
       )}
     >
-      <div
-        className={classNames(
-          !disabled ? 'lg:shadow-lg' : '',
-          darkBackground ? 'bg-dark-900 lg:bg-dark-1000' : 'bg-dark-900 lg:bg-dark-900',
-          'lg:border lg:rounded-[14px] lg:border-dark-700 flex flex-col lg:p-5 py-3 lg:pb-3 gap-3 overflow-hidden'
-        )}
-      >
-        {header}
-        <div className="flex flex-col">
-          <div
-            className={classNames(
-              darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
-              'block lg:hidden flex justify-between border border-dark-700 lg:border-none py-2 px-4 rounded-t lg:bg-transparent'
-            )}
-          >
-            <Typography variant="xs" weight={700}>
-              {currency?.name}
-            </Typography>
-            <Typography variant="xs" weight={700}>
-              ≈${usdcValue?.toSignificant(3)}
-            </Typography>
-          </div>
-          <div
-            className={classNames(
-              darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
-              'border-l border-r border-dark-700 lg:border-none lg:bg-transparent'
-            )}
-          >
-            <InputPanel />
-          </div>
-          <div className="hidden py-2 mt-3 lg:block lg:pb-0">
-            <BalancePanel />
-          </div>
-          <div className="flex items-center justify-between overflow-hidden border rounded-b lg:hidden border-dark-700 lg:border-none">
-            {walletToggle}
-            {!disabled && (
-              <div className="pr-5">
-                <MaxButton />
-              </div>
-            )}
-          </div>
+      {header({
+        disabled,
+        onChange,
+        value,
+        currency,
+        onSelect,
+        walletToggle,
+        spendFromWallet,
+      })}
+      <div className="flex flex-col">
+        <div
+          className={classNames(
+            darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
+            'block lg:hidden flex justify-between border border-dark-700 lg:border-none py-2 px-4 rounded-t lg:bg-transparent'
+          )}
+        >
+          <Typography variant="xs" weight={700}>
+            {currency?.name}
+          </Typography>
+          <Typography variant="xs" weight={700}>
+            ≈${usdcValue?.toSignificant(3)}
+          </Typography>
+        </div>
+        <div
+          className={classNames(
+            darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
+            'border-l border-r border-dark-700 lg:border-none lg:bg-transparent'
+          )}
+        >
+          <InputPanel {...{ error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet }} />
+        </div>
+        <div className="hidden py-2 mt-3 lg:block lg:pb-0">
+          <BalancePanel {...{ disabled, currency, onChange, spendFromWallet, value }} />
+        </div>
+        <div className="flex items-center justify-between overflow-hidden border rounded-b lg:hidden border-dark-700 lg:border-none">
+          {walletToggle}
+          {!disabled && (
+            <div className="pr-5">
+              <MaxButton {...{ currency, onChange, spendFromWallet }} />
+            </div>
+          )}
         </div>
       </div>
-    </SwapAssetPanelContext.Provider>
+    </div>
   )
 }
 
@@ -182,12 +161,15 @@ const WalletSwitch: FC<{ label: string; onChange(x: boolean): void; id?: string 
   )
 }
 
-const InputPanel: FC = () => {
+const InputPanel: FC<
+  Pick<
+    SwapAssetPanel,
+    'error' | 'currency' | 'value' | 'onChange' | 'disabled' | 'onSelect' | 'priceImpact' | 'spendFromWallet'
+  >
+> = ({ error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet }) => {
   const { i18n } = useLingui()
   const isDesktop = useDesktopMediaQuery()
   const [open, setOpen] = useState<boolean>(false)
-  const { error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet } =
-    useSwapAssetPanelContext()
   const usdcValue = useUSDCValue(tryParseAmount(value, currency))
 
   const priceImpactClassName = useMemo(() => {
@@ -292,8 +274,13 @@ const InputPanel: FC = () => {
   )
 }
 
-const BalancePanel: FC = () => {
-  const { disabled, currency, onChange, spendFromWallet, value } = useSwapAssetPanelContext()
+const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange' | 'spendFromWallet' | 'value'>> = ({
+  disabled,
+  currency,
+  onChange,
+  spendFromWallet,
+  value,
+}) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
@@ -346,9 +333,13 @@ const BalancePanel: FC = () => {
   )
 }
 
-const SwapAssetPanelHeader: FC<{ label: string; id?: string }> = ({ label, id }) => {
+const SwapAssetPanelHeader: FC<
+  Pick<
+    SwapAssetPanel,
+    'currency' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
+  > & { label: string; id?: string }
+> = ({ disabled, onChange, value, currency, onSelect, walletToggle, spendFromWallet, label, id }) => {
   const isDesktop = useDesktopMediaQuery()
-  const { currency, onSelect, walletToggle, spendFromWallet } = useSwapAssetPanelContext()
 
   return (
     <div className="flex items-center justify-between px-4 lg:px-0">
@@ -375,15 +366,18 @@ const SwapAssetPanelHeader: FC<{ label: string; id?: string }> = ({ label, id })
       </div>
       <div className="hidden lg:block">{walletToggle}</div>
       <div className="block lg:hidden">
-        <BalancePanel />
+        <BalancePanel {...{ disabled, currency, onChange, spendFromWallet, value }} />
       </div>
     </div>
   )
 }
 
-const MaxButton: FC = () => {
+const MaxButton: FC<Pick<SwapAssetPanel, 'currency' | 'onChange' | 'spendFromWallet'>> = ({
+  currency,
+  onChange,
+  spendFromWallet,
+}) => {
   const { i18n } = useLingui()
-  const { currency, onChange, spendFromWallet } = useSwapAssetPanelContext()
   const { account } = useActiveWeb3React()
   const balance = useBentoOrWalletBalance(account ? account : undefined, currency, spendFromWallet)
 

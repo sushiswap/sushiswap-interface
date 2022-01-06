@@ -67,7 +67,7 @@ export type RoutingInfo = {
   route?: MultiRoute
 }
 
-export const routingInfo = atom<RoutingInfo>({
+export const routingInfo = atom<RoutingInfo | undefined>({
   key: 'routingInfo',
   default: undefined,
 })
@@ -76,11 +76,13 @@ export const routingInfo = atom<RoutingInfo>({
  * Returns best trident trade for a desired swap.
  * @param tradeType whether we request an exact output amount or we provide an exact input amount
  * @param amountSpecified the exact amount to swap in/out
+ * @param mainCurrency the desired input/payment currency
  * @param otherCurrency the desired output/payment currency
  */
 export function useBestTridentTrade(
   tradeType: TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT,
   amountSpecified?: CurrencyAmount<Currency>,
+  mainCurrency?: Currency,
   otherCurrency?: Currency
 ): UseBestTridentTradeOutput {
   const { chainId, library } = useActiveWeb3React()
@@ -88,7 +90,12 @@ export function useBestTridentTrade(
   const setRoutingInfo = useSetRecoilState(routingInfo)
   const [trade, setTrade] = useState<UseBestTridentTradeOutput>({ trade: undefined, priceImpact: undefined })
   const { rebase } = useBentoRebase(amountSpecified?.currency)
-
+  const [gasPrice, setGasPrice] = useState<number>()
+  const [currencyIn, currencyOut] = useMemo(
+    () => (tradeType === TradeType.EXACT_INPUT ? [mainCurrency, otherCurrency] : [otherCurrency, mainCurrency]),
+    [tradeType, mainCurrency, otherCurrency]
+  )
+  const allowedPools = useAllCommonPools(currencyIn, currencyOut)
   const shareSpecified = useMemo(() => {
     if (!amountSpecified || !rebase) return
     return CurrencyAmount.fromRawAmount(
@@ -97,34 +104,27 @@ export function useBestTridentTrade(
     )
   }, [amountSpecified, rebase])
 
-  const [currencyIn, currencyOut] = useMemo(
-    () =>
-      tradeType === TradeType.EXACT_INPUT
-        ? [amountSpecified?.currency, otherCurrency]
-        : [otherCurrency, amountSpecified?.currency],
-    [tradeType, amountSpecified, otherCurrency]
-  )
-
-  const gasPricePromise = useMemo(async () => {
+  useEffect(() => {
     if (!library) return
 
-    const gas = await library.getGasPrice()
-    return gas.toNumber()
+    const main = async () => {
+      const gas = await library.getGasPrice()
+      return gas.toNumber()
+    }
+
+    main().then((gasPrice) => setGasPrice(gasPrice))
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [library, blockNumber])
-
-  const allowedPools = useAllCommonPools(currencyIn, currencyOut)
+  }, [blockNumber, library])
 
   useEffect(() => {
     const bestTrade = async () => {
-      const price = await gasPricePromise
       if (
+        gasPrice &&
         currencyIn &&
         currencyOut &&
         currencyIn.wrapped.address !== currencyOut.wrapped.address &&
         chainId &&
-        price &&
         shareSpecified &&
         amountSpecified &&
         otherCurrency &&
@@ -140,7 +140,7 @@ export function useBestTridentTrade(
             BigNumber.from(shareSpecified.quotient.toString()),
             tridentPools,
             WNATIVE[shareSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
+            chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
           )
 
           const legacyRoute = findSingleRouteExactIn(
@@ -149,7 +149,7 @@ export function useBestTridentTrade(
             BigNumber.from(amountSpecified.quotient.toString()),
             legacyPools,
             WNATIVE[amountSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
+            chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
           )
 
           if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
@@ -181,7 +181,7 @@ export function useBestTridentTrade(
             BigNumber.from(shareSpecified.quotient.toString()),
             tridentPools,
             WNATIVE[shareSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
+            chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
           )
 
           const legacyRoute = findSingleRouteExactOut(
@@ -190,7 +190,7 @@ export function useBestTridentTrade(
             BigNumber.from(amountSpecified.quotient.toString()),
             legacyPools,
             WNATIVE[amountSpecified.currency.chainId],
-            chainId === ChainId.KOVAN ? 750 * 1e9 : price
+            chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
           )
 
           if (tridentRoute.amountInBN.lt(legacyRoute.amountInBN)) {
@@ -228,17 +228,16 @@ export function useBestTridentTrade(
       setTrade(trade)
     })
   }, [
-    currencyIn,
-    currencyOut,
     allowedPools,
     amountSpecified,
     chainId,
-    gasPricePromise,
+    currencyIn,
+    currencyOut,
+    gasPrice,
     otherCurrency,
+    setRoutingInfo,
     shareSpecified,
     tradeType,
-    blockNumber,
-    setRoutingInfo,
   ])
 
   return trade

@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, JSBI, Percent, TradeType, TradeVersion, WNATIVE, ZERO } from '@sushiswap/core-sdk'
+import { JSBI, Percent, TradeType, TradeVersion, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import { maxAmountSpend, toAmountCurrencyAmount } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { tryParseAmount } from 'app/functions/parse'
@@ -8,10 +8,8 @@ import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBestTridentTrade } from 'app/hooks/useBestTridentTrade'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMemo } from 'react'
-import { atom, selector, useRecoilCallback, useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
+import { useCallback, useMemo, useState } from 'react'
 
-import { currenciesAtom } from '../atoms'
 import useCurrenciesFromURL from './useCurrenciesFromURL'
 
 export enum TypedField {
@@ -19,73 +17,36 @@ export enum TypedField {
   B,
 }
 
-export const typedFieldAtom = atom<TypedField>({
-  key: 'useSwapAssetPanelInputs:typedFieldAtom',
-  default: TypedField.A,
-})
-
-export const spendFromWalletAtom = atom<boolean>({
-  key: 'useSwapAssetPanelInputs:spendFromWalletAtom',
-  default: true,
-})
-
-export const receiveToWalletAtom = atom<boolean>({
-  key: 'useSwapAssetPanelInputs:receiveToWalletAtom',
-  default: true,
-})
-
-export const mainInputAtom = atom<string>({
-  key: 'useSwapAssetPanelInputs:mainInputAtom',
-  default: '',
-})
-
-export const secondaryInputAtom = atom<string>({
-  key: 'useSwapAssetPanelInputs:secondaryInputAtom',
-  default: '',
-})
-
-export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'useSwapAssetPanelInputs:mainInputCurrencyAmountSelector',
-  get: ({ get }) => {
-    const value = get(mainInputAtom)
-    const [currencyA] = get(currenciesAtom)
-    return tryParseAmount(value, currencyA)
-  },
-})
-
-export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'useSwapAssetPanelInputs:secondaryInputCurrencyAmountSelector',
-  get: ({ get }) => {
-    const value = get(secondaryInputAtom)
-    const [, currencyB] = get(currenciesAtom)
-    return tryParseAmount(value, currencyB)
-  },
-})
-
 const useSwapAssetPanelInputs = () => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
-  const { currencies, switchCurrencies: switchURLCurrencies } = useCurrenciesFromURL()
-  const typedField = useRecoilState(typedFieldAtom)
-  const mainInput = useRecoilState(mainInputAtom)
-  const secondaryInput = useRecoilState(secondaryInputAtom)
-  const spendFromWallet = useRecoilState(spendFromWalletAtom)
-  const receiveToWallet = useRecoilState(receiveToWalletAtom)
-  const mainInputCurrencyAmount = useRecoilValue(mainInputCurrencyAmountSelector)
-  const secondaryInputCurrencyAmount = useRecoilValue(secondaryInputCurrencyAmountSelector)
-  const { rebases, loading: rebasesLoading } = useBentoRebases(currencies)
+  const {
+    currencies: [currencyA, currencyB],
+    switchCurrencies: switchURLCurrencies,
+  } = useCurrenciesFromURL()
+  const input = useState({ value: '', typedField: TypedField.A })
+  const { value, typedField } = input[0]
+  const spendFromWallet = useState(true)
+  const receiveToWallet = useState(true)
+
+  const inputCurrencyAmount = useMemo(() => {
+    return tryParseAmount(value, typedField === TypedField.A ? currencyA : currencyB)
+  }, [currencyA, currencyB, typedField, value])
+
+  const { rebases, loading: rebasesLoading } = useBentoRebases([currencyA, currencyB])
 
   const isWrap =
-    currencies[0] &&
-    currencies[1] &&
+    currencyA &&
+    currencyB &&
     chainId &&
-    ((currencies[0]?.isNative && WNATIVE[chainId].address === currencies[1]?.wrapped.address) ||
-      (currencies[1]?.isNative && WNATIVE[chainId].address === currencies[0]?.wrapped.address))
+    ((currencyA?.isNative && WNATIVE[chainId].address === currencyB?.wrapped.address) ||
+      (currencyB?.isNative && WNATIVE[chainId].address === currencyA?.wrapped.address))
 
   const { trade, priceImpact: _priceImpact } = useBestTridentTrade(
-    typedField[0] === TypedField.A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
-    typedField[0] === TypedField.A ? mainInputCurrencyAmount : secondaryInputCurrencyAmount,
-    typedField[0] === TypedField.A ? currencies[1] : currencies[0]
+    typedField === TypedField.A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT,
+    inputCurrencyAmount,
+    typedField === TypedField.A ? currencyA : currencyB,
+    typedField === TypedField.A ? currencyB : currencyA
   )
 
   const priceImpact = useMemo(
@@ -114,35 +75,29 @@ const useSwapAssetPanelInputs = () => {
     return undefined
   }, [rebases, rebasesLoading, trade])
 
-  const balance = useBentoOrWalletBalance(account ?? undefined, currencies?.[0], spendFromWallet[0])
+  const balance = useBentoOrWalletBalance(account ?? undefined, currencyA, spendFromWallet[0])
 
   const formattedAmounts = useMemo(() => {
-    if (isWrap) return [mainInput[0], mainInput[0]]
+    if (isWrap) return [value, value]
 
     return [
-      typedField[0] === TypedField.A ? mainInput[0] : tradeOutputAmount?.toSignificant(6) ?? '',
-      typedField[0] === TypedField.B ? secondaryInput[0] : tradeOutputAmount?.toSignificant(6) ?? '',
+      typedField === TypedField.A ? value : tradeOutputAmount?.toSignificant(6) ?? '',
+      typedField === TypedField.B ? value : tradeOutputAmount?.toSignificant(6) ?? '',
     ]
-  }, [isWrap, mainInput, secondaryInput, tradeOutputAmount, typedField])
+  }, [isWrap, tradeOutputAmount, typedField, value])
 
   const parsedAmounts = useMemo(() => {
-    if (isWrap) return [mainInputCurrencyAmount, mainInputCurrencyAmount]
+    if (isWrap) return [inputCurrencyAmount, inputCurrencyAmount]
 
-    return [mainInputCurrencyAmount, tradeOutputAmount]
-  }, [isWrap, mainInputCurrencyAmount, tradeOutputAmount])
+    return [inputCurrencyAmount, tradeOutputAmount]
+  }, [isWrap, inputCurrencyAmount, tradeOutputAmount])
 
-  const switchCurrencies = useRecoilCallback(
-    ({ set }) =>
-      async () => {
-        const outputAmount = trade?.outputAmount.toExact()
-        set(mainInputAtom, undefined)
-        await switchURLCurrencies()
-        set(mainInputAtom, outputAmount)
-      },
-    [switchURLCurrencies, trade?.outputAmount]
-  )
+  const switchCurrencies = useCallback(async () => {
+    input[1]({ value: '', typedField: TypedField.A })
+    await switchURLCurrencies()
+  }, [input, switchURLCurrencies])
 
-  const reset = useResetRecoilState(mainInputAtom)
+  const reset = useCallback(() => input[1]({ value: '', typedField: TypedField.A }), [input])
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
@@ -152,18 +107,16 @@ const useSwapAssetPanelInputs = () => {
     ? i18n._(t`Enter an amount`)
     : trade === undefined && !isWrap
     ? i18n._(t`No route found`)
-    : balance && trade && mainInputCurrencyAmount && maxAmountSpend(balance)?.lessThan(mainInputCurrencyAmount)
-    ? i18n._(t`Insufficient ${mainInputCurrencyAmount?.currency.symbol} balance`)
+    : balance && trade && inputCurrencyAmount && maxAmountSpend(balance)?.lessThan(inputCurrencyAmount)
+    ? i18n._(t`Insufficient ${inputCurrencyAmount?.currency.symbol} balance`)
     : ''
 
   return useMemo(
     () => ({
+      input,
       isWrap,
       reset,
       error,
-      typedField,
-      mainInput,
-      secondaryInput,
       trade,
       priceImpact,
       spendFromWallet,
@@ -173,13 +126,11 @@ const useSwapAssetPanelInputs = () => {
       switchCurrencies,
     }),
     [
+      input,
       priceImpact,
       isWrap,
       reset,
       error,
-      typedField,
-      mainInput,
-      secondaryInput,
       trade,
       spendFromWallet,
       receiveToWallet,

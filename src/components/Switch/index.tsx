@@ -30,7 +30,6 @@ const Switch = ({
       checked={checked}
       onChange={onChange}
       className={classNames(
-        checked ? 'bg-teal-900' : 'bg-teal-700',
         `flex items-center bg-dark-800 border border-dark-700 relative inline-flex flex-shrink-0 h-[36px] w-[65px] rounded-full cursor-pointer ease-in-out duration-200 ${id}`
       )}
     >

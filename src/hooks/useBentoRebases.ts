@@ -6,11 +6,8 @@ import { useBentoBoxContract } from './useContract'
 
 const useBentoRebases = (tokens: (Currency | undefined)[]) => {
   const addresses = useMemo(() => tokens.map((token) => [token?.wrapped.address]), [tokens])
-
   const bentoboxContract = useBentoBoxContract()
-
   const results = useSingleContractMultipleData(bentoboxContract, 'totals', addresses)
-
   const loading: boolean = useMemo(() => results.some((callState) => callState.loading), [results])
 
   return useMemo(
@@ -34,11 +31,14 @@ const useBentoRebases = (tokens: (Currency | undefined)[]) => {
 export const useBentoRebase = (token: Currency | undefined) => {
   const tokens = useMemo(() => [token], [token])
   const { rebases, loading } = useBentoRebases(tokens)
-  if (token && !loading) {
-    return { rebase: rebases[token?.wrapped.address], loading }
-  }
 
-  return { rebase: undefined, loading }
+  return useMemo(() => {
+    if (token && !loading) {
+      return { rebase: rebases[token?.wrapped.address], loading }
+    }
+
+    return { rebase: undefined, loading }
+  }, [loading, rebases, token])
 }
 
 export default useBentoRebases

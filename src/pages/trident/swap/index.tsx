@@ -29,9 +29,7 @@ const Swap = () => {
   const setCurrencies = useSetRecoilState(currenciesAtom)
   const [expertMode] = useExpertModeManager()
   const {
-    typedField: [typedField, setTypedField],
-    mainInput: [, setMainInput],
-    secondaryInput: [, setSecondaryInput],
+    input: [input, setInput],
     spendFromWallet: [spendFromWallet, setSpendFromWallet],
     receiveToWallet: [receiveToWallet, setReceiveToWallet],
     formattedAmounts,
@@ -76,10 +74,14 @@ const Swap = () => {
           <div className="block w-full border-b lg:hidden border-dark-800" />
           <div className="flex flex-col px-2 lg:gap-3 ">
             <SwapAssetPanel
-              error={typedField === TypedField.A && !!error && !!formattedAmounts[0]}
-              header={
-                <SwapAssetPanel.Header label={i18n._(t`Swap from`)} id={`asset-select-trigger-${TypedField.A}`} />
-              }
+              error={input.typedField === TypedField.A && !!error && !!formattedAmounts[0]}
+              header={(props) => (
+                <SwapAssetPanel.Header
+                  {...props}
+                  label={i18n._(t`Swap from`)}
+                  id={`asset-select-trigger-${TypedField.A}`}
+                />
+              )}
               walletToggle={
                 <SwapAssetPanel.Switch
                   label={i18n._(t`Pay from`)}
@@ -87,14 +89,11 @@ const Swap = () => {
                   id="chk-pay-from-wallet"
                 />
               }
-              darkBackground={typedField === TypedField.A}
+              darkBackground={input.typedField === TypedField.A}
               spendFromWallet={spendFromWallet}
               currency={currencies[0]}
               value={formattedAmounts[0]}
-              onChange={(value) => {
-                setTypedField(TypedField.A)
-                setMainInput(value)
-              }}
+              onChange={(value) => setInput({ value: value || '', typedField: TypedField.A })}
               onSelect={(currency) => setURLCurrency(currency, 0)}
             />
             <div className="flex justify-center relative lg:mt-[-20px] lg:mb-[-20px]">
@@ -107,13 +106,14 @@ const Swap = () => {
               </div>
             </div>
             <SwapAssetPanel
-              error={typedField === TypedField.B && !!error && !!formattedAmounts[0]}
-              header={
+              error={input.typedField === TypedField.B && !!error && !!formattedAmounts[0]}
+              header={(props) => (
                 <SwapAssetPanel.Header
+                  {...props}
                   label={i18n._(t`Swap to (estimated)`)}
                   id={`asset-select-trigger-${TypedField.B}`}
                 />
-              }
+              )}
               walletToggle={
                 <SwapAssetPanel.Switch
                   label={i18n._(t`Receive to`)}
@@ -121,14 +121,13 @@ const Swap = () => {
                   id="chk-receive-to-wallet"
                 />
               }
-              darkBackground={typedField === TypedField.B}
+              darkBackground={input.typedField === TypedField.B}
               spendFromWallet={receiveToWallet}
               currency={currencies[1]}
               value={formattedAmounts[1]}
               onChange={(value) => {
-                // Uncomment when exactOut works
-                // setTypedField(TypedField.B)
-                setSecondaryInput(value)
+                // Change typedField to TypedField.B once exactOut is available
+                setInput({ value: value || '', typedField: TypedField.A })
               }}
               onSelect={(currency) => setURLCurrency(currency, 1)}
               priceImpact={priceImpact}
