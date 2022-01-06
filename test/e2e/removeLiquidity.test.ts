@@ -24,7 +24,7 @@ let addLiquidityPage: AddLiquidityPage
 let poolPage: PoolPage
 
 async function initPages() {
-  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}/trident/pools`)
+  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, baseUrl)
   poolPage = new PoolPage(page, metamask)
   addLiquidityPage = new AddLiquidityPage(page, metamask)
   removeLiquidityPage = new RemoveLiquidityPage(page, metamask)

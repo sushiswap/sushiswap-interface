@@ -4,6 +4,8 @@ import { SwapType } from '../../enums/SwapType'
 import { AppPage } from '../AppPage'
 
 export class SwapPage extends AppPage {
+  protected Route: string = '/trident/swap'
+
   // Main swap panel selectors
   private TokenInputSelector: string = '.swap-panel-input input'
   private PayFromWalletSelector: string = '.chk-pay-from-wallet'

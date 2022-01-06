@@ -53,7 +53,7 @@ jest.retryTimes(1)
 describe('Trident Swap:', () => {
   beforeAll(async () => {
     ;[metamask, browser, page] = await TestHelper.initDappeteer()
-    swapPage = new SwapPage(page, metamask, `${baseUrl}/trident/swap`)
+    swapPage = new SwapPage(page, metamask, baseUrl)
     approvalHelper = new ApprovalHelper()
 
     await page.goto(baseUrl)
@@ -106,8 +106,6 @@ describe('Trident Swap:', () => {
   })
 
   test('Should click max button for wallet', async () => {
-    await swapPage.navigateTo()
-
     await swapPage.setInputToken('USDC')
 
     const usdcWalletBalance = await swapPage.getMetamaskTokenBalance('USDC' as string)
@@ -120,7 +118,6 @@ describe('Trident Swap:', () => {
   })
 
   test('Should click max button for bento', async () => {
-    await swapPage.navigateTo()
     await swapPage.setPayFromWallet(false)
 
     await swapPage.setInputToken('USDC')
@@ -134,8 +131,6 @@ describe('Trident Swap:', () => {
   })
 
   test('Should switch currencies', async () => {
-    await swapPage.navigateTo()
-
     await swapPage.setInputToken('USDC')
     await swapPage.setOutputToken('WETH')
 
@@ -155,8 +150,6 @@ describe('Trident Swap:', () => {
   })
 
   test.each(currencySelectCases)(`Should select %p as input and %p as output`, async (inToken, outToken) => {
-    await swapPage.navigateTo()
-
     await swapPage.setInputToken(inToken)
     await swapPage.setOutputToken(outToken)
 
@@ -169,8 +162,6 @@ describe('Trident Swap:', () => {
 
   test('Should invert rate', async () => {
     const inputAmount = 500
-
-    await swapPage.navigateTo()
 
     await swapPage.setInputToken('USDC')
     await swapPage.setOutputToken('WETH')
@@ -194,8 +185,6 @@ describe('Trident Swap:', () => {
   })
 
   test('Should change slippage', async () => {
-    await swapPage.navigateTo()
-
     await swapPage.setSlippage('25.00')
 
     const slippage = await swapPage.getSlippage()
@@ -215,7 +204,7 @@ describe('Trident Swap:', () => {
       process.env.TEST_PASS
     )
 
-    const recipientSwapPage = new SwapPage(recipientPage, recipientMetamask, `${baseUrl}/trident/swap`)
+    const recipientSwapPage = new SwapPage(recipientPage, recipientMetamask, baseUrl)
     await recipientPage.goto(baseUrl)
     await recipientPage.bringToFront()
     await recipientSwapPage.connectMetamaskWallet()
@@ -262,7 +251,7 @@ describe('Trident Swap:', () => {
       process.env.TEST_PASS
     )
 
-    const recipientSwapPage = new SwapPage(recipientPage, recipientMetamask, `${baseUrl}/trident/swap`)
+    const recipientSwapPage = new SwapPage(recipientPage, recipientMetamask, baseUrl)
     await recipientPage.goto(baseUrl)
     await recipientPage.bringToFront()
     await recipientSwapPage.connectMetamaskWallet()
@@ -275,7 +264,7 @@ describe('Trident Swap:', () => {
 
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
-    await swapPage.navigateTo()
+    //await swapPage.navigateTo()
     await swapPage.toggleExpertMode()
     await swapPage.setRecipient(account2PubKey)
     await swapPage.setInputToken(inToken)
@@ -297,7 +286,6 @@ describe('Trident Swap:', () => {
   })
 
   test('Should reset recipient address when expert mode is disabled', async () => {
-    await swapPage.navigateTo()
     await swapPage.toggleExpertMode() // enable expert mode
     await swapPage.setRecipient('potato')
 
@@ -322,8 +310,6 @@ describe('Trident Swap:', () => {
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
     const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
     const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
-
-    await swapPage.navigateTo()
 
     const wethBentoBalanceBefore = await swapPage.getBentoBalance('WETH')
 
@@ -355,7 +341,7 @@ describe('Trident Swap:', () => {
 
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
-    await swapPage.navigateTo()
+    //await swapPage.navigateTo()
     await swapPage.setInputToken(inToken)
     await swapPage.setOutputToken(outToken)
     await swapPage.setAmountIn(swapAmount)
@@ -390,7 +376,7 @@ describe('Trident Swap:', () => {
 
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
-    await swapPage.navigateTo()
+    // await swapPage.navigateTo()
     await swapPage.setInputToken(inToken)
     await swapPage.setOutputToken(outToken)
     await swapPage.setAmountIn(swapAmount)
@@ -427,7 +413,7 @@ describe('Trident Swap:', () => {
     const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
     const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
 
-    await swapPage.navigateTo()
+    // await swapPage.navigateTo()
     await swapPage.setInputToken(inToken)
     await swapPage.setOutputToken(outToken)
     await swapPage.setAmountIn(swapAmount)

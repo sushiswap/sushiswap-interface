@@ -23,7 +23,7 @@ let addLiquidityPage: AddLiquidityPage
 let depositPercentage = 0.01
 
 async function initPages() {
-  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}`)
+  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, baseUrl)
   poolPage = new PoolPage(page, metamask)
   addLiquidityPage = new AddLiquidityPage(page, metamask)
 }
@@ -49,9 +49,8 @@ describe('Add Liquidity:', () => {
     browser.close()
   })
 
-  test('Should deposit USDC from wallet in unequal amounts', async () => {
+  test.only('Should deposit USDC from wallet in unequal amounts', async () => {
     const targetPoolName = 'USDC-WETH'
-    // Asset A: USDC
 
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.connectMetamaskWallet()
