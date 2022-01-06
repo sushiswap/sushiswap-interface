@@ -4176,10 +4176,10 @@
     magic-string "^0.25.0"
     string.prototype.matchall "^4.0.6"
 
-"@sushiswap/bentobox-sdk@1.0.0-canary.5":
-  version "1.0.0-canary.5"
-  resolved "https://registry.yarnpkg.com/@sushiswap/bentobox-sdk/-/bentobox-sdk-1.0.0-canary.5.tgz#c4e54e0810724ccf8416ef020e2042e0d4089c5e"
-  integrity sha512-XUVCs5XbU8AcSOJmHdsxhPwpW5J14sRG2M1mlU23R5DXF/FUbydN9N87E7mAlBDr8eayQ28LL2DJhFxQkw9o2g==
+"@sushiswap/bentobox-sdk@1.0.0-canary.13":
+  version "1.0.0-canary.13"
+  resolved "https://registry.yarnpkg.com/@sushiswap/bentobox-sdk/-/bentobox-sdk-1.0.0-canary.13.tgz#1dd1d217090f5557a2e1ee8e274c8d958c5c37b0"
+  integrity sha512-aDlDLyu7sSKu9Azoa8WvE0iVCsokFJvCH8DFhwHPfCZEwEdzZpfNXE1jSnOCgBI1SGB8Qkm+WFMbGn8UcGrYqA==
   dependencies:
     "@sushiswap/core-sdk" "1.0.0-canary.21"
 
