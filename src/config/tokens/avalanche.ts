@@ -23,6 +23,7 @@ export const WETH = new Token(
   'WETH',
   'Wrapped Ether'
 )
+export const ICE = new Token(ChainId.AVALANCHE, '0x4e1581f01046efdd7a1a2cdb0f82cdd7f71f2e59', 18, 'ICE', 'Ice Token')
 export const MIM = new Token(
   ChainId.AVALANCHE,
   '0x130966628846BFd36ff31a822705796e8cb8C18D',
@@ -30,8 +31,6 @@ export const MIM = new Token(
   'MIM',
   'Magic Internet Money'
 )
-
-export const TIME = new Token(ChainId.AVALANCHE, '0xb54f16fB19478766A268F172C9480f8da1a7c9C3', 9, 'TIME', 'Time')
 export const SPELL = new Token(
   ChainId.AVALANCHE,
   '0xCE1bFFBD5374Dac86a2893119683F4911a2F7814',
@@ -39,3 +38,4 @@ export const SPELL = new Token(
   'SPELL',
   'Spell Token'
 )
+export const TIME = new Token(ChainId.AVALANCHE, '0xb54f16fB19478766A268F172C9480f8da1a7c9C3', 9, 'TIME', 'Time')
