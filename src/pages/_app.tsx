@@ -141,7 +141,7 @@ function MyApp({
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="theme-color" content="#F338C3" />
 
-        <meta key="twitter:card" name="twitter:card" content="app" />
+        <meta key="twitter:card" name="twitter:card" content="summary" />
         <meta key="twitter:title" name="twitter:title" content="SUSHI App" />
         <meta key="twitter:text:title" name="twitter:text:title" content="SUSHI App" />
         <meta key="twitter:url" name="twitter:url" content="https://app.sushi.com" />
