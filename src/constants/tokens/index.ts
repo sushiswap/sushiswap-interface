@@ -140,6 +140,7 @@ export const AVALANCHE: { [key: string]: Token } = {
   WBTC: new Token(ChainId.AVALANCHE, '0x50b7545627a5162F82A992c33b87aDc75187B218', 8, 'WBTC', 'Wrapped Bitcoin'),
   WETH: new Token(ChainId.AVALANCHE, '0x49D5c2BdFfac6CE2BFdB6640F4F80f226bc10bAB', 18, 'WETH', 'Wrapped Ether'),
   MIM: new Token(ChainId.AVALANCHE, '0x130966628846BFd36ff31a822705796e8cb8C18D', 18, 'MIM', 'Magic Internet Money'),
+  ICE: new Token(ChainId.AVALANCHE, '0xe0Ce60AF0850bF54072635e66E79Df17082A1109', 18, 'ICE', 'IceToken'),
 }
 
 // Default Ethereum chain tokens
