@@ -8,7 +8,9 @@ declare global {
     toBigNumber(decimals: number): BigNumber
   }
   interface Window {
+    walletLinkExtension?: any
     ethereum?: {
+      isCoinbaseWallet?: true
       isMetaMask?: true
       on?: (...args: any[]) => void
       removeListener?: (...args: any[]) => void
