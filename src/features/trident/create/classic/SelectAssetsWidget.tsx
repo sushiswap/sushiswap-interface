@@ -15,12 +15,13 @@ const SelectPanel: FC<{ index: number }> = ({ index }) => {
     <SwapAssetPanel
       error={asset.error !== undefined}
       header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw from`)} />}
-      walletToggle={
+      walletToggle={(props) => (
         <SwapAssetPanel.Switch
+          {...props}
           label={i18n._(t`Withdraw from`)}
           onChange={() => setWalletSource(asset.oppositeToggle())}
         />
-      }
+      )}
       darkBackground={true}
       spendFromWallet={asset.spendFromSource !== SpendSource.BENTO_BOX}
       currency={asset.currency}

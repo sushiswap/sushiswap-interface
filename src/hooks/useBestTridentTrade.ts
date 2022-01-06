@@ -130,7 +130,7 @@ export function useBestTridentTrade(
           BigNumber.from(shareSpecified.quotient.toString()),
           tridentPools,
           WNATIVE[shareSpecified.currency.chainId],
-          chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
+          gasPrice
         )
 
         const legacyRoute = findSingleRouteExactIn(
@@ -139,7 +139,7 @@ export function useBestTridentTrade(
           BigNumber.from(amountSpecified.quotient.toString()),
           legacyPools,
           WNATIVE[amountSpecified.currency.chainId],
-          chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
+          gasPrice
         )
 
         if (tridentRoute.amountOutBN.gt(legacyRoute.amountOutBN)) {
@@ -171,7 +171,7 @@ export function useBestTridentTrade(
           BigNumber.from(shareSpecified.quotient.toString()),
           tridentPools,
           WNATIVE[shareSpecified.currency.chainId],
-          chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
+          gasPrice
         )
 
         const legacyRoute = findSingleRouteExactOut(
@@ -180,7 +180,7 @@ export function useBestTridentTrade(
           BigNumber.from(amountSpecified.quotient.toString()),
           legacyPools,
           WNATIVE[amountSpecified.currency.chainId],
-          chainId === ChainId.KOVAN ? 750 * 1e9 : gasPrice
+          gasPrice
         )
 
         if (tridentRoute.amountInBN.lt(legacyRoute.amountInBN)) {
