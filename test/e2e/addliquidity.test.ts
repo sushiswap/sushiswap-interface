@@ -49,7 +49,7 @@ describe('Add Liquidity:', () => {
     browser.close()
   })
 
-  test.only('Should deposit USDC from wallet in unequal amounts', async () => {
+  test('Should deposit USDC from wallet in unequal amounts', async () => {
     const targetPoolName = 'USDC-WETH'
 
     await liquidityPoolsPage.navigateTo()

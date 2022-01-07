@@ -23,6 +23,23 @@ export class CreatePoolPage extends AppPage {
     this.CurrencySelectModal = new CurrencySelectComponent(page)
   }
 
+  public async setAssetA(symbol: string): Promise<void> {
+    await this.setAsset(symbol, 0)
+  }
+
+  public async setAssetB(symbol: string): Promise<void> {
+    await this.setAsset(symbol, 1)
+  }
+
+  private async setAsset(symbol: string, assetIndex: number): Promise<void> {
+    await this.Page.waitForSelector(this.TokenSelectTriggerSelector)
+
+    const tokenSelectTriggers = await this.Page.$$(this.TokenSelectTriggerSelector)
+    await tokenSelectTriggers[assetIndex].click()
+
+    await this.CurrencySelectModal.selectToken(symbol)
+  }
+
   public async setAssetAAmountIn(amountIn: string): Promise<void> {
     await this.setAssetAmountIn(amountIn, 0)
   }

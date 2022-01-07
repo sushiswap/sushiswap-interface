@@ -3,8 +3,9 @@ import { Browser, Page } from 'puppeteer'
 
 import { ADDRESSES } from './constants/Addresses'
 import { FUNDING_SOURCE } from './constants/FundingSource'
-import { ApprovalHelper } from './helpers/ApprovalHelper'
 import { TestHelper } from './helpers/TestHelper'
+import { CreatePoolPage } from './pages/pools/CreatePoolPage'
+import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
 import { SwapPage } from './pages/swap/SwapPage'
 
 let browser: Browser
@@ -12,12 +13,12 @@ let page: Page
 let metamask: Dappeteer
 
 let swapPage: SwapPage
+let liquidityPoolsPage: LiquidityPoolsPage
+let createPoolPage: CreatePoolPage
 
 require('dotenv').config()
 
 let baseUrl: string = process.env.TEST_BASE_URL || 'http://localhost:3000'
-
-let approvalHelper: ApprovalHelper
 
 const cases = [['ETH', FUNDING_SOURCE.WALLET, 'USDT', FUNDING_SOURCE.WALLET]]
 
@@ -26,8 +27,10 @@ jest.retryTimes(1)
 describe('Trident Swap:', () => {
   beforeAll(async () => {
     ;[metamask, browser, page] = await TestHelper.initDappeteer()
-    swapPage = new SwapPage(page, metamask, `${baseUrl}/trident/swap`)
-    approvalHelper = new ApprovalHelper()
+
+    swapPage = new SwapPage(page, metamask, baseUrl)
+    liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, baseUrl)
+    createPoolPage = new CreatePoolPage(page, metamask, baseUrl)
 
     await page.goto(baseUrl)
     await page.bringToFront()
@@ -44,7 +47,15 @@ describe('Trident Swap:', () => {
     browser.close()
   })
 
-  test.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+  test.only.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+    const targetPoolName = 'ETH-USDT'
+
+    await liquidityPoolsPage.navigateTo()
+    await liquidityPoolsPage.clickCreateNewPoolButton()
+
+    await createPoolPage.setAssetA(inToken)
+    await createPoolPage.setAssetB(outToken)
+
     // Create pool
     // 1. Click create new pool button - ✔
     // 2. Click classic pool type button - ✔
