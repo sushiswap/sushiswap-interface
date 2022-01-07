@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { Contract, Signer, Wallet } from 'ethers'
 
-import { ADDRESSES } from '../constants/Addresses'
+import { ADDRESSES } from '../constants/Index'
 
 export class ApprovalHelper {
   private Signer!: Signer

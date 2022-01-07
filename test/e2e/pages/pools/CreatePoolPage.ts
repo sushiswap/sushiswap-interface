@@ -10,12 +10,15 @@ export class CreatePoolPage extends AppPage {
 
   // Page selectors
   private ClassicContinueButtonSelector: string = '#btn-classic-continue'
-  private ClassicWithdrawFromSelector: string = '#switch-classic-withdraw-from-'
+  private ClassicWithdrawFromSelector: string = '.switch-classic-withdraw-from-'
   private PoolTypeButtonSelector: string = '#pool-select-'
   private TokenSelectTriggerSelector: string = '.token-select-trigger'
   private TokenAmountInputSelector: string = '.swap-panel-input input'
   private FeeTierSelector: string = '#fee-tier-'
   private ApproveButtonSelector: string = '#btn-approve'
+  private ReviewConfirmButtonSelector: string = '#btn-review-confirm'
+  private ConfirmCreationButtonSelector: string = '#btn-confirm-pool-creation'
+  private SuccessIconSelector: string = '#pool-creation-success'
 
   constructor(page: Page, metamask: Dappeteer, baseUrl: string) {
     super(page, metamask, baseUrl)
@@ -23,19 +26,58 @@ export class CreatePoolPage extends AppPage {
     this.CurrencySelectModal = new CurrencySelectComponent(page)
   }
 
-  public async setAssetA(symbol: string): Promise<void> {
-    await this.setAsset(symbol, 0)
+  public async createPool(
+    poolType: string,
+    assetA: string,
+    assetB: string,
+    payAssetAFromWallet: boolean,
+    payAssetBFromWallet: boolean,
+    amountInA: string,
+    amountInB: string,
+    fee: number
+  ): Promise<void> {
+    await this.setPoolType(poolType)
+    await this.clickContinueButton()
+    await this.setAssetA(assetA, payAssetAFromWallet)
+    await this.setAssetB(assetB, payAssetBFromWallet)
+    await this.setAssetAAmountIn(amountInA)
+    await this.setAssetBAmountIn(amountInB)
+    await this.setPoolFee(fee)
+    await this.confirmCreate()
   }
 
-  public async setAssetB(symbol: string): Promise<void> {
+  public async setAssetA(symbol: string, payFromWallet: boolean): Promise<void> {
+    await this.setAsset(symbol, 0)
+    await this.setAssetPayFromWallet(payFromWallet, 0)
+  }
+
+  public async setAssetB(symbol: string, payFromWallet: boolean): Promise<void> {
     await this.setAsset(symbol, 1)
+    await this.setAssetPayFromWallet(payFromWallet, 1)
+  }
+
+  private async setAssetPayFromWallet(payFromWallet: boolean, assetIndex: number): Promise<void> {
+    const selector = this.ClassicWithdrawFromSelector + assetIndex
+
+    await this.Page.waitForSelector(selector)
+    const isSelectorChecked = await this.isSwitchChecked(selector)
+    const switchElement = await this.getSwitchElement(selector)
+    if (payFromWallet && !isSelectorChecked) {
+      await switchElement.click()
+    } else if (!payFromWallet && isSelectorChecked) {
+      await switchElement.click()
+    }
   }
 
   private async setAsset(symbol: string, assetIndex: number): Promise<void> {
     await this.Page.waitForSelector(this.TokenSelectTriggerSelector)
 
     const tokenSelectTriggers = await this.Page.$$(this.TokenSelectTriggerSelector)
-    await tokenSelectTriggers[assetIndex].click()
+    if (tokenSelectTriggers.length > 1) {
+      await tokenSelectTriggers[assetIndex].click()
+    } else {
+      await tokenSelectTriggers[0].click()
+    }
 
     await this.CurrencySelectModal.selectToken(symbol)
   }
@@ -53,6 +95,16 @@ export class CreatePoolPage extends AppPage {
     await feeTierButton.click()
   }
 
+  public async setPoolType(poolType: string): Promise<void> {
+    const poolTypeButton = await this.Page.waitForSelector(this.PoolTypeButtonSelector + poolType)
+    await poolTypeButton.click()
+  }
+
+  public async clickContinueButton(): Promise<void> {
+    const continueButton = await this.Page.waitForSelector(this.ClassicContinueButtonSelector)
+    await continueButton.click()
+  }
+
   public async confirmCreate(): Promise<void> {
     // Check if there is a approve button and approve if exists
     let approveButton = await this.Page.$(this.ApproveButtonSelector)
@@ -63,6 +115,16 @@ export class CreatePoolPage extends AppPage {
       await this.bringToFront()
       approveButton = await this.Page.$(this.ApproveButtonSelector)
     }
+
+    const btnReviewConfirm = await this.Page.waitForSelector(this.ReviewConfirmButtonSelector)
+    await btnReviewConfirm.click()
+
+    const btnConfirmCreation = await this.Page.waitForSelector(this.ConfirmCreationButtonSelector)
+    await btnConfirmCreation.click()
+
+    await this.confirmMetamaskTransaction()
+
+    await this.Page.waitForSelector(this.SuccessIconSelector)
   }
 
   private async setAssetAmountIn(amountIn: string, assetIndex: number): Promise<void> {

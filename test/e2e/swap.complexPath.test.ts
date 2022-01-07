@@ -1,8 +1,9 @@
 import { Dappeteer } from '@chainsafe/dappeteer'
+import { closeValues } from '@sushiswap/tines'
+import { Fee } from '@sushiswap/trident-sdk'
 import { Browser, Page } from 'puppeteer'
 
-import { ADDRESSES } from './constants/Addresses'
-import { FUNDING_SOURCE } from './constants/FundingSource'
+import { ADDRESSES, FUNDING_SOURCE, POOL_TYPE } from './constants/Index'
 import { TestHelper } from './helpers/TestHelper'
 import { CreatePoolPage } from './pages/pools/CreatePoolPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
@@ -15,6 +16,7 @@ let metamask: Dappeteer
 let swapPage: SwapPage
 let liquidityPoolsPage: LiquidityPoolsPage
 let createPoolPage: CreatePoolPage
+let depositPercentage = 0.01
 
 require('dotenv').config()
 
@@ -39,36 +41,79 @@ describe('Trident Swap:', () => {
     await swapPage.addTokenToMetamask(ADDRESSES.USDT)
   })
 
-  beforeEach(async () => {
-    await swapPage.blockingWait(2, true)
-  })
+  beforeEach(async () => {})
 
   afterAll(async () => {
+    // TODO: Remove all liquidity from pools
     browser.close()
   })
 
-  test.only.each(cases)(`Should swap from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
-    const targetPoolName = 'ETH-USDT'
+  test.only.each(cases)(`Should swap from %p %p to %p %p`, async (assetA, payFromA, assetB, payFromB) => {
+    const payAFromWallet = payFromA === FUNDING_SOURCE.WALLET
+    const payBFromWallet = payFromB === FUNDING_SOURCE.WALLET
+
+    await swapPage.navigateTo()
+
+    const assetABalance = await swapPage.getTokenBalance(assetA, payAFromWallet)
+    const assetBBalance = await swapPage.getTokenBalance(assetB, payBFromWallet)
+    const assetADepositAmount = (assetABalance * depositPercentage).toFixed(5)
+    const assetBDepositAmount = (assetBBalance * depositPercentage).toFixed(5)
 
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.clickCreateNewPoolButton()
 
-    await createPoolPage.setAssetA(inToken)
-    await createPoolPage.setAssetB(outToken)
+    await createPoolPage.createPool(
+      POOL_TYPE.CLASSIC,
+      assetA,
+      assetB,
+      payAFromWallet,
+      payBFromWallet,
+      assetADepositAmount,
+      assetBDepositAmount,
+      Fee.LOW
+    )
 
-    // Create pool
-    // 1. Click create new pool button - ✔
-    // 2. Click classic pool type button - ✔
-    // 3. Click continue button - ✔
-    // 5. Set Token0 - Eth, pay from wallet - ✔
-    // 6. Set Token1 - Usdt, pay from wallet - ✔
-    // 7. Set Token0 amount -> balance * 0.01 - ✔
-    // 8. Set Token1 amount -> balance * 0.01 - ✔
-    // 9. Set pool fee - 0.01 - ✔
-    // 10. Check for approve button and approve if exists
-    //
-    // Create ETH-USDT pool #1
-    // Create ETH-USDT pool #2
+    await createPoolPage.createPool(
+      POOL_TYPE.CLASSIC,
+      assetA,
+      assetB,
+      payAFromWallet,
+      payBFromWallet,
+      assetADepositAmount,
+      (assetBBalance * depositPercentage).toFixed(5),
+      Fee.MEDIUM
+    )
+
     // Swap token
+    // TODO: Amount in needs to be big enough to use trident route.
+    // TODO: Verify swap is sent to trident router instead of legacy
+
+    await swapPage.navigateTo()
+
+    const inputTokenBalanceBefore = await swapPage.getTokenBalance(assetA, payAFromWallet)
+    const outputTokenBalanceBefore = await swapPage.getTokenBalance(assetB, payBFromWallet)
+    if (!(inputTokenBalanceBefore > 0)) throw new Error(`${assetA} wallet balance is 0. Can't execute swap`)
+
+    const swapAmount = (inputTokenBalanceBefore * depositPercentage).toFixed(5)
+
+    await swapPage.setInputToken(assetA)
+    await swapPage.setOutputToken(assetB)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(payAFromWallet)
+    await swapPage.setReceiveToWallet(payBFromWallet)
+
+    const minOutputAmount = await swapPage.getMinOutputAmount()
+
+    await swapPage.confirmSwap(assetA, assetB)
+    await swapPage.navigateTo()
+
+    const inputTokenBalanceAfter = await swapPage.getTokenBalance(assetA, payAFromWallet)
+    const outputTokenBalanceAfter = await swapPage.getTokenBalance(assetB, payBFromWallet)
+
+    const intputTokenBalanceDiff = inputTokenBalanceBefore - inputTokenBalanceAfter
+    const outputTokenBalanceDiff = outputTokenBalanceAfter - outputTokenBalanceBefore
+
+    expect(closeValues(intputTokenBalanceDiff, parseFloat(swapAmount), 1e-9)).toBe(true)
+    expect(closeValues(outputTokenBalanceDiff, parseFloat(minOutputAmount), 1e-9)).toBe(true)
   })
 })

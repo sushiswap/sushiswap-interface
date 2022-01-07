@@ -7,3 +7,17 @@ export const ADDRESSES = {
   TRIDENT_ROUTER: '0x70e9D5279AFbf898FB507C6FfF8Dd92618e892DB',
   LEGACY_ROUTER: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
 }
+
+export const FUNDING_SOURCE = {
+  BENTO: 'Bento',
+  WALLET: 'Wallet',
+}
+
+export const RATIO = {
+  EQUAL: 'Equal',
+  UNEQUAL: 'Unequal',
+}
+
+export const POOL_TYPE = {
+  CLASSIC: 'ConstantProduct',
+}

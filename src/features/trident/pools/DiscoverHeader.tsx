@@ -7,10 +7,10 @@ import Button from '../../../components/Button'
 import Typography from '../../../components/Typography'
 import { TridentHeader } from '../../../layouts/Trident'
 
-const HeaderButton: FC<{ title: string; linkTo: string }> = ({ title, linkTo }) => (
+const HeaderButton: FC<{ title: string; linkTo: string; id?: string }> = ({ title, linkTo, id }) => (
   <Link href={linkTo}>
     <Button
-      id={'btn-' + title.toLowerCase().replace(' ', '-')}
+      id={id}
       color="gradient"
       variant="outlined"
       className="flex-1 text-sm font-bold text-white sm:flex-none md:flex-1 h-9"
@@ -34,7 +34,7 @@ export const DiscoverHeader: FC = () => {
         </Typography>
       </div>
       <div className="flex gap-3 w-80 sm:flex-col md:flex-row">
-        <HeaderButton title={i18n._(t`Create New Pool`)} linkTo="/trident/create" />
+        <HeaderButton id="btn-create-new-pool" title={i18n._(t`Create New Pool`)} linkTo="/trident/create" />
         <HeaderButton title={i18n._(t`My Positions`)} linkTo="/farm" />
       </div>
     </TridentHeader>

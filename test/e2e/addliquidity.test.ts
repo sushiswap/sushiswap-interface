@@ -2,7 +2,7 @@ import { Dappeteer } from '@chainsafe/dappeteer'
 import { closeValues } from '@sushiswap/tines'
 import { Browser, Page } from 'puppeteer'
 
-import { ADDRESSES } from './constants/Addresses'
+import { ADDRESSES } from './constants/Index'
 import { TestHelper } from './helpers/TestHelper'
 import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'

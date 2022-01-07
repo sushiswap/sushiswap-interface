@@ -3,7 +3,7 @@ import { AppPage } from '../AppPage'
 export class LiquidityPoolsPage extends AppPage {
   protected Route: string = '/trident/pools'
 
-  private CreateNewPoolButtonSelector: string = '#btn-create-new pool'
+  private CreateNewPoolButtonSelector: string = '#btn-create-new-pool'
 
   public async clickCreateNewPoolButton(): Promise<void> {
     const createNewPoolButton = await this.Page.waitForSelector(this.CreateNewPoolButtonSelector)
