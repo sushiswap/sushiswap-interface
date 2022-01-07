@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { Trans, useLingui } from '@lingui/react'
 import loadingCircle from 'app/animation/loading-circle.json'
@@ -66,7 +67,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
         <Typography weight={700}>{i18n._(t`Point List Address`)}</Typography>
         <div className="mt-2 flex rounded-md shadow-sm">
           <input
-            value={pointListAddress}
+            value={pointListAddress === AddressZero ? '' : pointListAddress}
             onChange={(e) =>
               pipeline(
                 { value: e.target.value },
