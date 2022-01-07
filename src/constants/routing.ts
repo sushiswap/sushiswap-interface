@@ -1,5 +1,5 @@
 // a list of tokens by chain
-import { ChainId, SUSHI, Token, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, Token, WNATIVE } from '@sushiswap/sdk'
 
 import * as ARBITRUM from './tokens/arbitrum'
 import * as AVALANCHE from './tokens/avalanche'
@@ -16,6 +16,7 @@ import * as OKEX from './tokens/okex'
 import * as PALM from './tokens/palm'
 import * as TELOS from './tokens/telos'
 import * as XDAI from './tokens/xdai'
+import { SUSHI } from './tokens'
 
 type ChainTokenList = {
   readonly [chainId: number]: Token[]
@@ -43,7 +44,7 @@ const MIRROR_ADDITIONAL_BASES: { [tokenAddress: string]: Token[] } = {
 }
 
 const WRAPPED_NATIVE_ONLY: ChainTokenList = {
-  [ChainId.ETHEREUM]: [WNATIVE[ChainId.ETHEREUM]],
+  [ChainId.MAINNET]: [WNATIVE[ChainId.MAINNET]],
   [ChainId.ROPSTEN]: [WNATIVE[ChainId.ROPSTEN]],
   [ChainId.RINKEBY]: [WNATIVE[ChainId.RINKEBY]],
   [ChainId.GÖRLI]: [WNATIVE[ChainId.GÖRLI]],
@@ -76,8 +77,8 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.ETHEREUM]: [
-    ...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM],
+  [ChainId.MAINNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MAINNET],
     ETHEREUM.DAI,
     ETHEREUM.USDC,
     ETHEREUM.USDT,
@@ -88,7 +89,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     ETHEREUM.OHM_V1,
     ETHEREUM.OHM_V2,
     ETHEREUM.MIM,
-    SUSHI[ChainId.ETHEREUM],
+    SUSHI[ChainId.MAINNET],
   ],
   [ChainId.MATIC]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
@@ -177,7 +178,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
 export const ADDITIONAL_BASES: {
   [chainId: number]: { [tokenAddress: string]: Token[] }
 } = {
-  [ChainId.ETHEREUM]: {
+  [ChainId.MAINNET]: {
     ...MIRROR_ADDITIONAL_BASES,
     '0xF16E4d813f4DcfDe4c5b44f305c908742De84eF0': [ETHEREUM.ETH2X_FLI],
     [ETHEREUM.FEI.address]: [ETHEREUM.DPI],
@@ -223,8 +224,8 @@ export const ADDITIONAL_BASES: {
 export const CUSTOM_BASES: {
   [chainId: number]: { [tokenAddress: string]: Token[] }
 } = {
-  [ChainId.ETHEREUM]: {
-    [ETHEREUM.AMPL.address]: [ETHEREUM.DAI, WNATIVE[ChainId.ETHEREUM]],
+  [ChainId.MAINNET]: {
+    [ETHEREUM.AMPL.address]: [ETHEREUM.DAI, WNATIVE[ChainId.MAINNET]],
   },
   [ChainId.MATIC]: {
     [MATIC.TEL.address]: [MATIC.SUSHI, MATIC.AAVE],
@@ -235,9 +236,9 @@ export const CUSTOM_BASES: {
  * Shows up in the currency select for swap and add liquidity
  */
 export const COMMON_BASES: ChainTokenList = {
-  [ChainId.ETHEREUM]: [
-    ...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM],
-    SUSHI[ChainId.ETHEREUM],
+  [ChainId.MAINNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MAINNET],
+    SUSHI[ChainId.MAINNET],
     ETHEREUM.WBTC,
     ETHEREUM.MIM,
     ETHEREUM.SPELL,
@@ -383,8 +384,8 @@ export const COMMON_BASES: ChainTokenList = {
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
-  [ChainId.ETHEREUM]: [
-    ...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM],
+  [ChainId.MAINNET]: [
+    ...WRAPPED_NATIVE_ONLY[ChainId.MAINNET],
     ETHEREUM.DAI,
     ETHEREUM.USDC,
     ETHEREUM.USDT,
@@ -477,11 +478,11 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
 export const PINNED_PAIRS: {
   readonly [chainId in ChainId]?: [Token, Token][]
 } = {
-  [ChainId.ETHEREUM]: [
-    [SUSHI[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM]],
+  [ChainId.MAINNET]: [
+    [SUSHI[ChainId.MAINNET], WNATIVE[ChainId.MAINNET]],
     [
-      new Token(ChainId.ETHEREUM, '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643', 8, 'cDAI', 'Compound Dai'),
-      new Token(ChainId.ETHEREUM, '0x39AA39c021dfbaE8faC545936693aC917d5E7563', 8, 'cUSDC', 'Compound USD Coin'),
+      new Token(ChainId.MAINNET, '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643', 8, 'cDAI', 'Compound Dai'),
+      new Token(ChainId.MAINNET, '0x39AA39c021dfbaE8faC545936693aC917d5E7563', 8, 'cUSDC', 'Compound USD Coin'),
     ],
     [ETHEREUM.USDC, ETHEREUM.USDT],
     [ETHEREUM.DAI, ETHEREUM.USDT],

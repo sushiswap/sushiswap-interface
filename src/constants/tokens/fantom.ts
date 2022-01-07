@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/sdk'
 
 export const USDC = new Token(ChainId.FANTOM, '0x04068DA6C83AFCFA0e13ba15A6696662335D5B75', 6, 'USDC', 'USD Coin')
 export const WBTC = new Token(

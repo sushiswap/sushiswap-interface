@@ -1,5 +1,5 @@
 import { Currency, CurrencyAmount, JSBI, Percent, Token, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
-import { DAI, SUSHI, USDC } from '../constants/tokens2'
+import { DAI, SUSHI, USDC } from '../constants/tokens'
 import { useMemo, useState } from 'react'
 
 import { splitSignature } from 'ethers/lib/utils'

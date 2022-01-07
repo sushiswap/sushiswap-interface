@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/sdk'
 
 export const DAI = new Token(ChainId.HARMONY, '0xEf977d2f931C1978Db5F6747666fa1eACB0d0339', 18, 'DAI', 'Dai Stablecoin')
 export const USDC = new Token(ChainId.HARMONY, '0x985458E523dB3d53125813eD68c274899e9DfAb4', 6, 'USDC', 'USD Coin')

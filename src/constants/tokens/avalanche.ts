@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/sdk'
 
 export const USDC = new Token(ChainId.AVALANCHE, '0xA7D7079b0FEaD91F3e65f86E8915Cb59c1a4C664', 6, 'USDC', 'USD Coin')
 export const DAI = new Token(

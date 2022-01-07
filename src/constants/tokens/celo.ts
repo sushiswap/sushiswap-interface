@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@sushiswap/core-sdk'
+import { ChainId, Token } from '@sushiswap/sdk'
 
 export const mCUSD = new Token(ChainId.CELO, '0x64dEFa3544c695db8c535D289d843a189aa26b98', 18, 'mCUSD', 'Moola cUSD')
 export const mCELO = new Token(ChainId.CELO, '0x7037F7296B2fc7908de7b57a89efaa8319f0C500', 18, 'mCELO', 'Moola CELO')
