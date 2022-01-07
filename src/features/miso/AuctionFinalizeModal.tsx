@@ -5,7 +5,7 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
 import useAuctionEdit from 'app/features/miso/context/hooks/useAuctionEdit'
-import React, { FC } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 
 interface AuctionFinalizeModalProps {
   auction?: Auction
@@ -18,9 +18,24 @@ const AuctionFinalizeModal: FC<AuctionFinalizeModalProps> = ({ auction }) => {
     auction?.template,
     auction?.auctionInfo.liquidityTemplate
   )
+  const [open, setOpen] = useState(false)
+  const [dismissed, setDismissed] = useState(false)
+
+  useEffect(() => {
+    if (auction?.canFinalize && !dismissed) setOpen(true)
+  }, [auction?.canFinalize, dismissed])
+
+  useEffect(() => {
+    if (auction?.auctionInfo.finalized) setOpen(false)
+  }, [auction?.auctionInfo.finalized])
+
+  const handleDismiss = useCallback(() => {
+    setDismissed(true)
+    setOpen(false)
+  }, [])
 
   return (
-    <HeadlessUiModal.Controlled isOpen={auction?.canFinalize || false} onDismiss={() => {}} className="bg-transparent">
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={handleDismiss} className="bg-transparent">
       <div className="flex flex-col items-center h-full gap-2 pb-8 m-5">
         <div className="flex flex-col justify-center">
           <Typography variant="hero" weight={700} className="text-high-emphesis text-center">

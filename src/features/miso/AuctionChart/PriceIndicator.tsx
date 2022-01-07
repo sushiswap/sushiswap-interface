@@ -15,10 +15,6 @@ export const PriceIndicator: FC<{
   auction: Auction
 }> = ({ orientation, x, y, auction }) => {
   const { i18n } = useLingui()
-  const priceInfoWidth = useTextWidth({
-    text: `Current Token Value`,
-    font: '14px DM Sans',
-  })
   const currentPriceWidth = useTextWidth({
     text: `${auction?.currentPrice?.toSignificant(6)} ${auction?.minimumPrice?.quoteCurrency.symbol}`,
     font: '14px DM Sans',
@@ -59,13 +55,15 @@ export const PriceIndicator: FC<{
         {i18n._(t`Current Token Value`)}
       </text>
       <foreignObject
-        width="30"
+        width="10"
         height="30"
         x={orientation === 'bottom' ? tooltipBottomPositionX : tooltipTopPositionX}
         y={orientation === 'bottom' ? tooltipBottomPositionY : tooltipTopPositionY}
       >
         <QuestionHelper text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}>
-          <QuestionMarkCircleIcon width={10} height={10} className="ml-0 text-secondary mb-[2px] text-dark-400" />
+          <span>
+            <QuestionMarkCircleIcon width={12} height={12} className="ml-0 text-secondary mb-[4px] text-dark-400" />
+          </span>
         </QuestionHelper>
       </foreignObject>
       <text

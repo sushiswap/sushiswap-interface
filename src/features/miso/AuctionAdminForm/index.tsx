@@ -28,6 +28,7 @@ const schema = yup.object({
   description: yup.string().max(300),
   website: yup.string().url(),
   whitepaper: yup.string().url(),
+  tokenomics: yup.string().url(),
   github: yup.string().url(),
   telegram: yup.string().url(),
   wechat: yup.string().url(),
@@ -160,6 +161,22 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   label={i18n._(t`Website`)}
                   helperText={i18n._(t`Please note that the URL must use https.`)}
                   placeholder="https://example.com"
+                />
+              </div>
+              <div className="col-span-3">
+                <Form.TextField
+                  name="whitepaper"
+                  label={i18n._(t`Whitepaper`)}
+                  helperText={i18n._(t`Please note that the URL must use https.`)}
+                  placeholder="https://example.com/whitepaper.pdf"
+                />
+              </div>
+              <div className="col-span-3">
+                <Form.TextField
+                  name="tokenomics"
+                  label={i18n._(t`Tokenomics`)}
+                  helperText={i18n._(t`Please note that the URL must use https.`)}
+                  placeholder="https://example.com/tokenomics.pdf"
                 />
               </div>
               <div className="col-span-3">
