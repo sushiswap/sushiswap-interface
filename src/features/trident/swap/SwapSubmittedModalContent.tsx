@@ -5,16 +5,15 @@ import loadingCircle from 'animation/loading-circle.json'
 import swapArrows from 'animation/swap-arrows.json'
 import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions/explorer'
+import { useTransactionStatusByHash } from 'app/hooks/useTransactionStatus'
 import { useActiveWeb3React } from 'app/services/web3'
-import { transactionStateSelector } from 'app/state/global/transactions'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
 const SwapSubmittedModalContent: FC<{ txHash: string }> = ({ txHash }) => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { pending, success, cancelled, failed } = useRecoilValue(transactionStateSelector(txHash))
+  const { pending, success, cancelled, failed } = useTransactionStatusByHash(txHash)
 
   return (
     <div className="flex flex-col items-center justify-center h-full gap-3 px-8 lg:p-12 bg-dark-800/90">

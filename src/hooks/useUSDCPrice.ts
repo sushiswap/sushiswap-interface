@@ -42,9 +42,11 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
       return new Price(stableCoin, stableCoin, '1', '1')
     }
 
-    console.log({ pools, stableCoin, typeofPools: pools.map((pool) => typeof pool) })
-
-    return calcTokenPrices(pools, stableCoin)?.[currency.wrapped.address]
+    try {
+      return calcTokenPrices(pools, stableCoin)?.[currency.wrapped.address]
+    } catch (e) {
+      return undefined
+    }
   }, [currency, pools, stableCoin])
 }
 

@@ -7,45 +7,41 @@ import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import Gas from 'app/components/Gas'
 import SettingsTab from 'app/components/Settings'
 import { Feature } from 'app/enums'
-import { currenciesAtom } from 'app/features/trident/context/atoms'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
-import useSwapAssetPanelInputs, { TypedField } from 'app/features/trident/context/hooks/useSwapAssetPanelInputs'
+import _useSwapPage from 'app/features/trident/swap/_useSwapPage'
+import { DerivedTradeContext } from 'app/features/trident/swap/DerivedTradeContext'
 import RecipientPanel from 'app/features/trident/swap/RecipientPanel'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import SwapButton from 'app/features/trident/swap/SwapButton'
 import SwapRate from 'app/features/trident/swap/SwapRate'
 import SwapReviewModal from 'app/features/trident/swap/SwapReviewModal'
+import {
+  selectTridentSwap,
+  setReceiveToWallet,
+  setSpendFromWallet,
+  setTridentSwapState,
+  TypedField,
+} from 'app/features/trident/swap/swapSlice'
 import WrapButton from 'app/features/trident/swap/WrapButton'
 import NetworkGuard from 'app/guards/Network'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
-import React, { useEffect } from 'react'
-import { useSetRecoilState } from 'recoil'
+import React, { useCallback, useMemo } from 'react'
 
 const Swap = () => {
+  const { formattedAmounts, trade, priceImpact, error, isWrap, parsedAmounts } = _useSwapPage()
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
-  const { currencies, setURLCurrency } = useCurrenciesFromURL()
-  const setCurrencies = useSetRecoilState(currenciesAtom)
+  const { currencies, setURLCurrency, switchCurrencies } = useCurrenciesFromURL()
   const [expertMode] = useExpertModeManager()
-  const {
-    typedField: [typedField, setTypedField],
-    mainInput: [, setMainInput],
-    secondaryInput: [, setSecondaryInput],
-    spendFromWallet: [spendFromWallet, setSpendFromWallet],
-    receiveToWallet: [receiveToWallet, setReceiveToWallet],
-    formattedAmounts,
-    trade,
-    priceImpact,
-    switchCurrencies,
-    error,
-    isWrap,
-  } = useSwapAssetPanelInputs()
+  const dispatch = useAppDispatch()
+  const { typedField, spendFromWallet, receiveToWallet } = useAppSelector(selectTridentSwap)
 
-  useEffect(() => {
-    if (!chainId || !currencies?.[0] || !currencies?.[1]) return
-    setCurrencies([currencies?.[0], currencies?.[1]])
-  }, [chainId, currencies, setCurrencies])
+  const handleArrowsClick = useCallback(async () => {
+    dispatch(setTridentSwapState({ value: '', typedField: TypedField.A }))
+    await switchCurrencies()
+  }, [dispatch, switchCurrencies])
 
   return (
     <Container className="px-2 py-4 md:py-8 lg:py-12" maxWidth="2xl">
@@ -77,78 +73,95 @@ const Swap = () => {
           <div className="flex flex-col px-2 lg:gap-3 ">
             <SwapAssetPanel
               error={typedField === TypedField.A && !!error && !!formattedAmounts[0]}
-              header={
-                <SwapAssetPanel.Header label={i18n._(t`Swap from`)} id={`asset-select-trigger-${TypedField.A}`} />
-              }
-              walletToggle={
+              header={(props) => (
+                <SwapAssetPanel.Header
+                  {...props}
+                  label={i18n._(t`Swap from`)}
+                  id={`asset-select-trigger-${TypedField.A}`}
+                />
+              )}
+              walletToggle={(props) => (
                 <SwapAssetPanel.Switch
+                  {...props}
                   label={i18n._(t`Pay from`)}
-                  onChange={setSpendFromWallet}
+                  onChange={(spendFromWallet) => dispatch(setSpendFromWallet(spendFromWallet))}
                   id="chk-pay-from-wallet"
                 />
-              }
+              )}
               darkBackground={typedField === TypedField.A}
               spendFromWallet={spendFromWallet}
               currency={currencies[0]}
               value={formattedAmounts[0]}
-              onChange={(value) => {
-                setTypedField(TypedField.A)
-                setMainInput(value)
-              }}
+              onChange={(value) => dispatch(setTridentSwapState({ value: value || '', typedField: TypedField.A }))}
               onSelect={(currency) => setURLCurrency(currency, 0)}
             />
             <div className="flex justify-center relative lg:mt-[-20px] lg:mb-[-20px]">
               <div
                 id="btn-switch-currencies"
                 className="rounded-full border-2 border-dark-700 lg:border-dark-800 hover:lg:border-dark-700 hover:text-white bg-dark-900 p-1.5 cursor-pointer"
-                onClick={switchCurrencies}
+                onClick={handleArrowsClick}
               >
                 <SwitchVerticalIcon width={24} height={24} />
               </div>
             </div>
             <SwapAssetPanel
               error={typedField === TypedField.B && !!error && !!formattedAmounts[0]}
-              header={
+              header={(props) => (
                 <SwapAssetPanel.Header
+                  {...props}
                   label={i18n._(t`Swap to (estimated)`)}
                   id={`asset-select-trigger-${TypedField.B}`}
                 />
-              }
-              walletToggle={
+              )}
+              walletToggle={(props) => (
                 <SwapAssetPanel.Switch
+                  {...props}
                   label={i18n._(t`Receive to`)}
-                  onChange={setReceiveToWallet}
+                  onChange={(receiveToWallet) => dispatch(setReceiveToWallet(receiveToWallet))}
                   id="chk-receive-to-wallet"
                 />
-              }
+              )}
               darkBackground={typedField === TypedField.B}
               spendFromWallet={receiveToWallet}
               currency={currencies[1]}
               value={formattedAmounts[1]}
               onChange={(value) => {
-                // Uncomment when exactOut works
-                // setTypedField(TypedField.B)
-                setSecondaryInput(value)
+                // Change typedField to TypedField.B once exactOut is available
+                dispatch(setTridentSwapState({ value: value || '', typedField: TypedField.A }))
               }}
               onSelect={(currency) => setURLCurrency(currency, 1)}
               priceImpact={priceImpact}
               // Remove when exactOut works
               disabled={true}
             />
-            {expertMode && (
-              <div className="mb-3 lg:mb-0">
-                <RecipientPanel />
-              </div>
-            )}
-            {trade && (
-              <div className="px-5 py-2 bg-dark-1000 rounded-[14px] mb-3 lg:mb-0">
-                <SwapRate className="font-bold text-primary" />
-              </div>
-            )}
-            {isWrap ? <WrapButton /> : <SwapButton />}
+            <DerivedTradeContext.Provider
+              value={useMemo(
+                () => ({
+                  formattedAmounts,
+                  trade,
+                  priceImpact,
+                  error,
+                  isWrap,
+                  parsedAmounts,
+                }),
+                [error, formattedAmounts, isWrap, parsedAmounts, priceImpact, trade]
+              )}
+            >
+              {expertMode && (
+                <div className="mb-3 lg:mb-0">
+                  <RecipientPanel />
+                </div>
+              )}
+              {trade && (
+                <div className="px-5 py-2 bg-dark-1000 rounded-[14px] mb-3 lg:mb-0">
+                  <SwapRate className="font-bold text-primary" />
+                </div>
+              )}
+              {isWrap ? <WrapButton /> : <SwapButton />}
+              <SwapReviewModal />
+            </DerivedTradeContext.Provider>
           </div>
         </div>
-        <SwapReviewModal />
       </DoubleGlowShadow>
     </Container>
   )

@@ -3,40 +3,35 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'
+import { selectTridentSwap, setRecipient } from 'app/features/trident/swap/swapSlice'
 import { classNames } from 'app/functions/styling'
 import useENS from 'app/hooks/useENS'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useIsExpertMode } from 'app/state/user/hooks'
 import React, { useEffect } from 'react'
-import { atom, useRecoilState, useResetRecoilState } from 'recoil'
-
-const recipientAtom = atom<string | undefined>({
-  key: 'RecipientPanel:recipientAtom',
-  default: undefined,
-})
 
 const RecipientPanel = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [recipient, setRecipient] = useRecoilState(recipientAtom)
-  const resetRecipient = useResetRecoilState(recipientAtom)
-
+  const { recipient } = useAppSelector(selectTridentSwap)
+  const dispatch = useAppDispatch()
   const { address, loading } = useENS(recipient)
   const expertMode = useIsExpertMode()
 
   const error = Boolean(recipient && recipient.length > 0 && !loading && !address)
   const valid = Boolean(recipient && recipient.length > 0 && address && !loading)
 
-  // Reset recipient when expert mode is turned off
+  // Reset recipient when expert mode is turned off or on unmount
   useEffect(() => {
     if (!expertMode) {
-      resetRecipient()
+      dispatch(setRecipient(undefined))
     }
 
     return () => {
-      resetRecipient()
+      dispatch(setRecipient(undefined))
     }
-  }, [expertMode, resetRecipient])
+  }, [dispatch, expertMode])
 
   if (recipient === undefined) {
     return (
@@ -97,5 +92,4 @@ const RecipientPanel = () => {
   )
 }
 
-RecipientPanel.atom = recipientAtom
 export default RecipientPanel
