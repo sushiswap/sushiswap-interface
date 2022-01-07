@@ -9,6 +9,7 @@ import { useBlockNumber } from 'app/state/application/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useEffect, useMemo, useRef } from 'react'
 
+// import { constants, default as chunkCalls } from '../../functions/calls'
 import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from './actions'
 import { Call, parseCallKey } from './utils'
 
@@ -155,6 +156,7 @@ export default function Updater(): null {
     const calls = outdatedCallKeys.map((key) => parseCallKey(key))
 
     const chunkedCalls = chunkArray(calls)
+    // const chunkedCalls = chunkCalls(calls, constants.CHUNK_GAS_LIMIT)
 
     if (cancellations.current && cancellations.current.blockNumber !== latestBlockNumber) {
       cancellations.current.cancellations.forEach((c) => c())
