@@ -70,6 +70,8 @@ import { getContract } from '../functions/contract'
 import { getVerifyingContract } from 'limitorderv2-sdk'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useMemo } from 'react'
+import ERC721_ABI from '../constants/abis/erc721.json'
+import ERC1155_ABI from '../constants/abis/erc1155.json'
 
 const UNI_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 
@@ -646,4 +648,12 @@ export function useInariContract(withSignerIfPossible?: boolean): Contract | nul
 
 export function useZenkoContract(withSignerIfPossible?: boolean): Contract | null {
   return useContract('0xa8f676c49f91655ab3b7c3ea2b73bb3088b2bc1f', ZENKO_ABI, withSignerIfPossible)
+}
+
+export function useERC721Contract(nftAddress?: string) {
+  return useContract(nftAddress, ERC721_ABI, false)
+}
+
+export function useERC1155Contract(nftAddress?: string) {
+  return useContract(nftAddress, ERC1155_ABI, false)
 }

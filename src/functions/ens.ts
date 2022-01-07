@@ -73,3 +73,14 @@ export function parseENSAddress(ensAddress: string): { ensName: string; ensPath:
   if (!match) return undefined
   return { ensName: `${match[1].toLowerCase()}eth`, ensPath: match[4] }
 }
+
+export function safeNamehash(name?: string): string | undefined {
+  if (name === undefined) return undefined
+
+  try {
+    return namehash(name)
+  } catch (error) {
+    console.debug(error)
+    return undefined
+  }
+}

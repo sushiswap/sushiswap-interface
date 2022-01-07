@@ -5,6 +5,7 @@ import { isTransactionRecent, useAllTransactions } from '../../state/transaction
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import Image from 'next/image'
 import Loader from '../Loader'
+import Identicon from '../Identicon'
 import { NetworkContextName } from '../../constants'
 import { TransactionDetails } from '../../state/transactions/reducer'
 import WalletModal from '../../modals/WalletModal'
@@ -42,8 +43,8 @@ const SOCK = (
 // eslint-disable-next-line react/prop-types
 function StatusIcon({ connector }: { connector: AbstractConnector }) {
   if (connector === injected) {
-    return <Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />
-    // return <Identicon />
+    // return <Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />
+    return <Identicon />
   } else if (connector === walletconnect) {
     return (
       <IconWrapper size={16}>
@@ -89,6 +90,8 @@ function Web3StatusInner() {
   const { account, connector } = useWeb3React()
 
   const { ENSName } = useENSName(account ?? undefined)
+
+  console.log({ ENSName })
 
   const allTransactions = useAllTransactions()
 
