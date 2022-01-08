@@ -33,8 +33,7 @@ const useAuctionCreate = () => {
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOLauncher.abi : undefined
   )
   const recipeContract = useContract(
-    '0x4a8aC34dB3648e3b10387e8cb640561993C5E533',
-    // chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.address : undefined,
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.address : undefined,
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.abi : undefined
   )
 
