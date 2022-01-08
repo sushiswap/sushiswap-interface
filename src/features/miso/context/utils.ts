@@ -311,13 +311,12 @@ export const getNativeOrToken = (chainId: ChainId, paymentCurrencyInfo: AuctionP
       )
 }
 
-export const getStatusByTimestamp = (auctionInfo: RawAuctionInfo, auctionEnded?: boolean) => {
+export const getStatusByTimestamp = (blockTimestamp: number, auctionInfo: RawAuctionInfo, auctionEnded?: boolean) => {
   const startTime = auctionInfo.startTime.toNumber()
   const endTime = auctionInfo.endTime.toNumber()
-  const now = Date.now() / 1000
 
   if (typeof auctionEnded !== 'undefined' && auctionEnded) return AuctionStatus.FINISHED
-  if (now >= startTime && now < endTime && !auctionInfo.finalized) return AuctionStatus.LIVE
-  if (now < startTime && !auctionInfo.finalized) return AuctionStatus.UPCOMING
+  if (blockTimestamp >= startTime && blockTimestamp <= endTime && !auctionInfo.finalized) return AuctionStatus.LIVE
+  if (blockTimestamp < startTime && !auctionInfo.finalized) return AuctionStatus.UPCOMING
   return AuctionStatus.FINISHED
 }

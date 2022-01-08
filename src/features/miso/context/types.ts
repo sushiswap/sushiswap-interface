@@ -30,6 +30,7 @@ export interface AuctionDocument {
   description: string
   website: string
   whitepaper: string
+  tokenomics: string
   github: string
   telegram: string
   wechat: string

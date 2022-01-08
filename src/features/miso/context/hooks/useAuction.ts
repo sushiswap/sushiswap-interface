@@ -8,6 +8,7 @@ import { useAuctionRawInfos } from 'app/features/miso/context/hooks/useAuctionRa
 import { AuctionStatus } from 'app/features/miso/context/types'
 import { getNativeOrToken, getStatusByTimestamp } from 'app/features/miso/context/utils'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockTimestamp } from 'app/state/application/hooks'
 import { useMemo } from 'react'
 
 import { Auction } from '../Auction'
@@ -23,6 +24,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
   const auctionInfos = useAuctionRawInfos(addresses, auctionTemplateIds)
   const auctionDocuments = useAuctionDocuments(addresses)
   const pointListAddresses = useAuctionPointLists(addresses)
+  const blockTimestamp = useBlockTimestamp()
 
   return useMemo(() => {
     if (!chainId) return Array(Math.min(auctions.length, 6)).fill(undefined)
@@ -57,7 +59,7 @@ export const useAuctions = (type: AuctionStatus, owner?: string): (Auction | und
               marketInfo,
               auctionDocuments: auctionDocs,
               pointListAddress,
-              status: getStatusByTimestamp(auctionInfo),
+              status: getStatusByTimestamp(blockTimestamp, auctionInfo),
             })
           )
         } else {
@@ -93,6 +95,7 @@ export const useAuction = (address?: string, owner?: string) => {
   const { chainId } = useActiveWeb3React()
   const { marketTemplateId, pointListAddress, loading: loadingDetails } = useAuctionDetails(address)
   const auctionEnded = useAuctionEnded(address, marketTemplateId)
+  const blockTimestamp = useBlockTimestamp()
 
   const {
     auctionDocuments,
@@ -124,13 +127,14 @@ export const useAuction = (address?: string, owner?: string) => {
         marketInfo,
         auctionDocuments,
         pointListAddress,
-        status: getStatusByTimestamp(auctionInfo, auctionEnded),
+        status: getStatusByTimestamp(blockTimestamp, auctionInfo, auctionEnded),
       }),
     }
   }, [
     auctionDocuments,
     auctionEnded,
     auctionInfo,
+    blockTimestamp,
     chainId,
     loadingDetails,
     loadingInfo,

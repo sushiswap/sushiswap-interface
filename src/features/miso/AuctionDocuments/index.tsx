@@ -95,8 +95,8 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
               </div>
             </a>
           )}
-          {documents?.docs && (
-            <a href={documents.docs} target="_blank" rel="noreferrer">
+          {documents?.tokenomics && (
+            <a href={documents.tokenomics} target="_blank" rel="noreferrer">
               <div className="flex gap-2">
                 <TokenomicsIcon width={18} />
                 <Typography variant="sm" weight={700} className="underline text-high-emphesis">

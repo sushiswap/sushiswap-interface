@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Form from 'app/components/Form'
@@ -36,7 +37,10 @@ const AuctionAdminFormWhitelistSection: FC<AuctionAdminFormWhitelistSectionProps
       </div>
       <WhitelistUploadField auction={auction} />
       <div className="col-span-6">
-        <WhitelistChecker listAddress={auction.pointListAddress} paymentToken={auction.paymentToken} />
+        <WhitelistChecker
+          listAddress={auction.pointListAddress === AddressZero ? '' : auction.pointListAddress}
+          paymentToken={auction.paymentToken}
+        />
       </div>
     </Form.Section>
   )
