@@ -56,13 +56,11 @@ const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }
       <div
         className={classNames(
           'col-span-6',
-          value.length > 0 ? 'md:col-span-3' : 'md:col-span-6',
+          value?.length > 0 ? 'md:col-span-3' : 'md:col-span-6',
           !disabled ? '' : 'pointer-events-none opacity-40 filter saturate-[0.1]'
         )}
       >
-        <Typography variant="lg" className="text-high-emphesis" weight={700}>
-          {i18n._(t`Point List`)}
-        </Typography>
+        <Typography weight={700}>{i18n._(t`Upload`)}</Typography>
         <Typography className="mt-1 text-secondary">{i18n._(t``)}</Typography>
         <div
           {...getRootProps()}
@@ -115,7 +113,7 @@ const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }
           {i18n._(t`CSV's must use a comma delimiter. Amounts should NOT contain comma's`)}
         </p>
       </div>
-      {value.length > 0 && <WhitelistTable entries={value} />}
+      {value?.length > 0 && <WhitelistTable entries={value} />}
     </>
   )
 }

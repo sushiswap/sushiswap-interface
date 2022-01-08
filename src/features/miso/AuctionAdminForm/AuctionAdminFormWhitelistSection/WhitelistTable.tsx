@@ -12,10 +12,8 @@ const WhitelistTable: FC<WhitelistTableProps> = ({ entries }) => {
   const { i18n } = useLingui()
 
   return (
-    <div className="col-span-6 md:col-span-3">
-      <Typography variant="lg" className="text-high-emphesis" weight={700}>
-        {i18n._(t`Addresses`)}
-      </Typography>
+    <div className="col-span-6 md:col-span-3 pt-8">
+      <Typography weight={700}>{i18n._(t`Addresses`)}</Typography>
       <div className="min-h-[140px] mt-2 divide-y divide-dark-800 border border-dark-800 rounded bg-dark-900">
         <div className="px-4 py-2 grid grid-cols-3 items-center">
           <Typography variant="sm" weight={700} className="text-secondary">
