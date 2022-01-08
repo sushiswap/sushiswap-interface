@@ -4266,10 +4266,10 @@
     eip-712 "^0.4.0"
     isomorphic-unfetch "^3.0.0"
 
-"@sushiswap/miso@^1.0.0-canary.8":
-  version "1.0.0-canary.8"
-  resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.8.tgz#9deb49c9f918cfc9a38f2785df2795ef904bfbb2"
-  integrity sha512-z9GFWTuiFxRvntMD2rQn+MTO0OMxgVXCyZlDGXiHhM6YP0ckVprSbWlpVSfoNypvBgVvWHLQe/R0UiYeRkqjMA==
+"@sushiswap/miso@^1.0.0-canary.12":
+  version "1.0.0-canary.12"
+  resolved "https://registry.yarnpkg.com/@sushiswap/miso/-/miso-1.0.0-canary.12.tgz#133f0068a31b627bb47be4fa48a9b6e3f9a8111e"
+  integrity sha512-VKFXdpFiHBvUPvY3etV/Vqvcd7qZHQUNjvPbLy/bi1ywPhuj2H4v5PzfZPpU7xdSk7FpAzh5PhzBwB5TEOTeFg==
 
 "@sushiswap/sdk@^5.0.0-canary.109":
   version "5.0.0-canary.116"

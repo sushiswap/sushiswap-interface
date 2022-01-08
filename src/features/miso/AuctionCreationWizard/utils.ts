@@ -23,7 +23,7 @@ export const formatCreationFormData = (
   data: AuctionCreationWizardInput,
   paymentCurrency: Currency
 ): AuctionCreationWizardInputFormatted => {
-  const { tokenSymbol, tokenName, startDate, endDate, liqPercentage, whitelistAddresses } = data
+  const { tokenSymbol, tokenName, startDate, endDate, liqPercentage, whitelistAddresses, liqLockTime } = data
 
   // This token is just for formatting numbers hence the AddressZero
   const auctionToken = new Token(1, AddressZero, 18, tokenSymbol, tokenName)
@@ -53,6 +53,14 @@ export const formatCreationFormData = (
     auctionToken,
     JSBI.BigInt(parseUnits(data.tokenAmount.toString(), auctionToken.decimals).toString())
   )
+  const liqTokenAmount = CurrencyAmount.fromRawAmount(
+    auctionToken,
+    JSBI.BigInt(parseUnits(data.liqTokenAmount.toString(), auctionToken.decimals).toString())
+  )
+  const tokenSupply = CurrencyAmount.fromRawAmount(
+    auctionToken,
+    JSBI.BigInt(parseUnits(data.tokenSupply.toString(), auctionToken.decimals).toString())
+  )
   const minimumTarget =
     fixedPrice && tokenAmount && data.minimumTarget
       ? fixedPrice.quote(tokenAmount).multiply(new Percent(data.minimumTarget, '100'))
@@ -68,12 +76,15 @@ export const formatCreationFormData = (
     ...data,
     accounts,
     amounts,
+    liqLockTime: Number(liqLockTime) * 24 * 60 * 60,
     liqPercentage: Number(liqPercentage) * 100,
     startDate: new Date(startDate),
     endDate: new Date(endDate),
     auctionToken,
     paymentCurrency,
     tokenAmount,
+    liqTokenAmount,
+    tokenSupply,
     startPrice,
     endPrice,
     fixedPrice,

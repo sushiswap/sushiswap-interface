@@ -9,6 +9,7 @@ import AuctionCreationSubmittedModalContent from 'app/features/miso/AuctionCreat
 import { AuctionCreationWizardInputFormatted } from 'app/features/miso/AuctionCreationWizard/index'
 import useAuctionCreate from 'app/features/miso/context/hooks/useAuctionCreate'
 import useAuctionTemplateMap from 'app/features/miso/context/hooks/useAuctionTemplateMap'
+import useTokenTemplateMap from 'app/features/miso/context/hooks/useTokenTemplateMap'
 import { AuctionTemplate } from 'app/features/miso/context/types'
 import { getExplorerLink } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -32,6 +33,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
   const [pending, setPending] = useState<boolean>(false)
   const [auctionAddress, setAuctionAddress] = useState<string>()
   const [error, setError] = useState<string>()
+  const { templateIdToLabel: tokenTemplateIdToLabel } = useTokenTemplateMap()
   const { templateIdToLabel } = useAuctionTemplateMap()
   const { initWizard, subscribe, unsubscribe } = useAuctionCreate()
 
@@ -110,28 +112,38 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
           <HeadlessUIModal.Content>
             <div className="grid grid-cols-2 items-center">
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                {i18n._(t`Token Type`)}
+              </Typography>
+              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                {tokenTemplateIdToLabel(data.tokenType)}
+              </Typography>
+              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                {i18n._(t`Token Name`)}
+              </Typography>
+              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                {data.tokenName}
+              </Typography>
+              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                {i18n._(t`Token Symbol`)}
+              </Typography>
+              <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                {data.tokenSymbol}
+              </Typography>
+              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
                 {i18n._(t`Auction Type`)}
               </Typography>
               <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
                 {templateIdToLabel(data.auctionType)}
               </Typography>
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
-                {i18n._(t`Token Amount`)}
+                {i18n._(t`Tokens for sale`)}
               </Typography>
               <Typography
                 weight={700}
                 variant="sm"
                 className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
               >
-                {data.tokenAmount.toSignificant(6)}{' '}
-                <a
-                  className="text-purple font-normal text-xs"
-                  target="_blank"
-                  rel="noreferrer"
-                  href={getExplorerLink(chainId, data.tokenAmount.currency.address, 'address')}
-                >
-                  {data.tokenAmount.currency.symbol}
-                </a>
+                {data.tokenAmount.toSignificant(6)} {data.tokenAmount.currency.symbol}
               </Typography>
 
               {data.auctionType === AuctionTemplate.DUTCH_AUCTION && (
@@ -238,6 +250,16 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
                 })}{' '}
                 UTC
               </Typography>
+              {data.whitelistEnabled && (
+                <>
+                  <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                    {i18n._(t`Whitelisted Addresses`)}
+                  </Typography>
+                  <Typography weight={700} variant="sm" className="text-high-emphesis py-2 border-b border-dark-700">
+                    {data.accounts.length}
+                  </Typography>
+                </>
+              )}
             </div>
           </HeadlessUIModal.Content>
           <HeadlessUIModal.Actions>

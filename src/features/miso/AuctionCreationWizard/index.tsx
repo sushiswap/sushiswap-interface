@@ -34,21 +34,32 @@ export interface AuctionCreationWizardInput {
   minimumRaised?: number
   startPrice?: number
   endPrice?: number
-  liqLauncherEnabled: boolean
+  liqTokenAmount: number
   liqLockTime?: number
-  liqPercentage?: number
+  liqPercentage: number
   whitelistEnabled: boolean
   whitelistAddresses: WhitelistEntry[]
 }
 
 export type AuctionCreationWizardInputFormatted = Omit<
   AuctionCreationWizardInput,
-  'startDate' | 'endDate' | 'tokenAmount' | 'fixedPrice' | 'minimumTarget' | 'minimumRaised' | 'startPrice' | 'endPrice'
+  | 'startDate'
+  | 'endDate'
+  | 'tokenSupply'
+  | 'tokenAmount'
+  | 'liqTokenAmount'
+  | 'fixedPrice'
+  | 'minimumTarget'
+  | 'minimumRaised'
+  | 'startPrice'
+  | 'endPrice'
 > & {
   paymentCurrency: Currency
   startDate: Date
   endDate: Date
   tokenAmount: CurrencyAmount<Token>
+  liqTokenAmount: CurrencyAmount<Token>
+  tokenSupply: CurrencyAmount<Token>
   auctionType: AuctionTemplate
   fixedPrice?: Price<Token, Currency>
   minimumTarget?: CurrencyAmount<Currency>
@@ -117,21 +128,14 @@ const schema = yup.object().shape({
       .required('Must enter a start price'),
   }),
   liqLauncherEnabled: yup.boolean(),
-  liqLockTime: yup.number().when('liqLauncherEnabled', {
-    is: (value) => value === true,
-    then: yup.number().typeError('Must be a number').required('Must enter a number'),
-    otherwise: yup.number().notRequired().nullable(),
-  }),
-  liqPercentage: yup.number().when('liqLauncherEnabled', {
-    is: (value) => value === true,
-    then: yup
-      .number()
-      .typeError('Must be a number')
-      .required('Must enter a number')
-      .moreThan(0, 'Must be a number between 0 and 100')
-      .max(100, 'Must be a number between 0 and 100'),
-    otherwise: yup.number().notRequired().nullable(),
-  }),
+  liqLockTime: yup.number().typeError('Must be a number'),
+  liqTokenAmount: yup.number().typeError('Must be a number').required('Must enter a number'),
+  liqPercentage: yup
+    .number()
+    .typeError('Must be a number')
+    .required('Must enter a number')
+    .moreThan(0, 'Must be a number between 0 and 100')
+    .max(100, 'Must be a number between 0 and 100'),
   whitelistEnabled: yup.boolean(),
 })
 
@@ -141,7 +145,6 @@ const AuctionCreationWizard: FC = () => {
   const [open, setOpen] = useState<boolean>(false)
   const methods = useForm<AuctionCreationWizardInput>({
     defaultValues: {
-      liqLauncherEnabled: false,
       whitelistEnabled: false,
       whitelistAddresses: [],
     },

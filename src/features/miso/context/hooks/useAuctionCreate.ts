@@ -242,15 +242,15 @@ const useAuctionCreate = () => {
       const launcherTemplateId = await launcherFactory.getTemplateId(listFactoryAddress)
       const tokenFactoryData = defaultAbiCoder.encode(
         ['uint256', 'string', 'string', 'uint256'],
-        [tokenTemplateId, data.tokenName, data.tokenSymbol, data.tokenSupply]
+        [tokenTemplateId, data.tokenName, data.tokenSymbol, data.tokenSupply.quotient.toString()]
       )
       const marketFactoryData = defaultAbiCoder.encode(
         ['uint256', 'bytes'],
         [marketTemplateId, getAuctionData(data, marketFactory.address, true)]
       )
       const launcherFactoryData = defaultAbiCoder.encode(
-        ['uint256', 'uint256', 'uint256'],
-        [launcherTemplateId, data.liqPercentage, data.liqLockTime]
+        ['uint256', 'uint256', 'uint256', 'uint256'],
+        [launcherTemplateId, data.liqTokenAmount.quotient.toString(), data.liqPercentage, data.liqLockTime]
       )
 
       console.log(
