@@ -33,7 +33,8 @@ const useAuctionCreate = () => {
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOLauncher.abi : undefined
   )
   const recipeContract = useContract(
-    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.address : undefined,
+    '0x4a8aC34dB3648e3b10387e8cb640561993C5E533',
+    // chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.address : undefined,
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.abi : undefined
   )
 
@@ -249,8 +250,8 @@ const useAuctionCreate = () => {
         [marketTemplateId, getAuctionData(data, marketFactory.address, true)]
       )
       const launcherFactoryData = defaultAbiCoder.encode(
-        ['uint256', 'uint256', 'uint256', 'uint256'],
-        [launcherTemplateId, data.liqTokenAmount.quotient.toString(), data.liqPercentage, data.liqLockTime]
+        ['uint256', 'uint256', 'uint256'],
+        [launcherTemplateId, data.liqPercentage, data.liqLockTime]
       )
 
       console.log(

@@ -13,9 +13,9 @@ import { useFormContext } from 'react-hook-form'
 const LiquidityLauncherStep: FC = () => {
   const { i18n } = useLingui()
   const { getValues, setValue, watch } = useFormContext<AuctionCreationWizardInput>()
-  const [paymentCurrencyAddress, liqTokenAmount, tokenSymbol, liqPercentage] = watch([
+  const [paymentCurrencyAddress, tokenAmount, tokenSymbol, liqPercentage] = watch([
     'paymentCurrencyAddress',
-    'liqTokenAmount',
+    'tokenAmount',
     'tokenSymbol',
     'liqPercentage',
   ])
@@ -51,16 +51,6 @@ const LiquidityLauncherStep: FC = () => {
       </div>
       <div className="col-span-4">
         <Form.TextField
-          name="liqTokenAmount"
-          label={i18n._(t`Tokens for liquidity seeding*`)}
-          helperText={i18n._(
-            t`The token amount reserved for liquidity seeding added to the tokens for sale has to be less than the total supply of the token`
-          )}
-          placeholder="Enter the amount of tokens you would like to use for liquidity."
-        />
-      </div>
-      <div className="col-span-4">
-        <Form.TextField
           endIcon={
             <Typography variant="sm" weight={700} className="text-secondary">
               %
@@ -75,10 +65,10 @@ const LiquidityLauncherStep: FC = () => {
 
       <div className="col-span-4">
         <Typography weight={700}>{i18n._(t`Liquidity Pair`)}</Typography>
-        {liqTokenAmount && liqPercentage && (
+        {tokenAmount && liqPercentage && (
           <Typography className="mt-2">
-            {formatNumber((Number(liqTokenAmount) * Number(liqPercentage)) / 100)} {tokenSymbol} +{' '}
-            {Number(liqPercentage)}% of auction {paymentToken?.symbol} proceeds
+            {formatNumber((Number(tokenAmount) * Number(liqPercentage)) / 100)} {tokenSymbol} + {Number(liqPercentage)}%
+            of auction {paymentToken?.symbol} proceeds
           </Typography>
         )}
         <FormFieldHelperText>

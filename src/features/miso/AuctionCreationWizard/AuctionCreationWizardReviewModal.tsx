@@ -136,6 +136,16 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
                 {templateIdToLabel(data.auctionType)}
               </Typography>
               <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                {i18n._(t`Total Supply`)}
+              </Typography>
+              <Typography
+                weight={700}
+                variant="sm"
+                className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
+              >
+                {data.tokenSupply.toSignificant(6)} {data.tokenSupply.currency.symbol}
+              </Typography>
+              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
                 {i18n._(t`Tokens for sale`)}
               </Typography>
               <Typography
@@ -144,6 +154,26 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
                 className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
               >
                 {data.tokenAmount.toSignificant(6)} {data.tokenAmount.currency.symbol}
+              </Typography>
+              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                {i18n._(t`Liquidity percentage`)}
+              </Typography>
+              <Typography
+                weight={700}
+                variant="sm"
+                className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
+              >
+                {data.liqPercentage / 100}%
+              </Typography>
+              <Typography variant="sm" className="text-secondary py-2 border-b border-dark-700">
+                {i18n._(t`Liquidity lockup`)}
+              </Typography>
+              <Typography
+                weight={700}
+                variant="sm"
+                className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
+              >
+                {data.liqLockTime} days
               </Typography>
 
               {data.auctionType === AuctionTemplate.DUTCH_AUCTION && (

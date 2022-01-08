@@ -34,7 +34,6 @@ export interface AuctionCreationWizardInput {
   minimumRaised?: number
   startPrice?: number
   endPrice?: number
-  liqTokenAmount: number
   liqLockTime?: number
   liqPercentage: number
   whitelistEnabled: boolean
@@ -47,7 +46,6 @@ export type AuctionCreationWizardInputFormatted = Omit<
   | 'endDate'
   | 'tokenSupply'
   | 'tokenAmount'
-  | 'liqTokenAmount'
   | 'fixedPrice'
   | 'minimumTarget'
   | 'minimumRaised'
@@ -58,7 +56,6 @@ export type AuctionCreationWizardInputFormatted = Omit<
   startDate: Date
   endDate: Date
   tokenAmount: CurrencyAmount<Token>
-  liqTokenAmount: CurrencyAmount<Token>
   tokenSupply: CurrencyAmount<Token>
   auctionType: AuctionTemplate
   fixedPrice?: Price<Token, Currency>
@@ -97,7 +94,10 @@ const schema = yup.object().shape({
     .typeError('Must be a valid number')
     .required('Must enter a valid number')
     .moreThan(0, 'Token supply must be larger than zero')
-    .max(yup.ref('tokenSupply'), 'Amount of tokens for sale must be less than the total supply'),
+    .test({
+      message: 'Amount of tokens for sale must be less than half the total supply',
+      test: (value, ctx) => (value ? value * 2 <= ctx.parent.tokenSupply : false),
+    }),
   auctionType: yup.number().required('Must select an auction type'),
   fixedPrice: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.CROWDSALE,
@@ -129,7 +129,6 @@ const schema = yup.object().shape({
   }),
   liqLauncherEnabled: yup.boolean(),
   liqLockTime: yup.number().typeError('Must be a number'),
-  liqTokenAmount: yup.number().typeError('Must be a number').required('Must enter a number'),
   liqPercentage: yup
     .number()
     .typeError('Must be a number')

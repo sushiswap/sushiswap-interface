@@ -53,10 +53,6 @@ export const formatCreationFormData = (
     auctionToken,
     JSBI.BigInt(parseUnits(data.tokenAmount.toString(), auctionToken.decimals).toString())
   )
-  const liqTokenAmount = CurrencyAmount.fromRawAmount(
-    auctionToken,
-    JSBI.BigInt(parseUnits(data.liqTokenAmount.toString(), auctionToken.decimals).toString())
-  )
   const tokenSupply = CurrencyAmount.fromRawAmount(
     auctionToken,
     JSBI.BigInt(parseUnits(data.tokenSupply.toString(), auctionToken.decimals).toString())
@@ -83,7 +79,6 @@ export const formatCreationFormData = (
     auctionToken,
     paymentCurrency,
     tokenAmount,
-    liqTokenAmount,
     tokenSupply,
     startPrice,
     endPrice,
