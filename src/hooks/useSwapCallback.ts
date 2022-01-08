@@ -227,13 +227,13 @@ function getComplexPathParams(
     if (multiRoute.legs[legIndex].tokenFrom.address === multiRoute.fromToken.address) {
       const initialPath: InitialPath = {
         tokenIn:
-          inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
+          inputAmount.currency.isNative || fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
         pool: multiRoute.legs[legIndex].poolAddress,
         amount: getInitialPathAmount(legIndex, multiRoute, initialPaths, initialPathCount, inputAmount, fromWallet),
-        native: false,
+        native: inputAmount.currency.isNative || fromWallet,
         data: defaultAbiCoder.encode(
           ['address', 'address', 'bool'],
-          [multiRoute.legs[legIndex].tokenFrom.address, tridentRouterAddress, true]
+          [multiRoute.legs[legIndex].tokenFrom.address, tridentRouterAddress, false]
         ),
       }
       initialPaths.push(initialPath)
