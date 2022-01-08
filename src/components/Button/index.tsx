@@ -91,7 +91,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={classNames(
           rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
           variant !== 'empty' && SIZE[size],
-          'hover:text-white font-bold rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
+          'font-bold rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
           className
         )}
         {...rest}
