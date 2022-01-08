@@ -88,12 +88,14 @@ const schema = yup.object().shape({
     .typeError('Supply must be a number')
     .required('Must enter a valid number')
     .moreThan(0, 'Token supply must be larger than zero')
-    .max(2e256 - 1, 'Token supply can be at most 2^256 - 1 due to network limitations'),
+    .max(2e256 - 1, 'Token supply can be at most 2^256 - 1 due to network limitations')
+    .integer('Must be a whole number'),
   tokenAmount: yup
     .number()
     .typeError('Must be a valid number')
     .required('Must enter a valid number')
     .moreThan(0, 'Token supply must be larger than zero')
+    .integer('Must be a whole number')
     .test({
       message: 'Amount of tokens for sale must be less than half the total supply',
       test: (value, ctx) => (value ? value * 2 <= ctx.parent.tokenSupply : false),
@@ -109,7 +111,8 @@ const schema = yup.object().shape({
       .number()
       .typeError('Target must be a number')
       .moreThan(0, 'Must be a number between 0 and 100')
-      .max(100, 'Must be a number between 0 and 100'),
+      .max(100, 'Must be a number between 0 and 100')
+      .integer('Must be a whole number'),
   }),
   minimumRaised: yup.number().when('auctionType', {
     is: (value) => value === AuctionTemplate.BATCH_AUCTION,
@@ -134,7 +137,8 @@ const schema = yup.object().shape({
     .typeError('Must be a number')
     .required('Must enter a number')
     .moreThan(0, 'Must be a number between 0 and 100')
-    .max(100, 'Must be a number between 0 and 100'),
+    .max(100, 'Must be a number between 0 and 100')
+    .integer('Must be a whole number'),
   whitelistEnabled: yup.boolean(),
 })
 

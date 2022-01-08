@@ -173,7 +173,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
                 variant="sm"
                 className="flex items-end gap-1.5 text-high-emphesis py-2 border-b border-dark-700"
               >
-                {data.liqLockTime} days
+                {Number(data.liqLockTime) / (24 * 60 * 60)} days
               </Typography>
 
               {data.auctionType === AuctionTemplate.DUTCH_AUCTION && (

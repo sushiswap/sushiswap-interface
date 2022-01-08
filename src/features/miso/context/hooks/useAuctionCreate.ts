@@ -33,8 +33,8 @@ const useAuctionCreate = () => {
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOLauncher.abi : undefined
   )
   const recipeContract = useContract(
-    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.address : undefined,
-    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOReceipe.abi : undefined
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.AuctionCreation.address : undefined,
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.AuctionCreation.abi : undefined
   )
 
   const subscribe = useCallback(

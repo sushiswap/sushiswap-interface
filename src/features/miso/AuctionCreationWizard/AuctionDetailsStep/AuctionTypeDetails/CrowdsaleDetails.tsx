@@ -34,8 +34,14 @@ const CrowdsaleDetails: FC = () => {
 
     if (base && quote) price = new Price({ baseAmount: quote, quoteAmount: base })
     if (price && amount) maximumRaised = price.quote(amount)
-    if (maximumRaised && data.minimumTarget)
-      minimumRaised = maximumRaised.multiply(new Percent(data.minimumTarget, '100'))
+    if (
+      maximumRaised &&
+      data.minimumTarget &&
+      Number.isInteger(Number(data.minimumTarget)) &&
+      data.minimumTarget >= 1
+    ) {
+      minimumRaised = maximumRaised.multiply(new Percent(data.minimumTarget, 10000))
+    }
   }
 
   return (
