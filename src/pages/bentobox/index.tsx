@@ -27,6 +27,16 @@ export default function BenotBox() {
           name="description"
           content="BentoBox is a token vault that generates yield for liquidity providers. BentoBox creates a source of liquidity that any user can access with minimal approvals, minimal gas usage, and maximal capital efficiency."
         />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="BentoBox is a token vault that generates yield for liquidity providers. BentoBox creates a source of liquidity that any user can access with minimal approvals, minimal gas usage, and maximal capital efficiency."
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="BentoBox is a token vault that generates yield for liquidity providers. BentoBox creates a source of liquidity that any user can access with minimal approvals, minimal gas usage, and maximal capital efficiency."
+        />
       </Head>
       <div className="absolute top-0 left-0 right-0 z-0 w-full h-full" style={{ maxHeight: 500 }}>
         <Image

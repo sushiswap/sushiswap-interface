@@ -1,6 +1,5 @@
 import { ChainId, Currency, NATIVE, WNATIVE } from '@sushiswap/sdk'
 
-import { WETH9_EXTENDED } from '../constants/tokens'
 import { tryParseAmount } from '../functions/parse'
 import { useActiveWeb3React } from './useActiveWeb3React'
 import { useCurrencyBalance } from '../state/wallet/hooks'

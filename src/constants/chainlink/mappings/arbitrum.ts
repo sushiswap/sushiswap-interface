@@ -47,6 +47,38 @@ const ARBITRUM_CHAINLINK_MAPPING = {
     fromDecimals: 18,
     toDecimals: 8,
   },
+  // DAI / USD
+  '0xc5C8E77B397E531B8EC06BFb0048328B30E9eCfB': {
+    from: '0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // MIM / USD
+  '0x87121F6c9A9F6E90E59591E4Cf4804873f54A95b': {
+    from: '0xFEa7a6a0B346362BF88A9e4A88416B77a57D6c2A',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // SPELL / USD
+  '0x383b3624478124697BEF675F07cA37570b73992f': {
+    from: '0x3E6648C5a70A150A88bCE65F4aD4d506Fe15d2AF',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // SUSHI / USD
+  '0xb2A8BA74cbca38508BA1632761b56C897060147C': {
+    from: '0xd4d42F0b6DEF4CE0383636770eF773390d85c61A',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
 }
 
 export default ARBITRUM_CHAINLINK_MAPPING

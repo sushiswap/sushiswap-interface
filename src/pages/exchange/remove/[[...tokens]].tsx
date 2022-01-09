@@ -434,6 +434,8 @@ export default function Remove() {
       <Head>
         <title>Remove Liquidity | Sushi</title>
         <meta key="description" name="description" content="Remove liquidity from the SushiSwap AMM" />
+        <meta key="twitter:description" name="twitter:description" content="Remove liquidity from the SushiSwap AMM" />
+        <meta key="og:description" property="og:description" content="Remove liquidity from the SushiSwap AMM" />
       </Head>
       <div className="px-4 mb-5">
         <NavLink href="/pool">
