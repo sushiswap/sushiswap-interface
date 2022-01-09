@@ -90,11 +90,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
           </div>
         }
       >
-        <div
-          className={
-            'lg:bg-dark-900 lg:border-dark-700 border border-transparent flex items-center justify-center w-10 h-10 rounded cursor-pointer'
-          }
-        >
+        <div className={'flex items-center justify-center w-10 h-10 rounded cursor-pointer'}>
           <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90 hover:text-white" />
         </div>
       </Popover>

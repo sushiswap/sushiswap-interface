@@ -69,7 +69,7 @@ const TridentLayout: FC<TridentLayoutProps> = ({ children = [], breadcrumbs = []
       {/*<Breadcrumb breadcrumbs={breadcrumbs} />*/}
       <Container maxWidth="7xl" className="mx-auto">
         <div className="flex flex-col items-center w-full h-screen">
-          <div className="bg-dark-1000 w-full flex-grow flex flex-col">{children}</div>
+          <div className="w-full flex-grow flex flex-col">{children}</div>
           <Popups />
         </div>
       </Container>

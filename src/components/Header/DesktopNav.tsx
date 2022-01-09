@@ -37,7 +37,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
     <div className="flex flex-col gap-3 px-6 py-3">
       <div className="grid items-center justify-between grid-cols-2">
         <div className="flex items-center">
-          <div className="w-12 h-6">
+          <div className="min-w-[48px] h-6">
             <Image src="/logo.svg" alt="Sushi logo" width="24px" height="24px" />
           </div>
           <div className="flex space-x-1.5 hidden sm:block">

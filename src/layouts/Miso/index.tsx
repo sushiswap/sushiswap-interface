@@ -1,8 +1,8 @@
 import Container, { MaxWidth } from 'app/components/Container'
-import Main from 'app/components/Main'
-import { classNames } from 'app/functions'
 import Header from 'app/components/Header'
+import Main from 'app/components/Main'
 import Popups from 'app/components/Popups'
+import { classNames } from 'app/functions'
 import React, { FC, ReactNode } from 'react'
 
 interface MisoHeaderProps extends React.HTMLProps<HTMLHeadElement> {
@@ -61,7 +61,7 @@ const MisoLayout: FC = ({ children }) => {
     <>
       <Header />
       <div className="flex flex-col items-center w-full h-screen">
-        <div className="bg-dark-1000 w-full flex-grow flex flex-col">{children}</div>
+        <div className="w-full flex-grow flex flex-col">{children}</div>
         <Popups />
       </div>
     </>

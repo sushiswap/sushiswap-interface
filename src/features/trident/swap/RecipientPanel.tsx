@@ -18,7 +18,6 @@ const RecipientPanel = () => {
   const dispatch = useAppDispatch()
   const { address, loading } = useENS(recipient)
   const expertMode = useIsExpertMode()
-
   const error = Boolean(recipient && recipient.length > 0 && !loading && !address)
   const valid = Boolean(recipient && recipient.length > 0 && address && !loading)
 
@@ -41,7 +40,7 @@ const RecipientPanel = () => {
           variant="sm"
           weight={700}
           className="py-1 cursor-pointer text-blue"
-          onClick={() => setRecipient('')}
+          onClick={() => dispatch(setRecipient(''))}
         >
           {i18n._(t`+ Add Recipient (optional)`)}
         </Typography>
@@ -60,7 +59,7 @@ const RecipientPanel = () => {
         <Typography variant="xs" className="text-secondary" weight={700}>
           {i18n._(t`Send to:`)}
         </Typography>
-        <Typography variant="xs" className="text-blue" weight={700} onClick={() => setRecipient(undefined)}>
+        <Typography variant="xs" className="text-blue" weight={700} onClick={() => dispatch(setRecipient(undefined))}>
           {i18n._(t`Remove recipient`)}
         </Typography>
       </div>
@@ -68,7 +67,7 @@ const RecipientPanel = () => {
         <Input.Address
           id="recipient-input"
           placeholder={i18n._(t`Wallet address or ENS name`)}
-          onUserInput={setRecipient}
+          onUserInput={(val) => dispatch(setRecipient(val))}
           value={recipient}
           className={classNames(
             error ? 'border-red/50' : 'border-transparent',
