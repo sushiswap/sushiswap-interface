@@ -1,6 +1,7 @@
-import { BigNumber } from 'ethers'
-import { useMulticall2Contract } from './useContract'
+import { BigNumber } from '@ethersproject/bignumber'
+
 import { useSingleCallResult } from '../state/multicall/hooks'
+import { useMulticall2Contract } from './useContract'
 
 // gets the current timestamp from the blockchain
 export default function useCurrentBlockTimestamp(): BigNumber | undefined {

@@ -1,17 +1,17 @@
-import { ChainId, Currency, NATIVE, Token, WNATIVE, currencyEquals } from '@sushiswap/sdk'
-import { NEVER_RELOAD, useSingleCallResult } from '../state/multicall/hooks'
-import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from './../state/lists/hooks'
-import { createTokenFilterFunction, filterTokens } from '../functions/filtering'
-import { useBytes32TokenContract, useTokenContract } from './useContract'
-
-import { WrappedTokenInfo } from './../state/lists/wrappedTokenInfo'
-import { arrayify } from 'ethers/lib/utils'
-import { isAddress } from '../functions/validate'
+import { arrayify } from '@ethersproject/bytes'
 import { parseBytes32String } from '@ethersproject/strings'
-import { useActiveWeb3React } from './useActiveWeb3React'
-import { useCombinedActiveList } from '../state/lists/hooks'
+import { ChainId, Currency, NATIVE, Token, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { createTokenFilterFunction } from 'app/functions/filtering'
+import { isAddress } from 'app/functions/validate'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useCombinedActiveList } from 'app/state/lists/hooks'
+import { TokenAddressMap, useAllLists, useInactiveListUrls, useUnsupportedTokenList } from 'app/state/lists/hooks'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
+import { NEVER_RELOAD, useSingleCallResult } from 'app/state/multicall/hooks'
+import { useUserAddedTokens } from 'app/state/user/hooks'
 import { useMemo } from 'react'
-import { useUserAddedTokens } from '../state/user/hooks'
+
+import { useBytes32TokenContract, useTokenContract } from './useContract'
 
 // reduce token map into standard address <-> Token mapping, optionally include user added tokens
 function useTokensFromMap(tokenMap: TokenAddressMap, includeUserAdded: boolean): { [address: string]: Token } {
@@ -126,9 +126,9 @@ function parseStringOrBytes32(str: string | undefined, bytes32: string | undefin
 }
 
 // undefined if invalid or does not exist
-// null if loading
+// null if loading or null was passed
 // otherwise returns the token
-export function useToken(tokenAddress?: string): Token | undefined | null {
+export function useToken(tokenAddress?: string | null): Token | undefined | null {
   const { chainId } = useActiveWeb3React()
   const tokens = useAllTokens()
 
@@ -151,6 +151,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 
   return useMemo(() => {
     if (token) return token
+    if (tokenAddress === null) return null
     if (!chainId || !address) return undefined
     if (decimals.loading || symbol.loading || tokenName.loading) return null
     if (decimals.result) {
@@ -172,6 +173,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
     symbol.result,
     symbolBytes32.result,
     token,
+    tokenAddress,
     tokenName.loading,
     tokenName.result,
     tokenNameBytes32.result,
@@ -188,14 +190,18 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
   const useNative = isETH && !isDual
 
   if (isETH && isDual) {
-    currencyId = WNATIVE[chainId].address
+    currencyId = WNATIVE_ADDRESS[chainId]
   }
 
   const token = useToken(useNative ? undefined : currencyId)
 
-  const native = useMemo(() => (chainId ? NATIVE[chainId] : undefined), [chainId])
-
-  const wnative = chainId ? WNATIVE[chainId] : undefined
+  const { native, wnative } = useMemo(
+    () => ({
+      native: chainId && chainId in NATIVE ? NATIVE[chainId] : undefined,
+      wnative: chainId && chainId in WNATIVE ? WNATIVE[chainId] : undefined,
+    }),
+    [chainId]
+  )
 
   if (wnative?.address?.toLowerCase() === currencyId?.toLowerCase()) return wnative
 

@@ -1,4 +1,5 @@
-import { Store, createStore } from '@reduxjs/toolkit'
+import { createStore, Store } from '@reduxjs/toolkit'
+
 import {
   addMulticallListeners,
   errorFetchingMulticallResults,

@@ -1,11 +1,12 @@
-import React, { useCallback, useState } from 'react'
-import { FC } from 'react'
-import { useActiveWeb3React } from '../../hooks'
-import { ChainId } from '@sushiswap/sdk'
-import Button from '../Button'
-import { classNames } from '../../functions'
 import { Transition } from '@headlessui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { ChainId } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import { classNames } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
+import React, { useCallback, useState } from 'react'
+import { FC } from 'react'
+
 import { getStrapiMedia } from '../../lib/media'
 
 interface BannerProps {
@@ -38,7 +39,7 @@ const Banner: FC<BannerProps> = ({ banners }) => {
     setSlideIndex((prevState) => (prevState - 1 + banners.length) % banners.length)
   }, [banners.length])
 
-  if (chainId !== ChainId.MAINNET || banners.length === 0) return <></>
+  if (chainId !== ChainId.ETHEREUM || banners.length === 0) return <></>
 
   const filteredSlides = banners.filter(({ attributes: { startDate, endDate } }) => {
     const now = new Date().getTime()
@@ -86,11 +87,11 @@ const Banner: FC<BannerProps> = ({ banners }) => {
   })
 
   return (
-    <div className="flex justify-center flex-col">
+    <div className="flex flex-col justify-center">
       <div className="relative h-[96px] mt-4">
         {slides}
         {slides.length > 1 && (
-          <div className="flex justify-between w-full h-full items-center">
+          <div className="flex items-center justify-between w-full h-full">
             <Button onClick={prevSlide} className="flex items-center -ml-12">
               <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
             </Button>

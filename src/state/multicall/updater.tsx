@@ -1,18 +1,17 @@
-import { Call, parseCallKey } from './utils'
-import { RetryableError, retry } from '../../functions/retry'
-import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from './actions'
-import { useAppDispatch, useAppSelector } from '../hooks'
+import { Contract } from '@ethersproject/contracts'
+import { chunkArray } from 'app/functions/array'
+import { retry, RetryableError } from 'app/functions/retry'
+import { useMulticall2Contract } from 'app/hooks/useContract'
+import useDebounce from 'app/hooks/useDebounce'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useEffect, useMemo, useRef } from 'react'
 
-import { AppState } from '../index'
-import { CHUNK_GAS_LIMIT } from '../../functions/calls/constants';
-import { Contract } from 'ethers'
-import chunkCalls from '../../functions/calls';
-import { updateBlockNumber } from '../application/actions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useBlockNumber } from '../application/hooks'
-import useDebounce from '../../hooks/useDebounce'
-import { useMulticall2Contract } from '../../hooks/useContract'
+// import { constants, default as chunkCalls } from '../../functions/calls'
+import { errorFetchingMulticallResults, fetchingMulticallResults, updateMulticallResults } from './actions'
+import { Call, parseCallKey } from './utils'
 
 const DEFAULT_GAS_REQUIRED = 1_000_000
 
@@ -156,7 +155,8 @@ export default function Updater(): null {
     if (outdatedCallKeys.length === 0) return
     const calls = outdatedCallKeys.map((key) => parseCallKey(key))
 
-    const chunkedCalls = chunkCalls(calls, CHUNK_GAS_LIMIT)
+    const chunkedCalls = chunkArray(calls)
+    // const chunkedCalls = chunkCalls(calls, constants.CHUNK_GAS_LIMIT)
 
     if (cancellations.current && cancellations.current.blockNumber !== latestBlockNumber) {
       cancellations.current.cancellations.forEach((c) => c())

@@ -1,19 +1,17 @@
+import { Token } from '@sushiswap/core-sdk'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import ExternalLink from 'app/components/ExternalLink'
+import { ExternalLinkIcon } from 'app/components/ExternalLinkIcon'
+import { RowBetween, RowFixed } from 'app/components/Row'
+import { getExplorerLink, isAddress } from 'app/functions'
+import { useToken } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useRemoveUserAddedToken, useUserAddedTokens } from 'app/state/user/hooks'
 import React, { RefObject, useCallback, useMemo, useRef, useState } from 'react'
-import { RowBetween, RowFixed } from '../../components/Row'
-import { useRemoveUserAddedToken, useUserAddedTokens } from '../../state/user/hooks'
+import { Trash } from 'react-feather'
 
-import ButtonText from '../../components/ButtonText'
-import CurrencyLogo from '../../components/CurrencyLogo'
 import CurrencyModalView from './CurrencyModalView'
-import ExternalLink from '../../components/ExternalLink'
-import { ExternalLinkIcon } from '../../components/ExternalLinkIcon'
 import ImportRow from './ImportRow'
-import { Token } from '@sushiswap/sdk'
-import TrashIcon from '../../components/TrashIcon'
-import { getExplorerLink } from '../../functions/explorer'
-import { isAddress } from '../../functions/validate'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useToken } from '../../hooks/Tokens'
 
 function ManageTokens({
   setModalView,
@@ -62,7 +60,12 @@ function ManageTokens({
             </ExternalLink>
           </RowFixed>
           <RowFixed align="center">
-            <TrashIcon onClick={() => removeToken(chainId, token.address)} />
+            <div
+              className="flex items-center justify-center w-4 h-4 cursor-pointer hover:opacity-70"
+              onClick={() => removeToken(chainId, token.address)}
+            >
+              <Trash />
+            </div>
             <ExternalLinkIcon href={getExplorerLink(chainId, token.address, 'address')} />
           </RowFixed>
         </RowBetween>
@@ -98,9 +101,9 @@ function ManageTokens({
             {userAddedTokens?.length} Custom {userAddedTokens.length === 1 ? 'Token' : 'Tokens'}
           </div>
           {userAddedTokens.length > 0 && (
-            <ButtonText onClick={handleRemoveAll}>
-              <div>Clear all</div>
-            </ButtonText>
+            <button onClick={handleRemoveAll}>
+              <div className="hover:opacity-70">Clear all</div>
+            </button>
           )}
         </div>
         {tokenList}

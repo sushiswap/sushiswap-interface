@@ -1,4 +1,25 @@
-import React from 'react'
+import { classNames } from 'app/functions/styling'
+import React, { FC } from 'react'
+
+function Header({ className, children }) {
+  return (
+    <div className={classNames('flex items-center rounded-t px-4 sm:px-8 py-4 sm:py-6', className)}>{children}</div>
+  )
+}
+
+const Gradient: FC<{ className?: string }> = ({ children, className }) => {
+  return (
+    <div className="relative">
+      <div
+        className={classNames(
+          'rounded pointer-events-none absolute w-full h-full bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-40',
+          className
+        )}
+      />
+      {children}
+    </div>
+  )
+}
 
 type CardProps = {
   header?: React.ReactChild
@@ -8,7 +29,7 @@ type CardProps = {
   description?: string
 } & React.HTMLAttributes<HTMLDivElement>
 
-export default function Card({
+function Card({
   header = undefined,
   footer = undefined,
   backgroundImage = '',
@@ -40,3 +61,8 @@ export default function Card({
     </div>
   )
 }
+
+Card.Header = Header
+Card.Gradient = Gradient
+
+export default Card

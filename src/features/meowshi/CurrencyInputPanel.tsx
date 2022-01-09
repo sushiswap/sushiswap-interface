@@ -1,17 +1,17 @@
-import { Field, MeowshiState } from '../../pages/tools/meowshi'
-import React, { FC } from 'react'
-import { SUSHI, XSUSHI } from '../../constants'
-
-import { ChainId } from '@sushiswap/sdk'
-import Image from 'next/image'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import Typography from '../../components/Typography'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions'
-import { useActiveWeb3React } from '../../hooks'
 import { useLingui } from '@lingui/react'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { useUSDCValue } from '../../hooks/useUSDCPrice'
+import { ChainId, SUSHI } from '@sushiswap/core-sdk'
+import Input from 'app/components/Input'
+import Typography from 'app/components/Typography'
+import { XSUSHI } from 'app/config/tokens'
+import { tryParseAmount } from 'app/functions'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTokenBalance } from 'app/state/wallet/hooks'
+import Image from 'next/image'
+import React, { FC } from 'react'
+
+import { Field, MeowshiState } from '../../pages/tools/meowshi'
 
 interface CurrencyInputPanelProps {
   field: Field
@@ -31,13 +31,13 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
 
   return (
     <>
-      <div className="bg-dark-800 rounded">
-        <div className="p-5 flex flex-col justify-between space-y-3 sm:space-y-0 sm:flex-row">
-          <div className="flex w-full sm:w-2/5 items-center">
-            <div className="flex gap-4 items-center">
+      <div className="rounded bg-dark-800">
+        <div className="flex flex-col justify-between p-5 space-y-3 sm:space-y-0 sm:flex-row">
+          <div className="flex items-center w-full sm:w-2/5">
+            <div className="flex items-center gap-4">
               <Image
                 src={
-                  currency === SUSHI[ChainId.MAINNET]
+                  currency === SUSHI[ChainId.ETHEREUM]
                     ? '/images/tokens/sushi-square.jpg'
                     : currency === XSUSHI
                     ? '/images/tokens/xsushi-square.jpg'
@@ -50,26 +50,26 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
                 className="rounded-full"
               />
               <div className="flex flex-col items-start">
-                <Typography variant="h3" className="text-high-emphesis leading-6" weight={700}>
+                <Typography variant="h3" className="leading-6 text-high-emphesis" weight={700}>
                   {currency?.symbol}
                 </Typography>
-                {(currency === SUSHI[ChainId.MAINNET] || currency === XSUSHI) && (
+                {(currency === SUSHI[ChainId.ETHEREUM] || currency === XSUSHI) && (
                   <Typography
                     variant="xs"
-                    className="underline text-blue cursor-pointer"
-                    onClick={() => setCurrency(currency === XSUSHI ? SUSHI[ChainId.MAINNET] : XSUSHI, field)}
+                    className="underline cursor-pointer text-blue"
+                    onClick={() => setCurrency(currency === XSUSHI ? SUSHI[ChainId.ETHEREUM] : XSUSHI, field)}
                   >
-                    {currencies[field] === SUSHI[ChainId.MAINNET] ? i18n._(t`Use xSUSHI`) : i18n._(t`Use SUSHI`)}
+                    {currencies[field] === SUSHI[ChainId.ETHEREUM] ? i18n._(t`Use xSUSHI`) : i18n._(t`Use SUSHI`)}
                   </Typography>
                 )}
               </div>
             </div>
           </div>
-          <div className="flex items-center w-full px-3 py-2 rounded bg-dark-900 sm:w-3/5 justify-between">
+          <div className="flex items-center justify-between w-full px-3 py-2 rounded bg-dark-900 sm:w-3/5">
             <div className="flex flex-col items-start">
               <div className="w-full">
-                <NumericalInput
-                  className="w-full bg-transparent text-2xl leading-4"
+                <Input.Numeric
+                  className="w-full text-2xl leading-4 bg-transparent"
                   id="token-amount-input"
                   value={fields[field]}
                   onUserInput={(val) => handleInput(val, field)}
@@ -85,7 +85,7 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
             {showMax && (
               <span
                 onClick={() => handleInput(balance?.toExact(), field)}
-                className="uppercase border border-blue bg-blue text-blue bg-opacity-30 border-opacity-50 py-1 px-2 text-sm rounded-3xl flex items-center justify-center cursor-pointer hover:border-opacity-100"
+                className="flex items-center justify-center px-2 py-1 text-sm uppercase border border-opacity-50 cursor-pointer border-blue bg-blue text-blue bg-opacity-30 rounded-3xl hover:border-opacity-100"
               >
                 {i18n._(t`Max`)}
               </span>

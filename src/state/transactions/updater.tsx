@@ -1,13 +1,15 @@
-import { AppDispatch, AppState } from '../index'
-import { RetryOptions, RetryableError, retry } from '../../functions/retry'
-import { checkedTransaction, finalizeTransaction } from './actions'
-import { useAddPopup, useBlockNumber } from '../application/hooks'
-import { useAppDispatch, useAppSelector } from '../hooks'
+import { ChainId } from '@sushiswap/core-sdk'
+import { retry, RetryableError, RetryOptions } from 'app/functions/retry'
+import { routingInfo } from 'app/hooks/useBestTridentTrade'
+import { useActiveWeb3React } from 'app/services/web3'
+import { updateBlockNumber } from 'app/state/application/actions'
+import { useAddPopup, useBlockNumber } from 'app/state/application/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useCallback, useEffect, useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
 
-import { ChainId } from '@sushiswap/sdk'
-import { updateBlockNumber } from '../application/actions'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
+import { checkedTransaction, finalizeTransaction } from './actions'
+import { sendRevertTransactionLog } from './sentryLogger'
 
 interface TxInterface {
   addedTime: number
@@ -71,6 +73,8 @@ export default function Updater(): null {
     [chainId, library]
   )
 
+  const routeInfo = useRecoilValue(routingInfo)
+
   useEffect(() => {
     if (!chainId || !library || !lastBlockNumber) return
 
@@ -113,6 +117,10 @@ export default function Updater(): null {
               if (receipt.blockNumber > lastBlockNumber) {
                 dispatch(updateBlockNumber({ chainId, blockNumber: receipt.blockNumber }))
               }
+
+              if (receipt.status === 0) {
+                sendRevertTransactionLog(hash, routeInfo)
+              }
             } else {
               dispatch(checkedTransaction({ chainId, hash, blockNumber: lastBlockNumber }))
             }
@@ -128,7 +136,7 @@ export default function Updater(): null {
     return () => {
       cancels.forEach((cancel) => cancel())
     }
-  }, [chainId, library, transactions, lastBlockNumber, dispatch, addPopup, getReceipt])
+  }, [chainId, library, transactions, lastBlockNumber, dispatch, addPopup, getReceipt, routeInfo])
 
   return null
 }

@@ -1,10 +1,10 @@
-import { ANALYTICS_URL } from '../../constants'
-import { ChainId } from '@sushiswap/sdk'
-import ExternalLink from '../ExternalLink'
-import Polling from '../Polling'
 import { t } from '@lingui/macro'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
+import ExternalLink from 'app/components/ExternalLink'
+import Polling from 'app/components/Polling'
+import ANALYTICS_URL from 'app/config/analytics'
+import { useActiveWeb3React } from 'app/services/web3'
 
 const Footer = () => {
   const { chainId } = useActiveWeb3React()
@@ -83,6 +83,13 @@ const Footer = () => {
             {i18n._(t`Moonriver Bridge`)}
           </ExternalLink>
         )}
+
+        {chainId && chainId === ChainId.AVALANCHE && (
+          <ExternalLink id={`avalanche-bridge-link`} href=" https://bridge.avax.network" className="text-low-emphesis">
+            {i18n._(t`Avalanche Bridge`)}
+          </ExternalLink>
+        )}
+
         <Polling />
       </div>
     </footer>

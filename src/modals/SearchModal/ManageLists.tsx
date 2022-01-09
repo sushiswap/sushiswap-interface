@@ -1,92 +1,28 @@
-import { AppDispatch, AppState } from '../../state'
-import { CheckCircle, Settings } from 'react-feather'
-import Column, { AutoColumn } from '../../components/Column'
-import { PaddedColumn, SeparatorDark } from './styleds'
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Row, { RowBetween, RowFixed } from '../../components/Row'
-import { acceptListUpdate, disableList, enableList, removeList } from '../../state/lists/actions'
-import { useActiveListUrls, useAllLists, useIsListActive } from '../../state/lists/hooks'
-import { useDispatch, useSelector } from 'react-redux'
-
-import AutoSizer from 'react-virtualized-auto-sizer'
-import Button from '../../components/Button'
-import CurrencyModalView from './CurrencyModalView'
-import ExternalLink from '../../components/ExternalLink'
-import IconWrapper from '../../components/IconWrapper'
-import LinkStyledButton from '../../components/LinkStyledButton'
-import ListLogo from '../../components/ListLogo'
-import ListToggle from '../../components/Toggle/ListToggle'
-import ReactGA from 'react-ga'
+import { Popover } from '@headlessui/react'
 import { TokenList } from '@uniswap/token-lists'
-import { UNSUPPORTED_LIST_URLS } from '../../constants/token-lists'
-import { listVersionLabel } from '../../functions/list'
-import { parseENSAddress } from '../../functions/ens'
-import styled from 'styled-components'
-import { uriToHttp } from '../../functions/convert'
-import { useFetchListCallback } from '../../hooks/useFetchListCallback'
-import { useListColor } from '../../hooks/useColor'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import Button from 'app/components/Button'
+import { AutoColumn } from 'app/components/Column'
+import ExternalLink from 'app/components/ExternalLink'
+import ListLogo from 'app/components/ListLogo'
+import { RowBetween, RowFixed } from 'app/components/Row'
+import ListToggle from 'app/components/Toggle/ListToggle'
+import { classNames } from 'app/functions'
+import { uriToHttp } from 'app/functions/convert'
+import { parseENSAddress } from 'app/functions/ens'
+import { listVersionLabel } from 'app/functions/list'
+import { useListColor } from 'app/hooks/useColor'
+import { useFetchListCallback } from 'app/hooks/useFetchListCallback'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { CheckCircle, Settings } from 'react-feather'
+import ReactGA from 'react-ga'
 import { usePopper } from 'react-popper'
-import useToggle from '../../hooks/useToggle'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, AppState } from 'app/state'
 
-const Wrapper = styled(Column)`
-  width: 100%;
-  height: 100%;
-`
-
-const UnpaddedLinkStyledButton = styled(LinkStyledButton)`
-  padding: 0;
-  font-size: 1rem;
-  opacity: ${({ disabled }) => (disabled ? '0.4' : '1')};
-`
-
-const PopoverContainer = styled.div<{ show: boolean }>`
-  z-index: 100;
-  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.show ? 1 : 0)};
-  transition: visibility 150ms linear, opacity 150ms linear;
-  background: ${({ theme }) => theme.bg2};
-  border: 1px solid ${({ theme }) => theme.bg3};
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
-    0px 24px 32px rgba(0, 0, 0, 0.01);
-  // color: ${({ theme }) => theme.text2};
-  // border-radius: ${({ theme }) => theme.borderRadius};
-  padding: 1rem;
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-gap: 8px;
-  font-size: 1rem;
-  text-align: left;
-`
-
-const StyledMenu = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border: none;
-`
-
-const StyledTitleText = styled.div<{ active: boolean }>`
-  font-size: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 600;
-  color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
-`
-
-const StyledListUrlText = styled.div<{ active: boolean }>`
-  font-size: 12px;
-  color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
-`
-
-const RowWrapper = styled(Row)<{ bgColor: string; active: boolean }>`
-  background-color: ${({ bgColor, active, theme }) => (active ? bgColor ?? 'transparent' : theme.bg2)};
-  transition: 200ms;
-  align-items: center;
-  padding: 1rem;
-  border-radius: 10px;
-`
+import { UNSUPPORTED_LIST_URLS } from '../../config/token-lists'
+import { acceptListUpdate, disableList, enableList, removeList } from 'app/state/lists/actions'
+import { useActiveListUrls, useAllLists, useIsListActive } from 'app/state/lists/hooks'
+import CurrencyModalView from './CurrencyModalView'
 
 function listUrlRowHTMLId(listUrl: string) {
   return `list-row-${listUrl.replace(/\./g, '-')}`
@@ -100,18 +36,12 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
   const listColor = useListColor(list?.logoURI)
   const isActive = useIsListActive(listUrl)
 
-  const [open, toggle] = useToggle(false)
-  const node = useRef<HTMLDivElement>()
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement>()
   const [popperElement, setPopperElement] = useState<HTMLDivElement>()
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'auto',
-    strategy: 'fixed',
-    modifiers: [{ name: 'offset', options: { offset: [8, 8] } }],
+    placement: 'right',
   })
-
-  useOnClickOutside(node, open ? toggle : undefined)
 
   const handleAcceptListUpdate = useCallback(() => {
     if (!pending) return
@@ -160,46 +90,54 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
   if (!list) return null
 
   return (
-    <RowWrapper
+    <div
       id={listUrlRowHTMLId(listUrl)}
-      active={isActive}
-      bgColor={listColor}
+      style={isActive ? { backgroundColor: listColor } : {}}
+      className={classNames(isActive ? 'text-high-emphesis' : 'text-primary bg-dark-700', 'rounded flex flex-row p-4')}
       key={listUrl}
-      className={`${isActive ? 'text-high-emphesis' : 'text-primary bg-dark-700'}`}
     >
       {list.logoURI ? (
         <ListLogo size="40px" logoURI={list.logoURI} alt={`${list.name} list logo`} />
       ) : (
         <div style={{ width: '24px', height: '24px' }} />
       )}
-      <Column style={{ flex: '1', marginLeft: '1rem' }}>
-        <Row>
-          <StyledTitleText active={isActive}>{list.name}</StyledTitleText>
-        </Row>
-        <RowFixed mt="4px">
-          <StyledListUrlText active={isActive} mr="6px">
-            {list.tokens.length} tokens
-          </StyledListUrlText>
-          <StyledMenu ref={node as any}>
-            <Button variant="empty" onClick={toggle} ref={setReferenceElement} style={{ padding: '0' }}>
+      <div className="justify-center flex-auto ml-4">
+        <div>
+          <div className={classNames(isActive && 'text-white', 'overflow-hidden overflow-ellipsis font-semibold')}>
+            {list.name}
+          </div>
+        </div>
+        <div className="relative flex flex-row">
+          <div className={classNames(isActive && 'text-white', 'text-xs')}>{list.tokens.length} tokens</div>
+          <Popover className="flex items-center justify-center">
+            <Popover.Button ref={setReferenceElement as any}>
               <Settings size={12} className="ml-1 stroke-current" />
-            </Button>
-            {open && (
-              <PopoverContainer show={true} ref={setPopperElement as any} style={styles.popper} {...attributes.popper}>
-                <div>{list && listVersionLabel(list.version)}</div>
-                <SeparatorDark />
-                <ExternalLink href={`https://tokenlists.org/token-list?url=${listUrl}`}>View list</ExternalLink>
-                <UnpaddedLinkStyledButton onClick={handleRemoveList} disabled={Object.keys(listsByUrl).length === 1}>
-                  Remove list
-                </UnpaddedLinkStyledButton>
-                {pending && (
-                  <UnpaddedLinkStyledButton onClick={handleAcceptListUpdate}>Update list</UnpaddedLinkStyledButton>
-                )}
-              </PopoverContainer>
-            )}
-          </StyledMenu>
-        </RowFixed>
-      </Column>
+            </Popover.Button>
+            <Popover.Panel
+              className="z-20 flex flex-col p-4 space-y-2 bg-black border border-white rounded bg-opacity-80 backdrop-blur whitespace-nowrap"
+              ref={setPopperElement as any}
+              style={styles.popper}
+              {...attributes.popper}
+            >
+              <div>{list && listVersionLabel(list.version)}</div>
+              <div />
+              <ExternalLink href={`https://tokenlists.org/token-list?url=${listUrl}`}>View list</ExternalLink>
+              <button
+                className="hover:text-high-emphesis text-primary"
+                onClick={handleRemoveList}
+                disabled={Object.keys(listsByUrl).length === 1}
+              >
+                Remove list
+              </button>
+              {pending && (
+                <button className="hover:text-high-emphesis text-primary" onClick={handleAcceptListUpdate}>
+                  Update list
+                </button>
+              )}
+            </Popover.Panel>
+          </Popover>
+        </div>
+      </div>
       <ListToggle
         isActive={isActive}
         bgColor={listColor}
@@ -207,23 +145,17 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
           isActive ? handleDisableList() : handleEnableList()
         }}
       />
-    </RowWrapper>
+    </div>
   )
 })
 
-const ListContainer = styled.div`
-  // padding: 1rem;
-  height: 100%;
-  overflow-y: auto;
-
-  padding-bottom: 80px;
-`
-
 function ManageLists({
+  height,
   setModalView,
   setImportList,
   setListUrl,
 }: {
+  height: number
   setModalView: (view: CurrencyModalView) => void
   setImportList: (list: TokenList) => void
   setListUrl: (url: string) => void
@@ -319,7 +251,7 @@ function ManageLists({
   }, [listUrlInput, setImportList, setListUrl, setModalView, tempList])
 
   return (
-    <div className="relative flex-1 w-full h-full space-y-4 overflow-y-hidden">
+    <div style={{ height: `${height}px` }} className="flex flex-col space-y-4">
       <input
         id="list-add-input"
         type="text"
@@ -337,7 +269,7 @@ function ManageLists({
         </div>
       ) : null}
       {tempList && (
-        <PaddedColumn style={{ paddingTop: 0 }}>
+        <div className="px-5">
           <RowBetween>
             <RowFixed>
               {tempList.logoURI && <ListLogo logoURI={tempList.logoURI} size="40px" />}
@@ -348,9 +280,7 @@ function ManageLists({
             </RowFixed>
             {isImported ? (
               <RowFixed>
-                <IconWrapper size="16px" marginRight={'10px'}>
-                  <CheckCircle />
-                </IconWrapper>
+                <CheckCircle className="w-4 h-4 mr-2.5" />
                 <div>Loaded</div>
               </RowFixed>
             ) : (
@@ -367,21 +297,13 @@ function ManageLists({
               </Button>
             )}
           </RowBetween>
-        </PaddedColumn>
-      )}
-      <ListContainer>
-        <div className="h-full">
-          <AutoSizer disableWidth>
-            {({ height }) => (
-              <div style={{ height }} className="space-y-4">
-                {sortedLists.map((listUrl) => (
-                  <ListRow key={listUrl} listUrl={listUrl} />
-                ))}
-              </div>
-            )}
-          </AutoSizer>
         </div>
-      </ListContainer>
+      )}
+      <div className="flex flex-col h-full p-2 space-y-4 overflow-y-auto">
+        {sortedLists.map((listUrl) => (
+          <ListRow key={listUrl} listUrl={listUrl} />
+        ))}
+      </div>
     </div>
   )
 }

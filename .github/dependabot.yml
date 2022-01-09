@@ -1,4 +1,4 @@
-version: 1
+version: 2
 updates:
   # Enable version updates for npm
   - package-ecosystem: 'npm'
@@ -8,5 +8,14 @@ updates:
     schedule:
       interval: 'daily'
     allow:
+      - dependency-name: '@sushiswap/bentobox-sdk'
+      - dependency-name: '@sushiswap/chainlink-whitelist'
+      - dependency-name: '@sushiswap/core'
+      - dependency-name: '@sushiswap/core-sdk'
       - dependency-name: '@sushiswap/default-token-list'
+      - dependency-name: '@sushiswap/kashi-sdk'
       - dependency-name: '@sushiswap/limit-order-pair-list'
+      - dependency-name: '@sushiswap/limit-order-sdk'
+      - dependency-name: '@sushiswap/tines'
+      - dependency-name: '@sushiswap/trident'
+      - dependency-name: '@sushiswap/trident-sdk'

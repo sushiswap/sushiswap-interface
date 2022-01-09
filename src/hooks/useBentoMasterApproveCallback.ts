@@ -1,10 +1,15 @@
-import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
-import { ethers } from 'ethers'
-import { useActiveWeb3React, useBentoBoxContract } from './index'
-import { useAllTransactions, useTransactionAdder } from '../state/transactions/hooks'
-import { useCallback, useMemo, useState } from 'react'
-import { signMasterContractApproval } from '../entities/KashiCooker'
+import { Signature, splitSignature } from '@ethersproject/bytes'
+import { AddressZero, HashZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { signMasterContractApproval } from 'app/entities/KashiCooker'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBentoMasterContractAllowed } from 'app/state/bentobox/hooks'
+import { useAllTransactions, useTransactionAdder } from 'app/state/transactions/hooks'
+import { useCallback, useMemo, useState } from 'react'
+
+import { useBentoBoxContract } from './useContract'
 
 export enum BentoApprovalState {
   UNKNOWN,
@@ -21,7 +26,7 @@ export enum BentoApproveOutcome {
   NOT_READY,
 }
 
-const useBentoHasPendingApproval = (masterContract: string, account: string, contractName?: string) => {
+const useBentoHasPendingApproval = (masterContract?: string, account?: string, contractName?: string) => {
   const allTransactions = useAllTransactions()
   return useMemo(
     () =>
@@ -38,21 +43,21 @@ const useBentoHasPendingApproval = (masterContract: string, account: string, con
           return summary === `Approving ${contractName} Master Contract`
         }
       }),
-    [allTransactions, account, masterContract]
+    [allTransactions, account, masterContract, contractName]
   )
 }
 
 export interface BentoPermit {
   outcome: BentoApproveOutcome
-  signature?: { v: number; r: string; s: string }
+  signature?: Signature
   data?: string
 }
 
 export interface BentoMasterApproveCallback {
   approvalState: BentoApprovalState
   approve: () => Promise<void>
-  getPermit: () => Promise<BentoPermit>
-  permit: BentoPermit
+  getPermit: () => Promise<BentoPermit | undefined>
+  permit: BentoPermit | undefined
 }
 
 export interface BentoMasterApproveCallbackOptions {
@@ -62,15 +67,16 @@ export interface BentoMasterApproveCallbackOptions {
 }
 
 const useBentoMasterApproveCallback = (
-  masterContract: string,
+  masterContract: string | undefined,
   { otherBentoBoxContract, contractName, functionFragment }: BentoMasterApproveCallbackOptions
 ): BentoMasterApproveCallback => {
+  const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
   const bentoBoxContract = useBentoBoxContract()
   const addTransaction = useTransactionAdder()
-  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || ethers.constants.AddressZero)
-  const pendingApproval = useBentoHasPendingApproval(masterContract, account, contractName)
-  const [permit, setPermit] = useState<BentoPermit>(null)
+  const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
+  const pendingApproval = useBentoHasPendingApproval(masterContract, account ? account : undefined, contractName)
+  const [permit, setPermit] = useState<BentoPermit | undefined>()
 
   const approvalState: BentoApprovalState = useMemo(() => {
     if (permit) return BentoApprovalState.APPROVED
@@ -101,7 +107,7 @@ const useBentoMasterApproveCallback = (
     }
 
     try {
-      const signature = await signMasterContractApproval(
+      const signatureString = await signMasterContractApproval(
         bentoBoxContract,
         masterContract,
         account,
@@ -110,13 +116,13 @@ const useBentoMasterApproveCallback = (
         chainId
       )
 
-      const { v, r, s } = ethers.utils.splitSignature(signature)
+      const signature = splitSignature(signatureString)
       const permit = {
         outcome: BentoApproveOutcome.SUCCESS,
-        signature: { v, r, s },
+        signature: splitSignature(signature),
         data: (otherBentoBoxContract || bentoBoxContract)?.interface?.encodeFunctionData(
           functionFragment || 'setMasterContractApproval',
-          [account, masterContract, true, v, r, s]
+          [account, masterContract, true, signature.v, signature.r, signature.s]
         ),
       }
 
@@ -140,20 +146,22 @@ const useBentoMasterApproveCallback = (
 
   const approve = useCallback(async () => {
     try {
-      const tx = await bentoBoxContract?.setMasterContractApproval(
+      const tx = await (otherBentoBoxContract || bentoBoxContract)?.setMasterContractApproval(
         account,
         masterContract,
         true,
         0,
-        ethers.constants.HashZero,
-        ethers.constants.HashZero
+        HashZero,
+        HashZero
       )
 
       return addTransaction(tx, {
-        summary: `Approving ${contractName} Master Contract`,
+        summary: contractName
+          ? i18n._(t`Approving ${contractName} Master Contract`)
+          : i18n._(t`Approving Master Contract`),
       })
     } catch (e) {}
-  }, [account, addTransaction, bentoBoxContract, contractName, masterContract])
+  }, [account, addTransaction, bentoBoxContract, contractName, i18n, masterContract])
 
   return {
     approvalState,

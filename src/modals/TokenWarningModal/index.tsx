@@ -1,8 +1,8 @@
+import { Token } from '@sushiswap/core-sdk'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import React, { useCallback } from 'react'
 
 import { ImportToken } from '../SearchModal/ImportToken'
-import Modal from '../../components/Modal'
-import { Token } from '@sushiswap/sdk'
 
 export default function TokenWarningModal({
   isOpen,
@@ -16,8 +16,8 @@ export default function TokenWarningModal({
   const handleDismiss = useCallback(() => null, [])
 
   return (
-    <Modal isOpen={isOpen} onDismiss={handleDismiss} maxHeight={90}>
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={handleDismiss}>
       <ImportToken tokens={tokens} handleCurrencySelect={onConfirm} />
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }

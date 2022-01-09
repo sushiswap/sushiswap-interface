@@ -1,7 +1,6 @@
-import { isTransactionRecent, useAllTransactions } from '../state/transactions/hooks'
+import { isTransactionRecent, useAllTransactions } from 'app/state/transactions/hooks'
+import { TransactionDetails } from 'app/state/transactions/reducer'
 import { useEffect, useMemo, useState } from 'react'
-
-import { TransactionDetails } from '../state/transactions/reducer'
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
@@ -25,6 +24,26 @@ const useTransactionStatus = () => {
   }, [hasPendingTransactions])
 
   return pendingTXStatus
+}
+
+export const useTransactionStatusByHash = (txHash: string) => {
+  const allTransactions = useAllTransactions()
+
+  const tx = allTransactions?.[txHash]
+  const pending = !tx?.receipt
+  const success = !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
+  const cancelled = (tx?.receipt && tx.receipt.status === 1337) ?? false
+  const failed = !pending && !success && !cancelled
+
+  return useMemo(
+    () => ({
+      pending,
+      success,
+      cancelled,
+      failed,
+    }),
+    [cancelled, failed, pending, success]
+  )
 }
 
 export default useTransactionStatus

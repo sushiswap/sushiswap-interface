@@ -1,6 +1,6 @@
-import { isMobile } from 'react-device-detect'
+import { classNames } from 'app/functions'
 import { FC } from 'react'
-import { classNames } from '../../functions'
+import { isMobile } from 'react-device-detect'
 
 const DoubleGlowShadow: FC<{ className?: string }> = ({ children, className }) => {
   if (isMobile) {

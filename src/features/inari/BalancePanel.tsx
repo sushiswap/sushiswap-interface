@@ -1,14 +1,14 @@
-import React, { FC, useCallback } from 'react'
-import Typography from '../../components/Typography'
-import { useAppDispatch } from '../../state/hooks'
-import { setValues } from '../../state/inari/actions'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import { CurrencyAmount, Token } from '@sushiswap/sdk'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
-import { Field } from '../../state/inari/types'
+import { useLingui } from '@lingui/react'
+import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import Input from 'app/components/Input'
+import Typography from 'app/components/Typography'
+import { useAppDispatch } from 'app/state/hooks'
+import { setValues } from 'app/state/inari/actions'
+import { useDerivedInariState, useInariState, useSelectedInariStrategy } from 'app/state/inari/hooks'
+import { Field } from 'app/state/inari/types'
+import React, { FC, useCallback } from 'react'
 
 interface BalancePanelProps {
   label: string
@@ -51,18 +51,18 @@ const BalancePanel: FC<BalancePanelProps> = ({ label, value, token, showMax = fa
   }, [balance, dispatchValue])
 
   return (
-    <div className="flex flex-col gap-1 w-full">
+    <div className="flex flex-col w-full gap-1">
       <div className="inline">
         <Typography component="span">{label}</Typography>{' '}
         <Typography component="span" weight={700}>
           {symbol}
         </Typography>
       </div>
-      <div className="flex flex-row bg-dark-800 p-4 rounded gap-4 items-center">
-        <div className="rounded-full overflow-hidden">
+      <div className="flex flex-row items-center gap-4 p-4 rounded bg-dark-800">
+        <div className="overflow-hidden rounded-full">
           <CurrencyLogo currency={token} size={40} />
         </div>
-        <NumericalInput value={value} onUserInput={dispatchValue} />
+        <Input.Numeric value={value} onUserInput={dispatchValue} />
         {showMax && (
           <span
             onClick={onMax}

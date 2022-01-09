@@ -1,44 +1,37 @@
-import { AppDispatch, AppState } from '../index'
-import { ChainId, Currency, CurrencyAmount, JSBI, Percent, TradeType, Trade as V2Trade, WNATIVE } from '@sushiswap/sdk'
-import { DEFAULT_ARCHER_ETH_TIP, DEFAULT_ARCHER_GAS_ESTIMATE } from '../../constants'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Percent,
+  SUSHI_ADDRESS,
+  Trade as V2Trade,
+  TradeType,
+  WNATIVE_ADDRESS,
+} from '@sushiswap/core-sdk'
+import { tryParseAmount } from 'app/functions/parse'
+import { isAddress } from 'app/functions/validate'
+import { useCurrency } from 'app/hooks/Tokens'
+import useENS from 'app/hooks/useENS'
+import useParsedQueryString from 'app/hooks/useParsedQueryString'
+import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useCurrencyBalances } from 'app/state/wallet/hooks'
+import { ParsedQs } from 'qs'
+import { useCallback, useEffect, useState } from 'react'
+
 // import {
 //   EstimatedSwapCall,
 //   SuccessfulCall,
 //   useSwapCallArguments,
 // } from "../../hooks/useSwapCallback";
 import { Field, replaceSwapState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
-import { isAddress, isZero } from '../../functions/validate'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
-import {
-  useExpertModeManager,
-  useUserArcherETHTip,
-  useUserArcherGasEstimate,
-  useUserArcherGasPrice,
-  useUserArcherTipManualOverride,
-  useUserSingleHopOnly,
-  useUserSlippageTolerance,
-} from '../user/hooks'
-
-import { ParsedQs } from 'qs'
 import { SwapState } from './reducer'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrency } from '../../hooks/Tokens'
-import { useCurrencyBalances } from '../wallet/hooks'
-import useENS from '../../hooks/useENS'
-import { useLingui } from '@lingui/react'
-import useParsedQueryString from '../../hooks/useParsedQueryString'
-import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
-import {
-  EstimatedSwapCall,
-  SuccessfulCall,
-  swapErrorToUserReadableMessage,
-  useSwapCallArguments,
-} from '../../hooks/useSwapCallback'
 
 export function useSwapState(): AppState['swap'] {
   return useAppSelector((state) => state.swap)
@@ -95,7 +88,7 @@ export function useSwapActionHandlers(): {
 
 // TODO: Swtich for ours...
 const BAD_RECIPIENT_ADDRESSES: { [chainId: string]: { [address: string]: true } } = {
-  [ChainId.MAINNET]: {
+  [ChainId.ETHEREUM]: {
     '0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac': true, // v2 factory
     '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F': true, // v2 router 02
   },
@@ -117,7 +110,7 @@ function involvesAddress(trade: V2Trade<Currency, Currency, TradeType>, checksum
 }
 
 // from the current swap inputs, compute the best trade and return it.
-export function useDerivedSwapInfo(doArcher = false): {
+export function useDerivedSwapInfo(): {
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount<Currency> }
   parsedAmount: CurrencyAmount<Currency> | undefined
@@ -153,6 +146,7 @@ export function useDerivedSwapInfo(doArcher = false): {
   ])
 
   const isExactIn: boolean = independentField === Field.INPUT
+
   const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
   const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined, {
@@ -176,6 +170,7 @@ export function useDerivedSwapInfo(doArcher = false): {
   }
 
   let inputError: string | undefined
+
   if (!account) {
     inputError = 'Connect Wallet'
   }
@@ -209,89 +204,6 @@ export function useDerivedSwapInfo(doArcher = false): {
   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
     inputError = i18n._(t`Insufficient ${amountIn.currency.symbol} balance`)
   }
-
-  const swapCalls = useSwapCallArguments(v2Trade, allowedSlippage, to, undefined, doArcher)
-
-  const [, setUserETHTip] = useUserArcherETHTip()
-  const [userGasEstimate, setUserGasEstimate] = useUserArcherGasEstimate()
-  const [userGasPrice] = useUserArcherGasPrice()
-  const [userTipManualOverride, setUserTipManualOverride] = useUserArcherTipManualOverride()
-
-  useEffect(() => {
-    if (doArcher) {
-      setUserTipManualOverride(false)
-      setUserETHTip(DEFAULT_ARCHER_ETH_TIP.toString())
-      setUserGasEstimate(DEFAULT_ARCHER_GAS_ESTIMATE.toString())
-    }
-  }, [doArcher, setUserTipManualOverride, setUserETHTip, setUserGasEstimate])
-
-  useEffect(() => {
-    if (doArcher && !userTipManualOverride) {
-      setUserETHTip(JSBI.multiply(JSBI.BigInt(userGasEstimate), JSBI.BigInt(userGasPrice)).toString())
-    }
-  }, [doArcher, userGasEstimate, userGasPrice, userTipManualOverride, setUserETHTip])
-
-  useEffect(() => {
-    async function estimateGas() {
-      const estimatedCalls: EstimatedSwapCall[] = await Promise.all(
-        swapCalls.map((call) => {
-          const { address, calldata, value } = call
-
-          const tx =
-            !value || isZero(value)
-              ? { from: account, to: address, data: calldata }
-              : {
-                  from: account,
-                  to: address,
-                  data: calldata,
-                  value,
-                }
-
-          return library
-            .estimateGas(tx)
-            .then((gasEstimate) => {
-              return {
-                call,
-                gasEstimate,
-              }
-            })
-            .catch((gasError) => {
-              console.debug('Gas estimate failed, trying eth_call to extract error', call)
-
-              return library
-                .call(tx)
-                .then((result) => {
-                  console.debug('Unexpected successful call after failed estimate gas', call, gasError, result)
-                  return {
-                    call,
-                    error: new Error('Unexpected issue with estimating the gas. Please try again.'),
-                  }
-                })
-                .catch((callError) => {
-                  console.debug('Call threw error', call, callError)
-                  return {
-                    call,
-                    error: new Error(swapErrorToUserReadableMessage(callError)),
-                  }
-                })
-            })
-        })
-      )
-
-      // a successful estimation is a bignumber gas estimate and the next call is also a bignumber gas estimate
-      const successfulEstimation = estimatedCalls.find(
-        (el, ix, list): el is SuccessfulCall =>
-          'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1])
-      )
-
-      if (successfulEstimation) {
-        setUserGasEstimate(successfulEstimation.gasEstimate.toString())
-      }
-    }
-    if (doArcher && v2Trade && swapCalls && !userTipManualOverride) {
-      estimateGas()
-    }
-  }, [doArcher, v2Trade, swapCalls, userTipManualOverride, library, setUserGasEstimate])
 
   return {
     currencies,
@@ -330,19 +242,18 @@ function validatedRecipient(recipient: any): string | null {
   if (ADDRESS_REGEX.test(recipient)) return recipient
   return null
 }
-export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.MAINNET): SwapState {
+export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.ETHEREUM): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+  const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'
+  const sushi = SUSHI_ADDRESS[chainId]
   if (inputCurrency === '' && outputCurrency === '') {
-    if (chainId === ChainId.CELO) {
-      inputCurrency = WNATIVE[chainId].address
-    } else {
-      // default to ETH input
-      inputCurrency = 'ETH'
-    }
-  } else if (inputCurrency === outputCurrency) {
-    // clear output if identical
-    outputCurrency = ''
+    inputCurrency = eth
+    outputCurrency = sushi
+  } else if (inputCurrency === '') {
+    inputCurrency = outputCurrency === eth ? sushi : eth
+  } else if (outputCurrency === '' || inputCurrency === outputCurrency) {
+    outputCurrency = inputCurrency === eth ? sushi : eth
   }
 
   const recipient = validatedRecipient(parsedQs.recipient)
