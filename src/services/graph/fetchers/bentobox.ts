@@ -5,6 +5,7 @@ import {
   bentoUserTokensQuery,
   kashiPairsQuery,
   kashiUserPairsQuery,
+  clonesQuery,
 } from '../queries/bentobox'
 import { getFraction, toAmount } from '../../../functions'
 
@@ -22,8 +23,13 @@ export const BENTOBOX = {
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
 }
-const fetcher = async (chainId = ChainId.MAINNET, query, variables) =>
+const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) =>
   request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query)
+
+export const getClones = async (chainId = ChainId.MAINNET) => {
+  const { clones } = await fetcher(chainId, clonesQuery)
+  return clones
+}
 
 export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undefined) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)

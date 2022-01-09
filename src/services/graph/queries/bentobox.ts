@@ -1,5 +1,38 @@
 import gql from 'graphql-tag'
 
+export const cloneFieldsQuery = gql`
+  fragment cloneFields on Clone {
+    id
+    address: id
+    data
+    block
+    timestamp
+  }
+`
+
+export const clonesQuery = gql`
+  query clones(
+    $skip: Int = 0
+    $first: Int = 1000
+    $where: Clone_filter
+    $block: Block_height
+    $orderBy: Clone_orderBy
+    $orderDirection: OrderDirection
+  ) {
+    clones(
+      skip: $skip
+      first: $first
+      where: $where
+      block: $block
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...cloneFields
+    }
+  }
+  ${cloneFieldsQuery}
+`
+
 export const bentoTokenFieldsQuery = gql`
   fragment bentoTokenFields on Token {
     id

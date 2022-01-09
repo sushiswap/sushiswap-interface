@@ -1,4 +1,6 @@
 import { ChainId, Currency, NATIVE, SUSHI_ADDRESS } from '@sushiswap/sdk'
+import { InjectedConnector } from '@web3-react/injected-connector'
+import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import React, { useEffect, useState } from 'react'
 
 import { ANALYTICS_URL } from '../../constants'
@@ -23,7 +25,12 @@ import { useLingui } from '@lingui/react'
 
 function AppBar(): JSX.Element {
   const { i18n } = useLingui()
-  const { account, chainId, library } = useActiveWeb3React()
+  const { account, chainId, library, connector } = useActiveWeb3React()
+
+  const isCbWallet =
+    connector instanceof WalletLinkConnector ||
+    (connector instanceof InjectedConnector && window.walletLinkExtension) ||
+    window?.ethereum?.isCoinbaseWallet
 
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
 
@@ -36,7 +43,7 @@ function AppBar(): JSX.Element {
             <div className="px-4 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Image src="/logo-santa.png" alt="Sushi" width="32px" height="32px" />
+                  <Image src="/logo-santa.png" alt="Sushi" width="32px" height="32px" unoptimized />
                   <div className="hidden sm:block sm:ml-4">
                     <div className="flex space-x-2">
                       {/* <Buy /> */}
@@ -223,7 +230,7 @@ function AppBar(): JSX.Element {
                       </>
                     )}
 
-                    {library && library.provider.isMetaMask && (
+                    {library && (library.provider.isMetaMask || isCbWallet) && (
                       <div className="hidden sm:inline-block">
                         <Web3Network />
                       </div>
