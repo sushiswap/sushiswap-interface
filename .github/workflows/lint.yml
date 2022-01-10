@@ -45,10 +45,9 @@ jobs:
           auto_fix: true
           continue_on_error: true
           commit_message: "style: code style issues with ${linter}"
-          github_token: ${{ secrets.github_token }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint_extensions: "js,jsx,ts,tsx"
           eslint: true
-          prettier: true
           prettier_extensions: "js,jsx,ts,tsx"
 
       - name: Run eslint
