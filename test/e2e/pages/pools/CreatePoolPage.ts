@@ -106,13 +106,13 @@ export class CreatePoolPage extends AppPage {
   }
 
   public async confirmCreate(): Promise<void> {
-    // Check if there is a approve button and approve if exists
+    await this.blockingWait(3, true)
     let approveButton = await this.Page.$(this.ApproveButtonSelector)
     while (approveButton) {
       await approveButton.click()
       await this.Metamask.confirmTransaction()
-      await this.Metamask.page.waitForTimeout(1000)
       await this.bringToFront()
+      await this.blockingWait(3, true)
       approveButton = await this.Page.$(this.ApproveButtonSelector)
     }
 
