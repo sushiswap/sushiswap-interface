@@ -49,7 +49,7 @@ jobs:
         uses: wearerequired/lint-action@36c7e6689e80d785d27a22f71d970f3a3b4fcb70
         id: lint
         with:
-          github_token: ${{ secrets.API_GITHUB_TOKEN }}
+          github_token: ${{ secrets.API_TOKEN_GITHUB }}
           auto_fix: true
           eslint: true
           prettier: true
