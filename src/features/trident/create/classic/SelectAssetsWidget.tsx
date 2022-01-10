@@ -22,7 +22,7 @@ const SelectPanel: FC<{ index: number }> = ({ index }) => {
           onChange={() => setWalletSource(asset.oppositeToggle())}
         />
       )}
-      darkBackground={true}
+      selected={true}
       spendFromWallet={asset.spendFromSource !== SpendSource.BENTO_BOX}
       currency={asset.currency}
       value={asset.amount}

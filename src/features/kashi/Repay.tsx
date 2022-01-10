@@ -19,7 +19,7 @@ import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
 import { KashiApproveButton, TokenApproveButton } from './Button'
-import { ExchangeRateCheckBox, SwapCheckbox } from './Checkbox'
+import { SwapCheckbox } from './Checkbox'
 import SmartNumberInput from './SmartNumberInput'
 import TradeReview from './TradeReview'
 import TransactionReviewView from './TransactionReview'

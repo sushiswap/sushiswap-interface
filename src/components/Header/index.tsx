@@ -1,5 +1,7 @@
 import { Popover } from '@headlessui/react'
 import Container from 'app/components/Container'
+import { classNames } from 'app/functions'
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 
 import { DesktopNav } from './DesktopNav'
@@ -10,12 +12,19 @@ interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = ({ height = 64 }) => {
+  const { pathname } = useRouter()
+
   return (
     <>
       <header className="fixed z-20 flex-shrink-0 w-full filter" style={{ height }}>
         <Popover
           as="nav"
-          className="z-10 w-full backdrop-blur-[20px] bg-[rgba(255,255,255,0.03)] border-b border-[rgba(255,255,255,0.12)]"
+          className={classNames(
+            pathname.includes('swap')
+              ? ''
+              : 'backdrop-blur-[20px] bg-[rgba(255,255,255,0.03)] border-b border-[rgba(255,255,255,0.12)]',
+            'z-10 w-full'
+          )}
         >
           {({ open }) => (
             <Container maxWidth="7xl" className="mx-auto">

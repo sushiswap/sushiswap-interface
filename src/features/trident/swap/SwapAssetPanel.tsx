@@ -9,6 +9,7 @@ import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
 import NumericalInput from 'app/components/Input/Numeric'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
+import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import { classNames, maxAmountSpend, tryParseAmount, warningSeverity } from 'app/functions'
@@ -30,7 +31,7 @@ interface SwapAssetPanel {
   onChange(x?: string): void
   onSelect?(x: Currency): void
   spendFromWallet: boolean
-  darkBackground?: boolean
+  selected?: boolean
   priceImpact?: Percent
   disabled?: boolean
 }
@@ -42,7 +43,7 @@ const SwapAssetPanel = ({
   currency,
   value,
   onChange,
-  darkBackground,
+  selected,
   onSelect,
   spendFromWallet,
   priceImpact,
@@ -53,9 +54,8 @@ const SwapAssetPanel = ({
   return (
     <div
       className={classNames(
-        !disabled ? 'lg:shadow-lg' : '',
-        darkBackground ? 'bg-dark-900 lg:bg-dark-1000' : 'bg-dark-900 lg:bg-dark-900',
-        'lg:border lg:rounded-[14px] lg:border-dark-700 flex flex-col lg:p-5 py-3 lg:pb-3 gap-3 overflow-hidden'
+        selected ? 'lg:bg-dark-800 lg:border-dark-700' : 'bg-dark-900 lg:border-dark-800',
+        'lg:border lg:rounded-[14px] flex flex-col lg:p-5 py-3 lg:pb-3 gap-3 overflow-hidden'
       )}
     >
       {header({
@@ -70,8 +70,8 @@ const SwapAssetPanel = ({
       <div className="flex flex-col">
         <div
           className={classNames(
-            darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
-            'block lg:hidden flex justify-between border border-dark-700 lg:border-none py-2 px-4 rounded-t lg:bg-transparent'
+            selected ? 'bg-dark-800 border-dark-700' : 'bg-dark-900 border-dark-800',
+            'block lg:hidden flex justify-between border lg:border-none py-2 px-4 rounded-t lg:bg-transparent'
           )}
         >
           <Typography variant="xs" weight={700}>
@@ -83,22 +83,24 @@ const SwapAssetPanel = ({
         </div>
         <div
           className={classNames(
-            darkBackground ? 'bg-dark-1000' : 'bg-dark-900',
-            'border-l border-r border-dark-700 lg:border-none lg:bg-transparent'
+            selected ? 'bg-dark-800 border-dark-700' : 'border-dark-800',
+            'border-l border-r lg:border-none lg:bg-transparent'
           )}
         >
-          <InputPanel {...{ error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet }} />
+          <InputPanel
+            {...{ selected, error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet }}
+          />
         </div>
-        <div className="hidden py-2 mt-3 lg:block lg:pb-0">
-          <BalancePanel {...{ disabled, currency, onChange, spendFromWallet, value }} />
+        <div className="hidden py-2 mt-1 lg:block lg:pb-0">
+          <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
         </div>
-        <div className="flex items-center justify-between overflow-hidden border rounded-b lg:hidden border-dark-700 lg:border-none">
-          {walletToggle({ spendFromWallet })}
-          {!disabled && (
-            <div className="pr-5">
-              <MaxButton {...{ currency, onChange, spendFromWallet }} />
-            </div>
+        <div
+          className={classNames(
+            selected ? 'bg-dark-800' : '',
+            'flex items-center justify-between overflow-hidden border rounded-b lg:hidden border-dark-700 lg:border-none'
           )}
+        >
+          {walletToggle({ spendFromWallet })}
         </div>
       </div>
     </div>
@@ -106,12 +108,16 @@ const SwapAssetPanel = ({
 }
 
 const WalletSwitch: FC<
-  Pick<SwapAssetPanel, 'spendFromWallet'> & { label: string; onChange(x: boolean): void; id?: string }
-> = ({ label, onChange, id, spendFromWallet }) => {
+  Pick<SwapAssetPanel, 'spendFromWallet' | 'disabled'> & {
+    label: string
+    onChange(x: boolean): void
+    id?: string
+  }
+> = ({ label, onChange, id, spendFromWallet, disabled }) => {
   const { i18n } = useLingui()
 
-  return (
-    <div className="flex gap-2.5 items-center lg:px-0 px-4 py-3 lg:py-0 lg:bg-transparent bg-dark-900">
+  const content = (
+    <div className={classNames(disabled ? 'opacity-40' : '', 'flex gap-2.5 items-center lg:px-0 px-4 py-3 lg:py-0')}>
       <div className="flex flex-col order-2 lg:order-1">
         <Typography variant="xs" weight={700} className="text-left text-secondary lg:text-right">
           {label}
@@ -123,7 +129,7 @@ const WalletSwitch: FC<
           {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)} <BentoBoxFundingSourceModal />
         </Typography>
       </div>
-      <div className="order-1 lg:order-2">
+      <div className={classNames(disabled ? 'pointer-events-none' : '', 'order-1 lg:order-2')}>
         <Switch
           id={id}
           checked={spendFromWallet}
@@ -142,14 +148,28 @@ const WalletSwitch: FC<
       </div>
     </div>
   )
+
+  if (disabled) {
+    return <QuestionHelper text={i18n._(t`Not available for legacy route`)}>{content}</QuestionHelper>
+  }
+
+  return content
 }
 
 const InputPanel: FC<
   Pick<
     SwapAssetPanel,
-    'error' | 'currency' | 'value' | 'onChange' | 'disabled' | 'onSelect' | 'priceImpact' | 'spendFromWallet'
+    | 'error'
+    | 'currency'
+    | 'value'
+    | 'onChange'
+    | 'disabled'
+    | 'onSelect'
+    | 'priceImpact'
+    | 'spendFromWallet'
+    | 'selected'
   >
-> = ({ error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet }) => {
+> = ({ error, currency, value, onChange, disabled, onSelect, priceImpact, selected, spendFromWallet }) => {
   const { i18n } = useLingui()
   const isDesktop = useDesktopMediaQuery()
   const [open, setOpen] = useState<boolean>(false)
@@ -168,13 +188,14 @@ const InputPanel: FC<
   return (
     <div
       className={classNames(
-        error ? 'border-red/50 lg:border-red/50' : ' border-transparent lg:border-dark-700',
+        selected ? 'lg:border-dark-700' : 'lg:border-dark-800',
+        error ? 'border-red/50 lg:border-red/50' : 'border-transparent',
         'border lg:rounded-full lg:bg-dark-900 flex items-center pl-4 lg:pl-0 px-[1px] py-1.5 lg:py-0 bg-transparent'
       )}
     >
-      <div className="cursor-pointer" onClick={() => setOpen(true)}>
+      <div className="cursor-pointer pl-3" onClick={() => setOpen(true)}>
         {currency ? (
-          <CurrencyLogo currency={currency} className="rounded-full" size={isDesktop ? '74px' : '40px'} />
+          <CurrencyLogo currency={currency} className="rounded-full" size={40} />
         ) : (
           <div className="flex items-center w-10 h-10 lg:w-[74px] lg:h-[74px] rounded-full relative">
             <Lottie animationData={selectCoinAnimation} autoplay loop />
@@ -238,12 +259,11 @@ const InputPanel: FC<
               />
             )}
           </Typography>
-          <Typography variant="xs" className="hidden text-left text-secondary lg:block" weight={400}>
-            {currency?.name}
-          </Typography>
         </div>
         <div className="flex flex-col hidden lg:block">
-          <Typography className="text-low-emphesis">≈${usdcValue?.toFixed(2)}</Typography>
+          <Typography className="text-low-emphesis" variant="sm">
+            ≈${usdcValue?.toFixed(2)}
+          </Typography>
           {priceImpact && (
             <Typography variant="xs" weight={700} className={classNames(priceImpactClassName, 'text-right')}>
               {priceImpact.toSignificant(3)}%
@@ -255,12 +275,11 @@ const InputPanel: FC<
   )
 }
 
-const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange' | 'spendFromWallet' | 'value'>> = ({
+const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange' | 'spendFromWallet'>> = ({
   disabled,
   currency,
   onChange,
   spendFromWallet,
-  value,
 }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
@@ -272,44 +291,16 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
     onChange(maxAmountSpend(balance)?.toExact())
   }, [balance, disabled, onChange])
 
-  const valueAsCurrencyAmount = tryParseAmount(value, currency)
-  const isMax = balance && valueAsCurrencyAmount && maxAmountSpend(balance)?.equalTo(valueAsCurrencyAmount)
-
-  let icon = <WalletIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
-  if (!spendFromWallet) {
-    icon = <BentoBoxIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
-  }
-
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-start">
       <div className="flex items-center gap-1">
-        <div className="flex justify-between pr-1 flex items-center gap-1.5">
-          <div className="hidden lg:block">{icon}</div>
-          <Typography
-            variant={isDesktop ? 'sm' : 'xs'}
-            weight={700}
-            className={classNames(balance ? 'text-primary' : 'text-low-emphesis')}
-          >
-            {spendFromWallet ? i18n._(t`Balance:`) : i18n._(t`Bento Balance:`)}
-          </Typography>
-        </div>
-        <Typography
-          variant={isDesktop ? 'sm' : 'xs'}
-          weight={700}
-          className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'text-balance')}
-          onClick={handleClick}
-        >
+        <Typography variant={isDesktop ? 'sm' : 'xs'} weight={700} className="text-secondary">
+          {i18n._(t`Balance:`)}
+        </Typography>
+        <Typography variant={isDesktop ? 'sm' : 'xs'} weight={700} onClick={handleClick} className="text-secondary">
           {balance ? balance.toSignificant(6) : '0.0000'}
         </Typography>
-        <Typography variant="sm" weight={700} className="hidden text-secondary lg:block">
-          {balance?.currency.symbol}
-        </Typography>
       </div>
-      {!disabled && !isMax && (
-        <Typography className="hidden text-blue btn-max lg:block" weight={700} variant="sm" onClick={handleClick}>
-          {i18n._(t`Use Max`)}
-        </Typography>
-      )}
     </div>
   )
 }
@@ -349,27 +340,6 @@ const SwapAssetPanelHeader: FC<
       <div className="block lg:hidden">
         <BalancePanel {...{ disabled, currency, onChange, spendFromWallet, value }} />
       </div>
-    </div>
-  )
-}
-
-const MaxButton: FC<Pick<SwapAssetPanel, 'currency' | 'onChange' | 'spendFromWallet'>> = ({
-  currency,
-  onChange,
-  spendFromWallet,
-}) => {
-  const { i18n } = useLingui()
-  const { account } = useActiveWeb3React()
-  const balance = useBentoOrWalletBalance(account ? account : undefined, currency, spendFromWallet)
-
-  return (
-    <div
-      className="flex btn-max items-center justify-center h-9 w-[96px] rounded-full border border-blue/50 bg-blue/30 cursor-pointer"
-      onClick={() => balance && onChange && onChange(maxAmountSpend(balance)?.toExact())}
-    >
-      <Typography variant="sm" className="text-blue" weight={700}>
-        {i18n._(t`USE MAX`)}
-      </Typography>
     </div>
   )
 }

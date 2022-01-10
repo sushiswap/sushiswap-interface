@@ -22,6 +22,7 @@ module.exports = {
         'wavy-pattern': "url('/images/trident/wavy-pattern.png')",
         'chevron-pattern': "url('/images/trident/chevron-pattern.png')",
         'miso-bowl': "url('/images/miso/banner.jpg')",
+        'gradient-radial': 'radial-gradient(100% 100% at 50% 25%, var(--tw-gradient-stops))',
       }),
       linearBorderGradients: {
         directions: {

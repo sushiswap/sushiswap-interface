@@ -5,7 +5,6 @@ import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Typography from 'app/components/Typography'
-import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import {
   attemptingTxnAtom,
   poolAtom,
@@ -14,6 +13,7 @@ import {
 } from 'app/features/trident/context/atoms'
 import { TypedField, useDependentAssetInputs } from 'app/features/trident/context/hooks/useDependentAssetInputs'
 import { classNames } from 'app/functions'
+import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import Lottie from 'lottie-react'
 import React from 'react'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'

@@ -1,6 +1,6 @@
 import { PoolType } from '@sushiswap/tines'
-import { poolTypeNameMapper } from 'app/features/trident/types'
 import Typography from 'app/components/Typography'
+import { poolTypeNameMapper } from 'app/features/trident/types'
 import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 

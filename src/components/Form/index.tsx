@@ -5,6 +5,7 @@ import FormSelectField, { FormSelectFieldProps } from 'app/components/Form/FormS
 import FormSubmit, { FormSubmitProps } from 'app/components/Form/FormSubmit'
 import FormTextAreaField, { FormTextAreaFieldProps } from 'app/components/Form/FormTextAreaField'
 import FormTextField, { FormTextFieldProps } from 'app/components/Form/FormTextField'
+import FormWizard, { FormWizardProps } from 'app/components/Form/FormWizard'
 import React, { FC, ReactElement } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { UseFormReturn } from 'react-hook-form/dist/types'
@@ -25,6 +26,7 @@ type Form<P> = FC<P> & {
   SelectField: FC<FormSelectFieldProps>
   TextAreaField: FC<FormTextAreaFieldProps>
   HelperText: FC<FormFieldHelperTextProps>
+  Wizard: FC<FormWizardProps>
 }
 
 const Form: Form<FormProps> = ({ children, onSubmit, ...rest }) => {
@@ -36,6 +38,7 @@ const Form: Form<FormProps> = ({ children, onSubmit, ...rest }) => {
 }
 
 Form.Card = FormCard
+Form.Wizard = FormWizard
 Form.Section = FormSection
 Form.Submit = FormSubmit
 Form.TextField = FormTextField

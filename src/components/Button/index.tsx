@@ -13,13 +13,12 @@ const SIZE = {
 
 const FILLED = {
   default: 'bg-transparent opacity-80 hover:opacity-100',
-  red: 'bg-red bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
-  blue: 'bg-blue bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
-  pink: 'bg-gradient-to-r from-pink to-opaque-pink w-full rounded text-high-emphesis opacity-80 hover:opacity-100 disabled:bg-opacity-80',
-  gray: 'border rounded shadow-sm focus:ring-2 focus:ring-offset-2 bg-dark-700 bg-opacity-80 w-full text-primary border-dark-800 hover:bg-opacity-100 focus:ring-offset-dark-700 focus:ring-dark-800 disabled:bg-opacity-80',
-  green: 'bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 disabled:bg-opacity-80',
-  gradient:
-    'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-100 hover:opacity-100 disabled:bg-opacity-80',
+  red: 'bg-red bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 ',
+  blue: 'bg-blue bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 ',
+  pink: 'bg-gradient-to-r from-pink to-opaque-pink w-full rounded text-high-emphesis opacity-80 hover:opacity-100 ',
+  gray: 'border rounded shadow-sm focus:ring-2 focus:ring-offset-2 bg-dark-700 bg-opacity-80 w-full text-primary border-dark-800 hover:bg-opacity-100 focus:ring-offset-dark-700 focus:ring-dark-800 ',
+  green: 'bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 ',
+  gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-100 hover:opacity-100 ',
   white: 'bg-high-emphesis text-dark-700',
 }
 
@@ -91,7 +90,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={classNames(
           rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
           variant !== 'empty' && SIZE[size],
-          'hover:text-white font-bold rounded disabled:cursor-not-allowed focus:outline-none flex items-center justify-center gap-1',
+          'font-bold rounded disabled:cursor-not-allowed disabled:bg-dark-800 disabled:text-opacity-40 focus:outline-none flex items-center justify-center gap-1',
           className
         )}
         {...rest}

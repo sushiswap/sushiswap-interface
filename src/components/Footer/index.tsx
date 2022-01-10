@@ -1,98 +1,162 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
-import ExternalLink from 'app/components/ExternalLink'
-import Polling from 'app/components/Polling'
-import ANALYTICS_URL from 'app/config/analytics'
+import { DiscordIcon, InstagramIcon, MediumIcon, TwitterIcon } from 'app/components/Icon'
+import Typography from 'app/components/Typography'
+import { Feature } from 'app/enums'
+import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
+import Link from 'next/link'
+
+import Container from '../Container'
 
 const Footer = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
+
   return (
-    // <footer className="absolute bottom-0 flex items-center justify-between w-screen h-20 p-4 mx-auto text-center text-low-emphesis">
-    <footer className="flex-shrink-0 w-full">
-      <div className="flex items-center justify-between h-20 px-4">
-        {chainId && chainId in ANALYTICS_URL && (
-          <ExternalLink
-            id={`analytics-nav-link`}
-            href={ANALYTICS_URL[chainId] || 'https://analytics.sushi.com'}
-            className="text-low-emphesis"
-          >
-            <div className="flex items-center space-x-2">
-              <div>{i18n._(t`Analytics`)}</div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-              </svg>
+    <div className="z-10 w-full py-20 bg-dark-900/30 px-6 mt-20">
+      <Container maxWidth="7xl" className="mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 lg:grid-cols-6">
+          <div className="flex flex-col gap-2">
+            <Typography variant="lg" weight={700} className="mb-3">
+              Sushi
+            </Typography>
+            <Typography variant="sm" className="text-low-emphesis">
+              {i18n._(t`Our community is building a comprehensive decentralized trading platform for the future of finance. Join
+              us!`)}
+            </Typography>
+            <div className="flex gap-4 items-center">
+              <a href="https://twitter.com/sushiswap" target="_blank" rel="noreferrer">
+                <TwitterIcon width={16} className="text-low-emphesis" />
+              </a>
+              <a href="https://instagram.com/instasushiswap" target="_blank" rel="noreferrer">
+                <InstagramIcon width={16} className="text-low-emphesis" />
+              </a>
+              <a href="https://medium.com/sushiswap-org" target="_blank" rel="noreferrer">
+                <MediumIcon width={16} className="text-low-emphesis" />
+              </a>
+              <a href="https://discord.gg/NVPXN4e" target="_blank" rel="noreferrer">
+                <DiscordIcon width={16} className="text-low-emphesis" />
+              </a>
             </div>
-          </ExternalLink>
-        )}
-        {chainId && chainId === ChainId.MATIC && (
-          <ExternalLink
-            id={`polygon-bridge-link`}
-            href="https://wallet.matic.network/bridge/"
-            className="text-low-emphesis"
-          >
-            {i18n._(t`Matic Bridge`)}
-          </ExternalLink>
-        )}
-        {chainId && chainId === ChainId.CELO && (
-          <ExternalLink id={`celo-bridge-link`} href="https://app.optics.xyz/" className="text-low-emphesis">
-            {i18n._(t`Celo Bridge`)}
-          </ExternalLink>
-        )}
-        {chainId && chainId === ChainId.HARMONY && (
-          <ExternalLink
-            id={`harmony-bridge-link`}
-            href=" https://bridge.harmony.one/tokens"
-            className="text-low-emphesis"
-          >
-            {i18n._(t`Harmony Bridge`)}
-          </ExternalLink>
-        )}
-        {chainId && chainId === ChainId.XDAI && (
-          <ExternalLink id={`xdai-bridge-link`} href=" https://omni.xdaichain.com/" className="text-low-emphesis">
-            {i18n._(t`xDai Bridge`)}
-          </ExternalLink>
-        )}
-
-        {chainId && chainId === ChainId.PALM && (
-          <ExternalLink id={`palm-bridge-link`} href=" https://app.palm.io/bridge" className="text-low-emphesis">
-            {i18n._(t`Palm Bridge`)}
-          </ExternalLink>
-        )}
-
-        {chainId && chainId === ChainId.ARBITRUM && (
-          <ExternalLink id={`arbitrum-bridge-link`} href=" https://bridge.arbitrum.io/" className="text-low-emphesis">
-            {i18n._(t`Arbitrum Bridge`)}
-          </ExternalLink>
-        )}
-
-        {chainId && chainId === ChainId.MOONRIVER && (
-          <ExternalLink
-            id={`moonriver-bridge-link`}
-            href="https://movr.anyswap.exchange/#/bridge"
-            className="text-low-emphesis"
-          >
-            {i18n._(t`Moonriver Bridge`)}
-          </ExternalLink>
-        )}
-
-        {chainId && chainId === ChainId.AVALANCHE && (
-          <ExternalLink id={`avalanche-bridge-link`} href=" https://bridge.avax.network" className="text-low-emphesis">
-            {i18n._(t`Avalanche Bridge`)}
-          </ExternalLink>
-        )}
-
-        <Polling />
-      </div>
-    </footer>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Typography variant="lg" weight={700} className="mb-3">
+              {i18n._(t`Products`)}
+            </Typography>
+            <Link
+              href={featureEnabled(Feature.TRIDENT, chainId || 1) ? '/trident/pools' : '/legacy/pools'}
+              passHref={true}
+            >
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Liquidity Pools`)}
+              </Typography>
+            </Link>
+            <Link href="/lend" passHref={true}>
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Lending`)}
+              </Typography>
+            </Link>
+            <Link href="/miso" passHref={true}>
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Launchpad`)}
+              </Typography>
+            </Link>
+            <a href="https://shoyunft.com" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Shoyu NFT`)}
+              </Typography>
+            </a>
+            <Link href="/tools" passHref={true}>
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Tools`)}
+              </Typography>
+            </Link>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Typography variant="lg" weight={700} className="mb-3">
+              {i18n._(t`Help`)}
+            </Typography>
+            <a href="https://docs.sushi.com" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`What is Sushi?`)}
+              </Typography>
+            </a>
+            <a href="https://discord.gg/NVPXN4e" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Ask on Discord`)}
+              </Typography>
+            </a>
+            <a href="https://twitter.com/sushiswap" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Ask on Twitter`)}
+              </Typography>
+            </a>
+            <a href="https://forum.sushi.com" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Ask on Forum`)}
+              </Typography>
+            </a>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Typography variant="lg" weight={700} className="mb-3">
+              {i18n._(t`Developers`)}
+            </Typography>
+            <a href="https://docs.sushi.com" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`GitBook`)}
+              </Typography>
+            </a>
+            <a href="https://github.com/sushiswap" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Github`)}
+              </Typography>
+            </a>
+            <a href="https://dev.sushi.com" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Development`)}
+              </Typography>
+            </a>
+            <a href="https://docs.openmev.org" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Sushi Relay`)}
+              </Typography>
+            </a>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Typography variant="lg" weight={700} className="mb-3">
+              {i18n._(t`Governance`)}
+            </Typography>
+            <a href="https://forum.sushi.com" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Forum & Proposals`)}
+              </Typography>
+            </a>
+            <a href="https://snapshot.org/#/sushigov.eth" target="_blank" rel="noreferrer">
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Vote`)}
+              </Typography>
+            </a>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Typography variant="lg" weight={700} className="mb-3">
+              {i18n._(t`Protocol`)}
+            </Typography>
+            <Typography variant="sm" className="text-low-emphesis">
+              {i18n._(t`Apply for Onsen`)}
+            </Typography>
+            <Typography variant="sm" className="text-low-emphesis">
+              {i18n._(t`Apply for Miso`)}
+            </Typography>
+            <Link href="/vesting" passHref={true}>
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Vesting`)}
+              </Typography>
+            </Link>
+          </div>
+        </div>
+      </Container>
+    </div>
   )
 }
 

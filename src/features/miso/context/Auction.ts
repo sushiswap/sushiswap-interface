@@ -5,6 +5,7 @@ import {
   AuctionStatus,
   AuctionTemplate,
   RawAuctionInfo,
+  RawLauncherInfo,
   RawMarketInfo,
 } from 'app/features/miso/context/types'
 
@@ -12,18 +13,23 @@ export class Auction {
   public readonly template: AuctionTemplate
   public readonly auctionToken: Token
   public readonly paymentToken: Currency
+  public readonly liquidityToken?: Token
   public readonly auctionInfo: RawAuctionInfo
   public readonly marketInfo?: RawMarketInfo
+  public readonly launcherInfo?: RawLauncherInfo
   public readonly auctionDocuments: AuctionDocument
   public readonly pointListAddress: string
+  public readonly auctionLauncherAddress: string
   public readonly status: AuctionStatus
 
   public constructor({
     template,
     auctionToken,
     paymentToken,
+    liquidityToken,
     auctionInfo,
     marketInfo,
+    launcherInfo,
     auctionDocuments,
     pointListAddress,
     status,
@@ -31,8 +37,10 @@ export class Auction {
     template: AuctionTemplate
     auctionToken: Token
     paymentToken: Currency
+    liquidityToken?: Token
     auctionInfo: RawAuctionInfo
     marketInfo?: RawMarketInfo
+    launcherInfo?: RawLauncherInfo
     auctionDocuments: AuctionDocument
     pointListAddress: string
     status: AuctionStatus
@@ -42,6 +50,8 @@ export class Auction {
     this.auctionInfo = auctionInfo
     this.paymentToken = paymentToken
     this.marketInfo = marketInfo
+    this.launcherInfo = launcherInfo
+    this.liquidityToken = liquidityToken
     this.auctionDocuments = auctionDocuments
     this.pointListAddress = pointListAddress
     this.status = status
@@ -294,5 +304,11 @@ export class Auction {
     if (!this.marketInfo) return false
     if (this.auctionInfo.auctionSuccessful) return false
     return JSBI.greaterThan(JSBI.BigInt(this.marketInfo.commitments), JSBI.BigInt(0))
+  }
+
+  public get liquidityAmount(): CurrencyAmount<Token> | undefined {
+    if (this.launcherInfo && this.liquidityToken) {
+      return CurrencyAmount.fromRawAmount(this.liquidityToken, JSBI.BigInt(this.launcherInfo.liquidityAdded))
+    }
   }
 }
