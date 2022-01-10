@@ -23,15 +23,7 @@ jobs:
         os: ['ubuntu-latest']
 
     steps:
-      - name: Check out repository (push)
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/checkout@v2
-
-      - name: Check out repository (pull_request_target)
-        if: ${{ github.event_name == 'pull_request_target' }}
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/checkout@v2
 
       - name: Use Node.js 14
         uses: actions/setup-node@v2
@@ -49,10 +41,12 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Installing dependencies
         run: yarn install --frozen-lockfile
 
       - name: Run linters
+        if: ${{ github.event_name == 'push' }}
         uses: wearerequired/lint-action@v1.10.0
         id: lint
         with:
@@ -66,8 +60,3 @@ jobs:
           prettier_extensions: "js,jsx,ts,tsx"
           git_name: github-actions
           git_email: github-actions@users.noreply.github.com
-
-      # Workaround to avoid Post Use step failures. See: https://github.com/actions/setup-node/issues/317
-      - name: Workaround for Post Set up
-        run: mkdir -p /home/runner/.cache/yarn/v6
-        continue-on-error: true
