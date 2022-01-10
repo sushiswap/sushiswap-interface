@@ -54,6 +54,17 @@ jobs:
         run: yarn --version && yarn install --frozen-lockfile
         id: install
 
+      - name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          git_user_signingkey: true
+          git_commit_gpgsign: true
+
+      - name: Set signature for commit
+        run : |
+          git config --global commit.gpgsign true
+
       - name: Run linters
         uses: wearerequired/lint-action@a25b25ac232deed2e3d2f802b111da885f8aa617
         id: lint
