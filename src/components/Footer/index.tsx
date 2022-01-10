@@ -14,7 +14,7 @@ const Footer = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="z-10 w-full py-10 bg-dark-900/30 px-6">
+    <div className="z-10 w-full py-20 bg-dark-900/30 px-6 mt-20">
       <Container maxWidth="7xl" className="mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-10 lg:grid-cols-6">
           <div className="flex flex-col gap-2">
