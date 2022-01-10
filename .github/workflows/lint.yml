@@ -9,8 +9,8 @@ on:
       - canary
 
 jobs:
-  lint:
-    name: Run action
+  run-linters:
+    name: Run linters
     runs-on: ubuntu-latest
 
     steps:
