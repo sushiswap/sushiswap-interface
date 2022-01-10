@@ -7,10 +7,6 @@ on:
     branches:
       - canary
 
-permissions:
-  checks: write
-  contents: read
-
 # CI false so we don't treat warnings as failures
 env:
   CI: false
