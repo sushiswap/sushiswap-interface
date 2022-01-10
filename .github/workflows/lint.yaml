@@ -8,13 +8,6 @@ on:
     branches:
       - canary
 
-# CI false so we don't treat warnings as failures
-env:
-  CI: false
-  FORCE_COLOR: 0
-  HUSKY_SKIP_INSTALL: 1
-  NEXT_TELEMETRY_DISABLED: 1
-
 jobs:
   lint:
     name: Run action
