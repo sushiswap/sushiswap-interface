@@ -1,10 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
-import { useActiveWeb3React } from 'app/services/web3'
 import Typography from 'app/components/Typography'
 import { formatPercent } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
+import { useActiveWeb3React } from 'app/services/web3'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 
