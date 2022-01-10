@@ -1,7 +1,7 @@
 import { SwitchVerticalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId } from '@sushiswap/core-sdk'
+import { ChainId, Trade } from '@sushiswap/core-sdk'
 import Container from 'app/components/Container'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import Gas from 'app/components/Gas'
@@ -158,6 +158,11 @@ const Swap = () => {
                 </div>
               )}
               {isWrap ? <WrapButton /> : <SwapButton />}
+              <input
+                id="trade-type"
+                type="hidden"
+                value={!trade ? '' : trade instanceof Trade ? 'legacy' : 'trident'}
+              />
               <SwapReviewModal />
             </DerivedTradeContext.Provider>
           </div>
