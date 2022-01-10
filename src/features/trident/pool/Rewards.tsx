@@ -1,12 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, SUSHI } from '@sushiswap/core-sdk'
-import { useActiveWeb3React } from 'app/services/web3'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
 import { tryParseAmount } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

@@ -8,8 +8,8 @@ import {
   getMasterChefV2Farms,
   getMasterChefV2PairAddreses,
   getMiniChefFarms,
-  getOldMiniChefFarms,
   getMiniChefPairAddreses,
+  getOldMiniChefFarms,
 } from 'app/services/graph/fetchers'
 import { useActiveWeb3React } from 'app/services/web3'
 import concat from 'lodash/concat'

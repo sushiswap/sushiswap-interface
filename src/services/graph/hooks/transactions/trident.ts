@@ -1,7 +1,7 @@
 import { Transactions } from 'app/features/transactions/types'
 import { formatDateAgo, formatNumber } from 'app/functions'
-import { useMemo } from 'react'
 import { getTridentPoolTransactions } from 'app/services/graph/fetchers/pools'
+import { useMemo } from 'react'
 import useSWR from 'swr'
 
 export interface TridentTransactionRawData {

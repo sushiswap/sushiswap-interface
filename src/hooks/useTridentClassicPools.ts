@@ -5,8 +5,8 @@ import { computeConstantProductPoolAddress, ConstantProductPool, Fee } from '@su
 import { PoolAtomType } from 'app/features/trident/types'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMemo } from 'react'
 import { useMultipleContractSingleData } from 'app/state/multicall/hooks'
+import { useMemo } from 'react'
 
 const CONSTANT_PRODUCT_POOL_INTERFACE = new Interface(ConstantProductPoolArtifact.abi)
 

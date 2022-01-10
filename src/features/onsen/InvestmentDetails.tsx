@@ -13,6 +13,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+
 import { PairType } from './enum'
 import { usePendingSushi, useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
