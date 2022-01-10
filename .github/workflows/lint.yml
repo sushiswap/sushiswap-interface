@@ -73,17 +73,18 @@ jobs:
           git config --global commit.gpgsign true
 
       - name: Run linters
-        uses: wearerequired/lint-action@a25b25ac232deed2e3d2f802b111da885f8aa617
+        uses: wearerequired/lint-action
         id: lint
         with:
+          auto_fix: true
           continue_on_error: true
           commit_message: "style: code style issues with ${linter}"
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          eslint: true
           eslint_extensions: "js,jsx,ts,tsx"
-          auto_fix: true
+          eslint: true
           prettier: true
           stylelint: true
           prettier_extensions: "js,jsx,ts,tsx"
           git_name: github-actions
           git_email: github-actions@users.noreply.github.com
+          git_no_verify: true
