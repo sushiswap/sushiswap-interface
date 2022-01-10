@@ -50,8 +50,6 @@ jobs:
           eslint: true
           prettier: true
           prettier_extensions: "js,jsx,ts,tsx"
-          git_name: github-actions
-          git_email: github-actions@users.noreply.github.com
 
       - name: Run eslint
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.owner.login != github.repository_owner }}
