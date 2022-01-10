@@ -16,7 +16,8 @@ let metamask: Dappeteer
 let swapPage: SwapPage
 let liquidityPoolsPage: LiquidityPoolsPage
 let createPoolPage: CreatePoolPage
-let depositPercentage = 0.01
+let depositPercentage = 0.2
+let swapPercentage = 0.01
 
 require('dotenv').config()
 
@@ -44,7 +45,6 @@ describe('Trident Swap:', () => {
   beforeEach(async () => {})
 
   afterAll(async () => {
-    // TODO: Remove all liquidity from pools
     browser.close()
   })
 
@@ -61,7 +61,6 @@ describe('Trident Swap:', () => {
 
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.clickCreateNewPoolButton()
-
     await createPoolPage.createPool(
       POOL_TYPE.CLASSIC,
       assetA,
@@ -73,6 +72,8 @@ describe('Trident Swap:', () => {
       Fee.LOW
     )
 
+    await liquidityPoolsPage.navigateTo()
+    await liquidityPoolsPage.clickCreateNewPoolButton()
     await createPoolPage.createPool(
       POOL_TYPE.CLASSIC,
       assetA,
@@ -80,13 +81,9 @@ describe('Trident Swap:', () => {
       payAFromWallet,
       payBFromWallet,
       assetADepositAmount,
-      (assetBBalance * depositPercentage).toFixed(5),
+      assetBDepositAmount,
       Fee.MEDIUM
     )
-
-    // Swap token
-    // TODO: Amount in needs to be big enough to use trident route.
-    // TODO: Verify swap is sent to trident router instead of legacy
 
     await swapPage.navigateTo()
 
@@ -94,7 +91,7 @@ describe('Trident Swap:', () => {
     const outputTokenBalanceBefore = await swapPage.getTokenBalance(assetB, payBFromWallet)
     if (!(inputTokenBalanceBefore > 0)) throw new Error(`${assetA} wallet balance is 0. Can't execute swap`)
 
-    const swapAmount = (inputTokenBalanceBefore * depositPercentage).toFixed(5)
+    const swapAmount = (inputTokenBalanceBefore * swapPercentage).toFixed(5)
 
     await swapPage.setInputToken(assetA)
     await swapPage.setOutputToken(assetB)

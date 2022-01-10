@@ -236,6 +236,7 @@ describe('Trident Swap:', () => {
       const account2BalanceDifference = parseFloat(account2BentoBalanceAfter) - parseFloat(account2BentoBalanceBefore)
       expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
     } catch (error) {
+      throw error
     } finally {
       await recipientBrowser.close()
     }
@@ -268,7 +269,6 @@ describe('Trident Swap:', () => {
 
       const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
-      //await swapPage.navigateTo()
       await swapPage.toggleExpertMode()
       await swapPage.setRecipient(account2PubKey)
       await swapPage.setInputToken(inToken)
@@ -287,6 +287,7 @@ describe('Trident Swap:', () => {
 
       expect(closeValues(parseFloat(expectedOutputAmount), account2BalanceDifference, 1e-3)).toBe(true)
     } catch (error) {
+      throw error
     } finally {
       await recipientBrowser.close()
     }

@@ -117,13 +117,18 @@ export class CreatePoolPage extends AppPage {
     }
 
     const btnReviewConfirm = await this.Page.waitForSelector(this.ReviewConfirmButtonSelector)
+
+    const confirmButtonText = await this.Page.$eval(this.ReviewConfirmButtonSelector, (el) => el.textContent)
+    if (confirmButtonText === 'Pool already exists') {
+      return
+    }
+
     await btnReviewConfirm.click()
 
     const btnConfirmCreation = await this.Page.waitForSelector(this.ConfirmCreationButtonSelector)
     await btnConfirmCreation.click()
 
     await this.confirmMetamaskTransaction()
-
     await this.Page.waitForSelector(this.SuccessIconSelector)
   }
 
