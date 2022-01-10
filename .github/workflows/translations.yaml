@@ -57,7 +57,3 @@ jobs:
           user-email: ramin@sushi.com
           target-branch: master
           target-directory: sushiswap
-
-      # Workaround to avoid Post Use step failures. See: https://github.com/actions/setup-node/issues/317
-      - run: mkdir -p /home/runner/.cache/yarn/v6
-        continue-on-error: true

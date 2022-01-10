@@ -3,10 +3,6 @@ name: Lint
 on:
   push:
 
-  pull_request_target:
-    branches:
-      - canary
-
 # CI false so we don't treat warnings as failures
 env:
   CI: false
@@ -64,7 +60,3 @@ jobs:
           prettier_extensions: "js,jsx,ts,tsx"
           git_name: github-actions
           git_email: github-actions@users.noreply.github.com
-
-      # Workaround to avoid Post Use step failures. See: https://github.com/actions/setup-node/issues/317
-      - run: mkdir -p /home/runner/.cache/yarn/v6
-        continue-on-error: true
