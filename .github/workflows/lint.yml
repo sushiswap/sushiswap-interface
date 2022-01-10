@@ -69,7 +69,7 @@ jobs:
           git config --global commit.gpgsign true
 
       - name: Run linters
-        uses: wearerequired/lint-action@v1
+        uses: wearerequired/lint-action@v1.10.0
         id: lint
         with:
           auto_fix: true
