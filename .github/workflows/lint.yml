@@ -59,9 +59,10 @@ jobs:
         id: lint
         with:
           continue_on_error: false
+          commit_message: "fix: code style issues with ${linter}"
+          github_token: ${{ secrets.API_TOKEN_GITHUB }}
           eslint: true
           eslint_extensions: "js,jsx,ts,tsx"
           auto_fix: true
-          commit_message: "fix: code style issues with ${linter}"
           prettier: true
           prettier_extensions: "js,jsx,ts,tsx"
