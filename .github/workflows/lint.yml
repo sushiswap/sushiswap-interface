@@ -1,11 +1,6 @@
 name: Lint
 
-on:
-  push:
-
-  pull_request_target:
-    branches:
-      - canary
+on: [push, pull_request]
 
 # CI false so we don't treat warnings as failures
 env:
