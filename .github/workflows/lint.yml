@@ -17,11 +17,7 @@ env:
 jobs:
   lint:
     name: Run action
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: ['ubuntu-latest']
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -30,6 +26,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '14'
+          registry-url: https://registry.npmjs.org
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -46,17 +43,18 @@ jobs:
       - name: Installing dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Run linters
-        uses: wearerequired/lint-action@v1.10.0
+      - name: Run linters w/ autofix
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.owner.login == github.repository_owner }}
+        uses: wearerequired/lint-action@36c7e6689e80d785d27a22f71d970f3a3b4fcb70
         id: lint
         with:
-          auto_fix: true
-          continue_on_error: true
-          commit_message: "style: code style issues with ${linter}"
           github_token: ${{ secrets.API_GITHUB_TOKEN }}
-          eslint_extensions: "js,jsx,ts,tsx"
+          auto_fix: true
           eslint: true
           prettier: true
-          prettier_extensions: "js,jsx,ts,tsx"
-          git_name: github-actions
-          git_email: github-actions@users.noreply.github.com
+          commit_message: "style: code style issues with ${linter}"
+          eslint_args: "-c .eslintrc.json"
+
+      - name: Run eslint
+        if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.owner.login != github.repository_owner }}
+        run: yarn eslint .
