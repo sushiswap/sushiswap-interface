@@ -51,7 +51,6 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Run linters
-        if: ${{ github.event_name == 'push' }}
         uses: wearerequired/lint-action@v1.10.0
         id: lint
         with:
