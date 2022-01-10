@@ -10,7 +10,7 @@ on:
 # CI false so we don't treat warnings as failures
 env:
   CI: false
-  FORCE_COLOR: 0
+  FORCE_COLOR: 2
   HUSKY_SKIP_INSTALL: 1
   NEXT_TELEMETRY_DISABLED: 1
 
@@ -64,3 +64,7 @@ jobs:
           prettier_extensions: "js,jsx,ts,tsx"
           git_name: github-actions
           git_email: github-actions@users.noreply.github.com
+
+      # Workaround to avoid Post Use step failures. See: https://github.com/actions/setup-node/issues/317
+      - run: mkdir -p /home/runner/.cache/yarn/v6
+        continue-on-error: true
