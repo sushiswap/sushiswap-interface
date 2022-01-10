@@ -73,7 +73,7 @@ jobs:
           git config --global commit.gpgsign true
 
       - name: Run linters
-        uses: wearerequired/lint-action
+        uses: wearerequired/lint-action@v1
         id: lint
         with:
           auto_fix: true
@@ -83,7 +83,6 @@ jobs:
           eslint_extensions: "js,jsx,ts,tsx"
           eslint: true
           prettier: true
-          stylelint: true
           prettier_extensions: "js,jsx,ts,tsx"
           git_name: github-actions
           git_email: github-actions@users.noreply.github.com
