@@ -25,10 +25,10 @@ const useTokenTemplateMap = () => {
 
     return {
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken.address]: TokenType.FIXED,
-      [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.SushiToken.address]: TokenType.SUSHI,
+      [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.GovToken.address]: TokenType.SUSHI,
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MintableToken.address]: TokenType.MINTABLE,
       [TokenType.FIXED]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken,
-      [TokenType.SUSHI]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.SushiToken,
+      [TokenType.SUSHI]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.GovToken,
       [TokenType.MINTABLE]: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MintableToken,
     }
   }, [chainId])
