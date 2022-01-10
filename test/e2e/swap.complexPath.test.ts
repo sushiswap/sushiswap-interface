@@ -102,6 +102,9 @@ describe('Trident Swap:', () => {
     await swapPage.setPayFromWallet(payAFromWallet)
     await swapPage.setReceiveToWallet(payBFromWallet)
 
+    const tradeType = await swapPage.getTradeType()
+    expect(tradeType).toBe('trident')
+
     const minOutputAmount = await swapPage.getMinOutputAmount()
 
     await swapPage.confirmSwap(assetA, assetB)

@@ -46,6 +46,8 @@ export class SwapPage extends AppPage {
 
   private ApproveButtonSelector: string = '#btn-approve'
 
+  private TradeTypeSelector: string = '#trade-type'
+
   public async swapTokens(
     inTokenSymbol: string,
     outTokenSymbol: string,
@@ -377,5 +379,13 @@ export class SwapPage extends AppPage {
     } else {
       return SwapType.Normal
     }
+  }
+
+  public async getTradeType(): Promise<string> {
+    await this.Page.waitForSelector(this.TradeTypeSelector)
+
+    const tradeTypeInput = await this.Page.$(this.TradeTypeSelector)
+    const tradeType = (await (await tradeTypeInput.getProperty('value')).jsonValue()) as string
+    return tradeType
   }
 }
