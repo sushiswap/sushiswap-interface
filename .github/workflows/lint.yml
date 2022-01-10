@@ -1,7 +1,6 @@
 name: Lint
 
-on:
-  push:
+on: [push]
 
 # CI false so we don't treat warnings as failures
 env:
@@ -38,6 +37,9 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
+      - name: Installing dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Run linters
         uses: wearerequired/lint-action@v1.10.0
