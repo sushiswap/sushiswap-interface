@@ -60,7 +60,7 @@ jobs:
         with:
           continue_on_error: false
           commit_message: "fix: code style issues with ${linter}"
-          github_token: ${{ secrets.API_TOKEN_GITHUB }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint: true
           eslint_extensions: "js,jsx,ts,tsx"
           auto_fix: true
