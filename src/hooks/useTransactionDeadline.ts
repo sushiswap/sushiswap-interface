@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import { useMemo } from 'react'
 import { useAppSelector } from 'app/state/hooks'
+import { useMemo } from 'react'
 
 import useCurrentBlockTimestamp from './useCurrentBlockTimestamp'
 

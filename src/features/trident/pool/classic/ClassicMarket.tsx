@@ -1,10 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
 import { bentoboxRebasesAtom, poolAtom, totalSupplyAtom } from 'app/features/trident/context/atoms'
 import { toAmountCurrencyAmount } from 'app/functions'
+import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 

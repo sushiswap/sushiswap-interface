@@ -18,6 +18,7 @@ import {
 import Button, { ButtonError } from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Web3Connect from 'app/components/Web3Connect'
+import { OLD_FARMS } from 'app/config/farms'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { classNames, getUSDValue, tryParseAmount } from 'app/functions'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
@@ -30,7 +31,6 @@ import CurrencyInputPanel from './CurrencyInputPanel'
 import { Chef, PairType } from './enum'
 import { useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
-import { OLD_FARMS } from 'app/config/farms'
 
 const ManageBar = ({ farm }) => {
   const { account, chainId } = useActiveWeb3React()
