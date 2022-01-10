@@ -49,12 +49,16 @@ jobs:
         uses: wearerequired/lint-action@36c7e6689e80d785d27a22f71d970f3a3b4fcb70
         id: lint
         with:
-          github_token: ${{ secrets.API_TOKEN_GITHUB }}
           auto_fix: true
+          continue_on_error: true
+          commit_message: "style: code style issues with ${linter}"
+          github_token: ${{ secrets.API_TOKEN_GITHUB }}
+          eslint_extensions: "js,jsx,ts,tsx"
           eslint: true
           prettier: true
-          commit_message: "style: code style issues with ${linter}"
-          eslint_args: "-c .eslintrc.json"
+          prettier_extensions: "js,jsx,ts,tsx"
+          git_name: github-actions
+          git_email: github-actions@users.noreply.github.com
 
       - name: Run eslint
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.owner.login != github.repository_owner }}
