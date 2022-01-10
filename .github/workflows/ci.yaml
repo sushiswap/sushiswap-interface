@@ -17,12 +17,13 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
         with:
           node-version: 14
-      
-      - name: Install Yarn
-        run: npm install yarn --global 
-      
-      - name: Install packages
-        run: yarn
+          always-auth: true
+          registry-url: https://registry.npmjs.org
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn --version && yarn install --frozen-lockfile
+        id: install
 
       - name: Run Unit tests
         run: yarn test:ci
