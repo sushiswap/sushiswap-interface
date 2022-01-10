@@ -107,7 +107,9 @@ export const useAuctionDetails = (auctionAddress?: string) => {
   }
 }
 
-export const useAuctionLauncherDetails = (launcherAddress?: string) => {
+export const useAuctionLauncherDetails = (
+  launcherAddress?: string
+): { launcherInfo?: RawLauncherInfo; lpTokenAddress?: string } => {
   const { chainId } = useActiveWeb3React()
   const launcher = useContract(
     launcherAddress,
@@ -128,7 +130,7 @@ export const useAuctionLauncherDetails = (launcherAddress?: string) => {
   if (launcherAddress && results && Array.isArray(results) && results.length === callsData.length) {
     const [{ result: launcherInfo }, { result: lpTokenAddress }] = results
     return {
-      launcherInfo: launcherInfo as RawLauncherInfo | undefined,
+      launcherInfo: launcherInfo as any,
       lpTokenAddress: lpTokenAddress?.[0],
     }
   }
