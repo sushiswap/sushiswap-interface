@@ -43,12 +43,10 @@ jobs:
         id: lint
         with:
           auto_fix: true
-          continue_on_error: true
           commit_message: "style: code style issues with ${linter}"
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint_extensions: "js,jsx,ts,tsx"
           eslint: true
-          prettier_extensions: "js,jsx,ts,tsx"
 
       - name: Run eslint
         if: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.owner.login != github.repository_owner }}
