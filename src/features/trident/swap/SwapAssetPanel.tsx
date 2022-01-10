@@ -150,7 +150,7 @@ const WalletSwitch: FC<
   )
 
   if (disabled) {
-    return <QuestionHelper text={i18n._(t`Not available for v2 route`)}>{content}</QuestionHelper>
+    return <QuestionHelper text={i18n._(t`Not available for legacy route`)}>{content}</QuestionHelper>
   }
 
   return content

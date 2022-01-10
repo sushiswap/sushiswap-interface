@@ -16,7 +16,6 @@ import NavLink from '../NavLink'
 import Web3Network from '../Web3Network'
 import Web3Status from '../Web3Status'
 import MobileMenuToggle from './MobileMenuToggle'
-import More from './More'
 import { ACTIVE_NAV_LINK_CLASS, NAV_BASE_CLASS } from './styles'
 
 interface DesktopNavProps {
@@ -150,7 +149,6 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
           <div className="hidden lg:flex">
             <LanguageSwitch />
           </div>
-          <More />
           <MobileMenuToggle isOpen={mobileMenuOpen} />
         </div>
       </div>
