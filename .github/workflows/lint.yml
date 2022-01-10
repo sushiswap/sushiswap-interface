@@ -3,9 +3,13 @@ name: Lint
 on:
   push:
 
-  pull_request:
+  pull_request_target:
     branches:
       - canary
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}
+  cancel-in-progress: true
 
 # CI false so we don't treat warnings as failures
 env:
@@ -24,7 +28,15 @@ jobs:
         os: ['ubuntu-latest']
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Check out repository (push)
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/checkout@v2
+
+      - name: Check out repository (pull_request_target)
+        if: ${{ github.event_name == 'pull_request_target' }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Use Node.js 14
         uses: actions/setup-node@v2
