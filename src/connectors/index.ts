@@ -7,8 +7,8 @@ import { TorusConnector } from '@web3-react/torus-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 
-import { FortmaticConnector } from '../entities/FortmaticConnector'
-import { NetworkConnector } from '../entities/NetworkConnector'
+import { FortmaticConnector } from '../entities/connectors/FortmaticConnector'
+import { NetworkConnector } from '../entities/connectors/NetworkConnector'
 
 const RPC = {
   [ChainId.ETHEREUM]: 'https://api.sushirelay.com/v1',
