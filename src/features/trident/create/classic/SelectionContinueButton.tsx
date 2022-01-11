@@ -58,6 +58,7 @@ export const SelectionContinueButton: FC = () => {
       >
         {({ loading, approved }) => (
           <Button
+            id="btn-review-confirm"
             disabled={Boolean(error) || loading || !approved}
             color="gradient"
             variant="filled"

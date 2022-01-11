@@ -1,12 +1,12 @@
 import { ILiquidityInfo } from '../../interfaces/ILiquidityInfo'
 import { AppPage } from '../AppPage'
 export class PoolPage extends AppPage {
-  protected DepositButtonSelector: string = '#btn-deposit > a'
-  protected AddLiquidityButtonSelector: string = '#btn-add-stake-liquidity > a'
-  protected RemoveLiquidityButtonSelector: string = '#btn-remove-liquidity > a'
+  private DepositButtonSelector: string = '#btn-deposit > a'
+  private AddLiquidityButtonSelector: string = '#btn-add-stake-liquidity > a'
+  private RemoveLiquidityButtonSelector: string = '#btn-remove-liquidity > a'
 
-  protected Position0Selector: string = '#my-position-0'
-  protected Position1Selector: string = '#my-position-1'
+  private Position0Selector: string = '#my-position-0'
+  private Position1Selector: string = '#my-position-1'
 
   public async clickAddLiquidityButton(): Promise<void> {
     const depositButton = await this.Page.$(this.DepositButtonSelector)

@@ -4,18 +4,18 @@ import { ILiquidityInfo } from '../../interfaces/ILiquidityInfo'
 import { AppPage } from '../AppPage'
 
 export class RemoveLiquidityPage extends AppPage {
-  protected BackToPoolsButtonSelector: string = '#btn-withdraw-success-back'
-  protected ModalConfirmWithdrawButtonSelector: string = '#btn-modal-confirm-withdrawal'
-  protected ReviewAndConfirmButtonSelector: string = '#btn-confirm-remove-liquidity'
+  private BackToPoolsButtonSelector: string = '#btn-withdraw-success-back'
+  private ModalConfirmWithdrawButtonSelector: string = '#btn-modal-confirm-withdrawal'
+  private ReviewAndConfirmButtonSelector: string = '#btn-confirm-remove-liquidity'
 
-  protected ApproveButtonSelector: string = '#btn-approve'
-  protected FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-withdraw'
-  protected RemovePercentSelector: string = '#radio-option-'
+  private ApproveButtonSelector: string = '#btn-approve'
+  private FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-withdraw'
+  private RemovePercentSelector: string = '#radio-option-'
 
-  protected WithdrawToSelector: string = '#txt-withdraw-to'
-  protected CheckOutputToWalletSelector: string = '#chk-output-to-wallet'
+  private WithdrawToSelector: string = '#txt-withdraw-to'
+  private CheckOutputToWalletSelector: string = '#chk-output-to-wallet'
 
-  protected EstimatedOutputTextSelector: string = '-min-liquidity-output'
+  private EstimatedOutputTextSelector: string = '-min-liquidity-output'
 
   public async removeLiquidity(percent: number, outputToWallet: boolean, fixedRatio: boolean = false): Promise<void> {
     await this.setRemovePercent(percent)

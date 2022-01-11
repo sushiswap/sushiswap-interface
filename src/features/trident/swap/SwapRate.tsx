@@ -32,7 +32,7 @@ const SwapRate: FC<SwapRateProps> = ({ className = 'text-low-emphesis' }) => {
       <Typography variant="sm" className={className}>
         {i18n._(t`Exchange Rate`)}
       </Typography>
-      <div id="btn-invert-rate" className="flex items-center gap-2 cursor-pointer" onClick={() => setInvert(!invert)}>
+      <div id="btn-exchange-rate" className="flex items-center gap-2 cursor-pointer" onClick={() => setInvert(!invert)}>
         <Typography variant="sm" className="text-high-emphesis" weight={700}>
           {invert ? (
             <>

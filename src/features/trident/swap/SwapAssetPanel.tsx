@@ -241,7 +241,7 @@ const InputPanel: FC<
                     <Button
                       color="blue"
                       variant="filled"
-                      className="rounded-full px-3 py-0 h-[32px] shadow-md"
+                      className="rounded-full px-3 py-0 h-[32px] shadow-md token-select-trigger"
                       endIcon={<ChevronDownIcon width={20} height={20} />}
                     >
                       <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
@@ -302,7 +302,13 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
         <Typography variant={isDesktop ? 'sm' : 'xs'} weight={700} className="text-secondary">
           {i18n._(t`Balance:`)}
         </Typography>
-        <Typography variant={isDesktop ? 'sm' : 'xs'} weight={700} onClick={handleClick} className="text-secondary">
+        <Typography
+          id={`text-balance-${currency.symbol}`}
+          variant={isDesktop ? 'sm' : 'xs'}
+          weight={700}
+          onClick={handleClick}
+          className="text-secondary"
+        >
           {balance ? balance.toSignificant(6) : '0.0000'}
         </Typography>
       </div>
