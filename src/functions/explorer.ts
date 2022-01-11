@@ -194,10 +194,12 @@ const chains: ChainObject = {
 }
 
 export function getExplorerLink(
-  chainId: ChainId,
+  chainId: ChainId | undefined,
   data: string,
   type: 'transaction' | 'token' | 'address' | 'block'
 ): string {
+  if (!chainId) return ''
+
   const chain = chains[chainId]
   return chain.builder(chain.link, data, type)
 }

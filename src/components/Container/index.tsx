@@ -1,6 +1,9 @@
-import { classNames } from '../../functions'
+import { classNames } from 'app/functions'
+import { ReactNode } from 'react'
 
-const MAX_WIDTH = {
+export type MaxWidth = 'full' | '7xl' | '6xl' | '5xl' | '4xl' | '3xl' | '2xl' | 'xl' | 'lg' | 'md' | 'sm' | 'xs'
+
+const TailwindMapper: Record<MaxWidth, string> = {
   full: 'max-w-full',
   '7xl': 'max-w-7xl',
   '6xl': 'max-w-6xl',
@@ -15,8 +18,15 @@ const MAX_WIDTH = {
   xs: 'max-w-xs',
 }
 
-const Container = ({ children, maxWidth = '2xl', className = '', ...rest }) => (
-  <div className={classNames(className, MAX_WIDTH[maxWidth], 'w-full')} {...rest}>
+interface ContainerProps {
+  children: ReactNode
+  maxWidth?: MaxWidth
+  className?: string
+  id?: string
+}
+
+const Container = ({ children, maxWidth = '2xl', className = '', id }: ContainerProps) => (
+  <div className={classNames(className, TailwindMapper[maxWidth], 'w-full')} id={id}>
     {children}
   </div>
 )

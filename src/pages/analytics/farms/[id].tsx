@@ -1,7 +1,6 @@
-import React from 'react'
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
 import { useRouter } from 'next/router'
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
+import React from 'react'
 
 export default function Pool() {
   const router = useRouter()

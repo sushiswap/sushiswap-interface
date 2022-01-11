@@ -1,18 +1,18 @@
-import { CRXSUSHI, SUSHI, XSUSHI } from '../../../config/tokens'
-import { ChainId, CurrencyAmount, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
-import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
-import { useApproveCallback } from '../../../hooks/useApproveCallback'
-import { useInariContract, useZenkoContract } from '../../../hooks/useContract'
-import { useActiveWeb3React } from '../../../services/web3'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-
 import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../../functions'
-import useBaseStrategy from './useBaseStrategy'
-import { useDerivedInariState } from '../hooks'
 import { useLingui } from '@lingui/react'
-import { useTokenBalances } from '../../wallet/hooks'
+import { ChainId, CurrencyAmount, SUSHI, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
+import { CRXSUSHI, XSUSHI } from 'app/config/tokens'
+import { tryParseAmount } from 'app/functions/parse'
+import { useApproveCallback } from 'app/hooks/useApproveCallback'
+import { useInariContract, useZenkoContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTokenBalances } from 'app/state/wallet/hooks'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
+
+import { useDerivedInariState } from '../hooks'
+import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import useBaseStrategy from './useBaseStrategy'
 
 export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
   name: i18n._(t`SUSHI → Cream`),

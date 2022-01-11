@@ -1,8 +1,7 @@
-import { blockQuery, blocksQuery, massBlocksQuery } from '../queries'
-import { getUnixTime, startOfHour, subDays, subHours } from 'date-fns'
-
 import { ChainId } from '@sushiswap/core-sdk'
-import { GRAPH_HOST } from '../constants'
+import { GRAPH_HOST } from 'app/services/graph/constants'
+import { blockQuery, blocksQuery, massBlocksQuery } from 'app/services/graph/queries'
+import { getUnixTime, startOfHour, subHours } from 'date-fns'
 import { request } from 'graphql-request'
 
 export const BLOCKS = {
@@ -18,25 +17,16 @@ export const BLOCKS = {
   [ChainId.OKEX]: 'okexchain-blocks/oec',
   [ChainId.HECO]: 'hecoblocks/heco',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-blocks',
+  [ChainId.FUSE]: 'sushiswap/fuse-blocks',
+  [ChainId.KOVAN]: 'blocklytics/kovan-blocks',
 }
 
-export const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) => {
+const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) => {
   return request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BLOCKS[chainId]}`, query, variables)
 }
 
-export const getBlock = async (chainId = ChainId.ETHEREUM, timestamp: number) => {
-  const { blocks } = await fetcher(
-    chainId,
-    blockQuery,
-    timestamp
-      ? {
-          where: {
-            timestamp_gt: timestamp - 600,
-            timestamp_lt: timestamp,
-          },
-        }
-      : {}
-  )
+export const getBlock = async (chainId = ChainId.ETHEREUM, variables) => {
+  const { blocks } = await fetcher(chainId, blockQuery, variables)
 
   return { number: Number(blocks?.[0]?.number) }
 }

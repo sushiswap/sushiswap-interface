@@ -1,19 +1,19 @@
-import { useActiveWeb3React } from '../../services/web3'
-import { ApprovalState } from '../../hooks/useApproveCallback'
-import { Field, MeowshiState } from '../../pages/tools/meowshi'
-import React, { FC, useMemo, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../config/tokens'
-import TransactionConfirmationModal, { ConfirmationModalContent } from '../../modals/TransactionConfirmationModal'
-
-import Button from '../../components/Button'
-import { ChainId } from '@sushiswap/core-sdk'
-import Dots from '../../components/Dots'
 import { parseUnits } from '@ethersproject/units'
 import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions'
 import { useLingui } from '@lingui/react'
-import useMeowshi from '../../hooks/useMeowshi'
-import { useTokenBalance } from '../../state/wallet/hooks'
+import { ChainId, SUSHI } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import { XSUSHI } from 'app/config/tokens'
+import { tryParseAmount } from 'app/functions/parse'
+import { ApprovalState } from 'app/hooks/useApproveCallback'
+import useMeowshi from 'app/hooks/useMeowshi'
+import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useTokenBalance } from 'app/state/wallet/hooks'
+import React, { FC, useMemo, useState } from 'react'
+
+import { Field, MeowshiState } from '../../pages/tools/meowshi'
 
 interface MeowshiButtonProps {
   meowshiState: MeowshiState

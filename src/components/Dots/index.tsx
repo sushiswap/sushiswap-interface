@@ -1,7 +1,7 @@
 import { classNames } from '../../functions'
 
 interface DotsProps {
-  children: any
+  children?: any
   className?: string
 }
 

@@ -1,16 +1,16 @@
-import { KASHI_ADDRESS } from '@sushiswap/core-sdk'
-import KashiCooker from '../entities/KashiCooker'
-import { signMasterContractApproval } from '../functions'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { setKashiApprovalPending } from '../state/application/actions'
-import { useActiveWeb3React } from '../services/web3'
-import { useBentoBoxContract } from './useContract'
-import { useBentoMasterContractAllowed } from '../state/bentobox/hooks'
-import { useDispatch } from 'react-redux'
-import { useKashiApprovalPending } from '../state/application/hooks'
-import { useTransactionAdder } from '../state/transactions/hooks'
-import { AddressZero, HashZero } from '@ethersproject/constants'
 import { splitSignature } from '@ethersproject/bytes'
+import { AddressZero, HashZero } from '@ethersproject/constants'
+import { KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import KashiCooker, { signMasterContractApproval } from 'app/entities/KashiCooker'
+import { useActiveWeb3React } from 'app/services/web3'
+import { setKashiApprovalPending } from 'app/state/application/actions'
+import { useKashiApprovalPending } from 'app/state/application/hooks'
+import { useBentoMasterContractAllowed } from 'app/state/bentobox/hooks'
+import { useTransactionAdder } from 'app/state/transactions/hooks'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDispatch } from 'react-redux'
+
+import { useBentoBoxContract } from './useContract'
 
 export enum BentoApprovalState {
   UNKNOWN,

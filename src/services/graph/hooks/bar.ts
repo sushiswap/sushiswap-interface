@@ -1,6 +1,6 @@
+import { getBar, getBarHistory } from 'app/services/graph/fetchers/bar'
 import stringify from 'fast-json-stable-stringify'
 import useSWR, { SWRConfiguration } from 'swr'
-import { getBar, getBarHistory } from '../fetchers/bar'
 
 interface useBarProps {
   variables?: { [key: string]: any }

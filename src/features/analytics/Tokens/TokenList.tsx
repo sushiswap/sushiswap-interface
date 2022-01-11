@@ -1,17 +1,17 @@
-import ColoredNumber from '../ColoredNumber'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import LineGraph from '../../../components/LineGraph'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import LineGraph from 'app/components/LineGraph'
+import Table, { Column } from 'app/components/Table'
+import { formatNumber, formatPercent } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
 import React from 'react'
-import Table, { Column } from '../../../components/Table'
-import _ from 'lodash'
-import { formatNumber, formatPercent } from '../../../functions'
-import { useCurrency } from '../../../hooks/Tokens'
+
+import ColoredNumber from '../ColoredNumber'
 
 type TokenListColumnType = 'name' | 'price' | 'liquidity' | 'priceChange' | 'volumeChange' | 'lastWeekGraph'
 
 interface Token {
   token: {
-    address: string
+    id: string
     symbol: string
   }
   liquidity: number
@@ -29,13 +29,13 @@ interface TokenListProps {
 
 interface TokenListNameProps {
   token: {
-    address: string
+    id: string
     symbol: string
   }
 }
 
 function TokenListName({ token }: TokenListNameProps): JSX.Element {
-  const currency = useCurrency(token.address)
+  const currency = useCurrency(token.id)
 
   return (
     <>
@@ -60,7 +60,7 @@ export default function TokenList({
           columns={columns}
           data={tokens}
           defaultSortBy={{ id: 'liquidity', desc: true }}
-          link={{ href: '/analytics/tokens/', id: 'token.address' }}
+          link={{ href: '/analytics/tokens/', id: 'token.id' }}
         />
       )}
     </>

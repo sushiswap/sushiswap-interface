@@ -1,5 +1,6 @@
-import Popover, { PopoverProps } from '../Popover'
 import React, { ReactNode, useCallback, useState } from 'react'
+
+import Popover, { PopoverProps } from '../Popover'
 
 interface TooltipProps extends Omit<PopoverProps, 'content'> {
   text: ReactNode
@@ -9,21 +10,28 @@ interface TooltipContentProps extends Omit<PopoverProps, 'content'> {
   content: ReactNode
 }
 
-export default function Tooltip({ text, ...rest }: TooltipProps) {
+export default function Tooltip({ text, children, ...rest }: TooltipProps) {
   return (
     <Popover
+      placement="bottom"
       content={
-        <div className="w-full max-w-[228px] px-2 py-1 font-medium bg-dark-700 border border-gray-600 rounded text-sm">
+        <div className="w-full max-w-[228px] px-3 py-2 font-bold bg-dark-900 border border-dark-700 rounded text-sm shadow-lg">
           {text}
         </div>
       }
       {...rest}
-    />
+    >
+      {children}
+    </Popover>
   )
 }
 
-export function TooltipContent({ content, ...rest }: TooltipContentProps) {
-  return <Popover content={<div className="w-64 py-[0.6rem] px-4 break-words">{content}</div>} {...rest} />
+export function TooltipContent({ content, children, ...rest }: TooltipContentProps) {
+  return (
+    <Popover content={<div className="w-64 py-[0.6rem] px-4 break-words">{content}</div>} {...rest}>
+      {children}
+    </Popover>
+  )
 }
 
 export function MouseoverTooltip({ children, ...rest }: Omit<TooltipProps, 'show'>) {

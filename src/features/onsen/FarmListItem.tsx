@@ -1,13 +1,13 @@
-import { classNames, formatNumber, formatPercent } from '../../functions'
-
 import { Disclosure } from '@headlessui/react'
-import DoubleLogo from '../../components/DoubleLogo'
-import FarmListItemDetails from './FarmListItemDetails'
-import Image from '../../components/Image'
-import { PairType } from './enum'
-import QuestionHelper from '../../components/QuestionHelper'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import DoubleLogo from 'app/components/DoubleLogo'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { classNames, formatNumber, formatPercent } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
 import React from 'react'
-import { useCurrency } from '../../hooks/Tokens'
+
+import { PairType } from './enum'
+import FarmListItemDetails from './FarmListItemDetails'
 
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
@@ -46,21 +46,14 @@ const FarmListItem = ({ farm, ...rest }) => {
                 <div className="flex items-center space-x-2">
                   {farm?.rewards?.map((reward, i) => (
                     <div key={i} className="flex items-center">
-                      <Image
-                        src={reward.icon}
-                        width="30px"
-                        height="30px"
-                        className="rounded-md"
-                        layout="fixed"
-                        alt={reward.token}
-                      />
+                      <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />
                     </div>
                   ))}
                 </div>
                 <div className="flex flex-col space-y-1">
                   {farm?.rewards?.map((reward, i) => (
                     <div key={i} className="text-xs md:text-sm whitespace-nowrap">
-                      {formatNumber(reward.rewardPerDay)} {reward.token} / DAY
+                      {formatNumber(reward.rewardPerDay)} {reward.currency.symbol} / DAY
                     </div>
                   ))}
                 </div>

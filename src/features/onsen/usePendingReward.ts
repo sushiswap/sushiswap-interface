@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useCloneRewarderContract, useComplexRewarderContract } from '../../hooks/useContract'
 import { BigNumber } from '@ethersproject/bignumber'
 import { ChainId } from '@sushiswap/core-sdk'
+import { Fraction } from 'app/entities/bignumber'
+import { useCloneRewarderContract, useComplexRewarderContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3/hooks/useActiveWeb3React'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useEffect, useMemo, useState } from 'react'
+
 import { Chef } from './enum'
-import Fraction from '../../entities/Fraction'
-import { useActiveWeb3React } from '../../services/web3'
-import { useBlockNumber } from '../../state/application/hooks'
 
 const usePending = (farm) => {
   const [balance, setBalance] = useState<string>('0')
@@ -26,6 +27,7 @@ const usePending = (farm) => {
       [ChainId.ARBITRUM]: cloneRewarder,
       [ChainId.CELO]: complexRewarder,
       [ChainId.MOONRIVER]: complexRewarder,
+      [ChainId.FUSE]: complexRewarder,
     }),
     [complexRewarder, cloneRewarder]
   )
@@ -53,7 +55,7 @@ const usePending = (farm) => {
       cloneRewarder &&
       farm &&
       library &&
-      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF)
+      (farm.chef === Chef.MASTERCHEF_V2 || farm.chef === Chef.MINICHEF || farm.chef === Chef.OLD_FARMS)
     ) {
       fetchPendingReward()
     }

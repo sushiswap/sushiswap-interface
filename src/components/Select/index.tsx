@@ -1,7 +1,8 @@
-import React, { FC, MouseEvent, useRef } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
-import useToggle from '../../hooks/useToggle'
+import React, { FC, MouseEvent, useRef } from 'react'
+
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
+import useToggle from '../../hooks/useToggle'
 
 interface NeonSelectProps {
   value

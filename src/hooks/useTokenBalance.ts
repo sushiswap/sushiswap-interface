@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react'
-
 import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
-import ERC20_ABI from '../constants/abis/erc20.json'
 import { WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { isAddress } from '../functions/validate'
-import { useActiveWeb3React } from '../services/web3'
-import { useBlockNumber } from '../state/application/hooks'
+import ERC20_ABI from 'app/constants/abis/erc20.json'
+import { isAddress } from 'app/functions/validate'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockNumber } from 'app/state/application/hooks'
+import { useCallback, useEffect, useState } from 'react'
+
 import { useContract } from './useContract'
 import useTransactionStatus from './useTransactionStatus'
 
@@ -16,7 +16,7 @@ export interface BalanceProps {
 }
 
 // Do NOT use this hook, use the generic wallet hook for useTokenBalance
-// Prefer import { useTokenBalance } from 'state/wallet/hooks' and use appropriately.
+// Prefer import { useTokenBalance } from 'app/state/wallet/hooks' and use appropriately.
 
 function useTokenBalance(tokenAddress: string): BalanceProps {
   const [balance, setBalance] = useState<BalanceProps>({

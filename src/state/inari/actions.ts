@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit'
+
 import { Strategy } from './types'
 
 export const setStrategy = createAction<Strategy>('inari/setStrategy')

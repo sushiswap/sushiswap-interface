@@ -1,17 +1,16 @@
-import React, { FC, useCallback } from 'react'
-import { formatNumber, shortenAddress } from '../../../functions'
-import useUSDCPrice from '../../../hooks/useUSDCPrice'
-import { useActiveWeb3React } from '../../../services/web3'
-import { useDerivedLimitOrderInfo, useLimitOrderState } from '../../../state/limit-order/hooks'
-
-import Button from '../../../components/Button'
-import { ConfirmationModalContent } from '../../../modals/TransactionConfirmationModal'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { Field } from '../../../state/limit-order/actions'
-import Modal from '../../../components/Modal'
-import { USDC } from '@sushiswap/core-sdk'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { USDC } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import { formatNumber, shortenAddress } from 'app/functions'
+import useUSDCPrice from 'app/hooks/useUSDCPrice'
+import { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
+import { useActiveWeb3React } from 'app/services/web3'
+import { Field } from 'app/state/limit-order/actions'
+import { useDerivedLimitOrderInfo, useLimitOrderState } from 'app/state/limit-order/hooks'
+import React, { FC, useCallback } from 'react'
 
 interface ConfirmLimitOrderModalProps {
   open: boolean
@@ -23,14 +22,14 @@ const ConfirmLimitOrderModal: FC<ConfirmLimitOrderModalProps> = ({ open, onDismi
   const bottomContent = useCallback(() => <ConfirmLimitOrderBottomContent onClick={onConfirm} />, [onConfirm])
 
   return (
-    <Modal isOpen={open} onDismiss={onDismiss} maxHeight={90}>
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onDismiss}>
       <ConfirmationModalContent
         title="Confirm Limit Order"
         onDismiss={onDismiss}
         topContent={topContent}
         bottomContent={bottomContent}
       />
-    </Modal>
+    </HeadlessUiModal.Controlled>
   )
 }
 

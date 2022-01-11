@@ -1,4 +1,4 @@
-import { classNames } from '../../functions'
+import { classNames } from 'app/functions'
 
 interface ItemProps {
   item: unknown

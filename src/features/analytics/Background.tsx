@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import React from 'react'
+
 import { classNames } from '../../functions'
 
 interface BackgroundProps {
@@ -30,7 +30,7 @@ export default function Background({ background, children }: BackgroundProps) {
           WebkitMaskImage: `url('${backgrounds[background]}')`,
         }}
       />
-      <div className="absolute w-full py-8 px-14 z-1">{children}</div>
+      <div className="absolute w-full px-8 py-8 lg:px-14 z-1">{children}</div>
     </div>
   )
 }

@@ -1,70 +1,43 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
-import { RowBetween, RowFixed } from '../../components/Row'
-
-import Card from '../../components/Card'
-import Column from '../../components/Column'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import { FixedSizeList } from 'react-window'
-import ImportRow from './ImportRow'
-import Loader from '../../components/Loader'
-import { MouseoverTooltip } from '../../components/Tooltip'
-import QuestionHelper from '../../components/QuestionHelper'
-import Typography from '../../components/Typography'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-import { i18n } from '@lingui/core'
-import { isTokenOnList } from '../../functions/validate'
-import styled from 'styled-components'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../services/web3'
-import { useCombinedActiveList } from '../../state/lists/hooks'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useLingui } from '@lingui/react'
-import { classNames } from '../../functions'
+import { Currency, CurrencyAmount, Token, ZERO } from '@sushiswap/core-sdk'
+import Chip from 'app/components/Chip'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import Image from 'app/components/Image'
+import Loader from 'app/components/Loader'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { MouseoverTooltip } from 'app/components/Tooltip'
+import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
+import { isTokenOnList } from 'app/functions/validate'
+import { useIsUserAddedToken } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useCombinedActiveList } from 'app/state/lists/hooks'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
+import { useCurrencyBalance } from 'app/state/wallet/hooks'
+import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import { FixedSizeList } from 'react-window'
+
+import ImportRow from './ImportRow'
 
 function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
 }
 
-const Tag = styled.div`
-  background-color: ${({ theme }) => theme.bg3};
-  // color: ${({ theme }) => theme.text2};
-  font-size: 14px;
-  border-radius: 4px;
-  padding: 0.25rem 0.3rem 0.25rem 0.3rem;
-  max-width: 6rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  justify-self: flex-end;
-  margin-right: 4px;
-`
-
-const FixedContentRow = styled.div`
-  padding: 4px 20px;
-  height: 56px;
-  display: grid;
-  grid-gap: 16px;
-  align-items: center;
-`
-
 function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
   return (
-    <div className="whitespace-nowrap overflow-hidden max-w-[5rem] overflow-ellipsis" title={balance.toExact()}>
-      {balance.toSignificant(4)}
-    </div>
+    <Typography
+      weight={balance.greaterThan(ZERO) ? 700 : 400}
+      className={classNames(
+        balance.greaterThan(ZERO) ? 'text-high-emphesis' : 'text-low-emphesis',
+        'whitespace-nowrap overflow-hidden max-w-[5rem] overflow-ellipsis'
+      )}
+      title={balance.toExact()}
+    >
+      {balance.greaterThan(ZERO) ? balance.toSignificant(4) : '0.00'}
+    </Typography>
   )
 }
-
-const TagContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`
-
-const TokenListLogoWrapper = styled.img`
-  height: 20px;
-`
 
 function TokenTags({ currency }: { currency: Currency }) {
   if (!(currency instanceof WrappedTokenInfo)) {
@@ -77,9 +50,9 @@ function TokenTags({ currency }: { currency: Currency }) {
   const tag = tags[0]
 
   return (
-    <TagContainer>
+    <div className="flex justify-end">
       <MouseoverTooltip text={tag.description}>
-        <Tag key={tag.id}>{tag.name}</Tag>
+        <Chip color="purple" key={tag.id} label={tag.name} />
       </MouseoverTooltip>
       {tags.length > 1 ? (
         <MouseoverTooltip
@@ -88,10 +61,10 @@ function TokenTags({ currency }: { currency: Currency }) {
             .map(({ name, description }) => `${name}: ${description}`)
             .join('; \n')}
         >
-          <Tag>...</Tag>
+          <Chip color="purple" key={tag.id} label="..." />
         </MouseoverTooltip>
       ) : null}
-    </TagContainer>
+    </div>
   )
 }
 
@@ -110,7 +83,7 @@ function CurrencyRow({
   hideBalance: boolean
   style: CSSProperties
 }) {
-  const { account, chainId } = useActiveWeb3React()
+  const { account } = useActiveWeb3React()
   const key = currencyKey(currency)
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency.isToken ? currency : undefined)
@@ -118,32 +91,32 @@ function CurrencyRow({
   const balance = useCurrencyBalance(account ?? undefined, currency)
   // only show add or remove buttons if not on selected list
   return (
-    <RowBetween
+    <div
+      className="flex items-center w-full hover:bg-dark-800 px-6"
       id={`token-item-${key}`}
       style={style}
-      className="px-5 py-1 rounded cursor-pointer hover:bg-dark-800"
       onClick={() => (isSelected ? null : onSelect())}
-      disabled={isSelected}
-      selected={otherSelected}
+      // disabled={isSelected}
+      // selected={otherSelected}
     >
-      <div className="flex flex-row items-center space-x-4">
-        <div className="flex items-center">
-          <CurrencyLogo currency={currency} size={32} />
+      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
+        <div className="flex flex-row items-center gap-3 flex-grow">
+          <CurrencyLogo currency={currency} size={32} className="rounded-full" />
+          <div className="flex flex-col">
+            <Typography variant="xs" className="text-secondary">
+              {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
+            </Typography>
+            <Typography variant="sm" weight={700} className="text-high-emphesis">
+              {currency.symbol}
+            </Typography>
+          </div>
+          <TokenTags currency={currency} />
         </div>
-        <div>
-          <div title={currency.name} className="text-sm font-medium">
-            {currency.symbol}
-          </div>
-          <div className="text-sm font-thin truncate">
-            {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
-          </div>
+        <div className="flex items-center pr-3">
+          {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
         </div>
       </div>
-      <TokenTags currency={currency} />
-      <div className="flex items-center justify-end">
-        {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
-      </div>
-    </RowBetween>
+    </div>
   )
 }
 
@@ -155,21 +128,24 @@ function isBreakLine(x: unknown): x is BreakLine {
 
 function BreakLineComponent({ style }: { style: CSSProperties }) {
   const { i18n } = useLingui()
+
   return (
-    <FixedContentRow style={style}>
-      <RowBetween>
-        <RowFixed>
-          <TokenListLogoWrapper src="/tokenlist.svg" />
-          <Typography variant="sm" className="ml-3">
-            {i18n._(t`Expanded results from inactive Token Lists`)}
-          </Typography>
-        </RowFixed>
-        <QuestionHelper
-          text={i18n._(t`Tokens from inactive lists. Import specific tokens below or
+    <div className="flex items-center w-full hover:bg-dark-800 px-6" style={style}>
+      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
+        <div className="flex flex-row items-center gap-3 flex-grow">
+          <Image src="/tokenlist.svg" alt="Token List" width={32} height={32} />
+          <div className="flex flex-col">
+            <Typography variant="sm" className="ml-3">
+              {i18n._(t`Expanded results from inactive Token Lists`)}
+              <QuestionHelper
+                text={i18n._(t`Tokens from inactive lists. Import specific tokens below or
             click Manage to activate more lists.`)}
-        />
-      </RowBetween>
-    </FixedContentRow>
+              />
+            </Typography>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -206,7 +182,6 @@ export default function CurrencyList({
   const Row = useCallback(
     function TokenRow({ data, index, style }) {
       const row: Currency | BreakLine = data[index]
-
       if (isBreakLine(row)) {
         return <BreakLineComponent style={style} />
       }

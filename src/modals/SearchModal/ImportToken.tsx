@@ -1,24 +1,20 @@
-import { AutoRow, RowFixed } from '../../components/Row'
-import { Currency, Token } from '@sushiswap/core-sdk'
-
-import { AlertTriangle } from 'react-feather'
-import { AutoColumn } from '../../components/Column'
-import Button from '../../components/Button'
-import Card from '../../components/Card'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import ExternalLink from '../../components/ExternalLink'
-import ListLogo from '../../components/ListLogo'
-import ModalHeader from '../../components/ModalHeader'
-import React from 'react'
-import { TokenList } from '@uniswap/token-lists/dist/types'
-import Typography from '../../components/Typography'
-import { getExplorerLink } from '../../functions/explorer'
-import { shortenAddress } from '../../functions'
-import { t, plural } from '@lingui/macro'
-import { transparentize } from 'polished'
-import { useActiveWeb3React } from '../../services/web3'
-import { useAddUserToken } from '../../state/user/hooks'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Currency, Token } from '@sushiswap/core-sdk'
+import { TokenList } from '@uniswap/token-lists/dist/types'
+import Button from 'app/components/Button'
+import { AutoColumn } from 'app/components/Column'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import ExternalLink from 'app/components/ExternalLink'
+import ListLogo from 'app/components/ListLogo'
+import ModalHeader from 'app/components/ModalHeader'
+import { RowFixed } from 'app/components/Row'
+import Typography from 'app/components/Typography'
+import { getExplorerLink, shortenAddress } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAddUserToken } from 'app/state/user/hooks'
+import React from 'react'
+import { AlertTriangle } from 'react-feather'
 
 interface ImportProps {
   tokens: Token[]
@@ -34,12 +30,8 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
 
   const addToken = useAddUserToken()
   return (
-    <div className="relative w-full space-y-3 overflow-auto">
-      <ModalHeader
-        onBack={onBack}
-        onClose={onDismiss}
-        title={`Import ${plural(tokens.length, { one: 'Token', many: 'Tokens' })}`}
-      />
+    <div className="flex flex-col h-full p-6">
+      <ModalHeader onBack={onBack} onClose={onDismiss} title="Import Tokens" />
       <Typography className="text-center">
         {i18n._(
           t`This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade.`
@@ -76,6 +68,7 @@ export function ImportToken({ tokens, list, onBack, onDismiss, handleCurrencySel
           </div>
         )
       })}
+      <div className="flex flex-grow" />
       <Button
         color="gradient"
         onClick={() => {
