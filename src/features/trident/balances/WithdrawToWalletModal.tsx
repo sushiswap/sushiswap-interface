@@ -63,7 +63,7 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
     : ''
 
   return (
-    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose} className="!bg-dark-800 lg:!bg-transparent">
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose}>
       <div className="lg:max-w-[28rem] lg:min-w-[28rem]">
         <div className="flex flex-col bg-dark-900 p-5 gap-5">
           <div className="flex flex-col gap-5">
