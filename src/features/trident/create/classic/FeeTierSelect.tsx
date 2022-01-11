@@ -16,6 +16,7 @@ export const FeeTierSelect: FC<FeeTierSelectProps> = ({ tier, subtitle, selected
 
   return (
     <div
+      id={`fee-tier-${tier}`}
       style={active ? { boxShadow: '#27b0e6 0px 7px 67px -33px' } : {}}
       className={classNames(
         'flex flex-col rounded justify-center border p-8 border-dark-700 hover:cursor-pointer',

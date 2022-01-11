@@ -124,7 +124,13 @@ export const CreatePoolReviewModal: FC = () => {
                 </Typography>
               </div>
             </div>
-            <Button color="gradient" size="lg" onClick={execute} disabled={attemptingTxn}>
+            <Button
+              id="btn-confirm-pool-creation"
+              color="gradient"
+              size="lg"
+              onClick={execute}
+              disabled={attemptingTxn}
+            >
               <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {attemptingTxn ? i18n._(t`Transaction pending`) : i18n._(t`Confirm Pool Creation`)}
               </Typography>

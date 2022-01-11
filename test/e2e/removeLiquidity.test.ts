@@ -2,8 +2,7 @@ import { Dappeteer } from '@chainsafe/dappeteer'
 import { closeValues } from '@sushiswap/tines'
 import { Browser, Page } from 'puppeteer'
 
-import { FUNDING_SOURCE } from './constants/FundingSource'
-import { RATIO } from './constants/Ratio'
+import { FUNDING_SOURCE, RATIO } from './constants/Index'
 import { TestHelper } from './helpers/TestHelper'
 import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
@@ -24,7 +23,7 @@ let addLiquidityPage: AddLiquidityPage
 let poolPage: PoolPage
 
 async function initPages() {
-  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}/trident/pools`)
+  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, baseUrl)
   poolPage = new PoolPage(page, metamask)
   addLiquidityPage = new AddLiquidityPage(page, metamask)
   removeLiquidityPage = new RemoveLiquidityPage(page, metamask)

@@ -2,7 +2,7 @@ import { Dappeteer } from '@chainsafe/dappeteer'
 import { closeValues } from '@sushiswap/tines'
 import { Browser, Page } from 'puppeteer'
 
-import { ADDRESSES } from './constants/Addresses'
+import { ADDRESSES } from './constants/Index'
 import { TestHelper } from './helpers/TestHelper'
 import { AddLiquidityPage } from './pages/pools/AddLiquidityPage'
 import { LiquidityPoolsPage } from './pages/pools/LiquidityPoolsPage'
@@ -23,7 +23,7 @@ let addLiquidityPage: AddLiquidityPage
 let depositPercentage = 0.01
 
 async function initPages() {
-  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, `${baseUrl}/trident/pools`)
+  liquidityPoolsPage = new LiquidityPoolsPage(page, metamask, baseUrl)
   poolPage = new PoolPage(page, metamask)
   addLiquidityPage = new AddLiquidityPage(page, metamask)
 }
@@ -51,7 +51,6 @@ describe('Add Liquidity:', () => {
 
   test('Should deposit USDC from wallet in unequal amounts', async () => {
     const targetPoolName = 'USDC-WETH'
-    // Asset A: USDC
 
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.connectMetamaskWallet()

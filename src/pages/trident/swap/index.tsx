@@ -51,7 +51,7 @@ const Swap = () => {
     <Container className="px-2 py-4 md:py-8 lg:py-20" maxWidth="lg">
       <DoubleGlowShadow>
         <div className="shadow rounded-[20px] bg-dark-900 pb-3">
-          <div className="flex justify-between items-center pl-4 pr-2 py-2">
+          <div className="flex items-center justify-between py-2 pl-4 pr-2">
             <Typography weight={700}>{i18n._(t`Swap`)}</Typography>
             <div className="flex items-center justify-end gap-3">
               {chainId === ChainId.ETHEREUM && (
@@ -147,12 +147,13 @@ const Swap = () => {
                 </div>
               )}
               {trade && (
-                <div className="border border-dark-800 rounded mb-3 lg:mb-0 flex flex-col divide-y px-3 divide-dark-800">
+                <div className="flex flex-col px-3 mb-3 border divide-y rounded border-dark-800 lg:mb-0 divide-dark-800">
                   <div className="flex justify-between py-2">
                     <Typography variant="sm" weight={700}>
                       {i18n._(t`Version`)}
                     </Typography>
                     <Chip
+                      id="trade-type"
                       label={tradeVersion === TradeVersion.V2TRADE ? 'Legacy' : 'Trident'}
                       color={tradeVersion === TradeVersion.V2TRADE ? 'blue' : 'green'}
                     />

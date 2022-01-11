@@ -3,20 +3,20 @@ import { ElementHandle } from 'puppeteer'
 import { AppPage } from '../AppPage'
 
 export class AddLiquidityPage extends AppPage {
-  protected ConfirmDepositButtonSelector: string = '#btn-ConfirmDeposit'
-  protected ModalConfirmDepositButtonSelector: string = '#btn-modal-confirm-deposit'
-  protected BackToPoolsButtonSelector: string = '#btn-backToPools'
-  protected DepositStatusDivSelector: string = 'div-deposit-status'
-  protected ApproveButtonSelector: string = '#btn-approve'
-  protected FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-deposit'
+  private ConfirmDepositButtonSelector: string = '#btn-ConfirmDeposit'
+  private ModalConfirmDepositButtonSelector: string = '#btn-modal-confirm-deposit'
+  private BackToPoolsButtonSelector: string = '#btn-backToPools'
+  private DepositStatusDivSelector: string = 'div-deposit-status'
+  private ApproveButtonSelector: string = '#btn-approve'
+  private FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-deposit'
 
   // Asset input selectors
-  protected SpendFromWalletASelector: string = '.switch-spend-from-wallet-a'
-  protected SpendFromWalletBSelector: string = '.switch-spend-from-wallet-b'
-  protected AssetInputALabelSelector: string = '#asset-input-a'
-  protected AssetInputBLabelSelector: string = '#asset-input-b'
-  protected AssetInputABalanceSelector: string = '#asset-input-a-balance'
-  protected AssetInputBBalanceSelector: string = '#asset-input-b-balance'
+  private SpendFromWalletASelector: string = '.switch-spend-from-wallet-a'
+  private SpendFromWalletBSelector: string = '.switch-spend-from-wallet-b'
+  private AssetInputALabelSelector: string = '#asset-input-a'
+  private AssetInputBLabelSelector: string = '#asset-input-b'
+  private AssetInputABalanceSelector: string = '#asset-input-a-balance'
+  private AssetInputBBalanceSelector: string = '#asset-input-b-balance'
 
   public async addLiquidity(
     t0Amount: string,
@@ -37,6 +37,7 @@ export class AddLiquidityPage extends AppPage {
   }
 
   public async confirmDeposit(): Promise<void> {
+    await this.blockingWait(1, true)
     const approveButton = await this.Page.$(this.ApproveButtonSelector)
     if (approveButton) {
       await approveButton.click()
