@@ -123,113 +123,57 @@ describe('Trident Swap:', () => {
     }
   )
 
-  test.each([['ETH', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET]])(
-    `Single Pool: Should swap from %p %p to %p %p`,
-    async (assetA, payFromA, assetB, payFromB) => {
-      const payAFromWallet = payFromA === FUNDING_SOURCE.WALLET
-      const payBFromWallet = payFromB === FUNDING_SOURCE.WALLET
-
-      await swapPage.navigateTo()
-
-      const assetABalance = await swapPage.getTokenBalance(assetA, payAFromWallet)
-      const assetBBalance = await swapPage.getTokenBalance(assetB, payBFromWallet)
-      const assetADepositAmount = (assetABalance * depositPercentage).toFixed(5)
-      const assetBDepositAmount = (assetBBalance * 0.7).toFixed(5)
-
-      await liquidityPoolsPage.navigateTo()
-      await liquidityPoolsPage.clickCreateNewPoolButton()
-      await createPoolPage.createPool(
-        POOL_TYPE.CLASSIC,
-        assetA,
-        assetB,
-        payAFromWallet,
-        payBFromWallet,
-        assetADepositAmount,
-        assetBDepositAmount,
-        Fee.LOW
-      )
-
-      await swapPage.navigateTo()
-
-      const inputTokenBalanceBefore = await swapPage.getTokenBalance(assetA, payAFromWallet)
-      const outputTokenBalanceBefore = await swapPage.getTokenBalance(assetB, payBFromWallet)
-      if (!(inputTokenBalanceBefore > 0)) throw new Error(`${assetA} wallet balance is 0. Can't execute swap`)
-
-      const swapAmount = (inputTokenBalanceBefore * swapPercentage).toFixed(5)
-
-      await swapPage.setInputToken(assetA)
-      await swapPage.setOutputToken(assetB)
-      await swapPage.setAmountIn(swapAmount)
-      await swapPage.setPayFromWallet(payAFromWallet)
-      await swapPage.setReceiveToWallet(payBFromWallet)
-
-      const tradeType = await swapPage.getTradeType()
-      expect(tradeType).toBe('trident')
-
-      const minOutputAmount = await swapPage.getMinOutputAmount()
-
-      await swapPage.confirmSwap(assetA, assetB)
-      await swapPage.navigateTo()
-
-      const inputTokenBalanceAfter = await swapPage.getTokenBalance(assetA, payAFromWallet)
-      const outputTokenBalanceAfter = await swapPage.getTokenBalance(assetB, payBFromWallet)
-
-      const intputTokenBalanceDiff = inputTokenBalanceBefore - inputTokenBalanceAfter
-      const outputTokenBalanceDiff = outputTokenBalanceAfter - outputTokenBalanceBefore
-
-      expect(closeValues(intputTokenBalanceDiff, parseFloat(swapAmount), 1e-9)).toBe(true)
-      expect(closeValues(outputTokenBalanceDiff, parseFloat(minOutputAmount), 1e-9)).toBe(true)
-    }
-  )
-
-  test('Single pool, large amount in: Should swap ETH from wallet to BAT wallet', async () => {
-    const poolAssetA = 'ETH'
-    const poolAssetB = 'BAT'
+  test.only.each([
+    ['ETH', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET, swapPercentage],
+    ['ETH', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET, 0.8],
+  ])(`Single Pool: Should swap from %p %p to %p %p`, async (assetA, payFromA, assetB, payFromB, swapPercent) => {
+    const payAFromWallet = payFromA === FUNDING_SOURCE.WALLET
+    const payBFromWallet = payFromB === FUNDING_SOURCE.WALLET
 
     await swapPage.navigateTo()
 
-    const ethBalance = await swapPage.getTokenBalance(poolAssetA)
-    const batBalance = await swapPage.getTokenBalance(poolAssetB)
-    const ethDepositAmount = (ethBalance * depositPercentage).toFixed(5)
-    const batDepositAmount = (batBalance * 0.8).toFixed(5)
+    const assetABalance = await swapPage.getTokenBalance(assetA, payAFromWallet)
+    const assetBBalance = await swapPage.getTokenBalance(assetB, payBFromWallet)
+    const assetADepositAmount = (assetABalance * depositPercentage).toFixed(5)
+    const assetBDepositAmount = (assetBBalance * 0.7).toFixed(5)
 
     await liquidityPoolsPage.navigateTo()
     await liquidityPoolsPage.clickCreateNewPoolButton()
     await createPoolPage.createPool(
       POOL_TYPE.CLASSIC,
-      poolAssetA,
-      poolAssetB,
-      true,
-      true,
-      ethDepositAmount,
-      batDepositAmount,
+      assetA,
+      assetB,
+      payAFromWallet,
+      payBFromWallet,
+      assetADepositAmount,
+      assetBDepositAmount,
       Fee.LOW
     )
 
     await swapPage.navigateTo()
 
-    const inputTokenBalanceBefore = await swapPage.getTokenBalance(poolAssetA)
-    const outputTokenBalanceBefore = await swapPage.getTokenBalance(poolAssetB)
-    if (!(inputTokenBalanceBefore > 0)) throw new Error(`ETH wallet balance is 0. Can't execute swap`)
+    const inputTokenBalanceBefore = await swapPage.getTokenBalance(assetA, payAFromWallet)
+    const outputTokenBalanceBefore = await swapPage.getTokenBalance(assetB, payBFromWallet)
+    if (!(inputTokenBalanceBefore > 0)) throw new Error(`${assetA} wallet balance is 0. Can't execute swap`)
 
-    const swapAmount = (inputTokenBalanceBefore * 0.8).toFixed(5)
+    const swapAmount = (inputTokenBalanceBefore * swapPercent).toFixed(5)
 
-    await swapPage.setInputToken(poolAssetA)
-    await swapPage.setOutputToken(poolAssetB)
+    await swapPage.setInputToken(assetA)
+    await swapPage.setOutputToken(assetB)
     await swapPage.setAmountIn(swapAmount)
-    await swapPage.setPayFromWallet(true)
-    await swapPage.setReceiveToWallet(true)
+    await swapPage.setPayFromWallet(payAFromWallet)
+    await swapPage.setReceiveToWallet(payBFromWallet)
 
     const tradeType = await swapPage.getTradeType()
     expect(tradeType).toBe('trident')
 
     const minOutputAmount = await swapPage.getMinOutputAmount()
 
-    await swapPage.confirmSwap(poolAssetA, poolAssetB)
+    await swapPage.confirmSwap(assetA, assetB)
     await swapPage.navigateTo()
 
-    const inputTokenBalanceAfter = await swapPage.getTokenBalance(poolAssetA)
-    const outputTokenBalanceAfter = await swapPage.getTokenBalance(poolAssetB)
+    const inputTokenBalanceAfter = await swapPage.getTokenBalance(assetA, payAFromWallet)
+    const outputTokenBalanceAfter = await swapPage.getTokenBalance(assetB, payBFromWallet)
 
     const intputTokenBalanceDiff = inputTokenBalanceBefore - inputTokenBalanceAfter
     const outputTokenBalanceDiff = outputTokenBalanceAfter - outputTokenBalanceBefore
