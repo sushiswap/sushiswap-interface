@@ -17,7 +17,7 @@ const SelectPanel: FC<{ index: number }> = ({ index }) => {
       header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw from`)} />}
       walletToggle={(props) => (
         <SwapAssetPanel.Switch
-          id={'switch-classic-withdraw-from-' + index}
+          id={`switch-classic-withdraw-from-${index}`}
           {...props}
           label={i18n._(t`Withdraw from`)}
           onChange={() => setWalletSource(asset.oppositeToggle())}

@@ -29,7 +29,7 @@ export const PoolSelector: FC<PoolSelectorProps> = ({ type, selectedPool, coming
 
   return (
     <div
-      id={'pool-select-' + type}
+      id={`pool-select-${type}`}
       style={active ? { boxShadow: '#27b0e6 0px 7px 67px -33px' } : {}}
       className={classNames(
         'flex flex-col rounded justify-center border p-6 border-dark-700 overflow-hidden',

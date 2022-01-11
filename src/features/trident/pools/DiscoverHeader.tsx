@@ -8,7 +8,7 @@ import Typography from '../../../components/Typography'
 import { TridentHeader } from '../../../layouts/Trident'
 
 const HeaderButton: FC<{ title: string; linkTo: string; id?: string }> = ({ title, linkTo, id }) => (
-  <Link href={linkTo}>
+  <Link href={linkTo} passHref={true}>
     <Button
       id={id}
       color="gradient"

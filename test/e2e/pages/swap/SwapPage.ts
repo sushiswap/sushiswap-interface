@@ -387,7 +387,7 @@ export class SwapPage extends AppPage {
     await this.Page.waitForSelector(this.TradeTypeSelector)
 
     const tradeTypeInput = await this.Page.$(this.TradeTypeSelector)
-    const tradeType = (await (await tradeTypeInput.getProperty('value')).jsonValue()) as string
-    return tradeType
+    const tradeType = (await (await tradeTypeInput.getProperty('textContent')).jsonValue()) as string
+    return tradeType.toLowerCase()
   }
 }
