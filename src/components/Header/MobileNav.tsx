@@ -16,7 +16,7 @@ export const MobileNav: FC = () => {
   const { chainId } = useActiveWeb3React()
 
   return (
-    <Popover.Panel className="sm:hidden ">
+    <Popover.Panel className="sm:hidden">
       <div className="flex flex-col px-4 pt-2 pb-3 space-y-1">
         <Link href={chainId && featureEnabled(Feature.TRIDENT, chainId) ? '/trident/swap' : '/swap'}>
           <a id="swap-nav-link" className={NAV_BASE_CLASS}>
