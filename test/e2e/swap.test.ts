@@ -49,7 +49,7 @@ const currencySelectCases = [
 
 jest.retryTimes(1)
 
-describe('Trident Swap:', () => {
+describe('Swap:', () => {
   beforeAll(async () => {
     ;[metamask, browser, page] = await TestHelper.initDappeteer()
     swapPage = new SwapPage(page, metamask, baseUrl)
