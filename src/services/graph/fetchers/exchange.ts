@@ -134,9 +134,9 @@ export const getSushiPrice = async () => {
   })
 }
 
-export const getStakePrice = async () => {
+export const getGnoPrice = async () => {
   return getTokenPrice(ChainId.XDAI, tokenPriceQuery, {
-    id: '0xb7d311e2eb55f2f68a9440da38e7989210b9a05e',
+    id: '0x9c58bacc331c9aa871afd802db6379a98e80cedb',
   })
 }
 

@@ -14,7 +14,7 @@ import {
   getPicklePrice,
   getRulerPrice,
   getSpellPrice,
-  getStakePrice,
+  getGnoPrice,
   getSushiPrice,
   getToken,
   getTokenPairs,
@@ -65,10 +65,10 @@ export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration =
   return data
 }
 
-export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
+export function useGnoPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.XDAI
-  const { data } = useSWR(shouldFetch ? 'stakePrice' : null, () => getStakePrice(), swrConfig)
+  const { data } = useSWR(shouldFetch ? 'gnoPrice' : null, () => getGnoPrice(), swrConfig)
   return data
 }
 
