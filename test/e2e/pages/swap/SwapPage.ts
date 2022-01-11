@@ -180,12 +180,14 @@ export class SwapPage extends AppPage {
   }
 
   public async getInputTokenBalance(): Promise<string> {
-    await this.blockingWait(1, true)
-    const balanceLabels = await this.Page.$$(this.BalanceLabelSelector)
-    const inputTokenBalanceLabel = balanceLabels[1]
+    await this.Page.waitForSelector(this.InTokenButtonSelector)
+    const inputTokenLabel = await this.Page.$(this.InTokenButtonSelector)
+    const inToken = (await (await inputTokenLabel.getProperty('textContent')).jsonValue()) as string
 
-    const inTokenAmount = (await (await inputTokenBalanceLabel.getProperty('textContent')).jsonValue()) as string
-    return inTokenAmount
+    const balanceLabel = await this.Page.waitForSelector(`#text-balance-${inToken}`)
+    const inTokenBalance = (await (await balanceLabel.getProperty('textContent')).jsonValue()) as string
+
+    return inTokenBalance
   }
 
   public async getTokenBalance(tokenSymbol: string, fromWallet: boolean = true): Promise<number> {

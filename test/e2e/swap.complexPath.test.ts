@@ -123,7 +123,7 @@ describe('Trident Swap:', () => {
     }
   )
 
-  test.only.each([
+  test.each([
     ['ETH', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET, swapPercentage],
     ['ETH', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET, 0.8],
   ])(`Single Pool: Should swap from %p %p to %p %p`, async (assetA, payFromA, assetB, payFromB, swapPercent) => {
@@ -181,4 +181,42 @@ describe('Trident Swap:', () => {
     expect(closeValues(intputTokenBalanceDiff, parseFloat(swapAmount), 1e-9)).toBe(true)
     expect(closeValues(outputTokenBalanceDiff, parseFloat(minOutputAmount), 1e-9)).toBe(true)
   })
+
+  test.each([['BAT', FUNDING_SOURCE.WALLET, 'USDT', FUNDING_SOURCE.WALLET, swapPercentage]])(
+    `Single Path: Should swap from %p %p to %p %p`,
+    async (assetA, payFromA, assetB, payFromB, swapPercent) => {
+      const payAFromWallet = payFromA === FUNDING_SOURCE.WALLET
+      const payBFromWallet = payFromB === FUNDING_SOURCE.WALLET
+
+      await swapPage.navigateTo()
+      const inputTokenBalanceBefore = await swapPage.getTokenBalance(assetA, payAFromWallet)
+      const outputTokenBalanceBefore = await swapPage.getTokenBalance(assetB, payBFromWallet)
+      if (!(inputTokenBalanceBefore > 0)) throw new Error(`${assetA} wallet balance is 0. Can't execute swap`)
+
+      const swapAmount = (inputTokenBalanceBefore * swapPercent).toFixed(5)
+
+      await swapPage.setInputToken(assetA)
+      await swapPage.setOutputToken(assetB)
+      await swapPage.setAmountIn(swapAmount)
+      await swapPage.setPayFromWallet(payAFromWallet)
+      await swapPage.setReceiveToWallet(payBFromWallet)
+
+      const tradeType = await swapPage.getTradeType()
+      expect(tradeType).toBe('trident')
+
+      const minOutputAmount = await swapPage.getMinOutputAmount()
+
+      await swapPage.confirmSwap(assetA, assetB)
+      await swapPage.navigateTo()
+
+      const inputTokenBalanceAfter = await swapPage.getTokenBalance(assetA, payAFromWallet)
+      const outputTokenBalanceAfter = await swapPage.getTokenBalance(assetB, payBFromWallet)
+
+      const intputTokenBalanceDiff = inputTokenBalanceBefore - inputTokenBalanceAfter
+      const outputTokenBalanceDiff = outputTokenBalanceAfter - outputTokenBalanceBefore
+
+      expect(closeValues(intputTokenBalanceDiff, parseFloat(swapAmount), 1e-9)).toBe(true)
+      expect(closeValues(outputTokenBalanceDiff, parseFloat(minOutputAmount), 1e-9)).toBe(true)
+    }
+  )
 })

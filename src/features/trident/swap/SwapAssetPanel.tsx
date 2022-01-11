@@ -193,7 +193,7 @@ const InputPanel: FC<
         'border lg:rounded-full lg:bg-dark-900 flex items-center pl-4 lg:pl-0 px-[1px] py-1.5 lg:py-0 bg-transparent'
       )}
     >
-      <div className="cursor-pointer pl-3" onClick={() => setOpen(true)}>
+      <div className="pl-3 cursor-pointer" onClick={() => setOpen(true)}>
         {currency ? (
           <CurrencyLogo currency={currency} className="rounded-full" size={40} />
         ) : (
@@ -297,7 +297,13 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
         <Typography variant={isDesktop ? 'sm' : 'xs'} weight={700} className="text-secondary">
           {i18n._(t`Balance:`)}
         </Typography>
-        <Typography variant={isDesktop ? 'sm' : 'xs'} weight={700} onClick={handleClick} className="text-secondary">
+        <Typography
+          id={`text-balance-${currency.symbol}`}
+          variant={isDesktop ? 'sm' : 'xs'}
+          weight={700}
+          onClick={handleClick}
+          className="text-secondary"
+        >
           {balance ? balance.toSignificant(6) : '0.0000'}
         </Typography>
       </div>
