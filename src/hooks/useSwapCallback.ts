@@ -1,6 +1,8 @@
+import { TransactionFactory, TypedTransaction } from '@ethereumjs/tx'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Signature } from '@ethersproject/bytes'
+import { arrayify, DataOptions, hexlify, splitSignature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
@@ -39,14 +41,12 @@ import { useBlockNumber } from 'app/state/application/hooks'
 import { TransactionResponseLight, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
 
+import { OPENMEV_SUPPORTED_NETWORKS, OPENMEV_URI } from '../config/openmev'
 import { useArgentWalletContract } from './useArgentWalletContract'
 import { useRouterContract, useTridentRouterContract } from './useContract'
 import useENS from './useENS'
 import { SignatureData } from './useERC20Permit'
 import useTransactionDeadline from './useTransactionDeadline'
-import { arrayify, DataOptions, hexlify, splitSignature } from '@ethersproject/bytes'
-import { TransactionFactory, TypedTransaction } from '@ethereumjs/tx'
-import { OPENMEV_SUPPORTED_NETWORKS, OPENMEV_URI } from '../config/openmev'
 
 export enum SwapCallbackState {
   INVALID,
