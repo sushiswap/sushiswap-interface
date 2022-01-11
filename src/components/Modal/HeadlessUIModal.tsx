@@ -130,11 +130,11 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
           >
             <div
               className={classNames(
-                transparent ? '' : 'bg-gradient-radial from-purple/10 to-blue/10',
+                transparent ? '' : 'bg-gradient-radial from-purple/10 to-blue/10 border border-dark-800',
                 isDesktop
                   ? `lg:max-w-${maxWidth} w-full backdrop-blur-[40px] backdrop-saturate-[180%]`
                   : 'w-[85vw] max-h-[85vh] overflow-y-auto mx-auto',
-                'bg-dark-1000/80 inline-block align-bottom rounded-xl text-left overflow-hidden transform p-4 border border-dark-800'
+                'bg-dark-1000/80 inline-block align-bottom rounded-xl text-left overflow-hidden transform p-4'
               )}
             >
               {children}
