@@ -2,14 +2,18 @@ import { Dialog, Transition } from '@headlessui/react'
 import ModalAction, { ModalActionProps } from 'app/components/Modal/Action'
 import ModalActions, { ModalActionsProps } from 'app/components/Modal/Actions'
 import ModalBody, { ModalBodyProps } from 'app/components/Modal/Body'
-import ModalContent, { ModalContentProps } from 'app/components/Modal/Content'
+import ModalContent, {
+  BorderedModalContent,
+  ModalContentBorderedProps,
+  ModalContentProps,
+} from 'app/components/Modal/Content'
 import ModalError, { ModalActionErrorProps } from 'app/components/Modal/Error'
 import ModalHeader, { ModalHeaderProps } from 'app/components/Modal/Header'
 import SubmittedModalContent, { SubmittedModalContentProps } from 'app/components/Modal/SubmittedModalContent'
+import { classNames } from 'app/functions'
 import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react'
 import React, { Fragment } from 'react'
 
-import { classNames } from '../../functions'
 import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 
 interface TriggerProps {
@@ -27,6 +31,7 @@ type HeadlessUiModalType<P> = FC<P> & {
   Body: FC<ModalBodyProps>
   Actions: FC<ModalActionsProps>
   Content: FC<ModalContentProps>
+  BorderedContent: FC<ModalContentBorderedProps>
   Header: FC<ModalHeaderProps>
   Action: FC<ModalActionProps>
   SubmittedModalContent: FC<SubmittedModalContentProps>
@@ -74,66 +79,68 @@ interface ControlledModalProps {
   onDismiss: () => void
   afterLeave?: () => void
   children?: React.ReactNode
-  className?: string
+  transparent?: boolean
+  maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
 }
 
 const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
-  className,
   isOpen,
   onDismiss,
   afterLeave,
   children,
+  transparent = false,
+  maxWidth = 'lg',
 }) => {
   const isDesktop = useDesktopMediaQuery()
 
   return (
     <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave}>
-      <Dialog
-        as="div"
-        className={classNames('fixed z-50 inset-0 overflow-y-auto', isDesktop ? '' : 'bg-dark-900', className)}
-        onClose={onDismiss}
-      >
-        {isDesktop ? (
-          <div className="relative flex items-center justify-center block min-h-screen text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0 filter backdrop-blur-[10px] bg-[rgb(0,0,0,0.4)]" />
-            </Transition.Child>
+      <Dialog as="div" className="fixed z-50 inset-0" onClose={onDismiss}>
+        <div className="relative flex items-center justify-center block min-h-screen text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay
+              className={classNames(
+                isDesktop ? 'backdrop-blur-[10px]  bg-[rgb(0,0,0,0.4)]' : ' bg-[rgb(0,0,0,0.8)]',
+                'fixed inset-0 filter'
+              )}
+            />
+          </Transition.Child>
 
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span className="inline-block h-screen align-middle" aria-hidden="true">
-              &#8203;
-            </span>
+          {/* This element is to trick the browser into centering the modal contents. */}
+          <span className="inline-block h-screen align-middle" aria-hidden="true">
+            &#8203;
+          </span>
 
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div
+              className={classNames(
+                transparent ? '' : 'bg-gradient-radial from-purple/10 to-blue/10 border border-dark-800',
+                isDesktop
+                  ? `lg:max-w-${maxWidth} w-full backdrop-blur-[40px] backdrop-saturate-[180%]`
+                  : 'w-[85vw] max-h-[85vh] overflow-y-auto mx-auto',
+                'bg-dark-1000/80 inline-block align-bottom rounded-xl text-left overflow-hidden transform p-4'
+              )}
             >
-              <div
-                className={classNames(
-                  className ? className : 'bg-dark-900 shadow-lg',
-                  'lg:max-w-lg lg:w-[32rem] inline-block align-bottom rounded-lg text-left overflow-hidden transform'
-                )}
-              >
-                {children}
-              </div>
-            </Transition.Child>
-          </div>
-        ) : (
-          <div className="w-full h-full">{children}</div>
-        )}
+              {children}
+            </div>
+          </Transition.Child>
+        </div>
       </Dialog>
     </Transition>
   )
@@ -143,6 +150,7 @@ HeadlessUiModal.Controlled = HeadlessUiModalControlled
 HeadlessUiModal.Header = ModalHeader
 HeadlessUiModal.Body = ModalBody
 HeadlessUiModal.Content = ModalContent
+HeadlessUiModal.BorderedContent = BorderedModalContent
 HeadlessUiModal.Actions = ModalActions
 HeadlessUiModal.Action = ModalAction
 HeadlessUiModal.Error = ModalError

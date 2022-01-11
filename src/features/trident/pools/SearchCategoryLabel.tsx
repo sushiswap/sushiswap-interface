@@ -3,7 +3,7 @@ import Image from 'next/image'
 import React, { FC } from 'react'
 import { useRecoilValue } from 'recoil'
 
-import rssSVG from '../../../../public/rss.svg'
+import rssSVG from '../../../../public/images/rss.svg'
 import { searchQueryAtom } from './context/atoms'
 
 export const SearchCategoryLabel: FC = () => {

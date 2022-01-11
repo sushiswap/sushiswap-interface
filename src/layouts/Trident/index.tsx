@@ -7,8 +7,6 @@ import { BreadcrumbItem } from 'app/features/trident/Breadcrumb'
 import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
-const HEADER_HEIGHT = 64
-
 type HeaderBackground =
   | 'bg-bars-pattern'
   | 'bg-binary-pattern'
@@ -66,7 +64,7 @@ interface TridentLayoutProps {
 const TridentLayout: FC<TridentLayoutProps> = ({ children = [], breadcrumbs = [] }) => {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header height={HEADER_HEIGHT} />
+      <Header />
       <Container maxWidth="7xl" className="mx-auto flex flex-grow">
         <div className="flex flex-col items-center w-full flex-grow">
           <div className="w-full flex-grow flex flex-col">{children}</div>
