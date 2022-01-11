@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
+import { classNames } from 'app/functions'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React from 'react'
 import { Activity } from 'react-feather'
@@ -27,7 +28,7 @@ export default function Web3Connect({ color = 'gray', size = 'sm', className = '
       onClick={toggleWalletModal}
       variant="outlined"
       color={color}
-      className={className}
+      className={classNames(className, '!border-none')}
       size={size}
       {...rest}
     >

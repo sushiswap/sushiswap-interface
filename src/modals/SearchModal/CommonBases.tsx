@@ -21,10 +21,12 @@ export default function CommonBases({
   const { i18n } = useLingui()
   const bases = typeof chainId !== 'undefined' ? COMMON_BASES[chainId] ?? [] : []
 
+  if (bases.length === 0) return <></>
+
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-row">
-        <Typography variant="sm" weight={700} className="text-low-emphesis flex items-center">
+        <Typography variant="xs" weight={700} className="text-low-emphesis flex items-center">
           {i18n._(t`Common bases`)}
           <QuestionHelper text="These tokens are commonly paired with other tokens." />
         </Typography>
@@ -39,7 +41,7 @@ export default function CommonBases({
               onClick={() => !isSelected && onSelect(currency)}
               disabled={isSelected}
               key={currencyId(currency)}
-              className="disabled:bg-dark-700 flex items-center p-2 space-x-2 rounded bg-dark-700/20 hover:bg-dark-700 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+              className="border border-dark-700 disabled:bg-dark-700 flex items-center p-2 space-x-2 rounded bg-dark-700/20 hover:bg-dark-700/60 disabled:bg-dark-1000 disabled:cursor-not-allowed"
             >
               <CurrencyLogo currency={currency} />
               <Typography variant="sm" className="font-semibold">

@@ -92,7 +92,7 @@ function CurrencyRow({
   // only show add or remove buttons if not on selected list
   return (
     <div
-      className="flex items-center w-full hover:bg-dark-800 px-6"
+      className="flex items-center w-full hover:bg-dark-800/40 px-6"
       id={`token-item-${key}`}
       style={style}
       onClick={() => (isSelected ? null : onSelect())}
@@ -133,7 +133,7 @@ function BreakLineComponent({ style }: { style: CSSProperties }) {
     <div className="flex items-center w-full hover:bg-dark-800 px-6" style={style}>
       <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
         <div className="flex flex-row items-center gap-3 flex-grow">
-          <Image src="/tokenlist.svg" alt="Token List" width={32} height={32} />
+          <Image src="/images/tokenlist.svg" alt="Token List" width={32} height={32} />
           <div className="flex flex-col">
             <Typography variant="sm" className="ml-3">
               {i18n._(t`Expanded results from inactive Token Lists`)}

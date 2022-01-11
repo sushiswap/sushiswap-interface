@@ -37,7 +37,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
       <div className="grid items-center justify-between grid-cols-2">
         <div className="flex items-center">
           <div className="min-w-[48px] h-6">
-            <Image src="/logo.svg" alt="Sushi logo" width="24px" height="24px" />
+            <Image src="/images/logo.svg" alt="Sushi logo" width="24px" height="24px" />
           </div>
           <div className="flex space-x-1.5 hidden sm:block">
             <NavLink
@@ -136,7 +136,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
             </div>
           )}
 
-          <div className="flex items-center w-auto text-sm font-bold border rounded cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
+          <div className="shadow flex items-center w-auto text-sm font-bold border-2 rounded cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
             {account && chainId && userEthBalance && (
               <Link href="/balances" passHref={true}>
                 <a className="px-3 text-high-emphesis text-bold hidden md:block">

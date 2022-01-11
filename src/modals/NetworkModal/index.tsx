@@ -1,13 +1,16 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import ModalHeader from 'app/components/ModalHeader'
+import Typography from 'app/components/Typography'
 import { NETWORK_ICON, NETWORK_LABEL } from 'app/config/networks'
+import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { ApplicationModal } from 'app/state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
 import cookie from 'cookie-cutter'
 import Image from 'next/image'
-import React from 'react'
+import React, { FC } from 'react'
 
 export const SUPPORTED_NETWORKS: {
   [chainId in ChainId]?: {
@@ -194,7 +197,8 @@ export const SUPPORTED_NETWORKS: {
   },
 }
 
-export default function NetworkModal(): JSX.Element | null {
+const NetworkModal: FC = () => {
+  const { i18n } = useLingui()
   const { chainId, library, account } = useActiveWeb3React()
   const networkModalOpen = useModalOpen(ApplicationModal.NETWORK)
   const toggleNetworkModal = useNetworkModalToggle()
@@ -203,14 +207,9 @@ export default function NetworkModal(): JSX.Element | null {
 
   return (
     <HeadlessUiModal.Controlled isOpen={networkModalOpen} onDismiss={toggleNetworkModal}>
-      <div className="p-6">
-        <ModalHeader onClose={toggleNetworkModal} title="Select a Network" />
-        <div className="mb-6 text-lg text-primary">
-          You are currently browsing <span className="font-bold text-pink">SUSHI</span>
-          <br /> on the <span className="font-bold text-blue">{NETWORK_LABEL[chainId]}</span> network
-        </div>
-
-        <div className="grid grid-flow-row-dense grid-cols-1 gap-5 overflow-y-auto md:grid-cols-2">
+      <div className="flex flex-col gap-4">
+        <HeadlessUiModal.Header header={i18n._(t`Select a network`)} onClose={toggleNetworkModal} />
+        <div className="grid grid-flow-row-dense grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">
           {[
             ChainId.ETHEREUM,
             ChainId.MATIC,
@@ -230,18 +229,21 @@ export default function NetworkModal(): JSX.Element | null {
           ].map((key: ChainId, i: number) => {
             if (chainId === key) {
               return (
-                <button key={i} className="w-full col-span-1 p-px rounded bg-gradient-to-r from-blue to-pink">
-                  <div className="flex items-center w-full h-full p-3 space-x-3 rounded bg-dark-1000">
-                    <Image
-                      src={NETWORK_ICON[key]}
-                      alt={`Switch to ${NETWORK_LABEL[key]} Network`}
-                      className="rounded-md"
-                      width="32px"
-                      height="32px"
-                    />
-                    <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
-                  </div>
-                </button>
+                <div
+                  key={i}
+                  className="bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-purple cursor-default"
+                >
+                  <Image
+                    src={NETWORK_ICON[key]}
+                    alt="Switch Network"
+                    className="rounded-md"
+                    width="32px"
+                    height="32px"
+                  />
+                  <Typography weight={700} className="text-high-emphesis">
+                    {NETWORK_LABEL[key]}
+                  </Typography>
+                </div>
               )
             }
             return (
@@ -269,30 +271,21 @@ export default function NetworkModal(): JSX.Element | null {
                     // handle other "switch" errors
                   }
                 }}
-                className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
+                className={classNames(
+                  'bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-dark-700 hover:border-blue'
+                )}
               >
                 <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
-                <div className="font-bold text-primary">{NETWORK_LABEL[key]}</div>
+                <Typography weight={700} className="text-high-emphesis">
+                  {NETWORK_LABEL[key]}
+                </Typography>
               </button>
             )
           })}
-          {/* {['Clover', 'Telos', 'Optimism'].map((network, i) => (
-          <button
-            key={i}
-            className="flex items-center w-full col-span-1 p-3 space-x-3 rounded cursor-pointer bg-dark-800 hover:bg-dark-700"
-          >
-            <Image
-              src="/images/tokens/unknown.png"
-              alt="Switch Network"
-              className="rounded-md"
-              width="32px"
-              height="32px"
-            />
-            <div className="font-bold text-primary">{network} (Coming Soon)</div>
-          </button>
-        ))} */}
         </div>
       </div>
     </HeadlessUiModal.Controlled>
   )
 }
+
+export default NetworkModal

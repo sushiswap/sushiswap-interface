@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
 import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import ModalHeader from 'app/components/ModalHeader'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { filterTokens, useSortedTokensByQuery } from 'app/functions/filtering'
 import { isAddress } from 'app/functions/validate'
@@ -175,10 +175,10 @@ export function CurrencySearch({
   )
 
   return (
-    <div className="flex flex-col h-full">
-      <ModalHeader className="py-2" onClose={onDismiss} title="Select a token" />
+    <div className="flex flex-col gap-4 h-full">
+      <HeadlessUiModal.Header onClose={onDismiss} header={i18n._(t`Select a token`)} />
       {!currencyList && showSearch && (
-        <div className="mt-0 mb-3 sm:mb-8">
+        <div>
           <input
             type="text"
             id="token-search-input"
@@ -188,17 +188,15 @@ export function CurrencySearch({
             ref={inputRef as RefObject<HTMLInputElement>}
             onChange={handleInput}
             onKeyDown={handleEnter}
-            className="w-full bg-dark-1000/20 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
+            className="w-full bg-dark-900 border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
           />
         </div>
       )}
       {showCommonBases && (
-        <div className="mb-4">
-          <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
-        </div>
+        <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
       )}
 
-      <div className="lg:h-screen h-full border-t border-b border-dark-800 -mx-6">
+      <div className="lg:h-screen h-full border-t border-b border-dark-800 -mx-6 bg-[rgba(0,0,0,0.2)]">
         {searchToken && !searchTokenIsAdded ? (
           <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
         ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
@@ -227,7 +225,7 @@ export function CurrencySearch({
         )}
       </div>
       {allowManageTokenList && (
-        <div className="mt-5 flex justify-center">
+        <div className="flex justify-center">
           <Button id="list-token-manage-button" onClick={showManageView} color="blue" variant="empty">
             {i18n._(t`Manage Token Lists`)}
           </Button>

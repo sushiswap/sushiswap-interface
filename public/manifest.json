@@ -1,63 +1,59 @@
 {
   "name": "SushiSwap",
   "short_name": "SushiSwap",
-  "lang": "en",
-  "description": "Swap, yield, lend, borrow, leverage, limit, launch all on one community driven ecosystem",
-  "background_color": "#0D0415",
-  "theme_color": "#F338C3",
-  "dir": "ltr",
-  "display": "fullscreen",
+  "display": "standalone",
   "orientation": "portrait",
-  "scope": "/",
+  "theme_color": "#0993ec",
+  "background_color": "#0D0415",
   "start_url": "/",
-  "splash_pages": null,
-  "prefer_related_applications": false,
-  "iconPath": "logo.png",
   "icons": [
     {
-        "src": "/images/android/android-chrome-36x36.png",
-        "sizes": "36x36",
-        "type": "image/png"
+      "src": "/icons/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-        "src": "/images/android/android-chrome-48x48.png",
-        "sizes": "48x48",
-        "type": "image/png"
+      "src": "/icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-        "src": "/images/android/android-chrome-72x72.png",
-        "sizes": "72x72",
-        "type": "image/png"
+      "src": "/icons/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-        "src": "/images/android/android-chrome-96x96.png",
-        "sizes": "96x96",
-        "type": "image/png"
+      "src": "/icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-        "src": "/images/android/android-chrome-144x144.png",
-        "sizes": "144x144",
-        "type": "image/png"
+      "src": "/icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-        "src": "/images/android/android-chrome-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png"
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-        "src": "/images/android/android-chrome-256x256.png",
-        "sizes": "256x256",
-        "type": "image/png"
+      "src": "/icons/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-        "src": "/images/android/android-chrome-384x384.png",
-        "sizes": "384x384",
-        "type": "image/png"
-    },
-    {
-        "src": "/images/android/android-chrome-512x512.png",
-        "sizes": "512x512",
-        "type": "image/png"
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
