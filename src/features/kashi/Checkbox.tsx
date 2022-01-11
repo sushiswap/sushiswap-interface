@@ -3,7 +3,7 @@ import React from 'react'
 import Checkbox from '../../components/Checkbox'
 import QuestionHelper from '../../components/QuestionHelper'
 import Settings from '../../components/Settings'
-import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTollerence'
+import useSwapSlippageTolerance from '../../hooks/useSwapSlippageTolerance'
 
 export function ExchangeRateCheckBox({ pair, updateOracle, setUpdateOracle, desiredDirection }: any) {
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
@@ -16,7 +16,7 @@ export function ExchangeRateCheckBox({ pair, updateOracle, setUpdateOracle, desi
     show && (
       <div className="flex items-center mb-4">
         <Checkbox checked={displayUpdateOracle} disabled={pair.currentExchangeRate.isZero()} set={setUpdateOracle} />
-        <span className="ml-2 mr-1 text-primary">Update exchange rate from the oracle</span>
+        <span className="mr-1 ml-2 text-primary">Update exchange rate from the oracle</span>
         <QuestionHelper
           text={
             pair.currentExchangeRate.gt(0)
@@ -32,10 +32,10 @@ export function ExchangeRateCheckBox({ pair, updateOracle, setUpdateOracle, desi
 export function SwapCheckbox({ title, color, swap, setSwap, help, trade }: any) {
   const allowedSlippage = useSwapSlippageTolerance(trade)
   return (
-    <div className="flex items-center justify-between mb-4">
+    <div className="flex justify-between items-center mb-4">
       <div>
         <Checkbox color={color} checked={swap} set={setSwap} />
-        <span className="ml-2 mr-1 text-primary">{title}</span>
+        <span className="mr-1 ml-2 text-primary">{title}</span>
         <QuestionHelper text={help} />
       </div>
       {swap && <Settings placeholderSlippage={allowedSlippage} />}
