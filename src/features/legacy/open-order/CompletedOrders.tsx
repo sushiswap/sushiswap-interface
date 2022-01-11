@@ -1,14 +1,13 @@
-import React, { FC } from 'react'
-
-import Badge from '../../../components/Badge'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import Lottie from 'lottie-react'
-import { OrderStatus } from '@sushiswap/limit-order-sdk'
-import Pagination from './Pagination'
-import loadingCircle from '../../../animation/loading-circle.json'
 import { t } from '@lingui/macro'
-import useLimitOrders from '../../../hooks/useLimitOrders'
 import { useLingui } from '@lingui/react'
+import { OrderStatus } from '@sushiswap/limit-order-sdk'
+import loadingCircle from 'app/animation/loading-circle.json'
+import Badge from 'app/components/Badge'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import Pagination from 'app/components/Pagination'
+import useLimitOrders from 'app/hooks/useLimitOrders'
+import Lottie from 'lottie-react'
+import React, { FC } from 'react'
 
 const CompletedOrders: FC = () => {
   const { i18n } = useLingui()
@@ -97,6 +96,8 @@ const CompletedOrders: FC = () => {
               totalPages={completed.maxPages}
               currentPage={completed.page}
               pageNeighbours={2}
+              canNextPage={false}
+              canPreviousPage={false}
             />
           </>
         ) : (

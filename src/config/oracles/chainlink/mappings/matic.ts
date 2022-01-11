@@ -238,6 +238,45 @@ const MATIC_CHAINLINK_MAPPING = {
     decimals: 18,
     fromDecimals: 18,
     toDecimals: 18,
+  }, // RAI / USD
+  '0x7f45273fD7C644714825345670414Ea649b50b16': {
+    from: '0x00e5646f60AC6Fb446f621d146B6E1886f002905',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // COMP / USD
+  '0x2A8758b7257102461BC958279054e372C2b1bDE6': {
+    from: '0x8505b9d2254A7Ae468c0E9dd10Ccea3A837aef5c',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // UMA / USD
+  '0x33D9B1BAaDcF4b26ab6F8E83e9cb8a611B2B3956': {
+    from: '0x3066818837c5e6eD6601bd5a91B0762877A6B731',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // ALCX / USD
+  '0x5DB6e61B6159B20F068dc15A47dF2E5931b14f29': {
+    from: '0x95c300e7740D2A88a44124B424bFC1cB2F9c3b89',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
+  },
+  // BAL / USD
+  '0xD106B538F2A868c28Ca1Ec7E298C3325E0251d66': {
+    from: '0x9a71012B13CA4d3D0Cdc72A177DF3ef03b0E76A3',
+    to: '0x0000000000000000000000000000000000000001',
+    decimals: 8,
+    fromDecimals: 18,
+    toDecimals: 8,
   },
 }
 

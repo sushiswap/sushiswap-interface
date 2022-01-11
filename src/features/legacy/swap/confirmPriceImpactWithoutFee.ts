@@ -1,6 +1,6 @@
-import { ALLOWED_PRICE_IMPACT_HIGH, PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN } from '../../../constants'
-
 import { Percent } from '@sushiswap/core-sdk'
+
+import { ALLOWED_PRICE_IMPACT_HIGH, PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN } from '../../../constants'
 
 /**
  * Given the price impact, get user confirmation.

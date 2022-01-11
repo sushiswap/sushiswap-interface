@@ -1,24 +1,78 @@
+import Search from 'app/components/Search'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import ChartCard from 'app/features/analytics/ChartCard'
+import DashboardTabs from 'app/features/analytics/Dashboard/DashboardTabs'
+import PoolList from 'app/features/analytics/Farms/FarmList'
+import PairList from 'app/features/analytics/Pairs/PairList'
+import TokenList from 'app/features/analytics/Tokens/TokenList'
+import useFarmRewards from 'app/hooks/useFarmRewards'
+import useFuse from 'app/hooks/useFuse'
+import {
+  useDayData,
+  useFactory,
+  useNativePrice,
+  useOneDayBlock,
+  useOneWeekBlock,
+  useSushiPairs,
+  useTokens,
+  useTwoDayBlock,
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import DashboardChartCard from '../../../features/analytics/Dashboard/DashboardChartCard'
-import DashboardTabs from '../../../features/analytics/Dashboard/DashboardTabs'
-import PairList from '../../../features/analytics/Pairs/PairList'
-import PoolList from '../../../features/analytics/Farms/FarmList'
-import Search from '../../../components/Search'
-import TokenList from '../../../features/analytics/Tokens/TokenList'
-import useFarmRewards from '../../../hooks/useFarmRewards'
-import { useActiveWeb3React } from '../../../services/web3'
-import { useBlock, useNativePrice, useSushiPairs, useTokens } from '../../../services/graph'
-import useFuse from '../../../hooks/useFuse'
-import Background from '../../../features/analytics/Background'
+
+const chartTimespans = [
+  {
+    text: '1W',
+    length: 604800,
+  },
+  {
+    text: '1M',
+    length: 2629746,
+  },
+  {
+    text: '1Y',
+    length: 31556952,
+  },
+  {
+    text: 'ALL',
+    length: Infinity,
+  },
+]
 
 export default function Dashboard(): JSX.Element {
   const [type, setType] = useState<'pools' | 'pairs' | 'tokens'>('pools')
 
   const { chainId } = useActiveWeb3React()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block1w = useBlock({ daysAgo: 7, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
+  const block1w = useOneWeekBlock({ chainId, shouldFetch: !!chainId })
+
+  // For the charts
+  const exchange = useFactory({ chainId })
+  const exchange1d = useFactory({ chainId, variables: { block: block1d } })
+  const exchange2d = useFactory({ chainId, variables: { block: block2d } })
+
+  const dayData = useDayData({ chainId })
+
+  const chartData = useMemo(
+    () => ({
+      liquidity: exchange?.liquidityUSD,
+      liquidityChange: (exchange1d?.liquidityUSD / exchange2d?.liquidityUSD) * 100 - 100,
+      liquidityChart: dayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.liquidityUSD) })),
+
+      volume1d: exchange?.volumeUSD - exchange1d?.volumeUSD,
+      volume1dChange:
+        ((exchange?.volumeUSD - exchange1d?.volumeUSD) / (exchange1d?.volumeUSD - exchange2d?.volumeUSD)) * 100 - 100,
+      volumeChart: dayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
+    }),
+    [exchange, exchange1d, exchange2d, dayData]
+  )
 
   // For Top Pairs
   const pairs = useSushiPairs({ chainId })
@@ -35,7 +89,7 @@ export default function Dashboard(): JSX.Element {
           pair: {
             token0: pair.token0,
             token1: pair.token1,
-            address: pair.id,
+            id: pair.id,
           },
           liquidity: pair.reserveUSD,
           volume1d: pair.volumeUSD - pair1d?.volumeUSD,
@@ -55,7 +109,7 @@ export default function Dashboard(): JSX.Element {
           pair: {
             token0: farm.pair.token0,
             token1: farm.pair.token1,
-            address: farm.pair.id,
+            id: farm.pair.id,
             name: farm.pair.symbol ?? `${farm.pair.token0.symbol}-${farm.pair.token1.symbol}`,
             type: farm.pair.symbol ? 'Kashi Farm' : 'Sushi Farm',
           },
@@ -88,7 +142,7 @@ export default function Dashboard(): JSX.Element {
 
             return {
               token: {
-                address: token.id,
+                id: token.id,
                 symbol: token.symbol,
                 name: token.name,
               },
@@ -113,7 +167,14 @@ export default function Dashboard(): JSX.Element {
       case 'pools':
         return {
           options: {
-            keys: ['pair.address0', 'pair.address1', 'pair.symbol', 'pair.symbol'],
+            keys: [
+              'pair.token0.id',
+              'pair.token0.symbol',
+              'pair.token0.name',
+              'pair.token1.id',
+              'pair.token1.symbol',
+              'pair.token1.name',
+            ],
             threshold: 0.4,
           },
           data: farmsFormatted,
@@ -122,7 +183,14 @@ export default function Dashboard(): JSX.Element {
       case 'pairs':
         return {
           options: {
-            keys: ['pair.address0', 'pair.address1', 'pair.symbol0', 'pair.symbol1', 'pair.name0', 'pair.name1'],
+            keys: [
+              'pair.token0.id',
+              'pair.token0.symbol',
+              'pair.token0.name',
+              'pair.token1.id',
+              'pair.token1.symbol',
+              'pair.token1.name',
+            ],
             threshold: 0.4,
           },
           data: pairsFormatted,
@@ -131,7 +199,7 @@ export default function Dashboard(): JSX.Element {
       case 'tokens':
         return {
           options: {
-            keys: ['token.address', 'token.symbol', 'token.name'],
+            keys: ['token.id', 'token.symbol', 'token.name'],
             threshold: 0.4,
           },
           data: tokensFormatted,
@@ -151,7 +219,7 @@ export default function Dashboard(): JSX.Element {
   return (
     <AnalyticsContainer>
       <Background background="dashboard">
-        <div className="grid items-center justify-between grid-cols-2">
+        <div className="grid items-center justify-between grid-cols-1 gap-x-4 gap-y-4 md:grid-cols-2">
           <div>
             <div className="text-3xl font-bold text-high-emphesis">Sushi Analytics</div>
             <div className="">
@@ -167,15 +235,31 @@ export default function Dashboard(): JSX.Element {
           />
         </div>
       </Background>
-      <div className="py-6 space-y-4 px-14">
+      <div className="px-4 py-6 space-y-4 lg:px-14">
         <div className="text-2xl font-bold text-high-emphesis">Overview</div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <DashboardChartCard type="liquidity" />
-          <DashboardChartCard type="volume" />
+          <ChartCard
+            header="TVL"
+            subheader="SUSHI AMM"
+            figure={chartData.liquidity}
+            change={chartData.liquidityChange}
+            chart={chartData.liquidityChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
+          <ChartCard
+            header="Volume"
+            subheader="SUSHI AMM"
+            figure={chartData.volume1d}
+            change={chartData.volume1dChange}
+            chart={chartData.volumeChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
         </div>
       </div>
       <DashboardTabs currentType={type} setType={setType} />
-      <div className="pt-4 lg:px-14">
+      <div className="px-4 pt-4 lg:px-14">
         {type === 'pools' && <PoolList pools={searched} />}
         {type === 'pairs' && <PairList pairs={searched} type={'all'} />}
         {type === 'tokens' && <TokenList tokens={searched} />}

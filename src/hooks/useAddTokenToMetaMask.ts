@@ -1,8 +1,7 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
+import { getCurrencyLogoUrls } from 'app/components/CurrencyLogo/CurrencyLogo'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useState } from 'react'
-
-import { getCurrencyLogoUrls } from './../components/CurrencyLogo'
-import { useActiveWeb3React } from '../services/web3'
 
 export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefined): {
   addToken: () => void
@@ -20,7 +19,7 @@ export default function useAddTokenToMetaMask(currencyToAdd: Currency | undefine
         .request({
           method: 'wallet_watchAsset',
           params: {
-            //@ts-ignore // need this for incorrect ethers provider type
+            // @ts-ignore // need this for incorrect ethers provider type
             type: 'ERC20',
             options: {
               address: token.address,

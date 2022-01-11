@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "paths": {
       "app/animation/*": ["./animation/*"],
-      "app/components": ["./components"],
+      "app/components": ["./components/index.ts"],
       "app/components/*": ["./components/*"],
       "app/config": ["./config"],
       "app/config/*": ["./config/*"],
@@ -38,7 +38,7 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": false, // in local dev, this should be set to TRUE
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "esModuleInterop": true,
@@ -48,8 +48,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "downlevelIteration": true,
-    "incremental": true
+    "incremental": true,
+//    "strictNullChecks": true
   },
-  "include": ["next-env.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }

@@ -1,25 +1,30 @@
-import { Direction, TransactionReview } from '../../entities/TransactionReview'
-import { KashiApproveButton, TokenApproveButton } from './Button'
+import { BigNumber } from '@ethersproject/bignumber'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { WNATIVE } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import KashiCooker from 'app/entities/KashiCooker'
+import { Direction, TransactionReview } from 'app/entities/TransactionReview'
+import { Warnings } from 'app/entities/Warnings'
+import { formatNumber } from 'app/functions/format'
+import { e10, ZERO } from 'app/functions/math'
+import { useBentoBoxContract } from 'app/hooks'
+import { useCurrency } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useState } from 'react'
-import { ZERO, e10 } from '../../functions/math'
 
-import Button from '../../components/Button'
-import KashiCooker from '../../entities/KashiCooker'
+import { KashiApproveButton, TokenApproveButton } from './Button'
 import SmartNumberInput from './SmartNumberInput'
 import TransactionReviewList from './TransactionReview'
-import { WNATIVE } from '@sushiswap/core-sdk'
-import { Warnings } from '../../entities/Warnings'
 import WarningsList from './WarningsList'
-import { formatNumber } from '../../functions/format'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../services/web3'
-import { useCurrency } from '../../hooks/Tokens'
-import { useKashiInfo } from './context'
-import { useLingui } from '@lingui/react'
 
 export default function Deposit({ pair }: any): JSX.Element {
-  const { chainId } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+
   const assetToken = useCurrency(pair.asset.address) || undefined
+
+  const bentoBoxContract = useBentoBoxContract()
 
   const { i18n } = useLingui()
 
@@ -27,13 +32,24 @@ export default function Deposit({ pair }: any): JSX.Element {
   const [useBento, setUseBento] = useState<boolean>(pair.asset.bentoBalance.gt(0))
   const [value, setValue] = useState('')
 
-  const info = useKashiInfo()
-
   // Calculated
-  const assetNative = WNATIVE[chainId || 1].address === pair.asset.address
-  const balance = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
+  const assetNative = WNATIVE[chainId].address === pair.asset.address
 
-  const max = useBento ? pair.asset.bentoBalance : assetNative ? info?.ethBalance : pair.asset.balance
+  const ethBalance = useETHBalances(assetNative ? [account] : [])
+
+  const balance = useBento
+    ? pair.asset.bentoBalance
+    : assetNative
+    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    : pair.asset.balance
+
+  console.log({ balance })
+
+  const max = useBento
+    ? pair.asset.bentoBalance
+    : assetNative
+    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    : pair.asset.balance
 
   const warnings = new Warnings()
 
@@ -79,7 +95,15 @@ export default function Deposit({ pair }: any): JSX.Element {
     if (pair.currentExchangeRate.isZero()) {
       cooker.updateExchangeRate(false, ZERO, ZERO)
     }
-    cooker.addAsset(value.toBigNumber(pair.asset.tokenInfo.decimals), useBento)
+    const amount = value.toBigNumber(pair.asset.tokenInfo.decimals)
+
+    const deadBalance = await bentoBoxContract.balanceOf(
+      pair.asset.address,
+      '0x000000000000000000000000000000000000dead'
+    )
+
+    cooker.addAsset(amount, useBento, deadBalance.isZero())
+
     return `${i18n._(t`Deposit`)} ${pair.asset.tokenInfo.symbol}`
   }
 

@@ -1,20 +1,14 @@
-import { AlertTriangle, ArrowDown } from 'react-feather'
-import { Currency, Percent, TradeType, Trade as V2Trade } from '@sushiswap/core-sdk'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency, Percent, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { isAddress, shortenAddress, warningSeverity } from 'app/functions'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import React, { useState } from 'react'
-import { isAddress, shortenAddress } from '../../../functions'
+import { AlertTriangle, ArrowDown } from 'react-feather'
 
 import { AdvancedSwapDetails } from './AdvancedSwapDetails'
-import Card from '../../../components/Card'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { Field } from '../../../state/swap/actions'
-import { RowBetween } from '../../../components/Row'
 import TradePrice from './TradePrice'
-import Typography from '../../../components/Typography'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../../services/web3'
-import { useLingui } from '@lingui/react'
-import { useUSDCValue } from '../../../hooks/useUSDCPrice'
-import { warningSeverity } from '../../../functions'
 
 export default function SwapModalHeader({
   trade,
@@ -78,7 +72,7 @@ export default function SwapModalHeader({
       <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} />
 
       {showAcceptChanges ? (
-        <div className="flex items-center justify-between p-2 px-3 border border-gray-800 rounded">
+        <div className="flex items-center justify-between p-2 px-3 border border-dark-800 rounded">
           <div className="flex items-center justify-start text-sm font-bold uppercase text-high-emphesis">
             <div className="mr-3 min-w-[24px]">
               <AlertTriangle size={24} />

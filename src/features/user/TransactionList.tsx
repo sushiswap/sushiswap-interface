@@ -1,11 +1,11 @@
-import { ArrowUpRight, CheckCircle } from 'react-feather'
-import Dots from '../../components/Dots'
-import Image from '../../components/Image'
-import React from 'react'
-import { getExplorerLink } from '../../functions/explorer'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../services/web3'
 import { useLingui } from '@lingui/react'
+import Dots from 'app/components/Dots'
+import Image from 'app/components/Image'
+import { getExplorerLink } from 'app/functions/explorer'
+import { useActiveWeb3React } from 'app/services/web3'
+import React from 'react'
+import { ArrowUpRight, CheckCircle } from 'react-feather'
 
 export default function TransactionList({ transactions }) {
   const { i18n } = useLingui()
@@ -36,7 +36,7 @@ export default function TransactionList({ transactions }) {
       ))}
     </div>
   ) : (
-    <div className="px-4 text-center text-gray-500 border border-gray-800 rounded py-14">
+    <div className="px-4 text-center text-gray-500 border border-dark-800 rounded py-14">
       <Dots>{i18n._(t`Loading`)}</Dots>
     </div>
   )

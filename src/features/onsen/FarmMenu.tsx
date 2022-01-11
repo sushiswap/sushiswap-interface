@@ -1,8 +1,8 @@
 import { ChainId } from '@sushiswap/core-sdk'
-import NavLink from '../../components/NavLink'
+import NavLink from 'app/components/NavLink'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useWalletModalToggle } from 'app/state/application/hooks'
 import React from 'react'
-import { useActiveWeb3React } from '../../services/web3'
-import { useWalletModalToggle } from '../../state/application/hooks'
 
 const Menu = ({ positionsLength }) => {
   const { account, chainId } = useActiveWeb3React()
@@ -40,7 +40,7 @@ const Menu = ({ positionsLength }) => {
         </a>
       </NavLink>
 
-      {[ChainId.ETHEREUM, ChainId.ARBITRUM].includes(chainId) && (
+      {chainId === ChainId.ETHEREUM && (
         <>
           <NavLink
             exact
@@ -73,6 +73,20 @@ const Menu = ({ positionsLength }) => {
             2x Reward Farms
           </a>
         </NavLink>
+      )}
+
+      {[ChainId.CELO].includes(chainId) && (
+        <>
+          <NavLink
+            exact
+            href={`/farm?filter=old`}
+            activeClassName="font-bold bg-transparent border rounded text-high-emphesis border-transparent border-gradient-r-blue-pink-dark-900"
+          >
+            <a className="flex items-center justify-between px-4 py-6 text-base font-bold border border-transparent rounded cursor-pointer bg-dark-900 hover:bg-dark-800">
+              Old Farms
+            </a>
+          </NavLink>
+        </>
       )}
     </div>
   )

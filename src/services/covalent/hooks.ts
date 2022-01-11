@@ -1,3 +1,4 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import {
   getBlock,
   getBlockHeights,
@@ -15,9 +16,8 @@ import {
   getTokenMetadata,
   getTransaction,
   getTransfers,
-} from './fetchers'
+} from 'app/services/covalent/fetchers'
 import useSWR from 'swr'
-import { ChainId } from '@sushiswap/core-sdk'
 
 // CLASS A
 export function useTokenBalances({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {

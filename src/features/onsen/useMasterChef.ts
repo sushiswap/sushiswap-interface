@@ -1,9 +1,10 @@
-import { useSushiContract } from '../../hooks/useContract'
-import { useActiveWeb3React } from '../../services/web3'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Chef } from './enum'
 import { Zero } from '@ethersproject/constants'
+import { useSushiContract } from 'app/hooks/useContract'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback } from 'react'
+
+import { Chef } from './enum'
 import { useChefContract } from './hooks'
 
 export default function useMasterChef(chef: Chef) {
@@ -42,7 +43,7 @@ export default function useMasterChef(chef: Chef) {
 
         if (chef === Chef.MASTERCHEF) {
           tx = await contract?.withdraw(pid, amount)
-        } else if (chef === Chef.MINICHEF) {
+        } else if (chef === Chef.MINICHEF || chef === Chef.OLD_FARMS) {
           tx = await contract?.withdrawAndHarvest(pid, amount, account)
         } else {
           tx = await contract?.withdraw(pid, amount, account)
@@ -81,7 +82,7 @@ export default function useMasterChef(chef: Chef) {
           } else {
             tx = await contract?.harvest(pid, account)
           }
-        } else if (chef === Chef.MINICHEF) {
+        } else if (chef === Chef.MINICHEF || chef === Chef.OLD_FARMS) {
           tx = await contract?.harvest(pid, account)
         }
 

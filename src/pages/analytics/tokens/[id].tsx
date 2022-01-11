@@ -1,27 +1,54 @@
+import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import ChartCard from 'app/features/analytics/ChartCard'
+import ColoredNumber from 'app/features/analytics/ColoredNumber'
+import InfoCard from 'app/features/analytics/InfoCard'
+import PairList from 'app/features/analytics/Pairs/PairList'
+import { LegacyTransactions } from 'app/features/transactions/Transactions'
+import { getExplorerLink } from 'app/functions/explorer'
+import { formatNumber, shortenAddress } from 'app/functions/format'
+import { useCurrency } from 'app/hooks/Tokens'
+import { useTokenContract } from 'app/hooks/useContract'
+import useCopyClipboard from 'app/hooks/useCopyClipboard'
+import {
+  useNativePrice,
+  useOneDayBlock,
+  useOneWeekBlock,
+  useTokenDayData,
+  useTokenPairs,
+  useTokens,
+  useTwoDayBlock,
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useMemo, useState } from 'react'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import ColoredNumber from '../../../features/analytics/ColoredNumber'
-import PairList from '../../../features/analytics/Pairs/PairList'
-import InfoCard from '../../../features/analytics/InfoCard'
-import TokenChartCard from '../../../features/analytics/Tokens/Token/TokenChartCard'
-import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
-import { formatNumber, shortenAddress } from '../../../functions'
-import { useCurrency } from '../../../hooks/Tokens'
-import { useBlock, useNativePrice, useTokenPairs, useTokens, useTransactions } from '../../../services/graph'
 import { ExternalLink as LinkIcon } from 'react-feather'
-import Background from '../../../features/analytics/Background'
-import Link from 'next/link'
-import { CheckIcon, DuplicateIcon } from '@heroicons/react/outline'
-import useCopyClipboard from '../../../hooks/useCopyClipboard'
-import { useActiveWeb3React } from '../../../services/web3'
-import { useTokenContract } from '../../../hooks/useContract'
-import { getExplorerLink } from '../../../functions/explorer'
+
+const chartTimespans = [
+  {
+    text: '1W',
+    length: 604800,
+  },
+  {
+    text: '1M',
+    length: 2629746,
+  },
+  {
+    text: '1Y',
+    length: 31556952,
+  },
+  {
+    text: 'ALL',
+    length: Infinity,
+  },
+]
 
 export default function Token() {
   const router = useRouter()
-  const id = (router.query.id as string).toLowerCase()
+  const id = (router.query.id as string)?.toLowerCase()
 
   const { chainId } = useActiveWeb3React()
 
@@ -37,36 +64,37 @@ export default function Token() {
     fetch()
   }, [tokenContract])
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-
-  const block2d = useBlock({ daysAgo: 2, chainId })
-
-  const block1w = useBlock({ daysAgo: 7, chainId })
+  const block1d = useOneDayBlock({ chainId })
+  const block2d = useTwoDayBlock({ chainId })
+  const block1w = useOneWeekBlock({ chainId })
 
   // General data (volume, liquidity)
   const nativePrice = useNativePrice({ chainId })
-
   const nativePrice1d = useNativePrice({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
 
-  const token = useTokens({ chainId, variables: { where: { id } } })?.[0]
-
-  const token1d = useTokens({ chainId, variables: { block: block1d, where: { id } }, shouldFetch: !!block1d })?.[0]
-
-  const token2d = useTokens({ chainId, variables: { block: block2d, where: { id } }, shouldFetch: !!block2d })?.[0]
+  const token = useTokens({ chainId, variables: { where: { id } }, shouldFetch: !!id })?.[0]
+  const token1d = useTokens({
+    chainId,
+    variables: { block: block1d, where: { id } },
+    shouldFetch: !!id && !!block1d,
+  })?.[0]
+  const token2d = useTokens({
+    chainId,
+    variables: { block: block2d, where: { id } },
+    shouldFetch: !!id && !!block2d,
+  })?.[0]
 
   // Token Pairs
   const tokenPairs = useTokenPairs({ chainId, variables: { id } })
-
   const tokenPairs1d = useTokenPairs({
     chainId,
     variables: { id, block: block1d },
-    shouldFetch: !!block1d,
+    shouldFetch: !!id && !!block1d,
   })
-
   const tokenPairs1w = useTokenPairs({
     chainId,
     variables: { id, block: block1w },
-    shouldFetch: !!block1w,
+    shouldFetch: !!id && !!block1w,
   })
 
   const tokenPairsFormatted = useMemo(
@@ -79,7 +107,7 @@ export default function Token() {
           pair: {
             token0: pair.token0,
             token1: pair.token1,
-            address: pair.id,
+            id: pair.id,
           },
           liquidity: pair.reserveUSD,
           volume1d: pair.volumeUSD - pair1d.volumeUSD,
@@ -89,74 +117,40 @@ export default function Token() {
     [tokenPairs, tokenPairs1d, tokenPairs1w]
   )
 
-  // For Transactions
-  const transactions = useTransactions({
-    chainId,
-    variables: {
-      where: {
-        pair_in: tokenPairs?.map((pair) => pair.id),
-      },
-    },
-    shouldFetch: !!tokenPairs,
-  })
-
-  const transactionsFormatted = useMemo(
-    () =>
-      transactions?.map((tx) => {
-        const base = {
-          value: tx.amountUSD,
-          address: tx.to,
-          time: new Date(Number(tx.timestamp) * 1000),
-        }
-
-        if (tx.amount0In === '0') {
-          return {
-            symbols: {
-              incoming: tx.pair.token1.symbol,
-              outgoing: tx.pair.token0.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-            ...base,
-          }
-        } else {
-          return {
-            symbols: {
-              incoming: tx.pair.token0.symbol,
-              outgoing: tx.pair.token1.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-            ...base,
-          }
-        }
-      }),
-    [transactions]
-  )
-
   // For the logo
   const currency = useCurrency(token?.id)
 
   // For the Info Cards
-  const price = useMemo(() => token?.derivedETH * nativePrice, [token, nativePrice])
-  const priceChange = useMemo(
-    () => ((token?.derivedETH * nativePrice) / (token1d?.derivedETH * nativePrice1d)) * 100 - 100,
-    [token, token1d, nativePrice, nativePrice1d]
-  )
+  const price = token?.derivedETH * nativePrice
+  const priceChange = ((token?.derivedETH * nativePrice) / (token1d?.derivedETH * nativePrice1d)) * 100 - 100
 
-  const liquidityUSD = useMemo(() => token?.liquidity * token?.derivedETH * nativePrice, [token, nativePrice])
-  const liquidityUSDChange = useMemo(
-    () =>
-      ((token?.liquidity * token?.derivedETH * nativePrice) /
-        (token1d?.liquidity * token1d?.derivedETH * nativePrice1d)) *
-        100 -
-      100,
-    [token, token1d, nativePrice, nativePrice1d]
-  )
+  const liquidityUSD = token?.liquidity * token?.derivedETH * nativePrice
+  const liquidityUSDChange =
+    ((token?.liquidity * price) / (token1d?.liquidity * token1d?.derivedETH * nativePrice1d)) * 100 - 100
 
-  const volumeUSD1d = useMemo(() => token?.volumeUSD - token1d?.volumeUSD, [token, token1d])
-  const volumeUSD2d = useMemo(() => token1d?.volumeUSD - token2d?.volumeUSD, [token1d, token2d])
-  const volumeUSD1dChange = useMemo(() => (volumeUSD1d / volumeUSD2d) * 100 - 100, [volumeUSD1d, volumeUSD2d])
+  const volumeUSD1d = token?.volumeUSD - token1d?.volumeUSD
+  const volumeUSD2d = token1d?.volumeUSD - token2d?.volumeUSD
+  const volumeUSD1dChange = (volumeUSD1d / volumeUSD2d) * 100 - 100
+
+  // The Chart
+  const tokenDayData = useTokenDayData({
+    chainId,
+    variables: { where: { token: id.toLowerCase() } },
+    shouldFetch: !!id && !!chainId,
+  })
+
+  const chartData = useMemo(
+    () => ({
+      liquidityChart: tokenDayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.liquidityUSD) })),
+
+      volumeChart: tokenDayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
+    }),
+    [tokenDayData]
+  )
 
   return (
     <AnalyticsContainer>
@@ -164,7 +158,7 @@ export default function Token() {
         <div className="absolute w-full h-full bg-gradient-to-r from-blue to-pink opacity-5" />
         <div className="absolute flex items-center w-full p-2 lg:pl-14">
           <div className="text-xs font-medium text-secondary">
-            <Link href="/analytics/dashboard">Analytics</Link>&nbsp;
+            <Link href="/analytics">Analytics</Link>&nbsp;
             {'>'}&nbsp;
             <Link href="/analytics/tokens">Tokens</Link>&nbsp;
             {'> '}&nbsp;
@@ -212,11 +206,27 @@ export default function Token() {
           </div>
         </div>
       </Background>
-      <div className="pt-4 space-y-4 lg:px-14">
+      <div className="px-4 pt-4 space-y-4 lg:px-14">
         <div className="text-3xl font-bold text-high-emphesis">Overview</div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <TokenChartCard type="liquidity" name={token?.symbol} token={id} />
-          <TokenChartCard type="volume" name={token?.symbol} token={id} />
+          <ChartCard
+            header="Liquidity"
+            subheader={token?.symbol}
+            figure={liquidityUSD}
+            change={liquidityUSDChange}
+            chart={chartData.liquidityChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
+          <ChartCard
+            header="Volume"
+            subheader={token?.symbol}
+            figure={volumeUSD1d}
+            change={volumeUSD1dChange}
+            chart={chartData.volumeChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
         </div>
         <div className="flex flex-row justify-between flex-grow space-x-4 overflow-x-auto">
           <InfoCard text="Liquidity (24H)" number={liquidityUSD} percent={liquidityUSDChange} />
@@ -260,12 +270,7 @@ export default function Token() {
           <div className="text-2xl font-bold text-high-emphesis">Top Pairs</div>
           <PairList pairs={tokenPairsFormatted} type="all" />
         </div>
-        <div>
-          <div className="text-2xl font-bold text-high-emphesis">Transactions</div>
-          <div className="px-4">
-            <TransactionList transactions={transactionsFormatted} />
-          </div>
-        </div>
+        <LegacyTransactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
       </div>
     </AnalyticsContainer>
   )

@@ -1,14 +1,14 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { useWeb3React } from '@web3-react/core'
+import { network } from 'app/config/wallets'
+import { NetworkContextName } from 'app/constants'
+import useEagerConnect from 'app/hooks/useEagerConnect'
+import useInactiveListener from 'app/hooks/useInactiveListener'
+import dynamic from 'next/dynamic'
 import React, { useEffect, useState } from 'react'
 
 import Loader from '../Loader'
-import { NetworkContextName } from '../../constants'
-import dynamic from 'next/dynamic'
-import { network } from '../../config/wallets'
-import { t } from '@lingui/macro'
-import useEagerConnect from '../../hooks/useEagerConnect'
-import useInactiveListener from '../../hooks/useInactiveListener'
-import { useLingui } from '@lingui/react'
-import { useWeb3React } from '@web3-react/core'
 
 const GnosisManagerNoSSR = dynamic(() => import('./GnosisManager'), {
   ssr: false,

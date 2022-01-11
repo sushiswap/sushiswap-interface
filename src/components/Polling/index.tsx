@@ -1,9 +1,9 @@
+import { getExplorerLink } from 'app/functions/explorer'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBlockNumber } from 'app/state/application/hooks'
 import React, { useEffect, useState } from 'react'
 
-import ExternalLink from './../ExternalLink'
-import { getExplorerLink } from '../../functions/explorer'
-import { useActiveWeb3React } from '../../services/web3'
-import { useBlockNumber } from '../../state/application/hooks'
+import ExternalLink from '../ExternalLink'
 
 export default function Polling() {
   const { chainId } = useActiveWeb3React()

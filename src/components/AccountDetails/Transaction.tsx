@@ -1,11 +1,11 @@
 import { CheckCircleIcon, ExclamationIcon, XCircleIcon } from '@heroicons/react/outline'
-import ExternalLink from '../ExternalLink'
-import Loader from '../Loader'
-import Typography from '../Typography'
-import { classNames, getExplorerLink } from '../../functions'
+import ExternalLink from 'app/components/ExternalLink'
+import Loader from 'app/components/Loader'
+import Typography from 'app/components/Typography'
+import { classNames, getExplorerLink } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAllTransactions } from 'app/state/transactions/hooks'
 import React, { FC } from 'react'
-import { useActiveWeb3React } from '../../services/web3'
-import { useAllTransactions } from '../../state/transactions/hooks'
 
 const Transaction: FC<{ hash: string }> = ({ hash }) => {
   const { chainId } = useActiveWeb3React()

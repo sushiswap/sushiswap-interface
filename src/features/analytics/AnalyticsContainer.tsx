@@ -1,16 +1,21 @@
-import Container from '../../components/Container'
 import Head from 'next/head'
+
+import Container from '../../components/Container'
 import Sidebar from '../../components/Sidebar'
 
 export default function AnalyticsContainer({ children }): JSX.Element {
   return (
     <>
       <Head>
-        <title>SushiSwap Liquidity Pair (SLP) Analytics | Sushi</title>
+        <title>Sushi Analytics | Sushi</title>
         <meta name="description" content="SushiSwap Liquidity Pair (SLP) Analytics by Sushi" />
       </Head>
 
-      <Container id="analytics" maxWidth="full" className="grid h-full grid-flow-col grid-cols-10 px-4 mx-auto gap-9">
+      <Container
+        id="analytics"
+        maxWidth="full"
+        className="grid h-full grid-flow-col grid-cols-10 mx-auto lg:px-4 gap-9"
+      >
         <div className="sticky top-0 hidden lg:block md:col-span-2 3xl:col-start-1 3xl:col-span-2">
           <Sidebar
             items={[
@@ -20,7 +25,7 @@ export default function AnalyticsContainer({ children }): JSX.Element {
               },
               {
                 text: 'xSushi',
-                href: '/analytics/xSushi',
+                href: '/analytics/xsushi',
               },
               {
                 text: 'Farms',

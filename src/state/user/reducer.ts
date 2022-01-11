@@ -1,31 +1,26 @@
-import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../constants'
+import { createReducer } from '@reduxjs/toolkit'
+import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from 'app/constants'
+import { updateVersion } from 'app/state/global/actions'
+
 import {
-  SerializedPair,
-  SerializedToken,
   addSerializedPair,
   addSerializedToken,
   removeSerializedPair,
   removeSerializedToken,
+  SerializedPair,
+  SerializedToken,
   toggleURLWarning,
-  updateMatchesDarkMode,
-  updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
 } from './actions'
 
-import { createReducer } from '@reduxjs/toolkit'
-import { updateVersion } from '../global/actions'
-
 const currentTimestamp = () => new Date().getTime()
 
 export interface UserState {
   // the timestamp of the last updateVersion action
   lastUpdateVersionTimestamp?: number
-
-  userDarkMode: boolean | null // the user's choice for dark mode or light mode
-  matchesDarkMode: boolean // whether the dark mode media query matches
 
   userExpertMode: boolean
 
@@ -59,8 +54,6 @@ function pairKey(token0Address: string, token1Address: string) {
 }
 
 export const initialState: UserState = {
-  userDarkMode: null,
-  matchesDarkMode: false,
   userExpertMode: false,
   userSingleHopOnly: false,
   userSlippageTolerance: INITIAL_ALLOWED_SLIPPAGE,
@@ -88,14 +81,7 @@ export default createReducer(initialState, (builder) =>
 
       state.lastUpdateVersionTimestamp = currentTimestamp()
     })
-    .addCase(updateUserDarkMode, (state, action) => {
-      state.userDarkMode = action.payload.userDarkMode
-      state.timestamp = currentTimestamp()
-    })
-    .addCase(updateMatchesDarkMode, (state, action) => {
-      state.matchesDarkMode = action.payload.matchesDarkMode
-      state.timestamp = currentTimestamp()
-    })
+
     .addCase(updateUserExpertMode, (state, action) => {
       state.userExpertMode = action.payload.userExpertMode
       state.timestamp = currentTimestamp()

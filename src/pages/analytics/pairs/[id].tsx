@@ -1,23 +1,42 @@
-import React, { useMemo } from 'react'
-import AnalyticsContainer from '../../../features/analytics/AnalyticsContainer'
-import { useRouter } from 'next/router'
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
-import { useBlock, useNativePrice, useSushiPairs, useTransactions } from '../../../services/graph'
-import { useCurrency } from '../../../hooks/Tokens'
-import { times } from 'lodash'
-import CurrencyLogo from '../../../components/CurrencyLogo'
-import { formatNumber, shortenAddress } from '../../../functions'
-import PairChartCard from '../../../features/analytics/Pairs/Pair/PairChartCard'
-import InfoCard from '../../../features/analytics/InfoCard'
-import { ExternalLink as LinkIcon } from 'react-feather'
-import Link from 'next/link'
-import TransactionList from '../../../features/analytics/Tokens/Token/TransactionList'
-import Background from '../../../features/analytics/Background'
-import useCopyClipboard from '../../../hooks/useCopyClipboard'
 import { DuplicateIcon } from '@heroicons/react/outline'
 import { CheckIcon } from '@heroicons/react/solid'
-import { getExplorerLink } from '../../../functions/explorer'
-import { useActiveWeb3React } from '../../../services/web3'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import DoubleCurrencyLogo from 'app/components/DoubleLogo'
+import AnalyticsContainer from 'app/features/analytics/AnalyticsContainer'
+import Background from 'app/features/analytics/Background'
+import ChartCard from 'app/features/analytics/ChartCard'
+import InfoCard from 'app/features/analytics/InfoCard'
+import { LegacyTransactions } from 'app/features/transactions/Transactions'
+import { getExplorerLink } from 'app/functions/explorer'
+import { formatNumber, shortenAddress } from 'app/functions/format'
+import { useCurrency } from 'app/hooks/Tokens'
+import useCopyClipboard from 'app/hooks/useCopyClipboard'
+import { useNativePrice, useOneDayBlock, usePairDayData, useSushiPairs, useTwoDayBlock } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
+import { times } from 'lodash'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useMemo } from 'react'
+import { ExternalLink as LinkIcon } from 'react-feather'
+
+const chartTimespans = [
+  {
+    text: '1W',
+    length: 604800,
+  },
+  {
+    text: '1M',
+    length: 2629746,
+  },
+  {
+    text: '1Y',
+    length: 31556952,
+  },
+  {
+    text: 'ALL',
+    length: Infinity,
+  },
+]
 
 export default function Pair() {
   const router = useRouter()
@@ -27,49 +46,45 @@ export default function Pair() {
 
   const [isCopied, setCopied] = useCopyClipboard()
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
-  const block2d = useBlock({ daysAgo: 2, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
+  const block2d = useTwoDayBlock({ chainId, shouldFetch: !!chainId })
 
-  const pair = useSushiPairs({ chainId, variables: { where: { id } } })?.[0]
-  const pair1d = useSushiPairs({ chainId, variables: { block: block1d, where: { id } }, shouldFetch: !!block1d })?.[0]
-  const pair2d = useSushiPairs({ chainId, variables: { block: block2d, where: { id } }, shouldFetch: !!block2d })?.[0]
+  const pair = useSushiPairs({ chainId, variables: { where: { id } }, shouldFetch: !!chainId })?.[0]
+  const pair1d = useSushiPairs({
+    chainId,
+    variables: { block: block1d, where: { id } },
+    shouldFetch: !!chainId && !!block1d,
+  })?.[0]
+  const pair2d = useSushiPairs({
+    chainId,
+    variables: { block: block2d, where: { id } },
+    shouldFetch: !!chainId && !!block2d,
+  })?.[0]
 
-  const nativePrice = useNativePrice({ chainId })
+  const pairDayData = usePairDayData({
+    chainId,
+    variables: { where: { pair: id?.toLowerCase() } },
+    shouldFetch: !!chainId && !!id,
+  })
 
-  // For Transactions
-  const transactions = useTransactions({ chainId, variables: { where: { id } } })
-  const transactionsFormatted = useMemo(
-    () =>
-      transactions?.map((tx) => {
-        const base = {
-          value: tx.amountUSD,
-          address: tx.to,
-          time: new Date(Number(tx.timestamp) * 1000),
-        }
+  const nativePrice = useNativePrice({ chainId, shouldFetch: !!chainId })
 
-        if (tx.amount0In === '0') {
-          return {
-            symbols: {
-              incoming: tx.pair.token1.symbol,
-              outgoing: tx.pair.token0.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount1In)} ${tx.pair.token1.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount0Out)} ${tx.pair.token0.symbol}`,
-            ...base,
-          }
-        } else {
-          return {
-            symbols: {
-              incoming: tx.pair.token0.symbol,
-              outgoing: tx.pair.token1.symbol,
-            },
-            incomingAmt: `${formatNumber(tx.amount0In)} ${tx.pair.token0.symbol}`,
-            outgoingAmt: `${formatNumber(tx.amount1Out)} ${tx.pair.token1.symbol}`,
-            ...base,
-          }
-        }
-      }),
-    [transactions]
+  // For the charts
+  const chartData = useMemo(
+    () => ({
+      liquidity: pair?.reserveUSD,
+      liquidityChange: (pair?.reserveUSD / pair1d?.reserveUSD) * 100 - 100,
+      liquidityChart: pairDayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.reserveUSD) })),
+
+      volume1d: pair?.volumeUSD - pair1d?.volumeUSD,
+      volume1dChange: ((pair?.volumeUSD - pair1d?.volumeUSD) / (pair1d?.volumeUSD - pair2d?.volumeUSD)) * 100 - 100,
+      volumeChart: pairDayData
+        ?.sort((a, b) => a.date - b.date)
+        .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
+    }),
+    [pair, pair1d, pair2d, pairDayData]
   )
 
   // For the logos
@@ -77,23 +92,23 @@ export default function Pair() {
   const currency1 = useCurrency(pair?.token1?.id)
 
   // For the Info Cards
-  const liquidityUSDChange = useMemo(() => (pair?.reserveUSD / pair1d?.reserveUSD) * 100 - 100, [pair, pair1d])
+  const liquidityUSDChange = pair?.reserveUSD / pair1d?.reserveUSD
 
-  const volumeUSD1d = useMemo(() => pair?.volumeUSD - pair1d?.volumeUSD, [pair, pair1d])
-  const volumeUSD2d = useMemo(() => pair1d?.volumeUSD - pair2d?.volumeUSD, [pair1d, pair2d])
-  const volumeUSD1dChange = useMemo(() => (volumeUSD1d / volumeUSD2d) * 100 - 100, [volumeUSD1d, volumeUSD2d])
+  const volumeUSD1d = pair?.volumeUSD - pair1d?.volumeUSD
+  const volumeUSD2d = pair1d?.volumeUSD - pair2d?.volumeUSD
+  const volumeUSD1dChange = (volumeUSD1d / volumeUSD2d) * 100 - 100
 
-  const tx1d = useMemo(() => pair?.txCount - pair1d?.txCount, [pair, pair1d])
-  const tx2d = useMemo(() => pair1d?.txCount - pair2d?.txCount, [pair1d, pair2d])
-  const tx1dChange = useMemo(() => (tx1d / tx2d) * 100 - 100, [tx1d, tx2d])
+  const tx1d = pair?.txCount - pair1d?.txCount
+  const tx2d = pair1d?.txCount - pair2d?.txCount
+  const tx1dChange = (tx1d / tx2d) * 100 - 100
 
-  const avgTrade1d = useMemo(() => volumeUSD1d / tx1d, [volumeUSD1d, tx1d])
-  const avgTrade2d = useMemo(() => volumeUSD2d / tx2d, [volumeUSD2d, tx2d])
-  const avgTrade1dChange = useMemo(() => (avgTrade1d / avgTrade2d) * 100 - 100, [avgTrade1d, avgTrade2d])
+  const avgTrade1d = volumeUSD1d / tx1d
+  const avgTrade2d = volumeUSD2d / tx2d
+  const avgTrade1dChange = (avgTrade1d / avgTrade2d) * 100 - 100
 
-  const utilisation1d = useMemo(() => (volumeUSD1d / pair?.reserveUSD) * 100, [volumeUSD1d, pair])
-  const utilisation2d = useMemo(() => (volumeUSD2d / pair1d?.reserveUSD) * 100, [volumeUSD2d, pair1d])
-  const utilisation1dChange = useMemo(() => (utilisation1d / utilisation2d) * 100 - 100, [utilisation1d, utilisation2d])
+  const utilisation1d = (volumeUSD1d / pair?.reserveUSD) * 100
+  const utilisation2d = (volumeUSD2d / pair1d?.reserveUSD) * 100
+  const utilisation1dChange = (utilisation1d / utilisation2d) * 100 - 100
 
   return (
     <AnalyticsContainer>
@@ -101,7 +116,7 @@ export default function Pair() {
         <div className="absolute w-full h-full bg-gradient-to-r from-blue to-pink opacity-5" />
         <div className="absolute flex items-center w-full p-2 lg:pl-14">
           <div className="text-xs font-medium text-secondary">
-            <Link href="/analytics/dashboard">Analytics</Link>&nbsp;
+            <Link href="/analytics">Analytics</Link>&nbsp;
             {'>'}&nbsp;
             <Link href="/analytics/pairs">Pairs</Link>&nbsp;
             {'> '}&nbsp;
@@ -139,7 +154,7 @@ export default function Pair() {
           </div>
         </div>
       </Background>
-      <div className="pt-4 space-y-4 lg:px-14">
+      <div className="px-4 pt-4 space-y-4 lg:px-14">
         <div className="relative h-12">
           <div className="absolute w-full h-full">
             <div className="h-1/3" />
@@ -148,8 +163,24 @@ export default function Pair() {
           <div className="absolute text-3xl font-bold text-high-emphesis">Pool Overview</div>
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <PairChartCard type="liquidity" name={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`} pair={id} />
-          <PairChartCard type="volume" name={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`} pair={id} />
+          <ChartCard
+            header="Liquidity"
+            subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
+            figure={chartData.liquidity}
+            change={chartData.liquidityChange}
+            chart={chartData.liquidityChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
+          <ChartCard
+            header="Volume"
+            subheader={`${pair?.token0?.symbol}-${pair?.token1?.symbol}`}
+            figure={chartData.volume1d}
+            change={chartData.volume1dChange}
+            chart={chartData.volumeChart}
+            defaultTimespan="1W"
+            timespans={chartTimespans}
+          />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {times(2).map((i) => (
@@ -199,11 +230,7 @@ export default function Pair() {
                 <tr>
                   <td>
                     <div className="flex items-center justify-center w-11/12 space-x-1">
-                      <Link href={`/analytics/tokens/${pair?.id}`} passHref>
-                        <div className="overflow-hidden cursor-pointer overflow-ellipsis whitespace-nowrap">
-                          {pair?.id}
-                        </div>
-                      </Link>
+                      <div className="overflow-hidden overflow-ellipsis whitespace-nowrap">{pair?.id}</div>
                       <a href={getExplorerLink(chainId, pair?.id, 'token')} target="_blank" rel="noreferrer">
                         <LinkIcon size={16} />
                       </a>
@@ -238,10 +265,7 @@ export default function Pair() {
             </table>
           </div>
         </div>
-        <div className="text-2xl font-bold text-high-emphesis">Transactions</div>
-        <div className="px-4">
-          <TransactionList transactions={transactionsFormatted} />
-        </div>
+        <LegacyTransactions pairs={[id]} />
       </div>
     </AnalyticsContainer>
   )

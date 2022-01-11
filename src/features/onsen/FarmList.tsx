@@ -1,12 +1,13 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
-import { useInfiniteScroll } from './hooks'
-import Dots from '../../components/Dots'
-import FarmListItem from './FarmListItem'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import React from 'react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import useSortableData from '../../hooks/useSortableData'
+import Dots from 'app/components/Dots'
+import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
+import useSortableData from 'app/hooks/useSortableData'
+import React from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
+
+import FarmListItem from './FarmListItem'
 
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'roiPerYear' })

@@ -7,3 +7,12 @@ export function unwrappedToken(currency: Currency): Currency {
 
   return currency
 }
+
+export const isWrappedReturnNativeSymbol = (chainId: ChainId | undefined, address: string) => {
+  if (!chainId) return address
+  if (address.toLowerCase() === WNATIVE[chainId].address.toLowerCase()) {
+    return NATIVE[chainId].symbol
+  }
+
+  return address
+}

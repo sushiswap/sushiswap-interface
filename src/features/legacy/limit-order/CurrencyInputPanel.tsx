@@ -1,7 +1,6 @@
-import React, { ReactNode } from 'react'
-
 import { ExclamationIcon } from '@heroicons/react/solid'
-import { classNames } from '../../../functions'
+import { classNames } from 'app/functions'
+import React, { ReactNode } from 'react'
 
 interface CurrencyInputPanelProps {
   id: string

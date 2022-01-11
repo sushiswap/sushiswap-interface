@@ -1,20 +1,18 @@
 import { AxisBottom, AxisLeft } from '@visx/axis'
-import { GridColumns, GridRows } from '@visx/grid'
-import { MarkerArrow, MarkerCross, MarkerLine, MarkerX } from '@visx/marker'
-import { scaleLinear, scaleOrdinal, scaleTime } from '@visx/scale'
-import { timeFormat, timeParse } from 'd3-time-format'
-import { useMemo, useState } from 'react'
-
 import { Brush } from '@visx/brush'
-import Curve from './Curve'
+import { GridColumns, GridRows } from '@visx/grid'
 import { Group } from '@visx/group'
 import { LegendOrdinal } from '@visx/legend'
-import { LinearGradient } from '@visx/gradient'
+import { MarkerArrow, MarkerCross, MarkerLine, MarkerX } from '@visx/marker'
 import { PatternLines } from '@visx/pattern'
-import React from 'react'
-import { Text } from '@visx/text'
+import { scaleLinear, scaleOrdinal, scaleTime } from '@visx/scale'
 import { extent } from 'd3-array'
+import { timeFormat, timeParse } from 'd3-time-format'
 import millify from 'millify'
+import { useMemo, useState } from 'react'
+import React from 'react'
+
+import Curve from './Curve'
 
 export const getX = (data) => new Date(data.date)
 export const getY = (data) => data.value
@@ -61,7 +59,7 @@ const Curves = ({
   compact = false,
   width,
   height,
-  margin = { top: 0, right: 0, bottom: 0, left: 0 },
+  margin = { top: 64, right: 32, bottom: 16, left: 64 },
   data,
   title = undefined,
   labels = undefined,
@@ -142,7 +140,7 @@ const Curves = ({
         range: [0, xBrushMax],
         domain: extent(allData, getX),
       }),
-    [xBrushMax]
+    [allData, xBrushMax]
   )
   const brushYScale = useMemo(
     () =>
@@ -151,7 +149,7 @@ const Curves = ({
         domain: [Math.min(...allData.map((d) => getY(d))), Math.max(...allData.map((d) => getY(d)))],
         nice: true,
       }),
-    [yBrushMax]
+    [allData, yBrushMax]
   )
 
   const initialBrushPosition = useMemo(
@@ -161,7 +159,7 @@ const Curves = ({
       },
       end: { x: brushXScale(getX(data[0][data[0].length - 1])) },
     }),
-    [brushXScale]
+    [brushXScale, data]
   )
 
   const colorScale = scaleOrdinal({

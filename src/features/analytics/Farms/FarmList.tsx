@@ -1,10 +1,10 @@
-import _ from 'lodash'
-import React, { useMemo } from 'react'
-import { formatNumber, formatNumberScale, formatPercent } from '../../../functions'
-import Table from '../../../components/Table'
-import DoubleCurrencyLogo from '../../../components/DoubleLogo'
-import { useCurrency } from '../../../hooks/Tokens'
+import DoubleCurrencyLogo from 'app/components/DoubleLogo'
+import Table from 'app/components/Table'
+import { formatNumber, formatPercent } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
 import Image from 'next/image'
+import React from 'react'
+
 import ColoredNumber from '../ColoredNumber'
 
 interface FarmListProps {
@@ -65,14 +65,16 @@ function Rewards({ rewards }: { rewards: Reward[] }): JSX.Element {
         <div className="flex flex-col items-center space-y-2">
           {rewards?.map((reward, i) => (
             <div key={i} className="flex items-center">
-              <Image
-                src={reward.icon}
-                width="30px"
-                height="30px"
-                className="rounded-full"
-                layout="fixed"
-                alt={reward.token}
-              />
+              {reward.icon && (
+                <Image
+                  src={reward.icon}
+                  width="30px"
+                  height="30px"
+                  className="rounded-full"
+                  layout="fixed"
+                  alt={reward.token}
+                />
+              )}
             </div>
           ))}
         </div>

@@ -1,34 +1,54 @@
-import React, { useCallback, useState } from 'react'
-import { FC } from 'react'
-import { useActiveWeb3React } from '../../services/web3'
-import { ChainId } from '@sushiswap/core-sdk'
-import Button from '../Button'
-import { classNames } from '../../functions'
 import { Transition } from '@headlessui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { ChainId } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import { classNames } from 'app/functions'
+import { useActiveWeb3React } from 'app/services/web3'
+import React, { useCallback, useState } from 'react'
+import { FC } from 'react'
 
-const images = [
-  {
-    image: `url('/images/miso/banner-gene.png')`,
-    url: 'https://miso.sushi.com/auctions/0xA017E4Cf380c5FDc372463f3330853500b4B3Cb9',
-  },
-]
+import { getStrapiMedia } from '../../lib/media'
 
-const Banner: FC = () => {
+interface BannerProps {
+  banners: {
+    attributes: {
+      name: string
+      url: string
+      image: {
+        data: {
+          attributes: {
+            url: string
+          }
+        }
+      }
+      startDate: string
+      endDate: string
+    }
+  }[]
+}
+
+const Banner: FC<BannerProps> = ({ banners }) => {
   const { chainId } = useActiveWeb3React()
-  const [slideIndex, setSlideIndex] = useState<number>(Math.floor(Math.random() * images.length))
+  const [slideIndex, setSlideIndex] = useState<number>(Math.floor(Math.random() * banners.length))
 
   const nextSlide = useCallback(() => {
-    setSlideIndex((prevState) => (prevState + 1) % images.length)
-  }, [])
+    setSlideIndex((prevState) => (prevState + 1) % banners.length)
+  }, [banners.length])
 
   const prevSlide = useCallback(() => {
-    setSlideIndex((prevState) => (prevState - 1 + images.length) % images.length)
-  }, [])
+    setSlideIndex((prevState) => (prevState - 1 + banners.length) % banners.length)
+  }, [banners.length])
 
-  if (chainId !== ChainId.ETHEREUM) return <></>
+  if (chainId !== ChainId.ETHEREUM || banners.length === 0) return <></>
 
-  const slides = images.map(({ image, url }, index) => {
+  const filteredSlides = banners.filter(({ attributes: { startDate, endDate } }) => {
+    const now = new Date().getTime()
+    const startEpoch = new Date(startDate).getTime()
+    const endEpoch = new Date(endDate).getTime()
+    return now > startEpoch && now < endEpoch
+  })
+
+  const slides = filteredSlides.map(({ attributes: { image, url } }, index) => {
     return (
       <div
         key={index}
@@ -53,7 +73,7 @@ const Banner: FC = () => {
             target="_blank"
             className="hidden w-full py-12 rounded cursor-pointer sm:block"
             style={{
-              backgroundImage: image,
+              backgroundImage: `url(${getStrapiMedia(image.data.attributes.url)})`,
               backgroundPosition: 'center',
               backgroundSize: 'cover',
               backgroundRepeat: 'no-repeat',
@@ -67,11 +87,11 @@ const Banner: FC = () => {
   })
 
   return (
-    <div className="flex justify-center flex-col">
+    <div className="flex flex-col justify-center">
       <div className="relative h-[96px] mt-4">
         {slides}
-        {images.length > 1 && (
-          <div className="flex justify-between w-full h-full items-center">
+        {slides.length > 1 && (
+          <div className="flex items-center justify-between w-full h-full">
             <Button onClick={prevSlide} className="flex items-center -ml-12">
               <ChevronLeftIcon width={24} className="hover:text-white text-low-emphesis" />
             </Button>

@@ -1,26 +1,25 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BAR_ADDRESS, ZERO } from '@sushiswap/core-sdk'
-import React, { useState } from 'react'
-import { SUSHI, XSUSHI } from '../../config/tokens'
-import Button from '../../components/Button'
-import { ChainId } from '@sushiswap/core-sdk'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { BAR_ADDRESS, ChainId, SUSHI, ZERO } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Container from 'app/components/Container'
+import Dots from 'app/components/Dots'
+import Input from 'app/components/Input'
+import { XSUSHI } from 'app/config/tokens'
+import { classNames } from 'app/functions'
+import { aprToApy } from 'app/functions/convert/apyApr'
+import { tryParseAmount } from 'app/functions/parse'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useSushiBar from 'app/hooks/useSushiBar'
+import TransactionFailedModal from 'app/modals/TransactionFailedModal'
+import { useFactory, useNativePrice, useOneDayBlock, useTokens } from 'app/services/graph/hooks'
+import { useBar } from 'app/services/graph/hooks/bar'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useWalletModalToggle } from 'app/state/application/hooks'
+import { useTokenBalance } from 'app/state/wallet/hooks'
 import Head from 'next/head'
 import Image from 'next/image'
-import Input from '../../components/Input'
-import TransactionFailedModal from '../../modals/TransactionFailedModal'
-import { request } from 'graphql-request'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions/parse'
-import { useActiveWeb3React } from '../../services/web3'
-import { useLingui } from '@lingui/react'
-import useSushiBar from '../../hooks/useSushiBar'
-import { useBar, useBlock, useFactory, useNativePrice, useSushiPrice, useTokens } from '../../services/graph'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { useWalletModalToggle } from '../../state/application/hooks'
-import { classNames } from '../../functions'
-import { aprToApy } from '../../functions/convert/apyApr'
+import React, { useState } from 'react'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -48,8 +47,6 @@ const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r f
 const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
 const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
-
-const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
 
 export default function Stake() {
   const { i18n } = useLingui()
@@ -133,7 +130,7 @@ export default function Stake() {
     }
   }
 
-  const block1d = useBlock({ daysAgo: 1, chainId: ChainId.ETHEREUM })
+  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
   const exchange = useFactory({ chainId: ChainId.ETHEREUM })
 

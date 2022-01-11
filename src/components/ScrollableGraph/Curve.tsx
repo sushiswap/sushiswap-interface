@@ -1,11 +1,9 @@
-import { AxisBottom, AxisLeft, AxisScale } from '@visx/axis'
-import { GradientTealBlue, LinearGradient } from '@visx/gradient'
-
+import { AxisBottom, AxisLeft } from '@visx/axis'
+import { curveNatural } from '@visx/curve'
 import { Group } from '@visx/group'
 import { LinePath } from '@visx/shape'
-import React from 'react'
-import { curveNatural } from '@visx/curve'
 import millify from 'millify'
+import React from 'react'
 
 // Initialize some variables
 const axisColor = 'currentColor'

@@ -17,8 +17,8 @@ export default function ColoredNumber({
 
   return (
     <>
-      <div className={classNames(number >= 0 ? 'text-green' : 'text-red', 'font-normal', className)}>
-        {(number >= 0 ? '+' : '-') +
+      <div className={classNames(number > 0 ? 'text-green' : number < 0 && 'text-red', 'font-normal', className)}>
+        {(number > 0 ? '+' : number < 0 ? '-' : '') +
           (percent
             ? formatPercent(number).replace('-', '')
             : scaleNumber
