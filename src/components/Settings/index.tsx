@@ -10,13 +10,13 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Toggle from 'app/components/Toggle'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
-import { useToggleSettingsMenu } from 'app/state/application/hooks'
-
-import React, { FC, useRef, useState } from 'react'
-import { useExpertModeManager, useUserSingleHopOnly, useUserOpenMev } from 'app/state/user/hooks'
-import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
-import { useActiveWeb3React } from 'app/services/web3'
 import { useOnClickOutside } from 'app/hooks/useOnClickOutside'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useToggleSettingsMenu } from 'app/state/application/hooks'
+import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
+import React, { FC, useRef, useState } from 'react'
+
+import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
 
 interface SettingsTabProps {
   placeholderSlippage?: Percent
@@ -30,7 +30,6 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
 
   const node = useRef<HTMLDivElement>(null)
 
-  
   const toggle = useToggleSettingsMenu()
   const [expertMode, toggleExpertMode] = useExpertModeManager()
   const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
