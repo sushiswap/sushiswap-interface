@@ -1,5 +1,5 @@
 import { classNames } from 'app/functions'
-import React, { FC } from 'react'
+import React, { FC, forwardRef } from 'react'
 
 export type TypographyWeight = 400 | 500 | 700
 
@@ -30,25 +30,36 @@ export interface TypographyProps extends React.AllHTMLAttributes<React.ReactHTML
   clickable?: boolean
 }
 
-const Typography: FC<TypographyProps> = ({
-  variant = 'base',
-  weight = 400,
-  component = 'div',
-  className = 'currentColor',
-  clickable = false,
-  children = [],
-  onClick = undefined,
-  ...rest
-}) => {
-  return React.createElement(
-    component,
+const Typography: FC<TypographyProps> = forwardRef(
+  (
     {
-      className: classNames(VARIANTS[variant], WEIGHTS[weight], onClick ? 'cursor-pointer select-none' : '', className),
-      onClick,
-      ...rest,
+      variant = 'base',
+      weight = 400,
+      component = 'div',
+      className = 'currentColor',
+      clickable = false,
+      children = [],
+      onClick = undefined,
+      ...rest
     },
-    children
-  )
-}
+    ref
+  ) => {
+    return React.createElement(
+      component,
+      {
+        className: classNames(
+          VARIANTS[variant],
+          WEIGHTS[weight],
+          onClick ? 'cursor-pointer select-none' : '',
+          className
+        ),
+        onClick,
+        ...rest,
+        ref,
+      },
+      children
+    )
+  }
+)
 
 export default Typography

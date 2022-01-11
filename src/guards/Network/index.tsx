@@ -40,7 +40,7 @@ const Component: FC<NetworkGuardProps> = ({ children, feature }) => {
       <HeadlessUIModal.Controlled
         isOpen={!!account && !features[chainId].includes(feature)}
         onDismiss={() => null}
-        className="transparent"
+        transparent={true}
       >
         <div className="flex flex-col gap-7 justify-center p-4 mt-10 lg:mt-0">
           <Typography variant="h1" className="max-w-2xl text-white text-center" weight={700}>

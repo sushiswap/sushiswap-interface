@@ -5,8 +5,6 @@ import Popups from 'app/components/Popups'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
-const HEADER_HEIGHT = 64
-
 interface LayoutProps {
   left?: JSX.Element
   right?: JSX.Element
