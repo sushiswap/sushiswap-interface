@@ -71,7 +71,7 @@ function CurrencySearchModal({
 
   return (
     <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
-      <div className="p-6 lg:max-h-[92vh] lg:h-[40rem] h-full">
+      <div className="lg:max-h-[92vh] lg:h-[40rem] h-full">
         {modalView === CurrencyModalView.search ? (
           <CurrencySearch
             isOpen={isOpen}

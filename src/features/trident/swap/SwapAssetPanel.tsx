@@ -117,7 +117,12 @@ const WalletSwitch: FC<
   const { i18n } = useLingui()
 
   const content = (
-    <div className={classNames(disabled ? 'opacity-40' : '', 'flex gap-2.5 items-center lg:px-0 px-4 py-3 lg:py-0')}>
+    <div
+      className={classNames(
+        disabled ? 'opacity-40' : '',
+        'flex gap-2.5 items-center !justify-start lg:px-0 px-4 py-3 lg:py-0'
+      )}
+    >
       <div className="flex flex-col order-2 lg:order-1">
         <Typography variant="xs" weight={700} className="text-left text-secondary lg:text-right">
           {label}
@@ -193,7 +198,7 @@ const InputPanel: FC<
         'border lg:rounded-full lg:bg-dark-900 flex items-center pl-4 lg:pl-0 px-[1px] py-1.5 lg:py-0 bg-transparent'
       )}
     >
-      <div className="cursor-pointer pl-3" onClick={() => setOpen(true)}>
+      <div className="cursor-pointer lg:pl-3" onClick={() => setOpen(true)}>
         {currency ? (
           <CurrencyLogo currency={currency} className="rounded-full" size={40} />
         ) : (

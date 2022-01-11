@@ -41,7 +41,7 @@ export default function LangSwitcher() {
     >
       <div
         onClick={() => setShow(!show)}
-        className="cursor-pointer bg-dark-1000 inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800"
+        className="cursor-pointer bg-dark-1000 inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border-2 rounded shadow-sm text-primary border-dark-800 hover:border-dark-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800"
       >
         {LANG_TO_COUNTRY[locale]}
         <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />

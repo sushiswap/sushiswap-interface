@@ -35,7 +35,7 @@ const AuctionFinalizeModal: FC<AuctionFinalizeModalProps> = ({ auction }) => {
   }, [])
 
   return (
-    <HeadlessUiModal.Controlled isOpen={open} onDismiss={handleDismiss} className="bg-transparent">
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={handleDismiss} transparent={true}>
       <div className="flex flex-col items-center h-full gap-2 pb-8 m-5">
         <div className="flex flex-col justify-center">
           <Typography variant="hero" weight={700} className="text-high-emphesis text-center">

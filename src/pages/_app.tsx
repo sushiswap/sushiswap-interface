@@ -23,7 +23,7 @@ import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
-import { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { RecoilRoot } from 'recoil'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -97,6 +97,11 @@ function MyApp({ Component, pageProps, fallback }) {
   return (
     <>
       <Head>Sushi</Head>
+      <meta
+        name="viewport"
+        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
+      />
+
       {/* Global Site Tag (gtag.js) - Google Analytics */}
       <Script
         strategy="afterInteractive"
