@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Percent } from '@sushiswap/core-sdk'
 import CopyHelper from 'app/components/AccountDetails/Copy'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
@@ -34,6 +35,31 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
 
   return (
     <div className={classNames(active ? 'block' : 'hidden', 'grid grid-cols-2 gap-6')}>
+      <AuctionDetailsTabStat
+        label={i18n._(t`Liquidity Locked Until`)}
+        value={new Date(Number(auction.launcherInfo?.unlock.mul(1000))).toLocaleString('en-uS', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          timeZone: 'UTC',
+        })}
+      />
+      <AuctionDetailsTabStat
+        label={i18n._(t`Liquidity`)}
+        value={
+          <>
+            <div className="flex gap-1">
+              {auction.totalTokens
+                ?.multiply(new Percent(Number(auction.launcherInfo?.liquidityPercent), 10000))
+                ?.toSignificant(6)}{' '}
+              {auction.totalTokens?.currency.symbol} + {Number(auction.launcherInfo?.liquidityPercent) / 100}% of{' '}
+              {auction.paymentToken.symbol} proceeds
+            </div>
+          </>
+        }
+      />
       <AuctionDetailsTabStat
         label={i18n._(t`Token Address`)}
         value={

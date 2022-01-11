@@ -1,7 +1,9 @@
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { CHAIN_KEY } from '@sushiswap/core-sdk'
+import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
-import { AuctionTemplate } from 'app/features/miso/context/types'
+import { AuctionTemplate, RawLauncherInfo } from 'app/features/miso/context/types'
 import { useContract, useMisoHelperContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useSingleContractMultipleMethods } from 'app/state/multicall/hooks'
@@ -77,6 +79,10 @@ export const useAuctionDetails = (auctionAddress?: string) => {
               methodName: 'pointList',
               callInputs: [],
             },
+            {
+              methodName: 'wallet',
+              callInputs: [],
+            },
           ]
         : [],
     [auctionAddress]
@@ -84,10 +90,11 @@ export const useAuctionDetails = (auctionAddress?: string) => {
 
   const results = useSingleContractMultipleMethods(contract, callsData)
   if (auctionAddress && results && Array.isArray(results) && results.length === callsData.length) {
-    const [{ result: marketTemplate }, { result: pointList }] = results
+    const [{ result: marketTemplate }, { result: pointList }, { result: auctionLauncherAddress }] = results
     return {
       marketTemplateId: marketTemplate?.[0],
       pointListAddress: pointList?.[0],
+      auctionLauncherAddress: auctionLauncherAddress?.[0],
       loading: false,
     }
   }
@@ -95,6 +102,41 @@ export const useAuctionDetails = (auctionAddress?: string) => {
   return {
     marketTemplateId: undefined,
     pointListAddress: undefined,
+    auctionLauncherAddress: undefined,
     loading: results.some((el) => el.loading),
+  }
+}
+
+export const useAuctionLauncherDetails = (
+  launcherAddress?: string
+): { launcherInfo?: RawLauncherInfo; lpTokenAddress?: string } => {
+  const { chainId } = useActiveWeb3React()
+  const launcher = useContract(
+    launcherAddress,
+    chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.abi : undefined
+  )
+  const callsData = useMemo(
+    () =>
+      launcherAddress
+        ? [
+            { methodName: 'launcherInfo', callInputs: [] },
+            { methodName: 'getLPTokenAddress', callInputs: [] },
+          ]
+        : [],
+    [launcherAddress]
+  )
+
+  const results = useSingleContractMultipleMethods(launcher, callsData)
+  if (launcherAddress && results && Array.isArray(results) && results.length === callsData.length) {
+    const [{ result: launcherInfo }, { result: lpTokenAddress }] = results
+    return {
+      launcherInfo: launcherInfo as any,
+      lpTokenAddress: lpTokenAddress?.[0],
+    }
+  }
+
+  return {
+    launcherInfo: undefined,
+    lpTokenAddress: undefined,
   }
 }
