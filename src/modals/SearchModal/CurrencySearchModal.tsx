@@ -1,10 +1,8 @@
 import { Currency, Token } from '@sushiswap/core-sdk'
 import { TokenList } from '@uniswap/token-lists'
-import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import useLast from 'app/hooks/useLast'
+import { HeadlessUiModal } from 'app/components/Modal'
 import usePrevious from 'app/hooks/usePrevious'
-import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { createContext, FC, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
 
 import CurrencyModalView from './CurrencyModalView'
 import { CurrencySearch } from './CurrencySearch'
@@ -12,41 +10,68 @@ import ImportList from './ImportList'
 import { ImportToken } from './ImportToken'
 import Manage from './Manage'
 
-interface CurrencySearchModalProps {
-  isOpen: boolean
+interface CurrencyModalContext {
+  view: CurrencyModalView
+  setView(x: CurrencyModalView): void
+  importToken?: Token
+  setImportToken(x: Token): void
+  onDismiss(): void
+  onSelect(x: Currency): void
+  currency?: Currency
+  includeNative?: boolean
+  importList?: TokenList
+  setImportList(x: TokenList): void
+  listUrl?: string
+  setListUrl(x: string): void
+  showSearch: boolean
+}
+
+const CurrencyModalContext = createContext<CurrencyModalContext>({
+  view: CurrencyModalView.search,
+  setView: () => {},
+  importToken: undefined,
+  setImportToken: () => {},
+  onDismiss: () => {},
+  onSelect: () => {},
+  currency: undefined,
+  includeNative: true,
+  importList: undefined,
+  setImportList: () => {},
+  listUrl: undefined,
+  setListUrl: () => {},
+  showSearch: true,
+})
+
+export const useCurrencyModalContext = () => useContext(CurrencyModalContext)
+
+interface ComponentProps {
   onDismiss: () => void
-  selectedCurrency?: Currency | null
+  selectedCurrency?: Currency
   onCurrencySelect: (currency: Currency) => void
-  otherSelectedCurrency?: Currency | null
+  otherSelectedCurrency?: Currency
   showCommonBases?: boolean
-  currencyList?: string[]
+  currencyList?: (string | undefined)[]
   includeNativeCurrency?: boolean
   allowManageTokenList?: boolean
-  hideBalance?: boolean
   showSearch?: boolean
 }
 
-function CurrencySearchModal({
-  isOpen,
+const Component: FC<ComponentProps> = ({
   onDismiss,
   onCurrencySelect,
   selectedCurrency,
   otherSelectedCurrency,
   currencyList,
   showCommonBases = false,
-  showSearch = true,
   includeNativeCurrency = true,
   allowManageTokenList = true,
-  hideBalance = false,
-}: CurrencySearchModalProps) {
-  const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.manage)
-  const lastOpen = useLast(isOpen)
-
-  useEffect(() => {
-    if (isOpen && !lastOpen) {
-      setModalView(CurrencyModalView.search)
-    }
-  }, [isOpen, lastOpen])
+  showSearch = true,
+}) => {
+  const [view, setView] = useState<CurrencyModalView>(CurrencyModalView.search)
+  const prevView = usePrevious(view)
+  const [importToken, setImportToken] = useState<Token | undefined>()
+  const [importList, setImportList] = useState<TokenList | undefined>()
+  const [listUrl, setListUrl] = useState<string | undefined>()
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
@@ -56,63 +81,98 @@ function CurrencySearchModal({
     [onDismiss, onCurrencySelect]
   )
 
-  // for token import view
-  const prevView = usePrevious(modalView)
-
-  // used for import token flow
-  const [importToken, setImportToken] = useState<Token | undefined>()
-
-  // used for import list
-  const [importList, setImportList] = useState<TokenList | undefined>()
-  const [listURL, setListUrl] = useState<string | undefined>()
-
-  // change min height if not searching
-  const minHeight = modalView === CurrencyModalView.importToken || modalView === CurrencyModalView.importList ? 40 : 75
+  const handleReset = useCallback(() => {
+    setView(CurrencyModalView.search)
+  }, [])
 
   return (
-    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
-      <div className="lg:max-h-[92vh] lg:h-[40rem] h-full">
-        {modalView === CurrencyModalView.search ? (
+    <CurrencyModalContext.Provider
+      value={useMemo(
+        () => ({
+          view,
+          setView,
+          importToken,
+          setImportToken,
+          importList,
+          setImportList,
+          onDismiss,
+          onSelect: handleCurrencySelect,
+          currency: selectedCurrency,
+          includeNative: includeNativeCurrency,
+          listUrl,
+          setListUrl,
+          showSearch,
+        }),
+        [
+          handleCurrencySelect,
+          importList,
+          importToken,
+          includeNativeCurrency,
+          listUrl,
+          onDismiss,
+          selectedCurrency,
+          showSearch,
+          view,
+        ]
+      )}
+    >
+      <div className="lg:max-h-[92vh] lg:h-[40rem] h-full flex flex-col gap-4">
+        {view === CurrencyModalView.search ? (
           <CurrencySearch
-            isOpen={isOpen}
-            onDismiss={onDismiss}
-            onCurrencySelect={handleCurrencySelect}
-            selectedCurrency={selectedCurrency}
             otherSelectedCurrency={otherSelectedCurrency}
             showCommonBases={showCommonBases}
-            showImportView={() => setModalView(CurrencyModalView.importToken)}
-            setImportToken={setImportToken}
-            showManageView={() => setModalView(CurrencyModalView.manage)}
             currencyList={currencyList}
-            includeNativeCurrency={includeNativeCurrency}
             allowManageTokenList={allowManageTokenList}
           />
-        ) : modalView === CurrencyModalView.importToken && importToken ? (
+        ) : view === CurrencyModalView.importToken && importToken ? (
           <ImportToken
             tokens={[importToken]}
-            onDismiss={onDismiss}
-            list={importToken instanceof WrappedTokenInfo ? importToken.list : undefined}
             onBack={() =>
-              setModalView(prevView && prevView !== CurrencyModalView.importToken ? prevView : CurrencyModalView.search)
+              setView(prevView && prevView !== CurrencyModalView.importToken ? prevView : CurrencyModalView.search)
             }
-            handleCurrencySelect={handleCurrencySelect}
           />
-        ) : modalView === CurrencyModalView.importList && importList && listURL ? (
-          <ImportList list={importList} listURL={listURL} onDismiss={onDismiss} setModalView={setModalView} />
-        ) : modalView === CurrencyModalView.manage ? (
-          <Manage
-            onDismiss={onDismiss}
-            setModalView={setModalView}
-            setImportToken={setImportToken}
-            setImportList={setImportList}
-            setListUrl={setListUrl}
-          />
+        ) : view === CurrencyModalView.importList && importList && listUrl ? (
+          <ImportList />
+        ) : view === CurrencyModalView.manage ? (
+          <Manage />
         ) : (
-          ''
+          <></>
         )}
       </div>
+    </CurrencyModalContext.Provider>
+  )
+}
+
+type CurrencySearchModal<P> = FC<P> & {
+  Controlled: FC<CurrencySearchModalControlledProps>
+}
+
+interface CurrencySearchModalProps extends Omit<ComponentProps, 'onDismiss'> {
+  trigger: ReactNode
+}
+
+const CurrencySearchModal: CurrencySearchModal<CurrencySearchModalProps> = ({ trigger, ...props }) => {
+  return (
+    <HeadlessUiModal trigger={trigger}>
+      {({ setOpen }) => {
+        return <Component {...props} onDismiss={() => setOpen(false)} />
+      }}
+    </HeadlessUiModal>
+  )
+}
+
+interface CurrencySearchModalControlledProps extends Omit<ComponentProps, 'onDismiss'> {
+  open: boolean
+  onDismiss(): void
+}
+
+const CurrencySearchModalControlled: FC<CurrencySearchModalControlledProps> = ({ open, onDismiss, ...props }) => {
+  return (
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onDismiss}>
+      <Component {...props} onDismiss={onDismiss} />
     </HeadlessUiModal.Controlled>
   )
 }
 
+CurrencySearchModal.Controlled = CurrencySearchModalControlled
 export default CurrencySearchModal

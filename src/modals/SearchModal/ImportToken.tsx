@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Token } from '@sushiswap/core-sdk'
-import { TokenList } from '@uniswap/token-lists/dist/types'
+import { Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
@@ -9,25 +8,26 @@ import ExternalLink from 'app/components/ExternalLink'
 import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import { getExplorerLink, shortenAddress } from 'app/functions'
+import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import { useAddUserToken } from 'app/state/user/hooks'
 import React, { FC } from 'react'
 
 interface ImportProps {
   tokens: Token[]
-  list?: TokenList
   onBack?: () => void
-  onDismiss?: () => void
-  handleCurrencySelect?: (currency: Currency) => void
 }
 
-export const ImportToken: FC<ImportProps> = ({ tokens, list, onBack, onDismiss, handleCurrencySelect }) => {
+export const ImportToken: FC<ImportProps> = ({ tokens, onBack }) => {
   const { chainId } = useActiveWeb3React()
+  const { onDismiss, onSelect, importToken } = useCurrencyModalContext()
   const { i18n } = useLingui()
-
   const addToken = useAddUserToken()
+  const importList = importToken instanceof WrappedTokenInfo ? importToken.list : undefined
+
   return (
-    <div className="flex flex-col gap-4">
+    <>
       <HeadlessUiModal.Header header={i18n._(t`Import token`)} onClose={onDismiss} onBack={onBack} />
       <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 divide-y divide-gray-700">
         <Typography variant="sm" weight={700} className="text-high-emphesis">
@@ -47,8 +47,8 @@ export const ImportToken: FC<ImportProps> = ({ tokens, list, onBack, onDismiss, 
                         {shortenAddress(token.address)}
                       </ExternalLink>
                     </Typography>
-                    {list !== undefined ? (
-                      <Chip icon={list.logoURI} color="green" size="sm" label={list.name} />
+                    {importList !== undefined ? (
+                      <Chip icon={importList.logoURI} color="green" size="sm" label={importList.name} />
                     ) : (
                       <Chip color="yellow" size="sm" label={i18n._(t`Unknown Source`)}>
                         {i18n._(t`Unknown Source`)}
@@ -67,17 +67,18 @@ export const ImportToken: FC<ImportProps> = ({ tokens, list, onBack, onDismiss, 
           )
         })}
       </HeadlessUiModal.BorderedContent>
+      <div className="flex flex-grow" />
       <Button
         color="blue"
         onClick={() => {
           tokens.map((token) => addToken(token))
-          handleCurrencySelect && handleCurrencySelect(tokens[0])
+          onSelect && onSelect(tokens[0])
         }}
         className=".token-dismiss-button"
       >
         {i18n._(t`Import`)}
       </Button>
-    </div>
+    </>
   )
 }
 

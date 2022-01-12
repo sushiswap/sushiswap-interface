@@ -1,85 +1,49 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Token } from '@sushiswap/core-sdk'
-import Button from 'app/components/Button'
+import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import ListLogo from 'app/components/ListLogo'
-import { RowFixed } from 'app/components/Row'
+import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
-import { classNames } from 'app/functions'
-import { useIsTokenActive, useIsUserAddedToken } from 'app/hooks/Tokens'
-import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
-import React, { CSSProperties } from 'react'
+import { shortenAddress } from 'app/functions'
+import React, { FC } from 'react'
 
-export default function ImportRow({
-  token,
-  style,
-  dim,
-  showImportView,
-  setImportToken,
-}: {
+interface ImportRow {
   token: Token
-  style?: CSSProperties
-  dim?: boolean
-  showImportView: () => void
-  setImportToken: (token: Token) => void
-}) {
-  // check if already active on list or local storage tokens
-  const isAdded = useIsUserAddedToken(token)
-  const isActive = useIsTokenActive(token)
+  onClick(x: any): void
+}
 
-  const list = token instanceof WrappedTokenInfo ? token.list : undefined
+const ImportRow: FC<ImportRow> = ({ token, onClick }) => {
+  const { i18n } = useLingui()
 
   return (
-    <div
-      className={classNames(
-        'flex items-center w-full hover:bg-dark-800 px-6 h-[56px]',
-        dim ? 'opacity-60' : 'opacity-100'
-      )}
-      style={style}
-      // disabled={isSelected}
-      // selected={otherSelected}
-    >
-      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
-        <div className="flex flex-row items-center gap-3 flex-grow">
-          <CurrencyLogo currency={token} size={32} className="rounded-full" />
+    <HeadlessUiModal.BorderedContent className="border hover:border-gray-700 cursor-pointer" onClick={onClick}>
+      <div className="flex justify-between">
+        <div className="flex items-center gap-3">
+          <div className="rounded-full overflow-hidden border border-dark-700">
+            <CurrencyLogo currency={token} size={48} />
+          </div>
           <div className="flex flex-col">
-            <Typography variant="xs" className="text-secondary">
-              {token.name}
-            </Typography>
-            <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {token.symbol}
+            <div className="flex gap-2 items-center">
+              <Typography variant="lg" weight={700} component="span" className="text-white">
+                {token.symbol}{' '}
+                <Typography variant="xs" component="span">
+                  {token.name}
+                </Typography>
+              </Typography>
+
+              <Chip color="yellow" size="sm" label={i18n._(t`Unknown Source`)}>
+                {i18n._(t`Unknown Source`)}
+              </Chip>
+            </div>
+            <Typography variant="xxs" weight={700}>
+              {shortenAddress(token.address)}
             </Typography>
           </div>
-          {list && list.logoURI && (
-            <RowFixed align="center">
-              <div className="mr-1 text-sm">via {list?.name}</div>
-              <ListLogo logoURI={list?.logoURI} size="12px" />
-            </RowFixed>
-          )}
-        </div>
-        <div className="flex items-center">
-          {!isActive && !isAdded ? (
-            <Button
-              color="gradient"
-              size="xs"
-              style={{
-                width: 'fit-content',
-                padding: '6px 12px',
-              }}
-              onClick={() => {
-                setImportToken && setImportToken(token)
-                showImportView()
-              }}
-            >
-              Import
-            </Button>
-          ) : (
-            <RowFixed style={{ minWidth: 'fit-content' }}>
-              <div className="mr-1.5 w-4 h-4" />
-              <div className="text-green">Active</div>
-            </RowFixed>
-          )}
         </div>
       </div>
-    </div>
+    </HeadlessUiModal.BorderedContent>
   )
 }
+
+export default ImportRow
