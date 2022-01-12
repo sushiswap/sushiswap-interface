@@ -637,9 +637,7 @@ export default function Swap({ banners }) {
             )}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
           </div>
-          {swapIsUnsupported ? (
-            <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
-          ) : null}
+          {swapIsUnsupported ? <UnsupportedCurrencyFooter currencies={[currencies.INPUT, currencies.OUTPUT]} /> : null}
         </div>
         <Banner banners={banners} />
       </DoubleGlowShadow>
