@@ -24,7 +24,7 @@ export default function PairTools({ pair }) {
   }
 
   const priceChange = useMemo(() => {
-    const currentPrice = pair?.currentExchangeRate / 1e18
+    const currentPrice = pair?.exchangeRate / 1e18
     const oraclePrice = pair?.oracleExchangeRate / 1e18
 
     const difference = Math.abs(currentPrice - oraclePrice)

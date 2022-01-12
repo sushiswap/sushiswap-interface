@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
-import { ChainId, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, KASHI_ADDRESS } from '@sushiswap/core-sdk'
 import { Fraction } from 'app/entities'
 import { Feature } from 'app/enums'
 import {
@@ -22,11 +22,11 @@ import {
   toShare,
   validateChainlinkOracleData,
 } from 'app/functions'
-import { useBentoBoxContract, useBoringHelperContract } from 'app/hooks'
+import { useBentoBoxContract } from 'app/hooks'
 import { useAllTokens } from 'app/hooks/Tokens'
-import { useBentoStrategies, useClones } from 'app/services/graph'
+import { useBentoStrategies, useClones, useNativePrice, useTokens } from 'app/services/graph'
 import { useActiveWeb3React, useQueryFilter } from 'app/services/web3'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
+import { useKashiPairsRPC } from 'app/state/kashi/hooks'
 import { useMemo } from 'react'
 
 const BLACKLISTED_TOKENS = ['0xC6d54D2f624bc83815b49d9c2203b1330B841cA0']
@@ -69,84 +69,46 @@ export function useKashiPairAddresses(): string[] {
 }
 
 export function useKashiPairs(addresses = []) {
-  const { chainId, account } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
 
-  const boringHelperContract = useBoringHelperContract()
-
-  const wnative = WNATIVE_ADDRESS[chainId]
-
-  const currency = USD[chainId]
-
-  const allTokens = useAllTokens()
-
-  const pollArgs = useMemo(() => [account, addresses], [account, addresses])
-
-  // TODO: Replace
-  const pollKashiPairs = useSingleCallResult(boringHelperContract, 'pollKashiPairs', pollArgs)?.result?.[0]
-
-  const tokens = useMemo<Token[]>(() => {
-    if (!pollKashiPairs) {
-      return []
-    }
-    return Array.from(
-      pollKashiPairs?.reduce((previousValue, currentValue) => {
-        const asset = allTokens[currentValue.asset]
-        const collateral = allTokens[currentValue.collateral]
-        return previousValue.add(asset).add(collateral)
-      }, new Set([currency]))
-    )
-  }, [allTokens, currency, pollKashiPairs])
-
+  const { pairs, tokens } = useKashiPairsRPC({ shouldFetch: true, pairAddresses: addresses })
   const strategies = useBentoStrategies({ chainId })
+  const nativePrice = useNativePrice({ chainId })
+  const tokenPricings = useTokens({
+    chainId,
+    variables: { id_in: tokens?.map((token) => token.address.toLowerCase()) },
+  })
 
-  console.log({ USD, chainId, account, tokens })
+  const tokensFull = useMemo(
+    () =>
+      tokens?.map((token) => {
+        const strategy = strategies.find((strategy) => strategy.token === token.address.toLowerCase())
+        const priceUSD =
+          (tokenPricings?.find((pricing) => pricing.id === token.address.toLowerCase())?.derivedETH ?? 0) *
+          (nativePrice ?? 0)
 
-  const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token?.address)], [account, tokens])
-
-  // TODO: Replace
-  const balances = useSingleCallResult(boringHelperContract, 'getBalances', getBalancesArgs)?.result?.[0]?.reduce(
-    (previousValue, currentValue) => {
-      return { ...previousValue, [currentValue[0]]: currentValue }
-    },
-    {}
+        return {
+          ...token,
+          strategy,
+          usd: BigNumber.from(Math.floor(priceUSD * 10e5)), // 10e5 because of the getUSDString function
+        }
+      }) ?? undefined,
+    [nativePrice, strategies, tokenPricings, tokens]
   )
 
-  // TODO: Disgusting but until final refactor this will have to remain...
-  const pairTokens = tokens
-    .filter((token) => balances?.[token.address])
-    .reduce((previousValue, currentValue) => {
-      const balance = balances[currentValue.address]
-      const strategy = strategies?.find((strategy) => strategy.token === currentValue.address.toLowerCase())
-      const usd = e10(currentValue.decimals).mulDiv(balances[currency.address].rate, balance.rate)
-      const symbol = currentValue.address === wnative ? NATIVE[chainId].symbol : currentValue.symbol
-      return {
-        ...previousValue,
-        [currentValue.address]: {
-          ...currentValue,
-          ...balance,
-          address: currentValue.address,
-          elastic: balance.bentoAmount,
-          base: balance.bentoShare,
-          strategy,
-          usd,
-          symbol,
-        },
-      }
-    }, {})
-
   return useMemo(() => {
-    if (!addresses || !tokens || !pollKashiPairs) {
+    if (!addresses || !pairs || !tokensFull) {
       return []
     }
     return addresses.reduce((previousValue, currentValue, i) => {
-      if (chainId && pairTokens && balances) {
+      if (chainId && pairs && tokensFull) {
         // Hack until we instantiate entity here...
-        const pair = Object.assign({}, pollKashiPairs?.[i])
+        const pair: any = Object.assign({}, pairs?.[i])
 
         pair.address = currentValue
-        pair.oracle = getOracle(chainId, pair.oracle, pair.oracle.data)
-        pair.asset = pairTokens[pair.asset]
-        pair.collateral = pairTokens[pair.collateral]
+        pair.oracle = getOracle(chainId, pair.oracle, pair.oracleData)
+        pair.asset = tokensFull.find((token) => token.address === pair.asset)
+        pair.collateral = tokensFull.find((token) => token.address === pair.collateral)
 
         pair.elapsedSeconds = BigNumber.from(Date.now()).div('1000').sub(pair.accrueInfo.lastAccrued)
 
@@ -166,7 +128,7 @@ export function useKashiPairs(addresses = []) {
         pair.currentAllAssets = easyAmount(pair.totalAssetAmount.value.add(pair.currentBorrowAmount.value), pair.asset)
 
         pair.marketHealth = pair.totalCollateralAmount.value
-          .mulDiv(e10(18), maximum(pair.currentExchangeRate, pair.oracleExchangeRate, pair.spotExchangeRate))
+          .mulDiv(e10(18), maximum(pair.exchangeRate, pair.oracleExchangeRate, pair.spotExchangeRate))
           .mulDiv(e10(18), pair.currentBorrowAmount.value)
 
         pair.currentTotalAsset = accrueTotalAssetWithFee(pair)
@@ -201,7 +163,7 @@ export function useKashiPairs(addresses = []) {
 
         // The user's amount of assets (stable, doesn't accrue)
         pair.currentUserAssetAmount = easyAmount(
-          pair.userAssetFraction.mulDiv(pair.currentAllAssets.value, pair.totalAsset.base),
+          pair.balanceOf.mulDiv(pair.currentAllAssets.value, pair.totalAsset.base),
           pair.asset
         )
 
@@ -213,7 +175,7 @@ export function useKashiPairs(addresses = []) {
 
         // The user's amount of assets that are currently lent
         pair.currentUserLentAmount = easyAmount(
-          pair.userAssetFraction.mulDiv(pair.currentBorrowAmount.value, pair.totalAsset.base),
+          pair.balanceOf.mulDiv(pair.currentBorrowAmount.value, pair.totalAsset.base),
           pair.asset
         )
 
@@ -227,7 +189,7 @@ export function useKashiPairs(addresses = []) {
         pair.maxBorrowable = {
           oracle: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.oracleExchangeRate),
           spot: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.spotExchangeRate),
-          stored: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.currentExchangeRate),
+          stored: pair.userCollateralAmount.value.mulDiv(e10(16).mul('75'), pair.exchangeRate),
         }
 
         pair.maxBorrowable.minimum = minimum(
@@ -309,7 +271,7 @@ export function useKashiPairs(addresses = []) {
 
       return previousValue
     }, [])
-  }, [addresses, tokens, pollKashiPairs, chainId, pairTokens, balances])
+  }, [addresses, pairs, chainId, tokensFull])
 
   //   return useMemo(
   //     () =>

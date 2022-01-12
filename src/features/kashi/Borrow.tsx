@@ -59,7 +59,7 @@ export default function Borrow({ pair }: BorrowProps) {
     ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.collateral.balance
 
-  const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
+  const displayUpdateOracle = pair.exchangeRate.gt(0) ? updateOracle : true
 
   // Swap
   // const [allowedSlippage] = useUserSlippageTolerance(); // 10 = 0.1%
@@ -101,7 +101,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
   const nextMaxBorrowableStored = nextUserCollateralValue.mulDiv(
     e10(16).mul('75'),
-    displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate
+    displayUpdateOracle ? pair.oracleExchangeRate : pair.exchangeRate
   )
 
   const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
@@ -170,14 +170,14 @@ export default function Borrow({ pair }: BorrowProps) {
   //     name: pair.asset.tokenInfo.symbol + '-' + pair.collateral.tokenInfo.symbol,
   //     borrowValueSet: borrowValueSet,
   //     displayUpdateOracle: displayUpdateOracle,
-  //     currentExchangeRate: pair.currentExchangeRate.toFixed(
+  //     exchangeRate: pair.exchangeRate.toFixed(
   //         pair.asset.tokenInfo.decimals
   //     ),
   //     oracleExchangeRate: pair.oracleExchangeRate.toFixed(
   //         pair.asset.tokenInfo.decimals
   //     ),
   //     diff:
-  //         pair.currentExchangeRate.toFixed(pair.asset.tokenInfo.decimals) /
+  //         pair.exchangeRate.toFixed(pair.asset.tokenInfo.decimals) /
   //         pair.oracleExchangeRate.toFixed(pair.asset.tokenInfo.decimals),
   // })
 
@@ -202,7 +202,7 @@ export default function Borrow({ pair }: BorrowProps) {
       transactionReview.addUSD('Borrowed USD', pair.currentUserBorrowAmount.value, nextBorrowValue, pair.asset)
     }
     if (displayUpdateOracle) {
-      transactionReview.addRate('Exchange Rate', pair.currentExchangeRate, pair.oracleExchangeRate, pair)
+      transactionReview.addRate('Exchange Rate', pair.exchangeRate, pair.oracleExchangeRate, pair)
     }
     transactionReview.addTokenAmount(
       'Borrow Limit',
@@ -327,7 +327,7 @@ export default function Borrow({ pair }: BorrowProps) {
       )
     )
 
-    const multipliedBorrow = multipliedCollateral.mulDiv(e10(16).mul('75'), pair.currentExchangeRate)
+    const multipliedBorrow = multipliedCollateral.mulDiv(e10(16).mul('75'), pair.exchangeRate)
 
     // console.log({
     //     original: swapCollateral.toFixed(pair.collateral.tokenInfo.decimals),

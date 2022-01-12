@@ -26,7 +26,7 @@ export default function Lend() {
   const pairs = useKashiPairs(addresses)
 
   const positions = useSearchAndSort(
-    pairs.filter((pair) => pair.userAssetFraction.gt(0)),
+    pairs.filter((pair) => pair.balanceOf.gt(0)),
     { keys: ['search'], threshold: 0.1 },
     { key: 'currentUserAssetAmount.usdValue', direction: 'descending' }
   )

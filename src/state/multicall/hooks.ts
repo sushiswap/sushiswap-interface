@@ -13,7 +13,7 @@ export interface Result extends ReadonlyArray<any> {
   readonly [key: string]: any
 }
 
-type MethodArg = string | number | BigNumber
+type MethodArg = string | number | BigNumber | MethodArgs
 type MethodArgs = Array<MethodArg | MethodArg[]>
 
 export type OptionalMethodInputs = Array<MethodArg | MethodArg[] | undefined> | undefined
@@ -25,7 +25,8 @@ function isMethodArg(x: unknown): x is MethodArg {
 function isValidMethodArgs(x: unknown): x is MethodArgs | undefined {
   return (
     x === undefined ||
-    (Array.isArray(x) && x.every((xi) => isMethodArg(xi) || (Array.isArray(xi) && xi.every(isMethodArg))))
+    (Array.isArray(x) &&
+      x.every((xi) => isMethodArg(xi) || (Array.isArray(xi) && (xi.every(isMethodArg) || xi.every(isValidMethodArgs)))))
   )
 }
 
@@ -232,6 +233,60 @@ export function useSingleContractMultipleMethods(
       toCallState(result, contract?.interface, fragments?.[index], latestBlockNumber)
     )
   }, [results, contract?.interface, fragments, latestBlockNumber])
+}
+
+export function useMultipleContractsMultipleMethods(
+  contracts: Contract[] | null | undefined,
+  callsData?: (
+    | {
+        methodName: string
+        callInputs?: OptionalMethodInputs
+      }
+    | undefined
+  )[][],
+  options?: ListenerOptions,
+  gasRequired?: number
+): CallState[][] {
+  const calls = useMemo(
+    () =>
+      contracts && callsData?.length > 0 && callsData?.flat().every((inputs) => isValidMethodArgs(inputs?.callInputs))
+        ? contracts
+            .map<Call[] | undefined>((contract, index) => {
+              return callsData[index].map((inputs) => {
+                if (!inputs) return undefined
+                const fragment = contract.interface.getFunction(inputs.methodName)
+                return {
+                  address: contract.address,
+                  callData: contract.interface.encodeFunctionData(fragment, inputs.callInputs),
+                  ...(gasRequired ? { gasRequired } : {}),
+                }
+              })
+            })
+            .flat()
+        : [],
+    [contracts, callsData, gasRequired]
+  )
+
+  const results = useCallsData(calls, options)
+
+  const latestBlockNumber = useBlockNumber()
+
+  return useMemo(() => {
+    let index = 0
+    return results?.length > 0
+      ? callsData.map((callsDataBlock, i) =>
+          callsDataBlock.map((callsData) => {
+            index++
+            return toCallState(
+              results[index - 1],
+              contracts[i].interface,
+              contracts[i].interface.getFunction(callsData.methodName),
+              latestBlockNumber
+            )
+          })
+        )
+      : []
+  }, [results, contracts, callsData, latestBlockNumber])
 }
 
 export function useMultipleContractSingleData(

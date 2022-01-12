@@ -75,11 +75,11 @@ export default function Deposit({ pair }: any): JSX.Element {
     transactionReview.addUSD(i18n._(t`Balance USD`), pair.currentUserAssetAmount.value, newUserAssetAmount, pair.asset)
     const newUtilization = e10(18).mulDiv(pair.currentBorrowAmount.value, pair.currentAllAssets.value.add(amount))
     transactionReview.addPercentage(i18n._(t`Borrowed`), pair.utilization.value, newUtilization)
-    if (pair.currentExchangeRate.isZero()) {
+    if (pair.exchangeRate.isZero()) {
       transactionReview.add(
         'Exchange Rate',
         formatNumber(
-          pair.currentExchangeRate.toFixed(18 + pair.collateral.tokenInfo.decimals - pair.asset.tokenInfo.decimals)
+          pair.exchangeRate.toFixed(18 + pair.collateral.tokenInfo.decimals - pair.asset.tokenInfo.decimals)
         ),
         formatNumber(
           pair.oracleExchangeRate.toFixed(18 + pair.collateral.tokenInfo.decimals - pair.asset.tokenInfo.decimals)
@@ -92,7 +92,7 @@ export default function Deposit({ pair }: any): JSX.Element {
 
   // Handlers
   async function onExecute(cooker: KashiCooker): Promise<string> {
-    if (pair.currentExchangeRate.isZero()) {
+    if (pair.exchangeRate.isZero()) {
       cooker.updateExchangeRate(false, ZERO, ZERO)
     }
     const amount = value.toBigNumber(pair.asset.tokenInfo.decimals)

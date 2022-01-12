@@ -8,6 +8,7 @@ import {
   getBentoUserTokens,
   getClones,
   getKashiPairs,
+  getUserKashiPairs,
 } from 'app/services/graph/fetchers'
 import stringify from 'fast-json-stable-stringify'
 import useSWR from 'swr'
@@ -28,6 +29,20 @@ export function useKashiPairs({
   const { data } = useSWR(
     shouldFetch ? () => ['kashiPairs', chainId, stringify(variables)] : null,
     (_, chainId) => getKashiPairs(chainId, variables),
+    swrConfig
+  )
+  return data
+}
+
+export function useUserKashiPairs({
+  chainId = ChainId.ETHEREUM,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) {
+  const { data } = useSWR(
+    shouldFetch ? () => ['userKashiPairs', chainId, stringify(variables)] : null,
+    (_, chainId) => getUserKashiPairs(chainId, variables),
     swrConfig
   )
   return data

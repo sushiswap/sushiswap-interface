@@ -62,7 +62,7 @@ export default function Repay({ pair }: RepayProps) {
     ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.asset.balance
 
-  const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
+  const displayUpdateOracle = pair.exchangeRate.gt(0) ? updateOracle : true
 
   const displayRepayValue = pinRepayMax
     ? minimum(pair.currentUserBorrowAmount.value, balance).toFixed(pair.asset.tokenInfo.decimals)
@@ -75,7 +75,7 @@ export default function Repay({ pair }: RepayProps) {
   const nextMinCollateralOracle = nextUserBorrowAmount.mulDiv(pair.oracleExchangeRate, e10(16).mul('75'))
   const nextMinCollateralSpot = nextUserBorrowAmount.mulDiv(pair.spotExchangeRate, e10(16).mul('75'))
   const nextMinCollateralStored = nextUserBorrowAmount.mulDiv(
-    displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate,
+    displayUpdateOracle ? pair.oracleExchangeRate : pair.exchangeRate,
     e10(16).mul('75')
   )
   const nextMinCollateralMinimum = maximum(nextMinCollateralOracle, nextMinCollateralSpot, nextMinCollateralStored)
@@ -128,7 +128,7 @@ export default function Repay({ pair }: RepayProps) {
   const nextMaxBorrowableSpot = nextUserCollateralAmount.mulDiv(e10(16).mul('75'), pair.spotExchangeRate)
   const nextMaxBorrowableStored = nextUserCollateralAmount.mulDiv(
     e10(16).mul('75'),
-    displayUpdateOracle ? pair.oracleExchangeRate : pair.currentExchangeRate
+    displayUpdateOracle ? pair.oracleExchangeRate : pair.exchangeRate
   )
   const nextMaxBorrowMinimum = minimum(nextMaxBorrowableOracle, nextMaxBorrowableSpot, nextMaxBorrowableStored)
   const nextMaxBorrowSafe = nextMaxBorrowMinimum.mulDiv('95', '100').sub(pair.currentUserBorrowAmount.value)

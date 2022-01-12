@@ -25,7 +25,7 @@ export default function Borrow() {
   const pairs = useKashiPairs(addresses)
 
   const positions = useSearchAndSort(
-    pairs.filter((pair: any) => pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)),
+    pairs.filter((pair: any) => pair.balanceOf.gt(0) || pair.userBorrowPart.gt(0)),
     { keys: ['search'], threshold: 0.1 },
     { key: 'health.value', direction: 'descending' }
   )

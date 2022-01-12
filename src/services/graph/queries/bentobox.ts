@@ -130,8 +130,8 @@ export const kashiPairsQuery = gql`
 `
 
 export const kashiUserPairsQuery = gql`
-  query kashiUserPairs($user: String!, $skip: Int = 0, $first: Int = 1000, $block: Block_height) {
-    userKashiPairs(skip: $skip, first: $first, block: $block, where: { user: $user }) {
+  query kashiUserPairs($first: Int = 1000, $skip: Int = 0, $where: UserKashiPair_filter, $block: Block_height) {
+    userKashiPairs(first: $first, skip: $skip, block: $block, where: $where) {
       assetFraction
       collateralShare
       borrowPart

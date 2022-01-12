@@ -55,7 +55,7 @@ const KashiDeposit = ({ pair, useBento }) => {
   )
 
   async function onDeposit(cooker: KashiCooker): Promise<string> {
-    if (pair?.currentExchangeRate.isZero()) {
+    if (pair?.exchangeRate.isZero()) {
       cooker.updateExchangeRate(false, ZERO, ZERO)
     }
     cooker.addAsset(BigNumber.from(parsedDepositValue.quotient.toString()), useBento)

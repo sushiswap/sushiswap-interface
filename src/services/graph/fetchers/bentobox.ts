@@ -15,7 +15,7 @@ import {
 import { pager } from './pager'
 
 export const BENTOBOX = {
-  [ChainId.ETHEREUM]: 'sushiswap/bentobox',
+  [ChainId.ETHEREUM]: 'lufycz/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
   [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
@@ -70,7 +70,7 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = unde
   }))
 }
 
-export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
+export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { userKashiPairs } = await fetcher(chainId, kashiUserPairsQuery, variables)
 
   return userKashiPairs.map((userPair) => ({
