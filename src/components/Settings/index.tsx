@@ -1,12 +1,13 @@
-import { AdjustmentsIcon } from '@heroicons/react/solid'
+import { CheckIcon, CogIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Percent } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
+import CloseIcon from 'app/components/CloseIcon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Popover from 'app/components/Popover'
 import QuestionHelper from 'app/components/QuestionHelper'
-import Toggle from 'app/components/Toggle'
+import Switch from 'app/components/Switch'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
@@ -31,22 +32,21 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
       <Popover
         placement="bottom-end"
         content={
-          <div className="bg-dark-900 border border-dark-700 rounded w-80 shadow-lg">
-            <div className="p-4 space-y-4">
-              <Typography variant="sm" weight={700} className="text-high-emphesis">
+          <div className="p-3 flex flex-col bg-dark-900 gap-3 rounded w-80 shadow-xl border border-dark-700">
+            <div className="flex flex-col gap-4 p-3 border border-dark-800/60 rounded">
+              <Typography variant="xxs" weight={700} className="text-secondary">
                 {i18n._(t`Transaction Settings`)}
               </Typography>
-
               <TransactionSettings placeholderSlippage={placeholderSlippage} trident={trident} />
-
-              <Typography className="text-high-emphesis" weight={700}>
+            </div>
+            <div className="flex flex-col gap-3 p-3 border border-dark-800/60 rounded">
+              <Typography variant="xxs" weight={700} className="text-secondary">
                 {i18n._(t`Interface Settings`)}
               </Typography>
-
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
-                  <Typography variant="sm" className="text-primary">
-                    {i18n._(t`Toggle Expert Mode`)}
+                  <Typography variant="xs" className="text-high-emphesis" weight={700}>
+                    {i18n._(t`Toggle expert mode`)}
                   </Typography>
                   <QuestionHelper
                     text={i18n._(
@@ -54,10 +54,11 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
                     )}
                   />
                 </div>
-                <Toggle
+                <Switch
+                  size="sm"
                   id="toggle-expert-mode-button"
-                  isActive={expertMode}
-                  toggle={
+                  checked={expertMode}
+                  onChange={
                     expertMode
                       ? () => {
                           toggleExpertMode()
@@ -68,20 +69,27 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
                           setShowConfirmation(true)
                         }
                   }
+                  checkedIcon={<CheckIcon className="text-dark-700" />}
+                  uncheckedIcon={<CloseIcon />}
+                  color="gradient"
                 />
               </div>
               {!trident && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <Typography variant="sm" className="text-primary">
-                      {i18n._(t`Disable Multihops`)}
+                    <Typography variant="xs" className="text-high-emphesis" weight={700}>
+                      {i18n._(t`Disable multihops`)}
                     </Typography>
                     <QuestionHelper text={i18n._(t`Restricts swaps to direct pairs only.`)} />
                   </div>
-                  <Toggle
+                  <Switch
+                    size="sm"
                     id="toggle-disable-multihop-button"
-                    isActive={singleHopOnly}
-                    toggle={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
+                    checked={singleHopOnly}
+                    onChange={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
+                    checkedIcon={<CheckIcon className="text-dark-700" />}
+                    uncheckedIcon={<CloseIcon />}
+                    color="gradient"
                   />
                 </div>
               )}
@@ -89,24 +97,25 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
           </div>
         }
       >
-        <div className={'flex items-center justify-center w-10 h-10 rounded cursor-pointer'}>
-          <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90 hover:text-white" />
+        <div className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer">
+          <CogIcon className="w-[26px] h-[26px] transform rotate-90 hover:text-white" />
         </div>
       </Popover>
       <HeadlessUiModal.Controlled isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)} maxWidth="md">
         <div className="flex flex-col gap-4">
           <HeadlessUiModal.Header header={i18n._(t`Confirm`)} onClose={() => setShowConfirmation(false)} />
-          <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
-            <Typography weight={700}>
+          <HeadlessUiModal.BorderedContent className="flex flex-col gap-3 !border-yellow/40">
+            <Typography variant="xs" weight={700} className="text-secondary">
+              {i18n._(t`Only use this mode if you know what you are doing.`)}
+            </Typography>
+            <Typography variant="sm" weight={700} className="text-yellow">
               {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
             </Typography>
-            <Typography variant="xs" weight={700} className="text-secondary">
-              {i18n._(t`ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.`)}
-            </Typography>
           </HeadlessUiModal.BorderedContent>
           <Button
-            color="red"
+            color="blue"
+            variant="filled"
             onClick={() => {
               toggleExpertMode()
               setShowConfirmation(false)

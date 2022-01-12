@@ -76,7 +76,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
           </Typography>
         </div>
         <div className="flex rounded bg-dark-900 px-4 py-2.5 gap-4 items-center">
-          <CurrencyLogo currency={auction.paymentToken} size={42} className="rounded-full" />
+          <CurrencyLogo currency={auction.paymentToken} size={42} className="!rounded-full overflow-hidden" />
           <div className="flex items-baseline gap-2 flex-grow">
             <Typography variant="lg" weight={700} className="text-high-emphesis">
               {auction.paymentToken.symbol}
