@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react'
 import { Percent } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import ModalHeader from 'app/components/ModalHeader'
 import Popover from 'app/components/Popover'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Toggle from 'app/components/Toggle'
@@ -34,7 +33,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
         content={
           <div className="bg-dark-900 border border-dark-700 rounded w-80 shadow-lg">
             <div className="p-4 space-y-4">
-              <Typography weight={700} className="text-high-emphesis">
+              <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {i18n._(t`Transaction Settings`)}
               </Typography>
 
@@ -94,27 +93,26 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
           <AdjustmentsIcon className="w-[26px] h-[26px] transform rotate-90 hover:text-white" />
         </div>
       </Popover>
-      <HeadlessUiModal.Controlled isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)}>
-        <div className="space-y-4 p-6">
-          <ModalHeader title={i18n._(t`Are you sure?`)} onClose={() => setShowConfirmation(false)} />
-          <Typography variant="lg">
-            {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
+      <HeadlessUiModal.Controlled isOpen={showConfirmation} onDismiss={() => setShowConfirmation(false)} maxWidth="md">
+        <div className="flex flex-col gap-4">
+          <HeadlessUiModal.Header header={i18n._(t`Confirm`)} onClose={() => setShowConfirmation(false)} />
+          <HeadlessUiModal.BorderedContent className="flex flex-col gap-3">
+            <Typography weight={700}>
+              {i18n._(t`Expert mode turns off the confirm transaction prompt and allows high slippage trades
                                 that often result in bad rates and lost funds.`)}
-          </Typography>
-          <Typography variant="sm" className="font-medium">
-            {i18n._(t`ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.`)}
-          </Typography>
+            </Typography>
+            <Typography variant="xs" weight={700} className="text-secondary">
+              {i18n._(t`ONLY USE THIS MODE IF YOU KNOW WHAT YOU ARE DOING.`)}
+            </Typography>
+          </HeadlessUiModal.BorderedContent>
           <Button
             color="red"
-            size="lg"
             onClick={() => {
               toggleExpertMode()
               setShowConfirmation(false)
             }}
           >
-            <Typography variant="lg" id="confirm-expert-mode">
-              {i18n._(t`Turn On Expert Mode`)}
-            </Typography>
+            {i18n._(t`Enable Expert Mode`)}
           </Button>
         </div>
       </HeadlessUiModal.Controlled>

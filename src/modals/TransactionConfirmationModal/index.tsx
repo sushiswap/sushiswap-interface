@@ -7,7 +7,6 @@ import Button from 'app/components/Button'
 import CloseIcon from 'app/components/CloseIcon'
 import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import ModalHeader from 'app/components/ModalHeader'
 import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions'
 import useAddTokenToMetaMask from 'app/hooks/useAddTokenToMetaMask'
@@ -106,8 +105,8 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   topContent,
 }) => {
   return (
-    <div className="grid gap-4 p-6">
-      <ModalHeader title={title} onClose={onDismiss} />
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={title} onClose={onDismiss} />
       {topContent()}
       {bottomContent()}
     </div>
