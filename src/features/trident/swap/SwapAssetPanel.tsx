@@ -303,7 +303,7 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
           {i18n._(t`Balance:`)}
         </Typography>
         <Typography
-          id={`text-balance-${currency?.symbol}`}
+          id={currency ? `text-balance-${currency?.symbol}` : ''}
           variant={isDesktop ? 'sm' : 'xs'}
           weight={700}
           onClick={handleClick}
