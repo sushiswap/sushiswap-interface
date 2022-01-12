@@ -179,15 +179,14 @@ export default function CurrencyInputPanel({
         )}
       </div>
       {!disableCurrencySelect && onCurrencySelect && (
-        <CurrencySearchModal
-          isOpen={modalOpen}
+        <CurrencySearchModal.Controlled
+          open={modalOpen}
           onDismiss={handleDismissSearch}
           onCurrencySelect={onCurrencySelect}
-          selectedCurrency={currency}
-          otherSelectedCurrency={otherCurrency}
+          selectedCurrency={currency ?? undefined}
+          otherSelectedCurrency={otherCurrency ?? undefined}
           showCommonBases={showCommonBases}
           allowManageTokenList={allowManageTokenList}
-          hideBalance={hideBalance}
           showSearch={showSearch}
         />
       )}

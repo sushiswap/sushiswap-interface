@@ -28,12 +28,6 @@ const WalletIcon: FC<{ size?: number; src: string; alt: string }> = ({ size, src
   )
 }
 
-function renderTransactions(transactions: string[]) {
-  return transactions.map((hash, i) => {
-    return <Transaction key={i} hash={hash} />
-  })
-}
-
 interface AccountDetailsProps {
   toggleWalletModal: () => void
   pendingTransactions: string[]
@@ -71,14 +65,14 @@ const AccountDetails: FC<AccountDetailsProps> = ({
 
   const statusIcon = useMemo(() => {
     if (connector === injected) {
-      return <Identicon seed={account} />
-    } else if (connector.constructor.name === 'WalletConnectConnector') {
+      return <Identicon seed={account ?? ''} />
+    } else if (connector?.constructor.name === 'WalletConnectConnector') {
       return <WalletIcon src="/wallet-connect.png" alt="Wallet Connect" size={16} />
-    } else if (connector.constructor.name === 'WalletLinkConnector') {
+    } else if (connector?.constructor.name === 'WalletLinkConnector') {
       return <WalletIcon src="/coinbase.svg" alt="Coinbase" size={16} />
-    } else if (connector.constructor.name === 'FortmaticConnector') {
+    } else if (connector?.constructor.name === 'FortmaticConnector') {
       return <WalletIcon src="/formatic.png" alt="Fortmatic" size={16} />
-    } else if (connector.constructor.name === 'PortisConnector') {
+    } else if (connector?.constructor.name === 'PortisConnector') {
       return (
         <WalletIcon src="/portnis.png" alt="Portis" size={16}>
           <Button
@@ -91,7 +85,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
           </Button>
         </WalletIcon>
       )
-    } else if (connector.constructor.name === 'TorusConnector') {
+    } else if (connector?.constructor.name === 'TorusConnector') {
       return <WalletIcon src="/torus.png" alt="Torus" size={16} />
     }
     return null

@@ -88,6 +88,7 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
       {!txHash ? (
         <HeadlessUIModal.Body>
           <HeadlessUIModal.Header
+            onClose={onDismiss}
             header={i18n._(t`Create Liquidity Launcher`)}
             subheader={i18n._(t`Please review your entered details thoroughly.`)}
           />

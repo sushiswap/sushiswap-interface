@@ -1,24 +1,22 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import Image from 'app/components/Image'
 import Loader from 'app/components/Loader'
-import QuestionHelper from 'app/components/QuestionHelper'
 import { MouseoverTooltip } from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
 import { isTokenOnList } from 'app/functions/validate'
 import { useIsUserAddedToken } from 'app/hooks/Tokens'
+import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCombinedActiveList } from 'app/state/lists/hooks'
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
-import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
-import { FixedSizeList } from 'react-window'
-
-import ImportRow from './ImportRow'
+import React, { CSSProperties, FC, useMemo } from 'react'
+import AutoSizer from 'react-virtualized-auto-sizer'
+import { FixedSizeList as List } from 'react-window'
 
 function currencyKey(currency: Currency): string {
   return currency.isToken ? currency.address : 'ETHER'
@@ -68,42 +66,35 @@ function TokenTags({ currency }: { currency: Currency }) {
   )
 }
 
-function CurrencyRow({
-  currency,
-  onSelect,
-  isSelected,
-  otherSelected,
-  style,
-  hideBalance = false,
-}: {
+interface CurrencyRow {
   currency: Currency
-  onSelect: () => void
-  isSelected: boolean
-  otherSelected: boolean
-  hideBalance: boolean
   style: CSSProperties
-}) {
+}
+
+const CurrencyRow: FC<CurrencyRow> = ({ currency, style }) => {
   const { account } = useActiveWeb3React()
+  const { onSelect, currency: selectedCurrency } = useCurrencyModalContext()
   const key = currencyKey(currency)
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency.isToken ? currency : undefined)
   const customAdded = useIsUserAddedToken(currency)
   const balance = useCurrencyBalance(account ?? undefined, currency)
-  // only show add or remove buttons if not on selected list
+
   return (
     <div
-      className="flex items-center w-full hover:bg-dark-800/40 px-6"
       id={`token-item-${key}`}
+      className={classNames(
+        currency === selectedCurrency ? 'opacity-20 pointer-events-none' : '',
+        'flex items-center w-full hover:bg-dark-800/40 px-4 py-2'
+      )}
       style={style}
-      onClick={() => (isSelected ? null : onSelect())}
-      // disabled={isSelected}
-      // selected={otherSelected}
+      {...(currency !== selectedCurrency && { onClick: () => onSelect(currency) })}
     >
       <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
         <div className="flex flex-row items-center gap-3 flex-grow">
-          <CurrencyLogo currency={currency} size={32} className="rounded-full" />
+          <CurrencyLogo currency={currency} size={32} className="!rounded-full overflow-hidden" />
           <div className="flex flex-col">
-            <Typography variant="xs" className="text-secondary">
+            <Typography variant="xxs" className="text-secondary">
               {currency.name} {!isOnSelectedList && customAdded && '• Added by user'}
             </Typography>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
@@ -112,9 +103,7 @@ function CurrencyRow({
           </div>
           <TokenTags currency={currency} />
         </div>
-        <div className="flex items-center pr-3">
-          {balance ? <Balance balance={balance} /> : account ? <Loader /> : null}
-        </div>
+        <div className="flex items-center">{balance ? <Balance balance={balance} /> : account ? <Loader /> : null}</div>
       </div>
     </div>
   )
@@ -126,115 +115,61 @@ function isBreakLine(x: unknown): x is BreakLine {
   return x === BREAK_LINE
 }
 
-function BreakLineComponent({ style }: { style: CSSProperties }) {
+const BreakLineComponent: FC<{ style: CSSProperties }> = ({ style }) => {
   const { i18n } = useLingui()
 
   return (
-    <div className="flex items-center w-full hover:bg-dark-800 px-6" style={style}>
-      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
-        <div className="flex flex-row items-center gap-3 flex-grow">
-          <Image src="/images/tokenlist.svg" alt="Token List" width={32} height={32} />
-          <div className="flex flex-col">
-            <Typography variant="sm" className="ml-3">
-              {i18n._(t`Expanded results from inactive Token Lists`)}
-              <QuestionHelper
-                text={i18n._(t`Tokens from inactive lists. Import specific tokens below or
-            click Manage to activate more lists.`)}
-              />
-            </Typography>
-          </div>
-        </div>
+    <div className="flex w-full px-4 border-t border-dark-800" style={style}>
+      <div className="flex flex-col gap-0.5 justify-center">
+        <Typography variant="xs" weight={700}>
+          {i18n._(t`Expanded results from inactive token lists`)}
+        </Typography>
+        <Typography variant="xxs">
+          {i18n._(t`Tokens from inactive lists: import specific tokens below or
+            click manage to activate more lists.`)}
+        </Typography>
       </div>
     </div>
   )
 }
 
-export default function CurrencyList({
-  height,
-  currencies,
-  otherListTokens,
-  selectedCurrency,
-  onCurrencySelect,
-  otherCurrency,
-  fixedListRef,
-  showImportView,
-  setImportToken,
-  hideBalance = false,
-}: {
-  height: number
+interface CurrencyList {
   currencies: Currency[]
   otherListTokens?: WrappedTokenInfo[]
   selectedCurrency?: Currency | null
-  onCurrencySelect: (currency: Currency) => void
   otherCurrency?: Currency | null
-  fixedListRef?: MutableRefObject<FixedSizeList | undefined>
-  showImportView: () => void
-  setImportToken: (token: Token) => void
-  hideBalance: boolean
-}) {
+}
+
+const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
   const itemData: (Currency | BreakLine)[] = useMemo(() => {
     if (otherListTokens && otherListTokens?.length > 0) {
       return [...currencies, BREAK_LINE, ...otherListTokens]
     }
     return currencies
-  }, [currencies, otherListTokens])
 
-  const Row = useCallback(
-    function TokenRow({ data, index, style }) {
-      const row: Currency | BreakLine = data[index]
-      if (isBreakLine(row)) {
-        return <BreakLineComponent style={style} />
-      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currencies.length, otherListTokens])
 
-      const currency = row
+  const Row = ({ index, key, style }) => {
+    const currency = itemData[index]
+    if (isBreakLine(currency)) {
+      return <BreakLineComponent style={style} key={key} />
+    }
 
-      const isSelected = Boolean(currency && selectedCurrency && selectedCurrency.equals(currency))
-      const otherSelected = Boolean(currency && otherCurrency && otherCurrency.equals(currency))
-      const handleSelect = () => currency && onCurrencySelect(currency)
-
-      const token = currency?.wrapped
-
-      const showImport = index > currencies.length
-
-      if (showImport && token) {
-        return (
-          <ImportRow style={style} token={token} showImportView={showImportView} setImportToken={setImportToken} dim />
-        )
-      } else if (currency) {
-        return (
-          <CurrencyRow
-            style={style}
-            currency={currency}
-            isSelected={isSelected}
-            onSelect={handleSelect}
-            otherSelected={otherSelected}
-            hideBalance={hideBalance}
-          />
-        )
-      } else {
-        return null
-      }
-    },
-    [currencies.length, hideBalance, onCurrencySelect, otherCurrency, selectedCurrency, setImportToken, showImportView]
-  )
-
-  const itemKey = useCallback((index: number, data: typeof itemData) => {
-    const currency = data[index]
-    if (isBreakLine(currency)) return BREAK_LINE
-    return currencyKey(currency)
-  }, [])
+    return <CurrencyRow currency={currency} style={style} key={key} />
+  }
 
   return (
-    <FixedSizeList
-      height={height}
-      ref={fixedListRef as any}
-      width="100%"
-      itemData={itemData}
-      itemCount={itemData.length}
-      itemSize={56}
-      itemKey={itemKey}
-    >
-      {Row}
-    </FixedSizeList>
+    <div className="divide-y divide-dark-800 flex flex-col flex-1 flex-grow h-full">
+      <AutoSizer>
+        {({ height, width }) => (
+          <List height={height} width={width} itemCount={itemData.length} itemSize={56}>
+            {Row}
+          </List>
+        )}
+      </AutoSizer>
+    </div>
   )
 }
+
+export default CurrencyList

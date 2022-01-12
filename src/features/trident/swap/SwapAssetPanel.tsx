@@ -6,9 +6,7 @@ import selectCoinAnimation from 'app/animation/select-coin.json'
 import { BentoBoxIcon, WalletIcon } from 'app/components/AssetInput/icons'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
 import NumericalInput from 'app/components/Input/Numeric'
-import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
@@ -16,6 +14,7 @@ import { classNames, maxAmountSpend, tryParseAmount, warningSeverity } from 'app
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { FC, useCallback, useMemo, useState } from 'react'
@@ -200,7 +199,7 @@ const InputPanel: FC<
     >
       <div className="cursor-pointer lg:pl-3" onClick={() => setOpen(true)}>
         {currency ? (
-          <CurrencyLogo currency={currency} className="rounded-full" size={40} />
+          <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={40} />
         ) : (
           <div className="flex items-center w-10 h-10 lg:w-[74px] lg:h-[74px] rounded-full relative">
             <Lottie animationData={selectCoinAnimation} autoplay loop />
@@ -220,9 +219,12 @@ const InputPanel: FC<
                 </Typography>
                 <ChevronDownIcon width={24} className="text-low-emphesis" />
               </div>
-              <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
-                <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
-              </HeadlessUIModal.Controlled>
+              <CurrencySearchModal.Controlled
+                open={open}
+                selectedCurrency={currency}
+                onCurrencySelect={(currency) => onSelect && onSelect(currency)}
+                onDismiss={() => setOpen(false)}
+              />
             </div>
           )}
           <Typography
@@ -235,24 +237,22 @@ const InputPanel: FC<
             )}
           >
             {!currency ? (
-              <HeadlessUIModal
+              <CurrencySearchModal
+                selectedCurrency={currency}
+                onCurrencySelect={(currency) => onSelect && onSelect(currency)}
                 trigger={
                   <div className="inline-flex items-center">
                     <Button
                       color="blue"
                       variant="filled"
-                      className="rounded-full px-3 py-0 h-[32px] shadow-md token-select-trigger"
+                      className="!rounded-full px-3 py-0 h-[32px] shadow-md token-select-trigger"
                       endIcon={<ChevronDownIcon width={20} height={20} />}
                     >
                       <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
                     </Button>
                   </div>
                 }
-              >
-                {({ setOpen }) => (
-                  <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
-                )}
-              </HeadlessUIModal>
+              />
             ) : (
               <NumericalInput
                 disabled={disabled}
@@ -331,7 +331,9 @@ const SwapAssetPanelHeader: FC<
           {label}
         </Typography>
         {currency && isDesktop && (
-          <HeadlessUIModal
+          <CurrencySearchModal
+            selectedCurrency={currency}
+            onCurrencySelect={(currency) => onSelect && onSelect(currency)}
             trigger={
               <div id={id} className="flex gap-0.5 cursor-pointer hover:text-high-emphesis">
                 <Typography variant="h3" weight={700}>
@@ -340,11 +342,7 @@ const SwapAssetPanelHeader: FC<
                 <ChevronDownIcon width={24} className="text-low-emphesis" />
               </div>
             }
-          >
-            {({ setOpen }) => (
-              <CurrencySelectDialog currency={currency} onChange={onSelect} onDismiss={() => setOpen(false)} />
-            )}
-          </HeadlessUIModal>
+          />
         )}
       </div>
       <div className="hidden lg:block">{walletToggle({ spendFromWallet })}</div>
