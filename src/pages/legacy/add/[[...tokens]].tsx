@@ -523,10 +523,7 @@ export default function Add() {
                 <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
               ) : null
             ) : (
-              <UnsupportedCurrencyFooter
-                show={addIsUnsupported}
-                currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]}
-              />
+              <UnsupportedCurrencyFooter currencies={[currencies.CURRENCY_A, currencies.CURRENCY_B]} />
             )}
           </div>
         </DoubleGlowShadow>

@@ -1,26 +1,26 @@
-import { Currency, Token } from '@sushiswap/core-sdk'
-import Button from 'app/components/Button'
-import CloseIcon from 'app/components/CloseIcon'
-import { AutoColumn } from 'app/components/Column'
+import { ExternalLinkIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency } from '@sushiswap/core-sdk'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import { AutoRow, RowBetween } from 'app/components/Row'
-import { classNames } from 'app/functions'
+import Typography from 'app/components/Typography'
+import { shortenAddress } from 'app/functions'
 import { getExplorerLink } from 'app/functions/explorer'
 import { useUnsupportedTokens } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { useState } from 'react'
+import React, { FC, useState } from 'react'
 
-export default function UnsupportedCurrencyFooter({
-  show,
-  currencies,
-}: {
-  show: boolean
+interface UnsupportedCurrencyFooter {
   currencies: (Currency | undefined)[]
-}) {
+}
+
+const UnsupportedCurrencyFooter: FC<UnsupportedCurrencyFooter> = ({ currencies }) => {
+  const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const [showDetails, setShowDetails] = useState(false)
+  const unsupportedTokens = useUnsupportedTokens()
 
   const tokens =
     chainId && currencies
@@ -29,56 +29,58 @@ export default function UnsupportedCurrencyFooter({
         })
       : []
 
-  const unsupportedTokens: { [address: string]: Token } = useUnsupportedTokens()
-
   return (
-    <div
-      className={classNames(
-        show ? 'translate-y-0' : '-translate-y-full',
-        'text-center transition-transform z-[-1] w-full -mt-8 pb-5 pt-12'
-      )}
-    >
+    <>
       <HeadlessUiModal.Controlled isOpen={showDetails} onDismiss={() => setShowDetails(false)}>
-        <div className="p-6">
-          <AutoColumn gap="lg">
-            <RowBetween>
-              <div>Unsupported Assets</div>
-
-              <CloseIcon onClick={() => setShowDetails(false)} />
-            </RowBetween>
+        <div className="flex flex-col gap-4">
+          <HeadlessUiModal.Header header={i18n._(t`Unsupported Asset`)} onClose={() => setShowDetails(false)} />
+          <HeadlessUiModal.BorderedContent className="flex flex-col gap-4">
             {tokens.map((token) => {
               return (
                 token &&
                 unsupportedTokens &&
                 Object.keys(unsupportedTokens).includes(token.address) && (
-                  <div className="border border-dark-700" key={token.address?.concat('not-supported')}>
-                    <AutoColumn gap="10px">
-                      <AutoRow gap="5px" align="center">
-                        <CurrencyLogo currency={token} size={'24px'} />
-                        <div className="font-medium">{token.symbol}</div>
-                      </AutoRow>
-                      {chainId && (
-                        <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
-                          <div className="text-xs">{token.address}</div>
-                        </ExternalLink>
-                      )}
-                    </AutoColumn>
+                  <div key={token.address?.concat('not-supported')}>
+                    <div className="flex items-center gap-3">
+                      <CurrencyLogo currency={token} size={32} />
+                      <div className="flex flex-col">
+                        <Typography variant="lg" weight={700}>
+                          {token.symbol}
+                        </Typography>
+                        {chainId && (
+                          <ExternalLink href={getExplorerLink(chainId, token.address, 'address')}>
+                            <div className="flex gap-2">
+                              <Typography variant="xs" weight={700} className="text-blue">
+                                {shortenAddress(token.address)}
+                              </Typography>
+                              <ExternalLinkIcon width={12} className="text-blue" />
+                            </div>
+                          </ExternalLink>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 )
               )
             })}
-            <AutoColumn gap="lg">
-              <div className="font-medium">
-                Some assets are not available through this interface because they may not work well with our smart
-                contract or we are unable to allow trading for legal reasons.
-              </div>
-            </AutoColumn>
-          </AutoColumn>
+            <Typography variant="sm" weight={700}>
+              {i18n._(t`Some assets are not available through this interface because they may not work well with our smart
+            contract or we are unable to allow trading for legal reasons.`)}
+            </Typography>
+          </HeadlessUiModal.BorderedContent>
         </div>
       </HeadlessUiModal.Controlled>
-      <Button variant="empty" style={{ padding: '0px' }} onClick={() => setShowDetails(true)}>
-        <div>Read more about unsupported assets</div>
-      </Button>
-    </div>
+      <Typography
+        role="button"
+        onClick={() => setShowDetails(true)}
+        variant="xs"
+        weight={700}
+        className="text-blue/80 hover:text-blue text-center"
+      >
+        {i18n._(t`What does this mean?`)}
+      </Typography>
+    </>
   )
 }
+
+export default UnsupportedCurrencyFooter
