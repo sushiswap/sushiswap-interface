@@ -27,10 +27,10 @@ export const ImportToken: FC<ImportProps> = ({ tokens, onBack }) => {
   const importList = importToken instanceof WrappedTokenInfo ? importToken.list : undefined
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Import token`)} onClose={onDismiss} onBack={onBack} />
-      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 divide-y divide-gray-700">
-        <Typography variant="sm" weight={700} className="text-high-emphesis">
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 divide-y divide-gray-700 !border-yellow/40">
+        <Typography variant="sm" weight={700} className="text-yellow">
           {i18n._(
             t`This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade.`
           )}
@@ -39,7 +39,7 @@ export const ImportToken: FC<ImportProps> = ({ tokens, onBack }) => {
           return (
             <div key={'import' + token.address} className=".token-warning-container flex flex-col gap-4 pt-4">
               <div className="flex items-center gap-3">
-                <CurrencyLogo currency={token} size={48} className="rounded-full overflow-hidden" />
+                <CurrencyLogo currency={token} size={48} className="!rounded-full overflow-hidden" />
                 <div className="flex flex-col">
                   <div className="flex gap-2 items-center">
                     <Typography variant="lg" weight={700}>
@@ -78,7 +78,7 @@ export const ImportToken: FC<ImportProps> = ({ tokens, onBack }) => {
       >
         {i18n._(t`Import`)}
       </Button>
-    </>
+    </div>
   )
 }
 
