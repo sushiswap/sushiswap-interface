@@ -120,7 +120,7 @@ export const useAuction = (address?: string, owner?: string) => {
   } = useAuctionHelperInfo(address, marketTemplateId, owner ?? undefined)
 
   return useMemo(() => {
-    if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
+    if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments || !lpTokenAddress)
       return { loading: loadingDetails || loadingInfo, auction: undefined }
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
