@@ -1,10 +1,21 @@
-import { ElementHandle } from 'puppeteer'
+import { Dappeteer } from '@chainsafe/dappeteer'
+import { ElementHandle, Page } from 'puppeteer'
 
 import { SwapType } from '../../enums/SwapType'
 import { AppPage } from '../AppPage'
+import { CurrencySelectComponent } from '../shared/CurrencySelectComponent'
 
 export class SwapPage extends AppPage {
   protected Route: string = '/trident/swap'
+
+  // Components
+  private CurrencySelectModal: CurrencySelectComponent
+
+  constructor(page: Page, metamask: Dappeteer, baseUrl: string) {
+    super(page, metamask, baseUrl)
+
+    this.CurrencySelectModal = new CurrencySelectComponent(page)
+  }
 
   // Main swap panel selectors
   private TokenInputSelector: string = '.swap-panel-input input'
@@ -28,9 +39,9 @@ export class SwapPage extends AppPage {
   private OutTokenButtonSelector: string = '#asset-select-trigger-1'
 
   //Currency select dialog selectors
-  private SelectTokenInputSelector: string = '#txt-select-token'
-  private AllCurrenciesListSelector: string = '#all-currencies-list'
-  private SelectTokenResultsSelector: string = '#all-currencies-'
+  // private SelectTokenInputSelector: string = '#txt-select-token'
+  // private AllCurrenciesListSelector: string = '#all-currencies-list'
+  // private SelectTokenResultsSelector: string = '.token-'
 
   // Tx settings
   private TxSettingsButtonSelector: string = '#btn-transaction-settings'
@@ -90,6 +101,12 @@ export class SwapPage extends AppPage {
   // Swap Asset Panel
   public async setInputToken(tokenSymbol: string): Promise<void> {
     await this.blockingWait(1, true)
+
+    const selectedInToken = await this.getSelectedInputToken()
+    if (selectedInToken === tokenSymbol) {
+      return
+    }
+
     const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
     await inputTokenButton.click()
     await this.selectToken(tokenSymbol)
@@ -97,27 +114,19 @@ export class SwapPage extends AppPage {
 
   public async setOutputToken(tokenSymbol: string): Promise<void> {
     await this.blockingWait(1, true)
+
+    const selectedOutToken = await this.getSelectedOutputToken()
+    if (selectedOutToken === tokenSymbol) {
+      return
+    }
+
     const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
     await outputTokenButton.click()
     await this.selectToken(tokenSymbol)
   }
 
   private async selectToken(tokenSymbol: string): Promise<void> {
-    await this.Page.waitForSelector(this.AllCurrenciesListSelector)
-    await this.blockingWait(3)
-
-    const nativeTokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
-    if (nativeTokenButton) {
-      await this.blockingWait(2)
-      await nativeTokenButton.click()
-    } else {
-      const selectTokenInput = await this.Page.waitForSelector(this.SelectTokenInputSelector)
-      selectTokenInput.type(tokenSymbol)
-      await this.blockingWait(2)
-
-      const tokenButton = await this.Page.$(this.SelectTokenResultsSelector + tokenSymbol)
-      await tokenButton.click()
-    }
+    await this.CurrencySelectModal.selectToken(tokenSymbol)
   }
 
   public async setAmountIn(inTokenAmount: string): Promise<void> {

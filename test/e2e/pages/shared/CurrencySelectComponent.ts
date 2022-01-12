@@ -4,7 +4,7 @@ export class CurrencySelectComponent extends AppPageComponent {
   // Selectors
   private SelectTokenInputSelector: string = '#txt-select-token'
   private AllCurrenciesListSelector: string = '#all-currencies-list'
-  private SelectTokenResultsSelector: string = '#all-currencies-'
+  private SelectTokenResultsSelector: string = '.token-'
 
   public async selectToken(tokenSymbol: string): Promise<void> {
     await this.Page.waitForSelector(this.AllCurrenciesListSelector)
