@@ -99,6 +99,7 @@ const PointlistCreationModal: FC<PointlistCreationModalProps> = ({ open, onDismi
       {!txHash ? (
         <HeadlessUIModal.Body>
           <HeadlessUIModal.Header
+            onClose={onDismiss}
             header={i18n._(t`Create Permission List`)}
             subheader={i18n._(t`Please review your entered details thoroughly.`)}
           />

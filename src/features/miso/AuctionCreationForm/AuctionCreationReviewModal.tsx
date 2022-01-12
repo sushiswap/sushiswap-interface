@@ -99,6 +99,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: 
       {!txHash ? (
         <HeadlessUIModal.Body className="lg:max-w-lg lg:min-w-lg">
           <HeadlessUIModal.Header
+            onClose={onDismiss}
             header={i18n._(t`Create Auction`)}
             subheader={i18n._(t`Please review your entered details thoroughly.`)}
           />
