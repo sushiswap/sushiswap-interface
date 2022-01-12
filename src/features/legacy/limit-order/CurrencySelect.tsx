@@ -82,8 +82,8 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
         </div>
       </button>
       {!disabled && onSelect && (
-        <CurrencySearchModal
-          isOpen={modalOpen}
+        <CurrencySearchModal.Controlled
+          open={modalOpen}
           onDismiss={() => setModalOpen(false)}
           onCurrencySelect={onSelect}
           selectedCurrency={currency}

@@ -5,12 +5,11 @@ import { Currency } from '@sushiswap/core-sdk'
 import selectCoinAnimation from 'app/animation/select-coin.json'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
 import ListPanel from 'app/components/ListPanel'
-import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
@@ -98,14 +97,13 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
         )}
       >
         {content}
-        <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
-          <CurrencySelectDialog
-            currency={value}
-            onChange={onSelect}
-            onDismiss={() => setOpen(false)}
-            currencies={currencies}
-          />
-        </HeadlessUIModal.Controlled>
+        <CurrencySearchModal.Controlled
+          open={open}
+          onDismiss={() => setOpen(false)}
+          selectedCurrency={value}
+          onCurrencySelect={onSelect}
+          currencyList={currencies?.map((el) => el?.wrapped.address)}
+        />
       </div>
       {value && balances && (
         <div className="mt-4">
