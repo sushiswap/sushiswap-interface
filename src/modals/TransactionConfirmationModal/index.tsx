@@ -86,8 +86,8 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
 interface ConfirmationModelContentProps {
   title: string
   onDismiss: () => void
-  topContent: () => React.ReactNode
-  bottomContent: () => React.ReactNode
+  topContent?: (() => React.ReactNode) | React.ReactNode
+  bottomContent?: (() => React.ReactNode) | React.ReactNode
 }
 
 export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
@@ -99,8 +99,8 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={title} onClose={onDismiss} />
-      {topContent()}
-      {bottomContent()}
+      {typeof topContent === 'function' ? topContent() : topContent}
+      {typeof bottomContent === 'function' ? bottomContent() : bottomContent}
     </div>
   )
 }
@@ -134,11 +134,11 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ mess
 interface ConfirmationModalProps {
   isOpen: boolean
   onDismiss: () => void
-  hash: string | undefined
-  content: () => React.ReactNode
+  hash?: string
+  content: React.ReactNode
   attemptingTxn: boolean
   pendingText: string
-  currencyToAdd?: Currency | undefined
+  currencyToAdd?: Currency
 }
 
 const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
@@ -151,12 +151,10 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
   currencyToAdd,
 }) => {
   const { chainId } = useActiveWeb3React()
+  if (!chainId) return <></>
 
-  if (!chainId) return null
-
-  // confirmation screen
   return (
-    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss} maxWidth="md">
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss} maxWidth="md" unmount={false}>
       {attemptingTxn ? (
         <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} />
       ) : hash ? (
@@ -167,7 +165,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
           currencyToAdd={currencyToAdd}
         />
       ) : (
-        content()
+        content
       )}
     </HeadlessUiModal.Controlled>
   )

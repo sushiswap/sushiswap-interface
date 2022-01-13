@@ -1,12 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
+import { CurrencyAmount, Percent, TradeType } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { isAddress, shortenAddress } from 'app/functions'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { TradeUnion } from 'app/types'
 import React, { FC, useState } from 'react'
 import { ArrowDown } from 'react-feather'
 
@@ -14,7 +15,7 @@ import AdvancedSwapDetails from './AdvancedSwapDetails'
 import TradePrice from './TradePrice'
 
 interface SwapModalHeader {
-  trade: V2Trade<Currency, Currency, TradeType>
+  trade?: TradeUnion
   allowedSlippage: Percent
   recipient?: string
   showAcceptChanges: boolean
@@ -29,11 +30,21 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
   onAcceptChanges,
 }) => {
   const { i18n } = useLingui()
+  const { currencies } = useCurrenciesFromURL()
   const [showInverted, setShowInverted] = useState<boolean>(false)
-  const fiatValueInput = useUSDCValue(trade.inputAmount)
-  const fiatValueOutput = useUSDCValue(trade.outputAmount)
+
+  // Use a default CurrencyAmount of 1 so that the price loads in the background hence making the inputs faster
+  const fiatValueInput = useUSDCValue(
+    trade?.inputAmount || (currencies?.[0] ? CurrencyAmount.fromRawAmount(currencies[0], '1') : undefined)
+  )
+
+  // Use a default CurrencyAmount of 1 so that the price loads in the background hence making the inputs faster
+  const fiatValueOutput = useUSDCValue(
+    trade?.outputAmount || (currencies?.[1] ? CurrencyAmount.fromRawAmount(currencies[1], '1') : undefined)
+  )
+
   const change =
-    ((Number(fiatValueOutput.toExact()) - Number(fiatValueInput.toExact())) / Number(fiatValueInput.toExact())) * 100
+    ((Number(fiatValueOutput?.toExact()) - Number(fiatValueInput?.toExact())) / Number(fiatValueInput?.toExact())) * 100
 
   return (
     <div className="grid gap-4">
@@ -43,15 +54,19 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
             <div className="flex items-start gap-3">
               <div className="flex flex-col gap-1">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
-                  {trade.inputAmount.toSignificant(6)}{' '}
+                  {trade?.inputAmount.toSignificant(6)}{' '}
                 </Typography>
                 <Typography className="text-secondary">${fiatValueInput?.toFixed(2)}</Typography>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <CurrencyLogo currency={trade.inputAmount.currency} size={18} className="!rounded-full overflow-hidden" />
+              <CurrencyLogo
+                currency={trade?.inputAmount.currency}
+                size={18}
+                className="!rounded-full overflow-hidden"
+              />
               <Typography variant="lg" weight={700} className="text-high-emphesis">
-                {trade.inputAmount.currency.symbol}
+                {trade?.inputAmount.currency.symbol}
               </Typography>
             </div>
           </div>
@@ -66,7 +81,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
             <div className="flex items-start gap-3">
               <div className="flex flex-col gap-1">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
-                  {trade.outputAmount.toSignificant(6)}{' '}
+                  {trade?.outputAmount.toSignificant(6)}{' '}
                 </Typography>
                 <Typography className="text-secondary">
                   ${fiatValueOutput?.toFixed(2)}{' '}
@@ -78,19 +93,19 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
             </div>
             <div className="flex items-center gap-3">
               <CurrencyLogo
-                currency={trade.outputAmount.currency}
+                currency={trade?.outputAmount.currency}
                 size={18}
                 className="!rounded-full overflow-hidden"
               />
               <Typography variant="lg" weight={700} className="text-high-emphesis">
-                {trade.outputAmount.currency.symbol}
+                {trade?.outputAmount.currency.symbol}
               </Typography>
             </div>
           </div>
         </HeadlessUiModal.BorderedContent>
       </div>
-      <TradePrice price={trade.executionPrice} showInverted={showInverted} setShowInverted={setShowInverted} />
-      <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} />
+      <TradePrice price={trade?.executionPrice} showInverted={showInverted} setShowInverted={setShowInverted} />
+      <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} recipient={recipient} />
 
       {showAcceptChanges && (
         <HeadlessUiModal.BorderedContent className="bg-dark-1000/40 border !border-dark-800 rounded-2xl">
@@ -105,7 +120,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
         </HeadlessUiModal.BorderedContent>
       )}
       <div className="justify-start text-sm text-secondary text-center">
-        {trade.tradeType === TradeType.EXACT_INPUT ? (
+        {trade?.tradeType === TradeType.EXACT_INPUT ? (
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Output is estimated. You will receive at least`)}{' '}
             <Typography variant="xs" className="text-high-emphesis" weight={700} component="span">
@@ -117,21 +132,12 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Input is estimated. You will sell at most`)}{' '}
             <Typography variant="xs" className="text-high-emphesis" weight={700} component="span">
-              {trade.maximumAmountIn(allowedSlippage).toSignificant(6)} {trade.inputAmount.currency.symbol}
+              {trade?.maximumAmountIn(allowedSlippage).toSignificant(6)} {trade?.inputAmount.currency.symbol}
             </Typography>{' '}
             {i18n._(t`or the transaction will revert.`)}
           </Typography>
         )}
       </div>
-
-      {recipient !== null ? (
-        <div className="flex-start">
-          <>
-            {i18n._(t`Output will be sent to`)}{' '}
-            <b title={recipient}>{isAddress(recipient) ? shortenAddress(recipient) : recipient}</b>
-          </>
-        </div>
-      ) : null}
     </div>
   )
 }
