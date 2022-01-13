@@ -15,7 +15,7 @@ export interface ModalContentBorderedProps extends HTMLProps<HTMLDivElement> {
 
 export const BorderedModalContent: FC<ModalContentBorderedProps> = ({ children, className, ...rest }) => {
   return (
-    <div {...rest} className={classNames(className, 'border border-dark-700 rounded p-4')}>
+    <div {...rest} className={classNames(className, 'border border-dark-800/60 rounded p-4')}>
       {children}
     </div>
   )
