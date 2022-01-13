@@ -36,7 +36,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from 'app/state/application/hooks'
 import { Field } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserSingleHopOnly, useUserTransactionTTL } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly, useUserTransactionTTL } from 'app/state/user/hooks'
 import Lottie from 'lottie-react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -101,6 +101,9 @@ export default function Swap({ banners }) {
 
   // get custom setting values for user
   const [ttl] = useUserTransactionTTL()
+
+  // OpenMEV
+  const [useOpenMev] = useUserOpenMev()
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
@@ -241,7 +244,8 @@ export default function Swap({ banners }) {
     trade,
     allowedSlippage,
     recipient,
-    signatureData
+    signatureData,
+    useOpenMev
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -454,7 +458,7 @@ export default function Swap({ banners }) {
             />
             <AutoColumn justify="space-between" className="py-3">
               <div
-                className={classNames(isExpertMode ? 'justify-between' : 'flex-start', 'px-4 flex-wrap w-full flex')}
+                className={classNames(isExpertMode ? 'justify-between' : 'flex-start', 'flex flex-wrap px-4 w-full')}
               >
                 <button
                   className="z-10 -mt-6 -mb-6 rounded-full"
@@ -514,7 +518,7 @@ export default function Swap({ banners }) {
                 id="swap-currency-output"
               />
               {Boolean(trade) && (
-                <div className="p-1 -mt-2 cursor-pointer rounded-b-md bg-dark-800">
+                <div className="p-1 -mt-2 rounded-b-md cursor-pointer bg-dark-800">
                   <TradePrice
                     price={trade?.executionPrice}
                     showInverted={showInverted}
@@ -572,7 +576,7 @@ export default function Swap({ banners }) {
                     size="lg"
                   >
                     {approvalState === ApprovalState.PENDING ? (
-                      <div className="flex items-center justify-center h-full space-x-2">
+                      <div className="flex justify-center items-center space-x-2 h-full">
                         <div>Approving</div>
                         <Loader stroke="white" />
                       </div>

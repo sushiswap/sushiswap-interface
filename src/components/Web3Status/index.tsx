@@ -34,49 +34,49 @@ function StatusIcon({
 }) {
   if (connector === injected) {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/metamask.png" alt="Injected (MetaMask etc...)" width={16} height={16} />
       </div>
     )
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'LatticeConnector') {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'PortisConnector') {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'CloverConnector') {
     return (
-      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+      <div className="flex flex-col flex-nowrap justify-center items-center w-4 h-4">
         <Image src="/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
       </div>
     )
@@ -111,7 +111,7 @@ function Web3StatusInner() {
         onClick={toggleWalletModal}
       >
         {hasPendingTransactions ? (
-          <div className="flex gap-2 items-center justify-between">
+          <div className="flex gap-2 justify-between items-center">
             <div>
               {pending?.length} {i18n._(t`Pending`)}
             </div>{' '}

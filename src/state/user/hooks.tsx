@@ -37,6 +37,7 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
+  updateUserUseOpenMev,
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -415,4 +416,17 @@ export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Pe
     () => (allowedSlippage === 'auto' ? defaultSlippageTolerance : allowedSlippage),
     [allowedSlippage, defaultSlippageTolerance]
   )
+}
+
+export function useUserOpenMev(): [boolean, (newUseOpenMev: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  const useOpenMev = useSelector<AppState, AppState['user']['useOpenMev']>((state) => state.user.userUseOpenMev)
+
+  const setUseOpenMev = useCallback(
+    (newUseOpenMev: boolean) => dispatch(updateUserUseOpenMev({ userUseOpenMev: newUseOpenMev })),
+    [dispatch]
+  )
+
+  return [useOpenMev, setUseOpenMev]
 }

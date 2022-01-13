@@ -17,12 +17,13 @@ import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import useENS from 'app/hooks/useENS'
 import { SwapCallbackState, useSwapCallback } from 'app/hooks/useSwapCallback'
-import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTolerance'
 import useTransactionStatus from 'app/hooks/useTransactionStatus'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { FC, useCallback, useMemo, useState } from 'react'
 
 import SwapRate from './SwapRate'
+
 
 const SwapReviewModal: FC = () => {
   const { i18n } = useLingui()
@@ -38,6 +39,7 @@ const SwapReviewModal: FC = () => {
 
   const allowedSlippage = useSwapSlippageTolerance(trade)
 
+  // @ts-ignore
   const { state, callback, error } = useSwapCallback(trade, allowedSlippage, address, null, {
     receiveToWallet,
     fromWallet: spendFromWallet,
@@ -88,9 +90,9 @@ const SwapReviewModal: FC = () => {
       afterLeave={() => setTxHash(undefined)}
     >
       {!txHash ? (
-        <div className="flex flex-col h-full gap-5 pb-4 lg:w-full">
+        <div className="flex flex-col gap-5 pb-4 h-full lg:w-full">
           <div className="relative">
-            <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
+            <div className="absolute w-full h-full bg-gradient-to-r opacity-20 pointer-events-none from-opaque-blue to-opaque-pink" />
             <div className="flex flex-col gap-4 px-5 pt-5 pb-8">
               <div className="flex flex-row justify-between">
                 <Button
@@ -119,7 +121,7 @@ const SwapReviewModal: FC = () => {
             </div>
           </div>
           <div className="flex flex-col gap-3 px-5">
-            <div className="flex items-center gap-3">
+            <div className="flex gap-3 items-center">
               <CurrencyLogo currency={parsedAmounts?.[0]?.currency} size={48} className="rounded-full" />
               <Typography variant="h3" weight={700} className="text-white">
                 {parsedAmounts?.[0]?.toSignificant(6)}
@@ -131,7 +133,7 @@ const SwapReviewModal: FC = () => {
             <div className="flex justify-center w-12 text-secondary">
               <ArrowDownIcon width={20} />
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex gap-3 items-center">
               <CurrencyLogo currency={parsedAmounts?.[1]?.currency} size={48} className="rounded-full" />
               <Typography variant="h3" weight={700} className="text-white">
                 {parsedAmounts?.[1]?.toSignificant(6)}

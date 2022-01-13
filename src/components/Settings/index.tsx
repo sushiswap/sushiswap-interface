@@ -10,9 +10,13 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
+import { useOnClickOutside } from 'app/hooks/useOnClickOutside'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
-import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
-import React, { FC, useState } from 'react'
+import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
+import React, { FC, useRef, useState } from 'react'
+
+import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
 
 interface SettingsTabProps {
   placeholderSlippage?: Percent
@@ -22,10 +26,18 @@ interface SettingsTabProps {
 const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = false }) => {
   const { i18n } = useLingui()
 
+  const { chainId } = useActiveWeb3React()
+
+  const node = useRef<HTMLDivElement>(null)
+
   const toggle = useToggleSettingsMenu()
   const [expertMode, toggleExpertMode] = useExpertModeManager()
   const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
   const [showConfirmation, setShowConfirmation] = useState(false)
+
+  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMev()
+
+  useOnClickOutside(node, open ? toggle : undefined)
 
   return (
     <>
@@ -75,7 +87,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
                 />
               </div>
               {!trident && (
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                   <div className="flex items-center">
                     <Typography variant="xs" className="text-high-emphesis" weight={700}>
                       {i18n._(t`Disable multihops`)}
@@ -94,6 +106,21 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
                 </div>
               )}
             </div>
+            {OPENMEV_ENABLED && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <Typography variant="sm" className="text-primary">
+                    {i18n._(t`OpenMEV Gas Refunder`)}
+                  </Typography>
+                  <QuestionHelper text={i18n._(t`OpenMEV refunds up to 95% of transaction costs in 35 blocks.`)} />
+                </div>
+                <Toggle
+                  id="toggle-use-openmev"
+                  isActive={userUseOpenMev}
+                  toggle={() => (userUseOpenMev ? setUserUseOpenMev(false) : setUserUseOpenMev(true))}
+                />
+              </div>
+            )}
           </div>
         }
       >
