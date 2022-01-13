@@ -7,6 +7,8 @@ export default function Vaults() {
       <Head>
         <title>Vaults | Sushi</title>
         <meta key="description" name="description" content="Sushi vaults..." />
+        <meta key="twitter:description" name="twitter:description" content="Sushi vaults..." />
+        <meta key="og:description" property="og:description" content="Sushi vaults..." />
       </Head>
     </Container>
   )

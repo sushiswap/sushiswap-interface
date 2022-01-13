@@ -153,9 +153,7 @@ const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
             color="blue"
             onClick={onClick}
           >
-            {bApprove === BentoApprovalState.PENDING
-              ? i18n._(t`Approving BentoBox to spend tokens`)
-              : i18n._(t`Approve BentoBox to spend tokens`)}
+            {bApprove === BentoApprovalState.PENDING ? i18n._(t`Approving BentoBox`) : i18n._(t`Approve BentoBox`)}
           </ButtonDotted>
         )}
       {inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {

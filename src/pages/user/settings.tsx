@@ -7,6 +7,8 @@ export default function Settings() {
       <Head>
         <title>Settings | Sushi</title>
         <meta name="description" content="SushiSwap Settings..." />
+        <meta key="twitter:description" name="twitter:description" content="SushiSwap Settings..." />
+        <meta key="og:description" property="og:description" content="SushiSwap Settings..." />
       </Head>
     </Container>
   )

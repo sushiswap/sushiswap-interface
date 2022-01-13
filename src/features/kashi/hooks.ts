@@ -99,8 +99,6 @@ export function useKashiPairs(addresses = []) {
 
   const strategies = useBentoStrategies({ chainId })
 
-  console.log({ USD, chainId, account, tokens })
-
   const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token?.address)], [account, tokens])
 
   // TODO: Replace

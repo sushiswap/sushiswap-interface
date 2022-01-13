@@ -40,6 +40,16 @@ export default function Pair() {
           name="description"
           content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
         />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
+        />
       </Head>
       <Card
         className="h-full bg-dark-900"
@@ -157,7 +167,7 @@ const PairLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="/borrow-graphic.png"
+          backgroundImage="/images/kashi/borrow.png"
           title={i18n._(t`Add collateral in order to borrow assets`)}
           description={i18n._(
             t`Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements.`

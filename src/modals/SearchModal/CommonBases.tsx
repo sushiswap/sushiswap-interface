@@ -7,18 +7,14 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import { COMMON_BASES } from 'app/config/routing'
 import { currencyId } from 'app/functions'
-import React from 'react'
+import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
+import { useActiveWeb3React } from 'app/services/web3'
+import React, { FC } from 'react'
 
-export default function CommonBases({
-  chainId,
-  onSelect,
-  selectedCurrency,
-}: {
-  chainId?: number
-  selectedCurrency?: Currency | null
-  onSelect: (currency: Currency) => void
-}) {
+const CommonBases: FC = () => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
+  const { currency: selectedCurrency, onSelect } = useCurrencyModalContext()
   const bases = typeof chainId !== 'undefined' ? COMMON_BASES[chainId] ?? [] : []
 
   if (bases.length === 0) return <></>
@@ -54,3 +50,5 @@ export default function CommonBases({
     </div>
   )
 }
+
+export default CommonBases

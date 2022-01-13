@@ -1,138 +1,119 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { TokenList } from '@uniswap/token-lists'
 import Button from 'app/components/Button'
-import { AutoColumn } from 'app/components/Column'
-import ExternalLink from 'app/components/ExternalLink'
+import Checkbox from 'app/components/Checkbox'
 import ListLogo from 'app/components/ListLogo'
-import ModalHeader from 'app/components/ModalHeader'
+import { HeadlessUiModal } from 'app/components/Modal'
+import Typography from 'app/components/Typography'
+import { classNames, listVersionLabel } from 'app/functions'
 import { useFetchListCallback } from 'app/hooks/useFetchListCallback'
+import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
 import { AppDispatch } from 'app/state'
 import { enableList, removeList } from 'app/state/lists/actions'
 import { useAllLists } from 'app/state/lists/hooks'
-import React, { useCallback, useState } from 'react'
-import { AlertTriangle } from 'react-feather'
+import React, { FC, useCallback, useState } from 'react'
 import ReactGA from 'react-ga'
 import { useDispatch } from 'react-redux'
 
 import CurrencyModalView from './CurrencyModalView'
 
-interface ImportProps {
-  listURL: string
-  list: TokenList
-  onDismiss: () => void
-  setModalView: (view: CurrencyModalView) => void
-}
-
-function ImportList({ listURL, list, setModalView, onDismiss }: ImportProps) {
-  const dispatch = useDispatch<AppDispatch>()
-
+const ImportList: FC = () => {
   const { i18n } = useLingui()
-
-  // user must accept
+  const dispatch = useDispatch<AppDispatch>()
+  const { setView, onDismiss, listUrl, importList } = useCurrencyModalContext()
   const [confirmed, setConfirmed] = useState(false)
-
   const lists = useAllLists()
   const fetchList = useFetchListCallback()
-
-  // monitor is list is loading
-  const adding = Boolean(lists[listURL]?.loadingRequestId)
-  const [addError, setAddError] = useState<string | null>(null)
-
+  const [addError, setAddError] = useState<string>()
+  const adding = Boolean(listUrl && lists[listUrl]?.loadingRequestId)
   const handleAddList = useCallback(() => {
-    if (adding) return
-    setAddError(null)
-    fetchList(listURL)
+    if (adding || !listUrl) return
+    setAddError(undefined)
+    fetchList(listUrl)
       .then(() => {
         ReactGA.event({
           category: 'Lists',
           action: 'Add List',
-          label: listURL,
+          label: listUrl,
         })
 
-        // turn list on
-        dispatch(enableList(listURL))
-        // go back to lists
-        setModalView(CurrencyModalView.manage)
+        console.log(listUrl)
+        dispatch(enableList(listUrl))
+        setView(CurrencyModalView.manage)
       })
       .catch((error) => {
         ReactGA.event({
           category: 'Lists',
           action: 'Add List Failed',
-          label: listURL,
+          label: listUrl,
         })
         setAddError(error.message)
-        dispatch(removeList(listURL))
+        dispatch(removeList(listUrl))
       })
-  }, [adding, dispatch, fetchList, listURL, setModalView])
+  }, [adding, dispatch, fetchList, listUrl, setView])
 
   return (
-    <div>
-      <ModalHeader
+    <>
+      <HeadlessUiModal.Header
         onClose={onDismiss}
-        title={i18n._(t`Import List`)}
-        onBack={() => setModalView(CurrencyModalView.manage)}
+        header={i18n._(t`Import List`)}
+        onBack={() => setView(CurrencyModalView.manage)}
       />
-      <div className="px-1 space-y-4">
-        <div className="flex flex-row items-center px-4">
-          {list.logoURI && <ListLogo logoURI={list.logoURI} size="50px" />}
-          <AutoColumn gap="sm" style={{ marginLeft: '20px' }}>
-            <div className="flex flex-row">
-              <div className="mr-1.5 font-semibold">{list.name}</div>
-              <div className="ml-1.5">{list.tokens.length} tokens</div>
+      <HeadlessUiModal.BorderedContent className="bg-[rgba(0,0,0,0.2)]">
+        <div className="flex gap-3">
+          {importList?.logoURI && (
+            <ListLogo size="40px" logoURI={importList.logoURI} alt={`${importList.name} list logo`} />
+          )}
+          <div className="flex flex-col">
+            <Typography weight={700} className={classNames('text-primary overflow-hidden overflow-ellipsis')}>
+              {importList?.name}{' '}
+              {importList && (
+                <Typography variant="xs" weight={700} component="span">
+                  {listVersionLabel(importList.version)}
+                </Typography>
+              )}
+            </Typography>
+            <div className="flex gap-1 items-center">
+              <Typography variant="xs" className="text-white">
+                {i18n._(t`${importList?.tokens.length} tokens`)}
+              </Typography>
             </div>
-            <ExternalLink className="overflow-hidden" href={`https://tokenlists.org/token-list?url=${listURL}`}>
-              <div className="overflow-hidden font-sm text-blue overflow-ellipsis whitespace-nowrap">{listURL}</div>
-            </ExternalLink>
-          </AutoColumn>
-        </div>
-        <div className="space-y-2">
-          <div className="flex flex-col items-center justify-center text-center">
-            <AlertTriangle className="text-red" stroke="currentColor" size={32} />
-            <div className="text-lg font-medium text-red">Import at your own risk </div>
           </div>
-
-          <div className="flex flex-col mb-3 space-y-4 text-center whitespace-pre-line">
-            <div className="font-semibold text-red">
-              By adding this list you are implicitly trusting that the data is correct. Anyone can create a list,
+        </div>
+      </HeadlessUiModal.BorderedContent>
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 !border-yellow/30">
+        <Typography variant="xs" className="text-yellow" weight={700}>
+          {i18n._(t`Import at your own risk`)}
+        </Typography>
+        <Typography variant="sm" className="text-yellow" weight={700}>
+          {i18n._(t`By adding this list you are implicitly trusting that the data is correct. Anyone can create a list,
               including creating fake versions of existing lists and lists that claim to represent projects that do not
-              have one.
-            </div>
-            <div className="font-semibold text-red">
-              If you purchase a token from this list, you may not be able to sell it back.
-            </div>
-          </div>
-          <div className="flex flex-row justify-center cursor-pointer" onClick={() => setConfirmed(!confirmed)}>
-            <input
-              className="h-5 m-0"
-              name="confirmed"
-              type="checkbox"
-              checked={confirmed}
-              onChange={() => setConfirmed(!confirmed)}
-            />
-            <div className="text-red ml-2.5 font-medium">I understand</div>
-          </div>
-
-          <Button
-            color="gradient"
-            size="default"
-            style={{
-              padding: '10px 1rem',
-            }}
-            className="w-full"
-            disabled={!confirmed}
-            onClick={handleAddList}
-          >
-            Import
-          </Button>
+              have one.`)}
+        </Typography>
+        <Typography variant="sm" className="text-yellow" weight={700}>
+          {i18n._(t`If you purchase a token from this list, you may not be able to sell it back.`)}
+        </Typography>
+        <div className="flex flex-row items-center gap-3 cursor-pointer" onClick={() => setConfirmed(!confirmed)}>
+          <Checkbox
+            className="h-5 m-0"
+            name="confirmed"
+            type="checkbox"
+            checked={confirmed}
+            onChange={() => setConfirmed(!confirmed)}
+          />
+          <Typography weight={700}>{i18n._(t`I understand`)}</Typography>
         </div>
-        {addError ? (
-          <div title={addError} style={{ textOverflow: 'ellipsis', overflow: 'hidden' }} className="text-red">
-            {addError}
-          </div>
-        ) : null}
-      </div>
-    </div>
+      </HeadlessUiModal.BorderedContent>
+      <div className="flex flex-grow" />
+      <Button color="blue" disabled={!confirmed} onClick={handleAddList}>
+        {i18n._(t`Import`)}
+      </Button>
+      {addError ? (
+        <Typography variant="sm" weight={700} className="overflow-hidden text-ellipsis text-red text-center">
+          {addError}
+        </Typography>
+      ) : null}
+    </>
   )
 }
 

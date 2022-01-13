@@ -121,7 +121,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
                 <div className="flex flex-col gap-3 bg-dark-900 border border-dark-700 rounded p-5">
                   <Typography className="text-low-emphesis">{i18n._(t`You are committing`)}</Typography>
                   <div className="flex items-center gap-3 border-dark-700">
-                    <CurrencyLogo currency={amount?.currency} size={32} className="rounded-full" />
+                    <CurrencyLogo currency={amount?.currency} size={32} className="!rounded-full overflow-hidden" />
                     <div className="flex gap-2 items-baseline">
                       <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
                         {amount?.toSignificant(6)}

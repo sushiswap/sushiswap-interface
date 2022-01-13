@@ -64,6 +64,8 @@ export default function Me() {
       <Head>
         <title>My SUSHI | Sushi</title>
         <meta key="description" name="description" content="My SUSHI" />
+        <meta key="twitter:description" name="twitter:description" content="My SUSHI" />
+        <meta key="og:description" property="og:description" content="My SUSHI" />
       </Head>
       <div className="p-4 mb-3 space-y-3">
         <Back />
@@ -122,7 +124,7 @@ export default function Me() {
           <Typography component="h2" variant="lg" className="font-medium text-high-emphesis">
             {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId]}`)}
           </Typography>
-          <Button variant="link" onClick={clearAllTransactionsCallback}>
+          <Button variant="empty" color="blue" onClick={clearAllTransactionsCallback}>
             <span className="text-sm">{i18n._(t`Clear History`)}</span>
           </Button>
         </div>

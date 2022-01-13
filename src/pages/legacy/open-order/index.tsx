@@ -23,6 +23,8 @@ function OpenOrdersPage() {
       <Head>
         <title>Open Orders | Sushi</title>
         <meta name="description" content="Open orders..." />
+        <meta key="twitter:description" name="twitter:description" content="Open orders..." />
+        <meta key="og:description" property="og:description" content="Open orders..." />
       </Head>
       <div className="min-w-0 md:min-w-[672px]">
         <div className="flex items-center justify-start gap-2 py-3">

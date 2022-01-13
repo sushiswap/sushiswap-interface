@@ -48,6 +48,8 @@ const Vesting = () => {
       <Head>
         <title>Vesting | Sushi</title>
         <meta name="description" content="Vesting..." />
+        <meta key="twitter:description" name="twitter:description" content="Vesting..." />
+        <meta key="og:description" property="og:description" content="Vesting..." />
       </Head>
       <Container maxWidth="5xl" className="flex flex-col gap-8 px-4 py-8">
         <div className="flex items-center gap-8">

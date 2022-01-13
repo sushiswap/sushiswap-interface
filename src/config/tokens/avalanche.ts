@@ -39,3 +39,11 @@ export const SPELL = new Token(
   'Spell Token'
 )
 export const TIME = new Token(ChainId.AVALANCHE, '0xb54f16fB19478766A268F172C9480f8da1a7c9C3', 9, 'TIME', 'Time')
+
+export const WMEMO = new Token(
+  ChainId.AVALANCHE,
+  '0x0da67235dD5787D67955420C84ca1cEcd4E5Bb3b',
+  18,
+  'WMEMO',
+  'Wrapped MEMO'
+)

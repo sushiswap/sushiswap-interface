@@ -13,6 +13,8 @@ export default function Status({ fallbackData }) {
       <Head>
         <title>Chains | Sushi</title>
         <meta key="description" name="description" content="Chains..." />
+        <meta key="twitter:description" name="twitter:description" content="Chains..." />
+        <meta key="og:description" property="og:description" content="Chains..." />
       </Head>
       <div className="w-full max-w-6xl mx-auto">
         <Typography component="h1" variant="h1" className="w-full mb-4">

@@ -1,3 +1,4 @@
+import Background from 'app/components/Background'
 import Container, { MaxWidth } from 'app/components/Container'
 import Footer from 'app/components/Footer'
 import Header from 'app/components/Header'
@@ -27,6 +28,7 @@ export const MisoHeader: FC<MisoHeaderProps> = ({
       {...props}
       className={classNames('relative w-full bg-opacity-80 flex flex-col items-center shadow-md', className)}
     >
+      <Background variant="miso-bowl" />
       <Container
         maxWidth={maxWidth}
         className={classNames(

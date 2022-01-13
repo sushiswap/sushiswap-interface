@@ -59,7 +59,7 @@ const AuctionDetailsStep: FC = () => {
               {({ checked }) => (
                 <div
                   className={classNames(
-                    checked ? 'bg-dark-1000/40' : 'bg-dark-900',
+                    checked ? 'bg-dark-1000/40 border-purple' : 'bg-dark-900 hover:border-purple/40',
                     'flex flex-col gap-4 border border-dark-800 p-5 rounded h-full cursor-pointer'
                   )}
                 >

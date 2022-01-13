@@ -5,7 +5,9 @@ import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
+import Image from 'next/image'
 import Link from 'next/link'
+import React from 'react'
 
 import Container from '../Container'
 
@@ -17,10 +19,15 @@ const Footer = () => {
     <div className="z-10 w-full py-20 bg-dark-900/30 px-6 mt-20">
       <Container maxWidth="7xl" className="mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-10 lg:grid-cols-6">
-          <div className="flex flex-col gap-2">
-            <Typography variant="lg" weight={700} className="mb-3">
-              Sushi
-            </Typography>
+          <div className="flex flex-col gap-3">
+            <div className="flex justify-start items-center gap-2">
+              <div className="">
+                <Image src="/images/logo.svg" alt="Sushi logo" width="28px" height="28px" />
+              </div>
+              <Typography variant="h2" weight={700} className="tracking-[0.02em] scale-y-90">
+                Sushi
+              </Typography>
+            </div>
             <Typography variant="sm" className="text-low-emphesis">
               {i18n._(t`Our community is building a comprehensive decentralized trading platform for the future of finance. Join
               us!`)}
@@ -41,7 +48,7 @@ const Footer = () => {
             </div>
           </div>
           <div className="flex flex-col gap-1">
-            <Typography variant="lg" weight={700} className="mb-3">
+            <Typography variant="lg" weight={700} className="my-2.5">
               {i18n._(t`Products`)}
             </Typography>
             <Link
@@ -74,7 +81,7 @@ const Footer = () => {
             </Link>
           </div>
           <div className="flex flex-col gap-1">
-            <Typography variant="lg" weight={700} className="mb-3">
+            <Typography variant="lg" weight={700} className="my-2.5">
               {i18n._(t`Help`)}
             </Typography>
             <a href="https://docs.sushi.com" target="_blank" rel="noreferrer">
@@ -99,7 +106,7 @@ const Footer = () => {
             </a>
           </div>
           <div className="flex flex-col gap-1">
-            <Typography variant="lg" weight={700} className="mb-3">
+            <Typography variant="lg" weight={700} className="my-2.5">
               {i18n._(t`Developers`)}
             </Typography>
             <a href="https://docs.sushi.com" target="_blank" rel="noreferrer">
@@ -124,7 +131,7 @@ const Footer = () => {
             </a>
           </div>
           <div className="flex flex-col gap-1">
-            <Typography variant="lg" weight={700} className="mb-3">
+            <Typography variant="lg" weight={700} className="my-2.5">
               {i18n._(t`Governance`)}
             </Typography>
             <a href="https://forum.sushi.com" target="_blank" rel="noreferrer">
@@ -139,15 +146,28 @@ const Footer = () => {
             </a>
           </div>
           <div className="flex flex-col gap-1">
-            <Typography variant="lg" weight={700} className="mb-3">
+            <Typography variant="lg" weight={700} className="my-2.5">
               {i18n._(t`Protocol`)}
             </Typography>
-            <Typography variant="sm" className="text-low-emphesis">
-              {i18n._(t`Apply for Onsen`)}
-            </Typography>
-            <Typography variant="sm" className="text-low-emphesis">
-              {i18n._(t`Apply for Miso`)}
-            </Typography>
+            <a
+              href="https://docs.google.com/document/d/19bL55ZTjKtxlom2CpVo6K8jL1e-OZ13y6y9AQgw_qT4"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Apply for Onsen`)}
+              </Typography>
+            </a>
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSecahmrXOJytn-wOUB8tEfONzOTP4zjKqz3sIzNzDDs9J8zcA/viewform"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Typography variant="sm" className="text-low-emphesis">
+                {i18n._(t`Apply for Miso`)}
+              </Typography>
+            </a>
+
             <Link href="/vesting" passHref={true}>
               <Typography variant="sm" className="text-low-emphesis">
                 {i18n._(t`Vesting`)}

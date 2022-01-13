@@ -41,7 +41,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
           <Lottie animationData={animationData} autoplay loop={false} />
         </div>
       )}
-      <HeadlessUiModal.Header header={header} subheader={subheader} />
+      <HeadlessUiModal.Header onClose={onDismiss} header={header} subheader={subheader} />
       <HeadlessUiModal.Content>
         <div className="flex flex-col divide-dark-700 divide-y">
           <div className="flex justify-between gap-2 py-2">

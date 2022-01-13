@@ -31,6 +31,12 @@ export default function Pair() {
       <Head>
         <title>Lend {pair.asset.tokenInfo.symbol} | Sushi</title>
         <meta key="description" name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`}
+        />
+        <meta key="og:description" property="og:description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
       </Head>
       <Card
         className="bg-dark-900"
@@ -139,7 +145,7 @@ const PairLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="/bentobox/deposit.png"
+          backgroundImage="/images/kashi/deposit.png"
           title={i18n._(t`Lend assets for interest from borrowers.`)}
           description={i18n._(
             t`Have assets you want to earn additional interest on? Lend them in isolated markets and earn interest from borrowers.`

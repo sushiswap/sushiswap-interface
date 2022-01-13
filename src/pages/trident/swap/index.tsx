@@ -1,4 +1,4 @@
-import { SwitchVerticalIcon } from '@heroicons/react/solid'
+import { ArrowDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, TradeVersion } from '@sushiswap/core-sdk'
@@ -94,13 +94,13 @@ const Swap = () => {
               onChange={(value) => dispatch(setTridentSwapState({ value: value || '', typedField: TypedField.A }))}
               onSelect={(currency) => setURLCurrency(currency, 0)}
             />
-            <div className="flex justify-center relative lg:mt-[-20px] lg:mb-[-20px]">
+            <div className="flex justify-center relative lg:mt-[-23px] lg:mb-[-23px]">
               <div
                 id="btn-switch-currencies"
                 className="rounded-full lg:border-2 lg:border-dark-800 hover:lg:border-dark-700 hover:text-white bg-dark-900 p-1.5 cursor-pointer"
                 onClick={handleArrowsClick}
               >
-                <SwitchVerticalIcon width={24} height={24} />
+                <ArrowDownIcon width={16} height={16} />
               </div>
             </div>
             <SwapAssetPanel
@@ -149,9 +149,7 @@ const Swap = () => {
               {trade && (
                 <div className="flex flex-col px-3 mb-3 border divide-y rounded border-dark-800 lg:mb-0 divide-dark-800">
                   <div className="flex justify-between py-2">
-                    <Typography variant="sm" weight={700}>
-                      {i18n._(t`Version`)}
-                    </Typography>
+                    <Typography variant="sm">{i18n._(t`Version`)}</Typography>
                     <Chip
                       id="trade-type"
                       label={tradeVersion === TradeVersion.V2TRADE ? 'Legacy' : 'Trident'}

@@ -10,6 +10,7 @@ import {
   useEthPrice,
   useFarms,
   useFusePrice,
+  useGnoPrice,
   useKashiPairs,
   useMagicPrice,
   useMasterChefV1SushiPerBlock,
@@ -20,7 +21,6 @@ import {
   useOneDayBlock,
   useOnePrice,
   useSpellPrice,
-  useStakePrice,
   useSushiPairs,
   useSushiPrice,
 } from 'app/services/graph'
@@ -75,7 +75,7 @@ export default function useFarmRewards() {
     sushiPrice,
     ethPrice,
     maticPrice,
-    stakePrice,
+    gnoPrice,
     onePrice,
     spellPrice,
     celoPrice,
@@ -87,7 +87,7 @@ export default function useFarmRewards() {
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
-    useStakePrice(),
+    useGnoPrice(),
     useOnePrice(),
     useSpellPrice(),
     useCeloPrice(),
@@ -207,10 +207,11 @@ export default function useFarmRewards() {
             rewardPrice: maticPrice,
           },
           [ChainId.XDAI]: {
-            currency: new Token(ChainId.XDAI, '0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e', 18, 'STAKE', 'Stake'),
+            token: 'GNO',
+            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x6810e776880C02933D47DB1b9fc05908e5386b96.jpg',
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
-            rewardPrice: stakePrice,
+            rewardPrice: gnoPrice,
           },
           [ChainId.HARMONY]: {
             currency: NATIVE[ChainId.HARMONY],
@@ -359,10 +360,6 @@ export default function useFarmRewards() {
     const roiPerYear = rewardAprPerYear + feeApyPerYear
 
     const position = positions.find((position) => position.id === pool.id && position.chef === pool.chef)
-
-    if (positions.length) {
-      console.log({ positions })
-    }
 
     return {
       ...pool,

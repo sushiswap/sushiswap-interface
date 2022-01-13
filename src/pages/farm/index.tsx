@@ -57,6 +57,8 @@ export default function Farm(): JSX.Element {
       <Head>
         <title>Farm | Sushi</title>
         <meta key="description" name="description" content="Farm SUSHI" />
+        <meta key="twitter:description" name="twitter:description" content="Farm SUSHI" />
+        <meta key="og:description" property="og:description" content="Farm SUSHI" />
       </Head>
       <div className={classNames('sticky top-0 hidden lg:block md:col-span-1')} style={{ maxHeight: '40rem' }}>
         <Menu positionsLength={positions.length} />

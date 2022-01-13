@@ -7,15 +7,14 @@ import Alert from 'app/components/Alert'
 import Banner from 'app/components/Banner'
 import { ButtonConfirmed, ButtonError } from 'app/components/Button'
 import Button from 'app/components/Button'
-import Column, { AutoColumn } from 'app/components/Column'
+import { AutoColumn } from 'app/components/Column'
 import Container from 'app/components/Container'
 import CurrencyInputPanel from 'app/components/CurrencyInputPanel'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import Loader from 'app/components/Loader'
-import ProgressSteps from 'app/components/ProgressSteps'
 import Web3Connect from 'app/components/Web3Connect'
 import ConfirmSwapModal from 'app/features/legacy/swap/ConfirmSwapModal'
-import { SwapCallbackError } from 'app/features/legacy/swap/SwapCallbackError'
+import SwapCallbackError from 'app/features/legacy/swap/SwapCallbackError'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 import SwapHeader from 'app/features/trade/Header'
@@ -403,6 +402,16 @@ export default function Swap({ banners }) {
           name="description"
           content="SushiSwap allows for swapping of ERC20 compatible tokens across multiple networks"
         />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="SushiSwap allows for swapping of ERC20 compatible tokens across multiple networks"
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content="SushiSwap allows for swapping of ERC20 compatible tokens across multiple networks"
+        />
       </Head>
       <TokenWarningModal
         isOpen={importTokensNotInDefault.length > 0 && !dismissTokenWarning}
@@ -475,16 +484,17 @@ export default function Swap({ banners }) {
                 </button>
                 {isExpertMode ? (
                   recipient === null && !showWrap ? (
-                    <Button variant="link" size="none" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
+                    <Button
+                      variant="empty"
+                      size="sm"
+                      color="blue"
+                      id="add-recipient-button"
+                      onClick={() => onChangeRecipient('')}
+                    >
                       + Add recipient (optional)
                     </Button>
                   ) : (
-                    <Button
-                      variant="link"
-                      size="none"
-                      id="remove-recipient-button"
-                      onClick={() => onChangeRecipient(null)}
-                    >
+                    <Button variant="empty" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
                       - {i18n._(t`Remove recipient`)}
                     </Button>
                   )
@@ -537,13 +547,13 @@ export default function Swap({ banners }) {
           )}
           <div className="mt-4">
             {swapIsUnsupported ? (
-              <Button color="red" size="lg" disabled>
+              <Button color="red" size="lg" disabled fullWidth>
                 {i18n._(t`Unsupported Asset`)}
               </Button>
             ) : !account ? (
               <Web3Connect size="lg" color="blue" className="w-full" />
             ) : showWrap ? (
-              <Button color="gradient" size="lg" disabled={Boolean(wrapInputError)} onClick={onWrap}>
+              <Button fullWidth color="gradient" size="lg" disabled={Boolean(wrapInputError)} onClick={onWrap}>
                 {wrapInputError ??
                   (wrapType === WrapType.WRAP
                     ? i18n._(t`Wrap`)
@@ -560,6 +570,7 @@ export default function Swap({ banners }) {
               <div>
                 {approvalState !== ApprovalState.APPROVED && (
                   <ButtonConfirmed
+                    fullWidth
                     onClick={handleApprove}
                     disabled={approvalState !== ApprovalState.NOT_APPROVED || approvalSubmitted}
                     size="lg"
@@ -576,6 +587,7 @@ export default function Swap({ banners }) {
                 )}
                 {approvalState === ApprovalState.APPROVED && (
                   <ButtonError
+                    fullWidth
                     onClick={() => {
                       if (isExpertMode) {
                         handleSwap()
@@ -608,6 +620,7 @@ export default function Swap({ banners }) {
               </div>
             ) : (
               <ButtonError
+                fullWidth
                 onClick={() => {
                   if (isExpertMode) {
                     handleSwap()
@@ -634,16 +647,14 @@ export default function Swap({ banners }) {
                   : i18n._(t`Swap`)}
               </ButtonError>
             )}
-            {showApproveFlow && (
+            {/* {showApproveFlow && (
               <Column style={{ marginTop: '1rem' }}>
                 <ProgressSteps steps={[approvalState === ApprovalState.APPROVED]} />
               </Column>
-            )}
+            )} */}
             {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
           </div>
-          {swapIsUnsupported ? (
-            <UnsupportedCurrencyFooter show={swapIsUnsupported} currencies={[currencies.INPUT, currencies.OUTPUT]} />
-          ) : null}
+          {swapIsUnsupported ? <UnsupportedCurrencyFooter currencies={[currencies.INPUT, currencies.OUTPUT]} /> : null}
         </div>
         <Banner banners={banners} />
       </DoubleGlowShadow>

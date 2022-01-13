@@ -4,7 +4,7 @@ import { AbstractConnector } from '@web3-react/abstract-connector'
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import AccountDetails from 'app/components/AccountDetails'
-import { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
@@ -216,9 +216,9 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
                 : i18n._(t`Error connecting. Try refreshing the page.`)}
             </Typography>
           </HeadlessUiModal.BorderedContent>
-          <ButtonError error={true} size="sm" onClick={handleDeactivate} className="h-[50px]">
+          <Button color="red" onClick={handleDeactivate}>
             {i18n._(t`Disconnect`)}
-          </ButtonError>
+          </Button>
         </div>
       ) : account && walletView === WALLET_VIEWS.ACCOUNT ? (
         <AccountDetails

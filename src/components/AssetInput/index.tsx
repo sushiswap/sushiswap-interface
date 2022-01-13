@@ -7,9 +7,7 @@ import selectCoinAnimation from 'app/animation/select-coin.json'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
 import NumericalInput from 'app/components/Input/Numeric'
-import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import BentoBoxFundingSourceModal from 'app/features/trident/add/BentoBoxFundingSourceModal'
@@ -17,6 +15,7 @@ import { classNames, maxAmountSpend, tryParseAmount } from 'app/functions'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { createContext, FC, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -75,14 +74,13 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
           {props.onSelect && (
             <>
               <ChevronDownIcon width={24} height={24} className="text-secondary" />
-              <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
-                <CurrencySelectDialog
-                  currency={props.currency}
-                  onChange={props.onSelect}
-                  onDismiss={() => setOpen(false)}
-                  currencies={props.currencies}
-                />
-              </HeadlessUIModal.Controlled>
+              <CurrencySearchModal.Controlled
+                open={open}
+                selectedCurrency={props.currency}
+                onCurrencySelect={props.onSelect}
+                onDismiss={() => setOpen(false)}
+                currencyList={props.currencies?.map((el) => el.wrapped.address)}
+              />
             </>
           )}
         </div>
@@ -155,37 +153,31 @@ const AssetInputPanel = ({
   }, [isDesktop, value])
 
   let content = (
-    <div className="flex flex-row gap-3 py-2.5 px-2 flex-grow">
+    <div className="flex flex-row gap-3 py-2.5 px-2 flex-grow items-center">
       <div className="w-12 h-12 rounded-full">
         <Lottie animationData={selectCoinAnimation} autoplay loop />
       </div>
       {onSelect && (
         <>
-          <HeadlessUIModal
-            trigger={({ setOpen }) => (
+          <CurrencySearchModal
+            trigger={
               <div className="inline-flex items-center">
                 <Button
                   disabled={disabled}
                   color="blue"
+                  size="sm"
                   variant="filled"
-                  className="rounded-full px-3 py-0 h-[32px] shadow-md"
+                  className="!rounded-full"
                   endIcon={<ChevronDownIcon width={24} height={24} />}
-                  onClick={() => setOpen(true)}
                 >
-                  <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
+                  {i18n._(t`Select a Token`)}
                 </Button>
               </div>
-            )}
-          >
-            {({ setOpen }) => (
-              <CurrencySelectDialog
-                currency={currency}
-                onChange={onSelect}
-                onDismiss={() => setOpen(false)}
-                currencies={currencies}
-              />
-            )}
-          </HeadlessUIModal>
+            }
+            selectedCurrency={currency}
+            onCurrencySelect={onSelect}
+            currencyList={currencies?.map((el) => el.wrapped.address)}
+          />
         </>
       )}
     </div>

@@ -179,7 +179,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
                   <CurrencyLogo
                     currency={auction.paymentToken}
                     size={32}
-                    className="rounded-full transform scale-[0.5]"
+                    className="!rounded-full overflow-hidden transform scale-[0.5]"
                   />
                 </div>
                 <Typography variant="xs" weight={700} className="text-high-emphesis">

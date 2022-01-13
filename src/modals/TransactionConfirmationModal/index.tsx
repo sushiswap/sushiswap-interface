@@ -4,17 +4,14 @@ import { ChainId, Currency } from '@sushiswap/core-sdk'
 import loadingRollingCircle from 'app/animation/loading-rolling-circle.json'
 import receiptPrinting from 'app/animation/receipt-printing.json'
 import Button from 'app/components/Button'
-import CloseIcon from 'app/components/CloseIcon'
 import ExternalLink from 'app/components/ExternalLink'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
-import ModalHeader from 'app/components/ModalHeader'
 import Typography from 'app/components/Typography'
 import { getExplorerLink } from 'app/functions'
 import useAddTokenToMetaMask from 'app/hooks/useAddTokenToMetaMask'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-import { AlertTriangle } from 'react-feather'
 
 interface ConfirmationPendingContentProps {
   onDismiss: () => void
@@ -27,7 +24,7 @@ export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Confirm transaction`)} onClose={onDismiss} />
       <HeadlessUiModal.BorderedContent className="flex flex-col gap-1 justify-center items-center">
-        <div className="w-24 pb-4 m-auto">
+        <div className="w-16 m-auto py-8">
           <Lottie animationData={loadingRollingCircle} autoplay loop />
         </div>
         <Typography variant="lg" weight={700} className="text-white">
@@ -76,15 +73,9 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
       </HeadlessUiModal.BorderedContent>
 
       {currencyToAdd && library?.provider?.isMetaMask && (
-        <Button color="blue" onClick={addToken}>
+        <Button color="blue" onClick={!success ? addToken : onDismiss}>
           <Typography variant="sm" weight={700}>
-            {!success ? (
-              i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`)
-            ) : (
-              <>
-                {i18n._(t`Added`)} {currencyToAdd.symbol}
-              </>
-            )}
+            {!success ? i18n._(t`Add ${currencyToAdd.symbol} to MetaMask`) : i18n._(t`Dismiss`)}
           </Typography>
         </Button>
       )}
@@ -106,8 +97,8 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   topContent,
 }) => {
   return (
-    <div className="grid gap-4 p-6">
-      <ModalHeader title={title} onClose={onDismiss} />
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={title} onClose={onDismiss} />
       {topContent()}
       {bottomContent()}
     </div>
@@ -123,22 +114,19 @@ export const TransactionErrorContent: FC<TransactionErrorContentProps> = ({ mess
   const { i18n } = useLingui()
 
   return (
-    <div className="grid gap-6 p-6">
-      <div>
-        <div className="flex justify-between">
-          <div className="text-lg font-medium text-high-emphesis">{i18n._(t`Error`)}</div>
-          <CloseIcon onClick={onDismiss} />
-        </div>
-        <div className="flex flex-col items-center justify-center gap-3">
-          <AlertTriangle className="text-red" style={{ strokeWidth: 1.5 }} size={64} />
-          <div className="font-bold text-red">{message}</div>
-        </div>
-      </div>
-      <div>
-        <Button color="gradient" size="lg" onClick={onDismiss}>
-          Dismiss
-        </Button>
-      </div>
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={i18n._(t`Transaction Rejected`)} onClose={onDismiss} />
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-1 text-center">
+        <Typography variant="lg" weight={700} className="text-pink-red" component="span">
+          {i18n._(t`Oops!`)}
+        </Typography>
+        <Typography variant="sm" weight={700} className="text-primary" component="span">
+          {message}
+        </Typography>
+      </HeadlessUiModal.BorderedContent>
+      <Button color="blue" onClick={onDismiss}>
+        {i18n._(t`Dismiss`)}
+      </Button>
     </div>
   )
 }
@@ -168,7 +156,7 @@ const TransactionConfirmationModal: FC<ConfirmationModalProps> = ({
 
   // confirmation screen
   return (
-    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss}>
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onDismiss} maxWidth="md">
       {attemptingTxn ? (
         <ConfirmationPendingContent onDismiss={onDismiss} pendingText={pendingText} />
       ) : hash ? (

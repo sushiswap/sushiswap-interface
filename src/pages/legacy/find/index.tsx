@@ -76,6 +76,8 @@ export default function PoolFinder() {
       <Head>
         <title>{i18n._(t`Find Pool`)} | Sushi</title>
         <meta key="description" name="description" content="Find pool" />
+        <meta key="twitter:description" name="twitter:description" content="Find pool" />
+        <meta key="og:description" property="og:description" content="Find pool" />
       </Head>
       <div className="p-4 mb-3 space-y-3">
         <Back />

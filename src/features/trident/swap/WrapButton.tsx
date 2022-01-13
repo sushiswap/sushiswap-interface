@@ -4,7 +4,6 @@ import { NATIVE, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import loadingCircle from 'animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
-import Typography from 'app/components/Typography'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
 import { selectTridentSwap } from 'app/features/trident/swap/swapSlice'
 import { useBentoBox, useBentoBoxContract, useWETH9Contract } from 'app/hooks'
@@ -83,8 +82,8 @@ const WrapButton: FC = () => {
         return (
           <div className="flex">
             <Button
+              fullWidth
               id="wrap-button"
-              className="h-[48px]"
               {...(loading && {
                 startIcon: (
                   <div className="w-4 h-4 mr-1">
@@ -96,9 +95,7 @@ const WrapButton: FC = () => {
               disabled={disabled}
               onClick={execute}
             >
-              <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
-                {buttonText}
-              </Typography>
+              {buttonText}
             </Button>
           </div>
         )

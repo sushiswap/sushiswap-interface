@@ -76,7 +76,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
           </Typography>
         </div>
         <div className="flex rounded bg-dark-900 px-4 py-2.5 gap-4 items-center">
-          <CurrencyLogo currency={auction.paymentToken} size={42} className="rounded-full" />
+          <CurrencyLogo currency={auction.paymentToken} size={42} className="!rounded-full overflow-hidden" />
           <div className="flex items-baseline gap-2 flex-grow">
             <Typography variant="lg" weight={700} className="text-high-emphesis">
               {auction.paymentToken.symbol}
@@ -91,25 +91,30 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
               />
             </Typography>
           </div>
-          <div
+          <Button
+            size="sm"
+            variant="outlined"
+            color="blue"
             role="button"
+            className="!rounded-full"
             onClick={() => setValue(maxSpend?.toExact())}
-            className="min-w-[60px] cursor-pointer flex flex-col items-center justify-center rounded-full overflow-hidden bg-gradient-to-r from-red/30 via-pink/30 to-red/30 bg-opacity-20 border border-red text-pink px-3 h-9"
           >
             <Typography>{i18n._(t`MAX`)}</Typography>
-          </div>
+          </Button>
         </div>
         <MisoButton amount={tryParseAmount(value, auction.paymentToken)} auction={auction} error={!!error}>
           <AuctionTimer auction={auction}>
             {() => (
               <Button
                 onClick={() => setReview(true)}
-                disabled={!!(notWhitelisted || notEnoughBalance || overSpend) || auction.status !== AuctionStatus.LIVE}
-                className={classNames(
-                  error ? 'pointer-events-none' : '',
-                  inputAmount.equalTo(ZERO) ? '!opacity-60' : '',
-                  '!border-none outline-none h-[74px] bg-gradient-to-r from-blue to-pink transition-all disabled:scale-[1] hover:scale-[1.02] !opacity-100 disabled:!opacity-40'
-                )}
+                disabled={
+                  inputAmount.equalTo(ZERO) ||
+                  error ||
+                  !!(notWhitelisted || notEnoughBalance || overSpend) ||
+                  auction.status !== AuctionStatus.LIVE
+                }
+                size="lg"
+                color="gradient"
               >
                 <div className="flex flex-col items-center gap-1">
                   <Typography className="text-white" weight={700}>

@@ -170,6 +170,8 @@ export default function Create() {
       <Head>
         <title>Create Lending Pair | Kashi by Sushi</title>
         <meta key="description" name="description" content="Create Lending Pair on Kashi by Sushi" />
+        <meta key="twitter:description" name="twitter:description" content="Create Lending Pair on Kashi by Sushi" />
+        <meta key="og:description" property="og:description" content="Create Lending Pair on Kashi by Sushi" />
       </Head>
       <Card
         className="h-full bg-dark-900"

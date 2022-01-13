@@ -28,6 +28,7 @@ export interface AuctionCreationWizardInput {
   tokenSymbol: string
   tokenSupply: number
   tokenAmount: number
+  tokenForLiquidity: number
   auctionType: AuctionTemplate
   fixedPrice?: number
   minimumTarget?: number
@@ -46,6 +47,7 @@ export type AuctionCreationWizardInputFormatted = Omit<
   | 'endDate'
   | 'tokenSupply'
   | 'tokenAmount'
+  | 'tokenForLiquidity'
   | 'fixedPrice'
   | 'minimumTarget'
   | 'minimumRaised'
@@ -99,6 +101,19 @@ const schema = yup.object().shape({
     .test({
       message: 'Amount of tokens for sale must be less than half the total supply',
       test: (value, ctx) => (value ? value * 2 <= ctx.parent.tokenSupply : false),
+    }),
+  tokenForLiquidity: yup
+    .number()
+    .typeError('Must be a valid number')
+    .required('Must enter a valid number')
+    .integer('Must be a whole number')
+    .test({
+      message: 'Amount of tokens for liquidity seeding must be at least 1 percent of tokens for sale',
+      test: (value, ctx) => value * 100 >= ctx.parent.tokenAmount,
+    })
+    .test({
+      message: 'Amount of tokens for liquidity cannot be larger than amount of tokens for sale',
+      test: (value, ctx) => value <= ctx.parent.tokenAmount,
     }),
   auctionType: yup.number().required('Must select an auction type'),
   fixedPrice: yup.number().when('auctionType', {

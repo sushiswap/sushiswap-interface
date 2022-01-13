@@ -33,7 +33,7 @@ export default function Lend() {
   const data = useSearchAndSort(
     pairs,
     { keys: ['search'], threshold: 0.1 },
-    { key: 'currentSupplyAPR.value', direction: 'descending' }
+    { key: 'currentSupplyAPR.valueWithStrategy', direction: 'descending' }
   )
 
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(data.items)
@@ -45,6 +45,16 @@ export default function Lend() {
         <meta
           key="description"
           name="description"
+          content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
+        />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
+        />
+        <meta
+          key="og:description"
+          property="og:description"
           content="Kashi is a lending and margin trading platform, built upon BentoBox, which allows for anyone to create customized and gas-efficient markets for lending, borrowing, and collateralizing a variety of DeFi tokens, stable coins, and synthetic assets."
         />
       </Head>

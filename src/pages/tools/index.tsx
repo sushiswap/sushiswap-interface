@@ -32,6 +32,8 @@ export default function Tools() {
       <Head>
         <title>Tools | Sushi</title>
         <meta key="description" name="description" content="SushiSwap tools..." />
+        <meta key="twitter:description" name="twitter:description" content="SushiSwap tools..." />
+        <meta key="og:description" property="og:description" content="SushiSwap tools..." />
       </Head>
       <Typography variant="h1" component="h1">
         Tools
