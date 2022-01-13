@@ -23,7 +23,7 @@ const ListPanel = ({ header, items, footer, className = '' }: ListPanelProps) =>
           className={classNames(
             header ? '' : 'border-t rounded-t',
             footer ? 'bg-dark-800' : 'border-b rounded-b bg-dark-900',
-            'border-l border-r border-dark-700 divide-y overflow-hidden'
+            'border-l border-r border-dark-700 divide-y divide-dark-700 overflow-hidden'
           )}
         >
           {items}
