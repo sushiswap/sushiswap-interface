@@ -33,7 +33,7 @@ export default function Lend() {
   const data = useSearchAndSort(
     pairs,
     { keys: ['search'], threshold: 0.1 },
-    { key: 'currentSupplyAPR.value', direction: 'descending' }
+    { key: 'currentSupplyAPR.valueWithStrategy', direction: 'descending' }
   )
 
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(data.items)

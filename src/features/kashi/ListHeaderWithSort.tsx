@@ -14,6 +14,7 @@ function ListHeaderWithSort({
   direction?: any
   children: any
 }) {
+  console.log(sort.sortConfig.key, sortKey)
   return (
     <div
       className={`flex items-center cursor-pointer hover:text-primary ${className}`}
