@@ -47,7 +47,7 @@ const buttonStyle =
 const buttonStyleEnabled = `${buttonStyle} text-high-emphesis bg-gradient-to-r from-pink-red to-light-brown hover:opacity-90`
 const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
-const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
+const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-blue hover:bg-opacity-90`
 
 export default function Stake() {
   const { i18n } = useLingui()
@@ -222,7 +222,7 @@ export default function Stake() {
         <div className="flex flex-col justify-center md:flex-row">
           <div className="flex flex-col w-full max-w-xl mx-auto mb-4 md:m-0">
             <div className="mb-4">
-              <div className="flex items-center justify-between w-full h-24 max-w-xl p-4 rounded md:pl-5 md:pr-7 bg-light-yellow bg-opacity-40">
+              <div className="flex items-center justify-between w-full h-24 max-w-xl p-4 rounded md:pl-5 md:pr-7 bg-yellow bg-opacity-40">
                 <div className="flex flex-col">
                   <div className="flex items-center justify-center mb-4 flex-nowrap md:mb-2">
                     <p className="text-sm font-bold whitespace-nowrap md:text-lg md:leading-5 text-high-emphesis">
@@ -238,7 +238,7 @@ export default function Stake() {
                       className={`
                         py-1 px-4 md:py-1.5 md:px-7 rounded
                         text-xs md:text-sm font-medium md:font-bold text-dark-900
-                        bg-light-yellow hover:bg-opacity-90`}
+                        bg-yellow hover:bg-opacity-90`}
                     >
                       {i18n._(t`View Stats`)}
                     </a>
@@ -323,7 +323,7 @@ export default function Stake() {
                         <p className="text-base font-bold">{formattedBalance}</p>
                       </div>
                       <button
-                        className="px-2 py-1 ml-3 text-xs font-bold border pointer-events-auto focus:outline-none focus:ring hover:bg-opacity-40 md:bg-cyan-blue md:bg-opacity-30 border-secondary md:border-cyan-blue rounded-2xl md:py-1 md:px-3 md:ml-4 md:text-sm md:font-normal md:text-cyan-blue"
+                        className="px-2 py-1 ml-3 text-xs font-bold border pointer-events-auto focus:outline-none focus:ring hover:bg-opacity-40 md:bg-blue md:bg-opacity-30 border-secondary md:border-cyan-blue rounded-2xl md:py-1 md:px-3 md:ml-4 md:text-sm md:font-normal md:text-cyan-blue"
                         onClick={handleClickMax}
                       >
                         {i18n._(t`MAX`)}
@@ -334,7 +334,7 @@ export default function Stake() {
                 {(approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) &&
                 activeTab === 0 ? (
                   <Button
-                    className={`${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`}
+                    className={`${buttonStyle} text-high-emphesis bg-blue hover:bg-opacity-90`}
                     disabled={approvalState === ApprovalState.PENDING}
                     onClick={approve}
                   >

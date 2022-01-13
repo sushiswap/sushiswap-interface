@@ -4133,6 +4133,11 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-11.5.0.tgz#07f31e6771c31fff44ca1a6a37697f266dd486a7"
   integrity sha512-XuouWhMJdhz/QaWOLuPb/PkPzqfnipBi3VBzUuMisWdCAiUy7mhh2ep209/qoQcOAXj0Dgzz/cuHYTy20Uab5w==
 
+"@sushiswap/default-token-list@^22.3.0":
+  version "22.3.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-22.3.0.tgz#6745be8ed4fb7428523e0972af26a7e82c6c42c4"
+  integrity sha512-4sTgP/PlLTpXHyhQbawBphHAAP2pjm0EexJ5/wTXxt2Awh69CcMERU8aNu7piDYa6WP4qLnn0ohoo2hnhJwwqw==
+
 "@sushiswap/kashi-sdk@^1.0.0-canary.9":
   version "1.0.0-canary.10"
   resolved "https://registry.yarnpkg.com/@sushiswap/kashi-sdk/-/kashi-sdk-1.0.0-canary.10.tgz#a14b7f674bca152d77c5280247bc7d72663d8baa"
@@ -4205,7 +4210,11 @@
     "@sushiswap/core-sdk" "1.0.0-canary.34"
     "@sushiswap/tines" "1.0.0-canary.16"
 
+<<<<<<< HEAD
 "@sushiswap/tines@^1.0.0-canary.15":
+=======
+"@sushiswap/tines@^1.0.0-canary.17":
+>>>>>>> origin/canary
   version "1.0.0-canary.17"
   resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.17.tgz#e9e37a53b0eae3d71e4b9f3d0d7f7b7abb1986f9"
   integrity sha512-uO2ttRlNkTmquXk7LpaXKlUTKPXS3RETpW1ZV1w1lkfBw5aCCyB2iAiNFyUtItnO/nDmncguoeGOlK2HaC9nlQ==

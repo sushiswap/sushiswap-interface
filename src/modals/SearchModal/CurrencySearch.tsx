@@ -175,7 +175,6 @@ export function CurrencySearch({
             onClick={() => setView(CurrencyModalView.manage)}
             color="blue"
             variant="empty"
-            className="text-sm"
           >
             {i18n._(t`Manage Token Lists`)}
           </Button>

@@ -12,7 +12,6 @@ import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
-
 const queryToAuctionStatus = {
   live: AuctionStatus.LIVE,
   upcoming: AuctionStatus.UPCOMING,
@@ -32,7 +31,7 @@ const Miso = () => {
 
   return (
     <>
-      <MisoHeader className="bg-miso-bowl bg-cover">
+      <MisoHeader>
         <div className="flex justify-between lg:flex-row flex-col gap-8">
           <div className="flex flex-col">
             <Typography variant="hero" weight={700} className="text-white">
