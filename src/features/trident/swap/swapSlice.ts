@@ -14,6 +14,7 @@ export interface SwapState {
   recipient?: string
   attemptingTxn: boolean
   showReview: boolean
+  error?: string
 }
 
 const initialState: SwapState = {
@@ -24,6 +25,7 @@ const initialState: SwapState = {
   recipient: undefined,
   attemptingTxn: false,
   showReview: false,
+  error: undefined,
 }
 
 export const swapSlice = createSlice({
@@ -41,10 +43,16 @@ export const swapSlice = createSlice({
       action: PayloadAction<{
         value: string
         typedField: TypedField
+        attemptingTxn: boolean
+        showReview: boolean
+        error: string
       }>
     ) => {
       state.value = action.payload.value
       state.typedField = action.payload.typedField
+      state.attemptingTxn = action.payload.attemptingTxn
+      state.showReview = action.payload.showReview
+      state.error = action.payload.error
     },
     setRecipient: (state, action: PayloadAction<string | undefined>) => {
       state.recipient = action.payload
@@ -54,6 +62,9 @@ export const swapSlice = createSlice({
     },
     setShowReview: (state, action: PayloadAction<boolean>) => {
       state.showReview = action.payload
+    },
+    setError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload
     },
   },
 })
