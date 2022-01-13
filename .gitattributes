@@ -1,0 +1,3 @@
+*.txt ident
+NEXT_PUBLIC_LAST_COMMIT export-subst
+NEXT_PUBLIC_VERSION export-subst
