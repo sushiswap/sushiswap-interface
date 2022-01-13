@@ -101,7 +101,7 @@ export const _useSwapPage = () => {
         : trade === undefined && !isWrap
         ? i18n._(t`No route found`)
         : balance && trade && inputCurrencyAmount && maxAmountSpend(balance)?.lessThan(inputCurrencyAmount)
-        ? i18n._(t`Insufficient ${inputCurrencyAmount?.currency.symbol} balance`)
+        ? i18n._(t`Insufficient Balance`)
         : '',
     [account, balance, i18n, inputCurrencyAmount, isWrap, parsedAmounts, trade]
   )

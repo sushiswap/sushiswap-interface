@@ -122,7 +122,7 @@ export default function Me() {
           <Typography component="h2" variant="lg" className="font-medium text-high-emphesis">
             {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId]}`)}
           </Typography>
-          <Button variant="link" onClick={clearAllTransactionsCallback}>
+          <Button variant="empty" color="blue" onClick={clearAllTransactionsCallback}>
             <span className="text-sm">{i18n._(t`Clear History`)}</span>
           </Button>
         </div>

@@ -186,9 +186,7 @@ const SwapReviewModal: FC = () => {
               onClick={execute}
               className="mt-4 mb-2"
             >
-              <Typography variant="sm" weight={700} className="text-high-emphesis">
-                {error && !txHash ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
-              </Typography>
+              {error && !txHash ? error : recipient ? i18n._(t`Swap and send to recipient`) : i18n._(t`Swap`)}
             </Button>
             {!txHash && (error || cbError) && (
               <Typography variant="xs" weight={700} className="text-center text-red">

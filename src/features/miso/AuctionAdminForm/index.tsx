@@ -285,9 +285,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                       onClick={cancelAuction}
                       variant="empty"
                       role="button"
-                      className={classNames(
-                        auction.status !== AuctionStatus.UPCOMING ? '!text-low-emphesis' : '!text-red'
-                      )}
+                      color={auction.status !== AuctionStatus.UPCOMING ? 'gray' : 'red'}
                       disabled={auction.status !== AuctionStatus.UPCOMING}
                     >
                       {i18n._(t`Cancel this auction`)}

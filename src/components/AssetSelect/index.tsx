@@ -56,11 +56,12 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
       <div className="inline-flex">
         <Button
           color="blue"
+          size="sm"
           variant="filled"
-          className="rounded-full px-3 py-0 h-[32px] shadow-md"
+          className="!rounded-full"
           endIcon={<ChevronDownIcon width={24} height={24} />}
         >
-          <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
+          {i18n._(t`Select a Token`)}
         </Button>
       </div>
     </div>
