@@ -85,13 +85,13 @@ const CurrencyRow: FC<CurrencyRow> = ({ currency, style }) => {
       id={`token-item-${key}`}
       className={classNames(
         currency === selectedCurrency ? 'opacity-20 pointer-events-none' : '',
-        'flex items-center w-full hover:bg-dark-800/40 px-4 py-2'
+        `flex items-center w-full hover:bg-dark-800/40 px-4 py-2 token-${currency?.symbol}`
       )}
       style={style}
       {...(currency !== selectedCurrency && { onClick: () => onSelect(currency) })}
     >
-      <div className="flex items-center justify-between rounded cursor-pointer gap-2 flex-grow">
-        <div className="flex flex-row items-center gap-3 flex-grow">
+      <div className="flex items-center justify-between flex-grow gap-2 rounded cursor-pointer">
+        <div className="flex flex-row items-center flex-grow gap-3">
           <CurrencyLogo currency={currency} size={32} className="!rounded-full overflow-hidden" />
           <div className="flex flex-col">
             <Typography variant="xxs" className="text-secondary">
@@ -160,7 +160,7 @@ const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
   }
 
   return (
-    <div className="divide-y divide-dark-800 flex flex-col flex-1 flex-grow h-full">
+    <div id="all-currencies-list" className="flex flex-col flex-1 flex-grow h-full divide-y divide-dark-800">
       <AutoSizer>
         {({ height, width }) => (
           <List height={height} width={width} itemCount={itemData.length} itemSize={56}>
