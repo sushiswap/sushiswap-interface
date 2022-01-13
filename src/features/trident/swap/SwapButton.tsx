@@ -3,7 +3,6 @@ import { useLingui } from '@lingui/react'
 import loadingCircle from 'animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
-import Typography from 'app/components/Typography'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
 import { selectTridentSwap, setShowReview } from 'app/features/trident/swap/swapSlice'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
@@ -43,8 +42,8 @@ const SwapButton: FC = () => {
         return (
           <div className="flex">
             <Button
+              fullWidth
               id="swap-button"
-              className="h-[48px]"
               {...(loading && {
                 startIcon: (
                   <div className="w-4 h-4 mr-1">
@@ -56,9 +55,7 @@ const SwapButton: FC = () => {
               disabled={disabled}
               onClick={() => dispatch(setShowReview(true))}
             >
-              <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
-                {buttonText}
-              </Typography>
+              {buttonText}
             </Button>
           </div>
         )

@@ -104,14 +104,14 @@ const ClassicStandardMode = () => {
                 return (
                   <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                     {!isMax && (
-                      <Button color="gradient" variant={isMax ? 'filled' : 'outlined'} disabled={isMax} onClick={onMax}>
-                        <Typography
-                          variant="sm"
-                          weight={700}
-                          className={!isMax ? 'text-high-emphesis' : 'text-low-emphasis'}
-                        >
-                          {i18n._(t`Max Deposit`)}
-                        </Typography>
+                      <Button
+                        size="sm"
+                        color="gradient"
+                        variant={isMax ? 'filled' : 'outlined'}
+                        disabled={isMax}
+                        onClick={onMax}
+                      >
+                        {i18n._(t`Max Deposit`)}
                       </Button>
                     )}
                     <Button

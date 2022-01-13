@@ -23,7 +23,7 @@ const MisoButton: FC<MisoButtonProps> = ({ auction, amount, children, error }) =
     return (
       <Button
         disabled={auction.status === AuctionStatus.FINISHED || approvalState === ApprovalState.PENDING}
-        className="h-[74px]"
+        size="lg"
         color="blue"
         onClick={approve}
         {...(approvalState === ApprovalState.PENDING && {
