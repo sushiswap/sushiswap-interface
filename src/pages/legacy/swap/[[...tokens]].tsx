@@ -471,16 +471,17 @@ export default function Swap({ banners }) {
                 </button>
                 {isExpertMode ? (
                   recipient === null && !showWrap ? (
-                    <Button variant="link" size="none" id="add-recipient-button" onClick={() => onChangeRecipient('')}>
+                    <Button
+                      variant="empty"
+                      size="sm"
+                      color="blue"
+                      id="add-recipient-button"
+                      onClick={() => onChangeRecipient('')}
+                    >
                       + Add recipient (optional)
                     </Button>
                   ) : (
-                    <Button
-                      variant="link"
-                      size="none"
-                      id="remove-recipient-button"
-                      onClick={() => onChangeRecipient(null)}
-                    >
+                    <Button variant="empty" id="remove-recipient-button" onClick={() => onChangeRecipient(null)}>
                       - {i18n._(t`Remove recipient`)}
                     </Button>
                   )
@@ -533,13 +534,13 @@ export default function Swap({ banners }) {
           )}
           <div className="mt-4">
             {swapIsUnsupported ? (
-              <Button color="red" size="lg" disabled>
+              <Button color="red" size="lg" disabled fullWidth>
                 {i18n._(t`Unsupported Asset`)}
               </Button>
             ) : !account ? (
               <Web3Connect size="lg" color="blue" className="w-full" />
             ) : showWrap ? (
-              <Button color="gradient" size="lg" disabled={Boolean(wrapInputError)} onClick={onWrap}>
+              <Button fullWidth color="gradient" size="lg" disabled={Boolean(wrapInputError)} onClick={onWrap}>
                 {wrapInputError ??
                   (wrapType === WrapType.WRAP
                     ? i18n._(t`Wrap`)
@@ -556,6 +557,7 @@ export default function Swap({ banners }) {
               <div>
                 {approvalState !== ApprovalState.APPROVED && (
                   <ButtonConfirmed
+                    fullWidth
                     onClick={handleApprove}
                     disabled={approvalState !== ApprovalState.NOT_APPROVED || approvalSubmitted}
                     size="lg"
@@ -572,6 +574,7 @@ export default function Swap({ banners }) {
                 )}
                 {approvalState === ApprovalState.APPROVED && (
                   <ButtonError
+                    fullWidth
                     onClick={() => {
                       if (isExpertMode) {
                         handleSwap()
@@ -604,6 +607,7 @@ export default function Swap({ banners }) {
               </div>
             ) : (
               <ButtonError
+                fullWidth
                 onClick={() => {
                   if (isExpertMode) {
                     handleSwap()

@@ -3,60 +3,66 @@ import React, { FC, ReactNode } from 'react'
 
 import Dots from '../Dots'
 
+export type ButtonColor = 'red' | 'blue' | 'pink' | 'yellow' | 'purple' | 'gray' | 'green' | 'gradient' | 'white'
+export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
+export type ButtonVariant = 'outlined' | 'filled' | 'empty'
+
+const DIMENSIONS = {
+  xs: 'px-2 h-[28px]',
+  sm: 'px-3 h-[36px]',
+  md: 'px-4 h-[52px]',
+  lg: 'px-6 h-[60px]',
+}
+
 const SIZE = {
-  xs: 'px-2 py-1 text-xs',
-  sm: 'px-4 py-2 text-sm',
-  default: 'px-4 py-3.5 text-sm',
-  lg: 'px-6 py-4 text-lg',
-  none: 'p-0 text-sm',
+  xs: 'text-xs rounded',
+  sm: 'text-sm rounded',
+  md: 'rounded-xl',
+  lg: 'text-lg rounded-2xl',
 }
 
 const FILLED = {
-  default: 'bg-transparent opacity-80 hover:opacity-100',
-  red: 'bg-red bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 ',
-  blue: 'bg-blue bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 ',
-  pink: 'bg-gradient-to-r from-pink to-opaque-pink w-full rounded text-high-emphesis opacity-80 hover:opacity-100 ',
-  gray: 'border rounded shadow-sm focus:ring-2 focus:ring-offset-2 bg-dark-700 bg-opacity-80 w-full text-primary border-dark-800 hover:bg-opacity-100 focus:ring-offset-dark-700 focus:ring-dark-800 ',
-  green: 'bg-green bg-opacity-80 w-full rounded text-high-emphesis hover:bg-opacity-100 ',
-  gradient: 'w-full text-high-emphesis bg-gradient-to-r from-blue to-pink opacity-100 hover:opacity-100 ',
-  white: 'bg-high-emphesis text-dark-700',
+  red: 'bg-red hover:bg-red-600 text-white',
+  blue: 'bg-blue hover:bg-blue-600 text-white',
+  pink: 'bg-pink hover:bg-pink-600 text-white',
+  yellow: 'bg-yellow hover:bg-yellow-600 text-black',
+  purple: 'bg-purple hover:bg-purple-600 text-white',
+  gray: 'bg-dark-700 hover:bg-dark-800 text-white',
+  green: 'bg-green hover:bg-green-600 text-black',
+  gradient: 'bg-gradient-to-r from-blue to-pink text-white',
+  white: 'bg-gray-50 hover:bg-gray-200 text-black',
 }
 
 const OUTLINED = {
-  default: 'bg-transparent opacity-80 hover:opacity-100',
-  red: 'bg-red bg-opacity-20 outline-red rounded text-red hover:bg-opacity-40 disabled:bg-opacity-20',
-  blue: 'bg-blue bg-opacity-20 outline-blue rounded text-blue hover:bg-opacity-40 disabled:bg-opacity-20',
-  pink: 'bg-pink bg-opacity-20 outline-pink rounded text-pink hover:bg-opacity-40 disabled:bg-opacity-20',
-  gray: 'bg-dark-1000 border border-dark-700 bg-opacity-20 outline-gray rounded text-gray hover:bg-opacity-40 disabled:bg-opacity-20',
-  green: 'bg-green bg-opacity-20 border border-green rounded text-green hover:bg-opacity-40 disabled:bg-opacity-20',
+  red: 'border border-red/50 bg-red/5 text-red hover:border-red/40',
+  blue: 'border border-blue/50 bg-blue/5 text-blue hover:border-blue/40',
+  pink: 'border border-pink/50 bg-pink/5 text-pink hover:border-pink/40',
+  yellow: 'border border-yellow/50 bg-yellow/5 text-yellow hover:border-yellow/40',
+  purple: 'border border-purple/50 bg-purple/5 text-purple hover:border-purple/40',
+  green: 'border border-green/50 bg-green/5 text-green hover:border-green/40',
+  gray: 'border border-dark-700 bg-dark-700/5 text-white hover:border-dark-800',
+  white: 'border border-white/50 bg-white/5 text-white hover:border-gray-400/50',
   gradient:
-    'border-image-source border border-transparent border-gradient-r-blue-pink-dark-1000 opacity-100 disabled:bg-opacity-20',
-  white: 'bg-transparent opacity-80 hover:opacity-100',
+    'border border-transparent hover:border-gradient-r-blue-pink-hover-dark-900 border-gradient-r-blue-pink-dark-900 text-white',
 }
 
 const EMPTY = {
-  default:
-    'flex bg-transparent justify-center items-center disabled:opacity-50 disabled:cursor-auto bg-opacity-80 hover:bg-opacity-100',
-  blue: 'flex bg-transparent justify-center items-center text-blue/90 hover:text-blue disabled:opacity-50 disabled:cursor-auto bg-opacity-80 hover:bg-opacity-100',
-}
-
-const LINK = {
-  default: 'text-primary hover:text-high-emphesis focus:text-high-emphesis whitespace-nowrap focus:ring-0',
-  blue: 'text-blue text-opacity-80 hover:text-opacity-100 focus:text-opacity-100 whitespace-nowrap focus:ring-0',
+  red: 'text-red hover:text-red-600',
+  blue: 'text-blue hover:text-blue-600',
+  pink: 'text-pink hover:text-pink-600',
+  yellow: 'text-yellow hover:text-yellow-700',
+  purple: 'text-purple hover:text-purple-600',
+  green: 'text-green hover:text-green-700',
+  gray: 'text-gray-300 hover:text-gray-400',
+  white: 'text-white hover:border-gray-400/50 hover:text-gray-300',
+  gradient: 'bg-gradient-to-r from-blue to-pink bg-clip-text text-transparent hover:from-blue-600 hover:to-pink-600',
 }
 
 const VARIANT = {
   outlined: OUTLINED,
   filled: FILLED,
   empty: EMPTY,
-  link: LINK,
 }
-
-export type ButtonColor = 'blue' | 'pink' | 'gradient' | 'gray' | 'default' | 'red' | 'green' | 'white'
-
-export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
-
-export type ButtonVariant = 'outlined' | 'filled' | 'empty' | 'link'
 
 type Button = React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLButtonElement>> & {
   Dotted: FC<DottedButtonProps>
@@ -68,6 +74,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   color?: ButtonColor
   size?: ButtonSize
   variant?: ButtonVariant
+  fullWidth?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -75,11 +82,12 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       children,
       className = '',
-      color = 'default',
-      size = 'default',
+      color = 'blue',
+      size = 'md',
       variant = 'filled',
       startIcon = undefined,
       endIcon = undefined,
+      fullWidth = false,
       ...rest
     },
     ref
@@ -89,8 +97,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={classNames(
           rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
-          variant !== 'empty' && SIZE[size],
-          'font-bold rounded disabled:cursor-not-allowed disabled:bg-dark-800 disabled:text-opacity-40 focus:outline-none flex items-center justify-center gap-1',
+          SIZE[size],
+          variant !== 'empty' ? DIMENSIONS[size] : '',
+          fullWidth ? 'w-full' : '',
+          'font-bold disabled:opacity-40 disabled:pointer-events-none focus:outline-none flex items-center justify-center gap-1',
           className
         )}
         {...rest}
@@ -120,7 +130,7 @@ export function ButtonConfirmed({
       />
     )
   } else {
-    return <Button color={disabled ? 'gray' : 'gradient'} size="lg" disabled={disabled} {...rest} />
+    return <Button color="gradient" size="lg" disabled={disabled} {...rest} />
   }
 }
 
@@ -135,7 +145,7 @@ export function ButtonError({
   if (error) {
     return <Button color="red" size="lg" {...rest} />
   } else {
-    return <Button color={disabled ? 'gray' : 'gradient'} disabled={disabled} size="lg" {...rest} />
+    return <Button color="gradient" disabled={disabled} size="lg" {...rest} />
   }
 }
 

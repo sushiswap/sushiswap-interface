@@ -37,7 +37,7 @@ const TransactionReviewZapModal: FC = () => {
                 color="blue"
                 variant="outlined"
                 size="sm"
-                className="rounded-full py-1 pl-2 cursor-pointer"
+                className="!rounded-full"
                 startIcon={<ChevronLeftIcon width={24} height={24} />}
                 onClick={() => setShowReview(false)}
               >

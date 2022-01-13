@@ -153,7 +153,7 @@ const AssetInputPanel = ({
   }, [isDesktop, value])
 
   let content = (
-    <div className="flex flex-row gap-3 py-2.5 px-2 flex-grow">
+    <div className="flex flex-row gap-3 py-2.5 px-2 flex-grow items-center">
       <div className="w-12 h-12 rounded-full">
         <Lottie animationData={selectCoinAnimation} autoplay loop />
       </div>
@@ -165,11 +165,12 @@ const AssetInputPanel = ({
                 <Button
                   disabled={disabled}
                   color="blue"
+                  size="sm"
                   variant="filled"
-                  className="rounded-full px-3 py-0 h-[32px] shadow-md"
+                  className="!rounded-full"
                   endIcon={<ChevronDownIcon width={24} height={24} />}
                 >
-                  <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
+                  {i18n._(t`Select a Token`)}
                 </Button>
               </div>
             }
