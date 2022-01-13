@@ -1,12 +1,13 @@
-import { AppState } from '..'
 import DEFAULT_TOKEN_LIST from '@sushiswap/default-token-list'
 import { TokenList } from '@uniswap/token-lists'
-import { UNSUPPORTED_LIST_URLS } from '../../constants/token-lists'
-import UNSUPPORTED_TOKEN_LIST from '../../constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
-import { WrappedTokenInfo } from './wrappedTokenInfo'
-import { sortByListPriority } from '../../functions/list'
-import { useAppSelector } from '../hooks'
+import { UNSUPPORTED_LIST_URLS } from 'app/config/token-lists'
+import UNSUPPORTED_TOKEN_LIST from 'app/constants/token-lists/sushiswap-v2-unsupported.tokenlist.json'
+import { sortByListPriority } from 'app/functions/list'
+import { AppState } from 'app/state'
+import { useAppSelector } from 'app/state/hooks'
 import { useMemo } from 'react'
+
+import { WrappedTokenInfo } from './wrappedTokenInfo'
 
 export type TokenAddressMap = Readonly<{
   [chainId: number]: Readonly<{
@@ -121,7 +122,7 @@ export function useInactiveListUrls(): string[] {
 export function useCombinedActiveList(): TokenAddressMap {
   const activeListUrls = useActiveListUrls()
   const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-  return combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST)
+  return useMemo(() => combineMaps(activeTokens, TRANSFORMED_DEFAULT_TOKEN_LIST), [activeTokens])
 }
 
 // list of tokens not supported on interface, used to show warnings and prevent swaps and adds

@@ -1,26 +1,14 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { useWeb3React } from '@web3-react/core'
+import { network } from 'app/config/wallets'
+import { NetworkContextName } from 'app/constants'
+import useEagerConnect from 'app/hooks/useEagerConnect'
+import useInactiveListener from 'app/hooks/useInactiveListener'
+import dynamic from 'next/dynamic'
 import React, { useEffect, useState } from 'react'
 
 import Loader from '../Loader'
-import { NetworkContextName } from '../../constants'
-import dynamic from 'next/dynamic'
-import { network } from '../../connectors'
-import styled from 'styled-components'
-import { t } from '@lingui/macro'
-import useEagerConnect from '../../hooks/useEagerConnect'
-import useInactiveListener from '../../hooks/useInactiveListener'
-import { useLingui } from '@lingui/react'
-import { useWeb3React } from '@web3-react/core'
-
-const MessageWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 20rem;
-`
-
-const Message = styled.h2`
-  // color: ${({ theme }) => theme.secondary1};
-`
 
 const GnosisManagerNoSSR = dynamic(() => import('./GnosisManager'), {
   ssr: false,
@@ -64,20 +52,20 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
   // if the account context isn't active, and there's an error on the network context, it's an irrecoverable error
   if (!active && networkError) {
     return (
-      <MessageWrapper>
+      <div className="flex items-center justify-center h-80">
         <div className="text-secondary">
           {i18n._(t`Oops! An unknown error occurred. Please refresh the page, or visit from another browser or device`)}
         </div>
-      </MessageWrapper>
+      </div>
     )
   }
 
   // if neither context is active, spin
   if (!active && !networkActive) {
     return showLoader ? (
-      <MessageWrapper>
+      <div className="flex items-center justify-center h-80">
         <Loader />
-      </MessageWrapper>
+      </div>
     ) : null
   }
 

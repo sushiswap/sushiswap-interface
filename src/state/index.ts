@@ -1,10 +1,8 @@
-import { Action, ThunkAction, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist'
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
 import reducer from './reducer'
-import storage from 'redux-persist/lib/storage'
-import { updateVersion } from './global/actions'
-import { useMemo } from 'react'
 
 let store
 

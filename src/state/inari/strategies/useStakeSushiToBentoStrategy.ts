@@ -1,35 +1,38 @@
+import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { SUSHI, XSUSHI } from '../../../constants'
-import { ChainId, SUSHI_ADDRESS } from '@sushiswap/sdk'
-import { tryParseAmount } from '../../../functions'
-import { useBentoBalance } from '../../bentobox/hooks'
-import { useActiveWeb3React } from '../../../hooks'
-import { useTokenBalances } from '../../wallet/hooks'
-import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import { useLingui } from '@lingui/react'
+import { ChainId, SUSHI, SUSHI_ADDRESS } from '@sushiswap/core-sdk'
+import { XSUSHI } from 'app/config/tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
+import { useTokenBalances } from 'app/state/wallet/hooks'
 import { useEffect, useMemo } from 'react'
-import useBaseStrategy from './useBaseStrategy'
-import useBentoBoxTrait from '../traits/useBentoBoxTrait'
 
-export const general: StrategyGeneralInfo = {
-  name: 'SUSHI → Bento',
-  steps: ['SUSHI', 'xSUSHI', 'BentoBox'],
+import useBentoBoxTrait from '../traits/useBentoBoxTrait'
+import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import useBaseStrategy from './useBaseStrategy'
+
+export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
+  name: i18n._(t`SUSHI → Bento`),
+  steps: [i18n._(t`SUSHI`), i18n._(t`xSUSHI`), i18n._(t`BentoBox`)],
   zapMethod: 'stakeSushiToBento',
   unzapMethod: 'unstakeSushiFromBento',
-  description: t`Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically
-                invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi.`,
-  inputSymbol: 'SUSHI',
-  outputSymbol: 'xSUSHI in BentoBox',
-}
+  description:
+    i18n._(t`Stake SUSHI for xSUSHI and deposit into BentoBox in one click. xSUSHI in BentoBox is automatically
+                invested into a passive yield strategy, and can be lent or used as collateral for borrowing in Kashi.`),
+  inputSymbol: i18n._(t`SUSHI`),
+  outputSymbol: i18n._(t`xSUSHI in BentoBox`),
+})
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
-    chainId: ChainId.MAINNET,
-    address: SUSHI_ADDRESS[ChainId.MAINNET],
+    chainId: ChainId.ETHEREUM,
+    address: SUSHI_ADDRESS[ChainId.ETHEREUM],
     decimals: 18,
     symbol: 'SUSHI',
   },
   outputToken: {
-    chainId: ChainId.MAINNET,
+    chainId: ChainId.ETHEREUM,
     address: '0x8798249c2E607446EfB7Ad49eC89dD1865Ff4272',
     decimals: 18,
     symbol: 'XSUSHI',
@@ -37,11 +40,13 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 }
 
 const useStakeSushiToBentoStrategy = (): StrategyHook => {
+  const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET], XSUSHI])
-  const xSushiBentoBalance = useBentoBalance(XSUSHI.address)
+  const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM], XSUSHI])
+  const xSushiBentoBalance = useBentoBalanceV2(XSUSHI.address)
 
   // Strategy ends in BentoBox so use BaseBentoBox strategy
+  const general = useMemo(() => GENERAL(i18n), [i18n])
   const baseStrategy = useBaseStrategy({
     id: 'stakeSushiToBentoStrategy',
     general,
@@ -55,10 +60,10 @@ const useStakeSushiToBentoStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
-      inputTokenBalance: balances[SUSHI[ChainId.MAINNET].address],
-      outputTokenBalance: tryParseAmount(xSushiBentoBalance?.value?.toFixed(18) || '0', XSUSHI),
+      inputTokenBalance: balances[SUSHI_ADDRESS[ChainId.ETHEREUM]],
+      outputTokenBalance: xSushiBentoBalance,
     })
-  }, [balances, setBalances, xSushiBentoBalance?.value])
+  }, [balances, setBalances, xSushiBentoBalance])
 
   return useMemo(
     () => ({

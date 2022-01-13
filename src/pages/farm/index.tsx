@@ -1,30 +1,26 @@
 import { InformationCircleIcon } from '@heroicons/react/solid'
-import { ChainId, SUSHI_ADDRESS, MINICHEF_ADDRESS } from '@sushiswap/sdk'
-import { BigNumber } from '@ethersproject/bignumber'
-import { Chef, PairType } from '../../features/farm/enum'
-import { useActiveWeb3React, useFuse } from '../../hooks'
-
-import Alert from '../../components/Alert'
-import Container from '../../components/Container'
-import ExternalLink from '../../components/ExternalLink'
-import FarmList from '../../features/farm/FarmList'
+import { ChainId } from '@sushiswap/core-sdk'
+import Container from 'app/components/Container'
+import ExternalLink from 'app/components/ExternalLink'
+import Search from 'app/components/Search'
+import Typography from 'app/components/Typography'
+import { Chef, PairType } from 'app/features/onsen/enum'
+import FarmList from 'app/features/onsen/FarmList'
+import Menu from 'app/features/onsen/FarmMenu'
+import { usePositions } from 'app/features/onsen/hooks'
+import { classNames } from 'app/functions/styling'
+import useFarmRewards from 'app/hooks/useFarmRewards'
+import useFuse from 'app/hooks/useFuse'
+import { useActiveWeb3React } from 'app/services/web3'
 import Head from 'next/head'
-import Menu from '../../features/farm/FarmMenu'
-import React from 'react'
-import Search from '../../components/Search'
-import Typography from '../../components/Typography'
-import { classNames } from '../../functions'
-import useFarmRewards from '../../hooks/useFarmRewards'
-import { usePositions } from '../../features/farm/hooks'
-import useContractTokenBalance from '../../hooks/useContractTokenBalance'
 import { useRouter } from 'next/router'
-import Provider from '../../features/lending/context'
+import React from 'react'
 
 export default function Farm(): JSX.Element {
   const { chainId } = useActiveWeb3React()
 
   const router = useRouter()
-  const type = router.query.filter == null ? 'all' : (router.query.filter as string)
+  const type = router.query.filter === null ? 'all' : (router.query.filter as string)
 
   const positions = usePositions(chainId)
 
@@ -105,5 +101,3 @@ export default function Farm(): JSX.Element {
     </Container>
   )
 }
-
-Farm.Provider = Provider

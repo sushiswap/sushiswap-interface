@@ -1,5 +1,6 @@
 import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
-import Fraction from './src/entities/Fraction'
+
+import Fraction from './src/entities/bignumber/Fraction'
 
 declare module 'fortmatic'
 
@@ -40,12 +41,14 @@ declare module 'jazzicon' {
   export default function (diameter: number, seed: number): HTMLElement
 }
 
-declare module 'react-tradingview-widget'
+declare module 'formatic'
 
 declare module '@ethersproject/bignumber' {
   interface BigNumber {
     mulDiv(multiplier: BigNumberish, divisor: BigNumberish): BigNumber
     toFixed(decimals: BigNumberish): string
     toFraction(decimals: BigNumberish, base: BigNumberish): Fraction
+    min(...values: BigNumberish[]): BigNumber
+    max(...values: BigNumberish[]): BigNumber
   }
 }

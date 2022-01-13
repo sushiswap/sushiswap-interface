@@ -1,15 +1,14 @@
-import { VersionUpgrade, getVersionUpgrade, minVersionBump } from '@uniswap/token-lists'
+import { getVersionUpgrade, minVersionBump, VersionUpgrade } from '@uniswap/token-lists'
+import { UNSUPPORTED_LIST_URLS } from 'app/config/token-lists'
+import { useFetchListCallback } from 'app/hooks/useFetchListCallback'
+import useInterval from 'app/hooks/useInterval'
+import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch } from 'app/state/hooks'
 import { useCallback, useEffect } from 'react'
 
-import { UNSUPPORTED_LIST_URLS } from '../../constants/token-lists'
 import { acceptListUpdate } from './actions'
-import { useActiveListUrls } from './hooks'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllLists } from './hooks'
-import { useAppDispatch } from '../hooks'
-import { useFetchListCallback } from '../../hooks/useFetchListCallback'
-import useInterval from '../../hooks/useInterval'
-import useIsWindowVisible from '../../hooks/useIsWindowVisible'
+import { useActiveListUrls, useAllLists } from './hooks'
 
 export default function Updater(): null {
   const { library } = useActiveWeb3React()

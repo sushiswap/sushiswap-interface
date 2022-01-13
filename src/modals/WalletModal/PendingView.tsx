@@ -1,106 +1,63 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { AbstractConnector } from '@web3-react/abstract-connector'
-import Dots from '../../components/Dots'
-import Loader from '../../components/Loader'
+import loadingCircle from 'app/animation/loading-circle.json'
+import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import { HeadlessUiModal } from 'app/components/Modal'
+import Typography from 'app/components/Typography'
+import { injected, SUPPORTED_WALLETS } from 'config/wallets'
+import Lottie from 'lottie-react'
+import React, { FC } from 'react'
+
 import Option from './Option'
-import React from 'react'
-import { SUPPORTED_WALLETS } from '../../constants'
-import { darken } from 'polished'
-import { injected } from '../../connectors'
-import styled from 'styled-components'
 
-const PendingSection = styled.div`
-  // ${({ theme }) => theme.flexColumnNoWrap};
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  & > * {
-    width: 100%;
-  }
-`
-
-const StyledLoader = styled(Loader)`
-  margin-right: 1rem;
-`
-
-const LoadingMessage = styled.div<{ error?: boolean }>`
-  // ${({ theme }) => theme.flexRowNoWrap};
-  align-items: center;
-  justify-content: flex-start;
-  // border-radius: ${({ theme }) => theme.borderRadius};
-  margin-bottom: 20px;
-  // color: ${({ theme, error }) => (error ? theme.red1 : 'inherit')};
-  // border: 1px solid ${({ theme, error }) => (error ? theme.red1 : theme.text4)};
-
-  & > * {
-    padding: 1rem;
-  }
-`
-
-const ErrorGroup = styled.div`
-  // ${({ theme }) => theme.flexRowNoWrap};
-  align-items: center;
-  justify-content: flex-start;
-`
-
-const ErrorButton = styled.div`
-  border-radius: 8px;
-  font-size: 12px;
-  // color: ${({ theme }) => theme.text1};
-  // background-color: ${({ theme }) => theme.bg4};
-  margin-left: 1rem;
-  padding: 0.5rem;
-  font-weight: 600;
-  user-select: none;
-
-  &:hover {
-    cursor: pointer;
-    // background-color: ${({ theme }) => darken(0.1, theme.text4)};
-  }
-`
-
-const LoadingWrapper = styled.div`
-  // ${({ theme }) => theme.flexRowNoWrap};
-  align-items: center;
-  justify-content: center;
-`
-
-export default function PendingView({
-  connector,
-  error = false,
-  setPendingError,
-  tryActivation,
-}: {
+interface PendingView {
+  id: string
   connector?: AbstractConnector
   error?: boolean
-  setPendingError: (error: boolean) => void
-  tryActivation: (connector: AbstractConnector) => void
-}) {
+  setPendingError(error: boolean): void
+  tryActivation(connector: AbstractConnector, key: string): void
+}
+
+const PendingView: FC<PendingView> = ({ id, connector, error = false, setPendingError, tryActivation }) => {
+  const { i18n } = useLingui()
   const isMetamask = window?.ethereum?.isMetaMask
 
   return (
-    <PendingSection>
-      <LoadingMessage error={error}>
-        <LoadingWrapper>
-          {error ? (
-            <ErrorGroup>
-              <div>Error connecting.</div>
-              <ErrorButton
-                onClick={() => {
-                  setPendingError(false)
-                  connector && tryActivation(connector)
-                }}
-              >
-                Try Again
-              </ErrorButton>
-            </ErrorGroup>
-          ) : (
-            <Dots>Initializing</Dots>
-          )}
-        </LoadingWrapper>
-      </LoadingMessage>
-      {Object.keys(SUPPORTED_WALLETS).map((key) => {
-        const option = SUPPORTED_WALLETS[key]
-        if (option.connector === connector) {
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.BorderedContent className={error ? 'border-red' : 'border-dark-800'}>
+        {error ? (
+          <div className="flex gap-4 items-center">
+            <Typography variant="sm" weight={700} className="text-red">
+              {i18n._(t`Error while trying to connect`)}
+            </Typography>
+            <Button
+              variant="outlined"
+              color="blue"
+              size="xs"
+              onClick={() => {
+                setPendingError(false)
+                connector && tryActivation(connector, id)
+              }}
+            >
+              Try Again
+            </Button>
+          </div>
+        ) : (
+          <div className="flex gap-4">
+            <div className="w-5 h-5">
+              <Lottie animationData={loadingCircle} autoplay loop />
+            </div>
+            <Typography weight={700} className="text-high-emphesis">
+              <Dots>{i18n._(t`Initializing`)}</Dots>
+            </Typography>
+          </div>
+        )}
+      </HeadlessUiModal.BorderedContent>
+      {Object.keys(SUPPORTED_WALLETS).map((_key) => {
+        const option = SUPPORTED_WALLETS[_key]
+        if (id === _key) {
           if (option.connector === injected) {
             if (isMetamask && option.name !== 'MetaMask') {
               return null
@@ -111,10 +68,9 @@ export default function PendingView({
           }
           return (
             <Option
-              id={`connect-${key}`}
-              key={key}
+              id={`connect-${_key}`}
+              key={_key}
               clickable={false}
-              color={option.color}
               header={option.name}
               subheader={option.description}
               icon={'/images/wallets/' + option.iconName}
@@ -123,6 +79,8 @@ export default function PendingView({
         }
         return null
       })}
-    </PendingSection>
+    </div>
   )
 }
+
+export default PendingView

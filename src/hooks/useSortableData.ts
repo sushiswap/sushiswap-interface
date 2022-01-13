@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react'
-
 import { BigNumber } from '@ethersproject/bignumber'
+import { useMemo, useState } from 'react'
 
 function getNested(theObject: any, path: string, separator = '.') {
   try {

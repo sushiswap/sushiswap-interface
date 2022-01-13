@@ -1,21 +1,21 @@
 import { ArrowDownIcon, InformationCircleIcon } from '@heroicons/react/solid'
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
-import { MEOW, SUSHI, XSUSHI } from '../../constants'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-
-import Container from '../../components/Container'
-import CurrencyInputPanel from '../../features/meowshi/CurrencyInputPanel'
-import Head from 'next/head'
-import HeaderToggle from '../../features/meowshi/HeaderToggle'
-import Image from 'next/image'
-import MeowshiButton from '../../features/meowshi/MeowshiButton'
-import NetworkGuard from '../../guards/Network'
-import Typography from '../../components/Typography'
-import { e10 } from '../../functions'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import useMeowshiPerXSushi from '../../hooks/useMeowshiPerXSushi'
-import useSushiPerXSushi from '../../hooks/useXSushiPerSushi'
+import { ChainId, Currency, SUSHI, Token } from '@sushiswap/core-sdk'
+import Container from 'app/components/Container'
+import Typography from 'app/components/Typography'
+import { MEOW, XSUSHI } from 'app/config/tokens'
+import { Feature } from 'app/enums'
+import CurrencyInputPanel from 'app/features/meowshi/CurrencyInputPanel'
+import HeaderToggle from 'app/features/meowshi/HeaderToggle'
+import MeowshiButton from 'app/features/meowshi/MeowshiButton'
+import { e10 } from 'app/functions'
+import NetworkGuard from 'app/guards/Network'
+import useMeowshiPerXSushi from 'app/hooks/useMeowshiPerXSushi'
+import useSushiPerXSushi from 'app/hooks/useXSushiPerSushi'
+import Head from 'next/head'
+import Image from 'next/image'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 export enum Field {
   INPUT = 'INPUT',
@@ -50,7 +50,7 @@ export default function Meowshi() {
   })
 
   const [currencies, setCurrencies] = useState({
-    [Field.INPUT]: SUSHI[ChainId.MAINNET],
+    [Field.INPUT]: SUSHI[ChainId.ETHEREUM],
     [Field.OUTPUT]: MEOW,
   })
 
@@ -141,7 +141,7 @@ export default function Meowshi() {
 
       <div className="z-0 relative mb-[-38px] md:mb-[-54px] ml-0 md:ml-4 flex justify-between gap-6 items-center">
         <div className="min-w-[168px] hidden md:block">
-          <Image src="/neon-cat.png" alt="neon-cat" width="168px" height="168px" />
+          <Image src="/meowshi/neon-cat.png" alt="neon-cat" width="168px" height="168px" />
         </div>
 
         <div className="bg-[rgba(255,255,255,0.04)] p-4 py-2 rounded flex flex-row items-center gap-4 mb-[54px]">
@@ -164,8 +164,8 @@ export default function Meowshi() {
           </div>
           <Typography variant="sm" className="text-secondary ml-[26px]">
             {currencies[Field.INPUT]?.symbol} →{' '}
-            {(currencies[Field.INPUT] === SUSHI[ChainId.MAINNET] ||
-              currencies[Field.OUTPUT] === SUSHI[ChainId.MAINNET]) &&
+            {(currencies[Field.INPUT] === SUSHI[ChainId.ETHEREUM] ||
+              currencies[Field.OUTPUT] === SUSHI[ChainId.ETHEREUM]) &&
               ' xSUSHI → '}
             {currencies[Field.OUTPUT]?.symbol}
           </Typography>
@@ -177,4 +177,4 @@ export default function Meowshi() {
   )
 }
 
-Meowshi.Guard = NetworkGuard([ChainId.MAINNET])
+Meowshi.Guard = NetworkGuard(Feature.MEOWSHI)

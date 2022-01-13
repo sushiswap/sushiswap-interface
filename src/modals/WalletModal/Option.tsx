@@ -1,56 +1,52 @@
+import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
 import Image from 'next/image'
 import React from 'react'
-import styled from 'styled-components'
-
-const SubHeader = styled.div`
-  // color: ${({ theme }) => theme.text1};
-  margin-top: 10px;
-  font-size: 12px;
-`
 
 export default function Option({
+  id,
   link = null,
-  clickable = true,
-  size,
   onClick = null,
-  color,
   header,
   subheader = null,
   icon,
   active = false,
-  id,
+  clickable = true,
 }: {
+  id: string
   link?: string | null
-  clickable?: boolean
   size?: number | null
   onClick?: null | (() => void)
-  color: string
   header: React.ReactNode
   subheader: React.ReactNode | null
   icon: string
   active?: boolean
-  id: string
+  clickable?: boolean
 }) {
   const content = (
     <div
+      role="button"
       onClick={onClick}
-      className={`flex items-center justify-between w-full p-3 rounded cursor-pointer ${
-        !active ? 'bg-dark-800 hover:bg-dark-700' : 'bg-dark-1000'
-      }`}
+      className={classNames(
+        clickable ? 'cursor-pointer' : '',
+        'bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 justify-between w-full px-4 py-3 rounded border border-dark-700 hover:border-blue'
+      )}
     >
-      <div>
-        <div className="flex items-center">
-          {active && <div className="w-4 h-4 mr-4 rounded-full" style={{ background: color }} />}
-          {header}
+      <div className="flex flex-col gap-1">
+        <div id={`wallet-option-${header}`} className="flex items-center">
+          <Typography variant="sm" weight={700} className="text-high-emphesis">
+            {header}
+          </Typography>
         </div>
-        {subheader && <SubHeader>{subheader}</SubHeader>}
+        {subheader && <Typography variant="xs">{subheader}</Typography>}
       </div>
       <Image src={icon} alt={'Icon'} width="32px" height="32px" />
     </div>
   )
+
   if (link) {
     return <a href={link}>{content}</a>
   }
 
-  return !active ? content : <div className="w-full p-px rounded bg-gradient-to-r from-blue to-pink">{content}</div>
+  return content
 }

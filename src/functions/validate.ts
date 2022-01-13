@@ -1,10 +1,9 @@
 // CONVENTION isFoo -> boolean
 
-import { ChainId, Currency, Token } from '@sushiswap/sdk'
-
-import { BigNumber } from 'ethers'
-import { TokenAddressMap } from '../state/lists/hooks'
 import { getAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Token } from '@sushiswap/core-sdk'
+import { TokenAddressMap } from 'app/state/lists/hooks'
 
 /**
  * Returns true if the string value is zero in hex

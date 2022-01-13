@@ -1,12 +1,12 @@
-import { Menu, Transition } from '@headlessui/react'
-
 import { ChevronDownIcon } from '@heroicons/react/solid'
-import React, { Fragment } from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
-import { classNames } from '../../functions'
-import { useRouter } from 'next/router'
+import Popover from 'app/components/Popover'
+import { classNames } from 'app/functions'
 import cookieCutter from 'cookie-cutter'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import React, { useState } from 'react'
+
+import Typography from '../Typography'
 
 const LANG_TO_COUNTRY = {
   en: 'English',
@@ -29,72 +29,49 @@ const LANG_TO_COUNTRY = {
 }
 
 export default function LangSwitcher() {
-  const { locale, locales, asPath } = useRouter()
+  const { locale } = useRouter()
+  const [show, setShow] = useState(false)
 
   return (
-    <Menu as="div" className="relative inline-block text-right">
-      {({ open }) => (
-        <>
-          <div>
-            <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border rounded shadow-sm text-primary border-dark-800 hover:bg-dark-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800">
-              {LANG_TO_COUNTRY[locale]}
-              {/* <Image
-                className="inline w-3 h-3 mr-1 align-middle"
-                src={`/images/flags/${locale}-flag.png`}
-                width={20}
-                height={20}
-                alt={locale}
-                aria-hidden="true"
-              /> */}
-              <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
-            </Menu.Button>
-          </div>
+    <Popover
+      placement="bottom-end"
+      modifiers={[{ name: 'offset', options: { offset: [8, 0] } }]}
+      show={show}
+      content={<LanguageSwitcherContent onClick={() => setShow(false)} />}
+    >
+      <div
+        onClick={() => setShow(!show)}
+        className="cursor-pointer bg-dark-1000 inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border-2 rounded shadow-sm text-primary border-dark-800 hover:border-dark-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800"
+      >
+        {LANG_TO_COUNTRY[locale]}
+        <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
+      </div>
+    </Popover>
+  )
+}
 
-          <Transition
-            show={open}
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="absolute right-0 w-[max-content] mt-2 origin-top-right divide-y divide-dark-600 rounded shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
-              <div className="p-2">
-                {locales.map((locale) => {
-                  return (
-                    <Menu.Item key={locale}>
-                      {({ active }) => (
-                        <Link href={asPath} locale={locale}>
-                          <a
-                            href="#"
-                            className={classNames(
-                              active ? 'bg-dark-700 text-high-emphesis' : 'text-primary',
-                              'group flex items-center p-2 text-sm hover:bg-dark-700 focus:bg-dark-700 rounded font-bold'
-                            )}
-                            onClick={() => cookieCutter.set('NEXT_LOCALE', locale)}
-                          >
-                            {/* <Image
-                              className="inline w-3 h-3 mr-1 align-middle"
-                              src={`/images/flags/${locale}-flag.png`}
-                              width={20}
-                              height={20}
-                              alt={locale}
-                              aria-hidden="true"
-                            /> */}
-                            <span className="ml-2">{LANG_TO_COUNTRY[locale]}</span>
-                          </a>
-                        </Link>
-                      )}
-                    </Menu.Item>
-                  )
-                })}
-              </div>
-            </Menu.Items>
-          </Transition>
-        </>
-      )}
-    </Menu>
+export const LanguageSwitcherContent = ({ onClick }: { onClick?(): void }) => {
+  const { locales, asPath } = useRouter()
+  return (
+    <div className="px-2 mt-3">
+      <div className="shadow-lg overflow-hidden bg-dark-900 rounded border border-dark-700">
+        {locales.map((l) => {
+          return (
+            <div key={l} onClick={onClick}>
+              <Link href={asPath} locale={l} passHref={true}>
+                <a
+                  className={classNames('flex gap-3 p-3 transition duration-150 ease-in-out hover:bg-dark-800')}
+                  onClick={() => cookieCutter.set('NEXT_LOCALE', l)}
+                >
+                  <Typography variant="xs" weight={700}>
+                    {LANG_TO_COUNTRY[l]}
+                  </Typography>
+                </a>
+              </Link>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }

@@ -1,9 +1,9 @@
-import { useENSRegistrarContract, useENSResolverContract } from './useContract'
+import { namehash } from '@ethersproject/hash'
+import { useMemo } from 'react'
 
 import { isZero } from '../functions'
-import { namehash } from 'ethers/lib/utils'
-import { useMemo } from 'react'
 import { useSingleCallResult } from '../state/multicall/hooks'
+import { useENSRegistrarContract, useENSResolverContract } from './useContract'
 
 /**
  * Does a lookup for an ENS name to find its contenthash.

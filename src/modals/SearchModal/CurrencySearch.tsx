@@ -1,91 +1,52 @@
-import { ChainId, Currency, NATIVE, Token } from '@sushiswap/sdk'
-import React, { KeyboardEvent, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Row, { RowFixed } from '../../components/Row'
-import { filterTokens, useSortedTokensByQuery } from '../../functions/filtering'
-import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from '../../hooks/Tokens'
-
-import AutoSizer from 'react-virtualized-auto-sizer'
-import Button from '../../components/Button'
-import ButtonText from '../../components/ButtonText'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import CHAINLINK_TOKENS from '@sushiswap/chainlink-whitelist/dist/sushiswap-chainlink.whitelist.json'
-import Column from '../../components/Column'
+import { ChainId, Currency, NATIVE, Token } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import Typography from 'app/components/Typography'
+import { filterTokens, useSortedTokensByQuery } from 'app/functions/filtering'
+import { isAddress } from 'app/functions/validate'
+import { useAllTokens, useIsUserAddedToken, useSearchInactiveTokenLists, useToken } from 'app/hooks/Tokens'
+import useDebounce from 'app/hooks/useDebounce'
+import CurrencyModalView from 'app/modals/SearchModal/CurrencyModalView'
+import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useRouter } from 'next/router'
+import React, { KeyboardEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import ReactGA from 'react-ga'
+
 import CommonBases from './CommonBases'
 import CurrencyList from './CurrencyList'
-import { Edit } from 'react-feather'
-import { FixedSizeList } from 'react-window'
-import IconWrapper from '../../components/IconWrapper'
 import ImportRow from './ImportRow'
-import ModalHeader from '../../components/ModalHeader'
-import ReactGA from 'react-ga'
-import { isAddress } from '../../functions/validate'
-import styled from 'styled-components'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import useDebounce from '../../hooks/useDebounce'
-import { useLingui } from '@lingui/react'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { useRouter } from 'next/router'
-import useToggle from '../../hooks/useToggle'
 import { useTokenComparator } from './sorting'
 
-const ContentWrapper = styled(Column)`
-  height: 100%;
-  width: 100%;
-  flex: 1 1;
-  position: relative;
-  // overflow-y: hidden;
-`
-
 interface CurrencySearchProps {
-  isOpen: boolean
-  onDismiss: () => void
-  selectedCurrency?: Currency | null
-  onCurrencySelect: (currency: Currency) => void
   otherSelectedCurrency?: Currency | null
   showCommonBases?: boolean
-  showManageView: () => void
-  showImportView: () => void
-  setImportToken: (token: Token) => void
-  currencyList?: string[]
-  includeNativeCurrency?: boolean
+  currencyList?: (string | undefined)[]
   allowManageTokenList?: boolean
-  hideBalance: boolean
-  showSearch: boolean
 }
 
 export function CurrencySearch({
-  selectedCurrency,
-  onCurrencySelect,
   otherSelectedCurrency,
   showCommonBases,
-  onDismiss,
-  isOpen,
-  showManageView,
-  showImportView,
-  setImportToken,
   currencyList,
-  includeNativeCurrency = true,
   allowManageTokenList = true,
-  hideBalance = false,
-  showSearch = true,
 }: CurrencySearchProps) {
   const { i18n } = useLingui()
-
+  const router = useRouter()
+  let allTokens = useAllTokens()
   const { chainId } = useActiveWeb3React()
-
-  // refs for fixed size lists
-  const fixedList = useRef<FixedSizeList>()
-
+  const { setView, onDismiss, onSelect, includeNative, showSearch, setImportToken } = useCurrencyModalContext()
   const [searchQuery, setSearchQuery] = useState<string>('')
   const debouncedQuery = useDebounce(searchQuery, 200)
+  const isAddressSearch = isAddress(debouncedQuery)
+  const searchToken = useToken(debouncedQuery)
+  const searchTokenIsAdded = useIsUserAddedToken(searchToken)
+  const tokenComparator = useTokenComparator()
 
-  const [invertSearchOrder] = useState<boolean>(false)
-
-  let allTokens = useAllTokens()
-
-  const router = useRouter()
-
-  if (router.asPath.startsWith('/kashi/create')) {
+  if (router.asPath.startsWith('/kashi/create') && chainId) {
     allTokens = Object.keys(allTokens).reduce((obj, key) => {
       if (CHAINLINK_TOKENS[chainId].find((address) => address === key)) obj[key] = allTokens[key]
       return obj
@@ -99,13 +60,6 @@ export function CurrencySearch({
     }, {})
   }
 
-  // if they input an address, use it
-  const isAddressSearch = isAddress(debouncedQuery)
-
-  const searchToken = useToken(debouncedQuery)
-
-  const searchTokenIsAdded = useIsUserAddedToken(searchToken)
-
   useEffect(() => {
     if (isAddressSearch) {
       ReactGA.event({
@@ -116,8 +70,6 @@ export function CurrencySearch({
     }
   }, [isAddressSearch])
 
-  const tokenComparator = useTokenComparator(invertSearchOrder)
-
   const filteredTokens: Token[] = useMemo(() => {
     return filterTokens(Object.values(allTokens), debouncedQuery)
   }, [allTokens, debouncedQuery])
@@ -127,7 +79,6 @@ export function CurrencySearch({
   }, [filteredTokens, tokenComparator])
 
   const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
-
   const ether = useMemo(() => chainId && ![ChainId.CELO].includes(chainId) && NATIVE[chainId], [chainId])
 
   const filteredSortedTokensWithETH: Currency[] = useMemo(() => {
@@ -140,24 +91,17 @@ export function CurrencySearch({
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {
-      onCurrencySelect(currency)
+      onSelect(currency)
       onDismiss()
     },
-    [onDismiss, onCurrencySelect]
+    [onSelect, onDismiss]
   )
 
-  // clear the input on open
-  useEffect(() => {
-    if (isOpen) setSearchQuery('')
-  }, [isOpen])
-
   // manage focus on modal show
-  const inputRef = useRef<HTMLInputElement>()
   const handleInput = useCallback((event) => {
     const input = event.target.value
-    const checksummedInput = isAddress(input)
-    setSearchQuery(checksummedInput || input)
-    fixedList.current?.scrollTo(0)
+    const checkSum = isAddress(input)
+    setSearchQuery(checkSum || input)
   }, [])
 
   const handleEnter = useCallback(
@@ -179,75 +123,64 @@ export function CurrencySearch({
     [debouncedQuery, ether, filteredSortedTokensWithETH, handleCurrencySelect]
   )
 
-  // menu ui
-  const [open, toggle] = useToggle(false)
-  const node = useRef<HTMLDivElement>()
-  useOnClickOutside(node, open ? toggle : undefined)
-
   // if no results on main list, show option to expand into inactive
   const filteredInactiveTokens = useSearchInactiveTokenLists(
     filteredTokens.length === 0 || (debouncedQuery.length > 2 && !isAddressSearch) ? debouncedQuery : undefined
   )
 
-  return (
-    <ContentWrapper>
-      <ModalHeader onClose={onDismiss} title="Select a token" />
-      {!currencyList && showSearch && (
-        <div className="mt-0 mb-3 sm:mt-3 sm:mb-8">
-          <input
-            type="text"
-            id="token-search-input"
-            placeholder={i18n._(t`Search name or paste address`)}
-            autoComplete="off"
-            value={searchQuery}
-            ref={inputRef as RefObject<HTMLInputElement>}
-            onChange={handleInput}
-            onKeyDown={handleEnter}
-            className="w-full bg-transparent border border-dark-700 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5"
-          />
-        </div>
-      )}
-      {showCommonBases && (
-        <div className="mb-4">
-          <CommonBases chainId={chainId} onSelect={handleCurrencySelect} selectedCurrency={selectedCurrency} />
-        </div>
-      )}
+  const handleImport = useCallback(() => {
+    if (searchToken) {
+      setImportToken(searchToken)
+    }
 
-      {searchToken && !searchTokenIsAdded ? (
-        <Column style={{ padding: '20px 0', height: '100%' }}>
-          <ImportRow token={searchToken} showImportView={showImportView} setImportToken={setImportToken} />
-        </Column>
-      ) : filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
-        <div className="flex-1 h-full">
-          <AutoSizer disableWidth>
-            {({ height }) => (
-              <CurrencyList
-                height={height}
-                currencies={includeNativeCurrency ? filteredSortedTokensWithETH : filteredSortedTokens}
-                otherListTokens={filteredInactiveTokens}
-                onCurrencySelect={handleCurrencySelect}
-                otherCurrency={otherSelectedCurrency}
-                selectedCurrency={selectedCurrency}
-                fixedListRef={fixedList}
-                showImportView={showImportView}
-                setImportToken={setImportToken}
-                hideBalance={hideBalance}
-              />
-            )}
-          </AutoSizer>
-        </div>
-      ) : (
-        <Column style={{ padding: '20px', height: '100%' }}>
-          <div className="mb-8 text-center">{i18n._(t`No results found`)}</div>
-        </Column>
+    setView(CurrencyModalView.importToken)
+  }, [searchToken, setImportToken, setView])
+
+  return (
+    <>
+      <HeadlessUiModal.Header onClose={onDismiss} header={i18n._(t`Select a token`)} />
+      {!currencyList && showSearch && (
+        <input
+          type="text"
+          id="token-search-input"
+          placeholder={i18n._(t`Search name or paste address`)}
+          autoComplete="off"
+          value={searchQuery}
+          onChange={handleInput}
+          onKeyDown={handleEnter}
+          className="w-full bg-[rgba(0,0,0,0.2)] border border-dark-800 focus:border-blue rounded placeholder-secondary font-bold text-base p-4 appearance-none"
+        />
       )}
+      {showCommonBases && <CommonBases />}
+
+      {searchToken && !searchTokenIsAdded && <ImportRow token={searchToken} onClick={handleImport} />}
+      <div className="h-full overflow-hidden overflow-y-auto border rounded border-dark-800 bg-[rgba(0,0,0,0.2)]">
+        {filteredSortedTokens?.length > 0 || filteredInactiveTokens?.length > 0 ? (
+          <CurrencyList
+            currencies={includeNative ? filteredSortedTokensWithETH : filteredSortedTokens}
+            otherListTokens={filteredInactiveTokens}
+            otherCurrency={otherSelectedCurrency}
+          />
+        ) : (
+          <Typography weight={700} variant="xs" className="text-secondary flex h-full justify-center items-center">
+            {i18n._(t`No results found`)}
+          </Typography>
+        )}
+      </div>
       {allowManageTokenList && (
-        <div className="mt-3">
-          <Button id="list-token-manage-button" onClick={showManageView} color="gray">
+        <div className="flex justify-center">
+          <Button
+            size="sm"
+            id="list-token-manage-button"
+            onClick={() => setView(CurrencyModalView.manage)}
+            color="blue"
+            variant="empty"
+            className="text-sm"
+          >
             {i18n._(t`Manage Token Lists`)}
           </Button>
         </div>
       )}
-    </ContentWrapper>
+    </>
   )
 }

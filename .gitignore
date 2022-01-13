@@ -9,7 +9,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-.vscode/
 .idea/
 .vercel
 .next
@@ -19,9 +18,8 @@ public/sw.js.map
 public/workbox*.js
 public/workbox*.js.map
 
-/locale/_build/
-/locale/**/*.js
+/locale
 
 .env
 
-lokalise.yaml
+coverage

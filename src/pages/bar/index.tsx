@@ -1,28 +1,26 @@
-import { ApprovalState, useApproveCallback } from '../../hooks/useApproveCallback'
-import { BAR_ADDRESS, ZERO } from '@sushiswap/sdk'
-import React, { useEffect, useState } from 'react'
-import { SUSHI, XSUSHI } from '../../constants'
-
-import Button from '../../components/Button'
-import { ChainId } from '@sushiswap/sdk'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
+import ExclamationIcon from '@heroicons/react/outline/ExclamationIcon'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { BAR_ADDRESS, ChainId, SUSHI, ZERO } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Container from 'app/components/Container'
+import Dots from 'app/components/Dots'
+import Input from 'app/components/Input'
+import { XSUSHI } from 'app/config/tokens'
+import { classNames } from 'app/functions'
+import { aprToApy } from 'app/functions/convert/apyApr'
+import { tryParseAmount } from 'app/functions/parse'
+import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
+import useSushiBar from 'app/hooks/useSushiBar'
+import TransactionFailedModal from 'app/modals/TransactionFailedModal'
+import { useFactory, useNativePrice, useOneDayBlock, useTokens } from 'app/services/graph/hooks'
+import { useBar } from 'app/services/graph/hooks/bar'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useWalletModalToggle } from 'app/state/application/hooks'
+import { useTokenBalance } from 'app/state/wallet/hooks'
 import Head from 'next/head'
 import Image from 'next/image'
-import { Input as NumericalInput } from '../../components/NumericalInput'
-import TransactionFailedModal from '../../components/TransactionFailedModal'
-import { request } from 'graphql-request'
-import styled from 'styled-components'
-import sushiData from '@sushiswap/sushi-data'
-import { t } from '@lingui/macro'
-import { tryParseAmount } from '../../functions/parse'
-import useActiveWeb3React from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import useSWR from 'swr'
-import useSushiBar from '../../hooks/useSushiBar'
-import { useSushiPrice } from '../../services/graph'
-import { useTokenBalance } from '../../state/wallet/hooks'
-import { useWalletModalToggle } from '../../state/application/hooks'
+import React, { useState } from 'react'
 
 const INPUT_CHAR_LIMIT = 18
 
@@ -40,10 +38,6 @@ const sendTx = async (txFunc: () => Promise<any>): Promise<boolean> => {
   return success
 }
 
-const StyledNumericalInput = styled(NumericalInput)`
-  caret-color: #e3e3e3;
-`
-
 const tabStyle = 'flex justify-center items-center h-full w-full rounded-lg cursor-pointer text-sm md:text-base'
 const activeTabStyle = `${tabStyle} text-high-emphesis font-bold bg-dark-900`
 const inactiveTabStyle = `${tabStyle} text-secondary`
@@ -55,21 +49,13 @@ const buttonStyleInsufficientFunds = `${buttonStyleEnabled} opacity-60`
 const buttonStyleDisabled = `${buttonStyle} text-secondary bg-dark-700`
 const buttonStyleConnectWallet = `${buttonStyle} text-high-emphesis bg-cyan-blue hover:bg-opacity-90`
 
-const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
-
 export default function Stake() {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.MAINNET])
+  const sushiBalance = useTokenBalance(account ?? undefined, SUSHI[ChainId.ETHEREUM])
   const xSushiBalance = useTokenBalance(account ?? undefined, XSUSHI)
 
-  const sushiPrice = useSushiPrice()
-
   const { enter, leave } = useSushiBar()
-
-  const { data } = useSWR(`{bar(id: "0x8798249c2e607446efb7ad49ec89dd1865ff4272") {ratio, totalSupply}}`, fetcher)
-
-  const xSushiPerSushi = parseFloat(data?.bar?.ratio)
 
   const walletConnected = !!account
   const toggleWalletModal = useWalletModalToggle()
@@ -86,7 +72,7 @@ export default function Stake() {
 
   const parsedAmount = usingBalance ? balance : tryParseAmount(input, balance?.currency)
 
-  const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.MAINNET])
+  const [approvalState, approve] = useApproveCallback(parsedAmount, BAR_ADDRESS[ChainId.ETHEREUM])
 
   const handleInput = (v: string) => {
     if (v.length <= INPUT_CHAR_LIMIT) {
@@ -145,18 +131,32 @@ export default function Stake() {
     }
   }
 
-  const [apr, setApr] = useState<any>()
+  const block1d = useOneDayBlock({ chainId: ChainId.ETHEREUM })
 
-  // TODO: DROP AND USE SWR HOOKS INSTEAD
-  useEffect(() => {
-    const fetchData = async () => {
-      const results = await sushiData.exchange.dayData()
-      const apr = (((results[1].volumeUSD * 0.05) / data?.bar?.totalSupply) * 365) / (data?.bar?.ratio * sushiPrice)
+  const exchange = useFactory({ chainId: ChainId.ETHEREUM })
 
-      setApr(apr)
-    }
-    fetchData()
-  }, [data?.bar?.ratio, data?.bar?.totalSupply, sushiPrice])
+  const exchange1d = useFactory({
+    chainId: ChainId.ETHEREUM,
+    variables: {
+      block: block1d,
+    },
+    shouldFetch: !!block1d,
+  })
+
+  const ethPrice = useNativePrice({ chainId: ChainId.ETHEREUM })
+
+  const xSushi = useTokens({
+    chainId: ChainId.ETHEREUM,
+    variables: { where: { id: XSUSHI.address.toLowerCase() } },
+  })?.[0]
+
+  const bar = useBar()
+
+  const [xSushiPrice] = [xSushi?.derivedETH * ethPrice, xSushi?.derivedETH * ethPrice * bar?.totalSupply]
+
+  const APY1d = aprToApy(
+    (((exchange?.volumeUSD - exchange1d?.volumeUSD) * 0.0005 * 365.25) / (bar?.totalSupply * xSushiPrice)) * 100 ?? 0
+  )
 
   return (
     <Container id="bar-page" className="py-4 md:py-8 lg:py-12" maxWidth="full">
@@ -174,10 +174,10 @@ export default function Stake() {
           name="twitter:description"
           content="Stake SUSHI in return for xSUSHI, an interest bearing and fungible ERC20 token designed to share revenue generated by all SUSHI products."
         />
-        <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/xsushi-sign.png" />
+        <meta key="twitter:image" name="twitter:image" content="https://app.sushi.com/images/xsushi-sign.png" />
         <meta key="og:title" property="og:title" content="STAKE SUSHI" />
         <meta key="og:url" property="og:url" content="https://app.sushi.com/stake" />
-        <meta key="og:image" property="og:image" content="https://app.sushi.com/xsushi-sign.png" />
+        <meta key="og:image" property="og:image" content="https://app.sushi.com/images/xsushi-sign.png" />
         <meta
           key="og:description"
           property="og:description"
@@ -197,7 +197,7 @@ export default function Stake() {
             </div>
             <div className="max-w-lg pr-3 mb-2 text-sm leading-5 text-gray-500 md:text-base md:mb-4 md:pr-0">
               {i18n._(t`For every swap on the exchange on every chain, 0.05% of the swap fees are distributed as SUSHI
-                                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you recieve
+                                proportional to your share of the SushiBar. When your SUSHI is staked into the SushiBar, you receive
                                 xSUSHI in return for voting rights and a fully composable token that can interact with other protocols.
                                 Your xSUSHI is continuously compounding, when you unstake you will receive all the originally deposited
                                 SUSHI and any additional from fees.`)}
@@ -216,7 +216,7 @@ export default function Stake() {
                         </div> */}
           </div>
           <div className="hidden px-8 ml-6 md:block w-72">
-            <Image src="/xsushi-sign.png" alt="xSUSHI sign" width="100%" height="100%" layout="responsive" />
+            <Image src="/images/xsushi-sign.png" alt="xSUSHI sign" width="100%" height="100%" layout="responsive" />
           </div>
         </div>
         <div className="flex flex-col justify-center md:flex-row">
@@ -246,7 +246,7 @@ export default function Stake() {
                 </div>
                 <div className="flex flex-col">
                   <p className="mb-1 text-lg font-bold text-right text-high-emphesis md:text-3xl">
-                    {`${apr ? apr.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
+                    {`${APY1d ? APY1d.toFixed(2) + '%' : i18n._(t`Loading...`)}`}
                   </p>
                   <p className="w-32 text-sm text-right text-primary md:w-64 md:text-base">
                     {i18n._(t`Yesterday's APR`)}
@@ -281,22 +281,22 @@ export default function Stake() {
                     </div>
                   </div>
                 </div>
-
                 <div className="flex items-center justify-between w-full mt-6">
                   <p className="font-bold text-large md:text-2xl text-high-emphesis">
                     {activeTab === 0 ? i18n._(t`Stake SUSHI`) : i18n._(t`Unstake`)}
                   </p>
                   <div className="border-gradient-r-pink-red-light-brown-dark-pink-red border-transparent border-solid border rounded-3xl px-4 md:px-3.5 py-1.5 md:py-0.5 text-high-emphesis text-xs font-medium md:text-base md:font-normal">
-                    {`1 xSUSHI = ${xSushiPerSushi.toFixed(4)} SUSHI`}
+                    {`1 xSUSHI = ${Number(bar?.ratio ?? 0)?.toFixed(4)} SUSHI`}
                   </div>
                 </div>
 
-                <StyledNumericalInput
+                <Input.Numeric
                   value={input}
                   onUserInput={handleInput}
-                  className={`w-full h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-sm md:text-lg font-bold text-dark-800 whitespace-nowrap${
+                  className={classNames(
+                    'w-full h-14 px-3 md:px-5 mt-5 rounded bg-dark-800 text-sm md:text-lg font-bold text-dark-800 whitespace-nowrap caret-high-emphesis',
                     inputError ? ' pl-9 md:pl-12' : ''
-                  }`}
+                  )}
                   placeholder=" "
                 />
 
@@ -307,16 +307,8 @@ export default function Stake() {
                       inputError ? ' border border-red' : ''
                     }`}
                   >
-                    <div className="flex space-x-2 ">
-                      {inputError && (
-                        <Image
-                          className="mr-2 max-w-4 md:max-w-5"
-                          src="/error-triangle.svg"
-                          alt="error"
-                          width="20px"
-                          height="20px"
-                        />
-                      )}
+                    <div className="flex space-x-2 items-center">
+                      {inputError && <ExclamationIcon color="red" width={20} />}
                       <p
                         className={`text-sm md:text-lg font-bold whitespace-nowrap ${
                           input ? 'text-high-emphesis' : 'text-secondary'

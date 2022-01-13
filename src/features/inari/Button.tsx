@@ -1,13 +1,14 @@
-import React, { FC, useCallback, useState } from 'react'
-import { ApprovalState, useActiveWeb3React } from '../../hooks'
-import { ZERO } from '@sushiswap/sdk'
-import Button, { ButtonProps } from '../../components/Button'
-import { useLingui } from '@lingui/react'
 import { t } from '@lingui/macro'
-import Dots from '../../components/Dots'
-import { useDerivedInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
-import { BentoApprovalState } from '../../hooks/useBentoMasterApproveCallback'
-import ProgressSteps from '../../components/ProgressSteps'
+import { useLingui } from '@lingui/react'
+import { ZERO } from '@sushiswap/core-sdk'
+import Button, { ButtonProps } from 'app/components/Button'
+import Dots from 'app/components/Dots'
+import ProgressSteps from 'app/components/ProgressSteps'
+import { ApprovalState } from 'app/hooks/useApproveCallback'
+import { BentoApprovalState } from 'app/hooks/useBentoMasterApproveCallback'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useDerivedInariState, useSelectedInariStrategy } from 'app/state/inari/hooks'
+import React, { FC, useCallback, useState } from 'react'
 
 interface InariButtonProps extends ButtonProps {}
 

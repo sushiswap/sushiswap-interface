@@ -1,10 +1,12 @@
-import { useActiveWeb3React, useLimitOrderContract } from '.'
-import useSWR, { SWRResponse } from 'swr'
-import { LAMBDA_URL, LimitOrder, OrderStatus } from 'limitorderv2-sdk'
-import { BigNumber } from 'ethers'
+import { BigNumber } from '@ethersproject/bignumber'
+import { JSBI, Percent, Token } from '@sushiswap/core-sdk'
+import { LAMBDA_URL, LimitOrder, OrderStatus } from '@sushiswap/limit-order-sdk'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { JSBI, Percent, Token } from '@sushiswap/sdk'
+import useSWR, { SWRResponse } from 'swr'
+
 import { useAllTokens } from './Tokens'
+import { useLimitOrderContract } from './useContract'
 
 interface State {
   pending: {

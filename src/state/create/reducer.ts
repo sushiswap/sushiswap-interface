@@ -1,6 +1,6 @@
-import { Field, replaceCreateState, selectCurrency, switchCurrencies, typeInput } from './actions'
-
 import { createReducer } from '@reduxjs/toolkit'
+
+import { Field, replaceCreateState, selectCurrency, switchCurrencies, typeInput } from './actions'
 
 export interface CreateState {
   readonly independentField: Field

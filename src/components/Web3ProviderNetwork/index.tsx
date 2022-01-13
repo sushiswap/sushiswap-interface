@@ -1,5 +1,5 @@
-import { NetworkContextName } from '../../constants'
 import { createWeb3ReactRoot } from '@web3-react/core'
+import { NetworkContextName } from 'app/constants'
 
 const Web3ReactRoot = createWeb3ReactRoot(NetworkContextName)
 

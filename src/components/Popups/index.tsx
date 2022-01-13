@@ -1,6 +1,7 @@
+import { useActivePopups } from 'app/state/application/hooks'
+import { useURLWarningVisible } from 'app/state/user/hooks'
 import { FC } from 'react'
-import { useActivePopups } from '../../state/application/hooks'
-import { useURLWarningVisible } from '../../state/user/hooks'
+
 import PopupItem from './PopupItem'
 
 const Popups: FC = () => {
@@ -12,7 +13,7 @@ const Popups: FC = () => {
   return (
     <>
       <div
-        className={`hidden md:block fixed right-[36px] max-w-[355px] w-full z-3 flex flex-col ${
+        className={`hidden md:block fixed right-[36px] max-w-[355px] w-full z-30 flex flex-col ${
           urlWarningActive ? 'top-[108px]' : 'top-[88px]'
         }`}
       >
