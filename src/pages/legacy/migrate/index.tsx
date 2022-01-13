@@ -4,6 +4,7 @@ import { ChevronDownIcon, XIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
+import Back from 'app/components/Back'
 import Head from 'next/head'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -11,7 +12,6 @@ import Badge from '../../../components/Badge'
 import Button, { ButtonConfirmed } from '../../../components/Button'
 import Container from '../../../components/Container'
 import Dots from '../../../components/Dots'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
 import Empty from '../../../components/Empty'
 import Input from '../../../components/Input'
@@ -311,19 +311,25 @@ export default function Migrate() {
   }
 
   return (
-    <Container id="migrate-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="lg">
+    <Container id="migrate-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Migrate | Sushi</title>
         <meta key="description" name="description" content="Migrate your liquidity to SushiSwap." />
       </Head>
 
-      <div className="mb-8 text-2xl text-center">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
+      <div className="p-4 mb-3 space-y-3">
+        <Back />
 
-      <DoubleGlowShadow>
+        <Typography component="h1" variant="h2">
+          {i18n._(t`Migrate ${exchange} Liquidity`)}
+        </Typography>
+      </div>
+
+      {!account ? (
+        <Web3Connect className="w-full !bg-dark-900 bg-gradient-to-r from-pink/80 hover:from-pink to-purple/80 hover:to-purple text-white h-[38px]" />
+      ) : (
         <div className="p-4 space-y-4 rounded bg-dark-900">
-          {!account ? (
-            <Web3Connect color="blue" className="w-full" />
-          ) : state.loading ? (
+          {state.loading ? (
             <Typography variant="lg" className="p-4 text-center text-primary">
               <Dots>{i18n._(t`Loading your ${exchange} liquidity positions`)}</Dots>
             </Typography>
@@ -336,7 +342,7 @@ export default function Migrate() {
                   <Typography variant="lg">{i18n._(t`Your Liquidity`)}</Typography>
                   <Typography variant="sm" className="text-secondary">
                     {t`Click on a pool below, input the amount you wish to migrate or select max, and click
-                        migrate`}
+                      migrate`}
                   </Typography>
                 </div>
               )}
@@ -346,7 +352,7 @@ export default function Migrate() {
             </>
           )}
         </div>
-      </DoubleGlowShadow>
+      )}
     </Container>
   )
 }
