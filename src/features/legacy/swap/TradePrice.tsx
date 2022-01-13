@@ -5,23 +5,23 @@ import { classNames } from 'app/functions'
 import React, { FC, useCallback } from 'react'
 
 interface TradePriceProps {
-  price: Price<Currency, Currency>
+  price?: Price<Currency, Currency>
   showInverted: boolean
   setShowInverted: (showInverted: boolean) => void
   className?: string
 }
 
 const TradePrice: FC<TradePriceProps> = ({ price, showInverted, setShowInverted, className }) => {
-  let formattedPrice: string
+  let formattedPrice
 
   try {
-    formattedPrice = showInverted ? price.toSignificant(4) : price.invert()?.toSignificant(4)
+    formattedPrice = showInverted ? price?.toSignificant(4) : price?.invert()?.toSignificant(4)
   } catch (error) {
     formattedPrice = '0'
   }
 
-  const label = showInverted ? `${price.quoteCurrency?.symbol}` : `${price.baseCurrency?.symbol} `
-  const labelInverted = showInverted ? `${price.baseCurrency?.symbol} ` : `${price.quoteCurrency?.symbol}`
+  const label = showInverted ? `${price?.quoteCurrency?.symbol}` : `${price?.baseCurrency?.symbol} `
+  const labelInverted = showInverted ? `${price?.baseCurrency?.symbol} ` : `${price?.quoteCurrency?.symbol}`
   const flipPrice = useCallback(() => setShowInverted(!showInverted), [setShowInverted, showInverted])
   const text = `${'1 ' + labelInverted + ' = ' + formattedPrice ?? '-'} ${label}`
 

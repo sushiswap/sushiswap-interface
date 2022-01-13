@@ -11,7 +11,7 @@ import ModalError, { ModalActionErrorProps } from 'app/components/Modal/Error'
 import ModalHeader, { ModalHeaderProps } from 'app/components/Modal/Header'
 import SubmittedModalContent, { SubmittedModalContentProps } from 'app/components/Modal/SubmittedModalContent'
 import { classNames } from 'app/functions'
-import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react'
+import { cloneElement, FC, isValidElement, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 import React, { Fragment } from 'react'
 
 import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
@@ -81,6 +81,7 @@ interface ControlledModalProps {
   children?: React.ReactNode
   transparent?: boolean
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'
+  unmount?: boolean
 }
 
 const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
@@ -90,19 +91,20 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
   children,
   transparent = false,
   maxWidth = 'lg',
+  unmount,
 }) => {
   const isDesktop = useDesktopMediaQuery()
-
   return (
-    <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave}>
-      <Dialog as="div" className="fixed z-50 inset-0" onClose={onDismiss}>
+    <Transition appear show={isOpen} as={Fragment} afterLeave={afterLeave} unmount={unmount}>
+      <Dialog as="div" className="fixed z-50 inset-0" onClose={onDismiss} unmount={unmount}>
         <div className="relative flex items-center justify-center block min-h-screen text-center">
           <Transition.Child
+            unmount={false}
             as={Fragment}
-            enter="ease-out duration-300"
+            enter="ease-out duration-150"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="ease-in duration-200"
+            leave="ease-in duration-150"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
@@ -120,19 +122,18 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
           </span>
 
           <Transition.Child
+            unmount={unmount}
             as={Fragment}
-            enter="ease-out duration-300"
+            enter="ease-out duration-150"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
+            leave="ease-in duration-150"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
             <div
               className={classNames(
-                transparent
-                  ? ''
-                  : 'bg-dark-1000/80 bg-gradient-radial from-purple/10 to-blue/10 border border-dark-800 backdrop-blur-[40px] backdrop-saturate-[180%]',
+                transparent ? '' : 'bg-dark-900 border border-dark-800',
                 isDesktop ? `lg:max-w-${maxWidth} w-full` : 'w-[85vw] max-h-[85vh] overflow-y-auto mx-auto',
                 'inline-block align-bottom rounded-xl text-left overflow-hidden transform p-4'
               )}
@@ -144,6 +145,15 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
       </Dialog>
     </Transition>
   )
+}
+
+const Test = () => {
+  useEffect(() => {
+    return () => {
+      console.log('efae')
+    }
+  }, [])
+  return <span />
 }
 
 HeadlessUiModal.Controlled = HeadlessUiModalControlled

@@ -2,7 +2,7 @@ import { SwitchHorizontalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE } from '@sushiswap/core-sdk'
-import WalletSVG from 'app/components/SVG/WalletSVG'
+import { WalletIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
 import ActionItem from 'app/features/trident/balances/ActionsModal/ActionItem'
 import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
@@ -32,7 +32,7 @@ const WalletActions: FC = () => {
         </Typography>
         <ActionItem svg={<SwitchHorizontalIcon width={24} />} label={i18n._(t`Swap`)} onClick={swapActionHandler} />
         <ActionItem
-          svg={<WalletSVG />}
+          svg={<WalletIcon width={20} height={20} />}
           label={i18n._(t`Deposit to BentoBox`)}
           onClick={() => setActiveModal(ActiveModal.DEPOSIT)}
         />

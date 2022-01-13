@@ -34,6 +34,7 @@ interface AssetInputProps {
   disabled?: boolean
   currencies?: Currency[]
   id?: string
+  className?: string
 }
 
 type AssetInput<P> = FC<P> & {
@@ -46,7 +47,7 @@ const useAssetInputContextError = () => useContext(AssetInputContext)
 
 // AssetInput exports its children so if you need a child component of this component,
 // for example if you want this component without the title, take a look at the components this file exports
-const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...props }) => {
+const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, className, ...props }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
@@ -91,11 +92,13 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
 
   return (
     <AssetInputContext.Provider value={useMemo(() => (error ? error : false), [error])}>
-      <div className="flex flex-col gap-4 mt-4 lg:mt-0">
-        <div className="flex justify-between px-2">
-          {props.title !== '' && header}
-          {!isDesktop && props.headerRight && props.headerRight}
-        </div>
+      <div className={classNames(className, 'flex flex-col gap-4 mt-4 lg:mt-0')}>
+        {(props.title || props.headerRight) && (
+          <div className="flex justify-between px-2">
+            {props.title !== '' && header}
+            {!isDesktop && props.headerRight && props.headerRight}
+          </div>
+        )}
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
           <AssetInputPanel
             {...props}
@@ -192,7 +195,7 @@ const AssetInputPanel = ({
         )}
       >
         <div>
-          <CurrencyLogo currency={currency} size={48} className="rounded-full" />
+          <CurrencyLogo currency={currency} size={48} className="!rounded-full" />
         </div>
         <div className="flex flex-col flex-grow">
           <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">

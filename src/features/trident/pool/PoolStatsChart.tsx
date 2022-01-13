@@ -91,11 +91,7 @@ const PoolStatsChart = () => {
           variant={text === chartRange ? 'outlined' : 'empty'}
           size="xs"
           color={text === chartRange ? 'blue' : 'gray'}
-          className={
-            text === chartRange
-              ? 'min-w-12 px-2 py-1 text-sm bg-blue-400 border-1 border-blue/50 border rounded-full font-bold hover:text-blue'
-              : 'min-w-12 px-2 py-1 text-sm text-secondary font-bold hover:text-blue'
-          }
+          className="min-w-[40px]"
         >
           {text}
         </Button>

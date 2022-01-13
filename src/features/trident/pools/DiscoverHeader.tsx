@@ -33,9 +33,17 @@ export const DiscoverHeader: FC = () => {
           {i18n._(t`Earn LP fees by depositing tokens to the platform.`)}
         </Typography>
       </div>
-      <div className="flex gap-3 w-80 sm:flex-col md:flex-row">
-        <HeaderButton id="btn-create-new-pool" title={i18n._(t`Create New Pool`)} linkTo="/trident/create" />
-        <HeaderButton title={i18n._(t`My Positions`)} linkTo="/farm" />
+      <div className="flex gap-3">
+        <Link href="/farm" passHref={true}>
+          <Button color="blue" size="sm">
+            {i18n._(t`My Positions`)}
+          </Button>
+        </Link>
+        <Link href="/trident/create" passHref={true}>
+          <Button id="btn-create-new-pool" size="sm">
+            {i18n._(t`Create New Pool`)}
+          </Button>
+        </Link>
       </div>
     </TridentHeader>
   )

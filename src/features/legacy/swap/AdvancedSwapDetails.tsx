@@ -1,33 +1,33 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent, Trade as V2Trade, TradeType } from '@sushiswap/core-sdk'
+import { Percent } from '@sushiswap/core-sdk'
 import FormattedPriceImpact from 'app/components/FormattedPriceImpact'
 import { HeadlessUiModal } from 'app/components/Modal'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
+import { isAddress, shortenAddress } from 'app/functions'
 import { computeRealizedLPFeePercent } from 'app/functions/prices'
+import { TradeUnion } from 'app/types'
 import React, { FC, useMemo } from 'react'
 
 export interface AdvancedSwapDetailsProps {
-  trade?: V2Trade<Currency, Currency, TradeType>
+  trade?: TradeUnion
   allowedSlippage: Percent
+  recipient?: string
 }
 
-const AdvancedSwapDetails: FC<AdvancedSwapDetailsProps> = ({ trade, allowedSlippage }) => {
+const AdvancedSwapDetails: FC<AdvancedSwapDetailsProps> = ({ trade, recipient, allowedSlippage }) => {
   const { i18n } = useLingui()
 
   const { priceImpact } = useMemo(() => {
-    if (!trade) return { realizedLPFee: undefined, priceImpact: undefined }
+    if (!trade) return { priceImpact: undefined }
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
-    const realizedLPFee = trade.inputAmount.multiply(realizedLpFeePercent)
-
     const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
-
-    return { priceImpact, realizedLPFee }
+    return { priceImpact }
   }, [trade])
 
-  return !trade ? undefined : (
+  return (
     <HeadlessUiModal.BorderedContent className="flex flex-col px-4 gap-1 bg-dark-1000/40 border !border-dark-800 rounded-2xl">
       <div className="flex justify-between items-center">
         <div className="flex gap-1 items-center">
@@ -45,6 +45,17 @@ const AdvancedSwapDetails: FC<AdvancedSwapDetailsProps> = ({ trade, allowedSlipp
         </div>
         <Typography variant="sm">{allowedSlippage.toFixed(2)}%</Typography>
       </div>
+
+      {recipient && (
+        <div className="flex justify-between items-center">
+          <div className="flex gap-1 items-center">
+            <Typography variant="sm">{i18n._(t`Recipient`)}</Typography>
+          </div>
+          <Typography variant="sm">
+            {recipient && isAddress(recipient) ? shortenAddress(recipient) : recipient}
+          </Typography>
+        </div>
+      )}
     </HeadlessUiModal.BorderedContent>
   )
 }
