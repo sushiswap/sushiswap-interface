@@ -211,7 +211,7 @@ const Swap = () => {
                   </div>
                 </div>
               )}
-              {isWrap ? <WrapButton /> : <SwapButton />}
+              {isWrap ? <WrapButton /> : <SwapButton onClick={(trade) => setConfirmTrade(trade)} />}
             </DerivedTradeContext.Provider>
             <ConfirmSwapModal
               isOpen={showReview}
