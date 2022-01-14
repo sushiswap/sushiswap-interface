@@ -30,7 +30,7 @@ const TradePrice: FC<TradePriceProps> = ({ price, showInverted, setShowInverted,
       onClick={flipPrice}
       title={text}
       className={classNames(
-        'flex justify-center w-full gap-1 cursor-pointer text-high-emphesis hover:text-white',
+        'flex w-full gap-1 cursor-pointer text-high-emphesis hover:text-white select-none',
         className
       )}
     >

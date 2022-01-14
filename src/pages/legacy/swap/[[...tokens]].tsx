@@ -510,7 +510,7 @@ export default function Swap({ banners }) {
                     price={trade?.executionPrice}
                     showInverted={showInverted}
                     setShowInverted={setShowInverted}
-                    className="bg-dark-900"
+                    className="justify-between px-5 py-1 bg-dark-900"
                   />
                 </div>
               )}

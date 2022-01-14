@@ -104,12 +104,17 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
           </div>
         </HeadlessUiModal.BorderedContent>
       </div>
-      <TradePrice price={trade?.executionPrice} showInverted={showInverted} setShowInverted={setShowInverted} />
+      <TradePrice
+        price={trade?.executionPrice}
+        showInverted={showInverted}
+        setShowInverted={setShowInverted}
+        className="justify-center"
+      />
       <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} recipient={recipient} />
 
       {showAcceptChanges && (
         <HeadlessUiModal.BorderedContent className="bg-dark-1000/40 border !border-dark-800 rounded-2xl">
-          <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between">
             <Typography variant="sm" weight={700}>
               {i18n._(t`Price Updated`)}
             </Typography>
@@ -119,7 +124,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
           </div>
         </HeadlessUiModal.BorderedContent>
       )}
-      <div className="justify-start text-sm text-secondary text-center">
+      <div className="justify-start text-sm text-center text-secondary">
         {trade?.tradeType === TradeType.EXACT_INPUT ? (
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Output is estimated. You will receive at least`)}{' '}
