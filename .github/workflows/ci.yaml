@@ -1,15 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches: 
-      - canary
-  pull_request:
-    branches: 
-      - canary
-  schedule:
-    - cron: "30 1 * * *"
-      
   workflow_dispatch:
 
 jobs:
@@ -41,8 +32,8 @@ jobs:
       - name: Installing dependencies
         run: yarn install --frozen-lockfile
 
-      # - name: Run Unit tests
-      #   run: yarn test:ci
+      - name: Run Unit tests
+        run: yarn test:ci
 
       - name: Run E2E tests
         uses: mujo-code/puppeteer-headful@v2
