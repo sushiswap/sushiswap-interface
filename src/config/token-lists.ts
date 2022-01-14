@@ -40,7 +40,7 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   KLEROS_LIST,
   OPYN_LIST,
   NFTX_LIST,
-  OPTIMISM_LIST,
+  // OPTIMISM_LIST,
   GEMINI_LIST,
   DHEDGE_LIST,
   ...UNSUPPORTED_LIST_URLS, // need to load unsupported tokens as well
