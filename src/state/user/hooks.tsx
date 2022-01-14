@@ -316,12 +316,12 @@ export function toKashiLiquidityToken([collateral, asset]: [Token, Token]): Toke
   if (collateral.equals(asset)) throw new Error('Tokens cannot be equal')
   if (!BENTOBOX_ADDRESS[collateral.chainId]) throw new Error('No BentoBox factory address on this chain')
   if (!KASHI_ADDRESS[collateral.chainId]) throw new Error('No Kashi address on this chain')
-  console.log({
-    collateral,
-    asset,
-    oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
-    oracleData: computeOracleData(collateral, asset),
-  })
+  // console.log({
+  //   collateral,
+  //   asset,
+  //   oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
+  //   oracleData: computeOracleData(collateral, asset),
+  // })
   const oracleData = computeOracleData(collateral, asset)
   if (!oracleData) return
   return new Token(

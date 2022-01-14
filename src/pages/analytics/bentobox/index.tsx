@@ -26,8 +26,6 @@ export default function BentoBox(): JSX.Element {
   const tokens1d = useTokens({ chainId, variables: { block: block1d }, shouldFetch: !!block1d })
   const tokens1w = useTokens({ chainId, variables: { block: block1w }, shouldFetch: !!block1w })
 
-  console.log({ tokens1d, tokens1w })
-
   // Creating map to easily reference TokenId -> Token
   const tokenIdToPrice = useMemo<
     Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>

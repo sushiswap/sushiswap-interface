@@ -56,8 +56,6 @@ export const getAverageBlockTime = async (chainId = ChainId.ETHEREUM) => {
     },
   })
 
-  console.log({ blocks })
-
   const averageBlockTime = blocks?.reduce(
     (previousValue, currentValue, currentIndex) => {
       if (previousValue.timestamp) {

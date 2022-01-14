@@ -141,7 +141,7 @@ export default function Swap({ banners }) {
   const fiatValueInput = useUSDCValue(parsedAmounts[Field.INPUT])
   const fiatValueOutput = useUSDCValue(parsedAmounts[Field.OUTPUT])
   const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
-  console.log({ fiatValueInput, fiatValueOutput })
+  // console.log({ fiatValueInput, fiatValueOutput })
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
 
   const isValid = !swapInputError
@@ -388,7 +388,7 @@ export default function Swap({ banners }) {
 
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
 
-  console.log(priceImpactSeverity, priceImpactSeverity > 3, !isExpertMode, trade?.priceImpact, priceImpact)
+  // console.log(priceImpactSeverity, priceImpactSeverity > 3, !isExpertMode, trade?.priceImpact, priceImpact)
 
   return (
     <Container id="swap-page" className="py-4 md:py-8 lg:py-12">
