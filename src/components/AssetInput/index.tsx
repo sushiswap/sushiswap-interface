@@ -7,6 +7,7 @@ import selectCoinAnimation from 'app/animation/select-coin.json'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
 import NumericalInput from 'app/components/Input/Numeric'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
@@ -19,8 +20,6 @@ import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { createContext, FC, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
-
-import { BentoBoxIcon, WalletIcon } from './icons'
 
 interface AssetInputProps {
   value?: string
@@ -67,7 +66,10 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, class
 
   if (props.currency) {
     header = (
-      <div className="flex gap-2.5 cursor-pointer items-center" onClick={() => setOpen(true)}>
+      <div
+        className={classNames(props.onSelect ? 'cursor-pointer ' : '', 'flex gap-2.5 items-center')}
+        onClick={() => setOpen(true)}
+      >
         <div className="flex gap-0.5 items-center">
           <Typography id={props.id} variant="h3" weight={700} className="text-high-emphesis">
             {props.currency.symbol}
@@ -147,7 +149,7 @@ const AssetInputPanel = ({
   const error = useAssetInputContextError()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const usdcValue = useUSDCValue(tryParseAmount(value, currency))
+  const usdcValue = useUSDCValue(tryParseAmount(Number(value) === 0 ? '1' : value, currency))
   const span = useRef<HTMLSpanElement>(null)
   const [width, setWidth] = useState(0)
 
@@ -217,7 +219,7 @@ const AssetInputPanel = ({
           <Typography
             id={currency.symbol + '-usdc-value'}
             variant="sm"
-            className={error ? 'text-red' : usdcValue ? 'text-green' : 'text-low-emphesis'}
+            className={error ? 'text-red' : usdcValue && value ? 'text-green' : 'text-low-emphesis'}
           >
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
@@ -272,9 +274,17 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
   const { i18n } = useLingui()
   const error = useAssetInputContextError()
 
-  let icon = <WalletIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+  let icon = (
+    <WalletIcon width={16} height={14} className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+  )
   if (!spendFromWallet) {
-    icon = <BentoBoxIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+    icon = (
+      <BentoboxIcon
+        width={16}
+        height={16}
+        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
+      />
+    )
   }
 
   return (
@@ -340,12 +350,12 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
             onChange={onChange}
             checkedIcon={
               <div className="flex items-center justify-center w-full h-full text-dark-700">
-                <WalletIcon />
+                <WalletIcon width={16} height={14} />
               </div>
             }
             uncheckedIcon={
               <div className="flex items-center justify-center w-full h-full text-dark-700">
-                <BentoBoxIcon />
+                <BentoboxIcon width={16} height={16} />
               </div>
             }
           />

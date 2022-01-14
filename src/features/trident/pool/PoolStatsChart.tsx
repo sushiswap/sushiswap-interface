@@ -1,4 +1,3 @@
-import { useLingui } from '@lingui/react'
 import { BarGraph } from 'app/components/BarGraph'
 import Button from 'app/components/Button'
 import LineGraph from 'app/components/LineGraph'
@@ -37,7 +36,6 @@ const chartTimespans: Record<ChartRange, number> = {
 const PoolStatsChart = () => {
   const isDesktop = useDesktopMediaQuery()
   const { chainId } = useActiveWeb3React()
-  const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Volume)
   const [chartRange, setChartRange] = useState<ChartRange>(ChartRange.ALL)
   const { pool } = useRecoilValue(poolAtom)
@@ -58,8 +56,6 @@ const PoolStatsChart = () => {
     },
     shouldFetch: !!pool && chartTimespans[chartRange] >= chartTimespans['1W'],
   })
-
-  console.log(hourBuckets, dayBuckets, pool?.liquidityToken.address)
 
   const data = chartTimespans[chartRange] <= chartTimespans['1W'] ? hourBuckets : dayBuckets
 
