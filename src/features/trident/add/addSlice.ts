@@ -13,8 +13,6 @@ export interface AddState {
   attemptingTxn: boolean
   txHash?: string
   bentoPermit?: Signature
-
-  // 2nd argument may be undefined if on zapMode
   spendFromWallet: [boolean, boolean]
 }
 
@@ -87,5 +85,7 @@ export const {
 
 type selectTridentAdd = (state: AppState) => AddState
 export const selectTridentAdd: selectTridentAdd = (state: AppState) => state.tridentAdd
-
 export default addSlice.reducer
+
+export const selectAddNormalInput = (state: AppState) => state.tridentAdd.normalInput
+export const selectAddSpendFromWallet = (state: AppState) => state.tridentAdd.spendFromWallet

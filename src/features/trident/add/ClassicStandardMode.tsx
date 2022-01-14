@@ -4,38 +4,45 @@ import loadingCircle from 'app/animation/loading-circle.json'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
-import { setAddBentoPermit, setAddShowReview, setAddSpendFromWallet } from 'app/features/trident/add/addSlice'
+import {
+  selectTridentAdd,
+  setAddBentoPermit,
+  setAddShowReview,
+  setAddSpendFromWallet,
+} from 'app/features/trident/add/addSlice'
+import {
+  useAddLiquidityDerivedCurrencyAmounts,
+  useAddLiquidityDerivedInput,
+  useAddLiquidityDerivedInputError,
+} from 'app/features/trident/add/useAddLiquidityDerivedState'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { classNames } from 'app/functions'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
-import { useAppDispatch } from 'app/state/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import Lottie from 'lottie-react'
 import React from 'react'
 
-import useCurrenciesFromURL from '../context/hooks/useCurrenciesFromURL'
 import TridentApproveGate from '../TridentApproveGate'
 import TransactionDetails from './TransactionDetails'
-import { useAddLiquidityState } from './useAddLiquidityState'
 
 const ClassicStandardMode = () => {
-  const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
+  const isDesktop = useDesktopMediaQuery()
   const dispatch = useAppDispatch()
   const bentoBox = useBentoBoxContract()
-  const { currencies } = useCurrenciesFromURL()
   const router = useTridentRouterContract()
+  const { currencies } = usePoolContext()
+  const { spendFromWallet, attemptingTxn, bentoPermit } = useAppSelector(selectTridentAdd)
+  const [parsedAmountA, parsedAmountB] = useAddLiquidityDerivedCurrencyAmounts()
+  const error = useAddLiquidityDerivedInputError()
 
   const {
     mainInput: [mainInput, setMainInput],
     secondaryInput: [secondaryInput, setSecondaryInput],
-    parsedAmounts: [parsedAmountA, parsedAmountB],
     onMax,
     isMax,
-    error,
-    spendFromWallet,
-    attemptingTxn,
-    bentoPermit,
-  } = useAddLiquidityState()
+  } = useAddLiquidityDerivedInput()
 
   return (
     <>

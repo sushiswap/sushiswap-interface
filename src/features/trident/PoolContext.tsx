@@ -1,4 +1,4 @@
-import { CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 import { ConstantProductPool, PoolState } from '@sushiswap/trident-sdk'
 import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import { toAmountCurrencyAmount } from 'app/functions'
@@ -18,17 +18,10 @@ interface PoolContext {
   noLiquidity?: boolean
   poolShare?: Percent
   liquidityValue: (CurrencyAmount<Token> | undefined)[]
+  currencies: (Currency | undefined)[]
 }
 
-const Context = createContext<PoolContext>({
-  poolWithState: undefined,
-  totalSupply: undefined,
-  poolBalance: undefined,
-  rebases: undefined,
-  noLiquidity: undefined,
-  poolShare: undefined,
-  liquidityValue: [undefined, undefined],
-})
+const Context = createContext<PoolContext | undefined>(undefined)
 
 const PoolContext: FC = ({ children }) => {
   const { account } = useActiveWeb3React()
@@ -99,8 +92,9 @@ const PoolContext: FC = ({ children }) => {
           noLiquidity,
           poolShare,
           liquidityValue,
+          currencies,
         }),
-        [liquidityValue, noLiquidity, poolBalance, poolShare, poolWithState, rebases, totalSupply]
+        [currencies, liquidityValue, noLiquidity, poolBalance, poolShare, poolWithState, rebases, totalSupply]
       )}
     >
       {/*// Reduce renders by conditionally rendering here*/}
@@ -109,9 +103,13 @@ const PoolContext: FC = ({ children }) => {
   )
 }
 
-export const usePoolContext = () => useContext(Context)
-export const withPoolContext = (Component) => {
-  return (props) => <Context.Consumer>{(values) => <Component {...props} {...values} />}</Context.Consumer>
+export const usePoolContext = () => {
+  const context = useContext(Context)
+  if (!context) {
+    throw new Error('Hook can only be used inside Pool Context')
+  }
+
+  return context
 }
 
 export default PoolContext

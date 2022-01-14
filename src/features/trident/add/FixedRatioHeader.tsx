@@ -2,11 +2,10 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Checkbox from 'app/components/Checkbox'
 import Typography from 'app/components/Typography'
-import { setAddFixedRatio } from 'app/features/trident/add/addSlice'
-import { useAddLiquidityState } from 'app/features/trident/add/useAddLiquidityState'
+import { selectTridentAdd, setAddFixedRatio } from 'app/features/trident/add/addSlice'
 import { LiquidityMode } from 'app/features/trident/types'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
-import { useAppDispatch } from 'app/state/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC } from 'react'
 
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
@@ -19,7 +18,7 @@ const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const { fixedRatio, liquidityMode } = useAddLiquidityState()
+  const { fixedRatio, liquidityMode } = useAppSelector(selectTridentAdd)
 
   if (liquidityMode !== LiquidityMode.STANDARD) return <></>
 

@@ -1,17 +1,14 @@
-import { Currency, CurrencyAmount, Percent, ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount, Percent, ZERO } from '@sushiswap/core-sdk'
 import { ZERO_PERCENT } from 'app/constants'
+import { useAddLiquidityDerivedCurrencyAmounts } from 'app/features/trident/add/useAddLiquidityDerivedState'
 import { DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE } from 'app/features/trident/context/atoms'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import { getPriceOfNewPool } from 'app/features/trident/context/utils'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { calculateSlippageAmount, toShareCurrencyAmount } from 'app/functions'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useMemo } from 'react'
 
-export const useAddDetails = (
-  parsedAmounts?: (CurrencyAmount<Currency> | undefined)[],
-  defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-) => {
+export const useAddDetails = (defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) => {
   const {
     poolWithState,
     totalSupply,
@@ -20,9 +17,10 @@ export const useAddDetails = (
     noLiquidity,
     poolShare: poolShareBefore,
     liquidityValue: liquidityValueBefore,
+    currencies,
   } = usePoolContext()
   const slippage = useUserSlippageToleranceWithDefault(defaultSlippage)
-  const { currencies } = useCurrenciesFromURL()
+  const parsedAmounts = useAddLiquidityDerivedCurrencyAmounts()
 
   // Returns the minimum SLP that will get minted given current input amounts
   const liquidityMinted = useMemo(() => {

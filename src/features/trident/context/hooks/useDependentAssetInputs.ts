@@ -1,8 +1,5 @@
-import { t } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import { PoolState } from '@sushiswap/trident-sdk'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { useAddLiquidityDerivedCurrencyAmounts } from 'app/features/trident/add/useAddLiquidityDerivedState'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from 'app/functions'
 import { useBentoOrWalletBalances } from 'app/hooks/useBentoOrWalletBalance'
@@ -17,10 +14,8 @@ export type useDependentAssetInputs = (x: {
 }) => {
   mainInput: [string, (string) => void]
   secondaryInput: [string, (string) => void]
-  parsedAmounts: (CurrencyAmount<Currency> | undefined)[]
   onMax(): void
   isMax?: boolean
-  error: string
 }
 
 export const useDependentAssetInputs: useDependentAssetInputs = ({
@@ -29,10 +24,9 @@ export const useDependentAssetInputs: useDependentAssetInputs = ({
   inputs,
   setInputs,
 }) => {
-  const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const { poolWithState, noLiquidity, rebases } = usePoolContext()
-  const { currencies } = useCurrenciesFromURL()
+  const { poolWithState, noLiquidity, rebases, currencies } = usePoolContext()
+  const parsedAmounts = useAddLiquidityDerivedCurrencyAmounts()
 
   const handleMainInput = useCallback(
     (val: string) => {
@@ -90,14 +84,6 @@ export const useDependentAssetInputs: useDependentAssetInputs = ({
     [currencies, fixedRatio, noLiquidity, poolWithState?.pool, rebases, setInputs]
   )
 
-  const parsedAmounts = useMemo(() => {
-    if (currencies?.[0] && currencies?.[1]) {
-      return [tryParseAmount(inputs[0], currencies[0]), tryParseAmount(inputs[1], currencies[1])]
-    }
-
-    return [undefined, undefined]
-  }, [currencies, inputs])
-
   const balances = useBentoOrWalletBalances(account ?? undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {
@@ -137,28 +123,13 @@ export const useDependentAssetInputs: useDependentAssetInputs = ({
     }
   }, [balances, currencies, fixedRatio, noLiquidity, parsedAmounts, poolWithState?.pool])
 
-  const insufficientBalance = useMemo(() => {
-    return parsedAmounts.find((el, index) => {
-      return balances && el ? balances?.[index]?.lessThan(el) : false
-    })
-  }, [balances, parsedAmounts])
-
-  let error = !account
-    ? i18n._(t`Connect Wallet`)
-    : poolWithState?.state === PoolState.INVALID
-    ? i18n._(t`Invalid pool`)
-    : !parsedAmounts[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
-    ? i18n._(t`Enter an amount`)
-    : insufficientBalance
-    ? i18n._(t`Insufficient Balance`)
-    : ''
-
   // If we change back to fixedRatio,
   // make sure to update second input
   useEffect(() => {
     if (fixedRatio && inputs[0] && inputs[1]) handleMainInput(inputs[0])
     else if (fixedRatio && inputs[0] && !inputs[1]) handleMainInput(inputs[0])
     else if (fixedRatio && inputs[1] && !inputs[0]) handleSecondaryInput(inputs[1])
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fixedRatio])
 
@@ -166,11 +137,9 @@ export const useDependentAssetInputs: useDependentAssetInputs = ({
     () => ({
       mainInput: [inputs[0], handleMainInput] as [string, (string) => void],
       secondaryInput: [inputs[1], handleSecondaryInput] as [string, (string) => void],
-      parsedAmounts,
       onMax,
       isMax,
-      error,
     }),
-    [error, fixedRatio, handleMainInput, handleSecondaryInput, inputs, isMax, onMax, parsedAmounts]
+    [handleMainInput, handleSecondaryInput, inputs, isMax, onMax]
   )
 }

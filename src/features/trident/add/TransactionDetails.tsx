@@ -2,7 +2,6 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
 import { useAddDetails } from 'app/features/trident/add/useAddDetails'
-import { useAddLiquidityState } from 'app/features/trident/add/useAddLiquidityState'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { FC } from 'react'
 
@@ -11,8 +10,7 @@ import TransactionDetailsExplanationModal from '../TransactionDetailsExplanation
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
   const { poolWithState, poolBalance } = usePoolContext()
-  const { parsedAmounts } = useAddLiquidityState()
-  const { price, poolShareBefore, liquidityMinted, poolShareAfter } = useAddDetails(parsedAmounts)
+  const { price, poolShareBefore, liquidityMinted, poolShareAfter } = useAddDetails()
 
   return (
     <div className="flex flex-col gap-4 lg:gap-8">

@@ -1,13 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { useAddLiquidityDerivedInputError } from 'app/features/trident/add/useAddLiquidityDerivedState'
 
 import TransactionDetails from './TransactionDetails'
-import { useAddLiquidityState } from './useAddLiquidityState'
 
 const ClassicStandardAside = () => {
   const { i18n } = useLingui()
-  const { error } = useAddLiquidityState()
+  const error = useAddLiquidityDerivedInputError()
 
   return (
     <div className="flex flex-col p-10 rounded bg-dark-1000 shadow-lg gap-20">

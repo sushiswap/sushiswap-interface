@@ -5,29 +5,23 @@ import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { setAddShowReview, setAddTxHash } from 'app/features/trident/add/addSlice'
+import { selectTridentAdd, setAddShowReview, setAddTxHash } from 'app/features/trident/add/addSlice'
 import { useAddDetails } from 'app/features/trident/add/useAddDetails'
+import { useAddLiquidityDerivedCurrencyAmounts } from 'app/features/trident/add/useAddLiquidityDerivedState'
 import { useAddLiquidityExecute } from 'app/features/trident/add/useAddLiquidityExecute'
-import { useAddLiquidityState } from 'app/features/trident/add/useAddLiquidityState'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import DepositSubmittedModalContent from 'app/features/trident/DepositSubmittedModalContent'
-import { useAppDispatch } from 'app/state/hooks'
+import { usePoolContext } from 'app/features/trident/PoolContext'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { FC, useCallback } from 'react'
 
 const TransactionReviewStandardModal: FC = () => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const { currencies } = useCurrenciesFromURL()
-  const {
-    attemptingTxn,
-    showReview,
-    txHash,
-    parsedAmounts: _parsedAmounts,
-    spendFromWallet,
-    bentoPermit,
-  } = useAddLiquidityState()
-  const { liquidityMinted, poolShareAfter, poolShareBefore } = useAddDetails(_parsedAmounts)
+  const { currencies } = usePoolContext()
+  const { attemptingTxn, showReview, txHash, spendFromWallet, bentoPermit } = useAppSelector(selectTridentAdd)
+  const { liquidityMinted, poolShareAfter, poolShareBefore } = useAddDetails()
   const execute = useAddLiquidityExecute()
+  const _parsedAmounts = useAddLiquidityDerivedCurrencyAmounts()
 
   const _execute = useCallback(async () => {
     const tx = await execute({ parsedAmounts: _parsedAmounts, liquidityMinted, spendFromWallet, bentoPermit })
