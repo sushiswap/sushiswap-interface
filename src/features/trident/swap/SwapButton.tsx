@@ -27,7 +27,7 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
   const { parsedAmounts, error, trade } = useDerivedTridentSwapContext()
 
   const handleClick = useCallback(() => {
-    onClick(trade)
+    if (trade) onClick(trade)
     dispatch(setTridentSwapState({ ...tridentSwapState, showReview: true }))
   }, [dispatch, onClick, trade, tridentSwapState])
 
