@@ -19,15 +19,15 @@ export type BreadcrumbItem =
 export const BREADCRUMBS: Record<string, BreadcrumbItem> = {
   pools: { link: '/trident/pools', label: 'Pools' },
   add_classic: ([a, b]) => ({
-    link: `/trident/add/classic/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
+    link: `/trident/add/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
     label: `Add Liquidity`,
   }),
   remove_classic: ([a, b]) => ({
-    link: `/trident/add/classic/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
+    link: `/trident/add/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
     label: `Remove Liquidity`,
   }),
   pool_classic: ([a, b], pool) => ({
-    link: `/trident/pool/classic/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
+    link: `/trident/pool/${a ? a.symbol : ''}/${b ? b.symbol : ''}`,
     label: pool
       ? `${pool.token0.symbol}-${pool.token1.symbol} - Classic - ${formatPercent(pool.fee.valueOf() / 100)}`
       : 'Pool not found',

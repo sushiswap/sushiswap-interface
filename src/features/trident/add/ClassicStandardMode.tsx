@@ -4,40 +4,38 @@ import loadingCircle from 'app/animation/loading-circle.json'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
+import { setAddBentoPermit, setAddShowReview, setAddSpendFromWallet } from 'app/features/trident/add/addSlice'
 import { classNames } from 'app/functions'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { useAppDispatch } from 'app/state/hooks'
 import Lottie from 'lottie-react'
 import React from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { attemptingTxnAtom, showReviewAtom, spendFromWalletSelector } from '../../context/atoms'
-import useCurrenciesFromURL from '../../context/hooks/useCurrenciesFromURL'
-import { TypedField, useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
-import TridentApproveGate from '../../TridentApproveGate'
-import TransactionDetails from './../TransactionDetails'
+import useCurrenciesFromURL from '../context/hooks/useCurrenciesFromURL'
+import TridentApproveGate from '../TridentApproveGate'
+import TransactionDetails from './TransactionDetails'
+import { useAddLiquidityState } from './useAddLiquidityState'
 
 const ClassicStandardMode = () => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
+  const dispatch = useAppDispatch()
   const bentoBox = useBentoBoxContract()
+  const { currencies } = useCurrenciesFromURL()
   const router = useTridentRouterContract()
+
   const {
-    mainInput: [, setMainInput],
-    secondaryInput: [, setSecondaryInput],
-    formattedAmounts,
+    mainInput: [mainInput, setMainInput],
+    secondaryInput: [secondaryInput, setSecondaryInput],
     parsedAmounts: [parsedAmountA, parsedAmountB],
-    typedField: [, setTypedField],
     onMax,
     isMax,
     error,
-  } = useDependentAssetInputs()
-  const { currencies, setURLCurrency } = useCurrenciesFromURL()
-
-  const setShowReview = useSetRecoilState(showReviewAtom)
-  const [spendFromWalletA, setSpendFromWalletA] = useRecoilState(spendFromWalletSelector(0))
-  const [spendFromWalletB, setSpendFromWalletB] = useRecoilState(spendFromWalletSelector(1))
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+    spendFromWallet,
+    attemptingTxn,
+    bentoPermit,
+  } = useAddLiquidityState()
 
   return (
     <>
@@ -45,40 +43,32 @@ const ClassicStandardMode = () => {
         <div />
         <div className="flex flex-col gap-4">
           <AssetInput
-            value={formattedAmounts[0]}
+            value={mainInput || ''}
             currency={currencies?.[0]}
-            onChange={(val) => {
-              setTypedField(TypedField.A)
-              setMainInput(val || '')
-            }}
-            onSelect={(cur) => setURLCurrency(cur, 0)}
+            onChange={(val) => setMainInput(val || '')}
             headerRight={
               <AssetInput.WalletSwitch
-                onChange={() => setSpendFromWalletA(!spendFromWalletA)}
-                checked={spendFromWalletA}
+                onChange={() => dispatch(setAddSpendFromWallet([!spendFromWallet[0], spendFromWallet[1]]))}
+                checked={spendFromWallet[0]}
                 id="switch-spend-from-wallet-a"
               />
             }
-            spendFromWallet={spendFromWalletA}
+            spendFromWallet={spendFromWallet[0]}
             id="asset-input-a"
           />
           <div />
           <AssetInput
-            value={formattedAmounts[1]}
+            value={secondaryInput || ''}
             currency={currencies?.[1]}
-            onChange={(val) => {
-              setTypedField(TypedField.B)
-              setSecondaryInput(val || '')
-            }}
-            onSelect={(cur) => setURLCurrency(cur, 1)}
+            onChange={(val) => setSecondaryInput(val || '')}
             headerRight={
               <AssetInput.WalletSwitch
-                onChange={() => setSpendFromWalletB(!spendFromWalletB)}
-                checked={spendFromWalletB}
+                onChange={() => dispatch(setAddSpendFromWallet([spendFromWallet[0], !spendFromWallet[1]]))}
+                checked={spendFromWallet[1]}
                 id="switch-spend-from-wallet-b"
               />
             }
-            spendFromWallet={spendFromWalletB}
+            spendFromWallet={spendFromWallet[1]}
             id="asset-input-b"
           />
           <div className="flex flex-col gap-3">
@@ -87,6 +77,8 @@ const ClassicStandardMode = () => {
               tokenApproveOn={bentoBox?.address}
               masterContractAddress={router?.address}
               withPermit={true}
+              permit={bentoPermit}
+              onPermit={(permit) => dispatch(setAddBentoPermit(permit))}
             >
               {({ approved, loading }) => {
                 const disabled = !!error || !approved || loading || attemptingTxn
@@ -103,7 +95,7 @@ const ClassicStandardMode = () => {
                 return (
                   <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                     {!isMax && (
-                      <Button color="blue" disabled={isMax} onClick={onMax}>
+                      <Button fullWidth color="blue" disabled={isMax} onClick={onMax}>
                         {i18n._(t`Max Deposit`)}
                       </Button>
                     )}
@@ -116,9 +108,10 @@ const ClassicStandardMode = () => {
                           </div>
                         ),
                       })}
+                      fullWidth
                       color="gradient"
                       disabled={disabled}
-                      onClick={() => setShowReview(true)}
+                      onClick={() => dispatch(setAddShowReview(true))}
                     >
                       {buttonText}
                     </Button>

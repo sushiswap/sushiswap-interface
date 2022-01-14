@@ -2,13 +2,13 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Checkbox from 'app/components/Checkbox'
 import Typography from 'app/components/Typography'
-import { liquidityModeAtom } from 'app/features/trident/context/atoms'
-import { useDependentAssetInputs } from 'app/features/trident/context/hooks/useDependentAssetInputs'
+import { setAddFixedRatio } from 'app/features/trident/add/addSlice'
+import { useAddLiquidityState } from 'app/features/trident/add/useAddLiquidityState'
+import { LiquidityMode } from 'app/features/trident/types'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { useAppDispatch } from 'app/state/hooks'
 import React, { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
-import { LiquidityMode } from '../types'
 import FixedRatioExplanationModal from './FixedRatioExplanationModal'
 
 interface FixedRatioHeaderProps {
@@ -18,16 +18,17 @@ interface FixedRatioHeaderProps {
 const FixedRatioHeader: FC<FixedRatioHeaderProps> = ({ margin = true }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const {
-    fixedRatio: [fixedRatio, setFixedRatio],
-  } = useDependentAssetInputs()
-  const liquidityMode = useRecoilValue(liquidityModeAtom)
+  const dispatch = useAppDispatch()
+  const { fixedRatio, liquidityMode } = useAddLiquidityState()
 
   if (liquidityMode !== LiquidityMode.STANDARD) return <></>
 
   const content = (
     <div className="flex justify-between gap-1 lg:justify-start">
-      <div className="flex flex-row items-center gap-3 cursor-pointer" onClick={() => setFixedRatio(!fixedRatio)}>
+      <div
+        className="flex flex-row items-center gap-3 cursor-pointer"
+        onClick={() => dispatch(setAddFixedRatio(!fixedRatio))}
+      >
         <Checkbox id={`chk-fixed-ratio-deposit`} className="w-6 h-6" checked={fixedRatio} />
         <Typography variant="sm" weight={700} className={fixedRatio ? 'text-white' : ''}>
           {i18n._(t`Deposit assets in equal amounts`)}

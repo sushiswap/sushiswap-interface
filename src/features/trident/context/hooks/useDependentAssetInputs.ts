@@ -1,196 +1,132 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { PoolState } from '@sushiswap/trident-sdk'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { maxAmountSpend, toAmountCurrencyAmount, toShareCurrencyAmount, tryParseAmount } from 'app/functions'
 import { useBentoOrWalletBalances } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useCallback, useMemo } from 'react'
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil'
+import { useCallback, useEffect, useMemo } from 'react'
 
-import { bentoboxRebasesAtom, currenciesAtom, noLiquiditySelector, poolAtom, spendFromWalletAtom } from '../atoms'
-
-export enum TypedField {
-  A,
-  B,
+export type useDependentAssetInputs = (x: {
+  fixedRatio: boolean
+  spendFromWallet: [boolean, boolean]
+  inputs: (string | undefined)[]
+  setInputs(x): void
+}) => {
+  mainInput: [string, (string) => void]
+  secondaryInput: [string, (string) => void]
+  parsedAmounts: (CurrencyAmount<Currency> | undefined)[]
+  onMax(): void
+  isMax?: boolean
+  error: string
 }
 
-const fixedRatioAtom = atom<boolean>({
-  key: 'useDependentAssetInputs:fixedRatioAtom',
-  default: selector({
-    key: 'useDependentAssetInputs:fixedRatioAtom/Default',
-    get: () => true,
-    set: ({ set }) => {
-      set(typedFieldAtom, TypedField.A)
-    },
-  }),
-})
-
-export const mainInputAtom = atom<string>({
-  key: 'useDependentAssetInputs:mainInputAtom',
-  default: '',
-})
-
-// Just an atom that acts as a copy state to hold a previous value
-export const secondaryInputAtom = atom<string>({
-  key: 'useDependentAssetInputs:secondaryInputAtom',
-  default: '',
-})
-
-export const typedFieldAtom = atom<TypedField>({
-  key: 'useDependentAssetInputs:typedFieldAtom',
-  default: TypedField.A,
-})
-
-export const secondaryInputSelector = selector<string>({
-  key: 'useDependentAssetInputs:secondaryInputSelector',
-  get: ({ get }) => {
-    const mainInputCurrencyAmount = get(mainInputCurrencyAmountSelector)
-    const noLiquidity = get(noLiquiditySelector)
-    const fixedRatio = get(fixedRatioAtom)
-    const typedField = get(typedFieldAtom)
-    const rebases = get(bentoboxRebasesAtom)
-
-    // If we have liquidity, when a user tries to 'get' this value (by setting mainInput), calculate amount in terms of mainInput amount
-    if (!noLiquidity && fixedRatio && typedField === TypedField.A) {
-      const { pool } = get(poolAtom)
-      const [currencyA, currencyB] = get(currenciesAtom)
-      const [tokenA, tokenB] = [currencyA?.wrapped, currencyB?.wrapped]
-
-      if (tokenA && tokenB && pool && mainInputCurrencyAmount?.wrapped) {
-        const dependentTokenAmount = toAmountCurrencyAmount(
-          rebases[tokenB.wrapped.address],
-          pool
-            .priceOf(mainInputCurrencyAmount?.wrapped.currency)
-            .quote(
-              toShareCurrencyAmount(
-                rebases[mainInputCurrencyAmount?.wrapped.currency.address],
-                mainInputCurrencyAmount?.wrapped
-              )
-            )
-        )
-
-        return (
-          currencyB?.isNative
-            ? CurrencyAmount.fromRawAmount(currencyB, dependentTokenAmount.quotient)
-            : dependentTokenAmount
-        ).toExact()
-      }
-    }
-
-    // If we don't have liquidity and we 'get' this value, return previous value as no side effects will happen
-    return mainInputCurrencyAmount?.equalTo(ZERO) ? '0' : get(secondaryInputAtom)
-  },
-  set: ({ set, get }, newValue: string) => {
-    const noLiquidity = get(noLiquiditySelector)
-    const typedField = get(typedFieldAtom)
-    const fixedRatio = get(fixedRatioAtom)
-    const rebases = get(bentoboxRebasesAtom)
-
-    // If we have liquidity, when a user tries to 'set' this value, calculate mainInput amount in terms of this amount
-    if (!noLiquidity && fixedRatio) {
-      const { pool } = get(poolAtom)
-      const [currencyA, currencyB] = get(currenciesAtom)
-      const [tokenA, tokenB] = [currencyA?.wrapped, currencyB?.wrapped]
-      const newValueCA = tryParseAmount(newValue, tokenB)
-
-      if (tokenA && tokenB && pool && newValueCA?.wrapped) {
-        const dependentTokenAmount = toAmountCurrencyAmount(
-          rebases[tokenA.wrapped.address],
-          pool.priceOf(tokenB).quote(toShareCurrencyAmount(rebases[tokenB.wrapped.address], newValueCA?.wrapped))
-        )
-        set(mainInputAtom, dependentTokenAmount?.toExact())
-      }
-
-      // Edge case where if we enter 0 on secondary input, also set mainInput to 0
-      else if (typedField === TypedField.B) {
-        set(mainInputAtom, '')
-      }
-    }
-
-    // In any case, 'set' this value directly to the atom to keep a copy saved as a string
-    set(secondaryInputAtom, newValue)
-  },
-})
-
-export const mainInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'useDependentAssetInputs:mainInputCurrencyAmountSelector',
-  get: ({ get }) => {
-    const value = get(mainInputAtom)
-    const [currencyA] = get(currenciesAtom)
-    return tryParseAmount(value, currencyA)
-  },
-})
-
-export const secondaryInputCurrencyAmountSelector = selector<CurrencyAmount<Currency> | undefined>({
-  key: 'useDependentAssetInputs:secondaryInputCurrencyAmountSelector',
-  get: ({ get }) => {
-    const value = get(secondaryInputSelector)
-    const [, currencyB] = get(currenciesAtom)
-    return tryParseAmount(value, currencyB)
-  },
-})
-
-export const formattedAmountsSelector = selector<[string, string]>({
-  key: 'useDependentAssetInputs:formattedAmountsSelector',
-  get: ({ get }) => {
-    const inputField = get(typedFieldAtom)
-    const [parsedAmountA, parsedAmountB] = get(parsedAmountsSelector)
-    return [
-      (inputField === TypedField.A ? get(mainInputAtom) : parsedAmountA?.toSignificant(6)) ?? '',
-      (inputField === TypedField.B ? get(secondaryInputAtom) : parsedAmountB?.toSignificant(6)) ?? '',
-    ]
-  },
-})
-
-export const parsedAmountsSelector = selector<
-  [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
->({
-  key: 'useDependentAssetInputs:parsedAmountsSelector',
-  get: ({ get }) => {
-    return [get(mainInputCurrencyAmountSelector), get(secondaryInputCurrencyAmountSelector)]
-  },
-})
-
-// When adding liquidity, poolAtom is defined and provides us with the tokens
-export const useDependentAssetInputs = () => {
+export const useDependentAssetInputs: useDependentAssetInputs = ({
+  fixedRatio,
+  spendFromWallet,
+  inputs,
+  setInputs,
+}) => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
-  const { state: poolState, pool } = useRecoilValue(poolAtom)
-  const mainInput = useRecoilState(mainInputAtom)
-  const secondaryInput = useRecoilState(secondaryInputSelector)
-  const formattedAmounts = useRecoilValue(formattedAmountsSelector)
-  const parsedAmounts = useRecoilValue(parsedAmountsSelector)
-  const noLiquidity = useRecoilValue(noLiquiditySelector)
-  const typedField = useRecoilState(typedFieldAtom)
-  const fixedRatio = useRecoilState(fixedRatioAtom)
-  const spendFromWallet = useRecoilValue(spendFromWalletAtom)
-  const currencies = useMemo(
-    () => parsedAmounts.reduce<Currency[]>((acc, cur) => [...acc, ...(cur ? [cur.currency] : [])], []),
-    [parsedAmounts]
+  const { poolWithState, noLiquidity, rebases } = usePoolContext()
+  const { currencies } = useCurrenciesFromURL()
+
+  const handleMainInput = useCallback(
+    (val: string) => {
+      if (poolWithState?.pool && !noLiquidity && fixedRatio && currencies?.[0] && currencies?.[1]) {
+        const [token0, token1] = [currencies[0].wrapped, currencies[1].wrapped]
+        const amount = tryParseAmount(val, token0)
+
+        if (token0 && token0 && amount && rebases?.[token0.address] && rebases?.[token1.address]) {
+          const dependentTokenAmount = toAmountCurrencyAmount(
+            rebases[token1.address],
+            poolWithState.pool.priceOf(token0).quote(toShareCurrencyAmount(rebases[token0.address], amount))
+          )
+
+          setInputs([
+            val,
+            (currencies[1]?.isNative
+              ? CurrencyAmount.fromRawAmount(currencies[1], dependentTokenAmount.quotient)
+              : dependentTokenAmount
+            ).toExact(),
+          ])
+          return
+        }
+      }
+
+      setInputs((prevState) => [val, Number(val) === 0 ? undefined : prevState[1]])
+    },
+    [currencies, fixedRatio, noLiquidity, poolWithState?.pool, rebases, setInputs]
   )
+
+  const handleSecondaryInput = useCallback(
+    (val: string) => {
+      if (poolWithState?.pool && !noLiquidity && fixedRatio && currencies?.[0] && currencies?.[1]) {
+        const [token0, token1] = [currencies[0].wrapped, currencies[1].wrapped]
+        const amount = tryParseAmount(val, token1)
+
+        if (token0 && token0 && amount && rebases?.[token0.address] && rebases?.[token1.address]) {
+          const dependentTokenAmount = toAmountCurrencyAmount(
+            rebases[token0.address],
+            poolWithState.pool.priceOf(token1).quote(toShareCurrencyAmount(rebases[token1.address], amount))
+          )
+
+          setInputs([
+            (currencies[0]?.isNative
+              ? CurrencyAmount.fromRawAmount(currencies[0], dependentTokenAmount.quotient)
+              : dependentTokenAmount
+            ).toExact(),
+            val,
+          ])
+          return
+        }
+      }
+
+      setInputs((prevState) => [Number(val) === 0 ? undefined : prevState[0], val])
+    },
+    [currencies, fixedRatio, noLiquidity, poolWithState?.pool, rebases, setInputs]
+  )
+
+  const parsedAmounts = useMemo(() => {
+    if (currencies?.[0] && currencies?.[1]) {
+      return [tryParseAmount(inputs[0], currencies[0]), tryParseAmount(inputs[1], currencies[1])]
+    }
+
+    return [undefined, undefined]
+  }, [currencies, inputs])
+
   const balances = useBentoOrWalletBalances(account ?? undefined, currencies, spendFromWallet)
 
   const onMax = useCallback(async () => {
-    if (!balances || !pool || !balances[0] || !balances[1]) return
-    if (!noLiquidity && fixedRatio[0]) {
-      if (pool.priceOf(currencies[0]?.wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)) {
-        typedField[1](TypedField.A)
-        mainInput[1](maxAmountSpend(balances[0])?.toExact() || '')
+    if (!balances || !poolWithState?.pool || !balances[0] || !balances[1] || !currencies[0]) return
+    if (!noLiquidity && fixedRatio) {
+      if (poolWithState.pool.priceOf(currencies[0].wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)) {
+        handleMainInput(maxAmountSpend(balances[0])?.toExact() || '')
       } else {
-        typedField[1](TypedField.B)
-        secondaryInput[1](maxAmountSpend(balances[1])?.toExact() || '')
+        handleSecondaryInput(maxAmountSpend(balances[1])?.toExact() || '')
       }
     } else {
-      mainInput[1](maxAmountSpend(balances[0])?.toExact() || '')
-      secondaryInput[1](maxAmountSpend(balances[1])?.toExact() || '')
+      setInputs([maxAmountSpend(balances[0])?.toExact(), maxAmountSpend(balances[1])?.toExact()])
     }
-  }, [balances, currencies, fixedRatio, mainInput, noLiquidity, pool, secondaryInput, typedField])
+  }, [
+    balances,
+    currencies,
+    fixedRatio,
+    handleMainInput,
+    handleSecondaryInput,
+    noLiquidity,
+    poolWithState?.pool,
+    setInputs,
+  ])
 
   const isMax = useMemo(() => {
-    if (!balances || !pool || !balances[0] || !balances[1]) return false
+    if (!balances || !poolWithState?.pool || !balances[0] || !balances[1] || !currencies[0]) return false
 
-    if (!noLiquidity && fixedRatio[0]) {
-      return pool.priceOf(currencies[0]?.wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)
+    if (!noLiquidity && fixedRatio) {
+      return poolWithState.pool.priceOf(currencies[0].wrapped).quote(balances[0].wrapped)?.lessThan(balances[1].wrapped)
         ? parsedAmounts[0]?.equalTo(maxAmountSpend(balances[0]) || '')
         : parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]) || '')
     } else {
@@ -199,7 +135,7 @@ export const useDependentAssetInputs = () => {
         parsedAmounts[1]?.equalTo(maxAmountSpend(balances[1]) || '')
       )
     }
-  }, [balances, currencies, fixedRatio, noLiquidity, parsedAmounts, pool])
+  }, [balances, currencies, fixedRatio, noLiquidity, parsedAmounts, poolWithState?.pool])
 
   const insufficientBalance = useMemo(() => {
     return parsedAmounts.find((el, index) => {
@@ -209,27 +145,32 @@ export const useDependentAssetInputs = () => {
 
   let error = !account
     ? i18n._(t`Connect Wallet`)
-    : poolState === 3
+    : poolWithState?.state === PoolState.INVALID
     ? i18n._(t`Invalid pool`)
     : !parsedAmounts[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : insufficientBalance
-    ? i18n._(t`Insufficient ${insufficientBalance.currency.symbol} balance`)
+    ? i18n._(t`Insufficient Balance`)
     : ''
+
+  // If we change back to fixedRatio,
+  // make sure to update second input
+  useEffect(() => {
+    if (fixedRatio && inputs[0] && inputs[1]) handleMainInput(inputs[0])
+    else if (fixedRatio && inputs[0] && !inputs[1]) handleMainInput(inputs[0])
+    else if (fixedRatio && inputs[1] && !inputs[0]) handleSecondaryInput(inputs[1])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fixedRatio])
 
   return useMemo(
     () => ({
-      inputs: [mainInput[0], secondaryInput[0]],
-      mainInput,
-      secondaryInput,
-      formattedAmounts,
+      mainInput: [inputs[0], handleMainInput] as [string, (string) => void],
+      secondaryInput: [inputs[1], handleSecondaryInput] as [string, (string) => void],
       parsedAmounts,
-      typedField,
       onMax,
       isMax,
       error,
-      fixedRatio,
     }),
-    [error, fixedRatio, formattedAmounts, isMax, mainInput, onMax, parsedAmounts, secondaryInput, typedField]
+    [error, fixedRatio, handleMainInput, handleSecondaryInput, inputs, isMax, onMax, parsedAmounts]
   )
 }

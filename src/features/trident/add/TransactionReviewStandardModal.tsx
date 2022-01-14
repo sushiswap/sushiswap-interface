@@ -1,51 +1,63 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
+import { setAddShowReview, setAddTxHash } from 'app/features/trident/add/addSlice'
+import { useAddDetails } from 'app/features/trident/add/useAddDetails'
+import { useAddLiquidityExecute } from 'app/features/trident/add/useAddLiquidityExecute'
+import { useAddLiquidityState } from 'app/features/trident/add/useAddLiquidityState'
+import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import DepositSubmittedModalContent from 'app/features/trident/DepositSubmittedModalContent'
-import { FC, ReactNode, useCallback, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-
-import { attemptingTxnAtom, DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
-import { useClassicStandardAddExecute } from '../../context/hooks/useClassicStandardAddExecute'
-import { useDependentAssetInputs } from '../../context/hooks/useDependentAssetInputs'
-import { usePoolDetailsMint } from '../../context/hooks/usePoolDetails'
+import { useAppDispatch } from 'app/state/hooks'
+import { FC, useCallback } from 'react'
 
 const TransactionReviewStandardModal: FC = () => {
   const { i18n } = useLingui()
-  const [txHash, setTxHash] = useState<string>()
-  const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const dispatch = useAppDispatch()
+  const { currencies } = useCurrenciesFromURL()
+  const {
+    attemptingTxn,
+    showReview,
+    txHash,
+    parsedAmounts: _parsedAmounts,
+    spendFromWallet,
+    bentoPermit,
+  } = useAddLiquidityState()
+  const { liquidityMinted, poolShareAfter, poolShareBefore } = useAddDetails(_parsedAmounts)
+  const execute = useAddLiquidityExecute()
 
-  const { parsedAmounts } = useDependentAssetInputs()
-  const _execute = useClassicStandardAddExecute()
-  const { liquidityMinted, poolShareAfter, poolShareBefore } = usePoolDetailsMint(
-    parsedAmounts,
-    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-  )
-
-  const execute = useCallback(async () => {
-    const tx = await _execute()
-    if (tx.hash) {
-      setTxHash(tx.hash)
+  const _execute = useCallback(async () => {
+    const tx = await execute({ parsedAmounts: _parsedAmounts, liquidityMinted, spendFromWallet, bentoPermit })
+    if (tx?.hash) {
+      dispatch(setAddTxHash(tx.hash))
     }
-  }, [_execute])
+  }, [execute, _parsedAmounts, liquidityMinted, spendFromWallet, bentoPermit, dispatch])
+
+  // Trick for performance since useUSDCValue is blocking
+  const parsedAmounts = [
+    _parsedAmounts[0] || (currencies?.[0] ? CurrencyAmount.fromRawAmount(currencies[0], '0') : undefined),
+    _parsedAmounts[1] || (currencies?.[1] ? CurrencyAmount.fromRawAmount(currencies[1], '0') : undefined),
+  ]
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
     <HeadlessUIModal.Controlled
       isOpen={showReview}
-      onDismiss={() => setShowReview(false)}
-      afterLeave={() => setTxHash(undefined)}
+      onDismiss={() => dispatch(setAddShowReview(false))}
+      afterLeave={() => dispatch(setAddTxHash(undefined))}
       maxWidth="md"
+      unmount={false}
     >
       {!txHash ? (
         <div className="flex flex-col gap-4">
-          <HeadlessUIModal.Header header={i18n._(t`Confirm add liquidity`)} onClose={() => setShowReview(false)} />
+          <HeadlessUIModal.Header
+            header={i18n._(t`Confirm add liquidity`)}
+            onClose={() => dispatch(setAddShowReview(false))}
+          />
           <Typography variant="sm">
             {i18n._(t`Output is estimated. If the price changes by more than 0.5% your transaction will revert.`)}
           </Typography>
@@ -54,10 +66,9 @@ const TransactionReviewStandardModal: FC = () => {
               {i18n._(t`You are depositing:`)}
             </Typography>
             <ListPanel
-              items={parsedAmounts.reduce<ReactNode[]>((acc, cur, index) => {
-                if (cur?.greaterThan(ZERO)) acc.push(<ListPanel.CurrencyAmountItem amount={cur} key={index} />)
-                return acc
-              }, [])}
+              items={parsedAmounts.map((cur, index) => (
+                <ListPanel.CurrencyAmountItem amount={cur} key={index} />
+              ))}
             />
           </HeadlessUIModal.BorderedContent>
           <HeadlessUIModal.BorderedContent className="flex flex-col gap-3 bg-dark-1000/40">
@@ -77,7 +88,7 @@ const TransactionReviewStandardModal: FC = () => {
               {poolShareAfter?.toSignificant(6) || '0.000'}%
             </Typography>
           </div>
-          <Button id={`btn-modal-confirm-deposit`} disabled={attemptingTxn} color="blue" onClick={execute}>
+          <Button id={`btn-modal-confirm-deposit`} disabled={attemptingTxn} color="blue" onClick={_execute}>
             {i18n._(t`Confirm Deposit`)}
           </Button>
         </div>

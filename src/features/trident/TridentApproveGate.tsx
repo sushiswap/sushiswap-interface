@@ -9,12 +9,7 @@ import { StandardSignatureData, useTridentLiquidityTokenPermit } from 'app/hooks
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React, { FC, memo, ReactNode, useCallback, useEffect, useState } from 'react'
-import { atom, RecoilState, useSetRecoilState } from 'recoil'
-
-export const TridentApproveGateBentoPermitAtom = atom<Signature | undefined>({
-  key: 'TridentApproveGate:BentoPermit',
-  default: undefined,
-})
+import { atom, useSetRecoilState } from 'recoil'
 
 export const TridentApproveGateSLPPermitAtom = atom<StandardSignatureData | undefined>({
   key: 'TridentApproveGate:SLPPermit',
@@ -90,38 +85,50 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(({ inputAmount, onS
   return <></>
 })
 
-type TridentApproveGate<P> = FC<P> & {
-  bentoPermit: RecoilState<Signature | undefined>
-  slpPermit: RecoilState<StandardSignatureData | undefined>
-}
-
-interface TridentApproveGateProps {
+interface TridentApproveGateCommonProps {
   inputAmounts: (CurrencyAmount<Currency> | undefined)[]
   children: ({ approved, loading }: { approved: boolean; loading: boolean; permit?: BentoPermit }) => ReactNode
   tokenApproveOn?: string
-  withPermit?: boolean
   masterContractAddress?: string
 }
 
-const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
+type TridentApproveGatePropsNoPermit = TridentApproveGateCommonProps & {
+  withPermit?: false
+  permit?: never
+  onPermit?: never
+}
+
+type TridentApproveGatePropsWithPermit = TridentApproveGateCommonProps & {
+  withPermit: true
+  permit: Signature | undefined
+  onPermit(x?: Signature): void
+}
+
+type TridentApproveGateType = TridentApproveGatePropsNoPermit | TridentApproveGatePropsWithPermit
+
+const TridentApproveGate = ({
   inputAmounts,
   tokenApproveOn,
   children,
   withPermit = false,
   masterContractAddress,
-}) => {
+  permit: permitProp,
+  onPermit,
+}: TridentApproveGateType) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const [status, setStatus] = useState<Record<string, ApprovalState>>({})
   const toggleWalletModal = useWalletModalToggle()
-  const setBentoPermit = useSetRecoilState(TridentApproveGateBentoPermitAtom)
 
   const {
     approve: bApproveCallback,
     approvalState: bApprove,
     getPermit,
     permit,
-  } = useBentoMasterApproveCallback(masterContractAddress ? masterContractAddress : undefined, {})
+  } = useBentoMasterApproveCallback(
+    permitProp ? undefined : masterContractAddress ? masterContractAddress : undefined,
+    {}
+  )
 
   const loading =
     Object.values(status).some((el) => el === ApprovalState.UNKNOWN) ||
@@ -134,13 +141,13 @@ const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
   const onClick = useCallback(async () => {
     if (withPermit) {
       const permit = await getPermit()
-      if (permit) {
-        setBentoPermit(permit.signature)
+      if (onPermit) {
+        onPermit(permit?.signature)
       }
     } else {
       await bApproveCallback()
     }
-  }, [bApproveCallback, getPermit, setBentoPermit, withPermit])
+  }, [bApproveCallback, getPermit, onPermit, withPermit])
 
   return (
     <div className="flex flex-col gap-3">
@@ -175,12 +182,11 @@ const TridentApproveGate: TridentApproveGate<TridentApproveGateProps> = ({
           {i18n._(t`Connect Wallet`)}
         </Button>
       ) : (
-        children({ approved, loading, permit })
+        children({ approved: approved || !!permitProp, loading, permit })
       )}
     </div>
   )
 }
 
-TridentApproveGate.bentoPermit = TridentApproveGateBentoPermitAtom
 TridentApproveGate.slpPermit = TridentApproveGateSLPPermitAtom
 export default TridentApproveGate
