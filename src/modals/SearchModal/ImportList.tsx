@@ -36,8 +36,6 @@ const ImportList: FC = () => {
           action: 'Add List',
           label: listUrl,
         })
-
-        console.log(listUrl)
         dispatch(enableList(listUrl))
         setView(CurrencyModalView.manage)
       })
@@ -73,7 +71,7 @@ const ImportList: FC = () => {
                 </Typography>
               )}
             </Typography>
-            <div className="flex gap-1 items-center">
+            <div className="flex items-center gap-1">
               <Typography variant="xs" className="text-white">
                 {i18n._(t`${importList?.tokens.length} tokens`)}
               </Typography>
@@ -109,7 +107,7 @@ const ImportList: FC = () => {
         {i18n._(t`Import`)}
       </Button>
       {addError ? (
-        <Typography variant="sm" weight={700} className="overflow-hidden text-ellipsis text-red text-center">
+        <Typography variant="sm" weight={700} className="overflow-hidden text-center text-ellipsis text-red">
           {addError}
         </Typography>
       ) : null}
