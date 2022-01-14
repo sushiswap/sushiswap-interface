@@ -22,6 +22,7 @@ const BLOCKCHAIN = {
   [ChainId.XDAI]: 'xdai',
   [ChainId.ARBITRUM]: 'arbitrum',
   [ChainId.AVALANCHE]: 'avalanche',
+  [ChainId.HARDHAT]: 'hardhat',
 }
 
 export const getCurrencyLogoUrls = (currency): string[] => {
@@ -93,6 +94,7 @@ const LOGO: Record<ChainId, string> = {
   [ChainId.MOONRIVER]: MovrLogo,
   [ChainId.FUSE]: FuseLogo,
   [ChainId.TELOS]: TelosLogo,
+  [ChainId.HARDHAT]: EthereumLogo,
 }
 
 export interface CurrencyLogoProps {
