@@ -22,16 +22,16 @@ export const LiquidityPositionsBalancesSum = () => {
   const sum = positions?.reduce((acc, cur) => acc + cur.value, 0)
 
   return (
-    <div className="flex border border-dark-700 bg-dark-900 rounded divide-x divide-dark-700">
-      <div className="flex flex-col py-2 px-4 w-6/12">
+    <div className="flex gap-14">
+      <div className="flex flex-col gap-1">
         <Typography variant="sm">{i18n._(t`Total Value`)}</Typography>
-        <Typography variant="lg" className="text-high-emphesis" weight={700}>
+        <Typography variant="lg" weight={700} className="text-high-emphesis">
           ${sum?.toFixed(2) || '0.00'}
         </Typography>
       </div>
-      <div className="flex flex-col py-2 px-4 w-6/12">
+      <div className="flex flex-col gap-1">
         <Typography variant="sm">{i18n._(t`Number of Assets`)}</Typography>
-        <Typography variant="lg" className="text-high-emphesis" weight={700}>
+        <Typography variant="lg" weight={700} className="text-high-emphesis">
           {positions?.length}
         </Typography>
       </div>
@@ -69,24 +69,22 @@ const _BalancesSum: FC<BalancesSumProps> = ({ amounts }) => {
 
   return (
     <SumUSDCValues amounts={amounts}>
-      {({ amount }) => {
-        return (
-          <div className="flex border border-dark-700 bg-dark-900 rounded divide-x divide-dark-700">
-            <div className="flex flex-col py-2 px-4 w-6/12">
-              <Typography variant="sm">{i18n._(t`Total Value`)}</Typography>
-              <Typography variant="lg" className="text-high-emphesis" weight={700}>
-                ${amount ? amount.toExact({}) : '0.00'}
-              </Typography>
-            </div>
-            <div className="flex flex-col py-2 px-4 w-6/12">
-              <Typography variant="sm">{i18n._(t`Number of Assets`)}</Typography>
-              <Typography variant="lg" className="text-high-emphesis" weight={700}>
-                {amounts.length}
-              </Typography>
-            </div>
+      {({ amount }) => (
+        <div className="flex gap-14">
+          <div className="flex flex-col gap-1">
+            <Typography variant="sm">{i18n._(t`Total Value`)}</Typography>
+            <Typography variant="lg" weight={700} className="text-high-emphesis">
+              ${amount ? amount.toExact(2) : '0.00'}
+            </Typography>
           </div>
-        )
-      }}
+          <div className="flex flex-col gap-1">
+            <Typography variant="sm">{i18n._(t`Assets`)}</Typography>
+            <Typography variant="lg" weight={700} className="text-high-emphesis">
+              {amounts.length}
+            </Typography>
+          </div>
+        </div>
+      )}
     </SumUSDCValues>
   )
 }

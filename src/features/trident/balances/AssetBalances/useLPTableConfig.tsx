@@ -113,7 +113,7 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
                     }}
                     passHref={true}
                   >
-                    <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
+                    <Button color="blue" size="sm" variant="empty">
                       Manage
                     </Button>
                   </Link>

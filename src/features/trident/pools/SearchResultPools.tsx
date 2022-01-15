@@ -3,8 +3,14 @@ import { useLingui } from '@lingui/react'
 import { PoolType } from '@sushiswap/tines'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import { TableInstance } from 'app/features/transactions/types'
+import {
+  TABLE_TABLE_CLASSNAME,
+  TABLE_TBODY_TD_CLASSNAME,
+  TABLE_TBODY_TR_CLASSNAME,
+  TABLE_TR_TH_CLASSNAME,
+  TABLE_WRAPPER_DIV_CLASSNAME,
+} from 'app/features/trident/constants'
 import { poolTypeNameMapper } from 'app/features/trident/types'
-import { classNames } from 'app/functions/styling'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
@@ -35,8 +41,8 @@ const SearchResultPools: FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
-      <div className="overflow-x-auto border border-dark-900 rounded">
-        <table {...getTableProps()} className="w-full">
+      <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
+        <table {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={i}>
@@ -44,11 +50,7 @@ const SearchResultPools: FC = () => {
                   <th
                     key={i}
                     {...column.getHeaderProps()}
-                    className={classNames(
-                      'text-secondary text-sm py-3',
-                      i === 0 ? 'pl-4 text-left' : 'text-right',
-                      i === headerGroup.headers.length - 1 ? 'pr-4' : ''
-                    )}
+                    className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                   >
                     {column.render('Header')}
                     {i === 0 && (
@@ -83,18 +85,10 @@ const SearchResultPools: FC = () => {
                   key={i}
                   passHref
                 >
-                  <tr {...row.getRowProps()} className={classNames('hover:bg-dark-900/40 hover:cursor-pointer')}>
+                  <tr {...row.getRowProps()} className={TABLE_TBODY_TR_CLASSNAME}>
                     {row.cells.map((cell, i) => {
                       return (
-                        <td
-                          key={i}
-                          {...cell.getCellProps()}
-                          className={classNames(
-                            'py-3 border-t border-dark-900 flex items-center',
-                            i === 0 ? 'pl-4 justify-start' : 'justify-end',
-                            i === row.cells.length - 1 ? 'pr-4' : ''
-                          )}
-                        >
+                        <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
                           {cell.render('Cell')}
                         </td>
                       )

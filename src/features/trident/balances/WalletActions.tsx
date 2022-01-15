@@ -5,17 +5,18 @@ import { NATIVE } from '@sushiswap/core-sdk'
 import { WalletIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
 import ActionItem from 'app/features/trident/balances/ActionsModal/ActionItem'
-import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
-import { ActiveModal } from 'app/features/trident/balances/context/types'
+import { setBalancesActiveModal } from 'app/features/trident/balances/balancesSlice'
+import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
+import { ActiveModal } from 'app/features/trident/types'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch } from 'app/state/hooks'
 import { useRouter } from 'next/router'
 import React, { FC, useCallback } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 const WalletActions: FC = () => {
   const { chainId } = useActiveWeb3React()
-  const setActiveModal = useSetRecoilState(ActiveModalAtom)
-  const currency = useRecoilValue(SelectedCurrencyAtom)
+  const currency = useBalancesSelectedCurrency()
+  const dispatch = useAppDispatch()
   const { i18n } = useLingui()
   const router = useRouter()
 
@@ -34,7 +35,7 @@ const WalletActions: FC = () => {
         <ActionItem
           svg={<WalletIcon width={20} height={20} />}
           label={i18n._(t`Deposit to BentoBox`)}
-          onClick={() => setActiveModal(ActiveModal.DEPOSIT)}
+          onClick={() => dispatch(setBalancesActiveModal(ActiveModal.DEPOSIT))}
         />
         <Typography variant="sm" className="text-blue text-center mb-5 mt-2 cursor-pointer">
           What is BentoBox?

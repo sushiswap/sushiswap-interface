@@ -6,19 +6,20 @@ import Divider from 'app/components/Divider'
 import { BentoboxIcon, TransferIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
 import ActionItem from 'app/features/trident/balances/ActionsModal/ActionItem'
-import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
-import { ActiveModal } from 'app/features/trident/balances/context/types'
+import { setBalancesActiveModal } from 'app/features/trident/balances/balancesSlice'
+import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
+import { ActiveModal } from 'app/features/trident/types'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch } from 'app/state/hooks'
 import { useRouter } from 'next/router'
 import React, { FC, useCallback } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 const BentoActions: FC = () => {
   const { chainId } = useActiveWeb3React()
   const isDesktop = useDesktopMediaQuery()
-  const setActiveModal = useSetRecoilState(ActiveModalAtom)
-  const currency = useRecoilValue(SelectedCurrencyAtom)
+  const dispatch = useAppDispatch()
+  const currency = useBalancesSelectedCurrency()
   const { i18n } = useLingui()
   const router = useRouter()
 
@@ -53,7 +54,7 @@ const BentoActions: FC = () => {
         <ActionItem
           svg={<BentoboxIcon width={20} height={20} />}
           label={i18n._(t`Withdraw to Wallet`)}
-          onClick={() => setActiveModal(ActiveModal.WITHDRAW)}
+          onClick={() => dispatch(setBalancesActiveModal(ActiveModal.WITHDRAW))}
         />
         <ActionItem svg={<TransferIcon width={24} height={24} />} label={i18n._(t`Transfer`)} />
       </div>

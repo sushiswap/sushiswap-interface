@@ -8,16 +8,19 @@ const useBalancesMenuItems = () => {
   const { i18n } = useLingui()
   return [
     {
+      key: 'wallet',
       label: i18n._(t`Wallet`),
       icon: <WalletIcon width={20} height={20} />,
       link: (BREADCRUMBS['wallet'] as BreadcrumbTuple).link,
     },
     {
+      key: 'bentobox',
       label: i18n._(t`BentoBox`),
       icon: <BentoboxIcon width={20} height={20} />,
       link: (BREADCRUMBS['bentobox'] as BreadcrumbTuple).link,
     },
     {
+      key: 'liquidity',
       label: i18n._(t`Liquidity Pools`),
       link: (BREADCRUMBS['liquidity'] as BreadcrumbTuple).link,
     },

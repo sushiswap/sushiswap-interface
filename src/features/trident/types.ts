@@ -48,3 +48,9 @@ export enum TypedField {
   A,
   B,
 }
+
+export enum ActiveModal {
+  MENU = 'MENU',
+  WITHDRAW = 'WITHDRAW',
+  DEPOSIT = 'DEPOSIT',
+}

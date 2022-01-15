@@ -1,11 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
 import Button from '../../../components/Button'
 import Typography from '../../../components/Typography'
-import { TridentHeader } from '../../../layouts/Trident'
 
 const HeaderButton: FC<{ title: string; linkTo: string; id?: string }> = ({ title, linkTo, id }) => (
   <Link href={linkTo} passHref={true}>

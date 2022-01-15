@@ -9,7 +9,7 @@ import Dots from 'app/components/Dots'
 import { WalletIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
+import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { tryParseAmount } from 'app/functions'
 import { useBentoBox, useBentoBoxContract } from 'app/hooks'
@@ -18,7 +18,6 @@ import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import Lottie from 'lottie-react'
 import React, { FC, useCallback, useState } from 'react'
-import { useRecoilValue } from 'recoil'
 
 interface WithdrawToWalletModalProps {
   open: boolean
@@ -27,7 +26,7 @@ interface WithdrawToWalletModalProps {
 
 const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }) => {
   const { account } = useActiveWeb3React()
-  const currency = useRecoilValue(SelectedCurrencyAtom)
+  const currency = useBalancesSelectedCurrency()
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
   const bentoBalance = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
@@ -63,7 +62,7 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
     : ''
 
   return (
-    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose} maxWidth="md">
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose} maxWidth="sm">
       <div className="flex flex-col gap-4">
         <HeadlessUiModal.Header header={i18n._(t`Withdraw to wallet`)} onClose={onClose} />
         <AssetInput

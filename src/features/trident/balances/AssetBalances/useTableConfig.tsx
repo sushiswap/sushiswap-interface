@@ -18,7 +18,7 @@ export const useTableConfig = (assets?: Assets[]) => {
         Cell: (props) => {
           return (
             <div className="flex gap-2.5 items-center">
-              <CurrencyLogo currency={props.cell.value.currency} className="rounded-full" size={28} />
+              <CurrencyLogo currency={props.cell.value.currency} className="!rounded-full" size={28} />
               <Typography
                 weight={isDesktop ? 400 : 700}
                 variant={isDesktop ? 'sm' : 'base'}

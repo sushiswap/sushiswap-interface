@@ -13,6 +13,13 @@ module.exports = {
         'token-section': 'auto minmax(auto, 1fr) auto',
       },
       backgroundImage: () => ({
+        bars: "url('/images/trident/bars-pattern.png')",
+        binary: "url('/images/trident/binary-pattern.png')",
+        bubble: "url('/images/trident/bubble-pattern.png')",
+        dots: "url('/images/trident/dots-pattern.png')",
+        'x-times-y-is-k': "url('/images/trident/x-times-y-is-k.png')",
+        wavy: "url('/images/trident/wavy-pattern.png')",
+        chevron: "url('/images/trident/chevron-pattern.png')",
         'gradient-radial': 'radial-gradient(100% 100% at 50% 25%, var(--tw-gradient-stops))',
       }),
       linearBorderGradients: (theme) => ({
