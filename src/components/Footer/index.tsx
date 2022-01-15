@@ -116,7 +116,7 @@ const Footer = () => {
             </a>
             <a href="https://github.com/sushiswap" target="_blank" rel="noreferrer">
               <Typography variant="sm" className="text-low-emphesis">
-                {i18n._(t`Github`)}
+                {i18n._(t`GitHub`)}
               </Typography>
             </a>
             <a href="https://dev.sushi.com" target="_blank" rel="noreferrer">
