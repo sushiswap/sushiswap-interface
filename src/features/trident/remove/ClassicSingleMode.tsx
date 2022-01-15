@@ -17,6 +17,7 @@ import {
   setRemoveOutputToWallet,
   setRemovePercentageAmount,
   setRemoveShowReview,
+  setRemoveSLPPermit,
   setRemoveZapCurrency,
 } from 'app/features/trident/remove/removeSlice'
 import {
@@ -122,6 +123,7 @@ const ClassicSingleMode: FC = () => {
                 withPermit={true}
                 permit={bentoPermit}
                 onPermit={(permit) => dispatch(setRemoveBentoPermit(permit))}
+                onSLPPermit={(permit) => dispatch(setRemoveSLPPermit(permit))}
               >
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn

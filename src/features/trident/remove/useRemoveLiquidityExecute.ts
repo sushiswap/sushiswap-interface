@@ -12,9 +12,8 @@ import { usePoolContext } from 'app/features/trident/PoolContext'
 import {
   selectTridentRemove,
   setRemoveAttemptingTxn,
-  setRemoveBentoPermit,
+  setRemoveDeletePermits,
 } from 'app/features/trident/remove/removeSlice'
-import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { LiquidityOutput } from 'app/features/trident/types'
 import { toShareJSBI } from 'app/functions/bentobox'
 import { useTridentRouterContract } from 'app/hooks/useContract'
@@ -23,7 +22,6 @@ import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 import ReactGA from 'react-ga'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
 
 export const useRemoveLiquidityExecute = () => {
   const { i18n } = useLingui()
@@ -32,11 +30,7 @@ export const useRemoveLiquidityExecute = () => {
   const addTransaction = useTransactionAdder()
   const dispatch = useAppDispatch()
   const { poolWithState, rebases } = usePoolContext()
-  const { outputToWallet, receiveNative, bentoPermit } = useAppSelector(selectTridentRemove)
-
-  // TODO RAMIN
-  const slpPermit = useRecoilValue(TridentApproveGate.slpPermit)
-  const resetSLPPermit = useResetRecoilState(TridentApproveGate.slpPermit)
+  const { outputToWallet, receiveNative, bentoPermit, slpPermit } = useAppSelector(selectTridentRemove)
 
   return useCallback(
     async (slpAmountToRemove: CurrencyAmount<Token>, minLiquidityOutput: (CurrencyAmount<Token> | undefined)[]) => {
@@ -126,8 +120,7 @@ export const useRemoveLiquidityExecute = () => {
           label: [poolWithState.pool.token0.symbol, poolWithState.pool.token1.symbol].join('/'),
         })
 
-        dispatch(setRemoveBentoPermit(undefined))
-        resetSLPPermit()
+        dispatch(setRemoveDeletePermits())
         return tx
       } catch (error) {
         dispatch(setRemoveAttemptingTxn(false))
@@ -151,7 +144,6 @@ export const useRemoveLiquidityExecute = () => {
       dispatch,
       addTransaction,
       i18n,
-      resetSLPPermit,
     ]
   )
 }

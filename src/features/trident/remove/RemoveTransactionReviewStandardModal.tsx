@@ -1,14 +1,11 @@
-import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, NATIVE, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
-import Divider from 'app/components/Divider'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { selectTridentRemove, setRemoveShowReview, setRemoveTxHash } from 'app/features/trident/remove/removeSlice'
-import TransactionDetails from 'app/features/trident/remove/TransactionDetails'
 import { useRemoveDetails } from 'app/features/trident/remove/useRemoveDetails'
 import { useRemoveLiquidityDerivedSLPAmount } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { useRemoveLiquidityExecute } from 'app/features/trident/remove/useRemoveLiquidityExecute'
@@ -25,7 +22,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
   const dispatch = useAppDispatch()
   const { receiveNative, outputToWallet, showReview, attemptingTxn, txHash } = useAppSelector(selectTridentRemove)
   const slpAmountToRemove = useRemoveLiquidityDerivedSLPAmount()
-  const { minLiquidityOutput } = useRemoveDetails()
+  const { minLiquidityOutput, poolShareBefore, poolShareAfter } = useRemoveDetails()
   const receiveETH = receiveNative && outputToWallet
   const execute = useRemoveLiquidityExecute()
 
@@ -53,70 +50,44 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
       afterLeave={() => dispatch(setRemoveTxHash(undefined))}
     >
       {!txHash ? (
-        <div className="flex flex-col h-full gap-8 lg:max-w-md">
-          <div className="relative">
-            <div className="absolute w-full h-full pointer-events-none bg-gradient-to-r from-opaque-blue to-opaque-pink opacity-20" />
-            <div className="flex flex-col gap-4 px-5 pt-5 pb-8">
-              <div className="flex flex-row justify-between">
-                <Button
-                  color="blue"
-                  variant="outlined"
-                  size="sm"
-                  className="py-1 pl-2 rounded-full cursor-pointer"
-                  startIcon={<ChevronLeftIcon width={24} height={24} />}
-                  onClick={() => dispatch(setRemoveShowReview(false))}
-                >
-                  {i18n._(t`Back`)}
-                </Button>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Typography variant="h2" weight={700} className="text-high-emphesis">
-                  {i18n._(t`Confirm Withdrawal`)}
-                </Typography>
-                <Typography variant="sm">
-                  {i18n._(t`Output is estimated. If the price changes by more than 0.5% your transaction will revert.`)}
-                </Typography>
-              </div>
-            </div>
+        <div className="flex flex-col gap-4">
+          <HeadlessUIModal.Header
+            header={i18n._(t`Confirm remove liquidity`)}
+            onClose={() => dispatch(setRemoveShowReview(false))}
+          />
+          <Typography variant="sm">
+            {i18n._(t`Output is estimated. If the price changes by more than 0.5% your transaction will revert.`)}
+          </Typography>
+          <HeadlessUIModal.BorderedContent className="flex flex-col gap-3 bg-dark-1000/40">
+            <Typography weight={700} variant="sm" className="text-secondary">
+              {i18n._(t`You'll receive (at least):`)}
+            </Typography>
+            <ListPanel
+              items={liquidityOutput.map((parsedInputAmount, index) => (
+                <ListPanel.CurrencyAmountItem amount={parsedInputAmount} key={index} />
+              ))}
+            />
+          </HeadlessUIModal.BorderedContent>
+          <HeadlessUIModal.BorderedContent className="flex flex-col gap-3 bg-dark-1000/40">
+            <Typography weight={700} variant="sm" className="text-secondary">
+              {i18n._(t`Deposited to your:`)}
+            </Typography>
+            <Typography weight={700} variant="lg" className="text-high-emphesis">
+              {outputToWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
+            </Typography>
+          </HeadlessUIModal.BorderedContent>
+          <div className="flex justify-between px-2 py-1">
+            <Typography variant="sm" className="text-secondary">
+              {i18n._(t`Share of Pool`)}
+            </Typography>
+            <Typography variant="sm" weight={700} className="text-right text-high-emphesis">
+              {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'}% →{' '}
+              {poolShareAfter?.toSignificant(6) || '0.000'}%
+            </Typography>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="flex flex-col gap-3 px-5">
-              <Typography weight={700} variant="lg">
-                {i18n._(t`You'll receive (at least):`)}
-              </Typography>
-              <ListPanel
-                items={liquidityOutput.map((parsedInputAmount, index) => (
-                  <ListPanel.CurrencyAmountItem amount={parsedInputAmount} key={index} />
-                ))}
-              />
-            </div>
-            <div className="flex flex-row justify-between px-5">
-              <Typography weight={700} variant="lg">
-                {i18n._(t`and deposited to your:`)}
-              </Typography>
-              <Typography weight={700} variant="lg" className="text-high-emphesis">
-                {outputToWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
-              </Typography>
-            </div>
-          </div>
-          <div className="flex flex-col gap-5 px-5">
-            <Divider />
-            <TransactionDetails />
-            <Button
-              id="btn-modal-confirm-withdrawal"
-              disabled={attemptingTxn}
-              color="gradient"
-              size="lg"
-              onClick={_execute}
-            >
-              <Typography variant="sm" weight={700} className="text-high-emphesis">
-                {i18n._(t`Confirm Withdrawal`)}
-              </Typography>
-            </Button>
-
-            {/*spacer*/}
-            <span />
-          </div>
+          <Button id="btn-modal-confirm-withdrawal" disabled={attemptingTxn} color="blue" onClick={_execute}>
+            {i18n._(t`Confirm Withdrawal`)}
+          </Button>
         </div>
       ) : (
         <WithdrawalSubmittedModalContent txHash={txHash} onDismiss={() => dispatch(setRemoveTxHash(undefined))} />

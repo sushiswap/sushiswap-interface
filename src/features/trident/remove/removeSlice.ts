@@ -1,5 +1,6 @@
 import { Signature } from '@ethersproject/bytes'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { StandardSignatureData } from 'app/hooks/useERC20Permit'
 import { AppState } from 'app/state'
 
 import { LiquidityMode } from '../types'
@@ -13,6 +14,7 @@ export interface RemoveState {
   attemptingTxn: boolean
   txHash?: string
   bentoPermit?: Signature
+  slpPermit?: StandardSignatureData
   outputToWallet: boolean
   receiveNative: boolean
   zapCurrency?: string
@@ -29,6 +31,7 @@ const initialState: RemoveState = {
   outputToWallet: true,
   txHash: undefined,
   bentoPermit: undefined,
+  slpPermit: undefined,
   receiveNative: true,
   zapCurrency: undefined,
   percentageAmount: '',
@@ -75,6 +78,13 @@ export const addSlice = createSlice({
     setRemoveBentoPermit: (state, action: PayloadAction<Signature | undefined>) => {
       state.bentoPermit = action.payload
     },
+    setRemoveSLPPermit: (state, action: PayloadAction<StandardSignatureData | undefined>) => {
+      state.slpPermit = action.payload
+    },
+    setRemoveDeletePermits: (state) => {
+      state.bentoPermit = undefined
+      state.slpPermit = undefined
+    },
     setRemoveReceiveNative: (state, action: PayloadAction<boolean>) => {
       state.receiveNative = action.payload
     },
@@ -100,6 +110,8 @@ export const {
   setRemoveReceiveNative,
   setRemoveZapCurrency,
   setRemovePercentageAmount,
+  setRemoveSLPPermit,
+  setRemoveDeletePermits,
 } = addSlice.actions
 
 type selectTridentRemove = (state: AppState) => RemoveState

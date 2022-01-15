@@ -7,10 +7,9 @@ import { usePoolContext } from 'app/features/trident/PoolContext'
 import {
   selectTridentRemove,
   setRemoveAttemptingTxn,
-  setRemoveBentoPermit,
+  setRemoveDeletePermits,
 } from 'app/features/trident/remove/removeSlice'
 import { useRemoveLiquidityZapCurrency } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
-import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { toShareJSBI } from 'app/functions'
 import { useTridentRouterContract } from 'app/hooks'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
@@ -19,7 +18,6 @@ import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 import ReactGA from 'react-ga'
-import { useRecoilValue, useResetRecoilState } from 'recoil'
 
 export const useRemoveLiquiditySingleExecute = () => {
   const { i18n } = useLingui()
@@ -28,12 +26,9 @@ export const useRemoveLiquiditySingleExecute = () => {
   const router = useTridentRouterContract()
   const addTransaction = useTransactionAdder()
   const { poolWithState } = usePoolContext()
-  const { bentoPermit, outputToWallet } = useAppSelector(selectTridentRemove)
+  const { bentoPermit, outputToWallet, slpPermit } = useAppSelector(selectTridentRemove)
   const zapCurrency = useRemoveLiquidityZapCurrency()
   const { rebase } = useBentoRebase(zapCurrency?.wrapped)
-
-  const slpPermit = useRecoilValue(TridentApproveGate.slpPermit)
-  const resetSLPPermit = useResetRecoilState(TridentApproveGate.slpPermit)
 
   return useCallback(
     async (slpAmountToRemove: CurrencyAmount<Token>, minOutputAmount: CurrencyAmount<Currency>) => {
@@ -99,8 +94,7 @@ export const useRemoveLiquiditySingleExecute = () => {
           label: [poolWithState.pool.token0.symbol, poolWithState.pool.token1.symbol].join('/'),
         })
 
-        dispatch(setRemoveBentoPermit(undefined))
-        resetSLPPermit()
+        dispatch(setRemoveDeletePermits())
         return tx
       } catch (error) {
         dispatch(setRemoveAttemptingTxn(false))
@@ -121,7 +115,6 @@ export const useRemoveLiquiditySingleExecute = () => {
       outputToWallet,
       poolWithState?.pool,
       rebase,
-      resetSLPPermit,
       router,
       slpPermit,
       zapCurrency?.isNative,

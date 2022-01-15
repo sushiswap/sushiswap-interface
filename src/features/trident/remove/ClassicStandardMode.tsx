@@ -18,6 +18,7 @@ import {
   setRemovePercentageAmount,
   setRemoveReceiveNative,
   setRemoveShowReview,
+  setRemoveSLPPermit,
 } from 'app/features/trident/remove/removeSlice'
 import {
   useRemoveLiquidityDerivedCurrencyAmounts,
@@ -144,6 +145,7 @@ const ClassicStandardMode: FC = () => {
                 withPermit={true}
                 permit={bentoPermit}
                 onPermit={(permit) => dispatch(setRemoveBentoPermit(permit))}
+                onSLPPermit={(permit) => dispatch(setRemoveSLPPermit(permit))}
               >
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn
