@@ -24,7 +24,7 @@ const items = (i18n: I18n) => [
     external: true,
   },
   {
-    name: i18n._(t`Github`),
+    name: i18n._(t`GitHub`),
     icon: <GithubIcon width={20} />,
     href: 'https://github.com/sushiswap',
     external: true,
