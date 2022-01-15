@@ -35,7 +35,7 @@ const SearchResultPools: FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto border border-dark-900 rounded">
         <table {...getTableProps()} className="w-full">
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -44,7 +44,11 @@ const SearchResultPools: FC = () => {
                   <th
                     key={i}
                     {...column.getHeaderProps()}
-                    className={`text-secondary text-sm pt-1 pb-3 ${i === 0 ? 'text-left' : 'text-right'}`}
+                    className={classNames(
+                      'text-secondary text-sm py-3',
+                      i === 0 ? 'pl-4 text-left' : 'text-right',
+                      i === headerGroup.headers.length - 1 ? 'pr-4' : ''
+                    )}
                   >
                     {column.render('Header')}
                     {i === 0 && (
@@ -79,15 +83,16 @@ const SearchResultPools: FC = () => {
                   key={i}
                   passHref
                 >
-                  <tr {...row.getRowProps()} className="hover:bg-gray-900 hover:cursor-pointer">
+                  <tr {...row.getRowProps()} className={classNames('hover:bg-dark-900/40 hover:cursor-pointer')}>
                     {row.cells.map((cell, i) => {
                       return (
                         <td
                           key={i}
                           {...cell.getCellProps()}
                           className={classNames(
-                            'py-3 border-t border-dark-800 flex items-center',
-                            i === 0 ? 'justify-start' : 'justify-end'
+                            'py-3 border-t border-dark-900 flex items-center',
+                            i === 0 ? 'pl-4 justify-start' : 'justify-end',
+                            i === row.cells.length - 1 ? 'pr-4' : ''
                           )}
                         >
                           {cell.render('Cell')}

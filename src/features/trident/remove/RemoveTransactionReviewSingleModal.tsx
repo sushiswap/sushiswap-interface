@@ -53,6 +53,7 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = 
       onDismiss={() => dispatch(setRemoveShowReview(false))}
       afterLeave={() => dispatch(setRemoveTxHash(undefined))}
       unmount={false}
+      maxWidth="md"
     >
       {!txHash ? (
         <div className="flex flex-col gap-4">

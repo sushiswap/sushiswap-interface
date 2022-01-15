@@ -6,13 +6,13 @@ interface Background {
 }
 
 const IMAGE_URL = {
-  'bars-pattern': '/images/trident/bars-pattern.png',
-  'binary-pattern': '/images/trident/binary-pattern.png',
-  'bubble-pattern': 'i/mages/trident/bubble-pattern.png',
-  'dots-pattern': '/images/trident/dots-pattern.png',
+  bars: '/images/trident/bars-pattern.png',
+  binary: '/images/trident/binary-pattern.png',
+  bubble: 'i/mages/trident/bubble-pattern.png',
+  dots: '/images/trident/dots-pattern.png',
   'x-times-y-is-k': '/images/trident/x-times-y-is-k.png',
-  'wavy-pattern': '/images/trident/wavy-pattern.png',
-  'chevron-pattern': '/images/trident/chevron-pattern.png',
+  wavy: '/images/trident/wavy-pattern.png',
+  chevron: '/images/trident/chevron-pattern.png',
   'miso-bowl': '/images/miso/banner.jpg',
 }
 

@@ -13,7 +13,7 @@ export const SearchCategoryLabel: FC = () => {
   const searchQuery = useRecoilValue(searchQueryAtom)
 
   return (
-    <div className="py-2 flex flex-row justify-between items-center">
+    <div className="py-2 flex flex-row justify-between items-center px-2">
       <Typography variant="base" className="text-high-emphesis" weight={700}>
         {searchQuery ? i18n._(t`Search results for '${searchQuery}'`) : i18n._(t`Top Liquidity Pools`)}
       </Typography>

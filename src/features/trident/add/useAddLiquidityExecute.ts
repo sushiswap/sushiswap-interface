@@ -25,7 +25,7 @@ type ExecutePayload = {
   bentoPermit?: Signature
 }
 
-type UseAddLiquidityExecute = () => (x: ExecutePayload) => Promise<TransactionResponse | void>
+type UseAddLiquidityExecute = () => (x: ExecutePayload) => Promise<TransactionResponse | undefined>
 
 export const useAddLiquidityExecute: UseAddLiquidityExecute = () => {
   const { i18n } = useLingui()
