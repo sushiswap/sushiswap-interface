@@ -2,37 +2,39 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE, WNATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import { BentoBoxIcon, WalletIcon } from 'app/components/AssetInput/icons'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Divider from 'app/components/Divider'
+import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import BentoBoxFundingSourceModal from 'app/features/trident/add/BentoBoxFundingSourceModal'
-import { outputToWalletAtom } from 'app/features/trident/context/atoms'
-import { usePoolDetailsBurn } from 'app/features/trident/context/hooks/usePoolDetails'
-import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
+import { selectTridentRemove, setRemoveOutputToWallet } from 'app/features/trident/remove/removeSlice'
+import { useRemoveDetails } from 'app/features/trident/remove/useRemoveDetails'
+import {
+  useRemoveLiquidityDerivedInputError,
+  useRemoveLiquidityZapCurrency,
+} from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { useMemo } from 'react'
-import { useRecoilState } from 'recoil'
 
-import TransactionDetails from '../TransactionDetails'
+import TransactionDetails from './TransactionDetails'
 
 const ClassicSingleAside = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const {
-    parsedSLPAmount,
-    zapCurrency: [zapCurrency],
-    error,
-  } = useRemovePercentageInput()
-  const { minLiquidityOutputSingleToken } = usePoolDetailsBurn(parsedSLPAmount)
+  const zapCurrency = useRemoveLiquidityZapCurrency()
+  const error = useRemoveLiquidityDerivedInputError()
+
+  const { minLiquidityOutputSingleToken } = useRemoveDetails()
   const minOutputAmount = useMemo(
     () => minLiquidityOutputSingleToken(zapCurrency),
     [minLiquidityOutputSingleToken, zapCurrency]
   )
   const usdcValue = useUSDCValue(minOutputAmount)
-  const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
+  const { outputToWallet } = useAppSelector(selectTridentRemove)
+  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-col p-10 rounded bg-dark-1000 shadow-lg gap-8">
@@ -56,26 +58,28 @@ const ClassicSingleAside = () => {
         </div>
         <Switch
           checked={outputToWallet}
-          onChange={() => setOutputToWallet(!outputToWallet)}
+          onChange={() => dispatch(setRemoveOutputToWallet(!outputToWallet))}
           checkedIcon={
             <div className="text-dark-700 flex justify-center items-center h-full w-full">
-              <WalletIcon />
+              <WalletIcon width={16} height={14} />
             </div>
           }
           uncheckedIcon={
             <div className="text-dark-700 flex justify-center items-center h-full w-full">
-              <BentoBoxIcon />
+              <BentoboxIcon width={16} height={16} />
             </div>
           }
         />
       </div>
-      {!outputToWallet && zapCurrency.isNative && (
+      {!outputToWallet && zapCurrency?.isNative && (
         <Alert
           className="bg-transparent p-0"
           dismissable={false}
           type="error"
           message={i18n._(
-            t`Native ${NATIVE[chainId].symbol} can't be withdrawn to BentoBox, ${WNATIVE[chainId].symbol} will be received instead`
+            t`Native ${NATIVE[chainId || 1].symbol} can't be withdrawn to BentoBox, ${
+              WNATIVE[chainId || 1].symbol
+            } will be received instead`
           )}
         />
       )}
@@ -90,7 +94,7 @@ const ClassicSingleAside = () => {
               {minOutputAmount?.greaterThan(0) ? minOutputAmount.toSignificant(6) : '0.00'}
             </Typography>
             <Typography variant="sm" weight={700} className="text-high-emphesis">
-              {!outputToWallet && zapCurrency.isNative ? zapCurrency.wrapped.symbol : zapCurrency?.symbol}
+              {!outputToWallet && zapCurrency?.isNative ? zapCurrency.wrapped.symbol : zapCurrency?.symbol}
             </Typography>
           </div>
           <Typography variant="sm" weight={700} className="text-secondary">

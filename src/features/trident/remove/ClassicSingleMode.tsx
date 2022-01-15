@@ -10,46 +10,49 @@ import PercentInput from 'app/components/Input/Percent'
 import ListPanel from 'app/components/ListPanel'
 import ToggleButtonGroup from 'app/components/ToggleButton'
 import Typography from 'app/components/Typography'
-import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
+import { usePoolContext } from 'app/features/trident/PoolContext'
+import {
+  selectTridentRemove,
+  setRemoveBentoPermit,
+  setRemoveOutputToWallet,
+  setRemovePercentageAmount,
+  setRemoveShowReview,
+  setRemoveZapCurrency,
+} from 'app/features/trident/remove/removeSlice'
+import {
+  useRemoveLiquidityDerivedCurrencyAmountSingle,
+  useRemoveLiquidityDerivedInputError,
+  useRemoveLiquidityDerivedSLPAmount,
+  useRemoveLiquidityZapCurrency,
+} from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { classNames } from 'app/functions'
 import { useTridentRouterContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
-import {
-  attemptingTxnAtom,
-  currentLiquidityValueSelector,
-  outputToWalletAtom,
-  poolAtom,
-  poolBalanceAtom,
-  showReviewAtom,
-} from '../../context/atoms'
-import SumUSDCValues from '../../SumUSDCValues'
-import TridentApproveGate from '../../TridentApproveGate'
+import SumUSDCValues from '../SumUSDCValues'
+import TridentApproveGate from '../TridentApproveGate'
 
 const ClassicSingleMode: FC = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const { pool } = useRecoilValue(poolAtom)
   const router = useTridentRouterContract()
-
-  const {
-    percentageInput: [percentageInput, setPercentageInput],
-    parsedAmountSingleToken,
-    zapCurrency: [zapCurrency, setZapCurrency],
-    error,
-  } = useRemovePercentageInput()
-
-  const currentLiquidityValue = useRecoilValue(currentLiquidityValueSelector)
-  const setShowReview = useSetRecoilState(showReviewAtom)
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-  const poolBalance = useRecoilValue(poolBalanceAtom)
-  const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
+  const dispatch = useAppDispatch()
+  const { poolBalance, poolWithState, liquidityValue } = usePoolContext()
+  const error = useRemoveLiquidityDerivedInputError()
+  const slpAmountToRemove = useRemoveLiquidityDerivedSLPAmount()
+  const parsedAmountSingleToken = useRemoveLiquidityDerivedCurrencyAmountSingle()
+  const zapCurrency = useRemoveLiquidityZapCurrency()
+  const { percentageAmount, outputToWallet, attemptingTxn, bentoPermit } = useAppSelector(selectTridentRemove)
 
   const toggleButtonGroup = (
-    <ToggleButtonGroup value={percentageInput} onChange={setPercentageInput} variant="outlined">
+    <ToggleButtonGroup
+      value={percentageAmount}
+      onChange={(val: string) => dispatch(setRemovePercentageAmount(val))}
+      variant="outlined"
+    >
       <ToggleButtonGroup.Button value="100">Max</ToggleButtonGroup.Button>
       <ToggleButtonGroup.Button value="75">75%</ToggleButtonGroup.Button>
       <ToggleButtonGroup.Button value="50">50%</ToggleButtonGroup.Button>
@@ -58,17 +61,24 @@ const ClassicSingleMode: FC = () => {
   )
 
   const oneTokenIsWETH =
-    pool?.token0.address === WNATIVE[chainId].address || pool?.token1.address === WNATIVE[chainId].address
-  const assetSelectCurrencies = [pool?.token0, pool?.token1]
-  if (oneTokenIsWETH) assetSelectCurrencies.push(NATIVE[chainId])
+    poolWithState?.pool?.token0.address === WNATIVE[chainId || 1].address ||
+    poolWithState?.pool?.token1.address === WNATIVE[chainId || 1].address
+  const assetSelectCurrencies = [poolWithState?.pool?.token0, poolWithState?.pool?.token1]
+  if (oneTokenIsWETH) assetSelectCurrencies.push(NATIVE[chainId || 1])
 
   return (
-    <SumUSDCValues amounts={currentLiquidityValue}>
+    <SumUSDCValues amounts={liquidityValue}>
       {({ amount }) => {
-        const selectedLiquidityValueInUsdc = amount?.multiply(new Percent(percentageInput, '100'))
+        const selectedLiquidityValueInUsdc = amount?.multiply(new Percent(percentageAmount, '100'))
         return (
           <div className="flex flex-col gap-8">
-            <AssetSelect value={zapCurrency} onSelect={setZapCurrency} currencies={assetSelectCurrencies} />
+            <AssetSelect
+              value={zapCurrency}
+              onSelect={(currency) =>
+                dispatch(setRemoveZapCurrency(currency.isNative ? 'ETH' : currency.wrapped.address))
+              }
+              currencies={assetSelectCurrencies}
+            />
             <div className={classNames(zapCurrency ? '' : 'pointer-events-none opacity-50', 'flex flex-col gap-3')}>
               <div className="flex items-center justify-between gap-10 lg:mb-2">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
@@ -85,15 +95,13 @@ const ClassicSingleMode: FC = () => {
                   />
                 }
                 items={[
-                  currentLiquidityValue.map((amount, index) => (
-                    <ListPanel.CurrencyAmountItem amount={amount} key={index} />
-                  )),
+                  liquidityValue.map((amount, index) => <ListPanel.CurrencyAmountItem amount={amount} key={index} />),
                 ]}
                 footer={
                   <div className="flex justify-between items-center px-4 py-5 gap-3">
                     <PercentInput
-                      value={percentageInput}
-                      onUserInput={setPercentageInput}
+                      value={percentageAmount}
+                      onUserInput={(val) => dispatch(setRemovePercentageAmount(val))}
                       placeholder="0%"
                       className="bg-transparent text-3xl leading-7 tracking-[-0.01em] flex-grow font-bold text-high-emphesis"
                     />
@@ -109,9 +117,11 @@ const ClassicSingleMode: FC = () => {
               <div className="block lg:hidden">{toggleButtonGroup}</div>
               <div className="hidden lg:block" />
               <TridentApproveGate
-                inputAmounts={[poolBalance?.multiply(new Percent(percentageInput, '100'))]}
+                inputAmounts={[slpAmountToRemove]}
                 tokenApproveOn={router?.address}
                 withPermit={true}
+                permit={bentoPermit}
+                onPermit={(permit) => dispatch(setRemoveBentoPermit(permit))}
               >
                 {({ approved, loading }) => {
                   const disabled = !!error || !approved || loading || attemptingTxn
@@ -137,7 +147,7 @@ const ClassicSingleMode: FC = () => {
                       })}
                       color={approved ? 'gradient' : 'blue'}
                       disabled={disabled}
-                      onClick={() => setShowReview(true)}
+                      onClick={() => dispatch(setRemoveShowReview(true))}
                     >
                       <Typography
                         variant="sm"
@@ -156,7 +166,10 @@ const ClassicSingleMode: FC = () => {
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
                   {i18n._(t`Receive:`)}
                 </Typography>
-                <AssetInput.WalletSwitch onChange={() => setOutputToWallet(!outputToWallet)} checked={outputToWallet} />
+                <AssetInput.WalletSwitch
+                  onChange={() => dispatch(setRemoveOutputToWallet(!outputToWallet))}
+                  checked={outputToWallet}
+                />
               </div>
               <div className="flex flex-col gap-4">
                 <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedAmountSingleToken} key={0} />]} />

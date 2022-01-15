@@ -2,35 +2,32 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE, WNATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import { usePoolDetailsBurn } from 'app/features/trident/context/hooks/usePoolDetails'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import Divider from 'app/components/Divider'
+import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
+import Switch from 'app/components/Switch'
+import Typography from 'app/components/Typography'
+import { selectTridentRemove, setRemoveOutputToWallet } from 'app/features/trident/remove/removeSlice'
+import TransactionDetails from 'app/features/trident/remove/TransactionDetails'
+import { useRemoveDetails } from 'app/features/trident/remove/useRemoveDetails'
+import { useRemoveLiquidityDerivedInputError } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { classNames } from 'app/functions'
+import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React from 'react'
-import { useRecoilState } from 'recoil'
 
-import { BentoBoxIcon, WalletIcon } from '../../../../components/AssetInput/icons'
-import { CurrencyLogo } from '../../../../components/CurrencyLogo'
-import Divider from '../../../../components/Divider'
-import Switch from '../../../../components/Switch'
-import Typography from '../../../../components/Typography'
-import { useUSDCValue } from '../../../../hooks/useUSDCPrice'
-import BentoBoxFundingSourceModal from '../../add/BentoBoxFundingSourceModal'
-import { outputToWalletAtom } from '../../context/atoms'
-import useRemovePercentageInput from '../../context/hooks/useRemovePercentageInput'
-import SumUSDCValues from '../../SumUSDCValues'
-import TransactionDetails from '../TransactionDetails'
+import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
+import SumUSDCValues from '../SumUSDCValues'
 
 const ClassicStandardAside = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const {
-    parsedSLPAmount,
-    error,
-    receiveNative: [receiveNative],
-  } = useRemovePercentageInput()
-  const { minLiquidityOutput } = usePoolDetailsBurn(parsedSLPAmount)
+  const dispatch = useAppDispatch()
+  const error = useRemoveLiquidityDerivedInputError()
+  const { outputToWallet, receiveNative } = useAppSelector(selectTridentRemove)
+  const { minLiquidityOutput } = useRemoveDetails()
   const usdcValues = [useUSDCValue(minLiquidityOutput?.[0]), useUSDCValue(minLiquidityOutput?.[1])]
-  const [outputToWallet, setOutputToWallet] = useRecoilState(outputToWalletAtom)
 
   return (
     <div className="flex flex-col gap-8 p-10 rounded shadow-lg bg-dark-1000">
@@ -55,15 +52,15 @@ const ClassicStandardAside = () => {
         <Switch
           id={`chk-output-to-wallet`}
           checked={outputToWallet}
-          onChange={() => setOutputToWallet(!outputToWallet)}
+          onChange={() => dispatch(setRemoveOutputToWallet(!outputToWallet))}
           checkedIcon={
             <div className="flex items-center justify-center w-full h-full text-dark-700">
-              <WalletIcon />
+              <WalletIcon width={16} height={14} />
             </div>
           }
           uncheckedIcon={
             <div className="flex items-center justify-center w-full h-full text-dark-700">
-              <BentoBoxIcon />
+              <BentoboxIcon width={16} height={16} />
             </div>
           }
         />
@@ -74,7 +71,9 @@ const ClassicStandardAside = () => {
           dismissable={false}
           type="error"
           message={i18n._(
-            t`Native ${NATIVE[chainId].symbol} can't be withdrawn to BentoBox, ${WNATIVE[chainId].symbol} will be received instead`
+            t`Native ${NATIVE[chainId || 1].symbol} can't be withdrawn to BentoBox, ${
+              WNATIVE[chainId || 1].symbol
+            } will be received instead`
           )}
         />
       )}
@@ -95,8 +94,8 @@ const ClassicStandardAside = () => {
                 {el?.greaterThan(0) ? el.toSignificant(6) : '0.00'}
               </Typography>
               <Typography variant="sm" weight={700} className="text-high-emphesis">
-                {el?.currency.wrapped.address === WNATIVE[chainId].address && receiveNative && outputToWallet
-                  ? NATIVE[chainId].symbol
+                {el?.currency.wrapped.address === WNATIVE[chainId || 1].address && receiveNative && outputToWallet
+                  ? NATIVE[chainId || 1].symbol
                   : el?.currency.symbol}
               </Typography>
             </div>

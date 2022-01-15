@@ -1,40 +1,36 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount } from '@sushiswap/core-sdk'
+import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Divider from 'app/components/Divider'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { useClassicSingleRemoveExecute } from 'app/features/trident/context/hooks/useClassicSingleRemoveExecute'
-import useRemovePercentageInput from 'app/features/trident/context/hooks/useRemovePercentageInput'
+import { selectTridentRemove, setRemoveShowReview, setRemoveTxHash } from 'app/features/trident/remove/removeSlice'
+import { useRemoveDetails } from 'app/features/trident/remove/useRemoveDetails'
+import {
+  useRemoveLiquidityDerivedCurrencyAmounts,
+  useRemoveLiquidityDerivedSLPAmount,
+  useRemoveLiquidityZapCurrency,
+} from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
+import { useRemoveLiquiditySingleExecute } from 'app/features/trident/remove/useRemoveLiquiditySingleExecute'
 import WithdrawalSubmittedModalContent from 'app/features/trident/WithdrawalSubmittedModalContent'
-import React, { FC, useCallback, useMemo, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-
-import { attemptingTxnAtom, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
-import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import React, { FC, useCallback, useMemo } from 'react'
 
 interface RemoveTransactionReviewSingleModal {}
 
 const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = () => {
   const { i18n } = useLingui()
-  const _execute = useClassicSingleRemoveExecute()
-  const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-  const [txHash, setTxHash] = useState<string>()
+  const dispatch = useAppDispatch()
+  const { showReview, attemptingTxn, txHash, outputToWallet } = useAppSelector(selectTridentRemove)
+  const zapCurrency = useRemoveLiquidityZapCurrency()
+  const slpAmountToRemove = useRemoveLiquidityDerivedSLPAmount()
+  const parsedAmounts = useRemoveLiquidityDerivedCurrencyAmounts()
+  const { poolShareAfter, poolShareBefore, minLiquidityOutputSingleToken } = useRemoveDetails()
+  const execute = useRemoveLiquiditySingleExecute()
 
-  const {
-    parsedAmounts,
-    parsedSLPAmount,
-    zapCurrency: [zapCurrency],
-    outputToWallet,
-  } = useRemovePercentageInput()
-  const { poolShareAfter, poolShareBefore, minLiquidityOutputSingleToken } = usePoolDetailsBurn(
-    parsedSLPAmount,
-    DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
-  )
   const minOutputAmount = useMemo(() => {
     const amount = minLiquidityOutputSingleToken(zapCurrency)
     if (zapCurrency?.isNative && outputToWallet && amount) {
@@ -44,18 +40,21 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = 
     return amount
   }, [minLiquidityOutputSingleToken, outputToWallet, zapCurrency])
 
-  const execute = useCallback(async () => {
-    const tx = await _execute()
+  const _execute = useCallback(async () => {
+    if (!slpAmountToRemove?.greaterThan(ZERO) || !minOutputAmount?.greaterThan(ZERO)) return
+
+    const tx = await execute(slpAmountToRemove, minOutputAmount)
     if (tx && tx.hash) {
-      setTxHash(tx.hash)
+      dispatch(setRemoveTxHash(tx.hash))
     }
-  }, [_execute])
+  }, [slpAmountToRemove, minOutputAmount, execute, dispatch])
 
   return (
     <HeadlessUIModal.Controlled
       isOpen={showReview}
-      onDismiss={() => setShowReview(false)}
-      afterLeave={() => setTxHash(undefined)}
+      onDismiss={() => dispatch(setRemoveShowReview(false))}
+      afterLeave={() => dispatch(setRemoveTxHash(undefined))}
+      unmount={false}
     >
       {!txHash ? (
         <div className="flex flex-col gap-8 h-full lg:max-w-md">
@@ -69,7 +68,7 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = 
                   size="sm"
                   className="rounded-full py-1 pl-2 cursor-pointer"
                   startIcon={<ChevronLeftIcon width={24} height={24} />}
-                  onClick={() => setShowReview(false)}
+                  onClick={() => dispatch(setRemoveShowReview(false))}
                 >
                   {i18n._(t`Back`)}
                 </Button>
@@ -123,7 +122,7 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = 
                 </Typography>
               </div>
             </div>
-            <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={execute}>
+            <Button disabled={attemptingTxn} color="gradient" size="lg" onClick={_execute}>
               <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {i18n._(t`Confirm Withdrawal`)}
               </Typography>
@@ -134,7 +133,7 @@ const RemoveTransactionReviewZapModal: FC<RemoveTransactionReviewSingleModal> = 
           </div>
         </div>
       ) : (
-        <WithdrawalSubmittedModalContent txHash={txHash} />
+        <WithdrawalSubmittedModalContent txHash={txHash} onDismiss={() => dispatch(setRemoveTxHash(undefined))} />
       )}
     </HeadlessUIModal.Controlled>
   )

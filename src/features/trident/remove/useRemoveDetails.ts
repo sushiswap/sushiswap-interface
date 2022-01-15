@@ -1,16 +1,12 @@
-import { Currency, CurrencyAmount, Percent, Token } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent } from '@sushiswap/core-sdk'
+import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE } from 'app/features/trident/context/atoms'
 import { usePoolContext } from 'app/features/trident/PoolContext'
+import { useRemoveLiquidityDerivedSLPAmount } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { calculateSlippageAmount, toAmountCurrencyAmount } from 'app/functions'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useCallback, useMemo } from 'react'
 
-import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE } from '../atoms'
-import useCurrenciesFromURL from './useCurrenciesFromURL'
-
-export const usePoolDetailsBurn = (
-  slpAmount?: CurrencyAmount<Token>,
-  defaultSlippage: Percent = DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE
-) => {
+export const useRemoveDetails = (defaultSlippage: Percent = DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE) => {
   const {
     poolWithState,
     totalSupply,
@@ -18,9 +14,10 @@ export const usePoolDetailsBurn = (
     rebases,
     poolShare: poolShareBefore,
     liquidityValue: liquidityValueBefore,
+    currencies,
   } = usePoolContext()
+  const slpAmount = useRemoveLiquidityDerivedSLPAmount()
   const slippage = useUserSlippageToleranceWithDefault(defaultSlippage)
-  const { currencies } = useCurrenciesFromURL()
 
   // Returns the resulting pool share after execution
   const poolShareAfter = useMemo(() => {

@@ -1,37 +1,35 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { PoolType } from '@sushiswap/tines'
+import { PoolState } from '@sushiswap/trident-sdk'
 import Alert from 'app/components/Alert'
 import Button from 'app/components/Button'
 import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
-import { poolAtom } from 'app/features/trident/context/atoms'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
-import ClassicSingleAside from 'app/features/trident/remove/classic/ClassicSingleAside'
-import ClassicSingleMode from 'app/features/trident/remove/classic/ClassicSingleMode'
-import ClassicStandardAside from 'app/features/trident/remove/classic/ClassicStandardAside'
-import ClassicStandardMode from 'app/features/trident/remove/classic/ClassicStandardMode'
-import RemoveTransactionReviewSingleModal from 'app/features/trident/remove/classic/RemoveTransactionReviewSingleModal'
-import RemoveTransactionReviewStandardModal from 'app/features/trident/remove/classic/RemoveTransactionReviewStandardModal'
+import PoolContext, { usePoolContext } from 'app/features/trident/PoolContext'
+import ClassicSingleAside from 'app/features/trident/remove/ClassicSingleAside'
+import ClassicSingleMode from 'app/features/trident/remove/ClassicSingleMode'
+import ClassicStandardAside from 'app/features/trident/remove/ClassicStandardAside'
+import ClassicStandardMode from 'app/features/trident/remove/ClassicStandardMode'
 import FixedRatioHeader from 'app/features/trident/remove/FixedRatioHeader'
-import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
+import { selectTridentRemove } from 'app/features/trident/remove/removeSlice'
+import RemoveTransactionReviewSingleModal from 'app/features/trident/remove/RemoveTransactionReviewSingleModal'
+import RemoveTransactionReviewStandardModal from 'app/features/trident/remove/RemoveTransactionReviewStandardModal'
+import { isWrappedReturnNativeSymbol } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
-import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
-import { ConstantProductPoolState } from 'app/hooks/useConstantProductPools'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAppSelector } from 'app/state/hooks'
 import Link from 'next/link'
 import React from 'react'
-import { useRecoilValue } from 'recoil'
 
 const RemoveClassic = () => {
   const { i18n } = useLingui()
-  const { currencies, fee, twap } = useCurrenciesFromURL()
-  const { pool } = useRecoilValue(poolAtom)
-  const classicPool = useConstantProductPool(currencies[0], currencies[1], fee, twap)
-  const fixedRatio = useRecoilValue(FixedRatioHeader.atom)
+  const { chainId } = useActiveWeb3React()
+  const { poolWithState } = usePoolContext()
+  const { fixedRatio } = useAppSelector(selectTridentRemove)
 
   return (
     <>
@@ -47,12 +45,24 @@ const RemoveClassic = () => {
             >
               <Link
                 href={
-                  currencies?.[0] && currencies?.[1]
-                    ? `/trident/pool/classic/${currencies?.[0]?.symbol}/${currencies?.[1]?.symbol}`
+                  poolWithState?.state === PoolState.EXISTS
+                    ? {
+                        pathname: `/trident/pool`,
+                        query: {
+                          tokens: [
+                            isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token0.address),
+                            isWrappedReturnNativeSymbol(chainId, poolWithState.pool.token1.address),
+                          ],
+                          fee: poolWithState.pool.fee,
+                          twap: poolWithState.pool.twap,
+                        },
+                      }
                     : '/trident/pools'
                 }
               >
-                {pool ? `${currencies?.[0]?.symbol}-${currencies?.[1]?.symbol}` : i18n._(t`Back`)}
+                {poolWithState?.state === PoolState.EXISTS
+                  ? `${poolWithState.pool.token0.symbol}-${poolWithState.pool.token1.symbol}`
+                  : i18n._(t`Back`)}
               </Link>
             </Button>
             <SettingsTab trident />
@@ -64,9 +74,7 @@ const RemoveClassic = () => {
             <Typography variant="sm">
               {i18n._(t`Receive both pool tokens in equal amounts or receive one of the two pool tokens.`)}
             </Typography>
-            {[ConstantProductPoolState.NOT_EXISTS, ConstantProductPoolState.INVALID].includes(
-              classicPool.state as any
-            ) && (
+            {poolWithState && [PoolState.NOT_EXISTS, PoolState.INVALID].includes(poolWithState.state) && (
               <Alert
                 className="px-0 pb-0 bg-transparent"
                 dismissable={false}
@@ -108,7 +116,7 @@ const RemoveClassic = () => {
 }
 
 RemoveClassic.Guard = NetworkGuard(Feature.TRIDENT)
-RemoveClassic.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
+RemoveClassic.Provider = PoolContext
 RemoveClassic.Layout = (props) => (
   <TridentLayout
     {...props}

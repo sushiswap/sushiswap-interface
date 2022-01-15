@@ -87,7 +87,7 @@ const TransactionReviewStandardModal: FC = () => {
           </Button>
         </div>
       ) : (
-        <DepositSubmittedModalContent txHash={txHash} />
+        <DepositSubmittedModalContent txHash={txHash} onDismiss={() => dispatch(setAddTxHash(undefined))} />
       )}
     </HeadlessUIModal.Controlled>
   )

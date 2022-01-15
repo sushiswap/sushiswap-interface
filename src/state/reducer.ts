@@ -1,6 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
 import tridentAdd from '../features/trident/add/addSlice'
+import tridentRemove from '../features/trident/remove/removeSlice'
 import tridentSwap from '../features/trident/swap/swapSlice'
 import application from './application/reducer'
 import burn from './burn/reducer'
@@ -28,6 +29,7 @@ const reducer = combineReducers({
   inari,
   tridentSwap,
   tridentAdd,
+  tridentRemove,
 })
 
 export default reducer

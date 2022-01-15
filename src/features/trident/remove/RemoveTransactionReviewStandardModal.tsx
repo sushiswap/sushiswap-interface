@@ -1,64 +1,56 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
+import { CurrencyAmount, NATIVE, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Divider from 'app/components/Divider'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
+import { selectTridentRemove, setRemoveShowReview, setRemoveTxHash } from 'app/features/trident/remove/removeSlice'
 import TransactionDetails from 'app/features/trident/remove/TransactionDetails'
+import { useRemoveDetails } from 'app/features/trident/remove/useRemoveDetails'
+import { useRemoveLiquidityDerivedSLPAmount } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
+import { useRemoveLiquidityExecute } from 'app/features/trident/remove/useRemoveLiquidityExecute'
 import WithdrawalSubmittedModalContent from 'app/features/trident/WithdrawalSubmittedModalContent'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useCallback, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-
-import { attemptingTxnAtom, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE, showReviewAtom } from '../../context/atoms'
-import { useClassicStandardRemoveExecute } from '../../context/hooks/useClassicStandardRemoveExecute'
-import { usePoolDetailsBurn } from '../../context/hooks/usePoolDetails'
-import useRemovePercentageInput from '../../context/hooks/useRemovePercentageInput'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import React, { FC, useCallback } from 'react'
 
 interface RemoveTransactionReviewStandardModal {}
 
 const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardModal> = () => {
   const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [txHash, setTxHash] = useState<string>()
-
-  const {
-    parsedSLPAmount,
-    receiveNative: [receiveNative],
-    outputToWallet,
-  } = useRemovePercentageInput()
-
-  const { minLiquidityOutput } = usePoolDetailsBurn(parsedSLPAmount, DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE)
-
-  const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
+  const dispatch = useAppDispatch()
+  const { receiveNative, outputToWallet, showReview, attemptingTxn, txHash } = useAppSelector(selectTridentRemove)
+  const slpAmountToRemove = useRemoveLiquidityDerivedSLPAmount()
+  const { minLiquidityOutput } = useRemoveDetails()
   const receiveETH = receiveNative && outputToWallet
-
-  const _execute = useClassicStandardRemoveExecute()
+  const execute = useRemoveLiquidityExecute()
 
   const liquidityOutput = minLiquidityOutput.map((el) => {
-    if (el?.currency.wrapped.address === WNATIVE[chainId].address && receiveETH) {
-      return CurrencyAmount.fromRawAmount(NATIVE[chainId], el.quotient.toString())
+    if (el?.currency.wrapped.address === WNATIVE[chainId || 1].address && receiveETH) {
+      return CurrencyAmount.fromRawAmount(NATIVE[chainId || 1], el.quotient.toString())
     }
 
     return el
   })
 
-  const execute = useCallback(async () => {
-    const tx = await _execute()
+  const _execute = useCallback(async () => {
+    if (!slpAmountToRemove?.greaterThan(ZERO)) return
+
+    const tx = await execute(slpAmountToRemove, minLiquidityOutput)
     if (tx && tx.hash) {
-      setTxHash(tx.hash)
+      dispatch(setRemoveTxHash(tx.hash))
     }
-  }, [_execute, setTxHash])
+  }, [execute, slpAmountToRemove, minLiquidityOutput, dispatch])
 
   return (
     <HeadlessUIModal.Controlled
       isOpen={showReview}
-      onDismiss={() => setShowReview(false)}
-      afterLeave={() => setTxHash(undefined)}
+      onDismiss={() => dispatch(setRemoveShowReview(false))}
+      afterLeave={() => dispatch(setRemoveTxHash(undefined))}
     >
       {!txHash ? (
         <div className="flex flex-col h-full gap-8 lg:max-w-md">
@@ -72,7 +64,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
                   size="sm"
                   className="py-1 pl-2 rounded-full cursor-pointer"
                   startIcon={<ChevronLeftIcon width={24} height={24} />}
-                  onClick={() => setShowReview(false)}
+                  onClick={() => dispatch(setRemoveShowReview(false))}
                 >
                   {i18n._(t`Back`)}
                 </Button>
@@ -115,7 +107,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
               disabled={attemptingTxn}
               color="gradient"
               size="lg"
-              onClick={execute}
+              onClick={_execute}
             >
               <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {i18n._(t`Confirm Withdrawal`)}
@@ -127,7 +119,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
           </div>
         </div>
       ) : (
-        <WithdrawalSubmittedModalContent txHash={txHash} />
+        <WithdrawalSubmittedModalContent txHash={txHash} onDismiss={() => dispatch(setRemoveTxHash(undefined))} />
       )}
     </HeadlessUIModal.Controlled>
   )

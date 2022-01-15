@@ -58,6 +58,9 @@ export const addSlice = createSlice({
     },
     setAddTxHash: (state, action: PayloadAction<string | undefined>) => {
       state.txHash = action.payload
+      if (typeof action.payload === 'undefined') {
+        state.showReview = false
+      }
     },
     setAddAttemptingTxn: (state, action: PayloadAction<boolean>) => {
       state.attemptingTxn = action.payload
