@@ -216,15 +216,16 @@ function getComplexPathParams(
   ).length
 
   const output: Output = {
-    token: multiRoute.toToken.address,
+    token: (multiRoute.toToken as Currency).wrapped.address,
     to: senderAddress,
     unwrapBento: receiveToWallet,
     minAmount: getBigNumber(multiRoute.amountOut * slippage),
   }
   outputs.push(output)
 
+  const fromTokenAddress = (multiRoute.fromToken as Currency).wrapped.address
   for (let legIndex = 0; legIndex < routeLegs; ++legIndex) {
-    if (multiRoute.legs[legIndex].tokenFrom.address === multiRoute.fromToken.address) {
+    if (multiRoute.legs[legIndex].tokenFrom.address === fromTokenAddress) {
       const initialPath: InitialPath = {
         tokenIn:
           inputAmount.currency.isNative && fromWallet ? AddressZero : multiRoute.legs[legIndex].tokenFrom.address,
