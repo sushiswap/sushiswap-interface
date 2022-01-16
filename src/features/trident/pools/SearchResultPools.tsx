@@ -9,13 +9,19 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
+import { PoolSortOption } from 'app/features/trident/pools/poolsSlice'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { SearchCategoryLabel } from './SearchCategoryLabel'
 import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
-import { usePoolsTableData } from './usePoolsTableData'
+import { DiscoverPoolsTableColumn, usePoolsTableData } from './usePoolsTableData'
+
+export const sortTitleMapper: Record<PoolSortOption, DiscoverPoolsTableColumn['accessor']> = {
+  [PoolSortOption.TVL]: 'liquidityUSD',
+  [PoolSortOption.APY]: 'apy',
+}
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()

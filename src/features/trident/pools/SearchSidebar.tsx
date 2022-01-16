@@ -1,10 +1,9 @@
 import { Fee } from '@sushiswap/trident-sdk'
 import Checkbox from 'app/components/Checkbox'
 import Typography from 'app/components/Typography'
+import { selectTridentPools, setPoolsFeeTiers, setPoolsTWAPOnly } from 'app/features/trident/pools/poolsSlice'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC } from 'react'
-import { SetterOrUpdater, useRecoilState } from 'recoil'
-
-import { feeTiersFilterAtom, showTWAPOnlyAtom } from './context/atoms'
 
 const Section: FC<{ title: string }> = ({ children, title }) => {
   return (
@@ -32,7 +31,7 @@ const Selection: FC<SelectionProps> = ({ title, checked, setter }) => {
   )
 }
 
-export const removeOrAddFeeTier = (tier: Fee, currentSelection: Fee[], setter: SetterOrUpdater<Fee[]>) => {
+export const removeOrAddFeeTier = (tier: Fee, currentSelection: Fee[], setter: (x: Fee[]) => void) => {
   if (currentSelection.includes(tier)) {
     setter(currentSelection.filter((t) => t !== tier))
   } else {
@@ -41,7 +40,8 @@ export const removeOrAddFeeTier = (tier: Fee, currentSelection: Fee[], setter: S
 }
 
 const FeeTiers: FC = () => {
-  const [selectedFeeTiers, setSelectedFeeTiers] = useRecoilState(feeTiersFilterAtom)
+  const { feeTiers } = useAppSelector(selectTridentPools)
+  const dispatch = useAppDispatch()
 
   return (
     <Section title="Fee Tiers">
@@ -50,8 +50,8 @@ const FeeTiers: FC = () => {
           <Selection
             key={fee}
             title={`${fee / 100}%`}
-            checked={selectedFeeTiers.includes(fee)}
-            setter={() => removeOrAddFeeTier(fee, selectedFeeTiers, setSelectedFeeTiers)}
+            checked={feeTiers.includes(fee)}
+            setter={() => removeOrAddFeeTier(fee, feeTiers, (feeTiers) => dispatch(setPoolsFeeTiers(feeTiers)))}
           />
         )
       })}
@@ -60,12 +60,17 @@ const FeeTiers: FC = () => {
 }
 
 export const SearchSidebar: FC = () => {
-  const [twapOnly, setTwapOnly] = useRecoilState(showTWAPOnlyAtom)
+  const { showTWAPOnly } = useAppSelector(selectTridentPools)
+  const dispatch = useAppDispatch()
 
   return (
     <div className="hidden lg:flex flex-col gap-6 w-52 pt-2">
       <Section title="TWAP Oracles">
-        <Selection title="Show oracle pairs only" checked={twapOnly} setter={() => setTwapOnly(!twapOnly)} />
+        <Selection
+          title="Show oracle pairs only"
+          checked={showTWAPOnly}
+          setter={() => dispatch(setPoolsTWAPOnly(!showTWAPOnly))}
+        />
       </Section>
       <FeeTiers />
     </div>

@@ -40,7 +40,6 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(
       }
     }, [approveCallback, gatherPermitSignature])
 
-    // If we have signatureData, sync to recoil
     useEffect(() => {
       if (signatureData && inputAmount && approveState === ApprovalState.NOT_APPROVED) {
         // Can safely cast because signatureData is always StandardSignatureData if PermitType === PermitType.amount

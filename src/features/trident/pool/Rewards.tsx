@@ -46,7 +46,7 @@ const Rewards: FC = () => {
                 key={0}
                 left={
                   <div className="flex flex-row gap-4 items-center">
-                    <CurrencyLogo size={30} currency={rewardCurrency} className="rounded-full" />
+                    <CurrencyLogo size={30} currency={rewardCurrency} className="!rounded-full" />
                     <Typography weight={700} className="text-high-emphesis">
                       {rewardCurrency?.symbol}
                     </Typography>

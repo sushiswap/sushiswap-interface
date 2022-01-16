@@ -52,7 +52,7 @@ const CurrencyAmountItemWithEthSelector: FC<{
     <ListPanel.Item
       left={
         <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
-          <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />
+          <CurrencyLogo currency={amount?.currency} size={20} className="!rounded-full" />
           <Typography variant="sm" className="text-high-emphesis" weight={700}>
             {amount?.toSignificant(6)} {amount?.currency.symbol}
           </Typography>

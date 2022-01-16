@@ -1,15 +1,15 @@
 import { SearchIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { setPoolsSearchQuery } from 'app/features/trident/pools/poolsSlice'
+import { useAppDispatch } from 'app/state/hooks'
 import { FC } from 'react'
-import { useSetRecoilState } from 'recoil'
 
-import { searchQueryAtom } from './context/atoms'
 import { MobileFilter } from './MobileFilter'
 
 export const PoolSearch: FC = () => {
   const { i18n } = useLingui()
-  const setSearchQuery = useSetRecoilState(searchQueryAtom)
+  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-grow items-center gap-4 w-full sm:w-auto">
@@ -18,7 +18,7 @@ export const PoolSearch: FC = () => {
         <input
           className="bg-transparent text-high-emphesis w-full"
           placeholder={i18n._(t`Search by token or pair`)}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => dispatch(setPoolsSearchQuery(e.target.value))}
         />
       </div>
       <MobileFilter />
