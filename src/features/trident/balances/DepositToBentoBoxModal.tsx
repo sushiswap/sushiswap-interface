@@ -62,7 +62,7 @@ const DepositToBentoBoxModal: FC<DepositToBentoBoxModalProps> = ({ open, onClose
     : ''
 
   return (
-    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose} maxWidth="sm">
+    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose} maxWidth="md">
       <div className="flex flex-col gap-4">
         <HeadlessUiModal.Header header={i18n._(t`Deposit to BentoBox`)} onClose={onClose} />
         <AssetInput

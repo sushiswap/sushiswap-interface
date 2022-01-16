@@ -87,11 +87,11 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               maxWidth: 100,
               className: 'text-right flex justify-end',
               cellClassName: 'justify-end',
-              Cell: ({ value, row: { original } }) => {
+              Cell: ({ row: { original } }) => {
                 return (
                   <Link
                     href={{
-                      pathname: `/trident/pool${value}`,
+                      pathname: `/trident/pool`,
                       query: {
                         tokens: original.assets.map((el) => el.address),
                         fee: original.swapFeePercent * 100,

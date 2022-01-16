@@ -74,7 +74,7 @@ const _BalancesSum: FC<BalancesSumProps> = ({ amounts }) => {
           <div className="flex flex-col gap-1">
             <Typography variant="sm">{i18n._(t`Total Value`)}</Typography>
             <Typography variant="lg" weight={700} className="text-high-emphesis">
-              ${amount ? amount.toExact(2) : '0.00'}
+              ${amount ? amount.toExact() : '0.00'}
             </Typography>
           </div>
           <div className="flex flex-col gap-1">

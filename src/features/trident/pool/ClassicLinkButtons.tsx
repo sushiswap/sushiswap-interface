@@ -19,7 +19,22 @@ const ClassicLinkButtons: FC = () => {
     <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
       {poolBalance?.greaterThan(0) ? (
         <>
-          <Button id={`btn-add-stake-liquidity`} variant="outlined" color="gradient" className="text-high-emphesis">
+          <Button id={`btn-remove-liquidity`} variant="outlined" color="pink">
+            <Link
+              href={{
+                pathname: `/trident/remove`,
+                query: {
+                  tokens: [poolWithState?.pool.token0.address, poolWithState?.pool.token1.address],
+                  fee: poolWithState?.pool.fee,
+                  twap: poolWithState?.pool.twap,
+                },
+              }}
+              passHref={true}
+            >
+              {i18n._(t`Remove Liquidity`)}
+            </Link>
+          </Button>
+          <Button id={`btn-add-stake-liquidity`} variant="outlined" color="blue">
             <Link
               href={{
                 pathname: `/trident/add`,
@@ -38,24 +53,9 @@ const ClassicLinkButtons: FC = () => {
               {i18n._(t`Add Liquidity`)}
             </Link>
           </Button>
-          <Button id={`btn-remove-liquidity`} variant="outlined" color="gradient" className="text-high-emphesis">
-            <Link
-              href={{
-                pathname: `/trident/remove`,
-                query: {
-                  tokens: [poolWithState?.pool.token0.address, poolWithState?.pool.token1.address],
-                  fee: poolWithState?.pool.fee,
-                  twap: poolWithState?.pool.twap,
-                },
-              }}
-              passHref={true}
-            >
-              {i18n._(t`Remove Liquidity`)}
-            </Link>
-          </Button>
         </>
       ) : (
-        <Button id={`btn-deposit`} color="purple">
+        <Button id={`btn-deposit`} color="blue">
           <Link
             href={{
               pathname: `/trident/add`,

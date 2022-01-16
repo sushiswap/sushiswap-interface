@@ -15,7 +15,7 @@ const DiscoverPools = () => {
           <SearchSidebar />
           <div className="flex w-full">
             <div className="flex flex-col w-full gap-10">
-              <div className="flex flex-col sm:flex-row justify-between md:gap-24 gap-4 items-center">
+              <div className="flex flex-col sm:flex-row justify-between gap-4 items-center">
                 <PoolSearch />
                 <PoolSort />
               </div>
