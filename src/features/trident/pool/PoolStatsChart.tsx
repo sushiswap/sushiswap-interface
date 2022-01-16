@@ -3,14 +3,12 @@ import Button from 'app/components/Button'
 import LineGraph from 'app/components/LineGraph'
 import Tabs from 'app/components/Tabs'
 import Typography from 'app/components/Typography'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { formatDate, formatNumber } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { usePoolDayBuckets, usePoolHourBuckets } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-
-import { poolAtom } from '../context/atoms'
 
 enum ChartType {
   Volume = 'Volume',
@@ -38,23 +36,23 @@ const PoolStatsChart = () => {
   const { chainId } = useActiveWeb3React()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Volume)
   const [chartRange, setChartRange] = useState<ChartRange>(ChartRange.ALL)
-  const { pool } = useRecoilValue(poolAtom)
+  const { poolWithState } = usePoolContext()
 
   const hourBuckets = usePoolHourBuckets({
     chainId,
     variables: {
       first: 168,
-      where: { pool: pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
-    shouldFetch: !!pool && chartTimespans[chartRange] <= chartTimespans['1W'],
+    shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] <= chartTimespans['1W'],
   })
 
   const dayBuckets = usePoolDayBuckets({
     chainId,
     variables: {
-      where: { pool: pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
-    shouldFetch: !!pool && chartTimespans[chartRange] >= chartTimespans['1W'],
+    shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] >= chartTimespans['1W'],
   })
 
   const data = chartTimespans[chartRange] <= chartTimespans['1W'] ? hourBuckets : dayBuckets

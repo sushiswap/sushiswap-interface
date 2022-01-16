@@ -17,7 +17,7 @@ const Wallet = () => {
 
   return (
     <>
-      <TridentHeader pattern="dots">
+      <TridentHeader pattern="bg-chevron">
         <HeaderDropdown label={i18n._(t`My Wallet`)} />
         <WalletBalancesSum />
       </TridentHeader>

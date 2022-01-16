@@ -4,13 +4,13 @@ import { FC } from 'react'
 
 export type BackgroundVariant =
   | 'miso-bowl'
-  | 'bars'
-  | 'bubble'
-  | 'dots'
-  | 'x-times-y-is-k'
-  | 'wavy'
-  | 'chevron'
-  | 'binary'
+  | 'bg-bars'
+  | 'bg-bubble'
+  | 'bg-dots'
+  | 'bg-x-times-y-is-k'
+  | 'bg-wavy'
+  | 'bg-chevron'
+  | 'bg-binary'
 
 enum ImageType {
   REPEAT,
@@ -22,31 +22,31 @@ export interface Background {
 }
 
 const IMAGE_URL = {
-  bars: {
+  'bg-bars': {
     type: ImageType.REPEAT,
     url: '/images/trident/bars-pattern.png',
   },
-  binary: {
+  'bg-binary': {
     type: ImageType.REPEAT,
     url: '/images/trident/binary-pattern.png',
   },
-  bubble: {
+  'bg-bubble': {
     type: ImageType.REPEAT,
     url: 'i/mages/trident/bubble-pattern.png',
   },
-  dots: {
+  'bg-dots': {
     type: ImageType.REPEAT,
     url: '/images/trident/dots-pattern.png',
   },
-  'x-times-y-is-k': {
+  'bg-x-times-y-is-k': {
     type: ImageType.REPEAT,
     url: '/images/trident/x-times-y-is-k.png',
   },
-  wavy: {
+  'bg-wavy': {
     type: ImageType.REPEAT,
     url: '/images/trident/wavy-pattern.png',
   },
-  chevron: {
+  'bg-chevron': {
     type: ImageType.REPEAT,
     url: '/images/trident/chevron-pattern.png',
   },
@@ -61,8 +61,8 @@ const Background: FC<Background> = ({ variant }) => {
 
   if (IMAGE_URL[variant].type === ImageType.REPEAT) {
     return (
-      <div className={classNames('absolute inset-0 flex flex-col items-center', `bg-${variant}`)}>
-        <div className="absolute inset-0 w-full h-full bg-dark-900/30 bg-opacity-80 z-0" />
+      <div className={classNames('absolute inset-0 flex flex-col items-center bg-dark-900/30')}>
+        <div className={classNames('absolute inset-0 w-full h-full z-0 opacity-10', variant)} />
       </div>
     )
   }

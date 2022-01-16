@@ -23,7 +23,7 @@ export const TridentHeader: FC<TridentHeaderProps> = ({
   condensed,
 }) => {
   return (
-    <header className={classNames('relative w-full bg-opacity-80 flex flex-col justify-center items-center')}>
+    <header className="relative w-full flex flex-col justify-center items-center">
       <Background variant={pattern} />
       <Container
         maxWidth={maxWidth}

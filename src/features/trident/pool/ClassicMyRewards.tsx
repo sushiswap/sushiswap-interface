@@ -3,15 +3,14 @@ import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
-import { currentLiquidityValueSelector } from 'app/features/trident/context/atoms'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import React, { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
 const ClassicMyRewards: FC = () => {
   const { i18n } = useLingui()
 
-  // TODO ramin: this is incorrect
-  const currentLiquidityValues = useRecoilValue(currentLiquidityValueSelector)
+  // TODO ramin: this is a placeholder and incorrect
+  const { liquidityValue } = usePoolContext()
 
   return (
     <ListPanel
@@ -25,7 +24,7 @@ const ClassicMyRewards: FC = () => {
           </Button>
         </div>
       }
-      items={currentLiquidityValues.map((el, index) => (
+      items={liquidityValue.map((el, index) => (
         <ListPanel.CurrencyAmountItem amount={el} key={index} />
       ))}
     />

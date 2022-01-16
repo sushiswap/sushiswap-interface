@@ -135,15 +135,22 @@ interface CurrencyAmountItemProps {
   weight?: string
   displayTokenAmount?: boolean
   id?: string
+  hideIfZero?: boolean
 }
 
 // ListPanelItem for displaying a CurrencyAmount
-const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount, weight, displayTokenAmount = false, id = '' }) => {
+const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
+  amount,
+  weight,
+  displayTokenAmount = false,
+  id = '',
+  hideIfZero = true,
+}) => {
   const usdcValue = useUSDCValue(amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency, '1') : amount)
 
   if (!displayTokenAmount)
     return (
-      <div id={`${id}`} className={amount?.equalTo(ZERO) ? 'hidden' : ''}>
+      <div id={`${id}`} className={hideIfZero && amount?.equalTo(ZERO) ? 'hidden' : ''}>
         <ListPanel.Item
           left={
             <ListPanel.Item.Left
@@ -161,7 +168,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({ amount, weight, displ
     <div
       id={id}
       className={classNames(
-        amount?.equalTo(ZERO) ? 'hidden' : '',
+        hideIfZero && amount?.equalTo(ZERO) ? 'hidden' : '',
         'flex grid items-center grid-cols-3 gap-2 px-3 py-3 lg:px-4 border-dark-700'
       )}
     >

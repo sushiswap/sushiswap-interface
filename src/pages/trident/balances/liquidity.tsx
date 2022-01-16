@@ -14,7 +14,7 @@ const LiquidityPosition = () => {
 
   return (
     <>
-      <TridentHeader pattern="binary">
+      <TridentHeader pattern="bg-binary">
         <HeaderDropdown label={i18n._(t`My Liquidity Positions`)} />
         <LiquidityPositionsBalancesSum />
       </TridentHeader>

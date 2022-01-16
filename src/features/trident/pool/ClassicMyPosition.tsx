@@ -2,26 +2,19 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
 import ListPanel from 'app/components/ListPanel'
-import {
-  currentLiquidityValueSelector,
-  currentPoolShareSelector,
-  poolBalanceAtom,
-} from 'app/features/trident/context/atoms'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
 import { formatPercent } from 'app/functions'
 import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
 const ClassicMyPosition: FC = () => {
   const { i18n } = useLingui()
-  const poolBalance = useRecoilValue(poolBalanceAtom)
-  const currentLiquidityValue = useRecoilValue(currentLiquidityValueSelector)
-  const currentPoolShare = useRecoilValue(currentPoolShareSelector)
+  const { poolBalance, liquidityValue, poolShare } = usePoolContext()
 
   return (
     <ListPanel
       header={
-        <SumUSDCValues amounts={currentLiquidityValue}>
+        <SumUSDCValues amounts={liquidityValue}>
           {({ amount }) => (
             <ListPanel.Header
               className="bg-dark-1000"
@@ -34,13 +27,13 @@ const ClassicMyPosition: FC = () => {
           )}
         </SumUSDCValues>
       }
-      items={currentLiquidityValue.map((amount, index) => (
-        <ListPanel.CurrencyAmountItem id={`my-position-${index}`} amount={amount} key={index} />
+      items={liquidityValue.map((amount, index) => (
+        <ListPanel.CurrencyAmountItem hideIfZero={false} id={`my-position-${index}`} amount={amount} key={index} />
       ))}
       footer={
         <ListPanel.Footer
           title={i18n._(t`Share of Pool`)}
-          value={currentPoolShare ? formatPercent(currentPoolShare.toSignificant(6)) : '0.00%'}
+          value={poolShare ? formatPercent(poolShare.toSignificant(6)) : '0.00%'}
         />
       }
     />

@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { PoolType } from '@sushiswap/tines'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import { TableInstance } from 'app/features/transactions/types'
 import {
@@ -10,7 +9,6 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
-import { poolTypeNameMapper } from 'app/features/trident/types'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
@@ -75,7 +73,7 @@ const SearchResultPools: FC = () => {
               return (
                 <Link
                   href={{
-                    pathname: `/trident/pool/${poolTypeNameMapper[row.original.type as PoolType].toLowerCase()}`,
+                    pathname: `/trident/pool`,
                     query: {
                       tokens: row.original.assets.map((asset) => asset.address),
                       fee: row.original.swapFee,

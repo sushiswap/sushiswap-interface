@@ -22,7 +22,7 @@ const ConfirmMigration = () => {
         <title>{i18n._(t`Confirm Migration | Sushi`)}</title>
       </Head>
       <DebugObserver />
-      <TridentHeader pattern="bg-binary-pattern" className="!gap-2">
+      <TridentHeader pattern="bg-binary" className="!gap-2">
         <div>
           <Button
             color="blue"

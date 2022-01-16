@@ -1,25 +1,22 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { PoolType } from '@sushiswap/tines'
 import Button from 'app/components/Button'
 import { Feature } from 'app/enums'
 import { TridentTransactions } from 'app/features/transactions/Transactions'
 import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
-import { poolAtom } from 'app/features/trident/context/atoms'
-import ClassicLinkButtons from 'app/features/trident/pool/classic/ClassicLinkButtons'
-import ClassicMarket from 'app/features/trident/pool/classic/ClassicMarket'
-import ClassicMyPosition from 'app/features/trident/pool/classic/ClassicMyPosition'
-import ClassicTokenPrices from 'app/features/trident/pool/classic/ClassicTokenPrices'
+import ClassicLinkButtons from 'app/features/trident/pool/ClassicLinkButtons'
+import ClassicMarket from 'app/features/trident/pool/ClassicMarket'
+import ClassicMyPosition from 'app/features/trident/pool/ClassicMyPosition'
+import ClassicTokenPrices from 'app/features/trident/pool/ClassicTokenPrices'
 import Header from 'app/features/trident/pool/Header'
 import PoolStats from 'app/features/trident/pool/PoolStats'
 import PoolStatsChart from 'app/features/trident/pool/PoolStatsChart'
-import TridentRecoilRoot from 'app/features/trident/TridentRecoilRoot'
+import PoolContext, { usePoolContext } from 'app/features/trident/PoolContext'
 import NetworkGuard from 'app/guards/Network'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import React from 'react'
-import { useRecoilValue } from 'recoil'
 
 const Pool = () => {
   const { i18n } = useLingui()
@@ -33,10 +30,11 @@ const Pool = () => {
     </>
   )
 
-  const { pool } = useRecoilValue(poolAtom)
+  const { poolWithState } = usePoolContext()
+
   return (
     <>
-      <TridentHeader pattern="bg-dots-pattern" condensed className="lg:py-[22px]">
+      <TridentHeader pattern="bg-chevron" condensed className="lg:py-[22px]">
         <div className="flex flex-col gap-3 lg:w-8/12 lg:gap-5 lg:pr-6 h-[68px] lg:h-auto">
           <div>
             <Button
@@ -79,14 +77,14 @@ const Pool = () => {
             </div>
           </div>
         </div>
-        <TridentTransactions poolAddress={pool?.liquidityToken.address} />
+        <TridentTransactions poolAddress={poolWithState?.pool?.liquidityToken.address} />
       </TridentBody>
     </>
   )
 }
 
 Pool.Guard = NetworkGuard(Feature.TRIDENT)
-Pool.Provider = (props) => <TridentRecoilRoot poolType={PoolType.ConstantProduct} {...props} />
+Pool.Provider = PoolContext
 Pool.Layout = (props) => <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic']]} />
 
 export default Pool

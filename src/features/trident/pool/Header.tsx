@@ -4,21 +4,20 @@ import { useLingui } from '@lingui/react'
 import { ConstantProductPool, HybridPool } from '@sushiswap/trident-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { formatPercent } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
-import { poolAtom } from '../context/atoms'
 import { PoolProperties } from './PoolProperties'
 
 const HeaderContainer = () => {
   const { i18n } = useLingui()
-  const { pool } = useRecoilValue(poolAtom)
+  const { poolWithState } = usePoolContext()
 
-  return <Header i18n={i18n} pool={pool} />
+  return <Header i18n={i18n} pool={poolWithState?.pool} />
 }
 
 interface HeaderProps {

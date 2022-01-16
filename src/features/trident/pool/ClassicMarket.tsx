@@ -2,26 +2,23 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import ListPanel from 'app/components/ListPanel'
 import Typography from 'app/components/Typography'
-import { bentoboxRebasesAtom, poolAtom, totalSupplyAtom } from 'app/features/trident/context/atoms'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { toAmountCurrencyAmount } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
-import SumUSDCValues from '../../SumUSDCValues'
+import SumUSDCValues from '../SumUSDCValues'
 import ClassicTokenPrices from './ClassicTokenPrices'
 
 const ClassicMarket: FC = () => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const { pool } = useRecoilValue(poolAtom)
-  const totalSupply = useRecoilValue(totalSupplyAtom)
-  const rebases = useRecoilValue(bentoboxRebasesAtom)
-  const amounts = [pool?.reserve0, pool?.reserve1]
+  const { poolWithState, totalSupply, rebases } = usePoolContext()
+  const amounts = [poolWithState?.pool?.reserve0, poolWithState?.pool?.reserve1]
 
   const reserves = amounts.map((el, index) => {
     const amount = amounts[index]
-    if (el && pool && totalSupply && amount && rebases[amount.wrapped.currency.address]) {
+    if (el && poolWithState?.pool && totalSupply && amount && rebases?.[amount.wrapped.currency.address]) {
       return toAmountCurrencyAmount(rebases[amount.wrapped.currency.address], amount.wrapped)
     }
 
@@ -62,7 +59,7 @@ const ClassicMarket: FC = () => {
                 <ListPanel.Header
                   title={i18n._(t`Assets`)}
                   value={`$${amount ? `${amount.toSignificant(6)}` : '0.00'}`}
-                  subValue={`${totalSupply?.toSignificant(6)} ${pool?.liquidityToken.symbol}`}
+                  subValue={`${totalSupply?.toSignificant(6)} ${poolWithState?.pool?.liquidityToken.symbol}`}
                 />
               )
             }

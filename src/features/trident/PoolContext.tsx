@@ -46,7 +46,7 @@ const PoolContext: FC = ({ children }) => {
     )
   }, [poolWithState.pool, poolWithState.state, totalSupply])
 
-  // Returns the current pool share before execution
+  // Returns the current pool share
   const poolShare = useMemo(() => {
     if (poolWithState?.pool && totalSupply && poolBalance && totalSupply?.greaterThan(ZERO)) {
       return new Percent(poolBalance.quotient, totalSupply.quotient)
@@ -55,7 +55,7 @@ const PoolContext: FC = ({ children }) => {
     return undefined
   }, [poolBalance, poolWithState?.pool, totalSupply])
 
-  // Returns the current deposited tokens before execution
+  // Returns the current deposited tokens
   const liquidityValue = useMemo(() => {
     if (
       poolWithState?.pool &&

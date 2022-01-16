@@ -5,7 +5,6 @@ import SearchResultPools from 'app/features/trident/pools/SearchResultPools'
 import { SearchSidebar } from 'app/features/trident/pools/SearchSidebar'
 import TridentLayout, { TridentBody } from 'app/layouts/Trident'
 import React from 'react'
-import { RecoilRoot } from 'recoil'
 
 const DiscoverPools = () => {
   return (
@@ -29,7 +28,6 @@ const DiscoverPools = () => {
   )
 }
 
-DiscoverPools.Provider = RecoilRoot
 DiscoverPools.Layout = (props) => (
   <TridentLayout {...props} breadcrumbs={[{ label: 'Pools' }, { label: 'Search Results' }]} />
 )

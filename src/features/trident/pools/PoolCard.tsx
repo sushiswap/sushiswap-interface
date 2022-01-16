@@ -90,7 +90,7 @@ const PoolCard: FC<PoolCardProps> = ({ pool: poolProp, link }) => {
     return (
       <Link
         href={{
-          pathname: `/trident/pool/classic`,
+          pathname: `/trident/pool`,
           query: {
             tokens: pool.assets.map((el) => el.address),
             fee: pool.fee,
