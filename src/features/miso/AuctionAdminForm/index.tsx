@@ -104,9 +104,9 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
     },
     {
       key: 'github',
-      label: i18n._(t`Github`),
+      label: i18n._(t`GitHub`),
       placeholder: 'https://github.com',
-      helperText: i18n._(t`Link to your Github repository`),
+      helperText: i18n._(t`Link to your GitHub repository`),
     },
     {
       key: 'telegram',

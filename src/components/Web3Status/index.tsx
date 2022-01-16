@@ -1,3 +1,4 @@
+import Davatar from '@davatar/react'
 import { Web3Provider } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -23,15 +24,7 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 }
 
 // eslint-disable-next-line react/prop-types
-function StatusIcon({
-  connector,
-  account,
-  provider,
-}: {
-  connector: AbstractConnector
-  account: string
-  provider: Web3Provider
-}) {
+function StatusIcon({ connector }: { connector: AbstractConnector; account: string; provider: Web3Provider }) {
   if (connector === injected) {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
@@ -118,7 +111,16 @@ function Web3StatusInner() {
             <Loader stroke="white" />
           </div>
         ) : (
-          <div>{ENSName || shortenAddress(account)}</div>
+          <div className="flex items-center space-x-2">
+            <Davatar
+              size={20}
+              address={account}
+              defaultComponent={<Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />}
+              style={{ borderRadius: 5 }}
+              provider={library}
+            />
+            <div>{ENSName || shortenAddress(account)}</div>
+          </div>
         )}
         {!hasPendingTransactions && connector && (
           <StatusIcon connector={connector} account={account} provider={library} />
