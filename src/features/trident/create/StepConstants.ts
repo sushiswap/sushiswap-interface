@@ -1,6 +1,5 @@
 import { CreatePoolStep } from 'app/features/trident/create/createSlice'
 
-export const completedStepGradient = 'from-opaque-blue to-opaque-pink'
 export const activeStepColor = 'bg-blue'
 export const stepAheadColor = 'bg-dark-700'
 

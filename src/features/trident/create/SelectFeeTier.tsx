@@ -14,15 +14,17 @@ export const SelectFeeTier: FC = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <div>
-      <Typography variant="h3" weight={700} className="text-high-emphesis">
-        Select Fee Tier
-      </Typography>
-      <div className="mt-2 text-secondary">
-        Select the percentage of fee that this pool will take from a swap order. Higher fee tiers suit pairs with more
-        volatility and less volume.
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-0.5">
+        <Typography variant="lg" weight={700} className="text-high-emphesis">
+          {i18n._(t`Select Fee Tier`)}
+        </Typography>
+        <Typography variant="sm" className="text-secondary">
+          {i18n._(t`Select the percentage of fee that this pool will take from a swap order. Higher fee tiers suit pairs with more
+        volatility and less volume.`)}
+        </Typography>
       </div>
-      <div className="grid gap-3 mt-4 select-none lg:grid-cols-4 md:grid-cols-2">
+      <div className="grid gap-3 select-none lg:grid-cols-4 md:grid-cols-2">
         <FeeTierSelect
           tier={Fee.LOW}
           subtitle={i18n._(t`Best for stable pairs`)}

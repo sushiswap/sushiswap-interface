@@ -37,7 +37,7 @@ export const SelectionContinueButton: FC = () => {
           <Button
             id="btn-review-confirm"
             disabled={Boolean(error) || loading || !approved}
-            color="gradient"
+            color="blue"
             variant="filled"
             onClick={() => !error && dispatch(setCreateShowReview(true))}
             {...(loading && {

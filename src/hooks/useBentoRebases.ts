@@ -20,7 +20,7 @@ const useBentoRebases: UseBentoRebases = (tokens) => {
       rebases: tokens.reduce<Record<string, Rebase | undefined>>((previousValue, currentValue, index) => {
         const el = results[index]
         if (currentValue) {
-          if (el.result) {
+          if (el?.result) {
             previousValue[currentValue.wrapped.address] = {
               base: JSBI.BigInt(el.result.base.toString()),
               elastic: JSBI.BigInt(el.result.elastic.toString()),

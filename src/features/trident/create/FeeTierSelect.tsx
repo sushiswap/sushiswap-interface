@@ -16,17 +16,18 @@ export const FeeTierSelect: FC<FeeTierSelectProps> = ({ tier, subtitle, selected
   return (
     <div
       id={`fee-tier-${tier}`}
-      style={active ? { boxShadow: '#27b0e6 0px 7px 67px -33px' } : {}}
       className={classNames(
-        'flex flex-col rounded justify-center border p-8 border-dark-700 hover:cursor-pointer',
-        active ? 'text-high-emphesis bg-dark-900' : 'text-secondary'
+        'border flex flex-col gap-1 rounded justify-center border p-5 border-dark-800 hover:cursor-pointer',
+        active ? 'text-high-emphesis border-purple shadow-lg shadow-purple/10' : 'border transparent text-secondary'
       )}
       onClick={() => setter(tier)}
     >
       <Typography variant="h3" weight={700}>
         {tier / 100}%
       </Typography>
-      <div>{subtitle}</div>
+      <Typography variant="xs" weight={700} className={active ? 'text-primary' : 'text-low-emphesis'}>
+        {subtitle}
+      </Typography>
     </div>
   )
 }
