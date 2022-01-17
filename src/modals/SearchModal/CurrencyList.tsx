@@ -150,13 +150,13 @@ const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currencies.length, otherListTokens])
 
-  const Row = ({ index, key, style }) => {
+  const Row = ({ index, style }) => {
     const currency = itemData[index]
     if (isBreakLine(currency)) {
-      return <BreakLineComponent style={style} key={key} />
+      return <BreakLineComponent style={style} />
     }
 
-    return <CurrencyRow currency={currency} style={style} key={key} />
+    return <CurrencyRow currency={currency} style={style} />
   }
 
   return (
