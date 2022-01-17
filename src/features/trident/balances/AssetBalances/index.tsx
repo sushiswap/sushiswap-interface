@@ -2,14 +2,15 @@ import { NATIVE, ZERO } from '@sushiswap/core-sdk'
 import AssetBalances from 'app/features/trident/balances/AssetBalances/AssetBalances'
 import { Assets } from 'app/features/trident/balances/AssetBalances/types'
 import { useLPTableConfig } from 'app/features/trident/balances/AssetBalances/useLPTableConfig'
-import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
-import { ActiveModal } from 'app/features/trident/balances/context/types'
+import { setBalancesState } from 'app/features/trident/balances/balancesSlice'
+import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
+import { ActiveModal } from 'app/features/trident/types'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
+import { useAppDispatch } from 'app/state/hooks'
 import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { useCallback, useMemo } from 'react'
-import { useRecoilState, useSetRecoilState } from 'recoil'
 
 import { useTableConfig } from './useTableConfig'
 
@@ -31,8 +32,8 @@ export const LiquidityPositionsBalances = () => {
 }
 
 export const BentoBalances = () => {
-  const [selected, setSelected] = useRecoilState(SelectedCurrencyAtom)
-  const setActiveModal = useSetRecoilState(ActiveModalAtom)
+  const dispatch = useAppDispatch()
+  const selected = useBalancesSelectedCurrency()
   const balances = useBentoBalancesV2()
   const assets = balances.reduce<Assets[]>((acc, el) => {
     if (el) acc.push({ asset: el })
@@ -41,10 +42,15 @@ export const BentoBalances = () => {
 
   const handleRowClick = useCallback(
     (row) => {
-      setSelected(row.values.asset.currency)
-      setActiveModal(ActiveModal.MENU)
+      const { currency } = row.values.asset
+      dispatch(
+        setBalancesState({
+          currency: currency.isNative ? 'ETH' : row.values.asset.currency.address,
+          activeModal: ActiveModal.MENU,
+        })
+      )
     },
-    [setActiveModal, setSelected]
+    [dispatch]
   )
 
   const { config } = useTableConfig(assets)
@@ -60,10 +66,11 @@ export const BentoBalances = () => {
 
 export const WalletBalances = () => {
   const { chainId, account } = useActiveWeb3React()
-  const [selected, setSelected] = useRecoilState(SelectedCurrencyAtom)
+  const dispatch = useAppDispatch()
+  const selected = useBalancesSelectedCurrency()
+
   const _balances = useAllTokenBalances()
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
-  const setActiveModal = useSetRecoilState(ActiveModalAtom)
 
   const balances = useMemo(() => {
     const res = Object.values(_balances).reduce<Assets[]>((acc, cur) => {
@@ -81,10 +88,15 @@ export const WalletBalances = () => {
 
   const handleRowClick = useCallback(
     (row) => {
-      setSelected(row.values.asset.currency)
-      setActiveModal(ActiveModal.MENU)
+      const { currency } = row.values.asset
+      dispatch(
+        setBalancesState({
+          currency: currency.isNative ? 'ETH' : row.values.asset.currency.address,
+          activeModal: ActiveModal.MENU,
+        })
+      )
     },
-    [setActiveModal, setSelected]
+    [dispatch]
   )
 
   return (

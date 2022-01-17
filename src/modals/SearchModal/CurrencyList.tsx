@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
@@ -13,8 +14,8 @@ import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchMo
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCombinedActiveList } from 'app/state/lists/hooks'
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
-import { useCurrencyBalance } from 'app/state/wallet/hooks'
-import React, { CSSProperties, FC, useMemo } from 'react'
+import { useCurrencyBalances } from 'app/state/wallet/hooks'
+import React, { CSSProperties, FC, useCallback, useMemo } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList as List } from 'react-window'
 
@@ -69,16 +70,16 @@ function TokenTags({ currency }: { currency: Currency }) {
 interface CurrencyRow {
   currency: Currency
   style: CSSProperties
+  balance: CurrencyAmount<Currency>
 }
 
-const CurrencyRow: FC<CurrencyRow> = ({ currency, style }) => {
+const CurrencyRow: FC<CurrencyRow> = ({ currency, style, balance }) => {
   const { account } = useActiveWeb3React()
   const { onSelect, currency: selectedCurrency } = useCurrencyModalContext()
   const key = currencyKey(currency)
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency.isToken ? currency : undefined)
   const customAdded = useIsUserAddedToken(currency)
-  const balance = useCurrencyBalance(account ?? undefined, currency)
 
   return (
     <div
@@ -141,6 +142,17 @@ interface CurrencyList {
 }
 
 const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
+  const { account } = useActiveWeb3React()
+  const balances = useCurrencyBalances(account ?? undefined, currencies)
+
+  const balancesMap = useMemo(() => {
+    return balances.reduce((acc, cur) => {
+      if (!cur) return acc
+      acc[cur.currency.isNative ? AddressZero : cur.currency.wrapped.address] = cur
+      return acc
+    }, {})
+  }, [balances])
+
   const itemData: (Currency | BreakLine)[] = useMemo(() => {
     if (otherListTokens && otherListTokens?.length > 0) {
       return [...currencies, BREAK_LINE, ...otherListTokens]
@@ -150,14 +162,23 @@ const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currencies.length, otherListTokens])
 
-  const Row = ({ index, style }) => {
-    const currency = itemData[index]
-    if (isBreakLine(currency)) {
-      return <BreakLineComponent style={style} />
-    }
+  const Row = useCallback(
+    ({ index, style }) => {
+      const currency = itemData[index]
+      if (isBreakLine(currency)) {
+        return <BreakLineComponent style={style} />
+      }
 
-    return <CurrencyRow currency={currency} style={style} />
-  }
+      return (
+        <CurrencyRow
+          currency={currency}
+          style={style}
+          balance={balancesMap[currency.isNative ? AddressZero : currency.wrapped.address]}
+        />
+      )
+    },
+    [balancesMap, itemData]
+  )
 
   return (
     <div id="all-currencies-list" className="flex flex-col flex-1 flex-grow h-full divide-y divide-dark-800">

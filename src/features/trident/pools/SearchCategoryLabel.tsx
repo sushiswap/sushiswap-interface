@@ -1,19 +1,19 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { selectTridentPools } from 'app/features/trident/pools/poolsSlice'
+import { useAppSelector } from 'app/state/hooks'
 import Image from 'next/image'
 import React, { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
 import rssSVG from '../../../../public/images/rss.svg'
-import { searchQueryAtom } from './context/atoms'
 
 export const SearchCategoryLabel: FC = () => {
   const { i18n } = useLingui()
-  const searchQuery = useRecoilValue(searchQueryAtom)
+  const { searchQuery } = useAppSelector(selectTridentPools)
 
   return (
-    <div className="py-2 flex flex-row justify-between items-center">
+    <div className="py-2 flex flex-row justify-between items-center px-2">
       <Typography variant="base" className="text-high-emphesis" weight={700}>
         {searchQuery ? i18n._(t`Search results for '${searchQuery}'`) : i18n._(t`Top Liquidity Pools`)}
       </Typography>

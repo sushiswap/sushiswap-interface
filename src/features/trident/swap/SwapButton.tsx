@@ -27,7 +27,7 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
   const { parsedAmounts, error, trade } = useDerivedTridentSwapContext()
 
   const handleClick = useCallback(() => {
-    onClick(trade)
+    if (trade) onClick(trade)
     dispatch(setTridentSwapState({ ...tridentSwapState, showReview: true }))
   }, [dispatch, onClick, trade, tridentSwapState])
 
@@ -36,7 +36,6 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
       inputAmounts={[parsedAmounts?.[0]]}
       tokenApproveOn={bentoBox?.address}
       masterContractAddress={router?.address}
-      withPermit={true}
     >
       {({ approved, loading }) => {
         const disabled = !!error || !approved || loading || attemptingTxn

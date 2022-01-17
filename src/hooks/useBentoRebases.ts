@@ -4,7 +4,12 @@ import { useMemo } from 'react'
 import { useSingleContractMultipleData } from '../state/multicall/hooks'
 import { useBentoBoxContract } from './useContract'
 
-const useBentoRebases = (tokens: (Currency | undefined)[]) => {
+type UseBentoRebases = (tokens: (Currency | undefined)[]) => {
+  rebases: Record<string, Rebase | undefined>
+  loading: boolean
+}
+
+const useBentoRebases: UseBentoRebases = (tokens) => {
   const addresses = useMemo(() => tokens.map((token) => [token?.wrapped.address]), [tokens])
   const bentoboxContract = useBentoBoxContract()
   const results = useSingleContractMultipleData(bentoboxContract, 'totals', addresses)
@@ -12,12 +17,16 @@ const useBentoRebases = (tokens: (Currency | undefined)[]) => {
 
   return useMemo(
     () => ({
-      rebases: tokens.reduce<Record<string, Rebase>>((previousValue, currentValue, index) => {
+      rebases: tokens.reduce<Record<string, Rebase | undefined>>((previousValue, currentValue, index) => {
         const el = results[index]
-        if (currentValue && el?.result) {
-          previousValue[currentValue.wrapped.address] = {
-            base: JSBI.BigInt(el.result.base.toString()),
-            elastic: JSBI.BigInt(el.result.elastic.toString()),
+        if (currentValue) {
+          if (el?.result) {
+            previousValue[currentValue.wrapped.address] = {
+              base: JSBI.BigInt(el.result.base.toString()),
+              elastic: JSBI.BigInt(el.result.elastic.toString()),
+            }
+          } else {
+            previousValue[currentValue.wrapped.address] = undefined
           }
         }
         return previousValue

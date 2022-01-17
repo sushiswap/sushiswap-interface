@@ -1,17 +1,27 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { PoolType } from '@sushiswap/tines'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
 import { TableInstance } from 'app/features/transactions/types'
-import { poolTypeNameMapper } from 'app/features/trident/types'
-import { classNames } from 'app/functions/styling'
+import {
+  TABLE_TABLE_CLASSNAME,
+  TABLE_TBODY_TD_CLASSNAME,
+  TABLE_TBODY_TR_CLASSNAME,
+  TABLE_TR_TH_CLASSNAME,
+  TABLE_WRAPPER_DIV_CLASSNAME,
+} from 'app/features/trident/constants'
+import { PoolSortOption } from 'app/features/trident/pools/poolsSlice'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { SearchCategoryLabel } from './SearchCategoryLabel'
 import { useInstantiateTableFeatures } from './useInstantiateTableFeatures'
-import { usePoolsTableData } from './usePoolsTableData'
+import { DiscoverPoolsTableColumn, usePoolsTableData } from './usePoolsTableData'
+
+export const sortTitleMapper: Record<PoolSortOption, DiscoverPoolsTableColumn['accessor']> = {
+  [PoolSortOption.TVL]: 'liquidityUSD',
+  [PoolSortOption.APY]: 'apy',
+}
 
 const SearchResultPools: FC = () => {
   const { i18n } = useLingui()
@@ -35,8 +45,8 @@ const SearchResultPools: FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <SearchCategoryLabel />
-      <div className="overflow-x-auto">
-        <table {...getTableProps()} className="w-full">
+      <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
+        <table {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={i}>
@@ -44,7 +54,7 @@ const SearchResultPools: FC = () => {
                   <th
                     key={i}
                     {...column.getHeaderProps()}
-                    className={`text-secondary text-sm pt-1 pb-3 ${i === 0 ? 'text-left' : 'text-right'}`}
+                    className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                   >
                     {column.render('Header')}
                     {i === 0 && (
@@ -69,7 +79,7 @@ const SearchResultPools: FC = () => {
               return (
                 <Link
                   href={{
-                    pathname: `/trident/pool/${poolTypeNameMapper[row.original.type as PoolType].toLowerCase()}`,
+                    pathname: `/trident/pool`,
                     query: {
                       tokens: row.original.assets.map((asset) => asset.address),
                       fee: row.original.swapFee,
@@ -79,17 +89,10 @@ const SearchResultPools: FC = () => {
                   key={i}
                   passHref
                 >
-                  <tr {...row.getRowProps()} className="hover:bg-gray-900 hover:cursor-pointer">
+                  <tr {...row.getRowProps()} className={TABLE_TBODY_TR_CLASSNAME}>
                     {row.cells.map((cell, i) => {
                       return (
-                        <td
-                          key={i}
-                          {...cell.getCellProps()}
-                          className={classNames(
-                            'py-3 border-t border-dark-800 flex items-center',
-                            i === 0 ? 'justify-start' : 'justify-end'
-                          )}
-                        >
+                        <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
                           {cell.render('Cell')}
                         </td>
                       )

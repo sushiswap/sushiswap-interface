@@ -5,14 +5,20 @@ import Button from 'app/components/Button'
 import Checkbox from 'app/components/Checkbox'
 import BottomSlideIn from 'app/components/Dialog/BottomSlideIn'
 import Typography from 'app/components/Typography'
+import {
+  selectTridentPools,
+  setPoolsFarmsOnly,
+  setPoolsFeeTiers,
+  setPoolsTWAPOnly,
+} from 'app/features/trident/pools/poolsSlice'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { FC, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
 
-import { farmsOnlyAtom, feeTiersFilterAtom, filterInUseSelector, showTWAPOnlyAtom } from './context/atoms'
 import { removeOrAddFeeTier } from './SearchSidebar'
 
 const YieldFarmFilter: FC = () => {
-  const [farmsOnly, setFarmsOnly] = useRecoilState(farmsOnlyAtom)
+  const { farmsOnly } = useAppSelector(selectTridentPools)
+  const dispatch = useAppDispatch()
   return (
     <div className="flex flex-col gap-5 p-5">
       <div className="flex items-center justify-between gap-3">
@@ -20,7 +26,7 @@ const YieldFarmFilter: FC = () => {
           Yield Farms:
         </Typography>
       </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => setFarmsOnly(!farmsOnly)}>
+      <div className="flex flex-row gap-3 items-center" onClick={() => dispatch(setPoolsFarmsOnly(!farmsOnly))}>
         <Checkbox checked={farmsOnly} />
         <Typography className="text-secondary">Show farms only</Typography>
       </div>
@@ -29,7 +35,8 @@ const YieldFarmFilter: FC = () => {
 }
 
 const TwapOnlyFilter: FC = () => {
-  const [twapOnly, setTwapOnly] = useRecoilState(showTWAPOnlyAtom)
+  const { showTWAPOnly } = useAppSelector(selectTridentPools)
+  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-col gap-5 p-5">
@@ -38,8 +45,8 @@ const TwapOnlyFilter: FC = () => {
           TWAP Oracles:
         </Typography>
       </div>
-      <div className="flex flex-row gap-3 items-center" onClick={() => setTwapOnly(!twapOnly)}>
-        <Checkbox checked={twapOnly} />
+      <div className="flex flex-row gap-3 items-center" onClick={() => dispatch(setPoolsTWAPOnly(!showTWAPOnly))}>
+        <Checkbox checked={showTWAPOnly} />
         <Typography className="text-secondary">Show oracle pairs only</Typography>
       </div>
     </div>
@@ -47,7 +54,8 @@ const TwapOnlyFilter: FC = () => {
 }
 
 const FeeTierFilter: FC = () => {
-  const [feeTiers, setFeeTiers] = useRecoilState(feeTiersFilterAtom)
+  const { feeTiers } = useAppSelector(selectTridentPools)
+  const dispatch = useAppDispatch()
 
   return (
     <div className="flex flex-col gap-5 p-5">
@@ -60,7 +68,7 @@ const FeeTierFilter: FC = () => {
         <div
           key={fee}
           className="flex flex-row gap-3 items-center"
-          onClick={() => removeOrAddFeeTier(fee, feeTiers, setFeeTiers)}
+          onClick={() => removeOrAddFeeTier(fee, feeTiers, (feeTiers) => dispatch(setPoolsFeeTiers(feeTiers)))}
         >
           <Checkbox checked={feeTiers.includes(fee)} />
           <Typography className="text-secondary">{fee / 100}%</Typography>
@@ -73,7 +81,8 @@ const FeeTierFilter: FC = () => {
 export const MobileFilter: FC = () => {
   const { i18n } = useLingui()
   const [open, setOpen] = useState(false)
-  const filterInUse = useRecoilValue(filterInUseSelector)
+  const { feeTiers, showTWAPOnly, farmsOnly } = useAppSelector(selectTridentPools)
+  const filterInUse = farmsOnly || showTWAPOnly || feeTiers.length > 0
 
   return (
     <div className="lg:hidden">

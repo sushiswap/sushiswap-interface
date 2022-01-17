@@ -18,7 +18,7 @@ const Footer = () => {
   return (
     <div className="z-10 w-full py-20 bg-dark-900/30 px-6 mt-20">
       <Container maxWidth="7xl" className="mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 lg:grid-cols-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 lg:grid-cols-6 sm:px-6">
           <div className="flex flex-col gap-3">
             <div className="flex justify-start items-center gap-2">
               <div className="">

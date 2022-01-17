@@ -1,24 +1,22 @@
 import { TableInstance } from 'app/features/transactions/types'
-import { useMemo } from 'react'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-
-import { feeTiersFilterAtom, searchQueryAtom, showTWAPOnlyAtom, sortTableFuncAtom } from './context/atoms'
+import { selectTridentPools } from 'app/features/trident/pools/poolsSlice'
+import { sortTitleMapper } from 'app/features/trident/pools/SearchResultPools'
+import { useAppSelector } from 'app/state/hooks'
+import { useLayoutEffect, useMemo } from 'react'
 
 const useInstantiateFilters = (setFilter: TableInstance['setFilter']) => {
-  const searchQuery = useRecoilValue(searchQueryAtom)
-  const twapEnabled = useRecoilValue(showTWAPOnlyAtom)
-  useMemo(() => setFilter('assets', { searchQuery, twapEnabled }), [searchQuery, setFilter, twapEnabled])
-
-  const feeTiersSelected = useRecoilValue(feeTiersFilterAtom)
+  const { searchQuery, showTWAPOnly, feeTiers: feeTiersSelected } = useAppSelector(selectTridentPools)
+  useMemo(() => setFilter('assets', { searchQuery, twapEnabled: showTWAPOnly }), [searchQuery, setFilter, showTWAPOnly])
   useMemo(() => setFilter('swapFee', { feeTiersSelected }), [feeTiersSelected, setFilter])
 }
 
-export const useInstantiateSorting = (toggleSortBy: TableInstance['toggleSortBy']) => {
-  /* Gives sort dropdown access to sort table */
-  const setSortFuncAtom = useSetRecoilState(sortTableFuncAtom)
-  useMemo(() => {
-    setSortFuncAtom(() => toggleSortBy)
-  }, [setSortFuncAtom, toggleSortBy])
+export const useInstantiateSorting = (toggleSortBy) => {
+  const { sort } = useAppSelector(selectTridentPools)
+
+  // Call sort toggle function of table if sort in RTK changes
+  useLayoutEffect(() => {
+    toggleSortBy(sortTitleMapper[sort], true)
+  }, [sort, toggleSortBy])
 }
 
 export const useInstantiateTableFeatures = (

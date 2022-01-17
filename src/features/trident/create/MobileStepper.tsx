@@ -1,9 +1,9 @@
 import { CheckIcon } from '@heroicons/react/outline'
+import { selectTridentCreate, setCreateCurrentStep } from 'app/features/trident/create/createSlice'
 import { classNames } from 'app/functions'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC } from 'react'
-import { useRecoilState } from 'recoil'
 
-import { currentStepAtom } from './context/atoms'
 import { activeStepColor, StepProps, stepTitleText } from './StepConstants'
 
 const Step: FC<StepProps> = ({ stepNum, title, currentStep, stepSetter, isLastStep }) => {
@@ -61,13 +61,25 @@ const FullWidthBorder: FC<{ location: 'top' | 'bottom' }> = ({ location }) => {
 }
 
 export const MobileStepper: FC = () => {
-  const [currentStep, setCurrentStep] = useRecoilState(currentStepAtom)
+  const dispatch = useAppDispatch()
+  const { currentStep } = useAppSelector(selectTridentCreate)
 
   return (
     <div className="lg:hidden grid grid-cols-2 mt-8 -mb-10 relative">
       <FullWidthBorder location="top" />
-      <Step stepNum={1} title={stepTitleText[1]} currentStep={currentStep} stepSetter={setCurrentStep} />
-      <Step stepNum={2} title={stepTitleText[2]} currentStep={currentStep} stepSetter={setCurrentStep} isLastStep />
+      <Step
+        stepNum={1}
+        title={stepTitleText[1]}
+        currentStep={currentStep}
+        stepSetter={(step) => dispatch(setCreateCurrentStep(step))}
+      />
+      <Step
+        stepNum={2}
+        title={stepTitleText[2]}
+        currentStep={currentStep}
+        stepSetter={(step) => dispatch(setCreateCurrentStep(step))}
+        isLastStep
+      />
       <FullWidthBorder location="bottom" />
     </div>
   )

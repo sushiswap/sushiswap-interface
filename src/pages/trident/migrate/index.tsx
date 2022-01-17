@@ -18,7 +18,7 @@ const MigrateLiquidity = () => {
         <title>{i18n._(t`Migrate Liquidity | Sushi`)}</title>
       </Head>
       <DebugObserver />
-      <TridentHeader pattern="bg-binary-pattern" className="!gap-2">
+      <TridentHeader pattern="bg-binary" className="!gap-2">
         <Typography variant="h2" className="text-high-emphesis" weight={700}>
           {i18n._(t`Migrate Liquidity`)}
         </Typography>
@@ -41,8 +41,6 @@ const MigrateLiquidity = () => {
 }
 
 MigrateLiquidity.Guard = NetworkGuard(Feature.TRIDENT)
-MigrateLiquidity.Layout = (props) => (
-  <TridentLayout {...props} breadcrumbs={[{ label: 'Pools' }, { label: 'Migrate Liquidity' }]} />
-)
+MigrateLiquidity.Layout = TridentLayout
 
 export default MigrateLiquidity

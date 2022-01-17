@@ -1,33 +1,42 @@
-import Card from 'app/components/Card'
 import Typography from 'app/components/Typography'
-import useBalancesMenuItems from 'app/features/trident/balances/context/useBalancesMenuItems'
+import { classNames } from 'app/functions'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
 
+import useBalancesMenuItems from './useBalancesMenuItems'
+
 const BalancesSideBar = () => {
   const items = useBalancesMenuItems()
-  const router = useRouter()
+  const { pathname } = useRouter()
+
   return (
-    <div className="flex-none hidden p-6 pt-8 border-r w-52 border-dark-900 lg:block">
-      <div className="flex flex-col gap-2.5">
-        {items.map(({ label, link }, index) => {
-          if (!link) return
-          const active = router.route === link
-          const content = (
-            <div className="px-5 py-3 cursor-pointer">
-              <Typography className={active ? 'text-high-emphesis' : ''} weight={active ? 700 : 400}>
+    <div className="hidden lg:block">
+      <div className="flex gap-8">
+        {items.map(({ label, link, key }, index) => (
+          <Link href={link} key={index} passHref={true}>
+            <div className="space-y-2 cursor-pointer h-full">
+              <Typography
+                weight={700}
+                className={classNames(
+                  `/trident/balances/${key}` === pathname
+                    ? 'bg-gradient-to-r from-blue to-pink bg-clip-text text-transparent'
+                    : '',
+                  'font-bold text-sm text-high-emphesis'
+                )}
+              >
                 {label}
               </Typography>
+              <div
+                className={classNames(
+                  `/trident/balances/${key}` === pathname
+                    ? 'relative bg-gradient-to-r from-blue to-pink h-[3px] w-full'
+                    : ''
+                )}
+              />
             </div>
-          )
-
-          return (
-            <Link href={link} key={index} passHref={true}>
-              {active ? <Card.Gradient className="opacity-20">{content}</Card.Gradient> : content}
-            </Link>
-          )
-        })}
+          </Link>
+        ))}
       </div>
     </div>
   )

@@ -2,9 +2,10 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Price } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
 import React, { FC, useState } from 'react'
+
+import useCurrenciesFromURL from '../useCurrenciesFromURL'
 
 interface SwapRateProps {
   className?: string
