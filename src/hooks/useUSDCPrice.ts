@@ -1,9 +1,8 @@
 import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
-import { calcTokenPrices } from '@sushiswap/trident-sdk'
-import { useAllCommonPools } from 'app/hooks/useBestTridentTrade'
 import { useMemo } from 'react'
 
 import { useActiveWeb3React } from '../services/web3'
+import { useV2TradeExactOut } from './useV2Trades'
 
 // StableCoin amounts used when calculating spot price for a given currency.
 // The amount is large enough to filter low liquidity pairs.
@@ -29,37 +28,43 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
  */
 export default function useUSDCPrice(currency?: Currency): Price<Currency, Token> | undefined {
   const { chainId } = useActiveWeb3React()
+
   const amountOut = chainId ? STABLECOIN_AMOUNT_OUT[chainId] : undefined
-  const stableCoin = amountOut?.currency
-  const pools = useAllCommonPools(currency, amountOut?.currency)
+  const stablecoin = amountOut?.currency
+
+  const v2USDCTrade = useV2TradeExactOut(currency, amountOut, {
+    maxHops: 3,
+  })
 
   return useMemo(() => {
-    if (!currency || !stableCoin) {
+    if (!currency || !stablecoin) {
       return undefined
     }
 
-    if (currency.wrapped.equals(stableCoin)) {
-      return new Price(stableCoin, stableCoin, '1', '1')
+    // handle usdc
+    if (currency?.wrapped.equals(stablecoin)) {
+      return new Price(stablecoin, stablecoin, '1', '1')
     }
 
-    try {
-      return calcTokenPrices(pools, stableCoin)?.[currency.wrapped.address]
-    } catch (e) {
-      return undefined
+    // use v2 price if available
+    if (v2USDCTrade) {
+      const { numerator, denominator } = v2USDCTrade.route.midPrice
+      return new Price(currency, stablecoin, denominator, numerator)
     }
-  }, [currency, pools, stableCoin])
+
+    return undefined
+  }, [currency, stablecoin, v2USDCTrade])
 }
 
-export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined) {
-  const price = useUSDCPrice(currencyAmount?.wrapped.currency)
+export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {
+  const price = useUSDCPrice(currencyAmount?.currency)
 
   return useMemo(() => {
-    if (!price || !currencyAmount) return undefined
-
+    if (!price || !currencyAmount) return null
     try {
-      return price.quote(currencyAmount.wrapped)
+      return price.quote(currencyAmount)
     } catch (error) {
-      return undefined
+      return null
     }
   }, [currencyAmount, price])
 }

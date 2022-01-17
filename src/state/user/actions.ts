@@ -37,3 +37,6 @@ export const removeSerializedPair = createAction<{
   tokenBAddress: string
 }>('user/removeSerializedPair')
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
+export const updateUserUseOpenMev = createAction<{
+  userUseOpenMev: boolean
+}>('user/updateUserUseOpenMev')

@@ -17,10 +17,10 @@ const useBalancesMenuItems = () => {
       icon: <BentoboxIcon width={20} height={20} />,
       link: (BREADCRUMBS['bentobox'] as BreadcrumbTuple).link,
     },
-    {
-      label: i18n._(t`Liquidity Pools`),
-      link: (BREADCRUMBS['liquidity'] as BreadcrumbTuple).link,
-    },
+    // {
+    //   label: i18n._(t`Liquidity Pools`),
+    //   link: (BREADCRUMBS['liquidity'] as BreadcrumbTuple).link,
+    // },
   ]
 }
 

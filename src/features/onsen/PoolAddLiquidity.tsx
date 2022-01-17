@@ -362,6 +362,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
               }}
               disabled={!isValid || attemptingTxn}
               error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
+              fullWidth={true}
             >
               {error ?? i18n._(t`Confirm Adding Liquidity`)}
             </ButtonError>
