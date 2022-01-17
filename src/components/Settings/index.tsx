@@ -10,9 +10,12 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
-import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
 import React, { FC, useState } from 'react'
+
+import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
 
 interface SettingsTabProps {
   placeholderSlippage?: Percent
@@ -21,25 +24,27 @@ interface SettingsTabProps {
 
 const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = false }) => {
   const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
 
   const toggle = useToggleSettingsMenu()
   const [expertMode, toggleExpertMode] = useExpertModeManager()
   const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMev()
 
   return (
     <>
       <Popover
         placement="bottom-end"
         content={
-          <div className="p-3 flex flex-col bg-dark-900 gap-3 rounded w-80 shadow-xl border border-dark-700">
-            <div className="flex flex-col gap-4 p-3 border border-dark-800/60 rounded">
+          <div className="flex flex-col gap-3 p-3 border rounded shadow-xl bg-dark-900 w-80 border-dark-700">
+            <div className="flex flex-col gap-4 p-3 border rounded border-dark-800/60">
               <Typography variant="xxs" weight={700} className="text-secondary">
                 {i18n._(t`Transaction Settings`)}
               </Typography>
               <TransactionSettings placeholderSlippage={placeholderSlippage} trident={trident} />
             </div>
-            <div className="flex flex-col gap-3 p-3 border border-dark-800/60 rounded">
+            <div className="flex flex-col gap-3 p-3 border rounded border-dark-800/60">
               <Typography variant="xxs" weight={700} className="text-secondary">
                 {i18n._(t`Interface Settings`)}
               </Typography>
@@ -87,6 +92,25 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
                     id="toggle-disable-multihop-button"
                     checked={singleHopOnly}
                     onChange={() => (singleHopOnly ? setSingleHopOnly(false) : setSingleHopOnly(true))}
+                    checkedIcon={<CheckIcon className="text-dark-700" />}
+                    uncheckedIcon={<CloseIcon />}
+                    color="gradient"
+                  />
+                </div>
+              )}
+              {OPENMEV_ENABLED && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <Typography variant="xs" className="text-high-emphesis" weight={700}>
+                      {i18n._(t`OpenMEV Gas Refunder`)}
+                    </Typography>
+                    <QuestionHelper text={i18n._(t`OpenMEV refunds up to 95% of transaction costs in 35 blocks.`)} />
+                  </div>
+                  <Switch
+                    size="sm"
+                    id="toggle-use-openmev"
+                    checked={userUseOpenMev}
+                    onChange={() => (userUseOpenMev ? setUserUseOpenMev(false) : setUserUseOpenMev(true))}
                     checkedIcon={<CheckIcon className="text-dark-700" />}
                     uncheckedIcon={<CloseIcon />}
                     color="gradient"

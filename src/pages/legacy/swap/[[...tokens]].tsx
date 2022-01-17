@@ -37,7 +37,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from 'app/state/application/hooks'
 import { Field } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserSingleHopOnly, useUserTransactionTTL } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly, useUserTransactionTTL } from 'app/state/user/hooks'
 import Lottie from 'lottie-react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -237,12 +237,16 @@ export default function Swap({ banners }) {
   const maxInputAmount: CurrencyAmount<Currency> | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
   const showMaxButton = Boolean(maxInputAmount?.greaterThan(0) && !parsedAmounts[Field.INPUT]?.equalTo(maxInputAmount))
 
+  const [useOpenMev] = useUserOpenMev()
+
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
     trade,
     allowedSlippage,
     recipient,
-    signatureData
+    signatureData,
+    null,
+    useOpenMev
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
