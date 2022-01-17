@@ -1,15 +1,16 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
-import { SetAssetPrice } from 'app/features/trident/create/classic/SetAssetPrice'
-import { SpendSource } from 'app/features/trident/create/context/SelectedAsset'
-import { usePoolAssetInput } from 'app/features/trident/create/context/usePoolAssetInput'
+import { SpendSource } from 'app/features/trident/create/SelectedAsset'
+import { useCreatePoolDerivedAsset } from 'app/features/trident/create/useCreateDerivedState'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import React, { FC } from 'react'
 
+import { SetAssetPrice } from './SetAssetPrice'
+
 const SelectPanel: FC<{ index: number }> = ({ index }) => {
   const { i18n } = useLingui()
-  const { asset, setCurrency, setAmount, setWalletSource } = usePoolAssetInput(index)
+  const { asset, setCurrency, setAmount, setWalletSource } = useCreatePoolDerivedAsset(index)
 
   return (
     <SwapAssetPanel

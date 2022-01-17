@@ -8,7 +8,6 @@ import { BentoBalances } from 'app/features/trident/balances/AssetBalances'
 import BalancesSideBar from 'app/features/trident/balances/BalancesSideBar'
 import { BentoBalancesSum } from 'app/features/trident/balances/BalancesSum'
 import HeaderDropdown from 'app/features/trident/balances/HeaderDropdown'
-import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React from 'react'
 
@@ -48,7 +47,6 @@ const BentoBox = () => {
   )
 }
 
-BentoBox.Layout = (props) => (
-  <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['my_portfolio'], BREADCRUMBS['bentobox']]} />
-)
+BentoBox.Layout = TridentLayout
+
 export default BentoBox

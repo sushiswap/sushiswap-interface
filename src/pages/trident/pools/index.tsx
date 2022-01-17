@@ -28,8 +28,6 @@ const DiscoverPools = () => {
   )
 }
 
-DiscoverPools.Layout = (props) => (
-  <TridentLayout {...props} breadcrumbs={[{ label: 'Pools' }, { label: 'Search Results' }]} />
-)
+DiscoverPools.Layout = TridentLayout
 
 export default DiscoverPools

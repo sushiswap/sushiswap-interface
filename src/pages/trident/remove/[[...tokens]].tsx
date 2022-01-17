@@ -7,7 +7,6 @@ import Button from 'app/components/Button'
 import SettingsTab from 'app/components/Settings'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
-import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
 import PoolContext, { usePoolContext } from 'app/features/trident/PoolContext'
 import ClassicSingleAside from 'app/features/trident/remove/ClassicSingleAside'
 import ClassicSingleMode from 'app/features/trident/remove/ClassicSingleMode'
@@ -117,11 +116,6 @@ const RemoveClassic = () => {
 
 RemoveClassic.Guard = NetworkGuard(Feature.TRIDENT)
 RemoveClassic.Provider = PoolContext
-RemoveClassic.Layout = (props) => (
-  <TridentLayout
-    {...props}
-    breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic'], BREADCRUMBS['remove_classic']]}
-  />
-)
+RemoveClassic.Layout = TridentLayout
 
 export default RemoveClassic

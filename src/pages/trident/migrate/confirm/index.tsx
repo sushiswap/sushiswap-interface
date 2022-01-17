@@ -52,11 +52,6 @@ const ConfirmMigration = () => {
 }
 
 ConfirmMigration.Guard = NetworkGuard(Feature.TRIDENT)
-ConfirmMigration.Layout = (props) => (
-  <TridentLayout
-    {...props}
-    breadcrumbs={[{ label: 'Pools' }, { label: 'Migrate Liquidity', link: '/trident/migrate' }, { label: 'Confirm' }]}
-  />
-)
+ConfirmMigration.Layout = TridentLayout
 
 export default ConfirmMigration

@@ -2,15 +2,16 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Fee } from '@sushiswap/trident-sdk'
 import Typography from 'app/components/Typography'
+import { selectTridentCreate, setCreateSelectedFeeTier } from 'app/features/trident/create/createSlice'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC } from 'react'
-import { useRecoilState } from 'recoil'
 
-import { selectedFeeTierAtom } from '../context/atoms'
 import { FeeTierSelect } from './FeeTierSelect'
 
 export const SelectFeeTier: FC = () => {
   const { i18n } = useLingui()
-  const [selectedFeeTier, setSelectedFeeTier] = useRecoilState(selectedFeeTierAtom)
+  const { selectedFeeTier } = useAppSelector(selectTridentCreate)
+  const dispatch = useAppDispatch()
 
   return (
     <div>
@@ -26,25 +27,25 @@ export const SelectFeeTier: FC = () => {
           tier={Fee.LOW}
           subtitle={i18n._(t`Best for stable pairs`)}
           selectedFeeTier={selectedFeeTier}
-          setter={setSelectedFeeTier}
+          setter={(feeTier) => dispatch(setCreateSelectedFeeTier(feeTier))}
         />
         <FeeTierSelect
           tier={Fee.MEDIUM}
           subtitle={i18n._(t`Best for mainstream pairs`)}
           selectedFeeTier={selectedFeeTier}
-          setter={setSelectedFeeTier}
+          setter={(feeTier) => dispatch(setCreateSelectedFeeTier(feeTier))}
         />
         <FeeTierSelect
           tier={Fee.DEFAULT}
           subtitle={i18n._(t`Best for volatile pairs`)}
           selectedFeeTier={selectedFeeTier}
-          setter={setSelectedFeeTier}
+          setter={(feeTier) => dispatch(setCreateSelectedFeeTier(feeTier))}
         />
         <FeeTierSelect
           tier={Fee.HIGH}
           subtitle={i18n._(t`Best for exotic pairs`)}
           selectedFeeTier={selectedFeeTier}
-          setter={setSelectedFeeTier}
+          setter={(feeTier) => dispatch(setCreateSelectedFeeTier(feeTier))}
         />
       </div>
     </div>

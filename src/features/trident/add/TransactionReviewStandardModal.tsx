@@ -9,10 +9,11 @@ import { selectTridentAdd, setAddShowReview, setAddTxHash } from 'app/features/t
 import { useAddDetails } from 'app/features/trident/add/useAddDetails'
 import { useAddLiquidityDerivedCurrencyAmounts } from 'app/features/trident/add/useAddLiquidityDerivedState'
 import { useAddLiquidityExecute } from 'app/features/trident/add/useAddLiquidityExecute'
-import DepositSubmittedModalContent from 'app/features/trident/DepositSubmittedModalContent'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { FC, useCallback } from 'react'
+
+import DepositSubmittedModalContent from './DepositSubmittedModalContent'
 
 const TransactionReviewStandardModal: FC = () => {
   const { i18n } = useLingui()

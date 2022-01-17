@@ -1,32 +1,29 @@
 import { PoolType } from '@sushiswap/tines'
 import { Feature } from 'app/enums'
-import { StepTwoClassic } from 'app/features/trident/create/classic/StepTwoClassic'
-import { currentStepAtom, selectedPoolTypeAtom } from 'app/features/trident/create/context/atoms'
+import { selectTridentCreate } from 'app/features/trident/create/createSlice'
 import { StepOneSelectPoolType } from 'app/features/trident/create/StepOneSelectPoolType'
 import { StepperSidebar } from 'app/features/trident/create/StepperSidebar'
+import { StepTwoClassic } from 'app/features/trident/create/StepTwoClassic'
 import NetworkGuard from 'app/guards/Network'
 import TridentLayout from 'app/layouts/Trident'
+import { useAppSelector } from 'app/state/hooks'
 import React from 'react'
-import { useRecoilValue } from 'recoil'
 
 const CreateNewPool = () => {
-  const currentStep = useRecoilValue(currentStepAtom)
-  const selectedPool = useRecoilValue(selectedPoolTypeAtom)
+  const { currentStep, selectedPoolType } = useAppSelector(selectTridentCreate)
 
   return (
     <div className="flex justify-center">
       <div className="flex w-full mb-10 lg:mb-0">
         <StepperSidebar />
         {currentStep === 1 && <StepOneSelectPoolType />}
-        {currentStep === 2 && selectedPool === PoolType.ConstantProduct && <StepTwoClassic />}
+        {currentStep === 2 && selectedPoolType === PoolType.ConstantProduct && <StepTwoClassic />}
       </div>
     </div>
   )
 }
 
 CreateNewPool.Guard = NetworkGuard(Feature.TRIDENT)
-CreateNewPool.Layout = (props) => (
-  <TridentLayout {...props} breadcrumbs={[{ link: '/trident/pools', label: 'Pools' }, { label: 'Create Pool' }]} />
-)
+CreateNewPool.Layout = TridentLayout
 
 export default CreateNewPool

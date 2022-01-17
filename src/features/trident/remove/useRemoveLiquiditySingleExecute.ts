@@ -1,8 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
-import { approveMasterContractAction, approveSLPAction } from 'app/features/trident/context/actions'
-import { batchAction, burnLiquiditySingleAction, unwrapWETHAction } from 'app/features/trident/context/hooks/actions'
+import {
+  approveMasterContractAction,
+  approveSLPAction,
+  batchAction,
+  burnLiquiditySingleAction,
+  unwrapWETHAction,
+} from 'app/features/trident/actions'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import {
   selectTridentRemove,

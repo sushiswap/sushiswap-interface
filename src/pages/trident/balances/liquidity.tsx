@@ -5,7 +5,6 @@ import { LiquidityPositionsBalances } from 'app/features/trident/balances/AssetB
 import BalancesSideBar from 'app/features/trident/balances/BalancesSideBar'
 import { LiquidityPositionsBalancesSum } from 'app/features/trident/balances/BalancesSum'
 import HeaderDropdown from 'app/features/trident/balances/HeaderDropdown'
-import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React from 'react'
 
@@ -29,7 +28,6 @@ const LiquidityPosition = () => {
   )
 }
 
-LiquidityPosition.Layout = (props) => (
-  <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['my_portfolio'], BREADCRUMBS['liquidity']]} />
-)
+LiquidityPosition.Layout = TridentLayout
+
 export default LiquidityPosition

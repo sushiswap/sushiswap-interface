@@ -8,7 +8,6 @@ import { WalletBalances } from 'app/features/trident/balances/AssetBalances'
 import BalancesSideBar from 'app/features/trident/balances/BalancesSideBar'
 import { WalletBalancesSum } from 'app/features/trident/balances/BalancesSum'
 import HeaderDropdown from 'app/features/trident/balances/HeaderDropdown'
-import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React from 'react'
 
@@ -48,7 +47,6 @@ const Wallet = () => {
   )
 }
 
-Wallet.Layout = (props) => (
-  <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['my_portfolio'], BREADCRUMBS['wallet']]} />
-)
+Wallet.Layout = TridentLayout
+
 export default Wallet

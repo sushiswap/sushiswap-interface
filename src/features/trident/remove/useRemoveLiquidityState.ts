@@ -1,7 +1,8 @@
 import { selectTridentAdd, setAddNormalInput } from 'app/features/trident/add/addSlice'
-import { useDependentAssetInputs } from 'app/features/trident/context/hooks/useDependentAssetInputs'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useMemo } from 'react'
+
+import { useDependentAssetInputs } from '../useDependentAssetInputs'
 
 export const useAddLiquidityState = () => {
   const dispatch = useAppDispatch()

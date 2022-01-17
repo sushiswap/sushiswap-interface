@@ -18,7 +18,9 @@ const PoolCard: FC<PoolCardProps> = ({ poolWithState, link }) => {
   const { i18n } = useLingui()
   const { pool } = poolWithState
 
-  const currencies = [pool?.token0, pool?.token1]
+  if (!pool) return <></>
+
+  const currencies = [pool.token0, pool.token1]
 
   // TODO ramin: remove
   const isFarm = true

@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import { Feature } from 'app/enums'
 import { TridentTransactions } from 'app/features/transactions/Transactions'
-import { BREADCRUMBS } from 'app/features/trident/Breadcrumb'
 import ClassicLinkButtons from 'app/features/trident/pool/ClassicLinkButtons'
 import ClassicMarket from 'app/features/trident/pool/ClassicMarket'
 import ClassicMyPosition from 'app/features/trident/pool/ClassicMyPosition'
@@ -85,6 +84,6 @@ const Pool = () => {
 
 Pool.Guard = NetworkGuard(Feature.TRIDENT)
 Pool.Provider = PoolContext
-Pool.Layout = (props) => <TridentLayout {...props} breadcrumbs={[BREADCRUMBS['pools'], BREADCRUMBS['pool_classic']]} />
+Pool.Layout = TridentLayout
 
 export default Pool

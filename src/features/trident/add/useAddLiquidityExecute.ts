@@ -5,9 +5,8 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, toHex, Token } from '@sushiswap/core-sdk'
-import { setAddAttemptingTxn } from 'app/features/trident/add/addSlice'
-import { approveMasterContractAction } from 'app/features/trident/context/actions'
-import { batchAction, getAsEncodedAction } from 'app/features/trident/context/hooks/actions'
+import { approveMasterContractAction, batchAction, getAsEncodedAction } from 'app/features/trident/actions'
+import { setAddAttemptingTxn, setAddBentoPermit } from 'app/features/trident/add/addSlice'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { LiquidityInput } from 'app/features/trident/types'
 import { toShareJSBI } from 'app/functions'
@@ -116,6 +115,7 @@ export const useAddLiquidityExecute: UseAddLiquidityExecute = () => {
           label: [pool.token0.symbol, pool.token1.symbol].join('/'),
         })
 
+        dispatch(setAddBentoPermit(undefined))
         return tx
       } catch (error) {
         dispatch(setAddAttemptingTxn(false))

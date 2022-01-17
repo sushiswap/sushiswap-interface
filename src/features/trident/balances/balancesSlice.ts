@@ -17,7 +17,7 @@ export const balancesSlice = createSlice({
   name: 'tridentAdd',
   initialState,
   reducers: {
-    setBalancesActiveModal: (state, action: PayloadAction<ActiveModal>) => {
+    setBalancesActiveModal: (state, action: PayloadAction<ActiveModal | undefined>) => {
       state.activeModal = action.payload
     },
     setBalancesState: (state, action: PayloadAction<BalancesState>) => {

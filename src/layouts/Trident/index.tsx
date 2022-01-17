@@ -4,7 +4,6 @@ import Footer from 'app/components/Footer'
 import Header from 'app/components/Header'
 import Main from 'app/components/Main'
 import Popups from 'app/components/Popups'
-import { BreadcrumbItem } from 'app/features/trident/Breadcrumb'
 import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 
@@ -50,11 +49,7 @@ export const TridentBody: FC<TridentBodyProps> = ({ children, className, maxWidt
   )
 }
 
-interface TridentLayoutProps {
-  breadcrumbs?: BreadcrumbItem[]
-}
-
-const TridentLayout: FC<TridentLayoutProps> = ({ children = [], breadcrumbs = [] }) => {
+const TridentLayout: FC = ({ children = [] }) => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />

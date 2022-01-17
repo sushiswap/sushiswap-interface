@@ -1,10 +1,11 @@
 import { Currency, CurrencyAmount, Percent } from '@sushiswap/core-sdk'
-import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE } from 'app/features/trident/context/atoms'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { useRemoveLiquidityDerivedSLPAmount } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { calculateSlippageAmount, toAmountCurrencyAmount } from 'app/functions'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useCallback, useMemo } from 'react'
+
+import { DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE } from '../constants'
 
 export const useRemoveDetails = (defaultSlippage: Percent = DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE) => {
   const {

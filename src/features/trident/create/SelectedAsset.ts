@@ -1,39 +1,38 @@
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { tryParseAmount } from 'app/functions'
+import uuidv4 from 'uuid/v4'
 
 export enum SpendSource {
   WALLET,
   BENTO_BOX,
 }
 
-export enum SelectAssetError {
-  ACCOUNT_NOT_CONNECTED,
-  INSUFFICIENT_BALANCE,
-  NO_AMOUNT_CHOSEN,
-}
-
 interface SelectedAssetProps {
+  id?: string
   currency?: Currency
   amount?: string
   spendFromSource?: SpendSource
-  error?: SelectAssetError
+  error?: string
   amountInteractedWith?: boolean
 }
 
 export class SelectedAsset {
+  readonly id: string
   readonly currency?: Currency
   readonly amount: string
   readonly amountInteractedWith: boolean
   readonly spendFromSource: SpendSource
-  readonly error?: SelectAssetError
+  readonly error?: string
 
   constructor({
+    id = uuidv4(),
     currency,
     amount = '',
     spendFromSource = SpendSource.WALLET,
     error,
     amountInteractedWith = false,
   }: SelectedAssetProps) {
+    this.id = id
     this.currency = currency
     this.amount = amount
     this.spendFromSource = spendFromSource
@@ -47,5 +46,9 @@ export class SelectedAsset {
 
   oppositeToggle(): SpendSource {
     return this.spendFromSource === SpendSource.WALLET ? SpendSource.BENTO_BOX : SpendSource.WALLET
+  }
+
+  serialize(): string {
+    return `${this.id}-${this.currency?.isNative}-${this.currency?.wrapped.address}-${this.amount}-${this.spendFromSource}-${this.error}`
   }
 }

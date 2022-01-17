@@ -7,40 +7,41 @@ import Divider from 'app/components/Divider'
 import ListPanel from 'app/components/ListPanel'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { getPriceOfNewPool } from 'app/features/trident/context/utils'
-import { useClassicPoolCreateExecute } from 'app/features/trident/create/context/useClassicPoolCreateExecute'
+import { selectTridentCreate, setCreateShowReview, setCreateTxHash } from 'app/features/trident/create/createSlice'
 import { PoolCreationSubmittedModalContent } from 'app/features/trident/create/PoolCreationSubmittedModalContent'
-import React, { FC, useCallback, useMemo, useState } from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
-
-import { attemptingTxnAtom, showReviewAtom } from '../context/atoms'
-import { getAllParsedAmountsSelector, getAllSelectedAssetsSelector, selectedPoolTypeAtom } from './context/atoms'
+import {
+  useCreatePoolDerivedCurrencyAmounts,
+  useCreatePoolDerivedPrice,
+} from 'app/features/trident/create/useCreateDerivedState'
+import { useCreatePoolExecute } from 'app/features/trident/create/useCreatePoolExecute'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import React, { FC, useCallback } from 'react'
 
 export const CreatePoolReviewModal: FC = () => {
   const { i18n } = useLingui()
-  const [showReview, setShowReview] = useRecoilState(showReviewAtom)
-  const selectedPoolType = useRecoilValue(selectedPoolTypeAtom)
-  const assets = useRecoilValue(getAllSelectedAssetsSelector)
-  const parsedAmounts = useRecoilValue(getAllParsedAmountsSelector)
-  const attemptingTxn = useRecoilValue(attemptingTxnAtom)
-  const price = useMemo(() => getPriceOfNewPool(parsedAmounts), [parsedAmounts])
-  const [txHash, setTxHash] = useState<string>()
+  const dispatch = useAppDispatch()
+  const { showReview, attemptingTxn, txHash, selectedPoolType, selectedAssets, bentoPermit } =
+    useAppSelector(selectTridentCreate)
+  const parsedAmounts = useCreatePoolDerivedCurrencyAmounts()
+  const price = useCreatePoolDerivedPrice()
+  const execute = useCreatePoolExecute()
 
-  const _execute = useClassicPoolCreateExecute()
-  const execute = useCallback(async () => {
-    const tx = await _execute()
+  const _execute = useCallback(async () => {
+    const tx = await execute({ parsedAmounts, bentoPermit })
     if (tx && tx.hash) {
-      setTxHash(tx.hash)
+      dispatch(setCreateTxHash(tx.hash))
     }
-  }, [_execute])
+  }, [execute, parsedAmounts, bentoPermit, dispatch])
 
   // Need to use controlled modal here as open variable comes from the liquidityPageState.
   // In other words, this modal needs to be able to get spawned from anywhere within this context
   return (
     <HeadlessUIModal.Controlled
       isOpen={showReview}
-      onDismiss={() => setShowReview(false)}
-      afterLeave={() => setTxHash(undefined)}
+      onDismiss={() => dispatch(setCreateShowReview(false))}
+      afterLeave={() => dispatch(setCreateTxHash(undefined))}
+      unmount={false}
+      maxWidth="md"
     >
       {!txHash ? (
         <div className="flex flex-col h-full gap-8 pb-4 lg:max-w-lg">
@@ -54,7 +55,7 @@ export const CreatePoolReviewModal: FC = () => {
                   size="sm"
                   className="py-1 pl-2 rounded-full cursor-pointer"
                   startIcon={<ChevronLeftIcon width={24} height={24} />}
-                  onClick={() => setShowReview(false)}
+                  onClick={() => dispatch(setCreateShowReview(false))}
                 >
                   {i18n._(t`Back`)}
                 </Button>
@@ -81,7 +82,7 @@ export const CreatePoolReviewModal: FC = () => {
                   i18n._(t`You are creating a concentrated liquidity pool with:`)}
               </Typography>
               <ListPanel
-                items={assets.map((asset, index) => (
+                items={selectedAssets.map((asset, index) => (
                   <ListPanel.CurrencyAmountItem amount={asset.parsedAmount} key={index} />
                 ))}
               />
@@ -92,12 +93,14 @@ export const CreatePoolReviewModal: FC = () => {
               <div className="flex justify-between">
                 <Typography variant="sm">{i18n._(t`Rates:`)}</Typography>
                 <Typography variant="sm" className="text-right">
-                  1 {assets[0].currency?.symbol} = {price?.toSignificant(6)} {assets[1].currency?.symbol}
+                  1 {selectedAssets?.[0].currency?.symbol} = {price?.toSignificant(6)}{' '}
+                  {selectedAssets?.[1].currency?.symbol}
                 </Typography>
               </div>
               <div className="flex justify-end">
                 <Typography variant="sm" className="text-right">
-                  1 {assets[1].currency?.symbol} = {price?.invert().toSignificant(6)} {assets[0].currency?.symbol}
+                  1 {selectedAssets?.[1].currency?.symbol} = {price?.invert().toSignificant(6)}{' '}
+                  {selectedAssets?.[0].currency?.symbol}
                 </Typography>
               </div>
             </div>
@@ -105,7 +108,7 @@ export const CreatePoolReviewModal: FC = () => {
             <Divider />
 
             <div className="flex flex-col gap-1">
-              {assets.map((asset, i) => (
+              {selectedAssets.map((asset, i) => (
                 <div className="flex justify-between" key={i}>
                   <Typography variant="sm" className="text-secondary">
                     {i18n._(t`${asset.currency?.symbol} Deposited:`)}
@@ -128,7 +131,7 @@ export const CreatePoolReviewModal: FC = () => {
               id="btn-confirm-pool-creation"
               color="gradient"
               size="lg"
-              onClick={execute}
+              onClick={_execute}
               disabled={attemptingTxn}
             >
               <Typography variant="sm" weight={700} className="text-high-emphesis">
@@ -138,7 +141,7 @@ export const CreatePoolReviewModal: FC = () => {
           </div>
         </div>
       ) : (
-        <PoolCreationSubmittedModalContent txHash={txHash} />
+        <PoolCreationSubmittedModalContent txHash={txHash} onDismiss={() => dispatch(setCreateTxHash(undefined))} />
       )}
     </HeadlessUIModal.Controlled>
   )

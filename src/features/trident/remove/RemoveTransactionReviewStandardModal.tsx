@@ -9,10 +9,11 @@ import { selectTridentRemove, setRemoveShowReview, setRemoveTxHash } from 'app/f
 import { useRemoveDetails } from 'app/features/trident/remove/useRemoveDetails'
 import { useRemoveLiquidityDerivedSLPAmount } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { useRemoveLiquidityExecute } from 'app/features/trident/remove/useRemoveLiquidityExecute'
-import WithdrawalSubmittedModalContent from 'app/features/trident/WithdrawalSubmittedModalContent'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC, useCallback } from 'react'
+
+import WithdrawalSubmittedModalContent from './WithdrawalSubmittedModalContent'
 
 interface RemoveTransactionReviewStandardModal {}
 

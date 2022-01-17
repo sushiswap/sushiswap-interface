@@ -2,6 +2,7 @@ import { combineReducers } from '@reduxjs/toolkit'
 
 import tridentAdd from '../features/trident/add/addSlice'
 import tridentBalances from '../features/trident/balances/balancesSlice'
+import tridentCreate from '../features/trident/create/createSlice'
 import tridentPools from '../features/trident/pools/poolsSlice'
 import tridentRemove from '../features/trident/remove/removeSlice'
 import tridentSwap from '../features/trident/swap/swapSlice'
@@ -34,6 +35,7 @@ const reducer = combineReducers({
   tridentRemove,
   tridentBalances,
   tridentPools,
+  tridentCreate,
 })
 
 export default reducer

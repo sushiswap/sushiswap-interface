@@ -13,7 +13,7 @@ const ClassicLinkButtons: FC = () => {
   const { poolWithState, poolBalance } = usePoolContext()
 
   // Skeleton loader
-  if (!poolWithState.pool) return <></>
+  if (!poolWithState?.pool) return <></>
 
   return (
     <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">

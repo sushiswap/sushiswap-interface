@@ -1,6 +1,6 @@
 import { Currency, CurrencyAmount, JSBI, Percent, Rebase, Token, ZERO } from '@sushiswap/core-sdk'
 import { ConstantProductPool, PoolState } from '@sushiswap/trident-sdk'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
+import useCurrenciesFromURL from 'app/features/trident/useCurrenciesFromURL'
 import { toAmountCurrencyAmount } from 'app/functions'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useConstantProductPool } from 'app/hooks/useConstantProductPools'
@@ -62,8 +62,8 @@ const PoolContext: FC = ({ children }) => {
       poolBalance &&
       totalSupply &&
       totalSupply?.greaterThan(ZERO) &&
-      rebases?.[poolWithState?.pool.token0.wrapped.address] &&
-      rebases?.[poolWithState?.pool.token1.wrapped.address]
+      rebases?.[poolWithState.pool.token0.wrapped.address] &&
+      rebases?.[poolWithState.pool.token1.wrapped.address]
     ) {
       // Convert from shares to amount
       return [

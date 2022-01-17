@@ -36,7 +36,6 @@ const SwapButton: FC<SwapButton> = ({ onClick }) => {
       inputAmounts={[parsedAmounts?.[0]]}
       tokenApproveOn={bentoBox?.address}
       masterContractAddress={router?.address}
-      withPermit={true}
     >
       {({ approved, loading }) => {
         const disabled = !!error || !approved || loading || attemptingTxn

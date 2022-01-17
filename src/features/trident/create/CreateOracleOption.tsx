@@ -2,14 +2,14 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Checkbox from 'app/components/Checkbox'
 import Typography from 'app/components/Typography'
+import { selectTridentCreate, setCreateAnOracle } from 'app/features/trident/create/createSlice'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC } from 'react'
-import { useRecoilState } from 'recoil'
-
-import { createAnOracleSelectionAtom } from '../context/atoms'
 
 export const CreateOracleOption: FC = () => {
   const { i18n } = useLingui()
-  const [createAnOracle, setCreateAnOracle] = useRecoilState(createAnOracleSelectionAtom)
+  const { createAnOracle } = useAppSelector(selectTridentCreate)
+  const dispatch = useAppDispatch()
 
   return (
     <div>
@@ -22,7 +22,7 @@ export const CreateOracleOption: FC = () => {
       </div>
       <div
         className="flex items-center gap-2 mt-8 hover:cursor-pointer"
-        onClick={() => setCreateAnOracle(!createAnOracle)}
+        onClick={() => dispatch(setCreateAnOracle(!createAnOracle))}
       >
         <Checkbox checked={createAnOracle} />
         <span className="text-xs">{i18n._(t`Yes create an oracle`)}</span>

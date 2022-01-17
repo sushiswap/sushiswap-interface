@@ -8,7 +8,6 @@ import {
   selectTridentAdd,
   setAddNormalInput,
 } from 'app/features/trident/add/addSlice'
-import { useDependentAssetInputs } from 'app/features/trident/context/hooks/useDependentAssetInputs'
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { tryParseAmount } from 'app/functions'
 import { useBentoOrWalletBalances } from 'app/hooks/useBentoOrWalletBalance'
@@ -16,6 +15,8 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
+
+import { useDependentAssetInputs } from '../useDependentAssetInputs'
 
 type UseAddLiquidityDerivedCurrencyAmounts = () => (CurrencyAmount<Currency> | undefined)[]
 export const useAddLiquidityDerivedCurrencyAmounts: UseAddLiquidityDerivedCurrencyAmounts = () => {

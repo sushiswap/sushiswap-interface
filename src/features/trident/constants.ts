@@ -1,6 +1,10 @@
+import { Percent } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
 import { ChipColor } from 'app/components/Chip'
 import { classNames } from 'app/functions'
+
+export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
+export const DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 type PoolTypesInterface = Record<
   PoolType,

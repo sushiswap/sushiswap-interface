@@ -18,7 +18,7 @@ enum ImageType {
 }
 
 export interface Background {
-  variant: BackgroundVariant
+  variant?: BackgroundVariant
 }
 
 const IMAGE_URL = {

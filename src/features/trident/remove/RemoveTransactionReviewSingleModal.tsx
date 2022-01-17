@@ -13,9 +13,10 @@ import {
   useRemoveLiquidityZapCurrency,
 } from 'app/features/trident/remove/useRemoveLiquidityDerivedState'
 import { useRemoveLiquiditySingleExecute } from 'app/features/trident/remove/useRemoveLiquiditySingleExecute'
-import WithdrawalSubmittedModalContent from 'app/features/trident/WithdrawalSubmittedModalContent'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC, useCallback, useMemo } from 'react'
+
+import WithdrawalSubmittedModalContent from './WithdrawalSubmittedModalContent'
 
 interface RemoveTransactionReviewSingleModal {}
 

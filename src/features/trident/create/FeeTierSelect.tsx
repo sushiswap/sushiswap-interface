@@ -2,13 +2,12 @@ import { Fee } from '@sushiswap/trident-sdk'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions/styling'
 import React, { FC } from 'react'
-import { SetterOrUpdater } from 'recoil'
 
 interface FeeTierSelectProps {
   tier: Fee
   subtitle: string
-  selectedFeeTier: Fee | undefined
-  setter: SetterOrUpdater<Fee | undefined>
+  selectedFeeTier?: Fee
+  setter(x: Fee): void
 }
 
 export const FeeTierSelect: FC<FeeTierSelectProps> = ({ tier, subtitle, selectedFeeTier, setter }) => {
