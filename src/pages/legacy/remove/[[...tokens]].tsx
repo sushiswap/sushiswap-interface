@@ -459,14 +459,14 @@ export default function Remove() {
               onDismiss={handleDismissConfirmation}
               attemptingTxn={attemptingTxn}
               hash={txHash ? txHash : ''}
-              content={() => (
+              content={
                 <ConfirmationModalContent
                   title={i18n._(t`You will receive`)}
                   onDismiss={handleDismissConfirmation}
                   topContent={modalHeader}
                   bottomContent={modalBottom}
                 />
-              )}
+              }
               pendingText={pendingText}
             />
             <AutoColumn gap="md">
