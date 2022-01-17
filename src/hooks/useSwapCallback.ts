@@ -30,7 +30,9 @@ import {
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
 import { EIP_1559_ACTIVATION_BLOCK } from 'app/constants'
+import { Feature } from 'app/enums'
 import { approveMasterContractAction, batchAction, unwrapWETHAction } from 'app/features/trident/actions'
+import { featureEnabled } from 'app/functions'
 import approveAmountCalldata from 'app/functions/approveAmountCalldata'
 import { shortenAddress } from 'app/functions/format'
 import { calculateGasMargin } from 'app/functions/trade'
@@ -342,7 +344,15 @@ export function useSwapCallArguments(
 
   return useMemo<SwapCall[]>(() => {
     let result: SwapCall[] = []
-    if (!rebase || !trade || !recipient || !library || !account || !chainId) return result
+    if (
+      (featureEnabled(Feature.BENTOBOX, chainId) && !rebase) ||
+      !trade ||
+      !recipient ||
+      !library ||
+      !account ||
+      !chainId
+    )
+      return result
 
     if (trade instanceof LegacyTrade) {
       if (!legacyRouterContract || !deadline) return result
@@ -651,7 +661,7 @@ export function useSwapCallback(
         }
 
         let txResponse: Promise<TransactionResponseLight>
-        if (!useOpenMev) {
+        if (!(chainId in OPENMEV_SUPPORTED_NETWORKS) || (chainId in OPENMEV_SUPPORTED_NETWORKS && !useOpenMev)) {
           txResponse = library.getSigner().sendTransaction(txParams)
         } else {
           const supportedNetwork = OPENMEV_SUPPORTED_NETWORKS.includes(chainId)
