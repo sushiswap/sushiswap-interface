@@ -1,21 +1,19 @@
 import { AppPageComponent } from '../AppPageComponent'
 
 export class AssetBalancesComponent extends AppPageComponent {
-  private AssetBalancesTableBodySelector: string = '#asset-balances-body > div'
+  private AssetBalancesTableBodySelector: string = '#asset-balances-table > tbody'
 
   public async getAssetBalances(): Promise<Record<string, number>> {
     let balances: Record<string, number> = {}
 
     await this.Page.waitForSelector(this.AssetBalancesTableBodySelector)
-    const balancesList = await this.Page.$$(this.AssetBalancesTableBodySelector)
+    const balancesList = await this.Page.$$(this.AssetBalancesTableBodySelector + ' > tr')
 
     for (const balanceRow of balancesList) {
       let assetSymbol: string = ''
       let assetBalance: number = 0
-      let rowSelector = `#asset-balances-row-${balancesList.indexOf(balanceRow)} > div`
 
-      await this.Page.waitForSelector(rowSelector)
-      const balanceCells = await this.Page.$$(rowSelector)
+      const balanceCells = await balanceRow.$$('td')
 
       for (let cellIndex = 0; cellIndex < balanceCells.length - 1; cellIndex++) {
         const balanceCell = balanceCells[cellIndex]
