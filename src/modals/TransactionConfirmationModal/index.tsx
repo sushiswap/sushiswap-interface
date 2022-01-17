@@ -86,8 +86,8 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
 interface ConfirmationModelContentProps {
   title: string
   onDismiss: () => void
-  topContent?: (() => React.ReactNode) | React.ReactNode
-  bottomContent?: (() => React.ReactNode) | React.ReactNode
+  topContent?: React.ReactNode
+  bottomContent?: React.ReactNode
 }
 
 export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
