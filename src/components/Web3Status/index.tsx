@@ -100,11 +100,11 @@ function Web3StatusInner() {
     return (
       <div
         id="web3-status-connected"
-        className="flex gap-2 items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
+        className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
         onClick={toggleWalletModal}
       >
         {hasPendingTransactions ? (
-          <div className="flex gap-2 items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <div>
               {pending?.length} {i18n._(t`Pending`)}
             </div>{' '}
@@ -112,6 +112,7 @@ function Web3StatusInner() {
           </div>
         ) : (
           <div className="flex items-center space-x-2">
+            <div>{ENSName || shortenAddress(account)}</div>
             <Davatar
               size={20}
               address={account}
@@ -119,12 +120,11 @@ function Web3StatusInner() {
               style={{ borderRadius: 5 }}
               provider={library}
             />
-            <div>{ENSName || shortenAddress(account)}</div>
           </div>
         )}
-        {!hasPendingTransactions && connector && (
+        {/* {!hasPendingTransactions && connector && (
           <StatusIcon connector={connector} account={account} provider={library} />
-        )}
+        )} */}
       </div>
     )
   } else {
