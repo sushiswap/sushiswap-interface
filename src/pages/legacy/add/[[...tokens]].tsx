@@ -393,14 +393,14 @@ export default function Add() {
               onDismiss={handleDismissConfirmation}
               attemptingTxn={attemptingTxn}
               hash={txHash}
-              content={() => (
+              content={
                 <ConfirmationModalContent
                   title={noLiquidity ? i18n._(t`You are creating a pool`) : i18n._(t`You will receive`)}
                   onDismiss={handleDismissConfirmation}
                   topContent={modalHeader}
                   bottomContent={modalBottom}
                 />
-              )}
+              }
               pendingText={pendingText}
             />
             <div className="flex flex-col space-y-4">
