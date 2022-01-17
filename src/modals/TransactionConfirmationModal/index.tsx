@@ -23,8 +23,8 @@ export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = (
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Confirm transaction`)} onClose={onDismiss} />
-      <HeadlessUiModal.BorderedContent className="flex flex-col gap-1 justify-center items-center">
-        <div className="w-16 m-auto py-8">
+      <HeadlessUiModal.BorderedContent className="flex flex-col items-center justify-center gap-1">
+        <div className="w-16 py-8 m-auto">
           <Lottie animationData={loadingRollingCircle} autoplay loop />
         </div>
         <Typography variant="lg" weight={700} className="text-white">
@@ -56,7 +56,7 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Transaction submitted`)} onClose={onDismiss} />
-      <HeadlessUiModal.BorderedContent className="flex flex-col gap-1 justify-center items-center">
+      <HeadlessUiModal.BorderedContent className="flex flex-col items-center justify-center gap-1">
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
           <Lottie animationData={receiptPrinting} autoplay loop={false} />
         </div>
@@ -65,7 +65,7 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
         </Typography>
         {chainId && hash && (
           <ExternalLink href={getExplorerLink(chainId, hash, 'transaction')}>
-            <Typography variant="xs" weight={700} className="text-blue outline-none">
+            <Typography variant="xs" weight={700} className="outline-none text-blue">
               {i18n._(t`View on explorer`)}
             </Typography>
           </ExternalLink>
@@ -99,8 +99,8 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={title} onClose={onDismiss} />
-      {typeof topContent === 'function' ? topContent() : topContent}
-      {typeof bottomContent === 'function' ? bottomContent() : bottomContent}
+      {topContent}
+      {bottomContent}
     </div>
   )
 }
