@@ -111,7 +111,7 @@ function Web3StatusInner() {
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <div>{ENSName || shortenAddress(account)}</div>
             <Davatar
               size={20}
