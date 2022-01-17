@@ -10,7 +10,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import FarmListItem from './FarmListItem'
 
 const FarmList = ({ farms, term }) => {
-  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'roiPerYear' })
+  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'tvl', direction: 'descending' })
   const { i18n } = useLingui()
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
 
