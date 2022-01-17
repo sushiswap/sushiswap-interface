@@ -19,7 +19,7 @@ interface SelectedAssetProps {
 export class SelectedAsset {
   readonly id: string
   readonly currency?: Currency
-  readonly amount: string
+  readonly amount?: string
   readonly amountInteractedWith: boolean
   readonly spendFromSource: SpendSource
   readonly error?: string

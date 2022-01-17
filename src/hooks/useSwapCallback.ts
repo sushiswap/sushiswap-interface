@@ -27,8 +27,7 @@ import {
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
 import { EIP_1559_ACTIVATION_BLOCK } from 'app/constants'
-import { approveMasterContractAction } from 'app/features/trident/context/actions'
-import { batchAction, unwrapWETHAction } from 'app/features/trident/context/hooks/actions'
+import { approveMasterContractAction, batchAction, unwrapWETHAction } from 'app/features/trident/actions'
 import approveAmountCalldata from 'app/functions/approveAmountCalldata'
 import { shortenAddress } from 'app/functions/format'
 import { calculateGasMargin } from 'app/functions/trade'

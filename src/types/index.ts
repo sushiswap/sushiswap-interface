@@ -13,17 +13,17 @@ export type PoolWithStateExists<T> = {
 
 export type PoolWithStateLoading = {
   state: PoolState.LOADING
-  pool: undefined
+  pool?: undefined
 }
 
 export type PoolWithStateNotExists = {
   state: PoolState.NOT_EXISTS
-  pool: undefined
+  pool?: undefined
 }
 
 export type PoolWithStateInvalid = {
   state: PoolState.INVALID
-  pool: undefined
+  pool?: undefined
 }
 
 export type PoolWithState<T> =

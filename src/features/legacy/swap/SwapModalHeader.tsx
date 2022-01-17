@@ -1,11 +1,10 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Percent, TradeType } from '@sushiswap/core-sdk'
+import { Percent, TradeType } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { TradeUnion } from 'app/types'
 import React, { FC, useState } from 'react'
@@ -30,18 +29,9 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
   onAcceptChanges,
 }) => {
   const { i18n } = useLingui()
-  const { currencies } = useCurrenciesFromURL()
   const [showInverted, setShowInverted] = useState<boolean>(false)
-
-  // Use a default CurrencyAmount of 1 so that the price loads in the background hence making the inputs faster
-  const fiatValueInput = useUSDCValue(
-    trade?.inputAmount || (currencies?.[0] ? CurrencyAmount.fromRawAmount(currencies[0], '1') : undefined)
-  )
-
-  // Use a default CurrencyAmount of 1 so that the price loads in the background hence making the inputs faster
-  const fiatValueOutput = useUSDCValue(
-    trade?.outputAmount || (currencies?.[1] ? CurrencyAmount.fromRawAmount(currencies[1], '1') : undefined)
-  )
+  const fiatValueInput = useUSDCValue(trade?.inputAmount)
+  const fiatValueOutput = useUSDCValue(trade?.outputAmount)
 
   const change =
     ((Number(fiatValueOutput?.toExact()) - Number(fiatValueInput?.toExact())) / Number(fiatValueInput?.toExact())) * 100

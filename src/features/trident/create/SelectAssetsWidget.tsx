@@ -13,8 +13,8 @@ const SelectPanel: FC<{ index: number }> = ({ index }) => {
 
   return (
     <SwapAssetPanel
-      error={asset.error !== undefined}
-      header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw from`)} />}
+      error={asset.error !== '' && asset.amount !== ''}
+      header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Pool Token ${index + 1}`)} />}
       walletToggle={(props) => (
         <SwapAssetPanel.Switch
           id={`switch-classic-withdraw-from-${index}`}

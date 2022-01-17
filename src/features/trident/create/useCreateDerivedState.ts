@@ -170,9 +170,7 @@ export const useCreatePoolDerivedAsset: UseCreatePoolDerivedAsset = (index) => {
 
   const setAmount = useCallback(
     (amount?: string) => {
-      if (amount) {
-        dispatch(setCreateSelectedAsset({ asset: new SelectedAsset({ ...asset, amount }), index }))
-      }
+      dispatch(setCreateSelectedAsset({ asset: new SelectedAsset({ ...asset, amount }), index }))
     },
     [asset, dispatch, index]
   )
