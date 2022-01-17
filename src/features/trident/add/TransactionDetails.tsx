@@ -34,7 +34,7 @@ const TransactionDetails: FC = () => {
           {i18n._(t`Transaction Details`)}
         </Typography>
         <TransactionDetailsExplanationModal>
-          <Typography weight={700} variant="sm" className="text-blue text-right">
+          <Typography weight={700} variant="sm" className="text-right text-blue">
             {i18n._(t`What do these mean?`)}
           </Typography>
         </TransactionDetailsExplanationModal>
@@ -46,7 +46,7 @@ const TransactionDetails: FC = () => {
               <Typography variant="sm" className="text-secondary">
                 1 {pool?.token0?.symbol}
               </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
+              <Typography weight={700} variant="sm" className="text-right text-high-emphesis">
                 {price ? price.toSignificant(6) : '0.000'} {pool?.token1?.symbol}
               </Typography>
             </div>
@@ -54,7 +54,7 @@ const TransactionDetails: FC = () => {
               <Typography variant="sm" className="text-secondary">
                 1 {pool?.token1?.symbol}
               </Typography>
-              <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
+              <Typography weight={700} variant="sm" className="text-right text-high-emphesis">
                 {price ? price.invert().toSignificant(6) : '0.000'} {pool?.token0?.symbol}
               </Typography>
             </div>
@@ -64,7 +64,7 @@ const TransactionDetails: FC = () => {
           <Typography variant="sm" className="text-secondary">
             {i18n._(t`Minimum Received`)}
           </Typography>
-          <Typography weight={700} variant="sm" className="text-high-emphesis">
+          <Typography id="text-liquidity-minted" weight={700} variant="sm" className="text-high-emphesis">
             {liquidityMinted?.toSignificant(6) || '0.000'} SLP
           </Typography>
         </div>
@@ -72,7 +72,7 @@ const TransactionDetails: FC = () => {
           <Typography variant="sm" className="text-secondary">
             {i18n._(t`Your Pool Share`)}
           </Typography>
-          <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
+          <Typography weight={700} variant="sm" className="text-right text-high-emphesis">
             {poolShareBefore?.greaterThan(0) ? poolShareBefore?.toSignificant(6) : '0.000'}%
             {poolShareAfter?.greaterThan(0) && (
               <>
@@ -85,7 +85,7 @@ const TransactionDetails: FC = () => {
           <Typography variant="sm" className="text-secondary whitespace-nowrap">
             {i18n._(t`Your Pool Tokens`)}
           </Typography>
-          <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
+          <Typography weight={700} variant="sm" className="text-right text-high-emphesis">
             {poolBalance?.greaterThan(0) ? poolBalance?.toSignificant(6) : '0.000'}
             {liquidityMinted?.greaterThan(0) && (
               <>

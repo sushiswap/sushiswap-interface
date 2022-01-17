@@ -10,6 +10,9 @@ export class AddLiquidityPage extends AppPage {
   private ApproveButtonSelector: string = '#btn-approve'
   private FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-deposit'
 
+  // Transaction Details Selctors
+  private MinReceivedSelector: string = '#text-liquidity-minted'
+
   // Asset input selectors
   private SpendFromWalletASelector: string = '.switch-spend-from-wallet-a'
   private SpendFromWalletBSelector: string = '.switch-spend-from-wallet-b'
@@ -123,6 +126,18 @@ export class AddLiquidityPage extends AppPage {
     return parseFloat(depositAmount)
   }
 
+  public async getMinReceivedAmount(): Promise<number> {
+    await this.Page.waitForSelector(this.MinReceivedSelector)
+    const minReceivedText = await this.Page.$eval(this.MinReceivedSelector, (el) => el.textContent)
+
+    if (minReceivedText) {
+      const balance = minReceivedText.split(' ')[0]
+      return parseFloat(balance)
+    }
+
+    return 0
+  }
+
   private async setFundingSource(switchSelector: string, fromWallet: boolean = true): Promise<void> {
     const isSpendFromWalletAChecked = await this.isSwitchChecked(switchSelector)
     const spendFromWalletASwitch = await this.getSwitchElement(switchSelector)
@@ -138,7 +153,7 @@ export class AddLiquidityPage extends AppPage {
     balanceSelector: string,
     fromWallet: boolean = true
   ): Promise<number> {
-    await this.blockingWait(1, true)
+    await this.blockingWait(5, true)
 
     const isSpendFromWalletChecked = await this.isSwitchChecked(spendFromSwitchSelector)
     const spendFromWalletSwitch = await this.getSwitchElement(spendFromSwitchSelector)

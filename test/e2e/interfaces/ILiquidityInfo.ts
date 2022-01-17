@@ -3,4 +3,5 @@ export interface ILiquidityInfo {
   assetB: string
   amountA: number
   amountB: number
+  slpAmount: number
 }

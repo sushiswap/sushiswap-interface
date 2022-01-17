@@ -24,6 +24,7 @@ const ClassicMyPosition: FC = () => {
         <SumUSDCValues amounts={currentLiquidityValue}>
           {({ amount }) => (
             <ListPanel.Header
+              id="my-position-header"
               className="bg-dark-1000"
               title={i18n._(t`My Position`)}
               value={`$${amount?.greaterThan(ZERO) ? `${amount.toSignificant(6)}` : '0.00'}`}
