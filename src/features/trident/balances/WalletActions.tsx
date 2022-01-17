@@ -46,9 +46,9 @@ const WalletActions: FC = () => {
               label={i18n._(t`Deposit to BentoBox`)}
               onClick={() => setActiveModal(ActiveModal.DEPOSIT)}
             />
-            <Typography variant="sm" className="mt-2 mb-5 text-center cursor-pointer text-blue">
+            {/* <Typography variant="sm" className="mt-2 mb-5 text-center cursor-pointer text-blue">
               What is BentoBox?
-            </Typography>
+            </Typography> */}
           </>
         )}
       </div>
