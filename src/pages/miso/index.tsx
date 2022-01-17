@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import AuctionCard from 'app/features/miso/AuctionCard'
@@ -32,7 +31,7 @@ const Miso = () => {
   return (
     <>
       <MisoHeader>
-        <div className="flex justify-between lg:flex-row flex-col gap-8">
+        <div className="flex flex-col justify-between gap-8 lg:flex-row">
           <div className="flex flex-col">
             <Typography variant="hero" weight={700} className="text-white">
               {i18n._(t`Chef's Edition`)}
@@ -41,8 +40,8 @@ const Miso = () => {
               {i18n._(t`These auctions are meticulously chosen by the Sushi Samurais, serving the best MISO for you.`)}
             </Typography>
           </div>
-          <div className="flex gap-4 items-center">
-            <div>
+          <div className="flex items-center gap-4">
+            {/* <div>
               <Link href="/miso/auction" passHref={true}>
                 <Button
                   color="blue"
@@ -51,7 +50,7 @@ const Miso = () => {
                   {i18n._(t`Create Auction`)}
                 </Button>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
       </MisoHeader>
@@ -64,7 +63,7 @@ const Miso = () => {
             >
               {tabs.map((tab) => (
                 <Link href={`/miso?status=${tab.link}`} key={tab.key} passHref={true}>
-                  <div className="space-y-2 cursor-pointer h-full">
+                  <div className="h-full space-y-2 cursor-pointer">
                     <Typography
                       weight={700}
                       className={classNames(
@@ -92,7 +91,7 @@ const Miso = () => {
             <Typography variant="lg" weight={700} className="text-high-emphesis">
               {auctions?.length} Results
             </Typography>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {auctions?.map((auction, index) => {
                 return <AuctionCard auction={auction} key={index} />
               })}
