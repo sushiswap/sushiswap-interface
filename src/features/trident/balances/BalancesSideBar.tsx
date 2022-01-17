@@ -10,7 +10,7 @@ const BalancesSideBar = () => {
   const router = useRouter()
   return (
     <div className="flex-none hidden p-6 pt-8 border-r w-52 border-dark-900 lg:block">
-      <div className="flex flex-col gap-2.5">
+      <div id="balances-sidebar" className="flex flex-col gap-2.5">
         {items.map(({ label, link }, index) => {
           if (!link) return
           const active = router.route === link

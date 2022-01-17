@@ -25,7 +25,7 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
   )
 
   return (
-    <div {...getTableProps()} className="w-full">
+    <div id="asset-balances-table" {...getTableProps()} className="w-full">
       <div>
         {headerGroups.map((headerGroup, i) => (
           <div {...headerGroup.getHeaderGroupProps()} key={i} className="lg:pl-[18px] lg:pr-[18px] lg:mb-3">
@@ -51,12 +51,17 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
           </div>
         ))}
       </div>
-      <div {...getTableBodyProps()} className="lg:border lg:border-dark-700 lg:rounded lg:overflow-hidden">
+      <div
+        id="asset-balances-body"
+        {...getTableBodyProps()}
+        className="lg:border lg:border-dark-700 lg:rounded lg:overflow-hidden"
+      >
         {page.length > 0 ? (
           page.map((row, i) => {
             prepareRow(row)
             return (
               <div
+                id={`asset-balances-row-${i}`}
                 {...row.getRowProps()}
                 key={i}
                 onClick={() => onSelect && onSelect(row)}
