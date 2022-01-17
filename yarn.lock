@@ -2971,7 +2971,7 @@
     "@react-hook/event" "^1.2.1"
     "@react-hook/throttle" "^2.2.0"
 
-"@reduxjs/toolkit@^1.6.0":
+"@reduxjs/toolkit@^1.7.1":
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-1.7.1.tgz#994962aeb7df3c77be343dd2ad1aa48221dbaa0c"
   integrity sha512-wXwXYjBVz/ItxB7SMzEAMmEE/FBiY1ze18N+VVVX7NtVbRUrdOGKhpQMHivIJfkbJvSdLUU923a/yAagJQzY0Q==

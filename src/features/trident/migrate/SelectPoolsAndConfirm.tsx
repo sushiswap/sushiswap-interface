@@ -4,12 +4,18 @@ import Button from 'app/components/Button'
 import { LoadingSpinner } from 'app/components/LoadingSpinner'
 import { SelectTridentPoolPanel } from 'app/components/Migrate/SelectTridentPoolPanel'
 import { migrateGridLayoutCss } from 'app/features/trident/migrate/AvailableToMigrate'
-import { MigrationSource, v2Migration, v2PairsToMigrateAtom } from 'app/features/trident/migrate/context/atoms'
-import { leftToSelect as lts, migrationObjUpdater } from 'app/features/trident/migrate/context/utils'
+import {
+  editMigration,
+  MigrationSource,
+  selectLeftToChoose,
+  selectTridentMigrations,
+  v2Migration,
+} from 'app/features/trident/migrate/context/migrateSlice'
 import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useRouter } from 'next/router'
-import React, { FC, useMemo } from 'react'
-import { useRecoilState } from 'recoil'
+import React, { FC } from 'react'
+import { useSelector } from 'react-redux'
 
 import Typography from '../../../components/Typography'
 
@@ -28,8 +34,10 @@ const mockExecute = (selectedMigrations: v2Migration[]) => () => {
 export const SelectPoolsAndConfirm: FC = () => {
   const { i18n } = useLingui()
   const router = useRouter()
-  const [selectedMigrations, setSelectedMigrations] = useRecoilState(v2PairsToMigrateAtom)
-  const leftToSelect = useMemo(() => lts(selectedMigrations), [selectedMigrations])
+
+  const dispatch = useAppDispatch()
+  const selectedMigrations = useAppSelector<v2Migration[]>(selectTridentMigrations)
+  const leftToSelect = useSelector(selectLeftToChoose)
 
   const { data, error, isValidating } = useGetAllTridentPools()
 
@@ -59,20 +67,17 @@ export const SelectPoolsAndConfirm: FC = () => {
                 key={i}
                 migration={migration}
                 tridentPools={data ?? []}
-                loading={isValidating}
                 source={MigrationSource.SUSHI_V2}
-                setFunc={migrationObjUpdater(migration, selectedMigrations, setSelectedMigrations)}
+                setFunc={(migration) => dispatch(editMigration({ indexToReplace: i, migration }))}
               />
             ))}
           </div>
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center mt-10">
-        <div>
-          <Button color="gradient" disabled={leftToSelect !== 0} onClick={mockExecute(selectedMigrations)}>
-            {leftToSelect === 0 ? i18n._(t`Confirm Migration`) : i18n._(t`Select Pools`)}
-          </Button>
-        </div>
+        <Button color="gradient" disabled={leftToSelect !== 0} onClick={mockExecute(selectedMigrations)}>
+          {leftToSelect === 0 ? i18n._(t`Confirm Migration`) : i18n._(t`Select Pools`)}
+        </Button>
         <div
           className="cursor-pointer text-blue text-center md:text-left"
           onClick={() => router.push('/trident/migrate')}
