@@ -138,8 +138,8 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
             <ConfirmationModalContent
               title={i18n._(t`Confirm convert`)}
               onDismiss={closeModal}
-              topContent={() => <span />}
-              bottomContent={() => <span />}
+              topContent={<span />}
+              bottomContent={<span />}
             />
           )}
           pendingText={i18n._(

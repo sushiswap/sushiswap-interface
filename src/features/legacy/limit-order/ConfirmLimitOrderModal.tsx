@@ -10,24 +10,22 @@ import { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModa
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field } from 'app/state/limit-order/actions'
 import { useDerivedLimitOrderInfo, useLimitOrderState } from 'app/state/limit-order/hooks'
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 
 interface ConfirmLimitOrderModalProps {
   open: boolean
   onDismiss: () => void
   onConfirm: () => void
 }
-const ConfirmLimitOrderModal: FC<ConfirmLimitOrderModalProps> = ({ open, onDismiss, onConfirm }) => {
-  const topContent = useCallback(() => <ConfirmLimitOrderTopContent />, [])
-  const bottomContent = useCallback(() => <ConfirmLimitOrderBottomContent onClick={onConfirm} />, [onConfirm])
 
+const ConfirmLimitOrderModal: FC<ConfirmLimitOrderModalProps> = ({ open, onDismiss, onConfirm }) => {
   return (
     <HeadlessUiModal.Controlled isOpen={open} onDismiss={onDismiss}>
       <ConfirmationModalContent
         title="Confirm Limit Order"
         onDismiss={onDismiss}
-        topContent={topContent}
-        bottomContent={bottomContent}
+        topContent={<ConfirmLimitOrderTopContent />}
+        bottomContent={<ConfirmLimitOrderBottomContent onClick={onConfirm} />}
       />
     </HeadlessUiModal.Controlled>
   )

@@ -215,50 +215,46 @@ export default function Add() {
       })
   }
 
-  const modalHeader = () => {
-    return noLiquidity ? (
-      <div className="pb-4">
-        <div className="flex items-center justify-start gap-3">
-          <div className="text-2xl font-bold text-high-emphesis">
-            {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol}
-          </div>
+  const ModalHeader = noLiquidity ? (
+    <div className="pb-4">
+      <div className="flex items-center justify-start gap-3">
+        <div className="text-2xl font-bold text-high-emphesis">
+          {currencies[Field.CURRENCY_A]?.symbol + '/' + currencies[Field.CURRENCY_B]?.symbol}
+        </div>
+        <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
+      </div>
+    </div>
+  ) : (
+    <div className="pb-4">
+      <div className="flex items-center justify-start gap-3">
+        <div className="text-xl font-bold md:text-3xl text-high-emphesis">{liquidityMinted?.toSignificant(6)}</div>
+        <div className="grid grid-flow-col gap-2">
           <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
         </div>
       </div>
-    ) : (
-      <div className="pb-4">
-        <div className="flex items-center justify-start gap-3">
-          <div className="text-xl font-bold md:text-3xl text-high-emphesis">{liquidityMinted?.toSignificant(6)}</div>
-          <div className="grid grid-flow-col gap-2">
-            <DoubleCurrencyLogo currency0={currencyA} currency1={currencyB} size={48} />
-          </div>
-        </div>
-        <div className="text-lg font-medium md:text-2xl text-high-emphesis">
-          {currencies[Field.CURRENCY_A]?.symbol}/{currencies[Field.CURRENCY_B]?.symbol}
-          &nbsp;{i18n._(t`Pool Tokens`)}
-        </div>
-        <div className="pt-3 text-xs italic text-secondary">
-          {i18n._(t`Output is estimated. If the price changes by more than ${allowedSlippage.toSignificant(
-            4
-          )}% your transaction
-            will revert.`)}
-        </div>
+      <div className="text-lg font-medium md:text-2xl text-high-emphesis">
+        {currencies[Field.CURRENCY_A]?.symbol}/{currencies[Field.CURRENCY_B]?.symbol}
+        &nbsp;{i18n._(t`Pool Tokens`)}
       </div>
-    )
-  }
+      <div className="pt-3 text-xs italic text-secondary">
+        {i18n._(t`Output is estimated. If the price changes by more than ${allowedSlippage.toSignificant(
+          4
+        )}% your transaction
+            will revert.`)}
+      </div>
+    </div>
+  )
 
-  const modalBottom = () => {
-    return (
-      <ConfirmAddModalBottom
-        price={price}
-        currencies={currencies}
-        parsedAmounts={parsedAmounts}
-        noLiquidity={noLiquidity}
-        onAdd={onAdd}
-        poolTokenPercentage={poolTokenPercentage}
-      />
-    )
-  }
+  const ModalBottom = (
+    <ConfirmAddModalBottom
+      price={price}
+      currencies={currencies}
+      parsedAmounts={parsedAmounts}
+      noLiquidity={noLiquidity}
+      onAdd={onAdd}
+      poolTokenPercentage={poolTokenPercentage}
+    />
+  )
 
   const pendingText = i18n._(
     t`Supplying ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${
@@ -397,8 +393,8 @@ export default function Add() {
                 <ConfirmationModalContent
                   title={noLiquidity ? i18n._(t`You are creating a pool`) : i18n._(t`You will receive`)}
                   onDismiss={handleDismissConfirmation}
-                  topContent={modalHeader}
-                  bottomContent={modalBottom}
+                  topContent={ModalHeader}
+                  bottomContent={ModalBottom}
                 />
               }
               pendingText={pendingText}
