@@ -661,7 +661,10 @@ export function useSwapCallback(
         }
 
         let txResponse: Promise<TransactionResponseLight>
-        if (!(chainId in OPENMEV_SUPPORTED_NETWORKS) || (chainId in OPENMEV_SUPPORTED_NETWORKS && !useOpenMev)) {
+        if (
+          !OPENMEV_SUPPORTED_NETWORKS.includes(chainId) ||
+          (OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && !useOpenMev)
+        ) {
           txResponse = library.getSigner().sendTransaction(txParams)
         } else {
           const supportedNetwork = OPENMEV_SUPPORTED_NETWORKS.includes(chainId)
