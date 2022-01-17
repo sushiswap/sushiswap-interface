@@ -133,6 +133,7 @@ export default function Deposit({ pair }: any): JSX.Element {
             <Button
               onClick={() => onCook(pair, onExecute)}
               disabled={value.toBigNumber(pair.asset.tokenInfo.decimals).lte(0) || warnings.broken}
+              fullWidth={true}
             >
               {i18n._(t`Deposit`)}
             </Button>
