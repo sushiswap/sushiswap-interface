@@ -4,7 +4,6 @@ import loadingCircle from 'app/animation/loading-circle.json'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
-import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
@@ -104,17 +103,12 @@ const ClassicStandardMode = () => {
                 return (
                   <div className={classNames(!isMax ? 'grid grid-cols-2 gap-3' : 'flex')}>
                     {!isMax && (
-                      <Button
-                        size="sm"
-                        color="gradient"
-                        variant={isMax ? 'filled' : 'outlined'}
-                        disabled={isMax}
-                        onClick={onMax}
-                      >
+                      <Button color="blue" disabled={isMax} onClick={onMax}>
                         {i18n._(t`Max Deposit`)}
                       </Button>
                     )}
                     <Button
+                      id={`btn-${buttonText.toString().replace(/\s/g, '')}`}
                       {...(loading && {
                         startIcon: (
                           <div className="w-4 h-4 mr-1">
@@ -126,14 +120,7 @@ const ClassicStandardMode = () => {
                       disabled={disabled}
                       onClick={() => setShowReview(true)}
                     >
-                      <Typography
-                        id={`btn-${buttonText.toString().replace(/\s/g, '')}`}
-                        variant="sm"
-                        weight={700}
-                        className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}
-                      >
-                        {buttonText}
-                      </Typography>
+                      {buttonText}
                     </Button>
                   </div>
                 )

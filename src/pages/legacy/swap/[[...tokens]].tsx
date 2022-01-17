@@ -36,7 +36,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useNetworkModalToggle, useToggleSettingsMenu, useWalletModalToggle } from 'app/state/application/hooks'
 import { Field } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserSingleHopOnly, useUserTransactionTTL } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly, useUserTransactionTTL } from 'app/state/user/hooks'
 import Lottie from 'lottie-react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -140,7 +140,7 @@ export default function Swap({ banners }) {
   const fiatValueInput = useUSDCValue(parsedAmounts[Field.INPUT])
   const fiatValueOutput = useUSDCValue(parsedAmounts[Field.OUTPUT])
   const priceImpact = computeFiatValuePriceImpact(fiatValueInput, fiatValueOutput)
-  console.log({ fiatValueInput, fiatValueOutput })
+  // console.log({ fiatValueInput, fiatValueOutput })
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useSwapActionHandlers()
 
   const isValid = !swapInputError
@@ -236,12 +236,16 @@ export default function Swap({ banners }) {
   const maxInputAmount: CurrencyAmount<Currency> | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
   const showMaxButton = Boolean(maxInputAmount?.greaterThan(0) && !parsedAmounts[Field.INPUT]?.equalTo(maxInputAmount))
 
+  const [useOpenMev] = useUserOpenMev()
+
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
     trade,
     allowedSlippage,
     recipient,
-    signatureData
+    signatureData,
+    null,
+    useOpenMev
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -387,7 +391,7 @@ export default function Swap({ banners }) {
 
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
 
-  console.log(priceImpactSeverity, priceImpactSeverity > 3, !isExpertMode, trade?.priceImpact, priceImpact)
+  // console.log(priceImpactSeverity, priceImpactSeverity > 3, !isExpertMode, trade?.priceImpact, priceImpact)
 
   return (
     <Container id="swap-page" className="py-4 md:py-8 lg:py-12">
@@ -519,7 +523,7 @@ export default function Swap({ banners }) {
                     price={trade?.executionPrice}
                     showInverted={showInverted}
                     setShowInverted={setShowInverted}
-                    className="bg-dark-900"
+                    className="justify-between px-5 py-1 bg-dark-900"
                   />
                 </div>
               )}

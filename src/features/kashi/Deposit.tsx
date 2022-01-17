@@ -43,8 +43,6 @@ export default function Deposit({ pair }: any): JSX.Element {
     ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.asset.balance
 
-  console.log({ balance })
-
   const max = useBento
     ? pair.asset.bentoBalance
     : assetNative

@@ -174,11 +174,10 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
 }
 
 export function usePositions(chainId = undefined) {
-  const [masterChefV1Positions, masterChefV2Positions, miniChefPositions, oldFarmsPositions] = [
+  const [masterChefV1Positions, masterChefV2Positions, miniChefPositions] = [
     useChefPositions(useMasterChefContract(), undefined, chainId),
     useChefPositions(useMasterChefV2Contract(), undefined, chainId),
     useChefPositions(useMiniChefContract(), undefined, chainId),
-    useChefPositions(useOldFarmsContract(), undefined, chainId),
   ]
-  return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions, oldFarmsPositions)
+  return concat(masterChefV1Positions, masterChefV2Positions, miniChefPositions)
 }

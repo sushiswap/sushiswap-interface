@@ -250,7 +250,7 @@ const NetworkModal: FC = () => {
               <button
                 key={i}
                 onClick={async () => {
-                  console.log(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
+                  console.debug(`Switching to chain ${key}`, SUPPORTED_NETWORKS[key])
                   toggleNetworkModal()
                   const params = SUPPORTED_NETWORKS[key]
                   cookie.set('chainId', key, params)

@@ -3,8 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE } from '@sushiswap/core-sdk'
 import Divider from 'app/components/Divider'
-import BentoBoxSVG from 'app/components/SVG/BentoBoxSVG'
-import DoubleRightChevronSVG from 'app/components/SVG/TransferSVG'
+import { BentoboxIcon, TransferIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
 import ActionItem from 'app/features/trident/balances/ActionsModal/ActionItem'
 import { ActiveModalAtom, SelectedCurrencyAtom } from 'app/features/trident/balances/context/atoms'
@@ -52,11 +51,11 @@ const BentoActions: FC = () => {
         </Typography>
         <ActionItem svg={<SwitchHorizontalIcon width={24} />} label={i18n._(t`Swap`)} onClick={swapActionHandler} />
         <ActionItem
-          svg={<BentoBoxSVG />}
+          svg={<BentoboxIcon width={20} height={20} />}
           label={i18n._(t`Withdraw to Wallet`)}
           onClick={() => setActiveModal(ActiveModal.WITHDRAW)}
         />
-        <ActionItem svg={<DoubleRightChevronSVG />} label={i18n._(t`Transfer`)} />
+        <ActionItem svg={<TransferIcon width={24} height={24} />} label={i18n._(t`Transfer`)} />
       </div>
     </div>
   )

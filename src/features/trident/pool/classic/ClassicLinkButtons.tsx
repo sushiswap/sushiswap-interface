@@ -60,7 +60,7 @@ const ClassicLinkButtons: FC = () => {
           </Button>
         </>
       ) : (
-        <Button id={`btn-deposit`} color="gradient" className="text-high-emphesis">
+        <Button id={`btn-deposit`} color="purple">
           <Link
             href={{
               pathname: `/trident/add/classic`,
@@ -81,11 +81,7 @@ const ClassicLinkButtons: FC = () => {
         </Button>
       )}
 
-      <Button
-        color="gradient"
-        variant="outlined"
-        className={classNames(poolBalance?.greaterThan(0) && 'col-span-2', 'text-high-emphesis')}
-      >
+      <Button color="blue" className={classNames(poolBalance?.greaterThan(0) && 'col-span-2')}>
         <Link
           href={{
             pathname: `/trident/swap`,

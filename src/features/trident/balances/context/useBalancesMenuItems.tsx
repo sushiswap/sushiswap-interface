@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import BentoBoxSVG from 'app/components/SVG/BentoBoxSVG'
-import WalletSVG from 'app/components/SVG/WalletSVG'
+import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
 import { BREADCRUMBS, BreadcrumbTuple } from 'app/features/trident/Breadcrumb'
 import React from 'react'
 
@@ -10,12 +9,12 @@ const useBalancesMenuItems = () => {
   return [
     {
       label: i18n._(t`Wallet`),
-      icon: <WalletSVG />,
+      icon: <WalletIcon width={20} height={20} />,
       link: (BREADCRUMBS['wallet'] as BreadcrumbTuple).link,
     },
     {
       label: i18n._(t`BentoBox`),
-      icon: <BentoBoxSVG />,
+      icon: <BentoboxIcon width={20} height={20} />,
       link: (BREADCRUMBS['bentobox'] as BreadcrumbTuple).link,
     },
     {

@@ -4,21 +4,32 @@ import loadingCircle from 'animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
-import { selectTridentSwap, setShowReview } from 'app/features/trident/swap/swapSlice'
+import { selectTridentSwap, setTridentSwapState } from 'app/features/trident/swap/swapSlice'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { TradeUnion } from 'app/types'
 import Lottie from 'lottie-react'
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 
 import TridentApproveGate from '../TridentApproveGate'
 
-const SwapButton: FC = () => {
+interface SwapButton {
+  onClick(x: TradeUnion): void
+}
+
+const SwapButton: FC<SwapButton> = ({ onClick }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const { attemptingTxn } = useAppSelector(selectTridentSwap)
+  const tridentSwapState = useAppSelector(selectTridentSwap)
+  const { attemptingTxn } = tridentSwapState
   const router = useTridentRouterContract()
   const bentoBox = useBentoBoxContract()
-  const { parsedAmounts, error } = useDerivedTridentSwapContext()
+  const { parsedAmounts, error, trade } = useDerivedTridentSwapContext()
+
+  const handleClick = useCallback(() => {
+    onClick(trade)
+    dispatch(setTridentSwapState({ ...tridentSwapState, showReview: true }))
+  }, [dispatch, onClick, trade, tridentSwapState])
 
   return (
     <TridentApproveGate
@@ -53,7 +64,7 @@ const SwapButton: FC = () => {
               })}
               color="gradient"
               disabled={disabled}
-              onClick={() => dispatch(setShowReview(true))}
+              onClick={handleClick}
             >
               {buttonText}
             </Button>

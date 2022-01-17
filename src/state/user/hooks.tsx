@@ -37,6 +37,7 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
+  updateUserUseOpenMev,
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -316,12 +317,12 @@ export function toKashiLiquidityToken([collateral, asset]: [Token, Token]): Toke
   if (collateral.equals(asset)) throw new Error('Tokens cannot be equal')
   if (!BENTOBOX_ADDRESS[collateral.chainId]) throw new Error('No BentoBox factory address on this chain')
   if (!KASHI_ADDRESS[collateral.chainId]) throw new Error('No Kashi address on this chain')
-  console.log({
-    collateral,
-    asset,
-    oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
-    oracleData: computeOracleData(collateral, asset),
-  })
+  // console.log({
+  //   collateral,
+  //   asset,
+  //   oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
+  //   oracleData: computeOracleData(collateral, asset),
+  // })
   const oracleData = computeOracleData(collateral, asset)
   if (!oracleData) return
   return new Token(
@@ -415,4 +416,20 @@ export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Pe
     () => (allowedSlippage === 'auto' ? defaultSlippageTolerance : allowedSlippage),
     [allowedSlippage, defaultSlippageTolerance]
   )
+}
+
+/**
+ * Returns a boolean indicating if the user has enabled OpenMEV protection.
+ */
+export function useUserOpenMev(): [boolean, (newUseOpenMev: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  const useOpenMev = useSelector<AppState, AppState['user']['useOpenMev']>((state) => state.user.userUseOpenMev)
+
+  const setUseOpenMev = useCallback(
+    (newUseOpenMev: boolean) => dispatch(updateUserUseOpenMev({ userUseOpenMev: newUseOpenMev })),
+    [dispatch]
+  )
+
+  return [useOpenMev, setUseOpenMev]
 }
