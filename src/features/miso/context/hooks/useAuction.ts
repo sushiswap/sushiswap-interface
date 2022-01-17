@@ -120,7 +120,7 @@ export const useAuction = (address?: string, owner?: string) => {
   } = useAuctionHelperInfo(address, marketTemplateId, owner ?? undefined)
 
   return useMemo(() => {
-    if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments || !lpTokenAddress)
+    if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
       return { loading: loadingDetails || loadingInfo, auction: undefined }
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
@@ -137,7 +137,9 @@ export const useAuction = (address?: string, owner?: string) => {
           auctionInfo.tokenInfo.symbol,
           auctionInfo.tokenInfo.name
         ),
-        liquidityToken: new Token(chainId, lpTokenAddress, 18, 'SLP', 'Sushiswap LP Token'),
+        liquidityToken: lpTokenAddress
+          ? new Token(chainId, lpTokenAddress, 18, 'SLP', 'Sushiswap LP Token')
+          : undefined,
         paymentToken,
         auctionInfo,
         marketInfo,

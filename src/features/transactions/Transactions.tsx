@@ -2,6 +2,13 @@ import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { LoadingSpinner } from 'app/components/LoadingSpinner'
+import {
+  TABLE_TABLE_CLASSNAME,
+  TABLE_TBODY_TD_CLASSNAME,
+  TABLE_TBODY_TR_CLASSNAME,
+  TABLE_TR_TH_CLASSNAME,
+  TABLE_WRAPPER_DIV_CLASSNAME,
+} from 'app/features/trident/constants'
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
 import { useTridentTransactions } from 'app/services/graph/hooks/transactions/trident'
 import React, { FC } from 'react'
@@ -48,8 +55,8 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
         {error && <span className="-ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
       </div>
 
-      <div className="overflow-x-auto">
-        <table {...getTableProps()} className="w-full">
+      <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
+        <table {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
               <tr {...headerGroup.getHeaderGroupProps()} key={i}>
@@ -57,7 +64,7 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
                   <th
                     key={i}
                     {...column.getHeaderProps(column.getSortByToggleProps())}
-                    className={`text-secondary text-sm pt-1 pb-3 ${i === 0 ? 'text-left' : 'text-right'}`}
+                    className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                   >
                     {column.render('Header')}
                     <span className="inline-block ml-1 align-middle">
@@ -80,14 +87,10 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
             {page.map((row, i) => {
               prepareRow(row)
               return (
-                <tr {...row.getRowProps()} key={i}>
+                <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
                   {row.cells.map((cell, i) => {
                     return (
-                      <td
-                        key={i}
-                        {...cell.getCellProps()}
-                        className={`py-3 border-t border-dark-800 ${i !== 0 && 'text-right'}`}
-                      >
+                      <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>
                         {cell.render('Cell')}
                       </td>
                     )

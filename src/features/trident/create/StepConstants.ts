@@ -1,8 +1,5 @@
-import { SetterOrUpdater } from 'recoil'
+import { CreatePoolStep } from 'app/features/trident/create/createSlice'
 
-import { CreatePoolStep } from './context/atoms'
-
-export const completedStepGradient = 'from-opaque-blue to-opaque-pink'
 export const activeStepColor = 'bg-blue'
 export const stepAheadColor = 'bg-dark-700'
 
@@ -10,7 +7,7 @@ export interface StepProps {
   stepNum: CreatePoolStep
   title: string
   currentStep: CreatePoolStep
-  stepSetter: SetterOrUpdater<CreatePoolStep>
+  stepSetter(x: CreatePoolStep): void
   isLastStep?: boolean
 }
 

@@ -454,7 +454,7 @@ export default function Borrow({ pair }: BorrowProps) {
         color="pink"
         content={(onCook: any) => (
           <TokenApproveButton value={collateralValue} token={collateralToken} needed={!useBentoCollateral}>
-            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
+            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled} fullWidth={true}>
               {actionName}
             </Button>
           </TokenApproveButton>

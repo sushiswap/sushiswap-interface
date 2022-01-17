@@ -13,9 +13,7 @@ export const PoolCell: FC<PoolCellProps> = ({ assets, twapEnabled }) => {
   return (
     <>
       <div className="flex items-center gap-2 overflow-hidden">
-        <div className="flex ml-2">
-          <CurrencyLogoArray currencies={assets} size={40} dense />
-        </div>
+        <CurrencyLogoArray currencies={assets} size={40} dense />
         <div
           id={`pool-${poolId}`}
           className="overflow-hidden font-bold text-high-emphesis overflow-ellipsis whitespace-nowrap"

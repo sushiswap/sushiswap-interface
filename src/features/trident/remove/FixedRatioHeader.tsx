@@ -2,27 +2,23 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Checkbox from 'app/components/Checkbox'
 import Typography from 'app/components/Typography'
+import { selectTridentRemove, setRemoveFixedRatio } from 'app/features/trident/remove/removeSlice'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC } from 'react'
-import { atom, RecoilState, useRecoilState } from 'recoil'
 
-type FixedRatio<P> = FC<P> & {
-  atom: RecoilState<boolean>
-}
-
-const fixedRatioAtom = atom<boolean>({
-  key: 'remove:fixedRatioHeaderAtom',
-  default: true,
-})
-
-const FixedRatioHeader: FixedRatio<{ margin?: boolean }> = ({ margin = true }) => {
+const FixedRatioHeader: FC<{ margin?: boolean }> = ({ margin = true }) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const [fixedRatio, setFixedRatio] = useRecoilState(fixedRatioAtom)
+  const dispatch = useAppDispatch()
+  const { fixedRatio } = useAppSelector(selectTridentRemove)
 
   const content = (
     <div className="flex justify-between gap-1 lg:justify-start">
-      <div className="flex flex-row items-center gap-3 cursor-pointer" onClick={() => setFixedRatio(!fixedRatio)}>
+      <div
+        className="flex flex-row items-center gap-3 cursor-pointer"
+        onClick={() => dispatch(setRemoveFixedRatio(!fixedRatio))}
+      >
         <Checkbox id={`chk-fixed-ratio-withdraw`} className="w-6 h-6" checked={fixedRatio} />
         <Typography variant="sm" weight={700} className={fixedRatio ? 'text-white' : ''}>
           {i18n._(t`Withdraw assets in equal amounts`)}
@@ -45,5 +41,4 @@ const FixedRatioHeader: FixedRatio<{ margin?: boolean }> = ({ margin = true }) =
   )
 }
 
-FixedRatioHeader.atom = fixedRatioAtom
 export default FixedRatioHeader

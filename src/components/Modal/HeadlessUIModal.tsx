@@ -11,8 +11,17 @@ import ModalError, { ModalActionErrorProps } from 'app/components/Modal/Error'
 import ModalHeader, { ModalHeaderProps } from 'app/components/Modal/Header'
 import SubmittedModalContent, { SubmittedModalContentProps } from 'app/components/Modal/SubmittedModalContent'
 import { classNames } from 'app/functions'
-import { cloneElement, FC, isValidElement, ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
+import { cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react'
 import React, { Fragment } from 'react'
+
+const MAX_WIDTH_CLASS_MAPPING = {
+  sm: 'lg:max-w-sm',
+  md: 'lg:max-w-md',
+  lg: 'lg:max-w-lg',
+  xl: 'lg:max-w-xl',
+  '2xl': 'lg:max-w-2xl',
+  '3xl': 'lg:max-w-3xl',
+}
 
 import useDesktopMediaQuery from '../../hooks/useDesktopMediaQuery'
 
@@ -134,7 +143,8 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
             <div
               className={classNames(
                 transparent ? '' : 'bg-dark-900 border border-dark-800',
-                isDesktop ? `lg:max-w-${maxWidth} w-full` : 'w-[85vw] max-h-[85vh] overflow-y-auto mx-auto',
+                isDesktop ? MAX_WIDTH_CLASS_MAPPING[maxWidth] : '',
+                isDesktop ? `w-full` : 'w-[85vw] max-h-[85vh] overflow-y-auto mx-auto',
                 'inline-block align-bottom rounded-xl text-left overflow-hidden transform p-4'
               )}
             >
@@ -145,15 +155,6 @@ const HeadlessUiModalControlled: FC<ControlledModalProps> = ({
       </Dialog>
     </Transition>
   )
-}
-
-const Test = () => {
-  useEffect(() => {
-    return () => {
-      console.log('efae')
-    }
-  }, [])
-  return <span />
 }
 
 HeadlessUiModal.Controlled = HeadlessUiModalControlled

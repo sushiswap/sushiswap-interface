@@ -157,7 +157,7 @@ const PairLayout = ({ children }) => {
       left={
         <Card
           className="h-full bg-dark-900"
-          backgroundImage="/borrow-graphic.png"
+          backgroundImage="/images/kashi/borrow.png"
           title={i18n._(t`Add collateral in order to borrow assets`)}
           description={i18n._(
             t`Gain exposure to tokens without reducing your assets. Leverage will enable you to take short positions against assets and earn from downside movements.`

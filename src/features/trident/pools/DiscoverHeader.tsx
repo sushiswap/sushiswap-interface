@@ -1,11 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { TridentHeader } from 'app/layouts/Trident'
 import Link from 'next/link'
 import React, { FC } from 'react'
 
 import Button from '../../../components/Button'
 import Typography from '../../../components/Typography'
-import { TridentHeader } from '../../../layouts/Trident'
 
 const HeaderButton: FC<{ title: string; linkTo: string; id?: string }> = ({ title, linkTo, id }) => (
   <Link href={linkTo} passHref={true}>
@@ -24,7 +24,7 @@ export const DiscoverHeader: FC = () => {
   const { i18n } = useLingui()
 
   return (
-    <TridentHeader maxWidth="full" pattern="bg-binary-pattern" className="sm:!flex-row justify-between items-center">
+    <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
       <div>
         <Typography variant="h2" className="text-high-emphesis" weight={700}>
           {i18n._(t`Provide liquidity & earn.`)}

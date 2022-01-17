@@ -1,9 +1,10 @@
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import Popover from 'app/components/Popover'
 import Typography from 'app/components/Typography'
-import useBalancesMenuItems from 'app/features/trident/balances/context/useBalancesMenuItems'
+import useBalancesMenuItems from 'app/features/trident/balances/useBalancesMenuItems'
 import { classNames, shortenAddress } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import useENSName from 'app/hooks/useENSName'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { FC, useState } from 'react'
@@ -18,6 +19,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ label, hideAccount = false })
   const { account } = useActiveWeb3React()
   const [show, setShow] = useState<boolean>(false)
   const items = useBalancesMenuItems()
+  const { ENSName } = useENSName(account ?? undefined)
 
   const content = (
     <div className="flex flex-col lg:flex-row text-left lg:items-baseline lg:gap-4" onClick={() => setShow(!show)}>
@@ -31,8 +33,8 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ label, hideAccount = false })
         />
       </div>
       {account && !hideAccount && (
-        <Typography variant="sm" className="hidden lg:block text-secondary z-[2]">
-          {shortenAddress(account)}
+        <Typography className="hidden lg:block text-high-emphesis" weight={700}>
+          {ENSName ? ENSName : shortenAddress(account)}
         </Typography>
       )}
     </div>

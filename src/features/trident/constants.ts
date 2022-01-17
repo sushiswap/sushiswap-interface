@@ -1,5 +1,10 @@
+import { Percent } from '@sushiswap/core-sdk'
 import { PoolType } from '@sushiswap/tines'
 import { ChipColor } from 'app/components/Chip'
+import { classNames } from 'app/functions'
+
+export const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
+export const DEFAULT_REMOVE_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 type PoolTypesInterface = Record<
   PoolType,
@@ -67,3 +72,16 @@ export const POOL_TYPES: PoolTypesInterface = {
     },
   },
 }
+
+export const TABLE_WRAPPER_DIV_CLASSNAME =
+  'overflow-x-auto border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]'
+export const TABLE_TABLE_CLASSNAME = 'w-full'
+export const TABLE_TR_TH_CLASSNAME = (i, length) =>
+  classNames('text-secondary text-sm py-3', i === 0 ? 'pl-4 text-left' : 'text-right', i === length - 1 ? 'pr-4' : '')
+export const TABLE_TBODY_TR_CLASSNAME = 'hover:bg-dark-900/40 hover:cursor-pointer'
+export const TABLE_TBODY_TD_CLASSNAME = (i, length) =>
+  classNames(
+    'py-3 border-t border-dark-900 flex items-center',
+    i === 0 ? 'pl-4 justify-start' : 'justify-end',
+    i === length - 1 ? 'pr-4' : ''
+  )
