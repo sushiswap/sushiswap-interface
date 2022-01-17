@@ -18,11 +18,11 @@ const useBalancesMenuItems = () => {
       icon: <BentoboxIcon width={20} height={20} />,
       link: '/trident/balances/bentobox',
     },
-    {
-      key: 'liquidity',
-      label: i18n._(t`Liquidity Pools`),
-      link: '/trident/balances/liquidity',
-    },
+    // {
+    //   key: 'liquidity',
+    //   label: i18n._(t`Liquidity Pools`),
+    //   link: '/trident/balances/liquidity',
+    // },
   ]
 }
 

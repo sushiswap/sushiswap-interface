@@ -1,9 +1,7 @@
-import { SwitchHorizontalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE } from '@sushiswap/core-sdk'
-import Divider from 'app/components/Divider'
-import { BentoboxIcon, TransferIcon } from 'app/components/Icon'
+import { BentoboxIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
 import ActionItem from 'app/features/trident/balances/ActionsModal/ActionItem'
 import { setBalancesActiveModal } from 'app/features/trident/balances/balancesSlice'
@@ -29,34 +27,32 @@ const BentoActions: FC = () => {
   }, [chainId, currency?.isNative, currency?.wrapped.address, router])
 
   return (
-    <div className="flex flex-col bg-dark-900 p-5 gap-5">
-      <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-5 p-5 bg-dark-900">
+      {/* <div className="flex flex-col gap-1">
         <Typography variant="sm" weight={700} className="text-high-emphesis">
           {i18n._(t`Strategy`)}
         </Typography>
         <div className="flex justify-between">
-          {/*TODO Ramin*/}
-          <Typography variant={isDesktop ? 'sm' : 'h3'} className="text-green italic" weight={700}>
+          <Typography variant={isDesktop ? 'sm' : 'h3'} className="italic text-green" weight={700}>
             coming soon
           </Typography>
-          {/*TODO Ramin*/}
-          <Typography variant={isDesktop ? 'sm' : 'h3'} className="text-high-emphesis italic" weight={700}>
+          <Typography variant={isDesktop ? 'sm' : 'h3'} className="italic text-high-emphesis" weight={700}>
             coming soon
           </Typography>
         </div>
       </div>
-      <Divider />
+      <Divider /> */}
       <div className="flex flex-col gap-3">
         <Typography variant="lg" weight={700} className="text-high-emphesis lg:mt-2">
           {i18n._(t`Available Actions`)}
         </Typography>
-        <ActionItem svg={<SwitchHorizontalIcon width={24} />} label={i18n._(t`Swap`)} onClick={swapActionHandler} />
+        {/* <ActionItem svg={<SwitchHorizontalIcon width={24} />} label={i18n._(t`Swap`)} onClick={swapActionHandler} /> */}
         <ActionItem
           svg={<BentoboxIcon width={20} height={20} />}
           label={i18n._(t`Withdraw to Wallet`)}
           onClick={() => dispatch(setBalancesActiveModal(ActiveModal.WITHDRAW))}
         />
-        <ActionItem svg={<TransferIcon width={24} height={24} />} label={i18n._(t`Transfer`)} />
+        {/* <ActionItem svg={<TransferIcon width={24} height={24} />} label={i18n._(t`Transfer`)} /> */}
       </div>
     </div>
   )

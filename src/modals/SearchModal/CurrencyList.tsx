@@ -163,17 +163,16 @@ const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
   }, [currencies.length, otherListTokens])
 
   const Row = useCallback(
-    ({ index, key, style }) => {
+    ({ index, style }) => {
       const currency = itemData[index]
       if (isBreakLine(currency)) {
-        return <BreakLineComponent style={style} key={key} />
+        return <BreakLineComponent style={style} />
       }
 
       return (
         <CurrencyRow
           currency={currency}
           style={style}
-          key={key}
           balance={balancesMap[currency.isNative ? AddressZero : currency.wrapped.address]}
         />
       )

@@ -10,7 +10,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import FarmListItem from './FarmListItem'
 
 const FarmList = ({ farms, term }) => {
-  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'roiPerYear' })
+  const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'tvl', direction: 'descending' })
   const { i18n } = useLingui()
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
 
@@ -18,7 +18,7 @@ const FarmList = ({ farms, term }) => {
     <>
       <div className="grid grid-cols-4 text-base font-bold text-primary">
         <div
-          className="flex items-center col-span-2 px-4 cursor-pointer md:col-span-1"
+          className="flex items-center col-span-2 pl-4 cursor-pointer md:col-span-1"
           onClick={() => requestSort('symbol')}
         >
           <div className="hover:text-high-emphesis">{i18n._(t`Pool`)}</div>
@@ -28,7 +28,7 @@ const FarmList = ({ farms, term }) => {
               (sortConfig.direction === 'descending' && <ChevronDownIcon width={12} height={12} />))}
         </div>
         <div
-          className="flex items-center px-4 cursor-pointer hover:text-high-emphesis"
+          className="flex items-center pl-8 cursor-pointer hover:text-high-emphesis"
           onClick={() => requestSort('tvl')}
         >
           {i18n._(t`TVL`)}
@@ -37,11 +37,11 @@ const FarmList = ({ farms, term }) => {
             ((sortConfig.direction === 'ascending' && <ChevronUpIcon width={12} height={12} />) ||
               (sortConfig.direction === 'descending' && <ChevronDownIcon width={12} height={12} />))}
         </div>
-        <div className="items-center justify-start hidden px-4 md:flex hover:text-high-emphesis">
+        <div className="items-center justify-start hidden pl-4 md:flex hover:text-high-emphesis">
           {i18n._(t`Rewards`)}
         </div>
         <div
-          className="flex items-center justify-end px-4 cursor-pointer hover:text-high-emphesis"
+          className="flex items-center justify-end pr-4 cursor-pointer hover:text-high-emphesis"
           onClick={() => requestSort('roiPerYear')}
         >
           {i18n._(t`APR`)}

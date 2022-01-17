@@ -20,11 +20,11 @@ const FarmListItem = ({ farm, ...rest }) => {
           <Disclosure.Button
             className={classNames(
               open && 'rounded-b-none',
-              'w-full px-4 py-6 text-left rounded cursor-pointer select-none bg-dark-900 text-primary text-sm md:text-lg'
+              'w-full py-6 text-left rounded cursor-pointer select-none bg-dark-900 text-primary text-sm md:text-lg'
             )}
           >
             <div className="grid grid-cols-4">
-              <div className="flex col-span-2 space-x-4 md:col-span-1">
+              <div className="flex col-span-2 pl-4 space-x-4 md:col-span-1">
                 <DoubleLogo currency0={token0} currency1={token1} size={40} />
                 <div className="flex flex-col justify-center">
                   <div>
@@ -34,15 +34,15 @@ const FarmListItem = ({ farm, ...rest }) => {
                     </span>
                   </div>
                   {farm?.pair?.type === PairType.SWAP && (
-                    <div className="text-xs md:text-base text-secondary">SushiSwap Farm</div>
+                    <div className="text-xs md:text-base text-secondary whitespace-nowrap">SushiSwap Farm</div>
                   )}
                   {farm?.pair?.type === PairType.KASHI && (
-                    <div className="text-xs md:text-base text-secondary">Kashi Farm</div>
+                    <div className="text-xs md:text-base text-secondary whitespace-nowrap">Kashi Farm</div>
                   )}
                 </div>
               </div>
-              <div className="flex flex-col justify-center font-bold">{formatNumber(farm.tvl, true)}</div>
-              <div className="flex-row items-center hidden space-x-4 md:flex">
+              <div className="flex flex-col justify-center pl-8 font-bold">{formatNumber(farm.tvl, true)}</div>
+              <div className="flex-row items-center hidden pl-4 space-x-4 md:flex">
                 <div className="flex items-center space-x-2">
                   {farm?.rewards?.map((reward, i) => (
                     <div key={i} className="flex items-center">
@@ -58,7 +58,7 @@ const FarmListItem = ({ farm, ...rest }) => {
                   ))}
                 </div>
               </div>
-              <div className="flex flex-col items-end justify-center">
+              <div className="flex flex-col items-end justify-center pr-4">
                 <div className="flex flex-row items-center font-bold text-right text-high-emphesis">
                   {farm?.tvl !== 0
                     ? farm?.roiPerYear > 10000

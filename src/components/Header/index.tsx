@@ -19,13 +19,13 @@ const Header: FC = () => {
       <header className="fixed z-20 flex-shrink-0 w-full filter" style={{ height: HEADER_HEIGHT }}>
         <Popover as={Fragment}>
           {({ open }) => {
-            const background =
-              pathname.includes('swap') && scrollY <= HEADER_HEIGHT / 3 && !open
-                ? ''
-                : 'backdrop-blur-[20px] bg-[rgba(255,255,255,0.03)] border-b border-[rgba(255,255,255,0.12)]'
-
             return (
-              <nav className={classNames(background, 'z-10 w-full')}>
+              <nav
+                className={classNames(
+                  'backdrop-blur-[20px] bg-[rgba(255,255,255,0.03)] border-b border-[rgba(255,255,255,0.12)]',
+                  'z-10 w-full'
+                )}
+              >
                 <Container maxWidth="7xl" className="mx-auto">
                   <DesktopNav mobileMenuOpen={open} />
                   <MobileNav />
