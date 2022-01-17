@@ -1,31 +1,16 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { useAddDetails } from 'app/features/trident/add/useAddDetails'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 
-import { DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE, liquidityModeAtom, poolAtom, poolBalanceAtom } from '../context/atoms'
-import { useDependentAssetInputs } from '../context/hooks/useDependentAssetInputs'
-import { usePoolDetailsMint } from '../context/hooks/usePoolDetails'
-import { useZapAssetInput } from '../context/hooks/useZapAssetInput'
 import TransactionDetailsExplanationModal from '../TransactionDetailsExplanationModal'
-import { LiquidityMode } from '../types'
 
 const TransactionDetails: FC = () => {
   const { i18n } = useLingui()
-  const { pool } = useRecoilValue(poolAtom)
-  const poolBalance = useRecoilValue(poolBalanceAtom)
-  const { parsedAmounts } = useDependentAssetInputs()
-
-  // TODO parsedSplitAmounts is still empty
-  const { parsedSplitAmounts } = useZapAssetInput()
-
-  const liquidityMode = useRecoilValue(liquidityModeAtom)
-  const input = liquidityMode === LiquidityMode.ZAP ? parsedSplitAmounts : parsedAmounts
-  const { price, poolShareBefore, liquidityMinted, poolShareAfter } = usePoolDetailsMint(
-    input,
-    DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE
-  )
+  const { poolWithState, poolBalance } = usePoolContext()
+  const { price, poolShareBefore, liquidityMinted, poolShareAfter } = useAddDetails()
 
   return (
     <div className="flex flex-col gap-4 lg:gap-8">
@@ -40,22 +25,22 @@ const TransactionDetails: FC = () => {
         </TransactionDetailsExplanationModal>
       </div>
       <div className="flex flex-col gap-1">
-        {pool && (
+        {poolWithState?.pool && (
           <>
             <div className="flex flex-row justify-between gap-2">
               <Typography variant="sm" className="text-secondary">
-                1 {pool?.token0?.symbol}
+                1 {poolWithState.pool?.token0?.symbol}
               </Typography>
               <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-                {price ? price.toSignificant(6) : '0.000'} {pool?.token1?.symbol}
+                {price ? price.toSignificant(6) : '0.000'} {poolWithState.pool?.token1?.symbol}
               </Typography>
             </div>
             <div className="flex flex-row justify-between">
               <Typography variant="sm" className="text-secondary">
-                1 {pool?.token1?.symbol}
+                1 {poolWithState.pool?.token1?.symbol}
               </Typography>
               <Typography weight={700} variant="sm" className="text-high-emphesis text-right">
-                {price ? price.invert().toSignificant(6) : '0.000'} {pool?.token0?.symbol}
+                {price ? price.invert().toSignificant(6) : '0.000'} {poolWithState.pool?.token0?.symbol}
               </Typography>
             </div>
           </>
@@ -97,22 +82,6 @@ const TransactionDetails: FC = () => {
             )}
           </Typography>
         </div>
-        {/*<div className="flex flex-row justify-between">*/}
-        {/*  <Typography variant="sm" className="text-secondary">*/}
-        {/*    {i18n._(t`Liquidity Provider Fee`)}*/}
-        {/*  </Typography>*/}
-        {/*  <Typography weight={700} variant="sm" className="text-high-emphesis">*/}
-        {/*    0.00283 ETH*/}
-        {/*  </Typography>*/}
-        {/*</div>*/}
-        {/*<div className="flex flex-row justify-between">*/}
-        {/*  <Typography variant="sm" className="text-secondary">*/}
-        {/*    {i18n._(t`Network Fee`)}*/}
-        {/*  </Typography>*/}
-        {/*  <Typography weight={700} variant="sm" className="text-high-emphesis">*/}
-        {/*    0.008654 ETH*/}
-        {/*  </Typography>*/}
-        {/*</div>*/}
       </div>
     </div>
   )

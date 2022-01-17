@@ -3,9 +3,9 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Percent } from '@sushiswap/core-sdk'
 import selectCoinAnimation from 'app/animation/select-coin.json'
-import { BentoBoxIcon, WalletIcon } from 'app/components/AssetInput/icons'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
 import NumericalInput from 'app/components/Input/Numeric'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
@@ -140,12 +140,12 @@ const WalletSwitch: FC<
           onChange={onChange}
           checkedIcon={
             <div className="flex items-center justify-center w-full h-full text-dark-700">
-              <WalletIcon />
+              <WalletIcon width={16} height={14} />
             </div>
           }
           uncheckedIcon={
             <div className="flex items-center justify-center w-full h-full text-dark-700">
-              <BentoBoxIcon />
+              <BentoboxIcon width={16} height={16} />
             </div>
           }
         />

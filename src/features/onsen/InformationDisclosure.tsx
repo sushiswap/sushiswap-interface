@@ -24,9 +24,9 @@ const InformationDisclosure = ({ farm }) => {
           <Transition
             show={open}
             as={Fragment}
-            enter="transition ease-in duration-200"
-            enterFrom="opacity-0 translate-y-1"
-            enterTo="opacity-100 translate-y-0"
+            enter="transition ease-in duration-300"
+            enterFrom="opacity-0 translate-x-1"
+            enterTo="opacity-100 translate-x-0"
           >
             <Disclosure.Panel
               static

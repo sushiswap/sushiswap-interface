@@ -8,12 +8,12 @@ import {
   findMultiRouteExactOut,
   findSingleRouteExactIn,
   findSingleRouteExactOut,
+  PoolState,
   Trade,
 } from '@sushiswap/trident-sdk'
 import { PoolUnion } from 'app/features/trident/types'
 import { toShareCurrencyAmount } from 'app/functions'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
-import { ConstantProductPoolState } from 'app/hooks/useConstantProductPools'
 import { PairState, useV2Pairs } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
@@ -33,7 +33,7 @@ export function useAllCommonPools(currencyA?: Currency, currencyB?: Currency): (
     () => [
       ...Object.values(
         pools.reduce<(PoolUnion | Pair)[]>((acc, result) => {
-          if (!Array.isArray(result) && result.state === ConstantProductPoolState.EXISTS && result.pool) {
+          if (!Array.isArray(result) && result.state === PoolState.EXISTS && result.pool) {
             acc.push(result.pool)
           }
 

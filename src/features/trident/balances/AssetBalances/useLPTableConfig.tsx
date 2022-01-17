@@ -10,23 +10,10 @@ import { TridentPositionRow } from 'app/services/graph'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 
 export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
   const { chainId } = useActiveWeb3React()
-
-  const poolSlug = useCallback((poolType) => {
-    switch (poolType) {
-      case PoolType.ConstantProduct:
-        return 'classic'
-      case PoolType.Hybrid:
-        return 'stable'
-      case PoolType.ConcentratedLiquidity:
-        return 'concentrated'
-      case PoolType.Weighted:
-        return 'index'
-    }
-  }, [])
 
   const AssetColumns = useMemo(
     () =>
@@ -100,11 +87,11 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
               maxWidth: 100,
               className: 'text-right flex justify-end',
               cellClassName: 'justify-end',
-              Cell: ({ value, row: { original } }) => {
+              Cell: ({ row: { original } }) => {
                 return (
                   <Link
                     href={{
-                      pathname: `/trident/pool/${poolSlug(value)}`,
+                      pathname: `/trident/pool`,
                       query: {
                         tokens: original.assets.map((el) => el.address),
                         fee: original.swapFeePercent * 100,
@@ -113,7 +100,7 @@ export const useLPTableConfig = (positions?: TridentPositionRow[]) => {
                     }}
                     passHref={true}
                   >
-                    <Button color="gradient" variant="outlined" className="text-sm font-bold text-white h-8">
+                    <Button color="blue" size="sm" variant="empty">
                       Manage
                     </Button>
                   </Link>

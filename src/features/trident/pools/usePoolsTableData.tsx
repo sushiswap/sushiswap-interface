@@ -77,7 +77,7 @@ export const usePoolsTableData = () => {
         maxWidth: 100,
         Cell: () => (
           /* Entire row is clickable, hence button does not need link */
-          <Button color="blue" size="sm" variant="outlined">
+          <Button color="blue" size="sm" variant="empty">
             Invest
           </Button>
         ),

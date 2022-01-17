@@ -14,7 +14,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useCombinedActiveList } from 'app/state/lists/hooks'
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
-import React, { CSSProperties, FC, useMemo } from 'react'
+import React, { CSSProperties, FC, useCallback, useMemo } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeList as List } from 'react-window'
 
@@ -150,14 +150,17 @@ const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currencies.length, otherListTokens])
 
-  const Row = ({ index, key, style }) => {
-    const currency = itemData[index]
-    if (isBreakLine(currency)) {
-      return <BreakLineComponent style={style} key={key} />
-    }
+  const Row = useCallback(
+    ({ index, style }) => {
+      const currency = itemData[index]
+      if (isBreakLine(currency)) {
+        return <BreakLineComponent style={style} />
+      }
 
-    return <CurrencyRow currency={currency} style={style} key={key} />
-  }
+      return <CurrencyRow currency={currency} style={style} />
+    },
+    [itemData]
+  )
 
   return (
     <div id="all-currencies-list" className="flex flex-col flex-1 flex-grow h-full divide-y divide-dark-800">

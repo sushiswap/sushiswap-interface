@@ -18,11 +18,11 @@ export const useTableConfig = (assets?: Assets[]) => {
         Cell: (props) => {
           return (
             <div className="flex gap-2.5 items-center">
-              <CurrencyLogo currency={props.cell.value.currency} className="rounded-full" size={28} />
+              <CurrencyLogo currency={props.cell.value.currency} className="!rounded-full" size={28} />
               <Typography
                 weight={isDesktop ? 400 : 700}
                 variant={isDesktop ? 'sm' : 'base'}
-                className="text-high-emphesis text-left"
+                className="text-left text-high-emphesis"
               >
                 {props.cell.value.currency.symbol}
               </Typography>
@@ -41,7 +41,7 @@ export const useTableConfig = (assets?: Assets[]) => {
             <Typography
               weight={isDesktop ? 400 : 700}
               variant={isDesktop ? 'sm' : 'base'}
-              className="text-high-emphesis text-left"
+              className="text-left text-high-emphesis"
             >
               {props.cell.value.toSignificant(6)}
             </Typography>
@@ -61,9 +61,9 @@ export const useTableConfig = (assets?: Assets[]) => {
             <Typography
               weight={700}
               variant={isDesktop ? 'sm' : 'base'}
-              className="text-high-emphesis text-right w-full"
+              className="w-full text-right text-high-emphesis"
             >
-              ${usdcValue?.toExact({})}
+              {usdcValue ? `$${usdcValue?.toExact({})}` : '-'}
             </Typography>
           )
         },

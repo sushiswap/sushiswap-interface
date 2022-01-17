@@ -1,10 +1,10 @@
 import { Interface } from '@ethersproject/abi'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import { default as constantProductPoolArtifact } from '@sushiswap/trident/artifacts/contracts/pool/ConstantProductPool.sol/ConstantProductPool.json'
-import { computeConstantProductPoolAddress, ConstantProductPool, Fee } from '@sushiswap/trident-sdk'
-import { PoolAtomType } from 'app/features/trident/types'
+import { computeConstantProductPoolAddress, ConstantProductPool, Fee, PoolState } from '@sushiswap/trident-sdk'
 import { enumToArray } from 'app/functions/array/enumToArray'
 import { useConstantProductPoolFactory } from 'app/hooks/useContract'
+import { PoolWithState } from 'app/types'
 import combinate from 'combinate'
 import { useMemo } from 'react'
 
@@ -12,16 +12,11 @@ import { useMultipleContractSingleData } from '../state/multicall/hooks'
 
 const POOL_INTERFACE = new Interface(constantProductPoolArtifact.abi)
 
-export enum ConstantProductPoolState {
-  LOADING,
-  NOT_EXISTS,
-  EXISTS,
-  INVALID,
-}
-
 type PoolInput = [Currency | undefined, Currency | undefined, Fee | undefined, boolean | undefined]
 
-export function useConstantProductPoolsPermutations(currencies: [Currency | undefined, Currency | undefined][]) {
+export function useConstantProductPoolsPermutations(
+  currencies: [Currency | undefined, Currency | undefined][]
+): PoolWithState<ConstantProductPool>[] {
   const permutations = useMemo(() => {
     if (!currencies.length) return []
     return combinate({
@@ -34,7 +29,7 @@ export function useConstantProductPoolsPermutations(currencies: [Currency | unde
   return useConstantProductPools(permutations)
 }
 
-export function useConstantProductPools(pools: PoolInput[]): PoolAtomType[] {
+export function useConstantProductPools(pools: PoolInput[]): PoolWithState<ConstantProductPool>[] {
   const constantProductPoolFactory = useConstantProductPoolFactory()
   const poolsAddresses = useMemo(
     () =>
@@ -70,14 +65,14 @@ export function useConstantProductPools(pools: PoolInput[]): PoolAtomType[] {
       const tokenB = pools[i][1]?.wrapped
       const fee = pools[i]?.[2]
       const twap = pools[i]?.[3]
-      if (loading) return { state: ConstantProductPoolState.LOADING }
-      if (!reserves) return { state: ConstantProductPoolState.NOT_EXISTS }
-      if (!tokenA || !tokenB || tokenA.equals(tokenB)) return { state: ConstantProductPoolState.INVALID }
+      if (loading) return { state: PoolState.LOADING }
+      if (!reserves) return { state: PoolState.NOT_EXISTS }
+      if (!tokenA || !tokenB || tokenA.equals(tokenB)) return { state: PoolState.INVALID }
 
       const { _reserve0: reserve0, _reserve1: reserve1 } = reserves
       const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
       return {
-        state: ConstantProductPoolState.EXISTS,
+        state: PoolState.EXISTS,
         pool: new ConstantProductPool(
           CurrencyAmount.fromRawAmount(token0, reserve0.toString()),
           CurrencyAmount.fromRawAmount(token1, reserve1.toString()),
@@ -89,7 +84,12 @@ export function useConstantProductPools(pools: PoolInput[]): PoolAtomType[] {
   }, [results, pools])
 }
 
-export function useConstantProductPool(tokenA?: Currency, tokenB?: Currency, fee?: Fee, twap?: boolean): PoolAtomType {
+export function useConstantProductPool(
+  tokenA?: Currency,
+  tokenB?: Currency,
+  fee?: Fee,
+  twap?: boolean
+): PoolWithState<ConstantProductPool> {
   const inputs: [PoolInput] = useMemo(() => [[tokenA, tokenB, fee, twap]], [tokenA, tokenB, fee, twap])
   return useConstantProductPools(inputs)[0]
 }

@@ -342,8 +342,6 @@ export default function useFarmRewards() {
     const feeApyPerDay = feeApyPerMonth / 30
     const feeApyPerHour = feeApyPerDay / blocksPerHour
 
-    // console.log({ feeApyPerYear, feeApyPerMonth, feeApyPerDay, feeApyPerHour })
-
     const roiPerBlock =
       rewards.reduce((previousValue, currentValue) => {
         return previousValue + currentValue.rewardPerBlock * currentValue.rewardPrice
