@@ -147,7 +147,7 @@ const VestingLayout = () => {
               <br />
               <br />
               {i18n._(t`Additional records and weekly merkle updates can be found on`)}{' '}
-              <ExternalLink href="https://github.com/sushiswap/sushi-vesting">Github</ExternalLink>
+              <ExternalLink href="https://github.com/sushiswap/sushi-vesting">GitHub</ExternalLink>
             </>
           </div>
         </div>

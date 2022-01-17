@@ -1,4 +1,7 @@
 import { Block } from '@ethersproject/abstract-provider'
+import { BigNumber } from '@ethersproject/bignumber'
+import { Zero } from '@ethersproject/constants'
+import { Formatter } from '@ethersproject/providers'
 import { ChainId } from '@sushiswap/core-sdk'
 import useDebounce from 'app/hooks/useDebounce'
 import useIsWindowVisible from 'app/hooks/useIsWindowVisible'
@@ -11,6 +14,35 @@ import { updateBlockNumber, updateBlockTimestamp, updateChainId } from './action
 export default function Updater(): null {
   const { library, chainId, account } = useActiveWeb3React()
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (chainId === ChainId.CELO) {
+      const originalBlockFormatter = library.formatter._block
+      library.formatter._block = (value, format) => {
+        return originalBlockFormatter(
+          {
+            gasLimit: Zero,
+            ...value,
+          },
+          format
+        )
+      }
+    }
+    return () => {
+      if (chainId === ChainId.CELO) {
+        library.formatter._block = (value: any, format: any): Block => {
+          if (value.author != null && value.miner == null) {
+            value.miner = value.author
+          }
+          // The difficulty may need to come from _difficulty in recursed blocks
+          const difficulty = value._difficulty != null ? value._difficulty : value.difficulty
+          const result = Formatter.check(format, value)
+          result._difficulty = difficulty == null ? null : BigNumber.from(difficulty)
+          return result
+        }
+      }
+    }
+  }, [chainId, library])
 
   const windowVisible = useIsWindowVisible()
 
@@ -42,7 +74,12 @@ export default function Updater(): null {
     [chainId, setState]
   )
 
-  const onBlock = useCallback((number) => library.getBlock(number).then(blockCallback), [blockCallback, library])
+  const onBlock = useCallback(
+    (number) => {
+      return library.getBlock(number).then(blockCallback)
+    },
+    [blockCallback, library]
+  )
 
   // attach/detach listeners
   useEffect(() => {
