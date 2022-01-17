@@ -385,7 +385,7 @@ export default function Repay({ pair }: RepayProps) {
         color="pink"
         content={(onCook: any) => (
           <TokenApproveButton value={displayRepayValue} token={assetToken} needed={!useBentoRepay}>
-            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
+            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled} fullWidth={true}>
               {actionName}
             </Button>
           </TokenApproveButton>
