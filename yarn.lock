@@ -1299,10 +1299,10 @@
     "@web3-react/types" "^6.0.7"
     tiny-warning "^1.0.3"
 
-"@chainsafe/dappeteer@^2.2.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@chainsafe/dappeteer/-/dappeteer-2.4.0.tgz#e8c7575da407f42a98e3b804f75c1f8a894dc638"
-  integrity sha512-fSkLMYfoEpjqGeBmlzeLi8gc+bG2WDIdc6TM4f8wErhqqSI7RLr/7NFECaQyxAeuyFKD/gsNQAszPnXbQtwqbg==
+"@chainsafe/dappeteer@2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@chainsafe/dappeteer/-/dappeteer-2.2.0.tgz#420a83e3e8b8caa70604357e192caa6cbe73cf19"
+  integrity sha512-YY3uVpQMPVNJdCGfZ0W2PzJtjSKi2ZRS8G2ozSo5QpOPkSGxvyW5RiI4hIOgw9C/y2LepPFr4+VN2KgAIGdWxQ==
   dependencies:
     node-stream-zip "^1.13.0"
 

@@ -19,7 +19,5 @@ export class LiquidityPoolsPage extends AppPage {
     await poolButton.click()
 
     await this.Page.waitForSelector(`#pool-title-${poolName}`)
-
-    await this.Metamask.page.waitForTimeout(1000)
   }
 }

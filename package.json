@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@binance-chain/bsc-connector": "^1.0.0",
-    "@chainsafe/dappeteer": "^2.2.0",
+    "@chainsafe/dappeteer": "2.2.0",
     "@clover-network/clover-connector": "^1.0.0",
     "@commitlint/cli": "^13.0.0",
     "@commitlint/config-conventional": "^13.0.0",
