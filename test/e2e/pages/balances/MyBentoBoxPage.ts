@@ -4,8 +4,8 @@ import { Page } from 'puppeteer'
 import { AppPage } from '../AppPage'
 import { AssetBalancesComponent } from './AssetBalancesComponent'
 
-export class MyWalletPage extends AppPage {
-  protected Route: string = '/trident/balances/wallet'
+export class MyBentoBoxPage extends AppPage {
+  protected Route: string = '/trident/balances/bentobox'
   private AssetBalances: AssetBalancesComponent
 
   constructor(page: Page, metamask: Dappeteer, baseUrl: string) {
@@ -14,7 +14,7 @@ export class MyWalletPage extends AppPage {
     this.AssetBalances = new AssetBalancesComponent(page)
   }
 
-  public async getWalletBalances(): Promise<Record<string, number>> {
+  public async getBentoBalances(): Promise<Record<string, number>> {
     return await this.AssetBalances.getAssetBalances()
   }
 }

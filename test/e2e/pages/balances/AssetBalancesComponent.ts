@@ -12,8 +12,10 @@ export class AssetBalancesComponent extends AppPageComponent {
     for (const balanceRow of balancesList) {
       let assetSymbol: string = ''
       let assetBalance: number = 0
+      let rowSelector = `#asset-balances-row-${balancesList.indexOf(balanceRow)} > div`
 
-      const balanceCells = await this.Page.$$(`#asset-balances-row-${balancesList.indexOf(balanceRow)} > div`)
+      await this.Page.waitForSelector(rowSelector)
+      const balanceCells = await this.Page.$$(rowSelector)
 
       for (let cellIndex = 0; cellIndex < balanceCells.length - 1; cellIndex++) {
         const balanceCell = balanceCells[cellIndex]
