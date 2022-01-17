@@ -1,5 +1,8 @@
 @tailwind base;
 
+@import '@fontsource/dm-sans/index.css';
+@import 'react-virtualized/styles.css';
+@import 'rc-slider/assets/index.css';
 @import './variables.css';
 
 @tailwind components;
@@ -20,6 +23,8 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 html,
@@ -36,8 +41,6 @@ body {
   position: relative;
   margin: 0;
   min-height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
 
 a {
@@ -57,21 +60,25 @@ input:focus {
   background: repeating-linear-gradient(45deg, #161522, #161522 10px, #0d0415 10px, #0d0415 20px);
 }
 
-/* *::-webkit-scrollbar {
-  width: var(--scrollbar-width);
-}
+/**::-webkit-scrollbar {*/
+/*  width: var(--scrollbar-width);*/
+/*}*/
 
-::-webkit-scrollbar-track-piece:start {
-  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAADklEQVR42mNkgAJG3AwAAH4ABWjFc8IAAAAASUVORK5CYII=) repeat-y !important;
-}
+/*::-webkit-scrollbar-track-piece:start {*/
+/*  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAADklEQVR42mNkgAJG3AwAAH4ABWjFc8IAAAAASUVORK5CYII=) repeat-y !important;*/
+/*}*/
 
-::-webkit-scrollbar-track-piece:end {
-  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAADklEQVR42mNkgAJG3AwAAH4ABWjFc8IAAAAASUVORK5CYII=) repeat-y !important;
-}
+/*::-webkit-scrollbar-track-piece:end {*/
+/*  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAADklEQVR42mNkgAJG3AwAAH4ABWjFc8IAAAAASUVORK5CYII=) repeat-y !important;*/
+/*}*/
 
-*::-webkit-scrollbar-thumb {
-  border: 3px solid rgba(0, 0, 0, 0);
-  background-clip: padding-box;
-  border-radius: 9999px;
-  background-color: #BFBFBF;
-} */
+/**::-webkit-scrollbar-thumb {*/
+/*  border: 3px solid rgba(0, 0, 0, 0);*/
+/*  background-clip: padding-box;*/
+/*  border-radius: 9999px;*/
+/*  background-color: #BFBFBF;*/
+/*}*/
+
+input[type=datetime-local]::-webkit-calendar-picker-indicator {
+  background-image: url('../../public/images/datepicker-icon.svg')
+}

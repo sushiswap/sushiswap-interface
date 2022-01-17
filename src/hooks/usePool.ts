@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
 import IUniswapV2PairABI from '@sushiswap/core/abi/IUniswapV2Pair.json'
-import { useContract } from './useContract'
+import { useCallback, useEffect, useState } from 'react'
+
 import { isAddress } from '../functions'
-import { BigNumber } from '@ethersproject/bignumber'
+import { useContract } from './useContract'
 
 const usePool = (poolAddress: string | undefined) => {
   const [poolData, setPoolData] = useState<any>({})

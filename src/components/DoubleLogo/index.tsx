@@ -1,7 +1,8 @@
-import { Currency } from '@sushiswap/sdk'
-import CurrencyLogo from '../CurrencyLogo'
+import { Currency } from '@sushiswap/core-sdk'
+import { classNames } from 'app/functions'
 import React from 'react'
-import { classNames } from '../../functions'
+
+import { CurrencyLogo } from '../CurrencyLogo'
 
 interface DoubleCurrencyLogoProps {
   margin?: boolean

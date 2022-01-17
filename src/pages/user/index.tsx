@@ -1,26 +1,25 @@
-import { ExternalLink, User } from 'react-feather'
-import React, { useCallback, useMemo } from 'react'
-import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
-import useSWR, { SWRResponse } from 'swr'
-
-import Back from '../../components/Back'
-import Button from '../../components/Button'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import Head from 'next/head'
-import { NETWORK_LABEL } from '../../constants/networks'
-import { TransactionDetails } from '../../state/transactions/reducer'
-import TransactionList from '../../components/TransactionList'
-import Typography from '../../components/Typography'
-import { clearAllTransactions } from '../../state/transactions/actions'
-import { getExplorerLink } from '../../functions/explorer'
-import { shortenAddress } from '../../functions/format'
 import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAppDispatch } from '../../state/hooks'
-import useENSName from '../../hooks/useENSName'
-import { useETHBalances } from '../../state/wallet/hooks'
 import { useLingui } from '@lingui/react'
+import Back from 'app/components/Back'
+import Button from 'app/components/Button'
+import Container from 'app/components/Container'
+import Dots from 'app/components/Dots'
+import Typography from 'app/components/Typography'
+import { NETWORK_LABEL } from 'app/config/networks'
+import TransactionList from 'app/features/user/TransactionList'
+import { getExplorerLink } from 'app/functions/explorer'
+import { shortenAddress } from 'app/functions/format'
+import useENSName from 'app/hooks/useENSName'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch } from 'app/state/hooks'
+import { clearAllTransactions } from 'app/state/transactions/actions'
+import { isTransactionRecent, useAllTransactions } from 'app/state/transactions/hooks'
+import { TransactionDetails } from 'app/state/transactions/reducer'
+import { useETHBalances } from 'app/state/wallet/hooks'
+import Head from 'next/head'
+import React, { useCallback, useMemo } from 'react'
+import { ExternalLink, User } from 'react-feather'
+import useSWR, { SWRResponse } from 'swr'
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
@@ -125,7 +124,7 @@ export default function Me() {
           <Typography component="h2" variant="lg" className="font-medium text-high-emphesis">
             {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId]}`)}
           </Typography>
-          <Button variant="link" onClick={clearAllTransactionsCallback}>
+          <Button variant="empty" color="blue" onClick={clearAllTransactionsCallback}>
             <span className="text-sm">{i18n._(t`Clear History`)}</span>
           </Button>
         </div>

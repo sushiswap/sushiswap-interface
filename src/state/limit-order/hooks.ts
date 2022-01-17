@@ -1,21 +1,22 @@
-import { AppDispatch, AppState } from '../index'
-import { useDispatch, useSelector } from 'react-redux'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Field, replaceLimitOrderState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
-import { useCurrency } from '../../hooks/Tokens'
-import { ChainId, Currency, CurrencyAmount, JSBI, NATIVE, Percent, Price, WNATIVE } from '@sushiswap/sdk'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrencyBalances } from '../wallet/hooks'
-import { isAddress, tryParseAmount } from '../../functions'
-import useParsedQueryString from '../../hooks/useParsedQueryString'
-import { ParsedQs } from 'qs'
-import { OrderExpiration } from './reducer'
-import { useBentoBalances } from '../bentobox/hooks'
-import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from '../../hooks/useV2Trades'
-import useENS from '../../hooks/useENS'
-import { t } from '@lingui/macro'
 import { i18n } from '@lingui/core'
-import { useExpertModeManager, useUserSingleHopOnly } from '../user/hooks'
+import { t } from '@lingui/macro'
+import { ChainId, Currency, CurrencyAmount, JSBI, NATIVE, Percent, Price, WNATIVE } from '@sushiswap/core-sdk'
+import { isAddress, tryParseAmount } from 'app/functions'
+import { useCurrency } from 'app/hooks/Tokens'
+import useENS from 'app/hooks/useENS'
+import useParsedQueryString from 'app/hooks/useParsedQueryString'
+import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppDispatch, AppState } from 'app/state'
+import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useCurrencyBalances } from 'app/state/wallet/hooks'
+import { ParsedQs } from 'qs'
+import { useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { Field, replaceLimitOrderState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
+import { OrderExpiration } from './reducer'
 
 export function useLimitOrderActionHandlers(): {
   onCurrencySelection: (field: Field, currency: Currency) => void
@@ -124,11 +125,7 @@ export function useDerivedLimitOrderInfo(): {
   const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
   const rate = trade?.executionPrice
 
-  const bentoBoxBalances = useBentoBalances()
-  const balance = useMemo(
-    () => bentoBoxBalances?.find((el) => el.address === inputCurrency?.wrapped.address),
-    [bentoBoxBalances, inputCurrency?.wrapped.address]
-  )
+  const bentoBoxBalances = useBentoBalancesV2([inputCurrencyId, outputCurrencyId])
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
@@ -141,12 +138,8 @@ export function useDerivedLimitOrderInfo(): {
   }
 
   const bentoboxBalances = {
-    [Field.INPUT]: inputCurrency
-      ? CurrencyAmount.fromRawAmount(inputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
-      : undefined,
-    [Field.OUTPUT]: outputCurrency
-      ? CurrencyAmount.fromRawAmount(outputCurrency, balance?.bentoBalance ? balance.bentoBalance : 0)
-      : undefined,
+    [Field.INPUT]: inputCurrency ? bentoBoxBalances?.[0] : undefined,
+    [Field.OUTPUT]: outputCurrency ? bentoBoxBalances?.[1] : undefined,
   }
 
   const parsedAmounts = {

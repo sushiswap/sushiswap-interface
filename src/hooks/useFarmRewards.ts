@@ -1,53 +1,73 @@
-import { Chef, PairType } from '../features/farm/enum'
+import { getAddress } from '@ethersproject/address'
+import { ChainId, Currency, NATIVE, SUSHI, Token } from '@sushiswap/core-sdk'
+import { ARBITRUM_TOKENS, MATIC_TOKENS } from 'app/config/tokens'
+import { Chef, PairType } from 'app/features/onsen/enum'
+import { usePositions } from 'app/features/onsen/hooks'
+import { aprToApy } from 'app/functions/convert'
 import {
   useAverageBlockTime,
-  useBlock,
+  useCeloPrice,
   useEthPrice,
   useFarms,
+  useFusePrice,
+  useGnoPrice,
   useKashiPairs,
+  useMagicPrice,
   useMasterChefV1SushiPerBlock,
   useMasterChefV1TotalAllocPoint,
   useMaticPrice,
-  useOnePrice,
-  useCeloPrice,
   useMovrPrice,
-  useSpellPrice,
-  useGnoPrice,
   useOhmPrice,
-  useMagicPrice,
+  useOneDayBlock,
+  useOnePrice,
+  useSpellPrice,
   useSushiPairs,
   useSushiPrice,
-  useFusePrice,
-} from '../services/graph'
-
-import { ChainId } from '@sushiswap/sdk'
-import { aprToApy } from '../functions/convert/apyApr'
-import { getAddress } from '@ethersproject/address'
-import useActiveWeb3React from './useActiveWeb3React'
+} from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
+import toLower from 'lodash/toLower'
 import { useMemo } from 'react'
-import { usePositions } from '../features/farm/hooks'
 
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()
 
   const positions = usePositions(chainId)
 
-  const block1d = useBlock({ daysAgo: 1, chainId })
+  const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
-  const farms = useFarms()
+  const farms = useFarms({ chainId })
+
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
-  const swapPairs = useSushiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses, chainId })
 
-  const swapPairs1d = useSushiPairs({
-    subset: farmAddresses,
-    block: block1d,
-    shouldFetch: !!block1d && !!farmAddresses,
+  const swapPairs = useSushiPairs({
     chainId,
+    variables: {
+      where: {
+        id_in: farmAddresses.map(toLower),
+      },
+    },
+    shouldFetch: !!farmAddresses,
   })
 
-  const kashiPairs = useKashiPairs({ subset: farmAddresses, shouldFetch: !!farmAddresses })
+  const swapPairs1d = useSushiPairs({
+    chainId,
+    variables: {
+      block: block1d,
+      where: {
+        id_in: farmAddresses.map(toLower),
+      },
+    },
+    shouldFetch: !!block1d && !!farmAddresses,
+  })
 
-  const averageBlockTime = useAverageBlockTime()
+  const kashiPairs = useKashiPairs({
+    chainId,
+    variables: { where: { id_in: farmAddresses.map(toLower) } },
+    shouldFetch: !!farmAddresses,
+  })
+
+  const averageBlockTime = useAverageBlockTime({ chainId })
+
   const masterChefV1TotalAllocPoint = useMasterChefV1TotalAllocPoint()
   const masterChefV1SushiPerBlock = useMasterChefV1SushiPerBlock()
 
@@ -104,14 +124,15 @@ export default function useFarmRewards() {
       const rewardPerBlock = (pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock
 
       const defaultReward = {
-        token: 'SUSHI',
-        icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x6B3595068778DD592e39A122f4f5a5cF09C90fE2.jpg',
+        currency: SUSHI[ChainId.ETHEREUM],
         rewardPerBlock,
         rewardPerDay: rewardPerBlock * blocksPerDay,
         rewardPrice: sushiPrice,
       }
 
-      let rewards = [defaultReward]
+      let rewards: { currency: Currency; rewardPerBlock: number; rewardPerDay: number; rewardPrice: number }[] = [
+        defaultReward,
+      ]
 
       if (pool.chef === Chef.MASTERCHEF_V2) {
         // override for mcv2...
@@ -125,14 +146,11 @@ export default function useFarmRewards() {
         // vestedQUARTZ to QUARTZ adjustments
         if (pool.rewarder.rewardToken === '0x5dd8905aec612529361a35372efd5b127bb182b3') {
           pool.rewarder.rewardToken = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
+          pool.rewardToken.id = '0xba8a621b4a54e61c442f5ec623687e2a942225ef'
           pool.rewardToken.symbol = 'vestedQUARTZ'
           pool.rewardToken.derivedETH = pair.token1.derivedETH
           pool.rewardToken.decimals = 18
         }
-
-        const icon = `https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/${getAddress(
-          pool.rewarder.rewardToken
-        )}.jpg`
 
         const decimals = 10 ** pool.rewardToken.decimals
 
@@ -154,13 +172,17 @@ export default function useFarmRewards() {
           const rewardPrice = pool.rewardToken.derivedETH * ethPrice
 
           const reward = {
-            token: pool.rewardToken.symbol,
-            icon: icon,
+            currency: new Token(
+              ChainId.ETHEREUM,
+              getAddress(pool.rewardToken.id),
+              Number(pool.rewardToken.decimals),
+              pool.rewardToken.symbol,
+              pool.rewardToken.name
+            ),
             rewardPerBlock,
             rewardPerDay,
             rewardPrice,
           }
-
           rewards[1] = reward
         }
       } else if (pool.chef === Chef.MINICHEF) {
@@ -179,8 +201,7 @@ export default function useFarmRewards() {
 
         const reward = {
           [ChainId.MATIC]: {
-            token: 'MATIC',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/matic/0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270.jpg',
+            currency: NATIVE[ChainId.MATIC],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: maticPrice,
@@ -193,29 +214,25 @@ export default function useFarmRewards() {
             rewardPrice: gnoPrice,
           },
           [ChainId.HARMONY]: {
-            token: 'ONE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/harmony/0xcF664087a5bB0237a0BAd6742852ec6c8d69A27a.jpg',
+            currency: NATIVE[ChainId.HARMONY],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: onePrice,
           },
           [ChainId.CELO]: {
-            token: 'CELO',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg',
+            currency: NATIVE[ChainId.CELO],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: celoPrice,
           },
           [ChainId.MOONRIVER]: {
-            token: 'MOVR',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/movr.jpg',
+            currency: NATIVE[ChainId.MOONRIVER],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: movrPrice,
           },
           [ChainId.FUSE]: {
-            token: 'FUSE',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg',
+            currency: NATIVE[ChainId.FUSE],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: fusePrice,
@@ -224,7 +241,7 @@ export default function useFarmRewards() {
 
         if (chainId === ChainId.FUSE) {
           // Secondary reward only
-          rewards[0] = reward[chainId]
+          rewards[0] = reward[ChainId.FUSE]
         } else {
           rewards[0] = {
             ...defaultReward,
@@ -238,8 +255,7 @@ export default function useFarmRewards() {
 
         if (chainId === ChainId.ARBITRUM && ['9', '11'].includes(pool.id)) {
           rewards[1] = {
-            token: 'SPELL',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/ethereum/0x090185f2135308BaD17527004364eBcC2D37e5F6.jpg',
+            currency: ARBITRUM_TOKENS.SPELL,
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: spellPrice,
@@ -247,8 +263,7 @@ export default function useFarmRewards() {
         }
         if (chainId === ChainId.ARBITRUM && ['12'].includes(pool.id)) {
           rewards[1] = {
-            token: 'gOHM',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/arbitrum/0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1.jpg',
+            currency: ARBITRUM_TOKENS.gOHM,
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: ohmPrice,
@@ -256,8 +271,7 @@ export default function useFarmRewards() {
         }
         if (chainId === ChainId.ARBITRUM && ['13'].includes(pool.id)) {
           rewards[1] = {
-            token: 'MAGIC',
-            icon: 'https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/arbitrum/assets/0x539bdE0d7Dbd336b79148AA742883198BBF60342/logo.png',
+            currency: ARBITRUM_TOKENS.MAGIC,
             rewardPerBlock,
             rewardPerDay,
             rewardPrice: magicPrice,
@@ -268,8 +282,7 @@ export default function useFarmRewards() {
           const rewardTokenPerBlock = rewardTokenPerSecond * averageBlockTime
           const rewardTokenPerDay = 0.4
           rewards[1] = {
-            token: 'gOHM',
-            icon: 'https://raw.githubusercontent.com/sushiswap/logos/main/network/arbitrum/0x8D9bA570D6cb60C7e3e0F31343Efe75AB8E65FB1.jpg',
+            currency: MATIC_TOKENS.gOHM,
             rewardPerBlock: rewardTokenPerBlock,
             rewardPerDay: rewardTokenPerDay,
             rewardPrice: ohmPrice,
@@ -281,7 +294,7 @@ export default function useFarmRewards() {
         const sushiPerDay = sushiPerBlock * blocksPerDay
 
         const rewardPerSecond =
-          pool.rewarder.rewardPerSecond && chainId == ChainId.ARBITRUM
+          pool.rewarder.rewardPerSecond && chainId === ChainId.ARBITRUM
             ? pool.rewarder.rewardPerSecond / 1e18
             : ((pool.allocPoint / pool.miniChef.totalAllocPoint) * pool.rewarder.rewardPerSecond) / 1e18
 
@@ -291,8 +304,7 @@ export default function useFarmRewards() {
 
         const reward = {
           [ChainId.CELO]: {
-            token: 'CELO',
-            icon: 'https://raw.githubusercontent.com/sushiswap/icons/master/token/celo.jpg',
+            currency: NATIVE[ChainId.CELO],
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: celoPrice,

@@ -1,3 +1,3 @@
-import { ChainId } from '@sushiswap/sdk'
+import { ChainId } from '@sushiswap/core-sdk'
 
-export const MigrationSupported = [ChainId.MAINNET, ChainId.BSC, ChainId.MATIC]
+export const MigrationSupported = [ChainId.ETHEREUM, ChainId.BSC, ChainId.MATIC]

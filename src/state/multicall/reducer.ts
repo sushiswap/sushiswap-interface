@@ -1,3 +1,5 @@
+import { createReducer } from '@reduxjs/toolkit'
+
 import {
   addMulticallListeners,
   errorFetchingMulticallResults,
@@ -5,8 +7,6 @@ import {
   removeMulticallListeners,
   updateMulticallResults,
 } from './actions'
-
-import { createReducer } from '@reduxjs/toolkit'
 import { toCallKey } from './utils'
 
 export interface MulticallState {

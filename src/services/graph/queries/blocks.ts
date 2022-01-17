@@ -9,8 +9,12 @@ const blockFieldsQuery = gql`
 `
 
 export const blockQuery = gql`
-  query blockQuery($where: Block_filter) {
-    blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: $where) {
+  query blockQuery(
+    $where: Block_filter
+    $orderBy: Block_orderBy! = "timestamp"
+    $orderDirection: OrderDirection! = "desc"
+  ) {
+    blocks(first: 1, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
       ...blockFields
     }
   }
@@ -18,14 +22,14 @@ export const blockQuery = gql`
 `
 
 export const blocksQuery = gql`
-  query blocksQuery($first: Int! = 1000, $skip: Int! = 0, $start: Int!, $end: Int!) {
-    blocks(
-      first: $first
-      skip: $skip
-      orderBy: number
-      orderDirection: desc
-      where: { timestamp_gt: $start, timestamp_lt: $end }
-    ) {
+  query blocksQuery(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $where: Block_filter
+    $orderBy: Block_orderBy = "timestamp"
+    $orderDirection: OrderDirection! = "desc"
+  ) {
+    blocks(first: $first, skip: $skip, where: $where, orderBy: $orderBy, orderDirection: $orderDirection) {
       ...blockFields
     }
   }

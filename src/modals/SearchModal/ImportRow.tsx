@@ -1,100 +1,49 @@
-import { AutoRow, RowFixed } from '../../components/Row'
-import React, { CSSProperties } from 'react'
-import { useIsTokenActive, useIsUserAddedToken } from '../../hooks/Tokens'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Token } from '@sushiswap/core-sdk'
+import Chip from 'app/components/Chip'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { HeadlessUiModal } from 'app/components/Modal'
+import Typography from 'app/components/Typography'
+import { shortenAddress } from 'app/functions'
+import React, { FC } from 'react'
 
-import { AutoColumn } from '../../components/Column'
-import Button from '../../components/Button'
-import { CheckCircle } from 'react-feather'
-import CurrencyLogo from '../../components/CurrencyLogo'
-import ListLogo from '../../components/ListLogo'
-import { Token } from '@sushiswap/sdk'
-import styled from 'styled-components'
-import { WrappedTokenInfo } from '../../state/lists/wrappedTokenInfo'
-
-const TokenSection = styled.div<{ dim?: boolean }>`
-  padding: 4px 20px;
-  height: 56px;
-  display: grid;
-  grid-template-columns: auto minmax(auto, 1fr) auto;
-  grid-gap: 16px;
-  align-items: center;
-
-  opacity: ${({ dim }) => (dim ? '0.4' : '1')};
-`
-
-const CheckIcon = styled(CheckCircle)`
-  height: 16px;
-  width: 16px;
-  margin-right: 6px;
-  // stroke: ${({ theme }) => theme.green1};
-`
-
-const NameOverflow = styled.div`
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 140px;
-  font-size: 12px;
-`
-
-export default function ImportRow({
-  token,
-  style,
-  dim,
-  showImportView,
-  setImportToken,
-}: {
+interface ImportRow {
   token: Token
-  style?: CSSProperties
-  dim?: boolean
-  showImportView: () => void
-  setImportToken: (token: Token) => void
-}) {
-  // check if already active on list or local storage tokens
-  const isAdded = useIsUserAddedToken(token)
-  const isActive = useIsTokenActive(token)
+  onClick(x: any): void
+}
 
-  const list = token instanceof WrappedTokenInfo ? token.list : undefined
+const ImportRow: FC<ImportRow> = ({ token, onClick }) => {
+  const { i18n } = useLingui()
 
   return (
-    <TokenSection style={style}>
-      <CurrencyLogo currency={token} size={'24px'} style={{ opacity: dim ? '0.6' : '1' }} />
-      <AutoColumn gap="4px" style={{ opacity: dim ? '0.6' : '1' }}>
-        <AutoRow align="center">
-          <div className="font-semibold">{token.symbol}</div>
-          <div className="ml-2 font-light">
-            <NameOverflow title={token.name}>{token.name}</NameOverflow>
+    <HeadlessUiModal.BorderedContent className="border hover:border-gray-700 cursor-pointer" onClick={onClick}>
+      <div className="flex justify-between">
+        <div className="flex items-center gap-3">
+          <div className="rounded-full overflow-hidden border border-dark-700">
+            <CurrencyLogo currency={token} size={48} />
           </div>
-        </AutoRow>
-        {list && list.logoURI && (
-          <RowFixed align="center">
-            <div className="mr-1 text-sm">via {list.name}</div>
-            <ListLogo logoURI={list.logoURI} size="12px" />
-          </RowFixed>
-        )}
-      </AutoColumn>
-      {!isActive && !isAdded ? (
-        <Button
-          color="gradient"
-          size="xs"
-          style={{
-            width: 'fit-content',
-            padding: '6px 12px',
-          }}
-          onClick={() => {
-            setImportToken && setImportToken(token)
-            showImportView()
-          }}
-        >
-          Import
-        </Button>
-      ) : (
-        <RowFixed style={{ minWidth: 'fit-content' }}>
-          <CheckIcon />
-          <div className="text-green">Active</div>
-        </RowFixed>
-      )}
-    </TokenSection>
+          <div className="flex flex-col">
+            <div className="flex gap-2 items-center">
+              <Typography variant="lg" weight={700} component="span" className="text-white">
+                {token.symbol}{' '}
+                <Typography variant="xs" component="span">
+                  {token.name}
+                </Typography>
+              </Typography>
+
+              <Chip color="yellow" size="sm" label={i18n._(t`Unknown Source`)}>
+                {i18n._(t`Unknown Source`)}
+              </Chip>
+            </div>
+            <Typography variant="xxs" weight={700}>
+              {shortenAddress(token.address)}
+            </Typography>
+          </div>
+        </div>
+      </div>
+    </HeadlessUiModal.BorderedContent>
   )
 }
+
+export default ImportRow

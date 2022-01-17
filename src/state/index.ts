@@ -1,10 +1,8 @@
-import { Action, ThunkAction, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistReducer, persistStore } from 'redux-persist'
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
+import { persistReducer, persistStore } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 
 import reducer from './reducer'
-import storage from 'redux-persist/lib/storage'
-import { updateVersion } from './global/actions'
-import { useMemo } from 'react'
 
 let store
 
@@ -26,9 +24,7 @@ function makeStore(preloadedState = undefined) {
       getDefaultMiddleware({
         thunk: true,
         immutableCheck: true,
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
+        serializableCheck: false,
       }),
     devTools: process.env.NODE_ENV === 'development',
     preloadedState,

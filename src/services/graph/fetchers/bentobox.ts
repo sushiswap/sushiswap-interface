@@ -1,37 +1,36 @@
+import { ChainId, CurrencyAmount, JSBI, Token } from '@sushiswap/core-sdk'
+import { aprToApy, getFraction, toAmount, toAmountCurrencyAmount } from 'app/functions'
+import { GRAPH_HOST } from 'app/services/graph/constants'
+import { getTokenSubset } from 'app/services/graph/fetchers'
 import {
   bentoBoxQuery,
   bentoStrategiesQuery,
   bentoTokensQuery,
   bentoUserTokensQuery,
+  clonesQuery,
   kashiPairsQuery,
   kashiUserPairsQuery,
-  clonesQuery,
-} from '../queries/bentobox'
-import { getFraction, toAmount } from '../../../functions'
+} from 'app/services/graph/queries/bentobox'
 
-import { ChainId } from '@sushiswap/sdk'
-import { GRAPH_HOST } from '../constants'
-import { request } from 'graphql-request'
-import { getTokenSubset } from './exchange'
-import { aprToApy } from '../../../functions/convert/apyApr'
+import { pager } from './pager'
 
 export const BENTOBOX = {
-  [ChainId.MAINNET]: 'lufycz/bentobox',
+  [ChainId.ETHEREUM]: 'sushiswap/bentobox',
   [ChainId.XDAI]: 'sushiswap/xdai-bentobox',
   [ChainId.MATIC]: 'lufycz/matic-bentobox',
   [ChainId.FANTOM]: 'sushiswap/fantom-bentobox',
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
 }
-const fetcher = async (chainId = ChainId.MAINNET, query, variables = undefined) =>
-  request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query)
+const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)
 
-export const getClones = async (chainId = ChainId.MAINNET) => {
+export const getClones = async (chainId = ChainId.ETHEREUM) => {
   const { clones } = await fetcher(chainId, clonesQuery)
   return clones
 }
 
-export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undefined) => {
+export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { kashiPairs } = await fetcher(chainId, kashiPairsQuery, variables)
 
   const tokens = await getTokenSubset(chainId, {
@@ -53,10 +52,25 @@ export const getKashiPairs = async (chainId = ChainId.MAINNET, variables = undef
       ...pair.collateral,
       ...tokens.find((token) => token.id === pair.collateral.id),
     },
+    assetAmount: Math.floor(pair.totalAssetBase / getFraction({ ...pair, token0: pair.asset })).toString(),
+    borrowedAmount: toAmount(
+      {
+        elastic: pair.totalBorrowElastic.toBigNumber(0),
+        base: pair.totalBorrowBase.toBigNumber(0),
+      },
+      pair.totalBorrowElastic.toBigNumber(0)
+    ).toString(),
+    collateralAmount: toAmount(
+      {
+        elastic: pair.collateral.totalSupplyElastic.toBigNumber(0),
+        base: pair.collateral.totalSupplyBase.toBigNumber(0),
+      },
+      pair.totalCollateralShare.toBigNumber(0)
+    ).toString(),
   }))
 }
 
-export const getUserKashiPairs = async (chainId = ChainId.MAINNET, variables) => {
+export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
   const { userKashiPairs } = await fetcher(chainId, kashiUserPairsQuery, variables)
 
   return userKashiPairs.map((userPair) => ({
@@ -66,54 +80,41 @@ export const getUserKashiPairs = async (chainId = ChainId.MAINNET, variables) =>
     ).toString(),
     borrowedAmount: toAmount(
       {
-        bentoAmount: userPair.pair.totalBorrowElastic.toBigNumber(0),
-        bentoShare: userPair.pair.totalBorrowBase.toBigNumber(0),
+        elastic: userPair.pair.totalBorrowElastic.toBigNumber(0),
+        base: userPair.pair.totalBorrowBase.toBigNumber(0),
       },
       userPair.borrowPart.toBigNumber(0)
     ).toString(),
     collateralAmount: toAmount(
       {
-        bentoAmount: userPair.pair.collateral.totalSupplyElastic.toBigNumber(0),
-        bentoShare: userPair.pair.collateral.totalSupplyBase.toBigNumber(0),
+        elastic: userPair.pair.collateral.totalSupplyElastic.toBigNumber(0),
+        base: userPair.pair.collateral.totalSupplyBase.toBigNumber(0),
       },
       userPair.collateralShare.toBigNumber(0)
     ).toString(),
   }))
 }
 
-export const getBentoUserTokens = async (chainId = ChainId.MAINNET, variables) => {
+export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables): Promise<CurrencyAmount<Token>[]> => {
   const { userTokens } = await fetcher(chainId, bentoUserTokensQuery, variables)
-
-  return userTokens
-    .map((token) => ({
-      ...(token.token as any),
-      shares: token.share as string,
-    }))
-    .map((token) => ({
-      ...token,
-      amount: toAmount(
-        {
-          bentoAmount: token.totalSupplyElastic.toBigNumber(0),
-          bentoShare: token.totalSupplyBase.toBigNumber(0),
-        },
-        token.shares.toBigNumber(0)
-      ).toString(),
-    }))
+  return userTokens.map(({ share, token: { decimals, id, name, symbol, totalSupplyElastic, totalSupplyBase } }) => {
+    return toAmountCurrencyAmount(
+      {
+        elastic: JSBI.BigInt(totalSupplyElastic),
+        base: JSBI.BigInt(totalSupplyBase),
+      },
+      CurrencyAmount.fromRawAmount(new Token(chainId, id, Number(decimals), symbol, name), JSBI.BigInt(share))
+    )
+  })
 }
 
-export const getBentoBox = async (chainId = ChainId.MAINNET, variables) => {
+export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables) => {
   const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
 
   return bentoBoxes[0]
 }
 
-export const getBentoTokens = async (chainId = ChainId.MAINNET, variables) => {
-  const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
-
-  return tokens
-}
-
-export const getBentoStrategies = async (chainId = ChainId.MAINNET, variables) => {
+export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) => {
   const { strategies } = await fetcher(chainId, bentoStrategiesQuery, variables)
 
   const SECONDS_IN_YEAR = 60 * 60 * 24 * 365
@@ -133,7 +134,7 @@ export const getBentoStrategies = async (chainId = ChainId.MAINNET, variables) =
         previousHarvest?.tokenElastic / 10 ** strategy.token.decimals,
       ]
 
-      return [...apys, (profitPerYear / ((tvl + tvlPrevious) / 2)) * 100]
+      return [...apys, ((profitPerYear / ((tvl + tvlPrevious) / 2)) * 100) / 2]
     }, [])
 
     const apy = apys.reduce((apyAcc, apy) => apyAcc + apy, 0) / apys.length
@@ -145,4 +146,10 @@ export const getBentoStrategies = async (chainId = ChainId.MAINNET, variables) =
       utilization: (Number(strategy.balance) / Number(strategy.token.totalSupplyElastic)) * 100,
     }
   })
+}
+
+export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables) => {
+  const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
+
+  return tokens
 }

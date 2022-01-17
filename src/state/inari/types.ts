@@ -1,7 +1,8 @@
-import { ChainId, CurrencyAmount, Token } from '@sushiswap/sdk'
+import { ChainId, CurrencyAmount, Token } from '@sushiswap/core-sdk'
+
+import { BaseStrategyHook } from './strategies/useBaseStrategy'
 import { BaseStrategyWithBentoBoxTraitHook } from './traits/useBentoBoxTrait'
 import { BaseStrategyWithHasPermitTokenHook } from './traits/useHasPermitTokenTrait'
-import { BaseStrategyHook } from './strategies/useBaseStrategy'
 
 export enum Field {
   INPUT = 'INPUT',

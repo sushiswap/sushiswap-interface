@@ -1,84 +1,77 @@
-import React, { useMemo } from 'react'
-import { fortmatic, injected, portis, walletconnect, walletlink } from '../../connectors'
-import { isTransactionRecent, useAllTransactions } from '../../state/transactions/hooks'
-
-import { AbstractConnector } from '@web3-react/abstract-connector'
-import Image from 'next/image'
-import Loader from '../Loader'
-import { NetworkContextName } from '../../constants'
-import { TransactionDetails } from '../../state/transactions/reducer'
-import WalletModal from '../../modals/WalletModal'
-import Web3Connect from '../Web3Connect'
-import { shortenAddress } from '../../functions/format'
-import styled from 'styled-components'
+import Davatar from '@davatar/react'
+import { Web3Provider } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
-import useENSName from '../../hooks/useENSName'
 import { useLingui } from '@lingui/react'
-import { useWalletModalToggle } from '../../state/application/hooks'
+import { AbstractConnector } from '@web3-react/abstract-connector'
 import { useWeb3React } from '@web3-react/core'
+import { injected } from 'app/config/wallets'
+import { NetworkContextName } from 'app/constants'
+import { shortenAddress } from 'app/functions'
+import useENSName from 'app/hooks/useENSName'
+import WalletModal from 'app/modals/WalletModal'
+import { useWalletModalToggle } from 'app/state/application/hooks'
+import { isTransactionRecent, useAllTransactions } from 'app/state/transactions/hooks'
+import { TransactionDetails } from 'app/state/transactions/reducer'
+import Image from 'next/image'
+import React, { useMemo } from 'react'
 
-const IconWrapper = styled.div<{ size?: number }>`
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-  & > * {
-    height: ${({ size }) => (size ? size + 'px' : '32px')};
-    width: ${({ size }) => (size ? size + 'px' : '32px')};
-  }
-`
+import Loader from '../Loader'
+import Web3Connect from '../Web3Connect'
 
 // we want the latest one to come first, so return negative if a is after b
 function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
   return b.addedTime - a.addedTime
 }
 
-const SOCK = (
-  <span role="img" aria-label="has socks emoji" style={{ marginTop: -4, marginBottom: -4 }}>
-    🧦
-  </span>
-)
-
 // eslint-disable-next-line react/prop-types
-function StatusIcon({ connector }: { connector: AbstractConnector }) {
+function StatusIcon({ connector }: { connector: AbstractConnector; account: string; provider: Web3Provider }) {
   if (connector === injected) {
-    return <Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />
-    // return <Identicon />
-  } else if (connector === walletconnect) {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+        <Image src="/images/wallets/metamask.png" alt="Injected (MetaMask etc...)" width={16} height={16} />
+      </div>
+    )
+  } else if (connector.constructor.name === 'WalletConnectConnector') {
+    return (
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'LatticeConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
-  } else if (connector === walletlink) {
+  } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
-  } else if (connector === fortmatic) {
+  } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
-  } else if (connector === portis) {
+  } else if (connector.constructor.name === 'PortisConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
     )
   } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
-      <IconWrapper size={16}>
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
-      </IconWrapper>
+      </div>
+    )
+  } else if (connector.constructor.name === 'CloverConnector') {
+    return (
+      <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
+        <Image src="/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
+      </div>
     )
   }
   return null
@@ -86,7 +79,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector }) {
 
 function Web3StatusInner() {
   const { i18n } = useLingui()
-  const { account, connector } = useWeb3React()
+  const { account, connector, library } = useWeb3React()
 
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -97,17 +90,7 @@ function Web3StatusInner() {
     return txs.filter(isTransactionRecent).sort(newTransactionsFirst)
   }, [allTransactions])
 
-  const pending = sortedRecentTransactions
-    .filter((tx) => {
-      if (tx.receipt) {
-        return false
-      } else if (tx.archer && tx.archer.deadline * 1000 - Date.now() < 0) {
-        return false
-      } else {
-        return true
-      }
-    })
-    .map((tx) => tx.hash)
+  const pending = sortedRecentTransactions.filter((tx) => !tx.receipt).map((tx) => tx.hash)
 
   const hasPendingTransactions = !!pending.length
 
@@ -117,24 +100,37 @@ function Web3StatusInner() {
     return (
       <div
         id="web3-status-connected"
-        className="flex items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-secondary"
+        className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
         onClick={toggleWalletModal}
       >
         {hasPendingTransactions ? (
-          <div className="flex items-center justify-between">
-            <div className="pr-2">
+          <div className="flex items-center justify-between gap-2">
+            <div>
               {pending?.length} {i18n._(t`Pending`)}
             </div>{' '}
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="mr-2">{ENSName || shortenAddress(account)}</div>
+          <div className="flex items-center space-x-2">
+            <div>{ENSName || shortenAddress(account)}</div>
+            <Davatar
+              size={20}
+              address={account}
+              defaultComponent={<Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />}
+              style={{ borderRadius: 5 }}
+              provider={library}
+            />
+          </div>
         )}
-        {!hasPendingTransactions && connector && <StatusIcon connector={connector} />}
+        {/* {!hasPendingTransactions && connector && (
+          <StatusIcon connector={connector} account={account} provider={library} />
+        )} */}
       </div>
     )
   } else {
-    return <Web3Connect style={{ paddingTop: '6px', paddingBottom: '6px' }} />
+    return (
+      <Web3Connect className="!bg-dark-900 bg-gradient-to-r from-pink/80 hover:from-pink to-purple/80 hover:to-purple text-white h-[38px]" />
+    )
   }
 }
 

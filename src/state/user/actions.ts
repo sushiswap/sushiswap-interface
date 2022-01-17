@@ -13,8 +13,6 @@ export interface SerializedPair {
   token1: SerializedToken
 }
 
-export const updateMatchesDarkMode = createAction<{ matchesDarkMode: boolean }>('user/updateMatchesDarkMode')
-export const updateUserDarkMode = createAction<{ userDarkMode: boolean }>('user/updateUserDarkMode')
 export const updateUserExpertMode = createAction<{ userExpertMode: boolean }>('user/updateUserExpertMode')
 export const updateUserSingleHopOnly = createAction<{
   userSingleHopOnly: boolean
@@ -39,18 +37,6 @@ export const removeSerializedPair = createAction<{
   tokenBAddress: string
 }>('user/removeSerializedPair')
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
-export const updateUserArcherUseRelay = createAction<{
-  userArcherUseRelay: boolean
-}>('user/updateUserArcherUseRelay')
-export const updateUserArcherGasPrice = createAction<{
-  userArcherGasPrice: string
-}>('user/updateUserArcherGasPrice')
-export const updateUserArcherETHTip = createAction<{
-  userArcherETHTip: string
-}>('user/updateUserArcherETHTip')
-export const updateUserArcherGasEstimate = createAction<{
-  userArcherGasEstimate: string
-}>('user/updateUserArcherGasEstimate')
-export const updateUserArcherTipManualOverride = createAction<{
-  userArcherTipManualOverride: boolean
-}>('user/updateUserArcherTipManualOverride')
+export const updateUserUseOpenMev = createAction<{
+  userUseOpenMev: boolean
+}>('user/updateUserUseOpenMev')

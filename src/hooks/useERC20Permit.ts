@@ -1,12 +1,22 @@
-import { Currency, CurrencyAmount, JSBI, Percent, Token, TradeType, Trade as V2Trade } from '@sushiswap/sdk'
-import { DAI, SUSHI, USDC } from '../constants/tokens'
+import { splitSignature } from '@ethersproject/bytes'
+import {
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  MaxUint256,
+  Percent,
+  SUSHI,
+  Token,
+  Trade as V2Trade,
+  TradeType,
+} from '@sushiswap/core-sdk'
+import { DAI, USDC } from 'app/config/tokens'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
 
-import { splitSignature } from 'ethers/lib/utils'
-import { useActiveWeb3React } from './useActiveWeb3React'
+import { useSingleCallResult } from '../state/multicall/hooks'
 import { useEIP2612Contract } from './useContract'
 import useIsArgentWallet from './useIsArgentWallet'
-import { useSingleCallResult } from '../state/multicall/hooks'
 import useTransactionDeadline from './useTransactionDeadline'
 
 enum PermitType {
@@ -277,6 +287,20 @@ export function useV2LiquidityTokenPermit(
   spender: string | null | undefined
 ) {
   return useERC20Permit(liquidityAmount, spender, REMOVE_V2_LIQUIDITY_PERMIT_INFO)
+}
+
+const REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO: PermitInfo = {
+  version: '1',
+  name: 'Sushi LP Token',
+  type: PermitType.AMOUNT,
+}
+
+export function useTridentLiquidityTokenPermit(liquidityAmount?: CurrencyAmount<Token>, spender?: string) {
+  return useERC20Permit(
+    liquidityAmount ? CurrencyAmount.fromRawAmount(liquidityAmount.currency, MaxUint256) : undefined,
+    spender,
+    REMOVE_TRIDENT_LIQUIDITY_PERMIT_INFO
+  )
 }
 
 export function useERC20PermitFromTrade(

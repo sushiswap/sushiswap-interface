@@ -1,117 +1,40 @@
-import { AppDispatch, AppState } from '../../state'
-import { CheckCircle, Settings } from 'react-feather'
-import Column, { AutoColumn } from '../../components/Column'
-import { PaddedColumn, SeparatorDark } from './styleds'
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Row, { RowBetween, RowFixed } from '../../components/Row'
-import { acceptListUpdate, disableList, enableList, removeList } from '../../state/lists/actions'
-import { useActiveListUrls, useAllLists, useIsListActive } from '../../state/lists/hooks'
+import { CheckIcon, ExternalLinkIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { TokenList } from '@uniswap/token-lists'
+import CloseIcon from 'app/components/CloseIcon'
+import ListLogo from 'app/components/ListLogo'
+import { HeadlessUiModal } from 'app/components/Modal'
+import Popover from 'app/components/Popover'
+import Switch from 'app/components/Switch'
+import Typography from 'app/components/Typography'
+import { UNSUPPORTED_LIST_URLS } from 'app/config/token-lists'
+import { classNames } from 'app/functions'
+import { uriToHttp } from 'app/functions/convert'
+import { parseENSAddress } from 'app/functions/ens'
+import { listVersionLabel } from 'app/functions/list'
+import { useFetchListCallback } from 'app/hooks/useFetchListCallback'
+import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
+import { AppDispatch, AppState } from 'app/state'
+import { acceptListUpdate, disableList, enableList, removeList } from 'app/state/lists/actions'
+import { useActiveListUrls, useAllLists, useIsListActive } from 'app/state/lists/hooks'
+import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { Settings } from 'react-feather'
+import ReactGA from 'react-ga'
 import { useDispatch, useSelector } from 'react-redux'
 
-import AutoSizer from 'react-virtualized-auto-sizer'
-import Button from '../../components/Button'
 import CurrencyModalView from './CurrencyModalView'
-import ExternalLink from '../../components/ExternalLink'
-import IconWrapper from '../../components/IconWrapper'
-import LinkStyledButton from '../../components/LinkStyledButton'
-import ListLogo from '../../components/ListLogo'
-import ListToggle from '../../components/Toggle/ListToggle'
-import ReactGA from 'react-ga'
-import { TokenList } from '@uniswap/token-lists'
-import { UNSUPPORTED_LIST_URLS } from '../../constants/token-lists'
-import { listVersionLabel } from '../../functions/list'
-import { parseENSAddress } from '../../functions/ens'
-import styled from 'styled-components'
-import { uriToHttp } from '../../functions/convert'
-import { useFetchListCallback } from '../../hooks/useFetchListCallback'
-import { useListColor } from '../../hooks/useColor'
-import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-import { usePopper } from 'react-popper'
-import useToggle from '../../hooks/useToggle'
 
-const Wrapper = styled(Column)`
-  width: 100%;
-  height: 100%;
-`
-
-const UnpaddedLinkStyledButton = styled(LinkStyledButton)`
-  padding: 0;
-  font-size: 1rem;
-  opacity: ${({ disabled }) => (disabled ? '0.4' : '1')};
-`
-
-const PopoverContainer = styled.div<{ show: boolean }>`
-  z-index: 100;
-  visibility: ${(props) => (props.show ? 'visible' : 'hidden')};
-  opacity: ${(props) => (props.show ? 1 : 0)};
-  transition: visibility 150ms linear, opacity 150ms linear;
-  background: ${({ theme }) => theme.bg2};
-  border: 1px solid ${({ theme }) => theme.bg3};
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.01), 0px 4px 8px rgba(0, 0, 0, 0.04), 0px 16px 24px rgba(0, 0, 0, 0.04),
-    0px 24px 32px rgba(0, 0, 0, 0.01);
-  // color: ${({ theme }) => theme.text2};
-  // border-radius: ${({ theme }) => theme.borderRadius};
-  padding: 1rem;
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-gap: 8px;
-  font-size: 1rem;
-  text-align: left;
-`
-
-const StyledMenu = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  border: none;
-`
-
-const StyledTitleText = styled.div<{ active: boolean }>`
-  font-size: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 600;
-  color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
-`
-
-const StyledListUrlText = styled.div<{ active: boolean }>`
-  font-size: 12px;
-  color: ${({ theme, active }) => (active ? theme.white : theme.text2)};
-`
-
-const RowWrapper = styled(Row)<{ bgColor: string; active: boolean }>`
-  background-color: ${({ bgColor, active, theme }) => (active ? bgColor ?? 'transparent' : theme.bg2)};
-  transition: 200ms;
-  align-items: center;
-  padding: 1rem;
-  border-radius: 10px;
-`
-
-function listUrlRowHTMLId(listUrl: string) {
+const listUrlRowHTMLId = (listUrl: string) => {
   return `list-row-${listUrl.replace(/\./g, '-')}`
 }
 
-const ListRow = memo(({ listUrl }: { listUrl: string }) => {
+const ListRow: FC<{ listUrl: string }> = memo(({ listUrl }) => {
+  const { i18n } = useLingui()
   const listsByUrl = useSelector<AppState, AppState['lists']['byUrl']>((state) => state.lists.byUrl)
   const dispatch = useDispatch<AppDispatch>()
   const { current: list, pendingUpdate: pending } = listsByUrl[listUrl]
-
-  const listColor = useListColor(list?.logoURI)
   const isActive = useIsListActive(listUrl)
-
-  const [open, toggle] = useToggle(false)
-  const node = useRef<HTMLDivElement>()
-  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement>()
-  const [popperElement, setPopperElement] = useState<HTMLDivElement>()
-
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'auto',
-    strategy: 'fixed',
-    modifiers: [{ name: 'offset', options: { offset: [8, 8] } }],
-  })
-
-  useOnClickOutside(node, open ? toggle : undefined)
 
   const handleAcceptListUpdate = useCallback(() => {
     if (!pending) return
@@ -160,81 +83,91 @@ const ListRow = memo(({ listUrl }: { listUrl: string }) => {
   if (!list) return null
 
   return (
-    <RowWrapper
+    <div
       id={listUrlRowHTMLId(listUrl)}
-      active={isActive}
-      bgColor={listColor}
-      key={listUrl}
-      className={`${isActive ? 'text-high-emphesis' : 'text-primary bg-dark-700'}`}
-    >
-      {list.logoURI ? (
-        <ListLogo size="40px" logoURI={list.logoURI} alt={`${list.name} list logo`} />
-      ) : (
-        <div style={{ width: '24px', height: '24px' }} />
+      className={classNames(
+        isActive ? 'text-high-emphesis' : 'text-primary',
+        'flex justify-between p-4 hover:bg-dark-800/40'
       )}
-      <Column style={{ flex: '1', marginLeft: '1rem' }}>
-        <Row>
-          <StyledTitleText active={isActive}>{list.name}</StyledTitleText>
-        </Row>
-        <RowFixed mt="4px">
-          <StyledListUrlText active={isActive} mr="6px">
-            {list.tokens.length} tokens
-          </StyledListUrlText>
-          <StyledMenu ref={node as any}>
-            <Button variant="empty" onClick={toggle} ref={setReferenceElement} style={{ padding: '0' }}>
-              <Settings size={12} className="ml-1 stroke-current" />
-            </Button>
-            {open && (
-              <PopoverContainer show={true} ref={setPopperElement as any} style={styles.popper} {...attributes.popper}>
-                <div>{list && listVersionLabel(list.version)}</div>
-                <SeparatorDark />
-                <ExternalLink href={`https://tokenlists.org/token-list?url=${listUrl}`}>View list</ExternalLink>
-                <UnpaddedLinkStyledButton onClick={handleRemoveList} disabled={Object.keys(listsByUrl).length === 1}>
-                  Remove list
-                </UnpaddedLinkStyledButton>
-                {pending && (
-                  <UnpaddedLinkStyledButton onClick={handleAcceptListUpdate}>Update list</UnpaddedLinkStyledButton>
-                )}
-              </PopoverContainer>
-            )}
-          </StyledMenu>
-        </RowFixed>
-      </Column>
-      <ListToggle
-        isActive={isActive}
-        bgColor={listColor}
-        toggle={() => {
-          isActive ? handleDisableList() : handleEnableList()
-        }}
-      />
-    </RowWrapper>
+      key={listUrl}
+    >
+      <div className="flex gap-3">
+        {list.logoURI && <ListLogo size="40px" logoURI={list.logoURI} alt={`${list.name} list logo`} />}
+        <div className="flex flex-col">
+          <Typography
+            weight={700}
+            className={classNames(isActive ? 'text-white' : 'text-primary', 'overflow-hidden overflow-ellipsis')}
+          >
+            {list.name}{' '}
+            <Typography variant="xs" weight={700} component="span">
+              {listVersionLabel(list.version)}
+            </Typography>
+          </Typography>
+          <div className="flex gap-1 items-center">
+            <Typography variant="xs" className="text-white">
+              {i18n._(t`${list.tokens.length} tokens`)}
+            </Typography>
+            <Popover
+              placement="bottom-start"
+              content={
+                <div className="flex flex-col gap-1 border rounded shadow bg-dark-900 border-dark-700 p-3">
+                  <a href={`https://tokenlists.org/token-list?url=${listUrl}`}>
+                    <Typography variant="sm" weight={700} className="text-blue flex items-center gap-1">
+                      {i18n._(t`View list`)}
+                      <ExternalLinkIcon width={16} />
+                    </Typography>
+                  </a>
+                  <Typography
+                    role="button"
+                    variant="sm"
+                    weight={700}
+                    onClick={handleRemoveList}
+                    disabled={Object.keys(listsByUrl).length === 1}
+                    className="hover:text-white cursor-pointer disabled:cursor-default"
+                  >
+                    {i18n._(t`Remove list`)}
+                  </Typography>
+                  <Typography
+                    role="button"
+                    variant="sm"
+                    weight={700}
+                    onClick={handleAcceptListUpdate}
+                    className="hover:text-white cursor-pointer disabled:cursor-default"
+                  >
+                    {i18n._(t`Update list`)}
+                  </Typography>
+                </div>
+              }
+            >
+              <Settings size={12} className="text-high-emphesis cursor-pointer hover:text-white" />
+            </Popover>
+          </div>
+        </div>
+      </div>
+      <div>
+        <Switch
+          checked={isActive}
+          onChange={() => (isActive ? handleDisableList() : handleEnableList())}
+          checkedIcon={<CheckIcon className="text-dark-700" />}
+          uncheckedIcon={<CloseIcon />}
+          color="gradient"
+        />
+      </div>
+    </div>
   )
 })
 
-const ListContainer = styled.div`
-  // padding: 1rem;
-  height: 100%;
-  overflow-y: auto;
-
-  padding-bottom: 80px;
-`
-
-function ManageLists({
-  setModalView,
-  setImportList,
-  setListUrl,
-}: {
-  setModalView: (view: CurrencyModalView) => void
-  setImportList: (list: TokenList) => void
-  setListUrl: (url: string) => void
-}) {
+const ManageLists: FC = () => {
+  const { i18n } = useLingui()
+  const { setView, setImportList, setListUrl } = useCurrencyModalContext()
   const [listUrlInput, setListUrlInput] = useState<string>('')
-
   const lists = useAllLists()
-
-  // sort by active but only if not visible
   const activeListUrls = useActiveListUrls()
   const [activeCopy, setActiveCopy] = useState<string[] | undefined>()
+  const fetchList = useFetchListCallback()
+  const [tempList, setTempList] = useState<TokenList>()
+  const [addError, setAddError] = useState<string | undefined>()
+
   useEffect(() => {
     if (!activeCopy && activeListUrls) {
       setActiveCopy(activeListUrls)
@@ -244,8 +177,6 @@ function ManageLists({
   const handleInput = useCallback((e) => {
     setListUrlInput(e.target.value)
   }, [])
-
-  const fetchList = useFetchListCallback()
 
   const validUrl: boolean = useMemo(() => {
     return uriToHttp(listUrlInput).length > 0 || Boolean(parseENSAddress(listUrlInput))
@@ -283,10 +214,6 @@ function ManageLists({
       })
   }, [lists, activeCopy])
 
-  // temporary fetched list for import flow
-  const [tempList, setTempList] = useState<TokenList>()
-  const [addError, setAddError] = useState<string | undefined>()
-
   useEffect(() => {
     async function fetchTempList() {
       fetchList(listUrlInput, false)
@@ -314,17 +241,17 @@ function ManageLists({
   const handleImport = useCallback(() => {
     if (!tempList) return
     setImportList(tempList)
-    setModalView(CurrencyModalView.importList)
+    setView(CurrencyModalView.importList)
     setListUrl(listUrlInput)
-  }, [listUrlInput, setImportList, setListUrl, setModalView, tempList])
+  }, [listUrlInput, setImportList, setListUrl, setView, tempList])
 
   return (
-    <div className="relative flex-1 w-full h-full space-y-4 overflow-y-hidden">
+    <>
       <input
         id="list-add-input"
         type="text"
         placeholder="https:// or ipfs:// or ENS name"
-        className="mt-4 w-full bg-dark-900 border border-dark-800 focus:border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5 appearance-none"
+        className="w-full bg-[rgba(0,0,0,0.2)] border border-dark-800 focus:border-blue rounded placeholder-secondary font-bold text-base p-4 appearance-none"
         value={listUrlInput}
         onChange={handleInput}
         title="List URI"
@@ -332,57 +259,60 @@ function ManageLists({
         autoCorrect="off"
       />
       {addError ? (
-        <div title={addError} className="overflow-hidden text-red text-ellipsis">
+        <Typography
+          variant="sm"
+          weight={700}
+          title={addError}
+          className="overflow-hidden text-red text-ellipsis text-center h-9"
+        >
           {addError}
-        </div>
+        </Typography>
       ) : null}
-      {tempList && (
-        <PaddedColumn style={{ paddingTop: 0 }}>
-          <RowBetween>
-            <RowFixed>
-              {tempList.logoURI && <ListLogo logoURI={tempList.logoURI} size="40px" />}
-              <AutoColumn gap="4px" style={{ marginLeft: '20px' }}>
-                <div className="font-semibold">{tempList.name}</div>
-                <div className="text-xs">{tempList.tokens.length} tokens</div>
-              </AutoColumn>
-            </RowFixed>
-            {isImported ? (
-              <RowFixed>
-                <IconWrapper size="16px" marginRight={'10px'}>
-                  <CheckCircle />
-                </IconWrapper>
-                <div>Loaded</div>
-              </RowFixed>
-            ) : (
-              <Button
-                color="gradient"
-                style={{
-                  width: 'fit-content',
-                  padding: '6px 8px',
-                  fontSize: '14px',
-                }}
-                onClick={handleImport}
-              >
-                Import
-              </Button>
-            )}
-          </RowBetween>
-        </PaddedColumn>
-      )}
-      <ListContainer>
-        <div className="h-full">
-          <AutoSizer disableWidth>
-            {({ height }) => (
-              <div style={{ height }} className="space-y-4">
-                {sortedLists.map((listUrl) => (
-                  <ListRow key={listUrl} listUrl={listUrl} />
-                ))}
+      {tempList && !addError && (
+        <HeadlessUiModal.BorderedContent
+          className={classNames(
+            isImported ? 'pointer-events-none' : 'hover:border-blue cursor-pointer',
+            'flex flex-col gap-4'
+          )}
+          onClick={handleImport}
+        >
+          {isImported && (
+            <Typography variant="xs" weight={700} className="text-green">
+              {i18n._(t`Already imported`)}
+            </Typography>
+          )}
+          <div className="flex justify-between">
+            <div className="flex gap-3">
+              {tempList?.logoURI && (
+                <ListLogo size="40px" logoURI={tempList.logoURI} alt={`${tempList.name} list logo`} />
+              )}
+              <div className="flex flex-col">
+                <Typography weight={700} className={classNames('text-primary overflow-hidden overflow-ellipsis')}>
+                  {tempList?.name}{' '}
+                  {tempList && (
+                    <Typography variant="xs" weight={700} component="span">
+                      {listVersionLabel(tempList.version)}
+                    </Typography>
+                  )}
+                </Typography>
+                <div className="flex gap-1 items-center">
+                  <Typography variant="xs" className="text-white">
+                    {i18n._(t`${tempList?.tokens.length} tokens`)}
+                  </Typography>
+                </div>
               </div>
-            )}
-          </AutoSizer>
+            </div>
+          </div>
+        </HeadlessUiModal.BorderedContent>
+      )}
+      <div className="h-full overflow-y-auto bg-[rgba(0,0,0,0.2)] border border-dark-800 rounded overflow-hidden">
+        <div className="flex flex-col flex-1 flex-grow divide-y divide-dark-800">
+          {sortedLists.map((listUrl) => (
+            <ListRow key={listUrl} listUrl={listUrl} />
+          ))}
         </div>
-      </ListContainer>
-    </div>
+      </div>
+    </>
   )
 }
 

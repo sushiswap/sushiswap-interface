@@ -1,20 +1,20 @@
-import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/sdk'
+import { ChevronDownIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount, Pair, Percent, Token } from '@sushiswap/core-sdk'
+import selectCoinAnimation from 'app/animation/select-coin.json'
+import { classNames, formatCurrencyAmount } from 'app/functions'
+import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useCurrencyBalance } from 'app/state/wallet/hooks'
+import Lottie from 'lottie-react'
 import React, { ReactNode, useCallback, useState } from 'react'
-import { classNames, formatCurrencyAmount } from '../../functions'
 
 import Button from '../Button'
-import { ChevronDownIcon } from '@heroicons/react/outline'
-import CurrencyLogo from '../CurrencyLogo'
-import CurrencySearchModal from '../../modals/SearchModal/CurrencySearchModal'
+import { CurrencyLogo } from '../CurrencyLogo'
 import DoubleCurrencyLogo from '../DoubleLogo'
+import Input from '../Input'
 import { FiatValue } from './FiatValue'
-import Lottie from 'lottie-react'
-import { Input as NumericalInput } from '../NumericalInput'
-import selectCoinAnimation from '../../animation/select-coin.json'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useCurrencyBalance } from '../../state/wallet/hooks'
-import { useLingui } from '@lingui/react'
 
 interface CurrencyInputPanelProps {
   value?: string
@@ -140,20 +140,15 @@ export default function CurrencyInputPanel({
           <div
             className={classNames(
               'flex items-center w-full space-x-3 rounded bg-dark-900 focus:bg-dark-700 p-3 sm:w-3/5'
-              // showMaxButton && selectedCurrencyBalance && 'px-3'
             )}
           >
             <>
               {showMaxButton && selectedCurrencyBalance && (
-                <Button
-                  onClick={onMax}
-                  size="xs"
-                  className="text-xs font-medium bg-transparent border rounded-full hover:bg-primary border-low-emphesis text-secondary whitespace-nowrap"
-                >
+                <Button variant="outlined" color="blue" onClick={onMax} size="xs">
                   {i18n._(t`Max`)}
                 </Button>
               )}
-              <NumericalInput
+              <Input.Numeric
                 id="token-amount-input"
                 value={value}
                 onUserInput={(val) => {
@@ -179,15 +174,14 @@ export default function CurrencyInputPanel({
         )}
       </div>
       {!disableCurrencySelect && onCurrencySelect && (
-        <CurrencySearchModal
-          isOpen={modalOpen}
+        <CurrencySearchModal.Controlled
+          open={modalOpen}
           onDismiss={handleDismissSearch}
           onCurrencySelect={onCurrencySelect}
-          selectedCurrency={currency}
-          otherSelectedCurrency={otherCurrency}
+          selectedCurrency={currency ?? undefined}
+          otherSelectedCurrency={otherCurrency ?? undefined}
           showCommonBases={showCommonBases}
           allowManageTokenList={allowManageTokenList}
-          hideBalance={hideBalance}
           showSearch={showSearch}
         />
       )}

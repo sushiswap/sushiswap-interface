@@ -1,11 +1,10 @@
-import { ExternalProvider, JsonRpcFetchFunc, Web3Provider } from '@ethersproject/providers'
-
-import { SupportedChainId } from '../constants/chains'
+import { Web3Provider } from '@ethersproject/providers'
+import { ChainId } from '@sushiswap/core-sdk'
 
 const NETWORK_POLLING_INTERVALS: { [chainId: number]: number } = {
-  [SupportedChainId.ARBITRUM]: 10_000,
-  [SupportedChainId.ARBITRUM_TESTNET]: 1_000,
-  [SupportedChainId.HARMONY]: 15_000,
+  [ChainId.ARBITRUM]: 1_000,
+  [ChainId.ARBITRUM_TESTNET]: 1_000,
+  [ChainId.HARMONY]: 15_000,
 }
 
 export default function getLibrary(provider: any): Web3Provider {

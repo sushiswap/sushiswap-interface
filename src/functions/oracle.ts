@@ -1,11 +1,20 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
-import { e10 } from './math'
 import { AddressZero } from '@ethersproject/constants'
-import { ChainId } from '@sushiswap/sdk'
-import { CHAINLINK_MAPPING } from '../constants/chainlink/mappings'
+import { ChainId, CHAINLINK_ORACLE_ADDRESS } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
+import { ChainlinkOracle } from 'app/entities/oracles'
+import { IOracle } from 'app/interfaces'
 
-export function validateChainlinkOracleData(chainId = ChainId.MAINNET, collateral, asset, data) {
-  const mapping = CHAINLINK_MAPPING[chainId]
+import { e10 } from './math'
+
+export function getOracle(chainId: ChainId, address: string, data: string): IOracle {
+  if (address.toLowerCase() === CHAINLINK_ORACLE_ADDRESS[chainId].toLowerCase()) {
+    return new ChainlinkOracle(chainId, address, data)
+  }
+}
+
+export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collateral, asset, data) {
+  const mapping = CHAINLINK_PRICE_FEED_MAP[chainId]
   if (!mapping) {
     return false
   }
@@ -16,7 +25,7 @@ export function validateChainlinkOracleData(chainId = ChainId.MAINNET, collatera
   if (params[0] !== AddressZero) {
     if (!mapping![params[0]]) {
       // 'One of the Chainlink oracles used is not configured in this UI.'
-      console.log('One of the Chainlink oracles used is not configured in this UI.')
+      console.debug('One of the Chainlink oracles used is not configured in this UI.', { collateral, asset })
       return false
     } else {
       decimals -= 18 - mapping![params[0]].decimals
@@ -27,6 +36,7 @@ export function validateChainlinkOracleData(chainId = ChainId.MAINNET, collatera
   if (params[1] !== AddressZero) {
     if (!mapping![params[1]]) {
       // 'One of the Chainlink oracles used is not configured in this UI.'
+      console.debug('One of the Chainlink oracles used is not configured in this UI.', collateral, asset)
       return false
     } else {
       decimals -= mapping![params[1]].decimals
@@ -37,8 +47,10 @@ export function validateChainlinkOracleData(chainId = ChainId.MAINNET, collatera
         to = mapping![params[1]].from
       } else {
         // "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link."
-        console.log(
-          "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link."
+        console.debug(
+          "The Chainlink oracles used don't match up with eachother. If 2 oracles are used, they should have a common token, such as WBTC/ETH and LINK/ETH, where ETH is the common link.",
+          collateral,
+          asset
         )
         return false
       }
@@ -50,8 +62,10 @@ export function validateChainlinkOracleData(chainId = ChainId.MAINNET, collatera
     const divider = e10(decimals - needed)
     if (!divider.eq(params[2])) {
       // 'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.'
-      console.log(
-        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.'
+      console.debug(
+        'The divider parameter is misconfigured for this oracle, which leads to rates that are order(s) of magnitude wrong.',
+        collateral,
+        asset
       )
       return false
     } else {
@@ -59,7 +73,7 @@ export function validateChainlinkOracleData(chainId = ChainId.MAINNET, collatera
     }
   } else {
     // "The Chainlink oracles configured don't match the pair tokens."
-    console.log("The Chainlink oracles configured don't match the pair tokens.")
+    console.debug("The Chainlink oracles configured don't match the pair tokens.", collateral, asset)
     return false
   }
 }

@@ -1,23 +1,21 @@
-import React, { useCallback } from 'react'
+import { Token } from '@sushiswap/core-sdk'
+import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
+import React, { FC } from 'react'
 
 import { ImportToken } from '../SearchModal/ImportToken'
-import Modal from '../../components/Modal'
-import { Token } from '@sushiswap/sdk'
 
-export default function TokenWarningModal({
-  isOpen,
-  tokens,
-  onConfirm,
-}: {
+interface TokenWarningModal {
   isOpen: boolean
   tokens: Token[]
   onConfirm: () => void
-}) {
-  const handleDismiss = useCallback(() => null, [])
+}
 
+const TokenWarningModal: FC<TokenWarningModal> = ({ isOpen, tokens, onConfirm }) => {
   return (
-    <Modal isOpen={isOpen} onDismiss={handleDismiss} maxHeight={90}>
-      <ImportToken tokens={tokens} handleCurrencySelect={onConfirm} />
-    </Modal>
+    <HeadlessUiModal.Controlled isOpen={isOpen} onDismiss={onConfirm}>
+      <ImportToken tokens={tokens} />
+    </HeadlessUiModal.Controlled>
   )
 }
+
+export default TokenWarningModal

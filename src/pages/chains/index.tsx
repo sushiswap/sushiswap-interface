@@ -1,12 +1,12 @@
-import Container from '../../components/Container'
+import Container from 'app/components/Container'
+import Typography from 'app/components/Typography'
 import Head from 'next/head'
-import Typography from '../../components/Typography'
 import useSWR from 'swr'
 
 const getChains = (url = 'https://chainid.network/chains.json') => fetch(url).then((res) => res.json())
 
-export default function Status({ initialData }) {
-  const res = useSWR('https://chainid.network/chains.json', getChains, { initialData })
+export default function Status({ fallbackData }) {
+  const res = useSWR('https://chainid.network/chains.json', getChains, { fallbackData })
   const { data } = res
   return (
     <Container id="chains-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="6xl">
@@ -37,5 +37,5 @@ export default function Status({ initialData }) {
 }
 
 export async function getStaticProps() {
-  return { props: { initialData: await getChains() } }
+  return { props: { fallbackData: await getChains() } }
 }

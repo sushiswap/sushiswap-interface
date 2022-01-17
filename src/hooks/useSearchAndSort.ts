@@ -1,7 +1,6 @@
-import React, { useMemo, useState } from 'react'
-
 import { BigNumber } from '@ethersproject/bignumber'
 import Fuse from 'fuse.js'
+import { useMemo, useState } from 'react'
 
 function getNested(theObject: any, path: string, separator = '.') {
   try {

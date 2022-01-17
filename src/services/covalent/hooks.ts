@@ -1,3 +1,4 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import {
   getBlock,
   getBlockHeights,
@@ -15,145 +16,144 @@ import {
   getTokenMetadata,
   getTransaction,
   getTransfers,
-} from './fetchers'
-
+} from 'app/services/covalent/fetchers'
 import useSWR from 'swr'
 
 // CLASS A
-export function useTokenBalances({ initialData, chainId, address }) {
-  const res = useSWR(
+export function useTokenBalances({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/address/${address}/balances_v2/`,
     () => getTokenBalances(chainId, address),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function usePortfolio({ initialData, chainId, address }) {
-  const res = useSWR(
-    `https://api.covalenthq.com/v1/${chainId}/address/${address}/portfolio_v2/`,
+export function usePortfolio({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {
+  const { data } = useSWR(
+    `https://api.covalenthq.com/v1/${chainId}/add{ data }s/${address}/portfolio_v2/`,
     () => getPortfolio(chainId, address),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useTransfers({ initialData, chainId, address }) {
-  const res = useSWR(
+export function useTransfers({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/address/${address}/transfers_v2/`,
     () => getTransfers(chainId, address),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useBlock({ initialData, chainId, blockHeight }) {
-  const res = useSWR(
+export function useBlock({ fallbackData = undefined, chainId = ChainId.ETHEREUM, blockHeight }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/block_v2/${blockHeight}/`,
     () => getBlock(chainId, blockHeight),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useBlockHeights({ initialData, chainId, startDate, endDate }) {
-  const res = useSWR(
+export function useBlockHeights({ fallbackData = undefined, chainId = ChainId.ETHEREUM, startDate, endDate }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/block_v2/${startDate}/${endDate}/`,
     () => getBlockHeights(chainId, startDate, endDate),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useLogs({ initialData, chainId, address }) {
-  const res = useSWR(
+export function useLogs({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/events/address/${address}/`,
     () => getLogs(chainId, address),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useLogsForTopic({ initialData, chainId, topic }) {
-  const res = useSWR(
+export function useLogsForTopic({ fallbackData = undefined, chainId = ChainId.ETHEREUM, topic }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/events/topics/${topic}/`,
     () => getLogsForTopic(chainId, topic),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useNftMetadata({ initialData, chainId, address, tokenId }) {
-  const res = useSWR(
+export function useNftMetadata({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address, tokenId }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/tokens/${address}/nft_metadata/${tokenId}/`,
     () => getNftMetadata(chainId, address, tokenId),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useNftTokenIds({ initialData, chainId, address }) {
-  const res = useSWR(
+export function useNftTokenIds({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/tokens/${address}/nft_token_ids/`,
     () => getNftTokenIds(chainId, address),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useNftTransactions({ initialData, chainId, address, tokenId }) {
-  const res = useSWR(
+export function useNftTransactions({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address, tokenId }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/tokens/${address}/nft_transactions/${tokenId}/`,
     () => getNftTransactions(chainId, address, tokenId),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useHoldersChanges({ initialData, chainId, address }) {
-  const res = useSWR(
+export function useHoldersChanges({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/tokens/${address}/token_holders_changes/`,
     () => getHoldersChanges(chainId, address),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useHolders({ initialData, chainId, address }) {
-  const res = useSWR(
+export function useHolders({ fallbackData = undefined, chainId = ChainId.ETHEREUM, address }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/tokens/${address}/token_holders/`,
     () => getTokenHolders(chainId, address),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useTokenMetadata({ initialData, chainId, id }) {
-  const res = useSWR(
+export function useTokenMetadata({ fallbackData = undefined, chainId = ChainId.ETHEREUM, id }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/tokens/tokenlists/${id}/`,
     () => getTokenMetadata(chainId, id),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useTransaction({ initialData, chainId, txHash }) {
-  const res = useSWR(
+export function useTransaction({ fallbackData = undefined, chainId = ChainId.ETHEREUM, txHash }) {
+  const { data } = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/trasaction_v2/${txHash}/`,
     () => getTransaction(chainId, txHash),
-    { initialData }
+    { fallbackData }
   )
-  return res
+  return data
 }
 
-export function useChains({ initialData }) {
-  const res = useSWR(`https://api.covalenthq.com/v1/chains/status/`, () => getChains(), { initialData })
-  return res
+export function useChains({ fallbackData = undefined }) {
+  const { data } = useSWR(`https://api.covalenthq.com/v1/chains/status/`, () => getChains(), { fallbackData })
+  return data
 }
 
-export function useChainsStatus({ initialData }) {
-  const res = useSWR(`https://api.covalenthq.com/v1/chains/status/`, () => getChainsStatus(), { initialData })
-  return res
+export function useChainsStatus({ fallbackData = undefined }) {
+  const { data } = useSWR(`https://api.covalenthq.com/v1/chains/status/`, () => getChainsStatus(), { fallbackData })
+  return data
 }
 
 // TODO: CLASS B

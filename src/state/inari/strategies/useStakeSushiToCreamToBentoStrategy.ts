@@ -1,36 +1,40 @@
+import { BigNumber } from '@ethersproject/bignumber'
+import { I18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { CRXSUSHI, SUSHI } from '../../../constants'
-import { ChainId, SUSHI_ADDRESS, Token } from '@sushiswap/sdk'
-import { e10, tryParseAmount } from '../../../functions'
-import { useBentoBalance } from '../../bentobox/hooks'
-import { useActiveWeb3React, useZenkoContract } from '../../../hooks'
-import { useTokenBalances } from '../../wallet/hooks'
-import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import { useLingui } from '@lingui/react'
+import { ChainId, SUSHI, SUSHI_ADDRESS, Token } from '@sushiswap/core-sdk'
+import { CRXSUSHI } from 'app/config/tokens'
+import { e10 } from 'app/functions/math'
+import { useZenkoContract } from 'app/hooks/useContract'
+import useSushiPerXSushi from 'app/hooks/useXSushiPerSushi'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
+import { useTokenBalances } from 'app/state/wallet/hooks'
 import { useCallback, useEffect, useMemo } from 'react'
-import useSushiPerXSushi from '../../../hooks/useXSushiPerSushi'
-import { BigNumber } from 'ethers'
-import useBaseStrategy from './useBaseStrategy'
-import useBentoBoxTrait from '../traits/useBentoBoxTrait'
 
-export const general: StrategyGeneralInfo = {
-  name: 'Cream → Bento',
-  steps: ['SUSHI', 'crXSUSHI', 'BentoBox'],
+import useBentoBoxTrait from '../traits/useBentoBoxTrait'
+import { StrategyGeneralInfo, StrategyHook, StrategyTokenDefinitions } from '../types'
+import useBaseStrategy from './useBaseStrategy'
+
+export const GENERAL = (i18n: I18n): StrategyGeneralInfo => ({
+  name: i18n._(t`Cream → Bento`),
+  steps: [i18n._(t`SUSHI`), i18n._(t`crXSUSHI`), i18n._(t`BentoBox`)],
   zapMethod: 'stakeSushiToCreamToBento',
   unzapMethod: 'unstakeSushiFromCreamFromBento',
-  description: t`Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click.`,
-  inputSymbol: 'SUSHI',
-  outputSymbol: 'crXSUSHI in BentoBox',
-}
+  description: i18n._(t`Stake SUSHI for xSUSHI into Cream and deposit crXSUSHI into BentoBox in one click.`),
+  inputSymbol: i18n._(t`SUSHI`),
+  outputSymbol: i18n._(t`crXSUSHI in BentoBox`),
+})
 
 export const tokenDefinitions: StrategyTokenDefinitions = {
   inputToken: {
-    chainId: ChainId.MAINNET,
-    address: SUSHI_ADDRESS[ChainId.MAINNET],
+    chainId: ChainId.ETHEREUM,
+    address: SUSHI_ADDRESS[ChainId.ETHEREUM],
     decimals: 18,
     symbol: 'SUSHI',
   },
   outputToken: {
-    chainId: ChainId.MAINNET,
+    chainId: ChainId.ETHEREUM,
     address: '0x228619CCa194Fbe3Ebeb2f835eC1eA5080DaFbb2',
     decimals: 8,
     symbol: 'crXSUSHI',
@@ -38,13 +42,15 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 }
 
 const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
+  const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const zenkoContract = useZenkoContract()
-  const balances = useTokenBalances(account, [SUSHI[ChainId.MAINNET]])
+  const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM]])
   const sushiPerXSushi = useSushiPerXSushi(true)
-  const crxSushiBentoBalance = useBentoBalance(CRXSUSHI.address)
+  const crxSushiBentoBalance = useBentoBalanceV2(CRXSUSHI.address)
 
   // Strategy ends in BentoBox so use BaseBentoBox strategy
+  const general = useMemo(() => GENERAL(i18n), [i18n])
   const baseStrategy = useBaseStrategy({
     id: 'stakeSushiToCreamToBentoStrategy',
     general,
@@ -58,10 +64,10 @@ const useStakeSushiToCreamToBentoStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
-      inputTokenBalance: balances[SUSHI[ChainId.MAINNET].address],
-      outputTokenBalance: tryParseAmount(crxSushiBentoBalance?.value?.toFixed(8) || '0', CRXSUSHI),
+      inputTokenBalance: balances[SUSHI_ADDRESS[ChainId.ETHEREUM]],
+      outputTokenBalance: crxSushiBentoBalance,
     })
-  }, [balances, setBalances, crxSushiBentoBalance?.value])
+  }, [balances, setBalances, crxSushiBentoBalance])
 
   const calculateOutputFromInput = useCallback(
     async (zapIn: boolean, inputValue: string, inputToken: Token, outputToken: Token) => {

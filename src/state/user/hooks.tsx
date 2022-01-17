@@ -1,32 +1,44 @@
-import { AppDispatch, AppState } from '..'
-import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from '../../constants'
-import { ChainId, FACTORY_ADDRESS, JSBI, Pair, Percent, Token, computePairAddress } from '@sushiswap/sdk'
+import { defaultAbiCoder } from '@ethersproject/abi'
+import { getCreate2Address } from '@ethersproject/address'
+import { AddressZero } from '@ethersproject/constants'
+import { keccak256 } from '@ethersproject/solidity'
 import {
-  SerializedPair,
-  SerializedToken,
+  BENTOBOX_ADDRESS,
+  CHAINLINK_ORACLE_ADDRESS,
+  computePairAddress,
+  Currency,
+  FACTORY_ADDRESS,
+  JSBI,
+  KASHI_ADDRESS,
+  Pair,
+  Percent,
+  Token,
+} from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
+import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
+import { e10 } from 'app/functions'
+import { useAllTokens } from 'app/hooks/Tokens'
+import { useActiveWeb3React } from 'app/services/web3'
+import { AppDispatch, AppState } from 'app/state'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import flatMap from 'lodash/flatMap'
+import { useCallback, useMemo } from 'react'
+import ReactGA from 'react-ga'
+import { useDispatch, useSelector } from 'react-redux'
+
+import {
   addSerializedPair,
   addSerializedToken,
   removeSerializedToken,
+  SerializedPair,
+  SerializedToken,
   toggleURLWarning,
-  updateUserArcherETHTip,
-  updateUserArcherGasEstimate,
-  updateUserArcherGasPrice,
-  updateUserArcherTipManualOverride,
-  updateUserArcherUseRelay,
-  updateUserDarkMode,
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
+  updateUserUseOpenMev,
 } from './actions'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { useAppDispatch, useAppSelector } from '../hooks'
-import { useCallback, useMemo } from 'react'
-
-import ReactGA from 'react-ga'
-import flatMap from 'lodash/flatMap'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useAllTokens } from '../../hooks/Tokens'
 
 function serializeToken(token: Token): SerializedToken {
   return {
@@ -46,29 +58,6 @@ function deserializeToken(serializedToken: SerializedToken): Token {
     serializedToken.symbol,
     serializedToken.name
   )
-}
-
-export function useIsDarkMode(): boolean {
-  const { userDarkMode, matchesDarkMode } = useAppSelector(
-    ({ user: { matchesDarkMode, userDarkMode } }) => ({
-      userDarkMode,
-      matchesDarkMode,
-    }),
-    shallowEqual
-  )
-
-  return userDarkMode === null ? matchesDarkMode : userDarkMode
-}
-
-export function useDarkModeManager(): [boolean, () => void] {
-  const dispatch = useAppDispatch()
-  const darkMode = useIsDarkMode()
-
-  const toggleSetDarkMode = useCallback(() => {
-    dispatch(updateUserDarkMode({ userDarkMode: !darkMode }))
-  }, [darkMode, dispatch])
-
-  return [darkMode, toggleSetDarkMode]
 }
 
 export function useIsExpertMode(): boolean {
@@ -233,6 +222,123 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
   )
 }
 
+const computeOracleData = (collateral: Currency, asset: Currency) => {
+  const oracleData = ''
+
+  const mapping = CHAINLINK_PRICE_FEED_MAP[asset.chainId]
+
+  for (const address in mapping) {
+    mapping[address].address = address
+  }
+
+  let multiply = AddressZero
+  let divide = AddressZero
+
+  const multiplyMatches: any = Object.values(mapping).filter(
+    (m: any) => m.from === asset.wrapped.address && m.to === collateral.wrapped.address
+  )
+
+  let decimals = 0
+
+  if (multiplyMatches.length) {
+    const match = multiplyMatches[0]
+    multiply = match.address!
+    decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals
+  } else {
+    const divideMatches: any = Object.values(mapping).filter(
+      (m: any) => m.from === collateral.wrapped.address && m.to === asset.wrapped.address
+    )
+    if (divideMatches.length) {
+      const match = divideMatches[0]
+      divide = match.address!
+      decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals
+    } else {
+      const mapFrom = Object.values(mapping).filter((m: any) => m.from === asset.wrapped.address)
+      const mapTo = Object.values(mapping).filter((m: any) => m.from === collateral.wrapped.address)
+      const match: any = mapFrom
+        .map((mfrom: any) => ({
+          mfrom: mfrom,
+          mto: mapTo.filter((mto: any) => mfrom.to === mto.to),
+        }))
+        .filter((path) => path.mto.length)
+      if (match.length) {
+        multiply = match[0].mfrom.address!
+        divide = match[0].mto[0].address!
+        decimals = 18 + match[0].mfrom.decimals - match[0].mto[0].decimals - collateral.decimals + asset.decimals
+      } else {
+        return ''
+      }
+    }
+  }
+
+  return defaultAbiCoder.encode(['address', 'address', 'uint256'], [multiply, divide, e10(decimals)])
+}
+
+export const computeKashiPairAddress = ({
+  collateral,
+  asset,
+  oracle,
+  oracleData,
+}: {
+  collateral: Token
+  asset: Token
+  oracle: string
+  oracleData: string
+}): string => {
+  return getCreate2Address(
+    BENTOBOX_ADDRESS[collateral.chainId],
+    keccak256(
+      ['bytes'],
+      [
+        defaultAbiCoder.encode(
+          ['address', 'address', 'address', 'bytes'],
+          [collateral.address, asset.address, oracle, oracleData]
+        ),
+      ]
+    ),
+    keccak256(
+      ['bytes'],
+      [
+        '0x3d602d80600a3d3981f3363d3d373d3d3d363d73' +
+          KASHI_ADDRESS[collateral.chainId].substring(2) +
+          '5af43d82803e903d91602b57fd5bf3',
+      ]
+    )
+  )
+}
+
+/**
+ * Given two tokens return the liquidity token that represents its liquidity shares
+ * @param tokenA one of the two tokens
+ * @param tokenB the other token
+ */
+export function toKashiLiquidityToken([collateral, asset]: [Token, Token]): Token {
+  if (collateral.chainId !== asset.chainId) throw new Error('Not matching chain IDs')
+  if (collateral.equals(asset)) throw new Error('Tokens cannot be equal')
+  if (!BENTOBOX_ADDRESS[collateral.chainId]) throw new Error('No BentoBox factory address on this chain')
+  if (!KASHI_ADDRESS[collateral.chainId]) throw new Error('No Kashi address on this chain')
+  // console.log({
+  //   collateral,
+  //   asset,
+  //   oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
+  //   oracleData: computeOracleData(collateral, asset),
+  // })
+  const oracleData = computeOracleData(collateral, asset)
+  if (!oracleData) return
+  return new Token(
+    collateral.chainId,
+    computeKashiPairAddress({
+      collateral,
+      asset,
+      oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
+      oracleData: computeOracleData(collateral, asset),
+    }),
+    18,
+    'KM',
+    'Kashi Medium Risk'
+  )
+}
+
 /**
  * Returns all the pairs of tokens that are tracked by the user for the current chain ID.
  */
@@ -300,95 +406,6 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   }, [combinedList])
 }
 
-export function useUserArcherUseRelay(): [boolean, (newUseRelay: boolean) => void] {
-  const dispatch = useAppDispatch()
-
-  const useRelay = useSelector<AppState, AppState['user']['userArcherUseRelay']>(
-    (state) => state.user.userArcherUseRelay
-  )
-
-  const setUseRelay = useCallback(
-    (newUseRelay: boolean) => {
-      dispatch(updateUserArcherUseRelay({ userArcherUseRelay: newUseRelay }))
-    },
-    [dispatch]
-  )
-
-  return [useRelay, setUseRelay]
-}
-
-export function useUserArcherGasPrice(): [string, (newGasPrice: string) => void] {
-  const dispatch = useAppDispatch()
-  const userGasPrice = useSelector<AppState, AppState['user']['userArcherGasPrice']>((state) => {
-    return state.user.userArcherGasPrice
-  })
-
-  const setUserGasPrice = useCallback(
-    (newGasPrice: string) => {
-      dispatch(updateUserArcherGasPrice({ userArcherGasPrice: newGasPrice }))
-    },
-    [dispatch]
-  )
-
-  return [userGasPrice, setUserGasPrice]
-}
-
-export function useUserArcherETHTip(): [string, (newETHTip: string) => void] {
-  const dispatch = useAppDispatch()
-  const userETHTip = useSelector<AppState, AppState['user']['userArcherETHTip']>((state) => {
-    return state.user.userArcherETHTip
-  })
-
-  const setUserETHTip = useCallback(
-    (newETHTip: string) => {
-      dispatch(updateUserArcherETHTip({ userArcherETHTip: newETHTip }))
-    },
-    [dispatch]
-  )
-
-  return [userETHTip, setUserETHTip]
-}
-
-export function useUserArcherGasEstimate(): [string, (newGasEstimate: string) => void] {
-  const dispatch = useAppDispatch()
-  const userGasEstimate = useSelector<AppState, AppState['user']['userArcherGasEstimate']>((state) => {
-    return state.user.userArcherGasEstimate
-  })
-
-  const setUserGasEstimate = useCallback(
-    (newGasEstimate: string) => {
-      dispatch(
-        updateUserArcherGasEstimate({
-          userArcherGasEstimate: newGasEstimate,
-        })
-      )
-    },
-    [dispatch]
-  )
-
-  return [userGasEstimate, setUserGasEstimate]
-}
-
-export function useUserArcherTipManualOverride(): [boolean, (newManualOverride: boolean) => void] {
-  const dispatch = useAppDispatch()
-  const userTipManualOverride = useSelector<AppState, AppState['user']['userArcherTipManualOverride']>((state) => {
-    return state.user.userArcherTipManualOverride
-  })
-
-  const setUserTipManualOverride = useCallback(
-    (newManualOverride: boolean) => {
-      dispatch(
-        updateUserArcherTipManualOverride({
-          userArcherTipManualOverride: newManualOverride,
-        })
-      )
-    },
-    [dispatch]
-  )
-
-  return [userTipManualOverride, setUserTipManualOverride]
-}
-
 /**
  * Same as above but replaces the auto with a default value
  * @param defaultSlippageTolerance the default value to replace auto with
@@ -399,4 +416,20 @@ export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Pe
     () => (allowedSlippage === 'auto' ? defaultSlippageTolerance : allowedSlippage),
     [allowedSlippage, defaultSlippageTolerance]
   )
+}
+
+/**
+ * Returns a boolean indicating if the user has enabled OpenMEV protection.
+ */
+export function useUserOpenMev(): [boolean, (newUseOpenMev: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  const useOpenMev = useSelector<AppState, AppState['user']['useOpenMev']>((state) => state.user.userUseOpenMev)
+
+  const setUseOpenMev = useCallback(
+    (newUseOpenMev: boolean) => dispatch(updateUserUseOpenMev({ userUseOpenMev: newUseOpenMev })),
+    [dispatch]
+  )
+
+  return [useOpenMev, setUseOpenMev]
 }

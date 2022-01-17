@@ -1,44 +1,43 @@
-import { Currency, CurrencyAmount, Token } from '@sushiswap/sdk'
-import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { useClaimCallback, useUserUnclaimedAmount } from '../../state/claim/weekly/hooks'
+import { isAddress } from '@ethersproject/address'
+import { BigNumber } from '@ethersproject/bignumber'
+import { ArrowRightIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
+import Container from 'app/components/Container'
+import Dots from 'app/components/Dots'
+import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
+import ExternalLink from 'app/components/ExternalLink'
+import Loader from 'app/components/Loader'
+import QuestionHelper from 'app/components/QuestionHelper'
+import { Fraction } from 'app/entities'
+import { Feature } from 'app/enums/Feature'
+import BalancePanel from 'app/features/inari/BalancePanel'
+import InariButton from 'app/features/inari/Button'
+import InariDescription from 'app/features/inari/InariDescription'
+import SideSwitch from 'app/features/inari/SideSwitch'
+import StrategySelector from 'app/features/inari/StrategySelector'
+import StrategyStepDisplay from 'app/features/inari/StrategyStepDisplay'
+import { formatNumber } from 'app/functions/format'
+import NetworkGuard from 'app/guards/Network'
+import { ApplicationModal } from 'app/state/application/actions'
+import { useModalOpen, useToggleSelfClaimModal } from 'app/state/application/hooks'
 import {
   useClaimCallback as useProtocolClaimCallback,
   useUserUnclaimedAmount as useUserUnclaimedProtocolAmount,
-} from '../../state/claim/protocol/hooks'
-import { useModalOpen, useToggleSelfClaimModal } from '../../state/application/hooks'
-
-import { ApplicationModal } from '../../state/application/actions'
-import { BigNumber } from '@ethersproject/bignumber'
-import Button from '../../components/Button'
-import Container from '../../components/Container'
-import Dots from '../../components/Dots'
-import ExternalLink from '../../components/ExternalLink'
-import Fraction from '../../entities/Fraction'
+} from 'app/state/claim/protocol/hooks'
+import { useClaimCallback, useUserUnclaimedAmount } from 'app/state/claim/weekly/hooks'
+import { useDerivedInariState, useInariState, useSelectedInariStrategy } from 'app/state/inari/hooks'
+import { Field } from 'app/state/inari/types'
+import { useUserHasSubmittedClaim } from 'app/state/transactions/hooks'
 import Head from 'next/head'
-import Loader from '../../components/Loader'
-import QuestionHelper from '../../components/QuestionHelper'
-import { formatNumber } from '../../functions/format'
-import { isAddress } from 'ethers/lib/utils'
-import { t } from '@lingui/macro'
-import { useActiveWeb3React } from '../../hooks/useActiveWeb3React'
-import { useLingui } from '@lingui/react'
-import { useUserHasSubmittedClaim } from '../../state/transactions/hooks'
+import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 
-import DoubleGlowShadow from '../../components/DoubleGlowShadow'
-import InariButton from '../../features/inari/Button'
-import InariDescription from '../../features/inari/InariDescription'
-import SideSwitch from '../../features/inari/SideSwitch'
-import { ArrowRightIcon } from '@heroicons/react/outline'
-import BalancePanel from '../../features/inari/BalancePanel'
-import { useDerivedInariState, useInariState, useSelectedInariStrategy } from '../../state/inari/hooks'
-import NetworkGuard from '../../guards/Network'
-import { ChainId } from '@sushiswap/sdk'
-import StrategyStepDisplay from '../../features/inari/StrategyStepDisplay'
-import StrategySelector from '../../features/inari/StrategySelector'
-import { Field } from '../../state/inari/types'
+import { useActiveWeb3React } from '../../services/web3'
 
-const Strategies = () => {
+const Vesting = () => {
   const { i18n } = useLingui()
   const { inputValue, outputValue } = useInariState()
   const { tokens, general } = useDerivedInariState()
@@ -61,11 +60,11 @@ const Strategies = () => {
             <div className="flex flex-col gap-5">
               <StrategySelector />
               <Link href={'/tools/meowshi'}>
-                <div
+                <a
                   className={`bg-dark-900 cursor-pointer border border-transparent pl-5 py-2 rounded whitespace-nowrap w-full font-bold h-[48px] flex items-center text-sm`}
                 >
                   {'SUSHI → MEOW'}
-                </div>
+                </a>
               </Link>
             </div>
           </div>
@@ -150,7 +149,7 @@ const VestingLayout = () => {
               <br />
               <br />
               {i18n._(t`Additional records and weekly merkle updates can be found on`)}{' '}
-              <ExternalLink href="https://github.com/sushiswap/sushi-vesting">Github</ExternalLink>
+              <ExternalLink href="https://github.com/sushiswap/sushi-vesting">GitHub</ExternalLink>
             </>
           </div>
         </div>
@@ -424,6 +423,6 @@ const WeeklyVesting = () => {
   )
 }
 
-Strategies.Guard = NetworkGuard([ChainId.MAINNET])
+Vesting.Guard = NetworkGuard(Feature.VESTING)
 
-export default Strategies
+export default Vesting

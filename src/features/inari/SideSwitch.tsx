@@ -1,12 +1,13 @@
-import React, { FC } from 'react'
 import { Switch } from '@headlessui/react'
-import Typography from '../../components/Typography'
-import { t } from '@lingui/macro'
 import { MinusIcon, PlusIcon } from '@heroicons/react/outline'
+import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { useInariState } from '../../state/inari/hooks'
-import { useAppDispatch } from '../../state/hooks'
-import { setZapIn } from '../../state/inari/actions'
+import { useAppDispatch } from 'app/state/hooks'
+import { setZapIn } from 'app/state/inari/actions'
+import { useInariState } from 'app/state/inari/hooks'
+import React, { FC } from 'react'
+
+import Typography from '../../components/Typography'
 
 interface SideSwitchProps {}
 

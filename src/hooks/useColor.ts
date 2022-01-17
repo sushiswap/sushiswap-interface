@@ -1,10 +1,9 @@
-import { ChainId, Token } from '@sushiswap/sdk'
-import { useLayoutEffect, useState } from 'react'
-
+import { ChainId, Token } from '@sushiswap/core-sdk'
+import { uriToHttp } from 'app/functions/convert'
 import Vibrant from 'node-vibrant'
-import { hex } from 'wcag-contrast'
 import { shade } from 'polished'
-import { uriToHttp } from '../functions/convert'
+import { useLayoutEffect, useState } from 'react'
+import { hex } from 'wcag-contrast'
 
 async function getColorFromToken(token: Token): Promise<string | null> {
   if (token.chainId === ChainId.RINKEBY && token.address === '0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735') {

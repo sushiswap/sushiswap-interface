@@ -1,13 +1,13 @@
+import { ChainId, Currency, CurrencyAmount, JSBI, Percent, Trade, TradeType } from '@sushiswap/core-sdk'
+import { TradeUnion } from 'app/types'
+
 import {
   ALLOWED_PRICE_IMPACT_HIGH,
   ALLOWED_PRICE_IMPACT_LOW,
   ALLOWED_PRICE_IMPACT_MEDIUM,
   BLOCKED_PRICE_IMPACT_NON_EXPERT,
+  PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from '../constants'
-import { ChainId, Currency, CurrencyAmount, Fraction, JSBI, Percent, Trade, TradeType } from '@sushiswap/sdk'
-
-import { Field } from '../state/swap/actions'
-import { basisPointsToPercent } from './convert'
 
 const THIRTY_BIPS_FEE = new Percent(JSBI.BigInt(30), JSBI.BigInt(10000))
 const ONE_HUNDRED_PERCENT = new Percent(JSBI.BigInt(10000), JSBI.BigInt(10000))
@@ -34,7 +34,7 @@ export function formatExecutionPrice(
 }
 
 // computes realized lp fee as a percent
-export function computeRealizedLPFeePercent(trade: Trade<Currency, Currency, TradeType>): Percent {
+export function computeRealizedLPFeePercent(trade: TradeUnion): Percent {
   let percent: Percent
   if (trade instanceof Trade) {
     // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
@@ -81,4 +81,28 @@ export function warningSeverity(priceImpact: Percent | undefined): WarningSeveri
     impact--
   }
   return 0
+}
+
+/**
+ * Given the price impact, get user confirmation.
+ *
+ * @param priceImpactWithoutFee price impact of the trade without the fee.
+ */
+export default function confirmPriceImpactWithoutFee(priceImpactWithoutFee: Percent): boolean {
+  if (!priceImpactWithoutFee.lessThan(PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN)) {
+    return (
+      window.prompt(
+        `This swap has a price impact of at least ${PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN.toFixed(
+          0
+        )}%. Please type the word "confirm" to continue with this swap.`
+      ) === 'confirm'
+    )
+  } else if (!priceImpactWithoutFee.lessThan(ALLOWED_PRICE_IMPACT_HIGH)) {
+    return window.confirm(
+      `This swap has a price impact of at least ${ALLOWED_PRICE_IMPACT_HIGH.toFixed(
+        0
+      )}%. Please confirm that you would like to continue with this swap.`
+    )
+  }
+  return true
 }

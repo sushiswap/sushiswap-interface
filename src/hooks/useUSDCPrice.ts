@@ -1,17 +1,15 @@
-import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/sdk'
-
-import { useActiveWeb3React } from '../hooks/useActiveWeb3React'
+import { ChainId, Currency, CurrencyAmount, Price, Token, USD } from '@sushiswap/core-sdk'
 import { useMemo } from 'react'
+
+import { useActiveWeb3React } from '../services/web3'
 import { useV2TradeExactOut } from './useV2Trades'
 
-// import { wrappedCurrency } from "../functions/currency/wrappedCurrency";
-
-// Stablecoin amounts used when calculating spot price for a given currency.
+// StableCoin amounts used when calculating spot price for a given currency.
 // The amount is large enough to filter low liquidity pairs.
-const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
-  [ChainId.MAINNET]: CurrencyAmount.fromRawAmount(USD[ChainId.MAINNET], 100_000e6),
+export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> } = {
+  [ChainId.ETHEREUM]: CurrencyAmount.fromRawAmount(USD[ChainId.ETHEREUM], 100_000e6),
   [ChainId.ROPSTEN]: CurrencyAmount.fromRawAmount(USD[ChainId.ROPSTEN], 100_000e6),
-  [ChainId.KOVAN]: CurrencyAmount.fromRawAmount(USD[ChainId.KOVAN], 100_000e6),
+  [ChainId.KOVAN]: CurrencyAmount.fromRawAmount(USD[ChainId.KOVAN], 100_000e1),
   [ChainId.MATIC]: CurrencyAmount.fromRawAmount(USD[ChainId.MATIC], 100_000e6),
   [ChainId.FANTOM]: CurrencyAmount.fromRawAmount(USD[ChainId.FANTOM], 100_000e6),
   [ChainId.BSC]: CurrencyAmount.fromRawAmount(USD[ChainId.BSC], 100_000e18),
@@ -56,106 +54,6 @@ export default function useUSDCPrice(currency?: Currency): Price<Currency, Token
 
     return undefined
   }, [currency, stablecoin, v2USDCTrade])
-
-  // if (!(chainId in USDC)) return undefined;
-
-  // const wrapped = wrappedCurrency(currency, chainId);
-  // const tokenPairs: [Currency | undefined, Currency | undefined][] = useMemo(
-  //   () => [
-  //     [
-  //       chainId && wrapped && currencyEquals(WETH[chainId], wrapped)
-  //         ? undefined
-  //         : currency,
-  //       chainId ? WETH[chainId] : undefined,
-  //     ],
-  //     [wrapped?.equals(USDC[chainId]) ? undefined : wrapped, USDC[chainId]],
-  //     [chainId ? WETH[chainId] : undefined, USDC[chainId]],
-  //   ],
-  //   [chainId, currency, wrapped]
-  // );
-  // const [
-  //   [ethPairState, ethPair],
-  //   [usdcPairState, usdcPair],
-  //   [usdcEthPairState, usdcEthPair],
-  // ] = usePairs(tokenPairs);
-
-  // return useMemo(() => {
-  //   if (!(chainId in USDC) || !currency || !wrapped || !chainId) {
-  //     return undefined;
-  //   }
-  //   // handle weth/eth
-  //   if (wrapped.equals(WETH[chainId])) {
-  //     if (usdcPair) {
-  //       const price = usdcPair.priceOf(WETH[chainId]);
-  //       return new Price(
-  //         currency,
-  //         USDC[chainId],
-  //         price.denominator,
-  //         price.numerator
-  //       );
-  //     } else {
-  //       return undefined;
-  //     }
-  //   }
-  //   // handle usdc
-  //   if (wrapped.equals(USDC[chainId])) {
-  //     return new Price(USDC[chainId], USDC[chainId], "1", "1");
-  //   }
-
-  //   const ethPairETHAmount = ethPair?.reserveOf(WETH[chainId]);
-  //   const ethPairETHUSDCValue: JSBI =
-  //     ethPairETHAmount && usdcEthPair
-  //       ? usdcEthPair.priceOf(WETH[chainId]).quote(ethPairETHAmount).raw
-  //       : JSBI.BigInt(0);
-
-  //   // all other tokens
-  //   // first try the usdc pair
-  //   if (
-  //     usdcPairState === PairState.EXISTS &&
-  //     usdcPair &&
-  //     usdcPair.reserveOf(USDC[chainId]).greaterThan(ethPairETHUSDCValue)
-  //   ) {
-  //     const price = usdcPair.priceOf(wrapped);
-  //     return new Price(
-  //       currency,
-  //       USDC[chainId],
-  //       price.denominator,
-  //       price.numerator
-  //     );
-  //   }
-  //   if (
-  //     ethPairState === PairState.EXISTS &&
-  //     ethPair &&
-  //     usdcEthPairState === PairState.EXISTS &&
-  //     usdcEthPair
-  //   ) {
-  //     if (
-  //       usdcEthPair.reserveOf(USDC[chainId]).greaterThan("0") &&
-  //       ethPair.reserveOf(WETH[chainId]).greaterThan("0")
-  //     ) {
-  //       const ethUsdcPrice = usdcEthPair.priceOf(USDC[chainId]);
-  //       const currencyEthPrice = ethPair.priceOf(WETH[chainId]);
-  //       const usdcPrice = ethUsdcPrice.multiply(currencyEthPrice).invert();
-  //       return new Price(
-  //         currency,
-  //         USDC[chainId],
-  //         usdcPrice.denominator,
-  //         usdcPrice.numerator
-  //       );
-  //     }
-  //   }
-  //   return undefined;
-  // }, [
-  //   chainId,
-  //   currency,
-  //   ethPair,
-  //   ethPairState,
-  //   usdcEthPair,
-  //   usdcEthPairState,
-  //   usdcPair,
-  //   usdcPairState,
-  //   wrapped,
-  // ]);
 }
 
 export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefined | null) {

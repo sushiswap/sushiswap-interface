@@ -1,4 +1,4 @@
-import Container from '../../components/Container'
+import Container from 'app/components/Container'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
