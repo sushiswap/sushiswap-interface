@@ -1,3 +1,4 @@
+import Davatar from '@davatar/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { HeadlessUiModal } from 'app/components/Modal'
@@ -9,7 +10,6 @@ import { AppDispatch } from 'app/state'
 import { clearAllTransactions } from 'app/state/transactions/actions'
 import Image from 'next/image'
 import React, { FC, useCallback, useMemo } from 'react'
-import Identicon from 'react-blockies'
 import { ExternalLink as LinkIcon } from 'react-feather'
 import { useDispatch } from 'react-redux'
 
@@ -44,7 +44,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
   openOptions,
 }) => {
   const { i18n } = useLingui()
-  const { chainId, account, connector, deactivate } = useActiveWeb3React()
+  const { chainId, account, connector, deactivate, library } = useActiveWeb3React()
   const dispatch = useDispatch<AppDispatch>()
 
   const connectorName = useMemo(() => {
@@ -63,34 +63,6 @@ const AccountDetails: FC<AccountDetailsProps> = ({
     )
   }, [connector])
 
-  const statusIcon = useMemo(() => {
-    if (connector === injected) {
-      return <Identicon seed={account ?? ''} />
-    } else if (connector?.constructor.name === 'WalletConnectConnector') {
-      return <WalletIcon src="/wallet-connect.png" alt="Wallet Connect" size={16} />
-    } else if (connector?.constructor.name === 'WalletLinkConnector') {
-      return <WalletIcon src="/coinbase.svg" alt="Coinbase" size={16} />
-    } else if (connector?.constructor.name === 'FortmaticConnector') {
-      return <WalletIcon src="/formatic.png" alt="Fortmatic" size={16} />
-    } else if (connector?.constructor.name === 'PortisConnector') {
-      return (
-        <WalletIcon src="/portnis.png" alt="Portis" size={16}>
-          <Button
-            onClick={async () => {
-              // casting as PortisConnector here defeats the lazyload purpose
-              ;(connector as any).portis.showPortis()
-            }}
-          >
-            Show Portis
-          </Button>
-        </WalletIcon>
-      )
-    } else if (connector?.constructor.name === 'TorusConnector') {
-      return <WalletIcon src="/torus.png" alt="Torus" size={16} />
-    }
-    return null
-  }, [account, connector])
-
   const clearAllTransactionsCallback = useCallback(() => {
     if (chainId) dispatch(clearAllTransactions({ chainId }))
   }, [dispatch, chainId])
@@ -107,8 +79,15 @@ const AccountDetails: FC<AccountDetailsProps> = ({
             </Button>
           </div>
           <div id="web3-account-identifier-row" className="flex flex-col justify-center gap-4">
-            <div className="flex gap-4 items-center">
-              <div className="rounded-full overflow-hidden">{statusIcon}</div>
+            <div className="flex items-center gap-4">
+              <div className="overflow-hidden rounded-full">
+                <Davatar
+                  size={48}
+                  address={account}
+                  defaultComponent={<Image src="/chef.svg" alt="Sushi Chef" width={48} height={48} />}
+                  provider={library}
+                />
+              </div>
               <Typography weight={700} variant="lg" className="text-white">
                 {ENSName ? ENSName : account && shortenAddress(account)}
               </Typography>

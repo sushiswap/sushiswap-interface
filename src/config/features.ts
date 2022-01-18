@@ -48,6 +48,7 @@ const features: FeatureMap = {
   [ChainId.MOONRIVER]: [Feature.AMM, Feature.LIQUIDITY_MINING],
   [ChainId.CELO]: [Feature.AMM, Feature.LIQUIDITY_MINING],
   [ChainId.ARBITRUM]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
+  [ChainId.FUSE]: [Feature.AMM, Feature.LIQUIDITY_MINING],
 }
 
 export default features
