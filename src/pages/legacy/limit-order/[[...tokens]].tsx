@@ -7,7 +7,6 @@ import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-orde
 import swapArrowsAnimationData from 'app/animation/swap-arrows.json'
 import AddressInputPanel from 'app/components/AddressInputPanel'
 import Alert from 'app/components/Alert'
-import Button from 'app/components/Button'
 import Container from 'app/components/Container'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import ExpertModePanel from 'app/components/ExpertModePanel'
@@ -17,6 +16,7 @@ import BalancePanel from 'app/features/legacy/limit-order/BalancePanel'
 import CurrencyInput from 'app/features/legacy/limit-order/CurrencyInput'
 import CurrencyInputPanel from 'app/features/legacy/limit-order/CurrencyInputPanel'
 import CurrencySelect from 'app/features/legacy/limit-order/CurrencySelect'
+import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
 import LimitPriceInputPanel from 'app/features/legacy/limit-order/LimitPriceInputPanel'
 import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
 import PayFromToggle from 'app/features/legacy/limit-order/PayFromToggle'
@@ -390,18 +390,18 @@ function LimitOrder() {
             </div>
 
             <div className="flex flex-col gap-3">
-              <Alert
+              {/* <Alert
                 type="information"
                 title="Upgrade Notice"
                 message={
                   'In order to incorporate more community filler bots the ability to add new limit orders is temporarily paused. Existing orders are unaffected and can be edited and cancelled at any time'
                 }
                 dismissable={false}
-              />
-              <Button disabled={true} color={'gray'}>
+              /> */}
+              {/* <Button disabled={true} color={'gray'}>
                 {i18n._(t`Limit Orders Disabled`)}
-              </Button>
-              {/*<LimitOrderButton color="gradient" className="font-bold" currency={currencies[Field.INPUT]} />*/}
+              </Button> */}
+              <LimitOrderButton color="gradient" className="font-bold" currency={currencies[Field.INPUT]} />
             </div>
           </div>
         </DoubleGlowShadow>
