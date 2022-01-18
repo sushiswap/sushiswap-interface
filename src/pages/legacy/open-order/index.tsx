@@ -13,6 +13,7 @@ import useLimitOrderApproveCallback, { BentoApprovalState } from 'app/hooks/useL
 import useLimitOrders from 'app/hooks/useLimitOrders'
 import Head from 'next/head'
 import React from 'react'
+// import Back from 'app/components/Back'
 
 function OpenOrdersPage() {
   const { i18n } = useLingui()
@@ -34,6 +35,7 @@ function OpenOrdersPage() {
               {i18n._(t`Back to Limit Orders`)}
             </a>
           </NavLink>
+          {/* <Back /> */}
         </div>
         {pending.totalOrders > 0 && approvalState === BentoApprovalState.NOT_APPROVED && (
           <div className="flex pb-6">
