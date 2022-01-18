@@ -15,7 +15,6 @@ import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
-import { useSelector } from 'react-redux'
 
 import Typography from '../../../components/Typography'
 
@@ -37,7 +36,7 @@ export const SelectPoolsAndConfirm: FC = () => {
 
   const dispatch = useAppDispatch()
   const selectedMigrations = useAppSelector<v2Migration[]>(selectTridentMigrations)
-  const leftToSelect = useSelector(selectLeftToChoose)
+  const leftToSelect = useAppSelector(selectLeftToChoose)
 
   const { data, error, isValidating } = useGetAllTridentPools()
 
