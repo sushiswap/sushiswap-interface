@@ -41,7 +41,7 @@ const OUTLINED = {
   pink: 'border-pink hover:bg-pink/10 active:bg-pink/20 text-pink focus:bg-pink/10',
   purple: 'border-purple hover:bg-purple/10 active:bg-purple/20 text-purple focus:bg-purple/10',
   gradient: 'border-purple hover:bg-purple/10 active:bg-purple/20 text-purple focus:bg-purple/10',
-  gray: 'border-dark-700 hover:bg-dark-700/10 active:bg-dark-700/20 focus:bg-dark-700/10',
+  gray: 'border-dark-700 hover:bg-dark-700/30 active:bg-dark-700/50 focus:bg-dark-700/30',
 }
 
 const EMPTY = {
