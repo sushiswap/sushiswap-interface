@@ -33,6 +33,8 @@ export default function useFarmRewards() {
 
   const positions = usePositions(chainId)
 
+  // console.log({ positions })
+
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
   const farms = useFarms({ chainId })
