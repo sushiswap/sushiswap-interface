@@ -32,7 +32,9 @@ const CompletedOrders: FC = () => {
           <>
             <div className="grid grid-flow-col grid-cols-3 gap-4 px-4 pb-4 text-sm font-bold md:grid-cols-4 text-secondary">
               <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Receive`)}</div>
-              <div className="flex items-center cursor-pointer hover:text-primary">{i18n._(t`Pay`)}</div>
+              <div className="flex items-center justify-center cursor-pointer hover:text-primary md:justify-start">
+                {i18n._(t`Pay`)}
+              </div>
               <div className="flex items-center hidden text-left cursor-pointer hover:text-primary md:block">
                 {i18n._(t`Rate`)}
               </div>
@@ -64,10 +66,10 @@ const CompletedOrders: FC = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="font-bold text-left">
+                    <div className="font-bold md:text-left">
                       <div className="flex flex-col">
                         <div>{order.limitOrder.amountIn.toSignificant(6)} </div>
-                        <div className="text-xs text-left text-secondary">{order.tokenIn.symbol}</div>
+                        <div className="text-xs md:text-left text-secondary">{order.tokenIn.symbol}</div>
                       </div>
                     </div>
                     <div className="hidden font-bold text-left md:block">
