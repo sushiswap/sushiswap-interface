@@ -36,8 +36,8 @@ export class CreatePoolPage extends AppPage {
     amountInB: string,
     fee: number
   ): Promise<void> {
-    await this.setPoolType(poolType)
-    await this.clickContinueButton()
+    // await this.setPoolType(poolType)
+    // await this.clickContinueButton()
     await this.setAssetA(assetA, payAssetAFromWallet)
     await this.setAssetB(assetB, payAssetBFromWallet)
     await this.setAssetAAmountIn(amountInA)
