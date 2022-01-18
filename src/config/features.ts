@@ -45,10 +45,10 @@ const features: FeatureMap = {
   [ChainId.OKEX]: [Feature.AMM],
   [ChainId.OKEX_TESTNET]: [Feature.AMM],
   [ChainId.XDAI]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.MOONRIVER]: [Feature.AMM, Feature.LIQUIDITY_MINING],
-  [ChainId.CELO]: [Feature.AMM, Feature.LIQUIDITY_MINING],
+  [ChainId.MOONRIVER]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
+  [ChainId.CELO]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
   [ChainId.ARBITRUM]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.BENTOBOX, Feature.KASHI],
-  [ChainId.FUSE]: [Feature.AMM, Feature.LIQUIDITY_MINING],
+  [ChainId.FUSE]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
 }
 
 export default features
