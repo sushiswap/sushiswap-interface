@@ -135,7 +135,7 @@ export function useDerivedLimitOrderInfo(): {
   const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
   const rate = trade?.executionPrice
 
-  const bentoBoxBalances = useBentoBalancesV2([inputCurrency.wrapped.address, outputCurrency.wrapped.address])
+  const bentoBoxBalances = useBentoBalancesV2([inputCurrency?.wrapped?.address, outputCurrency?.wrapped?.address])
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
