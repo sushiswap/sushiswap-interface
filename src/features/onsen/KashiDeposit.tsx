@@ -3,7 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { BENTOBOX_ADDRESS, CurrencyAmount, WNATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Web3Connect from 'app/components/Web3Connect'
 import { KashiCooker } from 'app/entities'
@@ -128,13 +128,13 @@ const KashiDeposit = ({ pair, useBento }) => {
           )}
         </Button>
       ) : (
-        <ButtonError
+        <Button
           onClick={() => onCook(pair, onDeposit)}
           disabled={!isValid}
-          error={!isValid && !!parsedDepositValue}
+          color={!isValid && !!parsedDepositValue ? 'red' : 'blue'}
         >
           {error || i18n._(t`Confirm Deposit`)}
-        </ButtonError>
+        </Button>
       )}
     </div>
   )

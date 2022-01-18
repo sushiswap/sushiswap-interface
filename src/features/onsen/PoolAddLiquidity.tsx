@@ -3,7 +3,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, Currency, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/core-sdk'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import DoubleCurrencyLogo from 'app/components/DoubleLogo'
 import Web3Connect from 'app/components/Web3Connect'
@@ -352,16 +352,18 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
               )}
             </div>
           ) : (
-            <ButtonError
+            <Button
+              color={
+                !isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B] ? 'red' : 'blue'
+              }
               onClick={() => {
                 isExpertMode ? onAdd() : setShowConfirm(true)
               }}
               disabled={!isValid || attemptingTxn}
-              error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
               fullWidth={true}
             >
               {error ?? i18n._(t`Confirm Adding Liquidity`)}
-            </ButtonError>
+            </Button>
           )}
         </div>
       </div>

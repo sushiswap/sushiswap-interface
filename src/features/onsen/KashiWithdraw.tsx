@@ -3,7 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Web3Connect from 'app/components/Web3Connect'
 import { KashiCooker } from 'app/entities'
@@ -107,13 +107,13 @@ const KashiWithdraw = ({ pair, useBento }) => {
           )}
         </Button>
       ) : (
-        <ButtonError
+        <Button
+          color={!isValid && !!parsedWithdrawValue ? 'red' : 'blue'}
           onClick={() => onCook(pair, onWithdraw)}
           disabled={!isValid}
-          error={!isValid && !!parsedWithdrawValue}
         >
           {error || i18n._(t`Confirm Withdraw`)}
-        </ButtonError>
+        </Button>
       )}
     </div>
   )

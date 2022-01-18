@@ -9,10 +9,7 @@ import {
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
-import Lottie from 'lottie-react'
 import React, { FC } from 'react'
-
-import LoadingCircle from '../../../animation/loading-circle.json'
 
 export const SelectionContinueButton: FC = () => {
   const { i18n } = useLingui()
@@ -40,13 +37,7 @@ export const SelectionContinueButton: FC = () => {
             color="blue"
             variant="filled"
             onClick={() => !error && dispatch(setCreateShowReview(true))}
-            {...(loading && {
-              startIcon: (
-                <div className="w-4 h-4 mr-1">
-                  <Lottie animationData={LoadingCircle} autoplay loop />
-                </div>
-              ),
-            })}
+            loading={loading}
           >
             {error
               ? error

@@ -34,7 +34,7 @@ export function formatExecutionPrice(
 }
 
 // computes realized lp fee as a percent
-export function computeRealizedLPFeePercent(trade: TradeUnion): Percent {
+export function computeRealizedLPFeePercent(trade: TradeUnion): Percent | undefined {
   let percent: Percent
   if (trade instanceof Trade) {
     // for each hop in our trade, take away the x*y=k price impact from 0.3% fees
@@ -45,9 +45,11 @@ export function computeRealizedLPFeePercent(trade: TradeUnion): Percent {
         ONE_HUNDRED_PERCENT
       )
     )
+
+    return new Percent(percent.numerator, percent.denominator)
   }
 
-  return new Percent(percent.numerator, percent.denominator)
+  return undefined
 }
 
 // computes price breakdown for the trade

@@ -4,7 +4,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, currencyEquals, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import { AutoColumn } from 'app/components/Column'
 import Container from 'app/components/Container'
 import CurrencyInputPanel from 'app/components/CurrencyInputPanel'
@@ -507,17 +507,21 @@ export default function Add() {
                     }
 
                     {approvalA === ApprovalState.APPROVED && approvalB === ApprovalState.APPROVED && (
-                      <ButtonError
+                      <Button
+                        color={
+                          !isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]
+                            ? 'red'
+                            : 'blue'
+                        }
                         onClick={() => {
                           isExpertMode ? onAdd() : setShowConfirm(true)
                         }}
                         disabled={
                           !isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED
                         }
-                        error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
                       >
                         {error ?? i18n._(t`Confirm Adding Liquidity`)}
-                      </ButtonError>
+                      </Button>
                     )}
                   </AutoColumn>
                 )

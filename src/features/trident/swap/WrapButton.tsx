@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import loadingCircle from 'animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { useDerivedTridentSwapContext } from 'app/features/trident/swap/DerivedTradeContext'
@@ -10,7 +9,6 @@ import { useBentoBox, useBentoBoxContract, useWETH9Contract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 
 import TridentApproveGate from '../TridentApproveGate'
@@ -81,20 +79,7 @@ const WrapButton: FC = () => {
 
         return (
           <div className="flex">
-            <Button
-              fullWidth
-              id="wrap-button"
-              {...(loading && {
-                startIcon: (
-                  <div className="w-4 h-4 mr-1">
-                    <Lottie animationData={loadingCircle} autoplay loop />
-                  </div>
-                ),
-              })}
-              color="gradient"
-              disabled={disabled}
-              onClick={execute}
-            >
+            <Button fullWidth id="wrap-button" loading={loading} color="gradient" disabled={disabled} onClick={execute}>
               {buttonText}
             </Button>
           </div>

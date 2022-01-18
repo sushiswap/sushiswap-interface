@@ -5,12 +5,10 @@ import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, Currency, NATIVE, Percent, WNATIVE, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
-import { ButtonConfirmed, ButtonError } from 'app/components/Button'
 import Button from 'app/components/Button'
 import { AutoColumn } from 'app/components/Column'
 import Container from 'app/components/Container'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import Dots from 'app/components/Dots'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import NavLink from 'app/components/NavLink'
 import PercentInputPanel from 'app/components/PercentInputPanel'
@@ -543,28 +541,30 @@ export default function Remove() {
                   <Web3Connect size="lg" color="blue" className="w-full" />
                 ) : (
                   <div className="grid grid-cols-2 gap-4">
-                    <ButtonConfirmed
+                    <Button
+                      fullWidth
+                      loading={approval === ApprovalState.PENDING}
                       onClick={onAttemptToApprove}
-                      confirmed={approval === ApprovalState.APPROVED || signatureData !== null}
                       disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
                     >
-                      {approval === ApprovalState.PENDING ? (
-                        <Dots>{i18n._(t`Approving`)}</Dots>
-                      ) : approval === ApprovalState.APPROVED || signatureData !== null ? (
-                        i18n._(t`Approved`)
-                      ) : (
-                        i18n._(t`Approve`)
-                      )}
-                    </ButtonConfirmed>
-                    <ButtonError
+                      {approval === ApprovalState.APPROVED || signatureData !== null
+                        ? i18n._(t`Approved`)
+                        : i18n._(t`Approve`)}
+                    </Button>
+                    <Button
+                      fullWidth
+                      color={
+                        !isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]
+                          ? 'red'
+                          : 'blue'
+                      }
                       onClick={() => {
                         setShowConfirm(true)
                       }}
                       disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
-                      error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
                     >
                       {error || i18n._(t`Confirm Withdrawal`)}
-                    </ButtonError>
+                    </Button>
                   </div>
                 )}
               </div>

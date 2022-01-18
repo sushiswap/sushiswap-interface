@@ -9,7 +9,7 @@ import Head from 'next/head'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import Badge from '../../../components/Badge'
-import Button, { ButtonConfirmed } from '../../../components/Button'
+import Button from '../../../components/Button'
 import Container from '../../../components/Container'
 import Dots from '../../../components/Dots'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
@@ -191,7 +191,11 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
   }, [state.selectedLPToken])
 
   if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken || !state.amount) {
-    return <ButtonConfirmed disabled={true}>Migrate</ButtonConfirmed>
+    return (
+      <Button fullWidth disabled={true}>
+        Migrate
+      </Button>
+    )
   }
 
   const insufficientAmount = JSBI.lessThan(
@@ -224,27 +228,24 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
             </div>
           </div>
           {state.mode === 'approve' && (
-            <ButtonConfirmed
+            <Button
+              fullWidth
+              loading={approval === ApprovalState.PENDING}
               onClick={approve}
-              confirmed={approval === ApprovalState.APPROVED}
               disabled={approval !== ApprovalState.NOT_APPROVED || isButtonDisabled}
             >
-              {approval === ApprovalState.PENDING ? (
-                <Dots>{i18n._(t`Approving`)}</Dots>
-              ) : approval === ApprovalState.APPROVED ? (
-                i18n._(t`Approved`)
-              ) : (
-                i18n._(t`Approve`)
-              )}
-            </ButtonConfirmed>
+              {approval === ApprovalState.APPROVED ? i18n._(t`Approved`) : i18n._(t`Approve`)}
+            </Button>
           )}
           {((state.mode === 'approve' && approval === ApprovalState.APPROVED) || state.mode === 'permit') && (
-            <ButtonConfirmed
+            <Button
+              fullWidth
+              loading={state.isMigrationPending}
               disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
               onClick={onPress}
             >
-              {state.isMigrationPending ? <Dots>{i18n._(t`Migrating`)}</Dots> : i18n._(t`Migrate`)}
-            </ButtonConfirmed>
+              {i18n._(t`Migrate`)}
+            </Button>
           )}
         </>
       )}
