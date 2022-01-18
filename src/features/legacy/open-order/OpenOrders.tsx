@@ -39,7 +39,7 @@ const OpenOrders: FC = () => {
         isOpen={!!hash}
         onDismiss={() => setHash('')}
         hash={hash}
-        content={() => <div />}
+        content={<div />}
         attemptingTxn={false}
         pendingText={''}
       />

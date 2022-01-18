@@ -134,14 +134,14 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
           onDismiss={closeModal}
           attemptingTxn={modalState.attemptingTxn}
           hash={modalState.txHash}
-          content={() => (
+          content={
             <ConfirmationModalContent
               title={i18n._(t`Confirm convert`)}
               onDismiss={closeModal}
               topContent={<span />}
               bottomContent={<span />}
             />
-          )}
+          }
           pendingText={i18n._(
             t`Converting ${parsedInputAmount?.toSignificant(6, { groupSeparator: ',' })} ${
               meowshiState.currencies[Field.INPUT]?.symbol

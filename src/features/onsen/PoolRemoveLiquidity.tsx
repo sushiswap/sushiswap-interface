@@ -393,14 +393,14 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
         onDismiss={handleDismissConfirmation}
         attemptingTxn={attemptingTxn}
         hash={txHash ? txHash : ''}
-        content={() => (
+        content={
           <ConfirmationModalContent
             title={i18n._(t`You will receive`)}
             onDismiss={handleDismissConfirmation}
             topContent={ModalHeader}
             bottomContent={ModalBottom}
           />
-        )}
+        }
         pendingText={pendingText}
       />
       <div className="flex flex-col space-y-4">
