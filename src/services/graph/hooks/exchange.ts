@@ -173,7 +173,7 @@ export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
 
 export function useFusePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
+  const shouldFetch = chainId && chainId === ChainId.FUSE
   const { data } = useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
   return data
 }

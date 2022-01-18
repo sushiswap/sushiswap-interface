@@ -213,8 +213,8 @@ export const getSpellPrice = async () => {
 }
 
 export const getFusePrice = async () => {
-  return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
-    id: '0x970b9bb2c0444f5e81e9d0efb84c8ccdcdcaf84d',
+  return getTokenPrice(ChainId.FUSE, tokenPriceQuery, {
+    id: '0x0be9e53fd7edac9f859882afdda116645287c629',
   })
 }
 
