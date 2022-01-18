@@ -99,7 +99,7 @@ export const MobileFilter: FC = () => {
         open={open}
         onClose={() => setOpen(false)}
         closeTrigger={
-          <Button color="white" size="sm" className="h-[32px]" onClick={() => setOpen(false)}>
+          <Button size="sm" onClick={() => setOpen(false)}>
             <span className="px-3">{i18n._(t`Apply & Close`)}</span>
           </Button>
         }

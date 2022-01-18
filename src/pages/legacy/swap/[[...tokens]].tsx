@@ -5,13 +5,11 @@ import swapArrowsAnimationData from 'app/animation/swap-arrows.json'
 import AddressInputPanel from 'app/components/AddressInputPanel'
 import Alert from 'app/components/Alert'
 import Banner from 'app/components/Banner'
-import { ButtonConfirmed, ButtonError } from 'app/components/Button'
 import Button from 'app/components/Button'
 import { AutoColumn } from 'app/components/Column'
 import Container from 'app/components/Container'
 import CurrencyInputPanel from 'app/components/CurrencyInputPanel'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
-import Loader from 'app/components/Loader'
 import Web3Connect from 'app/components/Web3Connect'
 import ConfirmSwapModal from 'app/features/legacy/swap/ConfirmSwapModal'
 import SwapCallbackError from 'app/features/legacy/swap/SwapCallbackError'
@@ -569,25 +567,18 @@ export default function Swap({ banners }) {
             ) : showApproveFlow ? (
               <div>
                 {approvalState !== ApprovalState.APPROVED && (
-                  <ButtonConfirmed
+                  <Button
                     fullWidth
+                    loading={approvalState === ApprovalState.PENDING}
                     onClick={handleApprove}
                     disabled={approvalState !== ApprovalState.NOT_APPROVED || approvalSubmitted}
-                    size="lg"
                   >
-                    {approvalState === ApprovalState.PENDING ? (
-                      <div className="flex items-center justify-center h-full space-x-2">
-                        <div>Approving</div>
-                        <Loader stroke="white" />
-                      </div>
-                    ) : (
-                      i18n._(t`Approve ${currencies[Field.INPUT]?.symbol}`)
-                    )}
-                  </ButtonConfirmed>
+                    {i18n._(t`Approve ${currencies[Field.INPUT]?.symbol}`)}
+                  </Button>
                 )}
                 {approvalState === ApprovalState.APPROVED && (
-                  <ButtonError
-                    fullWidth
+                  <Button
+                    color={isValid && priceImpactSeverity > 2 ? 'red' : 'gradient'}
                     onClick={() => {
                       if (isExpertMode) {
                         handleSwap()
@@ -601,25 +592,23 @@ export default function Swap({ banners }) {
                         })
                       }
                     }}
-                    style={{
-                      width: '100%',
-                    }}
+                    fullWidth
                     id="swap-button"
                     disabled={
                       !isValid || approvalState !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)
                     }
-                    error={isValid && priceImpactSeverity > 2}
                   >
                     {priceImpactSeverity > 3 && !isExpertMode
                       ? i18n._(t`Price Impact High`)
                       : priceImpactSeverity > 2
                       ? i18n._(t`Swap Anyway`)
                       : i18n._(t`Swap`)}
-                  </ButtonError>
+                  </Button>
                 )}
               </div>
             ) : (
-              <ButtonError
+              <Button
+                color={isValid && priceImpactSeverity > 2 && !swapCallbackError ? 'red' : 'gradient'}
                 fullWidth
                 onClick={() => {
                   if (isExpertMode) {
@@ -636,7 +625,6 @@ export default function Swap({ banners }) {
                 }}
                 id="swap-button"
                 disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
-                error={isValid && priceImpactSeverity > 2 && !swapCallbackError}
               >
                 {swapInputError
                   ? swapInputError
@@ -645,7 +633,7 @@ export default function Swap({ banners }) {
                   : priceImpactSeverity > 2
                   ? i18n._(t`Swap Anyway`)
                   : i18n._(t`Swap`)}
-              </ButtonError>
+              </Button>
             )}
             {/* {showApproveFlow && (
               <Column style={{ marginTop: '1rem' }}>

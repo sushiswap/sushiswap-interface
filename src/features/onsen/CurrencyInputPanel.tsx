@@ -69,7 +69,6 @@ export default function CurrencyInputPanel({
                   onClick={onMax}
                   size="xs"
                   variant="outlined"
-                  color="gray"
                   className="text-xs font-medium bg-transparent border !rounded-full hover:bg-primary border-low-emphesis !text-secondary whitespace-nowrap"
                 >
                   {i18n._(t`Max`)}

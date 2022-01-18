@@ -5,7 +5,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import { FiatValue } from 'app/components/CurrencyInputPanel/FiatValue'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Dots from 'app/components/Dots'
@@ -492,15 +492,15 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
             {approval === ApprovalState.PENDING ? <Dots>{i18n._(t`Approving`)}</Dots> : i18n._(t`Approve`)}
           </Button>
         ) : (
-          <ButtonError
+          <Button
+            color={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B] ? 'red' : 'blue'}
             onClick={() => {
               setShowConfirm(true)
             }}
             disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
-            error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
           >
             {error || i18n._(t`Confirm Withdrawal`)}
-          </ButtonError>
+          </Button>
         )}
       </div>
     </div>
