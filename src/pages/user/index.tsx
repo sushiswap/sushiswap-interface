@@ -64,6 +64,8 @@ export default function Me() {
       <Head>
         <title>My SUSHI | Sushi</title>
         <meta key="description" name="description" content="My SUSHI" />
+        <meta key="twitter:description" name="twitter:description" content="My SUSHI" />
+        <meta key="og:description" property="og:description" content="My SUSHI" />
       </Head>
       <div className="p-4 mb-3 space-y-3">
         <Back />

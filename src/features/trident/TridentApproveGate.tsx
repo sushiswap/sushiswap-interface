@@ -72,11 +72,9 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(
 
     if (!signatureData && [ApprovalState.NOT_APPROVED, ApprovalState.PENDING].includes(approveState)) {
       return (
-        <ButtonDotted id={id} pending={approveState === ApprovalState.PENDING} color="blue" onClick={handleApprove}>
-          {approveState === ApprovalState.PENDING
-            ? i18n._(t`Approving ${inputAmount?.currency.symbol}`)
-            : i18n._(t`Approve ${inputAmount?.currency.symbol}`)}
-        </ButtonDotted>
+        <Button fullWidth id={id} loading={approveState === ApprovalState.PENDING} color="blue" onClick={handleApprove}>
+          {i18n._(t`Approve ${inputAmount?.currency.symbol}`)}
+        </Button>
       )
     }
 

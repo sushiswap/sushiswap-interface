@@ -111,12 +111,12 @@ function Web3StatusInner() {
             <Loader stroke="white" />
           </div>
         ) : (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <div>{ENSName || shortenAddress(account)}</div>
             <Davatar
               size={20}
               address={account}
-              defaultComponent={<Image src="/chef.svg" alt="Injected (MetaMask etc...)" width={20} height={20} />}
+              defaultComponent={<Image src="/images/chef.svg" alt="Sushi Chef" width={20} height={20} />}
               style={{ borderRadius: 5 }}
               provider={library}
             />

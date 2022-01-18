@@ -2,8 +2,9 @@ import { classNames } from 'app/functions'
 import React, { FC, ReactNode } from 'react'
 
 import Dots from '../Dots'
+import Loader from '../Loader'
 
-export type ButtonColor = 'red' | 'blue' | 'pink' | 'yellow' | 'purple' | 'gray' | 'green' | 'gradient' | 'white'
+export type ButtonColor = 'red' | 'blue' | 'pink' | 'purple' | 'gradient' | 'gray'
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 export type ButtonVariant = 'outlined' | 'filled' | 'empty'
 
@@ -17,45 +18,39 @@ const DIMENSIONS = {
 const SIZE = {
   xs: 'text-xs rounded',
   sm: 'text-sm rounded',
-  md: 'rounded-xl',
-  lg: 'text-lg rounded-2xl',
+  md: 'rounded',
+  lg: 'text-lg rounded',
 }
 
 const FILLED = {
-  red: 'bg-red hover:bg-red-600 text-white',
-  blue: 'bg-blue hover:bg-blue-600 text-white',
-  pink: 'bg-pink hover:bg-pink-600 text-white',
-  yellow: 'bg-yellow hover:bg-yellow-600 text-black',
-  purple: 'bg-purple hover:bg-purple-600 text-white',
-  gray: 'bg-dark-700 hover:bg-dark-800 text-white',
-  green: 'bg-green hover:bg-green-600 text-black',
-  gradient: 'bg-gradient-to-r from-blue to-pink text-white',
-  white: 'bg-gray-50 hover:bg-gray-200 text-black',
+  default:
+    'text-higher-emphesis hover:bg-gradient-to-b hover:from-black/20 focus:to-black/20 focus:bg-gradient-to-b focus:from-black/20 hover:to-black/20 active:bg-gradient-to-b active:from-black/40 active:to-black/40 disabled:pointer-events-none disabled:opacity-40',
+  blue: 'bg-blue',
+  red: 'bg-red',
+  pink: 'bg-pink',
+  purple: 'bg-purple',
+  gradient:
+    '!bg-gradient-to-r from-blue to-pink-600 hover:from-blue/80 hover:to-pink-600/80 focus:from-blue/80 focus:to-pink-600/80 active:from-blue/70 active:to-pink-600/70 focus:border-blue-700',
+  gray: 'bg-dark-700',
 }
 
 const OUTLINED = {
-  red: 'border border-red/50 bg-red/5 text-red hover:border-red/40',
-  blue: 'border border-blue/50 bg-blue/5 text-blue hover:border-blue/40',
-  pink: 'border border-pink/50 bg-pink/5 text-pink hover:border-pink/40',
-  yellow: 'border border-yellow/50 bg-yellow/5 text-yellow hover:border-yellow/40',
-  purple: 'border border-purple/50 bg-purple/5 text-purple hover:border-purple/40',
-  green: 'border border-green/50 bg-green/5 text-green hover:border-green/40',
-  gray: 'border border-dark-700 bg-dark-700/5 text-white hover:border-dark-800',
-  white: 'border border-white/50 bg-white/5 text-white hover:border-gray-400/50',
-  gradient:
-    'border border-transparent hover:border-gradient-r-blue-pink-hover-dark-900 border-gradient-r-blue-pink-dark-900 text-white',
+  default: 'border-2 disabled:pointer-events-none disabled:opacity-40',
+  blue: 'border-blue hover:bg-blue/10 active:bg-blue/20 text-blue focus:bg-blue/10',
+  red: 'border-red hover:bg-red/10 active:bg-red/20 text-red focus:bg-red/10',
+  pink: 'border-pink hover:bg-pink/10 active:bg-pink/20 text-pink focus:bg-pink/10',
+  purple: 'border-purple hover:bg-purple/10 active:bg-purple/20 text-purple focus:bg-purple/10',
+  gradient: 'border-purple hover:bg-purple/10 active:bg-purple/20 text-purple focus:bg-purple/10',
+  gray: 'border-dark-700 hover:bg-dark-700/30 active:bg-dark-700/50 focus:bg-dark-700/30',
 }
 
 const EMPTY = {
-  red: 'text-red hover:text-red-600',
-  blue: 'text-blue hover:text-blue-600',
-  pink: 'text-pink hover:text-pink-600',
-  yellow: 'text-yellow hover:text-yellow-700',
-  purple: 'text-purple hover:text-purple-600',
-  green: 'text-green hover:text-green-700',
-  gray: 'text-gray-300 hover:text-gray-400',
-  white: 'text-white hover:border-gray-400/50 hover:text-gray-300',
-  gradient: 'bg-gradient-to-r from-blue to-pink bg-clip-text text-transparent hover:from-blue-600 hover:to-pink-600',
+  default:
+    'hover:bg-gradient-to-b hover:from-black/20 focus:to-black/20 focus:bg-gradient-to-b focus:from-black/20 hover:to-black/20 active:bg-gradient-to-b active:from-black/40 active:to-black/40 disabled:pointer-events-none disabled:opacity-40 bg-clip-text text-transparent',
+  blue: 'bg-blue',
+  red: 'bg-red',
+  pink: 'bg-pink',
+  purple: 'bg-purple',
 }
 
 const VARIANT = {
@@ -75,6 +70,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   size?: ButtonSize
   variant?: ButtonVariant
   fullWidth?: boolean
+  loading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -88,6 +84,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       startIcon = undefined,
       endIcon = undefined,
       fullWidth = false,
+      loading,
       ...rest
     },
     ref
@@ -96,43 +93,29 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={classNames(
-          rest.disabled ? VARIANT[variant]['gray'] : VARIANT[variant][color],
+          VARIANT[variant]['default'],
+          VARIANT[variant][color],
           SIZE[size],
           variant !== 'empty' ? DIMENSIONS[size] : '',
           fullWidth ? 'w-full' : '',
-          'font-bold disabled:opacity-40 disabled:pointer-events-none focus:outline-none flex items-center justify-center gap-1',
+          'font-bold flex items-center justify-center gap-1',
           className
         )}
         {...rest}
       >
-        {startIcon && startIcon}
-        {children}
-        {endIcon && endIcon}
+        {loading ? (
+          <Loader stroke="currentColor" />
+        ) : (
+          <>
+            {startIcon && startIcon}
+            {children}
+            {endIcon && endIcon}
+          </>
+        )}
       </button>
     )
   }
 )
-
-export function ButtonConfirmed({
-  confirmed,
-  disabled,
-  ...rest
-}: { confirmed?: boolean; disabled?: boolean } & ButtonProps) {
-  if (confirmed) {
-    return (
-      <Button
-        variant="outlined"
-        color="green"
-        size="lg"
-        className={classNames(disabled && 'cursor-not-allowed', 'border opacity-50')}
-        disabled={disabled}
-        {...rest}
-      />
-    )
-  } else {
-    return <Button color="gradient" size="lg" disabled={disabled} {...rest} />
-  }
-}
 
 export function ButtonError({
   error,

@@ -108,9 +108,9 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
                 : tooLow || tooHigh
                 ? 'border-yellow/60'
                 : userSlippageTolerance !== 'auto'
-                ? 'border-blue/60'
+                ? 'border-blue'
                 : 'border-dark-800',
-              'border p-2 rounded bg-dark-1000/40'
+              'border-2 h-[36px] flex items-center px-2 rounded bg-dark-1000/40'
             )}
             tabIndex={-1}
           >
@@ -144,7 +144,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
             <Button
               size="sm"
               color={userSlippageTolerance === 'auto' ? 'blue' : 'gray'}
-              variant={userSlippageTolerance === 'auto' ? 'filled' : 'outlined'}
+              variant="outlined"
               onClick={() => parseSlippageInput('')}
             >
               {i18n._(t`Auto`)}
@@ -184,7 +184,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
             <input
               className={classNames(
                 deadlineError ? 'text-red' : '',
-                'font-bold bg-transparent placeholder-low-emphesis bg-dark-1000/40 border border-dark-800 rounded px-3 py-2 max-w-[100px] focus:border-blue/60'
+                'font-bold bg-transparent placeholder-low-emphesis bg-dark-1000/40 border-2 border-dark-800 rounded px-3 py-2 max-w-[100px] focus:border-blue'
               )}
               placeholder={(DEFAULT_DEADLINE_FROM_NOW / 60).toString()}
               value={

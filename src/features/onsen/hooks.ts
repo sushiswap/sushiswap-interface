@@ -156,7 +156,7 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
   }, [chainId, contract])
 
   return useMemo(() => {
-    if (!pendingSushi || !userInfo) {
+    if (!pendingSushi && !userInfo) {
       return []
     }
     return zip(pendingSushi, userInfo)

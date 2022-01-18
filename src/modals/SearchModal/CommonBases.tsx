@@ -32,14 +32,16 @@ const CommonBases: FC = () => {
           const isSelected = selectedCurrency?.equals(currency)
           return (
             <Button
-              variant="empty"
+              size="sm"
+              variant="outlined"
+              color="gray"
               type="button"
               onClick={() => !isSelected && onSelect(currency)}
               disabled={isSelected}
               key={currencyId(currency)}
-              className="border border-dark-700 disabled:bg-dark-700 flex items-center p-2 space-x-2 rounded bg-dark-700/20 hover:bg-dark-700/60 disabled:bg-dark-1000 disabled:cursor-not-allowed"
+              className="!border !px-2 flex gap-2"
             >
-              <CurrencyLogo currency={currency} />
+              <CurrencyLogo currency={currency} size={18} />
               <Typography variant="sm" className="font-semibold">
                 {currency.symbol}
               </Typography>

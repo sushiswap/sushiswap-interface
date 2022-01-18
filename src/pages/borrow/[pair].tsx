@@ -40,6 +40,16 @@ export default function Pair() {
           name="description"
           content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
         />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
+        />
       </Head>
       <Card
         className="h-full bg-dark-900"

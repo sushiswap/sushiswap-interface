@@ -22,7 +22,8 @@ const ROLL_LIST = 'https://app.tryroll.com/tokens.json'
 const SET_LIST = 'https://raw.githubusercontent.com/SetProtocol/uniswap-tokenlist/main/set.tokenlist.json'
 const UMA_LIST = 'https://umaproject.org/uma.tokenlist.json'
 const WRAPPED_LIST = 'wrapped.tokensoft.eth'
-const DHEDGE_LIST = 'https://list.dhedge.eth.link/'
+const DHEDGE_LIST = 'https://list.dhedge.eth.link'
+const ARBITRUM_LIST = 'https://bridge.arbitrum.io/token-list-42161.json'
 
 // lower index == higher priority for token import
 export const DEFAULT_LIST_OF_LISTS: string[] = [
@@ -42,6 +43,8 @@ export const DEFAULT_LIST_OF_LISTS: string[] = [
   NFTX_LIST,
   // OPTIMISM_LIST,
   GEMINI_LIST,
+  ARBITRUM_LIST,
+  OPTIMISM_LIST,
   DHEDGE_LIST,
   ...UNSUPPORTED_LIST_URLS, // need to load unsupported tokens as well
 ]

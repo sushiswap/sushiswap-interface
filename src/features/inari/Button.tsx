@@ -45,21 +45,21 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
 
   if (!account)
     return (
-      <Button {...rest} disabled color="gray">
+      <Button {...rest} disabled>
         {i18n._(t`Connect Wallet`)}
       </Button>
     )
 
   if (!inputValue || inputValue.equalTo(ZERO))
     return (
-      <Button {...rest} disabled color="gray">
+      <Button {...rest} disabled>
         {i18n._(t`Enter an amount`)}
       </Button>
     )
 
   if (inputValue && balances && balances.inputTokenBalance && balances.inputTokenBalance.lessThan(inputValue))
     return (
-      <Button {...rest} disabled color="gray">
+      <Button {...rest} disabled>
         {i18n._(t`Insufficient Balance`)}
       </Button>
     )
@@ -67,7 +67,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
   if (approveCallback && approveCallback[0] === ApprovalState.PENDING)
     return (
       <>
-        <Button {...rest} disabled color="gray">
+        <Button {...rest} disabled>
           <Dots>{i18n._(t`Approving Inari to spend ${approveCallback[2].currency.symbol}`)}</Dots>
         </Button>
         {approveFlow}
@@ -87,7 +87,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
   if (bentoApproveCallback && bentoApproveCallback.approvalState === BentoApprovalState.PENDING)
     return (
       <>
-        <Button {...rest} disabled color="gray">
+        <Button {...rest} disabled>
           <Dots>{i18n._(t`Approving Inari Master Contract`)}</Dots>
         </Button>
         {approveFlow}

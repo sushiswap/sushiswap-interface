@@ -76,7 +76,7 @@ const ClassicLinkButtons: FC = () => {
         </Button>
       )}
 
-      <Button color="blue" className={classNames(poolBalance?.greaterThan(0) && 'col-span-2')}>
+      <Button color="gradient" className={classNames(poolBalance?.greaterThan(0) && 'col-span-2')}>
         <Link
           href={{
             pathname: `/trident/swap`,

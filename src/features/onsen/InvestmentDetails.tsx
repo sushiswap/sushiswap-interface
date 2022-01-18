@@ -72,9 +72,12 @@ const InvestmentDetails = ({ farm }) => {
         )
   )
 
-  const rewardValue =
-    (farm?.rewards?.[0]?.rewardPrice ?? 0) * Number(pendingSushi?.toExact() ?? 0) +
-    (farm?.rewards?.[1]?.rewardPrice ?? 0) * Number(pendingReward ?? 0)
+  const secondaryRewardOnly = [ChainId.FUSE].includes(chainId)
+
+  const rewardValue = !secondaryRewardOnly
+    ? (farm?.rewards?.[0]?.rewardPrice ?? 0) * Number(pendingSushi?.toExact() ?? 0) +
+      (farm?.rewards?.[1]?.rewardPrice ?? 0) * Number(pendingReward ?? 0)
+    : (farm?.rewards?.[0]?.rewardPrice ?? 0) * Number(pendingReward ?? 0)
 
   async function onHarvest() {
     setPendingTx(true)
@@ -88,8 +91,6 @@ const InvestmentDetails = ({ farm }) => {
     }
     setPendingTx(false)
   }
-
-  const secondaryRewardOnly = [ChainId.FUSE].includes(chainId)
 
   return (
     <div className="flex flex-col w-full space-y-8">
@@ -150,8 +151,15 @@ const InvestmentDetails = ({ farm }) => {
             {farm?.rewards?.map((reward, i) => (
               <div key={i} className="flex items-center space-x-2">
                 <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />
-                {i === 0 && <Typography>{formatNumber(pendingSushi?.toSignificant(6) ?? 0)}</Typography>}
-                {i === 1 && <Typography>{formatNumber(pendingReward)}</Typography>}
+                {!secondaryRewardOnly ? (
+                  <>
+                    {i === 0 && <Typography>{formatNumber(pendingSushi?.toSignificant(6) ?? 0)}</Typography>}
+                    {i === 1 && <Typography>{formatNumber(pendingReward)}</Typography>}
+                  </>
+                ) : (
+                  <Typography>{formatNumber(pendingReward)}</Typography>
+                )}
+
                 <Typography>{reward.token}</Typography>
               </div>
             ))}

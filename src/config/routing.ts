@@ -299,6 +299,7 @@ export const COMMON_BASES: ChainTokenList = {
     XDAI.WBTC,
     XDAI.USDC,
     XDAI.USDT,
+    XDAI.GNO,
   ],
   [ChainId.AVALANCHE]: [
     ...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE],
@@ -309,6 +310,7 @@ export const COMMON_BASES: ChainTokenList = {
     AVALANCHE.MIM,
     AVALANCHE.SPELL,
     AVALANCHE.TIME,
+    AVALANCHE.WMEMO,
     AVALANCHE.USDC,
     AVALANCHE.USDT,
     AVALANCHE.DAI,

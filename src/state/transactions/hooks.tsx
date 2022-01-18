@@ -1,5 +1,6 @@
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { selectTransactions } from 'app/state/transactions/selectors'
 import { useCallback, useMemo } from 'react'
 
 import { addTransaction } from './actions'
@@ -60,7 +61,7 @@ export function useTransactionAdder(): (
 export function useAllTransactions(): { [txHash: string]: TransactionDetails } {
   const { chainId } = useActiveWeb3React()
 
-  const state: TransactionState = useAppSelector((state) => state.transactions)
+  const state: TransactionState = useAppSelector(selectTransactions)
 
   return chainId ? state[chainId] ?? {} : {}
 }

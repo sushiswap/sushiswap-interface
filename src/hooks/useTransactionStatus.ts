@@ -26,24 +26,4 @@ const useTransactionStatus = () => {
   return pendingTXStatus
 }
 
-export const useTransactionStatusByHash = (txHash: string) => {
-  const allTransactions = useAllTransactions()
-
-  const tx = allTransactions?.[txHash]
-  const pending = !tx?.receipt
-  const success = !pending && tx && (tx.receipt?.status === 1 || typeof tx.receipt?.status === 'undefined')
-  const cancelled = (tx?.receipt && tx.receipt.status === 1337) ?? false
-  const failed = !pending && !success && !cancelled
-
-  return useMemo(
-    () => ({
-      pending,
-      success,
-      cancelled,
-      failed,
-    }),
-    [cancelled, failed, pending, success]
-  )
-}
-
 export default useTransactionStatus

@@ -1,6 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import loadingCircle from 'app/animation/loading-circle.json'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
@@ -20,7 +19,6 @@ import { classNames } from 'app/functions'
 import { useBentoBoxContract, useTridentRouterContract } from 'app/hooks'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
-import Lottie from 'lottie-react'
 import React from 'react'
 
 import TridentApproveGate from '../TridentApproveGate'
@@ -108,13 +106,7 @@ const ClassicStandardMode = () => {
                     )}
                     <Button
                       id={`btn-${buttonText.toString().replace(/\s/g, '')}`}
-                      {...(loading && {
-                        startIcon: (
-                          <div className="w-4 h-4 mr-1">
-                            <Lottie animationData={loadingCircle} autoplay loop />
-                          </div>
-                        ),
-                      })}
+                      loading={loading}
                       fullWidth
                       color="gradient"
                       disabled={disabled}

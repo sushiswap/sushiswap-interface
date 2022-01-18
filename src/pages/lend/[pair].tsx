@@ -31,6 +31,12 @@ export default function Pair() {
       <Head>
         <title>Lend {pair.asset.tokenInfo.symbol} | Sushi</title>
         <meta key="description" name="description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`}
+        />
+        <meta key="og:description" property="og:description" content={`Lend ${pair.asset.tokenInfo.symbol} on Kashi`} />
       </Head>
       <Card
         className="bg-dark-900"

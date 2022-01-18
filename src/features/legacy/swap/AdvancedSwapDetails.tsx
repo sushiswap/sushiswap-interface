@@ -23,8 +23,7 @@ const AdvancedSwapDetails: FC<AdvancedSwapDetailsProps> = ({ trade, recipient, a
     if (!trade) return { priceImpact: undefined }
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
-    const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
-    return { priceImpact }
+    return { priceImpact: realizedLpFeePercent ? trade.priceImpact.subtract(realizedLpFeePercent) : trade.priceImpact }
   }, [trade])
 
   return (

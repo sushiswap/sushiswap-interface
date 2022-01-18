@@ -86,8 +86,8 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
 interface ConfirmationModelContentProps {
   title: string
   onDismiss: () => void
-  topContent?: (() => React.ReactNode) | React.ReactNode
-  bottomContent?: (() => React.ReactNode) | React.ReactNode
+  topContent?: React.ReactNode
+  bottomContent?: React.ReactNode
 }
 
 export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
@@ -99,8 +99,8 @@ export const ConfirmationModalContent: FC<ConfirmationModelContentProps> = ({
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={title} onClose={onDismiss} />
-      {typeof topContent === 'function' ? topContent() : topContent}
-      {typeof bottomContent === 'function' ? bottomContent() : bottomContent}
+      {topContent}
+      {bottomContent}
     </div>
   )
 }

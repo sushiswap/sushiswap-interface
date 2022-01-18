@@ -12,6 +12,7 @@ import {
   getDayData,
   getFactory,
   getFusePrice,
+  getGnoPrice,
   getLiquidityPositions,
   getMagicPrice,
   getMaticPrice,
@@ -25,7 +26,6 @@ import {
   getPicklePrice,
   getRulerPrice,
   getSpellPrice,
-  getStakePrice,
   getSushiPrice,
   getTokenDayData,
   getTokenPairs,
@@ -70,8 +70,10 @@ export function useEthPrice(variables = undefined, swrConfig: SWRConfiguration =
   return data
 }
 
-export function useStakePrice(swrConfig: SWRConfiguration = undefined) {
-  const { data } = useSWR(['stakePrice'], () => getStakePrice(), swrConfig)
+export function useGnoPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.XDAI
+  const { data } = useSWR(shouldFetch ? 'gnoPrice' : null, () => getGnoPrice(), swrConfig)
   return data
 }
 
@@ -171,7 +173,7 @@ export function useOhmPrice(swrConfig: SWRConfiguration = undefined) {
 
 export function useFusePrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
-  const shouldFetch = chainId
+  const shouldFetch = chainId && chainId === ChainId.FUSE
   const { data } = useSWR(shouldFetch ? 'fusePrice' : null, () => getFusePrice(), swrConfig)
   return data
 }

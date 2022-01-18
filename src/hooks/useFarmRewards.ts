@@ -1,6 +1,6 @@
 import { getAddress } from '@ethersproject/address'
 import { ChainId, Currency, NATIVE, SUSHI, Token } from '@sushiswap/core-sdk'
-import { ARBITRUM_TOKENS, MATIC_TOKENS } from 'app/config/tokens'
+import { ARBITRUM_TOKENS, MATIC_TOKENS, XDAI_TOKENS } from 'app/config/tokens'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import { usePositions } from 'app/features/onsen/hooks'
 import { aprToApy } from 'app/functions/convert'
@@ -10,6 +10,7 @@ import {
   useEthPrice,
   useFarms,
   useFusePrice,
+  useGnoPrice,
   useKashiPairs,
   useMagicPrice,
   useMasterChefV1SushiPerBlock,
@@ -20,7 +21,6 @@ import {
   useOneDayBlock,
   useOnePrice,
   useSpellPrice,
-  useStakePrice,
   useSushiPairs,
   useSushiPrice,
 } from 'app/services/graph'
@@ -32,6 +32,8 @@ export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()
 
   const positions = usePositions(chainId)
+
+  // console.log({ positions })
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
@@ -75,7 +77,7 @@ export default function useFarmRewards() {
     sushiPrice,
     ethPrice,
     maticPrice,
-    stakePrice,
+    gnoPrice,
     onePrice,
     spellPrice,
     celoPrice,
@@ -87,7 +89,7 @@ export default function useFarmRewards() {
     useSushiPrice(),
     useEthPrice(),
     useMaticPrice(),
-    useStakePrice(),
+    useGnoPrice(),
     useOnePrice(),
     useSpellPrice(),
     useCeloPrice(),
@@ -207,10 +209,10 @@ export default function useFarmRewards() {
             rewardPrice: maticPrice,
           },
           [ChainId.XDAI]: {
-            currency: new Token(ChainId.XDAI, '0xb7D311E2Eb55F2f68a9440da38e7989210b9A05e', 18, 'STAKE', 'Stake'),
+            currency: XDAI_TOKENS.GNO,
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
-            rewardPrice: stakePrice,
+            rewardPrice: gnoPrice,
           },
           [ChainId.HARMONY]: {
             currency: NATIVE[ChainId.HARMONY],

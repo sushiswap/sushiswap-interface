@@ -8,6 +8,8 @@ export default function Saave() {
       <Head>
         <title>Saave | Sushi</title>
         <meta key="description" name="description" content="SushiSwap Saave..." />
+        <meta key="twitter:description" name="twitter:description" content="SushiSwap Saave..." />
+        <meta key="og:description" property="og:description" content="SushiSwap Saave..." />
       </Head>
 
       <Container className="text-center">

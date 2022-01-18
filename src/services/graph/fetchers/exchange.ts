@@ -162,10 +162,9 @@ export const getSushiPrice = async (variables = {}) => {
   })
 }
 
-export const getStakePrice = async (variables = {}) => {
+export const getGnoPrice = async () => {
   return getTokenPrice(ChainId.XDAI, tokenPriceQuery, {
-    id: '0xb7d311e2eb55f2f68a9440da38e7989210b9a05e',
-    ...variables,
+    id: '0x9c58bacc331c9aa871afd802db6379a98e80cedb',
   })
 }
 
@@ -214,8 +213,8 @@ export const getSpellPrice = async () => {
 }
 
 export const getFusePrice = async () => {
-  return getTokenPrice(ChainId.ETHEREUM, tokenPriceQuery, {
-    id: '0x970b9bb2c0444f5e81e9d0efb84c8ccdcdcaf84d',
+  return getTokenPrice(ChainId.FUSE, tokenPriceQuery, {
+    id: '0x0be9e53fd7edac9f859882afdda116645287c629',
   })
 }
 

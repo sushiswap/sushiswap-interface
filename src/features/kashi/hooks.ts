@@ -98,7 +98,7 @@ export function useKashiPairs(addresses = []) {
   }, [allTokens, currency, pollKashiPairs])
 
   const strategies = useBentoStrategies({ chainId })
-  
+
   const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token?.address)], [account, tokens])
 
   // TODO: Replace

@@ -5,7 +5,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import { FiatValue } from 'app/components/CurrencyInputPanel/FiatValue'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Dots from 'app/components/Dots'
@@ -275,87 +275,83 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
     }
   }
 
-  function modalHeader() {
-    return (
-      <div className="grid gap-4 pt-3 pb-4">
-        <div className="grid gap-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <CurrencyLogo currency={currencyA} size={48} />
-              <div className="text-2xl font-bold text-high-emphesis">
-                {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
-              </div>
+  const ModalHeader = (
+    <div className="grid gap-4 pt-3 pb-4">
+      <div className="grid gap-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CurrencyLogo currency={currencyA} size={48} />
+            <div className="text-2xl font-bold text-high-emphesis">
+              {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
             </div>
-            <div className="ml-3 text-2xl font-medium text-high-emphesis">{currencyA?.symbol}</div>
           </div>
-          <div className="ml-3 mr-3 min-w-[24px]">
-            <Plus size={24} />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <CurrencyLogo currency={currencyB} size={48} />
-              <div className="text-2xl font-bold text-high-emphesis">
-                {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
-              </div>
-            </div>
-            <div className="ml-3 text-2xl font-medium text-high-emphesis">{currencyB?.symbol}</div>
-          </div>
+          <div className="ml-3 text-2xl font-medium text-high-emphesis">{currencyA?.symbol}</div>
         </div>
-        <div className="justify-start text-sm text-secondary">
-          {t`Output is estimated. If the price changes by more than ${allowedSlippage.toSignificant(
-            4
-          )}% your transaction will revert.`}
+        <div className="ml-3 mr-3 min-w-[24px]">
+          <Plus size={24} />
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <CurrencyLogo currency={currencyB} size={48} />
+            <div className="text-2xl font-bold text-high-emphesis">
+              {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
+            </div>
+          </div>
+          <div className="ml-3 text-2xl font-medium text-high-emphesis">{currencyB?.symbol}</div>
         </div>
       </div>
-    )
-  }
+      <div className="justify-start text-sm text-secondary">
+        {t`Output is estimated. If the price changes by more than ${allowedSlippage.toSignificant(
+          4
+        )}% your transaction will revert.`}
+      </div>
+    </div>
+  )
 
-  function modalBottom() {
-    return (
-      <div className="p-6 mt-0 -m-6 bg-dark-800">
-        {pair && (
-          <>
-            <div className="grid gap-1">
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-high-emphesis">{i18n._(t`Rates`)}</div>
-                <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-                  {`1 ${currencyA?.symbol} = ${tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} ${
-                    currencyB?.symbol
-                  }`}
-                </div>
-              </div>
-              <div className="flex items-center justify-end">
-                <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-                  {`1 ${currencyB?.symbol} = ${tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} ${
-                    currencyA?.symbol
-                  }`}
-                </div>
+  const ModalBottom = (
+    <div className="p-6 mt-0 -m-6 bg-dark-800">
+      {pair && (
+        <>
+          <div className="grid gap-1">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-high-emphesis">{i18n._(t`Rates`)}</div>
+              <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
+                {`1 ${currencyA?.symbol} = ${tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} ${
+                  currencyB?.symbol
+                }`}
               </div>
             </div>
-            <div className="h-px my-6 bg-gray-700" />
-          </>
-        )}
-        <div className="grid gap-1 pb-6">
-          <div className="flex items-center justify-between">
-            <div className="text-sm text-secondary">
-              {currencyA?.symbol}/{currencyB?.symbol} {i18n._(t`Burned`)}
-            </div>
-            <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphasis">
-              {parsedAmounts[Field.LIQUIDITY]?.toSignificant(6)}
+            <div className="flex items-center justify-end">
+              <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
+                {`1 ${currencyB?.symbol} = ${tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} ${
+                  currencyA?.symbol
+                }`}
+              </div>
             </div>
           </div>
+          <div className="h-px my-6 bg-gray-700" />
+        </>
+      )}
+      <div className="grid gap-1 pb-6">
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-secondary">
+            {currencyA?.symbol}/{currencyB?.symbol} {i18n._(t`Burned`)}
+          </div>
+          <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphasis">
+            {parsedAmounts[Field.LIQUIDITY]?.toSignificant(6)}
+          </div>
         </div>
-        <Button
-          color="gradient"
-          size="lg"
-          disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)}
-          onClick={onRemove}
-        >
-          {i18n._(t`Confirm`)}
-        </Button>
       </div>
-    )
-  }
+      <Button
+        color="gradient"
+        size="lg"
+        disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)}
+        onClick={onRemove}
+      >
+        {i18n._(t`Confirm`)}
+      </Button>
+    </div>
+  )
 
   const pendingText = i18n._(
     t`Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.symbol} and ${parsedAmounts[
@@ -397,14 +393,14 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
         onDismiss={handleDismissConfirmation}
         attemptingTxn={attemptingTxn}
         hash={txHash ? txHash : ''}
-        content={() => (
+        content={
           <ConfirmationModalContent
             title={i18n._(t`You will receive`)}
             onDismiss={handleDismissConfirmation}
-            topContent={modalHeader}
-            bottomContent={modalBottom}
+            topContent={ModalHeader}
+            bottomContent={ModalBottom}
           />
-        )}
+        }
         pendingText={pendingText}
       />
       <div className="flex flex-col space-y-4">
@@ -496,15 +492,15 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
             {approval === ApprovalState.PENDING ? <Dots>{i18n._(t`Approving`)}</Dots> : i18n._(t`Approve`)}
           </Button>
         ) : (
-          <ButtonError
+          <Button
+            color={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B] ? 'red' : 'blue'}
             onClick={() => {
               setShowConfirm(true)
             }}
             disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
-            error={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B]}
           >
             {error || i18n._(t`Confirm Withdrawal`)}
-          </ButtonError>
+          </Button>
         )}
       </div>
     </div>

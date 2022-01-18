@@ -7,7 +7,6 @@ import { arrayify, DataOptions, hexlify, splitSignature } from '@ethersproject/b
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
-  ChainId,
   Currency,
   CurrencyAmount,
   Percent,
@@ -30,7 +29,9 @@ import {
   Trade as TridentTrade,
 } from '@sushiswap/trident-sdk'
 import { EIP_1559_ACTIVATION_BLOCK } from 'app/constants'
+import { Feature } from 'app/enums'
 import { approveMasterContractAction, batchAction, unwrapWETHAction } from 'app/features/trident/actions'
+import { featureEnabled } from 'app/functions'
 import approveAmountCalldata from 'app/functions/approveAmountCalldata'
 import { shortenAddress } from 'app/functions/format'
 import { calculateGasMargin } from 'app/functions/trade'
@@ -342,7 +343,15 @@ export function useSwapCallArguments(
 
   return useMemo<SwapCall[]>(() => {
     let result: SwapCall[] = []
-    if (!rebase || !trade || !recipient || !library || !account || !chainId) return result
+    if (
+      (featureEnabled(Feature.BENTOBOX, chainId) && !rebase) ||
+      !trade ||
+      !recipient ||
+      !library ||
+      !account ||
+      !chainId
+    )
+      return result
 
     if (trade instanceof LegacyTrade) {
       if (!legacyRouterContract || !deadline) return result
@@ -646,12 +655,15 @@ export function useSwapCallback(
           data: calldata,
           // let the wallet try if we can't estimate the gas
           ...('gasEstimate' in bestCallOption ? { gasLimit: calculateGasMargin(bestCallOption.gasEstimate) } : {}),
-          gasPrice: !eip1559 && chainId === ChainId.HARMONY ? BigNumber.from('2000000000') : undefined,
+          // gasPrice: !eip1559 && chainId === ChainId.HARMONY ? BigNumber.from('2000000000') : undefined,
           ...(value && !isZero(value) ? { value } : {}),
         }
 
         let txResponse: Promise<TransactionResponseLight>
-        if (!useOpenMev) {
+        if (
+          !OPENMEV_SUPPORTED_NETWORKS.includes(chainId) ||
+          (OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && !useOpenMev)
+        ) {
           txResponse = library.getSigner().sendTransaction(txParams)
         } else {
           const supportedNetwork = OPENMEV_SUPPORTED_NETWORKS.includes(chainId)

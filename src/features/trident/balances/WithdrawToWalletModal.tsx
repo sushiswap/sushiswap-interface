@@ -2,7 +2,6 @@ import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
-import loadingCircle from 'app/animation/loading-circle.json'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
@@ -16,7 +15,6 @@ import { useBentoBox, useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
-import Lottie from 'lottie-react'
 import React, { FC, useCallback, useState } from 'react'
 
 interface WithdrawToWalletModalProps {
@@ -104,18 +102,7 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
             )
 
             return (
-              <Button
-                {...(loading && {
-                  startIcon: (
-                    <div className="w-4 h-4 mr-1">
-                      <Lottie animationData={loadingCircle} autoplay loop />
-                    </div>
-                  ),
-                })}
-                color="gradient"
-                disabled={disabled}
-                onClick={execute}
-              >
+              <Button loading={loading} color="gradient" disabled={disabled} onClick={execute}>
                 <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
                   {buttonText}
                 </Typography>
