@@ -43,7 +43,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
       )}
       <HeadlessUiModal.Header onClose={onDismiss} header={header} subheader={subheader} />
       <HeadlessUiModal.Content>
-        <div className="flex flex-col divide-dark-700 divide-y">
+        <div className="flex flex-col divide-y divide-dark-700">
           <div className="flex justify-between gap-2 py-2">
             <Typography variant="sm" className="text-secondary">
               {i18n._(t`Transaction Hash`)}
@@ -61,7 +61,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
             <Typography variant="sm" className="text-secondary">
               {i18n._(t`Status`)}
             </Typography>
-            <Typography id={`div-deposit-status`} variant="sm" weight={700} className="italic flex items-center gap-2">
+            <Typography id={`div-deposit-status`} variant="sm" weight={700} className="flex items-center gap-2 italic">
               {txStatus === 'PENDING'
                 ? i18n._(t`Processing`)
                 : txStatus === 'SUCCESS'
