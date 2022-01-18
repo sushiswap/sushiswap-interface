@@ -84,7 +84,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
                 <Davatar
                   size={48}
                   address={account}
-                  defaultComponent={<Image src="/chef.svg" alt="Sushi Chef" width={48} height={48} />}
+                  defaultComponent={<Image src="/images/chef.svg" alt="Sushi Chef" width={48} height={48} />}
                   provider={library}
                 />
               </div>
