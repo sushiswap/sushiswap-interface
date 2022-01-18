@@ -24,7 +24,7 @@ export class SwapPage extends AppPage {
   private SwapButtonSelector: string = '#swap-button'
   private WrapButtonSelector: string = '#wrap-button'
   private UseMaxButtonSelector: string = '.btn-max'
-  private BalanceLabelSelector: string = '.text-balance'
+  private BalanceLabelSelector: string = '#text-balance-'
   private SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
 
   // Swap rate selectors
@@ -184,6 +184,7 @@ export class SwapPage extends AppPage {
   }
 
   public async getInputTokenBalance(): Promise<string> {
+    await this.blockingWait(3, true)
     await this.Page.waitForSelector(this.InTokenButtonSelector)
     const inputTokenLabel = await this.Page.$(this.InTokenButtonSelector)
     const inToken = (await (await inputTokenLabel.getProperty('textContent')).jsonValue()) as string

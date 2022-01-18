@@ -33,9 +33,6 @@ const currencySelectCases = [
   ['ETH', 'DAI'],
   ['WETH', 'USDC'],
   ['BAT', 'SUSHI'],
-  ['SUSHI', 'COMP'],
-  ['USDC', 'ZRX'],
-  ['ZRX', 'SAI'],
 ]
 
 jest.retryTimes(1)
@@ -98,23 +95,30 @@ describe('Swap:', () => {
   test('Should click max button for wallet', async () => {
     await swapPage.setInputToken('USDC')
 
-    const usdcWalletBalance = await swapPage.getMetamaskTokenBalance('USDC' as string)
-    if (!(usdcWalletBalance > 0)) throw new Error(`USDC wallet balance is 0 or could not be read from Metamask`)
+    const inputTokenBalance = await swapPage.getInputTokenBalance()
 
-    await swapPage.clickMaxButton()
+    await page.evaluate(() => {
+      // @ts-ignore
+      document.querySelector('#text-balance-USDC').click()
+    })
+
     const inputTokenAmount = await swapPage.getInputTokenAmount()
 
-    expect(closeValues(usdcWalletBalance, parseFloat(inputTokenAmount), 1e-3)).toBe(true)
+    expect(closeValues(parseFloat(inputTokenBalance), parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 
-  test('Should click max button for bento', async () => {
+  test.only('Should click max button for bento', async () => {
     await swapPage.setPayFromWallet(false)
 
     await swapPage.setInputToken('USDC')
 
     const inputTokenBalance = await swapPage.getInputTokenBalance()
 
-    await swapPage.clickMaxButton()
+    await page.evaluate(() => {
+      // @ts-ignore
+      document.querySelector('#text-balance-USDC').click()
+    })
+
     const inputTokenAmount = await swapPage.getInputTokenAmount()
 
     expect(closeValues(parseFloat(inputTokenBalance), parseFloat(inputTokenAmount), 1e-3)).toBe(true)
@@ -153,8 +157,8 @@ describe('Swap:', () => {
   test('Should invert rate', async () => {
     const inputAmount = 500
 
-    await swapPage.setInputToken('USDC')
-    await swapPage.setOutputToken('WETH')
+    await swapPage.setInputToken('ETH')
+    await swapPage.setOutputToken('USDC')
 
     await swapPage.setAmountIn(inputAmount.toString())
 
@@ -182,7 +186,7 @@ describe('Swap:', () => {
     expect(slippage).toBe('25.00')
   })
 
-  test('Should swap ETH from wallet to USDC bento with other recipient', async () => {
+  test.skip('Should swap ETH from wallet to USDC bento with other recipient', async () => {
     const inToken = 'ETH'
     const outToken = 'USDC'
 
@@ -231,6 +235,38 @@ describe('Swap:', () => {
     } finally {
       await recipientBrowser.close()
     }
+  })
+
+  test.skip.each([
+    ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.BENTO],
+    ['USDC', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.BENTO],
+  ])(`Should add WETH to Bento when swapping from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
+    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+
+    await swapPage.navigateTo()
+
+    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
+    const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
+    const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
+
+    const wethBentoBalanceBefore = await swapPage.getBentoBalance('WETH')
+
+    await swapPage.setInputToken(inToken)
+    await swapPage.setOutputToken(outToken)
+    await swapPage.setAmountIn(swapAmount)
+    await swapPage.setPayFromWallet(payFromWallet)
+    await swapPage.setReceiveToWallet(receiveToWallet)
+
+    const expectedOutputAmount = await swapPage.getMinOutputAmount()
+    await swapPage.confirmSwap(inToken, outToken)
+
+    await swapPage.navigateTo()
+    const wethBentoBalanceAfter = await swapPage.getBentoBalance('WETH')
+    expect(wethBentoBalanceAfter !== wethBentoBalanceBefore).toBe(true)
+
+    const wethBalanceDiff = parseFloat(wethBentoBalanceAfter) - parseFloat(wethBentoBalanceBefore)
+    expect(closeValues(parseFloat(expectedOutputAmount), wethBalanceDiff, 1e-3)).toBe(true)
   })
 
   test('Should swap ETH from wallet to USDC wallet with other recipient', async () => {
@@ -292,41 +328,11 @@ describe('Swap:', () => {
     expect(recipientAddressBefore).toBe('potato')
     await swapPage.toggleExpertMode() // disable expert mode
 
-    await swapPage.navigateTo()
+    await page.click('body') // click to dismiss tx settings modal
 
     await swapPage.toggleExpertMode() // enable expert mode
     const recipientAddressAfter = await swapPage.getRecipient()
     expect(recipientAddressAfter).toBe('')
-  })
-
-  test.each([
-    ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.BENTO],
-    ['USDC', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.BENTO],
-  ])(`Should add WETH to Bento when swapping from %p %p to %p %p`, async (inToken, payFrom, outToken, receiveTo) => {
-    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
-    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
-
-    const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
-    const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
-    const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
-
-    const wethBentoBalanceBefore = await swapPage.getBentoBalance('WETH')
-
-    await swapPage.setInputToken(inToken)
-    await swapPage.setOutputToken(outToken)
-    await swapPage.setAmountIn(swapAmount)
-    await swapPage.setPayFromWallet(payFromWallet)
-    await swapPage.setReceiveToWallet(receiveToWallet)
-
-    const expectedOutputAmount = await swapPage.getMinOutputAmount()
-    await swapPage.confirmSwap(inToken, outToken)
-
-    await swapPage.navigateTo()
-    const wethBentoBalanceAfter = await swapPage.getBentoBalance('WETH')
-    expect(wethBentoBalanceAfter !== wethBentoBalanceBefore).toBe(true)
-
-    const wethBalanceDiff = parseFloat(wethBentoBalanceAfter) - parseFloat(wethBentoBalanceBefore)
-    expect(closeValues(parseFloat(expectedOutputAmount), wethBalanceDiff, 1e-3)).toBe(true)
   })
 
   test('Should require approval of token when swapping from wallet', async () => {
@@ -340,7 +346,6 @@ describe('Swap:', () => {
 
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
-    //await swapPage.navigateTo()
     await swapPage.setInputToken(inToken)
     await swapPage.setOutputToken(outToken)
     await swapPage.setAmountIn(swapAmount)
@@ -375,7 +380,6 @@ describe('Swap:', () => {
 
     const swapAmount = (tokenWalletBalance * 0.01).toFixed(5)
 
-    // await swapPage.navigateTo()
     await swapPage.setInputToken(inToken)
     await swapPage.setOutputToken(outToken)
     await swapPage.setAmountIn(swapAmount)
@@ -401,26 +405,26 @@ describe('Swap:', () => {
     await approvalHelper.approveRouter(ADDRESSES.USDC, 2 ^ (256 - 1))
   })
 
-  test.each([
-    ['USDC', FUNDING_SOURCE.WALLET, 'ETH', FUNDING_SOURCE.BENTO],
-    ['USDC', FUNDING_SOURCE.BENTO, 'ETH', FUNDING_SOURCE.BENTO],
-  ])(`Should display insufficient balance when not enough %p in %p`, async (inToken, payFrom, outToken, receiveTo) => {
-    const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
-    if (!(tokenWalletBalance > 0)) throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
+  test.each([['ETH', FUNDING_SOURCE.WALLET, 'USDC', FUNDING_SOURCE.WALLET]])(
+    `Should display insufficient balance when not enough %p in %p`,
+    async (inToken, payFrom, outToken, receiveTo) => {
+      const tokenWalletBalance = await swapPage.getMetamaskTokenBalance(inToken)
+      if (!(tokenWalletBalance > 0))
+        throw new Error(`${inToken} wallet balance is 0 or could not be read from Metamask`)
 
-    const swapAmount = (tokenWalletBalance * 100).toFixed(5)
-    const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
-    const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
+      const swapAmount = (tokenWalletBalance * 100).toFixed(5)
+      const payFromWallet = payFrom === FUNDING_SOURCE.WALLET ? true : false
+      const receiveToWallet = receiveTo === FUNDING_SOURCE.WALLET ? true : false
 
-    // await swapPage.navigateTo()
-    await swapPage.setInputToken(inToken)
-    await swapPage.setOutputToken(outToken)
-    await swapPage.setAmountIn(swapAmount)
-    await swapPage.setPayFromWallet(payFromWallet)
-    await swapPage.setReceiveToWallet(receiveToWallet)
+      await swapPage.setInputToken(inToken)
+      await swapPage.setOutputToken(outToken)
+      await swapPage.setAmountIn(swapAmount)
+      await swapPage.setPayFromWallet(payFromWallet)
+      await swapPage.setReceiveToWallet(receiveToWallet)
 
-    const swapButtonText = await swapPage.getSwapButtonText()
+      const swapButtonText = await swapPage.getSwapButtonText()
 
-    expect(swapButtonText).toBe(`Insufficient ${inToken} balance`)
-  })
+      expect(swapButtonText).toBe(`Insufficient Balance`)
+    }
+  )
 })
