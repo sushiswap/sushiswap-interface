@@ -118,11 +118,11 @@ export default function Pool() {
               >
                 {i18n._(t`Add`)}
               </Button>
-              <Button id="add-pool-button" color="gray" onClick={() => router.push(`/find`)}>
+              <Button id="add-pool-button" onClick={() => router.push(`/find`)}>
                 {i18n._(t`Import`)}
               </Button>
               {migrationSupported && (
-                <Button id="create-pool-button" color="gray" onClick={() => router.push(`/migrate`)}>
+                <Button id="create-pool-button" onClick={() => router.push(`/migrate`)}>
                   {i18n._(t`Migrate`)}
                 </Button>
               )}

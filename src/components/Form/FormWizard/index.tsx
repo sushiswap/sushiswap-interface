@@ -84,7 +84,7 @@ const FormWizard: FC<FormWizardProps> = ({ children, submitButton }) => {
               >
                 {hasPrev && (
                   <div>
-                    <Button variant="outlined" color="gray" onClick={setPrev} type="button">
+                    <Button variant="outlined" color="blue" onClick={setPrev} type="button">
                       {i18n._(t`Previous`)}
                     </Button>
                   </div>

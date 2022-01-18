@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, Percent, WNATIVE } from '@sushiswap/core-sdk'
-import loadingCircle from 'animation/loading-circle.json'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
@@ -30,7 +29,6 @@ import { useTridentRouterContract } from 'app/hooks'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
-import Lottie from 'lottie-react'
 import React, { FC } from 'react'
 
 import SumUSDCValues from '../SumUSDCValues'
@@ -163,13 +161,7 @@ const ClassicStandardMode: FC = () => {
                     <Button
                       id="btn-confirm-remove-liquidity"
                       size="lg"
-                      {...(loading && {
-                        startIcon: (
-                          <div className="w-4 h-4 mr-1">
-                            <Lottie animationData={loadingCircle} autoplay loop />
-                          </div>
-                        ),
-                      })}
+                      loading={loading}
                       color={approved ? 'gradient' : 'blue'}
                       disabled={disabled}
                       onClick={() => dispatch(setRemoveShowReview(true))}

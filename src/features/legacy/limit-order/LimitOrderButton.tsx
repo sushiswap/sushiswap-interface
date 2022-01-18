@@ -147,7 +147,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     )
   else if (inputError)
     button = (
-      <Button disabled={true} color="gray" {...rest}>
+      <Button disabled={true} {...rest}>
         {inputError}
       </Button>
     )

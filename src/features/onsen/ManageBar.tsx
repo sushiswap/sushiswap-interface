@@ -15,7 +15,7 @@ import {
   USD,
   ZERO,
 } from '@sushiswap/core-sdk'
-import Button, { ButtonError } from 'app/components/Button'
+import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import Web3Connect from 'app/components/Web3Connect'
 import { OLD_FARMS } from 'app/config/farms'
@@ -204,7 +204,8 @@ const ManageBar = ({ farm }) => {
               {approvalState === ApprovalState.PENDING ? <Dots>{i18n._(t`Approving`)}</Dots> : i18n._(t`Approve`)}
             </Button>
           ) : (
-            <ButtonError
+            <Button
+              color={!isDepositValid && !!parsedDepositValue ? 'red' : 'blue'}
               onClick={async () => {
                 try {
                   // KMP decimals depend on asset, SLP is always 18
@@ -217,10 +218,9 @@ const ManageBar = ({ farm }) => {
                 }
               }}
               disabled={!isDepositValid}
-              error={!isDepositValid && !!parsedDepositValue}
             >
               {depositError || i18n._(t`Confirm Deposit`)}
-            </ButtonError>
+            </Button>
           )}
         </div>
       ) : (
@@ -238,7 +238,9 @@ const ManageBar = ({ farm }) => {
           {!account ? (
             <Web3Connect size="lg" color="blue" className="w-full" />
           ) : (
-            <ButtonError
+            <Button
+              fullWidth
+              color={!isWithdrawValid && !!parsedWithdrawValue ? 'red' : 'blue'}
               onClick={async () => {
                 try {
                   // KMP decimals depend on asset, SLP is always 18
@@ -251,10 +253,9 @@ const ManageBar = ({ farm }) => {
                 }
               }}
               disabled={!isWithdrawValid}
-              error={!isWithdrawValid && !!parsedWithdrawValue}
             >
               {withdrawError || i18n._(t`Confirm Withdraw`)}
-            </ButtonError>
+            </Button>
           )}
         </div>
       )}
