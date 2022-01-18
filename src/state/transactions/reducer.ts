@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
+import { ChainId } from '@sushiswap/core-sdk'
 
 import {
   addTransaction,
@@ -22,11 +23,9 @@ export interface TransactionDetails {
   from: string
 }
 
-export interface TransactionState {
-  [chainId: number]: {
-    [txHash: string]: TransactionDetails
-  }
-}
+type txHash = string
+
+export type TransactionState = { [key in ChainId]?: Record<txHash, TransactionDetails> }
 
 export const initialState: TransactionState = {}
 

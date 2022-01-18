@@ -7,10 +7,10 @@ import { HeadlessUiModal } from 'app/components/Modal/index'
 import Typography from 'app/components/Typography'
 import { getExplorerLink, shortenString } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import { transactionStateSelector } from 'app/state/global/transactions'
+import { useAppSelector } from 'app/state/hooks'
+import { selectTxStatus } from 'app/state/transactions/selectors'
 import Lottie from 'lottie-react'
 import React, { FC, ReactElement } from 'react'
-import { useRecoilValue } from 'recoil'
 
 import { ModalHeaderProps } from './Header'
 
@@ -32,7 +32,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
-  const { pending, success, cancelled, failed } = useRecoilValue(transactionStateSelector(txHash))
+  const txStatus = useAppSelector(selectTxStatus(txHash))
 
   return (
     <HeadlessUiModal.Body>
@@ -62,22 +62,22 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
               {i18n._(t`Status`)}
             </Typography>
             <Typography id={`div-deposit-status`} variant="sm" weight={700} className="italic flex items-center gap-2">
-              {pending
+              {txStatus === 'PENDING'
                 ? i18n._(t`Processing`)
-                : success
+                : txStatus === 'SUCCESS'
                 ? i18n._(t`Success`)
-                : cancelled
+                : txStatus === 'CANCELLED'
                 ? i18n._(t`Cancelled`)
-                : failed
+                : txStatus === 'FAILED'
                 ? i18n._(t`Failed`)
                 : ''}
-              {pending ? (
+              {txStatus === 'PENDING' ? (
                 <div className="w-4 h-4">
                   <Lottie animationData={loadingCircle} autoplay loop />
                 </div>
-              ) : success ? (
+              ) : txStatus === 'SUCCESS' ? (
                 <CheckCircleIcon className="w-4 h-4 text-green" />
-              ) : cancelled || failed ? (
+              ) : txStatus === 'CANCELLED' || txStatus === 'FAILED' ? (
                 <XCircleIcon className="w-4 h-4 text-high-emphesis" />
               ) : (
                 ''
