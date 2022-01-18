@@ -60,7 +60,7 @@ export const useBentoBalanceV2 = (tokenAddress?: string): CurrencyAmount<Token> 
 }
 
 export const useBentoBalancesSubGraph = ({
-  shouldFetch,
+  shouldFetch = true,
   tokenAddresses,
 }: {
   shouldFetch?: boolean

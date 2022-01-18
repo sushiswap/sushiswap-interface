@@ -18,7 +18,7 @@ import useParsedQueryString from 'app/hooks/useParsedQueryString'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
 import { AppDispatch, AppState } from 'app/state'
-import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
+import { useBentoBalancesSubGraph } from 'app/state/bentobox/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { ParsedQs } from 'qs'
@@ -135,7 +135,10 @@ export function useDerivedLimitOrderInfo(): {
   const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
   const rate = trade?.executionPrice
 
-  const bentoBoxBalances = useBentoBalancesV2([inputCurrency?.wrapped?.address, outputCurrency?.wrapped?.address])
+  const bentoBoxBalances = useBentoBalancesSubGraph({
+    tokenAddresses: [inputCurrency?.wrapped?.address, outputCurrency?.wrapped?.address],
+    shouldFetch: true,
+  })
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,

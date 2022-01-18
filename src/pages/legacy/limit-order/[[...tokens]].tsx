@@ -91,8 +91,6 @@ function LimitOrder() {
   // Limit order derived state
   const { currencies, parsedAmounts, walletBalances, bentoboxBalances, currentPrice } = useDerivedLimitOrderInfo()
 
-  console.log({ bentoboxBalances })
-
   // Limit order state handlers
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useLimitOrderActionHandlers()
 
