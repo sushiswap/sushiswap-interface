@@ -224,7 +224,12 @@ export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract |
 }
 
 export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Contract | null {
-  return useContract('0xe2f736B7d1f6071124CBb5FC23E93d141CD24E12', LIMIT_ORDER_HELPER_ABI, withSignerIfPossible)
+  const { chainId } = useActiveWeb3React()
+  const LIMIT_ORDER_HELPER_ADDRESS = {
+    [ChainId.MATIC]: '0xe2f736B7d1f6071124CBb5FC23E93d141CD24E12',
+    [ChainId.AVALANCHE]: '0x889ec9e19C1598358899fCA4879011686c3d4045',
+  }
+  return useContract(chainId && LIMIT_ORDER_HELPER_ADDRESS[chainId], LIMIT_ORDER_HELPER_ABI, withSignerIfPossible)
 }
 
 export function useInariContract(withSignerIfPossible?: boolean): Contract | null {

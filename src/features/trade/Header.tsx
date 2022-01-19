@@ -73,7 +73,7 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
       <div className="flex items-center">
         <div className="grid grid-flow-col gap-1">
           {isLimitOrder && (
-            <div className="items-center h-full w-full cursor-pointer hover:bg-dark-800 rounded px-3 py-1.5">
+            <div className="flex items-center h-full w-full cursor-pointer bg-dark-800 hover:bg-dark-700 rounded px-3 py-1.5">
               <MyOrders />
             </div>
           )}

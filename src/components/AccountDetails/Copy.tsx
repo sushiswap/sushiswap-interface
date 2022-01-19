@@ -27,15 +27,17 @@ const CopyHelper: FC<CopyHelperProps> = ({ className, toCopy, children }) => {
     >
       {isCopied && (
         <div className="flex items-center space-x-1 whitespace-nowrap">
-          <Typography className="font-size-inherit weight-inherit">{i18n._(t`Copied`)}</Typography>
           <CheckCircleIcon width={16} height={16} />
+          <Typography variant="xs" weight={700}>
+            {i18n._(t`Copied`)}
+          </Typography>
         </div>
       )}
 
       {!isCopied && (
-        <div className="flex gap-1 items-center">
+        <div className="flex items-center gap-1">
+          <DocumentDuplicateIcon width={16} height={16} />
           {children}
-          <DocumentDuplicateIcon width={20} />
         </div>
       )}
     </div>

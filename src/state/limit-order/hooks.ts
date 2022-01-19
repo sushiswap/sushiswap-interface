@@ -1,6 +1,16 @@
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { ChainId, Currency, CurrencyAmount, JSBI, NATIVE, Percent, Price, WNATIVE } from '@sushiswap/core-sdk'
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  Percent,
+  Price,
+  SUSHI_ADDRESS,
+  WNATIVE,
+  WNATIVE_ADDRESS,
+} from '@sushiswap/core-sdk'
 import { isAddress, tryParseAmount } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
 import useENS from 'app/hooks/useENS'
@@ -8,7 +18,7 @@ import useParsedQueryString from 'app/hooks/useParsedQueryString'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
 import { AppDispatch, AppState } from 'app/state'
-import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
+import { useBentoBalancesSubGraph } from 'app/state/bentobox/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { ParsedQs } from 'qs'
@@ -125,7 +135,10 @@ export function useDerivedLimitOrderInfo(): {
   const trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
   const rate = trade?.executionPrice
 
-  const bentoBoxBalances = useBentoBalancesV2([inputCurrencyId, outputCurrencyId])
+  const bentoBoxBalances = useBentoBalancesSubGraph({
+    tokenAddresses: [inputCurrency?.wrapped?.address, outputCurrency?.wrapped?.address],
+    shouldFetch: true,
+  })
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
@@ -248,10 +261,15 @@ function validatedRecipient(recipient: any): string | null {
 export function queryParametersToSwapState(chainId: ChainId, parsedQs: ParsedQs) {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
   let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency)
+  const eth = chainId === ChainId.CELO ? WNATIVE_ADDRESS[chainId] : 'ETH'
+  const sushi = SUSHI_ADDRESS[chainId]
   if (inputCurrency === '' && outputCurrency === '') {
-    inputCurrency = NATIVE[chainId].address
-  } else if (inputCurrency === outputCurrency) {
-    outputCurrency = ''
+    inputCurrency = eth
+    outputCurrency = sushi
+  } else if (inputCurrency === '') {
+    inputCurrency = outputCurrency === eth ? sushi : eth
+  } else if (outputCurrency === '' || inputCurrency === outputCurrency) {
+    outputCurrency = inputCurrency === eth ? sushi : eth
   }
 
   return {

@@ -22,7 +22,7 @@ const CommonBases: FC = () => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-row">
-        <Typography variant="xs" weight={700} className="text-low-emphesis flex items-center">
+        <Typography variant="xs" weight={700} className="flex items-center text-low-emphesis">
           {i18n._(t`Common bases`)}
           <QuestionHelper text="These tokens are commonly paired with other tokens." />
         </Typography>
