@@ -199,7 +199,7 @@ function LimitOrder() {
                     </div>
                   </button>
                 </div>
-                <LimitPriceInputPanel />
+                <LimitPriceInputPanel trade={trade} />
               </div>
               <CurrencyInputPanel
                 className="relative rounded z-1"
@@ -263,7 +263,7 @@ function LimitOrder() {
             <div className="flex flex-col items-end justify-between w-full gap-4 md:flex-row md:items-center">
               {inputCurrency && outputCurrency && (
                 <div className="flex flex-1">
-                  <PriceRatio />
+                  <PriceRatio trade={trade} />
                 </div>
               )}
               {isExpertMode && recipient === null && (

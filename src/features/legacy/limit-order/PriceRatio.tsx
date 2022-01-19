@@ -1,10 +1,13 @@
-import { Currency, Price } from '@sushiswap/core-sdk'
+import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
 import { Field } from 'app/state/limit-order/actions'
-import { useLimitOrderDerivedParsedAmounts, useLimitOrderDerivedTrade } from 'app/state/limit-order/hooks'
+import { useLimitOrderDerivedParsedAmounts } from 'app/state/limit-order/hooks'
 import { FC, useState } from 'react'
 
-const PriceRatio: FC = () => {
-  const trade = useLimitOrderDerivedTrade()
+interface PriceRatio {
+  trade?: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+}
+
+const PriceRatio: FC<PriceRatio> = ({ trade }) => {
   const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
   const [inverted, setInverted] = useState(false)
 

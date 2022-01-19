@@ -8,7 +8,7 @@ import useENS from 'app/hooks/useENS'
 import useParsedQueryString from 'app/hooks/useParsedQueryString'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch, AppState } from 'app/state'
+import { AppDispatch } from 'app/state'
 import { useAppDispatch } from 'app/state/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { ParsedQs } from 'qs'
@@ -64,14 +64,8 @@ export function useLimitOrderActionHandlers(): {
   }, [onChangeRecipient, onCurrencySelection, onSwitchTokens, onUserInput])
 }
 
-const denominator = (decimals: number = 18) => JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals))
-
 export function useLimitOrderState(): LimitOrderState {
   return useSelector(selectLimitOrder)
-}
-
-export function useLimitOrderApprovalPending(): string {
-  return useSelector((state: AppState) => state.limitOrder.limitOrderApprovalPending)
 }
 
 function parseCurrencyFromURLParameter(urlParam: any): string {
@@ -247,23 +241,35 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ()
   const parsedRate = useLimitOrderDerivedLimitPrice()
   const balance = useBentoOrWalletBalance(account ?? undefined, inputCurrency, fromBentoBalance)
 
-  return !account
-    ? 'Connect Wallet'
-    : !parsedInputAmount || !parsedOutputAmount
-    ? i18n._(t`Enter an amount`)
-    : !inputCurrency || !outputCurrency
-    ? i18n._(t`Select a token`)
-    : !to || !isAddress(to)
-    ? i18n._(t`Enter a recipient`)
-    : !parsedRate
-    ? i18n._(t`Select a rate`)
-    : !orderExpiration
-    ? i18n._(t`Select an order expiration`)
-    : !balance
-    ? i18n._(t`Loading balance`)
-    : balance && parsedInputAmount && balance.lessThan(parsedInputAmount)
-    ? i18n._(t`Insufficient Balance`)
-    : ''
+  return useMemo(() => {
+    return !account
+      ? 'Connect Wallet'
+      : !parsedInputAmount || !parsedOutputAmount
+      ? i18n._(t`Enter an amount`)
+      : !inputCurrency || !outputCurrency
+      ? i18n._(t`Select a token`)
+      : !to || !isAddress(to)
+      ? i18n._(t`Enter a recipient`)
+      : !parsedRate
+      ? i18n._(t`Select a rate`)
+      : !orderExpiration
+      ? i18n._(t`Select an order expiration`)
+      : !balance
+      ? i18n._(t`Loading balance`)
+      : balance && parsedInputAmount && balance.lessThan(parsedInputAmount)
+      ? i18n._(t`Insufficient Balance`)
+      : ''
+  }, [
+    account,
+    balance,
+    inputCurrency,
+    orderExpiration,
+    outputCurrency,
+    parsedInputAmount,
+    parsedOutputAmount,
+    parsedRate,
+    to,
+  ])
 }
 
 export const useLimitOrderDerivedTrade = () => {

@@ -1,19 +1,20 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
 import Input from 'app/components/Input'
 import { useAppDispatch } from 'app/state/hooks'
 import { setLimitPrice } from 'app/state/limit-order/actions'
-import useLimitOrderDerivedCurrencies, {
-  useLimitOrderDerivedTrade,
-  useLimitOrderState,
-} from 'app/state/limit-order/hooks'
+import useLimitOrderDerivedCurrencies, { useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC } from 'react'
 
-const LimitPriceInputPanel: FC = () => {
+interface LimitPriceInputPanel {
+  trade?: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+}
+
+const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const { limitPrice } = useLimitOrderState()
-  const trade = useLimitOrderDerivedTrade()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
 
   const disabled = !inputCurrency || !outputCurrency
