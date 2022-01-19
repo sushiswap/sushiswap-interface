@@ -240,7 +240,7 @@ function LimitOrder() {
                   )
                 }
               />
-              {recipient !== null ? (
+              {recipient !== undefined ? (
                 <>
                   <div className="relative left-9">
                     <ArrowDownIcon className="text-high-emphesis" strokeWidth={2} width={16} height={16} />
@@ -257,7 +257,7 @@ function LimitOrder() {
                     />
                   )}
                 </>
-              ) : null}
+              ) : undefined}
             </div>
 
             <div className="flex flex-col items-end justify-between w-full gap-4 md:flex-row md:items-center">
@@ -266,7 +266,7 @@ function LimitOrder() {
                   <PriceRatio trade={trade} />
                 </div>
               )}
-              {isExpertMode && recipient === null && (
+              {isExpertMode && recipient === undefined && (
                 <div className={`flex flex-1 ${inputCurrency && outputCurrency ? 'justify-center' : ''}`}>
                   <div
                     className="flex items-center text-sm underline cursor-pointer text-blue"
@@ -276,7 +276,7 @@ function LimitOrder() {
                   </div>
                 </div>
               )}
-              {!(inputCurrency && outputCurrency) && !(isExpertMode && recipient === null) && (
+              {!(inputCurrency && outputCurrency) && !(isExpertMode && recipient === undefined) && (
                 <div className="flex flex-1" />
               )}
 
