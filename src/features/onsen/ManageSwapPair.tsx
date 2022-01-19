@@ -1,53 +1,55 @@
-import { Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
-import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import Settings from 'app/components/Settings'
+import Switch from 'app/components/Switch'
+import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import PoolAddLiquidity from './PoolAddLiquidity'
 import PoolRemoveLiquidity from './PoolRemoveLiquidity'
 
 const ManageSwapPair = ({ farm }) => {
+  const { i18n } = useLingui()
   const [toggle, setToggle] = useState(true)
 
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
-  return (
-    <div className="flex flex-col space-y-2">
-      <div className="flex justify-between pb-2">
-        <Switch.Group>
-          <div className="flex items-center">
+  const header = useMemo(
+    () => (
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <Typography weight={700} className="text-high-emphesis">
+            {toggle ? i18n._(t`Add liquidity`) : i18n._(t`Remove liquidity`)}
+          </Typography>
+          <div className="flex gap-4">
             <Switch
+              size="sm"
               checked={toggle}
               onChange={() => setToggle(!toggle)}
-              className={`${
-                toggle ? 'bg-blue border-blue' : 'bg-pink border-pink'
-              } bg-opacity-60 border border-opacity-80 relative inline-flex items-center h-[32px] rounded-full w-[54px] transition-colors focus:outline-none`}
-            >
-              <span
-                className={`${
-                  toggle ? 'translate-x-[1px] text-blue' : 'translate-x-[23px] text-pink'
-                } inline-block w-7 h-7 transform bg-white rounded-full transition-transform`}
-              >
-                {toggle ? <PlusIcon /> : <MinusIcon />}
-              </span>
-            </Switch>
-            <Switch.Label className="ml-3">
-              {toggle ? i18n._(t`Add Liquidity`) : i18n._(t`Remove Liquidity`)}
-            </Switch.Label>
+              checkedIcon={<PlusIcon className="text-dark-1000" />}
+              uncheckedIcon={<MinusIcon className="text-dark-1000" />}
+            />
+            <Settings className="w-[unset] h-[unset]" />
           </div>
-        </Switch.Group>
-        <Settings />
+        </div>
       </div>
-      {toggle ? (
-        <PoolAddLiquidity currencyA={token0} currencyB={token1} />
-      ) : (
-        <PoolRemoveLiquidity currencyA={token0} currencyB={token1} />
-      )}
-    </div>
+    ),
+    [i18n, toggle]
+  )
+
+  return (
+    <>
+      <div className={classNames(toggle ? 'flex flex-col flex-grow gap-4' : 'hidden')}>
+        <PoolAddLiquidity currencyA={token0} currencyB={token1} header={header} />
+      </div>
+      <div className={classNames(!toggle ? 'flex flex-col flex-grow gap-4' : 'hidden')}>
+        <PoolRemoveLiquidity currencyA={token0} currencyB={token1} header={header} />
+      </div>
+    </>
   )
 }
 

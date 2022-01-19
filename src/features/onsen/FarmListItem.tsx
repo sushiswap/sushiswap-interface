@@ -1,99 +1,98 @@
-import { Disclosure } from '@headlessui/react'
-import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import DoubleLogo from 'app/components/DoubleLogo'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { CurrencyLogo, CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import QuestionHelper from 'app/components/QuestionHelper'
+import Typography from 'app/components/Typography'
+import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
-import React from 'react'
+import React, { FC, ReactNode } from 'react'
 
 import { PairType } from './enum'
-import FarmListItemDetails from './FarmListItemDetails'
 
-const FarmListItem = ({ farm, ...rest }) => {
-  const token0 = useCurrency(farm.pair.token0.id)
-  const token1 = useCurrency(farm.pair.token1.id)
+interface FarmListItem {
+  farm: any
+  onClick(x: ReactNode): void
+}
+
+const FarmListItem: FC<FarmListItem> = ({ farm, onClick }) => {
+  const { i18n } = useLingui()
+  const token0 = useCurrency(farm.pair.token0.id) ?? undefined
+  const token1 = useCurrency(farm.pair.token1.id) ?? undefined
 
   return (
-    <Disclosure {...rest}>
-      {({ open }) => (
-        <div>
-          <Disclosure.Button
-            className={classNames(
-              open && 'rounded-b-none',
-              'w-full py-6 text-left rounded cursor-pointer select-none bg-dark-900 text-primary text-sm md:text-lg'
-            )}
-          >
-            <div className="grid grid-cols-4">
-              <div className="flex col-span-2 pl-4 space-x-4 md:col-span-1">
-                <DoubleLogo currency0={token0} currency1={token1} size={40} />
-                <div className="flex flex-col justify-center">
-                  <div>
-                    <span className="font-bold">{farm?.pair?.token0?.symbol}</span>/
-                    <span className={farm?.pair?.type === PairType.KASHI ? 'font-thin' : 'font-bold'}>
-                      {farm?.pair?.token1?.symbol}
-                    </span>
-                  </div>
-                  {farm?.pair?.type === PairType.SWAP && (
-                    <div className="text-xs md:text-base text-secondary whitespace-nowrap">SushiSwap Farm</div>
-                  )}
-                  {farm?.pair?.type === PairType.KASHI && (
-                    <div className="text-xs md:text-base text-secondary whitespace-nowrap">Kashi Farm</div>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col justify-center pl-8 font-bold">{formatNumber(farm.tvl, true)}</div>
-              <div className="flex-row items-center hidden pl-4 space-x-4 md:flex">
-                <div className="flex items-center space-x-2">
-                  {farm?.rewards?.map((reward, i) => (
-                    <div key={i} className="flex items-center">
-                      <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />
-                    </div>
-                  ))}
-                </div>
-                <div className="flex flex-col space-y-1">
-                  {farm?.rewards?.map((reward, i) => (
-                    <div key={i} className="text-xs md:text-sm whitespace-nowrap">
-                      {formatNumber(reward.rewardPerDay)} {reward.currency.symbol} / DAY
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="flex flex-col items-end justify-center pr-4">
-                <div className="flex flex-row items-center font-bold text-right text-high-emphesis">
-                  {farm?.tvl !== 0
-                    ? farm?.roiPerYear > 10000
-                      ? '>10,000%'
-                      : formatPercent(farm?.roiPerYear * 100)
-                    : 'Infinite'}
-                  {!!farm?.feeApyPerYear && (
-                    <QuestionHelper
-                      text={
-                        <div className="flex flex-col">
-                          <div>
-                            Reward APR:{' '}
-                            {farm?.tvl !== 0
-                              ? farm?.rewardAprPerYear > 10000
-                                ? '>10,000%'
-                                : formatPercent(farm?.rewardAprPerYear * 100)
-                              : 'Infinite'}
-                          </div>
-                          <div>
-                            Fee APR:{' '}
-                            {farm?.feeApyPerYear < 10000 ? formatPercent(farm?.feeApyPerYear * 100) : '>10,000%'}
-                          </div>
-                        </div>
-                      }
-                    />
-                  )}
-                </div>
-                <div className="text-xs text-right md:text-base text-secondary">annualized</div>
-              </div>
-            </div>
-          </Disclosure.Button>
-          {open && <FarmListItemDetails farm={farm} />}
+    <div className={classNames(TABLE_TBODY_TR_CLASSNAME, 'grid grid-cols-4')} onClick={onClick}>
+      <div className={classNames('flex gap-2', TABLE_TBODY_TD_CLASSNAME(0, 4))}>
+        {token0 && token1 && <CurrencyLogoArray currencies={[token0, token1]} dense size={32} />}
+        <div className="flex flex-col items-start">
+          <Typography weight={700} className="text-high-emphesis flex gap-1">
+            {farm?.pair?.token0?.symbol}
+            <span className="text-low-emphesis">/</span>
+            {farm?.pair?.token1?.symbol}
+          </Typography>
+          {farm?.pair?.type === PairType.SWAP && (
+            <Typography variant="xs" className="text-low-emphesis">
+              {i18n._(t`SushiSwap Farm`)}
+            </Typography>
+          )}
+          {farm?.pair?.type === PairType.KASHI && (
+            <Typography variant="xs" className="text-low-emphesis">
+              {i18n._(t`Kashi Farm`)}
+            </Typography>
+          )}
         </div>
-      )}
-    </Disclosure>
+      </div>
+      <div className={TABLE_TBODY_TD_CLASSNAME(1, 4)}>
+        <Typography weight={700} className="text-high-emphesis">
+          {formatNumber(farm.tvl, true)}
+        </Typography>
+      </div>
+      <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(2, 4))}>
+        {farm?.rewards?.map((reward, i) => (
+          <Typography
+            variant="sm"
+            weight={700}
+            key={i}
+            className="flex gap-1.5 text-high-emphesis items-center"
+            component="span"
+          >
+            {formatNumber(reward.rewardPerDay)}
+            <CurrencyLogo currency={reward.currency} size={16} />
+          </Typography>
+        ))}
+      </div>
+      <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(3, 4))}>
+        <Typography weight={700} className="flex gap-0.5 items-center text-high-emphesis">
+          {farm?.tvl !== 0
+            ? farm?.roiPerYear > 10000
+              ? '>10,000%'
+              : formatPercent(farm?.roiPerYear * 100)
+            : 'Infinite'}
+          {!!farm?.feeApyPerYear && (
+            <QuestionHelper
+              text={
+                <div className="flex flex-col">
+                  <div>
+                    Reward APR:{' '}
+                    {farm?.tvl !== 0
+                      ? farm?.rewardAprPerYear > 10000
+                        ? '>10,000%'
+                        : formatPercent(farm?.rewardAprPerYear * 100)
+                      : 'Infinite'}
+                  </div>
+                  <div>
+                    Fee APR: {farm?.feeApyPerYear < 10000 ? formatPercent(farm?.feeApyPerYear * 100) : '>10,000%'}
+                  </div>
+                </div>
+              }
+            />
+          )}
+        </Typography>
+        <Typography variant="xs" className="text-low-emphesis">
+          {i18n._(t`annualized`)}
+        </Typography>
+      </div>
+    </div>
   )
 }
 

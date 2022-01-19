@@ -4,45 +4,42 @@ import { Contract } from '@ethersproject/contracts'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/core-sdk'
-import Alert from 'app/components/Alert'
+import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
-import { FiatValue } from 'app/components/CurrencyInputPanel/FiatValue'
-import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import Dots from 'app/components/Dots'
-import Input from 'app/components/Input'
+import ListPanel from 'app/components/ListPanel'
+import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
-import { calculateGasMargin, calculateSlippageAmount, classNames } from 'app/functions'
+import { useFarmListItemDetailsModal } from 'app/features/onsen/FarmListItemDetails'
+import PoolRemoveLiquidityReviewContent from 'app/features/onsen/PoolRemoveLiquidityReviewContent'
+import { calculateGasMargin, calculateSlippageAmount } from 'app/functions'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import { usePairContract, useRouterContract } from 'app/hooks/useContract'
-import useDebouncedChangeHandler from 'app/hooks/useDebouncedChangeHandler'
 import { useV2LiquidityTokenPermit } from 'app/hooks/useERC20Permit'
 import useTransactionDeadline from 'app/hooks/useTransactionDeadline'
-import { useUSDCValue } from 'app/hooks/useUSDCPrice'
-import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field } from 'app/state/burn/actions'
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from 'app/state/burn/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
-const PoolWithdraw = ({ currencyA, currencyB }) => {
+const PoolWithdraw = ({ currencyA, currencyB, header }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
-
+  const { setContent } = useFarmListItemDetailsModal()
+  const [attemptingTxn, setAttemptingTxn] = useState(false)
   const [useETH, setUseETH] = useState(false)
   useETH && currencyA && currencyEquals(currencyA, WNATIVE[chainId]) && (currencyA = NATIVE[chainId])
   useETH && currencyB && currencyEquals(currencyB, WNATIVE[chainId]) && (currencyB = NATIVE[chainId])
+  const { typedValue } = useBurnState()
 
   const [tokenA, tokenB] = useMemo(() => [currencyA?.wrapped, currencyB?.wrapped], [currencyA, currencyB])
 
   // burn state
-  const { independentField, typedValue } = useBurnState()
   const { pair, parsedAmounts, error, userLiquidity } = useDerivedBurnInfo(
     currencyA ?? undefined,
     currencyB ?? undefined
@@ -50,34 +47,9 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
   const { onUserInput: _onUserInput } = useBurnActionHandlers()
   const isValid = !error
 
-  // modal and loading
-  const [showConfirm, setShowConfirm] = useState<boolean>(false)
-  const [showDetailed, setShowDetailed] = useState<boolean>(false)
-  const [attemptingTxn, setAttemptingTxn] = useState(false) // clicked confirm
-
   // txn values
-  const [txHash, setTxHash] = useState<string>('')
   const deadline = useTransactionDeadline()
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE)
-
-  const formattedAmounts = {
-    [Field.LIQUIDITY_PERCENT]: parsedAmounts[Field.LIQUIDITY_PERCENT].equalTo('0')
-      ? '0'
-      : parsedAmounts[Field.LIQUIDITY_PERCENT].lessThan(new Percent('1', '100'))
-      ? '<1'
-      : parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
-    [Field.LIQUIDITY]:
-      independentField === Field.LIQUIDITY ? typedValue : parsedAmounts[Field.LIQUIDITY]?.toSignificant(6) ?? '',
-    [Field.CURRENCY_A]:
-      independentField === Field.CURRENCY_A ? typedValue : parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',
-    [Field.CURRENCY_B]:
-      independentField === Field.CURRENCY_B ? typedValue : parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) ?? '',
-  }
-
-  const currencyAFiatValue = useUSDCValue(parsedAmounts[Field.CURRENCY_A])
-  const currencyBFiatValue = useUSDCValue(parsedAmounts[Field.CURRENCY_B])
-
-  const atMaxAmount = parsedAmounts[Field.LIQUIDITY_PERCENT]?.equalTo(new Percent('1'))
 
   // pair contract
   const pairContract: Contract | null = usePairContract(pair?.liquidityToken?.address)
@@ -121,14 +93,6 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
 
   const onLiquidityInput = useCallback(
     (typedValue: string): void => onUserInput(Field.LIQUIDITY, typedValue),
-    [onUserInput]
-  )
-  const onCurrencyAInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.CURRENCY_A, typedValue),
-    [onUserInput]
-  )
-  const onCurrencyBInput = useCallback(
-    (typedValue: string): void => onUserInput(Field.CURRENCY_B, typedValue),
     [onUserInput]
   )
 
@@ -259,7 +223,14 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
             } and ${parsedAmounts[Field.CURRENCY_B]?.toSignificant(3)} ${currencyB?.symbol}`,
           })
 
-          setTxHash(response.hash)
+          setContent(
+            <PoolRemoveLiquidityReviewContent
+              liquidityAmount={parsedAmounts[Field.LIQUIDITY]}
+              parsedAmounts={[parsedAmounts[Field.CURRENCY_A], parsedAmounts[Field.CURRENCY_B]]}
+              execute={onRemove}
+              txHash={response.hash}
+            />
+          )
 
           ReactGA.event({
             category: 'Liquidity',
@@ -275,235 +246,74 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
     }
   }
 
-  const ModalHeader = (
-    <div className="grid gap-4 pt-3 pb-4">
-      <div className="grid gap-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <CurrencyLogo currency={currencyA} size={48} />
-            <div className="text-2xl font-bold text-high-emphesis">
-              {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}
-            </div>
-          </div>
-          <div className="ml-3 text-2xl font-medium text-high-emphesis">{currencyA?.symbol}</div>
-        </div>
-        <div className="ml-3 mr-3 min-w-[24px]">
-          <Plus size={24} />
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <CurrencyLogo currency={currencyB} size={48} />
-            <div className="text-2xl font-bold text-high-emphesis">
-              {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}
-            </div>
-          </div>
-          <div className="ml-3 text-2xl font-medium text-high-emphesis">{currencyB?.symbol}</div>
-        </div>
-      </div>
-      <div className="justify-start text-sm text-secondary">
-        {t`Output is estimated. If the price changes by more than ${allowedSlippage.toSignificant(
-          4
-        )}% your transaction will revert.`}
-      </div>
-    </div>
-  )
-
-  const ModalBottom = (
-    <div className="p-6 mt-0 -m-6 bg-dark-800">
-      {pair && (
-        <>
-          <div className="grid gap-1">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-high-emphesis">{i18n._(t`Rates`)}</div>
-              <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-                {`1 ${currencyA?.symbol} = ${tokenA ? pair.priceOf(tokenA).toSignificant(6) : '-'} ${
-                  currencyB?.symbol
-                }`}
-              </div>
-            </div>
-            <div className="flex items-center justify-end">
-              <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphesis">
-                {`1 ${currencyB?.symbol} = ${tokenB ? pair.priceOf(tokenB).toSignificant(6) : '-'} ${
-                  currencyA?.symbol
-                }`}
-              </div>
-            </div>
-          </div>
-          <div className="h-px my-6 bg-gray-700" />
-        </>
-      )}
-      <div className="grid gap-1 pb-6">
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-secondary">
-            {currencyA?.symbol}/{currencyB?.symbol} {i18n._(t`Burned`)}
-          </div>
-          <div className="text-sm font-bold justify-center items-center flex right-align pl-1.5 text-high-emphasis">
-            {parsedAmounts[Field.LIQUIDITY]?.toSignificant(6)}
-          </div>
-        </div>
-      </div>
-      <Button
-        color="gradient"
-        size="lg"
-        disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)}
-        onClick={onRemove}
-      >
-        {i18n._(t`Confirm`)}
-      </Button>
-    </div>
-  )
-
-  const pendingText = i18n._(
-    t`Removing ${parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)} ${currencyA?.symbol} and ${parsedAmounts[
-      Field.CURRENCY_B
-    ]?.toSignificant(6)} ${currencyB?.symbol}`
-  )
-
-  const liquidityPercentChangeCallback = useCallback(
-    (value: string) => {
-      onUserInput(Field.LIQUIDITY_PERCENT, value)
-    },
-    [onUserInput]
-  )
-
   const oneCurrencyIsETH = currencyA?.isNative || currencyB?.isNative
 
   const oneCurrencyIsWETH = Boolean(
     chainId && WNATIVE[chainId] && (currencyA?.equals(WNATIVE[chainId]) || currencyB?.equals(WNATIVE[chainId]))
   )
 
-  const handleDismissConfirmation = useCallback(() => {
-    setShowConfirm(false)
-    // if there was a tx hash, we want to clear the input
-    if (txHash) {
-      onUserInput(Field.LIQUIDITY_PERCENT, '0')
-    }
-    setTxHash('')
-  }, [onUserInput, txHash])
-
-  const [innerLiquidityPercentage, setInnerLiquidityPercentage] = useDebouncedChangeHandler(
-    parsedAmounts[Field.LIQUIDITY_PERCENT].toFixed(0),
-    liquidityPercentChangeCallback
-  )
-
   return (
-    <div>
-      <TransactionConfirmationModal
-        isOpen={showConfirm}
-        onDismiss={handleDismissConfirmation}
-        attemptingTxn={attemptingTxn}
-        hash={txHash ? txHash : ''}
-        content={
-          <ConfirmationModalContent
-            title={i18n._(t`You will receive`)}
-            onDismiss={handleDismissConfirmation}
-            topContent={ModalHeader}
-            bottomContent={ModalBottom}
-          />
-        }
-        pendingText={pendingText}
-      />
-      <div className="flex flex-col space-y-4">
-        <div className="flex flex-col space-y-2">
-          <div id="liquidity-percent" className="p-5 rounded bg-dark-900">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center justify-between w-full">
-                <div className="whitespace-nowrap">{i18n._(t`Amount to Remove`)}</div>
-                <div className="flex items-center w-full space-x-1">
-                  <Input.Percent
-                    className="token-amount-input"
-                    value={innerLiquidityPercentage}
-                    onUserInput={(val) => {
-                      setInnerLiquidityPercentage(val)
-                    }}
-                    align="right"
-                  />
-                  <Typography className="text-xl font-bold">%</Typography>
-                </div>
-              </div>
-              <div className="flex justify-end space-x-4 sm:w-full">
-                {['25', '50', '75', '100'].map((multipler, i) => (
-                  <Button
-                    variant="outlined"
-                    size="xs"
-                    color="pink"
-                    key={i}
-                    onClick={() => {
-                      setInnerLiquidityPercentage(multipler)
-                    }}
-                    className={classNames(
-                      'text-md border border-opacity-50 border-pink focus:ring-pink',
-                      multipler === '100' ? '' : 'hidden sm:block'
-                    )}
-                  >
-                    {multipler === '100' ? 'MAX' : multipler + '%'}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="flex justify-between">
-            <div>{i18n._(t`You'll Receive:`)}</div>
-            {(oneCurrencyIsETH || oneCurrencyIsWETH) && (
-              <a
-                className="cursor-pointer text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap"
-                onClick={() => setUseETH(!useETH)}
-              >
-                {i18n._(t`Receive`)} {useETH && 'W'}
-                {NATIVE[chainId].symbol}
-              </a>
-            )}
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex items-center justify-between p-4 rounded bg-dark-900">
-              <div>
-                <div className="text-secondary">
-                  {formattedAmounts[Field.CURRENCY_A] || '-'} {currencyA?.symbol}
-                  <FiatValue fiatValue={currencyAFiatValue} />
-                </div>
-              </div>
-              <CurrencyLogo currency={currencyA} size="46px" />
-            </div>
-            <div className="flex items-center justify-between p-4 rounded bg-dark-900">
-              <div className="text-secondary">
-                {formattedAmounts[Field.CURRENCY_B] || '-'} {currencyB?.symbol}
-                <FiatValue fiatValue={currencyBFiatValue} />
-              </div>
-              <CurrencyLogo currency={currencyB} size="46px" />
-            </div>
-          </div>
+    <>
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/30">
+        {header}
+        <AssetInput
+          currencyLogo={false}
+          currency={pair?.liquidityToken}
+          value={typedValue}
+          onChange={onLiquidityInput}
+        />
+        <div className="flex justify-between mt-2 mx-2">
+          <Typography weight={700} variant="sm" className="text-secondary">
+            {i18n._(t`You'll receive (at least):`)}
+          </Typography>
+          {(oneCurrencyIsETH || oneCurrencyIsWETH) && (
+            <Button size="xs" variant="empty" color="blue" className="rounded-none" onClick={() => setUseETH(!useETH)}>
+              {i18n._(t`Receive`)} {useETH && 'W'}
+              {NATIVE[chainId].symbol}
+            </Button>
+          )}
         </div>
-        {userLiquidity?.equalTo(ZERO) && (
-          <Alert
-            message={i18n._(t`Note: If your SLP is staked, you cannot remove your liquidity. You must unstake first.`)}
-            className="mb-4"
-            type="information"
-          />
-        )}
-        {!account ? (
-          <Web3Connect size="lg" color="blue" className="w-full" />
-        ) : isValid && approval !== ApprovalState.APPROVED && signatureData === null ? (
-          <Button
-            color="gradient"
-            size="lg"
-            onClick={onAttemptToApprove}
-            disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
-          >
-            {approval === ApprovalState.PENDING ? <Dots>{i18n._(t`Approving`)}</Dots> : i18n._(t`Approve`)}
-          </Button>
-        ) : (
-          <Button
-            color={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B] ? 'red' : 'blue'}
-            onClick={() => {
-              setShowConfirm(true)
-            }}
-            disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
-          >
-            {error || i18n._(t`Confirm Withdrawal`)}
-          </Button>
-        )}
-      </div>
-    </div>
+        <ListPanel
+          items={[parsedAmounts[Field.CURRENCY_A], parsedAmounts[Field.CURRENCY_B]].map((parsedInputAmount, index) => (
+            <ListPanel.CurrencyAmountItem amount={parsedInputAmount} key={index} />
+          ))}
+        />
+      </HeadlessUiModal.BorderedContent>
+      {!userLiquidity?.equalTo(ZERO) && (
+        <Typography variant="xs" className="text-center italic">
+          {i18n._(t`If your SLP is staked, you cannot remove your liquidity. You must unstake first.`)}
+        </Typography>
+      )}
+      {!account ? (
+        <Web3Connect size="lg" color="blue" className="w-full" />
+      ) : isValid && approval !== ApprovalState.APPROVED && signatureData === null ? (
+        <Button
+          loading={approval === ApprovalState.PENDING}
+          color="blue"
+          onClick={onAttemptToApprove}
+          disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
+        >
+          {i18n._(t`Approve`)}
+        </Button>
+      ) : (
+        <Button
+          loading={attemptingTxn}
+          color={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B] ? 'red' : 'blue'}
+          onClick={() => {
+            setContent(
+              <PoolRemoveLiquidityReviewContent
+                liquidityAmount={parsedAmounts[Field.LIQUIDITY]}
+                parsedAmounts={[parsedAmounts[Field.CURRENCY_A], parsedAmounts[Field.CURRENCY_B]]}
+                execute={onRemove}
+              />
+            )
+          }}
+          disabled={!isValid || (signatureData === null && approval !== ApprovalState.APPROVED)}
+        >
+          {error || i18n._(t`Confirm Withdrawal`)}
+        </Button>
+      )}
+    </>
   )
 }
 

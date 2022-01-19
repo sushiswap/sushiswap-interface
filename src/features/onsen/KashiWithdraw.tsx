@@ -43,8 +43,6 @@ const KashiWithdraw = ({ pair, useBento }) => {
       pair.currentTotalAsset.base,
       pair.currentAllAssets.value
     )
-    console.log('max', maxFraction.toString())
-    console.log(minimum(fraction, maxFraction).toString())
     cooker.removeAsset(minimum(fraction, maxFraction), useBento)
     return `${i18n._(t`Withdraw`)} ${pair.asset.tokenInfo.symbol}`
   }
