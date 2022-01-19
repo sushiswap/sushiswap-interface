@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
+import { AppState } from 'app/state'
 
 import {
   Field,
@@ -144,3 +145,7 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
       state.recipient = recipient
     })
 )
+
+type SelectLimitOrder = (state: AppState) => LimitOrderState
+export const selectLimitOrder: SelectLimitOrder = (state: AppState) => state.limitOrder
+export const selectLimitOrderBentoBalance = (state: AppState) => state.limitOrder.fromBentoBalance

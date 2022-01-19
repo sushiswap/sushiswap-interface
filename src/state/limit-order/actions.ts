@@ -5,12 +5,15 @@ export enum Field {
   OUTPUT = 'OUTPUT',
 }
 
-export const setLimitPrice = createAction<string | null>('limit-order/setLimitPrice')
+export const setLimitPrice = createAction<string | undefined>('limit-order/setLimitPrice')
 
-export const setOrderExpiration = createAction<{
-  value: string
-  label: string
-} | null>('limit-order/setOrderExpiration')
+export const setOrderExpiration = createAction<
+  | {
+      value: string
+      label: string
+    }
+  | undefined
+>('limit-order/setOrderExpiration')
 
 export const setFromBentoBalance = createAction<boolean>('limit-order/setFromBentoBalance')
 
@@ -21,9 +24,9 @@ export const replaceLimitOrderState = createAction<{
   typedValue: string
   inputCurrencyId?: string
   outputCurrencyId?: string
-  recipient: string | null
+  recipient?: string
   fromBentoBalance?: boolean
-  limitPrice: string
+  limitPrice?: string
   orderExpiration?: { value: string; label: string }
 }>('limit-order/replaceLimitOrderState')
 
@@ -36,4 +39,4 @@ export const switchCurrencies = createAction<void>('limit-order/switchCurrencies
 
 export const typeInput = createAction<{ field: Field; typedValue: string }>('limit-order/typeInput')
 
-export const setRecipient = createAction<{ recipient: string | null }>('limit-order/setRecipient')
+export const setRecipient = createAction<{ recipient?: string }>('limit-order/setRecipient')

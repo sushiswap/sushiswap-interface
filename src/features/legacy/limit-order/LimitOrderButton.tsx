@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { BENTOBOX_ADDRESS, Currency } from '@sushiswap/core-sdk'
+import { BENTOBOX_ADDRESS } from '@sushiswap/core-sdk'
 import { LimitOrder } from '@sushiswap/limit-order-sdk'
 import Alert from 'app/components/Alert'
 import Button, { ButtonProps } from 'app/components/Button'
@@ -9,39 +9,36 @@ import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useLimitOrderApproveCallback, { BentoApprovalState } from 'app/hooks/useLimitOrderApproveCallback'
 import useLimitOrders from 'app/hooks/useLimitOrders'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch } from 'app/state'
 import { useAddPopup, useWalletModalToggle } from 'app/state/application/hooks'
+import { useAppDispatch } from 'app/state/hooks'
 import { Field, setFromBentoBalance } from 'app/state/limit-order/actions'
-import { useDerivedLimitOrderInfo, useLimitOrderState } from 'app/state/limit-order/hooks'
+import useLimitOrderDerivedCurrencies, {
+  useLimitOrderDerivedInputError,
+  useLimitOrderDerivedParsedAmounts,
+  useLimitOrderState,
+} from 'app/state/limit-order/hooks'
 import { OrderExpiration } from 'app/state/limit-order/reducer'
 import React, { FC, useCallback, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import ConfirmLimitOrderModal from './ConfirmLimitOrderModal'
 
-interface LimitOrderButtonProps extends ButtonProps {
-  currency: Currency
-}
+interface LimitOrderButtonProps extends ButtonProps {}
 
-const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest }) => {
+const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const addPopup = useAddPopup()
   const toggleWalletModal = useWalletModalToggle()
-
+  const { mutate } = useLimitOrders()
+  const { inputCurrency: currency } = useLimitOrderDerivedCurrencies()
+  const { fromBentoBalance, orderExpiration, recipient } = useLimitOrderState()
+  const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
+  const inputError = useLimitOrderDerivedInputError()
   const [depositPending, setDepositPending] = useState(false)
   const [openConfirmationModal, setOpenConfirmationModal] = useState(false)
-
-  const { fromBentoBalance, orderExpiration, recipient } = useLimitOrderState()
-  const { parsedAmounts, inputError } = useDerivedLimitOrderInfo()
   const [approvalState, fallback, permit, onApprove, execute] = useLimitOrderApproveCallback()
-  const { mutate } = useLimitOrders()
-
-  const [tokenApprovalState, tokenApprove] = useApproveCallback(
-    parsedAmounts[Field.INPUT],
-    chainId && BENTOBOX_ADDRESS[chainId]
-  )
+  const [tokenApprovalState, tokenApprove] = useApproveCallback(parsedInputAmount, chainId && BENTOBOX_ADDRESS[chainId])
 
   const showLimitApprove =
     (approvalState === BentoApprovalState.NOT_APPROVED || approvalState === BentoApprovalState.PENDING) && !permit
@@ -51,7 +48,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     chainId &&
     currency &&
     !currency.isNative &&
-    parsedAmounts[Field.INPUT] &&
+    parsedInputAmount &&
     (tokenApprovalState === ApprovalState.NOT_APPROVED || tokenApprovalState === ApprovalState.PENDING)
 
   const disabled =
@@ -76,50 +73,64 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
         endTime = Number.MAX_SAFE_INTEGER
     }
 
-    const order = new LimitOrder(
-      account,
-      parsedAmounts[Field.INPUT].wrapped,
-      parsedAmounts[Field.OUTPUT].wrapped,
-      recipient ? recipient : account,
-      Math.floor(new Date().getTime() / 1000).toString(),
-      endTime.toString()
-    )
+    const order =
+      account && parsedInputAmount && parsedOutputAmount
+        ? new LimitOrder(
+            account,
+            parsedInputAmount.wrapped,
+            parsedOutputAmount.wrapped,
+            recipient ? recipient : account,
+            Math.floor(new Date().getTime() / 1000).toString(),
+            endTime.toString()
+          )
+        : undefined
 
     try {
-      await order.signOrderWithProvider(chainId, library)
+      await order?.signOrderWithProvider(chainId || 1, library)
       setOpenConfirmationModal(false)
 
-      const resp = await order.send()
+      const resp = await order?.send()
       if (resp.success) {
         addPopup({
-          txn: { hash: null, summary: 'Limit order created', success: true },
+          txn: { hash: undefined, summary: 'Limit order created', success: true },
         })
+
         await mutate()
       }
     } catch (e) {
       addPopup({
         txn: {
-          hash: null,
+          hash: undefined,
           summary: `Error: ${e?.response?.data?.data}`,
           success: false,
         },
       })
     }
-  }, [account, addPopup, chainId, library, mutate, orderExpiration.value, parsedAmounts, recipient])
+  }, [
+    account,
+    addPopup,
+    chainId,
+    library,
+    mutate,
+    orderExpiration.value,
+    parsedInputAmount,
+    parsedOutputAmount,
+    recipient,
+  ])
 
   const deposit = useCallback(async () => {
-    const tx = await execute(currency)
+    const tx = await execute(parsedInputAmount, currency)
     setDepositPending(true)
     await tx.wait()
     setDepositPending(false)
     dispatch(setFromBentoBalance(true))
-  }, [currency, dispatch, execute])
+  }, [currency, dispatch, execute, parsedInputAmount])
 
   let button = (
     <>
       <ConfirmLimitOrderModal
         open={openConfirmationModal}
-        onConfirm={() => handler()}
+        onConfirm={handler}
         onDismiss={() => setOpenConfirmationModal(false)}
       />
       <Button
@@ -135,13 +146,19 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
 
   if (depositPending)
     button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : color} onClick={deposit} {...rest}>
+      <Button
+        loading={depositPending}
+        disabled={disabled}
+        color={disabled ? 'gray' : color}
+        onClick={deposit}
+        {...rest}
+      >
         <Dots>{i18n._(t`Depositing ${currency.symbol} into BentoBox`)}</Dots>
       </Button>
     )
   else if (!account)
     button = (
-      <Button disabled={disabled} color="pink" onClick={toggleWalletModal} {...rest}>
+      <Button disabled={disabled} onClick={toggleWalletModal} {...rest}>
         {i18n._(t`Connect Wallet`)}
       </Button>
     )
@@ -153,22 +170,27 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ currency, color, ...rest 
     )
   else if (showTokenApprove)
     button = (
-      <Button disabled={disabled} onClick={tokenApprove} color={disabled ? 'gray' : 'pink'} className="mb-4" {...rest}>
-        {tokenApprovalState === ApprovalState.PENDING ? (
-          <Dots>{i18n._(t`Approving ${currency.symbol}`)}</Dots>
-        ) : (
-          i18n._(t`Approve ${currency.symbol}`)
-        )}
+      <Button
+        loading={tokenApprovalState === ApprovalState.PENDING}
+        disabled={disabled}
+        onClick={tokenApprove}
+        color={disabled ? 'gray' : 'pink'}
+        className="mb-4"
+        {...rest}
+      >
+        {i18n._(t`Approve ${currency.symbol}`)}
       </Button>
     )
   else if (showLimitApprove)
     button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : 'pink'} onClick={onApprove} {...rest}>
-        {approvalState === BentoApprovalState.PENDING ? (
-          <Dots>{i18n._(t`Approving Limit Order`)}</Dots>
-        ) : (
-          i18n._(t`Approve Limit Order`)
-        )}
+      <Button
+        loading={approvalState === BentoApprovalState.PENDING}
+        disabled={disabled}
+        color={disabled ? 'gray' : 'pink'}
+        onClick={() => onApprove()}
+        {...rest}
+      >
+        {i18n._(t`Approve Limit Order`)}
       </Button>
     )
   else if (
