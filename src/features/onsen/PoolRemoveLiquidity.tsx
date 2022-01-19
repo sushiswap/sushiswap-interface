@@ -97,18 +97,29 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
   )
 
   const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
-  const amountsMin = {
-    [Field.CURRENCY_A]: parsedAmountA ? calculateSlippageAmount(parsedAmountA, allowedSlippage)[0] : undefined,
-    [Field.CURRENCY_B]: parsedAmountB ? calculateSlippageAmount(parsedAmountB, allowedSlippage)[0] : undefined,
-  }
+  const amountsMin =
+    parsedAmountA && parsedAmountB
+      ? {
+          [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, allowedSlippage)[0],
+          [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, allowedSlippage)[0],
+        }
+      : undefined
 
   const amountsMinCurrencyAmount = {
-    [Field.CURRENCY_A]: amountsMin[Field.CURRENCY_A]
-      ? CurrencyAmount.fromRawAmount(parsedAmountA.currency, amountsMin[Field.CURRENCY_A])
-      : undefined,
-    [Field.CURRENCY_B]: amountsMin[Field.CURRENCY_B]
-      ? CurrencyAmount.fromRawAmount(parsedAmountB.currency, amountsMin[Field.CURRENCY_B])
-      : undefined,
+    [Field.CURRENCY_A]:
+      amountsMin?.[Field.CURRENCY_A] && parsedAmountA
+        ? CurrencyAmount.fromRawAmount(
+            currencyA.isNative ? NATIVE[chainId || 1] : parsedAmountA.currency,
+            amountsMin[Field.CURRENCY_A]
+          )
+        : undefined,
+    [Field.CURRENCY_B]:
+      amountsMin?.[Field.CURRENCY_B] && parsedAmountB
+        ? CurrencyAmount.fromRawAmount(
+            currencyB.isNative ? NATIVE[chainId || 1] : parsedAmountB.currency,
+            amountsMin[Field.CURRENCY_B]
+          )
+        : undefined,
   }
 
   // tx sending
