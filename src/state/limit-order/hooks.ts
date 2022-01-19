@@ -1,16 +1,6 @@
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import {
-  ChainId,
-  Currency,
-  CurrencyAmount,
-  JSBI,
-  Percent,
-  Price,
-  SUSHI_ADDRESS,
-  WNATIVE,
-  WNATIVE_ADDRESS,
-} from '@sushiswap/core-sdk'
+import { ChainId, Currency, CurrencyAmount, JSBI, Price, SUSHI_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { isAddress, tryParseAmount } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
@@ -225,7 +215,6 @@ type UseLimitOrderDerivedParsedAmount = () => {
 }
 
 export const useLimitOrderDerivedParsedAmounts: UseLimitOrderDerivedParsedAmount = () => {
-  const { chainId } = useActiveWeb3React()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const { independentField, typedValue } = useLimitOrderState()
   const parsedRate = useLimitOrderDerivedLimitPrice()
@@ -236,28 +225,15 @@ export const useLimitOrderDerivedParsedAmounts: UseLimitOrderDerivedParsedAmount
     const parsedOutputAmount =
       inputCurrency && outputCurrency && parsedRate && parsedInputAmount
         ? exactIn
-          ? CurrencyAmount.fromRawAmount(
-              outputCurrency,
-              new Percent(parsedRate.numerator, denominator(WNATIVE[chainId || 1].decimals))
-                .multiply(new Percent(parsedInputAmount.quotient, denominator(inputCurrency.decimals)))
-                .multiply(denominator(outputCurrency.decimals)).quotient
-            )
-          : CurrencyAmount.fromRawAmount(
-              inputCurrency,
-              new Percent(
-                parsedInputAmount
-                  .multiply(denominator(inputCurrency.decimals))
-                  .multiply(denominator(WNATIVE[chainId || 1].decimals - outputCurrency.decimals)).quotient,
-                parsedRate.quotient
-              ).quotient
-            )
+          ? parsedRate.quote(parsedInputAmount)
+          : parsedRate.invert().quote(parsedInputAmount)
         : undefined
 
     return {
       [Field.INPUT]: independentField === Field.INPUT ? parsedInputAmount : parsedOutputAmount,
       [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedInputAmount : parsedOutputAmount,
     }
-  }, [chainId, independentField, inputCurrency, outputCurrency, parsedRate, typedValue])
+  }, [independentField, inputCurrency, outputCurrency, parsedRate, typedValue])
 }
 
 type UseLimitOrderDerivedInputError = () => string
