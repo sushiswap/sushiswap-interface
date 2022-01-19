@@ -1,9 +1,9 @@
 import { ArrowLeftIcon, XIcon } from '@heroicons/react/outline'
 import Typography from 'app/components/Typography'
-import React, { FC } from 'react'
+import React, { FC, ReactNode } from 'react'
 
 export interface ModalHeaderProps {
-  header: string
+  header: string | ReactNode
   subheader?: string
   onClose?(): void
   onBack?(): void
