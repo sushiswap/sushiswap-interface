@@ -27,13 +27,13 @@ export interface LimitOrderState {
   readonly typedValue: string
   readonly limitPrice: string
   readonly [Field.INPUT]: {
-    readonly currencyId: string | undefined
+    readonly currencyId?: string
   }
   readonly [Field.OUTPUT]: {
-    readonly currencyId: string | undefined
+    readonly currencyId?: string
   }
   // the typed recipient address or ENS name, or null if swap should go to sender
-  readonly recipient: string | null
+  readonly recipient?: string
   readonly fromBentoBalance: boolean
   readonly limitOrderApprovalPending: string
   readonly orderExpiration: {
@@ -52,7 +52,7 @@ const initialState: LimitOrderState = {
   [Field.OUTPUT]: {
     currencyId: '',
   },
-  recipient: null,
+  recipient: undefined,
   fromBentoBalance: false,
   limitOrderApprovalPending: '',
   orderExpiration: {
