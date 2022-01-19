@@ -40,7 +40,7 @@ const AuctionChartDutch: FC<AuctionChartDutchProps> = ({ auction, prices, showPr
 
   const bottomHeight = 60
   const paddingX = 28
-  const paddingY = 60
+  const paddingY = showPriceIndicator ? 60 : 28
   const topPadding = 20
   const minHeight = prices ? 'min-h-[234px]' : 'min-h-[94px]'
 
