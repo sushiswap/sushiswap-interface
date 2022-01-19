@@ -50,7 +50,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
 
   // mint state
   const { independentField, typedValue, otherTypedValue } = useMintState()
-  const { dependentField, currencies, parsedAmounts, price, noLiquidity, liquidityMinted, poolTokenPercentage, error } =
+  const { dependentField, currencies, parsedAmounts, noLiquidity, liquidityMinted, poolTokenPercentage, error } =
     useDerivedMintInfo(currencyA ?? undefined, currencyB ?? undefined)
 
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
@@ -160,7 +160,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
 
   return (
     <>
-      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/30">
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40">
         {header}
         <AssetInput
           size="sm"
@@ -192,7 +192,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
         )}
       </HeadlessUiModal.BorderedContent>
       {!account ? (
-        <Web3Connect size="lg" color="blue" className="w-full" />
+        <Web3Connect fullWidth />
       ) : isValid &&
         (approvalA === ApprovalState.NOT_APPROVED ||
           approvalA === ApprovalState.PENDING ||
@@ -203,7 +203,6 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
             <Button
               fullWidth
               loading={approvalA === ApprovalState.PENDING}
-              color="blue"
               onClick={approveACallback}
               disabled={approvalA === ApprovalState.PENDING}
               style={{
@@ -217,7 +216,6 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
             <Button
               fullWidth
               loading={approvalB === ApprovalState.PENDING}
-              color="blue"
               onClick={approveBCallback}
               disabled={approvalB === ApprovalState.PENDING}
             >
@@ -242,7 +240,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
                 )
           }}
           disabled={!isValid || attemptingTxn}
-          fullWidth={true}
+          fullWidth
         >
           {error ?? i18n._(t`Confirm Adding Liquidity`)}
         </Button>

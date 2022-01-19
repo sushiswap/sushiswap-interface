@@ -174,7 +174,7 @@ const AssetInputPanel = ({
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
-    if (isDesktop && span.current) setWidth(span?.current?.clientWidth + 6)
+    if (isDesktop && span.current) setWidth(value ? span?.current?.clientWidth + 6 : 60)
   }, [isDesktop, value])
 
   let content = (

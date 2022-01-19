@@ -78,7 +78,7 @@ const ManageBar = ({ farm }) => {
 
   return (
     <>
-      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/30">
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40">
         <div className="flex flex-col gap-2">
           <div className="flex justify-between">
             <Typography variant="lg" weight={700} className="text-high-emphesis">

@@ -95,12 +95,7 @@ export default function Pairs() {
             <div className="text-3xl font-bold text-high-emphesis">Pairs</div>
             <div className="">Click on the column name to sort pairs by its TVL, volume or fees gained.</div>
           </div>
-          <Search
-            term={term}
-            search={search}
-            inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
-            className="border shadow-2xl border-dark-800"
-          />
+          <Search term={term} search={search} />
         </div>
       </Background>
       <PairTabs currentType={type} setType={setType} />

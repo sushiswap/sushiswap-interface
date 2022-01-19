@@ -1,12 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { OnsenModalView } from 'app/features/onsen/enum'
 import { AppState } from 'app/state'
-
-export enum OnsenModalView {
-  Liquidity,
-  Staking,
-  Position,
-  AddLiquidityConfirm,
-}
 
 export interface OnsenState {
   view?: OnsenModalView

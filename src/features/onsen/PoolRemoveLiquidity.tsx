@@ -254,12 +254,12 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
 
   return (
     <>
-      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/30">
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40">
         {header}
         <AssetInput
           currencyLogo={false}
           currency={pair?.liquidityToken}
-          value={typedValue}
+          value={Number(typedValue) > 0 ? typedValue : ''}
           onChange={onLiquidityInput}
         />
         <div className="flex justify-between mt-2 mx-2">
@@ -285,11 +285,11 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
         </Typography>
       )}
       {!account ? (
-        <Web3Connect size="lg" color="blue" className="w-full" />
+        <Web3Connect fullWidth />
       ) : isValid && approval !== ApprovalState.APPROVED && signatureData === null ? (
         <Button
+          fullWidth
           loading={approval === ApprovalState.PENDING}
-          color="blue"
           onClick={onAttemptToApprove}
           disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
         >
@@ -297,6 +297,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
         </Button>
       ) : (
         <Button
+          fullWidth
           loading={attemptingTxn}
           color={!isValid && !!parsedAmounts[Field.CURRENCY_A] && !!parsedAmounts[Field.CURRENCY_B] ? 'red' : 'blue'}
           onClick={() => {

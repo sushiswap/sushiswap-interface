@@ -12,8 +12,8 @@ import { useAppDispatch } from 'app/state/hooks'
 import React, { FC } from 'react'
 
 interface PoolRemoveLiquidityReviewContentProps {
-  liquidityAmount: CurrencyAmount<Token>
-  parsedAmounts: CurrencyAmount<Currency>[]
+  liquidityAmount?: CurrencyAmount<Token>
+  parsedAmounts: (CurrencyAmount<Currency> | undefined)[]
   execute(): void
   txHash?: string
 }

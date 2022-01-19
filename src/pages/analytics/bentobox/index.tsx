@@ -100,12 +100,7 @@ export default function BentoBox(): JSX.Element {
             <div className="text-3xl font-bold text-high-emphesis">Bento Box</div>
             <div className="">Click on the column name to sort tokens by price or liquidity.</div>
           </div>
-          <Search
-            term={term}
-            search={search}
-            inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
-            className="border shadow-2xl border-dark-800"
-          />
+          <Search term={term} search={search} />
         </div>
       </Background>
       <div className="py-6 space-y-4 lg:px-14">

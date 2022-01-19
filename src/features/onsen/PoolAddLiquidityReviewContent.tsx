@@ -13,9 +13,9 @@ import { Field } from 'app/state/mint/actions'
 import React, { FC } from 'react'
 
 interface PoolAddLiquidityReviewContentProps {
-  noLiquidity: boolean
-  liquidityMinted: CurrencyAmount<Token>
-  poolShare: Percent
+  noLiquidity?: boolean
+  liquidityMinted?: CurrencyAmount<Token>
+  poolShare?: Percent
   parsedAmounts: { [field in Field]?: CurrencyAmount<Currency> }
   execute(): void
   txHash?: string

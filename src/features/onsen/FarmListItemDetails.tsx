@@ -3,12 +3,12 @@ import { useLingui } from '@lingui/react'
 import { HeadlessUiModal } from 'app/components/Modal'
 import QuestionHelper from 'app/components/QuestionHelper'
 import ToggleButtonGroup from 'app/components/ToggleButton'
-import { OnsenModalView, selectOnsen, setOnsenModalView } from 'app/features/onsen/onsenSlice'
+import { selectOnsen, setOnsenModalView } from 'app/features/onsen/onsenSlice'
 import { classNames } from 'app/functions'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react'
 
-import { PairType } from './enum'
+import { OnsenModalView, PairType } from './enum'
 import InformationDisclosure from './InformationDisclosure'
 import InvestmentDetails from './InvestmentDetails'
 import ManageBar from './ManageBar'
@@ -65,21 +65,8 @@ const FarmListItemDetails = ({ farm, onDismiss }) => {
           <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Position ? 'block' : 'hidden')}>
             <InvestmentDetails farm={farm} />
           </div>
-          <div
-            className={classNames(
-              COLUMN_CONTAINER,
-              view === OnsenModalView.Liquidity && farm.pair.type === PairType.KASHI ? 'block' : 'hidden'
-            )}
-          >
-            <ManageKashiPair farm={farm} />
-          </div>
-          <div
-            className={classNames(
-              COLUMN_CONTAINER,
-              view === OnsenModalView.Liquidity && farm.pair.type !== PairType.KASHI ? 'block' : 'hidden'
-            )}
-          >
-            <ManageSwapPair farm={farm} />
+          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Liquidity ? 'block' : 'hidden')}>
+            {farm.pair.type === PairType.KASHI ? <ManageKashiPair farm={farm} /> : <ManageSwapPair farm={farm} />}
           </div>
           <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Staking ? 'block' : 'hidden')}>
             <ManageBar farm={farm} />

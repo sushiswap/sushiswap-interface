@@ -1,9 +1,11 @@
-import { Popover, Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
-import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import React, { useState } from 'react'
+import Settings from 'app/components/Settings'
+import Switch from 'app/components/Switch'
+import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
+import React, { useMemo, useState } from 'react'
 
 import { useKashiPair } from '../kashi/hooks'
 import KashiDeposit from './KashiDeposit'
@@ -15,55 +17,39 @@ const ManageKashiPair = ({ farm }) => {
   const kashiPair = useKashiPair(farm.pair.id)
 
   const [toggle, setToggle] = useState(true)
-  const [useBento, setUseBento] = useState(false)
 
-  return (
-    <div className="flex flex-col space-y-2">
-      <div className="flex items-center justify-between pb-2">
-        <Switch.Group>
-          <div className="flex items-center space-x-4">
+  const header = useMemo(
+    () => (
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center">
+          <Typography weight={700} className="text-high-emphesis">
+            {toggle ? i18n._(t`Deposit`) : i18n._(t`Withdraw`)}
+          </Typography>
+          <div className="flex gap-4">
             <Switch
+              size="sm"
               checked={toggle}
               onChange={() => setToggle(!toggle)}
-              className={`${
-                toggle ? 'bg-blue border-blue' : 'bg-pink border-pink'
-              } bg-opacity-60 border border-opacity-80 relative inline-flex items-center h-[32px] rounded-full w-[54px] transition-colors focus:outline-none`}
-            >
-              <span
-                className={`${
-                  toggle ? 'translate-x-[1px] text-blue' : 'translate-x-[23px] text-pink'
-                } inline-block w-7 h-7 transform bg-white rounded-full transition-transform`}
-              >
-                {toggle ? <PlusIcon /> : <MinusIcon />}
-              </span>
-            </Switch>
-            <Switch.Label>{toggle ? i18n._(t`Deposit`) : i18n._(t`Withdraw`)}</Switch.Label>
-            <div className="flex space-x-1">
-              <div className="whitespace-nowrap">{toggle ? i18n._(t`From:`) : i18n._(t`To:`)}</div>
-              <Popover>
-                <Popover.Button>
-                  <div className="flex">
-                    <div>{useBento ? 'BentoBox' : i18n._(t`Wallet`)}</div>
-                    <ChevronDownIcon className="w-3" />
-                  </div>
-                </Popover.Button>
-                <Popover.Panel className="absolute">
-                  <Popover.Button>
-                    <div onClick={() => setUseBento(!useBento)}>{useBento ? i18n._(t`Wallet`) : 'BentoBox'}</div>
-                  </Popover.Button>
-                </Popover.Panel>
-              </Popover>
-            </div>
+              checkedIcon={<PlusIcon className="text-dark-1000" />}
+              uncheckedIcon={<MinusIcon className="text-dark-1000" />}
+            />
+            <Settings className="w-[unset] h-[unset]" />
           </div>
-        </Switch.Group>
-        <div className="whitespace-nowrap">{toggle ? i18n._(t`Balance`) : i18n._(t`Available to Withdraw`)}</div>
+        </div>
       </div>
-      {toggle ? (
-        <KashiDeposit pair={kashiPair} useBento={useBento} />
-      ) : (
-        <KashiWithdraw pair={kashiPair} useBento={useBento} />
-      )}
-    </div>
+    ),
+    [i18n, toggle]
+  )
+
+  return (
+    <>
+      <div className={classNames(toggle ? 'flex flex-col flex-grow gap-4' : 'hidden')}>
+        <KashiDeposit pair={kashiPair} header={header} />
+      </div>
+      <div className={classNames(!toggle ? 'flex flex-col flex-grow gap-4' : 'hidden')}>
+        <KashiWithdraw pair={kashiPair} header={header} />
+      </div>
+    </>
   )
 }
 

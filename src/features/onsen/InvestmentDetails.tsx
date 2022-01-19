@@ -33,19 +33,12 @@ const RewardRow = ({ value, symbol }) => {
 
 const InvestmentDetails = ({ farm }) => {
   const { i18n } = useLingui()
-
   const { chainId } = useActiveWeb3React()
-
   const { harvest } = useMasterChef(farm.chef)
-
   const router = useRouter()
-
   const addTransaction = useTransactionAdder()
-
   const kashiPair = useKashiPair(farm.pair.id)
-
   const [pendingTx, setPendingTx] = useState(false)
-
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
@@ -120,7 +113,7 @@ const InvestmentDetails = ({ farm }) => {
         </div>
         {[PairType.KASHI, PairType.SWAP].includes(farm.pair.type) && (
           <div className="flex gap-2 items-center">
-            <CurrencyLogo currency={token0} size={18} />
+            {token0 && <CurrencyLogo currency={token0} size={18} />}
             {farm.pair.type === PairType.KASHI && (
               <RewardRow
                 symbol={token0?.symbol}
@@ -139,7 +132,7 @@ const InvestmentDetails = ({ farm }) => {
         )}
         {farm.pair.type === PairType.SWAP && (
           <div className="flex gap-2 items-center">
-            <CurrencyLogo currency={token1} size={18} />
+            {token1 && <CurrencyLogo currency={token1} size={18} />}
             <RewardRow
               value={formatNumber((farm.pair.reserve1 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
               symbol={token1?.symbol}
