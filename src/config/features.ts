@@ -38,6 +38,7 @@ const features: FeatureMap = {
     Feature.KASHI,
     Feature.MIGRATE,
     Feature.ANALYTICS,
+    Feature.LIMIT_ORDERS,
   ],
   [ChainId.MATIC_TESTNET]: [Feature.AMM],
   [ChainId.HARMONY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
