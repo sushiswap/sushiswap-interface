@@ -54,12 +54,14 @@ const TokenApproveButton: FC<TokenApproveButtonProps> = memo(
     useEffect(() => {
       if (!inputAmount?.currency.wrapped.address) return
 
+      // @ts-ignore TYPE NEEDS FIXING
       onStateChange((prevState) => ({
         ...prevState,
         [inputAmount.currency.wrapped.address]: signatureData ? ApprovalState.APPROVED : approveState,
       }))
 
       return () =>
+        // @ts-ignore TYPE NEEDS FIXING
         onStateChange((prevState) => {
           const state = { ...prevState }
           if (state[inputAmount!!.currency.wrapped.address]) {

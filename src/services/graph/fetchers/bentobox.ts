@@ -22,7 +22,10 @@ export const BENTOBOX = {
   [ChainId.BSC]: 'sushiswap/bsc-bentobox',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-bentobox',
 }
+
+// @ts-ignore TYPE NEEDS FIXING
 const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+  // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${BENTOBOX[chainId]}`, query, variables)
 
 export const getClones = async (chainId = ChainId.ETHEREUM) => {
@@ -36,20 +39,23 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = unde
   const tokens = await getTokenSubset(chainId, {
     tokenAddresses: Array.from(
       kashiPairs.reduce(
+        // @ts-ignore TYPE NEEDS FIXING
         (previousValue, currentValue) => previousValue.add(currentValue.asset.id, currentValue.collateral.id),
         new Set() // use set to avoid duplicates
       )
     ),
   })
-
+  // @ts-ignore TYPE NEEDS FIXING
   return kashiPairs.map((pair) => ({
     ...pair,
     token0: {
       ...pair.asset,
+      // @ts-ignore TYPE NEEDS FIXING
       ...tokens.find((token) => token.id === pair.asset.id),
     },
     token1: {
       ...pair.collateral,
+      // @ts-ignore TYPE NEEDS FIXING
       ...tokens.find((token) => token.id === pair.collateral.id),
     },
     assetAmount: Math.floor(pair.totalAssetBase / getFraction({ ...pair, token0: pair.asset })).toString(),
@@ -70,9 +76,11 @@ export const getKashiPairs = async (chainId = ChainId.ETHEREUM, variables = unde
   }))
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) => {
   const { userKashiPairs } = await fetcher(chainId, kashiUserPairsQuery, variables)
 
+  // @ts-ignore TYPE NEEDS FIXING
   return userKashiPairs.map((userPair) => ({
     ...userPair,
     assetAmount: Math.floor(
@@ -95,8 +103,10 @@ export const getUserKashiPairs = async (chainId = ChainId.ETHEREUM, variables) =
   }))
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables): Promise<CurrencyAmount<Token>[]> => {
   const { userTokens } = await fetcher(chainId, bentoUserTokensQuery, variables)
+  // @ts-ignore TYPE NEEDS FIXING
   return userTokens.map(({ share, token: { decimals, id, name, symbol, totalSupplyElastic, totalSupplyBase } }) => {
     return toAmountCurrencyAmount(
       {
@@ -108,18 +118,22 @@ export const getBentoUserTokens = async (chainId = ChainId.ETHEREUM, variables):
   })
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getBentoBox = async (chainId = ChainId.ETHEREUM, variables) => {
   const { bentoBoxes } = await fetcher(chainId, bentoBoxQuery, variables)
 
   return bentoBoxes[0]
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) => {
   const { strategies } = await fetcher(chainId, bentoStrategiesQuery, variables)
 
   const SECONDS_IN_YEAR = 60 * 60 * 24 * 365
 
+  // @ts-ignore TYPE NEEDS FIXING
   return strategies?.map((strategy) => {
+    // @ts-ignore TYPE NEEDS FIXING
     const apys = strategy.harvests?.reduce((apys, _, i) => {
       const [lastHarvest, previousHarvest] = [strategy.harvests?.[i], strategy.harvests?.[i + 1]]
 
@@ -137,6 +151,7 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
       return [...apys, ((profitPerYear / ((tvl + tvlPrevious) / 2)) * 100) / 2]
     }, [])
 
+    // @ts-ignore TYPE NEEDS FIXING
     const apy = apys.reduce((apyAcc, apy) => apyAcc + apy, 0) / apys.length
 
     return {
@@ -148,6 +163,7 @@ export const getBentoStrategies = async (chainId = ChainId.ETHEREUM, variables) 
   })
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getBentoTokens = async (chainId = ChainId.ETHEREUM, variables) => {
   const { tokens } = await fetcher(chainId, bentoTokensQuery, variables)
 

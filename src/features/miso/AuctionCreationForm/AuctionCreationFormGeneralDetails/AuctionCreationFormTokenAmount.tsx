@@ -34,6 +34,7 @@ const AuctionCreationFormTokenAmount: FC<AuctionCreationFormTokenProps> = ({}) =
 
   const [approvalState, approve] = useApproveCallback(
     amount,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOMarket.address : undefined
   )
 

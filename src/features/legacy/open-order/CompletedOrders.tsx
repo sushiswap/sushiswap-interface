@@ -97,6 +97,7 @@ const CompletedOrders: FC = () => {
               onChange={(page) => {
                 completed.setPage(page + 1)
               }}
+              // @ts-ignore TYPE NEEDS FIXING
               totalPages={completed.maxPages}
               currentPage={completed.page - 1}
               pageNeighbours={2}

@@ -33,20 +33,24 @@ export default function Deposit({ pair }: any): JSX.Element {
   const [value, setValue] = useState('')
 
   // Calculated
+  // @ts-ignore TYPE NEEDS FIXING
   const assetNative = WNATIVE[chainId].address === pair.asset.address
 
+  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useETHBalances(assetNative ? [account] : [])
 
   const balance = useBento
     ? pair.asset.bentoBalance
     : assetNative
-    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    ? //  @ts-ignore TYPE NEEDS FIXING
+      BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.asset.balance
 
   const max = useBento
     ? pair.asset.bentoBalance
     : assetNative
-    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    ? // @ts-ignore TYPE NEEDS FIXING
+      BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.asset.balance
 
   const warnings = new Warnings()
@@ -95,6 +99,7 @@ export default function Deposit({ pair }: any): JSX.Element {
     }
     const amount = value.toBigNumber(pair.asset.tokenInfo.decimals)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const deadBalance = await bentoBoxContract.balanceOf(
       pair.asset.address,
       '0x000000000000000000000000000000000000dead'

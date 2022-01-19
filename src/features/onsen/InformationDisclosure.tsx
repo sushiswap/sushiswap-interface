@@ -9,6 +9,7 @@ import NavLink from '../../components/NavLink'
 import Typography from '../../components/Typography'
 import { PairType } from './enum'
 
+// @ts-ignore TYPE NEEDS FIXING
 const InformationDisclosure = ({ farm }) => {
   const { i18n } = useLingui()
 

@@ -20,6 +20,7 @@ const queryToAuctionStatus = {
 const Miso = () => {
   const { i18n } = useLingui()
   const { query } = useRouter()
+  // @ts-ignore TYPE NEEDS FIXING
   const auctions = useAuctions(queryToAuctionStatus[query?.status as string] ?? AuctionStatus.LIVE)
 
   const tabs = [
@@ -67,6 +68,7 @@ const Miso = () => {
                     <Typography
                       weight={700}
                       className={classNames(
+                        // @ts-ignore TYPE NEEDS FIXING
                         tab.key === (queryToAuctionStatus[query?.status as string] || AuctionStatus.LIVE)
                           ? 'bg-gradient-to-r from-red to-pink bg-clip-text text-transparent'
                           : '',
@@ -77,6 +79,7 @@ const Miso = () => {
                     </Typography>
                     <div
                       className={classNames(
+                        // @ts-ignore TYPE NEEDS FIXING
                         tab.key === queryToAuctionStatus[query?.status as string]
                           ? 'relative bg-gradient-to-r from-red to-pink h-[3px] w-full'
                           : ''

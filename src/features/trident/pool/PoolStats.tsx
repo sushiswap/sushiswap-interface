@@ -56,13 +56,16 @@ const PoolStats: FC<PoolStatsProps> = () => {
           </Typography>
           <div className="flex flex-row gap-2 lg:flex-col lg:gap-0">
             <Typography weight={700} variant={isDesktop ? 'lg' : 'base'} className="text-high-emphesis">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {stats?.[0]?.[value]}
             </Typography>
             <Typography
               weight={400}
               variant={isDesktop ? 'xs' : 'sm'}
+              // @ts-ignore TYPE NEEDS FIXING
               className={stats?.[0]?.[change] > 0 ? 'text-green' : 'text-red'}
             >
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatPercent(stats?.[0]?.[change])}
             </Typography>
           </div>

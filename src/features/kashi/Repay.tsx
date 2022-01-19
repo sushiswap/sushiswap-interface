@@ -52,6 +52,7 @@ export default function Repay({ pair }: RepayProps) {
 
   // Calculated
   const assetNative = WNATIVE[chainId || 1].address === pair.asset.address
+  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useETHBalances(assetNative ? [account] : [])
 
   console.log({ pair })
@@ -59,7 +60,8 @@ export default function Repay({ pair }: RepayProps) {
   const balance = useBentoRepay
     ? toAmount(pair.asset, pair.asset.bentoBalance)
     : assetNative
-    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    ? // @ts-ignore TYPE NEEDS FIXING
+      BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.asset.balance
 
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
@@ -99,7 +101,9 @@ export default function Repay({ pair }: RepayProps) {
     if (!trade) return { realizedLPFee: undefined, priceImpact: undefined }
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
+    // @ts-ignore TYPE NEEDS FIXING
     const realizedLPFee = trade.inputAmount.multiply(realizedLpFeePercent)
+    // @ts-ignore TYPE NEEDS FIXING
     const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
     return { priceImpact, realizedLPFee }
   }, [trade])

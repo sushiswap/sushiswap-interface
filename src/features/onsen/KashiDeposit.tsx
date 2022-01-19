@@ -19,6 +19,7 @@ import React, { useState } from 'react'
 
 import CurrencyInputPanel from './CurrencyInputPanel'
 
+// @ts-ignore TYPE NEEDS FIXING
 const KashiDeposit = ({ pair, useBento }) => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
@@ -28,17 +29,20 @@ const KashiDeposit = ({ pair, useBento }) => {
   const [depositValue, setDepositValue] = useState('')
 
   const assetNative = WNATIVE[chainId || 1].address === pair?.asset.address
+  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useETHBalances(assetNative ? [account] : [])
 
   const balanceAmount = useBento
     ? pair?.asset.bentoBalance
     : assetNative
-    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    ? // @ts-ignore TYPE NEEDS FIXING
+      BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair?.asset.balance
 
   const balance =
     assetToken &&
     balanceAmount &&
+    // @ts-ignore TYPE NEEDS FIXING
     CurrencyAmount.fromRawAmount(assetNative ? WNATIVE[chainId] : assetToken, balanceAmount)
 
   const maxAmount = balance
@@ -58,6 +62,7 @@ const KashiDeposit = ({ pair, useBento }) => {
     if (pair?.currentExchangeRate.isZero()) {
       cooker.updateExchangeRate(false, ZERO, ZERO)
     }
+    // @ts-ignore TYPE NEEDS FIXING
     cooker.addAsset(BigNumber.from(parsedDepositValue.quotient.toString()), useBento)
     return `${i18n._(t`Deposit`)} ${pair?.asset.tokenInfo.symbol}`
   }

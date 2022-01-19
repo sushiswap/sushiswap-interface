@@ -5,6 +5,7 @@ import { useOnClickOutside } from '../../hooks/useOnClickOutside'
 import useToggle from '../../hooks/useToggle'
 
 interface NeonSelectProps {
+  // @ts-ignore TYPE NEEDS FIXING
   value
   children: React.ReactElement<NeonSelectItemProps> | React.ReactElement<NeonSelectItemProps>[]
 }
@@ -15,6 +16,7 @@ const NeonSelect: FC<NeonSelectProps> = ({ value, children }) => {
   useOnClickOutside(node, open ? toggle : undefined)
 
   return (
+    // @ts-ignore TYPE NEEDS FIXING
     <div className="relative" ref={node} onClick={toggle}>
       <div className="shadow-md z-[2] relative flex border border-dark-800 bg-dark-900 h-[38px] rounded-md divide-x divide-dark-800">
         <div className="text-sm text-primary flex items-center pl-3 min-w-[80px] font-medium">{value}</div>

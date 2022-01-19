@@ -17,7 +17,9 @@ export default function Updater(): null {
 
   useEffect(() => {
     if (chainId === ChainId.CELO) {
+      // @ts-ignore TYPE NEEDS FIXING
       const originalBlockFormatter = library.formatter._block
+      // @ts-ignore TYPE NEEDS FIXING
       library.formatter._block = (value, format) => {
         return originalBlockFormatter(
           {
@@ -30,6 +32,7 @@ export default function Updater(): null {
     }
     return () => {
       if (chainId === ChainId.CELO) {
+        // @ts-ignore TYPE NEEDS FIXING
         library.formatter._block = (value: any, format: any): Block => {
           if (value.author != null && value.miner == null) {
             value.miner = value.author
@@ -64,7 +67,9 @@ export default function Updater(): null {
             return { chainId, blockNumber: block.number, blockTimestamp: block.timestamp }
           return {
             chainId,
+            // @ts-ignore TYPE NEEDS FIXING
             blockNumber: Math.max(block.number, state.blockNumber),
+            // @ts-ignore TYPE NEEDS FIXING
             blockTimestamp: Math.max(block.timestamp, state.blockTimestamp),
           }
         }
@@ -76,6 +81,7 @@ export default function Updater(): null {
 
   const onBlock = useCallback(
     (number) => {
+      // @ts-ignore TYPE NEEDS FIXING
       return library.getBlock(number).then(blockCallback)
     },
     [blockCallback, library]
@@ -111,6 +117,7 @@ export default function Updater(): null {
   }, [windowVisible, dispatch, debouncedState.blockTimestamp, debouncedState.chainId])
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     dispatch(updateChainId({ chainId: debouncedState.chainId in ChainId ? debouncedState.chainId ?? null : null }))
   }, [dispatch, debouncedState.chainId])
 

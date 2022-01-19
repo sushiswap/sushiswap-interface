@@ -34,7 +34,9 @@ export const EXCHANGE = {
   [ChainId.FUSE]: 'sushiswap/fuse-exchange',
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const exchange = async (chainId = ChainId.ETHEREUM, query, variables = {}) =>
+  // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${EXCHANGE[chainId]}`, query, variables)
 
 export const getPairs = async (chainId = ChainId.ETHEREUM, variables = undefined, query = pairsQuery) => {
@@ -42,42 +44,50 @@ export const getPairs = async (chainId = ChainId.ETHEREUM, variables = undefined
   return pairs
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getPairDayData = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokens')
   const { pairDayDatas } = await exchange(chainId, pairDayDatasQuery, variables)
   return pairDayDatas
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getTokenSubset = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokenSubset')
   const { tokens } = await exchange(chainId, tokenSubsetQuery, variables)
   return tokens
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getTokens = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokens')
   const { tokens } = await exchange(chainId, tokensQuery, variables)
   return tokens
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getToken = async (chainId = ChainId.ETHEREUM, query = tokenQuery, variables) => {
   // console.log('getTokens')
   const { token } = await exchange(chainId, query, variables)
   return token
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getTokenDayData = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokens')
   const { tokenDayDatas } = await exchange(chainId, tokenDayDatasQuery, variables)
   return tokenDayDatas
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getTokenPrices = async (chainId = ChainId.ETHEREUM, variables) => {
   // console.log('getTokenPrice')
   const { tokens } = await exchange(chainId, tokensQuery, variables)
+  // @ts-ignore TYPE NEEDS FIXING
   return tokens.map((token) => token?.derivedETH)
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getTokenPrice = async (chainId = ChainId.ETHEREUM, query, variables) => {
   // console.log('getTokenPrice')
   const nativePrice = await getNativePrice(chainId)
@@ -182,6 +192,7 @@ export const getCeloPrice = async () => {
   })
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getOhmPrice = async (chainId) => {
   if (chainId === ChainId.ARBITRUM) {
     return getTokenPrice(ChainId.ARBITRUM, tokenPriceQuery, {
@@ -228,6 +239,7 @@ export const getBundle = async (
   return exchange(chainId, query, variables)
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getLiquidityPositions = async (chainId = ChainId.ETHEREUM, variables) => {
   const { liquidityPositions } = await exchange(chainId, liquidityPositionsQuery, variables)
   return liquidityPositions

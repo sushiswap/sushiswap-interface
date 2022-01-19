@@ -18,6 +18,7 @@ export interface BaseStrategyWithHasPermitTokenHook extends BaseStrategyHook, Ba
 // Use this BaseStrategy when outputToken allows for a batched permitToken
 // THIS TRAIT IS UNTESTED, PLEASE TEST THOROUGHLY BEFORE USING
 const useHasPermitTokenTrait = (props: BaseStrategyHook): BaseStrategyWithHasPermitTokenHook => {
+  // @ts-ignore TYPE NEEDS FIXING
   const trait = useTrait(props, TRAIT_CONFIG)
   const { account } = useActiveWeb3React()
   const { zapIn, inputValue } = useDerivedInariState()
@@ -44,6 +45,7 @@ const useHasPermitTokenTrait = (props: BaseStrategyHook): BaseStrategyWithHasPer
             ]),
           ]
 
+          // @ts-ignore TYPE NEEDS FIXING
           const tx = await inariContract.batch(batch, true)
           addTransaction(tx, {
             summary: `Approve Inari Master Contract and ${zapIn ? 'Deposit' : 'Withdraw'} ${

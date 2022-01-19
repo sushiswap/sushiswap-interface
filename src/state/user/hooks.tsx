@@ -172,6 +172,7 @@ export function useUserAddedTokens(): Token[] {
 
   return useMemo(() => {
     if (!chainId) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return Object.values(serializedTokensMap?.[chainId] ?? {}).map(deserializeToken)
   }, [serializedTokensMap, chainId])
 }
@@ -225,6 +226,7 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
 const computeOracleData = (collateral: Currency, asset: Currency) => {
   const oracleData = ''
 
+  // @ts-ignore TYPE NEEDS FIXING
   const mapping = CHAINLINK_PRICE_FEED_MAP[asset.chainId]
 
   for (const address in mapping) {
@@ -324,6 +326,7 @@ export function toKashiLiquidityToken([collateral, asset]: [Token, Token]): Toke
   //   oracleData: computeOracleData(collateral, asset),
   // })
   const oracleData = computeOracleData(collateral, asset)
+  // @ts-ignore TYPE NEEDS FIXING
   if (!oracleData) return
   return new Token(
     collateral.chainId,

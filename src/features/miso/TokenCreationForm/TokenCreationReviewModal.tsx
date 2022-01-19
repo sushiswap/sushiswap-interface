@@ -51,6 +51,7 @@ const TokenCreationModal: FC<TokenCreationModalProps> = ({ open, onDismiss: _onD
           await tx.wait()
         }
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error?.message)
       } finally {
         setPending(false)
@@ -61,6 +62,7 @@ const TokenCreationModal: FC<TokenCreationModalProps> = ({ open, onDismiss: _onD
 
   // Subscribe to creation event to get created token ID
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     subscribe('TokenCreated', (owner, tokenAddress, tokenTemplate, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setTokenAddress(tokenAddress)
@@ -88,6 +90,7 @@ const TokenCreationModal: FC<TokenCreationModalProps> = ({ open, onDismiss: _onD
                     {i18n._(t`Type`)}
                   </Typography>
                   <Typography weight={700} variant="sm" className="text-high-emphesis">
+                    {/*@ts-ignore TYPE NEEDS FIXING*/}
                     {templateIdToLabel(tokenTemplateMap?.[data.tokenTypeAddress])}
                   </Typography>
                 </div>

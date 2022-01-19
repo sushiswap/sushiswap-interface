@@ -22,7 +22,9 @@ function TradeReview({
     if (!trade) return { realizedLPFee: undefined, priceImpact: undefined }
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
+    // @ts-ignore TYPE NEEDS FIXING
     const realizedLPFee = trade.inputAmount.multiply(realizedLpFeePercent)
+    // @ts-ignore TYPE NEEDS FIXING
     const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
     return { priceImpact, realizedLPFee }
   }, [trade])

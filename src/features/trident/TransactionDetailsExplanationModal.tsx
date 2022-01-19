@@ -9,6 +9,7 @@ const TransactionDetailsExplanationModal: FC = ({ children }) => {
 
   return (
     <HeadlessUiModal trigger={children}>
+      {/*@ts-ignore TYPE NEEDS FIXING*/}
       {({ setOpen }) => (
         <div className="flex flex-col gap-4 lg:max-w-2xl">
           <HeadlessUiModal.Header header={i18n._(t`Transaction Details`)} onClose={() => setOpen(false)} />

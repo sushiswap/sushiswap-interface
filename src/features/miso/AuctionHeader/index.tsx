@@ -144,7 +144,8 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
               text={
                 auction.template === AuctionTemplate.DUTCH_AUCTION
                   ? AuctionHelperTextByTemplateId(i18n)[auction.template]
-                  : AuctionPriceHelperTextByTemplateId(i18n)[auction.template]
+                  : // @ts-ignore TYPE NEEDS FIXING
+                    AuctionPriceHelperTextByTemplateId(i18n)[auction.template]
               }
               icon={<SolidQuestionMarkCircleIcon width={12} height={12} className="text-secondary" />}
             />
@@ -153,6 +154,7 @@ const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
           <div className="flex justify-end items-baseline w-full gap-1">
             {auction.template === AuctionTemplate.DUTCH_AUCTION ? (
               <AuctionCardPrice auction={auction}>
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {({ price }) => {
                   return (
                     <>

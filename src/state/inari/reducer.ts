@@ -9,6 +9,7 @@ const initialState: InariState = {
   zapIn: true,
   inputValue: '',
   outputValue: '',
+  // @ts-ignore TYPE NEEDS FIXING
   general: null,
   tokens: tokenDefinitions,
 }

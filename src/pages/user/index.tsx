@@ -50,6 +50,7 @@ export default function Me() {
 
   const { data, error }: SWRResponse<any, Error> = useSWR(
     `https://api.covalenthq.com/v1/${chainId}/address/${account}/stacks/sushiswap/acts/?&key=ckey_cba3674f2ce5450f9d5dd290589&swaps=true&quote-currency=usd`,
+    // @ts-ignore TYPE NEEDS FIXING
     (url) =>
       fetch(url)
         .then((r) => r.json())

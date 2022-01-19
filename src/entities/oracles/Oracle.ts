@@ -7,6 +7,7 @@ export abstract class Oracle {
   name = ''
   warning = ''
   error = ''
+  // @ts-ignore TYPE NEEDS FIXING
   constructor(chainId, address, name, data) {
     this.chainId = chainId
     this.address = address

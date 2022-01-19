@@ -110,6 +110,7 @@ export default function Remove() {
         await gatherPermitSignature()
       } catch (error) {
         // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
+        /* @ts-ignore TYPE NEEDS FIXING */
         if (error?.code !== 4001) {
           await approveCallback()
         }
@@ -234,6 +235,7 @@ export default function Remove() {
 
     const safeGasEstimates: (BigNumber | undefined)[] = await Promise.all(
       methodNames.map((methodName) =>
+        /* @ts-ignore TYPE NEEDS FIXING */
         routerContract.estimateGas[methodName](...args)
           .then(calculateGasMargin)
           .catch((error) => {
@@ -255,6 +257,7 @@ export default function Remove() {
       const safeGasEstimate = safeGasEstimates[indexOfSuccessfulEstimation]
 
       setAttemptingTxn(true)
+      /* @ts-ignore TYPE NEEDS FIXING */
       await routerContract[methodName](...args, {
         gasLimit: safeGasEstimate,
       })
@@ -497,6 +500,7 @@ export default function Remove() {
                                 }`}
                               >
                                 <a className="text-baseline text-blue opacity-80 hover:opacity-100 focus:opacity-100 whitespace-nowrap">
+                                  {/* @ts-ignore TYPE NEEDS FIXING */}
                                   Receive W{NATIVE[chainId].symbol}
                                 </a>
                               </Link>
@@ -507,6 +511,7 @@ export default function Remove() {
                                 }`}
                               >
                                 <a className="text-baseline text-blue opacity-80 hover:opacity-100 whitespace-nowrap">
+                                  {/* @ts-ignore TYPE NEEDS FIXING */}
                                   Receive {NATIVE[chainId].symbol}
                                 </a>
                               </Link>

@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { Chef } from './enum'
 
+// @ts-ignore TYPE NEEDS FIXING
 const usePending = (farm) => {
   const [balance, setBalance] = useState<string>('0')
 
@@ -35,6 +36,7 @@ const usePending = (farm) => {
   useEffect(() => {
     async function fetchPendingReward() {
       try {
+        // @ts-ignore TYPE NEEDS FIXING
         const pending = await contract[chainId]?.pendingTokens(farm.id, account, '0')
         // console.log({ farm })
         // todo: do not assume [0] or that rewardToken has 18 decimals (only works w/ mastechefv2 currently)

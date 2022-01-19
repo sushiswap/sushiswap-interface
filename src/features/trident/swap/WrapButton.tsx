@@ -37,9 +37,11 @@ const WrapButton: FC = () => {
       return addTransaction(txReceipt, {
         summary: parsedAmounts?.[0]?.currency.isNative
           ? i18n._(
+              // @ts-ignore TYPE NEEDS FIXING
               t`Wrap ${parsedAmounts?.[0].toSignificant(6)} ${NATIVE[chainId].symbol} to ${WNATIVE[chainId].symbol}`
             )
           : i18n._(
+              // @ts-ignore TYPE NEEDS FIXING
               t`Unwrap ${parsedAmounts?.[0].toSignificant(6)} ${WNATIVE[chainId].symbol} to ${NATIVE[chainId].symbol}`
             ),
       })

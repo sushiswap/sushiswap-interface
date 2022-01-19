@@ -56,6 +56,7 @@ export default function useWrapCallback(
                     value: `0x${inputAmount.quotient.toString(16)}`,
                   })
                   addTransaction(txReceipt, {
+                    // @ts-ignore TYPE NEEDS FIXING
                     summary: `Wrap ${inputAmount.toSignificant(6)} ${NATIVE[chainId].symbol} to ${
                       WNATIVE[chainId].symbol
                     }`,
@@ -68,8 +69,10 @@ export default function useWrapCallback(
         inputError: sufficientBalance
           ? undefined
           : hasInputAmount
-          ? `Insufficient ${NATIVE[chainId].symbol} balance`
-          : `Enter ${NATIVE[chainId].symbol} amount`,
+          ? // @ts-ignore TYPE NEEDS FIXING
+            `Insufficient ${NATIVE[chainId].symbol} balance`
+          : // @ts-ignore TYPE NEEDS FIXING
+            `Enter ${NATIVE[chainId].symbol} amount`,
       }
     } else if (weth.equals(inputCurrency) && outputCurrency.isNative) {
       return {
@@ -81,6 +84,7 @@ export default function useWrapCallback(
                   const txReceipt = await wethContract.withdraw(`0x${inputAmount.quotient.toString(16)}`)
                   addTransaction(txReceipt, {
                     summary: `Unwrap ${inputAmount.toSignificant(6)} ${WNATIVE[chainId].symbol} to ${
+                      // @ts-ignore TYPE NEEDS FIXING
                       NATIVE[chainId].symbol
                     }`,
                   })

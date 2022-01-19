@@ -175,6 +175,7 @@ export const useLimitOrderDerivedCurrencies: UseLimitOrderDerivedCurrencies = ()
   } = useLimitOrderState()
 
   const inputCurrency = useCurrency(inputCurrencyId || 'ETH') ?? undefined
+  // @ts-ignore TYPE NEEDS FIXING
   const outputCurrency = useCurrency(outputCurrencyId || SUSHI_ADDRESS[chainId]) ?? undefined
 
   return useMemo(() => {
@@ -285,7 +286,9 @@ export const useLimitOrderDerivedTrade = () => {
     exactIn
       ? parsedInputAmount ||
           CurrencyAmount.fromRawAmount(
+            // @ts-ignore TYPE NEEDS FIXING
             inputCurrency,
+            // @ts-ignore TYPE NEEDS FIXING
             JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals))
           )
       : undefined,
@@ -300,7 +303,9 @@ export const useLimitOrderDerivedTrade = () => {
     !exactIn
       ? parsedOutputAmount ||
           CurrencyAmount.fromRawAmount(
+            // @ts-ignore TYPE NEEDS FIXING
             outputCurrency,
+            // @ts-ignore TYPE NEEDS FIXING
             JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))
           )
       : undefined,

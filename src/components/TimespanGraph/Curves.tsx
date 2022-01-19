@@ -6,6 +6,7 @@ import { Group } from '@visx/group'
 import { PatternLines } from '@visx/pattern'
 import { scaleLinear, scaleTime } from '@visx/scale'
 import { LinePath } from '@visx/shape'
+// @ts-ignore TYPE NEEDS FIXING
 import { extent } from 'd3-array'
 import millify from 'millify'
 import { useEffect, useMemo, useRef, useState } from 'react'
@@ -14,7 +15,9 @@ import React from 'react'
 import { classNames } from '../../functions'
 import { TimespanGraphProps } from '.'
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getX = (data) => new Date(data.date)
+// @ts-ignore TYPE NEEDS FIXING
 export const getY = (data) => data.value
 
 interface Dimensions {
@@ -68,16 +71,21 @@ const Curves = ({
   const [timespan, setTimespan] = useState(timespans?.find((t) => t.text === defaultTimespan))
   const brushRef = useRef<BaseBrush | null>(null)
 
+  // @ts-ignore TYPE NEEDS FIXING
   const allData = data.reduce((previousValue, currentValue) => previousValue.concat(currentValue), [])
 
   const [filteredData, setFilteredData] = useState(
+    // @ts-ignore TYPE NEEDS FIXING
     data.map((curve) => curve.slice(curve.length - 30, curve.length - 1))
   )
 
+  // @ts-ignore TYPE NEEDS FIXING
   const onBrushChange = (domain) => {
     if (!domain) return
     const { x0, x1, y0, y1 } = domain
+    // @ts-ignore TYPE NEEDS FIXING
     const stockCopy = data.map((d) =>
+      // @ts-ignore TYPE NEEDS FIXING
       d.filter((s) => {
         const x = getX(s).getTime()
         const y = getY(s)
@@ -105,6 +113,7 @@ const Curves = ({
       scaleTime({
         range: [0, xMax],
         domain: extent(
+          // @ts-ignore TYPE NEEDS FIXING
           filteredData.reduce((previousValue, currentValue) => previousValue.concat(currentValue), []),
           getX
         ),
@@ -120,12 +129,16 @@ const Curves = ({
         domain: [
           Math.min(
             ...filteredData
+              // @ts-ignore TYPE NEEDS FIXING
               .reduce((previousValue, currentValue) => previousValue.concat(currentValue), [])
+              // @ts-ignore TYPE NEEDS FIXING
               .map((d) => getY(d))
           ),
           Math.max(
             ...filteredData
+              // @ts-ignore TYPE NEEDS FIXING
               .reduce((previousValue, currentValue) => previousValue.concat(currentValue), [])
+              // @ts-ignore TYPE NEEDS FIXING
               .map((d) => getY(d))
           ),
         ],
@@ -149,6 +162,7 @@ const Curves = ({
     () =>
       scaleLinear({
         range: [yBrushMax, 0],
+        // @ts-ignore TYPE NEEDS FIXING
         domain: [Math.min(...allData.map((d) => getY(d))), Math.max(...allData.map((d) => getY(d)))],
         nice: true,
       }),
@@ -168,6 +182,7 @@ const Curves = ({
     if (brushRef?.current) {
       const updater: UpdateBrush = (prevBrush) => {
         const lastDate = data[0][data[0].length - 1].date
+        // @ts-ignore TYPE NEEDS FIXING
         const firstDate = data[0].find((data) => data.date >= lastDate - t.length * 1000)
 
         const newExtent = brushRef.current!.getExtent(
@@ -260,6 +275,7 @@ const Curves = ({
         />
         <Group top={margin.top} left={margin.left}>
           {width > 8 &&
+            // @ts-ignore TYPE NEEDS FIXING
             filteredData.map((curve, i) => (
               <LinePath
                 key={`chart-${i}-${timespan?.text}`}
@@ -289,6 +305,7 @@ const Curves = ({
         </Group>
 
         <Group top={topChartHeight + topChartBottomMargin + margin.top} left={brushMargin.left}>
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {data.map((brushData, i) => {
             return (
               <LinePath

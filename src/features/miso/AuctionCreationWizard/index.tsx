@@ -109,18 +109,22 @@ const schema = yup.object().shape({
     .integer('Must be a whole number')
     .test({
       message: 'Amount of tokens for liquidity seeding must be at least 1 percent of tokens for sale',
+      // @ts-ignore TYPE NEEDS FIXING
       test: (value, ctx) => value * 100 >= ctx.parent.tokenAmount,
     })
     .test({
       message: 'Amount of tokens for liquidity cannot be larger than amount of tokens for sale',
+      // @ts-ignore TYPE NEEDS FIXING
       test: (value, ctx) => value <= ctx.parent.tokenAmount,
     }),
   auctionType: yup.number().required('Must select an auction type'),
   fixedPrice: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.CROWDSALE,
     then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
   }),
   minimumTarget: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.CROWDSALE,
     then: yup
       .number()
@@ -130,14 +134,17 @@ const schema = yup.object().shape({
       .integer('Must be a whole number'),
   }),
   minimumRaised: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.BATCH_AUCTION,
     then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
   }),
   startPrice: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
   }),
   endPrice: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup
       .number()
@@ -178,6 +185,7 @@ const AuctionCreationWizard: FC = () => {
 
   const data = watch()
 
+  // @ts-ignore TYPE NEEDS FIXING
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
   const formattedData =
     paymentToken && !isValidating && isValid ? formatCreationFormData(data, paymentToken) : undefined

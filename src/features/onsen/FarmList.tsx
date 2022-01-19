@@ -9,6 +9,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 import FarmListItem from './FarmListItem'
 
+// @ts-ignore TYPE NEEDS FIXING
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'tvl', direction: 'descending' })
   const { i18n } = useLingui()

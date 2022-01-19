@@ -110,6 +110,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
       conn &&
         activate(conn, undefined, true).catch((error) => {
           if (error instanceof UnsupportedChainIdError) {
+            // @ts-ignore TYPE NEEDS FIXING
             activate(conn) // a little janky...can't use setError because the connector isn't set
           } else {
             setPendingError(true)
@@ -237,7 +238,9 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
           />
           {walletView === WALLET_VIEWS.PENDING ? (
             <PendingView
+              // @ts-ignore TYPE NEEDS FIXING
               id={pendingWallet.id}
+              // @ts-ignore TYPE NEEDS FIXING
               connector={pendingWallet.connector}
               error={pendingError}
               setPendingError={setPendingError}

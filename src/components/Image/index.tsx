@@ -4,6 +4,7 @@ import { FC } from 'react'
 
 import { shimmer } from './shimmer'
 
+// @ts-ignore TYPE NEEDS FIXING
 const toBase64 = (str) => (typeof window === 'undefined' ? Buffer.from(str).toString('base64') : window.btoa(str))
 
 const Image: FC<ImageProps> = ({ src, width, height, layout, ...rest }) => {

@@ -22,6 +22,7 @@ const OpenOrders: FC = () => {
   const [hash, setHash] = useState('')
 
   const cancelOrder = async (limitOrder: LimitOrder, summary: string) => {
+    // @ts-ignore TYPE NEEDS FIXING
     const tx = await limitOrderContract.cancelOrder(limitOrder.getTypeHash())
     addTransaction(tx, {
       summary,
@@ -30,6 +31,7 @@ const OpenOrders: FC = () => {
     setHash(tx.hash)
 
     await tx.wait()
+    // @ts-ignore TYPE NEEDS FIXING
     await mutate((data) => ({ ...data }))
   }
 
@@ -116,6 +118,7 @@ const OpenOrders: FC = () => {
             </div>
             <Pagination
               onChange={pending.setPage}
+              // @ts-ignore TYPE NEEDS FIXING
               totalPages={pending.maxPages}
               currentPage={pending.page}
               pageNeighbours={2}

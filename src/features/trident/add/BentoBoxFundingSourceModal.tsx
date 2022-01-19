@@ -21,6 +21,7 @@ const BentoBoxFundingSourceModal: FC = () => {
         </div>
       }
     >
+      {/*@ts-ignore TYPE NEEDS FIXING*/}
       {({ setOpen }) => (
         <div className="flex flex-col gap-4">
           <HeadlessUiModal.Header header={i18n._(t`Bentobox`)} onClose={() => setOpen(false)} />

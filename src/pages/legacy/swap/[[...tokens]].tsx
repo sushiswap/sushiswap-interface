@@ -56,6 +56,7 @@ export async function getServerSideProps() {
   }
 }
 
+/* @ts-ignore TYPE NEEDS FIXING */
 export default function Swap({ banners }) {
   const { i18n } = useLingui()
 
@@ -183,11 +184,13 @@ export default function Swap({ banners }) {
   const formattedAmounts = {
     [independentField]: typedValue,
     [dependentField]: showWrap
-      ? parsedAmounts[independentField]?.toExact() ?? ''
+      ? /* @ts-ignore TYPE NEEDS FIXING */
+        parsedAmounts[independentField]?.toExact() ?? ''
       : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
 
   const userHasSpecifiedInputOutput = Boolean(
+    /* @ts-ignore TYPE NEEDS FIXING */
     currencies[Field.INPUT] && currencies[Field.OUTPUT] && parsedAmounts[independentField]?.greaterThan(JSBI.BigInt(0))
   )
 
@@ -242,6 +245,7 @@ export default function Swap({ banners }) {
     allowedSlippage,
     recipient,
     signatureData,
+    /* @ts-ignore TYPE NEEDS FIXING */
     null,
     useOpenMev
   )

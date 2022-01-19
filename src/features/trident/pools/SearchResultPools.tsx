@@ -12,6 +12,7 @@ import {
 import { PoolSortOption } from 'app/features/trident/pools/poolsSlice'
 import Link from 'next/link'
 import React, { FC } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { useFilters, useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { SearchCategoryLabel } from './SearchCategoryLabel'
@@ -81,6 +82,7 @@ const SearchResultPools: FC = () => {
                   href={{
                     pathname: `/trident/pool`,
                     query: {
+                      // @ts-ignore TYPE NEEDS FIXING
                       tokens: row.original.assets.map((asset) => asset.address),
                       fee: row.original.swapFee,
                       twap: row.original.twapEnabled,
@@ -90,6 +92,7 @@ const SearchResultPools: FC = () => {
                   passHref
                 >
                   <tr {...row.getRowProps()} className={TABLE_TBODY_TR_CLASSNAME}>
+                    {/*@ts-ignore TYPE NEEDS FIXING*/}
                     {row.cells.map((cell, i) => {
                       return (
                         <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>

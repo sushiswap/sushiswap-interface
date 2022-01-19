@@ -49,6 +49,7 @@ const Typography: FC<TypographyProps> = forwardRef(
       {
         className: classNames(
           VARIANTS[variant],
+          // @ts-ignore TYPE NEEDS FIXING
           WEIGHTS[weight],
           onClick ? 'cursor-pointer select-none' : '',
           className

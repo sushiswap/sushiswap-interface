@@ -52,6 +52,7 @@ export const useLegacyTransactions = (pairs?: string[]) => {
   const variables = { where: { pair_in: pairs } }
   const { data, error, isValidating } = useSWR<LegacyTransactions[]>(
     !!chainId && !!pairs ? ['legacyTransactions', chainId, JSON.stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     () => getTransactions(chainId, variables)
   )
   const transactions = useMemo(() => legacyTransactionDataFormatter(data || []), [data])

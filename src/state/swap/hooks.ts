@@ -188,6 +188,7 @@ export function useDerivedSwapInfo(): {
     inputError = inputError ?? i18n._(t`Enter a recipient`)
   } else {
     if (
+      // @ts-ignore TYPE NEEDS FIXING
       BAD_RECIPIENT_ADDRESSES?.[chainId]?.[formattedTo] ||
       (bestTradeExactIn && involvesAddress(bestTradeExactIn, formattedTo)) ||
       (bestTradeExactOut && involvesAddress(bestTradeExactOut, formattedTo))
@@ -196,6 +197,7 @@ export function useDerivedSwapInfo(): {
     }
   }
 
+  // @ts-ignore TYPE NEEDS FIXING
   const allowedSlippage = useSwapSlippageTolerance(v2Trade)
 
   // compare input balance to max input based on version

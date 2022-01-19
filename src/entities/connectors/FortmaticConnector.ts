@@ -17,6 +17,7 @@ const CHAIN_ID_NETWORK_ARGUMENT: {
 export class FortmaticConnector extends FortmaticConnectorCore {
   async activate() {
     if (!this.fortmatic) {
+      // @ts-ignore TYPE NEEDS FIXING
       const { default: Fortmatic } = await import('fortmatic')
 
       const { apiKey, chainId } = this as any

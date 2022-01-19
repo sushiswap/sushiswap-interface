@@ -40,6 +40,7 @@ function TokenListName({ token }: TokenListNameProps): JSX.Element {
   return (
     <>
       <div className="flex items-center">
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         <CurrencyLogo className="rounded-full" currency={currency} size={40} />
         <div className="ml-4 text-lg font-bold text-high-emphesis">{token.symbol}</div>
       </div>

@@ -32,6 +32,7 @@ export default function PoolFinder() {
 
   const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
+  // @ts-ignore TYPE NEEDS FIXING
   const [currency0, setCurrency0] = useState<Currency | null>(() => (chainId ? NATIVE[chainId] : null))
   const [currency1, setCurrency1] = useState<Currency | null>(null)
 

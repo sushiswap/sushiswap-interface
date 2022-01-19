@@ -45,7 +45,9 @@ function FarmListName({ pair }: FarmListNameProps): JSX.Element {
         <DoubleCurrencyLogo
           className="-space-x-3"
           logoClassName="rounded-full"
+          // @ts-ignore TYPE NEEDS FIXING
           currency0={token0}
+          // @ts-ignore TYPE NEEDS FIXING
           currency1={token1}
           size={40}
         />
@@ -107,6 +109,7 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
       {
         Header: 'Pool Name',
         accessor: 'pair',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => <FarmListName pair={props.value} />,
         disableSortBy: true,
         align: 'left',
@@ -114,6 +117,7 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
       {
         Header: 'Annual / Monthly / Daily APR',
         accessor: 'apr',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => (
           <div className="inline-flex flex-row font-medium">
             {props.value.annual < 10000 ? (
@@ -126,11 +130,13 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
           </div>
         ),
         align: 'right',
+        // @ts-ignore TYPE NEEDS FIXING
         sortType: (a, b) => a.original.apr.annual - b.original.apr.annual,
       },
       {
         Header: 'TVL',
         accessor: 'liquidity',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => (
           <div className="text-base font-medium text-primary">{formatNumber(props.value, true, false)}</div>
         ),
@@ -139,6 +145,7 @@ export default function FarmList({ pools }: FarmListProps): JSX.Element {
       {
         Header: 'Daily Rewards',
         accessor: 'rewards',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => <Rewards rewards={props.value} />,
         disableSortBy: true,
         align: 'right',

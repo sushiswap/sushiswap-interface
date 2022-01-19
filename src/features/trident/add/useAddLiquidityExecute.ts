@@ -120,6 +120,7 @@ export const useAddLiquidityExecute: UseAddLiquidityExecute = () => {
       } catch (error) {
         dispatch(setAddAttemptingTxn(false))
         // we only care if the error is something _other_ than the user rejected the tx
+        // @ts-ignore TYPE NEEDS FIXING
         if (error?.code !== 4001) {
           console.error(error)
         }

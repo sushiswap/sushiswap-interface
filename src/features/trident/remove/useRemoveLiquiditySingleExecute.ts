@@ -104,6 +104,7 @@ export const useRemoveLiquiditySingleExecute = () => {
       } catch (error) {
         dispatch(setRemoveAttemptingTxn(false))
         // we only care if the error is something _other_ than the user rejected the tx
+        // @ts-ignore TYPE NEEDS FIXING
         if (error?.code !== 4001) {
           console.error(error)
         }

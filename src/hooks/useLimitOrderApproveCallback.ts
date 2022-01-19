@@ -109,6 +109,7 @@ const useLimitOrderApproveCallback = () => {
     } catch (error) {
       console.log(error)
       return {
+        // @ts-ignore TYPE NEEDS FIXING
         outcome: error.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
       }
     }
@@ -123,6 +124,7 @@ const useLimitOrderApproveCallback = () => {
     } else {
       const { outcome, signature, data } = await approve()
 
+      // @ts-ignore TYPE NEEDS FIXING
       if (outcome === BentoApproveOutcome.SUCCESS) setLimitOrderPermit({ signature, data })
       else setFallback(true)
     }
@@ -163,6 +165,7 @@ const useLimitOrderApproveCallback = () => {
 
         const tx = await limitOrderHelperContract?.depositAndApprove(account, masterContract, true, v, r, s, {
           value: amount,
+          // @ts-ignore TYPE NEEDS FIXING
           gasLimit: calculateGasMargin(estimatedGas),
         })
 
@@ -173,6 +176,7 @@ const useLimitOrderApproveCallback = () => {
 
       // If bento is not yet approved but we do have the permit, add the permit to the batch
       if (approvalState === BentoApprovalState.NOT_APPROVED && limitOrderPermit) {
+        // @ts-ignore TYPE NEEDS FIXING
         batch.push(limitOrderPermit.data)
         summary.push('Approve Limit Order')
       }

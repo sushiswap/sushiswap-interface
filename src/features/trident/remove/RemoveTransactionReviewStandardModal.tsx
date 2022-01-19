@@ -29,6 +29,7 @@ const RemoveTransactionReviewStandardModal: FC<RemoveTransactionReviewStandardMo
 
   const liquidityOutput = minLiquidityOutput.map((el) => {
     if (el?.currency.wrapped.address === WNATIVE[chainId || 1].address && receiveETH) {
+      // @ts-ignore TYPE NEEDS FIXING
       return CurrencyAmount.fromRawAmount(NATIVE[chainId || 1], el.quotient.toString())
     }
 

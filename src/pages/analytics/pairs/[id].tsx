@@ -75,13 +75,17 @@ export default function Pair() {
       liquidity: pair?.reserveUSD,
       liquidityChange: (pair?.reserveUSD / pair1d?.reserveUSD) * 100 - 100,
       liquidityChart: pairDayData
+        // @ts-ignore TYPE NEEDS FIXING
         ?.sort((a, b) => a.date - b.date)
+        // @ts-ignore TYPE NEEDS FIXING
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.reserveUSD) })),
 
       volume1d: pair?.volumeUSD - pair1d?.volumeUSD,
       volume1dChange: ((pair?.volumeUSD - pair1d?.volumeUSD) / (pair1d?.volumeUSD - pair2d?.volumeUSD)) * 100 - 100,
       volumeChart: pairDayData
+        // @ts-ignore TYPE NEEDS FIXING
         ?.sort((a, b) => a.date - b.date)
+        // @ts-ignore TYPE NEEDS FIXING
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
     }),
     [pair, pair1d, pair2d, pairDayData]
@@ -135,7 +139,9 @@ export default function Pair() {
             <DoubleCurrencyLogo
               className="-space-x-3"
               logoClassName="rounded-full"
+              /* @ts-ignore TYPE NEEDS FIXING */
               currency0={currency0}
+              /* @ts-ignore TYPE NEEDS FIXING */
               currency1={currency1}
               size={54}
             />
@@ -186,6 +192,7 @@ export default function Pair() {
           {times(2).map((i) => (
             <div key={i} className="w-full p-6 space-y-2 border rounded bg-dark-900 border-dark-700">
               <div className="flex flex-row items-center space-x-2">
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <CurrencyLogo size={32} currency={[currency0, currency1][i]} />
                 <div className="text-2xl font-bold">{formatNumber([pair?.reserve0, pair?.reserve1][i])}</div>
                 <div className="text-lg text-secondary">{[pair?.token0, pair?.token1][i]?.symbol}</div>

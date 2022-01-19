@@ -18,6 +18,7 @@ function Web3Network(): JSX.Element | null {
       onClick={() => toggleNetworkModal()}
     >
       <div className="grid items-center grid-flow-col items-center justify-center bg-dark-1000 h-[36px] w-[36px] text-sm rounded pointer-events-auto auto-cols-max text-secondary">
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         <Image src={NETWORK_ICON[chainId]} alt="Switch Network" className="rounded-md" width="22px" height="22px" />
       </div>
       <NetworkModel />

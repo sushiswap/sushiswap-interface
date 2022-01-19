@@ -22,6 +22,7 @@ import { RecoilRoot } from 'recoil'
 export default function Borrow() {
   const { i18n } = useLingui()
   const addresses = useKashiPairAddresses()
+  // @ts-ignore TYPE NEEDS FIXING
   const pairs = useKashiPairs(addresses)
 
   const positions = useSearchAndSort(
@@ -298,6 +299,7 @@ export default function Borrow() {
 
 Borrow.Provider = RecoilRoot
 
+// @ts-ignore TYPE NEEDS FIXING
 const BorrowLayout = ({ children }) => {
   const { i18n } = useLingui()
   return (

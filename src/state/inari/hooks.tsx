@@ -40,6 +40,7 @@ export function useDerivedInariState(): DerivedInariState {
     [tokens.outputToken.address, tokens.outputToken.chainId, tokens.outputToken.decimals, tokens.outputToken.symbol]
   )
 
+  // @ts-ignore TYPE NEEDS FIXING
   return useMemo(
     () => ({
       ...rest,

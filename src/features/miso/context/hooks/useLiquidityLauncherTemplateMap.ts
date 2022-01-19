@@ -22,9 +22,11 @@ export const useLiquidityLauncherTemplateMap = () => {
     if (!chainId) return undefined
 
     return {
+      // @ts-ignore TYPE NEEDS FIXING
       [MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.address]:
         LiquidityLauncherTemplate.PostAuctionLauncher,
       [LiquidityLauncherTemplate.PostAuctionLauncher]:
+        // @ts-ignore TYPE NEEDS FIXING
         MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher,
     }
   }, [chainId])

@@ -9,6 +9,7 @@ import React from 'react'
 import { PairType } from './enum'
 import FarmListItemDetails from './FarmListItemDetails'
 
+// @ts-ignore TYPE NEEDS FIXING
 const FarmListItem = ({ farm, ...rest }) => {
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
@@ -25,6 +26,7 @@ const FarmListItem = ({ farm, ...rest }) => {
           >
             <div className="grid grid-cols-4">
               <div className="flex col-span-2 pl-4 space-x-4 md:col-span-1">
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <DoubleLogo currency0={token0} currency1={token1} size={40} />
                 <div className="flex flex-col justify-center">
                   <div>
@@ -44,6 +46,7 @@ const FarmListItem = ({ farm, ...rest }) => {
               <div className="flex flex-col justify-center pl-8 font-bold">{formatNumber(farm.tvl, true)}</div>
               <div className="flex-row items-center hidden pl-4 space-x-4 md:flex">
                 <div className="flex items-center space-x-2">
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {farm?.rewards?.map((reward, i) => (
                     <div key={i} className="flex items-center">
                       <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />
@@ -51,6 +54,7 @@ const FarmListItem = ({ farm, ...rest }) => {
                   ))}
                 </div>
                 <div className="flex flex-col space-y-1">
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {farm?.rewards?.map((reward, i) => (
                     <div key={i} className="text-xs md:text-sm whitespace-nowrap">
                       {formatNumber(reward.rewardPerDay)} {reward.currency.symbol} / DAY

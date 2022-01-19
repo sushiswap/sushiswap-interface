@@ -59,25 +59,31 @@ const PoolStatsChart = () => {
 
   const graphData = useMemo(() => {
     const currentDate = Math.round(Date.now() / 1000)
-    return data
-      ?.reduce((acc, cur) => {
-        const x = cur.date.getTime()
-        if (Math.round(x / 1000) >= currentDate - chartTimespans[chartRange]) {
-          acc.push({
-            x,
-            y: Number(chartType === ChartType.Volume ? cur.volumeUSD : cur.liquidityUSD),
-          })
-        }
+    return (
+      data
+        ?.reduce((acc, cur) => {
+          const x = cur.date.getTime()
+          if (Math.round(x / 1000) >= currentDate - chartTimespans[chartRange]) {
+            acc.push({
+              // @ts-ignore TYPE NEEDS FIXING
+              x,
+              // @ts-ignore TYPE NEEDS FIXING
+              y: Number(chartType === ChartType.Volume ? cur.volumeUSD : cur.liquidityUSD),
+            })
+          }
 
-        return acc
-      }, [])
-      .sort((a, b) => a.x - b.x)
+          return acc
+        }, [])
+        // @ts-ignore TYPE NEEDS FIXING
+        .sort((a, b) => a.x - b.x)
+    )
   }, [data, chartRange, chartType])
 
   const [selectedIndex, setSelectedIndex] = useState(graphData?.length - 1)
 
   const chartButtons = (
     <div className="flex justify-between lg:justify-end lg:gap-1">
+      {/*@ts-ignore TYPE NEEDS FIXING*/}
       {Object.keys(chartTimespans).map((text: ChartRange) => (
         <Button
           key={text}
@@ -104,9 +110,11 @@ const PoolStatsChart = () => {
         <div className="w-full h-40 lg:order-2">
           <div className="mt-6">
             <Typography variant="h3" className="text-high-emphesis" weight={700}>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatNumber(graphData[selectedIndex]?.y, true, false, 2)}
             </Typography>
             <Typography variant="sm" className="text-gray-500 text-high-emphesis" weight={700}>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatDate(new Date(graphData[selectedIndex]?.x))}
             </Typography>
           </div>
