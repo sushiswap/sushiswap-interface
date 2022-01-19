@@ -34,7 +34,6 @@ const features: FeatureMap = {
   [ChainId.MATIC]: [
     Feature.AMM,
     Feature.LIQUIDITY_MINING,
-    Feature.LIMIT_ORDERS,
     Feature.BENTOBOX,
     Feature.KASHI,
     Feature.MIGRATE,
@@ -43,7 +42,7 @@ const features: FeatureMap = {
   [ChainId.MATIC_TESTNET]: [Feature.AMM],
   [ChainId.HARMONY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
   [ChainId.HARMONY_TESTNET]: [Feature.AMM],
-  [ChainId.AVALANCHE]: [Feature.AMM, Feature.BENTOBOX, Feature.KASHI, Feature.LIMIT_ORDERS],
+  [ChainId.AVALANCHE]: [Feature.AMM, Feature.BENTOBOX, Feature.KASHI],
   [ChainId.AVALANCHE_TESTNET]: [Feature.AMM],
   [ChainId.OKEX]: [Feature.AMM],
   [ChainId.OKEX_TESTNET]: [Feature.AMM],
