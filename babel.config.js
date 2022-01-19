@@ -16,15 +16,3 @@ module.exports = function (api) {
 
   return { presets, plugins: ['macros'] }
 }
-
-// module.exports = {
-//   presets: [
-//     'next/babel',
-//     {
-//       'preset-react': {
-//         importSource: !isServer && isCallerDevelopment ? '@welldone-software/why-did-you-render' : 'react',
-//       },
-//     },
-//   ],
-//   plugins: ['macros'],
-// }
