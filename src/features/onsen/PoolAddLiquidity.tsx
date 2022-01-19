@@ -3,7 +3,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { HeadlessUiModal } from 'app/components/Modal'
@@ -66,6 +66,15 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
   // check whether the user has approved the router on the tokens
   const [approvalA, approveACallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_A], routerContract?.address)
   const [approvalB, approveBCallback] = useApproveCallback(parsedAmounts[Field.CURRENCY_B], routerContract?.address)
+
+  const minLiquidityMintedJSBI = liquidityMinted
+    ? calculateSlippageAmount(liquidityMinted, noLiquidity ? ZERO_PERCENT : allowedSlippage)[0]
+    : undefined
+
+  const minLiquidityCurrencyAmount =
+    liquidityMinted?.currency && minLiquidityMintedJSBI
+      ? CurrencyAmount.fromRawAmount(liquidityMinted.currency, minLiquidityMintedJSBI)
+      : undefined
 
   async function onAdd() {
     if (!chainId || !library || !account || !routerContract) return
@@ -232,7 +241,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
               : setContent(
                   <PoolAddLiquidityReviewContent
                     noLiquidity={noLiquidity}
-                    liquidityMinted={liquidityMinted}
+                    liquidityMinted={minLiquidityCurrencyAmount}
                     poolShare={poolTokenPercentage}
                     parsedAmounts={parsedAmounts}
                     execute={onAdd}

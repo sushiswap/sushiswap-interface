@@ -3,7 +3,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { Contract } from '@ethersproject/contracts'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/core-sdk'
+import { ChainId, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
@@ -96,6 +96,21 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
     [onUserInput]
   )
 
+  const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
+  const amountsMin = {
+    [Field.CURRENCY_A]: parsedAmountA ? calculateSlippageAmount(parsedAmountA, allowedSlippage)[0] : undefined,
+    [Field.CURRENCY_B]: parsedAmountB ? calculateSlippageAmount(parsedAmountB, allowedSlippage)[0] : undefined,
+  }
+
+  const amountsMinCurrencyAmount = {
+    [Field.CURRENCY_A]: amountsMin[Field.CURRENCY_A]
+      ? CurrencyAmount.fromRawAmount(parsedAmountA.currency, amountsMin[Field.CURRENCY_A])
+      : undefined,
+    [Field.CURRENCY_B]: amountsMin[Field.CURRENCY_B]
+      ? CurrencyAmount.fromRawAmount(parsedAmountB.currency, amountsMin[Field.CURRENCY_B])
+      : undefined,
+  }
+
   // tx sending
   const addTransaction = useTransactionAdder()
 
@@ -104,11 +119,6 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
     const { [Field.CURRENCY_A]: currencyAmountA, [Field.CURRENCY_B]: currencyAmountB } = parsedAmounts
     if (!currencyAmountA || !currencyAmountB) {
       throw new Error('missing currency amounts')
-    }
-
-    const amountsMin = {
-      [Field.CURRENCY_A]: calculateSlippageAmount(currencyAmountA, allowedSlippage)[0],
-      [Field.CURRENCY_B]: calculateSlippageAmount(currencyAmountB, allowedSlippage)[0],
     }
 
     if (!currencyA || !currencyB) throw new Error('missing tokens')
@@ -274,7 +284,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
           )}
         </div>
         <ListPanel
-          items={[parsedAmounts[Field.CURRENCY_A], parsedAmounts[Field.CURRENCY_B]].map((parsedInputAmount, index) => (
+          items={Object.values(amountsMinCurrencyAmount).map((parsedInputAmount, index) => (
             <ListPanel.CurrencyAmountItem amount={parsedInputAmount} key={index} />
           ))}
         />
@@ -304,7 +314,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
             setContent(
               <PoolRemoveLiquidityReviewContent
                 liquidityAmount={parsedAmounts[Field.LIQUIDITY]}
-                parsedAmounts={[parsedAmounts[Field.CURRENCY_A], parsedAmounts[Field.CURRENCY_B]]}
+                parsedAmounts={Object.values(amountsMinCurrencyAmount)}
                 execute={onRemove}
               />
             )
