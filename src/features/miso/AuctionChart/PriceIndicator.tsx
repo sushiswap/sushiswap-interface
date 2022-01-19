@@ -16,7 +16,6 @@ export const PriceIndicator: FC<{
 }> = ({ orientation, x, y, auction }) => {
   const { i18n } = useLingui()
   const symbol = auction?.minimumPrice ? auction?.minimumPrice?.quoteCurrency?.symbol : auction?.paymentToken?.symbol
-  console.log({ auction, symbol })
 
   const priceInfoWidth = useTextWidth({
     text: `Current Token Value`,
