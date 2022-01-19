@@ -199,8 +199,8 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(true)
     await addLiquidityPage.setAssetBFundFromWallet(true)
 
-    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
     await addLiquidityPage.setAssetBDepositAmount(assetBDepositAmount)
+    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
 
     const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
 
@@ -251,8 +251,8 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(false)
     await addLiquidityPage.setAssetBFundFromWallet(true)
 
-    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
 
     const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
 
@@ -303,8 +303,8 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(true)
     await addLiquidityPage.setAssetBFundFromWallet(false)
 
-    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
 
     const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
 

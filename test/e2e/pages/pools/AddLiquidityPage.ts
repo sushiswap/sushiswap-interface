@@ -5,7 +5,7 @@ import { AppPage } from '../AppPage'
 export class AddLiquidityPage extends AppPage {
   private ConfirmDepositButtonSelector: string = '#btn-ConfirmDeposit'
   private ModalConfirmDepositButtonSelector: string = '#btn-modal-confirm-deposit'
-  private DepositStatusDivSelector: string = 'div-deposit-status'
+  private TxStatusDivSelector: string = 'div-tx-status'
   private ApproveButtonSelector: string = '#btn-approve'
   private FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-deposit'
 
@@ -56,7 +56,7 @@ export class AddLiquidityPage extends AppPage {
 
     await this.confirmMetamaskTransaction()
 
-    await this.Page.waitForXPath(`//div[@id='${this.DepositStatusDivSelector}' and contains(., 'Success')]`)
+    await this.Page.waitForXPath(`//div[@id='${this.TxStatusDivSelector}' and contains(., 'Success')]`)
 
     await this.blockingWait(5)
   }

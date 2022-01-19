@@ -107,7 +107,7 @@ describe('Swap:', () => {
     expect(closeValues(parseFloat(inputTokenBalance), parseFloat(inputTokenAmount), 1e-3)).toBe(true)
   })
 
-  test.only('Should click max button for bento', async () => {
+  test('Should click max button for bento', async () => {
     await swapPage.setPayFromWallet(false)
 
     await swapPage.setInputToken('USDC')

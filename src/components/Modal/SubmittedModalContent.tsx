@@ -61,7 +61,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
             <Typography variant="sm" className="text-secondary">
               {i18n._(t`Status`)}
             </Typography>
-            <Typography id={`div-deposit-status`} variant="sm" weight={700} className="flex items-center gap-2 italic">
+            <Typography id={`div-tx-status`} variant="sm" weight={700} className="flex items-center gap-2 italic">
               {txStatus === 'PENDING'
                 ? i18n._(t`Processing`)
                 : txStatus === 'SUCCESS'
