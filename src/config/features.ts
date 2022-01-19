@@ -33,7 +33,7 @@ const features: FeatureMap = {
   [ChainId.FANTOM_TESTNET]: [Feature.AMM],
   [ChainId.MATIC]: [
     Feature.AMM,
-    Feature.LIQUIDITY_MINING
+    Feature.LIQUIDITY_MINING,
     Feature.BENTOBOX,
     Feature.KASHI,
     Feature.MIGRATE,
