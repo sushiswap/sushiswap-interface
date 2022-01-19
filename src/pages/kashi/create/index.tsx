@@ -62,6 +62,7 @@ export default function Create() {
     async (asset: Currency, collateral: Currency) => {
       const oracleData = ''
 
+      // @ts-ignore TYPE NEEDS FIXING
       const mapping = CHAINLINK_PRICE_FEED_MAP[chainId]
 
       for (const address in mapping) {
@@ -72,6 +73,7 @@ export default function Create() {
       let divide = AddressZero
 
       const multiplyMatches = Object.values(mapping).filter(
+        // @ts-ignore TYPE NEEDS FIXING
         (m) => m.from === asset.wrapped.address && m.to === collateral.wrapped.address
       )
 
@@ -79,28 +81,39 @@ export default function Create() {
 
       if (multiplyMatches.length) {
         const match = multiplyMatches[0]
+        // @ts-ignore TYPE NEEDS FIXING
         multiply = match.address!
+        // @ts-ignore TYPE NEEDS FIXING
         decimals = 18 + match.decimals - match.toDecimals + match.fromDecimals
       } else {
         const divideMatches = Object.values(mapping).filter(
+          // @ts-ignore TYPE NEEDS FIXING
           (m) => m.from === collateral.wrapped.address && m.to === asset.wrapped.address
         )
         if (divideMatches.length) {
           const match = divideMatches[0]
+          // @ts-ignore TYPE NEEDS FIXING
           divide = match.address!
+          // @ts-ignore TYPE NEEDS FIXING
           decimals = 36 - match.decimals - match.toDecimals + match.fromDecimals
         } else {
+          // @ts-ignore TYPE NEEDS FIXING
           const mapFrom = Object.values(mapping).filter((m) => m.from === asset.wrapped.address)
+          // @ts-ignore TYPE NEEDS FIXING
           const mapTo = Object.values(mapping).filter((m) => m.from === collateral.wrapped.address)
           const match = mapFrom
             .map((mfrom) => ({
               mfrom: mfrom,
+              // @ts-ignore TYPE NEEDS FIXING
               mto: mapTo.filter((mto) => mfrom.to === mto.to),
             }))
             .filter((path) => path.mto.length)
           if (match.length) {
+            // @ts-ignore TYPE NEEDS FIXING
             multiply = match[0].mfrom.address!
+            // @ts-ignore TYPE NEEDS FIXING
             divide = match[0].mto[0].address!
+            // @ts-ignore TYPE NEEDS FIXING
             decimals = 18 + match[0].mfrom.decimals - match[0].mto[0].decimals - collateral.decimals + asset.decimals
           } else {
             return ''
@@ -117,6 +130,7 @@ export default function Create() {
     try {
       if (!both) return
 
+      // @ts-ignore TYPE NEEDS FIXING
       const oracleData = await getOracleData(currencies[Field.ASSET], currencies[Field.COLLATERAL])
 
       if (!oracleData) {
@@ -124,22 +138,27 @@ export default function Create() {
         return
       }
 
+      // @ts-ignore TYPE NEEDS FIXING
       if (!(chainId in CHAINLINK_ORACLE_ADDRESS)) {
         console.log('No chainlink oracle address')
         return
       }
 
+      // @ts-ignore TYPE NEEDS FIXING
       if (!(chainId in KASHI_ADDRESS)) {
         console.log('No kashi address')
         return
       }
 
+      // @ts-ignore TYPE NEEDS FIXING
       const oracleAddress = CHAINLINK_ORACLE_ADDRESS[chainId]
 
       const kashiData = defaultAbiCoder.encode(
         ['address', 'address', 'address', 'bytes'],
         [
+          // @ts-ignore TYPE NEEDS FIXING
           currencies[Field.COLLATERAL].wrapped.address,
+          // @ts-ignore TYPE NEEDS FIXING
           currencies[Field.ASSET].wrapped.address,
           oracleAddress,
           oracleData,
@@ -147,7 +166,9 @@ export default function Create() {
       )
 
       console.log([
+        // @ts-ignore TYPE NEEDS FIXING
         currencies[Field.COLLATERAL].wrapped.address,
+        // @ts-ignore TYPE NEEDS FIXING
         currencies[Field.ASSET].wrapped.address,
         oracleAddress,
         oracleData,
@@ -156,6 +177,7 @@ export default function Create() {
       const tx = await bentoBoxContract?.deploy(chainId && KASHI_ADDRESS[chainId], kashiData, true)
 
       addTransaction(tx, {
+        // @ts-ignore TYPE NEEDS FIXING
         summary: `Add Kashi market ${currencies[Field.ASSET].symbol}/${currencies[Field.COLLATERAL].symbol} Chainlink`,
       })
 
@@ -226,6 +248,7 @@ export default function Create() {
   )
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const CreateLayout = ({ children }) => {
   const { i18n } = useLingui()
   return (

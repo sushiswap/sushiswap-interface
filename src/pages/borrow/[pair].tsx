@@ -34,20 +34,24 @@ export default function Pair() {
   return (
     <PairLayout>
       <Head>
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         <title>{i18n._(t`Borrow ${pair?.asset?.symbol}-${pair?.collateral?.symbol}`)} | Sushi</title>
         <meta
           key="description"
           name="description"
+          /* @ts-ignore TYPE NEEDS FIXING */
           content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
         />
         <meta
           key="twitter:description"
           name="twitter:description"
+          /* @ts-ignore TYPE NEEDS FIXING */
           content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
         />
         <meta
           key="og:description"
           property="og:description"
+          /* @ts-ignore TYPE NEEDS FIXING */
           content={`Borrow ${pair?.asset?.symbol} against ${pair?.collateral?.symbol} collateral on Kashi by Sushi`}
         />
       </Head>
@@ -62,16 +66,20 @@ export default function Pair() {
                     <Image
                       height={48}
                       width={48}
+                      /* @ts-ignore TYPE NEEDS FIXING */
                       src={pair.asset.tokenInfo.logoURI}
                       className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      /* @ts-ignore TYPE NEEDS FIXING */
                       alt={pair.asset.tokenInfo.symbol}
                     />
 
                     <Image
                       height={48}
                       width={48}
+                      /* @ts-ignore TYPE NEEDS FIXING */
                       src={pair.collateral.tokenInfo.logoURI}
                       className="block w-10 h-10 rounded-lg sm:w-12 sm:h-12"
+                      /* @ts-ignore TYPE NEEDS FIXING */
                       alt={pair.collateral.tokenInfo.symbol}
                     />
                   </>
@@ -79,11 +87,14 @@ export default function Pair() {
               </div>
               <div className="flex items-center justify-between">
                 <div>
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   <div className="text-3xl text-high-emphesis">{i18n._(t`Borrow ${pair.asset.tokenInfo.symbol}`)}</div>
                   <div className="flex items-center">
                     <div className="mr-1 text-sm text-secondary">{i18n._(t`Collateral`)}:</div>
+                    {/*@ts-ignore TYPE NEEDS FIXING*/}
                     <div className="mr-2 text-sm text-high-emphesis">{pair.collateral.tokenInfo.symbol}</div>
                     <div className="mr-1 text-sm text-secondary">{i18n._(t`Oracle`)}:</div>
+                    {/*@ts-ignore TYPE NEEDS FIXING*/}
                     <div className="text-sm text-high-emphesis">{pair.oracle.name}</div>
                   </div>
                 </div>
@@ -96,23 +107,29 @@ export default function Pair() {
           <div>
             <div className="text-lg text-secondary">{i18n._(t`Collateral`)}</div>
             <div className="text-2xl text-blue">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatNumber(pair.userCollateralAmount.string)} {pair.collateral.tokenInfo.symbol}
             </div>
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             <div className="text-lg text-high-emphesis">{formatNumber(pair.userCollateralAmount.usd, true)}</div>
           </div>
           <div>
             <div className="text-lg text-secondary">{i18n._(t`Borrowed`)}</div>
             <div className="text-2xl text-pink">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatNumber(pair.currentUserBorrowAmount.string)} {pair.asset.tokenInfo.symbol}
             </div>
             <div className="flex items-center text-lg text-high-emphesis">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatPercent(pair.health.string)}
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <GradientDot percent={pair.health.string}></GradientDot>
             </div>
           </div>
           <div className="text-right">
             <div>
               <div className="text-lg text-secondary">{i18n._(t`APR`)}</div>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <div className="text-2xl text-high-emphesis">{formatPercent(pair.interestPerYear.string)}</div>
             </div>
           </div>
@@ -152,14 +169,20 @@ export default function Pair() {
 
 Pair.Provider = RecoilRoot
 
+// @ts-ignore TYPE NEEDS FIXING
 const PairLayout = ({ children }) => {
   const { i18n } = useLingui()
   const router = useRouter()
   const pair = useKashiPair(router.query.pair as string)
+  // @ts-ignore TYPE NEEDS FIXING
   const asset = useToken(pair?.asset.address)
+  // @ts-ignore TYPE NEEDS FIXING
   const collateral = useToken(pair?.collateral.address)
+  // @ts-ignore TYPE NEEDS FIXING
   const [pairState, liquidityPair] = useV2Pair(asset, collateral)
+  // @ts-ignore TYPE NEEDS FIXING
   const assetPrice = useUSDCPrice(asset)
+  // @ts-ignore TYPE NEEDS FIXING
   const collateralPrice = useUSDCPrice(collateral)
 
   return pair ? (
@@ -183,6 +206,7 @@ const PairLayout = ({ children }) => {
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`APR`)}</div>
               <div className="flex items-center">
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <div className="text-lg text-high-emphesis">{formatPercent(pair?.currentInterestPerYear.string)}</div>
               </div>
             </div>
@@ -193,6 +217,7 @@ const PairLayout = ({ children }) => {
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Total`)}</div>
               <div className="text-lg text-high-emphesis">
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {formatNumber(pair?.currentAllAssets.string)} {pair?.asset.tokenInfo.symbol}
               </div>
             </div>
@@ -200,6 +225,7 @@ const PairLayout = ({ children }) => {
               <div className="text-lg text-secondary">{i18n._(t`Available`)}</div>
               <div className="flex items-center">
                 <div className="text-lg text-high-emphesis">
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {formatNumber(pair?.totalAssetAmount.string)} {pair?.asset.tokenInfo.symbol}
                 </div>
               </div>
@@ -207,6 +233,7 @@ const PairLayout = ({ children }) => {
             <div className="flex justify-between">
               <div className="text-lg text-secondary">{i18n._(t`Borrowed`)}</div>
               <div className="flex items-center">
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <div className="text-lg text-high-emphesis">{formatPercent(pair?.utilization.string)}</div>
               </div>
             </div>
@@ -219,6 +246,7 @@ const PairLayout = ({ children }) => {
 
             <div className="flex justify-between">
               <div className="text-lg text-secondary">Name</div>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <div className="text-lg text-high-emphesis">{pair?.oracle.name}</div>
             </div>
 
@@ -226,8 +254,10 @@ const PairLayout = ({ children }) => {
               <div className="text-xl text-high-emphesis">{i18n._(t`BentoBox`)}</div>
             </div>
             <div className="flex justify-between">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <div className="text-lg text-secondary">{i18n._(t`${pair?.collateral.tokenInfo.symbol} Strategy`)}</div>
               <div className="flex flex-row text-lg text-high-emphesis">
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {pair.collateral.strategy ? (
                   i18n._(t`Active`)
                 ) : (
@@ -243,8 +273,10 @@ const PairLayout = ({ children }) => {
               </div>
             </div>
 
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             <Strategy token={pair.collateral} />
 
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {pair && pair.oracle.name === 'SushiSwap' && (
               <>
                 <div className="flex justify-between pt-3">
@@ -267,7 +299,9 @@ const PairLayout = ({ children }) => {
                       <div className="text-lg text-high-emphesis">
                         {formatNumber(
                           liquidityPair?.reserve1
+                            // @ts-ignore TYPE NEEDS FIXING
                             .multiply(assetPrice?.quotient)
+                            // @ts-ignore TYPE NEEDS FIXING
                             .add(liquidityPair?.reserve1.multiply(collateralPrice?.quotient))
                             .toSignificant(4),
                           true

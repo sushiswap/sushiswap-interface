@@ -66,6 +66,7 @@ export const PriceIndicator: FC<{
         x={orientation === 'bottom' ? tooltipBottomPositionX : tooltipTopPositionX}
         y={orientation === 'bottom' ? tooltipBottomPositionY : tooltipTopPositionY}
       >
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         <QuestionHelper text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}>
           <span>
             <QuestionMarkCircleIcon width={12} height={12} className="ml-0 text-secondary mb-[4px] text-dark-400" />

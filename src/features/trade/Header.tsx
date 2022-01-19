@@ -10,6 +10,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
 
+// @ts-ignore TYPE NEEDS FIXING
 const getQuery = (input, output) => {
   if (!input && !output) return
 

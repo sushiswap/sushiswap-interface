@@ -41,31 +41,44 @@ export function useKashiPairAddresses(): string[] {
   const events = useQueryFilter({
     chainId,
     contract: bentoBoxContract,
+    // @ts-ignore TYPE NEEDS FIXING
     event: bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
     shouldFetch: useEvents && featureEnabled(Feature.KASHI, chainId),
   })
   const clones = useClones({ chainId, shouldFetch: !useEvents })
   return (
-    useEvents ? events?.map((event) => ({ address: event.args.cloneAddress, data: event.args.data })) : clones
-  )?.reduce((previousValue, currentValue) => {
-    try {
-      const [collateral, asset, oracle, oracleData] = defaultAbiCoder.decode(
-        ['address', 'address', 'address', 'bytes'],
-        currentValue.data
-      )
-      if (
-        BLACKLISTED_TOKENS.includes(collateral) ||
-        BLACKLISTED_TOKENS.includes(asset) ||
-        BLACKLISTED_ORACLES.includes(oracle) ||
-        !validateChainlinkOracleData(chainId, allTokens[collateral], allTokens[asset], oracleData)
-      ) {
-        return previousValue
-      }
-      return [...previousValue, currentValue.address]
-    } catch (error) {
-      return previousValue
-    }
-  }, [])
+    (
+      useEvents
+        ? events?.map((event) => ({
+            address:
+              // @ts-ignore TYPE NEEDS FIXING
+              event.args.cloneAddress,
+            // @ts-ignore TYPE NEEDS FIXING
+            data: event.args.data,
+          }))
+        : clones
+    )
+      // @ts-ignore TYPE NEEDS FIXING
+      ?.reduce((previousValue, currentValue) => {
+        try {
+          const [collateral, asset, oracle, oracleData] = defaultAbiCoder.decode(
+            ['address', 'address', 'address', 'bytes'],
+            currentValue.data
+          )
+          if (
+            BLACKLISTED_TOKENS.includes(collateral) ||
+            BLACKLISTED_TOKENS.includes(asset) ||
+            BLACKLISTED_ORACLES.includes(oracle) ||
+            !validateChainlinkOracleData(chainId, allTokens[collateral], allTokens[asset], oracleData)
+          ) {
+            return previousValue
+          }
+          return [...previousValue, currentValue.address]
+        } catch (error) {
+          return previousValue
+        }
+      }, [])
+  )
 }
 
 export function useKashiPairs(addresses = []) {
@@ -73,8 +86,10 @@ export function useKashiPairs(addresses = []) {
 
   const boringHelperContract = useBoringHelperContract()
 
+  // @ts-ignore TYPE NEEDS FIXING
   const wnative = WNATIVE_ADDRESS[chainId]
 
+  // @ts-ignore TYPE NEEDS FIXING
   const currency = USD[chainId]
 
   const allTokens = useAllTokens()
@@ -82,6 +97,7 @@ export function useKashiPairs(addresses = []) {
   const pollArgs = useMemo(() => [account, addresses], [account, addresses])
 
   // TODO: Replace
+  // @ts-ignore TYPE NEEDS FIXING
   const pollKashiPairs = useSingleCallResult(boringHelperContract, 'pollKashiPairs', pollArgs)?.result?.[0]
 
   const tokens = useMemo<Token[]>(() => {
@@ -89,6 +105,7 @@ export function useKashiPairs(addresses = []) {
       return []
     }
     return Array.from(
+      // @ts-ignore TYPE NEEDS FIXING
       pollKashiPairs?.reduce((previousValue, currentValue) => {
         const asset = allTokens[currentValue.asset]
         const collateral = allTokens[currentValue.collateral]
@@ -102,7 +119,9 @@ export function useKashiPairs(addresses = []) {
   const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token?.address)], [account, tokens])
 
   // TODO: Replace
+  // @ts-ignore TYPE NEEDS FIXING
   const balances = useSingleCallResult(boringHelperContract, 'getBalances', getBalancesArgs)?.result?.[0]?.reduce(
+    // @ts-ignore TYPE NEEDS FIXING
     (previousValue, currentValue) => {
       return { ...previousValue, [currentValue[0]]: currentValue }
     },
@@ -116,6 +135,7 @@ export function useKashiPairs(addresses = []) {
       const balance = balances[currentValue.address]
       const strategy = strategies?.find((strategy) => strategy.token === currentValue.address.toLowerCase())
       const usd = e10(currentValue.decimals).mulDiv(balances[currency.address].rate, balance.rate)
+      // @ts-ignore TYPE NEEDS FIXING
       const symbol = currentValue.address === wnative ? NATIVE[chainId].symbol : currentValue.symbol
       return {
         ...previousValue,
@@ -143,7 +163,9 @@ export function useKashiPairs(addresses = []) {
 
         pair.address = currentValue
         pair.oracle = getOracle(chainId, pair.oracle, pair.oracle.data)
+        // @ts-ignore TYPE NEEDS FIXING
         pair.asset = pairTokens[pair.asset]
+        // @ts-ignore TYPE NEEDS FIXING
         pair.collateral = pairTokens[pair.collateral]
 
         pair.elapsedSeconds = BigNumber.from(Date.now()).div('1000').sub(pair.accrueInfo.lastAccrued)
@@ -302,6 +324,7 @@ export function useKashiPairs(addresses = []) {
 
         pair.safeMaxRemovable = easyAmount(pair.safeMaxRemovable, pair.collateral)
 
+        // @ts-ignore TYPE NEEDS FIXING
         previousValue = [...previousValue, pair]
       }
 
@@ -321,5 +344,6 @@ export function useKashiPairs(addresses = []) {
 }
 
 export function useKashiPair(address: string) {
+  // @ts-ignore TYPE NEEDS FIXING
   return useKashiPairs([getAddress(address)])[0]
 }

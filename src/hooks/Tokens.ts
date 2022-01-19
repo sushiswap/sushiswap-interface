@@ -185,11 +185,13 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
 
   const isETH = currencyId?.toUpperCase() === 'ETH'
 
+  // @ts-ignore TYPE NEEDS FIXING
   const isDual = [ChainId.CELO].includes(chainId)
 
   const useNative = isETH && !isDual
 
   if (isETH && isDual) {
+    // @ts-ignore TYPE NEEDS FIXING
     currencyId = WNATIVE_ADDRESS[chainId]
   }
 
@@ -197,6 +199,7 @@ export function useCurrency(currencyId: string | undefined): Currency | null | u
 
   const { native, wnative } = useMemo(
     () => ({
+      // @ts-ignore TYPE NEEDS FIXING
       native: chainId && chainId in NATIVE ? NATIVE[chainId] : undefined,
       wnative: chainId && chainId in WNATIVE ? WNATIVE[chainId] : undefined,
     }),

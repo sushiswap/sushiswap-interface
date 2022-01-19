@@ -80,6 +80,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, class
               <CurrencySearchModal.Controlled
                 open={open}
                 selectedCurrency={props.currency}
+                // @ts-ignore TYPE NEEDS FIXING
                 onCurrencySelect={props.onSelect}
                 onDismiss={() => setOpen(false)}
                 currencyList={props.currencies}
@@ -180,6 +181,7 @@ const AssetInputPanel = ({
               </div>
             }
             selectedCurrency={currency}
+            // @ts-ignore TYPE NEEDS FIXING
             onCurrencySelect={onSelect}
             currencyList={currencies}
           />

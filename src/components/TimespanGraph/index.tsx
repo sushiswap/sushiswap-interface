@@ -1,3 +1,4 @@
+// @ts-ignore TYPE NEEDS FIXING
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import Curves from './Curves'
@@ -20,6 +21,7 @@ export default function TimespanGraph(props: TimespanGraphProps) {
   return (
     <>
       {props.data && props.data[0]?.length !== 0 && (
+        // @ts-ignore TYPE NEEDS FIXING
         <AutoSizer>{({ width, height }) => <Curves {...props} width={width} height={height} />}</AutoSizer>
       )}
     </>

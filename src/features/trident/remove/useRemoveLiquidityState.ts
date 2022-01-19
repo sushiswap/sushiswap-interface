@@ -11,6 +11,7 @@ export const useAddLiquidityState = () => {
 
   // Similar to setState(prevState => newState) if a function is passed as value to setInputs, pass previous state
   const setInputs = useMemo(
+    // @ts-ignore TYPE NEEDS FIXING
     () => (values) => dispatch(setAddNormalInput(typeof values === 'function' ? values(normalInput) : values)),
     [dispatch, normalInput]
   )

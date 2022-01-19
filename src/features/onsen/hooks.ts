@@ -59,6 +59,7 @@ export function useChefContracts(chefs: Chef[]) {
   return chefs.map((chef) => contracts[chef])
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useUserInfo(farm, token) {
   const { account } = useActiveWeb3React()
 
@@ -80,6 +81,7 @@ export function useUserInfo(farm, token) {
   return amount ? CurrencyAmount.fromRawAmount(token, amount) : undefined
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function usePendingSushi(farm) {
   const { account, chainId } = useActiveWeb3React()
 
@@ -98,9 +100,11 @@ export function usePendingSushi(farm) {
 
   const amount = value ? JSBI.BigInt(value.toString()) : undefined
 
+  // @ts-ignore TYPE NEEDS FIXING
   return amount ? CurrencyAmount.fromRawAmount(SUSHI[chainId], amount) : undefined
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function usePendingToken(farm, contract) {
   const { account } = useActiveWeb3React()
 
@@ -114,6 +118,7 @@ export function usePendingToken(farm, contract) {
   const pendingTokens = useSingleContractMultipleData(
     args ? contract : null,
     'pendingTokens',
+    // @ts-ignore TYPE NEEDS FIXING
     args.map((arg) => [...arg, '0'])
   )
 
@@ -133,8 +138,10 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
     return [...Array(numberOfPools.toNumber()).keys()].map((pid) => [String(pid), String(account)])
   }, [numberOfPools, account])
 
+  // @ts-ignore TYPE NEEDS FIXING
   const pendingSushi = useSingleContractMultipleData(args ? contract : null, 'pendingSushi', args)
 
+  // @ts-ignore TYPE NEEDS FIXING
   const userInfo = useSingleContractMultipleData(args ? contract : null, 'userInfo', args)
 
   // const pendingTokens = useSingleContractMultipleData(
@@ -144,12 +151,16 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
   // )
 
   const getChef = useCallback(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     if (MASTERCHEF_ADDRESS[chainId] === contract.address) {
       return Chef.MASTERCHEF
+      // @ts-ignore TYPE NEEDS FIXING
     } else if (MASTERCHEF_V2_ADDRESS[chainId] === contract.address) {
       return Chef.MASTERCHEF_V2
+      // @ts-ignore TYPE NEEDS FIXING
     } else if (MINICHEF_ADDRESS[chainId] === contract.address) {
       return Chef.MINICHEF
+      // @ts-ignore TYPE NEEDS FIXING
     } else if (OLD_FARMS[chainId] === contract.address) {
       return Chef.OLD_FARMS
     }
@@ -161,8 +172,11 @@ export function useChefPositions(contract?: Contract | null, rewarder?: Contract
     }
     return zip(pendingSushi, userInfo)
       .map((data, i) => ({
+        // @ts-ignore TYPE NEEDS FIXING
         id: args[i][0],
+        // @ts-ignore TYPE NEEDS FIXING
         pendingSushi: data[0].result?.[0] || Zero,
+        // @ts-ignore TYPE NEEDS FIXING
         amount: data[1].result?.[0] || Zero,
         chef: getChef(),
         // pendingTokens: data?.[2]?.result,

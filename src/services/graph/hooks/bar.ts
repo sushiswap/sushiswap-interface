@@ -9,6 +9,7 @@ interface useBarProps {
 }
 
 export function useBar({ variables, shouldFetch = true, swrConfig = undefined }: useBarProps = {}) {
+  // @ts-ignore TYPE NEEDS FIXING
   const { data } = useSWR(shouldFetch ? ['bar', stringify(variables)] : null, () => getBar(variables), swrConfig)
   return data
 }
@@ -22,6 +23,7 @@ interface useBarHistoryProps {
 export function useBarHistory({ variables, shouldFetch = true, swrConfig = undefined }: useBarHistoryProps = {}) {
   const { data } = useSWR(
     shouldFetch ? ['barHistory', stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     () => getBarHistory(variables),
     swrConfig
   )

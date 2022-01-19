@@ -36,6 +36,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
   const [modalOpen, setModalOpen] = useState(false)
 
   const handleClick = useCallback(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     if (onSelect) setModalOpen(true)
   }, [onSelect])
 

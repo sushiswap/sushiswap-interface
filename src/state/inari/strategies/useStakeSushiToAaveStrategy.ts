@@ -40,6 +40,7 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 const useStakeSushiToAaveStrategy = (): StrategyHook => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM], AXSUSHI])
   const general = useMemo(() => GENERAL(i18n), [i18n])
   const { setBalances, ...strategy } = useBaseStrategy({
@@ -52,6 +53,7 @@ const useStakeSushiToAaveStrategy = (): StrategyHook => {
     if (!balances) return
 
     setBalances({
+      // @ts-ignore TYPE NEEDS FIXING
       inputTokenBalance: balances[SUSHI[ChainId.ETHEREUM].address],
       outputTokenBalance: balances[AXSUSHI.address],
     })

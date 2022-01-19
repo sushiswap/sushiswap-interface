@@ -28,6 +28,7 @@ const OrderExpirationDropdown: FC = () => {
     (e, item) => {
       dispatch(
         setOrderExpiration({
+          // @ts-ignore TYPE NEEDS FIXING
           label: items[item],
           value: item,
         })

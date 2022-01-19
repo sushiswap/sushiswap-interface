@@ -9,24 +9,28 @@ import {
   RawAuctionInfo,
 } from 'app/features/miso/context/types'
 
+// @ts-ignore TYPE NEEDS FIXING
 export const AuctionStatusById = (i18n) => ({
   1: i18n._(t`LIVE`),
   2: i18n._(t`UPCOMING`),
   3: i18n._(t`FINISHED`),
 })
 
+// @ts-ignore TYPE NEEDS FIXING
 export const AuctionTitleByTemplateId = (i18n) => ({
   1: i18n._(t`Crowdsale`),
   2: i18n._(t`Dutch Auction`),
   3: i18n._(t`Batch Auction`),
 })
 
+// @ts-ignore TYPE NEEDS FIXING
 export const AuctionHelperTextByTemplateId = (i18n) => ({
   1: i18n._(t`Fixed price with fixed amount`),
   2: i18n._(t`Price discovery that linearly declines from ceiling to floor price`),
   3: i18n._(t`Valuation discovery with a minimum threshold and uncapped raise`),
 })
 
+// @ts-ignore TYPE NEEDS FIXING
 export const AuctionPriceHelperTextByTemplateId = (i18n) => ({
   1: i18n._(t`Fixed price, doesn't change over time`),
   2: i18n._(
@@ -36,9 +40,13 @@ export const AuctionPriceHelperTextByTemplateId = (i18n) => ({
 })
 
 export const MisoAbiByTemplateId = (chainId: ChainId, templateId: AuctionTemplate) => {
+  // @ts-ignore TYPE NEEDS FIXING
   return {
+    // @ts-ignore TYPE NEEDS FIXING
     1: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.Crowdsale.abi,
+    // @ts-ignore TYPE NEEDS FIXING
     2: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.DutchAuction.abi,
+    // @ts-ignore TYPE NEEDS FIXING
     3: MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.BatchAuction.abi,
   }[templateId]
 }
@@ -291,8 +299,10 @@ export const ISO_COUNTRIES = {
   ZW: 'Zimbabwe',
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function getCountryName(countryCode) {
   if (ISO_COUNTRIES.hasOwnProperty(countryCode)) {
+    // @ts-ignore TYPE NEEDS FIXING
     return ISO_COUNTRIES[countryCode]
   } else {
     return countryCode
@@ -301,7 +311,8 @@ export function getCountryName(countryCode) {
 
 export const getNativeOrToken = (chainId: ChainId, paymentCurrencyInfo: AuctionPaymentCurrencyInfo) => {
   return paymentCurrencyInfo.addr === NATIVE_PAYMENT_TOKEN
-    ? NATIVE[chainId]
+    ? // @ts-ignore TYPE NEEDS FIXING
+      NATIVE[chainId]
     : new Token(
         chainId,
         paymentCurrencyInfo.addr,

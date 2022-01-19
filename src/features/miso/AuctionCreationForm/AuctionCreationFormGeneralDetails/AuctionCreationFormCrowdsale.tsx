@@ -18,6 +18,7 @@ const AuctionCreationFormCrowdsale: FC<AuctionCreationFormCrowdsaleProps> = ({})
   const { i18n } = useLingui()
   const { watch } = useFormContext<AuctionCreationFormInput>()
   const data = watch()
+  // @ts-ignore TYPE NEEDS FIXING
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
   const auctionToken = useToken(data.token)
 

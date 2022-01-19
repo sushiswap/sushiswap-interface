@@ -50,6 +50,7 @@ const PointlistCreationFormSetup: FC = () => {
   } = methods
 
   const data = watch()
+  // @ts-ignore TYPE NEEDS FIXING
   const token = useToken(data.paymentTokenAddress) ?? NATIVE[chainId || 1]
 
   const onSubmit = () => setOpen(true)

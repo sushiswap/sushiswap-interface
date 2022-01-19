@@ -43,14 +43,17 @@ export default function RemoveLiquidityReceiveDetails({
                 <Link
                   href={`/remove/${
                     currencyA && currencyEquals(currencyA, WNATIVE[chainId])
-                      ? NATIVE[chainId].symbol
+                      ? // @ts-ignore TYPE NEEDS FIXING
+                        NATIVE[chainId].symbol
                       : currencyId(currencyA)
                   }/${
                     currencyB && currencyEquals(currencyB, WNATIVE[chainId])
-                      ? NATIVE[chainId].symbol
+                      ? // @ts-ignore TYPE NEEDS FIXING
+                        NATIVE[chainId].symbol
                       : currencyId(currencyB)
                   }`}
                 >
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   <a>Receive {NATIVE[chainId].symbol}</a>
                 </Link>
               ) : null}

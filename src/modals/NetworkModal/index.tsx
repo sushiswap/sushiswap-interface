@@ -8,6 +8,7 @@ import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { ApplicationModal } from 'app/state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
+// @ts-ignore TYPE NEEDS FIXING
 import cookie from 'cookie-cutter'
 import Image from 'next/image'
 import React, { FC } from 'react'
@@ -234,6 +235,7 @@ const NetworkModal: FC = () => {
                   className="bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-purple cursor-default"
                 >
                   <Image
+                    // @ts-ignore TYPE NEEDS FIXING
                     src={NETWORK_ICON[key]}
                     alt="Switch Network"
                     className="rounded-md"
@@ -259,6 +261,7 @@ const NetworkModal: FC = () => {
                     await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${key.toString(16)}` }, account])
                   } catch (switchError) {
                     // This error code indicates that the chain has not been added to MetaMask.
+                    // @ts-ignore TYPE NEEDS FIXING
                     if (switchError.code === 4902) {
                       try {
                         await library?.send('wallet_addEthereumChain', [params, account])
@@ -275,6 +278,7 @@ const NetworkModal: FC = () => {
                   'bg-[rgba(0,0,0,0.2)] focus:outline-none flex items-center gap-4 w-full px-4 py-3 rounded border border-dark-700 hover:border-blue'
                 )}
               >
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <Image src={NETWORK_ICON[key]} alt="Switch Network" className="rounded-md" width="32px" height="32px" />
                 <Typography weight={700} className="text-high-emphesis">
                   {NETWORK_LABEL[key]}

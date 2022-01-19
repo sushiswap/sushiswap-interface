@@ -23,8 +23,10 @@ const WalletActions: FC = () => {
   const router = useRouter()
 
   const swapActionHandler = useCallback(async () => {
+    // @ts-ignore TYPE NEEDS FIXING
     if (featureEnabled(Feature.TRIDENT, chainId)) {
       if (currency?.isNative) return router.push('/trident/swap')
+      // @ts-ignore TYPE NEEDS FIXING
       return router.push(`/trident/swap?&tokens=${NATIVE[chainId].symbol}&tokens=${currency?.wrapped.address}`)
     }
 
@@ -40,6 +42,7 @@ const WalletActions: FC = () => {
           {i18n._(t`Available Actions`)}
         </Typography>
         <ActionItem svg={<SwitchHorizontalIcon width={24} />} label={i18n._(t`Swap`)} onClick={swapActionHandler} />
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {featureEnabled(Feature.BENTOBOX, chainId) && (
           <>
             <ActionItem

@@ -98,6 +98,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
                   />
                 </div>
               )}
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {OPENMEV_ENABLED && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">

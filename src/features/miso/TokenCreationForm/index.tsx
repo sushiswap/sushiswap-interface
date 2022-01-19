@@ -41,6 +41,7 @@ const TokenCreationForm: FC = ({}) => {
   const methods = useForm<TokenCreationFormInput>({
     resolver: yupResolver(schema),
     defaultValues: {
+      // @ts-ignore TYPE NEEDS FIXING
       tokenTypeAddress: chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken.address : undefined,
     },
     reValidateMode: 'onChange',

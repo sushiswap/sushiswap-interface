@@ -31,12 +31,15 @@ import ReactGA from 'react-ga'
 
 const DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE = new Percent(5, 100)
 
+// @ts-ignore TYPE NEEDS FIXING
 const PoolWithdraw = ({ currencyA, currencyB }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
 
   const [useETH, setUseETH] = useState(false)
+  // @ts-ignore TYPE NEEDS FIXING
   useETH && currencyA && currencyEquals(currencyA, WNATIVE[chainId]) && (currencyA = NATIVE[chainId])
+  // @ts-ignore TYPE NEEDS FIXING
   useETH && currencyB && currencyEquals(currencyB, WNATIVE[chainId]) && (currencyB = NATIVE[chainId])
 
   const [tokenA, tokenB] = useMemo(() => [currencyA?.wrapped, currencyB?.wrapped], [currencyA, currencyB])
@@ -102,6 +105,7 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
         await gatherPermitSignature()
       } catch (error) {
         // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
+        // @ts-ignore TYPE NEEDS FIXING
         if (error?.code !== 4001) {
           await approveCallback()
         }
@@ -450,6 +454,7 @@ const PoolWithdraw = ({ currencyA, currencyB }) => {
                 onClick={() => setUseETH(!useETH)}
               >
                 {i18n._(t`Receive`)} {useETH && 'W'}
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {NATIVE[chainId].symbol}
               </a>
             )}

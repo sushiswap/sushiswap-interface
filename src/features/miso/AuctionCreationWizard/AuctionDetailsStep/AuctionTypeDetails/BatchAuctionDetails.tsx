@@ -15,6 +15,7 @@ const BatchAuctionDetails: FC = () => {
   const { i18n } = useLingui()
   const { watch } = useFormContext<AuctionCreationWizardInput>()
   const data = watch()
+  // @ts-ignore TYPE NEEDS FIXING
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
 
   return (

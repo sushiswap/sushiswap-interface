@@ -113,6 +113,7 @@ function useKashiApproveCallback(): [
       }
     } catch (e) {
       return {
+        // @ts-ignore TYPE NEEDS FIXING
         outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
       }
     }

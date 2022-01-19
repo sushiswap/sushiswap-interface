@@ -47,6 +47,7 @@ export const BentoBalancesSum = () => {
 export const WalletBalancesSum = () => {
   const { chainId, account } = useActiveWeb3React()
   const tokenBalances = useAllTokenBalances()
+  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
   const amounts = useMemo(() => {
     const res: CurrencyAmount<Currency>[] = Object.values(tokenBalances).filter((cur) => cur.greaterThan(ZERO))

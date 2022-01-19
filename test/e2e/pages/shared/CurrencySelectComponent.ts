@@ -12,6 +12,7 @@ export class CurrencySelectComponent extends AppPageComponent {
 
     const tokenSelector = this.SelectTokenResultsSelector + tokenSymbol
     const tokenButton = await this.Page.waitForSelector(tokenSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await tokenButton.click()
   }
 }

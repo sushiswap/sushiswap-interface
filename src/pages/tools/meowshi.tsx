@@ -112,6 +112,7 @@ export default function Meowshi() {
   }, [fields.independentField, handleInput])
 
   const switchCurrencies = useCallback(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     setCurrencies((prevState) => ({
       [Field.INPUT]: prevState[Field.OUTPUT],
       [Field.OUTPUT]: prevState[Field.INPUT],
@@ -120,6 +121,7 @@ export default function Meowshi() {
 
   const meowshiState = useMemo<MeowshiState>(
     () => ({
+      // @ts-ignore TYPE NEEDS FIXING
       currencies,
       setCurrency,
       switchCurrencies,

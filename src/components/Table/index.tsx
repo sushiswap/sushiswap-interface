@@ -1,6 +1,7 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import React, { ReactNode, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { usePagination, useSortBy, useTable } from 'react-table'
 
 import { classNames } from '../../functions'
@@ -11,6 +12,7 @@ export interface Column {
   accessor: string | ((row: any) => ReactNode)
   align?: string
   disableSortBy?: boolean
+  // @ts-ignore TYPE NEEDS FIXING
   sortType?: (a, b) => number
 }
 
@@ -73,13 +75,17 @@ export default function Table<T>({
     usePagination
   )
 
+  // @ts-ignore TYPE NEEDS FIXING
   const toggleHide = (e) => {
+    // @ts-ignore TYPE NEEDS FIXING
     const list = allColumns.filter((column) => columnsHideable.find((c) => c === column.id))
+    // @ts-ignore TYPE NEEDS FIXING
     list.forEach((column) => column.toggleHidden(!isHidden))
     setHidden(!isHidden)
     e.stopPropagation()
   }
 
+  // @ts-ignore TYPE NEEDS FIXING
   const getProperty = (obj, prop) => {
     var parts = prop.split('.')
 
@@ -111,8 +117,10 @@ export default function Table<T>({
       <div className="w-full overflow-x-auto">
         <table className="w-auto min-w-full border-collapse table-fixed" {...getTableProps()}>
           <thead>
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {headerGroups.map((headerGroup) => (
               <tr key="tr" {...headerGroup.getHeaderGroupProps()}>
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {headerGroup.headers.map((column, i, columns) => (
                   <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
                     <div
@@ -171,10 +179,12 @@ export default function Table<T>({
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {page.map((row, i) => {
               prepareRow(row)
               return (
                 <tr key={i} {...row.getRowProps()}>
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {row.cells.map((cell, cI) => {
                     return (
                       <td key={cI} className="pb-3 pl-0 pr-0" {...cell.getCellProps()}>

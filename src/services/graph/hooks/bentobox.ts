@@ -14,6 +14,7 @@ import useSWR from 'swr'
 
 import { GraphProps } from '../interfaces'
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useClones({ chainId, shouldFetch = true, swrConfig = undefined }) {
   const { data } = useSWR(shouldFetch ? () => ['clones', chainId] : null, (_, chainId) => getClones(chainId), swrConfig)
   return data
@@ -27,6 +28,7 @@ export function useKashiPairs({
 }: GraphProps) {
   const { data } = useSWR(
     shouldFetch ? () => ['kashiPairs', chainId, stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
     (_, chainId) => getKashiPairs(chainId, variables),
     swrConfig
   )
@@ -62,6 +64,7 @@ export function useBentoStrategies({
 export function useBentoTokens({
   chainId,
   variables,
+  // @ts-ignore TYPE NEEDS FIXING
   shouldFetch = featureEnabled(Feature.BENTOBOX, chainId),
   swrConfig = undefined,
 }: GraphProps) {
@@ -76,6 +79,7 @@ export function useBentoTokens({
 export function useBentoUserTokens({
   chainId,
   variables,
+  // @ts-ignore TYPE NEEDS FIXING
   shouldFetch = featureEnabled(Feature.BENTOBOX, chainId),
   swrConfig = undefined,
 }: GraphProps) {

@@ -38,6 +38,7 @@ const TokenCreationFormGeneralDetails: FC<TokenCreationFormGeneralDetailsProps> 
           label={i18n._(t`Initial Supply*`)}
           helperText={
             tokenTypeAddress ===
+            // @ts-ignore TYPE NEEDS FIXING
             (chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.FixedToken.address : undefined)
               ? i18n._(
                   t`This will be the initial supply of your token. Because your token type is set to fixed. This value will be final and immutable`

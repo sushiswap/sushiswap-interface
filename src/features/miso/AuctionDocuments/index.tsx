@@ -43,6 +43,7 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
         <div className="flex gap-1.5">
           <AuctionIcon auctionTemplate={auction.template} width={18} />
           <Typography variant="sm" weight={700} className="text-secondary">
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {AuctionTitleByTemplateId(i18n)[auction.template]}
           </Typography>
         </div>
@@ -70,6 +71,7 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           {i18n._(t`Technical Information`)}
         </Typography>
         <div className="flex gap-4">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {info.filter((el) => !!documents?.[el]).length === 0 && (
             <Typography variant="sm" className="italic">
               {i18n._(t`No documents provided`)}
@@ -112,6 +114,7 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           {i18n._(t`Socials`)}
         </Typography>
         <div className="flex gap-5 items-center">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {info.filter((el) => !!documents?.[el]).length === 0 && (
             <Typography variant="sm" className="italic">
               {i18n._(t`No socials provided`)}

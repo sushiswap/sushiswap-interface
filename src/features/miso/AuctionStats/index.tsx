@@ -70,6 +70,7 @@ const AuctionStats: FC<AuctionStatsProps> = ({ auction }) => {
             <div className="flex items-center justify-end">
               {i18n._(t`Current Token Price`)}
               <QuestionHelper
+                // @ts-ignore TYPE NEEDS FIXING
                 text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}
                 icon={<SolidQuestionMarkCircleIcon width={12} height={12} className="text-secondary" />}
               />

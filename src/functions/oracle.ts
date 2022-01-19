@@ -7,12 +7,14 @@ import { IOracle } from 'app/interfaces'
 
 import { e10 } from './math'
 
+// @ts-ignore TYPE NEEDS FIXING
 export function getOracle(chainId: ChainId, address: string, data: string): IOracle {
   if (address.toLowerCase() === CHAINLINK_ORACLE_ADDRESS[chainId].toLowerCase()) {
     return new ChainlinkOracle(chainId, address, data)
   }
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function validateChainlinkOracleData(chainId = ChainId.ETHEREUM, collateral, asset, data) {
   const mapping = CHAINLINK_PRICE_FEED_MAP[chainId]
   if (!mapping) {

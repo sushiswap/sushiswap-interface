@@ -63,6 +63,7 @@ export const useRemoveLiquidityExecute = () => {
       ]
 
       const indexOfWETH = minOutputA.wrapped.currency.address === WNATIVE[chainId].address ? 0 : 1
+      // @ts-ignore TYPE NEEDS FIXING
       const receiveETH = receiveNative[0] && outputToWallet
       const actions = [
         approveMasterContractAction({ router, signature: bentoPermit }),
@@ -126,6 +127,7 @@ export const useRemoveLiquidityExecute = () => {
       } catch (error) {
         dispatch(setRemoveAttemptingTxn(false))
         // we only care if the error is something _other_ than the user rejected the tx
+        // @ts-ignore TYPE NEEDS FIXING
         if (error?.code !== 4001) {
           console.error(error)
         }

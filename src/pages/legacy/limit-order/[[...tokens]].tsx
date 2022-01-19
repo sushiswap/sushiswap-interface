@@ -38,6 +38,7 @@ import Lottie from 'lottie-react'
 import Head from 'next/head'
 import React, { useCallback, useMemo, useState } from 'react'
 
+// @ts-ignore TYPE NEEDS FIXING
 const areEqual = (first, second) => {
   if (first.length !== second.length) {
     return false
@@ -62,6 +63,7 @@ function LimitOrder() {
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useLimitOrderActionHandlers()
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
   const pairs = useMemo(
+    // @ts-ignore TYPE NEEDS FIXING
     () => (limitOrderPairList.pairs[chainId || 1] || []).map(([token0, token1]) => [token0.address, token1.address]),
     [chainId]
   )
@@ -103,6 +105,7 @@ function LimitOrder() {
       pairs &&
       inputCurrency &&
       outputCurrency &&
+      // @ts-ignore TYPE NEEDS FIXING
       !pairs.find((el) => areEqual(el, [inputCurrency.wrapped.address, outputCurrency.wrapped.address]))
     ) {
       return 'Invalid pair'
@@ -111,6 +114,7 @@ function LimitOrder() {
 
   const inputTokenList = useMemo(() => {
     if (pairs.length === 0) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return pairs.reduce((acc, [token0, token1]) => {
       acc.push(token0)
       acc.push(token1)
@@ -121,12 +125,14 @@ function LimitOrder() {
   const outputTokenList = useMemo(() => {
     if (pairs.length === 0) return []
     if (inputCurrency) {
+      // @ts-ignore TYPE NEEDS FIXING
       return pairs.reduce((acc, [token0, token1]) => {
         if (inputCurrency.wrapped.address === token0) acc.push(token1)
         if (inputCurrency.wrapped.address === token1) acc.push(token0)
         return acc
       }, [])
     }
+    // @ts-ignore TYPE NEEDS FIXING
     return pairs.reduce((acc, [token0, token1]) => {
       acc.push(token0)
       acc.push(token1)
@@ -199,6 +205,7 @@ function LimitOrder() {
                     </div>
                   </button>
                 </div>
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <LimitPriceInputPanel trade={trade} />
               </div>
               <CurrencyInputPanel
@@ -263,6 +270,7 @@ function LimitOrder() {
             <div className="flex flex-col items-end justify-between w-full gap-4 md:flex-row md:items-center">
               {inputCurrency && outputCurrency && (
                 <div className="flex flex-1">
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   <PriceRatio trade={trade} />
                 </div>
               )}

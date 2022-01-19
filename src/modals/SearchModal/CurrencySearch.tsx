@@ -48,6 +48,7 @@ export function CurrencySearch({
 
   if (router.asPath.startsWith('/kashi/create') && chainId) {
     allTokens = Object.keys(allTokens).reduce((obj, key) => {
+      // @ts-ignore TYPE NEEDS FIXING
       if (CHAINLINK_TOKENS[chainId].find((address) => address === key)) obj[key] = allTokens[key]
       return obj
     }, {})
@@ -55,6 +56,7 @@ export function CurrencySearch({
 
   if (currencyList) {
     allTokens = Object.keys(allTokens).reduce((obj, key) => {
+      // @ts-ignore TYPE NEEDS FIXING
       if (currencyList.includes(key)) obj[key] = allTokens[key]
       return obj
     }, {})
@@ -79,6 +81,7 @@ export function CurrencySearch({
   }, [filteredTokens, tokenComparator])
 
   const filteredSortedTokens = useSortedTokensByQuery(sortedTokens, debouncedQuery)
+  // @ts-ignore TYPE NEEDS FIXING
   const ether = useMemo(() => chainId && ![ChainId.CELO].includes(chainId) && NATIVE[chainId], [chainId])
 
   const filteredSortedTokensWithETH: Currency[] = useMemo(() => {

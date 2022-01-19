@@ -4,6 +4,7 @@ import storage from 'redux-persist/lib/storage'
 
 import reducer from './reducer'
 
+// @ts-ignore TYPE NEEDS FIXING
 let store
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists']
@@ -32,13 +33,17 @@ function makeStore(preloadedState = undefined) {
 }
 
 export const getOrCreateStore = (preloadedState = undefined) => {
+  // @ts-ignore TYPE NEEDS FIXING
   let _store = store ?? makeStore(preloadedState)
 
   // After navigating to a page with an initial Redux state, merge that state
   // with the current state in the store, and create a new store
+  // @ts-ignore TYPE NEEDS FIXING
   if (preloadedState && store) {
     _store = makeStore({
+      //@ts-ignore TYPE NEEDS FIXING
       ...store.getState(),
+      //@ts-ignore TYPE NEEDS FIXING
       ...preloadedState,
     })
     // Reset the current store
@@ -49,6 +54,7 @@ export const getOrCreateStore = (preloadedState = undefined) => {
   if (typeof window === 'undefined') return _store
 
   // Create the store once in the client
+  // @ts-ignore TYPE NEEDS FIXING
   if (!store) store = _store
 
   return _store

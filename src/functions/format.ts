@@ -4,8 +4,10 @@ import { getAddress } from '@ethersproject/address'
 import { BigNumberish } from '@ethersproject/bignumber'
 import { formatUnits } from '@ethersproject/units'
 import { Currency, CurrencyAmount, Fraction, JSBI, Price } from '@sushiswap/core-sdk'
+// @ts-ignore TYPE NEEDS FIXING
 import Numeral from 'numeral'
 
+// @ts-ignore TYPE NEEDS FIXING
 export const capitalize = (s) => {
   if (typeof s !== 'string') return ''
   return s.charAt(0).toUpperCase() + s.slice(1)
@@ -40,6 +42,7 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
 })
 
+// @ts-ignore TYPE NEEDS FIXING
 export function formatPercent(percentString) {
   const percent = parseFloat(percentString)
 

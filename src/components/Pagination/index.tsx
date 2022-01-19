@@ -20,6 +20,7 @@ const RIGHT_PAGE = 'RIGHT'
  * Helper method for creating a range of numbers
  * range(1, 5) => [1, 2, 3, 4, 5]
  */
+// @ts-ignore TYPE NEEDS FIXING
 const range = (from, to, step = 1): (string | number)[] => {
   let i = from
   const range: (string | number)[] = []

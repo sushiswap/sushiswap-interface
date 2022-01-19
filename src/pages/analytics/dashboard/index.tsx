@@ -61,14 +61,18 @@ export default function Dashboard(): JSX.Element {
       liquidity: exchange?.liquidityUSD,
       liquidityChange: (exchange1d?.liquidityUSD / exchange2d?.liquidityUSD) * 100 - 100,
       liquidityChart: dayData
+        // @ts-ignore TYPE NEEDS FIXING
         ?.sort((a, b) => a.date - b.date)
+        // @ts-ignore TYPE NEEDS FIXING
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.liquidityUSD) })),
 
       volume1d: exchange?.volumeUSD - exchange1d?.volumeUSD,
       volume1dChange:
         ((exchange?.volumeUSD - exchange1d?.volumeUSD) / (exchange1d?.volumeUSD - exchange2d?.volumeUSD)) * 100 - 100,
       volumeChart: dayData
+        // @ts-ignore TYPE NEEDS FIXING
         ?.sort((a, b) => a.date - b.date)
+        // @ts-ignore TYPE NEEDS FIXING
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
     }),
     [exchange, exchange1d, exchange2d, dayData]
@@ -81,8 +85,11 @@ export default function Dashboard(): JSX.Element {
 
   const pairsFormatted = useMemo(
     () =>
+      // @ts-ignore TYPE NEEDS FIXING
       pairs?.map((pair) => {
+        // @ts-ignore TYPE NEEDS FIXING
         const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+        // @ts-ignore TYPE NEEDS FIXING
         const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair1d
 
         return {
@@ -136,8 +143,11 @@ export default function Dashboard(): JSX.Element {
   const tokensFormatted = useMemo(
     () =>
       tokens && tokens1d && tokens1w && nativePrice && nativePrice1d && nativePrice1w
-        ? tokens.map((token) => {
+        ? // @ts-ignore TYPE NEEDS FIXING
+          tokens.map((token) => {
+            // @ts-ignore TYPE NEEDS FIXING
             const token1d = tokens1d.find((p) => token.id === p.id) ?? token
+            // @ts-ignore TYPE NEEDS FIXING
             const token1w = tokens1w.find((p) => token.id === p.id) ?? token
 
             return {
@@ -155,6 +165,7 @@ export default function Dashboard(): JSX.Element {
               graph: token.dayData
                 .slice(0)
                 .reverse()
+                // @ts-ignore TYPE NEEDS FIXING
                 .map((day, i) => ({ x: i, y: Number(day.priceUSD) })),
             }
           })

@@ -23,7 +23,9 @@ import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
 
 interface SwapAssetPanel {
   error: boolean
+  // @ts-ignore TYPE NEEDS FIXING
   header: (x) => React.ReactNode
+  // @ts-ignore TYPE NEEDS FIXING
   walletToggle: (x) => React.ReactNode
   currency?: Currency
   currencies?: string[]
@@ -254,6 +256,7 @@ const InputPanel: FC<
             {!currency ? (
               <CurrencySearchModal
                 selectedCurrency={currency}
+                // @ts-ignore TYPE NEEDS FIXING
                 {...(currencies?.length > 0 && { currencyList: currencies })}
                 onCurrencySelect={(currency) => onSelect && onSelect(currency)}
                 trigger={

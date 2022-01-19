@@ -28,6 +28,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
 
   // Get permit to send with execute
   const handleGetPermit = useCallback(async () => {
+    // @ts-ignore TYPE NEEDS FIXING
     await bentoApproveCallback.getPermit()
   }, [bentoApproveCallback])
 
@@ -68,6 +69,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
     return (
       <>
         <Button {...rest} disabled>
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           <Dots>{i18n._(t`Approving Inari to spend ${approveCallback[2].currency.symbol}`)}</Dots>
         </Button>
         {approveFlow}
@@ -78,6 +80,7 @@ const InariButton: FC<InariButtonProps> = ({ children, ...rest }) => {
     return (
       <>
         <Button {...rest} color="pink" onClick={approveCallback[1]}>
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {i18n._(t`Approve Inari to spend ${approveCallback[2].currency.symbol}`)}
         </Button>
         {approveFlow}

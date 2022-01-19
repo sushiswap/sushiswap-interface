@@ -25,15 +25,19 @@ const axisLeftTickLabelProps = {
 }
 
 // accessors
+// @ts-ignore TYPE NEEDS FIXING
 const getX = (d) => new Date(d.date)
+// @ts-ignore TYPE NEEDS FIXING
 const getY = (d) => Number(d.value)
 
 export default function CurveChart({
+  // @ts-ignore TYPE NEEDS FIXING
   data,
   gradientColor = undefined,
   index = undefined,
   even = undefined,
   height = undefined,
+  // @ts-ignore TYPE NEEDS FIXING
   width,
   yMax = undefined,
   margin = { top: 0, right: 0, bottom: 0, left: 0 },
@@ -57,7 +61,9 @@ export default function CurveChart({
       <LinePath
         curve={curveNatural}
         data={data}
+        // @ts-ignore TYPE NEEDS FIXING
         x={(d) => xScale(getX(d)) ?? 0}
+        // @ts-ignore TYPE NEEDS FIXING
         y={(d) => yScale(getY(d)) ?? 0}
         stroke={stroke}
         strokeWidth={strokeWidth}
@@ -70,6 +76,7 @@ export default function CurveChart({
       {!hideBottomAxis && (
         <AxisBottom
           top={yMax}
+          // @ts-ignore TYPE NEEDS FIXING
           scale={xScale}
           numTicks={width > 520 ? 10 : 5}
           stroke={axisColor}
@@ -79,6 +86,7 @@ export default function CurveChart({
       )}
       {!hideLeftAxis && (
         <AxisLeft
+          // @ts-ignore TYPE NEEDS FIXING
           scale={yScale}
           numTicks={5}
           tickFormat={millify as any}

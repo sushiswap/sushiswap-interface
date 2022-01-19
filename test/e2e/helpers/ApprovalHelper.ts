@@ -10,6 +10,7 @@ export class ApprovalHelper {
   constructor() {
     this.Provider = new JsonRpcProvider(process.env.INFURA_URL)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const signer = new Wallet(process.env.TEST_PKEY, this.Provider)
     this.Signer = signer
   }

@@ -209,6 +209,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
       await state.onMigrate()
     } catch (error) {
       console.log(error)
+      // @ts-ignore TYPE NEEDS FIXING
       setError(error)
     }
   }

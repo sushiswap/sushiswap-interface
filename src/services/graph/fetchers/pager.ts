@@ -1,5 +1,6 @@
 import { request } from 'graphql-request'
 
+// @ts-ignore TYPE NEEDS FIXING
 export async function pager(endpoint, query, variables = {}) {
   if (endpoint.includes('undefined')) return {}
 
@@ -19,6 +20,7 @@ export async function pager(endpoint, query, variables = {}) {
       if (entry.length === 1000) flag = true
     })
 
+    // @ts-ignore TYPE NEEDS FIXING
     if (Object.keys(variables).includes('first') && variables['first'] !== undefined) break
 
     skip += 1000

@@ -19,6 +19,7 @@ import { usePendingSushi, useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
 import usePendingReward from './usePendingReward'
 
+// @ts-ignore TYPE NEEDS FIXING
 const InvestmentDetails = ({ farm }) => {
   const { i18n } = useLingui()
 
@@ -38,6 +39,7 @@ const InvestmentDetails = ({ farm }) => {
   const token1 = useCurrency(farm.pair.token1.id)
 
   const liquidityToken = new Token(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId,
     getAddress(farm.pair.id),
     farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
@@ -52,9 +54,12 @@ const InvestmentDetails = ({ farm }) => {
     stakedAmount &&
     easyAmount(
       BigNumber.from(stakedAmount.quotient.toString()).mulDiv(
+        // @ts-ignore TYPE NEEDS FIXING
         kashiPair.currentAllAssets.value,
+        // @ts-ignore TYPE NEEDS FIXING
         kashiPair.totalAsset.base
       ),
+      // @ts-ignore TYPE NEEDS FIXING
       kashiPair.asset
     )
 
@@ -62,16 +67,21 @@ const InvestmentDetails = ({ farm }) => {
   const pendingReward = usePendingReward(farm)
 
   const positionFiatValue = CurrencyAmount.fromRawAmount(
+    // @ts-ignore TYPE NEEDS FIXING
     USD[chainId],
     farm.pair.type === PairType.KASHI
-      ? kashiAssetAmount?.usdValue.toString() ?? ZERO
+      ? // @ts-ignore TYPE NEEDS FIXING
+        kashiAssetAmount?.usdValue.toString() ?? ZERO
       : JSBI.BigInt(
           ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
+            // @ts-ignore TYPE NEEDS FIXING
             .toFixed(USD[chainId].decimals)
+            // @ts-ignore TYPE NEEDS FIXING
             .toBigNumber(USD[chainId].decimals)
         )
   )
 
+  // @ts-ignore TYPE NEEDS FIXING
   const secondaryRewardOnly = [ChainId.FUSE].includes(chainId)
 
   const rewardValue = !secondaryRewardOnly
@@ -106,9 +116,11 @@ const InvestmentDetails = ({ farm }) => {
         <div className="flex justify-between">
           <div className="flex flex-col justify-center space-y-2">
             <div className="flex items-center space-x-2">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <CurrencyLogo currency={token0} size="30px" />
               {farm.pair.type === PairType.KASHI && (
                 <Typography>
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {formatNumber(kashiAssetAmount?.value.toFixed(kashiPair.asset.tokenInfo.decimals) ?? 0)}
                 </Typography>
               )}
@@ -121,6 +133,7 @@ const InvestmentDetails = ({ farm }) => {
             </div>
             {farm.pair.type === PairType.SWAP && (
               <div className="flex items-center space-x-2">
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 <CurrencyLogo currency={token1} size="30px" />
                 <Typography>
                   {formatNumber((farm.pair.reserve1 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
@@ -148,6 +161,7 @@ const InvestmentDetails = ({ farm }) => {
         <div className="w-full bg-transparent border border-b-0 border-transparent rounded h-0font-bold text-high-emphesis border-gradient-r-blue-pink-dark-800 opacity-20" />
         <div className="flex justify-between">
           <div className="flex flex-col space-y-2">
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {farm?.rewards?.map((reward, i) => (
               <div key={i} className="flex items-center space-x-2">
                 <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />

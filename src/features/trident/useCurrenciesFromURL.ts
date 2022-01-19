@@ -14,6 +14,7 @@ const useCurrenciesFromURL = (): {
 } => {
   const { chainId } = useActiveWeb3React()
   const router = useRouter()
+  // @ts-ignore TYPE NEEDS FIXING
   const currencyA = useCurrency(router.query.tokens?.[0]) || (chainId && NATIVE[chainId]) || undefined
   const currencyB = useCurrency(router.query.tokens?.[1]) || (chainId && SUSHI[chainId]) || undefined
 
@@ -23,6 +24,7 @@ const useCurrenciesFromURL = (): {
   const switchCurrencies = useCallback(async () => {
     if (!chainId) return
 
+    // @ts-ignore TYPE NEEDS FIXING
     const nativeSymbol = NATIVE[chainId].symbol
     let tokens: string[] = []
     if (router.query && router.query.tokens) {
@@ -59,6 +61,7 @@ const useCurrenciesFromURL = (): {
     async (cur: Currency, index: number) => {
       if (!chainId) return
 
+      // @ts-ignore TYPE NEEDS FIXING
       const nativeSymbol = NATIVE[chainId].symbol
       let tokens: string[] = [
         currencyA?.isNative ? nativeSymbol : currencyA?.wrapped.address,
@@ -73,6 +76,7 @@ const useCurrenciesFromURL = (): {
           return switchCurrencies()
         }
 
+        // @ts-ignore TYPE NEEDS FIXING
         const newToken = cur.isNative ? NATIVE[chainId].symbol : cur.wrapped.address
         if (tokens.includes(newToken)) return // return if token already selected
         tokens[index] = newToken

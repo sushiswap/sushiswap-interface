@@ -3,6 +3,7 @@ import { Placement } from '@popperjs/core'
 import { classNames } from 'app/functions'
 import useInterval from 'app/hooks/useInterval'
 import React, { Fragment, useCallback, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import ReactDOM from 'react-dom'
 import { usePopper } from 'react-popper'
 

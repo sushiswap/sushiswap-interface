@@ -11,11 +11,13 @@ export const useAuctionList = (type?: AuctionStatus): RawAuction[] => {
   return useMemo(() => {
     if (!result || !Array.isArray(result) || !(result.length > 0)) return []
 
+    // @ts-ignore TYPE NEEDS FIXING
     let filtered = result[0].filter((el) => !BAD_AUCTIONS.includes(el.addr))
     const currentTimestamp = new Date().getTime()
 
     if (type === AuctionStatus.LIVE) {
       return filtered.filter(
+        // @ts-ignore TYPE NEEDS FIXING
         (auction) =>
           currentTimestamp >= auction.startTime.mul('1000').toNumber() &&
           currentTimestamp < auction.endTime.mul('1000').toNumber() &&
@@ -23,10 +25,12 @@ export const useAuctionList = (type?: AuctionStatus): RawAuction[] => {
       )
     } else if (type === AuctionStatus.UPCOMING) {
       return filtered.filter(
+        // @ts-ignore TYPE NEEDS FIXING
         (auction) => currentTimestamp < auction.startTime.mul('1000').toNumber() && !auction.finalized
       )
     } else if (type === AuctionStatus.FINISHED) {
       return filtered.filter(
+        // @ts-ignore TYPE NEEDS FIXING
         (auction) => currentTimestamp > auction.endTime.mul('1000').toNumber() || auction.finalized
       )
     }

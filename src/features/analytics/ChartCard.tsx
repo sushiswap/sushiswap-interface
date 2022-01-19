@@ -35,9 +35,12 @@ export default function ChartCard({
     const currentDate = Math.round(Date.now() / 1000)
     return chart?.reduce((acc, cur) => {
       const x = cur.x.getTime()
+      // @ts-ignore TYPE NEEDS FIXING
       if (Math.round(x / 1000) >= currentDate - timespan?.length) {
         acc.push({
+          // @ts-ignore TYPE NEEDS FIXING
           x,
+          // @ts-ignore TYPE NEEDS FIXING
           y: cur.y,
         })
       }
@@ -47,7 +50,9 @@ export default function ChartCard({
   }, [chart, timespan?.length])
 
   const [selectedIndex, setSelectedIndex] = useState(chartFiltered?.length - 1)
+  // @ts-ignore TYPE NEEDS FIXING
   const overrideFigure = useMemo(() => chartFiltered?.[selectedIndex]?.y, [chartFiltered, selectedIndex])
+  // @ts-ignore TYPE NEEDS FIXING
   const overrideDate = useMemo(() => chartFiltered?.[selectedIndex]?.x, [chartFiltered, selectedIndex])
 
   return (

@@ -40,6 +40,7 @@ export default function Pool() {
   //       .filter((stakingPair) => stakingPair?.liquidityToken.address === v2Pair.liquidityToken.address).length === 0
   //   )
   // })
+  // @ts-ignore TYPE NEEDS FIXING
   const migrationSupported = chainId in MigrationSupported
   return (
     <Container id="pool-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
@@ -114,6 +115,7 @@ export default function Pool() {
                 id="add-pool-button"
                 color="gradient"
                 className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
+                // @ts-ignore TYPE NEEDS FIXING
                 onClick={() => router.push(`/add/${currencyId(NATIVE[chainId])}`)}
               >
                 {i18n._(t`Add`)}

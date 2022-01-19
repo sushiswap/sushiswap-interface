@@ -32,6 +32,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade }) => {
             !disabled ? 'cursor-pointer hover:border-opacity-100' : ''
           }`}
           onClick={() => {
+            // @ts-ignore TYPE NEEDS FIXING
             dispatch(setLimitPrice(trade.executionPrice.toSignificant(6)))
           }}
         >

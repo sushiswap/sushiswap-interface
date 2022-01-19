@@ -9,6 +9,7 @@ import { useKashiPair } from '../kashi/hooks'
 import KashiDeposit from './KashiDeposit'
 import KashiWithdraw from './KashiWithdraw'
 
+// @ts-ignore TYPE NEEDS FIXING
 const ManageKashiPair = ({ farm }) => {
   const { i18n } = useLingui()
 

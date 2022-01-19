@@ -23,8 +23,10 @@ interface TridentTokenPricesQueryResult {
 
 export const getTridentTokenPrices = async (
   chainId: ChainId = ChainId.ETHEREUM,
+  // @ts-ignore TYPE NEEDS FIXING
   variables: {} = undefined
 ): Promise<CurrencyAmount<Currency>[]> => {
+  // @ts-ignore TYPE NEEDS FIXING
   const { tokenPrices }: TridentTokenPricesQueryResult = await fetcher(chainId, getTridentTokenPricesQuery, variables)
   return formatCurrencyAmounts(chainId, tokenPrices)
 }
@@ -35,9 +37,12 @@ interface TridentTokenPriceQueryResult {
 
 export const getTridentTokenPrice = async (
   chainId: ChainId = ChainId.ETHEREUM,
+  // @ts-ignore TYPE NEEDS FIXING
   variables: {} = undefined
+  // @ts-ignore TYPE NEEDS FIXING
 ): Promise<CurrencyAmount<Currency>> => {
   try {
+    // @ts-ignore TYPE NEEDS FIXING
     const { tokenPrice }: TridentTokenPriceQueryResult = await fetcher(chainId, getTridentTokenPriceQuery, variables)
     return formatCurrencyAmounts(chainId, [tokenPrice])?.[0]
   } catch (e) {

@@ -65,6 +65,7 @@ const initialState: LimitOrderState = {
 export default createReducer<LimitOrderState>(initialState, (builder) =>
   builder
     .addCase(
+      // @ts-ignore TYPE NEEDS FIXING
       replaceLimitOrderState,
       (
         state,
@@ -97,12 +98,14 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
       })
     )
     .addCase(setLimitPrice, (state, { payload: limitPrice }) => {
+      // @ts-ignore TYPE NEEDS FIXING
       state.limitPrice = limitPrice
     })
     .addCase(setLimitOrderApprovalPending, (state, { payload: limitOrderApprovalPending }) => {
       state.limitOrderApprovalPending = limitOrderApprovalPending
     })
     .addCase(setOrderExpiration, (state, { payload: orderExpiration }) => {
+      // @ts-ignore TYPE NEEDS FIXING
       state.orderExpiration = orderExpiration
     })
     .addCase(setFromBentoBalance, (state, { payload: fromBentoBalance }) => {

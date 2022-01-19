@@ -81,17 +81,20 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
             parsedOutputAmount.wrapped,
             recipient ? recipient : account,
             Math.floor(new Date().getTime() / 1000).toString(),
+            // @ts-ignore TYPE NEEDS FIXING
             endTime.toString()
           )
         : undefined
 
     try {
+      // @ts-ignore TYPE NEEDS FIXING
       await order?.signOrderWithProvider(chainId || 1, library)
       setOpenConfirmationModal(false)
 
       const resp = await order?.send()
       if (resp.success) {
         addPopup({
+          // @ts-ignore TYPE NEEDS FIXING
           txn: { hash: undefined, summary: 'Limit order created', success: true },
         })
 
@@ -102,7 +105,9 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
     } catch (e) {
       addPopup({
         txn: {
+          // @ts-ignore TYPE NEEDS FIXING
           hash: undefined,
+          // @ts-ignore TYPE NEEDS FIXING
           summary: `Error: ${e?.response?.data?.data}`,
           success: false,
         },
@@ -122,6 +127,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
   ])
 
   const deposit = useCallback(async () => {
+    // @ts-ignore TYPE NEEDS FIXING
     const tx = await execute(parsedInputAmount, currency)
     setDepositPending(true)
     await tx.wait()
@@ -156,6 +162,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
         onClick={deposit}
         {...rest}
       >
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         <Dots>{i18n._(t`Depositing ${currency.symbol} into BentoBox`)}</Dots>
       </Button>
     )
@@ -190,6 +197,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
         loading={approvalState === BentoApprovalState.PENDING}
         disabled={disabled}
         color={disabled ? 'gray' : 'pink'}
+        // @ts-ignore TYPE NEEDS FIXING
         onClick={() => onApprove()}
         {...rest}
       >
@@ -202,6 +210,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
   )
     button = (
       <Button disabled={disabled} color={disabled ? 'gray' : 'blue'} onClick={deposit} {...rest}>
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {i18n._(t`Deposit ${currency.symbol} into BentoBox`)}
       </Button>
     )

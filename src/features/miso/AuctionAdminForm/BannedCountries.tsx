@@ -19,9 +19,11 @@ const BannedCountriesFormField: FC = () => {
   const values =
     getValues('bannedCountries')
       ?.split(',')
+      // @ts-ignore TYPE NEEDS FIXING
       .filter((el) => el !== '') || []
 
   const deleteCountry = useCallback(
+    // @ts-ignore TYPE NEEDS FIXING
     (values, value) => setValue('bannedCountries', values?.filter((el) => el !== value).join(',')),
     [setValue]
   )
@@ -58,6 +60,7 @@ const BannedCountriesFormField: FC = () => {
             'flex flex-wrap gap-2 min-h-[42px] relative w-full py-2 pl-3 pr-10 text-left cursor-pointer'
           )}
         >
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {values?.map((el, index) => {
             return (
               <Chip

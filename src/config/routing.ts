@@ -77,17 +77,29 @@ const WRAPPED_NATIVE_ONLY: ChainTokenList = {
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ...WRAPPED_NATIVE_ONLY,
   [ChainId.ETHEREUM]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM],
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.DAI,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.RUNE,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.NFTX,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.STETH,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.OHM_V1,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.OHM_V2,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.ETHEREUM],
   ],
   [ChainId.MATIC]: [
@@ -127,14 +139,23 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
   ],
   [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
   [ChainId.AVALANCHE]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE],
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.DAI,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.TIME,
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.AVALANCHE],
   ],
   [ChainId.HARMONY]: [
@@ -236,147 +257,262 @@ export const CUSTOM_BASES: {
  */
 export const COMMON_BASES: ChainTokenList = {
   [ChainId.ETHEREUM]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.ETHEREUM],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.ETHEREUM],
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.SPELL,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.ICE,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.DAI,
+    // @ts-ignore TYPE NEEDS FIXING
     ETHEREUM.OHM_V2,
   ],
   [ChainId.MATIC]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.MATIC],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.MATIC],
+    // @ts-ignore TYPE NEEDS FIXING
     MATIC.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     MATIC.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     MATIC.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     MATIC.ICE,
+    // @ts-ignore TYPE NEEDS FIXING
     MATIC.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     MATIC.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     MATIC.DAI,
   ],
   [ChainId.FANTOM]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.FANTOM],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.FANTOM],
+    // @ts-ignore TYPE NEEDS FIXING
     FANTOM.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     FANTOM.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     FANTOM.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     FANTOM.ICE,
+    // @ts-ignore TYPE NEEDS FIXING
     FANTOM.SPELL,
+    // @ts-ignore TYPE NEEDS FIXING
     FANTOM.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     FANTOM.DAI,
   ],
   [ChainId.BSC]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.BSC],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.BSC],
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.BTCB,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.SPELL,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.ICE,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.DAI,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     BSC.USD,
   ],
   [ChainId.ARBITRUM]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.ARBITRUM],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.ARBITRUM],
+    // @ts-ignore TYPE NEEDS FIXING
     ARBITRUM.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     ARBITRUM.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     ARBITRUM.SPELL,
+    // @ts-ignore TYPE NEEDS FIXING
     ARBITRUM.ICE,
+    // @ts-ignore TYPE NEEDS FIXING
     ARBITRUM.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     ARBITRUM.USDT,
   ],
   [ChainId.XDAI]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.XDAI],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.XDAI],
+    // @ts-ignore TYPE NEEDS FIXING
     XDAI.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     XDAI.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     XDAI.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     XDAI.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     XDAI.GNO,
   ],
   [ChainId.AVALANCHE]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.AVALANCHE],
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.ICE,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.SPELL,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WMEMO,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.DAI,
   ],
   [ChainId.HARMONY]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.HARMONY],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.HARMONY],
+    // @ts-ignore TYPE NEEDS FIXING
     HARMONY.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     HARMONY.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     HARMONY.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     HARMONY.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     HARMONY.DAI,
   ],
   [ChainId.HECO]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.HECO],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.HECO],
+    // @ts-ignore TYPE NEEDS FIXING
     HECO.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     HECO.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     HECO.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     HECO.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     HECO.DAI,
   ],
   [ChainId.OKEX]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.OKEX],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.OKEX],
+    // @ts-ignore TYPE NEEDS FIXING
     OKEX.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     OKEX.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     OKEX.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     OKEX.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     OKEX.DAI,
   ],
   [ChainId.CELO]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.CELO],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.CELO],
+    // @ts-ignore TYPE NEEDS FIXING
     CELO.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     CELO.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     CELO.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     CELO.cUSD,
+    // @ts-ignore TYPE NEEDS FIXING
     CELO.cEURO,
   ],
   [ChainId.MOONRIVER]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.MOONRIVER],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.MOONRIVER],
+    // @ts-ignore TYPE NEEDS FIXING
     MOONRIVER.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     MOONRIVER.BTC,
+    // @ts-ignore TYPE NEEDS FIXING
     MOONRIVER.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     MOONRIVER.FRAX,
+    // @ts-ignore TYPE NEEDS FIXING
     MOONRIVER.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     MOONRIVER.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     MOONRIVER.ROME,
   ],
   [ChainId.PALM]: [...WRAPPED_NATIVE_ONLY[ChainId.PALM], PALM.WETH, PALM.DAI],
   [ChainId.FUSE]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.FUSE],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.FUSE],
+    // @ts-ignore TYPE NEEDS FIXING
     FUSE.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     FUSE.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     FUSE.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     FUSE.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     FUSE.DAI,
   ],
   [ChainId.TELOS]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.TELOS],
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.TELOS],
+    // @ts-ignore TYPE NEEDS FIXING
     TELOS.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     TELOS.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     TELOS.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     TELOS.USDT,
   ],
 }
@@ -430,14 +566,23 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   ],
   [ChainId.XDAI]: [...WRAPPED_NATIVE_ONLY[ChainId.XDAI], XDAI.USDC, XDAI.USDT, XDAI.WBTC, XDAI.WETH],
   [ChainId.AVALANCHE]: [
+    // @ts-ignore TYPE NEEDS FIXING
     ...WRAPPED_NATIVE_ONLY[ChainId.AVALANCHE],
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.DAI,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDT,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WBTC,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.WETH,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.USDC,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.MIM,
+    // @ts-ignore TYPE NEEDS FIXING
     AVALANCHE.TIME,
+    // @ts-ignore TYPE NEEDS FIXING
     SUSHI[ChainId.AVALANCHE],
   ],
   [ChainId.HARMONY]: [
@@ -479,6 +624,7 @@ export const PINNED_PAIRS: {
   readonly [chainId in ChainId]?: [Token, Token][]
 } = {
   [ChainId.ETHEREUM]: [
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[ChainId.ETHEREUM], WNATIVE[ChainId.ETHEREUM]],
     [
       new Token(ChainId.ETHEREUM, '0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643', 8, 'cDAI', 'Compound Dai'),

@@ -70,6 +70,7 @@ export const WalletBalances = () => {
   const selected = useBalancesSelectedCurrency()
 
   const _balances = useAllTokenBalances()
+  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
 
   const balances = useMemo(() => {

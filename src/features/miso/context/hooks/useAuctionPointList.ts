@@ -28,6 +28,7 @@ export const useAuctionPointListPoints = (
   const { account, chainId } = useActiveWeb3React()
   const contract = useContract(
     listAddress,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PointList.abi : undefined
   )
   const { result } = useSingleCallResult(
@@ -45,7 +46,9 @@ export const useAuctionPointListFunctions = () => {
   const { account, chainId } = useActiveWeb3React()
   const addTransaction = useTransactionAdder()
   const contract = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ListFactory.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ListFactory.abi : undefined
   )
 

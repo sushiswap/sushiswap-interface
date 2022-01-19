@@ -47,14 +47,17 @@ export class AddLiquidityPage extends AppPage {
     }
 
     const confirmDepositButton = await this.Page.waitForSelector(this.ConfirmDepositButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await confirmDepositButton.click()
 
     const modalConfirmDepositButton = await this.Page.waitForSelector(this.ModalConfirmDepositButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await modalConfirmDepositButton.click()
 
     await this.confirmMetamaskTransaction()
 
     const backToPoolsButton = await this.Page.waitForSelector(this.BackToPoolsButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await backToPoolsButton.click()
 
     await this.blockingWait(5)
@@ -163,6 +166,7 @@ export class AddLiquidityPage extends AppPage {
     await this.Page.waitForSelector(this.FixedRatioCheckboxSelector)
     const fixedRateCheckbox = await this.Page.$(this.FixedRatioCheckboxSelector)
 
+    // @ts-ignore TYPE NEEDS FIXING
     return fixedRateCheckbox
   }
 

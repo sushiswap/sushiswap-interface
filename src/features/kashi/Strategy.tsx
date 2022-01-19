@@ -6,6 +6,7 @@ import Button from '../../components/Button'
 import { formatPercent } from '../../functions'
 import { useBentoBox } from '../../hooks'
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function Strategy({ token }) {
   const { harvest } = useBentoBox()
 

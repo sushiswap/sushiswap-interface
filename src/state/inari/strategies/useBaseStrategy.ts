@@ -110,6 +110,7 @@ const useBaseStrategy = ({ id, general, tokenDefinitions }: useBaseStrategyInter
       inputTokenBalance?: CurrencyAmount<Token>
       outputTokenBalance?: CurrencyAmount<Token>
     }) => {
+      // @ts-ignore TYPE NEEDS FIXING
       _setBalances((prevState) => ({
         ...prevState,
         inputTokenBalance,
@@ -119,6 +120,7 @@ const useBaseStrategy = ({ id, general, tokenDefinitions }: useBaseStrategyInter
     []
   )
 
+  // @ts-ignore TYPE NEEDS FIXING
   return useMemo(
     () => ({
       id,

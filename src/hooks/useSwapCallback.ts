@@ -344,6 +344,7 @@ export function useSwapCallArguments(
   return useMemo<SwapCall[]>(() => {
     let result: SwapCall[] = []
     if (
+      // @ts-ignore TYPE NEEDS FIXING
       (featureEnabled(Feature.BENTOBOX, chainId) && !rebase) ||
       !trade ||
       !recipient ||
@@ -433,6 +434,7 @@ export function useSwapCallArguments(
 
       const actions = [
         approveMasterContractAction({ router: tridentRouterContract, signature: bentoPermit }),
+        // @ts-ignore TYPE NEEDS FIXING
         tridentRouterContract.interface.encodeFunctionData(method[routeType], [rest]),
       ]
 
@@ -534,6 +536,7 @@ export function useSwapCallback(
   const blockNumber = useBlockNumber()
 
   const eip1559 =
+    // @ts-ignore TYPE NEEDS FIXING
     EIP_1559_ACTIVATION_BLOCK[chainId] == undefined ? false : blockNumber >= EIP_1559_ACTIVATION_BLOCK[chainId]
 
   const swapCalls = useSwapCallArguments(
@@ -669,6 +672,7 @@ export function useSwapCallback(
           const supportedNetwork = OPENMEV_SUPPORTED_NETWORKS.includes(chainId)
           if (!supportedNetwork) throw new Error(`Unsupported OpenMEV network id ${chainId} when building transaction`)
 
+          // @ts-ignore TYPE NEEDS FIXING
           txResponse = library
             .getSigner()
             .populateTransaction({
@@ -692,6 +696,7 @@ export function useSwapCallback(
                 data: data?.toString(),
               })
 
+              // @ts-ignore TYPE NEEDS FIXING
               return library.provider
                 .request({ method: 'eth_sign', params: [account, hexlify(txToSign.getMessageToSign())] })
                 .then((signature) => {
@@ -710,6 +715,7 @@ export function useSwapCallback(
                 params: [signedTx],
               })
 
+              // @ts-ignore TYPE NEEDS FIXING
               return fetch(OPENMEV_URI[chainId], {
                 method: 'POST',
                 body,
@@ -741,8 +747,10 @@ export function useSwapCallback(
             } for ${trade?.outputAmount?.toSignificant(4)} ${trade?.outputAmount.currency?.symbol}`
             if (tridentTradeContext?.parsedAmounts) {
               base = `Swap ${tridentTradeContext?.parsedAmounts[0]?.toSignificant(4)} ${
+                // @ts-ignore TYPE NEEDS FIXING
                 tridentTradeContext?.parsedAmounts[0].currency?.symbol
               } for ${tridentTradeContext?.parsedAmounts[1]?.toSignificant(4)} ${
+                // @ts-ignore TYPE NEEDS FIXING
                 tridentTradeContext?.parsedAmounts[1].currency?.symbol
               }`
             }

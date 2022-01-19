@@ -15,6 +15,7 @@ const Rewards: FC = () => {
   const { i18n } = useLingui()
 
   // TODO ramin:
+  // @ts-ignore TYPE NEEDS FIXING
   const rewardCurrency = SUSHI[chainId]
 
   return (
