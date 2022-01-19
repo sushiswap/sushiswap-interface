@@ -15,6 +15,7 @@ const features: FeatureMap = {
     Feature.MISO,
     Feature.MEOWSHI,
     Feature.INARI,
+    Feature.VESTING,
   ],
   [ChainId.ROPSTEN]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI, Feature.MISO],
   [ChainId.RINKEBY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI, Feature.MISO],
