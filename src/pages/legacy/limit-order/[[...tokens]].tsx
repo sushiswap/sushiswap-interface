@@ -277,7 +277,7 @@ function LimitOrder() {
             </div>
 
             <div className="flex flex-col items-end justify-between w-full gap-4 md:flex-row md:items-center">
-              <PriceRatio trade={trade} />
+              {trade ? <PriceRatio trade={trade} /> : <div />}
               {isExpertMode && recipient === undefined && (
                 <div className={`flex flex-1 ${inputCurrency && outputCurrency ? 'justify-center' : ''}`}>
                   <div
