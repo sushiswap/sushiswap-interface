@@ -20,9 +20,9 @@ const PriceRatio: FC<PriceRatio> = ({ trade }) => {
       : trade?.executionPrice
 
   return (
-    <div className="flex flex-row font-bold text-sm ">
-      <div className="flex divide-x divide-dark-800 hover:divide-dark-700 cursor-pointer rounded border border-dark-800 hover:border-dark-700">
-        <div className="py-2 px-4">
+    <div className="flex flex-row text-sm font-bold ">
+      <div className="flex border divide-x rounded cursor-pointer divide-dark-800 hover:divide-dark-700 border-dark-800 hover:border-dark-700">
+        <div className="px-4 py-2">
           <span className="whitespace-nowrap">
             1 {inverted ? parsedOutputAmount?.currency.symbol : parsedInputAmount?.currency.symbol} ={' '}
             {inverted ? price?.invert().toSignificant(6) : price?.toSignificant(6)}{' '}
@@ -30,7 +30,7 @@ const PriceRatio: FC<PriceRatio> = ({ trade }) => {
           </span>
         </div>
         <div
-          className="py-2 w-9 flex items-center justify-center cursor-pointer text-secondary"
+          className="flex items-center justify-center py-2 cursor-pointer w-9 text-secondary"
           onClick={() => setInverted((prevState) => !prevState)}
         >
           <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -31,7 +31,9 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade }) => {
           className={`uppercase border border-blue bg-blue text-blue bg-opacity-30 border-opacity-50 py-0.5 px-1.5 text-xs rounded-3xl flex items-center justify-center ${
             !disabled ? 'cursor-pointer hover:border-opacity-100' : ''
           }`}
-          onClick={() => dispatch(setLimitPrice(trade?.executionPrice.toFixed()))}
+          onClick={() => {
+            dispatch(setLimitPrice(trade.executionPrice.toSignificant(6)))
+          }}
         >
           {i18n._(t`Current`)}
         </span>
