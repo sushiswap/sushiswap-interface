@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
 import Input from 'app/components/Input'
 import { useAppDispatch } from 'app/state/hooks'
-import { setLimitPrice } from 'app/state/limit-order/actions'
+import { LimitPrice, setLimitPrice } from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, { useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC } from 'react'
 
@@ -31,10 +31,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade }) => {
           className={`uppercase border border-blue bg-blue text-blue bg-opacity-30 border-opacity-50 py-0.5 px-1.5 text-xs rounded-3xl flex items-center justify-center ${
             !disabled ? 'cursor-pointer hover:border-opacity-100' : ''
           }`}
-          onClick={() => {
-            // @ts-ignore TYPE NEEDS FIXING
-            dispatch(setLimitPrice(trade.executionPrice.toSignificant(6)))
-          }}
+          onClick={() => dispatch(setLimitPrice(LimitPrice.CURRENT))}
         >
           {i18n._(t`Current`)}
         </span>
@@ -45,7 +42,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade }) => {
           className="w-full text-2xl font-medium bg-transparent"
           placeholder={trade ? trade.executionPrice.toSignificant(6) : '0.0'}
           id="limit-price-input"
-          value={limitPrice || ''}
+          value={(limitPrice === LimitPrice.CURRENT ? trade?.executionPrice.toSignificant(6) : limitPrice) || ''}
           onUserInput={(val) => dispatch(setLimitPrice(val))}
         />
         <div className="text-xs text-secondary whitespace-nowrap">

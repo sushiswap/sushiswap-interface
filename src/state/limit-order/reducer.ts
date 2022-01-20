@@ -1,3 +1,4 @@
+import { Signature } from '@ethersproject/bytes'
 import { createReducer } from '@reduxjs/toolkit'
 import { AppState } from 'app/state'
 
@@ -8,6 +9,9 @@ import {
   selectCurrency,
   setFromBentoBalance,
   setLimitOrderApprovalPending,
+  setLimitOrderAttemptingTxn,
+  setLimitOrderBentoPermit,
+  setLimitOrderShowReview,
   setLimitPrice,
   setOrderExpiration,
   setRecipient,
@@ -41,6 +45,9 @@ export interface LimitOrderState {
     value: OrderExpiration | string
     label: string
   }
+  readonly bentoPermit?: Signature
+  readonly attemptingTxn: boolean
+  readonly showReview: boolean
 }
 
 const initialState: LimitOrderState = {
@@ -60,6 +67,9 @@ const initialState: LimitOrderState = {
     value: OrderExpiration.never,
     label: 'Never',
   },
+  bentoPermit: undefined,
+  attemptingTxn: false,
+  showReview: false,
 }
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>
@@ -153,8 +163,16 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
         ...initialState,
       }
     })
+    .addCase(setLimitOrderBentoPermit, (state, { payload: bentoPermit }) => {
+      state.bentoPermit = bentoPermit
+    })
+    .addCase(setLimitOrderAttemptingTxn, (state, { payload: attemptingTxn }) => {
+      state.attemptingTxn = attemptingTxn
+    })
+    .addCase(setLimitOrderShowReview, (state, { payload: showReview }) => {
+      state.showReview = showReview
+    })
 )
 
 type SelectLimitOrder = (state: AppState) => LimitOrderState
 export const selectLimitOrder: SelectLimitOrder = (state: AppState) => state.limitOrder
-export const selectLimitOrderBentoBalance = (state: AppState) => state.limitOrder.fromBentoBalance

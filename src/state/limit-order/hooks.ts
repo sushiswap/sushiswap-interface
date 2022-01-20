@@ -1,6 +1,17 @@
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import { ChainId, Currency, CurrencyAmount, JSBI, Price, SUSHI_ADDRESS, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  JSBI,
+  Price,
+  SUSHI_ADDRESS,
+  Trade,
+  TradeType,
+  WNATIVE_ADDRESS,
+  ZERO,
+} from '@sushiswap/core-sdk'
 import { isAddress, tryParseAmount } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
@@ -15,7 +26,15 @@ import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Field, replaceLimitOrderState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
+import {
+  Field,
+  LimitPrice,
+  replaceLimitOrderState,
+  selectCurrency,
+  setRecipient,
+  switchCurrencies,
+  typeInput,
+} from './actions'
 import { LimitOrderState, OrderExpiration, selectLimitOrder } from './reducer'
 
 export function useLimitOrderActionHandlers(): {
@@ -175,8 +194,7 @@ export const useLimitOrderDerivedCurrencies: UseLimitOrderDerivedCurrencies = ()
   } = useLimitOrderState()
 
   const inputCurrency = useCurrency(inputCurrencyId || 'ETH') ?? undefined
-  // @ts-ignore TYPE NEEDS FIXING
-  const outputCurrency = useCurrency(outputCurrencyId || SUSHI_ADDRESS[chainId]) ?? undefined
+  const outputCurrency = useCurrency(outputCurrencyId || SUSHI_ADDRESS[chainId || 1]) ?? undefined
 
   return useMemo(() => {
     return {
@@ -230,9 +248,9 @@ export const useLimitOrderDerivedParsedAmounts: UseLimitOrderDerivedParsedAmount
 
 type UseLimitOrderDerivedInputError = () => string
 export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = () => {
-  const { recipient, orderExpiration, fromBentoBalance } = useLimitOrderState()
+  const { recipient, orderExpiration, fromBentoBalance, limitPrice } = useLimitOrderState()
   const { account } = useActiveWeb3React()
-  const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
+  const { [Field.INPUT]: parsedInputAmount } = useLimitOrderDerivedParsedAmounts()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const recipientLookup = useENS(recipient)
   const to = !recipient ? account : recipientLookup.address
@@ -242,13 +260,13 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ()
   return useMemo(() => {
     return !account
       ? 'Connect Wallet'
-      : !parsedInputAmount || !parsedOutputAmount
+      : !parsedInputAmount
       ? i18n._(t`Enter an amount`)
       : !inputCurrency || !outputCurrency
       ? i18n._(t`Select a token`)
       : !to || !isAddress(to)
       ? i18n._(t`Enter a recipient`)
-      : !parsedRate
+      : limitPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
       ? i18n._(t`Select a rate`)
       : !orderExpiration
       ? i18n._(t`Select an order expiration`)
@@ -257,20 +275,11 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ()
       : balance && parsedInputAmount && balance.lessThan(parsedInputAmount)
       ? i18n._(t`Insufficient Balance`)
       : ''
-  }, [
-    account,
-    balance,
-    inputCurrency,
-    orderExpiration,
-    outputCurrency,
-    parsedInputAmount,
-    parsedOutputAmount,
-    parsedRate,
-    to,
-  ])
+  }, [account, balance, inputCurrency, limitPrice, orderExpiration, outputCurrency, parsedInputAmount, parsedRate, to])
 }
 
-export const useLimitOrderDerivedTrade = () => {
+type UseLimitOrderDerivedTrade = () => Trade<Currency, Currency, TradeType> | undefined
+export const useLimitOrderDerivedTrade: UseLimitOrderDerivedTrade = () => {
   const { independentField } = useLimitOrderState()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
@@ -310,7 +319,7 @@ export const useLimitOrderDerivedTrade = () => {
   )
 
   return useMemo(() => {
-    return exactIn ? bestTradeExactIn : bestTradeExactOut
+    return (exactIn ? bestTradeExactIn : bestTradeExactOut) ?? undefined
   }, [bestTradeExactIn, bestTradeExactOut, exactIn])
 }
 

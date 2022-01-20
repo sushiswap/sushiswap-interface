@@ -1,11 +1,10 @@
 import { ArrowDownIcon } from '@heroicons/react/outline'
-import { ExclamationIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Percent, ZERO } from '@sushiswap/core-sdk'
 import limitOrderPairList from '@sushiswap/limit-order-pair-list/dist/limit-order.pairlist.json'
 import swapArrowsAnimationData from 'app/animation/swap-arrows.json'
 import AddressInputPanel from 'app/components/AddressInputPanel'
-import Alert from 'app/components/Alert'
 import Container from 'app/components/Container'
 import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import ExpertModePanel from 'app/components/ExpertModePanel'
@@ -16,23 +15,23 @@ import CurrencyInput from 'app/features/legacy/limit-order/CurrencyInput'
 import CurrencyInputPanel from 'app/features/legacy/limit-order/CurrencyInputPanel'
 import CurrencySelect from 'app/features/legacy/limit-order/CurrencySelect'
 import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
+import LimitOrderReviewModal from 'app/features/legacy/limit-order/LimitOrderReviewModal'
 import LimitPriceInputPanel from 'app/features/legacy/limit-order/LimitPriceInputPanel'
 import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
 import PayFromToggle from 'app/features/legacy/limit-order/PayFromToggle'
 import PriceRatio from 'app/features/legacy/limit-order/PriceRatio'
 import ExchangeHeader from 'app/features/trade/Header'
-import { maxAmountSpend } from 'app/functions'
+import { classNames, maxAmountSpend } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
 import { useBentoOrWalletBalances } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
+import { Field } from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, {
   useLimitOrderActionHandlers,
   useLimitOrderDerivedLimitPrice,
-  useLimitOrderDerivedParsedAmounts,
   useLimitOrderDerivedTrade,
   useLimitOrderState,
 } from 'app/state/limit-order/hooks'
-import { Field } from 'app/state/swap/actions'
 import { useExpertModeManager } from 'app/state/user/hooks'
 import Lottie from 'lottie-react'
 import Head from 'next/head'
@@ -57,7 +56,6 @@ function LimitOrder() {
   const [isExpertMode, toggleExpertMode] = useExpertModeManager()
   const { independentField, typedValue, recipient, fromBentoBalance } = useLimitOrderState()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
-  const parsedAmounts = useLimitOrderDerivedParsedAmounts()
   const trade = useLimitOrderDerivedTrade()
   const limitPrice = useLimitOrderDerivedLimitPrice()
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useLimitOrderActionHandlers()
@@ -67,6 +65,7 @@ function LimitOrder() {
     () => (limitOrderPairList.pairs[chainId || 1] || []).map(([token0, token1]) => [token0.address, token1.address]),
     [chainId]
   )
+
   const [walletBalance, bentoBalance] = useBentoOrWalletBalances(
     account ?? undefined,
     [inputCurrency, inputCurrency],
@@ -76,14 +75,16 @@ function LimitOrder() {
   const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
   const formattedAmounts = {
     [independentField]: typedValue,
-    [dependentField]: parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+    [dependentField]:
+      (independentField === Field.INPUT ? trade?.outputAmount : trade?.inputAmount)?.toSignificant(6) ?? '',
   }
+
   const maxAmountInput = maxAmountSpend(walletBalance)
   const atMaxAmountInput = bentoBalance
     ? Boolean(
         fromBentoBalance
-          ? parsedAmounts[Field.INPUT]?.equalTo(bentoBalance)
-          : maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput)
+          ? trade?.inputAmount?.equalTo(bentoBalance)
+          : maxAmountInput && trade?.inputAmount?.equalTo(maxAmountInput)
       )
     : undefined
 
@@ -95,12 +96,7 @@ function LimitOrder() {
     }
   }, [bentoBalance, fromBentoBalance, maxAmountInput, onUserInput])
 
-  const inputPanelError = useMemo(() => {
-    const currentPrice = trade?.executionPrice
-    if (limitPrice && currentPrice && !limitPrice.greaterThan(currentPrice)) {
-      return i18n._(t`This transaction is below market rate`)
-    }
-
+  const inputPanelHelperText = useMemo(() => {
     if (
       pairs &&
       inputCurrency &&
@@ -108,9 +104,19 @@ function LimitOrder() {
       // @ts-ignore TYPE NEEDS FIXING
       !pairs.find((el) => areEqual(el, [inputCurrency.wrapped.address, outputCurrency.wrapped.address]))
     ) {
-      return 'Invalid pair'
+      return { type: 'error', msg: 'Invalid pair' }
     }
-  }, [i18n, inputCurrency, limitPrice, outputCurrency, pairs, trade?.executionPrice])
+
+    if (limitPrice && trade) {
+      const { numerator, denominator } = limitPrice.subtract(trade.executionPrice).divide(trade.executionPrice)
+      const deviation = new Percent(numerator, denominator)
+      if (deviation.lessThan(ZERO)) {
+        return { type: 'error', msg: i18n._(t`This transaction is ${deviation.toSignificant(2)}% below market rate`) }
+      } else {
+        return { type: 'info', msg: i18n._(t`This transaction is ${deviation.toSignificant(2)}% above market rate`) }
+      }
+    }
+  }, [i18n, inputCurrency, limitPrice, outputCurrency, pairs, trade])
 
   const inputTokenList = useMemo(() => {
     if (pairs.length === 0) return []
@@ -229,16 +235,20 @@ function LimitOrder() {
                     showMaxButton={false}
                     onUserInput={(value) => onUserInput(Field.OUTPUT, value)}
                     value={formattedAmounts[Field.OUTPUT]}
-                    error={inputPanelError}
+                    {...(inputPanelHelperText?.type === 'error' && { error: inputPanelHelperText.msg })}
                   />
                 }
                 bottomAdornment={
-                  inputPanelError ? (
-                    <div className="z-0 flex items-center justify-center py-2 -mt-2 rounded-b bg-red bg-opacity-20">
+                  inputPanelHelperText ? (
+                    <div
+                      className={classNames(
+                        inputPanelHelperText.type === 'error' ? 'bg-red/40' : 'bg-green/40',
+                        'z-0 flex items-center justify-center py-2 -mt-2 rounded-b'
+                      )}
+                    >
                       <div className="flex items-center gap-2 pt-2">
-                        <ExclamationIcon className="text-red" width={24} height={24} />
-                        <Typography variant="xs" weight={700}>
-                          {inputPanelError}
+                        <Typography variant="xs" weight={700} className="text-white">
+                          {inputPanelHelperText.msg}
                         </Typography>
                       </div>
                     </div>
@@ -254,26 +264,20 @@ function LimitOrder() {
                   </div>
                   <AddressInputPanel id="recipient" value={recipient} onChange={onChangeRecipient} />
                   {recipient !== account && (
-                    <Alert
-                      type="warning"
-                      dismissable={false}
-                      showIcon
-                      message={i18n._(
-                        t`Please note that the recipient address is different from the connected wallet address.`
-                      )}
-                    />
+                    <div className="rounded p-4 border border-yellow/40">
+                      <Typography variant="sm" weight={700}>
+                        {i18n._(
+                          t`Please note that the recipient address is different from the connected wallet address.`
+                        )}
+                      </Typography>
+                    </div>
                   )}
                 </>
               ) : undefined}
             </div>
 
             <div className="flex flex-col items-end justify-between w-full gap-4 md:flex-row md:items-center">
-              {inputCurrency && outputCurrency && (
-                <div className="flex flex-1">
-                  {/*@ts-ignore TYPE NEEDS FIXING*/}
-                  <PriceRatio trade={trade} />
-                </div>
-              )}
+              <PriceRatio trade={trade} />
               {isExpertMode && recipient === undefined && (
                 <div className={`flex flex-1 ${inputCurrency && outputCurrency ? 'justify-center' : ''}`}>
                   <div
@@ -291,9 +295,8 @@ function LimitOrder() {
               <OrderExpirationDropdown />
             </div>
 
-            <div className="flex flex-col gap-3">
-              <LimitOrderButton color="gradient" className="font-bold" />
-            </div>
+            <LimitOrderButton trade={trade} />
+            <LimitOrderReviewModal trade={trade} />
           </div>
         </DoubleGlowShadow>
       </ExpertModePanel>

@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import Alert from 'app/components/Alert'
 import Back from 'app/components/Back'
 import Container from 'app/components/Container'
@@ -8,15 +9,19 @@ import { Feature } from 'app/enums'
 import CompletedOrders from 'app/features/legacy/open-order/CompletedOrders'
 import OpenOrders from 'app/features/legacy/open-order/OpenOrders'
 import NetworkGuard from 'app/guards/Network'
-import useLimitOrderApproveCallback, { BentoApprovalState } from 'app/hooks/useLimitOrderApproveCallback'
 import useLimitOrders from 'app/hooks/useLimitOrders'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useBentoMasterContractAllowed } from 'app/state/bentobox/hooks'
 import Head from 'next/head'
 import React from 'react'
 
 function OpenOrdersPage() {
+  const { chainId, account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [approvalState] = useLimitOrderApproveCallback()
   const { pending } = useLimitOrders()
+  const masterContract = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
+  const allowed = useBentoMasterContractAllowed(masterContract, account ?? undefined)
+
   return (
     <Container id="open-order-page" className="py-4 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
@@ -29,7 +34,7 @@ function OpenOrdersPage() {
         <div className="flex items-center justify-start gap-2 py-3">
           <Back />
         </div>
-        {pending.totalOrders > 0 && approvalState === BentoApprovalState.NOT_APPROVED && (
+        {pending.totalOrders > 0 && !allowed && (
           <div className="flex pb-6">
             <Alert
               type="error"

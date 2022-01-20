@@ -20,8 +20,8 @@ const PayFromToggle: FC = () => {
       <Switch.Group>
         <div className="flex items-center">
           <Switch.Label className="mr-2">
-            <Typography variant="sm" className={fromBentoBalance ? 'text-primary' : 'text-secondary'}>
-              BentoBox
+            <Typography variant="sm" className={!fromBentoBalance ? 'text-primary' : 'text-secondary'}>
+              {i18n._(t`Wallet`)}
             </Typography>
           </Switch.Label>
           <Switch
@@ -31,13 +31,13 @@ const PayFromToggle: FC = () => {
           >
             <span
               className={`${
-                !fromBentoBalance ? 'translate-x-5' : ''
+                fromBentoBalance ? 'translate-x-5' : ''
               } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
             />
           </Switch>
           <Switch.Label className="ml-2">
-            <Typography variant="sm" className={!fromBentoBalance ? 'text-primary' : 'text-low-emphesis'}>
-              {i18n._(t`Wallet`)}
+            <Typography variant="sm" className={fromBentoBalance ? 'text-primary' : 'text-low-emphesis'}>
+              BentoBox
             </Typography>
           </Switch.Label>
         </div>
