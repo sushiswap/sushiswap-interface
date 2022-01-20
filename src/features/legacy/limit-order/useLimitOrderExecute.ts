@@ -59,6 +59,7 @@ const useLimitOrderExecute: UseLimitOrderExecute = () => {
   const addPopup = useAddPopup()
   const { mutate } = useLimitOrders()
 
+  // Deposit to BentoBox and approve BentoBox in one transaction
   const depositAndApprove = useCallback(
     async ({ inputAmount, bentoPermit }: DepositAndApprovePayload) => {
       const { v, r, s } = bentoPermit
@@ -109,6 +110,7 @@ const useLimitOrderExecute: UseLimitOrderExecute = () => {
     [account, addTransaction, dispatch, limitOrderContractAddress, limitOrderHelperContract]
   )
 
+  // Deposit to BentoBox
   const deposit = useCallback<UseLimitOrderExecuteDeposit>(
     async ({ inputAmount, bentoPermit, fromBentoBalance }) => {
       if (!bentoBoxContract || !limitOrderContractAddress || !inputAmount) throw new Error('Dependencies unavailable')

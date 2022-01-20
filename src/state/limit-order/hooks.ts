@@ -4,7 +4,6 @@ import {
   ChainId,
   Currency,
   CurrencyAmount,
-  JSBI,
   Price,
   SUSHI_ADDRESS,
   Trade,
@@ -286,37 +285,13 @@ export const useLimitOrderDerivedTrade: UseLimitOrderDerivedTrade = () => {
   const [singleHopOnly] = useUserSingleHopOnly()
   const exactIn = independentField === Field.INPUT
 
-  const bestTradeExactIn = useTradeExactIn(
-    exactIn
-      ? parsedInputAmount ||
-          CurrencyAmount.fromRawAmount(
-            // @ts-ignore TYPE NEEDS FIXING
-            inputCurrency,
-            // @ts-ignore TYPE NEEDS FIXING
-            JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals))
-          )
-      : undefined,
-    outputCurrency ?? undefined,
-    {
-      maxHops: singleHopOnly ? 1 : undefined,
-    }
-  )
+  const bestTradeExactIn = useTradeExactIn(exactIn ? parsedInputAmount : undefined, outputCurrency ?? undefined, {
+    maxHops: singleHopOnly ? 1 : undefined,
+  })
 
-  const bestTradeExactOut = useTradeExactOut(
-    inputCurrency ?? undefined,
-    !exactIn
-      ? parsedOutputAmount ||
-          CurrencyAmount.fromRawAmount(
-            // @ts-ignore TYPE NEEDS FIXING
-            outputCurrency,
-            // @ts-ignore TYPE NEEDS FIXING
-            JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))
-          )
-      : undefined,
-    {
-      maxHops: singleHopOnly ? 1 : undefined,
-    }
-  )
+  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !exactIn ? parsedOutputAmount : undefined, {
+    maxHops: singleHopOnly ? 1 : undefined,
+  })
 
   return useMemo(() => {
     return (exactIn ? bestTradeExactIn : bestTradeExactOut) ?? undefined

@@ -5,12 +5,11 @@ import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import useLimitOrderExecute, { DepositPayload } from 'app/features/legacy/limit-order/useLimitOrderExecute'
-import { setRemoveBentoPermit } from 'app/features/trident/remove/removeSlice'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch } from 'app/state/hooks'
-import { setFromBentoBalance, setLimitOrderShowReview } from 'app/state/limit-order/actions'
+import { setFromBentoBalance, setLimitOrderBentoPermit, setLimitOrderShowReview } from 'app/state/limit-order/actions'
 import { useLimitOrderDerivedInputError, useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
@@ -71,7 +70,7 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade }) => {
           : {
               withPermit: true,
               permit: bentoPermit,
-              onPermit: (permit) => dispatch(setRemoveBentoPermit(permit)),
+              onPermit: (permit) => dispatch(setLimitOrderBentoPermit(permit)),
               onPermitError: () => setPermitError(true),
             })}
       >
