@@ -117,10 +117,12 @@ const OpenOrders: FC = () => {
               ))}
             </div>
             <Pagination
-              onChange={pending.setPage}
+              onChange={(page) => {
+                pending.setPage(page + 1)
+              }}
               // @ts-ignore TYPE NEEDS FIXING
               totalPages={pending.maxPages}
-              currentPage={pending.page}
+              currentPage={pending.page - 1}
               pageNeighbours={2}
               canNextPage={false}
               canPreviousPage={false}
