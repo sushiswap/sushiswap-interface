@@ -12,7 +12,7 @@ import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { OLD_FARMS } from 'app/config/farms'
 import { useFarmListItemDetailsModal } from 'app/features/onsen/FarmListItemDetails'
-import { setOnsenModalView } from 'app/features/onsen/onsenSlice'
+import { setOnsenModalOpen } from 'app/features/onsen/onsenSlice'
 import { classNames, tryParseAmount } from 'app/functions'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -160,7 +160,7 @@ const ManageBar = ({ farm }) => {
                       txHash={tx?.hash}
                       header={i18n._(t`Success!`)}
                       subheader={i18n._(t`Success! Transaction successfully submitted`)}
-                      onDismiss={() => dispatch(setOnsenModalView(undefined))}
+                      onDismiss={() => dispatch(setOnsenModalOpen(false))}
                     />
                   )
                   addTransaction(tx, {
@@ -192,7 +192,7 @@ const ManageBar = ({ farm }) => {
                     txHash={tx?.hash}
                     header={i18n._(t`Success!`)}
                     subheader={i18n._(t`Success! Transaction successfully submitted`)}
-                    onDismiss={() => dispatch(setOnsenModalView(undefined))}
+                    onDismiss={() => dispatch(setOnsenModalOpen(false))}
                   />
                 )
                 addTransaction(tx, {

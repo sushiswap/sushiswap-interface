@@ -18,6 +18,7 @@ export interface SubmittedModalContentProps extends ModalHeaderProps {
   animationData?: Object
   txHash?: string
   onDismiss(): void
+  onBack?(): void
   actions?: ReactElement<ModalActionProps> | ReactElement<ModalActionProps>[]
 }
 
@@ -28,6 +29,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
   animationData,
   txHash = '',
   onDismiss,
+  onBack,
   actions,
 }) => {
   const { i18n } = useLingui()
@@ -41,7 +43,7 @@ const SubmittedModalContent: FC<SubmittedModalContentProps> = ({
           <Lottie animationData={animationData} autoplay loop={false} />
         </div>
       )}
-      <HeadlessUiModal.Header onClose={onDismiss} header={header} subheader={subheader} />
+      <HeadlessUiModal.Header onClose={onDismiss} onBack={onBack} header={header} subheader={subheader} />
       <HeadlessUiModal.Content>
         <div className="flex flex-col divide-dark-700 divide-y">
           <div className="flex justify-between gap-2 py-2">

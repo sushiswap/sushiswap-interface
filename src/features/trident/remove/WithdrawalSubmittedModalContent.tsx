@@ -5,10 +5,11 @@ import React, { FC } from 'react'
 
 interface WithdrawSubmittedModalContent {
   txHash: string
+  onBack?(): void
   onDismiss(): void
 }
 
-const WithdrawSubmittedModalContent: FC<WithdrawSubmittedModalContent> = ({ txHash, onDismiss }) => {
+const WithdrawSubmittedModalContent: FC<WithdrawSubmittedModalContent> = ({ txHash, onBack, onDismiss }) => {
   const { i18n } = useLingui()
 
   return (
@@ -16,6 +17,7 @@ const WithdrawSubmittedModalContent: FC<WithdrawSubmittedModalContent> = ({ txHa
       txHash={txHash}
       header={i18n._(t`Success!`)}
       subheader={i18n._(t`Success! Withdraw Submitted`)}
+      onBack={onBack}
       onDismiss={onDismiss}
     />
   )

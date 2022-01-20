@@ -6,12 +6,12 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import { OnsenModalView } from 'app/features/onsen/enum'
 import FarmListItemDetails from 'app/features/onsen/FarmListItemDetails'
-import { setOnsenModalView } from 'app/features/onsen/onsenSlice'
+import { selectOnsen, setOnsenModalOpen, setOnsenModalState, setOnsenModalView } from 'app/features/onsen/onsenSlice'
 import { TABLE_TR_TH_CLASSNAME, TABLE_WRAPPER_DIV_CLASSNAME } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import useSortableData from 'app/hooks/useSortableData'
-import { useAppDispatch } from 'app/state/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC, useCallback, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
@@ -34,7 +34,7 @@ const FarmList = ({ farms, term }) => {
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
   const [selectedFarm, setSelectedFarm] = useState<any>()
   const dispatch = useAppDispatch()
-  const [open, setOpen] = useState<boolean>(false)
+  const { open } = useAppSelector(selectOnsen)
 
   const handleDismiss = useCallback(() => {
     setSelectedFarm(undefined)
@@ -91,16 +91,21 @@ const FarmList = ({ farms, term }) => {
                 farm={farm}
                 onClick={() => {
                   setSelectedFarm(farm)
-                  dispatch(setOnsenModalView(OnsenModalView.Liquidity))
-                  setOpen(true)
+                  dispatch(setOnsenModalState({ view: OnsenModalView.Liquidity, open: true }))
                 }}
               />
             ))}
           </InfiniteScroll>
         </div>
       </div>
-      <HeadlessUiModal.Controlled isOpen={open} onDismiss={() => setOpen(false)} afterLeave={handleDismiss}>
-        <FarmListItemDetails farm={selectedFarm} onDismiss={() => setOpen(false)} />
+      <HeadlessUiModal.Controlled
+        isOpen={open}
+        onDismiss={() => dispatch(setOnsenModalOpen(false))}
+        afterLeave={handleDismiss}
+      >
+        {selectedFarm && (
+          <FarmListItemDetails farm={selectedFarm} onDismiss={() => dispatch(setOnsenModalOpen(false))} />
+        )}
       </HeadlessUiModal.Controlled>
     </>
   ) : (

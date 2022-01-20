@@ -19,7 +19,7 @@ const InformationDisclosure = ({ farm }) => {
         </Typography>
         {farm.pair.type === PairType.SWAP && (
           <>
-            <Typography variant="xs" weight={700}>
+            <Typography variant="xs">
               {i18n._(t`Provide liquidity to the`)}
               {` `}
               <NavLink href={`/add/${farm.pair.token0.id}/${farm.pair.token1.id}`}>
@@ -42,7 +42,7 @@ const InformationDisclosure = ({ farm }) => {
         <Typography variant="xs" weight={700} className="text-white">
           {i18n._(t`Step Two`)}
         </Typography>
-        <Typography variant="xs" weight={700}>
+        <Typography variant="xs">
           {i18n._(t`Approve and then deposit your`)}
           {` `}
           {farm.pair.type === PairType.KASHI ? `KMP` : `SLP`}
@@ -55,14 +55,14 @@ const InformationDisclosure = ({ farm }) => {
           {i18n._(t`Step Three`)}
         </Typography>
         {farm.pair.type === PairType.SWAP && (
-          <Typography variant="xs" weight={700}>
+          <Typography variant="xs">
             {i18n._(
               t`Harvest rewards and unstake your SLP tokens at any time. You can then remove your liquidity to receive your base investment tokens back in your wallet.`
             )}
           </Typography>
         )}
         {farm.pair.type === PairType.KASHI && (
-          <Typography variant="xs" weight={700}>
+          <Typography variant="xs">
             {i18n._(t`Harvest rewards and unstake your KMP tokens at any time. You can then withdraw your lent`)}
             {` `}
             {farm.pair.token0.symbol}

@@ -1,6 +1,5 @@
 import { TransactionResponse } from '@ethersproject/abstract-provider'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Contract } from '@ethersproject/contracts'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE, ZERO } from '@sushiswap/core-sdk'
@@ -35,11 +34,9 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
   const [useETH, setUseETH] = useState(false)
   useETH && currencyA && currencyEquals(currencyA, WNATIVE[chainId]) && (currencyA = NATIVE[chainId])
   useETH && currencyB && currencyEquals(currencyB, WNATIVE[chainId]) && (currencyB = NATIVE[chainId])
-  const { typedValue } = useBurnState()
-
   const [tokenA, tokenB] = useMemo(() => [currencyA?.wrapped, currencyB?.wrapped], [currencyA, currencyB])
 
-  // burn state
+  const { typedValue } = useBurnState()
   const { pair, parsedAmounts, error, userLiquidity } = useDerivedBurnInfo(
     currencyA ?? undefined,
     currencyB ?? undefined
@@ -52,7 +49,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_REMOVE_LIQUIDITY_SLIPPAGE_TOLERANCE)
 
   // pair contract
-  const pairContract: Contract | null = usePairContract(pair?.liquidityToken?.address)
+  const pairContract = usePairContract(pair?.liquidityToken?.address)
 
   // router contract
   const routerContract = useRouterContract()
@@ -280,7 +277,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
         <AssetInput
           currencyLogo={false}
           currency={pair?.liquidityToken}
-          value={Number(typedValue) > 0 ? typedValue : ''}
+          value={typedValue}
           onChange={onLiquidityInput}
         />
         <div className="flex justify-between mt-2 mx-2">

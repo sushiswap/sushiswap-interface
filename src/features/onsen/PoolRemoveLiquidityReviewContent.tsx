@@ -3,11 +3,11 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
+import { HeadlessUiModal } from 'app/components/Modal'
 import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { useFarmListItemDetailsModal } from 'app/features/onsen/FarmListItemDetails'
-import { setOnsenModalView } from 'app/features/onsen/onsenSlice'
-import WithdrawalSubmittedModalContent from 'app/features/trident/remove/WithdrawalSubmittedModalContent'
+import { setOnsenModalOpen } from 'app/features/onsen/onsenSlice'
 import { useAppDispatch } from 'app/state/hooks'
 import React, { FC } from 'react'
 
@@ -33,7 +33,7 @@ const PoolRemoveLiquidityReviewContent: FC<PoolRemoveLiquidityReviewContentProps
       <HeadlessUIModal.Header
         header={i18n._(t`Confirm remove liquidity`)}
         onBack={() => setContent(undefined)}
-        onClose={() => dispatch(setOnsenModalView(undefined))}
+        onClose={() => dispatch(setOnsenModalOpen(false))}
       />
       <Typography variant="sm">
         {i18n._(t`Output is estimated. If the price changes by more than 0.5% your transaction will revert.`)}
@@ -63,7 +63,12 @@ const PoolRemoveLiquidityReviewContent: FC<PoolRemoveLiquidityReviewContentProps
       </Button>
     </div>
   ) : (
-    <WithdrawalSubmittedModalContent txHash={txHash} onDismiss={() => dispatch(setOnsenModalView(undefined))} />
+    <HeadlessUiModal.SubmittedModalContent
+      txHash={txHash}
+      header={i18n._(t`Success!`)}
+      subheader={i18n._(t`Success! Withdrawal Submitted`)}
+      onDismiss={() => dispatch(setOnsenModalOpen(false))}
+    />
   )
 }
 

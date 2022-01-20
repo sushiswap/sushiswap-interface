@@ -47,13 +47,13 @@ const FarmListItem: FC<FarmListItem> = ({ farm, onClick }) => {
           {formatNumber(farm.tvl, true)}
         </Typography>
       </div>
-      <div className={classNames('flex flex-col !items-end', TABLE_TBODY_TD_CLASSNAME(2, 4))}>
+      <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(2, 4))}>
         {farm?.rewards?.map((reward, i) => (
           <Typography
             variant="sm"
             weight={700}
             key={i}
-            className="flex gap-1.5 text-high-emphesis items-center"
+            className="flex gap-1.5 text-high-emphesis justify-center items-center"
             component="span"
           >
             {formatNumber(reward.rewardPerDay)}

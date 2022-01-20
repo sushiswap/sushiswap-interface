@@ -9,7 +9,7 @@ export interface BurnState {
 
 const initialState: BurnState = {
   independentField: Field.LIQUIDITY_PERCENT,
-  typedValue: '0',
+  typedValue: '',
 }
 
 export default createReducer<BurnState>(initialState, (builder) =>
