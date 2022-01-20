@@ -44,5 +44,8 @@ jobs:
           CI: 'true'
           TEST_PASS: ${{ secrets.TEST_PASS }}
           TEST_SEED: ${{ secrets.TEST_SEED }}
+          TEST_SEED2: ${{ secrets.TEST_SEED2 }}
+          TEST_PKEY: ${{ secrets.TEST_PKEY }}
+          TEST_ACCOUNT2_PUB_KEY: ${{ secrets.TEST_ACCOUNT2_PUB_KEY }}
         with:
           args: yarn e2e
