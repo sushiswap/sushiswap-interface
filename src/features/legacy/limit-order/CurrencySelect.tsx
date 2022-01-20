@@ -93,6 +93,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
           currencyList={currencyList}
           includeNativeCurrency={includeNativeCurrency}
           allowManageTokenList={allowManageTokenList}
+          showSearch={true}
         />
       )}
     </>

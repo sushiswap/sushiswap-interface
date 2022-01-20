@@ -81,10 +81,6 @@ const Component: FC<ComponentProps> = ({
     [onDismiss, onCurrencySelect]
   )
 
-  const handleReset = useCallback(() => {
-    setView(CurrencyModalView.search)
-  }, [])
-
   return (
     <CurrencyModalContext.Provider
       value={useMemo(

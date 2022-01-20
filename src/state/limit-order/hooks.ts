@@ -8,12 +8,11 @@ import useENS from 'app/hooks/useENS'
 import useParsedQueryString from 'app/hooks/useParsedQueryString'
 import { useV2TradeExactIn as useTradeExactIn, useV2TradeExactOut as useTradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch } from 'app/state'
 import { useAppDispatch } from 'app/state/hooks'
 import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { Field, replaceLimitOrderState, selectCurrency, setRecipient, switchCurrencies, typeInput } from './actions'
 import { LimitOrderState, OrderExpiration, selectLimitOrder } from './reducer'
@@ -132,7 +131,7 @@ export function queryParametersToSwapState(chainId: ChainId, parsedQs: ParsedQs)
 // updates the swap state to use the defaults for a given network
 export function useDefaultsFromURLSearch() {
   const { chainId } = useActiveWeb3React()
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const parsedQs = useParsedQueryString()
   const [expertMode] = useExpertModeManager()
   const [result, setResult] = useState<
@@ -192,16 +191,11 @@ export const useLimitOrderDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = ()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
 
   return useMemo(() => {
-    const baseAmount = tryParseAmount(limitPrice, inputCurrency)
-    const quoteAmount = tryParseAmount('1', outputCurrency)
+    const baseAmount = tryParseAmount('1', inputCurrency)
+    const quoteAmount = tryParseAmount(limitPrice, outputCurrency)
 
     return baseAmount && quoteAmount && inputCurrency && outputCurrency
-      ? new Price(
-          inputCurrency,
-          outputCurrency,
-          JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals))),
-          JSBI.BigInt(baseAmount.quotient.toString())
-        )
+      ? new Price({ baseAmount, quoteAmount })
       : undefined
   }, [inputCurrency, limitPrice, outputCurrency])
 }
