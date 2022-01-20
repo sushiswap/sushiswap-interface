@@ -24,11 +24,13 @@ const LiquidityLauncherStep: FC = () => {
 
   useEffect(() => {
     const value = Math.round((Number(getValues('liqPercentage')) / 100) * tokenAmount)
+    // @ts-ignore TYPE NEEDS FIXING
     setValue('tokenForLiquidity', value > 0 ? value : undefined)
   }, [getValues, liqPercentage, setValue, tokenAmount])
 
   useEffect(() => {
     const value = Math.round((Number(getValues('tokenForLiquidity')) * 100) / tokenAmount)
+    // @ts-ignore TYPE NEEDS FIXING
     setValue('liqPercentage', value > 0 ? value : undefined)
   }, [getValues, tokenForLiquidity, setValue, tokenAmount])
 

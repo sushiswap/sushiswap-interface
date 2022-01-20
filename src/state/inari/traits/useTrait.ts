@@ -5,6 +5,7 @@ export interface BaseTrait {
   overrides: string[]
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const useTrait = (props, { overrides = [] }) => {
   useEffect(() => {
     const intersection = overrides.filter((value) => (props.overrides || []).includes(value))

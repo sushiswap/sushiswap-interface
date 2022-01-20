@@ -47,6 +47,7 @@ const PERMITTABLE_TOKENS: {
       name: 'Dai Stablecoin',
       version: '1',
     },
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[1].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
   [4]: {
@@ -55,9 +56,11 @@ const PERMITTABLE_TOKENS: {
       name: 'Dai Stablecoin',
       version: '1',
     },
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[4].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
   [3]: {
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[3].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
     ['0x07865c6E87B9F70255377e024ace6630C1Eaa37F']: {
       type: PermitType.AMOUNT,
@@ -66,9 +69,11 @@ const PERMITTABLE_TOKENS: {
     },
   },
   [5]: {
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[5].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
   [42]: {
+    // @ts-ignore TYPE NEEDS FIXING
     [SUSHI[42].address]: { type: PermitType.AMOUNT, name: 'SushiSwap' },
   },
 }

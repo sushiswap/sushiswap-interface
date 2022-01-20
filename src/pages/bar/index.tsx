@@ -82,10 +82,12 @@ export default function Stake() {
   }
 
   const handleClickMax = () => {
+    // @ts-ignore TYPE NEEDS FIXING
     setInput(parsedAmount ? parsedAmount.toSignificant(balance.currency.decimals).substring(0, INPUT_CHAR_LIMIT) : '')
     setUsingBalance(true)
   }
 
+  // @ts-ignore TYPE NEEDS FIXING
   const insufficientFunds = (balance && balance.equalTo(ZERO)) || parsedAmount?.greaterThan(balance)
 
   const inputError = insufficientFunds

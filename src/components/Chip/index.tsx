@@ -34,6 +34,7 @@ export interface ChipProps {
   variant?: ChipVariant
   size?: ChipSize
   className?: string
+  // @ts-ignore TYPE NEEDS FIXING
   onClick?: (e) => void
   icon?: ReactNode
   endIcon?: ReactNode

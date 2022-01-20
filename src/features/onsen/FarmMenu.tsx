@@ -4,6 +4,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import React from 'react'
 
+// @ts-ignore TYPE NEEDS FIXING
 const Menu = ({ positionsLength }) => {
   const { account, chainId } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
@@ -75,6 +76,7 @@ const Menu = ({ positionsLength }) => {
         </NavLink>
       )}
 
+      {/*@ts-ignore TYPE NEEDS FIXING*/}
       {[ChainId.CELO].includes(chainId) && (
         <>
           <NavLink

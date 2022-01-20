@@ -9,6 +9,7 @@ export abstract class AppPageComponent {
     this.Page = page
   }
 
+  // @ts-ignore TYPE NEEDS FIXING
   public async blockingWait(seconds, checkCi: boolean = false): Promise<void> {
     let waitSeconds = seconds
 

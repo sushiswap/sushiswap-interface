@@ -76,8 +76,10 @@ export default function CurrencyInputPanel({
               )}
               <Input.Numeric
                 id="token-amount-input"
+                // @ts-ignore TYPE NEEDS FIXING
                 value={value}
                 onUserInput={(val) => {
+                  // @ts-ignore TYPE NEEDS FIXING
                   onUserInput(val)
                 }}
               />

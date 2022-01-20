@@ -21,6 +21,7 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
   const { i18n } = useLingui()
   const { getValues, setValue } = useFormContext()
   const paymentTokenAddress = useWatch({ name })
+  // @ts-ignore TYPE NEEDS FIXING
   const token = useToken(paymentTokenAddress) ?? NATIVE[chainId || 1]
 
   if (!chainId) return <></>
@@ -40,6 +41,7 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
             activeClassName="border-purple"
             className="!bg-none px-5 !py-2.5"
           >
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {NATIVE[chainId].symbol}
           </ToggleButtonGroup.Button>
           <ToggleButtonGroup.Button

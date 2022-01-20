@@ -16,10 +16,10 @@ export default function CurrencyInputPanel({
   id,
   error = '',
   className = '',
-  topAdornment = null,
-  bottomAdornment = null,
-  selectComponent = null,
-  inputComponent = null,
+  topAdornment = undefined,
+  bottomAdornment = undefined,
+  selectComponent = undefined,
+  inputComponent = undefined,
 }: CurrencyInputPanelProps) {
   return (
     <div id={id}>

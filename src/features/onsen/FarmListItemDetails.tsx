@@ -15,12 +15,14 @@ import ManageBar from './ManageBar'
 import ManageKashiPair from './ManageKashiPair'
 import ManageSwapPair from './ManageSwapPair'
 
+// @ts-ignore TYPE NEEDS FIXING
 const FarmListItemDetails = ({ farm }) => {
   const { i18n } = useLingui()
 
   const { chainId } = useActiveWeb3React()
 
   const liquidityToken = new Token(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId,
     getAddress(farm.pair.id),
     farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,

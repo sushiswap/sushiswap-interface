@@ -16,6 +16,7 @@ function useEagerConnect() {
           .catch(() => {
             setTried(true)
           })
+        // @ts-ignore TYPE NEEDS FIXING
         window.ethereum.removeAllListeners(['networkChanged'])
       } else {
         if (isMobile && window.ethereum) {
@@ -24,6 +25,7 @@ function useEagerConnect() {
             .catch(() => {
               setTried(true)
             })
+          // @ts-ignore TYPE NEEDS FIXING
           window.ethereum.removeAllListeners(['networkChanged'])
         } else {
           setTried(true)

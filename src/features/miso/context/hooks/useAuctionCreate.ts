@@ -21,19 +21,27 @@ const useAuctionCreate = () => {
   const { map: tokenTemplateMap } = useTokenTemplateMap()
   const { map: launcherTemplateMap } = useLiquidityLauncherTemplateMap()
   const marketFactory = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOMarket.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOMarket.abi : undefined
   )
   const tokenFactory = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOTokenFactory.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOTokenFactory.abi : undefined
   )
   const launcherFactory = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOLauncher.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOLauncher.abi : undefined
   )
   const recipeContract = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.AuctionCreation.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.AuctionCreation.abi : undefined
   )
 

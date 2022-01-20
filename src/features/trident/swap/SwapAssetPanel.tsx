@@ -23,9 +23,12 @@ import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
 
 interface SwapAssetPanel {
   error: boolean
+  // @ts-ignore TYPE NEEDS FIXING
   header: (x) => React.ReactNode
+  // @ts-ignore TYPE NEEDS FIXING
   walletToggle: (x) => React.ReactNode
   currency?: Currency
+  currencies?: string[]
   value?: string
   onChange(x?: string): void
   onSelect?(x: Currency): void
@@ -47,6 +50,7 @@ const SwapAssetPanel = ({
   spendFromWallet,
   priceImpact,
   disabled,
+  currencies,
 }: SwapAssetPanel) => {
   const usdcValue = useUSDCValue(tryParseAmount(value || '1', currency))
 
@@ -87,7 +91,18 @@ const SwapAssetPanel = ({
           )}
         >
           <InputPanel
-            {...{ selected, error, currency, value, onChange, disabled, onSelect, priceImpact, spendFromWallet }}
+            {...{
+              selected,
+              error,
+              currency,
+              currencies,
+              value,
+              onChange,
+              disabled,
+              onSelect,
+              priceImpact,
+              spendFromWallet,
+            }}
           />
         </div>
         <div className="hidden py-2 mt-1 lg:block lg:pb-0">
@@ -172,8 +187,9 @@ const InputPanel: FC<
     | 'priceImpact'
     | 'spendFromWallet'
     | 'selected'
+    | 'currencies'
   >
-> = ({ error, currency, value, onChange, disabled, onSelect, priceImpact, selected, spendFromWallet }) => {
+> = ({ error, currency, currencies, value, onChange, disabled, onSelect, priceImpact, selected, spendFromWallet }) => {
   const { i18n } = useLingui()
   const isDesktop = useDesktopMediaQuery()
   const [open, setOpen] = useState<boolean>(false)
@@ -224,6 +240,7 @@ const InputPanel: FC<
                 selectedCurrency={currency}
                 onCurrencySelect={(currency) => onSelect && onSelect(currency)}
                 onDismiss={() => setOpen(false)}
+                {...(currencies && { currencyList: currencies })}
               />
             </div>
           )}
@@ -239,6 +256,8 @@ const InputPanel: FC<
             {!currency ? (
               <CurrencySearchModal
                 selectedCurrency={currency}
+                // @ts-ignore TYPE NEEDS FIXING
+                {...(currencies?.length > 0 && { currencyList: currencies })}
                 onCurrencySelect={(currency) => onSelect && onSelect(currency)}
                 trigger={
                   <div className="inline-flex items-center">

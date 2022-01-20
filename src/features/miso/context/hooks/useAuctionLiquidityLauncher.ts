@@ -15,7 +15,9 @@ export const useAuctionLiquidityLauncher = () => {
   const addTransaction = useTransactionAdder()
   const factory = useFactoryContract()
   const contract = useContract(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOLauncher.address : undefined,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOLauncher.abi : undefined
   )
   const { map: templateMap } = useLiquidityLauncherTemplateMap()

@@ -92,16 +92,19 @@ export class CreatePoolPage extends AppPage {
 
   public async setPoolFee(fee: number): Promise<void> {
     const feeTierButton = await this.Page.waitForSelector(this.FeeTierSelector + fee)
+    // @ts-ignore TYPE NEEDS FIXING
     await feeTierButton.click()
   }
 
   public async setPoolType(poolType: string): Promise<void> {
     const poolTypeButton = await this.Page.waitForSelector(this.PoolTypeButtonSelector + poolType)
+    // @ts-ignore TYPE NEEDS FIXING
     await poolTypeButton.click()
   }
 
   public async clickContinueButton(): Promise<void> {
     const continueButton = await this.Page.waitForSelector(this.ClassicContinueButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await continueButton.click()
   }
 
@@ -123,9 +126,11 @@ export class CreatePoolPage extends AppPage {
       return
     }
 
+    // @ts-ignore TYPE NEEDS FIXING
     await btnReviewConfirm.click()
 
     const btnConfirmCreation = await this.Page.waitForSelector(this.ConfirmCreationButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await btnConfirmCreation.click()
 
     await this.confirmMetamaskTransaction()

@@ -8,6 +8,7 @@ describe('application reducer', () => {
   let store: Store<ApplicationState>
 
   beforeEach(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     store = createStore(reducer, {
       popupList: [],
       blockNumber: {

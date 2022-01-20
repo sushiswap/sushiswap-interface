@@ -107,10 +107,12 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
             <div className="flex gap-3">
               <AuctionIcon auctionTemplate={auction.template} width={18} height={14} />
               <Typography variant="xs" weight={700}>
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {AuctionTitleByTemplateId(i18n)[auction.template]}
               </Typography>
             </div>
             <QuestionHelper
+              // @ts-ignore TYPE NEEDS FIXING
               text={AuctionHelperTextByTemplateId(i18n)[auction.template]}
               icon={<SolidQuestionMarkCircleIcon width={12} height={12} />}
             />
@@ -138,6 +140,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
                 {i18n._(t`Current Token Price`)}
               </Typography>
               <QuestionHelper
+                // @ts-ignore TYPE NEEDS FIXING
                 text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}
                 icon={
                   <SolidQuestionMarkCircleIcon
@@ -170,6 +173,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
                   {i18n._(t`Auction Price`)}
                 </Typography>
                 <QuestionHelper
+                  // @ts-ignore TYPE NEEDS FIXING
                   text={AuctionHelperTextByTemplateId(i18n)[auction.template]}
                   icon={<SolidQuestionMarkCircleIcon width={12} height={12} />}
                 />

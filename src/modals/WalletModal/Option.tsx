@@ -26,6 +26,7 @@ export default function Option({
   const content = (
     <div
       role="button"
+      // @ts-ignore TYPE NEEDS FIXING
       onClick={onClick}
       className={classNames(
         clickable ? 'cursor-pointer' : '',

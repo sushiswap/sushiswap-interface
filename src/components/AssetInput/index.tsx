@@ -31,7 +31,7 @@ interface AssetInputProps {
   headerRight?: ReactNode
   chip?: string
   disabled?: boolean
-  currencies?: Currency[]
+  currencies?: string[]
   id?: string
   className?: string
 }
@@ -80,9 +80,10 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, class
               <CurrencySearchModal.Controlled
                 open={open}
                 selectedCurrency={props.currency}
+                // @ts-ignore TYPE NEEDS FIXING
                 onCurrencySelect={props.onSelect}
                 onDismiss={() => setOpen(false)}
-                currencyList={props.currencies?.map((el) => el.wrapped.address)}
+                currencyList={props.currencies}
               />
             </>
           )}
@@ -180,8 +181,9 @@ const AssetInputPanel = ({
               </div>
             }
             selectedCurrency={currency}
+            // @ts-ignore TYPE NEEDS FIXING
             onCurrencySelect={onSelect}
-            currencyList={currencies?.map((el) => el.wrapped.address)}
+            currencyList={currencies}
           />
         </>
       )}

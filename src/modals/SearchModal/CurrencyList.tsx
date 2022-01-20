@@ -15,7 +15,9 @@ import { useCombinedActiveList } from 'app/state/lists/hooks'
 import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { CSSProperties, FC, useCallback, useMemo } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import AutoSizer from 'react-virtualized-auto-sizer'
+// @ts-ignore TYPE NEEDS FIXING
 import { FixedSizeList as List } from 'react-window'
 
 function currencyKey(currency: Currency): string {
@@ -165,6 +167,7 @@ const CurrencyList: FC<CurrencyList> = ({ currencies, otherListTokens }) => {
   return (
     <div id="all-currencies-list" className="flex flex-col flex-1 flex-grow h-full divide-y divide-dark-800">
       <AutoSizer>
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {({ height, width }) => (
           <List height={height} width={width} itemCount={itemData.length} itemSize={56}>
             {Row}

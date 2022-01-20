@@ -120,6 +120,7 @@ export default function Updater(): null {
               }
 
               if (receipt.status === 0) {
+                // @ts-ignore TYPE NEEDS FIXING
                 sendRevertTransactionLog(hash, routeInfo)
               }
             } else {

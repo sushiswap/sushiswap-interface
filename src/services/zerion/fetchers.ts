@@ -58,6 +58,7 @@ export const getAssets = async (account: string) => {
 
   return Object.keys(assets)
     .map((key) => {
+      // @ts-ignore TYPE NEEDS FIXING
       const network = Networks[key.split(' ')[2]]
       return Object.values(assets[key][Object.keys(assets[key])[0]]).map((asset: any) => {
         return {

@@ -29,6 +29,7 @@ export const usePoolsTableData = () => {
       {
         Header: 'Assets',
         accessor: 'assets',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: ({ value, row: { original } }) => {
           return <PoolCell assets={value} twapEnabled={original.twapEnabled} />
         },
@@ -41,13 +42,16 @@ export const usePoolsTableData = () => {
         Cell: (props: { value: PoolType }) => (
           <Chip label={poolTypeNameMapper[props.value]} color={chipPoolColorMapper[props.value]} />
         ),
+        // @ts-ignore TYPE NEEDS FIXING
         filter: (rows, id, filterValue) =>
+          // @ts-ignore TYPE NEEDS FIXING
           rows.filter((row) => !filterValue.length || filterValue.includes(row.values.type)),
       },
       {
         Header: 'Fee Tier',
         accessor: 'swapFee',
         maxWidth: 100,
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => <span>{props.value / 100}%</span>,
         filter: feeTiersFilter,
       },
@@ -55,12 +59,14 @@ export const usePoolsTableData = () => {
         Header: 'TVL',
         accessor: 'liquidityUSD',
         maxWidth: 100,
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => <span>{formatNumber(props.value, true)}</span>,
       },
       {
         Header: 'APY',
         accessor: 'apy',
         maxWidth: 100,
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: ({ row }) => {
           const { data: stats } = useRollingPoolStats({
             chainId,

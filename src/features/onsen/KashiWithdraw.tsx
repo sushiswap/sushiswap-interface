@@ -17,6 +17,7 @@ import React, { useState } from 'react'
 
 import CurrencyInputPanel from './CurrencyInputPanel'
 
+// @ts-ignore TYPE NEEDS FIXING
 const KashiWithdraw = ({ pair, useBento }) => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
@@ -39,6 +40,7 @@ const KashiWithdraw = ({ pair, useBento }) => {
 
   async function onWithdraw(cooker: KashiCooker): Promise<string> {
     const maxFraction = minimum(pair.userAssetFraction, pair.maxAssetAvailableFraction)
+    // @ts-ignore TYPE NEEDS FIXING
     const fraction = BigNumber.from(parsedWithdrawValue.quotient.toString()).mulDiv(
       pair.currentTotalAsset.base,
       pair.currentAllAssets.value
@@ -68,6 +70,7 @@ const KashiWithdraw = ({ pair, useBento }) => {
           setWithdrawValue(maxAmount?.toExact() ?? '')
         }}
         onUserInput={(value) => setWithdrawValue(value)}
+        // @ts-ignore TYPE NEEDS FIXING
         currencyBalance={available}
         fiatValue={availableFiatValue}
       />

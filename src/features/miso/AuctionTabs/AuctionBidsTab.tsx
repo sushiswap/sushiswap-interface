@@ -12,6 +12,7 @@ import { classNames, getExplorerLink, shortenAddress, shortenString } from 'app/
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
 import React, { FC, useMemo, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 export const useCommitmentTableConfig = (commitments?: AuctionCommitment[]) => {
@@ -153,8 +154,10 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
       <div className="flex flex-col gap-2">
         <div {...getTableProps()} className="w-full">
           <div className="mb-3">
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {headerGroups.map((headerGroup, i) => (
               <div {...headerGroup.getHeaderGroupProps()} key={i}>
+                {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {headerGroup.headers.map((column, i) => (
                   <Typography
                     weight={700}
@@ -169,10 +172,12 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
             ))}
           </div>
           <div {...getTableBodyProps()}>
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {page.map((row, i) => {
               prepareRow(row)
               return (
                 <div {...row.getRowProps()} key={i} className="space-y-4">
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {row.cells.map((cell, i) => {
                     return (
                       <Typography

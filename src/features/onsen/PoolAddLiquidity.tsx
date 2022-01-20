@@ -27,13 +27,16 @@ import CurrencyInputPanel from './CurrencyInputPanel'
 
 const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
+// @ts-ignore TYPE NEEDS FIXING
 const PoolDeposit = ({ currencyA, currencyB }) => {
   const { i18n } = useLingui()
   const { account, chainId, library } = useActiveWeb3React()
 
   const [useETH, setUseETH] = useState(chainId !== ChainId.CELO)
 
+  // @ts-ignore TYPE NEEDS FIXING
   chainId && useETH && currencyA && currencyEquals(currencyA, WNATIVE[chainId]) && (currencyA = NATIVE[chainId])
+  // @ts-ignore TYPE NEEDS FIXING
   chainId && useETH && currencyB && currencyEquals(currencyB, WNATIVE[chainId]) && (currencyB = NATIVE[chainId])
 
   const oneCurrencyIsETH = currencyA?.isNative || currencyB?.isNative
@@ -281,6 +284,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
           onMax={() => {
             onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')
           }}
+          // @ts-ignore TYPE NEEDS FIXING
           currencyBalance={currencyBalances[Field.CURRENCY_A]}
           fiatValue={currencyAFiatValue}
         />
@@ -294,6 +298,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
             onMax={() => {
               onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')
             }}
+            // @ts-ignore TYPE NEEDS FIXING
             currencyBalance={currencyBalances[Field.CURRENCY_B]}
             fiatValue={currencyBFiatValue}
           />
@@ -303,6 +308,7 @@ const PoolDeposit = ({ currencyA, currencyB }) => {
               onClick={() => setUseETH(!useETH)}
             >
               {i18n._(t`Use`)} {useETH && 'W'}
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {NATIVE[chainId].symbol}
             </a>
           )}

@@ -25,7 +25,9 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const currency = currencies[field]
+  // @ts-ignore TYPE NEEDS FIXING
   const balance = useTokenBalance(account, currency)
+  // @ts-ignore TYPE NEEDS FIXING
   const inputUSDCValue = useUSDCValue(tryParseAmount(fields[field], currencies[field]))
   const balanceUSDCValue = useUSDCValue(balance)
 
@@ -57,6 +59,7 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
                   <Typography
                     variant="xs"
                     className="underline cursor-pointer text-blue"
+                    // @ts-ignore TYPE NEEDS FIXING
                     onClick={() => setCurrency(currency === XSUSHI ? SUSHI[ChainId.ETHEREUM] : XSUSHI, field)}
                   >
                     {currencies[field] === SUSHI[ChainId.ETHEREUM] ? i18n._(t`Use xSUSHI`) : i18n._(t`Use SUSHI`)}
@@ -71,6 +74,7 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
                 <Input.Numeric
                   className="w-full text-2xl leading-4 bg-transparent"
                   id="token-amount-input"
+                  // @ts-ignore TYPE NEEDS FIXING
                   value={fields[field]}
                   onUserInput={(val) => handleInput(val, field)}
                 />
@@ -84,6 +88,7 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
 
             {showMax && (
               <span
+                // @ts-ignore TYPE NEEDS FIXING
                 onClick={() => handleInput(balance?.toExact(), field)}
                 className="flex items-center justify-center px-2 py-1 text-sm uppercase border border-opacity-50 cursor-pointer border-blue bg-blue text-blue bg-opacity-30 rounded-3xl hover:border-opacity-100"
               >
@@ -96,6 +101,7 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
           <Typography
             variant="xs"
             component="span"
+            // @ts-ignore TYPE NEEDS FIXING
             onClick={() => handleInput(balance?.toExact(), field)}
             className="cursor-pointer text-primary"
           >

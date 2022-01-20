@@ -1,6 +1,7 @@
 import Container from 'app/components/Container'
 import Head from 'next/head'
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function Status({ initialData }) {
   //   const res = useChainsStatus({ initialData })
   //   const { data } = res.data

@@ -7,7 +7,9 @@ export interface DocumentInput {
   data: string
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const arrayToMap = (result) =>
+  // @ts-ignore TYPE NEEDS FIXING
   result.reduce((acc, cur) => {
     acc[cur.name] = cur.data
     return acc

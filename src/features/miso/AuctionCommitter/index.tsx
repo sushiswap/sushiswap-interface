@@ -50,6 +50,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
   const overSpend =
     auction && whitelistedAmount && auction.totalTokensCommitted?.add(inputAmount).greaterThan(whitelistedAmount)
   const notEnoughBalance = balance && inputAmount && inputAmount.greaterThan(balance)
+  // @ts-ignore TYPE NEEDS FIXING
   let error
 
   if (inputAmount.equalTo(ZERO)) error = i18n._(t`Enter amount`)
@@ -109,6 +110,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
                 onClick={() => setReview(true)}
                 disabled={
                   inputAmount.equalTo(ZERO) ||
+                  // @ts-ignore TYPE NEEDS FIXING
                   error ||
                   !!(notWhitelisted || notEnoughBalance || overSpend) ||
                   auction.status !== AuctionStatus.LIVE
@@ -118,6 +120,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
               >
                 <div className="flex flex-col items-center gap-1">
                   <Typography className="text-white" weight={700}>
+                    {/*@ts-ignore TYPE NEEDS FIXING*/}
                     {error ? error : i18n._(t`Commit`)}
                   </Typography>
                   {whitelist && (

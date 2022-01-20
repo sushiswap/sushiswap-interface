@@ -71,6 +71,7 @@ const ClassicStandardAside = () => {
           dismissable={false}
           type="error"
           message={i18n._(
+            // @ts-ignore TYPE NEEDS FIXING
             t`Native ${NATIVE[chainId || 1].symbol} can't be withdrawn to BentoBox, ${
               WNATIVE[chainId || 1].symbol
             } will be received instead`
@@ -86,6 +87,7 @@ const ClassicStandardAside = () => {
             <div className="flex gap-1.5 items-center">
               <CurrencyLogo currency={el?.currency} size={20} />
               <Typography
+                // @ts-ignore TYPE NEEDS FIXING
                 id={el?.currency.symbol.toLowerCase() + `-min-liquidity-output`}
                 variant="sm"
                 weight={700}
@@ -95,7 +97,8 @@ const ClassicStandardAside = () => {
               </Typography>
               <Typography variant="sm" weight={700} className="text-high-emphesis">
                 {el?.currency.wrapped.address === WNATIVE[chainId || 1].address && receiveNative && outputToWallet
-                  ? NATIVE[chainId || 1].symbol
+                  ? // @ts-ignore TYPE NEEDS FIXING
+                    NATIVE[chainId || 1].symbol
                   : el?.currency.symbol}
               </Typography>
             </div>

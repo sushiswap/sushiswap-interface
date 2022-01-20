@@ -81,10 +81,6 @@ const Component: FC<ComponentProps> = ({
     [onDismiss, onCurrencySelect]
   )
 
-  const handleReset = useCallback(() => {
-    setView(CurrencyModalView.search)
-  }, [])
-
   return (
     <CurrencyModalContext.Provider
       value={useMemo(
@@ -154,6 +150,7 @@ interface CurrencySearchModalProps extends Omit<ComponentProps, 'onDismiss'> {
 const CurrencySearchModal: CurrencySearchModal<CurrencySearchModalProps> = ({ trigger, ...props }) => {
   return (
     <HeadlessUiModal trigger={trigger}>
+      {/*@ts-ignore TYPE NEEDS FIXING*/}
       {({ setOpen }) => {
         return <Component {...props} onDismiss={() => setOpen(false)} />
       }}

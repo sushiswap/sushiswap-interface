@@ -38,6 +38,7 @@ const BLOCKS_IN_A_YEAR = SECONDS_PER_YEAR / 13.25
  * @param frequency {Number} Compounding frequency (times a year)
  * @returns {Number} APR as percentage (ie. 5.82 for APY of 6%)
  */
+// @ts-ignore TYPE NEEDS FIXING
 export const apyToApr = (apy, frequency = BLOCKS_IN_A_YEAR) =>
   ((1 + apy / 100) ** (1 / frequency) - 1) * frequency * 100
 
@@ -48,4 +49,5 @@ export const apyToApr = (apy, frequency = BLOCKS_IN_A_YEAR) =>
  * @param frequency {Number} Compounding frequency (times a year)
  * @returns {Number} APY as percentage (ie. 6 for APR of 5.82%)
  */
+// @ts-ignore TYPE NEEDS FIXING
 export const aprToApy = (apr, frequency = BLOCKS_IN_A_YEAR) => ((1 + apr / 100 / frequency) ** frequency - 1) * 100

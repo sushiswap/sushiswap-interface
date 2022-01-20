@@ -48,6 +48,7 @@ export function useMasterChefV1Farms({ chainId, swrConfig = undefined }: useFarm
   const { data } = useSWR(shouldFetch ? ['masterChefV1Farms'] : null, () => getMasterChefV1Farms(undefined), swrConfig)
   return useMemo(() => {
     if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return data.map((data) => ({ ...data, chef: Chef.MASTERCHEF }))
   }, [data])
 }
@@ -57,10 +58,12 @@ export function useMasterChefV2Farms({ chainId, swrConfig = undefined }: useFarm
   const { data } = useSWR(shouldFetch ? 'masterChefV2Farms' : null, () => getMasterChefV2Farms(), swrConfig)
   return useMemo(() => {
     if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return data.map((data) => ({ ...data, chef: Chef.MASTERCHEF_V2 }))
   }, [data])
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useOldMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.CELO
@@ -72,6 +75,7 @@ export function useOldMiniChefFarms(swrConfig: SWRConfiguration = undefined) {
 
   return useMemo(() => {
     if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return data.map((data) => ({ ...data, chef: Chef.OLD_FARMS }))
   }, [data])
 }
@@ -95,6 +99,7 @@ export function useMiniChefFarms({ chainId, swrConfig = undefined }: useFarmsPro
   )
   return useMemo(() => {
     if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return data.map((data) => ({ ...data, chef: Chef.MINICHEF }))
   }, [data])
 }
@@ -119,6 +124,7 @@ export function useMasterChefV1PairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return data.map((data) => data.pair)
   }, [data])
 }
@@ -131,6 +137,7 @@ export function useMasterChefV2PairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return data.map((data) => data.pair)
   }, [data])
 }
@@ -153,6 +160,7 @@ export function useMiniChefPairAddresses() {
   )
   return useMemo(() => {
     if (!data) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return data.map((data) => data.pair)
   }, [data])
 }

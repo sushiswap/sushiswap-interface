@@ -19,6 +19,7 @@ const CrowdsaleDetails: FC = () => {
   const data = watch()
 
   const auctionToken = new Token(1, AddressZero, 18, data.tokenSymbol, data.tokenName)
+  // @ts-ignore TYPE NEEDS FIXING
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
 
   let price: Price<Token, Currency> | undefined

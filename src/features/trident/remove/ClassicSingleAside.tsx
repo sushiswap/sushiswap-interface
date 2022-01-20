@@ -77,6 +77,7 @@ const ClassicSingleAside = () => {
           dismissable={false}
           type="error"
           message={i18n._(
+            // @ts-ignore TYPE NEEDS FIXING
             t`Native ${NATIVE[chainId || 1].symbol} can't be withdrawn to BentoBox, ${
               WNATIVE[chainId || 1].symbol
             } will be received instead`

@@ -15,6 +15,7 @@ export const useTableConfig = (assets?: Assets[]) => {
         accessor: 'asset',
         minWidth: 100,
         className: 'text-left',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           return (
             <div className="flex gap-2.5 items-center">
@@ -36,6 +37,7 @@ export const useTableConfig = (assets?: Assets[]) => {
         accessor: 'asset',
         maxWidth: 100,
         className: 'text-left',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           return (
             <Typography
@@ -55,6 +57,7 @@ export const useTableConfig = (assets?: Assets[]) => {
         accessor: 'asset',
         maxWidth: 100,
         className: 'text-right flex justify-end',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           const usdcValue = useUSDCValue(props.cell.value)
           return (

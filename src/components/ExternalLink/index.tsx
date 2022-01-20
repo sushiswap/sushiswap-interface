@@ -50,6 +50,7 @@ const ExternalLink: FC<ExternalLinkProps> = ({
       onClick={handleClick}
       className={classNames(
         'text-baseline whitespace-nowrap',
+        // @ts-ignore TYPE NEEDS FIXING
         COLOR[color],
         (startIcon || endIcon) && 'space-x-1 flex items-center justify-center',
         className

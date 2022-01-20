@@ -68,6 +68,7 @@ const HeadlessUiModal: HeadlessUiModalType<Props> = ({ children: childrenProp, t
 
   // If children is a function, render props
   // Else just render normally
+  // @ts-ignore TYPE NEEDS FIXING
   const children = useMemo(
     () => (typeof childrenProp === 'function' ? childrenProp({ onClick, open, setOpen }) : children),
     [onClick, open, childrenProp]

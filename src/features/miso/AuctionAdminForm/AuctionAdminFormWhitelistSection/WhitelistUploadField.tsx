@@ -51,6 +51,7 @@ const WhitelistUploadField: FC<WhitelistUploadFieldProps> = ({ auction }) => {
         await tx.wait()
       }
     } catch (e) {
+      // @ts-ignore TYPE NEEDS FIXING
       console.error('Updating point list failed: ', e.message)
     } finally {
       setPending(false)

@@ -3,6 +3,7 @@ export function getStrapiURL(path = '') {
 }
 
 // Helper to make GET requests to Strapi
+// @ts-ignore TYPE NEEDS FIXING
 export async function fetchAPI(path) {
   const requestUrl = getStrapiURL(path)
   const response = await fetch(requestUrl)

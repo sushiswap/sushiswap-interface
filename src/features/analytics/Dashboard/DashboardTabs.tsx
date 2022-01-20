@@ -15,6 +15,7 @@ const tabs = [
   },
 ]
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function DashboardTabs({ currentType, setType }): JSX.Element {
   return (
     <>

@@ -89,6 +89,7 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
     await this.Page.waitForSelector(this.ExchangeRateButtonSelector)
     const rate = await this.Page.$(this.ExchangeRateButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     const rateText = (await (await rate.getProperty('textContent')).jsonValue()) as string
     return rateText
   }
@@ -103,6 +104,7 @@ export class SwapPage extends AppPage {
     }
 
     const inputTokenButton = await this.Page.waitForSelector(this.InTokenButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await inputTokenButton.click()
     await this.selectToken(tokenSymbol)
   }
@@ -116,6 +118,7 @@ export class SwapPage extends AppPage {
     }
 
     const outputTokenButton = await this.Page.waitForSelector(this.OutTokenButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await outputTokenButton.click()
     await this.selectToken(tokenSymbol)
   }
@@ -127,6 +130,7 @@ export class SwapPage extends AppPage {
   public async setAmountIn(inTokenAmount: string): Promise<void> {
     await this.Page.waitForTimeout(500)
     const tokenAmountInput = await this.Page.waitForSelector(this.TokenInputSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await tokenAmountInput.type(inTokenAmount)
   }
 
@@ -135,6 +139,7 @@ export class SwapPage extends AppPage {
     await this.Page.waitForSelector(this.TokenInputSelector)
     const tokenInput = await this.Page.$(this.TokenInputSelector)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const inTokenAmount = (await (await tokenInput.getProperty('value')).jsonValue()) as string
     return inTokenAmount
   }
@@ -179,6 +184,7 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
     await this.Page.waitForSelector(selector)
     const tokenButton = await this.Page.$(selector)
+    // @ts-ignore TYPE NEEDS FIXING
     const selectedToken = (await (await tokenButton.getProperty('textContent')).jsonValue()) as string
     return selectedToken
   }
@@ -187,9 +193,11 @@ export class SwapPage extends AppPage {
     await this.blockingWait(3, true)
     await this.Page.waitForSelector(this.InTokenButtonSelector)
     const inputTokenLabel = await this.Page.$(this.InTokenButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     const inToken = (await (await inputTokenLabel.getProperty('textContent')).jsonValue()) as string
 
     const balanceLabel = await this.Page.waitForSelector(`#text-balance-${inToken}`)
+    // @ts-ignore TYPE NEEDS FIXING
     const inTokenBalance = (await (await balanceLabel.getProperty('textContent')).jsonValue()) as string
 
     return inTokenBalance
@@ -216,6 +224,7 @@ export class SwapPage extends AppPage {
       case SwapType.Wrap:
       case SwapType.Unwrap:
         const wrapButon = await this.Page.waitForSelector(this.WrapButtonSelector)
+        // @ts-ignore TYPE NEEDS FIXING
         await wrapButon.click()
 
         await this.blockingWait(1)
@@ -224,10 +233,12 @@ export class SwapPage extends AppPage {
       case SwapType.Normal:
       default:
         const swapButon = await this.Page.waitForSelector(this.SwapButtonSelector)
+        // @ts-ignore TYPE NEEDS FIXING
         await swapButon.click()
 
         await this.blockingWait(1)
         const confirmSwapButton = await this.Page.waitForSelector(this.ConfirmSwapButtonSelector)
+        // @ts-ignore TYPE NEEDS FIXING
         await confirmSwapButton.click()
         break
     }
@@ -245,9 +256,11 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
 
     const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await TxSettingsButtonSelector.click()
 
     const expertModeToggle = await this.Page.waitForSelector(this.ExpertModeToggleSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await expertModeToggle.click()
 
     const confirmExpertModeButton = await this.Page.$(this.ConfirmExpertModeSelector)
@@ -260,13 +273,17 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
 
     const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await TxSettingsButtonSelector.click()
 
     const slippageInput = await this.Page.waitForSelector(this.SlippageInputSelector)
 
+    // @ts-ignore TYPE NEEDS FIXING
     await slippageInput.click({ clickCount: 3 })
+    // @ts-ignore TYPE NEEDS FIXING
     await slippageInput.type(slippage)
 
+    // @ts-ignore TYPE NEEDS FIXING
     await TxSettingsButtonSelector.click()
   }
 
@@ -274,11 +291,13 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
 
     const TxSettingsButtonSelector = await this.Page.waitForSelector(this.TxSettingsButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await TxSettingsButtonSelector.click()
 
     await this.Page.waitForSelector(this.SlippageInputSelector)
 
     const slippageInputTextBox = await this.Page.$(this.SlippageInputSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     const slippage = (await (await slippageInputTextBox.getProperty('value')).jsonValue()) as string
     return slippage
   }
@@ -288,9 +307,11 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
 
     const addRecipientButton = await this.Page.waitForSelector(this.AddRecipientButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     addRecipientButton.click()
 
     const recipientInput = await this.Page.waitForSelector(this.RecipientInputSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await recipientInput.type(recipient)
   }
 
@@ -298,6 +319,7 @@ export class SwapPage extends AppPage {
     await this.blockingWait(1, true)
 
     let recipientInputBox: ElementHandle<Element>
+    // @ts-ignore TYPE NEEDS FIXING
     recipientInputBox = await this.Page.$(this.RecipientInputSelector)
 
     if (!recipientInputBox) {
@@ -311,6 +333,7 @@ export class SwapPage extends AppPage {
   public async clickSwitchCurrenciesButton(): Promise<void> {
     await this.blockingWait(1, true)
     const switchCurrenciesButton = await this.Page.waitForSelector(this.SwitchCurrenciesButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await switchCurrenciesButton.click()
     await this.blockingWait(1, true)
   }
@@ -321,6 +344,7 @@ export class SwapPage extends AppPage {
     await this.Page.waitForSelector(this.SwapButtonSelector)
     const swapButton = await this.Page.$(this.SwapButtonSelector)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const swapButtonText = (await (await swapButton.getProperty('textContent')).jsonValue()) as string
     return swapButtonText
   }
@@ -336,6 +360,7 @@ export class SwapPage extends AppPage {
   public async clickInvertRateButton(): Promise<void> {
     await this.blockingWait(1, true)
     const invertRateButton = await this.Page.waitForSelector(this.ExchangeRateButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await invertRateButton.click()
   }
 
@@ -372,6 +397,7 @@ export class SwapPage extends AppPage {
   public async approveToken(): Promise<void> {
     await this.blockingWait(1, true)
     const approveButton = await this.Page.waitForSelector(this.ApproveButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await approveButton.click()
     await this.Metamask.confirmTransaction()
     await this.Metamask.page.waitForTimeout(1000)
@@ -393,6 +419,7 @@ export class SwapPage extends AppPage {
     await this.Page.waitForSelector(this.TradeTypeSelector)
 
     const tradeTypeInput = await this.Page.$(this.TradeTypeSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     const tradeType = (await (await tradeTypeInput.getProperty('textContent')).jsonValue()) as string
     return tradeType.toLowerCase()
   }

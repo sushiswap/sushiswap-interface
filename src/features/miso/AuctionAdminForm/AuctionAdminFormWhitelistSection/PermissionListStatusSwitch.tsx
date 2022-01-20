@@ -27,6 +27,7 @@ const PermissionListStatusSwitch: FC<PermissionListStatusSwitchProps> = ({ aucti
           await tx.wait()
         }
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         console.error('Changing permission status failed: ', e.message)
       } finally {
         setPending(false)

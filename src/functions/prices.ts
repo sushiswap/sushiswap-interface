@@ -60,6 +60,7 @@ export function computeRealizedLPFeeAmount(
     const realizedLPFee = computeRealizedLPFeePercent(trade)
 
     // the amount of the input that accrues to LPs
+    // @ts-ignore TYPE NEEDS FIXING
     return CurrencyAmount.fromRawAmount(trade.inputAmount.currency, trade.inputAmount.multiply(realizedLPFee).quotient)
   }
 

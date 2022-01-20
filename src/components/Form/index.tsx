@@ -14,6 +14,7 @@ export const DEFAULT_FORM_FIELD_CLASSNAMES =
   'appearance-none outline-none rounded placeholder:text-low-emphesis bg-dark-1000/40 px-3 py-2 focus:ring-purple focus:border-purple block w-full min-w-0 border border-dark-800'
 
 export interface FormProps extends UseFormReturn<any> {
+  // @ts-ignore TYPE NEEDS FIXING
   onSubmit(x): void
   children: ReactElement<FormCardProps>
 }

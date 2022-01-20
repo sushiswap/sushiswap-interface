@@ -94,8 +94,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={classNames(
           VARIANT[variant]['default'],
+          // @ts-ignore TYPE NEEDS FIXING
           VARIANT[variant][color],
+          // @ts-ignore TYPE NEEDS FIXING
           SIZE[size],
+          // @ts-ignore TYPE NEEDS FIXING
           variant !== 'empty' ? DIMENSIONS[size] : '',
           fullWidth ? 'w-full' : '',
           'font-bold flex items-center justify-center gap-1',

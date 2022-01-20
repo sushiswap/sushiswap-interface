@@ -94,9 +94,12 @@ const CompletedOrders: FC = () => {
               ))}
             </div>
             <Pagination
-              onChange={(page) => completed.setPage(page + 1)}
+              onChange={(page) => {
+                completed.setPage(page + 1)
+              }}
+              // @ts-ignore TYPE NEEDS FIXING
               totalPages={completed.maxPages}
-              currentPage={completed.page}
+              currentPage={completed.page - 1}
               pageNeighbours={2}
               canNextPage={false}
               canPreviousPage={false}

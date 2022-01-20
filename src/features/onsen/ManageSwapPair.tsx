@@ -9,6 +9,7 @@ import React, { useState } from 'react'
 import PoolAddLiquidity from './PoolAddLiquidity'
 import PoolRemoveLiquidity from './PoolRemoveLiquidity'
 
+// @ts-ignore TYPE NEEDS FIXING
 const ManageSwapPair = ({ farm }) => {
   const [toggle, setToggle] = useState(true)
 

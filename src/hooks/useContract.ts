@@ -174,6 +174,7 @@ export function useFactoryContract(): Contract | null {
 
 export function useRouterContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   return useContract(ROUTER_ADDRESS[chainId], ROUTER_ABI, withSignerIfPossible)
 }
 
@@ -206,10 +207,12 @@ export function useUniV2FactoryContract(): Contract | null {
   return useContract(UNI_FACTORY_ADDRESS, UNI_FACTORY_ABI, false)
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useComplexRewarderContract(address, withSignerIfPossible?: boolean): Contract | null {
   return useContract(address, COMPLEX_REWARDER_ABI, withSignerIfPossible)
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useCloneRewarderContract(address, withSignerIfPossibe?: boolean): Contract | null {
   return useContract(address, CLONE_REWARDER_ABI, withSignerIfPossibe)
 }
@@ -220,6 +223,7 @@ export function useMeowshiContract(withSignerIfPossible?: boolean): Contract | n
 
 export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   return useContract(STOP_LIMIT_ORDER_ADDRESS[chainId], LIMIT_ORDER_ABI, withSignerIfPossibe)
 }
 
@@ -229,6 +233,7 @@ export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Con
     [ChainId.MATIC]: '0xe2f736B7d1f6071124CBb5FC23E93d141CD24E12',
     [ChainId.AVALANCHE]: '0x889ec9e19C1598358899fCA4879011686c3d4045',
   }
+  // @ts-ignore TYPE NEEDS FIXING
   return useContract(chainId && LIMIT_ORDER_HELPER_ADDRESS[chainId], LIMIT_ORDER_HELPER_ABI, withSignerIfPossible)
 }
 
@@ -242,30 +247,35 @@ export function useZenkoContract(withSignerIfPossible?: boolean): Contract | nul
 
 export function useTridentRouterContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const router = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.TridentRouter
   return useContract(router?.address, router?.abi, withSignerIfPossible)
 }
 
 export function useMasterDeployerContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const masterDeployer = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MasterDeployer
   return useContract(masterDeployer?.address, masterDeployer?.abi, withSignerIfPossible)
 }
 
 export function useConstantProductPoolFactory(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.ConstantProductPoolFactory
   return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }
 
 export function useStablePoolFactory(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const factory = TRIDENT[chainId]?.[CHAIN_KEY[chainId]]?.contracts.HybridPoolFactory
   return useContract(factory?.address, factory?.abi, withSignerIfPossible)
 }
 
 export function useMisoHelperContract(withSignerIfPossible = true): Contract | null {
   const { chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const factory = MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.MISOHelper
   return useContract(factory?.address, MISO_HELPER_ABI, withSignerIfPossible)
 }

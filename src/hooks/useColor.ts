@@ -3,6 +3,7 @@ import { uriToHttp } from 'app/functions/convert'
 import Vibrant from 'node-vibrant'
 import { shade } from 'polished'
 import { useLayoutEffect, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { hex } from 'wcag-contrast'
 
 async function getColorFromToken(token: Token): Promise<string | null> {

@@ -7,6 +7,7 @@ const BAR = {
   [ChainId.ETHEREUM]: 'matthewlilley/bar',
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const fetcher = async (query, variables = undefined) =>
   request(`${GRAPH_HOST[ChainId.ETHEREUM]}/subgraphs/name/${BAR[ChainId.ETHEREUM]}`, query, variables)
 

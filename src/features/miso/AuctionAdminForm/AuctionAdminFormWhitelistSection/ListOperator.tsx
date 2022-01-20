@@ -49,6 +49,7 @@ const ListOperator: FC<ListOperatorProps> = ({ auction }) => {
           await tx.wait()
         }
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error.message)
       } finally {
         setPending(false)

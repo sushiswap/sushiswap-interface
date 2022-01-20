@@ -21,25 +21,32 @@ export const BLOCKS = {
   [ChainId.KOVAN]: 'blocklytics/kovan-blocks',
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const fetcher = async (chainId = ChainId.ETHEREUM, query, variables = undefined) => {
+  // @ts-ignore TYPE NEEDS FIXING
   return request(`${GRAPH_HOST[chainId]}/subgraphs/name/${BLOCKS[chainId]}`, query, variables)
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getBlock = async (chainId = ChainId.ETHEREUM, variables) => {
   const { blocks } = await fetcher(chainId, blockQuery, variables)
 
   return { number: Number(blocks?.[0]?.number) }
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getBlocks = async (chainId = ChainId.ETHEREUM, variables) => {
   const { blocks } = await fetcher(chainId, blocksQuery, variables)
   return blocks
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const getMassBlocks = async (chainId = ChainId.ETHEREUM, timestamps) => {
   const data = await fetcher(chainId, massBlocksQuery(timestamps))
   return Object.values(data).map((entry) => ({
+    // @ts-ignore TYPE NEEDS FIXING
     number: Number(entry[0].number),
+    // @ts-ignore TYPE NEEDS FIXING
     timestamp: Number(entry[0].timestamp),
   }))
 }
@@ -57,6 +64,7 @@ export const getAverageBlockTime = async (chainId = ChainId.ETHEREUM) => {
   })
 
   const averageBlockTime = blocks?.reduce(
+    // @ts-ignore TYPE NEEDS FIXING
     (previousValue, currentValue, currentIndex) => {
       if (previousValue.timestamp) {
         const difference = previousValue.timestamp - currentValue.timestamp

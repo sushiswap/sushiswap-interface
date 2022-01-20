@@ -114,6 +114,7 @@ export function useDerivedMintInfo(
   // amounts
   const independentAmount: CurrencyAmount<Currency> | undefined = tryParseAmount(
     typedValue,
+    // @ts-ignore TYPE NEEDS FIXING
     currencies[independentField]
   )
   const dependentAmount: CurrencyAmount<Currency> | undefined = useMemo(() => {

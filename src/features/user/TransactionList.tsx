@@ -7,11 +7,13 @@ import { useActiveWeb3React } from 'app/services/web3'
 import React from 'react'
 import { ArrowUpRight, CheckCircle } from 'react-feather'
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function TransactionList({ transactions }) {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   return transactions ? (
     <div className="space-y-3">
+      {/*@ts-ignore TYPE NEEDS FIXING*/}
       {transactions.map((transaction) => (
         <div key={transaction.tx_hash} className="flex items-center justify-between px-3 py-1 rounded bg-dark-800">
           <div className="flex flex-row items-center pr-3 space-x-1">

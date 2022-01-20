@@ -10,9 +10,12 @@ export type useDependentAssetInputs = (x: {
   fixedRatio: boolean
   spendFromWallet: [boolean, boolean]
   inputs: (string | undefined)[]
+  // @ts-ignore TYPE NEEDS FIXING
   setInputs(x): void
 }) => {
+  // @ts-ignore TYPE NEEDS FIXING
   mainInput: [string, (string) => void]
+  // @ts-ignore TYPE NEEDS FIXING
   secondaryInput: [string, (string) => void]
   onMax(): void
   isMax?: boolean
@@ -51,6 +54,7 @@ export const useDependentAssetInputs: useDependentAssetInputs = ({
         }
       }
 
+      // @ts-ignore TYPE NEEDS FIXING
       setInputs((prevState) => [val, Number(val) === 0 ? undefined : prevState[1]])
     },
     [currencies, fixedRatio, noLiquidity, poolWithState?.pool, rebases, setInputs]
@@ -79,6 +83,7 @@ export const useDependentAssetInputs: useDependentAssetInputs = ({
         }
       }
 
+      // @ts-ignore TYPE NEEDS FIXING
       setInputs((prevState) => [Number(val) === 0 ? undefined : prevState[0], val])
     },
     [currencies, fixedRatio, noLiquidity, poolWithState?.pool, rebases, setInputs]
@@ -135,7 +140,9 @@ export const useDependentAssetInputs: useDependentAssetInputs = ({
 
   return useMemo(
     () => ({
+      // @ts-ignore TYPE NEEDS FIXING
       mainInput: [inputs[0], handleMainInput] as [string, (string) => void],
+      // @ts-ignore TYPE NEEDS FIXING
       secondaryInput: [inputs[1], handleSecondaryInput] as [string, (string) => void],
       onMax,
       isMax,

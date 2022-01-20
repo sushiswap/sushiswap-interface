@@ -7,6 +7,7 @@ import Typography from '../Typography'
 const FILLED = {
   group: 'border border-dark-800 rounded p-0.5 bg-dark-900',
   option: {
+    // @ts-ignore TYPE NEEDS FIXING
     checked: (checked) => (checked ? 'border-transparent border-gradient-r-blue-pink-dark-900' : 'border-transparent'),
     default: 'py-1 rounded-lg border',
   },
@@ -15,6 +16,7 @@ const FILLED = {
 const OUTLINED = {
   group: 'gap-2',
   option: {
+    // @ts-ignore TYPE NEEDS FIXING
     checked: (checked) => (checked ? 'border-dark-700 bg-gradient-to-r from-blue to-pink' : 'border-dark-700'),
     default: 'py-3 rounded border',
   },
@@ -67,7 +69,9 @@ ToggleButtonGroup.Button = ({
           className={classNames(
             checked ? classNames(activeClassName, className) : className,
             'h-full flex items-center justify-center cursor-pointer focus:none',
+            // @ts-ignore TYPE NEEDS FIXING
             VARIANTS[variant].option.checked(checked),
+            // @ts-ignore TYPE NEEDS FIXING
             VARIANTS[variant].option.default
           )}
         >

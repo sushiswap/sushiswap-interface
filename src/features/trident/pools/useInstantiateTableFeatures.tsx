@@ -10,6 +10,7 @@ const useInstantiateFilters = (setFilter: TableInstance['setFilter']) => {
   useMemo(() => setFilter('swapFee', { feeTiersSelected }), [feeTiersSelected, setFilter])
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const useInstantiateSorting = (toggleSortBy) => {
   const { sort } = useAppSelector(selectTridentPools)
 

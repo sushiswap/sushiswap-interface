@@ -63,6 +63,7 @@ const ClassicSingleMode: FC = () => {
     poolWithState?.pool?.token0.address === WNATIVE[chainId || 1].address ||
     poolWithState?.pool?.token1.address === WNATIVE[chainId || 1].address
   const assetSelectCurrencies = [poolWithState?.pool?.token0, poolWithState?.pool?.token1]
+  // @ts-ignore TYPE NEEDS FIXING
   if (oneTokenIsWETH) assetSelectCurrencies.push(NATIVE[chainId || 1])
 
   return (

@@ -11,7 +11,9 @@ import { useMemo } from 'react'
 
 const AUCTION_INTERFACE = new Interface(BASE_AUCTION_ABI)
 
+// @ts-ignore TYPE NEEDS FIXING
 const arrayToMap = (result) =>
+  // @ts-ignore TYPE NEEDS FIXING
   result?.reduce((acc, cur) => {
     acc[cur.name] = cur.data
     return acc
@@ -113,6 +115,7 @@ export const useAuctionLauncherDetails = (
   const { chainId } = useActiveWeb3React()
   const launcher = useContract(
     launcherAddress,
+    // @ts-ignore TYPE NEEDS FIXING
     chainId ? MISO[chainId]?.[CHAIN_KEY[chainId]]?.contracts.PostAuctionLauncher.abi : undefined
   )
   const callsData = useMemo(

@@ -1,16 +1,15 @@
 import { getAddress } from '@ethersproject/address'
 import { AddressZero, HashZero } from '@ethersproject/constants'
-import { Token } from '@sushiswap/core-sdk'
+import { CurrencyAmount, Token } from '@sushiswap/core-sdk'
 import { getSignatureWithProviderBentobox, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import { calculateGasMargin, ZERO } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoMasterContractAllowed } from 'app/state/bentobox/hooks'
+import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderApprovalPending } from 'app/state/limit-order/actions'
-import { useDerivedLimitOrderInfo, useLimitOrderApprovalPending, useLimitOrderState } from 'app/state/limit-order/hooks'
-import { Field } from 'app/state/swap/actions'
+import { useLimitOrderState } from 'app/state/limit-order/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { useBentoBoxContract, useLimitOrderHelperContract } from './useContract'
 
@@ -30,13 +29,13 @@ export enum BentoApproveOutcome {
 }
 
 const useLimitOrderApproveCallback = () => {
+  const dispatch = useAppDispatch()
   const { account, library, chainId } = useActiveWeb3React()
-  const dispatch = useDispatch()
-
-  const { fromBentoBalance } = useLimitOrderState()
-  const { parsedAmounts } = useDerivedLimitOrderInfo()
+  const bentoBoxContract = useBentoBoxContract()
+  const limitOrderHelperContract = useLimitOrderHelperContract()
   const [fallback, setFallback] = useState(false)
   const [limitOrderPermit, setLimitOrderPermit] = useState(undefined)
+  const { fromBentoBalance, limitOrderApprovalPending: pendingApproval } = useLimitOrderState()
 
   useEffect(() => {
     setLimitOrderPermit(undefined)
@@ -44,7 +43,6 @@ const useLimitOrderApproveCallback = () => {
 
   const masterContract = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
 
-  const pendingApproval = useLimitOrderApprovalPending()
   const currentAllowed = useBentoMasterContractAllowed(masterContract, account || AddressZero)
   const addTransaction = useTransactionAdder()
 
@@ -55,9 +53,6 @@ const useLimitOrderApproveCallback = () => {
 
     return currentAllowed ? BentoApprovalState.APPROVED : BentoApprovalState.NOT_APPROVED
   }, [masterContract, currentAllowed, pendingApproval])
-
-  const bentoBoxContract = useBentoBoxContract()
-  const limitOrderHelperContract = useLimitOrderHelperContract()
 
   const approve = useCallback(async () => {
     if (approvalState !== BentoApprovalState.NOT_APPROVED) {
@@ -114,12 +109,13 @@ const useLimitOrderApproveCallback = () => {
     } catch (error) {
       console.log(error)
       return {
+        // @ts-ignore TYPE NEEDS FIXING
         outcome: error.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
       }
     }
   }, [approvalState, account, library, chainId, bentoBoxContract, masterContract])
 
-  const onApprove = async function () {
+  const onApprove = useCallback(async () => {
     if (fallback) {
       const tx = await bentoBoxContract?.setMasterContractApproval(account, masterContract, true, 0, HashZero, HashZero)
       dispatch(setLimitOrderApprovalPending('Approve Limit Order'))
@@ -128,80 +124,104 @@ const useLimitOrderApproveCallback = () => {
     } else {
       const { outcome, signature, data } = await approve()
 
+      // @ts-ignore TYPE NEEDS FIXING
       if (outcome === BentoApproveOutcome.SUCCESS) setLimitOrderPermit({ signature, data })
       else setFallback(true)
     }
-  }
+  }, [account, approve, bentoBoxContract, dispatch, fallback, masterContract])
 
-  const execute = async function (token: Token) {
-    const summary = []
-    const batch = []
-    const amount = parsedAmounts[Field.INPUT].quotient.toString()
+  const execute = useCallback(
+    async (inputAmount: CurrencyAmount<Token>, token: Token) => {
+      if (!bentoBoxContract) return
 
-    // Since the setMasterContractApproval is not payable, we can't batch native deposit and approve
-    // For this case, we setup a helper contract
-    if (token.isNative && approvalState === BentoApprovalState.NOT_APPROVED && limitOrderPermit && !fromBentoBalance) {
-      summary.push(`Approve Limit Order and Deposit ${token.symbol} into BentoBox`)
-      const {
-        signature: { v, r, s },
-      } = limitOrderPermit
+      const summary: string[] = []
+      const batch: string[] = []
+      const amount = inputAmount.quotient.toString()
 
-      const estimatedGas = await limitOrderHelperContract?.estimateGas.depositAndApprove(
-        account,
-        masterContract,
-        true,
-        v,
-        r,
-        s,
-        {
+      // Since the setMasterContractApproval is not payable, we can't batch native deposit and approve
+      // For this case, we setup a helper contract
+      if (
+        token.isNative &&
+        approvalState === BentoApprovalState.NOT_APPROVED &&
+        limitOrderPermit &&
+        !fromBentoBalance
+      ) {
+        summary.push(`Approve Limit Order and Deposit ${token.symbol} into BentoBox`)
+        const {
+          signature: { v, r, s },
+        } = limitOrderPermit
+
+        const estimatedGas = await limitOrderHelperContract?.estimateGas.depositAndApprove(
+          account,
+          masterContract,
+          true,
+          v,
+          r,
+          s,
+          {
+            value: amount,
+          }
+        )
+
+        const tx = await limitOrderHelperContract?.depositAndApprove(account, masterContract, true, v, r, s, {
           value: amount,
+          // @ts-ignore TYPE NEEDS FIXING
+          gasLimit: calculateGasMargin(estimatedGas),
+        })
+
+        addTransaction(tx, { summary: summary.join('') })
+        setLimitOrderPermit(undefined)
+        return tx
+      }
+
+      // If bento is not yet approved but we do have the permit, add the permit to the batch
+      if (approvalState === BentoApprovalState.NOT_APPROVED && limitOrderPermit) {
+        // @ts-ignore TYPE NEEDS FIXING
+        batch.push(limitOrderPermit.data)
+        summary.push('Approve Limit Order')
+      }
+
+      if (!fromBentoBalance) {
+        summary.push(`Deposit ${token.symbol} into BentoBox`)
+        if (token.isNative) {
+          batch.push(
+            bentoBoxContract.interface.encodeFunctionData('deposit', [AddressZero, account, account, amount, 0])
+          )
+        } else {
+          batch.push(
+            bentoBoxContract?.interface?.encodeFunctionData('deposit', [
+              getAddress(token.wrapped.address),
+              account,
+              account,
+              amount,
+              0,
+            ])
+          )
         }
-      )
+      }
 
-      const tx = await limitOrderHelperContract?.depositAndApprove(account, masterContract, true, v, r, s, {
-        value: amount,
-        gasLimit: calculateGasMargin(estimatedGas),
+      const tx = await bentoBoxContract?.batch(batch, true, {
+        value: token.isNative ? amount : ZERO,
       })
-
-      addTransaction(tx, { summary: summary.join('') })
+      addTransaction(tx, { summary: summary.join(', ') })
       setLimitOrderPermit(undefined)
       return tx
-    }
+    },
+    [
+      account,
+      addTransaction,
+      approvalState,
+      bentoBoxContract,
+      fromBentoBalance,
+      limitOrderHelperContract,
+      limitOrderPermit,
+      masterContract,
+    ]
+  )
 
-    // If bento is not yet approved but we do have the permit, add the permit to the batch
-    if (approvalState === BentoApprovalState.NOT_APPROVED && limitOrderPermit) {
-      batch.push(limitOrderPermit.data)
-      summary.push('Approve Limit Order')
-    }
-
-    if (!fromBentoBalance) {
-      summary.push(`Deposit ${token.symbol} into BentoBox`)
-      if (token.isNative) {
-        batch.push(
-          bentoBoxContract?.interface?.encodeFunctionData('deposit', [AddressZero, account, account, amount, 0])
-        )
-      } else {
-        batch.push(
-          bentoBoxContract?.interface?.encodeFunctionData('deposit', [
-            getAddress(token.wrapped.address),
-            account,
-            account,
-            amount,
-            0,
-          ])
-        )
-      }
-    }
-
-    const tx = await bentoBoxContract?.batch(batch, true, {
-      value: token.isNative ? amount : ZERO,
-    })
-    addTransaction(tx, { summary: summary.join(', ') })
-    setLimitOrderPermit(undefined)
-    return tx
-  }
-
-  return [approvalState, fallback, limitOrderPermit, onApprove, execute]
+  return useMemo(() => {
+    return [approvalState, fallback, limitOrderPermit, onApprove, execute]
+  }, [approvalState, execute, fallback, limitOrderPermit, onApprove])
 }
 
 export default useLimitOrderApproveCallback

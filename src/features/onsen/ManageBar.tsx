@@ -32,6 +32,7 @@ import { Chef, PairType } from './enum'
 import { useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
 
+// @ts-ignore TYPE NEEDS FIXING
 const ManageBar = ({ farm }) => {
   const { account, chainId } = useActiveWeb3React()
 
@@ -45,6 +46,7 @@ const ManageBar = ({ farm }) => {
   const addTransaction = useTransactionAdder()
 
   const liquidityToken = new Token(
+    // @ts-ignore TYPE NEEDS FIXING
     chainId,
     getAddress(farm.pair.id),
     farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
@@ -53,44 +55,57 @@ const ManageBar = ({ farm }) => {
 
   const kashiPair = useKashiPair(farm.pair.id)
 
+  // @ts-ignore TYPE NEEDS FIXING
   const balance = useCurrencyBalance(account, liquidityToken)
 
   const stakedAmount = useUserInfo(farm, liquidityToken)
 
   const balanceFiatValue = CurrencyAmount.fromRawAmount(
+    // @ts-ignore TYPE NEEDS FIXING
     USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiPair && balance
         ? getUSDValue(
             BigNumber.from(balance.quotient.toString()).mulDiv(
+              // @ts-ignore TYPE NEEDS FIXING
               kashiPair.currentAllAssets.value,
+              // @ts-ignore TYPE NEEDS FIXING
               kashiPair.totalAsset.base
             ),
+            // @ts-ignore TYPE NEEDS FIXING
             kashiPair.asset
           ).toString()
         : ZERO
       : JSBI.BigInt(
           ((Number(balance?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
+            // @ts-ignore TYPE NEEDS FIXING
             .toFixed(USD[chainId].decimals)
+            // @ts-ignore TYPE NEEDS FIXING
             .toBigNumber(USD[chainId].decimals)
         )
   )
 
   const stakedAmountFiatValue = CurrencyAmount.fromRawAmount(
+    // @ts-ignore TYPE NEEDS FIXING
     USD[chainId],
     farm.pair.type === PairType.KASHI
       ? kashiPair && stakedAmount
         ? getUSDValue(
             BigNumber.from(stakedAmount.quotient.toString()).mulDiv(
+              // @ts-ignore TYPE NEEDS FIXING
               kashiPair.currentAllAssets.value,
+              // @ts-ignore TYPE NEEDS FIXING
               kashiPair.totalAsset.base
             ),
+            // @ts-ignore TYPE NEEDS FIXING
             kashiPair.asset
           ).toString()
         : ZERO
       : JSBI.BigInt(
           ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
+            // @ts-ignore TYPE NEEDS FIXING
             .toFixed(USD[chainId].decimals)
+            // @ts-ignore TYPE NEEDS FIXING
             .toBigNumber(USD[chainId].decimals)
         )
   )
@@ -115,6 +130,7 @@ const ManageBar = ({ farm }) => {
     },
   }
 
+  // @ts-ignore TYPE NEEDS FIXING
   const [approvalState, approve] = useApproveCallback(parsedDepositValue, APPROVAL_ADDRESSES[farm.chef][chainId])
 
   const depositError = !parsedDepositValue
@@ -127,7 +143,8 @@ const ManageBar = ({ farm }) => {
 
   const withdrawError = !parsedWithdrawValue
     ? 'Enter an amount'
-    : stakedAmount.lessThan(parsedWithdrawValue)
+    : // @ts-ignore TYPE NEEDS FIXING
+    stakedAmount.lessThan(parsedWithdrawValue)
     ? 'Insufficient balance'
     : undefined
 
@@ -165,8 +182,10 @@ const ManageBar = ({ farm }) => {
               key={i}
               onClick={() => {
                 toggle
-                  ? setDepositValue(balance.multiply(multipler).divide(100).toExact())
-                  : setWithdrawValue(stakedAmount.multiply(multipler).divide(100).toExact())
+                  ? // @ts-ignore TYPE NEEDS FIXING
+                    setDepositValue(balance.multiply(multipler).divide(100).toExact())
+                  : // @ts-ignore TYPE NEEDS FIXING
+                    setWithdrawValue(stakedAmount.multiply(multipler).divide(100).toExact())
               }}
               className={classNames(
                 'text-md border border-opacity-50',
@@ -187,6 +206,7 @@ const ManageBar = ({ farm }) => {
             id="add-liquidity-input-tokenb"
             hideIcon
             onUserInput={(value) => setDepositValue(value)}
+            // @ts-ignore TYPE NEEDS FIXING
             currencyBalance={balance}
             fiatValue={balanceFiatValue}
             showMaxButton={false}
@@ -209,6 +229,7 @@ const ManageBar = ({ farm }) => {
               onClick={async () => {
                 try {
                   // KMP decimals depend on asset, SLP is always 18
+                  // @ts-ignore TYPE NEEDS FIXING
                   const tx = await deposit(farm.id, BigNumber.from(parsedDepositValue.quotient.toString()))
                   addTransaction(tx, {
                     summary: `Deposit ${farm.pair.token0.name}/${farm.pair.token1.name}`,
@@ -231,6 +252,7 @@ const ManageBar = ({ farm }) => {
             id="add-liquidity-input-tokenb"
             hideIcon
             onUserInput={(value) => setWithdrawValue(value)}
+            // @ts-ignore TYPE NEEDS FIXING
             currencyBalance={stakedAmount}
             fiatValue={stakedAmountFiatValue}
             showMaxButton={false}
@@ -244,6 +266,7 @@ const ManageBar = ({ farm }) => {
               onClick={async () => {
                 try {
                   // KMP decimals depend on asset, SLP is always 18
+                  // @ts-ignore TYPE NEEDS FIXING
                   const tx = await withdraw(farm.id, BigNumber.from(parsedWithdrawValue.quotient.toString()))
                   addTransaction(tx, {
                     summary: `Withdraw ${farm.pair.token0.name}/${farm.pair.token1.name}`,

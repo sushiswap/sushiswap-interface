@@ -1,6 +1,7 @@
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import Popover from 'app/components/Popover'
 import { classNames } from 'app/functions'
+// @ts-ignore TYPE NEEDS FIXING
 import cookieCutter from 'cookie-cutter'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -43,6 +44,7 @@ export default function LangSwitcher() {
         onClick={() => setShow(!show)}
         className="cursor-pointer bg-dark-1000 inline-flex justify-center w-full px-4 py-2 text-sm font-bold bg-transparent border-2 rounded shadow-sm text-primary border-dark-800 hover:border-dark-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-700 focus:ring-dark-800"
       >
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {LANG_TO_COUNTRY[locale]}
         <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
       </div>
@@ -55,6 +57,7 @@ export const LanguageSwitcherContent = ({ onClick }: { onClick?(): void }) => {
   return (
     <div className="px-2 mt-3">
       <div className="shadow-lg overflow-hidden bg-dark-900 rounded border border-dark-700">
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {locales.map((l) => {
           return (
             <div key={l} onClick={onClick}>
@@ -64,6 +67,7 @@ export const LanguageSwitcherContent = ({ onClick }: { onClick?(): void }) => {
                   onClick={() => cookieCutter.set('NEXT_LOCALE', l)}
                 >
                   <Typography variant="xs" weight={700}>
+                    {/*@ts-ignore TYPE NEEDS FIXING*/}
                     {LANG_TO_COUNTRY[l]}
                   </Typography>
                 </a>

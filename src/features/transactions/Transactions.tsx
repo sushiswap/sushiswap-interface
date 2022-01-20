@@ -12,6 +12,7 @@ import {
 import { useLegacyTransactions } from 'app/services/graph/hooks/transactions/legacy'
 import { useTridentTransactions } from 'app/services/graph/hooks/transactions/trident'
 import React, { FC } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import Typography from '../../components/Typography'
@@ -88,6 +89,7 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
               prepareRow(row)
               return (
                 <tr {...row.getRowProps()} key={i} className={TABLE_TBODY_TR_CLASSNAME}>
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>

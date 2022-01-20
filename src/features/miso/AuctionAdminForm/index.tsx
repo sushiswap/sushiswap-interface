@@ -56,6 +56,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   const { editDocuments, cancelAuction } = useAuctionEdit(auction.auctionInfo.addr, auction.template)
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     const subscription = watch((data: IFormInputs) => {
       setExampleAuction(
         (prevAuction) =>
@@ -74,6 +75,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
           })
       )
     })
+    // @ts-ignore TYPE NEEDS FIXING
     return () => subscription.unsubscribe()
   }, [watch])
 
@@ -82,7 +84,9 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
       const currentDocs = { ...auction.auctionDocuments }
       const newDocs = { ...data }
       const diff = Object.entries(newDocs).reduce<DocumentInput[]>((acc, [k, v]) => {
+        // @ts-ignore TYPE NEEDS FIXING
         const _ = currentDocs[k] === undefined ? '' : currentDocs[k]
+        // @ts-ignore TYPE NEEDS FIXING
         if (_ !== newDocs[k]) {
           acc.push({ name: k, data: v })
         }

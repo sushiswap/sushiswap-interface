@@ -2,23 +2,18 @@ import { Switch } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
-import { AppDispatch } from 'app/state'
+import { useAppDispatch } from 'app/state/hooks'
 import { setFromBentoBalance } from 'app/state/limit-order/actions'
 import { useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC } from 'react'
-import { useDispatch } from 'react-redux'
 
 const PayFromToggle: FC = () => {
   const { i18n } = useLingui()
   const { fromBentoBalance } = useLimitOrderState()
-  const dispatch = useDispatch<AppDispatch>()
-
-  const handleChange = (checked: boolean) => {
-    dispatch(setFromBentoBalance(!checked))
-  }
+  const dispatch = useAppDispatch()
 
   return (
-    <div className="px-5 py-2 pt-0 flex gap-2">
+    <div className="flex gap-2 px-5 py-2 pt-0">
       <Typography variant="sm" weight={700}>
         {i18n._(t`Pay from:`)}
       </Typography>
@@ -31,8 +26,8 @@ const PayFromToggle: FC = () => {
           </Switch.Label>
           <Switch
             checked={!fromBentoBalance}
-            onChange={handleChange}
-            className="bg-gray-600 relative inline-flex items-center h-3 rounded-full w-9 transition-colors"
+            onChange={() => dispatch(setFromBentoBalance(!fromBentoBalance))}
+            className="relative inline-flex items-center h-3 transition-colors bg-gray-600 rounded-full w-9"
           >
             <span
               className={`${

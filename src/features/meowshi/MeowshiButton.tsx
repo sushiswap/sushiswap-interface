@@ -19,6 +19,7 @@ interface MeowshiButtonProps {
   meowshiState: MeowshiState
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
   const { currencies, meow: doMeow, fields } = meowshiState
   const { i18n } = useLingui()
@@ -28,13 +29,18 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
     open: false,
   })
   const { account, chainId } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const sushiBalance = useTokenBalance(account, SUSHI[ChainId.ETHEREUM])
+  // @ts-ignore TYPE NEEDS FIXING
   const xSushiBalance = useTokenBalance(account, XSUSHI)
   const { approvalState, approve, meow, unmeow, meowSushi, unmeowSushi } = useMeowshi(
     currencies[Field.INPUT] === SUSHI[ChainId.ETHEREUM]
   )
+  // @ts-ignore TYPE NEEDS FIXING
   const balance = useTokenBalance(account, currencies[Field.INPUT])
+  // @ts-ignore TYPE NEEDS FIXING
   const parsedInputAmount = tryParseAmount(fields[Field.INPUT], currencies[Field.INPUT])
+  // @ts-ignore TYPE NEEDS FIXING
   const parsedOutputAmount = tryParseAmount(fields[Field.OUTPUT], currencies[Field.OUTPUT])
 
   const closeModal = () => {
@@ -51,30 +57,39 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
       txHash: '',
     })
 
+    // @ts-ignore TYPE NEEDS FIXING
     let tx
     if (doMeow) {
       if (currencies[Field.INPUT]?.symbol === 'SUSHI') {
         tx = await meowSushi({
+          // @ts-ignore TYPE NEEDS FIXING
           value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          // @ts-ignore TYPE NEEDS FIXING
           decimals: sushiBalance.currency.decimals,
         })
       }
       if (currencies[Field.INPUT]?.symbol === 'xSUSHI') {
         tx = await meow({
+          // @ts-ignore TYPE NEEDS FIXING
           value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          // @ts-ignore TYPE NEEDS FIXING
           decimals: xSushiBalance.currency.decimals,
         })
       }
     } else {
       if (currencies[Field.OUTPUT]?.symbol === 'SUSHI') {
         tx = await unmeowSushi({
+          // @ts-ignore TYPE NEEDS FIXING
           value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          // @ts-ignore TYPE NEEDS FIXING
           decimals: xSushiBalance.currency.decimals,
         })
       }
       if (currencies[Field.OUTPUT]?.symbol === 'xSUSHI') {
         tx = await unmeow({
+          // @ts-ignore TYPE NEEDS FIXING
           value: parseUnits(fields[Field.INPUT], sushiBalance.currency.decimals),
+          // @ts-ignore TYPE NEEDS FIXING
           decimals: xSushiBalance.currency.decimals,
         })
       }
@@ -84,6 +99,7 @@ const MeowshiButton: FC<MeowshiButtonProps> = ({ meowshiState }) => {
       setModalState((prevState) => ({
         ...prevState,
         attemptingTxn: false,
+        // @ts-ignore TYPE NEEDS FIXING
         txHash: tx.hash,
       }))
     } else {

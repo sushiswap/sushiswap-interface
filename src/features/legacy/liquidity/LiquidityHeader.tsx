@@ -16,6 +16,7 @@ export default function LiquidityHeader({ input = undefined, output = undefined 
         </a>
       </NavLink>
       <NavLink
+        // @ts-ignore TYPE NEEDS FIXING
         onClick={(event) => {
           if (!output) event.preventDefault()
         }}

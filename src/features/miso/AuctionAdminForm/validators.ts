@@ -19,6 +19,7 @@ export const isAddressValidator: Validator = async (data) => {
   return true
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const pipeline = async (data: ValidatorData, validators: Validator[], resolve, reject) => {
   // Always set field on input
   resolve()
@@ -45,6 +46,7 @@ export const pipeline = async (data: ValidatorData, validators: Validator[], res
     // Reset error
     reject()
   } catch (e) {
+    // @ts-ignore TYPE NEEDS FIXING
     reject(e.message)
   }
 }
@@ -54,11 +56,13 @@ export const testImage = (url?: string, timeout?: number) =>
     console.log('hi')
     timeout = timeout || 5000
     let timedOut = false
+    // @ts-ignore TYPE NEEDS FIXING
     let timer
     const img = new Image()
 
     img.onerror = img.onabort = function () {
       if (!timedOut) {
+        // @ts-ignore TYPE NEEDS FIXING
         clearTimeout(timer)
         res('error')
       }
@@ -66,6 +70,7 @@ export const testImage = (url?: string, timeout?: number) =>
 
     img.onload = function () {
       if (!timedOut) {
+        // @ts-ignore TYPE NEEDS FIXING
         clearTimeout(timer)
         res('success')
       }

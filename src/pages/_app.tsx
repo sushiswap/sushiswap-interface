@@ -12,6 +12,7 @@ import Web3ReactManager from 'app/components/Web3ReactManager'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
+// @ts-ignore TYPE NEEDS FIXING
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
 import ListsUpdater from 'app/state/lists/updater'
@@ -34,16 +35,19 @@ if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 function MyApp({ Component, pageProps, fallback }) {
   const router = useRouter()
   const { locale, events } = router
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     const handleRouteChange = (url) => {
       pageview(url)
     }
     events.on('routeChangeComplete', handleRouteChange)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const handleError = (error) => {
       exception({
         description: `${error.message} @ ${error.filename}:${error.lineno}:${error.colno}`,
@@ -60,7 +64,9 @@ function MyApp({ Component, pageProps, fallback }) {
   }, [events])
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     async function load(locale) {
+      // @ts-ignore TYPE NEEDS FIXING
       i18n.loadLocaleData(locale, { plurals: plurals[locale.split('_')[0]] })
 
       try {
@@ -125,6 +131,7 @@ function MyApp({ Component, pageProps, fallback }) {
         <Web3ReactProvider getLibrary={getLibrary}>
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <ReduxProvider store={store}>
                 <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
                   <>

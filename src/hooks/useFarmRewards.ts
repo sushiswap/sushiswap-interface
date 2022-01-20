@@ -31,12 +31,14 @@ import { useMemo } from 'react'
 export default function useFarmRewards() {
   const { chainId } = useActiveWeb3React()
 
+  // @ts-ignore TYPE NEEDS FIXING
   const positions = usePositions(chainId)
 
   // console.log({ positions })
 
   const block1d = useOneDayBlock({ chainId, shouldFetch: !!chainId })
 
+  // @ts-ignore TYPE NEEDS FIXING
   const farms = useFarms({ chainId })
 
   const farmAddresses = useMemo(() => farms.map((farm) => farm.pair), [farms])
@@ -101,13 +103,17 @@ export default function useFarmRewards() {
 
   const blocksPerDay = 86400 / Number(averageBlockTime)
 
+  // @ts-ignore TYPE NEEDS FIXING
   const map = (pool) => {
     // TODO: Deal with inconsistencies between properties on subgraph
     pool.owner = pool?.owner || pool?.masterChef || pool?.miniChef
     pool.balance = pool?.balance || pool?.slpBalance
 
+    // @ts-ignore TYPE NEEDS FIXING
     const swapPair = swapPairs?.find((pair) => pair.id === pool.pair)
+    // @ts-ignore TYPE NEEDS FIXING
     const swapPair1d = swapPairs1d?.find((pair) => pair.id === pool.pair)
+    // @ts-ignore TYPE NEEDS FIXING
     const kashiPair = kashiPairs?.find((pair) => pair.id === pool.pair)
 
     const pair = swapPair || kashiPair
@@ -123,6 +129,7 @@ export default function useFarmRewards() {
         (pool?.owner?.sushiPerSecond / 1e18) * averageBlockTime ||
         masterChefV1SushiPerBlock
 
+      // @ts-ignore TYPE NEEDS FIXING
       const rewardPerBlock = (pool.allocPoint / pool.owner.totalAllocPoint) * sushiPerBlock
 
       const defaultReward = {
@@ -133,6 +140,7 @@ export default function useFarmRewards() {
       }
 
       let rewards: { currency: Currency; rewardPerBlock: number; rewardPerDay: number; rewardPrice: number }[] = [
+        // @ts-ignore TYPE NEEDS FIXING
         defaultReward,
       ]
 
@@ -244,12 +252,15 @@ export default function useFarmRewards() {
           // Secondary reward only
           rewards[0] = reward[ChainId.FUSE]
         } else {
+          // @ts-ignore TYPE NEEDS FIXING
           rewards[0] = {
             ...defaultReward,
             rewardPerBlock: sushiPerBlock,
             rewardPerDay: sushiPerDay,
           }
+          // @ts-ignore TYPE NEEDS FIXING
           if (chainId in reward) {
+            // @ts-ignore TYPE NEEDS FIXING
             rewards[1] = reward[chainId]
           }
         }
@@ -312,13 +323,16 @@ export default function useFarmRewards() {
           },
         }
 
+        // @ts-ignore TYPE NEEDS FIXING
         rewards[0] = {
           ...defaultReward,
           rewardPerBlock: sushiPerBlock,
           rewardPerDay: sushiPerDay,
         }
 
+        // @ts-ignore TYPE NEEDS FIXING
         if (chainId in reward) {
+          // @ts-ignore TYPE NEEDS FIXING
           rewards[1] = reward[chainId]
         }
       }
@@ -390,7 +404,9 @@ export default function useFarmRewards() {
   return farms
     .filter((farm) => {
       return (
+        // @ts-ignore TYPE NEEDS FIXING
         (swapPairs && swapPairs.find((pair) => pair.id === farm.pair)) ||
+        // @ts-ignore TYPE NEEDS FIXING
         (kashiPairs && kashiPairs.find((pair) => pair.id === farm.pair))
       )
     })

@@ -20,6 +20,7 @@ const WhitelistUpload: FC<WhitelistUploadProps> = ({ disabled, onChange, value }
 
   const onDrop = useCallback(
     (acceptedFiles) => {
+      // @ts-ignore TYPE NEEDS FIXING
       acceptedFiles.forEach((file) => {
         const reader = new FileReader()
         reader.onload = () => {

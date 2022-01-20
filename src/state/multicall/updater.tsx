@@ -35,6 +35,7 @@ async function fetchChunk(
     )
 
     if (process.env.NODE_ENV === 'development') {
+      // @ts-ignore TYPE NEEDS FIXING
       returnData.forEach(({ gasUsed, returnData, success }, i) => {
         if (
           !success &&
@@ -52,6 +53,7 @@ async function fetchChunk(
     }
     return returnData
   } catch (error) {
+    // @ts-ignore TYPE NEEDS FIXING
     if (error.code === -32000 || error.message?.indexOf('header not found') !== -1) {
       throw new RetryableError(`header not found for block number ${blockNumber}`)
     }

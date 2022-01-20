@@ -59,6 +59,7 @@ export const Purple = Template.bind({})
 Purple.args = {
   color: 'purple',
   label: 'Classic Pool',
+  // @ts-ignore TYPE NEEDS FIXING
   onClick: null,
 }
 
@@ -91,5 +92,6 @@ export const White = Template.bind({})
 White.args = {
   color: 'white',
   label: '70%',
+  // @ts-ignore TYPE NEEDS FIXING
   onClick: null,
 }

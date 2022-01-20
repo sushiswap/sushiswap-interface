@@ -30,23 +30,28 @@ export default function BentoBox(): JSX.Element {
   const tokenIdToPrice = useMemo<
     Map<string, { derivedETH: number; volumeUSD: number; dayData: Array<{ priceUSD: number }> }>
   >(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     return new Map(tokens?.map((token) => [token.id, token]))
   }, [tokens])
 
   const token1dIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     return new Map(tokens1d?.map((token) => [token.id, token]))
   }, [tokens1d])
 
   const token1wIdToPrice = useMemo<Map<string, { derivedETH: number; volumeUSD: number }>>(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     return new Map(tokens1w?.map((token) => [token.id, token]))
   }, [tokens1w])
 
+  // @ts-ignore TYPE NEEDS FIXING
   const bentoBox = useBentoBox({ chainId, shouldFetch: featureEnabled(Feature.BENTOBOX, chainId) })
 
   // Combine Bento Box Tokens with Token data from exchange
   const bentoBoxTokensFormatted = useMemo<Array<any>>(
     () =>
       (bentoBox?.tokens || [])
+        // @ts-ignore TYPE NEEDS FIXING
         .map(({ id, totalSupplyElastic, decimals, symbol, name }) => {
           const token = tokenIdToPrice.get(id)
           const token1d = token1dIdToPrice.get(id)

@@ -74,6 +74,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
               <div className="overflow-hidden rounded-full">
                 <Davatar
                   size={48}
+                  // @ts-ignore TYPE NEEDS FIXING
                   address={account}
                   defaultComponent={<Image src="/images/chef.svg" alt="Sushi Chef" width={48} height={48} />}
                   provider={library}

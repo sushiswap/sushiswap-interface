@@ -10,6 +10,7 @@ import {
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
 import React, { FC } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 interface AssetBalancesProps {
@@ -69,6 +70,7 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
                   onClick={() => onSelect && onSelect(row)}
                   className={TABLE_TBODY_TR_CLASSNAME}
                 >
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {row.cells.map((cell, i) => {
                     return (
                       <td key={i} {...cell.getCellProps()} className={TABLE_TBODY_TD_CLASSNAME(i, row.cells.length)}>

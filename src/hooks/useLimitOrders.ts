@@ -37,6 +37,7 @@ interface OpenOrder {
 const denominator = (decimals: number = 18) => JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals))
 
 const viewUrl = `${LAMBDA_URL}/orders/view`
+// @ts-ignore TYPE NEEDS FIXING
 const viewFetcher = (url, account, chainId, pendingPage, page) => {
   return fetch(url, {
     method: 'POST',
@@ -143,7 +144,9 @@ const useLimitOrders = () => {
     }
 
     ;(async () => {
+      // @ts-ignore TYPE NEEDS FIXING
       const openOrders = await Promise.all<OpenOrder>(ordersData.pendingOrders.orders.map((el) => transform(el)))
+      // @ts-ignore TYPE NEEDS FIXING
       const completedOrders = await Promise.all<OpenOrder>(ordersData.otherOrders.orders.map((el) => transform(el)))
 
       setState((prevState) => ({

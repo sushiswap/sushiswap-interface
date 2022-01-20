@@ -74,6 +74,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
         summary: i18n._(t`Committed ${amount?.toSignificant(6)} ${amount.currency.symbol}`),
       })
     } catch (e) {
+      // @ts-ignore TYPE NEEDS FIXING
       setError(e.error?.message)
     } finally {
       setAttemptingTxn(false)
@@ -106,6 +107,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
                     <div className="flex gap-1.5">
                       <AuctionIcon auctionTemplate={auction.template} width={18} />
                       <Typography variant="sm" className="text-secondary">
+                        {/*@ts-ignore TYPE NEEDS FIXING*/}
                         {AuctionTitleByTemplateId(i18n)[auction.template]}
                       </Typography>
                     </div>

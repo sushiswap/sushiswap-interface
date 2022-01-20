@@ -21,14 +21,17 @@ export default function Buy() {
   const { account, chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const onClick = useCallback(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     if (!(chainId in DEFAULT_NETWORK)) {
       return
     }
 
     const widget = new RampInstantSDK({
+      // @ts-ignore TYPE NEEDS FIXING
       userAddress: account,
       hostAppName: 'SUSHI',
       hostLogoUrl: 'http://sushiswap-interface-canary.vercel.app/_next/image?url=%2Flogo.png&w=32&q=75',
+      // @ts-ignore TYPE NEEDS FIXING
       defaultAsset: DEFAULT_CRYPTO_CURRENCY[chainId],
     })
 

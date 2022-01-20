@@ -65,6 +65,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
         }
       } catch (e) {
         console.log(e)
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error?.message)
       } finally {
         setPending(false)
@@ -75,6 +76,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
 
   // Subscribe to creation event to get created token ID
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     subscribe('MarketCreated', (owner, address, marketTemplate, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setAuctionAddress(address)

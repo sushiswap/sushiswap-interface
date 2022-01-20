@@ -140,6 +140,7 @@ export const DesktopNav: FC<DesktopNavProps> = ({ mobileMenuOpen }) => {
             {account && chainId && userEthBalance && (
               <Link href="/balances" passHref={true}>
                 <a className="px-3 text-high-emphesis text-bold hidden md:block">
+                  {/*@ts-ignore TYPE NEEDS FIXING*/}
                   {userEthBalance?.toSignificant(4)} {NATIVE[chainId].symbol}
                 </a>
               </Link>

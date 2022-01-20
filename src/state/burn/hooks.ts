@@ -97,8 +97,11 @@ export function useDerivedBurnInfo(
   }
   // user specified a specific amount of token a or b
   else {
+    // @ts-ignore TYPE NEEDS FIXING
     if (tokens[independentField]) {
+      // @ts-ignore TYPE NEEDS FIXING
       const independentAmount = tryParseAmount(typedValue, tokens[independentField])
+      // @ts-ignore TYPE NEEDS FIXING
       const liquidityValue = liquidityValues[independentField]
       if (independentAmount && liquidityValue && !independentAmount.greaterThan(liquidityValue)) {
         percentToRemove = new Percent(independentAmount.quotient, liquidityValue.quotient)

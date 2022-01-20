@@ -58,6 +58,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: 
           await tx.wait()
         }
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error?.message)
       } finally {
         setPending(false)
@@ -68,6 +69,7 @@ const AuctionCreationModal: FC<AuctionCreationModalProps> = ({ open, onDismiss: 
 
   // Subscribe to creation event to get created token ID
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     subscribe('MarketCreated', (owner, address, marketTemplate, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setAuctionAddress(address)
