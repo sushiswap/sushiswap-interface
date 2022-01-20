@@ -50,10 +50,7 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
         </NavLink>
         <NavLink
           activeClassName="font-bold border rounded text-high-emphesis border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink"
-          href={{
-            pathname: '/limit-order',
-            query: getQuery(input, output),
-          }}
+          href={'/limit-order'}
         >
           <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md text-secondary hover:text-high-emphesis">
             {i18n._(t`Limit`)}
@@ -73,7 +70,7 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
       <div className="flex items-center">
         <div className="grid grid-flow-col gap-1">
           {isLimitOrder && (
-            <div className="flex items-center w-full cursor-pointer bg-dark-800 hover:bg-dark-700 rounded px-3 py-1.5 h-[46px]">
+            <div className="flex items-center h-[46px] w-full cursor-pointer bg-dark-800 hover:bg-dark-700 rounded px-3 py-1.5">
               <MyOrders />
             </div>
           )}

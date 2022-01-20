@@ -10,8 +10,8 @@ import Lottie from 'lottie-react'
 import React, { FC, useCallback, useState } from 'react'
 
 interface CurrencySelectProps {
-  currency: Currency
-  otherCurrency: Currency
+  currency?: Currency
+  otherCurrency?: Currency
   showCommonBases?: boolean
   onSelect: (x: Currency) => void
   disabled?: boolean

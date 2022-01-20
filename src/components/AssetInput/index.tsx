@@ -31,7 +31,7 @@ interface AssetInputProps {
   headerRight?: ReactNode
   chip?: string
   disabled?: boolean
-  currencies?: Currency[]
+  currencies?: string[]
   id?: string
   className?: string
 }
@@ -82,7 +82,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, class
                 selectedCurrency={props.currency}
                 onCurrencySelect={props.onSelect}
                 onDismiss={() => setOpen(false)}
-                currencyList={props.currencies?.map((el) => el.wrapped.address)}
+                currencyList={props.currencies}
               />
             </>
           )}
@@ -181,7 +181,7 @@ const AssetInputPanel = ({
             }
             selectedCurrency={currency}
             onCurrencySelect={onSelect}
-            currencyList={currencies?.map((el) => el.wrapped.address)}
+            currencyList={currencies}
           />
         </>
       )}
