@@ -1,103 +1,89 @@
-import { getAddress } from '@ethersproject/address'
-import { Disclosure, Transition } from '@headlessui/react'
-import { Tab } from '@headlessui/react'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Token, ZERO } from '@sushiswap/core-sdk'
-import { useActiveWeb3React } from 'app/services/web3'
-import React, { useState } from 'react'
+import { HeadlessUiModal } from 'app/components/Modal'
+import QuestionHelper from 'app/components/QuestionHelper'
+import ToggleButtonGroup from 'app/components/ToggleButton'
+import { selectOnsen, setOnsenModalView } from 'app/features/onsen/onsenSlice'
+import { classNames } from 'app/functions'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import React, { createContext, ReactNode, useContext, useMemo, useState } from 'react'
 
-import { PairType } from './enum'
-import { useUserInfo } from './hooks'
+import { OnsenModalView, PairType } from './enum'
 import InformationDisclosure from './InformationDisclosure'
 import InvestmentDetails from './InvestmentDetails'
 import ManageBar from './ManageBar'
 import ManageKashiPair from './ManageKashiPair'
 import ManageSwapPair from './ManageSwapPair'
 
-// @ts-ignore TYPE NEEDS FIXING
-const FarmListItemDetails = ({ farm }) => {
+const COLUMN_CONTAINER = 'flex flex-col flex-grow gap-4'
+
+interface FarmListItemDetailsModal {
+  content: ReactNode
+  setContent: React.Dispatch<React.SetStateAction<React.ReactNode>>
+}
+
+const Context = createContext<FarmListItemDetailsModal | undefined>(undefined)
+
+const FarmListItemDetails = ({ farm, onDismiss }) => {
   const { i18n } = useLingui()
-
-  const { chainId } = useActiveWeb3React()
-
-  const liquidityToken = new Token(
-    // @ts-ignore TYPE NEEDS FIXING
-    chainId,
-    getAddress(farm.pair.id),
-    farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
-    farm.pair.type === PairType.KASHI ? 'KMP' : 'SLP'
-  )
-
-  const stakedAmount = useUserInfo(farm, liquidityToken)
-
-  const [toggleView, setToggleView] = useState(stakedAmount?.greaterThan(ZERO))
+  const { view } = useAppSelector(selectOnsen)
+  const dispatch = useAppDispatch()
+  const [content, setContent] = useState<ReactNode>()
 
   return (
-    <Transition
-      show={true}
-      enter="transition-opacity duration-75"
-      enterFrom="opacity-0"
-      enterTo="opacity-100"
-      leave="transition-opacity duration-150"
-      leaveFrom="opacity-100"
-      leaveTo="opacity-0"
-    >
-      <Disclosure.Panel className="flex w-full border-t-0 rounded rounded-t-none bg-dark-800" static>
-        <InformationDisclosure farm={farm} />
-        <div className="flex flex-col w-full p-6 pl-2 space-y-8 sm:pl-6">
-          <div className="flex items-center justify-between">
-            <div className="text-xl font-bold cursor-pointer">
-              {toggleView ? i18n._(t`Investment Details`) : i18n._(t`Manage Position`)}
-            </div>
-            <button
-              className="py-0.5 px-4 font-bold bg-transparent border border-transparent rounded cursor-pointer border-gradient-r-blue-pink-dark-800 whitespace-nowrap"
-              onClick={() => setToggleView(!toggleView)}
-            >
-              {toggleView ? i18n._(t`Manage Position`) : i18n._(t`Investment Details`)}
-            </button>
-          </div>
-          <div className="w-full h-0 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis border-gradient-r-blue-pink-dark-800 opacity-20" />
-          {toggleView ? (
+    <Context.Provider value={useMemo(() => ({ content, setContent }), [content, setContent])}>
+      <div className={classNames('')}>
+        <div className={classNames(COLUMN_CONTAINER, content ? '' : 'hidden')}>{content}</div>
+        <div className={classNames(COLUMN_CONTAINER, content ? 'hidden' : '')}>
+          <HeadlessUiModal.Header
+            header={
+              <div className="flex gap-0.5 items-center">
+                {view === OnsenModalView.Liquidity
+                  ? i18n._(t`Manage liquidity`)
+                  : view === OnsenModalView.Position
+                  ? i18n._(t`Your position and rewards`)
+                  : i18n._(t`Stake or unstake your liquidity`)}
+                <QuestionHelper className="!bg-dark-800 !shadow-xl p-2" text={<InformationDisclosure farm={farm} />} />
+              </div>
+            }
+            onClose={onDismiss}
+          />
+          <ToggleButtonGroup
+            size="sm"
+            value={view}
+            onChange={(view: OnsenModalView) => dispatch(setOnsenModalView(view))}
+            variant="filled"
+          >
+            <ToggleButtonGroup.Button value={OnsenModalView.Liquidity}>
+              {farm.pair.type === PairType.KASHI ? i18n._(t`Lending`) : i18n._(t`Liquidity`)}
+            </ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={OnsenModalView.Staking}>{i18n._(t`Staking`)}</ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={OnsenModalView.Position}>{i18n._(t`Rewards`)}</ToggleButtonGroup.Button>
+          </ToggleButtonGroup>
+
+          {/*Dont unmount following components to make modal more react faster*/}
+          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Position ? 'block' : 'hidden')}>
             <InvestmentDetails farm={farm} />
-          ) : (
-            <Tab.Group>
-              <Tab.List className="flex rounded bg-dark-900">
-                <Tab
-                  className={({ selected }) =>
-                    `${
-                      selected
-                        ? 'text-high-emphesis bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink'
-                        : 'text-secondary'
-                    } flex items-center justify-center flex-1 px-2 py-2 text-lg rounded cursor-pointer select-none`
-                  }
-                >
-                  {farm.pair.type === PairType.KASHI ? i18n._(t`Lending`) : i18n._(t`Liquidity`)}
-                </Tab>
-                <Tab
-                  className={({ selected }) =>
-                    `${
-                      selected
-                        ? 'text-high-emphesis bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink'
-                        : 'text-secondary'
-                    } flex items-center justify-center flex-1 px-2 py-2 text-lg rounded cursor-pointer select-none`
-                  }
-                >
-                  {i18n._(t`Staking`)}
-                </Tab>
-              </Tab.List>
-              <Tab.Panel>
-                {farm.pair.type === PairType.KASHI ? <ManageKashiPair farm={farm} /> : <ManageSwapPair farm={farm} />}
-              </Tab.Panel>
-              <Tab.Panel>
-                <ManageBar farm={farm} />
-              </Tab.Panel>
-            </Tab.Group>
-          )}
+          </div>
+          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Liquidity ? 'block' : 'hidden')}>
+            {farm.pair.type === PairType.KASHI ? <ManageKashiPair farm={farm} /> : <ManageSwapPair farm={farm} />}
+          </div>
+          <div className={classNames(COLUMN_CONTAINER, view === OnsenModalView.Staking ? 'block' : 'hidden')}>
+            <ManageBar farm={farm} />
+          </div>
         </div>
-      </Disclosure.Panel>
-    </Transition>
+      </div>
+    </Context.Provider>
   )
+}
+
+export const useFarmListItemDetailsModal = () => {
+  const context = useContext(Context)
+  if (!context) {
+    throw new Error('Hook can only be used inside Farm List Item Details Context')
+  }
+
+  return context
 }
 
 export default FarmListItemDetails

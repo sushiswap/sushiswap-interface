@@ -51,6 +51,9 @@ const EMPTY = {
   red: 'bg-red',
   pink: 'bg-pink',
   purple: 'bg-purple',
+  gray: 'bg-higher-emphesis',
+  gradient:
+    '!bg-gradient-to-r from-blue to-pink-600 hover:from-blue/80 hover:to-pink-600/80 focus:from-blue/80 focus:to-pink-600/80 active:from-blue/70 active:to-pink-600/70',
 }
 
 const VARIANT = {

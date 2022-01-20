@@ -10,6 +10,7 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
 import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
@@ -20,9 +21,10 @@ import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openme
 interface SettingsTabProps {
   placeholderSlippage?: Percent
   trident?: boolean
+  className?: string
 }
 
-const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = false }) => {
+const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, trident = false }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
@@ -122,7 +124,9 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
           </div>
         }
       >
-        <div className="flex items-center justify-center w-10 h-10 rounded-full cursor-pointer">
+        <div
+          className={classNames(className, 'flex items-center justify-center w-10 h-10 rounded-full cursor-pointer')}
+        >
           <CogIcon className="w-[26px] h-[26px] transform rotate-90 hover:text-white" />
         </div>
       </Popover>
