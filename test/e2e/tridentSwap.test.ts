@@ -58,7 +58,7 @@ describe('Trident Swap:', () => {
     browser.close()
   })
 
-  test.each([['ETH', FUNDING_SOURCE.WALLET, 'USDT', FUNDING_SOURCE.WALLET]])(
+  test.skip.each([['ETH', FUNDING_SOURCE.WALLET, 'USDT', FUNDING_SOURCE.WALLET]])(
     `Complex Path: Should swap from %p %p to %p %p`,
     async (assetA, payFromA, assetB, payFromB) => {
       const payAFromWallet = payFromA === FUNDING_SOURCE.WALLET
@@ -131,8 +131,8 @@ describe('Trident Swap:', () => {
   )
 
   test.each([
-    ['ETH', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET, swapPercentage],
-    ['ETH', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET, 0.8],
+    ['MKR', FUNDING_SOURCE.WALLET, 'USDT', FUNDING_SOURCE.WALLET, swapPercentage],
+    ['MKR', FUNDING_SOURCE.WALLET, 'USDT', FUNDING_SOURCE.WALLET, 0.8],
   ])(`Single Pool: Should swap from %p %p to %p %p`, async (assetA, payFromA, assetB, payFromB, swapPercent) => {
     const payAFromWallet = payFromA === FUNDING_SOURCE.WALLET
     const payBFromWallet = payFromB === FUNDING_SOURCE.WALLET
@@ -187,9 +187,11 @@ describe('Trident Swap:', () => {
 
     expect(closeValues(intputTokenBalanceDiff, parseFloat(swapAmount), 1e-9)).toBe(true)
     expect(closeValues(outputTokenBalanceDiff, parseFloat(minOutputAmount), 1e-9)).toBe(true)
+
+    await swapPage.swapTokens(assetB, assetA, minOutputAmount, payAFromWallet, payBFromWallet)
   })
 
-  test.each([['BAT', FUNDING_SOURCE.WALLET, 'USDT', FUNDING_SOURCE.WALLET, swapPercentage]])(
+  test.only.each([['USDT', FUNDING_SOURCE.WALLET, 'BAT', FUNDING_SOURCE.WALLET, swapPercentage]])(
     `Single Path: Should swap from %p %p to %p %p`,
     async (assetA, payFromA, assetB, payFromB, swapPercent) => {
       const payAFromWallet = payFromA === FUNDING_SOURCE.WALLET
@@ -224,6 +226,8 @@ describe('Trident Swap:', () => {
 
       expect(closeValues(intputTokenBalanceDiff, parseFloat(swapAmount), 1e-9)).toBe(true)
       expect(closeValues(outputTokenBalanceDiff, parseFloat(minOutputAmount), 1e-9)).toBe(true)
+
+      await swapPage.swapTokens(assetB, assetA, minOutputAmount, payAFromWallet, payBFromWallet)
     }
   )
 })
