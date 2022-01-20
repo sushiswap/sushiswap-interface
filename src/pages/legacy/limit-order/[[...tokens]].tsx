@@ -85,8 +85,6 @@ function LimitOrder() {
       )
     : undefined
 
-  console.log({ fromBentoBalance })
-
   const handleMaxInput = useCallback(() => {
     if (fromBentoBalance) {
       bentoBalance && onUserInput(Field.INPUT, bentoBalance.toExact())
