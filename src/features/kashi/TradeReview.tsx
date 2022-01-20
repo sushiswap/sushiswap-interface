@@ -35,7 +35,7 @@ function TradeReview({
       {trade ? (
         <div className="py-4 mb-4">
           <div className="flex items-center justify-between">
-            <div className="text-lg text-secondary">
+            <div className="flex text-lg text-secondary">
               {i18n._(t`Minimum received`)}
               <QuestionHelper
                 text={i18n._(
@@ -49,7 +49,7 @@ function TradeReview({
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <div className="text-lg text-secondary">
+            <div className="flex text-lg text-secondary">
               {i18n._(t`Price Impact`)}
               <QuestionHelper
                 text={i18n._(t`The difference between the market price and estimated price due to trade size.`)}
@@ -60,7 +60,7 @@ function TradeReview({
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <div className="text-lg text-secondary">
+            <div className="flex text-lg text-secondary">
               Liquidity Provider Fee
               <QuestionHelper
                 text={i18n._(t`A portion of each trade (0.25%) goes to liquidity providers as a protocol incentive.`)}
@@ -72,7 +72,7 @@ function TradeReview({
           </div>
           {showRoute && (
             <div className="flex items-center justify-between">
-              <div className="text-lg text-secondary">
+              <div className="flex text-lg text-secondary">
                 {i18n._(t`Route`)}
                 <QuestionHelper
                   text={i18n._(t`Routing through these tokens resulted in the best price for your trade.`)}

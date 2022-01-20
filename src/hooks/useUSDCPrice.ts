@@ -22,6 +22,7 @@ export const STABLECOIN_AMOUNT_OUT: { [chainId: number]: CurrencyAmount<Token> }
   [ChainId.MOONRIVER]: CurrencyAmount.fromRawAmount(USD[ChainId.MOONRIVER], 100_000e6),
   [ChainId.FUSE]: CurrencyAmount.fromRawAmount(USD[ChainId.FUSE], 100_000e6),
   [ChainId.TELOS]: CurrencyAmount.fromRawAmount(USD[ChainId.TELOS], 100_000e6),
+  [ChainId.AVALANCHE]: CurrencyAmount.fromRawAmount(USD[ChainId.AVALANCHE], 100_000e6),
 }
 
 /**
