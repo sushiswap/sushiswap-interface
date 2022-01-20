@@ -56,8 +56,8 @@ const initialState: LimitOrderState = {
   fromBentoBalance: false,
   limitOrderApprovalPending: '',
   orderExpiration: {
-    value: '',
-    label: '',
+    value: OrderExpiration.never,
+    label: 'Never',
   },
 }
 
