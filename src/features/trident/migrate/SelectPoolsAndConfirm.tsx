@@ -35,7 +35,7 @@ export const SelectPoolsAndConfirm: FC = () => {
   const router = useRouter()
 
   const dispatch = useAppDispatch()
-  const selectedMigrations = useAppSelector<v2Migration[]>(selectTridentMigrations)
+  const selectedMigrations = useAppSelector(selectTridentMigrations)
   const leftToSelect = useAppSelector(selectLeftToChoose)
 
   const { data, error, isValidating } = useGetAllTridentPools()

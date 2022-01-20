@@ -7,7 +7,6 @@ import {
   addOrRemoveMigration,
   MigrationSource,
   selectTridentMigrations,
-  v2Migration,
 } from 'app/features/trident/migrate/context/migrateSlice'
 import { useV2PairsWithLiquidity } from 'app/features/trident/migrate/context/useV2PairsWithLiquidity'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -26,7 +25,7 @@ export const AvailableToMigrate: FC = () => {
   const { pairs, loading } = useV2PairsWithLiquidity()
 
   const dispatch = useAppDispatch()
-  const selectedMigrations = useAppSelector<v2Migration[]>(selectTridentMigrations)
+  const selectedMigrations = useAppSelector(selectTridentMigrations)
 
   return (
     <div>
