@@ -192,16 +192,11 @@ export const useLimitOrderDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = ()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
 
   return useMemo(() => {
-    const baseAmount = tryParseAmount(limitPrice, inputCurrency)
-    const quoteAmount = tryParseAmount('1', outputCurrency)
+    const baseAmount = tryParseAmount('1', inputCurrency)
+    const quoteAmount = tryParseAmount(limitPrice, outputCurrency)
 
     return baseAmount && quoteAmount && inputCurrency && outputCurrency
-      ? new Price(
-          inputCurrency,
-          outputCurrency,
-          JSBI.BigInt(JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals))),
-          JSBI.BigInt(baseAmount.quotient.toString())
-        )
+      ? new Price({ baseAmount, quoteAmount })
       : undefined
   }, [inputCurrency, limitPrice, outputCurrency])
 }

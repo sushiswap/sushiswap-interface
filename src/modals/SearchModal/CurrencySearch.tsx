@@ -142,7 +142,7 @@ export function CurrencySearch({
   return (
     <>
       <HeadlessUiModal.Header onClose={onDismiss} header={i18n._(t`Select a token`)} />
-      {!currencyList && showSearch && (
+      {showSearch && (
         <input
           type="text"
           id="token-search-input"
