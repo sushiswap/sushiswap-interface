@@ -52,5 +52,7 @@ type selectTridentPools = (state: AppState) => PoolsState
 export const selectTridentPools: selectTridentPools = (state: AppState) => state.tridentPools
 export default poolsSlice.reducer
 
+// @ts-ignore TYPE NEEDS FIXING
 export const selectPoolsNormalInput = (state: AppState) => state.tridentPools.normalInput
+// @ts-ignore TYPE NEEDS FIXING
 export const selectPoolsSpendFromWallet = (state: AppState) => state.tridentPools.spendFromWallet

@@ -5,10 +5,11 @@ import { tryParseAmount } from 'app/functions/parse'
 import { useTotalSupply } from 'app/hooks/useTotalSupply'
 import { PairState, useV2Pair } from 'app/hooks/useV2Pairs'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch, AppState } from 'app/state'
+import { AppState } from 'app/state'
+import { useAppDispatch } from 'app/state/hooks'
 import { useCurrencyBalances } from 'app/state/wallet/hooks'
 import { useCallback, useMemo } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import { Field, typeInput } from './actions'
 
@@ -22,7 +23,7 @@ export function useMintActionHandlers(noLiquidity: boolean | undefined): {
   onFieldAInput: (typedValue: string) => void
   onFieldBInput: (typedValue: string) => void
 } {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   const onFieldAInput = useCallback(
     (typedValue: string) => {

@@ -15,13 +15,14 @@ import { parseENSAddress } from 'app/functions/ens'
 import { listVersionLabel } from 'app/functions/list'
 import { useFetchListCallback } from 'app/hooks/useFetchListCallback'
 import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
-import { AppDispatch, AppState } from 'app/state'
+import { AppState } from 'app/state'
+import { useAppDispatch } from 'app/state/hooks'
 import { acceptListUpdate, disableList, enableList, removeList } from 'app/state/lists/actions'
 import { useActiveListUrls, useAllLists, useIsListActive } from 'app/state/lists/hooks'
 import React, { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Settings } from 'react-feather'
 import ReactGA from 'react-ga'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import CurrencyModalView from './CurrencyModalView'
 
@@ -32,7 +33,7 @@ const listUrlRowHTMLId = (listUrl: string) => {
 const ListRow: FC<{ listUrl: string }> = memo(({ listUrl }) => {
   const { i18n } = useLingui()
   const listsByUrl = useSelector<AppState, AppState['lists']['byUrl']>((state) => state.lists.byUrl)
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const { current: list, pendingUpdate: pending } = listsByUrl[listUrl]
   const isActive = useIsListActive(listUrl)
 

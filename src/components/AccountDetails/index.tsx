@@ -6,12 +6,11 @@ import { injected, SUPPORTED_WALLETS } from 'app/config/wallets'
 import { getExplorerLink } from 'app/functions/explorer'
 import { shortenAddress } from 'app/functions/format'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch } from 'app/state'
+import { useAppDispatch } from 'app/state/hooks'
 import { clearAllTransactions } from 'app/state/transactions/actions'
 import Image from 'next/image'
 import React, { FC, useCallback, useMemo } from 'react'
 import { ExternalLink as LinkIcon } from 'react-feather'
-import { useDispatch } from 'react-redux'
 
 import Button from '../Button'
 import ExternalLink from '../ExternalLink'
@@ -36,7 +35,7 @@ const AccountDetails: FC<AccountDetailsProps> = ({
 }) => {
   const { i18n } = useLingui()
   const { chainId, account, connector, deactivate, library } = useActiveWeb3React()
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   const connectorName = useMemo(() => {
     const { ethereum } = window

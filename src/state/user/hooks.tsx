@@ -19,12 +19,12 @@ import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
 import { e10 } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch, AppState } from 'app/state'
+import { AppState } from 'app/state'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import flatMap from 'lodash/flatMap'
 import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import {
   addSerializedPair,
@@ -131,7 +131,7 @@ export function useUserSlippageTolerance(): Percent | 'auto' {
 }
 
 export function useUserTransactionTTL(): [number, (slippage: number) => void] {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>((state) => {
     return state.user.userDeadline
   })
@@ -147,7 +147,7 @@ export function useUserTransactionTTL(): [number, (slippage: number) => void] {
 }
 
 export function useAddUserToken(): (token: Token) => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(
     (token: Token) => {
       dispatch(addSerializedToken({ serializedToken: serializeToken(token) }))
@@ -427,6 +427,7 @@ export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Pe
 export function useUserOpenMev(): [boolean, (newUseOpenMev: boolean) => void] {
   const dispatch = useAppDispatch()
 
+  // @ts-ignore TYPE NEEDS FIXING
   const useOpenMev = useSelector<AppState, AppState['user']['useOpenMev']>((state) => state.user.userUseOpenMev)
 
   const setUseOpenMev = useCallback(

@@ -8,18 +8,17 @@ import Typography from 'app/components/Typography'
 import { classNames, listVersionLabel } from 'app/functions'
 import { useFetchListCallback } from 'app/hooks/useFetchListCallback'
 import { useCurrencyModalContext } from 'app/modals/SearchModal/CurrencySearchModal'
-import { AppDispatch } from 'app/state'
+import { useAppDispatch } from 'app/state/hooks'
 import { enableList, removeList } from 'app/state/lists/actions'
 import { useAllLists } from 'app/state/lists/hooks'
 import React, { FC, useCallback, useState } from 'react'
 import ReactGA from 'react-ga'
-import { useDispatch } from 'react-redux'
 
 import CurrencyModalView from './CurrencyModalView'
 
 const ImportList: FC = () => {
   const { i18n } = useLingui()
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   const { setView, onDismiss, listUrl, importList } = useCurrencyModalContext()
   const [confirmed, setConfirmed] = useState(false)
   const lists = useAllLists()

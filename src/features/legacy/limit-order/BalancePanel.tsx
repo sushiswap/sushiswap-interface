@@ -4,12 +4,11 @@ import Typography from 'app/components/Typography'
 import { maxAmountSpend } from 'app/functions'
 import { useBentoOrWalletBalances } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch } from 'app/state'
+import { useAppDispatch } from 'app/state/hooks'
 import { setFromBentoBalance } from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, { useLimitOrderActionHandlers } from 'app/state/limit-order/hooks'
 import { Field } from 'app/state/swap/actions'
 import React, { FC, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
 
 const BalancePanel: FC = () => {
   const { account } = useActiveWeb3React()
@@ -22,7 +21,7 @@ const BalancePanel: FC = () => {
     [true, false]
   )
   const maxAmountInput = maxAmountSpend(walletBalance)
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
 
   const handleMaxInput = useCallback(
     (bento) => {

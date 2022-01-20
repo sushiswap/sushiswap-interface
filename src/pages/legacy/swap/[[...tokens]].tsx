@@ -435,6 +435,7 @@ export default function Swap({ banners }) {
             onAcceptChanges={handleAcceptChanges}
             attemptingTxn={attemptingTxn}
             txHash={txHash}
+            // @ts-ignore TYPE NEEDS FIXING
             recipient={recipient}
             allowedSlippage={allowedSlippage}
             onConfirm={handleSwap}
