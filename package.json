@@ -33,6 +33,7 @@
     "*.{md,css}": "prettier --write"
   },
   "devDependencies": {
+    "@babel/preset-react": "^7.16.7",
     "@binance-chain/bsc-connector": "^1.0.0",
     "@chainsafe/dappeteer": "^2.2.0",
     "@clover-network/clover-connector": "^1.0.0",

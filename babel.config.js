@@ -5,12 +5,14 @@ module.exports = function (api) {
 
   const presets = isCallerDevelopment
     ? [
-        'next/babel',
-        {
-          'preset-react': {
+        ['next/babel'],
+        [
+          '@babel/preset-react',
+          {
+            runtime: 'automatic',
             importSource: !isServer ? '@welldone-software/why-did-you-render' : 'react',
           },
-        },
+        ],
       ]
     : ['next/babel']
 
