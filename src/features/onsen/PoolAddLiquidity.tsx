@@ -178,7 +178,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
           currency={currencyA}
           onChange={onFieldAInput}
         />
-        <div className="flex justify-center -mt-6 -mb-6 z-10">
+        <div className="z-10 flex justify-center -mt-6 -mb-6">
           <div className="p-1.5 rounded-full bg-dark-800 border border-dark-800 shadow-md border-dark-700">
             <PlusIcon width={14} className="text-high-emphesis" />
           </div>
@@ -189,6 +189,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
           value={formattedAmounts[Field.CURRENCY_B]}
           currency={currencyB}
           onChange={onFieldBInput}
+          className="!mt-0"
         />
         {(oneCurrencyIsETH || oneCurrencyIsWETH) && chainId != ChainId.CELO && (
           <div className="flex justify-center">

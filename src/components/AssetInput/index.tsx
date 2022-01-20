@@ -37,6 +37,7 @@ interface AssetInputProps {
   currencyLogo?: boolean
   size?: 'sm' | 'md'
   balance?: CurrencyAmount<Currency>
+  showMax?: boolean
 }
 
 type AssetInput<P> = FC<P> & {
@@ -55,6 +56,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({
   className,
   size = 'md',
   balance: balanceProp,
+  showMax = true,
   ...props
 }) => {
   const isDesktop = useDesktopMediaQuery()
@@ -125,7 +127,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({
             spendFromWallet={spendFromWallet}
             onMax={() => props.onChange(maxSpend)}
             showMax={
-              balance && maxSpendAsFraction && balance.greaterThan('0')
+              showMax && balance && maxSpendAsFraction && balance.greaterThan('0')
                 ? !parsedInput?.equalTo(maxSpendAsFraction)
                 : false
             }
@@ -304,14 +306,14 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
       <BentoboxIcon
         width={16}
         height={16}
-        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
+        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'truncate')}
       />
     )
   }
 
   return (
     <div className={classNames(error ? 'bg-red/10' : '', 'flex justify-between py-2 px-3')}>
-      <div className="flex items-center gap-1.5">
+      <div className="flex items-center gap-1.5 mr-1">
         {icon}
         <Typography variant="sm" className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}>
           {i18n._(t`Balance:`)}
@@ -320,7 +322,7 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
       <Typography
         variant="sm"
         weight={700}
-        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
+        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'truncate')}
         onClick={() => onClick(balance)}
         id={id}
       >

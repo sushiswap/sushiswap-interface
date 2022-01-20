@@ -98,7 +98,7 @@ const ManageBar = ({ farm }) => {
           </Typography>
         </div>
 
-        <div className="flex gap-2 justify-end">
+        <div className="flex justify-end gap-2">
           {['25', '50', '75', '100'].map((multiplier, i) => (
             <Button
               variant="outlined"
@@ -116,8 +116,7 @@ const ManageBar = ({ farm }) => {
               }}
               className={classNames(
                 'text-md border border-opacity-50',
-                toggle ? 'focus:ring-blue border-blue' : 'focus:ring-pink border-pink',
-                multiplier === '25' || multiplier === '75' ? 'hidden sm:block' : ''
+                toggle ? 'focus:ring-blue border-blue' : 'focus:ring-pink border-pink'
               )}
             >
               {multiplier === '100' ? 'MAX' : multiplier + '%'}
@@ -130,6 +129,7 @@ const ManageBar = ({ farm }) => {
           value={toggle ? depositValue : withdrawValue}
           onChange={setDepositValue}
           balance={toggle ? undefined : stakedAmount}
+          showMax={false}
         />
       </HeadlessUiModal.BorderedContent>
       {toggle ? (
