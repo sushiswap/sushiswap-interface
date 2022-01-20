@@ -167,13 +167,15 @@ export function useDefaultsFromURLSearch() {
 
 type UseLimitOrderDerivedCurrencies = () => { inputCurrency?: Currency; outputCurrency?: Currency }
 export const useLimitOrderDerivedCurrencies: UseLimitOrderDerivedCurrencies = () => {
+  const { chainId } = useActiveWeb3React()
+
   const {
     [Field.INPUT]: { currencyId: inputCurrencyId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
   } = useLimitOrderState()
 
-  const inputCurrency = useCurrency(inputCurrencyId) ?? undefined
-  const outputCurrency = useCurrency(outputCurrencyId) ?? undefined
+  const inputCurrency = useCurrency(inputCurrencyId || 'ETH') ?? undefined
+  const outputCurrency = useCurrency(outputCurrencyId || SUSHI_ADDRESS[chainId]) ?? undefined
 
   return useMemo(() => {
     return {
