@@ -61,6 +61,7 @@ describe('Remove Liquidity:', () => {
     const positionBeforeWithdraw = await poolPage.getPoolPosition()
     expect(positionBeforeWithdraw.assetA).toEqual('USDC')
     expect(positionBeforeWithdraw.assetB).toEqual('WETH')
+    expect(positionBeforeWithdraw.amountA || positionBeforeWithdraw.amountB).toBeGreaterThan(0)
 
     await poolPage.clickAddLiquidityButton()
 

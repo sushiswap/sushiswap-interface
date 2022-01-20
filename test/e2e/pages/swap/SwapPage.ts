@@ -24,24 +24,19 @@ export class SwapPage extends AppPage {
   private SwapButtonSelector: string = '#swap-button'
   private WrapButtonSelector: string = '#wrap-button'
   private UseMaxButtonSelector: string = '.btn-max'
-  private BalanceLabelSelector: string = '.text-balance'
+  private BalanceLabelSelector: string = '#text-balance-'
   private SwitchCurrenciesButtonSelector: string = '#btn-switch-currencies'
 
   // Swap rate selectors
   private ExchangeRateButtonSelector: string = '#btn-exchange-rate'
 
   // Swap review modal selectors
-  private ConfirmSwapButtonSelector: string = '#review-swap-button'
-  private SwapSuccessIconSelector: string = '#swap-success-icon'
+  private ConfirmSwapButtonSelector: string = '#confirm-swap-or-send'
+  private TxSubmittedSelector: string = '#text-transaction-submitted'
 
   // Token selector &
   private InTokenButtonSelector: string = '#asset-select-trigger-0'
   private OutTokenButtonSelector: string = '#asset-select-trigger-1'
-
-  //Currency select dialog selectors
-  // private SelectTokenInputSelector: string = '#txt-select-token'
-  // private AllCurrenciesListSelector: string = '#all-currencies-list'
-  // private SelectTokenResultsSelector: string = '.token-'
 
   // Tx settings
   private TxSettingsButtonSelector: string = '#btn-transaction-settings'
@@ -195,6 +190,7 @@ export class SwapPage extends AppPage {
   }
 
   public async getInputTokenBalance(): Promise<string> {
+    await this.blockingWait(3, true)
     await this.Page.waitForSelector(this.InTokenButtonSelector)
     const inputTokenLabel = await this.Page.$(this.InTokenButtonSelector)
     // @ts-ignore TYPE NEEDS FIXING
@@ -250,7 +246,8 @@ export class SwapPage extends AppPage {
     await this.confirmMetamaskTransaction()
 
     if (swapType === SwapType.Normal) {
-      await this.Page.waitForSelector(this.SwapSuccessIconSelector)
+      await this.Page.waitForSelector(this.TxSubmittedSelector)
+      await this.blockingWait(5) // wait for tx
     }
   }
 

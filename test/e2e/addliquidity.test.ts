@@ -70,6 +70,8 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(true)
     await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
 
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
+
     await addLiquidityPage.confirmDeposit()
 
     await page.goto(poolLink)
@@ -83,10 +85,10 @@ describe('Add Liquidity:', () => {
     const usdcWalletBalanceAfter = await addLiquidityPage.getAssetABalance(true)
 
     const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
-    expect(closeValues(positionAfterDeposit.amountA, positionBeforeDeposit.amountA + usdcDepositAmount, 1e-9)).toBe(
-      true
-    )
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from wallet in unequal amounts', async () => {
@@ -110,6 +112,8 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetBFundFromWallet(true)
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
 
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
+
     await addLiquidityPage.confirmDeposit()
 
     await page.goto(poolLink)
@@ -123,8 +127,10 @@ describe('Add Liquidity:', () => {
     const ethWalletBalanceAfter = await addLiquidityPage.getAssetBBalance(true)
 
     const ethBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
-    expect(closeValues(positionAfterDeposit.amountB, positionBeforeDeposit.amountB + ethDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from bento in unequal amounts', async () => {
@@ -148,6 +154,8 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetBFundFromWallet(false)
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
 
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
+
     await addLiquidityPage.confirmDeposit()
 
     await page.goto(poolLink)
@@ -161,8 +169,10 @@ describe('Add Liquidity:', () => {
     const ethBalanceAfter = await addLiquidityPage.getAssetBBalance(false)
 
     const ethBalanceDiff = ethBalanceBefore - ethBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
-    expect(closeValues(positionAfterDeposit.amountB, positionBeforeDeposit.amountB + ethDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from wallet & USDC from wallet in unequal amounts', async () => {
@@ -189,8 +199,10 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(true)
     await addLiquidityPage.setAssetBFundFromWallet(true)
 
-    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
     await addLiquidityPage.setAssetBDepositAmount(assetBDepositAmount)
+    await addLiquidityPage.setAssetADepositAmount(assetADepositAmount)
+
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
 
     await addLiquidityPage.confirmDeposit()
 
@@ -207,8 +219,11 @@ describe('Add Liquidity:', () => {
 
     const assetABalanceDiff = assetAWalletBalanceBefore - assetAWalletBalanceAfter
     const assetBBalanceDiff = assetBWalletBalanceBefore - assetBWalletBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(assetABalanceDiff, assetADepositAmount, 1e-9)).toBe(true)
     expect(closeValues(assetBBalanceDiff, assetBDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from wallet & USDC from bento in unequal amounts', async () => {
@@ -236,8 +251,10 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(false)
     await addLiquidityPage.setAssetBFundFromWallet(true)
 
-    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
+
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
 
     await addLiquidityPage.confirmDeposit()
 
@@ -254,8 +271,11 @@ describe('Add Liquidity:', () => {
 
     const assetABalanceDiff = usdcBentoBalanceBefore - usdcBentoBalanceAfter
     const assetBBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(assetABalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
     expect(closeValues(assetBBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from bento & USDC from wallet in unequal amounts', async () => {
@@ -283,8 +303,10 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(true)
     await addLiquidityPage.setAssetBFundFromWallet(false)
 
-    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
+
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
 
     await addLiquidityPage.confirmDeposit()
 
@@ -301,8 +323,11 @@ describe('Add Liquidity:', () => {
 
     const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
     const ethBalanceDiff = ethBentoBalanceBefore - ethBentoBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from bento & USDC from bento in unequal amounts', async () => {
@@ -332,8 +357,10 @@ describe('Add Liquidity:', () => {
     await addLiquidityPage.setAssetAFundFromWallet(false)
     await addLiquidityPage.setAssetBFundFromWallet(false)
 
-    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
     await addLiquidityPage.setAssetBDepositAmount(ethDepositAmount)
+    await addLiquidityPage.setAssetADepositAmount(usdcDepositAmount)
+
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
 
     await addLiquidityPage.confirmDeposit()
 
@@ -350,8 +377,11 @@ describe('Add Liquidity:', () => {
 
     const usdcBalanceDiff = usdcBentoBalanceBefore - usdcBentoBalanceAfter
     const ethBalanceDiff = ethBentoBalanceBefore - ethBentoBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from bento & USDC from bento in equal amounts', async () => {
@@ -381,6 +411,8 @@ describe('Add Liquidity:', () => {
 
     const assetBDepositAmount = await addLiquidityPage.getAssetBDepositAmount()
 
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
+
     await addLiquidityPage.confirmDeposit()
 
     await page.goto(poolLink)
@@ -396,15 +428,11 @@ describe('Add Liquidity:', () => {
 
     const assetABalanceDiff = assetABentoBalanceBefore - assetABentoBalanceAfter
     const assetBBalanceDiff = assetBBentoBalanceBefore - assetBBentoBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(assetABalanceDiff, assetADepositAmount, 1e-9)).toBe(true)
     expect(closeValues(assetBBalanceDiff, assetBDepositAmount, 1e-9)).toBe(true)
-
-    expect(closeValues(positionAfterDeposit.amountA, positionBeforeDeposit.amountA + assetADepositAmount, 1e-9)).toBe(
-      true
-    )
-    expect(closeValues(positionAfterDeposit.amountB, positionBeforeDeposit.amountB + assetBDepositAmount, 1e-9)).toBe(
-      true
-    )
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 
   test('Should deposit ETH from wallet & USDC from wallet in equal amounts', async () => {
@@ -437,6 +465,8 @@ describe('Add Liquidity:', () => {
 
     const usdcDepositAmount = await addLiquidityPage.getAssetADepositAmount()
 
+    const minLiquidityOutput = await addLiquidityPage.getMinReceivedAmount()
+
     await addLiquidityPage.confirmDeposit()
 
     await page.goto(poolLink)
@@ -452,7 +482,10 @@ describe('Add Liquidity:', () => {
 
     const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
     const ethBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
+    const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
+
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
+    expect(closeValues(slpAmountDiff, minLiquidityOutput, 1e-9)).toBe(true)
   })
 })

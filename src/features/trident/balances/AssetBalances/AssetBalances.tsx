@@ -33,7 +33,7 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
 
   return (
     <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
-      <table {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
+      <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
         <thead>
           {headerGroups.map((headerGroup, i) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={i}>
