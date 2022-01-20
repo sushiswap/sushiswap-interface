@@ -1,30 +1,23 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
 import Input from 'app/components/Input'
-import { AppDispatch } from 'app/state'
-import { Field, setLimitPrice } from 'app/state/limit-order/actions'
-import { useDerivedLimitOrderInfo, useLimitOrderState } from 'app/state/limit-order/hooks'
-import React, { FC, useCallback } from 'react'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from 'app/state/hooks'
+import { setLimitPrice } from 'app/state/limit-order/actions'
+import useLimitOrderDerivedCurrencies, { useLimitOrderState } from 'app/state/limit-order/hooks'
+import React, { FC } from 'react'
 
-interface LimitPriceInputPanelProps {
-  onBlur: (value: string) => void
+interface LimitPriceInputPanel {
+  trade?: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
 }
 
-const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { limitPrice } = useLimitOrderState()
-  const { currencies, currentPrice } = useDerivedLimitOrderInfo()
+const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade }) => {
   const { i18n } = useLingui()
-  const handleInput = useCallback(
-    (value) => {
-      dispatch(setLimitPrice(value))
-      onBlur(value)
-    },
-    [dispatch, onBlur]
-  )
+  const dispatch = useAppDispatch()
+  const { limitPrice } = useLimitOrderState()
+  const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
 
-  const disabled = !currencies[Field.INPUT] || !currencies[Field.OUTPUT]
+  const disabled = !inputCurrency || !outputCurrency
 
   return (
     <div
@@ -38,7 +31,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
           className={`uppercase border border-blue bg-blue text-blue bg-opacity-30 border-opacity-50 py-0.5 px-1.5 text-xs rounded-3xl flex items-center justify-center ${
             !disabled ? 'cursor-pointer hover:border-opacity-100' : ''
           }`}
-          onClick={() => handleInput(currentPrice?.toSignificant(6))}
+          onClick={() => dispatch(setLimitPrice(trade?.executionPrice.toFixed()))}
         >
           {i18n._(t`Current`)}
         </span>
@@ -47,14 +40,13 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanelProps> = ({ onBlur }) => {
         <Input.Numeric
           disabled={disabled}
           className="w-full text-2xl font-medium bg-transparent"
-          placeholder={currentPrice ? currentPrice.toSignificant(6) : '0.0'}
+          placeholder={trade ? trade.executionPrice.toSignificant(6) : '0.0'}
           id="limit-price-input"
           value={limitPrice || ''}
-          onUserInput={handleInput}
-          onBlur={() => onBlur(limitPrice)}
+          onUserInput={(val) => dispatch(setLimitPrice(val))}
         />
         <div className="text-xs text-secondary whitespace-nowrap">
-          {currencies.OUTPUT?.symbol} per {currencies.INPUT?.symbol}
+          {outputCurrency?.symbol} per {inputCurrency?.symbol}
         </div>
       </div>
     </div>

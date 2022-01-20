@@ -1,28 +1,32 @@
-import { Currency, Price } from '@sushiswap/core-sdk'
+import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
 import { Field } from 'app/state/limit-order/actions'
-import { useDerivedLimitOrderInfo } from 'app/state/limit-order/hooks'
+import { useLimitOrderDerivedParsedAmounts } from 'app/state/limit-order/hooks'
 import { FC, useState } from 'react'
 
-const PriceRatio: FC = () => {
-  const { currencies, currentPrice, parsedAmounts } = useDerivedLimitOrderInfo()
+interface PriceRatio {
+  trade?: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+}
+
+const PriceRatio: FC<PriceRatio> = ({ trade }) => {
+  const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
   const [inverted, setInverted] = useState(false)
 
   const price =
-    parsedAmounts[Field.INPUT] && parsedAmounts[Field.OUTPUT]
+    parsedInputAmount && parsedOutputAmount
       ? new Price<Currency, Currency>({
-          baseAmount: parsedAmounts[Field.INPUT],
-          quoteAmount: parsedAmounts[Field.OUTPUT],
+          baseAmount: parsedInputAmount,
+          quoteAmount: parsedOutputAmount,
         })
-      : currentPrice
+      : trade?.executionPrice
 
   return (
     <div className="flex flex-row font-bold text-sm ">
       <div className="flex divide-x divide-dark-800 hover:divide-dark-700 cursor-pointer rounded border border-dark-800 hover:border-dark-700">
         <div className="py-2 px-4">
           <span className="whitespace-nowrap">
-            1 {inverted ? currencies.OUTPUT?.symbol : currencies.INPUT?.symbol} ={' '}
+            1 {inverted ? parsedOutputAmount?.currency.symbol : parsedInputAmount?.currency.symbol} ={' '}
             {inverted ? price?.invert().toSignificant(6) : price?.toSignificant(6)}{' '}
-            {inverted ? currencies.INPUT?.symbol : currencies.OUTPUT?.symbol}
+            {inverted ? parsedInputAmount?.currency.symbol : parsedOutputAmount?.currency.symbol}
           </span>
         </div>
         <div
