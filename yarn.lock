@@ -4096,10 +4096,10 @@
     "@ethersproject/contracts" "^5.4.0"
     "@sushiswap/bentobox-sdk" "1.0.0-canary.41"
 
-"@sushiswap/limit-order-pair-list@0.2.7":
-  version "0.2.7"
-  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-pair-list/-/limit-order-pair-list-0.2.7.tgz#9a1348d103b1fcc24cb5534daff560700df3276e"
-  integrity sha512-PMVUJ6AbZJflSnVl7yXtJLNZulgg2zrzokid4QJ64p10zaldOm2RdT/tCA6LwJaBJkIZoeF4zDBM872m9gn/FQ==
+"@sushiswap/limit-order-pair-list@0.2.9":
+  version "0.2.9"
+  resolved "https://registry.yarnpkg.com/@sushiswap/limit-order-pair-list/-/limit-order-pair-list-0.2.9.tgz#311e886909c3fba8c9c7631110323659ae673226"
+  integrity sha512-rniKL2lw1CfibwEBiC5GQISfQGJnvhivoP98By8rgX1w0YNVZz10A9SzYZIpmOGeamAToslkqBxtkxnPJV8eOg==
 
 "@sushiswap/limit-order-sdk@1.0.0-canary.42":
   version "1.0.0-canary.42"
