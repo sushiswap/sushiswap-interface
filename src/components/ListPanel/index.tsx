@@ -61,13 +61,14 @@ interface ListPanelHeaderProps {
   value?: string
   subValue?: string
   className?: string
+  id?: string
 }
 
 // Default ListPanelHeader component, please note that you are not obliged to pass this to a ListPanel component
 // If you need different styling, please create another component and leave this one as is.
-const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue, className = '' }) => {
+const ListPanelHeader: FC<ListPanelHeaderProps> = ({ title, value, subValue, className = '', id }) => {
   return (
-    <div className={classNames(className, 'flex flex-row justify-between px-4 py-[10px] items-center')}>
+    <div id={id} className={classNames(className, 'flex flex-row justify-between px-4 py-[10px] items-center')}>
       <Typography variant="lg" className="text-high-emphesis" weight={700}>
         {title}
       </Typography>

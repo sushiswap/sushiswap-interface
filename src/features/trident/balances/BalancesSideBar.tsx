@@ -12,10 +12,10 @@ const BalancesSideBar = () => {
 
   return (
     <div className="hidden lg:block">
-      <div className="flex gap-8">
+      <div id="balances-sidebar" className="flex gap-8">
         {items.map(({ label, link, key }, index) => (
           <Link href={link} key={index} passHref={true}>
-            <div className="space-y-2 cursor-pointer h-full">
+            <div className="h-full space-y-2 cursor-pointer">
               <Typography
                 weight={700}
                 className={classNames(

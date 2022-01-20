@@ -139,6 +139,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, trident = fals
             </Typography>
           </HeadlessUiModal.BorderedContent>
           <Button
+            id="confirm-expert-mode"
             color="blue"
             variant="filled"
             onClick={() => {

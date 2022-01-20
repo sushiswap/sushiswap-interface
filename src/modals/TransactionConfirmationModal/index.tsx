@@ -60,7 +60,7 @@ export const TransactionSubmittedContent: FC<TransactionSubmittedContentProps> =
         <div className="w-[102px] h-[102px] bg-dark-900 rounded-full">
           <Lottie animationData={receiptPrinting} autoplay loop={false} />
         </div>
-        <Typography variant="sm" weight={700} className="text-white">
+        <Typography id="text-transaction-submitted" variant="sm" weight={700} className="text-white">
           {i18n._(t`Transaction Submitted`)}
         </Typography>
         {chainId && hash && (

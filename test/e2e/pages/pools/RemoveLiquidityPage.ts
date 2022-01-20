@@ -4,6 +4,7 @@ import { ILiquidityInfo } from '../../interfaces/ILiquidityInfo'
 import { AppPage } from '../AppPage'
 
 export class RemoveLiquidityPage extends AppPage {
+  private TxStatusDivSelector: string = 'div-tx-status'
   private BackToPoolsButtonSelector: string = '#btn-withdraw-success-back'
   private ModalConfirmWithdrawButtonSelector: string = '#btn-modal-confirm-withdrawal'
   private ReviewAndConfirmButtonSelector: string = '#btn-confirm-remove-liquidity'
@@ -84,9 +85,7 @@ export class RemoveLiquidityPage extends AppPage {
 
     await this.confirmMetamaskTransaction()
 
-    const backToPoolsButton = await this.Page.waitForSelector(this.BackToPoolsButtonSelector)
-    // @ts-ignore TYPE NEEDS FIXING
-    await backToPoolsButton.click()
+    await this.Page.waitForXPath(`//div[@id='${this.TxStatusDivSelector}' and contains(., 'Success')]`)
 
     await this.blockingWait(5)
   }

@@ -133,7 +133,7 @@ export abstract class AppPage {
 
       // Try to confirm transaction again
       await this.Metamask.confirmTransaction()
-      await this.Metamask.page.waitForTimeout(500)
+      await this.blockingWait(3)
 
       //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
       const mmFooterButtons = await this.Metamask.page.$$('footer > button')
