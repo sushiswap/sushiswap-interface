@@ -42,6 +42,7 @@ const APPROVAL_ADDRESSES = {
   },
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const ManageBar = ({ farm }) => {
   const dispatch = useAppDispatch()
   const { account, chainId } = useActiveWeb3React()
@@ -62,6 +63,7 @@ const ManageBar = ({ farm }) => {
   const stakedAmount = useUserInfo(farm, liquidityToken)
   const parsedDepositValue = tryParseAmount(depositValue, liquidityToken)
   const parsedWithdrawValue = tryParseAmount(withdrawValue, liquidityToken)
+  // @ts-ignore TYPE NEEDS FIXING
   const [approvalState, approve] = useApproveCallback(parsedDepositValue, APPROVAL_ADDRESSES[farm.chef][chainId])
 
   const depositError = !parsedDepositValue

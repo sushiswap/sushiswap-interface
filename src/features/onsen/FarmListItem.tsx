@@ -49,6 +49,7 @@ const FarmListItem: FC<FarmListItem> = ({ farm, onClick }) => {
         </Typography>
       </div>
       <div className={classNames('flex flex-col !items-end !justify-center', TABLE_TBODY_TD_CLASSNAME(2, 4))}>
+        {/* @ts-ignore TYPE NEEDS FIXING */}
         {farm?.rewards?.map((reward, i) => (
           <Typography
             variant="sm"

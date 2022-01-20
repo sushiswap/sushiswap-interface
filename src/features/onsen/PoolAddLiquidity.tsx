@@ -179,6 +179,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
           id="add-liquidity-input-tokena"
           value={formattedAmounts[Field.CURRENCY_A]}
           currency={currencyA}
+          // @ts-ignore TYPE NEEDS FIXING
           onChange={onFieldAInput}
         />
         <div className="z-10 flex justify-center -mt-6 -mb-6">
@@ -191,6 +192,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
           id="add-liquidity-input-tokena"
           value={formattedAmounts[Field.CURRENCY_B]}
           currency={currencyB}
+          // @ts-ignore TYPE NEEDS FIXING
           onChange={onFieldBInput}
           className="!mt-0"
         />
@@ -198,7 +200,9 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
           <div className="flex justify-center">
             <Button size="xs" variant="empty" color="blue" className="rounded-none" onClick={() => setUseETH(!useETH)}>
               {i18n._(t`Use`)} {useETH && 'W'}
+              {/* @ts-ignore TYPE NEEDS FIXING */}
               {NATIVE[chainId].symbol} instead of {!useETH && 'W'}
+              {/* @ts-ignore TYPE NEEDS FIXING */}
               {NATIVE[chainId].symbol}
             </Button>
           </div>

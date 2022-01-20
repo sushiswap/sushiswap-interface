@@ -173,7 +173,7 @@ const AssetInputPanel = ({
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(Number(value) === 0 ? '1' : value, currency))
-  const span = useRef<HTMLSpanElement>(undefined)
+  const span = useRef<HTMLSpanElement | null>(null)
   const [width, setWidth] = useState(0)
 
   useEffect(() => {

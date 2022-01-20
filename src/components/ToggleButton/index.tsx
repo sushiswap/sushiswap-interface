@@ -40,6 +40,7 @@ const ToggleButtonGroup: ToggleButtonGroup<Props> = ({
   ...props
 }) => {
   return (
+    // @ts-ignore TYPE NEEDS FIXING
     <HeadlessRadioGroup {...props} className={classNames(className, `flex bg-dark-1000/40`, VARIANTS[variant].group)}>
       {Children.map(children, (child) => {
         if (isValidElement(child)) {

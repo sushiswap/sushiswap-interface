@@ -14,7 +14,7 @@ const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement
 }) => {
   const [show, setShow] = useState<boolean>(false)
   const [toggle, setToggle] = useToggle(false)
-  const node = useRef<HTMLDivElement>()
+  const node = useRef<HTMLDivElement | null>(null)
   useOnClickOutside(node, toggle ? setToggle : undefined)
 
   const open = useCallback(() => setShow(true), [setShow])

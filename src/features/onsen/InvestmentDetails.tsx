@@ -163,6 +163,7 @@ const InvestmentDetails = ({ farm }) => {
           </Typography>
         </div>
 
+        {/* @ts-ignore TYPE NEEDS FIXING */}
         {farm?.rewards?.map((reward, i) => {
           return (
             <div className="flex items-center gap-2" key={i}>

@@ -78,6 +78,7 @@ const OnsenFilter = () => {
         chainId === ChainId.ETHEREUM ? (
           <MenuLink href={'/farm?filter=sushi'} label={i18n._(t`SushiSwap Farms`)} />
         ) : undefined,
+      // @ts-ignore TYPE NEEDS FIXING
       [FarmFilter.Old]: [ChainId.CELO].includes(chainId) ? (
         <MenuLink href={'/farm?filter=old'} label={i18n._(t`Old Farms`)} />
       ) : undefined,

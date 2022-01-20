@@ -110,6 +110,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
     [Field.CURRENCY_A]:
       amountsMin?.[Field.CURRENCY_A] && parsedAmountA
         ? CurrencyAmount.fromRawAmount(
+            // @ts-ignore TYPE NEEDS FIXING
             currencyA.isNative ? NATIVE[chainId || 1] : parsedAmountA.currency,
             amountsMin[Field.CURRENCY_A]
           )
@@ -117,6 +118,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
     [Field.CURRENCY_B]:
       amountsMin?.[Field.CURRENCY_B] && parsedAmountB
         ? CurrencyAmount.fromRawAmount(
+            // @ts-ignore TYPE NEEDS FIXING
             currencyB.isNative ? NATIVE[chainId || 1] : parsedAmountB.currency,
             amountsMin[Field.CURRENCY_B]
           )
@@ -151,7 +153,9 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
         args = [
           currencyBIsETH ? tokenA.address : tokenB.address,
           liquidityAmount.quotient.toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
           account,
           deadline.toHexString(),
@@ -164,7 +168,9 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
           tokenA.address,
           tokenB.address,
           liquidityAmount.quotient.toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[Field.CURRENCY_A].toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[Field.CURRENCY_B].toString(),
           account,
           deadline.toHexString(),
@@ -179,7 +185,9 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
         args = [
           currencyBIsETH ? tokenA.address : tokenB.address,
           liquidityAmount.quotient.toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[currencyBIsETH ? Field.CURRENCY_A : Field.CURRENCY_B].toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[currencyBIsETH ? Field.CURRENCY_B : Field.CURRENCY_A].toString(),
           account,
           signatureData.deadline,
@@ -196,7 +204,9 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
           tokenA.address,
           tokenB.address,
           liquidityAmount.quotient.toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[Field.CURRENCY_A].toString(),
+          // @ts-ignore TYPE NEEDS FIXING
           amountsMin[Field.CURRENCY_B].toString(),
           account,
           signatureData.deadline,
@@ -282,6 +292,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
           currencyLogo={false}
           currency={pair?.liquidityToken}
           value={typedValue}
+          // @ts-ignore TYPE NEEDS FIXING
           onChange={onLiquidityInput}
         />
         <div className="flex justify-between mx-2 mt-2">
@@ -291,6 +302,7 @@ const PoolWithdraw = ({ currencyA, currencyB, header }) => {
           {(oneCurrencyIsETH || oneCurrencyIsWETH) && (
             <Button size="xs" variant="empty" color="blue" className="rounded-none" onClick={() => setUseETH(!useETH)}>
               {i18n._(t`Receive`)} {useETH && 'W'}
+              {/* @ts-ignore TYPE NEEDS FIXING */}
               {NATIVE[chainId].symbol}
             </Button>
           )}

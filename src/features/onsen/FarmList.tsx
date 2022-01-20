@@ -28,6 +28,7 @@ const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active
   return <></>
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'tvl', direction: 'descending' })
   const { i18n } = useLingui()

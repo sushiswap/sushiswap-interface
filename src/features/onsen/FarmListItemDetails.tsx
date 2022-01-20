@@ -24,6 +24,7 @@ interface FarmListItemDetailsModal {
 
 const Context = createContext<FarmListItemDetailsModal | undefined>(undefined)
 
+// @ts-ignore TYPE NEEDS FIXING
 const FarmListItemDetails = ({ farm, onDismiss }) => {
   const { i18n } = useLingui()
   const { view } = useAppSelector(selectOnsen)
