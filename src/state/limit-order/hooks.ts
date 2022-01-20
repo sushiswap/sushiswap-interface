@@ -4,6 +4,7 @@ import {
   ChainId,
   Currency,
   CurrencyAmount,
+  JSBI,
   Price,
   SUSHI_ADDRESS,
   Trade,
@@ -186,12 +187,7 @@ export function useDefaultsFromURLSearch() {
 type UseLimitOrderDerivedCurrencies = () => { inputCurrency?: Currency; outputCurrency?: Currency }
 export const useLimitOrderDerivedCurrencies: UseLimitOrderDerivedCurrencies = () => {
   const { chainId } = useActiveWeb3React()
-
-  const {
-    [Field.INPUT]: { currencyId: inputCurrencyId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId },
-  } = useLimitOrderState()
-
+  const { inputCurrencyId, outputCurrencyId } = useLimitOrderState()
   const inputCurrency = useCurrency(inputCurrencyId || 'ETH') ?? undefined
   const outputCurrency = useCurrency(outputCurrencyId || SUSHI_ADDRESS[chainId || 1]) ?? undefined
 
@@ -218,38 +214,57 @@ export const useLimitOrderDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = ()
   }, [inputCurrency, limitPrice, outputCurrency])
 }
 
-type UseLimitOrderDerivedParsedAmount = () => {
-  [Field.INPUT]?: CurrencyAmount<Currency>
-  [Field.OUTPUT]?: CurrencyAmount<Currency>
+type UseLimitOrderDerivedParsedAmounts = ({
+  rate,
+  trade,
+}: {
+  rate?: Price<Currency, Currency>
+  trade?: Trade<Currency, Currency, TradeType>
+}) => {
+  inputAmount?: CurrencyAmount<Currency>
+  outputAmount?: CurrencyAmount<Currency>
 }
 
-export const useLimitOrderDerivedParsedAmounts: UseLimitOrderDerivedParsedAmount = () => {
+export const useLimitOrderDerivedParsedAmounts: UseLimitOrderDerivedParsedAmounts = ({ rate, trade }) => {
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
-  const { independentField, typedValue } = useLimitOrderState()
-  const parsedRate = useLimitOrderDerivedLimitPrice()
+  const { typedField, typedValue } = useLimitOrderState()
 
   return useMemo(() => {
-    const exactIn = independentField === Field.INPUT
-    const parsedInputAmount = tryParseAmount(typedValue, (exactIn ? inputCurrency : outputCurrency) ?? undefined)
-    const parsedOutputAmount =
-      inputCurrency && outputCurrency && parsedRate && parsedInputAmount
+    const _rate = rate || trade?.executionPrice
+    const exactIn = typedField === Field.INPUT
+    const typedAmountCurrency = exactIn ? inputCurrency : outputCurrency
+    const typedAmount = tryParseAmount(typedValue, typedAmountCurrency ?? undefined)
+
+    const otherAmount =
+      inputCurrency && outputCurrency && _rate && typedAmount
         ? exactIn
-          ? parsedRate.quote(parsedInputAmount)
-          : parsedRate.invert().quote(parsedInputAmount)
+          ? _rate.quote(typedAmount)
+          : _rate.invert().quote(typedAmount)
         : undefined
 
     return {
-      [Field.INPUT]: independentField === Field.INPUT ? parsedInputAmount : parsedOutputAmount,
-      [Field.OUTPUT]: independentField === Field.OUTPUT ? parsedInputAmount : parsedOutputAmount,
+      inputAmount: exactIn ? typedAmount : otherAmount,
+      outputAmount: exactIn ? otherAmount : typedAmount,
     }
-  }, [independentField, inputCurrency, outputCurrency, parsedRate, typedValue])
+  }, [inputCurrency, outputCurrency, rate, trade?.executionPrice, typedField, typedValue])
+}
+
+type UseLimitOrderDerivedTypedInputAmount = () => CurrencyAmount<Currency> | undefined
+export const useLimitOrderDerivedTypedInputAmount: UseLimitOrderDerivedTypedInputAmount = () => {
+  const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
+  const { typedField, typedValue } = useLimitOrderState()
+
+  return useMemo(() => {
+    const exactIn = typedField === Field.INPUT
+    return tryParseAmount(typedValue, (exactIn ? inputCurrency : outputCurrency) ?? undefined)
+  }, [inputCurrency, outputCurrency, typedField, typedValue])
 }
 
 type UseLimitOrderDerivedInputError = () => string
 export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = () => {
   const { recipient, orderExpiration, fromBentoBalance, limitPrice } = useLimitOrderState()
   const { account } = useActiveWeb3React()
-  const { [Field.INPUT]: parsedInputAmount } = useLimitOrderDerivedParsedAmounts()
+  const parsedInputAmount = useLimitOrderDerivedTypedInputAmount()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const recipientLookup = useENS(recipient)
   const to = !recipient ? account : recipientLookup.address
@@ -279,17 +294,26 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ()
 
 type UseLimitOrderDerivedTrade = () => Trade<Currency, Currency, TradeType> | undefined
 export const useLimitOrderDerivedTrade: UseLimitOrderDerivedTrade = () => {
-  const { independentField } = useLimitOrderState()
+  const { typedField } = useLimitOrderState()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
-  const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
+  const typedInputAmount = useLimitOrderDerivedTypedInputAmount()
   const [singleHopOnly] = useUserSingleHopOnly()
-  const exactIn = independentField === Field.INPUT
+  const exactIn = typedField === Field.INPUT
 
-  const bestTradeExactIn = useTradeExactIn(exactIn ? parsedInputAmount : undefined, outputCurrency ?? undefined, {
+  // To get the initial rate we need to enter a default value
+  const inputAmount = inputCurrency
+    ? typedInputAmount ||
+      CurrencyAmount.fromRawAmount(
+        inputCurrency,
+        JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals))
+      )
+    : undefined
+
+  const bestTradeExactIn = useTradeExactIn(exactIn ? inputAmount : undefined, outputCurrency ?? undefined, {
     maxHops: singleHopOnly ? 1 : undefined,
   })
 
-  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !exactIn ? parsedOutputAmount : undefined, {
+  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !exactIn ? inputAmount : undefined, {
     maxHops: singleHopOnly ? 1 : undefined,
   })
 

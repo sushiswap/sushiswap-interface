@@ -1,7 +1,7 @@
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent, Trade, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Currency, Percent, Price, Trade, TradeType, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
 import { HeadlessUiModal } from 'app/components/Modal'
@@ -11,17 +11,17 @@ import TradePrice from 'app/features/legacy/swap/TradePrice'
 import { shortenAddress } from 'app/functions'
 import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderShowReview } from 'app/state/limit-order/actions'
-import { useLimitOrderDerivedLimitPrice, useLimitOrderState } from 'app/state/limit-order/hooks'
+import { useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback, useMemo, useState } from 'react'
 
 interface LimitOrderReviewModal {
   trade?: Trade<Currency, Currency, TradeType>
+  limitPrice?: Price<Currency, Currency>
 }
 
-const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ trade }) => {
+const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ trade, limitPrice }) => {
   const [inverted, setInverted] = useState(false)
   const { showReview, orderExpiration, recipient, attemptingTxn } = useLimitOrderState()
-  const limitPrice = useLimitOrderDerivedLimitPrice()
   const dispatch = useAppDispatch()
   const { i18n } = useLingui()
   const { execute } = useLimitOrderExecute()

@@ -29,6 +29,7 @@ import { Field } from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, {
   useLimitOrderActionHandlers,
   useLimitOrderDerivedLimitPrice,
+  useLimitOrderDerivedParsedAmounts,
   useLimitOrderDerivedTrade,
   useLimitOrderState,
 } from 'app/state/limit-order/hooks'
@@ -50,14 +51,15 @@ const areEqual = (first, second) => {
   return true
 }
 
-function LimitOrder() {
+const LimitOrder = () => {
   const { i18n } = useLingui()
   const { chainId, account } = useActiveWeb3React()
   const [isExpertMode, toggleExpertMode] = useExpertModeManager()
-  const { independentField, typedValue, recipient, fromBentoBalance } = useLimitOrderState()
+  const { typedField, typedValue, recipient, fromBentoBalance } = useLimitOrderState()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const trade = useLimitOrderDerivedTrade()
-  const limitPrice = useLimitOrderDerivedLimitPrice()
+  const rate = useLimitOrderDerivedLimitPrice()
+  const parsedAmounts = useLimitOrderDerivedParsedAmounts({ rate, trade })
   const { onSwitchTokens, onCurrencySelection, onUserInput, onChangeRecipient } = useLimitOrderActionHandlers()
   const [animateSwapArrows, setAnimateSwapArrows] = useState<boolean>(false)
   const pairs = useMemo(
@@ -71,13 +73,6 @@ function LimitOrder() {
     [inputCurrency, inputCurrency],
     [true, false]
   )
-
-  const dependentField: Field = independentField === Field.INPUT ? Field.OUTPUT : Field.INPUT
-  const formattedAmounts = {
-    [independentField]: typedValue,
-    [dependentField]:
-      (independentField === Field.INPUT ? trade?.outputAmount : trade?.inputAmount)?.toSignificant(6) ?? '',
-  }
 
   const maxAmountInput = maxAmountSpend(walletBalance)
   const atMaxAmountInput = bentoBalance
@@ -107,8 +102,8 @@ function LimitOrder() {
       return { type: 'error', msg: 'Invalid pair' }
     }
 
-    if (limitPrice && trade) {
-      const { numerator, denominator } = limitPrice.subtract(trade.executionPrice).divide(trade.executionPrice)
+    if (rate && trade) {
+      const { numerator, denominator } = rate.subtract(trade.executionPrice).divide(trade.executionPrice)
       const deviation = new Percent(numerator, denominator)
       if (deviation.lessThan(ZERO)) {
         return { type: 'error', msg: i18n._(t`This transaction is ${deviation.toSignificant(2)}% below market rate`) }
@@ -116,7 +111,7 @@ function LimitOrder() {
         return { type: 'info', msg: i18n._(t`This transaction is ${deviation.toSignificant(2)}% above market rate`) }
       }
     }
-  }, [i18n, inputCurrency, limitPrice, outputCurrency, pairs, trade])
+  }, [i18n, inputCurrency, rate, outputCurrency, pairs, trade])
 
   const inputTokenList = useMemo(() => {
     if (pairs.length === 0) return []
@@ -183,7 +178,9 @@ function LimitOrder() {
                     onMax={handleMaxInput}
                     showMaxButton={!atMaxAmountInput}
                     onUserInput={(value) => onUserInput(Field.INPUT, value)}
-                    value={formattedAmounts[Field.INPUT]}
+                    value={
+                      (typedField === Field.INPUT ? typedValue : parsedAmounts?.inputAmount?.toSignificant(6)) || ''
+                    }
                   />
                 }
               />
@@ -234,7 +231,9 @@ function LimitOrder() {
                     id="token-amount-output"
                     showMaxButton={false}
                     onUserInput={(value) => onUserInput(Field.OUTPUT, value)}
-                    value={formattedAmounts[Field.OUTPUT]}
+                    value={
+                      (typedField === Field.OUTPUT ? typedValue : parsedAmounts?.outputAmount?.toSignificant(6)) || ''
+                    }
                     {...(inputPanelHelperText?.type === 'error' && { error: inputPanelHelperText.msg })}
                   />
                 }
@@ -296,7 +295,7 @@ function LimitOrder() {
             </div>
 
             <LimitOrderButton trade={trade} />
-            <LimitOrderReviewModal trade={trade} />
+            <LimitOrderReviewModal trade={trade} limitPrice={rate} />
           </div>
         </DoubleGlowShadow>
       </ExpertModePanel>
