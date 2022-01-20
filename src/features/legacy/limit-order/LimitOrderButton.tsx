@@ -22,7 +22,7 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade }) => {
   const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const { fromBentoBalance, bentoPermit, attemptingTxn } = useLimitOrderState()
-  const error = useLimitOrderDerivedInputError()
+  const error = useLimitOrderDerivedInputError({ trade })
   const { deposit } = useLimitOrderExecute()
   const bentoboxContract = useBentoBoxContract()
   const masterContractAddress = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
