@@ -11,6 +11,8 @@ const PriceRatio: FC<PriceRatio> = ({ trade }) => {
   const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
   const [inverted, setInverted] = useState(false)
 
+  console.log('trade exec price', trade, trade?.executionPrice.toSignificant(6))
+
   const price =
     parsedInputAmount && parsedOutputAmount
       ? new Price<Currency, Currency>({

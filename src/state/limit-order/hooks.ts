@@ -277,17 +277,37 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ()
 export const useLimitOrderDerivedTrade = () => {
   const { independentField } = useLimitOrderState()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
-  const { [Field.INPUT]: parsedInputAmount } = useLimitOrderDerivedParsedAmounts()
+  const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
   const [singleHopOnly] = useUserSingleHopOnly()
   const exactIn = independentField === Field.INPUT
 
-  const bestTradeExactIn = useTradeExactIn(exactIn ? parsedInputAmount : undefined, outputCurrency ?? undefined, {
-    maxHops: singleHopOnly ? 1 : undefined,
-  })
+  const bestTradeExactIn = useTradeExactIn(
+    exactIn
+      ? parsedInputAmount ||
+          CurrencyAmount.fromRawAmount(
+            inputCurrency,
+            JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(inputCurrency.decimals))
+          )
+      : undefined,
+    outputCurrency ?? undefined,
+    {
+      maxHops: singleHopOnly ? 1 : undefined,
+    }
+  )
 
-  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !exactIn ? parsedInputAmount : undefined, {
-    maxHops: singleHopOnly ? 1 : undefined,
-  })
+  const bestTradeExactOut = useTradeExactOut(
+    inputCurrency ?? undefined,
+    !exactIn
+      ? parsedOutputAmount ||
+          CurrencyAmount.fromRawAmount(
+            outputCurrency,
+            JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))
+          )
+      : undefined,
+    {
+      maxHops: singleHopOnly ? 1 : undefined,
+    }
+  )
 
   return useMemo(() => {
     return exactIn ? bestTradeExactIn : bestTradeExactOut
