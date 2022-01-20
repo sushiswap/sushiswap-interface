@@ -40,7 +40,8 @@ const nextConfig = {
   reactStrictMode: true,
   pwa: {
     dest: 'public',
-    runtimeCaching,
+    // runtimeCaching,
+    dynamicStartUrlRedirect: '/swap',
     disable: process.env.NODE_ENV === 'development',
   },
   images: {

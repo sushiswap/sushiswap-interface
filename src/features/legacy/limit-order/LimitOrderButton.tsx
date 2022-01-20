@@ -11,7 +11,7 @@ import useLimitOrders from 'app/hooks/useLimitOrders'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAddPopup, useWalletModalToggle } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
-import { Field, setFromBentoBalance } from 'app/state/limit-order/actions'
+import { clear, Field, setFromBentoBalance } from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, {
   useLimitOrderDerivedInputError,
   useLimitOrderDerivedParsedAmounts,
@@ -96,6 +96,8 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
         })
 
         await mutate()
+
+        dispatch(clear())
       }
     } catch (e) {
       addPopup({
@@ -110,6 +112,7 @@ const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
     account,
     addPopup,
     chainId,
+    dispatch,
     library,
     mutate,
     orderExpiration.value,

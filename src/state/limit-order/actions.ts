@@ -40,3 +40,5 @@ export const switchCurrencies = createAction<void>('limit-order/switchCurrencies
 export const typeInput = createAction<{ field: Field; typedValue: string }>('limit-order/typeInput')
 
 export const setRecipient = createAction<{ recipient: string | undefined }>('limit-order/setRecipient')
+
+export const clear = createAction<void>('limit-order/clear')

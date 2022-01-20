@@ -2,6 +2,7 @@ import { createReducer } from '@reduxjs/toolkit'
 import { AppState } from 'app/state'
 
 import {
+  clear,
   Field,
   replaceLimitOrderState,
   selectCurrency,
@@ -143,6 +144,11 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
     })
     .addCase(setRecipient, (state, { payload: { recipient } }) => {
       state.recipient = recipient
+    })
+    .addCase(clear, () => {
+      return {
+        ...initialState,
+      }
     })
 )
 

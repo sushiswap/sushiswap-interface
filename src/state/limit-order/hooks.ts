@@ -241,7 +241,7 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ()
   const recipientLookup = useENS(recipient)
   const to = !recipient ? account : recipientLookup.address
   const parsedRate = useLimitOrderDerivedLimitPrice()
-  const balance = useBentoOrWalletBalance(account ?? undefined, inputCurrency, fromBentoBalance)
+  const balance = useBentoOrWalletBalance(account ?? undefined, inputCurrency, !fromBentoBalance)
 
   return useMemo(() => {
     return !account
