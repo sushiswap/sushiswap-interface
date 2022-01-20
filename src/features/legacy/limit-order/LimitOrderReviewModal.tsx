@@ -8,6 +8,7 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import useLimitOrderExecute from 'app/features/legacy/limit-order/useLimitOrderExecute'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
+import { shortenAddress } from 'app/functions'
 import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderShowReview } from 'app/state/limit-order/actions'
 import { useLimitOrderDerivedLimitPrice, useLimitOrderState } from 'app/state/limit-order/hooks'
@@ -68,6 +69,16 @@ const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ trade }) => {
           <ListPanel items={[<ListPanel.CurrencyAmountItem amount={trade?.outputAmount} key={0} />]} />
         </HeadlessUiModal.BorderedContent>
         <HeadlessUiModal.BorderedContent className="flex flex-col gap-1 !py-1 bg-dark-1000/40 divide-y divide-dark-900">
+          {recipient && (
+            <div className="flex justify-between py-2">
+              <Typography variant="sm" weight={700}>
+                {i18n._(t`Recipient`)}
+              </Typography>
+              <Typography variant="sm" weight={700}>
+                {shortenAddress(recipient)}
+              </Typography>
+            </div>
+          )}
           <div className="flex justify-between py-2">
             <Typography variant="sm" weight={700}>
               {i18n._(t`Expiration`)}
