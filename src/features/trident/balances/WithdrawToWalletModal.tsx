@@ -10,7 +10,7 @@ import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
 import { tryParseAmount } from 'app/functions'
-import { useBentoBox, useBentoBoxContract } from 'app/hooks'
+import { useBentoBox } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
@@ -30,7 +30,6 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
   const { withdraw } = useBentoBox()
   const [value, setValue] = useState<string>()
   const { i18n } = useLingui()
-  const bentoboxContract = useBentoBoxContract()
 
   const valueCA = currency ? tryParseAmount(value, currency) : undefined
   let valuePlusBalance = valueCA?.wrapped
