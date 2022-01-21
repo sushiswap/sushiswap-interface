@@ -97,7 +97,7 @@ const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ parsedAmounts, trade
                 {i18n._(t`Rate`)}
               </Typography>
               <TradePrice
-                price={trade?.executionPrice}
+                price={limitPrice}
                 showInverted={inverted}
                 setShowInverted={setInverted}
                 className="justify-end text-primary"
