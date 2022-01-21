@@ -200,17 +200,17 @@ export const useLimitOrderDerivedCurrencies: UseLimitOrderDerivedCurrencies = ()
 
 type UseLimitOrderDerivedLimitPrice = () => Price<Currency, Currency> | undefined
 export const useLimitOrderDerivedLimitPrice: UseLimitOrderDerivedLimitPrice = () => {
-  const { limitPrice } = useLimitOrderState()
+  const { limitPrice, invertRate } = useLimitOrderState()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
 
   return useMemo(() => {
-    const baseAmount = tryParseAmount('1', inputCurrency)
-    const quoteAmount = tryParseAmount(limitPrice, outputCurrency)
+    const baseAmount = tryParseAmount(invertRate ? limitPrice : '1', inputCurrency)
+    const quoteAmount = tryParseAmount(invertRate ? '1' : limitPrice, outputCurrency)
 
     return baseAmount && quoteAmount && inputCurrency && outputCurrency
       ? new Price({ baseAmount, quoteAmount })
       : undefined
-  }, [inputCurrency, limitPrice, outputCurrency])
+  }, [inputCurrency, invertRate, limitPrice, outputCurrency])
 }
 
 type UseLimitOrderDerivedParsedAmounts = ({

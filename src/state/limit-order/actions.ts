@@ -14,6 +14,9 @@ export const setLimitPrice = createAction<string | undefined>('limit-order/setLi
 export const setLimitOrderBentoPermit = createAction<Signature | undefined>('limit-order/setLimitBentoPermit')
 export const setLimitOrderAttemptingTxn = createAction<boolean>('limit-order/setLimitAttemptingTxn')
 export const setLimitOrderInvertRate = createAction<boolean>('limit-order/setLimitOrderInvertRate')
+export const setLimitOrderInvertState = createAction<{ invertRate: boolean; limitPrice: string }>(
+  'limit-order/setLimitOrderInvertState'
+)
 export const setOrderExpiration = createAction<
   | {
       value: string

@@ -12,6 +12,7 @@ import {
   setLimitOrderAttemptingTxn,
   setLimitOrderBentoPermit,
   setLimitOrderInvertRate,
+  setLimitOrderInvertState,
   setLimitOrderShowReview,
   setLimitPrice,
   setOrderExpiration,
@@ -147,6 +148,10 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
     })
     .addCase(setLimitOrderInvertRate, (state, { payload: invertRate }) => {
       state.invertRate = invertRate
+    })
+    .addCase(setLimitOrderInvertState, (state, { payload: { invertRate, limitPrice } }) => {
+      state.invertRate = invertRate
+      state.limitPrice = limitPrice
     })
 )
 

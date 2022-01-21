@@ -1,11 +1,11 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, Price, Trade, TradeType } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'
 import { useAppDispatch } from 'app/state/hooks'
-import { LimitPrice, setLimitOrderInvertRate, setLimitPrice } from 'app/state/limit-order/actions'
+import { LimitPrice, setLimitOrderInvertState, setLimitPrice } from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, { useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback } from 'react'
 
@@ -27,23 +27,25 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
 
   const handleUserInput = useCallback(
     (value) => {
+      if (!outputCurrency || !inputCurrency) return
+
       if (Number(value) > 0) {
-        dispatch(setLimitPrice(invertRate ? String(1 / Number(value)) : value))
+        const base = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))
+        const amount = JSBI.multiply(
+          JSBI.BigInt(value),
+          JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))
+        )
+        const baseAmount = CurrencyAmount.fromRawAmount(inputCurrency, base)
+        const quoteAmount = CurrencyAmount.fromRawAmount(outputCurrency, amount)
+
+        const price = new Price({ baseAmount, quoteAmount })
+        dispatch(setLimitPrice(invertRate ? price.invert()?.toSignificant(6) : price?.toSignificant(7)))
       } else {
         dispatch(setLimitPrice(value))
       }
     },
     [dispatch, invertRate]
   )
-
-  const currentPrice =
-    limitPriceString === LimitPrice.CURRENT
-      ? invertRate
-        ? trade?.executionPrice.invert().toSignificant(6)
-        : trade?.executionPrice.toSignificant(6)
-      : invertRate && Number(limitPriceString) > 0
-      ? String(1 / Number(limitPriceString))
-      : limitPriceString
 
   return (
     <div
@@ -71,15 +73,28 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
           className="w-full text-2xl font-bold bg-transparent placeholder:text-low-emphesis focus:placeholder:text-low-emphesis"
           placeholder={placeholder}
           id="limit-price-input"
-          value={currentPrice || ''}
-          onUserInput={handleUserInput}
+          value={
+            (limitPriceString === LimitPrice.CURRENT ? trade?.executionPrice.toSignificant(6) : limitPriceString) || ''
+          }
+          onUserInput={(value) => dispatch(setLimitPrice(value))}
         />
         <Button
           size="xs"
           variant="outlined"
           color="gray"
           className="!border"
-          onClick={() => dispatch(setLimitOrderInvertRate(!invertRate))}
+          onClick={() =>
+            dispatch(
+              setLimitOrderInvertState({
+                invertRate: !invertRate,
+                limitPrice: limitPrice
+                  ? !invertRate
+                    ? limitPrice?.invert().toSignificant(6)
+                    : limitPrice?.toSignificant(6)
+                  : '',
+              })
+            )
+          }
         >
           {invertRate ? inputCurrency?.symbol : outputCurrency?.symbol} per{' '}
           {invertRate ? outputCurrency?.symbol : inputCurrency?.symbol}
