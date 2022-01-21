@@ -42,7 +42,7 @@ const LiquidityLauncherStep: FC = () => {
           <ToggleButtonGroup
             size="sm"
             variant="filled"
-            value={getValues('liqLockTime')}
+            value={Number(getValues('liqLockTime'))}
             onChange={(val) => {
               val && setValue('liqLockTime', Number(val), { shouldValidate: true })
             }}
