@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -172,6 +173,8 @@ const AuctionCreationWizard: FC = () => {
     defaultValues: {
       whitelistEnabled: false,
       whitelistAddresses: [],
+      paymentCurrencyAddress: AddressZero,
+      liqLockTime: 180,
     },
     resolver: yupResolver(schema),
     reValidateMode: 'onChange',
