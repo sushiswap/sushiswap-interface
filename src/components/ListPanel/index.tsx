@@ -109,13 +109,14 @@ const ListPanelItem = ({ left, right }: ListPanelItemProps) => {
 interface ListPanelItemLeftProps {
   amount: CurrencyAmount<Currency> | undefined
   startAdornment?: ReactNode
+  hideCurrencyLogo?: boolean
 }
 
-const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, startAdornment }) => {
+const ListPanelItemLeft: FC<ListPanelItemLeftProps> = ({ amount, hideCurrencyLogo, startAdornment }) => {
   return (
     <div className="flex flex-row gap-1.5 lg:gap-3 items-center">
       {startAdornment && startAdornment}
-      <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />
+      {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={20} className="rounded-full" />}
       <Typography variant="sm" className="text-high-emphesis" weight={700}>
         {amount?.greaterThan(ZERO) ? amount?.toSignificant(6) : '0.00'} {amount?.currency.symbol}
       </Typography>
@@ -137,6 +138,8 @@ interface CurrencyAmountItemProps {
   displayTokenAmount?: boolean
   id?: string
   hideIfZero?: boolean
+  hideCurrencyLogo?: boolean
+  hideUSDC?: boolean
 }
 
 // ListPanelItem for displaying a CurrencyAmount
@@ -146,8 +149,12 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
   displayTokenAmount = false,
   id = '',
   hideIfZero = true,
+  hideCurrencyLogo,
+  hideUSDC = false,
 }) => {
-  const usdcValue = useUSDCValue(amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency, '1') : amount)
+  const usdcValue = useUSDCValue(
+    hideUSDC ? undefined : amount?.equalTo(ZERO) ? CurrencyAmount.fromRawAmount(amount?.currency, '1') : amount
+  )
 
   if (!displayTokenAmount)
     return (
@@ -155,11 +162,14 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
         <ListPanel.Item
           left={
             <ListPanel.Item.Left
+              hideCurrencyLogo={hideCurrencyLogo}
               amount={amount}
               {...(weight && { startAdornment: <Chip color="default" label={weight} size="sm" /> })}
             />
           }
-          right={<ListPanel.Item.Right>${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>}
+          right={
+            !hideUSDC && <ListPanel.Item.Right>${usdcValue ? usdcValue?.toFixed(2) : '0.00'}</ListPanel.Item.Right>
+          }
           key={0}
         />
       </div>
@@ -174,7 +184,7 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
       )}
     >
       <div className="flex items-center gap-3 -ml-1">
-        <CurrencyLogo currency={amount?.currency} size={30} className="rounded-full" />
+        {!hideCurrencyLogo && <CurrencyLogo currency={amount?.currency} size={30} className="rounded-full" />}
         <Typography className="text-high-emphesis" weight={700}>
           {amount?.currency.symbol}
         </Typography>
@@ -182,9 +192,11 @@ const CurrencyAmountItem: FC<CurrencyAmountItemProps> = ({
       <Typography className="text-right text-high-emphesis" weight={700}>
         {amount?.toSignificant(6)}
       </Typography>
-      <Typography className="text-right" variant="sm">
-        ${usdcValue?.toSignificant(6)}
-      </Typography>
+      {!hideUSDC && (
+        <Typography className="text-right" variant="sm">
+          ${usdcValue?.toSignificant(6)}
+        </Typography>
+      )}
     </div>
   )
 }

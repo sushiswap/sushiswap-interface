@@ -1,135 +1,68 @@
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Switch } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/solid'
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
-import {
-  ChainId,
-  CurrencyAmount,
-  JSBI,
-  MASTERCHEF_ADDRESS,
-  MASTERCHEF_V2_ADDRESS,
-  MINICHEF_ADDRESS,
-  Token,
-  USD,
-  ZERO,
-} from '@sushiswap/core-sdk'
+import { ChainId, MASTERCHEF_ADDRESS, MASTERCHEF_V2_ADDRESS, MINICHEF_ADDRESS, Token } from '@sushiswap/core-sdk'
+import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
-import Dots from 'app/components/Dots'
+import { HeadlessUiModal } from 'app/components/Modal'
+import Switch from 'app/components/Switch'
+import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { OLD_FARMS } from 'app/config/farms'
-import { useKashiPair } from 'app/features/kashi/hooks'
-import { classNames, getUSDValue, tryParseAmount } from 'app/functions'
+import { useFarmListItemDetailsModal } from 'app/features/onsen/FarmListItemDetails'
+import { setOnsenModalOpen } from 'app/features/onsen/onsenSlice'
+import { classNames, tryParseAmount } from 'app/functions'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppDispatch } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { useState } from 'react'
 
-import CurrencyInputPanel from './CurrencyInputPanel'
 import { Chef, PairType } from './enum'
 import { useUserInfo } from './hooks'
 import useMasterChef from './useMasterChef'
 
+const APPROVAL_ADDRESSES = {
+  [Chef.MASTERCHEF]: { [ChainId.ETHEREUM]: MASTERCHEF_ADDRESS[ChainId.ETHEREUM] },
+  [Chef.MASTERCHEF_V2]: { [ChainId.ETHEREUM]: MASTERCHEF_V2_ADDRESS[ChainId.ETHEREUM] },
+  [Chef.MINICHEF]: {
+    [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
+    [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
+    [ChainId.HARMONY]: MINICHEF_ADDRESS[ChainId.HARMONY],
+    [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
+    [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
+    [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
+    [ChainId.FUSE]: MINICHEF_ADDRESS[ChainId.FUSE],
+  },
+  [Chef.OLD_FARMS]: {
+    [ChainId.CELO]: OLD_FARMS[ChainId.CELO],
+  },
+}
+
 // @ts-ignore TYPE NEEDS FIXING
 const ManageBar = ({ farm }) => {
+  const dispatch = useAppDispatch()
   const { account, chainId } = useActiveWeb3React()
-
+  const { setContent } = useFarmListItemDetailsModal()
   const [toggle, setToggle] = useState(true)
-
-  const [depositValue, setDepositValue] = useState('')
-  const [withdrawValue, setWithdrawValue] = useState('')
-
+  const [depositValue, setDepositValue] = useState<string>()
+  const [withdrawValue, setWithdrawValue] = useState<string>()
   const { deposit, withdraw } = useMasterChef(farm.chef)
-
   const addTransaction = useTransactionAdder()
-
   const liquidityToken = new Token(
     // @ts-ignore TYPE NEEDS FIXING
-    chainId,
+    chainId || 1,
     getAddress(farm.pair.id),
     farm.pair.type === PairType.KASHI ? Number(farm.pair.asset.decimals) : 18,
     farm.pair.type === PairType.KASHI ? 'KMP' : 'SLP'
   )
-
-  const kashiPair = useKashiPair(farm.pair.id)
-
-  // @ts-ignore TYPE NEEDS FIXING
-  const balance = useCurrencyBalance(account, liquidityToken)
-
+  const balance = useCurrencyBalance(account ?? undefined, liquidityToken)
   const stakedAmount = useUserInfo(farm, liquidityToken)
-
-  const balanceFiatValue = CurrencyAmount.fromRawAmount(
-    // @ts-ignore TYPE NEEDS FIXING
-    USD[chainId],
-    farm.pair.type === PairType.KASHI
-      ? kashiPair && balance
-        ? getUSDValue(
-            BigNumber.from(balance.quotient.toString()).mulDiv(
-              // @ts-ignore TYPE NEEDS FIXING
-              kashiPair.currentAllAssets.value,
-              // @ts-ignore TYPE NEEDS FIXING
-              kashiPair.totalAsset.base
-            ),
-            // @ts-ignore TYPE NEEDS FIXING
-            kashiPair.asset
-          ).toString()
-        : ZERO
-      : JSBI.BigInt(
-          ((Number(balance?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            // @ts-ignore TYPE NEEDS FIXING
-            .toFixed(USD[chainId].decimals)
-            // @ts-ignore TYPE NEEDS FIXING
-            .toBigNumber(USD[chainId].decimals)
-        )
-  )
-
-  const stakedAmountFiatValue = CurrencyAmount.fromRawAmount(
-    // @ts-ignore TYPE NEEDS FIXING
-    USD[chainId],
-    farm.pair.type === PairType.KASHI
-      ? kashiPair && stakedAmount
-        ? getUSDValue(
-            BigNumber.from(stakedAmount.quotient.toString()).mulDiv(
-              // @ts-ignore TYPE NEEDS FIXING
-              kashiPair.currentAllAssets.value,
-              // @ts-ignore TYPE NEEDS FIXING
-              kashiPair.totalAsset.base
-            ),
-            // @ts-ignore TYPE NEEDS FIXING
-            kashiPair.asset
-          ).toString()
-        : ZERO
-      : JSBI.BigInt(
-          ((Number(stakedAmount?.toExact() ?? '0') * farm.pair.reserveUSD) / farm.pair.totalSupply)
-            // @ts-ignore TYPE NEEDS FIXING
-            .toFixed(USD[chainId].decimals)
-            // @ts-ignore TYPE NEEDS FIXING
-            .toBigNumber(USD[chainId].decimals)
-        )
-  )
-
   const parsedDepositValue = tryParseAmount(depositValue, liquidityToken)
   const parsedWithdrawValue = tryParseAmount(withdrawValue, liquidityToken)
-
-  const APPROVAL_ADDRESSES = {
-    [Chef.MASTERCHEF]: { [ChainId.ETHEREUM]: MASTERCHEF_ADDRESS[ChainId.ETHEREUM] },
-    [Chef.MASTERCHEF_V2]: { [ChainId.ETHEREUM]: MASTERCHEF_V2_ADDRESS[ChainId.ETHEREUM] },
-    [Chef.MINICHEF]: {
-      [ChainId.MATIC]: MINICHEF_ADDRESS[ChainId.MATIC],
-      [ChainId.XDAI]: MINICHEF_ADDRESS[ChainId.XDAI],
-      [ChainId.HARMONY]: MINICHEF_ADDRESS[ChainId.HARMONY],
-      [ChainId.ARBITRUM]: MINICHEF_ADDRESS[ChainId.ARBITRUM],
-      [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
-      [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
-      [ChainId.FUSE]: MINICHEF_ADDRESS[ChainId.FUSE],
-    },
-    [Chef.OLD_FARMS]: {
-      [ChainId.CELO]: OLD_FARMS[ChainId.CELO],
-    },
-  }
-
   // @ts-ignore TYPE NEEDS FIXING
   const [approvalState, approve] = useApproveCallback(parsedDepositValue, APPROVAL_ADDRESSES[farm.chef][chainId])
 
@@ -138,43 +71,39 @@ const ManageBar = ({ farm }) => {
     : balance?.lessThan(parsedDepositValue)
     ? 'Insufficient balance'
     : undefined
-
   const isDepositValid = !depositError
-
   const withdrawError = !parsedWithdrawValue
     ? 'Enter an amount'
     : // @ts-ignore TYPE NEEDS FIXING
-    stakedAmount.lessThan(parsedWithdrawValue)
+    stakedAmount?.lessThan(parsedWithdrawValue)
     ? 'Insufficient balance'
     : undefined
-
   const isWithdrawValid = !withdrawError
 
   return (
-    <div className="flex flex-col space-y-2">
-      <div className="flex items-center justify-between pb-2">
-        <Switch.Group>
-          <div className="flex items-center">
+    <>
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40">
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between">
+            <Typography variant="lg" weight={700} className="text-high-emphesis">
+              {toggle ? i18n._(t`Stake liquidity`) : i18n._(t`Unstake liquidity`)}
+            </Typography>
             <Switch
+              size="sm"
               checked={toggle}
               onChange={() => setToggle(!toggle)}
-              className={`${
-                toggle ? 'bg-blue border-blue' : 'bg-pink border-pink'
-              } bg-opacity-60 border border-opacity-80 relative inline-flex items-center h-[32px] rounded-full w-[54px] transition-colors focus:outline-none`}
-            >
-              <span
-                className={`${
-                  toggle ? 'translate-x-[1px] text-blue' : 'translate-x-[23px] text-pink'
-                } inline-block w-7 h-7 transform bg-white rounded-full transition-transform`}
-              >
-                {toggle ? <PlusIcon /> : <MinusIcon />}
-              </span>
-            </Switch>
-            <Switch.Label className="ml-3">{toggle ? i18n._(t`Deposit`) : i18n._(t`Withdraw`)}</Switch.Label>
+              checkedIcon={<PlusIcon className="text-dark-1000" />}
+              uncheckedIcon={<MinusIcon className="text-dark-1000" />}
+            />
           </div>
-        </Switch.Group>
-        <div className="flex justify-end space-x-4">
-          {['25', '50', '75', '100'].map((multipler, i) => (
+
+          <Typography variant="sm" className="text-secondary">
+            {i18n._(t`Use one of the buttons to set a percentage or enter a value manually using the input field`)}
+          </Typography>
+        </div>
+
+        <div className="flex justify-end gap-2">
+          {['25', '50', '75', '100'].map((multiplier, i) => (
             <Button
               variant="outlined"
               size="xs"
@@ -182,107 +111,112 @@ const ManageBar = ({ farm }) => {
               key={i}
               onClick={() => {
                 toggle
+                  ? balance
+                    ? // @ts-ignore TYPE NEEDS FIXING
+                      setDepositValue(balance.multiply(multiplier).divide(100).toExact())
+                    : undefined
+                  : stakedAmount
                   ? // @ts-ignore TYPE NEEDS FIXING
-                    setDepositValue(balance.multiply(multipler).divide(100).toExact())
-                  : // @ts-ignore TYPE NEEDS FIXING
-                    setWithdrawValue(stakedAmount.multiply(multipler).divide(100).toExact())
+                    setWithdrawValue(stakedAmount.multiply(multiplier).divide(100).toExact())
+                  : undefined
               }}
               className={classNames(
                 'text-md border border-opacity-50',
-                toggle ? 'focus:ring-blue border-blue' : 'focus:ring-pink border-pink',
-                multipler === '25' || multipler === '75' ? 'hidden sm:block' : ''
+                toggle ? 'focus:ring-blue border-blue' : 'focus:ring-pink border-pink'
               )}
             >
-              {multipler === '100' ? 'MAX' : multipler + '%'}
+              {multiplier === '100' ? 'MAX' : multiplier + '%'}
             </Button>
           ))}
         </div>
-      </div>
+        <AssetInput
+          currencyLogo={false}
+          currency={liquidityToken}
+          value={toggle ? depositValue : withdrawValue}
+          onChange={setDepositValue}
+          balance={toggle ? undefined : stakedAmount}
+          showMax={false}
+        />
+      </HeadlessUiModal.BorderedContent>
       {toggle ? (
-        <div className="flex flex-col space-y-4">
-          <CurrencyInputPanel
-            value={depositValue}
-            currency={liquidityToken}
-            id="add-liquidity-input-tokenb"
-            hideIcon
-            onUserInput={(value) => setDepositValue(value)}
-            // @ts-ignore TYPE NEEDS FIXING
-            currencyBalance={balance}
-            fiatValue={balanceFiatValue}
-            showMaxButton={false}
-          />
-          {!account ? (
-            <Web3Connect size="lg" color="blue" className="w-full" />
-          ) : isDepositValid &&
-            (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) ? (
-            <Button
-              color="gradient"
-              size="lg"
-              onClick={approve}
-              disabled={approvalState !== ApprovalState.NOT_APPROVED}
-            >
-              {approvalState === ApprovalState.PENDING ? <Dots>{i18n._(t`Approving`)}</Dots> : i18n._(t`Approve`)}
-            </Button>
-          ) : (
-            <Button
-              color={!isDepositValid && !!parsedDepositValue ? 'red' : 'blue'}
-              onClick={async () => {
-                try {
-                  // KMP decimals depend on asset, SLP is always 18
-                  // @ts-ignore TYPE NEEDS FIXING
-                  const tx = await deposit(farm.id, BigNumber.from(parsedDepositValue.quotient.toString()))
+        !account ? (
+          <Web3Connect size="lg" color="blue" fullWidth />
+        ) : isDepositValid &&
+          (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING) ? (
+          <Button
+            fullWidth
+            loading={approvalState === ApprovalState.PENDING}
+            color="gradient"
+            onClick={approve}
+            disabled={approvalState !== ApprovalState.NOT_APPROVED}
+          >
+            {i18n._(t`Approve`)}
+          </Button>
+        ) : (
+          <Button
+            fullWidth
+            color={!isDepositValid && !!parsedDepositValue ? 'red' : 'blue'}
+            onClick={async () => {
+              try {
+                // KMP decimals depend on asset, SLP is always 18
+                // @ts-ignore TYPE NEEDS FIXING
+                const tx = await deposit(farm.id, BigNumber.from(parsedDepositValue?.quotient.toString()))
+                if (tx?.hash) {
+                  setContent(
+                    <HeadlessUiModal.SubmittedModalContent
+                      txHash={tx?.hash}
+                      header={i18n._(t`Success!`)}
+                      subheader={i18n._(t`Success! Transaction successfully submitted`)}
+                      onDismiss={() => dispatch(setOnsenModalOpen(false))}
+                    />
+                  )
                   addTransaction(tx, {
                     summary: `Deposit ${farm.pair.token0.name}/${farm.pair.token1.name}`,
                   })
-                } catch (error) {
-                  console.error(error)
                 }
-              }}
-              disabled={!isDepositValid}
-            >
-              {depositError || i18n._(t`Confirm Deposit`)}
-            </Button>
-          )}
-        </div>
+              } catch (error) {
+                console.error(error)
+              }
+            }}
+            disabled={!isDepositValid}
+          >
+            {depositError || i18n._(t`Confirm Deposit`)}
+          </Button>
+        )
+      ) : !account ? (
+        <Web3Connect color="blue" className="w-full" />
       ) : (
-        <div className="flex flex-col space-y-4">
-          <CurrencyInputPanel
-            value={withdrawValue}
-            currency={liquidityToken}
-            id="add-liquidity-input-tokenb"
-            hideIcon
-            onUserInput={(value) => setWithdrawValue(value)}
-            // @ts-ignore TYPE NEEDS FIXING
-            currencyBalance={stakedAmount}
-            fiatValue={stakedAmountFiatValue}
-            showMaxButton={false}
-          />
-          {!account ? (
-            <Web3Connect size="lg" color="blue" className="w-full" />
-          ) : (
-            <Button
-              fullWidth
-              color={!isWithdrawValid && !!parsedWithdrawValue ? 'red' : 'blue'}
-              onClick={async () => {
-                try {
-                  // KMP decimals depend on asset, SLP is always 18
-                  // @ts-ignore TYPE NEEDS FIXING
-                  const tx = await withdraw(farm.id, BigNumber.from(parsedWithdrawValue.quotient.toString()))
-                  addTransaction(tx, {
-                    summary: `Withdraw ${farm.pair.token0.name}/${farm.pair.token1.name}`,
-                  })
-                } catch (error) {
-                  console.error(error)
-                }
-              }}
-              disabled={!isWithdrawValid}
-            >
-              {withdrawError || i18n._(t`Confirm Withdraw`)}
-            </Button>
-          )}
-        </div>
+        <Button
+          fullWidth
+          color={!isWithdrawValid && !!parsedWithdrawValue ? 'red' : 'blue'}
+          onClick={async () => {
+            try {
+              // KMP decimals depend on asset, SLP is always 18
+              // @ts-ignore TYPE NEEDS FIXING
+              const tx = await withdraw(farm.id, BigNumber.from(parsedWithdrawValue?.quotient.toString()))
+              if (tx?.hash) {
+                setContent(
+                  <HeadlessUiModal.SubmittedModalContent
+                    txHash={tx?.hash}
+                    header={i18n._(t`Success!`)}
+                    subheader={i18n._(t`Success! Transaction successfully submitted`)}
+                    onDismiss={() => dispatch(setOnsenModalOpen(false))}
+                  />
+                )
+                addTransaction(tx, {
+                  summary: `Withdraw ${farm.pair.token0.name}/${farm.pair.token1.name}`,
+                })
+              }
+            } catch (error) {
+              console.error(error)
+            }
+          }}
+          disabled={!isWithdrawValid}
+        >
+          {withdrawError || i18n._(t`Confirm Withdraw`)}
+        </Button>
       )}
-    </div>
+    </>
   )
 }
 

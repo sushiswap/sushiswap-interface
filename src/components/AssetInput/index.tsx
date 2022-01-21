@@ -34,6 +34,10 @@ interface AssetInputProps {
   currencies?: string[]
   id?: string
   className?: string
+  currencyLogo?: boolean
+  size?: 'sm' | 'md'
+  balance?: CurrencyAmount<Currency>
+  showMax?: boolean
 }
 
 type AssetInput<P> = FC<P> & {
@@ -46,13 +50,27 @@ const useAssetInputContextError = () => useContext(AssetInputContext)
 
 // AssetInput exports its children so if you need a child component of this component,
 // for example if you want this component without the title, take a look at the components this file exports
-const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, className, ...props }) => {
+const AssetInput: AssetInput<AssetInputProps> = ({
+  spendFromWallet = true,
+  currencyLogo = true,
+  className,
+  size = 'md',
+  balance: balanceProp,
+  showMax = true,
+  ...props
+}) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
 
-  const balance = useBentoOrWalletBalance(account ? account : undefined, props.currency, spendFromWallet)
+  const bentoOrWalletBalance = useBentoOrWalletBalance(
+    account && !balanceProp ? account : undefined,
+    props.currency,
+    spendFromWallet
+  )
+  const balance = balanceProp || bentoOrWalletBalance
+
   const maxSpend = maxAmountSpend(balance)?.toExact()
   const maxSpendAsFraction = maxAmountSpend(balance)?.asFraction
   const parsedInput = tryParseAmount(props.value, props.currency)
@@ -105,10 +123,12 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, class
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
           <AssetInputPanel
             {...props}
+            size={size}
+            currencyLogo={currencyLogo}
             spendFromWallet={spendFromWallet}
             onMax={() => props.onChange(maxSpend)}
             showMax={
-              balance && maxSpendAsFraction && balance.greaterThan('0')
+              showMax && balance && maxSpendAsFraction && balance.greaterThan('0')
                 ? !parsedInput?.equalTo(maxSpendAsFraction)
                 : false
             }
@@ -146,16 +166,20 @@ const AssetInputPanel = ({
   showMax = true,
   currencies = [],
   headerRight,
+  currencyLogo,
+  size,
 }: AssetInputPanelProps) => {
   const error = useAssetInputContextError()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const usdcValue = useUSDCValue(tryParseAmount(Number(value) === 0 ? '1' : value, currency))
-  const span = useRef<HTMLSpanElement>(null)
+  const span = useRef<HTMLSpanElement | null>(null)
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
-    if (isDesktop && span.current) setWidth(span?.current?.clientWidth + 6)
+    if (isDesktop && span.current) {
+      setWidth(value ? span?.current?.clientWidth + 6 : 60)
+    }
   }, [isDesktop, value])
 
   let content = (
@@ -194,13 +218,16 @@ const AssetInputPanel = ({
     content = (
       <div
         className={classNames(
-          error ? 'border-red border-opacity-40' : 'border-dark-700',
+          error ? 'border-red border-opacity-40' : 'border-dark-800',
+          size === 'md' ? 'py-4' : 'py-2',
           'flex gap-3 py-4 px-3 items-center border-b'
         )}
       >
-        <div>
-          <CurrencyLogo currency={currency} size={48} className="!rounded-full" />
-        </div>
+        {currencyLogo && (
+          <div>
+            <CurrencyLogo currency={currency} size={size === 'md' ? 48 : 40} className="!rounded-full" />
+          </div>
+        )}
         <div className="flex flex-col flex-grow">
           <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
             <NumericalInput
@@ -220,7 +247,7 @@ const AssetInputPanel = ({
           </Typography>
           <Typography
             id={currency.symbol + '-usdc-value'}
-            variant="sm"
+            variant="xs"
             className={error ? 'text-red' : usdcValue && value ? 'text-green' : 'text-low-emphesis'}
           >
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
@@ -230,12 +257,9 @@ const AssetInputPanel = ({
           <ExclamationCircleIcon className="w-8 h-8 mr-2 text-red" />
         ) : (
           showMax && (
-            <div
-              onClick={() => onMax()}
-              className="flex flex-col items-center justify-center px-3 overflow-hidden border rounded-full cursor-pointer bg-blue bg-opacity-20 border-blue text-blue h-9"
-            >
-              <Typography>MAX</Typography>
-            </div>
+            <Button size="xs" variant="outlined" color="gray" className="!border" onClick={() => onMax()}>
+              Max
+            </Button>
           )
         )}
       </div>
@@ -246,7 +270,7 @@ const AssetInputPanel = ({
     <div
       className={classNames(
         'border',
-        error ? 'border-red border-opacity-40' : 'border-dark-700',
+        error ? 'border-red border-opacity-40' : 'border-dark-800',
         headerRight ? 'lg:rounded-l lg:rounded-r-[0px]' : 'lg:rounded',
         'flex-1 rounded bg-dark-900 flex flex-col overflow-hidden'
       )}
@@ -284,14 +308,14 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
       <BentoboxIcon
         width={16}
         height={16}
-        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
+        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'truncate')}
       />
     )
   }
 
   return (
-    <div className={classNames(error ? 'bg-red/10' : '', 'flex justify-between bg-dark-800 py-2 px-3')}>
-      <div className="flex items-center gap-1.5">
+    <div className={classNames(error ? 'bg-red/10' : '', 'flex justify-between py-2 px-3')}>
+      <div className="flex items-center gap-1.5 mr-1">
         {icon}
         <Typography variant="sm" className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}>
           {i18n._(t`Balance:`)}
@@ -300,7 +324,7 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
       <Typography
         variant="sm"
         weight={700}
-        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
+        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'truncate')}
         onClick={() => onClick(balance)}
         id={id}
       >
@@ -328,7 +352,7 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
   return (
     <div
       className={classNames(
-        error ? 'lg:border-red/40' : 'lg:border-dark-700',
+        error ? 'lg:border-red/40' : 'lg:border-dark-800',
         'lg:p-4 flex gap-1.5 items-center lg:border-r lg:border-t lg:border-b lg:bg-dark-900 lg:rounded-r lg:justify-center lg:min-w-[120px]'
       )}
     >

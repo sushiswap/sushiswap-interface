@@ -3,10 +3,10 @@ name: Lint
 on:
   push:
     branches:
-      - canary
+      - master
   pull_request:
     branches:
-      - canary
+      - master
 
 jobs:
   run-linters:
@@ -33,6 +33,7 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
+
       - name: Installing dependencies
         run: yarn install --frozen-lockfile
 

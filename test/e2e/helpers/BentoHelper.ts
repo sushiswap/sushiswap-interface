@@ -12,6 +12,7 @@ export class BentoHelper {
   constructor() {
     this.Provider = new JsonRpcProvider(process.env.INFURA_URL)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const signer = new Wallet(process.env.TEST_PKEY, this.Provider)
     this.Signer = signer
 
@@ -20,6 +21,7 @@ export class BentoHelper {
   }
 
   public async getBentoBalance(tokenSymbol: string): Promise<number> {
+    // @ts-ignore TYPE NEEDS FIXING
     const tokenAddress = ADDRESSES[tokenSymbol]
 
     const address = await this.Signer.getAddress()

@@ -2,7 +2,7 @@ import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import Button, { ButtonDotted } from 'app/components/Button'
+import Button from 'app/components/Button'
 import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import useBentoMasterApproveCallback, { BentoApprovalState, BentoPermit } from 'app/hooks/useBentoMasterApproveCallback'
 import { StandardSignatureData, useTridentLiquidityTokenPermit } from 'app/hooks/useERC20Permit'
@@ -11,10 +11,10 @@ import { useWalletModalToggle } from 'app/state/application/hooks'
 import React, { FC, memo, ReactNode, useCallback, useEffect, useState } from 'react'
 
 interface TokenApproveButtonProps {
-  inputAmount: CurrencyAmount<Currency> | undefined
-  onStateChange: React.Dispatch<React.SetStateAction<any>>
-  tokenApproveOn: string | undefined
   id: string
+  inputAmount?: CurrencyAmount<Currency>
+  onStateChange: React.Dispatch<React.SetStateAction<any>>
+  tokenApproveOn?: string
   onSLPPermit?(x: StandardSignatureData): void
 }
 
@@ -96,12 +96,15 @@ type TridentApproveGatePropsNoPermit = TridentApproveGateCommonProps & {
   withPermit?: false
   permit?: never
   onPermit?: never
+  onPermitError?: never
+  fallback?: never
 }
 
 type TridentApproveGatePropsWithPermit = TridentApproveGateCommonProps & {
   withPermit: true
   permit: Signature | undefined
   onPermit(x?: Signature): void
+  onPermitError?(): void
 }
 
 type TridentApproveGateType = TridentApproveGatePropsNoPermit | TridentApproveGatePropsWithPermit
@@ -115,55 +118,53 @@ const TridentApproveGate = ({
   permit: permitProp,
   onPermit,
   onSLPPermit,
+  onPermitError,
 }: TridentApproveGateType) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const [status, setStatus] = useState<Record<string, ApprovalState>>({})
   const toggleWalletModal = useWalletModalToggle()
+  const [status, setStatus] = useState<Record<string, ApprovalState>>({})
+  const [permitError, setPermitError] = useState(false)
 
-  const {
-    approve: bApproveCallback,
-    approvalState: bApprove,
-    getPermit,
-    permit,
-  } = useBentoMasterApproveCallback(
+  const { approve, approvalState, getPermit, permit } = useBentoMasterApproveCallback(
     permitProp ? undefined : masterContractAddress ? masterContractAddress : undefined,
     {}
   )
 
   const loading =
     Object.values(status).some((el) => el === ApprovalState.UNKNOWN) ||
-    (masterContractAddress ? bApprove === BentoApprovalState.UNKNOWN : false)
+    (masterContractAddress ? approvalState === BentoApprovalState.UNKNOWN : false)
 
   const approved =
     Object.values(status).every((el) => el === ApprovalState.APPROVED) &&
-    (masterContractAddress ? bApprove === BentoApprovalState.APPROVED : true)
+    (masterContractAddress ? approvalState === BentoApprovalState.APPROVED : true)
 
+  // If we have a permitError, use the approveCallback as a fallback
   const onClick = useCallback(async () => {
-    if (withPermit) {
+    if (withPermit && !permitError) {
       const permit = await getPermit()
-      if (onPermit) {
-        onPermit(permit?.signature)
+
+      if (permit?.signature && onPermit) {
+        onPermit(permit.signature)
+      } else if (onPermitError) {
+        setPermitError(true)
+        onPermitError()
       }
     } else {
-      await bApproveCallback()
+      await approve()
     }
-  }, [bApproveCallback, getPermit, onPermit, withPermit])
+  }, [approve, getPermit, onPermit, onPermitError, permitError, withPermit])
 
   return (
     <div className="flex flex-col gap-3">
       {/*hide bentobox approval if not every inputAmount is greater than than zero*/}
       {inputAmounts.every((el) => el?.greaterThan(ZERO)) &&
-        [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(bApprove) && (
-          <ButtonDotted
-            id={`btn-approve`}
-            pending={bApprove === BentoApprovalState.PENDING}
-            color="blue"
-            onClick={onClick}
-          >
-            {bApprove === BentoApprovalState.PENDING ? i18n._(t`Approving BentoBox`) : i18n._(t`Approve BentoBox`)}
-          </ButtonDotted>
+        [BentoApprovalState.NOT_APPROVED, BentoApprovalState.PENDING].includes(approvalState) && (
+          <Button loading={approvalState === BentoApprovalState.PENDING} id={`btn-approve`} onClick={onClick}>
+            {i18n._(t`Approve BentoBox`)}
+          </Button>
         )}
+
       {inputAmounts.reduce<ReactNode[]>((acc, amount, index) => {
         if (!amount?.currency.isNative && amount?.greaterThan(ZERO)) {
           acc.push(
@@ -179,6 +180,7 @@ const TridentApproveGate = ({
         }
         return acc
       }, [])}
+
       {!account ? (
         <Button color="gradient" onClick={toggleWalletModal}>
           {i18n._(t`Connect Wallet`)}

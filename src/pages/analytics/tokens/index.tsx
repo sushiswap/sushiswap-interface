@@ -28,12 +28,7 @@ export default function Tokens() {
             <div className="text-3xl font-bold text-high-emphesis">Tokens</div>
             <div>Click on the column name to sort tokens by it&apos;s price or trading volume.</div>
           </div>
-          <Search
-            term={term}
-            search={search}
-            inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
-            className="border shadow-2xl border-dark-800"
-          />
+          <Search term={term} search={search} />
         </div>
       </Background>
       <div className="px-4 pt-4 lg:px-14">

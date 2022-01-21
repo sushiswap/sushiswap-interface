@@ -1,21 +1,28 @@
+import { classNames } from 'app/functions'
 import React, { ReactNode, useCallback, useState } from 'react'
 
 import Popover, { PopoverProps } from '../Popover'
 
 interface TooltipProps extends Omit<PopoverProps, 'content'> {
   text: ReactNode
+  className?: string
 }
 
 interface TooltipContentProps extends Omit<PopoverProps, 'content'> {
   content: ReactNode
 }
 
-export default function Tooltip({ text, children, ...rest }: TooltipProps) {
+export default function Tooltip({ text, children, className, ...rest }: TooltipProps) {
   return (
     <Popover
       placement="bottom"
       content={
-        <div className="w-full max-w-[228px] px-3 py-2 font-bold bg-dark-900 border border-dark-700 rounded text-sm shadow-lg">
+        <div
+          className={classNames(
+            className,
+            'w-full max-w-[228px] px-3 py-2 font-bold bg-dark-900 border border-dark-700 rounded text-sm shadow-lg'
+          )}
+        >
           {text}
         </div>
       }

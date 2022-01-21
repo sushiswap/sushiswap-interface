@@ -1,22 +1,23 @@
-import { InformationCircleIcon } from '@heroicons/react/solid'
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
-import Container from 'app/components/Container'
+import Button from 'app/components/Button'
 import ExternalLink from 'app/components/ExternalLink'
 import Search from 'app/components/Search'
 import Typography from 'app/components/Typography'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import FarmList from 'app/features/onsen/FarmList'
-import Menu from 'app/features/onsen/FarmMenu'
+import OnsenFilter from 'app/features/onsen/FarmMenu'
 import { usePositions } from 'app/features/onsen/hooks'
-import { classNames } from 'app/functions/styling'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
+import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import { useActiveWeb3React } from 'app/services/web3'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 export default function Farm(): JSX.Element {
+  const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
 
   const router = useRouter()
@@ -61,51 +62,49 @@ export default function Farm(): JSX.Element {
   })
 
   return (
-    <Container id="farm-page" className="grid h-full grid-cols-4 py-4 mx-auto md:py-8 lg:py-12 gap-9" maxWidth="7xl">
-      <Head>
-        <title>Farm | Sushi</title>
-        <meta key="description" name="description" content="Farm SUSHI" />
-        <meta key="twitter:description" name="twitter:description" content="Farm SUSHI" />
-        <meta key="og:description" property="og:description" content="Farm SUSHI" />
-      </Head>
-      <div className={classNames('sticky top-0 hidden lg:block md:col-span-1')} style={{ maxHeight: '40rem' }}>
-        <Menu positionsLength={positions.length} />
-      </div>
-      <div className={classNames('space-y-6 col-span-4 lg:col-span-3')}>
-        {chainId && chainId === ChainId.CELO && (
-          <div className="bg-[rgba(255,255,255,0.04)] p-4 py-2 rounded flex flex-row items-center gap-4">
-            <InformationCircleIcon width={28} height={28} color="pink" />
-            <Typography variant="xs" weight={700}>
+    <>
+      <TridentHeader className="sm:!flex-row justify-between items-center" pattern="bg-bubble">
+        <div>
+          <Typography variant="h2" className="text-high-emphesis" weight={700}>
+            {i18n._(t`Onsen Menu`)}
+          </Typography>
+          <Typography variant="sm" weight={400}>
+            {i18n._(t`Earn fees and rewards by depositing and staking your tokens to the platform.`)}
+          </Typography>
+        </div>
+        <div className="flex gap-3">
+          <Button id="btn-create-new-pool" size="sm">
+            <a
+              href="https://docs.google.com/document/d/19bL55ZTjKtxlom2CpVo6K8jL1e-OZ13y6y9AQgw_qT4"
+              target="_blank"
+              rel="noreferrer"
+            >
+              {i18n._(t`Apply for Onsen`)}
+            </a>
+          </Button>
+        </div>
+      </TridentHeader>
+      <TridentBody>
+        <div className="flex flex-col w-full gap-6">
+          <div className="flex flex-col sm:flex-row justify-between gap-4 items-center">
+            <Search search={search} term={term} />
+            <OnsenFilter />
+          </div>
+          <FarmList farms={result} term={term} />
+          {chainId && chainId === ChainId.CELO && (
+            <Typography variant="xs" weight={700} className="text-secondary italic text-center">
+              {i18n._(t`Users can now bridge back to Celo using a new version of Optics.`)}{' '}
               <ExternalLink
+                color="blue"
                 id={`celo-optics-info-link`}
                 href="https://medium.com/@0xJiro/celo-farms-update-migrating-to-the-optics-v2-bridge-e8075d1c9ea"
-                className="text-high-emphesis"
               >
-                {`Click for more info on Optics V1 Migration.`}
+                {i18n._(t`Click for more info on Optics V1 Migration.`)}
               </ExternalLink>
             </Typography>
-          </div>
-        )}
-        <Search
-          search={search}
-          term={term}
-          inputProps={{
-            className:
-              'relative w-full bg-transparent border border-transparent focus:border-gradient-r-blue-pink-dark-900 rounded placeholder-secondary focus:placeholder-primary font-bold text-base px-6 py-3.5',
-          }}
-        />
-        {/* <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
-            Ready to Stake{' '}
-            <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
-          </div>
-          <FarmList farms={filtered} term={term} /> */}
-        <div className="flex items-center text-lg font-bold text-high-emphesis whitespace-nowrap">
-          Farms{' '}
-          <div className="w-full h-0 ml-4 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis md:border-gradient-r-blue-pink-dark-800 opacity-20"></div>
+          )}
         </div>
-
-        <FarmList farms={result} term={term} />
-      </div>
-    </Container>
+      </TridentBody>
+    </>
   )
 }

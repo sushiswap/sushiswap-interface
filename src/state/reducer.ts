@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
 
+import onsen from '../features/onsen/onsenSlice'
 import tridentAdd from '../features/trident/add/addSlice'
 import tridentBalances from '../features/trident/balances/balancesSlice'
 import tridentCreate from '../features/trident/create/createSlice'
@@ -32,6 +33,7 @@ const reducer = combineReducers({
   limitOrder,
   create,
   inari,
+  onsen,
   tridentSwap,
   tridentAdd,
   tridentRemove,

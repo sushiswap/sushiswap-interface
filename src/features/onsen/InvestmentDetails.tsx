@@ -5,6 +5,7 @@ import { useLingui } from '@lingui/react'
 import { ChainId, CurrencyAmount, JSBI, Token, USD, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
+import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import { useKashiPair } from 'app/features/kashi/hooks'
 import { easyAmount, formatNumber } from 'app/functions'
@@ -20,21 +21,26 @@ import useMasterChef from './useMasterChef'
 import usePendingReward from './usePendingReward'
 
 // @ts-ignore TYPE NEEDS FIXING
+const RewardRow = ({ value, symbol }) => {
+  return (
+    <Typography weight={700} className="text-high-emphesis">
+      {value}{' '}
+      <Typography component="span" className="text-secondary">
+        {symbol}
+      </Typography>
+    </Typography>
+  )
+}
+
+// @ts-ignore TYPE NEEDS FIXING
 const InvestmentDetails = ({ farm }) => {
   const { i18n } = useLingui()
-
   const { chainId } = useActiveWeb3React()
-
   const { harvest } = useMasterChef(farm.chef)
-
   const router = useRouter()
-
   const addTransaction = useTransactionAdder()
-
   const kashiPair = useKashiPair(farm.pair.id)
-
   const [pendingTx, setPendingTx] = useState(false)
-
   const token0 = useCurrency(farm.pair.token0.id)
   const token1 = useCurrency(farm.pair.token1.id)
 
@@ -103,94 +109,107 @@ const InvestmentDetails = ({ farm }) => {
   }
 
   return (
-    <div className="flex flex-col w-full space-y-8">
-      <div className="flex flex-col w-full space-y-4">
-        <div className="flex items-end justify-between font-bold">
-          <div className="text-lg cursor-pointer">{i18n._(t`Your Deposits`)}:</div>
-          <Typography className="font-bold">
-            {formatNumber(stakedAmount?.toSignificant(6) ?? 0)} {farm.pair.token0.symbol}-{farm.pair.token1.symbol}{' '}
-            {liquidityToken.symbol}
+    <>
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-2 bg-dark-1000/40">
+        <div className="flex justify-between">
+          <Typography variant="xs" weight={700} className="text-secondary">
+            {i18n._(t`Your Deposits`)}
+          </Typography>
+          <Typography variant="xs" className="flex gap-1 text-secondary">
+            {formatNumber(stakedAmount?.toSignificant(6) ?? 0)} {farm.pair.token0.symbol}-{farm.pair.token1.symbol}
+            <Typography variant="xs" weight={700} className="text-high-emphesis" component="span">
+              {formatNumber(positionFiatValue?.toSignificant(6) ?? 0, true)}
+            </Typography>
           </Typography>
         </div>
-        <div className="w-full h-0 font-bold bg-transparent border border-b-0 border-transparent rounded text-high-emphesis border-gradient-r-blue-pink-dark-800 opacity-20" />
-        <div className="flex justify-between">
-          <div className="flex flex-col justify-center space-y-2">
-            <div className="flex items-center space-x-2">
-              {/*@ts-ignore TYPE NEEDS FIXING*/}
-              <CurrencyLogo currency={token0} size="30px" />
-              {farm.pair.type === PairType.KASHI && (
-                <Typography>
-                  {/*@ts-ignore TYPE NEEDS FIXING*/}
-                  {formatNumber(kashiAssetAmount?.value.toFixed(kashiPair.asset.tokenInfo.decimals) ?? 0)}
-                </Typography>
-              )}
-              {farm.pair.type === PairType.SWAP && (
-                <Typography>
-                  {formatNumber((farm.pair.reserve0 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
-                </Typography>
-              )}
-              <Typography>{token0?.symbol}</Typography>
-            </div>
+        {[PairType.KASHI, PairType.SWAP].includes(farm.pair.type) && (
+          <div className="flex items-center gap-2">
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
+            {token0 && <CurrencyLogo currency={token0} size={18} />}
+            {farm.pair.type === PairType.KASHI && (
+              <RewardRow
+                symbol={token0?.symbol}
+                // @ts-ignore TYPE NEEDS FIXING
+                value={formatNumber(kashiAssetAmount?.value.toFixed(kashiPair.asset.tokenInfo.decimals) ?? 0)}
+              />
+            )}
             {farm.pair.type === PairType.SWAP && (
-              <div className="flex items-center space-x-2">
-                {/*@ts-ignore TYPE NEEDS FIXING*/}
-                <CurrencyLogo currency={token1} size="30px" />
-                <Typography>
-                  {formatNumber((farm.pair.reserve1 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
-                </Typography>
-                <Typography>{token1?.symbol}</Typography>
-              </div>
+              <RewardRow
+                value={formatNumber(
+                  (farm.pair.reserve0 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply
+                )}
+                symbol={token0?.symbol}
+              />
             )}
           </div>
-          <Typography>{formatNumber(positionFiatValue?.toSignificant(6) ?? 0, true)}</Typography>
-        </div>
-      </div>
-      <div className="flex flex-col w-full space-y-4">
-        <div className="flex items-end justify-between">
-          <div className="text-lg font-bold cursor-pointer">{i18n._(t`Your Rewards`)}:</div>
-          {((pendingSushi && pendingSushi.greaterThan(ZERO)) || (pendingReward && Number(pendingReward) > 0)) && (
-            <button
-              className="py-0.5 px-4 font-bold bg-transparent border border-transparent rounded cursor-pointer border-gradient-r-blue-pink-dark-800 whitespace-nowrap text-md"
-              disabled={pendingTx}
-              onClick={onHarvest}
-            >
-              {i18n._(t`Harvest Rewards`)}
-            </button>
-          )}
-        </div>
-        <div className="w-full bg-transparent border border-b-0 border-transparent rounded h-0font-bold text-high-emphesis border-gradient-r-blue-pink-dark-800 opacity-20" />
-        <div className="flex justify-between">
-          <div className="flex flex-col space-y-2">
-            {/*@ts-ignore TYPE NEEDS FIXING*/}
-            {farm?.rewards?.map((reward, i) => (
-              <div key={i} className="flex items-center space-x-2">
-                <CurrencyLogo currency={reward.currency} size="30px" className="rounded-md" />
-                {!secondaryRewardOnly ? (
-                  <>
-                    {i === 0 && <Typography>{formatNumber(pendingSushi?.toSignificant(6) ?? 0)}</Typography>}
-                    {i === 1 && <Typography>{formatNumber(pendingReward)}</Typography>}
-                  </>
-                ) : (
-                  <Typography>{formatNumber(pendingReward)}</Typography>
-                )}
-
-                <Typography>{reward.token}</Typography>
-              </div>
-            ))}
+        )}
+        {farm.pair.type === PairType.SWAP && (
+          <div className="flex items-center gap-2">
+            {token1 && <CurrencyLogo currency={token1} size={18} />}
+            <RewardRow
+              value={formatNumber((farm.pair.reserve1 * Number(stakedAmount?.toExact() ?? 0)) / farm.pair.totalSupply)}
+              symbol={token1?.symbol}
+            />
           </div>
-          <Typography>{formatNumber(rewardValue, true)}</Typography>
+        )}
+      </HeadlessUiModal.BorderedContent>
+      <HeadlessUiModal.BorderedContent className="flex flex-col gap-2 bg-dark-1000/40">
+        <div className="flex justify-between">
+          <Typography variant="xs" weight={700} className="text-secondary">
+            {i18n._(t`Your Rewards`)}
+          </Typography>
+          <Typography variant="xs" weight={700} className="text-high-emphesis" component="span">
+            {formatNumber(rewardValue, true)}
+          </Typography>
         </div>
-      </div>
+
+        {/* @ts-ignore TYPE NEEDS FIXING */}
+        {farm?.rewards?.map((reward, i) => {
+          return (
+            <div className="flex items-center gap-2" key={i}>
+              <CurrencyLogo currency={reward.currency} size={18} />
+              {!secondaryRewardOnly ? (
+                <>
+                  {i === 0 && (
+                    <RewardRow
+                      value={formatNumber(pendingSushi?.toSignificant(6) ?? 0)}
+                      symbol={reward.currency.symbol}
+                    />
+                  )}
+                  {i === 1 && <RewardRow value={formatNumber(pendingReward)} symbol={reward.currency.symbol} />}
+                </>
+              ) : (
+                <RewardRow value={formatNumber(pendingReward)} symbol={reward.currency.symbol} />
+              )}
+            </div>
+          )
+        })}
+      </HeadlessUiModal.BorderedContent>
       {farm.pair.type === PairType.KASHI && (
         <Button
+          fullWidth
+          color="blue"
+          variant="empty"
           size="sm"
-          className="font-bold bg-transparent border border-transparent rounded cursor-pointer border-gradient-r-blue-pink-dark-800 whitespace-nowrap text-md"
+          className="!italic"
           onClick={() => router.push(`/lend/${farm.pair.id}`)}
         >
-          {i18n._(t`View Details on Kashi`)}
+          {i18n._(t`View details on Kashi`)}
         </Button>
       )}
-    </div>
+      <Button
+        loading={pendingTx}
+        fullWidth
+        color="blue"
+        disabled={
+          pendingTx ||
+          !((pendingSushi && pendingSushi.greaterThan(ZERO)) || (pendingReward && Number(pendingReward) > 0))
+        }
+        onClick={onHarvest}
+      >
+        {i18n._(t`Harvest Rewards`)}
+      </Button>
+    </>
   )
 }
 
