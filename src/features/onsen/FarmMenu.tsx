@@ -119,7 +119,7 @@ const OnsenFilter = () => {
         >
           <Menu.Items
             static
-            className="absolute w-full mt-2 border divide-y rounded shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-dark-900 bg-dark-1000 divide-dark-900"
+            className="absolute w-full z-10 mt-2 border divide-y rounded shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none border-dark-900 bg-dark-1000 divide-dark-900"
           >
             {Object.entries(items).map(([k, v], index) => (
               <div

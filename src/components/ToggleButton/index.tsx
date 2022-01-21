@@ -58,7 +58,7 @@ const ToggleButtonGroup: ToggleButtonGroup<Props> = ({
 }
 
 type ToggleButtonProps = ComponentProps<typeof HeadlessRadioGroup.Option>
-ToggleButtonGroup.Button = ({ value, children, size, style }: ToggleButtonProps) => {
+ToggleButtonGroup.Button = ({ value, children, size, style, className }: ToggleButtonProps) => {
   return (
     <HeadlessRadioGroup.Option value={value} as={Fragment}>
       {({ checked }) => (
@@ -68,6 +68,7 @@ ToggleButtonGroup.Button = ({ value, children, size, style }: ToggleButtonProps)
           id={`radio-option-${value}`}
           variant={checked ? 'filled' : 'empty'}
           color={checked ? 'blue' : 'gray'}
+          className={className}
         >
           {children}
         </Button>

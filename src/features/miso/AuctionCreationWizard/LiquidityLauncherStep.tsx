@@ -38,19 +38,28 @@ const LiquidityLauncherStep: FC = () => {
     <>
       <div className="col-span-4">
         <Typography weight={700}>{i18n._(t`Liquidity lockup time`)}</Typography>
-        <ToggleButtonGroup
-          variant="outlined"
-          value={getValues('liqLockTime')}
-          onChange={(val) => setValue('liqLockTime', Number(val), { shouldValidate: true })}
-          className="mt-2 !flex"
-        >
-          <ToggleButtonGroup.Button value={180} activeClassName="border-purple" className="!bg-none px-5 !py-2.5">
-            {i18n._(t`${180} days`)}
-          </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value={90} activeClassName="border-purple" className="!bg-none px-5 !py-2.5">
-            {i18n._(t`${90} days`)}
-          </ToggleButtonGroup.Button>
-        </ToggleButtonGroup>
+        <div className="flex">
+          <ToggleButtonGroup
+            size="sm"
+            variant="filled"
+            value={getValues('liqLockTime')}
+            onChange={(val) => setValue('liqLockTime', Number(val), { shouldValidate: true })}
+            className="mt-2 flex gap-2"
+          >
+            <ToggleButtonGroup.Button value={180} className="!px-3 whitespace-nowrap">
+              {i18n._(t`${180} days`)}
+            </ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={90} className="!px-3 whitespace-nowrap">
+              {i18n._(t`${90} days`)}
+            </ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={60} className="!px-3 whitespace-nowrap">
+              {i18n._(t`${60} days`)}
+            </ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={30} className="!px-3 whitespace-nowrap">
+              {i18n._(t`${30} days`)}
+            </ToggleButtonGroup.Button>
+          </ToggleButtonGroup>
+        </div>
         <Form.TextField
           name="liqLockTime"
           helperText={i18n._(t`Custom amount of days`)}

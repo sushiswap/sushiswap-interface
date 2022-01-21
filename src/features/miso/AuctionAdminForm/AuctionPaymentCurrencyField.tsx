@@ -30,42 +30,29 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
     <div className="flex flex-col">
       <div>
         <Typography weight={700}>{label}</Typography>
-        <ToggleButtonGroup
-          variant="outlined"
-          value={getValues(name)}
-          onChange={(val: string) => setValue(name, val, { shouldValidate: true })}
-          className="mt-2 !flex"
-        >
-          <ToggleButtonGroup.Button
-            value={AddressZero}
-            activeClassName="border-purple"
-            className="!bg-none px-5 !py-2.5"
+        <div className="flex">
+          <ToggleButtonGroup
+            size="sm"
+            variant="filled"
+            value={getValues(name)}
+            onChange={(val: string) => setValue(name, val, { shouldValidate: true })}
+            className="mt-2 flex gap-2"
           >
-            {/*@ts-ignore TYPE NEEDS FIXING*/}
-            {NATIVE[chainId].symbol}
-          </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button
-            value={DAI_ADDRESS[chainId]}
-            activeClassName="border-purple"
-            className="!bg-none px-5 !py-2.5"
-          >
-            DAI
-          </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button
-            value={USDC_ADDRESS[chainId]}
-            activeClassName="border-purple"
-            className="!bg-none px-5 !py-2.5"
-          >
-            USDC
-          </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button
-            value={USDT_ADDRESS[chainId]}
-            activeClassName="border-purple"
-            className="!bg-none px-5 !py-2.5"
-          >
-            USDT
-          </ToggleButtonGroup.Button>
-        </ToggleButtonGroup>
+            <ToggleButtonGroup.Button value={AddressZero} className="!px-3">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
+              {NATIVE[chainId].symbol}
+            </ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={DAI_ADDRESS[chainId]} className="!px-3">
+              DAI
+            </ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={USDC_ADDRESS[chainId]} className="!px-3">
+              USDC
+            </ToggleButtonGroup.Button>
+            <ToggleButtonGroup.Button value={USDT_ADDRESS[chainId]} className="!px-3">
+              USDT
+            </ToggleButtonGroup.Button>
+          </ToggleButtonGroup>
+        </div>
       </div>
       <div className="flex flex-col flex-grow">
         <Form.TextField
