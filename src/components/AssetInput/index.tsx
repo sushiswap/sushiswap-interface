@@ -229,7 +229,7 @@ const AssetInputPanel = ({
           </div>
         )}
         <div className="flex flex-col flex-grow">
-          <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
+          <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline overflow-hidden">
             <NumericalInput
               disabled={disabled}
               value={value || ''}

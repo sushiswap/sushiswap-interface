@@ -3,13 +3,15 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId } from '@sushiswap/core-sdk'
-import NavLink from 'app/components/NavLink'
 import Typography from 'app/components/Typography'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useWalletModalToggle } from 'app/state/application/hooks'
+import { useRouter } from 'next/router'
 import React, { FC, Fragment, ReactNode, useMemo, useState } from 'react'
 
 const MenuLink: FC<{ href?: string; label: string; onClick?(): void }> = ({ href, label, onClick }) => {
+  const router = useRouter()
+
   if (onClick) {
     return (
       <Menu.Item>
@@ -26,19 +28,12 @@ const MenuLink: FC<{ href?: string; label: string; onClick?(): void }> = ({ href
 
   if (href) {
     return (
-      <Menu.Item>
+      <Menu.Item onClick={() => router.push(href)}>
         {({ active }) => {
           return (
-            <NavLink exact href={href}>
-              <Typography
-                variant="sm"
-                weight={700}
-                onClick={onClick}
-                className={active ? 'text-white' : 'text-primary'}
-              >
-                {label}
-              </Typography>
-            </NavLink>
+            <Typography variant="sm" weight={700} onClick={onClick} className={active ? 'text-white' : 'text-primary'}>
+              {label}
+            </Typography>
           )
         }}
       </Menu.Item>
@@ -56,11 +51,21 @@ enum FarmFilter {
   Old = 'Old Farms',
 }
 
+const filters: Record<string, FarmFilter> = {
+  portfolio: FarmFilter.Portfolio,
+  farm: FarmFilter.All,
+  kashi: FarmFilter.Kashi,
+  old: FarmFilter.Old,
+  sushi: FarmFilter.Sushi,
+}
+
 const OnsenFilter = () => {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
   const toggleWalletModal = useWalletModalToggle()
-  const [selected, setSelected] = useState<FarmFilter>(FarmFilter.All)
+  const { query } = useRouter()
+  const filter = query?.filter as string
+  const [selected, setSelected] = useState<FarmFilter>(filters[filter] || FarmFilter.All)
 
   const items = useMemo(() => {
     const map: Record<string, ReactNode> = {

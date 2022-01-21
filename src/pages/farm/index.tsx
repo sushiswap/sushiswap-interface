@@ -8,7 +8,6 @@ import Typography from 'app/components/Typography'
 import { Chef, PairType } from 'app/features/onsen/enum'
 import FarmList from 'app/features/onsen/FarmList'
 import OnsenFilter from 'app/features/onsen/FarmMenu'
-import { usePositions } from 'app/features/onsen/hooks'
 import useFarmRewards from 'app/hooks/useFarmRewards'
 import useFuse from 'app/hooks/useFuse'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
@@ -22,9 +21,6 @@ export default function Farm(): JSX.Element {
 
   const router = useRouter()
   const type = router.query.filter === null ? 'all' : (router.query.filter as string)
-
-  // @ts-ignore TYPE NEEDS FIXING
-  const positions = usePositions(chainId)
 
   const FILTER = {
     // @ts-ignore TYPE NEEDS FIXING
