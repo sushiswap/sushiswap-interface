@@ -40,7 +40,7 @@ const viewUrl = `${LAMBDA_URL}/orders/view`
 const viewFetcher = (url, account, chainId, pendingPage, page) => {
   return fetch(url, {
     method: 'POST',
-    body: JSON.stringify({ address: '0xad8F72A7612Bb91B2dfaB09E54464aaA5150914E', chainId, page, pendingPage }),
+    body: JSON.stringify({ address: account, chainId, page, pendingPage }),
   })
     .then((r) => r.json())
     .then((j) => j.data)
