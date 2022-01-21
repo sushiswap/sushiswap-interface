@@ -1,13 +1,13 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, JSBI, Price, Trade, TradeType } from '@sushiswap/core-sdk'
+import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Input from 'app/components/Input'
 import Typography from 'app/components/Typography'
 import { useAppDispatch } from 'app/state/hooks'
 import { LimitPrice, setLimitOrderInvertState, setLimitPrice } from 'app/state/limit-order/actions'
 import useLimitOrderDerivedCurrencies, { useLimitOrderState } from 'app/state/limit-order/hooks'
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 
 interface LimitPriceInputPanel {
   trade?: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
@@ -24,28 +24,6 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
   const placeholder = trade
     ? (invertRate ? trade.executionPrice.invert() : trade.executionPrice).toSignificant(6)
     : '0.0'
-
-  const handleUserInput = useCallback(
-    (value) => {
-      if (!outputCurrency || !inputCurrency) return
-
-      if (Number(value) > 0) {
-        const base = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))
-        const amount = JSBI.multiply(
-          JSBI.BigInt(value),
-          JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(outputCurrency.decimals))
-        )
-        const baseAmount = CurrencyAmount.fromRawAmount(inputCurrency, base)
-        const quoteAmount = CurrencyAmount.fromRawAmount(outputCurrency, amount)
-
-        const price = new Price({ baseAmount, quoteAmount })
-        dispatch(setLimitPrice(invertRate ? price.invert()?.toSignificant(6) : price?.toSignificant(7)))
-      } else {
-        dispatch(setLimitPrice(value))
-      }
-    },
-    [dispatch, invertRate]
-  )
 
   return (
     <div
@@ -82,7 +60,7 @@ const LimitPriceInputPanel: FC<LimitPriceInputPanel> = ({ trade, limitPrice }) =
           size="xs"
           variant="outlined"
           color="gray"
-          className="!border"
+          className="whitespace-nowrap"
           onClick={() =>
             dispatch(
               setLimitOrderInvertState({
