@@ -24,13 +24,13 @@ export interface AuctionCreationWizardInput {
   paymentCurrencyAddress: string
   startDate: string
   endDate: string
-  tokenType: TokenType | ''
+  tokenType: TokenType
   tokenName: string
   tokenSymbol: string
   tokenSupply: number
   tokenAmount: number
   tokenForLiquidity: number
-  auctionType: AuctionTemplate | ''
+  auctionType: AuctionTemplate
   fixedPrice?: number
   minimumTarget?: number
   minimumRaised?: number
@@ -120,13 +120,11 @@ const schema = yup.object().shape({
     }),
   auctionType: yup.number().required('Must select an auction type'),
   fixedPrice: yup.number().when('auctionType', {
-    // @ts-ignore TYPE NEEDS FIXING
-    is: (value) => value === AuctionTemplate.CROWDSALE,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
     then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
   }),
   minimumTarget: yup.number().when('auctionType', {
-    // @ts-ignore TYPE NEEDS FIXING
-    is: (value) => value === AuctionTemplate.CROWDSALE,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
     then: yup
       .number()
       .typeError('Target must be a number')
@@ -135,18 +133,15 @@ const schema = yup.object().shape({
       .integer('Must be a whole number'),
   }),
   minimumRaised: yup.number().when('auctionType', {
-    // @ts-ignore TYPE NEEDS FIXING
-    is: (value) => value === AuctionTemplate.BATCH_AUCTION,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.BATCH_AUCTION,
     then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
   }),
   startPrice: yup.number().when('auctionType', {
-    // @ts-ignore TYPE NEEDS FIXING
-    is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
   }),
   endPrice: yup.number().when('auctionType', {
-    // @ts-ignore TYPE NEEDS FIXING
-    is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup
       .number()
       .typeError('Price must be a number')
@@ -171,8 +166,8 @@ const AuctionCreationWizard: FC = () => {
   const [open, setOpen] = useState<boolean>(false)
   const methods = useForm<AuctionCreationWizardInput>({
     defaultValues: {
-      auctionType: '',
-      tokenType: '',
+      auctionType: AuctionTemplate.DUTCH_AUCTION,
+      tokenType: TokenType.FIXED,
       whitelistEnabled: false,
       whitelistAddresses: [],
       paymentCurrencyAddress: AddressZero,
