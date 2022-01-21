@@ -11,6 +11,7 @@ import {
   setLimitOrderApprovalPending,
   setLimitOrderAttemptingTxn,
   setLimitOrderBentoPermit,
+  setLimitOrderInvertRate,
   setLimitOrderShowReview,
   setLimitPrice,
   setOrderExpiration,
@@ -43,6 +44,7 @@ export interface LimitOrderState {
   readonly bentoPermit?: Signature
   readonly attemptingTxn: boolean
   readonly showReview: boolean
+  readonly invertRate: boolean
 }
 
 const initialState: LimitOrderState = {
@@ -61,6 +63,7 @@ const initialState: LimitOrderState = {
   bentoPermit: undefined,
   attemptingTxn: false,
   showReview: false,
+  invertRate: false,
 }
 
 export default createReducer<LimitOrderState>(initialState, (builder) =>
@@ -141,6 +144,9 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
     })
     .addCase(setLimitOrderShowReview, (state, { payload: showReview }) => {
       state.showReview = showReview
+    })
+    .addCase(setLimitOrderInvertRate, (state, { payload: invertRate }) => {
+      state.invertRate = invertRate
     })
 )
 

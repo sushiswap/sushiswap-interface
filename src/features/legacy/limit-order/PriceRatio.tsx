@@ -1,22 +1,21 @@
-import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
+import { Currency, Price } from '@sushiswap/core-sdk'
 import { FC, useState } from 'react'
 
 interface PriceRatio {
-  trade?: Trade<Currency, Currency, TradeType.EXACT_INPUT | TradeType.EXACT_OUTPUT>
+  price?: Price<Currency, Currency>
 }
 
-const PriceRatio: FC<PriceRatio> = ({ trade }) => {
+const PriceRatio: FC<PriceRatio> = ({ price }) => {
   const [inverted, setInverted] = useState(false)
-  const price = trade?.executionPrice
 
   return (
     <div className="flex flex-row text-sm font-bold ">
       <div className="flex border divide-x rounded cursor-pointer divide-dark-800 hover:divide-dark-700 border-dark-800 hover:border-dark-700">
         <div className="px-4 py-2">
           <span className="whitespace-nowrap">
-            1 {inverted ? trade?.outputAmount?.currency.symbol : trade?.inputAmount?.currency.symbol} ={' '}
+            1 {inverted ? price?.quoteCurrency.symbol : price?.baseCurrency.symbol} ={' '}
             {inverted ? price?.invert().toSignificant(6) : price?.toSignificant(6)}{' '}
-            {inverted ? trade?.inputAmount?.currency.symbol : trade?.outputAmount?.currency.symbol}
+            {inverted ? price?.baseCurrency.symbol : price?.quoteCurrency.symbol}
           </span>
         </div>
         <div

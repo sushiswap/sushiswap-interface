@@ -9,7 +9,7 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none'
 export type ButtonVariant = 'outlined' | 'filled' | 'empty'
 
 const DIMENSIONS = {
-  xs: 'px-2 h-[28px]',
+  xs: 'px-2 h-[28px] !border',
   sm: 'px-3 h-[36px]',
   md: 'px-4 h-[52px]',
   lg: 'px-6 h-[60px]',

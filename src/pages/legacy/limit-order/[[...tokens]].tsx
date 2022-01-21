@@ -209,7 +209,7 @@ const LimitOrder = () => {
                   </button>
                 </div>
                 {/*@ts-ignore TYPE NEEDS FIXING*/}
-                <LimitPriceInputPanel trade={trade} />
+                <LimitPriceInputPanel trade={trade} limitPrice={!!rate ? rate : trade?.executionPrice} />
               </div>
               <CurrencyInputPanel
                 className="relative rounded z-1"
@@ -276,7 +276,7 @@ const LimitOrder = () => {
             </div>
 
             <div className="flex flex-col items-end justify-between w-full gap-4 md:flex-row md:items-center">
-              {trade ? <PriceRatio trade={trade} /> : <div />}
+              {trade ? <PriceRatio price={!!rate ? rate : trade?.executionPrice} /> : <div />}
               {isExpertMode && recipient === undefined && (
                 <div className={`flex flex-1 ${inputCurrency && outputCurrency ? 'justify-center' : ''}`}>
                   <div
