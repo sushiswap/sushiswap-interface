@@ -91,7 +91,7 @@ const LiquidityLauncherStep: FC = () => {
           <Form.TextField
             endIcon={
               <Typography variant="sm" weight={700} className="text-secondary">
-                %
+                {tokenSymbol}
               </Typography>
             }
             name="tokenForLiquidity"

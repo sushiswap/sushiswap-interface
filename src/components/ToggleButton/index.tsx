@@ -69,6 +69,7 @@ ToggleButtonGroup.Button = ({ value, children, size, style, className }: ToggleB
           variant={checked ? 'filled' : 'empty'}
           color={checked ? 'blue' : 'gray'}
           className={className}
+          type="button"
         >
           {children}
         </Button>
