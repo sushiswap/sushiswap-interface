@@ -1,6 +1,4 @@
-import { Currency, Price, Trade, TradeType } from '@sushiswap/core-sdk'
-import { Field } from 'app/state/limit-order/actions'
-import { useLimitOrderDerivedParsedAmounts } from 'app/state/limit-order/hooks'
+import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
 import { FC, useState } from 'react'
 
 interface PriceRatio {
@@ -8,25 +6,17 @@ interface PriceRatio {
 }
 
 const PriceRatio: FC<PriceRatio> = ({ trade }) => {
-  const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
   const [inverted, setInverted] = useState(false)
-
-  const price =
-    parsedInputAmount && parsedOutputAmount
-      ? new Price<Currency, Currency>({
-          baseAmount: parsedInputAmount,
-          quoteAmount: parsedOutputAmount,
-        })
-      : trade?.executionPrice
+  const price = trade?.executionPrice
 
   return (
     <div className="flex flex-row text-sm font-bold ">
       <div className="flex border divide-x rounded cursor-pointer divide-dark-800 hover:divide-dark-700 border-dark-800 hover:border-dark-700">
         <div className="px-4 py-2">
           <span className="whitespace-nowrap">
-            1 {inverted ? parsedOutputAmount?.currency.symbol : parsedInputAmount?.currency.symbol} ={' '}
+            1 {inverted ? trade?.outputAmount?.currency.symbol : trade?.inputAmount?.currency.symbol} ={' '}
             {inverted ? price?.invert().toSignificant(6) : price?.toSignificant(6)}{' '}
-            {inverted ? parsedInputAmount?.currency.symbol : parsedOutputAmount?.currency.symbol}
+            {inverted ? trade?.inputAmount?.currency.symbol : trade?.outputAmount?.currency.symbol}
           </span>
         </div>
         <div

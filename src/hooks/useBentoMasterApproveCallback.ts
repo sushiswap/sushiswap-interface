@@ -132,6 +132,8 @@ const useBentoMasterApproveCallback = (
       return {
         // @ts-ignore TYPE NEEDS FIXING
         outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
+        signature: undefined,
+        data: undefined,
       }
     }
   }, [
@@ -162,7 +164,7 @@ const useBentoMasterApproveCallback = (
           : i18n._(t`Approving Master Contract`),
       })
     } catch (e) {}
-  }, [account, addTransaction, bentoBoxContract, contractName, i18n, masterContract])
+  }, [account, addTransaction, bentoBoxContract, contractName, i18n, masterContract, otherBentoBoxContract])
 
   return {
     approvalState,

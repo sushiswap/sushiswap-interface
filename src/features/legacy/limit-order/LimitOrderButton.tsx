@@ -1,232 +1,93 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { BENTOBOX_ADDRESS } from '@sushiswap/core-sdk'
-import { LimitOrder } from '@sushiswap/limit-order-sdk'
-import Alert from 'app/components/Alert'
-import Button, { ButtonProps } from 'app/components/Button'
-import Dots from 'app/components/Dots'
-import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
-import useLimitOrderApproveCallback, { BentoApprovalState } from 'app/hooks/useLimitOrderApproveCallback'
-import useLimitOrders from 'app/hooks/useLimitOrders'
+import { Currency, CurrencyAmount, Trade, TradeType } from '@sushiswap/core-sdk'
+import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
+import Button from 'app/components/Button'
+import Typography from 'app/components/Typography'
+import useLimitOrderExecute, { DepositPayload } from 'app/features/legacy/limit-order/useLimitOrderExecute'
+import TridentApproveGate from 'app/features/trident/TridentApproveGate'
+import { useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useAddPopup, useWalletModalToggle } from 'app/state/application/hooks'
 import { useAppDispatch } from 'app/state/hooks'
-import { clear, Field, setFromBentoBalance } from 'app/state/limit-order/actions'
-import useLimitOrderDerivedCurrencies, {
-  useLimitOrderDerivedInputError,
-  useLimitOrderDerivedParsedAmounts,
-  useLimitOrderState,
-} from 'app/state/limit-order/hooks'
-import { OrderExpiration } from 'app/state/limit-order/reducer'
+import { setFromBentoBalance, setLimitOrderBentoPermit, setLimitOrderShowReview } from 'app/state/limit-order/actions'
+import { useLimitOrderDerivedInputError, useLimitOrderState } from 'app/state/limit-order/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
-import ConfirmLimitOrderModal from './ConfirmLimitOrderModal'
+interface LimitOrderButton {
+  trade?: Trade<Currency, Currency, TradeType>
+  parsedAmounts: {
+    inputAmount?: CurrencyAmount<Currency>
+    outputAmount?: CurrencyAmount<Currency>
+  }
+}
 
-interface LimitOrderButtonProps extends ButtonProps {}
-
-const LimitOrderButton: FC<LimitOrderButtonProps> = ({ color, ...rest }) => {
+const LimitOrderButton: FC<LimitOrderButton> = ({ trade, parsedAmounts }) => {
   const { i18n } = useLingui()
-  const { account, chainId, library } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
-  const addPopup = useAddPopup()
-  const toggleWalletModal = useWalletModalToggle()
-  const { mutate } = useLimitOrders()
-  const { inputCurrency: currency } = useLimitOrderDerivedCurrencies()
-  const { fromBentoBalance, orderExpiration, recipient } = useLimitOrderState()
-  const { [Field.INPUT]: parsedInputAmount, [Field.OUTPUT]: parsedOutputAmount } = useLimitOrderDerivedParsedAmounts()
-  const inputError = useLimitOrderDerivedInputError()
-  const [depositPending, setDepositPending] = useState(false)
-  const [openConfirmationModal, setOpenConfirmationModal] = useState(false)
-  const [approvalState, fallback, permit, onApprove, execute] = useLimitOrderApproveCallback()
-  const [tokenApprovalState, tokenApprove] = useApproveCallback(parsedInputAmount, chainId && BENTOBOX_ADDRESS[chainId])
+  const { fromBentoBalance, bentoPermit, attemptingTxn } = useLimitOrderState()
+  const error = useLimitOrderDerivedInputError({ trade })
+  const { deposit } = useLimitOrderExecute()
+  const bentoboxContract = useBentoBoxContract()
+  const masterContractAddress = chainId && STOP_LIMIT_ORDER_ADDRESS[chainId]
+  const [permitError, setPermitError] = useState(false)
 
-  const showLimitApprove =
-    (approvalState === BentoApprovalState.NOT_APPROVED || approvalState === BentoApprovalState.PENDING) && !permit
-
-  const showTokenApprove =
-    !fromBentoBalance &&
-    chainId &&
-    currency &&
-    !currency.isNative &&
-    parsedInputAmount &&
-    (tokenApprovalState === ApprovalState.NOT_APPROVED || tokenApprovalState === ApprovalState.PENDING)
-
-  const disabled =
-    !!inputError ||
-    approvalState === BentoApprovalState.PENDING ||
-    depositPending ||
-    tokenApprovalState === ApprovalState.PENDING
+  const _deposit = useCallback(
+    async (payload: DepositPayload) => {
+      const tx = await deposit(payload)
+      if (tx?.hash) {
+        dispatch(setFromBentoBalance(true))
+      }
+    },
+    [deposit, dispatch]
+  )
 
   const handler = useCallback(async () => {
-    let endTime
-    switch (orderExpiration.value) {
-      case OrderExpiration.hour:
-        endTime = Math.floor(new Date().getTime() / 1000) + 3600
-        break
-      case OrderExpiration.day:
-        endTime = Math.floor(new Date().getTime() / 1000) + 86400
-        break
-      case OrderExpiration.week:
-        endTime = Math.floor(new Date().getTime() / 1000) + 604800
-        break
-      case OrderExpiration.never:
-        endTime = Number.MAX_SAFE_INTEGER
-    }
+    if (!parsedAmounts?.inputAmount) return
 
-    const order =
-      account && parsedInputAmount && parsedOutputAmount
-        ? new LimitOrder(
-            account,
-            parsedInputAmount.wrapped,
-            parsedOutputAmount.wrapped,
-            recipient ? recipient : account,
-            Math.floor(new Date().getTime() / 1000).toString(),
-            // @ts-ignore TYPE NEEDS FIXING
-            endTime.toString()
-          )
-        : undefined
-
-    try {
-      // @ts-ignore TYPE NEEDS FIXING
-      await order?.signOrderWithProvider(chainId || 1, library)
-      setOpenConfirmationModal(false)
-
-      const resp = await order?.send()
-      if (resp.success) {
-        addPopup({
-          // @ts-ignore TYPE NEEDS FIXING
-          txn: { hash: undefined, summary: 'Limit order created', success: true },
-        })
-
-        await mutate()
-
-        dispatch(clear())
-      }
-    } catch (e) {
-      addPopup({
-        txn: {
-          // @ts-ignore TYPE NEEDS FIXING
-          hash: undefined,
-          // @ts-ignore TYPE NEEDS FIXING
-          summary: `Error: ${e?.response?.data?.data}`,
-          success: false,
-        },
+    if (fromBentoBalance) {
+      dispatch(setLimitOrderShowReview(true))
+    } else {
+      await _deposit({
+        inputAmount: parsedAmounts?.inputAmount,
+        bentoPermit,
+        fromBentoBalance,
       })
     }
-  }, [
-    account,
-    addPopup,
-    chainId,
-    dispatch,
-    library,
-    mutate,
-    orderExpiration.value,
-    parsedInputAmount,
-    parsedOutputAmount,
-    recipient,
-  ])
-
-  const deposit = useCallback(async () => {
-    // @ts-ignore TYPE NEEDS FIXING
-    const tx = await execute(parsedInputAmount, currency)
-    setDepositPending(true)
-    await tx.wait()
-    setDepositPending(false)
-    dispatch(setFromBentoBalance(true))
-  }, [currency, dispatch, execute, parsedInputAmount])
-
-  let button = (
-    <>
-      <ConfirmLimitOrderModal
-        open={openConfirmationModal}
-        onConfirm={handler}
-        onDismiss={() => setOpenConfirmationModal(false)}
-      />
-      <Button
-        disabled={disabled}
-        color={disabled ? 'gray' : 'blue'}
-        onClick={() => setOpenConfirmationModal(true)}
-        {...rest}
-      >
-        {i18n._(t`Review Limit Order`)}
-      </Button>
-    </>
-  )
-
-  if (depositPending)
-    button = (
-      <Button
-        loading={depositPending}
-        disabled={disabled}
-        color={disabled ? 'gray' : color}
-        onClick={deposit}
-        {...rest}
-      >
-        {/*@ts-ignore TYPE NEEDS FIXING*/}
-        <Dots>{i18n._(t`Depositing ${currency.symbol} into BentoBox`)}</Dots>
-      </Button>
-    )
-  else if (!account)
-    button = (
-      <Button disabled={disabled} onClick={toggleWalletModal} {...rest}>
-        {i18n._(t`Connect Wallet`)}
-      </Button>
-    )
-  else if (inputError)
-    button = (
-      <Button disabled={true} {...rest}>
-        {inputError}
-      </Button>
-    )
-  else if (showTokenApprove)
-    button = (
-      <Button
-        loading={tokenApprovalState === ApprovalState.PENDING}
-        disabled={disabled}
-        onClick={tokenApprove}
-        color={disabled ? 'gray' : 'pink'}
-        className="mb-4"
-        {...rest}
-      >
-        {i18n._(t`Approve ${currency.symbol}`)}
-      </Button>
-    )
-  else if (showLimitApprove)
-    button = (
-      <Button
-        loading={approvalState === BentoApprovalState.PENDING}
-        disabled={disabled}
-        color={disabled ? 'gray' : 'pink'}
-        // @ts-ignore TYPE NEEDS FIXING
-        onClick={() => onApprove()}
-        {...rest}
-      >
-        {i18n._(t`Approve Limit Order`)}
-      </Button>
-    )
-  else if (
-    (permit && !fromBentoBalance) ||
-    (!permit && approvalState === BentoApprovalState.APPROVED && !fromBentoBalance)
-  )
-    button = (
-      <Button disabled={disabled} color={disabled ? 'gray' : 'blue'} onClick={deposit} {...rest}>
-        {/*@ts-ignore TYPE NEEDS FIXING*/}
-        {i18n._(t`Deposit ${currency.symbol} into BentoBox`)}
-      </Button>
-    )
+  }, [_deposit, bentoPermit, dispatch, fromBentoBalance, parsedAmounts?.inputAmount])
 
   return (
-    <div className="flex flex-col flex-1">
-      {fallback && (
-        <Alert
-          message={i18n._(
-            t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click again and the fallback method will be used`
+    <>
+      {permitError && (
+        <Typography variant="sm" className="border border-yellow/40 text-yellow p-4 rounded text-center">
+          {i18n._(
+            t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
           )}
-          className="flex flex-row w-full mb-4"
-        />
+        </Typography>
       )}
-      {button}
-    </div>
+      <TridentApproveGate
+        inputAmounts={[trade?.inputAmount]}
+        tokenApproveOn={bentoboxContract?.address}
+        masterContractAddress={masterContractAddress}
+        {...(fromBentoBalance
+          ? { withPermit: false }
+          : {
+              withPermit: true,
+              permit: bentoPermit,
+              onPermit: (permit) => dispatch(setLimitOrderBentoPermit(permit)),
+              onPermitError: () => setPermitError(true),
+            })}
+      >
+        {({ approved, loading }) => {
+          const disabled = !!error || !approved || loading || attemptingTxn
+          return (
+            <Button loading={loading || attemptingTxn} color="gradient" disabled={disabled} onClick={handler}>
+              {error ? error : fromBentoBalance ? i18n._(t`Review Limit Order`) : i18n._(t`Confirm Deposit`)}
+            </Button>
+          )
+        }}
+      </TridentApproveGate>
+    </>
   )
 }
 

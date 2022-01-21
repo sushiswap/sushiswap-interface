@@ -1,3 +1,4 @@
+import { Signature } from '@ethersproject/bytes'
 import { createAction } from '@reduxjs/toolkit'
 
 export enum Field {
@@ -5,7 +6,15 @@ export enum Field {
   OUTPUT = 'OUTPUT',
 }
 
+export enum LimitPrice {
+  CURRENT = 'CURRENT',
+}
+
 export const setLimitPrice = createAction<string | undefined>('limit-order/setLimitPrice')
+
+export const setLimitOrderBentoPermit = createAction<Signature | undefined>('limit-order/setLimitBentoPermit')
+
+export const setLimitOrderAttemptingTxn = createAction<boolean>('limit-order/setLimitAttemptingTxn')
 
 export const setOrderExpiration = createAction<
   | {
@@ -18,6 +27,8 @@ export const setOrderExpiration = createAction<
 export const setFromBentoBalance = createAction<boolean>('limit-order/setFromBentoBalance')
 
 export const setLimitOrderApprovalPending = createAction<string>('limit-order/setLimitOrderApprovalPending')
+
+export const setLimitOrderShowReview = createAction<boolean>('limit-order/setLimitOrderShowReview')
 
 export const replaceLimitOrderState = createAction<{
   independentField: Field
