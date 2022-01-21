@@ -49,12 +49,10 @@ export class AddLiquidityPage extends AppPage {
     }
 
     const confirmDepositButton = await this.Page.waitForSelector(this.ConfirmDepositButtonSelector)
-    // @ts-ignore TYPE NEEDS FIXING
-    await confirmDepositButton.click()
+    await confirmDepositButton?.click()
 
     const modalConfirmDepositButton = await this.Page.waitForSelector(this.ModalConfirmDepositButtonSelector)
-    // @ts-ignore TYPE NEEDS FIXING
-    await modalConfirmDepositButton.click()
+    await modalConfirmDepositButton?.click()
 
     await this.confirmMetamaskTransaction()
 
@@ -178,7 +176,10 @@ export class AddLiquidityPage extends AppPage {
     await this.Page.waitForSelector(this.FixedRatioCheckboxSelector)
     const fixedRateCheckbox = await this.Page.$(this.FixedRatioCheckboxSelector)
 
-    // @ts-ignore TYPE NEEDS FIXING
+    if (!fixedRateCheckbox) {
+      throw new Error('Could not find fixed rate checkbox on add liquidity page')
+    }
+
     return fixedRateCheckbox
   }
 

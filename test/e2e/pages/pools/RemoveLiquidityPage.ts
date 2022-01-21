@@ -75,13 +75,11 @@ export class RemoveLiquidityPage extends AppPage {
     }
 
     const reviewConfirmButton = await this.Page.waitForSelector(this.ReviewAndConfirmButtonSelector)
-    // @ts-ignore TYPE NEEDS FIXING
-    await reviewConfirmButton.click()
+    await reviewConfirmButton?.click()
     await this.Page.waitForTimeout(500)
 
     const modalConfirmWithdrawButton = await this.Page.waitForSelector(this.ModalConfirmWithdrawButtonSelector)
-    // @ts-ignore TYPE NEEDS FIXING
-    await modalConfirmWithdrawButton.click()
+    await modalConfirmWithdrawButton?.click()
 
     await this.confirmMetamaskTransaction()
 
@@ -96,7 +94,9 @@ export class RemoveLiquidityPage extends AppPage {
     const withdrawTo = await this.Page.evaluate((el) => el.textContent, withdrawToElement)
 
     const outputSelector = await this.Page.waitForSelector(this.CheckOutputToWalletSelector)
-    // @ts-ignore TYPE NEEDS FIXING
+    if (!outputSelector) {
+      throw new Error('Could not find output to wallet checkbox on remove liquidity page')
+    }
     const outputSelectorButton = (await outputSelector.$x('..'))[0]
 
     if (withdrawToWallet && withdrawTo.toLowerCase() !== 'wallet') {
@@ -109,15 +109,19 @@ export class RemoveLiquidityPage extends AppPage {
   public async setRemovePercent(percent: number): Promise<void> {
     await this.blockingWait(1, true)
     const percentSelectionButton = await this.Page.waitForSelector(this.RemovePercentSelector + percent.toString())
-    // @ts-ignore TYPE NEEDS FIXING
+    if (!percentSelectionButton) {
+      throw new Error(`Could not find remove percent selection button for ${percent}`)
+    }
     await percentSelectionButton.click()
   }
 
   private async getFixedRatioCheckbox(): Promise<ElementHandle<Element>> {
     await this.Page.waitForSelector(this.FixedRatioCheckboxSelector)
     const fixedRateCheckbox = await this.Page.$(this.FixedRatioCheckboxSelector)
+    if (!fixedRateCheckbox) {
+      throw new Error('Could not find fixed ratio checkbox on remove liquidity page')
+    }
 
-    // @ts-ignore TYPE NEEDS FIXING
     return fixedRateCheckbox
   }
 

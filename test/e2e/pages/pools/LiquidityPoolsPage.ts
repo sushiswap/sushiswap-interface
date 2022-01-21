@@ -7,8 +7,7 @@ export class LiquidityPoolsPage extends AppPage {
 
   public async clickCreateNewPoolButton(): Promise<void> {
     const createNewPoolButton = await this.Page.waitForSelector(this.CreateNewPoolButtonSelector)
-    // @ts-ignore TYPE NEEDS FIXING
-    await createNewPoolButton.click()
+    await createNewPoolButton?.click()
   }
 
   public async goToPool(poolName: string): Promise<void> {
