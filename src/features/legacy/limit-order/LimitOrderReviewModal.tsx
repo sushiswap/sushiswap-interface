@@ -63,14 +63,14 @@ const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ parsedAmounts, trade
           <Typography weight={700} variant="sm" className="text-secondary">
             {i18n._(t`You'll pay`)}
           </Typography>
-          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={trade?.inputAmount} key={0} />]} />
+          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedAmounts?.inputAmount} key={0} />]} />
           <div className="flex justify-center mt-2 -mb-2">
             <ArrowDownIcon width={14} className="text-secondary" />
           </div>
           <Typography weight={700} variant="sm" className="text-secondary justify-end">
             {i18n._(t`You'll receive`)}
           </Typography>
-          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={trade?.outputAmount} key={0} />]} />
+          <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedAmounts?.outputAmount} key={0} />]} />
         </HeadlessUiModal.BorderedContent>
         <HeadlessUiModal.BorderedContent className="flex flex-col gap-1 !py-1 bg-dark-1000/40 divide-y divide-dark-900">
           {recipient && (
