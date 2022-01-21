@@ -6,11 +6,13 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import { OnsenModalView } from 'app/features/onsen/enum'
 import FarmListItemDetails from 'app/features/onsen/FarmListItemDetails'
+import { usePositions } from 'app/features/onsen/hooks'
 import { selectOnsen, setOnsenModalOpen, setOnsenModalState, setOnsenModalView } from 'app/features/onsen/onsenSlice'
 import { TABLE_TR_TH_CLASSNAME, TABLE_WRAPPER_DIV_CLASSNAME } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import useSortableData from 'app/hooks/useSortableData'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import React, { FC, useCallback, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -31,6 +33,8 @@ const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active
 // @ts-ignore TYPE NEEDS FIXING
 const FarmList = ({ farms, term }) => {
   const { items, requestSort, sortConfig } = useSortableData(farms, { key: 'tvl', direction: 'descending' })
+  const { chainId } = useActiveWeb3React()
+  const positions = usePositions(chainId)
   const { i18n } = useLingui()
   const [numDisplayed, setNumDisplayed] = useInfiniteScroll(items)
   const [selectedFarm, setSelectedFarm] = useState<any>()
@@ -42,13 +46,15 @@ const FarmList = ({ farms, term }) => {
     dispatch(setOnsenModalView(undefined))
   }, [dispatch])
 
+  const positionIds = positions.map((el) => el.id)
+
   return items ? (
     <>
       <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME)}>
         <div className="grid grid-cols-4 min-w-[768px]">
           <div
             className={classNames('flex gap-1 items-center cursor-pointer', TABLE_TR_TH_CLASSNAME(0, 4))}
-            onClick={() => requestSort('symbol')}
+            onClick={() => requestSort('pair.token0.symbol')}
           >
             <Typography variant="sm" weight={700}>
               {i18n._(t`Pool`)}
@@ -92,7 +98,12 @@ const FarmList = ({ farms, term }) => {
                 farm={farm}
                 onClick={() => {
                   setSelectedFarm(farm)
-                  dispatch(setOnsenModalState({ view: OnsenModalView.Liquidity, open: true }))
+                  dispatch(
+                    setOnsenModalState({
+                      view: positionIds.includes(farm.id) ? OnsenModalView.Position : OnsenModalView.Liquidity,
+                      open: true,
+                    })
+                  )
                 }}
               />
             ))}
