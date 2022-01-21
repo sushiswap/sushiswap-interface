@@ -43,7 +43,9 @@ const LiquidityLauncherStep: FC = () => {
             size="sm"
             variant="filled"
             value={getValues('liqLockTime')}
-            onChange={(val) => setValue('liqLockTime', Number(val), { shouldValidate: true })}
+            onChange={(val) => {
+              val && setValue('liqLockTime', Number(val), { shouldValidate: true })
+            }}
             className="mt-2 flex gap-2"
           >
             <ToggleButtonGroup.Button value={180} className="!px-3 whitespace-nowrap">

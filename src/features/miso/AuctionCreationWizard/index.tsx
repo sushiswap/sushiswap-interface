@@ -24,13 +24,13 @@ export interface AuctionCreationWizardInput {
   paymentCurrencyAddress: string
   startDate: string
   endDate: string
-  tokenType: TokenType
+  tokenType: TokenType | ''
   tokenName: string
   tokenSymbol: string
   tokenSupply: number
   tokenAmount: number
   tokenForLiquidity: number
-  auctionType: AuctionTemplate
+  auctionType: AuctionTemplate | ''
   fixedPrice?: number
   minimumTarget?: number
   minimumRaised?: number
@@ -171,6 +171,8 @@ const AuctionCreationWizard: FC = () => {
   const [open, setOpen] = useState<boolean>(false)
   const methods = useForm<AuctionCreationWizardInput>({
     defaultValues: {
+      auctionType: '',
+      tokenType: '',
       whitelistEnabled: false,
       whitelistAddresses: [],
       paymentCurrencyAddress: AddressZero,
