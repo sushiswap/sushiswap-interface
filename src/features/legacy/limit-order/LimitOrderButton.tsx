@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Trade, TradeType } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Trade, TradeType } from '@sushiswap/core-sdk'
 import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
@@ -15,9 +15,13 @@ import React, { FC, useCallback, useState } from 'react'
 
 interface LimitOrderButton {
   trade?: Trade<Currency, Currency, TradeType>
+  parsedAmounts: {
+    inputAmount?: CurrencyAmount<Currency>
+    outputAmount?: CurrencyAmount<Currency>
+  }
 }
 
-const LimitOrderButton: FC<LimitOrderButton> = ({ trade }) => {
+const LimitOrderButton: FC<LimitOrderButton> = ({ trade, parsedAmounts }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
@@ -39,18 +43,18 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade }) => {
   )
 
   const handler = useCallback(async () => {
-    if (!trade) return
+    if (!parsedAmounts?.inputAmount) return
 
     if (fromBentoBalance) {
       dispatch(setLimitOrderShowReview(true))
     } else {
       await _deposit({
-        inputAmount: trade.inputAmount,
+        inputAmount: parsedAmounts?.inputAmount,
         bentoPermit,
         fromBentoBalance,
       })
     }
-  }, [_deposit, bentoPermit, dispatch, fromBentoBalance, trade])
+  }, [_deposit, bentoPermit, dispatch, fromBentoBalance, parsedAmounts?.inputAmount])
 
   return (
     <>

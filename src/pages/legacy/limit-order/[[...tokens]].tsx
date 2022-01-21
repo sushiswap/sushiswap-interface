@@ -294,8 +294,8 @@ const LimitOrder = () => {
               <OrderExpirationDropdown />
             </div>
 
-            <LimitOrderButton trade={trade} />
-            <LimitOrderReviewModal trade={trade} limitPrice={rate} />
+            <LimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
+            <LimitOrderReviewModal parsedAmounts={parsedAmounts} trade={trade} limitPrice={rate} />
           </div>
         </DoubleGlowShadow>
       </ExpertModePanel>

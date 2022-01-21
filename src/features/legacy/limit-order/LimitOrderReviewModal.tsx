@@ -1,7 +1,7 @@
 import { ArrowDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent, Price, Trade, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, Price, Trade, TradeType, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import ListPanel from 'app/components/ListPanel'
 import { HeadlessUiModal } from 'app/components/Modal'
@@ -17,9 +17,13 @@ import React, { FC, useCallback, useMemo, useState } from 'react'
 interface LimitOrderReviewModal {
   trade?: Trade<Currency, Currency, TradeType>
   limitPrice?: Price<Currency, Currency>
+  parsedAmounts: {
+    inputAmount?: CurrencyAmount<Currency>
+    outputAmount?: CurrencyAmount<Currency>
+  }
 }
 
-const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ trade, limitPrice }) => {
+const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ parsedAmounts, trade, limitPrice }) => {
   const [inverted, setInverted] = useState(false)
   const { showReview, orderExpiration, recipient, attemptingTxn } = useLimitOrderState()
   const dispatch = useAppDispatch()
@@ -27,15 +31,15 @@ const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ trade, limitPrice })
   const { execute } = useLimitOrderExecute()
 
   const _execute = useCallback(() => {
-    if (trade) {
+    if (parsedAmounts?.inputAmount && parsedAmounts?.outputAmount) {
       execute({
         orderExpiration: orderExpiration.value,
         recipient,
-        outputAmount: trade.outputAmount,
-        inputAmount: trade.inputAmount,
+        outputAmount: parsedAmounts.outputAmount,
+        inputAmount: parsedAmounts.inputAmount,
       })
     }
-  }, [execute, orderExpiration.value, recipient, trade])
+  }, [execute, orderExpiration.value, parsedAmounts.inputAmount, parsedAmounts.outputAmount, recipient])
 
   const deviation = useMemo(() => {
     if (limitPrice && trade) {
