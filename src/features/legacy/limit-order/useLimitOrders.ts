@@ -1,43 +1,31 @@
-import { JSBI, Percent, Token } from '@sushiswap/core-sdk'
+import { CurrencyAmount, Percent, Price, Token } from '@sushiswap/core-sdk'
 import { LAMBDA_URL, LimitOrder, OrderStatus } from '@sushiswap/limit-order-sdk'
+import { DerivedOrder, LimitOrdersResponse, Order } from 'app/features/legacy/limit-order/types'
+import { useLimitOrderContract } from 'app/hooks'
+import { useAllTokens } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useSWR, { SWRResponse } from 'swr'
 
-import { useAllTokens } from './Tokens'
-import { useLimitOrderContract } from './useContract'
-
 interface State {
   pending: {
     page: number
-    maxPages: null
-    data: OpenOrder[]
+    maxPages: number
+    data: DerivedOrder[]
     loading: boolean
     totalOrders: number
   }
   completed: {
     page: number
-    maxPages: null
-    data: OpenOrder[]
+    maxPages: number
+    data: DerivedOrder[]
     loading: boolean
     totalOrders: number
   }
 }
 
-interface OpenOrder {
-  tokenIn: Token
-  tokenOut: Token
-  filledPercent: string
-  limitOrder: LimitOrder
-  status: OrderStatus
-  rate: string
-}
-
-const denominator = (decimals: number = 18) => JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals))
-
 const viewUrl = `${LAMBDA_URL}/orders/view`
-// @ts-ignore TYPE NEEDS FIXING
-const viewFetcher = (url, account, chainId, pendingPage, page) => {
+const viewFetcher = (url: string, account: string, chainId: number, pendingPage: number, page: number) => {
   return fetch(url, {
     method: 'POST',
     body: JSON.stringify({ address: account, chainId, page, pendingPage }),
@@ -54,14 +42,14 @@ const useLimitOrders = () => {
   const [state, setState] = useState<State>({
     pending: {
       page: 1,
-      maxPages: null,
+      maxPages: 0,
       data: [],
       loading: true,
       totalOrders: 0,
     },
     completed: {
       page: 1,
-      maxPages: null,
+      maxPages: 0,
       data: [],
       loading: true,
       totalOrders: 0,
@@ -74,8 +62,7 @@ const useLimitOrders = () => {
     [account, chainId, state.completed.page, state.pending.page]
   )
 
-  const { data: ordersData, mutate }: SWRResponse<any, Error> = useSWR(shouldFetch, viewFetcher)
-
+  const { data: ordersData, mutate }: SWRResponse<LimitOrdersResponse, Error> = useSWR(shouldFetch, viewFetcher)
   const setPendingPage = useCallback((page: number) => {
     setState((prevState) => ({
       ...prevState,
@@ -110,7 +97,7 @@ const useLimitOrders = () => {
     )
       return
 
-    const transform = async (order: any) => {
+    const transform = async (order: Order) => {
       const limitOrder = LimitOrder.getLimitOrder({
         ...order,
         chainId: +order.chainId,
@@ -120,8 +107,10 @@ const useLimitOrders = () => {
 
       const tokenIn = limitOrder.amountIn.currency
       const tokenOut = limitOrder.amountOut.currency
+      const filledAmount = order.filledAmount ? CurrencyAmount.fromRawAmount(tokenIn, order.filledAmount) : undefined
 
-      const openOrder = {
+      const openOrder: DerivedOrder = {
+        id: order._id,
         tokenIn:
           tokens[tokenIn.address] ||
           new Token(chainId, tokenIn.address.toLowerCase(), tokenIn.decimals, tokenIn.symbol),
@@ -129,19 +118,21 @@ const useLimitOrders = () => {
           tokens[tokenOut.address] ||
           new Token(chainId, tokenOut.address.toLowerCase(), tokenOut.decimals, tokenOut.symbol),
         limitOrder,
-        filledPercent: order.filledAmount ? Number((order.filledAmount / order.amountIn) * 100).toFixed(2) : '0.00',
+        filledPercent:
+          order.status === OrderStatus.FILLED
+            ? '100'
+            : filledAmount
+            ? new Percent(filledAmount.quotient, limitOrder.amountIn.quotient).toSignificant(2)
+            : '0.00',
         status: order.status,
-        rate: new Percent(limitOrder.amountOut.quotient, denominator(tokenOut.decimals))
-          .divide(new Percent(limitOrder.amountIn.quotient, denominator(tokenIn.decimals)))
-          .divide(denominator(2))
-          .toSignificant(6),
+        rate: new Price({ baseAmount: limitOrder.amountIn, quoteAmount: limitOrder.amountOut }),
       }
 
-      return openOrder as OpenOrder
+      return openOrder
     }
 
-    ;(async () => {
-      const openOrders = await Promise.all<OpenOrder>(
+    const init = async () => {
+      const openOrders = await Promise.all<DerivedOrder>(
         // @ts-ignore TYPE NEEDS FIXING
         ordersData.pendingOrders.orders.map((el, i) =>
           transform({ ...el, filledAmount: ordersData.pendingOrders.filledAmounts[i] })
@@ -166,8 +157,9 @@ const useLimitOrders = () => {
           totalOrders: ordersData.otherOrders.totalOrders,
         },
       }))
-    })()
+    }
 
+    init()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, chainId, ordersData, limitOrderContract, setPendingPage, setCompletedPage])
 

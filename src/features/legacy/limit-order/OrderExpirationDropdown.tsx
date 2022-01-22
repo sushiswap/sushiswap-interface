@@ -40,7 +40,7 @@ const OrderExpirationDropdown: FC = () => {
   )
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 flex-grow">
       <Typography variant="sm" className="flex items-center px-2">
         {i18n._(t`Expires in`)}
         <QuestionHelper text={i18n._(t`Expiration is the time at which the order will become invalid`)} />

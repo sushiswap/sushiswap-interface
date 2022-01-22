@@ -1,4 +1,4 @@
-import { ArrowNarrowLeftIcon, ArrowNarrowRightIcon, DotsHorizontalIcon } from '@heroicons/react/outline'
+import { ChevronLeftIcon, ChevronRightIcon, DotsHorizontalIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { classNames } from 'app/functions'
@@ -132,13 +132,9 @@ const Pagination: FC<PaginationProps> = ({
         {canPreviousPage && (
           <button
             onClick={() => onChange(currentPage - 1)}
-            className={classNames(
-              'text-transparent bg-gradient-to-r from-pink to-pink-red bg-clip-text cursor-pointer inline-flex items-center text-sm font-bold'
-            )}
+            className={classNames('text-secondary cursor-pointer inline-flex items-center text-sm font-bold')}
           >
-            <span className="text-pink">
-              <ArrowNarrowLeftIcon className="mr-3 h-5 w-5" aria-hidden="true" />
-            </span>
+            <ChevronLeftIcon className="mr-1 h-4 w-4" aria-hidden="true" />
             {i18n._(t`Previous`)}
           </button>
         )}
@@ -148,14 +144,10 @@ const Pagination: FC<PaginationProps> = ({
         {canNextPage && (
           <button
             onClick={() => onChange(currentPage + 1)}
-            className={classNames(
-              'text-transparent bg-gradient-to-r from-pink to-pink-red bg-clip-text cursor-pointer inline-flex items-center text-sm font-bold'
-            )}
+            className={classNames('text-secondary cursor-pointer inline-flex items-center text-sm font-bold')}
           >
             {i18n._(t`Next`)}
-            <span className="text-pink-red">
-              <ArrowNarrowRightIcon className="ml-3 h-5 w-5" aria-hidden="true" />
-            </span>
+            <ChevronRightIcon className="ml-1 h-4 w-4" aria-hidden="true" />
           </button>
         )}
       </div>

@@ -2,6 +2,7 @@ import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, Percent } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import NumericalInput from 'app/components/Input/Numeric'
 import QuestionHelper from 'app/components/QuestionHelper'
@@ -49,7 +50,7 @@ const SwapAssetPanel = ({
   currencies,
 }: SwapAssetPanel) => {
   return (
-    <div className="rounded-[14px] border border-dark-700 hover:border-dark-600 bg-dark-900 p-3 flex flex-col gap-2">
+    <div className="rounded-[14px] border border-dark-700 hover:border-dark-600 bg-dark-900 p-3 flex flex-col gap-4">
       {header({
         disabled,
         onChange,
@@ -108,8 +109,8 @@ const WalletSwitch: FC<
         className="flex gap-1 items-center text-high-emphesis hover:text-white cursor-pointer hover:shadow bg-dark-800 rounded-full px-2 py-1 hover:bg-dark-700"
       >
         {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
-        <BentoBoxFundingSourceModal />
       </Typography>
+      <BentoBoxFundingSourceModal />
     </Typography>
   )
 
@@ -202,26 +203,32 @@ const SwapAssetPanelHeader: FC<
     'currency' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
   > & { label: string; id?: string }
 > = ({ walletToggle, currency, onSelect, spendFromWallet, id }) => {
+  const { i18n } = useLingui()
+  const trigger = currency ? (
+    <div
+      id={id}
+      className="text-high-emphesis bg-dark-800 hover:bg-dark-700 flex gap-2 shadow-md rounded-full items-center px-2 py-1 cursor-pointer"
+    >
+      <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={20} />
+      <Typography variant="sm" className="!text-xl" weight={700}>
+        {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
+      </Typography>
+      <ChevronDownIcon width={18} />
+    </div>
+  ) : (
+    <Button color="blue" variant="filled" size="sm" id={id} className="!rounded-full !px-2 !py-0 !h-[32px] !pl-3">
+      {i18n._(t`Select a Token`)}
+      <ChevronDownIcon width={18} />
+    </Button>
+  )
+
   return (
     <div className="flex items-end justify-between gap-2">
-      {currency && (
-        <CurrencySearchModal
-          selectedCurrency={currency}
-          onCurrencySelect={(currency) => onSelect && onSelect(currency)}
-          trigger={
-            <div
-              id={id}
-              className="text-high-emphesis bg-dark-800 hover:bg-dark-700 flex gap-2 shadow-md rounded-full items-center px-2 py-1 cursor-pointer"
-            >
-              <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={20} />
-              <Typography variant="sm" className="!text-xl" weight={700}>
-                {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
-              </Typography>
-              <ChevronDownIcon width={18} />
-            </div>
-          }
-        />
-      )}
+      <CurrencySearchModal
+        selectedCurrency={currency}
+        onCurrencySelect={(currency) => onSelect && onSelect(currency)}
+        trigger={trigger}
+      />
       {walletToggle && walletToggle({ spendFromWallet })}
     </div>
   )

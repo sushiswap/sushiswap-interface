@@ -54,6 +54,11 @@ const nextConfig = {
         destination: '/swap',
         permanent: true,
       },
+      {
+        source: '/open-order',
+        destination: '/limit-order/open',
+        permanent: true,
+      },
     ]
   },
   async rewrites() {
@@ -89,10 +94,6 @@ const nextConfig = {
       {
         source: '/limit-order/:token*',
         destination: '/legacy/limit-order/:token*',
-      },
-      {
-        source: '/open-order',
-        destination: '/legacy/open-order',
       },
       {
         source: '/pool',

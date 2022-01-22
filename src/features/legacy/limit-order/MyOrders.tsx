@@ -3,7 +3,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Badge from 'app/components/Badge'
 import QuestionHelper from 'app/components/QuestionHelper'
-import useLimitOrders from 'app/hooks/useLimitOrders'
+import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 
@@ -20,7 +20,7 @@ const MyOrders: FC = () => {
   )
 
   return (
-    <div onClick={() => router.push('/open-order')}>
+    <div onClick={() => router.push('/limit-order/open')}>
       {pending.totalOrders > 0 ? (
         <Badge color="blue" value={pending.totalOrders}>
           {content}
