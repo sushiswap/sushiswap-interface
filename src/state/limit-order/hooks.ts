@@ -187,7 +187,8 @@ type UseLimitOrderDerivedCurrencies = () => { inputCurrency?: Currency; outputCu
 export const useLimitOrderDerivedCurrencies: UseLimitOrderDerivedCurrencies = () => {
   const { chainId } = useActiveWeb3React()
   const { inputCurrencyId, outputCurrencyId } = useLimitOrderState()
-  const inputCurrency = useCurrency(inputCurrencyId) ?? undefined
+  const inputCurrency =
+    useCurrency(inputCurrencyId === 'SUSHI' ? SUSHI_ADDRESS[chainId || 1] : inputCurrencyId) ?? undefined
   const outputCurrency =
     useCurrency(outputCurrencyId === 'SUSHI' ? SUSHI_ADDRESS[chainId || 1] : outputCurrencyId) ?? undefined
 
