@@ -5,6 +5,7 @@ import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import CompletedOrders from 'app/features/legacy/limit-order/CompletedOrders'
 import DiscoverHeader from 'app/features/legacy/limit-order/DiscoverHeader'
+import LimitOrderApprovalCheck from 'app/features/legacy/limit-order/LimitOrderApprovalCheck'
 import OrdersTableToggle from 'app/features/legacy/limit-order/OrderTableToggle'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import NetworkGuard from 'app/guards/Network'
@@ -22,6 +23,7 @@ function OpenOrdersPage() {
 
   return (
     <>
+      <LimitOrderApprovalCheck />
       <DiscoverHeader />
       <TridentBody>
         {pending.totalOrders > 0 && typeof allowed !== 'undefined' && !allowed && (

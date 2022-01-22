@@ -8,6 +8,7 @@ import DoubleGlowShadow from 'app/components/DoubleGlowShadow'
 import Typography from 'app/components/Typography'
 import { ZERO_PERCENT } from 'app/constants'
 import { Feature } from 'app/enums'
+import LimitOrderApprovalCheck from 'app/features/legacy/limit-order/LimitOrderApprovalCheck'
 import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
 import LimitOrderRecipientField from 'app/features/legacy/limit-order/LimitOrderRecipientField'
 import LimitOrderReviewModal from 'app/features/legacy/limit-order/LimitOrderReviewModal'
@@ -95,74 +96,77 @@ const LimitOrder = () => {
   }, [inputCurrency, pairs])
 
   return (
-    <Container id="limit-order-page" className="py-4 md:py-12 lg:py-[120px]" maxWidth="md">
-      <DoubleGlowShadow>
-        <div id="limit-order-page" className="flex flex-col gap-3 p-4 rounded-[24px] bg-dark-800">
-          <div className="px-2">
-            <HeaderNew inputCurrency={inputCurrency} outputCurrency={outputCurrency} />
-          </div>
-          <div className="flex flex-col gap-3">
-            <SwapAssetPanel
-              error={false}
-              header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You pay`)} />}
-              walletToggle={(props) => (
-                <SwapAssetPanel.Switch
-                  id={`switch-classic-withdraw-from-0}`}
-                  {...props}
-                  label={i18n._(t`Pay from`)}
-                  onChange={() => dispatch(setFromBentoBalance(!fromBentoBalance))}
-                />
-              )}
-              selected={true}
-              spendFromWallet={!fromBentoBalance}
-              currency={inputCurrency}
-              value={(typedField === Field.INPUT ? typedValue : parsedAmounts?.inputAmount?.toSignificant(6)) || ''}
-              onChange={(value) => onUserInput(Field.INPUT, value || '')}
-              onSelect={(inputCurrency) => onCurrencySelection(Field.INPUT, inputCurrency)}
-              currencies={inputTokenList}
-            />
-            <div className="flex gap-3">
-              <div className="flex flex-1">
-                <LimitPriceInputPanel trade={trade} limitPrice={!!rate ? rate : trade?.executionPrice} />
-              </div>
-              <SwitchVerticalIcon
-                width={18}
-                className="text-secondary cursor-pointer mt-6 hover:text-white"
-                onClick={onSwitchTokens}
-              />
-              <div className="flex flex-1">
-                <OrderExpirationDropdown />
-              </div>
+    <>
+      <LimitOrderApprovalCheck />
+      <Container id="limit-order-page" className="py-4 md:py-12 lg:py-[120px]" maxWidth="md">
+        <DoubleGlowShadow>
+          <div id="limit-order-page" className="flex flex-col gap-3 p-4 rounded-[24px] bg-dark-800">
+            <div className="px-2">
+              <HeaderNew inputCurrency={inputCurrency} outputCurrency={outputCurrency} />
             </div>
-            <SwapAssetPanel
-              error={false}
-              header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You receive`)} />}
-              selected={true}
-              currency={outputCurrency}
-              value={(typedField === Field.OUTPUT ? typedValue : parsedAmounts?.outputAmount?.toSignificant(6)) || ''}
-              onChange={(value) => onUserInput(Field.OUTPUT, value || '')}
-              onSelect={(outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency)}
-              currencies={outputTokenList}
-              priceImpact={inputPanelHelperText}
-              priceImpactCss={inputPanelHelperText?.greaterThan(ZERO_PERCENT) ? 'text-green' : 'text-red'}
+            <div className="flex flex-col gap-3">
+              <SwapAssetPanel
+                error={false}
+                header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You pay`)} />}
+                walletToggle={(props) => (
+                  <SwapAssetPanel.Switch
+                    id={`switch-classic-withdraw-from-0}`}
+                    {...props}
+                    label={i18n._(t`Pay from`)}
+                    onChange={() => dispatch(setFromBentoBalance(!fromBentoBalance))}
+                  />
+                )}
+                selected={true}
+                spendFromWallet={!fromBentoBalance}
+                currency={inputCurrency}
+                value={(typedField === Field.INPUT ? typedValue : parsedAmounts?.inputAmount?.toSignificant(6)) || ''}
+                onChange={(value) => onUserInput(Field.INPUT, value || '')}
+                onSelect={(inputCurrency) => onCurrencySelection(Field.INPUT, inputCurrency)}
+                currencies={inputTokenList}
+              />
+              <div className="flex gap-3">
+                <div className="flex flex-1">
+                  <LimitPriceInputPanel trade={trade} limitPrice={!!rate ? rate : trade?.executionPrice} />
+                </div>
+                <SwitchVerticalIcon
+                  width={18}
+                  className="text-secondary cursor-pointer mt-6 hover:text-white"
+                  onClick={onSwitchTokens}
+                />
+                <div className="flex flex-1">
+                  <OrderExpirationDropdown />
+                </div>
+              </div>
+              <SwapAssetPanel
+                error={false}
+                header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You receive`)} />}
+                selected={true}
+                currency={outputCurrency}
+                value={(typedField === Field.OUTPUT ? typedValue : parsedAmounts?.outputAmount?.toSignificant(6)) || ''}
+                onChange={(value) => onUserInput(Field.OUTPUT, value || '')}
+                onSelect={(outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency)}
+                currencies={outputTokenList}
+                priceImpact={inputPanelHelperText}
+                priceImpactCss={inputPanelHelperText?.greaterThan(ZERO_PERCENT) ? 'text-green' : 'text-red'}
+              />
+            </div>
+
+            {isExpertMode && <LimitOrderRecipientField />}
+            <LimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
+            <LimitOrderReviewModal
+              parsedAmounts={parsedAmounts}
+              trade={trade}
+              limitPrice={!!rate ? rate : trade?.executionPrice}
             />
           </div>
-
-          {isExpertMode && <LimitOrderRecipientField />}
-          <LimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
-          <LimitOrderReviewModal
-            parsedAmounts={parsedAmounts}
-            trade={trade}
-            limitPrice={!!rate ? rate : trade?.executionPrice}
-          />
-        </div>
-        <Typography variant="xs" className="text-low-emphesis text-center italic px-10 mt-5">
-          {i18n._(
-            t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`
-          )}
-        </Typography>
-      </DoubleGlowShadow>
-    </Container>
+          <Typography variant="xs" className="text-low-emphesis text-center italic px-10 mt-5">
+            {i18n._(
+              t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`
+            )}
+          </Typography>
+        </DoubleGlowShadow>
+      </Container>
+    </>
   )
 }
 
