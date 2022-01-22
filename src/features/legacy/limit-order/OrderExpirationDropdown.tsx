@@ -66,7 +66,7 @@ const OrderExpirationDropdown: FC = () => {
           >
             <Menu.Items
               static
-              className="absolute overflow-auto w-full mt-2 bg-dark-900 rounded border border-dark-700 hover:border-dark-600 shadow-lg"
+              className="absolute z-10 overflow-auto w-full mt-2 bg-dark-900 rounded border border-dark-700 hover:border-dark-600 shadow-lg"
             >
               {Object.entries(items).map(([k, v]) => {
                 return (
