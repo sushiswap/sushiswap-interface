@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { LockClosedIcon } from '@heroicons/react/outline'
 import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
@@ -44,9 +45,9 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
       })}
     >
       <div className="flex flex-col gap-3 bg-dark-900/95 backdrop-blur-[10px] filter">
-        <div className="flex justify-between items-center pl-3 pr-3 pt-3">
+        <div className="flex items-center justify-between pt-3 pl-3 pr-3">
           <div className="flex gap-2">
-            {auction.pointListAddress.length > 0 && (
+            {auction.pointListAddress !== AddressZero && (
               <div className="flex gap-1.5 items-center">
                 <LockClosedIcon width={14} />
                 <Typography variant="xxs" weight={700} className="text-secondary">
@@ -96,13 +97,13 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
             <Typography variant="sm" weight={700} className="text-secondary">
               {auction.auctionToken.symbol}
             </Typography>
-            <Typography variant="h3" weight={700} className="text-high-emphesis truncate">
+            <Typography variant="h3" weight={700} className="truncate text-high-emphesis">
               {auction.auctionToken.name}
             </Typography>
           </div>
         </div>
 
-        <div className="flex justify-between bg-dark-800 p-3 items-center ">
+        <div className="flex items-center justify-between p-3 bg-dark-800 ">
           <div className="flex items-center">
             <div className="flex gap-3">
               <AuctionIcon auctionTemplate={auction.template} width={18} height={14} />
@@ -166,7 +167,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
         </div>
         <div className="flex flex-col">
           <AuctionChart auction={auction} prices={false} showPriceIndicator={false} />
-          <div className="flex flex-col px-3 py-2 px-4 bg-dark-800 flex-grow divide-y divide-dark-700">
+          <div className="flex flex-col flex-grow px-3 px-4 py-2 divide-y bg-dark-800 divide-dark-700">
             <div className="flex justify-between gap-0.5 py-2">
               <div className="flex items-center">
                 <Typography variant="xs" weight={700} className="text-high-emphesis">
@@ -178,7 +179,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
                   icon={<SolidQuestionMarkCircleIcon width={12} height={12} />}
                 />
               </div>
-              <div className="flex items-center relative">
+              <div className="relative flex items-center">
                 <div className="!w-4 !h-4 absolute -left-7 -top-2">
                   <CurrencyLogo
                     currency={auction.paymentToken}
