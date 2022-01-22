@@ -45,7 +45,7 @@ const nextConfig = {
     disable: process.env.NODE_ENV === 'development',
   },
   images: {
-    domains: ['assets.sushi.com', 'res.cloudinary.com', 'raw.githubusercontent.com', 'logos.covalenthq.com'],
+    domains: ['res.cloudinary.com'],
   },
   async redirects() {
     return [
