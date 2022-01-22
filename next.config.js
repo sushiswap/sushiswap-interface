@@ -51,7 +51,7 @@ const nextConfig = {
   },
   images: {
     loader: 'cloudinary',
-    path: 'https://res.cloudinary.com/sushi-cdn/',
+    path: 'https://res.cloudinary.com/sushi-cdn/image/fetch/',
   },
   async redirects() {
     return [
