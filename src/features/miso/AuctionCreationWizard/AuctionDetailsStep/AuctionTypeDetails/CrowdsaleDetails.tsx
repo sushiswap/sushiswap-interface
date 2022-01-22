@@ -41,7 +41,7 @@ const CrowdsaleDetails: FC = () => {
       Number.isInteger(Number(data.minimumTarget)) &&
       data.minimumTarget >= 1
     ) {
-      minimumRaised = maximumRaised.multiply(new Percent(data.minimumTarget, 10000))
+      minimumRaised = maximumRaised.multiply(new Percent(data.minimumTarget * 100, 10000))
     }
   }
 
