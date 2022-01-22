@@ -1,35 +1,37 @@
-import React from 'react'
+import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
+import React, { FC } from 'react'
 
-export type BadgeColor = 'default' | 'blue' | 'pink' | 'gradient'
-export type BadgeSize = 'default' | 'medium' | 'large'
+export type BadgeColor = 'gray' | 'blue' | 'pink' | 'red'
 
 export interface BadgeProps {
-  children?: React.ReactChild | React.ReactChild[]
-  color?: BadgeColor
-  size?: BadgeSize
+  color: BadgeColor
+  value: number | string
 }
 
 export const COLOR = {
-  default: '',
-  blue: 'bg-blue bg-opacity-20 outline-blue rounded text-xs text-blue px-2 py-1',
-  pink: 'bg-pink bg-opacity-20 outline-pink rounded text-xs text-pink px-2 py-1',
-  gradient:
-    'bg-gradient-to-r from-blue to-pink opacity-80 hover:opacity-100 bg-pink bg-opacity-20 outline-pink rounded text-base text-white px-2 py-1',
+  gray: 'bg-dark-700',
+  blue: 'bg-blue',
+  pink: 'bg-pink',
+  red: 'bg-red',
 }
 
-export const SIZE = {
-  default: 'text-xs',
-  medium: 'text-sm',
-  large: 'text-lg',
-}
-
-function Badge({
-  color = 'default',
-  size = 'default',
-  children,
-  className = '',
-}: BadgeProps & React.HTMLAttributes<HTMLDivElement>): JSX.Element {
-  return <div className={`${COLOR[color]} ${SIZE[size]} ${className}`}>{children}</div>
+const Badge: FC<BadgeProps & React.HTMLAttributes<HTMLDivElement>> = ({ children, color, value }) => {
+  return (
+    <div className="relative">
+      <div
+        className={classNames(
+          COLOR[color],
+          'ring ring-dark-900/40 flex items-center justify-center shadow-md absolute top-[-6px] right-[-6px] h-4 w-4 rounded-full p-1 pointer-events-none'
+        )}
+      >
+        <Typography variant="xxs" component="span" className="text-white">
+          {value}
+        </Typography>
+      </div>
+      {children}
+    </div>
+  )
 }
 
 export default Badge

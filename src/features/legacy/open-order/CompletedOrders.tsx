@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { OrderStatus } from '@sushiswap/limit-order-sdk'
 import loadingCircle from 'app/animation/loading-circle.json'
-import Badge from 'app/components/Badge'
+import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Pagination from 'app/components/Pagination'
 import useLimitOrders from 'app/hooks/useLimitOrders'
@@ -16,12 +16,8 @@ const CompletedOrders: FC = () => {
   return (
     <>
       <div className="flex items-center gap-2 pb-4 text-xl border-b text-high-emphesis border-dark-800">
-        {i18n._(t`Order History`)}{' '}
-        <span className="inline-flex">
-          <Badge color="pink" size="medium">
-            {completed.totalOrders}
-          </Badge>
-        </span>
+        {i18n._(t`Order History`)}
+        <Chip color="purple" label={completed.totalOrders} />
       </div>
       <div className="text-center text-secondary">
         {completed.loading ? (

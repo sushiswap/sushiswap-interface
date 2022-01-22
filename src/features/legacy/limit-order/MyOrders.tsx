@@ -1,27 +1,34 @@
-import { ClipboardListIcon } from '@heroicons/react/outline'
+import { BookOpenIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Badge from 'app/components/Badge'
-import NavLink from 'app/components/NavLink'
+import QuestionHelper from 'app/components/QuestionHelper'
 import useLimitOrders from 'app/hooks/useLimitOrders'
+import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 
 const MyOrders: FC = () => {
   const { i18n } = useLingui()
   const { pending } = useLimitOrders()
+  const router = useRouter()
+
+  const content = (
+    <QuestionHelper
+      text={i18n._(t`Open orders`)}
+      icon={<BookOpenIcon width={24} height={24} className="hover:text-white cursor-pointer" />}
+    />
+  )
 
   return (
-    <NavLink href="/open-order">
-      <a className="text-secondary hover:text-high-emphesis">
-        <div className="items-center hidden gap-3 md:flex">
-          <div>{i18n._(t`My Orders`)}</div>
-          <Badge color="blue">{pending.totalOrders}</Badge>
-        </div>
-        <div className="flex md:hidden text-primary">
-          <ClipboardListIcon className="w-[26px] h-[26px]" />
-        </div>
-      </a>
-    </NavLink>
+    <div onClick={() => router.push('/open-order')}>
+      {pending.totalOrders > 0 ? (
+        <Badge color="blue" value={pending.totalOrders}>
+          {content}
+        </Badge>
+      ) : (
+        content
+      )}
+    </div>
   )
 }
 

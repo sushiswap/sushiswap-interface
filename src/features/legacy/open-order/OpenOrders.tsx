@@ -2,8 +2,8 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { LimitOrder } from '@sushiswap/limit-order-sdk'
 import loadingCircle from 'app/animation/loading-circle.json'
-import Badge from 'app/components/Badge'
 import Button from 'app/components/Button'
+import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import NavLink from 'app/components/NavLink'
 import Pagination from 'app/components/Pagination'
@@ -46,12 +46,8 @@ const OpenOrders: FC = () => {
         pendingText={''}
       />
       <div className="flex items-center gap-2 pb-4 text-xl border-b text-high-emphesis border-dark-800">
-        {i18n._(t`Open Orders`)}{' '}
-        <span className="inline-flex">
-          <Badge color="blue" size="medium">
-            {pending.totalOrders}
-          </Badge>
-        </span>
+        {i18n._(t`Open Orders`)}
+        <Chip color="blue" label={pending.totalOrders} />
       </div>
       <div className="text-center text-secondary">
         {pending.loading ? (
