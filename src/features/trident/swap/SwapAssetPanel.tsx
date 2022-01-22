@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent } from '@sushiswap/core-sdk'
+import { Currency, Percent, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import NumericalInput from 'app/components/Input/Numeric'
@@ -160,7 +160,7 @@ const InputPanel: FC<
         component="span"
         style={{ left: width }}
       >
-        ~{formatNumber(usdcValue?.toFixed(), true, true, 2)}{' '}
+        {usdcValue?.greaterThan(ZERO) && <>~{formatNumber(usdcValue?.toFixed(), true, true, 2)} </>}
         {priceImpact && (
           <span className={priceImpactCss || priceImpactClassName}>{priceImpact?.toSignificant(2)}%</span>
         )}
