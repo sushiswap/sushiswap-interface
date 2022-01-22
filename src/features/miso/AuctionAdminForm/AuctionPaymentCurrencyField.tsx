@@ -38,17 +38,17 @@ const AuctionPaymentCurrencyField: FC<AuctionPaymentCurrencyFieldProps> = ({ nam
             onChange={(val: string) => setValue(name, val, { shouldValidate: true })}
             className="mt-2 flex gap-2"
           >
-            <ToggleButtonGroup.Button value={AddressZero} className="!px-3">
+            <ToggleButtonGroup.Button value={AddressZero} className="!px-3 h-[36px]">
               {/*@ts-ignore TYPE NEEDS FIXING*/}
               {NATIVE[chainId].symbol}
             </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={DAI_ADDRESS[chainId]} className="!px-3">
+            <ToggleButtonGroup.Button value={DAI_ADDRESS[chainId]} className="!px-3 h-[36px]">
               DAI
             </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={USDC_ADDRESS[chainId]} className="!px-3">
+            <ToggleButtonGroup.Button value={USDC_ADDRESS[chainId]} className="!px-3 h-[36px]">
               USDC
             </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={USDT_ADDRESS[chainId]} className="!px-3">
+            <ToggleButtonGroup.Button value={USDT_ADDRESS[chainId]} className="!px-3 h-[36px]">
               USDT
             </ToggleButtonGroup.Button>
           </ToggleButtonGroup>

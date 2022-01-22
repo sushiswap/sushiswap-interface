@@ -48,16 +48,16 @@ const LiquidityLauncherStep: FC = () => {
             }}
             className="mt-2 flex gap-2"
           >
-            <ToggleButtonGroup.Button value={180} className="!px-3 whitespace-nowrap">
+            <ToggleButtonGroup.Button value={180} className="!px-3 whitespace-nowrap h-[36px]">
               {i18n._(t`${180} days`)}
             </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={90} className="!px-3 whitespace-nowrap">
+            <ToggleButtonGroup.Button value={90} className="!px-3 whitespace-nowrap h-[36px]">
               {i18n._(t`${90} days`)}
             </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={60} className="!px-3 whitespace-nowrap">
+            <ToggleButtonGroup.Button value={60} className="!px-3 whitespace-nowrap h-[36px]">
               {i18n._(t`${60} days`)}
             </ToggleButtonGroup.Button>
-            <ToggleButtonGroup.Button value={30} className="!px-3 whitespace-nowrap">
+            <ToggleButtonGroup.Button value={30} className="!px-3 whitespace-nowrap h-[36px]">
               {i18n._(t`${30} days`)}
             </ToggleButtonGroup.Button>
           </ToggleButtonGroup>
