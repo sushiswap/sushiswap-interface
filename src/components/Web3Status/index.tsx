@@ -40,7 +40,7 @@ function StatusIcon({ connector }: { connector: AbstractConnector; account: stri
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
         <Image
-          src="https://app.sushi.com/images/wallets/wallet-connect.png"
+          src="https://app.sushi.com/images/wallets/wallet-connect.svg"
           alt={'Wallet Connect'}
           width="16px"
           height="16px"
