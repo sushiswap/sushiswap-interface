@@ -34,21 +34,30 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
   const { i18n } = useLingui()
   const { config } = useTableConfig(transactions)
 
+  //  @ts-ignore TYPE NEEDS FIXING
   const {
+    //  @ts-ignore TYPE NEEDS FIXING
     getTableProps,
+    //  @ts-ignore TYPE NEEDS FIXING
     getTableBodyProps,
+    //  @ts-ignore TYPE NEEDS FIXING
     headerGroups,
+    //  @ts-ignore TYPE NEEDS FIXING
     page,
+    //  @ts-ignore TYPE NEEDS FIXING
     gotoPage,
+    //  @ts-ignore TYPE NEEDS FIXING
     canPreviousPage,
+    //  @ts-ignore TYPE NEEDS FIXING
     canNextPage,
+    //  @ts-ignore TYPE NEEDS FIXING
     prepareRow,
     state: { pageIndex, pageSize },
   }: TableInstance = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center gap-3">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
           {i18n._(t`Transactions`)}
         </Typography>

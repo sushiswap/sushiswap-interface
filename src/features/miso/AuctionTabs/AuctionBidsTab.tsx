@@ -108,15 +108,25 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
   const { i18n } = useLingui()
 
   const {
+    //  @ts-ignore TYPE NEEDS FIXING
     getTableProps,
+    //  @ts-ignore TYPE NEEDS FIXING
     getTableBodyProps,
+    //  @ts-ignore TYPE NEEDS FIXING
     headerGroups,
+    //  @ts-ignore TYPE NEEDS FIXING
     page,
+    //  @ts-ignore TYPE NEEDS FIXING
     gotoPage,
+    //  @ts-ignore TYPE NEEDS FIXING
     canPreviousPage,
+    //  @ts-ignore TYPE NEEDS FIXING
     canNextPage,
+    //  @ts-ignore TYPE NEEDS FIXING
     prepareRow,
+    //  @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
+    //  @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
@@ -140,7 +150,7 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
             <Switch
               checked={ownBidsOnly}
               onChange={setOwnBidsOnly}
-              className="bg-gray-600 relative inline-flex items-center h-3 rounded-full w-9 transition-colors"
+              className="relative inline-flex items-center h-3 transition-colors bg-gray-600 rounded-full w-9"
             >
               <span
                 className={`${
@@ -160,8 +170,10 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
                 {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {headerGroup.headers.map((column, i) => (
                   <Typography
+                    //  @ts-ignore TYPE NEEDS FIXING
                     weight={700}
                     key={i}
+                    //  @ts-ignore TYPE NEEDS FIXING
                     {...column.getHeaderProps(column.getSortByToggleProps())}
                     className={classNames(column.className)}
                   >
@@ -172,7 +184,7 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
             ))}
           </div>
           <div {...getTableBodyProps()}>
-            {/*@ts-ignore TYPE NEEDS FIXING*/}
+            {/* @ts-ignore TYPE NEEDS FIXING */}
             {page.map((row, i) => {
               prepareRow(row)
               return (
