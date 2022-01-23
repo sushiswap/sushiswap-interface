@@ -28,6 +28,7 @@ const Layout: FC<LayoutProps> = ({ left, children, right }) => {
                     height={64}
                     width={250}
                     placeholder="empty"
+                    priority
                   />
                 </a>
               </Link>

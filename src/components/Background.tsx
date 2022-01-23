@@ -74,6 +74,7 @@ const Background: FC<Background> = ({ variant }) => {
       objectFit="cover"
       objectPosition="center"
       layout="fill"
+      priority
     />
   )
 }
