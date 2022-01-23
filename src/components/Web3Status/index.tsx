@@ -131,7 +131,9 @@ function Web3StatusInner() {
             <Davatar
               size={20}
               address={account}
-              defaultComponent={<Image src="/images/chef.svg" alt="Sushi Chef" width={20} height={20} />}
+              defaultComponent={
+                <Image src="https://app.sushi.com/images/chef.svg" alt="Sushi Chef" width={20} height={20} />
+              }
               style={{ borderRadius: 5 }}
               provider={library}
             />
