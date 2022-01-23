@@ -17,7 +17,7 @@ import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import Typography from '../../components/Typography'
 import { TablePageToggler } from './TablePageToggler'
-import { TransactionFetcherState } from './types'
+import { TableInstance, TransactionFetcherState } from './types'
 import { useTableConfig } from './useTableConfig'
 
 export const LegacyTransactions: FC<{ pairs: string[] }> = ({ pairs }) => {
@@ -38,19 +38,13 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    // @ts-ignore TYPE NEEDS FIXING
     page,
-    // @ts-ignore TYPE NEEDS FIXING
     gotoPage,
-    // @ts-ignore TYPE NEEDS FIXING
     canPreviousPage,
-    // @ts-ignore TYPE NEEDS FIXING
     canNextPage,
     prepareRow,
-    // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
-    // @ts-ignore TYPE NEEDS FIXING
-  } = useTable(config, useSortBy, usePagination, useFlexLayout)
+  }: TableInstance = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
     <div className="flex flex-col gap-3">
@@ -69,16 +63,13 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
               <tr {...headerGroup.getHeaderGroupProps()} key={i}>
                 {headerGroup.headers.map((column, i) => (
                   <th
-                    // @ts-ignore TYPE NEEDS FIXING
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     key={i}
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                   >
                     {column.render('Header')}
                     <span className="inline-block ml-1 align-middle">
-                      {/*@ts-ignore TYPE NEEDS FIXING*/}
                       {column.isSorted ? (
-                        // @ts-ignore TYPE NEEDS FIXING
                         column.isSortedDesc ? (
                           <ArrowDownIcon width={12} />
                         ) : (
@@ -94,7 +85,6 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {page.map((row, i) => {
               prepareRow(row)
               return (

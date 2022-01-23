@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { TablePageToggler } from 'app/features/transactions/TablePageToggler'
+import { TableInstance } from 'app/features/transactions/types'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TD_CLASSNAME,
@@ -31,24 +32,15 @@ const SearchResultPools: FC = () => {
     getTableBodyProps,
     headerGroups,
     rows,
-    // @ts-ignore TYPE NEEDS FIXING
     page,
-    // @ts-ignore TYPE NEEDS FIXING
     gotoPage,
-    // @ts-ignore TYPE NEEDS FIXING
     canPreviousPage,
-    // @ts-ignore TYPE NEEDS FIXING
     canNextPage,
-    // @ts-ignore TYPE NEEDS FIXING
     prepareRow,
-    // @ts-ignore TYPE NEEDS FIXING
     setFilter,
-    // @ts-ignore TYPE NEEDS FIXING
     toggleSortBy,
-    // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
-    // @ts-ignore TYPE NEEDS FIXING
-  } = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
+  }: TableInstance = useTable(config, useFlexLayout, useFilters, useSortBy, useFlexLayout, usePagination)
   useInstantiateTableFeatures(setFilter, toggleSortBy)
 
   return (
@@ -61,8 +53,8 @@ const SearchResultPools: FC = () => {
               <tr {...headerGroup.getHeaderGroupProps()} key={i}>
                 {headerGroup.headers.map((column, i) => (
                   <th
-                    {...column.getHeaderProps()}
                     key={i}
+                    {...column.getHeaderProps()}
                     className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                   >
                     {column.render('Header')}
@@ -82,7 +74,6 @@ const SearchResultPools: FC = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {page.map((row, i) => {
               prepareRow(row)
 

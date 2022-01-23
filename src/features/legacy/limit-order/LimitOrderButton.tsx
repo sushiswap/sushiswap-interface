@@ -7,7 +7,6 @@ import Typography from 'app/components/Typography'
 import useLimitOrderExecute, { DepositPayload } from 'app/features/legacy/limit-order/useLimitOrderExecute'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
-import useENS from 'app/hooks/useENS'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch } from 'app/state/hooks'
 import { setFromBentoBalance, setLimitOrderBentoPermit, setLimitOrderShowReview } from 'app/state/limit-order/actions'
@@ -26,9 +25,7 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade, parsedAmounts }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
-  const { fromBentoBalance, bentoPermit, attemptingTxn, recipient } = useLimitOrderState()
-  const { address } = useENS(recipient)
-
+  const { fromBentoBalance, bentoPermit, attemptingTxn } = useLimitOrderState()
   const error = useLimitOrderDerivedInputError({ trade })
   const { deposit } = useLimitOrderExecute()
   const bentoboxContract = useBentoBoxContract()
@@ -82,7 +79,7 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade, parsedAmounts }) => {
             })}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading || attemptingTxn || Boolean(recipient && !address && error)
+          const disabled = !!error || !approved || loading || attemptingTxn
           return (
             <Button loading={loading || attemptingTxn} color="gradient" disabled={disabled} onClick={handler}>
               {error ? error : fromBentoBalance ? i18n._(t`Review Limit Order`) : i18n._(t`Confirm Deposit`)}

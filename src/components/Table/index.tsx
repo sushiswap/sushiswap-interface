@@ -1,7 +1,7 @@
-// @ts-nocheck TYPE NEEDS FIXING
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import React, { ReactNode, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { usePagination, useSortBy, useTable } from 'react-table'
 
 import { classNames } from '../../functions'

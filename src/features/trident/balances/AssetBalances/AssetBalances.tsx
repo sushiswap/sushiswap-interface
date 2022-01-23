@@ -1,6 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { TableInstance } from 'app/features/trident/balances/AssetBalances/types'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TD_CLASSNAME,
@@ -23,8 +24,7 @@ interface AssetBalancesProps {
 const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelect, selected }) => {
   const { i18n } = useLingui()
 
-  // @ts-ignore TYPE NEEDS FIXING
-  const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(
+  const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page }: TableInstance = useTable(
     config,
     useSortBy,
     usePagination,
@@ -39,9 +39,8 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
             <tr {...headerGroup.getHeaderGroupProps()} key={i}>
               {headerGroup.headers.map((column, i) => (
                 <th
-                  // @ts-ignore TYPE NEEDS FIXING
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
                   key={i}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
                   className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                 >
                   {column.render('Header')}
@@ -62,7 +61,6 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
         </thead>
         <tbody {...getTableBodyProps()}>
           {page.length > 0 ? (
-            // @ts-ignore TYPE NEEDS FIXING
             page.map((row, i) => {
               prepareRow(row)
               return (

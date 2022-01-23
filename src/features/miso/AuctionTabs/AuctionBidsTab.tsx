@@ -111,18 +111,12 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    // @ts-ignore TYPE NEEDS FIXING
     page,
-    // @ts-ignore TYPE NEEDS FIXING
     gotoPage,
-    // @ts-ignore TYPE NEEDS FIXING
     canPreviousPage,
-    // @ts-ignore TYPE NEEDS FIXING
     canNextPage,
     prepareRow,
-    // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
-    // @ts-ignore TYPE NEEDS FIXING
   } = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
@@ -167,10 +161,8 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
                 {headerGroup.headers.map((column, i) => (
                   <Typography
                     weight={700}
-                    // @ts-ignore TYPE NEEDS FIXING
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     key={i}
-                    // @ts-ignore TYPE NEEDS FIXING
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
                     className={classNames(column.className)}
                   >
                     {column.render('Header')}
@@ -194,7 +186,6 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
                         {...cell.getCellProps()}
                         className={classNames(
                           'flex items-center text-high-emphesis',
-                          // @ts-ignore TYPE NEEDS FIXING
                           headerGroups[0].headers[i].className
                         )}
                       >

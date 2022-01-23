@@ -5,10 +5,10 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
 import Back from 'app/components/Back'
-import Chip from 'app/components/Chip'
 import Head from 'next/head'
 import React, { useCallback, useEffect, useState } from 'react'
 
+import Badge from '../../../components/Badge'
 import Button from '../../../components/Button'
 import Container from '../../../components/Container'
 import Dots from '../../../components/Dots'
@@ -113,7 +113,7 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
           variant="lg"
           className="text-primary"
         >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
-        {lpToken.version && <Chip color="purple" label={lpToken.version} />}
+        {lpToken.version && <Badge color="pink">{lpToken.version}</Badge>}
       </div>
       {isSelected ? <XIcon width={16} height={16} /> : <ChevronDownIcon width={16} height={16} />}
     </div>

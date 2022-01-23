@@ -52,8 +52,8 @@ const initialState: LimitOrderState = {
   typedField: Field.INPUT,
   typedValue: '',
   limitPrice: '',
-  inputCurrencyId: 'ETH',
-  outputCurrencyId: 'SUSHI',
+  inputCurrencyId: '',
+  outputCurrencyId: '',
   recipient: undefined,
   fromBentoBalance: false,
   limitOrderApprovalPending: '',
@@ -87,8 +87,12 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
           },
         }
       ) => ({
-        inputCurrencyId,
-        outputCurrencyId,
+        [Field.INPUT]: {
+          currencyId: inputCurrencyId,
+        },
+        [Field.OUTPUT]: {
+          currencyId: outputCurrencyId,
+        },
         independentField,
         typedValue: typedValue,
         recipient,
@@ -113,27 +117,19 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
       state.fromBentoBalance = fromBentoBalance
     })
     .addCase(selectCurrency, (state, { payload: { currencyId, field } }) => {
-      if (field === Field.INPUT) {
-        state.limitPrice = ''
-        state.inputCurrencyId = currencyId
-      }
-      if (field === Field.OUTPUT) {
-        state.limitPrice = ''
-        state.outputCurrencyId = currencyId
-      }
+      if (field === Field.INPUT) state.inputCurrencyId = currencyId
+      if (field === Field.OUTPUT) state.outputCurrencyId = currencyId
     })
     .addCase(switchCurrencies, (state) => {
-      return {
-        ...state,
-        inputCurrencyId: state.outputCurrencyId,
-        outputCurrencyId: state.inputCurrencyId,
-      }
+      const tmp = state.outputCurrencyId
+      state.outputCurrencyId = state.inputCurrencyId
+      state.inputCurrencyId = tmp
     })
     .addCase(typeInput, (state, { payload: { field, typedValue } }) => {
       state.typedField = field
       state.typedValue = typedValue
     })
-    .addCase(setRecipient, (state, { payload: recipient }) => {
+    .addCase(setRecipient, (state, { payload: { recipient } }) => {
       state.recipient = recipient
     })
     .addCase(clear, () => {

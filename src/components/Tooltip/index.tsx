@@ -2,7 +2,6 @@ import { classNames } from 'app/functions'
 import React, { ReactNode, useCallback, useState } from 'react'
 
 import Popover, { PopoverProps } from '../Popover'
-import Typography from '../Typography'
 
 interface TooltipProps extends Omit<PopoverProps, 'content'> {
   text: ReactNode
@@ -21,12 +20,10 @@ export default function Tooltip({ text, children, className, ...rest }: TooltipP
         <div
           className={classNames(
             className,
-            'w-full max-w-[228px] px-3 py-2 font-bold bg-dark-800 border border-dark-600 rounded text-sm shadow-lg'
+            'w-full max-w-[228px] px-3 py-2 font-bold bg-dark-900 border border-dark-700 rounded text-sm shadow-lg'
           )}
         >
-          <Typography variant="xs" className="text-white">
-            {text}
-          </Typography>
+          {text}
         </div>
       }
       {...rest}
