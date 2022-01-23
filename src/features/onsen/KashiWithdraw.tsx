@@ -41,11 +41,11 @@ const KashiWithdraw = ({ pair, header }) => {
     },
     [
       i18n,
-      pair.asset.tokenInfo.symbol,
-      pair.currentAllAssets.value,
-      pair.currentTotalAsset.base,
-      pair.maxAssetAvailableFraction,
-      pair.userAssetFraction,
+      pair?.asset.tokenInfo.symbol,
+      pair?.currentAllAssets.value,
+      pair?.currentTotalAsset.base,
+      pair?.maxAssetAvailableFraction,
+      pair?.userAssetFraction,
       parsedWithdrawValue?.quotient,
       useBento,
     ]
