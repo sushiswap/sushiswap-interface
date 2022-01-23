@@ -102,6 +102,7 @@ export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   return data
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export function useFantomPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.FANTOM
