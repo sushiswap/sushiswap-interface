@@ -48,21 +48,30 @@ export default function Table<T>({
     headerGroups,
     prepareRow,
     rows,
+    // @ts-ignore TYPE NEEDS FIXING
     page,
+    // @ts-ignore TYPE NEEDS FIXING
     nextPage,
+    // @ts-ignore TYPE NEEDS FIXING
     previousPage,
+    // @ts-ignore TYPE NEEDS FIXING
     canPreviousPage,
+    // @ts-ignore TYPE NEEDS FIXING
     canNextPage,
+    // @ts-ignore TYPE NEEDS FIXING
     setPageSize,
     allColumns,
+    // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
   } = useTable(
     {
       columns,
+      // @ts-ignore TYPE NEEDS FIXING
       data,
       defaultCanSort: false,
       initialState: {
         hiddenColumns: columnsHideable,
+        // @ts-ignore TYPE NEEDS FIXING
         sortBy: [
           {
             id: defaultSortBy.id,
