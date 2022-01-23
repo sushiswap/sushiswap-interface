@@ -192,6 +192,12 @@ export const getCeloPrice = async () => {
   })
 }
 
+export const getFantomPrice = async () => {
+  return getTokenPrice(ChainId.FANTOM, tokenPriceQuery, {
+    id: '0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83',
+  })
+}
+
 // @ts-ignore TYPE NEEDS FIXING
 export const getOhmPrice = async (chainId) => {
   if (chainId === ChainId.ARBITRUM) {

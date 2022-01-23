@@ -36,11 +36,11 @@ export default function CurrencyInputPanel({
       {bottomAdornment && bottomAdornment}
 
       {error && (
-        <div className="p-3 flex justify-center items-center gap-2">
-          <span className="text-red flex items-center">
+        <div className="flex items-center justify-center gap-2 p-3">
+          <span className="flex items-center text-red">
             <ExclamationIcon width={20} height={20} />
           </span>
-          <span className="text-high-emphesis font-bold text-sm">{error}</span>
+          <span className="text-sm font-bold text-high-emphesis">{error}</span>
         </div>
       )}
     </div>

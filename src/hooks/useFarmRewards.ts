@@ -8,6 +8,7 @@ import {
   useAverageBlockTime,
   useCeloPrice,
   useEthPrice,
+  useFantomPrice,
   useFarms,
   useFusePrice,
   useGnoPrice,
@@ -83,6 +84,7 @@ export default function useFarmRewards() {
     onePrice,
     spellPrice,
     celoPrice,
+    fantomPrice,
     movrPrice,
     ohmPrice,
     fusePrice,
@@ -95,6 +97,7 @@ export default function useFarmRewards() {
     useOnePrice(),
     useSpellPrice(),
     useCeloPrice(),
+    useFantomPrice(),
     useMovrPrice(),
     useOhmPrice(),
     useFusePrice(),
@@ -245,6 +248,12 @@ export default function useFarmRewards() {
             rewardPerBlock,
             rewardPerDay: rewardPerSecond * 86400,
             rewardPrice: fusePrice,
+          },
+          [ChainId.FANTOM]: {
+            currency: NATIVE[ChainId.FANTOM],
+            rewardPerBlock,
+            rewardPerDay: rewardPerSecond * 86400,
+            rewardPrice: fantomPrice,
           },
         }
 

@@ -8,7 +8,7 @@ import { HeadlessUiModal } from 'app/components/Modal'
 import Typography from 'app/components/Typography'
 import useLimitOrderExecute from 'app/features/legacy/limit-order/useLimitOrderExecute'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
-import { shortenAddress } from 'app/functions'
+import { isAddress, shortenAddress } from 'app/functions'
 import { useAppDispatch } from 'app/state/hooks'
 import { setLimitOrderShowReview } from 'app/state/limit-order/actions'
 import { useLimitOrderState } from 'app/state/limit-order/hooks'
@@ -67,7 +67,7 @@ const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ parsedAmounts, trade
           <div className="flex justify-center mt-2 -mb-2">
             <ArrowDownIcon width={14} className="text-secondary" />
           </div>
-          <Typography weight={700} variant="sm" className="text-secondary justify-end">
+          <Typography weight={700} variant="sm" className="justify-end text-secondary">
             {i18n._(t`You'll receive`)}
           </Typography>
           <ListPanel items={[<ListPanel.CurrencyAmountItem amount={parsedAmounts?.outputAmount} key={0} />]} />
@@ -79,7 +79,7 @@ const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ parsedAmounts, trade
                 {i18n._(t`Recipient`)}
               </Typography>
               <Typography variant="sm" weight={700}>
-                {shortenAddress(recipient)}
+                {isAddress(recipient) && shortenAddress(recipient)}
               </Typography>
             </div>
           )}
@@ -116,7 +116,7 @@ const LimitOrderReviewModal: FC<LimitOrderReviewModal> = ({ parsedAmounts, trade
             )}
           </div>
         </HeadlessUiModal.BorderedContent>
-        <Typography variant="xs" className="text-secondary text-center">
+        <Typography variant="xs" className="text-center text-secondary">
           {i18n._(t`Please note that after order execution, your tokens will be received in your BentoBox`)}
         </Typography>
         <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>

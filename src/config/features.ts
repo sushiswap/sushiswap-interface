@@ -30,7 +30,7 @@ const features: FeatureMap = {
   ],
   [ChainId.BSC]: [Feature.AMM, Feature.BENTOBOX, Feature.KASHI, Feature.MIGRATE, Feature.ANALYTICS],
   [ChainId.BSC_TESTNET]: [Feature.AMM],
-  [ChainId.FANTOM]: [Feature.AMM, Feature.ANALYTICS, Feature.BENTOBOX],
+  [ChainId.FANTOM]: [Feature.AMM, Feature.ANALYTICS, Feature.LIMIT_ORDERS, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
   [ChainId.FANTOM_TESTNET]: [Feature.AMM],
   [ChainId.MATIC]: [
     Feature.AMM,
