@@ -3,7 +3,7 @@ import { OrderStatus } from '@sushiswap/limit-order-sdk'
 import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { CellProps } from 'react-table'
 
 import { DerivedOrder } from './types'
@@ -47,12 +47,18 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
         width: 100,
         minWidth: 100,
         Cell: (props: CellProps<DerivedOrder>) => {
+          const [invert, setInvert] = useState(false)
+
           return (
-            <Typography variant="xs" className="flex gap-2 text-secondary">
-              <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
-                {props.cell.value?.toSignificant(6)}
+            <Typography
+              variant="xs"
+              className="flex items-baseline gap-2 text-secondary cursor-pointer"
+              onClick={() => setInvert(!invert)}
+            >
+              <Typography weight={700} variant="xs" component="span" className="text-high-emphesis">
+                {invert ? props.cell.value.invert().toSignificant(6) : props.cell.value.toSignificant(6)}
               </Typography>{' '}
-              {props.cell.row.original.tokenOut.symbol}
+              {invert ? props.cell.row.original.tokenIn.symbol : props.cell.row.original.tokenOut.symbol}
             </Typography>
           )
         },
