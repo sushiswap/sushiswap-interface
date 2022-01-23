@@ -127,17 +127,17 @@ const TridentApproveGate = ({
   const [permitError, setPermitError] = useState(false)
 
   const { approve, approvalState, getPermit, permit } = useBentoMasterApproveCallback(
-    permitProp ? undefined : masterContractAddress ? masterContractAddress : undefined,
+    withPermit ? masterContractAddress : undefined,
     {}
   )
 
   const loading =
     Object.values(status).some((el) => el === ApprovalState.UNKNOWN) ||
-    (masterContractAddress ? approvalState === BentoApprovalState.UNKNOWN : false)
+    (withPermit ? approvalState === BentoApprovalState.UNKNOWN : false)
 
   const approved =
     Object.values(status).every((el) => el === ApprovalState.APPROVED) &&
-    (masterContractAddress ? approvalState === BentoApprovalState.APPROVED : true)
+    (withPermit ? approvalState === BentoApprovalState.APPROVED : true)
 
   // If we have a permitError, use the approveCallback as a fallback
   const onClick = useCallback(async () => {

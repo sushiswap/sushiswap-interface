@@ -29,7 +29,7 @@ const OrdersTableToggle = () => {
   return (
     <div className="flex gap-8">
       {items.map(({ label, link, key }, index) => (
-        <Link href={link} key={index} passHref={true}>
+        <Link href={link} key={index} passHref={true} replace={true}>
           <div className="h-full space-y-2 cursor-pointer">
             <Typography
               weight={700}
