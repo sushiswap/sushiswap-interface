@@ -16,7 +16,7 @@ export const SearchCategoryLabel: FC = () => {
         {searchQuery ? i18n._(t`Search results for '${searchQuery}'`) : i18n._(t`Top Liquidity Pools`)}
       </Typography>
       <div className="flex gap-1">
-        <Image layout="fixed" src={'https://app.sushi.com/images/rss.svg'} alt="rss icon" />
+        <Image src={'https://app.sushi.com/images/rss.svg'} width={16} height={16} alt="rss icon" />
         <div className="text-xs text-secondary">{i18n._(t`*Pairs with this symbol have a TWAP oracle.`)}</div>
       </div>
     </div>
