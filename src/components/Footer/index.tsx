@@ -16,13 +16,13 @@ const Footer = () => {
   const { i18n } = useLingui()
 
   return (
-    <div className="z-10 w-full py-20 bg-dark-900/30 px-6 mt-20">
+    <div className="z-10 w-full px-6 py-20 mt-20 bg-dark-900/30">
       <Container maxWidth="7xl" className="mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-10 lg:grid-cols-6 sm:px-6">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-6 sm:px-6">
           <div className="flex flex-col gap-3">
-            <div className="flex justify-start items-center gap-2">
+            <div className="flex items-center justify-start gap-2">
               <div className="">
-                <Image src="/images/logo.svg" alt="Sushi logo" width="28px" height="28px" />
+                <Image src="https://app.sushi.com/images/logo.svg" alt="Sushi logo" width="28px" height="28px" />
               </div>
               <Typography variant="h2" weight={700} className="tracking-[0.02em] scale-y-90">
                 Sushi
@@ -32,7 +32,7 @@ const Footer = () => {
               {i18n._(t`Our community is building a comprehensive decentralized trading platform for the future of finance. Join
               us!`)}
             </Typography>
-            <div className="flex gap-4 items-center">
+            <div className="flex items-center gap-4">
               <a href="https://twitter.com/sushiswap" target="_blank" rel="noreferrer">
                 <TwitterIcon width={16} className="text-low-emphesis" />
               </a>

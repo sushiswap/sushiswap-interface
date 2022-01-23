@@ -218,7 +218,13 @@ export default function Stake() {
                         </div> */}
           </div>
           <div className="hidden px-8 ml-6 md:block w-72">
-            <Image src="/images/xsushi-sign.png" alt="xSUSHI sign" width="100%" height="100%" layout="responsive" />
+            <Image
+              src="https://app.sushi.com/images/xsushi-sign.png"
+              alt="xSUSHI sign"
+              width="100%"
+              height="100%"
+              layout="responsive"
+            />
           </div>
         </div>
         <div className="flex flex-col justify-center md:flex-row">
@@ -384,7 +390,7 @@ export default function Stake() {
                   <div className="flex items-center space-x-4">
                     <Image
                       className="max-w-10 md:max-w-16 -ml-1 mr-1 md:mr-2 -mb-1.5 rounded"
-                      src="/images/tokens/xsushi-square.jpg"
+                      src="https://app.sushi.com/images/tokens/xsushi-square.jpg"
                       alt="xSUSHI"
                       width={64}
                       height={64}
@@ -408,7 +414,7 @@ export default function Stake() {
                   <div className="flex items-center ml-8 space-x-4 md:ml-0">
                     <Image
                       className="max-w-10 md:max-w-16 -ml-1 mr-1 md:mr-2 -mb-1.5 rounded"
-                      src="/images/tokens/sushi-square.jpg"
+                      src="https://app.sushi.com/images/tokens/sushi-square.jpg"
                       alt="SUSHI"
                       width={64}
                       height={64}

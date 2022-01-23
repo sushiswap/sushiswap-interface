@@ -28,49 +28,64 @@ function StatusIcon({ connector }: { connector: AbstractConnector; account: stri
   if (connector === injected) {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/metamask.png" alt="Injected (MetaMask etc...)" width={16} height={16} />
+        <Image
+          src="https://app.sushi.com/images/wallets/metamask.png"
+          alt="Injected (MetaMask etc...)"
+          width={16}
+          height={16}
+        />
       </div>
     )
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
+        <Image
+          src="https://app.sushi.com/images/wallets/wallet-connect.png"
+          alt={'Wallet Connect'}
+          width="16px"
+          height="16px"
+        />
       </div>
     )
   } else if (connector.constructor.name === 'LatticeConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
+        <Image
+          src="https://app.sushi.com/images/wallets/coinbase.svg"
+          alt={'Coinbase Wallet'}
+          width="16px"
+          height="16px"
+        />
       </div>
     )
   } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'PortisConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'CloverConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
       </div>
     )
   }
