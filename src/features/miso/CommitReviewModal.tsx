@@ -132,16 +132,20 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
                         {amount?.currency.symbol}
                       </Typography>
                     </div>
-                    <ChevronRightIcon width={20} className="text-secondary" />
-                    {amount?.greaterThan(ZERO) && (
-                      <div className="flex gap-2 items-baseline">
-                        <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
-                          {auction.tokenAmount(amount)?.toSignificant(6)}
-                        </Typography>
-                        <Typography className="text-secondary" weight={700}>
-                          {auction.tokenAmount(amount)?.currency.symbol}
-                        </Typography>
-                      </div>
+                    {auction.template !== AuctionTemplate.BATCH_AUCTION && (
+                      <>
+                        <ChevronRightIcon width={20} className="text-secondary" />
+                        {amount?.greaterThan(ZERO) && (
+                          <div className="flex gap-2 items-baseline">
+                            <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
+                              {auction.tokenAmount(amount)?.toSignificant(6)}
+                            </Typography>
+                            <Typography className="text-secondary" weight={700}>
+                              {auction.tokenAmount(amount)?.currency.symbol}
+                            </Typography>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

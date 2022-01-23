@@ -40,12 +40,12 @@ const OrderExpirationDropdown: FC = () => {
   )
 
   return (
-    <div className="flex flex-col gap-1 flex-grow">
+    <div className="flex flex-col flex-grow gap-1">
       <Typography variant="sm" className="flex items-center px-2">
         {i18n._(t`Expires in`)}
         <QuestionHelper text={i18n._(t`Expiration is the time at which the order will become invalid`)} />
       </Typography>
-      <div className="h-full flex justify-between items-center bg-dark-900 rounded px-4 py-2 border border-dark-700 hover:border-dark-600">
+      <div className="flex items-center justify-between h-full px-4 py-2 border rounded bg-dark-900 border-dark-700 hover:border-dark-600">
         <Menu as="div" className="relative inline-block w-full text-left">
           <Menu.Button className="w-full">
             <div className="flex flex-row items-center justify-between">
@@ -66,7 +66,7 @@ const OrderExpirationDropdown: FC = () => {
           >
             <Menu.Items
               static
-              className="absolute z-10 overflow-auto w-full mt-2 bg-dark-900 rounded border border-dark-700 hover:border-dark-600 shadow-lg"
+              className="absolute z-10 w-full mt-2 overflow-auto border rounded shadow-lg bg-dark-900 border-dark-700 hover:border-dark-600"
             >
               {Object.entries(items).map(([k, v]) => {
                 return (

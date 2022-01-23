@@ -15,7 +15,7 @@ const MyOrders: FC = () => {
   const content = (
     <QuestionHelper
       text={i18n._(t`Open orders`)}
-      icon={<BookOpenIcon width={24} height={24} className="hover:text-white cursor-pointer" />}
+      icon={<BookOpenIcon width={24} height={24} className="cursor-pointer hover:text-white" />}
     />
   )
 

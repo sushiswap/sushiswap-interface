@@ -29,7 +29,7 @@ export type ChipSize = 'default' | 'sm'
 export type ChipVariant = 'filled'
 
 export interface ChipProps {
-  label: string | number
+  label: string
   color?: ChipColor
   variant?: ChipVariant
   size?: ChipSize

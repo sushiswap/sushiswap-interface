@@ -39,7 +39,7 @@ const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement
       <div
         ref={node}
         onClick={setToggle}
-        className="flex ml-1 items-center justify-center outline-none cursor-help hover:text-primary"
+        className="flex items-center justify-center ml-1 outline-none cursor-help hover:text-primary"
         onMouseEnter={open}
         onMouseLeave={close}
       >

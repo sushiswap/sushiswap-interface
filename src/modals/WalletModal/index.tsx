@@ -143,7 +143,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
               link={option.href}
               header={option.name}
               subheader={null}
-              icon={'/images/wallets/' + option.iconName}
+              icon={'https://app.sushi.com' + '/images/wallets/' + option.iconName}
             />
           )
         }
@@ -162,7 +162,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
                 header={'Install Metamask'}
                 subheader={null}
                 link={'https://metamask.io/'}
-                icon="/images/wallets/metamask.png"
+                icon="https://app.sushi.com/images/wallets/metamask.png"
               />
             )
           } else {
@@ -195,7 +195,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
             link={option.href}
             header={option.name}
             subheader={null} // use option.descriptio to bring back multi-line
-            icon={'/images/wallets/' + option.iconName}
+            icon={'https://app.sushi.com' + '/images/wallets/' + option.iconName}
           />
         )
       )
@@ -247,7 +247,7 @@ const WalletModal: FC<WalletModal> = ({ pendingTransactions, confirmedTransactio
               tryActivation={tryActivation}
             />
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto">{options}</div>
+            <div className="grid grid-cols-1 gap-4 overflow-y-auto md:grid-cols-2">{options}</div>
           )}
           <div className="flex justify-center">
             <Typography variant="xs" className="text-secondary" component="span">

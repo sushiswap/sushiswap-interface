@@ -54,7 +54,7 @@ const _Transactions: FC<TransactionFetcherState> = ({ transactions, error, loadi
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex gap-3 items-center">
+      <div className="flex items-center gap-3">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
           {i18n._(t`Transactions`)}
         </Typography>

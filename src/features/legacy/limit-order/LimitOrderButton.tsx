@@ -62,7 +62,7 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade, parsedAmounts }) => {
   return (
     <>
       {permitError && (
-        <Typography variant="sm" className="border border-yellow/40 text-yellow p-4 rounded text-center">
+        <Typography variant="sm" className="p-4 text-center border rounded border-yellow/40 text-yellow">
           {i18n._(
             t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
           )}

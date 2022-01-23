@@ -1,7 +1,7 @@
-// @ts-nocheck TYPE NEEDS FIXING
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/outline'
 import { useRouter } from 'next/router'
 import React, { ReactNode, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import { usePagination, useSortBy, useTable } from 'react-table'
 
 import { classNames } from '../../functions'
@@ -48,21 +48,30 @@ export default function Table<T>({
     headerGroups,
     prepareRow,
     rows,
+    // @ts-ignore TYPE NEEDS FIXING
     page,
+    // @ts-ignore TYPE NEEDS FIXING
     nextPage,
+    // @ts-ignore TYPE NEEDS FIXING
     previousPage,
+    // @ts-ignore TYPE NEEDS FIXING
     canPreviousPage,
+    // @ts-ignore TYPE NEEDS FIXING
     canNextPage,
+    // @ts-ignore TYPE NEEDS FIXING
     setPageSize,
     allColumns,
+    // @ts-ignore TYPE NEEDS FIXING
     state: { pageIndex, pageSize },
   } = useTable(
     {
       columns,
+      // @ts-ignore TYPE NEEDS FIXING
       data,
       defaultCanSort: false,
       initialState: {
         hiddenColumns: columnsHideable,
+        // @ts-ignore TYPE NEEDS FIXING
         sortBy: [
           {
             id: defaultSortBy.id,
@@ -119,9 +128,11 @@ export default function Table<T>({
           <thead>
             {/*@ts-ignore TYPE NEEDS FIXING*/}
             {headerGroups.map((headerGroup) => (
+              // @ts-ignore TYPE NEEDS FIXING
               <tr key="tr" {...headerGroup.getHeaderGroupProps()}>
                 {/*@ts-ignore TYPE NEEDS FIXING*/}
                 {headerGroup.headers.map((column, i, columns) => (
+                  //  @ts-ignore TYPE NEEDS FIXING
                   <th key={i} {...column.getHeaderProps(column.getSortByToggleProps())}>
                     <div
                       className={classNames(
@@ -133,20 +144,26 @@ export default function Table<T>({
                       <div className="flex flex-row pb-2 text-sm text-secondary">
                         <div
                           className={classNames(
+                            //@ts-ignore TYPE NEEDS FIXING
                             i !== 0 && column.align === 'right' && `justify-end`,
+                            // @ts-ignore TYPE NEEDS FIXING
                             i !== 0 && column.align === 'left' && 'justify-start',
+                            // @ts-ignore TYPE NEEDS FIXING
                             !column.align && (i !== 0 ? 'justify-start' : 'justify-end'),
                             i !== 0 && 'ml-2',
                             i !== columns.length - 1 && 'mr-2',
                             i === 0 && 'flex-row-reverse',
+                            // @ts-ignore TYPE NEEDS FIXING
                             i === 0 ? (column.align === 'right' ? 'justify-start' : 'justify-end') : '',
                             'w-full flex whitespace-nowrap xl:mx-auto'
                           )}
                         >
+                          {/* @ts-ignore TYPE NEEDS FIXING */}
                           <span className={classNames('flex items-center', column.isSorted ? 'block' : 'hidden')}>
                             <div
                               className={classNames(
                                 'fill-current text-secondary',
+                                // @ts-ignore TYPE NEEDS FIXING
                                 !column.isSortedDesc && 'rotate-180 transform'
                               )}
                             >
@@ -165,6 +182,7 @@ export default function Table<T>({
                             </div>
                           </span>
                           {column.render('Header')}
+                          {/* @ts-ignore TYPE NEEDS FIXING */}
                           {column.HideHeader && isHidden && (
                             <button onClick={(e) => toggleHide(e)} className="ml-1 text-dark-700">
                               {column.render('HideHeader')}

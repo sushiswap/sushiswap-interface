@@ -90,7 +90,7 @@ const CompletedOrders: FC = () => {
                 colSpan={4}
                 className={classNames(TABLE_TBODY_TD_CLASSNAME(0, 1), 'justify-center cursor-default py-4')}
               >
-                <Typography variant="xs" className="text-low-emphesis italic text-center">
+                <Typography variant="xs" className="italic text-center text-low-emphesis">
                   Funds will be received in your{' '}
                   <Link href="/balances" passHref={true}>
                     <Typography variant="xs" className="text-blue" component="span">

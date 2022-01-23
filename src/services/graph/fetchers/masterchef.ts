@@ -21,6 +21,7 @@ export const MINICHEF = {
   [ChainId.CELO]: 'sushiswap/celo-minichef-v2',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-minichef',
   [ChainId.FUSE]: 'sushiswap/fuse-minichef',
+  [ChainId.FANTOM]: 'sushiswap/fantom-minichef',
 }
 
 export const OLD_MINICHEF = {

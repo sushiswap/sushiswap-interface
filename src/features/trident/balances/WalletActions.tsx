@@ -2,7 +2,7 @@ import { SwitchHorizontalIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE } from '@sushiswap/core-sdk'
-import { BentoboxIcon } from 'app/components/Icon'
+import { WalletIcon } from 'app/components/Icon'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums/Feature'
 import ActionItem from 'app/features/trident/balances/ActionsModal/ActionItem'
@@ -46,7 +46,7 @@ const WalletActions: FC = () => {
         {featureEnabled(Feature.BENTOBOX, chainId) && (
           <>
             <ActionItem
-              svg={<BentoboxIcon width={20} height={20} />}
+              svg={<WalletIcon width={20} height={20} />}
               label={i18n._(t`Deposit to BentoBox`)}
               onClick={() => dispatch(setBalancesActiveModal(ActiveModal.DEPOSIT))}
             />

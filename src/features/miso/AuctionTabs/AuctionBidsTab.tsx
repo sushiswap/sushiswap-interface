@@ -146,7 +146,7 @@ const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
             <Switch
               checked={ownBidsOnly}
               onChange={setOwnBidsOnly}
-              className="bg-gray-600 relative inline-flex items-center h-3 rounded-full w-9 transition-colors"
+              className="relative inline-flex items-center h-3 transition-colors bg-gray-600 rounded-full w-9"
             >
               <span
                 className={`${

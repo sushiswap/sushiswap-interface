@@ -1,5 +1,7 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
+import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { Feature } from 'app/enums'
 import AuctionCard from 'app/features/miso/AuctionCard'
@@ -8,6 +10,7 @@ import { AuctionStatus } from 'app/features/miso/context/types'
 import { classNames } from 'app/functions'
 import NetworkGuard from 'app/guards/Network'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
+import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -20,6 +23,7 @@ const queryToAuctionStatus = {
 const Miso = () => {
   const { i18n } = useLingui()
   const { query } = useRouter()
+  const { chainId } = useActiveWeb3React()
   // @ts-ignore TYPE NEEDS FIXING
   const auctions = useAuctions(queryToAuctionStatus[query?.status as string] ?? AuctionStatus.LIVE)
 
@@ -41,18 +45,20 @@ const Miso = () => {
               {i18n._(t`These auctions are meticulously chosen by the Sushi Samurais, serving the best MISO for you.`)}
             </Typography>
           </div>
-          <div className="flex items-center gap-4">
-            {/* <div>
-              <Link href="/miso/auction" passHref={true}>
-                <Button
-                  color="blue"
-                  className="rounded-full bg-gradient-to-r from-pink-red via-pink to-red text-white transition hover:scale-[1.05]"
-                >
-                  {i18n._(t`Create Auction`)}
-                </Button>
-              </Link>
-            </div> */}
-          </div>
+          {chainId === ChainId.HARMONY && (
+            <div className="flex items-center gap-4">
+              <div>
+                <Link href="/miso/auction" passHref={true}>
+                  <Button
+                    color="blue"
+                    className="rounded-full bg-gradient-to-r from-pink-red via-pink to-red text-white transition hover:scale-[1.05]"
+                  >
+                    {i18n._(t`Create Auction`)}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
       </MisoHeader>
       <MisoBody>

@@ -30,7 +30,7 @@ export const useOpenOrdersTableConfig = ({
               <div className="hidden lg:block">
                 <CurrencyLogo currency={props.cell.row.original.tokenIn} className="!rounded-full" size={18} />
               </div>
-              <Typography variant="xs" className="flex gap-2 text-secondary items-baseline">
+              <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
                 <Typography variant="sm" weight={700} component="span" className="text-high-emphesis">
                   {props.cell.row.original.limitOrder.amountIn.toSignificant(6)}
                 </Typography>{' '}
@@ -40,7 +40,7 @@ export const useOpenOrdersTableConfig = ({
               <div className="hidden lg:block">
                 <CurrencyLogo currency={props.cell.row.original.tokenOut} className="!rounded-full" size={18} />
               </div>
-              <Typography variant="xs" className="flex gap-2 text-secondary items-baseline">
+              <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
                 <Typography variant="sm" weight={700} component="span" className="text-high-emphesis">
                   {props.cell.row.original.limitOrder.amountOut.toSignificant(6)}
                 </Typography>{' '}
@@ -57,7 +57,7 @@ export const useOpenOrdersTableConfig = ({
         minWidth: 100,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Typography variant="xs" className="flex gap-2 text-secondary items-baseline">
+            <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
               <Typography weight={700} variant="xs" component="span" className="text-high-emphesis">
                 {props.cell.value?.toSignificant(6)}
               </Typography>{' '}

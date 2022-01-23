@@ -31,7 +31,7 @@ const HeaderNew: FC<HeaderNewProps> = ({ inputCurrency, outputCurrency }) => {
   const isLimitOrder = asPath.startsWith('/limit-order')
 
   return (
-    <div className="flex justify-between gap-1 items-center">
+    <div className="flex items-center justify-between gap-1">
       <div className="flex gap-4">
         <NavLink
           activeClassName="text-high-emphesis"

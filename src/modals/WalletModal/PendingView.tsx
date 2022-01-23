@@ -28,7 +28,7 @@ const PendingView: FC<PendingView> = ({ id, connector, error = false, setPending
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.BorderedContent className={error ? 'border-red' : 'border-dark-800'}>
         {error ? (
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-4">
             <Typography variant="sm" weight={700} className="text-red">
               {i18n._(t`Error while trying to connect`)}
             </Typography>
@@ -73,7 +73,7 @@ const PendingView: FC<PendingView> = ({ id, connector, error = false, setPending
               clickable={false}
               header={option.name}
               subheader={option.description}
-              icon={'/images/wallets/' + option.iconName}
+              icon={'https://app.sushi.com' + '/images/wallets/' + option.iconName}
             />
           )
         }

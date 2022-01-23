@@ -36,6 +36,7 @@ const APPROVAL_ADDRESSES = {
     [ChainId.CELO]: MINICHEF_ADDRESS[ChainId.CELO],
     [ChainId.MOONRIVER]: MINICHEF_ADDRESS[ChainId.MOONRIVER],
     [ChainId.FUSE]: MINICHEF_ADDRESS[ChainId.FUSE],
+    [ChainId.FANTOM]: MINICHEF_ADDRESS[ChainId.FANTOM],
   },
   [Chef.OLD_FARMS]: {
     [ChainId.CELO]: OLD_FARMS[ChainId.CELO],
