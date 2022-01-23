@@ -1,4 +1,4 @@
-import { QuestionMarkCircleIcon as SolidQuestionMarkCircleIcon } from '@heroicons/react/solid'
+import { InformationCircleIcon } from '@heroicons/react/outline'
 import { classNames } from 'app/functions'
 import { useOnClickOutside } from 'app/hooks/useOnClickOutside'
 import useToggle from 'app/hooks/useToggle'
@@ -10,7 +10,7 @@ const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement
   className,
   children,
   text,
-  icon = <SolidQuestionMarkCircleIcon width={16} height={16} />,
+  icon = <InformationCircleIcon width={14} height={14} />,
 }) => {
   const [show, setShow] = useState<boolean>(false)
   const [toggle, setToggle] = useToggle(false)
@@ -35,19 +35,17 @@ const QuestionHelper: FC<{ text?: any; icon?: ReactNode; children?: ReactElement
   }
 
   return (
-    <span className="ml-1">
-      <Tooltip text={text} show={show || toggle} className={className}>
-        <div
-          ref={node}
-          onClick={setToggle}
-          className="flex items-center justify-center outline-none cursor-help hover:text-primary"
-          onMouseEnter={open}
-          onMouseLeave={close}
-        >
-          {icon}
-        </div>
-      </Tooltip>
-    </span>
+    <Tooltip text={text} show={show || toggle} className={className}>
+      <div
+        ref={node}
+        onClick={setToggle}
+        className="flex ml-1 items-center justify-center outline-none cursor-help hover:text-primary"
+        onMouseEnter={open}
+        onMouseLeave={close}
+      >
+        {icon}
+      </div>
+    </Tooltip>
   )
 }
 

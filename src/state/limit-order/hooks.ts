@@ -67,7 +67,7 @@ export function useLimitOrderActionHandlers(): {
 
   const onChangeRecipient = useCallback(
     (recipient?: string) => {
-      dispatch(setRecipient({ recipient }))
+      dispatch(setRecipient(recipient))
     },
     [dispatch]
   )
@@ -187,8 +187,10 @@ type UseLimitOrderDerivedCurrencies = () => { inputCurrency?: Currency; outputCu
 export const useLimitOrderDerivedCurrencies: UseLimitOrderDerivedCurrencies = () => {
   const { chainId } = useActiveWeb3React()
   const { inputCurrencyId, outputCurrencyId } = useLimitOrderState()
-  const inputCurrency = useCurrency(inputCurrencyId || 'ETH') ?? undefined
-  const outputCurrency = useCurrency(outputCurrencyId || SUSHI_ADDRESS[chainId || 1]) ?? undefined
+  const inputCurrency =
+    useCurrency(inputCurrencyId === 'SUSHI' ? SUSHI_ADDRESS[chainId || 1] : inputCurrencyId) ?? undefined
+  const outputCurrency =
+    useCurrency(outputCurrencyId === 'SUSHI' ? SUSHI_ADDRESS[chainId || 1] : outputCurrencyId) ?? undefined
 
   return useMemo(() => {
     return {
@@ -277,7 +279,7 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       : !inputCurrency || !outputCurrency
       ? i18n._(t`Select a token`)
       : !to || !isAddress(to)
-      ? i18n._(t`Enter a recipient`)
+      ? i18n._(t`Enter a valid recipient address`)
       : limitPrice !== LimitPrice.CURRENT && parsedRate?.equalTo(ZERO)
       ? i18n._(t`Select a rate`)
       : !orderExpiration

@@ -1,4 +1,4 @@
-import { QuestionMarkCircleIcon } from '@heroicons/react/solid'
+import { InformationCircleIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
@@ -17,7 +17,7 @@ const BentoBoxFundingSourceModal: FC = () => {
     <HeadlessUiModal
       trigger={
         <div className="flex items-center justify-center rounded cursor-pointer lg:w-4 lg:h-4">
-          <QuestionMarkCircleIcon className="w-4 h-4 text-high-emphesis" />
+          <InformationCircleIcon className="w-4 h-4 text-high-emphesis" />
         </div>
       }
     >
