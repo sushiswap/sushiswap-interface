@@ -99,6 +99,7 @@ export interface RawMarketInfo {
 
 export interface RawLauncherInfo {
   lockTime: BigNumber
+  locktime: number
   unlock: BigNumber
   liquidityPercent: BigNumber
   launched: boolean
