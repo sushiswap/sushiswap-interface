@@ -55,8 +55,6 @@ const LimitOrder = () => {
   const parsedAmounts = useLimitOrderDerivedParsedAmounts({ rate, trade })
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useLimitOrderActionHandlers()
 
-  console.log('limit pairs', limitOrderPairList.pairs[chainId || 1])
-
   const pairs = useMemo(
     // @ts-ignore TYPE NEEDS FIXING
     () => (limitOrderPairList.pairs[chainId || 1] || []).map(([token0, token1]) => [token0.address, token1.address]),
@@ -97,8 +95,6 @@ const LimitOrder = () => {
       return acc
     }, [])
   }, [inputCurrency, pairs])
-
-  console.log([inputTokenList, outputTokenList])
 
   return (
     <>
