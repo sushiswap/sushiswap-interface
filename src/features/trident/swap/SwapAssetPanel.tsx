@@ -56,6 +56,7 @@ const SwapAssetPanel = ({
         onChange,
         value,
         currency,
+        currencies,
         onSelect,
         walletToggle,
         spendFromWallet,
@@ -106,7 +107,7 @@ const WalletSwitch: FC<
         variant="sm"
         weight={700}
         component="span"
-        className="flex gap-1 items-center text-high-emphesis hover:text-white cursor-pointer hover:shadow bg-dark-800 rounded-full px-2 py-1 hover:bg-dark-700"
+        className="flex items-center gap-1 px-2 py-1 rounded-full cursor-pointer text-high-emphesis hover:text-white hover:shadow bg-dark-800 hover:bg-dark-700"
       >
         {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
       </Typography>
@@ -145,7 +146,7 @@ const InputPanel: FC<
   }, [value])
 
   return (
-    <Typography weight={700} variant="h3" className="flex gap-3 flex-grow items-baseline relative overflow-hidden">
+    <Typography weight={700} variant="h3" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
       <NumericalInput
         disabled={disabled}
         value={value || ''}
@@ -191,7 +192,7 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
   }, [balance, disabled, onChange])
 
   return (
-    <Typography role="button" onClick={handleClick} variant="sm" className="text-secondary flex whitespace-nowrap">
+    <Typography role="button" onClick={handleClick} variant="sm" className="flex text-secondary whitespace-nowrap">
       {i18n._(t`Balance:`)} {balance ? balance.toSignificant(6) : '0.00'}
     </Typography>
   )
@@ -200,14 +201,14 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
 const SwapAssetPanelHeader: FC<
   Pick<
     SwapAssetPanel,
-    'currency' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
+    'currency' | 'currencies' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
   > & { label: string; id?: string }
-> = ({ walletToggle, currency, onSelect, spendFromWallet, id }) => {
+> = ({ walletToggle, currency, onSelect, spendFromWallet, id, currencies }) => {
   const { i18n } = useLingui()
   const trigger = currency ? (
     <div
       id={id}
-      className="text-high-emphesis bg-dark-800 hover:bg-dark-700 flex gap-2 shadow-md rounded-full items-center px-2 py-1 cursor-pointer"
+      className="flex items-center gap-2 px-2 py-1 rounded-full shadow-md cursor-pointer text-high-emphesis bg-dark-800 hover:bg-dark-700"
     >
       <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={20} />
       <Typography variant="sm" className="!text-xl" weight={700}>
@@ -228,6 +229,7 @@ const SwapAssetPanelHeader: FC<
         selectedCurrency={currency}
         onCurrencySelect={(currency) => onSelect && onSelect(currency)}
         trigger={trigger}
+        currencyList={currencies}
       />
       {walletToggle && walletToggle({ spendFromWallet })}
     </div>

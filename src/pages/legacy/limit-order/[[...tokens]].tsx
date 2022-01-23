@@ -54,6 +54,9 @@ const LimitOrder = () => {
   const rate = useLimitOrderDerivedLimitPrice()
   const parsedAmounts = useLimitOrderDerivedParsedAmounts({ rate, trade })
   const { onSwitchTokens, onCurrencySelection, onUserInput } = useLimitOrderActionHandlers()
+
+  console.log('limit pairs', limitOrderPairList.pairs[chainId || 1])
+
   const pairs = useMemo(
     // @ts-ignore TYPE NEEDS FIXING
     () => (limitOrderPairList.pairs[chainId || 1] || []).map(([token0, token1]) => [token0.address, token1.address]),
@@ -95,6 +98,8 @@ const LimitOrder = () => {
     }, [])
   }, [inputCurrency, pairs])
 
+  console.log([inputTokenList, outputTokenList])
+
   return (
     <>
       <LimitOrderApprovalCheck />
@@ -130,7 +135,7 @@ const LimitOrder = () => {
                 </div>
                 <SwitchVerticalIcon
                   width={18}
-                  className="text-secondary cursor-pointer mt-6 hover:text-white"
+                  className="mt-6 cursor-pointer text-secondary hover:text-white"
                   onClick={onSwitchTokens}
                 />
                 <div className="flex flex-1">
@@ -159,7 +164,7 @@ const LimitOrder = () => {
               limitPrice={!!rate ? rate : trade?.executionPrice}
             />
           </div>
-          <Typography variant="xs" className="text-low-emphesis text-center italic px-10 mt-5">
+          <Typography variant="xs" className="px-10 mt-5 italic text-center text-low-emphesis">
             {i18n._(
               t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`
             )}
