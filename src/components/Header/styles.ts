@@ -3,3 +3,6 @@ export const NAV_BASE_CLASS =
 
 export const ACTIVE_NAV_LINK_CLASS =
   'font-bold text-high-emphesis rounded-md underline underline-offset-4 decoration-2 decoration'
+
+export const NAV_CLASS =
+  'w-full before:backdrop-blur-[20px] before:z-[-1] before:absolute before:w-full before:h-full bg-white bg-opacity-[0.03] border-b border-[rgba(255,255,255,0.12)]'

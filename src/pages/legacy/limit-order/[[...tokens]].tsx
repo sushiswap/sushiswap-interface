@@ -30,19 +30,6 @@ import useLimitOrderDerivedCurrencies, {
 import { useExpertModeManager } from 'app/state/user/hooks'
 import React, { useMemo } from 'react'
 
-// @ts-ignore TYPE NEEDS FIXING
-const areEqual = (first, second) => {
-  if (first.length !== second.length) {
-    return false
-  }
-  for (let i = 0; i < first.length; i++) {
-    if (!second.includes(first[i])) {
-      return false
-    }
-  }
-  return true
-}
-
 const LimitOrder = () => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
@@ -99,9 +86,9 @@ const LimitOrder = () => {
   return (
     <>
       <LimitOrderApprovalCheck />
-      <Container id="limit-order-page" className="py-4 md:py-12 lg:py-[120px]" maxWidth="md">
+      <Container id="limit-order-page" className="py-4 md:py-12 lg:py-[120px] px-2" maxWidth="md">
         <DoubleGlowShadow>
-          <div id="limit-order-page" className="flex flex-col gap-3 p-4 rounded-[24px] bg-dark-800">
+          <div id="limit-order-page" className="flex flex-col gap-3 p-2 md:p-4 pt-4 rounded-[24px] bg-dark-800">
             <div className="px-2">
               <HeaderNew inputCurrency={inputCurrency} outputCurrency={outputCurrency} />
             </div>

@@ -84,7 +84,13 @@ const LimitOrderButton: FC<LimitOrderButton> = ({ trade, parsedAmounts }) => {
         {({ approved, loading }) => {
           const disabled = !!error || !approved || loading || attemptingTxn || Boolean(recipient && !address && error)
           return (
-            <Button loading={loading || attemptingTxn} color="gradient" disabled={disabled} onClick={handler}>
+            <Button
+              loading={loading || attemptingTxn}
+              color="gradient"
+              disabled={disabled}
+              onClick={handler}
+              className="rounded-2xl md:rounded"
+            >
               {error ? error : fromBentoBalance ? i18n._(t`Review Limit Order`) : i18n._(t`Confirm Deposit`)}
             </Button>
           )

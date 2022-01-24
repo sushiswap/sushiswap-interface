@@ -57,7 +57,7 @@ const OpenOrders: FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
+      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, 'min-h-[537px]')}>
         <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -88,7 +88,10 @@ const OpenOrders: FC = () => {
                         <td
                           key={i}
                           {...cell.getCellProps()}
-                          className={classNames(TABLE_TBODY_TD_CLASSNAME(i, row.cells.length), 'cursor-default')}
+                          className={classNames(
+                            TABLE_TBODY_TD_CLASSNAME(i, row.cells.length),
+                            'cursor-default whitespace-nowrap'
+                          )}
                         >
                           {cell.render('Cell')}
                         </td>
@@ -110,7 +113,9 @@ const OpenOrders: FC = () => {
                 </td>
               </tr>
             )}
-            <tr className={TABLE_TBODY_TR_CLASSNAME}>
+          </tbody>
+          <tfoot>
+            <tr className={classNames(TABLE_TBODY_TR_CLASSNAME)}>
               <td
                 colSpan={4}
                 className={classNames(TABLE_TBODY_TD_CLASSNAME(0, 1), 'justify-center cursor-default py-4')}
@@ -126,7 +131,7 @@ const OpenOrders: FC = () => {
                 </Typography>
               </td>
             </tr>
-          </tbody>
+          </tfoot>
         </table>
       </div>
       <Pagination

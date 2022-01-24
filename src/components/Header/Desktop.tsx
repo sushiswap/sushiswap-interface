@@ -4,12 +4,14 @@ import { NATIVE } from '@sushiswap/core-sdk'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import Container from 'app/components/Container'
+import { NAV_CLASS } from 'app/components/Header/styles'
 import useMenu, { MenuItem, MenuItemLeaf, MenuItemNode } from 'app/components/Header/useMenu'
 import LanguageSwitch from 'app/components/LanguageSwitch'
 import Typography from 'app/components/Typography'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
 import { classNames } from 'app/functions'
+import useDesktopMediaQuery, { useTouchDeviceMediaQuery } from 'app/hooks/useDesktopMediaQuery'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
@@ -32,12 +34,7 @@ const Desktop: FC = () => {
   return (
     <>
       <header className="fixed z-20 w-full hidden lg:block" style={{ height: HEADER_HEIGHT }}>
-        <nav
-          className={classNames(
-            'before:backdrop-blur-[20px] before:z-[-1] before:absolute before:w-full before:h-full bg-white bg-opacity-[0.03] border-b border-[rgba(255,255,255,0.12)]',
-            'w-full'
-          )}
-        >
+        <nav className={NAV_CLASS}>
           <Container maxWidth="7xl" className="mx-auto">
             <div className="flex gap-4 px-6 items-center justify-between">
               <div className="flex gap-4">
@@ -83,9 +80,11 @@ interface NavigationItem {
   node: MenuItem
 }
 
-const NavigationItem: FC<NavigationItem> = ({ node }) => {
+export const NavigationItem: FC<NavigationItem> = ({ node }) => {
   const router = useRouter()
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const isDesktop = useDesktopMediaQuery()
+  const touchDevice = useTouchDeviceMediaQuery()
 
   const handleToggle = useCallback((open, type) => {
     if (!open && type === 'enter') {
@@ -104,9 +103,10 @@ const NavigationItem: FC<NavigationItem> = ({ node }) => {
         variant="sm"
         className={classNames(
           router.asPath === link ? 'text-white' : '',
-          'hover:text-white font-bold py-5 px-2 rounded'
+          'hover:text-white font-bold py-5 px-2 rounded flex gap-3'
         )}
       >
+        {!isDesktop && node.icon}
         {node.title}
       </Typography>
     )
@@ -115,13 +115,19 @@ const NavigationItem: FC<NavigationItem> = ({ node }) => {
   return (
     <Popover key={node.key} className="flex relative">
       {({ open }) => (
-        <div onMouseEnter={() => handleToggle(open, 'enter')} onMouseLeave={() => handleToggle(open, 'leave')}>
+        <div
+          {...(!touchDevice && {
+            onMouseEnter: () => handleToggle(open, 'enter'),
+            onMouseLeave: () => handleToggle(open, 'leave'),
+          })}
+        >
           <Popover.Button ref={buttonRef}>
             <Typography
               weight={700}
               variant="sm"
-              className={classNames(open ? 'text-white' : '', 'font-bold py-5 px-2 rounded flex gap-1 items-center')}
+              className={classNames(open ? 'text-white' : '', 'font-bold py-5 px-2 rounded flex gap-3 items-center')}
             >
+              {!isDesktop && node.icon}
               {node.title}
               <ChevronDownIcon strokeWidth={5} width={12} />
             </Typography>
@@ -136,8 +142,15 @@ const NavigationItem: FC<NavigationItem> = ({ node }) => {
               leaveFrom="transform opacity-100 scale-100"
               leaveTo="transform opacity-0 scale-95"
             >
-              <Popover.Panel className="w-full absolute w-40 translate-y-[-8px] translate-x-[-8px]">
-                <div className="shadow-md shadow-black/40 before:z-[-1] border border-dark-700 rounded before:rounded overflow-hidden before:absolute before:w-full before:h-full before:content-[''] before:backdrop-blur-[20px] bg-white bg-opacity-[0.02]">
+              <Popover.Panel className="z-10 w-full absolute w-40 translate-y-[-8px] translate-x-[-8px]">
+                <div
+                  className={classNames(
+                    'shadow-md shadow-black/40 border border-dark-700 rounded overflow-hidden',
+                    !touchDevice
+                      ? "before:z-[-1] before:rounded before:absolute before:w-full before:h-full before:content-[''] before:backdrop-blur-[20px] bg-white bg-opacity-[0.02]"
+                      : 'bg-dark-800 inset-0'
+                  )}
+                >
                   {(node as MenuItemNode).items.map((leaf) => (
                     <Typography
                       variant="sm"

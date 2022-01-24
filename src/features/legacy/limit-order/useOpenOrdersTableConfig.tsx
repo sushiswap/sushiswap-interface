@@ -31,7 +31,7 @@ export const useOpenOrdersTableConfig = ({
                 <CurrencyLogo currency={props.cell.row.original.tokenIn} className="!rounded-full" size={18} />
               </div>
               <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
-                <Typography variant="sm" weight={700} component="span" className="text-high-emphesis">
+                <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
                   {props.cell.row.original.limitOrder.amountIn.toSignificant(6)}
                 </Typography>{' '}
                 {props.cell.row.original.tokenIn.symbol}
@@ -41,7 +41,7 @@ export const useOpenOrdersTableConfig = ({
                 <CurrencyLogo currency={props.cell.row.original.tokenOut} className="!rounded-full" size={18} />
               </div>
               <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
-                <Typography variant="sm" weight={700} component="span" className="text-high-emphesis">
+                <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
                   {props.cell.row.original.limitOrder.amountOut.toSignificant(6)}
                 </Typography>{' '}
                 {props.cell.row.original.tokenOut.symbol}

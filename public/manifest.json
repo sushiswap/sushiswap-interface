@@ -3,7 +3,7 @@
   "short_name": "SushiSwap",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#0993ec",
+  "theme_color": "#0D0415",
   "background_color": "#0D0415",
   "start_url": "/",
   "icons": [

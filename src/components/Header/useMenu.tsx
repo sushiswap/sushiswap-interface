@@ -1,20 +1,24 @@
+import { GlobeIcon, SwitchVerticalIcon, TrendingUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { PoolIcon, RocketIcon, WalletIcon } from 'app/components/Icon'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 
 export interface MenuItemLeaf {
   key: string
   title: string
   link: string
+  icon?: ReactNode
 }
 
 export interface MenuItemNode {
   key: string
   title: string
   items: MenuItemLeaf[]
+  icon?: ReactNode
 }
 
 export type MenuItem = MenuItemLeaf | MenuItemNode
@@ -33,6 +37,7 @@ const useMenu: UseMenu = () => {
       key: 'swap',
       title: i18n._(t`Swap`),
       link: '/swap',
+      icon: <SwitchVerticalIcon width={20} />,
     }
 
     // If limit orders is enabled, replace swap button with a submenu under trade
@@ -40,6 +45,7 @@ const useMenu: UseMenu = () => {
       tradeMenu = {
         key: 'trade',
         title: i18n._(t`Trade`),
+        icon: <SwitchVerticalIcon width={20} />,
         items: [
           {
             key: 'swap',
@@ -49,7 +55,7 @@ const useMenu: UseMenu = () => {
           {
             key: 'limit',
             title: i18n._(t`Limit order`),
-            link: '/limit',
+            link: '/limit-order',
           },
         ],
       }
@@ -107,6 +113,7 @@ const useMenu: UseMenu = () => {
         key: 'balances',
         title: i18n._(t`Portfolio`),
         link: '/balances',
+        icon: <WalletIcon width={20} />,
       },
     ]
 
@@ -115,6 +122,7 @@ const useMenu: UseMenu = () => {
         key: 'pool',
         title: i18n._(t`Pool`),
         items: poolMenu,
+        icon: <PoolIcon width={20} />,
       })
 
     if (exploreMenu.length > 0)
@@ -122,12 +130,14 @@ const useMenu: UseMenu = () => {
         key: 'explore',
         title: i18n._(t`Explore`),
         items: exploreMenu,
+        icon: <GlobeIcon width={20} />,
       })
 
     if (featureEnabled(Feature.KASHI, chainId)) {
       mainItems.push({
         key: 'lending',
         title: i18n._(t`Lending`),
+        icon: <SwitchVerticalIcon width={20} className="filter rotate-90" />,
         items: [
           {
             key: 'lend',
@@ -152,6 +162,7 @@ const useMenu: UseMenu = () => {
       mainItems.push({
         key: 'launchpad',
         title: i18n._(t`Launchpad`),
+        icon: <RocketIcon width={20} />,
         items: [
           {
             key: 'marketplace',
@@ -166,6 +177,35 @@ const useMenu: UseMenu = () => {
         ],
       })
     }
+
+    let analyticsMenu: MenuItem = {
+      key: 'analytics',
+      title: i18n._(t`Analytics`),
+      link: '/analytics/dashboard',
+      icon: <TrendingUpIcon width={20} />,
+    }
+
+    if (featureEnabled(Feature.BENTOBOX, chainId)) {
+      analyticsMenu = {
+        key: 'analytics',
+        title: i18n._(t`Analytics`),
+        icon: <TrendingUpIcon width={20} />,
+        items: [
+          {
+            key: 'dashboard',
+            title: 'Dashboard',
+            link: '/analytics/dashboard',
+          },
+          {
+            key: 'bentobox',
+            title: 'Bentobox',
+            link: '/analytics/bentobox',
+          },
+        ],
+      }
+    }
+
+    mainItems.push(analyticsMenu)
 
     return mainItems.filter((el) => Object.keys(el).length > 0)
   }, [chainId, i18n])
