@@ -373,6 +373,7 @@ const Swap = ({ banners }) => {
         </div>
         <div className="flex flex-col gap-3">
           <SwapAssetPanel
+            spendFromWallet={true}
             header={(props) => (
               <SwapAssetPanel.Header
                 {...props}
@@ -399,6 +400,7 @@ const Swap = ({ banners }) => {
             </div>
           </div>
           <SwapAssetPanel
+            spendFromWallet={true}
             header={(props) => (
               <SwapAssetPanel.Header
                 {...props}
