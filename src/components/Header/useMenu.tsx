@@ -107,15 +107,7 @@ const useMenu: UseMenu = () => {
       })
     }
 
-    const mainItems: Menu = [
-      tradeMenu,
-      {
-        key: 'balances',
-        title: i18n._(t`Portfolio`),
-        link: '/balances',
-        icon: <WalletIcon width={20} />,
-      },
-    ]
+    const mainItems: Menu = [tradeMenu]
 
     if (poolMenu.length > 0)
       mainItems.push({
@@ -137,7 +129,7 @@ const useMenu: UseMenu = () => {
       mainItems.push({
         key: 'lending',
         title: i18n._(t`Lending`),
-        icon: <SwitchVerticalIcon width={20} className="filter rotate-90" />,
+        icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
         items: [
           {
             key: 'lend',
@@ -181,31 +173,49 @@ const useMenu: UseMenu = () => {
     let analyticsMenu: MenuItem = {
       key: 'analytics',
       title: i18n._(t`Analytics`),
-      link: '/analytics/dashboard',
       icon: <TrendingUpIcon width={20} />,
+      items: [
+        {
+          key: 'dashboard',
+          title: 'Dashboard',
+          link: '/analytics/dashboard',
+        },
+        {
+          key: 'xsushi',
+          title: 'xSUSHI',
+          link: '/analytics/xsushi',
+        },
+        {
+          key: 'tokens',
+          title: 'Tokens',
+          link: '/analytics/tokens',
+        },
+        {
+          key: 'pairs',
+          title: 'Pairs',
+          link: '/analytics/pairs',
+        },
+      ],
     }
 
     if (featureEnabled(Feature.BENTOBOX, chainId)) {
-      analyticsMenu = {
-        key: 'analytics',
-        title: i18n._(t`Analytics`),
-        icon: <TrendingUpIcon width={20} />,
-        items: [
-          {
-            key: 'dashboard',
-            title: 'Dashboard',
-            link: '/analytics/dashboard',
-          },
-          {
-            key: 'bentobox',
-            title: 'Bentobox',
-            link: '/analytics/bentobox',
-          },
-        ],
-      }
+      analyticsMenu.items.push({
+        key: 'bentobox',
+        title: 'Bentobox',
+        link: '/analytics/bentobox',
+      })
     }
 
-    mainItems.push(analyticsMenu)
+    if (featureEnabled(Feature.ANALYTICS, chainId)) {
+      mainItems.push(analyticsMenu)
+    }
+
+    mainItems.push({
+      key: 'balances',
+      title: i18n._(t`Portfolio`),
+      link: '/balances',
+      icon: <WalletIcon width={20} />,
+    })
 
     return mainItems.filter((el) => Object.keys(el).length > 0)
   }, [chainId, i18n])
