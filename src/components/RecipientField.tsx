@@ -7,28 +7,38 @@ import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
 import useENS from 'app/hooks/useENS'
 import { useAppDispatch } from 'app/state/hooks'
-import { setRecipient } from 'app/state/limit-order/actions'
-import { useLimitOrderState } from 'app/state/limit-order/hooks'
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
-const LimitOrderRecipientField: FC = () => {
+interface RecipientField {
+  recipient?: string
+  action: any
+}
+
+const RecipientField: FC<RecipientField> = ({ recipient, action }) => {
   const { i18n } = useLingui()
-  const { recipient } = useLimitOrderState()
-  const dispatch = useAppDispatch()
   const { address, loading } = useENS(recipient)
+  const dispatch = useAppDispatch()
   const [use, setUse] = useState(false)
-  const error = Boolean(recipient && recipient.length > 0 && !loading && !address)
+  const error = useMemo(
+    () => Boolean(recipient && recipient.length > 0 && !loading && !address),
+    [address, loading, recipient]
+  )
+
+  // Unset recipient on unmount
+  useEffect(() => {
+    return () => {
+      dispatch(action(undefined))
+    }
+  }, [action, dispatch])
 
   useEffect(() => {
-    if (!error && address) {
-      dispatch(setRecipient(address))
-    }
-  }, [address, dispatch, error])
+    if (!error && address) dispatch(action(address))
+  }, [action, address, dispatch, error])
 
   const handleClose = useCallback(() => {
     setUse(false)
-    dispatch(setRecipient())
-  }, [dispatch])
+    dispatch(action(undefined))
+  }, [action, dispatch])
 
   return !use ? (
     <div className="flex justify-center">
@@ -53,7 +63,7 @@ const LimitOrderRecipientField: FC = () => {
         <Typography weight={700} variant="lg" className="flex gap-3 flex-grow items-baseline relative overflow-hidden">
           <Input.Address
             className="!text-sm leading-[32px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
-            onUserInput={(val) => dispatch(setRecipient(val))}
+            onUserInput={(val) => dispatch(action(val))}
             value={recipient ?? ''}
           />
         </Typography>
@@ -62,4 +72,4 @@ const LimitOrderRecipientField: FC = () => {
   )
 }
 
-export default LimitOrderRecipientField
+export default RecipientField

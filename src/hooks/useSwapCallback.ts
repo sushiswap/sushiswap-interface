@@ -324,7 +324,7 @@ function getInitialPathAmount(
 export function useSwapCallArguments(
   trade: LegacyTrade<Currency, Currency, TradeType> | TridentTrade<Currency, Currency, TradeType> | undefined, // trade to execute, required
   allowedSlippage: Percent, // in bips
-  recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
+  recipientAddressOrName: string | undefined, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | null | undefined,
   tridentTradeContext?: TridentTradeContext
 ): SwapCall[] {
@@ -523,7 +523,7 @@ export function swapErrorToUserReadableMessage(error: any): string {
 export function useSwapCallback(
   trade: LegacyTrade<Currency, Currency, TradeType> | TridentTrade<Currency, Currency, TradeType> | undefined, // trade to execute, required
   allowedSlippage: Percent, // in bips
-  recipientAddressOrName: string | null, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
+  recipientAddressOrName: string | undefined, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | undefined | null,
   tridentTradeContext?: TridentTradeContext,
   useOpenMev: boolean = false

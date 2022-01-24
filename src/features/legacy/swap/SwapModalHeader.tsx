@@ -1,17 +1,15 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Percent, TradeType } from '@sushiswap/core-sdk'
+import { Percent, TradeType, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
+import SwapDetails from 'app/features/legacy/swap/SwapDetails'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import { TradeUnion } from 'app/types'
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { ArrowDown } from 'react-feather'
-
-import AdvancedSwapDetails from './AdvancedSwapDetails'
-import TradePrice from './TradePrice'
 
 interface SwapModalHeader {
   trade?: TradeUnion
@@ -29,7 +27,6 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
   onAcceptChanges,
 }) => {
   const { i18n } = useLingui()
-  const [showInverted, setShowInverted] = useState<boolean>(false)
   const fiatValueInput = useUSDCValue(trade?.inputAmount)
   const fiatValueOutput = useUSDCValue(trade?.outputAmount)
 
@@ -37,7 +34,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
     ((Number(fiatValueOutput?.toExact()) - Number(fiatValueInput?.toExact())) / Number(fiatValueInput?.toExact())) * 100
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-2">
       <div className="flex flex-col">
         <HeadlessUiModal.BorderedContent className="bg-dark-1000/40 border !border-dark-800 rounded-2xl">
           <div className="flex items-start justify-between">
@@ -46,7 +43,9 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
                   {trade?.inputAmount.toSignificant(6)}{' '}
                 </Typography>
-                <Typography className="text-secondary">${fiatValueInput?.toFixed(2)}</Typography>
+                {fiatValueInput?.greaterThan(ZERO) && (
+                  <Typography className="text-secondary">${fiatValueInput.toFixed(2)}</Typography>
+                )}
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -66,19 +65,21 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
             <ArrowDown size={18} />
           </div>
         </div>
-        <HeadlessUiModal.BorderedContent className="bg-dark-1000/40 border !border-dark-800 rounded-2xl">
+        <HeadlessUiModal.BorderedContent className="bg-dark-1000/40 border !border-dark-800">
           <div className="flex items-start justify-between">
             <div className="flex items-start gap-3">
               <div className="flex flex-col gap-1">
                 <Typography variant="h3" weight={700} className="text-high-emphesis">
                   {trade?.outputAmount.toSignificant(6)}{' '}
                 </Typography>
-                <Typography className="text-secondary">
-                  ${fiatValueOutput?.toFixed(2)}{' '}
-                  <Typography variant="xs" component="span">
-                    ({change.toFixed(2)}%)
+                {fiatValueOutput?.greaterThan(ZERO) && (
+                  <Typography className="text-secondary">
+                    ${fiatValueOutput?.toFixed(2)}{' '}
+                    <Typography variant="xs" component="span">
+                      ({change.toFixed(2)}%)
+                    </Typography>
                   </Typography>
-                </Typography>
+                )}
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -94,16 +95,16 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
           </div>
         </HeadlessUiModal.BorderedContent>
       </div>
-      <TradePrice
-        price={trade?.executionPrice}
-        showInverted={showInverted}
-        setShowInverted={setShowInverted}
-        className="justify-center"
+      <SwapDetails
+        trade={trade}
+        recipient={recipient}
+        inputCurrency={trade?.inputAmount.currency}
+        outputCurrency={trade?.outputAmount.currency}
+        className="!border-dark-800"
       />
-      <AdvancedSwapDetails trade={trade} allowedSlippage={allowedSlippage} recipient={recipient} />
 
       {showAcceptChanges && (
-        <HeadlessUiModal.BorderedContent className="bg-dark-1000/40 border !border-dark-800 rounded-2xl">
+        <HeadlessUiModal.BorderedContent className="border !border-dark-800">
           <div className="flex items-center justify-between">
             <Typography variant="sm" weight={700}>
               {i18n._(t`Price Updated`)}
@@ -114,7 +115,7 @@ const SwapModalHeader: FC<SwapModalHeader> = ({
           </div>
         </HeadlessUiModal.BorderedContent>
       )}
-      <div className="justify-start text-sm text-center text-secondary">
+      <div className="justify-start text-sm text-center text-secondary py-2">
         {trade?.tradeType === TradeType.EXACT_INPUT ? (
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Output is estimated. You will receive at least`)}{' '}
