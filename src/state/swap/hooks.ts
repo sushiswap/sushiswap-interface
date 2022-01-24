@@ -41,7 +41,7 @@ export function useSwapActionHandlers(): {
   onCurrencySelection: (field: Field, currency: Currency) => void
   onSwitchTokens: () => void
   onUserInput: (field: Field, typedValue: string) => void
-  onChangeRecipient: (recipient: string | null) => void
+  onChangeRecipient: (recipient?: string) => void
 } {
   const dispatch = useAppDispatch()
   const onCurrencySelection = useCallback(
@@ -72,8 +72,8 @@ export function useSwapActionHandlers(): {
   )
 
   const onChangeRecipient = useCallback(
-    (recipient: string | null) => {
-      dispatch(setRecipient({ recipient }))
+    (recipient?: string) => {
+      dispatch(setRecipient(recipient))
     },
     [dispatch]
   )
@@ -111,6 +111,7 @@ function involvesAddress(trade: V2Trade<Currency, Currency, TradeType>, checksum
 
 // from the current swap inputs, compute the best trade and return it.
 export function useDerivedSwapInfo(): {
+  to?: string
   currencies: { [field in Field]?: Currency }
   currencyBalances: { [field in Field]?: CurrencyAmount<Currency> }
   parsedAmount: CurrencyAmount<Currency> | undefined
@@ -119,11 +120,8 @@ export function useDerivedSwapInfo(): {
   allowedSlippage: Percent
 } {
   const { i18n } = useLingui()
-
-  const { account, chainId, library } = useActiveWeb3React()
-
+  const { account, chainId } = useActiveWeb3React()
   const [singleHopOnly] = useUserSingleHopOnly()
-
   const {
     independentField,
     typedValue,
@@ -131,14 +129,11 @@ export function useDerivedSwapInfo(): {
     [Field.OUTPUT]: { currencyId: outputCurrencyId },
     recipient,
   } = useSwapState()
-
   const inputCurrency = useCurrency(inputCurrencyId)
-
   const outputCurrency = useCurrency(outputCurrencyId)
-
   const recipientLookup = useENS(recipient ?? undefined)
 
-  const to: string | null = (recipient === null ? account : recipientLookup.address) ?? null
+  const to = (recipient === undefined ? account : recipientLookup.address) ?? undefined
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
     inputCurrency ?? undefined,
@@ -204,10 +199,11 @@ export function useDerivedSwapInfo(): {
   const [balanceIn, amountIn] = [currencyBalances[Field.INPUT], v2Trade?.maximumAmountIn(allowedSlippage)]
 
   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
-    inputError = i18n._(t`Insufficient ${amountIn.currency.symbol} balance`)
+    inputError = i18n._(t`Insufficient Balance`)
   }
 
   return {
+    to,
     currencies,
     currencyBalances,
     parsedAmount,
@@ -236,13 +232,13 @@ function parseIndependentFieldURLParameter(urlParam: any): Field {
 
 const ENS_NAME_REGEX = /^[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)?$/
 const ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/
-function validatedRecipient(recipient: any): string | null {
-  if (typeof recipient !== 'string') return null
+function validatedRecipient(recipient: any): string | undefined {
+  if (typeof recipient !== 'string') return undefined
   const address = isAddress(recipient)
   if (address) return address
   if (ENS_NAME_REGEX.test(recipient)) return recipient
   if (ADDRESS_REGEX.test(recipient)) return recipient
-  return null
+  return undefined
 }
 export function queryParametersToSwapState(parsedQs: ParsedQs, chainId: ChainId = ChainId.ETHEREUM): SwapState {
   let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency)
@@ -302,7 +298,7 @@ export function useDefaultsFromURLSearch():
         field: parsed.independentField,
         inputCurrencyId: parsed[Field.INPUT].currencyId,
         outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-        recipient: expertMode ? parsed.recipient : null,
+        recipient: expertMode ? parsed.recipient : undefined,
       })
     )
 

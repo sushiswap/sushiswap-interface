@@ -9,7 +9,7 @@ const DoubleGlowShadow: FC<{ className?: string }> = ({ children, className }) =
   return (
     <div className={classNames(className, 'relative w-full max-w-2xl')}>
       <div className={classNames('from-pink/5 to-blue/5 fixed inset-0 bg-gradient-radial z-0 pointer-events-none')} />
-      <div className="relative filter drop-shadow z-10">{children}</div>
+      <div className="relative filter z-10">{children}</div>
     </div>
   )
 }
