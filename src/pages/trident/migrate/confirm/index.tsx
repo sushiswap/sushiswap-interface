@@ -28,7 +28,7 @@ const ConfirmMigration = () => {
             color="blue"
             variant="outlined"
             size="xs"
-            onClick={() => router.push('/trident/migrate')}
+            onClick={() => router.replace('/trident/migrate')}
             className="flex-none h-6 pl-0 pr-3 rounded-full"
             startIcon={<ChevronLeftIcon width={24} height={24} />}
           >

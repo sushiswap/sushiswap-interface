@@ -38,6 +38,7 @@ import { calculateGasMargin } from 'app/functions/trade'
 import { isAddress, isZero } from 'app/functions/validate'
 import { useBentoRebase } from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useBlockNumber } from 'app/state/application/hooks'
 import { TransactionResponseLight, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useMemo } from 'react'
@@ -776,7 +777,7 @@ export function useSwapCallback(
           })
           .catch((error) => {
             // if the user rejected the tx, pass this along
-            if (error?.code === 4001) {
+            if (error?.code === USER_REJECTED_TX) {
               throw new Error('Transaction rejected.')
             } else {
               // otherwise, the error was unexpected and we need to convey that

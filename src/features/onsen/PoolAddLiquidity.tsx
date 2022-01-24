@@ -16,6 +16,7 @@ import { ApprovalState, useApproveCallback } from 'app/hooks/useApproveCallback'
 import { useRouterContract } from 'app/hooks/useContract'
 import useTransactionDeadline from 'app/hooks/useTransactionDeadline'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { Field } from 'app/state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'app/state/mint/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
@@ -164,7 +165,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
       .catch((error) => {
         setAttemptingTxn(false)
         // we only care if the error is something _other_ than the user rejected the tx
-        if (error?.code !== 4001) {
+        if (error?.code !== USER_REJECTED_TX) {
           console.error(error)
         }
       })

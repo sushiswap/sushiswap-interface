@@ -1,59 +1,58 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
+import Dots from 'app/components/Dots'
 import { LoadingSpinner } from 'app/components/LoadingSpinner'
 import { SelectTridentPoolPanel } from 'app/components/Migrate/SelectTridentPoolPanel'
+import { tridentMigrationContracts } from 'app/config/tridentMigration'
 import { migrateGridLayoutCss } from 'app/features/trident/migrate/AvailableToMigrate'
 import {
+  addSLPPermit,
   editMigration,
   MigrationSource,
   selectLeftToChoose,
   selectTridentMigrations,
-  v2Migration,
 } from 'app/features/trident/migrate/context/migrateSlice'
+import { useExecuteTridentMigration } from 'app/features/trident/migrate/context/useExecuteTridentMigration'
+import { MigrationTransactionModal } from 'app/features/trident/migrate/MigrationTransactionModal'
+import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import { useTokenBalances } from 'app/state/wallet/hooks'
 import { useRouter } from 'next/router'
 import React, { FC } from 'react'
 
 import Typography from '../../../components/Typography'
 
-const mockExecute = (selectedMigrations: v2Migration[]) => () => {
-  alert(
-    selectedMigrations
-      .map((m) => {
-        if (m.poolToCreate) return `Creating pool: {fee: ${m.poolToCreate.fee}, twap: ${m.poolToCreate.twap}}`
-        if (m.matchingTridentPool)
-          return `Migrating ${m.v2Pair.token0.symbol}-${m.v2Pair.token1.symbol} to existing pool: ${m.matchingTridentPool.address}`
-      })
-      .join(', ')
-  )
-}
-
 export const SelectPoolsAndConfirm: FC = () => {
   const { i18n } = useLingui()
   const router = useRouter()
-
   const dispatch = useAppDispatch()
+
   const selectedMigrations = useAppSelector(selectTridentMigrations)
+  /* Need to select pools on previous page */
+  if (selectedMigrations.length === 0) router.replace('/trident/migrate')
   const leftToSelect = useAppSelector(selectLeftToChoose)
 
   const { data, error, isValidating } = useGetAllTridentPools()
 
-  if (selectedMigrations.length === 0) {
-    /* Need to select pools on previous page */
-    router.push('/trident/migrate')
-  }
+  const { account, chainId } = useActiveWeb3React()
+  const lpTokenAmounts = useTokenBalances(
+    account ?? undefined,
+    selectedMigrations.map((m) => m.v2Pair.liquidityToken)
+  )
+  const migrationContractAddress = chainId ? tridentMigrationContracts[chainId] : undefined
+
+  const execute = useExecuteTridentMigration()
 
   return (
     <div>
+      <MigrationTransactionModal />
+
       <div className="flex gap-3 items-center">
         <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          {leftToSelect === 0
-            ? i18n._(t`All set ✅`)
-            : leftToSelect === 1
-            ? i18n._(t`One pool left to select`)
-            : i18n._(t`${leftToSelect} pools left to select`)}
+          {leftToSelect === 0 ? i18n._(t`All set ✅`) : i18n._(t`Pools left to select: ${leftToSelect}`)}
         </Typography>
         <LoadingSpinner active={isValidating} />
         {error && <span className="text-red">⚠️ Loading Error</span>}
@@ -74,12 +73,35 @@ export const SelectPoolsAndConfirm: FC = () => {
         </div>
       )}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center mt-10">
-        <Button color="gradient" disabled={leftToSelect !== 0} onClick={mockExecute(selectedMigrations)}>
-          {leftToSelect === 0 ? i18n._(t`Confirm Migration`) : i18n._(t`Select Pools`)}
-        </Button>
+        {leftToSelect !== 0 ? (
+          <Button disabled={true}>{i18n._(t`Pools left to select: ${leftToSelect}`)}</Button>
+        ) : (
+          <TridentApproveGate
+            inputAmounts={Object.values(lpTokenAmounts)}
+            tokenApproveOn={migrationContractAddress}
+            onSLPPermit={(permit) => dispatch(addSLPPermit(permit))}
+          >
+            {({ loading, approved }) => {
+              if (loading)
+                return (
+                  <Button disabled={true}>
+                    {i18n._(t`Loading`)}
+                    <Dots />
+                  </Button>
+                )
+
+              if (approved)
+                return (
+                  <Button color="gradient" onClick={() => execute()}>
+                    {i18n._(t`Confirm Migration`)}
+                  </Button>
+                )
+            }}
+          </TridentApproveGate>
+        )}
         <div
           className="cursor-pointer text-blue text-center md:text-left"
-          onClick={() => router.push('/trident/migrate')}
+          onClick={() => router.replace('/trident/migrate')}
         >
           {i18n._(t`← Previous Step`)}
         </div>

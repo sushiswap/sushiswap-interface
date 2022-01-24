@@ -26,6 +26,7 @@ import { useV2LiquidityTokenPermit } from 'app/hooks/useERC20Permit'
 import useTransactionDeadline from 'app/hooks/useTransactionDeadline'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import { Field } from 'app/state/burn/actions'
 import { useBurnActionHandlers, useBurnState, useDerivedBurnInfo } from 'app/state/burn/hooks'
@@ -111,7 +112,7 @@ export default function Remove() {
       } catch (error) {
         // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
         /* @ts-ignore TYPE NEEDS FIXING */
-        if (error?.code !== 4001) {
+        if (error?.code !== USER_REJECTED_TX) {
           await approveCallback()
         }
       }

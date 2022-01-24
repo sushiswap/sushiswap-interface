@@ -12,6 +12,7 @@ import { LiquidityInput } from 'app/features/trident/types'
 import { toShareJSBI } from 'app/functions'
 import { useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useAppDispatch } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
@@ -121,7 +122,7 @@ export const useAddLiquidityExecute: UseAddLiquidityExecute = () => {
         dispatch(setAddAttemptingTxn(false))
         // we only care if the error is something _other_ than the user rejected the tx
         // @ts-ignore TYPE NEEDS FIXING
-        if (error?.code !== 4001) {
+        if (error?.code !== USER_REJECTED_TX) {
           console.error(error)
         }
       }

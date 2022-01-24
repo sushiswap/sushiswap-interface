@@ -5,6 +5,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { signMasterContractApproval } from 'app/entities/KashiCooker'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useBentoMasterContractAllowed } from 'app/state/bentobox/hooks'
 import { useAllTransactions, useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback, useMemo, useState } from 'react'
@@ -131,7 +132,7 @@ const useBentoMasterApproveCallback = (
     } catch (e) {
       return {
         // @ts-ignore TYPE NEEDS FIXING
-        outcome: e.code === 4001 ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
+        outcome: e.code === USER_REJECTED_TX ? BentoApproveOutcome.REJECTED : BentoApproveOutcome.FAILED,
         signature: undefined,
         data: undefined,
       }
