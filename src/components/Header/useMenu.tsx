@@ -67,16 +67,16 @@ const useMenu: UseMenu = () => {
         title: i18n._(t`Browse`),
         link: '/pool',
       },
-      {
-        key: 'add-liquidity',
-        title: i18n._(t`Add`),
-        link: '/add',
-      },
-      {
-        key: 'remove-liquidity',
-        title: i18n._(t`Remove`),
-        link: '/remove',
-      },
+      // {
+      //   key: 'add-liquidity',
+      //   title: i18n._(t`Add`),
+      //   link: '/add',
+      // },
+      // {
+      //   key: 'remove-liquidity',
+      //   title: i18n._(t`Remove`),
+      //   link: '/remove',
+      // },
       {
         key: 'import',
         title: i18n._(t`Import`),
@@ -142,26 +142,12 @@ const useMenu: UseMenu = () => {
         icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
         items: [
           {
-            key: 'farm-portfolio',
-            title: i18n._(t`My Farms`),
-            link: '/farm?filter=portfolio',
-          },
-          {
-            key: 'sushi',
-            title: i18n._(t`Sushi Farms`),
-            link: '/farm?filter=sushi',
+            key: 'farm',
+            title: i18n._(t`Browse`),
+            link: '/farm',
           },
         ],
       }
-
-      if (featureEnabled(Feature.KASHI, chainId)) {
-        farmItems.items.push({
-          key: 'kashi-farms',
-          title: i18n._(t`Kashi Farms`),
-          link: '/farm?filter=kashi',
-        })
-      }
-
       mainItems.push(farmItems)
     }
 
