@@ -57,7 +57,7 @@ const OpenOrders: FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, 'min-h-[537px]')}>
+      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, pending.maxPages > 1 ? 'min-h-[537px]' : '')}>
         <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
