@@ -166,7 +166,7 @@ const Swap = ({ banners }) => {
     //     await gatherPermitSignature()
     //   } catch (error) {
     //     // try to approve if gatherPermitSignature failed for any reason other than the user rejecting it
-    //     if (error?.code !== 4001) {
+    //     if (error?.code !== USER_REJECTED_TRANSACTION) {
     //       await approveCallback()
     //     }
     //   }
