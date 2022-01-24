@@ -1,23 +1,19 @@
-import { Popover, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/outline'
 import { NATIVE } from '@sushiswap/core-sdk'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import Container from 'app/components/Container'
 import { NAV_CLASS } from 'app/components/Header/styles'
-import useMenu, { MenuItem, MenuItemLeaf, MenuItemNode } from 'app/components/Header/useMenu'
+import useMenu from 'app/components/Header/useMenu'
 import LanguageSwitch from 'app/components/LanguageSwitch'
-import Typography from 'app/components/Typography'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
-import { classNames } from 'app/functions'
-import useDesktopMediaQuery, { useTouchDeviceMediaQuery } from 'app/hooks/useDesktopMediaQuery'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
-import React, { FC, Fragment, useCallback, useRef } from 'react'
+import React, { FC } from 'react'
+
+import { NavigationItem } from './NavigationItem'
 
 const HEADER_HEIGHT = 64
 
@@ -73,104 +69,6 @@ const Desktop: FC = () => {
       </header>
       <div style={{ height: HEADER_HEIGHT, minHeight: HEADER_HEIGHT }} />
     </>
-  )
-}
-
-interface NavigationItem {
-  node: MenuItem
-}
-
-export const NavigationItem: FC<NavigationItem> = ({ node }) => {
-  const router = useRouter()
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  const isDesktop = useDesktopMediaQuery()
-  const touchDevice = useTouchDeviceMediaQuery()
-
-  const handleToggle = useCallback((open, type) => {
-    if (!open && type === 'enter') {
-      buttonRef?.current?.click()
-    } else if (open && type === 'leave') {
-      buttonRef?.current?.click()
-    }
-  }, [])
-
-  if (node && node.hasOwnProperty('link')) {
-    const { link } = node as MenuItemLeaf
-    return (
-      <Typography
-        onClick={() => router.push(link)}
-        weight={700}
-        variant="sm"
-        className={classNames(
-          router.asPath === link ? 'text-white' : '',
-          'hover:text-white font-bold py-5 px-2 rounded flex gap-3'
-        )}
-      >
-        {!isDesktop && node.icon}
-        {node.title}
-      </Typography>
-    )
-  }
-
-  return (
-    <Popover key={node.key} className="flex relative">
-      {({ open }) => (
-        <div
-          {...(!touchDevice && {
-            onMouseEnter: () => handleToggle(open, 'enter'),
-            onMouseLeave: () => handleToggle(open, 'leave'),
-          })}
-        >
-          <Popover.Button ref={buttonRef}>
-            <Typography
-              weight={700}
-              variant="sm"
-              className={classNames(open ? 'text-white' : '', 'font-bold py-5 px-2 rounded flex gap-3 items-center')}
-            >
-              {!isDesktop && node.icon}
-              {node.title}
-              <ChevronDownIcon strokeWidth={5} width={12} />
-            </Typography>
-          </Popover.Button>
-          {node.hasOwnProperty('items') && (
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Popover.Panel className="z-10 w-full absolute w-40 translate-y-[-8px] translate-x-[-8px]">
-                <div
-                  className={classNames(
-                    'shadow-md shadow-black/40 border border-dark-700 rounded overflow-hidden',
-                    !touchDevice
-                      ? "before:z-[-1] before:rounded before:absolute before:w-full before:h-full before:content-[''] before:backdrop-blur-[20px] bg-white bg-opacity-[0.02]"
-                      : 'bg-dark-800 inset-0'
-                  )}
-                >
-                  {(node as MenuItemNode).items.map((leaf) => (
-                    <Typography
-                      variant="sm"
-                      weight={700}
-                      key={leaf.key}
-                      onClick={() => {
-                        router.push(leaf.link).then(() => buttonRef?.current?.click())
-                      }}
-                      className="relative px-3 py-2 hover:cursor-pointer hover:text-white m-1 rounded-lg hover:bg-white/10"
-                    >
-                      {leaf.title}
-                    </Typography>
-                  ))}
-                </div>
-              </Popover.Panel>
-            </Transition>
-          )}
-        </div>
-      )}
-    </Popover>
   )
 }
 

@@ -82,3 +82,10 @@ input:focus {
 input[type=datetime-local]::-webkit-calendar-picker-indicator {
   background-image: url('../../public/images/datepicker-icon.svg')
 }
+
+/* if backdrop support: very transparent and blurred */
+@supports not ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
+  .backdrop-blur-fallback {
+    background-color: var(--primary);
+  }
+}

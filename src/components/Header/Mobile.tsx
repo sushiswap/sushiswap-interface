@@ -3,7 +3,6 @@ import { MenuIcon } from '@heroicons/react/outline'
 import { NATIVE } from '@sushiswap/core-sdk'
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletLinkConnector } from '@web3-react/walletlink-connector'
-import { NavigationItem } from 'app/components/Header/Desktop'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
@@ -12,6 +11,8 @@ import { useETHBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { FC, Fragment, useState } from 'react'
+
+import { NavigationItem } from './NavigationItem'
 
 const Mobile: FC = () => {
   const menu = useMenu()
