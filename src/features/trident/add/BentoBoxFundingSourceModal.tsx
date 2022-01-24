@@ -27,13 +27,13 @@ const BentoBoxFundingSourceModal: FC = () => {
           <HeadlessUiModal.Header header={i18n._(t`Bentobox`)} onClose={() => setOpen(false)} />
           <div className="flex justify-center gap-4">
             <div className="relative shadow-pink-glow">
-              <Image src="/images/bentobox/logo.png" width={160} height={120} alt="BentoBox Logo" />
+              <Image src="https://app.sushi.com/images/bentobox/logo.png" width={160} height={120} alt="BentoBox Logo" />
             </div>
             <div className="flex flex-col gap-2">
-              <Typography variant="lg" weight={700} className="text-high-emphesis text-center">
+              <Typography variant="lg" weight={700} className="text-center text-high-emphesis">
                 {i18n._(t`Sushi utilizes a token vault called BentoBox that has balances separate from your wallet.`)}
               </Typography>
-              <Typography variant="sm" className="text-secondary text-center">
+              <Typography variant="sm" className="text-center text-secondary">
                 {i18n._(t`You can think of this as having "account balances" for each asset within sushi.com`)}
               </Typography>
             </div>
@@ -41,7 +41,7 @@ const BentoBoxFundingSourceModal: FC = () => {
           <HeadlessUiModal.BorderedContent className="flex flex-col">
             <div className="grid grid-cols-2 gap-10 flex-grow min-h-[160px]">
               <div className="flex flex-col justify-center gap-3">
-                <div className="flex flex gap-4 justify-center">
+                <div className="flex justify-center gap-4">
                   <div
                     className={classNames(
                       'flex flex-col gap-1',
@@ -65,7 +65,7 @@ const BentoBoxFundingSourceModal: FC = () => {
                     </Typography>
                   </div>
                 </div>
-                <Typography weight={700} variant="sm" className="text-high-emphesis text-center">
+                <Typography weight={700} variant="sm" className="text-center text-high-emphesis">
                   {i18n._(t`You’ll see these icons next to your balance in various input fields.`)}
                 </Typography>
               </div>
@@ -80,9 +80,9 @@ const BentoBoxFundingSourceModal: FC = () => {
                   className="h-full bg-no-repeat bg-contain"
                   style={{ backgroundImage: `url('/images/trident/AssetInputScreenshot2.png')` }}
                 />
-                <div className="flex flex-col justify-center items-center gap-2 p-3 px-8">
+                <div className="flex flex-col items-center justify-center gap-2 p-3 px-8">
                   <Switch checked={walletSelected} onChange={setWalletSelected} />
-                  <Typography weight={700} variant="sm" className="text-high-emphesis text-center">
+                  <Typography weight={700} variant="sm" className="text-center text-high-emphesis">
                     {i18n._(t`Use the toggle to switch between balances when interacting with our platform.`)}
                   </Typography>
                 </div>

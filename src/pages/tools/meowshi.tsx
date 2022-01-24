@@ -143,7 +143,7 @@ export default function Meowshi() {
 
       <div className="z-0 relative mb-[-38px] md:mb-[-54px] ml-0 md:ml-4 flex justify-between gap-6 items-center">
         <div className="min-w-[168px] hidden md:block">
-          <Image src="/meowshi/neon-cat.png" alt="neon-cat" width="168px" height="168px" />
+          <Image src="https://app.sushi.com/images/meowshi/neon-cat.png" alt="neon-cat" width="168px" height="168px" />
         </div>
 
         <div className="bg-[rgba(255,255,255,0.04)] p-4 py-2 rounded flex flex-row items-center gap-4 mb-[54px]">

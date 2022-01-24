@@ -20,7 +20,7 @@ import {
   TIMELOCK_ADDRESS,
   WNATIVE_ADDRESS,
 } from '@sushiswap/core-sdk'
-import { STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
+import { LIMIT_ORDER_HELPER_ADDRESS, STOP_LIMIT_ORDER_ADDRESS } from '@sushiswap/limit-order-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import TRIDENT from '@sushiswap/trident/exports/all.json'
 import { OLD_FARMS } from 'app/config/farms'
@@ -229,10 +229,6 @@ export function useLimitOrderContract(withSignerIfPossibe?: boolean): Contract |
 
 export function useLimitOrderHelperContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
-  const LIMIT_ORDER_HELPER_ADDRESS = {
-    [ChainId.MATIC]: '0xe2f736B7d1f6071124CBb5FC23E93d141CD24E12',
-    [ChainId.AVALANCHE]: '0x889ec9e19C1598358899fCA4879011686c3d4045',
-  }
   // @ts-ignore TYPE NEEDS FIXING
   return useContract(chainId && LIMIT_ORDER_HELPER_ADDRESS[chainId], LIMIT_ORDER_HELPER_ABI, withSignerIfPossible)
 }

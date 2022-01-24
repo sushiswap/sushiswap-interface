@@ -24,35 +24,35 @@ export interface Background {
 const IMAGE_URL = {
   'bg-bars': {
     type: ImageType.REPEAT,
-    url: '/images/trident/bars-pattern.png',
+    url: 'https://app.sushi.com/images/trident/bars-pattern.png',
   },
   'bg-binary': {
     type: ImageType.REPEAT,
-    url: '/images/trident/binary-pattern.png',
+    url: 'https://app.sushi.com/images/trident/binary-pattern.png',
   },
   'bg-bubble': {
     type: ImageType.REPEAT,
-    url: 'i/mages/trident/bubble-pattern.png',
+    url: 'https://app.sushi.com/images/trident/bubble-pattern.png',
   },
   'bg-dots': {
     type: ImageType.REPEAT,
-    url: '/images/trident/dots-pattern.png',
+    url: 'https://app.sushi.com/images/trident/dots-pattern.png',
   },
   'bg-x-times-y-is-k': {
     type: ImageType.REPEAT,
-    url: '/images/trident/x-times-y-is-k.png',
+    url: 'https://app.sushi.com/images/trident/x-times-y-is-k.png',
   },
   'bg-wavy': {
     type: ImageType.REPEAT,
-    url: '/images/trident/wavy-pattern.png',
+    url: 'https://app.sushi.com/images/trident/wavy-pattern.png',
   },
   'bg-chevron': {
     type: ImageType.REPEAT,
-    url: '/images/trident/chevron-pattern.png',
+    url: 'https://app.sushi.com/images/trident/chevron-pattern.png',
   },
   'miso-bowl': {
     type: ImageType.SINGLE,
-    url: '/images/miso/banner.jpg',
+    url: 'https://app.sushi.com/images/miso/banner.jpg',
   },
 }
 
@@ -74,6 +74,7 @@ const Background: FC<Background> = ({ variant }) => {
       objectFit="cover"
       objectPosition="center"
       layout="fill"
+      priority
     />
   )
 }

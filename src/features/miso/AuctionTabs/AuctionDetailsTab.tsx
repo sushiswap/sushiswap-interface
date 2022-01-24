@@ -71,7 +71,7 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
       <AuctionDetailsTabStat
         label={i18n._(t`Token Address`)}
         value={
-          <CopyHelper toCopy={shortenAddress(auction.auctionToken.address)} className="text-high-emphesis opacity-100">
+          <CopyHelper toCopy={shortenAddress(auction.auctionToken.address)} className="opacity-100 text-high-emphesis">
             {shortenAddress(auction.auctionToken.address)}
           </CopyHelper>
         }
@@ -79,7 +79,7 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
       <AuctionDetailsTabStat
         label={i18n._(t`Auction Address`)}
         value={
-          <CopyHelper toCopy={shortenAddress(auction.auctionInfo.addr)} className="text-high-emphesis opacity-100">
+          <CopyHelper toCopy={shortenAddress(auction.auctionInfo.addr)} className="opacity-100 text-high-emphesis">
             {shortenAddress(auction.auctionInfo.addr)}
           </CopyHelper>
         }

@@ -11,6 +11,7 @@ import {
   getCvxPrice,
   getDayData,
   getFactory,
+  getFantomPrice,
   getFusePrice,
   getGnoPrice,
   getLiquidityPositions,
@@ -98,6 +99,14 @@ export function useCeloPrice(swrConfig: SWRConfiguration = undefined) {
   const { chainId } = useActiveWeb3React()
   const shouldFetch = chainId && chainId === ChainId.CELO
   const { data } = useSWR(shouldFetch ? 'celoPrice' : null, () => getCeloPrice(), swrConfig)
+  return data
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export function useFantomPrice(swrConfig: SWRConfiguration = undefined) {
+  const { chainId } = useActiveWeb3React()
+  const shouldFetch = chainId && chainId === ChainId.FANTOM
+  const { data } = useSWR(shouldFetch ? 'fantomPrice' : null, () => getFantomPrice(), swrConfig)
   return data
 }
 

@@ -1,4 +1,3 @@
-import { BigNumber } from '@ethersproject/bignumber'
 import { JSBI, Percent, Token } from '@sushiswap/core-sdk'
 import { LAMBDA_URL, LimitOrder, OrderStatus } from '@sushiswap/limit-order-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -130,9 +129,7 @@ const useLimitOrders = () => {
           tokens[tokenOut.address] ||
           new Token(chainId, tokenOut.address.toLowerCase(), tokenOut.decimals, tokenOut.symbol),
         limitOrder,
-        filledPercent: order.filledAmount
-          ? order.filledAmount.mul(BigNumber.from('100')).div(BigNumber.from(order.amountIn)).toString()
-          : '0',
+        filledPercent: order.filledAmount ? Number((order.filledAmount / order.amountIn) * 100).toFixed(2) : '0.00',
         status: order.status,
         rate: new Percent(limitOrder.amountOut.quotient, denominator(tokenOut.decimals))
           .divide(new Percent(limitOrder.amountIn.quotient, denominator(tokenIn.decimals)))
@@ -144,8 +141,12 @@ const useLimitOrders = () => {
     }
 
     ;(async () => {
-      // @ts-ignore TYPE NEEDS FIXING
-      const openOrders = await Promise.all<OpenOrder>(ordersData.pendingOrders.orders.map((el) => transform(el)))
+      const openOrders = await Promise.all<OpenOrder>(
+        // @ts-ignore TYPE NEEDS FIXING
+        ordersData.pendingOrders.orders.map((el, i) =>
+          transform({ ...el, filledAmount: ordersData.pendingOrders.filledAmounts[i] })
+        )
+      )
       // @ts-ignore TYPE NEEDS FIXING
       const completedOrders = await Promise.all<OpenOrder>(ordersData.otherOrders.orders.map((el) => transform(el)))
 

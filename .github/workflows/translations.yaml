@@ -53,7 +53,7 @@ jobs:
         run: rm -rf locale/*.js
 
       - name: Push translation files to translation repo
-        uses: cpina/github-action-push-to-another-repository@main
+        uses: cpina/github-action-push-to-another-repository@v1.4.1
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:

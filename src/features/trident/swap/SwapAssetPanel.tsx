@@ -1,23 +1,18 @@
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Percent } from '@sushiswap/core-sdk'
-import selectCoinAnimation from 'app/animation/select-coin.json'
+import { Currency, Percent, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
 import NumericalInput from 'app/components/Input/Numeric'
 import QuestionHelper from 'app/components/QuestionHelper'
-import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
-import { classNames, maxAmountSpend, tryParseAmount, warningSeverity } from 'app/functions'
+import { classNames, formatNumber, maxAmountSpend, tryParseAmount, warningSeverity } from 'app/functions'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
-import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
-import Lottie from 'lottie-react'
-import React, { FC, useCallback, useMemo, useState } from 'react'
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
 
@@ -26,15 +21,16 @@ interface SwapAssetPanel {
   // @ts-ignore TYPE NEEDS FIXING
   header: (x) => React.ReactNode
   // @ts-ignore TYPE NEEDS FIXING
-  walletToggle: (x) => React.ReactNode
+  walletToggle?: (x) => React.ReactNode
   currency?: Currency
   currencies?: string[]
   value?: string
   onChange(x?: string): void
   onSelect?(x: Currency): void
-  spendFromWallet: boolean
+  spendFromWallet?: boolean
   selected?: boolean
   priceImpact?: Percent
+  priceImpactCss?: string
   disabled?: boolean
 }
 
@@ -49,73 +45,39 @@ const SwapAssetPanel = ({
   onSelect,
   spendFromWallet,
   priceImpact,
+  priceImpactCss,
   disabled,
   currencies,
 }: SwapAssetPanel) => {
-  const usdcValue = useUSDCValue(tryParseAmount(value || '1', currency))
-
   return (
-    <div
-      className={classNames(
-        selected ? 'lg:bg-dark-800 lg:border-dark-700' : 'bg-dark-900 lg:border-dark-800',
-        'lg:border lg:rounded-[14px] flex flex-col lg:p-5 py-3 lg:pb-3 gap-3 overflow-hidden'
-      )}
-    >
+    <div className="rounded-[14px] border border-dark-700 hover:border-dark-600 bg-dark-900 p-3 flex flex-col gap-4">
       {header({
         disabled,
         onChange,
         value,
         currency,
+        currencies,
         onSelect,
         walletToggle,
         spendFromWallet,
       })}
-      <div className="flex flex-col">
-        <div
-          className={classNames(
-            selected ? 'bg-dark-800 border-dark-700' : 'bg-dark-900 border-dark-800',
-            'block lg:hidden flex justify-between border lg:border-none py-2 px-4 rounded-t lg:bg-transparent'
-          )}
-        >
-          <Typography variant="xs" weight={700}>
-            {currency?.name}
-          </Typography>
-          <Typography variant="xs" weight={700}>
-            ≈${usdcValue?.toSignificant(3)}
-          </Typography>
-        </div>
-        <div
-          className={classNames(
-            selected ? 'bg-dark-800 border-dark-700' : 'border-dark-800',
-            'border-l border-r lg:border-none lg:bg-transparent'
-          )}
-        >
-          <InputPanel
-            {...{
-              selected,
-              error,
-              currency,
-              currencies,
-              value,
-              onChange,
-              disabled,
-              onSelect,
-              priceImpact,
-              spendFromWallet,
-            }}
-          />
-        </div>
-        <div className="hidden py-2 mt-1 lg:block lg:pb-0">
-          <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
-        </div>
-        <div
-          className={classNames(
-            selected ? 'bg-dark-800' : '',
-            'flex items-center justify-between overflow-hidden border rounded-b lg:hidden border-dark-700 lg:border-none'
-          )}
-        >
-          {walletToggle({ spendFromWallet })}
-        </div>
+      <div className="flex gap-1 justify-between items-baseline px-1.5">
+        <InputPanel
+          {...{
+            selected,
+            error,
+            currency,
+            currencies,
+            value,
+            onChange,
+            disabled,
+            onSelect,
+            priceImpact,
+            priceImpactCss,
+            spendFromWallet,
+          }}
+        />
+        <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
       </div>
     </div>
   )
@@ -131,41 +93,26 @@ const WalletSwitch: FC<
   const { i18n } = useLingui()
 
   const content = (
-    <div
-      className={classNames(
-        disabled ? 'opacity-40' : '',
-        'flex gap-2.5 items-center !justify-start lg:px-0 px-4 py-3 lg:py-0'
-      )}
+    <Typography
+      variant="xs"
+      weight={700}
+      component="span"
+      className={classNames(disabled ? 'pointer-events-none opacity-40' : '', 'flex items-center gap-2')}
     >
-      <div className="flex flex-col order-2 lg:order-1">
-        <Typography variant="xs" weight={700} className="text-left text-secondary lg:text-right">
-          {label}
-        </Typography>
-        <Typography
-          weight={700}
-          className="flex items-center justify-center gap-1 text-center text-right text-high-emphesis"
-        >
-          {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)} <BentoBoxFundingSourceModal />
-        </Typography>
-      </div>
-      <div className={classNames(disabled ? 'pointer-events-none' : '', 'order-1 lg:order-2')}>
-        <Switch
-          id={id}
-          checked={spendFromWallet}
-          onChange={onChange}
-          checkedIcon={
-            <div className="flex items-center justify-center w-full h-full text-dark-700">
-              <WalletIcon width={16} height={14} />
-            </div>
-          }
-          uncheckedIcon={
-            <div className="flex items-center justify-center w-full h-full text-dark-700">
-              <BentoboxIcon width={16} height={16} />
-            </div>
-          }
-        />
-      </div>
-    </div>
+      {label}
+      <Typography
+        id={id}
+        role="button"
+        onClick={() => onChange(!spendFromWallet)}
+        variant="sm"
+        weight={700}
+        component="span"
+        className="flex items-center gap-1 px-2 py-1 rounded-full cursor-pointer text-high-emphesis hover:text-white hover:shadow bg-dark-800 hover:bg-dark-700"
+      >
+        {spendFromWallet ? i18n._(t`Wallet`) : i18n._(t`BentoBox`)}
+      </Typography>
+      <BentoBoxFundingSourceModal />
+    </Typography>
   )
 
   if (disabled) {
@@ -176,24 +123,11 @@ const WalletSwitch: FC<
 }
 
 const InputPanel: FC<
-  Pick<
-    SwapAssetPanel,
-    | 'error'
-    | 'currency'
-    | 'value'
-    | 'onChange'
-    | 'disabled'
-    | 'onSelect'
-    | 'priceImpact'
-    | 'spendFromWallet'
-    | 'selected'
-    | 'currencies'
-  >
-> = ({ error, currency, currencies, value, onChange, disabled, onSelect, priceImpact, selected, spendFromWallet }) => {
-  const { i18n } = useLingui()
-  const isDesktop = useDesktopMediaQuery()
-  const [open, setOpen] = useState<boolean>(false)
+  Pick<SwapAssetPanel, 'currency' | 'value' | 'onChange' | 'disabled' | 'priceImpact'> & { priceImpactCss?: string }
+> = ({ currency, value, onChange, disabled, priceImpact, priceImpactCss }) => {
   const usdcValue = useUSDCValue(tryParseAmount(value || '1', currency))
+  const span = useRef<HTMLSpanElement | null>(null)
+  const [width, setWidth] = useState(0)
 
   const priceImpactClassName = useMemo(() => {
     if (!priceImpact) return undefined
@@ -205,97 +139,40 @@ const InputPanel: FC<
     return 'text-red'
   }, [priceImpact])
 
+  useEffect(() => {
+    if (span.current) {
+      setWidth(value ? span?.current?.clientWidth + 8 : 60)
+    }
+  }, [value])
+
   return (
-    <div
-      className={classNames(
-        selected ? 'lg:border-dark-700' : 'lg:border-dark-800',
-        error ? 'border-red/50 lg:border-red/50' : 'border-transparent',
-        'border lg:rounded-full lg:bg-dark-900 flex items-center pl-4 lg:pl-0 px-[1px] py-1.5 lg:py-0 bg-transparent'
-      )}
-    >
-      <div className="cursor-pointer lg:pl-3" onClick={() => setOpen(true)}>
-        {currency ? (
-          <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={40} />
-        ) : (
-          <div className="flex items-center w-10 h-10 lg:w-[74px] lg:h-[74px] rounded-full relative">
-            <Lottie animationData={selectCoinAnimation} autoplay loop />
-          </div>
+    <Typography weight={700} variant="h3" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
+      <NumericalInput
+        disabled={disabled}
+        value={value || ''}
+        onUserInput={onChange}
+        placeholder="0.00"
+        className="leading-[36px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
+        autoFocus
+      />
+      <Typography
+        variant="xs"
+        className="text-secondary absolute bottom-1.5 pointer-events-none"
+        component="span"
+        style={{ left: width }}
+      >
+        {usdcValue?.greaterThan(ZERO) && <>~{formatNumber(usdcValue?.toFixed(), true, true, 2)} </>}
+        {priceImpact && (
+          <span className={priceImpactCss || priceImpactClassName}>{priceImpact?.toSignificant(2)}%</span>
         )}
-      </div>
-      <div className="flex items-center flex-grow p-4">
-        <div className={classNames('flex lg:flex-col flex-grow')}>
-          {currency && (
-            <div className="block lg:hidden">
-              <div
-                className="flex gap-0.5 items-center cursor-pointer hover:text-high-emphesis"
-                onClick={() => setOpen(true)}
-              >
-                <Typography variant={isDesktop ? 'h3' : 'base'} weight={700}>
-                  {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
-                </Typography>
-                <ChevronDownIcon width={24} className="text-low-emphesis" />
-              </div>
-              <CurrencySearchModal.Controlled
-                open={open}
-                selectedCurrency={currency}
-                onCurrencySelect={(currency) => onSelect && onSelect(currency)}
-                onDismiss={() => setOpen(false)}
-                {...(currencies && { currencyList: currencies })}
-              />
-            </div>
-          )}
-          <Typography
-            weight={700}
-            variant={isDesktop ? 'h3' : 'lg'}
-            className={classNames(
-              !currency ? 'justify-start' : 'justify-between lg:justify-start',
-              'w-full text-right lg:text-left items-center swap-panel-input',
-              value ? 'text-high-emphesis' : 'text-primary'
-            )}
-          >
-            {!currency ? (
-              <CurrencySearchModal
-                selectedCurrency={currency}
-                // @ts-ignore TYPE NEEDS FIXING
-                {...(currencies?.length > 0 && { currencyList: currencies })}
-                onCurrencySelect={(currency) => onSelect && onSelect(currency)}
-                trigger={
-                  <div className="inline-flex items-center">
-                    <Button
-                      color="blue"
-                      variant="filled"
-                      className="!rounded-full px-3 py-0 h-[32px] shadow-md token-select-trigger"
-                      endIcon={<ChevronDownIcon width={20} height={20} />}
-                    >
-                      <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
-                    </Button>
-                  </div>
-                }
-              />
-            ) : (
-              <NumericalInput
-                disabled={disabled}
-                value={value || ''}
-                onUserInput={onChange}
-                placeholder="0.00"
-                className="flex-grow w-full text-right bg-transparent text-inherit lg:text-left disabled:cursor-not-allowed"
-                autoFocus
-              />
-            )}
-          </Typography>
-        </div>
-        <div className="flex flex-col hidden lg:block">
-          <Typography className="text-low-emphesis" variant="sm">
-            ≈${usdcValue?.toFixed(2)}
-          </Typography>
-          {priceImpact && (
-            <Typography variant="xs" weight={700} className={classNames(priceImpactClassName, 'text-right')}>
-              {priceImpact.toSignificant(3)}%
-            </Typography>
-          )}
-        </div>
-      </div>
-    </div>
+      </Typography>
+      {/*This acts as a reference to get input width*/}
+      <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
+        <span ref={span} className="opacity-0 absolute pointer-events-none tracking-[0]">
+          {`${value ? value : '0.00'}`}
+        </span>
+      </Typography>
+    </Typography>
   )
 }
 
@@ -305,7 +182,6 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
   onChange,
   spendFromWallet,
 }) => {
-  const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const balance = useBentoOrWalletBalance(account ? account : undefined, currency, spendFromWallet)
@@ -316,58 +192,46 @@ const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange'
   }, [balance, disabled, onChange])
 
   return (
-    <div className="flex justify-start">
-      <div className="flex items-center gap-1">
-        <Typography variant={isDesktop ? 'sm' : 'xs'} weight={700} className="text-secondary">
-          {i18n._(t`Balance:`)}
-        </Typography>
-        <Typography
-          id={currency ? `text-balance-${currency?.symbol}` : ''}
-          variant={isDesktop ? 'sm' : 'xs'}
-          weight={700}
-          onClick={handleClick}
-          className="text-secondary"
-        >
-          {balance ? balance.toSignificant(6) : '0.0000'}
-        </Typography>
-      </div>
-    </div>
+    <Typography role="button" onClick={handleClick} variant="sm" className="flex text-secondary whitespace-nowrap">
+      {i18n._(t`Balance:`)} {balance ? balance.toSignificant(6) : '0.00'}
+    </Typography>
   )
 }
 
 const SwapAssetPanelHeader: FC<
   Pick<
     SwapAssetPanel,
-    'currency' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
+    'currency' | 'currencies' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
   > & { label: string; id?: string }
-> = ({ disabled, onChange, value, currency, onSelect, walletToggle, spendFromWallet, label, id }) => {
-  const isDesktop = useDesktopMediaQuery()
+> = ({ walletToggle, currency, onSelect, spendFromWallet, id, currencies }) => {
+  const { i18n } = useLingui()
+  const trigger = currency ? (
+    <div
+      id={id}
+      className="flex items-center gap-2 px-2 py-1 rounded-full shadow-md cursor-pointer text-high-emphesis bg-dark-800 hover:bg-dark-700"
+    >
+      <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={20} />
+      <Typography variant="sm" className="!text-xl" weight={700}>
+        {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
+      </Typography>
+      <ChevronDownIcon width={18} />
+    </div>
+  ) : (
+    <Button color="blue" variant="filled" size="sm" id={id} className="!rounded-full !px-2 !py-0 !h-[32px] !pl-3">
+      {i18n._(t`Select a Token`)}
+      <ChevronDownIcon width={18} />
+    </Button>
+  )
 
   return (
-    <div className="flex items-center justify-between px-4 lg:px-0">
-      <div className="flex flex-col gap-1">
-        <Typography variant="xs" className="text-secondary" weight={700}>
-          {label}
-        </Typography>
-        {currency && isDesktop && (
-          <CurrencySearchModal
-            selectedCurrency={currency}
-            onCurrencySelect={(currency) => onSelect && onSelect(currency)}
-            trigger={
-              <div id={id} className="flex gap-0.5 cursor-pointer hover:text-high-emphesis">
-                <Typography variant="h3" weight={700}>
-                  {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
-                </Typography>
-                <ChevronDownIcon width={24} className="text-low-emphesis" />
-              </div>
-            }
-          />
-        )}
-      </div>
-      <div className="hidden lg:block">{walletToggle({ spendFromWallet })}</div>
-      <div className="block lg:hidden">
-        <BalancePanel {...{ disabled, currency, onChange, spendFromWallet, value }} />
-      </div>
+    <div className="flex items-end justify-between gap-2">
+      <CurrencySearchModal
+        selectedCurrency={currency}
+        onCurrencySelect={(currency) => onSelect && onSelect(currency)}
+        trigger={trigger}
+        currencyList={currencies}
+      />
+      {walletToggle && walletToggle({ spendFromWallet })}
     </div>
   )
 }

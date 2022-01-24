@@ -1,7 +1,5 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Card from 'app/components/Card'
-import Typography from 'app/components/Typography'
 import { ActionsAsideWallet } from 'app/features/trident/balances/ActionsAside'
 import { WalletActionsModal } from 'app/features/trident/balances/ActionsModal'
 import { WalletBalances } from 'app/features/trident/balances/AssetBalances'
@@ -24,15 +22,6 @@ const Wallet = () => {
         <div className="flex flex-row justify-between gap-10">
           <div className="flex flex-col gap-8 w-full">
             <BalancesSideBar />
-            <div className="block lg:hidden">
-              <Card.Gradient>
-                <div className="flex flex-col p-4 border rounded border-dark-900">
-                  <Typography variant="sm" className="text-center text-high-emphesis">
-                    {i18n._(t`Tap any asset row to view available actions.`)}
-                  </Typography>
-                </div>
-              </Card.Gradient>
-            </div>
             <div className="flex flex-col gap-4">
               <WalletBalances />
             </div>

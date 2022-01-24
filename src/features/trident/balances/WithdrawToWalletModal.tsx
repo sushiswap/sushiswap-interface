@@ -9,9 +9,8 @@ import { WalletIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
-import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { tryParseAmount } from 'app/functions'
-import { useBentoBox, useBentoBoxContract } from 'app/hooks'
+import { useBentoBox } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
@@ -31,7 +30,6 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
   const { withdraw } = useBentoBox()
   const [value, setValue] = useState<string>()
   const { i18n } = useLingui()
-  const bentoboxContract = useBentoBoxContract()
 
   const valueCA = currency ? tryParseAmount(value, currency) : undefined
   let valuePlusBalance = valueCA?.wrapped
@@ -59,6 +57,15 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
     ? i18n._(t`Insufficient ${valueCA.currency.symbol} balance`)
     : ''
 
+  const disabled = !!error || attemptingTxn
+  const buttonText = attemptingTxn ? (
+    <Dots>{i18n._(t`Withdrawing`)}</Dots>
+  ) : error ? (
+    error
+  ) : (
+    i18n._(t`Confirm Withdrawal`)
+  )
+
   return (
     <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose} maxWidth="md">
       <div className="flex flex-col gap-4">
@@ -70,12 +77,12 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
           value={value}
           spendFromWallet={false}
         />
-        <div className="flex justify-center -mt-6 -mb-6 z-10">
+        <div className="z-10 flex justify-center -mt-6 -mb-6">
           <div className="p-1.5 rounded-full bg-dark-800 border border-dark-800 shadow-md border-dark-700">
             <ArrowDownIcon width={14} className="text-high-emphesis" />
           </div>
         </div>
-        <HeadlessUiModal.BorderedContent className="bg-dark-900 flex gap-3 px-3">
+        <HeadlessUiModal.BorderedContent className="flex gap-3 px-3 bg-dark-900">
           <div className="border border-dark-700 rounded-full w-[48px] h-[48px] flex items-center justify-center shadow-md">
             <WalletIcon width={20} height={20} />
           </div>
@@ -88,28 +95,11 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
             </Typography>
           </div>
         </HeadlessUiModal.BorderedContent>
-        <TridentApproveGate inputAmounts={[valueCA]} tokenApproveOn={bentoboxContract?.address}>
-          {({ approved, loading }) => {
-            const disabled = !!error || !approved || loading || attemptingTxn
-            const buttonText = attemptingTxn ? (
-              <Dots>{i18n._(t`Withdrawing`)}</Dots>
-            ) : loading ? (
-              ''
-            ) : error ? (
-              error
-            ) : (
-              i18n._(t`Confirm Withdrawal`)
-            )
-
-            return (
-              <Button loading={loading} color="gradient" disabled={disabled} onClick={execute}>
-                <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
-                  {buttonText}
-                </Typography>
-              </Button>
-            )
-          }}
-        </TridentApproveGate>
+        <Button color="gradient" disabled={disabled} onClick={execute}>
+          <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
+            {buttonText}
+          </Typography>
+        </Button>
       </div>
     </HeadlessUiModal.Controlled>
   )
