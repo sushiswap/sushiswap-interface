@@ -1,6 +1,7 @@
 import { GlobeIcon, SwitchVerticalIcon, TrendingUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { SUSHI_ADDRESS } from '@sushiswap/core-sdk'
 import { PoolIcon, RocketIcon, WalletIcon } from 'app/components/Icon'
 import { Feature } from 'app/enums'
 import { featureEnabled } from 'app/functions'
@@ -67,11 +68,11 @@ const useMenu: UseMenu = () => {
         title: i18n._(t`Browse`),
         link: '/pool',
       },
-      // {
-      //   key: 'add-liquidity',
-      //   title: i18n._(t`Add`),
-      //   link: '/add',
-      // },
+      {
+        key: 'add-liquidity',
+        title: i18n._(t`Add`),
+        link: `/add/ETH/${SUSHI_ADDRESS[chainId]}`,
+      },
       // {
       //   key: 'remove-liquidity',
       //   title: i18n._(t`Remove`),

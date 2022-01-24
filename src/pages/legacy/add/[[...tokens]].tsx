@@ -17,7 +17,6 @@ import { AutoRow, RowBetween } from 'app/components/Row'
 import Web3Connect from 'app/components/Web3Connect'
 import { ZERO_PERCENT } from 'app/constants'
 import { ConfirmAddModalBottom } from 'app/features/legacy/liquidity/ConfirmAddModalBottom'
-import LiquidityHeader from 'app/features/legacy/liquidity/LiquidityHeader'
 import LiquidityPrice from 'app/features/legacy/liquidity/LiquidityPrice'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 import ExchangeHeader from 'app/features/trade/Header'
@@ -402,9 +401,9 @@ export default function Add() {
               pendingText={pendingText}
             />
             <div className="flex flex-col space-y-4">
-              {pair && pairState !== PairState.INVALID && (
+              {/* {pair && pairState !== PairState.INVALID && (
                 <LiquidityHeader input={currencies[Field.CURRENCY_A]} output={currencies[Field.CURRENCY_B]} />
-              )}
+              )} */}
 
               <div>
                 <CurrencyInputPanel
