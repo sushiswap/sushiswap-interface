@@ -67,10 +67,20 @@ const useMenu: UseMenu = () => {
         title: i18n._(t`Browse`),
         link: '/pool',
       },
+      // {
+      //   key: 'add-liquidity',
+      //   title: i18n._(t`Add`),
+      //   link: '/add',
+      // },
+      // {
+      //   key: 'remove-liquidity',
+      //   title: i18n._(t`Remove`),
+      //   link: '/remove',
+      // },
       {
-        key: 'farm',
-        title: i18n._(t`Farm`),
-        link: '/farm',
+        key: 'import',
+        title: i18n._(t`Import`),
+        link: '/find',
       },
     ]
 
@@ -107,15 +117,7 @@ const useMenu: UseMenu = () => {
       })
     }
 
-    const mainItems: Menu = [
-      tradeMenu,
-      {
-        key: 'balances',
-        title: i18n._(t`Portfolio`),
-        link: '/balances',
-        icon: <WalletIcon width={20} />,
-      },
-    ]
+    const mainItems: Menu = [tradeMenu]
 
     if (poolMenu.length > 0)
       mainItems.push({
@@ -133,11 +135,32 @@ const useMenu: UseMenu = () => {
         icon: <GlobeIcon width={20} />,
       })
 
+    if (featureEnabled(Feature.LIQUIDITY_MINING, chainId)) {
+      const farmItems = {
+        key: 'farm',
+        title: i18n._(t`Farm`),
+        icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
+        items: [
+          {
+            key: 'your-farms',
+            title: i18n._(t`Your Farms`),
+            link: '/farm?filter=portfolio',
+          },
+          {
+            key: 'all-farms',
+            title: i18n._(t`All Farms`),
+            link: '/farm',
+          },
+        ],
+      }
+      mainItems.push(farmItems)
+    }
+
     if (featureEnabled(Feature.KASHI, chainId)) {
       mainItems.push({
         key: 'lending',
         title: i18n._(t`Lending`),
-        icon: <SwitchVerticalIcon width={20} className="filter rotate-90" />,
+        icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
         items: [
           {
             key: 'lend',
@@ -148,11 +171,6 @@ const useMenu: UseMenu = () => {
             key: 'borrow',
             title: i18n._(t`Borrow`),
             link: '/borrow',
-          },
-          {
-            key: 'kashi',
-            title: i18n._(t`Kashi Farms`),
-            link: '/farm?filter=kashi',
           },
         ],
       })
@@ -181,31 +199,49 @@ const useMenu: UseMenu = () => {
     let analyticsMenu: MenuItem = {
       key: 'analytics',
       title: i18n._(t`Analytics`),
-      link: '/analytics/dashboard',
       icon: <TrendingUpIcon width={20} />,
+      items: [
+        {
+          key: 'dashboard',
+          title: 'Dashboard',
+          link: '/analytics/dashboard',
+        },
+        {
+          key: 'xsushi',
+          title: 'xSUSHI',
+          link: '/analytics/xsushi',
+        },
+        {
+          key: 'tokens',
+          title: 'Tokens',
+          link: '/analytics/tokens',
+        },
+        {
+          key: 'pairs',
+          title: 'Pairs',
+          link: '/analytics/pairs',
+        },
+      ],
     }
 
     if (featureEnabled(Feature.BENTOBOX, chainId)) {
-      analyticsMenu = {
-        key: 'analytics',
-        title: i18n._(t`Analytics`),
-        icon: <TrendingUpIcon width={20} />,
-        items: [
-          {
-            key: 'dashboard',
-            title: 'Dashboard',
-            link: '/analytics/dashboard',
-          },
-          {
-            key: 'bentobox',
-            title: 'Bentobox',
-            link: '/analytics/bentobox',
-          },
-        ],
-      }
+      analyticsMenu.items.push({
+        key: 'bentobox',
+        title: 'Bentobox',
+        link: '/analytics/bentobox',
+      })
     }
 
-    mainItems.push(analyticsMenu)
+    if (featureEnabled(Feature.ANALYTICS, chainId)) {
+      mainItems.push(analyticsMenu)
+    }
+
+    mainItems.push({
+      key: 'balances',
+      title: i18n._(t`Portfolio`),
+      link: '/balances',
+      icon: <WalletIcon width={20} />,
+    })
 
     return mainItems.filter((el) => Object.keys(el).length > 0)
   }, [chainId, i18n])

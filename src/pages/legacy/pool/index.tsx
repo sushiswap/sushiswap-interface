@@ -1,9 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, NATIVE } from '@sushiswap/core-sdk'
+import { CurrencyAmount } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
 import Back from 'app/components/Back'
-import Button from 'app/components/Button'
 import Container from 'app/components/Container'
 import Dots from 'app/components/Dots'
 import Empty from 'app/components/Empty'
@@ -12,7 +11,6 @@ import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { MigrationSupported } from 'app/features/migration'
 import { useV2PairsWithLiquidity } from 'app/features/trident/migrate/context/useV2PairsWithLiquidity'
-import { classNames, currencyId } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -110,25 +108,6 @@ export default function Pool() {
                 <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
               </Empty>
             )}
-            <div className={classNames('grid gap-4', migrationSupported ? 'grid-cols-3' : 'grid-cols-2')}>
-              <Button
-                id="add-pool-button"
-                color="gradient"
-                className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
-                // @ts-ignore TYPE NEEDS FIXING
-                onClick={() => router.push(`/add/${currencyId(NATIVE[chainId])}`)}
-              >
-                {i18n._(t`Add`)}
-              </Button>
-              <Button id="add-pool-button" onClick={() => router.push(`/find`)}>
-                {i18n._(t`Import`)}
-              </Button>
-              {migrationSupported && (
-                <Button id="create-pool-button" onClick={() => router.push(`/migrate`)}>
-                  {i18n._(t`Migrate`)}
-                </Button>
-              )}
-            </div>
           </div>
         </div>
       )}
