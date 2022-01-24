@@ -142,8 +142,13 @@ const useMenu: UseMenu = () => {
         icon: <SwitchVerticalIcon width={20} className="rotate-90 filter" />,
         items: [
           {
-            key: 'farm',
-            title: i18n._(t`Browse`),
+            key: 'your-farms',
+            title: i18n._(t`Your Farms`),
+            link: '/farm?filter=portfolio',
+          },
+          {
+            key: 'all-farms',
+            title: i18n._(t`All Farms`),
             link: '/farm',
           },
         ],
