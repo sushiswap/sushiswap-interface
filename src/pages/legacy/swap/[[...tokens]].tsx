@@ -5,6 +5,7 @@ import { Currency, JSBI, Token, Trade as V2Trade, TradeType } from '@sushiswap/c
 import Banner from 'app/components/Banner'
 import Button from 'app/components/Button'
 import RecipientField from 'app/components/RecipientField'
+import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import ConfirmSwapModal from 'app/features/legacy/swap/ConfirmSwapModal'
 import SwapCallbackError from 'app/features/legacy/swap/SwapCallbackError'
@@ -420,14 +421,28 @@ const Swap = ({ banners }) => {
               recipient={recipient ?? undefined}
             />
           )}
+
+          {trade && routeNotFound && userHasSpecifiedInputOutput && (
+            <Typography variant="xs" className="text-center py-2">
+              {i18n._(t`Insufficient liquidity for this trade.`)}{' '}
+              {singleHopOnly && i18n._(t`Try enabling multi-hop trades`)}
+            </Typography>
+          )}
+
           {swapIsUnsupported ? (
-            <Button color="red" disabled fullWidth>
+            <Button color="red" disabled fullWidth className="rounded-2xl md:rounded">
               {i18n._(t`Unsupported Asset`)}
             </Button>
           ) : !account ? (
-            <Web3Connect color="blue" variant="filled" fullWidth />
+            <Web3Connect color="blue" variant="filled" fullWidth className="rounded-2xl md:rounded" />
           ) : showWrap ? (
-            <Button fullWidth color="blue" disabled={Boolean(wrapInputError)} onClick={onWrap}>
+            <Button
+              fullWidth
+              color="blue"
+              disabled={Boolean(wrapInputError)}
+              onClick={onWrap}
+              className="rounded-2xl md:rounded"
+            >
               {wrapInputError ??
                 (wrapType === WrapType.WRAP
                   ? i18n._(t`Wrap`)
@@ -435,11 +450,6 @@ const Swap = ({ banners }) => {
                   ? i18n._(t`Unwrap`)
                   : null)}
             </Button>
-          ) : trade && routeNotFound && userHasSpecifiedInputOutput ? (
-            <div className="text-center">
-              <div className="mb-1">{i18n._(t`Insufficient liquidity for this trade`)}</div>
-              {singleHopOnly && <div className="mb-1">{i18n._(t`Try enabling multi-hop trades`)}</div>}
-            </div>
           ) : showApproveFlow ? (
             <div>
               {approvalState !== ApprovalState.APPROVED && (
@@ -448,6 +458,7 @@ const Swap = ({ banners }) => {
                   loading={approvalState === ApprovalState.PENDING}
                   onClick={handleApprove}
                   disabled={approvalState !== ApprovalState.NOT_APPROVED || approvalSubmitted}
+                  className="rounded-2xl md:rounded"
                 >
                   {i18n._(t`Approve ${currencies[Field.INPUT]?.symbol}`)}
                 </Button>
@@ -473,6 +484,7 @@ const Swap = ({ banners }) => {
                   disabled={
                     !isValid || approvalState !== ApprovalState.APPROVED || (priceImpactSeverity > 3 && !isExpertMode)
                   }
+                  className="rounded-2xl md:rounded"
                 >
                   {priceImpactSeverity > 3 && !isExpertMode
                     ? i18n._(t`Price Impact High`)
@@ -501,6 +513,7 @@ const Swap = ({ banners }) => {
               }}
               id="swap-button"
               disabled={!isValid || (priceImpactSeverity > 3 && !isExpertMode) || !!swapCallbackError}
+              className="rounded-2xl md:rounded"
             >
               {swapInputError
                 ? swapInputError
