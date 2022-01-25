@@ -1,65 +1,53 @@
-import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
-import { useRouter } from 'next/router'
 import React, { FC, useEffect, useRef } from 'react'
 
-import { widget } from '../../../public/static/charting_library'
-import DATAFEED from './datafeed'
+import {
+  ChartingLibraryWidgetOptions,
+  ResolutionString,
+  ThemeName,
+  Timezone,
+  TradingTerminalWidgetOptions,
+  widget,
+} from '../../../public/static/charting_library'
+import DATAFEED from './api'
 
-console.log(DATAFEED)
-/**
- * When the script tag is injected the TradingView object is not immediately
- * available on the window. So we listen for when it gets set
- */
-const tradingViewListener = async () =>
-  new Promise<void>((resolve) =>
-    Object.defineProperty(window, 'TradingView', {
-      configurable: true,
-      set(value) {
-        this.tv = value
-        resolve(value)
-      },
-    })
-  )
+type TradingViewChartOptions = ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions
+type DynamicTradingViewOptions = Pick<TradingViewChartOptions, 'container' | 'symbol'>
+type GetDefaultWidgetOptions = (opts: DynamicTradingViewOptions) => TradingViewChartOptions
 
-const initializeTradingView = (TradingViewObj: any, symbol: string, localeCode: string, opts: any) => {
-  let timezone = 'Etc/UTC'
+const getDefaultWidgetOptions: GetDefaultWidgetOptions = (opts) => {
+  let timezone: Timezone = 'Etc/UTC'
   try {
-    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone as Timezone
   } catch (e) {
     // noop
   }
 
-  return new widget({
-    // Advanced Chart Widget uses the legacy embedding scheme,
-    // an id property should be specified in the settings object
-    debug: true,
-    id: opts.container_id,
-    autosize: true,
-    height: '100%',
-    symbol,
+  return {
+    ...opts,
+    ...(timezone && { timezone }),
     datafeed: DATAFEED,
-    interval: '5',
-    timezone,
-    theme: 'dark',
+    locale: 'en',
+    debug: false,
+    autosize: true,
+    interval: '5' as ResolutionString,
+    theme: 'dark' as ThemeName,
     style: '1',
-    locale: localeCode,
     toolbar_bg: '#f1f3f6',
     enable_publishing: false,
     allow_symbol_change: false,
     hide_side_toolbar: false,
+    library_path: '/static/charting_library/',
     enabled_features: ['header_fullscreen_button'],
     overrides: {
       'mainSeriesProperties.showCountdown': true,
-      'paneProperties.background': '#131722',
-      'paneProperties.vertGridProperties.color': '#363c4e',
-      'paneProperties.horzGridProperties.color': '#363c4e',
+      'paneProperties.background.solid': true,
+      'paneProperties.background': '#0D0415',
+      'paneProperties.vertGridProperties.color': '#161522',
+      'paneProperties.horzGridProperties.color': '#161522',
       'symbolWatermarkProperties.transparency': 90,
       'scalesProperties.textColor': '#AAA',
-      'mainSeriesProperties.candleStyle.wickUpColor': '#336854',
-      'mainSeriesProperties.candleStyle.wickDownColor': '#7f323f',
     },
-    ...opts,
-  })
+  }
 }
 
 interface TradingViewProps {
@@ -67,40 +55,24 @@ interface TradingViewProps {
   symbol: string
 }
 
-const Index: FC<TradingViewProps> = ({ id, symbol }) => {
-  const { locale } = useRouter()
-  const widgetRef = useRef<any>()
-  const isDesktop = useDesktopMediaQuery()
+const Widget: FC<TradingViewProps> = ({ id, symbol }) => {
+  const ref = useRef<any>()
 
   useEffect(() => {
-    const opts: any = {
-      container_id: id,
+    const widgetOptions: DynamicTradingViewOptions = {
+      container: id,
       symbol,
     }
 
-    if (!isDesktop) {
-      opts.hide_side_toolbar = true
-    }
+    const tvWidget = new widget(getDefaultWidgetOptions(widgetOptions))
+    ref.current = tvWidget
 
-    // @ts-ignore
-    if (window.tv) {
-      // @ts-ignore
-      widgetRef.current = initializeTradingView(window.tv, symbol, locale || 'en', opts)
-    } else {
-      tradingViewListener().then((tv) => {
-        widgetRef.current = initializeTradingView(tv, symbol, locale || 'en', opts)
-      })
-    }
+    tvWidget.onChartReady(() => {
+      tvWidget.addCustomCSSFile('./theme/dark.css')
+    })
+  }, [id, ref, symbol])
 
-    // Ignore isMobile to avoid re-render TV
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, symbol, locale])
-
-  return (
-    <div className="overflow-hidden tradingview_container">
-      <div id={id} />
-    </div>
-  )
+  return <div id={id} className="absolute inset-0" />
 }
 
-export default Index
+export default Widget

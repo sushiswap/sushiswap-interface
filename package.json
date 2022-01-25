@@ -207,5 +207,9 @@
     "not ie 11",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "@types/react-grid-layout": "^1.3.0",
+    "react-grid-layout": "^1.3.3"
+  }
 }

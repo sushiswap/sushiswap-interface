@@ -12,6 +12,7 @@ import LimitOrderButton from 'app/features/legacy/limit-order/LimitOrderButton'
 import LimitOrderReviewModal from 'app/features/legacy/limit-order/LimitOrderReviewModal'
 import LimitPriceInputPanel from 'app/features/legacy/limit-order/LimitPriceInputPanel'
 import OrderExpirationDropdown from 'app/features/legacy/limit-order/OrderExpirationDropdown'
+import { LimitOrderMode, LimitOrderProps } from 'app/features/legacy/limit-order/types'
 import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import NetworkGuard from 'app/guards/Network'
@@ -27,9 +28,37 @@ import useLimitOrderDerivedCurrencies, {
   useLimitOrderState,
 } from 'app/state/limit-order/hooks'
 import { useExpertModeManager } from 'app/state/user/hooks'
-import React, { useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 
-const LimitOrder = () => {
+type LimitOrder<P> = FC<P> & {
+  Guard: FC
+  Layout: FC
+}
+
+const LimitOrder: LimitOrder<LimitOrderProps> = ({ mode = LimitOrderMode.standard }) => {
+  const { i18n } = useLingui()
+
+  if (mode === LimitOrderMode.pro) {
+    return (
+      <div className="flex flex-col gap-3">
+        <LimitOrderContent mode={mode} />
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <SwapLayoutCard>
+        <LimitOrderContent />
+      </SwapLayoutCard>
+      <Typography variant="xs" className="px-10 mt-5 italic text-center text-low-emphesis">
+        {i18n._(t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`)}
+      </Typography>
+    </>
+  )
+}
+
+const LimitOrderContent: FC<LimitOrderProps> = ({ mode }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()
@@ -84,69 +113,64 @@ const LimitOrder = () => {
 
   return (
     <>
-      <SwapLayoutCard>
-        <LimitOrderApprovalCheck />
-        <div className="px-2">
-          <HeaderNew inputCurrency={inputCurrency} outputCurrency={outputCurrency} />
-        </div>
-        <div className="flex flex-col gap-3">
-          <SwapAssetPanel
-            error={false}
-            header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You pay`)} />}
-            walletToggle={(props) => (
-              <SwapAssetPanel.Switch
-                id={`switch-classic-withdraw-from-0}`}
-                {...props}
-                label={i18n._(t`Pay from`)}
-                onChange={() => dispatch(setFromBentoBalance(!fromBentoBalance))}
-              />
-            )}
-            selected={true}
-            spendFromWallet={!fromBentoBalance}
-            currency={inputCurrency}
-            value={(typedField === Field.INPUT ? typedValue : parsedAmounts?.inputAmount?.toSignificant(6)) || ''}
-            onChange={(value) => onUserInput(Field.INPUT, value || '')}
-            onSelect={(inputCurrency) => onCurrencySelection(Field.INPUT, inputCurrency)}
-            currencies={inputTokenList}
-          />
-          <div className="flex gap-3">
-            <div className="flex flex-1">
-              <LimitPriceInputPanel trade={trade} limitPrice={!!rate ? rate : trade?.executionPrice} />
-            </div>
-            <SwitchVerticalIcon
-              width={18}
-              className="mt-6 cursor-pointer text-secondary hover:text-white"
-              onClick={onSwitchTokens}
+      <LimitOrderApprovalCheck />
+      <div className="px-2">
+        <HeaderNew inputCurrency={inputCurrency} outputCurrency={outputCurrency} />
+      </div>
+      <div className="flex flex-col gap-3">
+        <SwapAssetPanel
+          error={false}
+          header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You pay`)} />}
+          walletToggle={(props) => (
+            <SwapAssetPanel.Switch
+              id={`switch-classic-withdraw-from-0}`}
+              {...props}
+              label={i18n._(t`Pay from`)}
+              onChange={() => dispatch(setFromBentoBalance(!fromBentoBalance))}
             />
-            <div className="flex flex-1">
-              <OrderExpirationDropdown />
-            </div>
-          </div>
-          <SwapAssetPanel
-            error={false}
-            header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You receive`)} />}
-            selected={true}
-            currency={outputCurrency}
-            value={(typedField === Field.OUTPUT ? typedValue : parsedAmounts?.outputAmount?.toSignificant(6)) || ''}
-            onChange={(value) => onUserInput(Field.OUTPUT, value || '')}
-            onSelect={(outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency)}
-            currencies={outputTokenList}
-            priceImpact={inputPanelHelperText}
-            priceImpactCss={inputPanelHelperText?.greaterThan(ZERO_PERCENT) ? 'text-green' : 'text-red'}
-          />
-        </div>
-
-        {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
-        <LimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
-        <LimitOrderReviewModal
-          parsedAmounts={parsedAmounts}
-          trade={trade}
-          limitPrice={!!rate ? rate : trade?.executionPrice}
+          )}
+          selected={true}
+          spendFromWallet={!fromBentoBalance}
+          currency={inputCurrency}
+          value={(typedField === Field.INPUT ? typedValue : parsedAmounts?.inputAmount?.toSignificant(6)) || ''}
+          onChange={(value) => onUserInput(Field.INPUT, value || '')}
+          onSelect={(inputCurrency) => onCurrencySelection(Field.INPUT, inputCurrency)}
+          currencies={inputTokenList}
         />
-      </SwapLayoutCard>
-      <Typography variant="xs" className="px-10 mt-5 italic text-center text-low-emphesis">
-        {i18n._(t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`)}
-      </Typography>
+        <div className="flex gap-3">
+          <div className="flex flex-1">
+            <LimitPriceInputPanel trade={trade} limitPrice={!!rate ? rate : trade?.executionPrice} />
+          </div>
+          <SwitchVerticalIcon
+            width={18}
+            className="mt-6 cursor-pointer text-secondary hover:text-white"
+            onClick={onSwitchTokens}
+          />
+          <div className="flex flex-1">
+            <OrderExpirationDropdown />
+          </div>
+        </div>
+        <SwapAssetPanel
+          error={false}
+          header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`You receive`)} />}
+          selected={true}
+          currency={outputCurrency}
+          value={(typedField === Field.OUTPUT ? typedValue : parsedAmounts?.outputAmount?.toSignificant(6)) || ''}
+          onChange={(value) => onUserInput(Field.OUTPUT, value || '')}
+          onSelect={(outputCurrency) => onCurrencySelection(Field.OUTPUT, outputCurrency)}
+          currencies={outputTokenList}
+          priceImpact={inputPanelHelperText}
+          priceImpactCss={inputPanelHelperText?.greaterThan(ZERO_PERCENT) ? 'text-green' : 'text-red'}
+        />
+      </div>
+
+      {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
+      <LimitOrderButton trade={trade} parsedAmounts={parsedAmounts} />
+      <LimitOrderReviewModal
+        parsedAmounts={parsedAmounts}
+        trade={trade}
+        limitPrice={!!rate ? rate : trade?.executionPrice}
+      />
     </>
   )
 }

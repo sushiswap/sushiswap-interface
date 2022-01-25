@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react'
 import { LimitOrder } from '@sushiswap/limit-order-sdk'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
+import { LimitOrderMode, LimitOrderProps } from 'app/features/legacy/limit-order/types'
 import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
 import {
   TABLE_TABLE_CLASSNAME,
@@ -20,7 +21,7 @@ import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
 
-const OpenOrders: FC = () => {
+const OpenOrders: FC<LimitOrderProps> = ({ mode = LimitOrderMode.standard }) => {
   const { i18n } = useLingui()
   const { pending, mutate } = useLimitOrders()
   const addTransaction = useTransactionAdder()
@@ -57,7 +58,12 @@ const OpenOrders: FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, pending.maxPages > 1 ? 'min-h-[537px]' : '')}>
+      <div
+        className={classNames(
+          mode === LimitOrderMode.standard ? TABLE_WRAPPER_DIV_CLASSNAME : '',
+          pending.maxPages > 1 ? 'min-h-[537px]' : ''
+        )}
+      >
         <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (

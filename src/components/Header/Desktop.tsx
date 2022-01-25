@@ -7,6 +7,7 @@ import useMenu from 'app/components/Header/useMenu'
 import LanguageSwitch from 'app/components/LanguageSwitch'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
+import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
@@ -29,9 +30,9 @@ const Desktop: FC = () => {
 
   return (
     <>
-      <header className="fixed z-20 w-full hidden lg:block" style={{ height: HEADER_HEIGHT }}>
-        <nav className={NAV_CLASS}>
-          <Container maxWidth="7xl" className="mx-auto">
+      <header className="relative z-20 w-full hidden lg:block">
+        <nav className={classNames(NAV_CLASS, 'h-[64px]')}>
+          <Container maxWidth="7xl" className="mx-auto h-full">
             <div className="flex gap-4 px-6 items-center justify-between">
               <div className="flex gap-4">
                 <div className="flex w-6 mr-4 items-center">

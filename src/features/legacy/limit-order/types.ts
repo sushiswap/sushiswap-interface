@@ -35,3 +35,12 @@ export interface DerivedOrder {
   status: OrderStatus
   rate: Price<Token, Token>
 }
+
+export enum LimitOrderMode {
+  standard = 'standard',
+  pro = 'pro',
+}
+
+export interface LimitOrderProps {
+  mode?: LimitOrderMode
+}

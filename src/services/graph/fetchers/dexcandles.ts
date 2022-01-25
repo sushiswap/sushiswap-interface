@@ -4,13 +4,13 @@ import { GRAPH_HOST } from 'app/services/graph/constants'
 import { barsQuery } from 'app/services/graph/queries/dexcandles'
 
 export const DEXCANDLES = {
-  [ChainId.ETHEREUM]: 'agxmbhir/sushiswap-dexcandles',
+  [ChainId.ETHEREUM]: 'sushiswap/sushiswap-dexcandles',
   [ChainId.XDAI]: 'sushiswap/xdai-exchange',
   [ChainId.MATIC]: 'sushiswap/matic-exchange',
-  [ChainId.FANTOM]: 'sushiswap/fantom-exchange',
+  [ChainId.FANTOM]: 'sushiswap/fantom-candles',
   [ChainId.BSC]: 'sushiswap/bsc-exchange',
   [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
-  [ChainId.AVALANCHE]: 'agxmbhir/sushiswap-dexcandles',
+  [ChainId.AVALANCHE]: 'sushiswap/avalanche-candles',
   [ChainId.CELO]: 'jiro-ono/sushitestsubgraph',
   [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
   [ChainId.MOONRIVER]: 'sushiswap/moonriver-exchange',

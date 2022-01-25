@@ -4,6 +4,8 @@
 @import 'react-virtualized/styles.css';
 @import 'rc-slider/assets/index.css';
 @import './variables.css';
+@import 'react-grid-layout/css/styles.css';
+@import 'react-resizable/css/styles.css';
 
 @tailwind components;
 
@@ -60,9 +62,9 @@ input:focus {
   background: repeating-linear-gradient(45deg, #161522, #161522 10px, #0d0415 10px, #0d0415 20px);
 }
 
-/**::-webkit-scrollbar {*/
-/*  width: var(--scrollbar-width);*/
-/*}*/
+*::-webkit-scrollbar {
+  display: none;
+}
 
 /*::-webkit-scrollbar-track-piece:start {*/
 /*  background: transparent url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAQAAAAD+Fb1AAAADklEQVR42mNkgAJG3AwAAH4ABWjFc8IAAAAASUVORK5CYII=) repeat-y !important;*/
