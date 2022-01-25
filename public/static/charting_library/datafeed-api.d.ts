@@ -51,6 +51,7 @@ export interface DOMLevel {
 export interface DatafeedConfiguration {
 	exchanges?: Exchange[];
 	supported_resolutions?: ResolutionString[];
+	units?: Record<string, Unit[]>;
 	currency_codes?: string[];
 	supports_marks?: boolean;
 	supports_time?: boolean;
@@ -207,6 +208,9 @@ export interface LibrarySymbolInfo {
 	industry?: string;
 	currency_code?: string;
 	original_currency_code?: string;
+	unit_id?: string;
+	original_unit_id?: string;
+	unit_conversion_types?: string[];
 }
 export interface Mark {
 	id: string | number;
@@ -247,6 +251,7 @@ export interface SearchSymbolResultItem {
 }
 export interface SymbolResolveExtension {
 	currencyCode?: string;
+	unitId?: string;
 }
 export interface TimescaleMark {
 	id: string | number;
@@ -254,6 +259,11 @@ export interface TimescaleMark {
 	color: MarkConstColors | string;
 	label: string;
 	tooltip: string[];
+}
+export interface Unit {
+	id: string;
+	name: string;
+	description: string;
 }
 export type CustomTimezones = "Africa/Cairo" | "Africa/Johannesburg" | "Africa/Lagos" | "America/Argentina/Buenos_Aires" | "America/Bogota" | "America/Caracas" | "America/Chicago" | "America/El_Salvador" | "America/Juneau" | "America/Lima" | "America/Los_Angeles" | "America/Mexico_City" | "America/New_York" | "America/Phoenix" | "America/Santiago" | "America/Sao_Paulo" | "America/Toronto" | "America/Vancouver" | "Asia/Almaty" | "Asia/Ashkhabad" | "Asia/Bahrain" | "Asia/Bangkok" | "Asia/Chongqing" | "Asia/Dubai" | "Asia/Ho_Chi_Minh" | "Asia/Hong_Kong" | "Asia/Jakarta" | "Asia/Jerusalem" | "Asia/Kathmandu" | "Asia/Kolkata" | "Asia/Kuwait" | "Asia/Muscat" | "Asia/Qatar" | "Asia/Riyadh" | "Asia/Seoul" | "Asia/Shanghai" | "Asia/Singapore" | "Asia/Taipei" | "Asia/Tehran" | "Asia/Tokyo" | "Atlantic/Reykjavik" | "Australia/ACT" | "Australia/Adelaide" | "Australia/Brisbane" | "Australia/Perth" | "Australia/Sydney" | "Europe/Amsterdam" | "Europe/Athens" | "Europe/Belgrade" | "Europe/Berlin" | "Europe/Brussels" | "Europe/Copenhagen" | "Europe/Dublin" | "Europe/Helsinki" | "Europe/Istanbul" | "Europe/Lisbon" | "Europe/London" | "Europe/Luxembourg" | "Europe/Madrid" | "Europe/Malta" | "Europe/Moscow" | "Europe/Oslo" | "Europe/Paris" | "Europe/Riga" | "Europe/Rome" | "Europe/Stockholm" | "Europe/Tallinn" | "Europe/Vilnius" | "Europe/Warsaw" | "Europe/Zurich" | "Pacific/Auckland" | "Pacific/Chatham" | "Pacific/Fakaofo" | "Pacific/Honolulu" | "Pacific/Norfolk" | "US/Mountain";
 
