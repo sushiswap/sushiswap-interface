@@ -55,7 +55,7 @@ const Pro = () => {
   }
 
   return (
-    <div className="m-0 min-w-0 place-items-stretch w-full h-full">
+    <div className="w-full h-full min-w-0 m-0 place-items-stretch">
       <ResponsiveGridLayout
         className="relative transition-[height] bg-dark-800"
         layouts={layouts}

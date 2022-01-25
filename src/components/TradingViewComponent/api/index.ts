@@ -1,5 +1,7 @@
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
 import { getDexCandles } from 'app/services/graph/fetchers/dexcandles'
+import gql from 'graphql-tag'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import {
   DatafeedConfiguration,
@@ -15,9 +17,16 @@ const config: DatafeedConfiguration = {
   supported_resolutions,
 }
 
+let client: SubscriptionClient
+
 const dataFeed: IBasicDataFeed = {
   onReady: (callback) => {
     console.log('=====onReady running')
+
+    client = new SubscriptionClient('wss://api.thegraph.com/subgraphs/name/sushiswap/avalanche-candles', {
+      reconnect: true,
+    })
+
     setTimeout(() => callback(config), 0)
   },
   searchSymbols: () => {
@@ -94,6 +103,10 @@ const dataFeed: IBasicDataFeed = {
             ),
           }
         })
+
+        var lastBar = bars[bars.length - 1]
+        // @ts-ignore
+        history[symbolInfo.name] = { lastBar: lastBar }
       } catch (e) {
         //
       }
@@ -105,11 +118,68 @@ const dataFeed: IBasicDataFeed = {
       onResult(bars, { noData: true })
     }
   },
-  subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscribeUID, onResetCacheNeededCallback) => {
+  subscribeBars: (symbolInfo, resolution, onTick, subscribeUID, onResetCacheNeededCallback) => {
     console.log('=====subscribeBars runnning')
+
+    const query = gql`
+      subscription barsSubscription($where: Candle_filter) {
+        candles(first: 1, orderBy: time, orderDirection: desc, where: $where) {
+          time
+          open
+          close
+          low
+          high
+          token1TotalAmount
+        }
+      }
+    `
+
+    const [, , chainId, token0, token1] = symbolInfo.full_name.split(/[:]/)
+
+    const observable = client.request({
+      query,
+      variables: {
+        // @ts-ignore
+        where: { period: 300, token0, token1 },
+      },
+    })
+
+    observable.subscribe({
+      next(results) {
+        console.log('results', results)
+
+        if (!results?.data?.candles?.[0]) return
+
+        // @ts-ignore
+        const { open, low, high, close, time, token1TotalAmount } = results?.data?.candles[0]
+
+        const bar = {
+          open: Number(1 / open),
+          low: Number(1 / low),
+          high: Number(1 / high),
+          close: Number(1 / close),
+          time: time * 1000,
+          volume: Number(
+            JSBI.divide(JSBI.BigInt(token1TotalAmount), JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))).toString()
+          ),
+        }
+
+        // @ts-ignore
+        history[symbolInfo.name] = { lastBar: bar }
+
+        onTick(bar)
+      },
+      error(error) {
+        console.log('error', error)
+      },
+      complete() {
+        console.log('complete')
+      },
+    })
   },
   unsubscribeBars: (subscriberUID) => {
     console.log('=====unsubscribeBars running')
+    client.unsubscribeAll()
   },
 }
 
