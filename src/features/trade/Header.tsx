@@ -4,7 +4,6 @@ import { ChainId, Currency, Percent } from '@sushiswap/core-sdk'
 import Gas from 'app/components/Gas'
 import NavLink from 'app/components/NavLink'
 import Settings from 'app/components/Settings'
-import MyOrders from 'app/features/legacy/limit-order/MyOrders'
 import { currencyId } from 'app/functions/currency'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
@@ -37,26 +36,7 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
 
   return (
     <div className="flex items-center justify-between mb-4 space-x-3">
-      <div className="grid grid-cols-3 rounded bg-dark-800 h-[46px]">
-        <NavLink
-          activeClassName="font-bold border rounded text-high-emphesis border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink"
-          href={{
-            pathname: '/swap',
-            query: getQuery(input, output),
-          }}
-        >
-          <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md text-secondary hover:text-high-emphesis ">
-            {i18n._(t`Swap`)}
-          </a>
-        </NavLink>
-        <NavLink
-          activeClassName="font-bold border rounded text-high-emphesis border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink"
-          href={'/limit-order'}
-        >
-          <a className="flex items-center justify-center px-4 text-base font-medium text-center rounded-md text-secondary hover:text-high-emphesis">
-            {i18n._(t`Limit`)}
-          </a>
-        </NavLink>
+      <div className="flex rounded bg-dark-800 h-[46px]">
         <NavLink
           activeClassName="font-bold border rounded text-high-emphesis border-dark-800 bg-gradient-to-r from-opaque-blue to-opaque-pink hover:from-blue hover:to-pink"
           href={`/${!isRemove ? 'add' : 'remove'}${input ? `/${currencyId(input)}` : ''}${
@@ -70,11 +50,6 @@ const ExchangeHeader: FC<ExchangeHeaderProps> = ({ input, output, allowedSlippag
       </div>
       <div className="flex items-center">
         <div className="grid grid-flow-col gap-1">
-          {isLimitOrder && (
-            <div className="flex items-center h-[46px] w-full cursor-pointer bg-dark-800 hover:bg-dark-700 rounded px-3 py-1.5">
-              <MyOrders />
-            </div>
-          )}
           {chainId === ChainId.ETHEREUM && (
             <div className="items-center hidden w-full h-full px-3 space-x-3 rounded cursor-pointer text-green text-opacity-80 hover:text-opacity-100 md:flex hover:bg-dark-800">
               <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -75,7 +75,7 @@ export const POOL_TYPES: PoolTypesInterface = {
 
 export const TABLE_WRAPPER_DIV_CLASSNAME =
   'overflow-x-auto border border-dark-900 rounded shadow-md bg-[rgba(0,0,0,0.12)]'
-export const TABLE_TABLE_CLASSNAME = 'w-full'
+export const TABLE_TABLE_CLASSNAME = 'w-full border-collapse'
 // @ts-ignore TYPE NEEDS FIXING
 export const TABLE_TR_TH_CLASSNAME = (i, length) =>
   classNames('text-secondary text-sm py-3', i === 0 ? 'pl-4 text-left' : 'text-right', i === length - 1 ? 'pr-4' : '')

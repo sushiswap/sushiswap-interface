@@ -31,12 +31,14 @@ import { PersistGate } from 'redux-persist/integration/react'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
+// const PersistGate = dynamic(() => import('redux-persist/integration/react'), { ssr: false })
+
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-function MyApp({ Component, pageProps, fallback }) {
+function MyApp({ Component, pageProps, fallback, err }) {
   const router = useRouter()
   const { locale, events } = router
 
@@ -145,7 +147,8 @@ function MyApp({ Component, pageProps, fallback }) {
                     <Provider>
                       <Layout>
                         <Guard>
-                          <Component {...pageProps} />
+                          {/*@ts-ignore TYPE NEEDS FIXING*/}
+                          <Component {...pageProps} err={err} />
                         </Guard>
                         <Portals />
                       </Layout>

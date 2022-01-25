@@ -17,7 +17,7 @@ import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 're
 import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
 
 interface SwapAssetPanel {
-  error: boolean
+  error?: boolean
   // @ts-ignore TYPE NEEDS FIXING
   header: (x) => React.ReactNode
   // @ts-ignore TYPE NEEDS FIXING
@@ -163,7 +163,7 @@ const InputPanel: FC<
       >
         {usdcValue?.greaterThan(ZERO) && <>~{formatNumber(usdcValue?.toFixed(), true, true, 2)} </>}
         {priceImpact && (
-          <span className={priceImpactCss || priceImpactClassName}>{priceImpact?.toSignificant(2)}%</span>
+          <span className={priceImpactCss || priceImpactClassName}>({priceImpact?.toSignificant(2)}%)</span>
         )}
       </Typography>
       {/*This acts as a reference to get input width*/}

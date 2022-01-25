@@ -263,7 +263,7 @@ export const useLimitOrderDerivedTypedInputAmount: UseLimitOrderDerivedTypedInpu
 
 type UseLimitOrderDerivedInputError = ({ trade }: { trade?: Trade<Currency, Currency, TradeType> }) => string
 export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({ trade }) => {
-  const { recipient, orderExpiration, fromBentoBalance, limitPrice } = useLimitOrderState()
+  const { recipient, orderExpiration, fromBentoBalance, limitPrice, typedValue } = useLimitOrderState()
   const { account } = useActiveWeb3React()
   const { inputCurrency, outputCurrency } = useLimitOrderDerivedCurrencies()
   const recipientLookup = useENS(recipient)
@@ -274,7 +274,7 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
   return useMemo(() => {
     return !account
       ? 'Connect Wallet'
-      : !trade?.inputAmount.greaterThan(ZERO)
+      : !trade?.inputAmount.greaterThan(ZERO) || !typedValue
       ? i18n._(t`Enter an amount`)
       : !inputCurrency || !outputCurrency
       ? i18n._(t`Select a token`)

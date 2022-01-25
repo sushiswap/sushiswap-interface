@@ -99,8 +99,8 @@ const Component: FC<NetworkGuardProps> = ({ children, feature }) => {
   )
 }
 
-const NetworkGuard = (feature: Feature) => {
-  // @ts-ignore TYPE NEEDS FIXING
+type NetworkGuard = (feature: Feature) => FC
+const NetworkGuard: NetworkGuard = (feature: Feature) => {
   return ({ children }) => <Component feature={feature}>{children}</Component>
 }
 

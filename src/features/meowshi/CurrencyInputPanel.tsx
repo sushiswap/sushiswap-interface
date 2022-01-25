@@ -40,10 +40,10 @@ const CurrencyInputPanel: FC<CurrencyInputPanelProps> = ({ field, meowshiState, 
               <Image
                 src={
                   currency === SUSHI[ChainId.ETHEREUM]
-                    ? '/images/tokens/sushi-square.jpg'
+                    ? 'https://app.sushi.com/images/tokens/sushi-square.jpg'
                     : currency === XSUSHI
-                    ? '/images/tokens/xsushi-square.jpg'
-                    : '/images/tokens/nyan-square.jpg'
+                    ? 'https://app.sushi.com/images/tokens/xsushi-square.jpg'
+                    : 'https://app.sushi.com/images/tokens/nyan-square.jpg'
                 }
                 alt="SUSHI"
                 width="62px"

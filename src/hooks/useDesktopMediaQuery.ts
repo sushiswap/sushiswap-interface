@@ -7,4 +7,8 @@ const useDesktopMediaQuery = () => {
   return useMediaQuery({ query: `(min-width: ${breakpoints.lg}` })
 }
 
+export const useTouchDeviceMediaQuery = () => {
+  return useMediaQuery({ query: `(hover: none) and (pointer: coarse)` })
+}
+
 export default useDesktopMediaQuery

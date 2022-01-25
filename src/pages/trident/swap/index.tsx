@@ -66,7 +66,7 @@ const Swap = () => {
     await switchCurrencies()
   }, [dispatch, switchCurrencies, tridentSwapState])
 
-  const { callback, error: cbError } = useSwapCallback(trade, allowedSlippage, address, null, {
+  const { callback, error: cbError } = useSwapCallback(trade, allowedSlippage, address ?? undefined, null, {
     receiveToWallet,
     fromWallet: spendFromWallet,
     parsedAmounts,
