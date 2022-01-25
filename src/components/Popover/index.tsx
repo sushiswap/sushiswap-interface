@@ -50,7 +50,7 @@ export default function Popover({ content, children, placement = 'auto', show, m
             ReactDOM.createPortal(
               <HeadlessuiPopover.Panel
                 static
-                className="z-1000 shadow-xl shadow-dark-1000/80"
+                className="z-1000 shadow-xl shadow-dark-1000/80 rounded overflow-hidden"
                 ref={setPopperElement as any}
                 style={styles.popper}
                 {...attributes.popper}
