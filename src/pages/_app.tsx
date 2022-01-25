@@ -31,6 +31,8 @@ import { PersistGate } from 'redux-persist/integration/react'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
+// const PersistGate = dynamic(() => import('redux-persist/integration/react'), { ssr: false })
+
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
