@@ -9,6 +9,7 @@ import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
 import { SyncWithRedux } from 'app/components/SyncWithRedux'
 import Web3ReactManager from 'app/components/Web3ReactManager'
+import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
@@ -147,6 +148,8 @@ function MyApp({ Component, pageProps, fallback, err }) {
                     <Provider>
                       <Layout>
                         <Guard>
+                          {/* TODO: Added alert Jan 25. Delete component after a few months. */}
+                          <MultichainExploitAlertModal />
                           {/*@ts-ignore TYPE NEEDS FIXING*/}
                           <Component {...pageProps} err={err} />
                         </Guard>
