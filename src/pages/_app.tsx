@@ -36,7 +36,7 @@ if (typeof window !== 'undefined' && !!window.ethereum) {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-function MyApp({ Component, pageProps, fallback }) {
+function MyApp({ Component, pageProps, fallback, err }) {
   const router = useRouter()
   const { locale, events } = router
 
@@ -145,7 +145,8 @@ function MyApp({ Component, pageProps, fallback }) {
                     <Provider>
                       <Layout>
                         <Guard>
-                          <Component {...pageProps} />
+                          {/*@ts-ignore TYPE NEEDS FIXING*/}
+                          <Component {...pageProps} err={err} />
                         </Guard>
                         <Portals />
                       </Layout>
