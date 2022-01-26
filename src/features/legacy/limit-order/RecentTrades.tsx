@@ -2,6 +2,7 @@ import { ArrowSmRightIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { computePairAddress, Currency, FACTORY_ADDRESS } from '@sushiswap/core-sdk'
+import ExternalLink from 'app/components/ExternalLink'
 import Typography from 'app/components/Typography'
 import { classNames, decimalFormatter } from 'app/functions'
 import { useSwaps } from 'app/services/graph'
@@ -20,13 +21,13 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
   const amount1 = swap.amount1In === '0' ? swap.amount1Out : swap.amount1In
 
   return (
-    <div
+    <ExternalLink
       style={style}
       className={classNames(
         'grid grid-cols-3 px-3 border-l items-center',
         swap.amount1In === '0' ? 'border-l-red/50' : 'border-l-green/50'
       )}
-      onClick={() => window.open(`https://snowtrace.io/tx/${swap.transaction.id}`)}
+      href={`https://snowtrace.io/tx/${swap.transaction.id}`}
     >
       <Typography variant="xs" className="text-right text-white">
         {decimalFormatter.format(amount0)}
@@ -46,7 +47,7 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
       <Typography variant="xs" className="text-right text-secondary">
         {format(Number(swap.transaction.timestamp * 1000), 'p')}
       </Typography>
-    </div>
+    </ExternalLink>
   )
 }
 
