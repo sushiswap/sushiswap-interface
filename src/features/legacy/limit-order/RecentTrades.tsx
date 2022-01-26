@@ -24,8 +24,9 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
       style={style}
       className={classNames(
         'grid grid-cols-3 px-3 border-l items-center',
-        swap.amount0In === '0' ? 'border-l-red/50' : 'border-l-green/50'
+        swap.amount1In === '0' ? 'border-l-red/50' : 'border-l-green/50'
       )}
+      onClick={() => window.open(`https://snowtrace.io/tx/${swap.transaction.id}`)}
     >
       <Typography variant="xs" className="text-right text-white">
         {decimalFormatter.format(amount0)}
@@ -34,12 +35,12 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
         variant="xs"
         className={classNames(
           'flex items-center justify-end text-right gap-0.5',
-          swap.amount0In === '0' ? 'text-red' : 'text-green'
+          swap.amount1In === '0' ? 'text-red' : 'text-green'
         )}
       >
         {decimalFormatter.format(amount1)}
         <ArrowSmRightIcon
-          className={classNames('w-[14px] h-[14]px', swap.amount0In === '0' ? 'rotate-45' : '-rotate-45')}
+          className={classNames('w-[14px] h-[14]px', swap.amount1In === '0' ? 'rotate-45' : '-rotate-45')}
         />
       </Typography>
       <Typography variant="xs" className="text-right text-secondary">
@@ -58,8 +59,14 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const pair = useMemo(() => {
-    //   @ts-ignore
-    const address = computePairAddress({ factoryAddress: FACTORY_ADDRESS[chainId], tokenA: token0, tokenB: token1 })
+    const address = computePairAddress({
+      //   @ts-ignore
+      factoryAddress: FACTORY_ADDRESS[chainId],
+      //   @ts-ignore
+      tokenA: token0.wrapped,
+      //   @ts-ignore
+      tokenB: token1.wrapped,
+    })
     return address.toLowerCase()
   }, [chainId, token0, token1])
 
@@ -87,7 +94,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="grid grid-cols-3 mx-3 pt-3 pb-1 items-center">
+      <div className="grid items-center grid-cols-3 pt-3 pb-1 mx-3">
         <Typography variant="xs" className="text-right text-secondary">
           {i18n._(t`Trade Size`)}
         </Typography>
