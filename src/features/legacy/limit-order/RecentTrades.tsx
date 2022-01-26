@@ -8,7 +8,9 @@ import { useSwaps } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { format } from 'date-fns'
 import React, { CSSProperties, FC, useCallback, useMemo } from 'react'
+// @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer'
+// @ts-ignore
 import { FixedSizeList as List } from 'react-window'
 interface SwapRow {
   swap: any
@@ -23,7 +25,7 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
     <div
       style={style}
       className={classNames(
-        'grid grid-cols-3 px-3 border-l items-center',
+        'grid grid-cols-3 px-3 border-l items-center hover:bg-dark-850',
         swap.amount0In === '0' ? 'border-l-red/50' : 'border-l-green/50'
       )}
     >
@@ -59,8 +61,15 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const { chainId } = useActiveWeb3React()
   const pair = useMemo(() => {
     //   @ts-ignore
-    const address = computePairAddress({ factoryAddress: FACTORY_ADDRESS[chainId], tokenA: token0, tokenB: token1 })
-    return address.toLowerCase()
+    const address =
+      token0 &&
+      token1 &&
+      computePairAddress({
+        factoryAddress: FACTORY_ADDRESS[chainId || 1],
+        tokenA: token0.wrapped,
+        tokenB: token1.wrapped,
+      })
+    return address?.toLowerCase()
   }, [chainId, token0, token1])
 
   const { data: swaps } = useSwaps({
@@ -73,7 +82,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
 
       where: { pair },
     },
-    shouldFetch: !!chainId,
+    shouldFetch: !!chainId && !!pair,
     swrConfig: { refreshInterval: 2000, fallbackData: [] },
   })
 

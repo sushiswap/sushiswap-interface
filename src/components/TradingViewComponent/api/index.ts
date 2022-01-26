@@ -88,7 +88,7 @@ const dataFeed: IBasicDataFeed = {
           where: { period: 300, token0, token1, time_gt: periodParams.from, time_lt: periodParams.to },
         })
 
-        bars = data.map(({ open, low, high, close, time, token1TotalAmount }) => {
+        bars = data.map(({ open, low, high, close, time, token1TotalAmount }: any) => {
           return {
             open: !stableQuote ? open : Number(1 / open),
             low: !stableQuote ? low : Number(1 / low),
