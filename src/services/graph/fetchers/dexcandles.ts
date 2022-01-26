@@ -2,22 +2,20 @@ import { ChainId } from '@sushiswap/core-sdk'
 import { pager } from 'app/services/graph'
 import { GRAPH_HOST } from 'app/services/graph/constants'
 import { barsQuery } from 'app/services/graph/queries/dexcandles'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 export const DEXCANDLES = {
-  [ChainId.ETHEREUM]: 'sushiswap/sushiswap-dexcandles',
-  [ChainId.XDAI]: 'sushiswap/xdai-exchange',
-  [ChainId.MATIC]: 'sushiswap/matic-exchange',
+  [ChainId.ETHEREUM]: 'sushiswap/sushiswap-candles',
+  [ChainId.MATIC]: 'sushiswap/polygon-candles',
   [ChainId.FANTOM]: 'sushiswap/fantom-candles',
-  [ChainId.BSC]: 'sushiswap/bsc-exchange',
-  [ChainId.HARMONY]: 'sushiswap/harmony-exchange',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-candles',
-  [ChainId.CELO]: 'jiro-ono/sushitestsubgraph',
-  [ChainId.ARBITRUM]: 'sushiswap/arbitrum-exchange',
-  [ChainId.MOONRIVER]: 'sushiswap/moonriver-exchange',
-  [ChainId.OKEX]: 'okex-exchange/oec',
-  [ChainId.HECO]: 'heco-exchange/heco',
-  [ChainId.FUSE]: 'sushiswap/fuse-exchange',
 }
+
+export const client = (chainId = ChainId.ETHEREUM) =>
+  // @ts-ignore TYPE NEEDS FIXING
+  new SubscriptionClient(`wss://api.thegraph.com/subgraphs/name/${DEXCANDLES[chainId]}`, {
+    reconnect: true,
+  })
 
 // @ts-ignore TYPE NEEDS FIXING
 export const dexcandles = async (chainId = ChainId.ETHEREUM, query, variables = {}) =>

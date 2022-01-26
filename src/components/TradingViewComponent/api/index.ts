@@ -1,6 +1,6 @@
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
-import { getDexCandles } from 'app/services/graph/fetchers/dexcandles'
-import gql from 'graphql-tag'
+import { client, getDexCandles } from 'app/services/graph/fetchers/dexcandles'
+import { barsSubscriptionQuery } from 'app/services/graph/observables/exchange'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import {
@@ -17,25 +17,25 @@ const config: DatafeedConfiguration = {
   supported_resolutions,
 }
 
-let client: SubscriptionClient
+let _client: SubscriptionClient
 
-const dataFeed: IBasicDataFeed = {
+type DataFeed = (chainId: ChainId) => IBasicDataFeed
+const dataFeed: DataFeed = (chainId) => ({
   onReady: (callback) => {
-    console.log('=====onReady running')
-
-    client = new SubscriptionClient('wss://api.thegraph.com/subgraphs/name/sushiswap/avalanche-candles', {
-      reconnect: true,
-    })
-
-    setTimeout(() => callback(config), 0)
+    if (chainId) {
+      _client = client(chainId)
+      _client.onConnected(() => {
+        setTimeout(() => callback(config), 0)
+      })
+    }
   },
   searchSymbols: () => {},
-  resolveSymbol: (symbolName, onSymbolResolvedCallback, onResolveErrorCallback) => {
+  resolveSymbol: (symbolName, onSymbolResolvedCallback) => {
     const split_data = symbolName.split(/[:]/)
     const symbol_stub: LibrarySymbolInfo = {
       full_name: symbolName,
       listed_exchange: split_data[0],
-      format: 'price', // what's this?
+      format: 'price',
       name: symbolName,
       description: split_data[1],
       type: 'crypto',
@@ -57,7 +57,7 @@ const dataFeed: IBasicDataFeed = {
       console.log('Resolving that symbol....', symbol_stub)
     }, 0)
   },
-  getBars: async (symbolInfo, resolutionString, periodParams, onResult, onError) => {
+  getBars: async (symbolInfo, resolutionString, periodParams, onResult) => {
     let stableQuote = false
     if (
       symbolInfo.full_name
@@ -110,7 +110,7 @@ const dataFeed: IBasicDataFeed = {
       onResult(bars, { noData: true })
     }
   },
-  subscribeBars: (symbolInfo, resolutionString, onTick, subscribeUID, onResetCacheNeededCallback) => {
+  subscribeBars: (symbolInfo, resolutionString, onTick) => {
     // Format resolution for subgraph
     let resolution = 300
     if (resolutionString === '5') resolution = 300
@@ -119,23 +119,10 @@ const dataFeed: IBasicDataFeed = {
     if (resolutionString === '240') resolution = 14400
     if (resolutionString === '1D') resolution = 86400
 
-    const query = gql`
-      subscription barsSubscription($where: Candle_filter) {
-        candles(first: 1, orderBy: time, orderDirection: desc, where: $where) {
-          time
-          open
-          close
-          low
-          high
-          token1TotalAmount
-        }
-      }
-    `
+    const [, , , token0, token1] = symbolInfo.full_name.split(/[:]/)
 
-    const [, , chainId, token0, token1] = symbolInfo.full_name.split(/[:]/)
-
-    const observable = client.request({
-      query,
+    const observable = _client.request({
+      query: barsSubscriptionQuery,
       variables: {
         // @ts-ignore
         where: { period: resolution, token0, token1 },
@@ -173,10 +160,9 @@ const dataFeed: IBasicDataFeed = {
       },
     })
   },
-  unsubscribeBars: (subscriberUID) => {
-    console.log('=====unsubscribeBars running')
-    client.unsubscribeAll()
+  unsubscribeBars: () => {
+    _client.unsubscribeAll()
   },
-}
+})
 
 export default dataFeed

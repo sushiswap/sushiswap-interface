@@ -113,24 +113,24 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
     chainId,
     observer: {
       next({ data }) {
-        if (data.swaps && data.swaps.length > 0) {
-          setBuffer((prevState) => {
-            if (prevState.ids.includes(data.swaps[0].transaction.id)) return prevState
-
-            // Copy state
-            const state = { ...prevState }
+        setBuffer((prevState) => {
+          const state = { ...prevState }
+          data.swaps.forEach((cur: any) => {
+            if (prevState.ids.includes(cur.transaction.id)) {
+              return
+            }
 
             // remove last element
             state.items.pop()
             state.ids.pop()
 
             // add first element
-            state.items.unshift(data.swaps[0])
-            state.ids.unshift(data.swaps[0].transaction.id)
-
-            return state
+            state.items.unshift(cur)
+            state.ids.unshift(cur.transaction.id)
           })
-        }
+
+          return prevState
+        })
       },
       error(error) {
         console.log(`Stream error: ${error.message}`)

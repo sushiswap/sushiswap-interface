@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import { useActiveWeb3React } from 'app/services/web3'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 
 import { ResolutionString, ThemeName, Timezone, widget } from '../../../public/static/charting_library'
 import Loader from '../Loader'
@@ -10,10 +11,14 @@ interface TradingViewProps {
 }
 
 const Widget: FC<TradingViewProps> = ({ id, symbol }) => {
+  const { chainId } = useActiveWeb3React()
   const ref = useRef<any>()
+  const datafeed = useMemo(() => (chainId ? DATAFEED(chainId) : undefined), [chainId])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (!datafeed) return
+
     let timezone: Timezone = 'Etc/UTC'
     try {
       timezone = Intl.DateTimeFormat().resolvedOptions().timeZone as Timezone
@@ -25,7 +30,7 @@ const Widget: FC<TradingViewProps> = ({ id, symbol }) => {
       ...(timezone && { timezone }),
       symbol,
       container: id,
-      datafeed: DATAFEED,
+      datafeed,
       locale: 'en',
       debug: false,
       autosize: true,
@@ -83,7 +88,7 @@ const Widget: FC<TradingViewProps> = ({ id, symbol }) => {
         setLoading(false)
       })
     })
-  }, [id, ref, symbol])
+  }, [chainId, datafeed, id, ref, symbol])
 
   return (
     <div className="relative w-full h-full">

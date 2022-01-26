@@ -24,3 +24,16 @@ export const swapsSubscriptionQuery = gql`
     }
   }
 `
+
+export const barsSubscriptionQuery = gql`
+  subscription barsSubscription($where: Candle_filter) {
+    candles(first: 1, orderBy: time, orderDirection: desc, where: $where) {
+      time
+      open
+      close
+      low
+      high
+      token1TotalAmount
+    }
+  }
+`
