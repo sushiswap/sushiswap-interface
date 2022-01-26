@@ -327,7 +327,7 @@ export const useSwaps = ({
   return useSWR(
     shouldFetch ? ['legacySwaps', chainId, stringify(variables)] : null,
     // @ts-ignore TYPE NEEDS FIXING
-    () => getLegacySwaps(chainId, variables),
+    (_, chainId) => getLegacySwaps(chainId, variables),
     swrConfig
   )
 }

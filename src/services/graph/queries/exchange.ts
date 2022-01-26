@@ -353,13 +353,16 @@ export const swapsQuery = gql`
       amount1Out
       transaction {
         id
+        timestamp
       }
       pair {
         token0 {
           id
+          symbol
         }
         token1 {
           id
+          symbol
         }
       }
     }

@@ -32,7 +32,7 @@ const Pro = () => {
   }
 
   return (
-    <div className="flex divide-x divide-y divide-dark-700 flex-grow overflow-hidden">
+    <div className="flex flex-grow overflow-hidden divide-x divide-y divide-dark-700">
       <div className="max-w-[340px] min-w-[340px] bg-dark-850 border-t border-dark-700">
         <Box className="scale-[90%]">
           <LimitOrder mode={LimitOrderMode.pro} />
@@ -89,7 +89,7 @@ const Pro = () => {
         </div>
       </div>
       <div className="max-w-[340px] min-w-[340px] bg-dark-900 border-t border-dark-1000 overflow-hidden h-full">
-        <RecentTrades />
+        <RecentTrades token0={token0} token1={token1} />
       </div>
     </div>
   )
