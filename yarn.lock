@@ -2836,6 +2836,22 @@
     tiny-warning "^1.0.0"
     toformat "^2.0.0"
 
+"@sushiswap/core-sdk@1.0.0-canary.64":
+  version "1.0.0-canary.64"
+  resolved "https://registry.yarnpkg.com/@sushiswap/core-sdk/-/core-sdk-1.0.0-canary.64.tgz#9ba0426bfac463bb22c24e9f0f10fd0937165cc5"
+  integrity sha512-u6yj1GNCt6fBpeNyv0qjw/eA3vlxdFXtbWi8KAcCoJGvMEpLz5vcmZTCw+yhLt7vkQkyJKeHiazsV5axlGOI8Q==
+  dependencies:
+    "@ethersproject/address" "^5.4.0"
+    "@ethersproject/bignumber" "^5.4.0"
+    "@ethersproject/providers" "^5.4.0"
+    "@ethersproject/solidity" "^5.4.0"
+    big.js "^6.1.1"
+    decimal.js-light "^2.5.0"
+    jsbi "^4.1.0"
+    tiny-invariant "^1.1.0"
+    tiny-warning "^1.0.0"
+    toformat "^2.0.0"
+
 "@sushiswap/core@^2.0.0-canary.1":
   version "2.0.0-canary.1"
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
@@ -2921,15 +2937,23 @@
     "@ethersproject/bignumber" "^5.4.0"
     "@sushiswap/core-sdk" "1.0.0-canary.63"
 
-"@sushiswap/trident-sdk@1.0.0-canary.73":
-  version "1.0.0-canary.73"
-  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.73.tgz#ec05e2b8dd17c19f08d07fe197ac61102d659006"
-  integrity sha512-qwNsJx68kreiU9SjxTiI36hD9hoTc2ThQtkf8LTv5xtjQ+vr5NnioOhugBWlmIMPG9OAxZFM6+MeEXX2V5MDbQ==
+"@sushiswap/tines@1.0.0-canary.47":
+  version "1.0.0-canary.47"
+  resolved "https://registry.yarnpkg.com/@sushiswap/tines/-/tines-1.0.0-canary.47.tgz#09644d9cfc4b446e7d8713392a9bf3bd15530e33"
+  integrity sha512-pyRIOKyZjmW7hKx32WvfHkdhVIUFqsjjBLTUvMawrwua/g2pkdsY6IOhYpK16sZ0f3cT3zEaHAK4QVu1ks4CIA==
+  dependencies:
+    "@ethersproject/bignumber" "^5.4.0"
+    "@sushiswap/core-sdk" "1.0.0-canary.64"
+
+"@sushiswap/trident-sdk@1.0.0-canary.74":
+  version "1.0.0-canary.74"
+  resolved "https://registry.yarnpkg.com/@sushiswap/trident-sdk/-/trident-sdk-1.0.0-canary.74.tgz#36e0ca1b78f03e299829bf5ac9dca5eedcc471e2"
+  integrity sha512-3S0d08rZruxrWvJUhWilMqnugtK2O72JcCSB5oy59J+XFm/HrpeN+MjZwvsANPqSe866TC3hNxIbFd1xtkYTjA==
   dependencies:
     "@ethersproject/abi" "^5.4.0"
     "@ethersproject/bignumber" "^5.4.0"
-    "@sushiswap/core-sdk" "1.0.0-canary.63"
-    "@sushiswap/tines" "1.0.0-canary.46"
+    "@sushiswap/core-sdk" "1.0.0-canary.64"
+    "@sushiswap/tines" "1.0.0-canary.47"
     "@sushiswap/trident" "1.0.0-canary.27"
     tiny-invariant "^1.1.0"
 
