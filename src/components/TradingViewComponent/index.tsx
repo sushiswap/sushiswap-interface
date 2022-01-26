@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 
 import {
   ChartingLibraryWidgetOptions,
@@ -8,6 +8,7 @@ import {
   TradingTerminalWidgetOptions,
   widget,
 } from '../../../public/static/charting_library'
+import Loader from '../Loader'
 import DATAFEED from './api'
 
 type TradingViewChartOptions = ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions
@@ -19,6 +20,7 @@ interface TradingViewProps {
 
 const Widget: FC<TradingViewProps> = ({ id, symbol }) => {
   const ref = useRef<any>()
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let timezone: Timezone = 'Etc/UTC'
@@ -86,10 +88,24 @@ const Widget: FC<TradingViewProps> = ({ id, symbol }) => {
 
     tvWidget.onChartReady(() => {
       tvWidget.addCustomCSSFile('./theme/dark.css')
+      tvWidget.headerReady().then(() => {
+        setLoading(false)
+      })
     })
   }, [id, ref, symbol])
 
-  return <div id={id} className="w-full h-full" />
+  return (
+    <div className="relative w-full h-full">
+      <div id={id} className="w-full h-full" />
+      {loading && (
+        <div className="absolute inset-0 bg-dark-900 z-10">
+          <div className="w-full h-full flex justify-center items-center">
+            <Loader />
+          </div>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default Widget

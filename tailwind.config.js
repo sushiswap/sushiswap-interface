@@ -231,6 +231,8 @@ module.exports = {
         ellipsis: 'ellipsis 1.25s infinite',
         'spin-slow': 'spin 2s linear infinite',
         fade: 'opacity 150ms linear',
+        'blink-green': 'blinkgreen .4s ease-in-out',
+        'blink-red': 'blinkred .4s ease-in-out',
       },
       keyframes: {
         ellipsis: {
@@ -241,6 +243,14 @@ module.exports = {
         opacity: {
           '0%': { opacity: 0 },
           '100%': { opacity: 100 },
+        },
+        blinkgreen: {
+          '0%': { backgroundColor: '#A0FF944D' },
+          '100%': { backgroundColor: '#A0FF9400' },
+        },
+        blinkred: {
+          '0%': { backgroundColor: '#FE83974D' },
+          '100%': { backgroundColor: '#FE839700' },
         },
       },
     },

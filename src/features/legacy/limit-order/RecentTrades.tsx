@@ -20,14 +20,14 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
   const price = Number(amount0) / Number(amount1)
 
   return (
-    <div style={style} className="grid grid-cols-3 px-3">
-      <Typography variant="xs" className="text-white text-right">
+    <div style={style} className="animate-blink-green grid grid-cols-3 px-3 items-center">
+      <Typography variant="xs" className="text-green text-right">
         {decimalFormatter.format(amount0 || amount1)}
       </Typography>
       <Typography variant="xs" className="text-white text-right">
         {currencyFormatter.format(price)}
       </Typography>
-      <Typography variant="xs" className="text-white text-right">
+      <Typography variant="xs" className="text-low-emphesis text-right">
         {decimalFormatter.format(swap.amount0)}
       </Typography>
     </div>
@@ -45,11 +45,11 @@ const RecentTrades: FC<RecentTrades> = ({ quoteCurrency }) => {
     chainId,
     variables: { first: 1000, skip: 0, orderBy: 'timestamp', orderDirection: 'desc' },
     shouldFetch: !!chainId,
-    swrConfig: { refreshInterval: 10000, fallbackData: [] },
+    swrConfig: { refreshInterval: 2000, fallbackData: [] },
   })
 
   const Row = useCallback(
-    ({ index, style }) => {
+    ({ index, style, ...rest }) => {
       const swap = swaps[index]
       return <SwapRow swap={swap} style={style} />
     },
@@ -58,7 +58,7 @@ const RecentTrades: FC<RecentTrades> = ({ quoteCurrency }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="grid grid-cols-3 border-b border-dark-700 px-3 py-2">
+      <div className="grid grid-cols-3 mx-3 pt-3 pb-1 items-center">
         <Typography variant="xs" className="text-right">
           {i18n._(t`Trade Size`)}
         </Typography>
@@ -69,7 +69,7 @@ const RecentTrades: FC<RecentTrades> = ({ quoteCurrency }) => {
           Time
         </Typography>
       </div>
-      <div className="h-full py-2">
+      <div className="h-full">
         <AutoSizer>
           {/*@ts-ignore TYPE NEEDS FIXING*/}
           {({ height, width }) => (

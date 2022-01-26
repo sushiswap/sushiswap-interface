@@ -1,4 +1,3 @@
-import { useCurrency } from 'app/hooks/Tokens'
 import ProLayout from 'app/layouts/ProLayout'
 import { useActiveWeb3React } from 'app/services/web3'
 import dynamic from 'next/dynamic'
@@ -12,6 +11,7 @@ import OpenOrders from 'app/features/legacy/limit-order/OpenOrders'
 import RecentTrades from 'app/features/legacy/limit-order/RecentTrades'
 import { LimitOrderMode } from 'app/features/legacy/limit-order/types'
 import { classNames } from 'app/functions'
+import useLimitOrderDerivedCurrencies from 'app/state/limit-order/hooks'
 import { FC, Fragment } from 'react'
 
 import LimitOrder from './[[...tokens]]'
@@ -23,8 +23,7 @@ const Box: FC<{ className?: string }> = ({ children, className }) => {
 const Pro = () => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
-  const a = useCurrency('0x0da67235dd5787d67955420c84ca1cecd4e5bb3b')
-  const b = useCurrency('0x130966628846bfd36ff31a822705796e8cb8c18d')
+  const { inputCurrency: a, outputCurrency: b } = useLimitOrderDerivedCurrencies()
   const [token0, token1] = a && b && a.wrapped.sortsBefore(b.wrapped) ? [a, b] : [b, a]
 
   if (!token0 || !token1) {
@@ -88,8 +87,8 @@ const Pro = () => {
           </Tab.Group>
         </div>
       </div>
-      <div className="max-w-[340px] min-w-[340px] bg-dark-900 border-t border-dark-1000 overflow-hidden h-full">
-        <RecentTrades />
+      <div className="max-w-[300px] min-w-[300px] bg-dark-900 border-t border-dark-1000 overflow-hidden h-full">
+        <RecentTrades quoteCurrency={b} />
       </div>
     </div>
   )
