@@ -27,7 +27,7 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
                 </Typography>{' '}
                 {props.cell.row.original.tokenIn.symbol}
               </Typography>
-              <ChevronRightIcon width={20} className="text-primary" />
+              <ChevronRightIcon width={14} className="text-primary" />
               <div className="hidden lg:block">
                 <CurrencyLogo currency={props.cell.row.original.tokenOut} className="!rounded-full" size={18} />
               </div>

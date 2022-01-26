@@ -4,10 +4,15 @@ import React, { FC } from 'react'
 
 import Desktop from './Desktop'
 
-const Header: FC = () => {
-  const isDesktop = useDesktopMediaQuery()
+interface Header {
+  fixed?: boolean
+  containerized?: boolean
+  className?: string
+}
 
-  return <>{isDesktop ? <Desktop /> : <Mobile />}</>
+const Header: FC<Header> = ({ fixed = true, containerized = true, className }) => {
+  const isDesktop = useDesktopMediaQuery()
+  return <>{isDesktop ? <Desktop fixed={fixed} containerized={containerized} className={className} /> : <Mobile />}</>
 }
 
 export default Header

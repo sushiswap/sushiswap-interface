@@ -16,9 +16,13 @@ import React, { FC } from 'react'
 
 import { NavigationItem } from './NavigationItem'
 
-const HEADER_HEIGHT = 64
+interface Desktop {
+  fixed: boolean
+  containerized: boolean
+  className?: string
+}
 
-const Desktop: FC = () => {
+const Desktop: FC<Desktop> = ({ fixed, containerized, className = NAV_CLASS }) => {
   const menu = useMenu()
   const { account, chainId, library, connector } = useActiveWeb3React()
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
@@ -30,10 +34,15 @@ const Desktop: FC = () => {
 
   return (
     <>
-      <header className="relative z-20 w-full hidden lg:block">
-        <nav className={classNames(NAV_CLASS, 'h-[64px]')}>
-          <Container maxWidth="7xl" className="mx-auto h-full">
-            <div className="flex gap-4 px-6 items-center justify-between">
+      <header
+        className={classNames(
+          fixed ? 'fixed' : 'relative',
+          'z-20 w-full hidden lg:block h-[64px] max-h-[64px] min-h-[64px]'
+        )}
+      >
+        <nav className={classNames(className, 'h-[64px] max-h-[64px] min-h-[64px]')}>
+          <Container maxWidth={containerized ? '7xl' : 'full'} className="mx-auto h-full">
+            <div className={classNames('px-6 flex gap-4 items-center justify-between')}>
               <div className="flex gap-4">
                 <div className="flex w-6 mr-4 items-center">
                   <Image src="https://app.sushi.com/images/logo.svg" alt="Sushi logo" width="24px" height="24px" />
@@ -68,7 +77,7 @@ const Desktop: FC = () => {
           </Container>
         </nav>
       </header>
-      <div style={{ height: HEADER_HEIGHT, minHeight: HEADER_HEIGHT }} />
+      {fixed && <div className="h-[64px] max-h-[64px] min-h-[64px]" />}
     </>
   )
 }

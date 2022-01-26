@@ -3,12 +3,12 @@ import { FC } from 'react'
 
 const ProLayout: FC = ({ children }) => {
   return (
-    <>
-      <div className="grid w-screen h-screen">
-        <Header />
-        {children}
+    <div className="grid grid-rows-[auto_1fr_auto] w-screen h-screen">
+      <div className="bg-dark-900">
+        <Header fixed={false} containerized={false} className="bg-dark-900" />
       </div>
-    </>
+      <div className="flex">{children}</div>
+    </div>
   )
 }
 

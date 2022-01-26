@@ -41,7 +41,7 @@ const LimitOrder: LimitOrder<LimitOrderProps> = ({ mode = LimitOrderMode.standar
   if (mode === LimitOrderMode.pro) {
     return (
       <div className="flex flex-col gap-3">
-        <LimitOrderContent mode={mode} />
+        <LimitOrderContent />
       </div>
     )
   }
@@ -58,7 +58,7 @@ const LimitOrder: LimitOrder<LimitOrderProps> = ({ mode = LimitOrderMode.standar
   )
 }
 
-const LimitOrderContent: FC<LimitOrderProps> = ({ mode }) => {
+const LimitOrderContent: FC = () => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const { chainId } = useActiveWeb3React()

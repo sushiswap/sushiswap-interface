@@ -7,21 +7,17 @@ import { useActiveWeb3React } from 'app/services/web3'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useSWR, { SWRResponse } from 'swr'
 
-interface State {
-  pending: {
-    page: number
-    maxPages: number
-    data: DerivedOrder[]
-    loading: boolean
-    totalOrders: number
-  }
-  completed: {
-    page: number
-    maxPages: number
-    data: DerivedOrder[]
-    loading: boolean
-    totalOrders: number
-  }
+export interface LimitOrdersPaginationState {
+  page: number
+  maxPages: number
+  data: DerivedOrder[]
+  loading: boolean
+  totalOrders: number
+}
+
+export interface LimitOrdersState {
+  pending: LimitOrdersPaginationState
+  completed: LimitOrdersPaginationState
 }
 
 const viewUrl = `${LAMBDA_URL}/orders/view`
@@ -39,7 +35,7 @@ const useLimitOrders = () => {
   const limitOrderContract = useLimitOrderContract()
   const tokens = useAllTokens()
 
-  const [state, setState] = useState<State>({
+  const [state, setState] = useState<LimitOrdersState>({
     pending: {
       page: 1,
       maxPages: 0,
