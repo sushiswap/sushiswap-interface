@@ -1,10 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { LimitOrder } from '@sushiswap/limit-order-sdk'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
-import { LimitOrderMode, LimitOrderProps } from 'app/features/legacy/limit-order/types'
-import useLimitOrders from 'app/features/legacy/limit-order/useLimitOrders'
+import { CompletedOrdersProps } from 'app/features/legacy/limit-order/types'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TD_CLASSNAME,
@@ -13,39 +11,12 @@ import {
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
-import { useLimitOrderContract } from 'app/hooks'
-import { useTransactionAdder } from 'app/state/transactions/hooks'
 import Link from 'next/link'
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
-import { useOpenOrdersTableConfig } from './useOpenOrdersTableConfig'
-
-const OpenOrders: FC<LimitOrderProps> = ({ mode = LimitOrderMode.standard }) => {
+const OpenOrdersStandard: FC<CompletedOrdersProps> = ({ config, orders }) => {
   const { i18n } = useLingui()
-  const { pending, mutate } = useLimitOrders()
-  const addTransaction = useTransactionAdder()
-  const limitOrderContract = useLimitOrderContract(true)
-
-  const cancelOrder = useCallback(
-    async (limitOrder: LimitOrder, summary: string) => {
-      if (!limitOrderContract) return
-
-      const tx = await limitOrderContract.cancelOrder(limitOrder.getTypeHash())
-      if (tx) {
-        addTransaction(tx, {
-          summary,
-        })
-
-        await tx.wait()
-        // @ts-ignore TYPE NEEDS FIXING
-        await mutate((data) => ({ ...data }))
-      }
-    },
-    [addTransaction, limitOrderContract, mutate]
-  )
-
-  const { config } = useOpenOrdersTableConfig({ orders: pending.data, cancelOrder })
 
   // @ts-ignore TYPE NEEDS FIXING
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(
@@ -58,12 +29,7 @@ const OpenOrders: FC<LimitOrderProps> = ({ mode = LimitOrderMode.standard }) => 
 
   return (
     <div className="flex flex-col gap-4">
-      <div
-        className={classNames(
-          mode === LimitOrderMode.standard ? TABLE_WRAPPER_DIV_CLASSNAME : '',
-          pending.maxPages > 1 ? 'min-h-[537px]' : ''
-        )}
-      >
+      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, orders.maxPages > 1 ? 'min-h-[537px]' : '')}>
         <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
@@ -141,15 +107,15 @@ const OpenOrders: FC<LimitOrderProps> = ({ mode = LimitOrderMode.standard }) => 
         </table>
       </div>
       <Pagination
-        canPreviousPage={pending.page > 1}
-        canNextPage={pending.page < pending.maxPages}
-        onChange={(page) => pending.setPage(page + 1)}
-        totalPages={pending.maxPages}
-        currentPage={pending.page - 1}
+        canPreviousPage={orders.page > 1}
+        canNextPage={orders.page < orders.maxPages}
+        onChange={(page) => orders.setPage(page + 1)}
+        totalPages={orders.maxPages}
+        currentPage={orders.page - 1}
         pageNeighbours={1}
       />
     </div>
   )
 }
 
-export default OpenOrders
+export default OpenOrdersStandard
