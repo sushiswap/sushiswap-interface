@@ -24,6 +24,7 @@ const Pro = () => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const { inputCurrency: a, outputCurrency: b } = useLimitOrderDerivedCurrencies()
+
   const [token0, token1] = a && b && a.wrapped.sortsBefore(b.wrapped) ? [a, b] : [b, a]
 
   if (!token0 || !token1) {

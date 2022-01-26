@@ -36,12 +36,12 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
         variant="xs"
         className={classNames(
           'flex items-center justify-end text-right gap-0.5',
-          swap.amount0In === '0' ? 'text-red' : 'text-green'
+          swap.amount1In === '0' ? 'text-red' : 'text-green'
         )}
       >
         {decimalFormatter.format(amount1)}
         <ArrowSmRightIcon
-          className={classNames('w-[14px] h-[14]px', swap.amount0In === '0' ? 'rotate-45' : '-rotate-45')}
+          className={classNames('w-[14px] h-[14]px', swap.amount1In === '0' ? 'rotate-45' : '-rotate-45')}
         />
       </Typography>
       <Typography variant="xs" className="text-right text-secondary">
@@ -96,7 +96,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="grid grid-cols-3 mx-3 pt-3 pb-1 items-center">
+      <div className="grid items-center grid-cols-3 pt-3 pb-1 mx-3">
         <Typography variant="xs" className="text-right text-secondary">
           {i18n._(t`Trade Size`)}
         </Typography>
