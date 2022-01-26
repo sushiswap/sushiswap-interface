@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, JSBI, NATIVE, Token } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
 import Back from 'app/components/Back'
+import Button from 'app/components/Button'
 import { AutoColumn } from 'app/components/Column'
 import Container from 'app/components/Container'
 import CurrencySelectPanel from 'app/components/CurrencySelectPanel'
@@ -18,6 +19,7 @@ import { usePairAdder } from 'app/state/user/hooks'
 import { useTokenBalance } from 'app/state/wallet/hooks'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Plus } from 'react-feather'
 
@@ -29,6 +31,8 @@ enum Fields {
 export default function PoolFinder() {
   const { i18n } = useLingui()
   const { account, chainId } = useActiveWeb3React()
+
+  const router = useRouter()
 
   const [activeField, setActiveField] = useState<number>(Fields.TOKEN1)
 
@@ -123,24 +127,6 @@ export default function PoolFinder() {
           />
         </AutoColumn>
 
-        {hasPosition && (
-          <AutoRow
-            style={{
-              justifyItems: 'center',
-              backgroundColor: '',
-              padding: '12px 0px',
-              borderRadius: '12px',
-            }}
-            justify={'center'}
-            gap={'0 3px'}
-          >
-            {i18n._(t`Pool Found!`)}
-            <Link href={`/pool`}>
-              <a className="text-center">{i18n._(t`Manage this pool`)}</a>
-            </Link>
-          </AutoRow>
-        )}
-
         {currency0 && currency1 ? (
           pairState === PairState.EXISTS ? (
             hasPosition && pair ? (
@@ -177,6 +163,22 @@ export default function PoolFinder() {
           <Web3Connect className="w-full" size="lg" color="blue" />
         ) : (
           prerequisiteMessage
+        )}
+
+        {hasPosition && (
+          <div className="rounded bg-dark-800">
+            <AutoColumn gap="sm" justify="center">
+              <Button
+                color="blue"
+                fullWidth={true}
+                onClick={() => {
+                  router.push(`/pool`)
+                }}
+              >
+                {i18n._(t`Manage this pool`)}
+              </Button>
+            </AutoColumn>
+          </div>
         )}
       </div>
     </Container>
