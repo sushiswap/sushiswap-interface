@@ -16,6 +16,7 @@ import {
   tokenSubsetQuery,
   transactionsQuery,
 } from 'app/services/graph/queries'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 import { pager } from './pager'
 
@@ -34,6 +35,12 @@ export const EXCHANGE = {
   [ChainId.HECO]: 'heco-exchange/heco',
   [ChainId.FUSE]: 'sushiswap/fuse-exchange',
 }
+
+export const client = (chainId = ChainId.ETHEREUM) =>
+  // @ts-ignore TYPE NEEDS FIXING
+  new SubscriptionClient(`wss://api.thegraph.com/subgraphs/name/${EXCHANGE[chainId]}`, {
+    reconnect: true,
+  })
 
 // @ts-ignore TYPE NEEDS FIXING
 export const exchange = async (chainId = ChainId.ETHEREUM, query, variables = {}) =>

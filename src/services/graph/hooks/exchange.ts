@@ -1,9 +1,13 @@
 import { ChainId } from '@sushiswap/core-sdk'
+import { GraphSubscriptionProps } from 'app/services/graph/interfaces/GraphProps'
+import { swapsSubscriptionQuery } from 'app/services/graph/observables/exchange'
 import { useActiveWeb3React } from 'app/services/web3'
 import stringify from 'fast-json-stable-stringify'
+import { useEffect, useMemo, useRef } from 'react'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import {
+  client,
   getAlcxPrice,
   getAvaxPrice,
   getBundle,
@@ -330,4 +334,46 @@ export const useSwaps = ({
     (_, chainId) => getLegacySwaps(chainId, variables),
     swrConfig
   )
+}
+
+export const useSwapsObservable = (props: GraphSubscriptionProps<any>) => {
+  return useObservable({ ...props, query: swapsSubscriptionQuery })
+}
+
+export const useObservable = ({
+  chainId = ChainId.ETHEREUM,
+  observer,
+  variables,
+  shouldFetch = true,
+  query,
+}: GraphSubscriptionProps<any>) => {
+  const initialized = useRef(false)
+  const _client = useMemo(() => client(chainId), [chainId])
+
+  useEffect(() => {
+    if (!shouldFetch || !observer || initialized.current || !chainId) return
+
+    const init = async () => {
+      try {
+        initialized.current = true
+        const observable = _client.request({ query, variables })
+        observable.subscribe(observer)
+      } catch (e) {
+        initialized.current = false
+      }
+    }
+
+    init()
+  }, [_client, chainId, initialized, observer, query, shouldFetch, variables])
+
+  useEffect(() => {
+    return () => {
+      if (_client) {
+        console.log('unsub')
+        _client.unsubscribeAll()
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 }

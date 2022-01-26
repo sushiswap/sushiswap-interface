@@ -57,7 +57,7 @@ const OpenOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
                         {...cell.getCellProps()}
                         className={classNames(
                           i === 0 ? 'text-left' : 'text-right justify-end',
-                          'flex items-center cursor-default whitespace-nowrap border-b border-dark-850 h-[36px]'
+                          'flex items-center cursor-default whitespace-nowrap border-b border-dark-850 h-[36px] font-mono'
                         )}
                       >
                         {cell.render('Cell')}

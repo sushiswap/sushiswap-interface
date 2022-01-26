@@ -1,6 +1,7 @@
 @tailwind base;
 
 @import '@fontsource/dm-sans/index.css';
+@import '@fontsource/dm-mono/index.css';
 @import 'react-virtualized/styles.css';
 @import 'rc-slider/assets/index.css';
 @import './variables.css';

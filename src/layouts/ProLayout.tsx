@@ -7,7 +7,7 @@ const ProLayout: FC = ({ children }) => {
       <div className="bg-dark-900">
         <Header fixed={false} containerized={false} className="bg-dark-900" />
       </div>
-      <div className="flex">{children}</div>
+      <div className="flex overflow-hidden">{children}</div>
     </div>
   )
 }

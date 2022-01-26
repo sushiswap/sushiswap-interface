@@ -64,6 +64,7 @@ const dataFeed: IBasicDataFeed = {
   getBars: async (symbolInfo, resolutionString, periodParams, onResult, onError) => {
     console.log('=====getBars running')
 
+    console.log(symbolInfo)
     let stableQuote = false
     if (
       symbolInfo.full_name
@@ -104,7 +105,7 @@ const dataFeed: IBasicDataFeed = {
           }
         })
 
-        var lastBar = bars[bars.length - 1]
+        const lastBar = bars[bars.length - 1]
         // @ts-ignore
         history[symbolInfo.name] = { lastBar: lastBar }
       } catch (e) {
@@ -146,8 +147,6 @@ const dataFeed: IBasicDataFeed = {
 
     observable.subscribe({
       next(results) {
-        console.log('results', results)
-
         if (!results?.data?.candles?.[0]) return
 
         // @ts-ignore
