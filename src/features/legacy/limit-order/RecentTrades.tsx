@@ -9,7 +9,9 @@ import { useSwaps } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { format } from 'date-fns'
 import React, { CSSProperties, FC, useCallback, useMemo } from 'react'
+// @ts-ignore
 import AutoSizer from 'react-virtualized-auto-sizer'
+// @ts-ignore
 import { FixedSizeList as List } from 'react-window'
 interface SwapRow {
   swap: any
@@ -24,8 +26,8 @@ const SwapRow: FC<SwapRow> = ({ swap, style }) => {
     <ExternalLink
       style={style}
       className={classNames(
-        'grid grid-cols-3 px-3 border-l items-center',
-        swap.amount1In === '0' ? 'border-l-red/50' : 'border-l-green/50'
+        'grid grid-cols-3 px-3 border-l items-center hover:bg-dark-850',
+        swap.amount0In === '0' ? 'border-l-red/50' : 'border-l-green/50'
       )}
       href={`https://snowtrace.io/tx/${swap.transaction.id}`}
     >
@@ -60,15 +62,16 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const pair = useMemo(() => {
-    const address = computePairAddress({
-      //   @ts-ignore
-      factoryAddress: FACTORY_ADDRESS[chainId],
-      //   @ts-ignore
-      tokenA: token0.wrapped,
-      //   @ts-ignore
-      tokenB: token1.wrapped,
-    })
-    return address.toLowerCase()
+    //   @ts-ignore
+    const address =
+      token0 &&
+      token1 &&
+      computePairAddress({
+        factoryAddress: FACTORY_ADDRESS[chainId || 1],
+        tokenA: token0.wrapped,
+        tokenB: token1.wrapped,
+      })
+    return address?.toLowerCase()
   }, [chainId, token0, token1])
 
   const { data: swaps } = useSwaps({
@@ -81,7 +84,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
 
       where: { pair },
     },
-    shouldFetch: !!chainId,
+    shouldFetch: !!chainId && !!pair,
     swrConfig: { refreshInterval: 2000, fallbackData: [] },
   })
 

@@ -8,7 +8,7 @@ export function useActiveWeb3React(): Web3ReactContextInterface<Web3Provider> & 
   chainId?: ChainId
 } {
   // replace with address to impersonate
-  const impersonate = '0xad8F72A7612Bb91B2dfaB09E54464aaA5150914E'
+  const impersonate = false
   const context = useWeb3React<Web3Provider>()
   const contextNetwork = useWeb3React<Web3Provider>(NetworkContextName)
   return context.active

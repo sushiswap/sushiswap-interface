@@ -1,17 +1,8 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 
-import {
-  ChartingLibraryWidgetOptions,
-  ResolutionString,
-  ThemeName,
-  Timezone,
-  TradingTerminalWidgetOptions,
-  widget,
-} from '../../../public/static/charting_library'
+import { ResolutionString, ThemeName, Timezone, widget } from '../../../public/static/charting_library'
 import Loader from '../Loader'
 import DATAFEED from './api'
-
-type TradingViewChartOptions = ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions
 
 interface TradingViewProps {
   id: string
