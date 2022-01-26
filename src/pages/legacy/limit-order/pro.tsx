@@ -11,6 +11,7 @@ import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
 import CompletedOrders from 'app/features/legacy/limit-order/CompletedOrders'
 import OpenOrders from 'app/features/legacy/limit-order/OpenOrders'
+import { RecentTrades } from 'app/features/legacy/limit-order/RecentTrades'
 import { LimitOrderMode } from 'app/features/legacy/limit-order/types'
 import { classNames } from 'app/functions'
 import { FC, Fragment } from 'react'
@@ -61,13 +62,13 @@ const Pro = () => {
   }
 
   return (
-    <div className="flex divide-x divide-y divide-dark-1000 flex-grow overflow-hidden">
+    <div className="flex flex-grow overflow-hidden divide-x divide-y divide-dark-1000">
       <div className="max-w-[340px] min-w-[340px] bg-dark-850 border-t border-dark-1000">
         <Box className="scale-[90%]">
           <LimitOrder mode={LimitOrderMode.pro} />
         </Box>
       </div>
-      <div className="flex flex-grow flex-1 flex-col divide-y divide-dark-1000">
+      <div className="flex flex-col flex-1 flex-grow divide-y divide-dark-1000">
         <TestNoSSR
           id="tv-chart"
           symbol={`SUSHISWAP:${token0.symbol}/${
@@ -106,7 +107,7 @@ const Pro = () => {
                 )}
               </Tab>
             </Tab.List>
-            <Tab.Panels className="bg-dark-900 px-2">
+            <Tab.Panels className="px-2 bg-dark-900">
               <Tab.Panel>
                 <OpenOrders mode={LimitOrderMode.pro} />
               </Tab.Panel>
@@ -117,9 +118,13 @@ const Pro = () => {
           </Tab.Group>
         </div>
       </div>
+      <div className="max-w-[340px] min-w-[340px] bg-dark-850 border-t border-dark-1000">
+        <RecentTrades />
+      </div>
     </div>
   )
 }
 
 Pro.Layout = ProLayout
+
 export default Pro

@@ -335,6 +335,28 @@ export const tokenSubsetQuery = gql`
   ${tokenFieldsQuery}
 `
 
+// Swaps...
+
+export const swapsQuery = gql`
+  query swapsQuery(
+    $first: Int! = 1000
+    $skip: Int! = 0
+    $block: Block_height
+    $orderBy: String! = "timestamp"
+    $orderDirection: String! = "desc"
+    $where: Swap_filter
+  ) {
+    swaps(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
+      id
+      amountUSD
+      transaction {
+        id
+        timestamp
+      }
+    }
+  }
+`
+
 // Transactions...
 export const transactionsQuery = gql`
   query transactionsQuery($first: Int! = 1000, $skip: Int, $block: Block_height, $where: Swap_filter) {

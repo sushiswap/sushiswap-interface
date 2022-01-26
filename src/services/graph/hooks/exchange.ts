@@ -14,6 +14,7 @@ import {
   getFantomPrice,
   getFusePrice,
   getGnoPrice,
+  getLegacySwaps,
   getLiquidityPositions,
   getMagicPrice,
   getMaticPrice,
@@ -315,4 +316,18 @@ export function useTokenPairs({
     swrConfig
   )
   return data
+}
+
+export const useSwaps = ({
+  chainId = ChainId.ETHEREUM,
+  variables,
+  shouldFetch = true,
+  swrConfig = undefined,
+}: GraphProps) => {
+  return useSWR(
+    shouldFetch ? ['legacySwaps', chainId, stringify(variables)] : null,
+    // @ts-ignore TYPE NEEDS FIXING
+    () => getLegacySwaps(chainId, variables),
+    swrConfig
+  )
 }

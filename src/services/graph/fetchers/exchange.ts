@@ -7,6 +7,7 @@ import {
   liquidityPositionsQuery,
   pairDayDatasQuery,
   pairsQuery,
+  swapsQuery,
   tokenDayDatasQuery,
   tokenPairsQuery,
   tokenPriceQuery,
@@ -269,4 +270,9 @@ export const getTransactions = async (chainId = ChainId.ETHEREUM, variables = un
 export const getTokenPairs = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
   const { pairs0, pairs1 } = await exchange(chainId, tokenPairsQuery, variables)
   return pairs0 || pairs1 ? [...(pairs0 ? pairs0 : []), ...(pairs1 ? pairs1 : [])] : undefined
+}
+
+export const getLegacySwaps = async (chainId = ChainId.ETHEREUM, variables = undefined) => {
+  const { swaps } = await exchange(chainId, swapsQuery, variables)
+  return swaps
 }
