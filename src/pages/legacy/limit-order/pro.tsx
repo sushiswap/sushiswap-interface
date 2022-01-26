@@ -88,7 +88,7 @@ const Pro = () => {
         </div>
       </div>
       <div className="max-w-[300px] min-w-[300px] bg-dark-900 border-t border-dark-1000 overflow-hidden h-full">
-        <RecentTrades quoteCurrency={b} token0={token0} token1={token1} />
+        <RecentTrades token0={token0} token1={token1} />
       </div>
     </div>
   )
