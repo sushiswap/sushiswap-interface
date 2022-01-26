@@ -44,3 +44,8 @@ export enum LimitOrderMode {
 export interface LimitOrderProps {
   mode?: LimitOrderMode
 }
+
+export interface CompletedOrdersProps {
+  orders: any
+  config: any
+}

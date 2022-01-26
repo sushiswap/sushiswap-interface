@@ -2,8 +2,6 @@ import { useCurrency } from 'app/hooks/Tokens'
 import ProLayout from 'app/layouts/ProLayout'
 import { useActiveWeb3React } from 'app/services/web3'
 import dynamic from 'next/dynamic'
-import { Responsive, WidthProvider } from 'react-grid-layout'
-const ResponsiveGridLayout = WidthProvider(Responsive)
 const TestNoSSR = dynamic(() => import('../../../components/TradingViewComponent/index'), { ssr: false })
 import { Tab } from '@headlessui/react'
 import { t } from '@lingui/macro'
@@ -20,34 +18,6 @@ import LimitOrder from './[[...tokens]]'
 
 const Box: FC<{ className?: string }> = ({ children, className }) => {
   return <div className={classNames(className)}>{children}</div>
-}
-
-const layouts = {
-  lg: [
-    { i: 'chart', x: 0, y: 0, w: 9, h: 8, static: true },
-    { i: 'order', x: 9, y: 0, w: 3, h: 12, static: true },
-    { i: 'tables', x: 0, y: 3, w: 9, h: 2 },
-  ],
-  md: [
-    { i: 'chart', x: 0, y: 0, w: 7, h: 9, static: true },
-    { i: 'order', x: 5, y: 0, w: 4, h: 3 },
-    { i: 'tables', x: 4, y: 0, w: 1, h: 2 },
-  ],
-  sm: [
-    { i: 'chart', x: 0, y: 0, w: 9, h: 9, static: true },
-    { i: 'order', x: 3, y: 0, w: 3, h: 3 },
-    { i: 'tables', x: 4, y: 0, w: 1, h: 2 },
-  ],
-  xs: [
-    { i: 'chart', x: 0, y: 0, w: 9, h: 9, static: true },
-    { i: 'order', x: 3, y: 0, w: 3, h: 3 },
-    { i: 'tables', x: 4, y: 0, w: 1, h: 2 },
-  ],
-  xxs: [
-    { i: 'chart', x: 0, y: 0, w: 9, h: 9, static: true },
-    { i: 'order', x: 3, y: 0, w: 3, h: 3 },
-    { i: 'tables', x: 4, y: 0, w: 1, h: 2 },
-  ],
 }
 
 const Pro = () => {

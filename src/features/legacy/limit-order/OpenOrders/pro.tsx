@@ -2,14 +2,13 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
+import { CompletedOrdersProps } from 'app/features/legacy/limit-order/types'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
-import { CompletedOrdersProps } from '../types'
-
-const CompletedOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
+const OpenOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
   const { i18n } = useLingui()
 
   // @ts-ignore TYPE NEEDS FIXING
@@ -76,7 +75,7 @@ const CompletedOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
                   className="text-center text-low-emphesis h-[60px] flex items-center justify-center"
                   component="span"
                 >
-                  {i18n._(t`No order history`)}
+                  {i18n._(t`No open orders`)}
                 </Typography>
               </div>
             </div>
@@ -95,4 +94,4 @@ const CompletedOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
   )
 }
 
-export default CompletedOrdersPro
+export default OpenOrdersPro

@@ -2,18 +2,18 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
+import { CompletedOrdersProps } from 'app/features/legacy/limit-order/types'
 import {
   TABLE_TABLE_CLASSNAME,
   TABLE_TBODY_TD_CLASSNAME,
   TABLE_TBODY_TR_CLASSNAME,
   TABLE_TR_TH_CLASSNAME,
+  TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
 import Link from 'next/link'
 import React, { FC } from 'react'
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
-
-import { CompletedOrdersProps } from './types'
 
 const CompletedOrdersStandard: FC<CompletedOrdersProps> = ({ config, orders }) => {
   const { i18n } = useLingui()
@@ -29,7 +29,7 @@ const CompletedOrdersStandard: FC<CompletedOrdersProps> = ({ config, orders }) =
 
   return (
     <div className="flex flex-col gap-3">
-      <div className={classNames(orders.maxPages > 1 ? 'min-h-[537px]' : '')}>
+      <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, orders.maxPages > 1 ? 'min-h-[537px]' : '')}>
         <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
           <thead>
             {headerGroups.map((headerGroup, i) => (
