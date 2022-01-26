@@ -347,11 +347,20 @@ export const swapsQuery = gql`
     $where: Swap_filter
   ) {
     swaps(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
-      id
-      amountUSD
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
       transaction {
         id
-        timestamp
+      }
+      pair {
+        token0 {
+          id
+        }
+        token1 {
+          id
+        }
       }
     }
   }

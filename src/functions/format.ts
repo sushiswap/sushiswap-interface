@@ -42,6 +42,18 @@ const priceFormatter = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 2,
 })
 
+export const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  minimumFractionDigits: 2,
+})
+
+export const decimalFormatter = new Intl.NumberFormat('en-US', {
+  style: 'decimal',
+  minimumSignificantDigits: 1,
+  maximumSignificantDigits: 4,
+})
+
 // @ts-ignore TYPE NEEDS FIXING
 export function formatPercent(percentString) {
   const percent = parseFloat(percentString)

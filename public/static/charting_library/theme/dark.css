@@ -3,18 +3,30 @@
     --tv-color-pane-background: #161522;
     --tv-color-pane-background-secondary: #161522;
     --tv-color-toolbar-button-background: #161522;
-    --tv-color-toolbar-button-background-hover: #161522;
-    --tv-color-toolbar-button-background-secondary-hover: #161522;
+    --tv-color-toolbar-button-background-hover: #202231;
+    --tv-color-toolbar-button-background-secondary-hover: #202231;
     --tv-color-toolbar-button-background-expanded: #161522;
     --tv-color-toolbar-button-text: #575757;
     --tv-color-toolbar-button-text-hover: #7F7F7F;
     --tv-color-toolbar-button-text-active: #BFBFBF;
     --tv-color-toolbar-button-text-active-hover: #7F7F7F;
     --tv-color-item-active-text: #BFBFBF;
-    --tv-color-toolbar-toggle-button-background-active: #BFBFBF;
-    --tv-color-toolbar-toggle-button-background-active-hover: #7F7F7F;
+    --tv-color-toolbar-toggle-button-background-active: #0993EC;
+    --tv-color-toolbar-toggle-button-background-active-hover: #055080;
 }
 
 .layout__area--left *, .chart-toolbar *, .chart-page {
     background-color: var(--tv-color-pane-background) !important;
+}
+
+.layout__area--top {
+    border-bottom: 1px solid #2E3348;
+}
+
+.layout__area--left {
+    border-right: 1px solid #2E3348;
+}
+
+.chart-container {
+    border-bottom: 1px solid #2E3348;
 }
