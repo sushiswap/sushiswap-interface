@@ -1,9 +1,7 @@
-import { ChevronRightIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { LimitOrder } from '@sushiswap/limit-order-sdk'
 import Button from 'app/components/Button'
-import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { DerivedOrder } from 'app/features/legacy/limit-order/types'
 import React, { useMemo, useState } from 'react'
@@ -21,40 +19,36 @@ export const useOpenOrdersTableConfig = ({
   const data = useMemo(
     () => [
       {
-        accessor: 'tokenOut',
-        Header: 'Market',
-        minWidth: 300,
+        accessor: 'tokenIn',
+        Header: 'Token In',
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <div className="flex gap-2.5 items-center whitespace-nowrap truncate text-ellipsis">
-              <div className="hidden lg:block">
-                <CurrencyLogo currency={props.cell.row.original.tokenIn} className="!rounded-full" size={18} />
-              </div>
-              <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
-                <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
-                  {props.cell.row.original.limitOrder.amountIn.toSignificant(6)}
-                </Typography>{' '}
-                {props.cell.row.original.tokenIn.symbol}
-              </Typography>
-              <ChevronRightIcon width={14} className="text-primary" />
-              <div className="hidden lg:block">
-                <CurrencyLogo currency={props.cell.row.original.tokenOut} className="!rounded-full" size={18} />
-              </div>
-              <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
-                <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
-                  {props.cell.row.original.limitOrder.amountOut.toSignificant(6)}
-                </Typography>{' '}
-                {props.cell.row.original.tokenOut.symbol}
-              </Typography>
-            </div>
+            <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
+              <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
+                {props.cell.row.original.limitOrder.amountIn.toSignificant(6)}
+              </Typography>{' '}
+              {props.cell.row.original.tokenIn.symbol}
+            </Typography>
+          )
+        },
+      },
+      {
+        accessor: 'tokenOut',
+        Header: 'Token Out',
+        Cell: (props: CellProps<DerivedOrder>) => {
+          return (
+            <Typography variant="xs" className="flex gap-2 text-secondary">
+              <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
+                {props.cell.row.original.limitOrder.amountOut.toSignificant(6)}
+              </Typography>{' '}
+              {props.cell.row.original.tokenOut.symbol}
+            </Typography>
           )
         },
       },
       {
         accessor: 'rate',
         Header: 'Rate',
-        width: 100,
-        minWidth: 100,
         Cell: (props: CellProps<DerivedOrder>) => {
           const [invert, setInvert] = useState(false)
 
@@ -75,11 +69,9 @@ export const useOpenOrdersTableConfig = ({
       {
         accessor: 'filledPercent',
         Header: 'Filled',
-        width: 80,
-        minWidth: 80,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Typography weight={700} variant="xs" component="span" className="text-high-emphesis">
+            <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
               {props.cell.value}%
             </Typography>
           )
@@ -88,16 +80,14 @@ export const useOpenOrdersTableConfig = ({
       {
         accessor: 'timestamp',
         Header: 'Expires',
-        width: 150,
-        minWidth: 150,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Typography weight={700} variant="xs">
+            <Typography weight={700} variant="xs" className="font-sans">
               {Number(props.cell.row.original.limitOrder.endTime) === Number.MAX_SAFE_INTEGER
                 ? 'Never'
                 : new Date(Number(props.cell.row.original.limitOrder.endTime) * 1000).toLocaleString('en-uS', {
                     year: 'numeric',
-                    month: 'long',
+                    month: 'numeric',
                     day: 'numeric',
                     hour: 'numeric',
                     minute: 'numeric',
@@ -108,20 +98,17 @@ export const useOpenOrdersTableConfig = ({
         },
       },
       {
-        accessor: 'Updated',
+        accessor: 'updated',
         Header: 'Created at',
-        width: 150,
-        minWidth: 150,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Typography weight={700} variant="xs">
+            <Typography weight={700} variant="xs" className="font-sans">
               {new Date(Number(props.cell.row.original.limitOrder.startTime) * 1000).toLocaleString('en-uS', {
                 year: 'numeric',
-                month: 'long',
+                month: 'numeric',
                 day: 'numeric',
                 hour: 'numeric',
                 minute: 'numeric',
-                timeZone: 'UTC',
               })}
             </Typography>
           )
@@ -130,8 +117,6 @@ export const useOpenOrdersTableConfig = ({
       {
         accessor: 'id',
         Header: 'Cancel',
-        width: 100,
-        minWidth: 100,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
             <Button
@@ -139,7 +124,7 @@ export const useOpenOrdersTableConfig = ({
               variant="empty"
               size="xs"
               onClick={() => cancelOrder(props.cell.row.original.limitOrder, `Cancel order`)}
-              className="whitespace-nowrap"
+              className="whitespace-nowrap font-sans"
             >
               {i18n._(t`Cancel Order`)}
             </Button>

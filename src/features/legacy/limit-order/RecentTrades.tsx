@@ -1,8 +1,9 @@
 import { ArrowSmRightIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, computePairAddress, Currency, FACTORY_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, computePairAddress, Currency, FACTORY_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
 import ExternalLink from 'app/components/ExternalLink'
+import Loader from 'app/components/Loader'
 import Typography from 'app/components/Typography'
 import { classNames, currencyFormatter, decimalFormatter, getExplorerLink } from 'app/functions'
 import { useSwaps, useSwapsObservable } from 'app/services/graph'
@@ -14,19 +15,22 @@ import React, { FC, useEffect, useMemo, useState } from 'react'
 interface SwapRow {
   swap: any
   chainId?: ChainId
-  quoteIsStableCoin: boolean
+  divideQuote: boolean
+  invertRate: boolean
 }
 
-const SwapRow: FC<SwapRow> = ({ chainId, swap, quoteIsStableCoin }) => {
+const SwapRow: FC<SwapRow> = ({ chainId, swap, divideQuote, invertRate }) => {
   const amount0 = swap.amount0In === '0' ? swap.amount0Out : swap.amount0In
   const amount1 = swap.amount1In === '0' ? swap.amount1Out : swap.amount1In
-  const price = quoteIsStableCoin ? Number(amount1) / Number(amount0) : Number(amount0) / Number(amount1)
-  const value = Math.min(((Number(amount0) * Number(price)) / 1000000) * 25, 25)
+  const div = divideQuote ? amount1 : amount0
+  const invertedDiv = div === amount1 ? amount0 : amount1
+  const price = Number(swap.amountUSD) / Number(invertRate ? invertedDiv : div)
+  const value = Math.min(((Number(swap.amountUSD) * Number(div)) / 1000000) * 25, 25)
 
   return (
     <ExternalLink
       className={classNames(
-        'relative font-mono grid grid-cols-12 px-3 items-center hover:bg-dark-850 gap-2',
+        'relative font-mono grid grid-cols-12 px-3 items-center hover:bg-dark-850 gap-4',
         swap.amount1In === '0' ? 'animate-blink-down' : 'animate-blink-up'
       )}
       href={getExplorerLink(chainId, swap.transaction.id, 'transaction')}
@@ -65,6 +69,7 @@ interface RecentTrades {
 const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
+  const [invert, setInvert] = useState(false)
   const [buffer, setBuffer] = useState({
     items: new Array(200),
     ids: new Array(200),
@@ -73,6 +78,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const quoteIsStableCoin = token1?.symbol
     ? ['USDT', 'USDC', 'MIM', 'DAI', 'BUSD', 'UST', 'FRAX'].includes(token1.symbol)
     : false
+  const quoteIsWrapped = WNATIVE[chainId || 1].address === token1?.wrapped.address
 
   const pair = useMemo(() => {
     const address =
@@ -97,6 +103,13 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
     },
     shouldFetch: !!pair,
   })
+
+  useEffect(() => {
+    setBuffer({
+      items: [],
+      ids: [],
+    })
+  }, [chainId, pair])
 
   // Fetch initial history
   useEffect(() => {
@@ -145,14 +158,33 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
     },
   })
 
+  if (!data || data?.length === 0) {
+    return (
+      <div className="w-full h-full flex justify-center items-center">
+        <Loader />
+      </div>
+    )
+  }
+
+  let quoteSymbol = !quoteIsStableCoin && !quoteIsWrapped ? token1?.symbol : token0?.symbol
+  if (invert) quoteSymbol = quoteSymbol === token1?.symbol ? token0?.symbol : token1?.symbol
+
   return (
     <div className="flex flex-col h-full">
-      <div className="grid items-center grid-cols-12 pt-3 pb-1 mx-3 gap-2">
+      <div className="grid items-center grid-cols-12 pt-3 pb-1 mx-3 gap-4">
         <Typography variant="xs" className="text-right text-secondary col-span-4">
           {i18n._(t`Trade Size`)}
         </Typography>
-        <Typography variant="xs" className="text-right text-secondary col-span-5">
-          Price ({token1?.symbol})
+        <Typography
+          variant="xs"
+          className="text-right text-secondary col-span-5"
+          onClick={() => setInvert((prev) => !prev)}
+        >
+          Price (
+          <Typography variant="xxs" component="span">
+            {quoteSymbol}
+          </Typography>
+          )
         </Typography>
         <Typography variant="xs" className="text-right text-secondary col-span-3">
           Time
@@ -160,7 +192,15 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
       </div>
       <div className="h-full overflow-auto">
         {buffer.items.map((el) => {
-          return <SwapRow chainId={chainId} swap={el} key={el.transaction.id} quoteIsStableCoin={quoteIsStableCoin} />
+          return (
+            <SwapRow
+              chainId={chainId}
+              swap={el}
+              key={el.transaction.id}
+              divideQuote={!quoteIsStableCoin && !quoteIsWrapped}
+              invertRate={invert}
+            />
+          )
         })}
       </div>
     </div>

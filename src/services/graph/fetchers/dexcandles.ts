@@ -5,7 +5,7 @@ import { barsQuery } from 'app/services/graph/queries/dexcandles'
 import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 export const DEXCANDLES = {
-  [ChainId.ETHEREUM]: 'sushiswap/sushiswap-candles',
+  [ChainId.ETHEREUM]: 'sushiswap/candles',
   [ChainId.MATIC]: 'sushiswap/polygon-candles',
   [ChainId.FANTOM]: 'sushiswap/fantom-candles',
   [ChainId.AVALANCHE]: 'sushiswap/avalanche-candles',

@@ -22,7 +22,7 @@ const CompletedOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
   )
 
   return (
-    <div className="flex flex-col gap-3 px-2">
+    <div className="flex flex-col px-2 divide-y divide-dark-800">
       <div {...getTableProps()}>
         <div>
           {headerGroups.map((headerGroup, i) => (
@@ -43,7 +43,7 @@ const CompletedOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
             </div>
           ))}
         </div>
-        <div {...getTableBodyProps()} className="overflow-auto h-[260px]">
+        <div {...getTableBodyProps()} className="overflow-auto h-[280px]">
           {page.length > 0 ? (
             // @ts-ignore TYPE NEEDS FIXING
             page.map((row, i) => {
@@ -57,8 +57,9 @@ const CompletedOrdersPro: FC<CompletedOrdersProps> = ({ config, orders }) => {
                         key={i}
                         {...cell.getCellProps()}
                         className={classNames(
+                          'border-b border-dark-850',
                           i === 0 ? 'text-left' : 'text-right justify-end',
-                          'flex items-center cursor-default whitespace-nowrap border-b border-dark-850 h-[36px] font-mono'
+                          'flex items-center cursor-default whitespace-nowrap h-[36px] font-mono'
                         )}
                       >
                         {cell.render('Cell')}

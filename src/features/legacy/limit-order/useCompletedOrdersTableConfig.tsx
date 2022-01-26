@@ -1,8 +1,6 @@
-import { ChevronRightIcon } from '@heroicons/react/outline'
 import { OrderStatus } from '@sushiswap/limit-order-sdk'
-import Chip from 'app/components/Chip'
-import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
+import { classNames } from 'app/functions'
 import React, { useMemo, useState } from 'react'
 import { CellProps } from 'react-table'
 
@@ -12,40 +10,36 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
   const data = useMemo(
     () => [
       {
-        accessor: 'tokenOut',
-        Header: 'Market',
-        minWidth: 300,
+        accessor: 'tokenIn',
+        Header: 'Token In',
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <div className="flex gap-2.5 items-center whitespace-nowrap truncate text-ellipsis">
-              <div className="hidden lg:block">
-                <CurrencyLogo currency={props.cell.row.original.tokenIn} className="!rounded-full" size={18} />
-              </div>
-              <Typography variant="xs" className="flex gap-2 text-secondary">
-                <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
-                  {props.cell.row.original.limitOrder.amountIn.toSignificant(6)}
-                </Typography>{' '}
-                {props.cell.row.original.tokenIn.symbol}
-              </Typography>
-              <ChevronRightIcon width={14} className="text-primary" />
-              <div className="hidden lg:block">
-                <CurrencyLogo currency={props.cell.row.original.tokenOut} className="!rounded-full" size={18} />
-              </div>
-              <Typography variant="xs" className="flex gap-2 text-secondary">
-                <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
-                  {props.cell.row.original.limitOrder.amountOut.toSignificant(6)}
-                </Typography>{' '}
-                {props.cell.row.original.tokenOut.symbol}
-              </Typography>
-            </div>
+            <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
+              <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
+                {props.cell.row.original.limitOrder.amountIn.toSignificant(6)}
+              </Typography>{' '}
+              {props.cell.row.original.tokenIn.symbol}
+            </Typography>
+          )
+        },
+      },
+      {
+        accessor: 'tokenOut',
+        Header: 'Token Out',
+        Cell: (props: CellProps<DerivedOrder>) => {
+          return (
+            <Typography variant="xs" className="flex gap-2 text-secondary">
+              <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
+                {props.cell.row.original.limitOrder.amountOut.toSignificant(6)}
+              </Typography>{' '}
+              {props.cell.row.original.tokenOut.symbol}
+            </Typography>
           )
         },
       },
       {
         accessor: 'rate',
         Header: 'Rate',
-        width: 100,
-        minWidth: 100,
         Cell: (props: CellProps<DerivedOrder>) => {
           const [invert, setInvert] = useState(false)
 
@@ -66,8 +60,6 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
       {
         accessor: 'filledPercent',
         Header: 'Filled',
-        width: 80,
-        minWidth: 80,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
             <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
@@ -79,18 +71,15 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
       {
         accessor: 'updated',
         Header: 'Created at',
-        width: 150,
-        minWidth: 150,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Typography weight={700} variant="xs">
+            <Typography weight={700} variant="xs" className="font-sans">
               {new Date(Number(props.cell.row.original.limitOrder.startTime) * 1000).toLocaleString('en-uS', {
                 year: 'numeric',
-                month: 'long',
+                month: 'numeric',
                 day: 'numeric',
                 hour: 'numeric',
                 minute: 'numeric',
-                timeZone: 'UTC',
               })}
             </Typography>
           )
@@ -99,22 +88,23 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
       {
         accessor: 'status',
         Header: 'Status',
-        minWidth: 100,
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Chip
-              color={
+            <Typography
+              variant="xs"
+              className={classNames(
+                'font-sans capitalize',
                 props.cell.row.original.status === OrderStatus.CANCELLED
-                  ? 'red'
+                  ? 'text-red'
                   : props.cell.row.original.status === OrderStatus.EXPIRED
-                  ? 'purple'
+                  ? 'text-purple'
                   : props.cell.row.original.status === OrderStatus.FILLED
-                  ? 'green'
-                  : 'default'
-              }
-              size="sm"
-              label={props.cell.row.original.status}
-            />
+                  ? 'text-green'
+                  : ''
+              )}
+            >
+              {props.cell.row.original.status.toLowerCase()}
+            </Typography>
           )
         },
       },
