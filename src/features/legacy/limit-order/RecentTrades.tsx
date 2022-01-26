@@ -21,16 +21,20 @@ const SwapRow: FC<SwapRow> = ({ chainId, swap, quoteIsStableCoin }) => {
   const amount0 = swap.amount0In === '0' ? swap.amount0Out : swap.amount0In
   const amount1 = swap.amount1In === '0' ? swap.amount1Out : swap.amount1In
   const price = quoteIsStableCoin ? Number(amount1) / Number(amount0) : Number(amount0) / Number(amount1)
+  const value = Math.min(((Number(amount0) * Number(price)) / 1000000) * 25, 25)
 
   return (
     <ExternalLink
       className={classNames(
-        'relative font-mono grid grid-cols-12 px-3 border-l items-center hover:bg-dark-850 gap-2',
-        swap.amount1In === '0' ? 'border-l-down/50 animate-blink-down' : 'border-l-up/50 animate-blink-up'
+        'relative font-mono grid grid-cols-12 px-3 items-center hover:bg-dark-850 gap-2',
+        swap.amount1In === '0' ? 'animate-blink-down' : 'animate-blink-up'
       )}
       href={getExplorerLink(chainId, swap.transaction.id, 'transaction')}
     >
-      <div className="absolute" />
+      <div
+        className={classNames(swap.amount1In === '0' ? 'bg-down/50' : 'bg-up/50', 'absolute h-4')}
+        style={{ width: `${value}%` }}
+      />
       <Typography variant="xs" className="text-right col-span-4 tracking-tight">
         {decimalFormatter.format(amount0)}
       </Typography>
@@ -129,11 +133,9 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
         }
       },
       error(error) {
-        alert(error.message)
         console.log(`Stream error: ${error.message}`)
       },
       complete() {
-        alert('stream ended')
         console.log('Stream ended')
       },
     },
