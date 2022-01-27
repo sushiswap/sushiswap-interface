@@ -129,7 +129,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
         setBuffer((prevState) => {
           const state = { ...prevState }
           data.swaps.forEach((cur: any) => {
-            if (prevState.ids.includes(cur.transaction.id)) {
+            if (state.ids.includes(cur.transaction.id)) {
               return
             }
 
@@ -142,7 +142,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
             state.ids.unshift(cur.transaction.id)
           })
 
-          return prevState
+          return state
         })
       },
       error(error) {
