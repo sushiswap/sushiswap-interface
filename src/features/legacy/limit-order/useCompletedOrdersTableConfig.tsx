@@ -1,12 +1,28 @@
 import { OrderStatus } from '@sushiswap/limit-order-sdk'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
-import React, { useMemo, useState } from 'react'
+import { useAppDispatch } from 'app/state/hooks'
+import { setCurrencies } from 'app/state/limit-order/actions'
+import React, { useCallback, useMemo, useState } from 'react'
 import { CellProps } from 'react-table'
 
 import { DerivedOrder } from './types'
 
 export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrder[] }) => {
+  const dispatch = useAppDispatch()
+
+  const handleClick = useCallback(
+    (props: CellProps<DerivedOrder>) => {
+      dispatch(
+        setCurrencies({
+          inputCurrencyId: props.cell.row.original.limitOrder.amountIn.currency.wrapped.address,
+          outputCurrencyId: props.cell.row.original.limitOrder.amountOut.currency.wrapped.address,
+        })
+      )
+    },
+    [dispatch]
+  )
+
   const data = useMemo(
     () => [
       {
@@ -14,7 +30,11 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
         Header: 'Token In',
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Typography variant="xs" className="flex items-baseline gap-2 text-secondary">
+            <Typography
+              variant="xs"
+              className="flex items-baseline gap-2 text-secondary"
+              onClick={() => handleClick(props)}
+            >
               <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
                 {props.cell.row.original.limitOrder.amountIn.toSignificant(6)}
               </Typography>{' '}
@@ -28,7 +48,7 @@ export const useCompletedOrdersTableConfig = ({ orders }: { orders?: DerivedOrde
         Header: 'Token Out',
         Cell: (props: CellProps<DerivedOrder>) => {
           return (
-            <Typography variant="xs" className="flex gap-2 text-secondary">
+            <Typography variant="xs" className="flex gap-2 text-secondary" onClick={() => handleClick(props)}>
               <Typography variant="xs" weight={700} component="span" className="text-high-emphesis">
                 {props.cell.row.original.limitOrder.amountOut.toSignificant(6)}
               </Typography>{' '}

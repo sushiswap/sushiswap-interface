@@ -7,6 +7,7 @@ import {
   Field,
   replaceLimitOrderState,
   selectCurrency,
+  setCurrencies,
   setFromBentoBalance,
   setLimitOrderApprovalPending,
   setLimitOrderAttemptingTxn,
@@ -121,6 +122,10 @@ export default createReducer<LimitOrderState>(initialState, (builder) =>
         state.limitPrice = ''
         state.outputCurrencyId = currencyId
       }
+    })
+    .addCase(setCurrencies, (state, { payload: { inputCurrencyId, outputCurrencyId } }) => {
+      state.inputCurrencyId = inputCurrencyId
+      state.outputCurrencyId = outputCurrencyId
     })
     .addCase(switchCurrencies, (state) => {
       return {
