@@ -15,6 +15,7 @@ import {
 } from 'app/features/trident/migrate/context/migrateSlice'
 import { useExecuteTridentMigration } from 'app/features/trident/migrate/context/useExecuteTridentMigration'
 import { MigrationTransactionModal } from 'app/features/trident/migrate/MigrationTransactionModal'
+import { SlippageWidget } from 'app/features/trident/migrate/SlippageWidget'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useGetAllTridentPools } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -72,7 +73,7 @@ export const SelectPoolsAndConfirm: FC = () => {
           </div>
         </div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-center mt-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-6 gap-3 mt-10">
         {leftToSelect !== 0 ? (
           <Button disabled={true}>{i18n._(t`Pools left to select: ${leftToSelect}`)}</Button>
         ) : (
@@ -92,15 +93,18 @@ export const SelectPoolsAndConfirm: FC = () => {
 
               if (approved)
                 return (
-                  <Button color="gradient" onClick={() => execute()}>
-                    {i18n._(t`Confirm Migration`)}
-                  </Button>
+                  <>
+                    <Button color="gradient" onClick={() => execute()}>
+                      {i18n._(t`Confirm Migration`)}
+                    </Button>
+                    <SlippageWidget />
+                  </>
                 )
             }}
           </TridentApproveGate>
         )}
         <div
-          className="cursor-pointer text-blue text-center md:text-left"
+          className="cursor-pointer text-blue text-center md:text-left md:mt-3"
           onClick={() => router.replace('/trident/migrate')}
         >
           {i18n._(t`← Previous Step`)}
