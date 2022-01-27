@@ -147,6 +147,14 @@ const LimitOrder = () => {
       <Typography variant="xs" className="px-10 mt-5 italic text-center text-low-emphesis">
         {i18n._(t`Limit orders use funds from BentoBox, to create a limit order depositing into BentoBox is required.`)}
       </Typography>
+      <Typography variant="xxs" className="px-10 mt-5 italic text-center text-low-emphesis">
+        <Typography variant="xxs" weight={700} component="span">
+          Tip
+        </Typography>
+        :{' '}
+        {i18n._(t`When expert mode is enabled, balance isn't checked when creating orders. You can use this to chain limit
+        orders.`)}
+      </Typography>
     </>
   )
 }
