@@ -8,7 +8,7 @@ import Typography from 'app/components/Typography'
 import { classNames, currencyFormatter, decimalFormatter, getExplorerLink } from 'app/functions'
 import { useSwaps, useSwapsObservable } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import React, { FC, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 // @ts-ignore
 // @ts-ignore
 
@@ -66,14 +66,14 @@ interface RecentTrades {
   token1?: Currency
 }
 
+const MAX_LENGTH = 200
 const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const [invert, setInvert] = useState(false)
-  const [buffer, setBuffer] = useState({
-    items: new Array(200),
-    ids: new Array(200),
-  })
+  const ids = useRef<string[]>([])
+  const buffer = useRef<any>([])
+  const [, forceUpdate] = useReducer((x) => x + 1, 0)
 
   const quoteIsStableCoin = token1?.symbol
     ? ['USDT', 'USDC', 'MIM', 'DAI', 'BUSD', 'UST', 'FRAX'].includes(token1.symbol)
@@ -95,56 +95,46 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const { data } = useSwaps({
     chainId,
     variables: {
-      first: 200,
+      first: MAX_LENGTH,
       skip: 0,
       orderBy: 'timestamp',
       orderDirection: 'desc',
       where: { pair },
     },
     shouldFetch: !!pair,
+    swrConfig: {
+      refreshInterval: 20000,
+    },
   })
-
-  useEffect(() => {
-    setBuffer({
-      items: [],
-      ids: [],
-    })
-  }, [chainId, pair])
 
   // Fetch initial history
   useEffect(() => {
     if (!data) return
-
-    setBuffer({
-      items: data,
-      ids: data.map((el: any) => el.transaction.id),
-    })
+    ids.current = data.map((el: any) => el.transaction.id)
+    buffer.current = data
   }, [data])
+
+  const handleSubscription = ({ data }: any) => {
+    if (buffer.current.length > 0 && data.swaps && data.swaps[0]) {
+      if (ids.current.includes(data.swaps[0].transaction.id)) {
+        return
+      }
+
+      if (buffer.current.length === MAX_LENGTH) {
+        buffer.current.pop()
+      }
+
+      buffer.current.unshift(data.swaps[0])
+      ids.current.push(data.swaps[0].transaction.id)
+      forceUpdate()
+    }
+  }
 
   // Get live data
   useSwapsObservable({
     chainId,
     observer: {
-      next({ data }) {
-        setBuffer((prevState) => {
-          const state = { ...prevState }
-          data.swaps.forEach((cur: any) => {
-            if (state.ids.includes(cur.transaction.id)) {
-              return
-            }
-
-            // remove last element
-            state.items.pop()
-            state.ids.pop()
-
-            // add first element
-            state.items.unshift(cur)
-            state.ids.unshift(cur.transaction.id)
-          })
-
-          return state
-        })
-      },
+      next: handleSubscription,
       error(error) {
         console.log(`Stream error: ${error.message}`)
       },
@@ -158,7 +148,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
     },
   })
 
-  if (!data || data?.length === 0) {
+  if (!buffer.current || buffer?.current.length === 0) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <Loader />
@@ -191,7 +181,7 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
         </Typography>
       </div>
       <div className="h-full overflow-auto">
-        {buffer.items.map((el) => {
+        {buffer.current.map((el: any) => {
           return (
             <SwapRow
               chainId={chainId}
