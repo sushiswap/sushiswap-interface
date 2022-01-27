@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 export const swapsSubscriptionQuery = gql`
   subscription swapsSubscription($where: Swap_filter) {
     swaps(first: 1, orderBy: timestamp, orderDirection: desc, where: $where) {
+      id
       amountUSD
       amount0In
       amount0Out

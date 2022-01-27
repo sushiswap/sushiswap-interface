@@ -347,6 +347,7 @@ export const swapsQuery = gql`
     $where: Swap_filter
   ) {
     swaps(first: $first, skip: $skip, orderBy: $orderBy, orderDirection: $orderDirection, where: $where) {
+      id
       amountUSD
       amount0In
       amount0Out

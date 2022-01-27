@@ -1,16 +1,17 @@
 import { ArrowSmRightIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, computePairAddress, Currency, FACTORY_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId } from '@sushiswap/core-sdk'
+import { computePairAddress, Currency, FACTORY_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
 import ExternalLink from 'app/components/ExternalLink'
 import Loader from 'app/components/Loader'
 import Typography from 'app/components/Typography'
 import { classNames, currencyFormatter, decimalFormatter, getExplorerLink } from 'app/functions'
 import { useSwaps, useSwapsObservable } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useEffect, useMemo, useReducer, useRef, useState } from 'react'
-// @ts-ignore
-// @ts-ignore
+import React, { FC, useEffect, useMemo, useReducer, useState } from 'react'
+
+import TradeFeed from './TradeFeed'
 
 interface SwapRow {
   swap: any
@@ -61,19 +62,22 @@ const SwapRow: FC<SwapRow> = ({ chainId, swap, divideQuote, invertRate }) => {
   )
 }
 
+// @ts-ignore
+// @ts-ignore
+
 interface RecentTrades {
   token0?: Currency
   token1?: Currency
 }
 
 const MAX_LENGTH = 200
+
 const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const [invert, setInvert] = useState(false)
-  const ids = useRef<string[]>([])
-  const buffer = useRef<any>([])
   const [, forceUpdate] = useReducer((x) => x + 1, 0)
+  const tradeFeed = useMemo(() => new TradeFeed(forceUpdate, MAX_LENGTH), [])
 
   const quoteIsStableCoin = token1?.symbol
     ? ['USDT', 'USDC', 'MIM', 'DAI', 'BUSD', 'UST', 'FRAX'].includes(token1.symbol)
@@ -110,45 +114,21 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
   // Fetch initial history
   useEffect(() => {
     if (!data) return
-    ids.current = data.map((el: any) => el.transaction.id)
-    buffer.current = data
-  }, [data])
-
-  const handleSubscription = ({ data }: any) => {
-    if (buffer.current.length > 0 && data.swaps && data.swaps[0]) {
-      if (ids.current.includes(data.swaps[0].transaction.id)) {
-        return
-      }
-
-      if (buffer.current.length === MAX_LENGTH) {
-        buffer.current.pop()
-      }
-
-      buffer.current.unshift(data.swaps[0])
-      ids.current.push(data.swaps[0].transaction.id)
-      forceUpdate()
-    }
-  }
+    tradeFeed.ids = data.map((el: any) => el.id)
+    tradeFeed.trades = data
+  }, [data, tradeFeed])
 
   // Get live data
   useSwapsObservable({
     chainId,
-    observer: {
-      next: handleSubscription,
-      error(error) {
-        console.log(`Stream error: ${error.message}`)
-      },
-      complete() {
-        console.log('Stream ended')
-      },
-    },
+    observer: tradeFeed.getObserver(),
     shouldFetch: !!chainId && !!pair,
     variables: {
       where: { pair },
     },
   })
 
-  if (!buffer.current || buffer?.current.length === 0) {
+  if (tradeFeed.trades.length === 0) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <Loader />
@@ -181,12 +161,12 @@ const RecentTrades: FC<RecentTrades> = ({ token0, token1 }) => {
         </Typography>
       </div>
       <div className="h-full overflow-auto">
-        {buffer.current.map((el: any) => {
+        {tradeFeed.trades.map((el: any) => {
           return (
             <SwapRow
               chainId={chainId}
               swap={el}
-              key={el.transaction.id}
+              key={el.id}
               divideQuote={!quoteIsStableCoin && !quoteIsWrapped}
               invertRate={invert}
             />
