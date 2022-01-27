@@ -73,7 +73,17 @@
       },
       {
         "internalType": "uint256",
-        "name": "minReceived",
+        "name": "minToken0Received",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minToken1Received",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minLpReceived",
         "type": "uint256"
       }
     ],
