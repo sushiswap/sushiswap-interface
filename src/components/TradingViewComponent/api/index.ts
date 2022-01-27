@@ -46,28 +46,18 @@ const dataFeed: DataFeed = (chainId) => ({
       minmov: 1,
       pricescale: 100000000,
       has_intraday: true,
-      intraday_multipliers: ['1', '5', '15', '60', '240'],
+      intraday_multipliers: ['5', '15', '60', '240'],
       supported_resolutions,
       volume_precision: 8,
       data_status: 'streaming',
+      has_empty_bars: true,
     }
 
     setTimeout(function () {
       onSymbolResolvedCallback(symbol_stub)
-      console.log('Resolving that symbol....', symbol_stub)
     }, 0)
   },
   getBars: async (symbolInfo, resolutionString, periodParams, onResult) => {
-    let stableQuote = false
-    if (
-      symbolInfo.full_name
-        .split(':')[1]
-        .split('/')[1]
-        .match(/USDT|USDC|MIM|DAI|BUSD|UST|FRAX/)
-    ) {
-      stableQuote = true
-    }
-
     // Format resolution for subgraph
     let resolution = 300
     if (resolutionString === '5') resolution = 300
@@ -86,10 +76,10 @@ const dataFeed: DataFeed = (chainId) => ({
 
       bars = data.map(({ open, low, high, close, time, token1TotalAmount }: any) => {
         return {
-          open: !stableQuote ? open : Number(1 / open),
-          low: !stableQuote ? low : Number(1 / low),
-          high: !stableQuote ? high : Number(1 / high),
-          close: !stableQuote ? close : Number(1 / close),
+          open: Number(1 / open),
+          low: Number(1 / low),
+          high: Number(1 / high),
+          close: Number(1 / close),
           time: time * 1000,
           volume: Number(
             JSBI.divide(JSBI.BigInt(token1TotalAmount), JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(18))).toString()
