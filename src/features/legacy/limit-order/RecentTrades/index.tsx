@@ -26,7 +26,7 @@ const SwapRow: FC<SwapRow> = ({ chainId, swap, divideQuote, invertRate }) => {
   const div = divideQuote ? amount1 : amount0
   const invertedDiv = div === amount1 ? amount0 : amount1
   const price = Number(swap.amountUSD) / Number(invertRate ? invertedDiv : div)
-  const value = Math.max(Math.min(((Number(swap.amountUSD) * Number(div)) / 1000000) * 25, 25), 1)
+  const value = Math.max(Math.min(((Number(swap.amountUSD) * Number(div)) / 1000000) * 25, 25), 0.1)
 
   return (
     <ExternalLink
