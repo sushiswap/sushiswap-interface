@@ -35,7 +35,7 @@ const Pro = () => {
   return (
     <div className="flex flex-grow overflow-hidden divide-x divide-y divide-dark-700">
       <div className="max-w-[340px] min-w-[340px] bg-dark-850 border-t border-dark-700">
-        <Box className="scale-[90%]">
+        <Box className="scale-[0.9]">
           <LimitOrder mode={LimitOrderMode.pro} />
         </Box>
       </div>
