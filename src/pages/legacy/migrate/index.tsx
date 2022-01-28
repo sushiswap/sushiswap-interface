@@ -6,6 +6,7 @@ import { useLingui } from '@lingui/react'
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
 import Back from 'app/components/Back'
 import Chip from 'app/components/Chip'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import Head from 'next/head'
 import React, { useCallback, useEffect, useState } from 'react'
 
@@ -250,7 +251,9 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
           )}
         </>
       )}
-      {error.message && error.code !== 4001 && <div className="font-medium text-center text-red">{error.message}</div>}
+      {error.message && error.code !== USER_REJECTED_TX && (
+        <div className="font-medium text-center text-red">{error.message}</div>
+      )}
       <div className="text-sm text-center text-low-emphesis">
         {i18n._(
           t`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`

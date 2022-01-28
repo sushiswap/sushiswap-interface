@@ -30,6 +30,7 @@ import useTransactionDeadline from 'app/hooks/useTransactionDeadline'
 import { PairState } from 'app/hooks/useV2Pairs'
 import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/modals/TransactionConfirmationModal'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useWalletModalToggle } from 'app/state/application/hooks'
 import { Field } from 'app/state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'app/state/mint/hooks'
@@ -208,7 +209,7 @@ export default function Add() {
       .catch((error) => {
         setAttemptingTxn(false)
         // we only care if the error is something _other_ than the user rejected the tx
-        if (error?.code !== 4001) {
+        if (error?.code !== USER_REJECTED_TX) {
           console.error(error)
         }
       })

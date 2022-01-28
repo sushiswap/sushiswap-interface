@@ -270,6 +270,7 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
   const to = !recipient ? account : recipientLookup.address
   const parsedRate = useLimitOrderDerivedLimitPrice()
   const balance = useBentoOrWalletBalance(account ?? undefined, inputCurrency, !fromBentoBalance)
+  const [expertMode] = useExpertModeManager()
 
   return useMemo(() => {
     return !account
@@ -286,10 +287,22 @@ export const useLimitOrderDerivedInputError: UseLimitOrderDerivedInputError = ({
       ? i18n._(t`Select an order expiration`)
       : !balance
       ? i18n._(t`Loading balance`)
-      : balance && trade?.inputAmount && balance.lessThan(trade.inputAmount)
+      : !expertMode && balance && trade?.inputAmount && balance.lessThan(trade.inputAmount)
       ? i18n._(t`Insufficient Balance`)
       : ''
-  }, [account, balance, inputCurrency, limitPrice, orderExpiration, outputCurrency, parsedRate, to, trade?.inputAmount])
+  }, [
+    account,
+    balance,
+    expertMode,
+    inputCurrency,
+    limitPrice,
+    orderExpiration,
+    outputCurrency,
+    parsedRate,
+    to,
+    trade?.inputAmount,
+    typedValue,
+  ])
 }
 
 type UseLimitOrderDerivedTrade = () => Trade<Currency, Currency, TradeType> | undefined

@@ -166,7 +166,6 @@ export interface ApproveSLPActionProps {
  */
 export const approveSLPAction = ({ router, signatureData }: ApproveSLPActionProps) => {
   if (!signatureData) return undefined
-
   const { tokenAddress, amount, deadline, v, r, s } = signatureData
   return router.interface.encodeFunctionData('permitThis', [tokenAddress, amount, deadline, v, r, s])
 }

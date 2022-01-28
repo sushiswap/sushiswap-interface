@@ -15,6 +15,7 @@ import { useCreatePoolDerivedDependencyError } from 'app/features/trident/create
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useConstantProductPoolFactory, useTridentRouterContract } from 'app/hooks/useContract'
 import { useActiveWeb3React } from 'app/services/web3'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
@@ -103,7 +104,7 @@ export const useCreatePoolExecute: UseCreatePoolExecute = () => {
           alert(`Error with pool creation: ${error}`)
         }
         // we only care if the error is something _other_ than the user rejected the tx
-        if ((error as { code: number }).code !== 4001) {
+        if ((error as { code: number }).code !== USER_REJECTED_TX) {
           alert(`Error with pool creation: ${JSON.stringify(error)}`)
         }
         console.error(error)

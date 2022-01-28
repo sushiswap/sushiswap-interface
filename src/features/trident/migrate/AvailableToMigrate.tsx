@@ -29,16 +29,23 @@ export const AvailableToMigrate: FC = () => {
 
   return (
     <div>
-      <div className="flex gap-3 items-center">
-        <Typography variant="h3" className="text-high-emphesis" weight={700}>
-          {i18n._(t`Available to Migrate`)}
-        </Typography>
-        <LoadingSpinner active={loading} />
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-3 items-center">
+          <Typography variant="h3" className="text-high-emphesis" weight={700}>
+            {i18n._(t`Available to Migrate`)}
+          </Typography>
+          <LoadingSpinner active={loading} />
+        </div>
+        {!account && <div>{i18n._(t`Connect to your wallet first ↗️`)}</div>}
+        {account && pairs.length === 0 && !loading && (
+          <>
+            <div>{i18n._(t`You have no pools available for migration`)}</div>
+            <Button className="w-max" size="sm" onClick={() => router.push('/trident/balances/wallet')}>
+              {i18n._(t`Go to your wallet`)}
+            </Button>
+          </>
+        )}
       </div>
-      {!account && <div className="mt-3">{i18n._(t`Connect to your wallet first ↗️`)}</div>}
-      {account && pairs.length === 0 && !loading && (
-        <div className="mt-3">{i18n._(t`You have no pools available for migration`)}</div>
-      )}
       {pairs.length > 0 && (
         <div className="flex flex-col">
           <div className={migrateGridLayoutCss}>
