@@ -24,13 +24,13 @@ const MATIC_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },*/
   // BZRX / USD
-  '0x6b7D436583e5fE0874B7310b74D29A13af816860': {
-    from: '0x54cFe73f2c7d0c4b62Ab869B473F5512Dc0944D2',
-    to: '0x0000000000000000000000000000000000000001',
-    decimals: 8,
-    fromDecimals: 18,
-    toDecimals: 8,
-  },
+  // '0x6b7D436583e5fE0874B7310b74D29A13af816860': {
+  //   from: '0x54cFe73f2c7d0c4b62Ab869B473F5512Dc0944D2',
+  //   to: '0x0000000000000000000000000000000000000001',
+  //   decimals: 8,
+  //   fromDecimals: 18,
+  //   toDecimals: 8,
+  // },
   // CEL / USD
   '0xc9ECF45956f576681bDc01F79602A79bC2667B0c': {
     from: '0xD85d1e945766Fea5Eda9103F918Bd915FbCa63E6',

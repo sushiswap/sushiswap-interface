@@ -27,6 +27,8 @@ export default function Lend() {
   // @ts-ignore TYPE NEEDS FIXING
   const pairs = useKashiPairs(addresses)
 
+  console.log('KASHI pairs', pairs)
+
   const positions = useSearchAndSort(
     // @ts-ignore TYPE NEEDS FIXING
     pairs.filter((pair) => pair.userAssetFraction.gt(0)),

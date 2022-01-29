@@ -3,6 +3,7 @@ import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { Zero } from '@ethersproject/constants'
 import { ChainId, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
 import { Fraction } from 'app/entities'
 import { Feature } from 'app/enums'
 import {
@@ -23,7 +24,7 @@ import {
   validateChainlinkOracleData,
 } from 'app/functions'
 import { useBentoBoxContract, useBoringHelperContract } from 'app/hooks'
-import { useAllTokens } from 'app/hooks/Tokens'
+import { useTokens } from 'app/hooks/Tokens'
 import { useBentoStrategies, useClones } from 'app/services/graph'
 import { useActiveWeb3React, useQueryFilter } from 'app/services/web3'
 import { useSingleCallResult } from 'app/state/multicall/hooks'
@@ -31,18 +32,51 @@ import { useMemo } from 'react'
 
 const BLACKLISTED_TOKENS = ['0xC6d54D2f624bc83815b49d9c2203b1330B841cA0']
 
-const BLACKLISTED_ORACLES = ['0x8f2CC3376078568a04eBC600ae5F0a036DBfd812']
+const BLACKLISTED_ORACLES = [
+  '0x8f2CC3376078568a04eBC600ae5F0a036DBfd812',
+  '0x8f7C7181Ed1a2BA41cfC3f5d064eF91b67daef66',
+  '0x6b7D436583e5fE0874B7310b74D29A13af816860',
+]
+
+const BLACKLISTED_PAIRS = ['0xF71e398B5CBb473a3378Bf4335256295A8eD713d']
+
+export function useKashiTokens(): { [address: string]: Token } {
+  const { chainId } = useActiveWeb3React()
+  const allTokens = useTokens()
+  return useMemo(
+    () =>
+      Object.values(allTokens).reduce((previousValue, currentValue) => {
+        if (
+          // @ts-ignore TYPE NEEDS FIXING
+          Object.values(CHAINLINK_PRICE_FEED_MAP[chainId]).some(
+            // @ts-ignore TYPE NEEDS FIXING
+            (value) => {
+              // @ts-ignore TYPE NEEDS FIXING
+              return currentValue.address === value.from || currentValue.address === value.to
+            }
+          )
+        ) {
+          // @ts-ignore TYPE NEEDS FIXING
+          previousValue[currentValue.address] = currentValue
+        }
+        return previousValue
+      }, {}),
+    [allTokens, chainId]
+  )
+}
 
 export function useKashiPairAddresses(): string[] {
   const bentoBoxContract = useBentoBoxContract()
   const { chainId } = useActiveWeb3React()
+  // const useEvents = false
   const useEvents = chainId && chainId !== ChainId.BSC && chainId !== ChainId.MATIC && chainId !== ChainId.ARBITRUM
-  const allTokens = useAllTokens()
+  const allTokens = useKashiTokens()
   const events = useQueryFilter({
     chainId,
     contract: bentoBoxContract,
     // @ts-ignore TYPE NEEDS FIXING
     event: bentoBoxContract && bentoBoxContract.filters.LogDeploy(KASHI_ADDRESS[chainId]),
+    // @ts-ignore TYPE NEEDS FIXING
     shouldFetch: useEvents && featureEnabled(Feature.KASHI, chainId),
   })
   const clones = useClones({ chainId, shouldFetch: !useEvents })
@@ -69,6 +103,7 @@ export function useKashiPairAddresses(): string[] {
             BLACKLISTED_TOKENS.includes(collateral) ||
             BLACKLISTED_TOKENS.includes(asset) ||
             BLACKLISTED_ORACLES.includes(oracle) ||
+            // @ts-ignore TYPE NEEDS FIXING
             !validateChainlinkOracleData(chainId, allTokens[collateral], allTokens[asset], oracleData)
           ) {
             return previousValue
@@ -90,37 +125,28 @@ export function useKashiPairs(addresses = []) {
   const wnative = WNATIVE_ADDRESS[chainId]
 
   // @ts-ignore TYPE NEEDS FIXING
-  const currency = USD[chainId]
+  const currency: Token = USD[chainId]
 
-  const allTokens = useAllTokens()
+  const allTokens = useKashiTokens()
 
   const pollArgs = useMemo(() => [account, addresses], [account, addresses])
 
   // TODO: Replace
   // @ts-ignore TYPE NEEDS FIXING
-  const pollKashiPairs = useSingleCallResult(boringHelperContract, 'pollKashiPairs', pollArgs)?.result?.[0]
-
-  const tokens = useMemo<Token[]>(() => {
-    if (!pollKashiPairs) {
-      return []
-    }
-    return Array.from(
-      // @ts-ignore TYPE NEEDS FIXING
-      pollKashiPairs?.reduce((previousValue, currentValue) => {
-        const asset = allTokens[currentValue.asset]
-        const collateral = allTokens[currentValue.collateral]
-        return previousValue.add(asset).add(collateral)
-      }, new Set([currency]))
-    )
-  }, [allTokens, currency, pollKashiPairs])
+  const pollKashiPairs = useSingleCallResult(boringHelperContract, 'pollKashiPairs', pollArgs, { blocksPerFetch: 0 })
+    ?.result?.[0]
 
   const strategies = useBentoStrategies({ chainId })
 
-  const getBalancesArgs = useMemo(() => [account, tokens.map((token) => token?.address)], [account, tokens])
+  const tokenAddresses = Object.keys(allTokens)
+
+  const getBalancesArgs = useMemo(() => [account, tokenAddresses], [account, tokenAddresses])
 
   // TODO: Replace
   // @ts-ignore TYPE NEEDS FIXING
-  const balances = useSingleCallResult(boringHelperContract, 'getBalances', getBalancesArgs)?.result?.[0]?.reduce(
+  const balancesCallState = useSingleCallResult(boringHelperContract, 'getBalances', getBalancesArgs)
+
+  const balances = balancesCallState?.result?.[0]?.reduce(
     // @ts-ignore TYPE NEEDS FIXING
     (previousValue, currentValue) => {
       return { ...previousValue, [currentValue[0]]: currentValue }
@@ -129,7 +155,7 @@ export function useKashiPairs(addresses = []) {
   )
 
   // TODO: Disgusting but until final refactor this will have to remain...
-  const pairTokens = tokens
+  const pairTokens = Object.values(allTokens)
     .filter((token) => balances?.[token.address])
     .reduce((previousValue, currentValue) => {
       const balance = balances[currentValue.address]
@@ -153,7 +179,7 @@ export function useKashiPairs(addresses = []) {
     }, {})
 
   return useMemo(() => {
-    if (!addresses || !tokens || !pollKashiPairs) {
+    if (!addresses || !tokenAddresses || !pollKashiPairs) {
       return []
     }
     return addresses.reduce((previousValue, currentValue, i) => {
@@ -330,7 +356,7 @@ export function useKashiPairs(addresses = []) {
 
       return previousValue
     }, [])
-  }, [addresses, tokens, pollKashiPairs, chainId, pairTokens, balances])
+  }, [addresses, tokenAddresses, pollKashiPairs, chainId, pairTokens, balances])
 
   //   return useMemo(
   //     () =>
