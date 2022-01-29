@@ -134,8 +134,8 @@ const ManageBar = ({ farm }) => {
           currencyLogo={false}
           currency={liquidityToken}
           value={toggle ? depositValue : withdrawValue}
-          onChange={setDepositValue}
-          balance={toggle ? undefined : stakedAmount}
+          onChange={toggle ? setDepositValue : setWithdrawValue}
+          balance={toggle ? balance : stakedAmount}
           showMax={false}
         />
       </HeadlessUiModal.BorderedContent>
