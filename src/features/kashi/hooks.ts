@@ -48,7 +48,7 @@ export function useKashiTokens(): { [address: string]: Token } {
       Object.values(allTokens).reduce((previousValue, currentValue) => {
         if (
           // @ts-ignore TYPE NEEDS FIXING
-          Object.values(CHAINLINK_PRICE_FEED_MAP?.[chainId]).some(
+          Object.values(CHAINLINK_PRICE_FEED_MAP?.[chainId])?.some(
             // @ts-ignore TYPE NEEDS FIXING
             (value) => {
               // @ts-ignore TYPE NEEDS FIXING
