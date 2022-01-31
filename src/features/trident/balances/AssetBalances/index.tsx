@@ -1,4 +1,7 @@
+import { t } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { NATIVE, ZERO } from '@sushiswap/core-sdk'
+import Typography from 'app/components/Typography'
 import AssetBalances from 'app/features/trident/balances/AssetBalances/AssetBalances'
 import { Assets } from 'app/features/trident/balances/AssetBalances/types'
 import { useLPTableConfig } from 'app/features/trident/balances/AssetBalances/useLPTableConfig'
@@ -32,6 +35,7 @@ export const LiquidityPositionsBalances = () => {
 }
 
 export const BentoBalances = () => {
+  const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const selected = useBalancesSelectedCurrency()
   const balances = useBentoBalancesV2()
@@ -56,15 +60,19 @@ export const BentoBalances = () => {
   const { config } = useTableConfig(assets)
 
   return (
-    <AssetBalances
-      config={config}
-      selected={(row) => row.values.asset.currency === selected}
-      onSelect={handleRowClick}
-    />
+    <div className="flex flex-col gap-3">
+      <Typography className="text-high-emphesis">{i18n._(t`BentoBox`)}</Typography>
+      <AssetBalances
+        config={config}
+        selected={(row) => row.values.asset.currency === selected}
+        onSelect={handleRowClick}
+      />
+    </div>
   )
 }
 
 export const WalletBalances = () => {
+  const { i18n } = useLingui()
   const { chainId, account } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const selected = useBalancesSelectedCurrency()
@@ -101,10 +109,13 @@ export const WalletBalances = () => {
   )
 
   return (
-    <AssetBalances
-      config={config}
-      selected={(row) => row.values.asset.currency === selected}
-      onSelect={handleRowClick}
-    />
+    <div className="flex flex-col gap-3">
+      <Typography className="text-high-emphesis">{i18n._(t`Wallet`)}</Typography>
+      <AssetBalances
+        config={config}
+        selected={(row) => row.values.asset.currency === selected}
+        onSelect={handleRowClick}
+      />
+    </div>
   )
 }

@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, ZERO } from '@sushiswap/core-sdk'
@@ -39,17 +40,12 @@ export const LiquidityPositionsBalancesSum = () => {
   )
 }
 
-export const BentoBalancesSum = () => {
-  const balances = useBentoBalancesV2()
-  return <_BalancesSum amounts={balances} />
-}
-
-export const WalletBalancesSum = () => {
+const useWalletBalances = () => {
   const { chainId, account } = useActiveWeb3React()
   const tokenBalances = useAllTokenBalances()
   // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
-  const amounts = useMemo(() => {
+  return useMemo(() => {
     const res: CurrencyAmount<Currency>[] = Object.values(tokenBalances).filter((cur) => cur.greaterThan(ZERO))
 
     if (ethBalance) {
@@ -57,8 +53,29 @@ export const WalletBalancesSum = () => {
     }
     return res
   }, [tokenBalances, ethBalance])
+}
 
-  return <_BalancesSum amounts={amounts} />
+export const BalancesSum = () => {
+  const walletBalances = useWalletBalances()
+  const bentoBalances = useBentoBalancesV2()
+  const balances = useMemo(() => {
+    return Object.values(
+      [...walletBalances, ...bentoBalances].reduce<Record<string, CurrencyAmount<Currency>>>((acc, cur) => {
+        if (cur.currency.isNative) {
+          if (acc[AddressZero]) acc[AddressZero] = acc[AddressZero].add(cur)
+          else acc[AddressZero] = cur
+        } else if (acc[cur.currency.wrapped.address]) {
+          acc[cur.currency.wrapped.address] = acc[cur.currency.wrapped.address].add(cur)
+        } else {
+          acc[cur.currency.wrapped.address] = cur
+        }
+
+        return acc
+      }, {})
+    )
+  }, [bentoBalances, walletBalances])
+
+  return <_BalancesSum amounts={balances} />
 }
 
 interface BalancesSumProps {

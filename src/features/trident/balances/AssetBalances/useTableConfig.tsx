@@ -1,6 +1,7 @@
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { Assets } from 'app/features/trident/balances/AssetBalances/types'
+import { currencyFormatter } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import React, { useMemo } from 'react'
@@ -66,7 +67,7 @@ export const useTableConfig = (assets?: Assets[]) => {
               variant={isDesktop ? 'sm' : 'base'}
               className="w-full text-right text-high-emphesis"
             >
-              {usdcValue ? `$${usdcValue?.toExact({})}` : '-'}
+              {usdcValue ? `${currencyFormatter.format(Number(usdcValue.toExact()))}` : '-'}
             </Typography>
           )
         },
@@ -86,6 +87,7 @@ export const useTableConfig = (assets?: Assets[]) => {
         initialState: {
           sortBy: [{ id: 'value', desc: true }],
         },
+        manualPagination: true,
       },
     }),
     [AssetColumns, assets, defaultColumn]
