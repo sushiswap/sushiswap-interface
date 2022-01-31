@@ -1,76 +1,59 @@
-import { ChevronDownIcon } from '@heroicons/react/solid'
-import Popover from 'app/components/Popover'
+import Davatar from '@davatar/react'
+import { LinkIcon } from '@heroicons/react/outline'
+import CopyHelper from 'app/components/AccountDetails/Copy'
 import Typography from 'app/components/Typography'
-import useBalancesMenuItems from 'app/features/trident/balances/useBalancesMenuItems'
-import { classNames, shortenAddress } from 'app/functions'
-import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import { BalancesSum } from 'app/features/trident/balances/BalancesSum'
+import { getExplorerLink, shortenAddress } from 'app/functions'
 import useENSName from 'app/hooks/useENSName'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
 import React, { FC, useState } from 'react'
+import Identicon from 'react-blockies'
 
 interface HeaderDropdownProps {
-  label: string
   hideAccount?: boolean
 }
 
-const HeaderDropdown: FC<HeaderDropdownProps> = ({ label, hideAccount = false }) => {
-  const isDesktop = useDesktopMediaQuery()
-  const { account } = useActiveWeb3React()
+const HeaderDropdown: FC<HeaderDropdownProps> = ({ hideAccount = false }) => {
+  const { account, library, chainId } = useActiveWeb3React()
   const [show, setShow] = useState<boolean>(false)
-  const items = useBalancesMenuItems()
   const { ENSName } = useENSName(account ?? undefined)
-
-  const content = (
-    <div className="flex flex-col lg:flex-row text-left lg:items-baseline lg:gap-4" onClick={() => setShow(!show)}>
-      <div className="flex gap-2 items-center">
-        <Typography variant={isDesktop ? 'h1' : 'h2'} className="text-high-emphesis z-[2] py-4" weight={700}>
-          {label}
-        </Typography>
-        <ChevronDownIcon
-          width={32}
-          className={classNames(show ? 'transform rotate-180' : '', 'text-high-emphesis', 'block lg:hidden')}
-        />
-      </div>
-      {account && !hideAccount && (
-        <Typography className="hidden lg:block text-high-emphesis" weight={700}>
-          {ENSName ? ENSName : shortenAddress(account)}
-        </Typography>
-      )}
-    </div>
-  )
-
-  if (isDesktop) {
-    return content
-  }
 
   return (
     <>
-      {show && <div className="fixed inset-0 top-[106px] bg-black/75 pointer-events-none" />}
-      <Popover
-        placement="bottom-start"
-        show={show}
-        content={
-          <div className="flex flex-col space-y-3 w-[calc(100vw-40px)] mt-2">
-            {items.map((el, index) => (
-              <Link href={el.link ?? ''} key={index} passHref={true}>
-                <div className="border border-dark-700 bg-dark-900 hover:bg-dark-800 rounded p-3 shadow-lg w-full cursor-pointer">
-                  <div className="flex gap-3 items-center">
-                    <div className="w-10 h-10 rounded-full border-[3px] border-transparent border-gradient-r-blue-pink-dark-900 flex items-center justify-center">
-                      {el.icon}
-                    </div>
-                    <Typography variant="lg" className="text-high-emphesis" weight={700}>
-                      {el.label}
-                    </Typography>
-                  </div>
-                </div>
-              </Link>
-            ))}
+      <div className="flex items-center gap-4" onClick={() => setShow(!show)}>
+        {account && (
+          <div className="border-2 rounded-full">
+            <Davatar
+              size={64}
+              address={account}
+              defaultComponent={<Identicon seed={account} size={16} className="rounded-full" />}
+              provider={library}
+            />
           </div>
-        }
-      >
-        {content}
-      </Popover>
+        )}
+        <div className="flex flex-col">
+          {account && (
+            <Link href={getExplorerLink(chainId, account, 'address')} passHref={true}>
+              <a target="_blank">
+                <Typography
+                  variant="h3"
+                  className="text-high-emphesis flex gap-1 cursor-pointer hover:text-blue-100"
+                  weight={700}
+                >
+                  {ENSName ? ENSName : account ? shortenAddress(account) : ''} <LinkIcon width={20} />
+                </Typography>
+              </a>
+            </Link>
+          )}
+          {account && !hideAccount && (
+            <CopyHelper toCopy={shortenAddress(account)} className="opacity-100 text-primary">
+              {shortenAddress(account)}
+            </CopyHelper>
+          )}
+        </div>
+      </div>
+      <BalancesSum />
     </>
   )
 }

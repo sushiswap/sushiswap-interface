@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
-import Dots from 'app/components/Dots'
 import { WalletIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
@@ -16,12 +15,12 @@ import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
-interface WithdrawToWalletModalProps {
-  open: boolean
+interface WithdrawViewProps {
+  onBack(): void
   onClose(): void
 }
 
-const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }) => {
+const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
   const { account } = useActiveWeb3React()
   const currency = useBalancesSelectedCurrency()
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
@@ -58,51 +57,43 @@ const WithdrawToWalletModal: FC<WithdrawToWalletModalProps> = ({ open, onClose }
     : ''
 
   const disabled = !!error || attemptingTxn
-  const buttonText = attemptingTxn ? (
-    <Dots>{i18n._(t`Withdrawing`)}</Dots>
-  ) : error ? (
-    error
-  ) : (
-    i18n._(t`Confirm Withdrawal`)
-  )
+  const buttonText = error ? error : i18n._(t`Confirm Withdrawal`)
 
   return (
-    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onClose} maxWidth="md">
-      <div className="flex flex-col gap-4">
-        <HeadlessUiModal.Header header={i18n._(t`Withdraw to wallet`)} onClose={onClose} />
-        <AssetInput
-          title={''}
-          currency={currency}
-          onChange={(val) => setValue(val)}
-          value={value}
-          spendFromWallet={false}
-        />
-        <div className="z-10 flex justify-center -mt-6 -mb-6">
-          <div className="p-1.5 rounded-full bg-dark-800 border border-dark-800 shadow-md border-dark-700">
-            <ArrowDownIcon width={14} className="text-high-emphesis" />
-          </div>
+    <div className="flex flex-col gap-4">
+      <HeadlessUiModal.Header header={i18n._(t`Withdraw to wallet`)} onClose={onClose} onBack={onBack} />
+      <AssetInput
+        title={''}
+        currency={currency}
+        onChange={(val) => setValue(val)}
+        value={value}
+        spendFromWallet={false}
+      />
+      <div className="z-10 flex justify-center -mt-6 -mb-6">
+        <div className="p-1.5 rounded-full bg-dark-800 border border-dark-800 shadow-md border-dark-700">
+          <ArrowDownIcon width={14} className="text-high-emphesis" />
         </div>
-        <HeadlessUiModal.BorderedContent className="flex gap-3 px-3 bg-dark-900">
-          <div className="border border-dark-700 rounded-full w-[48px] h-[48px] flex items-center justify-center shadow-md">
-            <WalletIcon width={20} height={20} />
-          </div>
-          <div className="flex flex-col gap-1">
-            <Typography variant="h3" className={value ? 'text-high-emphesis' : 'text-secondary'} weight={700}>
-              {(valuePlusBalance || walletBalance)?.toSignificant(6)}
-            </Typography>
-            <Typography variant="xxs" className="text-secondary">
-              {i18n._(t`In Wallet`)}
-            </Typography>
-          </div>
-        </HeadlessUiModal.BorderedContent>
-        <Button color="gradient" disabled={disabled} onClick={execute}>
-          <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
-            {buttonText}
-          </Typography>
-        </Button>
       </div>
-    </HeadlessUiModal.Controlled>
+      <HeadlessUiModal.BorderedContent className="flex gap-3 px-3 bg-dark-900">
+        <div className="border border-dark-700 rounded-full w-[48px] h-[48px] flex items-center justify-center shadow-md">
+          <WalletIcon width={20} height={20} />
+        </div>
+        <div className="flex flex-col gap-1">
+          <Typography variant="h3" className={value ? 'text-high-emphesis' : 'text-secondary'} weight={700}>
+            {(valuePlusBalance || walletBalance)?.toSignificant(6)}
+          </Typography>
+          <Typography variant="xxs" className="text-secondary">
+            {i18n._(t`In Wallet`)}
+          </Typography>
+        </div>
+      </HeadlessUiModal.BorderedContent>
+      <Button loading={attemptingTxn} color="gradient" disabled={disabled} onClick={execute}>
+        <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
+          {buttonText}
+        </Typography>
+      </Button>
+    </div>
   )
 }
 
-export default WithdrawToWalletModal
+export default WithdrawView

@@ -23,13 +23,14 @@ interface AssetBalancesProps {
 const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelect, selected }) => {
   const { i18n } = useLingui()
 
-  // @ts-ignore TYPE NEEDS FIXING
-  const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } = useTable(
-    config,
-    useSortBy,
-    usePagination,
-    useFlexLayout
-  )
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    // @ts-ignore TYPE NEEDS FIXING
+    page,
+  } = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
     <div className={TABLE_WRAPPER_DIV_CLASSNAME}>

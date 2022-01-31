@@ -119,11 +119,7 @@ const nextConfig = {
       },
       {
         source: '/balances',
-        destination: '/trident/balances/wallet',
-      },
-      {
-        source: '/trident/balances',
-        destination: '/trident/balances/wallet',
+        destination: '/trident/balances',
       },
     ]
   },

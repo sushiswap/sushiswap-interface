@@ -1,83 +1,50 @@
-import { XIcon } from '@heroicons/react/solid'
-import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import BottomSlideIn from 'app/components/Dialog/BottomSlideIn'
-import Typography from 'app/components/Typography'
-import { selectTridentBalances, setBalancesActiveModal } from 'app/features/trident/balances/balancesSlice'
-import BentoActions from 'app/features/trident/balances/BentoActions'
-import DepositToBentoBoxModal from 'app/features/trident/balances/DepositToBentoBoxModal'
-import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
-import WalletActions from 'app/features/trident/balances/WalletActions'
-import WithdrawToWalletModal from 'app/features/trident/balances/WithdrawToWalletModal'
+import { HeadlessUiModal } from 'app/components/Modal'
+import ActionView from 'app/features/trident/balances/ActionsModal/ActionView'
+import DepositView from 'app/features/trident/balances/ActionsModal/DepositView'
+import WithdrawView from 'app/features/trident/balances/ActionsModal/WithdrawView'
+import {
+  selectTridentBalances,
+  setBalancesActiveModal,
+  setBalancesModalOpen,
+  setBalancesState,
+} from 'app/features/trident/balances/balancesSlice'
 import { ActiveModal } from 'app/features/trident/types'
-import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 
-const _ActionsModal: FC = ({ children }) => {
-  const isDesktop = useDesktopMediaQuery()
+const ActionsModal: FC = () => {
   const dispatch = useAppDispatch()
-  const currency = useBalancesSelectedCurrency()
-  const { activeModal } = useAppSelector(selectTridentBalances)
+  const { activeModal, modalOpen } = useAppSelector(selectTridentBalances)
 
-  if (isDesktop) return <></>
+  const handleDismiss = useCallback(() => {
+    setBalancesState({
+      activeModal: undefined,
+      currency: undefined,
+    })
+  }, [])
 
   return (
-    <BottomSlideIn open={activeModal === ActiveModal.MENU} onClose={() => dispatch(setBalancesActiveModal(undefined))}>
-      <div className="flex justify-between bg-dark-800 p-5">
-        <div className="flex gap-4 items-center">
-          <CurrencyLogo currency={currency} size={42} className="!rounded-full" />
-          <Typography variant="h3" className="text-high-emphesis" weight={700}>
-            {currency?.symbol}
-          </Typography>
-        </div>
-        <div
-          className="w-8 h-8 flex justify-end items-start cursor-pointer"
-          onClick={() => dispatch(setBalancesActiveModal(undefined))}
-        >
-          <XIcon width={20} />
-        </div>
-      </div>
-      {children}
-    </BottomSlideIn>
+    <HeadlessUiModal.Controlled
+      isOpen={modalOpen}
+      onDismiss={() => dispatch(setBalancesModalOpen(false))}
+      afterLeave={handleDismiss}
+      maxWidth="md"
+    >
+      {activeModal === ActiveModal.DEPOSIT ? (
+        <DepositView
+          onBack={() => dispatch(setBalancesActiveModal(ActiveModal.MENU))}
+          onClose={() => dispatch(setBalancesActiveModal(undefined))}
+        />
+      ) : activeModal === ActiveModal.WITHDRAW ? (
+        <WithdrawView
+          onBack={() => dispatch(setBalancesActiveModal(ActiveModal.MENU))}
+          onClose={() => dispatch(setBalancesActiveModal(undefined))}
+        />
+      ) : (
+        <ActionView onClose={() => dispatch(setBalancesActiveModal(undefined))} />
+      )}
+    </HeadlessUiModal.Controlled>
   )
 }
 
-export const BentoActionsModal: FC = () => {
-  const isDesktop = useDesktopMediaQuery()
-  const dispatch = useAppDispatch()
-  const { activeModal } = useAppSelector(selectTridentBalances)
-
-  return (
-    <>
-      <_ActionsModal>
-        <BentoActions />
-      </_ActionsModal>
-      <WithdrawToWalletModal
-        open={activeModal === ActiveModal.WITHDRAW}
-        onClose={() =>
-          isDesktop ? dispatch(setBalancesActiveModal(ActiveModal.MENU)) : dispatch(setBalancesActiveModal(undefined))
-        }
-      />
-    </>
-  )
-}
-
-export const WalletActionsModal: FC = () => {
-  const isDesktop = useDesktopMediaQuery()
-  const dispatch = useAppDispatch()
-  const { activeModal } = useAppSelector(selectTridentBalances)
-
-  return (
-    <>
-      <_ActionsModal>
-        <WalletActions />
-      </_ActionsModal>
-      <DepositToBentoBoxModal
-        open={activeModal === ActiveModal.DEPOSIT}
-        onClose={() =>
-          isDesktop ? dispatch(setBalancesActiveModal(ActiveModal.MENU)) : dispatch(setBalancesActiveModal(undefined))
-        }
-      />
-    </>
-  )
-}
+export default ActionsModal
