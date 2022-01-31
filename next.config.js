@@ -121,10 +121,6 @@ const nextConfig = {
         source: '/balances',
         destination: '/trident/balances',
       },
-      {
-        source: '/trident/balances',
-        destination: '/trident/balances',
-      },
     ]
   },
   i18n: {

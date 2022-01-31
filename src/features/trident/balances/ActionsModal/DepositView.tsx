@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
-import Dots from 'app/components/Dots'
 import { BentoboxIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
@@ -42,7 +41,7 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
 
     try {
       setAttemptingTxn(true)
-      await deposit(currency?.wrapped.address, value.toBigNumber(currency?.decimals))
+      await deposit(currency.wrapped.address, value.toBigNumber(currency?.decimals))
     } finally {
       setAttemptingTxn(false)
       onClose()
@@ -90,18 +89,10 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
       <TridentApproveGate inputAmounts={[valueCA]} tokenApproveOn={bentoboxContract?.address}>
         {({ approved, loading }) => {
           const disabled = !!error || !approved || loading || attemptingTxn
-          const buttonText = attemptingTxn ? (
-            <Dots>{i18n._(t`Depositing`)}</Dots>
-          ) : loading ? (
-            ''
-          ) : error ? (
-            error
-          ) : (
-            i18n._(t`Confirm Deposit`)
-          )
+          const buttonText = error ? error : i18n._(t`Confirm Deposit`)
 
           return (
-            <Button loading={loading} color="blue" disabled={disabled} onClick={execute}>
+            <Button loading={attemptingTxn || loading} color="blue" disabled={disabled} onClick={execute}>
               <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
                 {buttonText}
               </Typography>

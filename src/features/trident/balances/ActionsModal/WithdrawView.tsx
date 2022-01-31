@@ -4,7 +4,6 @@ import { useLingui } from '@lingui/react'
 import { ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
-import Dots from 'app/components/Dots'
 import { WalletIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
@@ -58,13 +57,7 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
     : ''
 
   const disabled = !!error || attemptingTxn
-  const buttonText = attemptingTxn ? (
-    <Dots>{i18n._(t`Withdrawing`)}</Dots>
-  ) : error ? (
-    error
-  ) : (
-    i18n._(t`Confirm Withdrawal`)
-  )
+  const buttonText = error ? error : i18n._(t`Confirm Withdrawal`)
 
   return (
     <div className="flex flex-col gap-4">
@@ -94,7 +87,7 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
           </Typography>
         </div>
       </HeadlessUiModal.BorderedContent>
-      <Button color="gradient" disabled={disabled} onClick={execute}>
+      <Button loading={attemptingTxn} color="gradient" disabled={disabled} onClick={execute}>
         <Typography variant="sm" weight={700} className={!error ? 'text-high-emphesis' : 'text-low-emphasis'}>
           {buttonText}
         </Typography>
