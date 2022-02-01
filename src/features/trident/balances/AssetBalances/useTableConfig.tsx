@@ -2,12 +2,10 @@ import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
 import { Assets } from 'app/features/trident/balances/AssetBalances/types'
 import { currencyFormatter } from 'app/functions'
-import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
-import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import { useUSDCPriceWithLoadingIndicator, useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
 import React, { useMemo } from 'react'
 
-export const useTableConfig = (assets?: Assets[]) => {
-  const isDesktop = useDesktopMediaQuery()
+export const useTableConfig = (assets?: Assets[], balancesLoading?: boolean) => {
   const AssetColumns = useMemo(
     () => [
       {
@@ -18,39 +16,38 @@ export const useTableConfig = (assets?: Assets[]) => {
         className: 'text-left',
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
+          const { price, loading } = useUSDCPriceWithLoadingIndicator(
+            balancesLoading ? undefined : props.cell.value.currency
+          )
+
+          if (loading || balancesLoading) {
+            return (
+              <div className="flex gap-2.5 items-center w-full h-10">
+                <div className="bg-dark-800 rounded-full w-9 h-9 animate-pulse" />
+                <div className="flex flex-col gap-1.5">
+                  <div className="h-4 bg-dark-700 rounded animate-pulse w-[50px]" />
+                  <div className="h-2 bg-dark-800 rounded animate-pulse w-[50px]" />
+                </div>
+              </div>
+            )
+          }
+
           return (
-            <div className="flex gap-2.5 items-center">
-              <CurrencyLogo currency={props.cell.value.currency} className="!rounded-full" size={28} />
-              <Typography
-                weight={isDesktop ? 400 : 700}
-                variant={isDesktop ? 'sm' : 'base'}
-                className="text-left text-high-emphesis"
-              >
-                {props.cell.value.currency.symbol}
-              </Typography>
+            <div className="flex gap-2.5 items-center h-10">
+              <CurrencyLogo currency={props.cell.value.currency} className="!rounded-full" size={36} />
+              <div className="flex flex-col">
+                <Typography weight={700} className="text-left text-high-emphesis">
+                  {props.cell.value.currency.symbol}
+                </Typography>
+                {price && (
+                  <Typography weight={400} variant="sm" className="text-left text-low-emphesis">
+                    {currencyFormatter.format(Number(price?.toFixed()))}
+                  </Typography>
+                )}
+              </div>
             </div>
           )
         },
-      },
-      {
-        id: 'balance',
-        Header: 'Balance',
-        accessor: 'asset',
-        maxWidth: 100,
-        className: 'text-left',
-        // @ts-ignore TYPE NEEDS FIXING
-        Cell: (props) => {
-          return (
-            <Typography
-              weight={isDesktop ? 400 : 700}
-              variant={isDesktop ? 'sm' : 'base'}
-              className="text-left text-high-emphesis"
-            >
-              {props.cell.value.toSignificant(6)}
-            </Typography>
-          )
-        },
-        cellClassName: '',
       },
       {
         id: 'value',
@@ -60,20 +57,32 @@ export const useTableConfig = (assets?: Assets[]) => {
         className: 'text-right flex justify-end',
         // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
-          const usdcValue = useUSDCValue(props.cell.value)
+          const { value, loading } = useUSDCValueWithLoadingIndicator(balancesLoading ? undefined : props.cell.value)
+          if (loading || balancesLoading) {
+            return (
+              <div className="flex gap-2.5 items-center justify-end w-full">
+                <div className="flex flex-col gap-1.5">
+                  <div className="h-4 bg-dark-700 rounded animate-pulse w-[50px]" />
+                  <div className="h-2 bg-dark-800 rounded animate-pulse w-[50px]" />
+                </div>
+              </div>
+            )
+          }
+
           return (
-            <Typography
-              weight={700}
-              variant={isDesktop ? 'sm' : 'base'}
-              className="w-full text-right text-high-emphesis"
-            >
-              {usdcValue ? `${currencyFormatter.format(Number(usdcValue.toExact()))}` : '-'}
-            </Typography>
+            <div className="flex flex-col">
+              <Typography weight={700} className="w-full text-right text-high-emphesis">
+                {value ? `${currencyFormatter.format(Number(value.toExact()))}` : '-'}
+              </Typography>
+              <Typography weight={400} variant="sm" className="text-right text-low-emphesis">
+                {props.cell.value.toSignificant(6)}
+              </Typography>
+            </div>
           )
         },
       },
     ],
-    [isDesktop]
+    [balancesLoading]
   )
 
   const defaultColumn = React.useMemo(() => ({ minWidth: 0 }), [])
@@ -82,7 +91,7 @@ export const useTableConfig = (assets?: Assets[]) => {
     () => ({
       config: {
         columns: AssetColumns,
-        data: assets,
+        data: balancesLoading ? new Array(5).fill({ asset: undefined }) : assets,
         defaultColumn,
         initialState: {
           sortBy: [{ id: 'value', desc: true }],
@@ -90,6 +99,6 @@ export const useTableConfig = (assets?: Assets[]) => {
         manualPagination: true,
       },
     }),
-    [AssetColumns, assets, defaultColumn]
+    [AssetColumns, assets, balancesLoading, defaultColumn]
   )
 }

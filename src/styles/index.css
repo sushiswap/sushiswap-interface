@@ -89,3 +89,14 @@ input[type=datetime-local]::-webkit-calendar-picker-indicator {
     background-color: var(--primary);
   }
 }
+
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* for Internet Explorer, Edge */
+  scrollbar-width: none; /* for Firefox */
+  overflow-y: scroll;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

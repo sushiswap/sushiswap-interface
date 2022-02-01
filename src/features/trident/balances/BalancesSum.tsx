@@ -2,8 +2,9 @@ import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, ZERO } from '@sushiswap/core-sdk'
-import Typography from 'app/components/Typography'
+import Typography, { TypographyVariant } from 'app/components/Typography'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
+import { currencyFormatter } from 'app/functions'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
@@ -56,6 +57,7 @@ const useWalletBalances = () => {
 }
 
 export const BalancesSum = () => {
+  const { i18n } = useLingui()
   const walletBalances = useWalletBalances()
   const bentoBalances = useBentoBalancesV2()
   const balances = useMemo(() => {
@@ -75,34 +77,53 @@ export const BalancesSum = () => {
     )
   }, [bentoBalances, walletBalances])
 
-  return <_BalancesSum amounts={balances} />
+  return (
+    <div className="flex lg:flex-row flex-col gap-10 justify-between lg:items-end w-full">
+      <div className="flex gap-10">
+        <_BalancesSum amounts={balances} label={i18n._(t`Net Worth`)} size="h3" />
+      </div>
+      <div className="flex gap-10">
+        <_BalancesSum amounts={walletBalances} label={i18n._(t`Wallet`)} />
+        <_BalancesSum amounts={bentoBalances} label={i18n._(t`BentoBox`)} />
+        <div className="flex flex-col gap-1">
+          <Typography variant="sm">{i18n._(t`Assets`)}</Typography>
+          <Typography variant="lg">{balances.length}</Typography>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 interface BalancesSumProps {
   amounts: (CurrencyAmount<Currency> | undefined)[]
+  label: string
+  size?: TypographyVariant
 }
 
-const _BalancesSum: FC<BalancesSumProps> = ({ amounts }) => {
-  const { i18n } = useLingui()
+const _BalancesSum: FC<BalancesSumProps> = ({ amounts, label, size = 'lg' }) => {
+  const { account } = useActiveWeb3React()
 
   return (
     <SumUSDCValues amounts={amounts}>
-      {({ amount }) => (
-        <div className="flex gap-14">
+      {({ amount }) => {
+        if (!amount && account) {
+          return (
+            <div className="flex flex-col gap-1">
+              <Typography variant="sm">{label}</Typography>
+              <div className="animate-pulse rounded h-5 bg-dark-600 w-[100px]" />
+            </div>
+          )
+        }
+
+        return (
           <div className="flex flex-col gap-1">
-            <Typography variant="sm">{i18n._(t`Total Value`)}</Typography>
-            <Typography variant="lg" weight={700} className="text-high-emphesis">
-              ${amount ? amount.toExact() : '0.00'}
+            <Typography variant="sm">{label}</Typography>
+            <Typography variant={size} weight={size === 'h3' ? 700 : 400} className="text-high-emphesis">
+              {amount ? currencyFormatter.format(Number(amount.toExact())) : '$0.00'}
             </Typography>
           </div>
-          <div className="flex flex-col gap-1">
-            <Typography variant="sm">{i18n._(t`Assets`)}</Typography>
-            <Typography variant="lg" weight={700} className="text-high-emphesis">
-              {amounts.length}
-            </Typography>
-          </div>
-        </div>
-      )}
+        )
+      }}
     </SumUSDCValues>
   )
 }

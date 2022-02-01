@@ -10,6 +10,7 @@ import Typography from 'app/components/Typography'
 import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
 import { tryParseAmount } from 'app/functions'
 import { useBentoBox } from 'app/hooks'
+import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
@@ -27,24 +28,33 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
   const bentoBalance = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
   const { withdraw } = useBentoBox()
-  const [value, setValue] = useState<string>()
+  const { rebases } = useBentoRebases([currency?.wrapped])
+  const [inputState, setInputState] = useState<{ value?: string; isMax: boolean }>({ value: undefined, isMax: false })
   const { i18n } = useLingui()
 
-  const valueCA = currency ? tryParseAmount(value, currency) : undefined
+  const valueCA = currency ? tryParseAmount(inputState.value, currency) : undefined
   let valuePlusBalance = valueCA?.wrapped
   if (valuePlusBalance && walletBalance) valuePlusBalance = valuePlusBalance.wrapped.add(walletBalance.wrapped)
 
   const execute = useCallback(async () => {
-    if (!currency || !value) return
+    if (!currency || !inputState.value) return
 
     try {
       setAttemptingTxn(true)
-      await withdraw(currency?.wrapped.address, value.toBigNumber(currency?.decimals))
+      if (inputState.isMax) {
+        await withdraw(
+          currency?.wrapped.address,
+          inputState.value.toBigNumber(currency?.decimals),
+          rebases?.[currency.wrapped.address]?.base
+        )
+      } else {
+        await withdraw(currency?.wrapped.address, inputState.value.toBigNumber(currency?.decimals))
+      }
     } finally {
       setAttemptingTxn(false)
       onClose()
     }
-  }, [currency, value, withdraw, onClose])
+  }, [currency, inputState.value, inputState.isMax, withdraw, rebases, onClose])
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
@@ -65,8 +75,8 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
       <AssetInput
         title={''}
         currency={currency}
-        onChange={(val) => setValue(val)}
-        value={value}
+        onChange={(val, isMax) => setInputState({ value: val, isMax: isMax || false })}
+        value={inputState.value}
         spendFromWallet={false}
       />
       <div className="z-10 flex justify-center -mt-6 -mb-6">
@@ -79,7 +89,7 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
           <WalletIcon width={20} height={20} />
         </div>
         <div className="flex flex-col gap-1">
-          <Typography variant="h3" className={value ? 'text-high-emphesis' : 'text-secondary'} weight={700}>
+          <Typography variant="h3" className={inputState.value ? 'text-high-emphesis' : 'text-secondary'} weight={700}>
             {(valuePlusBalance || walletBalance)?.toSignificant(6)}
           </Typography>
           <Typography variant="xxs" className="text-secondary">

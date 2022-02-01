@@ -147,6 +147,13 @@ export function useAllTokenBalances(): TokenBalancesMap {
   return useTokenBalances(account ?? undefined, allTokensArray)
 }
 
+export function useAllTokenBalancesWithLoadingIndicator() {
+  const { account } = useActiveWeb3React()
+  const allTokens = useAllTokens()
+  const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
+  return useTokenBalancesWithLoadingIndicator(account ?? undefined, allTokensArray)
+}
+
 // TODO: Replace
 // get the total owned, unclaimed, and unharvested UNI for account
 // export function useAggregateUniBalance(): CurrencyAmount<Token> | undefined {
