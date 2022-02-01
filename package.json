@@ -116,7 +116,7 @@
     "@web3-react/portis-connector": "^6.2.9",
     "@web3-react/torus-connector": "^6.2.9",
     "@web3-react/walletconnect-connector": "7.0.2-alpha.0",
-    "@web3-react/walletlink-connector": "^6.2.8",
+    "@web3-react/walletlink-connector": "^6.2.11",
     "@welldone-software/why-did-you-render": "^6.2.3",
     "autoprefixer": "^10.3.1",
     "babel-jest": "^27.2.0",
