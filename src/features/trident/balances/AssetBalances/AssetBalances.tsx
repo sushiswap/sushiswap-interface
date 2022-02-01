@@ -8,19 +8,17 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
+import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
 
 interface AssetBalancesProps {
   config: any
-  loading?: boolean
-  error?: boolean
-  selected?(row: any): boolean
   onSelect?(row: any): void
 }
 
-const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelect, selected }) => {
+const AssetBalances: FC<AssetBalancesProps> = ({ config, onSelect }) => {
   const { i18n } = useLingui()
 
   const {
@@ -33,7 +31,7 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
   } = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
-    <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
+    <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, 'max-h-[800px] overflow-auto hide-scrollbar')}>
       <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
         <thead>
           {headerGroups.map((headerGroup, i) => (
@@ -46,16 +44,6 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, loading, error, onSelec
                   className={TABLE_TR_TH_CLASSNAME(i, headerGroup.headers.length)}
                 >
                   {column.render('Header')}
-                  {i === 0 && (
-                    <div className="inline-flex items-center">
-                      <div
-                        className={`animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue inline-block ml-3 transition ${
-                          loading ? 'opacity-100' : 'opacity-0'
-                        }`}
-                      />
-                      {error && <span className="ml-2 text-sm italic text-red">{i18n._(t`⚠️ Loading Error`)}</span>}
-                    </div>
-                  )}
                 </th>
               ))}
             </tr>

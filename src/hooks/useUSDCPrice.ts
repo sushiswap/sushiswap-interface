@@ -71,3 +71,27 @@ export function useUSDCValue(currencyAmount: CurrencyAmount<Currency> | undefine
     }
   }, [currencyAmount, price])
 }
+
+export function useUSDCPriceWithLoadingIndicator(currency?: Currency) {
+  const price = useUSDCPrice(currency)
+  return useMemo(() => {
+    if (!price || !currency) return { price: undefined, loading: false }
+    try {
+      return { price, loading: false }
+    } catch (error) {
+      return { price: undefined, loading: false }
+    }
+  }, [currency, price])
+}
+
+export function useUSDCValueWithLoadingIndicator(currencyAmount: CurrencyAmount<Currency> | undefined) {
+  const price = useUSDCPrice(currencyAmount?.currency)
+  return useMemo(() => {
+    if (!price || !currencyAmount) return { value: undefined, loading: false }
+    try {
+      return { value: price.quote(currencyAmount), loading: false }
+    } catch (error) {
+      return { value: undefined, loading: false }
+    }
+  }, [currencyAmount, price])
+}

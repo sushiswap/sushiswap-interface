@@ -10,7 +10,7 @@ const Balances = () => {
       <TridentHeader pattern="bg-chevron">
         <HeaderDropdown />
       </TridentHeader>
-      <TridentBody className="flex flex-col gap-10">
+      <TridentBody className="flex flex-col gap-10 lg:grid grid-cols-2 lg:gap-4">
         <WalletBalances />
         <BentoBalances />
       </TridentBody>

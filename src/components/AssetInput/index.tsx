@@ -24,7 +24,7 @@ import React, { createContext, FC, ReactNode, useContext, useEffect, useMemo, us
 interface AssetInputProps {
   value?: string
   currency?: Currency
-  onChange: (x: string | undefined) => void
+  onChange: (x: string | undefined, max?: boolean) => void
   spendFromWallet?: boolean
   title?: string
   onSelect?: (x: Token) => void
@@ -126,7 +126,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({
             size={size}
             currencyLogo={currencyLogo}
             spendFromWallet={spendFromWallet}
-            onMax={() => props.onChange(maxSpend)}
+            onMax={() => props.onChange(maxSpend, true)}
             showMax={
               showMax && balance && maxSpendAsFraction && balance.greaterThan('0')
                 ? !parsedInput?.equalTo(maxSpendAsFraction)

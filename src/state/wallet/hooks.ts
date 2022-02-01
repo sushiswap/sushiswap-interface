@@ -55,7 +55,7 @@ export function useETHBalances(uncheckedAddresses?: (string | undefined)[]): {
 export function useTokenBalancesWithLoadingIndicator(
   address?: string,
   tokens?: (Token | undefined)[]
-): [TokenBalancesMap, boolean] {
+): { data: TokenBalancesMap; loading: boolean } {
   const validatedTokens: Token[] = useMemo(
     () => tokens?.filter((t?: Token): t is Token => isAddress(t?.address) !== false) ?? [],
     [tokens]
@@ -74,9 +74,9 @@ export function useTokenBalancesWithLoadingIndicator(
 
   const anyLoading: boolean = useMemo(() => balances.some((callState) => callState.loading), [balances])
 
-  return [
-    useMemo(
-      () =>
+  return useMemo(
+    () => ({
+      data:
         address && validatedTokens.length > 0
           ? validatedTokens.reduce<TokenBalancesMap>((memo, token, i) => {
               const value = balances?.[i]?.result?.[0]
@@ -87,10 +87,10 @@ export function useTokenBalancesWithLoadingIndicator(
               return memo
             }, {})
           : {},
-      [address, validatedTokens, balances]
-    ),
-    anyLoading,
-  ]
+      loading: anyLoading,
+    }),
+    [address, validatedTokens, anyLoading, balances]
+  )
 }
 
 export const serializeBalancesMap = (mapping: Record<string, CurrencyAmount<Token>>): string => {
@@ -100,7 +100,7 @@ export const serializeBalancesMap = (mapping: Record<string, CurrencyAmount<Toke
 }
 
 export function useTokenBalances(address?: string, tokens?: (Token | undefined)[]): TokenBalancesMap {
-  return useTokenBalancesWithLoadingIndicator(address, tokens)[0]
+  return useTokenBalancesWithLoadingIndicator(address, tokens).data
 }
 
 // get the balance for a single token/account combo
@@ -145,6 +145,13 @@ export function useAllTokenBalances(): TokenBalancesMap {
   const allTokens = useAllTokens()
   const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
   return useTokenBalances(account ?? undefined, allTokensArray)
+}
+
+export function useAllTokenBalancesWithLoadingIndicator() {
+  const { account } = useActiveWeb3React()
+  const allTokens = useAllTokens()
+  const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
+  return useTokenBalancesWithLoadingIndicator(account ?? undefined, allTokensArray)
 }
 
 // TODO: Replace

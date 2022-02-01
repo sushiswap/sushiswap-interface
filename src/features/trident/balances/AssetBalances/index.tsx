@@ -6,13 +6,12 @@ import AssetBalances from 'app/features/trident/balances/AssetBalances/AssetBala
 import { Assets } from 'app/features/trident/balances/AssetBalances/types'
 import { useLPTableConfig } from 'app/features/trident/balances/AssetBalances/useLPTableConfig'
 import { setBalancesState } from 'app/features/trident/balances/balancesSlice'
-import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
 import { ActiveModal } from 'app/features/trident/types'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
 import { useAppDispatch } from 'app/state/hooks'
-import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
+import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { useCallback, useMemo } from 'react'
 
 import { useTableConfig } from './useTableConfig'
@@ -20,24 +19,20 @@ import { useTableConfig } from './useTableConfig'
 export const LiquidityPositionsBalances = () => {
   const { account, chainId } = useActiveWeb3React()
 
-  const {
-    data: positions,
-    isValidating,
-    error,
-  } = useTridentLiquidityPositions({
+  const { data: positions } = useTridentLiquidityPositions({
     chainId,
     variables: { where: { user: account?.toLowerCase(), balance_gt: 0 } },
     shouldFetch: !!chainId && !!account,
   })
 
   const { config } = useLPTableConfig(positions)
-  return <AssetBalances config={config} loading={isValidating} error={error} />
+  return <AssetBalances config={config} />
 }
 
 export const BentoBalances = () => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const selected = useBalancesSelectedCurrency()
   const balances = useBentoBalancesV2()
   const assets = balances.reduce<Assets[]>((acc, el) => {
     if (el) acc.push({ asset: el })
@@ -57,16 +52,14 @@ export const BentoBalances = () => {
     [dispatch]
   )
 
-  const { config } = useTableConfig(assets)
+  const { config } = useTableConfig(assets, balances.length === 0 && !!account)
 
   return (
     <div className="flex flex-col gap-3">
-      <Typography className="text-high-emphesis">{i18n._(t`BentoBox`)}</Typography>
-      <AssetBalances
-        config={config}
-        selected={(row) => row.values.asset.currency === selected}
-        onSelect={handleRowClick}
-      />
+      <Typography weight={700} variant="lg" className="px-2 text-high-emphesis">
+        {i18n._(t`BentoBox`)}
+      </Typography>
+      <AssetBalances config={config} onSelect={handleRowClick} />
     </div>
   )
 }
@@ -75,9 +68,8 @@ export const WalletBalances = () => {
   const { i18n } = useLingui()
   const { chainId, account } = useActiveWeb3React()
   const dispatch = useAppDispatch()
-  const selected = useBalancesSelectedCurrency()
+  const { data: _balances, loading } = useAllTokenBalancesWithLoadingIndicator()
 
-  const _balances = useAllTokenBalances()
   // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
 
@@ -93,7 +85,7 @@ export const WalletBalances = () => {
     }
     return res
   }, [_balances, ethBalance])
-  const { config } = useTableConfig(balances)
+  const { config } = useTableConfig(balances, loading)
 
   const handleRowClick = useCallback(
     (row) => {
@@ -110,12 +102,10 @@ export const WalletBalances = () => {
 
   return (
     <div className="flex flex-col gap-3">
-      <Typography className="text-high-emphesis">{i18n._(t`Wallet`)}</Typography>
-      <AssetBalances
-        config={config}
-        selected={(row) => row.values.asset.currency === selected}
-        onSelect={handleRowClick}
-      />
+      <Typography weight={700} variant="lg" className="px-2 text-high-emphesis">
+        {i18n._(t`Wallet`)}
+      </Typography>
+      <AssetBalances config={config} onSelect={handleRowClick} />
     </div>
   )
 }
