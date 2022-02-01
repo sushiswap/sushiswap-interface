@@ -68,7 +68,7 @@ export const WalletBalances = () => {
   const { i18n } = useLingui()
   const { chainId, account } = useActiveWeb3React()
   const dispatch = useAppDispatch()
-  const [_balances, loading] = useAllTokenBalancesWithLoadingIndicator()
+  const { data: _balances, loading } = useAllTokenBalancesWithLoadingIndicator()
 
   // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
