@@ -33,7 +33,7 @@ export const BentoBalances = () => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const balances = useBentoBalancesV2()
+  const { data: balances, loading } = useBentoBalancesV2()
   const assets = balances.reduce<Assets[]>((acc, el) => {
     if (el) acc.push({ asset: el })
     return acc
@@ -52,7 +52,7 @@ export const BentoBalances = () => {
     [dispatch]
   )
 
-  const { config } = useTableConfig(assets, balances.length === 0 && !!account)
+  const { config } = useTableConfig(assets, loading)
 
   return (
     <div className="flex flex-col gap-3">

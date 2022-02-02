@@ -1,14 +1,15 @@
+import { parseUnits } from '@ethersproject/units'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ZERO } from '@sushiswap/core-sdk'
+import { JSBI, Rebase, ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { WalletIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { useBalancesSelectedCurrency } from 'app/features/trident/balances/useBalancesDerivedState'
-import { tryParseAmount } from 'app/functions'
+import { toShareJSBI, tryParseAmount } from 'app/functions'
 import { useBentoBox } from 'app/hooks'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -26,7 +27,7 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
   const currency = useBalancesSelectedCurrency()
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
-  const bentoBalance = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
+  const { data: bentoBalance } = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
   const { withdraw } = useBentoBox()
   const { rebases } = useBentoRebases([currency?.wrapped])
   const [inputState, setInputState] = useState<{ value?: string; isMax: boolean }>({ value: undefined, isMax: false })
@@ -45,7 +46,12 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
         await withdraw(
           currency?.wrapped.address,
           inputState.value.toBigNumber(currency?.decimals),
-          rebases?.[currency.wrapped.address]?.base
+          rebases?.[currency.wrapped.address]
+            ? toShareJSBI(
+                rebases[currency.wrapped.address] as Rebase,
+                JSBI.BigInt(parseUnits(inputState.value, currency?.decimals))
+              )
+            : undefined
         )
       } else {
         await withdraw(currency?.wrapped.address, inputState.value.toBigNumber(currency?.decimals))

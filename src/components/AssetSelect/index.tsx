@@ -118,7 +118,7 @@ const AssetSelectPanel: FC<AssetSelectPanelProps> = ({ value, onSelect, currenci
 const BalancePanel = ({ currency }: { currency: Currency }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
-  const balance = useBentoBalanceV2(currency?.wrapped.address)
+  const { data: balance } = useBentoBalanceV2(currency?.wrapped.address)
   const bentoUSDC = useUSDCValue(balance)
   const wallet = useTokenBalance(account ?? undefined, currency?.wrapped)
   const walletUSDC = useUSDCValue(wallet)

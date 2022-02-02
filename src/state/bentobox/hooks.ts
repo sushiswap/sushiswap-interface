@@ -34,29 +34,46 @@ export function useBentoMasterContractAllowed(masterContract?: string, user?: st
   return useMemo(() => (allowed ? allowed[0] : undefined), [allowed])
 }
 
-export const useBentoBalancesV2 = (tokenAddresses?: string[]): CurrencyAmount<Token>[] => {
+export const useBentoBalancesV2 = (tokenAddresses?: string[]): { data: CurrencyAmount<Token>[]; loading: boolean } => {
   const { chainId, account } = useActiveWeb3React()
-  const { error, data } = useBentoUserTokens({
+  const {
+    error,
+    data,
+    isValidating: loading,
+  } = useBentoUserTokens({
     chainId,
     shouldFetch: !!chainId && !!account,
     variables: { user: account?.toLowerCase() },
   })
-  const userTokensFallback = useBentoBalancesSubGraph({ shouldFetch: !!error, tokenAddresses })
+  const { data: userTokensFallback, loading: fallbackLoading } = useBentoBalancesSubGraph({
+    shouldFetch: !!error,
+    tokenAddresses,
+  })
 
   if (!error && !!data) {
     if (tokenAddresses) {
-      return data.filter((el) => tokenAddresses.includes(el.currency.wrapped.address))
+      return {
+        data: data.filter((el) => tokenAddresses.includes(el.currency.wrapped.address)),
+        loading: false,
+      }
     }
 
-    return data || []
+    return { data, loading } || { data: [], loading: false }
   }
 
-  return userTokensFallback || []
+  return { data: userTokensFallback, loading: fallbackLoading } || { data: [], loading: false }
 }
 
-export const useBentoBalanceV2 = (tokenAddress?: string): CurrencyAmount<Token> | undefined => {
+export const useBentoBalanceV2 = (
+  tokenAddress?: string
+): { data: CurrencyAmount<Token> | undefined; loading: boolean } => {
   const addresses = useMemo(() => (tokenAddress ? [tokenAddress] : []), [tokenAddress])
-  return useBentoBalancesV2(addresses)?.[0]
+  const { data, loading } = useBentoBalancesV2(addresses)
+
+  return {
+    data: data?.[0],
+    loading,
+  }
 }
 
 export const useBentoBalancesSubGraph = ({
@@ -106,19 +123,22 @@ export const useBentoBalancesSubGraph = ({
 
   const balances = useSingleContractMultipleData(contract, 'balanceOf', balanceInput)
   return useMemo(() => {
-    return balances.reduce<CurrencyAmount<Token>[]>((acc, el, i) => {
-      if (baseTotals[i] && tokens[i] && el.result?.[0]) {
-        const amount = toAmountCurrencyAmount(
-          baseTotals[i],
-          CurrencyAmount.fromRawAmount(tokens[i], JSBI.BigInt(el.result[0]))
-        )
+    return {
+      data: balances.reduce<CurrencyAmount<Token>[]>((acc, el, i) => {
+        if (baseTotals[i] && tokens[i] && el.result?.[0]) {
+          const amount = toAmountCurrencyAmount(
+            baseTotals[i],
+            CurrencyAmount.fromRawAmount(tokens[i], JSBI.BigInt(el.result[0]))
+          )
 
-        if (amount.greaterThan(ZERO)) {
-          acc.push(amount)
+          if (amount.greaterThan(ZERO)) {
+            acc.push(amount)
+          }
         }
-      }
 
-      return acc
-    }, [])
-  }, [balances, baseTotals, tokens])
+        return acc
+      }, []),
+      loading: anyLoading,
+    }
+  }, [anyLoading, balances, baseTotals, tokens])
 }

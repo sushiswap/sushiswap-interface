@@ -8,7 +8,6 @@ import {
   TABLE_TR_TH_CLASSNAME,
   TABLE_WRAPPER_DIV_CLASSNAME,
 } from 'app/features/trident/constants'
-import { classNames } from 'app/functions'
 import React, { FC } from 'react'
 // @ts-ignore TYPE NEEDS FIXING
 import { useFlexLayout, usePagination, useSortBy, useTable } from 'react-table'
@@ -31,7 +30,7 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, onSelect }) => {
   } = useTable(config, useSortBy, usePagination, useFlexLayout)
 
   return (
-    <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME, 'max-h-[800px] overflow-auto hide-scrollbar')}>
+    <div className={TABLE_WRAPPER_DIV_CLASSNAME}>
       <table id="asset-balances-table" {...getTableProps()} className={TABLE_TABLE_CLASSNAME}>
         <thead>
           {headerGroups.map((headerGroup, i) => (
@@ -49,7 +48,7 @@ const AssetBalances: FC<AssetBalancesProps> = ({ config, onSelect }) => {
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} className="h-[65px]">
           {page.length > 0 ? (
             // @ts-ignore TYPE NEEDS FIXING
             page.map((row, i) => {

@@ -26,7 +26,7 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
   const currency = useBalancesSelectedCurrency()
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
   const walletBalance = useCurrencyBalance(account ?? undefined, currency)
-  const bentoBalance = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
+  const { data: bentoBalance } = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
   const { deposit } = useBentoBox()
   const [value, setValue] = useState<string>()
   const { i18n } = useLingui()

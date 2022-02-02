@@ -49,7 +49,7 @@ function useBentoBox() {
             account,
             account,
             value,
-            share ? share : 0
+            share ? share.toString() : 0
           )
           return addTransaction(tx, { summary: 'Withdraw from Bentobox' })
         } catch (e) {

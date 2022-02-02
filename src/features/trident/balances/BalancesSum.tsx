@@ -8,7 +8,7 @@ import { currencyFormatter } from 'app/functions'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
-import { useAllTokenBalances, useCurrencyBalance } from 'app/state/wallet/hooks'
+import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useMemo } from 'react'
 
 export const LiquidityPositionsBalancesSum = () => {
@@ -43,7 +43,7 @@ export const LiquidityPositionsBalancesSum = () => {
 
 const useWalletBalances = () => {
   const { chainId, account } = useActiveWeb3React()
-  const tokenBalances = useAllTokenBalances()
+  const { data: tokenBalances, loading } = useAllTokenBalancesWithLoadingIndicator()
   // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
   return useMemo(() => {
@@ -52,14 +52,18 @@ const useWalletBalances = () => {
     if (ethBalance) {
       res.push(ethBalance)
     }
-    return res
-  }, [tokenBalances, ethBalance])
+
+    return {
+      data: res,
+      loading,
+    }
+  }, [tokenBalances, ethBalance, loading])
 }
 
 export const BalancesSum = () => {
   const { i18n } = useLingui()
-  const walletBalances = useWalletBalances()
-  const bentoBalances = useBentoBalancesV2()
+  const { data: walletBalances, loading: wLoading } = useWalletBalances()
+  const { data: bentoBalances, loading: bLoading } = useBentoBalancesV2()
   const balances = useMemo(() => {
     return Object.values(
       [...walletBalances, ...bentoBalances].reduce<Record<string, CurrencyAmount<Currency>>>((acc, cur) => {
@@ -80,11 +84,11 @@ export const BalancesSum = () => {
   return (
     <div className="flex lg:flex-row flex-col gap-10 justify-between lg:items-end w-full">
       <div className="flex gap-10">
-        <_BalancesSum amounts={balances} label={i18n._(t`Net Worth`)} size="h3" />
+        <_BalancesSum amounts={balances} label={i18n._(t`Net Worth`)} size="h3" loading={wLoading || bLoading} />
       </div>
       <div className="flex gap-10">
-        <_BalancesSum amounts={walletBalances} label={i18n._(t`Wallet`)} />
-        <_BalancesSum amounts={bentoBalances} label={i18n._(t`BentoBox`)} />
+        <_BalancesSum amounts={walletBalances} label={i18n._(t`Wallet`)} loading={wLoading} />
+        <_BalancesSum amounts={bentoBalances} label={i18n._(t`BentoBox`)} loading={bLoading} />
         <div className="flex flex-col gap-1">
           <Typography variant="sm">{i18n._(t`Assets`)}</Typography>
           <Typography variant="lg">{balances.length}</Typography>
@@ -98,15 +102,14 @@ interface BalancesSumProps {
   amounts: (CurrencyAmount<Currency> | undefined)[]
   label: string
   size?: TypographyVariant
+  loading: boolean
 }
 
-const _BalancesSum: FC<BalancesSumProps> = ({ amounts, label, size = 'lg' }) => {
-  const { account } = useActiveWeb3React()
-
+const _BalancesSum: FC<BalancesSumProps> = ({ amounts, loading, label, size = 'lg' }) => {
   return (
     <SumUSDCValues amounts={amounts}>
       {({ amount }) => {
-        if (!amount && account) {
+        if (loading) {
           return (
             <div className="flex flex-col gap-1">
               <Typography variant="sm">{label}</Typography>
