@@ -11,6 +11,7 @@ import Switch from 'app/components/Switch'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
+import useWalletSupportsOpenMev from 'app/hooks/useWalletSupportsOpenMev'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
 import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
@@ -33,6 +34,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
   const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [userUseOpenMev, setUserUseOpenMev] = useUserOpenMev()
+  const walletSupportsOpenMev = useWalletSupportsOpenMev()
 
   return (
     <>
@@ -101,7 +103,7 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                 </div>
               )}
               {/*@ts-ignore TYPE NEEDS FIXING*/}
-              {OPENMEV_ENABLED && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
+              {OPENMEV_ENABLED && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && walletSupportsOpenMev && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <Typography variant="xs" className="text-high-emphesis" weight={700}>

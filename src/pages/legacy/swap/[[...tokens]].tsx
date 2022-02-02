@@ -23,6 +23,7 @@ import useIsArgentWallet from 'app/hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import useWalletSupportsOpenMev from 'app/hooks/useWalletSupportsOpenMev'
 import useWrapCallback, { WrapType } from 'app/hooks/useWrapCallback'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TokenWarningModal from 'app/modals/TokenWarningModal'
@@ -187,6 +188,7 @@ const Swap = ({ banners }) => {
   }, [approvalState, approvalSubmitted])
 
   const [useOpenMev] = useUserOpenMev()
+  const walletSupportsOpenMev = useWalletSupportsOpenMev()
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -196,7 +198,7 @@ const Swap = ({ banners }) => {
     signatureData,
     /* @ts-ignore TYPE NEEDS FIXING */
     null,
-    useOpenMev
+    walletSupportsOpenMev && useOpenMev
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
