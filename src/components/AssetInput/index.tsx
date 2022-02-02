@@ -135,7 +135,7 @@ const AssetInput: AssetInput<AssetInputProps> = ({
             footer={
               <AssetInputPanel.Balance
                 balance={balance}
-                onClick={() => props.onChange(maxSpend)}
+                onClick={() => props.onChange(maxSpend, true)}
                 spendFromWallet={spendFromWallet}
                 id={props.id + '-balance'}
               />
