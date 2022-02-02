@@ -15,7 +15,7 @@ export const useBentoOrWalletBalances = (
   )
 
   const balance = useCurrencyBalances(account, currencies)
-  const bentoBalance = useBentoBalancesV2(tokenAddresses)
+  const { data: bentoBalance } = useBentoBalancesV2(tokenAddresses)
 
   return useMemo(() => {
     if (!currencies.every((el) => !!el) || !bentoBalance) {
