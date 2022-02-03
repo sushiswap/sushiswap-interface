@@ -126,7 +126,7 @@ const Footer = () => {
             </a>
             <a href="https://docs.openmev.org" target="_blank" rel="noreferrer">
               <Typography variant="xs" className="text-low-emphesis hover:text-high-emphesis">
-                {i18n._(t`Sushi Relay`)}
+                {i18n._(t`SushiGuard`)}
               </Typography>
             </a>
           </div>

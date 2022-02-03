@@ -17,6 +17,7 @@ const features: FeatureMap = {
     Feature.INARI,
     Feature.VESTING,
     Feature.LIMIT_ORDERS,
+    Feature.RELAY,
   ],
   [ChainId.ROPSTEN]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI, Feature.MISO],
   [ChainId.RINKEBY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.BENTOBOX, Feature.KASHI, Feature.MISO],

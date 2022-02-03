@@ -10,13 +10,12 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
 import TransactionSettings from 'app/components/TransactionSettings'
 import Typography from 'app/components/Typography'
-import { classNames } from 'app/functions'
+import { Feature } from 'app/enums'
+import { classNames, featureEnabled } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useToggleSettingsMenu } from 'app/state/application/hooks'
 import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
 import React, { FC, useState } from 'react'
-
-import { OPENMEV_ENABLED, OPENMEV_SUPPORTED_NETWORKS } from '../../config/openmev'
 
 interface SettingsTabProps {
   placeholderSlippage?: Percent
@@ -101,13 +100,13 @@ const SettingsTab: FC<SettingsTabProps> = ({ placeholderSlippage, className, tri
                 </div>
               )}
               {/*@ts-ignore TYPE NEEDS FIXING*/}
-              {OPENMEV_ENABLED && OPENMEV_SUPPORTED_NETWORKS.includes(chainId) && (
+              {chainId && featureEnabled(Feature.RELAY, chainId) && (
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <Typography variant="xs" className="text-high-emphesis" weight={700}>
-                      {i18n._(t`OpenMEV Gas Refunder`)}
+                      {i18n._(t`SushiGuard Gas Refunder`)}
                     </Typography>
-                    <QuestionHelper text={i18n._(t`OpenMEV refunds up to 95% of transaction costs in 35 blocks.`)} />
+                    <QuestionHelper text={i18n._(t`SushiGuard refunds up to 95% of transaction costs in 35 blocks.`)} />
                   </div>
                   <Switch
                     size="sm"

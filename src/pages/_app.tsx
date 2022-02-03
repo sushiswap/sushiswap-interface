@@ -6,7 +6,6 @@ import { I18nProvider } from '@lingui/react'
 import { remoteLoader } from '@lingui/remote-loader'
 import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
-import Portals from 'app/components/Portals'
 import { SyncWithRedux } from 'app/components/SyncWithRedux'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
@@ -153,7 +152,6 @@ function MyApp({ Component, pageProps, fallback, err }) {
                           {/*@ts-ignore TYPE NEEDS FIXING*/}
                           <Component {...pageProps} err={err} />
                         </Guard>
-                        <Portals />
                       </Layout>
                     </Provider>
                     <TransactionUpdater />

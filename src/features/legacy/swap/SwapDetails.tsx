@@ -1,84 +1,42 @@
 import { Disclosure, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/outline'
+import { ChevronDownIcon, ExternalLinkIcon, ShieldCheckIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, Route, TradeVersion } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, NATIVE, Route, TradeVersion } from '@sushiswap/core-sdk'
+import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
+import { Feature } from 'app/enums'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
-import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
+import { classNames, computeRealizedLPFeePercent, featureEnabled, shortenAddress } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
+import useFeeData from 'app/hooks/useFeeData'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
+import { useActiveWeb3React } from 'app/services/web3'
+import { useSwapState } from 'app/state/swap/hooks'
+import { useExpertModeManager, useUserOpenMev } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
+import Link from 'next/link'
 import React, { FC, Fragment, useState } from 'react'
-import { isAddress } from 'web3-utils'
+import { isAddress, toWei } from 'web3-utils'
 
 interface SwapDetailsContent {
   trade?: TradeUnion
   recipient?: string
 }
 
-interface SwapDetails {
-  inputCurrency?: Currency
-  outputCurrency?: Currency
-  recipient?: string
-  trade?: TradeUnion
-  className?: string
-}
-
-const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient, trade, className }) => {
-  const [inverted, setInverted] = useState(false)
-
-  return (
-    <Disclosure as="div">
-      {({ open }) => (
-        <div
-          className={classNames(
-            open ? 'bg-dark-900' : '',
-            'shadow-inner flex flex-col gap-2 py-2 rounded px-2 border border-dark-700 transition hover:border-dark-700',
-            className
-          )}
-        >
-          <div className="flex justify-between gap-2 items-center pl-2">
-            <div>
-              <TradePrice
-                inputCurrency={inputCurrency}
-                outputCurrency={outputCurrency}
-                price={trade?.executionPrice}
-                showInverted={inverted}
-                setShowInverted={setInverted}
-              />
-            </div>
-            <Disclosure.Button as={Fragment}>
-              <div className="flex flex-grow items-center justify-end p-1 cursor-pointer rounded">
-                <ChevronDownIcon
-                  width={20}
-                  className={classNames(open ? 'transform rotate-180' : '', 'transition hover:text-white')}
-                />
-              </div>
-            </Disclosure.Button>
-          </div>
-          <Transition
-            show={open}
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-95 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            unmount={false}
-          >
-            <Disclosure.Panel static className="px-1 pt-2">
-              <SwapDetailsContent trade={trade} recipient={recipient} />
-            </Disclosure.Panel>
-          </Transition>
-        </div>
-      )}
-    </Disclosure>
-  )
-}
-
-const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient }) => {
+const SwapDetailsContent: FC<SwapDetailsContent> = ({ trade, recipient }) => {
   const { i18n } = useLingui()
+  const { chainId } = useActiveWeb3React()
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const minReceived = trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
+  const [userUseOpenMev] = useUserOpenMev()
+  const [expertMode] = useExpertModeManager()
+  const { maxFeePerGas, maxPriorityFeePerGas } = useFeeData()
+  const { maxFee, maxPriorityFee } = useSwapState()
+
+  const _maxFee = expertMode && maxFee ? maxFee : maxFeePerGas
+  const _maxPriorityFee = expertMode && maxPriorityFee ? maxPriorityFee : maxPriorityFeePerGas
 
   let path
   if (trade && getTradeVersion(trade) === TradeVersion.V2TRADE) {
@@ -109,7 +67,7 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient }) => {
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-1 pt-2">
+      <div className="flex flex-col gap-1 py-2">
         <div className="flex justify-between gap-4">
           <Typography variant="xs" className="text-secondary">
             {i18n._(t`Minimum received after slippage`)} ({allowedSlippage.toFixed(2)}%)
@@ -139,7 +97,113 @@ const SwapDetailsContent: FC<SwapDetails> = ({ trade, recipient }) => {
           </div>
         )}
       </div>
+      {userUseOpenMev && (
+        <div className="flex flex-col gap-1 py-2">
+          <div className="grid grid-cols-2 gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`SushiGuard Gas Rebate`)}
+            </Typography>
+            <Link href="https://docs.openmev.org/" passHref={true}>
+              <a target="_blank">
+                <Typography variant="xs" className="justify-end items-center text-right text-blue flex gap-1">
+                  {i18n._(t`Enabled`)}
+                  <ExternalLinkIcon width={12} />
+                </Typography>
+              </a>
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`Max Fee`)}
+            </Typography>
+            <Typography variant="xs" className="text-right text-secondary">
+              {chainId &&
+                _maxFee &&
+                CurrencyAmount.fromRawAmount(NATIVE[chainId], toWei(_maxFee.toString(), 'gwei'))?.toSignificant(6)}{' '}
+              GWEI
+            </Typography>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <Typography variant="xs" className="text-secondary">
+              {i18n._(t`Max Priority Fee`)}
+            </Typography>
+            <Typography variant="xs" className="text-right text-secondary">
+              {chainId &&
+                _maxPriorityFee &&
+                CurrencyAmount.fromRawAmount(NATIVE[chainId], toWei(_maxPriorityFee.toString(), 'gwei'))?.toSignificant(
+                  6
+                )}{' '}
+              GWEI
+            </Typography>
+          </div>
+        </div>
+      )}
     </div>
+  )
+}
+
+interface SwapDetails {
+  inputCurrency?: Currency
+  outputCurrency?: Currency
+  recipient?: string
+  trade?: TradeUnion
+  className?: string
+}
+
+const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient, trade, className }) => {
+  const { chainId } = useActiveWeb3React()
+  const [inverted, setInverted] = useState(false)
+  const [userUseOpenMev] = useUserOpenMev()
+
+  return (
+    <Disclosure as="div">
+      {({ open }) => (
+        <div
+          className={classNames(
+            open ? 'bg-dark-900' : '',
+            'shadow-inner flex flex-col gap-2 py-2 rounded px-2 border border-dark-700 transition hover:border-dark-700',
+            className
+          )}
+        >
+          <div className="flex justify-between gap-2 items-center pl-2">
+            <div>
+              <TradePrice
+                inputCurrency={inputCurrency}
+                outputCurrency={outputCurrency}
+                price={trade?.executionPrice}
+                showInverted={inverted}
+                setShowInverted={setInverted}
+              />
+            </div>
+            <Disclosure.Button as={Fragment}>
+              <div className="flex gap-2 flex-grow items-center justify-end cursor-pointer rounded h-7">
+                {chainId && featureEnabled(Feature.RELAY, chainId) && userUseOpenMev && (
+                  <QuestionHelper
+                    text="SushiGuard Gas Rebates are activated"
+                    icon={<ShieldCheckIcon width={16} className="text-green" />}
+                  />
+                )}
+                <ChevronDownIcon
+                  width={20}
+                  className={classNames(open ? 'transform rotate-180' : '', 'transition hover:text-white')}
+                />
+              </div>
+            </Disclosure.Button>
+          </div>
+          <Transition
+            show={open}
+            enter="transition duration-100 ease-out"
+            enterFrom="transform scale-95 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            unmount={false}
+          >
+            <Disclosure.Panel static className="px-1 pt-2">
+              <SwapDetailsContent trade={trade} recipient={recipient} />
+            </Disclosure.Panel>
+          </Transition>
+        </div>
+      )}
+    </Disclosure>
   )
 }
 
