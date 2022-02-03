@@ -1,11 +1,10 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { MenuIcon } from '@heroicons/react/outline'
 import { NATIVE } from '@sushiswap/core-sdk'
-import { InjectedConnector } from '@web3-react/injected-connector'
-import { WalletLinkConnector } from '@web3-react/walletlink-connector'
 import useMenu from 'app/components/Header/useMenu'
 import Web3Network from 'app/components/Web3Network'
 import Web3Status from 'app/components/Web3Status'
+import useIsCoinbaseWallet from 'app/hooks/useIsCoinbaseWallet'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import Image from 'next/image'
@@ -16,14 +15,10 @@ import { NavigationItem } from './NavigationItem'
 
 const Mobile: FC = () => {
   const menu = useMenu()
-  const { account, chainId, library, connector } = useActiveWeb3React()
+  const { account, chainId, library } = useActiveWeb3React()
   const userEthBalance = useETHBalances(account ? [account] : [])?.[account ?? '']
   const [open, setOpen] = useState(false)
-
-  const isCbWallet =
-    connector instanceof WalletLinkConnector ||
-    (connector instanceof InjectedConnector && window.walletLinkExtension) ||
-    window?.ethereum?.isCoinbaseWallet
+  const isCoinbaseWallet = useIsCoinbaseWallet()
 
   return (
     <>
@@ -72,7 +67,7 @@ const Mobile: FC = () => {
                       </nav>
 
                       <div className="px-6 flex flex-col gap-4">
-                        {library && (library.provider.isMetaMask || isCbWallet) && (
+                        {library && (library.provider.isMetaMask || isCoinbaseWallet) && (
                           <div className="hidden sm:flex">
                             <Web3Network />
                           </div>
