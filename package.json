@@ -83,7 +83,7 @@
     "@sushiswap/miso": "1.0.0-canary.37",
     "@sushiswap/miso-sdk": "1.0.0-canary.38",
     "@sushiswap/sdk": "^5.0.0-canary.109",
-    "@sushiswap/tines": "1.0.0-canary.46",
+    "@sushiswap/tines": "1.0.0-canary.48",
     "@sushiswap/trident": "^1.0.0-canary.28",
     "@sushiswap/trident-sdk": "1.0.0-canary.73",
     "@tailwindcss/jit": "^0.1.18",
