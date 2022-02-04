@@ -3,7 +3,7 @@ import { TransactionResponse } from '@ethersproject/providers'
 import { PlusIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { ChainId, CurrencyAmount, currencyEquals, NATIVE, Percent, WNATIVE } from '@sushiswap/core-sdk'
+import { ChainId, CurrencyAmount, currencyEquals, NATIVE, WNATIVE } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { HeadlessUiModal } from 'app/components/Modal'
@@ -17,14 +17,14 @@ import { useRouterContract } from 'app/hooks/useContract'
 import useTransactionDeadline from 'app/hooks/useTransactionDeadline'
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
+import { useAppSelector } from 'app/state/hooks'
 import { Field } from 'app/state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'app/state/mint/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import React, { useState } from 'react'
 import ReactGA from 'react-ga'
-
-const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 // @ts-ignore TYPE NEEDS FIXING
 const PoolDeposit = ({ currencyA, currencyB, header }) => {
@@ -35,7 +35,7 @@ const PoolDeposit = ({ currencyA, currencyB, header }) => {
   const [isExpertMode] = useExpertModeManager()
   const deadline = useTransactionDeadline() // custom from users settings
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false) // clicked confirm
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
+  const allowedSlippage = useAppSelector(selectSlippage)
   const routerContract = useRouterContract()
   const addTransaction = useTransactionAdder()
 

@@ -4,18 +4,21 @@ import { useLingui } from '@lingui/react'
 import { Percent } from '@sushiswap/core-sdk'
 import { DEFAULT_DEADLINE_FROM_NOW } from 'app/constants'
 import { classNames } from 'app/functions'
-import { useSetUserSlippageTolerance, useUserSlippageTolerance, useUserTransactionTTL } from 'app/state/user/hooks'
+import { useAppDispatch, useAppSelector } from 'app/state/hooks'
+import {
+  formatSlippageInput,
+  GLOBAL_DEFAULT_SLIPPAGE_PERCENT,
+  GLOBAL_DEFAULT_SLIPPAGE_STR,
+  setSlippageInput,
+  SlippageError,
+  slippageSelectors,
+} from 'app/state/slippage/slippageSlice'
+import { useUserTransactionTTL } from 'app/state/user/hooks'
 import React, { FC, useState } from 'react'
 
 import Button from '../Button'
 import QuestionHelper from '../QuestionHelper'
 import Typography from '../Typography'
-
-enum SlippageError {
-  InvalidInput = 'InvalidInput',
-  RiskyLow = 'RiskyLow',
-  RiskyHigh = 'RiskyHigh',
-}
 
 enum DeadlineError {
   InvalidInput = 'InvalidInput',
@@ -28,41 +31,14 @@ export interface TransactionSettingsProps {
 
 const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage, trident = false }) => {
   const { i18n } = useLingui()
+  const dispatch = useAppDispatch()
 
-  const userSlippageTolerance = useUserSlippageTolerance()
-  const setUserSlippageTolerance = useSetUserSlippageTolerance()
+  const { error: slippageError, percent: slippagePercent, input: slippageInput } = useAppSelector(slippageSelectors)
+  const slippageIsDefault = slippagePercent.equalTo(GLOBAL_DEFAULT_SLIPPAGE_PERCENT)
 
   const [deadline, setDeadline] = useUserTransactionTTL()
-
-  const [slippageInput, setSlippageInput] = useState('')
-  const [slippageError, setSlippageError] = useState<SlippageError | false>(false)
-
   const [deadlineInput, setDeadlineInput] = useState('')
   const [deadlineError, setDeadlineError] = useState<DeadlineError | false>(false)
-
-  function parseSlippageInput(value: string) {
-    // populate what the user typed and clear the error
-    setSlippageInput(value)
-    setSlippageError(false)
-
-    if (value.length === 0) {
-      setUserSlippageTolerance('auto')
-    } else {
-      const parsed = Math.floor(Number.parseFloat(value) * 100)
-
-      if (!Number.isInteger(parsed) || parsed < 1 || parsed > 5000) {
-        setUserSlippageTolerance('auto')
-        if (value !== '.') {
-          setSlippageError(SlippageError.InvalidInput)
-        }
-      } else {
-        setUserSlippageTolerance(new Percent(parsed, 10_000))
-      }
-    }
-  }
-
-  const tooLow = userSlippageTolerance !== 'auto' && userSlippageTolerance.lessThan(new Percent(5, 10_000))
-  const tooHigh = userSlippageTolerance !== 'auto' && userSlippageTolerance.greaterThan(new Percent(1, 100))
 
   function parseCustomDeadline(value: string) {
     // populate what the user typed and clear the error
@@ -103,11 +79,11 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
         <div className="flex items-center space-x-2">
           <div
             className={classNames(
-              !!slippageError
+              slippageError === SlippageError.INVALID_INPUT
                 ? 'border-red/60'
-                : tooLow || tooHigh
+                : slippageError === SlippageError.TOO_LOW || slippageError === SlippageError.TOO_HIGH
                 ? 'border-yellow/60'
-                : userSlippageTolerance !== 'auto'
+                : !slippageIsDefault
                 ? 'border-blue'
                 : 'border-dark-800',
               'border-2 h-[36px] flex items-center px-2 rounded bg-dark-1000/40'
@@ -115,27 +91,25 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
             tabIndex={-1}
           >
             <div className="flex items-center justify-between gap-1">
-              {tooLow || tooHigh ? <ExclamationIcon className="text-yellow" width={24} /> : null}
+              {slippageError === SlippageError.TOO_LOW || slippageError === SlippageError.TOO_HIGH ? (
+                <ExclamationIcon className="text-yellow" width={24} />
+              ) : null}
               <input
                 id="text-slippage"
                 className={classNames(
-                  slippageError ? 'text-red' : '',
+                  slippageError === SlippageError.INVALID_INPUT ? 'text-red' : '',
                   'bg-transparent placeholder-low-emphesis min-w-0 w-full font-bold'
                 )}
                 placeholder={placeholderSlippage?.toFixed(2)}
-                value={
-                  slippageInput.length > 0
-                    ? slippageInput
-                    : userSlippageTolerance === 'auto'
-                    ? ''
-                    : userSlippageTolerance.toFixed(2)
+                value={slippageInput}
+                onChange={(e) => dispatch(setSlippageInput(e.target.value))}
+                onBlur={() =>
+                  slippageError
+                    ? dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))
+                    : dispatch(formatSlippageInput())
                 }
-                onChange={(e) => parseSlippageInput(e.target.value)}
-                onBlur={() => {
-                  setSlippageInput('')
-                  setSlippageError(false)
-                }}
-                color={slippageError ? 'red' : ''}
+                color={slippageError === SlippageError.INVALID_INPUT ? 'red' : ''}
+                autoComplete="off"
               />
               %
             </div>
@@ -143,29 +117,29 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
           <div>
             <Button
               size="sm"
-              color={userSlippageTolerance === 'auto' ? 'blue' : 'gray'}
+              color={slippageIsDefault ? 'blue' : 'gray'}
               variant="outlined"
-              onClick={() => parseSlippageInput('')}
+              onClick={() => dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))}
             >
               {i18n._(t`Auto`)}
             </Button>
           </div>
         </div>
-        {slippageError || tooLow || tooHigh ? (
+        {slippageError ? (
           <Typography
             className={classNames(
-              slippageError === SlippageError.InvalidInput ? 'text-red' : 'text-yellow',
+              slippageError === SlippageError.INVALID_INPUT ? 'text-red' : 'text-yellow',
               'font-medium flex items-center space-x-2'
             )}
             variant="xs"
             weight={700}
           >
             <div>
-              {slippageError === SlippageError.InvalidInput
+              {slippageError === SlippageError.INVALID_INPUT
                 ? i18n._(t`Enter a valid slippage percentage`)
-                : slippageError === SlippageError.RiskyLow
-                ? i18n._(t`Your transaction may fail`)
-                : i18n._(t`Your transaction may be frontrun`)}
+                : slippageError === SlippageError.TOO_HIGH
+                ? i18n._(t`Your transaction may be frontrun`)
+                : i18n._(t`Your transaction may fail`)}
             </div>
           </Typography>
         ) : null}
