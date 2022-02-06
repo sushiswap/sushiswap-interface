@@ -314,28 +314,36 @@ export function useKashiPairs(addresses = []) {
             string: String(pair.collateral.strategy?.apy ?? 0),
           },
         }
+        pair.utilization = {
+          value: pair.utilization,
+          string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString(),
+        }
+        console.log(pair.utilization.value.div(e10(15)).toBigInt())
         pair.supplyAPR = {
           value: pair.supplyAPR,
-          valueWithStrategy: pair.supplyAPR.add(pair.strategyAPY.asset.value),
+          valueWithStrategy: pair.supplyAPR.add(pair.strategyAPY.asset.value.mulDiv(pair.utilization.value, e10(18))),
           string: Fraction.from(pair.supplyAPR, e10(16)).toString(),
-          stringWithStrategy: Fraction.from(pair.strategyAPY.asset.value.add(pair.supplyAPR), e10(16)).toString(),
+          stringWithStrategy: Fraction.from(
+            pair.strategyAPY.asset.value.add(
+              pair.supplyAPR.add(pair.strategyAPY.asset.value.mulDiv(pair.utilization.value, e10(18)))
+            ),
+            e10(16)
+          ).toString(),
         }
         pair.currentSupplyAPR = {
           value: pair.currentSupplyAPR,
-          valueWithStrategy: pair.currentSupplyAPR.add(pair.strategyAPY.asset.value),
+          valueWithStrategy: pair.currentSupplyAPR.add(
+            pair.strategyAPY.asset.value.mulDiv(pair.utilization.value, e10(18))
+          ),
           string: Fraction.from(pair.currentSupplyAPR, e10(16)).toString(),
           stringWithStrategy: Fraction.from(
-            pair.currentSupplyAPR.add(pair.strategyAPY.asset.value),
+            pair.currentSupplyAPR.add(pair.strategyAPY.asset.value.mulDiv(pair.utilization.value, e10(18))),
             e10(16)
           ).toString(),
         }
         pair.currentInterestPerYear = {
           value: pair.currentInterestPerYear,
           string: Fraction.from(pair.currentInterestPerYear, BigNumber.from(10).pow(16)).toString(),
-        }
-        pair.utilization = {
-          value: pair.utilization,
-          string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString(),
         }
         pair.health = {
           value: pair.health,
