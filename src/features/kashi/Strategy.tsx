@@ -1,5 +1,6 @@
 import { i18n } from '@lingui/core'
 import { t } from '@lingui/macro'
+import QuestionHelper from 'app/components/QuestionHelper'
 import React from 'react'
 
 import Button from '../../components/Button'
@@ -15,7 +16,10 @@ export default function Strategy({ token }) {
       {token.strategy && (
         <>
           <div className="flex justify-between">
-            <div className="text-lg text-secondary">{i18n._(t`Avg. APY`)}</div>
+            <div className="flex flex-row">
+              <div className="text-lg text-secondary">{i18n._(t`Avg. APY`)}</div>
+              <QuestionHelper text="Might be lower on the pair specifically depending on it's utilization" />
+            </div>
             <div className="flex items-center">
               <div className="text-lg text-high-emphesis">{formatPercent(token.strategy.apy)}</div>
             </div>
