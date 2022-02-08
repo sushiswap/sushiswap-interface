@@ -36,10 +36,10 @@ const Layout: FC<LayoutProps> = ({ left, children, right }) => {
             <div className="flex items-end col-span-12 xl:col-span-9">
               <nav className="flex items-center justify-end w-full">
                 <div className="flex pr-2 sm:pr-4">
-                  <NavLink href="/balances">
+                  <NavLink href="/portfolio">
                     <a
                       className={`px-2 sm:px-4 flex justify-end items-center font-medium ${
-                        router.pathname === '/balances' ? 'text-high-emphesis' : 'text-secondary hover:text-primary'
+                        router.pathname === '/portfolio' ? 'text-high-emphesis' : 'text-secondary hover:text-primary'
                       }`}
                     >
                       <svg
