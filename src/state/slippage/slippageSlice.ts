@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Percent } from '@sushiswap/core-sdk'
 import { AppState } from 'app/state'
 
@@ -38,16 +38,16 @@ export const slippageSlice = createSlice({
 export const { setSlippageInput, formatSlippageInput } = slippageSlice.actions
 
 const parseSlippageInput = (input: string): number => Math.floor(Number.parseFloat(input) * 100)
-const inputToPercent = (state: AppState) => new Percent(parseSlippageInput(state.slippage.input), 10_000)
+const inputToPercent = (input: string) => new Percent(parseSlippageInput(input), 10_000)
 
 const selectSlippageInputError = (state: AppState): SlippageError | false => {
   try {
     const parsedInput = parseSlippageInput(state.slippage.input)
     return !Number.isInteger(parsedInput) || parsedInput < 1
       ? SlippageError.INVALID_INPUT
-      : inputToPercent(state).lessThan(new Percent(5, 10_000))
+      : inputToPercent(state.slippage.input).lessThan(new Percent(5, 10_000))
       ? SlippageError.TOO_LOW
-      : inputToPercent(state).greaterThan(new Percent(1, 100))
+      : inputToPercent(state.slippage.input).greaterThan(new Percent(1, 100))
       ? SlippageError.TOO_HIGH
       : false
   } catch (e) {
@@ -57,13 +57,20 @@ const selectSlippageInputError = (state: AppState): SlippageError | false => {
 
 const selectSlippageInput = (state: AppState) => state.slippage.input
 
-export const selectSlippage = (state: AppState): Percent =>
-  selectSlippageInputError(state) ? GLOBAL_DEFAULT_SLIPPAGE_PERCENT : inputToPercent(state)
+export const selectSlippage = createSelector([selectSlippageInput, selectSlippageInputError], (input, error) => {
+  return error ? GLOBAL_DEFAULT_SLIPPAGE_PERCENT : inputToPercent(input)
+})
 
-export const selectSlippageWithDefault =
-  (fallbackDefault: Percent) =>
-  (state: AppState): Percent =>
-    selectSlippageInputError(state) ? fallbackDefault : inputToPercent(state)
+const fallbackParam = (state: AppState, fallbackDefault: Percent) => fallbackDefault
+const _composeSlippageWithDefault = createSelector(
+  [selectSlippageInput, selectSlippageInputError, fallbackParam],
+  (input, error, fallback) => {
+    return error ? fallback : inputToPercent(input)
+  }
+)
+
+export const selectSlippageWithDefault = (fallbackDefault: Percent) => (state: AppState) =>
+  _composeSlippageWithDefault(state, fallbackDefault)
 
 export const slippageSelectors = (state: AppState) => {
   return {
