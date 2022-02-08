@@ -8,6 +8,7 @@ import { Feature } from 'app/enums/Feature'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
+import { useKashiBorrowPositions } from 'app/features/portfolio/AssetBalances/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
@@ -25,11 +26,7 @@ export default function Borrow() {
   // @ts-ignore TYPE NEEDS FIXING
   const pairs = useKashiPairs(addresses)
 
-  const positions = useSearchAndSort(
-    pairs.filter((pair: any) => pair.userCollateralShare.gt(0) || pair.userBorrowPart.gt(0)),
-    { keys: ['search'], threshold: 0.1 },
-    { key: 'health.value', direction: 'descending' }
-  )
+  const positions = useKashiBorrowPositions(pairs)
 
   const data = useSearchAndSort(
     pairs,

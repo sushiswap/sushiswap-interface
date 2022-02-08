@@ -2,35 +2,19 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { NATIVE, ZERO } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
-import AssetBalances from 'app/features/trident/balances/AssetBalances/AssetBalances'
-import { Assets } from 'app/features/trident/balances/AssetBalances/types'
-import { useLPTableConfig } from 'app/features/trident/balances/AssetBalances/useLPTableConfig'
-import { setBalancesState } from 'app/features/trident/balances/balancesSlice'
+import AssetBalances from 'app/features/portfolio/AssetBalances/AssetBalances'
+import { Assets } from 'app/features/portfolio/AssetBalances/types'
+import { setBalancesState } from 'app/features/portfolio/portfolioSlice'
 import { ActiveModal } from 'app/features/trident/types'
-import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { useCallback, useMemo } from 'react'
 
-import { useTableConfig } from './useTableConfig'
-
-export const LiquidityPositionsBalances = () => {
-  const { account, chainId } = useActiveWeb3React()
-
-  const { data: positions } = useTridentLiquidityPositions({
-    chainId,
-    variables: { where: { user: account?.toLowerCase(), balance_gt: 0 } },
-    shouldFetch: !!chainId && !!account,
-  })
-
-  const { config } = useLPTableConfig(positions)
-  return <AssetBalances config={config} />
-}
+import { useBasicTableConfig } from '../useBasicTableConfig'
 
 export const BentoBalances = () => {
-  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
   const { data: balances, loading } = useBentoBalancesV2()
@@ -52,7 +36,7 @@ export const BentoBalances = () => {
     [dispatch]
   )
 
-  const { config } = useTableConfig(assets, loading)
+  const { config } = useBasicTableConfig(assets, loading)
 
   return (
     <div className="flex flex-col gap-3">
@@ -85,7 +69,7 @@ export const WalletBalances = () => {
     }
     return res
   }, [_balances, ethBalance])
-  const { config } = useTableConfig(balances, loading)
+  const { config } = useBasicTableConfig(balances, loading)
 
   const handleRowClick = useCallback(
     (row) => {

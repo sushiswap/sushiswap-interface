@@ -1,8 +1,8 @@
-import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, ZERO } from '@sushiswap/core-sdk'
 import Typography, { TypographyVariant } from 'app/components/Typography'
+import { reduceBalances, useKashiPositions } from 'app/features/portfolio/AssetBalances/kashi/hooks'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
 import { currencyFormatter } from 'app/functions'
 import { useTridentLiquidityPositions } from 'app/services/graph'
@@ -64,34 +64,39 @@ export const BalancesSum = () => {
   const { i18n } = useLingui()
   const { data: walletBalances, loading: wLoading } = useWalletBalances()
   const { data: bentoBalances, loading: bLoading } = useBentoBalancesV2()
-  const balances = useMemo(() => {
-    return Object.values(
-      [...walletBalances, ...bentoBalances].reduce<Record<string, CurrencyAmount<Currency>>>((acc, cur) => {
-        if (cur.currency.isNative) {
-          if (acc[AddressZero]) acc[AddressZero] = acc[AddressZero].add(cur)
-          else acc[AddressZero] = cur
-        } else if (acc[cur.currency.wrapped.address]) {
-          acc[cur.currency.wrapped.address] = acc[cur.currency.wrapped.address].add(cur)
-        } else {
-          acc[cur.currency.wrapped.address] = cur
-        }
+  const { borrowed, collateral, lent, kashiBalances } = useKashiPositions()
 
-        return acc
-      }, {})
-    )
-  }, [bentoBalances, walletBalances])
+  const allAssets = useMemo(() => {
+    const combined = [...walletBalances, ...bentoBalances, ...collateral, ...lent]
+    return {
+      total: combined.length,
+      balances: reduceBalances(combined),
+    }
+  }, [bentoBalances, collateral, lent, walletBalances])
 
   return (
     <div className="flex lg:flex-row flex-col gap-10 justify-between lg:items-end w-full">
       <div className="flex gap-10">
-        <_BalancesSum amounts={balances} label={i18n._(t`Net Worth`)} size="h3" loading={wLoading || bLoading} />
+        <_BalancesSum
+          assetAmounts={allAssets.balances}
+          liabilityAmounts={borrowed}
+          label={i18n._(t`Net Worth`)}
+          size="h3"
+          loading={wLoading || bLoading}
+        />
       </div>
       <div className="flex gap-10">
-        <_BalancesSum amounts={walletBalances} label={i18n._(t`Wallet`)} loading={wLoading} />
-        <_BalancesSum amounts={bentoBalances} label={i18n._(t`BentoBox`)} loading={bLoading} />
+        <_BalancesSum assetAmounts={walletBalances} label={i18n._(t`Wallet`)} loading={wLoading} />
+        <_BalancesSum assetAmounts={bentoBalances} label={i18n._(t`BentoBox`)} loading={bLoading} />
+        <_BalancesSum
+          assetAmounts={kashiBalances}
+          liabilityAmounts={borrowed}
+          label={i18n._(t`Kashi`)}
+          loading={false}
+        />
         <div className="flex flex-col gap-1">
           <Typography variant="sm">{i18n._(t`Assets`)}</Typography>
-          <Typography variant="lg">{balances.length}</Typography>
+          <Typography variant="lg">{allAssets.total}</Typography>
         </div>
       </div>
     </div>
@@ -99,34 +104,42 @@ export const BalancesSum = () => {
 }
 
 interface BalancesSumProps {
-  amounts: (CurrencyAmount<Currency> | undefined)[]
+  assetAmounts: (CurrencyAmount<Currency> | undefined)[]
+  liabilityAmounts?: (CurrencyAmount<Currency> | undefined)[]
   label: string
   size?: TypographyVariant
   loading: boolean
 }
 
-const _BalancesSum: FC<BalancesSumProps> = ({ amounts, loading, label, size = 'lg' }) => {
+const _BalancesSum: FC<BalancesSumProps> = ({ assetAmounts, liabilityAmounts = [], loading, label, size = 'lg' }) => {
   return (
-    <SumUSDCValues amounts={amounts}>
-      {({ amount }) => {
-        if (loading) {
-          return (
-            <div className="flex flex-col gap-1">
-              <Typography variant="sm">{label}</Typography>
-              <div className="animate-pulse rounded h-5 bg-dark-600 w-[100px]" />
-            </div>
-          )
-        }
-
-        return (
-          <div className="flex flex-col gap-1">
-            <Typography variant="sm">{label}</Typography>
-            <Typography variant={size} weight={size === 'h3' ? 700 : 400} className="text-high-emphesis">
-              {amount ? currencyFormatter.format(Number(amount.toExact())) : '$0.00'}
-            </Typography>
-          </div>
-        )
-      }}
+    <SumUSDCValues amounts={assetAmounts}>
+      {({ amount: assetAmount }) => (
+        <SumUSDCValues amounts={liabilityAmounts}>
+          {({ amount: liabilityAmount }) => {
+            if (loading) {
+              return (
+                <div className="flex flex-col gap-1">
+                  <Typography variant="sm">{label}</Typography>
+                  <div className="animate-pulse rounded h-5 bg-dark-600 w-[100px]" />
+                </div>
+              )
+            }
+            return (
+              <div className="flex flex-col gap-1">
+                <Typography variant="sm">{label}</Typography>
+                <Typography variant={size} weight={size === 'h3' ? 700 : 400} className="text-high-emphesis">
+                  {assetAmount && liabilityAmount
+                    ? currencyFormatter.format(Number(assetAmount.subtract(liabilityAmount).toExact()))
+                    : assetAmount
+                    ? currencyFormatter.format(Number(assetAmount.toExact()))
+                    : '$0.00'}
+                </Typography>
+              </div>
+            )
+          }}
+        </SumUSDCValues>
+      )}
     </SumUSDCValues>
   )
 }

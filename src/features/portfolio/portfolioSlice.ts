@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { AppState } from 'app/state'
 
-import { ActiveModal } from '../types'
+import { ActiveModal } from '../trident/types'
 
 export interface BalancesState {
   currency?: string
@@ -15,8 +15,8 @@ const initialState: BalancesState = {
   modalOpen: false,
 }
 
-export const balancesSlice = createSlice({
-  name: 'tridentAdd',
+export const portfolioSlice = createSlice({
+  name: 'portfolioSlice',
   initialState,
   reducers: {
     setBalancesActiveModal: (state, action: PayloadAction<ActiveModal | undefined>) => {
@@ -27,20 +27,17 @@ export const balancesSlice = createSlice({
       state.activeModal = action.payload.activeModal
       state.modalOpen = !!action.payload.currency && !!action.payload.activeModal
     },
-    setBalancesCurrency: (state, action: PayloadAction<string | undefined>) => {
-      state.currency = action.payload
-    },
     setBalancesModalOpen: (state, action: PayloadAction<boolean>) => {
       state.modalOpen = action.payload
     },
   },
 })
 
-export const { setBalancesActiveModal, setBalancesState, setBalancesCurrency, setBalancesModalOpen } =
-  balancesSlice.actions
+export const { setBalancesActiveModal, setBalancesState, setBalancesModalOpen } = portfolioSlice.actions
 
 type selectTridentAdd = (state: AppState) => BalancesState
-export const selectTridentBalances: selectTridentAdd = (state: AppState) => state.tridentBalances
-export default balancesSlice.reducer
+export const selectTridentBalances: selectTridentAdd = (state: AppState) => state.portfolio
 
-export const selectBalancesCurrency = (state: AppState) => state.tridentBalances.currency
+export const selectBalancesCurrency = (state: AppState) => state.portfolio.currency
+
+export default portfolioSlice.reducer

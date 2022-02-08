@@ -5,7 +5,7 @@ import { AppPage } from '../AppPage'
 import { AssetBalancesComponent } from './AssetBalancesComponent'
 
 export class MyWalletPage extends AppPage {
-  protected Route: string = '/trident/balances/wallet'
+  protected Route: string = '/portfolio/wallet'
   private AssetBalances: AssetBalancesComponent
 
   constructor(page: Page, metamask: Dappeteer, baseUrl: string) {

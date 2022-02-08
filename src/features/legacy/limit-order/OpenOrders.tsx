@@ -122,7 +122,7 @@ const OpenOrders: FC = () => {
               >
                 <Typography variant="xs" className="italic text-center text-low-emphesis">
                   Funds will be received in your{' '}
-                  <Link href="/balances" passHref={true}>
+                  <Link href="/portfolio" passHref={true}>
                     <Typography variant="xs" className="text-blue" component="span">
                       BentoBox
                     </Typography>

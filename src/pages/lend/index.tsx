@@ -8,6 +8,7 @@ import { Feature } from 'app/enums'
 import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
 import ListHeaderWithSort from 'app/features/kashi/ListHeaderWithSort'
 import MarketHeader from 'app/features/kashi/MarketHeader'
+import { useKashiLendPositions } from 'app/features/portfolio/AssetBalances/kashi/hooks'
 import { formatNumber, formatPercent } from 'app/functions/format'
 import NetworkGuard from 'app/guards/Network'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
@@ -27,12 +28,8 @@ export default function Lend() {
   // @ts-ignore TYPE NEEDS FIXING
   const pairs = useKashiPairs(addresses)
 
-  const positions = useSearchAndSort(
-    // @ts-ignore TYPE NEEDS FIXING
-    pairs.filter((pair) => pair.userAssetFraction.gt(0)),
-    { keys: ['search'], threshold: 0.1 },
-    { key: 'currentUserAssetAmount.usdValue', direction: 'descending' }
-  )
+  const positions = useKashiLendPositions(pairs)
+
   const data = useSearchAndSort(
     pairs,
     { keys: ['search'], threshold: 0.1 },
