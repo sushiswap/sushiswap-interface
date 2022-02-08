@@ -6,6 +6,7 @@ import { ChainId, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS } from '@su
 import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
 import { Fraction } from 'app/entities'
 import { Feature } from 'app/enums'
+import { KashiMarket } from 'app/features/kashi/types'
 import {
   accrue,
   accrueTotalAssetWithFee,
@@ -118,7 +119,7 @@ export function useKashiPairAddresses(): string[] {
   )
 }
 
-export function useKashiPairs(addresses = []) {
+export function useKashiPairs(addresses: string[] = []): KashiMarket[] {
   const { chainId, account } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
@@ -318,7 +319,6 @@ export function useKashiPairs(addresses = []) {
           value: pair.utilization,
           string: Fraction.from(pair.utilization, BigNumber.from(10).pow(16)).toString(),
         }
-        console.log(pair.utilization.value.div(e10(15)).toBigInt())
         pair.supplyAPR = {
           value: pair.supplyAPR,
           valueWithStrategy: pair.supplyAPR.add(pair.strategyAPY.asset.value.mulDiv(pair.utilization.value, e10(18))),
@@ -379,7 +379,7 @@ export function useKashiPairs(addresses = []) {
   //   )
 }
 
-export function useKashiPair(address: string) {
+export function useKashiPair(address: string): KashiMarket | undefined {
   // @ts-ignore TYPE NEEDS FIXING
   return useKashiPairs([getAddress(address)])[0]
 }

@@ -203,18 +203,28 @@ const SwapAssetPanelHeader: FC<
     SwapAssetPanel,
     'currency' | 'currencies' | 'onSelect' | 'walletToggle' | 'spendFromWallet' | 'disabled' | 'onChange' | 'value'
   > & { label: string; id?: string }
-> = ({ walletToggle, currency, onSelect, spendFromWallet, id, currencies }) => {
+> = ({ label, walletToggle, currency, onSelect, spendFromWallet, id, currencies }) => {
   const { i18n } = useLingui()
+  const hideSearchModal = Array.isArray(currencies) && currencies.length === 0
+
   const trigger = currency ? (
     <div
       id={id}
-      className="flex items-center gap-2 px-2 py-1 rounded-full shadow-md cursor-pointer text-high-emphesis bg-dark-800 hover:bg-dark-700"
+      className={classNames(
+        hideSearchModal ? '' : 'bg-dark-800 hover:bg-dark-700 cursor-pointer',
+        'flex items-center gap-2 px-2 py-1 rounded-full shadow-md text-high-emphesis'
+      )}
     >
       <CurrencyLogo currency={currency} className="!rounded-full overflow-hidden" size={20} />
+      {label && (
+        <Typography variant="sm" className="!text-xl" weight={700}>
+          {label}
+        </Typography>
+      )}
       <Typography variant="sm" className="!text-xl" weight={700}>
         {!spendFromWallet ? currency.wrapped.symbol : currency.symbol}
       </Typography>
-      <ChevronDownIcon width={18} />
+      {!hideSearchModal && <ChevronDownIcon width={18} />}
     </div>
   ) : (
     <Button color="blue" variant="filled" size="sm" id={id} className="!rounded-full !px-2 !py-0 !h-[32px] !pl-3">
@@ -224,13 +234,19 @@ const SwapAssetPanelHeader: FC<
   )
 
   return (
-    <div className="flex items-end justify-between gap-2">
-      <CurrencySearchModal
-        selectedCurrency={currency}
-        onCurrencySelect={(currency) => onSelect && onSelect(currency)}
-        trigger={trigger}
-        currencyList={currencies}
-      />
+    <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center">
+        {!hideSearchModal ? (
+          <CurrencySearchModal
+            selectedCurrency={currency}
+            onCurrencySelect={(currency) => onSelect && onSelect(currency)}
+            trigger={trigger}
+            currencyList={currencies}
+          />
+        ) : (
+          trigger
+        )}
+      </div>
       {walletToggle && walletToggle({ spendFromWallet })}
     </div>
   )
