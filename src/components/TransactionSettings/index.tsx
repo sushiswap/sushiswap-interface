@@ -104,7 +104,7 @@ const TransactionSettings: FC<TransactionSettingsProps> = ({ placeholderSlippage
                 value={slippageInput}
                 onChange={(e) => dispatch(setSlippageInput(e.target.value))}
                 onBlur={() =>
-                  slippageError
+                  slippageError === SlippageError.INVALID_INPUT
                     ? dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))
                     : dispatch(formatSlippageInput())
                 }

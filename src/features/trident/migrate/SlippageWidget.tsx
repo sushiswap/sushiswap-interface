@@ -10,6 +10,7 @@ import {
   GLOBAL_DEFAULT_SLIPPAGE_PERCENT,
   GLOBAL_DEFAULT_SLIPPAGE_STR,
   setSlippageInput,
+  SlippageError,
   slippageSelectors,
 } from 'app/state/slippage/slippageSlice'
 import React from 'react'
@@ -42,7 +43,9 @@ export const SlippageWidget = () => {
           value={input}
           onChange={(e) => dispatch(setSlippageInput(e.target.value))}
           onBlur={() =>
-            error ? dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR)) : dispatch(formatSlippageInput())
+            error === SlippageError.INVALID_INPUT
+              ? dispatch(setSlippageInput(GLOBAL_DEFAULT_SLIPPAGE_STR))
+              : dispatch(formatSlippageInput())
           }
         />
         <div className="text-low-emphesis">%</div>
