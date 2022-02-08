@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
+import { useKashiMediumRiskLendingPairs, useKashiPairAddresses } from 'app/features/kashi/hooks'
 import KashiMarketList from 'app/features/kashi/KashiMarketList'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React, { FC } from 'react'
@@ -10,7 +10,8 @@ import React, { FC } from 'react'
 const KashiPage: FC = () => {
   const { i18n } = useLingui()
   const addresses = useKashiPairAddresses()
-  const markets = useKashiPairs(addresses)
+  // const markets = useKashiPairs(addresses)
+  const markets = useKashiMediumRiskLendingPairs(addresses)
 
   return (
     <>
@@ -30,7 +31,7 @@ const KashiPage: FC = () => {
               target="_blank"
               rel="noreferrer"
             >
-              {i18n._(t`Apply for Onsen`)}
+              {i18n._(t`Create Kashi Market`)}
             </a>
           </Button>
         </div>

@@ -9,10 +9,14 @@ import {
   takeFee,
 } from '@sushiswap/kashi-sdk'
 
+import { Oracle } from './oracles'
+
 export class KashiMediumRiskLendingPair {
+  public readonly address: string
   public readonly accrueInfo: AccrueInfo
   public readonly collateral: Rebase
   public readonly asset: Rebase
+  public readonly oracle: Oracle
   public readonly totalCollateralShare: JSBI
   public readonly totalAsset: Rebase
   public readonly totalBorrow: Rebase
@@ -32,23 +36,40 @@ export class KashiMediumRiskLendingPair {
     })
   }
 
-  public constructor(
-    accrueInfo: AccrueInfo,
-    collateral: Rebase,
-    asset: Rebase,
-    totalCollateralShare: JSBI,
-    totalAsset: Rebase,
-    totalBorrow: Rebase,
-    exchangeRate: JSBI,
-    oracleExchangeRate: JSBI,
-    spotExchangeRate: JSBI,
-    userCollateralShare: JSBI,
-    userAssetFraction: JSBI,
+  public constructor({
+    accrueInfo,
+    collateral,
+    asset,
+    oracle,
+    totalCollateralShare,
+    totalAsset,
+    totalBorrow,
+    exchangeRate,
+    oracleExchangeRate,
+    spotExchangeRate,
+    userCollateralShare,
+    userAssetFraction,
+    userBorrowPart,
+  }: {
+    accrueInfo: AccrueInfo
+    collateral: Rebase & { token: Token }
+    asset: Rebase & { token: Token }
+    oracle: Oracle
+    totalCollateralShare: JSBI
+    totalAsset: Rebase
+    totalBorrow: Rebase
+    exchangeRate: JSBI
+    oracleExchangeRate: JSBI
+    spotExchangeRate: JSBI
+    userCollateralShare: JSBI
+    userAssetFraction: JSBI
     userBorrowPart: JSBI
-  ) {
+  }) {
+    this.address = KashiMediumRiskLendingPair.getAddress(collateral.token, asset.token, oracle.address, oracle.data)
     this.accrueInfo = accrueInfo
     this.collateral = collateral
     this.asset = asset
+    this.oracle = oracle
     this.totalCollateralShare = totalCollateralShare
     this.totalAsset = totalAsset
     this.totalBorrow = totalBorrow

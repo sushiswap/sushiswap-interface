@@ -32,7 +32,7 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
   const { result, term, search } = useFuse<KashiMarket>({
     data: markets,
     options: {
-      keys: ['asset.symbol', 'collateral.symbol'],
+      keys: ['asset.token.symbol', 'collateral.token.symbol'],
       threshold: 0,
       shouldSort: false,
       useExtendedSearch: false,
@@ -43,7 +43,7 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
 
   return (
     <div className="flex flex-col w-full gap-6">
-      <div className="flex flex-col sm:flex-row justify-between gap-4 items-center">
+      <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
         <Search search={(val) => search(val.toUpperCase())} term={term} />
       </div>
       <div className={classNames(TABLE_WRAPPER_DIV_CLASSNAME)}>
