@@ -118,7 +118,7 @@ export function useKashiPairAddresses(): string[] {
   )
 }
 
-export function useKashiPairs(addresses = []) {
+export function useKashiPairs(addresses: string[] = []) {
   const { chainId, account } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()

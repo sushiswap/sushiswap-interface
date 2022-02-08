@@ -45,7 +45,7 @@ const Desktop: FC = () => {
 
                 <div className="flex items-center w-auto text-sm font-bold border-2 rounded shadow cursor-pointer pointer-events-auto select-none border-dark-800 hover:border-dark-700 bg-dark-900 whitespace-nowrap">
                   {account && chainId && userEthBalance && (
-                    <Link href="/balances" passHref={true}>
+                    <Link href="/portfolio" passHref={true}>
                       <a className="hidden px-3 text-high-emphesis text-bold md:block">
                         {/*@ts-ignore*/}
                         {userEthBalance?.toSignificant(4)} {NATIVE[chainId || 1].symbol}
