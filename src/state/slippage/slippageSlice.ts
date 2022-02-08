@@ -43,7 +43,7 @@ const inputToPercent = (input: string) => new Percent(parseSlippageInput(input),
 const selectSlippageInputError = (state: AppState): SlippageError | false => {
   try {
     const parsedInput = parseSlippageInput(state.slippage.input)
-    return !Number.isInteger(parsedInput) || parsedInput < 1
+    return !Number.isInteger(parsedInput) || parsedInput < 1 || parsedInput > 5000
       ? SlippageError.INVALID_INPUT
       : inputToPercent(state.slippage.input).lessThan(new Percent(5, 10_000))
       ? SlippageError.TOO_LOW
@@ -58,14 +58,14 @@ const selectSlippageInputError = (state: AppState): SlippageError | false => {
 const selectSlippageInput = (state: AppState) => state.slippage.input
 
 export const selectSlippage = createSelector([selectSlippageInput, selectSlippageInputError], (input, error) => {
-  return error ? GLOBAL_DEFAULT_SLIPPAGE_PERCENT : inputToPercent(input)
+  return error === SlippageError.INVALID_INPUT ? GLOBAL_DEFAULT_SLIPPAGE_PERCENT : inputToPercent(input)
 })
 
 const fallbackParam = (state: AppState, fallbackDefault: Percent) => fallbackDefault
 const _composeSlippageWithDefault = createSelector(
   [selectSlippageInput, selectSlippageInputError, fallbackParam],
   (input, error, fallback) => {
-    return error ? fallback : inputToPercent(input)
+    return error === SlippageError.INVALID_INPUT ? fallback : inputToPercent(input)
   }
 )
 

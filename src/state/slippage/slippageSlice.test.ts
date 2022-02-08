@@ -119,11 +119,25 @@ describe('Slippage slice', () => {
         expect(error).toEqual(SlippageError.TOO_LOW)
       })
 
+      it('handles inputs way too small', () => {
+        store.dispatch(setSlippageInput('.001'))
+        getLatestState()
+        const { error } = slippageSelectors({ slippage: slippageState } as AppState)
+        expect(error).toEqual(SlippageError.INVALID_INPUT)
+      })
+
       it('handles inputs too large', () => {
         store.dispatch(setSlippageInput('4'))
         getLatestState()
         const { error } = slippageSelectors({ slippage: slippageState } as AppState)
         expect(error).toEqual(SlippageError.TOO_HIGH)
+      })
+
+      it('handles inputs way too large', () => {
+        store.dispatch(setSlippageInput('60'))
+        getLatestState()
+        const { error } = slippageSelectors({ slippage: slippageState } as AppState)
+        expect(error).toEqual(SlippageError.INVALID_INPUT)
       })
     })
 
@@ -151,12 +165,40 @@ describe('Slippage slice', () => {
       const slippage = selectSlippage({ slippage: slippageState } as AppState)
       expect(slippage.equalTo(GLOBAL_DEFAULT_SLIPPAGE_PERCENT)).toBeTruthy()
     })
+
+    it('correctly selects even if too high error is given', () => {
+      store.dispatch(setSlippageInput('33'))
+      getLatestState()
+      const slippage = selectSlippage({ slippage: slippageState } as AppState)
+      expect(slippage.equalTo(new Percent(33, 100))).toBeTruthy()
+    })
+
+    it('correctly defaults to the global if input way too high', () => {
+      store.dispatch(setSlippageInput('120'))
+      getLatestState()
+      const slippage = selectSlippage({ slippage: slippageState } as AppState)
+      expect(slippage.equalTo(GLOBAL_DEFAULT_SLIPPAGE_PERCENT)).toBeTruthy()
+    })
+
+    it('correctly defaults to global if way too low', () => {
+      store.dispatch(setSlippageInput('.0001'))
+      getLatestState()
+      const slippage = selectSlippage({ slippage: slippageState } as AppState)
+      expect(slippage.equalTo(GLOBAL_DEFAULT_SLIPPAGE_PERCENT)).toBeTruthy()
+    })
+
+    it('correctly selects even if too low error is given', () => {
+      store.dispatch(setSlippageInput('.01'))
+      getLatestState()
+      const slippage = selectSlippage({ slippage: slippageState } as AppState)
+      expect(slippage.equalTo(new Percent(1, 10_000))).toBeTruthy()
+    })
   })
 
   describe('selectSlippageWithDefault', () => {
     it('goes to default if invalid input', () => {
       const fallbackPercent = new Percent(4, 10_000)
-      store.dispatch(setSlippageInput('111'))
+      store.dispatch(setSlippageInput('adsf'))
       getLatestState()
       const slippage = selectSlippageWithDefault(fallbackPercent)({ slippage: slippageState } as AppState)
       expect(slippage.equalTo(fallbackPercent)).toBeTruthy()
@@ -169,6 +211,24 @@ describe('Slippage slice', () => {
       const slippage = selectSlippageWithDefault(fallbackPercent)({ slippage: slippageState } as AppState)
       expect(slippage.equalTo(fallbackPercent)).toBeFalsy()
       expect(slippage.equalTo(new Percent(2, 1000))).toBeTruthy()
+    })
+
+    it('Does not default even if too high', () => {
+      const fallbackPercent = new Percent(4, 10_000)
+      store.dispatch(setSlippageInput('20'))
+      getLatestState()
+      const slippage = selectSlippageWithDefault(fallbackPercent)({ slippage: slippageState } as AppState)
+      expect(slippage.equalTo(fallbackPercent)).toBeFalsy()
+      expect(slippage.equalTo(new Percent(20, 100))).toBeTruthy()
+    })
+
+    it('Does not default even if too low', () => {
+      const fallbackPercent = new Percent(4, 10_000)
+      store.dispatch(setSlippageInput('.01'))
+      getLatestState()
+      const slippage = selectSlippageWithDefault(fallbackPercent)({ slippage: slippageState } as AppState)
+      expect(slippage.equalTo(fallbackPercent)).toBeFalsy()
+      expect(slippage.equalTo(new Percent(1, 10_000))).toBeTruthy()
     })
   })
 })
