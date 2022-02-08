@@ -1,7 +1,7 @@
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Fraction, Percent } from '@sushiswap/core-sdk'
+import { CurrencyAmount, Fraction, ZERO } from '@sushiswap/core-sdk'
 import { KashiMarketBorrowDetailsView } from 'app/features/kashi/KashiMarket/index'
 import KashiMarketBorrowLeverageView from 'app/features/kashi/KashiMarket/KashiMarketBorrowLeverageView'
 import useMaxBorrow from 'app/features/kashi/KashiMarket/useMaxBorrow'
@@ -9,7 +9,7 @@ import { KashiMarket } from 'app/features/kashi/types'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { tryParseAmount } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
-import React, { FC, useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 
 interface KashiMarketBorrowView {
   market: KashiMarket
@@ -41,18 +41,25 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
     market,
   })
 
-  console.log(maxBorrow?.quotient.toString())
   const onMultiply = (multiplier: string) => {
-    if (!collateral || !asset || !collateralAmount) return
+    if (!collateral || !asset || !collateralAmountCurrencyAmount) return
 
-    const collateralCurrencyAmount = CurrencyAmount.fromRawAmount(collateral, collateralAmount).multiply(multiplier)
-    const ltv = new Percent(75, 100)
-    const multipliedBorrow = collateralCurrencyAmount
-      .multiply(ltv)
-      .divide(new Fraction(market.currentExchangeRate.toString(), '1'))
+    const multiplied = collateralAmountCurrencyAmount
+      .add(
+        collateralAmountCurrencyAmount
+          .multiply(multiplier.toBigNumber(collateral.decimals).toString())
+          .divide('1'.toBigNumber(collateral.decimals).toString())
+      )
+      .multiply(new Fraction(75, 100))
+      .divide(market.currentExchangeRate.toString())
 
-    console.log(multipliedBorrow.toSignificant(6))
+    setLeveragedAmount(multiplied.asFraction.toFixed(asset.decimals))
   }
+
+  const handleSetBorrowAmount = useCallback((value: string) => {
+    setLeveragedAmount(undefined)
+    setBorrowAmount(value)
+  }, [])
 
   return (
     <div className="flex flex-col gap-3">
@@ -95,17 +102,18 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
           spendFromWallet={receiveInWallet}
           currency={asset}
           value={leverage ? leveragedAmount : borrowAmount}
-          onChange={leverage ? setLeveragedAmount : setBorrowAmount}
+          onChange={leverage ? setLeveragedAmount : handleSetBorrowAmount}
           currencies={[]}
         />
       </div>
-      <KashiMarketBorrowLeverageView
-        market={market}
-        enabled={leverage}
-        onSwitch={() => setLeverage((prev) => !prev)}
-        borrowAmount={borrowAmount}
-        onChange={setLeveragedAmount}
-      />
+      {collateralAmountCurrencyAmount?.greaterThan(ZERO) && borrowAmountCurrencyAmount?.greaterThan(ZERO) && (
+        <KashiMarketBorrowLeverageView
+          market={market}
+          enabled={leverage}
+          onSwitch={() => setLeverage((prev) => !prev)}
+          onChange={onMultiply}
+        />
+      )}
       <KashiMarketBorrowDetailsView market={market} />
     </div>
   )

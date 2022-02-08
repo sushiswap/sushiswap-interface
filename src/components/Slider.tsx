@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react'
 import Typography from 'app/components/Typography'
 import { classNames } from 'app/functions'
-import { FC, Key, memo } from 'react'
+import { FC, Key } from 'react'
 import ReactSlider, { ReactSliderProps } from 'react-slider'
 
 const Track = (props: any) => {
@@ -12,7 +12,7 @@ const Track = (props: any) => {
 
 const Thumb = (props: any) => {
   return (
-    <div>
+    <div key={props.key}>
       <div className="absolute h-4 flex items-center justify-center w-4 -ml-2 top-0" style={{ left: props.style.left }}>
         <div className="z-40 min-w-full">
           <Transition
@@ -43,14 +43,6 @@ const Thumb = (props: any) => {
   )
 }
 
-const Mark: FC<any> = memo((props) => {
-  return (
-    <Typography variant="xxs" {...props} className="mt-4 text-secondary">
-      {props.formatter()}
-    </Typography>
-  )
-})
-
 interface Slider extends ReactSliderProps {
   markFormatter(x?: Key | null): string
 }
@@ -62,11 +54,11 @@ const Slider: FC<Slider> = ({ markFormatter, ...props }) => {
         {...props}
         renderThumb={Thumb}
         renderTrack={Track}
-        renderMark={(props) => {
+        renderMark={({ key, style }) => {
           return (
-            <Mark {...props} formatter={() => markFormatter(props.key)}>
-              {markFormatter(props.key)}
-            </Mark>
+            <Typography style={style} variant="xxs" key={key} className="mt-4 text-secondary" component="span">
+              {markFormatter(key)}
+            </Typography>
           )
         }}
       />

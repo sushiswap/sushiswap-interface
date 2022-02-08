@@ -1,21 +1,12 @@
-import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, JSBI, Percent, Price, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
 import { KashiMarket } from 'app/features/kashi/types'
+import { e10 } from 'app/functions'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 
-export const getPriceEntityFromRate = (price: string, baseCurrency: Currency, quoteCurrency: Currency) => {
-  const baseAmount = CurrencyAmount.fromRawAmount(baseCurrency, JSBI.BigInt(price))
-  const quoteAmount = CurrencyAmount.fromRawAmount(
-    quoteCurrency,
-    JSBI.BigInt(parseUnits('1', quoteCurrency.decimals).toString())
-  )
-  return new Price({ baseAmount, quoteAmount })
-}
-
 const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
-const LTV = new Percent(75, 100)
-const PADDING = new Percent(95, 100)
+const LTV = new Fraction(75, 100)
+const PADDING = new Fraction(95, 100)
 
 interface UseMaxBorrowPayload {
   leveraged: boolean
@@ -40,51 +31,35 @@ const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrowAmount,
   )
 
   // Calculate total collateral amount
-  let totalCollateral = userCollateralAmount.add(collateralAmount)
+  let userTotalCollateral = userCollateralAmount.add(collateralAmount)
   if (swapCollateralAmount) {
-    totalCollateral = totalCollateral.add(swapCollateralAmount)
+    userTotalCollateral = userTotalCollateral.add(swapCollateralAmount)
   }
 
-  const oracleRate = getPriceEntityFromRate(
-    market.oracleExchangeRate.toString(),
-    collateralAmount.currency,
-    borrowAmount.currency
-  )
-  console.log(market.oracleExchangeRate.toString())
-  const spotRate = getPriceEntityFromRate(
-    market.spotExchangeRate.toString(),
-    collateralAmount.currency,
-    borrowAmount.currency
-  )
-
-  const borrowableOracleRate = oracleRate.quote(totalCollateral).multiply(LTV)
-  const borrowableSpotRate = spotRate.quote(totalCollateral).multiply(LTV)
-  const borrowableMinimum = borrowableOracleRate.lessThan(borrowableSpotRate)
-    ? borrowableOracleRate
-    : borrowableSpotRate
+  const borrowableOracleAmount = userTotalCollateral
+    .multiply(LTV)
+    .multiply(e10(18).toString())
+    .divide(JSBI.BigInt(market.oracleExchangeRate)).asFraction
+  const borrowableSpotAmount = userTotalCollateral
+    .multiply(LTV)
+    .multiply(e10(18).toString())
+    .divide(JSBI.BigInt(market.spotExchangeRate)).asFraction
+  const borrowableMinimum = borrowableOracleAmount.lessThan(borrowableSpotAmount)
+    ? borrowableOracleAmount
+    : borrowableSpotAmount
 
   const borrowableMinimumPadded = borrowableMinimum
     .multiply(PADDING)
-    .subtract(CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount.string || '0'))
+    .asFraction.subtract(
+      CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount.string || '0')
+    )
 
   const maxAvailableBorrow = CurrencyAmount.fromRawAmount(borrowAmount.currency, market.maxAssetAvailable.toString())
-
-  console.log({
-    userCollateralAmount: userCollateralAmount.quotient.toString(),
-    totalCollateral: totalCollateral.quotient.toString(),
-    oracleRate: oracleRate.quotient.toString(),
-    spotRate: spotRate.quotient.toString(),
-    borrowableOracleRate: borrowableOracleRate.quotient.toString(),
-    borrowableSpotRate: borrowableSpotRate.quotient.toString(),
-    borrowableMinimum: borrowableMinimum.quotient.toString(),
-    borrowableMinimumPadded: borrowableMinimumPadded.quotient.toString(),
-    maxAvailableBorrow: maxAvailableBorrow.quotient.toString(),
-  })
 
   return borrowableMinimumPadded.greaterThan(ZERO)
     ? borrowableMinimumPadded.greaterThan(maxAvailableBorrow)
       ? maxAvailableBorrow
-      : borrowableMinimumPadded
+      : CurrencyAmount.fromRawAmount(borrowAmount.currency, borrowableMinimumPadded.quotient)
     : CurrencyAmount.fromRawAmount(borrowAmount.currency, '0')
 }
 
