@@ -8,10 +8,8 @@ import {
   computePairAddress,
   Currency,
   FACTORY_ADDRESS,
-  JSBI,
   KASHI_ADDRESS,
   Pair,
-  Percent,
   Token,
 } from '@sushiswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
@@ -36,7 +34,6 @@ import {
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSingleHopOnly,
-  updateUserSlippageTolerance,
   updateUserUseOpenMev,
 } from './actions'
 
@@ -94,43 +91,7 @@ export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) =>
   return [singleHopOnly, setSingleHopOnly]
 }
 
-export function useSetUserSlippageTolerance(): (slippageTolerance: Percent | 'auto') => void {
-  const dispatch = useAppDispatch()
-
-  return useCallback(
-    (userSlippageTolerance: Percent | 'auto') => {
-      let value: 'auto' | number
-      try {
-        value =
-          userSlippageTolerance === 'auto' ? 'auto' : JSBI.toNumber(userSlippageTolerance.multiply(10_000).quotient)
-      } catch (error) {
-        value = 'auto'
-      }
-      dispatch(
-        updateUserSlippageTolerance({
-          userSlippageTolerance: value,
-        })
-      )
-    },
-    [dispatch]
-  )
-}
-
-/**
- * Return the user's slippage tolerance, from the redux store, and a function to update the slippage tolerance
- */
-export function useUserSlippageTolerance(): Percent | 'auto' {
-  const userSlippageTolerance = useAppSelector((state) => {
-    return state.user.userSlippageTolerance
-  })
-
-  return useMemo(
-    () => (userSlippageTolerance === 'auto' ? 'auto' : new Percent(userSlippageTolerance, 10_000)),
-    [userSlippageTolerance]
-  )
-}
-
-export function useUserTransactionTTL(): [number, (slippage: number) => void] {
+export function useUserTransactionTTL(): [number, (userDeadline: number) => void] {
   const dispatch = useAppDispatch()
   const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>((state) => {
     return state.user.userDeadline
@@ -407,18 +368,6 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 
     return Object.keys(keyed).map((key) => keyed[key])
   }, [combinedList])
-}
-
-/**
- * Same as above but replaces the auto with a default value
- * @param defaultSlippageTolerance the default value to replace auto with
- */
-export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Percent): Percent {
-  const allowedSlippage = useUserSlippageTolerance()
-  return useMemo(
-    () => (allowedSlippage === 'auto' ? defaultSlippageTolerance : allowedSlippage),
-    [allowedSlippage, defaultSlippageTolerance]
-  )
 }
 
 /**

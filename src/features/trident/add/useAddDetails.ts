@@ -4,12 +4,11 @@ import { useAddLiquidityDerivedCurrencyAmounts } from 'app/features/trident/add/
 import { usePoolContext } from 'app/features/trident/PoolContext'
 import { getPriceOfNewPool } from 'app/features/trident/utils'
 import { calculateSlippageAmount, toShareCurrencyAmount } from 'app/functions'
-import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { useMemo } from 'react'
 
-import { DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE } from '../constants'
-
-export const useAddDetails = (defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) => {
+export const useAddDetails = () => {
   const {
     poolWithState,
     totalSupply,
@@ -20,7 +19,7 @@ export const useAddDetails = (defaultSlippage: Percent = DEFAULT_ADD_V2_SLIPPAGE
     liquidityValue: liquidityValueBefore,
     currencies,
   } = usePoolContext()
-  const slippage = useUserSlippageToleranceWithDefault(defaultSlippage)
+  const slippage = useAppSelector(selectSlippage)
   const parsedAmounts = useAddLiquidityDerivedCurrencyAmounts()
 
   // Returns the minimum SLP that will get minted given current input amounts

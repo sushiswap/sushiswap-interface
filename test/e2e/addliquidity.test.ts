@@ -85,6 +85,7 @@ describe('Add Liquidity:', () => {
     const usdcWalletBalanceAfter = await addLiquidityPage.getAssetABalance(true)
 
     const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
@@ -127,6 +128,7 @@ describe('Add Liquidity:', () => {
     const ethWalletBalanceAfter = await addLiquidityPage.getAssetBBalance(true)
 
     const ethBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
@@ -169,6 +171,7 @@ describe('Add Liquidity:', () => {
     const ethBalanceAfter = await addLiquidityPage.getAssetBBalance(false)
 
     const ethBalanceDiff = ethBalanceBefore - ethBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(ethBalanceDiff, ethDepositAmount, 1e-9)).toBe(true)
@@ -219,6 +222,7 @@ describe('Add Liquidity:', () => {
 
     const assetABalanceDiff = assetAWalletBalanceBefore - assetAWalletBalanceAfter
     const assetBBalanceDiff = assetBWalletBalanceBefore - assetBWalletBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(assetABalanceDiff, assetADepositAmount, 1e-9)).toBe(true)
@@ -271,6 +275,7 @@ describe('Add Liquidity:', () => {
 
     const assetABalanceDiff = usdcBentoBalanceBefore - usdcBentoBalanceAfter
     const assetBBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(assetABalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
@@ -323,6 +328,7 @@ describe('Add Liquidity:', () => {
 
     const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
     const ethBalanceDiff = ethBentoBalanceBefore - ethBentoBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
@@ -377,6 +383,7 @@ describe('Add Liquidity:', () => {
 
     const usdcBalanceDiff = usdcBentoBalanceBefore - usdcBentoBalanceAfter
     const ethBalanceDiff = ethBentoBalanceBefore - ethBentoBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
@@ -428,6 +435,7 @@ describe('Add Liquidity:', () => {
 
     const assetABalanceDiff = assetABentoBalanceBefore - assetABentoBalanceAfter
     const assetBBalanceDiff = assetBBentoBalanceBefore - assetBBentoBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(assetABalanceDiff, assetADepositAmount, 1e-9)).toBe(true)
@@ -482,6 +490,7 @@ describe('Add Liquidity:', () => {
 
     const usdcBalanceDiff = usdcWalletBalanceBefore - usdcWalletBalanceAfter
     const ethBalanceDiff = ethWalletBalanceBefore - ethWalletBalanceAfter
+    // @ts-ignore TYPE NEEDS FIXING
     const slpAmountDiff = positionAfterDeposit.slpAmount - positionBeforeDeposit.slpAmount
 
     expect(closeValues(usdcBalanceDiff, usdcDepositAmount, 1e-9)).toBe(true)
