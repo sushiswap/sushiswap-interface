@@ -44,34 +44,40 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
               }
             />
           </Typography>
-          <Tooltip
-            text={
-              <div className="flex flex-col">
-                <div className="flex justify-between gap-4">
-                  <Typography variant="xs">{i18n._(t`Strategy APY`)}</Typography>
-                  <Typography variant="xs" className="text-right">
-                    {formatPercent(market.asset.strategy.apy)}
-                  </Typography>
+          {market.asset.strategy ? (
+            <Tooltip
+              text={
+                <div className="flex flex-col">
+                  <div className="flex justify-between gap-4">
+                    <Typography variant="xs">{i18n._(t`Strategy APY`)}</Typography>
+                    <Typography variant="xs" className="text-right">
+                      {formatPercent(market.asset.strategy.apy)}
+                    </Typography>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <Typography variant="xs">{i18n._(t`Current Percentage`)}</Typography>
+                    <Typography variant="xs" className="text-right">
+                      {formatPercent(market.asset.strategy.targetPercentage)}
+                    </Typography>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <Typography variant="xs">{i18n._(t`Target Percentage`)}</Typography>
+                    <Typography variant="xs" className="text-right">
+                      {formatPercent(market.asset.strategy.utilization)}
+                    </Typography>
+                  </div>
                 </div>
-                <div className="flex justify-between gap-4">
-                  <Typography variant="xs">{i18n._(t`Current Percentage`)}</Typography>
-                  <Typography variant="xs" className="text-right">
-                    {formatPercent(market.asset.strategy.targetPercentage)}
-                  </Typography>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <Typography variant="xs">{i18n._(t`Target Percentage`)}</Typography>
-                  <Typography variant="xs" className="text-right">
-                    {formatPercent(market.asset.strategy.utilization)}
-                  </Typography>
-                </div>
-              </div>
-            }
-          >
+              }
+            >
+              <Typography variant="xs" className={classNames(market.asset.strategy ? 'text-blue' : '', 'text-right')}>
+                {market.asset.strategy ? i18n._(t`Active`) : i18n._(t`None`)}{' '}
+              </Typography>
+            </Tooltip>
+          ) : (
             <Typography variant="xs" className={classNames(market.asset.strategy ? 'text-blue' : '', 'text-right')}>
               {market.asset.strategy ? i18n._(t`Active`) : i18n._(t`None`)}{' '}
             </Typography>
-          </Tooltip>
+          )}
         </div>
       </div>
       <div className="flex flex-col gap-1 pt-2">
