@@ -3,7 +3,7 @@ import { ChevronDownIcon } from '@heroicons/react/outline'
 import { ArrowSmRightIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Price, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Percent, Price, ZERO } from '@sushiswap/core-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
@@ -16,9 +16,11 @@ interface KashiMarketBorrowDetailsView {
   market: KashiMarket
   collateralAmount?: CurrencyAmount<Currency>
   borrowAmount?: CurrencyAmount<Currency>
+  priceImpact?: Percent
 }
 
 const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
+  priceImpact,
   market,
   collateralAmount,
   borrowAmount,
@@ -40,6 +42,14 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
             75%
           </Typography>
         </div>
+        {priceImpact && (
+          <div className="flex justify-between gap-4">
+            <Typography variant="xs">{i18n._(t`Price Impact`)}</Typography>
+            <Typography variant="xs" className="text-right">
+              {priceImpact.toSignificant(2)}%
+            </Typography>
+          </div>
+        )}
         <div className="flex justify-between gap-4">
           <Typography variant="xs" className="flex items-center">
             {i18n._(t`BentoBox strategy`)}
@@ -133,7 +143,12 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
   )
 }
 
-const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({ market, collateralAmount, borrowAmount }) => {
+const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
+  priceImpact,
+  market,
+  collateralAmount,
+  borrowAmount,
+}) => {
   const { i18n } = useLingui()
   const [invert, setInvert] = useState(false)
 
@@ -207,6 +222,7 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({ market
           >
             <Disclosure.Panel static className="px-1 pt-2">
               <KashiMarketBorrowDetailsContentView
+                priceImpact={priceImpact}
                 market={market}
                 collateralAmount={collateralAmount}
                 borrowAmount={borrowAmount}
