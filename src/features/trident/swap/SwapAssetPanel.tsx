@@ -12,11 +12,12 @@ import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
 import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { FC, ForwardedRef, forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import BentoBoxFundingSourceModal from '../add/BentoBoxFundingSourceModal'
 
 interface SwapAssetPanel {
+  ref?: ForwardedRef<HTMLInputElement>
   error?: boolean
   // @ts-ignore TYPE NEEDS FIXING
   header: (x) => React.ReactNode
@@ -34,54 +35,65 @@ interface SwapAssetPanel {
   disabled?: boolean
 }
 
-const SwapAssetPanel = ({
-  error,
-  header,
-  walletToggle,
-  currency,
-  value,
-  onChange,
-  selected,
-  onSelect,
-  spendFromWallet,
-  priceImpact,
-  priceImpactCss,
-  disabled,
-  currencies,
-}: SwapAssetPanel) => {
-  return (
-    <div className="rounded-[14px] border border-dark-700 hover:border-dark-600 bg-dark-900 p-3 flex flex-col gap-4">
-      {header({
-        disabled,
-        onChange,
-        value,
-        currency,
-        currencies,
-        onSelect,
-        walletToggle,
-        spendFromWallet,
-      })}
-      <div className="flex gap-1 justify-between items-baseline px-1.5">
-        <InputPanel
-          {...{
-            selected,
-            error,
-            currency,
-            currencies,
-            value,
-            onChange,
-            disabled,
-            onSelect,
-            priceImpact,
-            priceImpactCss,
-            spendFromWallet,
-          }}
-        />
-        <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
+const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAssetPanel>(
+  (
+    {
+      error,
+      header,
+      walletToggle,
+      currency,
+      value,
+      onChange,
+      selected,
+      onSelect,
+      spendFromWallet,
+      priceImpact,
+      priceImpactCss,
+      disabled,
+      currencies,
+    },
+    ref
+  ) => {
+    return (
+      <div
+        className={classNames(
+          error ? 'border-red-800 hover:border-red-500' : 'border-dark-700 hover:border-dark-600',
+          'rounded-[14px] border bg-dark-900 p-3 flex flex-col gap-4'
+        )}
+      >
+        {header({
+          disabled,
+          onChange,
+          value,
+          currency,
+          currencies,
+          onSelect,
+          walletToggle,
+          spendFromWallet,
+        })}
+        <div className="flex gap-1 justify-between items-baseline px-1.5">
+          <InputPanel
+            {...{
+              ref,
+              selected,
+              error,
+              currency,
+              currencies,
+              value,
+              onChange,
+              disabled,
+              onSelect,
+              priceImpact,
+              priceImpactCss,
+              spendFromWallet,
+            }}
+          />
+          <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
+)
 
 const WalletSwitch: FC<
   Pick<SwapAssetPanel, 'spendFromWallet' | 'disabled'> & {
@@ -123,8 +135,10 @@ const WalletSwitch: FC<
 }
 
 const InputPanel: FC<
-  Pick<SwapAssetPanel, 'currency' | 'value' | 'onChange' | 'disabled' | 'priceImpact'> & { priceImpactCss?: string }
-> = ({ currency, value, onChange, disabled, priceImpact, priceImpactCss }) => {
+  Pick<SwapAssetPanel, 'currency' | 'value' | 'onChange' | 'disabled' | 'priceImpact'> & {
+    priceImpactCss?: string
+  }
+> = forwardRef(({ currency, value, onChange, disabled, priceImpact, priceImpactCss }, ref) => {
   const usdcValue = useUSDCValue(tryParseAmount(value || '1', currency))
   const span = useRef<HTMLSpanElement | null>(null)
   const [width, setWidth] = useState(0)
@@ -148,6 +162,7 @@ const InputPanel: FC<
   return (
     <Typography weight={700} variant="h3" className="relative flex items-baseline flex-grow gap-3 overflow-hidden">
       <NumericalInput
+        ref={ref}
         disabled={disabled}
         value={value || ''}
         onUserInput={onChange}
@@ -155,26 +170,30 @@ const InputPanel: FC<
         className="leading-[36px] focus:placeholder:text-low-emphesis flex-grow w-full text-left bg-transparent text-inherit disabled:cursor-not-allowed"
         autoFocus
       />
-      <Typography
-        variant="xs"
-        className="text-secondary absolute bottom-1.5 pointer-events-none"
-        component="span"
-        style={{ left: width }}
-      >
-        {usdcValue?.greaterThan(ZERO) && <>~{formatNumber(usdcValue?.toFixed(), true, true, 2)} </>}
-        {priceImpact && (
-          <span className={priceImpactCss || priceImpactClassName}>({priceImpact?.toSignificant(2)}%)</span>
-        )}
-      </Typography>
-      {/*This acts as a reference to get input width*/}
-      <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
-        <span ref={span} className="opacity-0 absolute pointer-events-none tracking-[0]">
-          {`${value ? value : '0.00'}`}
-        </span>
-      </Typography>
+      {!ref && (
+        <>
+          <Typography
+            variant="xs"
+            className="text-secondary absolute bottom-1.5 pointer-events-none"
+            component="span"
+            style={{ left: width }}
+          >
+            {usdcValue?.greaterThan(ZERO) && <>~{formatNumber(usdcValue?.toFixed(), true, true, 2)} </>}
+            {priceImpact && (
+              <span className={priceImpactCss || priceImpactClassName}>({priceImpact?.toSignificant(2)}%)</span>
+            )}
+          </Typography>
+          {/*This acts as a reference to get input width*/}
+          <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
+            <span ref={span} className="opacity-0 absolute pointer-events-none tracking-[0]">
+              {`${value ? value : '0.00'}`}
+            </span>
+          </Typography>
+        </>
+      )}
     </Typography>
   )
-}
+})
 
 const BalancePanel: FC<Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange' | 'spendFromWallet'>> = ({
   disabled,
@@ -252,7 +271,4 @@ const SwapAssetPanelHeader: FC<
   )
 }
 
-SwapAssetPanel.Header = SwapAssetPanelHeader
-SwapAssetPanel.Switch = WalletSwitch
-
-export default SwapAssetPanel
+export default Object.assign(SwapAssetPanel, { Header: SwapAssetPanelHeader, Switch: WalletSwitch })

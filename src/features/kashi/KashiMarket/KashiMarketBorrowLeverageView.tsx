@@ -2,20 +2,17 @@ import { Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Fraction } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Price, ZERO } from '@sushiswap/core-sdk'
 import CloseIcon from 'app/components/CloseIcon'
 import QuestionHelper from 'app/components/QuestionHelper'
+import SettingsTab from 'app/components/Settings'
 import Slider from 'app/components/Slider'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
+import { LTV } from 'app/features/kashi/constants'
 import { KashiMarket } from 'app/features/kashi/types'
 import { classNames } from 'app/functions'
-import { useUSDCPrice } from 'app/hooks'
-import { useCurrency } from 'app/hooks/Tokens'
 import React, { FC, useCallback, useState } from 'react'
-
-const LTV = 75
-const LIQUIDATION_MULTIPLIER = 200 - LTV
 
 const LeverageColor = (x: number) => {
   if (x < 1) return 'text-green'
@@ -24,18 +21,27 @@ const LeverageColor = (x: number) => {
 }
 
 interface KashiMarketBorrowLeverageView {
+  borrowAmount?: CurrencyAmount<Currency>
+  collateralAmount: CurrencyAmount<Currency>
   market: KashiMarket
   onChange(x: string): void
+  afterChange?(x: string): void
   enabled: boolean
   onSwitch(): void
 }
 
-const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({ enabled, onSwitch, market, onChange }) => {
+const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
+  borrowAmount,
+  collateralAmount,
+  enabled,
+  onSwitch,
+  market,
+  onChange,
+  afterChange,
+}) => {
   const { i18n } = useLingui()
   const [range, setRange] = useState<number>(0.5)
-  const asset = useCurrency(market.asset.address) ?? undefined
-  const collateral = useCurrency(market.collateral.address) ?? undefined
-  const usdcPrice = useUSDCPrice(asset)
+  const [invert, setInvert] = useState(false)
 
   const handleChange = useCallback(
     (value: number) => {
@@ -45,14 +51,16 @@ const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({ enab
     [onChange]
   )
 
-  const borrowPart = asset ? CurrencyAmount.fromRawAmount(asset, market.userBorrowPart.toString()) : undefined
-  const collateralShare = collateral
-    ? CurrencyAmount.fromRawAmount(collateral, market.userCollateralShare.toString())
-    : undefined
-  const quote = borrowPart && usdcPrice ? usdcPrice.quote(borrowPart) : undefined
-  const share = quote && collateralShare ? quote.divide(collateralShare) : undefined
-  const liquidationRatio = share && usdcPrice ? share.multiply(usdcPrice.invert()) : undefined
-  const liquidationPrice = liquidationRatio?.multiply(new Fraction(LIQUIDATION_MULTIPLIER, 100))
+  const liquidationPrice =
+    borrowAmount && collateralAmount && borrowAmount.greaterThan(ZERO)
+      ? new Price({ baseAmount: borrowAmount.multiply(LTV), quoteAmount: collateralAmount })
+      : undefined
+
+  const price = invert
+    ? `1 ${collateralAmount?.currency.symbol} = ${liquidationPrice?.invert().toSignificant(6)} ${
+        borrowAmount?.currency.symbol
+      }`
+    : `1 ${borrowAmount?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${collateralAmount?.currency.symbol}`
 
   return (
     <div
@@ -67,7 +75,7 @@ const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({ enab
           <QuestionHelper
             text={
               <div className="flex flex-col gap-2">
-                <Typography variant="xs">
+                <Typography variant="xs" className="text-white">
                   {i18n._(
                     t`Leverage your position by swapping the received borrowed ${market.asset.symbol} for ${market.collateral.symbol} and use that as extra collateral to borrow more ${market.asset.symbol}.`
                   )}
@@ -79,15 +87,18 @@ const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({ enab
             }
           />
         </Typography>
-        <Switch
-          size="sm"
-          id="toggle-expert-mode-button"
-          checked={enabled}
-          onChange={onSwitch}
-          checkedIcon={<CheckIcon className="text-dark-700" />}
-          uncheckedIcon={<CloseIcon />}
-          color="gradient"
-        />
+        <div className="flex gap-2 items-center">
+          <Switch
+            size="sm"
+            id="toggle-expert-mode-button"
+            checked={enabled}
+            onChange={onSwitch}
+            checkedIcon={<CheckIcon className="text-dark-700" />}
+            uncheckedIcon={<CloseIcon />}
+            color="gradient"
+          />
+          <SettingsTab />
+        </div>
       </div>
       <Transition
         show={enabled}
@@ -100,24 +111,30 @@ const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({ enab
             <Slider
               value={range}
               onChange={handleChange}
+              onAfterChange={() => afterChange && afterChange(range.toString())}
               marks={[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2]}
               min={0.25}
               max={2}
-              step={0.25}
+              step={0.01}
               defaultValue={0.5}
               markFormatter={(mark) => `${mark}x`}
             />
           </div>
           <div className="flex justify-between gap-4">
-            <Typography variant="xs">{i18n._(t`Liquidation Price`)}</Typography>
-            <Typography variant="sm" weight={700} className={classNames(LeverageColor(range))}>
+            <Typography variant="xs">{i18n._(t`Position Leverage`)}</Typography>
+            <Typography variant="xs" weight={700} className={classNames(LeverageColor(range))}>
               {range.toFixed(2)}x
             </Typography>
           </div>
           <div className="flex justify-between gap-4">
-            <Typography variant="xs">{i18n._(t`Position Leverage`)}</Typography>
-            <Typography variant="xs" weight={700} className={classNames(LeverageColor(range))}>
-              {liquidationPrice?.toSignificant(6)} {liquidationPrice?.currency.symbol}
+            <Typography variant="xs">{i18n._(t`Liquidation Price`)}</Typography>
+            <Typography
+              variant="xs"
+              weight={700}
+              className="text-high-emphesis"
+              onClick={() => setInvert((prev) => !prev)}
+            >
+              {price}
             </Typography>
           </div>
         </div>

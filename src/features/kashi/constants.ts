@@ -1,10 +1,5 @@
-import { ChainId } from '@sushiswap/core-sdk'
+import { Fraction, Percent } from '@sushiswap/core-sdk'
 
-export const KASHI_NETWORKS = [
-  ChainId.ETHEREUM,
-  ChainId.MATIC,
-  ChainId.XDAI,
-  ChainId.BSC,
-  ChainId.ARBITRUM,
-  ChainId.HECO,
-]
+export const LTV = new Fraction(75, 100)
+export const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
+export const PADDING = new Fraction(95, 100)

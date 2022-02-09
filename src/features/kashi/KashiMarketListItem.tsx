@@ -36,8 +36,6 @@ const KashiMarketListItem: FC<KashiMarketListItem> = ({ market }) => {
 
   const currentInterestPerYear = new Percent(market.currentInterestPerYear, 1e18)
 
-  console.log({ currentAllAssetsUSDLoading, currentBorrowAmountUSDLoading, totalAssetAmountLoading })
-
   return (
     <div className={classNames(TABLE_TBODY_TR_CLASSNAME, 'grid grid-cols-6')} onClick={() => {}}>
       <div className={classNames('flex gap-2', TABLE_TBODY_TD_CLASSNAME(0, 6))}>

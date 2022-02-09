@@ -1,24 +1,20 @@
 import { classNames, escapeRegExp } from 'app/functions'
-import React from 'react'
+import React, { FC, forwardRef } from 'react'
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
 const defaultClassName = 'w-0 p-0 text-2xl bg-transparent'
 
-export const Input = React.memo(
-  ({
-    value,
-    onUserInput,
-    placeholder,
-    className = defaultClassName,
-    ...rest
-  }: {
-    value: string | number
-    onUserInput: (input: string) => void
-    error?: boolean
-    fontSize?: string
-    align?: 'right' | 'left'
-  } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
+interface Input extends Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'> {
+  value: string | number
+  onUserInput: (input: string) => void
+  error?: boolean
+  fontSize?: string
+  align?: 'right' | 'left'
+}
+
+export const Input: FC<Input> = forwardRef<HTMLInputElement, Input>(
+  ({ value, onUserInput, placeholder, className = defaultClassName, ...rest }, ref) => {
     const enforcer = (nextUserInput: string) => {
       if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
         onUserInput(nextUserInput)
@@ -28,6 +24,7 @@ export const Input = React.memo(
     return (
       <input
         {...rest}
+        ref={ref}
         value={value}
         onChange={(event) => {
           // replace commas with periods, because uniswap exclusively uses period as the decimal separator

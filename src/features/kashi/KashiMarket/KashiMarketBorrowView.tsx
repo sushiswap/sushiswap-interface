@@ -1,15 +1,18 @@
+import { Transition } from '@headlessui/react'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, Fraction, ZERO } from '@sushiswap/core-sdk'
+import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
+import { LTV } from 'app/features/kashi/constants'
 import { KashiMarketBorrowDetailsView } from 'app/features/kashi/KashiMarket/index'
+import KashiMarketBorrowButton from 'app/features/kashi/KashiMarket/KashiMarketBorrowButton'
 import KashiMarketBorrowLeverageView from 'app/features/kashi/KashiMarket/KashiMarketBorrowLeverageView'
 import useMaxBorrow from 'app/features/kashi/KashiMarket/useMaxBorrow'
 import { KashiMarket } from 'app/features/kashi/types'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { tryParseAmount } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
-import React, { FC, useCallback, useState } from 'react'
+import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 
 interface KashiMarketBorrowView {
   market: KashiMarket
@@ -17,23 +20,28 @@ interface KashiMarketBorrowView {
 
 const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
   const { i18n } = useLingui()
+
+  const inputRef = useRef<HTMLInputElement>(null)
   const [leverage, setLeverage] = useState<boolean>(false)
   const [spendFromWallet, setSpendFromWallet] = useState<boolean>(true)
   const [receiveInWallet, setReceiveInWallet] = useState<boolean>(true)
 
   const collateral = useCurrency(market.collateral.address) ?? undefined
-  const [collateralAmount, setCollateralAmount] = useState<string>()
-
   const asset = useCurrency(market.asset.address) ?? undefined
+
+  const [collateralAmount, setCollateralAmount] = useState<string>()
   const [borrowAmount, setBorrowAmount] = useState<string>()
-  const [leveragedAmount, setLeveragedAmount] = useState<string>()
 
-  const borrowAmountCurrencyAmount =
-    tryParseAmount(borrowAmount || '0', asset) ?? (asset ? CurrencyAmount.fromRawAmount(asset, '0') : undefined)
-  const collateralAmountCurrencyAmount =
-    tryParseAmount(collateralAmount || '0', collateral) ??
-    (collateral ? CurrencyAmount.fromRawAmount(collateral, '0') : undefined)
-
+  const borrowAmountCurrencyAmount = useMemo(
+    () => tryParseAmount(borrowAmount || '0', asset) ?? (asset ? CurrencyAmount.fromRawAmount(asset, '0') : undefined),
+    [asset, borrowAmount]
+  )
+  const collateralAmountCurrencyAmount = useMemo(
+    () =>
+      tryParseAmount(collateralAmount || '0', collateral) ??
+      (collateral ? CurrencyAmount.fromRawAmount(collateral, '0') : undefined),
+    [collateral, collateralAmount]
+  )
   const maxBorrow = useMaxBorrow({
     leveraged: leverage,
     borrowAmount: borrowAmountCurrencyAmount,
@@ -41,31 +49,35 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
     market,
   })
 
-  const onMultiply = (multiplier: string) => {
-    if (!collateral || !asset || !collateralAmountCurrencyAmount) return
+  const onMultiply = useCallback(
+    (multiplier: string, persist: boolean = false) => {
+      if (!collateral || !asset || !collateralAmountCurrencyAmount) return
 
-    const multiplied = collateralAmountCurrencyAmount
-      .add(
-        collateralAmountCurrencyAmount
-          .multiply(multiplier.toBigNumber(collateral.decimals).toString())
-          .divide('1'.toBigNumber(collateral.decimals).toString())
-      )
-      .multiply(new Fraction(75, 100))
-      .divide(market.currentExchangeRate.toString())
+      const multiplied = collateralAmountCurrencyAmount
+        .add(
+          collateralAmountCurrencyAmount
+            .multiply(multiplier.toBigNumber(collateral.decimals).toString())
+            .divide('1'.toBigNumber(collateral.decimals).toString())
+        )
+        .multiply(LTV)
+        .divide(market.currentExchangeRate.toString())
 
-    setLeveragedAmount(multiplied.asFraction.toFixed(asset.decimals))
-  }
+      if (inputRef.current) {
+        inputRef.current.value = multiplied.asFraction.toSignificant(6)
+      }
 
-  const handleSetBorrowAmount = useCallback((value: string) => {
-    setLeveragedAmount(undefined)
-    setBorrowAmount(value)
-  }, [])
+      if (persist) {
+        setBorrowAmount(multiplied.asFraction.toSignificant(6))
+      }
+    },
+    [asset, collateral, collateralAmountCurrencyAmount, inputRef, market.currentExchangeRate]
+  )
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col gap-2">
         <SwapAssetPanel
-          error={false}
+          error={borrowAmountCurrencyAmount && maxBorrow ? borrowAmountCurrencyAmount.greaterThan(maxBorrow) : false}
           header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} />}
           walletToggle={(props) => (
             <SwapAssetPanel.Switch
@@ -89,32 +101,59 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
       </div>
       <div className="flex flex-col gap-2">
         <SwapAssetPanel
+          ref={inputRef}
           error={false}
           header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Borrow`)} />}
           walletToggle={(props) => (
-            <SwapAssetPanel.Switch
-              id={`switch-classic-withdraw-from-0}`}
-              {...props}
-              label={i18n._(t`Receive in`)}
-              onChange={() => setReceiveInWallet((prev) => !prev)}
-            />
+            <Transition
+              show={!leverage}
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-100 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <SwapAssetPanel.Switch
+                id={`switch-classic-withdraw-from-0}`}
+                {...props}
+                label={i18n._(t`Receive in`)}
+                onChange={() => setReceiveInWallet((prev) => !prev)}
+              />
+            </Transition>
           )}
           spendFromWallet={receiveInWallet}
           currency={asset}
-          value={leverage ? leveragedAmount : borrowAmount}
-          onChange={leverage ? setLeveragedAmount : handleSetBorrowAmount}
+          value={borrowAmount}
+          onChange={setBorrowAmount}
           currencies={[]}
         />
       </div>
-      {collateralAmountCurrencyAmount?.greaterThan(ZERO) && borrowAmountCurrencyAmount?.greaterThan(ZERO) && (
+      {collateralAmountCurrencyAmount?.greaterThan(ZERO) && (
         <KashiMarketBorrowLeverageView
+          borrowAmount={borrowAmountCurrencyAmount}
+          collateralAmount={collateralAmountCurrencyAmount}
           market={market}
           enabled={leverage}
           onSwitch={() => setLeverage((prev) => !prev)}
-          onChange={onMultiply}
+          onChange={(val) => onMultiply(val, false)}
+          afterChange={(val) => onMultiply(val, true)}
         />
       )}
-      <KashiMarketBorrowDetailsView market={market} />
+      <KashiMarketBorrowDetailsView
+        market={market}
+        borrowAmount={borrowAmountCurrencyAmount}
+        collateralAmount={collateralAmountCurrencyAmount}
+      />
+      <KashiMarketBorrowButton
+        borrowAmount={borrowAmountCurrencyAmount}
+        market={market}
+        collateralAmount={collateralAmountCurrencyAmount}
+        spendFromWallet={spendFromWallet}
+        maxBorrow={maxBorrow}
+        leveraged={leverage}
+        receiveInWallet={receiveInWallet}
+      />
     </div>
   )
 }

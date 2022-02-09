@@ -1,12 +1,9 @@
-import { Currency, CurrencyAmount, Fraction, JSBI, Percent, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, JSBI, ZERO } from '@sushiswap/core-sdk'
+import { DEFAULT_BORROW_SLIPPAGE_TOLERANCE, LTV, PADDING } from 'app/features/kashi/constants'
 import { KashiMarket } from 'app/features/kashi/types'
 import { e10 } from 'app/functions'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
-
-const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
-const LTV = new Fraction(75, 100)
-const PADDING = new Fraction(95, 100)
 
 interface UseMaxBorrowPayload {
   leveraged: boolean
@@ -17,9 +14,9 @@ interface UseMaxBorrowPayload {
 
 type UseMaxBorrow = (x: UseMaxBorrowPayload) => CurrencyAmount<Currency> | undefined
 const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrowAmount, market }) => {
-  const foundTrade = useV2TradeExactIn(borrowAmount, collateralAmount?.currency)
+  const trade = useV2TradeExactIn(borrowAmount, collateralAmount?.currency, { maxHops: 3 })
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_BORROW_SLIPPAGE_TOLERANCE)
-  const swapCollateralAmount = leveraged ? foundTrade?.minimumAmountOut(allowedSlippage) : undefined
+  const swapCollateralAmount = leveraged ? trade?.minimumAmountOut(allowedSlippage) : undefined
 
   if (!collateralAmount || !borrowAmount) {
     return undefined
@@ -36,6 +33,7 @@ const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrowAmount,
     userTotalCollateral = userTotalCollateral.add(swapCollateralAmount)
   }
 
+  console.log(swapCollateralAmount?.quotient.toString())
   const borrowableOracleAmount = userTotalCollateral
     .multiply(LTV)
     .multiply(e10(18).toString())
@@ -47,13 +45,11 @@ const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrowAmount,
   const borrowableMinimum = borrowableOracleAmount.lessThan(borrowableSpotAmount)
     ? borrowableOracleAmount
     : borrowableSpotAmount
-
   const borrowableMinimumPadded = borrowableMinimum
     .multiply(PADDING)
     .asFraction.subtract(
       CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount.string || '0')
     )
-
   const maxAvailableBorrow = CurrencyAmount.fromRawAmount(borrowAmount.currency, market.maxAssetAvailable.toString())
 
   return borrowableMinimumPadded.greaterThan(ZERO)

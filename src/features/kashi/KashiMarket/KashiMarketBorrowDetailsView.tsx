@@ -1,30 +1,39 @@
 import { Disclosure, Transition } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/outline'
+import { ArrowSmRightIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import Chip from 'app/components/Chip'
+import { Currency, CurrencyAmount, Price, ZERO } from '@sushiswap/core-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
+import { LTV } from 'app/features/kashi/constants'
 import { KashiMarket } from 'app/features/kashi/types'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
-import React, { FC, Fragment } from 'react'
+import React, { FC, Fragment, useState } from 'react'
 
 interface KashiMarketBorrowDetailsView {
   market: KashiMarket
+  collateralAmount?: CurrencyAmount<Currency>
+  borrowAmount?: CurrencyAmount<Currency>
 }
 
-const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({ market }) => {
+const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
+  market,
+  collateralAmount,
+  borrowAmount,
+}) => {
   const { i18n } = useLingui()
   return (
     <div className="flex flex-col divide-y divide-dark-850">
       <div className="flex flex-col gap-1 pb-2">
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`APR (annualized)`)}</Typography>
-          <Typography weight={700} variant="xs" className="text-right">
+          <Typography variant="xs" className="text-right">
             {formatPercent(market.currentInterestPerYear.string)}
           </Typography>
         </div>
+
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`Loan to Value (LTV)`)}</Typography>
           <Typography variant="xs" className="text-right">
@@ -83,19 +92,33 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
       <div className="flex flex-col gap-1 pt-2">
         <div className="flex justify-between gap-4">
           <Typography variant="xs" className="text-secondary">
-            {i18n._(t`Total Borrowed`)}
+            {i18n._(t`Total collateral`)}
           </Typography>
-          <Typography variant="xs" className="text-right text-secondary">
-            {formatNumber(market.currentBorrowAmount.string)} {market.asset.tokenInfo.symbol}
-          </Typography>
+          <div className="flex gap-1">
+            <Typography variant="xs" className="text-right text-secondary">
+              {formatNumber(market.userCollateralAmount.string)} {market.collateral.tokenInfo.symbol}
+            </Typography>
+            <ArrowSmRightIcon width={14} className="text-secondary" />
+            <Typography variant="xs" className="text-right text-secondary">
+              {formatNumber(+market.userCollateralAmount.string + +(collateralAmount?.toExact() || 0))}{' '}
+              {market.collateral.tokenInfo.symbol}
+            </Typography>
+          </div>
         </div>
         <div className="flex justify-between gap-4">
           <Typography variant="xs" className="text-secondary">
-            {i18n._(t`Available`)}
+            {i18n._(t`Total borrowed`)}
           </Typography>
-          <Typography variant="xs" className="text-right text-secondary">
-            {formatNumber(market.totalAssetAmount.string)} {market.asset.tokenInfo.symbol}
-          </Typography>
+          <div className="flex gap-1">
+            <Typography variant="xs" className="text-right text-secondary">
+              {formatNumber(market.currentUserBorrowAmount.string)} {market.asset.tokenInfo.symbol}
+            </Typography>
+            <ArrowSmRightIcon width={14} className="text-secondary" />
+            <Typography variant="xs" className="text-right text-secondary">
+              {formatNumber(+market.currentUserBorrowAmount.string + +(borrowAmount?.toExact() || 0))}{' '}
+              {market.asset.tokenInfo.symbol}
+            </Typography>
+          </div>
         </div>
         <div className="flex justify-between gap-4">
           <Typography variant="xs" className="text-secondary">
@@ -110,7 +133,21 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
   )
 }
 
-const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({ market }) => {
+const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({ market, collateralAmount, borrowAmount }) => {
+  const { i18n } = useLingui()
+  const [invert, setInvert] = useState(false)
+
+  const liquidationPrice =
+    borrowAmount && collateralAmount && borrowAmount.greaterThan(ZERO)
+      ? new Price({ baseAmount: borrowAmount.multiply(LTV), quoteAmount: collateralAmount })
+      : undefined
+
+  const price = invert
+    ? `1 ${collateralAmount?.currency.symbol} = ${liquidationPrice?.invert().toSignificant(6)} ${
+        borrowAmount?.currency.symbol
+      }`
+    : `1 ${borrowAmount?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${collateralAmount?.currency.symbol}`
+
   return (
     <Disclosure as="div">
       {({ open }) => (
@@ -120,12 +157,34 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({ market
             'shadow-inner flex flex-col gap-2 py-2 rounded px-2 border border-dark-700 transition hover:border-dark-700'
           )}
         >
-          <div className="flex justify-between gap-2 items-center pl-2">
-            <div className="flex gap-3 items-center">
-              <Typography variant="sm" weight={700}>
-                Position Health
+          <div className="flex justify-between gap-2 items-center pl-1">
+            <div className="flex gap-3 items-center" onClick={() => setInvert((prev) => !prev)}>
+              <Typography variant="xs" weight={700} className="flex -ml-1 gap-2">
+                <QuestionHelper
+                  text={
+                    <div className="flex flex-col gap-2">
+                      <Typography variant="xs" className="text-white">
+                        {i18n._(
+                          t`When the value of your collateral becomes less than the asset you borrowed, your position gets liquidated.`
+                        )}
+                      </Typography>
+                      <Typography variant="xs" className="italic">
+                        {i18n._(
+                          t`When a non-leveraged positions gets liquidated, you lose the collateral but you can keep the borrowed assets`
+                        )}
+                      </Typography>
+                    </div>
+                  }
+                />
+                {i18n._(t`Liquidation Price`)}
               </Typography>
-              <Chip color="green" label="75%" />
+              <Typography
+                variant="xs"
+                weight={700}
+                className="cursor-pointer bg-dark-700/80 hover:bg-dark-700 rounded px-3 py-1"
+              >
+                {price}
+              </Typography>
             </div>
 
             <Disclosure.Button as={Fragment}>
@@ -145,7 +204,11 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({ market
             unmount={false}
           >
             <Disclosure.Panel static className="px-1 pt-2">
-              <KashiMarketBorrowDetailsContentView market={market} />
+              <KashiMarketBorrowDetailsContentView
+                market={market}
+                collateralAmount={collateralAmount}
+                borrowAmount={borrowAmount}
+              />
             </Disclosure.Panel>
           </Transition>
         </div>
