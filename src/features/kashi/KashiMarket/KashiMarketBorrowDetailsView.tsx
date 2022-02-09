@@ -178,13 +178,15 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({ market
                 />
                 {i18n._(t`Liquidation Price`)}
               </Typography>
-              <Typography
-                variant="xs"
-                weight={700}
-                className="cursor-pointer bg-dark-700/80 hover:bg-dark-700 rounded px-3 py-1"
-              >
-                {price}
-              </Typography>
+              {liquidationPrice && (
+                <Typography
+                  variant="xs"
+                  weight={700}
+                  className="cursor-pointer bg-dark-700/80 hover:bg-dark-700 rounded px-3 py-1"
+                >
+                  {price}
+                </Typography>
+              )}
             </div>
 
             <Disclosure.Button as={Fragment}>
