@@ -8,8 +8,10 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
 import { LTV } from 'app/features/kashi/constants'
-import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
-import { classNames, formatNumber, formatPercent } from 'app/functions'
+import { useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { classNames, formatPercent } from 'app/functions'
+import { useBentoStrategies } from 'app/services/graph'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, Fragment, useState } from 'react'
 
 interface KashiMarketBorrowDetailsView {
@@ -18,13 +20,20 @@ interface KashiMarketBorrowDetailsView {
   priceImpact?: Percent
 }
 
-const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
+export const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
   priceImpact,
   collateralAmount,
   borrowAmount,
 }) => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
+  const strategies = useBentoStrategies({
+    chainId,
+    variables: { where: { token: market.collateral.token.address.toLowerCase() } },
+  })
+
+  const strategy = strategies?.[0]
 
   return (
     <div className="flex flex-col divide-y divide-dark-850">
@@ -32,7 +41,7 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
         <div className="flex justify-between gap-4">
           <Typography variant="xs">{i18n._(t`APR (annualized)`)}</Typography>
           <Typography variant="xs" className="text-right">
-            {formatPercent(market.currentInterestPerYear.string)}
+            {new Percent(market.currentInterestPerYear, 1e18).toFixed(2)}%
           </Typography>
         </div>
 
@@ -63,38 +72,38 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
               }
             />
           </Typography>
-          {market.asset.strategy ? (
+          {strategy ? (
             <Tooltip
               text={
                 <div className="flex flex-col">
                   <div className="flex justify-between gap-4">
                     <Typography variant="xs">{i18n._(t`Strategy APY`)}</Typography>
                     <Typography variant="xs" className="text-right">
-                      {formatPercent(market.asset.strategy.apy)}
+                      {formatPercent(strategy.apy)}
                     </Typography>
                   </div>
                   <div className="flex justify-between gap-4">
                     <Typography variant="xs">{i18n._(t`Current Percentage`)}</Typography>
                     <Typography variant="xs" className="text-right">
-                      {formatPercent(market.asset.strategy.targetPercentage)}
+                      {formatPercent(strategy.targetPercentage)}
                     </Typography>
                   </div>
                   <div className="flex justify-between gap-4">
                     <Typography variant="xs">{i18n._(t`Target Percentage`)}</Typography>
                     <Typography variant="xs" className="text-right">
-                      {formatPercent(market.asset.strategy.utilization)}
+                      {formatPercent(strategy.utilization)}
                     </Typography>
                   </div>
                 </div>
               }
             >
-              <Typography variant="xs" className={classNames(market.asset.strategy ? 'text-blue' : '', 'text-right')}>
-                {market.asset.strategy ? i18n._(t`Active`) : i18n._(t`None`)}{' '}
+              <Typography variant="xs" className={classNames(strategy ? 'text-blue' : '', 'text-right')}>
+                {strategy ? i18n._(t`Active`) : i18n._(t`None`)}{' '}
               </Typography>
             </Tooltip>
           ) : (
-            <Typography variant="xs" className={classNames(market.asset.strategy ? 'text-blue' : '', 'text-right')}>
-              {market.asset.strategy ? i18n._(t`Active`) : i18n._(t`None`)}{' '}
+            <Typography variant="xs" className={classNames(strategy ? 'text-blue' : '', 'text-right')}>
+              {strategy ? i18n._(t`Active`) : i18n._(t`None`)}{' '}
             </Typography>
           )}
         </div>
@@ -106,12 +115,19 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
           </Typography>
           <div className="flex gap-1">
             <Typography variant="xs" className="text-right text-secondary">
-              {formatNumber(market.userCollateralAmount.string)} {market.collateral.tokenInfo.symbol}
+              {collateralAmount &&
+                CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount).toSignificant(
+                  6
+                )}{' '}
+              {market.collateral.token.symbol}
             </Typography>
             <ArrowSmRightIcon width={14} className="text-secondary" />
             <Typography variant="xs" className="text-right text-secondary">
-              {formatNumber(+market.userCollateralAmount.string + +(collateralAmount?.toExact() || 0))}{' '}
-              {market.collateral.tokenInfo.symbol}
+              {collateralAmount &&
+                CurrencyAmount.fromRawAmount(collateralAmount.currency, market.userCollateralAmount)
+                  .add(collateralAmount)
+                  .toSignificant(6)}{' '}
+              {market.collateral.token.symbol}
             </Typography>
           </div>
         </div>
@@ -121,12 +137,19 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
           </Typography>
           <div className="flex gap-1">
             <Typography variant="xs" className="text-right text-secondary">
-              {formatNumber(market.currentUserBorrowAmount.string)} {market.asset.tokenInfo.symbol}
+              {borrowAmount &&
+                CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount).toSignificant(
+                  6
+                )}{' '}
+              {market.asset.token.symbol}
             </Typography>
             <ArrowSmRightIcon width={14} className="text-secondary" />
             <Typography variant="xs" className="text-right text-secondary">
-              {formatNumber(+market.currentUserBorrowAmount.string + +(borrowAmount?.toExact() || 0))}{' '}
-              {market.asset.tokenInfo.symbol}
+              {borrowAmount &&
+                CurrencyAmount.fromRawAmount(borrowAmount.currency, market.currentUserBorrowAmount)
+                  .add(borrowAmount)
+                  .toSignificant(6)}{' '}
+              {market.asset.token.symbol}
             </Typography>
           </div>
         </div>
@@ -143,14 +166,13 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
   )
 }
 
-const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
+export const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
   priceImpact,
   collateralAmount,
   borrowAmount,
 }) => {
   const { i18n } = useLingui()
   const [invert, setInvert] = useState(false)
-  const { market } = useKashiMarket()
 
   const liquidationPrice =
     borrowAmount && collateralAmount && borrowAmount.greaterThan(ZERO)
@@ -173,7 +195,7 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
           )}
         >
           <div className="flex justify-between gap-2 items-center pl-1">
-            <div className="flex gap-3 items-center" onClick={() => setInvert((prev) => !prev)}>
+            <div className="flex gap-3 items-center">
               <Typography variant="xs" weight={700} className="flex -ml-1 gap-2">
                 <QuestionHelper
                   text={
@@ -195,6 +217,7 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
               </Typography>
               {liquidationPrice && (
                 <Typography
+                  onClick={() => setInvert((prev) => !prev)}
                   variant="xs"
                   weight={700}
                   className="cursor-pointer bg-dark-700/80 hover:bg-dark-700 rounded px-3 py-1"
@@ -233,5 +256,3 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
     </Disclosure>
   )
 }
-
-export default KashiMarketBorrowDetailsView

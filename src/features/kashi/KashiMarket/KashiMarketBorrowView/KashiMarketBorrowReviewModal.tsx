@@ -7,19 +7,18 @@ import ListPanel from 'app/components/ListPanel'
 import { HeadlessUiModal } from 'app/components/Modal'
 import SubmittedModalContent from 'app/components/Modal/SubmittedModalContent'
 import Typography from 'app/components/Typography'
-import { KashiMarketBorrowButton } from 'app/features/kashi/KashiMarket/KashiMarketBorrowButton'
-import KashiMarketBorrowDetailsView from 'app/features/kashi/KashiMarket/KashiMarketBorrowDetailsView'
-import useBorrowExecute from 'app/features/kashi/KashiMarket/useBorrowExecute'
+import { KashiMarketBorrowDetailsView, useBorrowExecute } from 'app/features/kashi/KashiMarket'
+import { KashiMarketBorrowButtonProps } from 'app/features/kashi/KashiMarket/KashiMarketBorrowView/KashiMarketBorrowButton'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import React, { FC, useCallback, useState } from 'react'
 
-interface KashiMarketBorrowReviewModal extends KashiMarketBorrowButton {
+interface KashiMarketBorrowReviewModal extends KashiMarketBorrowButtonProps {
   open: boolean
   onDismiss(): void
   permit?: Signature
 }
 
-const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
+export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
   spendFromWallet,
   receiveInWallet,
   permit,
@@ -91,5 +90,3 @@ const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
     </HeadlessUiModal.Controlled>
   )
 }
-
-export default KashiMarketBorrowReviewModal

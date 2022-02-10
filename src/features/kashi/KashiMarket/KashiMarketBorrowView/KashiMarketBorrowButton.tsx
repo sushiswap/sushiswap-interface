@@ -1,22 +1,20 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, JSBI, KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, KASHI_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import KashiMarketBorrowReviewModal from 'app/features/kashi/KashiMarket/KashiMarketBorrowReviewModal'
-import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
-import { BorrowExecutePayload } from 'app/features/kashi/KashiMarket/useBorrowExecute'
+import { BorrowExecutePayload, KashiMarketBorrowReviewModal, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, useState } from 'react'
 
-export interface KashiMarketBorrowButton extends Omit<BorrowExecutePayload, 'permit' | 'trade'> {
+export interface KashiMarketBorrowButtonProps extends Omit<BorrowExecutePayload, 'permit' | 'trade'> {
   maxBorrow?: CurrencyAmount<Currency>
 }
 
-const KashiMarketBorrowButton: FC<KashiMarketBorrowButton> = ({
+export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   receiveInWallet,
   leveraged,
   borrowAmount,
@@ -35,7 +33,7 @@ const KashiMarketBorrowButton: FC<KashiMarketBorrowButton> = ({
   const attemptingTxn = false
 
   const totalAvailableToBorrow = borrowAmount
-    ? CurrencyAmount.fromRawAmount(borrowAmount.currency, JSBI.BigInt(market.totalAssetAmount.value))
+    ? CurrencyAmount.fromRawAmount(borrowAmount.currency, market.totalAssetAmount)
     : undefined
 
   let error: string | undefined = undefined
@@ -89,5 +87,3 @@ const KashiMarketBorrowButton: FC<KashiMarketBorrowButton> = ({
     </>
   )
 }
-
-export default KashiMarketBorrowButton

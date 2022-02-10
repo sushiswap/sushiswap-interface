@@ -1,13 +1,13 @@
-import { KashiMarket } from 'app/features/kashi/types'
+import KashiMediumRiskLendingPair from 'app/features/kashi/KashiMediumRiskLendingPair'
 import { createContext, FC, useContext, useMemo } from 'react'
 
 interface KashiMarketContext {
-  market: KashiMarket
+  market: KashiMediumRiskLendingPair
 }
 
 const Context = createContext<KashiMarketContext | undefined>(undefined)
 
-const KashiMarketProvider: FC<KashiMarketContext> = ({ market, children }) => {
+export const KashiMarketProvider: FC<KashiMarketContext> = ({ market, children }) => {
   return <Context.Provider value={useMemo(() => ({ market }), [market])}>{children}</Context.Provider>
 }
 
@@ -19,5 +19,3 @@ export const useKashiMarket = () => {
 
   return context
 }
-
-export default KashiMarketProvider

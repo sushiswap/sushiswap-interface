@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-const KashiMarketSkeleton: FC = () => {
+export const KashiMarketSkeleton: FC = () => {
   return (
     <div className="flex flex-col gap-3 p-2 md:p-4 pt-4 rounded-[24px] bg-dark-800 shadow-md shadow-dark-1000">
       <div className="grid grid-cols-4 gap-2 h-[42px] rounded-full">
@@ -56,5 +56,3 @@ const KashiMarketSkeleton: FC = () => {
     </div>
   )
 }
-
-export default KashiMarketSkeleton

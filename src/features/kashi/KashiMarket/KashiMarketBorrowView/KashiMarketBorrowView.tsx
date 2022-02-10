@@ -4,19 +4,20 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
 import { LTV } from 'app/features/kashi/constants'
-import { KashiMarketBorrowDetailsView } from 'app/features/kashi/KashiMarket/index'
-import KashiMarketBorrowButton from 'app/features/kashi/KashiMarket/KashiMarketBorrowButton'
-import KashiMarketBorrowLeverageView from 'app/features/kashi/KashiMarket/KashiMarketBorrowLeverageView'
+import {
+  KashiMarketBorrowButton,
+  KashiMarketBorrowDetailsView,
+  KashiMarketBorrowLeverageView,
+  useMaxBorrow,
+} from 'app/features/kashi/KashiMarket'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
-import useMaxBorrow from 'app/features/kashi/KashiMarket/useMaxBorrow'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { tryParseAmount } from 'app/functions'
-import { useCurrency } from 'app/hooks/Tokens'
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 
 interface KashiMarketBorrowView {}
 
-const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
+export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
 
@@ -25,8 +26,8 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const [spendFromWallet, setSpendFromWallet] = useState<boolean>(true)
   const [receiveInWallet, setReceiveInWallet] = useState<boolean>(true)
 
-  const collateral = useCurrency(market.collateral.address) ?? undefined
-  const asset = useCurrency(market.asset.address) ?? undefined
+  const collateral = market.collateral.token
+  const asset = market.asset.token
 
   const [collateralAmount, setCollateralAmount] = useState<string>()
   const [borrowAmount, setBorrowAmount] = useState<string>()
@@ -59,7 +60,7 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
             .divide('1'.toBigNumber(collateral.decimals).toString())
         )
         .multiply(LTV)
-        .divide(market.currentExchangeRate.toString())
+        .divide(market.exchangeRate.toString())
 
       if (inputRef.current) {
         inputRef.current.value = multiplied.asFraction.toSignificant(6)
@@ -69,7 +70,7 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
         setBorrowAmount(multiplied.asFraction.toSignificant(6))
       }
     },
-    [asset, collateral, collateralAmountCurrencyAmount, inputRef, market.currentExchangeRate]
+    [asset, collateral, collateralAmountCurrencyAmount, inputRef, market.exchangeRate]
   )
 
   return (
@@ -154,5 +155,3 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
     </div>
   )
 }
-
-export default KashiMarketBorrowView

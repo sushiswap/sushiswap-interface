@@ -1,7 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { KashiMediumRiskLendingPair } from '@sushiswap/kashi-sdk'
 import Search from 'app/components/Search'
 import Typography from 'app/components/Typography'
 import KashiMarketListItem from 'app/features/kashi/KashiMarketListItem'
@@ -13,7 +12,7 @@ import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, memo } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
+import { KashiMediumRiskLendingPair } from './KashiMediumRiskLendingPair'
 
 const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active: boolean }> = ({
   id,

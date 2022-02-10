@@ -3,9 +3,10 @@ import { useLingui } from '@lingui/react'
 import QuestionHelper from 'app/components/QuestionHelper'
 import ToggleButtonGroup from 'app/components/ToggleButton'
 import Typography from 'app/components/Typography'
-import { KashiMarketBorrowView } from 'app/features/kashi/KashiMarket/index'
 import { SwapLayoutCard } from 'app/layouts/SwapLayout'
 import React, { FC, useState } from 'react'
+
+import { KashiMarketBorrowView } from '.'
 
 interface KashiMarketProps {}
 
@@ -16,7 +17,7 @@ enum View {
   REPAY,
 }
 
-const KashiMarket: FC<KashiMarketProps> = () => {
+export const KashiMarket: FC<KashiMarketProps> = () => {
   const { i18n } = useLingui()
   const [view, setView] = useState<View>(View.BORROW)
 
@@ -64,5 +65,3 @@ const KashiMarket: FC<KashiMarketProps> = () => {
     </SwapLayoutCard>
   )
 }
-
-export default KashiMarket
