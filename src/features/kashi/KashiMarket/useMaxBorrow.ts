@@ -47,15 +47,14 @@ const useMaxBorrow: UseMaxBorrow = ({ leveraged, collateralAmount, borrowAmount,
     userTotalCollateral = userTotalCollateral.add(swapCollateralAmount)
   }
 
-  console.log(swapCollateralAmount?.quotient.toString())
-  const borrowableOracleAmount = userTotalCollateral
-    .multiply(LTV)
-    .multiply(e10(18).toString())
-    .divide(JSBI.BigInt(market.oracleExchangeRate)).asFraction
-  const borrowableSpotAmount = userTotalCollateral
-    .multiply(LTV)
-    .multiply(e10(18).toString())
-    .divide(JSBI.BigInt(market.spotExchangeRate)).asFraction
+  const borrowableOracleAmount = market.oracleExchangeRate.gt(0)
+    ? userTotalCollateral.multiply(LTV).multiply(e10(18).toString()).divide(JSBI.BigInt(market.oracleExchangeRate))
+        .asFraction
+    : CurrencyAmount.fromRawAmount(userTotalCollateral.currency, '0')
+  const borrowableSpotAmount = market.spotExchangeRate.gt(0)
+    ? userTotalCollateral.multiply(LTV).multiply(e10(18).toString()).divide(JSBI.BigInt(market.spotExchangeRate))
+        .asFraction
+    : CurrencyAmount.fromRawAmount(userTotalCollateral.currency, '0')
   const borrowableMinimum = borrowableOracleAmount.lessThan(borrowableSpotAmount)
     ? borrowableOracleAmount
     : borrowableSpotAmount

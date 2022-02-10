@@ -17,7 +17,7 @@ import {
 } from '@sushiswap/core-sdk'
 import KashiCooker from 'app/entities/KashiCooker'
 import { DEFAULT_BORROW_SLIPPAGE_TOLERANCE } from 'app/features/kashi/constants'
-import { KashiMarket } from 'app/features/kashi/types'
+import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import { toShare, ZERO } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
@@ -25,7 +25,6 @@ import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useCallback } from 'react'
 
 export interface BorrowExecutePayload {
-  market: KashiMarket
   permit?: Signature
   collateralAmount?: CurrencyAmount<Currency>
   borrowAmount?: CurrencyAmount<Currency>
@@ -43,9 +42,10 @@ const useBorrowExecute: UseBorrowExecute = () => {
   const masterContract = chainId && KASHI_ADDRESS[chainId]
   const addTransaction = useTransactionAdder()
   const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_BORROW_SLIPPAGE_TOLERANCE) // custom from users
+  const { market } = useKashiMarket()
 
   return useCallback(
-    async ({ trade, market, permit, collateralAmount, borrowAmount, leveraged, spendFromWallet, receiveInWallet }) => {
+    async ({ trade, permit, collateralAmount, borrowAmount, leveraged, spendFromWallet, receiveInWallet }) => {
       if (!account || !library || !chainId || !masterContract || !collateralAmount || !borrowAmount) {
         console.error('Dependencies unavailable')
         return
@@ -151,7 +151,7 @@ const useBorrowExecute: UseBorrowExecute = () => {
         return result.tx
       }
     },
-    [account, addTransaction, allowedSlippage, chainId, i18n, library, masterContract]
+    [account, addTransaction, allowedSlippage, chainId, i18n, library, market, masterContract]
   )
 }
 

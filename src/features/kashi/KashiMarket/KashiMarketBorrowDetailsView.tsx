@@ -8,12 +8,11 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
 import { LTV } from 'app/features/kashi/constants'
-import { KashiMarket } from 'app/features/kashi/types'
+import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import { classNames, formatNumber, formatPercent } from 'app/functions'
 import React, { FC, Fragment, useState } from 'react'
 
 interface KashiMarketBorrowDetailsView {
-  market: KashiMarket
   collateralAmount?: CurrencyAmount<Currency>
   borrowAmount?: CurrencyAmount<Currency>
   priceImpact?: Percent
@@ -21,11 +20,12 @@ interface KashiMarketBorrowDetailsView {
 
 const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
   priceImpact,
-  market,
   collateralAmount,
   borrowAmount,
 }) => {
   const { i18n } = useLingui()
+  const { market } = useKashiMarket()
+
   return (
     <div className="flex flex-col divide-y divide-dark-850">
       <div className="flex flex-col gap-1 pb-2">
@@ -145,12 +145,12 @@ const KashiMarketBorrowDetailsContentView: FC<KashiMarketBorrowDetailsView> = ({
 
 const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
   priceImpact,
-  market,
   collateralAmount,
   borrowAmount,
 }) => {
   const { i18n } = useLingui()
   const [invert, setInvert] = useState(false)
+  const { market } = useKashiMarket()
 
   const liquidationPrice =
     borrowAmount && collateralAmount && borrowAmount.greaterThan(ZERO)
@@ -223,7 +223,6 @@ const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
             <Disclosure.Panel static className="px-1 pt-2">
               <KashiMarketBorrowDetailsContentView
                 priceImpact={priceImpact}
-                market={market}
                 collateralAmount={collateralAmount}
                 borrowAmount={borrowAmount}
               />

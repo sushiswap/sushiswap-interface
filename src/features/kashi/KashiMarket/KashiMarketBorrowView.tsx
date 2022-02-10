@@ -7,19 +7,18 @@ import { LTV } from 'app/features/kashi/constants'
 import { KashiMarketBorrowDetailsView } from 'app/features/kashi/KashiMarket/index'
 import KashiMarketBorrowButton from 'app/features/kashi/KashiMarket/KashiMarketBorrowButton'
 import KashiMarketBorrowLeverageView from 'app/features/kashi/KashiMarket/KashiMarketBorrowLeverageView'
+import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import useMaxBorrow from 'app/features/kashi/KashiMarket/useMaxBorrow'
-import { KashiMarket } from 'app/features/kashi/types'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
 import { tryParseAmount } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 
-interface KashiMarketBorrowView {
-  market: KashiMarket
-}
+interface KashiMarketBorrowView {}
 
-const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
+const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const { i18n } = useLingui()
+  const { market } = useKashiMarket()
 
   const inputRef = useRef<HTMLInputElement>(null)
   const [leverage, setLeverage] = useState<boolean>(false)
@@ -133,7 +132,6 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
         <KashiMarketBorrowLeverageView
           borrowAmount={borrowAmountCurrencyAmount}
           collateralAmount={collateralAmountCurrencyAmount}
-          market={market}
           enabled={leverage}
           onSwitch={() => setLeverage((prev) => !prev)}
           onChange={(val) => onMultiply(val, false)}
@@ -142,13 +140,11 @@ const KashiMarketBorrowView: FC<KashiMarketBorrowView> = ({ market }) => {
       )}
       <KashiMarketBorrowDetailsView
         priceImpact={leverage ? priceImpact : undefined}
-        market={market}
         borrowAmount={borrowAmountCurrencyAmount}
         collateralAmount={collateralAmountCurrencyAmount}
       />
       <KashiMarketBorrowButton
         borrowAmount={borrowAmountCurrencyAmount}
-        market={market}
         collateralAmount={collateralAmountCurrencyAmount}
         spendFromWallet={spendFromWallet}
         maxBorrow={maxBorrow}

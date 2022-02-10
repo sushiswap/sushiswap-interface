@@ -10,7 +10,7 @@ import Slider from 'app/components/Slider'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import { LTV } from 'app/features/kashi/constants'
-import { KashiMarket } from 'app/features/kashi/types'
+import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import { classNames } from 'app/functions'
 import React, { FC, useCallback, useState } from 'react'
 
@@ -23,7 +23,6 @@ const LeverageColor = (x: number) => {
 interface KashiMarketBorrowLeverageView {
   borrowAmount?: CurrencyAmount<Currency>
   collateralAmount: CurrencyAmount<Currency>
-  market: KashiMarket
   onChange(x: string): void
   afterChange?(x: string): void
   enabled: boolean
@@ -35,13 +34,13 @@ const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
   collateralAmount,
   enabled,
   onSwitch,
-  market,
   onChange,
   afterChange,
 }) => {
   const { i18n } = useLingui()
   const [range, setRange] = useState<number>(0.5)
   const [invert, setInvert] = useState(false)
+  const { market } = useKashiMarket()
 
   const handleChange = useCallback(
     (value: number) => {

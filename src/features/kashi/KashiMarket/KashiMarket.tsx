@@ -4,13 +4,10 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import ToggleButtonGroup from 'app/components/ToggleButton'
 import Typography from 'app/components/Typography'
 import { KashiMarketBorrowView } from 'app/features/kashi/KashiMarket/index'
-import { KashiMarket as KashiMarketType } from 'app/features/kashi/types'
 import { SwapLayoutCard } from 'app/layouts/SwapLayout'
 import React, { FC, useState } from 'react'
 
-interface KashiMarketProps {
-  market: KashiMarketType
-}
+interface KashiMarketProps {}
 
 enum View {
   DEPOSIT,
@@ -19,7 +16,7 @@ enum View {
   REPAY,
 }
 
-const KashiMarket: FC<KashiMarketProps> = ({ market }) => {
+const KashiMarket: FC<KashiMarketProps> = () => {
   const { i18n } = useLingui()
   const [view, setView] = useState<View>(View.BORROW)
 
@@ -62,7 +59,7 @@ const KashiMarket: FC<KashiMarketProps> = ({ market }) => {
           </ToggleButtonGroup.Button>
           <ToggleButtonGroup.Button value={View.WITHDRAW}>{i18n._(t`Withdraw`)}</ToggleButtonGroup.Button>
         </ToggleButtonGroup>
-        {view === View.BORROW && <KashiMarketBorrowView market={market} />}
+        {view === View.BORROW && <KashiMarketBorrowView />}
       </div>
     </SwapLayoutCard>
   )

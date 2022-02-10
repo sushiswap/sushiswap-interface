@@ -1,4 +1,5 @@
 import { BigNumber } from '@ethersproject/bignumber'
+import { WrappedTokenInfo } from 'app/state/lists/wrappedTokenInfo'
 
 export interface Version {
   major: number
@@ -72,7 +73,7 @@ export interface Collateral {
   tokenInfo: TokenInfo
   _checksummedAddress: string
   _tags?: any
-  token: string
+  token: TokenInfo
   totalSupply: TotalSupply
   balance: Balance
   bentoBalance: BentoBalance
@@ -161,7 +162,7 @@ export interface Asset {
   tokenInfo: TokenInfo2
   _checksummedAddress: string
   _tags?: any
-  token: string
+  token: WrappedTokenInfo
   totalSupply: TotalSupply2
   balance: Balance2
   bentoBalance: BentoBalance2
