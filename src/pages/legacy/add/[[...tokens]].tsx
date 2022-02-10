@@ -2,7 +2,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, currencyEquals, Percent, WNATIVE } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, currencyEquals, WNATIVE } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
 import Button from 'app/components/Button'
 import { AutoColumn } from 'app/components/Column'
@@ -32,17 +32,17 @@ import TransactionConfirmationModal, { ConfirmationModalContent } from 'app/moda
 import { useActiveWeb3React } from 'app/services/web3'
 import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import { useWalletModalToggle } from 'app/state/application/hooks'
+import { useAppSelector } from 'app/state/hooks'
 import { Field } from 'app/state/mint/actions'
 import { useDerivedMintInfo, useMintActionHandlers, useMintState } from 'app/state/mint/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import React, { useCallback, useState } from 'react'
 import { Plus } from 'react-feather'
 import ReactGA from 'react-ga'
-
-const DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 export default function Add() {
   const { i18n } = useLingui()
@@ -90,9 +90,7 @@ export default function Add() {
   // txn values
   const deadline = useTransactionDeadline() // custom from users settings
 
-  // const [allowedSlippage] = useUserSlippageTolerance(); // custom from users
-
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_ADD_V2_SLIPPAGE_TOLERANCE) // custom from users
+  const allowedSlippage = useAppSelector(selectSlippage)
 
   const [txHash, setTxHash] = useState<string>('')
 

@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
 import { hexConcat, hexlify } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
-import { Percent, SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
+import { SUSHISWAP_MULTISWAPPER_ADDRESS, WNATIVE } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import KashiCooker from 'app/entities/KashiCooker'
 import { TransactionReview } from 'app/entities/TransactionReview'
@@ -14,7 +14,9 @@ import { computeRealizedLPFeePercent, warningSeverity } from 'app/functions/pric
 import { useCurrency } from 'app/hooks/Tokens'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
@@ -28,8 +30,6 @@ import WarningsView from './WarningsList'
 interface BorrowProps {
   pair: any
 }
-
-const DEFAULT_BORROW_SLIPPAGE_TOLERANCE = new Percent(50, 10_000)
 
 const DEFAULT_UPDATE_ORACLE = true
 
@@ -64,10 +64,7 @@ export default function Borrow({ pair }: BorrowProps) {
 
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
 
-  // Swap
-  // const [allowedSlippage] = useUserSlippageTolerance(); // 10 = 0.1%
-
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_BORROW_SLIPPAGE_TOLERANCE) // custom from users
+  const allowedSlippage = useAppSelector(selectSlippage)
 
   const parsedAmount = tryParseAmount(borrowValue, assetToken)
 

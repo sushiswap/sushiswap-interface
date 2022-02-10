@@ -5,7 +5,7 @@ import { AppPage } from '../AppPage'
 import { AssetBalancesComponent } from './AssetBalancesComponent'
 
 export class MyBentoBoxPage extends AppPage {
-  protected Route: string = '/trident/balances/bentobox'
+  protected Route: string = '/portfolio/bentobox'
   private AssetBalances: AssetBalancesComponent
 
   constructor(page: Page, metamask: Dappeteer, baseUrl: string) {
