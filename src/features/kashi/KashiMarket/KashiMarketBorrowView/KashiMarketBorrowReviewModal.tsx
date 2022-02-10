@@ -7,24 +7,22 @@ import ListPanel from 'app/components/ListPanel'
 import { HeadlessUiModal } from 'app/components/Modal'
 import SubmittedModalContent from 'app/components/Modal/SubmittedModalContent'
 import Typography from 'app/components/Typography'
-import { KashiMarketBorrowButton } from 'app/features/kashi/KashiMarket/KashiMarketBorrowButton'
-import KashiMarketBorrowDetailsView from 'app/features/kashi/KashiMarket/KashiMarketBorrowDetailsView'
-import useBorrowExecute from 'app/features/kashi/KashiMarket/useBorrowExecute'
+import { KashiMarketBorrowDetailsView, useBorrowExecute } from 'app/features/kashi/KashiMarket'
+import { KashiMarketBorrowButtonProps } from 'app/features/kashi/KashiMarket/KashiMarketBorrowView/KashiMarketBorrowButton'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import React, { FC, useCallback, useState } from 'react'
 
-interface KashiMarketBorrowReviewModal extends KashiMarketBorrowButton {
+interface KashiMarketBorrowReviewModal extends KashiMarketBorrowButtonProps {
   open: boolean
   onDismiss(): void
   permit?: Signature
 }
 
-const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
+export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
   spendFromWallet,
   receiveInWallet,
   permit,
   leveraged,
-  market,
   collateralAmount,
   borrowAmount,
   open,
@@ -44,7 +42,6 @@ const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
         spendFromWallet,
         receiveInWallet,
         permit,
-        market,
         leveraged,
         trade,
         collateralAmount,
@@ -57,7 +54,7 @@ const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
     } finally {
       setAttemptingTxn(false)
     }
-  }, [borrowAmount, collateralAmount, execute, leveraged, market, permit, receiveInWallet, spendFromWallet, trade])
+  }, [borrowAmount, collateralAmount, execute, leveraged, permit, receiveInWallet, spendFromWallet, trade])
 
   return (
     <HeadlessUiModal.Controlled isOpen={open} onDismiss={onDismiss} maxWidth="sm">
@@ -77,11 +74,7 @@ const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
             </Typography>
             <ListPanel items={[<ListPanel.CurrencyAmountItem amount={borrowAmount} key={0} />]} />
           </HeadlessUiModal.BorderedContent>
-          <KashiMarketBorrowDetailsView
-            market={market}
-            collateralAmount={collateralAmount}
-            borrowAmount={borrowAmount}
-          />
+          <KashiMarketBorrowDetailsView collateralAmount={collateralAmount} borrowAmount={borrowAmount} />
           <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>
             {i18n._(t`Confirm Borrow`)}
           </Button>
@@ -97,5 +90,3 @@ const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
     </HeadlessUiModal.Controlled>
   )
 }
-
-export default KashiMarketBorrowReviewModal

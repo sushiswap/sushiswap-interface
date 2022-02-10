@@ -16,16 +16,16 @@ import {
   TradeType,
 } from '@sushiswap/core-sdk'
 import KashiCooker from 'app/entities/KashiCooker'
-import { DEFAULT_BORROW_SLIPPAGE_TOLERANCE } from 'app/features/kashi/constants'
-import { KashiMarket } from 'app/features/kashi/types'
 import { toShare, ZERO } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
-import { useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
 import { useCallback } from 'react'
 
+import { useKashiMarket } from '..'
+
 export interface BorrowExecutePayload {
-  market: KashiMarket
   permit?: Signature
   collateralAmount?: CurrencyAmount<Currency>
   borrowAmount?: CurrencyAmount<Currency>
@@ -37,15 +37,16 @@ export interface BorrowExecutePayload {
 
 type UseBorrowExecute = () => (x: BorrowExecutePayload) => Promise<TransactionResponse | undefined>
 
-const useBorrowExecute: UseBorrowExecute = () => {
+export const useBorrowExecute: UseBorrowExecute = () => {
   const { i18n } = useLingui()
   const { account, library, chainId } = useActiveWeb3React()
   const masterContract = chainId && KASHI_ADDRESS[chainId]
   const addTransaction = useTransactionAdder()
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_BORROW_SLIPPAGE_TOLERANCE) // custom from users
+  const allowedSlippage = useAppSelector(selectSlippage)
+  const { market } = useKashiMarket()
 
   return useCallback(
-    async ({ trade, market, permit, collateralAmount, borrowAmount, leveraged, spendFromWallet, receiveInWallet }) => {
+    async ({ trade, permit, collateralAmount, borrowAmount, leveraged, spendFromWallet, receiveInWallet }) => {
       if (!account || !library || !chainId || !masterContract || !collateralAmount || !borrowAmount) {
         console.error('Dependencies unavailable')
         return
@@ -85,8 +86,8 @@ const useBorrowExecute: UseBorrowExecute = () => {
 
         // TODO Remove
         console.log([
-          market.asset.address,
-          market.collateral.address,
+          market.asset.token.address,
+          market.collateral.token.address,
           BigNumber.from(trade.minimumAmountOut(allowedSlippage).quotient.toString()).toString(),
           path.length > 2 ? path[1] : AddressZero,
           path.length > 3 ? path[2] : AddressZero,
@@ -108,8 +109,8 @@ const useBorrowExecute: UseBorrowExecute = () => {
             defaultAbiCoder.encode(
               ['address', 'address', 'uint256', 'address', 'address', 'address', 'uint256'],
               [
-                market.asset.address,
-                market.collateral.address,
+                market.asset.token.address,
+                market.collateral.token.address,
                 BigNumber.from(trade.minimumAmountOut(allowedSlippage).quotient.toString()),
                 path.length > 2 ? path[1] : AddressZero,
                 path.length > 3 ? path[2] : AddressZero,
@@ -151,8 +152,6 @@ const useBorrowExecute: UseBorrowExecute = () => {
         return result.tx
       }
     },
-    [account, addTransaction, allowedSlippage, chainId, i18n, library, masterContract]
+    [account, addTransaction, allowedSlippage, chainId, i18n, library, market, masterContract]
   )
 }
-
-export default useBorrowExecute

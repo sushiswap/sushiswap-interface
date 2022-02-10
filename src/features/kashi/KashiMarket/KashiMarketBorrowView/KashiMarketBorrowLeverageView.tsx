@@ -10,7 +10,7 @@ import Slider from 'app/components/Slider'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import { LTV } from 'app/features/kashi/constants'
-import { KashiMarket } from 'app/features/kashi/types'
+import { useKashiMarket } from 'app/features/kashi/KashiMarket'
 import { classNames } from 'app/functions'
 import React, { FC, useCallback, useState } from 'react'
 
@@ -23,25 +23,24 @@ const LeverageColor = (x: number) => {
 interface KashiMarketBorrowLeverageView {
   borrowAmount?: CurrencyAmount<Currency>
   collateralAmount: CurrencyAmount<Currency>
-  market: KashiMarket
   onChange(x: string): void
   afterChange?(x: string): void
   enabled: boolean
   onSwitch(): void
 }
 
-const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
+export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
   borrowAmount,
   collateralAmount,
   enabled,
   onSwitch,
-  market,
   onChange,
   afterChange,
 }) => {
   const { i18n } = useLingui()
   const [range, setRange] = useState<number>(0.5)
   const [invert, setInvert] = useState(false)
+  const { market } = useKashiMarket()
 
   const handleChange = useCallback(
     (value: number) => {
@@ -77,7 +76,7 @@ const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
               <div className="flex flex-col gap-2">
                 <Typography variant="xs" className="text-white">
                   {i18n._(
-                    t`Leverage your position by swapping the received borrowed ${market.asset.symbol} for ${market.collateral.symbol} and use that as extra collateral to borrow more ${market.asset.symbol}.`
+                    t`Leverage your position by swapping the received borrowed ${market.asset.token.symbol} for ${market.collateral.token.symbol} and use that as extra collateral to borrow more ${market.asset.token.symbol}.`
                   )}
                 </Typography>
                 <Typography variant="xs" className="italic">
@@ -142,5 +141,3 @@ const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
     </div>
   )
 }
-
-export default KashiMarketBorrowLeverageView

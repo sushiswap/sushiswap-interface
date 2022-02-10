@@ -8,10 +8,11 @@ import { TABLE_TR_TH_CLASSNAME, TABLE_WRAPPER_DIV_CLASSNAME } from 'app/features
 import { classNames } from 'app/functions'
 import { useFuse } from 'app/hooks'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, memo } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
+import { KashiMediumRiskLendingPair } from './KashiMediumRiskLendingPair'
 
 const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active: boolean }> = ({
   id,
@@ -29,6 +30,7 @@ interface KashiMarketList {
 }
 
 const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
+  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { result, term, search } = useFuse<KashiMediumRiskLendingPair>({
     data: markets,
@@ -103,7 +105,7 @@ const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
           loader={null}
         >
           {result.slice(0, numDisplayed).map((market, index) => (
-            <KashiMarketListItem market={market} key={index} />
+            <KashiMarketListItem market={market} chainId={chainId || 1} key={index} i18n={i18n} />
           ))}
         </InfiniteScroll>
       </div>
