@@ -115,7 +115,7 @@ export function useKashiPairAddresses(): string[] {
   )
 }
 
-export function useKashiMediumRiskLendingPairs(addresses: string[] = []) {
+export function useKashiMediumRiskLendingPairs(addresses: string[] = []): KashiMediumRiskLendingPair[] {
   const { chainId, account } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
@@ -167,6 +167,10 @@ export function useKashiMediumRiskLendingPairs(addresses: string[] = []) {
         })
     )
   }, [chainId, data, rebases])
+}
+
+export function useKashiMediumRiskLendingPair(address: string): KashiMediumRiskLendingPair {
+  return useKashiMediumRiskLendingPairs([getAddress(address)])[0]
 }
 
 export function useKashiPairs(addresses: string[] = []): KashiMarket[] {
