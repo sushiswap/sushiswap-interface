@@ -202,7 +202,7 @@ export const KashiMarketBorrowDetailsView: FC<KashiMarketBorrowDetailsView> = ({
                     <div className="flex flex-col gap-2">
                       <Typography variant="xs" className="text-white">
                         {i18n._(
-                          t`When the value of your collateral becomes less than the asset you borrowed, your position gets liquidated.`
+                          t`When the value of your collateral becomes less than the asset you borrow, your position gets liquidated.`
                         )}
                       </Typography>
                       <Typography variant="xs" className="italic">

@@ -5,13 +5,14 @@ import Typography from 'app/components/Typography'
 import { useKashiMediumRiskLendingPairs, useKashiPairAddresses } from 'app/features/kashi/hooks'
 import KashiMarketList from 'app/features/kashi/KashiMarketList'
 import { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC } from 'react'
 
 const KashiPage: FC = () => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const addresses = useKashiPairAddresses()
-  // const markets = useKashiPairs(addresses)
-  const markets = useKashiMediumRiskLendingPairs(addresses)
+  const markets = useKashiMediumRiskLendingPairs(account, addresses)
 
   return (
     <>

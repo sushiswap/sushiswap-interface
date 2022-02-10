@@ -7,6 +7,7 @@ import { SwapLayoutCard } from 'app/layouts/SwapLayout'
 import React, { FC, useState } from 'react'
 
 import { KashiMarketBorrowView } from '.'
+import KashiMarketRepayView from './KashiMarketRepayView/KashiMarketRepayView'
 
 interface KashiMarketProps {}
 
@@ -61,6 +62,7 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
           <ToggleButtonGroup.Button value={View.WITHDRAW}>{i18n._(t`Withdraw`)}</ToggleButtonGroup.Button>
         </ToggleButtonGroup>
         {view === View.BORROW && <KashiMarketBorrowView />}
+        {view === View.REPAY && <KashiMarketRepayView />}
       </div>
     </SwapLayoutCard>
   )

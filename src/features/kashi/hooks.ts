@@ -135,20 +135,15 @@ export function useKashiMediumRiskLendingPairs(
   addresses: string[] = []
 ): KashiMediumRiskLendingPair[] {
   const { chainId } = useActiveWeb3React()
-
   const boringHelperContract = useBoringHelperContract()
-
   const tokens = useKashiTokens()
-
   const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
+  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, NEVER_RELOAD)
+  const { rebases } = useBentoRebases(Object.values(tokens))
 
   // TODO: for skeleton loading
   // const kashiRepositoryContract = useKashiRepositoryContract()
   // const callStates = useSingleContractMultipleData(kashiRepositoryContract, 'getPair', args, NEVER_RELOAD)
-
-  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, NEVER_RELOAD)
-
-  const { rebases } = useBentoRebases(Object.values(tokens))
 
   return useMemo(() => {
     if (!chainId || !result || !rebases) {
@@ -187,7 +182,10 @@ export function useKashiMediumRiskLendingPairs(
   }, [chainId, result, rebases])
 }
 
-export function useKashiMediumRiskLendingPair(account: string, address: string): KashiMediumRiskLendingPair {
+export function useKashiMediumRiskLendingPair(
+  account: string | null | undefined,
+  address: string
+): KashiMediumRiskLendingPair {
   return useKashiMediumRiskLendingPairs(account, [getAddress(address)])[0]
 }
 

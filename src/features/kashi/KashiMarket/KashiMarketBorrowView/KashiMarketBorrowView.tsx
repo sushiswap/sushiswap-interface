@@ -2,8 +2,7 @@ import { Transition } from '@headlessui/react'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, ZERO } from '@sushiswap/core-sdk'
-import { LTV } from 'app/features/kashi/constants'
+import { CurrencyAmount, JSBI, ZERO } from '@sushiswap/core-sdk'
 import {
   KashiMarketBorrowButton,
   KashiMarketBorrowDetailsView,
@@ -12,7 +11,7 @@ import {
 } from 'app/features/kashi/KashiMarket'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import { tryParseAmount } from 'app/functions'
+import { e10, tryParseAmount } from 'app/functions'
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 
 interface KashiMarketBorrowView {}
@@ -53,24 +52,26 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
     (multiplier: string, persist: boolean = false) => {
       if (!collateral || !asset || !collateralAmountCurrencyAmount) return
 
-      const multiplied = collateralAmountCurrencyAmount
+      const { numerator, denominator } = collateralAmountCurrencyAmount
         .add(
           collateralAmountCurrencyAmount
             .multiply(multiplier.toBigNumber(collateral.decimals).toString())
             .divide('1'.toBigNumber(collateral.decimals).toString())
         )
-        .multiply(LTV)
-        .divide(market.exchangeRate.toString())
+        .multiply(JSBI.BigInt(e10(16)))
+        .multiply(JSBI.BigInt('75'))
+        .divide(market.exchangeRate)
 
+      const amount = CurrencyAmount.fromFractionalAmount(asset, numerator, denominator)
       if (inputRef.current) {
-        inputRef.current.value = multiplied.asFraction.toSignificant(6)
+        inputRef.current.value = amount.toSignificant(6)
       }
 
       if (persist) {
-        setBorrowAmount(multiplied.asFraction.toSignificant(6))
+        setBorrowAmount(amount.toSignificant(6))
       }
     },
-    [asset, collateral, collateralAmountCurrencyAmount, inputRef, market.exchangeRate]
+    [asset, collateral, collateralAmountCurrencyAmount, market.exchangeRate]
   )
 
   return (

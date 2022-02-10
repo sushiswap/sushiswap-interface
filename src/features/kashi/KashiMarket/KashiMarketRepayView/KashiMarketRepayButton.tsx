@@ -4,23 +4,24 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, KASHI_ADDRESS } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { BorrowExecutePayload, KashiMarketBorrowReviewModal, useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { useKashiMarket } from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, useState } from 'react'
 
-export interface KashiMarketBorrowButtonProps extends Omit<BorrowExecutePayload, 'permit' | 'trade'> {
-  maxBorrow?: CurrencyAmount<Currency>
+interface KashiMarketRepayButton {
+  closePosition: boolean
+  repayFromWallet: boolean
+  repayAmount?: CurrencyAmount<Currency>
+  removeAmount?: CurrencyAmount<Currency>
 }
 
-export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
-  receiveInWallet,
-  leveraged,
-  borrowAmount,
-  spendFromWallet,
-  collateralAmount,
-  maxBorrow,
+const KashiMarketRepayButton: FC<KashiMarketRepayButton> = ({
+  closePosition,
+  repayFromWallet,
+  repayAmount,
+  removeAmount,
 }) => {
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
@@ -32,14 +33,13 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   const [open, setOpen] = useState(false)
   const attemptingTxn = false
 
-  const totalAvailableToBorrow = borrowAmount
-    ? CurrencyAmount.fromRawAmount(borrowAmount.currency, market.totalAssetAmount)
+  const totalAvailableToRemove = removeAmount
+    ? CurrencyAmount.fromRawAmount(removeAmount.currency, market.totalCollateralAmount)
     : undefined
 
   let error: string | undefined = undefined
-  if (borrowAmount && maxBorrow && borrowAmount.greaterThan(maxBorrow)) error = i18n._(t`Not enough collateral`)
-  if (totalAvailableToBorrow && borrowAmount && borrowAmount.greaterThan(totalAvailableToBorrow))
-    error = i18n._(t`Not enough ${borrowAmount.currency.symbol} available`)
+  if (totalAvailableToRemove && removeAmount && removeAmount.greaterThan(totalAvailableToRemove))
+    error = i18n._(t`Not enough ${removeAmount.currency.symbol} available`)
 
   return (
     <>
@@ -51,8 +51,8 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
         </Typography>
       )}
       <TridentApproveGate
-        spendFromWallet={spendFromWallet}
-        inputAmounts={[collateralAmount]}
+        spendFromWallet={repayFromWallet}
+        inputAmounts={closePosition ? [] : [repayAmount]}
         tokenApproveOn={bentoboxContract?.address}
         masterContractAddress={masterContractAddress}
         withPermit={true}
@@ -70,21 +70,23 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
               onClick={() => setOpen(true)}
               className="rounded-2xl md:rounded"
             >
-              {error ? error : i18n._(t`Borrow`)}
+              {error ? error : closePosition ? i18n._(t`Close Position`) : i18n._(t`Repay`)}
             </Button>
           )
         }}
       </TridentApproveGate>
-      <KashiMarketBorrowReviewModal
-        open={open}
-        permit={permit}
-        onDismiss={() => setOpen(false)}
-        spendFromWallet={spendFromWallet}
-        receiveInWallet={receiveInWallet}
-        leveraged={leveraged}
-        collateralAmount={collateralAmount}
-        borrowAmount={borrowAmount}
-      />
+      {/*<KashiMarketBorrowReviewModal*/}
+      {/*  open={open}*/}
+      {/*  permit={permit}*/}
+      {/*  onDismiss={() => setOpen(false)}*/}
+      {/*  spendFromWallet={repayFromWallet}*/}
+      {/*  receiveInWallet={removeToWallet}*/}
+      {/*  leveraged={leveraged}*/}
+      {/*  collateralAmount={collateralAmount}*/}
+      {/*  borrowAmount={borrowAmount}*/}
+      {/*/>*/}
     </>
   )
 }
+
+export default KashiMarketRepayButton

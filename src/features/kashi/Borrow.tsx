@@ -96,7 +96,6 @@ export default function Borrow({ pair }: BorrowProps) {
     .add(collateralValue.toBigNumber(pair.collateral.tokenInfo.decimals))
     .add(extraCollateral)
 
-  console.log(extraCollateral.toNumber())
   // Calculate max borrow
   const nextMaxBorrowableOracle = nextUserCollateralValue.mulDiv(e10(16).mul('75'), pair.oracleExchangeRate)
   const nextMaxBorrowableSpot = nextUserCollateralValue.mulDiv(e10(16).mul('75'), pair.spotExchangeRate)
@@ -337,8 +336,10 @@ export default function Borrow({ pair }: BorrowProps) {
         '1'.toBigNumber(pair.collateral.tokenInfo.decimals)
       )
     )
+    console.log(multipliedCollateral.toString())
 
     const multipliedBorrow = multipliedCollateral.mulDiv(e10(16).mul('75'), pair.currentExchangeRate)
+    console.log(multipliedBorrow.toString())
 
     // console.log({
     //     original: swapCollateral.toFixed(pair.collateral.tokenInfo.decimals),
@@ -354,7 +355,6 @@ export default function Borrow({ pair }: BorrowProps) {
     // })
 
     // console.log('multipliedBorrow:', multipliedBorrow)
-
     setBorrowValue(multipliedBorrow.toFixed(pair.asset.tokenInfo.decimals))
   }
 
