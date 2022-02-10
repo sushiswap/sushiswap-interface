@@ -1,6 +1,6 @@
 import { AddressZero } from '@ethersproject/constants'
 import { Currency, CurrencyAmount, JSBI, Token } from '@sushiswap/core-sdk'
-import { useKashiPairAddresses, useKashiPairs } from 'app/features/kashi/hooks'
+import { useKashiPairAddresses, useKashiPairsForAccount } from 'app/features/kashi/hooks'
 import useSearchAndSort from 'app/hooks/useSearchAndSort'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo } from 'react'
@@ -35,10 +35,10 @@ export const useKashiLendPositions = (pairs: any[]) =>
     { key: 'currentUserAssetAmount.usdValue', direction: 'descending' }
   )
 
-const useBorrowPositionAmounts = () => {
+const useBorrowPositionAmounts = (account: string) => {
   const { chainId } = useActiveWeb3React()
   const addresses = useKashiPairAddresses()
-  const pairs = useKashiPairs(addresses)
+  const pairs = useKashiPairsForAccount(account, addresses)
 
   return useKashiBorrowPositions(pairs)
     .items.map((item) => {
@@ -51,15 +51,10 @@ const useBorrowPositionAmounts = () => {
     .filter(Boolean) as CurrencyAmount<Token>[]
 }
 
-type PairWithAmount = {
-  pair: any
-  amount: CurrencyAmount<Token>
-}
-
-export const useLendPositionAmounts = (): PairWithAmount[] => {
+export const useLendPositionAmounts = (account: string): CurrencyAmount<Token>[] => {
   const { chainId } = useActiveWeb3React()
   const addresses = useKashiPairAddresses()
-  const pairs = useKashiPairs(addresses)
+  const pairs = useKashiPairsForAccount(account, addresses)
 
   return useKashiLendPositions(pairs)
     .items.map((item) => {
@@ -67,18 +62,15 @@ export const useLendPositionAmounts = (): PairWithAmount[] => {
 
       const lentAsset = new Token(chainId, item.asset.address, item.asset.tokenInfo.decimals, item.asset.symbol)
       const lentAssetAmount = JSBI.BigInt(item.currentUserAssetAmount.value.toString())
-      return {
-        pair: item,
-        amount: CurrencyAmount.fromRawAmount(lentAsset, lentAssetAmount),
-      }
+      return CurrencyAmount.fromRawAmount(lentAsset, lentAssetAmount)
     })
-    .filter(Boolean) as PairWithAmount[]
+    .filter(Boolean) as CurrencyAmount<Token>[]
 }
 
-export const useCollateralPositionAmounts = (): PairWithAmount[] => {
+export const useCollateralPositionAmounts = (account: string): CurrencyAmount<Token>[] => {
   const { chainId } = useActiveWeb3React()
   const addresses = useKashiPairAddresses()
-  const pairs = useKashiPairs(addresses)
+  const pairs = useKashiPairsForAccount(account, addresses)
 
   return useKashiBorrowPositions(pairs)
     .items.map((item) => {
@@ -91,21 +83,15 @@ export const useCollateralPositionAmounts = (): PairWithAmount[] => {
         item.collateral.symbol
       )
       const collateralAssetAmount = JSBI.BigInt(item.userCollateralAmount.value.toString())
-      return {
-        pair: item,
-        amount: CurrencyAmount.fromRawAmount(collateralAsset, collateralAssetAmount),
-      }
+      return CurrencyAmount.fromRawAmount(collateralAsset, collateralAssetAmount)
     })
-    .filter(Boolean) as PairWithAmount[]
+    .filter(Boolean) as CurrencyAmount<Token>[]
 }
 
-export function useKashiPositions() {
-  const borrowPositionAmounts = useBorrowPositionAmounts()
-  const lentPositions = useLendPositionAmounts()
-  const lentPositionAmounts = lentPositions.map((p) => p.amount)
-
-  const collateralPositions = useCollateralPositionAmounts()
-  const collateralPositionAmounts = collateralPositions.map((p) => p.amount)
+export function useKashiPositions(account: string) {
+  const borrowPositionAmounts = useBorrowPositionAmounts(account)
+  const lentPositionAmounts = useLendPositionAmounts(account)
+  const collateralPositionAmounts = useCollateralPositionAmounts(account)
 
   const kashiBalances = useMemo(
     () => reduceBalances([...collateralPositionAmounts, ...lentPositionAmounts]),

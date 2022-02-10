@@ -7,7 +7,7 @@ import SumUSDCValues from 'app/features/trident/SumUSDCValues'
 import { currencyFormatter } from 'app/functions'
 import { useTridentLiquidityPositions } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
+import { useBentoBalancesV2ForAccount } from 'app/state/bentobox/hooks'
 import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useMemo } from 'react'
 
@@ -41,8 +41,8 @@ export const LiquidityPositionsBalancesSum = () => {
   )
 }
 
-const useWalletBalances = () => {
-  const { chainId, account } = useActiveWeb3React()
+const useWalletBalances = (account: string) => {
+  const { chainId } = useActiveWeb3React()
   const { data: tokenBalances, loading } = useAllTokenBalancesWithLoadingIndicator()
   // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useCurrencyBalance(account ? account : undefined, chainId ? NATIVE[chainId] : undefined)
@@ -60,11 +60,11 @@ const useWalletBalances = () => {
   }, [tokenBalances, ethBalance, loading])
 }
 
-export const BalancesSum = () => {
+export const BalancesSum: FC<{ account: string }> = ({ account }) => {
   const { i18n } = useLingui()
-  const { data: walletBalances, loading: wLoading } = useWalletBalances()
-  const { data: bentoBalances, loading: bLoading } = useBentoBalancesV2()
-  const { borrowed, collateral, lent, kashiBalances } = useKashiPositions()
+  const { data: walletBalances, loading: wLoading } = useWalletBalances(account)
+  const { data: bentoBalances, loading: bLoading } = useBentoBalancesV2ForAccount(account)
+  const { borrowed, collateral, lent } = useKashiPositions(account)
 
   const allAssets = useMemo(() => {
     const combined = [...walletBalances, ...bentoBalances, ...collateral, ...lent]
@@ -88,12 +88,6 @@ export const BalancesSum = () => {
       <div className="flex gap-10">
         <_BalancesSum assetAmounts={walletBalances} label={i18n._(t`Wallet`)} loading={wLoading} />
         <_BalancesSum assetAmounts={bentoBalances} label={i18n._(t`BentoBox`)} loading={bLoading} />
-        <_BalancesSum
-          assetAmounts={kashiBalances}
-          liabilityAmounts={borrowed}
-          label={i18n._(t`Kashi`)}
-          loading={false}
-        />
         <div className="flex flex-col gap-1">
           <Typography variant="sm">{i18n._(t`Assets`)}</Typography>
           <Typography variant="lg">{allAssets.total}</Typography>
