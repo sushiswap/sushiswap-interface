@@ -4,13 +4,14 @@ import { useLingui } from '@lingui/react'
 import Search from 'app/components/Search'
 import Typography from 'app/components/Typography'
 import KashiMarketListItem from 'app/features/kashi/KashiMarketListItem'
-import { KashiMarket } from 'app/features/kashi/types'
 import { TABLE_TR_TH_CLASSNAME, TABLE_WRAPPER_DIV_CLASSNAME } from 'app/features/trident/constants'
 import { classNames } from 'app/functions'
 import { useFuse } from 'app/hooks'
 import { useInfiniteScroll } from 'app/hooks/useInfiniteScroll'
 import React, { FC, memo } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
+
+import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
 
 const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active: boolean }> = ({
   id,
@@ -24,12 +25,12 @@ const SortIcon: FC<{ id?: string; direction?: 'ascending' | 'descending'; active
 }
 
 interface KashiMarketList {
-  markets: KashiMarket[]
+  markets: KashiMediumRiskLendingPair[]
 }
 
 const KashiMarketList: FC<KashiMarketList> = ({ markets }) => {
   const { i18n } = useLingui()
-  const { result, term, search } = useFuse<KashiMarket>({
+  const { result, term, search } = useFuse<KashiMediumRiskLendingPair>({
     data: markets,
     options: {
       keys: ['asset.token.symbol', 'collateral.token.symbol'],

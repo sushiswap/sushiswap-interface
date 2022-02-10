@@ -7,10 +7,12 @@ import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features
 import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
-import React, { FC } from 'react'
+import React, { FC, memo } from 'react'
+
+import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
 
 interface KashiMarketListItem {
-  market: any
+  market: KashiMediumRiskLendingPair
 }
 const KashiMarketListItem: FC<KashiMarketListItem> = ({ market }) => {
   const { i18n } = useLingui()
@@ -102,4 +104,4 @@ const KashiMarketListItem: FC<KashiMarketListItem> = ({ market }) => {
   )
 }
 
-export default KashiMarketListItem
+export default memo(KashiMarketListItem)
