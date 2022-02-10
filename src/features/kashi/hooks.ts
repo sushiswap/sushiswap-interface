@@ -1,7 +1,7 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
-import { Zero } from '@ethersproject/constants'
+import { AddressZero, Zero } from '@ethersproject/constants'
 import { ChainId, JSBI, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { Fraction } from 'app/entities'
@@ -29,7 +29,7 @@ import { useTokens } from 'app/hooks/Tokens'
 import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useBentoStrategies, useClones } from 'app/services/graph'
 import { useActiveWeb3React, useQueryFilter } from 'app/services/web3'
-import { useSingleCallResult } from 'app/state/multicall/hooks'
+import { NEVER_RELOAD, useSingleCallResult } from 'app/state/multicall/hooks'
 import { useMemo } from 'react'
 
 import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
@@ -122,21 +122,21 @@ export function useKashiMediumRiskLendingPairs(addresses: string[] = []): KashiM
 
   const tokens = useKashiTokens()
 
-  const pollArgs = useMemo(() => [account, addresses], [account, addresses])
+  const args = useMemo(() => [account ? account : AddressZero, addresses], [account, addresses])
 
-  // TODO: Replace
-  // @ts-ignore TYPE NEEDS FIXING
-  const data = useSingleCallResult(boringHelperContract, 'pollKashiPairs', pollArgs, {
-    blocksPerFetch: 0,
-  })?.result?.[0]
+  // TODO: for skeleton loading
+  // const kashiRepositoryContract = useKashiRepositoryContract()
+  // const callStates = useSingleContractMultipleData(kashiRepositoryContract, 'getPair', args, NEVER_RELOAD)
+
+  const { result } = useSingleCallResult(boringHelperContract, 'pollKashiPairs', args, NEVER_RELOAD)
 
   const { rebases } = useBentoRebases(Object.values(tokens))
 
   return useMemo(() => {
-    if (!chainId || !data) {
+    if (!chainId || !result || !rebases) {
       return []
     }
-    return data.map(
+    return result?.[0].map(
       (pair: any) =>
         new KashiMediumRiskLendingPair({
           accrueInfo: {
@@ -166,7 +166,7 @@ export function useKashiMediumRiskLendingPairs(addresses: string[] = []): KashiM
           userBorrowPart: JSBI.BigInt(pair.userBorrowPart.toString()),
         })
     )
-  }, [chainId, data, rebases])
+  }, [chainId, result, rebases])
 }
 
 export function useKashiMediumRiskLendingPair(address: string): KashiMediumRiskLendingPair {
