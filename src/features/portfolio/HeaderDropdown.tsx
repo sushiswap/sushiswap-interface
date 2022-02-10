@@ -12,10 +12,11 @@ import Identicon from 'react-blockies'
 
 interface HeaderDropdownProps {
   hideAccount?: boolean
+  account: string
 }
 
-const HeaderDropdown: FC<HeaderDropdownProps> = ({ hideAccount = false }) => {
-  const { account, library, chainId } = useActiveWeb3React()
+const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, hideAccount = false }) => {
+  const { library, chainId } = useActiveWeb3React()
   const [show, setShow] = useState<boolean>(false)
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -53,7 +54,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ hideAccount = false }) => {
           )}
         </div>
       </div>
-      <BalancesSum />
+      <BalancesSum account={account} />
     </>
   )
 }

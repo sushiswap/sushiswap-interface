@@ -1,16 +1,19 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import ActionsModal from 'app/features/portfolio/ActionsModal'
-import { BentoBalances, WalletBalances } from 'app/features/portfolio/AssetBalances/bentoAndWallet'
-import { KashiCollateral } from 'app/features/portfolio/AssetBalances/kashi/KashiCollateral'
-import { KashiLent } from 'app/features/portfolio/AssetBalances/kashi/KashiLent'
-import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
-import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
+import TridentLayout from 'app/layouts/Trident'
+import { useActiveWeb3React } from 'app/services/web3'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import React from 'react'
 
 const Portfolio = () => {
   const { i18n } = useLingui()
+  const router = useRouter()
+  const { account } = useActiveWeb3React()
+
+  if (account) {
+    router.replace(`/portfolio/${account}`)
+  }
 
   return (
     <>
@@ -22,16 +25,17 @@ const Portfolio = () => {
           content="Get a summary of all of the balances in your portfolio on Sushi."
         />
       </Head>
-      <TridentHeader pattern="bg-chevron">
-        <HeaderDropdown />
-      </TridentHeader>
-      <TridentBody className="flex flex-col gap-10 lg:grid grid-cols-2 lg:gap-4">
-        <WalletBalances />
-        <BentoBalances />
-        <KashiCollateral />
-        <KashiLent />
-      </TridentBody>
-      <ActionsModal />
+      <div className="flex flex-col items-center gap-4 mt-32">
+        <div>{i18n._(t`Connect to your wallet ↗`)}</div>
+
+        {/*
+          At the moment, there is an RPC issue if you are not connected to your wallet.
+          As soon as this is resolved, this ⬇️ can be enabled.
+         */}
+        {/*<div>{i18n._(t`or`)}</div>*/}
+        {/*<div>{i18n._(t`Insert an address`)}</div>*/}
+        {/*<AddressInputBox onSubmit={(account: string) => router.replace(`/portfolio/${account}`)} />*/}
+      </div>
     </>
   )
 }
