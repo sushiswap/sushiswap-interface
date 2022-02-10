@@ -3,15 +3,16 @@ import { t } from '@lingui/macro'
 import { ChainId, CurrencyAmount, Percent, Token } from '@sushiswap/core-sdk'
 import { CurrencyLogoArray } from 'app/components/CurrencyLogo'
 import Typography from 'app/components/Typography'
-import { KashiMarket } from 'app/features/kashi/types'
 import { TABLE_TBODY_TD_CLASSNAME, TABLE_TBODY_TR_CLASSNAME } from 'app/features/trident/constants'
 import { classNames, currencyFormatter, formatNumber, formatPercent } from 'app/functions'
 import { useUSDCValueWithLoadingIndicator } from 'app/hooks/useUSDCPrice'
 import Link from 'next/link'
 import React, { FC, memo } from 'react'
 
+import KashiMediumRiskLendingPair from './KashiMediumRiskLendingPair'
+
 interface KashiMarketListItem {
-  market: KashiMarket
+  market: KashiMediumRiskLendingPair
   chainId: ChainId
   i18n: I18n
 }
@@ -119,4 +120,4 @@ const KashiMarketListItem: FC<KashiMarketListItem> = memo(({ market, chainId, i1
   )
 })
 
-export default KashiMarketListItem
+export default memo(KashiMarketListItem)

@@ -4,9 +4,9 @@ import { ConstantProductPool, Fee } from '@sushiswap/trident-sdk'
 import { v2Migration } from 'app/features/trident/migrate/context/migrateSlice'
 import { calculateSlippageAmount, toShareCurrencyAmount } from 'app/functions'
 import store from 'app/state'
+import { selectSlippage } from 'app/state/slippage/slippageSlice'
 import { PoolWithState } from 'app/types'
 
-export const TRIDENT_MIGRATION_DEFAULT_SLIPPAGE = new Percent(50, 10_000) // .5%
 const NEW_POOL_MIN_LP_RECIEVED = '1'
 
 // Because twap setting is a boolean, a few more checks are necessary
@@ -43,7 +43,7 @@ type TridentMigrateAction = [
 ]
 
 function getMinLPRecieved(
-  slippageOnTransaction: Percent,
+  userSetSlippage: Percent,
   rebases: [Rebase | undefined, Rebase | undefined],
   v2LiquidityValues: { token0: CurrencyAmount<Token>; token1: CurrencyAmount<Token> },
   selectedTridentPool?: PoolWithState<ConstantProductPool>,
@@ -57,7 +57,7 @@ function getMinLPRecieved(
     toShareCurrencyAmount(rebases[0], v2LiquidityValues.token0),
     toShareCurrencyAmount(rebases[1], v2LiquidityValues.token1)
   )
-  return calculateSlippageAmount(liquidityMinted, slippageOnTransaction)[0].toString()
+  return calculateSlippageAmount(liquidityMinted, userSetSlippage)[0].toString()
 }
 
 interface TridentMigrateProps {
@@ -88,12 +88,10 @@ export const tridentMigrateAction = ({
     token1: migration.v2Pair.getLiquidityValue(migration.v2Pair.token1, v2PoolTotalSupply, v2LpTokenAmount),
   }
 
-  const userSetSlippage = store.getState().user.userSlippageTolerance
-  const slippageOnTransaction =
-    userSetSlippage === 'auto' ? TRIDENT_MIGRATION_DEFAULT_SLIPPAGE : new Percent(userSetSlippage, 10_000)
+  const userSetSlippage = selectSlippage(store.getState())
 
-  const minToken0Received = calculateSlippageAmount(v2LiquidityValues.token0, slippageOnTransaction)[0]
-  const minToken1Received = calculateSlippageAmount(v2LiquidityValues.token1, slippageOnTransaction)[0]
+  const minToken0Received = calculateSlippageAmount(v2LiquidityValues.token0, userSetSlippage)[0]
+  const minToken1Received = calculateSlippageAmount(v2LiquidityValues.token1, userSetSlippage)[0]
 
   const migrateParams: TridentMigrateAction = [
     migration.v2Pair.liquidityToken.address,
@@ -102,7 +100,7 @@ export const tridentMigrateAction = ({
     twap,
     minToken0Received.toString(),
     minToken1Received.toString(),
-    getMinLPRecieved(slippageOnTransaction, rebases, v2LiquidityValues, selectedTridentPool, tridentPoolSupply),
+    getMinLPRecieved(userSetSlippage, rebases, v2LiquidityValues, selectedTridentPool, tridentPoolSupply),
   ]
 
   return contract.interface.encodeFunctionData('migrate', migrateParams)

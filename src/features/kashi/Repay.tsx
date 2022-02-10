@@ -14,7 +14,9 @@ import { computeRealizedLPFeePercent, warningSeverity } from 'app/functions/pric
 import { useCurrency } from 'app/hooks/Tokens'
 import { useV2TradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippageWithDefault } from 'app/state/slippage/slippageSlice'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
@@ -89,9 +91,7 @@ export default function Repay({ pair }: RepayProps) {
 
   const displayRemoveValue = pinRemoveMax ? maxRemoveCollateral : removeValue
 
-  // Swap
-  // const [allowedSlippage] = useUserSlippageTolerance(); // 10 = 0.1%
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_KASHI_REPAY_SLIPPAGE_TOLERANCE)
+  const allowedSlippage = useAppSelector(selectSlippageWithDefault(DEFAULT_KASHI_REPAY_SLIPPAGE_TOLERANCE))
 
   const parsedAmount = tryParseAmount(pair.currentUserBorrowAmount.string, assetToken)
 

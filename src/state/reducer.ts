@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit'
+import portfolio from 'app/features/portfolio/portfolioSlice'
 
 import onsen from '../features/onsen/onsenSlice'
 import tridentAdd from '../features/trident/add/addSlice'
-import tridentBalances from '../features/trident/balances/balancesSlice'
 import tridentCreate from '../features/trident/create/createSlice'
 import tridentMigrations from '../features/trident/migrate/context/migrateSlice'
 import tridentPools from '../features/trident/pools/poolsSlice'
@@ -17,27 +17,29 @@ import limitOrder from './limit-order/reducer'
 import lists from './lists/reducer'
 import mint from './mint/reducer'
 import multicall from './multicall/reducer'
+import slippage from './slippage/slippageSlice'
 import swap from './swap/reducer'
 import transactions from './transactions/reducer'
 import user from './user/reducer'
 
 const reducer = combineReducers({
   application,
-  user,
-  transactions,
-  swap,
-  mint,
   burn,
-  multicall,
-  lists,
-  limitOrder,
+  user,
   create,
   inari,
+  limitOrder,
+  lists,
+  mint,
+  multicall,
   onsen,
+  slippage,
+  swap,
+  transactions,
   tridentSwap,
   tridentAdd,
   tridentRemove,
-  tridentBalances,
+  portfolio,
   tridentPools,
   tridentCreate,
   tridentMigrations,

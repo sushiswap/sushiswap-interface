@@ -14,8 +14,8 @@ import { Oracle } from './oracles'
 export class KashiMediumRiskLendingPair {
   public readonly address: string
   public readonly accrueInfo: AccrueInfo
-  public readonly collateral: Rebase
-  public readonly asset: Rebase
+  public readonly collateral: Rebase & { token: Token }
+  public readonly asset: Rebase & { token: Token }
   public readonly oracle: Oracle
   public readonly totalCollateralShare: JSBI
   public readonly totalAsset: Rebase

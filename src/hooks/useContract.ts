@@ -43,6 +43,7 @@ import { ERC20_BYTES32_ABI } from 'app/constants/abis/erc20'
 import ERC20_ABI from 'app/constants/abis/erc20.json'
 import FACTORY_ABI from 'app/constants/abis/factory.json'
 import INARI_ABI from 'app/constants/abis/inari.json'
+import KASHI_REPOSITORY_ABI from 'app/constants/abis/kashi-repository'
 import LIMIT_ORDER_ABI from 'app/constants/abis/limit-order.json'
 import LIMIT_ORDER_HELPER_ABI from 'app/constants/abis/limit-order-helper.json'
 import MAKER_ABI from 'app/constants/abis/maker.json'
@@ -129,6 +130,11 @@ export function useMerkleDistributorContract(): Contract | null {
 export function useProtocolMerkleDistributorContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
   return useContract(chainId ? '0x1026cbed7b7E851426b959BC69dcC1bf5876512d' : undefined, MERKLE_DISTRIBUTOR_ABI, true)
+}
+
+export function useKashiRepositoryContract(): Contract | null {
+  const { chainId } = useActiveWeb3React()
+  return useContract(chainId && '0x400AFAbFB249210E08A8dfC429FfE20d32245f57', KASHI_REPOSITORY_ABI, false)
 }
 
 export function useBoringHelperContract(): Contract | null {
