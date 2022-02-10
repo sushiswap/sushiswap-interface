@@ -1,17 +1,16 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import ActionsModal from 'app/features/portfolio/ActionsModal'
-import { BentoBalances, WalletBalances } from 'app/features/portfolio/AssetBalances/bentoAndWallet'
-import { KashiCollateral } from 'app/features/portfolio/AssetBalances/kashi/KashiCollateral'
-import { KashiLent } from 'app/features/portfolio/AssetBalances/kashi/KashiLent'
-import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
+import ActionsModal from 'app/features/account/ActionsModal'
+import { BentoBalances, WalletBalances } from 'app/features/account/AssetBalances/bentoAndWallet'
+import { KashiCollateral } from 'app/features/account/AssetBalances/kashi/KashiCollateral'
+import { KashiLent } from 'app/features/account/AssetBalances/kashi/KashiLent'
+import HeaderDropdown from 'app/features/account/HeaderDropdown'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import Head from 'next/head'
 import React from 'react'
 
 const Portfolio = () => {
   const { i18n } = useLingui()
-
   return (
     <>
       <Head>
@@ -25,7 +24,7 @@ const Portfolio = () => {
       <TridentHeader pattern="bg-chevron">
         <HeaderDropdown />
       </TridentHeader>
-      <TridentBody className="flex flex-col gap-10 lg:grid grid-cols-2 lg:gap-4">
+      <TridentBody className="flex flex-col grid-cols-2 gap-10 lg:grid lg:gap-4">
         <WalletBalances />
         <BentoBalances />
         <KashiCollateral />

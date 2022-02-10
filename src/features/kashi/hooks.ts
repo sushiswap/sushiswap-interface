@@ -2,7 +2,7 @@ import { defaultAbiCoder } from '@ethersproject/abi'
 import { getAddress } from '@ethersproject/address'
 import { BigNumber } from '@ethersproject/bignumber'
 import { AddressZero, Zero } from '@ethersproject/constants'
-import { ChainId, JSBI, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS } from '@sushiswap/core-sdk'
+import { ChainId, JSBI, KASHI_ADDRESS, NATIVE, Token, USD, WNATIVE_ADDRESS, ZERO } from '@sushiswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP, ChainlinkPriceFeedEntry } from 'app/config/oracles/chainlink'
 import { Fraction } from 'app/entities'
 import { Feature } from 'app/enums'
@@ -43,6 +43,21 @@ const BLACKLISTED_ORACLES = [
 ]
 
 const BLACKLISTED_PAIRS = ['0xF71e398B5CBb473a3378Bf4335256295A8eD713d']
+
+export const useKashiMediumRiskLendingPositions = (account: string): KashiMediumRiskLendingPair[] => {
+  const addresses = useKashiPairAddresses()
+  const markets = useKashiMediumRiskLendingPairs(account, addresses)
+  return markets.filter((pair: KashiMediumRiskLendingPair) => JSBI.greaterThan(pair.userAssetFraction, ZERO))
+}
+
+export const useKashiMediumRiskBorrowingPositions = (account: string): KashiMediumRiskLendingPair[] => {
+  const addresses = useKashiPairAddresses()
+  const markets = useKashiMediumRiskLendingPairs(account, addresses)
+  return markets.filter(
+    (pair: KashiMediumRiskLendingPair) =>
+      JSBI.greaterThan(pair.userCollateralShare, ZERO) || JSBI.greaterThan(pair.userBorrowPart, ZERO)
+  )
+}
 
 // Reduce all tokens down to only those which are found in the Oracle mapping
 export function useKashiTokens(): { [address: string]: Token } {
@@ -115,8 +130,11 @@ export function useKashiPairAddresses(): string[] {
   )
 }
 
-export function useKashiMediumRiskLendingPairs(addresses: string[] = []): KashiMediumRiskLendingPair[] {
-  const { chainId, account } = useActiveWeb3React()
+export function useKashiMediumRiskLendingPairs(
+  account: string | null | undefined,
+  addresses: string[] = []
+): KashiMediumRiskLendingPair[] {
+  const { chainId } = useActiveWeb3React()
 
   const boringHelperContract = useBoringHelperContract()
 
@@ -169,8 +187,8 @@ export function useKashiMediumRiskLendingPairs(addresses: string[] = []): KashiM
   }, [chainId, result, rebases])
 }
 
-export function useKashiMediumRiskLendingPair(address: string): KashiMediumRiskLendingPair {
-  return useKashiMediumRiskLendingPairs([getAddress(address)])[0]
+export function useKashiMediumRiskLendingPair(account: string, address: string): KashiMediumRiskLendingPair {
+  return useKashiMediumRiskLendingPairs(account, [getAddress(address)])[0]
 }
 
 export function useKashiPairs(addresses: string[] = []): KashiMarket[] {

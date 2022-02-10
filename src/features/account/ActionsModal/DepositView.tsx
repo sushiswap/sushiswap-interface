@@ -7,7 +7,7 @@ import Button from 'app/components/Button'
 import { BentoboxIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
-import { useBalancesSelectedCurrency } from 'app/features/portfolio/useBalancesDerivedState'
+import { useBalancesSelectedCurrency } from 'app/features/account/useBalancesDerivedState'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { tryParseAmount } from 'app/functions'
 import { useBentoBox, useBentoBoxContract } from 'app/hooks'
@@ -68,12 +68,12 @@ const DepositView: FC<DepositViewProps> = ({ onClose, onBack }) => {
         value={value}
         spendFromWallet={true}
       />
-      <div className="flex justify-center -mt-6 -mb-6 z-10">
+      <div className="z-10 flex justify-center -mt-6 -mb-6">
         <div className="p-1.5 rounded-full bg-dark-800 border border-dark-800 shadow-md border-dark-700">
           <ArrowDownIcon width={14} className="text-high-emphesis" />
         </div>
       </div>
-      <HeadlessUiModal.BorderedContent className="bg-dark-900 flex gap-3 px-3">
+      <HeadlessUiModal.BorderedContent className="flex gap-3 px-3 bg-dark-900">
         <div className="border border-dark-700 rounded-full w-[48px] h-[48px] flex items-center justify-center shadow-md">
           <BentoboxIcon width={20} height={20} />
         </div>

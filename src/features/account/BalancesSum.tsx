@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, ZERO } from '@sushiswap/core-sdk'
 import Typography, { TypographyVariant } from 'app/components/Typography'
-import { reduceBalances, useKashiPositions } from 'app/features/portfolio/AssetBalances/kashi/hooks'
+import { reduceBalances, useKashiPositions } from 'app/features/account/AssetBalances/kashi/hooks'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
 import { currencyFormatter } from 'app/functions'
 import { useTridentLiquidityPositions } from 'app/services/graph'
@@ -72,7 +72,7 @@ export const BalancesSum = () => {
   )
 
   return (
-    <div className="flex lg:flex-row flex-col gap-10 justify-between lg:items-end w-full">
+    <div className="flex flex-col justify-between w-full gap-10 lg:flex-row lg:items-end">
       <div className="flex gap-10">
         <_BalancesSum
           assetAmounts={allBalances}

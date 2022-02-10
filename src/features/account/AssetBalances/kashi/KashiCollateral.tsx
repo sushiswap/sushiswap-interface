@@ -3,9 +3,9 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount } from '@sushiswap/core-sdk'
 import Typography from 'app/components/Typography'
 import { Fraction } from 'app/entities'
-import AssetBalances from 'app/features/portfolio/AssetBalances/AssetBalances'
-import { useCollateralPositionAmounts } from 'app/features/portfolio/AssetBalances/kashi/hooks'
-import { useCollateralTableConfig } from 'app/features/portfolio/AssetBalances/kashi/useCollateralTableConfig'
+import AssetBalances from 'app/features/account/AssetBalances/AssetBalances'
+import { useCollateralPositionAmounts } from 'app/features/account/AssetBalances/kashi/hooks'
+import { useCollateralTableConfig } from 'app/features/account/AssetBalances/kashi/useCollateralTableConfig'
 import { useRouter } from 'next/router'
 import React from 'react'
 
@@ -32,8 +32,8 @@ export const KashiCollateral = () => {
   const config = useCollateralTableConfig(data)
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex gap-2 items-center">
+    <div className="flex flex-col w-full gap-3">
+      <div className="flex items-center gap-2">
         <Typography weight={700} variant="lg" className="text-high-emphesis">
           {i18n._(t`Kashi`)}
         </Typography>

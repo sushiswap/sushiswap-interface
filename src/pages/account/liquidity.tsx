@@ -1,6 +1,6 @@
-import { LiquidityPositionsBalances } from 'app/features/portfolio/AssetBalances/liquidityPositions'
-import { LiquidityPositionsBalancesSum } from 'app/features/portfolio/BalancesSum'
-import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
+import { LiquidityPositionsBalances } from 'app/features/account/AssetBalances/liquidityPositions'
+import { LiquidityPositionsBalancesSum } from 'app/features/account/BalancesSum'
+import HeaderDropdown from 'app/features/account/HeaderDropdown'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React from 'react'
 

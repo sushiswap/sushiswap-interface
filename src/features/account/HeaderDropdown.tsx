@@ -2,11 +2,12 @@ import Davatar from '@davatar/react'
 import { LinkIcon } from '@heroicons/react/outline'
 import CopyHelper from 'app/components/AccountDetails/Copy'
 import Typography from 'app/components/Typography'
-import { BalancesSum } from 'app/features/portfolio/BalancesSum'
+import { BalancesSum } from 'app/features/account/BalancesSum'
 import { getExplorerLink, shortenAddress } from 'app/functions'
 import useENSName from 'app/hooks/useENSName'
 import { useActiveWeb3React } from 'app/services/web3'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { FC, useState } from 'react'
 import Identicon from 'react-blockies'
 
@@ -15,7 +16,9 @@ interface HeaderDropdownProps {
 }
 
 const HeaderDropdown: FC<HeaderDropdownProps> = ({ hideAccount = false }) => {
-  const { account, library, chainId } = useActiveWeb3React()
+  const router = useRouter()
+  const account = router.query.address as string
+  const { library, chainId } = useActiveWeb3React()
   const [show, setShow] = useState<boolean>(false)
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -38,7 +41,7 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ hideAccount = false }) => {
               <a target="_blank">
                 <Typography
                   variant="h3"
-                  className="text-high-emphesis flex gap-1 cursor-pointer hover:text-blue-100"
+                  className="flex gap-1 cursor-pointer text-high-emphesis hover:text-blue-100"
                   weight={700}
                 >
                   {ENSName ? ENSName : account ? shortenAddress(account) : ''} <LinkIcon width={20} />

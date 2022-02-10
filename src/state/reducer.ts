@@ -1,5 +1,5 @@
 import { combineReducers } from '@reduxjs/toolkit'
-import portfolio from 'app/features/portfolio/portfolioSlice'
+import portfolio from 'app/features/account/portfolioSlice'
 
 import onsen from '../features/onsen/onsenSlice'
 import tridentAdd from '../features/trident/add/addSlice'
