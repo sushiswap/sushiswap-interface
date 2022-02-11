@@ -7,17 +7,17 @@ import { Assets } from 'app/features/portfolio/AssetBalances/types'
 import { setBalancesState } from 'app/features/portfolio/portfolioSlice'
 import { ActiveModal } from 'app/features/trident/types'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalancesV2 } from 'app/state/bentobox/hooks'
+import { useBentoBalancesV2ForAccount } from 'app/state/bentobox/hooks'
 import { useAppDispatch } from 'app/state/hooks'
 import { useAllTokenBalancesWithLoadingIndicator, useCurrencyBalance } from 'app/state/wallet/hooks'
-import React, { useCallback, useMemo } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 
 import { useBasicTableConfig } from '../useBasicTableConfig'
 
-export const BentoBalances = () => {
+export const BentoBalances = ({ account }: { account: string }) => {
   const { i18n } = useLingui()
   const dispatch = useAppDispatch()
-  const { data: balances, loading } = useBentoBalancesV2()
+  const { data: balances, loading } = useBentoBalancesV2ForAccount(account)
   const assets = balances.reduce<Assets[]>((acc, el) => {
     if (el) acc.push({ asset: el })
     return acc
@@ -48,9 +48,9 @@ export const BentoBalances = () => {
   )
 }
 
-export const WalletBalances = () => {
+export const WalletBalances: FC<{ account: string }> = ({ account }) => {
   const { i18n } = useLingui()
-  const { chainId, account } = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const { data: _balances, loading } = useAllTokenBalancesWithLoadingIndicator()
 
