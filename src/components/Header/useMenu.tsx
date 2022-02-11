@@ -189,8 +189,8 @@ const useMenu: UseMenu = () => {
             link: '/miso',
           },
           {
-            key: 'factory',
-            title: i18n._(t`Factory`),
+            key: 'launch',
+            title: i18n._(t`Launch`),
             link: '/miso/auction',
           },
         ],
@@ -240,7 +240,7 @@ const useMenu: UseMenu = () => {
     mainItems.push({
       key: 'balances',
       title: i18n._(t`Portfolio`),
-      link: '/balances',
+      link: '/portfolio',
       icon: <WalletIcon width={20} />,
     })
 

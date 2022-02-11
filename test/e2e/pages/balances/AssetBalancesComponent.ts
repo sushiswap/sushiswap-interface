@@ -1,7 +1,7 @@
 import { AppPageComponent } from '../AppPageComponent'
 
 export class AssetBalancesComponent extends AppPageComponent {
-  private AssetBalancesTableBodySelector: string = '#asset-balances-table > tbody'
+  private AssetBalancesTableBodySelector: string = '#asset-portfolio-table > tbody'
 
   public async getAssetBalances(): Promise<Record<string, number>> {
     let balances: Record<string, number> = {}

@@ -2,7 +2,7 @@ import Davatar from '@davatar/react'
 import { LinkIcon } from '@heroicons/react/outline'
 import CopyHelper from 'app/components/AccountDetails/Copy'
 import Typography from 'app/components/Typography'
-import { BalancesSum } from 'app/features/trident/balances/BalancesSum'
+import { BalancesSum } from 'app/features/portfolio/BalancesSum'
 import { getExplorerLink, shortenAddress } from 'app/functions'
 import useENSName from 'app/hooks/useENSName'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -12,10 +12,11 @@ import Identicon from 'react-blockies'
 
 interface HeaderDropdownProps {
   hideAccount?: boolean
+  account: string
 }
 
-const HeaderDropdown: FC<HeaderDropdownProps> = ({ hideAccount = false }) => {
-  const { account, library, chainId } = useActiveWeb3React()
+const HeaderDropdown: FC<HeaderDropdownProps> = ({ account, hideAccount = false }) => {
+  const { library, chainId } = useActiveWeb3React()
   const [show, setShow] = useState<boolean>(false)
   const { ENSName } = useENSName(account ?? undefined)
 
@@ -47,13 +48,13 @@ const HeaderDropdown: FC<HeaderDropdownProps> = ({ hideAccount = false }) => {
             </Link>
           )}
           {account && !hideAccount && (
-            <CopyHelper toCopy={shortenAddress(account)} className="opacity-100 text-primary">
+            <CopyHelper toCopy={account} className="opacity-100 text-primary">
               {shortenAddress(account)}
             </CopyHelper>
           )}
         </div>
       </div>
-      <BalancesSum />
+      <BalancesSum account={account} />
     </>
   )
 }

@@ -1,14 +1,18 @@
-import { LiquidityPositionsBalances } from 'app/features/trident/balances/AssetBalances'
-import { LiquidityPositionsBalancesSum } from 'app/features/trident/balances/BalancesSum'
-import HeaderDropdown from 'app/features/trident/balances/HeaderDropdown'
+import { LiquidityPositionsBalances } from 'app/features/portfolio/AssetBalances/liquidityPositions'
+import { LiquidityPositionsBalancesSum } from 'app/features/portfolio/BalancesSum'
+import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
+import { useAccountInUrl } from 'app/features/portfolio/useAccountInUrl'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
 import React from 'react'
 
 const LiquidityPosition = () => {
+  const account = useAccountInUrl('/portfolio')
+  if (!account) return
+
   return (
     <>
       <TridentHeader pattern="bg-binary">
-        <HeaderDropdown />
+        <HeaderDropdown account={account} />
         <LiquidityPositionsBalancesSum />
       </TridentHeader>
       <TridentBody>
