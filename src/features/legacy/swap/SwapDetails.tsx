@@ -5,15 +5,15 @@ import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, Route, TradeVersion } from '@sushiswap/core-sdk'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
-import { Feature } from 'app/enums'
 import TradePrice from 'app/features/legacy/swap/TradePrice'
-import { classNames, computeRealizedLPFeePercent, featureEnabled, shortenAddress } from 'app/functions'
+import { classNames, computeRealizedLPFeePercent, shortenAddress } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import useFeeData from 'app/hooks/useFeeData'
+import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import useSwapSlippageTolerance from 'app/hooks/useSwapSlippageTollerence'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserOpenMev } from 'app/state/user/hooks'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { TradeUnion } from 'app/types'
 import Link from 'next/link'
 import React, { FC, Fragment, useState } from 'react'
@@ -30,7 +30,7 @@ const SwapDetailsContent: FC<SwapDetailsContent> = ({ trade, recipient }) => {
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const minReceived = trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
-  const [userUseOpenMev] = useUserOpenMev()
+  const useSushiGuard = useSushiGuardFeature()
   const [expertMode] = useExpertModeManager()
   const { maxFeePerGas, maxPriorityFeePerGas } = useFeeData()
   const { maxFee, maxPriorityFee } = useSwapState()
@@ -97,7 +97,7 @@ const SwapDetailsContent: FC<SwapDetailsContent> = ({ trade, recipient }) => {
           </div>
         )}
       </div>
-      {userUseOpenMev && (
+      {useSushiGuard && (
         <div className="flex flex-col gap-1 py-2">
           <div className="grid grid-cols-2 gap-4">
             <Typography variant="xs" className="text-secondary">
@@ -105,7 +105,7 @@ const SwapDetailsContent: FC<SwapDetailsContent> = ({ trade, recipient }) => {
             </Typography>
             <Link href="https://docs.openmev.org/" passHref={true}>
               <a target="_blank">
-                <Typography variant="xs" className="justify-end items-center text-right text-blue flex gap-1">
+                <Typography variant="xs" className="flex items-center justify-end gap-1 text-right text-blue">
                   {i18n._(t`Enabled`)}
                   <ExternalLinkIcon width={12} />
                 </Typography>
@@ -151,9 +151,8 @@ interface SwapDetails {
 }
 
 const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient, trade, className }) => {
-  const { chainId } = useActiveWeb3React()
   const [inverted, setInverted] = useState(false)
-  const [userUseOpenMev] = useUserOpenMev()
+  const useSushiGuard = useSushiGuardFeature()
 
   return (
     <Disclosure as="div">
@@ -165,7 +164,7 @@ const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient
             className
           )}
         >
-          <div className="flex justify-between gap-2 items-center pl-2">
+          <div className="flex items-center justify-between gap-2 pl-2">
             <div>
               <TradePrice
                 inputCurrency={inputCurrency}
@@ -176,8 +175,8 @@ const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient
               />
             </div>
             <Disclosure.Button as={Fragment}>
-              <div className="flex gap-2 flex-grow items-center justify-end cursor-pointer rounded h-7">
-                {chainId && featureEnabled(Feature.RELAY, chainId) && userUseOpenMev && (
+              <div className="flex items-center justify-end flex-grow gap-2 rounded cursor-pointer h-7">
+                {useSushiGuard && (
                   <QuestionHelper
                     text="SushiGuard Gas Rebates are activated"
                     icon={<ShieldCheckIcon width={16} className="text-green" />}

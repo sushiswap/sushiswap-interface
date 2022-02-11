@@ -37,7 +37,7 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
-  updateUserUseOpenMev,
+  updateUserUseSushiGuard,
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -422,18 +422,20 @@ export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Pe
 }
 
 /**
- * Returns a boolean indicating if the user has enabled OpenMEV protection.
+ * Returns a boolean indicating if the user has enabled SushiGuard / MEV protection.
  */
-export function useUserOpenMev(): [boolean, (newUseOpenMev: boolean) => void] {
+export function useUserSushiGuard(): [boolean, (newUseSushiGuard: boolean) => void] {
   const dispatch = useAppDispatch()
 
   // @ts-ignore TYPE NEEDS FIXING
-  const useOpenMev = useSelector<AppState, AppState['user']['useOpenMev']>((state) => state.user.userUseOpenMev)
+  const useSushiGuard = useSelector<AppState, AppState['user']['useSushiGuard']>(
+    (state) => state.user.userUseSushiGuard
+  )
 
-  const setUseOpenMev = useCallback(
-    (newUseOpenMev: boolean) => dispatch(updateUserUseOpenMev({ userUseOpenMev: newUseOpenMev })),
+  const setUseSushiGuard = useCallback(
+    (newUseSushiGuard: boolean) => dispatch(updateUserUseSushiGuard({ userUseSushiGuard: newUseSushiGuard })),
     [dispatch]
   )
 
-  return [useOpenMev, setUseOpenMev]
+  return [useSushiGuard, setUseSushiGuard]
 }

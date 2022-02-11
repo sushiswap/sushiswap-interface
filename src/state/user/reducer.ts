@@ -14,7 +14,7 @@ import {
   updateUserExpertMode,
   updateUserSingleHopOnly,
   updateUserSlippageTolerance,
-  updateUserUseOpenMev,
+  updateUserUseSushiGuard,
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -33,8 +33,8 @@ export interface UserState {
   // deadline set by user in minutes, used in all txns
   userDeadline: number
 
-  // true if OpenMEV protection is enabled
-  userUseOpenMev: boolean
+  // true if SushiGuard / MEV protection is enabled
+  userUseSushiGuard: boolean
 
   tokens: {
     [chainId: number]: {
@@ -66,7 +66,7 @@ export const initialState: UserState = {
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
-  userUseOpenMev: true,
+  userUseSushiGuard: true,
 }
 
 export default createReducer(initialState, (builder) =>
@@ -134,7 +134,7 @@ export default createReducer(initialState, (builder) =>
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
     })
-    .addCase(updateUserUseOpenMev, (state, action) => {
-      state.userUseOpenMev = action.payload.userUseOpenMev
+    .addCase(updateUserUseSushiGuard, (state, action) => {
+      state.userUseSushiGuard = action.payload.userUseSushiGuard
     })
 )

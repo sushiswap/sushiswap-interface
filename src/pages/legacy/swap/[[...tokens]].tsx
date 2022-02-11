@@ -14,24 +14,23 @@ import SwapGasFeeInputs from 'app/features/legacy/swap/SwapGasFeeInputs'
 import UnsupportedCurrencyFooter from 'app/features/legacy/swap/UnsupportedCurrencyFooter'
 import HeaderNew from 'app/features/trade/HeaderNew'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import confirmPriceImpactWithoutFee from 'app/functions/prices'
-import { warningSeverity } from 'app/functions/prices'
+import confirmPriceImpactWithoutFee, { warningSeverity } from 'app/functions/prices'
 import { computeFiatValuePriceImpact } from 'app/functions/trade'
 import { useAllTokens, useCurrency } from 'app/hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from 'app/hooks/useApproveCallback'
 import useENSAddress from 'app/hooks/useENSAddress'
 import useIsArgentWallet from 'app/hooks/useIsArgentWallet'
 import { useIsSwapUnsupported } from 'app/hooks/useIsSwapUnsupported'
+import useSushiGuardFeature from 'app/hooks/useSushiGuardFeature'
 import { useSwapCallback } from 'app/hooks/useSwapCallback'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
-import useWalletSupportsOpenMev from 'app/hooks/useWalletSupportsOpenMev'
 import useWrapCallback, { WrapType } from 'app/hooks/useWrapCallback'
 import { SwapLayout, SwapLayoutCard } from 'app/layouts/SwapLayout'
 import TokenWarningModal from 'app/modals/TokenWarningModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import { Field, setRecipient } from 'app/state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'app/state/swap/hooks'
-import { useExpertModeManager, useUserOpenMev, useUserSingleHopOnly } from 'app/state/user/hooks'
+import { useExpertModeManager, useUserSingleHopOnly } from 'app/state/user/hooks'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactGA from 'react-ga'
 
@@ -188,8 +187,8 @@ const Swap = ({ banners }) => {
     }
   }, [approvalState, approvalSubmitted])
 
-  const [useOpenMev] = useUserOpenMev()
-  const walletSupportsOpenMev = useWalletSupportsOpenMev()
+  // Checks if user has enabled the feature and if the wallet supports it
+  const useSushiGuard = useSushiGuardFeature()
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -199,7 +198,7 @@ const Swap = ({ banners }) => {
     signatureData,
     /* @ts-ignore TYPE NEEDS FIXING */
     null,
-    walletSupportsOpenMev && useOpenMev
+    useSushiGuard
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -390,7 +389,7 @@ const Swap = ({ banners }) => {
             onChange={handleTypeInput}
             onSelect={handleInputSelect}
           />
-          <div className="flex justify-center -mt-6 -mb-6 z-0">
+          <div className="z-0 flex justify-center -mt-6 -mb-6">
             <div
               role="button"
               className="p-1.5 rounded-full bg-dark-800 border shadow-md border-dark-700 hover:border-dark-600"
@@ -417,7 +416,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
-          {isExpertMode && useOpenMev && <SwapGasFeeInputs />}
+          {isExpertMode && useSushiGuard && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails
@@ -429,7 +428,7 @@ const Swap = ({ banners }) => {
           )}
 
           {trade && routeNotFound && userHasSpecifiedInputOutput && (
-            <Typography variant="xs" className="text-center py-2">
+            <Typography variant="xs" className="py-2 text-center">
               {i18n._(t`Insufficient liquidity for this trade.`)}{' '}
               {singleHopOnly && i18n._(t`Try enabling multi-hop trades`)}
             </Typography>

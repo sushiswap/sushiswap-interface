@@ -1,11 +1,14 @@
+import Common, { Hardfork } from '@ethereumjs/common'
 import { TransactionFactory } from '@ethereumjs/tx'
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { TransactionRequest } from '@ethersproject/abstract-provider'
 import { BigNumber } from '@ethersproject/bignumber'
-import { arrayify, DataOptions, hexlify, Signature, splitSignature } from '@ethersproject/bytes'
+import { isBigNumberish } from '@ethersproject/bignumber/lib/bignumber'
+import { arrayify, DataOptions, hexlify, Signature, SignatureLike, splitSignature } from '@ethersproject/bytes'
 import { AddressZero } from '@ethersproject/constants'
 import { t } from '@lingui/macro'
 import {
+  ChainId,
   Currency,
   CurrencyAmount,
   Percent,
@@ -46,7 +49,7 @@ import { TransactionResponseLight, useTransactionAdder } from 'app/state/transac
 import { useExpertModeManager } from 'app/state/user/hooks'
 import { useMemo } from 'react'
 
-import { OPENMEV_URI } from '../config/openmev'
+import { SUSHIGUARD_RELAY } from '../config/sushiguard'
 import { useArgentWalletContract } from './useArgentWalletContract'
 import { useRouterContract, useTridentRouterContract } from './useContract'
 import useENS from './useENS'
@@ -513,6 +516,16 @@ export function swapErrorToUserReadableMessage(error: any): string {
       return t`This transaction will not succeed due to price movement. Try increasing your slippage tolerance.`
     case 'TF':
       return t`The output token cannot be transferred. There may be an issue with the output token.`
+    case 'SushiGuard: FAILED_GAS_PRICE_ESTIMATION':
+      return t`Your wallet provider has failed to obtain an accurate gas price estimation. Try again as it may be a transient error or disable SushiGuard feature.`
+    case 'SushiGuard: FAILED_EIP1559_FEE_GAS_ESTIMATION':
+      return t`Your wallet provider has failed to obtain an accurate gas fee estimation. Try again as it may be a transient error or disable SushiGuard feature.`
+    case 'SushiGuard: FAILED_NONCE_RETRIEVAL':
+      return t`Your wallet provider has failed to obtain a valid nonce from your wallet. Try again as it may be a transient error or disable SushiGuard feature.`
+    case 'SushiGuard: UNSUPPORTED_PROVIDER_REQUEST':
+      return t`Your wallet provider doesn't support the custom signature features necessary to sign your TX. Disable SushiGuard feature or try with another wallet provider.`
+    case 'SushiGuard: RELAY_URL_NOT_AVAILABLE':
+      return t`SushiGuard is not available for the selected network. Disable SushiGuard feature or switch to a supported network.`
     default:
       if (reason?.indexOf('undefined is not an object') !== -1) {
         console.error(error, reason)
@@ -530,7 +543,7 @@ export function useSwapCallback(
   recipientAddressOrName: string | undefined, // the ENS name or address of the recipient of the trade, or null if swap should be returned to sender
   signatureData: SignatureData | undefined | null,
   tridentTradeContext?: TridentTradeContext,
-  useOpenMev: boolean = false
+  useSushiGuard: boolean = false
 ): {
   state: SwapCallbackState
   callback: null | (() => Promise<string>)
@@ -671,13 +684,9 @@ export function useSwapCallback(
 
         let privateTx = false
         let txResponse: Promise<TransactionResponseLight>
-        if (!featureEnabled(Feature.RELAY, chainId) || (!useOpenMev && featureEnabled(Feature.RELAY, chainId))) {
+        if (!useSushiGuard) {
           txResponse = library.getSigner().sendTransaction(txParams)
         } else {
-          const supportedNetwork = featureEnabled(Feature.RELAY, chainId)
-          if (!supportedNetwork)
-            throw new Error(`Unsupported SushiGuard network id ${chainId} when building transaction`)
-
           // Set flag for transaction adder
           privateTx = true
 
@@ -688,38 +697,51 @@ export function useSwapCallback(
               type: eip1559 ? 2 : 0, // EIP1559, otherwise Legacy
               ...txParams,
             })
-            .then((fullTx) => {
-              const { type, chainId, nonce, gasLimit, maxFeePerGas, maxPriorityFeePerGas, to, value, data } = fullTx
+            .then((fullTx: TransactionRequest) => {
+              const { type, chainId, nonce, gasPrice, gasLimit, maxFeePerGas, maxPriorityFeePerGas, to, value, data } =
+                fullTx
               const hOpts: DataOptions = { hexPad: 'left' }
               const _maxFeePerGas = expertMode && maxFee ? maxFee : maxFeePerGas
               const _maxPriorityFee = expertMode && maxPriorityFee ? maxPriorityFee : maxPriorityFeePerGas
 
-              const txToSign = TransactionFactory.fromTxData({
-                type: type ? hexlify(type) : undefined,
-                chainId: chainId ? hexlify(chainId) : undefined,
-                nonce: nonce ? hexlify(nonce, hOpts) : undefined,
-                gasLimit: gasLimit ? hexlify(gasLimit, hOpts) : undefined,
-                maxFeePerGas: _maxFeePerGas ? hexlify(_maxFeePerGas, hOpts) : undefined,
-                maxPriorityFeePerGas: _maxPriorityFee ? hexlify(_maxPriorityFee, hOpts) : undefined,
-                to,
-                value: value ? hexlify(value, hOpts) : undefined,
-                data: data?.toString(),
-              })
+              // protect ourselves from not obtaining the gas price for legacy tx
+              if (!eip1559 && !isBigNumberish(gasPrice)) throw Error('SushiGuard: FAILED_GAS_PRICE_ESTIMATION')
 
-              dispatch(setSushiRelayChallenge(hexlify(txToSign.getMessageToSign())))
+              // protect ourselves from not obtaining correctly the necessary maxFeePerGas and maxPriorityFeePerGas for EIP1559
+              if (eip1559 && !isBigNumberish(_maxFeePerGas) && !isBigNumberish(_maxPriorityFee))
+                throw Error('SushiGuard: FAILED_EIP1559_FEE_GAS_ESTIMATION')
 
-              // @ts-ignore TYPE NEEDS FIXING
+              const txData = TransactionFactory.fromTxData(
+                {
+                  type: type ? hexlify(type) : undefined,
+                  chainId: chainId ? hexlify(chainId) : undefined,
+                  nonce: nonce ? hexlify(nonce, hOpts) : undefined,
+                  gasPrice: gasPrice ? hexlify(gasPrice, hOpts) : undefined,
+                  gasLimit: gasLimit ? hexlify(gasLimit, hOpts) : undefined,
+                  maxFeePerGas: _maxFeePerGas ? hexlify(_maxFeePerGas, hOpts) : undefined,
+                  maxPriorityFeePerGas: _maxPriorityFee ? hexlify(_maxPriorityFee, hOpts) : undefined,
+                  to,
+                  value: value ? hexlify(value, hOpts) : undefined,
+                  data: data?.toString(),
+                },
+                { common: new Common({ chain: chainId ?? ChainId.ETHEREUM, hardfork: Hardfork.London }) }
+              )
+              const txToSign = hexlify(txData.getMessageToSign())
+
+              dispatch(setSushiRelayChallenge(txToSign))
+
+              if (!library.provider.request) throw Error('SushiGuard: UNSUPPORTED_PROVIDER_REQUEST')
               return library.provider
-                .request({ method: 'eth_sign', params: [account, hexlify(txToSign.getMessageToSign())] })
-                .then((signature) => {
+                .request({ method: 'eth_sign', params: [account, txToSign] })
+                .then((signature: SignatureLike) => {
                   const { v, r, s } = splitSignature(signature)
                   // eslint-disable-next-line
                   // @ts-ignore
-                  const txWithSignature: TypedTransaction = txToSign._processSignature(v, arrayify(r), arrayify(s))
-                  return { signedTx: hexlify(txWithSignature.serialize()), fullTx }
+                  const txWithSignature: TypedTransaction = txData._processSignature(v, arrayify(r), arrayify(s))
+                  return hexlify(txWithSignature.serialize())
                 })
             })
-            .then(({ signedTx }) => {
+            .then((signedTx: string) => {
               const body = JSON.stringify({
                 jsonrpc: '2.0',
                 id: new Date().getTime(),
@@ -727,8 +749,8 @@ export function useSwapCallback(
                 params: [signedTx],
               })
 
-              // @ts-ignore TYPE NEEDS FIXING
-              return fetch(OPENMEV_URI[chainId], {
+              if (!SUSHIGUARD_RELAY[chainId]) throw Error('SushiGuard: RELAY_URL_NOT_AVAILABLE')
+              return fetch(SUSHIGUARD_RELAY[chainId] ?? '', {
                 method: 'POST',
                 body,
                 headers: {
@@ -812,7 +834,7 @@ export function useSwapCallback(
     recipient,
     recipientAddressOrName,
     swapCalls,
-    useOpenMev,
+    useSushiGuard,
     eip1559,
     dispatch,
     tridentTradeContext,
