@@ -189,8 +189,8 @@ const useMenu: UseMenu = () => {
             link: '/miso',
           },
           {
-            key: 'factory',
-            title: i18n._(t`Factory`),
+            key: 'launch',
+            title: i18n._(t`Launch`),
             link: '/miso/auction',
           },
         ],
