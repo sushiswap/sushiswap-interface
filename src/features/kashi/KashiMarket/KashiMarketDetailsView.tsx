@@ -218,7 +218,7 @@ export const KashiMarketDetailsView: FC<KashiMarketDetailsView> = ({
                   onClick={() => setInvert((prev) => !prev)}
                   variant="xs"
                   weight={700}
-                  className="cursor-pointer bg-dark-700 hover:bg-dark-700 rounded px-3 py-1 rounded-full"
+                  className="cursor-pointer hover:text-high-emphesis rounded py-1 rounded-full"
                 >
                   {liquidationPrice}
                 </Typography>
