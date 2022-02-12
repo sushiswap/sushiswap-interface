@@ -1,3 +1,4 @@
+import Davatar from '@davatar/react'
 import { Web3Provider } from '@ethersproject/providers'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -23,61 +24,68 @@ function newTransactionsFirst(a: TransactionDetails, b: TransactionDetails) {
 }
 
 // eslint-disable-next-line react/prop-types
-function StatusIcon({
-  connector,
-  account,
-  provider,
-}: {
-  connector: AbstractConnector
-  account: string
-  provider: Web3Provider
-}) {
+function StatusIcon({ connector }: { connector: AbstractConnector; account: string; provider: Web3Provider }) {
   if (connector === injected) {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/metamask.png" alt="Injected (MetaMask etc...)" width={16} height={16} />
+        <Image
+          src="https://app.sushi.com/images/wallets/metamask.png"
+          alt="Injected (MetaMask etc...)"
+          width={16}
+          height={16}
+        />
       </div>
     )
   } else if (connector.constructor.name === 'WalletConnectConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/wallet-connect.png" alt={'Wallet Connect'} width="16px" height="16px" />
+        <Image
+          src="https://app.sushi.com/images/wallets/wallet-connect.svg"
+          alt={'Wallet Connect'}
+          width="16px"
+          height="16px"
+        />
       </div>
     )
   } else if (connector.constructor.name === 'LatticeConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/lattice.png" alt={'Lattice'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'WalletLinkConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/coinbase.svg" alt={'Coinbase Wallet'} width="16px" height="16px" />
+        <Image
+          src="https://app.sushi.com/images/wallets/coinbase.svg"
+          alt={'Coinbase Wallet'}
+          width="16px"
+          height="16px"
+        />
       </div>
     )
   } else if (connector.constructor.name === 'FortmaticConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/fortmatic.png" alt={'Fortmatic'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'PortisConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/portis.png" alt={'Portis'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'KeystoneConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/keystone.png" alt={'Keystone'} width="16px" height="16px" />
       </div>
     )
   } else if (connector.constructor.name === 'CloverConnector') {
     return (
       <div className="flex flex-col items-center justify-center w-4 h-4 flex-nowrap">
-        <Image src="/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
+        <Image src="https://app.sushi.com/images/wallets/clover.svg" alt={'Clover'} width="16px" height="16px" />
       </div>
     )
   }
@@ -107,26 +115,39 @@ function Web3StatusInner() {
     return (
       <div
         id="web3-status-connected"
-        className="flex gap-2 items-center px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
+        className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg bg-dark-1000 text-primary"
         onClick={toggleWalletModal}
       >
         {hasPendingTransactions ? (
-          <div className="flex gap-2 items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <div>
               {pending?.length} {i18n._(t`Pending`)}
             </div>{' '}
             <Loader stroke="white" />
           </div>
         ) : (
-          <div>{ENSName || shortenAddress(account)}</div>
+          <div className="flex items-center gap-2">
+            <div>{ENSName || shortenAddress(account)}</div>
+            <Davatar
+              size={20}
+              address={account}
+              defaultComponent={
+                <Image src="https://app.sushi.com/images/chef.svg" alt="Sushi Chef" width={20} height={20} />
+              }
+              style={{ borderRadius: 5 }}
+              provider={library}
+            />
+          </div>
         )}
-        {!hasPendingTransactions && connector && (
+        {/* {!hasPendingTransactions && connector && (
           <StatusIcon connector={connector} account={account} provider={library} />
-        )}
+        )} */}
       </div>
     )
   } else {
-    return <Web3Connect className="!bg-dark-1000 border border-dark-900 h-[38px]" />
+    return (
+      <Web3Connect className="!bg-dark-900 bg-gradient-to-r from-pink/80 hover:from-pink to-purple/80 hover:to-purple text-white h-[38px]" />
+    )
   }
 }
 

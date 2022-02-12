@@ -75,10 +75,12 @@ const schema = yup.object().shape({
     .required('Must enter a valid number'),
   paymentCurrencyAddress: addressValidator.required('Must enter a valid address'),
   fixedPrice: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.CROWDSALE,
     then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
   }),
   minimumTarget: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.CROWDSALE,
     then: yup
       .number()
@@ -87,14 +89,17 @@ const schema = yup.object().shape({
       .max(100, 'Can be at most 100%'),
   }),
   minimumRaised: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.BATCH_AUCTION,
     then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
   }),
   startPrice: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
   }),
   endPrice: yup.number().when('auctionType', {
+    // @ts-ignore TYPE NEEDS FIXING
     is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup
       .number()
@@ -140,6 +145,7 @@ const AuctionCreationForm: FC = () => {
 
   // Format data
   const auctionToken = useToken(data.token) ?? undefined
+  // @ts-ignore TYPE NEEDS FIXING
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
   const formattedData =
     auctionToken && paymentToken && !isValidating && isValid

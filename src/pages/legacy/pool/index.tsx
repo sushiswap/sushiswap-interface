@@ -1,9 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { CurrencyAmount, NATIVE } from '@sushiswap/core-sdk'
+import { CurrencyAmount } from '@sushiswap/core-sdk'
 import Alert from 'app/components/Alert'
 import Back from 'app/components/Back'
-import Button from 'app/components/Button'
 import Container from 'app/components/Container'
 import Dots from 'app/components/Dots'
 import Empty from 'app/components/Empty'
@@ -12,7 +11,6 @@ import Typography from 'app/components/Typography'
 import Web3Connect from 'app/components/Web3Connect'
 import { MigrationSupported } from 'app/features/migration'
 import { useV2PairsWithLiquidity } from 'app/features/trident/migrate/context/useV2PairsWithLiquidity'
-import { classNames, currencyId } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
@@ -40,6 +38,7 @@ export default function Pool() {
   //       .filter((stakingPair) => stakingPair?.liquidityToken.address === v2Pair.liquidityToken.address).length === 0
   //   )
   // })
+  // @ts-ignore TYPE NEEDS FIXING
   const migrationSupported = chainId in MigrationSupported
   return (
     <Container id="pool-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
@@ -48,6 +47,16 @@ export default function Pool() {
         <meta
           key="description"
           name="description"
+          content="SushiSwap liquidity pools are markets for trades between the two tokens, you can provide these tokens and become a liquidity provider to earn 0.25% of fees from trades."
+        />
+        <meta
+          key="twitter:description"
+          name="twitter:description"
+          content="SushiSwap liquidity pools are markets for trades between the two tokens, you can provide these tokens and become a liquidity provider to earn 0.25% of fees from trades."
+        />
+        <meta
+          key="og:description"
+          property="og:description"
           content="SushiSwap liquidity pools are markets for trades between the two tokens, you can provide these tokens and become a liquidity provider to earn 0.25% of fees from trades."
         />
       </Head>
@@ -68,57 +77,40 @@ export default function Pool() {
         type="information"
       />
 
-      <div className="p-4 space-y-4 rounded bg-dark-900">
-        <div className="grid grid-flow-row gap-3">
-          {!account ? (
-            <Web3Connect size="lg" color="blue" className="w-full" />
-          ) : loading ? (
-            <Empty>
-              <Dots>{i18n._(t`Loading`)}</Dots>
-            </Empty>
-          ) : pairs?.length > 0 ? (
-            <>
-              {/* <div className="flex items-center justify-center">
+      {!account ? (
+        <Web3Connect className="w-full !bg-dark-900 bg-gradient-to-r from-pink/80 hover:from-pink to-purple/80 hover:to-purple text-white h-[38px]" />
+      ) : (
+        <div className="p-4 space-y-4 rounded bg-dark-900">
+          <div className="grid grid-flow-row gap-3">
+            {loading ? (
+              <Empty>
+                <Dots>{i18n._(t`Loading`)}</Dots>
+              </Empty>
+            ) : pairs?.length > 0 ? (
+              <>
+                {/* <div className="flex items-center justify-center">
                   <ExternalLink
                     href={"https://analytics.sushi.com/user/" + account}
                   >
                     Account analytics and accrued fees <span> ↗</span>
                   </ExternalLink>
                 </div> */}
-              {pairs.map((v2Pair) => (
-                <FullPositionCard
-                  key={v2Pair.liquidityToken.address}
-                  pair={v2Pair}
-                  stakedBalance={CurrencyAmount.fromRawAmount(v2Pair.liquidityToken, '0')}
-                />
-              ))}
-            </>
-          ) : (
-            <Empty className="flex text-lg text-center text-low-emphesis">
-              <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
-            </Empty>
-          )}
-          <div className={classNames('grid gap-4', migrationSupported ? 'grid-cols-3' : 'grid-cols-2')}>
-            <Button
-              id="add-pool-button"
-              color="gradient"
-              className="grid items-center justify-center grid-flow-col gap-2 whitespace-nowrap"
-              onClick={() => router.push(`/add/${currencyId(NATIVE[chainId])}`)}
-            >
-              {i18n._(t`Add`)}
-            </Button>
-            <Button id="add-pool-button" color="gray" onClick={() => router.push(`/find`)}>
-              {i18n._(t`Import`)}
-            </Button>
-
-            {migrationSupported && (
-              <Button id="create-pool-button" color="gray" onClick={() => router.push(`/migrate`)}>
-                {i18n._(t`Migrate`)}
-              </Button>
+                {pairs.map((v2Pair) => (
+                  <FullPositionCard
+                    key={v2Pair.liquidityToken.address}
+                    pair={v2Pair}
+                    stakedBalance={CurrencyAmount.fromRawAmount(v2Pair.liquidityToken, '0')}
+                  />
+                ))}
+              </>
+            ) : (
+              <Empty className="flex text-lg text-center text-low-emphesis">
+                <div className="px-4 py-2">{i18n._(t`No liquidity was found. `)}</div>
+              </Empty>
             )}
           </div>
         </div>
-      </div>
+      )}
     </Container>
   )
 }

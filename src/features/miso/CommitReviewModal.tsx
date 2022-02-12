@@ -74,6 +74,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
         summary: i18n._(t`Committed ${amount?.toSignificant(6)} ${amount.currency.symbol}`),
       })
     } catch (e) {
+      // @ts-ignore TYPE NEEDS FIXING
       setError(e.error?.message)
     } finally {
       setAttemptingTxn(false)
@@ -106,6 +107,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
                     <div className="flex gap-1.5">
                       <AuctionIcon auctionTemplate={auction.template} width={18} />
                       <Typography variant="sm" className="text-secondary">
+                        {/*@ts-ignore TYPE NEEDS FIXING*/}
                         {AuctionTitleByTemplateId(i18n)[auction.template]}
                       </Typography>
                     </div>
@@ -121,7 +123,7 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
                 <div className="flex flex-col gap-3 bg-dark-900 border border-dark-700 rounded p-5">
                   <Typography className="text-low-emphesis">{i18n._(t`You are committing`)}</Typography>
                   <div className="flex items-center gap-3 border-dark-700">
-                    <CurrencyLogo currency={amount?.currency} size={32} className="rounded-full" />
+                    <CurrencyLogo currency={amount?.currency} size={32} className="!rounded-full overflow-hidden" />
                     <div className="flex gap-2 items-baseline">
                       <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
                         {amount?.toSignificant(6)}
@@ -130,16 +132,20 @@ const CommitReviewStandardModal: FC<CommitReviewStandardModalProps> = ({
                         {amount?.currency.symbol}
                       </Typography>
                     </div>
-                    <ChevronRightIcon width={20} className="text-secondary" />
-                    {amount?.greaterThan(ZERO) && (
-                      <div className="flex gap-2 items-baseline">
-                        <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
-                          {auction.tokenAmount(amount)?.toSignificant(6)}
-                        </Typography>
-                        <Typography className="text-secondary" weight={700}>
-                          {auction.tokenAmount(amount)?.currency.symbol}
-                        </Typography>
-                      </div>
+                    {auction.template !== AuctionTemplate.BATCH_AUCTION && (
+                      <>
+                        <ChevronRightIcon width={20} className="text-secondary" />
+                        {amount?.greaterThan(ZERO) && (
+                          <div className="flex gap-2 items-baseline">
+                            <Typography variant="lg" className="text-right text-high-emphesis" weight={700}>
+                              {auction.tokenAmount(amount)?.toSignificant(6)}
+                            </Typography>
+                            <Typography className="text-secondary" weight={700}>
+                              {auction.tokenAmount(amount)?.currency.symbol}
+                            </Typography>
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>

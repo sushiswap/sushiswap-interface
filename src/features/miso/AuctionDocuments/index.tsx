@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { DocumentTextIcon, GlobeIcon, LockClosedIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -34,7 +35,7 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
 
   return (
     <>
-      <div className="flex gap-4 items-center">
+      <div className="flex items-center gap-4">
         {auction.auctionDocuments.category ? (
           <Chip label={auction.auctionDocuments.category} color="blue" />
         ) : (
@@ -43,11 +44,12 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
         <div className="flex gap-1.5">
           <AuctionIcon auctionTemplate={auction.template} width={18} />
           <Typography variant="sm" weight={700} className="text-secondary">
+            {/*@ts-ignore TYPE NEEDS FIXING*/}
             {AuctionTitleByTemplateId(i18n)[auction.template]}
           </Typography>
         </div>
 
-        {auction.pointListAddress?.length > 0 && (
+        {auction.pointListAddress !== AddressZero && (
           <div className="flex gap-1.5">
             <LockClosedIcon width={18} />
             <Typography variant="sm" weight={700} className="text-secondary">
@@ -70,6 +72,7 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
           {i18n._(t`Technical Information`)}
         </Typography>
         <div className="flex gap-4">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {info.filter((el) => !!documents?.[el]).length === 0 && (
             <Typography variant="sm" className="italic">
               {i18n._(t`No documents provided`)}
@@ -111,7 +114,8 @@ const AuctionDocuments: FC<AuctionDocumentsProps> = ({ auction }) => {
         <Typography variant="sm" weight={700} className="text-low-emphesis">
           {i18n._(t`Socials`)}
         </Typography>
-        <div className="flex gap-5 items-center">
+        <div className="flex items-center gap-5">
+          {/*@ts-ignore TYPE NEEDS FIXING*/}
           {info.filter((el) => !!documents?.[el]).length === 0 && (
             <Typography variant="sm" className="italic">
               {i18n._(t`No socials provided`)}

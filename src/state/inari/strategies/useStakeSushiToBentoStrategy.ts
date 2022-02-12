@@ -42,8 +42,9 @@ export const tokenDefinitions: StrategyTokenDefinitions = {
 const useStakeSushiToBentoStrategy = (): StrategyHook => {
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
+  // @ts-ignore TYPE NEEDS FIXING
   const balances = useTokenBalances(account, [SUSHI[ChainId.ETHEREUM], XSUSHI])
-  const xSushiBentoBalance = useBentoBalanceV2(XSUSHI.address)
+  const { data: xSushiBentoBalance } = useBentoBalanceV2(XSUSHI.address)
 
   // Strategy ends in BentoBox so use BaseBentoBox strategy
   const general = useMemo(() => GENERAL(i18n), [i18n])

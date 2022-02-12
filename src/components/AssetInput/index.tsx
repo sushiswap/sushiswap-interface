@@ -7,9 +7,8 @@ import selectCoinAnimation from 'app/animation/select-coin.json'
 import Button from 'app/components/Button'
 import Chip from 'app/components/Chip'
 import { CurrencyLogo } from 'app/components/CurrencyLogo'
-import CurrencySelectDialog from 'app/components/CurrencySelectDialog'
+import { BentoboxIcon, WalletIcon } from 'app/components/Icon'
 import NumericalInput from 'app/components/Input/Numeric'
-import HeadlessUIModal from 'app/components/Modal/HeadlessUIModal'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import BentoBoxFundingSourceModal from 'app/features/trident/add/BentoBoxFundingSourceModal'
@@ -17,24 +16,28 @@ import { classNames, maxAmountSpend, tryParseAmount } from 'app/functions'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useUSDCValue } from 'app/hooks/useUSDCPrice'
+import CurrencySearchModal from 'app/modals/SearchModal/CurrencySearchModal'
 import { useActiveWeb3React } from 'app/services/web3'
 import Lottie from 'lottie-react'
 import React, { createContext, FC, ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
 
-import { BentoBoxIcon, WalletIcon } from './icons'
-
 interface AssetInputProps {
   value?: string
   currency?: Currency
-  onChange: (x: string | undefined) => void
+  onChange: (x: string | undefined, max?: boolean) => void
   spendFromWallet?: boolean
   title?: string
   onSelect?: (x: Token) => void
   headerRight?: ReactNode
   chip?: string
   disabled?: boolean
-  currencies?: Currency[]
+  currencies?: string[]
   id?: string
+  className?: string
+  currencyLogo?: boolean
+  size?: 'sm' | 'md'
+  balance?: CurrencyAmount<Currency>
+  showMax?: boolean
 }
 
 type AssetInput<P> = FC<P> & {
@@ -47,13 +50,27 @@ const useAssetInputContextError = () => useContext(AssetInputContext)
 
 // AssetInput exports its children so if you need a child component of this component,
 // for example if you want this component without the title, take a look at the components this file exports
-const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...props }) => {
+const AssetInput: AssetInput<AssetInputProps> = ({
+  spendFromWallet = true,
+  currencyLogo = true,
+  className,
+  size = 'md',
+  balance: balanceProp,
+  showMax = true,
+  ...props
+}) => {
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
   const { account } = useActiveWeb3React()
   const [open, setOpen] = useState(false)
 
-  const balance = useBentoOrWalletBalance(account ? account : undefined, props.currency, spendFromWallet)
+  const bentoOrWalletBalance = useBentoOrWalletBalance(
+    account && !balanceProp ? account : undefined,
+    props.currency,
+    spendFromWallet
+  )
+  const balance = balanceProp || bentoOrWalletBalance
+
   const maxSpend = maxAmountSpend(balance)?.toExact()
   const maxSpendAsFraction = maxAmountSpend(balance)?.asFraction
   const parsedInput = tryParseAmount(props.value, props.currency)
@@ -67,7 +84,10 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
 
   if (props.currency) {
     header = (
-      <div className="flex gap-2.5 cursor-pointer items-center" onClick={() => setOpen(true)}>
+      <div
+        className={classNames(props.onSelect ? 'cursor-pointer ' : '', 'flex gap-2.5 items-center')}
+        onClick={() => setOpen(true)}
+      >
         <div className="flex gap-0.5 items-center">
           <Typography id={props.id} variant="h3" weight={700} className="text-high-emphesis">
             {props.currency.symbol}
@@ -75,14 +95,14 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
           {props.onSelect && (
             <>
               <ChevronDownIcon width={24} height={24} className="text-secondary" />
-              <HeadlessUIModal.Controlled isOpen={open} onDismiss={() => setOpen(false)}>
-                <CurrencySelectDialog
-                  currency={props.currency}
-                  onChange={props.onSelect}
-                  onDismiss={() => setOpen(false)}
-                  currencies={props.currencies}
-                />
-              </HeadlessUIModal.Controlled>
+              <CurrencySearchModal.Controlled
+                open={open}
+                selectedCurrency={props.currency}
+                // @ts-ignore TYPE NEEDS FIXING
+                onCurrencySelect={props.onSelect}
+                onDismiss={() => setOpen(false)}
+                currencyList={props.currencies}
+              />
             </>
           )}
         </div>
@@ -93,25 +113,29 @@ const AssetInput: AssetInput<AssetInputProps> = ({ spendFromWallet = true, ...pr
 
   return (
     <AssetInputContext.Provider value={useMemo(() => (error ? error : false), [error])}>
-      <div className="flex flex-col gap-4 mt-4 lg:mt-0">
-        <div className="flex justify-between px-2">
-          {props.title !== '' && header}
-          {!isDesktop && props.headerRight && props.headerRight}
-        </div>
+      <div className={classNames(className, 'flex flex-col gap-4 mt-4 lg:mt-0')}>
+        {(props.title || props.headerRight) && (
+          <div className="flex justify-between px-2">
+            {props.title !== '' && header}
+            {!isDesktop && props.headerRight && props.headerRight}
+          </div>
+        )}
         <div className="flex flex-col gap-4 lg:flex-row lg:gap-0">
           <AssetInputPanel
             {...props}
+            size={size}
+            currencyLogo={currencyLogo}
             spendFromWallet={spendFromWallet}
-            onMax={() => props.onChange(maxSpend)}
+            onMax={() => props.onChange(maxSpend, true)}
             showMax={
-              balance && maxSpendAsFraction && balance.greaterThan('0')
+              showMax && balance && maxSpendAsFraction && balance.greaterThan('0')
                 ? !parsedInput?.equalTo(maxSpendAsFraction)
                 : false
             }
             footer={
               <AssetInputPanel.Balance
                 balance={balance}
-                onClick={() => props.onChange(maxSpend)}
+                onClick={() => props.onChange(maxSpend, true)}
                 spendFromWallet={spendFromWallet}
                 id={props.id + '-balance'}
               />
@@ -142,50 +166,49 @@ const AssetInputPanel = ({
   showMax = true,
   currencies = [],
   headerRight,
+  currencyLogo,
+  size,
 }: AssetInputPanelProps) => {
   const error = useAssetInputContextError()
   const isDesktop = useDesktopMediaQuery()
   const { i18n } = useLingui()
-  const usdcValue = useUSDCValue(tryParseAmount(value, currency))
-  const span = useRef<HTMLSpanElement>(null)
+  const usdcValue = useUSDCValue(tryParseAmount(Number(value) === 0 ? '1' : value, currency))
+  const span = useRef<HTMLSpanElement | null>(null)
   const [width, setWidth] = useState(0)
 
   useEffect(() => {
-    if (isDesktop && span.current) setWidth(span?.current?.clientWidth + 6)
+    if (isDesktop && span.current) {
+      setWidth(value ? span?.current?.clientWidth + 6 : 60)
+    }
   }, [isDesktop, value])
 
   let content = (
-    <div className="flex flex-row gap-3 py-2.5 px-2 flex-grow">
+    <div className="flex flex-row gap-3 py-2.5 px-2 flex-grow items-center">
       <div className="w-12 h-12 rounded-full">
         <Lottie animationData={selectCoinAnimation} autoplay loop />
       </div>
       {onSelect && (
         <>
-          <HeadlessUIModal
-            trigger={({ setOpen }) => (
+          <CurrencySearchModal
+            trigger={
               <div className="inline-flex items-center">
                 <Button
                   disabled={disabled}
                   color="blue"
+                  size="sm"
                   variant="filled"
-                  className="rounded-full px-3 py-0 h-[32px] shadow-md"
+                  className="!rounded-full"
                   endIcon={<ChevronDownIcon width={24} height={24} />}
-                  onClick={() => setOpen(true)}
                 >
-                  <Typography variant="sm">{i18n._(t`Select a Token`)}</Typography>
+                  {i18n._(t`Select a Token`)}
                 </Button>
               </div>
-            )}
-          >
-            {({ setOpen }) => (
-              <CurrencySelectDialog
-                currency={currency}
-                onChange={onSelect}
-                onDismiss={() => setOpen(false)}
-                currencies={currencies}
-              />
-            )}
-          </HeadlessUIModal>
+            }
+            selectedCurrency={currency}
+            // @ts-ignore TYPE NEEDS FIXING
+            onCurrencySelect={onSelect}
+            currencyList={currencies}
+          />
         </>
       )}
     </div>
@@ -195,15 +218,18 @@ const AssetInputPanel = ({
     content = (
       <div
         className={classNames(
-          error ? 'border-red border-opacity-40' : 'border-dark-700',
+          error ? 'border-red border-opacity-40' : 'border-dark-800',
+          size === 'md' ? 'py-4' : 'py-2',
           'flex gap-3 py-4 px-3 items-center border-b'
         )}
       >
-        <div>
-          <CurrencyLogo currency={currency} size={48} className="rounded-full" />
-        </div>
+        {currencyLogo && (
+          <div>
+            <CurrencyLogo currency={currency} size={size === 'md' ? 48 : 40} className="!rounded-full" />
+          </div>
+        )}
         <div className="flex flex-col flex-grow">
-          <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline">
+          <Typography variant="h3" weight={700} className="relative flex flex-row items-baseline overflow-hidden">
             <NumericalInput
               disabled={disabled}
               value={value || ''}
@@ -221,8 +247,8 @@ const AssetInputPanel = ({
           </Typography>
           <Typography
             id={currency.symbol + '-usdc-value'}
-            variant="sm"
-            className={error ? 'text-red' : usdcValue ? 'text-green' : 'text-low-emphesis'}
+            variant="xs"
+            className={error ? 'text-red' : usdcValue && value ? 'text-green' : 'text-low-emphesis'}
           >
             ≈${usdcValue ? usdcValue.toSignificant(6) : '0.00'}
           </Typography>
@@ -231,12 +257,9 @@ const AssetInputPanel = ({
           <ExclamationCircleIcon className="w-8 h-8 mr-2 text-red" />
         ) : (
           showMax && (
-            <div
-              onClick={() => onMax()}
-              className="flex flex-col items-center justify-center px-3 overflow-hidden border rounded-full cursor-pointer bg-blue bg-opacity-20 border-blue text-blue h-9"
-            >
-              <Typography>MAX</Typography>
-            </div>
+            <Button size="xs" variant="outlined" color="gray" className="!border" onClick={() => onMax()}>
+              Max
+            </Button>
           )
         )}
       </div>
@@ -247,7 +270,7 @@ const AssetInputPanel = ({
     <div
       className={classNames(
         'border',
-        error ? 'border-red border-opacity-40' : 'border-dark-700',
+        error ? 'border-red border-opacity-40' : 'border-dark-800',
         headerRight ? 'lg:rounded-l lg:rounded-r-[0px]' : 'lg:rounded',
         'flex-1 rounded bg-dark-900 flex flex-col overflow-hidden'
       )}
@@ -277,14 +300,22 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
   const { i18n } = useLingui()
   const error = useAssetInputContextError()
 
-  let icon = <WalletIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+  let icon = (
+    <WalletIcon width={16} height={14} className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+  )
   if (!spendFromWallet) {
-    icon = <BentoBoxIcon className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')} />
+    icon = (
+      <BentoboxIcon
+        width={16}
+        height={16}
+        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'truncate')}
+      />
+    )
   }
 
   return (
-    <div className={classNames(error ? 'bg-red/10' : '', 'flex justify-between bg-dark-800 py-2 px-3')}>
-      <div className="flex items-center gap-1.5">
+    <div className={classNames(error ? 'bg-red/10' : '', 'flex justify-between py-2 px-3')}>
+      <div className="flex items-center gap-1.5 mr-1">
         {icon}
         <Typography variant="sm" className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}>
           {i18n._(t`Balance:`)}
@@ -293,7 +324,7 @@ const AssetInputPanelBalance: FC<AssetInputPanelBalanceProps> = ({ balance, onCl
       <Typography
         variant="sm"
         weight={700}
-        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis')}
+        className={classNames(balance ? 'text-high-emphesis' : 'text-low-emphesis', 'truncate')}
         onClick={() => onClick(balance)}
         id={id}
       >
@@ -321,7 +352,7 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
   return (
     <div
       className={classNames(
-        error ? 'lg:border-red/40' : 'lg:border-dark-700',
+        error ? 'lg:border-red/40' : 'lg:border-dark-800',
         'lg:p-4 flex gap-1.5 items-center lg:border-r lg:border-t lg:border-b lg:bg-dark-900 lg:rounded-r lg:justify-center lg:min-w-[120px]'
       )}
     >
@@ -345,12 +376,12 @@ const AssetInputWalletSwitch: FC<AssetInputWalletSwitchProps> = ({ checked, onCh
             onChange={onChange}
             checkedIcon={
               <div className="flex items-center justify-center w-full h-full text-dark-700">
-                <WalletIcon />
+                <WalletIcon width={16} height={14} />
               </div>
             }
             uncheckedIcon={
               <div className="flex items-center justify-center w-full h-full text-dark-700">
-                <BentoBoxIcon />
+                <BentoboxIcon width={16} height={16} />
               </div>
             }
           />

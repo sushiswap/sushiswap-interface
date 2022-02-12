@@ -1,8 +1,8 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { JSBI, Percent, TradeType, TradeVersion, WNATIVE, ZERO } from '@sushiswap/core-sdk'
-import useCurrenciesFromURL from 'app/features/trident/context/hooks/useCurrenciesFromURL'
 import { selectTridentSwap, TypedField } from 'app/features/trident/swap/swapSlice'
+import useCurrenciesFromURL from 'app/features/trident/useCurrenciesFromURL'
 import { maxAmountSpend, toAmountCurrencyAmount } from 'app/functions'
 import { getTradeVersion } from 'app/functions/getTradeVersion'
 import { tryParseAmount } from 'app/functions/parse'
@@ -68,6 +68,7 @@ export const _useSwapPage = () => {
       trade.outputAmount?.currency.wrapped.address &&
       rebases[trade?.outputAmount?.currency.wrapped.address]
     )
+      // @ts-ignore TYPE NEEDS FIXING
       return toAmountCurrencyAmount(rebases[trade.outputAmount?.currency.wrapped.address], trade.outputAmount.wrapped)
 
     return undefined
@@ -96,12 +97,13 @@ export const _useSwapPage = () => {
         ? i18n._(t`Connect Wallet`)
         : maxAmountSpend(balance)?.equalTo(ZERO)
         ? i18n._(t`Insufficient balance to cover for fees`)
-        : !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
+        : // @ts-ignore TYPE NEEDS FIXING
+        !trade?.inputAmount[0]?.greaterThan(ZERO) && !parsedAmounts[1]?.greaterThan(ZERO)
         ? i18n._(t`Enter an amount`)
         : trade === undefined && !isWrap
         ? i18n._(t`No route found`)
         : balance && trade && inputCurrencyAmount && maxAmountSpend(balance)?.lessThan(inputCurrencyAmount)
-        ? i18n._(t`Insufficient ${inputCurrencyAmount?.currency.symbol} balance`)
+        ? i18n._(t`Insufficient Balance`)
         : '',
     [account, balance, i18n, inputCurrencyAmount, isWrap, parsedAmounts, trade]
   )

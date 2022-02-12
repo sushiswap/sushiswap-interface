@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from 'app/constants'
+import { DEFAULT_DEADLINE_FROM_NOW } from 'app/constants'
 import { updateVersion } from 'app/state/global/actions'
 
 import {
@@ -13,7 +13,7 @@ import {
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSingleHopOnly,
-  updateUserSlippageTolerance,
+  updateUserUseOpenMev,
 } from './actions'
 
 const currentTimestamp = () => new Date().getTime()
@@ -26,11 +26,11 @@ export interface UserState {
 
   userSingleHopOnly: boolean // only allow swaps on direct pairs
 
-  // user defined slippage tolerance in bips, used in all txns
-  userSlippageTolerance: number | 'auto'
-
   // deadline set by user in minutes, used in all txns
   userDeadline: number
+
+  // true if OpenMEV protection is enabled
+  userUseOpenMev: boolean
 
   tokens: {
     [chainId: number]: {
@@ -56,23 +56,17 @@ function pairKey(token0Address: string, token1Address: string) {
 export const initialState: UserState = {
   userExpertMode: false,
   userSingleHopOnly: false,
-  userSlippageTolerance: INITIAL_ALLOWED_SLIPPAGE,
   userDeadline: DEFAULT_DEADLINE_FROM_NOW,
   tokens: {},
   pairs: {},
   timestamp: currentTimestamp(),
   URLWarningVisible: true,
+  userUseOpenMev: true,
 }
 
 export default createReducer(initialState, (builder) =>
   builder
     .addCase(updateVersion, (state) => {
-      // slippage isnt being tracked in local storage, reset to default
-      // noinspection SuspiciousTypeOfGuard
-      if (typeof state.userSlippageTolerance !== 'number') {
-        state.userSlippageTolerance = INITIAL_ALLOWED_SLIPPAGE
-      }
-
       // deadline isnt being tracked in local storage, reset to default
       // noinspection SuspiciousTypeOfGuard
       if (typeof state.userDeadline !== 'number') {
@@ -84,10 +78,6 @@ export default createReducer(initialState, (builder) =>
 
     .addCase(updateUserExpertMode, (state, action) => {
       state.userExpertMode = action.payload.userExpertMode
-      state.timestamp = currentTimestamp()
-    })
-    .addCase(updateUserSlippageTolerance, (state, action) => {
-      state.userSlippageTolerance = action.payload.userSlippageTolerance
       state.timestamp = currentTimestamp()
     })
     .addCase(updateUserDeadline, (state, action) => {
@@ -128,5 +118,8 @@ export default createReducer(initialState, (builder) =>
     })
     .addCase(toggleURLWarning, (state) => {
       state.URLWarningVisible = !state.URLWarningVisible
+    })
+    .addCase(updateUserUseOpenMev, (state, action) => {
+      state.userUseOpenMev = action.payload.userUseOpenMev
     })
 )

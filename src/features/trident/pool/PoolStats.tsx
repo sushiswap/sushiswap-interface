@@ -1,14 +1,12 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Typography from 'app/components/Typography'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { formatPercent } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { useRollingPoolStats } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
-
-import { poolAtom } from '../context/atoms'
 
 interface PoolStatsProps {}
 
@@ -16,11 +14,11 @@ const PoolStats: FC<PoolStatsProps> = () => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const isDesktop = useDesktopMediaQuery()
-  const { pool } = useRecoilValue(poolAtom)
+  const { poolWithState } = usePoolContext()
   const { data: stats } = useRollingPoolStats({
     chainId,
-    variables: { where: { id: pool?.liquidityToken?.address.toLowerCase() } },
-    shouldFetch: !!chainId && !!pool && !!pool.liquidityToken.address.toLowerCase(),
+    variables: { where: { id: poolWithState?.pool?.liquidityToken?.address.toLowerCase() } },
+    shouldFetch: !!chainId && !!poolWithState?.pool && !!poolWithState?.pool.liquidityToken.address.toLowerCase(),
   })
 
   const items = [
@@ -58,13 +56,16 @@ const PoolStats: FC<PoolStatsProps> = () => {
           </Typography>
           <div className="flex flex-row gap-2 lg:flex-col lg:gap-0">
             <Typography weight={700} variant={isDesktop ? 'lg' : 'base'} className="text-high-emphesis">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {stats?.[0]?.[value]}
             </Typography>
             <Typography
               weight={400}
               variant={isDesktop ? 'xs' : 'sm'}
+              // @ts-ignore TYPE NEEDS FIXING
               className={stats?.[0]?.[change] > 0 ? 'text-green' : 'text-red'}
             >
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatPercent(stats?.[0]?.[change])}
             </Typography>
           </div>

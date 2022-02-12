@@ -19,6 +19,7 @@ export class Auction {
   public readonly launcherInfo?: RawLauncherInfo
   public readonly auctionDocuments: AuctionDocument
   public readonly pointListAddress: string
+  // @ts-ignore TYPE NEEDS FIXING
   public readonly auctionLauncherAddress: string
   public readonly status: AuctionStatus
 

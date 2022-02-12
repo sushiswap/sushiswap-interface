@@ -31,7 +31,7 @@ export const useAuctionCommitments = (auction: Auction) => {
 
     const init = async () => {
       const logs = await library.getLogs({
-        fromBlock: blockNumber - 100000,
+        fromBlock: blockNumber - 1023,
         toBlock: blockNumber,
         address: auction.auctionInfo.addr,
         topics: [TOPIC_ADDED_COMMITMENT],

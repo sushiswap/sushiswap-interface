@@ -1,5 +1,7 @@
 import CID from 'cids'
+// @ts-ignore TYPE NEEDS FIXING
 import { getCodec, rmPrefix } from 'multicodec'
+// @ts-ignore TYPE NEEDS FIXING
 import { decode, toB58String } from 'multihashes'
 
 export function hexToUint8Array(hex: string): Uint8Array {

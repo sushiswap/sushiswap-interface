@@ -4,14 +4,15 @@ import { ChevronDownIcon, XIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { ChainId, JSBI } from '@sushiswap/core-sdk'
+import Back from 'app/components/Back'
+import Chip from 'app/components/Chip'
+import { USER_REJECTED_TX } from 'app/services/web3/WalletError'
 import Head from 'next/head'
 import React, { useCallback, useEffect, useState } from 'react'
 
-import Badge from '../../../components/Badge'
-import Button, { ButtonConfirmed } from '../../../components/Button'
+import Button from '../../../components/Button'
 import Container from '../../../components/Container'
 import Dots from '../../../components/Dots'
-import DoubleGlowShadow from '../../../components/DoubleGlowShadow'
 import DoubleCurrencyLogo from '../../../components/DoubleLogo'
 import Empty from '../../../components/Empty'
 import Input from '../../../components/Input'
@@ -113,7 +114,7 @@ const LPTokenSelect = ({ lpToken, onToggle, isSelected, updating, exchange }: Po
           variant="lg"
           className="text-primary"
         >{`${lpToken.tokenA.symbol}/${lpToken.tokenB.symbol}`}</Typography>
-        {lpToken.version && <Badge color="pink">{lpToken.version}</Badge>}
+        {lpToken.version && <Chip color="purple" label={lpToken.version} />}
       </div>
       {isSelected ? <XIcon width={16} height={16} /> : <ChevronDownIcon width={16} height={16} />}
     </div>
@@ -191,7 +192,11 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
   }, [state.selectedLPToken])
 
   if (!state.mode || state.lpTokens.length === 0 || !state.selectedLPToken || !state.amount) {
-    return <ButtonConfirmed disabled={true}>Migrate</ButtonConfirmed>
+    return (
+      <Button fullWidth disabled={true}>
+        Migrate
+      </Button>
+    )
   }
 
   const insufficientAmount = JSBI.lessThan(
@@ -205,6 +210,7 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
       await state.onMigrate()
     } catch (error) {
       console.log(error)
+      // @ts-ignore TYPE NEEDS FIXING
       setError(error)
     }
   }
@@ -224,31 +230,30 @@ const MigrateButtons = ({ state, exchange }: { state: MigrateState; exchange: st
             </div>
           </div>
           {state.mode === 'approve' && (
-            <ButtonConfirmed
+            <Button
+              fullWidth
+              loading={approval === ApprovalState.PENDING}
               onClick={approve}
-              confirmed={approval === ApprovalState.APPROVED}
               disabled={approval !== ApprovalState.NOT_APPROVED || isButtonDisabled}
             >
-              {approval === ApprovalState.PENDING ? (
-                <Dots>{i18n._(t`Approving`)}</Dots>
-              ) : approval === ApprovalState.APPROVED ? (
-                i18n._(t`Approved`)
-              ) : (
-                i18n._(t`Approve`)
-              )}
-            </ButtonConfirmed>
+              {approval === ApprovalState.APPROVED ? i18n._(t`Approved`) : i18n._(t`Approve`)}
+            </Button>
           )}
           {((state.mode === 'approve' && approval === ApprovalState.APPROVED) || state.mode === 'permit') && (
-            <ButtonConfirmed
+            <Button
+              fullWidth
+              loading={state.isMigrationPending}
               disabled={noLiquidityTokens || state.isMigrationPending || isButtonDisabled}
               onClick={onPress}
             >
-              {state.isMigrationPending ? <Dots>{i18n._(t`Migrating`)}</Dots> : i18n._(t`Migrate`)}
-            </ButtonConfirmed>
+              {i18n._(t`Migrate`)}
+            </Button>
           )}
         </>
       )}
-      {error.message && error.code !== 4001 && <div className="font-medium text-center text-red">{error.message}</div>}
+      {error.message && error.code !== USER_REJECTED_TX && (
+        <div className="font-medium text-center text-red">{error.message}</div>
+      )}
       <div className="text-sm text-center text-low-emphesis">
         {i18n._(
           t`Your ${exchange} ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity will become SushiSwap ${state.selectedLPToken.tokenA.symbol}/${state.selectedLPToken.tokenB.symbol} liquidity.`
@@ -311,19 +316,27 @@ export default function Migrate() {
   }
 
   return (
-    <Container id="migrate-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="lg">
+    <Container id="migrate-page" className="py-4 space-y-6 md:py-8 lg:py-12" maxWidth="2xl">
       <Head>
         <title>Migrate | Sushi</title>
         <meta key="description" name="description" content="Migrate your liquidity to SushiSwap." />
+        <meta key="twitter:description" name="twitter:description" content="Migrate your liquidity to SushiSwap." />
+        <meta key="og:description" property="og:description" content="Migrate your liquidity to SushiSwap." />
       </Head>
 
-      <div className="mb-8 text-2xl text-center">{i18n._(t`Migrate ${exchange} Liquidity`)}</div>
+      <div className="p-4 mb-3 space-y-3">
+        <Back />
 
-      <DoubleGlowShadow>
+        <Typography component="h1" variant="h2">
+          {i18n._(t`Migrate ${exchange} Liquidity`)}
+        </Typography>
+      </div>
+
+      {!account ? (
+        <Web3Connect className="w-full !bg-dark-900 bg-gradient-to-r from-pink/80 hover:from-pink to-purple/80 hover:to-purple text-white h-[38px]" />
+      ) : (
         <div className="p-4 space-y-4 rounded bg-dark-900">
-          {!account ? (
-            <Web3Connect color="blue" className="w-full" />
-          ) : state.loading ? (
+          {state.loading ? (
             <Typography variant="lg" className="p-4 text-center text-primary">
               <Dots>{i18n._(t`Loading your ${exchange} liquidity positions`)}</Dots>
             </Typography>
@@ -336,7 +349,7 @@ export default function Migrate() {
                   <Typography variant="lg">{i18n._(t`Your Liquidity`)}</Typography>
                   <Typography variant="sm" className="text-secondary">
                     {t`Click on a pool below, input the amount you wish to migrate or select max, and click
-                        migrate`}
+                      migrate`}
                   </Typography>
                 </div>
               )}
@@ -346,7 +359,7 @@ export default function Migrate() {
             </>
           )}
         </div>
-      </DoubleGlowShadow>
+      )}
     </Container>
   )
 }

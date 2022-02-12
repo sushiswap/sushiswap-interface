@@ -1,14 +1,14 @@
 import { ChainId } from '@sushiswap/core-sdk'
 import { getAverageBlockTime, getBlock, getMassBlocks } from 'app/services/graph/fetchers'
 import { useActiveWeb3React } from 'app/services/web3'
-import { addSeconds, getUnixTime, startOfMinute, subDays, subWeeks } from 'date-fns'
+import { addSeconds, getUnixTime, startOfHour, startOfMinute, startOfSecond, subDays, subWeeks } from 'date-fns'
 import stringify from 'fast-json-stable-stringify'
 import useSWR, { SWRConfiguration } from 'swr'
 
 import { GraphProps } from '../interfaces'
 
 export function useOneDayBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
-  const date = startOfMinute(subDays(Date.now(), 1))
+  const date = startOfSecond(startOfMinute(startOfHour(subDays(Date.now(), 1))))
   const start = getUnixTime(date)
   const end = getUnixTime(addSeconds(date, 600))
   return useBlock({
@@ -25,7 +25,7 @@ export function useOneDayBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true,
 }
 
 export function useTwoDayBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
-  const date = startOfMinute(subDays(Date.now(), 2))
+  const date = startOfSecond(startOfMinute(startOfHour(subDays(Date.now(), 2))))
   const start = getUnixTime(date)
   const end = getUnixTime(addSeconds(date, 600))
   return useBlock({
@@ -42,7 +42,7 @@ export function useTwoDayBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true,
 }
 
 export function useOneWeekBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
-  const date = startOfMinute(subWeeks(Date.now(), 1))
+  const date = startOfSecond(startOfMinute(startOfHour(subWeeks(Date.now(), 1))))
   const start = getUnixTime(date)
   const end = getUnixTime(addSeconds(date, 600))
   return useBlock({
@@ -59,7 +59,7 @@ export function useOneWeekBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true
 }
 
 export function useTwoWeekBlock({ chainId = ChainId.ETHEREUM, shouldFetch = true, swrConfig = undefined }) {
-  const date = startOfMinute(subWeeks(Date.now(), 2))
+  const date = startOfSecond(startOfMinute(startOfHour(subWeeks(Date.now(), 2))))
   const start = getUnixTime(date)
   const end = getUnixTime(addSeconds(date, 600))
   return useBlock({

@@ -1,17 +1,14 @@
-import { useLingui } from '@lingui/react'
 import { BarGraph } from 'app/components/BarGraph'
 import Button from 'app/components/Button'
 import LineGraph from 'app/components/LineGraph'
 import Tabs from 'app/components/Tabs'
 import Typography from 'app/components/Typography'
+import { usePoolContext } from 'app/features/trident/PoolContext'
 import { formatDate, formatNumber } from 'app/functions'
 import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
 import { usePoolDayBuckets, usePoolHourBuckets } from 'app/services/graph/hooks/pools'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useMemo, useState } from 'react'
-import { useRecoilValue } from 'recoil'
-
-import { poolAtom } from '../context/atoms'
 
 enum ChartType {
   Volume = 'Volume',
@@ -37,53 +34,56 @@ const chartTimespans: Record<ChartRange, number> = {
 const PoolStatsChart = () => {
   const isDesktop = useDesktopMediaQuery()
   const { chainId } = useActiveWeb3React()
-  const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Volume)
   const [chartRange, setChartRange] = useState<ChartRange>(ChartRange.ALL)
-  const { pool } = useRecoilValue(poolAtom)
+  const { poolWithState } = usePoolContext()
 
   const hourBuckets = usePoolHourBuckets({
     chainId,
     variables: {
       first: 168,
-      where: { pool: pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
-    shouldFetch: !!pool && chartTimespans[chartRange] <= chartTimespans['1W'],
+    shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] <= chartTimespans['1W'],
   })
 
   const dayBuckets = usePoolDayBuckets({
     chainId,
     variables: {
-      where: { pool: pool?.liquidityToken?.address?.toLowerCase() },
+      where: { pool: poolWithState?.pool?.liquidityToken?.address?.toLowerCase() },
     },
-    shouldFetch: !!pool && chartTimespans[chartRange] >= chartTimespans['1W'],
+    shouldFetch: !!poolWithState?.pool && chartTimespans[chartRange] >= chartTimespans['1W'],
   })
-
-  console.log(hourBuckets, dayBuckets, pool?.liquidityToken.address)
 
   const data = chartTimespans[chartRange] <= chartTimespans['1W'] ? hourBuckets : dayBuckets
 
   const graphData = useMemo(() => {
     const currentDate = Math.round(Date.now() / 1000)
-    return data
-      ?.reduce((acc, cur) => {
-        const x = cur.date.getTime()
-        if (Math.round(x / 1000) >= currentDate - chartTimespans[chartRange]) {
-          acc.push({
-            x,
-            y: Number(chartType === ChartType.Volume ? cur.volumeUSD : cur.liquidityUSD),
-          })
-        }
+    return (
+      data
+        ?.reduce((acc, cur) => {
+          const x = cur.date.getTime()
+          if (Math.round(x / 1000) >= currentDate - chartTimespans[chartRange]) {
+            acc.push({
+              // @ts-ignore TYPE NEEDS FIXING
+              x,
+              // @ts-ignore TYPE NEEDS FIXING
+              y: Number(chartType === ChartType.Volume ? cur.volumeUSD : cur.liquidityUSD),
+            })
+          }
 
-        return acc
-      }, [])
-      .sort((a, b) => a.x - b.x)
+          return acc
+        }, [])
+        // @ts-ignore TYPE NEEDS FIXING
+        .sort((a, b) => a.x - b.x)
+    )
   }, [data, chartRange, chartType])
 
   const [selectedIndex, setSelectedIndex] = useState(graphData?.length - 1)
 
   const chartButtons = (
     <div className="flex justify-between lg:justify-end lg:gap-1">
+      {/*@ts-ignore TYPE NEEDS FIXING*/}
       {Object.keys(chartTimespans).map((text: ChartRange) => (
         <Button
           key={text}
@@ -91,11 +91,7 @@ const PoolStatsChart = () => {
           variant={text === chartRange ? 'outlined' : 'empty'}
           size="xs"
           color={text === chartRange ? 'blue' : 'gray'}
-          className={
-            text === chartRange
-              ? 'min-w-12 px-2 py-1 text-sm bg-blue-400 border-1 border-blue/50 border rounded-full font-bold hover:text-blue'
-              : 'min-w-12 px-2 py-1 text-sm text-secondary font-bold hover:text-blue'
-          }
+          className="min-w-[40px]"
         >
           {text}
         </Button>
@@ -114,9 +110,11 @@ const PoolStatsChart = () => {
         <div className="w-full h-40 lg:order-2">
           <div className="mt-6">
             <Typography variant="h3" className="text-high-emphesis" weight={700}>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatNumber(graphData[selectedIndex]?.y, true, false, 2)}
             </Typography>
             <Typography variant="sm" className="text-gray-500 text-high-emphesis" weight={700}>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               {formatDate(new Date(graphData[selectedIndex]?.x))}
             </Typography>
           </div>

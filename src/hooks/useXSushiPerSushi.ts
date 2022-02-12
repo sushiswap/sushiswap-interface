@@ -7,6 +7,7 @@ const QUERY = `{
     }
 }`
 
+// @ts-ignore TYPE NEEDS FIXING
 const fetcher = (query) => request('https://api.thegraph.com/subgraphs/name/matthewlilley/bar', query)
 
 // Returns ratio of XSushi:Sushi

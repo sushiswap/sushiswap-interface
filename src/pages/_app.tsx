@@ -7,11 +7,13 @@ import { remoteLoader } from '@lingui/remote-loader'
 import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
-import { SyncWithRecoil } from 'app/components/SyncWithRecoil'
+import { SyncWithRedux } from 'app/components/SyncWithRedux'
 import Web3ReactManager from 'app/components/Web3ReactManager'
+import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
+// @ts-ignore TYPE NEEDS FIXING
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
 import ListsUpdater from 'app/state/lists/updater'
@@ -23,27 +25,32 @@ import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import Script from 'next/script'
-import { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { RecoilRoot } from 'recoil'
 import { PersistGate } from 'redux-persist/integration/react'
 
 const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetwork'), { ssr: false })
 
+// const PersistGate = dynamic(() => import('redux-persist/integration/react'), { ssr: false })
+
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
 }
 
-function MyApp({ Component, pageProps, fallback }) {
+// @ts-ignore TYPE NEEDS FIXING
+function MyApp({ Component, pageProps, fallback, err }) {
   const router = useRouter()
   const { locale, events } = router
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     const handleRouteChange = (url) => {
       pageview(url)
     }
     events.on('routeChangeComplete', handleRouteChange)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const handleError = (error) => {
       exception({
         description: `${error.message} @ ${error.filename}:${error.lineno}:${error.colno}`,
@@ -60,7 +67,9 @@ function MyApp({ Component, pageProps, fallback }) {
   }, [events])
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     async function load(locale) {
+      // @ts-ignore TYPE NEEDS FIXING
       i18n.loadLocaleData(locale, { plurals: plurals[locale.split('_')[0]] })
 
       try {
@@ -97,6 +106,11 @@ function MyApp({ Component, pageProps, fallback }) {
   return (
     <>
       <Head>Sushi</Head>
+      <meta
+        name="viewport"
+        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
+      />
+
       {/* Global Site Tag (gtag.js) - Google Analytics */}
       <Script
         strategy="afterInteractive"
@@ -120,6 +134,7 @@ function MyApp({ Component, pageProps, fallback }) {
         <Web3ReactProvider getLibrary={getLibrary}>
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <ReduxProvider store={store}>
                 <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
                   <>
@@ -129,11 +144,14 @@ function MyApp({ Component, pageProps, fallback }) {
                     <MulticallUpdater />
                   </>
                   <RecoilRoot>
-                    <SyncWithRecoil />
+                    <SyncWithRedux />
                     <Provider>
                       <Layout>
                         <Guard>
-                          <Component {...pageProps} />
+                          {/* TODO: Added alert Jan 25. Delete component after a few months. */}
+                          <MultichainExploitAlertModal />
+                          {/*@ts-ignore TYPE NEEDS FIXING*/}
+                          <Component {...pageProps} err={err} />
                         </Guard>
                         <Portals />
                       </Layout>

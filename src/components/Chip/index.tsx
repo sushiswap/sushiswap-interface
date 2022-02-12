@@ -34,9 +34,11 @@ export interface ChipProps {
   variant?: ChipVariant
   size?: ChipSize
   className?: string
+  // @ts-ignore TYPE NEEDS FIXING
   onClick?: (e) => void
   icon?: ReactNode
   endIcon?: ReactNode
+  id?: string
 }
 
 const Chip: FC<ChipProps> = ({
@@ -48,9 +50,11 @@ const Chip: FC<ChipProps> = ({
   onClick,
   icon = undefined,
   endIcon = <XIcon width={12} height={12} strokeWidth={5} />,
+  id = '',
 }) => {
   return (
     <div
+      id={id}
       className={classNames(
         VARIANT[variant][color],
         SIZE[size],

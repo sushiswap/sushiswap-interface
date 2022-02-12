@@ -30,7 +30,7 @@ export const useV2PairsWithLiquidity = (): V2PairsWithLiquidity => {
     () => tokenPairsWithLiquidityTokens.map((tpwlt) => tpwlt.liquidityToken),
     [tokenPairsWithLiquidityTokens]
   )
-  const [v2PairsBalances, fetchingV2PairBalances] = useTokenBalancesWithLoadingIndicator(
+  const { data: v2PairsBalances, loading: fetchingV2PairBalances } = useTokenBalancesWithLoadingIndicator(
     account ?? undefined,
     liquidityTokens
   )

@@ -248,13 +248,13 @@ const MAINNET_CHAINLINK_MAPPING = {
     toDecimals: 8,
   },
   // BZRX / ETH
-  '0x8f7C7181Ed1a2BA41cfC3f5d064eF91b67daef66': {
-    from: '0x56d811088235F11C8920698a204A5010a788f4b3',
-    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
-    decimals: 18,
-    fromDecimals: 18,
-    toDecimals: 18,
-  },
+  // '0x8f7C7181Ed1a2BA41cfC3f5d064eF91b67daef66': {
+  //   from: '0x56d811088235F11C8920698a204A5010a788f4b3',
+  //   to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+  //   decimals: 18,
+  //   fromDecimals: 18,
+  //   toDecimals: 18,
+  // },
   // CEL / ETH
   '0x75FbD83b4bd51dEe765b2a01e8D3aa1B020F9d33': {
     from: '0xaaAEBE6Fe48E54f431b0C390CfaF0b017d09D42d',

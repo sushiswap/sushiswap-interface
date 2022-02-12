@@ -10,8 +10,8 @@ import Lottie from 'lottie-react'
 import React, { FC, useCallback, useState } from 'react'
 
 interface CurrencySelectProps {
-  currency: Currency
-  otherCurrency: Currency
+  currency?: Currency
+  otherCurrency?: Currency
   showCommonBases?: boolean
   onSelect: (x: Currency) => void
   disabled?: boolean
@@ -36,6 +36,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
   const [modalOpen, setModalOpen] = useState(false)
 
   const handleClick = useCallback(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     if (onSelect) setModalOpen(true)
   }, [onSelect])
 
@@ -82,8 +83,8 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
         </div>
       </button>
       {!disabled && onSelect && (
-        <CurrencySearchModal
-          isOpen={modalOpen}
+        <CurrencySearchModal.Controlled
+          open={modalOpen}
           onDismiss={() => setModalOpen(false)}
           onCurrencySelect={onSelect}
           selectedCurrency={currency}
@@ -92,6 +93,7 @@ const CurrencySelect: FC<CurrencySelectProps> = ({
           currencyList={currencyList}
           includeNativeCurrency={includeNativeCurrency}
           allowManageTokenList={allowManageTokenList}
+          showSearch={true}
         />
       )}
     </>

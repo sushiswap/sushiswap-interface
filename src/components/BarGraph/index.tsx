@@ -2,6 +2,7 @@ import { Group } from '@visx/group'
 import { scaleBand, scaleLinear } from '@visx/scale'
 import { Bar } from '@visx/shape'
 import React, { FC, useMemo } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 const verticalMargin = 40
@@ -70,8 +71,11 @@ const Graph: FC<BarGraphProps> = ({ data, width, height, setSelectedDatum, event
               width={barWidth}
               height={barHeight}
               fill="rgba(0, 160, 233, 1)"
+              // @ts-ignore TYPE NEEDS FIXING
               onClick={() => setSelectedDatum(d)}
+              // @ts-ignore TYPE NEEDS FIXING
               onMouseMove={() => setSelectedDatum(d)}
+              // @ts-ignore TYPE NEEDS FIXING
               onMouseEnter={() => setSelectedDatum(d)}
             />
           )
@@ -81,6 +85,8 @@ const Graph: FC<BarGraphProps> = ({ data, width, height, setSelectedDatum, event
   )
 }
 
+// @ts-ignore TYPE NEEDS FIXING
 export const BarGraph = ({ data, ...rest }) => (
+  // @ts-ignore TYPE NEEDS FIXING
   <AutoSizer>{({ width, height }) => <Graph data={data} width={width} height={height} {...rest} />}</AutoSizer>
 )

@@ -10,6 +10,7 @@ import { formatPercent } from '../../functions'
 import { ZERO } from '../../functions/math'
 import useKashiApproveCallback from '../../hooks/useKashiApproveCallback'
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function PairTools({ pair }) {
   const [, , , , onCook] = useKashiApproveCallback()
 

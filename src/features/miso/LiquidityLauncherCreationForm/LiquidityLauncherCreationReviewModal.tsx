@@ -60,6 +60,7 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
           await tx.wait()
         }
       } catch (e) {
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error?.message)
       } finally {
         setPending(false)
@@ -70,6 +71,7 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
 
   // Subscribe to creation event to get created pointlist ID
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     subscribe('LauncherCreated', (owner, address, launcherTemplate, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setLiqLauncherAddress(address)
@@ -88,6 +90,7 @@ const LiquidityLauncherCreationModal: FC<LiquidityLauncherCreationModalProps> = 
       {!txHash ? (
         <HeadlessUIModal.Body>
           <HeadlessUIModal.Header
+            onClose={onDismiss}
             header={i18n._(t`Create Liquidity Launcher`)}
             subheader={i18n._(t`Please review your entered details thoroughly.`)}
           />

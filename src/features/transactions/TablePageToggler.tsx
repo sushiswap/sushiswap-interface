@@ -34,7 +34,7 @@ export const TablePageToggler: FC<PageTogglerProps> = ({
   return (
     <>
       {/* Desktop */}
-      <div className="border-t border-dark-800 text-right -mt-2 py-3 select-none hidden lg:block">
+      <div className="text-right -mt-2 py-3 select-none hidden lg:block">
         {summaryString}{' '}
         <ChevronLeftIcon
           onClick={() => gotoPage(pageIndex - 1)}

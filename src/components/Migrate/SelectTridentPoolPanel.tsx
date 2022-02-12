@@ -6,7 +6,7 @@ import { ExistingPoolOption } from 'app/components/Migrate/ExistingPoolOption'
 import { AvailablePoolConfig, matchV2PairWithTridentPools } from 'app/components/Migrate/migrate-utils'
 import { PoolPanelAssetsLabel } from 'app/components/Migrate/PoolPanelAssetsLabel'
 import { PoolValueEstimation } from 'app/components/Migrate/PoolValueEstimation'
-import { MigrationSource, v2Migration } from 'app/features/trident/migrate/context/atoms'
+import { MigrationSource, v2Migration } from 'app/features/trident/migrate/context/migrateSlice'
 import { TridentPool } from 'app/services/graph'
 import React, { FC, useMemo } from 'react'
 
@@ -15,10 +15,9 @@ interface PanelProps {
   source: MigrationSource
   setFunc: (updatedMigrationObj: v2Migration) => void
   tridentPools: TridentPool[]
-  loading: boolean
 }
 
-export const SelectTridentPoolPanel: FC<PanelProps> = ({ migration, source, setFunc, tridentPools, loading }) => {
+export const SelectTridentPoolPanel: FC<PanelProps> = ({ migration, source, setFunc, tridentPools }) => {
   const { i18n } = useLingui()
   const { matches, availableToCreate } = useMemo(
     () => matchV2PairWithTridentPools(migration.v2Pair, tridentPools),
@@ -39,7 +38,7 @@ export const SelectTridentPoolPanel: FC<PanelProps> = ({ migration, source, setF
       <div className="m-3 text-high-emphesis">{i18n._(t`Select a Pool:`)}</div>
       {matches.map((pool, i) => (
         <ExistingPoolOption
-          active={migration.matchingTridentPool === pool}
+          active={migration.matchingTridentPool?.address === pool.address}
           pool={pool}
           key={i}
           onClick={() => setFunc({ ...migration, matchingTridentPool: pool, poolToCreate: undefined })}

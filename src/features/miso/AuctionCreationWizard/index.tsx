@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -28,6 +29,7 @@ export interface AuctionCreationWizardInput {
   tokenSymbol: string
   tokenSupply: number
   tokenAmount: number
+  tokenForLiquidity: number
   auctionType: AuctionTemplate
   fixedPrice?: number
   minimumTarget?: number
@@ -46,6 +48,7 @@ export type AuctionCreationWizardInputFormatted = Omit<
   | 'endDate'
   | 'tokenSupply'
   | 'tokenAmount'
+  | 'tokenForLiquidity'
   | 'fixedPrice'
   | 'minimumTarget'
   | 'minimumRaised'
@@ -100,13 +103,28 @@ const schema = yup.object().shape({
       message: 'Amount of tokens for sale must be less than half the total supply',
       test: (value, ctx) => (value ? value * 2 <= ctx.parent.tokenSupply : false),
     }),
+  tokenForLiquidity: yup
+    .number()
+    .typeError('Must be a valid number')
+    .required('Must enter a valid number')
+    .integer('Must be a whole number')
+    .test({
+      message: 'Amount of tokens for liquidity seeding must be at least 1 percent of tokens for sale',
+      // @ts-ignore TYPE NEEDS FIXING
+      test: (value, ctx) => value * 100 >= ctx.parent.tokenAmount,
+    })
+    .test({
+      message: 'Amount of tokens for liquidity cannot be larger than amount of tokens for sale',
+      // @ts-ignore TYPE NEEDS FIXING
+      test: (value, ctx) => value <= ctx.parent.tokenAmount,
+    }),
   auctionType: yup.number().required('Must select an auction type'),
   fixedPrice: yup.number().when('auctionType', {
-    is: (value) => value === AuctionTemplate.CROWDSALE,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
     then: yup.number().typeError('Price must be a number').required('Must enter a fixed price'),
   }),
   minimumTarget: yup.number().when('auctionType', {
-    is: (value) => value === AuctionTemplate.CROWDSALE,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.CROWDSALE,
     then: yup
       .number()
       .typeError('Target must be a number')
@@ -115,15 +133,15 @@ const schema = yup.object().shape({
       .integer('Must be a whole number'),
   }),
   minimumRaised: yup.number().when('auctionType', {
-    is: (value) => value === AuctionTemplate.BATCH_AUCTION,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.BATCH_AUCTION,
     then: yup.number().typeError('Target must be a number').min(0, 'Must be greater than zero'),
   }),
   startPrice: yup.number().when('auctionType', {
-    is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup.number().typeError('Price must be a number').required('Must enter a start price'),
   }),
   endPrice: yup.number().when('auctionType', {
-    is: (value) => value === AuctionTemplate.DUTCH_AUCTION,
+    is: (value: AuctionTemplate) => value === AuctionTemplate.DUTCH_AUCTION,
     then: yup
       .number()
       .typeError('Price must be a number')
@@ -148,8 +166,12 @@ const AuctionCreationWizard: FC = () => {
   const [open, setOpen] = useState<boolean>(false)
   const methods = useForm<AuctionCreationWizardInput>({
     defaultValues: {
+      auctionType: AuctionTemplate.DUTCH_AUCTION,
+      tokenType: TokenType.FIXED,
       whitelistEnabled: false,
       whitelistAddresses: [],
+      paymentCurrencyAddress: AddressZero,
+      liqLockTime: 180,
     },
     resolver: yupResolver(schema),
     reValidateMode: 'onChange',
@@ -163,6 +185,7 @@ const AuctionCreationWizard: FC = () => {
 
   const data = watch()
 
+  // @ts-ignore TYPE NEEDS FIXING
   const paymentToken = useToken(data.paymentCurrencyAddress) ?? NATIVE[chainId || 1]
   const formattedData =
     paymentToken && !isValidating && isValid ? formatCreationFormData(data, paymentToken) : undefined

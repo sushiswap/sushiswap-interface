@@ -1,11 +1,14 @@
-import React, { ReactNode } from 'react'
-import { AlertTriangle } from 'react-feather'
+import Typography from 'app/components/Typography'
+import React, { FC, ReactNode } from 'react'
 
-export function SwapCallbackError({ error }: { error: ReactNode }) {
+const SwapCallbackError: FC<{ error: ReactNode }> = ({ error }) => {
   return (
-    <div className="flex items-center justify-center pt-6 text-red">
-      <AlertTriangle size={16} />
-      <div className="ml-4 text-sm">{error}</div>
+    <div className="flex items-center justify-center gap-2 text-red">
+      <Typography variant="sm" weight={700}>
+        {error}
+      </Typography>
     </div>
   )
 }
+
+export default SwapCallbackError

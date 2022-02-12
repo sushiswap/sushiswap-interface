@@ -1,5 +1,6 @@
 import { request } from 'graphql-request'
 
+// @ts-ignore TYPE NEEDS FIXING
 export async function pager(endpoint, query, variables = {}) {
   if (endpoint.includes('undefined')) return {}
 

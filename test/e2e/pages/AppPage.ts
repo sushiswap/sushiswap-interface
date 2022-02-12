@@ -4,24 +4,25 @@ import { ElementHandle, Page } from 'puppeteer'
 export abstract class AppPage {
   public Metamask: Dappeteer
 
-  protected URL: string
+  protected BaseUrl: string
   protected Page: Page
+  protected Route: string = ''
 
   protected WalletConnectSelector: string = '#connect-wallet'
   protected WalletOptionMetamaskSelector: string = '#wallet-option-MetaMask'
 
   private ci: string = process.env.CI || 'false'
 
-  constructor(page: Page, metamask: Dappeteer, url: string = '') {
+  constructor(page: Page, metamask: Dappeteer, baseUrl: string = '') {
     this.Page = page
-    this.URL = url
+    this.BaseUrl = baseUrl
     this.Metamask = metamask
   }
 
   public async navigateTo(): Promise<Page> {
     await this.bringToFront()
-    if (this.URL) {
-      await this.Page.goto(this.URL)
+    if (this.BaseUrl && this.Route) {
+      await this.Page.goto(this.BaseUrl + this.Route)
     } else {
       console.warn('Page has no URL and cannot be navigated to')
     }
@@ -46,9 +47,11 @@ export abstract class AppPage {
     if (web3Connected) return
 
     const btnConnectWallet = await this.Page.waitForSelector(this.WalletConnectSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await btnConnectWallet.click()
 
     const metamaskButton = await this.Page.waitForSelector(this.WalletOptionMetamaskSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await metamaskButton.click()
     await this.Metamask.approve()
     await this.bringToFront()
@@ -61,15 +64,18 @@ export abstract class AppPage {
     await this.closeMetamaskWhatsNew()
 
     const addTokenButton = await this.Metamask.page.waitForSelector('.add-token-button > button')
+    // @ts-ignore TYPE NEEDS FIXING
     await addTokenButton.click()
 
     const addressInput = await this.Metamask.page.waitForSelector('#custom-address')
+    // @ts-ignore TYPE NEEDS FIXING
     addressInput.type(tokenAddress)
 
     await this.Metamask.page.waitForTimeout(4000)
 
     this.Metamask.page.waitForSelector(`button[data-testid='page-container-footer-next']:not([disabled])`)
     const nextButton = await this.Metamask.page.waitForSelector(`button[data-testid='page-container-footer-next']`)
+    // @ts-ignore TYPE NEEDS FIXING
     await nextButton.click()
 
     const buttons = await this.Metamask.page.$$('footer > button')
@@ -85,6 +91,7 @@ export abstract class AppPage {
     await this.closeMetamaskWhatsNew()
 
     const assetMenutButton = await this.Metamask.page.waitForSelector(`li[data-testid="home__asset-tab"]`)
+    // @ts-ignore TYPE NEEDS FIXING
     await assetMenutButton.click()
     await this.blockingWait(1, true)
 
@@ -126,7 +133,7 @@ export abstract class AppPage {
 
       // Try to confirm transaction again
       await this.Metamask.confirmTransaction()
-      await this.Metamask.page.waitForTimeout(500)
+      await this.blockingWait(3)
 
       //Check if we're still at confirm transaction page. When gas estimation takes longer initial confirm does not work
       const mmFooterButtons = await this.Metamask.page.$$('footer > button')
@@ -141,6 +148,7 @@ export abstract class AppPage {
     await this.blockingWait(1, true)
   }
 
+  // @ts-ignore TYPE NEEDS FIXING
   public async blockingWait(seconds, checkCi: boolean = false): Promise<void> {
     let waitSeconds = seconds
 
@@ -156,6 +164,7 @@ export abstract class AppPage {
     await this.Page.waitForSelector(switchId)
     const switchElement = await this.Page.$(switchId)
 
+    // @ts-ignore TYPE NEEDS FIXING
     const buttonElement = (await switchElement.$x('..'))[0]
     if (!buttonElement) {
       throw new Error(`Switch with id ${switchId} not found on the page. Check selector is valid.`)

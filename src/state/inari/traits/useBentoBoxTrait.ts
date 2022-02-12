@@ -26,11 +26,13 @@ export interface BaseStrategyWithBentoBoxTraitHook
 // Strategies that end up in BentoBox don't need to to approve inari to spend tokens when unzapping
 // hence the approveCallback is null when unzapping
 const useBentoBoxTrait = (props: BaseStrategyHook): BaseStrategyWithBentoBoxTraitHook => {
+  // @ts-ignore TYPE NEEDS FIXING
   const trait = useTrait(props, TRAIT_CONFIG)
   const { account } = useActiveWeb3React()
   const { zapIn } = useDerivedInariState()
   const inariContract = useInariContract()
   const addTransaction = useTransactionAdder()
+  // @ts-ignore TYPE NEEDS FIXING
   const bentoApproveCallback = useBentoMasterApproveCallback(inariContract.address, {
     otherBentoBoxContract: inariContract,
     contractName: 'Inari',

@@ -59,6 +59,7 @@ export default function Token() {
 
   useEffect(() => {
     const fetch = async () => {
+      /* @ts-ignore TYPE NEEDS FIXING */
       setTotalSupply(await tokenContract.totalSupply())
     }
     fetch()
@@ -99,8 +100,11 @@ export default function Token() {
 
   const tokenPairsFormatted = useMemo(
     () =>
+      /* @ts-ignore TYPE NEEDS FIXING */
       tokenPairs?.map((pair) => {
+        /* @ts-ignore TYPE NEEDS FIXING */
         const pair1d = tokenPairs1d?.find((p) => pair.id === p.id) ?? pair
+        /* @ts-ignore TYPE NEEDS FIXING */
         const pair1w = tokenPairs1w?.find((p) => pair.id === p.id) ?? pair1d
 
         return {
@@ -142,11 +146,15 @@ export default function Token() {
   const chartData = useMemo(
     () => ({
       liquidityChart: tokenDayData
+        /* @ts-ignore TYPE NEEDS FIXING */
         ?.sort((a, b) => a.date - b.date)
+        /* @ts-ignore TYPE NEEDS FIXING */
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.liquidityUSD) })),
 
       volumeChart: tokenDayData
+        /* @ts-ignore TYPE NEEDS FIXING */
         ?.sort((a, b) => a.date - b.date)
+        /* @ts-ignore TYPE NEEDS FIXING */
         .map((day) => ({ x: new Date(day.date * 1000), y: Number(day.volumeUSD) })),
     }),
     [tokenDayData]
@@ -173,6 +181,7 @@ export default function Token() {
               {'<'} Go Back
             </button>
             <div className="flex items-center space-x-4">
+              {/*@ts-ignore TYPE NEEDS FIXING*/}
               <CurrencyLogo className="rounded-full" currency={currency} size={60} />
               <div>
                 <div className="text-sm font-medium text-secondary">{token?.symbol}</div>
@@ -270,6 +279,7 @@ export default function Token() {
           <div className="text-2xl font-bold text-high-emphesis">Top Pairs</div>
           <PairList pairs={tokenPairsFormatted} type="all" />
         </div>
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         <LegacyTransactions pairs={tokenPairs ? tokenPairs.map((pair) => pair.id) : []} />
       </div>
     </AnalyticsContainer>

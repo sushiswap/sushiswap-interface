@@ -47,6 +47,7 @@ export async function signMasterContractApproval(
     },
     message: message,
   }
+  // @ts-ignore TYPE NEEDS FIXING
   const signer = getSigner(library, user)
   return signer._signTypedData(typedData.domain, typedData.types, typedData.message)
 }

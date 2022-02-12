@@ -8,10 +8,8 @@ import {
   computePairAddress,
   Currency,
   FACTORY_ADDRESS,
-  JSBI,
   KASHI_ADDRESS,
   Pair,
-  Percent,
   Token,
 } from '@sushiswap/core-sdk'
 import { CHAINLINK_PRICE_FEED_MAP } from 'app/config/oracles/chainlink'
@@ -19,12 +17,12 @@ import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'app/config/routing'
 import { e10 } from 'app/functions'
 import { useAllTokens } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
-import { AppDispatch, AppState } from 'app/state'
+import { AppState } from 'app/state'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import flatMap from 'lodash/flatMap'
 import { useCallback, useMemo } from 'react'
 import ReactGA from 'react-ga'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import {
   addSerializedPair,
@@ -36,7 +34,7 @@ import {
   updateUserDeadline,
   updateUserExpertMode,
   updateUserSingleHopOnly,
-  updateUserSlippageTolerance,
+  updateUserUseOpenMev,
 } from './actions'
 
 function serializeToken(token: Token): SerializedToken {
@@ -93,44 +91,8 @@ export function useUserSingleHopOnly(): [boolean, (newSingleHopOnly: boolean) =>
   return [singleHopOnly, setSingleHopOnly]
 }
 
-export function useSetUserSlippageTolerance(): (slippageTolerance: Percent | 'auto') => void {
+export function useUserTransactionTTL(): [number, (userDeadline: number) => void] {
   const dispatch = useAppDispatch()
-
-  return useCallback(
-    (userSlippageTolerance: Percent | 'auto') => {
-      let value: 'auto' | number
-      try {
-        value =
-          userSlippageTolerance === 'auto' ? 'auto' : JSBI.toNumber(userSlippageTolerance.multiply(10_000).quotient)
-      } catch (error) {
-        value = 'auto'
-      }
-      dispatch(
-        updateUserSlippageTolerance({
-          userSlippageTolerance: value,
-        })
-      )
-    },
-    [dispatch]
-  )
-}
-
-/**
- * Return the user's slippage tolerance, from the redux store, and a function to update the slippage tolerance
- */
-export function useUserSlippageTolerance(): Percent | 'auto' {
-  const userSlippageTolerance = useAppSelector((state) => {
-    return state.user.userSlippageTolerance
-  })
-
-  return useMemo(
-    () => (userSlippageTolerance === 'auto' ? 'auto' : new Percent(userSlippageTolerance, 10_000)),
-    [userSlippageTolerance]
-  )
-}
-
-export function useUserTransactionTTL(): [number, (slippage: number) => void] {
-  const dispatch = useDispatch<AppDispatch>()
   const userDeadline = useSelector<AppState, AppState['user']['userDeadline']>((state) => {
     return state.user.userDeadline
   })
@@ -146,7 +108,7 @@ export function useUserTransactionTTL(): [number, (slippage: number) => void] {
 }
 
 export function useAddUserToken(): (token: Token) => void {
-  const dispatch = useDispatch<AppDispatch>()
+  const dispatch = useAppDispatch()
   return useCallback(
     (token: Token) => {
       dispatch(addSerializedToken({ serializedToken: serializeToken(token) }))
@@ -171,6 +133,7 @@ export function useUserAddedTokens(): Token[] {
 
   return useMemo(() => {
     if (!chainId) return []
+    // @ts-ignore TYPE NEEDS FIXING
     return Object.values(serializedTokensMap?.[chainId] ?? {}).map(deserializeToken)
   }, [serializedTokensMap, chainId])
 }
@@ -224,6 +187,7 @@ export function toV2LiquidityToken([tokenA, tokenB]: [Token, Token]): Token {
 const computeOracleData = (collateral: Currency, asset: Currency) => {
   const oracleData = ''
 
+  // @ts-ignore TYPE NEEDS FIXING
   const mapping = CHAINLINK_PRICE_FEED_MAP[asset.chainId]
 
   for (const address in mapping) {
@@ -316,13 +280,14 @@ export function toKashiLiquidityToken([collateral, asset]: [Token, Token]): Toke
   if (collateral.equals(asset)) throw new Error('Tokens cannot be equal')
   if (!BENTOBOX_ADDRESS[collateral.chainId]) throw new Error('No BentoBox factory address on this chain')
   if (!KASHI_ADDRESS[collateral.chainId]) throw new Error('No Kashi address on this chain')
-  console.log({
-    collateral,
-    asset,
-    oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
-    oracleData: computeOracleData(collateral, asset),
-  })
+  // console.log({
+  //   collateral,
+  //   asset,
+  //   oracle: CHAINLINK_ORACLE_ADDRESS[collateral.chainId],
+  //   oracleData: computeOracleData(collateral, asset),
+  // })
   const oracleData = computeOracleData(collateral, asset)
+  // @ts-ignore TYPE NEEDS FIXING
   if (!oracleData) return
   return new Token(
     collateral.chainId,
@@ -406,13 +371,18 @@ export function useTrackedTokenPairs(): [Token, Token][] {
 }
 
 /**
- * Same as above but replaces the auto with a default value
- * @param defaultSlippageTolerance the default value to replace auto with
+ * Returns a boolean indicating if the user has enabled OpenMEV protection.
  */
-export function useUserSlippageToleranceWithDefault(defaultSlippageTolerance: Percent): Percent {
-  const allowedSlippage = useUserSlippageTolerance()
-  return useMemo(
-    () => (allowedSlippage === 'auto' ? defaultSlippageTolerance : allowedSlippage),
-    [allowedSlippage, defaultSlippageTolerance]
+export function useUserOpenMev(): [boolean, (newUseOpenMev: boolean) => void] {
+  const dispatch = useAppDispatch()
+
+  // @ts-ignore TYPE NEEDS FIXING
+  const useOpenMev = useSelector<AppState, AppState['user']['useOpenMev']>((state) => state.user.userUseOpenMev)
+
+  const setUseOpenMev = useCallback(
+    (newUseOpenMev: boolean) => dispatch(updateUserUseOpenMev({ userUseOpenMev: newUseOpenMev })),
+    [dispatch]
   )
+
+  return [useOpenMev, setUseOpenMev]
 }

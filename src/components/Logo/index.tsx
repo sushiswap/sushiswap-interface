@@ -23,7 +23,7 @@ const Logo: FC<LogoProps> = ({ srcs, width, height, alt = '', className, style }
   const [, refresh] = useState<number>(0)
   const src = srcs.find((src) => !BAD_SRCS[src])
   return (
-    <div className="rounded" style={{ width, height, ...style }}>
+    <div className="rounded-full" style={{ width, height, ...style }}>
       <Image
         src={src || UNKNOWN_ICON}
         onError={() => {
@@ -34,7 +34,7 @@ const Logo: FC<LogoProps> = ({ srcs, width, height, alt = '', className, style }
         height={height}
         alt={alt}
         layout="fixed"
-        className={classNames('rounded', className)}
+        className={classNames('rounded-full', className)}
       />
     </div>
   )

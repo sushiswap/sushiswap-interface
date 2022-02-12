@@ -14,6 +14,7 @@ export interface SwapState {
   recipient?: string
   attemptingTxn: boolean
   showReview: boolean
+  error?: string
 }
 
 const initialState: SwapState = {
@@ -24,6 +25,7 @@ const initialState: SwapState = {
   recipient: undefined,
   attemptingTxn: false,
   showReview: false,
+  error: undefined,
 }
 
 export const swapSlice = createSlice({
@@ -36,15 +38,12 @@ export const swapSlice = createSlice({
     setReceiveToWallet: (state, action: PayloadAction<boolean>) => {
       state.receiveToWallet = action.payload
     },
-    setTridentSwapState: (
-      state,
-      action: PayloadAction<{
-        value: string
-        typedField: TypedField
-      }>
-    ) => {
+    setTridentSwapState: (state, action: PayloadAction<SwapState>) => {
       state.value = action.payload.value
       state.typedField = action.payload.typedField
+      state.attemptingTxn = action.payload.attemptingTxn
+      state.showReview = action.payload.showReview
+      state.error = action.payload.error
     },
     setRecipient: (state, action: PayloadAction<string | undefined>) => {
       state.recipient = action.payload
@@ -54,6 +53,9 @@ export const swapSlice = createSlice({
     },
     setShowReview: (state, action: PayloadAction<boolean>) => {
       state.showReview = action.payload
+    },
+    setError: (state, action: PayloadAction<string>) => {
+      state.error = action.payload
     },
   },
 })
@@ -66,6 +68,8 @@ export const {
   setReceiveToWallet,
   setTridentSwapState,
 } = swapSlice.actions
-export const selectTridentSwap = (state: AppState) => state.tridentSwap
+
+type selectTridentSwap = (state: AppState) => SwapState
+export const selectTridentSwap: selectTridentSwap = (state: AppState) => state.tridentSwap
 
 export default swapSlice.reducer

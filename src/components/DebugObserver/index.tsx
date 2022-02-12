@@ -10,5 +10,6 @@ export function DebugObserver(): JSX.Element {
     }
   }, [snapshot])
 
+  // @ts-ignore TYPE NEEDS FIXING
   return null
 }

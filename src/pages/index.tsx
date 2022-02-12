@@ -7,6 +7,8 @@ export default function Dashboard() {
       <Head>
         <title>Dashboard | Sushi</title>
         <meta name="description" content="Sushi" />
+        <meta key="twitter:description" name="twitter:description" content="Sushi" />
+        <meta key="og:description" property="og:description" content="Sushi" />
       </Head>
     </Container>
   )

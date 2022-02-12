@@ -86,8 +86,11 @@ export default function XSushi() {
   const data = useMemo(
     () =>
       barHistory && dayData && sushiDayData && bar
-        ? barHistory.map((barDay) => {
+        ? // @ts-ignore TYPE NEEDS FIXING
+          barHistory.map((barDay) => {
+            // @ts-ignore TYPE NEEDS FIXING
             const exchangeDay = dayData.find((day) => day.date === barDay.date)
+            //@ts-ignore TYPE NEEDS FIXING
             const sushiDay = sushiDayData.find((day) => day.date === barDay.date)
 
             const totalSushiStakedUSD = barDay.xSushiSupply * barDay.ratio * sushiDay.priceUSD
@@ -112,6 +115,7 @@ export default function XSushi() {
   const APY1d = aprToApy(
     (((exchange?.volumeUSD - exchange1d?.volumeUSD) * 0.0005 * 365.25) / (bar?.totalSupply * xSushiPrice)) * 100 ?? 0
   )
+  // @ts-ignore TYPE NEEDS FIXING
   const APY1w = aprToApy(data.slice(-7).reduce((acc, day) => (acc += day.APY), 0) / 7)
 
   const graphs = useMemo(
@@ -120,10 +124,12 @@ export default function XSushi() {
         title: 'xSushi Performance',
         labels: ['Daily APY', 'Daily APR'],
         data: [
+          // @ts-ignore TYPE NEEDS FIXING
           data.map((d) => ({
             date: d.date * 1000,
             value: d.APY,
           })),
+          // @ts-ignore TYPE NEEDS FIXING
           data.map((d) => ({
             date: d.date * 1000,
             value: d.APR,
@@ -134,6 +140,7 @@ export default function XSushi() {
         title: 'Daily Fees Received',
         labels: ['Fees (USD)'],
         data: [
+          // @ts-ignore TYPE NEEDS FIXING
           data.map((d) => ({
             date: d.date * 1000,
             value: d.feesReceived,
@@ -144,10 +151,12 @@ export default function XSushi() {
         title: 'xSushi Supply Movements',
         labels: ['Daily Minted', 'Daily Burned'],
         data: [
+          // @ts-ignore TYPE NEEDS FIXING
           data.map((d) => ({
             date: d.date * 1000,
             value: d.sushiStaked,
           })),
+          // @ts-ignore TYPE NEEDS FIXING
           data.map((d) => ({
             date: d.date * 1000,
             value: d.sushiHarvested,
@@ -158,6 +167,7 @@ export default function XSushi() {
         title: 'xSushi Total Supply',
         labels: ['Supply'],
         data: [
+          // @ts-ignore TYPE NEEDS FIXING
           data.map((d) => ({
             date: d.date * 1000,
             value: d.xSushiSupply,

@@ -14,7 +14,9 @@ import { computeRealizedLPFeePercent, warningSeverity } from 'app/functions/pric
 import { useCurrency } from 'app/hooks/Tokens'
 import { useV2TradeExactOut } from 'app/hooks/useV2Trades'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useExpertModeManager, useUserSlippageToleranceWithDefault } from 'app/state/user/hooks'
+import { useAppSelector } from 'app/state/hooks'
+import { selectSlippageWithDefault } from 'app/state/slippage/slippageSlice'
+import { useExpertModeManager } from 'app/state/user/hooks'
 import { useETHBalances } from 'app/state/wallet/hooks'
 import React, { useMemo, useState } from 'react'
 
@@ -52,6 +54,7 @@ export default function Repay({ pair }: RepayProps) {
 
   // Calculated
   const assetNative = WNATIVE[chainId || 1].address === pair.asset.address
+  // @ts-ignore TYPE NEEDS FIXING
   const ethBalance = useETHBalances(assetNative ? [account] : [])
 
   console.log({ pair })
@@ -59,7 +62,8 @@ export default function Repay({ pair }: RepayProps) {
   const balance = useBentoRepay
     ? toAmount(pair.asset, pair.asset.bentoBalance)
     : assetNative
-    ? BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
+    ? // @ts-ignore TYPE NEEDS FIXING
+      BigNumber.from(ethBalance[account]?.quotient.toString() || 0)
     : pair.asset.balance
 
   const displayUpdateOracle = pair.currentExchangeRate.gt(0) ? updateOracle : true
@@ -87,9 +91,7 @@ export default function Repay({ pair }: RepayProps) {
 
   const displayRemoveValue = pinRemoveMax ? maxRemoveCollateral : removeValue
 
-  // Swap
-  // const [allowedSlippage] = useUserSlippageTolerance(); // 10 = 0.1%
-  const allowedSlippage = useUserSlippageToleranceWithDefault(DEFAULT_KASHI_REPAY_SLIPPAGE_TOLERANCE)
+  const allowedSlippage = useAppSelector(selectSlippageWithDefault(DEFAULT_KASHI_REPAY_SLIPPAGE_TOLERANCE))
 
   const parsedAmount = tryParseAmount(pair.currentUserBorrowAmount.string, assetToken)
 
@@ -99,7 +101,9 @@ export default function Repay({ pair }: RepayProps) {
     if (!trade) return { realizedLPFee: undefined, priceImpact: undefined }
 
     const realizedLpFeePercent = computeRealizedLPFeePercent(trade)
+    // @ts-ignore TYPE NEEDS FIXING
     const realizedLPFee = trade.inputAmount.multiply(realizedLpFeePercent)
+    // @ts-ignore TYPE NEEDS FIXING
     const priceImpact = trade.priceImpact.subtract(realizedLpFeePercent)
     return { priceImpact, realizedLPFee }
   }, [trade])
@@ -385,7 +389,7 @@ export default function Repay({ pair }: RepayProps) {
         color="pink"
         content={(onCook: any) => (
           <TokenApproveButton value={displayRepayValue} token={assetToken} needed={!useBentoRepay}>
-            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled}>
+            <Button onClick={() => onCook(pair, onExecute)} disabled={actionDisabled} fullWidth={true}>
               {actionName}
             </Button>
           </TokenApproveButton>

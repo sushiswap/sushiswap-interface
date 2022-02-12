@@ -65,6 +65,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
         }
       } catch (e) {
         console.log(e)
+        // @ts-ignore TYPE NEEDS FIXING
         setError(e.error?.message)
       } finally {
         setPending(false)
@@ -75,6 +76,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
 
   // Subscribe to creation event to get created token ID
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     subscribe('MarketCreated', (owner, address, marketTemplate, { transactionHash }) => {
       if (transactionHash?.toLowerCase() === txHash?.toLowerCase()) {
         setAuctionAddress(address)
@@ -106,6 +108,7 @@ const AuctionCreationWizardReviewModal: FC<AuctionCreationWizardReviewModalProps
       {!txHash ? (
         <HeadlessUIModal.Body className="lg:max-w-lg lg:min-w-lg">
           <HeadlessUIModal.Header
+            onClose={onDismiss}
             header={i18n._(t`Create Auction`)}
             subheader={i18n._(t`Please review your entered details thoroughly.`)}
           />

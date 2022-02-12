@@ -37,33 +37,41 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
     <div className={classNames(active ? 'block' : 'hidden', 'grid grid-cols-2 gap-6')}>
       <AuctionDetailsTabStat
         label={i18n._(t`Liquidity Locked Until`)}
-        value={new Date(Number(auction.launcherInfo?.unlock.mul(1000))).toLocaleString('en-uS', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-          hour: 'numeric',
-          minute: 'numeric',
-          timeZone: 'UTC',
-        })}
+        value={
+          auction.launcherInfo
+            ? new Date(Number(auction.launcherInfo.unlock.mul(1000))).toLocaleString('en-uS', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: 'numeric',
+                timeZone: 'UTC',
+              })
+            : i18n._(t`No liquidity locked`)
+        }
       />
       <AuctionDetailsTabStat
         label={i18n._(t`Liquidity`)}
         value={
-          <>
-            <div className="flex gap-1">
-              {auction.totalTokens
-                ?.multiply(new Percent(Number(auction.launcherInfo?.liquidityPercent), 10000))
-                ?.toSignificant(6)}{' '}
-              {auction.totalTokens?.currency.symbol} + {Number(auction.launcherInfo?.liquidityPercent) / 100}% of{' '}
-              {auction.paymentToken.symbol} proceeds
-            </div>
-          </>
+          auction.launcherInfo ? (
+            <>
+              <div className="flex gap-1">
+                {auction.totalTokens
+                  ?.multiply(new Percent(Number(auction.launcherInfo.liquidityPercent), 10000))
+                  ?.toSignificant(6)}{' '}
+                {auction.totalTokens?.currency.symbol} + {Number(auction.launcherInfo.liquidityPercent) / 100}% of{' '}
+                {auction.paymentToken.symbol} proceeds
+              </div>
+            </>
+          ) : (
+            i18n._(t`No liquidity locked`)
+          )
         }
       />
       <AuctionDetailsTabStat
         label={i18n._(t`Token Address`)}
         value={
-          <CopyHelper toCopy={shortenAddress(auction.auctionToken.address)} className="text-high-emphesis opacity-100">
+          <CopyHelper toCopy={shortenAddress(auction.auctionToken.address)} className="opacity-100 text-high-emphesis">
             {shortenAddress(auction.auctionToken.address)}
           </CopyHelper>
         }
@@ -71,7 +79,7 @@ const AuctionDetailsTab: FC<AuctionDetailsTabProps> = ({ auction, active }) => {
       <AuctionDetailsTabStat
         label={i18n._(t`Auction Address`)}
         value={
-          <CopyHelper toCopy={shortenAddress(auction.auctionInfo.addr)} className="text-high-emphesis opacity-100">
+          <CopyHelper toCopy={shortenAddress(auction.auctionInfo.addr)} className="opacity-100 text-high-emphesis">
             {shortenAddress(auction.auctionInfo.addr)}
           </CopyHelper>
         }

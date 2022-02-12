@@ -15,13 +15,12 @@ const OKEx = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/o
 const Polygon = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/polygon.jpg'
 const Rinkeby = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/rinkeby.jpg'
 const Ropsten = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/ropsten.jpg'
-const xDai = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/xdai.jpg'
+const xDai = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/gnosis.jpg'
 const Celo = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/celo.jpg'
 const Palm = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/palm.jpg'
 const Moonriver = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/moonriver.jpg'
-const Fuse = 'https://raw.githubusercontent.com/sushiswap/icons/master/token/fuse.jpg'
-const Telos =
-  'https://raw.githubusercontent.com/sushiswap/logos/main/network/telos/0xD102cE6A4dB07D247fcc28F366A623Df0938CA9E.jpg'
+const Fuse = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/fuse.jpg'
+const Telos = 'https://raw.githubusercontent.com/sushiswap/icons/master/network/telos.jpg'
 
 export const NETWORK_ICON = {
   [ChainId.ETHEREUM]: Mainnet,
@@ -64,7 +63,7 @@ export const NETWORK_LABEL: { [chainId in ChainId]?: string } = {
   [ChainId.FANTOM_TESTNET]: 'Fantom Testnet',
   [ChainId.MATIC]: 'Polygon',
   [ChainId.MATIC_TESTNET]: 'Polygon Testnet',
-  [ChainId.XDAI]: 'xDai',
+  [ChainId.XDAI]: 'Gnosis',
   [ChainId.ARBITRUM]: 'Arbitrum',
   [ChainId.ARBITRUM_TESTNET]: 'Arbitrum Testnet',
   [ChainId.BSC]: 'BSC',

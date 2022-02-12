@@ -56,6 +56,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   const { editDocuments, cancelAuction } = useAuctionEdit(auction.auctionInfo.addr, auction.template)
 
   useEffect(() => {
+    // @ts-ignore TYPE NEEDS FIXING
     const subscription = watch((data: IFormInputs) => {
       setExampleAuction(
         (prevAuction) =>
@@ -74,6 +75,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
           })
       )
     })
+    // @ts-ignore TYPE NEEDS FIXING
     return () => subscription.unsubscribe()
   }, [watch])
 
@@ -82,7 +84,9 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
       const currentDocs = { ...auction.auctionDocuments }
       const newDocs = { ...data }
       const diff = Object.entries(newDocs).reduce<DocumentInput[]>((acc, [k, v]) => {
+        // @ts-ignore TYPE NEEDS FIXING
         const _ = currentDocs[k] === undefined ? '' : currentDocs[k]
+        // @ts-ignore TYPE NEEDS FIXING
         if (_ !== newDocs[k]) {
           acc.push({ name: k, data: v })
         }
@@ -104,9 +108,9 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
     },
     {
       key: 'github',
-      label: i18n._(t`Github`),
+      label: i18n._(t`GitHub`),
       placeholder: 'https://github.com',
-      helperText: i18n._(t`Link to your Github repository`),
+      helperText: i18n._(t`Link to your GitHub repository`),
     },
     {
       key: 'telegram',
@@ -141,7 +145,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
   ]
 
   return (
-    <div className="flex flex-col lg:flex-row gap-10">
+    <div className="flex flex-col gap-10 lg:flex-row">
       <div className="flex flex-col gap-10">
         <Form {...methods} onSubmit={methods.handleSubmit(onSubmit)}>
           <Form.Card>
@@ -260,7 +264,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                 <Form.TextAreaField
                   rows={6}
                   name="bannedWarning"
-                  placeholder="The content contained in this website does not constitute an offer or sale of securities in or into the United States, or to or for the account or benefit of U.S. persons, or in any other jurisdictions where it is unlawful to do so. Transfer of BIT tokens may be subject to legal restrictions under applicable laws. Under no circumstances shall BIT tokens be reoffered, resold or transferred within the United States or to, or for the account or benefit of, U.S. persons, except pursuant to an exemption from, or in a transaction not subject to, the registration requirements of the U.S. Securities Act of 1933, as amended."
+                  placeholder={`The content contained in this website does not constitute an offer or sale of securities in or into the United States, or to or for the account or benefit of U.S. persons, or in any other jurisdictions where it is unlawful to do so. Transfer of ${auction.auctionToken.symbol} tokens may be subject to legal restrictions under applicable laws. Under no circumstances shall ${auction.auctionToken.symbol} tokens be reoffered, resold or transferred within the United States or to, or for the account or benefit of, U.S. persons, except pursuant to an exemption from, or in a transaction not subject to, the registration requirements of the U.S. Securities Act of 1933, as amended.`}
                   label={i18n._(t`Warning Message`)}
                   helperText={
                     methods.getValues('bannedWarning')
@@ -285,9 +289,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                       onClick={cancelAuction}
                       variant="empty"
                       role="button"
-                      className={classNames(
-                        auction.status !== AuctionStatus.UPCOMING ? '!text-low-emphesis' : '!text-red'
-                      )}
+                      color={auction.status !== AuctionStatus.UPCOMING ? 'gray' : 'red'}
                       disabled={auction.status !== AuctionStatus.UPCOMING}
                     >
                       {i18n._(t`Cancel this auction`)}

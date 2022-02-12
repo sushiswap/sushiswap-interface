@@ -1,12 +1,17 @@
 version: 2
 updates:
-  # Enable version updates for npm
   - package-ecosystem: 'npm'
-    # Look for `package.json` and `lock` files in the `root` directory
     directory: '/'
-    # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: 'daily'
+    commit-message:
+      # Prefix all commit messages with "npm"
+      prefix: 'token list'
+      include: 'scope'
+    labels:
+      - 'tokenlist'
+      # Add default Kodiak `merge.automerge_label`
+      #- 'automerge'
     allow:
       - dependency-name: '@sushiswap/bentobox-sdk'
       - dependency-name: '@sushiswap/chainlink-whitelist'

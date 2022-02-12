@@ -1,6 +1,7 @@
 import Container from 'app/components/Container'
 import Head from 'next/head'
 
+// @ts-ignore TYPE NEEDS FIXING
 export default function Status({ initialData }) {
   //   const res = useChainsStatus({ initialData })
   //   const { data } = res.data
@@ -9,6 +10,8 @@ export default function Status({ initialData }) {
       <Head>
         <title>Status | Sushi</title>
         <meta key="description" name="description" content="Sushi Status..." />
+        <meta key="twitter:description" name="twitter:description" content="Sushi Status..." />
+        <meta key="og:description" property="og:description" content="Sushi Status..." />
       </Head>
       {/* <div className="w-full max-w-6xl mx-auto">
                 <Typography component="h1" variant="h1" className="w-full mb-4">

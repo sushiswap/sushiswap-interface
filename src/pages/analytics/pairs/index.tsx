@@ -26,8 +26,11 @@ export default function Pairs() {
 
   const pairsFormatted = useMemo(() => {
     return type === 'all'
-      ? pairs?.map((pair) => {
+      ? // @ts-ignore TYPE NEEDS FIXING
+        pairs?.map((pair) => {
+          // @ts-ignore TYPE NEEDS FIXING
           const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+          // @ts-ignore TYPE NEEDS FIXING
           const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair1d
 
           return {
@@ -42,10 +45,15 @@ export default function Pairs() {
           }
         })
       : pairs
+          // @ts-ignore TYPE NEEDS FIXING
           ?.map((pair) => {
+            // @ts-ignore TYPE NEEDS FIXING
             const pair1d = pairs1d?.find((p) => pair.id === p.id) ?? pair
+            // @ts-ignore TYPE NEEDS FIXING
             const pair2d = pairs2d?.find((p) => pair.id === p.id) ?? pair1d
+            // @ts-ignore TYPE NEEDS FIXING
             const pair1w = pairs1w?.find((p) => pair.id === p.id) ?? pair2d
+            // @ts-ignore TYPE NEEDS FIXING
             const pair2w = pairs2w?.find((p) => pair.id === p.id) ?? pair1w
 
             return {
@@ -67,6 +75,7 @@ export default function Pairs() {
                 ((pair.volumeUSD - pair1w.volumeUSD) / (pair1w.volumeUSD - pair2w.volumeUSD)) * 100 - 100,
             }
           })
+          // @ts-ignore TYPE NEEDS FIXING
           .sort((a, b) => b.liquidityChangeNumber1d - a.liquidityChangeNumber1d)
   }, [type, pairs, pairs1d, pairs2d, pairs1w, pairs2w])
 
@@ -95,12 +104,7 @@ export default function Pairs() {
             <div className="text-3xl font-bold text-high-emphesis">Pairs</div>
             <div className="">Click on the column name to sort pairs by its TVL, volume or fees gained.</div>
           </div>
-          <Search
-            term={term}
-            search={search}
-            inputProps={{ className: 'placeholder-primary bg-opacity-50 w-full py-3 pl-4 pr-14 rounded bg-dark-900' }}
-            className="border shadow-2xl border-dark-800"
-          />
+          <Search term={term} search={search} />
         </div>
       </Background>
       <PairTabs currentType={type} setType={setType} />

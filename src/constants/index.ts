@@ -28,9 +28,6 @@ export const PROTOCOL_MERKLE_ROOT =
 
 export const NetworkContextName = 'NETWORK'
 
-// default allowed slippage, in bips
-export const INITIAL_ALLOWED_SLIPPAGE = 50
-
 // 30 minutes, denominated in seconds
 export const DEFAULT_DEADLINE_FROM_NOW = 60 * 30
 
@@ -71,6 +68,9 @@ export const ANALYTICS_URL: { [chainId in ChainId]?: string } = {
   [ChainId.XDAI]: 'https://analytics-xdai.sushi.com',
   [ChainId.HARMONY]: 'https://analytics-harmony.sushi.com',
   [ChainId.ARBITRUM]: 'https://analytics-arbitrum.sushi.com',
+  [ChainId.FUSE]: 'https://analytics-fuse.sushi.com',
+  [ChainId.MOONRIVER]: 'https://analytics-moonriver.sushi.com',
+  [ChainId.CELO]: 'https://analytics-celo.sushi.com',
 }
 
 export const EIP_1559_ACTIVATION_BLOCK: { [chainId in ChainId]?: number } = {

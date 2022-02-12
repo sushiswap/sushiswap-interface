@@ -5,6 +5,7 @@ import { classNames } from 'app/functions'
 import useInterval from 'app/hooks/useInterval'
 import useTextWidth from 'app/hooks/useTextWidth'
 import { FC, useState } from 'react'
+// @ts-ignore TYPE NEEDS FIXING
 import AutoSizer from 'react-virtualized-auto-sizer'
 
 import { PriceIndicator } from './PriceIndicator'
@@ -31,7 +32,6 @@ const AuctionChartCrowdsale: FC<AuctionChartCrowdsaleProps> = ({ auction, prices
   }, 1000)
 
   const bottomHeight = 60
-  const padding = 28
   const paddingX = 20
   const paddingY = 50
   const topPadding = 20
@@ -40,6 +40,7 @@ const AuctionChartCrowdsale: FC<AuctionChartCrowdsaleProps> = ({ auction, prices
   return (
     <div className={classNames('relative w-full h-full', minHeight)}>
       <AutoSizer>
+        {/*@ts-ignore TYPE NEEDS FIXING*/}
         {({ width, height }) => {
           const remainingHeight = prices ? height - bottomHeight : height
           const currentX = paddingX + (width - 2 * paddingX) * progression
@@ -54,18 +55,18 @@ const AuctionChartCrowdsale: FC<AuctionChartCrowdsaleProps> = ({ auction, prices
                 height={remainingHeight}
                 viewBox={`0 0 ${width} ${remainingHeight}`}
               >
-                <circle r="4" cx={padding} cy={remainingHeight / 2} fill="currentColor" />
+                <circle r="4" cx={paddingX} cy={remainingHeight / 2} fill="currentColor" />
                 <line
-                  x1={padding}
+                  x1={paddingX}
                   y1={currentY}
-                  x2={width - padding}
+                  x2={width - paddingX}
                   y2={currentY}
                   stroke="currentColor"
                   strokeWidth="2"
                   opacity={0.2}
                 />
-                <line x1={padding} y1={currentY} x2={currentX} y2={currentY} stroke="currentColor" strokeWidth="2" />
-                <circle r="4" cx={width - padding} cy={currentY} fill="currentColor" />
+                <line x1={paddingX} y1={currentY} x2={currentX} y2={currentY} stroke="currentColor" strokeWidth="2" />
+                <circle r="4" cx={width - paddingX} cy={currentY} fill="currentColor" />
                 {showPriceIndicator && (
                   <PriceIndicator x={currentX} y={currentY} auction={auction} orientation={orientation} />
                 )}

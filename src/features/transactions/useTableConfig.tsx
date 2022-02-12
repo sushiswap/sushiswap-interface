@@ -28,6 +28,7 @@ export const useTableConfig = (transactions?: Transactions[]) => {
       {
         Header: 'To',
         accessor: 'address',
+        // @ts-ignore TYPE NEEDS FIXING
         Cell: (props) => {
           return (
             <ExternalLink color="blue" href={`https://etherscan.io/address/${props.cell.value}`}>

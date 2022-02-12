@@ -17,9 +17,6 @@ export const updateUserExpertMode = createAction<{ userExpertMode: boolean }>('u
 export const updateUserSingleHopOnly = createAction<{
   userSingleHopOnly: boolean
 }>('user/updateUserSingleHopOnly')
-export const updateUserSlippageTolerance = createAction<{
-  userSlippageTolerance: number | 'auto'
-}>('user/updateUserSlippageTolerance')
 export const updateUserDeadline = createAction<{ userDeadline: number }>('user/updateUserDeadline')
 export const addSerializedToken = createAction<{
   serializedToken: SerializedToken
@@ -37,3 +34,6 @@ export const removeSerializedPair = createAction<{
   tokenBAddress: string
 }>('user/removeSerializedPair')
 export const toggleURLWarning = createAction<void>('app/toggleURLWarning')
+export const updateUserUseOpenMev = createAction<{
+  userUseOpenMev: boolean
+}>('user/updateUserUseOpenMev')

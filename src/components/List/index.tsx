@@ -7,6 +7,7 @@ interface ItemProps {
 
 export function Item({ item, className }: ItemProps) {
   return (
+    // @ts-ignore TYPE NEEDS FIXING
     <li className={classNames('px-4 py-4 overflow-hidden bg-white shadow sm:px-6 sm:rounded-md', className)}>{item}</li>
   )
 }

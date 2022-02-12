@@ -3,20 +3,22 @@ import { ElementHandle } from 'puppeteer'
 import { AppPage } from '../AppPage'
 
 export class AddLiquidityPage extends AppPage {
-  protected ConfirmDepositButtonSelector: string = '#btn-ConfirmDeposit'
-  protected ModalConfirmDepositButtonSelector: string = '#btn-modal-confirm-deposit'
-  protected BackToPoolsButtonSelector: string = '#btn-backToPools'
-  protected DepositStatusDivSelector: string = 'div-deposit-status'
-  protected ApproveButtonSelector: string = '#btn-approve'
-  protected FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-deposit'
+  private ConfirmDepositButtonSelector: string = '#btn-ConfirmDeposit'
+  private ModalConfirmDepositButtonSelector: string = '#btn-modal-confirm-deposit'
+  private TxStatusDivSelector: string = 'div-tx-status'
+  private ApproveButtonSelector: string = '#btn-approve'
+  private FixedRatioCheckboxSelector: string = '#chk-fixed-ratio-deposit'
+
+  // Transaction Details Selctors
+  private MinReceivedSelector: string = '#text-liquidity-minted'
 
   // Asset input selectors
-  protected SpendFromWalletASelector: string = '.switch-spend-from-wallet-a'
-  protected SpendFromWalletBSelector: string = '.switch-spend-from-wallet-b'
-  protected AssetInputALabelSelector: string = '#asset-input-a'
-  protected AssetInputBLabelSelector: string = '#asset-input-b'
-  protected AssetInputABalanceSelector: string = '#asset-input-a-balance'
-  protected AssetInputBBalanceSelector: string = '#asset-input-b-balance'
+  private SpendFromWalletASelector: string = '.switch-spend-from-wallet-a'
+  private SpendFromWalletBSelector: string = '.switch-spend-from-wallet-b'
+  private AssetInputALabelSelector: string = '#asset-input-a'
+  private AssetInputBLabelSelector: string = '#asset-input-b'
+  private AssetInputABalanceSelector: string = '#asset-input-a-balance'
+  private AssetInputBBalanceSelector: string = '#asset-input-b-balance'
 
   public async addLiquidity(
     t0Amount: string,
@@ -37,6 +39,7 @@ export class AddLiquidityPage extends AppPage {
   }
 
   public async confirmDeposit(): Promise<void> {
+    await this.blockingWait(1, true)
     const approveButton = await this.Page.$(this.ApproveButtonSelector)
     if (approveButton) {
       await approveButton.click()
@@ -46,15 +49,16 @@ export class AddLiquidityPage extends AppPage {
     }
 
     const confirmDepositButton = await this.Page.waitForSelector(this.ConfirmDepositButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await confirmDepositButton.click()
 
     const modalConfirmDepositButton = await this.Page.waitForSelector(this.ModalConfirmDepositButtonSelector)
+    // @ts-ignore TYPE NEEDS FIXING
     await modalConfirmDepositButton.click()
 
     await this.confirmMetamaskTransaction()
 
-    const backToPoolsButton = await this.Page.waitForSelector(this.BackToPoolsButtonSelector)
-    await backToPoolsButton.click()
+    await this.Page.waitForXPath(`//div[@id='${this.TxStatusDivSelector}' and contains(., 'Success')]`)
 
     await this.blockingWait(5)
   }
@@ -122,6 +126,18 @@ export class AddLiquidityPage extends AppPage {
     return parseFloat(depositAmount)
   }
 
+  public async getMinReceivedAmount(): Promise<number> {
+    await this.Page.waitForSelector(this.MinReceivedSelector)
+    const minReceivedText = await this.Page.$eval(this.MinReceivedSelector, (el) => el.textContent)
+
+    if (minReceivedText) {
+      const balance = minReceivedText.split(' ')[0]
+      return parseFloat(balance)
+    }
+
+    return 0
+  }
+
   private async setFundingSource(switchSelector: string, fromWallet: boolean = true): Promise<void> {
     const isSpendFromWalletAChecked = await this.isSwitchChecked(switchSelector)
     const spendFromWalletASwitch = await this.getSwitchElement(switchSelector)
@@ -137,7 +153,7 @@ export class AddLiquidityPage extends AppPage {
     balanceSelector: string,
     fromWallet: boolean = true
   ): Promise<number> {
-    await this.blockingWait(1, true)
+    await this.blockingWait(5, true)
 
     const isSpendFromWalletChecked = await this.isSwitchChecked(spendFromSwitchSelector)
     const spendFromWalletSwitch = await this.getSwitchElement(spendFromSwitchSelector)
@@ -162,6 +178,7 @@ export class AddLiquidityPage extends AppPage {
     await this.Page.waitForSelector(this.FixedRatioCheckboxSelector)
     const fixedRateCheckbox = await this.Page.$(this.FixedRatioCheckboxSelector)
 
+    // @ts-ignore TYPE NEEDS FIXING
     return fixedRateCheckbox
   }
 
