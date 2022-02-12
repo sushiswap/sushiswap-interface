@@ -1,31 +1,41 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, KASHI_ADDRESS, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { KashiMarketRepayReviewModal, KashiMarketView, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
+import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, useState } from 'react'
 
-interface KashiMarketRepayButton {
+export interface KashiMarketRepayButtonProps {
+  view: KashiMarketView
   closePosition: boolean
   repayFromWallet: boolean
+  removeToWallet: boolean
   repayAmount?: CurrencyAmount<Currency>
   removeAmount?: CurrencyAmount<Currency>
+  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_OUTPUT>
 }
 
-const KashiMarketRepayButton: FC<KashiMarketRepayButton> = ({
+export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
   closePosition,
   repayFromWallet,
+  removeToWallet,
   repayAmount,
   removeAmount,
+  trade,
+  view,
 }) => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
   const { chainId } = useActiveWeb3React()
+  const balance = useBentoOrWalletBalance(account ?? undefined, market.collateral.token, repayFromWallet)
   const [permit, setPermit] = useState<Signature>()
   const [permitError, setPermitError] = useState<boolean>()
   const bentoboxContract = useBentoBoxContract()
@@ -37,9 +47,31 @@ const KashiMarketRepayButton: FC<KashiMarketRepayButton> = ({
     ? CurrencyAmount.fromRawAmount(removeAmount.currency, market.totalCollateralAmount)
     : undefined
 
-  let error: string | undefined = undefined
-  if (totalAvailableToRemove && removeAmount && removeAmount.greaterThan(totalAvailableToRemove))
-    error = i18n._(t`Not enough ${removeAmount.currency.symbol} available`)
+  const error = !account
+    ? i18n._(t`Connect Wallet`)
+    : !closePosition && !repayAmount?.greaterThan(ZERO) && !removeAmount?.greaterThan(ZERO)
+    ? i18n._(t`Enter an amount`)
+    : !balance
+    ? i18n._(t`Loading balance`)
+    : repayAmount?.greaterThan(balance)
+    ? i18n._(t`Insufficient balance`)
+    : totalAvailableToRemove && removeAmount && removeAmount.greaterThan(totalAvailableToRemove)
+    ? i18n._(t`Not enough ${removeAmount.currency.symbol} available`)
+    : removeAmount?.greaterThan(market.userCollateralAmount)
+    ? i18n._(t`Withdraw too large`)
+    : repayAmount?.greaterThan(market.currentUserBorrowAmount)
+    ? 'Repay larger than debt'
+    : ''
+
+  const buttonText = error
+    ? error
+    : removeAmount?.greaterThan(ZERO) && repayAmount?.greaterThan(ZERO)
+    ? i18n._(t`Repay and Remove`)
+    : removeAmount?.greaterThan(ZERO)
+    ? i18n._(t`Remove Collateral`)
+    : repayAmount?.greaterThan(ZERO)
+    ? i18n._(t`Repay Debt`)
+    : ''
 
   return (
     <>
@@ -70,23 +102,22 @@ const KashiMarketRepayButton: FC<KashiMarketRepayButton> = ({
               onClick={() => setOpen(true)}
               className="rounded-2xl md:rounded"
             >
-              {error ? error : closePosition ? i18n._(t`Close Position`) : i18n._(t`Repay`)}
+              {buttonText}
             </Button>
           )
         }}
       </TridentApproveGate>
-      {/*<KashiMarketBorrowReviewModal*/}
-      {/*  open={open}*/}
-      {/*  permit={permit}*/}
-      {/*  onDismiss={() => setOpen(false)}*/}
-      {/*  spendFromWallet={repayFromWallet}*/}
-      {/*  receiveInWallet={removeToWallet}*/}
-      {/*  leveraged={leveraged}*/}
-      {/*  collateralAmount={collateralAmount}*/}
-      {/*  borrowAmount={borrowAmount}*/}
-      {/*/>*/}
+      <KashiMarketRepayReviewModal
+        open={open}
+        onDismiss={() => setOpen(false)}
+        repayFromWallet={repayFromWallet}
+        repayAmount={repayAmount}
+        removeToWallet={removeToWallet}
+        removeAmount={removeAmount}
+        closePosition={closePosition}
+        trade={trade}
+        view={view}
+      />
     </>
   )
 }
-
-export default KashiMarketRepayButton

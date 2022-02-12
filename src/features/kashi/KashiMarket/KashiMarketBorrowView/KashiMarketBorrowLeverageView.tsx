@@ -2,15 +2,14 @@ import { Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, Price, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, Fraction } from '@sushiswap/core-sdk'
 import CloseIcon from 'app/components/CloseIcon'
 import QuestionHelper from 'app/components/QuestionHelper'
 import SettingsTab from 'app/components/Settings'
 import Slider from 'app/components/Slider'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
-import { LTV } from 'app/features/kashi/constants'
-import { useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { useKashiMarket, useLiquidationPrice } from 'app/features/kashi/KashiMarket'
 import { classNames } from 'app/functions'
 import React, { FC, useCallback, useState } from 'react'
 
@@ -27,6 +26,7 @@ interface KashiMarketBorrowLeverageView {
   afterChange?(x: string): void
   enabled: boolean
   onSwitch(): void
+  multiplier?: Fraction
 }
 
 export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = ({
@@ -36,10 +36,12 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
   onSwitch,
   onChange,
   afterChange,
+  multiplier,
 }) => {
   const { i18n } = useLingui()
   const [range, setRange] = useState<number>(0.5)
   const [invert, setInvert] = useState(false)
+  const liquidationPrice = useLiquidationPrice({ invert, borrowAmount, collateralAmount, multiplier, reduce: false })
   const { market } = useKashiMarket()
 
   const handleChange = useCallback(
@@ -49,17 +51,6 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
     },
     [onChange]
   )
-
-  const liquidationPrice =
-    borrowAmount && collateralAmount && borrowAmount.greaterThan(ZERO)
-      ? new Price({ baseAmount: borrowAmount.multiply(LTV), quoteAmount: collateralAmount })
-      : undefined
-
-  const price = invert
-    ? `1 ${collateralAmount?.currency.symbol} = ${liquidationPrice?.invert().toSignificant(6)} ${
-        borrowAmount?.currency.symbol
-      }`
-    : `1 ${borrowAmount?.currency.symbol} = ${liquidationPrice?.toSignificant(6)} ${collateralAmount?.currency.symbol}`
 
   return (
     <div
@@ -133,7 +124,7 @@ export const KashiMarketBorrowLeverageView: FC<KashiMarketBorrowLeverageView> = 
               className="text-high-emphesis"
               onClick={() => setInvert((prev) => !prev)}
             >
-              {price}
+              {liquidationPrice}
             </Typography>
           </div>
         </div>

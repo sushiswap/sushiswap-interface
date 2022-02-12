@@ -1,16 +1,23 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, KASHI_ADDRESS, ZERO } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import { BorrowExecutePayload, KashiMarketBorrowReviewModal, useKashiMarket } from 'app/features/kashi/KashiMarket'
+import {
+  BorrowExecutePayload,
+  KashiMarketBorrowReviewModal,
+  KashiMarketView,
+  useKashiMarket,
+} from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { useBentoBoxContract } from 'app/hooks'
+import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, useState } from 'react'
 
 export interface KashiMarketBorrowButtonProps extends Omit<BorrowExecutePayload, 'permit' | 'trade'> {
+  view: KashiMarketView
   maxBorrow?: CurrencyAmount<Currency>
 }
 
@@ -21,10 +28,13 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   spendFromWallet,
   collateralAmount,
   maxBorrow,
+  view,
 }) => {
+  const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
   const { chainId } = useActiveWeb3React()
+  const balance = useBentoOrWalletBalance(account ?? undefined, market.collateral.token, spendFromWallet)
   const [permit, setPermit] = useState<Signature>()
   const [permitError, setPermitError] = useState<boolean>()
   const bentoboxContract = useBentoBoxContract()
@@ -36,10 +46,29 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
     ? CurrencyAmount.fromRawAmount(borrowAmount.currency, market.totalAssetAmount)
     : undefined
 
-  let error: string | undefined = undefined
-  if (borrowAmount && maxBorrow && borrowAmount.greaterThan(maxBorrow)) error = i18n._(t`Not enough collateral`)
-  if (totalAvailableToBorrow && borrowAmount && borrowAmount.greaterThan(totalAvailableToBorrow))
-    error = i18n._(t`Not enough ${borrowAmount.currency.symbol} available`)
+  const error = !account
+    ? i18n._(t`Connect Wallet`)
+    : !collateralAmount?.greaterThan(ZERO) && !borrowAmount?.greaterThan(ZERO)
+    ? i18n._(t`Enter an amount`)
+    : !balance
+    ? i18n._(t`Loading balance`)
+    : collateralAmount?.greaterThan(balance)
+    ? i18n._(t`Insufficient balance`)
+    : borrowAmount && maxBorrow && borrowAmount.greaterThan(maxBorrow)
+    ? i18n._(t`Not enough collateral`)
+    : totalAvailableToBorrow && borrowAmount && borrowAmount.greaterThan(totalAvailableToBorrow)
+    ? i18n._(t`Not enough ${borrowAmount.currency.symbol} available`)
+    : ''
+
+  const buttonText = error
+    ? error
+    : borrowAmount?.greaterThan(ZERO) && collateralAmount?.greaterThan(ZERO)
+    ? i18n._(t`Deposit and Borrow`)
+    : borrowAmount?.greaterThan(ZERO)
+    ? i18n._(t`Borrow Asset`)
+    : collateralAmount?.greaterThan(ZERO)
+    ? i18n._(t`Deposit Collateral`)
+    : ''
 
   return (
     <>
@@ -65,12 +94,12 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
           return (
             <Button
               loading={loading || attemptingTxn}
-              color="gradient"
+              color={borrowAmount?.equalTo(ZERO) ? 'blue' : 'gradient'}
               disabled={disabled}
               onClick={() => setOpen(true)}
               className="rounded-2xl md:rounded"
             >
-              {error ? error : i18n._(t`Borrow`)}
+              {buttonText}
             </Button>
           )
         }}
@@ -84,6 +113,7 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
         leveraged={leveraged}
         collateralAmount={collateralAmount}
         borrowAmount={borrowAmount}
+        view={view}
       />
     </>
   )

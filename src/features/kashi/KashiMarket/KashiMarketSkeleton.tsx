@@ -3,8 +3,13 @@ import { FC } from 'react'
 export const KashiMarketSkeleton: FC = () => {
   return (
     <div className="flex flex-col gap-3 p-2 md:p-4 pt-4 rounded-[24px] bg-dark-800 shadow-md shadow-dark-1000">
-      <div className="grid grid-cols-4 gap-2 h-[42px] rounded-full">
+      <div className="grid grid-cols-3 gap-2 h-[42px] rounded-full">
         <div className="w-full h-full bg-dark-700 rounded-full animate-pulse" />
+        <div className="w-full h-full bg-dark-700 rounded-full animate-pulse" />
+        <div className="w-full h-full bg-dark-700 rounded-full animate-pulse" />
+        <div className="w-full h-full bg-dark-700 rounded-full animate-pulse" />
+      </div>
+      <div className="grid grid-cols-3 gap-2 h-[36px] rounded-full">
         <div className="w-full h-full bg-dark-700 rounded-full animate-pulse" />
         <div className="w-full h-full bg-dark-700 rounded-full animate-pulse" />
         <div className="w-full h-full bg-dark-700 rounded-full animate-pulse" />

@@ -33,6 +33,7 @@ interface SwapAssetPanel {
   priceImpact?: Percent
   priceImpactCss?: string
   disabled?: boolean
+  balancePanel?: (x: Pick<SwapAssetPanel, 'disabled' | 'currency' | 'onChange' | 'spendFromWallet'>) => React.ReactNode
 }
 
 const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAssetPanel>(
@@ -51,12 +52,14 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
       priceImpactCss,
       disabled,
       currencies,
+      balancePanel,
     },
     ref
   ) => {
     return (
       <div
         className={classNames(
+          disabled ? 'pointer-events-none opacity-40' : '',
           error ? 'border-red-800 hover:border-red-500' : 'border-dark-700 hover:border-dark-600',
           'rounded-[14px] border bg-dark-900 p-3 flex flex-col gap-4'
         )}
@@ -88,7 +91,11 @@ const SwapAssetPanel: FC<SwapAssetPanel> = forwardRef<HTMLInputElement, SwapAsse
               spendFromWallet,
             }}
           />
-          <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
+          {balancePanel ? (
+            balancePanel({ disabled, currency, onChange, spendFromWallet })
+          ) : (
+            <BalancePanel {...{ disabled, currency, onChange, spendFromWallet }} />
+          )}
         </div>
       </div>
     )

@@ -11,7 +11,7 @@ import KashiMarketRepayView from './KashiMarketRepayView/KashiMarketRepayView'
 
 interface KashiMarketProps {}
 
-enum View {
+export enum KashiMarketView {
   DEPOSIT,
   WITHDRAW,
   BORROW,
@@ -20,13 +20,13 @@ enum View {
 
 export const KashiMarket: FC<KashiMarketProps> = () => {
   const { i18n } = useLingui()
-  const [view, setView] = useState<View>(View.BORROW)
+  const [view, setView] = useState<KashiMarketView>(KashiMarketView.BORROW)
 
   return (
     <SwapLayoutCard>
       <div className="flex flex-col w-full gap-4">
         <ToggleButtonGroup size="sm" value={view} onChange={setView} variant="filled">
-          <ToggleButtonGroup.Button value={View.BORROW}>
+          <ToggleButtonGroup.Button value={KashiMarketView.BORROW}>
             {i18n._(t`Borrow`)}
             <QuestionHelper
               text={
@@ -43,8 +43,8 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
               }
             />
           </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value={View.REPAY}>{i18n._(t`Repay`)}</ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value={View.DEPOSIT}>
+          <ToggleButtonGroup.Button value={KashiMarketView.REPAY}>{i18n._(t`Repay`)}</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={KashiMarketView.DEPOSIT}>
             {i18n._(t`Deposit`)}
             <QuestionHelper
               text={
@@ -59,10 +59,10 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
               }
             />
           </ToggleButtonGroup.Button>
-          <ToggleButtonGroup.Button value={View.WITHDRAW}>{i18n._(t`Withdraw`)}</ToggleButtonGroup.Button>
+          <ToggleButtonGroup.Button value={KashiMarketView.WITHDRAW}>{i18n._(t`Withdraw`)}</ToggleButtonGroup.Button>
         </ToggleButtonGroup>
-        {view === View.BORROW && <KashiMarketBorrowView />}
-        {view === View.REPAY && <KashiMarketRepayView />}
+        {view === KashiMarketView.BORROW && <KashiMarketBorrowView />}
+        {view === KashiMarketView.REPAY && <KashiMarketRepayView />}
       </div>
     </SwapLayoutCard>
   )

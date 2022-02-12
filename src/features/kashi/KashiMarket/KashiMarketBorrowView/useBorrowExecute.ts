@@ -83,24 +83,6 @@ export const useBorrowExecute: UseBorrowExecute = () => {
       // If we're leveraged, check for trade object and add actions accordingly
       if (leveraged && trade) {
         const path = trade.route.path.map((token) => token.address) || []
-
-        // TODO Remove
-        console.log([
-          market.asset.token.address,
-          market.collateral.token.address,
-          BigNumber.from(trade.minimumAmountOut(allowedSlippage).quotient.toString()).toString(),
-          path.length > 2 ? path[1] : AddressZero,
-          path.length > 3 ? path[2] : AddressZero,
-          account,
-          toShare(
-            {
-              base: JSBI.BigInt(market.collateral.base.toString()),
-              elastic: JSBI.BigInt(market.collateral.elastic.toString()),
-            } as Rebase,
-            BigNumber.from(collateralAmount.quotient.toString())
-          ).toString(),
-        ])
-
         cooker.action(
           SUSHISWAP_MULTISWAPPER_ADDRESS[chainId || 1],
           ZERO,
@@ -148,7 +130,7 @@ export const useBorrowExecute: UseBorrowExecute = () => {
             } using ${collateralAmount.toSignificant(6)} ${collateralAmount.currency.symbol} as collateral`
           ),
         })
-        await result.tx.wait()
+
         return result.tx
       }
     },

@@ -1,13 +1,12 @@
 import { Signature } from '@ethersproject/bytes'
-import { ArrowDownIcon } from '@heroicons/react/outline'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import Button from 'app/components/Button'
-import ListPanel from 'app/components/ListPanel'
+import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { HeadlessUiModal } from 'app/components/Modal'
 import SubmittedModalContent from 'app/components/Modal/SubmittedModalContent'
 import Typography from 'app/components/Typography'
-import { KashiMarketBorrowDetailsView, useBorrowExecute } from 'app/features/kashi/KashiMarket'
+import { KashiMarketDetailsView, useBorrowExecute, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import { KashiMarketBorrowButtonProps } from 'app/features/kashi/KashiMarket/KashiMarketBorrowView/KashiMarketBorrowButton'
 import { useV2TradeExactIn } from 'app/hooks/useV2Trades'
 import React, { FC, useCallback, useState } from 'react'
@@ -27,8 +26,10 @@ export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
   borrowAmount,
   open,
   onDismiss,
+  view,
 }) => {
   const { i18n } = useLingui()
+  const { market } = useKashiMarket()
   const [txHash, setTxHash] = useState<string>()
   const [attemptingTxn, setAttemptingTxn] = useState(false)
   const execute = useBorrowExecute()
@@ -57,24 +58,46 @@ export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
   }, [borrowAmount, collateralAmount, execute, leveraged, permit, receiveInWallet, spendFromWallet, trade])
 
   return (
-    <HeadlessUiModal.Controlled isOpen={open} onDismiss={onDismiss} maxWidth="sm">
+    <HeadlessUiModal.Controlled
+      isOpen={open}
+      onDismiss={onDismiss}
+      maxWidth="md"
+      afterLeave={() => setTxHash(undefined)}
+    >
       {!txHash ? (
         <div className="flex flex-col gap-4">
           <HeadlessUiModal.Header header={i18n._(t`Confirm Borrow`)} onClose={onDismiss} />
-          <HeadlessUiModal.BorderedContent className="flex flex-col gap-2 bg-dark-1000/40 !border-dark-700">
-            <Typography weight={700} variant="sm" className="text-secondary">
-              {i18n._(t`You'll deposit`)}
-            </Typography>
-            <ListPanel items={[<ListPanel.CurrencyAmountItem amount={collateralAmount} key={0} />]} />
-            <div className="flex justify-center mt-2 -mb-2">
-              <ArrowDownIcon width={14} className="text-secondary" />
+          <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40 !border-dark-700">
+            <div className="flex flex-col gap-2">
+              <Typography variant="xs" className="text-secondary">
+                {i18n._(t`You will deposit collateral`)}
+              </Typography>
+              <div className="inline-flex gap-2">
+                <CurrencyLogo currency={market.collateral.token} size={20} />
+                <Typography weight={700} component="span" className="text-high-emphesis">
+                  {collateralAmount?.toSignificant(6)}{' '}
+                  <Typography weight={700} className="text-low-emphesis" component="span">
+                    {collateralAmount?.currency.symbol}
+                  </Typography>
+                </Typography>
+              </div>
             </div>
-            <Typography weight={700} variant="sm" className="justify-end text-secondary">
-              {i18n._(t`You'll borrow`)}
-            </Typography>
-            <ListPanel items={[<ListPanel.CurrencyAmountItem amount={borrowAmount} key={0} />]} />
+            <div className="flex flex-col gap-2">
+              <Typography variant="xs" className="text-secondary">
+                {i18n._(t`To borrow`)}{' '}
+              </Typography>
+              <div className="inline-flex gap-2">
+                <CurrencyLogo currency={market.asset.token} size={20} />
+                <Typography weight={700} component="span" className="text-high-emphesis">
+                  {borrowAmount?.toSignificant(6)}{' '}
+                  <Typography weight={700} className="text-low-emphesis" component="span">
+                    {borrowAmount?.currency.symbol}
+                  </Typography>
+                </Typography>
+              </div>
+            </div>
           </HeadlessUiModal.BorderedContent>
-          <KashiMarketBorrowDetailsView collateralAmount={collateralAmount} borrowAmount={borrowAmount} />
+          <KashiMarketDetailsView view={view} collateralAmount={collateralAmount} borrowAmount={borrowAmount} />
           <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>
             {i18n._(t`Confirm Borrow`)}
           </Button>
@@ -84,7 +107,7 @@ export const KashiMarketBorrowReviewModal: FC<KashiMarketBorrowReviewModal> = ({
           header={i18n._(t`Success!`)}
           subheader={i18n._(t`Success! Borrow Submitted`)}
           txHash={txHash}
-          onDismiss={() => setTxHash(undefined)}
+          onDismiss={onDismiss}
         />
       )}
     </HeadlessUiModal.Controlled>

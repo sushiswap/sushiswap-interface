@@ -85,20 +85,20 @@ export const KashiMarketRepayClosePositionView: FC<KashiMarketRepayClosePosition
               <div className="rounded flex flex-col gap-2">
                 <div
                   className="flex gap-2 items-center cursor-pointer"
-                  onClick={() => setRepayAmount(repayAmount?.toExact())}
-                >
-                  <CurrencyLogo currency={market.asset.token} size={20} />
-                  <Typography variant="sm" weight={700}>
-                    Borrowed {repayAmount.toSignificant(6)} {repayAmount.currency.symbol}
-                  </Typography>
-                </div>
-                <div
-                  className="flex gap-2 items-center cursor-pointer"
                   onClick={() => setRemoveAmount(removeAmount?.toExact())}
                 >
                   <CurrencyLogo currency={market.collateral.token} size={20} />
                   <Typography variant="sm" weight={700}>
                     Collateral {removeAmount.toSignificant(6)} {removeAmount.currency.symbol}
+                  </Typography>
+                </div>
+                <div
+                  className="flex gap-2 items-center cursor-pointer"
+                  onClick={() => setRepayAmount(repayAmount?.toExact())}
+                >
+                  <CurrencyLogo currency={market.asset.token} size={20} />
+                  <Typography variant="sm" weight={700}>
+                    Borrowed {repayAmount.toSignificant(6)} {repayAmount.currency.symbol}
                   </Typography>
                 </div>
               </div>
