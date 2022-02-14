@@ -35,9 +35,9 @@ export const MisoHeader: FC<MisoHeaderProps> = ({
         <>
           <Image
             alt={`${auction?.auctionInfo?.tokenInfo.name} banner`}
-            src={cloudinaryLoader({ src: auction?.auctionDocuments?.desktopBanner, width: 1280, height: 176 })}
+            src={cloudinaryLoader({ src: auction?.auctionDocuments?.desktopBanner, width: 1280, height: 196 })}
             width={1280}
-            height={176}
+            height={196}
             objectFit="cover"
             objectPosition="center"
             layout="fill"
@@ -74,7 +74,7 @@ export const MisoHeader: FC<MisoHeaderProps> = ({
   return (
     <header
       {...props}
-      className={classNames('relative w-full bg-opacity-80 flex flex-col items-center shadow-md', className)}
+      className={classNames('relative w-full bg-opacity-80 flex flex-col items-center shadow-md h-full', className)}
     >
       {background}
       <Container

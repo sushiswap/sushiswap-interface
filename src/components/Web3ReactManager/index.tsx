@@ -3,6 +3,7 @@ import { useLingui } from '@lingui/react'
 import { useWeb3React } from '@web3-react/core'
 import { network } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
+import { getCookie } from 'app/functions'
 import useEagerConnect from 'app/hooks/useEagerConnect'
 import useInactiveListener from 'app/hooks/useInactiveListener'
 import dynamic from 'next/dynamic'
@@ -25,6 +26,7 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
   // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
   useEffect(() => {
     if (triedEager && !networkActive && !networkError && !active) {
+      network.changeChainId(Number(getCookie('chain-id')))
       activateNetwork(network)
     }
   }, [triedEager, networkActive, networkError, activateNetwork, active])
