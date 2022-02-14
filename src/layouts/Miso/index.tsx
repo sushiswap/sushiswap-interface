@@ -4,8 +4,11 @@ import Footer from 'app/components/Footer'
 import Header from 'app/components/Header'
 import Main from 'app/components/Main'
 import Popups from 'app/components/Popups'
-import { classNames } from 'app/functions'
-import React, { FC, ReactNode } from 'react'
+import { Auction } from 'app/features/miso/context/Auction'
+import { classNames, cloudinaryLoader } from 'app/functions'
+import useDesktopMediaQuery from 'app/hooks/useDesktopMediaQuery'
+import Image from 'next/image'
+import React, { FC, ReactNode, useMemo } from 'react'
 
 interface MisoHeaderProps extends React.HTMLProps<HTMLHeadElement> {
   className?: string
@@ -13,6 +16,7 @@ interface MisoHeaderProps extends React.HTMLProps<HTMLHeadElement> {
   maxWidth?: MaxWidth
   condensed?: boolean
   breadcrumb?: ReactNode
+  auction?: Auction
 }
 
 export const MisoHeader: FC<MisoHeaderProps> = ({
@@ -21,14 +25,58 @@ export const MisoHeader: FC<MisoHeaderProps> = ({
   className,
   maxWidth = '7xl',
   condensed,
+  auction,
   ...props
 }) => {
+  const isDesktop = useDesktopMediaQuery()
+  const background = useMemo(() => {
+    if (isDesktop && auction?.auctionDocuments?.desktopBanner) {
+      return (
+        <>
+          <Image
+            alt={`${auction?.auctionInfo?.tokenInfo.name} banner`}
+            src={cloudinaryLoader({ src: auction?.auctionDocuments?.desktopBanner, width: 1280, height: 176 })}
+            width={1280}
+            height={176}
+            objectFit="cover"
+            objectPosition="center"
+            layout="fill"
+            priority
+          />
+          <div className="absolute top-0 right-0 bottom-0 left-0 bg-dark-900/60 filter backdrop-blur-[5px]" />
+        </>
+      )
+    } else if (!isDesktop && auction?.auctionDocuments?.mobileBanner) {
+      return (
+        <>
+          <Image
+            alt={`${auction?.auctionInfo?.tokenInfo.name} banner`}
+            src={cloudinaryLoader({ src: auction?.auctionDocuments?.mobileBanner, width: 768, height: 360 })}
+            width={768}
+            height={360}
+            objectFit="cover"
+            objectPosition="center"
+            layout="fill"
+            priority
+          />
+          <div className="absolute top-0 right-0 bottom-0 left-0 bg-dark-900/60 filter backdrop-blur-[5px]" />
+        </>
+      )
+    }
+    return <Background variant="miso-bowl" />
+  }, [
+    auction?.auctionDocuments?.desktopBanner,
+    auction?.auctionDocuments?.mobileBanner,
+    auction?.auctionInfo?.tokenInfo.name,
+    isDesktop,
+  ])
+
   return (
     <header
       {...props}
       className={classNames('relative w-full bg-opacity-80 flex flex-col items-center shadow-md', className)}
     >
-      <Background variant="miso-bowl" />
+      {background}
       <Container
         maxWidth={maxWidth}
         className={classNames(
