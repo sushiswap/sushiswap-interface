@@ -53,7 +53,6 @@ export const pipeline = async (data: ValidatorData, validators: Validator[], res
 
 export const testImage = (url?: string, timeout?: number) =>
   new Promise((res) => {
-    console.log('hi')
     timeout = timeout || 5000
     let timedOut = false
     // @ts-ignore TYPE NEEDS FIXING

@@ -2,7 +2,7 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Currency, CurrencyAmount, NATIVE, ZERO } from '@sushiswap/core-sdk'
 import Typography, { TypographyVariant } from 'app/components/Typography'
-import { reduceBalances, useKashiPositions } from 'app/features/portfolio/AssetBalances/kashi/hooks'
+import { reduceBalances } from 'app/features/portfolio/AssetBalances/kashi/hooks'
 import SumUSDCValues from 'app/features/trident/SumUSDCValues'
 import { currencyFormatter } from 'app/functions'
 import { useTridentLiquidityPositions } from 'app/services/graph'
@@ -64,22 +64,23 @@ export const BalancesSum: FC<{ account: string }> = ({ account }) => {
   const { i18n } = useLingui()
   const { data: walletBalances, loading: wLoading } = useWalletBalances(account)
   const { data: bentoBalances, loading: bLoading } = useBentoBalancesV2ForAccount(account)
-  const { borrowed, collateral, lent } = useKashiPositions(account)
+  // const { borrowed, collateral, lent } = useKashiPositions(account)
 
   const allAssets = useMemo(() => {
-    const combined = [...walletBalances, ...bentoBalances, ...collateral, ...lent]
+    // const combined = [...walletBalances, ...bentoBalances, ...collateral, ...lent]
+    const combined = [...walletBalances, ...bentoBalances]
     return {
       total: combined.length,
       balances: reduceBalances(combined),
     }
-  }, [bentoBalances, collateral, lent, walletBalances])
+  }, [bentoBalances, walletBalances])
 
   return (
     <div className="flex lg:flex-row flex-col gap-10 justify-between lg:items-end w-full">
       <div className="flex gap-10">
         <_BalancesSum
           assetAmounts={allAssets.balances}
-          liabilityAmounts={borrowed}
+          // liabilityAmounts={borrowed}
           label={i18n._(t`Net Worth`)}
           size="h3"
           loading={wLoading || bLoading}

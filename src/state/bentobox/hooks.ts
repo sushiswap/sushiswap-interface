@@ -74,6 +74,16 @@ export const useBentoBalancesV2ForAccount = (
   return { data: userTokensFallback, loading: fallbackLoading } || { data: [], loading: false }
 }
 
+export const useBentoShareForAccount = (account: string | undefined, token: string | undefined) => {
+  const contract = useBentoBoxContract()
+  const { result } = useSingleCallResult(contract, 'balanceOf', [token, account])
+  if (result && Array.isArray(result) && result.length > 0) {
+    return result[0]
+  }
+
+  return undefined
+}
+
 export const useBentoBalanceV2 = (
   tokenAddress?: string
 ): { data: CurrencyAmount<Token> | undefined; loading: boolean } => {
