@@ -9,15 +9,15 @@ import { useMultipleContractSingleData, useSingleCallResult } from 'app/state/mu
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
-export const useAuctionPointLists = (auctionAddresses: string[]) => {
+export const useAuctionPointLists = (auctionAddresses: string[]): string[] => {
   const results = useMultipleContractSingleData(auctionAddresses, new Interface(BASE_AUCTION_ABI), 'pointList')
   if (results && Array.isArray(results) && results.length === auctionAddresses.length) {
     return results.map<string[]>((el) => {
-      return (el.result as string[])?.filter((el) => el !== AddressZero) || []
+      return (el.result as string[])?.[0]
     })
   }
 
-  return Array(auctionAddresses.length).fill([])
+  return Array(auctionAddresses.length).fill(AddressZero)
 }
 
 export const useAuctionPointListPoints = (
