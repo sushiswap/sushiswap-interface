@@ -5,16 +5,15 @@ import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
 import { useContract } from 'app/hooks'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useMultipleContractSingleData, useSingleCallResult } from 'app/state/multicall/hooks'
+import { CallState, useMultipleContractSingleData, useSingleCallResult } from 'app/state/multicall/hooks'
 import { useTransactionAdder } from 'app/state/transactions/hooks'
 import { useCallback } from 'react'
 
 export const useAuctionPointLists = (auctionAddresses: string[]): string[] => {
-  const results = useMultipleContractSingleData(auctionAddresses, new Interface(BASE_AUCTION_ABI), 'pointList')
-  if (results && Array.isArray(results) && results.length === auctionAddresses.length) {
-    return results.map<string[]>((el) => {
-      return (el.result as string[])?.[0]
-    })
+  const callStates = useMultipleContractSingleData(auctionAddresses, new Interface(BASE_AUCTION_ABI), 'pointList')
+  if (callStates && Array.isArray(callStates) && callStates.length === auctionAddresses.length) {
+    const pointLists = callStates.map((callState: CallState) => String(callState?.result?.[0]))
+    return pointLists
   }
 
   return Array(auctionAddresses.length).fill(AddressZero)

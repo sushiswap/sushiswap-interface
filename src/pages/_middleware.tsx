@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 const SUBDOMAIN_CHAIN_ID: { [subdomain: string]: string } = {
+  ethereum: '1',
   celo: '42220',
   harmony: '1666600000',
   kovan: '42',
