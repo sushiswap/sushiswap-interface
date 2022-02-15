@@ -10,6 +10,7 @@ import Breadcrumb from 'app/features/miso/Breadcrumb'
 import useAuction from 'app/features/miso/context/hooks/useAuction'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import NetworkGuard from 'app/guards/Network'
+import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -20,7 +21,7 @@ const MisoAuction = () => {
   const { auction } = useAuction(address as string)
 
   // Redirect to overview on chainId change
-  // useRedirectOnChainId('/miso')
+  useRedirectOnChainId('/miso')
 
   return (
     <>

@@ -39,7 +39,7 @@ if (typeof window !== 'undefined' && !!window.ethereum) {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-function MyApp({ Component, pageProps, fallback, err, ...rest }) {
+function MyApp({ Component, pageProps, fallback, err }) {
   const router = useRouter()
   const { locale, events } = router
 
