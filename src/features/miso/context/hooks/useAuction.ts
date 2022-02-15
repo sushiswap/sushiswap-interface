@@ -123,14 +123,7 @@ export const useAuction = (address?: string, owner?: string) => {
 
   return useMemo(() => {
     if (loadingDetails || loadingInfo) return { loading: true, auction: undefined }
-    if (
-      !blockTimestamp ||
-      !chainId ||
-      !marketTemplateId ||
-      !auctionInfo ||
-      !auctionDocuments ||
-      Boolean(owner && !marketInfo?.isAdmin)
-    )
+    if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
       return { loading: false, auction: undefined }
 
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
@@ -170,7 +163,6 @@ export const useAuction = (address?: string, owner?: string) => {
     lpTokenAddress,
     marketInfo,
     marketTemplateId,
-    owner,
     pointListAddress,
   ])
 }
