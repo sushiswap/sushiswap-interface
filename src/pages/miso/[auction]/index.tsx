@@ -9,8 +9,6 @@ import AuctionTabs from 'app/features/miso/AuctionTabs'
 import Breadcrumb from 'app/features/miso/Breadcrumb'
 import useAuction from 'app/features/miso/context/hooks/useAuction'
 import { AuctionStatus } from 'app/features/miso/context/types'
-import { classNames } from 'app/functions'
-import { cloudinaryLoader } from 'app/functions/cloudinary'
 import NetworkGuard from 'app/guards/Network'
 import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
@@ -27,23 +25,11 @@ const MisoAuction = () => {
 
   return (
     <>
-      <div
-        className={classNames('bg-cover', !auction?.auctionDocuments.desktopBanner ? 'bg-miso-bowl' : '')}
-        {...(auction?.auctionDocuments?.desktopBanner && {
-          style: {
-            backgroundImage: `url("${cloudinaryLoader({ src: auction.auctionDocuments.desktopBanner, width: 1280 })}")`,
-          },
-        })}
-      >
-        <MisoHeader
-          className="bg-dark-900/60 bg-cover filter backdrop-blur-[5px]"
-          breadcrumb={<Breadcrumb auction={auction} />}
-        >
-          <section className="flex flex-col w-full">
-            <AuctionHeader auction={auction} />
-          </section>
-        </MisoHeader>
-      </div>
+      <MisoHeader breadcrumb={<Breadcrumb auction={auction} />} auction={auction}>
+        <section className="flex flex-col w-full">
+          <AuctionHeader auction={auction} />
+        </section>
+      </MisoHeader>
       <MisoBody>
         <section>
           <div className="flex flex-col lg:flex-row gap-[60px]">
