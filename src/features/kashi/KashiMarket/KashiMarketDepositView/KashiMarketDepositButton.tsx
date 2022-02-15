@@ -1,15 +1,11 @@
 import { Signature } from '@ethersproject/bytes'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { Currency, CurrencyAmount, KASHI_ADDRESS, ZERO } from '@sushiswap/core-sdk'
+import { Currency, CurrencyAmount, KASHI_ADDRESS, TradeType, ZERO } from '@sushiswap/core-sdk'
+import { Trade as LegacyTrade } from '@sushiswap/core-sdk/dist/entities/Trade'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
-import {
-  BorrowExecutePayload,
-  KashiMarketBorrowReviewModal,
-  KashiMarketView,
-  useKashiMarket,
-} from 'app/features/kashi/KashiMarket'
+import { KashiMarketDepositReviewModal, KashiMarketView, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
 import { unwrappedToken } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
@@ -17,18 +13,23 @@ import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, useState } from 'react'
 
-export interface KashiMarketBorrowButtonProps extends Omit<BorrowExecutePayload, 'permit' | 'trade'> {
+export interface KashiMarketDepositButtonProps {
   view: KashiMarketView
-  maxBorrow?: CurrencyAmount<Currency>
+  closePosition: boolean
+  repayFromWallet: boolean
+  removeToWallet: boolean
+  repayAmount?: CurrencyAmount<Currency>
+  removeAmount?: CurrencyAmount<Currency>
+  trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_OUTPUT>
 }
 
-export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
-  receiveInWallet,
-  leveraged,
-  borrowAmount,
-  spendFromWallet,
-  collateralAmount,
-  maxBorrow,
+export const KashiMarketDepositButton: FC<KashiMarketDepositButtonProps> = ({
+  closePosition,
+  repayFromWallet,
+  removeToWallet,
+  repayAmount,
+  removeAmount,
+  trade,
   view,
 }) => {
   const { account } = useActiveWeb3React()
@@ -38,7 +39,7 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   const balance = useBentoOrWalletBalance(
     account ?? undefined,
     unwrappedToken(market.collateral.token),
-    spendFromWallet
+    repayFromWallet
   )
   const [permit, setPermit] = useState<Signature>()
   const [permitError, setPermitError] = useState<boolean>()
@@ -47,32 +48,34 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
   const [open, setOpen] = useState(false)
   const attemptingTxn = false
 
-  const totalAvailableToBorrow = borrowAmount
-    ? CurrencyAmount.fromRawAmount(borrowAmount.currency, market.totalAssetAmount)
+  const totalAvailableToRemove = removeAmount
+    ? CurrencyAmount.fromRawAmount(removeAmount.currency, market.totalCollateralAmount)
     : undefined
 
   const error = !account
     ? i18n._(t`Connect Wallet`)
-    : !collateralAmount?.greaterThan(ZERO) && !borrowAmount?.greaterThan(ZERO)
+    : !closePosition && !repayAmount?.greaterThan(ZERO) && !removeAmount?.greaterThan(ZERO)
     ? i18n._(t`Enter an amount`)
     : !balance
     ? i18n._(t`Loading balance`)
-    : collateralAmount?.greaterThan(balance)
+    : repayAmount?.greaterThan(balance)
     ? i18n._(t`Insufficient balance`)
-    : borrowAmount && maxBorrow && borrowAmount.greaterThan(maxBorrow)
-    ? i18n._(t`Not enough collateral`)
-    : totalAvailableToBorrow && borrowAmount && borrowAmount.greaterThan(totalAvailableToBorrow)
-    ? i18n._(t`Not enough ${borrowAmount.currency.symbol} available`)
+    : totalAvailableToRemove && removeAmount && removeAmount.greaterThan(totalAvailableToRemove)
+    ? i18n._(t`Not enough ${removeAmount.currency.symbol} available`)
+    : removeAmount?.greaterThan(market.userCollateralAmount)
+    ? i18n._(t`Withdraw too large`)
+    : repayAmount?.greaterThan(market.currentUserBorrowAmount)
+    ? 'Deposit larger than debt'
     : ''
 
   const buttonText = error
     ? error
-    : borrowAmount?.greaterThan(ZERO) && collateralAmount?.greaterThan(ZERO)
-    ? i18n._(t`Deposit and Borrow`)
-    : borrowAmount?.greaterThan(ZERO)
-    ? i18n._(t`Borrow Asset`)
-    : collateralAmount?.greaterThan(ZERO)
-    ? i18n._(t`Deposit Collateral`)
+    : removeAmount?.greaterThan(ZERO) && repayAmount?.greaterThan(ZERO)
+    ? i18n._(t`Deposit and Remove`)
+    : removeAmount?.greaterThan(ZERO)
+    ? i18n._(t`Remove Collateral`)
+    : repayAmount?.greaterThan(ZERO)
+    ? i18n._(t`Deposit Debt`)
     : ''
 
   return (
@@ -85,8 +88,8 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
         </Typography>
       )}
       <TridentApproveGate
-        spendFromWallet={spendFromWallet}
-        inputAmounts={[collateralAmount]}
+        spendFromWallet={repayFromWallet}
+        inputAmounts={closePosition ? [] : [repayAmount]}
         tokenApproveOn={bentoboxContract?.address}
         masterContractAddress={masterContractAddress}
         withPermit={true}
@@ -99,7 +102,7 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
           return (
             <Button
               loading={loading || attemptingTxn}
-              color={borrowAmount?.equalTo(ZERO) ? 'blue' : 'gradient'}
+              color="gradient"
               disabled={disabled}
               onClick={() => setOpen(true)}
               className="rounded-2xl md:rounded"
@@ -109,15 +112,15 @@ export const KashiMarketBorrowButton: FC<KashiMarketBorrowButtonProps> = ({
           )
         }}
       </TridentApproveGate>
-      <KashiMarketBorrowReviewModal
+      <KashiMarketDepositReviewModal
         open={open}
-        permit={permit}
         onDismiss={() => setOpen(false)}
-        spendFromWallet={spendFromWallet}
-        receiveInWallet={receiveInWallet}
-        leveraged={leveraged}
-        collateralAmount={collateralAmount}
-        borrowAmount={borrowAmount}
+        repayFromWallet={repayFromWallet}
+        repayAmount={repayAmount}
+        removeToWallet={removeToWallet}
+        removeAmount={removeAmount}
+        closePosition={closePosition}
+        trade={trade}
         view={view}
       />
     </>

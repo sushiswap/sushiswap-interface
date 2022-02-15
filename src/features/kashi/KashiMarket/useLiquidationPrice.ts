@@ -1,6 +1,7 @@
 import { Currency, CurrencyAmount, Fraction, Price, ZERO } from '@sushiswap/core-sdk'
 import { LTV } from 'app/features/kashi/constants'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket'
+import { unwrappedToken } from 'app/functions'
 import { useUSDCPrice } from 'app/hooks'
 
 interface Payload {
@@ -21,8 +22,14 @@ export const useLiquidationPrice: UseLiquidationPrice = ({
   reduce,
 }) => {
   const { market } = useKashiMarket()
-  const currentCollateralAmount = CurrencyAmount.fromRawAmount(market.collateral.token, market.userCollateralAmount)
-  const currentBorrowedAmount = CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount)
+  const currentCollateralAmount = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.collateral.token),
+    market.userCollateralAmount
+  )
+  const currentBorrowedAmount = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.asset.token),
+    market.currentUserBorrowAmount
+  )
   const collateralAssetPrice = useUSDCPrice(market.collateral.token)
 
   try {
@@ -32,10 +39,10 @@ export const useLiquidationPrice: UseLiquidationPrice = ({
         : collateralAmount
 
     const totalCollateral = extraCollateral
-      ? currentCollateralAmount[reduce ? 'subtract' : 'add'](extraCollateral.wrapped)
+      ? currentCollateralAmount[reduce ? 'subtract' : 'add'](extraCollateral)
       : currentCollateralAmount
     const totalBorrowed = borrowAmount
-      ? currentBorrowedAmount[reduce ? 'subtract' : 'add'](borrowAmount.wrapped)
+      ? currentBorrowedAmount[reduce ? 'subtract' : 'add'](borrowAmount)
       : currentBorrowedAmount
 
     const liquidationPrice =

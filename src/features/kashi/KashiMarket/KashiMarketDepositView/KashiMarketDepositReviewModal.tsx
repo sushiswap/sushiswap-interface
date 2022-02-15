@@ -7,19 +7,19 @@ import { CurrencyLogo } from 'app/components/CurrencyLogo'
 import { HeadlessUiModal } from 'app/components/Modal'
 import SubmittedModalContent from 'app/components/Modal/SubmittedModalContent'
 import Typography from 'app/components/Typography'
-import { KashiMarketDetailsView, useKashiMarket, useRepayExecute } from 'app/features/kashi/KashiMarket'
+import { KashiMarketDetailsView, useDepositExecute, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import { unwrappedToken } from 'app/functions'
 import React, { FC, useCallback, useState } from 'react'
 
-import { KashiMarketRepayButtonProps } from './KashiMarketRepayButton'
+import { KashiMarketDepositButtonProps } from './KashiMarketDepositButton'
 
-interface KashiMarketRepayReviewModal extends KashiMarketRepayButtonProps {
+interface KashiMarketDepositReviewModal extends KashiMarketDepositButtonProps {
   open: boolean
   onDismiss(): void
   permit?: Signature
 }
 
-export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
+export const KashiMarketDepositReviewModal: FC<KashiMarketDepositReviewModal> = ({
   trade,
   repayFromWallet,
   removeToWallet,
@@ -29,14 +29,12 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
   open,
   onDismiss,
   view,
-  removeMax,
-  repayMax,
 }) => {
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
   const [txHash, setTxHash] = useState<string>()
   const [attemptingTxn, setAttemptingTxn] = useState(false)
-  const execute = useRepayExecute()
+  const execute = useDepositExecute()
 
   const repayAmountCurrencyAmount = CurrencyAmount.fromRawAmount(
     unwrappedToken(market.asset.token),
@@ -52,14 +50,11 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
 
     try {
       const tx = await execute({
-        trade,
         repayFromWallet,
         repayAmount,
         closePosition,
         removeToWallet,
         removeAmount,
-        removeMax,
-        repayMax,
       })
 
       if (tx?.hash) {
@@ -68,7 +63,7 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
     } finally {
       setAttemptingTxn(false)
     }
-  }, [closePosition, execute, removeAmount, removeToWallet, repayAmount, repayFromWallet, trade])
+  }, [closePosition, execute, removeAmount, removeToWallet, repayAmount, repayFromWallet])
 
   return (
     <HeadlessUiModal.Controlled
@@ -80,7 +75,7 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
       {!txHash ? (
         <div className="flex flex-col gap-4">
           <HeadlessUiModal.Header
-            header={closePosition ? i18n._(t`Close Position`) : i18n._(t`Confirm Repay`)}
+            header={closePosition ? i18n._(t`Close Position`) : i18n._(t`Confirm Deposit`)}
             onClose={onDismiss}
           />
           {closePosition ? (
@@ -130,7 +125,7 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
               <HeadlessUiModal.BorderedContent className="flex flex-col gap-4 bg-dark-1000/40 !border-dark-700">
                 <div className="flex flex-col gap-2">
                   <Typography variant="xs" className="text-secondary">
-                    {i18n._(t`Repaying`)}
+                    {i18n._(t`Depositing`)}
                   </Typography>
                   <div className="inline-flex gap-2">
                     <CurrencyLogo currency={market.collateral.token} size={20} />
@@ -159,13 +154,13 @@ export const KashiMarketRepayReviewModal: FC<KashiMarketRepayReviewModal> = ({
             borrowAmount={closePosition ? repayAmountCurrencyAmount : repayAmount}
           />
           <Button loading={attemptingTxn} color="gradient" disabled={attemptingTxn} onClick={_execute}>
-            {closePosition ? i18n._(t`Close Position`) : i18n._(t`Confirm Repay`)}
+            {closePosition ? i18n._(t`Close Position`) : i18n._(t`Confirm Deposit`)}
           </Button>
         </div>
       ) : (
         <SubmittedModalContent
           header={i18n._(t`Success!`)}
-          subheader={i18n._(t`Success! Repay Submitted`)}
+          subheader={i18n._(t`Success! Deposit Submitted`)}
           txHash={txHash}
           onDismiss={onDismiss}
         />

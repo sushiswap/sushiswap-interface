@@ -14,7 +14,7 @@ import {
 import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
 import { KashiMarketCurrentPosition } from 'app/features/kashi/KashiMarket/KashiMarketCurrentPosition'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import { e10, tryParseAmount } from 'app/functions'
+import { e10, tryParseAmount, unwrappedToken } from 'app/functions'
 import React, { FC, useCallback, useMemo, useRef, useState } from 'react'
 
 interface KashiMarketBorrowView {}
@@ -30,8 +30,8 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   const [spendFromWallet, setSpendFromWallet] = useState<boolean>(true)
   const [receiveInWallet, setReceiveInWallet] = useState<boolean>(true)
 
-  const collateral = market.collateral.token
-  const asset = market.asset.token
+  const collateral = unwrappedToken(market.collateral.token)
+  const asset = unwrappedToken(market.asset.token)
 
   const [collateralAmount, setCollateralAmount] = useState<string>()
   const [borrowAmount, setBorrowAmount] = useState<string>()
@@ -86,65 +86,65 @@ export const KashiMarketBorrowView: FC<KashiMarketBorrowView> = () => {
   return (
     <div className="flex flex-col gap-3">
       <KashiMarketCurrentPosition setBorrowAmount={setBorrowAmount} setCollateralAmount={setCollateralAmount} />
-      <div className="flex flex-col gap-2">
-        <SwapAssetPanel
-          error={borrowAmountCurrencyAmount && maxBorrow ? borrowAmountCurrencyAmount.greaterThan(maxBorrow) : false}
-          header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} />}
-          walletToggle={(props) => (
-            <SwapAssetPanel.Switch
-              id={`switch-classic-withdraw-from-0}`}
-              {...props}
-              label={i18n._(t`Deposit from`)}
-              onChange={() => setSpendFromWallet((prev) => !prev)}
-            />
-          )}
-          spendFromWallet={spendFromWallet}
-          currency={collateral}
-          value={collateralAmount}
-          onChange={setCollateralAmount}
-          currencies={[]}
-        />
-      </div>
+      <SwapAssetPanel
+        error={borrowAmountCurrencyAmount && maxBorrow ? borrowAmountCurrencyAmount.greaterThan(maxBorrow) : false}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Deposit`)} />}
+        walletToggle={(props) => (
+          <SwapAssetPanel.Switch
+            id={`switch-classic-withdraw-from-0}`}
+            {...props}
+            label={i18n._(t`Deposit from`)}
+            onChange={() => setSpendFromWallet((prev) => !prev)}
+          />
+        )}
+        spendFromWallet={spendFromWallet}
+        currency={collateral}
+        value={collateralAmount}
+        onChange={setCollateralAmount}
+        currencies={[]}
+      />
       <div className="flex justify-center relative lg:mt-[-23px] lg:mb-[-23px]">
         <div className="rounded-full lg:border-2 lg:border-dark-800 hover:lg:border-dark-700 hover:text-white bg-dark-900 p-1.5 cursor-pointer">
           <ArrowDownIcon width={12} height={12} />
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <SwapAssetPanel
-          ref={inputRef}
-          error={false}
-          header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Borrow`)} />}
-          walletToggle={(props) => (
-            <Transition
-              show={!leverage}
-              enter="transition duration-100 ease-out"
-              enterFrom="transform scale-95 opacity-0"
-              enterTo="transform scale-100 opacity-100"
-              leave="transition duration-100 ease-out"
-              leaveFrom="transform scale-100 opacity-100"
-              leaveTo="transform scale-95 opacity-0"
-            >
-              <SwapAssetPanel.Switch
-                id={`switch-classic-withdraw-from-0}`}
-                {...props}
-                label={i18n._(t`Receive in`)}
-                onChange={() => setReceiveInWallet((prev) => !prev)}
-              />
-            </Transition>
-          )}
-          spendFromWallet={receiveInWallet}
-          currency={asset}
-          value={borrowAmount}
-          onChange={setBorrowAmount}
-          currencies={[]}
-          balancePanel={({ onChange }) => (
-            <Typography variant="sm" className="text-secondary" onClick={() => onChange(maxBorrow?.toSignificant(6))}>
-              Max Borrow: {maxBorrow?.toSignificant(6)}
-            </Typography>
-          )}
-        />
-      </div>
+      <SwapAssetPanel
+        ref={inputRef}
+        error={false}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Borrow`)} />}
+        walletToggle={(props) => (
+          <Transition
+            show={!leverage}
+            enter="transition duration-100 ease-out"
+            enterFrom="transform scale-95 opacity-0"
+            enterTo="transform scale-100 opacity-100"
+            leave="transition duration-100 ease-out"
+            leaveFrom="transform scale-100 opacity-100"
+            leaveTo="transform scale-95 opacity-0"
+          >
+            <SwapAssetPanel.Switch
+              id={`switch-classic-withdraw-from-0}`}
+              {...props}
+              label={i18n._(t`Receive in`)}
+              onChange={() => setReceiveInWallet((prev) => !prev)}
+            />
+          </Transition>
+        )}
+        spendFromWallet={receiveInWallet}
+        currency={asset}
+        value={borrowAmount}
+        onChange={setBorrowAmount}
+        currencies={[]}
+        balancePanel={({ onChange }) => (
+          <Typography
+            variant="sm"
+            className="text-secondary text-right"
+            onClick={() => onChange(maxBorrow?.toSignificant(6))}
+          >
+            Max Borrow: {maxBorrow?.toSignificant(6)}
+          </Typography>
+        )}
+      />
       {collateralAmountCurrencyAmount?.greaterThan(ZERO) && (
         <KashiMarketBorrowLeverageView
           borrowAmount={borrowAmountCurrencyAmount}

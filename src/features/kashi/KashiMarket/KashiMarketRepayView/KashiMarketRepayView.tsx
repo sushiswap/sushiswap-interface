@@ -11,11 +11,11 @@ import {
 } from 'app/features/kashi/KashiMarket'
 import { KashiMarketCurrentPosition } from 'app/features/kashi/KashiMarket/KashiMarketCurrentPosition'
 import SwapAssetPanel from 'app/features/trident/swap/SwapAssetPanel'
-import { tryParseAmount } from 'app/functions'
+import { tryParseAmount, unwrappedToken } from 'app/functions'
 import { useV2TradeExactOut } from 'app/hooks/useV2Trades'
-import React, { FC, useState } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 
-const KashiMarketRepayView: FC = () => {
+export const KashiMarketRepayView: FC = () => {
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
 
@@ -24,50 +24,69 @@ const KashiMarketRepayView: FC = () => {
   const [removeToWallet, setRemoveToWallet] = useState<boolean>(true)
   const [repayAmount, setRepayAmount] = useState<string>()
   const [removeAmount, setRemoveAmount] = useState<string>()
-  const repayToken = market.asset.token
-  const removeToken = market.collateral.token
+  const [removeMax, setRemoveMax] = useState<boolean>(false)
+  const [repayMax, setRepayMax] = useState<boolean>(false)
+
+  const repayToken = unwrappedToken(market.asset.token)
+  const removeToken = unwrappedToken(market.collateral.token)
   const repayAmountCurrencyAmount = repayAmount ? tryParseAmount(repayAmount, repayToken) : undefined
   const removeAmountCurrencyAmount = removeAmount ? tryParseAmount(removeAmount, removeToken) : undefined
-  const currentCollateral = CurrencyAmount.fromRawAmount(market.collateral.token, market.userCollateralAmount)
+  const currentCollateral = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.collateral.token),
+    market.userCollateralAmount
+  )
+  const currentBorrowed = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.asset.token),
+    market.currentUserBorrowAmount
+  )
+
   const trade =
     useV2TradeExactOut(
-      market.collateral.token,
-      CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount),
+      unwrappedToken(market.collateral.token),
+      CurrencyAmount.fromRawAmount(unwrappedToken(market.asset.token), market.currentUserBorrowAmount),
       { maxHops: 3 }
     ) ?? undefined
+
+  const removeHandler = useCallback((val: string | undefined, max: boolean) => {
+    setRemoveAmount(val)
+    setRemoveMax(max)
+  }, [])
+
+  const repayHandler = useCallback((val: string | undefined, max: boolean) => {
+    setRepayAmount(val)
+    setRepayMax(max)
+  }, [])
 
   return (
     <div className="flex flex-col gap-3">
       <KashiMarketCurrentPosition setBorrowAmount={setRemoveAmount} setCollateralAmount={setRemoveAmount} />
-      <div className="flex flex-col gap-2">
-        <SwapAssetPanel
-          disabled={closePosition}
-          error={removeAmountCurrencyAmount?.greaterThan(market.userCollateralAmount)}
-          header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw`)} />}
-          walletToggle={(props) => (
-            <SwapAssetPanel.Switch
-              {...props}
-              id={`switch-classic-withdraw-from-0}`}
-              label={i18n._(t`Receive in`)}
-              onChange={() => setRemoveToWallet((prev) => !prev)}
-            />
-          )}
-          spendFromWallet={removeToWallet}
-          currency={removeToken}
-          value={removeAmount}
-          onChange={setRemoveAmount}
-          currencies={[]}
-          balancePanel={({ onChange }) => (
-            <Typography
-              variant="sm"
-              className="text-secondary"
-              onClick={() => onChange(currentCollateral.toSignificant(6))}
-            >
-              Max Withdraw: {currentCollateral.toSignificant(6)}
-            </Typography>
-          )}
-        />
-      </div>
+      <SwapAssetPanel
+        disabled={closePosition}
+        error={removeAmountCurrencyAmount?.greaterThan(market.userCollateralAmount)}
+        header={(props) => <SwapAssetPanel.Header {...props} label={i18n._(t`Withdraw`)} />}
+        walletToggle={(props) => (
+          <SwapAssetPanel.Switch
+            {...props}
+            id={`switch-classic-withdraw-from-0}`}
+            label={i18n._(t`Receive in`)}
+            onChange={() => setRemoveToWallet((prev) => !prev)}
+          />
+        )}
+        spendFromWallet={removeToWallet}
+        currency={removeToken}
+        value={removeAmount}
+        onChange={(val) => removeHandler(val, false)}
+        currencies={[]}
+        balancePanel={() => (
+          <Typography
+            variant="sm"
+            className="text-secondary text-right"
+            onClick={() => removeHandler(currentCollateral.toSignificant(6), true)}
+          >
+            Max Withdraw: {currentCollateral.toSignificant(6)}
+          </Typography>
+        )}
+      />
       <div className="flex flex-col gap-2 -mt-1.5">
         <SwapAssetPanel
           disabled={closePosition}
@@ -86,6 +105,15 @@ const KashiMarketRepayView: FC = () => {
           value={repayAmount}
           onChange={setRepayAmount}
           currencies={[]}
+          balancePanel={() => (
+            <Typography
+              variant="sm"
+              className="text-secondary text-right"
+              onClick={() => repayHandler(currentBorrowed.toSignificant(6), true)}
+            >
+              Max Repay: {currentBorrowed.toSignificant(6)}
+            </Typography>
+          )}
         />
       </div>
       <KashiMarketRepayClosePositionView
@@ -110,9 +138,9 @@ const KashiMarketRepayView: FC = () => {
         repayFromWallet={repayFromWallet}
         removeToWallet={removeToWallet}
         view={KashiMarketView.REPAY}
+        repayMax={repayMax}
+        removeMax={removeMax}
       />
     </div>
   )
 }
-
-export default KashiMarketRepayView

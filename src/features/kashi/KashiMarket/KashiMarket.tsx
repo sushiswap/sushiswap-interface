@@ -3,11 +3,9 @@ import { useLingui } from '@lingui/react'
 import QuestionHelper from 'app/components/QuestionHelper'
 import ToggleButtonGroup from 'app/components/ToggleButton'
 import Typography from 'app/components/Typography'
+import { KashiMarketBorrowView, KashiMarketDepositView, KashiMarketRepayView } from 'app/features/kashi/KashiMarket'
 import { SwapLayoutCard } from 'app/layouts/SwapLayout'
 import React, { FC, useState } from 'react'
-
-import { KashiMarketBorrowView } from '.'
-import KashiMarketRepayView from './KashiMarketRepayView/KashiMarketRepayView'
 
 interface KashiMarketProps {}
 
@@ -63,6 +61,7 @@ export const KashiMarket: FC<KashiMarketProps> = () => {
         </ToggleButtonGroup>
         {view === KashiMarketView.BORROW && <KashiMarketBorrowView />}
         {view === KashiMarketView.REPAY && <KashiMarketRepayView />}
+        {view === KashiMarketView.DEPOSIT && <KashiMarketDepositView />}
       </div>
     </SwapLayoutCard>
   )

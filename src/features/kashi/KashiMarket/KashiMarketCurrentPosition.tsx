@@ -5,6 +5,7 @@ import GradientDot from 'app/components/GradientDot'
 import QuestionHelper from 'app/components/QuestionHelper'
 import Typography from 'app/components/Typography'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket/KashiMarketContext'
+import { unwrappedToken } from 'app/functions'
 import React, { FC } from 'react'
 
 interface KashiMarketCurrentPosition {
@@ -19,8 +20,11 @@ export const KashiMarketCurrentPosition: FC<KashiMarketCurrentPosition> = ({
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
 
-  const currentCollateral = CurrencyAmount.fromRawAmount(market.collateral.token, market.userCollateralAmount)
-  const currentBorrow = CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount)
+  const currentCollateral = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.collateral.token),
+    market.userCollateralAmount
+  )
+  const currentBorrow = CurrencyAmount.fromRawAmount(unwrappedToken(market.asset.token), market.currentUserBorrowAmount)
 
   return (
     <div className="grid grid-cols-3 px-3">

@@ -8,7 +8,7 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Tooltip from 'app/components/Tooltip'
 import Typography from 'app/components/Typography'
 import { KashiMarketView, useKashiMarket, useLiquidationPrice } from 'app/features/kashi/KashiMarket'
-import { classNames, formatPercent } from 'app/functions'
+import { classNames, formatPercent, unwrappedToken } from 'app/functions'
 import { useBentoStrategies } from 'app/services/graph'
 import { useActiveWeb3React } from 'app/services/web3'
 import React, { FC, Fragment, useState } from 'react'
@@ -36,8 +36,14 @@ export const KashiMarketDetailsContentView: FC<KashiMarketDetailsView> = ({
   })
   const strategy = strategies?.[0]
 
-  const borrowPosition = CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount)
-  const collateralPosition = CurrencyAmount.fromRawAmount(market.collateral.token, market.userCollateralAmount)
+  const borrowPosition = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.asset.token),
+    market.currentUserBorrowAmount
+  )
+  const collateralPosition = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.collateral.token),
+    market.userCollateralAmount
+  )
 
   const newCollateralAmount =
     collateralAmount &&

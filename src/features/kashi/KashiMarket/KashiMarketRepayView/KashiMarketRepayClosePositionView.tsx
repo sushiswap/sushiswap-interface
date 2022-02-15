@@ -9,7 +9,7 @@ import QuestionHelper from 'app/components/QuestionHelper'
 import Switch from 'app/components/Switch'
 import Typography from 'app/components/Typography'
 import { useKashiMarket } from 'app/features/kashi/KashiMarket'
-import { classNames } from 'app/functions'
+import { classNames, unwrappedToken } from 'app/functions'
 import React, { FC, Fragment } from 'react'
 
 interface KashiMarketRepayClosePositionView {
@@ -28,8 +28,11 @@ export const KashiMarketRepayClosePositionView: FC<KashiMarketRepayClosePosition
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
 
-  const repayAmount = CurrencyAmount.fromRawAmount(market.asset.token, market.currentUserBorrowAmount)
-  const removeAmount = CurrencyAmount.fromRawAmount(market.collateral.token, market.userCollateralAmount)
+  const repayAmount = CurrencyAmount.fromRawAmount(unwrappedToken(market.asset.token), market.currentUserBorrowAmount)
+  const removeAmount = CurrencyAmount.fromRawAmount(
+    unwrappedToken(market.collateral.token),
+    market.userCollateralAmount
+  )
 
   return (
     <Disclosure as="div">

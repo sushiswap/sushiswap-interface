@@ -7,10 +7,11 @@ import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import { KashiMarketRepayReviewModal, KashiMarketView, useKashiMarket } from 'app/features/kashi/KashiMarket'
 import TridentApproveGate from 'app/features/trident/TridentApproveGate'
+import { unwrappedToken } from 'app/functions'
 import { useBentoBoxContract } from 'app/hooks'
 import { useBentoOrWalletBalance } from 'app/hooks/useBentoOrWalletBalance'
 import { useActiveWeb3React } from 'app/services/web3'
-import React, { FC, useState } from 'react'
+import React, { FC, ReactNode, useState } from 'react'
 
 export interface KashiMarketRepayButtonProps {
   view: KashiMarketView
@@ -20,6 +21,8 @@ export interface KashiMarketRepayButtonProps {
   repayAmount?: CurrencyAmount<Currency>
   removeAmount?: CurrencyAmount<Currency>
   trade?: LegacyTrade<Currency, Currency, TradeType.EXACT_OUTPUT>
+  repayMax: boolean
+  removeMax: boolean
 }
 
 export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
@@ -30,12 +33,16 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
   removeAmount,
   trade,
   view,
+  repayMax,
+  removeMax,
 }) => {
   const { account } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { market } = useKashiMarket()
+  const collateral = unwrappedToken(market.collateral.token)
+
   const { chainId } = useActiveWeb3React()
-  const balance = useBentoOrWalletBalance(account ?? undefined, market.collateral.token, repayFromWallet)
+  const balance = useBentoOrWalletBalance(account ?? undefined, collateral, repayFromWallet)
   const [permit, setPermit] = useState<Signature>()
   const [permitError, setPermitError] = useState<boolean>()
   const bentoboxContract = useBentoBoxContract()
@@ -65,6 +72,8 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
 
   const buttonText = error
     ? error
+    : closePosition
+    ? i18n._(t`Close Position`)
     : removeAmount?.greaterThan(ZERO) && repayAmount?.greaterThan(ZERO)
     ? i18n._(t`Repay and Remove`)
     : removeAmount?.greaterThan(ZERO)
@@ -73,15 +82,33 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
     ? i18n._(t`Repay Debt`)
     : ''
 
+  const warnings = [
+    permitError &&
+      i18n._(
+        t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
+      ),
+    collateral &&
+      !repayFromWallet &&
+      repayMax &&
+      `You cannot MAX repay ${collateral.symbol} directly from your wallet. Please deposit your ${collateral.symbol} into the BentoBox first, then repay. Because your debt is slowly accrueing interest we can't predict how much it will be once your transaction gets mined.`,
+    removeAmount?.greaterThan(CurrencyAmount.fromRawAmount(collateral, market.userCollateralAmount.toString())),
+  ]
+
   return (
     <>
-      {permitError && (
-        <Typography variant="sm" className="p-4 text-center border rounded border-yellow/40 text-yellow">
-          {i18n._(
-            t`Something went wrong during signing of the approval. This is expected for hardware wallets, such as Trezor and Ledger. Click 'Approve BentoBox' again for approving using the fallback method`
-          )}
-        </Typography>
-      )}
+      {warnings.reduce<ReactNode[]>((acc, cur, index) => {
+        if (cur)
+          acc.push(
+            <Typography
+              variant="sm"
+              className="p-4 text-center border rounded border-yellow/40 text-yellow"
+              key={index}
+            >
+              {cur}
+            </Typography>
+          )
+        return acc
+      }, [])}
       <TridentApproveGate
         spendFromWallet={repayFromWallet}
         inputAmounts={closePosition ? [] : [repayAmount]}
@@ -93,7 +120,7 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
         onPermitError={() => setPermitError(true)}
       >
         {({ approved, loading }) => {
-          const disabled = !!error || !approved || loading || attemptingTxn
+          const disabled = !!error || !approved || loading || attemptingTxn || warnings.filter((el) => !!el).length > 0
           return (
             <Button
               loading={loading || attemptingTxn}
@@ -117,6 +144,8 @@ export const KashiMarketRepayButton: FC<KashiMarketRepayButtonProps> = ({
         closePosition={closePosition}
         trade={trade}
         view={view}
+        removeMax={removeMax}
+        repayMax={repayMax}
       />
     </>
   )
