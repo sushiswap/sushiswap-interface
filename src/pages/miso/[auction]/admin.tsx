@@ -53,7 +53,7 @@ Do not waste your gas.`)}
   if (auction && auction.isOwner) {
     return (
       <>
-        <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
+        <MisoHeader auction={auction}>{header}</MisoHeader>
         <MisoBody>
           <AuctionAdminForm auction={auction} />
         </MisoBody>
@@ -64,7 +64,7 @@ Do not waste your gas.`)}
   if ((!loading && !auction?.isOwner) || !account) {
     return (
       <>
-        <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
+        <MisoHeader auction={auction}>{header}</MisoHeader>
         <MisoBody>
           <div className="flex gap-4 items-center">
             <EmojiSadIcon width={40} />
@@ -82,7 +82,7 @@ Do not waste your gas.`)}
 
   return (
     <>
-      <MisoHeader className="bg-miso-bowl bg-cover">{header}</MisoHeader>
+      <MisoHeader auction={auction}>{header}</MisoHeader>
       <MisoBody>
         <div className="p-10 rounded animate-pulse w-full h-[2700px] bg-dark-900" />
       </MisoBody>

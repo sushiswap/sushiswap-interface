@@ -1,19 +1,17 @@
-import { parseUnits } from '@ethersproject/units'
 import { ArrowDownIcon } from '@heroicons/react/solid'
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
-import { JSBI, Rebase, ZERO } from '@sushiswap/core-sdk'
+import { ZERO } from '@sushiswap/core-sdk'
 import AssetInput from 'app/components/AssetInput'
 import Button from 'app/components/Button'
 import { WalletIcon } from 'app/components/Icon'
 import HeadlessUiModal from 'app/components/Modal/HeadlessUIModal'
 import Typography from 'app/components/Typography'
 import { useBalancesSelectedCurrency } from 'app/features/portfolio/useBalancesDerivedState'
-import { toShareJSBI, tryParseAmount } from 'app/functions'
+import { tryParseAmount } from 'app/functions'
 import { useBentoBox } from 'app/hooks'
-import useBentoRebases from 'app/hooks/useBentoRebases'
 import { useActiveWeb3React } from 'app/services/web3'
-import { useBentoBalanceV2 } from 'app/state/bentobox/hooks'
+import { useBentoBalanceV2, useBentoShareForAccount } from 'app/state/bentobox/hooks'
 import { useCurrencyBalance } from 'app/state/wallet/hooks'
 import React, { FC, useCallback, useState } from 'react'
 
@@ -23,15 +21,16 @@ interface WithdrawViewProps {
 }
 
 const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
-  const { account } = useActiveWeb3React()
-  const currency = useBalancesSelectedCurrency()
-  const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
-  const walletBalance = useCurrencyBalance(account ?? undefined, currency)
-  const { data: bentoBalance } = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
-  const { withdraw } = useBentoBox()
-  const { rebases } = useBentoRebases([currency?.wrapped])
-  const [inputState, setInputState] = useState<{ value?: string; isMax: boolean }>({ value: undefined, isMax: false })
   const { i18n } = useLingui()
+  const { account } = useActiveWeb3React()
+  const { withdraw } = useBentoBox()
+  const currency = useBalancesSelectedCurrency()
+  const walletBalance = useCurrencyBalance(account ?? undefined, currency)
+  const share = useBentoShareForAccount(account ?? undefined, currency?.wrapped.address)
+  const { data: bentoBalance } = useBentoBalanceV2(currency ? currency.wrapped.address : undefined)
+
+  const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false)
+  const [inputState, setInputState] = useState<{ value?: string; isMax: boolean }>({ value: undefined, isMax: false })
 
   const valueCA = currency ? tryParseAmount(inputState.value, currency) : undefined
   let valuePlusBalance = valueCA?.wrapped
@@ -43,16 +42,7 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
     try {
       setAttemptingTxn(true)
       if (inputState.isMax) {
-        await withdraw(
-          currency?.wrapped.address,
-          inputState.value.toBigNumber(currency?.decimals),
-          rebases?.[currency.wrapped.address]
-            ? toShareJSBI(
-                rebases[currency.wrapped.address] as Rebase,
-                JSBI.BigInt(parseUnits(inputState.value, currency?.decimals))
-              )
-            : undefined
-        )
+        await withdraw(currency?.wrapped.address, inputState.value.toBigNumber(currency?.decimals), share)
       } else {
         await withdraw(currency?.wrapped.address, inputState.value.toBigNumber(currency?.decimals))
       }
@@ -60,7 +50,7 @@ const WithdrawView: FC<WithdrawViewProps> = ({ onClose, onBack }) => {
       setAttemptingTxn(false)
       onClose()
     }
-  }, [currency, inputState.value, inputState.isMax, withdraw, rebases, onClose])
+  }, [currency, inputState.value, inputState.isMax, withdraw, share, onClose])
 
   const error = !account
     ? i18n._(t`Connect Wallet`)

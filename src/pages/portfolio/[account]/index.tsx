@@ -2,8 +2,6 @@ import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import ActionsModal from 'app/features/portfolio/ActionsModal'
 import { BentoBalances, WalletBalances } from 'app/features/portfolio/AssetBalances/bentoAndWallet'
-import { KashiCollateral } from 'app/features/portfolio/AssetBalances/kashi/KashiCollateral'
-import { KashiLent } from 'app/features/portfolio/AssetBalances/kashi/KashiLent'
 import HeaderDropdown from 'app/features/portfolio/HeaderDropdown'
 import { useAccountInUrl } from 'app/features/portfolio/useAccountInUrl'
 import TridentLayout, { TridentBody, TridentHeader } from 'app/layouts/Trident'
@@ -30,8 +28,8 @@ const Portfolio = () => {
         <HeaderDropdown account={account} />
       </TridentHeader>
       <TridentBody className="flex flex-col gap-10 lg:grid grid-cols-2 lg:gap-4">
-        <KashiLent account={account} />
-        <KashiCollateral account={account} />
+        {/*<KashiLent account={account} />*/}
+        {/*<KashiCollateral account={account} />*/}
         <WalletBalances account={account} />
         <BentoBalances account={account} />
       </TridentBody>
