@@ -7,7 +7,7 @@ import {
 import { useMemo } from 'react'
 
 export const useAuctionCommitments = (auction: Auction): AuctionFetchState => {
-  const subgraphResult = useSubgraphMisoCommitments(auction)
+  const subgraphResult = useSubgraphMisoCommitments({ auction })
   const contractResult = useContractCallMisoCommitments({ auction, shouldFetch: subgraphResult.error })
-  return useMemo(() => (!subgraphResult.error ? subgraphResult : contractResult), [contractResult, subgraphResult])
+  return useMemo(() => (subgraphResult.error ? contractResult : subgraphResult), [contractResult, subgraphResult])
 }

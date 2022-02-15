@@ -1,6 +1,5 @@
 import gql from 'graphql-tag'
 
-/* Needs support for transaction hash */
 export const misoCommitmentsQuery = gql`
   query misoCommitmentsQuery($auctionId: String!) {
     commitments(where: { auction: $auctionId }) {
@@ -10,6 +9,7 @@ export const misoCommitmentsQuery = gql`
       }
       amount
       block
+      transactionHash
     }
   }
 `

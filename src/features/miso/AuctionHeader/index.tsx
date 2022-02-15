@@ -7,7 +7,7 @@ import Typography from 'app/components/Typography'
 import AuctionCardPrice from 'app/features/miso/AuctionCard/AuctionCardPrice'
 import AuctionHeaderSkeleton from 'app/features/miso/AuctionHeader/AuctionHeaderSkeleton'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import { AuctionStatus, AuctionTemplate } from 'app/features/miso/context/types'
 import { AuctionHelperTextByTemplateId, AuctionPriceHelperTextByTemplateId } from 'app/features/miso/context/utils'
 import { classNames } from 'app/functions'
@@ -15,13 +15,11 @@ import { cloudinaryLoader } from 'app/functions/cloudinary'
 import Image from 'next/image'
 import React, { FC } from 'react'
 
-interface AuctionHeaderProps {
-  auction?: Auction
-}
-const AuctionHeader: FC<AuctionHeaderProps> = ({ auction }) => {
+const AuctionHeader: FC = () => {
   const { i18n } = useLingui()
+  const { auction, loading } = useAuctionContext()
 
-  if (!auction) return <AuctionHeaderSkeleton />
+  if (loading || !auction) return <AuctionHeaderSkeleton />
 
   const link = (
     <div

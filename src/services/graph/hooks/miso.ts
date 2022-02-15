@@ -1,6 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi'
 import { Contract } from '@ethersproject/contracts'
-import { Web3Provider } from '@ethersproject/providers'
+import { Listener, Web3Provider } from '@ethersproject/providers'
 import { CurrencyAmount } from '@sushiswap/core-sdk'
 import { Auction } from 'app/features/miso/context/Auction'
 import { TOPIC_ADDED_COMMITMENT } from 'app/features/miso/context/constants'
@@ -26,22 +26,27 @@ interface MisoCommitmentGqlData {
   }
   amount: string
   block: string
-  transaction: string
+  transactionHash: string
 }
 
 const misoSubgraphFormatter = (rawData: MisoCommitmentGqlData[], auction: Auction): AuctionCommitment[] => {
   return rawData.map((i) => ({
-    txHash: 'Not yet available', // TODO: need to update subgraph
+    txHash: i.transactionHash,
     blockNumber: parseInt(i.block),
     address: i.user.id,
     amount: CurrencyAmount.fromRawAmount(auction.paymentToken, i.amount),
   }))
 }
 
-export const useSubgraphMisoCommitments = (auction: Auction): AuctionFetchState => {
+interface MisoCommitmentProps {
+  auction: Auction
+  shouldFetch?: boolean
+}
+
+export const useSubgraphMisoCommitments = ({ auction, shouldFetch = true }: MisoCommitmentProps): AuctionFetchState => {
   const auctionId = auction.auctionInfo.addr
   const { data, error, isValidating } = useSWR<{ commitments: MisoCommitmentGqlData[] }>(
-    !!auctionId ? ['misCommitments', auctionId] : null,
+    shouldFetch ? ['misCommitments', auctionId] : null,
     () => getMisoCommitments(auctionId)
   )
 
@@ -84,8 +89,7 @@ function subscribeToIncomingCommitments(
   auction: Auction,
   setCommitments: Dispatch<SetStateAction<AuctionCommitment[]>>
 ) {
-  // Subscribe
-  contract.on({ address: auction.auctionToken.address, topics: [TOPIC_ADDED_COMMITMENT] }, (_, __, result) => {
+  const handler: Listener = (_, __, result) => {
     if (result) {
       const [address, amount] = defaultAbiCoder.decode(['address', 'uint256'], result.data)
       setCommitments((prevState) => {
@@ -102,11 +106,14 @@ function subscribeToIncomingCommitments(
         } else return prevState
       })
     }
-  })
+  }
+
+  // Subscribe
+  contract.on({ address: auction.auctionToken.address, topics: [TOPIC_ADDED_COMMITMENT] }, handler)
 
   // Unsubscribe
   return () => {
-    contract.off({ address: auction.auctionToken.address, topics: [TOPIC_ADDED_COMMITMENT] }, () => undefined)
+    contract.off({ address: auction.auctionToken.address, topics: [TOPIC_ADDED_COMMITMENT] }, handler)
   }
 }
 

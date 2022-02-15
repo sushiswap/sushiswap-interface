@@ -4,6 +4,7 @@ import { AddressZero } from '@ethersproject/constants'
 import { keccak256 } from '@ethersproject/solidity'
 import {
   BENTOBOX_ADDRESS,
+  ChainId,
   CHAINLINK_ORACLE_ADDRESS,
   computePairAddress,
   Currency,
@@ -311,7 +312,7 @@ export function useTrackedTokenPairs(): [Token, Token][] {
   const tokens = useAllTokens()
 
   // pinned pairs
-  const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId] ?? [] : []), [chainId])
+  const pinnedPairs = useMemo(() => (chainId ? PINNED_PAIRS[chainId as ChainId] ?? [] : []), [chainId])
 
   // pairs for every token against every base
   const generatedPairs: [Token, Token][] = useMemo(

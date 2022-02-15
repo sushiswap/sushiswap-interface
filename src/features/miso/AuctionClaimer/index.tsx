@@ -4,18 +4,15 @@ import loadingCircle from 'app/animation/loading-circle.json'
 import Button from 'app/components/Button'
 import Typography from 'app/components/Typography'
 import AuctionCommitterSkeleton from 'app/features/miso/AuctionCommitter/AuctionCommitterSkeleton'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import useAuctionEdit from 'app/features/miso/context/hooks/useAuctionEdit'
 import { classNames } from 'app/functions'
 import Lottie from 'lottie-react'
 import React, { FC, useCallback, useState } from 'react'
 
-interface AuctionClaimerProps {
-  auction?: Auction
-}
-
-const AuctionClaimer: FC<AuctionClaimerProps> = ({ auction }) => {
+const AuctionClaimer: FC = () => {
   const { i18n } = useLingui()
+  const { auction, loading } = useAuctionContext()
   const [pending, setPending] = useState(false)
   const { claimTokens } = useAuctionEdit(
     auction?.auctionInfo.addr,
@@ -35,7 +32,7 @@ const AuctionClaimer: FC<AuctionClaimerProps> = ({ auction }) => {
     }
   }, [claimTokens])
 
-  if (!auction) return <AuctionCommitterSkeleton />
+  if (loading || !auction) return <AuctionCommitterSkeleton />
 
   return (
     <div className="relative mt-6">
