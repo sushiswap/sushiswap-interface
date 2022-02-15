@@ -15,7 +15,6 @@ export const useAuctionPointLists = (auctionAddresses: string[]): string[] => {
     const pointLists = callStates.map((callState: CallState) => String(callState?.result?.[0]))
     return pointLists
   }
-
   return Array(auctionAddresses.length).fill(AddressZero)
 }
 

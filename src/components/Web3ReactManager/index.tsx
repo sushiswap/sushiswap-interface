@@ -3,7 +3,6 @@ import { useLingui } from '@lingui/react'
 import { useWeb3React } from '@web3-react/core'
 import { network } from 'app/config/wallets'
 import { NetworkContextName } from 'app/constants'
-import { getCookie } from 'app/functions'
 import useEagerConnect from 'app/hooks/useEagerConnect'
 import useInactiveListener from 'app/hooks/useInactiveListener'
 import dynamic from 'next/dynamic'
@@ -23,12 +22,19 @@ export default function Web3ReactManager({ children }: { children: JSX.Element }
   // try to eagerly connect to an injected provider, if it exists and has granted access already
   const triedEager = useEagerConnect()
 
+  // const getChainIdFromCooker = useMemo(() => Number(getCookie('chain-id')), [])
+
   // after eagerly trying injected, if the network connect ever isn't active or in an error state, activate itd
   useEffect(() => {
-    if (triedEager && !networkActive && !networkError && !active) {
-      network.changeChainId(Number(getCookie('chain-id')))
-      activateNetwork(network)
+    const activate = async () => {
+      if (triedEager && !networkActive && !networkError && !active) {
+        const Cookies = (await import('js-cookie')).default
+        console.log('CHANGE CHAIN TO ' + Number(Cookies.get('chain-id')))
+        network.changeChainId(Number(Cookies.get('chain-id')))
+        activateNetwork(network)
+      }
     }
+    activate()
   }, [triedEager, networkActive, networkError, activateNetwork, active])
 
   // when there's no account connected, react to logins (broadly speaking) on the injected provider, if it exists
