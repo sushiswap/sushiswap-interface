@@ -3,9 +3,21 @@ import { NextResponse } from 'next/server'
 
 const SUBDOMAIN_CHAIN_ID: { [subdomain: string]: string } = {
   ethereum: '1',
-  celo: '42220',
-  harmony: '1666600000',
+  ropsten: '3',
+  rinkeby: '4',
+  gorli: '5',
   kovan: '42',
+  bsc: '56',
+  fantom: '250',
+  polygon: '167',
+  harmony: '1666600000',
+  avalanche: '43114',
+  okex: '66',
+  gnosis: '100',
+  moonriver: '1285',
+  celo: '42220',
+  arbitrum: '42161',
+  fuse: '122',
 }
 
 const DEFAULT_CHAIN_ID = '1'
