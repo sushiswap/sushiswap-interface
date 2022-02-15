@@ -188,7 +188,7 @@ const Swap = ({ banners }) => {
   }, [approvalState, approvalSubmitted])
 
   // Checks if user has enabled the feature and if the wallet supports it
-  const useSushiGuard = useSushiGuardFeature()
+  const sushiGuardEnabled = useSushiGuardFeature()
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(
@@ -198,7 +198,7 @@ const Swap = ({ banners }) => {
     signatureData,
     /* @ts-ignore TYPE NEEDS FIXING */
     null,
-    useSushiGuard
+    sushiGuardEnabled
   )
 
   const [singleHopOnly] = useUserSingleHopOnly()
@@ -416,7 +416,7 @@ const Swap = ({ banners }) => {
             priceImpact={priceImpact}
             priceImpactCss={priceImpactCss}
           />
-          {isExpertMode && useSushiGuard && <SwapGasFeeInputs />}
+          {isExpertMode && sushiGuardEnabled && <SwapGasFeeInputs />}
           {isExpertMode && <RecipientField recipient={recipient} action={setRecipient} />}
           {Boolean(trade) && (
             <SwapDetails

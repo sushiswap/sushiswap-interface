@@ -22,15 +22,14 @@ interface ConfirmationPendingContentProps {
 }
 
 export const ConfirmationPendingContent: FC<ConfirmationPendingContentProps> = ({ onDismiss, pendingText }) => {
-  const { chainId } = useActiveWeb3React()
   const { i18n } = useLingui()
   const { sushiRelayChallenge } = useSwapState()
-  const useSushiGuard = useSushiGuardFeature()
+  const sushiGuardEnabled = useSushiGuardFeature()
 
   return (
     <div className="flex flex-col gap-4">
       <HeadlessUiModal.Header header={i18n._(t`Confirm transaction`)} onClose={onDismiss} />
-      {useSushiGuard && (
+      {sushiGuardEnabled && (
         <HeadlessUiModal.BorderedContent className="flex flex-col gap-3 bg-dark-1000/40">
           <Typography variant="sm">
             {i18n._(

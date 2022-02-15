@@ -30,7 +30,7 @@ const SwapDetailsContent: FC<SwapDetailsContent> = ({ trade, recipient }) => {
   const allowedSlippage = useSwapSlippageTolerance(trade)
   const minReceived = trade?.minimumAmountOut(allowedSlippage)
   const realizedLpFeePercent = trade ? computeRealizedLPFeePercent(trade) : undefined
-  const useSushiGuard = useSushiGuardFeature()
+  const sushiGuardEnabled = useSushiGuardFeature()
   const [expertMode] = useExpertModeManager()
   const { maxFeePerGas, maxPriorityFeePerGas } = useFeeData()
   const { maxFee, maxPriorityFee } = useSwapState()
@@ -97,7 +97,7 @@ const SwapDetailsContent: FC<SwapDetailsContent> = ({ trade, recipient }) => {
           </div>
         )}
       </div>
-      {useSushiGuard && (
+      {sushiGuardEnabled && (
         <div className="flex flex-col gap-1 py-2">
           <div className="grid grid-cols-2 gap-4">
             <Typography variant="xs" className="text-secondary">
@@ -152,7 +152,7 @@ interface SwapDetails {
 
 const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient, trade, className }) => {
   const [inverted, setInverted] = useState(false)
-  const useSushiGuard = useSushiGuardFeature()
+  const sushiGuardEnabled = useSushiGuardFeature()
 
   return (
     <Disclosure as="div">
@@ -176,7 +176,7 @@ const SwapDetails: FC<SwapDetails> = ({ inputCurrency, outputCurrency, recipient
             </div>
             <Disclosure.Button as={Fragment}>
               <div className="flex items-center justify-end flex-grow gap-2 rounded cursor-pointer h-7">
-                {useSushiGuard && (
+                {sushiGuardEnabled && (
                   <QuestionHelper
                     text="SushiGuard Gas Rebates are activated"
                     icon={<ShieldCheckIcon width={16} className="text-green" />}
