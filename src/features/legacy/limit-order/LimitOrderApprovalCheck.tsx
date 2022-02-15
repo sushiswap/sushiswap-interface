@@ -17,7 +17,10 @@ const LimitOrderApprovalCheck: FC = () => {
   const { i18n } = useLingui()
   const { chainId } = useActiveWeb3React()
   const { pending } = useLimitOrders()
-  const { approve, approvalState } = useBentoMasterApproveCallback(chainId && STOP_LIMIT_ORDER_ADDRESS[chainId], {})
+  const { approve, approvalState } = useBentoMasterApproveCallback(
+    chainId ? STOP_LIMIT_ORDER_ADDRESS[chainId] : undefined,
+    {}
+  )
   const [dismissed, setDismissed] = useState<boolean>()
 
   const isOpen =

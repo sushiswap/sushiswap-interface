@@ -50,7 +50,7 @@ export default function Updater(): null {
   const dispatch = useAppDispatch()
   const state = useAppSelector(selectTransactions)
 
-  const transactions = useMemo(() => (chainId ? state[chainId] ?? {} : {}), [chainId, state])
+  const transactions = useMemo(() => (chainId ? state[chainId as ChainId] ?? {} : {}), [chainId, state])
 
   // show popup on confirm
   const addPopup = useAddPopup()

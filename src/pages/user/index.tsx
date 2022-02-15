@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
 import Back from 'app/components/Back'
 import Button from 'app/components/Button'
 import Container from 'app/components/Container'
@@ -123,7 +124,7 @@ export default function Me() {
       <div className="w-full max-w-2xl p-4 rounded bg-dark-900">
         <div className="flex flex-col items-center justify-between mb-3 sm:flex-row">
           <Typography component="h2" variant="lg" className="font-medium text-high-emphesis">
-            {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId]}`)}
+            {i18n._(t`Transaction History ${chainId && NETWORK_LABEL[chainId as ChainId]}`)}
           </Typography>
           <Button variant="empty" color="blue" onClick={clearAllTransactionsCallback}>
             <span className="text-sm">{i18n._(t`Clear History`)}</span>

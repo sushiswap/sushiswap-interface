@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { ChainId } from '@sushiswap/core-sdk'
 import Button from 'app/components/Button'
 import Dots from 'app/components/Dots'
 import { LoadingSpinner } from 'app/components/LoadingSpinner'
@@ -43,7 +44,7 @@ export const SelectPoolsAndConfirm: FC = () => {
     account ?? undefined,
     selectedMigrations.map((m) => m.v2Pair.liquidityToken)
   )
-  const migrationContractAddress = chainId ? tridentMigrationContracts[chainId] : undefined
+  const migrationContractAddress = chainId ? tridentMigrationContracts[chainId as ChainId] : undefined
 
   const execute = useExecuteTridentMigration()
 
