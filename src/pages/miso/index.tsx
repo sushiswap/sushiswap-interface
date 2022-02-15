@@ -45,18 +45,17 @@ const Miso = () => {
               {i18n._(t`These auctions are meticulously chosen by the Sushi Samurais, serving the best MISO for you.`)}
             </Typography>
           </div>
-          {chainId === ChainId.HARMONY ||
-            (chainId === ChainId.KOVAN && (
-              <div className="flex items-center gap-4">
-                <div>
-                  <Link href="/miso/auction" passHref={true}>
-                    <Button color="blue" className="rounded-full">
-                      {i18n._(t`Create Auction`)}
-                    </Button>
-                  </Link>
-                </div>
+          {(chainId === ChainId.HARMONY || chainId === ChainId.KOVAN) && (
+            <div className="flex items-center gap-4">
+              <div>
+                <Link href="/miso/auction" passHref={true}>
+                  <Button color="blue" className="rounded-full">
+                    {i18n._(t`Create Auction`)}
+                  </Button>
+                </Link>
               </div>
-            ))}
+            </div>
+          )}
         </div>
       </MisoHeader>
       <MisoBody>
