@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { Feature } from 'app/enums'
 import AuctionClaimer from 'app/features/miso/AuctionClaimer'
 import AuctionCommitter from 'app/features/miso/AuctionCommitter'
@@ -13,13 +14,15 @@ import { AuctionStatus } from 'app/features/miso/context/types'
 import NetworkGuard from 'app/guards/Network'
 import { useRedirectOnChainId } from 'app/hooks/useRedirectOnChainId'
 import MisoLayout, { MisoBody, MisoHeader } from 'app/layouts/Miso'
+import { useActiveWeb3React } from 'app/services/web3'
 import { useRouter } from 'next/router'
 import React from 'react'
 
 const MisoAuction = () => {
+  const { account } = useActiveWeb3React()
   const router = useRouter()
   const { auction: address } = router.query
-  const { auction, loading } = useAuction(address as string)
+  const { auction, loading } = useAuction(address as string, account ?? AddressZero)
 
   // Redirect to overview on chainId change
   useRedirectOnChainId('/miso')

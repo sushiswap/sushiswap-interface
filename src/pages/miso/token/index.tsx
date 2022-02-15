@@ -27,7 +27,6 @@ const Token = () => {
           <div>
             <Button
               color="blue"
-              variant="outlined"
               size="sm"
               className="rounded-full !pl-2 !py-1.5"
               startIcon={<ChevronLeftIcon width={24} height={24} />}

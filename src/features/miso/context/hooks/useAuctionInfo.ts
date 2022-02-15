@@ -1,6 +1,5 @@
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
-import { AddressZero } from '@ethersproject/constants'
 import { CHAIN_KEY } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
@@ -33,7 +32,7 @@ export const useAuctionHelperInfo = (auctionAddress?: string, marketTemplateId?:
             },
             {
               methodName: 'getUserMarketInfo',
-              callInputs: [auctionAddress, auctionAddress ? owner ?? account ?? AddressZero : AddressZero],
+              callInputs: [auctionAddress, owner],
             },
             {
               methodName:
