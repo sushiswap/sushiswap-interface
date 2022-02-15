@@ -6,7 +6,7 @@ import ExternalLink from 'app/components/ExternalLink'
 import Pagination from 'app/components/Pagination'
 import Typography from 'app/components/Typography'
 import { Auction } from 'app/features/miso/context/Auction'
-import useAuctionCommitments from 'app/features/miso/context/hooks/useAuctionCommitments'
+import { useAuctionCommitments } from 'app/features/miso/context/hooks/useAuctionCommitments'
 import { AuctionCommitment } from 'app/features/miso/context/types'
 import { classNames, getExplorerLink, shortenAddress, shortenString } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -95,7 +95,7 @@ interface AuctionBidsTabProps {
 
 const AuctionBidsTab: FC<AuctionBidsTabProps> = ({ auction, active }) => {
   const { account } = useActiveWeb3React()
-  const commitments = useAuctionCommitments(auction)
+  const { commitments } = useAuctionCommitments(auction)
   const blockNumber = useBlockNumber()
   const [ownBidsOnly, setOwnBidsOnly] = useState(false)
   const data = useMemo(() => {

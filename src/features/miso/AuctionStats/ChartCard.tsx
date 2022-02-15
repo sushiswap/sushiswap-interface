@@ -4,12 +4,12 @@ import { JSBI } from '@sushiswap/core-sdk'
 import LineGraph from 'app/components/LineGraph'
 import Typography from 'app/components/Typography'
 import AuctionChart from 'app/features/miso/AuctionChart'
+import { useAuctionCommitments } from 'app/features/miso/context/hooks/useAuctionCommitments'
 import { classNames, formatBalance } from 'app/functions'
 import { useToken } from 'app/hooks/Tokens'
 import React, { useEffect, useState } from 'react'
 
 import { Auction } from '../context/Auction'
-import useAuctionCommitments from '../context/hooks/useAuctionCommitments'
 
 enum ChartType {
   Price,
@@ -19,11 +19,11 @@ enum ChartType {
 export const ChartCard = ({ auction }: { auction: Auction }) => {
   const { i18n } = useLingui()
   const [chartType, setChartType] = useState<ChartType>(ChartType.Price)
-  const auctionCommitments = useAuctionCommitments(auction)
+  const { commitments } = useAuctionCommitments(auction)
   const auctionToken = useToken(auction.auctionInfo.addr)
-  const [selectedBlock, setSelectedBlock] = useState(auctionCommitments.length ? auctionCommitments.length - 1 : 0)
+  const [selectedBlock, setSelectedBlock] = useState(commitments.length ? commitments.length - 1 : 0)
   let cumulativeSum = JSBI.BigInt(0)
-  const parsedAuctionCommitments = [...auctionCommitments]
+  const parsedAuctionCommitments = [...commitments]
     .sort((a, b) => a.blockNumber - b.blockNumber)
     .map((e) => {
       cumulativeSum = JSBI.add(cumulativeSum, e.amount.quotient)
@@ -34,7 +34,7 @@ export const ChartCard = ({ auction }: { auction: Auction }) => {
       }
     })
 
-  useEffect(() => setSelectedBlock(auctionCommitments.length - 1), [auctionCommitments])
+  useEffect(() => setSelectedBlock(commitments.length - 1), [commitments])
 
   return (
     <div className="flex flex-col bg-[rgba(255,255,255,0.04)] border border-dark-900 rounded gap-5 shadow-2xl shadow-pink-red/5 h-full">
