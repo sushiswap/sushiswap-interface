@@ -1,4 +1,4 @@
-import { Currency, NATIVE, SUSHI } from '@sushiswap/core-sdk'
+import { ChainId, Currency, NATIVE, SUSHI } from '@sushiswap/core-sdk'
 import { Fee } from '@sushiswap/trident-sdk'
 import { useCurrency } from 'app/hooks/Tokens'
 import { useActiveWeb3React } from 'app/services/web3'
@@ -16,7 +16,7 @@ const useCurrenciesFromURL = (): {
   const router = useRouter()
   // @ts-ignore TYPE NEEDS FIXING
   const currencyA = useCurrency(router.query.tokens?.[0]) || (chainId && NATIVE[chainId]) || undefined
-  const currencyB = useCurrency(router.query.tokens?.[1]) || (chainId && SUSHI[chainId]) || undefined
+  const currencyB = useCurrency(router.query.tokens?.[1]) || (chainId && SUSHI[chainId as ChainId]) || undefined
 
   const fee = Number(router.query.fee ?? Fee.DEFAULT)
   const twap = router.query.twap !== 'false'

@@ -1,3 +1,4 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useAppDispatch, useAppSelector } from 'app/state/hooks'
 import { selectTransactions } from 'app/state/transactions/selectors'
@@ -63,7 +64,7 @@ export function useAllTransactions(): { [txHash: string]: TransactionDetails } {
 
   const state: TransactionState = useAppSelector(selectTransactions)
 
-  return chainId ? state[chainId] ?? {} : {}
+  return chainId ? state[chainId as ChainId] ?? {} : {}
 }
 
 export function useIsTransactionPending(transactionHash?: string): boolean {
