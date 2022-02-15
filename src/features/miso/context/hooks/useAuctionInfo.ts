@@ -1,5 +1,6 @@
 import { Interface } from '@ethersproject/abi'
 import { BigNumber } from '@ethersproject/bignumber'
+import { AddressZero } from '@ethersproject/constants'
 import { CHAIN_KEY } from '@sushiswap/core-sdk'
 import MISO from '@sushiswap/miso/exports/all.json'
 import BASE_AUCTION_ABI from 'app/constants/abis/base-auction.json'
@@ -24,7 +25,7 @@ export const useAuctionHelperInfo = (auctionAddress?: string, marketTemplateId?:
   const contract = useMisoHelperContract()
   const callsData = useMemo(
     () =>
-      auctionAddress && marketTemplateId
+      auctionAddress && marketTemplateId?.toNumber()
         ? [
             {
               methodName: 'getDocuments',
@@ -32,7 +33,7 @@ export const useAuctionHelperInfo = (auctionAddress?: string, marketTemplateId?:
             },
             {
               methodName: 'getUserMarketInfo',
-              callInputs: [auctionAddress, auctionAddress ? owner ?? account ?? undefined : undefined],
+              callInputs: [auctionAddress, auctionAddress ? owner ?? account ?? AddressZero : AddressZero],
             },
             {
               methodName:
@@ -49,13 +50,14 @@ export const useAuctionHelperInfo = (auctionAddress?: string, marketTemplateId?:
   )
 
   const results = useSingleContractMultipleMethods(contract, callsData)
+
   if (auctionAddress && marketTemplateId && results && Array.isArray(results) && results.length === callsData.length) {
     const [{ result: documents }, { result: marketInfo }, { result: auctionInfo }] = results
     return {
       auctionDocuments: arrayToMap(documents?.[0]),
       marketInfo: marketInfo?.[0],
       auctionInfo: auctionInfo?.[0],
-      loading: false,
+      loading: results.some((el) => el.loading),
     }
   }
 
@@ -97,7 +99,7 @@ export const useAuctionDetails = (auctionAddress?: string) => {
       marketTemplateId: marketTemplate?.[0],
       pointListAddress: pointList?.[0],
       auctionLauncherAddress: auctionLauncherAddress?.[0],
-      loading: false,
+      loading: results.some((el) => el.loading),
     }
   }
 

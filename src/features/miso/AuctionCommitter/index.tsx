@@ -7,7 +7,7 @@ import NumericalInput from 'app/components/Input/Numeric'
 import Typography from 'app/components/Typography'
 import AuctionTimer from 'app/features/miso/AuctionTimer'
 import CommitReviewModal from 'app/features/miso/CommitReviewModal'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import { useAuctionPointListPoints } from 'app/features/miso/context/hooks/useAuctionPointList'
 import { AuctionStatus } from 'app/features/miso/context/types'
 import MisoButton from 'app/features/miso/MisoButton'
@@ -18,12 +18,9 @@ import React, { FC, useState } from 'react'
 
 import AuctionCommitterSkeleton from './AuctionCommitterSkeleton'
 
-interface AuctionCommitterProps {
-  auction?: Auction
-}
-
-const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
+const AuctionCommitter: FC = () => {
   const { i18n } = useLingui()
+  const { auction, loading } = useAuctionContext()
   const { account } = useActiveWeb3React()
   const [review, setReview] = useState(false)
   const balance = useCurrencyBalance(account ?? undefined, auction?.paymentToken)
@@ -34,7 +31,7 @@ const AuctionCommitter: FC<AuctionCommitterProps> = ({ auction }) => {
     auction?.paymentToken
   )
 
-  if (!auction) return <AuctionCommitterSkeleton />
+  if (loading || !auction) return <AuctionCommitterSkeleton />
 
   const inputAmount =
     tryParseAmount(value, auction.paymentToken) || CurrencyAmount.fromRawAmount(auction.paymentToken, '0')
