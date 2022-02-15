@@ -121,8 +121,6 @@ export const useAuction = (address?: string, owner?: string) => {
     loading: loadingInfo,
   } = useAuctionHelperInfo(address, marketTemplateId, owner ?? AddressZero)
 
-  console.log({ auctionDocuments, marketInfo, auctionInfo, loadingInfo })
-
   return useMemo(() => {
     if (loadingDetails || loadingInfo) return { loading: true, auction: undefined }
     if (

@@ -50,10 +50,7 @@ const Miso = () => {
               <div className="flex items-center gap-4">
                 <div>
                   <Link href="/miso/auction" passHref={true}>
-                    <Button
-                      color="blue"
-                      className="rounded-full bg-gradient-to-r from-pink-red via-pink to-red text-white transition hover:scale-[1.05]"
-                    >
+                    <Button color="blue" className="rounded-full">
                       {i18n._(t`Create Auction`)}
                     </Button>
                   </Link>
