@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { Token } from '@sushiswap/core-sdk'
 import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import { useAuctionEnded } from 'app/features/miso/context/hooks/useAuctionEnded'
@@ -110,6 +111,7 @@ export const useAuction = (address?: string, owner?: string) => {
   } = useAuctionDetails(address)
 
   const auctionEnded = useAuctionEnded(address, marketTemplateId)
+
   const { launcherInfo, lpTokenAddress } = useAuctionLauncherDetails(auctionLauncherAddress)
 
   const {
@@ -117,7 +119,9 @@ export const useAuction = (address?: string, owner?: string) => {
     marketInfo,
     auctionInfo,
     loading: loadingInfo,
-  } = useAuctionHelperInfo(address, marketTemplateId, owner ?? undefined)
+  } = useAuctionHelperInfo(address, marketTemplateId, owner ?? AddressZero)
+
+  console.log({ auctionDocuments, marketInfo, auctionInfo, loadingInfo })
 
   return useMemo(() => {
     if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
