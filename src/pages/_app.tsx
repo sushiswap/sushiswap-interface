@@ -10,9 +10,12 @@ import Portals from 'app/components/Portals'
 import { SyncWithRedux } from 'app/components/SyncWithRedux'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
+import { getCookie } from 'app/functions'
 import getLibrary from 'app/functions/getLibrary'
 import { exception, GOOGLE_ANALYTICS_TRACKING_ID, pageview } from 'app/functions/gtag'
 import DefaultLayout from 'app/layouts/Default'
+import { SUPPORTED_NETWORKS } from 'app/modals/NetworkModal'
+import { useActiveWeb3React } from 'app/services/web3'
 // @ts-ignore TYPE NEEDS FIXING
 import store, { persistor } from 'app/state'
 import ApplicationUpdater from 'app/state/application/updater'
@@ -36,6 +39,36 @@ const Web3ProviderNetwork = dynamic(() => import('../components/Web3ProviderNetw
 
 if (typeof window !== 'undefined' && !!window.ethereum) {
   window.ethereum.autoRefreshOnNetworkChange = false
+}
+
+function NetworkOrchistrator() {
+  const { chainId, library, account } = useActiveWeb3React()
+  useEffect(() => {
+    ;(async () => {
+      const chainIdFromCookie = Number(getCookie('chain-id'))
+      if (!chainId || !account || chainId === chainIdFromCookie) {
+        return
+      }
+      const params = SUPPORTED_NETWORKS[chainIdFromCookie]
+      try {
+        await library?.send('wallet_switchEthereumChain', [{ chainId: `0x${chainIdFromCookie.toString(16)}` }, account])
+      } catch (switchError) {
+        // This error code indicates that the chain has not been added to MetaMask.
+        // @ts-ignore TYPE NEEDS FIXING
+        if (switchError.code === 4902) {
+          try {
+            await library?.send('wallet_addEthereumChain', [params, account])
+          } catch (addError) {
+            // handle "add" error
+            console.error(`Add chain error ${addError}`)
+          }
+        }
+        console.error(`Switch chain error ${switchError}`)
+        // handle other "switch" errors
+      }
+    })()
+  }, [account, chainId, library])
+  return null
 }
 
 // @ts-ignore TYPE NEEDS FIXING
@@ -134,6 +167,7 @@ function MyApp({ Component, pageProps, fallback, err }) {
         <Web3ReactProvider getLibrary={getLibrary}>
           <Web3ProviderNetwork getLibrary={getLibrary}>
             <Web3ReactManager>
+              <NetworkOrchistrator />
               {/*@ts-ignore TYPE NEEDS FIXING*/}
               <ReduxProvider store={store}>
                 <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
