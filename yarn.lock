@@ -2842,10 +2842,12 @@
   resolved "https://registry.yarnpkg.com/@sushiswap/core/-/core-2.0.0-canary.1.tgz#91c938668282d463e4fce6e0cf4d320ce5f3768f"
   integrity sha512-6YFT4EKgm0XgfwCBsKx5HrDtRI6EvhZHipjBKegdTV0b2zKuXnmdyZ+RwPCr0mCKq2pKB0qIiqCxfbgXYDlLCQ==
 
-"@sushiswap/default-token-list@22.7.0":
-  version "22.7.0"
-  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-22.7.0.tgz#bcb1f313d07d1ef54a6e946cd62eb6dbc30850c1"
-  integrity sha512-xkolG7EvjIFYzcUJP6wXNjIiaz6nlQrF3SbBY0NgfvM9dq6T05HnRqhWC6QnMNuAzrue2Q/8I5X36Kf6i+xGUg==
+"@sushiswap/default-token-list@23.15.0":
+  version "23.15.0"
+  resolved "https://registry.yarnpkg.com/@sushiswap/default-token-list/-/default-token-list-23.15.0.tgz#3d8f7fc42c6a4728473346d052db801e3c3ca47e"
+  integrity sha512-Lw6paG17ZBHZ48F/23Nu22VyCfj6r7+wssjmSz88iVyZ+nGi+eO9BIUe4Cx6KXfcFZ28c+pixuIlYs2agoGvNg==
+  dependencies:
+    raise-version "^0.5.0"
 
 "@sushiswap/kashi-sdk@1.0.0-canary.39":
   version "1.0.0-canary.39"
@@ -12074,6 +12076,11 @@ module-lookup-amd@^7.0.1:
     requirejs "^2.3.5"
     requirejs-config-file "^4.0.0"
 
+moment@^2.29.1:
+  version "2.29.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
+  integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
+
 mrmime@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/mrmime/-/mrmime-1.0.0.tgz#14d387f0585a5233d291baba339b063752a2398b"
@@ -13884,6 +13891,17 @@ quote-unquote@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/quote-unquote/-/quote-unquote-1.0.0.tgz#67a9a77148effeaf81a4d428404a710baaac8a0b"
   integrity sha1-Z6mncUjv/q+BpNQoQEpxC6qsigs=
+
+raise-version@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/raise-version/-/raise-version-0.5.0.tgz#1a9d0a5388c51b4df7c5ea1ea142a06ab1d5032b"
+  integrity sha512-irfv1XeWT0kmSslOjLpVrfmqMtkKLHBSJdrLWHi7tSP84aJlU5bm+/riqA6IdwutSSunyXODSJcy3bFkEgP1jw==
+  dependencies:
+    execa "^5.0.0"
+    fs-extra "^9.0.1"
+    moment "^2.29.1"
+    semver "^7.3.4"
+    yargs "^16.2.0"
 
 ramda@^0.27.1:
   version "0.27.2"
