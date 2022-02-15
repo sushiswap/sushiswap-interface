@@ -8,6 +8,8 @@ import { classNames } from 'app/functions'
 import { useActiveWeb3React } from 'app/services/web3'
 import { ApplicationModal } from 'app/state/application/actions'
 import { useModalOpen, useNetworkModalToggle } from 'app/state/application/hooks'
+// @ts-ignore TYPE NEEDS FIXING
+import Image from 'next/image'
 import React, { FC } from 'react'
 
 export const SUPPORTED_NETWORKS: {
