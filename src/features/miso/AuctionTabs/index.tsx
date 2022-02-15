@@ -3,22 +3,19 @@ import { useLingui } from '@lingui/react'
 import AuctionAboutTab from 'app/features/miso/AuctionTabs/AuctionAboutTab'
 import AuctionBidsTab from 'app/features/miso/AuctionTabs/AuctionBidsTab'
 import AuctionDetailsTab from 'app/features/miso/AuctionTabs/AuctionDetailsTab'
-import { Auction } from 'app/features/miso/context/Auction'
+import { useAuctionContext } from 'app/features/miso/context/AuctionContext'
 import { classNames } from 'app/functions'
 import React, { FC, useState } from 'react'
 
 import AuctionTabsSkeleton from './AuctionTabsSkeleton'
 
-interface AuctionTabsProps {
-  auction?: Auction
-}
-
-const AuctionTabs: FC<AuctionTabsProps> = ({ auction }) => {
+const AuctionTabs: FC = () => {
   const { i18n } = useLingui()
+  const { loading, auction } = useAuctionContext()
   const tabs = [i18n._(t`Auction Details`), i18n._(t`Commitments`), i18n._(t`About Project`)]
   const [tab, setTab] = useState(0)
 
-  if (!auction) return <AuctionTabsSkeleton />
+  if (loading || !auction) return <AuctionTabsSkeleton />
 
   return (
     <div className="flex flex-col gap-4">

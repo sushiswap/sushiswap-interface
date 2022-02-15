@@ -124,14 +124,21 @@ export const useAuction = (address?: string, owner?: string) => {
   console.log({ auctionDocuments, marketInfo, auctionInfo, loadingInfo })
 
   return useMemo(() => {
-    if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
-      return { loading: loadingDetails || loadingInfo, auction: undefined }
+    if (loadingDetails || loadingInfo) return { loading: true, auction: undefined }
+    if (
+      !blockTimestamp ||
+      !chainId ||
+      !marketTemplateId ||
+      !auctionInfo ||
+      !auctionDocuments ||
+      Boolean(owner && !marketInfo?.isAdmin)
+    )
+      return { loading: false, auction: undefined }
+
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    if (owner && !marketInfo?.isAdmin) return { loading: loadingDetails || loadingInfo, auction: undefined }
-
     return {
-      loading: loadingDetails || loadingInfo,
+      loading: false,
       auction: new Auction({
         template: marketTemplateId.toNumber(),
         auctionToken: new Token(
