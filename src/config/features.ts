@@ -50,7 +50,7 @@ const features: FeatureMap = {
     Feature.LIMIT_ORDERS,
   ],
   [ChainId.MATIC_TESTNET]: [Feature.AMM],
-  [ChainId.HARMONY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS],
+  [ChainId.HARMONY]: [Feature.AMM, Feature.LIQUIDITY_MINING, Feature.ANALYTICS, Feature.MISO],
   [ChainId.HARMONY_TESTNET]: [Feature.AMM],
   [ChainId.AVALANCHE]: [Feature.AMM, Feature.BENTOBOX, Feature.KASHI, Feature.LIMIT_ORDERS, Feature.ANALYTICS],
   [ChainId.AVALANCHE_TESTNET]: [Feature.AMM],

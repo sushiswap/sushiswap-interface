@@ -1,8 +1,20 @@
+import { ChainId } from '@sushiswap/core-sdk'
 import { pager } from 'app/services/graph'
 import { misoCommitmentsQuery } from 'app/services/graph/queries/miso'
 
-export const getMisoCommitments = async (auctionId: string) => {
-  return await pager('https://api.thegraph.com/subgraphs/name/sushiswap/kovan-miso', misoCommitmentsQuery, {
-    auctionId: auctionId.toLowerCase(),
-  })
+import { GRAPH_HOST } from '../constants'
+
+export const MISO = {
+  [ChainId.KOVAN]: 'sushiswap/kovan-miso',
+  [ChainId.HARMONY]: 'sushiswap/miso',
+}
+
+// @ts-ignore TYPE NEEDS FIXING
+export const miso = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+  // @ts-ignore TYPE NEEDS FIXING
+  pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${MISO[chainId]}`, query, variables)
+
+// @ts-ignore TYPE NEEDS FIXING
+export const getMisoCommitments = async (chainId, variables) => {
+  return miso(chainId, misoCommitmentsQuery, variables)
 }

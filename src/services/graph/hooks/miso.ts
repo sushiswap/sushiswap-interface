@@ -10,6 +10,7 @@ import { useContract } from 'app/hooks'
 import { getMisoCommitments } from 'app/services/graph/fetchers/miso'
 import { useActiveWeb3React } from 'app/services/web3'
 import { useBlockNumber } from 'app/state/application/hooks'
+import stringify from 'fast-json-stable-stringify'
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
 
@@ -39,17 +40,23 @@ const misoSubgraphFormatter = (rawData: MisoCommitmentGqlData[], auction: Auctio
 }
 
 interface MisoCommitmentProps {
+  chainId?: number
+  variables?: { [key: string]: any }
   auction: Auction
   shouldFetch?: boolean
 }
 
-export const useSubgraphMisoCommitments = ({ auction, shouldFetch = true }: MisoCommitmentProps): AuctionFetchState => {
-  const auctionId = auction.auctionInfo.addr
+export const useSubgraphMisoCommitments = ({
+  chainId,
+  variables,
+  // TODO: Subgraph should provide all the data needed, but looks like payment token was missing?
+  auction,
+  shouldFetch = true,
+}: MisoCommitmentProps): AuctionFetchState => {
   const { data, error, isValidating } = useSWR<{ commitments: MisoCommitmentGqlData[] }>(
-    shouldFetch ? ['misCommitments', auctionId] : null,
-    () => getMisoCommitments(auctionId)
+    shouldFetch ? ['misCommitments', stringify(variables)] : null,
+    () => getMisoCommitments(chainId, variables)
   )
-
   return useMemo(
     () => ({ commitments: misoSubgraphFormatter(data?.commitments ?? [], auction), error, loading: isValidating }),
     [auction, data?.commitments, error, isValidating]
