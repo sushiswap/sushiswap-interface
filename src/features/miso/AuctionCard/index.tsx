@@ -37,14 +37,21 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
 
   const content = (
     <div
-      className="bg-cover cursor-pointer rounded bg-dark-900 overflow-hidden transition-all shadow-md hover:translate-y-[-3px] hover:shadow-xl hover:shadow-pink/5"
+      className="border border-dark-800 hover:border-dark-600 bg-cover cursor-pointer rounded overflow-hidden shadow-md"
       {...(auction.auctionDocuments.icon && {
         style: {
           backgroundImage: `url("${cloudinaryLoader({ src: auction.auctionDocuments.icon, width: 48 })}")`,
         },
       })}
     >
-      <div className="flex flex-col gap-3 bg-dark-900/95 backdrop-blur-[10px] filter">
+      <div
+        className={classNames(
+          auction.auctionDocuments.icon
+            ? 'before:absolute before:inset-0 before:z-[-1] before:backdrop-saturate-[200%] before:backdrop-blur-[130px] before:shadow-[inset_0_0_2000px_rgba(0,0,0,.2)]'
+            : 'bg-dark-900',
+          'relative flex flex-col gap-3 z-[10]'
+        )}
+      >
         <div className="flex items-center justify-between pt-3 pl-3 pr-3">
           <div className="flex gap-2">
             {auction.pointListAddress !== AddressZero && (
@@ -103,7 +110,12 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-3 bg-dark-800 ">
+        <div
+          className={classNames(
+            auction.auctionDocuments.icon ? 'bg-black bg-opacity-50' : 'bg-dark-800',
+            'flex items-center justify-between p-3'
+          )}
+        >
           <div className="flex items-center">
             <div className="flex gap-3">
               <AuctionIcon auctionTemplate={auction.template} width={18} height={14} />
@@ -137,19 +149,13 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
         <div className="flex justify-between px-3">
           <div className="flex flex-col gap-0.5">
             <div className="flex items-center">
-              <Typography variant="xxs" weight={700} className="uppercase text-dark-400">
+              <Typography variant="xxs" weight={700} className="uppercase text-secondary">
                 {i18n._(t`Current Token Price`)}
               </Typography>
               <QuestionHelper
                 // @ts-ignore TYPE NEEDS FIXING
                 text={AuctionPriceHelperTextByTemplateId(i18n)[auction.template]}
-                icon={
-                  <SolidQuestionMarkCircleIcon
-                    width={10}
-                    height={10}
-                    className="text-secondary mb-[2px] text-dark-400"
-                  />
-                }
+                icon={<SolidQuestionMarkCircleIcon width={10} height={10} className="text-secondary mb-[2px]" />}
               />
             </div>
             <Typography variant="xs" weight={700}>
@@ -157,7 +163,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
             </Typography>
           </div>
           <div className="flex flex-col gap-0.5">
-            <Typography variant="xxs" weight={700} className="uppercase text-dark-400">
+            <Typography variant="xxs" weight={700} className="uppercase text-secondary">
               {i18n._(t`Amount for sale`)}
             </Typography>
             <Typography variant="xs" weight={700}>
@@ -167,7 +173,12 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
         </div>
         <div className="flex flex-col">
           <AuctionChart auction={auction} prices={false} showPriceIndicator={false} />
-          <div className="flex flex-col flex-grow px-3 px-4 py-2 divide-y bg-dark-800 divide-dark-700">
+          <div
+            className={classNames(
+              auction.auctionDocuments.icon ? 'divide-white/10' : 'bg-dark-800 divide-dark-700',
+              'flex flex-col flex-grow px-3 px-4 py-2 divide-y'
+            )}
+          >
             <div className="flex justify-between gap-0.5 py-2">
               <div className="flex items-center">
                 <Typography variant="xs" weight={700} className="text-high-emphesis">
