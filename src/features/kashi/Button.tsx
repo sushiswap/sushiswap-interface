@@ -45,7 +45,7 @@ export function TokenApproveButton({ children, value, token, needed, color }: an
   const { chainId } = useActiveWeb3React()
   const [approvalState, approve] = useApproveCallback(
     tryParseAmount(value, token),
-    chainId && BENTOBOX_ADDRESS[chainId]
+    chainId ? BENTOBOX_ADDRESS[chainId] : undefined
   )
 
   const showApprove =

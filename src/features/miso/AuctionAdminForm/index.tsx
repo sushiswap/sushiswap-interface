@@ -219,7 +219,7 @@ const AuctionAdminForm: FC<AuctionAdminFormProps> = ({ auction }) => {
                   placeholder="https://example.com/image.jpg"
                   label={i18n._(t`Mobile Banner`)}
                   helperText={i18n._(
-                    t`Mobile banner must be smaller than 250kB, this is to keep page load optimized. Desktop banner dimensions preferably 768x196 or a similar ratio`
+                    t`Mobile banner must be smaller than 250kB, this is to keep page load optimized. Desktop banner dimensions preferably 768x360 or a similar ratio`
                   )}
                 />
               </div>

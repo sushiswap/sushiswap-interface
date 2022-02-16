@@ -1,3 +1,4 @@
+import { AddressZero } from '@ethersproject/constants'
 import { Token } from '@sushiswap/core-sdk'
 import { useAuctionDocuments } from 'app/features/miso/context/hooks/useAuctionDocuments'
 import { useAuctionEnded } from 'app/features/miso/context/hooks/useAuctionEnded'
@@ -110,6 +111,7 @@ export const useAuction = (address?: string, owner?: string) => {
   } = useAuctionDetails(address)
 
   const auctionEnded = useAuctionEnded(address, marketTemplateId)
+
   const { launcherInfo, lpTokenAddress } = useAuctionLauncherDetails(auctionLauncherAddress)
 
   const {
@@ -117,17 +119,17 @@ export const useAuction = (address?: string, owner?: string) => {
     marketInfo,
     auctionInfo,
     loading: loadingInfo,
-  } = useAuctionHelperInfo(address, marketTemplateId, owner ?? undefined)
+  } = useAuctionHelperInfo(address, marketTemplateId, owner ?? AddressZero)
 
   return useMemo(() => {
+    if (loadingDetails || loadingInfo) return { loading: true, auction: undefined }
     if (!blockTimestamp || !chainId || !marketTemplateId || !auctionInfo || !auctionDocuments)
-      return { loading: loadingDetails || loadingInfo, auction: undefined }
+      return { loading: false, auction: undefined }
+
     const paymentToken = getNativeOrToken(chainId, auctionInfo.paymentCurrencyInfo)
 
-    if (owner && !marketInfo?.isAdmin) return { loading: loadingDetails || loadingInfo, auction: undefined }
-
     return {
-      loading: loadingDetails || loadingInfo,
+      loading: false,
       auction: new Auction({
         template: marketTemplateId.toNumber(),
         auctionToken: new Token(
@@ -161,7 +163,6 @@ export const useAuction = (address?: string, owner?: string) => {
     lpTokenAddress,
     marketInfo,
     marketTemplateId,
-    owner,
     pointListAddress,
   ])
 }

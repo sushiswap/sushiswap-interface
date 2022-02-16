@@ -22,7 +22,7 @@ describe('hooks', () => {
         [Field.INPUT]: { currencyId: 'ETH' },
         typedValue: '20.5',
         independentField: Field.OUTPUT,
-        recipient: null,
+        recipient: undefined,
       })
     })
 
@@ -39,7 +39,7 @@ describe('hooks', () => {
         [Field.OUTPUT]: { currencyId: sushiAddress },
         typedValue: '',
         independentField: Field.INPUT,
-        recipient: null,
+        recipient: undefined,
       })
     })
 
@@ -56,7 +56,7 @@ describe('hooks', () => {
         [Field.INPUT]: { currencyId: sushiAddress },
         typedValue: '20.5',
         independentField: Field.INPUT,
-        recipient: null,
+        recipient: undefined,
       })
     })
 
@@ -73,7 +73,7 @@ describe('hooks', () => {
         [Field.OUTPUT]: { currencyId: 'ETH' },
         typedValue: '20.5',
         independentField: Field.INPUT,
-        recipient: null,
+        recipient: undefined,
       })
     })
 
