@@ -7,6 +7,7 @@ import { remoteLoader } from '@lingui/remote-loader'
 import { Web3ReactProvider } from '@web3-react/core'
 import Dots from 'app/components/Dots'
 import Portals from 'app/components/Portals'
+import { SyncWithRedux } from 'app/components/SyncWithRedux'
 import Web3ReactManager from 'app/components/Web3ReactManager'
 import { MultichainExploitAlertModal } from 'app/features/user/MultichainExploitAlertModal'
 import { getCookie } from 'app/functions'
@@ -162,22 +163,21 @@ function MyApp({ Component, pageProps, fallback, err }) {
           `,
         }}
       />
-      <RecoilRoot>
-        <ReduxProvider store={store}>
-          <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
-            <Web3ReactProvider getLibrary={getLibrary}>
-              <Web3ProviderNetwork getLibrary={getLibrary}>
-                <>
-                  <ListsUpdater />
-                  <UserUpdater />
-                  <ApplicationUpdater />
-                  <MulticallUpdater />
-                  <TransactionUpdater />
-                </>
-                <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
-                  <Web3ReactManager>
-                    {/* <NetworkOrchistrator /> */}
-                    {/* <SyncWithRedux /> */}
+      <I18nProvider i18n={i18n} forceRenderOnLocaleChange={false}>
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <Web3ProviderNetwork getLibrary={getLibrary}>
+            <Web3ReactManager>
+              {/* <NetworkOrchistrator /> */}
+              <ReduxProvider store={store}>
+                <PersistGate loading={<Dots>loading</Dots>} persistor={persistor}>
+                  <>
+                    <ListsUpdater />
+                    <UserUpdater />
+                    <ApplicationUpdater />
+                    <MulticallUpdater />
+                  </>
+                  <RecoilRoot>
+                    <SyncWithRedux />
                     <Provider>
                       <Layout>
                         <Guard>
@@ -189,13 +189,14 @@ function MyApp({ Component, pageProps, fallback, err }) {
                         <Portals />
                       </Layout>
                     </Provider>
-                  </Web3ReactManager>
-                </I18nProvider>
-              </Web3ProviderNetwork>
-            </Web3ReactProvider>
-          </PersistGate>
-        </ReduxProvider>
-      </RecoilRoot>
+                    <TransactionUpdater />
+                  </RecoilRoot>
+                </PersistGate>
+              </ReduxProvider>
+            </Web3ReactManager>
+          </Web3ProviderNetwork>
+        </Web3ReactProvider>
+      </I18nProvider>
     </>
   )
 }
