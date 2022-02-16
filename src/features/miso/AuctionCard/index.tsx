@@ -44,14 +44,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
         },
       })}
     >
-      <div
-        className={classNames(
-          auction.auctionDocuments.icon
-            ? 'before:absolute before:inset-0 before:z-[-1] before:backdrop-saturate-[200%] before:backdrop-blur-[130px] before:shadow-[inset_0_0_2000px_rgba(0,0,0,.2)]'
-            : 'bg-dark-900',
-          'relative flex flex-col gap-3 z-[10]'
-        )}
-      >
+      <div className="bg-dark-900 relative flex flex-col gap-3 z-[10]">
         <div className="flex items-center justify-between pt-3 pl-3 pr-3">
           <div className="flex gap-2">
             {auction.pointListAddress !== AddressZero && (
@@ -110,12 +103,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
           </div>
         </div>
 
-        <div
-          className={classNames(
-            auction.auctionDocuments.icon ? 'bg-black bg-opacity-50' : 'bg-dark-800',
-            'flex items-center justify-between p-3'
-          )}
-        >
+        <div className={classNames('flex items-center justify-between p-3 bg-dark-800')}>
           <div className="flex items-center">
             <div className="flex gap-3">
               <AuctionIcon auctionTemplate={auction.template} width={18} height={14} />
@@ -173,12 +161,7 @@ const AuctionCard: FC<{ auction?: Auction; link?: boolean }> = ({ auction, link 
         </div>
         <div className="flex flex-col">
           <AuctionChart auction={auction} prices={false} showPriceIndicator={false} />
-          <div
-            className={classNames(
-              auction.auctionDocuments.icon ? 'divide-white/10' : 'bg-dark-800 divide-dark-700',
-              'flex flex-col flex-grow px-3 px-4 py-2 divide-y'
-            )}
-          >
+          <div className={classNames('flex flex-col flex-grow px-3 px-4 py-2 divide-y bg-dark-800 divide-dark-700')}>
             <div className="flex justify-between gap-0.5 py-2">
               <div className="flex items-center">
                 <Typography variant="xs" weight={700} className="text-high-emphesis">
