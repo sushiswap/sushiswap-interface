@@ -84,3 +84,5 @@ export const Web3ReactManager: FC = ({ children }) => {
     </>
   )
 }
+
+export default Web3ReactManager
