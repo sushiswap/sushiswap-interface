@@ -14,7 +14,7 @@ function useInactiveListener(suppress = false) {
     const { ethereum } = window
 
     if (ethereum && ethereum.on && !active && !error && !suppress) {
-      const handleChainChanged = () => {
+      const handleChainChanged = (chainId: number) => {
         // eat errors
         activate(injected, undefined, true).catch((error) => {
           console.error('Failed to activate after chain changed', error)
