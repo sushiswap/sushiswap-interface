@@ -11,11 +11,12 @@ import { useMemo } from 'react'
 export const useAuctionCommitments = (auction: Auction): AuctionFetchState => {
   const { chainId } = useActiveWeb3React()
 
-  // If we have a name for a subgraph, we assume there is one. This is our "shouldFetch" for the subgraph hook.
+  // If we have a name for a subgraph, we assume there is one.
+  // This is our "shouldFetch" for the subgraph hook.
   const useSubgraph = Boolean(chainId && chainId in MISO)
   const subgraphResult = useSubgraphMisoCommitments({
     chainId,
-    variables: { where: { auctionId: auction.auctionInfo.addr } },
+    variables: { where: { auction: auction.auctionInfo.addr.toLowerCase() } },
     shouldFetch: useSubgraph,
     auction,
   })

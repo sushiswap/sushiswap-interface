@@ -10,7 +10,7 @@ export const MISO = {
 }
 
 // @ts-ignore TYPE NEEDS FIXING
-export const miso = async (chainId = ChainId.ETHEREUM, query, variables = undefined) =>
+export const miso = async (chainId = ChainId.ETHEREUM, query, variables = {}) =>
   // @ts-ignore TYPE NEEDS FIXING
   pager(`${GRAPH_HOST[chainId]}/subgraphs/name/${MISO[chainId]}`, query, variables)
 

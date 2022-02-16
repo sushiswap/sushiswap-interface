@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export const misoCommitmentsQuery = gql`
-  query misoCommitmentsQuery($auctionId: String!) {
-    commitments(where: { auction: $auctionId }) {
+  query misoCommitmentsQuery($where: Commitment_filter!) {
+    commitments(where: $where) {
       id
       user {
         id
