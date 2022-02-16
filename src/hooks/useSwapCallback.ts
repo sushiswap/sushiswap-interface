@@ -701,8 +701,9 @@ export function useSwapCallback(
               const { type, chainId, nonce, gasPrice, gasLimit, maxFeePerGas, maxPriorityFeePerGas, to, value, data } =
                 fullTx
               const hOpts: DataOptions = { hexPad: 'left' }
-              const _maxFeePerGas = expertMode && maxFee ? maxFee : maxFeePerGas
-              const _maxPriorityFee = expertMode && maxPriorityFee ? maxPriorityFee : maxPriorityFeePerGas
+              const _maxFeePerGas = expertMode && maxFee ? BigNumber.from(maxFee) : maxFeePerGas
+              const _maxPriorityFee =
+                expertMode && maxPriorityFee ? BigNumber.from(maxPriorityFee) : maxPriorityFeePerGas
 
               // protect ourselves from not obtaining the gas price for legacy tx
               if (!eip1559 && !isBigNumberish(gasPrice)) throw Error('SushiGuard: FAILED_GAS_PRICE_ESTIMATION')
